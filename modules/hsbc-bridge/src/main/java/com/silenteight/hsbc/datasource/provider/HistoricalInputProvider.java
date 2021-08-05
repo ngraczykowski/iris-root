@@ -9,13 +9,13 @@ import com.silenteight.hsbc.datasource.common.DataSourceInputCommand;
 import com.silenteight.hsbc.datasource.common.DataSourceInputProvider;
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.historical.HistoricalFeatureInputDto;
-import com.silenteight.hsbc.datasource.dto.historical.HistoricalFeatureSolutionInputDto;
 import com.silenteight.hsbc.datasource.dto.historical.HistoricalInputResponse;
 import com.silenteight.hsbc.datasource.dto.historical.HistoricalSolutionInputDto;
+import com.silenteight.hsbc.datasource.extractors.historical.HistoricalDecisionsServiceClient;
 import com.silenteight.hsbc.datasource.feature.Feature;
+import com.silenteight.hsbc.datasource.feature.HistoricalFeatureClientValuesRetriever;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -26,6 +26,7 @@ public class HistoricalInputProvider
 
   @Getter
   private final MatchFacade matchFacade;
+  private final HistoricalDecisionsServiceClient serviceClient;
 
   @Override
   public HistoricalInputResponse toResponse(DataSourceInputCommand command) {
@@ -49,20 +50,11 @@ public class HistoricalInputProvider
 
   private List<HistoricalFeatureInputDto> getFeatureInputs(
       List<String> features, MatchData matchData) {
-    // TODO: FeatureValuesRetriever
     return features.stream()
-        .map(feature -> HistoricalFeatureInputDto.builder()
-            .feature(feature)
-            .featureSolutions(getSolutions())
-            .build())
+        .map(featureName -> (HistoricalFeatureInputDto)
+            ((HistoricalFeatureClientValuesRetriever) getFeatureRetriever(featureName))
+                .retrieve(matchData, serviceClient))
         .collect(Collectors.toList());
-  }
-
-  private List<HistoricalFeatureSolutionInputDto> getSolutions() {
-    return List.of(HistoricalFeatureSolutionInputDto.builder()
-        .solution("someSolution")
-        .reason(Map.of("reason_key_1","reason_value_1"))
-        .build());
   }
 
   @Override

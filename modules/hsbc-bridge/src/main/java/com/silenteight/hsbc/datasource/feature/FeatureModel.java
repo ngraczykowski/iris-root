@@ -12,6 +12,7 @@ import com.silenteight.hsbc.datasource.extractors.document.OtherDocumentQueryCon
 import com.silenteight.hsbc.datasource.extractors.document.PassportNumberDocumentQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.geolocation.GeoPlaceOfBirthConfigurer;
 import com.silenteight.hsbc.datasource.extractors.geolocation.GeoResidenciesConfigurer;
+import com.silenteight.hsbc.datasource.extractors.historical.HistoricalDecisionsQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.ispep.IsPepQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.name.NameQueryConfigurer;
 import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListCommonApFeature;
@@ -25,6 +26,9 @@ import com.silenteight.hsbc.datasource.feature.dob.DateOfBirthFeature;
 import com.silenteight.hsbc.datasource.feature.gender.GenderFeature;
 import com.silenteight.hsbc.datasource.feature.geolocation.GeoPlaceOfBirthFeature;
 import com.silenteight.hsbc.datasource.feature.geolocation.GeoResidencyFeature;
+import com.silenteight.hsbc.datasource.feature.historical.HistoricalIsApTpMarkedFeature;
+import com.silenteight.hsbc.datasource.feature.historical.HistoricalIsCaseTpMarkedFeature;
+import com.silenteight.hsbc.datasource.feature.historical.HistoricalIsTpMarkedFeature;
 import com.silenteight.hsbc.datasource.feature.incorporationcountry.IncorporationCountryFeature;
 import com.silenteight.hsbc.datasource.feature.ispep.IsPepFeature;
 import com.silenteight.hsbc.datasource.feature.name.NameFeature;
@@ -79,7 +83,16 @@ public class FeatureModel {
         entry(
             OTHER_DOCUMENT,
             new OtherDocumentFeature(new OtherDocumentQueryConfigurer().create())),
-        entry(DATE_OF_BIRTH, new DateOfBirthFeature())
+        entry(DATE_OF_BIRTH, new DateOfBirthFeature()),
+        entry(
+            HISTORICAL_IS_AP_TP_MARKED,
+            new HistoricalIsApTpMarkedFeature(new HistoricalDecisionsQueryConfigurer().create())),
+        entry(
+            HISTORICAL_IS_CASE_TP_MARKED,
+            new HistoricalIsCaseTpMarkedFeature(new HistoricalDecisionsQueryConfigurer().create())),
+        entry(
+            HISTORICAL_IS_TP_MARKED,
+            new HistoricalIsTpMarkedFeature(new HistoricalDecisionsQueryConfigurer().create()))
     );
   }
 

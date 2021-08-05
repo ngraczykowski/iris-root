@@ -10,16 +10,17 @@ import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisions
 import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisionsSolution.FeatureSolution;
 import com.silenteight.hsbc.datasource.common.DataSourceInputProvider;
 import com.silenteight.hsbc.datasource.common.dto.DataSourceInputRequest;
-import com.silenteight.hsbc.datasource.dto.historical.*;
+import com.silenteight.hsbc.datasource.dto.historical.HistoricalFeatureInputDto;
+import com.silenteight.hsbc.datasource.dto.historical.HistoricalFeatureSolutionInputDto;
+import com.silenteight.hsbc.datasource.dto.historical.HistoricalInputResponse;
+import com.silenteight.hsbc.datasource.dto.historical.HistoricalSolutionInputDto;
 
 import com.google.protobuf.Struct;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
-import java.util.Map;
 
-import static com.silenteight.hsbc.datasource.grpc.StructHelper.buildStringValue;
 import static java.util.stream.Collectors.toList;
 
 @GrpcService(interceptors = DatasourceGrpcInterceptor.class)
@@ -75,15 +76,8 @@ public class HistoricalDecisionsGrpcService extends HistoricalDecisionsInputServ
     return inputs.stream()
         .map(input -> FeatureSolution.newBuilder()
             .setSolution(input.getSolution())
-            .setReason(mapToStruct(input.getReason()))
+            .setReason(Struct.newBuilder().build())
             .build())
         .collect(toList());
-  }
-
-  private Struct mapToStruct(Map<String, String> reason) {
-    var builder = Struct.newBuilder();
-    reason.entrySet().stream()
-        .forEach(r -> builder.putFields(r.getKey(), buildStringValue(r.getValue())));
-    return builder.build();
   }
 }

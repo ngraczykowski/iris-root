@@ -12,25 +12,29 @@ import static com.silenteight.hsbc.datasource.extractors.historical.ModelKeyDto.
 public class HistoricalDecisionsServiceClientMock implements HistoricalDecisionsServiceClient {
 
   private static final int TRUE_POSITIVES_COUNT = 1;
-  private static final ModelKeyType TYPE = MATCH;
 
   @Override
   public GetHistoricalDecisionsResponseDto getHistoricalDecisions(
       GetHistoricalDecisionsRequestDto request) {
+    var modelKeyType = request.getModelKeys().stream()
+        .findFirst()
+        .get()
+        .getModelKeyType();
+
     return GetHistoricalDecisionsResponseDto.builder()
-        .modelCounts(getModelCounts())
+        .modelCounts(getModelCounts(modelKeyType))
         .build();
   }
 
-  private static List<ModelCountsDto> getModelCounts() {
+  private static List<ModelCountsDto> getModelCounts(ModelKeyType modelKeyType) {
     return List.of(ModelCountsDto.builder()
         .truePositivesCount(TRUE_POSITIVES_COUNT)
-        .modelKey(getModelKey())
+        .modelKey(getModelKey(modelKeyType))
         .build());
   }
 
-  private static ModelKeyDto getModelKey() {
-    switch (TYPE) {
+  private static ModelKeyDto getModelKey(ModelKeyType modelKeyType) {
+    switch (modelKeyType) {
       case ALERTED_PARTY:
         return ModelKeyDto.builder()
             .modelKeyType(ALERTED_PARTY)

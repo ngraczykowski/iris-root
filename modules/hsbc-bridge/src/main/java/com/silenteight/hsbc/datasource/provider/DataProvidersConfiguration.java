@@ -15,6 +15,7 @@ import com.silenteight.hsbc.datasource.dto.location.LocationInputResponse;
 import com.silenteight.hsbc.datasource.dto.name.NameInputResponse;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdInputResponse;
 import com.silenteight.hsbc.datasource.dto.transaction.TransactionInputResponse;
+import com.silenteight.hsbc.datasource.extractors.historical.HistoricalDecisionsServiceClient;
 import com.silenteight.hsbc.datasource.extractors.ispep.IsPepServiceClient;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
 
@@ -28,6 +29,7 @@ class DataProvidersConfiguration {
   private final MatchFacade matchFacade;
   private final IsPepServiceClient isPepServiceClient;
   private final NameInformationServiceClient nameInformationServiceClient;
+  private final HistoricalDecisionsServiceClient historicalDecisionsServiceClient;
 
   @Bean
   DataSourceInputProvider<AllowedListInputResponse> allowedListProvider() {
@@ -86,6 +88,6 @@ class DataProvidersConfiguration {
 
   @Bean
   DataSourceInputProvider<HistoricalInputResponse> historicalInputProvider() {
-    return new HistoricalInputProvider(matchFacade);
+    return new HistoricalInputProvider(matchFacade, historicalDecisionsServiceClient);
   }
 }
