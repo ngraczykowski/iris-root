@@ -9,12 +9,12 @@ import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 
 option java_multiple_files = true;
-option java_outer_classname = "AlertMessageProto";
+option java_outer_classname = "RecommendAlertCommandProto";
 option java_package = "com.silenteight.proto.payments.bridge.internal.v1";
 
-message AlertMessage {
+message RecommendAlertCommand {
   // The original JSON alert message serialized to google.protobuf.Struct.
-  google.protobuf.Struct message = 1 [(google.api.field_behavior) = REQUIRED];
+  google.protobuf.Struct alert_message = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The time the alert message was received.
   google.protobuf.Timestamp receive_time = 2 [(google.api.field_behavior) = REQUIRED];
