@@ -59,7 +59,7 @@ class AlertGenerator {
     payload.put("1.CustomerEntities.Address", "Fixed Value CE1");
     payload.put("2.CustomerEntities.Address", "Fixed Value CE2");
     payload.put("DN_CASE.ExtendedAttribute5", getRandomValue("SAN", "PEP"));
-    payload.put("status", getRandomValue("OK", "PROCESSING", "ERROR"));
+    payload.put("status", getRandomValue("COMPLETED", "ERROR"));
 
     return Alert.newBuilder()
         .setDiscriminator(getRandomDiscriminator())
