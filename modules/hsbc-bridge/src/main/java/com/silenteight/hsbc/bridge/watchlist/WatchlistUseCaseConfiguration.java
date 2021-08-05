@@ -2,7 +2,7 @@ package com.silenteight.hsbc.bridge.watchlist;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.unpacker.FileUnzipper;
+import com.silenteight.hsbc.bridge.unpacker.FileManager;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,7 @@ class WatchlistUseCaseConfiguration {
   private final WatchlistLoader watchlistLoader;
   private final WorldCheckNotifier worldCheckNotifier;
   private final ApplicationEventPublisher eventPublisher;
-  private final FileUnzipper unzipper;
+  private final FileManager unzipper;
 
   @Bean
   WatchlistEventListener watchlistEventListener() {

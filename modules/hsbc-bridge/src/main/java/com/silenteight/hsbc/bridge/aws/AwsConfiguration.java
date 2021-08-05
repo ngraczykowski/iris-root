@@ -23,7 +23,9 @@ class AwsConfiguration {
   AwsAdapter awsAdapter() {
     var buckets = properties.getBuckets();
     return new AwsAdapter(
-        createS3Client(), buckets.getModelBucketName(), buckets.getWatchlistBucketName());
+        createS3Client(),
+        buckets.getModelBucketName(),
+        buckets.getWatchlistBucketName());
   }
 
   private S3Client createS3Client() {

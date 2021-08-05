@@ -61,6 +61,9 @@ silenteight.bridge:
       LEVEL_3_REVIEW: Level 3 Review
   recommendations.queue: bridge.recommendations
 
+  unpacker:
+    path: ${UNPACKER_PATH:/tmp}
+
   category:
     risk-type-values:
       SAN:

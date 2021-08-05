@@ -7,6 +7,8 @@ public interface WatchlistSaver {
 
   URI save(InputStream inputStream, String name) throws WatchlistSavingException;
 
+  URI saveFile(String name, String path) throws WatchlistSavingException;
+
   class WatchlistSavingException extends RuntimeException {
 
     private static final long serialVersionUID = -3180672309079128603L;

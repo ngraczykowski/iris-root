@@ -18,17 +18,14 @@ class WatchlistEventListener {
   @Async
   @EventListener
   public void onOriginalWatchlistSaved(OriginalWatchlistSavedEvent event) {
-    var core = watchlistLoader.loadWatchlist(
-        URI.create(event.getCoreWatchlistUri()));
-    var aliases = watchlistLoader.loadWatchlist(
-        URI.create(event.getAliasesWatchlistUri()));
+    var coreUri = URI.create(event.getCoreWatchlistUri());
+    var aliasesUri = URI.create(event.getAliasesWatchlistUri());
 
     processWatchlist.process(RetrievedWatchlist.builder()
-        .core(core)
-        .aliases(aliases)
+        .core(watchlistLoader.loadWatchlist(coreUri))
+        .aliases(watchlistLoader.loadWatchlist(aliasesUri))
         .keywordsUri(event.getKeywordsWatchlistUri())
         .build()
     );
   }
-
 }

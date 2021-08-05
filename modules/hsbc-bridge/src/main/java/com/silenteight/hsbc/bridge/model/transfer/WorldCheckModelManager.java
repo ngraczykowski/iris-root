@@ -84,8 +84,7 @@ public class WorldCheckModelManager implements ModelManager {
   private byte[] tryLoadModel(String minioUrl) {
     try {
       var uri = new URI(minioUrl);
-      var inputStream = modelTransferModelLoader.loadModel(uri);
-      return IOUtils.toByteArray(inputStream);
+      return IOUtils.toByteArray(modelTransferModelLoader.loadModel(uri));
     } catch (IOException | URISyntaxException e) {
       log.error("Unable to load model from minio uri: " + minioUrl, e);
       throw new ModelLoadingException("Unable to load model from minio uri: " + e.getMessage(), e);

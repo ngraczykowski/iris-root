@@ -239,6 +239,11 @@
       "name": "silenteight.bridge.category.risk-type-values.SSC",
       "type": "java.util.List",
       "description": "Map's key value SSC for risk type values."
+    },
+    {
+      "name": "silenteight.bridge.unpacker.path",
+      "type": "java.lang.String",
+      "description": "Path to unpacked file or temporary directory when the file is unpacked."
     }
   ]
 }
