@@ -1,10 +1,10 @@
 package com.silenteight.simulator.dataset.domain;
 
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.support.hibernate.StringListConverter;
+import com.silenteight.simulator.dataset.domain.exception.DatasetNotInProperStateException;
 import com.silenteight.simulator.dataset.dto.AlertSelectionCriteriaDto;
 import com.silenteight.simulator.dataset.dto.DatasetDto;
 import com.silenteight.simulator.dataset.dto.RangeQueryDto;
@@ -16,10 +16,10 @@ import java.util.UUID;
 import javax.persistence.*;
 
 import static com.silenteight.simulator.dataset.common.DatasetResource.toResourceName;
-import static com.silenteight.simulator.dataset.domain.DatasetState.CURRENT;
+import static com.silenteight.simulator.dataset.domain.DatasetState.ACTIVE;
+import static com.silenteight.simulator.dataset.domain.DatasetState.ARCHIVED;
 import static javax.persistence.GenerationType.IDENTITY;
 
-@Slf4j
 @Data
 @Setter(AccessLevel.PRIVATE)
 @Builder
@@ -72,7 +72,7 @@ class DatasetEntity extends BaseEntity implements Serializable {
   @ToString.Include
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private DatasetState state = CURRENT;
+  private DatasetState state = ACTIVE;
 
   @ToString.Include
   @Column(name = "generation_date_from")
@@ -86,6 +86,16 @@ class DatasetEntity extends BaseEntity implements Serializable {
   @Convert(converter = StringListConverter.class)
   @Column(name = "countries")
   private List<String> countries;
+
+  void archive() {
+    assertInState(ACTIVE);
+    this.state = ARCHIVED;
+  }
+
+  private void assertInState(DatasetState requiredState) {
+    if (this.state != requiredState)
+      throw new DatasetNotInProperStateException(requiredState);
+  }
 
   DatasetDto toDto() {
     return DatasetDto.builder()

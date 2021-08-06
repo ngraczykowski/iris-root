@@ -8,6 +8,7 @@ import com.silenteight.adjudication.api.v1.FilteredAlerts;
 import com.silenteight.adjudication.api.v1.FilteredAlerts.AlertTimeRange;
 import com.silenteight.adjudication.api.v1.FilteredAlerts.LabelValues;
 import com.silenteight.adjudication.api.v1.FilteredAlerts.LabelsFilter;
+import com.silenteight.simulator.dataset.archive.ArchiveDatasetRequest;
 import com.silenteight.simulator.dataset.create.CreateDatasetRequest;
 import com.silenteight.simulator.dataset.create.dto.CreateDatasetRequestDto;
 import com.silenteight.simulator.dataset.domain.DatasetState;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
-import static com.silenteight.simulator.dataset.domain.DatasetState.CURRENT;
+import static com.silenteight.simulator.dataset.domain.DatasetState.ACTIVE;
 import static java.time.ZoneOffset.UTC;
 import static java.util.Map.of;
 import static java.util.UUID.fromString;
@@ -36,7 +37,7 @@ public final class DatasetFixtures {
   public static final String DESCRIPTION = "Dataset description";
   public static final String EXTERNAL_RESOURCE_NAME =
       "datasets/b6855a6f-fc63-422f-84a7-677a0c8f9a9a";
-  public static final DatasetState STATE = CURRENT;
+  public static final DatasetState STATE = ACTIVE;
   public static final long ALERTS_COUNT = 5L;
   public static final long SECOND_ALERTS_COUNT = 4L;
   public static final long NO_ALERTS_COUNT = 0;
@@ -47,6 +48,7 @@ public final class DatasetFixtures {
   public static final String CREATED_BY = "asmith";
   public static final String COUNTRY_LABEL = "country";
   public static final List<String> COUNTRIES = List.of("PL", "RU", "DE");
+  public static final String ARCHIVED_BY = "jdoe";
 
   public static final CreateDatasetRequestDto CREATE_DATASET_REQUEST_DTO =
       new CreateDatasetRequestDto(
@@ -123,5 +125,11 @@ public final class DatasetFixtures {
       FilteredAlerts.newBuilder()
           .setAlertTimeRange(ALERT_TIME_RANGE)
           .setLabelsFilter(LABELS_FILTER)
+          .build();
+
+  public static final ArchiveDatasetRequest ARCHIVE_DATASET_REQUEST =
+      ArchiveDatasetRequest.builder()
+          .id(ID)
+          .archivedBy(ARCHIVED_BY)
           .build();
 }

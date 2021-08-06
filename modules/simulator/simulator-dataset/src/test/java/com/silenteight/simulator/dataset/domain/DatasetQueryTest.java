@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.silenteight.simulator.dataset.domain.DatasetState.CURRENT;
+import static com.silenteight.simulator.dataset.domain.DatasetState.ACTIVE;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -30,7 +30,7 @@ class DatasetQueryTest extends BaseDataJpaTest {
   void shouldListDatasets() {
     persistDataset();
 
-    List<DatasetDto> result = underTest.list(CURRENT);
+    List<DatasetDto> result = underTest.list(ACTIVE);
 
     assertThat(result).hasSize(1);
     DatasetDto datasetDto = result.get(0);
@@ -77,7 +77,7 @@ class DatasetQueryTest extends BaseDataJpaTest {
         .description(DESCRIPTION)
         .externalResourceName(EXTERNAL_RESOURCE_NAME)
         .initialAlertCount(ALERTS_COUNT)
-        .state(CURRENT)
+        .state(ACTIVE)
         .generationDateFrom(FROM)
         .generationDateTo(TO)
         .countries(COUNTRIES)

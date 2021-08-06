@@ -5,12 +5,11 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-  <include file="db/changelog/db.changelog-datatypes.xml"/>
-  <include file="db/changelog/db.changelog-simulator-1.0.0.xml"/>
-  <include file="db/changelog/db.changelog-simulator-1.2.0.xml"/>
-
-  <include file="db/changelog/db.changelog-auditing.xml"/>
+  <changeSet id="simulator-1.2.0-1" author="mmastylo">
+    <update tableName="simulator_dataset">
+      <column name="state" value="ACTIVE"/>
+      <where>state = 'CURRENT'</where>
+    </update>
+  </changeSet>
 
 </databaseChangeLog>
-
-

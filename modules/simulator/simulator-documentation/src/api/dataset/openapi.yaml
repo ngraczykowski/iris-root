@@ -52,7 +52,7 @@ components:
 
     DatasetState:
       type: string
-      enum: [ CURRENT, ARCHIVED ]
+      enum: [ ACTIVE, ARCHIVED ]
 
     Dataset:
       type: object
