@@ -5,17 +5,19 @@ import com.silenteight.hsbc.datasource.extractors.name.GetNameInformationRequest
 import com.silenteight.hsbc.datasource.extractors.name.GetNameInformationResponseDto;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
 
+import java.util.Optional;
+
 import static java.util.List.of;
 
 class NameInformationServiceClientMock implements NameInformationServiceClient {
 
   @Override
-  public GetNameInformationResponseDto getNameInformation(GetNameInformationRequestDto request) {
-    return GetNameInformationResponseDto.builder()
+  public Optional<GetNameInformationResponseDto> getNameInformation(GetNameInformationRequestDto request) {
+    return Optional.of(GetNameInformationResponseDto.builder()
         .firstName("")
         .lastName("")
         .aliases(of(""))
         .foreignAliases(of(new ForeignAliasDto("", "")))
-        .build();
+        .build());
   }
 }

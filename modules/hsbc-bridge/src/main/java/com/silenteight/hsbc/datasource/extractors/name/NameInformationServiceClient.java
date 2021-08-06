@@ -1,6 +1,8 @@
 package com.silenteight.hsbc.datasource.extractors.name;
 
+import java.util.Optional;
+
 public interface NameInformationServiceClient {
 
-  GetNameInformationResponseDto getNameInformation(GetNameInformationRequestDto request);
+  Optional<GetNameInformationResponseDto> getNameInformation(GetNameInformationRequestDto request);
 }

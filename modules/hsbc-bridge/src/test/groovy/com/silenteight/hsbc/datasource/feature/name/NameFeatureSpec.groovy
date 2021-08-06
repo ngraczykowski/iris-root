@@ -79,7 +79,7 @@ class NameFeatureSpec extends Specification {
     def result = underTest.retrieve(matchData, client)
 
     then:
-    1 * client.getNameInformation(getNameInformationRequestDto) >> getNameInformationResponseDto
+    1 * client.getNameInformation(getNameInformationRequestDto) >> Optional.of(getNameInformationResponseDto)
 
     with(result) {
       feature == Feature.NAME.fullName
@@ -157,7 +157,7 @@ class NameFeatureSpec extends Specification {
     def result = underTest.retrieve(matchData, client)
 
     then:
-    1 * client.getNameInformation(getNameInformationRequestDto) >> getNameInformationResponseDto
+    1 * client.getNameInformation(getNameInformationRequestDto) >> Optional.of(getNameInformationResponseDto)
 
     with(result) {
       feature == Feature.NAME.fullName

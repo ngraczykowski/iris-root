@@ -10,9 +10,7 @@ import com.silenteight.hsbc.datasource.feature.registrationcountry.RegistrationC
 
 import one.util.streamex.StreamEx;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static com.silenteight.hsbc.datasource.extractors.name.NameExtractor.collectCountryMatchingAliases;
@@ -84,6 +82,8 @@ class WorldCheckEntitiesXmlNamesAndCountriesExtractor {
             .watchlistUuid(listRecordId)
             .build())
         .map(nameInformationServiceClient::getNameInformation)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
         .distinct()
         .collect(toList());
   }
