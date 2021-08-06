@@ -10,7 +10,7 @@ option java_outer_classname = "HistoricalDecisionsProto";
 option java_multiple_files = true;
 
 service HistoricalDecisionsInputService {
-  rpc BatchGetMatchHistoricalDecisionsSolutions (BatchGetMatchHistoricalDecisionsSolutionsRequest) returns (stream BatchGetMatchHistoricalDecisionsSolutionsResponse) {
+  rpc BatchGetMatchHistoricalDecisionsInputs (BatchGetMatchHistoricalDecisionsInputsRequest) returns (stream BatchGetMatchHistoricalDecisionsInputsResponse) {
     option (google.api.http) = {
       post: "/agent-inputs/historicaldecisions/versions/v1/matches:batchGet"
       body: "*"
@@ -18,29 +18,32 @@ service HistoricalDecisionsInputService {
   }
 }
 
-message BatchGetMatchHistoricalDecisionsSolutionsRequest {
+message BatchGetMatchHistoricalDecisionsInputsRequest {
   // The list of matches data is requested for, in form of `alerts/<Alert ID>/matches/<Match ID>`.
   repeated string matches = 1;
   // The list of features the input data for each match is requested, in form of `features/<Feature ID>`.
   repeated string features = 2;
 }
 
-message BatchGetMatchHistoricalDecisionsSolutionsResponse {
-  repeated HistoricalDecisionsSolution historical_decisions_solutions = 1;
+message BatchGetMatchHistoricalDecisionsInputsResponse {
+  repeated HistoricalDecisionsInput historical_decisions_inputs = 1;
 }
 
-message HistoricalDecisionsSolution {
+message HistoricalDecisionsInput {
   string match = 1;
-  repeated Feature features = 2;
+  repeated HistoricalDecisionsFeatureInput feature_inputs  = 2;
 
-  message Feature {
+  message HistoricalDecisionsFeatureInput {
     string feature = 1;
-    repeated FeatureSolution feature_solutions = 2;
+    uint32 true_positive_count = 2;
+    ModelType model_type = 3;
+    google.protobuf.Struct reason = 4;
   }
 
-  message FeatureSolution {
-    string solution = 1;
-    google.protobuf.Struct reason = 2;
-  }
+    enum ModelType {
+      UNSPECIFIED = 0;
+      ALERTED_PARTY = 1;
+      WATCHLIST_PARTY = 2;
+      MATCH = 3;
+    }
 }
-
