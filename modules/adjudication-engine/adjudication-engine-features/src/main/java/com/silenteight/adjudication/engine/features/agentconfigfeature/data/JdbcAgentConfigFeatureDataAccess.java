@@ -9,7 +9,6 @@ import com.silenteight.adjudication.engine.features.agentconfigfeature.dto.Agent
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 @Repository
@@ -20,12 +19,7 @@ class JdbcAgentConfigFeatureDataAccess implements AgentConfigFeatureDataAccess {
 
   @Override
   public int addUnique(List<Feature> features) {
-    features.forEach(acf -> insertAgentConfigFeatureQuery.execute(
-        acf.getAgentConfig(), acf.getFeature()));
-
-    var rowsAffected = insertAgentConfigFeatureQuery.flush();
-
-    return IntStream.of(rowsAffected).sum();
+    return insertAgentConfigFeatureQuery.execute(features);
   }
 
   @Override
