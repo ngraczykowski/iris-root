@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Dataset;
 import com.silenteight.auditing.bs.AuditingLogger;
+import com.silenteight.simulator.dataset.create.exception.EmptyDatasetException;
 import com.silenteight.simulator.dataset.domain.DatasetMetadataService;
 
 @RequiredArgsConstructor
@@ -20,6 +21,10 @@ public class CreateDatasetUseCase {
   public void activate(CreateDatasetRequest request) {
     request.preAudit(auditingLogger::log);
     Dataset dataset = createDatasetService.createDataset(request);
+
+    if (dataset.getAlertCount() == 0)
+      throw new EmptyDatasetException();
+
     datasetMetadataService.createMetadata(request, dataset);
     request.postAudit(auditingLogger::log);
   }
