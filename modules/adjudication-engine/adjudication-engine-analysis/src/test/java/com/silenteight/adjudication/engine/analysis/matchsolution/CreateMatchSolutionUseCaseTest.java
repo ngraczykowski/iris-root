@@ -14,21 +14,21 @@ import static org.assertj.core.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class CreateMatchSolutionUseCaseTest {
 
-  private MatchSolutionRepository matchSolutionRepository;
+  private InMemoryMatchSolutionDataAccess matchSolutionDataAccess;
   private CreateMatchSolutionsUseCase createMatchSolutionsUseCase;
   @Mock
   private ProtoMessageToObjectNodeConverter protoMessageToObjectNodeConverter;
 
   @BeforeEach
   void setUp() {
-    matchSolutionRepository = new InMemoryMatchSolutionRepository();
+    matchSolutionDataAccess = new InMemoryMatchSolutionDataAccess();
     createMatchSolutionsUseCase =
-        new CreateMatchSolutionsUseCase(matchSolutionRepository, protoMessageToObjectNodeConverter);
+        new CreateMatchSolutionsUseCase(matchSolutionDataAccess, protoMessageToObjectNodeConverter);
   }
 
   @Test
   void shouldSaveAllSolutions() {
     createMatchSolutionsUseCase.createMatchSolutions(createMatchSolutionCollection(10));
-    assertThat(matchSolutionRepository.count()).isEqualTo(10);
+    assertThat(matchSolutionDataAccess.count()).isEqualTo(10);
   }
 }

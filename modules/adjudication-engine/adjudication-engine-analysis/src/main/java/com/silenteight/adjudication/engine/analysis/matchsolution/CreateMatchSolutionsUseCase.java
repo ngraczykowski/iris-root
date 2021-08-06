@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.matchsolution.dto.MatchSolution;
 import com.silenteight.adjudication.engine.analysis.matchsolution.dto.MatchSolutionCollection;
+import com.silenteight.adjudication.engine.analysis.matchsolution.dto.SaveMatchSolutionRequest;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.proto.protobuf.Uuid;
 import com.silenteight.sep.base.aspects.metrics.Timed;
@@ -19,12 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Base64;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@SuppressWarnings("FeatureEnvy")
 class CreateMatchSolutionsUseCase {
 
-  private final MatchSolutionRepository matchSolutionRepository;
+  private final MatchSolutionDataAccess matchSolutionDataAccess;
   private final ProtoMessageToObjectNodeConverter protoMessageToObjectNodeConverter;
 
   @Setter(onMethod_ = @Autowired)
@@ -33,17 +37,18 @@ class CreateMatchSolutionsUseCase {
   @Transactional
   @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "matchsolution" })
   void createMatchSolutions(MatchSolutionCollection collection) {
-    collection
+    var requests = collection
         .getMatchSolutions()
         .stream()
         .map(m -> makeEntity(collection.getAnalysisId(), m))
-        .forEach(matchSolutionRepository::save);
+        .collect(toList());
+    matchSolutionDataAccess.save(requests);
   }
 
-  private MatchSolutionEntity makeEntity(long analysisId, MatchSolution matchSolution) {
+  private SaveMatchSolutionRequest makeEntity(long analysisId, MatchSolution matchSolution) {
     var solutionResponse = matchSolution.getResponse();
 
-    var builder = MatchSolutionEntity.builder()
+    var builder = SaveMatchSolutionRequest.builder()
         .analysisId(analysisId)
         .matchId(matchSolution.getMatchId())
         .solution(solutionResponse.getFeatureVectorSolution().toString());
