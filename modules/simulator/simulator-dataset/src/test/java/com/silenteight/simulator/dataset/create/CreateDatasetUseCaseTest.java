@@ -2,6 +2,7 @@ package com.silenteight.simulator.dataset.create;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
+import com.silenteight.simulator.dataset.create.exception.EmptyDatasetException;
 import com.silenteight.simulator.dataset.domain.DatasetMetadataService;
 
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import static com.silenteight.simulator.dataset.create.CreateDatasetRequest.POST
 import static com.silenteight.simulator.dataset.create.CreateDatasetRequest.PRE_AUDIT_TYPE;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.CREATE_DATASET_REQUEST;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.DATASET;
+import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.EMPTY_DATASET;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.*;
@@ -52,6 +54,18 @@ class CreateDatasetUseCaseTest {
     assertThat(preAudit.getType()).isEqualTo(PRE_AUDIT_TYPE);
     AuditDataDto postAudit = getPostAudit(logCaptor);
     assertThat(postAudit.getType()).isEqualTo(POST_AUDIT_TYPE);
+  }
+
+  @Test
+  void throwExceptionIfDatasetIsEmpty() {
+    // given
+    when(createDatasetService.createDataset(CREATE_DATASET_REQUEST)).thenReturn(EMPTY_DATASET);
+
+    // then
+    assertThatThrownBy(() -> underTest.activate(CREATE_DATASET_REQUEST))
+        .isInstanceOf(EmptyDatasetException.class)
+        .hasMessage("Dataset contains no alerts");
+    verifyNoInteractions(datasetMetadataService);
   }
 
   private static AuditDataDto getPreAudit(ArgumentCaptor<AuditDataDto> logCaptor) {

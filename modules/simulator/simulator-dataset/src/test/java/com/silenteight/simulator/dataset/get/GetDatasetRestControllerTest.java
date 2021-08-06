@@ -20,7 +20,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @Import({
     GetDatasetRestController.class,
-    GetDatasetRestControllerAdvice.class,
+    GetDatasetControllerAdvice.class,
     GenericExceptionControllerAdvice.class
 })
 class GetDatasetRestControllerTest extends BaseRestControllerTest {

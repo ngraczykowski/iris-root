@@ -39,6 +39,7 @@ public final class DatasetFixtures {
   public static final DatasetState STATE = CURRENT;
   public static final long ALERTS_COUNT = 5L;
   public static final long SECOND_ALERTS_COUNT = 4L;
+  public static final long NO_ALERTS_COUNT = 0;
   public static final OffsetDateTime FROM = OffsetDateTime.of(2019, 1, 1, 0, 0, 0, 0, UTC);
   public static final OffsetDateTime TO = OffsetDateTime.of(2020, 10, 10, 23, 59, 59, 0, UTC);
   public static final OffsetDateTime CREATED_AT =
@@ -78,6 +79,12 @@ public final class DatasetFixtures {
       Dataset.newBuilder()
           .setName(EXTERNAL_RESOURCE_NAME)
           .setAlertCount(ALERTS_COUNT)
+          .build();
+
+  public static final Dataset EMPTY_DATASET =
+      Dataset.newBuilder()
+          .setName(EXTERNAL_RESOURCE_NAME)
+          .setAlertCount(NO_ALERTS_COUNT)
           .build();
 
   private static AlertSelectionCriteriaDto selectionCriteria(

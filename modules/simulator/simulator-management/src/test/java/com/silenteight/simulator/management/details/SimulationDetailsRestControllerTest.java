@@ -21,7 +21,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @Import({
     SimulationDetailsRestController.class,
-    SimulationDetailsRestControllerAdvice.class,
+    SimulationDetailsControllerAdvice.class,
     GenericExceptionControllerAdvice.class,
 })
 class SimulationDetailsRestControllerTest extends BaseRestControllerTest {
