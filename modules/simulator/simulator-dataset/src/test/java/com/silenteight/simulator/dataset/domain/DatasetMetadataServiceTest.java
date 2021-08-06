@@ -1,6 +1,7 @@
 package com.silenteight.simulator.dataset.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
+import com.silenteight.simulator.dataset.domain.exception.DatasetNotFoundException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import static com.silenteight.simulator.dataset.domain.DatasetState.CURRENT;
+import static com.silenteight.simulator.dataset.domain.DatasetState.ACTIVE;
+import static com.silenteight.simulator.dataset.domain.DatasetState.ARCHIVED;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -37,7 +39,7 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
     assertThat(datasetOpt).isPresent();
     DatasetEntity dataset = datasetOpt.get();
     assertThat(dataset.getDatasetId()).isEqualTo(ID);
-    assertThat(dataset.getState()).isEqualTo(CURRENT);
+    assertThat(dataset.getState()).isEqualTo(ACTIVE);
     assertThat(dataset.getExternalResourceName()).isEqualTo(EXTERNAL_RESOURCE_NAME);
   }
 
@@ -54,7 +56,27 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
     assertThat(result).isEqualTo(ALERTS_COUNT + SECOND_ALERTS_COUNT);
   }
 
-  private void persistDataset(UUID datasetId, long initialAlertCount) {
+  @Test
+  void shouldArchive() {
+    // given
+    DatasetEntity dataset = persistDataset(ID, ALERTS_COUNT);
+
+    // when
+    underTest.archive(ID);
+
+    // then
+    DatasetEntity savedDataset = entityManager.find(DatasetEntity.class, dataset.getId());
+    assertThat(savedDataset.getState()).isEqualTo(ARCHIVED);
+  }
+
+  @Test
+  void shouldThrowIfArchivingAndDatasetNotFound() {
+    assertThatThrownBy(() -> underTest.archive(ID))
+        .isInstanceOf(DatasetNotFoundException.class)
+        .hasMessageContaining("datasetId=" + ID);
+  }
+
+  private DatasetEntity persistDataset(UUID datasetId, long initialAlertCount) {
     DatasetEntity datasetEntity = DatasetEntity.builder()
         .datasetId(datasetId)
         .createdBy(CREATED_BY)
@@ -62,12 +84,12 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
         .description(DESCRIPTION)
         .externalResourceName(EXTERNAL_RESOURCE_NAME)
         .initialAlertCount(initialAlertCount)
-        .state(CURRENT)
+        .state(ACTIVE)
         .generationDateFrom(FROM)
         .generationDateTo(TO)
         .countries(COUNTRIES)
         .build();
 
-    repository.save(datasetEntity);
+    return repository.save(datasetEntity);
   }
 }

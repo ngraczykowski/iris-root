@@ -9,7 +9,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
 import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
-import static com.silenteight.simulator.dataset.domain.DatasetState.CURRENT;
+import static com.silenteight.simulator.dataset.domain.DatasetState.ACTIVE;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.*;
 import static java.util.List.of;
 import static org.hamcrest.CoreMatchers.is;
@@ -46,8 +46,8 @@ class ListDatasetRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its200_whenDatasetsFoundWitState() {
-    given(datasetQuery.list(CURRENT)).willReturn(of(DATASET_DTO));
-    get("/v1/datasets?state=CURRENT")
+    given(datasetQuery.list(ACTIVE)).willReturn(of(DATASET_DTO));
+    get("/v1/datasets?state=ACTIVE")
         .statusCode(OK.value())
         .body("size()", is(1))
         .body("[0].id", is(ID.toString()))
