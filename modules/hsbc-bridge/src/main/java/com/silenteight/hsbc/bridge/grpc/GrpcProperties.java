@@ -13,8 +13,13 @@ import java.time.Duration;
 public class GrpcProperties {
 
   Duration defaultDeadline;
+  Duration recommendationDeadline;
 
   public long deadlineInSeconds() {
     return defaultDeadline.toSecondsPart();
+  }
+
+  public long recommendationDeadlineInSeconds() {
+    return recommendationDeadline.toSeconds();
   }
 }

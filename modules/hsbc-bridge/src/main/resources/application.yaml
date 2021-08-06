@@ -3,6 +3,7 @@ silenteight.bridge:
   grpc:
     port: 24803
     default-deadline: 20s
+    recommendation-deadline: 5m
     adjudication-engine-address: static://localhost:24801
     governance-address: static://localhost:24205
     worldcheck-address: static://localhost:24813

@@ -59,7 +59,8 @@ class GrpcServiceConfiguration {
 
   @Bean
   RecommendationGrpcAdapter recommendationServiceGrpcApi() {
-    return new RecommendationGrpcAdapter(recommendationServiceBlockingStub, getDeadline());
+    return new RecommendationGrpcAdapter(
+        recommendationServiceBlockingStub, getRecommendationDeadline());
   }
 
   @Bean
@@ -69,5 +70,9 @@ class GrpcServiceConfiguration {
 
   private long getDeadline() {
     return grpcProperties.deadlineInSeconds();
+  }
+
+  private long getRecommendationDeadline() {
+    return grpcProperties.recommendationDeadlineInSeconds();
   }
 }
