@@ -8,6 +8,8 @@ import com.silenteight.hsbc.bridge.model.dto.ModelType;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.silenteight.hsbc.bridge.model.dto.ModelStatus.SUCCESS;
+
 @RequiredArgsConstructor
 @Slf4j
 public class GetModelUseCase {
@@ -17,7 +19,7 @@ public class GetModelUseCase {
   @Transactional
   public ModelInformationEntity getModel(@NonNull ModelType type) {
     var modelEntity =
-        modelInformationRepository.findFirstByTypeOrderByCreatedAtDesc(type);
+        modelInformationRepository.findFirstByTypeAndStatusOrderByCreatedAtDesc(type, SUCCESS);
 
     if (modelEntity.isPresent()) {
       var model = modelEntity.get();

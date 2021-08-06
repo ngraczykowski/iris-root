@@ -596,3 +596,23 @@ databaseChangeLog:
         - dropNotNullConstraint:
             tableName: hsbc_bridge_alert
             columnName: alert_time
+
+  - changeSet:
+      id: 1.0.0-19
+      author: awojcicki
+      changes:
+        - addColumn:
+            tableName: hsbc_bridge_model
+            columns:
+              - column:
+                  name: status
+                  type: varchar(30)
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: type
+              - column:
+                  name: status
+            indexName: idx_bridge_model_status_type
+            tableName: hsbc_bridge_model

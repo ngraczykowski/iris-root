@@ -1,8 +1,10 @@
 package com.silenteight.hsbc.bridge.model.transfer
 
-import com.silenteight.hsbc.bridge.model.dto.ModelType
-
 import spock.lang.Specification
+
+import static com.silenteight.hsbc.bridge.model.dto.ModelStatus.SUCCESS
+import static com.silenteight.hsbc.bridge.model.dto.ModelType.*
+import static java.util.Optional.of
 
 class GetModelUseCaseSpec extends Specification {
 
@@ -11,67 +13,79 @@ class GetModelUseCaseSpec extends Specification {
 
   def 'should get IS_PEP_PROCEDURAL model from database'() {
     given:
-    def modelInformationEntity = ModelInformationEntity.builder()
-        .name('test_model')
-        .minIoUrl('test_url')
-        .type(ModelType.IS_PEP_PROCEDURAL)
-        .build()
+    def modelInformationEntity = of(
+        ModelInformationEntity.builder()
+            .name('test_model')
+            .minIoUrl('test_url')
+            .type(IS_PEP_PROCEDURAL)
+            .status(SUCCESS)
+            .build())
+    def entity = modelInformationEntity.get()
 
     when:
-    def result = underTest.getModel(ModelType.IS_PEP_PROCEDURAL)
+    def result = underTest.getModel(IS_PEP_PROCEDURAL)
 
     then:
-    1 * modelRepository.findFirstByTypeOrderByCreatedAtDesc(ModelType.IS_PEP_PROCEDURAL) >>
-        Optional.of(modelInformationEntity)
+    1 * modelRepository.findFirstByTypeAndStatusOrderByCreatedAtDesc(IS_PEP_PROCEDURAL, SUCCESS) >>
+        modelInformationEntity
 
     with(result) {
-      name == modelInformationEntity.name
-      minIoUrl == modelInformationEntity.minIoUrl
-      type == modelInformationEntity.type
+      name == entity.name
+      minIoUrl == entity.minIoUrl
+      type == entity.type
+      status == entity.status
     }
   }
 
   def 'should get IS_PEP_HISTORICAL model from database'() {
     given:
-    def modelInformationEntity = ModelInformationEntity.builder()
-        .name('test_model')
-        .minIoUrl('test_url')
-        .type(ModelType.IS_PEP_HISTORICAL)
-        .build()
+    def modelInformationEntity = of(
+        ModelInformationEntity.builder()
+            .name('test_model')
+            .minIoUrl('test_url')
+            .type(IS_PEP_HISTORICAL)
+            .status(SUCCESS)
+            .build())
+    def entity = modelInformationEntity.get()
 
     when:
-    def result = underTest.getModel(ModelType.IS_PEP_HISTORICAL)
+    def result = underTest.getModel(IS_PEP_HISTORICAL)
 
     then:
-    1 * modelRepository.findFirstByTypeOrderByCreatedAtDesc(ModelType.IS_PEP_HISTORICAL) >>
-        Optional.of(modelInformationEntity)
+    1 * modelRepository.findFirstByTypeAndStatusOrderByCreatedAtDesc(IS_PEP_HISTORICAL, SUCCESS) >>
+        modelInformationEntity
 
     with(result) {
-      name == modelInformationEntity.name
-      minIoUrl == modelInformationEntity.minIoUrl
-      type == modelInformationEntity.type
+      name == entity.name
+      minIoUrl == entity.minIoUrl
+      type == entity.type
+      status == entity.status
     }
   }
 
   def 'should get NAME_ALIASES model from database'() {
     given:
-    def modelInformationEntity = ModelInformationEntity.builder()
-        .name('test_model')
-        .minIoUrl('test_url')
-        .type(ModelType.NAME_ALIASES)
-        .build()
+    def modelInformationEntity = of(
+        ModelInformationEntity.builder()
+            .name('test_model')
+            .minIoUrl('test_url')
+            .type(NAME_ALIASES)
+            .status(SUCCESS)
+            .build())
+    def entity = modelInformationEntity.get()
 
     when:
-    def result = underTest.getModel(ModelType.NAME_ALIASES)
+    def result = underTest.getModel(NAME_ALIASES)
 
     then:
-    1 * modelRepository.findFirstByTypeOrderByCreatedAtDesc(ModelType.NAME_ALIASES) >>
-        Optional.of(modelInformationEntity)
+    1 * modelRepository.findFirstByTypeAndStatusOrderByCreatedAtDesc(NAME_ALIASES, SUCCESS) >>
+        modelInformationEntity
 
     with(result) {
-      name == modelInformationEntity.name
-      minIoUrl == modelInformationEntity.minIoUrl
-      type == modelInformationEntity.type
+      name == entity.name
+      minIoUrl == entity.minIoUrl
+      type == entity.type
+      status == entity.status
     }
   }
 }

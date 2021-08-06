@@ -1,5 +1,6 @@
 package com.silenteight.hsbc.bridge.model.transfer;
 
+import com.silenteight.hsbc.bridge.model.dto.ModelStatus;
 import com.silenteight.hsbc.bridge.model.dto.ModelType;
 
 import org.springframework.data.repository.Repository;
@@ -11,5 +12,6 @@ interface ModelInformationRepository extends Repository<ModelInformationEntity, 
 
   void save(ModelInformationEntity modelInformationEntity);
 
-  Optional<ModelInformationEntity> findFirstByTypeOrderByCreatedAtDesc(ModelType modelType);
+  Optional<ModelInformationEntity> findFirstByTypeAndStatusOrderByCreatedAtDesc(
+      ModelType modelType, ModelStatus status);
 }

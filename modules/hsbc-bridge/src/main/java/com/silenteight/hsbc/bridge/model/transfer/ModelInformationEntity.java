@@ -3,6 +3,7 @@ package com.silenteight.hsbc.bridge.model.transfer;
 import lombok.*;
 
 import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
+import com.silenteight.hsbc.bridge.model.dto.ModelStatus;
 import com.silenteight.hsbc.bridge.model.dto.ModelType;
 
 import javax.persistence.*;
@@ -31,4 +32,7 @@ public class ModelInformationEntity extends BaseEntity {
 
   @Enumerated(EnumType.STRING)
   private ModelType type;
+
+  @Enumerated(EnumType.STRING)
+  private ModelStatus status;
 }

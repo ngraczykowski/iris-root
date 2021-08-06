@@ -3,6 +3,7 @@ package com.silenteight.hsbc.bridge.model.transfer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.hsbc.bridge.model.dto.ModelStatus;
 import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
 import com.silenteight.hsbc.bridge.model.dto.ModelType;
 
@@ -27,6 +28,7 @@ public class StoreModelUseCase {
         .name(modelStatusUpdated.getName())
         .minIoUrl(modelStatusUpdated.getUrl())
         .type(ModelType.valueOf(modelStatusUpdated.getType()))
+        .status(ModelStatus.valueOf(modelStatusUpdated.getStatus()))
         .build();
   }
 }
