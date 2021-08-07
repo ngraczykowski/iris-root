@@ -7,10 +7,9 @@ buildscript {
 plugins {
   id "idea"
   id "maven-publish"
-  //TODO how to unify versions across repos? single convention plugin? (MI6-638)
-  id "com.silenteight.gradle.convention" version "1.15.0"
-  id "com.silenteight.gradle.release" version "1.0.9"
-  id "com.silenteight.gradle.wrapper" version "1.0.25"
+  id "com.silenteight.gradle.convention" version "1.20.0"
+  id "com.silenteight.gradle.release" version "1.4.0"
+  id "com.silenteight.gradle.wrapper" version "1.1.0"
   id "com.silenteight.gradle.testreportspublisher" version "1.2.0"
   id "io.freefair.aspectj" version "5.0.1" apply false
   id "nebula.resolution-rules" version "7.6.0"
