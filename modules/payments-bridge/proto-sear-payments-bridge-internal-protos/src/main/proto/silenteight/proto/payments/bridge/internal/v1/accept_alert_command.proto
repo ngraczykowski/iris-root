@@ -5,24 +5,13 @@ syntax = "proto3";
 package silenteight.proto.payments.bridge.internal.v1;
 
 import "google/api/field_behavior.proto";
-import "google/protobuf/struct.proto";
-import "google/protobuf/timestamp.proto";
+import "silenteight/proto/payments/bridge/internal/v1/alert_message.proto";
 
 option java_multiple_files = true;
 option java_outer_classname = "AcceptAlertCommandProto";
 option java_package = "com.silenteight.proto.payments.bridge.internal.v1";
 
 message AcceptAlertCommand {
-  // The original JSON alert message serialized to google.protobuf.Struct.
-  google.protobuf.Struct alert_message = 1 [(google.api.field_behavior) = REQUIRED];
-
-  // The time the alert message was received.
-  google.protobuf.Timestamp receive_time = 2 [(google.api.field_behavior) = REQUIRED];
-
-  // The name of the endpoint the message with decision must be delivered to, in form of
-  // `recommendation-endpoints/<endpoint name>`, e.g., `recommendation-endpoints/HK`,
-  // `recommendation-endpoints/UK`.
-  //
-  // If unspecified, the recommendation will not be sent to the endpoint.
-  string recommendation_endpoint = 3;
+  // The alert message to accept for processing.
+  AlertMessage alert_message = 1 [(google.api.field_behavior) = REQUIRED];
 }
