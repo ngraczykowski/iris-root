@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_1" author="wkeska">
+    <createTable tableName="ae_analysis_alert">
+      <column name="analysis_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="alert_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="deadline_at" type="TIMESTAMP"/>
+
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_analysis_alert"
+        baseColumnNames="analysis_id"
+        constraintName="fk_ae_analysis_alert_analysis_id"
+        referencedTableName="ae_analysis"
+        referencedColumnNames="analysis_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_analysis_alert"
+        baseColumnNames="alert_id"
+        constraintName="fk_ae_analysis_alert_alert_id"
+        referencedTableName="ae_alert"
+        referencedColumnNames="alert_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"/>
+  </changeSet>
+</databaseChangeLog>

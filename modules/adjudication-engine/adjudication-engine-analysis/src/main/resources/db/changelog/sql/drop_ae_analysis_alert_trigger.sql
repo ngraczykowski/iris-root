@@ -1,0 +1,1 @@
+DROP TRIGGER IF EXISTS ae_analysis_alert_dataset_trigger ON ae_analysis_dataset;
