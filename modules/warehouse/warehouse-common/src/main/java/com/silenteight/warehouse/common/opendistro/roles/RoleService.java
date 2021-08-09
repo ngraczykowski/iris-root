@@ -66,4 +66,8 @@ public class RoleService {
         .map(Objects::toString)
         .collect(toList());
   }
+
+  public void removeRole(UUID id) {
+    opendistroElasticClient.removeRole(id.toString());
+  }
 }

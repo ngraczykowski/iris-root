@@ -14,6 +14,7 @@ import com.silenteight.warehouse.indexer.alert.AlertRestController;
 import com.silenteight.warehouse.management.country.get.GetCountriesRestController;
 import com.silenteight.warehouse.management.country.update.UpdateCountriesRestController;
 import com.silenteight.warehouse.management.group.create.CreateCountryGroupRestController;
+import com.silenteight.warehouse.management.group.delete.DeleteCountryGroupRestController;
 import com.silenteight.warehouse.management.group.domain.dto.CountryGroupDto;
 import com.silenteight.warehouse.management.group.domain.exception.CountryGroupDoesNotExistException;
 
@@ -69,6 +70,9 @@ class CountryGroupsIT {
   private OpendistroElasticClient opendistroElasticClient;
 
   @Autowired
+  private DeleteCountryGroupRestController deleteCountryGroupRestController;
+
+  @Autowired
   private AlertRestController alertRestController;
 
   private static final String COUNTRY = "UK";
@@ -76,15 +80,14 @@ class CountryGroupsIT {
   private static final UUID NEW_COUNTRY_GROUP_ID =
       fromString("e11f9680-fb3b-4776-8044-571026290a65");
 
+  private static final CountryGroupDto COUNTRY_GROUP = CountryGroupDto.builder()
+      .id(NEW_COUNTRY_GROUP_ID)
+      .name("new country group")
+      .build();
+
   @BeforeEach
   void init() {
     storeData();
-
-    CountryGroupDto countryGroupDto = CountryGroupDto.builder()
-        .id(ELASTIC_ALLOWED_ROLE)
-        .name("Country group")
-        .build();
-    createCountryGroupRestController.create(countryGroupDto);
   }
 
   @AfterEach
@@ -123,15 +126,28 @@ class CountryGroupsIT {
 
   @Test
   void shouldReturnEmptyListOfCountriesWhenNewCountryGroup() {
-    CountryGroupDto countryGroupDto = CountryGroupDto.builder()
-        .id(NEW_COUNTRY_GROUP_ID)
-        .name("new country group")
-        .build();
-    createCountryGroupRestController.create(countryGroupDto);
+    saveCountryGroup(COUNTRY_GROUP);
 
     List<String> countries = getCountriesRestController.get(NEW_COUNTRY_GROUP_ID).getBody();
 
     assertThat(countries).isEmpty();
+  }
+
+  @Test
+  void shouldThrowExceptionWhenNewlyCreatedCountryGroupIsRemoved() {
+    //given
+    saveCountryGroup(COUNTRY_GROUP);
+
+    //when
+    deleteCountryGroupRestController.delete(NEW_COUNTRY_GROUP_ID);
+
+    //then
+    assertThatThrownBy(() -> getCountriesRestController.get(NEW_COUNTRY_GROUP_ID))
+        .isInstanceOf(CountryGroupDoesNotExistException.class);
+  }
+
+  private void saveCountryGroup(CountryGroupDto countryGroupDto) {
+    createCountryGroupRestController.create(countryGroupDto);
   }
 
   @SneakyThrows

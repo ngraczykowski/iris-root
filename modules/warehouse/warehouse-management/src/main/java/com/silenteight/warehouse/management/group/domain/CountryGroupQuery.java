@@ -10,7 +10,8 @@ import com.silenteight.warehouse.management.group.list.ListCountryGroupQuery;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 class CountryGroupQuery implements ListCountryGroupQuery, GetCountryGroupQuery {
@@ -22,7 +23,7 @@ class CountryGroupQuery implements ListCountryGroupQuery, GetCountryGroupQuery {
     return countryGroupRepository.findAll()
         .stream()
         .map(CountryGroupQuery::toDto)
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 
   public CountryGroupDto get(UUID id) {

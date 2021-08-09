@@ -10,6 +10,7 @@ public final class CountryGroupFixtures {
   public static final String COUNTRY_GROUP_URL = "/v1/countryGroups";
   public static final String NAME = "oceania";
   public static final String UPDATED_NAME = "europe";
+  public static final String COUNTRY_GROUP_DELETE_URL = COUNTRY_GROUP_URL + "/" + COUNTRY_GROUP_ID;
 
   public static final CountryGroupDto COUNTRY_GROUP_DTO =
       CountryGroupDto.builder()

@@ -21,4 +21,8 @@ public class RolesMappingService {
 
     opendistroElasticClient.setRoleMapping(role.toString(), roleMappingDto);
   }
+
+  public void removeRoleMapping(UUID id) {
+    opendistroElasticClient.removeRoleMapping(id.toString());
+  }
 }

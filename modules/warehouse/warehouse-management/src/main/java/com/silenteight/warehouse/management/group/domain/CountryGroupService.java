@@ -46,4 +46,16 @@ public class CountryGroupService {
 
     repository.save(entity);
   }
+
+  @Transactional
+  public void delete(UUID id) {
+    if (!repository.existsByCountryGroupId(id))
+      throw new CountryGroupDoesNotExistException(id);
+
+    doDelete(id);
+  }
+
+  private void doDelete(UUID id) {
+    repository.deleteByCountryGroupId(id);
+  }
 }

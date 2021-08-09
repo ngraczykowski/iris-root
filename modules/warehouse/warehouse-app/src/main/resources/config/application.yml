@@ -221,6 +221,7 @@ sep:
         - "CREATE_COUNTRY_GROUP"
         - "UPDATE_COUNTRY_GROUP"
         - "UPDATE_COUNTRIES"
+        - "DELETE_COUNTRY_GROUP"
       VIEW_QA_ALERTS:
         - "VIEW_ALERTS_DATA"
       MANAGE_QA_ALERT:

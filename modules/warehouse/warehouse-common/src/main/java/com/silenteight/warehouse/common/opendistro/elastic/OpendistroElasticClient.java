@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONObject;
 import org.apache.http.RequestLine;
 import org.apache.http.StatusLine;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
@@ -239,6 +240,48 @@ public class OpendistroElasticClient {
         request.getEndpoint(), response.getStatusLine(), queryResultDto);
 
     return queryResultDto;
+  }
+
+  public void removeRole(String id) {
+    try {
+      doRemoveRole(id);
+    } catch (IOException e) {
+      throw handle("removeRole", e);
+    }
+  }
+
+  private void doRemoveRole(String id) throws IOException {
+    String path = fromUriString(ROLES_ENDPOINT)
+        .buildAndExpand(of(ROLE_PARAM, id))
+        .toUriString();
+
+    Request request = new Request(HttpDelete.METHOD_NAME, path);
+    Response response = restLowLevelClient.performRequest(request);
+
+    log.debug(
+        "OpendistroElasticClient method=DELETE, endpoint={}, statusCode={}", request.getEndpoint(),
+        response.getStatusLine());
+  }
+
+  public void removeRoleMapping(String id) {
+    try {
+      doRemoveMapping(id);
+    } catch (IOException e) {
+      throw handle("removeRoleMapping", e);
+    }
+  }
+
+  private void doRemoveMapping(String id) throws IOException {
+    String path = fromUriString(ROLES_MAPPING_ENDPOINT)
+        .buildAndExpand(of(ROLEMAPPING_PARAM, id))
+        .toUriString();
+
+    Request request = new Request(HttpDelete.METHOD_NAME, path);
+    Response response = restLowLevelClient.performRequest(request);
+
+    log.debug(
+        "OpendistroElasticClient method=DELETE, endpoint={}, statusCode={}", request.getEndpoint(),
+        response.getStatusLine());
   }
 
   private Request createRequest(String name, String description) {

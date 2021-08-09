@@ -13,4 +13,8 @@ interface CountryGroupRepository extends Repository<CountryGroupEntity, Long> {
   Optional<CountryGroupEntity> findByCountryGroupId(UUID id);
 
   void save(CountryGroupEntity entity);
+
+  boolean existsByCountryGroupId(UUID id);
+
+  void deleteByCountryGroupId(UUID countryGroupId);
 }
