@@ -56,7 +56,7 @@ public class WorldCheckIndividual {
   @JsonProperty("WorldCheckIndividuals.Date of Birth")
   private String dateOfBirth;
   @JsonProperty("WorldCheckIndividuals.Year of Birth")
-  private Integer yearOfBirth;
+  private String yearOfBirth;
   @JsonProperty("WorldCheckIndividuals.Deceased Flag")
   private String deceasedFlag;
   @JsonProperty("WorldCheckIndividuals.Deceased Date")

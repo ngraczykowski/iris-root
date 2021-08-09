@@ -46,7 +46,7 @@ class StoreBulkUseCase {
       eventPublisher.publishEvent(new BulkStoredEvent(bulkId));
     } catch (Exception e) {
       log.error("Cannot create alert data json, batchId = {}", bulkId, e);
-      bulk.error("Enable to create alerts, due to: " + e.getMessage());
+      bulk.error("Unable to create alerts, due to: " + e.getMessage());
       bulkRepository.save(bulk);
     }
   }
