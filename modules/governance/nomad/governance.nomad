@@ -220,8 +220,8 @@ job "governance" {
       }
 
       template {
-        data = file("./conf/agents/configurations/date-enty-normal.json")
-        destination = "local/conf/agents/configurations/date-enty-normal.json"
+        data = file("./conf/agents/configurations/date-enty-normal.yml")
+        destination = "local/conf/agents/configurations/date-enty-normal.yml"
         change_mode = "noop"
       }
 
