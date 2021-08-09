@@ -7,6 +7,7 @@ import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticC
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,11 +32,28 @@ class OpendistroElasticClientTest {
   private static final String TEST_TENANT_ID = "itest_simulation_master";
   private static final String TEST_TENANT_DESCRIPTION = "description";
 
+  private static final RoleDto ROLE_DTO = RoleDto.builder()
+      .indexPermissions(List.of(IndexPermission.builder()
+          .indexPatterns(List.of("itest_production"))
+          .dls("{\"terms\": {\"s8_country.keyword\": [\"UK\", \"ES\"]}}")
+          .build()))
+      .build();
+
+  private static final RoleMappingDto ROLE_MAPPING_DTO = RoleMappingDto.builder()
+      .backendRoles(Set.of(ELASTIC_ALLOWED_ROLE_STRING))
+      .build();
+
   @Autowired
   OpendistroElasticClient opendistroElasticClient;
 
   @Autowired
   SimpleElasticTestClient simpleElasticTestClient;
+
+  @BeforeEach
+  void setUp() {
+    saveRole();
+    saveRoleMapping();
+  }
 
   @Test
   @SneakyThrows
@@ -53,34 +71,21 @@ class OpendistroElasticClientTest {
   @Test
   @SneakyThrows
   void shouldReturnRole() {
-    RoleDto roleDto = RoleDto.builder()
-        .indexPermissions(List.of(IndexPermission.builder()
-            .indexPatterns(List.of("itest_production"))
-            .dls("{\"terms\": {\"s8_country.keyword\": [\"UK\", \"ES\"]}}")
-            .build()))
-        .build();
-
-    opendistroElasticClient.setRole(ELASTIC_ALLOWED_ROLE_STRING, roleDto);
-
     RoleDto responseRoleDto =
         opendistroElasticClient.getCurrentRole(ELASTIC_ALLOWED_ROLE_STRING);
 
-    assertThat(responseRoleDto).isEqualTo(roleDto);
+    assertThat(responseRoleDto).isEqualTo(ROLE_DTO);
   }
 
   @Test
   @SneakyThrows
   void shouldReturnRoleMapping() {
-    RoleMappingDto roleMappingDto = RoleMappingDto.builder()
-        .backendRoles(Set.of(ELASTIC_ALLOWED_ROLE_STRING))
-        .build();
-
-    opendistroElasticClient.setRoleMapping(ELASTIC_ALLOWED_ROLE_STRING, roleMappingDto);
+    opendistroElasticClient.setRoleMapping(ELASTIC_ALLOWED_ROLE_STRING, ROLE_MAPPING_DTO);
 
     RoleMappingDto responseRoleDto =
         opendistroElasticClient.getRoleMapping(ELASTIC_ALLOWED_ROLE_STRING);
 
-    assertThat(responseRoleDto).isEqualTo(roleMappingDto);
+    assertThat(responseRoleDto).isEqualTo(ROLE_MAPPING_DTO);
   }
 
   @Test
@@ -109,5 +114,35 @@ class OpendistroElasticClientTest {
     QueryResultDto queryResultDto = opendistroElasticClient.executeSql(queryDto);
 
     assertThat(queryResultDto).isNotNull();
+  }
+
+  @Test
+  void shouldThrowExceptionWhenRoleNotFound() {
+    //when
+    opendistroElasticClient.removeRole(ELASTIC_ALLOWED_ROLE_STRING);
+
+    //then
+    assertThatThrownBy(() -> opendistroElasticClient.getCurrentRole(ELASTIC_ALLOWED_ROLE_STRING))
+        .isInstanceOf(OpendistroElasticClientException.class)
+        .hasMessageContaining("Error while calling getCurrentRole ES response: 404: Not Found");
+  }
+
+  @Test
+  void shouldRemoveRoleMapping() {
+    //when
+    opendistroElasticClient.removeRoleMapping(ELASTIC_ALLOWED_ROLE_STRING);
+
+    //then
+    assertThatThrownBy(() -> opendistroElasticClient.getRoleMapping(ELASTIC_ALLOWED_ROLE_STRING))
+        .isInstanceOf(OpendistroElasticClientException.class)
+        .hasMessageContaining("Error while calling getRoleMapping ES response: 404: Not Found");
+  }
+
+  private void saveRole() {
+    opendistroElasticClient.setRole(ELASTIC_ALLOWED_ROLE_STRING, ROLE_DTO);
+  }
+
+  private void saveRoleMapping() {
+    opendistroElasticClient.setRoleMapping(ELASTIC_ALLOWED_ROLE_STRING, ROLE_MAPPING_DTO);
   }
 }

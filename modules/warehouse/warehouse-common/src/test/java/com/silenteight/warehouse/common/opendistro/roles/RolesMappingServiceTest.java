@@ -25,6 +25,9 @@ class RolesMappingServiceTest {
   @Captor
   private ArgumentCaptor<RoleMappingDto> roleMappingDtoCaptor;
 
+  @Captor
+  private ArgumentCaptor<String> countryGroupIdCaptor;
+
   @InjectMocks
   private RolesMappingService underTest;
 
@@ -37,5 +40,15 @@ class RolesMappingServiceTest {
 
     assertThat(roleMappingDtoCaptor.getValue().getBackendRoles())
         .containsExactly(ELASTIC_ALLOWED_ROLE_STRING);
+  }
+
+  @Test
+  void shouldCallOpendistroClientWhenRemoveRoleRequested() {
+    underTest.removeRoleMapping(ELASTIC_ALLOWED_ROLE);
+
+    verify(opendistroElasticClient)
+        .removeRoleMapping(countryGroupIdCaptor.capture());
+
+    assertThat(countryGroupIdCaptor.getValue()).isEqualTo(ELASTIC_ALLOWED_ROLE_STRING);
   }
 }

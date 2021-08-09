@@ -83,4 +83,25 @@ class CountryGroupServiceTest extends BaseDataJpaTest {
             "Country Group with UUID %s already exists.",
             COUNTRY_GROUP_ID));
   }
+
+  @Test
+  void shouldDeleteCountryGroup() {
+    //given
+    underTest.create(COUNTRY_GROUP_DTO);
+
+    //when
+    underTest.delete(COUNTRY_GROUP_ID);
+
+    //then
+    Optional<CountryGroupEntity> countryGroupEntity =
+        countryGroupRepository.findByCountryGroupId(COUNTRY_GROUP_ID);
+    assertThat(countryGroupEntity).isNotPresent();
+  }
+
+  @Test
+  void shouldThrowExceptionWhenCountryGroupAlreadyDoesNotExist() {
+    assertThatThrownBy(() -> underTest.delete(MISSING_UUID))
+        .isInstanceOf(CountryGroupDoesNotExistException.class)
+        .hasMessageContaining(format("Country Group with UUID %s does not exist.", MISSING_UUID));
+  }
 }
