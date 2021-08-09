@@ -26,8 +26,8 @@ keycloak:
 serp:
   governance:
     agent:
-      agentConfigurationSource: file:conf/agents/agent_configs.json
-      agentDetailsSource: file:conf/agents/agent_details.json
+      agentConfigurationSource: file:local/conf/agents/agent_configs.json
+      agentDetailsSource: file:local/conf/agents/agent_details.json
   governance.qa:
     sampling:
       schedule:

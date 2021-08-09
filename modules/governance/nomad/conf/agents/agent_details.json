@@ -17,7 +17,7 @@
     "configurations": [
       {
         "name": "date-entity-normal",
-        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
       }
     ]},
   "agents/date/versions/1.0.0/configs/1": {
@@ -35,7 +35,7 @@
     "configurations": [
       {
         "name": "date-entity-normal",
-        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
       }
     ]
   },
@@ -57,7 +57,7 @@
     "configurations": [
       {
         "name": "date-entity-normal",
-        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
       }
     ]
   },
@@ -78,7 +78,7 @@
     "configurations": [
       {
         "name": "date-entity-normal",
-        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
       }
     ]
   },
@@ -96,7 +96,7 @@
     "configurations": [
       {
         "name": "date-entity-normal",
-        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
       }
     ]
   },
@@ -119,7 +119,7 @@
     "configurations": [
       {
         "name": "date-entity-normal",
-        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
       }
     ]
   },
@@ -139,7 +139,7 @@
     "configurations": [
       {
         "name": "date-entity-normal",
-        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
       }
     ]
   },
@@ -157,7 +157,7 @@
     "configurations": [
       {
         "name": "date-entity-normal",
-        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
       }
     ]
   },
@@ -176,7 +176,7 @@
     "configurations": [
       {
         "name": "date-entity-normal",
-        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
       }
     ]
   },
@@ -199,7 +199,7 @@
     "configurations": [
       {
         "name": "date-entity-normal",
-        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
       }
     ]
   },
@@ -218,7 +218,7 @@
     "configurations": [
       {
         "name": "date-entity-normal",
-        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
       }
     ]
   },
@@ -235,7 +235,7 @@
     "configurations": [
       {
         "name": "date-entity-normal",
-        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
       }
     ]
   },
@@ -253,7 +253,7 @@
     "configurations": [
       {
         "name": "date-entity-normal",
-        "configFile": "file:conf/agents/configurations/date-enty-normal.yml"
+        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
       }
     ]
   }
