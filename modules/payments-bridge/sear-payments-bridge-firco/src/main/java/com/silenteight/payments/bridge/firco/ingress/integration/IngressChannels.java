@@ -9,4 +9,7 @@ public final class IngressChannels {
 
   public static final String ACCEPT_ALERT_COMMAND_GATEWAY_CHANNEL =
       "acceptAlertCommandGatewayChannel";
+
+  public static final String DELAYED_REJECT_ALERT_COMMAND_GATEWAY_CHANNEL =
+      "delayedRejectAlertCommandGatewayChannel";
 }
