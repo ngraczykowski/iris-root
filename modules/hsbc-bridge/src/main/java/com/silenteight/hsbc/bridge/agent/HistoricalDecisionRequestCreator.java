@@ -2,7 +2,6 @@ package com.silenteight.hsbc.bridge.agent;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.UtilityClass;
 
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 import com.silenteight.hsbc.bridge.json.external.model.CaseHistory;
@@ -15,26 +14,27 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.silenteight.hsbc.bridge.agent.AgentUtils.toUnixTimestamp;
 import static com.silenteight.hsbc.bridge.agent.HistoricalDecisionRequestCreator.WatchlistType.*;
 
-@UtilityClass
+@RequiredArgsConstructor
 class HistoricalDecisionRequestCreator {
 
-  static HistoricalDecisionLearningStoreExchangeRequest create(Collection<AlertData> alerts) {
+  private final AgentTimestampMapper timestampMapper;
+
+  HistoricalDecisionLearningStoreExchangeRequest create(Collection<AlertData> alerts) {
     return HistoricalDecisionLearningStoreExchangeRequest.newBuilder()
         .addAllAlerts(mapAlerts(alerts))
         .build();
   }
 
-  private static List<Alert> mapAlerts(Collection<AlertData> alerts) {
+  private List<Alert> mapAlerts(Collection<AlertData> alerts) {
     return alerts
         .stream()
-        .map(HistoricalDecisionRequestCreator::toAlert)
+        .map(this::toAlert)
         .collect(Collectors.toList());
   }
 
-  private static Alert toAlert(AlertData alert) {
+  private Alert toAlert(AlertData alert) {
     return Alert.newBuilder()
         .setAlertId(alert.getId())
         .setMatchId(alert.getCaseId())
@@ -44,22 +44,22 @@ class HistoricalDecisionRequestCreator {
         .build();
   }
 
-  private static List<Decision> mapDecisions(List<CaseHistory> history) {
+  private List<Decision> mapDecisions(List<CaseHistory> history) {
     return history.stream()
         .filter(e -> "currentState".equals(e.getAttribute()))
-        .map(HistoricalDecisionRequestCreator::toDecision)
+        .map(this::toDecision)
         .collect(Collectors.toList());
   }
 
-  private static Decision toDecision(CaseHistory caseHistory) {
+  private Decision toDecision(CaseHistory caseHistory) {
     return Decision.newBuilder()
         .setId(createDecisionId(caseHistory))
         .setValue(caseHistory.getNewValue())
-        .setCreatedAt(toUnixTimestamp(caseHistory.getModifiedDateTime()))
+        .setCreatedAt(timestampMapper.toUnixTimestamp(caseHistory.getModifiedDateTime()))
         .build();
   }
 
-  private static String createDecisionId(CaseHistory caseHistory) {
+  private String createDecisionId(CaseHistory caseHistory) {
     var allValues = caseHistory.getModifiedBy()
         + caseHistory.getModifiedDateTime()
         + caseHistory.getAttribute()
@@ -122,7 +122,7 @@ class HistoricalDecisionRequestCreator {
         .build();
   }
 
-  private static Optional<String> findApCountry(AlertData alertData) {
+  private Optional<String> findApCountry(AlertData alertData) {
     var individuals = alertData.getCustomerIndividuals();
     var entities = alertData.getCustomerEntities();
 

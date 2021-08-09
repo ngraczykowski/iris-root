@@ -23,6 +23,7 @@ class AlertProcessor {
   private final AlertRepository repository;
   private final RelationshipProcessor relationshipProcessor;
   private final MatchFacade matchFacade;
+  private final AlertTimeCalculator alertTimeCalculator;
 
   @Transactional
   public void preProcessAlertsWithinBulk(@NonNull String bulkId) {
@@ -62,8 +63,8 @@ class AlertProcessor {
     alert.getMetadata().addAll(new AlertMetadataCollector().collectFromAlertData(alertData));
   }
 
-  private static OffsetDateTime getAlertTime(CaseInformation caseInformation) {
-    return caseInformation.getAlertTime().orElse(OffsetDateTime.now());
+  private OffsetDateTime getAlertTime(CaseInformation caseInformation) {
+    return alertTimeCalculator.calculateAlertTime(caseInformation).orElse(OffsetDateTime.now());
   }
 
   private void tryToProcessRelationshipsAndCreateMatches(AlertEntity alert, AlertData alertData) {

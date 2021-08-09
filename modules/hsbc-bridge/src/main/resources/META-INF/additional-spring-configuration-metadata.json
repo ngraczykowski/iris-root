@@ -244,6 +244,11 @@
       "name": "silenteight.bridge.unpacker.path",
       "type": "java.lang.String",
       "description": "Path to unpacked file or temporary directory when the file is unpacked."
+    },
+    {
+      "name": "silenteight.bridge.alert.datetime.format",
+      "type": "java.lang.String",
+      "description": "DateTime pattern for CustomDateTimeFormatter.class used in date mapping."
     }
   ]
 }

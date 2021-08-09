@@ -17,6 +17,7 @@ import com.silenteight.hsbc.bridge.recommendation.RecommendationModule;
 import com.silenteight.hsbc.bridge.report.ReportModule;
 import com.silenteight.hsbc.bridge.retention.DataRetentionModule;
 import com.silenteight.hsbc.bridge.unpacker.UnpackerModule;
+import com.silenteight.hsbc.bridge.util.UtilModule;
 import com.silenteight.hsbc.bridge.watchlist.WatchlistModule;
 import com.silenteight.hsbc.datasource.category.DataSourceCategoryModule;
 import com.silenteight.hsbc.datasource.comment.DataSourceCommentModule;
@@ -60,6 +61,7 @@ import javax.sql.DataSource;
     ReportModule.class,
     UnpackerModule.class,
     WatchlistModule.class,
+    UtilModule.class,
 
     DataSourceApiGrpcModule.class,
     DataSourceCategoryModule.class,

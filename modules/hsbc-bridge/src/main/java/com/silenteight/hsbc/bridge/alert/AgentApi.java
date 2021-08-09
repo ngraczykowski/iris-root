@@ -6,5 +6,7 @@ import java.util.Collection;
 
 public interface AgentApi {
 
-  void send(Collection<AlertData> alerts);
+  void sendIsPep(Collection<AlertData> alerts);
+
+  void sendHistorical(Collection<AlertData> alerts);
 }

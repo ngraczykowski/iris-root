@@ -65,6 +65,8 @@ silenteight.bridge:
   unpacker:
     path: ${UNPACKER_PATH:/tmp}
 
+  alert.datetime.format: dd-MMM-yy
+
   category:
     risk-type-values:
       SAN:

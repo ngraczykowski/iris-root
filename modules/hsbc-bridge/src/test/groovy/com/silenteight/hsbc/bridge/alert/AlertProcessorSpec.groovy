@@ -7,6 +7,8 @@ import com.silenteight.hsbc.bridge.match.MatchFacade
 
 import spock.lang.Specification
 
+import java.time.OffsetDateTime
+
 import static com.silenteight.hsbc.bridge.alert.AlertStatus.STORED
 
 class AlertProcessorSpec extends Specification {
@@ -15,9 +17,10 @@ class AlertProcessorSpec extends Specification {
   def repository = Mock(AlertRepository)
   def relationshipProcessor = Mock(RelationshipProcessor)
   def matchFacade = Mock(MatchFacade)
+  def alertTimeCalculator = Mock(AlertTimeCalculator)
 
   def underTest = new AlertProcessor(
-      payloadConverter, repository, relationshipProcessor, matchFacade)
+      payloadConverter, repository, relationshipProcessor, matchFacade, alertTimeCalculator)
 
   def fixtures = new Fixtures()
 
@@ -52,6 +55,8 @@ class AlertProcessorSpec extends Specification {
     2 * relationshipProcessor.process(fixtures.alertData) >> fixtures.processedAlert
     2 * matchFacade.prepareAndSaveMatches(1, fixtures.processedAlert.matches)
     1 * repository.findDuplicateAlertsByBulkId(someBulkId) >> [fixtures.duplicatedAlert]
+    2 * alertTimeCalculator.calculateAlertTime(fixtures.alertData.caseInformation) >>
+        fixtures.alertDateTime
   }
 
   class Fixtures {
@@ -64,6 +69,7 @@ class AlertProcessorSpec extends Specification {
         caseInformation: new CaseInformation()
     )
     def processedAlert = new ProcessedAlert([], '')
+    def alertDateTime = Optional.of(OffsetDateTime.now())
 
     def createAlert(name) {
       def entity = new AlertEntity(id: 1, bulkId: 'bulkId')

@@ -1,15 +1,20 @@
 package com.silenteight.hsbc.bridge.agent
 
 import com.silenteight.hsbc.bridge.json.external.model.AlertData
+import com.silenteight.hsbc.bridge.util.CustomDateTimeFormatter
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 
 class HistoricalDecisionRequestCreatorSpec extends Specification {
 
+  def dateTimeFormatter = new CustomDateTimeFormatter("dd-MMM-yy")
+  def timestampMapper = new AgentTimestampMapper(dateTimeFormatter.getDateTimeFormatter())
+  def underTest = new HistoricalDecisionRequestCreator(timestampMapper)
+
   def "should return HistoricalDecisionRequest object"(){
     when:
-    def result = HistoricalDecisionRequestCreator.create(List.of(getAlertData()))
+    def result = underTest.create(List.of(getAlertData()))
 
     then:
     def alert = result.alertsList.first()

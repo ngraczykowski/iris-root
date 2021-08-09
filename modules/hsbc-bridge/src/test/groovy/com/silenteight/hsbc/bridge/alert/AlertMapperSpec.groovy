@@ -3,6 +3,7 @@ package com.silenteight.hsbc.bridge.alert
 import com.silenteight.hsbc.bridge.alert.AlertSender.AlertDataComposite
 import com.silenteight.hsbc.bridge.json.external.model.AlertData
 import com.silenteight.hsbc.bridge.json.external.model.CaseInformation
+import com.silenteight.hsbc.bridge.util.CustomDateTimeFormatter
 
 import spock.lang.Specification
 
@@ -10,7 +11,8 @@ class AlertMapperSpec extends Specification {
 
   def payloadConverter = Mock(AlertPayloadConverter)
   def analystDecisionMapper = Mock(AnalystDecisionMapper)
-  def underTest = new AlertMapper(payloadConverter, analystDecisionMapper)
+  def dateTimeFormatter = new CustomDateTimeFormatter("dd-MMM-yy")
+  def underTest = new AlertMapper(payloadConverter, analystDecisionMapper, dateTimeFormatter.getDateTimeFormatter())
 
   def "Should find and return collection of Alerts"() {
     given:

@@ -14,7 +14,6 @@ import com.silenteight.hsbc.bridge.report.Alert.Match;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,8 +21,6 @@ import java.util.stream.Collectors;
 import static com.google.common.base.Strings.nullToEmpty;
 import static java.time.LocalDateTime.parse;
 import static java.time.ZoneOffset.UTC;
-import static java.time.temporal.ChronoField.HOUR_OF_DAY;
-import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
 import static java.util.Comparator.comparingLong;
 import static java.util.stream.Collectors.toList;
 
@@ -33,14 +30,7 @@ class AlertMapper {
 
   private final AlertPayloadConverter payloadConverter;
   private final AnalystDecisionMapper analystDecisionMapper;
-
-  // TODO ALL-266
-  private static final DateTimeFormatter DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
-      .parseCaseInsensitive()
-      .appendPattern("dd-MMM-yy")
-      .parseDefaulting(HOUR_OF_DAY, 0)
-      .parseDefaulting(MINUTE_OF_HOUR, 0)
-      .toFormatter(Locale.ENGLISH);
+  private final DateTimeFormatter dateTimeFormatter;
 
   public Collection<Alert> toReportAlerts(@NonNull Collection<AlertDataComposite> alerts) {
     return alerts.stream()
@@ -128,7 +118,7 @@ class AlertMapper {
     return map;
   }
 
-  private static Optional<String> getLastCaseComment(List<CaseComment> caseComments) {
+  private Optional<String> getLastCaseComment(List<CaseComment> caseComments) {
     return caseComments.stream()
         .filter(c -> StringUtils.isNotEmpty(c.getCommentDateTime()))
         .sorted(comparingLong((k) -> toDate(k.getCommentDateTime())))
@@ -137,9 +127,9 @@ class AlertMapper {
         .findFirst();
   }
 
-  private static long toDate(@NonNull String commentDateTime) {
+  private long toDate(@NonNull String commentDateTime) {
     try {
-      return parse(commentDateTime.toUpperCase(), DATE_TIME_FORMATTER).toEpochSecond(UTC);
+      return parse(commentDateTime.toUpperCase(), dateTimeFormatter).toEpochSecond(UTC);
     } catch (DateTimeParseException ex) {
       log.error("Cannot parse case comment date = {}", commentDateTime, ex);
       return Long.MIN_VALUE;

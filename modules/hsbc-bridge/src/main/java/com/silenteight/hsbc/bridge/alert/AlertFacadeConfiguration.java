@@ -3,6 +3,7 @@ package com.silenteight.hsbc.bridge.alert;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.retention.DataCleaner;
+import com.silenteight.hsbc.bridge.util.CustomDateTimeFormatter;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ class AlertFacadeConfiguration {
   private final AlertPayloadRepository alertPayloadRepository;
   private final WarehouseApi warehouseApi;
   private final AgentApi agentApi;
+  private final CustomDateTimeFormatter dateTimeFormatter;
 
   @Bean
   AlertFacade alertFacade() {
@@ -40,7 +42,8 @@ class AlertFacadeConfiguration {
   }
 
   private AlertMapper alertMapper() {
-    return new AlertMapper(alertPayloadConverter, analystDecisionMapper());
+    return new AlertMapper(
+        alertPayloadConverter, analystDecisionMapper(), dateTimeFormatter.getDateTimeFormatter());
   }
 
   private AnalystDecisionMapper analystDecisionMapper() {

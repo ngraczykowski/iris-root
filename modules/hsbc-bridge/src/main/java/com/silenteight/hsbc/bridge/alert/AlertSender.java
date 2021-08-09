@@ -39,7 +39,8 @@ class AlertSender {
         .map(AlertDataComposite::getPayload)
         .collect(Collectors.toList());
 
-    agentApi.send(alertsData);
+    agentApi.sendIsPep(alertsData);
+    agentApi.sendHistorical(alertsData);
   }
 
   private void sendToWarehouse(Collection<AlertDataComposite> alerts) {

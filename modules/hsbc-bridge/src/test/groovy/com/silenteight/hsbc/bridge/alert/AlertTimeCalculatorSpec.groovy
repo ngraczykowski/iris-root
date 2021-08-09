@@ -1,4 +1,7 @@
-package com.silenteight.hsbc.bridge.json.external.model
+package com.silenteight.hsbc.bridge.alert
+
+import com.silenteight.hsbc.bridge.json.external.model.CaseInformation
+import com.silenteight.hsbc.bridge.util.CustomDateTimeFormatter
 
 import spock.lang.Shared
 import spock.lang.Specification
@@ -8,10 +11,12 @@ import static java.time.OffsetDateTime.parse
 import static java.util.Optional.empty
 import static java.util.Optional.of
 
-class CaseInformationSpec extends Specification {
+class AlertTimeCalculatorSpec extends Specification {
 
   @Shared
   def invalidDate = '12'
+  def dateTimeFormatter = new CustomDateTimeFormatter("dd-MMM-yy")
+  def underTest = new AlertTimeCalculator(dateTimeFormatter.getDateTimeFormatter())
 
   @Unroll
   def 'should get alert time as #expectedResult, `#createdDate`, `#modifiedDate`, `#updatedDateTime`'() {
@@ -22,7 +27,7 @@ class CaseInformationSpec extends Specification {
         updatedDateTime: updatedDateTime)
 
     when:
-    def result = caseInformation.getAlertTime()
+    def result = underTest.calculateAlertTime(caseInformation)
 
     then:
     result == expectedResult

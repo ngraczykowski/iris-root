@@ -3,32 +3,11 @@ package com.silenteight.hsbc.bridge.json.external.model;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.util.Locale;
-import java.util.Optional;
-
-import static java.time.LocalDate.parse;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Data
 @Slf4j
 public class CaseInformation {
-
-  // TODO ALL-266
-  private static final DateTimeFormatter DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
-      .parseCaseInsensitive()
-      .appendPattern("dd-MMM-yy")
-      .toFormatter(Locale.ENGLISH);
 
   @JsonProperty("DN_CASE.ID")
   private String id;
@@ -130,44 +109,4 @@ public class CaseInformation {
   private String extendedAttribute15;
   @JsonProperty("DN_CASE.AlertURL")
   private String alertUrl;
-
-  @JsonIgnore
-  public Optional<OffsetDateTime> getAlertTime() {
-    return getNewAlertDate()
-        .map(Optional::of)
-        .orElse(getReAlertDate())
-        .map(l -> l.atStartOfDay(ZoneOffset.UTC).toOffsetDateTime());
-  }
-
-  @JsonIgnore
-  private Optional<LocalDate> getReAlertDate() {
-    return safeGetAsDate(updatedDateTime);
-  }
-
-  @JsonIgnore
-  private Optional<LocalDate> getNewAlertDate() {
-    var createdDateResult = safeGetAsDate(createdDateTime);
-    var modifiedDateResult = safeGetAsDate(extendedAttribute13DateTime);
-
-    if (createdDateResult.isEmpty() || modifiedDateResult.isEmpty()) {
-      return empty();
-    }
-
-    var createdDate = createdDateResult.get();
-    var modifiedDate = modifiedDateResult.get();
-    return modifiedDate.isAfter(createdDate) ? of(createdDate) : empty();
-  }
-
-  private static Optional<LocalDate> safeGetAsDate(String date) {
-    if (isEmpty(date)) {
-      return empty();
-    }
-
-    try {
-      return of(parse(date.toUpperCase(), DATE_TIME_FORMATTER));
-    } catch (RuntimeException ex) {
-      log.error("Invalid date format, value = {}", date, ex);
-      return empty();
-    }
-  }
 }
