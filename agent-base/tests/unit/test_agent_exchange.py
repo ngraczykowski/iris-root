@@ -10,6 +10,7 @@ from silenteight.agents.v1.api.exchange.exchange_pb2 import (
 )
 
 from agent_base.agent_exchange import AgentExchange
+from agent_base.agent_exchange.agent_data_source import AgentDataSourceException
 from tests.unit.mocks import MockAgent, MockAgentDataSource, MockPikaConnection
 
 # mark all test with asyncio
@@ -127,26 +128,34 @@ async def test_agent_exchange_on_agent_exception(agent, agent_exchange):
         agent=agent, agent_exchange=agent_exchange, data_source_args=()
     )
 
-    assert solution == ("UNEXPECTED_ERROR", {})
+    assert solution == ("AGENT_ERROR", {})
 
 
 async def test_agent_exchange_on_data_source_exception(agent, agent_exchange):
     async def new_request(*args, **kwargs):
-        raise Exception()
+        for x in ():
+            yield x  # needed for this function to have aiter
+        raise AgentDataSourceException()
 
     agent_exchange.data_source.request = new_request
     solution = await ask(
         agent=agent, agent_exchange=agent_exchange, data_source_args=()
     )
 
-    assert solution == ("UNEXPECTED_ERROR", {})
+    assert solution == ("DATA_SOURCE_ERROR", {})
 
 
-async def test_agent_exchange_on_data_source_without_data(agent, agent_exchange):
+async def test_agent_exchange_on_no_data_from_data_source(agent, agent_exchange):
+    async def new_request(*args, **kwargs):
+        for x in ():
+            yield x  # needed for this function to have aiter
+
+    agent_exchange.data_source.request = new_request
     solution = await ask(
-        agent=agent, agent_exchange=agent_exchange, data_source_args=None
+        agent=agent, agent_exchange=agent_exchange, data_source_args=()
     )
-    assert solution == ("UNEXPECTED_ERROR", {})
+
+    assert solution == ("DATA_SOURCE_ERROR", {})
 
 
 @pytest.mark.parametrize(

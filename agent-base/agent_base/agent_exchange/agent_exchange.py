@@ -29,7 +29,10 @@ class MessageFormatException(AgentException):
 
 
 class AgentExchange(AgentService):
-    default_feature_solution = AgentOutput.FeatureSolution(solution="UNEXPECTED_ERROR")
+    data_source_error_solution = AgentOutput.FeatureSolution(
+        solution="DATA_SOURCE_ERROR"
+    )
+    default_error_solution = AgentOutput.FeatureSolution(solution="AGENT_ERROR")
 
     def __init__(self, config: Config, data_source: AgentDataSource):
         super().__init__(config)
@@ -83,18 +86,40 @@ class AgentExchange(AgentService):
     async def _resolve_all(self, request, agent_inputs):
         resolved = collections.defaultdict(dict)
         try:
+            self.logger.debug(type(agent_inputs))
             async for match, feature, task in self._create_tasks(agent_inputs):
-                result = await task
+                resolved[match][feature] = await self._resolve_task(feature, task)
 
-                resolved[match][feature] = self._create_agent_output_feature(
-                    feature, result
-                )
         except AgentDataSourceException as err:
             self.logger.warning(repr(err))
-        except Exception as err:
-            self.logger.error(repr(err))
+
+        self._update_absent_solutions(
+            request=request,
+            resolved=resolved,
+            solution=self.data_source_error_solution,
+        )
 
         return resolved
+
+    def _update_absent_solutions(self, request, resolved, solution):
+        for match in request.matches:
+            for feature in request.features:
+                if feature not in resolved[match]:
+                    resolved[match][feature] = AgentOutput.Feature(
+                        feature=feature,
+                        feature_solution=solution,
+                    )
+
+    async def _resolve_task(self, feature, task):
+        try:
+            result = await task
+        except Exception as err:
+            self.logger.error(repr(err))
+            return AgentOutput.Feature(
+                feature=feature, feature_solution=self.default_error_solution
+            )
+        else:
+            return self._create_agent_output_feature(feature, result)
 
     def _create_agent_output_feature(self, feature, result):
         solution, reason = result
@@ -114,10 +139,8 @@ class AgentExchange(AgentService):
             Generator[Tuple[str, str, Any], None, None], None
         ],
     ) -> AsyncGenerator[Tuple[str, str, Any], None]:
-        # async for request_input in request_inputs:
         async for match, feature, args in request_inputs:
-            if args is not None:
-                yield match, feature, self.create_resolve_task(*args)
+            yield match, feature, self.create_resolve_task(*args)
 
     def _prepare_response(self, request, resolved):
         response = AgentExchangeResponse(agent_outputs=[])
@@ -125,7 +148,7 @@ class AgentExchange(AgentService):
             features = [
                 resolved.get(match, {}).get(feature)
                 or AgentOutput.Feature(
-                    feature=feature, feature_solution=self.default_feature_solution
+                    feature=feature, feature_solution=self.default_error_solution
                 )
                 for feature in request.features
             ]

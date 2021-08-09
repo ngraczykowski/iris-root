@@ -20,7 +20,8 @@ class AgentService:
         self.pool = pool
 
     async def stop(self):
-        pass
+        self.agent = None
+        self.pool = None
 
     def create_resolve_task(self, *args, **kwargs):
         func = functools.partial(self.agent.resolve, *args, **kwargs)

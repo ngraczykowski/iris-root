@@ -1,4 +1,6 @@
 import logging
+import random
+from typing import Any, Mapping
 
 import consul.aio
 
@@ -14,26 +16,20 @@ class ConsulService:
             self.consul = None
             self.logger.info("Consul not configured")
 
-        self.services = {}
+    async def get(self, key: str) -> str:
+        service = await self.get_service(key)
+        self.logger.debug(f"{key} : {service}")
+        return f"{service['ServiceAddress'] or 'localhost'}:{service['ServicePort']}"
 
-    async def get(self, key):
+    async def get_service(self, key: str) -> Mapping[str, Any]:
         if not self.consul:
             raise Exception("Consul not configured")
 
-        if key not in self.services:
-            await self._update_services()
+        _, services = await self.consul.catalog.service(key)
+        if not services:
+            raise Exception(f"Service {key} is not known")
 
-        if key not in self.services:
-            raise Exception(f"{key} is not known")
-
-        self.logger.debug(f"{key} : {self.services[key]}")
-        return f"{self.services[key]['Address'] or 'localhost'}:{self.services[key]['Port']}"
-
-    async def _update_services(self):
-        services = await self.consul.agent.services()
-        self.logger.debug(f"{services}")
-        self.services = {value["Service"]: value for value in services.values()}
-        self.logger.debug(f"{self.services}")
+        return random.choice(services)
 
 
 class AddressService:
@@ -42,7 +38,9 @@ class AddressService:
     def __init__(self, config):
         self.consul = ConsulService(config)
 
-    async def get(self, address):
+    async def get(self, address: str) -> str:
         if address.startswith(self.consul_prefix):
             return await self.consul.get(address[len(self.consul_prefix) :])
+        if "," in address:
+            return random.choice(address.split(","))
         return address

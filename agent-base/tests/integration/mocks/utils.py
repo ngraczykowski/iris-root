@@ -4,9 +4,8 @@ import functools
 import multiprocessing
 import sys
 
-from company_name.main import main as run_agent
-
-from tests.integration.mocks import DataSourceMock
+from agent_base.example import main as run_agent
+from tests.integration.mocks.data_source_mock import DataSourceMock
 
 
 @contextlib.contextmanager

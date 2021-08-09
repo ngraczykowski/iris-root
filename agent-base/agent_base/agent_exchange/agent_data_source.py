@@ -18,6 +18,7 @@ class AgentDataSource:
         self.application_config = config.application_config
         self.address_service = AddressService(config.application_config)
         self.channel, self.command = None, None
+        self.logger = logging.getLogger("AgentDataSource")
 
     async def start(self):
         address = await self.address_service.get(
@@ -40,7 +41,7 @@ class AgentDataSource:
                 for parsed in self.parse_response(response):
                     yield parsed
         except grpc.RpcError as err:
-            logging.warning(f"{err!r} for {request}")
+            self.logger.warning(f"{err!r} for {request}")
             raise AgentDataSourceException()
 
     def prepare_request(self, request: AgentExchangeRequest) -> Any:
@@ -54,3 +55,4 @@ class AgentDataSource:
     async def stop(self) -> None:
         if self.channel:
             await self.channel.close()
+            self.channel = None
