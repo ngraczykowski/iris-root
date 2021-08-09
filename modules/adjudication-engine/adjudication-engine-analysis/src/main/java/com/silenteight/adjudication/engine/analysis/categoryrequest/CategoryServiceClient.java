@@ -10,6 +10,7 @@ import com.silenteight.datasource.categories.api.v1.CategoryServiceGrpc.Category
 import com.silenteight.datasource.categories.api.v1.CategoryValue;
 
 import io.grpc.Deadline;
+import io.grpc.StatusRuntimeException;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -27,15 +28,7 @@ class CategoryServiceClient {
   public BatchGetMatchCategoryValuesResponse batchGetMatchCategoryValues(
       BatchGetMatchCategoryValuesRequest request) {
 
-    var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
-
-    if (log.isTraceEnabled()) {
-      log.trace("Requesting missing category values: deadline={}, request={}", deadline, request);
-    }
-
-    var response = stub
-        .withDeadline(deadline)
-        .batchGetMatchCategoryValues(request);
+    BatchGetMatchCategoryValuesResponse response = performRequest(request);
 
     if (response.getCategoryValuesCount() == 0) {
       // FIXME(ahaczewski): Uncomment this exception, instead of hiding Data Source shit.
@@ -58,6 +51,29 @@ class CategoryServiceClient {
       return BatchGetMatchCategoryValuesResponse.newBuilder()
           .addAllCategoryValues(mockedResults)
           .build();
+    }
+
+    return response;
+  }
+
+  private BatchGetMatchCategoryValuesResponse performRequest(
+      BatchGetMatchCategoryValuesRequest request) {
+    var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
+
+    if (log.isTraceEnabled()) {
+      log.trace("Requesting missing category values: deadline={}, request={}", deadline, request);
+    }
+
+    BatchGetMatchCategoryValuesResponse response;
+
+    try {
+      response = stub
+          .withDeadline(deadline)
+          .batchGetMatchCategoryValues(request);
+    } catch (StatusRuntimeException status) {
+      log.warn("Oh well, data source failed to tell us categories... we'll figuring it"
+          + " out ourselves");
+      response = BatchGetMatchCategoryValuesResponse.getDefaultInstance();
     }
 
     if (log.isTraceEnabled()) {
