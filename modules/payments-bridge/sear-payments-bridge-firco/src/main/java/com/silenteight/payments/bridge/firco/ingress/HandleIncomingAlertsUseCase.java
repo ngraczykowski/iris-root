@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import com.silenteight.payments.bridge.common.protobuf.TimestampConverter;
 import com.silenteight.payments.bridge.firco.dto.input.AlertDataCenterDto;
-import com.silenteight.sear.payments.bridge.internal.v1.AlertMessage;
+import com.silenteight.proto.payments.bridge.internal.v1.AcceptAlertCommand;
 
 import com.google.protobuf.Timestamp;
 import org.springframework.stereotype.Service;
@@ -31,9 +31,9 @@ class HandleIncomingAlertsUseCase {
         .forEach(alertMessageGateway::sendMessage);
   }
 
-  private static AlertMessage createMessage(AlertDataCenterDto dto, Timestamp receiveTime) {
-    return AlertMessage.newBuilder()
-        .setDecisionEndpoint("decision-endpoints/" + dto.getDataCenter())
+  private static AcceptAlertCommand createMessage(AlertDataCenterDto dto, Timestamp receiveTime) {
+    return AcceptAlertCommand.newBuilder()
+        .setRecommendationEndpoint("recommendation-endpoints/" + dto.getDataCenter())
         // TODO(ahaczewski): Set the receive time.
         // TODO(ahaczewski): Map the original alert to Struct.
         .build();
