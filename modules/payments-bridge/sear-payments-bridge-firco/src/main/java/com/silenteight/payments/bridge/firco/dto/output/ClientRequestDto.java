@@ -13,7 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
-public class DecisionDto implements Serializable {
+public class ClientRequestDto implements Serializable {
 
   private static final long serialVersionUID = 4361457566013326051L;
 
@@ -26,8 +26,8 @@ public class DecisionDto implements Serializable {
       log.error("There are {} decisions for the alert but should be 1", decisionsCount);
       throw new IllegalStateException();
     }
-    MessageDto messageDto =
-        getReceiveDecisionDto().getMessages().get(0).getMessageDto();
+    AlertDecisionMessageDto messageDto =
+        getReceiveDecisionDto().getMessages().get(0).getDecisionMessage();
     return messageDto.getStatus().getName();
   }
 }

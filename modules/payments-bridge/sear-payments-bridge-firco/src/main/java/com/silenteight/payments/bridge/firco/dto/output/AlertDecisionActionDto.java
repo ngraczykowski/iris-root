@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.io.Serializable;
 
 @Data
-@JsonSerialize(using = ActionToSendDtoSerializer.class)
-public class ActionToSendDto implements Serializable {
+@JsonSerialize(using = AlertDecisionActionDtoSerializer.class)
+public class AlertDecisionActionDto implements Serializable {
 
   private static final long serialVersionUID = -4215114603801984462L;
 }

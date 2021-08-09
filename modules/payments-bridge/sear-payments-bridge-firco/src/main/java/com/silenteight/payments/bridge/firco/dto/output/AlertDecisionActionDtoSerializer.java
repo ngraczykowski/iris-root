@@ -6,21 +6,21 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import java.io.IOException;
 
-class ActionToSendDtoSerializer extends StdSerializer<ActionToSendDto> {
+class AlertDecisionActionDtoSerializer extends StdSerializer<AlertDecisionActionDto> {
 
   private static final long serialVersionUID = 2494561902782496746L;
 
-  public ActionToSendDtoSerializer() {
+  public AlertDecisionActionDtoSerializer() {
     this(null);
   }
 
-  public ActionToSendDtoSerializer(Class<ActionToSendDto> t) {
+  public AlertDecisionActionDtoSerializer(Class<AlertDecisionActionDto> t) {
     super(t);
   }
 
   @Override
   public void serialize(
-      ActionToSendDto value, JsonGenerator jgen, SerializerProvider provider)
+      AlertDecisionActionDto value, JsonGenerator jgen, SerializerProvider provider)
       throws IOException {
 
     jgen.writeStartObject();

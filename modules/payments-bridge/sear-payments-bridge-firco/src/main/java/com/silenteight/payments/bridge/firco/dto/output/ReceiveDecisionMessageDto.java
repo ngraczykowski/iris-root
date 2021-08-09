@@ -11,10 +11,10 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageToSendDto implements Serializable {
+public class ReceiveDecisionMessageDto implements Serializable {
 
   private static final long serialVersionUID = -1310665198348343534L;
 
   @JsonProperty("Message")
-  private MessageDto messageDto;
+  private AlertDecisionMessageDto decisionMessage;
 }

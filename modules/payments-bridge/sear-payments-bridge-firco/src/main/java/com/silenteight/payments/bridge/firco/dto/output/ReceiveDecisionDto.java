@@ -17,11 +17,11 @@ public class ReceiveDecisionDto implements Serializable {
   private static final long serialVersionUID = -4284460925751955090L;
 
   @JsonProperty("VersionTag")
-  private String versionTag;
+  private String versionTag = "1";
 
   @JsonProperty("Authentication")
   private FircoAuthenticationDto authenticationDto;
 
   @JsonProperty("Messages")
-  private List<MessageToSendDto> messages;
+  private List<ReceiveDecisionMessageDto> messages;
 }

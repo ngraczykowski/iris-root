@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageDto implements Serializable {
+public class AlertDecisionMessageDto implements Serializable {
 
   private static final long serialVersionUID = -6851877425739319284L;
 
@@ -46,5 +46,5 @@ public class MessageDto implements Serializable {
   private AttachmentDto attachment;
 
   @JsonProperty("Actions")
-  private List<ActionToSendDto> actions;
+  private List<AlertDecisionActionDto> actions;
 }
