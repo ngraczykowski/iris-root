@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package silenteight.agent.historicaldecisions.v1.api;
+
+option java_package = "com.silenteight.proto.agent.historicaldecisions.v1.api";
+option java_outer_classname = "HistoricalDecisionsAgentApiProto";
+option java_multiple_files = true;
+
+service HistoricalDecisionsAgent {
+  rpc Verify (VerifyRequest) returns (VerifyResponse) {
+    }
+}
+
+message VerifyRequest {
+  ModelType model_type = 1;
+  uint32 true_positive_count = 2;
+}
+
+enum ModelType {
+  UNSPECIFIED = 0;
+  ALERTED_PARTY = 1;
+  WATCHLIST_PARTY = 2;
+  MATCH = 3;
+}
+
+message VerifyResponse {
+  string solution = 1;
+}
