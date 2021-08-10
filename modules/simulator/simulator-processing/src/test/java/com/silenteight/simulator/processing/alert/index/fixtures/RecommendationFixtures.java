@@ -15,8 +15,10 @@ import com.google.protobuf.Struct;
 import com.google.protobuf.Timestamp;
 import com.google.protobuf.Value;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.util.stream.IntStream;
 
 import static java.util.Collections.singletonList;
@@ -109,4 +111,31 @@ public final class RecommendationFixtures {
           .setRecommendation(RECOMMENDATION)
           .setMetadata(METADATA)
           .build();
+
+  public static final List<RecommendationWithMetadata> RECOMMENDATION_WITH_METADATA_LIST
+      = IntStream
+      .range(0, 10)
+      .boxed()
+      .map(v -> RECOMMENDATION_WITH_METADATA)
+      .collect(toList());
+
+  public static class RecommendationWithMetaDataIterator
+      implements Iterator<RecommendationWithMetadata> {
+
+    Stack<RecommendationWithMetadata> recommendations;
+
+    public RecommendationWithMetaDataIterator(Stack<RecommendationWithMetadata> recommendations) {
+      this.recommendations = recommendations;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return !recommendations.isEmpty();
+    }
+
+    @Override
+    public RecommendationWithMetadata next() {
+      return recommendations.pop();
+    }
+  }
 }

@@ -7,7 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.api.v2.GetRecommendationRequest;
 import com.silenteight.adjudication.api.v2.RecommendationServiceGrpc.RecommendationServiceBlockingStub;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
+import com.silenteight.adjudication.api.v2.StreamRecommendationsWithMetadataRequest;
 import com.silenteight.simulator.processing.alert.index.feed.RecommendationService;
+
+import java.util.Iterator;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,5 +33,15 @@ class GrpcRecommendationService implements RecommendationService {
     return GetRecommendationRequest.newBuilder()
         .setRecommendation(recommendationName)
         .build();
+  }
+
+  @Override
+  public Iterator<RecommendationWithMetadata> streamRecommendationsWithMetadata(
+      @NonNull String analysisName) {
+
+    return recommendationStub.streamRecommendationsWithMetadata(
+        StreamRecommendationsWithMetadataRequest.newBuilder()
+            .setRecommendationSource(analysisName)
+            .build());
   }
 }

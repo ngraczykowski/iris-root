@@ -23,8 +23,10 @@ class RecommendationsGeneratedFlowAdapter extends IntegrationFlowAdapter {
   @Override
   protected IntegrationFlowDefinition<?> buildFlow() {
     return from(inboundChannel)
-        .handle(RecommendationsGenerated.class,
-            (payload, headers) -> handler.handle(payload))
+        .handle(RecommendationsGenerated.class, (payload, headers) -> {
+          handler.handle(payload);
+          return null;
+        })
         .channel(outboundChannel);
   }
 }
