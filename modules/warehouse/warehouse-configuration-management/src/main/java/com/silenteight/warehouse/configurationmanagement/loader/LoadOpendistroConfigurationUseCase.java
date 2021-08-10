@@ -25,6 +25,8 @@ public class LoadOpendistroConfigurationUseCase {
     ByteArrayInputStream savedObjectsPayload = fromBase64String(request.getSavedObjects());
     opendistroSavedObjectsLoader.loadAll(request.getTenant(), savedObjectsPayload);
 
+    opendistroReportLoader.clearAll(request.getTenant());
+
     ByteArrayInputStream reportInstancePayload = fromBase64String(request.getReportInstances());
     opendistroReportLoader.loadAll(request.getTenant(), reportInstancePayload);
   }

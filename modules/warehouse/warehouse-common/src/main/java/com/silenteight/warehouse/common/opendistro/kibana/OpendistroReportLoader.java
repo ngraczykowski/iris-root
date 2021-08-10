@@ -16,6 +16,13 @@ public class OpendistroReportLoader {
   private final ObjectMapper objectMapper;
   private final OpendistroKibanaClient opendistroKibanaClient;
 
+  public void clearAll(String tenant) {
+    opendistroKibanaClient.listReportDefinitions(tenant)
+        .forEach(report -> opendistroKibanaClient.deleteReportDefinition(tenant, report.getId()));
+
+    log.info("Removed existing report definitions, tenant={}", tenant);
+  }
+
   @SneakyThrows
   public void loadAll(String tenant, InputStream payload) {
     TypeReference<ReportDefinitionList> typeRef = new TypeReference<>() {};
