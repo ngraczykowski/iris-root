@@ -161,6 +161,6 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity, Comparabl
 
   @Override
   public int compareTo(@NotNull Step step) {
-    return step.getSortOrder().compareTo(this.getSortOrder());
+    return this.getSortOrder().compareTo(step.getSortOrder());
   }
 }
