@@ -9,7 +9,9 @@ import com.silenteight.simulator.processing.alert.index.amqp.AlertIndexPropertie
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.gateway.GatewayProxyFactoryBean;
 
 import javax.validation.Valid;
 
@@ -40,5 +42,14 @@ public class GatewayConfiguration {
             .outboundAdapter()
             .exchangeName(exchange)
             .routingKey(routingKey));
+  }
+
+  @Bean
+  GatewayProxyFactoryBean createSimulationDataIndexRequestGateway() {
+    GatewayProxyFactoryBean factoryBean =
+        new GatewayProxyFactoryBean(SimulationDataIndexRequestGateway.class);
+    factoryBean.setDefaultRequestChannel(new DirectChannel());
+    factoryBean.setDefaultRequestChannelName(RECOMMENDATIONS_OUTBOUND_CHANNEL);
+    return factoryBean;
   }
 }

@@ -8,3 +8,5 @@ simulator:
         routing-key: command.index-request.simulation
       ack-messages-inbound:
         queue-name: sim.index-response.simulation
+    feed:
+      batch-size: 100

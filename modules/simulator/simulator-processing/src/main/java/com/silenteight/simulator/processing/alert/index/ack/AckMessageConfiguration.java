@@ -23,10 +23,7 @@ class AckMessageConfiguration {
       IndexedAlertQuery indexedAlertQuery) {
 
     return new FetchAckMessageUseCase(
-        analysisService,
         indexedAlertService,
-        simulationQuery,
-        datasetService,
         simulationService,
         indexedAlertQuery);
   }
