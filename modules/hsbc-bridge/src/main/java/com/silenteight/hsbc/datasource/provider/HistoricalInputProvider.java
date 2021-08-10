@@ -34,7 +34,7 @@ public class HistoricalInputProvider
     var matches = command.getMatches();
 
     return HistoricalInputResponse.builder()
-        .solutions(getInputs(matches, features))
+        .inputs(getInputs(matches, features))
         .build();
   }
 

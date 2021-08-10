@@ -14,7 +14,7 @@ class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
   private final HistoricalDecisionsServiceClient serviceClient;
 
   @Override
-  public List<ModelCountsDto> getIsApTpMarkedSolution() {
+  public List<ModelCountsDto> getIsApTpMarkedInput() {
     var alertedPartyId = matchData.getCaseInformation().getExternalId();
     var request =
         new AlertedPartyRequestCreator(alertedPartyId).createRequest();
@@ -23,7 +23,7 @@ class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
   }
 
   @Override
-  public List<ModelCountsDto> getIsTpMarkedSolution() {
+  public List<ModelCountsDto> getIsTpMarkedInput() {
     var request =
         new WatchlistPartyRequestCreator(matchData).createRequest();
 
@@ -31,7 +31,7 @@ class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
   }
 
   @Override
-  public List<ModelCountsDto> getCaseTpMarkedSolution() {
+  public List<ModelCountsDto> getCaseTpMarkedInput() {
     var request =
         new MatchRequestCreator(matchData).createRequest();
 

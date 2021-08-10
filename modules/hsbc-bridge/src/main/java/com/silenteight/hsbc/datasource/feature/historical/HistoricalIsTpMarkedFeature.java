@@ -4,14 +4,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.historical.HistoricalFeatureInputDto;
-import com.silenteight.hsbc.datasource.dto.historical.HistoricalFeatureSolutionInputDto;
 import com.silenteight.hsbc.datasource.extractors.historical.HistoricalDecisionsServiceClient;
-import com.silenteight.hsbc.datasource.extractors.historical.ModelCountsDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.HistoricalFeatureClientValuesRetriever;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class HistoricalIsTpMarkedFeature
@@ -26,21 +21,14 @@ public class HistoricalIsTpMarkedFeature
 
     var inputBuilder = HistoricalFeatureInputDto.builder();
 
-    var responses = query.getIsTpMarkedSolution();
+    var response = query.getIsTpMarkedInput().stream().findFirst();
 
-    return inputBuilder
-        .featureSolutions(mapToFeatureSolutions(responses))
-        .feature(getFeatureName())
-        .build();
-  }
+    response.ifPresent(e -> inputBuilder
+        .truePositiveCount(e.getTruePositivesCount())
+        .modelKeyType(e.getModelKey().getModelKeyType())
+    );
 
-  private List<HistoricalFeatureSolutionInputDto> mapToFeatureSolutions(
-      List<ModelCountsDto> responses) {
-    return responses.stream()
-        .map(response -> HistoricalFeatureSolutionInputDto.builder()
-            .solution(String.valueOf(response.getTruePositivesCount()))
-            .build())
-        .collect(Collectors.toList());
+    return inputBuilder.feature(getFeatureName()).build();
   }
 
   @Override

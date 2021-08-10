@@ -12,5 +12,5 @@ import static java.util.Collections.emptyList;
 public class HistoricalInputResponse {
 
   @Builder.Default
-  List<HistoricalSolutionInputDto> solutions = emptyList();
+  List<HistoricalSolutionInputDto> inputs = emptyList();
 }

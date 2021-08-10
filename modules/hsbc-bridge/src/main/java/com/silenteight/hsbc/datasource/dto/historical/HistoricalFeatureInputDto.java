@@ -3,15 +3,19 @@ package com.silenteight.hsbc.datasource.dto.historical;
 import lombok.Builder;
 import lombok.Value;
 
-import java.util.List;
+import com.silenteight.hsbc.datasource.extractors.historical.ModelKeyDto.ModelKeyType;
 
-import static java.util.Collections.emptyList;
+import java.util.Map;
+
+import static java.util.Collections.emptyMap;
 
 @Builder
 @Value
 public class HistoricalFeatureInputDto {
 
   String feature;
+  int truePositiveCount;
+  ModelKeyType modelKeyType;
   @Builder.Default
-  List<HistoricalFeatureSolutionInputDto> featureSolutions = emptyList();
+  Map<String, String> reason = emptyMap();
 }

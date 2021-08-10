@@ -6,14 +6,13 @@ import com.silenteight.hsbc.datasource.extractors.historical.ModelCountsDto;
 
 import java.util.List;
 
-
 public interface HistoricalDecisionsQuery {
 
-  List<ModelCountsDto> getIsApTpMarkedSolution();
+  List<ModelCountsDto> getIsApTpMarkedInput();
 
-  List<ModelCountsDto> getIsTpMarkedSolution();
+  List<ModelCountsDto> getIsTpMarkedInput();
 
-  List<ModelCountsDto> getCaseTpMarkedSolution();
+  List<ModelCountsDto> getCaseTpMarkedInput();
 
 
   interface Factory {
