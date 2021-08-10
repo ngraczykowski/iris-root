@@ -12,6 +12,8 @@ import com.silenteight.serp.governance.policy.domain.dto.TransferredFeatureLogic
 import com.silenteight.serp.governance.policy.domain.dto.TransferredStepDto;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,7 +32,7 @@ import static javax.persistence.CascadeType.ALL;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
-class Step extends BaseModifiableEntity implements IdentifiableEntity {
+class Step extends BaseModifiableEntity implements IdentifiableEntity, Comparable<Step> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -155,5 +157,10 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity {
         .stream()
         .map(FeatureLogic::toTransferredDto)
         .collect(toList());
+  }
+
+  @Override
+  public int compareTo(@NotNull Step step) {
+    return step.getSortOrder().compareTo(this.getSortOrder());
   }
 }

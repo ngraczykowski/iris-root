@@ -274,6 +274,7 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
   private List<TransferredStepDto> getTransferredStepDtos() {
     return getSteps()
         .stream()
+        .sorted(Step::compareTo)
         .map(Step::toTransferredDto)
         .collect(toList());
   }
