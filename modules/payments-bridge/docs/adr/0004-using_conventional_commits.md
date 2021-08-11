@@ -24,11 +24,15 @@ The elements allowed specifically for this project:
 - `build:` for changes in Gradle build files, dependencies updates, etc.
 - `ci:` for changes in Jenkins configuration or build definition,
 
+## Jira Task
+
+If commit is connected to jira task then add Task id at the end of commit message
+
 ## Examples
 
 ### Example 1
 
-    feat(firco): Add Firco controller error handling
+    feat(firco): Add Firco controller error handling (ABC-123)
     
     The Firco Continuity Content Manager API requires the error to be in form
     that resembles SOAP 1.1 Fault.
