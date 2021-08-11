@@ -33,4 +33,9 @@ class JdbcRecommendationConfiguration {
   GetAlertRecommendationQuery getAlertRecommendationQuery(JdbcTemplate jdbcTemplate) {
     return new GetAlertRecommendationQuery(jdbcTemplate);
   }
+
+  @Bean
+  InsertAlertRecommendationsQuery insertAlertRecommendationQuery(JdbcTemplate jdbcTemplate) {
+    return new InsertAlertRecommendationsQuery(jdbcTemplate);
+  }
 }

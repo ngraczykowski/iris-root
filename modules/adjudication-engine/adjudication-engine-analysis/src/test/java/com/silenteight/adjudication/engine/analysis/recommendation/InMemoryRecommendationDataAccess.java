@@ -1,10 +1,9 @@
 package com.silenteight.adjudication.engine.analysis.recommendation;
 
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertRecommendation;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlert;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlerts;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.*;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -51,6 +50,12 @@ class InMemoryRecommendationDataAccess implements RecommendationDataAccess {
 
   @Override
   public AlertRecommendation getAlertRecommendation(long recommendationId) {
+    return null;
+  }
+
+  @Override
+  public List<RecommendationResponse> insertAlertRecommendation(
+      Collection<InsertRecommendationRequest> alertRecommendation) {
     return null;
   }
 }

@@ -1,6 +1,7 @@
 package com.silenteight.adjudication.engine.analysis.recommendation;
 
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertRecommendation;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.InsertRecommendationRequest;
 import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.FeatureContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
@@ -22,6 +23,15 @@ public class RecommendationFixture {
         .createdTime(Timestamp.valueOf("1983-05-24 12:34:56.0000"))
         .alertContext(createAlertContext())
         .matchIds(LongStream.range(1, 5).toArray())
+        .build();
+  }
+
+  public static InsertRecommendationRequest createInsertRequest() {
+    return InsertRecommendationRequest.builder()
+        .alertId(1)
+        .analysisId(1)
+        .recommendationId(1)
+        .recommendedAction("MATCH")
         .build();
   }
 

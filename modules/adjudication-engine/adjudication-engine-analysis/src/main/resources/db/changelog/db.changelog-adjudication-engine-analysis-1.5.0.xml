@@ -40,4 +40,15 @@
         onDelete="CASCADE"
         onUpdate="CASCADE"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_2" author="wkeska">
+    <sqlFile path="db/changelog/sql/remove_duplicated_recommendations.sql"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_3" author="wkeska">
+    <addUniqueConstraint
+        columnNames="analysis_id, alert_id"
+        constraintName="uq_ae_recommendation_analysis_id_alert_id"
+        tableName="ae_recommendation"/>
+  </changeSet>
 </databaseChangeLog>

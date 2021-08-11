@@ -7,13 +7,16 @@ import com.silenteight.sep.base.testing.BaseJdbcTest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlMergeMode;
 import org.springframework.test.context.jdbc.SqlMergeMode.MergeMode;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import static com.silenteight.adjudication.engine.analysis.recommendation.RecommendationFixture.createInsertRequest;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ContextConfiguration(classes = {
@@ -30,6 +33,9 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
 
   @Autowired
   JdbcRecommendationDataAccess recommendationDataAccess;
+
+  @Autowired
+  JdbcTemplate jdbcTemplate;
 
   @Test
   @Sql
@@ -59,9 +65,9 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
   }
 
   /**
-   * When a single alert is in two analysis, the ae_alert_match_solutions_query view
-   * returns duplicated match_ids, which in turn prevents from showing the alert as pending
-   * due to the JOIN condition.
+   * When a single alert is in two analysis, the ae_alert_match_solutions_query view returns
+   * duplicated match_ids, which in turn prevents from showing the alert as pending due to the JOIN
+   * condition.
    */
   @Test
   @Sql
@@ -70,7 +76,26 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
     assertThat(result.size()).isEqualTo(1);
   }
 
-  private void assertContextData(AlertContext alertContext) {
+  @Test
+  @Sql
+  void shouldInsertAlertRecommendation() {
+    var result =
+        recommendationDataAccess.insertAlertRecommendation(List.of(createInsertRequest()));
+    assertThat(result.size()).isEqualTo(1);
+    assertThat(result.get(0).getAlertId()).isEqualTo(1);
+  }
+
+  @Test
+  @Sql(scripts = { "JdbcRecommendationDataAccessIT.shouldInsertAlertRecommendation.sql" })
+  void shouldNotInsertAlertRecommendation() {
+    recommendationDataAccess.insertAlertRecommendation(List.of(createInsertRequest()));
+    recommendationDataAccess.insertAlertRecommendation(List.of(createInsertRequest()));
+    assertThat(jdbcTemplate.queryForObject(
+        "SELECT count(*) FROM ae_recommendation",
+        Integer.class)).isEqualTo(1);
+  }
+
+  private static void assertContextData(AlertContext alertContext) {
     assertThat(alertContext.getAlertId())
         .isEqualTo("AVIR128SCR13925IN123TEST0003:IN:GR-ESAN:273067");
     assertThat(alertContext.getMatches().size()).isEqualTo(2);

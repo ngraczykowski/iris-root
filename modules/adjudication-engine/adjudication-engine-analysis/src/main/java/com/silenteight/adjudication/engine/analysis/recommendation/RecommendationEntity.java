@@ -3,9 +3,6 @@ package com.silenteight.adjudication.engine.analysis.recommendation;
 import lombok.*;
 import lombok.EqualsAndHashCode.Include;
 
-import com.silenteight.adjudication.api.v1.Recommendation;
-import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertSolution;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 
 import javax.persistence.Column;
@@ -13,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import static com.silenteight.adjudication.engine.common.protobuf.TimestampConverter.fromOffsetDateTime;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.*;
 
@@ -45,33 +41,4 @@ class RecommendationEntity extends BaseEntity {
   @Column(updatable = false, nullable = false)
   @NonNull
   private String recommendedAction;
-
-  static RecommendationEntity fromAlertSolution(long analysisId, AlertSolution alertSolution) {
-    return RecommendationEntity
-        .builder()
-        .alertId(alertSolution.getAlertId())
-        .recommendedAction(alertSolution.getRecommendedAction())
-        .analysisId(analysisId)
-        .build();
-  }
-
-  RecommendationInfo toRecommendationInfo() {
-    return RecommendationInfo
-        .newBuilder()
-        .setAlert("alerts/" + getAlertId())
-        .setRecommendation("analysis/" + getAnalysisId() + "/recommendations/" + getId())
-        .build();
-  }
-
-  Recommendation toRecommendation() {
-    return Recommendation
-        .newBuilder()
-        .setAlert("alerts/" + getAlertId())
-        .setCreateTime(fromOffsetDateTime(getCreatedAt()))
-        .setName("analysis/" + getAnalysisId() + "/recommendations/" + getId())
-        .setRecommendedAction(recommendedAction)
-        // TODO(ahaczewski): Generate a proper comment.
-        .setRecommendationComment("Recommended action: " + recommendedAction)
-        .build();
-  }
 }

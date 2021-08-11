@@ -91,7 +91,7 @@ class AnalysisQuery implements IdentifiableEntity {
     if (getDatasetCount() == 0 || getAlertCount() == 0)
       return State.NEW;
 
-    if (getPendingAlerts() == 0)
+    if (getPendingAlerts() <= 0)
       return State.DONE;
 
     if (getPendingAlerts() >= getAlertCount())
