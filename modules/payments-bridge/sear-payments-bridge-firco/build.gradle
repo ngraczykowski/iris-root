@@ -20,8 +20,11 @@ dependencies {
   implementation libraries.spring_web
   implementation libraries.spring_webmvc
 
+  implementation libraries.guava
   implementation libraries.hibernate_validator
   implementation libraries.jackson_annotations
   implementation libraries.jackson_databind
+  implementation libraries.jakarta_annotation_api
   implementation libraries.jakarta_validation_api
+  implementation libraries.opencsv
 }

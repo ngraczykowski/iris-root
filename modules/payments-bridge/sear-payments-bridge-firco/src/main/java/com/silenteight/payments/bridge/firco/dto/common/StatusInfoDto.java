@@ -47,5 +47,4 @@ public class StatusInfoDto implements Serializable {
   @JsonProperty("Checksum")
   @NotNull(groups = MinimalAlertDefinition.class)
   private String checksum;
-
 }
