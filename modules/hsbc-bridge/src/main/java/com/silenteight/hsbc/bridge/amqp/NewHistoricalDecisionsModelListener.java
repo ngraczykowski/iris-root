@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
-import com.silenteight.hsbc.bridge.model.transfer.WorldCheckModelManager;
-import com.silenteight.worldcheck.api.v1.ModelPersisted;
+import com.silenteight.hsbc.bridge.model.transfer.HistoricalDecisionsModelManager;
+import com.silenteight.proto.historicaldecisions.model.v1.api.ModelPersisted;
+
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
@@ -13,18 +14,19 @@ import static com.silenteight.hsbc.bridge.model.dto.ChangeType.MINOR;
 
 @Slf4j
 @RequiredArgsConstructor
-class NewWorldCheckModelListener {
+class NewHistoricalDecisionsModelListener {
 
   private final String address;
-  private final WorldCheckModelManager worldCheckModelManager;
+  private final HistoricalDecisionsModelManager historicalDecisionsModelManager;
 
-  @RabbitListener(queues = "${silenteight.bridge.amqp.ingoing.worldcheck-model-persisted-queue}")
+  @RabbitListener(queues = "${silenteight.bridge.amqp.ingoing.historical-decisions-model-persisted-queue}")
   void onModelChange(ModelPersisted modelPersisted) {
     log.info(
-        "Received ModelPersisted for WorldCheck model type={}", modelPersisted.getModelType());
+        "Received ModelPersisted for HistoricalDecisions model type={}",
+        modelPersisted.getModelType());
 
     var modelInfo = convertToModelInfo(modelPersisted);
-    worldCheckModelManager.transferModelToJenkins(modelInfo);
+    historicalDecisionsModelManager.transferModelToJenkins(modelInfo);
   }
 
   private ModelInfo convertToModelInfo(ModelPersisted modelPersisted) {

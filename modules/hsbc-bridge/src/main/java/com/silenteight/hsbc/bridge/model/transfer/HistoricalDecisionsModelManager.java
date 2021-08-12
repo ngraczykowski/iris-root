@@ -18,23 +18,23 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import static com.silenteight.hsbc.bridge.model.dto.ModelStatus.FAILURE;
-import static com.silenteight.hsbc.bridge.model.dto.ModelType.IS_PEP_HISTORICAL;
-import static com.silenteight.hsbc.bridge.model.dto.ModelType.IS_PEP_PROCEDURAL;
-import static com.silenteight.hsbc.bridge.model.dto.ModelType.NAME_ALIASES;
+import static com.silenteight.hsbc.bridge.model.dto.ModelType.HISTORICAL_DECISIONS_ALERTED_PARTY;
+import static com.silenteight.hsbc.bridge.model.dto.ModelType.HISTORICAL_DECISIONS_MATCH;
+import static com.silenteight.hsbc.bridge.model.dto.ModelType.HISTORICAL_DECISIONS_WATCHLIST_PARTY;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.convertToModelStatusUpdated;
 import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.createModelStatusUpdate;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.toModelPersisted;
+import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.toHistoricalDecisionsModelPersisted;
 
 @Slf4j
 @RequiredArgsConstructor
-public class WorldCheckModelManager implements ModelManager {
+public class HistoricalDecisionsModelManager implements ModelManager {
 
   private final ModelClient jenkinsModelClient;
-  private final StoreModelUseCase storeModelUseCase;
-  private final GetModelUseCase getModelUseCase;
-  private final WorldCheckMessageSender worldCheckMessageSender;
   private final ModelRepository modelRepository;
+  private final GetModelUseCase getModelUseCase;
+  private final StoreModelUseCase storeModelUseCase;
   private final ModelTransferModelLoader modelTransferModelLoader;
+  private final HistoricalDecisionsMessageSender historicalDecisionsMessageSender;
 
   @Override
   public void transferModelToJenkins(ModelInfo modelInfo) {
@@ -49,13 +49,13 @@ public class WorldCheckModelManager implements ModelManager {
 
   @Override
   public void transferModelStatus(ModelInfoStatusRequest request) {
-    var modelPersisted = toModelPersisted(request);
-    worldCheckMessageSender.send(modelPersisted);
+    var modelPersisted = toHistoricalDecisionsModelPersisted(request);
+    historicalDecisionsMessageSender.send(modelPersisted);
   }
 
   @Override
-  public ExportModelResponse exportModel(Details details) {
-    var model = getModelUseCase.getModel(ModelType.valueOf(details.getType()));
+  public ExportModelResponse exportModel(Details modelDetails) {
+    var model = getModelUseCase.getModel(ModelType.valueOf(modelDetails.getType()));
     var modelJson = tryLoadModel(model.getMinIoUrl());
     var exportModelResponseDto = ExportModelResponseDto.builder()
         .modelJson(modelJson).build();
@@ -63,11 +63,13 @@ public class WorldCheckModelManager implements ModelManager {
   }
 
   @Override
-  public boolean supportsModelType(ModelType modelType) {
-    return isPepOrNameAliases(modelType);
+  public boolean supportsModelType(ModelType type) {
+    return type == HISTORICAL_DECISIONS_ALERTED_PARTY
+        || type == HISTORICAL_DECISIONS_WATCHLIST_PARTY
+        || type == HISTORICAL_DECISIONS_MATCH;
   }
 
-  public void transferWorldCheckModelStatus(ModelStatusUpdatedDto modelStatusUpdated) {
+  public void transferHistoricalDecisionsModelStatus(ModelStatusUpdatedDto modelStatusUpdated) {
     storeModelUseCase.storeModel(modelStatusUpdated);
   }
 
@@ -89,9 +91,5 @@ public class WorldCheckModelManager implements ModelManager {
       log.error("Unable to load model from minio uri: " + minioUrl, e);
       throw new ModelLoadingException("Unable to load model from minio uri: " + e.getMessage(), e);
     }
-  }
-
-  private boolean isPepOrNameAliases(ModelType type) {
-    return type == IS_PEP_PROCEDURAL || type == IS_PEP_HISTORICAL || type == NAME_ALIASES;
   }
 }

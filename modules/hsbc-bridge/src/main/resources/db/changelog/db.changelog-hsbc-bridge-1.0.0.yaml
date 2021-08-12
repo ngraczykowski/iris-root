@@ -616,3 +616,12 @@ databaseChangeLog:
                   name: status
             indexName: idx_bridge_model_status_type
             tableName: hsbc_bridge_model
+
+  - changeSet:
+      id: 1.0.0-20
+      author: smrozowski
+      changes:
+        - modifyDataType:
+            tableName: hsbc_bridge_model
+            columnName: type
+            newDataType: varchar(40)

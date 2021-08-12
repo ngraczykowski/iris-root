@@ -24,6 +24,17 @@ class ModelMapper {
         .build();
   }
 
+  static com.silenteight.proto.historicaldecisions.model.v1.api.ModelPersisted toHistoricalDecisionsModelPersisted(
+      ModelInfoStatusRequest request) {
+    return com.silenteight.proto.historicaldecisions.model.v1.api.ModelPersisted.newBuilder()
+        .setModelName(request.getName())
+        .setModelUri(request.getUrl())
+        .setModelType(
+            com.silenteight.proto.historicaldecisions.model.v1.api.ModelType.valueOf(
+                request.getType().name()))
+        .build();
+  }
+
   static ModelStatusUpdatedDto createModelStatusUpdate(
       ModelInfoRequest modelInfoRequest, URI modelUri) {
     return ModelStatusUpdatedDto.builder()

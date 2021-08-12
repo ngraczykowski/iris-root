@@ -6,13 +6,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@Configuration
-@Profile("dev")
 @Slf4j
-class WorldCheckMessageSenderMockConfiguration {
+@Profile("dev")
+@Configuration
+class HistoricalDecisionsMessageSenderMockConfiguration {
 
   @Bean
-  WorldCheckMessageSender worldCheckMessageSenderMock() {
-    return modelPersisted -> log.warn("ModelPersisted has been sent to WorldCheck");
+  HistoricalDecisionsMessageSender historicalDecisionsMessageSender() {
+    return modelPersisted -> log.warn("ModelPersisted has been sent to HistoricalDecisions");
   }
 }

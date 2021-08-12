@@ -32,6 +32,21 @@ class TransferModelConfiguration {
   }
 
   @Bean
+  HistoricalDecisionsModelManager historicalDecisionsModelManager(
+      ModelRepository modelRepository,
+      StoreModelUseCase storeModelUseCase,
+      GetModelUseCase getModelUseCase,
+      HistoricalDecisionsMessageSender historicalDecisionsMessageSender) {
+    return new HistoricalDecisionsModelManager(
+        jenkinsModelClient,
+        modelRepository,
+        getModelUseCase,
+        storeModelUseCase,
+        modelTransferModelLoader,
+        historicalDecisionsMessageSender);
+  }
+
+  @Bean
   GovernanceModelManager governanceModelManager() {
     return new GovernanceModelManager(
         jenkinsModelClient,

@@ -60,7 +60,18 @@ class SenderConfiguration {
         .amqpTemplate(rabbitTemplate)
         .configuration(ModelPersistedMessageSender.Configuration.builder()
             .exchangeName(outgoing.getModelPersistedExchangeName())
-            .routingKey(outgoing.getModelPersistedRoutingKey())
+            .routingKey(outgoing.getWorldCheckModelPersistedRoutingKey())
+            .build())
+        .build();
+  }
+
+  @Bean
+  HistoricalDecisionsModelPersistedMessageSender historicalDecisionsModelPersistedMessageSender() {
+    return HistoricalDecisionsModelPersistedMessageSender.builder()
+        .amqpTemplate(rabbitTemplate)
+        .configuration(HistoricalDecisionsModelPersistedMessageSender.Configuration.builder()
+            .exchangeName(outgoing.getModelPersistedExchangeName())
+            .routingKey(outgoing.getHistoricalDecisionsModelPersistedRoutingKey())
             .build())
         .build();
   }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.BridgeApiProperties;
 import com.silenteight.hsbc.bridge.model.transfer.GovernanceModelManager;
+import com.silenteight.hsbc.bridge.model.transfer.HistoricalDecisionsModelManager;
 import com.silenteight.hsbc.bridge.model.transfer.WorldCheckModelManager;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -36,6 +37,19 @@ class ListenerConfiguration {
   WorldCheckModelTransferStatusListener worldCheckModelTransferStatusListener(
       WorldCheckModelManager worldCheckModelManager) {
     return new WorldCheckModelTransferStatusListener(worldCheckModelManager);
+  }
+
+  @Bean
+  NewHistoricalDecisionsModelListener newHistoricalDecisionsModelListener(
+      HistoricalDecisionsModelManager historicalDecisionsModelManager) {
+    return new NewHistoricalDecisionsModelListener(
+        bridgeApiProperties.getAddress(), historicalDecisionsModelManager);
+  }
+
+  @Bean
+  HistoricalDecisionsModelTransferStatusListener historicalDecisionsModelTransferStatusListener(
+      HistoricalDecisionsModelManager historicalDecisionsModelManager) {
+    return new HistoricalDecisionsModelTransferStatusListener(historicalDecisionsModelManager);
   }
 
   @Bean

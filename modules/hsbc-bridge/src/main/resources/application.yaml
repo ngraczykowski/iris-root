@@ -11,7 +11,8 @@ silenteight.bridge:
   amqp:
     outgoing:
       model-persisted-exchange-name: bridge.model
-      model-persisted-routing-key: persisted.external
+      worldcheck-model-persisted-routing-key: persisted.external.worldcheck
+      historical-decisions-model-persisted-routing-key: persisted.external.historical-decisions
       warehouse-exchange-name: bridge.command
       warehouse-routing-key: command.index-request.production
       watchlist-persisted-exchange-name: bridge.watchlist
@@ -24,8 +25,10 @@ silenteight.bridge:
       model-promoted-queue: bridge.model-promoted.production
       dead-letter-queue: bridge.dlq
       recommendations-queue: bridge.recommendations
-      model-loaded-queue: bridge.model.loaded
-      model-persisted-queue: bridge.model.persisted.internal
+      worldcheck-model-loaded-queue: bridge.model.loaded.worldcheck
+      historical-decisions-model-loaded-queue: bridge.model.loaded.historical-decisions
+      worldcheck-model-persisted-queue: bridge.model.persisted.internal.worldcheck
+      historical-decisions-model-persisted-queue: bridge.model.persisted.internal.historical-decisions
   analysis:
     alert-timeout: 5m
   aws:
