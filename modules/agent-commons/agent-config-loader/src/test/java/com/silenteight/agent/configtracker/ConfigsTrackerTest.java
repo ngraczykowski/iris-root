@@ -2,8 +2,6 @@ package com.silenteight.agent.configtracker;
 
 import lombok.Data;
 
-import com.silenteight.agent.configloader.ConfigsPathFinder;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +11,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.env.Environment;
 
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,28 +21,23 @@ import static org.mockito.Mockito.*;
 class ConfigsTrackerTest {
 
   @Mock
-  ApplicationContext applicationContext;
+  private ApplicationContext applicationContext;
 
   @Mock
-  Environment environment;
-
-  @Mock
-  ConfigsPathFinder configsPathFinder;
+  private Environment environment;
 
   @BeforeEach
   void setUp() {
     when(applicationContext.getEnvironment()).thenReturn(environment);
     when(environment.getRequiredProperty("spring.application.name")).thenReturn("tracker");
-    when(configsPathFinder.find()).thenReturn(
-        Paths.get("src", "test", "resources", "conf", "tracker"));
   }
 
   @Test
   void shouldPropagateConfigsToSpecificListeners() {
     // given
     var loaders = List.of(
-        new ConfigsLoader<>("first.cfg", FirstConfigProperties.class, configsPathFinder),
-        new ConfigsLoader<>("second.cfg", SecondConfigProperties.class, configsPathFinder));
+        new ConfigsLoader<>("first.cfg", FirstConfigProperties.class),
+        new ConfigsLoader<>("second.cfg", SecondConfigProperties.class));
     var firstListener = spy(new FirstConfigListener());
     var secondListener = spy(new SecondConfigListener());
     var listeners = List.of(firstListener, secondListener);

@@ -9,27 +9,28 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-@RequiredArgsConstructor
-public class ConfigLoader<PropertiesTypeT> {
+import static java.nio.file.Files.isHidden;
+import static java.nio.file.Files.isRegularFile;
 
-  private final ConfigsPathFinder configsPathFinder;
+@RequiredArgsConstructor
+public class AgentConfigsLoader<PropertiesTypeT> {
+
+  private final String applicationName;
   private final String prefix;
   private final Class<PropertiesTypeT> propertiesType;
 
-  public ConfigLoader(
-      String applicationName, String prefix, Class<PropertiesTypeT> propertiesType) {
-    this(new ConfigsPathFinder(applicationName), prefix, propertiesType);
-  }
-
   public AgentConfigs<PropertiesTypeT> load() throws IOException {
-    Path applicationConfigs = configsPathFinder.find();
+    Path applicationConfigs = ConfigsPathFinder.findDirectory(applicationName);
 
     AgentConfigs<PropertiesTypeT> agentConfigs = new AgentConfigs<>();
+
     try (DirectoryStream<Path> configFiles = Files.newDirectoryStream(applicationConfigs)) {
       for (Path configFile : configFiles) {
-        String agentName = getAgentName(configFile);
-        PropertiesTypeT agentProperties = loadProperties(configFile);
-        agentConfigs.put(agentName, agentProperties);
+        if (isRegularFile(configFile) && !isHidden(configFile)) {
+          String agentName = getAgentName(configFile);
+          PropertiesTypeT agentProperties = ConfigParser.parse(configFile, prefix, propertiesType);
+          agentConfigs.put(agentName, agentProperties);
+        }
       }
     }
     return agentConfigs;
@@ -39,12 +40,4 @@ public class ConfigLoader<PropertiesTypeT> {
     String fileName = String.valueOf(configFile.getFileName());
     return FilenameUtils.removeExtension(fileName);
   }
-
-  private PropertiesTypeT loadProperties(Path configFile) {
-    String resourceLocation = configFile.toUri().toString();
-    SpringConfigurationPropertiesLoader propertiesLoader =
-        new SpringConfigurationPropertiesLoader(resourceLocation);
-    return propertiesLoader.load(prefix, propertiesType);
-  }
-
 }

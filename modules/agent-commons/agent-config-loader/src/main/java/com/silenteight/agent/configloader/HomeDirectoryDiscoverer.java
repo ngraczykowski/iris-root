@@ -35,6 +35,15 @@ class HomeDirectoryDiscoverer {
     );
   }
 
+  Optional<Path> discover() {
+    for (PathSupplier supplier : pathSuppliers) {
+      Optional<Path> path = supplier.get();
+      if (path.isPresent())
+        return path;
+    }
+    return Optional.empty();
+  }
+
   private static Optional<Path> discoverHomeFromUserWorkingDirectory() {
     return getUserWorkingDirectory().flatMap(
         HomeDirectoryDiscoverer::discoverHomeFrom);
@@ -76,15 +85,6 @@ class HomeDirectoryDiscoverer {
   private static boolean hasConfDirectory(Path parent) {
     File confDirectory = parent.resolve("conf").toFile();
     return confDirectory.exists() && confDirectory.isDirectory();
-  }
-
-  Optional<Path> discover() {
-    for (PathSupplier supplier : pathSuppliers) {
-      Optional<Path> path = supplier.get();
-      if (path.isPresent())
-        return path;
-    }
-    return Optional.empty();
   }
 
   private Optional<Path> getHomeFromEnvironment() {

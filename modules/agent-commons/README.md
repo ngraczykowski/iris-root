@@ -42,7 +42,7 @@ By default, it searches for the config files in `AGENT_HOME` directory.
 
 Example usage:
 
-    import com.silenteight.agent.configloader.ConfigLoader;
+    import com.silenteight.agent.configloader.AgentConfigsLoader;
 
 
     ComparerConfigProperties loadProperties(String fileName) throws IOException {

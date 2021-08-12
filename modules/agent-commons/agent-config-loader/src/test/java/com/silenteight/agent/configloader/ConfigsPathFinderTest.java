@@ -8,10 +8,8 @@ class ConfigsPathFinderTest {
 
   @Test
   void shouldThrowExceptionIfApplicationConfigCannotBeFound() {
-    // given
-    ConfigsPathFinder configsPathFinder = new ConfigsPathFinder("wrong-name");
-
     // expect
-    assertThrows(IllegalStateException.class, configsPathFinder::find);
+    assertThrows(IllegalStateException.class,
+        () -> ConfigsPathFinder.findDirectory("wrong-name"));
   }
 }

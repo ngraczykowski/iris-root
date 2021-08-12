@@ -5,12 +5,9 @@ import lombok.Data;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,24 +15,16 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ConfigLoaderTest {
 
-  @Mock
-  private ConfigsPathFinder configsPathFinder;
-
-  private ConfigLoader<TestConfigProperties> configLoader;
+  private AgentConfigsLoader<TestConfigProperties> configLoader;
 
   @BeforeEach
   void setUp() {
-    when(configsPathFinder.find()).thenReturn(
-        Path.of(new File("src/test/resources").getAbsolutePath()
-            + "/conf/test-app"));
-
     configLoader =
-        new ConfigLoader<>(configsPathFinder, "foo.bar", TestConfigProperties.class);
+        new AgentConfigsLoader<>("test-app", "foo.bar", TestConfigProperties.class);
   }
 
   @Test
