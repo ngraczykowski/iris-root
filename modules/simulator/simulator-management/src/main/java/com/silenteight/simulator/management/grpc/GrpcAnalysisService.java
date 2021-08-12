@@ -26,9 +26,11 @@ class GrpcAnalysisService implements AnalysisService {
 
   @Override
   public Analysis createAnalysis(SolvingModel model) {
+    CreateAnalysisRequest createAnalysisRequest = toCreateAnalysisRequest(model);
     log.debug("Creating Analysis with model={}", model);
-
-    return analysisStub.createAnalysis(toCreateAnalysisRequest(model));
+    Analysis analysis = analysisStub.createAnalysis(createAnalysisRequest);
+    log.debug("Created Analysis with model={}", model);
+    return analysis;
   }
 
   private static CreateAnalysisRequest toCreateAnalysisRequest(SolvingModel model) {
@@ -64,9 +66,10 @@ class GrpcAnalysisService implements AnalysisService {
 
   @Override
   public void addDatasetToAnalysis(String analysis, String dataset) {
+    AddDatasetRequest addDatasetRequest = toAddDatasetRequest(analysis, dataset);
     log.debug("Adding dataset={} to analysis={}", analysis, dataset);
-
-    analysisStub.addDataset(toAddDatasetRequest(analysis, dataset));
+    analysisStub.addDataset(addDatasetRequest);
+    log.debug("Added dataset={} to analysis={}", analysis, dataset);
   }
 
   private static AddDatasetRequest toAddDatasetRequest(String analysis, String dataset) {
@@ -77,10 +80,12 @@ class GrpcAnalysisService implements AnalysisService {
   }
 
   @Override
-  public Analysis getAnalysis(String analysis) {
-    log.debug("Getting analysis by name={}", analysis);
-
-    return analysisStub.getAnalysis(toGetAnalysisRequest(analysis));
+  public Analysis getAnalysis(String analysisName) {
+    GetAnalysisRequest getAnalysisRequest = toGetAnalysisRequest(analysisName);
+    log.debug("Getting analysis by name={}", analysisName);
+    Analysis analysis  = analysisStub.getAnalysis(getAnalysisRequest);
+    log.debug("Got analysis by name={}", analysisName);
+    return analysis;
   }
 
   private static GetAnalysisRequest toGetAnalysisRequest(String analysis) {

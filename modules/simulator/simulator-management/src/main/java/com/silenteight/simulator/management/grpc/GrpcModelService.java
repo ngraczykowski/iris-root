@@ -18,9 +18,11 @@ class GrpcModelService implements ModelService {
 
   @Override
   public SolvingModel getModel(String model) {
-    log.trace("Getting SolvingModel by name={}", model);
-
-    return solvingModelStub.getSolvingModel(toModelRequest(model));
+    ModelRequest modelRequest = toModelRequest(model);
+    log.debug("Getting SolvingModel by name={}", model);
+    SolvingModel solvingModel = solvingModelStub.getSolvingModel(modelRequest);
+    log.debug("Got SolvingModel by name={}", model);
+    return solvingModel;
   }
 
   private static ModelRequest toModelRequest(String model) {
