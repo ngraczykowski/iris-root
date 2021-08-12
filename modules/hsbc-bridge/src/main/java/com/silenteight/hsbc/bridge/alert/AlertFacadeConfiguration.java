@@ -5,11 +5,13 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.hsbc.bridge.retention.DataCleaner;
 import com.silenteight.hsbc.bridge.util.CustomDateTimeFormatter;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableConfigurationProperties({ AnalystDecisionProperties.class })
 class AlertFacadeConfiguration {
 
   private final AlertRepository alertRepository;
@@ -18,6 +20,7 @@ class AlertFacadeConfiguration {
   private final WarehouseApi warehouseApi;
   private final AgentApi agentApi;
   private final CustomDateTimeFormatter dateTimeFormatter;
+  private final AnalystDecisionProperties decisionProperties;
 
   @Bean
   AlertFacade alertFacade() {
@@ -47,6 +50,6 @@ class AlertFacadeConfiguration {
   }
 
   private AnalystDecisionMapper analystDecisionMapper() {
-    return new AnalystDecisionMapper();
+    return new AnalystDecisionMapper(decisionProperties.getMap());
   }
 }
