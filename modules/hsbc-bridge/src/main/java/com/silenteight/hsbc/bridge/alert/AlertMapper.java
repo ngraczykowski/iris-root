@@ -6,22 +6,16 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.alert.AlertSender.AlertDataComposite;
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
-import com.silenteight.hsbc.bridge.json.external.model.CaseComment;
 import com.silenteight.hsbc.bridge.json.external.model.CaseInformation;
 import com.silenteight.hsbc.bridge.report.Alert;
 import com.silenteight.hsbc.bridge.report.Alert.Match;
 
-import org.apache.commons.lang3.StringUtils;
-
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Strings.nullToEmpty;
-import static java.time.LocalDateTime.parse;
-import static java.time.ZoneOffset.UTC;
-import static java.util.Comparator.comparingLong;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
@@ -30,7 +24,7 @@ class AlertMapper {
 
   private final AlertPayloadConverter payloadConverter;
   private final AnalystDecisionMapper analystDecisionMapper;
-  private final DateTimeFormatter dateTimeFormatter;
+  private final CaseCommentsMapper caseCommentsMapper;
 
   public Collection<Alert> toReportAlerts(@NonNull Collection<AlertDataComposite> alerts) {
     return alerts.stream()
@@ -80,9 +74,8 @@ class AlertMapper {
     map.put("status", alertEntity.getStatus().toString());
     map.put("analyst_decision", nullToEmpty(getAnalystDecision(alertData.getCaseInformation())));
     map.putAll(payloadConverter.convertAlertDataToMap(alertData));
+    map.putAll(caseCommentsMapper.getLastCaseCommentWithDate(alertData.getCaseComments()));
     map.putAll(getAlertEntityMetadata(alertEntity));
-
-    getLastCaseComment(alertData.getCaseComments()).ifPresent(c -> map.put("lastCaseComment", c));
 
     return map;
   }
@@ -116,23 +109,5 @@ class AlertMapper {
     map.put("name", nullToEmpty(matchEntity.getName()));
 
     return map;
-  }
-
-  private Optional<String> getLastCaseComment(List<CaseComment> caseComments) {
-    return caseComments.stream()
-        .filter(c -> StringUtils.isNotEmpty(c.getCommentDateTime()))
-        .sorted(comparingLong((k) -> toDate(k.getCommentDateTime())))
-        .map(CaseComment::getCaseComment)
-        .filter(StringUtils::isNotEmpty)
-        .findFirst();
-  }
-
-  private long toDate(@NonNull String commentDateTime) {
-    try {
-      return parse(commentDateTime.toUpperCase(), dateTimeFormatter).toEpochSecond(UTC);
-    } catch (DateTimeParseException ex) {
-      log.error("Cannot parse case comment date = {}", commentDateTime, ex);
-      return Long.MIN_VALUE;
-    }
   }
 }

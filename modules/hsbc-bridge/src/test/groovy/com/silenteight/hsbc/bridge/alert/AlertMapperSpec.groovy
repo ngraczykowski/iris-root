@@ -3,7 +3,6 @@ package com.silenteight.hsbc.bridge.alert
 import com.silenteight.hsbc.bridge.alert.AlertSender.AlertDataComposite
 import com.silenteight.hsbc.bridge.json.external.model.AlertData
 import com.silenteight.hsbc.bridge.json.external.model.CaseInformation
-import com.silenteight.hsbc.bridge.util.CustomDateTimeFormatter
 
 import spock.lang.Specification
 
@@ -11,12 +10,13 @@ class AlertMapperSpec extends Specification {
 
   def payloadConverter = Mock(AlertPayloadConverter)
   def analystDecisionMapper = Mock(AnalystDecisionMapper)
-  def dateTimeFormatter = new CustomDateTimeFormatter("dd-MMM-yy")
-  def underTest = new AlertMapper(payloadConverter, analystDecisionMapper, dateTimeFormatter.getDateTimeFormatter())
+  def caseCommentsMapper = Mock(CaseCommentsMapper)
+  def underTest = new AlertMapper(payloadConverter, analystDecisionMapper, caseCommentsMapper)
 
   def "Should find and return collection of Alerts"() {
     given:
-    payloadConverter.convertAlertDataToMap(*_) >> new HashMap<String, String>()
+    payloadConverter.convertAlertDataToMap(*_) >> Collections.emptyMap()
+    caseCommentsMapper.getLastCaseCommentWithDate(*_) >> Collections.emptyMap()
 
     when:
     def find = underTest.toReportAlerts(ALERT_INFORMATION)
@@ -42,6 +42,7 @@ class AlertMapperSpec extends Specification {
         "someKey": "someValue"
     )
     payloadConverter.convertAlertDataToMap(*_) >> payloadMap
+    caseCommentsMapper.getLastCaseCommentWithDate(*_) >> Collections.emptyMap()
 
     when:
     def find = underTest.toReportAlerts(ALERT_INFORMATION)

@@ -45,11 +45,14 @@ class AlertFacadeConfiguration {
   }
 
   private AlertMapper alertMapper() {
-    return new AlertMapper(
-        alertPayloadConverter, analystDecisionMapper(), dateTimeFormatter.getDateTimeFormatter());
+    return new AlertMapper(alertPayloadConverter, analystDecisionMapper(), caseCommentsMapper());
   }
 
   private AnalystDecisionMapper analystDecisionMapper() {
     return new AnalystDecisionMapper(decisionProperties.getMap());
+  }
+
+  private CaseCommentsMapper caseCommentsMapper() {
+    return new CaseCommentsMapper(dateTimeFormatter.getDateTimeFormatter());
   }
 }
