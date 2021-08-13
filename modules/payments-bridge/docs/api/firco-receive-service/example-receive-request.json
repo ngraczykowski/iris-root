@@ -1,0 +1,36 @@
+{
+  "Header": {},
+  "Body": {
+    "msg_ReceiveDecision": {
+      "VersionTag": "1",
+      "Authentication": {
+        "ContinuityLogin": "username",
+        "ContinuityPassword": "password",
+        "ContinuityBusinessUnit": "ROOT"
+      },
+      "Messages": [
+        {
+          "Message": {
+            "Unit": "HB-UK",
+            "BusinessUnit": "string",
+            "MessageID": "2020061300000008",
+            "SystemID": "MTH20210106102116-00003-16630",
+            "Status": {
+              "ID": "202",
+              "Name": "BOOK1",
+              "RoutingCode": "2",
+              "Checksum": "152c65fe973360004140a71f25a34cdd"
+            },
+            "Comment": "S8 Recommendation: False Positive\n",
+            "Operator": "Silent Eight",
+            "Attachment": {
+              "Name": "recommendation.txt",
+              "Contents": "UzggUmVjb21tZW5kYXRpb246IE1hbnVhbCBJbnZlc3RpZ2F0aW9u"
+            },
+            "Actions": []
+          }
+        }
+      ]
+    }
+  }
+}
