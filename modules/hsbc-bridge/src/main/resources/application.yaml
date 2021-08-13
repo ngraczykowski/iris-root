@@ -7,6 +7,7 @@ silenteight.bridge:
     adjudication-engine-address: static://localhost:24801
     governance-address: static://localhost:24205
     worldcheck-address: static://localhost:24813
+    historical-decisions-model-address: static://localhost:24901
   http.port: 24802
   amqp:
     outgoing:
@@ -123,6 +124,7 @@ grpc:
     adjudication-engine.address: ${silenteight.bridge.grpc.adjudication-engine-address}
     hsbc-worldcheck.address: ${silenteight.bridge.grpc.worldcheck-address}
     governance.address: ${silenteight.bridge.grpc.governance-address}
+    historical-decisions-model.address: ${silenteight.bridge.grpc.historical-decisions-model-address}
 
 ### HTTP
 

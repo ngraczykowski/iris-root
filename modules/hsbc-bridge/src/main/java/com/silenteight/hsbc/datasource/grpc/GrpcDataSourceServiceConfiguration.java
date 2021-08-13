@@ -31,7 +31,7 @@ class GrpcDataSourceServiceConfiguration {
   @GrpcClient(KnownServices.WORLDCHECK)
   private NamesInformationServiceBlockingStub namesInformationServiceBlockingStub;
 
-  @GrpcClient(KnownServices.HISTORICAL_DECISIONS_AGENT)
+  @GrpcClient(KnownServices.HISTORICAL_DECISIONS_MODEL)
   private HistoricalDecisionsModelServiceBlockingStub historicalDecisionsModelServiceBlockingStub;
 
   @Bean
