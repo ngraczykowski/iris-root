@@ -233,18 +233,21 @@ warehouse.report.rbs:
         add-counter: false
 
 warehouse.report.billing:
+  year-field-name: alert_recommendationYear
+  month-field-name: alert_recommendationMonth
   date-field-name: alert_recommendationDate
-  columns:
-    - name: alert_recommendationYear
-      label: year
-    - name: alert_recommendationMonth
-      label: month
+  year-month-label: date
   transpose-column:
     name: alert_s8_recommendation
-    label: count_solved
-    grouping-values: [ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE, ACTION_INVESTIGATE]
+    grouping-values:
+      - name: ACTION_FALSE_POSITIVE
+        label: count_solved_FP
+      - name: ACTION_POTENTIAL_TRUE_POSITIVE
+        label: count_solved_PTP
+      - name: ACTION_MANUAL_INVESTIGATION
+        label: count_solved_MI
     counter-label: count_alerts_received
-    significant-values: [ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE]
+    significant-values: [ ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE]
     significant-summation-label: count_alerts_solved
 
 warehouse.report.sm:

@@ -25,12 +25,14 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Stream.concat;
+import static org.apache.commons.lang3.StringUtils.leftPad;
 
 @RequiredArgsConstructor
 public class BillingReportGenerationService {
 
-  private static final String DELIMITER = ",";
+  private static final String DELIMITER = "-";
   private static final String EMPTY_STRING = "";
+
   @NonNull
   private final GroupingQueryService groupingQueryService;
   @NonNull
@@ -65,7 +67,7 @@ public class BillingReportGenerationService {
 
   private String getLabelsRow() {
     return CSVUtils.getCSVRecordWithDefaultDelimiter(
-        properties.getListOfLabels().toArray(String[]::new));
+        properties.getLabels().toArray(String[]::new));
   }
 
   private List<String> transpose(FetchGroupedDataResponse rawData) {
@@ -77,50 +79,62 @@ public class BillingReportGenerationService {
     return rowsToTranspose
         .keySet()
         .stream()
-        .sorted()
         .map(key -> getLine(rowsToTranspose.get(key)))
+        .sorted()
         .collect(toList());
   }
 
   private String generateStaticFields(Row row) {
-    return properties.getListOfStaticFields()
-                     .stream()
-                     .map(fieldName -> row.getValueOrDefault(fieldName, EMPTY_STRING))
-                     .collect(joining(DELIMITER));
+    return properties.getDateColumnsLabel()
+        .stream()
+        .map(fieldName -> row.getValueOrDefault(fieldName, EMPTY_STRING))
+        .collect(joining(DELIMITER));
   }
 
   private String getLine(List<Row> rowsToTranspose) {
     Stream<String> transposedCells = getValues(properties.getTransposeColumn(), rowsToTranspose);
-
     Row rowWithGroupedData = rowsToTranspose.stream().findAny().orElseThrow();
-    Stream<String> staticCells = properties
-        .getListOfStaticFields()
-        .stream()
-        .map(fieldName -> rowWithGroupedData.getValueOrDefault(fieldName, EMPTY_STRING));
 
-    Stream<String> rowCells = concat(staticCells, transposedCells);
+    String staticCells = properties
+        .getDateColumnsLabel()
+        .stream()
+        .map(fieldName -> rowWithGroupedData.getValueOrDefault(fieldName, EMPTY_STRING))
+        .map(this::convertToTwoDigitValue)
+        .collect(joining(DELIMITER));
+
+    Stream<String> staticFieldsStream = Stream.<String>builder()
+        .add(staticCells)
+        .build();
+
+    Stream<String> rowCells = concat(staticFieldsStream, transposedCells);
+
     return CSVUtils.getCSVRecordWithDefaultDelimiter(rowCells.toArray(String[]::new));
+  }
+
+  private String convertToTwoDigitValue(String field) {
+    return leftPad(field, 2, "0");
   }
 
   private Stream<String> getValues(TransposeColumnProperties column, List<Row> rows) {
     List<String> result = new ArrayList<>();
     Map<String, Long> values = rows
         .stream()
-        .collect(toMap(row -> row.getValueOrDefault(column.getName(), EMPTY_STRING).toLowerCase(),
-                       Row::getCount,
-                       Long::sum));
+        .collect(toMap(
+            row -> row.getValueOrDefault(column.getName(), EMPTY_STRING).toLowerCase(),
+            Row::getCount,
+            Long::sum));
 
     column.getGroupingValues()
-          .stream()
-          .map(String::toLowerCase)
-          .map(groupingValue -> values.getOrDefault(groupingValue, 0L))
-          .map(String::valueOf)
-          .forEach(result::add);
+        .stream()
+        .map(ColumnProperties::getName)
+        .map(groupingValue -> values.getOrDefault(groupingValue.toLowerCase(), 0L))
+        .map(String::valueOf)
+        .forEach(result::add);
 
-    result.add(getAllSignificantValuesSum(values,
-                                          getSignificantValues()));
+    result.add(getAllSignificantValuesSum(
+        values,
+        getSignificantValues()));
     result.add(getAllValuesSum(values));
-
     return result.stream();
   }
 
@@ -136,6 +150,7 @@ public class BillingReportGenerationService {
 
   private static String getAllSignificantValuesSum(
       Map<String, Long> values, List<String> significantValues) {
+
     return valueOf(values
         .keySet()
         .stream()
