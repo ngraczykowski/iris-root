@@ -14,6 +14,7 @@ servers:
     description: The API server address.
     variables:
       env:
+        description: The environment.
         enum:
           - 'dev'
           - 'uat'
