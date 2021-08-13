@@ -1,0 +1,114 @@
+openapi: 3.0.1
+info:
+  title: SEAR Payments - Firco Continuity Receive Service API
+  description: >
+    The API is for integrating Firco Continuity via Case Manager API with SEAR Payments.
+    This part of the API is the Ficro Continuity CMAPI receive service, where SEAR Payments sends
+    the decision back to.
+  contact:
+    name: Silent Eight Support
+    url: https://silenteight.com/contact/
+    email: support@silenteight.com
+  version: 1.0.0
+servers:
+  - url: 'https://cmapi.firco.example.com/'
+    description: >
+      An example URL to send back the decisions to. The exact API endpoint is to be determined
+      during the systems integration phase.
+paths:
+  /ContinuityReceiveService:
+    post:
+      tags:
+        - callback-controller
+      operationId: processAnalystSolutions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DecisionDto'
+        required: true
+      responses:
+        '200':
+          description: default response
+
+components:
+  schemas:
+    ActionToSendDto:
+      type: object
+    AuthenticationDto:
+      type: object
+      properties:
+        ContinuityLogin:
+          type: string
+        ContinuityPassword:
+          type: string
+        ContinuityBusinessUnit:
+          type: string
+    AttachmentDto:
+      type: object
+      properties:
+        Name:
+          type: string
+        Contents:
+          type: string
+    StatusToSendDto:
+      type: object
+      properties:
+        ID:
+          type: string
+        Name:
+          type: string
+        RoutingCode:
+          type: string
+        Checksum:
+          type: string
+    MessageDto:
+      type: object
+      properties:
+        Unit:
+          type: string
+        BusinessUnit:
+          type: string
+        MessageID:
+          type: string
+        SystemID:
+          type: string
+        Status:
+          type: object
+          $ref: '#/components/schemas/StatusToSendDto'
+        Comment:
+          type: string
+        Operator:
+          type: string
+        Attachment:
+          type: object
+          $ref: '#/components/schemas/AttachmentDto'
+        Actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActionToSendDto'
+
+    MessageToSendDto:
+      type: object
+      properties:
+        Message:
+          type: object
+          $ref: '#/components/schemas/MessageDto'
+    DecisionDto:    # Schema name
+      type: object
+      properties:
+        msg_ReceiveDecision:
+          type: object
+          $ref: '#/components/schemas/ReceiveDecisionDto'
+    ReceiveDecisionDto:
+      type: object
+      properties:
+        VersionTag:
+          type: string
+        Authentication:
+          type: object
+          $ref: '#/components/schemas/AuthenticationDto'
+        Messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageToSendDto'

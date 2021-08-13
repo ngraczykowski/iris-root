@@ -1,75 +1,27 @@
 openapi: 3.0.1
 info:
-  title: TSaaS API
-  version: 0.0.1
+  title: SEAR Payments - Firco Continuity Send Message API
+  description: >
+    The API is for integrating Firco Continuity via Case Manager API with SEAR Payments.
+    This part of the API is the server where Ficro Continuity sends messages to.
+  contact:
+    name: Silent Eight Support
+    url: https://silenteight.com/contact/
+    email: support@silenteight.com
+  version: 1.0.0
 servers:
-  - url: 'http://localhost:24600/tsaas-bridge/'
-    description: Generated server url
-tags:
-  - name: Actuator
-    description: Monitor and interact
-    externalDocs:
-      description: Spring Boot Actuator Web API Documentation
-      url: 'https://docs.spring.io/spring-boot/docs/current/actuator-api/html/'
+  - url: 'https://sierra-{env}.silent8.cloud:8443/tsaas-bridge/'
+    description: The API server address.
+    variables:
+      env:
+        enum:
+          - 'dev'
+          - 'uat'
+          - 'prod'
+        default: 'dev'
 paths:
-  /learn-analyst-solutions:
-    post:
-      tags:
-        - learning-controller
-      operationId: processAnalystSolutions
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RequestAnalystSolutionsDto'
-        required: true
-      responses:
-        '200':
-          description: default response
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/AckDto'
-  /queues:
-    get:
-      tags:
-        - status-controller
-      operationId: getQueues
-      responses:
-        '200':
-          description: default response
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/QueuesDto'
-  '/report/{reportName}':
-    post:
-      tags:
-        - report-controller
-      operationId: generateReport
-      parameters:
-        - name: reportName
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CsvReportFilter'
-        required: true
-      responses:
-        '200':
-          description: default response
-          content:
-            text/csv:
-              schema:
-                $ref: '#/components/schemas/FileSystemResource'
   /alert:
     post:
-      tags:
-        - alert-controller
       operationId: processAlert
       parameters:
         - name: dc
