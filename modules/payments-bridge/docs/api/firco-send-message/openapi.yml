@@ -37,13 +37,13 @@ paths:
       parameters:
         - name: receiveUrl
           description: |-
-            The URL of the endpoint implemention the `/ContinuityReceiveService`, where
-            the `msg_ReceiveDecision` message will be delivered,as specified in the Firco
+            The URL of the endpoint implementing the `/ContinuityReceiveService`, where
+            the `msg_ReceiveDecision` message will be delivered, as specified in the Firco
             Continuity documentation. The decision will contain the recommendation
             for adjudicated alert.
 
             Please note that the URL needs to be registered with Silent Eight for SEAR to send
-            back the decision.
+            back the decision. This is taken care during onboarding customer.
 
             When the parameter is not provided, the recommendation will be generated and visible
             on reports, but the `msg_ReceiveDecision` will not be delivered back
