@@ -29,9 +29,13 @@ class AlertGenerator {
     HashMap<String, String> payload = new HashMap<>();
     payload.put("recommendation", getRandomValue("Level 2 Review", "AAA False Positive"));
     payload.put("comment", getRandomValue("S8 recommended action - comment"));
+    payload.put("recommendationMonth", getRandomValue("01", "08", "09"));
+    payload.put("recommendationYear", getRandomValue("2021"));
     payload.put(
         "s8_recommendation",
-        getRandomValue("ACTION_FALSE_POSITIVE", "ACTION_POTENTIAL_TRUE_POSITIVE"));
+        getRandomValue(
+            "ACTION_FALSE_POSITIVE", "ACTION_POTENTIAL_TRUE_POSITIVE",
+            "ACTION_MANUAL_INVESTIGATION"));
     payload.put(
         "recommendationDate", now(UTC).format(DateTimeFormatter.ISO_ZONED_DATE_TIME));
     payload.put("lob_country", getRandomValue("PL", "DE", "UK"));

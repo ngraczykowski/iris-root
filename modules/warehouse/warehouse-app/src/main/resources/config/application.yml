@@ -316,22 +316,6 @@ warehouse.report.rbs:
         add-counter: false
     date-field-name: alert_timestamp
 
-warehouse.report.billing:
-  columns:
-    - name: recommendationYear
-      label: YEAR
-    - name: recommendationMonth
-      label: MONTH
-  transpose-column:
-    name: recommended action
-    label: count_solved
-    grouping-values: [FALSE_POSITIVE, POTENTIAL_TRUE_POSITIVE, MANUAL_INVESTIGATION]
-    counter-label: count_alerts_received
-    significant-values: [ FALSE_POSITIVE, POTENTIAL_TRUE_POSITIVE ]
-    significant-summation-label: count_alerts_solved
-  date-field-name: index_timestamp
-
-
 warehouse.report.sm:
   risk-type:
     name: riskType

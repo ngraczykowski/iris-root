@@ -13,8 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import static java.util.Collections.unmodifiableList;
-import static java.util.stream.Collectors.toUnmodifiableList;
+import static java.util.List.of;
 
 @AllArgsConstructor
 @ConstructorBinding
@@ -24,35 +23,30 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 public class BillingReportProperties {
 
   @NotBlank
+  String yearMonthLabel;
+  @NotBlank
   String dateFieldName;
-  @Valid
-  @NotNull
-  List<ColumnProperties> columns;
+  @NotBlank
+  String yearFieldName;
+  @NotBlank
+  String monthFieldName;
   @Valid
   @NotNull
   TransposeColumnProperties transposeColumn;
 
+  List<String> getDateColumnsLabel() {
+    return of(yearFieldName, monthFieldName);
+  }
+
+  List<String> getLabels() {
+    List<String> labels = new ArrayList<>();
+    labels.add(yearMonthLabel);
+    labels.addAll(getTransposeColumn().getLabels());
+    return labels;
+  }
+
   List<String> getListOfFields() {
-    return getColumns().stream().map(Column::getName).collect(toUnmodifiableList());
-  }
-
-  List<String> getListOfStaticFields() {
-    return getStaticColumns().stream().map(Column::getName).collect(toUnmodifiableList());
-  }
-
-  List<String> getListOfLabels() {
-    List<String> result = new ArrayList<>();
-    getColumns().forEach(column -> result.addAll(column.getLabels()));
-    return result;
-  }
-
-  private List<Column> getColumns() {
-    List<Column> result = getStaticColumns();
-    result.add(getTransposeColumn());
-    return unmodifiableList(result);
-  }
-
-  private List<Column> getStaticColumns() {
-    return new ArrayList<>(columns);
+    String name = transposeColumn.getName();
+    return List.of(monthFieldName, yearFieldName, name);
   }
 }

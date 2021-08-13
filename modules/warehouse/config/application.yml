@@ -70,3 +70,21 @@ warehouse:
 grpc:
   server:
     port: 24206
+
+warehouse.report.billing:
+  year-field-name: alert_recommendationYear
+  month-field-name: alert_recommendationMonth
+  date-field-name: alert_recommendationDate
+  year-month-label: date
+  transpose-column:
+    name: alert_s8_recommendation
+    grouping-values:
+      - name: ACTION_FALSE_POSITIVE
+        label: count_solved_FP
+      - name: ACTION_POTENTIAL_TRUE_POSITIVE
+        label: count_solved_PTP
+      - name: ACTION_MANUAL_INVESTIGATION
+        label: count_solved_MI
+    counter-label: count_alerts_received
+    significant-values: [ ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE]
+    significant-summation-label: count_alerts_solved

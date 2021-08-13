@@ -21,9 +21,7 @@ class TransposeColumnProperties implements Column {
   @NonNull
   private final String name;
   @NonNull
-  private final String label;
-  @NonNull
-  private final List<String> groupingValues;
+  private final List<ColumnProperties> groupingValues;
   @NonNull
   private final String counterLabel;
   @NonNull
@@ -35,7 +33,7 @@ class TransposeColumnProperties implements Column {
   public List<String> getLabels() {
     List<String> result = groupingValues
         .stream()
-        .map(value -> getLabel() + DELIMITER + value)
+        .map(ColumnProperties::getLabel)
         .collect(toList());
     result.add(significantSummationLabel);
     result.add(counterLabel);
