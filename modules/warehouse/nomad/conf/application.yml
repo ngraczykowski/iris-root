@@ -158,7 +158,7 @@ warehouse.report.rbs:
         grouping-values: [PASSED, FAILED]
         add-counter: true
       - name: alert_analyst_decision
-        label: analysis_decision
+        label:
         grouping-values: analyst_decision_true_positive, analyst_decision_false_positive
         add-counter: false
   simulation:
@@ -228,7 +228,7 @@ warehouse.report.rbs:
         grouping-values: [ PASSED, FAILED ]
         add-counter: true
       - name: alert_analyst_decision
-        label: analysis_decision
+        label:
         grouping-values: analyst_decision_false_positive, analyst_decision_true_positive
         add-counter: false
 
