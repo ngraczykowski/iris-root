@@ -93,7 +93,7 @@ components:
           type: string
       example:
         ID: "202"
-        Name: "BOOK1"
+        Name: "S8_ADJ"
         RoutingCode: "2"
         Checksum: "152c65fe973360004140a71f25a34cdd"
 
@@ -118,8 +118,9 @@ components:
         Header:
           description: 'Always `null`.'
           type: object
-          default: null
           nullable: true
+          default: null
+          example: null
         Body:
           description: 'Contains the message type and its value.'
           type: object
@@ -196,6 +197,7 @@ components:
             is "ROOT".
           type: string
           maxLength: 256
+          example: "ROOT"
           default: "ROOT"
         MessageID:
           description: |-
@@ -301,7 +303,7 @@ components:
         faultstring:
           description: |-
             Text describing the occurred error. e.g. 110: "Application of format ws.wmqin on
-            a buffer &lt;object(id => "", correlation => "", Accept-Encoding => "gzip,deflate",
+            a buffer <object(id => "", correlation => "", Accept-Encoding => "gzip,deflate",
             Content-Type => "text/xml;charset=UTF-8", SOAPAction => "\"\"",
             Content-Length => "1617", Host => "localhost:5406",
             Connection => "Keep-Alive", User-Agent => "Apache-HttpClient/4.1.1 (java 1.5)")>
