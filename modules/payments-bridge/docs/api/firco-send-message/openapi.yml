@@ -132,8 +132,8 @@ components:
           type: string
       example:
         ID: "211"
-        Name: "PI_BOOK1"
-        RoutingCode: "12"
+        Name: "S8_ADJ_PR"
+        RoutingCode: "2"
         Checksum: "bb6c8712a888eff9122d0f1709da063d"
 
     AttachmentInfo:
@@ -157,8 +157,9 @@ components:
         Header:
           description: 'Always `null`.'
           type: object
-          default: null
           nullable: true
+          default: null
+          example: null
         Body:
           description: 'Contains the message type and its value.'
           type: object

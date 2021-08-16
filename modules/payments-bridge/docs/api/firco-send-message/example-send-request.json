@@ -1,12 +1,12 @@
 {
-  "Header": {},
+  "Header": null,
   "Body": {
     "msg_SendMessage": {
       "VersionTag": "1",
       "Authentication": {
         "UserLogin": "username",
         "UserPassword": "password",
-        "UserRealm": "string"
+        "UserRealm": ""
       },
       "Messages": [
         {
