@@ -3,12 +3,14 @@ from setuptools import setup, find_packages
 install_require = [
     "agents-api",
     "aio_pika",
+    "aiohttp",
     "data-source-api",
     "googleapis-common-protos",
     "grpcio",
+    "grpcio-health-checking",
     "grpcio-tools",
     "lz4",
-    "aiohttp",
+    "protocol-agents",
     "python-consul2",
     "pyyaml",
 ]

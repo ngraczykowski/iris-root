@@ -26,3 +26,6 @@ agent:
 
     response:
       exchange: 'agent.response'
+
+  grpc:
+    port: {{ env "NOMAD_PORT_grpc" }}

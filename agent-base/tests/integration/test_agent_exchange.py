@@ -49,7 +49,7 @@ async def data_source_mock(config):
 
 
 @pytest.fixture(autouse=True)
-async def company_name_agent(config):
+async def johnny_agent(config):
     agent = JohnnyAgent(config)
     runner = AgentRunner(config)
     await runner.start(
