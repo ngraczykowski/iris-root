@@ -29,7 +29,7 @@ class WorldCheckIndividualsNamesExtractor {
         worldCheckIndividual.getOriginalScriptName(),
         joinNameParts(
             worldCheckIndividual.getGivenNamesOriginal(),
-            worldCheckIndividual.getFullNameOriginal())
+            worldCheckIndividual.getFamilyNameOriginal())
     );
   }
 }

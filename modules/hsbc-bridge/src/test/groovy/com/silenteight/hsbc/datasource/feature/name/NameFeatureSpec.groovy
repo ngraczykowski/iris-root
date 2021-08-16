@@ -47,6 +47,7 @@ class NameFeatureSpec extends Specification {
       getFullNameDerived() >> 'Aleksandr Leonidovich ZIMOWSKI'
       getOriginalScriptName() >> ''
       getGivenNamesOriginal() >> 'Akiaksandr Leanidavich'
+      getFamilyNameOriginal() >> 'ZIMOWSKI'
       getFullNameOriginal() >> 'Akiaksandr Leanidavich ZIMOUSKI'
       getCountryOfBirth() >> 'GERMANY'
       getNationalities() >> 'DE'
@@ -91,7 +92,7 @@ class NameFeatureSpec extends Specification {
       with(watchlistNames.name) {
         containsAll(
             ['Aleksandr Leonidovich ZIMOWSKI',
-             'Akiaksandr Leanidavich Aleksandr Leonidovich ZIMOWSKI',
+             'Akiaksandr Leanidavich ZIMOWSKI',
              'ALAKSANDR ZIMOUSKI',
              'Akiaksandr Leanidavich ZIMOUSKI'])
       }
