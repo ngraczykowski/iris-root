@@ -1,0 +1,3434 @@
+{
+  "Header": "",
+  "Body": {
+    "msg_SendMessage": {
+      "VersionTag": "1",
+      "Authentication": {
+        "UserLogin": "login",
+        "UserPassword": "password",
+        "UserRealm": ""
+      },
+      "Messages": [
+        {
+          "Message": {
+            "Unit": "NBP-KE",
+            "BusinessUnit": "H2H-NBP",
+            "MessageID": "PIUNHCRSOMB03738",
+            "SystemID": "DIN20201012071524-01758-179550",
+            "Bypass": "",
+            "Command": "",
+            "BusinessType": "",
+            "MessageType": null,
+            "IOIndicator": "I",
+            "SenderReference": "PIUNHCRSOMB03738",
+            "Currency": "USD",
+            "Amount": "0",
+            "ApplicationCode": "NBP+KE",
+            "ToApplication": null,
+            "MessageFormat": "FUF/FIRCOSOFT",
+            "SenderCode": "SCBLINBBAXXX",
+            "ReceiverCode": "GOLDUS33XXXX",
+            "ApplicationPriority": "0",
+            "CutoffTime": "",
+            "NormalizedAmount": "0",
+            "MessageData": "",
+            "LastComment": "",
+            "LastOperator": "1558600",
+            "ValueDate": "",
+            "FilteredDate": "2020/10/12 07:15:26",
+            "RelatedReference": null,
+            "CreatedDate": "2020/10/12 07:15:24",
+            "Priority": "0",
+            "Confidentiality": "0",
+            "Blocking": "30",
+            "NonBlocking": "0",
+            "CopyService": null,
+            "Hits": [
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali, SO",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "C_CREDITOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "2",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00375473",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2017-03-09 16:23:09 BofE"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BAYNAH, YASIN ALI"
+                      },
+                      {
+                        "Name": "ALI, YASIN BAYNAH"
+                      },
+                      {
+                        "Name": "ALI, YASSIN MOHAMED"
+                      },
+                      {
+                        "Name": "BAYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BAYNAH, YASSIN"
+                      },
+                      {
+                        "Name": "BAYNAX, YASIIN CALI"
+                      },
+                      {
+                        "Name": "BEENAH, YASIN"
+                      },
+                      {
+                        "Name": "BEENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BENAH, YASIN"
+                      },
+                      {
+                        "Name": "BENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BEYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BINAH, YASSIN"
+                      },
+                      {
+                        "Name": "CALI, YASIIN BAYNAX"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [
+                            {
+                              "City": "MOGADISHU"
+                            },
+                            {
+                              "City": "MOGADISCIO"
+                            },
+                            {
+                              "City": "MOGADISHU"
+                            }
+                          ],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "JAMHUURIYADDA SOOMAALIYA"
+                            },
+                            {
+                              "Country": "SOMALI REPUBLIC"
+                            },
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "SOMALIE"
+                            },
+                            {
+                              "Country": "SOOMAALIYA"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "BOFE",
+                    "Designation": "SOMALIA",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 29 / Create Date: 04/28/2010 16:07:32 / Last Update Date: 03/09/2017 12:09:50 / Program: SOMALIA / Nationality: Somali; Swedish / OtherInformation: Has incited attacks against the Transitional Federal Government and the Afgrican Union Mission in Somalia / EffectiveDate: 3/9/2017 / OriginalID: 10929",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "43704",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali, SO",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "C_CREDITOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "2",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00373085",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2018-11-14 15:43:53 UN"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BAYNAH, YASIN ALI"
+                      },
+                      {
+                        "Name": "ALI, YASIN BAYNAH"
+                      },
+                      {
+                        "Name": "ALI, YASSIN MOHAMED"
+                      },
+                      {
+                        "Name": "BAYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BAYNAH, YASSIN"
+                      },
+                      {
+                        "Name": "BAYNAX, YASIIN CALI"
+                      },
+                      {
+                        "Name": "BEENAH, YASIN"
+                      },
+                      {
+                        "Name": "BEENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BENAH, YASIN"
+                      },
+                      {
+                        "Name": "BENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BEYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BINAH, YASSIN"
+                      },
+                      {
+                        "Name": "CALI, YASIIN BAYNAX"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [
+                            {
+                              "City": "MOGADISHU"
+                            },
+                            {
+                              "City": "MOGADISCIO"
+                            },
+                            {
+                              "City": "MOGADISHU"
+                            }
+                          ],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "JAMHUURIYADDA SOOMAALIYA"
+                            },
+                            {
+                              "Country": "SOMALI REPUBLIC"
+                            },
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "SOMALIE"
+                            },
+                            {
+                              "Country": "SOOMAALIYA"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UN",
+                    "Designation": "SOMALIA",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 44 / Create Date: 04/14/2010 11:59:19 / Last Update Date: 06/14/2019 14:23:09 / Program: SOMALIA / Nationality: SOMALIA; SWEDEN / OtherInformation: INTERPOL-UN Security Council Special Notice web link: https://www.interpol.int/en/How-we-work/Notices/View-UN-Notices-Individuals / OriginalID: SOi.001",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "43704",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "C_CREDITOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "13",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00895806",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2016-08-23 18:37:48 UN"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "KONY, ALI"
+                      },
+                      {
+                        "Name": "'1-P'"
+                      },
+                      {
+                        "Name": "'BASHIR'"
+                      },
+                      {
+                        "Name": "'CAESAR'"
+                      },
+                      {
+                        "Name": "'KAPERE, OTIM'"
+                      },
+                      {
+                        "Name": "'ONE-P'"
+                      },
+                      {
+                        "Name": "BASHIR, ALI LALOBO"
+                      },
+                      {
+                        "Name": "KONY, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "LABOLA, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "LABOLO, ALI MOHAMMAD"
+                      },
+                      {
+                        "Name": "LALOBO, ALI"
+                      },
+                      {
+                        "Name": "LALOBO, ALI BASHIR"
+                      },
+                      {
+                        "Name": "LALOBO, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "MOHAMMED, ALI"
+                      },
+                      {
+                        "Name": "SALONGO, ALI MOHAMMED"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [
+                            {
+                              "State": "KAFIA KINGI"
+                            }
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "NOT PROVIDED"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UN",
+                    "Designation": "CAR",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 44 / Create Date: 08/23/2016 18:22:43 / Last Update Date: 06/14/2019 14:23:07 / Program: CENTRAL AFRICAN REPUBLIC / Title: DEPUTY, LORD'S RESISTANCE ARMY / OtherInformation: ALI KONY IS A DEPUTY IN THE LORD'S RESISTANCE ARMY (LRA) (CFE.002), A DESIGNATED ENTITY AND THE SON OF LRA LEADER JOSEPH KONY (CFI.009), A DESIGNATED INDIVIDUAL. ALI WAS INCORPORATED INTO THE LRA'S LEADERSHIP HIERARCHY IN 2010. HE IS PART OF A GROUP OF SENIOR LRA OFFICERS WHO ARE BASED WITH JOSEPH KONY. INTERPOL-UN Security Council Special Notice web link: https://www.interpol.int/en/How-we-work/Notices/View-UN-Notices-Individuals / AltAddress: A TERRITORY ON THE BORDER OF SUDAN AND SOUTH SUDAN WHOSE FINAL STATUS HAS YET TO BE DETERMINED / OriginalID: CFI.010",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "121533",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "C_CREDITOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00110547",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2017-04-24 15:27:01 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "MUHAMMAD, 'ALI HAJJ"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "SYRIAN ARAB REPUBLIC"
+                            },
+                            {
+                              "Country": "AL JUMHURIYAH AL ARABIYAH AS SURIYAH"
+                            },
+                            {
+                              "Country": "REPUBLIQUE ARABE SYRIENNE"
+                            },
+                            {
+                              "Country": "SIRIA"
+                            },
+                            {
+                              "Country": "SURIYE"
+                            },
+                            {
+                              "Country": "SYRIA"
+                            },
+                            {
+                              "Country": "SYRIAN ARAB REPUBLIC"
+                            },
+                            {
+                              "Country": "SYRIE"
+                            },
+                            {
+                              "Country": "SYRIEN"
+                            },
+                            {
+                              "Country": "SYRIEN ARABISCHE REPUBLIK"
+                            },
+                            {
+                              "Country": "SYRISCH"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UST",
+                    "Designation": "SYRIAN_ARAB_REPUBLIC",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 0 / Create Date: 04/24/2017 14:23:52 / Last Update Date: 04/24/2017 14:57:51 / Program: SYRIAN ARAB REPUBLIC / Title: SCIENTIFIC STUDIES AND RESEARCH CENTER EMPLOYEE / Nationality: SYRIA / OriginalID: 22070",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": null,
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali, SO",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "C_CREDITOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "2",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00372871",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2019-11-07 14:30:58 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BAYNAH, YASIN ALI"
+                      },
+                      {
+                        "Name": "ALI, YASIN BAYNAH"
+                      },
+                      {
+                        "Name": "ALI, YASSIN MOHAMED"
+                      },
+                      {
+                        "Name": "BAYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BAYNAH, YASSIN"
+                      },
+                      {
+                        "Name": "BAYNAX, YASIIN CALI"
+                      },
+                      {
+                        "Name": "BEENAH, YASIN"
+                      },
+                      {
+                        "Name": "BEENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BENAH, YASIN"
+                      },
+                      {
+                        "Name": "BENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BEYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BINAH, YASSIN"
+                      },
+                      {
+                        "Name": "CALI, YASIIN BAYNAX"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [
+                            {
+                              "City": "MOGADISHU"
+                            },
+                            {
+                              "City": "MOGADISCIO"
+                            },
+                            {
+                              "City": "MOGADISHU"
+                            }
+                          ],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "JAMHUURIYADDA SOOMAALIYA"
+                            },
+                            {
+                              "Country": "SOMALI REPUBLIC"
+                            },
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "SOMALIE"
+                            },
+                            {
+                              "Country": "SOOMAALIYA"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UST",
+                    "Designation": "SOMALIA",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 0 / Create Date: 04/13/2010 12:11:07 / Last Update Date: 11/07/2019 13:39:06 / Program: SOMALIA / Nationality: SOMALIA; SWEDEN / OriginalID: 11747",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "43704",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "C_CREDITOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS06290784",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2020-05-20 11:47:54 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "ALI NOORINAJAD, MOHAMMAD"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "IRAN ISLAMIC REPUBLIC OF"
+                            },
+                            {
+                              "Country": "IRAN"
+                            },
+                            {
+                              "Country": "IRAN (ISLAMIC REPUBLIC OF)"
+                            },
+                            {
+                              "Country": "IRAN ISLAMIC REPUBLIC OF"
+                            },
+                            {
+                              "Country": "IRAO"
+                            },
+                            {
+                              "Country": "ISLAMIC REPUBLIC OF IRAN"
+                            },
+                            {
+                              "Country": "JOMHURI YE ESLAMI YE IRAN"
+                            },
+                            {
+                              "Country": "JOMHURI-YE ESLAMI-YE IRAN"
+                            },
+                            {
+                              "Country": "PERSIA"
+                            },
+                            {
+                              "Country": "REPUBLIQUE ISLAMIQUE D IRAN"
+                            },
+                            {
+                              "Country": "REPUBLIQUE ISLAMIQUE D'IRAN"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UST",
+                    "Designation": "IRANHR",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 0 / Create Date: 05/20/2020 10:25:41 / Last Update Date: 05/20/2020 11:17:32 / Program: IRAN-HR / Nationality: IRAN / NATIONAL NO: 4032108617 OtherInfo: NATIONAL ID NO., IRAN / Gender: MALE / OtherInformation: (LINKED TO: LAW ENFORCEMENT FORCES OF THE ISLAMIC REPUBLIC OF IRAN); ADDITIONAL SANCTIONS INFORMATION: SUBJECT TO SECONDARY SANCTIONS / OriginalID: 28923",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": null,
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "C_CREDITOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "2",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00002526",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2017-05-30 14:19:33 EU"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "KONY, ALI"
+                      },
+                      {
+                        "Name": "1-P"
+                      },
+                      {
+                        "Name": "ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "BASHIR"
+                      },
+                      {
+                        "Name": "BASHIR, ALI LALOBO"
+                      },
+                      {
+                        "Name": "CAESAR"
+                      },
+                      {
+                        "Name": "KAPERE, OTIM"
+                      },
+                      {
+                        "Name": "KONY, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "LABOLA, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "LABOLO, ALI MOHAMMAD"
+                      },
+                      {
+                        "Name": "LALOBO, ALI"
+                      },
+                      {
+                        "Name": "LALOBO, ALI BASHIR"
+                      },
+                      {
+                        "Name": "LALOBO, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "ONE-P"
+                      },
+                      {
+                        "Name": "SALONGO, ALI MOHAMMED"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [
+                            {
+                              "State": "KAFIA KINGI"
+                            }
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "NOT PROVIDED"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "EU",
+                    "Designation": "CAR",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 33 / Create Date: 09/01/2016 15:33:31 / Last Update Date: 05/30/2017 13:56:51 / Program: CENTRAL AFRICAN REPUBLIC / Legal_Basis: 2016/1442 (OJ L235) / Title: DEPUTY, LORD'S RESISTANCE ARMY / OtherInformation: (DATE OF UN DESIGNATION: 2016-08-23); Son of LRA leader Joseph Kony; He was incorporated into the LRA's leadership hierarchy in 2010. He is part of a group of senior LRA officers who are based with Joseph Kony. INTERPOL-UN Security Council Special Notice web link: https://www.interpol.int/en/notice/search/un/5971056. / EffectiveDate: 9/1/2016 / AltAddress: A TERRITORY ON THE BORDER OF SUDAN AND SOUTH SUDAN WHOSE FINAL STATUS HAS YET TO BE DETERMINED / OriginalID: 109405",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "159172",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "C_CREDITOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00110633",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2017-04-24 15:27:03 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "'ALI, MUHAMMAD"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "SYRIAN ARAB REPUBLIC"
+                            },
+                            {
+                              "Country": "AL JUMHURIYAH AL ARABIYAH AS SURIYAH"
+                            },
+                            {
+                              "Country": "REPUBLIQUE ARABE SYRIENNE"
+                            },
+                            {
+                              "Country": "SIRIA"
+                            },
+                            {
+                              "Country": "SURIYE"
+                            },
+                            {
+                              "Country": "SYRIA"
+                            },
+                            {
+                              "Country": "SYRIAN ARAB REPUBLIC"
+                            },
+                            {
+                              "Country": "SYRIE"
+                            },
+                            {
+                              "Country": "SYRIEN"
+                            },
+                            {
+                              "Country": "SYRIEN ARABISCHE REPUBLIK"
+                            },
+                            {
+                              "Country": "SYRISCH"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UST",
+                    "Designation": "SYRIAN_ARAB_REPUBLIC",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 0 / Create Date: 04/24/2017 14:23:53 / Last Update Date: 04/24/2017 14:31:50 / Program: SYRIAN ARAB REPUBLIC / Title: SCIENTIFIC STUDIES AND RESEARCH CENTER EMPLOYEE / Nationality: SYRIA / OriginalID: 22113",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": null,
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "C_CREDITOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "5",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00429842",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2017-10-25 14:49:38 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "AL-ADANI, ABU SULAYMAN"
+                      },
+                      {
+                        "Name": "ABU-SULAYMAN, NASHWAN AL-ADANI"
+                      },
+                      {
+                        "Name": "AL-ADANI, NASHWAN"
+                      },
+                      {
+                        "Name": "AL-ADANI, SULAYMAN"
+                      },
+                      {
+                        "Name": "AL-HASHIMI, ABU MA'ALI"
+                      },
+                      {
+                        "Name": "AL-SAY'ARI, MUHAMMAD AHMED"
+                      },
+                      {
+                        "Name": "AL-SAY'ARI, MUHAMMAD QAN'AN"
+                      },
+                      {
+                        "Name": "AL-SAY'ARI, NASHWAN"
+                      },
+                      {
+                        "Name": "MUTHANA, MOHSEN AHMED SALEH"
+                      },
+                      {
+                        "Name": "MUTHANNA, MUHSIN AHMAD SALAH"
+                      },
+                      {
+                        "Name": "QAN'AN, MUHAMMAD SALIH MUHAMMAD"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "YEMEN"
+                            },
+                            {
+                              "Country": "AL JUMHURIYAH AL YAMANIYAH"
+                            },
+                            {
+                              "Country": "AL YAMAN"
+                            },
+                            {
+                              "Country": "IEMEN"
+                            },
+                            {
+                              "Country": "JEMEN REPUBLIK"
+                            },
+                            {
+                              "Country": "REPUBLIC OF YEMEN"
+                            },
+                            {
+                              "Country": "YEMEN"
+                            },
+                            {
+                              "Country": "YEMEN ARAB REPUBLIC"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UST",
+                    "Designation": "SDGT",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 0 / Create Date: 10/25/2017 12:59:19 / Last Update Date: 10/25/2017 13:45:04 / Program: SDGT / Weak Alias: 'AL-MUHAJIR, ABU USAMA' / Passport: 04988639 OtherInfo: JORDAN; 05867398 OtherInfo: YEMEN / Gender: MALE / OtherInformation: (LINKED TO: ISIL-YEMEN) / OriginalID: 23052",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "162736",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "C_CREDITOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "3",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00537998",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2020-06-05 17:52:54 EU"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "DURGHAM, MUHAMMAD ALI"
+                      },
+                      {
+                        "Name": "DURGHAM, MOHAMMAD ALI"
+                      },
+                      {
+                        "Name": "DURGHAM, MOHAMMED ALI"
+                      },
+                      {
+                        "Name": "محمد علي"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [],
+                          "Countries": []
+                        }
+                      }
+                    ],
+                    "Origin": "EU",
+                    "Designation": "SYRIA",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 33 / Create Date: 01/25/2012 13:17:18 / Last Update Date: 06/05/2020 11:55:44 / Program: SYRIA / Title: COMMANDER IN 4TH DIVISION; MAJOR GENERAL / Gender: MALE / OtherInformation: ORDERED TROOPS TO SHOOT AT PROTESTORS IN AND AROUND DAMASCUS, INCLUDING MO'ADAMIYEH, DOUMA, ABASIYEH, DUMA. DATE OF LISTING: 23.1.2012. / EffectiveDate: 4/23/2013 / OriginalID: 6867",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "66526",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "C_CREDITOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "13",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00003959",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2017-06-01 14:02:52 BofE"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "KONY, ALI"
+                      },
+                      {
+                        "Name": "'1-P'"
+                      },
+                      {
+                        "Name": "'BASHIR'"
+                      },
+                      {
+                        "Name": "'CAESAR'"
+                      },
+                      {
+                        "Name": "'ONE-P'"
+                      },
+                      {
+                        "Name": "BASHIR, ALI LALOBO"
+                      },
+                      {
+                        "Name": "KAPERE, OTIM"
+                      },
+                      {
+                        "Name": "KONY, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "LABOLA, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "LABOLO, ALI MOHAMMAD"
+                      },
+                      {
+                        "Name": "LALOBO, ALI"
+                      },
+                      {
+                        "Name": "LALOBO, ALI BASHIR"
+                      },
+                      {
+                        "Name": "LALOBO, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "MOHAMMED, ALI"
+                      },
+                      {
+                        "Name": "SALONGO, ALI MOHAMMED"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [
+                            {
+                              "State": "KAFIA KINGI"
+                            }
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "NOT PROVIDED"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "BOFE",
+                    "Designation": "CAR",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 29 / Create Date: 09/02/2016 11:18:50 / Last Update Date: 02/13/2019 09:08:54 / Program: CENTRAL AFRICAN REPUBLIC / Title: DEPUTY, LORD'S RESISTANCE ARMY / OtherInformation: Son of LRA Leader Joseph Kony. Ali incorporated into LRA's leadership hierarchy in 2010 and part of a group of senior LRA offices based with Joseph Kony. Also known as Bashir, Caesar, 1-P and One-P. / EffectiveDate: 6/1/2017 / AltAddress: (border of Sudan and South Sudan) / OriginalID: 13378",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": null,
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali, SO",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "C_CREDITOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "2",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AZ00506918",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2017-03-09 15:19:18 EU"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BAYNAH, YASIN ALI"
+                      },
+                      {
+                        "Name": "ALI, YASIN BAYNAH"
+                      },
+                      {
+                        "Name": "ALI, YASSIN MOHAMED"
+                      },
+                      {
+                        "Name": "BAYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BAYNAH, YASSIN"
+                      },
+                      {
+                        "Name": "BAYNAX, YASIIN CALI"
+                      },
+                      {
+                        "Name": "BEENAH, YASIN"
+                      },
+                      {
+                        "Name": "BEENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BENAH, YASIN"
+                      },
+                      {
+                        "Name": "BENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BEYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BINAH, YASSIN"
+                      },
+                      {
+                        "Name": "CALI, YASIIN BAYNAX"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [
+                            {
+                              "City": "MOGADISHU"
+                            },
+                            {
+                              "City": "MOGADISCIO"
+                            },
+                            {
+                              "City": "MOGADISHU"
+                            }
+                          ],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "JAMHUURIYADDA SOOMAALIYA"
+                            },
+                            {
+                              "Country": "SOMALI REPUBLIC"
+                            },
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "SOMALIE"
+                            },
+                            {
+                              "Country": "SOOMAALIYA"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "EU",
+                    "Designation": "SOMALIA",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 33 / Create Date: 04/28/2010 12:22:15 / Last Update Date: 03/09/2017 10:17:22 / Program: SOMALIA / Legal_Basis: 356/2010 (OJ L 105) / Nationality: SOMALIA; SWEDEN / OtherInformation: Date of UN designation: 12 April 2010. Yasin Ali Baynah has incited attacks against the Transitional Federal Government (TFG) and the African Union Mission in Somalia (AMISOM). He has also mobilised support and raised funds on behalf of the Alliance for the Re-Liberation of Somalia and Hisbul Islam, both of which have actively engaged in acts that threaten the peace and security of SO, including rejection of the Djibouti Agreement, and attacks on the TFG and AMISOM forces in Mogadishu / EffectiveDate: 4/28/2010 / OriginalID: 5620",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "43704",
+                    "UserData2": "AS00375090",
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "C_CREDITOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00715518",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2006-04-13 15:41:21 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "QAR'AWI, FATHI MOHAMMED"
+                      },
+                      {
+                        "Name": "QARAWI, MOHAMMED FATHI"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [
+                            {
+                              "City": "TULKARIM, WEST BANK"
+                            }
+                          ],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "PALESTINIAN TERRITORY, OCCUPIED"
+                            },
+                            {
+                              "Country": "CISJORDANIE"
+                            },
+                            {
+                              "Country": "ETAT DE PALESTINE"
+                            },
+                            {
+                              "Country": "OCCUPIED PALESTINIAN TERRITORY"
+                            },
+                            {
+                              "Country": "PALESTINE"
+                            },
+                            {
+                              "Country": "PALESTINE ETAT DE"
+                            },
+                            {
+                              "Country": "PALESTINE STATE OF"
+                            },
+                            {
+                              "Country": "PALESTINIAN AUTHORITY"
+                            },
+                            {
+                              "Country": "PALESTINIAN NATIONAL AUTHORITY"
+                            },
+                            {
+                              "Country": "PALESTINIAN TERRITORY"
+                            },
+                            {
+                              "Country": "PALESTINIAN TERRITORY OCCUPIED"
+                            },
+                            {
+                              "Country": "PALESTINIAN TERRITORY, OCCUPIED"
+                            },
+                            {
+                              "Country": "STATE OF PALESTINE"
+                            },
+                            {
+                              "Country": "TERRITOIRE PALESTINIEN OCCUPE"
+                            },
+                            {
+                              "Country": "WEST BANK"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UST",
+                    "Designation": "NSPLC",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 0 / Create Date: 04/13/2006 14:29:40 / Last Update Date: 05/06/2011 17:39:31 / Program: NS-PLC / OriginalID: 9651",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": null,
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali, SO",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "C_CREDITOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "1",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS06139505",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2018-02-09 14:01:03 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "YUSUF, MOHAMED MIRE ALI"
+                      },
+                      {
+                        "Name": "ALI, MOHAMED MIRE"
+                      },
+                      {
+                        "Name": "MIRE, MOHAMED"
+                      },
+                      {
+                        "Name": "MIRE, MOHAMED ALI"
+                      },
+                      {
+                        "Name": "MIRE, MUHAMMAD"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [
+                            {
+                              "State": "PUNTLAND"
+                            }
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "JAMHUURIYADDA SOOMAALIYA"
+                            },
+                            {
+                              "Country": "SOMALI REPUBLIC"
+                            },
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "SOMALIE"
+                            },
+                            {
+                              "Country": "SOOMAALIYA"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UST",
+                    "Designation": "SDGT",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 0 / Create Date: 02/09/2018 13:05:40 / Last Update Date: 02/09/2018 13:36:27 / Program: SDGT / Nationality: SOMALIA / Gender: MALE / OtherInformation: (LINKED TO: ISLAMIC STATE OF IRAQ AND THE LEVANT) / OriginalID: 23719",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": null,
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "C_CREDITOR",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "WL00050660",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "12/11/2017"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "ALI, MUHAMMAD"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [],
+                          "Countries": []
+                        }
+                      }
+                    ],
+                    "Origin": "SANCTIONSGROUP",
+                    "Designation": "XX-REGENHANCE-SP04",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "This internal Watchlist entry consolidates the information of multiple vendor supplied records for this OFAC Sanctioned Party. All information must be considered as applicable to this listed party. Program: SYRIAN ARAB REPUBLIC / Title: SCIENTIFIC STUDIES AND RESEARCH CENTER EMPLOYEE / Nationality: SYRIA / OriginalID: 22113 Program: SYRIAN ARAB REPUBLIC / Title: SCIENTIFIC STUDIES AND RESEARCH CENTER EMPLOYEE / Nationality: SYRIA / OriginalID: 22151Process alerts in accordance with DOI. If the alert cannot be deemed as false, escalate to the Regional Sanctions Team. Regional Sanctions Team - Establish if the match is True or False. For True Matches, consider the hit against the Group Sanctioned Parties Procedure and all applicable country sanctions procedures.",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "RFM-TS.NS.OB-DENY UPDATE",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "UC_CRED",
+                  "SolutionType": "1",
+                  "SynonymIndex": "2",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00375473",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2017-03-09 16:23:09 BofE"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BAYNAH, YASIN ALI"
+                      },
+                      {
+                        "Name": "ALI, YASIN BAYNAH"
+                      },
+                      {
+                        "Name": "ALI, YASSIN MOHAMED"
+                      },
+                      {
+                        "Name": "BAYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BAYNAH, YASSIN"
+                      },
+                      {
+                        "Name": "BAYNAX, YASIIN CALI"
+                      },
+                      {
+                        "Name": "BEENAH, YASIN"
+                      },
+                      {
+                        "Name": "BEENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BENAH, YASIN"
+                      },
+                      {
+                        "Name": "BENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BEYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BINAH, YASSIN"
+                      },
+                      {
+                        "Name": "CALI, YASIIN BAYNAX"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [
+                            {
+                              "City": "MOGADISHU"
+                            },
+                            {
+                              "City": "MOGADISCIO"
+                            },
+                            {
+                              "City": "MOGADISHU"
+                            }
+                          ],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "JAMHUURIYADDA SOOMAALIYA"
+                            },
+                            {
+                              "Country": "SOMALI REPUBLIC"
+                            },
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "SOMALIE"
+                            },
+                            {
+                              "Country": "SOOMAALIYA"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "BOFE",
+                    "Designation": "SOMALIA",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 29 / Create Date: 04/28/2010 16:07:32 / Last Update Date: 03/09/2017 12:09:50 / Program: SOMALIA / Nationality: Somali; Swedish / OtherInformation: Has incited attacks against the Transitional Federal Government and the Afgrican Union Mission in Somalia / EffectiveDate: 3/9/2017 / OriginalID: 10929",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "43704",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "UC_CRED",
+                  "SolutionType": "1",
+                  "SynonymIndex": "2",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00373085",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2018-11-14 15:43:53 UN"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BAYNAH, YASIN ALI"
+                      },
+                      {
+                        "Name": "ALI, YASIN BAYNAH"
+                      },
+                      {
+                        "Name": "ALI, YASSIN MOHAMED"
+                      },
+                      {
+                        "Name": "BAYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BAYNAH, YASSIN"
+                      },
+                      {
+                        "Name": "BAYNAX, YASIIN CALI"
+                      },
+                      {
+                        "Name": "BEENAH, YASIN"
+                      },
+                      {
+                        "Name": "BEENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BENAH, YASIN"
+                      },
+                      {
+                        "Name": "BENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BEYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BINAH, YASSIN"
+                      },
+                      {
+                        "Name": "CALI, YASIIN BAYNAX"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [
+                            {
+                              "City": "MOGADISHU"
+                            },
+                            {
+                              "City": "MOGADISCIO"
+                            },
+                            {
+                              "City": "MOGADISHU"
+                            }
+                          ],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "JAMHUURIYADDA SOOMAALIYA"
+                            },
+                            {
+                              "Country": "SOMALI REPUBLIC"
+                            },
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "SOMALIE"
+                            },
+                            {
+                              "Country": "SOOMAALIYA"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UN",
+                    "Designation": "SOMALIA",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 44 / Create Date: 04/14/2010 11:59:19 / Last Update Date: 06/14/2019 14:23:09 / Program: SOMALIA / Nationality: SOMALIA; SWEDEN / OtherInformation: INTERPOL-UN Security Council Special Notice web link: https://www.interpol.int/en/How-we-work/Notices/View-UN-Notices-Individuals / OriginalID: SOi.001",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "43704",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "UC_CRED",
+                  "SolutionType": "1",
+                  "SynonymIndex": "13",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00895806",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2016-08-23 18:37:48 UN"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "KONY, ALI"
+                      },
+                      {
+                        "Name": "'1-P'"
+                      },
+                      {
+                        "Name": "'BASHIR'"
+                      },
+                      {
+                        "Name": "'CAESAR'"
+                      },
+                      {
+                        "Name": "'KAPERE, OTIM'"
+                      },
+                      {
+                        "Name": "'ONE-P'"
+                      },
+                      {
+                        "Name": "BASHIR, ALI LALOBO"
+                      },
+                      {
+                        "Name": "KONY, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "LABOLA, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "LABOLO, ALI MOHAMMAD"
+                      },
+                      {
+                        "Name": "LALOBO, ALI"
+                      },
+                      {
+                        "Name": "LALOBO, ALI BASHIR"
+                      },
+                      {
+                        "Name": "LALOBO, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "MOHAMMED, ALI"
+                      },
+                      {
+                        "Name": "SALONGO, ALI MOHAMMED"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [
+                            {
+                              "State": "KAFIA KINGI"
+                            }
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "NOT PROVIDED"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UN",
+                    "Designation": "CAR",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 44 / Create Date: 08/23/2016 18:22:43 / Last Update Date: 06/14/2019 14:23:07 / Program: CENTRAL AFRICAN REPUBLIC / Title: DEPUTY, LORD'S RESISTANCE ARMY / OtherInformation: ALI KONY IS A DEPUTY IN THE LORD'S RESISTANCE ARMY (LRA) (CFE.002), A DESIGNATED ENTITY AND THE SON OF LRA LEADER JOSEPH KONY (CFI.009), A DESIGNATED INDIVIDUAL. ALI WAS INCORPORATED INTO THE LRA'S LEADERSHIP HIERARCHY IN 2010. HE IS PART OF A GROUP OF SENIOR LRA OFFICERS WHO ARE BASED WITH JOSEPH KONY. INTERPOL-UN Security Council Special Notice web link: https://www.interpol.int/en/How-we-work/Notices/View-UN-Notices-Individuals / AltAddress: A TERRITORY ON THE BORDER OF SUDAN AND SOUTH SUDAN WHOSE FINAL STATUS HAS YET TO BE DETERMINED / OriginalID: CFI.010",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "121533",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "UC_CRED",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00110547",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2017-04-24 15:27:01 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "MUHAMMAD, 'ALI HAJJ"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "SYRIAN ARAB REPUBLIC"
+                            },
+                            {
+                              "Country": "AL JUMHURIYAH AL ARABIYAH AS SURIYAH"
+                            },
+                            {
+                              "Country": "REPUBLIQUE ARABE SYRIENNE"
+                            },
+                            {
+                              "Country": "SIRIA"
+                            },
+                            {
+                              "Country": "SURIYE"
+                            },
+                            {
+                              "Country": "SYRIA"
+                            },
+                            {
+                              "Country": "SYRIAN ARAB REPUBLIC"
+                            },
+                            {
+                              "Country": "SYRIE"
+                            },
+                            {
+                              "Country": "SYRIEN"
+                            },
+                            {
+                              "Country": "SYRIEN ARABISCHE REPUBLIK"
+                            },
+                            {
+                              "Country": "SYRISCH"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UST",
+                    "Designation": "SYRIAN_ARAB_REPUBLIC",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 0 / Create Date: 04/24/2017 14:23:52 / Last Update Date: 04/24/2017 14:57:51 / Program: SYRIAN ARAB REPUBLIC / Title: SCIENTIFIC STUDIES AND RESEARCH CENTER EMPLOYEE / Nationality: SYRIA / OriginalID: 22070",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": null,
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "UC_CRED",
+                  "SolutionType": "1",
+                  "SynonymIndex": "2",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00372871",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2019-11-07 14:30:58 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BAYNAH, YASIN ALI"
+                      },
+                      {
+                        "Name": "ALI, YASIN BAYNAH"
+                      },
+                      {
+                        "Name": "ALI, YASSIN MOHAMED"
+                      },
+                      {
+                        "Name": "BAYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BAYNAH, YASSIN"
+                      },
+                      {
+                        "Name": "BAYNAX, YASIIN CALI"
+                      },
+                      {
+                        "Name": "BEENAH, YASIN"
+                      },
+                      {
+                        "Name": "BEENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BENAH, YASIN"
+                      },
+                      {
+                        "Name": "BENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BEYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BINAH, YASSIN"
+                      },
+                      {
+                        "Name": "CALI, YASIIN BAYNAX"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [
+                            {
+                              "City": "MOGADISHU"
+                            },
+                            {
+                              "City": "MOGADISCIO"
+                            },
+                            {
+                              "City": "MOGADISHU"
+                            }
+                          ],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "JAMHUURIYADDA SOOMAALIYA"
+                            },
+                            {
+                              "Country": "SOMALI REPUBLIC"
+                            },
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "SOMALIE"
+                            },
+                            {
+                              "Country": "SOOMAALIYA"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UST",
+                    "Designation": "SOMALIA",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 0 / Create Date: 04/13/2010 12:11:07 / Last Update Date: 11/07/2019 13:39:06 / Program: SOMALIA / Nationality: SOMALIA; SWEDEN / OriginalID: 11747",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "43704",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "UC_CRED",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS06290784",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2020-05-20 11:47:54 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "ALI NOORINAJAD, MOHAMMAD"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "IRAN ISLAMIC REPUBLIC OF"
+                            },
+                            {
+                              "Country": "IRAN"
+                            },
+                            {
+                              "Country": "IRAN (ISLAMIC REPUBLIC OF)"
+                            },
+                            {
+                              "Country": "IRAN ISLAMIC REPUBLIC OF"
+                            },
+                            {
+                              "Country": "IRAO"
+                            },
+                            {
+                              "Country": "ISLAMIC REPUBLIC OF IRAN"
+                            },
+                            {
+                              "Country": "JOMHURI YE ESLAMI YE IRAN"
+                            },
+                            {
+                              "Country": "JOMHURI-YE ESLAMI-YE IRAN"
+                            },
+                            {
+                              "Country": "PERSIA"
+                            },
+                            {
+                              "Country": "REPUBLIQUE ISLAMIQUE D IRAN"
+                            },
+                            {
+                              "Country": "REPUBLIQUE ISLAMIQUE D'IRAN"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UST",
+                    "Designation": "IRANHR",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 0 / Create Date: 05/20/2020 10:25:41 / Last Update Date: 05/20/2020 11:17:32 / Program: IRAN-HR / Nationality: IRAN / NATIONAL NO: 4032108617 OtherInfo: NATIONAL ID NO., IRAN / Gender: MALE / OtherInformation: (LINKED TO: LAW ENFORCEMENT FORCES OF THE ISLAMIC REPUBLIC OF IRAN); ADDITIONAL SANCTIONS INFORMATION: SUBJECT TO SECONDARY SANCTIONS / OriginalID: 28923",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": null,
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "UC_CRED",
+                  "SolutionType": "1",
+                  "SynonymIndex": "2",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00002526",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2017-05-30 14:19:33 EU"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "KONY, ALI"
+                      },
+                      {
+                        "Name": "1-P"
+                      },
+                      {
+                        "Name": "ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "BASHIR"
+                      },
+                      {
+                        "Name": "BASHIR, ALI LALOBO"
+                      },
+                      {
+                        "Name": "CAESAR"
+                      },
+                      {
+                        "Name": "KAPERE, OTIM"
+                      },
+                      {
+                        "Name": "KONY, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "LABOLA, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "LABOLO, ALI MOHAMMAD"
+                      },
+                      {
+                        "Name": "LALOBO, ALI"
+                      },
+                      {
+                        "Name": "LALOBO, ALI BASHIR"
+                      },
+                      {
+                        "Name": "LALOBO, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "ONE-P"
+                      },
+                      {
+                        "Name": "SALONGO, ALI MOHAMMED"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [
+                            {
+                              "State": "KAFIA KINGI"
+                            }
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "NOT PROVIDED"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "EU",
+                    "Designation": "CAR",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 33 / Create Date: 09/01/2016 15:33:31 / Last Update Date: 05/30/2017 13:56:51 / Program: CENTRAL AFRICAN REPUBLIC / Legal_Basis: 2016/1442 (OJ L235) / Title: DEPUTY, LORD'S RESISTANCE ARMY / OtherInformation: (DATE OF UN DESIGNATION: 2016-08-23); Son of LRA leader Joseph Kony; He was incorporated into the LRA's leadership hierarchy in 2010. He is part of a group of senior LRA officers who are based with Joseph Kony. INTERPOL-UN Security Council Special Notice web link: https://www.interpol.int/en/notice/search/un/5971056. / EffectiveDate: 9/1/2016 / AltAddress: A TERRITORY ON THE BORDER OF SUDAN AND SOUTH SUDAN WHOSE FINAL STATUS HAS YET TO BE DETERMINED / OriginalID: 109405",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "159172",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "UC_CRED",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00110633",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2017-04-24 15:27:03 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "'ALI, MUHAMMAD"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "SYRIAN ARAB REPUBLIC"
+                            },
+                            {
+                              "Country": "AL JUMHURIYAH AL ARABIYAH AS SURIYAH"
+                            },
+                            {
+                              "Country": "REPUBLIQUE ARABE SYRIENNE"
+                            },
+                            {
+                              "Country": "SIRIA"
+                            },
+                            {
+                              "Country": "SURIYE"
+                            },
+                            {
+                              "Country": "SYRIA"
+                            },
+                            {
+                              "Country": "SYRIAN ARAB REPUBLIC"
+                            },
+                            {
+                              "Country": "SYRIE"
+                            },
+                            {
+                              "Country": "SYRIEN"
+                            },
+                            {
+                              "Country": "SYRIEN ARABISCHE REPUBLIK"
+                            },
+                            {
+                              "Country": "SYRISCH"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UST",
+                    "Designation": "SYRIAN_ARAB_REPUBLIC",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 0 / Create Date: 04/24/2017 14:23:53 / Last Update Date: 04/24/2017 14:31:50 / Program: SYRIAN ARAB REPUBLIC / Title: SCIENTIFIC STUDIES AND RESEARCH CENTER EMPLOYEE / Nationality: SYRIA / OriginalID: 22113",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": null,
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "UC_CRED",
+                  "SolutionType": "1",
+                  "SynonymIndex": "5",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00429842",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2017-10-25 14:49:38 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "AL-ADANI, ABU SULAYMAN"
+                      },
+                      {
+                        "Name": "ABU-SULAYMAN, NASHWAN AL-ADANI"
+                      },
+                      {
+                        "Name": "AL-ADANI, NASHWAN"
+                      },
+                      {
+                        "Name": "AL-ADANI, SULAYMAN"
+                      },
+                      {
+                        "Name": "AL-HASHIMI, ABU MA'ALI"
+                      },
+                      {
+                        "Name": "AL-SAY'ARI, MUHAMMAD AHMED"
+                      },
+                      {
+                        "Name": "AL-SAY'ARI, MUHAMMAD QAN'AN"
+                      },
+                      {
+                        "Name": "AL-SAY'ARI, NASHWAN"
+                      },
+                      {
+                        "Name": "MUTHANA, MOHSEN AHMED SALEH"
+                      },
+                      {
+                        "Name": "MUTHANNA, MUHSIN AHMAD SALAH"
+                      },
+                      {
+                        "Name": "QAN'AN, MUHAMMAD SALIH MUHAMMAD"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "YEMEN"
+                            },
+                            {
+                              "Country": "AL JUMHURIYAH AL YAMANIYAH"
+                            },
+                            {
+                              "Country": "AL YAMAN"
+                            },
+                            {
+                              "Country": "IEMEN"
+                            },
+                            {
+                              "Country": "JEMEN REPUBLIK"
+                            },
+                            {
+                              "Country": "REPUBLIC OF YEMEN"
+                            },
+                            {
+                              "Country": "YEMEN"
+                            },
+                            {
+                              "Country": "YEMEN ARAB REPUBLIC"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UST",
+                    "Designation": "SDGT",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 0 / Create Date: 10/25/2017 12:59:19 / Last Update Date: 10/25/2017 13:45:04 / Program: SDGT / Weak Alias: 'AL-MUHAJIR, ABU USAMA' / Passport: 04988639 OtherInfo: JORDAN; 05867398 OtherInfo: YEMEN / Gender: MALE / OtherInformation: (LINKED TO: ISIL-YEMEN) / OriginalID: 23052",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "162736",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "UC_CRED",
+                  "SolutionType": "1",
+                  "SynonymIndex": "2",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00375090",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2017-03-09 15:19:18 EU"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BAYNAH, YASIN ALI"
+                      },
+                      {
+                        "Name": "ALI, YASIN BAYNAH"
+                      },
+                      {
+                        "Name": "ALI, YASSIN MOHAMED"
+                      },
+                      {
+                        "Name": "BAYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BAYNAH, YASSIN"
+                      },
+                      {
+                        "Name": "BAYNAX, YASIIN CALI"
+                      },
+                      {
+                        "Name": "BEENAH, YASIN"
+                      },
+                      {
+                        "Name": "BEENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASIN"
+                      },
+                      {
+                        "Name": "BEENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BENAH, YASIN"
+                      },
+                      {
+                        "Name": "BENAH, YASSIN"
+                      },
+                      {
+                        "Name": "BENAX, YASSIN"
+                      },
+                      {
+                        "Name": "BEYNAH, YASIN"
+                      },
+                      {
+                        "Name": "BINAH, YASSIN"
+                      },
+                      {
+                        "Name": "CALI, YASIIN BAYNAX"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [
+                            {
+                              "City": "RINKEBY, STOCKHOLM"
+                            }
+                          ],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "SWEDEN"
+                            },
+                            {
+                              "Country": "KINGDOM OF SWEDEN"
+                            },
+                            {
+                              "Country": "KONUNGARIKET SVERIGE"
+                            },
+                            {
+                              "Country": "SCHWEDEN"
+                            },
+                            {
+                              "Country": "SUECIA"
+                            },
+                            {
+                              "Country": "SUEDE"
+                            },
+                            {
+                              "Country": "SVERIGE"
+                            },
+                            {
+                              "Country": "SVEZIA"
+                            },
+                            {
+                              "Country": "SWEDEN"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "EU",
+                    "Designation": "SOMALIA",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 33 / Create Date: 04/28/2010 12:22:15 / Last Update Date: 03/09/2017 10:17:22 / Program: SOMALIA / Legal_Basis: 356/2010 (OJ L 105) / Nationality: SOMALIA; SWEDEN / OtherInformation: Date of UN designation: 12 April 2010. Yasin Ali Baynah has incited attacks against the Transitional Federal Government (TFG) and the African Union Mission in Somalia (AMISOM). He has also mobilised support and raised funds on behalf of the Alliance for the Re-Liberation of Somalia and Hisbul Islam, both of which have actively engaged in acts that threaten the peace and security of SO, including rejection of the Djibouti Agreement, and attacks on the TFG and AMISOM forces in Mogadishu / EffectiveDate: 4/28/2010 / OriginalID: 5620",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "43704",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "UC_CRED",
+                  "SolutionType": "1",
+                  "SynonymIndex": "3",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00537998",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2020-06-05 17:52:54 EU"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "DURGHAM, MUHAMMAD ALI"
+                      },
+                      {
+                        "Name": "DURGHAM, MOHAMMAD ALI"
+                      },
+                      {
+                        "Name": "DURGHAM, MOHAMMED ALI"
+                      },
+                      {
+                        "Name": "محمد علي"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [],
+                          "Countries": []
+                        }
+                      }
+                    ],
+                    "Origin": "EU",
+                    "Designation": "SYRIA",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 33 / Create Date: 01/25/2012 13:17:18 / Last Update Date: 06/05/2020 11:55:44 / Program: SYRIA / Title: COMMANDER IN 4TH DIVISION; MAJOR GENERAL / Gender: MALE / OtherInformation: ORDERED TROOPS TO SHOOT AT PROTESTORS IN AND AROUND DAMASCUS, INCLUDING MO'ADAMIYEH, DOUMA, ABASIYEH, DUMA. DATE OF LISTING: 23.1.2012. / EffectiveDate: 4/23/2013 / OriginalID: 6867",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "66526",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "UC_CRED",
+                  "SolutionType": "1",
+                  "SynonymIndex": "13",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00003959",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2017-06-01 14:02:52 BofE"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "KONY, ALI"
+                      },
+                      {
+                        "Name": "'1-P'"
+                      },
+                      {
+                        "Name": "'BASHIR'"
+                      },
+                      {
+                        "Name": "'CAESAR'"
+                      },
+                      {
+                        "Name": "'ONE-P'"
+                      },
+                      {
+                        "Name": "BASHIR, ALI LALOBO"
+                      },
+                      {
+                        "Name": "KAPERE, OTIM"
+                      },
+                      {
+                        "Name": "KONY, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "LABOLA, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "LABOLO, ALI MOHAMMAD"
+                      },
+                      {
+                        "Name": "LALOBO, ALI"
+                      },
+                      {
+                        "Name": "LALOBO, ALI BASHIR"
+                      },
+                      {
+                        "Name": "LALOBO, ALI MOHAMMED"
+                      },
+                      {
+                        "Name": "MOHAMMED, ALI"
+                      },
+                      {
+                        "Name": "SALONGO, ALI MOHAMMED"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [
+                            {
+                              "State": "KAFIA KINGI"
+                            }
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "NOT PROVIDED"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "BOFE",
+                    "Designation": "CAR",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 29 / Create Date: 09/02/2016 11:18:50 / Last Update Date: 02/13/2019 09:08:54 / Program: CENTRAL AFRICAN REPUBLIC / Title: DEPUTY, LORD'S RESISTANCE ARMY / OtherInformation: Son of LRA Leader Joseph Kony. Ali incorporated into LRA's leadership hierarchy in 2010 and part of a group of senior LRA offices based with Joseph Kony. Also known as Bashir, Caesar, 1-P and One-P. / EffectiveDate: 6/1/2017 / AltAddress: (border of Sudan and South Sudan) / OriginalID: 13378",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": null,
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "UC_CRED",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS00715518",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2006-04-13 15:41:21 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "QAR'AWI, FATHI MOHAMMED"
+                      },
+                      {
+                        "Name": "QARAWI, MOHAMMED FATHI"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [
+                            {
+                              "City": "TULKARIM, WEST BANK"
+                            }
+                          ],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "PALESTINIAN TERRITORY, OCCUPIED"
+                            },
+                            {
+                              "Country": "CISJORDANIE"
+                            },
+                            {
+                              "Country": "ETAT DE PALESTINE"
+                            },
+                            {
+                              "Country": "OCCUPIED PALESTINIAN TERRITORY"
+                            },
+                            {
+                              "Country": "PALESTINE"
+                            },
+                            {
+                              "Country": "PALESTINE ETAT DE"
+                            },
+                            {
+                              "Country": "PALESTINE STATE OF"
+                            },
+                            {
+                              "Country": "PALESTINIAN AUTHORITY"
+                            },
+                            {
+                              "Country": "PALESTINIAN NATIONAL AUTHORITY"
+                            },
+                            {
+                              "Country": "PALESTINIAN TERRITORY"
+                            },
+                            {
+                              "Country": "PALESTINIAN TERRITORY OCCUPIED"
+                            },
+                            {
+                              "Country": "PALESTINIAN TERRITORY, OCCUPIED"
+                            },
+                            {
+                              "Country": "STATE OF PALESTINE"
+                            },
+                            {
+                              "Country": "TERRITOIRE PALESTINIEN OCCUPE"
+                            },
+                            {
+                              "Country": "WEST BANK"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UST",
+                    "Designation": "NSPLC",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 0 / Create Date: 04/13/2006 14:29:40 / Last Update Date: 05/06/2011 17:39:31 / Program: NS-PLC / OriginalID: 9651",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": null,
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "UC_CRED",
+                  "SolutionType": "1",
+                  "SynonymIndex": "1",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "AS06139505",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2018-02-09 14:01:03 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "YUSUF, MOHAMED MIRE ALI"
+                      },
+                      {
+                        "Name": "ALI, MOHAMED MIRE"
+                      },
+                      {
+                        "Name": "MIRE, MOHAMED"
+                      },
+                      {
+                        "Name": "MIRE, MOHAMED ALI"
+                      },
+                      {
+                        "Name": "MIRE, MUHAMMAD"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [
+                            {
+                              "State": "PUNTLAND"
+                            }
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "JAMHUURIYADDA SOOMAALIYA"
+                            },
+                            {
+                              "Country": "SOMALI REPUBLIC"
+                            },
+                            {
+                              "Country": "SOMALIA"
+                            },
+                            {
+                              "Country": "SOMALIE"
+                            },
+                            {
+                              "Country": "SOOMAALIYA"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UST",
+                    "Designation": "SDGT",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "List ID: 0 / Create Date: 02/09/2018 13:05:40 / Last Update Date: 02/09/2018 13:36:27 / Program: SDGT / Nationality: SOMALIA / Gender: MALE / OtherInformation: (LINKED TO: ISLAMIC STATE OF IRAQ AND THE LEVANT) / OriginalID: 23719",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": null,
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "Mohammed Ali",
+                  "Positions": [],
+                  "Score": "",
+                  "Tag": "UC_CRED",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "",
+                    "Priority": "",
+                    "Confidentiality": "",
+                    "Info": ""
+                  },
+                  "EntityText": "",
+                  "HittedEntity": {
+                    "ID": "WL00050660",
+                    "IsException": "",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "12/11/2017"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "ALI, MUHAMMAD"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": null,
+                          "Cities": [],
+                          "States": [],
+                          "Countries": []
+                        }
+                      }
+                    ],
+                    "Origin": "SANCTIONSGROUP",
+                    "Designation": "XX-REGENHANCE-SP04",
+                    "Keywords": [],
+                    "Type": "Individual",
+                    "Codes": [],
+                    "AdditionalInfo": "This internal Watchlist entry consolidates the information of multiple vendor supplied records for this OFAC Sanctioned Party. All information must be considered as applicable to this listed party. Program: SYRIAN ARAB REPUBLIC / Title: SCIENTIFIC STUDIES AND RESEARCH CENTER EMPLOYEE / Nationality: SYRIA / OriginalID: 22113 Program: SYRIAN ARAB REPUBLIC / Title: SCIENTIFIC STUDIES AND RESEARCH CENTER EMPLOYEE / Nationality: SYRIA / OriginalID: 22151Process alerts in accordance with DOI. If the alert cannot be deemed as false, escalate to the Regional Sanctions Team. Regional Sanctions Team - Establish if the match is True or False. For True Matches, consider the hit against the Group Sanctioned Parties Procedure and all applicable country sanctions procedures.",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [],
+                    "UserData1": "RFM-TS.NS.OB-DENY UPDATE",
+                    "UserData2": null,
+                    "Nationality": null,
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": null,
+                    "HideIDs": null,
+                    "HideOrigins": null,
+                    "HideInTags": null,
+                    "HideUnits": null,
+                    "HideSenderReceivers": null
+                  }
+                }
+              }
+            ],
+            "Actions": [],
+            "CurrentStatus": {
+              "ID": "211",
+              "Name": "PI_BOOK1",
+              "RoutingCode": "12",
+              "Checksum": "bb6c8712a888eff9122d0f1709da063d"
+            },
+            "NextStatuses": [
+              {
+                "Status": {
+                  "ID": "1",
+                  "Name": "PASSED",
+                  "RoutingCode": "2",
+                  "Checksum": "bc67fdf269178b4bd32ac055fd2738d6"
+                }
+              },
+              {
+                "Status": {
+                  "ID": "2",
+                  "Name": "FAILED",
+                  "RoutingCode": "3",
+                  "Checksum": "bfb1776a1ec2d4a85ed14b2e370f5e61"
+                }
+              },
+              {
+                "Status": {
+                  "ID": "201",
+                  "Name": "CASE_CREATED",
+                  "RoutingCode": "12",
+                  "Checksum": "8117a4d7693553f41cc80089984c6c3b"
+                }
+              },
+              {
+                "Status": {
+                  "ID": "202",
+                  "Name": "BOOK1",
+                  "RoutingCode": "2",
+                  "Checksum": "152c65fe973360004140a71f25a34cdd"
+                }
+              },
+              {
+                "Status": {
+                  "ID": "206",
+                  "Name": "RECHECK_48HR",
+                  "RoutingCode": "5",
+                  "Checksum": "00bc2a8b05194464704018e5e070aa90"
+                }
+              },
+              {
+                "Status": {
+                  "ID": "266",
+                  "Name": "RECHECK_MAN_FCSU",
+                  "RoutingCode": "5",
+                  "Checksum": "e21251a0e4bf8792768bf715c24bdf26"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "DataCenter": "UK_DC"
+}
