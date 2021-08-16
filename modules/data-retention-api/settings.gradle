@@ -1,0 +1,3 @@
+rootProject.name = 'data-retention-api-root'
+
+include "data-retention-api"

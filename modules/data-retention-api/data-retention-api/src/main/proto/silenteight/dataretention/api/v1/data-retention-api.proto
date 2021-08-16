@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package silenteight.dataretention.api.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+
+option java_package = "com.silenteight.dataretention.api.v1";
+option java_outer_classname = "DataRetentionProto";
+option java_multiple_files = true;
+
+message AlertsExpired {
+  // List of alerts' resource name to be removed
+  repeated string alerts = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message PersonalInformationExpired {
+  // List of alerts from which PII data need to be removed
+  repeated string alerts = 1 [(google.api.field_behavior) = REQUIRED];
+}
