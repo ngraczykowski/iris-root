@@ -1,0 +1,220 @@
+{
+  "Header": null,
+  "Body": {
+    "msg_SendMessage": {
+      "VersionTag": "1",
+      "Authentication": {
+        "UserLogin": "login",
+        "UserPassword": "password",
+        "UserRealm": ""
+      },
+      "Messages": [
+        {
+          "Message": {
+            "Unit": "NBP-KE",
+            "BusinessUnit": "",
+            "MessageID": "NBP2021030409012",
+            "SystemID": "DIN20210304091150-00006-30824",
+            "Bypass": "0",
+            "Command": "1",
+            "BusinessType": "H2H-NBP",
+            "MessageType": "",
+            "IOIndicator": "I",
+            "SenderReference": "NBP2021030409011",
+            "Currency": "KES",
+            "Amount": "50",
+            "ApplicationCode": "NBP+KE",
+            "ToApplication": "",
+            "MessageFormat": "ALL",
+            "SenderCode": "",
+            "ReceiverCode": "",
+            "ApplicationPriority": "0",
+            "CutoffTime": "",
+            "NormalizedAmount": "",
+            "MessageData": "[FIRCOSOFT     X] FMT V1.0 GEN CoreEngine 5.6.9.2.p0\n[UNIT          X] NBP-KE\n[BUSINESS      X] H2H-NBP\n[APPLI         X] NBP+KE\n[UUMID         X] INBP2021030409011\n[TYPE          X] ??? INBOUND\n[AMOUNT         ] KES 50\n[VALUEDATE     X] ?\n[REFERENCE     X] NBP2021030409011\n[SERVICE       X] ?\n[USERREF       X] ?\n[G_BLOCK       X] ---- Group Header----\n[G_MSGID       X] NBP2021030409012\n[G_CREATETM    X] 2016-10-06T19:56:40\n[G_NBOFTXS     X] 1\n[G_CTRLSUM     X] 100\n[INT_BLOCK     X] ----  InitiatingParty Header----\n[INT_PARTY      ] SCB\n[INT_PTY_ID     ] NBPMMG01\n[INT_CFAX      X] NBPMMG01\n[INT_CEMAIL    X] NBPMMG01\n[P_BLOCK       X] ---- Payment Header----\n[P_PAYID       X] NBP20190123000007\n[P_METHOD      X] TRF\n[P_NBOFTXS     X] 1\n[P_CTRLSUM     X] 100\n[P_CTGYPUR     X] MWP\n[P_EXEDATE     X] 2016-10-06T19:56:40\n[PD_BLOCK      X] ---- Payment Debtor (PD)Header----\n[PD_DEBTOR      ] MWP TRANSIT ACCOUNT - G-EXCHANGE\nSCB PHILIPPINES\nHARA HARA COMPANY DEVI SAVITRI\n[PD_ACCOUNT     ] 0123456789012\n[PD_ACC_CCY     ] PHP\n[PD_AGT_BIC     ] SCBLPHMMXXX\n[UD_BLOCK      X] ---- Payment Ultimate Debtor (PUD)Header----\n[UD_UDEBTOR     ] MWP TRANSIT ACCOUNT - G-EXCHANGE\nHARA COMPANY DEVI SAVITRI\n[UD_UDEBTID     ] 0560067831234\n[CTT_BLOCK     X] ---- CreditTransferTransaction Header----\n[PC_INST       X] PHTs12345678\n[PC_END_ID     X] NBP20190678000008\n[PC_DEBAMC      ] PHP\n[PC_DEBAMT     X] 100\n[PC_CHRGBR     X] SHAR\n[PC_CHQNUM     X] HARA COMPANY DEVI SAVITRI\n[PC_CHQDEL     X] MLDB\n[I1_BLOCK      X] ---- CreditTransferTransaction IntermediaryAgent1 Header----\n[I_AGENT1       ] MWP TRANSIT ACCOUNT - G-EXCHANGE\nHARA COMPANY DEVI SAVITRI\n[I_AGENT1ID     ] HARA HARA COMPANY DEVI SAVITRI\n[C_CAGT_BIC     ] 1111\n[C_CAGTCLRC     ] 01234567890\n[C_CAGTCLRM     ] .\n[C_BLOCK       X] ---- CreditTransferTransaction Creditor Header----\n[C_CREDITOR     ] BANK OF SCOTLAND PLC\n[C_CREDACCT     ] 01234567890\n[C_CREDACCY     ] PHP\n[UC_BLOCK      X] ---- CreditTransferTransaction UltimateCreditor Header----\n[UC_CRED        ] BANK OF SCOTLAND PLC\nEH1 1YZ\nEDINBURGH\nUNITED KINGDOM\n[PC_RMBLOCK    X] ---- RemittanceInformation Header----\n[PC_RMITINF     ] BANK OF SCOTLAND PLC\n[PC_RMITDNM    X] BANK OF SCOTLAND PLC\n[PC_RMITDDT    X] 2016-10-07\n",
+            "LastComment": "Suspect(s) detected by OFAC-Agent",
+            "LastOperator": "OFAC-Agent",
+            "ValueDate": "?",
+            "FilteredDate": "2021/03/04 09:11:52",
+            "RelatedReference": "",
+            "CreatedDate": "2021/03/04 09:11:50",
+            "Priority": "0",
+            "Confidentiality": "0",
+            "Blocking": "1",
+            "NonBlocking": "0",
+            "CopyService": "",
+            "Hits": [
+              {
+                "Hit": {
+                  "MatchingText": "SCOTLAND",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "2227",
+                        "PositionEnd": "2235"
+                      }
+                    }
+                  ],
+                  "Score": "99.0",
+                  "Tag": "PC_RMITINF",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "BANK OF SCOTLAND PLC",
+                  "HittedEntity": {
+                    "ID": "AS01970275",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2020-06-18 22:09:55 EUK"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BANK OF SCOTLAND PLC"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "EH1 1YZ",
+                          "Cities": [
+                            {
+                              "City": "EDINBURGH"
+                            }
+                          ],
+                          "States": [],
+                          "Countries": [
+                            {
+                              "Country": "UNITED KINGDOM"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "EUK",
+                    "Designation": "GWL",
+                    "Keywords": [
+                      {
+                        "Keyword": "ENTITYLEVEL:LEVEL_NA"
+                      },
+                      {
+                        "Keyword": "NS:NAMESOURCE_UK-FCA"
+                      },
+                      {
+                        "Keyword": "OS:SOE"
+                      },
+                      {
+                        "Keyword": "SC:GOVT_LINKED_CORP"
+                      }
+                    ],
+                    "Type": "C",
+                    "Codes": [
+                      {
+                        "Code": {
+                          "Name": "OQ3T05P7YR8P5YJEVI93",
+                          "Type": "Other"
+                        }
+                      }
+                    ],
+                    "AdditionalInfo": "List ID: 1112 / Create Date: 05/31/2007 00:00:00 / Last Update Date: 06/18/2020 22:09:55 / Org_PID: 1096530 / Title: FINED GBP 64,046,800 BY THE FINANCIAL CONDUCT AUTHORITY FOR FAILING IN RELATION TO THEIR HANDLING OF MORTGAGE CUSTOMERS - JUNE 21, 2019. / OtherID: OQ3T05P7YR8P5YJEVI93 / OtherInformation: According to the UK - Financial Conduct Authority; June 11, 2020: On June 11, 2020, The Financial Conduct Authority (FCA) has fined Lloyds Bank plc, Bank of Scotland plc and The Mortgage Business plc (the banks) GBP 64,046,800 for failures in relation to  / Relationship: Affiliated Company / OriginalID: 926750",
+                    "DatesOfBirth": [],
+                    "PlacesOfBirth": [],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "https://accuity.worldcompliance.com/signin.aspx?ent=88794205-be20-4b06-ae0c-25d47a4e5fe8"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [],
+                    "HideOrigins": [],
+                    "HideInTags": [],
+                    "HideUnits": [],
+                    "HideSenderReceivers": []
+                  }
+                }
+              }
+            ],
+            "Actions": [
+              {
+                "Action": {
+                  "DateTime": "20210304091152",
+                  "Operator": "Filter Engine",
+                  "Comment": "Stop: 90, Nonblocking: 0",
+                  "Status": {
+                    "ID": "-1000",
+                    "Name": "N/A",
+                    "RoutingCode": "-1",
+                    "Checksum": "7163dc6253aa3c4467fdcb2ad60600df"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20210304091259",
+                  "Operator": "RuleEngine",
+                  "Comment": "Automatic escalation (rule version V0.0.0.20.16)",
+                  "Status": {
+                    "ID": "489",
+                    "Name": "PI_FILTER",
+                    "RoutingCode": "12",
+                    "Checksum": "ce54f0c04ec42805d24329dd8c0154df"
+                  }
+                }
+              }
+            ],
+            "CurrentStatus": {
+              "ID": "489",
+              "Name": "PI_FILTER",
+              "RoutingCode": "12",
+              "Checksum": "ce54f0c04ec42805d24329dd8c0154df"
+            },
+            "NextStatuses": [
+              {
+                "Status": {
+                  "ID": "1",
+                  "Name": "PASSED",
+                  "RoutingCode": "2",
+                  "Checksum": "bc67fdf269178b4bd32ac055fd2738d6"
+                }
+              },
+              {
+                "Status": {
+                  "ID": "516",
+                  "Name": "FILTER_I",
+                  "RoutingCode": "12",
+                  "Checksum": "d0c98aea8b109c1ef5b1f3367e3a45eb"
+                }
+              },
+              {
+                "Status": {
+                  "ID": "518",
+                  "Name": "FILTER_DY",
+                  "RoutingCode": "12",
+                  "Checksum": "5c1a5c9365b39532bd78f94cad64d261"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
