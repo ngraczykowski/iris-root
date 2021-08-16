@@ -171,14 +171,15 @@ components:
       required: [ 'VersionTag', 'Authentication', 'Messages' ]
       properties:
         VersionTag:
+          description: 'Contains the version of the buffer format. This field is set to 1.'
           type: string
-          description: Always "1".
           enum: [ '1' ]
           maxLength: 4
           default: '1'
         Authentication:
           $ref: '#/components/schemas/Authentication'
         Messages:
+          description: 'List of messages.'
           type: array
           minItems: 1
           maxItems: 1
@@ -186,19 +187,22 @@ components:
             $ref: '#/components/schemas/MessagesItem'
 
     Authentication:
+      description: 'In this sequence, set the list of parameters to connect to the case manager.'
       type: object
       required: [ 'UserLogin', 'UserPassword', 'UserRealm' ]
       properties:
         UserLogin:
+          description: 'Case manager Login.'
           type: string
           maxLength: 300
           example: 'username'
         UserPassword:
+          description: 'Case manager Password.'
           type: string
           maxLength: 300
           example: 'password'
         UserRealm:
-          description: 'The user realm. Can be empty.'
+          description: 'Case manager Login. Can be empty.'
           type: string
           maxLength: 300
           default: ''
