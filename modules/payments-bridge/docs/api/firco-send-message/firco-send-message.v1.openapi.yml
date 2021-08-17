@@ -1,0 +1,1014 @@
+openapi: 3.0.1
+info:
+  title: SEAR Payments - Firco Continuity Send Message API
+  description: >
+    The API is for integrating Firco Continuity via Case Manager API with SEAR Payments.
+    This part of the API is the server where Ficro Continuity sends messages to.
+  contact:
+    name: Silent Eight Support
+    url: https://silenteight.com/contact/
+    email: support@silenteight.com
+  version: 1.0.0
+servers:
+  - url: 'https://sierra-{env}.silent8.cloud/rest/pb/'
+    description: The API server address.
+    variables:
+      env:
+        description: The environment.
+        enum:
+          - 'dev'
+          - 'uat'
+          - 'prod'
+        default: 'dev'
+paths:
+  /alert:
+    post:
+      description: |-
+        Request automatic alert adjudication by the Silent Eight Alert Resolution.
+
+        This is the implementation of the `/ContinuitySendMessage` endpoint for Case Manager API
+        integration, as specified in the Firco Continuity documentation.
+      operationId: continuitySendMessage
+      tags:
+        - Case Manager API
+      security:
+        - oAuth:
+            - cmapi
+      parameters:
+        - name: receiveUrl
+          description: |-
+            The URL of the endpoint implementing the `/ContinuityReceiveService`, where
+            the `msg_ReceiveDecision` message will be delivered, as specified in the Firco
+            Continuity documentation. The decision will contain the recommendation
+            for adjudicated alert.
+
+            Please note that the URL needs to be registered with Silent Eight for SEAR to send
+            back the decision. This is taken care during onboarding customer.
+
+            When the parameter is not provided, the recommendation will be generated and visible
+            on reports, but the `msg_ReceiveDecision` will not be delivered back
+            to Firco Continuity.
+          in: query
+          example: https://cmapi.firco.example.com/ContinuityReceiveService
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessageRequest'
+      responses:
+        '200':
+          description: The message was successfully accepted for alert adjudication.
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/CaseManagerResponse'
+        '401':
+          description: Authorization failed.
+
+  /status:
+    get:
+      description: |-
+        Checks whether the SEAR system is fully operational and able to receive messages.
+      tags:
+        - Health Check
+      operationId: getStatus
+      responses:
+        '200':
+          description: Everything is OK, SEAR is ready to adjudicate alerts.
+        '401':
+          description: Authorization failed.
+        '503':
+          description: Service is unavailable.
+
+components:
+  securitySchemes:
+    oAuth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.silent8.cloud/realms/sierra/protocol/openid-connect/token
+          scopes:
+            cmapi: 'Access to the CMAPI integration endpoint.'
+
+  schemas:
+    StatusInfo:
+      type: object
+      required: [ 'ID', 'Name', 'RoutingCode', 'Checksum' ]
+      properties:
+        ID:
+          description: 'Identifies the database ID of the status.'
+          type: string
+        Name:
+          description: 'Identifies the name of the status.'
+          type: string
+        RoutingCode:
+          description: |-
+            Identifies the behavior associated to the decision made on the message. Available
+            default values are:
+              000: No hit.
+              001: Hit(s).
+              002: Passed.
+              003: Failed.
+              004: Filter in bypass mode.
+              005: Recheck. Requester sends the message back to the requesting application
+                   with a request to be re-filtered. Requester does not by itself re-filter
+                   the message.
+              006: Not Reviewed.
+              007: Non Blocking.
+              008: Non Checking.
+              009: Cancel. Cancel is like a failed but not due to a hit (i.e. the message life
+                   span has expired).
+              010: Unqueue.
+              011: Close.
+              012: Pending.
+              100: Error.
+              101: Nomessage.
+          type: string
+          maxLength: 3
+        Checksum:
+          description: 'Fingerprint of a status info at the time this info is built.'
+          type: string
+      example:
+        ID: "211"
+        Name: "S8_ADJ_PR"
+        RoutingCode: "2"
+        Checksum: "bb6c8712a888eff9122d0f1709da063d"
+
+    AttachmentInfo:
+      type: object
+      required: [ 'Name', 'Contents' ]
+      properties:
+        Name:
+          description: 'Attachment''s Filename.'
+          type: string
+          example: "recommendation.txt"
+        Contents:
+          description: 'Attachment''s contents, Base64 Encoded.'
+          type: string
+          format: byte
+          example: "UzggUmVjb21tZW5kYXRpb246IE1hbnVhbCBJbnZlc3RpZ2F0aW9u"
+
+    SendMessageRequest:
+      type: object
+      required: [ 'Header', 'Body' ]
+      properties:
+        Header:
+          description: 'Always `null`.'
+          type: object
+          nullable: true
+          default: null
+          example: null
+        Body:
+          description: 'Contains the message type and its value.'
+          type: object
+          properties:
+            msg_SendMessage:
+              $ref: '#/components/schemas/msg_SendMessage'
+
+    msg_SendMessage:
+      type: object
+      required: [ 'VersionTag', 'Authentication', 'Messages' ]
+      properties:
+        VersionTag:
+          description: 'Contains the version of the buffer format. This field is set to 1.'
+          type: string
+          enum: [ '1' ]
+          maxLength: 4
+          default: '1'
+        Authentication:
+          $ref: '#/components/schemas/Authentication'
+        Messages:
+          description: 'List of messages.'
+          type: array
+          minItems: 1
+          maxItems: 1
+          items:
+            $ref: '#/components/schemas/MessagesItem'
+
+    Authentication:
+      description: 'In this sequence, set the list of parameters to connect to the case manager.'
+      type: object
+      required: [ 'UserLogin', 'UserPassword', 'UserRealm' ]
+      properties:
+        UserLogin:
+          description: 'Case manager Login.'
+          type: string
+          maxLength: 300
+          example: 'username'
+        UserPassword:
+          description: 'Case manager Password.'
+          type: string
+          maxLength: 300
+          example: 'password'
+        UserRealm:
+          description: 'Case manager Login. Can be empty.'
+          type: string
+          maxLength: 300
+          default: ''
+
+    MessagesItem:
+      type: object
+      required: [ 'Message' ]
+      properties:
+        Message:
+          $ref: '#/components/schemas/Message'
+
+    Message:
+      type: object
+      properties:
+        Unit:
+          description: |-
+            The name of the entity that makes the decision on the alerted message (for
+            the multi-units architecture). The Unit which processes the message is given by
+            the banking application. The length of this field is 15.
+          type: string
+          maxLength: 15
+          example: "HB-UK"
+        BusinessUnit:
+          description: |-
+            The name of the Business Unit i.e., group of entities that makes the decision on
+            the alerted message (for the multi business units architecture). Default value
+            is "ROOT".
+          type: string
+          maxLength: 256
+          default: "ROOT"
+        MessageID:
+          description: |-
+            A unique identifier given by the banking application to identify a message in
+            the front-end application and the banking application.
+          type: string
+          maxLength: 64
+          example: "2020061300000008"
+        SystemID:
+          description: |-
+            ID of the transaction stored in the Firco Continuity database.
+          type: string
+          maxLength: 64
+          example: "MTH20210106102116-00003-16630"
+        Bypass:
+          description: |-
+            This flag is given by the banking application. It indicates the behavior to apply
+            in case of hits. Value 0: the alerted message is sent to the front-end application
+            (default case). Value 1: the alerted message is not sent to the front-end application.
+          type: string
+          maxLength: 1
+          enum:
+            - "0"
+            - "1"
+          example: "0"
+        Command:
+          description: |-
+            For a SWIFT message, only the required fields can be filled. Indicates if the Message
+            buffer contains the mandatory and optional information or only the mandatory fields.
+            Value 0: all fields are filled. Value 1: only required fields are filled.
+          type: string
+          maxLength: 1
+          enum:
+            - "0"
+            - "1"
+          example: "1"
+        BusinessType:
+          description: |-
+            Indicates the department name of the message, given by the banking application and
+            displayed in the front-end.
+          type: string
+          maxLength: 64
+          example: "MCTSMTHO"
+        MessageType:
+          description: 'The type of message processed (for example 103, 202).'
+          type: string
+          maxLength: 8
+          example: "103"
+        IOIndicator:
+          description: |-
+            Given by the banking application. Indicates if the message is incoming or outgoing.
+            There are 2 possible values. Value O : outgoing message. Value I: incoming message.
+          type: string
+          maxLength: 1
+          enum:
+            - "I"
+            - "O"
+          example: "O"
+        SenderReference:
+          description: |-
+            Contains the sender reference of the message, given by the banking application
+            or retrieved from the message (in the field 20).
+          type: string
+          maxLength: 38
+          example: "MX020054487902B"
+        Currency:
+          description: 'The currency of the transaction.'
+          type: string
+          maxLength: 3
+          example: "AUD"
+        Amount:
+          description: 'The amount of the transaction. Format : #0.00'
+          type: string
+          maxLength: 16
+          example: "123.00"
+        ApplicationCode:
+          description: |-
+            Given by the banking application only. Identifies the calling application.
+            This parameter is used only by the FML option to apply some rules.
+          type: string
+          maxLength: 8
+          example: "STAR0026"
+        ToApplication:
+          description: 'ToApplication message field.'
+          type: string
+          maxLength: 8
+          example: ""
+        MessageFormat:
+          description: 'Identifies the message format, given by the banking application.'
+          type: string
+          maxLength: 16
+          enum:
+            - SWIFT
+            - CHIPS
+            - FEDWIRE
+            - SIC
+            - FIRCO
+            - XML
+            - ALL
+          example: "SWIFT"
+        SenderCode:
+          description: |-
+            Contains the sender identifier, given by the banking application or retrieved from
+            the message (sender BIC code contained in the header "{2" field).
+          type: string
+          maxLength: 32
+          example: "SCBLSGS0AZPB"
+        ReceiverCode:
+          description: |-
+            Contains the receiver identifier, given by the banking application or retrieved
+            from the message (in this case the receiver BIC code contained in the header
+            fields "{1" and "{2").
+          type: string
+          maxLength: 32
+          example: "WPACAU2SXXXX"
+        ApplicationPriority:
+          description: |-
+            Contains the application priority. This value is supplied by the calling application
+            as numeric value set on two digits.
+          type: string
+          maxLength: 2
+          example: "0"
+        CutoffTime:
+          description: |-
+            Indicates the deadline to fully process a transaction. After this cut-off
+            a transaction should be cancelled and re-created to be processed before the next
+            cut-off. The value must be expressed in UTC time and according to the following
+            format: YYYYMMDDhhmmss.
+          type: string
+          maxLength: 14
+          example: ""
+        NormalizedAmount:
+          description: |-
+            Contains a normalized amount value. It is suggested that this field is always
+            represented with the same currency. The calling application is responsible to convert
+            the original amount in the normalized currency. The system handles this field as
+            a 64 bit positive integer number. Format : #0
+          type: string
+          maxLength: 20
+          example: ""
+        MessageData:
+          description: 'This field contains the message to filter.'
+          type: string
+          maxLength: 131072
+          example: |-
+            {1:F01SCBLINBBAXXX0000000000}{2:I199BOKLNPKAXXXXN}{3:{108:IR36701908280002}}{4:
+            :20:IR36701908280002
+            :50F:IT36701908273410
+            1/SMITH ANONYM
+            2/299, PARK AVENUE
+            3/US/NEW YORK, NY 10017
+            :79:REFER YOUR MT103
+            DATED 27/08/2019
+            VIDE REF XYZJOHNABEXYZ
+            FOR INR 98940.00
+            PLS BE ADVISED THAT WE HAVE
+            EFFECTED PAYMENT AS PER YOUR INSTN.
+            HOWEVER FUNDS WERE RETURNED BY
+            BENE BANK REASON BEING
+            A/C DOES NOT EXIST
+            WE CONFIRM HAVING CREDITED YOUR
+            ACCOUNT WITH US FOR INR 98645.00
+            DATED 28/08/2019
+            BEING REFUND OF THE CAPTIONED
+            MESSAGE.NET OUR CHARGES
+            KINDLY SEND US FRESH PYMT INSTN
+            IF YOU STILL WISH
+            TO EFFECT THE PYMT WITHOUT QUOTING
+            PREVIOUS REFERENCES.
+            OUR REF IT36701908273410
+            REGARDS
+            PAYMENTS PROCESSING CENTRE
+            INDIA
+            KIND ATTENTION - TO ENSURE PRECISE
+            PROCESSING OF TRANSACTIONS, PLEASE
+            PROVIDE CORRECT IFSC CODE OF THE
+            BENEFICIARY BANK.
+            -}
+        LastComment:
+          description: |-
+            Contains the comments written in the database explaining the final decision made.
+            The comment is set up by the user through the front-end application.
+          type: string
+          maxLength: 1024
+          example: "UAT"
+        LastOperator:
+          description: 'Contains the name of the user who has made the decision.'
+          type: string
+          maxLength: 64
+          example: "1533636"
+        ValueDate:
+          description: 'Contains the value date of the transaction.'
+          type: string
+          maxLength: 32
+          example: "2018/06/19"
+        FilteredDate:
+          description: 'Contains the filtered date of the transaction.'
+          type: string
+          maxLength: 32
+          example: "2021/01/06 10:21:16"
+        RelatedReference:
+          description: 'Contains the related reference of the transaction.'
+          type: string
+          maxLength: 38
+          example: "MX020054487902A"
+        CreatedDate:
+          description: 'Contains the created date of the transaction.'
+          type: string
+          maxLength: 32
+          example: "2021/01/06 10:21:16"
+        Priority:
+          description: 'Contains the priority of the transaction.'
+          type: string
+          maxLength: 38
+          example: "40"
+        Confidentiality:
+          description: 'Contains the confidentiality of the transaction.'
+          type: string
+          maxLength: 38
+          example: "0"
+        Blocking:
+          description: 'Contains the number of blocking hits of the transaction.'
+          type: string
+          maxLength: 38
+          example: "2"
+        NonBlocking:
+          description: 'Contains the number of non-blocking hits of the transaction.'
+          type: string
+          maxLength: 38
+          example: "0"
+        CopyService:
+          description: 'Contains the copy service of the transaction.'
+          type: string
+          maxLength: 8
+          example: ""
+        Hits:
+          description: 'List of hits on Alerted Message.'
+          type: array
+          items:
+            $ref: '#/components/schemas/HitItem'
+        Actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActionsItem'
+          example:
+            - Action:
+                DateTime: "20210106102116"
+                Operator: "Filter Engine"
+                Comment: "Stop: 23, Nonblocking: 0"
+                Status:
+                  ID: "0"
+                  Name: "FILTER"
+                  RoutingCode: "0"
+                  Checksum: "c4b4872d17cf6fa4f27f06e3b5d93c78"
+            - Action:
+                DateTime: "20210106102117"
+                Operator: "Stripping Engine"
+                Comment: "Stop: 23, Nonblocking: 0"
+                Status:
+                  ID: "-2"
+                  Name: "NO HIT"
+                  RoutingCode: "-2"
+                  Checksum: "1080a07f679004254edcc4854e8f66a7"
+            - Action:
+                DateTime: "20210106103416"
+                Operator: "1548822"
+                Comment: "1548822 opened this message"
+                Status:
+                  ID: "-1000"
+                  Name: "N/A"
+                  RoutingCode: "-1"
+                  Checksum: "7163dc6253aa3c4467fdcb2ad60600df"
+        CurrentStatus:
+          $ref: '#/components/schemas/StatusInfo'
+        NextStatuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/NextStatusesItem'
+          example:
+            - ID: "1"
+              Name: "PASSED"
+              RoutingCode: "2"
+              Checksum: "bc67fdf269178b4bd32ac055fd2738d6"
+            - ID: "2"
+              Name: "FAILED"
+              RoutingCode: "3"
+              Checksum: "bfb1776a1ec2d4a85ed14b2e370f5e61"
+            - ID: "201"
+              Name: "CASE_CREATED"
+              RoutingCode: "12"
+              Checksum: "8117a4d7693553f41cc80089984c6c3b"
+
+    HitItem:
+      type: object
+      required: [ 'Hit' ]
+      properties:
+        Hit:
+          $ref: '#/components/schemas/Hit'
+
+    Hit:
+      description: 'One hit on Alerted Message.'
+      type: object
+      properties:
+        MatchingText:
+          description: 'Text string that matched in Alerted Message.'
+          type: string
+          example: "PARK"
+        Positions:
+          description: 'List of matched test string positions.'
+          type: array
+          items:
+            $ref: '#/components/schemas/PositionItem'
+        Score:
+          description: 'Filter engine Score value Alerted Message. Floating point number, 0->1.'
+          type: string
+          example: "0.0"
+        Tag:
+          type: string
+          example: "50F"
+        SolutionType:
+          description: |-
+            Filter engine Hit type value on Alerted Message.
+              -1 : error,
+               0 : unknown,
+               1 : name,
+               2 : COD - search code,
+               3 : passport,
+               4 : national ID,
+               5 : BIC code,
+               6 : embargo,
+               7 : FML,
+               8 : EMC - embargo currency
+          type: string
+          enum: [ '-1', '0', '1', '2', '3', '4', '5', '6', '7', '8' ]
+          example: "1"
+        SynonymIndex:
+          type: string
+          example: "1"
+        RulesContext:
+          $ref: '#/components/schemas/RulesContext'
+        EntityText:
+          description: 'Text string that matched in Entity.'
+          type: string
+          example: "JAY PARK"
+        HittedEntity:
+          $ref: '#/components/schemas/HittedEntity'
+
+    PositionItem:
+      type: object
+      required: [ 'Position' ]
+      properties:
+        Position:
+          $ref: '#/components/schemas/Position'
+
+    Position:
+      description: 'Position of text string that matched in Alerted Message.'
+      type: object
+      required: [ 'PositionStart', 'PositionEnd' ]
+      properties:
+        PositionStart:
+          description: 'Starting position of text string that matched in Alerted Message. In bytes.'
+          type: string
+          example: "378"
+        PositionEnd:
+          description: 'Ending position of text string that matched in Alerted Message. In bytes.'
+          type: string
+          example: "389"
+
+    RulesContext:
+      description: 'Name of the rule which raised the hit.'
+      type: object
+      properties:
+        Type:
+          description: |-
+            Type of the rule which raised the hit.
+              -1 : no meaning,
+               0 : ignored,
+               1 : blocking,
+               2 : non blocking
+          type: string
+          enum: [ '-1', '0', '1', '2' ]
+          example: "1"
+        Priority:
+          description: 'Priority level of the rule which raised the hit.'
+          type: string
+          example: "40"
+        Confidentiality:
+          description: 'Confidentiality level of the rule which raised the hit.'
+          type: string
+          example: "0"
+        Info:
+          description: 'Info of the rule which raised the hit.'
+          type: string
+          example: "+SCSTAR PRIORITY SG"
+
+    HittedEntity:
+      description: 'Entity described in list entry.'
+      type: object
+      properties:
+        ID:
+          description: 'Entity Id in FircoSoft applications.'
+          type: string
+          example: "TEST000051"
+        IsException:
+          description: 'Entity is an exception or not (good guy).'
+          type: string
+          enum: [ '0', '1' ]
+          example: "0"
+        OfficialReferences:
+          description: 'Entity''s list of Official References or Codes.'
+          type: array
+          items:
+            $ref: '#/components/schemas/OfficialReferencesItem'
+        Names:
+          description: 'List of Names of Entity.'
+          type: array
+          items:
+            $ref: '#/components/schemas/HittedEntityNamesItem'
+          example:
+            - Name: "JAY PARK"
+            - Name: "JAY PARK ABC"
+        Addresses:
+          description: 'List of Addresses of Entity.'
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressItem'
+        Origin:
+          description: 'Entity''s Origin.'
+          type: string
+          example: "EU"
+        Designation:
+          description: 'Entity''s Designation.'
+          type: string
+          example: "NORTH_KOREA"
+        Keywords:
+          description: 'List of Keywords of Entity.'
+          type: array
+          items:
+            $ref: '#/components/schemas/HittedEntityKeyword'
+        Type:
+          description: |-
+            Entity's Type. "I" : Named person, "C" : Company, "V" : Vessel, "O" : Other.
+          type: string
+          enum: [ 'I', 'C', 'V', 'O' ]
+          example: "I"
+        Codes:
+          description: 'List of Codes of Entity.'
+          type: array
+          items:
+            $ref: '#/components/schemas/HittedEntityCodesItem'
+        AdditionalInfo:
+          description: 'AdditionalInfo for Entity. Usually Official text extract.'
+          type: string
+          example: ""
+        DatesOfBirth:
+          description: 'List of DOB of Entity.'
+          type: array
+          items:
+            $ref: '#/components/schemas/DatesOfBirthItem'
+        PlacesOfBirth:
+          description: 'List of DOB of Entity.'
+          type: array
+          items:
+            $ref: '#/components/schemas/PlacesOfBirthItem'
+        Hyperlinks:
+          description: 'List of HREF for Entity.'
+          type: array
+          items:
+            $ref: '#/components/schemas/HyperlinksItem'
+        UserData1:
+          description: 'Entity''s User text comment in FircoSoft applications.'
+          type: string
+          example: ""
+        UserData2:
+          description: 'Entity''s User extra text comment in FircoSoft applications.'
+          type: string
+          example: ""
+        Nationality:
+          description: 'Entity Nationality.'
+          type: string
+          example: ""
+        IsPEP:
+          description: 'Entity is Politically Exposed Person or not.'
+          type: string
+          enum: [ '0', '1' ]
+          example: "0"
+        IsFEP:
+          description: 'Entity is Financially Exposed Person or not.'
+          type: string
+          enum: [ '0', '1' ]
+          example: "0"
+        HideOnlyIDs:
+          type: array
+          items:
+            $ref: '#/components/schemas/HideOnlyIDsItem'
+          example: [ ]
+        HideIDs:
+          type: array
+          items:
+            $ref: '#/components/schemas/HideIDsItem'
+          example: [ ]
+        HideOrigins:
+          type: array
+          items:
+            $ref: '#/components/schemas/HideOriginsItem'
+          example: [ ]
+        HideInTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/HideInTagsItem'
+          example: [ ]
+        HideUnits:
+          type: array
+          items:
+            $ref: '#/components/schemas/HideUnitsItem'
+          example: [ ]
+        HideSenderReceivers:
+          type: array
+          items:
+            $ref: '#/components/schemas/HideSenderReceiversItem'
+          example: [ ]
+
+    OfficialReferencesItem:
+      type: object
+      required: [ 'OfficialReference' ]
+      properties:
+        OfficialReference:
+          $ref: '#/components/schemas/OfficialReference'
+
+    OfficialReference:
+      description: 'Official Reference or Code of Entity.'
+      type: object
+      properties:
+        Name:
+          description: 'Label of Official Reference or Code.'
+          type: string
+          example: ""
+
+    HittedEntityNamesItem:
+      type: object
+      required: [ 'Name' ]
+      properties:
+        Name:
+          description: 'Name of Entity.'
+          type: string
+          example: "JAY PARK"
+
+    AddressItem:
+      type: object
+      required: [ 'Address' ]
+      properties:
+        Address:
+          $ref: '#/components/schemas/Address'
+
+    Address:
+      description: 'One Address of Entity.'
+      type: object
+      properties:
+        IsMain:
+          description: 'Is this Address the main one of Entity or not. (0 or 1)'
+          type: string
+          enum: [ '0', '1' ]
+          example: "1"
+        PostalAddress:
+          description: 'Postal Address of Entity.'
+          type: string
+          example: ""
+        Cities:
+          description: 'List of Cities of Address.'
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressCity'
+        States:
+          description: 'List of States of Address.'
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressState'
+        Countries:
+          description: 'List of Countries of Address.'
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressCountry'
+
+    AddressCity:
+      type: object
+      required: [ 'City' ]
+      properties:
+        City:
+          type: string
+          example: "Dunkerque"
+
+    AddressState:
+      type: object
+      required: [ 'State' ]
+      properties:
+        State:
+          type: string
+          example: "Nord-Pas-de-Calais-Pikardia"
+
+    AddressCountry:
+      type: object
+      required: [ 'Country' ]
+      properties:
+        Country:
+          type: string
+          example: "France"
+
+    HittedEntityKeyword:
+      type: object
+      required: [ 'Keyword' ]
+      properties:
+        Keyword:
+          type: string
+          example: "none"
+
+    HittedEntityCodesItem:
+      type: object
+      required: [ 'Code' ]
+      properties:
+        Code:
+          $ref: '#/components/schemas/HittedEntityCode'
+
+    HittedEntityCode:
+      description: 'One Code of Entity.'
+      type: object
+      required: [ 'Name', 'Type' ]
+      properties:
+        Name:
+          description: 'Name of Code of Entity.'
+          type: string
+          example: "BA366700"
+        Type:
+          description: |-
+            Type of Code of Entity. "Bic", "Passport", "NationalID", "SSN", "SearchCode"
+          type: string
+          enum:
+            - 'Bic'
+            - 'Passport'
+            - 'NationalID'
+            - 'SSN'
+            - 'SearchCode'
+          example: "Passport"
+
+    DatesOfBirthItem:
+      type: object
+      required: [ 'DateOfBirth' ]
+      properties:
+        DateOfBirth:
+          description: 'One DOB of Entity. Format is string as it originated from Official text....'
+          type: string
+          example: "June 6th 1944"
+
+    PlacesOfBirthItem:
+      type: object
+      required: [ 'PlacesOfBirth' ]
+      properties:
+        PlacesOfBirth:
+          description: 'One POB of Entity.'
+          type: string
+          example: "Calais"
+
+    HyperlinksItem:
+      type: object
+      required: [ 'Hyperlink' ]
+      properties:
+        Hyperlink:
+          description: 'One HREF for Entity.'
+          type: string
+          example: "none"
+
+    HideOnlyIDsItem:
+      type: object
+      required: [ 'HideOnlyID' ]
+      properties:
+        HideOnlyID:
+          type: string
+
+    HideIDsItem:
+      type: object
+      required: [ 'HideID' ]
+      properties:
+        HideID:
+          type: string
+
+    HideOriginsItem:
+      type: object
+      required: [ 'HideOrigin' ]
+      properties:
+        HideOrigin:
+          type: string
+
+    HideInTagsItem:
+      type: object
+      required: [ 'HideInTag' ]
+      properties:
+        HideInTag:
+          type: string
+
+    HideUnitsItem:
+      type: object
+      required: [ 'HideUnit' ]
+      properties:
+        HideUnit:
+          type: string
+
+    HideSenderReceiversItem:
+      type: object
+      required: [ 'HideSenderReceiver' ]
+      properties:
+        HideSenderReceiver:
+          type: string
+
+    ActionsItem:
+      type: object
+      required: [ 'Action' ]
+      properties:
+        Action:
+          $ref: '#/components/schemas/Action'
+
+    Action:
+      type: object
+      properties:
+        DateTime:
+          type: string
+        Operator:
+          type: string
+        Comment:
+          type: string
+        Status:
+          $ref: '#/components/schemas/StatusInfo'
+        Attachment:
+          $ref: '#/components/schemas/AttachmentInfo'
+
+    NextStatusesItem:
+      type: object
+      properties:
+        Status:
+          $ref: '#/components/schemas/StatusInfo'
+
+    CaseManagerResponse:
+      type: object
+      required: [ 'Header', 'Body' ]
+      properties:
+        Header:
+          description: 'Always `null`.'
+          type: object
+          default: null
+          nullable: true
+        Body:
+          description: 'Contains the message type and its value.'
+          type: object
+          properties:
+            msg_Acknowledgement:
+              $ref: '#/components/schemas/msg_Acknowledgement'
+
+    msg_Acknowledgement:
+      type: object
+      required: [ 'faultcode', 'faultstring', 'faultactor' ]
+      properties:
+        faultcode:
+          description: |-
+            Contains the level & code of error. e.g. "soapenv:Server", "soapenv:Client.".
+            When no error occured, the faultcode should have value "0".
+          type: string
+          example: "0"
+        faultstring:
+          description: |-
+            Text describing the occurred error. e.g. 110: "Application of format ws.wmqin on
+            a buffer &lt;object(id => "", correlation => "", Accept-Encoding => "gzip,deflate",
+            Content-Type => "text/xml;charset=UTF-8", SOAPAction => "\"\"",
+            Content-Length => "1617", Host => "localhost:5406",
+            Connection => "Keep-Alive", User-Agent => "Apache-HttpClient/4.1.1 (java 1.5)")>
+            did not generate a valid message"
+          type: string
+          example: "OK"
+        faultactor:
+          description: 'Text describing which job raised the error. e.g. "requester#001"'
+          type: string
+          example: ""

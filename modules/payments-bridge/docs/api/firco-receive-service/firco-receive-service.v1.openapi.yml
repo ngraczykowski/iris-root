@@ -1,0 +1,316 @@
+openapi: 3.0.1
+info:
+  title: SEAR Payments - Firco Continuity Receive Service API
+  description: >
+    The API is for integrating Firco Continuity via Case Manager API with SEAR Payments.
+    This part of the API is the Ficro Continuity CMAPI receive service, where SEAR Payments sends
+    the decision back to.
+  contact:
+    name: Silent Eight Support
+    url: https://silenteight.com/contact/
+    email: support@silenteight.com
+  version: 1.0.0
+servers:
+  - url: 'https://cmapi.firco.example.com/'
+    description: >
+      An example URL to send back the decisions to. The exact API endpoint is to be determined
+      during the systems integration phase with customer.
+paths:
+  /ContinuityReceiveService:
+    post:
+      tags:
+        - Case Manager API
+      operationId: receiveService
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceiveDecisionRequest'
+        required: true
+      responses:
+        '200':
+          description: The decision was successfully accepted.
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/FircoResponse'
+        '401':
+          description: Authorization failed.
+
+security:
+  - oAuth:
+      - write_receive
+
+components:
+  securitySchemes:
+    oAuth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          # An example URL to the customer-provided OAuth 2.0 token authorization server.
+          tokenUrl: https://cmapi.firco.example.com/oauth/token
+          scopes:
+            write_receive: |-
+              Allow sending a message with a decision (recommendation) for an adjudicated alert.
+
+  schemas:
+    StatusInfo:
+      type: object
+      required: [ 'ID', 'Name', 'RoutingCode', 'Checksum' ]
+      properties:
+        ID:
+          description: 'Identifies the database ID of the status.'
+          type: string
+        Name:
+          description: 'Identifies the name of the status.'
+          type: string
+        RoutingCode:
+          description: |-
+            Identifies the behavior associated to the decision made on the message. Available
+            default values are:
+              000: No hit.
+              001: Hit(s).
+              002: Passed.
+              003: Failed.
+              004: Filter in bypass mode.
+              005: Recheck. Requester sends the message back to the requesting application
+                   with a request to be re-filtered. Requester does not by itself re-filter
+                   the message.
+              006: Not Reviewed.
+              007: Non Blocking.
+              008: Non Checking.
+              009: Cancel. Cancel is like a failed but not due to a hit (i.e. the message life
+                   span has expired).
+              010: Unqueue.
+              011: Close.
+              012: Pending.
+              100: Error.
+              101: Nomessage.
+          type: string
+          maxLength: 3
+        Checksum:
+          description: 'Fingerprint of a status info at the time this info is built.'
+          type: string
+      example:
+        ID: "202"
+        Name: "S8_ADJ"
+        RoutingCode: "2"
+        Checksum: "152c65fe973360004140a71f25a34cdd"
+
+    AttachmentInfo:
+      type: object
+      required: [ 'Name', 'Contents' ]
+      properties:
+        Name:
+          description: 'Attachment''s Filename.'
+          type: string
+          example: "recommendation.txt"
+        Contents:
+          description: 'Attachment''s contents, Base64 Encoded.'
+          type: string
+          format: byte
+          example: "UzggUmVjb21tZW5kYXRpb246IE1hbnVhbCBJbnZlc3RpZ2F0aW9u"
+
+    ReceiveDecisionRequest:
+      type: object
+      required: [ 'Header', 'Body' ]
+      properties:
+        Header:
+          description: 'Always `null`.'
+          type: object
+          nullable: true
+          default: null
+          example: null
+        Body:
+          description: 'Contains the message type and its value.'
+          type: object
+          properties:
+            msg_ReceiveDecision:
+              $ref: '#/components/schemas/msg_ReceiveDecision'
+
+    msg_ReceiveDecision:
+      type: object
+      required: [ 'VersionTag', 'Authentication', 'Messages' ]
+      properties:
+        VersionTag:
+          type: string
+          description: Always "1".
+          enum: [ '1' ]
+          maxLength: 4
+          default: '1'
+        Authentication:
+          $ref: '#/components/schemas/Authentication'
+        Messages:
+          type: array
+          minItems: 1
+          maxItems: 1
+          items:
+            $ref: '#/components/schemas/MessagesItem'
+
+    Authentication:
+      type: object
+      required: [ 'ContinuityLogin', 'ContinuityPassword', 'ContinuityBusinessUnit' ]
+      properties:
+        ContinuityLogin:
+          description: |-
+            Firco Continuity Verify Web Login. It must be declared & available in Firco Continuity
+            Verify Web!
+          type: string
+          maxLength: 300
+          example: 'username'
+        ContinuityPassword:
+          description: |-
+            Firco Continuity Verify Web Password. It must be encrypted using "FKRUN -Password"!
+          type: string
+          maxLength: 300
+          example: 'password'
+        ContinuityBusinessUnit:
+          description: 'Firco Continuity Verify Web Business Unit, by default = "ROOT".'
+          type: string
+          maxLength: 300
+          default: 'ROOT'
+          example: 'ROOT'
+
+    MessagesItem:
+      type: object
+      required: [ 'Message' ]
+      properties:
+        Message:
+          $ref: '#/components/schemas/Message'
+
+    Message:
+      type: object
+      required: [ 'Unit', 'BusinessUnit', 'MessageID', 'SystemID', 'Status' ]
+      properties:
+        Unit:
+          description: |-
+            The name of the entity that makes the decision on the alerted message (for
+            the multi-units architecture). The Unit which processes the message is given by
+            the banking application. The length of this field is 15.
+          type: string
+          maxLength: 15
+          example: "HB-UK"
+        BusinessUnit:
+          description: |-
+            The name of the Business Unit i.e., group of entities that makes the decision on
+            the alerted message (for the multi business units architecture). Default value
+            is "ROOT".
+          type: string
+          maxLength: 256
+          example: "ROOT"
+          default: "ROOT"
+        MessageID:
+          description: |-
+            A unique identifier given by the banking application to identify a message in
+            the front-end application and the banking application.
+          type: string
+          maxLength: 64
+          example: "2020061300000008"
+        SystemID:
+          description: |-
+            ID of the transaction stored in the Firco Continuity database.
+          type: string
+          maxLength: 64
+          example: "MTH20210106102116-00003-16630"
+        Status:
+          $ref: '#/components/schemas/StatusInfo'
+        Comment:
+          description: |-
+            Contains the comments written in the database explaining the final decision made.
+            The comment is set up by the user through the front-end application.
+          type: string
+          maxLength: 1024
+          example: |
+            S8 Recommendation: False Positive
+        Operator:
+          description: |-
+            Contains the name of the user who has made the decision.
+          type: string
+          maxLength: 64
+          example: "Silent Eight"
+        Attachment:
+          $ref: '#/components/schemas/AttachmentInfo'
+        Actions:
+          description: |-
+            Contains the audit entries to be appended to Alerted Message audit log.
+            For decisions sent by SEAR for adjudicated alerts, the list is always empty.
+          type: array
+          minItems: 0
+          maxItems: 0
+          items:
+            $ref: '#/components/schemas/ActionsItem'
+          example: [ ]
+
+    ActionsItem:
+      type: object
+      required: [ 'Action' ]
+      properties:
+        Action:
+          $ref: '#/components/schemas/Action'
+
+    Action:
+      type: object
+      properties:
+        DateTime:
+          type: string
+          example: "20210107071511"
+        Comment:
+          description: |-
+            Contains the comments written in the database explaining the final decision made.
+            The comment is set up by the user through the front-end application.
+          type: string
+          maxLength: 1024
+          example: ""
+        Operator:
+          description: 'Contains the name of the user who has made the decision.'
+          type: string
+          maxLength: 64
+          example: ""
+        StatusName:
+          description: 'Contains the decision type.'
+          type: string
+          maxLength: 64
+          example: ""
+        Attachment:
+          $ref: '#/components/schemas/AttachmentInfo'
+
+    FircoResponse:
+      type: object
+      required: [ 'Header', 'Body' ]
+      properties:
+        Header:
+          description: 'Always `null`.'
+          type: object
+          default: null
+          nullable: true
+        Body:
+          description: 'Contains the message type and its value.'
+          type: object
+          properties:
+            msg_Acknowledgement:
+              $ref: '#/components/schemas/msg_Acknowledgement'
+
+    msg_Acknowledgement:
+      type: object
+      required: [ 'faultcode', 'faultstring', 'faultactor' ]
+      properties:
+        faultcode:
+          description: |-
+            Contains the level & code of error. e.g. "soapenv:Server", "soapenv:Client.".
+            When no error occured, the faultcode should have value "0".
+          type: string
+          example: "0"
+        faultstring:
+          description: |-
+            Text describing the occurred error. e.g. 110: "Application of format ws.wmqin on
+            a buffer <object(id => "", correlation => "", Accept-Encoding => "gzip,deflate",
+            Content-Type => "text/xml;charset=UTF-8", SOAPAction => "\"\"",
+            Content-Length => "1617", Host => "localhost:5406",
+            Connection => "Keep-Alive", User-Agent => "Apache-HttpClient/4.1.1 (java 1.5)")>
+            did not generate a valid message"
+          type: string
+          example: "OK"
+        faultactor:
+          description: 'Text describing which job raised the error. e.g. "requester#001"'
+          type: string
+          example: "cmapi.receive.service"

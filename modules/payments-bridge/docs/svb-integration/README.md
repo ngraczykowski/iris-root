@@ -7,5 +7,5 @@ The diagrams used in the document are from:
 - [SEAR:Payments for Firco - Alert adjudication Flow](alert-adjudication-flow.puml)
 
 The API specifications:
-- [SEAR Payments - Firco Continuity Send Message API](../api/firco-send-message/openapi.yml)
-- [SEAR Payments - Firco Continuity Receive Service API](../api/firco-receive-service/openapi.yml)
+- [SEAR Payments - Firco Continuity Send Message API](../api/firco-send-message/firco-send-message.v1.openapi.yml)
+- [SEAR Payments - Firco Continuity Receive Service API](../api/firco-receive-service/firco-receive-service.v1.openapi.yml)
