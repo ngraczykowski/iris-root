@@ -6,13 +6,13 @@ import com.silenteight.warehouse.report.statistics.domain.dto.StatisticsDto;
 
 public final class StatisticsTestFixtures {
 
-  public static final EfficiencyDto EFFICIENCY_DTO = EfficiencyDto
+  public static final EffectivenessDto EFFECTIVENESS_DTO = EffectivenessDto
       .builder()
       .analystSolvedAsFalsePositive(10L)
       .aiSolvedAsFalsePositive(5L)
       .build();
 
-  public static final EffectivenessDto EFFECTIVENESS_DTO = EffectivenessDto
+  public static final EfficiencyDto EFFICIENCY_DTO = EfficiencyDto
       .builder()
       .solvedAlerts(20L)
       .allAlerts(25L)
@@ -20,7 +20,7 @@ public final class StatisticsTestFixtures {
 
   public static final StatisticsDto STATISTICS_DTO = StatisticsDto
       .builder()
-      .efficiency(EFFICIENCY_DTO)
       .effectiveness(EFFECTIVENESS_DTO)
+      .efficiency(EFFICIENCY_DTO)
       .build();
 }

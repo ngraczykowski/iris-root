@@ -269,5 +269,5 @@ warehouse.report.statistics:
     significant-values: [ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE]
     false-positive-value: ACTION_FALSE_POSITIVE
   analyst-decision:
-    field: alert_analyst_decision
-    false-positive-value: analyst_decision_false_positive
+    field: alert_DN_CASE.currentState
+    false-positive-value: Level 1 Review

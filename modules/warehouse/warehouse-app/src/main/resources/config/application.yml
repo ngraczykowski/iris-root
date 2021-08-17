@@ -327,13 +327,3 @@ warehouse.report.sm:
     name: recommended action
     decision-values: [FALSE_POSITIVE, POTENTIAL_TRUE_POSITIVE]
   date-field-name: alert_timestamp
-
-warehouse.report.statistics:
-  ai-decision:
-    field: alert_recommendation_recommended_action
-    significant-values: [ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE]
-    false-positive-value: ACTION_FALSE_POSITIVE
-  analyst-decision:
-    field: alert_DN_CASE.currentState
-    false-positive-value: Level 1 Review
-  date-field-name: index_timestamp

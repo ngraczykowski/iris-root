@@ -29,7 +29,6 @@ class StatisticsQuery implements SimulationStatisticsQuery {
   private static final DefaultTimeSource INSTANCE = DefaultTimeSource.INSTANCE;
   private static final TimeConverter TIME_CONVERTER = DefaultTimeSource.TIME_CONVERTER;
   private static final OffsetDateTime EPOCH = TIME_CONVERTER.toOffset(Instant.EPOCH);
-  private static final OffsetDateTime NOW = TIME_CONVERTER.toOffset(INSTANCE.now());
 
   @NonNull
   private final GroupingQueryService groupingQueryService;
@@ -43,44 +42,44 @@ class StatisticsQuery implements SimulationStatisticsQuery {
     log.info("Getting statistics for analysis={}", analysis);
     FetchGroupedDataResponse response = fetchRawData(analysis);
     List<Row> rows = response.getRows();
-    EfficiencyDto efficiency = toEfficiencyDto(rows);
+    EffectivenessDto effectiveness = toEffectivenessDto(rows);
     log.debug(
         "Analysis={}, aiSolvedAsFalsePositive={}, analystSolvedAsFalsePositive={}",
         analysis,
-        efficiency.getAiSolvedAsFalsePositive(),
-        efficiency.getAnalystSolvedAsFalsePositive());
+        effectiveness.getAiSolvedAsFalsePositive(),
+        effectiveness.getAnalystSolvedAsFalsePositive());
 
-    EffectivenessDto effectiveness = toEffectivenessDto(rows);
+    EfficiencyDto efficiency = toEfficiencyDto(rows);
     log.debug(
         "Analysis={}, allAlerts={}, solvedAlerts={}",
         analysis,
-        effectiveness.getAllAlerts(),
-        effectiveness.getSolvedAlerts());
+        efficiency.getAllAlerts(),
+        efficiency.getSolvedAlerts());
 
     return StatisticsDto
         .builder()
-        .effectiveness(effectiveness)
         .efficiency(efficiency)
+        .effectiveness(effectiveness)
         .build();
   }
 
-  private EffectivenessDto toEffectivenessDto(List<Row> rows) {
+  private EfficiencyDto toEfficiencyDto(List<Row> rows) {
     long allAlertsCount = sumAlerts(rows);
     long solvedAlertsCount = sumSolvedAlerts(rows);
-    return EffectivenessDto
+    return EfficiencyDto
         .builder()
         .allAlerts(allAlertsCount)
         .solvedAlerts(solvedAlertsCount)
         .build();
   }
 
-  private EfficiencyDto toEfficiencyDto(List<Row> rows) {
+  private EffectivenessDto toEffectivenessDto(List<Row> rows) {
     List<Row> solvedAsFalsePositiveByAi = getRowsSolvedAsFalsePositiveByAi(rows);
     long solvedAsFalsePositiveByAiCount = sumAlerts(solvedAsFalsePositiveByAi);
     long solvedAsFalsePositiveByAnalystCount =
         sumSolvedAsFalsePositiveByAnalyst(solvedAsFalsePositiveByAi);
 
-    return EfficiencyDto
+    return EffectivenessDto
         .builder()
         .aiSolvedAsFalsePositive(solvedAsFalsePositiveByAiCount)
         .analystSolvedAsFalsePositive(solvedAsFalsePositiveByAnalystCount)
@@ -92,12 +91,13 @@ class StatisticsQuery implements SimulationStatisticsQuery {
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest
         .builder()
         .from(EPOCH)
-        .to(NOW)
+        .to(TIME_CONVERTER.toOffset(INSTANCE.now()))
         .dateField(properties.getDateFieldName())
         .fields(properties.getFields())
         .indexes(indexes)
         .build();
 
+    log.debug("Analysis={}, FetchGroupedTimeRangedDataRequest={}", analysis, request);
     return groupingQueryService.generate(request);
   }
 
