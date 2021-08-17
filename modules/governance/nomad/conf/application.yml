@@ -32,8 +32,8 @@ serp:
     sampling:
       schedule:
         enabled: true
-        audit-cron: 0 0 2/6 */1 * ?
-        alert-generator-cron: 0 0 2 */1 * ?
+        audit-cron: 0 0 2/6 * * ?
+        alert-generator-cron: 0 0 2 ? * MON-FRI *
       generator:
         sample-count: 20
         grouping-fields:

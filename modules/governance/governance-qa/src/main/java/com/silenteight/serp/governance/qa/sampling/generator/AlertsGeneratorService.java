@@ -56,6 +56,7 @@ public class AlertsGeneratorService {
       return;
     }
 
+    log.debug("Generating alerts of total count={}", totalAlertsCount);
     DistributionCalculator distributionCalculator = getDistributionCalculator(
         totalSampleCount, totalAlertsCount);
 

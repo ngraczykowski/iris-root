@@ -41,6 +41,7 @@ public class AlertSamplingService {
     AlertSampling alertSampling = getAlertSampling(id);
     alertSampling.finished(timeSource.offsetDateTime());
     alertSamplingRepository.save(alertSampling);
+    log.debug("Alert sampling with state={} saved", alertSampling.getState());
   }
 
   @Transactional
@@ -48,6 +49,7 @@ public class AlertSamplingService {
     AlertSampling alertSampling = getAlertSampling(id);
     alertSampling.failed();
     alertSamplingRepository.save(alertSampling);
+    log.debug("Alert sampling with state={} saved", alertSampling.getState());
   }
 
   private AlertSampling getAlertSampling(Long id) {
