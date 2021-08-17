@@ -15,6 +15,7 @@ class AgentDataSourceException(AgentException):
 
 class AgentDataSource:
     def __init__(self, config: Config):
+        assert config.application_config
         self.application_config = config.application_config
         self.address_service = AddressService(config.application_config)
         self.channel, self.command = None, None

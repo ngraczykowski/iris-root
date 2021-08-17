@@ -3,6 +3,7 @@ import logging
 
 import grpc
 from grpc_health.v1.health_pb2 import HealthCheckResponse
+from grpc_reflection.v1alpha import reflection
 
 from agent_base.agent import AgentService
 from agent_base.grpc_service.health_servicer import AgentHealthServicer
@@ -35,18 +36,25 @@ class GrpcService(AgentService):
 
     async def _start_server(self):
         self.server = grpc.aio.server()
-        self.add_servicers()
+        self._add_servicers()
+        self._add_reflection()
         self.server.add_insecure_port(
             address=f"[::]:{self.config.application_config['agent']['grpc']['port']}"
         )
         await self.server.start()
         asyncio.get_event_loop().create_task(self.server.wait_for_termination())
 
-    def add_servicers(self):
+    def _add_servicers(self):
         for servicer in self.servicers:
             servicer.add_to_server(self.server)
             if servicer.name:
                 self.health_servicer.set(servicer.name, HealthCheckResponse.SERVING)
+
+    def _add_reflection(self):
+        service_names = (s.name for s in self.servicers)
+        reflection.enable_server_reflection(
+            (reflection.SERVICE_NAME, *service_names), self.server
+        )
 
     async def stop(self):
         self.logger.debug("Stopping grpc service")

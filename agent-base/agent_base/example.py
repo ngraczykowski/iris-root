@@ -127,7 +127,7 @@ def main():
         format="%(asctime)s %(name)-20s %(levelname)-8s %(message)s",
     )
 
-    config = Config(configuration_dirs=[args.configuration_dir])
+    config = Config(configuration_dirs=[args.configuration_dir], required=True)
     AgentRunner(config).run(
         JohnnyAgent(config),
         services=[

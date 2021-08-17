@@ -8,6 +8,7 @@ install_require = [
     "googleapis-common-protos",
     "grpcio",
     "grpcio-health-checking",
+    "grpcio-reflection",
     "grpcio-tools",
     "lz4",
     "protocol-agents",
