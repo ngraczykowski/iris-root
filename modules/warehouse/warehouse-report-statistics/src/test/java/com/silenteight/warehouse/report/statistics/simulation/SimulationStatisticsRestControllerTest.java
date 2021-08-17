@@ -39,10 +39,10 @@ class SimulationStatisticsRestControllerTest extends BaseRestControllerTest {
         GET_SIMULATION_STATISTICS_URL)
         .statusCode(OK.value())
         .contentType(JSON_CONTENT_TYPE)
-        .body("efficiency.aiSolvedAsFalsePositive", is(5))
-        .body("efficiency.analystSolvedAsFalsePositive", is(10))
-        .body("effectiveness.solvedAlerts", is(20))
-        .body("effectiveness.allAlerts", is(25));
+        .body("effectiveness.aiSolvedAsFalsePositive", is(5))
+        .body("effectiveness.analystSolvedAsFalsePositive", is(10))
+        .body("efficiency.solvedAlerts", is(20))
+        .body("efficiency.allAlerts", is(25));
   }
 
   @Test

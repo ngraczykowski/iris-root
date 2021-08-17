@@ -71,3 +71,13 @@ warehouse.report.billing:
     counter-label: count_alerts_received
     significant-values: [ ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE]
     significant-summation-label: count_alerts_solved
+
+warehouse.report.statistics:
+  date-field-name: index_timestamp
+  ai-decision:
+    field: alert_recommendation_recommended_action
+    significant-values: [ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE]
+    false-positive-value: ACTION_FALSE_POSITIVE
+  analyst-decision:
+    field: alert_DN_CASE.currentState
+    false-positive-value: Level 1 Review

@@ -7,6 +7,6 @@ import lombok.Data;
 @Builder
 public class EfficiencyDto {
 
-  private long aiSolvedAsFalsePositive;
-  private long analystSolvedAsFalsePositive;
+  private long solvedAlerts;
+  private long allAlerts;
 }
