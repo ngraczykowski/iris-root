@@ -8,7 +8,7 @@ class Solution(enum.Enum):
     INCONCLUSIVE = "INCONCLUSIVE"
     NO_MATCH = "NO_MATCH"
     NO_DATA = "NO_DATA"
-    UNEXPECTED_ERROR = "UNEXPECTED_ERROR"
+    AGENT_ERROR = "AGENT_ERROR"
 
     def __lt__(self, other: "Solution") -> bool:
         order = list(self.__class__.__members__)

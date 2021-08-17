@@ -53,14 +53,10 @@ async def data_source_mock(config):
 @pytest.fixture(autouse=True)
 async def company_name_agent(config):
     agent = CompanyNameAgent(config)
-    runner = AgentRunner(config.application_config)
+    runner = AgentRunner(config)
     await runner.start(
         agent,
-        services=[
-            CompanyNameAgentExchange(
-                config, CompanyNameAgentDataSource(config.application_config)
-            )
-        ],
+        services=[CompanyNameAgentExchange(config, CompanyNameAgentDataSource(config))],
     )
     try:
         yield agent
@@ -180,8 +176,7 @@ async def test_solution(
     correlation_id = await ae_mock.send(
         AgentExchangeRequest(matches=["match"], features=[FEATURE_NAME])
     )
-    # await asyncio.sleep(5)
+
     response = await ae_mock.wait_for(correlation_id)
-    print("in test", correlation_id, response)
     solution = list(get_solutions(response))[0]
     assert solution == ("match", FEATURE_NAME, expected_solution)

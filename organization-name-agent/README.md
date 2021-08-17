@@ -93,7 +93,7 @@ For final solution for two set of names:
 >>> import pathlib
 >>> from company_name import CompanyNameAgent
 
->>> agent = CompanyNameAgent(configuration_dir=pathlib.Path("./config"))
+>>> agent = CompanyNameAgent()
 >>> agent.resolve(['HP, INC'], ['HEWLETT-PACKARD COMPANY',  'HP CO.'])
 
 Result(solution=<Solution.MATCH: 'MATCH'>, reason=Reason(partials=[PairResult(solution=<Solution.MATCH: 'MATCH'>, solution_probability=1, names=('HP, INC', 'HP CO.')), PairResult(solution=<Solution.MATCH: 'MATCH'>, solution_probability=0.8, names=('HP, INC', 'HEWLETT-PACKARD COMPANY'))]))

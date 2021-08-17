@@ -1,7 +1,10 @@
 grpc:
   client:
     data-source:
-      address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-hsbc-bridge
+      address: {{ range $index, $client := service (printf "%s-grpc-hsbc-bridge" (env "NOMAD_NAMESPACE") ) -}}
+          {{ if $index }},{{ end -}}
+          {{ $client.Address }}:{{ $client.Port -}}
+      {{- end }}
       timeout: 10
 
 rabbitmq:
