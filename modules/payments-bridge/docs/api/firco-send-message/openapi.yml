@@ -10,7 +10,7 @@ info:
     email: support@silenteight.com
   version: 1.0.0
 servers:
-  - url: 'https://sierra-{env}.silent8.cloud:8443/tsaas-bridge/'
+  - url: 'https://sierra-{env}.silent8.cloud/rest/pb/'
     description: The API server address.
     variables:
       env:
@@ -33,7 +33,7 @@ paths:
         - Case Manager API
       security:
         - oAuth:
-            - write_alert
+            - cmapi
       parameters:
         - name: receiveUrl
           description: |-
@@ -90,7 +90,7 @@ components:
         clientCredentials:
           tokenUrl: https://auth.silent8.cloud/realms/sierra/protocol/openid-connect/token
           scopes:
-            write_alert: 'Send a message with an alert for adjudication.'
+            cmapi: 'Access to the CMAPI integration endpoint.'
 
   schemas:
     StatusInfo:

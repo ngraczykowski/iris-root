@@ -1,9 +1,9 @@
 @startuml
-participant "Firco\nContinuity\n[SVB]" as SVB
+participant "Firco\nContinuity\n[Bank]" as SVB
 participant "Payments\nBridge\n[S8]" as Bridge
 participant "SEAR\n[S8]" as SEAR
 
-title SVB - S8 Cloud Integration Flow
+title SEAR:Payments for Firco - Alert adjudication Flow
 
 autonumber 100 "<b>[000]"
 
