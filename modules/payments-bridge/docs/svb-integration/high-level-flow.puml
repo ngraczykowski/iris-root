@@ -1,0 +1,33 @@
+@startuml
+participant "Firco\nContinuity\n[SVB]" as SVB
+participant "Payments\nBridge\n[S8]" as Bridge
+participant "SEAR\n[S8]" as SEAR
+
+title SVB - S8 Cloud Integration Flow
+
+autonumber 100 "<b>[000]"
+
+== Request alert adjudication ==
+
+SVB -> Bridge ++: POST /alert
+return 200 OK
+
+Bridge -> SEAR ++: Request alert recommendation
+return
+
+...
+
+autonumber 200 "<b>[000]"
+
+== Return alert decision ==
+
+...
+
+SEAR -> Bridge ++: Recommendation generated
+Bridge -> Bridge : Map recommendation to CMAPI
+Bridge -> SVB ++: POST /ContinuityReceiveService
+return 200 OK
+
+deactivate Bridge
+
+@enduml
