@@ -56,14 +56,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SendMessageRequest'
+              $ref: '#/components/schemas/RequestDto'
       responses:
         '200':
           description: The message was successfully accepted for alert adjudication.
           content:
             'application/json':
               schema:
-                $ref: '#/components/schemas/CaseManagerResponse'
+                $ref: '#/components/schemas/AckDto'
         '401':
           description: Authorization failed.
 
@@ -93,7 +93,7 @@ components:
             cmapi: 'Access to the CMAPI integration endpoint.'
 
   schemas:
-    StatusInfo:
+    StatusDto:
       type: object
       required: [ 'ID', 'Name', 'RoutingCode', 'Checksum' ]
       properties:
@@ -136,21 +136,7 @@ components:
         RoutingCode: "2"
         Checksum: "bb6c8712a888eff9122d0f1709da063d"
 
-    AttachmentInfo:
-      type: object
-      required: [ 'Name', 'Contents' ]
-      properties:
-        Name:
-          description: 'Attachment''s Filename.'
-          type: string
-          example: "recommendation.txt"
-        Contents:
-          description: 'Attachment''s contents, Base64 Encoded.'
-          type: string
-          format: byte
-          example: "UzggUmVjb21tZW5kYXRpb246IE1hbnVhbCBJbnZlc3RpZ2F0aW9u"
-
-    SendMessageRequest:
+    RequestDto:
       type: object
       required: [ 'Header', 'Body' ]
       properties:
@@ -161,13 +147,16 @@ components:
           default: null
           example: null
         Body:
-          description: 'Contains the message type and its value.'
-          type: object
-          properties:
-            msg_SendMessage:
-              $ref: '#/components/schemas/msg_SendMessage'
+          $ref: '#/components/schemas/RequestSendMessageDto'
 
-    msg_SendMessage:
+    RequestSendMessageDto:
+      description: 'Contains the message type and its value.'
+      type: object
+      properties:
+        msg_SendMessage:
+          $ref: '#/components/schemas/RequestBodyDto'
+
+    RequestBodyDto:
       type: object
       required: [ 'VersionTag', 'Authentication', 'Messages' ]
       properties:
@@ -185,7 +174,7 @@ components:
           minItems: 1
           maxItems: 1
           items:
-            $ref: '#/components/schemas/MessagesItem'
+            $ref: '#/components/schemas/RequestMessageDto'
 
     Authentication:
       description: 'In this sequence, set the list of parameters to connect to the case manager.'
@@ -208,14 +197,14 @@ components:
           maxLength: 300
           default: ''
 
-    MessagesItem:
+    RequestMessageDto:
       type: object
       required: [ 'Message' ]
       properties:
         Message:
-          $ref: '#/components/schemas/Message'
+          $ref: '#/components/schemas/AlertMessageDto'
 
-    Message:
+    AlertMessageDto:
       type: object
       properties:
         Unit:
@@ -472,11 +461,11 @@ components:
           description: 'List of hits on Alerted Message.'
           type: array
           items:
-            $ref: '#/components/schemas/HitItem'
+            $ref: '#/components/schemas/RequestHitDto'
         Actions:
           type: array
           items:
-            $ref: '#/components/schemas/ActionsItem'
+            $ref: '#/components/schemas/RequestActionDto'
           example:
             - Action:
                 DateTime: "20210106102116"
@@ -506,11 +495,11 @@ components:
                   RoutingCode: "-1"
                   Checksum: "7163dc6253aa3c4467fdcb2ad60600df"
         CurrentStatus:
-          $ref: '#/components/schemas/StatusInfo'
+          $ref: '#/components/schemas/StatusDto'
         NextStatuses:
           type: array
           items:
-            $ref: '#/components/schemas/NextStatusesItem'
+            $ref: '#/components/schemas/RequestStatusDto'
           example:
             - ID: "1"
               Name: "PASSED"
@@ -525,14 +514,14 @@ components:
               RoutingCode: "12"
               Checksum: "8117a4d7693553f41cc80089984c6c3b"
 
-    HitItem:
+    RequestHitDto:
       type: object
       required: [ 'Hit' ]
       properties:
         Hit:
-          $ref: '#/components/schemas/Hit'
+          $ref: '#/components/schemas/HitDto'
 
-    Hit:
+    HitDto:
       description: 'One hit on Alerted Message.'
       type: object
       properties:
@@ -544,7 +533,7 @@ components:
           description: 'List of matched test string positions.'
           type: array
           items:
-            $ref: '#/components/schemas/PositionItem'
+            $ref: '#/components/schemas/RequestPositionDto'
         Score:
           description: 'Filter engine Score value Alerted Message. Floating point number, 0->1.'
           type: string
@@ -572,22 +561,22 @@ components:
           type: string
           example: "1"
         RulesContext:
-          $ref: '#/components/schemas/RulesContext'
+          $ref: '#/components/schemas/RulesContextDto'
         EntityText:
           description: 'Text string that matched in Entity.'
           type: string
           example: "JAY PARK"
         HittedEntity:
-          $ref: '#/components/schemas/HittedEntity'
+          $ref: '#/components/schemas/HittedEntityDto'
 
-    PositionItem:
+    RequestPositionDto:
       type: object
       required: [ 'Position' ]
       properties:
         Position:
-          $ref: '#/components/schemas/Position'
+          $ref: '#/components/schemas/PositionDto'
 
-    Position:
+    PositionDto:
       description: 'Position of text string that matched in Alerted Message.'
       type: object
       required: [ 'PositionStart', 'PositionEnd' ]
@@ -601,7 +590,7 @@ components:
           type: string
           example: "389"
 
-    RulesContext:
+    RulesContextDto:
       description: 'Name of the rule which raised the hit.'
       type: object
       properties:
@@ -628,7 +617,7 @@ components:
           type: string
           example: "+SCSTAR PRIORITY SG"
 
-    HittedEntity:
+    HittedEntityDto:
       description: 'Entity described in list entry.'
       type: object
       properties:
@@ -645,12 +634,12 @@ components:
           description: 'Entity''s list of Official References or Codes.'
           type: array
           items:
-            $ref: '#/components/schemas/OfficialReferencesItem'
+            $ref: '#/components/schemas/RequestOfficialReferenceDto'
         Names:
           description: 'List of Names of Entity.'
           type: array
           items:
-            $ref: '#/components/schemas/HittedEntityNamesItem'
+            $ref: '#/components/schemas/NameDto'
           example:
             - Name: "JAY PARK"
             - Name: "JAY PARK ABC"
@@ -658,7 +647,7 @@ components:
           description: 'List of Addresses of Entity.'
           type: array
           items:
-            $ref: '#/components/schemas/AddressItem'
+            $ref: '#/components/schemas/RequestAddressDto'
         Origin:
           description: 'Entity''s Origin.'
           type: string
@@ -671,7 +660,7 @@ components:
           description: 'List of Keywords of Entity.'
           type: array
           items:
-            $ref: '#/components/schemas/HittedEntityKeyword'
+            $ref: '#/components/schemas/KeywordDto'
         Type:
           description: |-
             Entity's Type. "I" : Named person, "C" : Company, "V" : Vessel, "O" : Other.
@@ -682,7 +671,7 @@ components:
           description: 'List of Codes of Entity.'
           type: array
           items:
-            $ref: '#/components/schemas/HittedEntityCodesItem'
+            $ref: '#/components/schemas/HittedEntityCodeDto'
         AdditionalInfo:
           description: 'AdditionalInfo for Entity. Usually Official text extract.'
           type: string
@@ -691,17 +680,17 @@ components:
           description: 'List of DOB of Entity.'
           type: array
           items:
-            $ref: '#/components/schemas/DatesOfBirthItem'
+            $ref: '#/components/schemas/DateOfBirthDto'
         PlacesOfBirth:
           description: 'List of DOB of Entity.'
           type: array
           items:
-            $ref: '#/components/schemas/PlacesOfBirthItem'
+            $ref: '#/components/schemas/PlaceOfBirthDto'
         Hyperlinks:
           description: 'List of HREF for Entity.'
           type: array
           items:
-            $ref: '#/components/schemas/HyperlinksItem'
+            $ref: '#/components/schemas/HyperlinkDto'
         UserData1:
           description: 'Entity''s User text comment in FircoSoft applications.'
           type: string
@@ -727,42 +716,42 @@ components:
         HideOnlyIDs:
           type: array
           items:
-            $ref: '#/components/schemas/HideOnlyIDsItem'
+            $ref: '#/components/schemas/HideOnlyIdDto'
           example: [ ]
         HideIDs:
           type: array
           items:
-            $ref: '#/components/schemas/HideIDsItem'
+            $ref: '#/components/schemas/HideIdDto'
           example: [ ]
         HideOrigins:
           type: array
           items:
-            $ref: '#/components/schemas/HideOriginsItem'
+            $ref: '#/components/schemas/HideOriginDto'
           example: [ ]
         HideInTags:
           type: array
           items:
-            $ref: '#/components/schemas/HideInTagsItem'
+            $ref: '#/components/schemas/HideInTagDto'
           example: [ ]
         HideUnits:
           type: array
           items:
-            $ref: '#/components/schemas/HideUnitsItem'
+            $ref: '#/components/schemas/HideUnitDto'
           example: [ ]
         HideSenderReceivers:
           type: array
           items:
-            $ref: '#/components/schemas/HideSenderReceiversItem'
+            $ref: '#/components/schemas/HideSenderReceiverDto'
           example: [ ]
 
-    OfficialReferencesItem:
+    RequestOfficialReferenceDto:
       type: object
       required: [ 'OfficialReference' ]
       properties:
         OfficialReference:
-          $ref: '#/components/schemas/OfficialReference'
+          $ref: '#/components/schemas/OfficialReferenceDto'
 
-    OfficialReference:
+    OfficialReferenceDto:
       description: 'Official Reference or Code of Entity.'
       type: object
       properties:
@@ -771,7 +760,7 @@ components:
           type: string
           example: ""
 
-    HittedEntityNamesItem:
+    NameDto:
       type: object
       required: [ 'Name' ]
       properties:
@@ -780,14 +769,14 @@ components:
           type: string
           example: "JAY PARK"
 
-    AddressItem:
+    RequestAddressDto:
       type: object
       required: [ 'Address' ]
       properties:
         Address:
-          $ref: '#/components/schemas/Address'
+          $ref: '#/components/schemas/AddressDto'
 
-    Address:
+    AddressDto:
       description: 'One Address of Entity.'
       type: object
       properties:
@@ -804,19 +793,19 @@ components:
           description: 'List of Cities of Address.'
           type: array
           items:
-            $ref: '#/components/schemas/AddressCity'
+            $ref: '#/components/schemas/AddressCityDto'
         States:
           description: 'List of States of Address.'
           type: array
           items:
-            $ref: '#/components/schemas/AddressState'
+            $ref: '#/components/schemas/AddressStateDto'
         Countries:
           description: 'List of Countries of Address.'
           type: array
           items:
-            $ref: '#/components/schemas/AddressCountry'
+            $ref: '#/components/schemas/AddressCountryDto'
 
-    AddressCity:
+    AddressCityDto:
       type: object
       required: [ 'City' ]
       properties:
@@ -824,7 +813,7 @@ components:
           type: string
           example: "Dunkerque"
 
-    AddressState:
+    AddressStateDto:
       type: object
       required: [ 'State' ]
       properties:
@@ -832,7 +821,7 @@ components:
           type: string
           example: "Nord-Pas-de-Calais-Pikardia"
 
-    AddressCountry:
+    AddressCountryDto:
       type: object
       required: [ 'Country' ]
       properties:
@@ -840,7 +829,7 @@ components:
           type: string
           example: "France"
 
-    HittedEntityKeyword:
+    KeywordDto:
       type: object
       required: [ 'Keyword' ]
       properties:
@@ -848,14 +837,14 @@ components:
           type: string
           example: "none"
 
-    HittedEntityCodesItem:
+    HittedEntityCodeDto:
       type: object
       required: [ 'Code' ]
       properties:
         Code:
-          $ref: '#/components/schemas/HittedEntityCode'
+          $ref: '#/components/schemas/CodeDto'
 
-    HittedEntityCode:
+    CodeDto:
       description: 'One Code of Entity.'
       type: object
       required: [ 'Name', 'Type' ]
@@ -876,7 +865,7 @@ components:
             - 'SearchCode'
           example: "Passport"
 
-    DatesOfBirthItem:
+    DateOfBirthDto:
       type: object
       required: [ 'DateOfBirth' ]
       properties:
@@ -885,7 +874,7 @@ components:
           type: string
           example: "June 6th 1944"
 
-    PlacesOfBirthItem:
+    PlaceOfBirthDto:
       type: object
       required: [ 'PlacesOfBirth' ]
       properties:
@@ -894,7 +883,7 @@ components:
           type: string
           example: "Calais"
 
-    HyperlinksItem:
+    HyperlinkDto:
       type: object
       required: [ 'Hyperlink' ]
       properties:
@@ -903,56 +892,56 @@ components:
           type: string
           example: "none"
 
-    HideOnlyIDsItem:
+    HideOnlyIdDto:
       type: object
       required: [ 'HideOnlyID' ]
       properties:
         HideOnlyID:
           type: string
 
-    HideIDsItem:
+    HideIdDto:
       type: object
       required: [ 'HideID' ]
       properties:
         HideID:
           type: string
 
-    HideOriginsItem:
+    HideOriginDto:
       type: object
       required: [ 'HideOrigin' ]
       properties:
         HideOrigin:
           type: string
 
-    HideInTagsItem:
+    HideInTagDto:
       type: object
       required: [ 'HideInTag' ]
       properties:
         HideInTag:
           type: string
 
-    HideUnitsItem:
+    HideUnitDto:
       type: object
       required: [ 'HideUnit' ]
       properties:
         HideUnit:
           type: string
 
-    HideSenderReceiversItem:
+    HideSenderReceiverDto:
       type: object
       required: [ 'HideSenderReceiver' ]
       properties:
         HideSenderReceiver:
           type: string
 
-    ActionsItem:
+    RequestActionDto:
       type: object
       required: [ 'Action' ]
       properties:
         Action:
-          $ref: '#/components/schemas/Action'
+          $ref: '#/components/schemas/ActionDto'
 
-    Action:
+    ActionDto:
       type: object
       properties:
         DateTime:
@@ -962,17 +951,15 @@ components:
         Comment:
           type: string
         Status:
-          $ref: '#/components/schemas/StatusInfo'
-        Attachment:
-          $ref: '#/components/schemas/AttachmentInfo'
+          $ref: '#/components/schemas/StatusDto'
 
-    NextStatusesItem:
+    RequestStatusDto:
       type: object
       properties:
         Status:
-          $ref: '#/components/schemas/StatusInfo'
+          $ref: '#/components/schemas/StatusDto'
 
-    CaseManagerResponse:
+    AckDto:
       type: object
       required: [ 'Header', 'Body' ]
       properties:
@@ -982,13 +969,16 @@ components:
           default: null
           nullable: true
         Body:
-          description: 'Contains the message type and its value.'
-          type: object
-          properties:
-            msg_Acknowledgement:
-              $ref: '#/components/schemas/msg_Acknowledgement'
+          $ref: '#/components/schemas/AckBodyDto'
 
-    msg_Acknowledgement:
+    AckBodyDto:
+      description: 'Contains the message type and its value.'
+      type: object
+      properties:
+        msg_Acknowledgement:
+          $ref: '#/components/schemas/AckMessageDto'
+
+    AckMessageDto:
       type: object
       required: [ 'faultcode', 'faultstring', 'faultactor' ]
       properties:

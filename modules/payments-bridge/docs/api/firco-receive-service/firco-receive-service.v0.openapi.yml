@@ -33,13 +33,13 @@ paths:
           content:
             'application/json':
               schema:
-                $ref: '#/components/schemas/FircoResponse'
+                $ref: '#/components/schemas/AckDto'
         '401':
           description: Authorization failed.
 
 security:
   - oAuth:
-      - write_receive
+      - cmapi
 
 components:
   securitySchemes:
@@ -50,11 +50,11 @@ components:
           # An example URL to the customer-provided OAuth 2.0 token authorization server.
           tokenUrl: https://cmapi.firco.example.com/oauth/token
           scopes:
-            write_receive: |-
+            cmapi: |-
               Allow sending a message with a decision (recommendation) for an adjudicated alert.
 
   schemas:
-    StatusInfo:
+    StatusToSendDto:
       type: object
       required: [ 'ID', 'Name', 'RoutingCode', 'Checksum' ]
       properties:
@@ -97,7 +97,7 @@ components:
         RoutingCode: "2"
         Checksum: "152c65fe973360004140a71f25a34cdd"
 
-    AttachmentInfo:
+    AttachmentDto:
       type: object
       required: [ 'Name', 'Contents' ]
       properties:
@@ -122,13 +122,16 @@ components:
           default: null
           example: null
         Body:
-          description: 'Contains the message type and its value.'
-          type: object
-          properties:
-            msg_ReceiveDecision:
-              $ref: '#/components/schemas/msg_ReceiveDecision'
+          $ref: '#/components/schemas/DecisionDto'
 
-    msg_ReceiveDecision:
+    DecisionDto:
+      description: 'Contains the message type and its value.'
+      type: object
+      properties:
+        msg_ReceiveDecision:
+          $ref: '#/components/schemas/ReceiveDecisionDto'
+
+    ReceiveDecisionDto:
       type: object
       required: [ 'VersionTag', 'Authentication', 'Messages' ]
       properties:
@@ -145,7 +148,7 @@ components:
           minItems: 1
           maxItems: 1
           items:
-            $ref: '#/components/schemas/MessagesItem'
+            $ref: '#/components/schemas/MessageToSendDto'
 
     Authentication:
       type: object
@@ -171,14 +174,14 @@ components:
           default: 'ROOT'
           example: 'ROOT'
 
-    MessagesItem:
+    MessageToSendDto:
       type: object
       required: [ 'Message' ]
       properties:
         Message:
-          $ref: '#/components/schemas/Message'
+          $ref: '#/components/schemas/MessageDto'
 
-    Message:
+    MessageDto:
       type: object
       required: [ 'Unit', 'BusinessUnit', 'MessageID', 'SystemID', 'Status' ]
       properties:
@@ -213,7 +216,7 @@ components:
           maxLength: 64
           example: "MTH20210106102116-00003-16630"
         Status:
-          $ref: '#/components/schemas/StatusInfo'
+          $ref: '#/components/schemas/StatusToSendDto'
         Comment:
           description: |-
             Contains the comments written in the database explaining the final decision made.
@@ -229,7 +232,7 @@ components:
           maxLength: 64
           example: "Silent Eight"
         Attachment:
-          $ref: '#/components/schemas/AttachmentInfo'
+          $ref: '#/components/schemas/AttachmentDto'
         Actions:
           description: |-
             Contains the audit entries to be appended to Alerted Message audit log.
@@ -238,43 +241,13 @@ components:
           minItems: 0
           maxItems: 0
           items:
-            $ref: '#/components/schemas/ActionsItem'
+            $ref: '#/components/schemas/ActionToSendDto'
           example: [ ]
 
-    ActionsItem:
+    ActionToSendDto:
       type: object
-      required: [ 'Action' ]
-      properties:
-        Action:
-          $ref: '#/components/schemas/Action'
 
-    Action:
-      type: object
-      properties:
-        DateTime:
-          type: string
-          example: "20210107071511"
-        Comment:
-          description: |-
-            Contains the comments written in the database explaining the final decision made.
-            The comment is set up by the user through the front-end application.
-          type: string
-          maxLength: 1024
-          example: ""
-        Operator:
-          description: 'Contains the name of the user who has made the decision.'
-          type: string
-          maxLength: 64
-          example: ""
-        StatusName:
-          description: 'Contains the decision type.'
-          type: string
-          maxLength: 64
-          example: ""
-        Attachment:
-          $ref: '#/components/schemas/AttachmentInfo'
-
-    FircoResponse:
+    AckDto:
       type: object
       required: [ 'Header', 'Body' ]
       properties:
@@ -284,13 +257,16 @@ components:
           default: null
           nullable: true
         Body:
-          description: 'Contains the message type and its value.'
-          type: object
-          properties:
-            msg_Acknowledgement:
-              $ref: '#/components/schemas/msg_Acknowledgement'
+          $ref: '#/components/schemas/AckBodyDto'
 
-    msg_Acknowledgement:
+    AckBodyDto:
+      description: 'Contains the message type and its value.'
+      type: object
+      properties:
+        msg_Acknowledgement:
+          $ref: '#/components/schemas/AckMessageDto'
+
+    AckMessageDto:
       type: object
       required: [ 'faultcode', 'faultstring', 'faultactor' ]
       properties:
