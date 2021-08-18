@@ -4,7 +4,7 @@ from company_name.names.name_information import NameInformation
 from company_name.scores.abbreviation import get_abbreviation_score
 
 
-def remove_members_abbreviations(names: Sequence[NameInformation]) -> List[NameInformation]:
+def remove_redundant_abbreviations(names: Sequence[NameInformation]) -> List[NameInformation]:
     redundant_abbreviations = []
     for name in names:
         name_len = len(name.base.cleaned_name)

@@ -4,7 +4,7 @@ import pytest
 
 from company_name import CompanyNameAgent, Solution, parse_name
 from company_name.scores.abbreviation import get_abbreviation_score
-from company_name.utils.abbreviations_filtering import remove_members_abbreviations
+from company_name.utils.abbreviations_filtering import remove_redundant_abbreviations
 
 
 @pytest.mark.parametrize(
@@ -34,7 +34,7 @@ def test_abbreviation_recognition(abbreviation: str, full: str):
     ]
 )
 def test_members_abbreviations_removing(names: Sequence[str], expected_names: Sequence[str]):
-    without_redundant_abbreviations = remove_members_abbreviations([parse_name(name) for name in names])
+    without_redundant_abbreviations = remove_redundant_abbreviations([parse_name(name) for name in names])
     names_without_redundant_abbreviations = [name.source.original for name in without_redundant_abbreviations]
     assert names_without_redundant_abbreviations == list(expected_names)
 
@@ -46,6 +46,6 @@ def test_members_abbreviations_removing(names: Sequence[str], expected_names: Se
         (("Apple Inc.", "The Walmart", "Narodowy Bank Polski", "NBP", "Microsoft"), ("New Base Project",))
     ],
 )
-def test_resolving_after_abbreviation_removal(names: Sequence[str], valid_terms: Sequence[str]):
+def test_resolving_with_many_names_abbreviation(names: Sequence[str], valid_terms: Sequence[str]):
     result = CompanyNameAgent().resolve(names, valid_terms)
     assert result.solution == Solution.NO_MATCH
