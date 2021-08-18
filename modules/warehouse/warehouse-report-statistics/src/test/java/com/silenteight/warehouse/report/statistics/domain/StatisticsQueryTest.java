@@ -29,7 +29,7 @@ class StatisticsQueryTest {
 
   private static final String AI_DECISION_PTP = "ACTION_POTENTIAL_TRUE_POSITIVE";
   private static final String AI_DECISION_FP = "ACTION_FALSE_POSITIVE";
-  private static final String AI_DECISION_MI = "ACTION_MANUAL_INVESTIGATION";
+  private static final String AI_DECISION_MI = "ACTION_INVESTIGATE";
 
   private static final String ANALYST_DECISION_FP = "Level 1 Review";
   private static final String ANALYST_DECISION_PTP = "Level 2 Review";

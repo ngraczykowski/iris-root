@@ -35,7 +35,7 @@ class AlertGenerator {
         "s8_recommendation",
         getRandomValue(
             "ACTION_FALSE_POSITIVE", "ACTION_POTENTIAL_TRUE_POSITIVE",
-            "ACTION_MANUAL_INVESTIGATION"));
+            "ACTION_INVESTIGATE"));
     payload.put(
         "recommendationDate", now(UTC).format(DateTimeFormatter.ISO_ZONED_DATE_TIME));
     payload.put("lob_country", getRandomValue("PL", "DE", "UK"));

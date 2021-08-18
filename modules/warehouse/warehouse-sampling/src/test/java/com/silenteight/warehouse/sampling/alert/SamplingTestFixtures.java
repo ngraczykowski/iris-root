@@ -21,7 +21,7 @@ public class SamplingTestFixtures {
   public static final String DISCRIMINATOR_5 = "48627744-d573-4edb-89fa-f88a8be4ac11";
   public static final String ALERT_RECOMMENDATION_KEY = "recommendation";
   public static final String ALERT_RECOMMENDATION_FP = "FALSE_POSITIVE";
-  public static final String ALERT_RECOMMENDATION_MI = "MANUAL_INVESTIGATION";
+  public static final String ALERT_RECOMMENDATION_MI = "INVESTIGATE";
   public static final String ALERT_RISK_TYPE_PEP = "PEP";
   public static final String ALERT_RISK_TYPE_SAN = "SAN";
   public static final String ALERT_RISK_TYPE_KEY = "riskType";

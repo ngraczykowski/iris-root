@@ -60,7 +60,7 @@ public class MappedAlertFixtures {
     public static final String SOLUTION_NO_DECISION = "NO_DECISION";
     public static final String SOLUTION_NO_DATA = "NO_DATA";
     public static final String RECOMMENDATION_FP = "FALSE_POSITIVE";
-    public static final String RECOMMENDATION_MI = "MANUAL_INVESTIGATION";
+    public static final String RECOMMENDATION_MI = "INVESTIGATE";
     public static final String RISK_TYPE_PEP = "PEP";
     public static final String COUNTRY_UK = "UK";
     public static final String COUNTRY_PL = "PL";

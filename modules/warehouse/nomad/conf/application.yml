@@ -244,7 +244,7 @@ warehouse.report.billing:
         label: count_solved_FP
       - name: ACTION_POTENTIAL_TRUE_POSITIVE
         label: count_solved_PTP
-      - name: ACTION_MANUAL_INVESTIGATION
+      - name: ACTION_INVESTIGATE
         label: count_solved_MI
     counter-label: count_alerts_received
     significant-values: [ ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE]
