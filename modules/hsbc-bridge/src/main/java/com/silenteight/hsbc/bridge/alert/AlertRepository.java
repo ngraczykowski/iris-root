@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,10 @@ interface AlertRepository extends Repository<AlertEntity, Long> {
   Stream<AlertEntity> findByBulkIdAndStatus(String bulkId, AlertStatus status);
 
   Stream<AlertEntity> findByNameIn(List<String> names);
+
+  @Modifying
+  @Query("SELECT a.name FROM AlertEntity a WHERE a.alertTime < :expireDate")
+  Stream<String> findAlertEntityNamesByAlertTimeBefore(@Param("expireDate") OffsetDateTime expireDate);
 
   @Modifying
   @Query("update AlertEntity a set a.status=:status where a.name IN :names")

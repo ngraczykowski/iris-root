@@ -10,6 +10,9 @@ import java.time.OffsetDateTime;
 public interface MatchPayloadRepository extends Repository<MatchPayloadEntity, Long> {
 
   @Modifying
-  @Query("update MatchPayloadEntity m set m.payload = null where m.createdAt < :expireDate")
-  void deletePayloadByCreatedAtBefore(@Param("expireDate") OffsetDateTime expireDate);
+  @Query(value = "UPDATE hsbc_bridge_match_payload p\n"
+      + "SET payload = NULL\n"
+      + "FROM hsbc_bridge_alert a, hsbc_bridge_match m\n"
+      + "WHERE p.id = m.match_payload_id AND m.alert_id = a.id AND a.alert_time < :expireDate", nativeQuery = true)
+  void deletePayloadByAlertTimeBefore(@Param("expireDate") OffsetDateTime expireDate);
 }

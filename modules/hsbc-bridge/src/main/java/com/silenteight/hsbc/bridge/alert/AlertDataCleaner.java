@@ -16,6 +16,6 @@ class AlertDataCleaner implements DataCleaner {
   @Override
   @Transactional
   public void clean(OffsetDateTime expireDate) {
-    payloadRepository.deletePayloadByCreatedAtBefore(expireDate);
+    payloadRepository.deletePayloadByAlertTimeBefore(expireDate);
   }
 }

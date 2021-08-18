@@ -2,7 +2,9 @@ package com.silenteight.hsbc.bridge.alert;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.hsbc.bridge.retention.AlertRetentionSender;
 import com.silenteight.hsbc.bridge.retention.DataCleaner;
+import com.silenteight.hsbc.bridge.retention.DataRetentionMessageSender;
 import com.silenteight.hsbc.bridge.util.CustomDateTimeFormatter;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -21,6 +23,7 @@ class AlertFacadeConfiguration {
   private final AgentApi agentApi;
   private final CustomDateTimeFormatter dateTimeFormatter;
   private final AnalystDecisionProperties decisionProperties;
+  private final DataRetentionMessageSender dataRetentionMessageSender;
 
   @Bean
   AlertFacade alertFacade() {
@@ -33,6 +36,11 @@ class AlertFacadeConfiguration {
   @Bean
   DataCleaner alertDataCleaner() {
     return new AlertDataCleaner(alertPayloadRepository);
+  }
+
+  @Bean
+  AlertRetentionSender alertRetentionSender() {
+    return new AlertRetentionMessageSender(alertRepository, dataRetentionMessageSender);
   }
 
   @Bean

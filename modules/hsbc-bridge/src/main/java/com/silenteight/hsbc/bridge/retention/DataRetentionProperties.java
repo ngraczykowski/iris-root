@@ -12,7 +12,22 @@ import java.time.Duration;
 @ConstructorBinding
 class DataRetentionProperties {
 
-  boolean enabled;
+  int chunk;
   Duration rate;
-  Duration duration;
+  PersonalInformationExpired personalInformationExpired;
+  AlertsExpired alertsExpired;
+
+  @Value
+  static class PersonalInformationExpired {
+
+    boolean enabled;
+    Duration duration;
+  }
+
+  @Value
+  static class AlertsExpired {
+
+    boolean enabled;
+    Duration duration;
+  }
 }

@@ -43,9 +43,15 @@ silenteight.bridge:
     secretKey: minioadmin
     uri: http://127.0.0.1:9000
   data.retention:
-    duration: 180d
-    enabled: true
+    chunk: 500
     rate: 1d
+    ### Enable one of retention type below
+    personal-information-expired:
+      enabled: false
+      duration: ${RETENTION_PERIOD:151d}
+    alerts-expired:
+      enabled: false
+      duration: ${RETENTION_PERIOD:2d}
   jenkins.api:
     crumbUri: ${CRUMB:https://jenkins.silenteight.com/crumbIssuer/api/json}
     password: ${JENKINS_PASSWORD:dev}

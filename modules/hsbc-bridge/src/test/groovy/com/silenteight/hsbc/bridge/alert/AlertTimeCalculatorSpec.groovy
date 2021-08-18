@@ -54,5 +54,7 @@ class AlertTimeCalculatorSpec extends Specification {
     '18-FEB-21' | '15-FEB-21'  | invalidDate     | empty()
     '15-FEB-21' | '18-FEB-21'  | invalidDate     | of(parse('2021-02-15T00:00Z'))
     '15-FEB-21' | invalidDate  | '18-FEB-21'     | of(parse('2021-02-18T00:00Z'))
+    '15-FEB-21' | '18-FEB-21'  | '18-FEB-21'     | of(parse('2021-02-15T00:00Z'))
+    '18-FEB-21' | '15-FEB-21'  | '20-FEB-21'     | of(parse('2021-02-20T00:00Z'))
   }
 }

@@ -5,28 +5,36 @@ import spock.lang.Specification
 import java.time.Duration
 import java.time.OffsetDateTime
 
+import static com.silenteight.hsbc.bridge.retention.DataRetentionType.PERSONAL_INFO_EXPIRED
 import static java.time.OffsetDateTime.now
 
-class DataCleanerJobSpec extends Specification {
+class DataRetentionJobSpec extends Specification {
 
   def dataRetentionDuration = Duration.ofDays(1)
   def alertCleaner = Mock(DataCleaner)
   def matchCleaner = Mock(DataCleaner)
-  def underTest = DataCleanerJob.builder()
+  def retentionSender = Mock(AlertRetentionSender)
+  def type = PERSONAL_INFO_EXPIRED
+  def chunkSize = 2
+  def underTest = DataRetentionJob.builder()
       .alertDataCleaner(alertCleaner)
       .matchDataCleaner(matchCleaner)
       .dataRetentionDuration(dataRetentionDuration)
+      .alertRetentionMessageSender(retentionSender)
+      .type(type)
+      .chunkSize(chunkSize)
       .build()
 
-
-  def 'should clean data'() {
+  def 'should process data'() {
     given:
     def expireDate = now() - dataRetentionDuration
 
     when:
-    underTest.clean()
+    underTest.process()
 
     then:
+    1 * retentionSender.
+        send({OffsetDateTime dateTime -> dateTime <=> expireDate == 1}, 2, PERSONAL_INFO_EXPIRED)
     1 * matchCleaner.clean({OffsetDateTime dateTime -> dateTime <=> expireDate == 1})
     1 * alertCleaner.clean({OffsetDateTime dateTime -> dateTime <=> expireDate == 1})
   }

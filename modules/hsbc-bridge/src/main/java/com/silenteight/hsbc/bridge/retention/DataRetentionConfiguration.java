@@ -9,12 +9,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.TaskScheduler;
 
+import java.time.Duration;
+
+import static com.silenteight.hsbc.bridge.retention.DataRetentionType.ALERTS_EXPIRED;
+import static com.silenteight.hsbc.bridge.retention.DataRetentionType.PERSONAL_INFO_EXPIRED;
+
 @Configuration
 @EnableConfigurationProperties(DataRetentionProperties.class)
 @RequiredArgsConstructor
 @Slf4j
 class DataRetentionConfiguration {
 
+  private final AlertRetentionSender alertRetentionMessageSender;
   private final DataCleaner alertDataCleaner;
   private final DataCleaner matchDataCleaner;
 
@@ -23,22 +29,40 @@ class DataRetentionConfiguration {
 
   @EventListener(ApplicationStartedEvent.class)
   public void applicationStarted() {
-    if (properties.isEnabled()) {
-      schedulePayloadCleanerJob();
+    var isPersonalInfoExpired = properties.getPersonalInformationExpired().isEnabled();
+    var isAlertsExpired = properties.getAlertsExpired().isEnabled();
+    if (isPersonalInfoExpired ^ isAlertsExpired) {
+      schedulePayloadRetentionJobForGivenEnvironment(isPersonalInfoExpired);
+    } else {
+      log.error("Wrong environment enabled in application.yaml!");
     }
   }
 
-  private void schedulePayloadCleanerJob() {
-    log.debug("Registering payload cleaner job, rate={}", properties.getRate());
-
-    taskScheduler.scheduleAtFixedRate(getPayloadCleanerJob()::clean, properties.getRate());
+  private void schedulePayloadRetentionJobForGivenEnvironment(boolean isPersonalInfoExpired) {
+    if (isPersonalInfoExpired) {
+      var personalInfoExpiredDuration = properties.getPersonalInformationExpired().getDuration();
+      schedulePayloadRetentionJob(personalInfoExpiredDuration, PERSONAL_INFO_EXPIRED);
+    } else {
+      var alertsExpiredDuration = properties.getAlertsExpired().getDuration();
+      schedulePayloadRetentionJob(alertsExpiredDuration, ALERTS_EXPIRED);
+    }
   }
 
-  private DataCleanerJob getPayloadCleanerJob() {
-    return DataCleanerJob.builder()
+  private void schedulePayloadRetentionJob(Duration duration, DataRetentionType type) {
+    log.debug("Registering payload cleaner job, rate={}", properties.getRate());
+
+    taskScheduler.scheduleAtFixedRate(
+        getPayloadRetentionJob(duration, type)::process, properties.getRate());
+  }
+
+  private DataRetentionJob getPayloadRetentionJob(Duration duration, DataRetentionType type) {
+    return DataRetentionJob.builder()
         .alertDataCleaner(alertDataCleaner)
         .matchDataCleaner(matchDataCleaner)
-        .dataRetentionDuration(properties.getDuration())
+        .alertRetentionMessageSender(alertRetentionMessageSender)
+        .dataRetentionDuration(duration)
+        .type(type)
+        .chunkSize(properties.getChunk())
         .build();
   }
 }
