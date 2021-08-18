@@ -8,6 +8,7 @@ from company_name.compare import compare_names
 from company_name.names.parse.parse import NameInformation, parse_name
 from company_name.solution.scores_reduction import ScoresReduction
 from company_name.solution.solution import PairResult, Reason, Result, Solution
+from company_name.utils.abbreviations_filtering import remove_members_abbreviations
 
 
 class CompanyNameAgent(Agent):
@@ -34,6 +35,9 @@ class CompanyNameAgent(Agent):
     def _resolve(self, ap_names: Sequence[str], mp_names: Sequence[str]) -> Result:
         ap_names_parsed = self._parse_names(ap_names)
         mp_names_parsed = self._parse_names(mp_names)
+
+        ap_names_parsed = remove_members_abbreviations(ap_names_parsed)
+        mp_names_parsed = remove_members_abbreviations(mp_names_parsed)
 
         if not ap_names_parsed or not mp_names_parsed:
             return Result(Solution.NO_DATA)

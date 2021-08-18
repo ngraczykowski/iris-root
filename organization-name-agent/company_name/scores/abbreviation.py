@@ -220,7 +220,7 @@ def _abbreviation_score(
     return max(abbreviation_score, base_score)
 
 
-def abbreviation_score(first: NameInformation, second: NameInformation) -> Score:
+def get_abbreviation_score(first: NameInformation, second: NameInformation) -> Score:
     return max(
         _abbreviation_score(first, second),
         reversed(_abbreviation_score(second, first)),

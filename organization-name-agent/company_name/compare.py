@@ -2,7 +2,7 @@ from typing import Mapping
 
 from company_name.names.name_information import NameInformation
 from company_name.names.parse.parse import parse_name
-from company_name.scores.abbreviation import abbreviation_score
+from company_name.scores.abbreviation import get_abbreviation_score
 from company_name.scores.blacklist import blacklist_score
 from company_name.scores.country import country_score
 from company_name.scores.first_token import first_token_score
@@ -25,7 +25,7 @@ def compare_names(
 ) -> Mapping[str, Score]:
     scores = {
         "parenthesis_match": parenthesis_score(alerted_name, watchlist_name),
-        "abbreviation": abbreviation_score(alerted_name, watchlist_name),
+        "abbreviation": get_abbreviation_score(alerted_name, watchlist_name),
         "fuzzy_on_base": fuzzy_score(alerted_name.base, watchlist_name.base),
         "fuzzy_on_suffix": fuzzy_score(
             alerted_name.common_suffixes, watchlist_name.common_suffixes
