@@ -28,12 +28,12 @@ public class LearningAlertProcessor {
 
     var alerts = repository.findByIdIn(alertIds);
 
-    sendAlerts(alerts);
-
     alerts.forEach(a -> {
       a.setStatus(LEARNING_COMPLETED);
       repository.save(a);
     });
+
+    sendAlerts(alerts);
   }
 
   private void sendAlerts(List<AlertEntity> alerts) {
