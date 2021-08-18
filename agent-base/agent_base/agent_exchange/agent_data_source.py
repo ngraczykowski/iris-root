@@ -23,8 +23,10 @@ class AgentDataSource:
 
     async def start(self):
         address = await self.address_service.get(
-            self.application_config["grpc"]["client"]["data-source"]["address"]
+            self.application_config["grpc"]["client"]["data-source"]["address"] or ""
         )
+        if not address:
+            raise Exception("No address for data source")
         self.channel = grpc.aio.insecure_channel(address)
         self.command = None
 
