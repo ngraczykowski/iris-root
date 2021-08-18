@@ -22,6 +22,8 @@ silenteight.bridge:
       is-pep-routing-key: ispep.ispep-learning-store-request.production
       historical-decision-exchange-name: bridge.historical
       historical-decision-routing-key: historical.historical-decisions-request.production
+      data-retention-exchange-name: bridge.retention
+      data-retention-routing-key: retention.data-retention
     ingoing:
       model-promoted-queue: bridge.model-promoted.production
       dead-letter-queue: bridge.dlq

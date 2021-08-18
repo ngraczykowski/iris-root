@@ -11,6 +11,7 @@ ext {
   warehouseApiVersion = "1.5.0"
   worldCheckApiVersion = "0.1.0-SNAPSHOT"
   historicalDecisionsApiVersion = "0.2.0-SNAPSHOT"
+  dataRetentionApiVersion = "0.0.1-SNAPSHOT"
 
   //***********************************
   // Dependency Versions
@@ -35,6 +36,7 @@ libraries.silenteight_learningstore_api = [group: 'com.silenteight.learningengin
 libraries.warehouse_api = [group: 'com.silenteight.warehouse.api', name: 'se-data-api', version: warehouseApiVersion]
 libraries.worldcheck_api = [group: 'com.silenteight.worldcheck.api', name: 'protocol-world-check', version: worldCheckApiVersion]
 libraries.historical_decisions_api = [group: 'com.silenteight.historicaldecisions.api', name: 'historical-decisions-model-api', version: historicalDecisionsApiVersion]
+libraries.data_retention_api = [group: 'com.silenteight.sens.data-retention-api', name: 'data-retention-api', version: dataRetentionApiVersion]
 
 // Spring
 libraries.spring_aspects = [group: 'org.springframework', name: 'spring-aspects', version: springVersion]
@@ -145,6 +147,7 @@ dependencies {
   implementation libraries.data_source_api
   implementation libraries.data_source_categories_api
   implementation libraries.data_source_comments_api
+  implementation libraries.data_retention_api
   implementation libraries.grpc_spring_boot_starter
   implementation libraries.io_utils
   implementation libraries.jetbrains_annotations

@@ -87,4 +87,15 @@ class SenderConfiguration {
         .amqpTemplate(rabbitTemplate)
         .build();
   }
+
+  @Bean
+  AmqpDataRetentionSender dataRetentionSender() {
+    return AmqpDataRetentionSender.builder()
+        .amqpTemplate(rabbitTemplate)
+        .configuration(AmqpDataRetentionSender.Configuration.builder()
+            .exchangeName(outgoing.getDataRetentionExchangeName())
+            .routingKey(outgoing.getDataRetentionRoutingKey())
+            .build())
+        .build();
+  }
 }

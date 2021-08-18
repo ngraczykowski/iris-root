@@ -249,6 +249,16 @@
       "name": "silenteight.bridge.alert.datetime.format",
       "type": "java.lang.String",
       "description": "DateTime pattern for CustomDateTimeFormatter.class used in date mapping."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.data-retention-exchange-name",
+      "type": "java.lang.String",
+      "description": "Data retention exchange name."
+    },
+    {
+      "name": "silenteight.bridge.amqp.outgoing.data-retention-routing-key",
+      "type": "java.lang.String",
+      "description": "Data retention routing key."
     }
   ]
 }
