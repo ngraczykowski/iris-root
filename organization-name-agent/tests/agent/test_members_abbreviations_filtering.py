@@ -29,21 +29,26 @@ def test_abbreviation_recognition(abbreviation: str, full: str):
         (("Bed & Breakfast Company of Kraków", "Bed & Breakfast", " B&B", "BB"),
          ("Bed & Breakfast Company of Kraków", "Bed & Breakfast")),
 
-        (("Apple Inc.", "The Film Makers of California", "Narodowy Bank Polski", "NBP", "Microsoft", "FM", "TFMoCa"),
+        (("Apple Inc.", "The Film Makers of California",
+          "Narodowy Bank Polski", "NBP", "Microsoft", "FM", "TFMoCa"),
          ("Apple Inc.", "The Film Makers of California", "Narodowy Bank Polski", "Microsoft"))
     ]
 )
 def test_members_abbreviations_removing(names: Sequence[str], expected_names: Sequence[str]):
-    without_redundant_abbreviations = remove_redundant_abbreviations([parse_name(name) for name in names])
-    names_without_redundant_abbreviations = [name.source.original for name in without_redundant_abbreviations]
+    without_redundant_abbreviations = \
+        remove_redundant_abbreviations([parse_name(name) for name in names])
+    names_without_redundant_abbreviations = \
+        [name.source.original for name in without_redundant_abbreviations]
     assert names_without_redundant_abbreviations == list(expected_names)
 
 
 @pytest.mark.parametrize(
     "names, valid_terms",
     [
-        (("SCB", "Standard Chartered Bank"), ("Siam Commercial Bank",)),
-        (("Apple Inc.", "The Walmart", "Narodowy Bank Polski", "NBP", "Microsoft"), ("New Base Project",))
+        (("SCB", "Standard Chartered Bank"),
+         ("Siam Commercial Bank",)),
+        (("Apple Inc.", "The Walmart", "Narodowy Bank Polski", "NBP", "Microsoft"),
+         ("New Base Project",))
     ],
 )
 def test_resolving_with_many_names_abbreviation(names: Sequence[str], valid_terms: Sequence[str]):
