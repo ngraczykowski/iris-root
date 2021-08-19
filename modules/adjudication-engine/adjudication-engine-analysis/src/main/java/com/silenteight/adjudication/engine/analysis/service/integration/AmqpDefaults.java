@@ -16,8 +16,8 @@ class AmqpDefaults {
       EVENT_PREFIX + "recommendations-generated";
 
   static final String EVENT_INTERNAL_EXCHANGE_NAME = PREFIX + "event.internal";
-  static final String ADDED_ANALYSIS_DATASETS_ROUTING_KEY =
-      EVENT_PREFIX + "added-analysis-datasets";
+  static final String ADDED_ANALYSIS_ALERTS_ROUTING_KEY =
+      EVENT_PREFIX + "added-analysis-alerts";
   static final String PENDING_RECOMMENDATIONS_ROUTING_KEY =
       EVENT_PREFIX + "pending-recommendations";
   static final String MATCH_CATEGORIES_UPDATED_ROUTING_KEY =

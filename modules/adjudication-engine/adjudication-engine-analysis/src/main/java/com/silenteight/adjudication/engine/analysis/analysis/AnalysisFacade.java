@@ -4,8 +4,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Analysis;
+import com.silenteight.adjudication.api.v1.AnalysisAlert;
 import com.silenteight.adjudication.api.v1.AnalysisDataset;
-import com.silenteight.adjudication.engine.analysis.analysis.dto.PolicyAndFeatureVectorElements;
+import com.silenteight.adjudication.engine.analysis.analysis.domain.PolicyAndFeatureVectorElements;
 
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,9 @@ public class AnalysisFacade {
 
   @NonNull
   private final AddAndListDatasetsInAnalysisUseCase addAndListDatasetsInAnalysisUseCase;
+
+  @NonNull
+  private final AddAlertsToAnalysisUseCase addAlertsToAnalysisUseCase;
 
   @NonNull
   private final GetAnalysisAgentConfigsUseCase getAnalysisAgentConfigsUseCase;
@@ -44,6 +48,10 @@ public class AnalysisFacade {
 
   public List<AnalysisDataset> addDatasets(String analysis, List<String> datasets) {
     return addAndListDatasetsInAnalysisUseCase.addAndListDatasets(analysis, datasets);
+  }
+
+  public List<AnalysisAlert> addAlerts(String analysis, List<AnalysisAlert> alerts) {
+    return addAlertsToAnalysisUseCase.addAlerts(analysis, alerts);
   }
 
   public Analysis getAnalysis(String analysisName) {

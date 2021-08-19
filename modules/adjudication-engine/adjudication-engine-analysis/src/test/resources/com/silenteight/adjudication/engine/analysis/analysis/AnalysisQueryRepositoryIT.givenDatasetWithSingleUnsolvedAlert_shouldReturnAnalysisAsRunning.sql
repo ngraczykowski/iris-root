@@ -11,5 +11,10 @@ VALUES (1, 3)
      , (1, 1)
 ;
 
+INSERT INTO ae_analysis_alert
+SELECT 1, alert_id, now(), now()
+FROM ae_alert
+WHERE alert_id <= 5;
+
 INSERT INTO ae_recommendation (analysis_id, alert_id, created_at, recommended_action)
 VALUES (1, 1, now(), 'TEST');

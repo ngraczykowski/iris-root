@@ -1,6 +1,6 @@
 package com.silenteight.adjudication.engine.analysis.matchsolution;
 
-import com.silenteight.adjudication.engine.analysis.analysis.dto.PolicyAndFeatureVectorElements;
+import com.silenteight.adjudication.engine.analysis.analysis.domain.PolicyAndFeatureVectorElements;
 import com.silenteight.adjudication.engine.analysis.matchsolution.dto.*;
 import com.silenteight.solving.api.v1.Feature;
 import com.silenteight.solving.api.v1.FeatureCollection;

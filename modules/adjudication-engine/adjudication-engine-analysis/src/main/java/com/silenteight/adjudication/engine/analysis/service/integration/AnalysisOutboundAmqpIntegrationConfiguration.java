@@ -33,7 +33,7 @@ class AnalysisOutboundAmqpIntegrationConfiguration {
   @Bean
   IntegrationFlow addedAnalysisDatasetsOutboundIntegrationFlow() {
     return createOutboundFlow(
-        AnalysisChannels.ADDED_ANALYSIS_DATASETS_OUTBOUND_CHANNEL,
+        AnalysisChannels.ADDED_ANALYSIS_ALERTS_OUTBOUND_CHANNEL,
         properties.getEventInternal().getOutboundExchangeName(),
         properties.getEventInternal().getAddedAnalysisDatasetsRoutingKey());
   }

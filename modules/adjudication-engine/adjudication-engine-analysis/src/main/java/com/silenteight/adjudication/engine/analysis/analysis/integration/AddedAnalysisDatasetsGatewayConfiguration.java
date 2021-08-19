@@ -5,16 +5,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.gateway.GatewayProxyFactoryBean;
 
-import static com.silenteight.adjudication.engine.analysis.analysis.integration.AnalysisChannels.ADDED_ANALYSIS_DATASETS_OUTBOUND_CHANNEL;
+import static com.silenteight.adjudication.engine.analysis.analysis.integration.AnalysisChannels.ADDED_ANALYSIS_ALERTS_OUTBOUND_CHANNEL;
 
 @Configuration
 class AddedAnalysisDatasetsGatewayConfiguration {
 
   @Bean
-  GatewayProxyFactoryBean addedAnalysisDatasetsGateway() {
-    var factoryBean = new GatewayProxyFactoryBean(AddedAnalysisDatasetsGateway.class);
+  GatewayProxyFactoryBean addedAnalysisAlertsGateway() {
+    var factoryBean = new GatewayProxyFactoryBean(AddedAnalysisAlertsGateway.class);
     factoryBean.setDefaultRequestChannel(new DirectChannel());
-    factoryBean.setDefaultRequestChannelName(ADDED_ANALYSIS_DATASETS_OUTBOUND_CHANNEL);
+    factoryBean.setDefaultRequestChannelName(ADDED_ANALYSIS_ALERTS_OUTBOUND_CHANNEL);
     return factoryBean;
   }
 }

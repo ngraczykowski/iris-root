@@ -39,7 +39,7 @@ class RabbitBrokerConfiguration {
 
     var pendingRecommendation = queueDeadLetter(PENDING_RECOMMENDATION_QUEUE_NAME).build();
     var pendingRecommendationsBinding = bind(pendingRecommendation, eventInternalExchange,
-        ADDED_ANALYSIS_DATASETS_ROUTING_KEY);
+        ADDED_ANALYSIS_ALERTS_ROUTING_KEY);
 
     var agentExchange = queueDeadLetter(AGENT_EXCHANGE_QUEUE_NAME).build();
     var agentExchangeBinding = bind(agentExchange, eventInternalExchange,

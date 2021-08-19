@@ -7,5 +7,8 @@ VALUES (3, 1);
 INSERT INTO ae_analysis_dataset (analysis_id, dataset_id)
 VALUES (1, 3);
 
+INSERT INTO ae_analysis_alert
+VALUES (1, 1, now(), now());
+
 INSERT INTO ae_recommendation (analysis_id, alert_id, created_at, recommended_action)
 VALUES (1, 1, now(), 'TEST');

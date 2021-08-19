@@ -39,6 +39,22 @@ class GrpcAnalysisService extends AnalysisServiceImplBase {
   }
 
   @Override
+  public void addAlert(
+      AddAlertRequest request,
+      StreamObserver<AnalysisAlert> responseObserver) {
+    responseObserver.onNext(analysisService.addAlert(request));
+    responseObserver.onCompleted();
+  }
+
+  @Override
+  public void batchAddAlerts(
+      BatchAddAlertsRequest request,
+      StreamObserver<BatchAddAlertsResponse> responseObserver) {
+    responseObserver.onNext(analysisService.batchAddAlerts(request));
+    responseObserver.onCompleted();
+  }
+
+  @Override
   public void getAnalysis(
       GetAnalysisRequest request, StreamObserver<Analysis> responseObserver) {
     responseObserver.onNext(analysisService.getAnalysis(request));

@@ -14,6 +14,12 @@ VALUES (1, 'policies/asd', 'strategy/asd', now())
      , (2, 'policies/asd', 'strategy/asd', now())
 ;
 
+INSERT INTO ae_dataset
+VALUES (1, now());
+
+INSERT INTO ae_dataset_alert
+VALUES (1, 1);
+
 INSERT INTO ae_pending_recommendation
 VALUES (1, 1, now())
      , (2, 1, now())

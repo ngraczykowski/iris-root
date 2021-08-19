@@ -3,7 +3,7 @@ package com.silenteight.adjudication.engine.analysis.analysis;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.engine.analysis.analysis.dto.PolicyAndFeatureVectorElements;
+import com.silenteight.adjudication.engine.analysis.analysis.domain.PolicyAndFeatureVectorElements;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;

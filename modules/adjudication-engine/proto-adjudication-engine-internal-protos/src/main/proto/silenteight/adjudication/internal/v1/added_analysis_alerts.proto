@@ -1,0 +1,16 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.adjudication.internal.v1;
+
+import "google/api/field_behavior.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "AddedAnalysisAlertsProto";
+option java_package = "com.silenteight.adjudication.internal.v1";
+
+message AddedAnalysisAlerts {
+  // The list of analysis alerts added, in form of `analysis/<Analysis>/alerts/<Alert>`.
+  repeated string analysis_alerts = 1 [(google.api.field_behavior) = REQUIRED];
+}

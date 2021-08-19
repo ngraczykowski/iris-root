@@ -24,6 +24,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.Map;
 
 import static com.silenteight.adjudication.engine.app.IntegrationTestFixture.*;
 import static com.silenteight.adjudication.engine.app.MatchSolutionTestDataAccess.solvedMatchesCount;
@@ -107,6 +109,17 @@ class AdjudicationEngineAnalysisIntegrationTest {
     var analysisId = ResourceName.create(savedAnalysis.getName()).getLong("analysis");
 
     assertGeneratedRecommendation(analysisId);
+  }
+
+  @Test
+  void shouldSolveOneAlert() {
+    var alert = createAlert(alertService, "alert1");
+    var analysis = givenSecondAnalysis();
+    addAlert(analysisService, secondAnalysis.getName(), alert.getName());
+
+    assertThat(getAnalysis(analysisService, secondAnalysis.getName()).getAlertCount()).isEqualTo(2);
+
+    assertSolvedAlerts(analysis);
   }
 
   @Test
@@ -211,19 +224,27 @@ class AdjudicationEngineAnalysisIntegrationTest {
     assertThat(savedAnalysis.getPendingAlerts()).isEqualTo(1);
   }
 
+  List<Map<String, Object>> custom(String sql) {
+    return jdbcTemplate.queryForList(sql);
+  }
+
   @Test
   void checkAlertsCountInAnalysisWithSameAlertInTwoDatasets() {
     var analysis = createAnalysis(analysisService, this.analysis);
-    var alert = createAlert(alertService, "alert1");
-    createMatch(alertService, alert.getName(), "match1");
+    var alert = createAlert(alertService, "1");
+    createMatch(alertService, alert.getName(), "1");
     var dataset1 = createDataset(datasetService, alert.getName());
     var dataset2 = createDataset(datasetService, alert.getName());
     addDataset(analysisService, analysis.getName(), dataset1.getName());
     addDataset(analysisService, analysis.getName(), dataset2.getName());
+
+    savedAnalysis = getAnalysis(analysisService, analysis.getName());
+    var analysisId = ResourceName.create(savedAnalysis.getName()).getLong("analysis");
+    assertGeneratedRecommendation(analysisId);
     savedAnalysis = getAnalysis(analysisService, analysis.getName());
 
     assertThat(savedAnalysis.getAlertCount()).isEqualTo(1);
-    assertThat(savedAnalysis.getPendingAlerts()).isEqualTo(1);
+    assertThat(savedAnalysis.getPendingAlerts()).isEqualTo(0);
   }
 
   private long givenSecondAnalysis() {

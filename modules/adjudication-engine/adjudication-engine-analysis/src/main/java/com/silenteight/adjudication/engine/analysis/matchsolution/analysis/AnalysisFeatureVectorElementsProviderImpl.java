@@ -3,7 +3,7 @@ package com.silenteight.adjudication.engine.analysis.matchsolution.analysis;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.analysis.analysis.AnalysisFacade;
-import com.silenteight.adjudication.engine.analysis.analysis.dto.PolicyAndFeatureVectorElements;
+import com.silenteight.adjudication.engine.analysis.analysis.domain.PolicyAndFeatureVectorElements;
 import com.silenteight.adjudication.engine.analysis.matchsolution.AnalysisFeatureVectorElementsProvider;
 
 import org.springframework.stereotype.Component;

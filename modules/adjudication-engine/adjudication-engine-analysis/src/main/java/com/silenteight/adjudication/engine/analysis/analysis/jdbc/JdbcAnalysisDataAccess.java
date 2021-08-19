@@ -3,7 +3,7 @@ package com.silenteight.adjudication.engine.analysis.analysis.jdbc;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.analysis.analysis.AnalysisDataAccess;
-import com.silenteight.adjudication.engine.analysis.analysis.dto.PolicyAndFeatureVectorElements;
+import com.silenteight.adjudication.engine.analysis.analysis.domain.PolicyAndFeatureVectorElements;
 
 import org.springframework.stereotype.Repository;
 

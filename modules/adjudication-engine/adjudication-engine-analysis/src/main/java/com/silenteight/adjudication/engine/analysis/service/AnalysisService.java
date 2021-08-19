@@ -42,6 +42,22 @@ class AnalysisService {
     return BatchAddDatasetsResponse.newBuilder().addAllAnalysisDatasets(datasets).build();
   }
 
+  AnalysisAlert addAlert(AddAlertRequest addAlertRequest) {
+    return analysisFacade
+        .addAlerts(
+            addAlertRequest.getAnalysis(),
+            singletonList(addAlertRequest.getAnalysisAlert()))
+        .get(0);
+  }
+
+  BatchAddAlertsResponse batchAddAlerts(BatchAddAlertsRequest batchAddAlertsRequest) {
+    var alerts = analysisFacade
+        .addAlerts(
+            batchAddAlertsRequest.getAnalysis(),
+            batchAddAlertsRequest.getAnalysisAlertsList());
+    return BatchAddAlertsResponse.newBuilder().addAllAnalysisAlerts(alerts).build();
+  }
+
   Analysis getAnalysis(GetAnalysisRequest request) {
     return analysisFacade.getAnalysis(request.getAnalysis());
   }

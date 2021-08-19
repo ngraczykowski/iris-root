@@ -34,10 +34,13 @@ class AddAndListDatasetsToAnalysisUseCaseTest {
 
   private AddAndListDatasetsInAnalysisUseCase useCase;
 
+  @Mock
+  private DatasetAlertsReader datasetAlertsReader;
+
   @BeforeEach
   void setUp() {
     var addUseCase = new AddDatasetsToAnalysisUseCase(
-        analysisDatasetRepository, applicationEventPublisher);
+        analysisDatasetRepository, datasetAlertsReader, applicationEventPublisher);
 
     useCase = new AddAndListDatasetsInAnalysisUseCase(addUseCase, listAnalysisDatasetUseCase);
   }

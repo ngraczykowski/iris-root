@@ -22,15 +22,15 @@ class CreatePendingRecommendationsQuery {
 
     query.setJdbcTemplate(jdbcTemplate);
     query.setSql("INSERT INTO ae_pending_recommendation\n"
-        + "SELECT aaaq.analysis_id, aaaq.alert_id, now()\n"
-        + "FROM ae_analysis_alert_query aaaq\n"
+        + "SELECT aaa.analysis_id, aaa.alert_id, now()\n"
+        + "FROM ae_analysis_alert aaa\n"
         + "         LEFT JOIN ae_recommendation ar\n"
-        + "                   on aaaq.alert_id = ar.alert_id\n"
-        + "                          and aaaq.analysis_id = ar.analysis_id\n"
+        + "                   on aaa.alert_id = ar.alert_id\n"
+        + "                          and aaa.analysis_id = ar.analysis_id\n"
         + "         LEFT JOIN ae_pending_recommendation apr\n"
-        + "                   on aaaq.alert_id = apr.alert_id\n"
-        + "                          and aaaq.analysis_id = ar.analysis_id\n"
-        + "WHERE aaaq.analysis_id = ?\n"
+        + "                   on aaa.alert_id = apr.alert_id\n"
+        + "                          and aaa.analysis_id = ar.analysis_id\n"
+        + "WHERE aaa.analysis_id = ?\n"
         + "  AND ar.analysis_id IS NULL\n"
         + "  AND apr.analysis_id IS NULL\n"
         + "ON CONFLICT DO NOTHING");

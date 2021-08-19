@@ -1,6 +1,6 @@
 package com.silenteight.adjudication.engine.analysis.analysis;
 
-import com.silenteight.adjudication.engine.analysis.analysis.dto.PolicyAndFeatureVectorElements;
+import com.silenteight.adjudication.engine.analysis.analysis.domain.PolicyAndFeatureVectorElements;
 
 import java.util.List;
 

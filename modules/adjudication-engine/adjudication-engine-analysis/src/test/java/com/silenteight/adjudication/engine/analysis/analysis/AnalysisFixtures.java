@@ -5,10 +5,13 @@ import lombok.NoArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
+import com.silenteight.adjudication.api.v1.AnalysisAlert;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 import static java.util.concurrent.ThreadLocalRandom.current;
+import static java.util.stream.Collectors.toList;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AnalysisFixtures {
@@ -81,6 +84,24 @@ public class AnalysisFixtures {
       labels.put("label" + i, "value" + i);
     }
     return labels;
+  }
+
+  static AnalysisAlertEntity createAnalysisAlertEntity(long analysisId, long alertId) {
+    return AnalysisAlertEntity
+        .builder()
+        .id(new AnalysisAlertKey(analysisId, alertId))
+        .build();
+  }
+
+  static List<AnalysisAlert> createAnalysisAlerts(int range) {
+    return IntStream
+        .range(1, range + 1)
+        .mapToObj(i -> AnalysisAlert.newBuilder().setAlert("alerts/" + i).build())
+        .collect(toList());
+  }
+
+  static AnalysisAlert createAnalysisAlert(long id) {
+    return AnalysisAlert.newBuilder().setAlert("alerts/" + id).build();
   }
 
   static List<AnalysisCategory> getRandomAnalysisCategories() {

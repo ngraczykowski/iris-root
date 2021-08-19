@@ -3,7 +3,7 @@ package com.silenteight.adjudication.engine.analysis.pendingrecommendation;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
-import com.silenteight.adjudication.internal.v1.AddedAnalysisDatasets;
+import com.silenteight.adjudication.internal.v1.AddedAnalysisAlerts;
 import com.silenteight.adjudication.internal.v1.PendingRecommendations;
 
 import org.springframework.stereotype.Service;
@@ -19,12 +19,12 @@ class HandleAddedAnalysisDatasetsUseCase {
 
   @Transactional
   Optional<PendingRecommendations> handleAddedAnalysisDatasets(
-      AddedAnalysisDatasets addedAnalysisDatasets) {
+      AddedAnalysisAlerts addedAnalysisDatasets) {
 
     var builder = PendingRecommendations.newBuilder();
 
     var pendingCount = addedAnalysisDatasets
-        .getAnalysisDatasetsList()
+        .getAnalysisAlertsList()
         .stream()
         .mapToLong(name -> ResourceName.create(name).getLong("analysis"))
         .distinct()

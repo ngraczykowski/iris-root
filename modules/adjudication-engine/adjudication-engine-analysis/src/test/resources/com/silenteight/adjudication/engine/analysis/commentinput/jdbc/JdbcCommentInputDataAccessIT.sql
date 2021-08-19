@@ -23,3 +23,8 @@ VALUES (2, 1);
 INSERT INTO ae_analysis_dataset(analysis_id, dataset_id)
 VALUES (1, 1),
        (1, 2);
+
+INSERT INTO ae_analysis_alert
+VALUES (1, 1, now(), now()),
+       (1, 2, now(), now()),
+       (1, 3, now(), now());

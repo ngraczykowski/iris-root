@@ -56,7 +56,8 @@ VALUES (11, 1, 1),
 INSERT INTO ae_analysis_dataset (analysis_id, dataset_id)
 VALUES (1, 1);
 
-REFRESH MATERIALIZED VIEW ae_analysis_alert_query;
+INSERT INTO ae_analysis_alert
+VALUES (1, 1, now(), now());
 
 -- Pending recommendations
 INSERT INTO ae_pending_recommendation (analysis_id, alert_id, created_at)

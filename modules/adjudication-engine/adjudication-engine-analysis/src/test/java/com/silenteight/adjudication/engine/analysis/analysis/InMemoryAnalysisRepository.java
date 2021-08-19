@@ -1,6 +1,6 @@
 package com.silenteight.adjudication.engine.analysis.analysis;
 
-import com.silenteight.adjudication.engine.analysis.analysis.dto.StrategyName;
+import com.silenteight.adjudication.engine.analysis.analysis.domain.StrategyName;
 import com.silenteight.sep.base.common.support.persistence.BasicInMemoryRepository;
 
 import org.jetbrains.annotations.NotNull;

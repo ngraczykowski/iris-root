@@ -3,7 +3,7 @@ package com.silenteight.adjudication.engine.analysis.pendingrecommendation.integ
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.analysis.pendingrecommendation.PendingRecommendationFacade;
-import com.silenteight.adjudication.internal.v1.AddedAnalysisDatasets;
+import com.silenteight.adjudication.internal.v1.AddedAnalysisAlerts;
 
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
@@ -17,8 +17,8 @@ class PendingRecommendationsIntegrationFlow extends IntegrationFlowAdapter {
 
   @Override
   protected IntegrationFlowDefinition<?> buildFlow() {
-    return from(PendingRecommendationChannels.ADDED_ANALYSIS_DATASETS_INBOUND_CHANNEL)
-        .handle(AddedAnalysisDatasets.class, (payload, headers) -> {
+    return from(PendingRecommendationChannels.ADDED_ANALYSIS_ALERTS_INBOUND_CHANNEL)
+        .handle(AddedAnalysisAlerts.class, (payload, headers) -> {
           var result = pendingRecommendationFacade.handleAddedAnalysisDatasets(payload);
           return result.orElse(null);
         })

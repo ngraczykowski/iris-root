@@ -2,7 +2,7 @@ package com.silenteight.adjudication.engine.analysis.pendingrecommendation;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.internal.v1.AddedAnalysisDatasets;
+import com.silenteight.adjudication.internal.v1.AddedAnalysisAlerts;
 import com.silenteight.adjudication.internal.v1.PendingRecommendations;
 
 import org.springframework.stereotype.Service;
@@ -17,9 +17,9 @@ public class PendingRecommendationFacade {
   private final RemoveSolvedPendingRecommendationUseCase removeSolvedPendingRecommendationUseCase;
 
   public Optional<PendingRecommendations> handleAddedAnalysisDatasets(
-      AddedAnalysisDatasets addedAnalysisDatasets) {
+      AddedAnalysisAlerts addedAnalysisAlerts) {
 
-    return handleAddedAnalysisDatasetsUseCase.handleAddedAnalysisDatasets(addedAnalysisDatasets);
+    return handleAddedAnalysisDatasetsUseCase.handleAddedAnalysisDatasets(addedAnalysisAlerts);
   }
 
   public void removeSolvedPendingRecommendation() {

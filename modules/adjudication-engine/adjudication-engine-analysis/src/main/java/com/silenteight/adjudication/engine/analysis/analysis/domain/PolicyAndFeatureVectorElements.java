@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.analysis.analysis.dto;
+package com.silenteight.adjudication.engine.analysis.analysis.domain;
 
 import lombok.AccessLevel;
 import lombok.Getter;

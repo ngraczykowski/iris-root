@@ -1,6 +1,6 @@
 package com.silenteight.adjudication.engine.analysis.matchsolution;
 
-import com.silenteight.adjudication.engine.analysis.analysis.dto.PolicyAndFeatureVectorElements;
+import com.silenteight.adjudication.engine.analysis.analysis.domain.PolicyAndFeatureVectorElements;
 
 public interface AnalysisFeatureVectorElementsProvider {
 

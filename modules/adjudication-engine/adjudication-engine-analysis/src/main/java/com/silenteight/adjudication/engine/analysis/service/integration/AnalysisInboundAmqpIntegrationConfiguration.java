@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.engine.analysis.agentresponse.integration.AgentResponseChannels;
 import com.silenteight.adjudication.engine.analysis.pendingrecommendation.integration.PendingRecommendationChannels;
-import com.silenteight.adjudication.internal.v1.AddedAnalysisDatasets;
+import com.silenteight.adjudication.internal.v1.AddedAnalysisAlerts;
 import com.silenteight.adjudication.internal.v1.PendingRecommendations;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 
@@ -35,8 +35,8 @@ class AnalysisInboundAmqpIntegrationConfiguration {
     return from(createInboundAdapter(properties.getEventInternalInboundQueueNames()))
         .<Object, Class<?>>route(Object::getClass, m -> m
             .channelMapping(
-                AddedAnalysisDatasets.class,
-                PendingRecommendationChannels.ADDED_ANALYSIS_DATASETS_INBOUND_CHANNEL)
+                AddedAnalysisAlerts.class,
+                PendingRecommendationChannels.ADDED_ANALYSIS_ALERTS_INBOUND_CHANNEL)
             .channelMapping(
                 PendingRecommendations.class,
                 PENDING_RECOMMENDATIONS_PUB_SUB_CHANNEL)

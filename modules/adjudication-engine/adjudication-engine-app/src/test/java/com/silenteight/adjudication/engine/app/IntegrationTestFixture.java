@@ -49,6 +49,13 @@ public class IntegrationTestFixture {
             .build());
   }
 
+  static AnalysisAlert addAlert(
+      AnalysisServiceBlockingStub analysisService, String analysisName, String alertName) {
+    return analysisService.addAlert(
+        AddAlertRequest.newBuilder().setAnalysis(analysisName).setAnalysisAlert(
+            AnalysisAlert.newBuilder().setAlert(alertName).buildPartial()).build());
+  }
+
   static Analysis getAnalysis(AnalysisServiceBlockingStub analysisService, String analysisName) {
     return analysisService.getAnalysis(
         GetAnalysisRequest.newBuilder()

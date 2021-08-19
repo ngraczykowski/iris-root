@@ -1,6 +1,6 @@
 package com.silenteight.adjudication.engine.analysis.analysis;
 
-import com.silenteight.adjudication.engine.analysis.analysis.dto.StrategyName;
+import com.silenteight.adjudication.engine.analysis.analysis.domain.StrategyName;
 
 import org.springframework.data.repository.Repository;
 
