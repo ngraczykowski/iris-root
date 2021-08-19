@@ -28,14 +28,10 @@ def run(
             )
         )
     if start_grpc_service:
-        services.append(
-            GrpcService(config, servicers=(CompanyNameAgentGrpcServicer(),))
-        )
+        services.append(GrpcService(config, servicers=(CompanyNameAgentGrpcServicer(),)))
 
     AgentRunner(config).run(
-        CompanyNameAgent(
-            config=config, additional_knowledge_dir=additional_knowledge_dir
-        ),
+        CompanyNameAgent(config=config, additional_knowledge_dir=additional_knowledge_dir),
         services=services,
     )
 

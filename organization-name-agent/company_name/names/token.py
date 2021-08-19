@@ -36,9 +36,7 @@ class Token:
     def __repr__(self) -> str:
         return (
             "Token("
-            + ", ".join(
-                f"{name}={getattr(self, name)!r}" for name in dataclasses.asdict(self)
-            )
+            + ", ".join(f"{name}={getattr(self, name)!r}" for name in dataclasses.asdict(self))
             + ")"
         )
 

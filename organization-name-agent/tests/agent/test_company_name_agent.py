@@ -53,8 +53,7 @@ def test_choose_exact_name(first, second):
     result = CompanyNameAgent().resolve(first, second)
     assert result.solution == Solution.MATCH
     assert (
-        result.reason.results[0].alerted_party_name
-        == result.reason.results[0].watchlist_party_name
+        result.reason.results[0].alerted_party_name == result.reason.results[0].watchlist_party_name
     )
 
 

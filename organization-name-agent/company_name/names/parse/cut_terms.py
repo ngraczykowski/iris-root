@@ -55,9 +55,7 @@ def cut_terms(
         return TokensSequence(), TokensSequence()
 
     if with_weak_words:
-        terms_to_cut = terms_to_cut + TermSources(
-            {(w,) for w in KnowledgeBase.weak_words}
-        )
+        terms_to_cut = terms_to_cut + TermSources({(w,) for w in KnowledgeBase.weak_words})
 
     name, saved_word = (
         next(_divide_name_for_possible_terms(name, 1, from_start=not from_start))
@@ -65,9 +63,7 @@ def cut_terms(
         else (name, TokensSequence())
     )
 
-    name_left, found_terms = _cut_all_matching(
-        name, terms_to_cut, from_start=from_start
-    )
+    name_left, found_terms = _cut_all_matching(name, terms_to_cut, from_start=from_start)
 
     name_left = name_left + saved_word if from_start else saved_word + name_left
     if not from_start:

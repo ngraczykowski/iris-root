@@ -40,8 +40,7 @@ class DataSourceMock(NameInputServiceServicer):
                         for name in match_info.get("alerted_party_names", [])
                     ],
                     watchlist_names=[
-                        WatchlistName(name=name)
-                        for name in match_info.get("watchlist_names", [])
+                        WatchlistName(name=name) for name in match_info.get("watchlist_names", [])
                     ],
                     alerted_party_type=match_info.get(
                         "alerted_party_type",
@@ -52,9 +51,7 @@ class DataSourceMock(NameInputServiceServicer):
             ],
         )
 
-    async def BatchGetMatchNameInputs(
-        self, request: BatchGetMatchNameInputsRequest, context
-    ):
+    async def BatchGetMatchNameInputs(self, request: BatchGetMatchNameInputsRequest, context):
         yield BatchGetMatchNameInputsResponse(
             name_inputs=await asyncio.gather(
                 *(

@@ -17,21 +17,14 @@ def _get_legal_terms(
 
 
 def _all_meanings(values: Sequence[Sequence[LegalTerm]]) -> Set[str]:
-    return {
-        meaning
-        for value in values
-        for possibility in value
-        for meaning in possibility.meaning
-    }
+    return {meaning for value in values for possibility in value for meaning in possibility.meaning}
 
 
 def _coverage(terms: Sequence[Sequence[LegalTerm]], all_meanings: Set[str]) -> float:
     scores = []
     for possible_terms in terms:
         values = [
-            statistics.mean(
-                meaning in all_meanings for meaning in possible_term.meaning
-            )
+            statistics.mean(meaning in all_meanings for meaning in possible_term.meaning)
             for possible_term in possible_terms
             if possible_term.meaning
         ]
@@ -57,9 +50,7 @@ def get_legal_score(first: TokensSequence, second: TokensSequence) -> Score:
         _coverage(legal_terms_second, appeared_in_first) if legal_terms_second else 0
     )
     score_value = (
-        (first_coverage + second_coverage) / 2
-        if first_coverage and second_coverage
-        else 0
+        (first_coverage + second_coverage) / 2 if first_coverage and second_coverage else 0
     )
 
     return Score(

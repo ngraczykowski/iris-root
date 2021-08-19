@@ -13,9 +13,7 @@ from company_name.names.parse.parse_parentheses import detect_parentheses_inform
 from company_name.utils.clear_name import clear_name
 
 
-def _fix_expression_divided(
-    information: Tuple[TokensSequence, ...]
-) -> Tuple[TokensSequence, ...]:
+def _fix_expression_divided(information: Tuple[TokensSequence, ...]) -> Tuple[TokensSequence, ...]:
     # handle common prefixes separately - words move right, not left as in other cases
     information = list(information)
     if information[0] and information[0][-1].cleaned in KnowledgeBase.joining_words:
@@ -46,9 +44,7 @@ def _fix_expression_divided(
                 if second_word_data:
                     second_word_index = j + joining_index + 1
                     second_word = second_word_data[0]
-                    data[second_word_index] = TokensSequence(
-                        data[second_word_index][1:]
-                    )
+                    data[second_word_index] = TokensSequence(data[second_word_index][1:])
                     break
 
             if second_word:
@@ -64,9 +60,7 @@ def _detect_name_parts(name: str) -> Dict[str, TokensSequence]:
     if not name_without_weak:
         name_without_weak, weak_words_at_the_end = name_tokens, TokensSequence()
     name_without_legal, legal, other = extract_legal_terms(name_without_weak)
-    common_prefixes, name_without_common, common_suffixes = extract_common(
-        name_without_legal
-    )
+    common_prefixes, name_without_common, common_suffixes = extract_common(name_without_legal)
 
     information = _fix_expression_divided(
         (
@@ -99,9 +93,7 @@ def parse_name(name: str) -> NameInformation:
 
     base_information = _detect_name_parts(name_without_parentheses)
     parentheses_information = detect_parentheses_information(parentheses)
-    parentheses_names = TokensSequence(
-        [parse_name(n) for n in parentheses_information["unknown"]]
-    )
+    parentheses_names = TokensSequence([parse_name(n) for n in parentheses_information["unknown"]])
 
     return NameInformation(
         source=Token(original=original, cleaned=clear_name(name)),

@@ -21,11 +21,7 @@ class LegalTerms:
         known_entities: Set[LegalTermJsonEntity] = self._load_known_entities(data)
 
         self.legal_term_sources = TermSources(
-            {
-                abbreviation
-                for entity in known_entities
-                for abbreviation in entity.abbreviations
-            }
+            {abbreviation for entity in known_entities for abbreviation in entity.abbreviations}
         )
 
         self.source_to_legal_terms: Dict[Tuple[str, ...], List[LegalTerm]] = {}
@@ -41,16 +37,13 @@ class LegalTerms:
         known_legal_entities = data["legal_terms"]
 
         cleaned_legal_entities = {
-            self._clean_entity(name, data)
-            for name, data in known_legal_entities.items()
+            self._clean_entity(name, data) for name, data in known_legal_entities.items()
         }
 
         return cleaned_legal_entities
 
     @classmethod
-    def _clean_entity(
-        cls, entity_name: str, entity_data: Dict[str, Any]
-    ) -> LegalTermJsonEntity:
+    def _clean_entity(cls, entity_name: str, entity_data: Dict[str, Any]) -> LegalTermJsonEntity:
         entity = LegalTermJsonEntity(
             name=entity_name,
             abbreviations=tuple(
@@ -73,8 +66,6 @@ class LegalTerms:
             term,
             *(
                 " ".join(w).strip()
-                for w in itertools.product(
-                    *[(" ".join(t), "".join(t)) for t in term.split()]
-                )
+                for w in itertools.product(*[(" ".join(t), "".join(t)) for t in term.split()])
             ),
         }

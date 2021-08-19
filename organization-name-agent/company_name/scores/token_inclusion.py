@@ -41,8 +41,5 @@ def get_token_inclusion_score(first: NameInformation, second: NameInformation) -
 
     return max(
         *(_token_inclusion(first.name(), tokens) for tokens in _tokens(second)),
-        *(
-            reversed(_token_inclusion(second.name(), tokens))
-            for tokens in _tokens(first)
-        )
+        *(reversed(_token_inclusion(second.name(), tokens)) for tokens in _tokens(first))
     )

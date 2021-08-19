@@ -14,6 +14,4 @@ from company_name.compare import parse_name
 )
 def test_parenthesis(name, expected_parenthesis):
     information = parse_name(name)
-    assert {n.name().cleaned_name for n in information.parenthesis} == set(
-        expected_parenthesis
-    )
+    assert {n.name().cleaned_name for n in information.parenthesis} == set(expected_parenthesis)

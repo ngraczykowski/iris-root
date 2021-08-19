@@ -12,10 +12,7 @@ def test_basic_legal_terms():
     assert ("corporation",) in terms.legal_term_sources
     assert ("corp",) in terms.legal_term_sources
     assert ("corp.",) not in terms.legal_term_sources
-    assert (
-        terms.source_to_legal_terms[("corp",)]
-        == terms.source_to_legal_terms[("corporation",)]
-    )
+    assert terms.source_to_legal_terms[("corp",)] == terms.source_to_legal_terms[("corporation",)]
 
 
 @pytest.mark.parametrize(

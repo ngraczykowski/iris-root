@@ -17,9 +17,7 @@ class CompanyNameAgentDataSource(AgentDataSource):
         stub = NameInputServiceStub(self.channel)
         self.command = stub.BatchGetMatchNameInputs
 
-    def prepare_request(
-        self, request: AgentExchangeRequest
-    ) -> BatchGetMatchNameInputsRequest:
+    def prepare_request(self, request: AgentExchangeRequest) -> BatchGetMatchNameInputsRequest:
         return BatchGetMatchNameInputsRequest(
             matches=request.matches,
             features=[

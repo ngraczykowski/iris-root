@@ -18,9 +18,7 @@ from company_name.utils.abbreviations_filtering import remove_redundant_abbrevia
     ],
 )
 def test_abbreviation_recognition(abbreviation: str, full: str):
-    abbreviation_from_full = get_abbreviation_score(
-        parse_name(full), parse_name(abbreviation)
-    )
+    abbreviation_from_full = get_abbreviation_score(parse_name(full), parse_name(abbreviation))
     assert abbreviation_from_full.status.name == "OK"
     assert abbreviation_from_full.value == 1
 
@@ -51,9 +49,7 @@ def test_abbreviation_recognition(abbreviation: str, full: str):
         ),
     ],
 )
-def test_members_abbreviations_removing(
-    names: Sequence[str], expected_names: Sequence[str]
-):
+def test_members_abbreviations_removing(names: Sequence[str], expected_names: Sequence[str]):
     without_redundant_abbreviations = remove_redundant_abbreviations(
         [parse_name(name) for name in names]
     )
@@ -73,8 +69,6 @@ def test_members_abbreviations_removing(
         ),
     ],
 )
-def test_resolving_with_many_names_abbreviation(
-    names: Sequence[str], valid_terms: Sequence[str]
-):
+def test_resolving_with_many_names_abbreviation(names: Sequence[str], valid_terms: Sequence[str]):
     result = CompanyNameAgent().resolve(names, valid_terms)
     assert result.solution == Solution.NO_MATCH

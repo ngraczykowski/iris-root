@@ -92,10 +92,7 @@ def test_cut_terms_with_weak_words(source, expected):
     ),
 )
 def test_cut_terms_saving_at_least_one_word(source, expected):
-    assert (
-        cut_terms(create_tokens(source), TERMS, saving_at_least_one_word=True)
-        == expected
-    )
+    assert cut_terms(create_tokens(source), TERMS, saving_at_least_one_word=True) == expected
 
 
 @pytest.mark.parametrize(
@@ -119,9 +116,7 @@ def test_cut_terms_saving_at_least_one_word(source, expected):
 )
 def test_cut_terms_from_start_saving_at_least_one_word(source, expected):
     assert (
-        cut_terms(
-            create_tokens(source), TERMS, from_start=True, saving_at_least_one_word=True
-        )
+        cut_terms(create_tokens(source), TERMS, from_start=True, saving_at_least_one_word=True)
         == expected
     )
 
@@ -151,8 +146,7 @@ def test_cut_terms_from_start_saving_at_least_one_word(source, expected):
 )
 def test_cut_terms_from_start_with_weak_words_between(source, expected):
     assert (
-        cut_terms(create_tokens(source), TERMS, from_start=True, with_weak_words=True)
-        == expected
+        cut_terms(create_tokens(source), TERMS, from_start=True, with_weak_words=True) == expected
     )
 
 
@@ -179,7 +173,4 @@ def test_cut_until_any_term_matches(source, expected):
     ),
 )
 def test_cut_until_any_term_matched_from_start(source, expected):
-    assert (
-        cut_until_any_term_matches(create_tokens(source), TERMS, from_start=True)
-        == expected
-    )
+    assert cut_until_any_term_matches(create_tokens(source), TERMS, from_start=True) == expected

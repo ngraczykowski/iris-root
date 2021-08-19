@@ -14,9 +14,7 @@ class Score:
         OK = "OK"
 
         @classmethod
-        def recognize(
-            cls, alerted_party_data, matched_party_data
-        ) -> "Score.ScoreStatus":
+        def recognize(cls, alerted_party_data, matched_party_data) -> "Score.ScoreStatus":
             return {
                 (True, True): cls.OK,
                 (True, False): cls.NO_MATCHED_PARTY_DATA,
@@ -74,8 +72,6 @@ class Score:
     def __repr__(self):
         return (
             "Score("
-            + ", ".join(
-                f"{name}={getattr(self, name)!r}" for name in dataclasses.asdict(self)
-            )
+            + ", ".join(f"{name}={getattr(self, name)!r}" for name in dataclasses.asdict(self))
             + ")"
         )

@@ -18,9 +18,7 @@ class classproperty:
 
 
 class KnowledgeBase:
-    default_source_path: pathlib.Path = (
-        importlib_resources.files("company_name") / "resources"
-    )
+    default_source_path: pathlib.Path = importlib_resources.files("company_name") / "resources"
     source_paths: List[pathlib.Path] = [default_source_path]
     _loaded = {}
 

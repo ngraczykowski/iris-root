@@ -29,10 +29,7 @@ class FeatureRule(ReductionRule):
         self.threshold = float(self.threshold)
 
     def check(self, scores: Mapping[str, Score]) -> Optional[SolutionWithProbability]:
-        if (
-            not scores.get(self.feature)
-            or scores[self.feature].status != Score.ScoreStatus.OK
-        ):
+        if not scores.get(self.feature) or scores[self.feature].status != Score.ScoreStatus.OK:
             return None
         if scores.get(self.feature).value >= self.threshold:
             return self.solution, self.solution_probability
@@ -51,9 +48,7 @@ class ModelSolutionRule:
     def check(
         self, predicted: Union[float, Mapping[str, float]]
     ) -> Optional[SolutionWithProbability]:
-        predicted_value = (
-            predicted if isinstance(predicted, float) else predicted[self.label]
-        )
+        predicted_value = predicted if isinstance(predicted, float) else predicted[self.label]
         if predicted_value >= self.threshold:
             return self.solution, predicted_value
 
@@ -89,9 +84,7 @@ class ScoresReduction:
         rules = []
         for rule in cfg["rules"]:
             if "source" in rule:
-                rule["model"] = SklearnModel(
-                    config.get_config_path(rule["source"], required=True)
-                )
+                rule["model"] = SklearnModel(config.get_config_path(rule["source"], required=True))
                 rules.append(ModelRule(**rule))
             else:
                 rules.append(FeatureRule(**rule))

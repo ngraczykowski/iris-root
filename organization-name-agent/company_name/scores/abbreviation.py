@@ -83,13 +83,9 @@ def _check_abbreviation_for_next_word(
         and abbreviation[1].cleaned == word.cleaned[0]
     ):
         duplicate_by = int(abbreviation[0].cleaned) - 1
-        abbreviated = Token(
-            cleaned="", original="".join(abbreviation[:2].original_tuple)
-        )
+        abbreviated = Token(cleaned="", original="".join(abbreviation[:2].original_tuple))
         new_abbreviation = (
-            TokensSequence(
-                [Token(cleaned=abbreviation[1].cleaned, original="")] * duplicate_by
-            )
+            TokensSequence([Token(cleaned=abbreviation[1].cleaned, original="")] * duplicate_by)
             + abbreviation[2:]
         )
         yield check_abbreviation(
@@ -102,18 +98,14 @@ def _check_abbreviation_for_next_word(
         )
 
 
-def _check_abbreviation_when_no_abbreviation(
-    words: TokensSequence, result: Abbreviation
-) -> Score:
+def _check_abbreviation_when_no_abbreviation(words: TokensSequence, result: Abbreviation) -> Score:
     left_words = len(set(words).difference(KnowledgeBase.weak_words))
     if not left_words:
         return Score(value=1, compared=result.compared())
 
     if words[0] == "of":
         left_words -= 1
-    return Score(
-        value=max(1 - left_words / len(result.source), 0), compared=result.compared()
-    )
+    return Score(value=max(1 - left_words / len(result.source), 0), compared=result.compared())
 
 
 def _check_abbreviation_when_no_words(
@@ -144,9 +136,7 @@ def _check_abbreviation_when_no_words(
                 )
 
     yield Score(
-        value=max(1 - len(abbreviation) / len(result.abbreviated), 0)
-        if result.abbreviated
-        else 0,
+        value=max(1 - len(abbreviation) / len(result.abbreviated), 0) if result.abbreviated else 0,
         compared=result.compared(),
     )
 
@@ -176,36 +166,27 @@ def check_abbreviation(
         )
 
     return max(
-        _check_abbreviation_for_next_word(
-            words[0], (words[1:], *rest), abbreviation, result
-        ),
+        _check_abbreviation_for_next_word(words[0], (words[1:], *rest), abbreviation, result),
         default=Score(),
     )
 
 
 def _create_possible_abbreviation(name: str) -> TokensSequence:
-    return TokensSequence(
-        [Token(original=n, cleaned=clear_name(n)) for n in list(name)]
-    )
+    return TokensSequence([Token(original=n, cleaned=clear_name(n)) for n in list(name)])
 
 
-def _abbreviation_score(
-    information: NameInformation, abbreviation_name: NameInformation
-) -> Score:
+def _abbreviation_score(information: NameInformation, abbreviation_name: NameInformation) -> Score:
     abbreviation = _create_possible_abbreviation(abbreviation_name.base.original_name)
     words = TokensSequence([*information.common_prefixes, *information.base])
     base_score = Score(compared=Abbreviation(words, abbreviation).compared())
 
     if (
-        len("".join(abbreviation.cleaned_tuple))
-        >= len("".join(information.name().cleaned_name))
+        len("".join(abbreviation.cleaned_tuple)) >= len("".join(information.name().cleaned_name))
         or len(abbreviation) < 2
     ):
         return base_score
 
-    if set(abbreviation_name.base.cleaned_tuple).issubset(
-        information.base.cleaned_tuple
-    ):
+    if set(abbreviation_name.base.cleaned_tuple).issubset(information.base.cleaned_tuple):
         return base_score
 
     abbreviation_score = check_abbreviation(

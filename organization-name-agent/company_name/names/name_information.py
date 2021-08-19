@@ -39,8 +39,6 @@ class NameInformation:
     def __repr__(self) -> str:
         return (
             "NameInformation("
-            + ", ".join(
-                f"{name}={getattr(self, name)!r}" for name in dataclasses.asdict(self)
-            )
+            + ", ".join(f"{name}={getattr(self, name)!r}" for name in dataclasses.asdict(self))
             + ")"
         )

@@ -39,9 +39,7 @@ ANY_COMPARED = (AnyValue(), AnyValue())
             "HP, INC",
             "HEWLETT-PACKARD COMPANY (HP CO.)",
             {
-                "abbreviation": Score(
-                    value=1, compared=(("HP",), ("HEWLETT-PACKARD",))
-                ),
+                "abbreviation": Score(value=1, compared=(("HP",), ("HEWLETT-PACKARD",))),
                 "legal_terms": Score(value=0, compared=(("INC",), ("COMPANY",))),
                 "parenthesis_match": Score(value=1, compared=ANY_COMPARED),
             },
@@ -60,9 +58,7 @@ ANY_COMPARED = (AnyValue(), AnyValue())
             "THE LARSEN & TOUBRO LIMITED PROVIDENT FUND OF 1952",
             "LARSEN AND TOUBRO LIMITED",
             {
-                "token_inclusion": Score(
-                    status=Score.ScoreStatus.NOT_APPLICABLE, value=0
-                ),
+                "token_inclusion": Score(status=Score.ScoreStatus.NOT_APPLICABLE, value=0),
                 "legal_terms": Score(value=1, compared=(("LIMITED",), ("LIMITED",))),
                 "fuzzy_on_base": Score(
                     value=EstimatedValue(lower=0.8),
@@ -74,24 +70,16 @@ ANY_COMPARED = (AnyValue(), AnyValue())
             "THE EMBASSY OF THE REPUBLIC OF ANGOLA IN THE REPUBLIC OF KENYA",
             "EMBASSY OF THE REPUBLIC OF ANGOLA",
             {
-                "token_inclusion": Score(
-                    status=Score.ScoreStatus.NOT_APPLICABLE, value=0
-                ),
+                "token_inclusion": Score(status=Score.ScoreStatus.NOT_APPLICABLE, value=0),
                 "legal_terms": Score(),
                 "fuzzy": Score(value=EstimatedValue(lower=0.7), compared=ANY_COMPARED),
-                "fuzzy_on_base": Score(
-                    value=EstimatedValue(lower=0.7), compared=ANY_COMPARED
-                ),
+                "fuzzy_on_base": Score(value=EstimatedValue(lower=0.7), compared=ANY_COMPARED),
             },
         ),
         (
             "GRAND PARTNER LIMITED",
             "GROUP GRAND LTD",
-            {
-                "potential_subsidiary": Score(
-                    value=1, compared=((), ("GROUP GRAND LTD",))
-                )
-            },
+            {"potential_subsidiary": Score(value=1, compared=((), ("GROUP GRAND LTD",)))},
         ),
         (
             "CHINA NATIONAL ELECTRONICS IMP & EXP CORPORATION",
@@ -180,9 +168,7 @@ ANY_COMPARED = (AnyValue(), AnyValue())
                 "fuzzy_on_base": Score(
                     value=EstimatedValue(upper=0.4), compared=(("Alpha",), ("Charlie",))
                 ),
-                "fuzzy_on_suffix": Score(
-                    value=1, compared=(("Engineering",), ("Engineering",))
-                ),
+                "fuzzy_on_suffix": Score(value=1, compared=(("Engineering",), ("Engineering",))),
             },
         ),
         (
@@ -199,12 +185,8 @@ ANY_COMPARED = (AnyValue(), AnyValue())
             "Seventh Avenue, Inc.",
             "7th Avenue",
             {
-                "fuzzy_on_base": Score(
-                    value=1, compared=(("Seventh Avenue",), ("7th Avenue",))
-                ),
-                "fuzzy": Score(
-                    value=1, compared=(("Seventh Avenue",), ("7th Avenue",))
-                ),
+                "fuzzy_on_base": Score(value=1, compared=(("Seventh Avenue",), ("7th Avenue",))),
+                "fuzzy": Score(value=1, compared=(("Seventh Avenue",), ("7th Avenue",))),
             },
         ),
     ),

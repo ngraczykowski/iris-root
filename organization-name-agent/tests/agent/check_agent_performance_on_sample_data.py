@@ -53,9 +53,7 @@ class Matches:
                 "MATCH",
             ):
                 # cause NO_DATA or AGENT_SKIPPED are probably faster
-                raise Exception(
-                    "Incorrect solution, check data source mock initialization"
-                )
+                raise Exception("Incorrect solution, check data source mock initialization")
 
 
 def get_companies(filepath):
@@ -63,13 +61,9 @@ def get_companies(filepath):
         companies = [line.strip() for line in f]
         for _, c1, c2 in zip(
             range(NUMBER_OF_MATCHES),
+            itertools.cycle(itertools.permutations(companies, NUMBER_OF_NAMES_PER_SIDE_IN_MATCH)),
             itertools.cycle(
-                itertools.permutations(companies, NUMBER_OF_NAMES_PER_SIDE_IN_MATCH)
-            ),
-            itertools.cycle(
-                itertools.permutations(
-                    reversed(companies), NUMBER_OF_NAMES_PER_SIDE_IN_MATCH
-                )
+                itertools.permutations(reversed(companies), NUMBER_OF_NAMES_PER_SIDE_IN_MATCH)
             ),
         ):
             yield {"alerted_party_names": c1, "watchlist_names": c2}

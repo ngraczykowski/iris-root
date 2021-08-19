@@ -107,12 +107,8 @@ async def test_multiple_matches(ae_mock: AdjudicationEngineMock):
 
     assert response
     assert len(response.agent_outputs) == match_no
-    assert {o.match for o in response.agent_outputs} == {
-        f"match_{i}" for i in range(match_no)
-    }
-    assert all(
-        len(agent_output.features) == 1 for agent_output in response.agent_outputs
-    )
+    assert {o.match for o in response.agent_outputs} == {f"match_{i}" for i in range(match_no)}
+    assert all(len(agent_output.features) == 1 for agent_output in response.agent_outputs)
 
 
 @pytest.mark.rabbitmq
@@ -121,9 +117,7 @@ async def test_multiple_queries_with_different_times(
 ):
     data_source_mock.alerts = {"match_0": {"sleep": 2}, "match_1": {}}
     correlations = [
-        await ae_mock.send(
-            AgentExchangeRequest(matches=[f"match_{i}"], features=[FEATURE_NAME])
-        )
+        await ae_mock.send(AgentExchangeRequest(matches=[f"match_{i}"], features=[FEATURE_NAME]))
         for i in (0, 1)
     ]
 

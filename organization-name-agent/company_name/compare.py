@@ -30,16 +30,10 @@ def compare_names(
         "fuzzy_on_base": fuzzy_score(alerted_name.base, watchlist_name.base),
         "fuzzy_on_suffix": get_suffix_fuzzy_score(alerted_name, watchlist_name),
         "fuzzy": fuzzy_score(alerted_name.name(), watchlist_name.name()),
-        "partial_fuzzy": partial_fuzzy_score(
-            alerted_name.name(), watchlist_name.name()
-        ),
-        "sorted_fuzzy": get_sorted_fuzzy_score(
-            alerted_name.name(), watchlist_name.name()
-        ),
+        "partial_fuzzy": partial_fuzzy_score(alerted_name.name(), watchlist_name.name()),
+        "sorted_fuzzy": get_sorted_fuzzy_score(alerted_name.name(), watchlist_name.name()),
         "legal_terms": get_legal_score(alerted_name.legal, watchlist_name.legal),
-        "tokenization": get_tokenization_score(
-            alerted_name.name(), watchlist_name.name()
-        ),
+        "tokenization": get_tokenization_score(alerted_name.name(), watchlist_name.name()),
         "absolute_tokenization": get_tokenization_score(
             alerted_name.name(), watchlist_name.name(), absolute=True
         ),
@@ -50,9 +44,7 @@ def compare_names(
         ),
         "phonetics_on_base": get_phonetic_score(alerted_name.base, watchlist_name.base),
         "phonetics": get_phonetic_score(alerted_name.name(), watchlist_name.name()),
-        "potential_subsidiary": get_potential_subsidiary_score(
-            alerted_name, watchlist_name
-        ),
+        "potential_subsidiary": get_potential_subsidiary_score(alerted_name, watchlist_name),
         "token_inclusion": get_token_inclusion_score(alerted_name, watchlist_name),
         "first_token": get_first_token_score(alerted_name, watchlist_name),
     }

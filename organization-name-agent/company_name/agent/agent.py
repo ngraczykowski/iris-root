@@ -14,18 +14,14 @@ from company_name.utils.abbreviations_filtering import remove_redundant_abbrevia
 
 
 class CompanyNameAgent(Agent):
-    def __init__(
-        self, *args, additional_knowledge_dir: Optional[pathlib.Path] = None, **kwargs
-    ):
+    def __init__(self, *args, additional_knowledge_dir: Optional[pathlib.Path] = None, **kwargs):
         super().__init__(*args, **kwargs)
         KnowledgeBase.set_additional_source_paths(
             dirs=(additional_knowledge_dir,) if additional_knowledge_dir else ()
         )
         self.reduction = ScoresReduction(self.config)
 
-    def _check_pair(
-        self, ap_name: NameInformation, mp_name: NameInformation
-    ) -> PairResult:
+    def _check_pair(self, ap_name: NameInformation, mp_name: NameInformation) -> PairResult:
         scores = compare_names(ap_name, mp_name)
         solution, probability = self.reduction.get_reduced_score(scores)
 
@@ -53,9 +49,7 @@ class CompanyNameAgent(Agent):
         values = sorted(
             (
                 self._check_pair(ap_name, mp_name)
-                for ap_name, mp_name in itertools.product(
-                    ap_names_parsed, mp_names_parsed
-                )
+                for ap_name, mp_name in itertools.product(ap_names_parsed, mp_names_parsed)
             ),
             reverse=True,
         )

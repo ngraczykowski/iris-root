@@ -18,9 +18,7 @@ class SklearnModel:
     def __repr__(self):
         return (
             "SkleanModel("
-            + ", \n".join(
-                f"{key}={getattr(self, key)!r}" for key in self.__dict__.keys()
-            )
+            + ", \n".join(f"{key}={getattr(self, key)!r}" for key in self.__dict__.keys())
             + ")"
         )
 
