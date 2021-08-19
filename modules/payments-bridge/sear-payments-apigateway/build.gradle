@@ -6,6 +6,9 @@ plugins {
 }
 
 dependencies {
+  // Project modules
+  implementation project(":sear-payments-common")
+
   // Utilities
   implementation libraries.commons_lang3
   implementation libraries.commons_text
@@ -34,7 +37,7 @@ dependencies {
 
 jar {
   manifest {
-    attributes "Main-Class": "com.silenteight.payments.apigateway.app.PaymentsApiGatewayApplication"
+    attributes "Main-Class": "com.silenteight.payments.apigateway.PaymentsApiGatewayApplication"
   }
 }
 

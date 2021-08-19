@@ -23,9 +23,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import reactor.core.scheduler.Schedulers;
 
-import static java.lang.System.getProperty;
+import static com.silenteight.payments.common.app.EnvironmentUtils.setPropertyFromEnvironment;
 import static java.lang.System.setProperty;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Configuration
 @EnableAutoConfiguration
@@ -61,13 +60,6 @@ public class PaymentsBridgeApplication {
     setPropertyFromEnvironment("javax.net.ssl.keyStore", "KEYSTORE_PATH");
     setPropertyFromEnvironment("javax.net.ssl.keyStorePassword", "KEYSTORE_PASSWORD");
     setPropertyFromEnvironment("javax.net.ssl.keyStoreType", "KEYSTORE_TYPE");
-  }
-
-  private static void setPropertyFromEnvironment(String property, String environmentVariable) {
-    var environmentVariableValue = System.getenv(environmentVariable);
-
-    if (getProperty(property) == null && isNotBlank(environmentVariableValue))
-      setProperty(property, environmentVariableValue);
   }
 
   private static class Configurer implements ApplicationBuilderConfigurer {

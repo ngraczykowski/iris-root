@@ -6,6 +6,7 @@ plugins {
 
 dependencies {
   // Application modules
+  implementation project(":sear-payments-common")
   implementation project(":sear-payments-bridge-common")
   implementation project(":sear-payments-bridge-ae")
   implementation project(":sear-payments-bridge-datasource")
