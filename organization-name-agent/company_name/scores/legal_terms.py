@@ -39,7 +39,7 @@ def _coverage(terms: Sequence[Sequence[LegalTerm]], all_meanings: Set[str]) -> f
     return statistics.mean(scores) if scores else 1
 
 
-def legal_score(first: TokensSequence, second: TokensSequence) -> Score:
+def get_legal_score(first: TokensSequence, second: TokensSequence) -> Score:
     if not first and not second:
         return Score()
 

@@ -34,7 +34,7 @@ def partial_fuzzy_score(first: TokensSequence, second: TokensSequence) -> Score:
     )
 
 
-def sorted_fuzzy_score(first: TokensSequence, second: TokensSequence) -> Score:
+def get_sorted_fuzzy_score(first: TokensSequence, second: TokensSequence) -> Score:
     if not first and not second:
         return Score()
 

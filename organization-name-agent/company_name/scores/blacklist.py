@@ -12,7 +12,7 @@ def _blacklisted(name: str) -> List[str]:
     return BLACKLIST_REGEX.findall(name)
 
 
-def blacklist_score(name: NameInformation, other_name: NameInformation) -> Score:
+def get_blacklist_score(name: NameInformation, other_name: NameInformation) -> Score:
     first_blacklisted = _blacklisted(name.source.cleaned)
     status = (
         Score.ScoreStatus.OK

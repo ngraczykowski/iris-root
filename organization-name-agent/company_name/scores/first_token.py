@@ -11,7 +11,7 @@ def _compared(
     return (first.original,) if first else (), (second.original,) if second else ()
 
 
-def first_token_score(first: NameInformation, second: NameInformation) -> Score:
+def get_first_token_score(first: NameInformation, second: NameInformation) -> Score:
     first_tokens = (
         first.base[0] if first.base else None,
         second.base[0] if second.base else None,

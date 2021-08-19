@@ -3,7 +3,7 @@ from company_name.names.name_information import TokensSequence
 from company_name.scores.score import Score
 
 
-def country_score(
+def get_country_score(
     first_countries: TokensSequence, second_countries: TokensSequence
 ) -> Score:
     if not first_countries and not second_countries:

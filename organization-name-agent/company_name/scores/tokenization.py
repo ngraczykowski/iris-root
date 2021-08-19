@@ -18,7 +18,7 @@ def _different(first: Counter[str], second: Counter[str]) -> List[str]:
     return _filter_weak_words(((first - second) + (second - first)).elements())
 
 
-def tokenization_score(
+def get_tokenization_score(
     first_name: TokensSequence, second_name: TokensSequence, absolute: bool = False
 ) -> Score:
     if not first_name and not second_name:

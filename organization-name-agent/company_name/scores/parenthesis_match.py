@@ -2,7 +2,7 @@ from company_name.names.name_information import NameInformation
 from company_name.scores.score import Score
 
 
-def parenthesis_score(first: NameInformation, second: NameInformation) -> Score:
+def get_parenthesis_score(first: NameInformation, second: NameInformation) -> Score:
     if not first.parenthesis and not second.parenthesis:
         return Score()
 

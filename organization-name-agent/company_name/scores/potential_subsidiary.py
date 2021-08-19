@@ -14,7 +14,7 @@ def _potential_subsidiary_parent(name: NameInformation) -> bool:
     )
 
 
-def potential_subsidiary_score(
+def get_potential_subsidiary_score(
     first: NameInformation, second: NameInformation
 ) -> Score:
     values = _potential_subsidiary_parent(first), _potential_subsidiary_parent(second)

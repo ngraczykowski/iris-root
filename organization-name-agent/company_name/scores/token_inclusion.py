@@ -30,7 +30,7 @@ def _token_inclusion(name: TokensSequence, tokens: TokensSequence) -> Score:
     )
 
 
-def token_inclusion_score(first: NameInformation, second: NameInformation) -> Score:
+def get_token_inclusion_score(first: NameInformation, second: NameInformation) -> Score:
     names = first.name(), second.name()
     if not all(names):
         return Score(compared=(names[0].original_tuple, names[1].original_tuple))
