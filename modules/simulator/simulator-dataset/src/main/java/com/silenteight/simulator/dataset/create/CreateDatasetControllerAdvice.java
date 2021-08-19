@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.simulator.dataset.create.exception.EmptyDatasetException;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,6 +17,12 @@ class CreateDatasetControllerAdvice {
 
   @ExceptionHandler(EmptyDatasetException.class)
   public ResponseEntity<String> handle(EmptyDatasetException e) {
+    log(e);
+    return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
+  }
+
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  public ResponseEntity<String> handle(DataIntegrityViolationException e) {
     log(e);
     return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
   }
