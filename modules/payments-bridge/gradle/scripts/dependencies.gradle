@@ -83,12 +83,13 @@ libraries.spring_batch_core = [group: 'org.springframework.batch', name: 'spring
 libraries.spring_batch_infrastructure = [group: 'org.springframework.batch', name: 'spring-batch-infrastructure']
 libraries.spring_batch_test = [group: 'org.springframework.batch', name: 'spring-batch-test']
 
+libraries.spring_cloud_consul_discovery = [group: 'org.springframework.cloud', name: 'spring-cloud-consul-discovery']
 libraries.spring_cloud_dependencies = [group: 'org.springframework.cloud', name: 'spring-cloud-dependencies']
 libraries.spring_cloud_starter_consul = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul']
 libraries.spring_cloud_starter_consul_config = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul-config']
+libraries.spring_cloud_starter_gateway = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-gateway']
 libraries.spring_cloud_starter_sleuth = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth']
 libraries.spring_cloud_test_support = [group: 'org.springframework.cloud', name: 'spring-cloud-test-support']
-libraries.spring_cloud_consul_discovery = [group: 'org.springframework.cloud', name: 'spring-cloud-consul-discovery']
 
 libraries.spring_data_commons = [group: 'org.springframework.data', name: 'spring-data-commons']
 libraries.spring_data_jpa = [group: 'org.springframework.data', name: 'spring-data-jpa']
