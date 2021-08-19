@@ -1,6 +1,6 @@
 from typing import Dict, Optional, Sequence, Tuple, Union
 
-from company_name.datasources.legal_terms import LEGAL_TERMS
+from company_name.knowledge_base import KnowledgeBase
 from company_name.names.parse.create_tokens import create_tokens
 from company_name.names.parse.cut_terms import cut_terms
 from company_name.names.parse.extract_information import extract_countries, extract_weak
@@ -21,7 +21,7 @@ def _extract_known_parenthesis_information(
         return "empty", None
 
     words_without_legal, legal_terms = cut_terms(
-        words, LEGAL_TERMS.legal_term_sources, with_weak_words=True
+        words, KnowledgeBase.legal_terms.legal_term_sources, with_weak_words=True
     )
     if not words_without_legal:
         return "legal", legal_terms

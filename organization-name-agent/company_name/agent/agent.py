@@ -1,10 +1,12 @@
 import itertools
 import logging
-from typing import Sequence
+import pathlib
+from typing import Optional, Sequence
 
 from agent_base.agent import Agent
 
 from company_name.compare import compare_names
+from company_name.knowledge_base import KnowledgeBase
 from company_name.names.parse.parse import NameInformation, parse_name
 from company_name.solution.scores_reduction import ScoresReduction
 from company_name.solution.solution import PairResult, Reason, Result, Solution
@@ -12,8 +14,13 @@ from company_name.utils.abbreviations_filtering import remove_redundant_abbrevia
 
 
 class CompanyNameAgent(Agent):
-    def __init__(self, *args, **kwargs):
+    def __init__(
+        self, *args, additional_knowledge_dir: Optional[pathlib.Path] = None, **kwargs
+    ):
         super().__init__(*args, **kwargs)
+        KnowledgeBase.set_additional_source_paths(
+            dirs=(additional_knowledge_dir,) if additional_knowledge_dir else ()
+        )
         self.reduction = ScoresReduction(self.config)
 
     def _check_pair(

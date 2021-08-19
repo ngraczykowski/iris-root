@@ -1,7 +1,8 @@
 import statistics
 from typing import Generator, Sequence, Set
 
-from company_name.datasources.legal_terms import LEGAL_TERMS, LegalTerm
+from company_name.knowledge_base import KnowledgeBase
+from company_name.knowledge_base.legal_terms import LegalTerm
 from company_name.names.name_information import TokensSequence
 from company_name.scores.score import Score
 
@@ -11,8 +12,8 @@ def _get_legal_terms(
 ) -> Generator[Sequence[LegalTerm], None, None]:
     for value in values:
         key = tuple(value.cleaned.split())
-        if key in LEGAL_TERMS.source_to_legal_terms:
-            yield LEGAL_TERMS.source_to_legal_terms[key]
+        if key in KnowledgeBase.legal_terms.source_to_legal_terms:
+            yield KnowledgeBase.legal_terms.source_to_legal_terms[key]
 
 
 def _all_meanings(values: Sequence[Sequence[LegalTerm]]) -> Set[str]:

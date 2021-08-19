@@ -195,9 +195,22 @@ ANY_COMPARED = (AnyValue(), AnyValue())
                 ),
             },
         ),
+        (
+            "Seventh Avenue, Inc.",
+            "7th Avenue",
+            {
+                "fuzzy_on_base": Score(
+                    value=1, compared=(("Seventh Avenue",), ("7th Avenue",))
+                ),
+                "fuzzy": Score(
+                    value=1, compared=(("Seventh Avenue",), ("7th Avenue",))
+                ),
+            },
+        ),
     ),
 )
 def test_known_cases(first, second, expected):
     result = compare(first, second)
+    print(result, expected)
     for key, value in expected.items():
         assert result[key] == value

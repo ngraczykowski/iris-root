@@ -1,24 +1,13 @@
 import collections
-import json
-import pathlib
-from typing import Set
+from typing import List, Set
 
-import importlib_resources
-
-from company_name.datasources.term_sources import TermSources
+from company_name.knowledge_base.term_sources import TermSources
 from company_name.names.name_information import TokensSequence
 from company_name.utils.clear_name import clear_name, divide
 
-COUNTRIES_PATH = (
-    importlib_resources.files("company_name") / "resources" / "countries.json"
-)
-
 
 class Countries:
-    def __init__(self, source_path: pathlib.Path = COUNTRIES_PATH):
-        with source_path.open("rt", encoding="utf-8") as f:
-            countries = json.load(f)
-
+    def __init__(self, countries: List[List[str]]):
         self.mapping = collections.defaultdict(list)
         for i, country_names in enumerate(countries):
             for country_name in country_names:
@@ -32,6 +21,3 @@ class Countries:
             for country_name in countries
             for country_id in self.mapping.get(country_name.cleaned, [])
         }
-
-
-COUNTRIES = Countries()

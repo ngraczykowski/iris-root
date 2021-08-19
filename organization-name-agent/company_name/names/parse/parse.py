@@ -1,7 +1,7 @@
 import re
 from typing import Dict, Sequence, Tuple
 
-from company_name.datasources.special_words import JOINING_WORDS
+from company_name.knowledge_base import KnowledgeBase
 from company_name.names.name_information import NameInformation, Token, TokensSequence
 from company_name.names.parse.create_tokens import create_tokens
 from company_name.names.parse.extract_information import (
@@ -18,14 +18,18 @@ def _fix_expression_divided(
 ) -> Tuple[TokensSequence, ...]:
     # handle common prefixes separately - words move right, not left as in other cases
     information = list(information)
-    if information[0] and information[0][-1].cleaned in JOINING_WORDS:
+    if information[0] and information[0][-1].cleaned in KnowledgeBase.joining_words:
         information[1] = TokensSequence([*information[0][-2:], *information[1]])
         information[0] = TokensSequence(information[0][:-2])
 
     data = information[1:]
     # move "and" to previous part, if at the beginning
     for joining_index, joining_data in enumerate(data):
-        if joining_index and joining_data and joining_data[0].cleaned in JOINING_WORDS:
+        if (
+            joining_index
+            and joining_data
+            and joining_data[0].cleaned in KnowledgeBase.joining_words
+        ):
             possible_indexes = [i for i in reversed(range(joining_index)) if data[i]]
             if not possible_indexes:
                 continue
@@ -35,7 +39,7 @@ def _fix_expression_divided(
 
     # move word after "and" to part with "and"
     for joining_index, joining_data in enumerate(data):
-        if joining_data and joining_data[-1].cleaned in JOINING_WORDS:
+        if joining_data and joining_data[-1].cleaned in KnowledgeBase.joining_words:
 
             second_word = None
             for j, second_word_data in enumerate(data[joining_index + 1 :]):
@@ -90,6 +94,7 @@ def _separate_parentheses(name: str) -> Tuple[str, Sequence[str]]:
 
 
 def parse_name(name: str) -> NameInformation:
+    original = name
     name_without_parentheses, parentheses = _separate_parentheses(name)
 
     base_information = _detect_name_parts(name_without_parentheses)
@@ -99,7 +104,7 @@ def parse_name(name: str) -> NameInformation:
     )
 
     return NameInformation(
-        source=Token(original=name, cleaned=clear_name(name)),
+        source=Token(original=original, cleaned=clear_name(name)),
         common_prefixes=base_information["common_prefixes"],
         base=base_information["base"],
         common_suffixes=base_information["common_suffixes"],

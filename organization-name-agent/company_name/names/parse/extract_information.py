@@ -1,10 +1,7 @@
 from typing import Tuple
 
-from company_name.datasources.common_prefixes import COMMON_PREFIXES
-from company_name.datasources.common_suffixes import COMMON_SUFFIXES
-from company_name.datasources.countries import COUNTRIES
-from company_name.datasources.legal_terms import LEGAL_TERMS
-from company_name.datasources.term_sources import TermSources
+from company_name.knowledge_base import KnowledgeBase
+from company_name.knowledge_base.term_sources import TermSources
 from company_name.names.name_information import TokensSequence
 from company_name.names.parse.cut_terms import cut_terms, cut_until_any_term_matches
 
@@ -12,7 +9,7 @@ from company_name.names.parse.cut_terms import cut_terms, cut_until_any_term_mat
 def extract_legal_terms(
     name: TokensSequence,
 ) -> Tuple[TokensSequence, TokensSequence, TokensSequence]:
-    legal_terms = LEGAL_TERMS.legal_term_sources
+    legal_terms = KnowledgeBase.legal_terms.legal_term_sources
 
     base, other = cut_until_any_term_matches(name, legal_terms)
     if not base or len(base) <= len(other):
@@ -28,20 +25,26 @@ def extract_common(
     name: TokensSequence,
 ) -> Tuple[TokensSequence, TokensSequence, TokensSequence]:
     without_prefixes, common_prefixes = cut_terms(
-        name, COMMON_PREFIXES, from_start=True
+        name, KnowledgeBase.common_prefixes.terms, from_start=True
     )
     if not without_prefixes:
         without_prefixes, common_prefixes = name, TokensSequence()
+    if common_prefixes:
+        pass
 
     without_suffixes, common_suffixes = cut_terms(
-        without_prefixes, COMMON_SUFFIXES, saving_at_least_one_word=True
+        without_prefixes,
+        KnowledgeBase.common_suffixes.terms,
+        saving_at_least_one_word=True,
     )
+    if common_suffixes:
+        pass
 
     return common_prefixes, without_suffixes, common_suffixes
 
 
 def extract_countries(name: TokensSequence) -> Tuple[TokensSequence, TokensSequence]:
-    return cut_terms(name, COUNTRIES.countries)
+    return cut_terms(name, KnowledgeBase.countries.countries)
 
 
 def extract_weak(name: TokensSequence):

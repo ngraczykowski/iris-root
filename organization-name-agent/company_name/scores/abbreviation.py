@@ -2,7 +2,7 @@ import dataclasses
 import string
 from typing import Generator, Sequence, Tuple
 
-from company_name.datasources.special_words import WEAK_WORDS
+from company_name.knowledge_base import KnowledgeBase
 from company_name.names.name_information import NameInformation, Token, TokensSequence
 from company_name.scores.score import Score
 from company_name.utils.clear_name import POSSIBLE_SEPARATORS, clear_name
@@ -26,7 +26,7 @@ def _check_abbreviation_for_next_word(
     result: Abbreviation,
 ) -> Generator[Score, None, None]:
     # words such as of / the / ... are often omitted in abbreviation
-    if not word or word in WEAK_WORDS:
+    if not word or word in KnowledgeBase.weak_words:
         source = (result.source + [word]) if word else result.source
         yield check_abbreviation(
             rest_of_information,
@@ -105,7 +105,7 @@ def _check_abbreviation_for_next_word(
 def _check_abbreviation_when_no_abbreviation(
     words: TokensSequence, result: Abbreviation
 ) -> Score:
-    left_words = len(set(words).difference(WEAK_WORDS))
+    left_words = len(set(words).difference(KnowledgeBase.weak_words))
     if not left_words:
         return Score(value=1, compared=result.compared())
 

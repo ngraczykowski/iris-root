@@ -12,7 +12,12 @@ from company_name.agent.agent_exchange import CompanyNameAgentExchange
 from company_name.agent.grpc_service import CompanyNameAgentGrpcServicer
 
 
-def run(configuration_dirs, start_agent_exchange, start_grpc_service):
+def run(
+    configuration_dirs,
+    start_agent_exchange,
+    start_grpc_service,
+    additional_knowledge_dir,
+):
     config = Config(configuration_dirs=configuration_dirs, required=True)
     services = []
     if start_agent_exchange:
@@ -27,7 +32,12 @@ def run(configuration_dirs, start_agent_exchange, start_grpc_service):
             GrpcService(config, servicers=(CompanyNameAgentGrpcServicer(),))
         )
 
-    AgentRunner(config).run(CompanyNameAgent(config), services=services)
+    AgentRunner(config).run(
+        CompanyNameAgent(
+            config=config, additional_knowledge_dir=additional_knowledge_dir
+        ),
+        services=services,
+    )
 
 
 def main():
@@ -50,6 +60,13 @@ def main():
         help="Start agent exchange",
     )
     parser.add_argument(
+        "-k",
+        "--knowledge",
+        type=pathlib.Path,
+        default=None,
+        help="Path for knowledge files, like legal terms or countries",
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
@@ -63,10 +80,12 @@ def main():
         level=logging.DEBUG if args.verbose else logging.INFO,
         format="%(asctime)s %(name)-20s %(levelname)-8s %(message)s",
     )
+
     run(
         configuration_dirs=(args.configuration_dir,),
         start_grpc_service=args.grpc,
         start_agent_exchange=args.agent_exchange,
+        additional_knowledge_dir=args.knowledge,
     )
 
 

@@ -1,11 +1,14 @@
+import json
+
 import pytest
 
 from company_name.compare import parse_name
-from company_name.datasources.legal_terms import LegalTerms
+from company_name.knowledge_base.legal_terms import LegalTerms
 
 
 def test_basic_legal_terms():
-    terms = LegalTerms()
+    with open("./company_name/resources/legal_terms.json") as f:
+        terms = LegalTerms(json.load(f))
     assert ("corporation",) in terms.legal_term_sources
     assert ("corp",) in terms.legal_term_sources
     assert ("corp.",) not in terms.legal_term_sources

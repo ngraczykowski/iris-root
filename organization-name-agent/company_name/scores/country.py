@@ -1,4 +1,4 @@
-from company_name.datasources.countries import COUNTRIES
+from company_name.knowledge_base import KnowledgeBase
 from company_name.names.name_information import TokensSequence
 from company_name.scores.score import Score
 
@@ -10,8 +10,8 @@ def get_country_score(
         return Score()
 
     first_country_ids, second_country_ids = (
-        COUNTRIES.get_countries_ids(first_countries),
-        COUNTRIES.get_countries_ids(second_countries),
+        KnowledgeBase.countries.get_countries_ids(first_countries),
+        KnowledgeBase.countries.get_countries_ids(second_countries),
     )
     value = float(bool(first_country_ids.intersection(second_country_ids)))
 

@@ -1,7 +1,7 @@
 from typing import Generator, Optional, Sequence, Tuple
 
-from company_name.datasources.special_words import WEAK_WORDS
-from company_name.datasources.term_sources import TermSources
+from company_name.knowledge_base import KnowledgeBase
+from company_name.knowledge_base.term_sources import TermSources
 from company_name.names.name_information import Token, TokensSequence
 
 
@@ -55,7 +55,9 @@ def cut_terms(
         return TokensSequence(), TokensSequence()
 
     if with_weak_words:
-        terms_to_cut = terms_to_cut + TermSources({(w,) for w in WEAK_WORDS})
+        terms_to_cut = terms_to_cut + TermSources(
+            {(w,) for w in KnowledgeBase.weak_words}
+        )
 
     name, saved_word = (
         next(_divide_name_for_possible_terms(name, 1, from_start=not from_start))

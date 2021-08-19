@@ -1,6 +1,6 @@
 import pytest
 
-from company_name.datasources.term_sources import TermSources
+from company_name.knowledge_base.term_sources import TermSources
 from company_name.names.parse.create_tokens import create_tokens
 from company_name.names.parse.cut_terms import cut_terms, cut_until_any_term_matches
 

@@ -1,13 +1,13 @@
 import collections
 from typing import Counter, Iterable, List
 
-from company_name.datasources.special_words import WEAK_WORDS
+from company_name.knowledge_base import KnowledgeBase
 from company_name.names.name_information import TokensSequence
 from company_name.scores.score import Score
 
 
 def _filter_weak_words(names: Iterable[str]) -> List[str]:
-    return [n for n in names if n not in WEAK_WORDS]
+    return [n for n in names if n not in KnowledgeBase.weak_words]
 
 
 def _common(first: Counter[str], second: Counter[str]) -> List[str]:

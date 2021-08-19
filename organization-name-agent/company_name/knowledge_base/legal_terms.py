@@ -1,16 +1,8 @@
 import itertools
-import json
-import pathlib
-from typing import Any, Dict, List, NamedTuple, Sequence, Set, Tuple
+from typing import Any, Dict, List, Mapping, NamedTuple, Sequence, Set, Tuple
 
-import importlib_resources
-
-from company_name.datasources.term_sources import TermSources
+from company_name.knowledge_base.term_sources import TermSources
 from company_name.utils.clear_name import clear_name, divide
-
-LEGAL_TERMS_PATH = (
-    importlib_resources.files("company_name") / "resources" / "legal_terms.json"
-)
 
 
 class LegalTermJsonEntity(NamedTuple):
@@ -25,10 +17,8 @@ class LegalTerm(NamedTuple):
 
 
 class LegalTerms:
-    def __init__(self, source_path: pathlib.Path = LEGAL_TERMS_PATH):
-        known_entities: Set[LegalTermJsonEntity] = self._load_known_entities(
-            source_path
-        )
+    def __init__(self, data: Mapping[str, Mapping]):
+        known_entities: Set[LegalTermJsonEntity] = self._load_known_entities(data)
 
         self.legal_term_sources = TermSources(
             {
@@ -47,11 +37,8 @@ class LegalTerms:
                 else:
                     self.source_to_legal_terms[abbr] = [legal_term]
 
-    def _load_known_entities(
-        self, source_path: pathlib.Path
-    ) -> Set[LegalTermJsonEntity]:
-        with source_path.open("rt", encoding="utf-8") as f:
-            known_legal_entities = json.load(f)["legal_terms"]
+    def _load_known_entities(self, data: Mapping) -> Set[LegalTermJsonEntity]:
+        known_legal_entities = data["legal_terms"]
 
         cleaned_legal_entities = {
             self._clean_entity(name, data)
@@ -91,6 +78,3 @@ class LegalTerms:
                 )
             ),
         }
-
-
-LEGAL_TERMS = LegalTerms()

@@ -16,6 +16,7 @@ from company_name.scores.parenthesis_match import get_parenthesis_score
 from company_name.scores.phonetics import get_phonetic_score
 from company_name.scores.potential_subsidiary import get_potential_subsidiary_score
 from company_name.scores.score import Score
+from company_name.scores.suffix import get_suffix_fuzzy_score
 from company_name.scores.token_inclusion import get_token_inclusion_score
 from company_name.scores.tokenization import get_tokenization_score
 
@@ -27,9 +28,7 @@ def compare_names(
         "parenthesis_match": get_parenthesis_score(alerted_name, watchlist_name),
         "abbreviation": get_abbreviation_score(alerted_name, watchlist_name),
         "fuzzy_on_base": fuzzy_score(alerted_name.base, watchlist_name.base),
-        "fuzzy_on_suffix": fuzzy_score(
-            alerted_name.common_suffixes, watchlist_name.common_suffixes
-        ),
+        "fuzzy_on_suffix": get_suffix_fuzzy_score(alerted_name, watchlist_name),
         "fuzzy": fuzzy_score(alerted_name.name(), watchlist_name.name()),
         "partial_fuzzy": partial_fuzzy_score(
             alerted_name.name(), watchlist_name.name()

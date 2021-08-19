@@ -39,6 +39,6 @@ def get_sorted_fuzzy_score(first: TokensSequence, second: TokensSequence) -> Sco
         return Score()
 
     return Score(
-        value=fuzz.token_sort_ratio(str(first), str(second)) / 100,
+        value=fuzz.token_sort_ratio(first.cleaned_name, second.cleaned_name) / 100,
         compared=_to_compared(first, second),
     )
