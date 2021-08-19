@@ -11,7 +11,7 @@ class DateOfBirthFeatureTest extends Specification {
 
   def underTest = new DateOfBirthFeature()
 
-  def "extracts correctly"() {
+  def "extracts correctly without duplicates"() {
     given:
     def matchData = [
         getCustomerEntity        : {null},
@@ -29,6 +29,10 @@ class DateOfBirthFeatureTest extends Specification {
                   getYearOfBirth: {"1994"}
               ] as WorldCheckIndividual,
               [
+                  getDobs       : {"22 12 1990"},
+                  getYearOfBirth: {"1994"}
+              ] as WorldCheckIndividual,
+              [
                   getDobs       : {"10 10 2012"},
                   getYearOfBirth: {null}
               ] as WorldCheckIndividual
@@ -36,6 +40,10 @@ class DateOfBirthFeatureTest extends Specification {
         },
         getPrivateListIndividuals: {
           [
+              [
+                  getDateOfBirth: {"23/12/1990"},
+                  getYearOfBirth: {"1995"}
+              ] as PrivateListIndividual,
               [
                   getDateOfBirth: {"23/12/1990"},
                   getYearOfBirth: {"1995"}
@@ -54,7 +62,9 @@ class DateOfBirthFeatureTest extends Specification {
 
     then:
     actual.with {
+      it.getAlertedPartyDates().size() == 2
       it.getAlertedPartyDates().containsAll(["1992 8 23", "1994"])
+      it.getWatchlistDates().size() == 5
       it.getWatchlistDates().containsAll(["22 12 1990", "1994", "10 10 2012", "23/12/1994", "1995"])
     }
   }

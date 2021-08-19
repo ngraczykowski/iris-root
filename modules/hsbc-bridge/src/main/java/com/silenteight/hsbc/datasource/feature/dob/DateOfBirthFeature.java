@@ -6,7 +6,7 @@ import com.silenteight.hsbc.datasource.dto.date.DateFeatureInputDto.DateFeatureI
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
-import static java.util.stream.Collectors.toList;
+import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
 import static java.util.stream.Stream.concat;
 
 public class DateOfBirthFeature implements FeatureValuesRetriever<DateFeatureInputDto> {
@@ -24,11 +24,10 @@ public class DateOfBirthFeature implements FeatureValuesRetriever<DateFeatureInp
         matchData.getPrivateListIndividuals()).extract();
     var mpDobsWorldCheckIndividuals = new WorldCheckDateExtractor(
         matchData.getWorldCheckIndividuals()).extract();
-
     return featureBuilder
-        .alertedPartyDates(apDates.collect(toList()))
+        .alertedPartyDates(toDistinctList(apDates))
         .watchlistDates(
-            concat(mpDobsWorldCheckIndividuals, mpDobsPrivateWatchlistDates).collect(toList()))
+            toDistinctList(concat(mpDobsWorldCheckIndividuals, mpDobsPrivateWatchlistDates)))
         .build();
   }
 
