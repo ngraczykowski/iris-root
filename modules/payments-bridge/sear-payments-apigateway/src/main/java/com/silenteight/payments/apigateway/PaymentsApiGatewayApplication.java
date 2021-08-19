@@ -36,6 +36,7 @@ public class PaymentsApiGatewayApplication {
 
   private static void setUpSystemProperties() {
     setProperty("spring.application.name", "papigw");
+    setProperty("spring.config.name", "apigateway");
 
     // NOTE(ahaczewski): Force use of fast random source.
     setProperty("java.security.egd", "file:/dev/urandom");
