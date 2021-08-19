@@ -2473,35 +2473,7 @@
             defs["v1_upload_body"] = {
   "type" : "object",
   "properties" : {
-    "coreWatchlist" : {
-      "type" : "array",
-      "format" : "binary",
-      "items" : {
-        "type" : "string"
-      }
-    },
-    "nameAliasesWatchlist" : {
-      "type" : "array",
-      "format" : "binary",
-      "items" : {
-        "type" : "string"
-      }
-    },
-    "keywordsWatchlist" : {
-      "type" : "array",
-      "format" : "binary",
-      "items" : {
-        "type" : "string"
-      }
-    },
-    "coreChecksum" : {
-      "type" : "array",
-      "format" : "binary",
-      "items" : {
-        "type" : "string"
-      }
-    },
-    "aliasesChecksum" : {
+    "file" : {
       "type" : "array",
       "format" : "binary",
       "items" : {
@@ -6995,13 +6967,9 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        array[String] coreWatchlist = ; // array[String] | 
-        array[String] nameAliasesWatchlist = ; // array[String] | 
-        array[String] keywordsWatchlist = ; // array[String] | 
-        array[String] coreChecksum = ; // array[String] | 
-        array[String] aliasesChecksum = ; // array[String] | 
+        array[String] file = ; // array[String] | 
         try {
-            apiInstance.watchlistV1UploadPost(coreWatchlist, nameAliasesWatchlist, keywordsWatchlist, coreChecksum, aliasesChecksum);
+            apiInstance.watchlistV1UploadPost(file);
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#watchlistV1UploadPost");
             e.printStackTrace();
@@ -7017,13 +6985,9 @@ public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        array[String] coreWatchlist = ; // array[String] | 
-        array[String] nameAliasesWatchlist = ; // array[String] | 
-        array[String] keywordsWatchlist = ; // array[String] | 
-        array[String] coreChecksum = ; // array[String] | 
-        array[String] aliasesChecksum = ; // array[String] | 
+        array[String] file = ; // array[String] | 
         try {
-            apiInstance.watchlistV1UploadPost(coreWatchlist, nameAliasesWatchlist, keywordsWatchlist, coreChecksum, aliasesChecksum);
+            apiInstance.watchlistV1UploadPost(file);
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#watchlistV1UploadPost");
             e.printStackTrace();
@@ -7036,20 +7000,12 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-watchlistV1UploadPost-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">array[String] *coreWatchlist = ; // 
-array[String] *nameAliasesWatchlist = ; // 
-array[String] *keywordsWatchlist = ; // 
-array[String] *coreChecksum = ; // 
-array[String] *aliasesChecksum = ; // 
+                              <pre class="prettyprint"><code class="language-cpp">array[String] *file = ; // 
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
 // Upload watchlist files with up to 1GB limit.
-[apiInstance watchlistV1UploadPostWith:coreWatchlist
-    nameAliasesWatchlist:nameAliasesWatchlist
-    keywordsWatchlist:keywordsWatchlist
-    coreChecksum:coreChecksum
-    aliasesChecksum:aliasesChecksum
+[apiInstance watchlistV1UploadPostWith:file
               completionHandler: ^(NSError* error) {
                             if (error) {
                                 NSLog(@"Error: %@", error);
@@ -7062,11 +7018,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
 
 var api = new HscbBridgeBatchApi.DefaultApi()
-var coreWatchlist = ; // {{array[String]}} 
-var nameAliasesWatchlist = ; // {{array[String]}} 
-var keywordsWatchlist = ; // {{array[String]}} 
-var coreChecksum = ; // {{array[String]}} 
-var aliasesChecksum = ; // {{array[String]}} 
+var file = ; // {{array[String]}} 
 
 var callback = function(error, data, response) {
   if (error) {
@@ -7075,7 +7027,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully.');
   }
 };
-api.watchlistV1UploadPost(coreWatchlistnameAliasesWatchlistkeywordsWatchlistcoreChecksumaliasesChecksum, callback);
+api.watchlistV1UploadPost(file, callback);
 </code></pre>
                             </div>
 
@@ -7097,16 +7049,12 @@ namespace Example
         {
 
             var apiInstance = new DefaultApi();
-            var coreWatchlist = new array[String](); // array[String] | 
-            var nameAliasesWatchlist = new array[String](); // array[String] | 
-            var keywordsWatchlist = new array[String](); // array[String] | 
-            var coreChecksum = new array[String](); // array[String] | 
-            var aliasesChecksum = new array[String](); // array[String] | 
+            var file = new array[String](); // array[String] | 
 
             try
             {
                 // Upload watchlist files with up to 1GB limit.
-                apiInstance.watchlistV1UploadPost(coreWatchlist, nameAliasesWatchlist, keywordsWatchlist, coreChecksum, aliasesChecksum);
+                apiInstance.watchlistV1UploadPost(file);
             }
             catch (Exception e)
             {
@@ -7123,14 +7071,10 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$coreWatchlist = ; // array[String] | 
-$nameAliasesWatchlist = ; // array[String] | 
-$keywordsWatchlist = ; // array[String] | 
-$coreChecksum = ; // array[String] | 
-$aliasesChecksum = ; // array[String] | 
+$file = ; // array[String] | 
 
 try {
-    $api_instance->watchlistV1UploadPost($coreWatchlist, $nameAliasesWatchlist, $keywordsWatchlist, $coreChecksum, $aliasesChecksum);
+    $api_instance->watchlistV1UploadPost($file);
 } catch (Exception $e) {
     echo 'Exception when calling DefaultApi->watchlistV1UploadPost: ', $e->getMessage(), PHP_EOL;
 }
@@ -7143,14 +7087,10 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $coreWatchlist = []; # array[String] | 
-my $nameAliasesWatchlist = []; # array[String] | 
-my $keywordsWatchlist = []; # array[String] | 
-my $coreChecksum = []; # array[String] | 
-my $aliasesChecksum = []; # array[String] | 
+my $file = []; # array[String] | 
 
 eval { 
-    $api_instance->watchlistV1UploadPost(coreWatchlist => $coreWatchlist, nameAliasesWatchlist => $nameAliasesWatchlist, keywordsWatchlist => $keywordsWatchlist, coreChecksum => $coreChecksum, aliasesChecksum => $aliasesChecksum);
+    $api_instance->watchlistV1UploadPost(file => $file);
 };
 if ($@) {
     warn "Exception when calling DefaultApi->watchlistV1UploadPost: $@\n";
@@ -7166,15 +7106,11 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-coreWatchlist =  # array[String] | 
-nameAliasesWatchlist =  # array[String] | 
-keywordsWatchlist =  # array[String] | 
-coreChecksum =  # array[String] | 
-aliasesChecksum =  # array[String] | 
+file =  # array[String] | 
 
 try: 
     # Upload watchlist files with up to 1GB limit.
-    api_instance.watchlist_v1_upload_post(coreWatchlist, nameAliasesWatchlist, keywordsWatchlist, coreChecksum, aliasesChecksum)
+    api_instance.watchlist_v1_upload_post(file)
 except ApiException as e:
     print("Exception when calling DefaultApi->watchlistV1UploadPost: %s\n" % e)</code></pre>
                             </div>
@@ -7191,87 +7127,11 @@ except ApiException as e:
                                 <th width="150px">Name</th>
                                 <th>Description</th>
                               </tr>
-                                  <tr><td style="width:150px;">coreWatchlist*</td>
+                                  <tr><td style="width:150px;">file*</td>
                                   <td>
                                   
                                   
-                                      <div id="d2e199_watchlistV1UploadPost_coreWatchlist">
-                                          <div class="json-schema-view">
-                                              <div class="primitive">
-                                                  <span class="type">
-                                                      array[String]
-                                                  </span>
-                                  
-                                              </div>
-                                                  <div class="inner required">
-                                                      Required
-                                                  </div>
-                                          </div>
-                                      </div>
-                                  </td>
-                                  </tr>
-                                  <tr><td style="width:150px;">nameAliasesWatchlist*</td>
-                                  <td>
-                                  
-                                  
-                                      <div id="d2e199_watchlistV1UploadPost_nameAliasesWatchlist">
-                                          <div class="json-schema-view">
-                                              <div class="primitive">
-                                                  <span class="type">
-                                                      array[String]
-                                                  </span>
-                                  
-                                              </div>
-                                                  <div class="inner required">
-                                                      Required
-                                                  </div>
-                                          </div>
-                                      </div>
-                                  </td>
-                                  </tr>
-                                  <tr><td style="width:150px;">keywordsWatchlist*</td>
-                                  <td>
-                                  
-                                  
-                                      <div id="d2e199_watchlistV1UploadPost_keywordsWatchlist">
-                                          <div class="json-schema-view">
-                                              <div class="primitive">
-                                                  <span class="type">
-                                                      array[String]
-                                                  </span>
-                                  
-                                              </div>
-                                                  <div class="inner required">
-                                                      Required
-                                                  </div>
-                                          </div>
-                                      </div>
-                                  </td>
-                                  </tr>
-                                  <tr><td style="width:150px;">coreChecksum*</td>
-                                  <td>
-                                  
-                                  
-                                      <div id="d2e199_watchlistV1UploadPost_coreChecksum">
-                                          <div class="json-schema-view">
-                                              <div class="primitive">
-                                                  <span class="type">
-                                                      array[String]
-                                                  </span>
-                                  
-                                              </div>
-                                                  <div class="inner required">
-                                                      Required
-                                                  </div>
-                                          </div>
-                                      </div>
-                                  </td>
-                                  </tr>
-                                  <tr><td style="width:150px;">aliasesChecksum*</td>
-                                  <td>
-                                  
-                                  
-                                      <div id="d2e199_watchlistV1UploadPost_aliasesChecksum">
+                                      <div id="d2e199_watchlistV1UploadPost_file">
                                           <div class="json-schema-view">
                                               <div class="primitive">
                                                   <span class="type">
@@ -7290,7 +7150,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - The watchlist files were uploaded successfully. </h3>
+                            <h3> Status: 200 - The watchlist was uploaded successfully. </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                             </ul>

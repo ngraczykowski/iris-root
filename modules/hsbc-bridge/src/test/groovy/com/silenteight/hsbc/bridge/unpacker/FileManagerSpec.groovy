@@ -13,7 +13,7 @@ class FileManagerSpec extends Specification {
     def archive = getClass().getResourceAsStream("/files/watchlistTest.gz")
 
     when:
-    def result = underTest.unzip(archive)
+    def result = underTest.unpackGzip(archive)
 
     then:
     result.name == name
@@ -23,7 +23,7 @@ class FileManagerSpec extends Specification {
   def "should delete unzipped file"() {
     given:
     def archive = getClass().getResourceAsStream("/files/watchlistTest.gz")
-    def path = underTest.unzip(archive).getPath()
+    def path = underTest.unpackGzip(archive).getPath()
 
     when:
     def result = underTest.delete(path)

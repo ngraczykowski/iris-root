@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.unpacker.FileManager;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,7 +14,6 @@ class WatchlistUseCaseConfiguration {
   private final WatchlistSaver watchlistSaver;
   private final WatchlistLoader watchlistLoader;
   private final WorldCheckNotifier worldCheckNotifier;
-  private final ApplicationEventPublisher eventPublisher;
   private final FileManager unzipper;
 
   @Bean
@@ -26,10 +24,5 @@ class WatchlistUseCaseConfiguration {
   @Bean
   ProcessWatchlistArchiveUseCase processWatchlistArchiveUseCase() {
     return new ProcessWatchlistArchiveUseCase(watchlistSaver, unzipper, worldCheckNotifier);
-  }
-
-  @Bean
-  SaveOriginalWatchlistUseCase saveOriginalWatchlistUseCase() {
-    return new SaveOriginalWatchlistUseCase(watchlistSaver, eventPublisher);
   }
 }

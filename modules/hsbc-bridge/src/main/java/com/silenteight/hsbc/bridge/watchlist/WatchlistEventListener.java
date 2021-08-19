@@ -2,7 +2,7 @@ package com.silenteight.hsbc.bridge.watchlist;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.hsbc.bridge.watchlist.event.OriginalWatchlistSavedEvent;
+import com.silenteight.hsbc.bridge.watchlist.event.ZipFileWatchlistSavedEvent;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -17,15 +17,8 @@ class WatchlistEventListener {
 
   @Async
   @EventListener
-  public void onOriginalWatchlistSaved(OriginalWatchlistSavedEvent event) {
-    var coreUri = URI.create(event.getCoreWatchlistUri());
-    var aliasesUri = URI.create(event.getAliasesWatchlistUri());
-
-    processWatchlist.process(RetrievedWatchlist.builder()
-        .core(watchlistLoader.loadWatchlist(coreUri))
-        .aliases(watchlistLoader.loadWatchlist(aliasesUri))
-        .keywordsUri(event.getKeywordsWatchlistUri())
-        .build()
-    );
+  public void onZipFileWatchlistSaved(ZipFileWatchlistSavedEvent event) {
+    var zipUri = URI.create(event.getZipUri());
+    processWatchlist.processZipFile(watchlistLoader.loadWatchlist(zipUri));
   }
 }

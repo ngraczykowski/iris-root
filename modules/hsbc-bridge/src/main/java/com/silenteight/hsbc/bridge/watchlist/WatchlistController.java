@@ -3,8 +3,10 @@ package com.silenteight.hsbc.bridge.watchlist;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.rest.ErrorResponse;
+import com.silenteight.hsbc.bridge.watchlist.event.ZipFileWatchlistSavedEvent;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,50 +22,24 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 @RequiredArgsConstructor
 class WatchlistController {
 
-  private final SaveOriginalWatchlistUseCase saveWatchlistUseCase;
+  private final WatchlistSaver watchlistSaver;
+  private final ApplicationEventPublisher eventPublisher;
 
   @PostMapping("/upload")
-  public void transferFile(
-      @RequestPart("coreWatchlist") MultipartFile coreWatchlist,
-      @RequestPart("nameAliasesWatchlist") MultipartFile nameAliasesWatchlist,
-      @RequestPart("keywordsWatchlist") MultipartFile keywordsWatchlist,
-      @RequestPart("coreChecksum") MultipartFile coreChecksum,
-      @RequestPart("aliasesChecksum") MultipartFile aliasesChecksum) throws IOException {
-    validateArchives(coreWatchlist, nameAliasesWatchlist);
-    validateKeywordsFile(keywordsWatchlist);
-    saveWatchlistUseCase.save(
-        RawWatchlistData.of(
-            coreWatchlist.getInputStream(), coreWatchlist.getOriginalFilename()),
-        RawWatchlistData.of(
-            nameAliasesWatchlist.getInputStream(), nameAliasesWatchlist.getOriginalFilename()),
-        RawWatchlistData.of(
-            keywordsWatchlist.getInputStream(), keywordsWatchlist.getOriginalFilename())
-    );
+  public void transferFile(@RequestPart("file") MultipartFile zipFile) throws IOException {
+    validateZipFile(zipFile);
+    var zipUri = watchlistSaver.save(zipFile.getInputStream(), zipFile.getOriginalFilename());
 
+    eventPublisher.publishEvent(new ZipFileWatchlistSavedEvent(zipUri.toString()));
     //TODO (smrozowski): delete original archives
     //TODO (smrozowski): verify if checksum is correct
   }
 
-  private void validateKeywordsFile(MultipartFile file) {
+  private void validateZipFile(MultipartFile file) {
     if (isNullOrEmpty(file.getOriginalFilename()))
       throw new NoFileException("No file was specified");
-    if (!StringUtils.endsWith(file.getOriginalFilename(), ".xml"))
+    if (!StringUtils.endsWith(file.getOriginalFilename(), ".zip"))
       throw new IncorrectFileExtensionException("File extension is incorrect");
-  }
-
-
-  private void validateArchives(MultipartFile... files) {
-    for (MultipartFile a : files) {
-      if (isNullOrEmpty(a.getOriginalFilename()))
-        throw new NoFileException("No file was specified");
-      if (!isExtensionValid(a.getOriginalFilename()))
-        throw new IncorrectFileExtensionException("File extension is incorrect");
-    }
-  }
-
-  private static boolean isExtensionValid(String originalFilename) {
-    return StringUtils.endsWith(originalFilename, ".gz") &&
-        !StringUtils.endsWith(originalFilename, "tar.gz");
   }
 
   @ExceptionHandler({ IOException.class })

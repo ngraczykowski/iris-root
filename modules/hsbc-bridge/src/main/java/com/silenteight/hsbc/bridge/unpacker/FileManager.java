@@ -3,12 +3,16 @@ package com.silenteight.hsbc.bridge.unpacker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.nio.file.Files.createDirectories;
 import static java.nio.file.Files.deleteIfExists;
@@ -22,12 +26,21 @@ public class FileManager {
 
   private final String path;
 
-  public UnzippedObject unzip(InputStream compressedFile) {
+  public UnzippedObject unpackGzip(InputStream compressedFile) {
     try {
       createDirectory();
       return unzipArchive(compressedFile);
     } catch (IOException e) {
       log.info("Error occurred during unzipping.", e);
+      throw new UnzipFailureException(e);
+    }
+  }
+
+  public List<UnzippedObject> unpackZip(InputStream compressedFile) {
+    try {
+      createDirectory();
+      return unpackZipArchive(compressedFile);
+    } catch (IOException e) {
       throw new UnzipFailureException(e);
     }
   }
@@ -62,6 +75,40 @@ public class FileManager {
     fileOutputStream.close();
 
     log.info("File successfully unzipped to: " + filePath);
+    return new UnzippedObject(name, filePath);
+  }
+
+  private List<UnzippedObject> unpackZipArchive(InputStream compressedFile) {
+    var unpackedFiles = new ArrayList<UnzippedObject>();
+
+    var name = "";
+    try (var zipInputStream = new ZipArchiveInputStream(compressedFile)) {
+      log.info("Starting unpacking zip file");
+      var entry = zipInputStream.getNextEntry();
+
+      while (entry != null) {
+        name = entry.getName();
+        unpackedFiles.add(unpackFile(zipInputStream, entry));
+        entry = zipInputStream.getNextEntry();
+      }
+    } catch (IOException e) {
+      log.error("Error occurred during unzipping file {}.", name, e);
+      throw new UnzipFailureException(e);
+    }
+
+    log.info("Content of zip file successfully unzipped");
+    return unpackedFiles;
+  }
+
+  private UnzippedObject unpackFile(InputStream zipInputStream, ArchiveEntry entry) throws
+      IOException {
+    var name = entry.getName();
+    var filePath = createPath(name);
+    var fileOutputStream = new FileOutputStream(filePath);
+    copyLarge(zipInputStream, fileOutputStream);
+    fileOutputStream.close();
+
+    log.info("File successfully unzipped to: {}", filePath);
     return new UnzippedObject(name, filePath);
   }
 
