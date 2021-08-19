@@ -1,0 +1,76 @@
+plugins {
+  id "java"
+  id "groovy"
+  id "org.springframework.boot"
+  id "com.google.cloud.tools.jib"
+}
+
+dependencies {
+  // Utilities
+  implementation libraries.commons_lang3
+  implementation libraries.commons_text
+  implementation libraries.guava
+
+  // Logging
+  runtimeOnly libraries.ecs_logging_core
+  runtimeOnly libraries.logback_ecs_encoder
+
+  // Application Starters
+  implementation libraries.spring_boot_starter_actuator
+  implementation libraries.spring_boot_starter_logging
+  implementation libraries.spring_boot_starter_webflux
+  implementation libraries.micrometer_prometheus
+
+  // Cloud
+  implementation libraries.spring_cloud_consul_discovery
+  implementation libraries.spring_cloud_starter_consul_config
+  implementation libraries.spring_cloud_starter_gateway
+  implementation libraries.spring_cloud_starter_sleuth
+
+  // AspectJ
+  implementation libraries.aspectjrt
+  aspect libraries.silenteight_sep_base_aspects
+}
+
+jar {
+  manifest {
+    attributes "Main-Class": "com.silenteight.payments.apigateway.app.PaymentsApiGatewayApplication"
+  }
+}
+
+jib {
+  from {
+    // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
+    def imageSuffix = ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) ?
+                      "-debug" : ""
+    image = "gcr.io/distroless/java-debian10:11" + imageSuffix
+  }
+  to {
+    image = "docker.repo.silenteight.com/papigw/${project.name}:${version}"
+    if ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) {
+      tags = ["snapshot"]
+    } else {
+      tags = ["latest"]
+    }
+  }
+  container {
+    appRoot = "/silenteight/app"
+    environment = [
+        "SILENTEIGHT_HOME"      : "/silenteight",
+        "SPRING_PROFILES_ACTIVE": "",
+    ]
+    jvmFlags = [
+        "-XX:MaxRAMPercentage=75",
+        "-Dfile.encoding=UTF-8",
+        "-Dsun.jnu.encoding=UTF-8",
+        "-Djava.net.preferIPv4Stack=true",
+        "-Djava.io.tmpdir=/tmp",
+        "-Dsilenteight.home=/silenteight",
+        "-Dspring.profiles.include=container",
+        "-Dserver.port=8080",
+    ]
+    ports = ["8080"]
+    user = "nonroot"
+    workingDirectory = "/silenteight"
+  }
+}

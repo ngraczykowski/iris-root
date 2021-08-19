@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.silenteight.payments.bridge.firco.accept;
+package com.silenteight.payments.apigateway;
 
 import javax.annotation.ParametersAreNonnullByDefault;

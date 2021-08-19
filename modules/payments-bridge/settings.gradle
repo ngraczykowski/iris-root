@@ -2,6 +2,7 @@ rootProject.name = 'sear-payments-bridge'
 gradle.ext.sepDependenciesVersion = "2.2.2"
 
 include 'proto-sear-payments-bridge-internal-protos'
+include 'sear-payments-apigateway'
 include 'sear-payments-bridge-ae'
 include 'sear-payments-bridge-app'
 include 'sear-payments-bridge-common'

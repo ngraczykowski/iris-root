@@ -1,0 +1,86 @@
+
+#---------------------------------------------------------------------------------------------------
+# SERVER
+#---------------------------------------------------------------------------------------------------
+
+# Embedded server configuration
+server:
+  forward-headers-strategy: native
+  undertow:
+    threads:
+      io: ${pb.web.threads.io:4}
+      worker: ${pb.web.threads.worker:16}
+
+  error:
+    include-exception: true
+    include-stacktrace: never
+
+  servlet:
+    context-path: /rest/payments
+
+#---------------------------------------------------------------------------------------------------
+# MANAGEMENT
+#---------------------------------------------------------------------------------------------------
+
+# Management HTTP server
+management:
+  endpoint:
+    health:
+      show-details: always
+
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers" ]
+    loggers:
+      sensitive: false
+
+  metrics:
+    tags:
+      application: /rest/${spring.application.name}
+
+spring:
+  #-------------------------------------------------------------------------------------------------
+  # GENERAL
+  #-------------------------------------------------------------------------------------------------
+  application:
+    name: papigw
+
+  aop:
+    auto: false
+
+  task:
+    execution:
+      pool:
+        core-size: 8
+        keep-alive: 10s
+        max-size: 16
+        queue-capacity: 10000
+      thread-name-prefix: pool-task-
+
+    scheduling:
+      pool:
+        size: 4
+      thread-name-prefix: pool-scheduling-
+
+  main:
+    banner-mode: 'off'
+
+  #-------------------------------------------------------------------------------------------------
+  # CONSUL SERVICE DISCOVERY
+  #-------------------------------------------------------------------------------------------------
+  cloud:
+    consul:
+      config:
+        enabled: false
+      enabled: false
+
+  jackson:
+    default-property-inclusion: NON_NULL
+
+  webflux:
+    base-path: /rest/${spring.application.name}
+
+info:
+  env: ${spb.env:local}
