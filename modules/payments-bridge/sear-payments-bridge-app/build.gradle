@@ -2,6 +2,7 @@ plugins {
   id "java"
   id "groovy"
   id "org.springframework.boot"
+  id "com.google.cloud.tools.jib"
 }
 
 dependencies {
@@ -80,5 +81,53 @@ dependencies {
 jar {
   manifest {
     attributes "Main-Class": "com.silenteight.payments.bridge.app.PaymentsBridgeApplication"
+  }
+}
+
+jib {
+  from {
+    // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
+    def imageSuffix = ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) ?
+                      "-debug" : ""
+    image = "gcr.io/distroless/java-debian10:11" + imageSuffix
+  }
+  to {
+    image = "docker.repo.silenteight.com/pb/${project.name}:${version}"
+    if ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) {
+      tags = ["snapshot"]
+    } else {
+      tags = ["latest"]
+    }
+  }
+  container {
+    appRoot = "/silenteight/app"
+    environment = [
+        "SILENTEIGHT_HOME"            : "/silenteight",
+        "PB_DB_HOST"                  : "postgres",
+        "PB_DB_PORT"                  : "5432",
+        "PB_DB_NAME"                  : "paymentsbridge",
+        "PB_DB_USERNAME"              : "paymentsbridge",
+        "PB_DB_PASSWORD"              : "paymentsbridge",
+        "SPRING_RABBITMQ_HOST"        : "rabbitmq",
+        "SPRING_RABBITMQ_PORT"        : "5672",
+        "SPRING_RABBITMQ_USERNAME"    : "dev",
+        "SPRING_RABBITMQ_PASSWORD"    : "dev",
+        "SPRING_RABBITMQ_VIRTUAL_HOST": "/",
+        "SPRING_PROFILES_ACTIVE"      : "",
+    ]
+    jvmFlags = [
+        "-XX:MaxRAMPercentage=75",
+        "-Dfile.encoding=UTF-8",
+        "-Dsun.jnu.encoding=UTF-8",
+        "-Djava.net.preferIPv4Stack=true",
+        "-Djava.io.tmpdir=/tmp",
+        "-Dsilenteight.home=/silenteight",
+        "-Dspring.profiles.include=container",
+        "-Dserver.port=8080",
+        "-Dgrpc.server.port=8081",
+    ]
+    ports = ["8080", "8081"]
+    user = "nonroot"
+    workingDirectory = "/silenteight"
   }
 }
