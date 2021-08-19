@@ -5,4 +5,5 @@ plugins {
 
 dependencies {
   implementation libraries.commons_lang3
+  implementation libraries.guava
 }
