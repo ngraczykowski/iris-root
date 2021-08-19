@@ -40,7 +40,7 @@ def test_abbreviation_recognition(abbreviation: str, full: str):
                 "NBP",
                 "Microsoft",
                 "FM",
-                "TFMoCa",
+                "TFMoC",
             ),
             (
                 "Apple Inc.",

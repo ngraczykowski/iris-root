@@ -14,7 +14,7 @@ def remove_redundant_abbreviations(
             lambda x: len(x.base.cleaned_name) < name_len, names
         ):
             abbreviation_score = get_abbreviation_score(name, shorter_name)
-            if abbreviation_score.value > 0.75:
+            if abbreviation_score.value == 1:
                 redundant_abbreviations.append(shorter_name)
     names_without_redundant_abbreviations = [
         name for name in names if name not in redundant_abbreviations
