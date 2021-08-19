@@ -4,6 +4,7 @@
 #---------------------------------------------------------------------------------------------------
 
 # Embedded server configuration
+# TODO(ahaczewski): Replace the following with WebFlux-compatible configuration.
 server:
   forward-headers-strategy: native
   undertow:
