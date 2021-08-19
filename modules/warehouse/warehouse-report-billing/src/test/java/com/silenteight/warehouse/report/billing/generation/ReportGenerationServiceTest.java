@@ -40,7 +40,7 @@ class ReportGenerationServiceTest {
         asList(
             getColumn("ACTION_FALSE_POSITIVE", "count_solved_FP"),
             getColumn("ACTION_POTENTIAL_TRUE_POSITIVE", "count_solved_PTP"),
-            getColumn("ACTION_MANUAL_INVESTIGATION", "count_solved_MI")),
+            getColumn("ACTION_INVESTIGATE", "count_solved_MI")),
         "count_alerts_received",
         asList("ACTION_FALSE_POSITIVE", "ACTION_POTENTIAL_TRUE_POSITIVE"),
         "count_alerts_solved");
@@ -69,13 +69,13 @@ class ReportGenerationServiceTest {
     List<Row> responseData = asList(
         buildRow("2020", "1", ACTION_PREFIX + "FALSE_POSITIVE", 30000),
         buildRow("2020", "1", ACTION_PREFIX + "POTENTIAL_TRUE_POSITIVE", 100),
-        buildRow("2020", "1", ACTION_PREFIX + "MANUAL_INVESTIGATION", 3000),
+        buildRow("2020", "1", ACTION_PREFIX + "INVESTIGATE", 3000),
         buildRow("2020", "2", ACTION_PREFIX + "FALSE_POSITIVE", 20000),
         buildRow("2020", "2", ACTION_PREFIX + "POTENTIAL_TRUE_POSITIVE", 150),
-        buildRow("2020", "2", ACTION_PREFIX + "MANUAL_INVESTIGATION", 4000),
+        buildRow("2020", "2", ACTION_PREFIX + "INVESTIGATE", 4000),
         buildRow("2020", "10", ACTION_PREFIX + "FALSE_POSITIVE", 15000),
         buildRow("2020", "10", ACTION_PREFIX + "POTENTIAL_TRUE_POSITIVE", 90),
-        buildRow("2020", "10", ACTION_PREFIX + "MANUAL_INVESTIGATION", 4000)
+        buildRow("2020", "10", ACTION_PREFIX + "INVESTIGATE", 4000)
     );
 
     FetchGroupedDataResponse response = FetchGroupedDataResponse

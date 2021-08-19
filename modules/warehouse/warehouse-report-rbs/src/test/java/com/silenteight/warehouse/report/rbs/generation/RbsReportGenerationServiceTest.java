@@ -70,13 +70,13 @@ class RbsReportGenerationServiceTest {
         "o7uPxWV913+ljhPW2uH+g7eAFeQ=",
         "policies/1234",
         "steps/94526",
-        "MANUAL_INVESTIGATION",
+        "INVESTIGATE",
         "I", "SAN", "MATCH", "NO_MATCH", "", "PTP", 2);
     Row fifth = buildRow(
         "o7uPxWV913+ljhPW2uH+g7eAFeQ=",
         "policies/1234",
         "steps/94526",
-        "MANUAL_INVESTIGATION",
+        "INVESTIGATE",
         "I", "SAN", "MATCH", "NO_MATCH", "", "FP", 8);
 
     FetchGroupedDataResponse response = FetchGroupedDataResponse
@@ -93,7 +93,7 @@ class RbsReportGenerationServiceTest {
             + "o7uPxWV913+ljhPW2uH+g7eAFeQ=,policies/1234,steps/3456,"
             + "FALSE_POSITIVE,I,SAN,MATCH,NO_MATCH,33,2,0,1,0,0\n"
             + "o7uPxWV913+ljhPW2uH+g7eAFeQ=,policies/1234,steps/94526,"
-            + "MANUAL_INVESTIGATION,I,SAN,MATCH,NO_MATCH,10,0,0,0,8,2\n"
+            + "INVESTIGATE,I,SAN,MATCH,NO_MATCH,10,0,0,0,8,2\n"
     );
   }
 
