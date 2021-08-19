@@ -20,7 +20,9 @@ def _compared(
     )
 
 
-def get_phonetic_score(first_name: TokensSequence, second_name: TokensSequence) -> Score:
+def get_phonetic_score(
+    first_name: TokensSequence, second_name: TokensSequence
+) -> Score:
     scores = [
         (fuzz.ratio(n1, n2) / 100, (n1, n2))
         for n1, n2 in itertools.product(

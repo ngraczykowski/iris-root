@@ -8,8 +8,8 @@ from company_name.scores.country import get_country_score
 from company_name.scores.first_token import get_first_token_score
 from company_name.scores.fuzzy import (
     fuzzy_score,
-    partial_fuzzy_score,
     get_sorted_fuzzy_score,
+    partial_fuzzy_score,
 )
 from company_name.scores.legal_terms import get_legal_score
 from company_name.scores.parenthesis_match import get_parenthesis_score
@@ -34,9 +34,13 @@ def compare_names(
         "partial_fuzzy": partial_fuzzy_score(
             alerted_name.name(), watchlist_name.name()
         ),
-        "sorted_fuzzy": get_sorted_fuzzy_score(alerted_name.name(), watchlist_name.name()),
+        "sorted_fuzzy": get_sorted_fuzzy_score(
+            alerted_name.name(), watchlist_name.name()
+        ),
         "legal_terms": get_legal_score(alerted_name.legal, watchlist_name.legal),
-        "tokenization": get_tokenization_score(alerted_name.name(), watchlist_name.name()),
+        "tokenization": get_tokenization_score(
+            alerted_name.name(), watchlist_name.name()
+        ),
         "absolute_tokenization": get_tokenization_score(
             alerted_name.name(), watchlist_name.name(), absolute=True
         ),
