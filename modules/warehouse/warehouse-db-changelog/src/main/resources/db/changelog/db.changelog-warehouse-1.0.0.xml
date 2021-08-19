@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+                        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
   <changeSet id="warehouse-1.0.0-1" author="anowicki">
     <createTable tableName="warehouse_report">
@@ -189,5 +189,19 @@
         <constraints nullable="false"/>
       </column>
     </addColumn>
+  </changeSet>
+
+  <changeSet id="warehouse-1.0.0-9" author="plewandowski">
+    <renameTable oldTableName="warehouse_report_sm" newTableName="warehouse_report_metrics"/>
+
+    <renameSequence newSequenceName="warehouse_report_metrics_id_seq"
+                    oldSequenceName="warehouse_report_sm_id_seq"/>
+
+    <createIndex
+        tableName="warehouse_report_metrics"
+        indexName="ix_warehouse_report_metrics_id"
+        unique="true">
+      <column name="id"/>
+    </createIndex>
   </changeSet>
 </databaseChangeLog>

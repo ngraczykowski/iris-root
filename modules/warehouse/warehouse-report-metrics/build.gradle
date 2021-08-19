@@ -1,0 +1,30 @@
+plugins {
+  id "java-library"
+  id "java-test-fixtures"
+}
+
+description = "Warehouse Report Metrics"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterDatabase
+
+  testImplementation.extendsFrom starterCommon
+  testImplementation.extendsFrom starterSpringTest
+}
+
+dependencies {
+  implementation project(":warehouse-common")
+  implementation project(":warehouse-indexer")
+  implementation project(":warehouse-report")
+
+  implementation libraries.silenteight_commons_core
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_sep_auth
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_web
+
+  testImplementation project(":warehouse-common-testing")
+  testImplementation testFixtures(project(':warehouse-common'))
+  testImplementation testFixtures(project(':warehouse-indexer'))
+}

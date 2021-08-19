@@ -308,22 +308,10 @@ warehouse.report.rbs:
     grouping-columns:
       - name: qa_decision
         label: qa_decision
-        grouping-values: [PASS, FAILED]
+        grouping-values: [ PASS, FAILED ]
         add-counter: true
       - name: analysis_decision
         label: analysis_decision
         grouping-values: FP, PTP
         add-counter: false
     date-field-name: alert_timestamp
-
-warehouse.report.sm:
-  risk-type:
-    name: riskType
-    label: Risk Type
-  country:
-    name: country
-    label: Country
-  recommendation-field:
-    name: recommended action
-    decision-values: [FALSE_POSITIVE, POTENTIAL_TRUE_POSITIVE]
-  date-field-name: alert_timestamp
