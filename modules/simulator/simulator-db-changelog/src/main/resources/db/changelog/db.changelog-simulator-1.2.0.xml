@@ -12,4 +12,13 @@
     </update>
   </changeSet>
 
+  <changeSet id="simulator-1.2.0-2" author="tbiedrzycki">
+    <createIndex
+        tableName="simulator_dataset"
+        indexName="ix_simulator_dataset_dataset_id"
+        unique="true">
+      <column name="dataset_id"/>
+    </createIndex>
+  </changeSet>
+
 </databaseChangeLog>
