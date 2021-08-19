@@ -21,12 +21,12 @@ import com.silenteight.warehouse.indexer.indexing.IndexingModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 import com.silenteight.warehouse.management.ManagementModule;
 import com.silenteight.warehouse.report.billing.BillingReportModule;
+import com.silenteight.warehouse.report.metrics.MetricsReportModule;
 import com.silenteight.warehouse.report.production.ProductionReportingModule;
 import com.silenteight.warehouse.report.rbs.RbsReportModule;
 import com.silenteight.warehouse.report.remove.ReportsRemovalModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
 import com.silenteight.warehouse.report.simulation.SimulationModule;
-import com.silenteight.warehouse.report.sm.SimulationMetricsReportModule;
 import com.silenteight.warehouse.report.statistics.ReportStatisticsModule;
 import com.silenteight.warehouse.report.storage.StorageModule;
 import com.silenteight.warehouse.report.synchronization.SynchronizationModule;
@@ -55,6 +55,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     ConfigurationManagementModule.class,
     IndexingModule.class,
     ManagementModule.class,
+    MetricsReportModule.class,
     ProductionReportingModule.class,
     RbsReportModule.class,
     ReportingModule.class,
@@ -62,7 +63,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     ReportStatisticsModule.class,
     QueryAlertModule.class,
     SamplingModule.class,
-    SimulationMetricsReportModule.class,
     SimulationModule.class,
     SynchronizationModule.class,
     // Interface modules

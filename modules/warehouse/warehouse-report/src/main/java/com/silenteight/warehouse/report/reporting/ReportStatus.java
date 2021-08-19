@@ -29,8 +29,16 @@ public class ReportStatus {
         .build();
   }
 
+  public static ReportStatus buildReportStatusFailed(String reportName) {
+    return ReportStatus.builder()
+        .status(Status.FAILED)
+        .reportName(reportName)
+        .build();
+  }
+
   private enum Status {
     OK,
-    GENERATING
+    GENERATING,
+    FAILED
   }
 }
