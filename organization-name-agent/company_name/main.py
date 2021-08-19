@@ -3,11 +3,31 @@ import logging
 import pathlib
 
 from agent_base.agent import AgentRunner
+from agent_base.grpc_service import GrpcService
 from agent_base.utils import Config
 
 from company_name.agent.agent import CompanyNameAgent
 from company_name.agent.agent_data_source import CompanyNameAgentDataSource
 from company_name.agent.agent_exchange import CompanyNameAgentExchange
+from company_name.agent.grpc_service import CompanyNameAgentGrpcServicer
+
+
+def run(configuration_dirs, start_agent_exchange, start_grpc_service):
+    config = Config(configuration_dirs=configuration_dirs, required=True)
+    services = []
+    if start_agent_exchange:
+        services.append(
+            CompanyNameAgentExchange(
+                config,
+                data_source=CompanyNameAgentDataSource(config),
+            )
+        )
+    if start_grpc_service:
+        services.append(
+            GrpcService(config, servicers=(CompanyNameAgentGrpcServicer(),))
+        )
+
+    AgentRunner(config).run(CompanyNameAgent(config), services=services)
 
 
 def main():
@@ -20,27 +40,33 @@ def main():
         help="Path for configuration files",
     )
     parser.add_argument(
+        "--grpc",
+        action="store_true",
+        help="Start grpc service",
+    )
+    parser.add_argument(
+        "--agent-exchange",
+        action="store_true",
+        help="Start agent exchange",
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         help="Increase verbosity for debug purpose",
     )
     args = parser.parse_args()
+    if not args.grpc and not args.agent_exchange:
+        parser.error("No services to run")
 
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,
         format="%(asctime)s %(name)-20s %(levelname)-8s %(message)s",
     )
-
-    config = Config(configuration_dirs=(args.configuration_dir,), required=True)
-    AgentRunner(config).run(
-        CompanyNameAgent(config),
-        services=[
-            CompanyNameAgentExchange(
-                config,
-                data_source=CompanyNameAgentDataSource(config),
-            )
-        ],
+    run(
+        configuration_dirs=(args.configuration_dir,),
+        start_grpc_service=args.grpc,
+        start_agent_exchange=args.agent_exchange,
     )
 
 

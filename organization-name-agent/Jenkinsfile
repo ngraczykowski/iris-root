@@ -24,13 +24,13 @@ pipeline {
             stages {
                 stage('Build') {
                     steps {
+                        sh './scripts/clean.sh'
                         sh './scripts/bootstrap.sh --index-url $PYPI_URL'
-                        sh './scripts/prepare_artifacts.sh --index-url $PYPI_URL'
+                        sh './scripts/build.sh --index-url $PYPI_URL'
                     }
                 }
                 stage('Test') {
                     steps {
-                        sh 'rm -rf .tox'
                         sh './scripts/test.sh --index-url $PYPI_URL'
                     }
                 }

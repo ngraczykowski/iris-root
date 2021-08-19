@@ -1,6 +1,6 @@
 import dataclasses
 import enum
-from typing import Optional, Sequence, Tuple
+from typing import Optional, Sequence
 
 
 class Solution(enum.Enum):
@@ -14,12 +14,20 @@ class Solution(enum.Enum):
         order = list(self.__class__.__members__)
         return order.index(self.name) > order.index(other.name)
 
+    def __eq__(self, other):
+        if isinstance(other, Solution):
+            return self.value == other.value
+        if isinstance(other, str):
+            return self.value == other
+        return NotImplementedError
+
 
 @dataclasses.dataclass
 class PairResult:
     solution: Solution
     solution_probability: Optional[float]
-    names: Tuple[str, str]
+    alerted_party_name: str
+    watchlist_party_name: str
 
     def __lt__(self, other: "PairResult") -> bool:
         return (self.solution, self.solution_probability or 0) < (
@@ -30,7 +38,7 @@ class PairResult:
 
 @dataclasses.dataclass
 class Reason:
-    partials: Sequence[PairResult] = ()
+    results: Sequence[PairResult] = ()
 
 
 @dataclasses.dataclass

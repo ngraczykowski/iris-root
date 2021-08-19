@@ -39,6 +39,7 @@ mcli cp --recursive artifacts/ "$MINIO_ALIAS"/artifacts/company-name-agent
 
 nomad job run "$@" company-name-agent.nomad
 
+
 # uncomment for run on local nomad in docker instead of command above
 # tricky - needs docker in docker or bound sockets and paths configured
 

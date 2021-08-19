@@ -23,7 +23,8 @@ class CompanyNameAgent(Agent):
         solution, probability = self.reduction.get_reduced_score(scores)
 
         return PairResult(
-            names=(ap_name.source.original, mp_name.source.original),
+            alerted_party_name=ap_name.source.original,
+            watchlist_party_name=mp_name.source.original,
             solution=solution,
             solution_probability=probability,
         )

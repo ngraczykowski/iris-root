@@ -39,6 +39,84 @@ job "company-name-agent" {
   group "company-name-agent" {
     count = 1
 
+    network {
+      port "grpc" {
+      }
+      port "grpcui" {
+      }
+    }
+
+    service {
+      name = "${var.namespace}-company-name-agent"
+      port = "grpc"
+
+      check_restart {
+        limit           = 3
+        grace           = "90s"
+        ignore_warnings = false
+      }
+
+      check {
+        name     = "gRPC Port Alive Check"
+        type     = "tcp"
+        interval = "10s"
+        timeout  = "2s"
+      }
+    }
+
+    service {
+      name = "${var.namespace}-grpc-company-name-agent"
+      port = "grpc"
+      tags = [
+        "grpc",
+        "gRPC.port=${NOMAD_PORT_grpc}",
+        "gRPC_port=${NOMAD_PORT_grpc}",
+      ]
+    }
+
+    service {
+      name = "${var.namespace}-name-agent-grpcui"
+      port = "grpcui"
+      tags = concat([
+        "grpcui",
+        "traefik.enable=true",
+        "traefik.protocol=http",
+      ])
+    }
+
+
+    task "grpcui" {
+      driver = "raw_exec"
+
+      lifecycle {
+        hook = "poststart"
+        sidecar = true
+      }
+
+      artifact {
+        source = "https://github.com/fullstorydev/grpcui/releases/download/v1.1.0/grpcui_1.1.0_linux_x86_64.tar.gz"
+        options {
+          checksum = "sha256:41b9b606a025561f7df892e78a8ac1819597ed74d2300183797ab8caa7b290a6"
+        }
+      }
+
+      config {
+        command = "grpcui"
+        args = [
+          "-plaintext",
+          "-bind=${NOMAD_IP_grpcui}",
+          "-port=${NOMAD_PORT_grpcui}",
+          "-open-browser=false",
+          "${NOMAD_ADDR_grpc}"
+        ]
+      }
+
+      resources {
+        cpu = 50
+        memory = 100
+      }
+    }
+
 
     task "company-name-agent" {
       driver = "docker"
@@ -69,7 +147,7 @@ job "company-name-agent" {
       config {
         image = "python:3.7"
         command = "python"
-        args = ["/app/company_name-${var.company_name_agent_version}.pyz", "-c", "/app/config", "-v"]
+        args = ["/app/company_name-${var.company_name_agent_version}.pyz", "-c", "/app/config", "--grpc", "--agent-exchange", "-v"]
         network_mode = "host"
         volumes = ["local:/app"]
       }
@@ -78,7 +156,6 @@ job "company-name-agent" {
         max_files = 10
         max_file_size = 20
       }
-
 
       resources {
         cpu = 1000

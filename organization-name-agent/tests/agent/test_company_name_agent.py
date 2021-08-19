@@ -52,7 +52,10 @@ def test_choose_exact_name(first, second):
     print(first, second)
     result = CompanyNameAgent().resolve(first, second)
     assert result.solution == Solution.MATCH
-    assert result.reason.partials[0].names[0] == result.reason.partials[0].names[1]
+    assert (
+        result.reason.results[0].alerted_party_name
+        == result.reason.results[0].watchlist_party_name
+    )
 
 
 @pytest.mark.parametrize(("first", "second"), ((("THE VTB BANK",), ("SAFE NAME",)),))
@@ -89,6 +92,6 @@ def test_abbreviation(first, second):
 )
 def test_choose_exact_name_over_abbreviation(first, second, abbreviation_not_chosen):
     print(first, second)
-    result = CompanyNameAgent().resolve(first, second)
+    result = CompanyNameAgent()._resolve(first, second)
     assert result.solution == Solution.MATCH
-    assert abbreviation_not_chosen not in result.reason.partials[0].names
+    assert abbreviation_not_chosen != result.reason.results[0].watchlist_party_name

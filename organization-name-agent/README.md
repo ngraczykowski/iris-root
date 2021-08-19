@@ -4,6 +4,8 @@
   - [Installing](#installing)
   - [Executing](#executing)
   - [Deploying](#deploying)
+  - [Agent exchange](#agent-exchange)
+  - [Grpc service](#grpc-service)
 - [Configuration](#configuration)
   - [Config files](#config)
   - [Resources](#resources)
@@ -12,7 +14,6 @@
   - [Comparing](#comparing)
   - [Scores reduction](#scores-reduction)
   - [Pair solutions reduction](#pair-solutions-reduction)
-  - [Agent exchange](#agent-exchange)
 - [Tests](#tests)
 
 <a name="usage"/>
@@ -48,11 +49,11 @@ Module needs python >= 3.7. Tested only on python 3.7.
 
 To run agent installed in your environment, simply run
 ```
-python -m company_name.main -c {configuration_dir}
+python -m company_name.main -c {configuration_dir} --grpc --agent-exchange
 ```
 
 ```
-usage: main.py [-h] [-c CONFIGURATION_DIR] [-v]
+usage: main.py [-h] [-c CONFIGURATION_DIR] [--grpc] [--agent-exchange] [-v]
 
 Company name agent
 
@@ -60,6 +61,8 @@ optional arguments:
   -h, --help            show this help message and exit
   -c CONFIGURATION_DIR, --configuration-dir CONFIGURATION_DIR
                         Path for configuration files
+  --grpc                Start grpc service
+  --agent-exchange      Start agent exchange
   -v, --verbose         Increase verbosity for debug purpose
 
 ```
@@ -73,7 +76,7 @@ Installation is not needed, if zipfile for your python version / system is avail
 Zipfile for latest python3.7 is available as artifact in jenkins (https://jenkins.silenteight.com/view/all/job/company-name-agent/job/master/)
 
 ```
-python company_name-0.1.0.dev0.pyz -c {configuration_dir}
+python company_name-0.1.0.dev0.pyz -c {configuration_dir} --grpc --agent-exchange
 ```
 
 ### using agent in your python code
@@ -96,14 +99,14 @@ For final solution for two set of names:
 >>> agent = CompanyNameAgent()
 >>> agent.resolve(['HP, INC'], ['HEWLETT-PACKARD COMPANY',  'HP CO.'])
 
-Result(solution=<Solution.MATCH: 'MATCH'>, reason=Reason(partials=[PairResult(solution=<Solution.MATCH: 'MATCH'>, solution_probability=1, names=('HP, INC', 'HP CO.')), PairResult(solution=<Solution.MATCH: 'MATCH'>, solution_probability=0.8, names=('HP, INC', 'HEWLETT-PACKARD COMPANY'))]))
+Result(solution=<Solution.MATCH: 'MATCH'>, reason=Reason(results=[PairResult(solution=<Solution.MATCH: 'MATCH'>, solution_probability=1, alerted_party_name: 'HP, INC', watchlist_party_name: HP CO.'), PairResult(solution=<Solution.MATCH: 'MATCH'>, solution_probability=0.8, alerted_party_name='HP, INC', watchlist_party_name='HEWLETT-PACKARD COMPANY)]))
 ```
 
 or, if you want to solution as simple python dict:
 ```
 >>> from company_name.utils import simplify
 >>> simplify(agent.resolve(['HP, INC'], ['HEWLETT-PACKARD COMPANY',  'HP CO.']))
-{'solution': 'MATCH', 'reason': {'partials': [{'solution': 'MATCH', 'solution_probability': 1, 'names': ['HP, INC', 'HP CO.']}, {'solution': 'MATCH', 'solution_probability': 0.8, 'names': ['HP, INC', 'HEWLETT-PACKARD COMPANY']}]}}
+{'solution': 'MATCH', 'reason': {'results': [{'solution': 'MATCH', 'solution_probability': 1, 'alerted_party_name': 'HP, INC', 'watchlist_party_name': HP CO.'}, {'solution': 'MATCH', 'solution_probability': 0.8, 'alerted_party_name': 'HP, INC', 'watchlist_party_name': 'HEWLETT-PACKARD COMPANY'}]}}
 ```
 
 <a name="deploying"/>
@@ -111,6 +114,23 @@ or, if you want to solution as simple python dict:
 ## Deploying
 See `Jenkinsfile` for building, testing and deploying on Nomad
 or `.gitlab-ci` for building, testing and deploying in PiPY. 
+
+<a name="agent-exchange"/>
+
+## Agent exchange
+
+Using [agent exchange protobufs](https://gitlab.silenteight.com/ro/agents-api/-/tree/master/agents-api) in rabbitmq queues
+and [name data source protobufs](https://gitlab.silenteight.com/sens/data-source-api/-/tree/master/data-source-api) in grpc requests to data source.
+
+Possible solutions: MATCH, INCONCLUSIVE, NO_MATCH, NO_DATA and in case of unexpected error AGENT_ERROR or DATA_SOURCE_ERROR.
+
+<a name="grpc-service"/>
+
+## Grpc service
+
+Using [protobufs for organization name agent](https://gitlab.silenteight.com/ro/agents-api/-/blob/master/protocol-agents/src/main/proto/silenteight/agent/organizationname/v1/api/organization_name_agent.proto).
+
+Possible solutions: MATCH, INCONCLUSIVE, NO_MATCH, NO_DATA and in case of unexpected error AGENT_ERROR.
 
 <a name="configuration"/>
 
@@ -411,14 +431,6 @@ and if solution is the same, by comparing solution probability. Sample sorted pa
     PairResult(solution=<Solution.NO_MATCH: 'NO_MATCH'>, solution_probability=0.9809527625612637, names=('HP, INC', 'GOOGLE')),
 ]
 ```
-
-<a name="agent-exchange"/>
-
-## Agent exchange
-
-Integration with agent exchange nad data source service is implemented in asyncio loop, listening on queue defined in config file `application.yaml`.
-Each resolving is then computed in separate process, where max number of processes is also defined in configuration.
-Any error encountered should result in UNEXPECTED_ERROR solution.
 
 <a name="tests"/>
 

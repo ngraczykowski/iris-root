@@ -28,7 +28,7 @@ build:
     - merge_requests
   script:
     - scripts/bootstrap.sh
-    - scripts/prepare_artifacts.sh
+    - scripts/build.sh
     - scripts/test.sh
   artifacts:
     when: always
