@@ -1,4 +1,21 @@
 plugins {
-  id "java-library"
-  id "groovy"
+    id 'java'
+}
+
+group 'com.silenteight.payments.bridge'
+version '1.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+  implementation libraries.spring_boot_starter_data_jpa
+
+  runtimeOnly libraries.liquibase_core
+  runtimeOnly libraries.postgresql
+}
+
+test {
+    useJUnitPlatform()
 }

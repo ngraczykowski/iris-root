@@ -25,3 +25,4 @@ build/
 
 ### Docker ###
 /.env
+/.idea/

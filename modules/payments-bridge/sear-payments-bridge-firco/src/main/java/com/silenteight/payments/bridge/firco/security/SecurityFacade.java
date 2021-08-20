@@ -11,7 +11,7 @@ public class SecurityFacade {
 
   private final AuthenticateUseCase authenticateUseCase;
 
-  public void authenticate(String realm, Authentication authentication) {
-    authenticateUseCase.authenticate(realm, authentication);
+  public void authenticate(Authentication authentication) {
+    authenticateUseCase.authenticate(authentication);
   }
 }

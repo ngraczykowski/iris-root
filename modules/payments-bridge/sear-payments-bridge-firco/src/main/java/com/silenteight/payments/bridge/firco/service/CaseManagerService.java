@@ -16,8 +16,7 @@ class CaseManagerService {
   private final IngressFacade ingressFacade;
 
   void sendMessage(RequestDto requestDto, String dc) {
-    securityFacade.authenticate(
-        requestDto.getAuthenticationRealm(), requestDto.getAuthenticationToken());
+    securityFacade.authenticate(requestDto.getAuthenticationToken());
     ingressFacade.handleIncomingAlerts(requestDto.getAlertDataCenters(dc));
   }
 }

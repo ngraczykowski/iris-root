@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.firco.dto.common.AckDto;
 import com.silenteight.payments.bridge.firco.dto.input.RequestDto;
 import com.silenteight.payments.bridge.firco.dto.validator.MinimalAlertDefinition;
+import com.silenteight.payments.bridge.firco.security.SecurityFacade;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,11 +24,13 @@ class FircoCaseManagerController {
 
   private final CaseManagerService caseManagerService;
 
+  private final SecurityFacade securityFacade;
+
   @PostMapping("/sendMessage")
   public ResponseEntity<AckDto> sendMessage(
       @RequestBody @Validated(MinimalAlertDefinition.class) RequestDto requestDto,
       @RequestParam @NotBlank String dc) {
-
+    
     caseManagerService.sendMessage(requestDto, dc);
 
     return ResponseEntity.ok(AckDto.ok());

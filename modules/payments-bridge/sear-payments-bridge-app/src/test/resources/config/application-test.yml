@@ -1,0 +1,72 @@
+spring:
+  application:
+    name: pb
+
+  #-------------------------------------------------------------------------------------------------
+  # DATABASE
+  #-------------------------------------------------------------------------------------------------
+  datasource:
+    # Postgres database
+    type: com.zaxxer.hikari.HikariDataSource
+    url: localhost
+    username: paymentsbridge
+    password: paymentsbridge
+    initialization-mode: never
+
+    # Hikari pool configuration
+    hikari:
+      pool-name: Database-Pool
+      minimum-idle: 1
+      maximum-pool-size: 10
+      auto-commit: false
+      schema: public
+      isolate-internal-queries: true
+      # NOTE(ahaczewski): Forces HikariCP to commit the transaction after opening fresh connection.
+      #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
+      #  just before handing the new connection to the pool, HikariCP runs
+      #  `SET SESSION search_path TO '${ae.db.schema}'`, which automatically begins a transaction.
+      #  The `connection-init-sql` query forces a transaction commit.
+      connection-init-sql: SELECT 1
+      data-source-properties:
+        ApplicationName: Sear payments bridge
+
+  # Database migrations
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-test.xml
+    default-schema: public
+    contexts: default, test
+
+  # Spring Data JPA
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    open-in-view: false
+    database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
+
+    hibernate:
+      ddl-auto: validate
+      use-new-id-generator-mappings: true
+
+    properties:
+      hibernate.cache.use_query_cache: false
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.generate_statistics: false
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.jdbc.time_zone: UTC
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      org.hibernate.envers.audit_table_suffix: _audit
+      org.hibernate.envers.store_data_at_delete: true
+
+grpc:
+  server:
+    in-process-name: test
+    port: -1
+  client:
+    GLOBAL:
+      negotiation-type: PLAINTEXT
+    pb:
+      address: in-process:test
+    governance:
+      address: in-process:test
+    data-source:
+      address: in-process:test
