@@ -41,7 +41,6 @@ class JenkinsModelClientSpec extends Specification {
     1 * httpClient.send({HttpRequest request -> request.method() == 'GET'}, BodyHandlers.ofString()) >> crumbHttpResponse
     1 * httpClient.send({HttpRequest request -> request.method() == 'POST'}, BodyHandlers.ofString()) >> updateModelHttpResponse
     1 * objectMapper.readValue(crumbHttpResponse.body(), _ as TypeReference) >> crumbResponse
-    1 * objectMapper.writeValueAsString(modelInfo) >> modelInfo.toString()
   }
 
   def 'should throw ModelNotReceivedException when unable to receive model with status code other than 201'() {
@@ -65,7 +64,6 @@ class JenkinsModelClientSpec extends Specification {
     1 * httpClient.send({HttpRequest request -> request.method() == 'GET'}, BodyHandlers.ofString()) >> crumbHttpResponse
     1 * httpClient.send({HttpRequest request -> request.method() == 'POST'}, BodyHandlers.ofString()) >> updateModelHttpResponse
     1 * objectMapper.readValue(crumbHttpResponse.body(), _ as TypeReference) >> crumbResponse
-    1 * objectMapper.writeValueAsString(modelInfo) >> modelInfo.toString()
     def exception = thrown(ModelNotReceivedException)
     exception.message == "Unable to get updated model with status code: 401"
   }
@@ -90,7 +88,6 @@ class JenkinsModelClientSpec extends Specification {
     1 * httpClient.send({HttpRequest request -> request.method() == 'GET'}, BodyHandlers.ofString()) >> crumbHttpResponse
     1 * httpClient.send({HttpRequest request -> request.method() == 'POST'}, BodyHandlers.ofString()) >> modelStatusHttpResponse
     1 * objectMapper.readValue(crumbHttpResponse.body(), _ as TypeReference) >> crumbResponse
-    1 * objectMapper.writeValueAsString(modelStatusUpdatedDto) >> modelStatusUpdatedDto.toString()
   }
 
   def 'should throw ModelNotReceivedException when unable to send model status with status code other than 201'() {
@@ -112,7 +109,6 @@ class JenkinsModelClientSpec extends Specification {
     1 * httpClient.send({HttpRequest request -> request.method() == 'GET'}, BodyHandlers.ofString()) >> crumbHttpResponse
     1 * httpClient.send({HttpRequest request -> request.method() == 'POST'}, BodyHandlers.ofString()) >> modelStatusHttpResponse
     1 * objectMapper.readValue(crumbHttpResponse.body(), _ as TypeReference) >> crumbResponse
-    1 * objectMapper.writeValueAsString(modelStatusUpdatedDto) >> modelStatusUpdatedDto.toString()
     def exception = thrown(ModelNotReceivedException)
     exception.message == "Unable to send update model status with code: 401"
   }

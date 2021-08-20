@@ -10,6 +10,7 @@ import com.silenteight.hsbc.bridge.model.transfer.ModelClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.client.utils.URIBuilder;
 
 import java.io.IOException;
 import java.net.URI;
@@ -105,51 +106,61 @@ public class JenkinsModelClient implements ModelClient {
   private HttpRequest createUpdateModelStatusHttpRequest(
       CrumbResponse crumbResponse, ModelStatusUpdatedDto modelStatusUpdated) {
     return HttpRequest.newBuilder()
-        .POST(
-            HttpRequest.BodyPublishers.ofString(
-                mapModelInfoStatusRequestToJsonAsString(modelStatusUpdated)))
+        .POST(HttpRequest.BodyPublishers.noBody())
         .header(
             AUTHORIZATION,
             encodeCredentialsToStringForBasicAuth(
                 jenkinsApiProperties.getUsername(),
                 jenkinsApiProperties.getPassword()))
         .header(crumbResponse.getCrumbRequestField(), crumbResponse.getCrumb())
-        .uri(URI.create(jenkinsApiProperties.getUpdateModelStatusUri()))
+        .uri(createModelStatusUpdatedUri(
+            jenkinsApiProperties.getUpdateModelStatusUri(), modelStatusUpdated))
         .build();
   }
 
-  private String mapModelInfoStatusRequestToJsonAsString(ModelStatusUpdatedDto modelStatusUpdated) {
-    try {
-      return objectMapper.writeValueAsString(modelStatusUpdated);
-    } catch (JsonProcessingException e) {
-      log.error("Error during mapping modelInfoStatusRequest to Json as String: ", e);
-      throw new ModelNotReceivedException(
-          "Error during mapping modelInfoStatusRequest to Json as String: " + e.getMessage(), e);
-    }
+  private URI createModelStatusUpdatedUri(
+      String updateModelStatusUri, ModelStatusUpdatedDto modelStatusUpdated) {
+    var uri = URI.create(updateModelStatusUri);
+    var uriWithParams = new URIBuilder()
+        .setScheme(uri.getScheme())
+        .setHost(uri.getHost())
+        .setPath(uri.getPath())
+        .addParameter("name", modelStatusUpdated.getName())
+        .addParameter("url", modelStatusUpdated.getUrl())
+        .addParameter("type", modelStatusUpdated.getType())
+        .addParameter("status", modelStatusUpdated.getStatus())
+        .toString();
+
+    return URI.create(uriWithParams);
   }
 
   private HttpRequest createUpdateModelHttpRequest(
       CrumbResponse crumbResponse, ModelInfo modelInfo) {
     return HttpRequest.newBuilder()
-        .POST(HttpRequest.BodyPublishers.ofString(mapModelInfoToJsonAsString(modelInfo)))
+        .POST(HttpRequest.BodyPublishers.noBody())
         .header(
             AUTHORIZATION,
             encodeCredentialsToStringForBasicAuth(
                 jenkinsApiProperties.getUsername(),
                 jenkinsApiProperties.getPassword()))
         .header(crumbResponse.getCrumbRequestField(), crumbResponse.getCrumb())
-        .uri(URI.create(jenkinsApiProperties.getUpdateModelUri()))
+        .uri(createModelInfoUri(jenkinsApiProperties.getUpdateModelUri(), modelInfo))
         .build();
   }
 
-  private String mapModelInfoToJsonAsString(ModelInfo modelInfo) {
-    try {
-      return objectMapper.writeValueAsString(modelInfo);
-    } catch (JsonProcessingException e) {
-      log.error("Error during mapping ModelInfo to Json as String: ", e);
-      throw new ModelNotReceivedException(
-          "Error during mapping ModelInfo to Json as String: " + e.getMessage(), e);
-    }
+  private URI createModelInfoUri(String updateModelUri, ModelInfo modelInfo) {
+    var uri = URI.create(updateModelUri);
+    var uriWithParams = new URIBuilder()
+        .setScheme(uri.getScheme())
+        .setHost(uri.getHost())
+        .setPath(uri.getPath())
+        .addParameter("name", modelInfo.getName())
+        .addParameter("url", modelInfo.getUrl())
+        .addParameter("type", modelInfo.getType())
+        .addParameter("changeType", modelInfo.getChangeType())
+        .toString();
+
+    return URI.create(uriWithParams);
   }
 
   private HttpResponse<String> sendRequest(HttpRequest httpRequest) {
