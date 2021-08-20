@@ -1,0 +1,48 @@
+{
+  "index_patterns": [
+    "local_production",
+    "local_simulation_*"
+  ],
+  "priority": 10,
+  "template": {
+    "mappings": {
+      "date_detection": false,
+      "numeric_detection": false,
+      "properties": {
+        "alert_recommendationDate" : {
+          "type" : "date"
+        },
+        "index_timestamp" : {
+          "type" : "date"
+        },
+        "s8_alert_name" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "s8_country" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        },
+        "s8_discriminator" : {
+          "type" : "text",
+          "fields" : {
+            "keyword" : {
+              "type" : "keyword",
+              "ignore_above" : 256
+            }
+          }
+        }
+      }
+    }
+  }
+}
