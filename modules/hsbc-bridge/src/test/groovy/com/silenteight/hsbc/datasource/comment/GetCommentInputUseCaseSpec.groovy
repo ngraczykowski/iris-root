@@ -1,6 +1,5 @@
 package com.silenteight.hsbc.datasource.comment
 
-
 import com.silenteight.hsbc.bridge.match.MatchComposite
 import com.silenteight.hsbc.bridge.match.MatchFacade
 import com.silenteight.hsbc.datasource.datamodel.CaseInformation
@@ -13,7 +12,8 @@ class GetCommentInputUseCaseSpec extends Specification {
   def matchFacade = Mock(MatchFacade)
   def matchData = Mock(MatchData)
   def caseInformation = Mock(CaseInformation)
-  def underTest = new GetCommentInputUseCase(matchFacade)
+  def fixtures = new Fixtures()
+  def underTest = new GetCommentInputUseCase(matchFacade, fixtures.wlTypes)
 
   // TODO Struct checks
   def 'should get comment inputs'() {
@@ -26,7 +26,7 @@ class GetCommentInputUseCaseSpec extends Specification {
         .match('alerts/1/matches/1')
         .build()
 
-    def alertCommentInput = [caseId: "1", apId: "1", listName: "someListName", apType: "I", wlType: "I", wlId: "someWlId"]
+    def alertCommentInput = [caseId: "1", apId: "1", listName: "someWatchlistType", apType: "I", wlType: "someWatchlistValue", wlId: "someWlId"]
 
     def response = CommentInputDto.builder()
         .alert('alerts/1')
@@ -40,22 +40,21 @@ class GetCommentInputUseCaseSpec extends Specification {
         .matchData(matchData)
         .build()
 
-
     when:
     def result = underTest.getInputRequestsResponse(request)
 
     then:
     1 * matchFacade.getMatchesByAlertNames(_ as List<String>) >> [matchComposite]
-    2 * matchData.getCaseInformation() >> caseInformation
+    3 * matchData.getCaseInformation() >> caseInformation
     1 * matchData.isIndividual() >> true
     1 * matchData.getWatchlistId() >> Optional.of("someWlId")
     1 * caseInformation.getExternalId() >> "1"
-    1 * caseInformation.getExtendedAttribute10() >> "someListName"
+    2 * caseInformation.getExtendedAttribute5() >> "someWatchlistType"
 
     result.size() == 1
     with(result.first()) {
       alert == response.alert
-      with(alertCommentInput as Map<String, String>){
+      with(alertCommentInput as Map<String, String>) {
         def comments = response.alertCommentInput
         get("caseId") == comments.get("caseId")
         get("apId") == comments.get("apId")
@@ -67,5 +66,36 @@ class GetCommentInputUseCaseSpec extends Specification {
         first().match == response.matchCommentInputsDto.first().match
       }
     }
+  }
+
+  class Fixtures {
+
+    def wlTypes =
+        [
+            'SAN'  : [
+                'AE-MEWOLF',
+                'MENA-GREY',
+                'MEWOLF',
+                'MX-DARK-GREY',
+                'SAN',
+                'US-HBUS',
+            ] as List,
+            'AML'  : [
+                'AML',
+                'CTF-P2',
+                'INNIA',
+                'MX-AML',
+                'MX-SHCP',
+            ] as List,
+            'PEP'  : [
+                'PEP'
+            ] as List,
+            'EXITS': [
+                'SCION'
+            ] as List,
+            'SSC'  : [
+                'SSC'
+            ]
+        ] as Map
   }
 }

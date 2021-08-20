@@ -9,7 +9,10 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import one.util.streamex.StreamEx;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -21,6 +24,7 @@ public class GetCommentInputUseCase {
   private static final String INDIVIDUAL = "I";
   private static final String ENTITY = "C";
   private final MatchFacade matchFacade;
+  private final Map<String, List<String>> wlTypesMap;
 
   @Transactional(readOnly = true)
   public List<CommentInputDto> getInputRequestsResponse(StreamCommentInputsRequestDto request) {
@@ -51,14 +55,14 @@ public class GetCommentInputUseCase {
 
   private Map<String, String> toAlertCommentMap(MatchComposite matchComposite) {
     var comments = new HashMap<String, String>();
-    var type = getType(matchComposite.getMatchData());
+    var matchData = matchComposite.getMatchData();
 
     comments.put("caseId", matchComposite.getExternalId());
-    comments.put("apId", getAlertedPartyId(matchComposite.getMatchData()));
-    comments.put("wlId", getWatchlistId(matchComposite.getMatchData()));
-    comments.put("apType", type);
-    comments.put("wlType", type);
-    comments.put("listName", getListName(matchComposite.getMatchData()));
+    comments.put("apId", getAlertedPartyId(matchData));
+    comments.put("wlId", getWatchlistId(matchData));
+    comments.put("apType", getApType(matchData));
+    comments.put("wlType", getWlType(matchData));
+    comments.put("listName", getListName(matchData));
 
     return comments;
   }
@@ -71,11 +75,21 @@ public class GetCommentInputUseCase {
     return matchData.getCaseInformation().getExternalId();
   }
 
-  private String getListName(MatchData matchData) {
-    return matchData.getCaseInformation().getExtendedAttribute10();
+  private String getWlType(MatchData matchData) {
+    var extendedAttribute5 = matchData.getCaseInformation().getExtendedAttribute5();
+
+    return wlTypesMap.entrySet().stream()
+        .filter(e -> e.getValue().contains(extendedAttribute5))
+        .map(Map.Entry::getKey)
+        .findFirst()
+        .orElse("OTHER");
   }
 
-  private String getType(MatchData matchData) {
+  private String getListName(MatchData matchData) {
+    return matchData.getCaseInformation().getExtendedAttribute5();
+  }
+
+  private String getApType(MatchData matchData) {
     return matchData.isIndividual() ? INDIVIDUAL : ENTITY;
   }
 
