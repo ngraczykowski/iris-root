@@ -10,15 +10,20 @@ import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 import com.silenteight.warehouse.report.metrics.generation.dto.CsvReportContentDto;
 
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 
 import static com.silenteight.commons.CSVUtils.getCSVRecordWithDefaultDelimiter;
+import static java.time.LocalDate.parse;
+import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @RequiredArgsConstructor
 public class MetricsReportGenerationService {
@@ -37,7 +42,7 @@ public class MetricsReportGenerationService {
       @Valid PropertiesDefinition properties) {
 
     FetchGroupedDataResponse rawData = fetchRawData(from, to, indexes, properties);
-    return CsvReportContentDto.of(getLabelsRow(), transpose(rawData, properties));
+    return CsvReportContentDto.of(getLabelsRow(properties), transpose(rawData, properties));
   }
 
   private FetchGroupedDataResponse fetchRawData(
@@ -50,7 +55,7 @@ public class MetricsReportGenerationService {
         .builder()
         .from(from)
         .to(to)
-        .dateField(properties.getDateFieldName())
+        .dateField(properties.getDateField().getName())
         .fields(properties.getFields())
         .indexes(indexes)
         .build();
@@ -58,9 +63,15 @@ public class MetricsReportGenerationService {
     return groupingQueryService.generate(request);
   }
 
-  private static String getLabelsRow() {
+  private static String getLabelsRow(@Valid PropertiesDefinition properties) {
     return getCSVRecordWithDefaultDelimiter(
-        "Country", "Risk Type", "Efficiency");
+        properties.getDateField().getLabel(),
+        properties.getCountry().getLabel(),
+        properties.getRiskType().getLabel(),
+        properties.getHitType().getLabel(),
+        "Efficiency",
+        "PTP Effectiveness",
+        "FP Effectiveness");
   }
 
   private static List<String> transpose(
@@ -69,7 +80,7 @@ public class MetricsReportGenerationService {
     Map<String, List<Row>> rowsToTranspose = rawData
         .getRows()
         .stream()
-        .collect(groupingBy(v -> generateStaticFields(v, properties.getStaticFields())));
+        .collect(groupingBy(row -> getGroupingValues(row, properties.getGroupingColumns())));
 
     return rowsToTranspose
         .values()
@@ -80,42 +91,104 @@ public class MetricsReportGenerationService {
   }
 
   private static String getLine(List<Row> rows, PropertiesDefinition properties) {
-    String country = getStaticValue(rows, properties.getCountry().getName());
-    String riskType = getStaticValue(rows, properties.getRiskType().getName());
+    ColumnProperties recommendationField = properties.getRecommendationField();
+    ColumnProperties analystDecisionField = properties.getAnalystDecisionField();
+    ColumnProperties qaDecisionField = properties.getQaDecisionField();
 
-    long allAlertsInGroupCount = rows.stream().mapToLong(Row::getCount).sum();
-    long meaningfulDecisionCount = rows
+    double efficiency = calculateEfficiency(rows, recommendationField);
+    List<Row> potentialTruePositiveRows = getPotentialTruePositiveRows(rows, recommendationField);
+    double falsePositiveEffectiveness =
+        calculateEffectiveness(potentialTruePositiveRows, qaDecisionField);
+
+    double potentialTruePositiveEffectiveness =
+        calculateEffectiveness(potentialTruePositiveRows, analystDecisionField);
+
+    String date = getStaticValue(rows, properties.getDateField());
+    String country = getStaticValue(rows, properties.getCountry());
+    String riskType = getStaticValue(rows, properties.getRiskType());
+    String hitType = getStaticValue(rows, properties.getHitType());
+    return getCSVRecordWithDefaultDelimiter(
+        date,
+        country,
+        riskType,
+        hitType,
+        DECIMAL_FORMAT.format(efficiency),
+        DECIMAL_FORMAT.format(potentialTruePositiveEffectiveness),
+        DECIMAL_FORMAT.format(falsePositiveEffectiveness));
+  }
+
+  private static List<Row> getPotentialTruePositiveRows(List<Row> rows, ColumnProperties column) {
+    return rows
         .stream()
-        .filter(v -> isMeaningfulDecision(v, properties.getRecommendationField()))
+        .filter(row -> isPositiveValue(row, column))
+        .collect(toList());
+  }
+
+  private static double calculateEffectiveness(List<Row> rows, ColumnProperties column) {
+    long potentialTruePositiveCount = rows
+        .stream()
+        .filter(row -> isPositiveValue(row, column))
         .mapToLong(Row::getCount)
         .sum();
 
-    double efficiency = (double) meaningfulDecisionCount / allAlertsInGroupCount;
-
-    return getCSVRecordWithDefaultDelimiter(
-        country, riskType, DECIMAL_FORMAT.format(efficiency));
+    long meaningfulDecisionCount = countMeaningfulDecision(rows, column);
+    return (double) potentialTruePositiveCount / meaningfulDecisionCount;
   }
 
-  private static boolean isMeaningfulDecision(
-      Row row, GroupingColumnProperties recommendationField) {
-    return recommendationField
+  private static double calculateEfficiency(List<Row> rows, ColumnProperties column) {
+    long meaningfulDecisionCount = countMeaningfulDecision(rows, column);
+    long allAlertsInGroupCount = rows.stream().mapToLong(Row::getCount).sum();
+
+    return (double) meaningfulDecisionCount / allAlertsInGroupCount;
+  }
+
+  private static long countMeaningfulDecision(List<Row> rows, ColumnProperties column) {
+    return rows
+        .stream()
+        .filter(row -> isMeaningfulDecision(row, column))
+        .mapToLong(Row::getCount)
+        .sum();
+  }
+
+  private static boolean isPositiveValue(Row row, ColumnProperties column) {
+    return column
+        .getPositiveValue()
+        .equals(row.getValueOrDefault(column.getName(), EMPTY_STRING));
+  }
+
+  private static boolean isMeaningfulDecision(Row row, ColumnProperties column) {
+    return column
         .getDecisionValues()
-        .contains(row.getValueOrDefault(
-            recommendationField.getName(), EMPTY_STRING));
+        .contains(row.getValueOrDefault(column.getName(), EMPTY_STRING));
   }
 
-  private static String getStaticValue(List<Row> rows, String field) {
+  private static String getStaticValue(List<Row> rows, GroupingColumnProperties column) {
     return rows
         .stream()
         .findFirst()
-        .map(row -> row.getValueOrDefault(field, EMPTY_STRING))
+        .map(row -> getFormattedValueOrDefault(row, column))
         .orElseThrow();
   }
 
-  private static String generateStaticFields(Row row, List<String> staticFields) {
-    return staticFields
+  private static String getGroupingValues(Row row, List<GroupingColumnProperties> columns) {
+    return columns
         .stream()
-        .map(fieldName -> row.getValueOrDefault(fieldName, EMPTY_STRING))
+        .map(column -> getFormattedValueOrDefault(row, column))
         .collect(joining(DELIMITER));
+  }
+
+  private static String getFormattedValueOrDefault(Row row, GroupingColumnProperties column) {
+    String value = row.getValueOrDefault(column.getName(), EMPTY_STRING);
+    if (column.isDateColumn() && isNotBlank(value))
+      value = formatDate(value, column);
+
+    return value;
+  }
+
+  private static String formatDate(String value, GroupingColumnProperties column) {
+    DateTimeFormatter sourceFormatter = ofPattern(column.getSourcePattern());
+    LocalDate date = parse(value, sourceFormatter);
+    DateTimeFormatter targetFormatter = ofPattern(column.getTargetPattern());
+    return date.format(targetFormatter);
   }
 }

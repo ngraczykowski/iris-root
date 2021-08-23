@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 
 import static java.util.List.of;
 
@@ -17,29 +16,45 @@ import static java.util.List.of;
 @Data
 public class PropertiesDefinition {
 
-  @NotBlank
-  String dateFieldName;
   @Valid
   @NonNull
-  ColumnProperties country;
+  GroupingColumnProperties dateField;
   @Valid
   @NonNull
-  ColumnProperties riskType;
+  GroupingColumnProperties country;
   @Valid
   @NonNull
-  GroupingColumnProperties recommendationField;
+  GroupingColumnProperties riskType;
+  @Valid
+  @NonNull
+  GroupingColumnProperties hitType;
+  @Valid
+  @NonNull
+  ColumnProperties recommendationField;
+  @Valid
+  @NonNull
+  ColumnProperties analystDecisionField;
+  @Valid
+  @NonNull
+  ColumnProperties qaDecisionField;
 
   List<String> getFields() {
-    List<String> result = getStaticFields();
-    result.add(recommendationField.getName());
-    return result;
+    List<String> fields = getStaticFields();
+    fields.add(recommendationField.getName());
+    fields.add(analystDecisionField.getName());
+    fields.add(qaDecisionField.getName());
+    return fields;
   }
 
   @NotNull
   List<String> getStaticFields() {
-    return of(country, riskType)
+    return of(country, riskType, dateField, hitType)
         .stream()
-        .map(ColumnProperties::getName)
+        .map(GroupingColumnProperties::getName)
         .collect(Collectors.toList());
+  }
+
+  List<GroupingColumnProperties> getGroupingColumns() {
+    return of(country, riskType, dateField);
   }
 }

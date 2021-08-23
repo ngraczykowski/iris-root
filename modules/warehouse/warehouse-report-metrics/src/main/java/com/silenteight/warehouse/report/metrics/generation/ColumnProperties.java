@@ -8,19 +8,15 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 import java.util.List;
 
-import static java.util.Collections.singletonList;
-
-@AllArgsConstructor
 @ConstructorBinding
+@AllArgsConstructor
 @Getter
-class ColumnProperties implements Column {
+class ColumnProperties {
 
   @NonNull
-  private final String name;
+  String name;
   @NonNull
-  private final String label;
-
-  public List<String> getLabels() {
-    return singletonList(label);
-  }
+  List<String> decisionValues;
+  @NonNull
+  String positiveValue;
 }

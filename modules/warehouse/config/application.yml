@@ -91,27 +91,59 @@ warehouse.report.billing:
 
 warehouse.report.metrics:
   production:
-    date-field-name: index_timestamp
+    date-field:
+      name: index_timestamp
+      label: Date
+      source-pattern: yyyy-MM-dd HH:mm:ss.SSS
+      target-pattern: yyyy-MM
     risk-type:
-      name: alert_categories/hitType:value
+      name: alert_extendedAttribute5
       label: Risk Type
+    hit-type:
+      name: alert_categories/hitType:value
+      label: Hit Type
     country:
       name: s8_country
       label: Country
     recommendation-field:
       name: alert_s8_recommendation
       decision-values: [ ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE ]
+      positive-value: ACTION_POTENTIAL_TRUE_POSITIVE
+    analyst-decision-field:
+      name: alert_analyst_decision
+      decision-values: [ analyst_decision_true_positive, analyst_decision_false_positive ]
+      positive-value: analyst_decision_true_positive
+    qa-decision-field:
+      name: alert_qa.level-0.state
+      decision-values: [ qa_decision_PASSED, qa_decision_FAILED ]
+      positive-value: qa_decision_PASSED
   simulation:
-    date-field-name: index_timestamp
+    date-field:
+      name: index_timestamp
+      label: Date
+      source-pattern: yyyy-MM-dd HH:mm:ss.SSS
+      target-pattern: yyyy-MM
     risk-type:
-      name: alert_categories/hitType:value
+      name: alert_extendedAttribute5
       label: Risk Type
+    hit-type:
+      name: alert_categories/hitType:value
+      label: Hit Type
     country:
       name: s8_country
       label: Country
     recommendation-field:
       name: alert_recommendation_recommended_action
       decision-values: [ ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE ]
+      positive-value: ACTION_POTENTIAL_TRUE_POSITIVE
+    analyst-decision-field:
+      name: alert_analyst_decision
+      decision-values: [ analyst_decision_true_positive, analyst_decision_false_positive ]
+      positive-value: analyst_decision_true_positive
+    qa-decision-field:
+      name: alert_qa.level-0.state
+      decision-values: [ qa_decision_PASSED, qa_decision_FAILED ]
+      positive-value: qa_decision_PASSED
 
 warehouse.report.statistics:
   date-field-name: index_timestamp
