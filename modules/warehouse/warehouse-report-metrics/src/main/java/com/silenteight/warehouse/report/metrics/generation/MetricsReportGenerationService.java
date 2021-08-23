@@ -132,14 +132,14 @@ public class MetricsReportGenerationService {
         .sum();
 
     long meaningfulDecisionCount = countMeaningfulDecision(rows, column);
-    return (double) potentialTruePositiveCount / meaningfulDecisionCount;
+    return divide(potentialTruePositiveCount, meaningfulDecisionCount);
   }
 
   private static double calculateEfficiency(List<Row> rows, ColumnProperties column) {
     long meaningfulDecisionCount = countMeaningfulDecision(rows, column);
     long allAlertsInGroupCount = rows.stream().mapToLong(Row::getCount).sum();
 
-    return (double) meaningfulDecisionCount / allAlertsInGroupCount;
+    return divide(meaningfulDecisionCount, allAlertsInGroupCount);
   }
 
   private static long countMeaningfulDecision(List<Row> rows, ColumnProperties column) {
@@ -190,5 +190,12 @@ public class MetricsReportGenerationService {
     LocalDate date = parse(value, sourceFormatter);
     DateTimeFormatter targetFormatter = ofPattern(column.getTargetPattern());
     return date.format(targetFormatter);
+  }
+
+  private static double divide(long dividend, long divisor) {
+    if (divisor == 0)
+      return 0;
+
+    return (double) dividend / divisor;
   }
 }
