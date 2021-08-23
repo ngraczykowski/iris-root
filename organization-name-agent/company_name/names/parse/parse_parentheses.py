@@ -47,9 +47,7 @@ def _combine_parentheses_information(
     }
 
 
-def detect_parentheses_information(
-    names: Sequence[str],
-) -> Dict[str, ParenthesisInformation]:
+def detect_parentheses_information(names: Sequence[str]) -> Dict[str, ParenthesisInformation]:
     return _combine_parentheses_information(
         [_extract_known_parenthesis_information(p) for p in names]
     )

@@ -14,7 +14,7 @@ def _to_compared(*names) -> Tuple[Tuple[str], ...]:
     return tuple((n.original_name,) if n else () for n in names)
 
 
-def fuzzy_score(first: TokensSequence, second: TokensSequence) -> Score:
+def get_fuzzy_score(first: TokensSequence, second: TokensSequence) -> Score:
     if not first and not second:
         return Score()
 
@@ -24,7 +24,7 @@ def fuzzy_score(first: TokensSequence, second: TokensSequence) -> Score:
     )
 
 
-def partial_fuzzy_score(first: TokensSequence, second: TokensSequence) -> Score:
+def get_partial_fuzzy_score(first: TokensSequence, second: TokensSequence) -> Score:
     if not first and not second:
         return Score()
 

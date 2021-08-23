@@ -7,9 +7,9 @@ from company_name.scores.blacklist import get_blacklist_score
 from company_name.scores.country import get_country_score
 from company_name.scores.first_token import get_first_token_score
 from company_name.scores.fuzzy import (
-    fuzzy_score,
+    get_fuzzy_score,
     get_sorted_fuzzy_score,
-    partial_fuzzy_score,
+    get_partial_fuzzy_score,
 )
 from company_name.scores.legal_terms import get_legal_score
 from company_name.scores.parenthesis_match import get_parenthesis_score
@@ -27,10 +27,10 @@ def compare_names(
     scores = {
         "parenthesis_match": get_parenthesis_score(alerted_name, watchlist_name),
         "abbreviation": get_abbreviation_score(alerted_name, watchlist_name),
-        "fuzzy_on_base": fuzzy_score(alerted_name.base, watchlist_name.base),
+        "fuzzy_on_base": get_fuzzy_score(alerted_name.base, watchlist_name.base),
         "fuzzy_on_suffix": get_suffix_fuzzy_score(alerted_name, watchlist_name),
-        "fuzzy": fuzzy_score(alerted_name.name(), watchlist_name.name()),
-        "partial_fuzzy": partial_fuzzy_score(alerted_name.name(), watchlist_name.name()),
+        "fuzzy": get_fuzzy_score(alerted_name.name(), watchlist_name.name()),
+        "partial_fuzzy": get_partial_fuzzy_score(alerted_name.name(), watchlist_name.name()),
         "sorted_fuzzy": get_sorted_fuzzy_score(alerted_name.name(), watchlist_name.name()),
         "legal_terms": get_legal_score(alerted_name.legal, watchlist_name.legal),
         "tokenization": get_tokenization_score(alerted_name.name(), watchlist_name.name()),
