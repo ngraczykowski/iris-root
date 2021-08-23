@@ -1,5 +1,8 @@
 silenteight.bridge:
   address: ${BRIDGE_ADDRESS:http://localhost:24802}
+
+  ### GRPC PROPERTIES
+
   grpc:
     port: 24803
     default-deadline: 20s
@@ -8,7 +11,13 @@ silenteight.bridge:
     governance-address: static://localhost:24205
     worldcheck-address: static://localhost:24813
     historical-decisions-model-address: static://localhost:24901
+
+  ### HTTP
+
   http.port: 24802
+
+  ### RABBITMQ QUEUES
+
   amqp:
     outgoing:
       model-persisted-exchange-name: bridge.model
@@ -32,8 +41,14 @@ silenteight.bridge:
       historical-decisions-model-loaded-queue: bridge.model.loaded.historical-decisions
       worldcheck-model-persisted-queue: bridge.model.persisted.internal.worldcheck
       historical-decisions-model-persisted-queue: bridge.model.persisted.internal.historical-decisions
+
+  ### ANALYSIS ALERT TIMEOUT
+
   analysis:
     alert-timeout: 5m
+
+  ### AWS
+
   aws:
     accessKey: minioadmin
     buckets:
@@ -42,6 +57,9 @@ silenteight.bridge:
     region: US_EAST_1
     secretKey: minioadmin
     uri: http://127.0.0.1:9000
+
+  ### DATA RETENTION
+
   data.retention:
     chunk: 500
     rate: 1d
@@ -52,6 +70,9 @@ silenteight.bridge:
     alerts-expired:
       enabled: false
       duration: ${RETENTION_PERIOD:2d}
+
+  ### JENKINS
+
   jenkins.api:
     crumbUri: ${CRUMB:https://jenkins.silenteight.com/crumbIssuer/api/json}
     password: ${JENKINS_PASSWORD:dev}
@@ -59,85 +80,25 @@ silenteight.bridge:
     updateModelStatusUri: ${UPDATE_MODEL_STATUS_URI:https://jenkins.silenteight.com/model/status}
     updateModelUri: ${UPDATE_MODEL_URI:https://jenkins.silenteight.com/model/update}
 
+  ### NEXUS
+
   nexus.api:
     password: ${NEXUS_PASSWORD:dev}
     username: ${NEXUS_USER:dev}
-  recommendation:
-    silent-eight-values:
-      FALSE_POSITIVE: ACTION_FALSE_POSITIVE
-      MANUAL_INVESTIGATION: ACTION_INVESTIGATE
-      POTENTIAL_TRUE_POSITIVE: ACTION_POTENTIAL_TRUE_POSITIVE
-    user-friendly-values:
-      AAA_FALSE_POSITIVE: AAA False Positive
-      LEVEL_1_REVIEW: Level 1 Review
-      LEVEL_2_REVIEW: Level 2 Review
-      LEVEL_3_REVIEW: Level 3 Review
-  recommendations.queue: bridge.recommendations
+
+
+  ### UNZIP
 
   unpacker:
     path: ${UNPACKER_PATH:/tmp}
 
+  ### DATE TIME FORMAT
+
   alert:
     datetime:
       format: dd-MMM-yy
-    decision:
-      map:
-        '[True Match Exit Completed]': analyst_decision_true_positive
-        '[True Match Retained]': analyst_decision_true_positive
-        '[PEP True Match]': analyst_decision_true_positive
-        '[True Match Exit / Retained Recommended]': analyst_decision_true_positive
-        '[False Positive]': analyst_decision_false_positive
-        '[Level 1 Review]': analyst_decision_pending
-        '[Level 2 Review]': analyst_decision_pending
-        '[Level 3 Review]': analyst_decision_pending
-        '[Isolated Level 1 / 2]': analyst_decision_pending
-        '[Isolated Level 3]': analyst_decision_pending
-        UNKNOWN: analyst_decision_unknown
 
-  category:
-    risk-type-values:
-      SAN:
-        - AE-MEWOLF
-        - MENA-GREY
-        - MEWOLF
-        - MX-DARK-GREY
-        - SAN
-        - US-HBUS
-      AML:
-        - AML
-        - CTF-P2
-        - INNIA
-        - MX-AML
-        - MX-SHCP
-      PEP:
-        - PEP
-      EXITS:
-        - SCION
-      SSC:
-        - SSC
-
-  comment:
-    wl-types:
-      SAN:
-        - AE-MEWOLF
-        - MENA-GREY
-        - MEWOLF
-        - MX-DARK-GREY
-        - SAN
-        - US-HBUS
-      AML:
-        - AML
-        - CTF-P2
-        - INNIA
-        - MX-AML
-        - MX-SHCP
-      PEP:
-        - PEP
-      EXITS:
-        - SCION
-      SSC:
-        - SSC
-
+  ### MODEL
   ### Export model jobs (use "-" value for disabling the particular job)
 
   model:
@@ -163,11 +124,15 @@ server:
   http2:
     enabled: true
 
+### SPRING
+
 spring:
   application.name: hsbc-bridge
   servlet.multipart:
     max-file-size: 1GB
     max-request-size: 1GB
+  config:
+    import: application-mappers.yaml
 
   ### CONSUL
 
