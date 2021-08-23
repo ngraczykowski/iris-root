@@ -25,6 +25,7 @@ export NOMAD_VAR_company_name_agent_artifact=${NOMAD_VAR_company_name_agent_arti
 export NOMAD_VAR_company_name_agent_artifact_checksum=${NOMAD_VAR_company_name_agent_artifact_checksum:-"sha256:$(sha256sum "$company_name_agent_artifact_path" | awk '{print $1}')"}
 export NOMAD_VAR_company_name_agent_version="$company_name_agent_version"
 export NOMAD_VAR_company_name_agent_config=${NOMAD_VAR_company_name_agent_config:-"${MINIO_ADDR}/artifacts/company-name-agent/${company_name_agent_config}"}
+export NOMAD_VAR_python_3_7_bin=${NOMAD_VAR_python_3_7_bin:="/home/suroptusr/miniconda3/bin/python"}
 
 cd "$scriptdir"
 set -x

@@ -63,8 +63,7 @@ pipeline {
                             if (utils.getGitBranch() == 'master') {
                                 sh './nomad/full/deploy.sh'
                             } else {
-                                echo 'This is not a release branch, but we are cheaters'
-                                sh './nomad/full/deploy.sh'
+                                echo 'This is not a release branch'
                             }
                         }
                     }

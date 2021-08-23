@@ -23,6 +23,11 @@ variable "namespace" {
   default = "dev"
 }
 
+variable "python_3_7_bin" {
+  type = string
+  default = "python"
+}
+
 job "company-name-agent" {
   type = "service"
 
@@ -94,7 +99,7 @@ job "company-name-agent" {
       }
 
       config {
-        command = "/home/suroptusr/miniconda3/bin/python"
+        command = var.python_3_7_bin
         args = ["local/company_name-${var.company_name_agent_version}.pyz", "-c", "local/config", "--grpc"]
       }
 
