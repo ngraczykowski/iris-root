@@ -75,7 +75,7 @@ job "company-name-agent" {
     }
 
     service {
-      name = "${var.namespace}-name-agent-grpcui"
+      name = "${var.namespace}-company-name-agent-grpcui"
       port = "grpcui"
       tags = concat([
         "grpcui",

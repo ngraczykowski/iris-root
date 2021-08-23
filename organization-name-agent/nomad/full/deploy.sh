@@ -14,10 +14,9 @@ MINIO_ALIAS=${MINIO_ALIAS:-minio}
 
 export NOMAD_ADDR="${NOMAD_ADDR:-http://localhost:4646}"
 
-company_name_agent_artifact_path="$(ls "$scriptdir"/../dist/company_name-*.pyz)"
+company_name_agent_artifact_path="$(ls "$scriptdir"/artifacts/company_name-*.pyz)"
 company_name_agent_artifact=$(basename -- "$company_name_agent_artifact_path")
 company_name_agent_version=$(ls -al "$company_name_agent_artifact_path" | awk -F'company_name-|.pyz' '{print $2}')
-company_name_agent_config_path="../config"
 company_name_agent_config="company_name_agent_config_${company_name_agent_version}.tgz"
 
 
@@ -27,14 +26,7 @@ export NOMAD_VAR_company_name_agent_version="$company_name_agent_version"
 export NOMAD_VAR_company_name_agent_config=${NOMAD_VAR_company_name_agent_config:-"${MINIO_ADDR}/artifacts/company-name-agent/${company_name_agent_config}"}
 
 cd "$scriptdir"
-
 set -x
-
-rm -rf artifacts/
-mkdir -p artifacts/
-tar -cvzf "$company_name_agent_config" "$company_name_agent_config_path"
-mv "${company_name_agent_config}" artifacts/
-cp ../dist/"$company_name_agent_artifact" artifacts/
 mcli cp --recursive artifacts/ "$MINIO_ALIAS"/artifacts/company-name-agent
 
 nomad job run "$@" company-name-agent.nomad

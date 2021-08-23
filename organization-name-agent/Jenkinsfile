@@ -46,18 +46,32 @@ pipeline {
             }
         }
 
-        stage('Deploy on Nomad Dev'){
+        stage('Nomad'){
             agent {
                 label 'nomad'
             }
-            steps {
-                unstash 'artifacts'
-                script {
-                    if (utils.getGitBranch() == 'master') {
-                        sh './nomad/deploy.sh'
-                    } else {
-                        echo 'This is not a release branch'
+            stages {
+                stage('Prepare nomad artifacts') {
+                    steps {
+                        unstash 'artifacts'
+                        sh './nomad/prepare.sh'
                     }
+                }
+                stage('Deploy on nomad dev') {
+                    steps {
+                        script {
+                            if (utils.getGitBranch() == 'master') {
+                                sh './nomad/full/deploy.sh'
+                            } else {
+                                echo 'This is not a release branch'
+                            }
+                        }
+                    }
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'nomad/*.tar.bz2', fingerprint: true
                 }
             }
        }
