@@ -2,7 +2,11 @@ import pytest
 
 from company_name.knowledge_base.term_sources import TermSources
 from company_name.names.parse.create_tokens import create_tokens
-from company_name.names.parse.cut_terms import cut_terms, cut_until_any_term_matches
+from company_name.names.parse.cut_terms import (
+    cut_terms,
+    cut_until_any_term_matches,
+    _divide_name_for_possible_terms,
+)
 
 TERMS = TermSources(
     {
@@ -174,3 +178,21 @@ def test_cut_until_any_term_matches(source, expected):
 )
 def test_cut_until_any_term_matched_from_start(source, expected):
     assert cut_until_any_term_matches(create_tokens(source), TERMS, from_start=True) == expected
+
+
+@pytest.mark.parametrize(
+    "name, max_length", [("Alpaca Bee Cheetah Deer Elephant Falcon Grizzly", 2)]
+)
+def test_divide_name_both_ways(name, max_length):
+    name_tokens = create_tokens(name)
+    # from start
+    name_left, possible_term = next(
+        _divide_name_for_possible_terms(name=name_tokens, max_length=max_length, from_start=True)
+    )
+    assert possible_term.original_name == "Alpaca Bee"
+
+    # not from start
+    name_left, possible_term = next(
+        _divide_name_for_possible_terms(name=name_tokens, max_length=max_length, from_start=False)
+    )
+    assert possible_term.original_name == "Falcon Grizzly"
