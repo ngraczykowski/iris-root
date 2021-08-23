@@ -82,4 +82,20 @@
         path="sql/view_ae_analysis_match_feature_vector_elements_query_v2.sql"
         relativeToChangelogFile="true"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_14" author="wkeska">
+    <dropView viewName="ae_alert_recommendation_query"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.4.0_15" author="wkeska">
+    <modifyDataType
+        columnName="client_alert_identifier"
+        newDataType="varchar(250)"
+        tableName="ae_alert"/>
+
+    <createView
+        viewName="ae_alert_recommendation_query"
+        path="sql/view_ae_alert_recommendation_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
 </databaseChangeLog>

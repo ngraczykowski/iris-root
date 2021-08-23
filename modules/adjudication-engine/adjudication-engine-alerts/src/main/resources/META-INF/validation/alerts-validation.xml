@@ -20,7 +20,7 @@
     <getter name="alertId">
       <constraint annotation="javax.validation.constraints.NotEmpty"/>
       <constraint annotation="javax.validation.constraints.Size">
-        <element name="max">100</element>
+        <element name="max">250</element>
       </constraint>
     </getter>
   </bean>
