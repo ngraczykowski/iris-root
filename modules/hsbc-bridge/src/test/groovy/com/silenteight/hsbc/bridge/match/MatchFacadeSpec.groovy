@@ -6,13 +6,16 @@ import com.silenteight.hsbc.bridge.json.ObjectConverter.ObjectConversionExceptio
 import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
 
+import javax.persistence.EntityManager
+
 class MatchFacadeSpec extends Specification {
 
   def objectConverter = Mock(ObjectConverter)
   def matchDataMapper = Mock(MatchDataMapper)
   def repository = Mock(MatchRepository)
   def eventPublisher = Mock(ApplicationEventPublisher)
-  def underTest = new MatchFacade(objectConverter, matchDataMapper, repository, eventPublisher)
+  def entityManger = Mock(EntityManager)
+  def underTest = new MatchFacade(objectConverter, matchDataMapper, repository, eventPublisher, entityManger)
 
   def fixtures = new Fixtures()
 

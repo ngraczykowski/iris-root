@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javax.persistence.EntityManager;
+
 import static java.util.stream.Collectors.toList;
 
 @Builder
@@ -22,6 +24,7 @@ public class AlertFacade implements Consumer<AlertDataComposite> {
 
   private final AlertPayloadConverter alertPayloadConverter;
   private final AlertRepository repository;
+  private final EntityManager entityManager;
 
   @Transactional
   public void createRawAlerts(String bulkId, @NonNull InputStream inputStream) throws IOException {
@@ -41,6 +44,8 @@ public class AlertFacade implements Consumer<AlertDataComposite> {
     alertEntity.setPayload(payloadEntity);
 
     repository.save(alertEntity);
+    entityManager.flush();
+    entityManager.clear();
   }
 
   private List<AlertInfo> mapToAlertInfo(List<AlertEntity> alertEntities) {

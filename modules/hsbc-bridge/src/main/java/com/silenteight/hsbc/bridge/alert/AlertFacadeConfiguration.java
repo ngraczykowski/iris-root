@@ -11,6 +11,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.persistence.EntityManager;
+
 @Configuration
 @RequiredArgsConstructor
 @EnableConfigurationProperties({ AnalystDecisionProperties.class })
@@ -26,10 +28,11 @@ class AlertFacadeConfiguration {
   private final DataRetentionMessageSender dataRetentionMessageSender;
 
   @Bean
-  AlertFacade alertFacade() {
+  AlertFacade alertFacade(EntityManager entityManager) {
     return AlertFacade.builder()
         .alertPayloadConverter(alertPayloadConverter)
         .repository(alertRepository)
+        .entityManager(entityManager)
         .build();
   }
 

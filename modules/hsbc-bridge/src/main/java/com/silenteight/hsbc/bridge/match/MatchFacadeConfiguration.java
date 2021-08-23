@@ -9,6 +9,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.persistence.EntityManager;
+
 @Configuration
 @RequiredArgsConstructor
 class MatchFacadeConfiguration {
@@ -19,12 +21,13 @@ class MatchFacadeConfiguration {
   private final MatchPayloadRepository matchPayloadRepository;
 
   @Bean
-  MatchFacade matchFacade() {
+  MatchFacade matchFacade(EntityManager entityManager) {
     return MatchFacade.builder()
         .objectConverter(objectConverter)
         .matchRepository(matchRepository)
         .eventPublisher(eventPublisher)
         .matchDataMapper(new OrikaMatchDataMapper())
+        .entityManager(entityManager)
         .build();
   }
 

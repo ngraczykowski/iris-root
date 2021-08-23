@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
 
 @Builder
 public class MatchFacade {
@@ -23,6 +24,7 @@ public class MatchFacade {
   private final MatchDataMapper matchDataMapper;
   private final MatchRepository matchRepository;
   private final ApplicationEventPublisher eventPublisher;
+  private final EntityManager entityManager;
 
   @Transactional
   public void prepareAndSaveMatches(long alertId, List<Match> matches) {
@@ -46,6 +48,9 @@ public class MatchFacade {
           .externalId(matchEntity.getExternalId())
           .matchData(matchRawData)
           .build());
+
+      entityManager.flush();
+      entityManager.clear();
     }
 
     return matchComposites;

@@ -129,8 +129,8 @@ server:
 spring:
   application.name: hsbc-bridge
   servlet.multipart:
-    max-file-size: 1GB
-    max-request-size: 1GB
+    max-file-size: 3GB
+    max-request-size: 3GB
   config:
     import: application-mappers.yaml
 

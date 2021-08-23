@@ -1,15 +1,14 @@
 package com.silenteight.hsbc.bridge.recommendation;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
 
-interface RecommendationRepository extends Repository<RecommendationEntity, Long> {
-
-  void save(RecommendationEntity entity);
+interface RecommendationRepository extends CrudRepository<RecommendationEntity, Long> {
 
   Optional<RecommendationEntity> findByAlert(String alert);
 

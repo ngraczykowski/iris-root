@@ -30,6 +30,6 @@ class StoreMatchCategoriesUseCase {
           matchCategoryRepository.save(matchCategory);
         }));
 
-    log.debug("Match categories has been stored");
+    log.trace("Match categories has been stored");
   }
 }
