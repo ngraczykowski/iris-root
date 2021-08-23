@@ -8,7 +8,6 @@ import com.google.protobuf.Struct.Builder;
 import com.google.protobuf.Value;
 
 import java.security.SecureRandom;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -16,59 +15,24 @@ import java.util.Random;
 
 import static java.time.ZoneOffset.UTC;
 import static java.time.ZonedDateTime.now;
+import static java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toMap;
 
 class AlertGenerator {
 
   private static final String[] ALERT_NAMES = { "alerts/123", "alerts/234", "alerts/345" };
+  private static final String NO_DATA = "NO_DATA";
+  private static final String INCONCLUSIVE = "INCONCLUSIVE";
+  private static final String NO = "NO";
 
   private final Random random = new SecureRandom();
 
   Alert generateProduction() {
-    HashMap<String, String> payload = new HashMap<>();
-    payload.put("recommendation", getRandomValue("Level 2 Review", "AAA False Positive"));
-    payload.put("comment", getRandomValue("S8 recommended action - comment"));
-    payload.put("recommendationMonth", getRandomValue("01", "08", "09"));
-    payload.put("recommendationYear", getRandomValue("2021"));
-    payload.put(
-        "s8_recommendation",
-        getRandomValue(
-            "ACTION_FALSE_POSITIVE", "ACTION_POTENTIAL_TRUE_POSITIVE",
-            "ACTION_INVESTIGATE"));
-    payload.put(
-        "recommendationDate", now(UTC).format(DateTimeFormatter.ISO_ZONED_DATE_TIME));
-    payload.put("lob_country", getRandomValue("PL", "DE", "UK"));
-    payload.put("risk_type", getRandomValue("SAN", "PEP"));
-    payload.put(
-        "fvSignature",
-        getRandomValue("qC4MMVPvDOpB/vA+hn8tM8mUgt4=", "qC4MMVPvDOpB/vA+hn8tM8mUgt4="));
-    payload.put(
-        "policyId", getRandomValue(
-            "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3",
-            "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3"));
-    payload.put(
-        "policy", getRandomValue(
-            "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3",
-            "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3"));
-    payload.put(
-        "stepId", getRandomValue(
-            "steps/b583e1cf-7f7c-4689-8df5-c7996763bd93",
-            "steps/4461c9c8-4980-4d63-9fc8-afe3e677eacf"));
-    payload.put(
-        "step", getRandomValue(
-            "steps/b583e1cf-7f7c-4689-8df5-c7996763bd93",
-            "steps/4461c9c8-4980-4d63-9fc8-afe3e677eacf"));
-    payload.put("1.CustomerEntities.LoB Region", getRandomValue("EGY", "ASP"));
-    payload.put("1.CustomerEntities.Address", "Fixed Value CE1");
-    payload.put("2.CustomerEntities.Address", "Fixed Value CE2");
-    payload.put("DN_CASE.ExtendedAttribute5", getRandomValue("SAN", "PEP"));
-    payload.put("status", getRandomValue("COMPLETED", "ERROR"));
-
     return Alert.newBuilder()
         .setDiscriminator(getRandomDiscriminator())
         .setName(getRandomValue(ALERT_NAMES))
-        .setPayload(convertMapToPayload(payload))
+        .setPayload(convertMapToPayload(generateRandomPayload()))
         .build();
   }
 
@@ -76,9 +40,79 @@ class AlertGenerator {
     return Alert.newBuilder()
         .setDiscriminator(getRandomDiscriminator())
         .setName(getRandomValue(ALERT_NAMES))
-        .setPayload(convertMapToPayload(Map.of(
-            "recommendation", getRandomValue("FALSE_POSITIVE", "POTENTIAL_TRUE_POSITIVE"))))
+        .setPayload(convertMapToPayload(generateRandomPayload()))
         .build();
+  }
+
+  private HashMap<String, String> generateRandomPayload() {
+    String date = now(UTC).format(ISO_ZONED_DATE_TIME);
+    HashMap<String, String> payload = new HashMap<>();
+    payload.put("status", getRandomValue("LEARNING_COMPLETED", "ERROR"));
+    payload.put("index_timestamp", date);
+    payload.put(
+        "recommendation_recommended_action", getRandomValue(
+            "ACTION_FALSE_POSITIVE",
+            "ACTION_POTENTIAL_TRUE_POSITIVE",
+            "ACTION_INVESTIGATE"));
+    payload.put(
+        "DN_CASE.currentState", getRandomValue("Level 1 Review", "Level 2 Review"));
+    payload.put("recommendationMonth", getRandomValue("01", "08", "09"));
+    payload.put("recommendationYear", getRandomValue("2021"));
+    payload.put(
+        "s8_recommendation",
+        getRandomValue(
+            "ACTION_FALSE_POSITIVE", "ACTION_POTENTIAL_TRUE_POSITIVE",
+            "ACTION_MANUAL_INVESTIGATION"));
+    payload.put("recommendationDate", date);
+    payload.put(
+        "fvSignature",
+        getRandomValue(
+            "qC4MMVPvDOpB/vA+hn8tM8mUgt4=",
+            "qC4MMVPvDOpB/vA+hn8tM8mUgt4="));
+    payload.put(
+        "policyId", getRandomValue(
+            "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3",
+            "policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3"));
+    payload.put("policy_title", getRandomValue("PROD Policy for HSBC - PoV v.16"));
+    payload.put("stepId", getRandomValue(""));
+    payload.put("step_title", getRandomValue(""));
+    payload.put("extendedAttribute5", getRandomValue("SAN", "PEP", "SCION"));
+    payload.put("features/commonAp:solution", getRandomValue(NO));
+    payload.put("features/commonMp:solution", getRandomValue(NO));
+    payload.put("features/commonNames:solution", getRandomValue(NO));
+    payload.put("features/dateOfBirth:solution", getRandomValue(NO_DATA));
+    payload.put("features/gender:solution", getRandomValue(NO_DATA));
+    payload.put("features/geoPlaceOfBirth:solution", getRandomValue(NO_DATA));
+    payload.put("features/geoResidencies:solution", getRandomValue(NO_DATA));
+    payload.put("features/incorporationCountry:solution", getRandomValue(NO_DATA));
+    payload.put("features/invalidAlert:solution", getRandomValue(NO));
+    payload.put("features/isApTpMarked:solution", getRandomValue(INCONCLUSIVE));
+    payload.put("features/isCaseTpMarked:solution", getRandomValue(INCONCLUSIVE));
+    payload.put("features/isPep:solution", getRandomValue("DATA_SOURCE_ERROR"));
+    payload.put("features/isTpMarked:solution", getRandomValue(INCONCLUSIVE));
+    payload.put(
+        "features/logicalDiscountingDob:solution",
+        getRandomValue(INCONCLUSIVE));
+    payload.put("features/name:solution", getRandomValue("DATA_SOURCE_ERROR"));
+    payload.put("features/nationalIdDocument:solution", getRandomValue(NO_DATA));
+    payload.put("features/otherCountry:solution", getRandomValue("MATCH", NO_DATA));
+    payload.put("features/otherDocument:solution", getRandomValue(NO_DATA));
+    payload.put("features/passportNumberDocument:solution", getRandomValue(NO_DATA));
+    payload.put("features/registrationCountry:solution", getRandomValue(NO_DATA));
+    payload.put("features/residencyCountry:solution", getRandomValue(NO_DATA));
+    payload.put("categories/hitType:value", getRandomValue("SAN", "PEP", "SCION"));
+    payload.put("s8_country", getRandomValue("UK", "DE"));
+    payload.put(
+        "qa.level-0.state",
+        getRandomValue("qa_decision_PASSED", "qa_decision_FAILED"));
+    payload.put(
+        "analyst_decision",
+        getRandomValue(
+            "analyst_decision_true_positive",
+            "analyst_decision_false_positive"));
+    payload.put("lob_country", getRandomValue("PL", "DE", "UK"));
+
+    return payload;
   }
 
   private static Match match(String matchName, String payloadName, String payloadSolution) {
@@ -110,5 +144,4 @@ class AlertGenerator {
     int element = random.nextInt(allowedValues.length);
     return allowedValues[element];
   }
-
 }

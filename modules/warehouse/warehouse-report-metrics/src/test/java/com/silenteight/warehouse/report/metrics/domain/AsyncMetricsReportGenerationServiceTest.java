@@ -12,10 +12,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 
+import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.INDEXES;
 import static com.silenteight.warehouse.report.metrics.domain.MetricsReportDefinition.DAY;
-import static com.silenteight.warehouse.report.metrics.domain.ReportState.*;
+import static com.silenteight.warehouse.report.metrics.domain.ReportState.DONE;
+import static com.silenteight.warehouse.report.metrics.domain.ReportState.FAILED;
+import static com.silenteight.warehouse.report.metrics.domain.ReportState.NEW;
 import static com.silenteight.warehouse.report.metrics.generation.GenerationMetricsReportTestFixtures.PROPERTIES;
 import static java.lang.String.format;
 import static java.util.List.of;
@@ -30,7 +32,6 @@ class AsyncMetricsReportGenerationServiceTest {
   private static final MetricsReportDefinition TYPE = DAY;
   private static final OffsetDateTime FROM = TYPE.getFrom(TIME_SOURCE.now());
   private static final OffsetDateTime TO = TYPE.getTo(TIME_SOURCE.now());
-  private static final List<String> INDEXES = of("index123");
   private static final CsvReportContentDto REPORT_CONTENT = CsvReportContentDto
       .of("test", of("lines"));
 
@@ -53,6 +54,7 @@ class AsyncMetricsReportGenerationServiceTest {
     // given
     when(reportGenerationService.generateReport(FROM, TO, INDEXES, PROPERTIES))
         .thenReturn(REPORT_CONTENT);
+
     MetricsReport metricsReport = repository.save(MetricsReport.of(TYPE, PRODUCTION_ANALYSIS_NAME));
     assertThat(metricsReport.getState()).isEqualTo(NEW);
 

@@ -6,15 +6,19 @@ import lombok.NonNull;
 
 import org.springframework.boot.context.properties.ConstructorBinding;
 
-import java.util.List;
-
-@ConstructorBinding
 @AllArgsConstructor
+@ConstructorBinding
 @Getter
-class GroupingColumnProperties {
+class GroupingColumnProperties implements Column {
 
   @NonNull
-  String name;
+  private final String name;
   @NonNull
-  List<String> decisionValues;
+  private final String label;
+  private final String sourcePattern;
+  private final String targetPattern;
+
+  public boolean isDateColumn() {
+    return sourcePattern != null && targetPattern != null;
+  }
 }
