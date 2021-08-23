@@ -89,11 +89,11 @@ class RbsReportGenerationServiceTest {
     assertThat(reportContent.getReport()).isEqualTo(
         "FV Signature,policy_name,step_name,recommended_action,"
             + "categories/apType,categories/riskType,features/name,features/dob,matches_count,"
-            + "QA_count,QA_PASS,QA_FAILED,Learning_FP,Learning_PTP\n"
+            + "QA_decision_PASS,QA_decision_FAILED,analyst_decision_FP,analyst_decision_PTP\n"
             + "o7uPxWV913+ljhPW2uH+g7eAFeQ=,policies/1234,steps/3456,"
-            + "FALSE_POSITIVE,I,SAN,MATCH,NO_MATCH,33,2,0,1,0,0\n"
+            + "FALSE_POSITIVE,I,SAN,MATCH,NO_MATCH,33,0,1,0,0\n"
             + "o7uPxWV913+ljhPW2uH+g7eAFeQ=,policies/1234,steps/94526,"
-            + "INVESTIGATE,I,SAN,MATCH,NO_MATCH,10,0,0,0,8,2\n"
+            + "INVESTIGATE,I,SAN,MATCH,NO_MATCH,10,0,0,8,2\n"
     );
   }
 
@@ -119,13 +119,15 @@ class RbsReportGenerationServiceTest {
             RbScorerFixtures.FEATURES_NAME_FIELD, name,
             RbScorerFixtures.FEATURES_DOB_FIELD, dob,
             RbScorerFixtures.QA_DECISION_FIELD, qa,
-            RbScorerFixtures.ANALYST_DECISION_FIELD, learning);
+            RbScorerFixtures.ANALYSIS_DECISION_FIELD, learning);
     return Row.builder().data(map).count(count).build();
   }
 
   private GroupingColumnProperties getGroupingColumn(
-      String name, String label, List<String> groupingValues, boolean addCounter) {
-    return new GroupingColumnProperties(name, label, groupingValues, addCounter);
+      String name, String label,
+      List<GroupingValues> groupingValues) {
+
+    return new GroupingColumnProperties(name, label, groupingValues);
   }
 
   private ColumnProperties getColumn(String name, String label) {
@@ -137,23 +139,42 @@ class RbsReportGenerationServiceTest {
     return new RbsReportDefinition(
         "alert_date",
         asList(
-            getColumn(RbScorerFixtures.FV_SIGNATURE_FIELD_NAME,
-                      RbScorerFixtures.FV_SIGNATURE_FIELD_LABEL),
+            getColumn(
+                RbScorerFixtures.FV_SIGNATURE_FIELD_NAME,
+                RbScorerFixtures.FV_SIGNATURE_FIELD_LABEL),
             getColumn(RbScorerFixtures.POLICY_NAME_FIELD),
             getColumn(RbScorerFixtures.STEP_NAME_FIELD),
             getColumn(RbScorerFixtures.RECOMMENDED_ACTION),
             getColumn(RbScorerFixtures.CATEGORIES_AP_TYPE_FIELD),
             getColumn(RbScorerFixtures.CATEGORIES_RISK_TYPE_FIELD),
             getColumn(RbScorerFixtures.FEATURES_NAME_FIELD),
-            getColumn(RbScorerFixtures.FEATURES_DOB_FIELD)),
-        asList(
-            getGroupingColumn(
-                RbScorerFixtures.QA_DECISION_FIELD, "QA", asList("PASS", "FAILED"), true),
-            getGroupingColumn(
-                RbScorerFixtures.ANALYST_DECISION_FIELD, "Learning", asList("FP", "PTP"), false)));
+            getColumn(RbScorerFixtures.FEATURES_DOB_FIELD)), as());
+
   }
 
   private ColumnProperties getColumn(String name) {
     return getColumn(name, name);
+  }
+
+  public static GroupingValues getGroupingValue(String value, String label) {
+    return new GroupingValues(value, label);
+  }
+
+  private List<GroupingColumnProperties> as() {
+    GroupingColumnProperties groupingColumn = getGroupingColumn(
+        "qa_decision",
+        "QA_decision",
+        of(
+            getGroupingValue("PASS", "QA_decision_PASSED"),
+            getGroupingValue("FAILED", "QA_decision_FAILED")));
+
+    GroupingColumnProperties groupingColumn1 =
+        getGroupingColumn(RbScorerFixtures.ANALYSIS_DECISION_FIELD,
+            RbScorerFixtures.ANALYST_DECISION_FIELD, of(
+                getGroupingValue("FP", "analyst_decision_false_positive"),
+                getGroupingValue("PTP", "analyst_decision_potential_true_positive")));
+
+    return List.of(groupingColumn, groupingColumn1);
+
   }
 }

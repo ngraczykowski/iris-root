@@ -6,20 +6,12 @@ import lombok.NonNull;
 
 import org.springframework.boot.context.properties.ConstructorBinding;
 
-import java.util.List;
-
 @ConstructorBinding
 @AllArgsConstructor
 @Getter
-class GroupingColumnProperties {
-
-  private static final String EMPTY_DELIMITER = "";
-  private static final String COUNTER = "count";
-
+public class GroupingValues {
   @NonNull
-  String name;
+  String value;
   @NonNull
   String label;
-  @NonNull
-  List<GroupingValues> groupingValues;
 }

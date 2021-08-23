@@ -39,6 +39,7 @@ public class RbsReportGenerationService {
       OffsetDateTime to,
       List<String> indexes,
       RbsReportDefinition properties) {
+
     FetchGroupedDataResponse rawData = fetchRawData(from, to, indexes, properties);
     return CsvReportContentDto.of(getLabelsRow(properties), transpose(rawData, properties));
   }
@@ -110,21 +111,19 @@ public class RbsReportGenerationService {
     List<String> result = new ArrayList<>();
     Map<String, Long> values = rows
         .stream()
-        .collect(toMap(row -> row.getValueOrDefault(column.getName(), EMPTY_STRING).toLowerCase(),
-                       Row::getCount,
-                       Long::sum));
-
-    if (column.isAddCounter())
-      result.add(getAllNonNullValueSum(values));
+        .collect(toMap(
+            row -> row.getValueOrDefault(column.getName(), EMPTY_STRING).toLowerCase(),
+            Row::getCount,
+            Long::sum));
 
     column
         .getGroupingValues()
         .stream()
+        .map(GroupingValues::getValue)
         .map(String::toLowerCase)
         .map(groupingValue -> values.getOrDefault(groupingValue, 0L))
         .map(String::valueOf)
         .forEach(result::add);
-
     return result.stream();
   }
 
