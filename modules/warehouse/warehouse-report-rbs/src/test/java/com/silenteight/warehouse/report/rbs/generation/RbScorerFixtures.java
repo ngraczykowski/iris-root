@@ -13,4 +13,5 @@ class RbScorerFixtures {
   public static final String FEATURES_DOB_FIELD = "features/dob";
   public static final String QA_DECISION_FIELD = "qa_decision";
   public static final String ANALYST_DECISION_FIELD = "analyst_decision";
+  public static final String ANALYSIS_DECISION_FIELD = "analysis_decision";
 }

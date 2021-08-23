@@ -105,3 +105,67 @@ warehouse.report.statistics:
   analyst-decision:
     field: alert_DN_CASE.currentState
     false-positive-value: Level 1 Review
+
+warehouse.report.rbs:
+  production:
+    columns:
+      - name: alert_fvSignature
+        label: fvSignature
+      - name: alert_policy_id
+        label: policy_id
+      - name: alert_step_id
+        label: step_id
+      - name: alert_recommended action
+        label: recommended action
+      - name: alert_categories/customerType
+        label: categories/customerType
+      - name: alert_features/name
+        label: features/name
+    grouping-columns:
+      - name: alert_qa_decision
+        label: QA_decision
+        grouping-values:
+          - value: PASS
+            label: qa_decision_pass
+          - value: FAILED
+            label: qa_decision_failed
+        counter-label: qa_decision_all
+      - name: alert_analysis_decision
+        label: analyst_decision
+        grouping-values:
+          - value: FP
+            label: analyst_decision_false_positive
+          - value: PTP
+            label: analyst_decision_potential_true_positive
+    date-field-name: alert_timestamp
+
+  simulation:
+    columns:
+      - name: alert_fvSignature
+        label: fvSignature
+      - name: alert_policy_id
+        label: policy_id
+      - name: alert_step_id
+        label: step_id
+      - name: alert_recommended_action
+        label: recommended action
+      - name: alert_categories/customerType
+        label: categories/customerType
+      - name: alert_features/name
+        label: features/name
+    grouping-columns:
+      - name: alert_qa_decision
+        label: QA_decision
+        grouping-values:
+          - value: PASS
+            label: qa_decision_pass
+          - value: FAILED
+            label: qa_decision_failed
+      - name: alert_analysis_decision
+        label: analyst_decision
+        grouping-values:
+          - value: FP
+            label: analyst_decision_false_positive
+          - value: PTP
+            label: analyst_decision_potential_true_positive
+    date-field-name: alert_timestamp

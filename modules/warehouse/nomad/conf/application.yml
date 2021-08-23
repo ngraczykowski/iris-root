@@ -157,15 +157,23 @@ warehouse.report.rbs:
         label: registration_country
       - name: alert_features/residencyCountry:solution
         label: residency_country
+
     grouping-columns:
       - name: alert_qa.level-0.state
-        label: qa_decision
-        grouping-values: [PASSED, FAILED]
-        add-counter: true
-      - name: alert_analyst_decision
-        label:
-        grouping-values: analyst_decision_true_positive, analyst_decision_false_positive
-        add-counter: false
+        label: QA_decision
+        grouping-values:
+          - value: PASS
+            label: qa_decision_pass
+          - value: FAILED
+            label: qa_decision_failed
+      - name: alert_analysis_decision
+        label: analyst_decision
+        grouping-values:
+          - value: FP
+            label: analyst_decision_false_positive
+          - value: PTP
+            label: analyst_decision_potential_true_positive
+
   simulation:
     date-field-name: index_timestamp
     columns:
@@ -227,15 +235,22 @@ warehouse.report.rbs:
         label: registration_country
       - name: alert_features/residencyCountry:solution
         label: residency_country
+
     grouping-columns:
       - name: alert_qa.level-0.state
-        label: qa_decision
-        grouping-values: [ PASSED, FAILED ]
-        add-counter: true
+        label: QA_decision
+        grouping-values:
+          - value: PASS
+            label: qa_decision_pass
+          - value: FAILED
+            label: qa_decision_failed
       - name: alert_analyst_decision
-        label:
-        grouping-values: analyst_decision_false_positive, analyst_decision_true_positive
-        add-counter: false
+        label: analyst_decision
+        grouping-values:
+          - value: FP
+            label: analyst_decision_false_positive
+          - value: PTP
+            label: analyst_decision_potential_true_positive
 
 warehouse.report.billing:
   year-field-name: alert_recommendationYear
