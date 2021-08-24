@@ -10,6 +10,7 @@ silenteight.bridge:
     dataset-deadline: 1m
     historical-decisions-deadline: 20s
     analysis-deadline: 1m
+    alert-deadline: 20s
     adjudication-engine-address: static://localhost:24801
     governance-address: static://localhost:24205
     worldcheck-address: static://localhost:24813

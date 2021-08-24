@@ -49,7 +49,7 @@ class GrpcServiceConfiguration {
 
   @Bean
   AlertGrpcAdapter alertServiceGrpcApi() {
-    return new AlertGrpcAdapter(alertServiceBlockingStub, getDeadline());
+    return new AlertGrpcAdapter(alertServiceBlockingStub, getAlertDeadline());
   }
 
   @Bean
@@ -82,5 +82,9 @@ class GrpcServiceConfiguration {
 
   private long getAnalysisDeadline() {
     return grpcProperties.analysisDeadlineInSeconds();
+  }
+
+  private long getAlertDeadline() {
+    return grpcProperties.alertDeadlineInSeconds();
   }
 }
