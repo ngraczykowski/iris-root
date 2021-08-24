@@ -2,6 +2,7 @@ package com.silenteight.warehouse.report.rbs.generation;
 
 class RbScorerFixtures {
 
+  public static final String ALERT_DATE_FIELD = "alert_date";
   public static final String FV_SIGNATURE_FIELD_NAME = "fvsignature";
   public static final String FV_SIGNATURE_FIELD_LABEL = "FV Signature";
   public static final String POLICY_NAME_FIELD = "policy_name";
@@ -14,4 +15,5 @@ class RbScorerFixtures {
   public static final String QA_DECISION_FIELD = "qa_decision";
   public static final String ANALYST_DECISION_FIELD = "analyst_decision";
   public static final String ANALYSIS_DECISION_FIELD = "analysis_decision";
+  public static final String ALERT_STATUS_FIELD = "alert_status";
 }

@@ -2,22 +2,29 @@ package com.silenteight.warehouse.indexer.query.grouping;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.opendistro.elastic.QueryDto;
 import com.silenteight.warehouse.common.opendistro.elastic.QueryResultDto;
 import com.silenteight.warehouse.common.opendistro.elastic.QueryResultDto.SchemaEntry;
-import com.silenteight.warehouse.indexer.query.SqlBuilder;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.index.QueryIndexService;
+import com.silenteight.warehouse.indexer.query.sql.MultiValueCondition;
+import com.silenteight.warehouse.indexer.query.sql.SingleValueCondition;
+import com.silenteight.warehouse.indexer.query.sql.SqlBuilder;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.query.SqlBuilder.KEY_COUNT;
+import static com.silenteight.warehouse.indexer.query.sql.SqlBuilder.KEY_COUNT;
 import static java.lang.Integer.parseInt;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RequiredArgsConstructor
 public class GroupingQueryService {
 
@@ -33,16 +40,40 @@ public class GroupingQueryService {
   public FetchGroupedDataResponse generate(
       FetchGroupedTimeRangedDataRequest fetchGroupedDataRequest) {
 
-    List<String> existingFields = filterOutNonExistingFields(
-        fetchGroupedDataRequest.getIndexes(), fetchGroupedDataRequest.getFields());
+    log.debug("Elastic GroupingQueryService: {}", fetchGroupedDataRequest);
+
+    SafetyQueryProcessor safetyQueryProcessor =
+        new SafetyQueryProcessor(fetchGroupedDataRequest.getIndexes(), queryIndexService);
+
+    List<String> existingFields = safetyQueryProcessor
+        .filterOutNonExistingFields(fetchGroupedDataRequest.getFields());
+    List<String> existingFilterFields = safetyQueryProcessor
+        .filterOutNonExistingFields(fetchGroupedDataRequest.getQueryFilterFields());
+    if (existingFilterFields.size() != fetchGroupedDataRequest.getQueryFilterFields().size()) {
+      log.warn("Cannot filter on non existing fields. Returning empty query result");
+      return FetchGroupedDataResponse.empty();
+    }
+
+    List<MultiValueCondition> whereConditions = fetchGroupedDataRequest.getQueryFilters().stream()
+        .map(filter -> new MultiValueCondition(filter.getField(), filter.getAllowedValues()))
+        .collect(toList());
+
+    SingleValueCondition fromCondition = SingleValueCondition.builder()
+        .field(fetchGroupedDataRequest.getDateField())
+        .value(fetchGroupedDataRequest.getFrom())
+        .build();
+
+    SingleValueCondition toCondition = SingleValueCondition.builder()
+        .field(fetchGroupedDataRequest.getDateField())
+        .value(fetchGroupedDataRequest.getTo())
+        .build();
 
     String query = sqlBuilder.groupByBetweenDates(
         fetchGroupedDataRequest.getIndexes(),
         existingFields,
-        fetchGroupedDataRequest.getDateField(),
-        fetchGroupedDataRequest.getFrom(),
-        fetchGroupedDataRequest.getTo(),
-        fetchGroupedDataRequest.isOnlySolvedAlerts());
+        whereConditions,
+        fromCondition,
+        toCondition);
 
     QueryDto queryDto = QueryDto.builder()
         .query(query)
@@ -50,16 +81,6 @@ public class GroupingQueryService {
 
     QueryResultDto queryResultDto = opendistroElasticClient.executeSql(queryDto);
     return asFetchGroupedDataResponse(queryResultDto);
-  }
-
-  private List<String> filterOutNonExistingFields(List<String> indexes, List<String> fields) {
-    List<String> allAvailableFields = indexes.stream()
-        .flatMap(index -> queryIndexService.getFieldsList(index).stream())
-        .collect(toList());
-
-    List<String> filteredFields = new ArrayList<>(fields);
-    filteredFields.retainAll(allAvailableFields);
-    return filteredFields;
   }
 
   private FetchGroupedDataResponse asFetchGroupedDataResponse(QueryResultDto queryResultDto) {
