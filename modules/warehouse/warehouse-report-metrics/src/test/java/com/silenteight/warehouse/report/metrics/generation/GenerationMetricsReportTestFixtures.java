@@ -2,10 +2,7 @@ package com.silenteight.warehouse.report.metrics.generation;
 
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.*;
-import static java.util.List.of;
 
 @NoArgsConstructor
 public final class GenerationMetricsReportTestFixtures {
@@ -17,17 +14,17 @@ public final class GenerationMetricsReportTestFixtures {
       getGroupingColumn(HIT_TYPE_FIELD_NAME, HIT_TYPE_FIELD_LABEL, null, null),
       getColumn(
           RECOMMENDATION_FIELD_NAME,
-          of(RECOMMENDATION_FIELD_POSITIVE_VALUE, RECOMMENDATION_FIELD_NEGATIVE_VALUE),
-          RECOMMENDATION_FIELD_POSITIVE_VALUE),
+          RECOMMENDATION_FIELD_POSITIVE_VALUE,
+          RECOMMENDATION_FIELD_NEGATIVE_VALUE),
       getColumn(
           ANALYST_FIELD_NAME,
-          of(ANALYST_FIELD_POSITIVE_VALUE, ANALYST_FIELD_NEGATIVE_VALUE),
-          ANALYST_FIELD_POSITIVE_VALUE
+          ANALYST_FIELD_POSITIVE_VALUE,
+          ANALYST_FIELD_NEGATIVE_VALUE
       ),
       getColumn(
           QA_FIELD_NAME,
-          of(QA_FIELD_POSITIVE_VALUE, QA_FIELD_NEGATIVE_VALUE),
-          QA_FIELD_POSITIVE_VALUE
+          QA_FIELD_POSITIVE_VALUE,
+          QA_FIELD_NEGATIVE_VALUE
       ));
 
   private static GroupingColumnProperties getGroupingColumn(
@@ -37,8 +34,8 @@ public final class GenerationMetricsReportTestFixtures {
   }
 
   private static ColumnProperties getColumn(
-      String name, List<String> decisionValues, String positiveValue) {
+      String name, String positiveValue, String negativeValue) {
 
-    return new ColumnProperties(name, decisionValues, positiveValue);
+    return new ColumnProperties(name, positiveValue, negativeValue);
   }
 }
