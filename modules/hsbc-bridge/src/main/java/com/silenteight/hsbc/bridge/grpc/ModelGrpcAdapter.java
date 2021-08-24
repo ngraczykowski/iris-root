@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.bridge.grpc;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.model.ModelServiceClient;
 import com.silenteight.hsbc.bridge.model.dto.ExportModelResponseDto;
@@ -14,11 +15,13 @@ import com.google.protobuf.ByteString;
 import io.grpc.StatusRuntimeException;
 import org.springframework.retry.annotation.Retryable;
 
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 import static com.google.protobuf.Empty.getDefaultInstance;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+@Slf4j
 @RequiredArgsConstructor
 class ModelGrpcAdapter implements ModelServiceClient {
 
@@ -39,7 +42,11 @@ class ModelGrpcAdapter implements ModelServiceClient {
         .setVersion(version)
         .build();
     var exportModelResponse = getStub().exportModel(request);
-    return mapToExportModelResponse(exportModelResponse);
+    var exportModelResponseDto = mapToExportModelResponse(exportModelResponse);
+    log.info(
+        "Response model from Governance after exportModel grpc call: {}",
+        new String(exportModelResponseDto.getModelJson(), StandardCharsets.UTF_8));
+    return exportModelResponseDto;
   }
 
   @Override
@@ -53,11 +60,18 @@ class ModelGrpcAdapter implements ModelServiceClient {
 
   @Retryable(value = StatusRuntimeException.class)
   public ImportNewModelResponseDto importModel(byte[] model) {
+    log.info(
+        "Imported model from Nexus as request to grpc call importModel: {}",
+        new String(model, StandardCharsets.UTF_8));
     var request = ImportNewModelRequest.newBuilder()
         .setModelJson(ByteString.copyFrom(model))
         .build();
     var importNewModelResponse = getStub().importModel(request);
-    return mapToImportNewModel(importNewModelResponse);
+    var importNewModelResponseDto = mapToImportNewModel(importNewModelResponse);
+    log.info(
+        "Response model from Governance after importModel grpc call : {}",
+        importNewModelResponseDto.getModel());
+    return importNewModelResponseDto;
   }
 
   @Retryable(value = StatusRuntimeException.class)
