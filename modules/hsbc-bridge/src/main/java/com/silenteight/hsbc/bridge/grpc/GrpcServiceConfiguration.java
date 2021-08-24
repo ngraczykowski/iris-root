@@ -54,7 +54,7 @@ class GrpcServiceConfiguration {
 
   @Bean
   DatasetServiceClient datasetServiceGrpcApi() {
-    return new DatasetGrpcAdapter(datasetServiceBlockingStub, getDeadline());
+    return new DatasetGrpcAdapter(datasetServiceBlockingStub, getDatasetDeadline());
   }
 
   @Bean
@@ -74,5 +74,9 @@ class GrpcServiceConfiguration {
 
   private long getRecommendationDeadline() {
     return grpcProperties.recommendationDeadlineInSeconds();
+  }
+
+  private long getDatasetDeadline() {
+    return grpcProperties.datasetDeadlineInSeconds();
   }
 }
