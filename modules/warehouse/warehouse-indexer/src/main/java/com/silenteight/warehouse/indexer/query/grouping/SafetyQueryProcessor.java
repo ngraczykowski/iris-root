@@ -32,7 +32,7 @@ public class SafetyQueryProcessor {
     filteredFields.retainAll(allAvailableFields);
 
     if (fields.size() != filteredFields.size())
-      log.warn("Some fields are missing: Requested fields: {}, Effective fields: {}",
+      log.warn("Some fields are missing: Requested fields={}, Effective fields={}",
           fields, filteredFields);
 
     return filteredFields;

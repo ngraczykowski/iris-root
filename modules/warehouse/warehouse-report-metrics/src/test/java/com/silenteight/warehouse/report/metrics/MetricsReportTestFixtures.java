@@ -49,4 +49,6 @@ public final class MetricsReportTestFixtures {
   public static final String RISK_TYPE_FRAUD = "Fraud";
   public static final String HIT_TYPE_FIELD_NAME = "alert_categories/hitType:value";
   public static final String HIT_TYPE_FIELD_LABEL = "Hit Type";
+  public static final String ALERT_STATUS_FIELD = "alert_status";
+  public static final String COMPLETED_VALUE = "COMPLETED";
 }

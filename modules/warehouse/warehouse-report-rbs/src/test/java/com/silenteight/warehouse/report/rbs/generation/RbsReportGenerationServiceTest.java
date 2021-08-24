@@ -148,12 +148,19 @@ class RbsReportGenerationServiceTest {
             getColumn(RbScorerFixtures.CATEGORIES_AP_TYPE_FIELD),
             getColumn(RbScorerFixtures.CATEGORIES_RISK_TYPE_FIELD),
             getColumn(RbScorerFixtures.FEATURES_NAME_FIELD),
-            getColumn(RbScorerFixtures.FEATURES_DOB_FIELD)), as());
+            getColumn(RbScorerFixtures.FEATURES_DOB_FIELD)),
+        as(),
+        asList(
+            getFilter(RbScorerFixtures.ALERT_STATUS_FIELD, of("COMPLETED"))));
 
   }
 
   private ColumnProperties getColumn(String name) {
     return getColumn(name, name);
+  }
+
+  private FilterProperties getFilter(String name, List<String> values) {
+    return new FilterProperties(name, values);
   }
 
   public static GroupingValues getGroupingValue(String value, String label) {
@@ -174,7 +181,7 @@ class RbsReportGenerationServiceTest {
                 getGroupingValue("FP", "analyst_decision_false_positive"),
                 getGroupingValue("PTP", "analyst_decision_potential_true_positive")));
 
-    return List.of(groupingColumn, groupingColumn1);
+    return of(groupingColumn, groupingColumn1);
 
   }
 }

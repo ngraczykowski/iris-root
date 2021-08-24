@@ -152,7 +152,6 @@ warehouse.report.rbs:
         label: registration_country
       - name: alert_features/residencyCountry:solution
         label: residency_country
-
     grouping-columns:
       - name: alert_qa.level-0.state
         label: QA_decision
@@ -168,6 +167,9 @@ warehouse.report.rbs:
             label: analyst_decision_false_positive
           - value: PTP
             label: analyst_decision_potential_true_positive
+    filters:
+      - name: alert_status
+        values: LEARNING_COMPLETED
 
   simulation:
     date-field-name: index_timestamp
@@ -230,7 +232,6 @@ warehouse.report.rbs:
         label: registration_country
       - name: alert_features/residencyCountry:solution
         label: residency_country
-
     grouping-columns:
       - name: alert_qa.level-0.state
         label: QA_decision
@@ -246,6 +247,9 @@ warehouse.report.rbs:
             label: analyst_decision_false_positive
           - value: PTP
             label: analyst_decision_potential_true_positive
+    filters:
+      - name: alert_status
+        values: LEARNING_COMPLETED
 
 warehouse.report.billing:
   year-field-name: alert_recommendationYear
@@ -264,6 +268,9 @@ warehouse.report.billing:
     counter-label: count_alerts_received
     significant-values: [ ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE]
     significant-summation-label: count_alerts_solved
+  filters:
+    - name: alert_status
+      values: COMPLETED, LEARNING_COMPLETED
 
 warehouse.report.metrics:
   production:
@@ -293,6 +300,9 @@ warehouse.report.metrics:
       name: alert_qa.level-0.state
       positive-value: qa_decision_PASSED
       negative-value: qa_decision_FAILED
+    filters:
+      - name: alert_status
+        values: LEARNING_COMPLETED
   simulation:
     date-field:
       name: index_timestamp
@@ -320,6 +330,9 @@ warehouse.report.metrics:
       name: alert_qa.level-0.state
       positive-value: qa_decision_PASSED
       negative-value: qa_decision_FAILED
+    filters:
+      - name: alert_status
+        values: LEARNING_COMPLETED
 
 warehouse.report.statistics:
   date-field-name: index_timestamp

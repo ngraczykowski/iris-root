@@ -3,6 +3,8 @@ package com.silenteight.warehouse.report.metrics.generation;
 import lombok.NoArgsConstructor;
 
 import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.*;
+import static java.util.Arrays.asList;
+import static java.util.List.of;
 
 @NoArgsConstructor
 public final class GenerationMetricsReportTestFixtures {
@@ -25,7 +27,8 @@ public final class GenerationMetricsReportTestFixtures {
           QA_FIELD_NAME,
           QA_FIELD_POSITIVE_VALUE,
           QA_FIELD_NEGATIVE_VALUE
-      ));
+      ),
+      of(getFilter(ALERT_STATUS_FIELD, COMPLETED_VALUE)));
 
   private static GroupingColumnProperties getGroupingColumn(
       String name, String label, String oldPattern, String newPattern) {
@@ -37,5 +40,9 @@ public final class GenerationMetricsReportTestFixtures {
       String name, String positiveValue, String negativeValue) {
 
     return new ColumnProperties(name, positiveValue, negativeValue);
+  }
+
+  private static FilterProperties getFilter(String name, String...values) {
+    return new FilterProperties(name, asList(values));
   }
 }

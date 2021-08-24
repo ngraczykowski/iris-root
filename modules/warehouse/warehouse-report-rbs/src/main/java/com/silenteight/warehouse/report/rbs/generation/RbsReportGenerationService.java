@@ -10,16 +10,12 @@ import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDa
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 import com.silenteight.warehouse.report.rbs.generation.dto.CsvReportContentDto;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Stream;
 
-import static java.lang.String.valueOf;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -61,6 +57,7 @@ public class RbsReportGenerationService {
         .to(to)
         .dateField(properties.getDateFieldName())
         .fields(properties.getListOfFields())
+        .queryFilters(properties.getQueryFilters())
         .indexes(indexes)
         .build();
     return groupingQueryService.generate(request);
@@ -125,15 +122,5 @@ public class RbsReportGenerationService {
         .map(String::valueOf)
         .forEach(result::add);
     return result.stream();
-  }
-
-  private static String getAllNonNullValueSum(Map<String, Long> values) {
-    long result = values
-        .entrySet()
-        .stream()
-        .filter(entry -> StringUtils.isNotBlank(entry.getKey()))
-        .mapToLong(Entry::getValue)
-        .sum();
-    return valueOf(result);
   }
 }

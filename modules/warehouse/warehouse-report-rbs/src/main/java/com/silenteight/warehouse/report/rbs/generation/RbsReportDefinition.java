@@ -2,14 +2,19 @@ package com.silenteight.warehouse.report.rbs.generation;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
+
+import com.silenteight.warehouse.indexer.query.grouping.QueryFilter;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javax.annotation.Nullable;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
+import static java.util.Collections.emptyList;
+import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
@@ -22,11 +27,14 @@ public class RbsReportDefinition {
   @NotBlank
   private final String dateFieldName;
   @Valid
-  @NonNull
+  @NotNull
   private final List<ColumnProperties> columns;
   @Valid
-  @NonNull
+  @NotNull
   private final List<GroupingColumnProperties> groupingColumns;
+  @Valid
+  @Nullable
+  private final List<FilterProperties> filters;
 
   List<String> getListOfFields() {
     List<String> fields = new ArrayList<>();
@@ -56,6 +64,15 @@ public class RbsReportDefinition {
 
     result.addAll(columnsLabels);
     return result;
+  }
+
+  List<QueryFilter> getQueryFilters() {
+    if (isNull(getFilters()))
+      return emptyList();
+
+    return getFilters().stream()
+        .map(FilterProperties::toQueryFilter)
+        .collect(toList());
   }
 
   private List<String> getColumnsLabels(GroupingColumnProperties groupingColumnProperties) {
