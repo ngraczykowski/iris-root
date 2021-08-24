@@ -50,7 +50,7 @@ def cut_terms(
     with_weak_words: bool = False,
     saving_at_least_one_word: bool = False,
     from_start: bool = False,
-):
+) -> Tuple[TokensSequence, TokensSequence]:
     if not name:
         return TokensSequence(), TokensSequence()
 
