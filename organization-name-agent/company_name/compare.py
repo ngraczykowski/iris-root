@@ -8,8 +8,8 @@ from company_name.scores.country import get_country_score
 from company_name.scores.first_token import get_first_token_score
 from company_name.scores.fuzzy import (
     get_fuzzy_score,
-    get_sorted_fuzzy_score,
     get_partial_fuzzy_score,
+    get_sorted_fuzzy_score,
 )
 from company_name.scores.legal_terms import get_legal_score
 from company_name.scores.parenthesis_match import get_parenthesis_score
