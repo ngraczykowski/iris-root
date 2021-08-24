@@ -37,7 +37,7 @@ class GrpcDataSourceServiceConfiguration {
   @Bean
   IsPepServiceClient isPepInformationServiceGrpcApi() {
     return new IsPepGrpcAdapter(
-        isPepServiceBlockingStub, getDeadline());
+        isPepServiceBlockingStub, getIsPepDeadline());
   }
 
   @Bean
@@ -58,5 +58,9 @@ class GrpcDataSourceServiceConfiguration {
 
   private long getHistoricalDecisionsDeadline() {
     return grpcProperties.historicalDecisionsDeadlineInSeconds();
+  }
+
+  private long getIsPepDeadline() {
+    return grpcProperties.isPepDeadlineInSeconds();
   }
 }

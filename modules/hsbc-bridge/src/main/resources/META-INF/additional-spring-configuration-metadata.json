@@ -36,6 +36,11 @@
       "description": "gRPC alert deadline time."
     },
     {
+      "name": "silenteight.bridge.grpc.is-pep-deadline",
+      "type": "java.time.Duration",
+      "description": "gRPC is-pep deadline time."
+    },
+    {
       "name": "silenteight.bridge.grpc.adjudication-engine-address",
       "type": "java.lang.String",
       "description": "gRPC adjudication engine address."
