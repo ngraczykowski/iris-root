@@ -73,11 +73,6 @@ warehouse:
     url: https://minio.silenteight.com
   kibana:
     url: https://kibana.silenteight.com
-  data:
-    production:
-      status:
-        field-name: alert_status
-        completed-value: LEARNING_COMPLETED
 
 keycloak:
   client-id: {{ env "NOMAD_NAMESPACE" }}-frontend

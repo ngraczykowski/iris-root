@@ -16,8 +16,11 @@ import static com.silenteight.warehouse.common.opendistro.roles.RolesMappedConst
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys.STATUS_KEY;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP_4;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.STATUS_COMPLETED;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.STATUS_ERROR;
 import static com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService.EMPTY_VALUE_PLACEHOLDER;
 import static java.time.OffsetDateTime.parse;
 import static java.util.List.of;
@@ -49,7 +52,6 @@ class GroupingQueryTest {
     testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
     testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_4);
     testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_5);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_4, MAPPED_ALERT_7);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
         .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
@@ -64,31 +66,6 @@ class GroupingQueryTest {
     assertThat(response.getRows()).hasSize(2);
     Row row = response.getRows().get(1);
     assertThat(row.getCount()).isEqualTo(2);
-    assertThat(row.getValue(COUNTRY_KEY)).isEqualTo(Values.COUNTRY_UK);
-    assertThat(row.getValue(MappedKeys.RISK_TYPE_KEY)).isEqualTo(Values.RISK_TYPE_PEP);
-  }
-
-  @Test
-  void shouldReturnGroupingByResultWithAlertStatusError() {
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_4);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_5);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_4, MAPPED_ALERT_7);
-
-    FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
-        .fields(of(COUNTRY_KEY, MappedKeys.RISK_TYPE_KEY))
-        .dateField(INDEX_TIMESTAMP)
-        .from(parse(PROCESSING_TIMESTAMP))
-        .to(parse(PROCESSING_TIMESTAMP_4))
-        .onlySolvedAlerts(false)
-        .build();
-
-    FetchGroupedDataResponse response = underTest.generate(request);
-
-    assertThat(response.getRows()).hasSize(2);
-    Row row = response.getRows().get(1);
-    assertThat(row.getCount()).isEqualTo(3);
     assertThat(row.getValue(COUNTRY_KEY)).isEqualTo(Values.COUNTRY_UK);
     assertThat(row.getValue(MappedKeys.RISK_TYPE_KEY)).isEqualTo(Values.RISK_TYPE_PEP);
   }
@@ -167,6 +144,65 @@ class GroupingQueryTest {
         .isInstanceOf(OpendistroElasticClientException.class)
         .extracting("statusCode")
         .isEqualTo(400);
+  }
+
+  @Test
+  void shouldReturnDataThatMatchesFilters() {
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_1);
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_7);
+
+    FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
+        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .fields(of(STATUS_KEY))
+        .dateField(INDEX_TIMESTAMP)
+        .from(parse(PROCESSING_TIMESTAMP))
+        .to(parse(PROCESSING_TIMESTAMP_4))
+        .queryFilters(of(new QueryFilter(STATUS_KEY, of(STATUS_COMPLETED))))
+        .build();
+
+    FetchGroupedDataResponse response = underTest.generate(request);
+
+    assertThat(response.getRows()).hasSize(1);
+    Row row = response.getRows().get(0);
+    assertThat(row.getValue(STATUS_KEY)).isEqualTo(STATUS_COMPLETED);
+  }
+
+  @Test
+  void shouldSupportMultipleValuesInFilters() {
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_1);
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_6);
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_7);
+
+    FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
+        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .fields(of(STATUS_KEY))
+        .dateField(INDEX_TIMESTAMP)
+        .from(parse(PROCESSING_TIMESTAMP))
+        .to(parse(PROCESSING_TIMESTAMP_4))
+        .queryFilters(of(new QueryFilter(STATUS_KEY, of(STATUS_COMPLETED, STATUS_ERROR))))
+        .build();
+
+    FetchGroupedDataResponse response = underTest.generate(request);
+
+    assertThat(response.getRows()).hasSize(2);
+  }
+
+  @Test
+  void shouldReturnEmptyResultIfAtLeastOneFilterFieldNotPresentInIndex() {
+    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_6);
+
+    FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
+        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .fields(of(STATUS_KEY))
+        .dateField(INDEX_TIMESTAMP)
+        .from(parse(PROCESSING_TIMESTAMP))
+        .to(parse(PROCESSING_TIMESTAMP_4))
+        .queryFilters(of(new QueryFilter(STATUS_KEY, of(STATUS_COMPLETED))))
+        .build();
+
+    FetchGroupedDataResponse response = underTest.generate(request);
+
+    assertThat(response.getRows()).isEmpty();
   }
 
   private void removeData() {

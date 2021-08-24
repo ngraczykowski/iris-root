@@ -7,7 +7,10 @@ import lombok.NonNull;
 import lombok.Value;
 
 import java.time.OffsetDateTime;
+import java.util.LinkedList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Value
 @AllArgsConstructor
@@ -25,5 +28,12 @@ public class FetchGroupedTimeRangedDataRequest {
   @NonNull
   OffsetDateTime to;
   @Default
-  boolean onlySolvedAlerts = true;
+  List<QueryFilter> queryFilters = new LinkedList<>();
+
+  List<String> getQueryFilterFields() {
+    return getQueryFilters()
+        .stream()
+        .map(QueryFilter::getField)
+        .collect(toList());
+  }
 }

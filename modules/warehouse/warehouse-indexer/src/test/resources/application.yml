@@ -32,11 +32,6 @@ warehouse:
     prefix: itest
   es:
     production-query-index: ${warehouse.environment.prefix}_production
-  data:
-    production:
-      status:
-        field-name: alert_status
-        completed-value: COMPLETED
 
 test:
   messaging:

@@ -7,7 +7,7 @@ import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClie
 import com.silenteight.warehouse.common.opendistro.elastic.QueryDto;
 import com.silenteight.warehouse.common.opendistro.elastic.QueryResultDto;
 import com.silenteight.warehouse.common.opendistro.elastic.QueryResultDto.SchemaEntry;
-import com.silenteight.warehouse.indexer.query.SqlBuilder;
+import com.silenteight.warehouse.indexer.query.sql.SqlBuilder;
 
 import java.util.List;
 import java.util.stream.Collectors;

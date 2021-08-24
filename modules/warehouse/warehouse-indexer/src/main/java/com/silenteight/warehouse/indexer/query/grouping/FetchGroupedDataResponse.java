@@ -5,10 +5,18 @@ import lombok.*;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Collections.emptyList;
+
 @Value
 @AllArgsConstructor
 @Builder
 public class FetchGroupedDataResponse {
+
+  static FetchGroupedDataResponse empty() {
+    return FetchGroupedDataResponse.builder()
+        .rows(emptyList())
+        .build();
+  }
 
   @NonNull
   @Builder.Default
