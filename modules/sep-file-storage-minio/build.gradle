@@ -24,12 +24,9 @@ repositories {
 
 libraries.platform_spring_boot = [group: 'org.springframework.boot', name: 'spring-boot-dependencies', version: springBootVersion]
 libraries.spring_context = [group: 'org.springframework', name: 'spring-context']
-libraries.spring_boot_starter_logging = [group: 'org.springframework.boot', name: 'spring-boot-starter-logging']
-libraries.spring_security_web = [group: 'org.springframework.security', name: 'spring-security-web']
 libraries.spring_security_config = [group: 'org.springframework.security', name: 'spring-security-config']
 libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web']
 libraries.minio = [group: 'io.minio', name: 'minio', version: '8.2.0']
-libraries.jakarta_validation_api = [group: 'jakarta.validation', name: 'jakarta.validation-api']
 
 libraries.spring_boot_test_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-test-autoconfigure']
 libraries.assertj_core = [group: 'org.assertj', name: 'assertj-core', version: '3.16.1']
@@ -38,26 +35,19 @@ libraries.spring_boot_test = [group: 'org.springframework.boot', name: 'spring-b
 libraries.commons_text = [group: 'org.apache.commons', name: 'commons-text', version: commonsTextVersion]
 
 libraries.test_containers = [group: 'org.testcontainers', name: 'testcontainers']
-libraries.test_containers_rabbitmq = [group: 'org.testcontainers', name: 'rabbitmq']
 libraries.test_containers_junit_jupiter = [group: 'org.testcontainers', name: 'junit-jupiter']
-libraries.test_containers_postgresql = [group: 'org.testcontainers', name: 'postgresql']
 libraries.test_containers_spock = [group: 'org.testcontainers', name: 'spock']
 
 
 dependencies {
   api libraries.spring_boot_test
-  api libraries.spring_boot_test_autoconfigure
 
   implementation platform(libraries.platform_spring_boot)
-  implementation libraries.spring_security_web
-  implementation libraries.spring_security_config
   implementation libraries.spring_boot_starter_web
 
   implementation libraries.commons_text
   implementation libraries.minio
-  implementation libraries.test_containers_spock
   implementation platform("org.testcontainers:testcontainers-bom:1.15.3")
-  implementation libraries.jakarta_validation_api
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 
   testImplementation libraries.assertj_core
