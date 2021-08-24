@@ -66,10 +66,10 @@ class MetricsReportGenerationServiceTest {
     // then
     assertThat(reportContent.getReport()).isEqualTo(
         "Date,Country,Risk Type,Hit Type,Efficiency,PTP Effectiveness,FP Effectiveness\n"
-            + "2021-06,DE,Fraud,Fraud,0.857,0.583,0.417\n"
+            + "2021-06,DE,Fraud,Fraud,0.882,0.583,0.333\n"
             + "2021-06,UK,Sanctions,San,1.000,1.000,0.000\n"
-            + "2021-07,DE,Fraud,Fraud,1.000,0.000,1.000\n"
-            + "2021-07,PL,AML,AML,1.000,1.000,1.000\n"
+            + "2021-07,DE,Fraud,Fraud,1.000,0.000,0.714\n"
+            + "2021-07,PL,AML,AML,1.000,1.000,0.000\n"
     );
   }
 
@@ -107,6 +107,24 @@ class MetricsReportGenerationServiceTest {
             RISK_TYPE_FRAUD,
             RISK_TYPE_FRAUD,
             DATE_2,
+            RECOMMENDATION_FIELD_NEGATIVE_VALUE,
+            ANALYST_FIELD_NEGATIVE_VALUE,
+            QA_FIELD_POSITIVE_VALUE,
+            2),
+        buildRow(
+            COUNTRY_DE,
+            RISK_TYPE_FRAUD,
+            RISK_TYPE_FRAUD,
+            DATE_2,
+            RECOMMENDATION_FIELD_NEGATIVE_VALUE,
+            ANALYST_FIELD_NEGATIVE_VALUE,
+            QA_FIELD_NEGATIVE_VALUE,
+            4),
+        buildRow(
+            COUNTRY_DE,
+            RISK_TYPE_FRAUD,
+            RISK_TYPE_FRAUD,
+            DATE_2,
             RECOMMENDATION_FIELD_POSITIVE_VALUE,
             ANALYST_FIELD_POSITIVE_VALUE,
             QA_FIELD_NEGATIVE_VALUE,
@@ -137,7 +155,16 @@ class MetricsReportGenerationServiceTest {
             RECOMMENDATION_FIELD_NEGATIVE_VALUE,
             ANALYST_FIELD_POSITIVE_VALUE,
             QA_FIELD_POSITIVE_VALUE,
-            5));
+            5),
+        buildRow(
+            COUNTRY_DE,
+            RISK_TYPE_FRAUD,
+            RISK_TYPE_FRAUD,
+            DATE,
+            RECOMMENDATION_FIELD_NEGATIVE_VALUE,
+            ANALYST_FIELD_POSITIVE_VALUE,
+            QA_FIELD_NEGATIVE_VALUE,
+            2));
   }
 
   private Row buildRow(

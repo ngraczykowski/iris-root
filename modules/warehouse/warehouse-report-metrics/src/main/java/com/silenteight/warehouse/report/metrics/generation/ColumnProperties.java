@@ -8,6 +8,8 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 import java.util.List;
 
+import static java.util.List.of;
+
 @ConstructorBinding
 @AllArgsConstructor
 @Getter
@@ -16,7 +18,11 @@ class ColumnProperties {
   @NonNull
   String name;
   @NonNull
-  List<String> decisionValues;
-  @NonNull
   String positiveValue;
+  @NonNull
+  String negativeValue;
+
+  List<String> getDecisionValues() {
+    return of(positiveValue, negativeValue);
+  }
 }

@@ -97,11 +97,12 @@ public class MetricsReportGenerationService {
 
     double efficiency = calculateEfficiency(rows, recommendationField);
     List<Row> potentialTruePositiveRows = getPotentialTruePositiveRows(rows, recommendationField);
-    double falsePositiveEffectiveness =
-        calculateEffectiveness(potentialTruePositiveRows, qaDecisionField);
-
     double potentialTruePositiveEffectiveness =
         calculateEffectiveness(potentialTruePositiveRows, analystDecisionField);
+
+    List<Row> falsePositiveRows = getFalsePositiveRows(rows, recommendationField);
+    double falsePositiveEffectiveness =
+        calculateEffectiveness(falsePositiveRows, qaDecisionField);
 
     String date = getStaticValue(rows, properties.getDateField());
     String country = getStaticValue(rows, properties.getCountry());
@@ -124,15 +125,22 @@ public class MetricsReportGenerationService {
         .collect(toList());
   }
 
+  private static List<Row> getFalsePositiveRows(List<Row> rows, ColumnProperties column) {
+    return rows
+        .stream()
+        .filter(row -> isNegativeValue(row, column))
+        .collect(toList());
+  }
+
   private static double calculateEffectiveness(List<Row> rows, ColumnProperties column) {
-    long potentialTruePositiveCount = rows
+    long positiveCount = rows
         .stream()
         .filter(row -> isPositiveValue(row, column))
         .mapToLong(Row::getCount)
         .sum();
 
     long meaningfulDecisionCount = countMeaningfulDecision(rows, column);
-    return divide(potentialTruePositiveCount, meaningfulDecisionCount);
+    return divide(positiveCount, meaningfulDecisionCount);
   }
 
   private static double calculateEfficiency(List<Row> rows, ColumnProperties column) {
@@ -153,6 +161,12 @@ public class MetricsReportGenerationService {
   private static boolean isPositiveValue(Row row, ColumnProperties column) {
     return column
         .getPositiveValue()
+        .equals(row.getValueOrDefault(column.getName(), EMPTY_STRING));
+  }
+
+  private static boolean isNegativeValue(Row row, ColumnProperties column) {
+    return column
+        .getNegativeValue()
         .equals(row.getValueOrDefault(column.getName(), EMPTY_STRING));
   }
 
@@ -193,9 +207,6 @@ public class MetricsReportGenerationService {
   }
 
   private static double divide(long dividend, long divisor) {
-    if (divisor == 0)
-      return 0;
-
-    return (double) dividend / divisor;
+    return divisor == 0 ? 0 : (double) dividend / divisor;
   }
 }
