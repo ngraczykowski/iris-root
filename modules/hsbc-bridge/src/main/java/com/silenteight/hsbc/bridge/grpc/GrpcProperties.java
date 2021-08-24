@@ -12,7 +12,6 @@ import java.time.Duration;
 @ConfigurationProperties("silenteight.bridge.grpc")
 public class GrpcProperties {
 
-  Duration defaultDeadline;
   Duration recommendationDeadline;
   Duration datasetDeadline;
   Duration historicalDecisionsDeadline;
@@ -20,10 +19,7 @@ public class GrpcProperties {
   Duration alertDeadline;
   Duration isPepDeadline;
   Duration nameInformationDeadline;
-
-  public long deadlineInSeconds() {
-    return defaultDeadline.toSecondsPart();
-  }
+  Duration modelDeadline;
 
   public long recommendationDeadlineInSeconds() {
     return recommendationDeadline.toSeconds();
@@ -51,5 +47,9 @@ public class GrpcProperties {
 
   public long nameInformationDeadlineInSeconds() {
     return nameInformationDeadline.toSeconds();
+  }
+
+  public long modelDeadlineInSeconds() {
+    return modelDeadline.toSeconds();
   }
 }

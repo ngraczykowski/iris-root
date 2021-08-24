@@ -65,19 +65,7 @@ class GrpcServiceConfiguration {
 
   @Bean
   ModelServiceClient modelServiceGrpcApi() {
-    return new ModelGrpcAdapter(solvingModelServiceBlockingStub, getDeadline());
-  }
-
-  private long getDeadline() {
-    return grpcProperties.deadlineInSeconds();
-  }
-
-  private long getRecommendationDeadline() {
-    return grpcProperties.recommendationDeadlineInSeconds();
-  }
-
-  private long getDatasetDeadline() {
-    return grpcProperties.datasetDeadlineInSeconds();
+    return new ModelGrpcAdapter(solvingModelServiceBlockingStub, getModelDeadline());
   }
 
   private long getAnalysisDeadline() {
@@ -86,5 +74,17 @@ class GrpcServiceConfiguration {
 
   private long getAlertDeadline() {
     return grpcProperties.alertDeadlineInSeconds();
+  }
+
+  private long getDatasetDeadline() {
+    return grpcProperties.datasetDeadlineInSeconds();
+  }
+
+  private long getRecommendationDeadline() {
+    return grpcProperties.recommendationDeadlineInSeconds();
+  }
+
+  private long getModelDeadline() {
+    return grpcProperties.modelDeadlineInSeconds();
   }
 }

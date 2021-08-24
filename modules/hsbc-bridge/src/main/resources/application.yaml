@@ -5,7 +5,6 @@ silenteight.bridge:
 
   grpc:
     port: 24803
-    default-deadline: 20s
     recommendation-deadline: 5m
     dataset-deadline: 1m
     historical-decisions-deadline: 20s
@@ -13,6 +12,7 @@ silenteight.bridge:
     alert-deadline: 20s
     is-pep-deadline: 20s
     name-information-deadline: 20s
+    model-deadline: 20s
     adjudication-engine-address: static://localhost:24801
     governance-address: static://localhost:24205
     worldcheck-address: static://localhost:24813

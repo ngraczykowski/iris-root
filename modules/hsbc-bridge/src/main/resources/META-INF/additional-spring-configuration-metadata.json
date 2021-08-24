@@ -6,11 +6,6 @@
       "description": "Bridge gRPC port."
     },
     {
-      "name": "silenteight.bridge.grpc.default-deadline",
-      "type": "java.time.Duration",
-      "description": "Default gRPC adapter deadline time."
-    },
-    {
       "name": "silenteight.bridge.grpc.recommendation-deadline",
       "type": "java.time.Duration",
       "description": "Recommendation gRPC adapter deadline time."
@@ -44,6 +39,11 @@
       "name": "silenteight.bridge.grpc.name-information-deadline",
       "type": "java.time.Duration",
       "description": "Name information gRPC adapter deadline time."
+    },
+    {
+      "name": "silenteight.bridge.grpc.model-deadline",
+      "type": "java.time.Duration",
+      "description": "Model gRPC adapter deadline time."
     },
     {
       "name": "silenteight.bridge.grpc.adjudication-engine-address",
