@@ -1,8 +1,8 @@
 public interface StorageManager {
 
-  void createBucket(String bucketName);
+  void create(String storageName);
 
-  void removeBucket(String bucketName);
+  void remove(String storageName);
 
-  boolean bucketExist(String bucketName);
+  boolean storageExist(String storageName);
 }
