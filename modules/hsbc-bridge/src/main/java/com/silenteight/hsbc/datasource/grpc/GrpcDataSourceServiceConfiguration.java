@@ -43,7 +43,7 @@ class GrpcDataSourceServiceConfiguration {
   @Bean
   NameInformationServiceClient nameInformationServiceGrpcApi() {
     return new NameInformationGrpcAdapter(
-        namesInformationServiceBlockingStub, getDeadline());
+        namesInformationServiceBlockingStub, getNameInformationDeadline());
   }
 
   @Bean
@@ -52,15 +52,15 @@ class GrpcDataSourceServiceConfiguration {
         historicalDecisionsModelServiceBlockingStub, getHistoricalDecisionsDeadline());
   }
 
-  private long getDeadline() {
-    return grpcProperties.deadlineInSeconds();
+  private long getIsPepDeadline() {
+    return grpcProperties.isPepDeadlineInSeconds();
+  }
+
+  private long getNameInformationDeadline() {
+    return grpcProperties.nameInformationDeadlineInSeconds();
   }
 
   private long getHistoricalDecisionsDeadline() {
     return grpcProperties.historicalDecisionsDeadlineInSeconds();
-  }
-
-  private long getIsPepDeadline() {
-    return grpcProperties.isPepDeadlineInSeconds();
   }
 }

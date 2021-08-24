@@ -8,37 +8,42 @@
     {
       "name": "silenteight.bridge.grpc.default-deadline",
       "type": "java.time.Duration",
-      "description": "gRPC default deadline time."
+      "description": "Default gRPC adapter deadline time."
     },
     {
       "name": "silenteight.bridge.grpc.recommendation-deadline",
       "type": "java.time.Duration",
-      "description": "gRPC recommendation deadline time."
+      "description": "Recommendation gRPC adapter deadline time."
     },
     {
       "name": "silenteight.bridge.grpc.dataset-deadline",
       "type": "java.time.Duration",
-      "description": "gRPC dataset deadline time."
+      "description": "Dataset gRPC adapter deadline time."
     },
     {
       "name": "silenteight.bridge.grpc.historical-decisions-deadline",
       "type": "java.time.Duration",
-      "description": "gRPC historical decisions deadline time."
+      "description": "Historical decisions gRPC adapter deadline time."
     },
     {
       "name": "silenteight.bridge.grpc.analysis-deadline",
       "type": "java.time.Duration",
-      "description": "gRPC analysis deadline time."
+      "description": "Analysis gRPC adapter deadline time."
     },
     {
       "name": "silenteight.bridge.grpc.alert-deadline",
       "type": "java.time.Duration",
-      "description": "gRPC alert deadline time."
+      "description": "Alert gRPC adapter deadline time."
     },
     {
       "name": "silenteight.bridge.grpc.is-pep-deadline",
       "type": "java.time.Duration",
-      "description": "gRPC is-pep deadline time."
+      "description": "Is-pep gRPC adapter deadline time."
+    },
+    {
+      "name": "silenteight.bridge.grpc.name-information-deadline",
+      "type": "java.time.Duration",
+      "description": "Name information gRPC adapter deadline time."
     },
     {
       "name": "silenteight.bridge.grpc.adjudication-engine-address",

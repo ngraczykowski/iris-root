@@ -19,6 +19,7 @@ public class GrpcProperties {
   Duration analysisDeadline;
   Duration alertDeadline;
   Duration isPepDeadline;
+  Duration nameInformationDeadline;
 
   public long deadlineInSeconds() {
     return defaultDeadline.toSecondsPart();
@@ -46,5 +47,9 @@ public class GrpcProperties {
 
   public long isPepDeadlineInSeconds() {
     return isPepDeadline.toSeconds();
+  }
+
+  public long nameInformationDeadlineInSeconds() {
+    return nameInformationDeadline.toSeconds();
   }
 }
