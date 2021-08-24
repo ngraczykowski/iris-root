@@ -16,6 +16,7 @@ public class GrpcProperties {
   Duration recommendationDeadline;
   Duration datasetDeadline;
   Duration historicalDecisionsDeadline;
+  Duration analysisDeadline;
 
   public long deadlineInSeconds() {
     return defaultDeadline.toSecondsPart();
@@ -31,5 +32,9 @@ public class GrpcProperties {
 
   public long historicalDecisionsDeadlineInSeconds() {
     return historicalDecisionsDeadline.toSeconds();
+  }
+
+  public long analysisDeadlineInSeconds() {
+    return analysisDeadline.toSeconds();
   }
 }

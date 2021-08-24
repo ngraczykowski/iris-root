@@ -44,7 +44,7 @@ class GrpcServiceConfiguration {
 
   @Bean
   AnalysisGrpcAdapter analysisServiceGrpcApi() {
-    return new AnalysisGrpcAdapter(analysisServiceBlockingStub, getDeadline());
+    return new AnalysisGrpcAdapter(analysisServiceBlockingStub, getAnalysisDeadline());
   }
 
   @Bean
@@ -78,5 +78,9 @@ class GrpcServiceConfiguration {
 
   private long getDatasetDeadline() {
     return grpcProperties.datasetDeadlineInSeconds();
+  }
+
+  private long getAnalysisDeadline() {
+    return grpcProperties.analysisDeadlineInSeconds();
   }
 }
