@@ -625,3 +625,12 @@ databaseChangeLog:
             tableName: hsbc_bridge_model
             columnName: type
             newDataType: varchar(40)
+
+  - changeSet:
+      id: 1.0.0-21
+      author: smrozowski
+      changes:
+        - modifyDataType:
+            tableName: hsbc_bridge_alert
+            columnName: external_id
+            newDataType: varchar(250)
