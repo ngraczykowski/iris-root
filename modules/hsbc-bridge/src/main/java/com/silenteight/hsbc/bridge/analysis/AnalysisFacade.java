@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.analysis.dto.AnalysisDto;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Duration;
 import java.time.OffsetDateTime;
 
@@ -19,7 +17,6 @@ public class AnalysisFacade {
   private final Registerer registerer;
   private final Duration alertTimeoutDuration;
 
-  @Transactional
   public AnalysisDto createAnalysisWithDataset(@NonNull String dataset) {
     var analysis = registerer.registerAnalysis(dataset);
     var entity = saveAnalysisWithTimeout(analysis);
