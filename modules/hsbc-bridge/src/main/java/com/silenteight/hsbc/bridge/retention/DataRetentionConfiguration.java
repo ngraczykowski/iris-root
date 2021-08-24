@@ -34,7 +34,7 @@ class DataRetentionConfiguration {
     if (isPersonalInfoExpired ^ isAlertsExpired) {
       schedulePayloadRetentionJobForGivenEnvironment(isPersonalInfoExpired);
     } else {
-      log.error("Wrong environment enabled in application.yaml!");
+      log.warn("Set proper environment variable in application.yaml for data retention!");
     }
   }
 
