@@ -57,6 +57,7 @@ public class MetricsReportGenerationService {
         .to(to)
         .dateField(properties.getDateField().getName())
         .fields(properties.getFields())
+        .queryFilters(properties.getQueryFilters())
         .indexes(indexes)
         .build();
 

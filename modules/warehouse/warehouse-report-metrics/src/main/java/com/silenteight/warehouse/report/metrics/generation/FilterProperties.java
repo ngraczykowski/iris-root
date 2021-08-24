@@ -3,23 +3,24 @@ package com.silenteight.warehouse.report.metrics.generation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import com.silenteight.warehouse.indexer.query.grouping.QueryFilter;
+
 import org.springframework.boot.context.properties.ConstructorBinding;
 
+import java.util.List;
 import javax.validation.constraints.NotNull;
 
 @ConstructorBinding
 @AllArgsConstructor
 @Getter
-class GroupingColumnProperties implements Column {
+class FilterProperties {
 
   @NotNull
   private final String name;
   @NotNull
-  private final String label;
-  private final String sourcePattern;
-  private final String targetPattern;
+  private final List<String> values;
 
-  public boolean isDateColumn() {
-    return sourcePattern != null && targetPattern != null;
+  static QueryFilter toQueryFilter(FilterProperties filterProperties) {
+    return new QueryFilter(filterProperties.getName(), filterProperties.getValues());
   }
 }

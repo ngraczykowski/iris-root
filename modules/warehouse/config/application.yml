@@ -88,6 +88,9 @@ warehouse.report.billing:
     counter-label: count_alerts_received
     significant-values: [ ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE]
     significant-summation-label: count_alerts_solved
+  filters:
+    - name: alert_status
+      values: COMPLETED, LEARNING_COMPLETED
 
 warehouse.report.metrics:
   production:
@@ -117,6 +120,9 @@ warehouse.report.metrics:
       name: alert_qa.level-0.state
       positive-value: qa_decision_PASSED
       negative-value: qa_decision_FAILED
+    filters:
+      - name: alert_status
+        values: LEARNING_COMPLETED
   simulation:
     date-field:
       name: index_timestamp
@@ -144,6 +150,9 @@ warehouse.report.metrics:
       name: alert_qa.level-0.state
       positive-value: qa_decision_PASSED
       negative-value: qa_decision_FAILED
+    filters:
+      - name: alert_status
+        values: LEARNING_COMPLETED
 
 warehouse.report.statistics:
   date-field-name: index_timestamp
@@ -160,11 +169,11 @@ warehouse.report.rbs:
     columns:
       - name: alert_fvSignature
         label: fvSignature
-      - name: alert_policy_id
+      - name: alert_policyId
         label: policy_id
-      - name: alert_step_id
+      - name: alert_stepId
         label: step_id
-      - name: alert_recommended action
+      - name: alert_s8_recommendation
         label: recommended action
       - name: alert_categories/customerType
         label: categories/customerType
@@ -187,16 +196,19 @@ warehouse.report.rbs:
           - value: PTP
             label: analyst_decision_potential_true_positive
     date-field-name: index_timestamp
+    filters:
+      - name: alert_status
+        values: LEARNING_COMPLETED
 
   simulation:
     columns:
       - name: alert_fvSignature
         label: fvSignature
-      - name: alert_policy_id
+      - name: alert_policyId
         label: policy_id
-      - name: alert_step_id
+      - name: alert_stepId
         label: step_id
-      - name: alert_recommended action
+      - name: alert_s8_recommendation
         label: recommended action
       - name: alert_categories/customerType
         label: alert_categories/customerType
@@ -218,3 +230,6 @@ warehouse.report.rbs:
           - value: PTP
             label: analyst_decision_potential_true_positive
     date-field-name: index_timestamp
+    filters:
+      - name: alert_status
+        values: LEARNING_COMPLETED

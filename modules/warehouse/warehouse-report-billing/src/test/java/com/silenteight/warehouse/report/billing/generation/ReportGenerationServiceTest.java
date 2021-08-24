@@ -47,7 +47,7 @@ class ReportGenerationServiceTest {
 
     BillingReportProperties billingReportProperties = new BillingReportProperties("date",
         "index_timestamp", "alert_recommendationYear", "alert_recommendationMonth",
-        transposeColumnProperties
+        transposeColumnProperties, emptyList()
     );
 
     underTest = new BillingReportGenerationConfiguration().billingReportGenerationService(

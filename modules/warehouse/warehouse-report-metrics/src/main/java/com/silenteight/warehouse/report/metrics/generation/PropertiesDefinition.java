@@ -2,41 +2,48 @@ package com.silenteight.warehouse.report.metrics.generation;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
+
+import com.silenteight.warehouse.indexer.query.grouping.QueryFilter;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import javax.validation.Valid;
 
+import static java.util.Collections.emptyList;
 import static java.util.List.of;
+import static java.util.Objects.isNull;
+import static java.util.stream.Collectors.toList;
 
 @AllArgsConstructor
 @Data
 public class PropertiesDefinition {
 
   @Valid
-  @NonNull
-  GroupingColumnProperties dateField;
+  @NotNull
+  private GroupingColumnProperties dateField;
   @Valid
-  @NonNull
-  GroupingColumnProperties country;
+  @NotNull
+  private GroupingColumnProperties country;
   @Valid
-  @NonNull
-  GroupingColumnProperties riskType;
+  @NotNull
+  private GroupingColumnProperties riskType;
   @Valid
-  @NonNull
-  GroupingColumnProperties hitType;
+  @NotNull
+  private GroupingColumnProperties hitType;
   @Valid
-  @NonNull
-  ColumnProperties recommendationField;
+  @NotNull
+  private ColumnProperties recommendationField;
   @Valid
-  @NonNull
-  ColumnProperties analystDecisionField;
+  @NotNull
+  private ColumnProperties analystDecisionField;
   @Valid
-  @NonNull
-  ColumnProperties qaDecisionField;
+  @NotNull
+  private ColumnProperties qaDecisionField;
+  @Nullable
+  private List<FilterProperties> filters;
 
   List<String> getFields() {
     List<String> fields = getStaticFields();
@@ -56,5 +63,14 @@ public class PropertiesDefinition {
 
   List<GroupingColumnProperties> getGroupingColumns() {
     return of(country, riskType, dateField);
+  }
+
+  List<QueryFilter> getQueryFilters() {
+    if (isNull(getFilters()))
+      return emptyList();
+
+    return getFilters().stream()
+        .map(FilterProperties::toQueryFilter)
+        .collect(toList());
   }
 }

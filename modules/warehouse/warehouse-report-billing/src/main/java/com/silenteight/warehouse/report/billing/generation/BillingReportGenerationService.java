@@ -60,6 +60,7 @@ public class BillingReportGenerationService {
         .to(to)
         .dateField(properties.getDateFieldName())
         .fields(properties.getListOfFields())
+        .queryFilters(properties.getQueryFilters())
         .indexes(indexes)
         .build();
     return groupingQueryService.generate(request);
