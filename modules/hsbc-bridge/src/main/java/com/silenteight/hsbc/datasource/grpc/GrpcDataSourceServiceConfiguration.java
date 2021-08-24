@@ -37,18 +37,26 @@ class GrpcDataSourceServiceConfiguration {
   @Bean
   IsPepServiceClient isPepInformationServiceGrpcApi() {
     return new IsPepGrpcAdapter(
-        isPepServiceBlockingStub, grpcProperties.deadlineInSeconds());
+        isPepServiceBlockingStub, getDeadline());
   }
 
   @Bean
   NameInformationServiceClient nameInformationServiceGrpcApi() {
     return new NameInformationGrpcAdapter(
-        namesInformationServiceBlockingStub, grpcProperties.deadlineInSeconds());
+        namesInformationServiceBlockingStub, getDeadline());
   }
 
   @Bean
   HistoricalDecisionsServiceClient historicalDecisionsServiceGrpcApi() {
     return new HistoricalDecisionsGrpcAdapter(
-        historicalDecisionsModelServiceBlockingStub, grpcProperties.deadlineInSeconds());
+        historicalDecisionsModelServiceBlockingStub, getHistoricalDecisionsDeadline());
+  }
+
+  private long getDeadline() {
+    return grpcProperties.deadlineInSeconds();
+  }
+
+  private long getHistoricalDecisionsDeadline() {
+    return grpcProperties.historicalDecisionsDeadlineInSeconds();
   }
 }

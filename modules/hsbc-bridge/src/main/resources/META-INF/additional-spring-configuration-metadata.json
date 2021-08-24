@@ -16,6 +16,16 @@
       "description": "gRPC recommendation deadline time."
     },
     {
+      "name": "silenteight.bridge.grpc.dataset-deadline",
+      "type": "java.time.Duration",
+      "description": "gRPC dataset deadline time."
+    },
+    {
+      "name": "silenteight.bridge.grpc.historical-decisions-deadline",
+      "type": "java.time.Duration",
+      "description": "gRPC historical decisions deadline time."
+    },
+    {
       "name": "silenteight.bridge.grpc.adjudication-engine-address",
       "type": "java.lang.String",
       "description": "gRPC adjudication engine address."
