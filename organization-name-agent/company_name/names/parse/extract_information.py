@@ -11,12 +11,47 @@ def extract_legal_terms(
 ) -> Tuple[TokensSequence, TokensSequence, TokensSequence]:
     legal_terms = KnowledgeBase.legal_terms.legal_term_sources
 
-    base, other = cut_until_any_term_matches(name, legal_terms)
+    without_legal_at_the_end, end_legal, end_other = _extract_legal_from_chosen_name_part(
+        name, legal_terms, from_start=False
+    )
+
+    without_legal_at_start, start_legal, start_other = _extract_legal_from_chosen_name_part(
+        name, legal_terms, from_start=True
+    )
+
+    if end_legal and not start_legal.cleaned_name.endswith(end_legal.cleaned_name):
+        return without_legal_at_the_end, end_legal, end_other
+
+    if start_legal.cleaned_name.endswith(end_legal.cleaned_name):
+        legal = start_legal
+        without_legal_at_the_end = without_legal_at_the_end + end_other
+        other = start_other
+    else:
+        legal = start_legal + end_legal
+        other = start_other + end_other
+
+    without_legal = [x for x in without_legal_at_the_end if x in without_legal_at_start]
+    if len(legal.original_name.split()) >= 3:
+        return TokensSequence(without_legal), legal, other
+    else:
+        return without_legal_at_the_end, end_legal, end_other
+
+    # TODO refactor this all above
+
+
+def _extract_legal_from_chosen_name_part(
+    name: TokensSequence, legal_terms: TermSources, from_start: bool
+) -> Tuple[TokensSequence, TokensSequence, TokensSequence]:
+    base, other = cut_until_any_term_matches(name, legal_terms, from_start)
     if not base or len(base) <= len(other):
         return name, TokensSequence(), TokensSequence()
 
     without_legal, legal = cut_terms(
-        base, legal_terms, with_weak_words=True, saving_at_least_one_word=True
+        base,
+        legal_terms,
+        with_weak_words=True,
+        saving_at_least_one_word=True,
+        from_start=from_start,
     )
     return without_legal, legal, other
 
