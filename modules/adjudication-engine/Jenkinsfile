@@ -5,8 +5,15 @@ gradleBuild(
     sonarEnabled: true,
     dependencyCheckEnabled: true,
     includeBuildNumberInSnapshotVersion: true,
-    additionalParams: [booleanParam(name: 'deployOnTest',
-        description: '''Deploy on test environment in Nomad.''', defaultValue: false)],
+    additionalParams: [
+        booleanParam(
+            name: 'deployOnDev',
+            description: 'Deploy on dev environment in Nomad (only for non-master branches).',
+            defaultValue: false),
+        booleanParam(
+            name: 'deployOnTest',
+            description: 'Deploy on test environment in Nomad.', defaultValue: false),
+    ],
     additionalStages: {
       stage('Build and deploy container image') {
         script {
@@ -19,7 +26,7 @@ gradleBuild(
         script {
           def utils = new com.silenteight.jenkins.ci.Utils()
           // FIXME(ahaczewski): Use `when` if possible.
-          if (utils.getGitBranch() == 'master') {
+          if (utils.getGitBranch() == 'master' || params.deployOnDev) {
             sh './nomad/deploy.sh -var-file=dev.vars'
           } else {
             echo 'This is not a release branch ignore Nomad deployment'
