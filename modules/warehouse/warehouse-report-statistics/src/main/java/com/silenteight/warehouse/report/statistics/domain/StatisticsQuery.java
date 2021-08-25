@@ -94,6 +94,7 @@ class StatisticsQuery implements SimulationStatisticsQuery {
         .to(TIME_CONVERTER.toOffset(INSTANCE.now()))
         .dateField(properties.getDateFieldName())
         .fields(properties.getFields())
+        .queryFilters(properties.getQueryFilters())
         .indexes(indexes)
         .build();
 

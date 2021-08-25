@@ -6,8 +6,10 @@ import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleResponse
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.common.testing.rest.WithElasticAccessCredentials;
+import com.silenteight.warehouse.sampling.configuration.SamplingProperties;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -20,6 +22,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
+import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_PREFIX;
 import static com.silenteight.warehouse.sampling.alert.SamplingTestFixtures.*;
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
@@ -36,6 +39,9 @@ class SamplingAlertServiceTest {
 
   @Autowired
   private SimpleElasticTestClient simpleElasticTestClient;
+
+  @Autowired
+  private SamplingProperties samplingProperties;
 
   @AfterEach
   void removeData() {
@@ -57,6 +63,22 @@ class SamplingAlertServiceTest {
     assertThat(idsCount).isEqualTo(alertsCount);
     List<String> idsList = convertResponseToIdsList(randomAlertResponse);
     assertThat(idsList).containsExactlyInAnyOrder(expectedIds.toArray(String[]::new));
+  }
+
+  @Test
+  void shouldIncludeFilterQueryWhenSamplingAlerts() {
+    saveAlert(DOCUMENT_ID_4, ALERT_4_MAP);
+    saveAlert(DOCUMENT_ID_5, ALERT_5_MAP);
+    saveAlert(DOCUMENT_ID_6, ALERT_6_MAP);
+
+    AlertsSampleResponse randomAlertResponse =
+        underTest.generateSamplingAlerts(ALERTS_SAMPLE_REQUEST_2);
+
+    var allowedValues = samplingProperties.getQueryFilters().get(0).getAllowedValues();
+    assertThat(ALERT_4_MAP.get(ALERT_PREFIX + ALERT_STATUS_KEY)).isIn(allowedValues);
+    assertThat(ALERT_5_MAP.get(ALERT_PREFIX + ALERT_STATUS_KEY)).isIn(allowedValues);
+    assertThat(ALERT_6_MAP.get(ALERT_PREFIX + ALERT_STATUS_KEY)).isNotIn(allowedValues);
+    assertThat(randomAlertResponse.getAlertsCount()).isEqualTo(2);
   }
 
   private List<String> convertResponseToIdsList(AlertsSampleResponse randomAlertResponse) {
@@ -81,8 +103,8 @@ class SamplingAlertServiceTest {
 
   private static Stream<Arguments> getAlertsSampleRequests() {
     return Stream.of(
-        Arguments.of(ALERTS_SAMPLE_REQUEST_1, REQUESTED_ALERT_COUNT_2, of(DISCRIMINATOR_4,
-            DISCRIMINATOR_5)),
+        Arguments.of(ALERTS_SAMPLE_REQUEST_1, REQUESTED_ALERT_COUNT_2,
+            of(DISCRIMINATOR_4, DISCRIMINATOR_5)),
         Arguments.of(ALERTS_SAMPLE_REQUEST_2, REQUESTED_ALERT_COUNT_4,
             of(DISCRIMINATOR_2, DISCRIMINATOR_3, DISCRIMINATOR_5, DISCRIMINATOR_4))
     );

@@ -28,6 +28,12 @@ warehouse:
     prefix: itest
   es:
     production-query-index: ${warehouse.environment.prefix}_production
+  sampling:
+    time-field-name: index_timestamp
+    filters:
+      - name: alert_status
+        values: COMPLETED, LEARNING_COMPLETED
+
 
 test:
   messaging:

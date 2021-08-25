@@ -4,17 +4,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
-import java.util.Map;
+import java.util.List;
 
 @Data
 @Builder
 public class AlertSearchCriteria {
 
   @NonNull
+  private String timeFieldName;
+  @NonNull
   private String timeRangeFrom;
   @NonNull
   private String timeRangeTo;
   @NonNull
-  private Map<String, String> filter;
+  private List<MultiValueEntry> filter;
   private int alertLimit;
 }

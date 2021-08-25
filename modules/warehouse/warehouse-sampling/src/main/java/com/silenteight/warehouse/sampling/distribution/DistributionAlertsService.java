@@ -11,11 +11,11 @@ import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDataRequest;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
+import com.silenteight.warehouse.sampling.configuration.SamplingProperties;
 
 import java.util.List;
 
 import static com.silenteight.warehouse.common.time.Timestamps.toOffsetDateTime;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 
@@ -27,6 +27,9 @@ class DistributionAlertsService {
 
   @NonNull
   private final String productionQueryIndex;
+
+  @NonNull
+  private final SamplingProperties samplingProperties;
 
   public AlertsDistributionResponse getAlertsDistribution(AlertsDistributionRequest request) {
 
@@ -80,9 +83,10 @@ class DistributionAlertsService {
     return FetchGroupedTimeRangedDataRequest.builder()
         .from(toOffsetDateTime(request.getTimeRangeFrom()))
         .to(toOffsetDateTime(request.getTimeRangeTo()))
-        .dateField(INDEX_TIMESTAMP)
+        .dateField(samplingProperties.getTimeFieldName())
         .indexes(of(productionQueryIndex))
         .fields(request.getGroupingFieldsList())
+        .queryFilters(samplingProperties.getQueryFilters())
         .build();
   }
 }
