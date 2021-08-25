@@ -1,6 +1,7 @@
 package com.silenteight.adjudication.engine.analysis.analysis;
 
 import com.silenteight.adjudication.api.v1.AnalysisDataset;
+import com.silenteight.adjudication.engine.analysis.pendingrecommendation.PendingRecommendationFacade;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +27,7 @@ class AddAndListDatasetsToAnalysisUseCaseTest {
   private ListAnalysisDatasetUseCase listAnalysisDatasetUseCase;
 
   @Mock
-  private ApplicationEventPublisher applicationEventPublisher;
+  private PendingRecommendationFacade pendingRecommendationFacade;
 
   private final InMemoryAnalysisDatasetRepository analysisDatasetRepository
       = new InMemoryAnalysisDatasetRepository();
@@ -40,8 +40,7 @@ class AddAndListDatasetsToAnalysisUseCaseTest {
   @BeforeEach
   void setUp() {
     var addUseCase = new AddDatasetsToAnalysisUseCase(
-        analysisDatasetRepository, datasetAlertsReader,
-        new PublishAnalysisAlertUseCase(applicationEventPublisher));
+        analysisDatasetRepository, datasetAlertsReader, pendingRecommendationFacade);
 
     useCase = new AddAndListDatasetsInAnalysisUseCase(addUseCase, listAnalysisDatasetUseCase);
   }

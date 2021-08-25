@@ -19,7 +19,7 @@ public class PendingRecommendationFacade {
   public Optional<PendingRecommendations> handleAddedAnalysisDatasets(
       AddedAnalysisAlerts addedAnalysisAlerts) {
 
-    return handleAddedAnalysisDatasetsUseCase.handleAddedAnalysisDatasets(addedAnalysisAlerts);
+    return handleAddedAnalysisDatasetsUseCase.handleAddedAnalysisAlerts(addedAnalysisAlerts);
   }
 
   public void removeSolvedPendingRecommendation() {

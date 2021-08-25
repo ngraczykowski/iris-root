@@ -4,11 +4,11 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.AnalysisAlert;
+import com.silenteight.adjudication.engine.analysis.pendingrecommendation.PendingRecommendationFacade;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.internal.v1.AddedAnalysisAlerts;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,9 +23,8 @@ class AddAlertsToAnalysisUseCase {
   private final AnalysisAlertRepository repository;
 
   @NonNull
-  private final PublishAnalysisAlertUseCase publishAnalysisAlertUseCase;
+  private final PendingRecommendationFacade pendingRecommendationFacade;
 
-  @Transactional
   List<AnalysisAlert> addAlerts(String analysis, List<AnalysisAlert> alerts) {
     long analysisId = ResourceName.create(analysis).getLong("analysis");
     var eventBuilder = AddedAnalysisAlerts.newBuilder();
@@ -36,8 +35,7 @@ class AddAlertsToAnalysisUseCase {
       return repository.save(entity);
     }).collect(toList());
 
-    var event = eventBuilder.build();
-    publishAnalysisAlertUseCase.publish(event);
+    pendingRecommendationFacade.handleAddedAnalysisDatasets(eventBuilder.build());
 
     return savedAnalysisAlerts.stream().map(AnalysisAlertEntity::toAnalysisAlert).collect(toList());
   }
