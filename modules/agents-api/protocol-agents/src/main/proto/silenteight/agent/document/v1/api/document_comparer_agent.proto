@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package silenteight.agent.document.v1.api;
+
+import public "silenteight/agent/document/v1/api/fact.proto";
+
+option java_package = "com.silenteight.proto.agent.document.v1.api";
+option java_outer_classname = "DocumentComparerAgentApiProto";
+option java_multiple_files = true;
+
+service DocumentComparerAgent {
+  rpc CompareDocuments (CompareDocumentsRequest) returns (CompareDocumentsResponse) {
+  }
+}
+
+message CompareDocumentsRequest {
+  message PartyDocuments {
+    repeated DocumentToCompare documents = 1;
+    Facts known_facts = 2;
+  }
+
+  message DocumentToCompare {
+    string number = 1;
+    //optional
+    KnownType known_type = 2;
+  }
+
+  message KnownType {
+    string type = 1;
+  }
+
+  PartyDocuments alerted_documents = 1;
+  PartyDocuments matched_documents = 2;
+}
+
+message CompareDocumentsResponse {
+  message ComparisonResult {
+    string alerted_document_number = 1;
+    string matched_document_number = 2;
+    repeated string recognized_types = 3;
+    string solution = 4;
+  }
+
+  message Document {
+    string number = 1;
+    repeated string recognized_types = 3;
+  }
+
+  repeated Document alerted_documents = 1;
+  repeated Document matched_documents = 2;
+
+  string solution = 3;
+
+  repeated ComparisonResult results = 4;
+
+  string error_message = 5;
+}

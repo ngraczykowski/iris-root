@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package silenteight.agent.document.v1.api;
+
+import public "silenteight/agent/document/v1/api/fact.proto";
+
+option java_package = "com.silenteight.proto.agent.document.v1.api";
+option java_outer_classname = "DocumentRecognizerAgentApiProto";
+option java_multiple_files = true;
+
+service DocumentRecognizerAgent {
+  rpc RecognizeDocuments (RecognizeDocumentsRequest) returns (stream RecognizeDocumentsResponse) {
+  }
+}
+
+message RecognizeDocumentsRequest {
+  repeated string document_numbers = 1;
+}
+
+message RecognizeDocumentsResponse {
+  message RecognizedDocument {
+    string type = 1;
+    Facts recognized_facts = 2;
+  }
+
+  // Index of inputs collection element from the request body
+  uint64 index = 1;
+  repeated RecognizedDocument documents = 2;
+  string error_message = 3;
+}
