@@ -12,6 +12,8 @@ import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Component
 @Profile("mockagents")
@@ -27,12 +29,19 @@ class AgentMockIntegrationFlow extends IntegrationFlowAdapter {
   private AgentExchangeResponse mockResponse(AgentExchangeRequest request) {
     return AgentExchangeResponse
         .newBuilder()
-        .addAgentOutputs(AgentOutput
-            .newBuilder()
-            .setMatch(request.getMatches(0))
-            .addFeatures(
-                Feature.newBuilder().setFeature(request.getFeatures(0)).build())
-            .build())
+        .addAllAgentOutputs(request
+            .getMatchesList()
+            .stream()
+            .map(m -> AgentOutput
+                .newBuilder()
+                .setMatch(m)
+                .addAllFeatures(request
+                    .getFeaturesList()
+                    .stream()
+                    .map(f -> Feature.newBuilder().setFeature(f).build())
+                    .collect(Collectors.toList()))
+                .build())
+            .collect(Collectors.toList()))
         .build();
   }
 }

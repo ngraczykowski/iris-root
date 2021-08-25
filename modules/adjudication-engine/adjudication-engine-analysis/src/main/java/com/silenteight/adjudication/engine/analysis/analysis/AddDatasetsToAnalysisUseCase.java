@@ -8,7 +8,6 @@ import com.silenteight.adjudication.engine.analysis.analysis.domain.AnalysisAler
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.internal.v1.AddedAnalysisAlerts;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +27,7 @@ class AddDatasetsToAnalysisUseCase {
   private final DatasetAlertsReader datasetAlertsReader;
 
   @NonNull
-  private final ApplicationEventPublisher applicationEventPublisher;
+  private final PublishAnalysisAlertUseCase publishAnalysisAlertUseCase;
 
   @Transactional
   List<AnalysisDatasetEntity> addDatasets(String analysis, List<String> datasets) {
@@ -40,7 +39,7 @@ class AddDatasetsToAnalysisUseCase {
           //  message to RabbitMQ, but after commit has succeeded.
           var datasetId = ResourceName.create(dataset).getLong("datasets");
           datasetAlertsReader.read(
-              analysisId, datasetId, new AnalysisAlertChunkHandler(applicationEventPublisher));
+              analysisId, datasetId, new AnalysisAlertChunkHandler(publishAnalysisAlertUseCase));
           var entity = new AnalysisDatasetEntity(analysisId, datasetId);
           return repository.save(entity);
         })
@@ -51,13 +50,13 @@ class AddDatasetsToAnalysisUseCase {
   private static class AnalysisAlertChunkHandler implements ChunkHandler {
 
     @NonNull
-    private final ApplicationEventPublisher applicationEventPublisher;
+    private final PublishAnalysisAlertUseCase publishAnalysisAlertUseCase;
 
     @Override
     public void handle(AnalysisAlertChunk chunk) {
       var eventBuilder = AddedAnalysisAlerts.newBuilder();
       chunk.forEach(aa -> eventBuilder.addAnalysisAlerts(aa.toName()));
-      applicationEventPublisher.publishEvent(eventBuilder.build());
+      publishAnalysisAlertUseCase.publish(eventBuilder.build());
     }
   }
 }

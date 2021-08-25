@@ -27,6 +27,6 @@ class AnalysisAlertKey implements Serializable {
   private Long alertId;
 
   String toName() {
-    return "analysis/" + getAnalysisId() + "alerts/" + getAlertId();
+    return "analysis/" + getAnalysisId() + "/alerts/" + getAlertId();
   }
 }

@@ -7,8 +7,8 @@ import com.silenteight.adjudication.api.v1.AnalysisAlert;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.internal.v1.AddedAnalysisAlerts;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,8 +23,9 @@ class AddAlertsToAnalysisUseCase {
   private final AnalysisAlertRepository repository;
 
   @NonNull
-  private final ApplicationEventPublisher applicationEventPublisher;
+  private final PublishAnalysisAlertUseCase publishAnalysisAlertUseCase;
 
+  @Transactional
   List<AnalysisAlert> addAlerts(String analysis, List<AnalysisAlert> alerts) {
     long analysisId = ResourceName.create(analysis).getLong("analysis");
     var eventBuilder = AddedAnalysisAlerts.newBuilder();
@@ -35,7 +36,8 @@ class AddAlertsToAnalysisUseCase {
       return repository.save(entity);
     }).collect(toList());
 
-    applicationEventPublisher.publishEvent(eventBuilder.build());
+    var event = eventBuilder.build();
+    publishAnalysisAlertUseCase.publish(event);
 
     return savedAnalysisAlerts.stream().map(AnalysisAlertEntity::toAnalysisAlert).collect(toList());
   }

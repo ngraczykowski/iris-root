@@ -25,11 +25,11 @@ class CreatePendingRecommendationsQuery {
         + "SELECT aaa.analysis_id, aaa.alert_id, now()\n"
         + "FROM ae_analysis_alert aaa\n"
         + "         LEFT JOIN ae_recommendation ar\n"
-        + "                   on aaa.alert_id = ar.alert_id\n"
-        + "                          and aaa.analysis_id = ar.analysis_id\n"
+        + "                   ON aaa.alert_id = ar.alert_id\n"
+        + "                          AND aaa.analysis_id = ar.analysis_id\n"
         + "         LEFT JOIN ae_pending_recommendation apr\n"
-        + "                   on aaa.alert_id = apr.alert_id\n"
-        + "                          and aaa.analysis_id = ar.analysis_id\n"
+        + "                   ON aaa.alert_id = apr.alert_id\n"
+        + "                          AND aaa.analysis_id = ar.analysis_id\n"
         + "WHERE aaa.analysis_id = ?\n"
         + "  AND ar.analysis_id IS NULL\n"
         + "  AND apr.analysis_id IS NULL\n"
@@ -38,6 +38,7 @@ class CreatePendingRecommendationsQuery {
   }
 
   int execute(long analysisId) {
-    return query.update(analysisId);
+    var count = query.update(analysisId);
+    return count;
   }
 }

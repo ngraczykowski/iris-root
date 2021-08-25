@@ -62,7 +62,7 @@ class InsertDatasetAlertsQuery {
 
     @Override
     public AnalysisAlert mapRow(ResultSet rs, int rowNum) throws SQLException {
-      return new AnalysisAlert(rs.getLong(1), rs.getLong(1));
+      return new AnalysisAlert(rs.getLong(1), rs.getLong(2));
     }
   }
 

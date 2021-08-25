@@ -5,6 +5,8 @@ import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlocking
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBlockingStub;
 
+import java.util.List;
+
 public class IntegrationTestFixture {
 
   static Analysis createAnalysis(
@@ -33,10 +35,10 @@ public class IntegrationTestFixture {
             .build());
   }
 
-  static Dataset createDataset(DatasetServiceBlockingStub datasetService, String alerts) {
+  static Dataset createDataset(DatasetServiceBlockingStub datasetService, List<String> alerts) {
     return datasetService.createDataset(
         CreateDatasetRequest.newBuilder()
-            .setNamedAlerts(NamedAlerts.newBuilder().addAlerts(alerts).build())
+            .setNamedAlerts(NamedAlerts.newBuilder().addAllAlerts(alerts).build())
             .build());
   }
 

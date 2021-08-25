@@ -40,7 +40,8 @@ class AddAndListDatasetsToAnalysisUseCaseTest {
   @BeforeEach
   void setUp() {
     var addUseCase = new AddDatasetsToAnalysisUseCase(
-        analysisDatasetRepository, datasetAlertsReader, applicationEventPublisher);
+        analysisDatasetRepository, datasetAlertsReader,
+        new PublishAnalysisAlertUseCase(applicationEventPublisher));
 
     useCase = new AddAndListDatasetsInAnalysisUseCase(addUseCase, listAnalysisDatasetUseCase);
   }

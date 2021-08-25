@@ -22,7 +22,9 @@ class AddAlertsToAnalysisUseCaseTest {
   void setUp() {
     analysisAlertRepository = new InMemoryAnalysisAlertRepository();
     addAlertsToAnalysisUseCase =
-        new AddAlertsToAnalysisUseCase(analysisAlertRepository, applicationEventPublisher);
+        new AddAlertsToAnalysisUseCase(
+            analysisAlertRepository,
+            new PublishAnalysisAlertUseCase(applicationEventPublisher));
   }
 
   @Test

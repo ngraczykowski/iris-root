@@ -69,8 +69,10 @@ class AdjudicationEngineAnalysisIntegrationTest {
   @BeforeEach
   public void setUp() {
     var alert = createAlert(alertService, "alert1");
+    var alert2 = createAlert(alertService, "alert2");
     createMatch(alertService, alert.getName(), "match1");
-    dataset = createDataset(datasetService, alert.getName());
+    createMatch(alertService, alert2.getName(), "match2");
+    dataset = createDataset(datasetService, List.of(alert.getName(), alert2.getName()));
 
     var analysisFixture = Analysis.newBuilder()
         .setStrategy("strategies/back_test")
@@ -101,25 +103,26 @@ class AdjudicationEngineAnalysisIntegrationTest {
   void shouldSolveAlerts() {
     var analysisId = ResourceName.create(savedAnalysis.getName()).getLong("analysis");
 
-    assertSolvedAlerts(analysisId);
+    assertSolvedAlerts(analysisId, 2);
   }
 
   @Test
   void shouldSaveRecommendations() {
     var analysisId = ResourceName.create(savedAnalysis.getName()).getLong("analysis");
 
-    assertGeneratedRecommendation(analysisId);
+    assertGeneratedRecommendation(analysisId, 2);
   }
 
   @Test
   void shouldSolveOneAlert() {
-    var alert = createAlert(alertService, "alert1");
+    var alert = createAlert(alertService, "alert3");
+    createMatch(alertService, alert.getName(), "match3");
     var analysis = givenSecondAnalysis();
     addAlert(analysisService, secondAnalysis.getName(), alert.getName());
 
-    assertThat(getAnalysis(analysisService, secondAnalysis.getName()).getAlertCount()).isEqualTo(2);
+    assertThat(getAnalysis(analysisService, secondAnalysis.getName()).getAlertCount()).isEqualTo(3);
 
-    assertSolvedAlerts(analysis);
+    assertSolvedAlerts(analysis, 3);
   }
 
   @Test
@@ -131,39 +134,39 @@ class AdjudicationEngineAnalysisIntegrationTest {
   void shouldSolveAlertsWhenSecondAnalysisAdded() {
     var analysisId = givenSecondAnalysis();
 
-    assertSolvedAlerts(analysisId);
+    assertSolvedAlerts(analysisId, 2);
   }
 
   @Test
   void shouldSaveRecommendationsWhenSecondAnalysisAdded() {
     var analysisId = givenSecondAnalysis();
 
-    assertGeneratedRecommendation(analysisId);
+    assertGeneratedRecommendation(analysisId, 2);
   }
 
   @Test
   void shouldStreamRecommendationsWhenSecondAnalysisAdded() {
     givenSecondAnalysis();
 
-    assertGeneratedRecommendation("analysis/2/recommendations/2");
+    assertGeneratedRecommendation("analysis/2/recommendations/3");
   }
 
-  private void assertSolvedAlerts(long analysisId) {
+  private void assertSolvedAlerts(long analysisId, int solvedCount) {
     await()
         .atMost(Duration.ofSeconds(10))
-        .until(() -> solvedMatchesCount(jdbcTemplate, analysisId) > 0);
+        .until(() -> solvedMatchesCount(jdbcTemplate, analysisId) >= solvedCount);
 
     assertThat(solvedMatchesCount(jdbcTemplate, analysisId))
-        .isEqualTo(1);
+        .isEqualTo(solvedCount);
   }
 
-  private void assertGeneratedRecommendation(long analysisId) {
+  private void assertGeneratedRecommendation(long analysisId, int recommendationCount) {
     await()
         .atMost(Duration.ofSeconds(10000))
         .until(() -> generatedRecommendationCount(jdbcTemplate, analysisId) > 0);
 
     assertThat(generatedRecommendationCount(jdbcTemplate, analysisId))
-        .isEqualTo(1);
+        .isEqualTo(recommendationCount);
   }
 
   private void assertGeneratedRecommendation(String analysisName) {
@@ -199,7 +202,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
    */
   @Test
   void shouldSaveOneAlertToDataSet() {
-    assertThat(savedDataset.getAlertCount()).isEqualTo(1);
+    assertThat(savedDataset.getAlertCount()).isEqualTo(2);
   }
 
   @Test
@@ -220,8 +223,8 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
   @Test
   void checkAlertsCountInAnalysisWithSingleAlert() {
-    assertThat(savedAnalysis.getAlertCount()).isEqualTo(1);
-    assertThat(savedAnalysis.getPendingAlerts()).isEqualTo(1);
+    assertThat(savedAnalysis.getAlertCount()).isEqualTo(2);
+    assertThat(savedAnalysis.getPendingAlerts()).isEqualTo(2);
   }
 
   List<Map<String, Object>> custom(String sql) {
@@ -233,14 +236,14 @@ class AdjudicationEngineAnalysisIntegrationTest {
     var analysis = createAnalysis(analysisService, this.analysis);
     var alert = createAlert(alertService, "1");
     createMatch(alertService, alert.getName(), "1");
-    var dataset1 = createDataset(datasetService, alert.getName());
-    var dataset2 = createDataset(datasetService, alert.getName());
+    var dataset1 = createDataset(datasetService, List.of(alert.getName()));
+    var dataset2 = createDataset(datasetService, List.of(alert.getName()));
     addDataset(analysisService, analysis.getName(), dataset1.getName());
     addDataset(analysisService, analysis.getName(), dataset2.getName());
 
     savedAnalysis = getAnalysis(analysisService, analysis.getName());
     var analysisId = ResourceName.create(savedAnalysis.getName()).getLong("analysis");
-    assertGeneratedRecommendation(analysisId);
+    assertGeneratedRecommendation(analysisId, 1);
     savedAnalysis = getAnalysis(analysisService, analysis.getName());
 
     assertThat(savedAnalysis.getAlertCount()).isEqualTo(1);
