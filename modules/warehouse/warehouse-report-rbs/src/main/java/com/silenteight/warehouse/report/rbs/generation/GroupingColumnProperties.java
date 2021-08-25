@@ -19,8 +19,6 @@ class GroupingColumnProperties {
 
   @NotBlank
   private final String name;
-  @NotBlank
-  private final String label;
   @NotNull
   private final List<GroupingValues> groupingValues;
 }

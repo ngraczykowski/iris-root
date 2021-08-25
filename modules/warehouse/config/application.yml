@@ -173,22 +173,22 @@ warehouse.report.rbs:
       - name: alert_features/name
         label: features/name
     grouping-columns:
-      - name: alert_qa_decision
-        label: QA_decision
+      - name: alert_qa.level-0.state
         grouping-values:
-          - value: PASS
-            label: qa_decision_pass
-          - value: FAILED
-            label: qa_decision_failed
-        counter-label: qa_decision_all
-      - name: alert_analysis_decision
-        label: analyst_decision
+          - value: qa_decision_PASSED
+            label: QA_decision_PASSED
+          - value: qa_decision_FAILED
+            label: QA_decision_FAILED
+      - name: alert_analyst_decision
         grouping-values:
-          - value: FP
-            label: analyst_decision_false_positive
-          - value: PTP
-            label: analyst_decision_potential_true_positive
-    date-field-name: alert_recommendationDate
+          - value: analyst_decision_true_positive
+            label: analyst_decision_FP
+          - value: analyst_decision_false_positive
+            label: analyst_decision_PTP
+    date-field-name: index_timestamp
+    filters:
+      - name: alert_status
+        values: LEARNING_COMPLETED
 
   simulation:
     columns:
@@ -205,19 +205,17 @@ warehouse.report.rbs:
       - name: alert_features/name
         label: features/name
     grouping-columns:
-      - name: alert_qa_decision
-        label: QA_decision
+      - name: alert_qa.level-0.state
         grouping-values:
-          - value: PASS
-            label: qa_decision_pass
-          - value: FAILED
-            label: qa_decision_failed
-      - name: alert_analysis_decision
-        label: analyst_decision
+          - value: qa_decision_PASSED
+            label: QA_decision_PASSED
+          - value: qa_decision_FAILED
+            label: QA_decision_FAILED
+      - name: alert_analyst_decision
         grouping-values:
-          - value: FP
-            label: analyst_decision_false_positive
-          - value: PTP
-            label: analyst_decision_potential_true_positive
+          - value: analyst_decision_true_positive
+            label: analyst_decision_FP
+          - value: analyst_decision_false_positive
+            label: analyst_decision_PTP
     date-field-name: index_timestamp
 

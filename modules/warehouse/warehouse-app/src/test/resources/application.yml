@@ -155,20 +155,18 @@ warehouse.report.rbs:
         label: features/name
     grouping-columns:
       - name: alert_qa_decision
-        label: QA_decision
         grouping-values:
           - value: PASS
-            label: qa_decision_pass
+            label: QA_decision_PASSED
           - value: FAILED
-            label: qa_decision_failed
+            label: QA_decision_FAILED
         counter-label: qa_decision_all
       - name: alert_analysis_decision
-        label: analyst_decision
         grouping-values:
           - value: FP
-            label: analyst_decision_false_positive
+            label: analyst_decision_FP
           - value: PTP
-            label: analyst_decision_potential_true_positive
+            label: analyst_decision_PTP
     date-field-name: alert_timestamp
 
   simulation:
@@ -187,17 +185,15 @@ warehouse.report.rbs:
         label: features/name
     grouping-columns:
       - name: alert_qa_decision
-        label: QA_decision
         grouping-values:
           - value: PASS
-            label: qa_decision_pass
+            label: QA_decision_PASSED
           - value: FAILED
-            label: qa_decision_failed
+            label: QA_decision_FAILED
       - name: alert_analysis_decision
-        label: analyst_decision
         grouping-values:
           - value: FP
-            label: analyst_decision_false_positive
+            label: analyst_decision_FP
           - value: PTP
-            label: analyst_decision_potential_true_positive
+            label: analyst_decision_PTP
     date-field-name: alert_timestamp

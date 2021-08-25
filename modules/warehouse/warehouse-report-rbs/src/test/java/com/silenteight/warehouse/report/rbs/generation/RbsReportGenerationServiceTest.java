@@ -89,7 +89,7 @@ class RbsReportGenerationServiceTest {
     assertThat(reportContent.getReport()).isEqualTo(
         "FV Signature,policy_name,step_name,recommended_action,"
             + "categories/apType,categories/riskType,features/name,features/dob,matches_count,"
-            + "QA_decision_PASS,QA_decision_FAILED,analyst_decision_FP,analyst_decision_PTP\n"
+            + "QA_decision_PASSED,QA_decision_FAILED,analyst_decision_FP,analyst_decision_PTP\n"
             + "o7uPxWV913+ljhPW2uH+g7eAFeQ=,policies/1234,steps/3456,"
             + "FALSE_POSITIVE,I,SAN,MATCH,NO_MATCH,33,0,1,0,0\n"
             + "o7uPxWV913+ljhPW2uH+g7eAFeQ=,policies/1234,steps/94526,"
@@ -124,10 +124,10 @@ class RbsReportGenerationServiceTest {
   }
 
   private GroupingColumnProperties getGroupingColumn(
-      String name, String label,
+      String name,
       List<GroupingValues> groupingValues) {
 
-    return new GroupingColumnProperties(name, label, groupingValues);
+    return new GroupingColumnProperties(name, groupingValues);
   }
 
   private ColumnProperties getColumn(String name, String label) {
@@ -149,7 +149,7 @@ class RbsReportGenerationServiceTest {
             getColumn(RbScorerFixtures.CATEGORIES_RISK_TYPE_FIELD),
             getColumn(RbScorerFixtures.FEATURES_NAME_FIELD),
             getColumn(RbScorerFixtures.FEATURES_DOB_FIELD)),
-        as(),
+        getGroupingColumn(),
         asList(
             getFilter(RbScorerFixtures.ALERT_STATUS_FIELD, of("COMPLETED"))));
 
@@ -167,21 +167,20 @@ class RbsReportGenerationServiceTest {
     return new GroupingValues(value, label);
   }
 
-  private List<GroupingColumnProperties> as() {
-    GroupingColumnProperties groupingColumn = getGroupingColumn(
+  private List<GroupingColumnProperties> getGroupingColumn() {
+    GroupingColumnProperties groupingColumnForQa = getGroupingColumn(
         "qa_decision",
-        "QA_decision",
         of(
             getGroupingValue("PASS", "QA_decision_PASSED"),
             getGroupingValue("FAILED", "QA_decision_FAILED")));
 
-    GroupingColumnProperties groupingColumn1 =
+    GroupingColumnProperties groupingColumnForAnalyst =
         getGroupingColumn(RbScorerFixtures.ANALYSIS_DECISION_FIELD,
-            RbScorerFixtures.ANALYST_DECISION_FIELD, of(
-                getGroupingValue("FP", "analyst_decision_false_positive"),
-                getGroupingValue("PTP", "analyst_decision_potential_true_positive")));
+            of(
+                getGroupingValue("FP", "analyst_decision_FP"),
+                getGroupingValue("PTP", "analyst_decision_PTP")));
 
-    return of(groupingColumn, groupingColumn1);
+    return of(groupingColumnForQa, groupingColumnForAnalyst);
 
   }
 }
