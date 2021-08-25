@@ -185,7 +185,7 @@ warehouse.report.rbs:
             label: analyst_decision_FP
           - value: analyst_decision_false_positive
             label: analyst_decision_PTP
-    date-field-name: index_timestamp
+    date-field-name: alert_recommendationDate
 
   simulation:
     columns:
