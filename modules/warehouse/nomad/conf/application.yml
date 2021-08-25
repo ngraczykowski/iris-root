@@ -185,7 +185,7 @@ warehouse.report.rbs:
         label: step_title
       - name: alert_recommendation_recommended_action
         label: alert_recommendation
-      - name: alert_categories/hitType:value
+      - name: alert_categories/hitType
         label: risk_type
       - name: alert_features/commonAp:solution
         label: common_ap
@@ -270,13 +270,13 @@ warehouse.report.metrics:
     date-field:
       name: alert_recommendationDate
       label: Date
-      source-pattern: yyyy-MM-dd HH:mm:ss.SSS
+      source-pattern: yyyy-MM-dd HH:mm:ss.SS
       target-pattern: yyyy-MM
     risk-type:
       name: alert_extendedAttribute5
       label: Risk Type
     hit-type:
-      name: alert_categories/hitType:value
+      name: alert_categories/hitType
       label: Hit Type
     country:
       name: s8_country
@@ -297,13 +297,13 @@ warehouse.report.metrics:
     date-field:
       name: index_timestamp
       label: Date
-      source-pattern: yyyy-MM-dd HH:mm:ss.SSS
+      source-pattern: yyyy-MM-dd HH:mm:ss.SS
       target-pattern: yyyy-MM
     risk-type:
       name: alert_extendedAttribute5
       label: Risk Type
     hit-type:
-      name: alert_categories/hitType:value
+      name: alert_categories/hitType
       label: Hit Type
     country:
       name: s8_country

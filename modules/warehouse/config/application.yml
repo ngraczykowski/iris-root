@@ -96,13 +96,13 @@ warehouse.report.metrics:
     date-field:
       name: alert_recommendationDate
       label: Date
-      source-pattern: yyyy-MM-dd HH:mm:ss.SSS
+      source-pattern: yyyy-MM-dd HH:mm:ss.SS
       target-pattern: yyyy-MM
     risk-type:
       name: alert_extendedAttribute5
       label: Risk Type
     hit-type:
-      name: alert_categories/hitType:value
+      name: alert_categories/hitType
       label: Hit Type
     country:
       name: s8_country
@@ -123,13 +123,13 @@ warehouse.report.metrics:
     date-field:
       name: index_timestamp
       label: Date
-      source-pattern: yyyy-MM-dd HH:mm:ss.SSS
+      source-pattern: yyyy-MM-dd HH:mm:ss.SS
       target-pattern: yyyy-MM
     risk-type:
       name: alert_extendedAttribute5
       label: Risk Type
     hit-type:
-      name: alert_categories/hitType:value
+      name: alert_categories/hitType
       label: Hit Type
     country:
       name: s8_country
