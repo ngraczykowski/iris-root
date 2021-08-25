@@ -270,7 +270,7 @@ warehouse.report.metrics:
     date-field:
       name: alert_recommendationDate
       label: Date
-      source-pattern: yyyy-MM-dd HH:mm:ss.SS
+      source-pattern: yyyy-MM-dd HH:mm:ss
       target-pattern: yyyy-MM
     risk-type:
       name: alert_extendedAttribute5
@@ -297,7 +297,7 @@ warehouse.report.metrics:
     date-field:
       name: index_timestamp
       label: Date
-      source-pattern: yyyy-MM-dd HH:mm:ss.SS
+      source-pattern: yyyy-MM-dd HH:mm:ss
       target-pattern: yyyy-MM
     risk-type:
       name: alert_extendedAttribute5
