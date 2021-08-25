@@ -1,8 +1,8 @@
-package com.silenteight.warehouse.report.statistics.domain;
+package com.silenteight.warehouse.sampling.configuration;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
 
 import com.silenteight.warehouse.indexer.query.grouping.QueryFilter;
 
@@ -13,10 +13,8 @@ import org.springframework.validation.annotation.Validated;
 import java.util.List;
 import javax.annotation.Nullable;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 
 import static java.util.Collections.emptyList;
-import static java.util.List.of;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 
@@ -24,30 +22,17 @@ import static java.util.stream.Collectors.toList;
 @ConstructorBinding
 @Getter
 @Validated
-@ConfigurationProperties(prefix = "warehouse.report.statistics")
-class StatisticsProperties {
-
-  @NotBlank
-  private final String dateFieldName;
-  @Valid
-  @NonNull
-  private final AiDecisionProperties aiDecision;
-  @Valid
-  @NonNull
-  private final AnalystDecisionProperties analystDecision;
+@ConfigurationProperties(prefix = "warehouse.sampling")
+public class SamplingProperties {
 
   @Valid
   @Nullable
   private final List<FilterProperties> filters;
 
-  public List<String> getFields() {
-    return of(aiDecision, analystDecision)
-        .stream()
-        .map(Decision::getField)
-        .collect(toList());
-  }
+  @Valid
+  private final String timeFieldName;
 
-  List<QueryFilter> getQueryFilters() {
+  public List<QueryFilter> getQueryFilters() {
     if (isNull(getFilters()))
       return emptyList();
 

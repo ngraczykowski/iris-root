@@ -3,18 +3,21 @@ package com.silenteight.warehouse.indexer.alert;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.warehouse.common.opendistro.utils.OpendistroUtils;
+
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import java.util.*;
 
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.DISCRIMINATOR;
-import static com.silenteight.warehouse.indexer.alert.RandomAlertQueryService.getExactMatch;
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 
 @RequiredArgsConstructor
 class AlertQueryService {
@@ -78,8 +81,12 @@ class AlertQueryService {
       String requestedField, String requestedValue) {
 
     SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-    MatchQueryBuilder matchQueryBuilder = getExactMatch(requestedField, requestedValue);
-    sourceBuilder.query(matchQueryBuilder);
+    BoolQueryBuilder boolQueryBuilder = getExactMatch(requestedField, requestedValue);
+    sourceBuilder.query(boolQueryBuilder);
     return productionSearchRequestBuilder.buildProductionSearchRequest(sourceBuilder);
+  }
+
+  private static BoolQueryBuilder getExactMatch(String fieldName, String value) {
+    return boolQuery().must(termsQuery(OpendistroUtils.getRawField(fieldName), value));
   }
 }

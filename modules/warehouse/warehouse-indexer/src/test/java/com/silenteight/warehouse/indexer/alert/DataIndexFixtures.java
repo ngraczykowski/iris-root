@@ -14,6 +14,7 @@ import com.google.protobuf.Value;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_2;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_1;
@@ -60,10 +61,11 @@ public class DataIndexFixtures {
       .build();
 
   static final AlertSearchCriteria ALERT_SEARCH_CRITERIA = AlertSearchCriteria.builder()
+      .timeFieldName(INDEX_TIMESTAMP)
       .timeRangeFrom(PROCESSING_TIMESTAMP)
       .timeRangeTo(PROCESSING_TIMESTAMP_4)
       .alertLimit(3)
-      .filter(Map.of(MappedKeys.COUNTRY_KEY, COUNTRY_UK))
+      .filter(of(new MultiValueEntry(MappedKeys.COUNTRY_KEY, of(COUNTRY_UK))))
       .build();
 
   static Builder structWithValue(String key, String value) {

@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Collections.emptyList;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -57,7 +58,8 @@ class StatisticsQueryTest {
             new AnalystDecisionProperties(
                 ANALYST_DECISION_FIELD,
                 ANALYST_DECISION_FP
-            ));
+            ),
+            emptyList());
 
     underTest = new StatisticsConfiguration().statisticsQuery(
         groupingQueryService,

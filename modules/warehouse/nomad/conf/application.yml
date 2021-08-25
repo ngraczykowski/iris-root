@@ -73,6 +73,11 @@ warehouse:
     url: https://minio.silenteight.com
   kibana:
     url: https://kibana.silenteight.com
+  sampling:
+    time-field-name: index_timestamp
+    filters:
+      - name: alert_status
+        values: COMPLETED, LEARNING_COMPLETED
 
 keycloak:
   client-id: {{ env "NOMAD_NAMESPACE" }}-frontend
@@ -343,3 +348,6 @@ warehouse.report.statistics:
   analyst-decision:
     field: alert_DN_CASE.currentState
     false-positive-value: Level 1 Review
+  filters:
+    - name: alert_status
+      values: LEARNING_COMPLETED

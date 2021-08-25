@@ -8,19 +8,22 @@ import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleRequest;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleResponse;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.RequestedAlertsFilter;
 import com.silenteight.warehouse.indexer.alert.AlertSearchCriteria;
+import com.silenteight.warehouse.indexer.alert.MultiValueEntry;
 import com.silenteight.warehouse.indexer.alert.RandomAlertQueryService;
+import com.silenteight.warehouse.sampling.configuration.FilterProperties;
+import com.silenteight.warehouse.sampling.configuration.SamplingProperties;
 
 import com.google.protobuf.Timestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Stream;
 
 import static java.time.LocalDateTime.ofEpochSecond;
 import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ofPattern;
+import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 @RequiredArgsConstructor
 class SamplingAlertService {
@@ -28,8 +31,12 @@ class SamplingAlertService {
   @NonNull
   private final RandomAlertQueryService randomAlertQueryService;
 
-  public AlertsSampleResponse generateSamplingAlerts(AlertsSampleRequest req) {
-    AlertSearchCriteria alertSearchCriteria = buildAlertSearchCriteria(req);
+  @NonNull
+  private final SamplingProperties samplingProperties;
+
+  public AlertsSampleResponse generateSamplingAlerts(AlertsSampleRequest alertsSampleRequest) {
+    AlertSearchCriteria alertSearchCriteria = buildAlertSearchCriteria(
+        alertsSampleRequest, samplingProperties);
 
     List<String> alertsIds =
         randomAlertQueryService.getRandomDiscriminatorByCriteria(alertSearchCriteria);
@@ -51,28 +58,37 @@ class SamplingAlertService {
         .build();
   }
 
-  private static Map<String, String> convertFilterToMap(
-      List<RequestedAlertsFilter> requestedAlertsFilter) {
+  private static AlertSearchCriteria buildAlertSearchCriteria(
+      AlertsSampleRequest alertsSampleRequest, SamplingProperties samplingProperties) {
 
-    return requestedAlertsFilter.stream()
-        .collect(toMap(
-            RequestedAlertsFilter::getFieldName,
-            RequestedAlertsFilter::getFieldValue));
-  }
+    Stream<MultiValueEntry> externalFilters = alertsSampleRequest.getRequestedAlertsFilterList()
+        .stream()
+        .map(SamplingAlertService::asMultiValueEntry);
 
-  private static AlertSearchCriteria buildAlertSearchCriteria(AlertsSampleRequest req) {
+    Stream<MultiValueEntry> internalFilters = samplingProperties.getFilters()
+        .stream()
+        .map(FilterProperties::toMultiValueEntry);
+
+    List<MultiValueEntry> allFilters = Stream.concat(externalFilters, internalFilters)
+        .collect(toList());
+
     return AlertSearchCriteria.builder()
-        .timeRangeFrom(convertTimeToDate(req.getTimeRangeFrom()))
-        .timeRangeTo(convertTimeToDate(req.getTimeRangeTo()))
-        .filter(convertFilterToMap(req.getRequestedAlertsFilterList()))
-        .alertLimit(req.getAlertCount())
+        .timeFieldName(samplingProperties.getTimeFieldName())
+        .timeRangeFrom(convertTimeToDate(alertsSampleRequest.getTimeRangeFrom()))
+        .timeRangeTo(convertTimeToDate(alertsSampleRequest.getTimeRangeTo()))
+        .alertLimit(alertsSampleRequest.getAlertCount())
+        .filter(allFilters)
         .build();
   }
 
   private static String convertTimeToDate(Timestamp rangeTime) {
-    LocalDateTime ldt =
-        ofEpochSecond(rangeTime.getSeconds(), rangeTime.getNanos(), UTC);
+    LocalDateTime ldt = ofEpochSecond(rangeTime.getSeconds(), rangeTime.getNanos(), UTC);
     return ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").format(ldt);
   }
 
+  private static MultiValueEntry asMultiValueEntry(RequestedAlertsFilter requestedAlertsFilter) {
+    return new MultiValueEntry(
+        requestedAlertsFilter.getFieldName(),
+        of(requestedAlertsFilter.getFieldValue()));
+  }
 }

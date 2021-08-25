@@ -66,6 +66,11 @@ warehouse:
     name: warehouse
     username: warehouse
     password: warehouse
+  sampling:
+    time-field-name: index_timestamp
+    filters:
+      - name: alert_status
+        values: COMPLETED, LEARNING_COMPLETED
 
 grpc:
   server:
@@ -163,6 +168,9 @@ warehouse.report.statistics:
   analyst-decision:
     field: alert_DN_CASE.currentState
     false-positive-value: Level 1 Review
+  filters:
+    - name: alert_status
+      values: LEARNING_COMPLETED
 
 warehouse.report.rbs:
   production:

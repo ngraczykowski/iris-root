@@ -5,6 +5,7 @@ import com.silenteight.model.api.v1.AlertsDistributionServiceProto.AlertsDistrib
 import com.silenteight.warehouse.indexer.alert.ElasticsearchProperties;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDataRequest;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
+import com.silenteight.warehouse.sampling.configuration.SamplingProperties;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,9 +16,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
 import static com.silenteight.warehouse.sampling.distribution.DistributionTestFixtures.*;
+import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentCaptor.*;
+import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,13 +33,13 @@ class DistributionAlertsServiceTest {
 
   @BeforeEach
   void setUp() {
-    ElasticsearchProperties elasticsearchProperties =
-        new ElasticsearchProperties();
-
+    ElasticsearchProperties elasticsearchProperties = new ElasticsearchProperties();
     elasticsearchProperties.setProductionQueryIndex("itest-production");
 
+    SamplingProperties samplingProperties = new SamplingProperties(of(), INDEX_TIMESTAMP);
+
     underTestService = new DistributionConfiguration().distributionAlertsService(
-        groupingQueryService, elasticsearchProperties);
+        groupingQueryService, elasticsearchProperties, samplingProperties);
   }
 
   @Test
