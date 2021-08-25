@@ -1,10 +1,10 @@
 package com.silenteight.hsbc.bridge.agent;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 import com.silenteight.hsbc.bridge.json.external.model.CaseHistory;
+import com.silenteight.hsbc.datasource.datamodel.WatchlistType;
 import com.silenteight.proto.learningstore.historicaldecision.v1.api.*;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.silenteight.hsbc.bridge.agent.HistoricalDecisionRequestCreator.WatchlistType.*;
+import static com.silenteight.hsbc.datasource.datamodel.WatchlistType.*;
 
 @RequiredArgsConstructor
 class HistoricalDecisionRequestCreator {
@@ -118,7 +118,7 @@ class HistoricalDecisionRequestCreator {
 
     findApCountry(alert).ifPresent(builder::setCountry);
     return builder
-        .setId(dnsCase.getParentId())
+        .setId(dnsCase.getExternalId())
         .build();
   }
 
@@ -132,18 +132,5 @@ class HistoricalDecisionRequestCreator {
       return Optional.of(entities.get(0).getEdqLobCountryCode());
     }
     return Optional.empty();
-  }
-
-  @RequiredArgsConstructor
-  enum WatchlistType {
-    CTRPPRHB_LIST_ENTITIES("CTRPPRHBListEntities"),
-    CTRPPRHB_LIST_INDIVIDUALS("CTRPPRHBListIndividuals"),
-    WORLDCHECK_INDIVIDUALS("WorldCheckIndividuals"),
-    WORLDCHECK_ENTITIES("WorldCheckEntities"),
-    PRIVATE_LIST_INDIVIDUALS("PrivateListIndividuals"),
-    PRIVATE_LIST_ENTITIES("PrivateListEntities");
-
-    @Getter
-    private final String label;
   }
 }

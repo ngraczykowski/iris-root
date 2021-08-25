@@ -5,6 +5,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
+import static com.silenteight.hsbc.datasource.datamodel.WatchlistType.CTRPPRHB_LIST_INDIVIDUALS;
+import static com.silenteight.hsbc.datasource.datamodel.WatchlistType.PRIVATE_LIST_INDIVIDUALS;
+import static com.silenteight.hsbc.datasource.datamodel.WatchlistType.WORLDCHECK_INDIVIDUALS;
 import static java.util.Objects.nonNull;
 
 public interface IndividualComposite {
@@ -42,5 +45,16 @@ public interface IndividualComposite {
     return getCtrpScreeningIndividuals().stream()
         .map(CtrpScreening::getCountryCode)
         .findFirst();
+  }
+
+  default Optional<WatchlistType> getIndividualWatchlistType() {
+    if (!getWorldCheckIndividuals().isEmpty()) {
+      return Optional.of(WORLDCHECK_INDIVIDUALS);
+    } else if (!getPrivateListIndividuals().isEmpty()) {
+      return Optional.of(PRIVATE_LIST_INDIVIDUALS);
+    } else if (!getCtrpScreeningIndividuals().isEmpty()) {
+      return Optional.of(CTRPPRHB_LIST_INDIVIDUALS);
+    } else
+      return Optional.empty();
   }
 }

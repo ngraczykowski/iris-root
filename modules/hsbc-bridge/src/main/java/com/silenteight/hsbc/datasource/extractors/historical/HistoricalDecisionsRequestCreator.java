@@ -4,18 +4,16 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 
 abstract class HistoricalDecisionsRequestCreator {
 
-  private static final String INDIVIDUAL = "I";
-  private static final String ENTITY = "C";
-
   abstract GetHistoricalDecisionsRequestDto createRequest();
 
   protected static WatchlistPartyDto getWatchlist(MatchData matchData) {
+    var build = WatchlistPartyDto.builder();
     var watchlistId = matchData.getWatchlistId().orElse("");
-    var watchlistType = matchData.isIndividual() ? INDIVIDUAL : ENTITY;
+    var watchlistType = matchData.getWatchlistType();
 
-    return WatchlistPartyDto.builder()
+    watchlistType.ifPresent(e -> build.type(e.getLabel()));
+    return build
         .id(watchlistId)
-        .type(watchlistType)
         .build();
   }
 }

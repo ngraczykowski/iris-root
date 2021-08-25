@@ -19,4 +19,8 @@ public interface MatchData extends EntityComposite, IndividualComposite {
   default Optional<String> getWatchlistId() {
     return isIndividual() ? getIndividualWatchlistId() : getEntityWatchlistId();
   }
+
+  default Optional<WatchlistType> getWatchlistType() {
+    return isIndividual() ? getIndividualWatchlistType() : getEntityWatchlistType();
+  }
 }
