@@ -95,7 +95,7 @@ job "adjudication-engine" {
       resources {
         cpu    = 2048
         # MHz
-        memory = 2048
+        memory = 4096
         # MB
       }
     }
@@ -265,7 +265,7 @@ job "adjudication-engine" {
 
       resources {
         cpu = 50
-        memory = 100
+        memory = 20
       }
 
       template {
