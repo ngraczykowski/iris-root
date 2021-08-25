@@ -102,4 +102,61 @@
                    columnNames="analysis_id, alert_id"
                    constraintName="pk_ae_analysis_alert_analysis_id_alert_id"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_10" author="ahaczewski">
+    <dropView viewName="ae_match_feature_vector_elements_query"/>
+
+    <createView
+        viewName="ae_match_categories_agg_query"
+        path="sql/view_ae_match_categories_agg_query.sql"
+        relativeToChangelogFile="true"/>
+
+    <createView
+        viewName="ae_match_features_agg_query"
+        path="sql/view_ae_match_features_agg_query.sql"
+        relativeToChangelogFile="true"/>
+
+    <createView
+        viewName="ae_match_feature_vector_elements_query"
+        path="sql/view_ae_match_feature_vector_elements_query_v3.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_11" author="ahaczewski">
+    <dropView viewName="ae_analysis_match_feature_vector_elements_query"/>
+
+    <createView
+        viewName="ae_analysis_match_categories_agg_query"
+        path="sql/view_ae_analysis_match_categories_agg_query.sql"
+        relativeToChangelogFile="true"/>
+
+    <createView
+        viewName="ae_analysis_match_features_agg_query"
+        path="sql/view_ae_analysis_match_features_agg_query.sql"
+        relativeToChangelogFile="true"/>
+
+    <createView
+        viewName="ae_analysis_match_feature_vector_elements_query"
+        path="sql/view_ae_analysis_match_feature_vector_elements_query_v4.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_12" author="ahaczewski">
+    <dropView viewName="ae_analysis_feature_vector_elements_query"/>
+
+    <createView
+        viewName="ae_analysis_categories_agg_query"
+        path="sql/view_ae_analysis_categories_agg_query.sql"
+        relativeToChangelogFile="true"/>
+
+    <createView
+        viewName="ae_analysis_features_agg_query"
+        path="sql/view_ae_analysis_features_agg_query.sql"
+        relativeToChangelogFile="true"/>
+
+    <createView
+        viewName="ae_analysis_feature_vector_elements_query"
+        path="sql/view_ae_analysis_feature_vector_elements_query_v3.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
 </databaseChangeLog>
