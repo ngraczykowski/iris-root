@@ -9,6 +9,7 @@ import com.silenteight.warehouse.report.billing.domain.dto.ReportDto;
 import javax.persistence.*;
 
 import static com.silenteight.warehouse.report.billing.domain.ReportState.DONE;
+import static com.silenteight.warehouse.report.billing.domain.ReportState.FAILED;
 import static com.silenteight.warehouse.report.billing.domain.ReportState.GENERATING;
 import static com.silenteight.warehouse.report.billing.domain.ReportState.NEW;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -59,6 +60,10 @@ class BillingReport extends BaseEntity implements IdentifiableEntity {
 
   void done() {
     state = DONE;
+  }
+
+  void failed() {
+    state = FAILED;
   }
 
   void storeReport(String report) {

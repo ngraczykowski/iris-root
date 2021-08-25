@@ -8,7 +8,9 @@ import com.silenteight.sep.base.common.time.DigitsOnlyDateFormatter;
 import com.silenteight.warehouse.report.billing.domain.exception.ReportTypeNotFoundException;
 import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto.ReportDefinitionDto;
 
-import java.time.*;
+import java.time.OffsetDateTime;
+import java.time.Year;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -35,8 +37,8 @@ public enum ReportDefinition {
       getStartOfYear());
 
   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                                                                      .withZone(
-                                                                          TIME_ZONE.toZoneId());
+      .withZone(
+          TIME_ZONE.toZoneId());
 
   @NonNull
   private static OffsetDateTime getStartOfYear() {
