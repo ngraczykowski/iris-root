@@ -33,10 +33,8 @@ def compare_names(
         "partial_fuzzy": get_partial_fuzzy_score(alerted_name.name(), watchlist_name.name()),
         "sorted_fuzzy": get_sorted_fuzzy_score(alerted_name.name(), watchlist_name.name()),
         "legal_terms": get_legal_score(alerted_name.legal, watchlist_name.legal),
-        "tokenization": get_tokenization_score(alerted_name.name(), watchlist_name.name()),
-        "absolute_tokenization": get_tokenization_score(
-            alerted_name.name(), watchlist_name.name(), absolute=True
-        ),
+        "tokenization": get_tokenization_score(alerted_name, watchlist_name),
+        "absolute_tokenization": get_tokenization_score(alerted_name, watchlist_name, absolute=True),
         "blacklisted": get_blacklist_score(alerted_name, watchlist_name),
         "country": get_country_score(
             alerted_name.countries,
