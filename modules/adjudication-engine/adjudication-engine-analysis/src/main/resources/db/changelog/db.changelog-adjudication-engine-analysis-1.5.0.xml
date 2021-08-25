@@ -159,4 +159,25 @@
         path="sql/view_ae_analysis_feature_vector_elements_query_v3.sql"
         relativeToChangelogFile="true"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_13" author="ahaczewski">
+    <dropView viewName="ae_alert_recommendation_query"/>
+    <dropView viewName="ae_comments_match_context"/>
+    <dropView viewName="ae_comments_feature_context"/>
+
+    <createView
+        viewName="ae_comments_feature_context"
+        path="sql/view_ae_comments_feature_context_v2.sql"
+        relativeToChangelogFile="true"/>
+
+    <createView
+        viewName="ae_comments_match_context"
+        path="sql/view_ae_comments_match_context_v3.sql"
+        relativeToChangelogFile="true"/>
+
+    <createView
+        viewName="ae_alert_recommendation_query"
+        path="sql/view_ae_alert_recommendation_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
 </databaseChangeLog>

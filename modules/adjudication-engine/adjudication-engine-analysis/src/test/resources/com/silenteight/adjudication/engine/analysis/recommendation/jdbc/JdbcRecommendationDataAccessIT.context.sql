@@ -12,7 +12,7 @@ VALUES (1, 1, NOW(), 'GSN00067068', 1);
 INSERT INTO ae_match
 VALUES (2, 1, NOW(), 'DB00051992', 2);
 INSERT INTO ae_match
-VALUES (3, 2, NOW(), 'DB00051992', 2);
+VALUES (3, 2, NOW(), 'DB00051992', 1);
 
 INSERT INTO ae_match_category_value
 VALUES (2, 1, NOW(), 'NO_VALUE');
