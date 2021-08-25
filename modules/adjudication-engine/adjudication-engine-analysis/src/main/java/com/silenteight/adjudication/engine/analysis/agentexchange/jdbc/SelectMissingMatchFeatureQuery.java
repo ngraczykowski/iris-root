@@ -27,6 +27,7 @@ class SelectMissingMatchFeatureQuery {
   private static final String SQL =
       "SELECT alert_id,\n"
           + "       match_id,\n"
+          + "       agent_config_feature_id,\n"
           + "       agent_config,\n"
           + "       feature,\n"
           + "       priority\n"
@@ -72,9 +73,10 @@ class SelectMissingMatchFeatureQuery {
       var row = MissingMatchFeature.builder()
           .alertId(rs.getLong(1))
           .matchId(rs.getLong(2))
-          .agentConfig(nullToEmpty(rs.getString(3)))
-          .feature(nullToEmpty(rs.getString(4)))
-          .priority(rs.getInt(5))
+          .agentConfigFeatureId(rs.getLong(3))
+          .agentConfig(nullToEmpty(rs.getString(4)))
+          .feature(nullToEmpty(rs.getString(5)))
+          .priority(rs.getInt(6))
           .build();
 
       if (!row.isValid()) {

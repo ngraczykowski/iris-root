@@ -34,8 +34,10 @@ class JpaAgentExchangeRequestMessageRepository implements AgentExchangeRequestMe
     message.forEachFeature(feature ->
         entityManager.persist(new AgentExchangeFeature(agentExchange, feature)));
 
-    message.forEachMatchId(matchId ->
-        entityManager.persist(new AgentExchangeMatch(agentExchange, matchId)));
+    message.forEachMatch((matchId, agentConfigFeatureIds) ->
+        agentConfigFeatureIds.forEach(agentConfigFeatureId ->
+            entityManager.persist(
+                new AgentExchangeMatchFeature(agentExchange, agentConfigFeatureId, matchId))));
   }
 
   @Transactional

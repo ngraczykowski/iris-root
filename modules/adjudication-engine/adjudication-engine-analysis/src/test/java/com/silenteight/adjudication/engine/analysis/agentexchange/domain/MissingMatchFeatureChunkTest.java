@@ -29,6 +29,7 @@ class MissingMatchFeatureChunkTest {
 
   MissingMatchFeature missingMatchFeature(String agentConfig, String feature) {
     return new MissingMatchFeature(
-        current().nextLong(), current().nextLong(), agentConfig, feature, current().nextInt(1, 11));
+        current().nextLong(), current().nextLong(), current().nextLong(), agentConfig, feature,
+        current().nextInt(1, 11));
   }
 }

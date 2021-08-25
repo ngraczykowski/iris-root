@@ -12,6 +12,8 @@ public class MissingMatchFeature {
 
   long matchId;
 
+  long agentConfigFeatureId;
+
   @NonNull
   String agentConfig;
 

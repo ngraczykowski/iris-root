@@ -179,4 +179,34 @@
         path="sql/view_ae_alert_recommendation_query.sql"
         relativeToChangelogFile="true"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_14" author="ahaczewski">
+    <sqlFile path="sql/remove_finished_exchanges.sql" relativeToChangelogFile="true"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_15" author="ahaczewski">
+    <sqlFile path="sql/create_ae_agent_exchange_match_feature.sql" relativeToChangelogFile="true"/>
+    <rollback>
+      <sqlFile path="sql/drop_ae_agent_exchange_match_feature.sql" relativeToChangelogFile="true"/>
+    </rollback>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_16" author="ahaczewski">
+    <dropView viewName="ae_missing_match_feature_query"/>
+    <dropView viewName="ae_pending_match_feature_query"/>
+
+    <createView
+        viewName="ae_missing_match_feature_query"
+        path="sql/view_ae_missing_match_feature_query_v3.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_17" author="ahaczewski">
+    <dropTable tableName="ae_agent_exchange_match"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_18" author="ahaczewski"
+             runInTransaction="false">
+    <sqlFile path="sql/vacuum_agent_exchange.sql" relativeToChangelogFile="true"/>
+  </changeSet>
 </databaseChangeLog>

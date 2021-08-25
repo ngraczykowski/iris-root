@@ -2,13 +2,11 @@ package com.silenteight.adjudication.engine.analysis.agentexchange;
 
 import lombok.*;
 
-import com.silenteight.adjudication.engine.analysis.agentexchange.domain.AgentExchangeRequestMessage;
 import com.silenteight.adjudication.engine.analysis.agentexchange.domain.AgentExchangeRequestMessage.Match;
 import com.silenteight.adjudication.engine.analysis.agentexchange.domain.MissingMatchFeature;
 import com.silenteight.adjudication.engine.analysis.agentexchange.domain.MissingMatchFeatureChunk;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
@@ -69,12 +67,6 @@ public final class AgentExchangeFixtures {
                 .build()
             ))))
         .collect(toList());
-  }
-
-  public static AgentExchangeRequestMessage createAgentExchangeRequestMessage() {
-    var agent = dummyAgent(3);
-    return new AgentExchangeRequestMessage(
-        UUID.randomUUID(), agent.agentConfig, 2, agent.features, generateMatches(10));
   }
 
   public static DummyAlert dummyAlert(int matchCount, int priority) {

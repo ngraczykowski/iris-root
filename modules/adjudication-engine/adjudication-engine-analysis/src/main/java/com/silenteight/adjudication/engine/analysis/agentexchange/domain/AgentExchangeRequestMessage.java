@@ -5,8 +5,8 @@ import lombok.*;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeRequest;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.LongConsumer;
 import javax.annotation.Nonnull;
 
 @Value
@@ -29,6 +29,9 @@ public class AgentExchangeRequestMessage {
   @NonNull
   List<Match> matches;
 
+  @NonNull
+  List<Long> agentConfigFeatureIds;
+
   public int getMessageSize() {
     return getMatchCount() * features.size();
   }
@@ -49,11 +52,11 @@ public class AgentExchangeRequestMessage {
     return builder.build();
   }
 
-  public void forEachMatchId(LongConsumer consumer) {
+  public void forEachMatch(BiConsumer<Long, List<Long>> consumer) {
     matches
         .stream()
         .mapToLong(Match::getMatchId)
-        .forEach(consumer);
+        .forEach(matchId -> consumer.accept(matchId, agentConfigFeatureIds));
   }
 
   public void forEachFeature(Consumer<String> consumer) {
@@ -95,6 +98,7 @@ public class AgentExchangeRequestMessage {
     private UUID requestId;
     private String agentConfig;
     private int priority;
+    private List<Long> agentConfigFeatureIds;
     private List<String> features;
     private SortedSet<Match> matches;
 
@@ -113,13 +117,17 @@ public class AgentExchangeRequestMessage {
       return this;
     }
 
-    public Builder uniqueFeature(@NonNull String feature) {
+    public Builder uniqueFeature(@NonNull String feature, long agentConfigFeatureId) {
       if (features == null) {
         features = new ArrayList<>();
+      }
+      if (agentConfigFeatureIds == null) {
+        agentConfigFeatureIds = new ArrayList<>();
       }
 
       if (!features.contains(feature)) {
         features.add(feature);
+        agentConfigFeatureIds.add(agentConfigFeatureId);
       }
 
       return this;
@@ -177,7 +185,8 @@ public class AgentExchangeRequestMessage {
       return new AgentExchangeRequestMessage(
           requestId, agentConfig, priority,
           features == null ? List.of() : List.copyOf(features),
-          matches == null ? List.of() : List.copyOf(matches));
+          matches == null ? List.of() : List.copyOf(matches),
+          agentConfigFeatureIds == null ? List.of() : List.copyOf(agentConfigFeatureIds));
     }
   }
 }

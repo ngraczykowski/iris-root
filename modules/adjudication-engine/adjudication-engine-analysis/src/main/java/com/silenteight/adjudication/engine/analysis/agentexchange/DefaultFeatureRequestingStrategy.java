@@ -46,7 +46,7 @@ class DefaultFeatureRequestingStrategy implements FeatureRequestingStrategy {
 
     this.maxMessageSize = maxMessageSize;
 
-    messageBuilders = new TreeMap<>(String::compareToIgnoreCase);
+    messageBuilders = new TreeMap<>(String::compareTo);
   }
 
   @Override
@@ -61,7 +61,7 @@ class DefaultFeatureRequestingStrategy implements FeatureRequestingStrategy {
 
     chunk.forEach(missing -> {
       var builder = getBuilder(missing.getAgentConfig())
-          .feature(missing.getFeature())
+          .feature(missing.getFeature(), missing.getAgentConfigFeatureId())
           .match(missing.getAlertId(), missing.getMatchId())
           .priority(missing.getPriority());
 
@@ -103,8 +103,8 @@ class DefaultFeatureRequestingStrategy implements FeatureRequestingStrategy {
           .agentConfig(agentConfig);
     }
 
-    CountingBuilder feature(String feature) {
-      builder.uniqueFeature(feature);
+    CountingBuilder feature(String feature, long agentConfigFeatureId) {
+      builder.uniqueFeature(feature, agentConfigFeatureId);
       return this;
     }
 

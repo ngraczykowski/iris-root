@@ -1,0 +1,2 @@
+DROP TABLE ae_agent_exchange_match_feature;
+DROP SEQUENCE ae_agent_exchange_match_feature_seq;
