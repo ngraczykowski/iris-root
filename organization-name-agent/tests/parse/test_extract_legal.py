@@ -18,18 +18,10 @@ from company_name.names.parse.extract_information import extract_legal_terms
             },
         ),
         (
-            "GM Company beta",
-            {
-                "without_legal": ("gm",),
-                "legal": ("company",),
-                "other": ("beta",),
-            },
-        ),
-        (
             "Company EjBiSiDi",
             {
                 "without_legal": ("company", "ejbisidi"),
-                "legal": (),
+                "legal": ("company",),
                 "other": (),
             },
         ),
@@ -40,6 +32,14 @@ from company_name.names.parse.extract_information import extract_legal_terms
                 "legal": ("joint stock company",),
                 "other": (),
             },
+        ),
+        (
+            "DIM TU TAC TRADING SERVICE JOINT STOCK COMPANY",
+            {
+                "without_legal": ("dim", "tu", "tac", "trading", "service"),
+                "legal": ("joint stock company",),
+                "other": (),
+            }
         ),
     ],
 )
