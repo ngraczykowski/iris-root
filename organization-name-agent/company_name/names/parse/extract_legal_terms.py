@@ -2,7 +2,7 @@ from typing import Tuple
 
 from company_name.knowledge_base import KnowledgeBase
 from company_name.knowledge_base.term_sources import TermSources
-from company_name.names.parse.cut_terms import cut_until_any_term_matches, cut_terms
+from company_name.names.parse.cut_terms import cut_terms, cut_until_any_term_matches
 from company_name.names.tokens_sequence import TokensSequence
 
 
