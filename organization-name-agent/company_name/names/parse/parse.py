@@ -6,9 +6,9 @@ from company_name.names.name_information import NameInformation, Token, TokensSe
 from company_name.names.parse.create_tokens import create_tokens
 from company_name.names.parse.extract_information import (
     extract_common,
-    extract_legal_terms,
     extract_weak,
 )
+from company_name.names.parse.extract_legal_terms import extract_legal_terms
 from company_name.names.parse.parse_parentheses import detect_parentheses_information
 from company_name.utils.clear_name import clear_name
 

@@ -3,7 +3,7 @@ from typing import Dict
 import pytest
 
 from company_name.names.parse.create_tokens import create_tokens
-from company_name.names.parse.extract_information import extract_legal_terms
+from company_name.names.parse.extract_legal_terms import extract_legal_terms
 
 
 @pytest.mark.parametrize(
@@ -30,6 +30,14 @@ from company_name.names.parse.extract_information import extract_legal_terms
             {
                 "without_legal": ("polotsk-steklo",),
                 "legal": ("joint stock company",),
+                "other": (),
+            },
+        ),
+        (
+            "Corporation of Cracow sp. z. o. o.",
+            {
+                "without_legal": ("corporation", "of", "cracow"),
+                "legal": ("sp z o o",),
                 "other": (),
             },
         ),
