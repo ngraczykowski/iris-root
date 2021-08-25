@@ -71,7 +71,7 @@ job "adjudication-engine" {
       }
 
       config {
-        image   = "postgres:10"
+        image   = "postgres:10.18"
         ports   = [
           "tcp"
         ]
