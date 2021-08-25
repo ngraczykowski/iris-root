@@ -202,7 +202,7 @@ public class MetricsReportGenerationService {
 
   private static String formatDate(String value, GroupingColumnProperties column) {
     DateTimeFormatter sourceFormatter = ofPattern(column.getSourcePattern());
-    LocalDate date = parse(value, sourceFormatter);
+    LocalDate date = parse(value.substring(0, 19), sourceFormatter);
     DateTimeFormatter targetFormatter = ofPattern(column.getTargetPattern());
     return date.format(targetFormatter);
   }

@@ -28,7 +28,7 @@ public final class MetricsReportTestFixtures {
 
   public static final String DATE_FIELD_NAME = "index_timestamp";
   public static final String DATE_FIELD_LABEL = "Date";
-  public static final String DATE_OLD_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
+  public static final String DATE_OLD_PATTERN = "yyyy-MM-dd HH:mm:ss";
   public static final String DATE_NEW_PATTERN = "yyyy-MM";
   public static final String COUNTRY_FIELD_NAME = "s8_country";
   public static final String COUNTRY_FIELD_LABEL = "Country";
