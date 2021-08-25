@@ -14,7 +14,7 @@ public class InMemoryMetricsRepository
   }
 
   @Override
-  public long removeAllByCreatedAtBefore(OffsetDateTime offsetDateTime) {
+  public int removeAllByCreatedAtBefore(OffsetDateTime offsetDateTime) {
     // TODO: (WEB-1435)
     throw new IllegalStateException("Not implemented");
   }

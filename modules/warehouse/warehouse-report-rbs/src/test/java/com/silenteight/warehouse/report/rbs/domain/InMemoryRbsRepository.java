@@ -14,7 +14,7 @@ public class InMemoryRbsRepository
   }
 
   @Override
-  public long deleteByCreatedAtBefore(OffsetDateTime offsetDateTime) {
+  public int deleteByCreatedAtBefore(OffsetDateTime offsetDateTime) {
     // TODO: It doesn't make sense to test test implementation, rewrite as integration test
     // (WEB-1435)
     throw new IllegalStateException("Not implemented");
