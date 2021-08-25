@@ -33,14 +33,6 @@ from company_name.names.parse.extract_information import extract_legal_terms
                 "other": (),
             },
         ),
-        (
-            "DIM TU TAC TRADING SERVICE JOINT STOCK COMPANY",
-            {
-                "without_legal": ("dim", "tu", "tac", "trading", "service"),
-                "legal": ("joint stock company",),
-                "other": (),
-            }
-        ),
     ],
 )
 def test_extract_legal_terms(name: str, expected: Dict):

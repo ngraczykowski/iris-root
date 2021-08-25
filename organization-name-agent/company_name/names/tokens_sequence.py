@@ -25,17 +25,7 @@ class TokensSequence(collections.UserList):
 
         if len(self) < len(seq):
             return False
-
-        return self.data[-len(seq) :] == list(seq)
-
-    def startswith(self, seq: Sequence[str]) -> bool:
-        if not isinstance(seq, Sequence):
-            raise NotImplementedError()
-
-        if len(self) < len(seq):
-            return False
-
-        return self.data[: len(seq)] == list(seq)
+        return self.cleaned_name.endswith(seq.__str__().lower())
 
     def __eq__(self, other: Any) -> bool:
         if isinstance(other, Sequence):
