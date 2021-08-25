@@ -9,6 +9,7 @@ import com.silenteight.warehouse.report.rbs.domain.dto.ReportDto;
 import javax.persistence.*;
 
 import static com.silenteight.warehouse.report.rbs.domain.ReportState.DONE;
+import static com.silenteight.warehouse.report.rbs.domain.ReportState.FAILED;
 import static com.silenteight.warehouse.report.rbs.domain.ReportState.GENERATING;
 import static com.silenteight.warehouse.report.rbs.domain.ReportState.NEW;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -59,6 +60,10 @@ class RbsReport extends BaseEntity implements IdentifiableEntity {
 
   void done() {
     state = DONE;
+  }
+
+  void failed() {
+    state = FAILED;
   }
 
   void storeReport(String report) {

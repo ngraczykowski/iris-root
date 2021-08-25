@@ -25,6 +25,7 @@ public class BillingReportAsyncGenerationService {
     try {
       doGenerateReport(id);
     } catch (RuntimeException e) {
+      doFailReport(id);
       log.error("Error occurred during the report generating process", e);
       throw new ReportGenerationException(e);
     }
@@ -49,5 +50,12 @@ public class BillingReportAsyncGenerationService {
       log.error("Could not found report with id = {}.", id);
       throw e;
     }
+  }
+
+  private void doFailReport(long id) {
+    BillingReport report = getReport(id);
+    report.failed();
+    repository.save(report);
+    log.warn("Billing report generating failed, reportId={}", id);
   }
 }

@@ -68,4 +68,22 @@ class AsyncReportGenerationServiceTest {
     assertThat(rbsReport.getState()).isEqualTo(ReportState.DONE);
     assertThat(rbsReport.getFile()).isEqualTo(REPORT_CONTENT.getReport());
   }
+
+  @Test
+  void shouldFailReport() {
+    //given
+    RbsReport rbsReport = rbsReportRepository.save(RbsReport.of(DAY));
+
+    //when
+    when(reportGenerationService.generateReport(FROM, TO, INDEXES, properties))
+        .thenThrow(RuntimeException.class);
+
+    //then
+    Long reportId = rbsReport.getId();
+    assertThatThrownBy(() -> underTest.generateReport(reportId))
+        .isInstanceOf(RuntimeException.class);
+
+    rbsReport = rbsReportRepository.getById(reportId);
+    assertThat(rbsReport.getState()).isEqualTo(ReportState.FAILED);
+  }
 }

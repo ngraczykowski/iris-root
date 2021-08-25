@@ -1,5 +1,6 @@
 package com.silenteight.warehouse.report.billing.domain;
 
+import com.silenteight.warehouse.report.billing.domain.exception.ReportGenerationException;
 import com.silenteight.warehouse.report.billing.generation.BillingReportGenerationService;
 import com.silenteight.warehouse.report.billing.generation.dto.CsvReportContentDto;
 
@@ -42,13 +43,31 @@ class AsyncBillingReportGenerationServiceTest {
   void generateReportAndReportAvailable() {
     when(reportGenerationService.generateReport(FROM, TO, PRODUCTION_ANALYSIS_NAME))
         .thenReturn(REPORT_CONTENT);
-    BillingReport rbsReport = billingReportRepository.save(BillingReport.of(TYPE));
-    assertThat(rbsReport.getState()).isEqualTo(ReportState.NEW);
+    BillingReport billingReport = billingReportRepository.save(BillingReport.of(TYPE));
+    assertThat(billingReport.getState()).isEqualTo(ReportState.NEW);
 
-    underTest.generateReport(rbsReport.getId());
+    underTest.generateReport(billingReport.getId());
 
-    rbsReport = billingReportRepository.getById(rbsReport.getId());
-    assertThat(rbsReport.getState()).isEqualTo(ReportState.DONE);
-    assertThat(rbsReport.getFile()).isEqualTo(REPORT_CONTENT.getReport());
+    billingReport = billingReportRepository.getById(billingReport.getId());
+    assertThat(billingReport.getState()).isEqualTo(ReportState.DONE);
+    assertThat(billingReport.getFile()).isEqualTo(REPORT_CONTENT.getReport());
+  }
+
+  @Test
+  void shouldFailReport() {
+    //given
+    BillingReport billingReport = billingReportRepository.save(BillingReport.of(TYPE));
+
+    //when
+    when(reportGenerationService.generateReport(FROM, TO, PRODUCTION_ANALYSIS_NAME))
+        .thenThrow(RuntimeException.class);
+
+    //then
+    Long reportId = billingReport.getId();
+    assertThatThrownBy(() -> underTest.generateReport(reportId)).isInstanceOf(
+        ReportGenerationException.class);
+
+    billingReport = billingReportRepository.getById(reportId);
+    assertThat(billingReport.getState()).isEqualTo(ReportState.FAILED);
   }
 }

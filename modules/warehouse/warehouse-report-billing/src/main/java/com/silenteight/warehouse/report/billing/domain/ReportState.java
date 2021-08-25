@@ -11,7 +11,8 @@ public enum ReportState {
 
   NEW(ReportStatus::buildReportStatusGenerating),
   GENERATING(ReportStatus::buildReportStatusGenerating),
-  DONE(ReportStatus::buildReportStatusOk);
+  DONE(ReportStatus::buildReportStatusOk),
+  FAILED(ReportStatus::buildReportStatusFailed);
 
   private final Function<String, ReportStatus> statusFunction;
 

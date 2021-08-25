@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.indexer.indexing.IndexesQuery;
+import com.silenteight.warehouse.report.rbs.domain.exception.ReportGenerationException;
 import com.silenteight.warehouse.report.rbs.generation.RbsReportDefinition;
 import com.silenteight.warehouse.report.rbs.generation.RbsReportGenerationService;
 import com.silenteight.warehouse.report.rbs.generation.dto.CsvReportContentDto;
@@ -37,13 +38,23 @@ public class AsyncRbsReportGenerationService {
   @Async
   public void generateReport(long id) {
     List<String> indexes = productionIndexerQuery.getIndexesForAnalysis(PRODUCTION_ANALYSIS_NAME);
-    doGenerateReport(id, productionReportProperties, indexes);
+    try {
+      doGenerateReport(id, productionReportProperties, indexes);
+    } catch (RuntimeException e) {
+      doFailReport(id);
+      throw new ReportGenerationException(e);
+    }
   }
 
   @Async
   public void generateReport(Long id, String analysisId) {
     List<String> indexes = simulationIndexerQuery.getIndexesForAnalysis(analysisId);
-    doGenerateReport(id, simulationReportProperties, indexes);
+    try {
+      doGenerateReport(id, simulationReportProperties, indexes);
+    } catch (RuntimeException e) {
+      doFailReport(id);
+      throw new ReportGenerationException(e);
+    }
   }
 
   private void doGenerateReport(
@@ -69,5 +80,12 @@ public class AsyncRbsReportGenerationService {
       log.error("Could not found report with id = {}.", id);
       throw e;
     }
+  }
+
+  private void doFailReport(Long id) {
+    RbsReport rbsReport = repository.getById(id);
+    rbsReport.failed();
+    repository.save(rbsReport);
+    log.warn("Rbs report generating failed, reportId={}", id);
   }
 }
