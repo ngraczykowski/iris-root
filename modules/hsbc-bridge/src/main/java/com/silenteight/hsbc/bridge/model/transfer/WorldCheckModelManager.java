@@ -3,13 +3,11 @@ package com.silenteight.hsbc.bridge.model.transfer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.bridge.model.dto.ExportModelResponseDto;
 import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
 import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
 import com.silenteight.hsbc.bridge.model.dto.ModelType;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
-import com.silenteight.hsbc.bridge.model.rest.output.ExportModelResponse;
 
 import org.apache.commons.io.IOUtils;
 
@@ -54,12 +52,9 @@ public class WorldCheckModelManager implements ModelManager {
   }
 
   @Override
-  public ExportModelResponse exportModel(Details details) {
+  public byte[] exportModel(Details details) {
     var model = getModelUseCase.getModel(ModelType.valueOf(details.getType()));
-    var modelJson = tryLoadModel(model.getMinIoUrl());
-    var exportModelResponseDto = ExportModelResponseDto.builder()
-        .modelJson(modelJson).build();
-    return ExportModelResponseCreator.of(exportModelResponseDto).create();
+    return tryLoadModel(model.getMinIoUrl());
   }
 
   @Override

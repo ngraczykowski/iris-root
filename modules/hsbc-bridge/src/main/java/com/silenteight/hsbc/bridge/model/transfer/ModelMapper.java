@@ -54,21 +54,4 @@ class ModelMapper {
         .status(status.name())
         .build();
   }
-
-  static ModelStatusUpdatedDto convertToModelStatusUpdated(
-      String model, ModelInfoRequest modelInfoRequest, ModelStatus status) {
-    var updateUrl = updateUrl(modelInfoRequest.getUrl(), model);
-    return ModelStatusUpdatedDto.builder()
-        .name(model)
-        .url(updateUrl)
-        .type(modelInfoRequest.getType().name())
-        .status(status.name())
-        .build();
-  }
-
-  private static String updateUrl(String requestUri, String model) {
-    var index = requestUri.lastIndexOf('/');
-    var substring = requestUri.substring(0, index);
-    return substring + "/" + model;
-  }
 }

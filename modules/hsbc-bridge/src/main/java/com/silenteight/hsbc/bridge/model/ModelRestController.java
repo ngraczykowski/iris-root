@@ -8,7 +8,6 @@ import com.silenteight.hsbc.bridge.model.dto.SolvingModelDto;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelType;
-import com.silenteight.hsbc.bridge.model.rest.output.ExportModelResponse;
 import com.silenteight.hsbc.bridge.model.rest.output.SimpleModelResponse;
 import com.silenteight.hsbc.bridge.model.transfer.ModelManager;
 
@@ -17,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -40,10 +40,11 @@ public class ModelRestController {
   }
 
   @GetMapping("/export/**")
-  public ResponseEntity<ExportModelResponse> export(HttpServletRequest request) {
+  public ResponseEntity<String> export(HttpServletRequest request) {
     var modelDetails = getModelDetailsFromUri(request.getRequestURI());
     var modelManager = getMatchingModelManager(fromValue(modelDetails.getType()));
-    return ok(modelManager.exportModel(modelDetails));
+    var model = modelManager.exportModel(modelDetails);
+    return ok(convertJsonModelInBytesToString(model));
   }
 
   @PostMapping
@@ -114,5 +115,9 @@ public class ModelRestController {
     response.setName(model.getName());
     response.setPolicyName(model.getPolicyName());
     return response;
+  }
+
+  private String convertJsonModelInBytesToString(byte[] jsonModel) {
+    return new String(jsonModel, StandardCharsets.UTF_8);
   }
 }

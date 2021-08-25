@@ -6,13 +6,14 @@ import com.silenteight.hsbc.bridge.model.dto.ModelDetails
 import com.silenteight.hsbc.bridge.model.dto.SolvingModelDto
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest
-import com.silenteight.hsbc.bridge.model.rest.output.ExportModelResponse
 import com.silenteight.hsbc.bridge.model.transfer.GovernanceModelManager
 import com.silenteight.hsbc.bridge.model.transfer.WorldCheckModelManager
 
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultActions
 import spock.lang.Specification
+
+import java.nio.charset.StandardCharsets
 
 import static com.silenteight.hsbc.bridge.model.dto.ModelType.IS_PEP_PROCEDURAL
 import static com.silenteight.hsbc.bridge.model.dto.ModelType.MODEL
@@ -41,7 +42,7 @@ class ModelRestControllerSpec extends Specification {
 
     then:
     1 * modelServiceClient.getSolvingModel() >> model
-    verifyResults(result, '{"name":"name","policyName":"policy"}')
+    verifyStringResults(result, '{"name":"name","policyName":"policy"}')
   }
 
   def 'should update Governance model'() {
@@ -61,17 +62,17 @@ class ModelRestControllerSpec extends Specification {
   def 'should export governance model'() {
     given:
     governanceModelManager.supportsModelType(MODEL) >> true
-    def version = "01.08.2021_8:27:34"
+    def version = "20210801082734"
     def type = "MODEL"
     def modelDetails = createModelDetails(type, version)
-    def exportModelResponse = createExportModelResponse(version)
+    def exportModelResponse = createExportModelResponse()
 
     when:
     def result = mockMvc.perform(get('/model/export/' + type + '/' + version))
 
     then:
     1 * modelManagers.first().exportModel(modelDetails) >> exportModelResponse
-    verifyResults(result, '{"modelJson":"01.08.2021_8:27:34"}')
+    verifyResults(result, '{"modelJson":"20210801082734"}')
   }
 
   def 'should send BAD_REQUEST status when model is not supported in Governance during updating model'() {
@@ -131,17 +132,17 @@ class ModelRestControllerSpec extends Specification {
   def 'should export WorldCheck model'() {
     given:
     worldCheckModelManager.supportsModelType(IS_PEP_PROCEDURAL) >> true
-    def version = "01.08.2021_8:27:34"
+    def version = "20210801082734"
     def type = "IS_PEP_PROCEDURAL"
     def modelDetails = createModelDetails(type, version)
-    def exportModelResponse = createExportModelResponse(version)
+    def exportModelResponse = createExportModelResponse()
 
     when:
     def result = mockMvc.perform(get('/model/export/' + type + '/' + version))
 
     then:
     1 * modelManagers.get(1).exportModel(modelDetails) >> exportModelResponse
-    verifyResults(result, '{"modelJson":"01.08.2021_8:27:34"}')
+    verifyResults(result, '{"modelJson":"20210801082734"}')
   }
 
   def 'should send BAD_REQUEST status when model is not supported in WorldCheck during updating model'() {
@@ -184,9 +185,15 @@ class ModelRestControllerSpec extends Specification {
     result.andExpect(status().isBadRequest())
   }
 
-  def static verifyResults(ResultActions results, String result) {
+  def static verifyStringResults(ResultActions results, String result) {
     results.andExpect(status().isOk())
     results.andExpect(content().contentType(APPLICATION_JSON))
+    results.andExpect(content().string(result))
+  }
+
+  def static verifyResults(ResultActions results, String result) {
+    results.andExpect(status().isOk())
+    results.andExpect(content().contentType("text/plain;charset=ISO-8859-1"))
     results.andExpect(content().string(result))
   }
 
@@ -204,8 +211,8 @@ class ModelRestControllerSpec extends Specification {
         .build()
   }
 
-  def static createExportModelResponse(String version) {
-    return new ExportModelResponse("modelJson": version)
+  def static createExportModelResponse() {
+    return '{"modelJson":"20210801082734"}'.getBytes(StandardCharsets.UTF_8)
   }
 
   static ModelInfoRequest createModelInfoRequest(String modelType, String changeType) {

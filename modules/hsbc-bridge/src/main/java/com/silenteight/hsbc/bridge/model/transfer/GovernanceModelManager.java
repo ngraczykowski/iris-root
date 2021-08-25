@@ -9,7 +9,6 @@ import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
 import com.silenteight.hsbc.bridge.model.dto.ModelType;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
-import com.silenteight.hsbc.bridge.model.rest.output.ExportModelResponse;
 
 import java.io.IOException;
 
@@ -43,9 +42,9 @@ public class GovernanceModelManager implements ModelManager {
   }
 
   @Override
-  public ExportModelResponse exportModel(Details details) {
+  public byte[] exportModel(Details details) {
     var exportModelResponseDto = governanceServiceClient.exportModel(details.getVersion());
-    return ExportModelResponseCreator.of(exportModelResponseDto).create();
+    return exportModelResponseDto.getModelJson();
   }
 
   @Override
@@ -58,8 +57,8 @@ public class GovernanceModelManager implements ModelManager {
       var jsonModel = nexusModelClient.updateModel(request.getUrl());
       log.info("Transferring model length = {}", jsonModel.length);
       var model = governanceServiceClient.transferModel(jsonModel);
-      log.info("Update model successful!");
-      return convertToModelStatusUpdated(model, request, SUCCESS);
+      log.info("Update model successful: {}", model);
+      return convertToModelStatusUpdated(request, SUCCESS);
     } catch (IOException | RuntimeException e) {
       log.error("Unable to update model: " + request.getName(), e);
       return convertToModelStatusUpdated(request, FAILURE);
