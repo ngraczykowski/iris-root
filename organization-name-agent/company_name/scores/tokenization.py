@@ -2,7 +2,7 @@ import collections
 from typing import Counter, Iterable, List
 
 from company_name.knowledge_base import KnowledgeBase
-from company_name.names.name_information import TokensSequence, NameInformation
+from company_name.names.name_information import NameInformation
 from company_name.names.parse.extract_information import extract_countries
 from company_name.scores.score import Score
 

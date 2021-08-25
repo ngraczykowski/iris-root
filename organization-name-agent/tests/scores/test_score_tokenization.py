@@ -33,8 +33,8 @@ def test_tokenization_for_completely_different_companies(first, second):
 def test_tokenization_for_one_common_word(first, second):
     print(first, second)
     score = compare(first, second)
-    print(score['tokenization'])
-    print(score['absolute_tokenization'])
+    print(score["tokenization"])
+    print(score["absolute_tokenization"])
     assert 0 < score["tokenization"].value < 1
     assert score["absolute_tokenization"].value == 1
     assert score["tokenization"].compared == score["absolute_tokenization"].compared
