@@ -167,9 +167,6 @@ warehouse.report.rbs:
             label: analyst_decision_FP
           - value: analyst_decision_false_positive
             label: analyst_decision_PTP
-    filters:
-      - name: alert_status
-        values: LEARNING_COMPLETED
 
   simulation:
     date-field-name: index_timestamp
@@ -245,9 +242,6 @@ warehouse.report.rbs:
             label: analyst_decision_FP
           - value: analyst_decision_false_positive
             label: analyst_decision_PTP
-    filters:
-      - name: alert_status
-        values: LEARNING_COMPLETED
 
 warehouse.report.billing:
   year-field-name: alert_recommendationYear

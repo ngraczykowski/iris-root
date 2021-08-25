@@ -186,9 +186,6 @@ warehouse.report.rbs:
           - value: analyst_decision_false_positive
             label: analyst_decision_PTP
     date-field-name: index_timestamp
-    filters:
-      - name: alert_status
-        values: LEARNING_COMPLETED
 
   simulation:
     columns:
