@@ -40,25 +40,24 @@
         onDelete="CASCADE"
         onUpdate="CASCADE"/>
   </changeSet>
-
-  <changeSet id="adjudication-engine-analysis-1.5.0_3" author="wkeska">
+  <changeSet id="adjudication-engine-analysis-1.5.0_2" author="wkeska">
     <sqlFile path="db/changelog/sql/remove_duplicated_recommendations.sql"/>
   </changeSet>
 
-  <changeSet id="adjudication-engine-analysis-1.5.0_4" author="wkeska">
+  <changeSet id="adjudication-engine-analysis-1.5.0_3" author="wkeska">
     <addUniqueConstraint
         columnNames="analysis_id, alert_id"
         constraintName="uq_ae_recommendation_analysis_id_alert_id"
         tableName="ae_recommendation"/>
   </changeSet>
 
-  <changeSet id="adjudication-engine-analysis-1.5.0_5" author="wkeska">
+  <changeSet id="adjudication-engine-analysis-1.5.0_4" author="wkeska">
     <dropView viewName="ae_analysis_match_feature_vector_elements_query"/>
     <dropView viewName="ae_analysis_query"/>
     <dropView viewName="ae_missing_alert_comment_input_query"/>
   </changeSet>
 
-  <changeSet id="adjudication-engine-analysis-1.5.0_6" author="wkeska">
+  <changeSet id="adjudication-engine-analysis-1.5.0_5" author="wkeska">
     <createView
         viewName="ae_analysis_match_feature_vector_elements_query"
         path="sql/view_ae_analysis_match_feature_vector_elements_query_v3.sql"
@@ -73,7 +72,7 @@
         relativeToChangelogFile="true"/>
   </changeSet>
 
-  <changeSet id="adjudication-engine-analysis-1.5.0_7" author="wkeska">
+  <changeSet id="adjudication-engine-analysis-1.5.0_6" author="wkeska">
     <sqlFile
         path="sql/migrate_ae_analysis_alert.sql"
         relativeToChangelogFile="true"/>
@@ -83,7 +82,7 @@
     </rollback>
   </changeSet>
 
-  <changeSet id="adjudication-engine-analysis-1.5.0_8" author="wkeska">
+  <changeSet id="adjudication-engine-analysis-1.5.0_7" author="wkeska">
     <sqlFile
         path="sql/drop_ae_analysis_alert_query.sql"
         relativeToChangelogFile="true"/>
@@ -97,13 +96,13 @@
         relativeToChangelogFile="true"/>
   </changeSet>
 
-  <changeSet id="adjudication-engine-analysis-1.5.0_9" author="wkeska">
+  <changeSet id="adjudication-engine-analysis-1.5.0_8" author="wkeska">
     <addPrimaryKey tableName="ae_analysis_alert"
                    columnNames="analysis_id, alert_id"
                    constraintName="pk_ae_analysis_alert_analysis_id_alert_id"/>
   </changeSet>
 
-  <changeSet id="adjudication-engine-analysis-1.5.0_10" author="ahaczewski">
+  <changeSet id="adjudication-engine-analysis-1.5.0_9" author="ahaczewski">
     <dropView viewName="ae_match_feature_vector_elements_query"/>
 
     <createView
@@ -122,7 +121,7 @@
         relativeToChangelogFile="true"/>
   </changeSet>
 
-  <changeSet id="adjudication-engine-analysis-1.5.0_11" author="ahaczewski">
+  <changeSet id="adjudication-engine-analysis-1.5.0_10" author="ahaczewski">
     <dropView viewName="ae_analysis_match_feature_vector_elements_query"/>
 
     <createView
@@ -141,7 +140,7 @@
         relativeToChangelogFile="true"/>
   </changeSet>
 
-  <changeSet id="adjudication-engine-analysis-1.5.0_12" author="ahaczewski">
+  <changeSet id="adjudication-engine-analysis-1.5.0_11" author="ahaczewski">
     <dropView viewName="ae_analysis_feature_vector_elements_query"/>
 
     <createView
@@ -160,7 +159,7 @@
         relativeToChangelogFile="true"/>
   </changeSet>
 
-  <changeSet id="adjudication-engine-analysis-1.5.0_13" author="ahaczewski">
+  <changeSet id="adjudication-engine-analysis-1.5.0_12" author="ahaczewski">
     <dropView viewName="ae_alert_recommendation_query"/>
     <dropView viewName="ae_comments_match_context"/>
     <dropView viewName="ae_comments_feature_context"/>
