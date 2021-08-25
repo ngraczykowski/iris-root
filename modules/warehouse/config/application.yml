@@ -67,10 +67,7 @@ warehouse:
     username: warehouse
     password: warehouse
   sampling:
-    time-field-name: index_timestamp
-    filters:
-      - name: alert_status
-        values: COMPLETED, LEARNING_COMPLETED
+    time-field-name: alert_recommendationDate
 
 grpc:
   server:
@@ -93,14 +90,11 @@ warehouse.report.billing:
     counter-label: count_alerts_received
     significant-values: [ ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE]
     significant-summation-label: count_alerts_solved
-  filters:
-    - name: alert_status
-      values: COMPLETED, LEARNING_COMPLETED
 
 warehouse.report.metrics:
   production:
     date-field:
-      name: index_timestamp
+      name: alert_recommendationDate
       label: Date
       source-pattern: yyyy-MM-dd HH:mm:ss.SSS
       target-pattern: yyyy-MM
@@ -125,9 +119,6 @@ warehouse.report.metrics:
       name: alert_qa.level-0.state
       positive-value: qa_decision_PASSED
       negative-value: qa_decision_FAILED
-    filters:
-      - name: alert_status
-        values: LEARNING_COMPLETED
   simulation:
     date-field:
       name: index_timestamp
@@ -155,9 +146,6 @@ warehouse.report.metrics:
       name: alert_qa.level-0.state
       positive-value: qa_decision_PASSED
       negative-value: qa_decision_FAILED
-    filters:
-      - name: alert_status
-        values: LEARNING_COMPLETED
 
 warehouse.report.statistics:
   date-field-name: index_timestamp
@@ -168,9 +156,6 @@ warehouse.report.statistics:
   analyst-decision:
     field: alert_DN_CASE.currentState
     false-positive-value: Level 1 Review
-  filters:
-    - name: alert_status
-      values: LEARNING_COMPLETED
 
 warehouse.report.rbs:
   production:
@@ -203,10 +188,7 @@ warehouse.report.rbs:
             label: analyst_decision_false_positive
           - value: PTP
             label: analyst_decision_potential_true_positive
-    date-field-name: index_timestamp
-    filters:
-      - name: alert_status
-        values: LEARNING_COMPLETED
+    date-field-name: alert_recommendationDate
 
   simulation:
     columns:
@@ -238,6 +220,4 @@ warehouse.report.rbs:
           - value: PTP
             label: analyst_decision_potential_true_positive
     date-field-name: index_timestamp
-    filters:
-      - name: alert_status
-        values: LEARNING_COMPLETED
+
