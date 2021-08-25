@@ -76,9 +76,8 @@ public class RbsReportDefinition {
   }
 
   private List<String> getColumnsLabels(GroupingColumnProperties groupingColumnProperties) {
-    String name = groupingColumnProperties.getLabel();
     return groupingColumnProperties.getGroupingValues().stream()
-        .map(e -> name + DELIMITER + e.getValue())
+        .map(GroupingValues::getLabel)
         .collect(toList());
   }
 
