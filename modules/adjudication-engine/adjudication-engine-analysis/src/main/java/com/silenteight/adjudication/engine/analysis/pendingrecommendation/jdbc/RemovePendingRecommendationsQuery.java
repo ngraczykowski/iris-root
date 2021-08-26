@@ -12,7 +12,6 @@ class RemovePendingRecommendationsQuery {
   private final JdbcTemplate jdbcTemplate;
 
   int execute() {
-    // TODO(wkeska): Replace CTE with subselect (AEP-217)
     return jdbcTemplate.update(
         "WITH solved AS (\n"
             + "    SELECT apr.analysis_id || '/' || apr.alert_id AS analysis_alert\n"

@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 class AgentRequestHandlerTest {
 
   private List<AgentExchangeRequestMessage> messages = new ArrayList<>();
-  private final AgentExchangeRequestMessageRepository repository =
+  private AgentExchangeRequestMessageRepository repository =
       new InMemoryAgentRequestMessageRepository();
   private final AgentRequestHandler agentRequestHandler = new AgentRequestHandler(
       createFeatureRequestingStrategySupplier(10), repository);
