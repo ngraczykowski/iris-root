@@ -209,8 +209,20 @@
       ],
       "meaning": []
     },
+    "consortium": {
+      "abbreviations": [
+        "consorzio"
+      ]
+    },
+    "cooperativa sociale onlus": {
+      "country": [
+        "Italy"
+      ]
+    },
     "cooperative": {
-      "abbreviations": []
+      "abbreviations": [
+        "coop"
+      ]
     },
     "copropiedad": {
       "abbreviations": []
@@ -300,6 +312,18 @@
       ],
       "country": [
         "Sweden"
+      ]
+    },
+    "Empresa Individual de Responsabilidade Limitada": {
+      "abbreviations": [
+        "eireli"
+      ],
+      "country": [
+        "Brazil"
+      ],
+      "meaning": [
+        "sole proprietorship",
+        "limited liability"
       ]
     },
     "Empresa Individual de Responsabilidad Limitada": {
@@ -696,6 +720,15 @@
       ],
       "meaning": [
         "limited liability"
+      ]
+    },
+    "maatschap": {
+      "abbreviations": [
+        "mts"
+      ],
+      "country": [
+        "Indonesia",
+        "Netherlands"
       ]
     },
     "Mažoji bendrija": {
@@ -1144,7 +1177,8 @@
         "Costa Rica",
         "Guatemala",
         "Mexico",
-        "Uruguay"
+        "Uruguay",
+        "Romania"
       ]
     },
     "sociedad en nombre colectivo": {
@@ -1211,6 +1245,37 @@
         "Portugal"
       ]
     },
+    "societăți de persoane": {
+      "abbreviations": [],
+      "country": [
+        "Romania"
+      ],
+      "meaning": [
+        "partnership"
+      ]
+    },
+    "societatea în nume colectiv": {
+      "abbreviations": [
+        "SNC"
+      ],
+      "country": [
+        "Romania"
+      ],
+      "meaning": [
+        "general partnership"
+      ]
+    },
+    "societatea în comandită simplă": {
+      "abbreviations": [
+        "SCS"
+      ],
+      "country": [
+        "Romania"
+      ],
+      "meaning": [
+        "limited partnership"
+      ]
+    },
     "societe a responsabilite limitee": {
       "abbreviations": [
         "sarl",
@@ -1228,6 +1293,30 @@
         "Morocco",
         "Switzerland",
         "Tunisia"
+      ]
+    },
+    "società a responsabilità limitata semplificata": {
+      "abbreviations": [
+        "srls"
+      ],
+      "country": [
+        "Italy"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "società a responsabilità limitata": {
+      "abbreviations": [
+        "srl"
+      ],
+      "country": [
+        "Italy"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
       ]
     },
     "societe anonyme": {
@@ -1430,6 +1519,11 @@
       ],
       "meaning": [
         "general partnership"
+      ]
+    },
+    "verwaltungsgesellschaft": {
+      "country": [
+        "Germany"
       ]
     },
     "Vidkryte aktsionerne tovarystvo": {
