@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class FakeFeatureIdsProvider implements FeatureIdsProvider {
 
-  private Map<String, Long> featureIds = new HashMap<>();
+  private final Map<String, Long> featureIds = new HashMap<>();
 
   @Override
   public Map<String, Long> getFeatureToIdsMap(UUID agentExchangeRequestId) {
