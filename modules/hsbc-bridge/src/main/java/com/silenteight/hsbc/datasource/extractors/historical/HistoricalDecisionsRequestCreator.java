@@ -11,7 +11,7 @@ abstract class HistoricalDecisionsRequestCreator {
     var watchlistId = matchData.getWatchlistId().orElse("");
     var watchlistType = matchData.getWatchlistType();
 
-    watchlistType.ifPresent(e -> build.type(e.getLabel()));
+    watchlistType.ifPresentOrElse(e -> build.type(e.getLabel()), () -> build.type(""));
     return build
         .id(watchlistId)
         .build();
