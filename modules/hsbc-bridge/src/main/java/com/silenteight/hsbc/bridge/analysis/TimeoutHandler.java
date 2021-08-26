@@ -56,6 +56,7 @@ class TimeoutHandler {
 
   private void handleTimeoutError(AnalysisEntity entity) {
     entity.setStatus(Status.TIMEOUT_ERROR);
+    log.error("Analysis with id: {} and name: {} has timed out.", entity.getId(), entity.getName());
     eventPublisher.publishEvent(new AnalysisTimeoutEvent(entity.getId()));
   }
 
