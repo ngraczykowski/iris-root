@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+  <changeSet id="payments-bridge-datasource-1.0.0-1" author="ahaczewski">
+    <createTable tableName="pb_match_feature_input">
+      <column name="match" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="feature" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <!-- The name of the type contained in `agent_input` column. -->
+      <column name="agent_input_type" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <!--
+        Contains JSON-serialized Protobuf message object with Agent feature input, e.g.,
+        `com.silenteight.datasource.api.location.v1LocationFeatureInput`,
+        or `com.silenteight.datasource.api.name.v1.NameFeatureInput`.
+      -->
+      <column name="agent_input" type="JSONB">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+</databaseChangeLog>
