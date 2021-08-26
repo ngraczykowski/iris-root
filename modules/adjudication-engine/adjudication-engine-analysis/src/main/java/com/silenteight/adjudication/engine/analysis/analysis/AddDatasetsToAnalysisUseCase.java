@@ -61,7 +61,6 @@ class AddDatasetsToAnalysisUseCase {
     public void handle(AnalysisAlertChunk chunk) {
       var eventBuilder = AddedAnalysisAlerts.newBuilder();
       chunk.forEach(aa -> eventBuilder.addAnalysisAlerts(aa.toName()));
-      log.debug("Sending chun={} to pending recommendation", chunk);
       pendingRecommendationFacade.handleAddedAnalysisDatasets(eventBuilder.build());
     }
   }
