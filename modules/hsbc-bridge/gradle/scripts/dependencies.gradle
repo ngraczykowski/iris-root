@@ -17,6 +17,7 @@ ext {
   // Dependency Versions
   //***********************************
   groovyVersion = '3.0.8'
+  testContainersVersion = '1.15.3'
   junitJupiterVersion = "5.6.0"
   mockitoVersion = "3.8.0"
   spockVersion = '2.0-groovy-3.0'
@@ -98,11 +99,12 @@ libraries.spring_amqp = [group: 'org.springframework.amqp', name: 'spring-amqp',
 libraries.spring_rabbit = [group: 'org.springframework.amqp', name: 'spring-rabbit', version: springRabbitVersion]
 
 // Testing
+libraries.assertj_core = [group: 'org.assertj', name: 'assertj-core', version: '3.20.2']
 libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion]
 libraries.junit_jupiter_api = [group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion]
 libraries.junit_jupiter_engine = [group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion]
-libraries.junit_jupiter_testcontainers = [group: 'org.testcontainers', name: 'junit-jupiter', version: '1.15.3']
-libraries.localstack = [group: 'org.testcontainers', name: 'localstack', version: '1.15.3']
+libraries.junit_jupiter_testcontainers = [group: 'org.testcontainers', name: 'junit-jupiter', version: testContainersVersion]
+libraries.localstack = [group: 'org.testcontainers', name: 'localstack', version: testContainersVersion]
 libraries.mockito_core = [group: 'org.mockito', name: 'mockito-core', version: mockitoVersion]
 libraries.mockito_junit_jupiter = [group: 'org.mockito', name: 'mockito-junit-jupiter', version: mockitoVersion]
 libraries.spock_core = [group: 'org.spockframework', name: 'spock-core', version: spockVersion]
@@ -111,7 +113,7 @@ libraries.spring_rabbit_junit = [group: 'org.springframework.amqp', name: 'sprin
 libraries.spring_rabbit_test = [group: 'org.springframework.amqp', name: 'spring-rabbit-test', version: springBootVersion]
 libraries.spring_starter_test = [group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion]
 libraries.spring_test = [group: 'org.springframework', name: 'spring-test', version: springVersion]
-libraries.testcontainers = [group: 'org.testcontainers', name: 'testcontainers', version: '1.15.3']
+libraries.testcontainers = [group: 'org.testcontainers', name: 'testcontainers', version: testContainersVersion]
 
 libraries.ecs_logging_core = [group: 'co.elastic.logging', name: 'ecs-logging-core', version: '1.0.1']
 libraries.logback_ecs_encoder = [group: 'co.elastic.logging', name: 'logback-ecs-encoder', version: libraries.ecs_logging_core.version]
@@ -189,6 +191,7 @@ dependencies {
   testCompile libraries.groovy_all
   testCompile libraries.lombok
   testCompile libraries.spock_core
+  testImplementation libraries.assertj_core
   testImplementation libraries.junit_jupiter_api
   testImplementation libraries.junit_jupiter_testcontainers
   testImplementation libraries.localstack

@@ -112,6 +112,12 @@ silenteight.bridge:
     is-pep-procedural-model-export.cron: "-"
     name-model-export.cron: "-"
 
+### GRPC THREADS AUTOCONFIGURATION (if needed different than default)
+
+#bridge:
+#  rpc:
+#    threads=4:
+
 ### GRPC
 
 grpc:
