@@ -1,4 +1,4 @@
-package com.silenteight.sep.filestorage.exception;
+package com.silenteight.sep.filestorage.minio.save;
 
 public class FileNotSavedException extends RuntimeException {
 

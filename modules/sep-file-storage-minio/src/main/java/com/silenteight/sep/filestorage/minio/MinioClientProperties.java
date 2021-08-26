@@ -1,4 +1,4 @@
-package com.silenteight.sep.filestorage.domain;
+package com.silenteight.sep.filestorage.minio;
 
 import lombok.Data;
 

@@ -7,14 +7,8 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.12/lombok-1.18.12.jar" />
         </processorPath>
-        <module name="sep-usermanagement-api.test" />
-      </profile>
-      <profile name="Gradle Imported" enabled="true">
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.20/lombok-1.18.20.jar" />
-        </processorPath>
-        <module name="sep-usermanagement-api.main" />
+        <module name="sep-filestorage-minio.test" />
+        <module name="sep-filestorage-minio.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="11" />

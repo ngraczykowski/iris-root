@@ -1,4 +1,4 @@
-package com.silenteight.sep.filestorage.domain;
+package com.silenteight.sep.filestorage.minio;
 
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Autowired;
