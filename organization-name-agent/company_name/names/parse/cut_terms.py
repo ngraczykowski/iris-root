@@ -2,7 +2,8 @@ from typing import Generator, Optional, Sequence, Tuple
 
 from company_name.knowledge_base import KnowledgeBase
 from company_name.knowledge_base.term_sources import TermSources
-from company_name.names.name_information import Token, TokensSequence
+from company_name.names.token import Token
+from company_name.names.tokens_sequence import TokensSequence
 
 
 def _divide_name_for_possible_terms(

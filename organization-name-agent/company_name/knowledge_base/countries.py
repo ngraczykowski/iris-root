@@ -2,7 +2,7 @@ import collections
 from typing import List, Set
 
 from company_name.knowledge_base.term_sources import TermSources
-from company_name.names.name_information import TokensSequence
+from company_name.names.tokens_sequence import TokensSequence
 from company_name.utils.clear_name import clear_name, divide
 
 
