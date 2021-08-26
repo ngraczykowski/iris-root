@@ -26,17 +26,15 @@ class RequestMissingFeatureValuesUseCase {
 
     log.info("Requesting missing feature values: analysisId={}", analysisId);
 
-    // NOTE(ahaczewski): We send requests in batches, handling errors along the way.
-    var totalCount = 0;
-    var matchCount = 0;
-    do {
-      matchCount = missingMatchFeatureReader.read(
-          analysisId, agentRequestHandler.createChunkHandler(this::sendRequests));
-      totalCount += matchCount;
-    } while (matchCount > 0);
+    var matchCount = missingMatchFeatureReader.read(
+        analysisId, agentRequestHandler.createChunkHandler(this::sendRequests));
 
-    log.info("Finished requesting missing feature values: analysisId={}, matchCount={}",
-        analysisId, totalCount);
+    if (matchCount > 0) {
+      log.info("Finished requesting missing feature values: analysisId={}, matchCount={}",
+          analysisId, matchCount);
+    } else {
+      log.debug("No missing feature values requested: analysisId={}", analysisId);
+    }
   }
 
   private void sendRequests(List<AgentExchangeRequestMessage> messages) {
