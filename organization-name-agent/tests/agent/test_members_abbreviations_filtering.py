@@ -3,8 +3,8 @@ from typing import Sequence
 import pytest
 
 from company_name import CompanyNameAgent, Solution, parse_name
+from company_name.names.names_abbreviations_filtering import remove_redundant_abbreviations
 from company_name.scores.abbreviation import get_abbreviation_score
-from company_name.utils.abbreviations_filtering import remove_redundant_abbreviations
 
 
 @pytest.mark.parametrize(

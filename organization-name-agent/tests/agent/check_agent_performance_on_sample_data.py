@@ -10,10 +10,7 @@ import yaml
 from silenteight.agents.v1.api.exchange.exchange_pb2 import AgentExchangeRequest
 
 from tests.agent.mocks.adjudication_engine_mock import AdjudicationEngineMock
-from tests.agent.mocks.utils import (
-    run_agent_in_process,
-    run_data_source_mock_in_process,
-)
+from tests.agent.mocks.utils import run_agent_in_process, run_data_source_mock_in_process
 
 NUMBER_OF_MATCHES = 100
 NUMBER_OF_MATCHES_IN_MESSAGE = 1

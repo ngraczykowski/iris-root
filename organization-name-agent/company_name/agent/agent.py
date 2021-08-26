@@ -7,10 +7,10 @@ from agent_base.agent import Agent
 
 from company_name.compare import compare_names
 from company_name.knowledge_base import KnowledgeBase
+from company_name.names.names_abbreviations_filtering import remove_redundant_abbreviations
 from company_name.names.parse.parse import NameInformation, parse_name
 from company_name.solution.scores_reduction import ScoresReduction
 from company_name.solution.solution import PairResult, Reason, Result, Solution
-from company_name.utils.abbreviations_filtering import remove_redundant_abbreviations
 
 
 class CompanyNameAgent(Agent):
