@@ -4,13 +4,14 @@ import static com.silenteight.adjudication.engine.analysis.agentexchange.AgentEx
 
 class InMemoryMissingMatchFutureReader implements MissingMatchFeatureReader {
 
-  private int chunks = 10;
-
   @Override
   public int read(long analysisId, ChunkHandler chunkHandler) {
-    chunkHandler.handle(createMissingMatchFeatureChunk(10));
-    if (chunks == 1)
-      chunkHandler.finished();
-    return --chunks;
+    for (int i = 0; i < 10; ++i) {
+      chunkHandler.handle(createMissingMatchFeatureChunk(10));
+    }
+
+    chunkHandler.finished();
+
+    return 100;
   }
 }
