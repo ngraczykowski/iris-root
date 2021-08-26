@@ -12,9 +12,6 @@ service NameAgent {
     rpc CompareNames (CompareNamesRequest) returns (stream CompareNamesResponse) {
     }
 
-    rpc CompareFreeText (CompareFreeTextRequest) returns (stream CompareFreeTextResponse) {
-    }
-
     rpc GetNameAgentDescriptor (GetNameAgentDescriptorRequest) returns (NameAgentDescriptor) {
     }
 }
@@ -77,19 +74,6 @@ message MatchedNameValueGroup {
     // Matched name values collection
     repeated string matched_values = 2 [deprecated = true];
     repeated WatchlistName watchlist_names = 3;
-}
-
-message CompareFreeTextRequest {
-  string matched_name = 1;
-  string matched_name_synonym = 2;
-  string matched_type = 3;
-  repeated string matching_texts = 4;
-  string freetext = 5;
-}
-
-message CompareFreeTextResponse {
-  string solution = 1;
-  string context = 2;
 }
 
 message GetNameAgentDescriptorRequest {
