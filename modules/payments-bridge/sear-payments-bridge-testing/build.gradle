@@ -1,12 +1,5 @@
 plugins {
-    id 'java'
-}
-
-group 'com.silenteight.payments.bridge'
-version '1.0.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
+    id 'java-library'
 }
 
 dependencies {
@@ -14,8 +7,4 @@ dependencies {
 
   runtimeOnly libraries.liquibase_core
   runtimeOnly libraries.postgresql
-}
-
-test {
-    useJUnitPlatform()
 }
