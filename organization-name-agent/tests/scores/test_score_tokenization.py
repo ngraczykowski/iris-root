@@ -61,6 +61,7 @@ def test_tokenization_for_one_common_word(first, second):
         ("AGRICULTURAL BANK OF CHINA", "china construction bank", 2 / 4, 2),
         ("Johnson & Johnson", "SC Johnson", 1 / 3, 1),
         ("Johnson & Johnson", "Johnson & Johnson", 1, 2),
+        ("OSANG HEAL THCARE CO LTD INFOPIA", "INFOPIA CO LTD", 1 / 4, 1),
     ),
 )
 def test_tokenization(first, second, tokenization, absolute_tokenization):

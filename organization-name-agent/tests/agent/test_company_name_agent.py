@@ -94,3 +94,16 @@ def test_choose_exact_name_over_abbreviation(first, second, abbreviation_not_cho
     result = CompanyNameAgent()._resolve(first, second)
     assert result.solution == Solution.MATCH
     assert abbreviation_not_chosen != result.reason.results[0].watchlist_party_name
+
+
+@pytest.mark.parametrize(
+    "first, second",
+    [
+        (("OSANG HEAL THCARE CO LTD INFOPIA",), ("INFOPIA CO LTD",)),
+        (("SCCM DYBNG AND PRINTING CO. ATO",), ("ATO, OOO",)),
+    ],
+)
+def test_match_when_base_name_after_legal_take_it_from_other(first, second):
+    print(first, second)
+    result = CompanyNameAgent().resolve(first, second)
+    assert result.solution == Solution.MATCH

@@ -3,12 +3,14 @@ from typing import Sequence
 
 from company_name.names.name_information import NameInformation, Token, TokensSequence
 from company_name.scores.score import Score
+from company_name.scores.tokenization import combine_name_and_other
 from company_name.utils.clear_name import POSSIBLE_SEPARATORS, clear_name
 
 
 def _tokens(name: NameInformation) -> Sequence[TokensSequence]:
     return (
         name.name(),
+        combine_name_and_other(name),
         TokensSequence(
             list(
                 itertools.chain.from_iterable(
