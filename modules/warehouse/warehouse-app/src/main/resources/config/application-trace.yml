@@ -12,10 +12,12 @@ logging:
     ROOT: DEBUG
     com.silenteight.sep: DEBUG
     com.silenteight.serp: DEBUG
-    com.silenteight.warehouse: DEBUG
+    com.silenteight.warehouse: TRACE
     io.opencensus: INFO
     io.netty: INFO
     io.grpc.netty: INFO
+    org.springframework.data.elasticsearch.client.WIRE: TRACE
+    org.springframework.integration: DEBUG
     jdk.internal.httpclient.debug: INFO
 
 management:

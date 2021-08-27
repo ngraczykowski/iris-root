@@ -16,10 +16,6 @@ logging:
     io.opencensus: INFO
     io.netty: INFO
     io.grpc.netty: INFO
-    org.quartz.core.JobRunShell: DEBUG
-    org.springframework.data.elasticsearch.client.WIRE: TRACE
-    org.springframework.integration: DEBUG
-    org.springframework.amqp: DEBUG
     jdk.internal.httpclient.debug: INFO
 
 management:
