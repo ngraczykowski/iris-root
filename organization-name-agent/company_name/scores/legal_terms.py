@@ -7,9 +7,7 @@ from company_name.names.name_information import TokensSequence
 from company_name.scores.score import Score
 
 
-def _get_legal_terms(
-    values: TokensSequence,
-) -> Generator[Sequence[LegalTerm], None, None]:
+def _get_legal_terms(values: TokensSequence) -> Generator[Sequence[LegalTerm], None, None]:
     for value in values:
         key = tuple(value.cleaned.split())
         if key in KnowledgeBase.legal_terms.source_to_legal_terms:

@@ -62,6 +62,7 @@ def test_tokenization_for_one_common_word(first, second):
         ("Johnson & Johnson", "SC Johnson", 1 / 3, 1),
         ("Johnson & Johnson", "Johnson & Johnson", 1, 2),
         ("OSANG HEAL THCARE CO LTD INFOPIA", "INFOPIA CO LTD", 1 / 4, 1),
+        ("SCCM DYBNG AND PRINTING CO. ATO", "ATO, OOO", 1 / 4, 1),
     ),
 )
 def test_tokenization(first, second, tokenization, absolute_tokenization):
