@@ -5,5 +5,5 @@ import java.util.UUID;
 
 public interface AgentExchangeDataAccess {
 
-  void removeAgentExchange(UUID agentExchangeRequestID, long matchID, List<String> featuresIDs);
+  void removeAgentExchange(UUID agentExchangeRequestId, long matchId, List<String> featuresIds);
 }

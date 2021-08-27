@@ -25,15 +25,15 @@ class DeleteAgentExchangeMatchFeatureQuery {
       + "             JOIN ae_agent_config_feature aacf "
       + "                 ON aacf.agent_config_feature_id = aaemf.agent_config_feature_id\n"
       + "    WHERE aacf.feature IN (:features)\n"
-      + "    AND aae.request_id = (:requestID))\n"
-      + "  AND match_id = (:matchID)";
+      + "    AND aae.request_id = (:requestId))\n"
+      + "  AND match_id = (:matchId)";
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
-  void execute(UUID agentExchangeRequestID, long matchID, List<String> features) {
+  void execute(UUID agentExchangeRequestId, long matchId, List<String> features) {
     MapSqlParameterSource parameters = new MapSqlParameterSource("features", features);
-    parameters.addValue("requestID", agentExchangeRequestID);
-    parameters.addValue("matchID", matchID);
+    parameters.addValue("requestId", agentExchangeRequestId);
+    parameters.addValue("matchId", matchId);
 
     jdbcTemplate.update(SQL, parameters);
   }

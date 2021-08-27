@@ -18,8 +18,8 @@ class JdbcAgentExchangeDataAccess implements AgentExchangeDataAccess {
 
   @Override
   public void removeAgentExchange(
-      UUID agentExchangeRequestID, long matchID, List<String> featuresIDs) {
-    deleteAgentExchangeMatchFeatureQuery.execute(agentExchangeRequestID, matchID, featuresIDs);
+      UUID agentExchangeRequestId, long matchId, List<String> featuresIds) {
+    deleteAgentExchangeMatchFeatureQuery.execute(agentExchangeRequestId, matchId, featuresIds);
     deleteEmptyAgentExchange.execute();
   }
 }
