@@ -4,7 +4,11 @@ from typing import Dict, Sequence, Tuple
 from company_name.knowledge_base import KnowledgeBase
 from company_name.names.name_information import NameInformation, Token, TokensSequence
 from company_name.names.parse.create_tokens import create_tokens
-from company_name.names.parse.extract_information import extract_common, extract_weak
+from company_name.names.parse.extract_information import (
+    extract_common,
+    extract_countries,
+    extract_weak,
+)
 from company_name.names.parse.extract_legal_terms import extract_legal_terms
 from company_name.names.parse.parse_parentheses import detect_parentheses_information
 from company_name.utils.clear_name import clear_name
@@ -57,6 +61,7 @@ def _detect_name_parts(name: str) -> Dict[str, TokensSequence]:
     if not name_without_weak:
         name_without_weak, weak_words_at_the_end = name_tokens, TokensSequence()
     name_without_legal, legal, other = extract_legal_terms(name_without_weak)
+    other, country_from_other = extract_countries(other)
     common_prefixes, name_without_common, common_suffixes = extract_common(name_without_legal)
 
     information = _fix_expression_divided(
@@ -74,6 +79,7 @@ def _detect_name_parts(name: str) -> Dict[str, TokensSequence]:
         "common_suffixes": information[2],
         "legal": information[3],
         "other": information[4],
+        "country_from_other": country_from_other,
     }
 
 
@@ -98,7 +104,7 @@ def parse_name(name: str) -> NameInformation:
         base=base_information["base"],
         common_suffixes=base_information["common_suffixes"],
         legal=base_information["legal"] + parentheses_information["legal"],
-        countries=parentheses_information["countries"],
+        countries=parentheses_information["countries"] + base_information["country_from_other"],
         parenthesis=parentheses_names,
         other=base_information["other"],
     )

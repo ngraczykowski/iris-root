@@ -1,7 +1,6 @@
 import dataclasses
 
 from company_name.knowledge_base import KnowledgeBase
-from company_name.names.parse.extract_information import extract_countries
 from company_name.names.token import Token
 from company_name.names.tokens_sequence import TokensSequence
 
@@ -22,11 +21,8 @@ class NameInformation:
         return TokensSequence(self.common_prefixes + self.base + self.common_suffixes)
 
     def combine_name_and_other(self) -> TokensSequence:
-        without_countries, countries = extract_countries(self.other)
-        without_weak_and_countries = [
-            token for token in without_countries if token not in KnowledgeBase.weak_words
-        ]
-        name_and_other = self.name() + without_weak_and_countries
+        without_weak = [token for token in self.other if token not in KnowledgeBase.weak_words]
+        name_and_other = self.name() + without_weak
         return name_and_other
 
     def __str__(self) -> str:
