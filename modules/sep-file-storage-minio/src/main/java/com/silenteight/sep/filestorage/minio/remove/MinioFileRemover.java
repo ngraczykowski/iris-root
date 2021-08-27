@@ -24,7 +24,7 @@ public class MinioFileRemover implements FileRemover {
     }
   }
 
-  public void deleteFile(String fileName, String bucketName) throws Exception {
+  private void deleteFile(String fileName, String bucketName) throws Exception {
     minioClient.removeObject(prepareObjectBasedOnFileToRemove(fileName, bucketName));
   }
 

@@ -1,4 +1,4 @@
-package com.silenteight.sep.filestorage.domain;
+package com.silenteight.sep.filestorage;
 
 import lombok.RequiredArgsConstructor;
 
@@ -10,5 +10,5 @@ import org.springframework.context.annotation.ComponentScan;
     FileStorageMinio.class
 })
 @RequiredArgsConstructor
-public class UploaderServiceTestConfiguration {
+public class MinioFileStorageConfiguration {
 }

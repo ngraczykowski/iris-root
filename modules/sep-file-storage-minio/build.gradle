@@ -15,6 +15,10 @@ projectSetup {
 sourceCompatibility = 1.11
 targetCompatibility = 1.11
 
+repositories {
+  mavenCentral()
+}
+
 ext {
   libraries = [:]
   springBootVersion = "2.4.9"
@@ -22,10 +26,7 @@ ext {
   silenteightSepUsermanagementApiVersion = "1.9.0"
   silenteightFileStorageApiVersion = "1.0.0-SNAPSHOT"
   commonsTextVersion = "1.9"
-}
-
-repositories {
-  mavenCentral()
+  sepDependenciesVersion = "2.2.1"
 }
 
 libraries.platform_spring_boot = [group: 'org.springframework.boot', name: 'spring-boot-dependencies', version: springBootVersion]
