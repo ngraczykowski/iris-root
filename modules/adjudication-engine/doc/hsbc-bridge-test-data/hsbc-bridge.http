@@ -1,12 +1,26 @@
 ### Start the recommendation process for batch request
-POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26072021-100/recommend
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26082021-300/recommend
 Accept: application/json
 Content-Type: application/json
 
-< hsbc-bridge-request-full.json
+< hsbc-bridge-request-batch.json
+
+### Start the recommendation process for new batch request ADJ698
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26082021-314/recommend
+Accept: application/json
+Content-Type: application/json
+
+< hsbc-bridge-request-batch_adj698.json
+
+### Start the recommendation process for new batch request SIMLU634
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26082021-320/recommend
+Accept: application/json
+Content-Type: application/json
+
+< hsbc-bridge-request-batch_simul634.json
 
 ### Start the recommendation process for single-alert request
-POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26072021-200/recommend
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26082021-330/recommend
 Accept: application/json
 Content-Type: application/json
 
@@ -19,5 +33,5 @@ Accept: application/json
 
 
 ### Check the recommendation results
-GET {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26072021-200/result
+GET {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/dla-Andrzeja-drugi-raz/result
 Accept: application/json
