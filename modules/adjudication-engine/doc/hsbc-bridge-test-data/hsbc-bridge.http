@@ -1,26 +1,26 @@
 ### Start the recommendation process for batch request
-POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26082021-300/recommend
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26082021-303/recommend
 Accept: application/json
 Content-Type: application/json
 
 < hsbc-bridge-request-batch.json
 
 ### Start the recommendation process for new batch request ADJ698
-POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26082021-314/recommend
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26082021-316/recommend
 Accept: application/json
 Content-Type: application/json
 
 < hsbc-bridge-request-batch_adj698.json
 
 ### Start the recommendation process for new batch request SIMLU634
-POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26082021-320/recommend
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26082021-321/recommend
 Accept: application/json
 Content-Type: application/json
 
 < hsbc-bridge-request-batch_simul634.json
 
 ### Start the recommendation process for single-alert request
-POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26082021-330/recommend
+POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/26082021-331/recommend
 Accept: application/json
 Content-Type: application/json
 
