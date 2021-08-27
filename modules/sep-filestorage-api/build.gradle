@@ -15,7 +15,6 @@ projectSetup {
 sourceCompatibility = 1.11
 targetCompatibility = 1.11
 
-
 ext {
   libraries = [:]
   sepDependenciesVersion = "2.2.1"
@@ -27,9 +26,10 @@ repositories {
 
 libraries.assertj_core = [group: 'org.assertj', name: 'assertj-core']
 libraries.spring_data_commons = [group: 'org.springframework.data', name: 'spring-data-commons']
+libraries.jackson_databind = [group: 'com.fasterxml.jackson.core', name: 'jackson-databind']
 
 dependencies {
   implementation platform("com.silenteight.sep:sep-dependencies:$sepDependenciesVersion")
   annotationProcessor platform("com.silenteight.sep:sep-dependencies:$sepDependenciesVersion")
-  implementation libraries.spring_data_commons
+  implementation libraries.jackson_databind
 }
