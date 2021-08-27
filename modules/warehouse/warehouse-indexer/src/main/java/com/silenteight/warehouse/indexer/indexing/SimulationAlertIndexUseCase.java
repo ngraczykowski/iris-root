@@ -37,7 +37,8 @@ public class SimulationAlertIndexUseCase implements SimulationIndexRequestComman
 
   @Override
   public DataIndexResponse handle(SimulationDataIndexRequest request) {
-    log.debug("SimulationDataIndexRequest received, requestId={}", request.getRequestId());
+    log.debug("SimulationDataIndexRequest received, requestId={}, alertCount={}",
+        request.getRequestId(), request.getAlertsCount());
 
     SimulationNamingStrategy namingStrategy = new SimulationNamingStrategy(environmentPrefix);
     AnalysisMetadataDto analysisMetadataDto = uniqueAnalysisFactory.getUniqueAnalysis(

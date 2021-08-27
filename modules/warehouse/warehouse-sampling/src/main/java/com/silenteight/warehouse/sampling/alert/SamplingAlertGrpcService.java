@@ -27,12 +27,11 @@ class SamplingAlertGrpcService extends SamplingAlertsServiceImplBase {
 
     log.info("AlertsSampleRequest received, request={}",request);
     try {
-      AlertsSampleResponse alertsSampleResponse =
-          samplingAlertService.generateSamplingAlerts(request);
+      AlertsSampleResponse response = samplingAlertService.generateSamplingAlerts(request);
 
-      responseObserver.onNext(alertsSampleResponse);
+      responseObserver.onNext(response);
       responseObserver.onCompleted();
-      log.debug("AlertsSampleRequest processed, request={}",request);
+      log.debug("AlertsSampleRequest processed, response={}", response);
     } catch (RuntimeException e) {
       handleException(
           responseObserver, e, INTERNAL_VALUE, "Getting alerts sample response failed.");

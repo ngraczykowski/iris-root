@@ -263,7 +263,7 @@ job "warehouse" {
           "-Dlogging.config=secrets/conf/logback.xml",
           "-jar",
           "local/warehouse-app.jar",
-          "--spring.profiles.active=linux,swagger",
+          "--spring.profiles.active=linux,swagger,debug",
           "--spring.config.additional-location=file:local/conf/"
         ]
       }
