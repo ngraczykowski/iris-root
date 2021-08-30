@@ -1,4 +1,5 @@
 import json
+from typing import List
 
 import pytest
 
@@ -32,7 +33,7 @@ def test_basic_legal_terms():
         ),
         ("DIM TU TAC TRADING SERVICE JOINT STOCK COMPANY", ("joint stock company",)),
         ("Ster - Planungs- u. Bau Gesellschaft m.b.H.", ("gesellschaft mbh",)),
-        ("Agentur Effect Ges.m.b.H.", ("gesmbh",)),
+        ("Agentur Effect Ges.m.b.H.", ("ges mbh",)),
         ("ML ABUNDANCE PTE. LTD.", ("pte", "ltd")),
         ("YOU CONSULT e.U.", ("eu",)),
         (
@@ -146,3 +147,25 @@ def test_different_ways_to_use_legal_term_abbreviation(name):
     information = parse_name(name)
     print(information)
     assert len(information.legal) == 1
+
+
+@pytest.mark.parametrize(
+    "legal_term",
+    ("sp zoo", "sp. z o.o", "sp. z o.o.", "sp. zoo", "sp z oo", "sp z o o"),
+)
+def test_legal_terms_in_different_format(legal_term: str):
+    information = parse_name(f"google {legal_term}")
+    assert information.base == ["google"]
+    assert len(information.legal) == 1
+
+
+@pytest.mark.parametrize(
+    ("name", "expected_legals"),
+    (
+        ("ECO1.Corp.", ["corp"]),
+        ("SCCM DYBNG AND PRINTING CO.ATO", ["co"]),
+    ),
+)
+def test_parse_legals_with_dots(name: str, expected_legals: List[str]):
+    information = parse_name(name)
+    assert information.legal == expected_legals

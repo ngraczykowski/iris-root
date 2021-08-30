@@ -5,14 +5,20 @@ import unidecode
 
 POSSIBLE_SEPARATORS = re.compile(r"[-_—]")
 REMOVE_CHARS_REGEX = re.compile(r"[\.\"']")
+
 SPLIT_CHARS_REGEX = re.compile(r",|( -)|(- )|/|\\")
-DOMAIN_REGEX = re.compile(r"\.\w{2,3}\b")  # .net, .com, .org, .de
+SPLIT_AND_LEAVE_CHARS_REGEX = re.compile(r"((?<=\w{3})\.|\.(?=\w{3}))")
+
+
+def remove_split_chars(name: str) -> str:
+    return SPLIT_AND_LEAVE_CHARS_REGEX.sub("", SPLIT_CHARS_REGEX.sub("", name))
 
 
 def divide(name: str) -> Tuple[str, ...]:
-    return tuple(SPLIT_CHARS_REGEX.sub(" ", name).strip().split())
+    replaced = SPLIT_AND_LEAVE_CHARS_REGEX.sub(r"\1 ", SPLIT_CHARS_REGEX.sub(" ", name))
+    return tuple(replaced.strip().split())
 
 
 def clear_name(name: str) -> str:
     name = unidecode.unidecode(name.lower()).strip()
-    return REMOVE_CHARS_REGEX.sub("", DOMAIN_REGEX.sub("", name))
+    return REMOVE_CHARS_REGEX.sub("", name)
