@@ -41,6 +41,14 @@ from company_name.names.parse.extract_legal_terms import extract_legal_terms
                 "other": (),
             },
         ),
+        (
+            "Limited some name limited",
+            {
+                "without_legal": ("limited", "some", "name"),
+                "legal": ("limited",),
+                "other": (),
+            },
+        ),
     ],
 )
 def test_extract_legal_terms(name: str, expected: Dict):
