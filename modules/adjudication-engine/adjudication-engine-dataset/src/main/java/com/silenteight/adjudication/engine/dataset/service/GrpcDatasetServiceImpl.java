@@ -13,7 +13,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 @GrpcService
 @Slf4j
 @RequiredArgsConstructor
-public class GrpcDatasetServiceImpl extends DatasetServiceImplBase {
+class GrpcDatasetServiceImpl extends DatasetServiceImplBase {
 
   @NonNull
   private final DatasetService datasetService;
@@ -21,14 +21,15 @@ public class GrpcDatasetServiceImpl extends DatasetServiceImplBase {
   @Override
   public void createDataset(
       CreateDatasetRequest request, StreamObserver<Dataset> responseObserver) {
+
     responseObserver.onNext(datasetService.createDataset(request));
     responseObserver.onCompleted();
-
   }
 
   @Override
   public void getDataset(
       GetDatasetRequest request, StreamObserver<Dataset> responseObserver) {
+
     responseObserver.onNext(datasetService.getDataset(request));
     responseObserver.onCompleted();
   }
@@ -36,6 +37,7 @@ public class GrpcDatasetServiceImpl extends DatasetServiceImplBase {
   @Override
   public void listDatasets(
       ListDatasetsRequest request, StreamObserver<ListDatasetsResponse> responseObserver) {
+
     responseObserver.onNext(datasetService.listDataset(request));
     responseObserver.onCompleted();
   }
@@ -44,6 +46,7 @@ public class GrpcDatasetServiceImpl extends DatasetServiceImplBase {
   public void listDatasetAlerts(
       ListDatasetAlertsRequest request,
       StreamObserver<ListDatasetAlertsResponse> responseObserver) {
+
     responseObserver.onNext(datasetService.listDatasetAlerts(request));
     responseObserver.onCompleted();
   }
