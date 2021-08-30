@@ -4,7 +4,7 @@
 ae:
   messaging:
     concurrency: 4
-    prefetch: 25
+    prefetch: 1
 
   # FIXME(ahaczewski): Rename to `comments.template-engine.cache-invalidation`.
   comments:
@@ -183,14 +183,14 @@ spring:
       type: simple
       direct:
         consumers-per-queue: ${ae.messaging.concurrency:4}
-        prefetch: ${ae.messaging.prefetch:25}
+        prefetch: ${ae.messaging.prefetch:1}
         retry:
           enabled: true
           multiplier: 2
       simple:
         concurrency: 1
         max-concurrency: ${ae.messaging.concurrency:4}
-        prefetch: ${ae.messaging.prefetch:25}
+        prefetch: ${ae.messaging.prefetch:1}
         retry:
           enabled: true
           multiplier: 2
