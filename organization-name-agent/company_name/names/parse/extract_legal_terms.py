@@ -20,7 +20,7 @@ def extract_legal_terms(
         name, legal_terms, from_start=True
     )
 
-    if start_legal.endswith(end_legal):
+    if start_legal.endswith(end_legal.cleaned_name):
         if _check_is_legal_part_of_name(start_legal):
             return start_legal + without_legal_at_start, start_legal, start_other
         else:

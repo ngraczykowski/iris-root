@@ -19,13 +19,13 @@ class TokensSequence(collections.UserList):
     def original_tuple(self) -> Tuple[str, ...]:
         return tuple(w.original for w in self.data)
 
-    def endswith(self, seq: Sequence[str]) -> bool:
-        if not isinstance(seq, Sequence):
+    def endswith(self, text: str) -> bool:
+        if not isinstance(text, str):
             raise NotImplementedError()
 
-        if len(self) < len(seq):
+        if len(self.cleaned_name) < len(text):
             return False
-        return self.cleaned_name.endswith(seq.__str__().lower())
+        return self.cleaned_name.endswith(text)
 
     def __eq__(self, other: Any) -> bool:
         if isinstance(other, Sequence):
