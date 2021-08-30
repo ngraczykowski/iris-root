@@ -29,6 +29,22 @@ ae:
     comment:
       template-name: alert
 
+  analysis:
+    agent-exchange:
+      missing-match-feature-reader:
+        chunk-size: 8192
+        max-rows: 65536
+
+    analysis:
+      dataset-alerts-adder:
+        chunk-size: 1024
+        max-rows: 8192
+
+    match-solution:
+      unsolved-matches-reader:
+        chunk-size: 1024
+        max-rows: 8192
+
   grpc:
     client:
       category-service:
