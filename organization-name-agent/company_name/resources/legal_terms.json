@@ -306,24 +306,24 @@
         "sole proprietorship"
       ]
     },
+    "einkahlutafélag": {
+      "abbreviations": [
+        "ehf"
+      ],
+      "country": [
+        "Iceland"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
     "ekonomisk forening": {
       "abbreviations": [
         "ek"
       ],
       "country": [
         "Sweden"
-      ]
-    },
-    "Empresa Individual de Responsabilidade Limitada": {
-      "abbreviations": [
-        "eireli"
-      ],
-      "country": [
-        "Brazil"
-      ],
-      "meaning": [
-        "sole proprietorship",
-        "limited liability"
       ]
     },
     "Empresa Individual de Responsabilidad Limitada": {
@@ -333,6 +333,18 @@
       "country": [
         "Chile",
         "Dominican Republic"
+      ],
+      "meaning": [
+        "sole proprietorship",
+        "limited liability"
+      ]
+    },
+    "Empresa Individual de Responsabilidade Limitada": {
+      "abbreviations": [
+        "eireli"
+      ],
+      "country": [
+        "Brazil"
       ],
       "meaning": [
         "sole proprietorship",
@@ -378,7 +390,7 @@
         "Ε.Π.Ε."
       ],
       "meaning": [
-        "limited",
+        "limited liability",
         "private"
       ],
       "country": [
@@ -499,6 +511,18 @@
       ],
       "country": [
         "Norway"
+      ]
+    },
+    "hlutafélag": {
+      "abbreviations": [
+        "hf"
+      ],
+      "country": [
+        "Iceland"
+      ],
+      "meaning": [
+        "public",
+        "limited liability"
       ]
     },
     "Incorporated": {
@@ -750,7 +774,7 @@
         "Μ.Ε.Π.Ε."
       ],
       "meaning": [
-        "limited",
+        "limited liability",
         "private",
         "single member"
       ],
@@ -1245,13 +1269,15 @@
         "Portugal"
       ]
     },
-    "societăți de persoane": {
-      "abbreviations": [],
+    "societatea în comandită simplă": {
+      "abbreviations": [
+        "SCS"
+      ],
       "country": [
         "Romania"
       ],
       "meaning": [
-        "partnership"
+        "limited partnership"
       ]
     },
     "societatea în nume colectiv": {
@@ -1263,17 +1289,6 @@
       ],
       "meaning": [
         "general partnership"
-      ]
-    },
-    "societatea în comandită simplă": {
-      "abbreviations": [
-        "SCS"
-      ],
-      "country": [
-        "Romania"
-      ],
-      "meaning": [
-        "limited partnership"
       ]
     },
     "societe a responsabilite limitee": {
@@ -1295,30 +1310,6 @@
         "Tunisia"
       ]
     },
-    "società a responsabilità limitata semplificata": {
-      "abbreviations": [
-        "srls"
-      ],
-      "country": [
-        "Italy"
-      ],
-      "meaning": [
-        "private",
-        "limited liability"
-      ]
-    },
-    "società a responsabilità limitata": {
-      "abbreviations": [
-        "srl"
-      ],
-      "country": [
-        "Italy"
-      ],
-      "meaning": [
-        "private",
-        "limited liability"
-      ]
-    },
     "societe anonyme": {
       "abbreviations": [
         "sociedad anonima",
@@ -1336,6 +1327,39 @@
         "Belgium",
         "France",
         "Morocco"
+      ]
+    },
+    "società a responsabilità limitata": {
+      "abbreviations": [
+        "srl"
+      ],
+      "country": [
+        "Italy"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "società a responsabilità limitata semplificata": {
+      "abbreviations": [
+        "srls"
+      ],
+      "country": [
+        "Italy"
+      ],
+      "meaning": [
+        "private",
+        "limited liability"
+      ]
+    },
+    "societăți de persoane": {
+      "abbreviations": [],
+      "country": [
+        "Romania"
+      ],
+      "meaning": [
+        "partnership"
       ]
     },
     "Société anonyme libanaise": {
@@ -1508,6 +1532,11 @@
         "UAB"
       ]
     },
+    "verwaltungsgesellschaft": {
+      "country": [
+        "Germany"
+      ]
+    },
     "veřejná obchodní společnost": {
       "abbreviations": [
         "v.o.s",
@@ -1519,11 +1548,6 @@
       ],
       "meaning": [
         "general partnership"
-      ]
-    },
-    "verwaltungsgesellschaft": {
-      "country": [
-        "Germany"
       ]
     },
     "Vidkryte aktsionerne tovarystvo": {
@@ -1559,6 +1583,15 @@
       "meaning": [
         "private"
       ]
+    },
+    "Şirketi": {
+      "abbreviations": [
+        "Şti."
+      ],
+      "country": [
+        "Turkey"
+      ],
+      "meaning": []
     },
     "živnost": {
       "country": [

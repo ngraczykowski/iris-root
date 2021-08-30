@@ -69,6 +69,13 @@ from company_name.names.parse.parse import parse_name
                 "legal": "GROUP",
             },
         ),
+        (
+            "MODERN DETERGENT IND.L.L.C",
+            {
+                "base": "MODERN DETERGENT IND.",
+                "legal": "L.L.C",
+            },
+        ),
     ),
 )
 def test_company_name(name, expected):
