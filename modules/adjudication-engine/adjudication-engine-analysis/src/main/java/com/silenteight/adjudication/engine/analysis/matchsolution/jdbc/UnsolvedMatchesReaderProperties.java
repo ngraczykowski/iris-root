@@ -14,7 +14,7 @@ import javax.validation.constraints.Min;
 class UnsolvedMatchesReaderProperties {
 
   static final int DEFAULT_CHUNK_SIZE = 1_024;
-  static final int DEFAULT_MAX_ROWS = 16_384;
+  static final int DEFAULT_MAX_ROWS = 8_192;
 
   @Min(1)
   @Max(1_048_576)
