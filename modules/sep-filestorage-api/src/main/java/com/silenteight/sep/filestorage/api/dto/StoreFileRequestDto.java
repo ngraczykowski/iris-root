@@ -9,6 +9,8 @@ import java.io.InputStream;
 @Builder
 public class StoreFileRequestDto {
 
+  String storageName;
+
   String fileName;
 
   InputStream fileContent;

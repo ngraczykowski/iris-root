@@ -4,5 +4,5 @@ import com.silenteight.sep.filestorage.api.dto.StoreFileRequestDto;
 
 public interface FileUploader {
 
-  void storeFile(StoreFileRequestDto file, String storageName);
+  void storeFile(StoreFileRequestDto file);
 }

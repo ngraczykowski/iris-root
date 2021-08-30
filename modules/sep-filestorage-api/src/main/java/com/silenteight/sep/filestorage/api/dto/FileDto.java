@@ -10,9 +10,9 @@ import java.io.InputStream;
 @Builder
 public class FileDto {
 
-  String fileName;
+  String name;
 
-  InputStream fileContent;
+  InputStream content;
 
-  long fileSize;
+  long sizeInBytes;
 }

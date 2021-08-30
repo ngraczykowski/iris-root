@@ -6,5 +6,5 @@ public interface StorageManager {
 
   void remove(String storageName);
 
-  boolean storageExist(String storageName);
+  boolean exist(String storageName);
 }
