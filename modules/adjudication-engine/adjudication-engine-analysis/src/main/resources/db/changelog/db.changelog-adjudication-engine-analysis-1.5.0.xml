@@ -213,4 +213,18 @@
   <changeSet id="adjudication-engine-analysis-1.5.0_19" author="ahaczewski">
     <sqlFile path="sql/remove_finished_exchanges_v2.sql" relativeToChangelogFile="true"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.5.0_20" author="ahaczewski">
+    <createIndex tableName="ae_analysis_alert" indexName="ix_ae_analysis_alert_analysis_id">
+      <column name="analysis_id"/>
+    </createIndex>
+    <createIndex tableName="ae_analysis_alert" indexName="ix_ae_analysis_alert_alert_id">
+      <column name="alert_id"/>
+    </createIndex>
+    <createIndex
+        tableName="ae_pending_recommendation"
+        indexName="ix_ae_pending_recommendation_alert_id">
+      <column name="alert_id"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>
