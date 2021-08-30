@@ -234,14 +234,14 @@ paths:
     post:
       summary: Upload watchlist files with up to 1GB limit.
       requestBody:
-        description: One zip file with 5 files inside (3 types of watchlist and 2 md5 files)
+        description: One zip file with 5 files inside (3 types of watchlist and 2 md5 files). Parameter name is not necessary - it can also be a null
         required: true
         content:
           multipart/form-data:
             schema:
               type: object
               properties:
-                file:
+                '':
                   type: object
                   items:
                     type: string

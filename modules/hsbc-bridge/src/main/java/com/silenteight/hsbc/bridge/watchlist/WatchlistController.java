@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.bridge.watchlist;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.bulk.rest.ErrorResponse;
 import com.silenteight.hsbc.bridge.watchlist.event.ZipFileWatchlistSavedEvent;
@@ -11,12 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
+@Slf4j
 @RestController
 @RequestMapping("/watchlist/v1")
 @RequiredArgsConstructor
@@ -26,9 +29,14 @@ class WatchlistController {
   private final ApplicationEventPublisher eventPublisher;
 
   @PostMapping("/upload")
-  public void transferFile(@RequestPart("file") MultipartFile zipFile) throws IOException {
+  public void transferFile(MultipartRequest request) throws IOException {
+    var entry = request.getFileMap().entrySet().iterator().next();
+    var zipFile = entry.getValue();
+
+    log.info("Received watchlist file with parameter name '{}'", entry.getKey());
     validateZipFile(zipFile);
     var zipUri = watchlistSaver.save(zipFile.getInputStream(), zipFile.getOriginalFilename());
+    log.info("Watchlist file {} saved", zipFile.getOriginalFilename());
 
     eventPublisher.publishEvent(new ZipFileWatchlistSavedEvent(zipUri.toString()));
     //TODO (smrozowski): delete original archives

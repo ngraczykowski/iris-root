@@ -9,6 +9,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockMultipartHttpServletRequest;
 
 import java.io.InputStream;
 import java.net.URI;
@@ -56,10 +57,12 @@ class WatchlistControllerTest {
   public void saveFile_whenFileNameIsEmpty_shouldThrowNoFileException() {
     //given
     var emptyName = " ";
+    var mockRequest = new MockMultipartHttpServletRequest();
     var mockFile = new MockMultipartFile(emptyName, "some content".getBytes());
+    mockRequest.addFile(mockFile);
 
     //then
-    assertThatThrownBy(() -> underTest.transferFile(mockFile))
+    assertThatThrownBy(() -> underTest.transferFile(mockRequest))
         .isInstanceOf(NoFileException.class)
         .hasMessageContaining(NO_FILE_EXCEPTION);
   }

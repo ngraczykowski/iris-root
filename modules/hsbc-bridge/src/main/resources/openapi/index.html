@@ -2465,7 +2465,7 @@
             defs["v1_upload_body"] = {
   "type" : "object",
   "properties" : {
-    "file" : {
+    "" : {
       "type" : "array",
       "format" : "binary",
       "items" : {
@@ -6960,9 +6960,9 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        array[String] file = ; // array[String] | 
+        array[String]  = ; // array[String] | 
         try {
-            apiInstance.watchlistV1UploadPost(file);
+            apiInstance.watchlistV1UploadPost();
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#watchlistV1UploadPost");
             e.printStackTrace();
@@ -6978,9 +6978,9 @@ public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        array[String] file = ; // array[String] | 
+        array[String]  = ; // array[String] | 
         try {
-            apiInstance.watchlistV1UploadPost(file);
+            apiInstance.watchlistV1UploadPost();
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#watchlistV1UploadPost");
             e.printStackTrace();
@@ -6993,12 +6993,12 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-watchlistV1UploadPost-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">array[String] *file = ; // 
+                              <pre class="prettyprint"><code class="language-cpp">array[String] * = ; // 
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
 // Upload watchlist files with up to 1GB limit.
-[apiInstance watchlistV1UploadPostWith:file
+[apiInstance watchlistV1UploadPostWith:
               completionHandler: ^(NSError* error) {
                             if (error) {
                                 NSLog(@"Error: %@", error);
@@ -7011,7 +7011,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var HscbBridgeBatchApi = require('hscb_bridge_batch_api');
 
 var api = new HscbBridgeBatchApi.DefaultApi()
-var file = ; // {{array[String]}} 
+var  = ; // {{array[String]}} 
 
 var callback = function(error, data, response) {
   if (error) {
@@ -7020,7 +7020,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully.');
   }
 };
-api.watchlistV1UploadPost(file, callback);
+api.watchlistV1UploadPost(, callback);
 </code></pre>
                             </div>
 
@@ -7042,12 +7042,12 @@ namespace Example
         {
 
             var apiInstance = new DefaultApi();
-            var file = new array[String](); // array[String] | 
+            var  = new array[String](); // array[String] | 
 
             try
             {
                 // Upload watchlist files with up to 1GB limit.
-                apiInstance.watchlistV1UploadPost(file);
+                apiInstance.watchlistV1UploadPost();
             }
             catch (Exception e)
             {
@@ -7064,10 +7064,10 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$file = ; // array[String] | 
+$ = ; // array[String] | 
 
 try {
-    $api_instance->watchlistV1UploadPost($file);
+    $api_instance->watchlistV1UploadPost($);
 } catch (Exception $e) {
     echo 'Exception when calling DefaultApi->watchlistV1UploadPost: ', $e->getMessage(), PHP_EOL;
 }
@@ -7080,10 +7080,10 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $file = []; # array[String] | 
+my $ = []; # array[String] | 
 
 eval { 
-    $api_instance->watchlistV1UploadPost(file => $file);
+    $api_instance->watchlistV1UploadPost( => $);
 };
 if ($@) {
     warn "Exception when calling DefaultApi->watchlistV1UploadPost: $@\n";
@@ -7099,11 +7099,11 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-file =  # array[String] | 
+ =  # array[String] | 
 
 try: 
     # Upload watchlist files with up to 1GB limit.
-    api_instance.watchlist_v1_upload_post(file)
+    api_instance.watchlist_v1_upload_post()
 except ApiException as e:
     print("Exception when calling DefaultApi->watchlistV1UploadPost: %s\n" % e)</code></pre>
                             </div>
@@ -7120,11 +7120,11 @@ except ApiException as e:
                                 <th width="150px">Name</th>
                                 <th>Description</th>
                               </tr>
-                                  <tr><td style="width:150px;">file*</td>
+                                  <tr><td style="width:150px;">*</td>
                                   <td>
                                   
                                   
-                                      <div id="d2e199_watchlistV1UploadPost_file">
+                                      <div id="d2e199_watchlistV1UploadPost_">
                                           <div class="json-schema-view">
                                               <div class="primitive">
                                                   <span class="type">
