@@ -8,8 +8,7 @@ from company_name.utils.clear_name import POSSIBLE_SEPARATORS, clear_name
 
 def _tokens(name: NameInformation) -> Sequence[TokensSequence]:
     return (
-        name.name(),
-        name.combine_name_and_other(),
+        name.name_and_other(),
         TokensSequence(
             list(
                 itertools.chain.from_iterable(
@@ -17,7 +16,7 @@ def _tokens(name: NameInformation) -> Sequence[TokensSequence]:
                         Token(original=o, cleaned=clear_name(o))
                         for o in POSSIBLE_SEPARATORS.split(word)
                     ]
-                    for word in name.name().original_tuple
+                    for word in name.name_and_other().original_tuple
                 )
             )
         ),

@@ -20,7 +20,7 @@ class NameInformation:
     def name(self) -> TokensSequence:
         return TokensSequence(self.common_prefixes + self.base + self.common_suffixes)
 
-    def combine_name_and_other(self) -> TokensSequence:
+    def name_and_other(self) -> TokensSequence:
         without_weak = [token for token in self.other if token not in KnowledgeBase.weak_words]
         name_and_other = self.name() + without_weak
         return name_and_other

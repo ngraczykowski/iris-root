@@ -11,8 +11,8 @@ def get_tokenization_score(
 ) -> Score:
     if not first_name_inf and not second_name_inf:
         return Score()
-    first_name = first_name_inf.combine_name_and_other()
-    second_name = second_name_inf.combine_name_and_other()
+    first_name = first_name_inf.name_and_other()
+    second_name = second_name_inf.name_and_other()
 
     first_tokens: Counter[str] = collections.Counter(first_name.cleaned_tuple)
     second_tokens: Counter[str] = collections.Counter(second_name.cleaned_tuple)
