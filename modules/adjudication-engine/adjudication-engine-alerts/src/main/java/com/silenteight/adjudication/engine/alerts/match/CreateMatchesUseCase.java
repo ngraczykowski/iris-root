@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.adjudication.api.v1.Match;
 import com.silenteight.adjudication.engine.alerts.match.MatchRepository.SortIndexOnly;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ class CreateMatchesUseCase {
   @NonNull
   private final MatchRepository repository;
 
+  @Timed(value = "ae.alerts.use_cases", extraTags = { "package", "match" })
   @Transactional
   List<Match> createMatches(Iterable<NewAlertMatches> newAlertMatches) {
     return StreamSupport

@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Alert;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ class CreateAlertsUseCase {
   @NonNull
   private final AlertRepository repository;
 
+  @Timed(value = "ae.alerts.use_cases", extraTags = { "package", "alert" })
   @Transactional
   List<Alert> createAlerts(Iterable<Alert> alerts) {
     return StreamSupport.stream(alerts.spliterator(), false)
