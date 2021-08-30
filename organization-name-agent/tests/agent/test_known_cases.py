@@ -80,8 +80,24 @@ POSITIVE_CASES = [
     #     ["ipc"]
     # ],
     [
+        ["SCCM DYBNG AND PRINTING CO.ATO"],
+        ["ATO, OOO"],
+    ],
+    [
         ["D.B.INTERNATIONAL LOGISTICS CAMBODIA CO, LTD."],
         ["D.B. INT.L LOGISTICS (CAMBODIA) CO. LTD"],
+    ],
+    [
+        ["OSANG HEAL THCARE CO LTD INFOPIA"],
+        ["INFOPIA CO LTD"],
+    ],
+    [
+        ["JOINT STOCK COMPANY POLOTSK-STEKLO"],
+        ["POLOTSK-STEKLOVOLOKNO"],
+    ],
+    [
+        ["PROTEAS SHIPPING AGENCY"],
+        ["PROTEUS SHIPPING PTE. LTD."],
     ],
     [
         ["THE SSZ LTD", "The SSZ Limited"],

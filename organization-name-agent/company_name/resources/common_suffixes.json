@@ -1,4 +1,5 @@
 [
+    ["agency", "agencies"],
     "asset",
     "association",
     "authorised distributor",
@@ -28,6 +29,7 @@
     "general",
     "global",
     ["group", "grup", "grupo"],
+    "handling",
     ["holding", "holdings"],
     "house",
     ["import", "imp", "importacao"],
@@ -58,7 +60,7 @@
     "systems",
     ["technologies", "tech", "technology"],
     ["trading", "trade"],
-    "transportation",
+    ["transportation", "transport"],
     "trust",
     "universal"
 ]
