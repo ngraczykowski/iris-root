@@ -11,7 +11,7 @@ import javax.validation.constraints.Min;
 @ConfigurationProperties(prefix = "ae.comment-input.jdbc")
 @Data
 @Validated
-public class CommentInputJdbcProperties {
+class CommentInputJdbcProperties {
 
   private static final int DEFAULT_MISSING_BATCH_SIZE_SELECT = 8_192;
 

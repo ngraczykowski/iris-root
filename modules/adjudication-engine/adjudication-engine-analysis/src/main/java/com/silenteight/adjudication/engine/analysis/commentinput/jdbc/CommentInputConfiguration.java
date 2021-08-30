@@ -12,7 +12,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Configuration
 @EnableConfigurationProperties(CommentInputJdbcProperties.class)
-public class CommentInputConfiguration {
+class CommentInputConfiguration {
 
   @Valid
   private final CommentInputJdbcProperties properties;
