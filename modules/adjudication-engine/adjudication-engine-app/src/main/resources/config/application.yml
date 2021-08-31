@@ -153,6 +153,12 @@ spring:
       #  just before HikariCP runs `SET SESSION search_path TO '${ae.db.schema}'` which begins
       #  transaction. Thus, with that query as workaround, we force the transaction commit.
       connection-init-sql: SELECT 1
+      # In milliseconds, defaults to 10s, as the default for connect timeout is 10s.
+      validation-timeout: ${ae.db.connections.validation-timeout:10000}
+      # In milliseconds, defaults to 2min.
+      idle-timeout: ${ae.db.connections.idle-timeout:120000}
+      # In milliseconds, defaults to 8min, as the default for socket timeout is 10min.
+      max-lifetime: ${ae.db.connections.max-lifetime:480000}
       # NOTE(ahaczewski): Postgres driver properties. For more information, see
       #  the org.postgresql.PGProperty enum.
       data-source-properties:
