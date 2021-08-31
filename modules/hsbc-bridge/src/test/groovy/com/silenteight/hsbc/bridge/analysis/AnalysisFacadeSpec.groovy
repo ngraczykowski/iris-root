@@ -5,6 +5,7 @@ import com.silenteight.hsbc.bridge.analysis.dto.AnalysisDto
 import spock.lang.Specification
 
 import java.time.Duration
+import java.time.OffsetDateTime
 
 import static java.util.Objects.nonNull
 
@@ -12,8 +13,8 @@ class AnalysisFacadeSpec extends Specification {
 
   def repository = Mock(AnalysisRepository)
   def registerer = Mock(Registerer)
-  def timeoutDuration = Duration.ofMinutes(1)
-  def underTest = new AnalysisFacade(repository, registerer, timeoutDuration)
+  def timeoutCalculator = Mock(AnalysisTimeoutCalculator)
+  def underTest = new AnalysisFacade(repository, registerer, timeoutCalculator)
 
   def fixtures = new Fixtures()
 
@@ -26,6 +27,7 @@ class AnalysisFacadeSpec extends Specification {
 
     then:
     1 * registerer.registerAnalysis(dataset) >> fixtures.analysis
+    1 * timeoutCalculator.determineTimeout(fixtures.analysis.alertCount) >> OffsetDateTime.now()
     1 * repository.save({AnalysisEntity entity ->
               entity.name == fixtures.analysisName && nonNull(entity.timeoutAt)})
 

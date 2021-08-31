@@ -51,7 +51,8 @@ silenteight.bridge:
   ### ANALYSIS ALERT TIMEOUT
 
   analysis:
-    alert-timeout: 5m
+    ### Analysis timeout for 5000 alerts
+    timeout: 1h
 
   ### AWS
 
@@ -186,5 +187,6 @@ spring:
           max-interval: 10000
           multiplier: 1.5
 
-# Metrics configuraton
+# METRICS CONFIGURATION
+
 management.metrics.tags.application: ${spring.application.name}

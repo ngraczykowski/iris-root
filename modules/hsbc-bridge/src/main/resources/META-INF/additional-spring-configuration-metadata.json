@@ -171,9 +171,9 @@
       "description": "Historical decisions model persisted ingoing queue."
     },
     {
-      "name": "silenteight.bridge.analysis.alert-timeout",
+      "name": "silenteight.bridge.analysis.timeout",
       "type": "java.time.Duration",
-      "description": "Duration of analysis timeout for single alert."
+      "description": "Duration of analysis timeout for 5000 alerts."
     },
     {
       "name": "silenteight.bridge.aws.accessKey",

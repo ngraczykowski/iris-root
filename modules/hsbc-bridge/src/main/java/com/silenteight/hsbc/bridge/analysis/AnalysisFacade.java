@@ -6,16 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.analysis.dto.AnalysisDto;
 
-import java.time.Duration;
-import java.time.OffsetDateTime;
-
 @RequiredArgsConstructor
 @Slf4j
 public class AnalysisFacade {
 
   private final AnalysisRepository analysisRepository;
   private final Registerer registerer;
-  private final Duration alertTimeoutDuration;
+  private final AnalysisTimeoutCalculator analysisTimeoutCalculator;
 
   public AnalysisDto createAnalysisWithDataset(@NonNull String dataset) {
     var analysis = registerer.registerAnalysis(dataset);
@@ -25,13 +22,10 @@ public class AnalysisFacade {
   }
 
   private AnalysisEntity saveAnalysisWithTimeout(AnalysisDto analysis) {
-    var timeout = determineTimeout(analysis.getAlertCount());
+    var timeout = analysisTimeoutCalculator.determineTimeout(analysis.getAlertCount());
     var entity = new AnalysisEntity(analysis, timeout);
+
     analysisRepository.save(entity);
     return entity;
-  }
-
-  private OffsetDateTime determineTimeout(long alertsCount) {
-    return OffsetDateTime.now().plus(alertTimeoutDuration.multipliedBy(alertsCount));
   }
 }

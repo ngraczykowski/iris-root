@@ -22,8 +22,7 @@ class AnalysisFacadeConfiguration {
 
   @Bean
   AnalysisFacade analysisFacade() {
-    return new AnalysisFacade(
-        analysisRepository, registerer(), analysisProperties.getAlertTimeout());
+    return new AnalysisFacade(analysisRepository, registerer(), analysisTimeoutCalculator());
   }
 
   @Bean
@@ -41,5 +40,9 @@ class AnalysisFacadeConfiguration {
 
   private AnalysisStatusCalculator analysisStatusCalculator() {
     return new AnalysisStatusCalculator(analysisServiceClient, analysisRepository);
+  }
+
+  private AnalysisTimeoutCalculator analysisTimeoutCalculator() {
+    return new AnalysisTimeoutCalculator(analysisProperties.getTimeout());
   }
 }
