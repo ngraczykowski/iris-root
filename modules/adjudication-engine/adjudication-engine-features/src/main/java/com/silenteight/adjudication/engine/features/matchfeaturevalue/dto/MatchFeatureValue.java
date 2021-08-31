@@ -8,7 +8,7 @@ import com.google.protobuf.Struct;
 
 @Value
 @Builder
-public class MatchFeatureValueDto {
+public class MatchFeatureValue {
 
   long matchId;
 

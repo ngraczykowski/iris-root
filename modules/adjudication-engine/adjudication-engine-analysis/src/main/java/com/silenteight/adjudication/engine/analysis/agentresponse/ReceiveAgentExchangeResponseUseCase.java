@@ -7,7 +7,7 @@ import com.silenteight.adjudication.engine.analysis.agentexchange.AgentExchangeF
 import com.silenteight.adjudication.engine.analysis.agentexchange.domain.DeleteAgentExchangeRequest;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.engine.features.matchfeaturevalue.MatchFeatureValueFacade;
-import com.silenteight.adjudication.engine.features.matchfeaturevalue.dto.MatchFeatureValueDto;
+import com.silenteight.adjudication.engine.features.matchfeaturevalue.dto.MatchFeatureValue;
 import com.silenteight.adjudication.internal.v1.MatchFeaturesUpdated;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 import com.silenteight.agents.v1.api.exchange.AgentOutput;
@@ -104,7 +104,7 @@ class ReceiveAgentExchangeResponseUseCase {
       return outputs.stream().map(AgentOutput::getMatch);
     }
 
-    Stream<MatchFeatureValueDto> featureValues() {
+    Stream<MatchFeatureValue> featureValues() {
       // NOTE(ahaczewski): It is possible to consume only the requested features, instead of
       //  failing. To do so, filter the features list with:
       //
@@ -135,11 +135,11 @@ class ReceiveAgentExchangeResponseUseCase {
     }
 
     @SuppressWarnings("FeatureEnvy")
-    private Stream<? extends MatchFeatureValueDto> mapFeatures(
+    private Stream<? extends MatchFeatureValue> mapFeatures(
         String match, List<Feature> featuresList) {
 
       return featuresList.stream()
-          .map(feature -> MatchFeatureValueDto.builder()
+          .map(feature -> MatchFeatureValue.builder()
               .agentConfigFeatureId(featureToId.get(feature.getFeature()))
               .matchId(ResourceName.create(match).getLong("matches"))
               .value(feature.getFeatureSolution().getSolution())

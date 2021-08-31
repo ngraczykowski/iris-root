@@ -2,7 +2,7 @@ package com.silenteight.adjudication.engine.analysis.agentresponse;
 
 import com.silenteight.adjudication.engine.analysis.agentexchange.AgentExchangeFacade;
 import com.silenteight.adjudication.engine.features.matchfeaturevalue.MatchFeatureValueFacade;
-import com.silenteight.adjudication.engine.features.matchfeaturevalue.dto.MatchFeatureValueDto;
+import com.silenteight.adjudication.engine.features.matchfeaturevalue.dto.MatchFeatureValue;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse.Builder;
 import com.silenteight.agents.v1.api.exchange.AgentOutput;
@@ -41,7 +41,7 @@ class ReceiveAgentExchangeResponseUseCaseTest {
   private ReceiveAgentExchangeResponseUseCase useCase;
 
   @Captor
-  private ArgumentCaptor<Collection<MatchFeatureValueDto>> featureValuesCaptor;
+  private ArgumentCaptor<Collection<MatchFeatureValue>> featureValuesCaptor;
 
   @Mock
   private AgentExchangeFacade agentExchangeFacade;
