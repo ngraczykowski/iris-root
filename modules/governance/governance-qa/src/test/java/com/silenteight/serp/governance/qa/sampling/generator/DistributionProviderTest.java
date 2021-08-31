@@ -28,6 +28,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class DistributionProviderTest {
 
+  private static final long TIMEOUT_MS = 1000L;
+
   @Mock
   private DistributionAlertsServiceBlockingStub distributionStub;
 
@@ -35,7 +37,7 @@ class DistributionProviderTest {
 
   @BeforeEach
   void setUp() {
-    underTest = new DistributionProvider(distributionStub);
+    underTest = new DistributionProvider(distributionStub, TIMEOUT_MS);
   }
 
   @Test
@@ -46,6 +48,7 @@ class DistributionProviderTest {
     List<String> groupingFields = of("riskType", "country");
     ArgumentCaptor<AlertsDistributionRequest> requestArgumentCaptor = ArgumentCaptor
         .forClass(AlertsDistributionRequest.class);
+    when(distributionStub.withDeadlineAfter(anyLong(), any())).thenReturn(distributionStub);
     when(distributionStub.getAlertsDistribution(any())).thenReturn(getAlertsDistributionResponse());
     //when
     underTest.getDistribution(dateRangeDto, groupingFields);

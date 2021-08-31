@@ -29,6 +29,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AlertProviderTest {
 
+  private static final long TIMEOUT_MS = 1000L;
+
   @Mock
   private SamplingAlertsServiceBlockingStub samplingStub;
 
@@ -36,7 +38,7 @@ class AlertProviderTest {
 
   @BeforeEach
   void setUp() {
-    underTest = new AlertProvider(samplingStub);
+    underTest = new AlertProvider(samplingStub, TIMEOUT_MS);
   }
 
   @Test
@@ -48,6 +50,7 @@ class AlertProviderTest {
         .forClass(AlertsSampleRequest.class);
     GetAlertsSampleRequest getAlertsSampleRequest = GetAlertsSampleRequest.of(
         dateRangeDto, of(getDistribution()), 100L);
+    when(samplingStub.withDeadlineAfter(anyLong(), any())).thenReturn(samplingStub);
     when(samplingStub.getAlertsSample(any())).thenReturn(getAlertsSampleResponse());
     //when
     underTest.getAlerts(getAlertsSampleRequest);

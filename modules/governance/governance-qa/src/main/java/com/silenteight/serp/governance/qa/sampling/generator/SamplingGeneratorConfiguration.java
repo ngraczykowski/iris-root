@@ -4,6 +4,7 @@ import lombok.Setter;
 
 import com.silenteight.model.api.v1.DistributionAlertsServiceGrpc;
 import com.silenteight.model.api.v1.SamplingAlertsServiceGrpc;
+import com.silenteight.serp.governance.common.grpc.GrpcCommonProperties;
 import com.silenteight.serp.governance.qa.manage.analysis.create.CreateAlertWithDecisionUseCase;
 import com.silenteight.serp.governance.qa.sampling.domain.AlertSamplingService;
 
@@ -43,18 +44,20 @@ class SamplingGeneratorConfiguration {
   }
 
   @Bean
-  DistributionProvider distributionProvider() {
+  DistributionProvider distributionProvider(
+      @Valid GrpcCommonProperties grpcCommonProperties) {
+
     return new DistributionProvider(
-        DistributionAlertsServiceGrpc
-            .newBlockingStub(warehouseChannel)
-            .withWaitForReady());
+        DistributionAlertsServiceGrpc.newBlockingStub(warehouseChannel).withWaitForReady(),
+        grpcCommonProperties.getTimoutMillis());
   }
 
   @Bean
-  AlertProvider alertProvider() {
+  AlertProvider alertProvider(
+      @Valid GrpcCommonProperties grpcCommonProperties) {
+
     return new AlertProvider(
-        SamplingAlertsServiceGrpc
-            .newBlockingStub(warehouseChannel)
-            .withWaitForReady());
+        SamplingAlertsServiceGrpc.newBlockingStub(warehouseChannel).withWaitForReady(),
+        grpcCommonProperties.getTimoutMillis());
   }
 }
