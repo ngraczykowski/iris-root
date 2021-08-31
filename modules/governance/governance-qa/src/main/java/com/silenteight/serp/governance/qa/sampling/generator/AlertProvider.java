@@ -1,7 +1,7 @@
 package com.silenteight.serp.governance.qa.sampling.generator;
 
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 import com.silenteight.model.api.v1.SampleAlertServiceProto.Alert;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleRequest;
@@ -12,16 +12,22 @@ import com.silenteight.serp.governance.qa.sampling.generator.dto.GetAlertsSample
 import java.util.List;
 
 import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.stream.Collectors.toList;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 class AlertProvider {
 
   @NonNull
   private final SamplingAlertsServiceBlockingStub samplingStub;
 
+  private final long timeoutMs;
+
   List<String> getAlerts(GetAlertsSampleRequest request) {
-    AlertsSampleResponse response = samplingStub.getAlertsSample(getAlertsSampleRequest(request));
+    AlertsSampleResponse response = samplingStub
+        .withDeadlineAfter(timeoutMs, MILLISECONDS)
+        .getAlertsSample(getAlertsSampleRequest(request));
+
     return response
         .getAlertsList()
         .stream()

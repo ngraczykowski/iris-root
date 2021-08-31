@@ -9,6 +9,7 @@ import com.silenteight.sep.auth.authorization.AuthorizationModule;
 import com.silenteight.serp.governance.agent.AgentModule;
 import com.silenteight.serp.governance.branch.BranchModule;
 import com.silenteight.serp.governance.changerequest.ChangeRequestModule;
+import com.silenteight.serp.governance.common.grpc.GrpcCommonModule;
 import com.silenteight.serp.governance.common.integration.AmqpCommonModule;
 import com.silenteight.serp.governance.common.signature.SignatureModule;
 import com.silenteight.serp.governance.common.web.WebModule;
@@ -53,6 +54,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AmqpCommonModule.class,
     AuthenticationModule.class,
     AuthorizationModule.class,
+    GrpcCommonModule.class,
     MailerModule.class,
     WebModule.class,
 })

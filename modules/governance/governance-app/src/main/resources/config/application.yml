@@ -339,3 +339,7 @@ serp.governance.featurevector:
       prefix-and-suffix-regex: ^(features\/)|^(categories\/)|(:solution)$
   event:
     strategy: INGEST #[INGEST,SOLVE]
+
+serp.governance.grpc:
+  client:
+    timeout: 30s
