@@ -71,7 +71,7 @@ class ReceiveAgentExchangeResponseUseCase {
         .addAllMatches(mapper.matches().collect(toUnmodifiableList()))
         .build();
 
-    deleteAgentExchanges(response, agentExchangeRequestId);
+    //deleteAgentExchanges(response, agentExchangeRequestId);
 
     return of(result);
   }
