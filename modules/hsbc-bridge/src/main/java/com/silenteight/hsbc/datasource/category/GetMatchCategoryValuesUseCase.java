@@ -47,10 +47,10 @@ public class GetMatchCategoryValuesUseCase {
 
   private List<CategoryValueDto> addMissingValues(List<String> names) {
     return names.stream().map(n ->
-        CategoryValueDto.builder()
-            .name(n)
-            .values(List.of())
-            .build())
+            CategoryValueDto.builder()
+                .name(n)
+                .values(List.of("NO_DATA"))
+                .build())
         .collect(toList());
   }
 
