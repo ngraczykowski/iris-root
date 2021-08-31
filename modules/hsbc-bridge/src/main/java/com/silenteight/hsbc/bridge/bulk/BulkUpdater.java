@@ -38,6 +38,14 @@ class BulkUpdater {
   }
 
   @Transactional
+  public void updateWithPreProcessingStatus(@NonNull String bulkId) {
+    bulkRepository.findById(bulkId).ifPresent(b -> {
+      b.setStatus(PRE_PROCESSING);
+      bulkRepository.save(b);
+    });
+  }
+
+  @Transactional
   public void updateWithUnavailableRecommendation(String analysis) {
     bulkRepository.findByAnalysisName(analysis).ifPresent(bulk -> {
       bulk.setStatus(ERROR);

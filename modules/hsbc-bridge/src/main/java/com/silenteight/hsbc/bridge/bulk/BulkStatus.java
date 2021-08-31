@@ -4,6 +4,7 @@ public enum BulkStatus {
 
   STORED,
   PRE_PROCESSED,
+  PRE_PROCESSING,
   PROCESSING,
   ERROR,
   COMPLETED,
@@ -11,6 +12,6 @@ public enum BulkStatus {
   CANCELLED;
 
   public boolean isInternal() {
-    return this == PRE_PROCESSED;
+    return this == PRE_PROCESSED || this == PRE_PROCESSING;
   }
 }

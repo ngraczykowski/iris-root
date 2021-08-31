@@ -8,16 +8,14 @@ import com.silenteight.hsbc.bridge.alert.LearningAlertProcessor;
 import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 import com.silenteight.hsbc.bridge.match.MatchIdComposite;
 
-import net.javacrumbs.shedlock.core.LockAssert;
-import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSED;
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSING;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PROCESSING;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -30,31 +28,24 @@ class BulkProcessor {
   private final LearningAlertProcessor learningAlertProcessor;
   private final BulkRepository bulkRepository;
 
-  @Scheduled(fixedDelay = 2 * 1000, initialDelay = 2000)
-  @SchedulerLock(name = "processPreProcessedBulks", lockAtLeastFor = "PT1S", lockAtMostFor = "PT2M")
   @Transactional
-  public void processPreProcessedBulks() {
-    LockAssert.assertLocked();
+  public void tryToProcessBulk() {
+    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(PRE_PROCESSING).ifPresent(bulk -> {
+      log.info("Processing bulk: {}", bulk.getId());
 
-    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(PRE_PROCESSED)
-        .ifPresent(this::tryToProcessBulk);
-  }
-
-  private void tryToProcessBulk(Bulk bulk) {
-    log.info("Processing bulk: {}", bulk.getId());
-
-    try {
-      if (bulk.isLearning()) {
-        processLearningBulk(bulk);
-      } else {
-        processSolvingBulk(bulk);
+      try {
+        if (bulk.isLearning()) {
+          processLearningBulk(bulk);
+        } else {
+          processSolvingBulk(bulk);
+        }
+      } catch (Exception exception) {
+        log.error("Bulk processing failed!", exception);
+        bulk.error("Bulk processing failed due to: " + exception.getMessage());
       }
-    } catch (Exception exception) {
-      log.error("Bulk processing failed!", exception);
-      bulk.error("Bulk processing failed due to: " + exception.getMessage());
-    }
 
-    bulkRepository.save(bulk);
+      bulkRepository.save(bulk);
+    });
   }
 
   private void processSolvingBulk(Bulk bulk) {
