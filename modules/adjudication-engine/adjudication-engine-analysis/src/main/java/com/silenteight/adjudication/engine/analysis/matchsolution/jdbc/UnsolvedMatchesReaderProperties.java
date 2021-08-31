@@ -8,7 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-@ConfigurationProperties(prefix = "ae.analysis.agent-exchange.unsolved-matches-reader")
+@ConfigurationProperties(prefix = "ae.analysis.match-solution.unsolved-matches-reader")
 @Data
 @Validated
 class UnsolvedMatchesReaderProperties {

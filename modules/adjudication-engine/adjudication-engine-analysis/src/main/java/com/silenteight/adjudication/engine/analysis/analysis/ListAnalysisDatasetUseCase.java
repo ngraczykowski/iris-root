@@ -4,13 +4,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.AnalysisDataset;
-import com.silenteight.sep.base.common.exception.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -21,15 +20,8 @@ class ListAnalysisDatasetUseCase {
 
   @Transactional(readOnly = true)
   List<AnalysisDataset> listAnalysisDatasets(List<AnalysisDatasetKey> ids) {
-    List<AnalysisDataset> result = new ArrayList<>();
-
-    for (AnalysisDatasetKey id : ids) {
-      AnalysisDatasetQueryEntity analysisDatasetQueryEntity = analysisDatasetQueryRepository
-          .findById(id)
-          .orElseThrow(() -> new EntityNotFoundException(id));
-      result.add(analysisDatasetQueryEntity.toAnalysisDataset());
-    }
-
-    return result;
+    return analysisDatasetQueryRepository.findAllByIdIn(ids)
+        .map(AnalysisDatasetQueryEntity::toAnalysisDataset)
+        .collect(Collectors.toList());
   }
 }

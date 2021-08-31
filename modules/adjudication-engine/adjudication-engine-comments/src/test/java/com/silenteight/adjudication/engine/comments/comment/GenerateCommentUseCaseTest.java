@@ -30,9 +30,9 @@ class GenerateCommentUseCaseTest {
 
   private static AlertContext randomAlertModel() {
     return AlertContext.builder()
-        .alertId("alert/1")
+        .alertId("alert-1")
         .commentInput(Map.of("o1", "v1", "o2", 1, "o3", List.of("l1", "l2")))
-        .match(MatchContext.builder().matchId("match/1").build())
+        .match(MatchContext.builder().matchId("match-1").build())
         .recommendedAction("NO_DECISION")
         .build();
   }
@@ -102,7 +102,7 @@ class GenerateCommentUseCaseTest {
     @Test
     void shouldGenerateCommentFromStruct() {
       var alertModel = randomAlertModel();
-      var output = "alert/1 v1 1 l1";
+      var output = "alert-1 v1 1 l1";
       var evaluated = facade.generateComment("pebble2", alertModel);
       assertThat(evaluated).isEqualTo(output);
     }

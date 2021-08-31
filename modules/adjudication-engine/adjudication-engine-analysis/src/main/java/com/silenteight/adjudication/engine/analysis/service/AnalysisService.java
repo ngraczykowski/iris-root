@@ -32,19 +32,19 @@ class AnalysisService {
   }
 
   AnalysisDataset addDataset(AddDatasetRequest request) {
-    return analysisFacade.addDatasets(
+    return analysisFacade.batchAddAndListDataset(
         request.getAnalysis(), singletonList(request.getDataset())).get(0);
   }
 
   BatchAddDatasetsResponse batchAddDatasets(BatchAddDatasetsRequest request) {
-    List<AnalysisDataset> datasets = analysisFacade.addDatasets(
+    List<AnalysisDataset> datasets = analysisFacade.batchAddAndListDataset(
         request.getAnalysis(), request.getDatasetsList());
     return BatchAddDatasetsResponse.newBuilder().addAllAnalysisDatasets(datasets).build();
   }
 
   AnalysisAlert addAlert(AddAlertRequest addAlertRequest) {
     return analysisFacade
-        .addAlerts(
+        .batchAddAlert(
             addAlertRequest.getAnalysis(),
             singletonList(addAlertRequest.getAnalysisAlert()))
         .get(0);
@@ -52,7 +52,7 @@ class AnalysisService {
 
   BatchAddAlertsResponse batchAddAlerts(BatchAddAlertsRequest batchAddAlertsRequest) {
     var alerts = analysisFacade
-        .addAlerts(
+        .batchAddAlert(
             batchAddAlertsRequest.getAnalysis(),
             batchAddAlertsRequest.getAnalysisAlertsList());
     return BatchAddAlertsResponse.newBuilder().addAllAnalysisAlerts(alerts).build();

@@ -10,6 +10,7 @@ import java.time.OffsetDateTime;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 
 import static com.silenteight.adjudication.engine.common.protobuf.TimestampConverter.fromOffsetDateTime;
 import static com.silenteight.solving.api.utils.Timestamps.toOffsetDateTime;
@@ -35,7 +36,9 @@ class AnalysisAlertEntity extends BaseEntity {
 
   public static AnalysisAlertEntity fromAnalysisAlert(
       long analysisId, AnalysisAlert analysisAlert) {
+
     long alertId = ResourceName.create(analysisAlert.getAlert()).getLong("alerts");
+
     return AnalysisAlertEntity
         .builder()
         .id(new AnalysisAlertKey(analysisId, alertId))
@@ -46,14 +49,15 @@ class AnalysisAlertEntity extends BaseEntity {
   public AnalysisAlert toAnalysisAlert() {
     return AnalysisAlert
         .newBuilder()
-        .setName(id.toName())
-        .setAlert("alerts/" + id.getAlertId())
+        .setName(id.getName())
+        .setAlert(id.getAlertName())
         .setCreateTime(fromOffsetDateTime(getCreatedAt()))
         .setDeadlineTime(fromOffsetDateTime(getDeadlineAt()))
         .build();
   }
 
-  public String toAlertName() {
-    return id.toName();
+  @Transient
+  public String getName() {
+    return id.getName();
   }
 }

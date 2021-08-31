@@ -7,8 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.List;
+
 import static com.silenteight.adjudication.engine.analysis.analysis.AnalysisFixtures.createAnalysisAlertEntity;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
 class AnalysisAlertRepositoryIT extends BaseDataJpaTest {
@@ -18,7 +20,9 @@ class AnalysisAlertRepositoryIT extends BaseDataJpaTest {
 
   @Test
   void shouldSaveAnalysisAlert() {
-    var entity = repository.save(createAnalysisAlertEntity(1, 1));
-    assertThat(entity.getId().getAlertId()).isEqualTo(1);
+    var entities = repository.saveAll(List.of(createAnalysisAlertEntity(1, 1)));
+    assertThat(entities)
+        .first()
+        .satisfies(r -> assertThat(r.getName()).isEqualTo("analysis/1/alerts/1"));
   }
 }

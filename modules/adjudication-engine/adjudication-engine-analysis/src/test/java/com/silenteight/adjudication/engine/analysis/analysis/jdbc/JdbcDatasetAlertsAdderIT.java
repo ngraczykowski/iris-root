@@ -1,6 +1,6 @@
 package com.silenteight.adjudication.engine.analysis.analysis.jdbc;
 
-import com.silenteight.adjudication.engine.analysis.analysis.DatasetAlertsReader;
+import com.silenteight.adjudication.engine.analysis.analysis.DatasetAlertsAdder;
 import com.silenteight.adjudication.engine.analysis.analysis.domain.AnalysisAlertChunk;
 import com.silenteight.adjudication.engine.testing.JdbcTestConfiguration;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
@@ -14,23 +14,21 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.ArrayList;
-
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {
     JdbcTestConfiguration.class,
-    JdbcAnalysisAlertsReaderConfiguration.class,
+    JdbcDatasetAlertsAdderConfiguration.class,
 })
 @Sql
-class JdbcDatasetAlertsReaderIT extends BaseJdbcTest {
+class JdbcDatasetAlertsAdderIT extends BaseJdbcTest {
 
   @Autowired
-  JdbcAnalysisAlertsReader reader;
+  JdbcDatasetAlertsAdder reader;
 
   @Mock
-  DatasetAlertsReader.ChunkHandler chunkHandler;
+  DatasetAlertsAdder.ChunkHandler chunkHandler;
 
   @Captor
   ArgumentCaptor<AnalysisAlertChunk> analysisAlertChunkArgumentCaptor;
@@ -40,7 +38,7 @@ class JdbcDatasetAlertsReaderIT extends BaseJdbcTest {
 
   @Test
   void shouldSelectInChunks() {
-    var readMatches = reader.read(1, 1, chunkHandler);
+    var readMatches = reader.addAlertsFromDataset(1, 1, chunkHandler);
     assertThat(readMatches).isEqualTo(2);
 
     verify(chunkHandler).handle(analysisAlertChunkArgumentCaptor.capture());
@@ -49,10 +47,12 @@ class JdbcDatasetAlertsReaderIT extends BaseJdbcTest {
 
     var analysisAlertChunk = analysisAlertChunkArgumentCaptor.getValue();
 
-    var alerts = new ArrayList<Long>();
-    analysisAlertChunk.forEach(aac -> alerts.add(aac.getAlertId()));
+    var event = analysisAlertChunk.toAnalysisAlertsAdded();
 
-    assertThat(1).isNotIn(alerts);
+    assertThat(event).hasValueSatisfying(r ->
+        assertThat(r.getAnalysisAlertsList())
+            .containsExactly("analysis/1/alerts/2", "analysis/1/alerts/3"));
+
     assertThat(jdbcTemplate.queryForObject(
         "SELECT count(*) FROM ae_analysis_alert",
         Integer.class)).isEqualTo(3);

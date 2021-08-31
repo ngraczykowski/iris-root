@@ -9,7 +9,7 @@ public class AnalysisAlert {
 
   long alertId;
 
-  public String toName() {
+  public String getName() {
     return "analysis/" + analysisId + "/alerts/" + alertId;
   }
 }

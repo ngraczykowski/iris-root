@@ -10,7 +10,7 @@ import com.silenteight.sep.base.aspects.metrics.Timed;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -21,9 +21,9 @@ class CreateMatchFeatureValuesUseCase {
   private final ProtoMessageToObjectNodeConverter converter;
 
   @Timed(value = "ae.features.use_cases", extraTags = { "package", "matchfeaturevalue" })
+  @Transactional
   void createMatchFeatureValues(Collection<MatchFeatureValueDto> valueDtos) {
-    var entities = valueDtos.stream().map(this::createEntity).collect(Collectors.toList());
-    repository.saveAll(entities);
+    repository.saveAll(() -> valueDtos.stream().map(this::createEntity).iterator());
   }
 
   private MatchFeatureValue createEntity(MatchFeatureValueDto dto) {

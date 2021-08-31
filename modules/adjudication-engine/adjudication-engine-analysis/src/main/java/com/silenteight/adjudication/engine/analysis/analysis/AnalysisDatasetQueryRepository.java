@@ -2,10 +2,11 @@ package com.silenteight.adjudication.engine.analysis.analysis;
 
 import org.springframework.data.repository.Repository;
 
-import java.util.Optional;
+import java.util.Collection;
+import java.util.stream.Stream;
 
 interface AnalysisDatasetQueryRepository
     extends Repository<AnalysisDatasetQueryEntity, AnalysisDatasetKey> {
 
-  Optional<AnalysisDatasetQueryEntity> findById(AnalysisDatasetKey id);
+  Stream<AnalysisDatasetQueryEntity> findAllByIdIn(Collection<AnalysisDatasetKey> ids);
 }

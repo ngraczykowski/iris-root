@@ -7,6 +7,6 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 public class AnalysisChannels {
 
-  public static final String ADDED_ANALYSIS_ALERTS_OUTBOUND_CHANNEL =
-      "addedAnalysisAlertsOutboundChannel";
+  public static final String ANALYSIS_ALERTS_ADDED_OUTBOUND_CHANNEL =
+      "analysisAlertsAddedOutboundChannel";
 }

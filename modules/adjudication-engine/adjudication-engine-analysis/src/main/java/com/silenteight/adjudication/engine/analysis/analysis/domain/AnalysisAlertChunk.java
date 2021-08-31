@@ -1,10 +1,12 @@
 package com.silenteight.adjudication.engine.analysis.analysis.domain;
 
-import com.silenteight.adjudication.engine.analysis.agentexchange.domain.MissingMatchFeature;
+import com.silenteight.adjudication.internal.v1.AnalysisAlertsAdded;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Optional;
+
+import static java.util.Optional.empty;
 
 public class AnalysisAlertChunk {
 
@@ -14,14 +16,12 @@ public class AnalysisAlertChunk {
     this.analysisAlerts = new ArrayList<>(analysisAlerts);
   }
 
-  public int getSize() {
-    return analysisAlerts.size();
-  }
+  public Optional<AnalysisAlertsAdded> toAnalysisAlertsAdded() {
+    if (analysisAlerts.isEmpty())
+      return empty();
 
-  /**
-   * Iterates over a list of {@link MissingMatchFeature}s sorted by agent config.
-   */
-  public void forEach(Consumer<AnalysisAlert> consumer) {
-    analysisAlerts.forEach(consumer);
+    return Optional.of(AnalysisAlertsAdded.newBuilder()
+        .addAllAnalysisAlerts(() -> analysisAlerts.stream().map(AnalysisAlert::getName).iterator())
+        .build());
   }
 }

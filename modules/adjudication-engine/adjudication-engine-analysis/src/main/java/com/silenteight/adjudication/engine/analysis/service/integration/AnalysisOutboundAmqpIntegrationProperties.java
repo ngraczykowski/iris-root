@@ -51,7 +51,7 @@ class AnalysisOutboundAmqpIntegrationProperties {
     private String outboundExchangeName = EVENT_INTERNAL_EXCHANGE_NAME;
 
     @NotNull
-    private String addedAnalysisDatasetsRoutingKey = ADDED_ANALYSIS_ALERTS_ROUTING_KEY;
+    private String analysisAlertsAddedRoutingKey = ANALYSIS_ALERTS_ADDED_ROUTING_KEY;
 
     @NotNull
     private String pendingRecommendationsRoutingKey = PENDING_RECOMMENDATIONS_ROUTING_KEY;

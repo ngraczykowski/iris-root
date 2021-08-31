@@ -23,10 +23,10 @@ public class AnalysisFacade {
   private final GetAnalysisUseCase getAnalysisUseCase;
 
   @NonNull
-  private final AddAndListDatasetsInAnalysisUseCase addAndListDatasetsInAnalysisUseCase;
+  private final AddAndListDatasetInAnalysisUseCase addAndListDatasetInAnalysisUseCase;
 
   @NonNull
-  private final AddAlertsToAnalysisUseCase addAlertsToAnalysisUseCase;
+  private final AddAlertToAnalysisUseCase addAlertToAnalysisUseCase;
 
   @NonNull
   private final GetAnalysisAgentConfigsUseCase getAnalysisAgentConfigsUseCase;
@@ -46,12 +46,12 @@ public class AnalysisFacade {
     return createAndGetAnalysisUseCase.createAndGetAnalysis(analysis);
   }
 
-  public List<AnalysisDataset> addDatasets(String analysis, List<String> datasets) {
-    return addAndListDatasetsInAnalysisUseCase.addAndListDatasets(analysis, datasets);
+  public List<AnalysisDataset> batchAddAndListDataset(String analysis, List<String> datasets) {
+    return addAndListDatasetInAnalysisUseCase.batchAddAndListDataset(analysis, datasets);
   }
 
-  public List<AnalysisAlert> addAlerts(String analysis, List<AnalysisAlert> alerts) {
-    return addAlertsToAnalysisUseCase.addAlerts(analysis, alerts);
+  public List<AnalysisAlert> batchAddAlert(String analysis, List<AnalysisAlert> alerts) {
+    return addAlertToAnalysisUseCase.batchAddAlert(analysis, alerts);
   }
 
   public Analysis getAnalysis(String analysisName) {
@@ -66,11 +66,8 @@ public class AnalysisFacade {
     return findAnalysisByPendingMatchesUseCase.findAnalysisByPendingMatches(matches);
   }
 
-  public PolicyAndFeatureVectorElements getAnalysisPolicyAndFeatureVectorElements(
-      long analysisId) {
-
-    return getPolicyAndFeatureVectorElementsUseCase.getPolicyAndFeatureVectorElements(
-        analysisId);
+  public PolicyAndFeatureVectorElements getAnalysisPolicyAndFeatureVectorElements(long analysisId) {
+    return getPolicyAndFeatureVectorElementsUseCase.getPolicyAndFeatureVectorElements(analysisId);
   }
 
   public String getAnalysisStrategy(long analysisId) {

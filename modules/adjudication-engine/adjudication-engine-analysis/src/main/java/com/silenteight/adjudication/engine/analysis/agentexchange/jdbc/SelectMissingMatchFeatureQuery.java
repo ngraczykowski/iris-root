@@ -97,8 +97,10 @@ class SelectMissingMatchFeatureQuery {
     var lock = new PostgresAdvisoryLock(con, key);
 
     var maybeAcquiredLock = lock.acquire();
-    if (maybeAcquiredLock.isEmpty())
+    if (maybeAcquiredLock.isEmpty()) {
+      log.warn("Failed to acquire lock for analysis: analysisId={}", analysisId);
       return 0;
+    }
 
     try (var acquiredLock = maybeAcquiredLock.get()) {
       return queryTemplate.execute(ROW_MAPPER, new InternalChunkHandler(chunkHandler), ps -> {

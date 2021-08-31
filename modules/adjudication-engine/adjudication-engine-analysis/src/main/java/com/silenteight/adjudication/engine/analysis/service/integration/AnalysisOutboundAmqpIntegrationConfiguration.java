@@ -31,11 +31,11 @@ class AnalysisOutboundAmqpIntegrationConfiguration {
   private final AmqpOutboundFactory outboundFactory;
 
   @Bean
-  IntegrationFlow addedAnalysisDatasetsOutboundIntegrationFlow() {
+  IntegrationFlow analysisAlertsAddedOutboundIntegrationFlow() {
     return createOutboundFlow(
-        AnalysisChannels.ADDED_ANALYSIS_ALERTS_OUTBOUND_CHANNEL,
+        AnalysisChannels.ANALYSIS_ALERTS_ADDED_OUTBOUND_CHANNEL,
         properties.getEventInternal().getOutboundExchangeName(),
-        properties.getEventInternal().getAddedAnalysisDatasetsRoutingKey());
+        properties.getEventInternal().getAnalysisAlertsAddedRoutingKey());
   }
 
   @Bean
@@ -66,7 +66,7 @@ class AnalysisOutboundAmqpIntegrationConfiguration {
       String outboundChannel, String outboundExchangeName, String outboundRoutingKey) {
 
     return from(outboundChannel)
-        .log(Level.TRACE, getClass().getName() + "." + outboundExchangeName)
+        .log(Level.TRACE, getClass().getName() + "." + outboundChannel)
         .handle(createOutboundAdapter(outboundExchangeName, outboundRoutingKey))
         .get();
   }

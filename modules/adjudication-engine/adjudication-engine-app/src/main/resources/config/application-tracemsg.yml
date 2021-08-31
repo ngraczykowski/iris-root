@@ -1,0 +1,8 @@
+# Enables tracing of messages in Spring Integration
+logging:
+  level:
+    com.silenteight.adjudication.engine.analysis.recommendation.integration.MatchesSolvedRecommendationIntegrationFlow: trace
+    com.silenteight.adjudication.engine.analysis.recommendation.integration.CommentInputsUpdatedRecommendationIntegrationFlow: trace
+    com.silenteight.adjudication.engine.analysis.service.integration.AnalysisOutboundAmqpIntegrationConfiguration: trace
+    com.silenteight.adjudication.engine.analysis.service.integration.AnalysisInboundAmqpIntegrationConfiguration: trace
+    com.silenteight.adjudication.engine.analysis.service.integration.AnalysisInternalIntegrationConfiguration: trace

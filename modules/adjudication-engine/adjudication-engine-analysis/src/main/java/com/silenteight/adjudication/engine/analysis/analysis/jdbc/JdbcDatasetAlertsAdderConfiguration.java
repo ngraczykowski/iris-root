@@ -11,15 +11,15 @@ import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @Configuration
-@EnableConfigurationProperties(JdbcAnalysisAlertsReaderProperties.class)
-class JdbcAnalysisAlertsReaderConfiguration {
+@EnableConfigurationProperties(JdbcDatasetAlertsAdderProperties.class)
+class JdbcDatasetAlertsAdderConfiguration {
 
   @Valid
-  private final JdbcAnalysisAlertsReaderProperties properties;
+  private final JdbcDatasetAlertsAdderProperties properties;
 
   @Bean
-  JdbcAnalysisAlertsReader jdbcAnalysisDatasetAlertsReader(DataSource dataSource) {
-    return new JdbcAnalysisAlertsReader(
+  JdbcDatasetAlertsAdder jdbcAnalysisDatasetAlertsReader(DataSource dataSource) {
+    return new JdbcDatasetAlertsAdder(
         dataSource, properties.getChunkSize(), properties.getMaxRows());
   }
 }

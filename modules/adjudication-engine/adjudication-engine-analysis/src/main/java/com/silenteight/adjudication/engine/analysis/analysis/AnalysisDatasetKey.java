@@ -25,4 +25,8 @@ class AnalysisDatasetKey implements Serializable {
   @Column(nullable = false)
   @NonNull
   private Long datasetId;
+
+  String toName() {
+    return "analysis/" + analysisId + "/datasets/" + datasetId;
+  }
 }

@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import javax.persistence.Column;
+import javax.persistence.Transient;
 
 import static lombok.AccessLevel.NONE;
 import static lombok.AccessLevel.PACKAGE;
@@ -26,7 +27,13 @@ class AnalysisAlertKey implements Serializable {
   @NonNull
   private Long alertId;
 
-  String toName() {
+  @Transient
+  String getName() {
     return "analysis/" + getAnalysisId() + "/alerts/" + getAlertId();
+  }
+
+  @Transient
+  String getAlertName() {
+    return "alerts/" + getAlertId();
   }
 }

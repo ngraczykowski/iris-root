@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 @RequiredArgsConstructor
 @Component
-public class SelectFeatureVectorElementsQuery {
+class SelectFeatureVectorElementsQuery {
 
   private static final PolicyAndFeatureVectorElementsMapper ROW_MAPPER =
       new PolicyAndFeatureVectorElementsMapper();

@@ -8,13 +8,13 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-@ConfigurationProperties(prefix = "ae.analysis.analysis-alerts-reader")
+@ConfigurationProperties(prefix = "ae.analysis.analysis.dataset-alerts-adder")
 @Data
 @Validated
-class JdbcAnalysisAlertsReaderProperties {
+class JdbcDatasetAlertsAdderProperties {
 
-  static final int DEFAULT_CHUNK_SIZE = 8_192;
-  static final int DEFAULT_MAX_ROWS = 65_536;
+  static final int DEFAULT_CHUNK_SIZE = 1_024;
+  static final int DEFAULT_MAX_ROWS = 8_192;
 
   @Min(1)
   @Max(1_048_576)

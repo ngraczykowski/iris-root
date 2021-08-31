@@ -17,7 +17,7 @@ class RabbitBrokerConfiguration {
   private static final String DEAD_LETTER_EXCHANGE = "ae.dlx";
 
   @Bean
-  Declarables rabbitBrokerDeclarables() {
+  Declarables rabbitBrokerDefinitions() {
     var errorQueue = queue(ERROR_QUEUE).build();
     var deadLetterQueue = queue(DEAD_LETTER_QUEUE).lazy().build();
 
@@ -39,7 +39,7 @@ class RabbitBrokerConfiguration {
 
     var pendingRecommendation = queueDeadLetter(PENDING_RECOMMENDATION_QUEUE_NAME).build();
     var pendingRecommendationsBinding = bind(pendingRecommendation, eventInternalExchange,
-        ADDED_ANALYSIS_ALERTS_ROUTING_KEY);
+        ANALYSIS_ALERTS_ADDED_ROUTING_KEY);
 
     var agentExchange = queueDeadLetter(AGENT_EXCHANGE_QUEUE_NAME).build();
     var agentExchangeBinding = bind(agentExchange, eventInternalExchange,
