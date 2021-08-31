@@ -153,9 +153,17 @@ spring:
       #  just before HikariCP runs `SET SESSION search_path TO '${ae.db.schema}'` which begins
       #  transaction. Thus, with that query as workaround, we force the transaction commit.
       connection-init-sql: SELECT 1
+      # NOTE(ahaczewski): Postgres driver properties. For more information, see
+      #  the org.postgresql.PGProperty enum.
       data-source-properties:
+        assumeMinServerVersion: "10"
         ApplicationName: Adjudication Engine
         reWriteBatchedInserts: true
+        # NOTE(ahaczewski): The timeouts for Postgres driver are in seconds.
+        connectTimeout: ${ae.db.timeout.connect:10}
+        loginTimeout: ${ae.db.timeout.login:10}
+        cancelSignalTimeout: ${ae.db.timeout.cancel-signal:10}
+        socketTimeout: ${ae.db.timeout.socket:600}
 
   # Database migrations
   liquibase:
