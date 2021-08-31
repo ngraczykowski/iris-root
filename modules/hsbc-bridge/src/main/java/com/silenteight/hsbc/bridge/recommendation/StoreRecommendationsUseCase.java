@@ -20,9 +20,14 @@ class StoreRecommendationsUseCase {
   public void store(@NonNull Collection<RecommendationWithMetadataDto> recommendations) {
     recommendations.forEach(r -> {
       var name = r.getName();
-      save(r);
 
-      log.debug("Recommendation stored, alert={}, recommendation={}", r.getAlert(), name);
+      if (doesNotExist(name)) {
+        save(r);
+        log.debug("Recommendation stored, alert={}, recommendation={}", r.getAlert(), name);
+      } else {
+        log.debug(
+            "Recommendation already exists in DB, alert={}, recommendation={}", r.getAlert(), name);
+      }
     });
   }
 
@@ -37,5 +42,9 @@ class StoreRecommendationsUseCase {
   private RecommendationMetadataEntity createMetadataEntity(RecommendationMetadata metadata) {
     var json = objectMapper.valueToTree(metadata);
     return new RecommendationMetadataEntity(json);
+  }
+
+  private boolean doesNotExist(String name) {
+    return !repository.existsByName(name);
   }
 }
