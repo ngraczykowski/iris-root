@@ -27,7 +27,7 @@ public class MinioStorageManager implements StorageManager {
   }
 
   @Override
-  public boolean storageExist(String storageName) {
+  public boolean exist(String storageName) {
     try {
       return minioClient.bucketExists(BucketExistsArgs.builder().bucket(storageName).build());
     } catch (Exception e) {

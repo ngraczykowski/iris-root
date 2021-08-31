@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 
 import com.silenteight.sep.filestorage.MinioFileStorageConfiguration;
 import com.silenteight.sep.filestorage.api.StorageManager;
-import com.silenteight.sep.filestorage.domain.test.container.MinioContainer.MinioContainerInitializer;
+import com.silenteight.sep.filestorage.container.MinioContainer.MinioContainerInitializer;
 
 import io.minio.*;
 import org.junit.jupiter.api.Test;
@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
-import static com.silenteight.sep.filestorage.testcontants.MinioTestCommons.BUCKET_NAME;
-import static com.silenteight.sep.filestorage.testcontants.MinioTestCommons.FULL_FILE_NAME;
+import static com.silenteight.sep.filestorage.testcommons.MinioTestCommons.BUCKET_NAME;
+import static com.silenteight.sep.filestorage.testcommons.MinioTestCommons.FULL_FILE_NAME;
 import static org.assertj.core.api.Assertions.*;
 
 @ContextConfiguration(initializers = {

@@ -5,7 +5,7 @@ import lombok.SneakyThrows;
 import com.silenteight.sep.filestorage.MinioFileStorageConfiguration;
 import com.silenteight.sep.filestorage.api.FileUploader;
 import com.silenteight.sep.filestorage.api.dto.StoreFileRequestDto;
-import com.silenteight.sep.filestorage.domain.test.container.MinioContainer.MinioContainerInitializer;
+import com.silenteight.sep.filestorage.container.MinioContainer.MinioContainerInitializer;
 
 import io.minio.*;
 import org.junit.jupiter.api.Test;
@@ -17,9 +17,9 @@ import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
-import static com.silenteight.sep.filestorage.testcontants.MinioTestCommons.BUCKET_NAME;
-import static com.silenteight.sep.filestorage.testcontants.MinioTestCommons.FULL_FILE_NAME;
-import static com.silenteight.sep.filestorage.testcontants.MinioTestCommons.MOCK_MULTIPART_FILE;
+import static com.silenteight.sep.filestorage.testcommons.MinioTestCommons.BUCKET_NAME;
+import static com.silenteight.sep.filestorage.testcommons.MinioTestCommons.FULL_FILE_NAME;
+import static com.silenteight.sep.filestorage.testcommons.MinioTestCommons.MOCK_MULTIPART_FILE_TXT;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ContextConfiguration(initializers = {
@@ -42,7 +42,7 @@ class MinioFileUploaderTest {
     createBucket(BUCKET_NAME);
 
     //when
-    underTest.storeFile(FILE_REQUEST_DTO, BUCKET_NAME);
+    underTest.storeFile(FILE_REQUEST_DTO);
 
     //then
     InputStream fileAsStream = minioClient.getObject(
@@ -56,9 +56,10 @@ class MinioFileUploaderTest {
   @SneakyThrows
   private static StoreFileRequestDto createStorageFileRequestDto() {
     return StoreFileRequestDto.builder()
+        .storageName(BUCKET_NAME)
         .fileName(FULL_FILE_NAME)
-        .fileContent(MOCK_MULTIPART_FILE.getInputStream())
-        .fileSize(MOCK_MULTIPART_FILE.getSize())
+        .fileContent(MOCK_MULTIPART_FILE_TXT.getInputStream())
+        .fileSize(MOCK_MULTIPART_FILE_TXT.getSize())
         .build();
   }
 

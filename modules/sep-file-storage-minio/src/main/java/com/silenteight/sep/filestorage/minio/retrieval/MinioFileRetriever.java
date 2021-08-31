@@ -20,13 +20,13 @@ public class MinioFileRetriever implements FileRetriever {
   private final MinioClient minioClient;
 
   @Override
-  public FileDto getFile(String fileName, String storageName) {
-    return getFileDto(fileName, storageName);
+  public FileDto getFile(String storageName, String fileName) {
+    return getFileDto(storageName, fileName);
   }
 
-  private FileDto getFileDto(String fileName, String bucketName) {
+  private FileDto getFileDto(String bucketName, String fileName) {
     try {
-      InputStream fileAsInputStream = getFileAsInputStream(fileName, bucketName);
+      InputStream fileAsInputStream = getFileAsInputStream(bucketName, fileName);
       return convertToFileDto(fileAsInputStream, fileName);
     } catch (Exception e) {
       throw new FileNotFoundException(format("File %s has not been found", fileName));
@@ -35,15 +35,16 @@ public class MinioFileRetriever implements FileRetriever {
 
   private FileDto convertToFileDto(InputStream inputStream, String fileName) throws IOException {
     byte[] bytes = inputStream.readAllBytes();
+    inputStream.close();
 
     return FileDto.builder()
-        .fileName(fileName)
-        .fileContent(new ByteArrayInputStream(bytes))
-        .fileSize(bytes.length)
+        .name(fileName)
+        .content(new ByteArrayInputStream(bytes))
+        .sizeInBytes(bytes.length)
         .build();
   }
 
-  private InputStream getFileAsInputStream(String fileName, String bucketName) throws Exception {
+  private InputStream getFileAsInputStream(String bucketName, String fileName) throws Exception {
     return minioClient.getObject(
         GetObjectArgs.builder()
             .bucket(bucketName)

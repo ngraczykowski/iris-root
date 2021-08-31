@@ -19,26 +19,27 @@ public class MinioFileUploader implements FileUploader {
   private final MinioClient minioClient;
 
   @Override
-  public void storeFile(StoreFileRequestDto file, String storageName) {
-    storeFileInMinio(file, storageName);
+  public void storeFile(StoreFileRequestDto file) {
+    storeFileInMinio(file);
   }
 
-  private void storeFileInMinio(StoreFileRequestDto file, String bucketName) {
+  private void storeFileInMinio(StoreFileRequestDto request) {
     try {
-      PutObjectArgs fileToSave = prepareObjectBasedOnFileToSave(file, bucketName);
+      PutObjectArgs fileToSave = prepareObjectBasedOnFileToSave(request);
       minioClient.putObject(fileToSave);
     } catch (Exception e) {
       throw new FileNotSavedException(
-          format("File %s has not been saved", file.getFileName()), e);
+          format("File %s has not been saved", request.getFileName()), e);
     }
   }
 
   private PutObjectArgs prepareObjectBasedOnFileToSave(
-      StoreFileRequestDto file, String bucketName) {
+      StoreFileRequestDto request) {
+
     return PutObjectArgs.builder()
-        .bucket(bucketName)
-        .object(file.getFileName())
-        .stream(file.getFileContent(), file.getFileSize(), PART_SIZE)
+        .bucket(request.getStorageName())
+        .object(request.getFileName())
+        .stream(request.getFileContent(), request.getFileSize(), PART_SIZE)
         .build();
   }
 }

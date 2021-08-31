@@ -1,4 +1,4 @@
-package com.silenteight.sep.filestorage.domain.test.container;
+package com.silenteight.sep.filestorage.container;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
