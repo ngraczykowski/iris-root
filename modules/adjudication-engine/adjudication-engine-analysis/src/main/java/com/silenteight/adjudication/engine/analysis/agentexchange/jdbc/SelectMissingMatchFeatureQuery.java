@@ -9,13 +9,10 @@ import com.silenteight.adjudication.engine.analysis.agentexchange.domain.Missing
 import com.silenteight.adjudication.engine.analysis.agentexchange.domain.MissingMatchFeatureChunk;
 import com.silenteight.adjudication.engine.common.jdbc.ChunkHandler;
 import com.silenteight.adjudication.engine.common.jdbc.JdbcCursorQueryTemplate;
-import com.silenteight.adjudication.engine.common.jdbc.PostgresAdvisoryLock;
 
 import org.intellij.lang.annotations.Language;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -41,7 +38,6 @@ class SelectMissingMatchFeatureQuery {
   private static final MissingMatchFeatureMapper ROW_MAPPER = new MissingMatchFeatureMapper();
 
   private final JdbcCursorQueryTemplate<MissingMatchFeature> queryTemplate;
-  private final JdbcTemplate lockJdbcTemplate;
   private final int limit;
 
   @SuppressWarnings("FeatureEnvy")
@@ -55,8 +51,6 @@ class SelectMissingMatchFeatureQuery {
         .maxRows(limit)
         .sql(SQL)
         .build();
-
-    lockJdbcTemplate = new JdbcTemplate(dataSource, true);
   }
 
   int execute(long analysisId, MissingMatchFeatureReader.ChunkHandler chunkHandler) {
@@ -68,7 +62,7 @@ class SelectMissingMatchFeatureQuery {
     var total = 0;
 
     do {
-      int count = executeQueryInLock(analysisId, chunkHandler);
+      int count = doExecute(analysisId, chunkHandler);
 
       total += count;
 
@@ -80,34 +74,11 @@ class SelectMissingMatchFeatureQuery {
     return total;
   }
 
-  private int executeQueryInLock(
-      long analysisId, MissingMatchFeatureReader.ChunkHandler chunkHandler) {
-
-    Integer result = lockJdbcTemplate.execute(
-        (Connection con) -> doExecuteQueryInLock(analysisId, chunkHandler, con));
-
-    return result == null ? 0 : result;
-  }
-
-  private int doExecuteQueryInLock(
-      long analysisId, MissingMatchFeatureReader.ChunkHandler chunkHandler, Connection con)
-      throws SQLException {
-
-    var key = SQL.hashCode() * analysisId;
-    var lock = new PostgresAdvisoryLock(con, key);
-
-    var maybeAcquiredLock = lock.acquire();
-    if (maybeAcquiredLock.isEmpty()) {
-      log.warn("Failed to acquire lock for analysis: analysisId={}", analysisId);
-      return 0;
-    }
-
-    try (var acquiredLock = maybeAcquiredLock.get()) {
-      return queryTemplate.execute(ROW_MAPPER, new InternalChunkHandler(chunkHandler), ps -> {
-        ps.setLong(1, analysisId);
-        ps.setInt(2, limit);
-      });
-    }
+  private int doExecute(long analysisId, MissingMatchFeatureReader.ChunkHandler chunkHandler) {
+    return queryTemplate.execute(ROW_MAPPER, new InternalChunkHandler(chunkHandler), ps -> {
+      ps.setLong(1, analysisId);
+      ps.setInt(2, limit);
+    });
   }
 
   private static final class MissingMatchFeatureMapper implements RowMapper<MissingMatchFeature> {
