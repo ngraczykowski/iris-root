@@ -46,10 +46,10 @@ class StoreBulkUseCase {
       alertFacade.createRawAlerts(bulkId, inputStream);
       eventPublisher.publishEvent(new BulkStoredEvent(bulkId));
     } catch (BatchAlertsLimitException e) {
-      setBulkError(bulk, bulkId, e);
+      setBulkError(bulkId, e);
       throw e;
     } catch (Exception e) {
-      setBulkError(bulk, bulkId, e);
+      setBulkError(bulkId, e);
     }
   }
 
@@ -59,10 +59,12 @@ class StoreBulkUseCase {
     }
   }
 
-  private void setBulkError(Bulk bulk, String bulkId, Throwable e) {
+  private void setBulkError(String bulkId, Throwable e) {
     log.error("Cannot create alert data json, batchId = {}", bulkId, e);
-    bulk.error("Unable to create alerts, due to: " + e.getMessage());
-    bulkRepository.save(bulk);
+    bulkRepository.findById(bulkId).ifPresent(bulk -> {
+      bulk.error("Unable to create alerts, due to: " + e.getMessage());
+      bulkRepository.save(bulk);
+    });
   }
 
   @Builder
