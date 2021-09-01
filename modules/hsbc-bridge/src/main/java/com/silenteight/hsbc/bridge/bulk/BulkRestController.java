@@ -3,6 +3,7 @@ package com.silenteight.hsbc.bridge.bulk;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.bulk.StoreBulkUseCase.StoreBulkUseCaseCommand;
+import com.silenteight.hsbc.bridge.bulk.exception.BatchAlertsLimitException;
 import com.silenteight.hsbc.bridge.bulk.exception.BatchIdNotFoundException;
 import com.silenteight.hsbc.bridge.bulk.exception.BatchResultNotAvailableException;
 import com.silenteight.hsbc.bridge.bulk.exception.BatchWithGivenIdAlreadyCreatedException;
@@ -111,6 +112,13 @@ public class BulkRestController {
   public ResponseEntity<ErrorResponse> handleIOExceptionWithBadRequestStatus(
       IOException exception) {
     return getErrorResponse(exception.getMessage(), HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler({ BatchAlertsLimitException.class })
+  @ResponseStatus(value = HttpStatus.PAYLOAD_TOO_LARGE)
+  public ResponseEntity<ErrorResponse> handleExceptionWithPayloadTooLargeStatus(
+      BatchAlertsLimitException exception) {
+    return getErrorResponse(exception.getMessage(), HttpStatus.PAYLOAD_TOO_LARGE);
   }
 
   @ExceptionHandler({ MethodArgumentNotValidException.class })

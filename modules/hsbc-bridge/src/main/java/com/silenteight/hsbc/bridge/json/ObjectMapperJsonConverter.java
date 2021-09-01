@@ -1,10 +1,12 @@
 package com.silenteight.hsbc.bridge.json;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.alert.AlertConversionException;
 import com.silenteight.hsbc.bridge.alert.AlertPayloadConverter;
 import com.silenteight.hsbc.bridge.alert.dto.AlertDataComposite;
+import com.silenteight.hsbc.bridge.bulk.exception.BatchAlertsLimitException;
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -28,6 +30,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
+@RequiredArgsConstructor
 class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverter {
 
   private final TypeReference<Map<String, String>> mapTypeReference = new TypeReference<>() {};
@@ -35,6 +38,7 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
       .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
       .configure(JsonParser.Feature.ALLOW_COMMENTS, true)
       .setSerializationInclusion(Include.NON_NULL);
+  private final int alertLimit;
 
   @Override
   public <T> T convert(byte[] src, Class<T> valueType) throws ObjectConversionException {
@@ -95,10 +99,15 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
       if (parser.nextToken() != JsonToken.START_ARRAY) {
         throw new JsonConversionException("Missing array token at the start of the file");
       }
-
+      var alertCount = 1;
       while (parser.nextToken() == JsonToken.START_OBJECT) {
+        if (alertCount > alertLimit)
+          throw new BatchAlertsLimitException(alertLimit);
         parseAndConsumeAlertData(command, consumer, parser);
+        alertCount++;
       }
+    } catch (BatchAlertsLimitException e) {
+      throw e;
     } catch (RuntimeException exception) {
       log.error("Error on parsing json", exception);
       throw new JsonConversionException("Error on parsing the input stream", exception);

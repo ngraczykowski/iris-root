@@ -8,7 +8,7 @@ import spock.lang.Specification
 class ObjectMapperJsonConverterSpec extends Specification {
 
   static var MAPPER = new ObjectMapper()
-  def underTest = new ObjectMapperJsonConverter()
+  def underTest = new ObjectMapperJsonConverter(10)
 
   def "should map payload to hashmap"(){
     when:

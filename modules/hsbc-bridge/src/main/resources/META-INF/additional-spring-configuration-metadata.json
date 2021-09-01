@@ -261,6 +261,11 @@
       "description": "Cron for name aliases model export."
     },
     {
+      "name": "silenteight.bridge.json.alert-limit",
+      "type": "java.lang.String",
+      "description": "Maximal number of alerts in a single batch."
+    },
+    {
       "name": "silenteight.bridge.category.risk-type-values.SAN",
       "type": "java.util.List",
       "description": "Map's key value SAN for risk type values."

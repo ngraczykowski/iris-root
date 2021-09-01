@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.bulk.event.BulkStoredEvent;
+import com.silenteight.hsbc.bridge.bulk.exception.BatchAlertsLimitException;
 import com.silenteight.hsbc.bridge.bulk.exception.BatchWithGivenIdAlreadyCreatedException;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -44,10 +45,11 @@ class StoreBulkUseCase {
     try {
       alertFacade.createRawAlerts(bulkId, inputStream);
       eventPublisher.publishEvent(new BulkStoredEvent(bulkId));
+    } catch (BatchAlertsLimitException e) {
+      setBulkError(bulk, bulkId, e);
+      throw e;
     } catch (Exception e) {
-      log.error("Cannot create alert data json, batchId = {}", bulkId, e);
-      bulk.error("Unable to create alerts, due to: " + e.getMessage());
-      bulkRepository.save(bulk);
+      setBulkError(bulk, bulkId, e);
     }
   }
 
@@ -55,6 +57,12 @@ class StoreBulkUseCase {
     if (bulkRepository.existsById(bulkId)) {
       throw new BatchWithGivenIdAlreadyCreatedException(bulkId);
     }
+  }
+
+  private void setBulkError(Bulk bulk, String bulkId, Throwable e) {
+    log.error("Cannot create alert data json, batchId = {}", bulkId, e);
+    bulk.error("Unable to create alerts, due to: " + e.getMessage());
+    bulkRepository.save(bulk);
   }
 
   @Builder
