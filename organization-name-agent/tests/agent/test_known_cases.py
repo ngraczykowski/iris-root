@@ -257,6 +257,11 @@ NEGATIVE_CASES = [
         ["4Life UK Ltd", "4LIFE UK LTD"],
         ["TRUST LIFE"],
     ],
+    [
+        ["AKDR DIS.TIC VE LTD"],
+        ["LOCAL DIS TIC LTD STI"],
+        # no match, cause only common suffixes match
+    ],
 ]
 
 

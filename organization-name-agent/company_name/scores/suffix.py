@@ -7,7 +7,7 @@ from company_name.scores.score import Score
 
 def _cast_to_common_base(tokens: TokensSequence) -> str:
     return " ".join(
-        [KnowledgeBase.common_suffixes.source_to_common_base[t] for t in tokens.cleaned_tuple]
+        KnowledgeBase.common_suffixes.source_to_common_base.get(t, t) for t in tokens.cleaned_tuple
     )
 
 
