@@ -9,6 +9,7 @@ import com.silenteight.sens.webapp.backend.user.rest.dto.CreateUserDto;
 import com.silenteight.sens.webapp.backend.user.rest.dto.TemporaryPasswordDto;
 import com.silenteight.sens.webapp.backend.user.rest.dto.UpdateUserDto;
 import com.silenteight.sens.webapp.user.list.ListUsersUseCase;
+import com.silenteight.sens.webapp.user.list.ListUsersWithRoleUseCase;
 import com.silenteight.sens.webapp.user.list.UserListDto;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserIsNotInternalException;
@@ -27,7 +28,6 @@ import com.silenteight.sep.usermanagement.api.dto.RolesDto;
 
 import io.vavr.control.Either;
 import io.vavr.control.Try;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +39,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
@@ -76,6 +77,9 @@ class UserRestController {
 
   @NonNull
   private final ListRolesUseCase listRolesUseCase;
+
+  @NonNull
+  private final ListUsersWithRoleUseCase listUsersWithRoleUseCase;
 
   @GetMapping
   @PreAuthorize("isAuthorized('LIST_USERS')")
@@ -181,6 +185,13 @@ class UserRestController {
   public ResponseEntity<RolesDto> roles() {
     log.info(USER_MANAGEMENT, "Listing roles");
     return ok(listRolesUseCase.apply());
+  }
+
+  @GetMapping("/role/{roleName}")
+  @PreAuthorize("isAuthorized('LIST_USERS')")
+  public List<UserListDto> listUsersWithRole(@PathVariable String roleName) {
+    log.info(USER_MANAGEMENT, "Listing users with roleName={}", roleName);
+    return listUsersWithRoleUseCase.apply(roleName);
   }
 
   @Getter
