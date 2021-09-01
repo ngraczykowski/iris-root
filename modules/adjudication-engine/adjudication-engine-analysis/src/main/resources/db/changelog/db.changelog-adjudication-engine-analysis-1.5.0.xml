@@ -237,4 +237,17 @@
         relativeToChangelogFile="true"/>
   </changeSet>
 
+  <changeSet id="adjudication-engine-analysis-1.5.0_22" author="ahaczewski">
+    <dropView viewName="ae_alert_match_solutions_query"/>
+    <createView
+        viewName="ae_alert_match_solutions_query"
+        path="sql/view_ae_alert_match_solutions_query_v3.sql"
+        relativeToChangelogFile="true"/>
+
+    <createView
+        viewName="ae_pending_alert_matches_query"
+        path="sql/view_ae_pending_alert_matches_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
 </databaseChangeLog>
