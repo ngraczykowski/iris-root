@@ -1,5 +1,7 @@
 package com.silenteight.hsbc.datasource.util;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -7,6 +9,7 @@ import java.util.stream.Stream;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
+@UtilityClass
 public class StreamUtils {
 
   @SafeVarargs

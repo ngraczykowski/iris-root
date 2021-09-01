@@ -10,25 +10,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Collection;
 
-@RequiredArgsConstructor
+import static com.silenteight.hsbc.bridge.util.StreamUtils.distinctBy;
+
 @Slf4j
+@RequiredArgsConstructor
 class StoreRecommendationsUseCase {
 
   private final ObjectMapper objectMapper;
   private final RecommendationRepository repository;
 
   public void store(@NonNull Collection<RecommendationWithMetadataDto> recommendations) {
-    recommendations.forEach(r -> {
-      var name = r.getName();
-
-      if (doesNotExist(name)) {
-        save(r);
-        log.debug("Recommendation stored, alert={}, recommendation={}", r.getAlert(), name);
-      } else {
-        log.debug(
-            "Recommendation already exists in DB, alert={}, recommendation={}", r.getAlert(), name);
-      }
-    });
+    recommendations.stream()
+        .filter(distinctBy(RecommendationWithMetadataDto::getName))
+        .forEach(r -> {
+          save(r);
+          log.debug(
+              "Recommendation stored, alert={}, recommendation={}", r.getAlert(), r.getName());
+        });
   }
 
   private void save(RecommendationWithMetadataDto recommendation) {
@@ -42,9 +40,5 @@ class StoreRecommendationsUseCase {
   private RecommendationMetadataEntity createMetadataEntity(RecommendationMetadata metadata) {
     var json = objectMapper.valueToTree(metadata);
     return new RecommendationMetadataEntity(json);
-  }
-
-  private boolean doesNotExist(String name) {
-    return !repository.existsByName(name);
   }
 }
