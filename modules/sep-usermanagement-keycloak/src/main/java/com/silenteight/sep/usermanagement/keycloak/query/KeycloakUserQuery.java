@@ -7,9 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sep.base.common.time.TimeConverter;
 import com.silenteight.sep.usermanagement.api.UserQuery;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
+import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 import com.silenteight.sep.usermanagement.keycloak.query.lastlogintime.LastLoginTimeProvider;
 import com.silenteight.sep.usermanagement.keycloak.query.role.RolesProvider;
 
+import org.keycloak.admin.client.resource.ClientsResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.UserRepresentation;
 
@@ -24,6 +26,8 @@ import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeN
 import static java.lang.Integer.MAX_VALUE;
 import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
+import static java.util.Set.of;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
 @Slf4j
@@ -38,6 +42,10 @@ public class KeycloakUserQuery implements UserQuery {
   private final RolesProvider userRolesProvider;
   @NonNull
   private final TimeConverter timeConverter;
+  @NonNull
+  private final ClientsResource clientsResource;
+  @NonNull
+  private final ClientQuery clientQuery;
 
   @Override
   public List<UserDto> listAll(Set<String> roleScopes) {
@@ -47,6 +55,19 @@ public class KeycloakUserQuery implements UserQuery {
         .stream()
         .map(userRepresentation -> mapToDto(userRepresentation, roleScopes))
         .collect(toUnmodifiableList());
+  }
+
+  @Override
+  public List<UserDto> listAll(String roleName, String roleScope) {
+    log.info("Listing all users with role name={}", roleName);
+    return clientsResource
+        .get(clientQuery.getByClientId(roleScope).getId())
+        .roles()
+        .get(roleName)
+        .getRoleUserMembers()
+        .stream()
+        .map(userRepresentation -> mapToDto(userRepresentation, of(roleScope)))
+        .collect(toList());
   }
 
   @Override

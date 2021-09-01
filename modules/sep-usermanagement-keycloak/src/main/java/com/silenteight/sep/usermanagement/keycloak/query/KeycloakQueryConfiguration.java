@@ -19,13 +19,17 @@ class KeycloakQueryConfiguration {
   KeycloakUserQuery keycloakUserQuery(
       LastLoginTimeProvider lastLoginTimeProvider,
       RolesProvider rolesProvider,
-      UsersResource usersResource) {
+      UsersResource usersResource,
+      ClientsResource clientsResource,
+      ClientQuery clientQuery) {
 
     return new KeycloakUserQuery(
         usersResource,
         lastLoginTimeProvider,
         rolesProvider,
-        DefaultTimeSource.TIME_CONVERTER);
+        DefaultTimeSource.TIME_CONVERTER,
+        clientsResource,
+        clientQuery);
   }
 
   @Bean

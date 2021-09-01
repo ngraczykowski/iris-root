@@ -18,11 +18,15 @@ import static com.silenteight.sep.usermanagement.api.origin.SensOrigin.SENS_ORIG
 import static com.silenteight.sep.usermanagement.keycloak.origin.ExternalOrigin.EXTERNAL_ORIGIN;
 import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.USER_ROLES_1;
 import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.USER_ROLES_2;
+import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.USER_ROLES_3;
 import static java.time.OffsetDateTime.parse;
 import static java.util.UUID.randomUUID;
 
 class KeycloakUserQueryTestFixtures {
 
+  static final String CLIENT_ID = "TEST_CLIENT";
+  static final String ROLE_NAME = "ROLE_NAME";
+  static final String ROLE_SCOPE = "TEST_SCOPE";
 
   static final KeycloakUser SENS_USER =
       new KeycloakUser(
@@ -40,6 +44,14 @@ class KeycloakUserQueryTestFixtures {
           parse("2011-12-10T15:15:30+01:00"),
           USER_ROLES_2,
           EXTERNAL_ORIGIN);
+  static final KeycloakUser SENS_USER_2 =
+      new KeycloakUser(
+          "tom",
+          "Tom Smith",
+          parse("2011-12-03T10:15:30+01:00"),
+          parse("2011-12-10T15:15:30+01:00"),
+          USER_ROLES_3,
+          SENS_ORIGIN);
 
   @RequiredArgsConstructor
   @Getter

@@ -4,12 +4,14 @@ import com.silenteight.sep.base.common.time.TimeConverter;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.sep.usermanagement.api.dto.UserDto;
 import com.silenteight.sep.usermanagement.keycloak.query.KeycloakUserQueryTestFixtures.KeycloakUser;
+import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 import com.silenteight.sep.usermanagement.keycloak.query.role.InMemoryTestRoleProvider;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.admin.client.resource.*;
+import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -22,11 +24,18 @@ import java.util.Map;
 import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.LOCKED_AT;
 import static com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames.USER_ORIGIN;
 import static com.silenteight.sep.usermanagement.keycloak.query.KeycloakUserQueryTest.KeycloakUserQueryUserDtoAssert.assertThatUserDto;
+import static com.silenteight.sep.usermanagement.keycloak.query.KeycloakUserQueryTestFixtures.CLIENT_ID;
+import static com.silenteight.sep.usermanagement.keycloak.query.KeycloakUserQueryTestFixtures.ROLE_NAME;
+import static com.silenteight.sep.usermanagement.keycloak.query.KeycloakUserQueryTestFixtures.ROLE_SCOPE;
+import static com.silenteight.sep.usermanagement.keycloak.query.KeycloakUserQueryTestFixtures.SENS_USER_2;
 import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.FRONTEND_USER_ROLES_1;
 import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.USER_ROLES_1;
+import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.USER_ROLES_3;
 import static java.lang.Integer.MAX_VALUE;
 import static java.time.OffsetDateTime.now;
+import static java.util.Set.of;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,6 +46,18 @@ class KeycloakUserQueryTest {
 
   @Mock
   private UsersResource usersResource;
+  @Mock
+  private ClientsResource clientsResource;
+  @Mock
+  private ClientQuery clientQuery;
+  @Mock
+  private ClientResource clientResource;
+  @Mock
+  private ClientRepresentation clientRepresentation;
+  @Mock
+  private RolesResource rolesResource;
+  @Mock
+  private RoleResource roleResource;
 
   private InMemoryTestLastLoginTimeProvider lastLoginTimeProvider =
       new InMemoryTestLastLoginTimeProvider();
@@ -48,7 +69,12 @@ class KeycloakUserQueryTest {
   @BeforeEach
   void setUp() {
     underTest = new KeycloakUserQuery(
-        usersResource, lastLoginTimeProvider, roleProvider, TIME_CONVERTER);
+        usersResource,
+        lastLoginTimeProvider,
+        roleProvider,
+        TIME_CONVERTER,
+        clientsResource,
+        clientQuery);
   }
 
   @Test
@@ -75,6 +101,29 @@ class KeycloakUserQueryTest {
             KeycloakUserQueryTestFixtures.SENS_USER))
         .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(
             KeycloakUserQueryTestFixtures.EXTERNAL_USER));
+  }
+
+  @Test
+  void returnUsersWithRoleName() {
+    // given
+    given(clientQuery.getByClientId(any())).willReturn(clientRepresentation);
+    given(clientRepresentation.getId()).willReturn(CLIENT_ID);
+    given(clientsResource.get(any())).willReturn(clientResource);
+    given(clientResource.roles()).willReturn(rolesResource);
+    given(rolesResource.get(any())).willReturn(roleResource);
+    given(roleResource.getRoleUserMembers())
+        .willReturn(of(SENS_USER_2.getUserRepresentation()));
+
+    roleProvider.add(SENS_USER_2.getUserId(), USER_ROLES_3);
+    lastLoginTimeProvider.add(SENS_USER_2.getUserId(), SENS_USER_2.getLastLoginAtDate());
+
+    // when
+    List<UserDto> actual = underTest.listAll(ROLE_NAME, ROLE_SCOPE);
+
+    // then
+    assertThat(actual)
+        .hasSize(1)
+        .anySatisfy(userDto -> assertThatUserDto(userDto).isEqualTo(SENS_USER_2));
   }
 
   @Test
