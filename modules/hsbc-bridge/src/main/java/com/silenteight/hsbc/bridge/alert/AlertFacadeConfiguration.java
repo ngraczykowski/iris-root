@@ -15,7 +15,7 @@ import javax.persistence.EntityManager;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties({ AnalystDecisionProperties.class })
+@EnableConfigurationProperties({ AnalystDecisionProperties.class, LearningProperties.class })
 class AlertFacadeConfiguration {
 
   private final AlertRepository alertRepository;
@@ -25,6 +25,7 @@ class AlertFacadeConfiguration {
   private final AgentApi agentApi;
   private final CustomDateTimeFormatter dateTimeFormatter;
   private final AnalystDecisionProperties decisionProperties;
+  private final LearningProperties learningProperties;
   private final DataRetentionMessageSender dataRetentionMessageSender;
 
   @Bean
@@ -47,8 +48,12 @@ class AlertFacadeConfiguration {
   }
 
   @Bean
-  LearningAlertProcessor learningAlertProcessor() {
-    return new LearningAlertProcessor(alertRepository, alertSender());
+  LearningAlertProcessor learningAlertProcessor(EntityManager entityManager) {
+    return new LearningAlertProcessor(
+        learningProperties.getBatchSize(),
+        entityManager,
+        alertRepository,
+        alertSender());
   }
 
   private AlertSender alertSender() {

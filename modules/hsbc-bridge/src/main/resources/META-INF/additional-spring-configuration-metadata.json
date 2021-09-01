@@ -344,6 +344,11 @@
       "name": "silenteight.bridge.recommendation.userFriendlyValues.LEVEL_3_REVIEW",
       "type": "java.lang.String",
       "description": "User-friendly value for LEVEL 3 REVIEW recommendation."
+    },
+    {
+      "name": "silenteight.bridge.learning.batch-size",
+      "type": "java.lang.String",
+      "description": "Batch size of sending messages for learning data."
     }
   ]
 }

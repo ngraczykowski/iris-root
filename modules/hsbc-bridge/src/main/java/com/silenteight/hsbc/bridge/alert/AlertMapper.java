@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.alert.AlertSender.AlertDataComposite;
+import com.silenteight.hsbc.bridge.alert.dto.AlertEntityDto;
+import com.silenteight.hsbc.bridge.alert.dto.AlertMatchEntityDto;
+import com.silenteight.hsbc.bridge.alert.dto.AlertMetadataDto;
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 import com.silenteight.hsbc.bridge.json.external.model.CaseInformation;
 import com.silenteight.hsbc.bridge.report.Alert;
@@ -38,7 +41,7 @@ class AlertMapper {
 
   private Alert mapToAlert(AlertDataComposite alertInfo) {
     return new Alert() {
-      final AlertEntity entity = alertInfo.getAlertEntity();
+      final AlertEntityDto entity = alertInfo.getAlertEntity();
 
       @Override
       public String getName() {
@@ -64,7 +67,7 @@ class AlertMapper {
     };
   }
 
-  private Map<String, String> createAlertMetadata(AlertEntity alertEntity, AlertData alertData) {
+  private Map<String, String> createAlertMetadata(AlertEntityDto alertEntity, AlertData alertData) {
     var map = new HashMap<String, String>();
     map.put("id", nullToEmpty(alertEntity.getExternalId()));
     map.put("name", nullToEmpty(alertEntity.getName()));
@@ -84,12 +87,12 @@ class AlertMapper {
     return analystDecisionMapper.getAnalystDecision(caseInformation.getCurrentState());
   }
 
-  private Map<String, String> getAlertEntityMetadata(AlertEntity alertEntity) {
+  private Map<String, String> getAlertEntityMetadata(AlertEntityDto alertEntity) {
     return alertEntity.getMetadata().stream()
-        .collect(Collectors.toMap(AlertMetadata::getKey, AlertMetadata::getValue));
+        .collect(Collectors.toMap(AlertMetadataDto::getKey, AlertMetadataDto::getValue));
   }
 
-  private static Match mapToMatch(AlertMatchEntity matchEntity) {
+  private static Match mapToMatch(AlertMatchEntityDto matchEntity) {
     return new Match() {
       @Override
       public String getName() {
@@ -103,7 +106,7 @@ class AlertMapper {
     };
   }
 
-  private static Map<String, String> createMatchMetadata(AlertMatchEntity matchEntity) {
+  private static Map<String, String> createMatchMetadata(AlertMatchEntityDto matchEntity) {
     var map = new HashMap<String, String>();
     map.put("id", nullToEmpty(matchEntity.getExternalId()));
     map.put("name", nullToEmpty(matchEntity.getName()));

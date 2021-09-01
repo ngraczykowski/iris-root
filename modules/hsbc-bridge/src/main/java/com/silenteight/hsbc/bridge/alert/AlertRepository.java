@@ -15,7 +15,7 @@ interface AlertRepository extends Repository<AlertEntity, Long> {
 
   void save(AlertEntity alertEntity);
 
-  List<AlertEntity> findByIdIn(Collection<Long> alertIds);
+  Stream<AlertEntity> findByIdIn(Collection<Long> alertIds);
 
   Optional<AlertEntity> findByName(String name);
 

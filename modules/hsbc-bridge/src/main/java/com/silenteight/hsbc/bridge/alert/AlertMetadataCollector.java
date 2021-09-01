@@ -9,10 +9,10 @@ import com.silenteight.hsbc.bridge.json.external.model.CustomerIndividual;
 
 import java.util.*;
 
-import static com.silenteight.hsbc.bridge.alert.AlertMetadata.MetadataKey.DISCRIMINATOR;
-import static com.silenteight.hsbc.bridge.alert.AlertMetadata.MetadataKey.EXTENDED_ATTRIBUTE_5;
-import static com.silenteight.hsbc.bridge.alert.AlertMetadata.MetadataKey.S8_LOB_COUNTRY_CODE;
-import static com.silenteight.hsbc.bridge.alert.AlertMetadata.MetadataKey.TRACKING_ID;
+import static com.silenteight.hsbc.bridge.alert.dto.MetadataKey.DISCRIMINATOR;
+import static com.silenteight.hsbc.bridge.alert.dto.MetadataKey.EXTENDED_ATTRIBUTE_5;
+import static com.silenteight.hsbc.bridge.alert.dto.MetadataKey.S8_LOB_COUNTRY_CODE;
+import static com.silenteight.hsbc.bridge.alert.dto.MetadataKey.TRACKING_ID;
 
 class AlertMetadataCollector {
 

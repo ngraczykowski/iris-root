@@ -1,6 +1,9 @@
 package com.silenteight.hsbc.bridge.alert
 
 import com.silenteight.hsbc.bridge.alert.AlertSender.AlertDataComposite
+import com.silenteight.hsbc.bridge.alert.dto.AlertEntityDto
+import com.silenteight.hsbc.bridge.alert.dto.AlertMatchEntityDto
+import com.silenteight.hsbc.bridge.alert.dto.AlertMetadataDto
 import com.silenteight.hsbc.bridge.json.external.model.AlertData
 import com.silenteight.hsbc.bridge.json.external.model.CaseInformation
 
@@ -55,31 +58,23 @@ class AlertMapperSpec extends Specification {
 
   static List<AlertDataComposite> ALERT_INFORMATION = [
       new AlertDataComposite(
-        new AlertEntity(
-            id: 10,
-            externalId: "1234",
-            name: "alertName1",
-            discriminator: "someDiscriminator",
-            bulkId: "1",
-            status: AlertStatus.STORED,
-            payload: new AlertDataPayloadEntity(),
-            matches: [
-                new AlertMatchEntity(
-                    id: 1,
-                    externalId: "123",
-                    name: "matchName1"
-                ),
-                new AlertMatchEntity(
-                    id: 2,
-                    externalId: "124",
-                    name: "matchName2"
-                )
-            ],
-            metadata: [
-                new AlertMetadata("extendedAttribute5", "SAN"),
-                new AlertMetadata("trackingId", "ddcc1234")
-            ]
-        ),
+          AlertEntityDto.builder()
+              .externalId("1234")
+              .name("alertName1")
+              .discriminator("someDiscriminator")
+              .bulkId("1")
+              .status(AlertStatus.STORED)
+              .payload(new byte[0])
+              .matches(
+                  [AlertMatchEntityDto.builder().name("matchName1").externalId("123").build(),
+                   AlertMatchEntityDto.builder().name("matchName2").externalId("124").build()
+                  ])
+              .metadata(
+                  [
+                      new AlertMetadataDto("extendedAttribute5", "SAN"),
+                      new AlertMetadataDto("trackingId", "ddcc1234")
+                  ])
+              .build(),
           new AlertData(
               caseInformation: new CaseInformation(
                   currentState: 'someCurrentState'

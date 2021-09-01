@@ -4,15 +4,16 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
+import com.silenteight.hsbc.bridge.alert.dto.AlertEntityDto;
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 import com.silenteight.hsbc.bridge.report.Alert;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.AGENTS;
 import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.WAREHOUSE;
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.ArrayUtils.contains;
 
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ class AlertSender {
   private final AgentApi agentApi;
   private final AlertMapper mapper;
 
-  void send(@NonNull Collection<AlertEntity> alerts, SendOption[] options) {
+  void send(@NonNull Collection<AlertEntityDto> alerts, SendOption[] options) {
     var alertComposites = getAlertInformation(alerts);
 
     if (contains(options, AGENTS)) {
@@ -37,7 +38,7 @@ class AlertSender {
   private void sendToAgents(Collection<AlertDataComposite> alerts) {
     var alertsData = alerts.stream()
         .map(AlertDataComposite::getPayload)
-        .collect(Collectors.toList());
+        .collect(toList());
 
     agentApi.sendIsPep(alertsData);
     agentApi.sendHistorical(alertsData);
@@ -48,10 +49,10 @@ class AlertSender {
     warehouseApi.send(reportAlerts);
   }
 
-  private List<AlertDataComposite> getAlertInformation(Collection<AlertEntity> alerts) {
+  private List<AlertDataComposite> getAlertInformation(Collection<AlertEntityDto> alerts) {
     return alerts.stream()
-        .map(e -> new AlertDataComposite(e, mapper.toAlertData(e.getPayload().getPayload())))
-        .collect(Collectors.toList());
+        .map(a -> new AlertDataComposite(a, mapper.toAlertData(a.getPayload())))
+        .collect(toList());
   }
 
   private Collection<Alert> getReportAlerts(Collection<AlertDataComposite> alerts) {
@@ -61,7 +62,7 @@ class AlertSender {
   @Value
   public static class AlertDataComposite {
 
-    AlertEntity alertEntity;
+    AlertEntityDto alertEntity;
     AlertData payload;
   }
 

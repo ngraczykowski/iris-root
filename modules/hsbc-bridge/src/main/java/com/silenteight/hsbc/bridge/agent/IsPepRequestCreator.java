@@ -13,7 +13,6 @@ import com.silenteight.proto.learningstore.ispep.v1.api.IsPepLearningStoreExchan
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -54,7 +53,7 @@ class IsPepRequestCreator {
             .setValue(e.getCaseComment())
             .setCreatedAt(timestampMapper.toUnixTimestamp(e.getCommentDateTime()))
             .build())
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 
   private Optional<String> findApCountry(List<CustomerIndividual> customers) {

@@ -54,6 +54,11 @@ silenteight.bridge:
     ### Analysis timeout for 5000 alerts
     timeout: 1h
 
+  ### LEARNING
+
+  learning:
+    batch-size: 1000
+
   ### AWS
 
   aws:
@@ -92,7 +97,6 @@ silenteight.bridge:
   nexus.api:
     password: ${NEXUS_PASSWORD:dev}
     username: ${NEXUS_USER:dev}
-
 
   ### UNZIP
 
@@ -169,6 +173,9 @@ spring:
   jpa:
     hibernate.ddl-auto: none
     show-sql: false
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
 
   ### RABBIT
 
