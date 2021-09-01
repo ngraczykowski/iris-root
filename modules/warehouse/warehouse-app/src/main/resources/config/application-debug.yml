@@ -9,14 +9,10 @@ spring:
 
 logging:
   level:
-    ROOT: DEBUG
+    ROOT: INFO
     com.silenteight.sep: DEBUG
     com.silenteight.serp: DEBUG
     com.silenteight.warehouse: DEBUG
-    io.opencensus: INFO
-    io.netty: INFO
-    io.grpc.netty: INFO
-    jdk.internal.httpclient.debug: INFO
 
 management:
   info:
@@ -34,4 +30,4 @@ server:
   error:
     include-stacktrace: on_trace_param
 
-debug: true
+debug: false
