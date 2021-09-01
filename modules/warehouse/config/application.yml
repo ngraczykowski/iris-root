@@ -159,19 +159,66 @@ warehouse.report.statistics:
 
 warehouse.report.rbs:
   production:
+    date-field-name: alert_recommendationDate
     columns:
       - name: alert_fvSignature
-        label: fvSignature
+        label: fv_signature
       - name: alert_policyId
         label: policy_id
+      - name: alert_policy_title
+        label: policy_title
       - name: alert_stepId
         label: step_id
+      - name: alert_step_title
+        label: step_title
       - name: alert_s8_recommendation
-        label: recommended action
-      - name: alert_categories/customerType
-        label: categories/customerType
-      - name: alert_features/name
-        label: features/name
+        label: alert_recommendation
+      - name: alert_extendedAttribute5
+        label: risk_type
+      - name: alert_features/commonAp:solution
+        label: common_ap
+      - name: alert_features/commonMp:solution
+        label: common_mp
+      - name: alert_features/commonNames:solution
+        label: common_names
+      - name: alert_features/dateOfBirth:solution
+        label: date_of_birth
+      - name: alert_features/gender:solution
+        label: gender
+      - name: alert_features/geoPlaceOfBirth:solution
+        label: geo_place_of_birth
+      - name: alert_features/geoResidencies:solution
+        label: geo_residencies
+      - name: alert_features/incorporationCountry:solution
+        label: incorporation_country
+      - name: alert_features/invalidAlert:solution
+        label: invalid_alert
+      - name: alert_features/isApTpMarked:solution
+        label: is_ap_tp_marked
+      - name: alert_features/isCaseTpMarked:solution
+        label: is_case_tp_marked
+      - name: alert_features/isPep:solution
+        label: is_pep
+      - name: alert_features/isTpMarked:solution
+        label: is_tp_marked
+      - name: alert_features/logicalDiscountingDob:solution
+        label: logical_discounting_dob
+      - name: alert_features/name:solution
+        label: name
+      - name: alert_features/nationalIdDocument:solution
+        label: national_id_document
+      - name: alert_features/nationalityCountry:solution
+        label: nationality_country
+      - name: alert_features/otherCountry:solution
+        label: other_country
+      - name: alert_features/otherDocument:solution
+        label: other_document
+      - name: alert_features/passportNumberDocument:solution
+        label: passport_number_document
+      - name: alert_features/registrationCountry:solution
+        label: registration_country
+      - name: alert_features/residencyCountry:solution
+        label: residency_country
     grouping-columns:
       - name: alert_qa.level-0.state
         grouping-values:
@@ -185,22 +232,68 @@ warehouse.report.rbs:
             label: analyst_decision_FP
           - value: analyst_decision_false_positive
             label: analyst_decision_PTP
-    date-field-name: alert_recommendationDate
 
   simulation:
+    date-field-name: index_timestamp
     columns:
-      - name: alert_fvSignature
-        label: fvSignature
-      - name: alert_policyId
+      - name: alert_match_reason:feature_vector_signature
+        label: fv_signature
+      - name: alert_match_reason:policy
         label: policy_id
-      - name: alert_stepId
+      - name: alert_match_reason:policy_title
+        label: policy_title
+      - name: alert_match_reason:step
         label: step_id
-      - name: alert_s8_recommendation
-        label: recommended action
-      - name: alert_categories/customerType
-        label: alert_categories/customerType
-      - name: alert_features/name
-        label: features/name
+      - name: alert_match_reason:step_title
+        label: step_title
+      - name: alert_recommendation_recommended_action
+        label: alert_recommendation
+      - name: alert_categories/hitType
+        label: risk_type
+      - name: alert_features/commonAp:solution
+        label: common_ap
+      - name: alert_features/commonMp:solution
+        label: common_mp
+      - name: alert_features/commonNames:solution
+        label: common_names
+      - name: alert_features/dateOfBirth:solution
+        label: date_of_birth
+      - name: alert_features/gender:solution
+        label: gender
+      - name: alert_features/geoPlaceOfBirth:solution
+        label: geo_place_of_birth
+      - name: alert_features/geoResidencies:solution
+        label: geo_residencies
+      - name: alert_features/incorporationCountry:solution
+        label: incorporation_country
+      - name: alert_features/invalidAlert:solution
+        label: invalid_alert
+      - name: alert_features/isApTpMarked:solution
+        label: is_ap_tp_marked
+      - name: alert_features/isCaseTpMarked:solution
+        label: is_case_tp_marked
+      - name: alert_features/isPep:solution
+        label: is_pep
+      - name: alert_features/isTpMarked:solution
+        label: is_tp_marked
+      - name: alert_features/logicalDiscountingDob:solution
+        label: logical_discounting_dob
+      - name: alert_features/name:solution
+        label: name
+      - name: alert_features/nationalIdDocument:solution
+        label: national_id_document
+      - name: alert_features/nationalityCountry:solution
+        label: nationality_country
+      - name: alert_features/otherCountry:solution
+        label: other_country
+      - name: alert_features/otherDocument:solution
+        label: other_document
+      - name: alert_features/passportNumberDocument:solution
+        label: passport_number_document
+      - name: alert_features/registrationCountry:solution
+        label: registration_country
+      - name: alert_features/residencyCountry:solution
+        label: residency_country
     grouping-columns:
       - name: alert_qa.level-0.state
         grouping-values:
@@ -214,5 +307,3 @@ warehouse.report.rbs:
             label: analyst_decision_FP
           - value: analyst_decision_false_positive
             label: analyst_decision_PTP
-    date-field-name: index_timestamp
-

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.warehouse.test.client.gateway.ProductionIndexClientGateway;
 import com.silenteight.warehouse.test.client.gateway.SimulationIndexClientGateway;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,30 +17,38 @@ import static java.util.UUID.randomUUID;
 class IndexClientConfiguration {
 
   @Bean
+  @Autowired
   @ConditionalOnProperty(value = "test.generator.production-enabled", havingValue = "true")
   ProductionIndexClient productionIndexClient(
-      ProductionIndexClientGateway productionIndexClientGateway) {
+      ProductionIndexClientGateway productionIndexClientGateway, AlertGenerator alertGenerator) {
 
     log.info("ProductionIndexClient created");
-    return new ProductionIndexClient(productionIndexClientGateway, new AlertGenerator());
+    return new ProductionIndexClient(productionIndexClientGateway, alertGenerator);
   }
 
   @Bean
+  @Autowired
   @ConditionalOnProperty(value = "test.generator.simulation-enabled", havingValue = "true")
   SimulationIndexClient simulationIndexClient(
-      SimulationIndexClientGateway simulationIndexClientGateway) {
+      SimulationIndexClientGateway simulationIndexClientGateway, AlertGenerator alertGenerator) {
 
     log.info("SimulationIndexClient created");
     return new SimulationIndexClient(
-        simulationIndexClientGateway, new AlertGenerator(), getAnalysisName());
+        simulationIndexClientGateway, alertGenerator, getAnalysisName());
   }
 
   @Bean
-  AlertGenerator alertGenerator() {
-    return new AlertGenerator();
+  @Autowired
+  AlertGenerator alertGenerator(DataReader dataReader) {
+    return new AlertGenerator(dataReader);
+  }
+
+  @Bean
+  DataReader dataReader() {
+    return new DataReader();
   }
 
   private String getAnalysisName() {
-    return "analysis/" + randomUUID().toString();
+    return "analysis/" + randomUUID();
   }
 }

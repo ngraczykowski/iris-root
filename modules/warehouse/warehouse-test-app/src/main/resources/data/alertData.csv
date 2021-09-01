@@ -1,0 +1,44 @@
+#field;value1,value2,value3
+fvSignature;qC4MMVPvDOpB/vA+hn8tM8mUgt4=,xcR2QVZCxU6bCBRxeghvvOa0BSc=
+recommendation_recommended_action;ACTION_FALSE_POSITIVE,ACTION_POTENTIAL_TRUE_POSITIVE,ACTION_INVESTIGATE
+status;LEARNING_COMPLETED,ERROR
+policyId;policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3,policies/c13b2278-f0d5-4366-a40f-576a3fb4f5a3
+policy_title;PROD Policy for HSBC - PoV v.16
+stepId;steps/5ca9d972-695b-4550-a383-b09311ff42e4
+step_title;STEP 4.0.1 - Escalate based on Key Evidence Match
+extendedAttribute5;SAN,PEP,SCION
+s8_recommendation;ACTION_FALSE_POSITIVE,ACTION_POTENTIAL_TRUE_POSITIVE,ACTION_MANUAL_INVESTIGATION
+features/commonAp:solution;NO
+features/commonMp:solution;NO
+features/commonNames:solution;NO
+features/dateOfBirth:solution;EXACT,NO_DATA
+features/gender:solution;MATCH,NO_DATA
+features/geoPlaceOfBirth:solution;NO_DATA
+features/geoResidencies:solution;CITY_MATCH,NO_DATA
+features/incorporationCountry:solution;NO_DATA
+features/invalidAlert:solution;NO
+features/isApTpMarked:solution;DATA_SOURCE_ERROR,INCONCLUSIVE
+features/isCaseTpMarked:solution;DATA_SOURCE_ERROR,INCONCLUSIVE
+features/isPep:solution;DATA_SOURCE_ERROR
+features/isTpMarked:solution;DATA_SOURCE_ERROR,INCONCLUSIVE
+features/logicalDiscountingDob:solution;INCONCLUSIVE
+features/name:solution;MATCH,DATA_SOURCE_ERROR
+features/nationalIdDocument:solution;NO_DATA
+features/nationalityCountry:solution;NO_DATA
+features/otherCountry:solution;MATCH,NO_DATA
+features/passportNumberDocument:solution;NO_DATA
+features/registrationCountry:solution;NO_DATA
+features/residencyCountry:solution;NO_DATA
+qa.level-0.state;NEW,qa_decision_PASSED,qa_decision_FAILED
+analyst_decision;analyst_decision_unknown,analyst_decision_true_positive,analyst_decision_false_positive
+match_reason:feature_vector_signature;4+LV6i5PjYReGqF3e9eL4Mv3TC8=
+match_reason:policy;policies/dcfd0d54-42d4-4b5e-b105-9f81c2b9529b
+match_reason:policy_title;Working policy for simulation as of 22.07.2021
+match_reason:step;NO_DATA
+match_reason:step_title;NO_DATA
+categories/hitType;SAN,PEP,SCION,SSC
+recommendationYear;2021,2020,2019
+recommendationMonth;8,7,6
+recommendationDate;2021-08-06T09:37:28.558647Z,2021-07-06T09:37:28.559687Z
+s8_country;IN,ID,HK,TR
+DN_CASE.currentState;Level 1 Review,Level 2 Review,Awaiting AAA Adjudication
