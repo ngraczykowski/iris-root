@@ -4,7 +4,7 @@ from typing import Tuple
 import unidecode
 
 POSSIBLE_SEPARATORS = re.compile(r"[-_—]")
-REMOVE_CHARS_REGEX = re.compile(r"[\.\"']")
+REMOVE_CHARS_REGEX = re.compile(r"[\.()\"']")
 
 SPLIT_CHARS_REGEX = re.compile(r",|( -)|(- )|/|\\")
 SPLIT_AND_LEAVE_CHARS_REGEX = re.compile(r"((?<=\w{3})\.|\.(?=\w{3}))")

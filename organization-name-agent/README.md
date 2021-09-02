@@ -147,6 +147,8 @@ Basic application configuration for running agent. Example configuration is stor
 * application.yaml - configuration for external integrations, such as agent exchange or data source
 
 * reduction-rules.yaml - configuration for [scores reduction](#scores-reduction)
+
+* name-preconditions.yaml - configuration of name preconditions necessary to get full solutions range
   
 While starting agent, you can indicate config directory. Currently there is no way to use different configuration in one running agent.
 

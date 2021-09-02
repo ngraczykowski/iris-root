@@ -237,7 +237,20 @@ POSITIVE_CASES = [
     ],
 ]
 
-INCONCLUSIVE_CASES = []
+INCONCLUSIVE_CASES = [
+    [
+        ["QINA LIMITED (FORMERLY"],
+        ["ASIAN INSP LIMITED"],
+    ],
+    [
+        ["AS INVEST PTE C/O AZ CARD"],
+        ["ASIAN INSP LIMITED"],
+    ],
+    [
+        ["XXXXX"],
+        ["Google"],
+    ],
+]
 
 NEGATIVE_CASES = [
     [

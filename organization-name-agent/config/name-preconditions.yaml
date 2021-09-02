@@ -1,0 +1,22 @@
+length:
+    max_length: 40
+    max_unique_tokens: 8
+
+inclusion:
+    without_part:
+        - xxx
+        - xyxy
+        - xzxz
+    without_token:
+        - formerly
+        - former
+        - b/o
+        - bo
+        - c/o
+        - mrs
+        - mr
+
+alphabet:
+    min_acceptable_fraction: 0.5
+    acceptable_alphabets:
+        - latin

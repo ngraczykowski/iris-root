@@ -1,4 +1,5 @@
 import dataclasses
+from typing import Set
 
 from company_name.knowledge_base import KnowledgeBase
 from company_name.names.token import Token
@@ -25,6 +26,16 @@ class NameInformation:
         name_and_other = self.name() + without_weak
         return name_and_other
 
+    def tokens(self) -> Set[Token]:
+        return set(
+            self.common_prefixes
+            + self.base
+            + self.common_suffixes
+            + self.legal
+            + self.other
+            + self.countries
+        ).union(*(p.tokens() for p in self.parenthesis))
+
     def __str__(self) -> str:
         return (
             self.source.original
@@ -48,3 +59,6 @@ class NameInformation:
             + ", ".join(f"{name}={getattr(self, name)!r}" for name in dataclasses.asdict(self))
             + ")"
         )
+
+    def __hash__(self):
+        return hash(self.source)
