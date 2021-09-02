@@ -32,6 +32,9 @@ class MatchEntity extends BaseEntity {
   private String name;
 
   @Setter
+  private String matchName;
+
+  @Setter
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "match_payload_id")
   private MatchPayloadEntity payload;

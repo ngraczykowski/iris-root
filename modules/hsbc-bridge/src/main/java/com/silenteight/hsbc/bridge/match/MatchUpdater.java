@@ -4,8 +4,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.bridge.alert.AlertStatus;
-
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,13 +19,18 @@ class MatchUpdater {
   public void updateNames(@NonNull Map<Long, String> matchIdWithName) {
     log.debug("Updating match names={}", matchIdWithName);
 
-    matchIdWithName.forEach((k,v) -> {
+    matchIdWithName.forEach((k, v) -> {
       var findResult = repository.findById(k);
 
       findResult.ifPresent(alert -> {
         alert.setName(v);
+        alert.setMatchName(getMatchName(v));
         repository.save(alert);
       });
     });
+  }
+
+  private String getMatchName(String alertIdWIthMatchId) {
+    return "matches/" + alertIdWIthMatchId.substring(alertIdWIthMatchId.lastIndexOf('/') + 1);
   }
 }
