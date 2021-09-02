@@ -42,9 +42,9 @@ public class MinioContainer {
     @Override
     public void initialize(ConfigurableApplicationContext context) {
       TestPropertyValues propertyValues = TestPropertyValues.of(
-          "warehouse.minio.url=http://" + getTransportAddress(),
-          "warehouse.minio.access-key=" + ADMIN_ACCESS_KEY,
-          "warehouse.minio.private-key=" + ADMIN_SECRET_KEY
+          "filestorage.minio.url=http://" + getTransportAddress(),
+          "filestorage.minio.access-key=" + ADMIN_ACCESS_KEY,
+          "filestorage.minio.private-key=" + ADMIN_SECRET_KEY
       );
 
       propertyValues.applyTo(context.getEnvironment());

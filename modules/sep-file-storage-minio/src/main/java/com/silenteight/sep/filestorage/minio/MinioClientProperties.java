@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import javax.validation.constraints.NotBlank;
 
 @Data
-@ConfigurationProperties(prefix = "warehouse.minio")
+@ConfigurationProperties(prefix = "filestorage.minio")
 class MinioClientProperties {
 
   @NotBlank
