@@ -37,7 +37,7 @@ class AlertServiceClientMock implements AlertServiceClient {
     return matchIds.stream()
         .map(m -> AlertMatchDto.builder()
             .matchId(m)
-            .name("matches/" + randomUUID())
+            .name("alerts/"+ randomUUID() +"/matches/" + randomUUID())
             .build())
         .collect(Collectors.toList());
   }

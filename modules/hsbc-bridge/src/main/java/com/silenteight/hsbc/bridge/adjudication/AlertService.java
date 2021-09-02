@@ -53,7 +53,8 @@ class AlertService {
           @Override
           public OffsetDateTime getAlertTime() {
             return a.getAlertTime();
-          }});
+          }
+        });
 
     return alertServiceClient.batchCreateAlerts(alertsForCreation).getAlerts();
   }
@@ -79,8 +80,13 @@ class AlertService {
     var response = alertServiceClient.batchCreateAlertMatches(request);
 
     return response.getAlertMatches().stream()
-        .map(a -> new MatchWithAlert(alertInternalId, alertName, a.getMatchId(), a.getName()))
+        .map(a -> new MatchWithAlert(alertInternalId, alertName, a.getMatchId(),
+            getMatchName(a.getName())))
         .collect(Collectors.toList());
+  }
+
+  private String getMatchName(String alertIdWIthMatchId) {
+    return "matches/" + alertIdWIthMatchId.substring(alertIdWIthMatchId.lastIndexOf('/') + 1);
   }
 
   private void publishUpdateAlertsWithNameEvent(
@@ -118,7 +124,7 @@ class AlertService {
       Collection<MatchIdComposite> matchIds, MatchWithAlert matchWithAlert) {
     var matchExternalId = matchWithAlert.getMatchExternalId();
     var id = findMatchInternalIdByExternalId(matchIds, matchExternalId);
-    return new MatchIdWithName(id, matchWithAlert.getName());
+    return new MatchIdWithName(id, matchWithAlert.getMatchName());
   }
 
   private long findMatchInternalIdByExternalId(
@@ -154,6 +160,6 @@ class AlertService {
     private String alertExternalId;
     private String alertName;
     private String matchExternalId;
-    private String name;
+    private String matchName;
   }
 }
