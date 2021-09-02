@@ -256,4 +256,10 @@
         relativeToChangelogFile="true"/>
   </changeSet>
 
+  <changeSet id="adjudication-engine-analysis-1.5.0_24" author="ahaczewski">
+    <sqlFile
+        path="sql/alter_table_set_autovacuum_analyze_threshold.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
 </databaseChangeLog>
