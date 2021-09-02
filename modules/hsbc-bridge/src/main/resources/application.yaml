@@ -120,7 +120,7 @@ silenteight.bridge:
   ### JSON
 
   json:
-    alert-limit: 15000
+    alert-limit: 30000
 
 ### GRPC THREADS AUTOCONFIGURATION (if needed different than default)
 
