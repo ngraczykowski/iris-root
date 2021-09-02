@@ -650,3 +650,9 @@ databaseChangeLog:
       author: mmrowka
       changes:
         - sql: create or replace view hsbc_bridge_match_category_view(id, multi_value, name) as SELECT mc.id,c.multi_value, ((c.name::text) || '/'::text) || m.match_name::text AS name FROM hsbc_bridge_match_category mc, hsbc_bridge_match m, hsbc_bridge_category c WHERE mc.match_id = m.id AND mc.category_id = c.id;
+
+  - changeSet:
+      id: 1.0.0-24
+      author: mmrowka
+      changes:
+        - sql: create or replace view hsbc_bridge_match_category_view(id, multi_value, name) as SELECT mc.id,c.multi_value, ((c.name::text) || '/'::text) || m.name::text AS name FROM hsbc_bridge_match_category mc, hsbc_bridge_match m, hsbc_bridge_category c WHERE mc.match_id = m.id AND mc.category_id = c.id;
