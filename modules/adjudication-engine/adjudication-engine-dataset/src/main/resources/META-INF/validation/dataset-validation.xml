@@ -22,7 +22,7 @@
         <element name="value">1</element>
       </constraint>
       <constraint annotation="javax.validation.constraints.Max">
-        <element name="value">16384</element>
+        <element name="value">30000</element>
       </constraint>
     </field>
     <getter name="dataset">
@@ -43,7 +43,7 @@
         <element name="value">1</element>
       </constraint>
       <constraint annotation="javax.validation.constraints.Max">
-        <element name="value">16384</element>
+        <element name="value">30000</element>
       </constraint>
     </field>
     <getter name="pageToken">
@@ -58,7 +58,7 @@
       <valid/>
       <constraint annotation="javax.validation.constraints.NotEmpty"/>
       <constraint annotation="javax.validation.constraints.Size">
-        <element name="max">16384</element>
+        <element name="max">30000</element>
       </constraint>
     </field>
   </bean>
