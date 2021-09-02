@@ -57,7 +57,7 @@ public class NameInformationGrpcAdapter implements NameInformationServiceClient 
   }
 
   private boolean isWatchlistIdNotFound(Status status) {
-    return status.getCode() == Code.NOT_FOUND;
+    return status.getCode() == Code.NOT_FOUND || status.getCode() == Code.FAILED_PRECONDITION;
   }
 
   private NamesInformationServiceBlockingStub getStub() {
