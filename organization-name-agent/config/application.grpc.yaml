@@ -1,0 +1,5 @@
+agent:
+  processes: 10
+
+  grpc:
+    port: 24804

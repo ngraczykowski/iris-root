@@ -17,7 +17,7 @@ export NOMAD_ADDR="${NOMAD_ADDR:-http://localhost:4646}"
 company_name_agent_artifact_path="$(ls "$scriptdir"/artifacts/company_name-*.pyz)"
 company_name_agent_artifact=$(basename -- "$company_name_agent_artifact_path")
 company_name_agent_version=$(ls -al "$company_name_agent_artifact_path" | awk -F'company_name-|.pyz' '{print $2}')
-company_name_agent_config="company_name_agent_config_${company_name_agent_version}.tgz"
+company_name_agent_config="company_name_config-${company_name_agent_version}.tgz"
 
 
 export NOMAD_VAR_company_name_agent_artifact=${NOMAD_VAR_company_name_agent_artifact:-"${MINIO_ADDR}/artifacts/company-name-agent/${company_name_agent_artifact}"}

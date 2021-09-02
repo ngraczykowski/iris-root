@@ -7,6 +7,9 @@ pipeline {
     environment {
         PYPI_URL = credentials('pypi-readonly-url')
     }
+    options {
+        timeout(time: 1, unit: 'HOURS')   // just to be safe
+    }
 
     stages {
         stage('Prepare python image') {
@@ -46,14 +49,46 @@ pipeline {
             }
         }
 
-        stage('Nomad'){
+        stage('Deployment'){
             agent {
                 label 'nomad'
             }
             stages {
+                stage('Upload artifacts') {
+                    steps {
+                        sh './scripts/clean.sh'
+                        unstash 'artifacts'
+                        rtServer (
+                            id: "silenteight-repo",
+                            url: "https://repo.silenteight.com/artifactory",
+                            credentialsId: "artifactory-deployment-user"
+                        )
+                        rtUpload (
+                            serverId: 'silenteight-repo',
+                            spec: '''{
+                                  "files": [
+                                    {
+                                      "pattern": "dist/*.pyz",
+                                      "target": "dist-public-local/organization-name-agent/"
+                                    }
+                                 ]
+                            }''',
+                        )
+                        rtUpload (
+                            serverId: 'silenteight-repo',
+                            spec: '''{
+                                  "files": [
+                                    {
+                                      "pattern": "dist/*.tgz",
+                                      "target": "dist-public-local/organization-name-agent/"
+                                    }
+                                 ]
+                            }''',
+                        )
+                    }
+                }
                 stage('Prepare nomad artifacts') {
                     steps {
-                        unstash 'artifacts'
                         sh './nomad/prepare.sh'
                     }
                 }

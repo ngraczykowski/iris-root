@@ -1,5 +1,0 @@
-agent:
-  processes: 2
-
-  grpc:
-    port: {{ env "NOMAD_PORT_grpc" }}
