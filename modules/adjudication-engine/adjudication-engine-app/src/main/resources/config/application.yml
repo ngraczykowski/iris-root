@@ -152,7 +152,12 @@ spring:
       #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
       #  just before HikariCP runs `SET SESSION search_path TO '${ae.db.schema}'` which begins
       #  transaction. Thus, with that query as workaround, we force the transaction commit.
-      connection-init-sql: SELECT 1
+      # The statement sets session timeouts to 8 minutes and it's executed on each connection.
+      connection-init-sql: |
+        SET SESSION statement_timeout = 480000;
+        SET SESSION lock_timeout = 480000;
+        SET SESSION idle_in_transaction_session_timeout = 480000;
+        SELECT 1;
       # In milliseconds, defaults to 10s, as the default for connect timeout is 10s.
       validation-timeout: ${ae.db.connections.validation-timeout:10000}
       # In milliseconds, defaults to 2min.
