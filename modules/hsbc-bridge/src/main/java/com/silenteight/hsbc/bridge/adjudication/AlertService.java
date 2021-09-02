@@ -80,13 +80,8 @@ class AlertService {
     var response = alertServiceClient.batchCreateAlertMatches(request);
 
     return response.getAlertMatches().stream()
-        .map(a -> new MatchWithAlert(alertInternalId, alertName, a.getMatchId(),
-            getMatchName(a.getName())))
+        .map(a -> new MatchWithAlert(alertInternalId, alertName, a.getMatchId(),a.getName()))
         .collect(Collectors.toList());
-  }
-
-  private String getMatchName(String alertIdWIthMatchId) {
-    return "matches/" + alertIdWIthMatchId.substring(alertIdWIthMatchId.lastIndexOf('/') + 1);
   }
 
   private void publishUpdateAlertsWithNameEvent(
