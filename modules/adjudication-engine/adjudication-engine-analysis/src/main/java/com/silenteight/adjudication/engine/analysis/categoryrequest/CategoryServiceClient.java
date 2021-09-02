@@ -71,8 +71,7 @@ class CategoryServiceClient {
           .withDeadline(deadline)
           .batchGetMatchCategoryValues(request);
     } catch (StatusRuntimeException status) {
-      log.warn("Oh well, data source failed to tell us categories... we'll figuring it"
-          + " out ourselves");
+      log.warn("Request to the categories service failed", status);
       response = BatchGetMatchCategoryValuesResponse.getDefaultInstance();
     }
 
