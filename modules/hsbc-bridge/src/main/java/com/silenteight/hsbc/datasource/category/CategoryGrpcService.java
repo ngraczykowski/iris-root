@@ -41,7 +41,7 @@ class CategoryGrpcService extends CategoryServiceImplBase {
 
   private BatchGetMatchCategoryValuesResponse getMatchCategoryValues(
       BatchGetMatchCategoryValuesRequest request) {
-    log.info("NOMAD: received getMatchCategoryValues request");
+    log.info("NOMAD: received getMatchCategoryValues request: " + request.getMatchValuesList());
 
     var command = GetMatchCategoryValuesCommand.builder()
         .matchValues(request.getMatchValuesList())
