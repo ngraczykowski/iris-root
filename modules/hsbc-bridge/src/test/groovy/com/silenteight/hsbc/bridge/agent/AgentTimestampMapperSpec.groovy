@@ -6,17 +6,17 @@ import spock.lang.Specification
 
 class AgentTimestampMapperSpec extends Specification {
 
-  def dateTimeFormatter = new CustomDateTimeFormatter("dd-MMM-yy")
+  def dateTimeFormatter = new CustomDateTimeFormatter("yyyy-MMM-dd HH:mm:ss")
   def underTest = new AgentTimestampMapper(dateTimeFormatter.getDateTimeFormatter())
 
-  static String RAW_DATE = "10-DEC-19"
+  static String RAW_DATE = "2020-DEC-30 09:20:06"
 
   def "Should parse date to unix timestamp"() {
     when:
     def result = underTest.toUnixTimestamp(RAW_DATE)
 
     then:
-    result == 1575936000
+    result == 1609286400
   }
 
   def "Should throw DateParsingException when parameter is empty"() {

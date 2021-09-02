@@ -15,7 +15,7 @@ class AlertTimeCalculatorSpec extends Specification {
 
   @Shared
   def invalidDate = '12'
-  def dateTimeFormatter = new CustomDateTimeFormatter("dd-MMM-yy")
+  def dateTimeFormatter = new CustomDateTimeFormatter("yyyy-MMM-dd HH:mm:ss")
   def underTest = new AlertTimeCalculator(dateTimeFormatter.getDateTimeFormatter())
 
   @Unroll
@@ -33,28 +33,28 @@ class AlertTimeCalculatorSpec extends Specification {
     result == expectedResult
 
     where:
-    createdDate | modifiedDate | updatedDateTime | expectedResult
-    null        | null         | null            | empty()
-    null        | null         | ''              | empty()
-    null        | ''           | null            | empty()
-    ''          | null         | null            | empty()
-    null        | ''           | ''              | empty()
-    ''          | ''           | null            | empty()
-    ''          | null         | ''              | empty()
-    invalidDate | invalidDate  | invalidDate     | empty()
-    null        | invalidDate  | invalidDate     | empty()
-    invalidDate | null         | invalidDate     | empty()
-    invalidDate | invalidDate  | null            | empty()
-    null        | null         | invalidDate     | empty()
-    null        | invalidDate  | invalidDate     | empty()
-    '15-FEB-21' | invalidDate  | invalidDate     | empty()
-    invalidDate | '15-FEB-21'  | invalidDate     | empty()
-    invalidDate | '15-FEB-21'  | '15-FEB-21'     | of(parse('2021-02-15T00:00Z'))
-    invalidDate | invalidDate  | '15-FEB-21'     | of(parse('2021-02-15T00:00Z'))
-    '18-FEB-21' | '15-FEB-21'  | invalidDate     | empty()
-    '15-FEB-21' | '18-FEB-21'  | invalidDate     | of(parse('2021-02-15T00:00Z'))
-    '15-FEB-21' | invalidDate  | '18-FEB-21'     | of(parse('2021-02-18T00:00Z'))
-    '15-FEB-21' | '18-FEB-21'  | '18-FEB-21'     | of(parse('2021-02-15T00:00Z'))
-    '18-FEB-21' | '15-FEB-21'  | '20-FEB-21'     | of(parse('2021-02-20T00:00Z'))
+    createdDate            | modifiedDate           | updatedDateTime        | expectedResult
+    null                   | null                   | null                   | empty()
+    null                   | null                   | ''                     | empty()
+    null                   | ''                     | null                   | empty()
+    ''                     | null                   | null                   | empty()
+    null                   | ''                     | ''                     | empty()
+    ''                     | ''                     | null                   | empty()
+    ''                     | null                   | ''                     | empty()
+    invalidDate            | invalidDate            | invalidDate            | empty()
+    null                   | invalidDate            | invalidDate            | empty()
+    invalidDate            | null                   | invalidDate            | empty()
+    invalidDate            | invalidDate            | null                   | empty()
+    null                   | null                   | invalidDate            | empty()
+    null                   | invalidDate            | invalidDate            | empty()
+    '2021-FEB-15 09:20:06' | invalidDate            | invalidDate            | empty()
+    invalidDate            | '2021-FEB-15 09:20:06' | invalidDate            | empty()
+    invalidDate            | '2021-FEB-15 09:20:06' | '2021-FEB-15 09:20:06' | of(parse('2021-02-15T00:00Z'))
+    invalidDate            | invalidDate            | '2021-FEB-15 09:20:06' | of(parse('2021-02-15T00:00Z'))
+    '2021-FEB-18 09:20:06' | '2021-FEB-15 09:20:06' | invalidDate            | empty()
+    '2021-FEB-15 09:20:06' | '2021-FEB-18 09:20:06' | invalidDate            | of(parse('2021-02-15T00:00Z'))
+    '2021-FEB-15 09:20:06' | invalidDate            | '2021-FEB-18 09:20:06' | of(parse('2021-02-18T00:00Z'))
+    '2021-FEB-15 09:20:06' | '2021-FEB-18 09:20:06' | '2021-FEB-18 09:20:06' | of(parse('2021-02-15T00:00Z'))
+    '2021-FEB-18 09:20:06' | '2021-FEB-15 09:20:06' | '2021-FEB-20 09:20:06' | of(parse('2021-02-20T00:00Z'))
   }
 }

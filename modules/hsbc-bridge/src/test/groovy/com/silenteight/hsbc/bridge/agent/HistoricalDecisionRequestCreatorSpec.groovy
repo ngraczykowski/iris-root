@@ -8,7 +8,7 @@ import spock.lang.Specification
 
 class HistoricalDecisionRequestCreatorSpec extends Specification {
 
-  def dateTimeFormatter = new CustomDateTimeFormatter("dd-MMM-yy")
+  def dateTimeFormatter = new CustomDateTimeFormatter("yyyy-MMM-dd HH:mm:ss")
   def timestampMapper = new AgentTimestampMapper(dateTimeFormatter.getDateTimeFormatter())
   def underTest = new HistoricalDecisionRequestCreator(timestampMapper)
 
@@ -28,7 +28,7 @@ class HistoricalDecisionRequestCreatorSpec extends Specification {
 
     def decision = alert.decisionsList.first()
     decision.value == "newValue"
-    decision.createdAt == 1262304000
+    decision.createdAt == 1609286400
   }
 
   AlertData getAlertData(){

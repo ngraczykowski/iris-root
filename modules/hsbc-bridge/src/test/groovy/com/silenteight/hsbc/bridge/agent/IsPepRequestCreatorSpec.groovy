@@ -8,7 +8,7 @@ import spock.lang.Specification
 
 class IsPepRequestCreatorSpec extends Specification {
 
-  def dateTimeFormatter = new CustomDateTimeFormatter("dd-MMM-yy")
+  def dateTimeFormatter = new CustomDateTimeFormatter("yyyy-MMM-dd HH:mm:ss")
   def timestampMapper = new AgentTimestampMapper(dateTimeFormatter.getDateTimeFormatter())
   def underTest = new IsPepRequestCreator(timestampMapper)
 
@@ -29,7 +29,7 @@ class IsPepRequestCreatorSpec extends Specification {
     def comment = alert.commentsList.first()
     comment.id == "1"
     comment.value == "someComment"
-    comment.createdAt == 1262304000
+    comment.createdAt == 1609286400
   }
 
   AlertData getAlertData() {

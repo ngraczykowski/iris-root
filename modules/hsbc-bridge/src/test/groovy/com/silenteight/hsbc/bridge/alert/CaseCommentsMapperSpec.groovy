@@ -8,7 +8,7 @@ import spock.lang.Specification
 class CaseCommentsMapperSpec extends Specification {
 
   def fixtures = new Fixtures()
-  def dateTimeFormatter = new CustomDateTimeFormatter("dd-MMM-yy")
+  def dateTimeFormatter = new CustomDateTimeFormatter("yyyy-MMM-dd HH:mm:ss")
   def underTest = new CaseCommentsMapper(dateTimeFormatter.getDateTimeFormatter())
 
   def "should find and return lastCaseComment and lastCaseCommentDateTime"() {
@@ -19,7 +19,7 @@ class CaseCommentsMapperSpec extends Specification {
     def result = underTest.getLastCaseCommentWithDate(input)
 
     then:
-    result.get("lastCaseCommentDateTime") == "11-SEP-19"
+    result.get("lastCaseCommentDateTime") == "2019-SEP-11 09:20:06"
     result.get("lastCaseComment") == "last_comment_value"
   }
 
@@ -39,11 +39,11 @@ class CaseCommentsMapperSpec extends Specification {
 
     List<CaseComment> caseComments = [
         new CaseComment(
-            commentDateTime: '30-SEP-21',
+            commentDateTime: '2021-SEP-30 09:20:06',
             caseComment: 'newest_comment_value'
         ),
         new CaseComment(
-            commentDateTime: '11-SEP-19',
+            commentDateTime: '2019-SEP-11 09:20:06',
             caseComment: ''
         ),
         new CaseComment(
@@ -55,7 +55,7 @@ class CaseCommentsMapperSpec extends Specification {
             caseComment: ''
         ),
         new CaseComment(
-            commentDateTime: '11-SEP-19',
+            commentDateTime: '2019-SEP-11 09:20:06',
             caseComment: 'last_comment_value'
         )
     ]
