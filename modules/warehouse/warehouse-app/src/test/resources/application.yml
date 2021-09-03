@@ -53,6 +53,8 @@ warehouse:
     name: warehouse
     username: warehouse
     password: warehouse
+  sampling:
+    time-field-name: alert_recommendationDate
 
 warehouse.report.billing:
   year-field-name: alert_recommendationYear
