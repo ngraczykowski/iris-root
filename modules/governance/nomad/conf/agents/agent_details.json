@@ -5,13 +5,13 @@
       "features/name"
     ],
     "responses": [
-      "STRONG_MATCH",
+      "EXACT MATCH",
+      "STRONG MATCH",
       "MATCH",
-      "WEAK_MATCH",
-      "NO_MATCH",
-      "EXACT_MATCH",
-      "HQ_NO_MATCH",
-      "NO_DATA",
+      "WEAK MATCH",
+      "NO MATCH",
+      "HQ NO MATCH",
+      "NO DATA",
       "INCONCLUSIVE"
     ],
     "configurations": [
@@ -133,7 +133,6 @@
     "responses": [
       "TRUE_POSITIVE",
       "NOT_TRUE_POSITIVE",
-      "INCONCLUSIVE",
       "NO_DATA"
     ],
     "configurations": [
