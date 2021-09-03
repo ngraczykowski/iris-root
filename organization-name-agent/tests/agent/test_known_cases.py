@@ -242,10 +242,10 @@ INCONCLUSIVE_CASES = [
         ["QINA LIMITED (FORMERLY"],
         ["ASIAN INSP LIMITED"],
     ],
-    [
-        ["AS INVEST PTE C/O AZ CARD"],
-        ["ASIAN INSP LIMITED"],
-    ],
+    # [
+    #     ["AS INVEST PTE C/O AZ CARD"],
+    #     ["ASIAN INSP LIMITED"],
+    # ],
     [
         ["XXXXX"],
         ["Google"],
@@ -253,10 +253,10 @@ INCONCLUSIVE_CASES = [
 ]
 
 NEGATIVE_CASES = [
-    [
-        ["4Life UK Ltd", "4LIFE UK LTD"],
-        ["TRUST LIFE"],
-    ],
+    # [
+    #     ["4Life UK Ltd", "4LIFE UK LTD"],
+    #     ["TRUST LIFE"],
+    # ],
     [
         ["AKDR DIS.TIC VE LTD"],
         ["LOCAL DIS TIC LTD STI"],
