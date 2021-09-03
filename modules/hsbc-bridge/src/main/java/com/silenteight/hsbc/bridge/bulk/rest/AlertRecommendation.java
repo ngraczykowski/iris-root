@@ -46,8 +46,6 @@ public class AlertRecommendation {
   private String recommendation = null;
 
   @JsonProperty("comment")
-  @NotNull
-  @NotBlank
   private String comment = null;
 
   @JsonProperty("policy_id")
