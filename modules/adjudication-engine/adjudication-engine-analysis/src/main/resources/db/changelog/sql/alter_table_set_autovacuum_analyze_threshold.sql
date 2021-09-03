@@ -11,7 +11,7 @@ ALTER TABLE ae_dataset_alert
 ALTER TABLE ae_match
   SET (autovacuum_analyze_threshold = 50000, autovacuum_analyze_scale_factor = 0, autovacuum_vacuum_threshold = 100000, autovacuum_vacuum_scale_factor = 0);
 ALTER TABLE ae_match_category_value
-  SET (autovacuum_analyze_threshold = 1000000, autovacuum_analyze_scale_factor = 0, autovacuum_vacuum_threshold = 2000000, autovacuum_vacuum_scale_factor = 0);
+  SET (autovacuum_analyze_threshold = 100000, autovacuum_analyze_scale_factor = 0, autovacuum_vacuum_threshold = 200000, autovacuum_vacuum_scale_factor = 0);
 ALTER TABLE ae_match_feature_value
   SET (autovacuum_analyze_threshold = 1000000, autovacuum_analyze_scale_factor = 0, autovacuum_vacuum_threshold = 2000000, autovacuum_vacuum_scale_factor = 0);
 ALTER TABLE ae_match_solution

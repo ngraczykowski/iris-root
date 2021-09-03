@@ -250,11 +250,17 @@
         relativeToChangelogFile="true"/>
   </changeSet>
 
+  <!--
+    XXX(ahaczewski): Commented out temporarily, as we're trying to figure out the right
+      configuration for the production rollout. Uncomment when you're sure of what you're doing.
+  -->
+  <!--
   <changeSet id="adjudication-engine-analysis-1.5.0_23" author="ahaczewski" runAlways="true">
     <sqlFile
         path="sql/alter_table_set_autovacuum_analyze_threshold.sql"
         relativeToChangelogFile="true"/>
   </changeSet>
+  -->
 
   <!-- NOTE(ahaczewski): The `adjudication-engine-analysis-1.5.0_24` is intentionally left out! -->
 
