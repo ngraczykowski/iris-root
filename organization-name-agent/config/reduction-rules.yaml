@@ -24,7 +24,7 @@ rules:
     solutions:
       - solution: NO_MATCH
         label: NO_MATCH
-        threshold: 0.9
+        threshold: 0.95
       - solution: MATCH
         label: MATCH
         threshold: 0
