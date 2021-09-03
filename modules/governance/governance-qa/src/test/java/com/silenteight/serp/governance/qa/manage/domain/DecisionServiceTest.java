@@ -3,6 +3,7 @@ package com.silenteight.serp.governance.qa.manage.domain;
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.serp.governance.qa.manage.analysis.details.DecisionAlreadyExistsException;
 import com.silenteight.serp.governance.qa.manage.domain.dto.CreateDecisionRequest;
+import com.silenteight.serp.governance.qa.manage.domain.dto.EraseDecisionCommentRequest;
 import com.silenteight.serp.governance.qa.manage.domain.dto.UpdateDecisionRequest;
 import com.silenteight.serp.governance.qa.manage.domain.exception.AlertAlreadyProcessedException;
 import com.silenteight.serp.governance.qa.manage.domain.exception.WrongDiscriminatorException;
@@ -261,5 +262,31 @@ class DecisionServiceTest {
     assertThat(alertDto.getLevel()).isEqualTo(ANALYSIS);
     assertThat(alertDto.getState()).isEqualTo(FAILED);
     assertThat(alertDto.getComment()).isEqualTo(COMMENT_FAILED);
+  }
+
+  @Test
+  void eraseCommentShouldSetNullForDecisionComment() {
+    //given
+    Alert alert = saveAlert(DISCRIMINATOR);
+    Decision decision = saveDecision(LEVEL_ANALYSIS.getValue(), NEW, CREATED_AT, alert.getId());
+    EraseDecisionCommentRequest.of(
+        DISCRIMINATOR, LEVEL_ANALYSIS, "governance-app", CREATED_AT);
+    //when
+    underTest.eraseComment(EraseDecisionCommentRequest.of(
+        DISCRIMINATOR, LEVEL_ANALYSIS, "governance-app", CREATED_AT));
+    //then
+    Decision updated = decisionRepository.getById(decision.getId());
+    assertThat(updated.getComment()).isNull();
+    assertThat(updated.getState()).isEqualTo(decision.getState());
+    assertThat(updated.getLevel()).isEqualTo(decision.getLevel());
+  }
+
+  @Test
+  void eraseCommentShouldThrowExceptionWhenDiscriminatorDoesNotExist() {
+    EraseDecisionCommentRequest request = EraseDecisionCommentRequest.of(
+        DISCRIMINATOR, LEVEL_ANALYSIS, "governance-app", CREATED_AT);
+    assertThatThrownBy(() -> underTest.eraseComment(request))
+        .isInstanceOf(WrongDiscriminatorException.class)
+        .hasMessageContaining(format("Could not find alert with discriminator=", DISCRIMINATOR));
   }
 }

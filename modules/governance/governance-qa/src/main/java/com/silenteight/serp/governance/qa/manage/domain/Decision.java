@@ -77,4 +77,8 @@ class Decision extends BaseAggregateRoot implements IdentifiableEntity {
       setUpdatedAt(now());
     }
   }
+
+  void eraseComment() {
+    setComment(null);
+  }
 }

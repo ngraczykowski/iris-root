@@ -2,10 +2,12 @@ package com.silenteight.serp.governance.qa.manage.domain;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.serp.governance.qa.manage.analysis.details.DecisionAlreadyExistsException;
 import com.silenteight.serp.governance.qa.manage.domain.dto.CreateDecisionRequest;
+import com.silenteight.serp.governance.qa.manage.domain.dto.EraseDecisionCommentRequest;
 import com.silenteight.serp.governance.qa.manage.domain.dto.UpdateDecisionRequest;
 import com.silenteight.serp.governance.qa.manage.domain.exception.AlertAlreadyProcessedException;
 import com.silenteight.serp.governance.qa.manage.domain.exception.WrongDiscriminatorException;
@@ -20,6 +22,7 @@ import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.VIE
 import static java.util.List.of;
 
 @RequiredArgsConstructor
+@Slf4j
 public class DecisionService {
 
   @NonNull
@@ -52,6 +55,21 @@ public class DecisionService {
     sendAlertMessageUseCase.activate(SendAlertMessageCommand.of(of(request.toAlertDto())));
 
     request.postAudit(auditingLogger::log);
+    return decision;
+  }
+
+  public Decision eraseComment(EraseDecisionCommentRequest request) {
+    log.debug("Erasing decision comment: {}", request);
+
+    request.preAudit(auditingLogger::log);
+
+    Decision decision = getDecisionByDiscriminatorAndLevel(
+        request.getDiscriminator(), request.getLevel());
+    decision.eraseComment();
+    decision = decisionRepository.save(decision);
+
+    request.postAudit(auditingLogger::log);
+
     return decision;
   }
 

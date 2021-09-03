@@ -17,6 +17,7 @@ class RabbitModuleConfiguration {
         "com.silenteight.model.api",
         "com.silenteight.solving.api",
         "com.silenteight.data.api",
+        "com.silenteight.dataretention.api",
         "com.google.protobuf",
         "com.google.rpc",
         "com.google.type"

@@ -85,3 +85,8 @@ serp:
         request:
           exchange: gov.event
           routingKey: event.qa-alert
+      retention:
+        personal-information-expired:
+          integration:
+            receive:
+              queue-name: gov.retention.personal-information-expired
