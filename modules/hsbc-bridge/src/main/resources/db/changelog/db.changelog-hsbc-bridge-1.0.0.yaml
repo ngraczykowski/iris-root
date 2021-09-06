@@ -684,5 +684,4 @@ databaseChangeLog:
             tableName: hsbc_bridge_category
         - dropView:
             catalogName: views
-            schemaName: public
             viewName: hsbc_bridge_match_category_view
