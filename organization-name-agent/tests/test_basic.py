@@ -1,6 +1,7 @@
 import pytest
 
 from company_name import Score, compare
+from company_name.errors import ComparisonError
 
 
 @pytest.mark.parametrize(
@@ -141,3 +142,16 @@ def test_empty_names(first, second, status):
     result = compare(first, second)
     for score in result.values():
         assert score.status == status or Score.ScoreStatus.NO_DATA
+
+
+@pytest.mark.parametrize(
+    ("first", "second"),
+    (
+        (["list"], {}),
+        (None, "©"),
+    ),
+)
+def test_exception(first, second):
+    print(first, second)
+    with pytest.raises(ComparisonError):
+        compare(first, second)

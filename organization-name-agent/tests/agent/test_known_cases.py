@@ -235,6 +235,14 @@ POSITIVE_CASES = [
         ["GRAND TRADING CO", "GRAND TRADING CO (格蘭貿易公司)"],
         ["GROUP GRAND LIMITED", "GROUP GRAND LTD"],
     ],
+    [
+        ["ADEL HUSEIN IBRAHIM-ZAMZAM CO"],
+        ["ZAMZAM FOUNDATION"],
+    ],
+    [
+        ["BAIANAT (ANTIGUO SMAS IP)"],
+        ["SMAS-IP"],
+    ],
 ]
 
 INCONCLUSIVE_CASES = [

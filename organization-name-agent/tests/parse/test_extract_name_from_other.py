@@ -22,6 +22,6 @@ from company_name.names.parse.parse import parse_name
 )
 def test_name_from_other(name, expected):
     name_information = parse_name(name)
-    assert name_information.name_and_other().original_name == expected["combined"]
+    assert name_information.combined_name().original_name == expected["combined"]
     assert name_information.legal.original_name == expected["legal"]
     assert name_information.countries.original_name == expected["countries"]

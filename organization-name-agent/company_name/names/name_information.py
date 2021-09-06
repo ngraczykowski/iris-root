@@ -21,10 +21,11 @@ class NameInformation:
     def name(self) -> TokensSequence:
         return TokensSequence(self.common_prefixes + self.base + self.common_suffixes)
 
-    def name_and_other(self) -> TokensSequence:
-        without_weak = [token for token in self.other if token not in KnowledgeBase.weak_words]
-        name_and_other = self.name() + without_weak
-        return name_and_other
+    def combined_name(self) -> TokensSequence:
+        other_without_weak = [
+            token for token in self.other if token not in KnowledgeBase.weak_words
+        ]
+        return self.name() + other_without_weak + self.parenthesis
 
     def tokens(self) -> Set[Token]:
         return set(
@@ -34,7 +35,8 @@ class NameInformation:
             + self.legal
             + self.other
             + self.countries
-        ).union(*(p.tokens() for p in self.parenthesis))
+            + self.parenthesis
+        )
 
     def __str__(self) -> str:
         return (

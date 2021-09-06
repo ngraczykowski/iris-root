@@ -7,8 +7,8 @@ def get_parenthesis_score(first: NameInformation, second: NameInformation) -> Sc
         return Score()
 
     second_base_appeared, first_base_appeared = (
-        second.base.cleaned_name in (n.name().cleaned_name for n in first.parenthesis),
-        first.base.cleaned_name in (n.name().cleaned_name for n in second.parenthesis),
+        second.base.cleaned_name in first.parenthesis.cleaned_name,
+        first.base.cleaned_name in second.parenthesis.cleaned_name,
     )
     return Score(
         status=Score.ScoreStatus.OK,

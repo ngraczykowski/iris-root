@@ -10,7 +10,10 @@ from company_name.names.parse.extract_information import (
     extract_weak,
 )
 from company_name.names.parse.extract_legal_terms import extract_legal_terms
-from company_name.names.parse.parse_parentheses import detect_parentheses_information
+from company_name.names.parse.parse_parentheses import (
+    detect_parentheses_information,
+    parse_base_from_parentheses,
+)
 from company_name.utils.clear_name import clear_name
 
 
@@ -93,10 +96,9 @@ def _separate_parentheses(name: str) -> Tuple[str, Sequence[str]]:
 def parse_name(name: str) -> NameInformation:
     original = name
     name_without_parentheses, parentheses = _separate_parentheses(name)
-
     base_information = _detect_name_parts(name_without_parentheses)
     parentheses_information = detect_parentheses_information(parentheses)
-    parentheses_names = TokensSequence([parse_name(n) for n in parentheses_information["unknown"]])
+    parentheses_names = parse_base_from_parentheses(parentheses_information["unknown"])
 
     return NameInformation(
         source=Token(original=original, cleaned=clear_name(name)),
