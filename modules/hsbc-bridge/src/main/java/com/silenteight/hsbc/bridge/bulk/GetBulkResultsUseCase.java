@@ -69,7 +69,7 @@ public class GetBulkResultsUseCase {
   }
 
   private AlertRecommendation getAlertRecommendation(BulkAlertEntity alert) {
-    return alert.isValid() ? getSolvedAlert(alert) : getErrorAlert(alert);
+    return (alert.isCompleted() && alert.isValid()) ? getSolvedAlert(alert) : getErrorAlert(alert);
   }
 
   private AlertRecommendation getErrorAlert(BulkAlertEntity alert) {
@@ -92,12 +92,11 @@ public class GetBulkResultsUseCase {
     solvedAlert.setId(alert.getExternalId());
     solvedAlert.status(COMPLETED);
 
-    if (alert.isCompleted()) {
-      var recommendation = getRecommendation(alert.getName(), metadata);
-      solvedAlert.setRecommendation(recommendation.getRecommendedAction());
-      solvedAlert.setComment(recommendation.getRecommendationComment());
-      attachRecommendationMetadata(solvedAlert, recommendation);
-    }
+    var recommendation = getRecommendation(alert.getName(), metadata);
+    solvedAlert.setRecommendation(recommendation.getRecommendedAction());
+    solvedAlert.setComment(recommendation.getRecommendationComment());
+    attachRecommendationMetadata(solvedAlert, recommendation);
+
     return solvedAlert;
   }
 

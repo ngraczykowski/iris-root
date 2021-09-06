@@ -42,11 +42,15 @@ class TimeoutHandler {
   }
 
   private void handleAnalysis(AnalysisEntity entity) {
-    if (hasPendingAlerts(entity.getName())) {
+    if (hasZeroCompletedAlerts(entity.getName())) {
       handleTimeoutError(entity);
     } else {
       handleCompletedAnalysis(entity);
     }
+  }
+
+  private boolean hasZeroCompletedAlerts(String analysisId) {
+    return analysisServiceClient.getAnalysis(analysisId).hasZeroAlertsCompleted();
   }
 
   private void handleCompletedAnalysis(AnalysisEntity entity) {
@@ -62,9 +66,5 @@ class TimeoutHandler {
 
   private List<AnalysisEntity> findInProgressTimeoutAnalyses() {
     return repository.findByTimeoutAtBeforeAndStatus(OffsetDateTime.now(), Status.IN_PROGRESS);
-  }
-
-  private boolean hasPendingAlerts(String analysis) {
-    return analysisServiceClient.getAnalysis(analysis).hasPendingAlerts();
   }
 }

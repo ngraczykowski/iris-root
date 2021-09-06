@@ -10,8 +10,8 @@ public class GetAnalysisResponseDto {
   long alertsCount;
   long pendingAlerts;
 
-  public boolean hasPendingAlerts() {
-    return pendingAlerts > 0;
+  public boolean hasZeroAlertsCompleted() {
+    return alertsCount == pendingAlerts;
   }
 
   public boolean hasNoPendingAlerts() {
