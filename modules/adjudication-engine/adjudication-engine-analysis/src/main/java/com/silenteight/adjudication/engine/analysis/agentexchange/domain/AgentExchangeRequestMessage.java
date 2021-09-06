@@ -137,6 +137,9 @@ public class AgentExchangeRequestMessage {
       if (features != null) {
         features.clear();
       }
+      if (agentConfigFeatureIds != null) {
+        agentConfigFeatureIds.clear();
+      }
 
       return this;
     }
@@ -182,6 +185,11 @@ public class AgentExchangeRequestMessage {
     }
 
     public AgentExchangeRequestMessage build() {
+      if (features != null && agentConfigFeatureIds != null
+          && features.size() == agentConfigFeatureIds.size()) {
+        throw new AssertionError("features.size() != agentConfigFeatureIds.size()");
+      }
+
       return new AgentExchangeRequestMessage(
           requestId, agentConfig, priority,
           features == null ? List.of() : List.copyOf(features),
