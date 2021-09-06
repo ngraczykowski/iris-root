@@ -186,7 +186,7 @@ public class AgentExchangeRequestMessage {
 
     public AgentExchangeRequestMessage build() {
       if (features != null && agentConfigFeatureIds != null
-          && features.size() == agentConfigFeatureIds.size()) {
+          && features.size() != agentConfigFeatureIds.size()) {
         throw new AssertionError("features.size() != agentConfigFeatureIds.size()");
       }
 
