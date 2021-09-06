@@ -15,11 +15,11 @@ class AlertTimeCalculatorSpec extends Specification {
 
   @Shared
   def invalidDate = '12'
-  def dateTimeFormatter = new CustomDateTimeFormatter("yyyy-MMM-dd HH:mm:ss")
+  def dateTimeFormatter = new CustomDateTimeFormatter("[yyyy-MMM-dd HH:mm:ss][dd-MMM-yy]")
   def underTest = new AlertTimeCalculator(dateTimeFormatter.getDateTimeFormatter())
 
   @Unroll
-  def 'should get alert time as #expectedResult, `#createdDate`, `#modifiedDate`, `#updatedDateTime`'() {
+  def 'should get alert time as `#expectedResult`, `#createdDate`, `#modifiedDate`, `#updatedDateTime`'() {
     given:
     def caseInformation = new CaseInformation(
         createdDateTime: createdDate,
@@ -47,14 +47,46 @@ class AlertTimeCalculatorSpec extends Specification {
     invalidDate            | invalidDate            | null                   | empty()
     null                   | null                   | invalidDate            | empty()
     null                   | invalidDate            | invalidDate            | empty()
+
     '2021-FEB-15 09:20:06' | invalidDate            | invalidDate            | empty()
     invalidDate            | '2021-FEB-15 09:20:06' | invalidDate            | empty()
-    invalidDate            | '2021-FEB-15 09:20:06' | '2021-FEB-15 09:20:06' | of(parse('2021-02-15T00:00Z'))
-    invalidDate            | invalidDate            | '2021-FEB-15 09:20:06' | of(parse('2021-02-15T00:00Z'))
+    invalidDate            | '2021-FEB-15 09:20:06' | '2021-FEB-15 09:20:06' | of(parse('2021-02-15T09:20:06Z'))
+    invalidDate            | invalidDate            | '2021-FEB-15 09:20:06' | of(parse('2021-02-15T09:20:06Z'))
     '2021-FEB-18 09:20:06' | '2021-FEB-15 09:20:06' | invalidDate            | empty()
-    '2021-FEB-15 09:20:06' | '2021-FEB-18 09:20:06' | invalidDate            | of(parse('2021-02-15T00:00Z'))
-    '2021-FEB-15 09:20:06' | invalidDate            | '2021-FEB-18 09:20:06' | of(parse('2021-02-18T00:00Z'))
-    '2021-FEB-15 09:20:06' | '2021-FEB-18 09:20:06' | '2021-FEB-18 09:20:06' | of(parse('2021-02-15T00:00Z'))
-    '2021-FEB-18 09:20:06' | '2021-FEB-15 09:20:06' | '2021-FEB-20 09:20:06' | of(parse('2021-02-20T00:00Z'))
+    '2021-FEB-15 09:20:06' | '2021-FEB-18 09:20:06' | invalidDate            | of(parse('2021-02-15T09:20:06Z'))
+    '2021-FEB-15 09:20:06' | invalidDate            | '2021-FEB-18 09:20:06' | of(parse('2021-02-18T09:20:06Z'))
+    '2021-FEB-15 09:20:06' | '2021-FEB-18 09:20:06' | '2021-FEB-18 09:20:06' | of(parse('2021-02-15T09:20:06Z'))
+    '2021-FEB-18 09:20:06' | '2021-FEB-15 09:20:06' | '2021-FEB-20 09:20:06' | of(parse('2021-02-20T09:20:06Z'))
+
+    '15-FEB-21'            | invalidDate            | invalidDate            | empty()
+    invalidDate            | '15-FEB-21'            | invalidDate            | empty()
+    invalidDate            | '15-FEB-21'            | '15-FEB-21'            | of(parse('2021-02-15T00:00Z'))
+    invalidDate            | invalidDate            | '15-FEB-21'            | of(parse('2021-02-15T00:00Z'))
+    '18-FEB-21'            | '15-FEB-21'            | invalidDate            | empty()
+    '15-FEB-21'            | '18-FEB-21'            | invalidDate            | of(parse('2021-02-15T00:00Z'))
+    '15-FEB-21'            | invalidDate            | '18-FEB-21'            | of(parse('2021-02-18T00:00Z'))
+    '15-FEB-21'            | '18-FEB-21'            | '18-FEB-21'            | of(parse('2021-02-15T00:00Z'))
+    '18-FEB-21'            | '15-FEB-21'            | '20-FEB-21'            | of(parse('2021-02-20T00:00Z'))
+
+    invalidDate            | '2021-FEB-15 09:20:06' | '15-FEB-21'            | of(parse('2021-02-15T00:00Z'))
+    invalidDate            | '15-FEB-21'            | '2021-FEB-15 09:20:06' | of(parse('2021-02-15T09:20:06Z'))
+    '2021-FEB-18 09:20:06' | '15-FEB-21'            | invalidDate            | empty()
+    '18-FEB-21'            | '2021-FEB-15 09:20:06' | invalidDate            | empty()
+    '15-FEB-21'            | '2021-FEB-18 09:20:06' | invalidDate            | of(parse('2021-02-15T00:00Z'))
+    '2021-FEB-15 09:20:06' | '18-FEB-21'            | invalidDate            | of(parse('2021-02-15T09:20:06Z'))
+    '15-FEB-21'            | invalidDate            | '2021-FEB-18 09:20:06' | of(parse('2021-02-18T09:20:06Z'))
+    '2021-FEB-15 09:20:06' | invalidDate            | '18-FEB-21'            | of(parse('2021-02-18T00:00Z'))
+    '2021-FEB-15 09:20:06' | '18-FEB-21'            | '18-FEB-21'            | of(parse('2021-02-15T09:20:06Z'))
+    '15-FEB-21'            | '18-FEB-21'            | '2021-FEB-18 09:20:06' | of(parse('2021-02-15T00:00Z'))
+    '15-FEB-21'            | '2021-FEB-18 09:20:06' | '18-FEB-21'            | of(parse('2021-02-15T00:00Z'))
+    '2021-FEB-15 09:20:06' | '18-FEB-21'            | '2021-FEB-18 09:20:06' | of(parse('2021-02-15T09:20:06Z'))
+    '15-FEB-21'            | '2021-FEB-18 09:20:06' | '2021-FEB-18 09:20:06' | of(parse('2021-02-15T00:00Z'))
+    '2021-FEB-15 09:20:06' | '2021-FEB-18 09:20:06' | '18-FEB-21'            | of(parse('2021-02-15T09:20:06Z'))
+    '2021-FEB-18 09:20:06' | '15-FEB-21'            | '20-FEB-21'            | of(parse('2021-02-20T00:00Z'))
+    '18-FEB-21'            | '15-FEB-21'            | '2021-FEB-20 09:20:06' | of(parse('2021-02-20T09:20:06Z'))
+    '18-FEB-21'            | '2021-FEB-15 09:20:06' | '20-FEB-21'            | of(parse('2021-02-20T00:00Z'))
+    '2021-FEB-18 09:20:06' | '15-FEB-21'            | '2021-FEB-20 09:20:06' | of(parse('2021-02-20T09:20:06Z'))
+    '18-FEB-21'            | '2021-FEB-15 09:20:06' | '2021-FEB-20 09:20:06' | of(parse('2021-02-20T09:20:06Z'))
+    '2021-FEB-18 09:20:06' | '2021-FEB-15 09:20:06' | '20-FEB-21'            | of(parse('2021-02-20T00:00Z'))
   }
 }

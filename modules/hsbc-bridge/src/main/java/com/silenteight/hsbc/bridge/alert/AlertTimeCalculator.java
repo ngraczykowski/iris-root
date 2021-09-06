@@ -5,13 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.json.external.model.CaseInformation;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import static java.time.LocalDate.parse;
+import static java.time.LocalDateTime.parse;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -26,14 +26,14 @@ class AlertTimeCalculator {
     var updatedDateTime = caseInformation.getUpdatedDateTime();
 
     return getNewAlertDate(caseInformation).or(() -> getReAlertDate(updatedDateTime))
-        .map(l -> l.atStartOfDay(ZoneOffset.UTC).toOffsetDateTime());
+        .map(l -> l.atOffset(ZoneOffset.UTC));
   }
 
-  private Optional<LocalDate> getReAlertDate(String updatedDateTime) {
+  private Optional<LocalDateTime> getReAlertDate(String updatedDateTime) {
     return safeGetAsDate(updatedDateTime);
   }
 
-  private Optional<LocalDate> getNewAlertDate(CaseInformation caseInformation) {
+  private Optional<LocalDateTime> getNewAlertDate(CaseInformation caseInformation) {
     var createdDateResult = safeGetAsDate(caseInformation.getCreatedDateTime());
     var modifiedDateResult = safeGetAsDate(caseInformation.getExtendedAttribute13DateTime());
 
@@ -46,7 +46,7 @@ class AlertTimeCalculator {
     return modifiedDate.isAfter(createdDate) ? of(createdDate) : empty();
   }
 
-  private Optional<LocalDate> safeGetAsDate(String date) {
+  private Optional<LocalDateTime> safeGetAsDate(String date) {
     if (isEmpty(date)) {
       return empty();
     }

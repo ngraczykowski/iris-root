@@ -31,7 +31,7 @@ class ObjectMapperJsonConverterSpec extends Specification {
   }
 
   AlertData getAlertData(){
-    def json = getClass().getResource("/files/alertData.json")
+    def json = getClass().getResource("/files/alertDataProdDateFormat.json")
     return MAPPER.readValue(json, AlertData.class)
   }
 }

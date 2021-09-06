@@ -107,7 +107,7 @@ silenteight.bridge:
 
   alert:
     datetime:
-      format: yyyy-MMM-dd HH:mm:ss
+      format: "[yyyy-MMM-dd HH:mm:ss][dd-MMM-yy]"
 
   ### MODEL
   ### Export model jobs (use "-" value for disabling the particular job)
