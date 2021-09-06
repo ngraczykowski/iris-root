@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
+
 @RequiredArgsConstructor
 @Slf4j
 class AlertService {
@@ -39,7 +41,7 @@ class AlertService {
 
     return alerts.stream()
         .map(AlertDto::getName)
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 
   private List<AlertDto> registerAlerts(Collection<AlertMatchIdComposite> alertMatchIdComposites) {
@@ -67,7 +69,7 @@ class AlertService {
       var alertMatchIdComposite = alertMatchIds.get(alertId);
       var matchExternalIds = alertMatchIdComposite.getMatchExternalIds();
       return registerMatchesForAlert(alertId, a.getName(), matchExternalIds);
-    }).flatMap(Collection::stream).collect(Collectors.toList());
+    }).flatMap(Collection::stream).collect(toList());
   }
 
   private List<MatchWithAlert> registerMatchesForAlert(
@@ -80,8 +82,8 @@ class AlertService {
     var response = alertServiceClient.batchCreateAlertMatches(request);
 
     return response.getAlertMatches().stream()
-        .map(a -> new MatchWithAlert(alertInternalId, alertName, a.getMatchId(),a.getName()))
-        .collect(Collectors.toList());
+        .map(a -> new MatchWithAlert(alertInternalId, alertName, a.getMatchId(), a.getName()))
+        .collect(toList());
   }
 
   private void publishUpdateAlertsWithNameEvent(

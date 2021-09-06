@@ -24,6 +24,9 @@ class MatchCategoryEntity {
 
   private long matchId;
 
+  @Setter
+  private String name;
+
   @ManyToOne
   @JoinColumn(name = "category_id")
   private CategoryEntity category;
@@ -36,11 +39,12 @@ class MatchCategoryEntity {
   private List<String> values;
 
   @Transient
-  public String getCategoryName() {
-    return category.getName();
+  public boolean getMultiValue() {
+    return category.isMultiValue();
   }
 
-  MatchCategoryEntity(long matchId, CategoryEntity category, List<String> values) {
+  MatchCategoryEntity(long matchId, String name, CategoryEntity category, List<String> values) {
+    this.name = name;
     this.matchId = matchId;
     this.category = category;
     this.values = values;

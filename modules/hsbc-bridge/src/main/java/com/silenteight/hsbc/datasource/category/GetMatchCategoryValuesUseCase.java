@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -18,51 +19,52 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class GetMatchCategoryValuesUseCase {
 
-  private final MatchCategoryViewRepository matchCategoryViewRepository;
+  private final MatchCategoryRepository matchCategoryRepository;
 
   @Transactional(readOnly = true)
   public List<CategoryValueDto> activate(@NonNull GetMatchCategoryValuesCommand command) {
     var matchValues = command.getMatchValues();
     var matchCategoryValues = findMatchCategoryValues(matchValues)
-        .stream()
-        .map(this::mapMatchCategoryValue)
+        .map(this::mapMatchCategoryEntity)
         .collect(toList());
 
-    var result = new ArrayList<>(matchCategoryValues);
-    if (result.size() < matchValues.size()) {
-      addMissingValues(matchValues, result);
+    if (matchCategoryValues.size() < matchValues.size()) {
+      return addMissingValues(matchValues, matchCategoryValues);
     }
 
-    return result;
+    return matchCategoryValues;
   }
 
-  private void addMissingValues(List<String> matchValues, List<CategoryValueDto> result) {
+  private List<CategoryValueDto> addMissingValues(
+      List<String> matchValues, List<CategoryValueDto> matchCategoryValues) {
+    var result = new ArrayList<>(matchCategoryValues);
     var returnedNames = result.stream().map(CategoryValueDto::getName).collect(toList());
     var missingNames =
         matchValues.stream().filter(a -> !returnedNames.contains(a)).collect(toList());
     log.warn("Not all match categories are present, missing category values={}", missingNames);
 
     result.addAll(addMissingValues(missingNames));
+    return result;
   }
 
   private List<CategoryValueDto> addMissingValues(List<String> names) {
     return names.stream().map(n ->
-            CategoryValueDto.builder()
-                .name(n)
-                .values(List.of("NO_DATA"))
-                .build())
+        CategoryValueDto.builder()
+            .name(n)
+            .values(List.of("NO_DATA"))
+            .build())
         .collect(toList());
   }
 
-  private List<MatchCategoryView> findMatchCategoryValues(List<String> matchValues) {
-    return matchCategoryViewRepository.findByNameIn(matchValues);
+  private Stream<MatchCategoryEntity> findMatchCategoryValues(List<String> matchValues) {
+    return matchCategoryRepository.findByNameIn(matchValues);
   }
 
-  private CategoryValueDto mapMatchCategoryValue(MatchCategoryView matchCategory) {
+  private CategoryValueDto mapMatchCategoryEntity(MatchCategoryEntity matchCategoryEntity) {
     return CategoryValueDto.builder()
-        .multiValue(matchCategory.isMultiValue())
-        .name(matchCategory.getName())
-        .values(new ArrayList<>(matchCategory.getValues()))
+        .multiValue(matchCategoryEntity.getMultiValue())
+        .name(matchCategoryEntity.getName())
+        .values(new ArrayList<>(matchCategoryEntity.getValues()))
         .build();
   }
 }

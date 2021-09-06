@@ -5,17 +5,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.persistence.EntityManager;
+
 @RequiredArgsConstructor
 @Configuration
 class MatchEventConfiguration {
 
   @Bean
-  MatchUpdater matchUpdater(MatchRepository matchRepository) {
-    return new MatchUpdater(matchRepository);
+  MatchCategoryUpdater matchUpdater(EntityManager entityManager, MatchRepository matchRepository) {
+    return new MatchCategoryUpdater(entityManager, matchRepository);
   }
 
   @Bean
-  MatchEventHandler matchEventHandler(MatchUpdater matchUpdater) {
-    return new MatchEventHandler(matchUpdater);
+  MatchEventHandler matchEventHandler(MatchCategoryUpdater matchCategoryUpdater) {
+    return new MatchEventHandler(matchCategoryUpdater);
   }
 }

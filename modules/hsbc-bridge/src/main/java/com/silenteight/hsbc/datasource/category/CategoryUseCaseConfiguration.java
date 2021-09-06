@@ -11,7 +11,6 @@ class CategoryUseCaseConfiguration {
 
   private final CategoryRepository categoryRepository;
   private final MatchCategoryRepository matchCategoryRepository;
-  private final MatchCategoryViewRepository matchCategoryViewRepository;
   private final CategoryModelHolder categoryModelHolder;
 
   @Bean
@@ -21,7 +20,7 @@ class CategoryUseCaseConfiguration {
 
   @Bean
   GetMatchCategoryValuesUseCase getMatchCategoryValuesUseCase() {
-    return new GetMatchCategoryValuesUseCase(matchCategoryViewRepository);
+    return new GetMatchCategoryValuesUseCase(matchCategoryRepository);
   }
 
   @Bean

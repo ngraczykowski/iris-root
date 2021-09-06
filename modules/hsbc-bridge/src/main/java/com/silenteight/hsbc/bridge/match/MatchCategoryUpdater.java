@@ -8,11 +8,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
+import javax.persistence.EntityManager;
 
 @RequiredArgsConstructor
 @Slf4j
-class MatchUpdater {
+class MatchCategoryUpdater {
 
+  private final EntityManager entityManager;
   private final MatchRepository repository;
 
   @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -27,6 +29,12 @@ class MatchUpdater {
         alert.setMatchName(getMatchName(v));
         repository.save(alert);
       });
+
+      entityManager.createQuery(
+          "UPDATE MatchCategoryEntity m SET m.name = CONCAT(m.name, '/', :matchName) WHERE m.matchId = :matchId")
+          .setParameter("matchName", v)
+          .setParameter("matchId", k)
+          .executeUpdate();
     });
   }
 

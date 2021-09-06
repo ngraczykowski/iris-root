@@ -25,30 +25,32 @@ class StoreMatchCategoriesUseCaseSpec extends Specification {
     underTest.storeMatchCategories(command)
 
     then:
-    fixtures.numberOfCategories * categoryRepository.findByName(_ as String) >> new CategoryEntity()
+    1 * categoryRepository.findByName(_ as String) >> fixtures.categoryEntity
     (fixtures.numberOfCategories * command.getMatchComposites().size()) *
         matchCategoryRepository.save(_ as MatchCategoryEntity)
   }
 
   class Fixtures {
 
-    def categories = [
-        CategoryModel.builder()
-            .name('categories/sourceSystem')
-            .displayName('Source System')
-            .multiValue(false)
-            .type(CategoryType.ANY_STRING)
-            .allowedValues([])
-            .valueRetriever(
-                new CategoryValueRetriever() {
+    def categoryModel = CategoryModel.builder()
+        .name('categories/sourceSystem')
+        .displayName('Source System')
+        .multiValue(false)
+        .type(CategoryType.ANY_STRING)
+        .allowedValues([])
+        .valueRetriever(
+            new CategoryValueRetriever() {
 
-                  @Override
-                  List<String> retrieve(MatchData matchData) {
-                    return List.of("dummy1", "dummy2")
-                  }
-                })
-            .build()
-    ] as List
+              @Override
+              List<String> retrieve(MatchData matchData) {
+                return List.of("dummy1", "dummy2")
+              }
+            })
+        .build()
+
+    def categoryEntity = new CategoryEntity(categoryModel)
+
+    def categories = [categoryModel] as List
 
     def numberOfCategories = categories.size()
 

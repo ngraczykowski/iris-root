@@ -2,12 +2,13 @@ package com.silenteight.hsbc.datasource.category;
 
 import org.springframework.data.repository.Repository;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.stream.Stream;
 
 @org.springframework.stereotype.Repository
 interface MatchCategoryRepository extends Repository<MatchCategoryEntity, Long> {
 
-  Collection<MatchCategoryEntity> findByMatchIdIn(Collection<Long> matchIds);
+  Stream<MatchCategoryEntity> findByNameIn(List<String> matchValues);
 
   void save(MatchCategoryEntity matchCategory);
 }

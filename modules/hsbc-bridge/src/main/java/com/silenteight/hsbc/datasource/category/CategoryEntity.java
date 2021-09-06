@@ -1,13 +1,15 @@
 package com.silenteight.hsbc.datasource.category;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 
 import java.util.List;
 import javax.persistence.*;
 
-import static lombok.AccessLevel.NONE;
 import static lombok.AccessLevel.PROTECTED;
 
 @Data
