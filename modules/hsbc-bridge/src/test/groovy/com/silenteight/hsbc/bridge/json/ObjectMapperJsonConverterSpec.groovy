@@ -1,5 +1,6 @@
 package com.silenteight.hsbc.bridge.json
 
+import com.silenteight.hsbc.bridge.json.ObjectConverter.ObjectConversionException
 import com.silenteight.hsbc.bridge.json.external.model.AlertData
 
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -10,7 +11,7 @@ class ObjectMapperJsonConverterSpec extends Specification {
   static var MAPPER = new ObjectMapper()
   def underTest = new ObjectMapperJsonConverter(10)
 
-  def "should map payload to hashmap"(){
+  def "should map payload to hashmap"() {
     when:
     def result = underTest.convertAlertDataToMap(getAlertData())
 
@@ -20,7 +21,7 @@ class ObjectMapperJsonConverterSpec extends Specification {
     result.get("DN_CASE.description") == "someDescription"
   }
 
-  def "should add prefix to key"(){
+  def "should add prefix to key"() {
     when:
     def result = underTest.convertAlertDataToMap(getAlertData())
 
@@ -28,6 +29,14 @@ class ObjectMapperJsonConverterSpec extends Specification {
     result.get("1.DN_CASEHISTORY.transition") == "someTransitionOne"
     result.get("2.DN_CASEHISTORY.transition") == "someTransitionTwo"
     result.get("3.DN_CASEHISTORY.transition") == "someTransitionThree"
+  }
+
+  def "should throw ObjectConversionException for payload == null"() {
+    when:
+    underTest.convert(null as byte[], AlertData.class)
+
+    then:
+    thrown(ObjectConversionException)
   }
 
   AlertData getAlertData(){

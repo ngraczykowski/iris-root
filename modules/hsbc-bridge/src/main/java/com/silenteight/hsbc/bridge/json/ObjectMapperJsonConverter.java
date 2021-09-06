@@ -41,9 +41,11 @@ class ObjectMapperJsonConverter implements ObjectConverter, AlertPayloadConverte
   private final int alertLimit;
 
   @Override
-  public <T> T convert(byte[] src, Class<T> valueType) throws ObjectConversionException {
+  public <T> T convert(byte[] payload, Class<T> valueType) throws ObjectConversionException {
     try {
-      return objectMapper.readValue(src, valueType);
+      if (payload == null)
+        throw new IllegalArgumentException("Payload given to conversion is null.");
+      return objectMapper.readValue(payload, valueType);
     } catch (RuntimeException | IOException e) {
       log.error("Error on payload conversion", e);
       throw new ObjectConversionException(e);
