@@ -660,6 +660,7 @@ databaseChangeLog:
   - changeSet:
       id: 1.0.0-25
       author: awojcicki
+      validCheckSum: 8:44694f99522025a4efe9e0f603f3708e
       changes:
         - addColumn:
             tableName: hsbc_bridge_match_category
