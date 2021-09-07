@@ -1,3 +1,7 @@
+@Library('pipeline-shared-library') _
+def utils = new com.silenteight.jenkins.ci.Utils()
+def jenkins = new com.silenteight.jenkins.ci.Jenkins()
+
 pipeline {
     agent none
     environment {
@@ -26,6 +30,11 @@ pipeline {
                         sh './scripts/clean.sh'
                         sh './scripts/bootstrap.sh --index-url $PYPI_URL'
                         sh './scripts/build.sh --index-url $PYPI_URL'
+                    }
+                }
+                stage('Prepare nomad artifact') {
+                    steps {
+                        sh './scripts/prepare_nomad_artifacts.sh'
                     }
                 }
             }
@@ -79,26 +88,16 @@ pipeline {
 
                     }
                 }
-//                 stage('Prepare nomad artifacts') {
-//                     steps {
-//                         sh './nomad/prepare.sh'
-//                     }
-//                 }
-//                 stage('Deploy on nomad dev') {
-//                     steps {
-//                         script {
-//                             if (utils.getGitBranch() == 'master') {
-//                                 sh './nomad/full/deploy.sh'
-//                             } else {
-//                                 echo 'This is not a release branch'
-//                             }
-//                         }
-//                     }
-//                 }
-            }
-            post {
-                always {
-                    archiveArtifacts artifacts: 'nomad/*.tar.bz2', fingerprint: true
+                stage('Deploy on nomad dev') {
+                    steps {
+                        script {
+                            if (utils.getGitBranch() == 'master') {
+                                sh './nomad/deploy.sh'
+                            } else {
+                                echo 'This is not a release branch'
+                            }
+                        }
+                    }
                 }
             }
        }

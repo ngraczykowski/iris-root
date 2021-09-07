@@ -24,5 +24,5 @@ shiv -e idmismatchagent.__main__:main "$@" --compressed -o "./dist/$name-$versio
 
 # configuration example
 example_config_path="./config"
-example_config="${name}-${version}-config.tgz"
+example_config="${name}-config-${version}.tgz"
 tar -cvzf "./dist/$example_config" "$example_config_path"
