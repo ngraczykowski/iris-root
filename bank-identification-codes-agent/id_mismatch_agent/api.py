@@ -1,12 +1,9 @@
-from enum import Enum
-from typing import NewType, Union, List
+from typing import List
 
 from attr import attrs, attrib
 
 __all__ = [
     "SearchCodeMismatchAgentInput",
-    "Result",
-    "Reason",
     "NoSearchCodeInWatchlistReason",
     "MatchingTextTooShortToBeCodeReason",
     "MatchingTextMatchesWlSearchCodeReason",
@@ -16,6 +13,8 @@ __all__ = [
     "MatchingTextDoesNotMatchWlSearchCodeReason",
     "MatchingTextDoesNotMatchMatchingFieldReason",
 ]
+
+from id_mismatch_agent.result import Reason
 
 
 @attrs(frozen=True)
@@ -29,39 +28,32 @@ class SearchCodeMismatchAgentInput:
     wl_bic_codes: list = attrib()
 
 
-class Result(Enum):
-    NO_DECISION = "NO_DECISION"
-    MATCH = "MATCH"
-    NO_MATCH = "NO_MATCH"
-    AGENT_ERROR = "AGENT_ERROR"
-
-
 @attrs(frozen=True)
-class NoSearchCodeInWatchlistReason:
+class NoSearchCodeInWatchlistReason(Reason):
     pass
 
 
 @attrs(frozen=True)
-class MatchingTextTooShortToBeCodeReason:
+class MatchingTextTooShortToBeCodeReason(Reason):
     matching_text: str = attrib()
 
 
 @attrs(frozen=True)
-class MatchingTextMatchesWlSearchCodeReason:
+class MatchingTextMatchesWlSearchCodeReason(Reason):
     matching_text: str = attrib()
     search_code: str = attrib()
     wl_type: str = attrib()
 
 
 @attrs(frozen=True)
-class MatchingTextMatchesWlBicCodeReason:
+class MatchingTextMatchesWlBicCodeReason(Reason):
     matching_text: str = attrib()
     bic_code: str = attrib()
     wl_type: str = attrib()
 
 
 @attrs(frozen=True)
-class MatchingTextIsPartOfLongerSequenceReason:
+class MatchingTextIsPartOfLongerSequenceReason(Reason):
     matching_text: str = attrib()
     raw_matched_sequence: str = attrib()
     matching_field: str = attrib()
@@ -70,33 +62,33 @@ class MatchingTextIsPartOfLongerSequenceReason:
 
 
 @attrs(frozen=True)
-class MatchingTextIsOnlyPartialMatchForSearchCodeReason:
+class MatchingTextIsOnlyPartialMatchForSearchCodeReason(Reason):
     matching_text: str = attrib()
     search_code: str = attrib()
     wl_type: str = attrib()
 
 
 @attrs(frozen=True)
-class MatchingTextDoesNotMatchWlSearchCodeReason:
+class MatchingTextDoesNotMatchWlSearchCodeReason(Reason):
     matching_text: str = attrib()
     search_codes: List[str] = attrib()
     wl_type: str = attrib()
 
 
 @attrs(frozen=True)
-class MatchingTextDoesNotMatchMatchingFieldReason:
+class MatchingTextDoesNotMatchMatchingFieldReason(Reason):
     matching_text: str = attrib()
     matching_field: str = attrib()
 
 
-Reason = NewType(
-    "Reason",
-    Union[
-        NoSearchCodeInWatchlistReason,
-        MatchingTextTooShortToBeCodeReason,
-        MatchingTextMatchesWlSearchCodeReason,
-        MatchingTextMatchesWlBicCodeReason,
-        MatchingTextIsPartOfLongerSequenceReason,
-        MatchingTextDoesNotMatchMatchingFieldReason,
-    ],
-)
+# Reason = NewType(
+#     "Reason",
+#     Union[
+#         NoSearchCodeInWatchlistReason,
+#         MatchingTextTooShortToBeCodeReason,
+#         MatchingTextMatchesWlSearchCodeReason,
+#         MatchingTextMatchesWlBicCodeReason,
+#         MatchingTextIsPartOfLongerSequenceReason,
+#         MatchingTextDoesNotMatchMatchingFieldReason,
+#     ],
+# )

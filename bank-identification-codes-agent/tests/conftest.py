@@ -7,17 +7,16 @@ from typing import Tuple
 from attr import attrs, attrib
 from cattr import structure_attrs_fromdict
 
-from idmismatchagent.api import (
-    Result,
-    Reason,
+from id_mismatch_agent.api import (
     SearchCodeMismatchAgentInput,
 )
+from id_mismatch_agent.result import Solution, Reason
 
 
 @attrs(frozen=True)
 class Case:
     input: SearchCodeMismatchAgentInput = attrib()
-    expected_values: Tuple[Result, Reason] = attrib()
+    expected_values: Tuple[Solution, Reason] = attrib()
 
 
 def read_test_cases():
@@ -41,7 +40,7 @@ def read_test_cases():
             )
 
             result_value = row["RESULT"]
-            result = Result[result_value] if result_value else Result.NO_DECISION
+            result = Solution[result_value] if result_value else Solution.NO_DECISION
 
             reason = None
             reason_type_name = row["REASON_TYPE"]
@@ -54,7 +53,7 @@ def read_test_cases():
                 if reason_dict.get("search_codes", ""):
                     reason_dict["search_codes"] = json.loads(reason_dict["search_codes"])
 
-                import idmismatchagent.api as api_module
+                import id_mismatch_agent.api as api_module
 
                 reason_type = getattr(api_module, reason_type_name)
 

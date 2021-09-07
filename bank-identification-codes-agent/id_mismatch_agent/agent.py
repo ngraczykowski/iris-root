@@ -7,13 +7,13 @@ from .api import *
 
 __all__ = ["identification_mismatch_agent"]
 
+from .result import Solution, Reason, Result
+
 SEPARATORS_PATTERN = re.compile(r"[-),./]+")
 HEADQUARTERS_INDICATOR = "XXX"
 
 
-def identification_mismatch_agent(
-    agent_input: SearchCodeMismatchAgentInput,
-) -> Tuple[Result, Reason]:
+def identification_mismatch_agent(agent_input: SearchCodeMismatchAgentInput,) -> Result:
     logic = IdMismatchLogic(
         agent_input.matching_field,
         agent_input.matching_text,
@@ -33,12 +33,15 @@ class IdMismatchLogic:
     wl_search_codes: list = attrib()
     wl_bic_codes: list = attrib()
 
-    def execute(self) -> Tuple[Result, Reason]:
+    def execute(self) -> Result:
         if len(self.wl_search_codes) == 0 and len(self.wl_bic_codes) == 0:
-            return Result.NO_DECISION, NoSearchCodeInWatchlistReason()
+            return Result(solution=Solution.NO_DECISION, reason=NoSearchCodeInWatchlistReason())
 
         if len(self.matching_text) < 3:
-            return Result.NO_DECISION, MatchingTextTooShortToBeCodeReason(self.matching_text)
+            return Result(
+                solution=Solution.NO_DECISION,
+                reason=MatchingTextTooShortToBeCodeReason(self.matching_text),
+            )
 
         remove_non_word_chars = lambda text: re.sub(r"\W+", "", text)
         matching_text_no_extra_characters = remove_non_word_chars(self.matching_text).upper()
@@ -59,7 +62,7 @@ class IdMismatchLogic:
             pattern, matching_field_no_extra_characters, re.VERBOSE
         )
 
-        result = Result.NO_DECISION
+        solution = Solution.NO_DECISION
         reason = MatchingTextDoesNotMatchMatchingFieldReason(
             self.matching_text, self.matching_field
         )
@@ -68,29 +71,29 @@ class IdMismatchLogic:
             raw_matched_string = matching_text_in_field_match.group(0)
             whole_string = raw_matched_string.replace(" ", "").replace(",", "").replace("-", "")
 
-            reason, result = self._search_in_bic_codes(
+            solution, reason = self._search_in_bic_codes(
                 bic_codes, matching_text_no_extra_characters, whole_string
             )
-            if result == Result.NO_DECISION:
-                reason, result = self._search_in_search_codes(
+            if solution == Solution.NO_DECISION:
+                solution, reason = self._search_in_search_codes(
                     matching_text_no_extra_characters,
                     raw_matched_string,
                     search_codes,
                     whole_string,
                 )
 
-        return result, reason
+        return Result(solution=solution, reason=reason)
 
     def _search_in_search_codes(
         self, matching_text_no_extra_characters, raw_matched_string, search_codes, whole_string,
-    ):
-        result = Result.NO_DECISION
+    ) -> Tuple[Solution, Reason]:
+        solution = Solution.NO_DECISION
         reason = MatchingTextDoesNotMatchWlSearchCodeReason(
             self.matching_text, search_codes, self.wl_type
         )
         for search_code in search_codes:
             if whole_string == search_code:
-                result = Result.NO_MATCH
+                solution = Solution.NO_MATCH
                 reason = MatchingTextMatchesWlSearchCodeReason(
                     self.matching_text, search_code, self.wl_type
                 )
@@ -100,7 +103,7 @@ class IdMismatchLogic:
                 len(matching_text_no_extra_characters) < len(whole_string)
                 and search_code.find(matching_text_no_extra_characters) != -1
             ):
-                result = Result.MATCH
+                solution = Solution.MATCH
                 reason = MatchingTextIsPartOfLongerSequenceReason(
                     self.matching_text,
                     raw_matched_string,
@@ -111,33 +114,35 @@ class IdMismatchLogic:
                 break
 
             elif search_code.find(matching_text_no_extra_characters) != -1:
-                result = Result.MATCH
+                solution = Solution.MATCH
                 reason = MatchingTextIsOnlyPartialMatchForSearchCodeReason(
                     self.matching_text, search_code, self.wl_type
                 )
                 break
-        return reason, result
+        return solution, reason
 
-    def _search_in_bic_codes(self, bic_codes, matching_text_no_extra_characters, whole_string):
-        result = Result.NO_DECISION
+    def _search_in_bic_codes(
+        self, bic_codes, matching_text_no_extra_characters, whole_string
+    ) -> Tuple[Solution, Reason]:
+        solution = Solution.NO_DECISION
         reason = None
         for bic_code in bic_codes:
             if (
                 _is_headquarters(whole_string)
                 and bic_code.find(matching_text_no_extra_characters) != -1
             ):
-                result = Result.NO_MATCH
+                solution = Solution.NO_MATCH
                 reason = MatchingTextMatchesWlBicCodeReason(
                     self.matching_text, bic_code, self.wl_type
                 )
                 break
             elif bic_code.find(matching_text_no_extra_characters) != -1:
-                result = Result.MATCH
+                solution = Solution.MATCH
                 reason = MatchingTextMatchesWlBicCodeReason(
                     self.matching_text, bic_code, self.wl_type
                 )
                 break
-        return reason, result
+        return solution, reason
 
 
 def _remove_ids_separators(text: str):

@@ -21,7 +21,7 @@ setup(
     classifiers=["License :: Other/Proprietary License",],
     packages=find_packages(exclude=("tests",)),
     package_data={
-        "idmismatchagent": ["templates/*",]
+        "id_mismatch_agent": ["templates/*",]
     },
     install_requires=[
         # Keep sorted alphabetically (case-insensitive)
