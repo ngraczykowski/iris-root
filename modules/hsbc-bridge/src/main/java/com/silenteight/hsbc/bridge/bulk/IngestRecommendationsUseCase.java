@@ -2,6 +2,7 @@ package com.silenteight.hsbc.bridge.bulk;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.alert.WarehouseApi;
 import com.silenteight.hsbc.bridge.bulk.rest.AlertMetadata;
@@ -18,14 +19,22 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
+@Slf4j
 @RequiredArgsConstructor
 class IngestRecommendationsUseCase {
 
   private final WarehouseApi warehouseApi;
 
   void ingest(@NonNull BatchSolvedAlerts recommendations) {
+
+    log.info(
+        "Start mapping BatchSolvedAlerts request with id: {} and alert count {} ",
+        recommendations.getBatchId(), recommendations.getAlerts().size());
+
     var alerts = mapAlerts(recommendations.getAlerts())
         .collect(toList());
+
+    log.info("Mapping completed with alert count: {}", alerts.size());
 
     warehouseApi.send(alerts);
   }
