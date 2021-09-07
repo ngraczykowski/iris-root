@@ -76,6 +76,14 @@ dependencies {
   // AspectJ
   implementation libraries.aspectjrt
   aspect libraries.silenteight_sep_base_aspects
+
+  //  Datasource API
+  implementation libraries.data_source_api
+
+//  Testing
+  testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libraries.adjudication_engine_api
+  testImplementation libraries.awaitility
 }
 
 jar {
