@@ -79,8 +79,9 @@ dependencies {
 
   //  Datasource API
   implementation libraries.data_source_api
+  implementation libraries.data_source_categories_api
 
-//  Testing
+  //  Testing
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.adjudication_engine_api
   testImplementation libraries.awaitility

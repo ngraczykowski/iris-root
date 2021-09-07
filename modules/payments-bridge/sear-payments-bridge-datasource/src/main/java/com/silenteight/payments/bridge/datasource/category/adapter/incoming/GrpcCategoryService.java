@@ -15,13 +15,14 @@ import net.devh.boot.grpc.server.service.GrpcService;
 @RequiredArgsConstructor
 class GrpcCategoryService extends CategoryServiceImplBase {
 
-  private final CategoryService categoryService;
+  private final CategoryAdapter categoryAdapter;
 
   @Override
   public void listCategories(
       ListCategoriesRequest request,
       StreamObserver<ListCategoriesResponse> responseObserver) {
-    responseObserver.onNext(categoryService.listCategories());
+
+    responseObserver.onNext(categoryAdapter.listCategories());
     responseObserver.onCompleted();
   }
 
@@ -30,7 +31,7 @@ class GrpcCategoryService extends CategoryServiceImplBase {
       BatchGetMatchCategoryValuesRequest request,
       StreamObserver<BatchGetMatchCategoryValuesResponse> responseObserver) {
 
-    responseObserver.onNext(categoryService.batchGetMatchCategoryValues(request));
+    responseObserver.onNext(categoryAdapter.batchGetMatchCategoryValues(request));
     responseObserver.onCompleted();
   }
 }

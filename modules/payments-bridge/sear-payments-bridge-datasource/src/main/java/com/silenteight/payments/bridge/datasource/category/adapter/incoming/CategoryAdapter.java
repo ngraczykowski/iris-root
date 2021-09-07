@@ -5,22 +5,24 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesResponse;
 import com.silenteight.datasource.categories.api.v1.ListCategoriesResponse;
-import com.silenteight.payments.bridge.datasource.category.service.CategoryFacade;
+import com.silenteight.payments.bridge.datasource.category.port.incoming.GetMatchCategoryValuesUseCase;
+import com.silenteight.payments.bridge.datasource.category.port.incoming.ListAvailableCategoriesUseCase;
 
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-class CategoryService {
+class CategoryAdapter {
 
-  private final CategoryFacade facade;
+  private final ListAvailableCategoriesUseCase listAvailableCategoriesUseCase;
+  private final GetMatchCategoryValuesUseCase getMatchCategoryValuesUseCase;
 
   ListCategoriesResponse listCategories() {
-    return facade.listCategories();
+    return listAvailableCategoriesUseCase.getAvailableCategories();
   }
 
   BatchGetMatchCategoryValuesResponse batchGetMatchCategoryValues(
       BatchGetMatchCategoryValuesRequest request) {
-    return facade.batchGetMatchCategoryValues(request.getMatchValuesList());
+    return getMatchCategoryValuesUseCase.batchGetMatchCategoryValues(request.getMatchValuesList());
   }
 }

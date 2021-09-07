@@ -50,4 +50,35 @@
       <column name="feature"/>
     </createIndex>
   </changeSet>
+
+  <changeSet id="payments-bridge-datasource-1.0.0-3" author="jgajewski">
+    <createTable tableName="pb_category_value">
+      <column name="match_name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="category_name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="value" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addPrimaryKey
+        tableName="pb_category_value"
+        columnNames="match_name, category_name"
+        constraintName="pk_pb_category_value"/>
+
+    <createIndex
+        tableName="pb_category_value"
+        indexName="ix_pb_category_value_match">
+      <column name="match_name"/>
+    </createIndex>
+
+    <createIndex
+        tableName="pb_category_value"
+        indexName="ix_pb_category_value_category">
+      <column name="category_name"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>
