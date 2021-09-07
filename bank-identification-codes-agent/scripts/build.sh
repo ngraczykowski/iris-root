@@ -21,3 +21,8 @@ python -m tox --installpkg ./dist/"$artifact" "$@"
 # zipfile (executable, to run without installing)
 pip install shiv
 shiv -e idmismatchagent.__main__:main "$@" --compressed -o "./dist/$name-$version.pyz" "dist/$artifact"
+
+# configuration example
+example_config_path="./config"
+example_config="${name}-${version}-config.tgz"
+tar -cvzf "./dist/$example_config" "$example_config_path"

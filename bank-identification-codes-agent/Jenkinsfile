@@ -54,28 +54,29 @@ pipeline {
                             url: "https://repo.silenteight.com/artifactory",
                             credentialsId: "artifactory-deployment-user"
                         )
-//                         rtUpload (
-//                             serverId: 'silenteight-repo',
-//                             spec: '''{
-//                                   "files": [
-//                                     {
-//                                       "pattern": "dist/*.pyz",
-//                                       "target": "dist-public-local/organization-name-agent/"
-//                                     }
-//                                  ]
-//                             }''',
-//                         )
-//                         rtUpload (
-//                             serverId: 'silenteight-repo',
-//                             spec: '''{
-//                                   "files": [
-//                                     {
-//                                       "pattern": "dist/*.tgz",
-//                                       "target": "dist-public-local/organization-name-agent/"
-//                                     }
-//                                  ]
-//                             }''',
-//                         )
+                        rtUpload (
+                            serverId: 'silenteight-repo',
+                            spec: '''{
+                                  "files": [
+                                    {
+                                      "pattern": "dist/*.pyz",
+                                      "target": "dist-public-local/identification-mismatch-agent/"
+                                    }
+                                 ]
+                            }''',
+                        )
+                        rtUpload (
+                            serverId: 'silenteight-repo',
+                            spec: '''{
+                                  "files": [
+                                    {
+                                      "pattern": "dist/*.tgz",
+                                      "target": "dist-public-local/identification-mismatch-agent/"
+                                    }
+                                 ]
+                            }''',
+                        )
+
                     }
                 }
 //                 stage('Prepare nomad artifacts') {
