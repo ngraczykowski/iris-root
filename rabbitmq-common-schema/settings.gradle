@@ -1,0 +1,5 @@
+rootProject.name = 'sear-rabbitmq-common-schema'
+
+// NOTE(ahaczewski): Keep sorted alphabetically.
+include "sear-rabbitmq-common-schema-definitions"
+include "sear-rabbitmq-common-schema-initializr-app"

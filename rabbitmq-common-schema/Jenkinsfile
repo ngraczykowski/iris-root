@@ -1,0 +1,16 @@
+@Library('pipeline-shared-library@master') _
+
+gradleBuild(
+    jdkVersion: 'jdk-11',
+    sonarEnabled: false,
+    dependencyCheckEnabled: false,
+    includeBuildNumberInSnapshotVersion: false,
+    additionalStages: {
+      stage('Build and deploy container image') {
+        script {
+          def gradle = new com.silenteight.jenkins.ci.Gradle()
+          gradle.gradle('jib')
+        }
+      }
+    }
+)

@@ -1,0 +1,8 @@
+plugins {
+  id "java-library"
+}
+
+dependencies {
+  implementation group: 'org.springframework.amqp', name: 'spring-amqp'
+  implementation group: 'org.springframework.amqp', name: 'spring-rabbit'
+}
