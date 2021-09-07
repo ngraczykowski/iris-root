@@ -1,4 +1,4 @@
-from idmismatchagent import *
+from idmismatchagent import identification_mismatch_agent, SearchCodeMismatchAgentInput
 from tstoolkit.utils import setup_logging, generate_logger, LogLevel
 
 if __name__ == "__main__":
@@ -11,8 +11,9 @@ if __name__ == "__main__":
                 message_tag="70",
                 matching_field="WE REFER TO 23190617054158 FOR15,990.00",
                 matching_text="190617",
-                wl_search_codes="190617",
+                wl_search_codes=["190617"],
                 wl_type="Individual",
+                wl_bic_codes=[],
             )
         )
     )
