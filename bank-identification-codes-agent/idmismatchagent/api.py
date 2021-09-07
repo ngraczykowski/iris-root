@@ -1,7 +1,7 @@
 from enum import Enum
-from typing import NewType, Union, List
+from typing import List, NewType, Union
 
-from attr import attrs, attrib
+from attr import attrib, attrs
 
 __all__ = [
     "SearchCodeMismatchAgentInput",

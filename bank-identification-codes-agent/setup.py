@@ -1,12 +1,13 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 tests_require = [
     "black>=19.10b0",
-    "cattrs>=1.0.0",
+    "cattrs==1.0.0",  # to be compatible with old attrs from ts-agent-toolkit
     "flake8>=3.8.3",
     "flake8-bugbear>=20.1.4",
     "flake8-comprehensions>=3.2.3",
     "flake8-junit-report>=2.1.0",
+    "isort==5.9.3",
     "pytest>=5.2.1",
     "pytest-cov>=2.10.0",
 ]
@@ -29,7 +30,7 @@ setup(
     },
     install_requires=[
         # Keep sorted alphabetically (case-insensitive)
-        "ts-agent-toolkit>=2.1,==2.*",
+        "ts-agent-toolkit==2.1.0",
     ],
     extras_require={
         "tests": tests_require,

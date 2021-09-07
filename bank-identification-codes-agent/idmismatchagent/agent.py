@@ -1,20 +1,20 @@
 import re
 from typing import Tuple
 
-from attr import attrs, attrib
+from attr import attrib, attrs
 
 from idmismatchagent.api import (
-    SearchCodeMismatchAgentInput,
-    Result,
-    Reason,
-    NoSearchCodeInWatchlistReason,
-    MatchingTextTooShortToBeCodeReason,
-    MatchingTextMatchesWlSearchCodeReason,
     MatchingTextDoesNotMatchMatchingFieldReason,
-    MatchingTextIsPartOfLongerSequenceReason,
-    MatchingTextIsOnlyPartialMatchForSearchCodeReason,
     MatchingTextDoesNotMatchWlSearchCodeReason,
+    MatchingTextIsOnlyPartialMatchForSearchCodeReason,
+    MatchingTextIsPartOfLongerSequenceReason,
     MatchingTextMatchesWlBicCodeReason,
+    MatchingTextMatchesWlSearchCodeReason,
+    MatchingTextTooShortToBeCodeReason,
+    NoSearchCodeInWatchlistReason,
+    Reason,
+    Result,
+    SearchCodeMismatchAgentInput,
 )
 
 __all__ = ["identification_mismatch_agent"]

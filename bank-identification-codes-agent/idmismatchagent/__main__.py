@@ -1,5 +1,6 @@
-from idmismatchagent import identification_mismatch_agent, SearchCodeMismatchAgentInput
-from tstoolkit.utils import setup_logging, generate_logger, LogLevel
+from tstoolkit.utils import LogLevel, generate_logger, setup_logging
+
+from idmismatchagent import SearchCodeMismatchAgentInput, identification_mismatch_agent
 
 if __name__ == "__main__":
     setup_logging()
