@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.api.v1.Alert;
 import com.silenteight.hsbc.bridge.alert.AlertServiceClient;
-import com.silenteight.hsbc.bridge.alert.AlertServiceClient.AlertForCreation;
 import com.silenteight.hsbc.bridge.alert.dto.AlertDto;
 import com.silenteight.hsbc.bridge.alert.dto.BatchCreateAlertMatchesRequestDto;
 import com.silenteight.hsbc.bridge.alert.event.UpdateAlertWithNameEvent;
@@ -16,13 +16,12 @@ import com.silenteight.hsbc.bridge.match.event.UpdateMatchWithNameEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
 
-import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import static com.silenteight.hsbc.bridge.common.util.TimestampUtil.fromOffsetDateTime;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
@@ -45,18 +44,13 @@ class AlertService {
   }
 
   private List<AlertDto> registerAlerts(Collection<AlertMatchIdComposite> alertMatchIdComposites) {
-    Stream<AlertForCreation> alertsForCreation = alertMatchIdComposites.stream()
-        .map(a -> new AlertForCreation() {
-          @Override
-          public String getId() {
-            return a.getAlertExternalId();
-          }
-
-          @Override
-          public OffsetDateTime getAlertTime() {
-            return a.getAlertTime();
-          }
-        });
+    List<Alert> alertsForCreation = alertMatchIdComposites.stream()
+        .map(a -> Alert
+            .newBuilder()
+            .setAlertId(a.getAlertExternalId())
+            .setAlertTime(fromOffsetDateTime(a.getAlertTime()))
+            .build())
+        .collect(toList());
 
     return alertServiceClient.batchCreateAlerts(alertsForCreation).getAlerts();
   }

@@ -31,11 +31,11 @@ public class AlertGrpcAdapter implements AlertServiceClient {
 
   @Override
   @Retryable(value = StatusRuntimeException.class)
-  public BatchCreateAlertsResponseDto batchCreateAlerts(Stream<AlertForCreation> alerts) {
+  public BatchCreateAlertsResponseDto batchCreateAlerts(List<Alert> alerts) {
     log.info("batchCreateAlerts alerts={}", alerts);
 
     var gprcRequest = BatchCreateAlertsRequest.newBuilder()
-        .addAllAlerts(alerts.map(AlertGrpcAdapter::mapAlert).collect(toList()))
+        .addAllAlerts(alerts)
         .build();
 
     var response = getStub().batchCreateAlerts(gprcRequest);
@@ -95,12 +95,5 @@ public class AlertGrpcAdapter implements AlertServiceClient {
 
   private AlertServiceBlockingStub getStub() {
     return alertServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, SECONDS);
-  }
-
-  private static Alert mapAlert(AlertForCreation alert) {
-    return Alert.newBuilder()
-        .setAlertId(alert.getId())
-        .setAlertTime(fromOffsetDateTime(alert.getAlertTime()))
-        .build();
   }
 }

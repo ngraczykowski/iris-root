@@ -1,5 +1,6 @@
 package com.silenteight.hsbc.bridge.grpc;
 
+import com.silenteight.adjudication.api.v1.Alert;
 import com.silenteight.hsbc.bridge.alert.AlertServiceClient;
 import com.silenteight.hsbc.bridge.alert.dto.*;
 
@@ -13,9 +14,9 @@ import static java.util.UUID.randomUUID;
 class AlertServiceClientMock implements AlertServiceClient {
 
   @Override
-  public BatchCreateAlertsResponseDto batchCreateAlerts(Stream<AlertForCreation> alerts) {
-    var requestedAlerts = alerts.map(a -> AlertDto.builder()
-            .alertId(a.getId())
+  public BatchCreateAlertsResponseDto batchCreateAlerts(List<Alert> alerts) {
+    var requestedAlerts = alerts.stream().map(a -> AlertDto.builder()
+            .alertId(a.getAlertId())
             .name("alerts/" + randomUUID())
             .build())
         .collect(Collectors.toList());
