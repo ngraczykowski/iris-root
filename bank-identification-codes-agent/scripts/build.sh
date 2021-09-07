@@ -6,4 +6,4 @@ basedir="$(cd -- "$scriptdir"/.. && pwd -P)"
 cd "$basedir"
 
 python setup.py bdist_wheel
-tox --installpkg ./dist/*.whl
+tox --installpkg ./dist/*.whl "$@"

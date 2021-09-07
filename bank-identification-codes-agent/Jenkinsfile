@@ -1,0 +1,106 @@
+pipeline {
+    agent none
+    environment {
+        PYPI_URL = credentials('pypi-readonly-url')
+    }
+    options {
+        timeout(time: 1, unit: 'HOURS')   // just to be safe
+    }
+
+    stages {
+        stage('Prepare python image') {
+            agent any
+            steps {
+                sh 'docker pull python:3.7'
+            }
+        }
+        stage('Prepare') {
+            agent {
+                docker {
+                    image 'python:3.7'
+                }
+            }
+            stages {
+                stage('Build') {
+                    steps {
+                        sh './scripts/clean.sh'
+                        sh './scripts/bootstrap.sh --index-url $PYPI_URL'
+                        sh './scripts/build.sh --index-url $PYPI_URL'
+                    }
+                }
+            }
+            post {
+                always {
+                    junit '.tox/*.xml'
+                    archiveArtifacts artifacts: 'dist/*', fingerprint: true
+                }
+                success {
+                    stash includes: 'dist/*', name: 'artifacts'
+                }
+            }
+        }
+
+        stage('Deployment'){
+            agent {
+                label 'nomad'
+            }
+            stages {
+                stage('Upload artifacts') {
+                    steps {
+                        sh './scripts/clean.sh'
+                        unstash 'artifacts'
+                        rtServer (
+                            id: "silenteight-repo",
+                            url: "https://repo.silenteight.com/artifactory",
+                            credentialsId: "artifactory-deployment-user"
+                        )
+//                         rtUpload (
+//                             serverId: 'silenteight-repo',
+//                             spec: '''{
+//                                   "files": [
+//                                     {
+//                                       "pattern": "dist/*.pyz",
+//                                       "target": "dist-public-local/organization-name-agent/"
+//                                     }
+//                                  ]
+//                             }''',
+//                         )
+//                         rtUpload (
+//                             serverId: 'silenteight-repo',
+//                             spec: '''{
+//                                   "files": [
+//                                     {
+//                                       "pattern": "dist/*.tgz",
+//                                       "target": "dist-public-local/organization-name-agent/"
+//                                     }
+//                                  ]
+//                             }''',
+//                         )
+                    }
+                }
+//                 stage('Prepare nomad artifacts') {
+//                     steps {
+//                         sh './nomad/prepare.sh'
+//                     }
+//                 }
+//                 stage('Deploy on nomad dev') {
+//                     steps {
+//                         script {
+//                             if (utils.getGitBranch() == 'master') {
+//                                 sh './nomad/full/deploy.sh'
+//                             } else {
+//                                 echo 'This is not a release branch'
+//                             }
+//                         }
+//                     }
+//                 }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'nomad/*.tar.bz2', fingerprint: true
+                }
+            }
+       }
+    }
+}
+
