@@ -17,7 +17,7 @@ public class LoggingRetryListener extends RetryListenerSupport {
       RetryCallback<T, E> callback, Throwable throwable) {
 
     log.error("Unable to recover from Exception");
-    log.error("Error", throwable);
+    log.error("Error: {}", throwable.getMessage());
     super.close(context, callback, throwable);
   }
 

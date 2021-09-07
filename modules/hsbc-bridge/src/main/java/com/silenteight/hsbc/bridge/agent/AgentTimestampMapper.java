@@ -3,8 +3,8 @@ package com.silenteight.hsbc.bridge.agent;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -15,10 +15,10 @@ class AgentTimestampMapper {
 
   long toUnixTimestamp(@NonNull String rawDate) {
     try {
-      var date = LocalDate.parse(rawDate, dateTimeFormatter);
-      return date.atStartOfDay(ZoneId.of("UTC")).toEpochSecond();
+      var dateTime = LocalDateTime.parse(rawDate, dateTimeFormatter);
+      return dateTime.atOffset(ZoneOffset.UTC).toEpochSecond();
     } catch (DateTimeParseException e) {
-      throw new DateParsingException(e);
+      throw new DateTimeParsingException(e);
     }
   }
 }

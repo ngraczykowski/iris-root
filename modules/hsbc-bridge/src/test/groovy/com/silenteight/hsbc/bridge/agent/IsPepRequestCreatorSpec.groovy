@@ -31,7 +31,7 @@ class IsPepRequestCreatorSpec extends Specification {
     def comment = alert.commentsList.first()
     comment.id == "1"
     comment.value == "someCommentProd"
-    comment.createdAt == 1609286400
+    comment.createdAt == 1609320006
   }
 
   def 'should return IsPepLearningStoreExchangeRequest object for data with testing env date format'() {

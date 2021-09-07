@@ -33,7 +33,7 @@ class HistoricalDecisionRequestCreatorSpec extends Specification {
 
     def decision = alert.decisionsList.first()
     decision.value == "newValueProd"
-    decision.createdAt == 1609286400
+    decision.createdAt == 1609320006
   }
 
   def "should return HistoricalDecisionRequest object for data with testing env date format"() {

@@ -1,10 +1,10 @@
 package com.silenteight.hsbc.bridge.agent;
 
-class DateParsingException extends RuntimeException {
+class DateTimeParsingException extends RuntimeException {
 
   private static final long serialVersionUID = 640726327424095134L;
 
-  public DateParsingException(Throwable cause) {
+  public DateTimeParsingException(Throwable cause) {
     super(cause);
   }
 }
