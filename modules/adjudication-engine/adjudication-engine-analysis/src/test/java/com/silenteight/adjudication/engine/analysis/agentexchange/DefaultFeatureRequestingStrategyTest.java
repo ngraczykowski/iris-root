@@ -62,7 +62,9 @@ class DefaultFeatureRequestingStrategyTest {
     assertThat(messages)
         .hasSize(2)
         .allSatisfy(m ->
-            assertThat(m.getFeatures()).hasSize(1).containsExactlyElementsOf(agent.getFeatures()))
+            assertThat(m.getFeatures())
+                .hasSize(1)
+                .containsExactlyElementsOf(agent.getFeatureNames()))
         .extracting(AgentExchangeRequestMessage::getMatchCount)
         .containsExactly(2, 1);
   }
@@ -78,6 +80,18 @@ class DefaultFeatureRequestingStrategyTest {
     assertThat(messages)
         .extracting(AgentExchangeRequestMessage::getMatchCount)
         .containsExactly(1);
+  }
+
+  @Test
+  void givenTwoFeaturesInChunkOfSizeOne_doesNotReuseAgentConfigFeatureIds() {
+    givenStrategy(1);
+    var agent = dummyAgent(2);
+    givenChunk(createMissingMatchFeatures(dummyAlert(1, 1), agent));
+
+    var messages = whenGenerate();
+    assertThat(messages)
+        .hasSize(2)
+        .allSatisfy(m -> assertThat(m.getAgentConfigFeatureIds()).hasSize(1));
   }
 
   @Nonnull

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
@@ -62,7 +63,8 @@ public final class AgentExchangeFixtures {
                 .alertId(alert.alertId)
                 .matchId(matchId)
                 .agentConfig(agent.agentConfig)
-                .feature(feature)
+                .feature(feature.name)
+                .agentConfigFeatureId(feature.agentConfigFeatureId)
                 .priority(alert.priority)
                 .build()
             ))))
@@ -82,10 +84,12 @@ public final class AgentExchangeFixtures {
   public static DummyAgent dummyAgent(int featureCount) {
     var agentId = AGENT_ID_GENERATOR.getAsInt();
     var configId = current().nextInt(1, 10);
-    var features = IntStream.range(0, featureCount)
+
+    var features = LongStream.range(0, featureCount)
         .map(j -> FEATURE_ID_GENERATOR.getAsInt())
-        .mapToObj(featureId -> "features/dummy_" + agentId + "_feature_" + featureId)
-        .collect(toList());
+        .mapToObj(featureId ->
+            new Feature("features/dummy_" + agentId + "_feature_" + featureId, featureId))
+        .collect(Collectors.toList());
 
     return new DummyAgent(
         "agents/dummy_" + agentId + "/versions/9.8.7/configs/" + configId, features);
@@ -113,9 +117,19 @@ public final class AgentExchangeFixtures {
   @Builder
   @Getter
   static final class DummyAgent {
-
     private final String agentConfig;
-    private final List<String> features;
+    private final List<Feature> features;
+
+    public List<String> getFeatureNames() {
+      return features.stream().map(f -> f.name).collect(toList());
+    }
+  }
+
+  @RequiredArgsConstructor
+  @Getter
+  static final class Feature {
+    private final String name;
+    private final long agentConfigFeatureId;
   }
 
   @RequiredArgsConstructor
