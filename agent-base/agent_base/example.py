@@ -109,9 +109,10 @@ def main():
     parser = argparse.ArgumentParser(description="Sample agent")
     parser.add_argument(
         "-c",
-        "--configuration-dir",
+        "--configuration-dirs",
         type=pathlib.Path,
-        default=pathlib.Path("config"),
+        default=(pathlib.Path("config"),),
+        nargs="+",
         help="Path for configuration files",
     )
     parser.add_argument(
@@ -127,7 +128,7 @@ def main():
         format="%(asctime)s %(name)-20s %(levelname)-8s %(message)s",
     )
 
-    config = Config(configuration_dirs=[args.configuration_dir], required=True)
+    config = Config(configuration_dirs=args.configuration_dirs, required=True)
     AgentRunner(config).run(
         JohnnyAgent(config),
         services=[

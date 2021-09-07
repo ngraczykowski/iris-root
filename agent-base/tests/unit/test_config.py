@@ -1,3 +1,4 @@
+import os
 import pathlib
 
 import pytest
@@ -16,6 +17,13 @@ def test_config_with_configuration_dir():
     config_dir = pathlib.Path("./other_config_dir")
     config = Config((config_dir,))
     assert config.configuration_dirs == (config_dir,)
+
+
+def test_config_with_env_variable():
+    config_dir = "./other_config_dir"
+    os.environ["AGENT_TEST_CONFIGURATION_DIR"] = config_dir
+    config = Config(env_configuration_dir_key="AGENT_TEST_CONFIGURATION_DIR")
+    assert config.configuration_dirs == (pathlib.Path(config_dir), DEFAULT_DIR)
 
 
 def test_application_required_config():

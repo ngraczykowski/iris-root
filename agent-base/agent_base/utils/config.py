@@ -1,3 +1,4 @@
+import os
 import pathlib
 from typing import Any, Optional
 
@@ -9,11 +10,25 @@ class ConfigurationException(Exception):
 
 
 class Config:
-    def __init__(self, configuration_dirs=(pathlib.Path("./config"),), required=False):
-        self.configuration_dirs = configuration_dirs
+    def __init__(
+        self,
+        configuration_dirs=(pathlib.Path("./config"),),
+        required: bool = False,
+        env_configuration_dir_key: str = "AGENT_CONFIGURATION_DIR",
+    ):
+        self.configuration_dirs = (
+            *self._get_from_environment(env_configuration_dir_key),
+            *configuration_dirs,
+        )
         self.application_config = self.load_yaml_config(
             "application.yaml", required=required
         )
+
+    @staticmethod
+    def _get_from_environment(configuration_dir_key: str):
+        path = os.environ.get(configuration_dir_key)
+        if path:
+            yield pathlib.Path(path)
 
     def get_config_path(
         self, config_file_name: str, required=False
