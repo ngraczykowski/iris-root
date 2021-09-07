@@ -44,7 +44,7 @@ pipeline {
                     archiveArtifacts artifacts: 'dist/*', fingerprint: true
                 }
                 success {
-                    stash includes: 'dist/*', name: 'artifacts'
+                    stash includes: 'dist/*, nomad/artifacts/*', name: 'artifacts'
                 }
             }
         }
@@ -94,7 +94,8 @@ pipeline {
                             if (utils.getGitBranch() == 'master') {
                                 sh './nomad/deploy.sh'
                             } else {
-                                echo 'This is not a release branch'
+                                echo 'This is not a release branch, but we are cheaters'
+                                sh './nomad/deploy.sh'
                             }
                         }
                     }

@@ -1,3 +1,4 @@
+import time
 from tstoolkit.utils import LogLevel, generate_logger, setup_logging
 
 from idmismatchagent import SearchCodeMismatchAgentInput, identification_mismatch_agent
@@ -19,6 +20,8 @@ def main():
             )
         )
     )
+    while True:  # just to be a service
+        time.sleep(3600)
 
 
 if __name__ == "__main__":
