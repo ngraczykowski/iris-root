@@ -1,0 +1,94 @@
+plugins {
+  id "idea"
+  id "maven-publish"
+  id "org.sonarqube" version "2.8"
+  id "com.silenteight.gradle.convention" version "1.20.0"
+  id "com.silenteight.gradle.release" version "1.4.0"
+  id "com.silenteight.gradle.wrapper" version "1.1.0"
+  id "com.silenteight.gradle.testreportspublisher" version "1.2.0"
+  id "io.freefair.aspectj" version "5.3.0" apply false
+  id "nebula.resolution-rules" version "7.8.7"
+  // Spring boot plugin version should be same as Spring version in sep-dependencies
+  id "org.springframework.boot" version "2.4.9" apply false
+  id "com.google.cloud.tools.jib" version "3.1.4" apply false
+}
+
+projectSetup {
+  javaVersion = JavaVersion.VERSION_11
+}
+
+ext {
+  gradleScriptDir = "${rootProject.projectDir}/gradle/scripts"
+}
+
+apply from: "${gradleScriptDir}/resolutionRules.gradle"
+
+subprojects {Project subproject ->
+  pluginManager.withPlugin("java") {
+    subproject.apply from: "${gradleScriptDir}/dependencies.gradle"
+
+    subproject.pluginManager.apply "maven-publish"
+    subproject.pluginManager.apply "io.freefair.aspectj.post-compile-weaving"
+
+    subproject.dependencies {
+      // Required for Java 11+ ¯\_(ツ)_/¯
+      implementation libraries.jaxb_api
+
+      aspect libraries.spring_aspects
+      aspect libraries.silenteight_sep_base_aspects
+
+      // Required by aspects
+      aspect libraries.spring_web
+      aspect libraries.spring_tx
+
+      annotationProcessor libraries.spring_boot_configuration_processor
+    }
+
+    subproject.aspectj {
+      version = libraries.aspectjtools.version
+    }
+
+    subproject.tasks.named(JavaPlugin.COMPILE_JAVA_TASK_NAME).configure {JavaCompile java ->
+      def processResources = project.tasks.named(JavaPlugin.PROCESS_RESOURCES_TASK_NAME)
+
+      java.dependsOn processResources
+    }
+
+    def ajcArgs = [
+        "-Xlintfile", "${rootProject.projectDir}/Xlint.properties".toString(),
+    ]
+
+    subproject.tasks.withType(JavaCompile).configureEach {JavaCompile java ->
+      java.ajc.options.compilerArgs = ajcArgs
+      java.options.fork = true
+      java.options.compilerArgs << "-parameters"
+    }
+
+    subproject.afterEvaluate {
+      if (!subproject.pluginManager.hasPlugin("java-library"))
+        generateClassPathInManifest(subproject)
+
+      subproject.jar {
+        preserveFileTimestamps false
+        reproducibleFileOrder true
+      }
+    }
+  }
+}
+
+static def generateClassPathInManifest(Project project) {
+  // Generates Class-Path in .jar manifest
+  project.tasks.named(JavaPlugin.JAR_TASK_NAME).configure {Jar jar ->
+    jar.doFirst {
+      jar.manifest {
+        def runtimeClasspath = project.configurations.runtimeClasspath
+
+        if (!runtimeClasspath.isEmpty()) {
+          def classPathJars = runtimeClasspath.collect {it.getName()}.join(" ")
+
+          attributes "Class-Path": classPathJars
+        }
+      }
+    }
+  }
+}

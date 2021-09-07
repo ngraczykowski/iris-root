@@ -1,0 +1,126 @@
+plugins {
+  id "java"
+  id "groovy"
+  id "org.springframework.boot"
+  id "com.google.cloud.tools.jib"
+}
+
+dependencies {
+  // Application modules
+
+  // Utilities
+  implementation libraries.commons_lang3
+  implementation libraries.commons_text
+  implementation libraries.guava
+
+  // Logging
+  runtimeOnly libraries.ecs_logging_core
+  runtimeOnly libraries.logback_ecs_encoder
+
+  // Base Libraries
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_commons_app
+
+  // Application Starters
+  implementation libraries.spring_boot_starter_actuator
+  implementation libraries.spring_boot_starter_logging
+  implementation libraries.spring_boot_starter_web
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.micrometer_prometheus
+
+  // Security
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_core
+  implementation libraries.spring_security_web
+
+  // Cloud
+  implementation libraries.spring_cloud_consul_discovery
+  implementation libraries.spring_cloud_starter_consul_config
+  implementation libraries.spring_cloud_starter_sleuth
+  // Validator
+  implementation libraries.tomcat_embed_el
+  implementation libraries.hibernate_validator
+
+  // Jackson
+  implementation libraries.jackson_annotations
+  implementation libraries.jackson_databind
+  runtimeOnly libraries.jackson_datatype_jdk8
+  runtimeOnly libraries.jackson_datatype_jsr310
+  runtimeOnly libraries.jackson_module_afterburner
+  runtimeOnly libraries.jackson_module_paranamer
+  runtimeOnly libraries.jackson_module_parameter_names
+
+  // Database
+  implementation libraries.spring_boot_starter_data_jpa
+  implementation libraries.spring_boot_starter_jdbc
+  implementation libraries.liquibase_core
+  implementation libraries.hikari_cp
+  runtimeOnly libraries.postgresql
+  runtimeOnly libraries.liquibase_sessionlock
+
+  // Messaging
+  implementation libraries.amqp_client
+  implementation libraries.lz4_java
+  implementation libraries.spring_boot_starter_integration
+  implementation libraries.spring_integration_amqp
+  implementation libraries.spring_integration_core
+  implementation libraries.spring_integration_http
+
+  // GRPC
+  implementation libraries.brave_instrumentation_grpc
+  implementation libraries.grpc_server_spring_boot_starter
+  implementation libraries.grpc_client_spring_boot_starter
+
+  // AspectJ
+  implementation libraries.aspectjrt
+  aspect libraries.silenteight_sep_base_aspects
+}
+
+jar {
+  manifest {
+    attributes "Main-Class": "com.silenteight.universaldatasource.app.UniversalDataSourceApplication"
+  }
+}
+
+jib {
+  from {
+    // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
+    def imageSuffix = ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) ?
+                      "-debug" : ""
+    image = "gcr.io/distroless/java-debian10:11" + imageSuffix
+  }
+  to {
+    image = "docker.repo.silenteight.com/uds/${project.name}:${version}"
+    if ("$version".contains("-BUILD") || "$version".endsWith("-SNAPSHOT")) {
+      tags = ["snapshot"]
+    } else {
+      tags = ["latest"]
+    }
+  }
+  container {
+    appRoot = "/silenteight/app"
+    environment = [
+        "SILENTEIGHT_HOME"            : "/silenteight",
+        "UDS_DB_HOST"                  : "postgres",
+        "UDS_DB_PORT"                  : "5432",
+        "UDS_DB_NAME"                  : "datasource",
+        "UDS_DB_USERNAME"              : "datasource",
+        "UDS_DB_PASSWORD"              : "datasource",
+        "SPRING_PROFILES_ACTIVE"      : "",
+    ]
+    jvmFlags = [
+        "-XX:MaxRAMPercentage=75",
+        "-Dfile.encoding=UTF-8",
+        "-Dsun.jnu.encoding=UTF-8",
+        "-Djava.net.preferIPv4Stack=true",
+        "-Djava.io.tmpdir=/tmp",
+        "-Dsilenteight.home=/silenteight",
+        "-Dspring.profiles.include=container",
+        "-Dserver.port=8080",
+        "-Dgrpc.server.port=8081",
+    ]
+    ports = ["8080", "8081"]
+    user = "nonroot"
+    workingDirectory = "/silenteight"
+  }
+}
