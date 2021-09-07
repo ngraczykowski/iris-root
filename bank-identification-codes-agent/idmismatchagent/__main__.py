@@ -2,7 +2,8 @@ from tstoolkit.utils import LogLevel, generate_logger, setup_logging
 
 from idmismatchagent import SearchCodeMismatchAgentInput, identification_mismatch_agent
 
-if __name__ == "__main__":
+
+def main():
     setup_logging()
     logger = generate_logger(log_level=LogLevel.debug)
     logger.debug(
@@ -18,3 +19,7 @@ if __name__ == "__main__":
             )
         )
     )
+
+
+if __name__ == "__main__":
+    main()

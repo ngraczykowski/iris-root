@@ -11,4 +11,13 @@ fi
 
 
 python setup.py bdist_wheel
-tox --installpkg ./dist/*.whl "$@"
+artifact=$(basename -- "$(ls -tr ./dist/*.whl)")
+IFS='-' read -r name version rest <<< "$artifact"
+
+# wheel
+pip install tox
+python -m tox --installpkg ./dist/"$artifact" "$@"
+
+# zipfile (executable, to run without installing)
+pip install shiv
+shiv -e idmismatchagent.__main__:main "$@" --compressed -o "./dist/$name-$version.pyz" "dist/$artifact"
