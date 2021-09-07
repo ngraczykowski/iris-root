@@ -22,10 +22,18 @@ public class BulkProcessorScheduler {
   public void processPreProcessedBulks() {
     LockAssert.assertLocked();
 
-    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(PRE_PROCESSED)
-        .ifPresent(b -> {
-          bulkUpdater.updateWithPreProcessingStatus(b.getId());
-          bulkProcessor.tryToProcessBulk();
-        });
+    var firstByStatusOrderByCreatedAtAsc =
+        bulkRepository.findFirstByStatusOrderByCreatedAtAsc(PRE_PROCESSED);
+
+    if (firstByStatusOrderByCreatedAtAsc.isPresent()) {
+      log.info("Try to process bulk with id: {}", firstByStatusOrderByCreatedAtAsc.get().getId());
+    } else {
+      log.info("No bulk with status PRE_PROCESSED");
+    }
+
+    firstByStatusOrderByCreatedAtAsc.ifPresent(b -> {
+      bulkUpdater.updateWithPreProcessingStatus(b.getId());
+      bulkProcessor.tryToProcessBulk();
+    });
   }
 }
