@@ -3,7 +3,19 @@ from typing import Tuple
 
 from attr import attrs, attrib
 
-from .api import *
+from idmismatchagent.api import (
+    SearchCodeMismatchAgentInput,
+    Result,
+    Reason,
+    NoSearchCodeInWatchlistReason,
+    MatchingTextTooShortToBeCodeReason,
+    MatchingTextMatchesWlSearchCodeReason,
+    MatchingTextDoesNotMatchMatchingFieldReason,
+    MatchingTextIsPartOfLongerSequenceReason,
+    MatchingTextIsOnlyPartialMatchForSearchCodeReason,
+    MatchingTextDoesNotMatchWlSearchCodeReason,
+    MatchingTextMatchesWlBicCodeReason,
+)
 
 __all__ = ["identification_mismatch_agent"]
 
@@ -40,8 +52,7 @@ class IdMismatchLogic:
         if len(self.matching_text) < 3:
             return Result.NO_DECISION, MatchingTextTooShortToBeCodeReason(self.matching_text)
 
-        remove_non_word_chars = lambda text: re.sub(r"\W+", "", text)
-        matching_text_no_extra_characters = remove_non_word_chars(self.matching_text).upper()
+        matching_text_no_extra_characters = re.sub(r"\W+", "", self.matching_text).upper()
 
         matching_text_pattern = "[ ]{0,1}".join(matching_text_no_extra_characters)
 
@@ -51,7 +62,7 @@ class IdMismatchLogic:
         bic_codes = [bic_code.strip().upper() for bic_code in self.wl_bic_codes]
 
         pattern = fr"""
-        ([\w]{{0,}}                 # Matches 0 to inf characters before actual pattern (no spaces) 
+        ([\w]{{0,}}                 # Matches 0 to inf characters before actual pattern (no spaces)
         ({matching_text_pattern})   # 2nd capture group for matching actual pattern
         [\w]{{0,}})                 # Matches 0 to inf characters after actual pattern
         """
@@ -82,7 +93,11 @@ class IdMismatchLogic:
         return result, reason
 
     def _search_in_search_codes(
-        self, matching_text_no_extra_characters, raw_matched_string, search_codes, whole_string,
+        self,
+        matching_text_no_extra_characters,
+        raw_matched_string,
+        search_codes,
+        whole_string,
     ):
         result = Result.NO_DECISION
         reason = MatchingTextDoesNotMatchWlSearchCodeReason(

@@ -18,10 +18,14 @@ setup(
     author_email="proj-scb-tsaas@silenteight.com",
     url="https://silenteight.com",
     license="Proprietary",
-    classifiers=["License :: Other/Proprietary License",],
+    classifiers=[
+        "License :: Other/Proprietary License",
+    ],
     packages=find_packages(exclude=("tests",)),
     package_data={
-        "idmismatchagent": ["templates/*",]
+        "idmismatchagent": [
+            "templates/*",
+        ]
     },
     install_requires=[
         # Keep sorted alphabetically (case-insensitive)
@@ -30,6 +34,8 @@ setup(
     extras_require={
         "tests": tests_require,
     },
-    setup_requires=["pytest-runner>=5.1",],
+    setup_requires=[
+        "pytest-runner>=5.1",
+    ],
     tests_require=tests_require,
 )
