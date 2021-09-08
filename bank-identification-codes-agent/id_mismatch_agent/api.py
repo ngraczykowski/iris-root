@@ -39,7 +39,7 @@ class MatchingTextTooShortToBeCodeReason(Reason):
 @attrs(frozen=True)
 class MatchingTextMatchesWlSearchCodeReason(Reason):
     matching_text: str = attrib()
-    search_code: str = attrib()
+    search_codes: List[str] = attrib()
     watchlist_type: str = attrib()
 
 
@@ -53,7 +53,7 @@ class MatchingTextMatchesWlBicCodeReason(Reason):
 @attrs(frozen=True)
 class MatchingTextIsPartOfLongerSequenceReason(Reason):
     matching_text: str = attrib()
-    raw_matched_sequence: str = attrib()
+    matched_sequence: str = attrib()
     matching_field: str = attrib()
     partial_match: str = attrib()
     watchlist_type: str = attrib()
@@ -77,16 +77,3 @@ class MatchingTextDoesNotMatchWlSearchCodeReason(Reason):
 class MatchingTextDoesNotMatchMatchingFieldReason(Reason):
     matching_text: str = attrib()
     matching_field: str = attrib()
-
-
-# Reason = NewType(
-#     "Reason",
-#     Union[
-#         NoSearchCodeInWatchlistReason,
-#         MatchingTextTooShortToBeCodeReason,
-#         MatchingTextMatchesWlSearchCodeReason,
-#         MatchingTextMatchesWlBicCodeReason,
-#         MatchingTextIsPartOfLongerSequenceReason,
-#         MatchingTextDoesNotMatchMatchingFieldReason,
-#     ],
-# )

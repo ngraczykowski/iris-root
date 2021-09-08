@@ -3,11 +3,22 @@ from typing import Tuple
 
 from attr import attrs, attrib
 
-from .api import *
+from id_mismatch_agent.api import (
+    MatchingTextDoesNotMatchMatchingFieldReason,
+    MatchingTextDoesNotMatchWlSearchCodeReason,
+    MatchingTextIsOnlyPartialMatchForSearchCodeReason,
+    MatchingTextIsPartOfLongerSequenceReason,
+    MatchingTextMatchesWlBicCodeReason,
+    MatchingTextMatchesWlSearchCodeReason,
+    MatchingTextTooShortToBeCodeReason,
+    NoSearchCodeInWatchlistReason,
+    SearchCodeMismatchAgentInput,
+)
+
 
 __all__ = ["identification_mismatch_agent"]
 
-from .result import Solution, Reason, Result
+from id_mismatch_agent.result import Solution, Reason, Result
 
 SEPARATORS_PATTERN = re.compile(r"[-),./]+")
 HEADQUARTERS_INDICATOR = "XXX"
@@ -43,8 +54,7 @@ class IdMismatchLogic:
                 reason=MatchingTextTooShortToBeCodeReason(self.matching_text),
             )
 
-        remove_non_word_chars = lambda text: re.sub(r"\W+", "", text)
-        matching_text_no_extra_characters = remove_non_word_chars(self.matching_text).upper()
+        matching_text_no_extra_characters = re.sub(r"\W+", "", self.matching_text).upper()
 
         matching_text_pattern = "[ ]{0,1}".join(matching_text_no_extra_characters)
 
@@ -54,7 +64,7 @@ class IdMismatchLogic:
         bic_codes = [bic_code.strip().upper() for bic_code in self.watchlist_bic_codes]
 
         pattern = fr"""
-        ([\w]{{0,}}                 # Matches 0 to inf characters before actual pattern (no spaces) 
+        ([\w]{{0,}}                 # Matches 0 to inf characters before actual pattern (no spaces)
         ({matching_text_pattern})   # 2nd capture group for matching actual pattern
         [\w]{{0,}})                 # Matches 0 to inf characters after actual pattern
         """
@@ -95,7 +105,7 @@ class IdMismatchLogic:
             if whole_string == search_code:
                 solution = Solution.NO_MATCH
                 reason = MatchingTextMatchesWlSearchCodeReason(
-                    self.matching_text, search_code, self.watchlist_type
+                    self.matching_text, [search_code], self.watchlist_type
                 )
                 break
 

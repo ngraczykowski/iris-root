@@ -11,7 +11,7 @@ ACC_NO_REGEX = re.compile(
 
 PAN_NO_REGEX = re.compile(
     r"""
-PAN\s*(NO[\s\.:]*)* # Matches "PAN", "PAN NO." or "PANNO" etc 
+PAN\s*(NO[\s\.:]*)* # Matches "PAN", "PAN NO." or "PANNO" etc
 (?P<PAN>\d+) # Actual PAN number matching group, just 1-inf digits
 """,
     re.VERBOSE,

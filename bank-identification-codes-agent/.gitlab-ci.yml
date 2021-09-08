@@ -32,8 +32,7 @@ build:
     reports:
       cobertura: .tox/coverage-report.xml
       junit:
-        # NOTE(ahaczewski): Disable flake8 report as it has tons of failures.
-        # - .tox/flake8-report.xml
+        - .tox/flake8-report.xml
         - .tox/pytest-report.xml
 
 publish:
@@ -69,8 +68,7 @@ release:
     reports:
       cobertura: .tox/coverage-report.xml
       junit:
-        # NOTE(ahaczewski): Disable flake8 report as it has tons of failures.
-        # - .tox/flake8-report.xml
+        - .tox/flake8-report.xml
         - .tox/pytest-report.xml
 
 publish_release:

@@ -4,13 +4,11 @@ import os
 from pathlib import Path
 from typing import Tuple
 
-from attr import attrs, attrib
+from attr import attrib, attrs
 from cattr import structure_attrs_fromdict
 
-from id_mismatch_agent.api import (
-    SearchCodeMismatchAgentInput,
-)
-from id_mismatch_agent.result import Solution, Reason
+from id_mismatch_agent.api import SearchCodeMismatchAgentInput
+from id_mismatch_agent.result import Reason, Solution
 
 
 @attrs(frozen=True)

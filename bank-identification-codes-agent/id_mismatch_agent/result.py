@@ -13,7 +13,7 @@ class Solution(Enum):
 class Reason:
     conclusion: str = None
     matching_text: str = None
-    raw_matched_sequence: str = None
+    matched_sequence: str = None
     matching_field: str = None
     partial_match: str = None
     watchlist_type: str = None
