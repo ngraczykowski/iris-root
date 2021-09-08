@@ -35,14 +35,16 @@ class StoreBulkUseCase {
   public void storeBulkWithAlerts(String bulkId, boolean learning, InputStream inputStream) {
     var bulk = new Bulk(bulkId, learning);
     bulkRepository.save(bulk);
-    tryToCreateAlerts(inputStream, bulk);
+    log.info("Batch has been stored, ID: {}, learning: {}", bulkId, learning);
 
-    log.info("Batch has been stored, ID: {}", bulkId);
+    tryToCreateAlerts(inputStream, bulk);
+    log.info("Raw alerts have been created, batchId: {}", bulkId);
   }
 
   private void tryToCreateAlerts(InputStream inputStream, Bulk bulk) {
     var bulkId = bulk.getId();
     try {
+      log.info("Creating raw alerts, batchId: {}", bulkId);
       alertFacade.createRawAlerts(bulkId, inputStream);
       eventPublisher.publishEvent(new BulkStoredEvent(bulkId));
     } catch (BatchAlertsLimitException e) {

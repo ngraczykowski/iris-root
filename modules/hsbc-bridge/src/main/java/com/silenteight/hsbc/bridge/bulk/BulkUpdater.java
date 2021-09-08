@@ -2,12 +2,14 @@ package com.silenteight.hsbc.bridge.bulk;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.*;
 
 @RequiredArgsConstructor
+@Slf4j
 class BulkUpdater {
 
   private final BulkRepository bulkRepository;
@@ -26,6 +28,7 @@ class BulkUpdater {
     bulkRepository.findByAnalysisName(analysis).ifPresent(bulk -> {
       bulk.setStatus(COMPLETED);
       bulkRepository.save(bulk);
+      log.info("Solving batch {} has been completed", bulk.getId());
     });
   }
 
@@ -34,6 +37,7 @@ class BulkUpdater {
     bulkRepository.findById(bulkId).ifPresent(b -> {
       b.setStatus(PRE_PROCESSED);
       bulkRepository.save(b);
+      log.info("Set batch {} status PRE_PROCESSED", bulkId);
     });
   }
 
@@ -42,6 +46,7 @@ class BulkUpdater {
     bulkRepository.findById(bulkId).ifPresent(b -> {
       b.setStatus(PRE_PROCESSING);
       bulkRepository.save(b);
+      log.info("Set batch {} status PRE_PROCESSING", bulkId);
     });
   }
 

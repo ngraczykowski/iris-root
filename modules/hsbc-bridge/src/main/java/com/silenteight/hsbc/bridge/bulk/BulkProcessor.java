@@ -57,6 +57,7 @@ class BulkProcessor {
 
     bulk.setAnalysisId(analysisId);
     bulk.setStatus(PROCESSING);
+    log.info("Set batch {} status PROCESSING", bulk.getId());
   }
 
   private void processLearningBulk(Bulk bulk) {
@@ -68,6 +69,7 @@ class BulkProcessor {
     processLearningAlerts(alerts);
 
     bulk.setStatus(COMPLETED);
+    log.info("Learning batch {} has been completed", bulk.getId());
   }
 
   private static AlertMatchIdComposite toComposite(BulkAlertEntity alert) {

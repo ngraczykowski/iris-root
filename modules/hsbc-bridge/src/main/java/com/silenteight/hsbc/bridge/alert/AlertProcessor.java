@@ -27,12 +27,13 @@ class AlertProcessor {
 
   @Transactional
   public void preProcessAlertsWithinBulk(@NonNull String bulkId) {
+    log.info("Pre-processing alerts, batchId: {}", bulkId);
     try (var alerts = repository.findByBulkIdAndStatus(bulkId, STORED)) {
       alerts.forEach(this::tryToPreProcessAlert);
     }
 
     handleDuplicatedAlerts(bulkId);
-    log.debug("Alerts pre-processing have been completed, batchId = {}", bulkId);
+    log.info("Alerts pre-processing have been completed, batchId: {}", bulkId);
   }
 
   private void handleDuplicatedAlerts(String bulkId) {

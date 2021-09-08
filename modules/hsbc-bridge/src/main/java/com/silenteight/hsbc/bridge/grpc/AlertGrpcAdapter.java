@@ -32,11 +32,11 @@ public class AlertGrpcAdapter implements AlertServiceClient {
   public BatchCreateAlertsResponseDto batchCreateAlerts(List<Alert> alerts) {
     log.info("batchCreateAlerts alerts={}", alerts.size());
 
-    var gprcRequest = BatchCreateAlertsRequest.newBuilder()
+    var grpcRequest = BatchCreateAlertsRequest.newBuilder()
         .addAllAlerts(alerts)
         .build();
 
-    var response = getStub().batchCreateAlerts(gprcRequest);
+    var response = getStub().batchCreateAlerts(grpcRequest);
     var registeredAlerts = response.getAlertsList();
 
     //TODO remove it once root cause of the issue is found
