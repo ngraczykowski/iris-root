@@ -66,3 +66,5 @@ class MatchingTextDoesNotMatchWlSearchCodeReason(Reason):
 class MatchingTextDoesNotMatchMatchingFieldReason(Reason):
     matching_text: str = attrib()
     matching_field: str = attrib()
+
+# some comment to avoid this newline trouble
