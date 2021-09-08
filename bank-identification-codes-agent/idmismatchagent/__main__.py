@@ -1,6 +1,5 @@
 import argparse
 import pathlib
-import time
 
 from agent_base.agent import AgentRunner
 from agent_base.grpc_service import GrpcService
