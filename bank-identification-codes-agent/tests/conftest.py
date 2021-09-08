@@ -7,8 +7,8 @@ from typing import Tuple
 from attr import attrib, attrs
 from cattr import structure_attrs_fromdict
 
-from id_mismatch_agent.api import SearchCodeMismatchAgentInput
-from id_mismatch_agent.result import Reason, Solution
+from idmismatchagent.api import SearchCodeMismatchAgentInput
+from idmismatchagent.result import Reason, Solution
 
 
 @attrs(frozen=True)
@@ -49,7 +49,7 @@ def read_test_cases():
                 if reason_dict.get("search_codes", ""):
                     reason_dict["search_codes"] = json.loads(reason_dict["search_codes"])
 
-                import id_mismatch_agent.api as api_module
+                import idmismatchagent.api as api_module
 
                 reason_type = getattr(api_module, reason_type_name)
 

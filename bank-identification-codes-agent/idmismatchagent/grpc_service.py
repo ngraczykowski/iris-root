@@ -12,10 +12,12 @@ from identification_mismatch_agent_pb2_grpc import (
 from result import Result
 
 
-class CompanyNameAgentGrpcServicer(IdentificationMismatchAgentServicer, AgentGrpcServicer):
+class IdentificationMismatchAgentGrpcServicer(
+    IdentificationMismatchAgentServicer, AgentGrpcServicer
+):
     name = DESCRIPTOR.services_by_name["IdentificationMismatchAgent"].full_name
 
-    async def CompareOrganizationNames(
+    async def CheckIdentificationMismatch(
         self, request: CheckIdentificationMismatchRequest, _context
     ) -> CheckIdentificationMismatchResponse:
         result: Result = await self.create_resolve_task(request)

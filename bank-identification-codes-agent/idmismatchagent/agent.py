@@ -1,9 +1,10 @@
 import re
 from typing import Tuple
 
+from agent_base.agent import Agent
 from attr import attrs, attrib
 
-from id_mismatch_agent.api import (
+from idmismatchagent.api import (
     MatchingTextDoesNotMatchMatchingFieldReason,
     MatchingTextDoesNotMatchWlSearchCodeReason,
     MatchingTextIsOnlyPartialMatchForSearchCodeReason,
@@ -15,25 +16,23 @@ from id_mismatch_agent.api import (
     SearchCodeMismatchAgentInput,
 )
 
-
-__all__ = ["identification_mismatch_agent"]
-
-from id_mismatch_agent.result import Solution, Reason, Result
+from idmismatchagent.result import Solution, Reason, Result
 
 SEPARATORS_PATTERN = re.compile(r"[-),./]+")
 HEADQUARTERS_INDICATOR = "XXX"
 
 
-def identification_mismatch_agent(agent_input: SearchCodeMismatchAgentInput,) -> Result:
-    logic = IdMismatchLogic(
-        agent_input.matching_field,
-        agent_input.matching_text,
-        agent_input.watchlist_type,
-        _filter_none_values(agent_input.watchlist_search_codes),
-        _filter_none_values(agent_input.watchlist_bic_codes),
-    )
+class IdentificationMismatchAgent(Agent):
+    def resolve(self, agent_input: SearchCodeMismatchAgentInput) -> Result:
+        logic = IdMismatchLogic(
+            agent_input.matching_field,
+            agent_input.matching_text,
+            agent_input.watchlist_type,
+            _filter_none_values(agent_input.watchlist_search_codes),
+            _filter_none_values(agent_input.watchlist_bic_codes),
+        )
 
-    return logic.execute()
+        return logic.execute()
 
 
 @attrs(frozen=True)

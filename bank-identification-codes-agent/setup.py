@@ -24,7 +24,7 @@ setup(
     ],
     packages=find_packages(exclude=("tests",)),
     package_data={
-        "id_mismatch_agent": [
+        "idmismatchagent": [
             "templates/*",
         ]
     },

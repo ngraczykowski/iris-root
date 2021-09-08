@@ -14,7 +14,7 @@ __all__ = [
     "MatchingTextDoesNotMatchMatchingFieldReason",
 ]
 
-from id_mismatch_agent.result import Reason
+from idmismatchagent.result import Reason
 
 
 @attrs(frozen=True)
