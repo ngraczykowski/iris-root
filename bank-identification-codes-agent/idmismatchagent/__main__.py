@@ -4,7 +4,7 @@ import pathlib
 from agent_base.agent import AgentRunner
 from agent_base.grpc_service import GrpcService
 from agent_base.utils import Config
-from tstoolkit.utils import setup_logging, LogLevel
+from tstoolkit.utils import LogLevel, setup_logging
 
 from idmismatchagent.agent import IdentificationMismatchAgent
 from idmismatchagent.grpc_service import IdentificationMismatchAgentGrpcServicer
@@ -15,7 +15,9 @@ def run(configuration_dirs, start_grpc_service):
     services = []
 
     if start_grpc_service:
-        services.append(GrpcService(config, servicers=(IdentificationMismatchAgentGrpcServicer(),)))
+        services.append(
+            GrpcService(config, servicers=(IdentificationMismatchAgentGrpcServicer(),))
+        )
 
     AgentRunner(config).run(
         IdentificationMismatchAgent(config=config),

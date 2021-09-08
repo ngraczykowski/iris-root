@@ -2,7 +2,7 @@ import re
 from typing import Tuple
 
 from agent_base.agent import Agent
-from attr import attrs, attrib
+from attr import attrib, attrs
 
 from idmismatchagent.api import (
     MatchingTextDoesNotMatchMatchingFieldReason,
@@ -15,8 +15,7 @@ from idmismatchagent.api import (
     NoSearchCodeInWatchlistReason,
     SearchCodeMismatchAgentInput,
 )
-
-from idmismatchagent.result import Solution, Reason, Result
+from idmismatchagent.result import Reason, Result, Solution
 
 SEPARATORS_PATTERN = re.compile(r"[-),./]+")
 HEADQUARTERS_INDICATOR = "XXX"
@@ -94,7 +93,11 @@ class IdMismatchLogic:
         return Result(solution=solution, reason=reason)
 
     def _search_in_search_codes(
-        self, matching_text_no_extra_characters, raw_matched_string, search_codes, whole_string,
+        self,
+        matching_text_no_extra_characters,
+        raw_matched_string,
+        search_codes,
+        whole_string,
     ) -> Tuple[Solution, Reason]:
         solution = Solution.NO_DECISION
         reason = MatchingTextDoesNotMatchWlSearchCodeReason(

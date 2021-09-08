@@ -2,7 +2,9 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from idmismatchagent import identification_mismatch_agent_pb2 as idmismatchagent_dot_identification__mismatch__agent__pb2
+from idmismatchagent import (
+    identification_mismatch_agent_pb2 as idmismatchagent_dot_identification__mismatch__agent__pb2,
+)
 
 
 class IdentificationMismatchAgentStub(object):
@@ -15,10 +17,10 @@ class IdentificationMismatchAgentStub(object):
             channel: A grpc.Channel.
         """
         self.CheckIdentificationMismatch = channel.unary_unary(
-                '/silenteight.agent.identification_mismatch_agent.v1.api.IdentificationMismatchAgent/CheckIdentificationMismatch',
-                request_serializer=idmismatchagent_dot_identification__mismatch__agent__pb2.CheckIdentificationMismatchRequest.SerializeToString,
-                response_deserializer=idmismatchagent_dot_identification__mismatch__agent__pb2.CheckIdentificationMismatchResponse.FromString,
-                )
+            "/silenteight.agent.identification_mismatch_agent.v1.api.IdentificationMismatchAgent/CheckIdentificationMismatch",
+            request_serializer=idmismatchagent_dot_identification__mismatch__agent__pb2.CheckIdentificationMismatchRequest.SerializeToString,
+            response_deserializer=idmismatchagent_dot_identification__mismatch__agent__pb2.CheckIdentificationMismatchResponse.FromString,
+        )
 
 
 class IdentificationMismatchAgentServicer(object):
@@ -27,40 +29,54 @@ class IdentificationMismatchAgentServicer(object):
     def CheckIdentificationMismatch(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
 
 def add_IdentificationMismatchAgentServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'CheckIdentificationMismatch': grpc.unary_unary_rpc_method_handler(
-                    servicer.CheckIdentificationMismatch,
-                    request_deserializer=idmismatchagent_dot_identification__mismatch__agent__pb2.CheckIdentificationMismatchRequest.FromString,
-                    response_serializer=idmismatchagent_dot_identification__mismatch__agent__pb2.CheckIdentificationMismatchResponse.SerializeToString,
-            ),
+        "CheckIdentificationMismatch": grpc.unary_unary_rpc_method_handler(
+            servicer.CheckIdentificationMismatch,
+            request_deserializer=idmismatchagent_dot_identification__mismatch__agent__pb2.CheckIdentificationMismatchRequest.FromString,
+            response_serializer=idmismatchagent_dot_identification__mismatch__agent__pb2.CheckIdentificationMismatchResponse.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'silenteight.agent.identification_mismatch_agent.v1.api.IdentificationMismatchAgent', rpc_method_handlers)
+        "silenteight.agent.identification_mismatch_agent.v1.api.IdentificationMismatchAgent",
+        rpc_method_handlers,
+    )
     server.add_generic_rpc_handlers((generic_handler,))
 
 
- # This class is part of an EXPERIMENTAL API.
+# This class is part of an EXPERIMENTAL API.
 class IdentificationMismatchAgent(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def CheckIdentificationMismatch(request,
+    def CheckIdentificationMismatch(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/silenteight.agent.identification_mismatch_agent.v1.api.IdentificationMismatchAgent/CheckIdentificationMismatch',
+            "/silenteight.agent.identification_mismatch_agent.v1.api.IdentificationMismatchAgent/CheckIdentificationMismatch",
             idmismatchagent_dot_identification__mismatch__agent__pb2.CheckIdentificationMismatchRequest.SerializeToString,
             idmismatchagent_dot_identification__mismatch__agent__pb2.CheckIdentificationMismatchResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )

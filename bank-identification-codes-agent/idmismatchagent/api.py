@@ -1,7 +1,6 @@
 from typing import List
 
-from attr import attrs, attrib
-
+from attr import attrib, attrs
 
 from idmismatchagent.result import Reason
 

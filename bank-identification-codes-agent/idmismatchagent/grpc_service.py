@@ -1,16 +1,16 @@
 from agent_base.grpc_service.servicer import AgentGrpcServicer
+from result import Result
 
 from idmismatchagent.identification_mismatch_agent_pb2 import (
     DESCRIPTOR,
+    CheckIdentificationMismatchReason,
     CheckIdentificationMismatchRequest,
     CheckIdentificationMismatchResponse,
-    CheckIdentificationMismatchReason,
 )
 from idmismatchagent.identification_mismatch_agent_pb2_grpc import (
     IdentificationMismatchAgentServicer,
     add_IdentificationMismatchAgentServicer_to_server,
 )
-from result import Result
 
 
 class IdentificationMismatchAgentGrpcServicer(
