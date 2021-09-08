@@ -14,6 +14,9 @@ INSERT INTO ae_match VALUES (2, 1, now(), 'DB00051993', 3);
 INSERT INTO ae_agent_exchange_match_feature VALUES (1, 1, 1, 1, now());
 INSERT INTO ae_agent_exchange_match_feature VALUES (2, 1, 2, 1, now());
 
+INSERT INTO ae_match_feature_value VALUES (1, 1, now(), '{}');
+INSERT INTO ae_match_feature_value VALUES (1, 2, now(), '{}');
+
 -- Independent values that should not be deleted
 
 INSERT INTO ae_agent_exchange VALUES (2, now(), '980e1f4c-6c5b-45d2-8516-0998776a39c7', 5,

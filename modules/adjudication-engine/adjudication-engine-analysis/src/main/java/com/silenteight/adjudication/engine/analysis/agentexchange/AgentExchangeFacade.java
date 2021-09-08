@@ -2,11 +2,8 @@ package com.silenteight.adjudication.engine.analysis.agentexchange;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.engine.analysis.agentexchange.domain.DeleteAgentExchangeRequest;
-
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -26,8 +23,7 @@ public class AgentExchangeFacade {
     return getFeatureToIdsMapUseCase.getFeatureToIdsMap(agentExchangeRequestId);
   }
 
-  public void removeReceivedAgentExchanges(
-      List<DeleteAgentExchangeRequest> deleteAgentExchangeRequests) {
-    removeAgentExchangesUseCase.removeAgentExchanges(deleteAgentExchangeRequests);
+  public void removeReceivedAgentExchanges() {
+    removeAgentExchangesUseCase.removeAgentExchanges();
   }
 }
