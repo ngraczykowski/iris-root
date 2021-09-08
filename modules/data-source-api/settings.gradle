@@ -1,5 +1,6 @@
 rootProject.name = "data-source-api-root"
 
+include "data-source-agentinput-api"
 include "data-source-api"
 include "data-source-categories-api"
 include "data-source-comments-api"

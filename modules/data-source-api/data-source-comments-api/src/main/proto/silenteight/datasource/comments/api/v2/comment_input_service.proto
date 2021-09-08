@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package silenteight.datasource.comments.api.v2;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "silenteight/datasource/comments/api/v2/comment_input.proto";
+
+option java_package = "com.silenteight.datasource.comments.api.v2";
+option java_outer_classname = "CommentInputServiceProto";
+option java_multiple_files = true;
+
+service CommentInputService {
+
+  rpc BatchCreateCommentInput (BatchCreateCommentInputRequest) returns (BatchCreateCommentInputResponse) {
+    option (google.api.http) = {
+      post: "/v2/comment-inputs:batchCreate"
+      body: "comment_inputs"
+    };
+  }
+
+  rpc BatchGetCommentInputsForAlerts (BatchGetCommentInputsForAlertsRequest) returns (BatchGetCommentInputsForAlertsResponse) {
+    option (google.api.http) = {
+      post: "/v2/comment-inputs:batchGetForAlerts"
+      body: "alerts"
+    };
+  }
+}
+
+message BatchCreateCommentInputRequest {
+  // The list of comment inputs.
+  // The maximum number of comment inputs accepted by the service is 30000.
+  repeated CommentInput comment_inputs = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// The concise information about created comment input, to save on sending back the potentially
+// large CommentInput message.
+message CreatedCommentInput {
+  // The name of this comment input, in form of `comment-inputs/<Comment input ID>`.
+  string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Alert name in form of `alerts/<Alert ID>`.
+  string alert = 2;
+}
+
+message BatchCreateCommentInputResponse {
+  // The list of created comment inputs.
+  repeated CreatedCommentInput created_comment_inputs = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message BatchGetCommentInputsForAlertsRequest {
+  // The list of alert names to which comment inputs are requested, in form of `alerts/<Alert ID>`.
+  // The maximum number of alert names accepted by the service is 30000.
+  repeated string alerts = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message BatchGetCommentInputsForAlertsResponse {
+  // The list of comment inputs.
+  // The maximum number of comment inputs accepted by the service is 30000.
+  repeated CommentInput comment_inputs = 1 [(google.api.field_behavior) = REQUIRED];
+}

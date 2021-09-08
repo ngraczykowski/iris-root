@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package silenteight.datasource.categories.api.v2;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+
+import "silenteight/datasource/categories/api/v2/category.proto";
+import "silenteight/datasource/categories/api/v2/category_value.proto";
+
+option java_package = "com.silenteight.datasource.categories.api.v2";
+option java_outer_classname = "CategoryValueServiceProto";
+option java_multiple_files = true;
+
+service CategoryValueService {
+
+  rpc CreateCategoryValues (CreateCategoryValuesRequest) returns (CreateCategoryValuesResponse) {
+    option (google.api.http) = {
+      post: "/v2/{category=categories/*}/values"
+      body: "category_values"
+    };
+  }
+
+  rpc BatchCreateCategoryValues (BatchCreateCategoryValuesRequest) returns (BatchCreateCategoryValuesResponse) {
+    option (google.api.http) = {
+      post: "/v2/categories/-/values:batchCreate"
+      body: "requests"
+    };
+  }
+
+  rpc BatchGetCategoryValuesForMatches (BatchGetCategoryValuesForMatchesRequest) returns (BatchGetCategoryValuesForMatchesResponse) {
+    option (google.api.http) = {
+      post: "/v2/categories/-/values:batchGetForMatches"
+      body: "matches"
+    };
+  }
+}
+
+message CreatedCategoryValue {
+  // The name of category value, in form of
+  // `categories/<Category>/value/<Value ID>`.
+  string name = 1;
+
+  // The name of a match this category value is for, in form of
+  // `alerts/<Alert ID>/matches/<Match ID>`.
+  string match = 2;
+}
+
+message CreateCategoryValuesRequest {
+  // The name of category to create values for, in form of `categories/<Category>`.
+  string category = 1;
+
+  // The maximum number of comment inputs accepted by the service is 30000.
+  repeated CategoryValue category_values = 2;
+}
+
+message CreateCategoryValuesResponse {
+  repeated CreatedCategoryValue created_category_values = 1;
+}
+
+message BatchCreateCategoryValuesRequest {
+  // The maximum number of comment inputs accepted by the service is 30000.
+  repeated CreateCategoryValuesRequest requests = 1;
+}
+
+message BatchCreateCategoryValuesResponse {
+  repeated CreatedCategoryValue created_category_values = 1;
+}
+
+message CategoryMatches {
+  // The list of category names to request values from, in form of `categories/<Category>`.
+  string categories = 1 [(google.api.field_behavior) = REQUIRED];
+
+  // The list of matches to retrieve category values for, in form of
+  // `alerts/<Alert ID>/matches/<Match ID>`.
+  // The maximum number of comment inputs accepted by the service is 30000.
+  repeated string matches = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message BatchGetCategoryValuesForMatchesRequest {
+  // The list of categories and matches for which to retrieve category values.
+  repeated CategoryMatches category_matches = 1;
+}
+
+message BatchGetCategoryValuesForMatchesResponse {
+  // The list of category values for requested matches.
+  repeated CategoryValue category_values = 1;
+}
