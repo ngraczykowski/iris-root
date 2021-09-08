@@ -9,7 +9,7 @@ silenteight.bridge:
     dataset-deadline: 1m
     historical-decisions-deadline: 20s
     analysis-deadline: 1m
-    alert-deadline: 20s
+    alert-deadline: 5m
     is-pep-deadline: 20s
     name-information-deadline: 20s
     model-deadline: 20s
