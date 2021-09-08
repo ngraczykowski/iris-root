@@ -1,11 +1,11 @@
 from agent_base.grpc_service.servicer import AgentGrpcServicer
 
-from identification_mismatch_agent_pb2 import (
+from idmismatchagent.identification_mismatch_agent_pb2 import (
     DESCRIPTOR,
     CheckIdentificationMismatchRequest,
     CheckIdentificationMismatchResponse,
 )
-from identification_mismatch_agent_pb2_grpc import (
+from idmismatchagent.identification_mismatch_agent_pb2_grpc import (
     IdentificationMismatchAgentServicer,
     add_IdentificationMismatchAgentServicer_to_server,
 )

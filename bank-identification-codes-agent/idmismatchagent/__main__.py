@@ -1,13 +1,12 @@
 import argparse
 import pathlib
-import time
 
 from agent_base.agent import AgentRunner
 from agent_base.grpc_service import GrpcService
 from agent_base.utils import Config
 from tstoolkit.utils import LogLevel, generate_logger, setup_logging
 
-from idmismatchagent import SearchCodeMismatchAgentInput, IdentificationMismatchAgent
+from idmismatchagent.agent import SearchCodeMismatchAgentInput, IdentificationMismatchAgent
 from idmismatchagent.grpc_service import IdentificationMismatchAgentGrpcServicer
 
 
@@ -22,6 +21,7 @@ def run(configuration_dirs, start_grpc_service):
         IdentificationMismatchAgent(config=config),
         services=services,
     )
+
 
 def main():
     setup_logging()
@@ -62,6 +62,7 @@ def main():
         configuration_dirs=(args.configuration_dir,),
         start_grpc_service=args.grpc,
     )
+
 
 if __name__ == "__main__":
     main()
