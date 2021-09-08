@@ -2,14 +2,17 @@ package com.silenteight.serp.governance.vector.store;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVector;
 import com.silenteight.serp.governance.common.signature.CanonicalFeatureVectorFactory;
+import com.silenteight.serp.governance.common.signature.Signature;
 import com.silenteight.serp.governance.vector.domain.FeatureVectorService;
 import com.silenteight.serp.governance.vector.usage.domain.UsageService;
 import com.silenteight.solving.api.v1.Feature;
 import com.silenteight.solving.api.v1.FeatureVectorSolvedEvent;
 
+import com.google.protobuf.ByteString;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -20,6 +23,7 @@ import java.util.function.Function;
 import static java.util.stream.Collectors.*;
 
 @RequiredArgsConstructor
+@Slf4j
 public class StoreFeatureVectorSolvedUseCase {
 
   @NonNull
@@ -43,14 +47,32 @@ public class StoreFeatureVectorSolvedUseCase {
   }
 
   private CanonicalFeatureVector getCanonicalFeatureVector(FeatureVectorSolvedEvent event) {
-    List<String> featureNames = event
+    List<String> featureNames = getFeatureNames(event);
+    List<String> featureValues = new ArrayList<>(event.getFeatureVector().getFeatureValueList());
+
+    CanonicalFeatureVector canonicalFeatureVector = canonicalFeatureVectorFactory
+        .fromNamesAndValues(featureNames, featureValues);
+
+    logIncompatibleSignature(canonicalFeatureVector.getVectorSignature(),
+        event.getFeatureVectorSignature());
+    return canonicalFeatureVector;
+  }
+
+  private static List<String> getFeatureNames(FeatureVectorSolvedEvent event) {
+    return event
         .getFeatureCollection()
         .getFeatureList()
         .stream()
         .map(Feature::getName)
         .collect(toList());
-    List<String> featureValues = new ArrayList<>(event.getFeatureVector().getFeatureValueList());
+  }
 
-    return canonicalFeatureVectorFactory.fromNamesAndValues(featureNames, featureValues);
+  private void logIncompatibleSignature(
+      Signature canonicalSignature,
+      ByteString requestSignature) {
+
+    if (!canonicalSignature.asString().equals(requestSignature.toStringUtf8())) {
+      log.warn("Incompatible FV Signature={}", canonicalSignature);
+    }
   }
 }

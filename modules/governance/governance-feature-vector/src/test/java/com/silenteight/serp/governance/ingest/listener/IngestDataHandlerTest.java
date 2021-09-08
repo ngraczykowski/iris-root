@@ -10,14 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static com.silenteight.serp.governance.ingest.IngestFixtures.ALERTS;
-import static com.silenteight.serp.governance.ingest.IngestFixtures.FEATURE_OR_CATEGORY_REGEX;
-import static com.silenteight.serp.governance.ingest.IngestFixtures.LEARNING_ALERTS;
-import static com.silenteight.serp.governance.ingest.IngestFixtures.PREFIX_AND_SUFFIX_REGEX;
+import static com.silenteight.serp.governance.ingest.IngestFixtures.*;
 import static com.silenteight.serp.governance.policy.solve.event.FeatureVectorEventStrategy.INGEST;
 import static com.silenteight.serp.governance.policy.solve.event.FeatureVectorEventStrategy.SOLVE;
 import static org.assertj.core.api.Assertions.*;
-
 
 class IngestDataHandlerTest {
 
@@ -29,8 +25,8 @@ class IngestDataHandlerTest {
     @BeforeEach
     void setUp() {
       var repackager = new IngestDataToSolvedEventRepackagerService(FEATURE_OR_CATEGORY_REGEX,
-          PREFIX_AND_SUFFIX_REGEX);
-      var validator = new IngestDataValidator("fvKey");
+          PREFIX_AND_SUFFIX_REGEX, FV_SIGNATURE_KEY_NAME);
+      var validator = new IngestDataValidator(FV_SIGNATURE_KEY_NAME);
       var fvEventStrategyService = new FeatureVectorEventStrategyService(INGEST);
       underTest = new IngestDataHandler(repackager, validator, fvEventStrategyService);
     }
@@ -68,8 +64,8 @@ class IngestDataHandlerTest {
   void whenEventStrategySolve_returnsNull() {
     //given
     var repackager = new IngestDataToSolvedEventRepackagerService(FEATURE_OR_CATEGORY_REGEX,
-        PREFIX_AND_SUFFIX_REGEX);
-    var validator = new IngestDataValidator("fvKey");
+        PREFIX_AND_SUFFIX_REGEX, FV_SIGNATURE_KEY_NAME);
+    var validator = new IngestDataValidator(FV_SIGNATURE_KEY_NAME);
     var fvEventStrategyService = new FeatureVectorEventStrategyService(SOLVE);
     underTest = new IngestDataHandler(repackager, validator, fvEventStrategyService);
     //when
