@@ -1,3 +1,4 @@
 agent:
+  process: 2
   grpc:
     port: 24805
