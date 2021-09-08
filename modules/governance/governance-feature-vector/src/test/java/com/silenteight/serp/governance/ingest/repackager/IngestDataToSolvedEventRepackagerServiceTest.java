@@ -5,6 +5,7 @@ import com.silenteight.serp.governance.ingest.IngestFixtures;
 import com.silenteight.solving.api.v1.FeatureVectorSolvedEvent;
 import com.silenteight.solving.api.v1.FeatureVectorSolvedEventBatch;
 
+import com.google.protobuf.ByteString;
 import com.google.protobuf.Value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,9 @@ class IngestDataToSolvedEventRepackagerServiceTest {
   @BeforeEach
   void setUp() {
     underTest = new IngestDataToSolvedEventRepackagerService(
-        IngestFixtures.FEATURE_OR_CATEGORY_REGEX, IngestFixtures.PREFIX_AND_SUFFIX_REGEX);
+        IngestFixtures.FEATURE_OR_CATEGORY_REGEX,
+        IngestFixtures.PREFIX_AND_SUFFIX_REGEX,
+        FV_SIGNATURE_KEY_NAME);
   }
 
   @Test
@@ -39,6 +42,8 @@ class IngestDataToSolvedEventRepackagerServiceTest {
         .containsExactlyInAnyOrder(NO_DATA, MATCH, DATA_SOURCE_ERROR);
     assertThat(firstSolvedEvent.getFeatureCollection().getFeatureList())
         .containsExactlyInAnyOrder(FEATURE_NAME, FEATURE_GENDER, FEATURE_AP_TYPE);
+    assertThat(firstSolvedEvent.getFeatureVectorSignature())
+        .isEqualTo(getStringValueBytes(FV_SIGNATURE_KEY_FIRST));
 
     FeatureVectorSolvedEvent secondSolvedEvent = featureVectorSolvedEventBatch.getEvents(1);
     assertThat(secondSolvedEvent.getId()).isNotNull();
@@ -47,6 +52,12 @@ class IngestDataToSolvedEventRepackagerServiceTest {
         .containsExactlyInAnyOrder(MATCH, MATCH, DATA_SOURCE_ERROR);
     assertThat(secondSolvedEvent.getFeatureCollection().getFeatureList())
         .containsExactlyInAnyOrder(FEATURE_NAME, FEATURE_GENDER, FEATURE_AP_TYPE);
+    assertThat(secondSolvedEvent.getFeatureVectorSignature())
+        .isEqualTo(getStringValueBytes(FV_SIGNATURE_KEY_SECOND));
+  }
+
+  private ByteString getStringValueBytes(String value) {
+    return getValueFromString(value).getStringValueBytes();
   }
 
   @Test

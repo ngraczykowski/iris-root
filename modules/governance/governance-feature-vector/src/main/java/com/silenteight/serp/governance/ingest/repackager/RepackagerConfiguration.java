@@ -19,7 +19,9 @@ class RepackagerConfiguration {
   IngestDataToSolvedEventRepackagerService ingestDataToSolvedEventRepackagerService(
       @Valid RepackagerProperties properties) {
 
-    return new IngestDataToSolvedEventRepackagerService(properties.getFeatureOrCategoryRegex(),
-        properties.getPrefixAndSuffixRegex());
+    return new IngestDataToSolvedEventRepackagerService(
+        properties.getFeatureOrCategoryRegex(),
+        properties.getPrefixAndSuffixRegex(),
+        properties.getFvSignatureKey());
   }
 }

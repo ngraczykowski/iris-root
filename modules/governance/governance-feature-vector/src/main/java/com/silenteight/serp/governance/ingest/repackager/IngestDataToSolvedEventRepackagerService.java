@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.solving.api.v1.*;
 
+import com.google.protobuf.ByteString;
+import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
 
 import java.util.List;
@@ -23,11 +25,15 @@ public class IngestDataToSolvedEventRepackagerService {
   private final Pattern featureOrCategoryPattern;
   @NonNull
   private final Pattern prefixOrSuffixPattern;
+  @NonNull
+  private final String fvSignatureKey;
 
   public IngestDataToSolvedEventRepackagerService(
-      String featureOrCategoryRegex, String prefixOrSuffixPattern) {
+      String featureOrCategoryRegex, String prefixOrSuffixPattern, String fvSignatureKey) {
+
     featureOrCategoryPattern = Pattern.compile(featureOrCategoryRegex);
     this.prefixOrSuffixPattern = Pattern.compile(prefixOrSuffixPattern);
+    this.fvSignatureKey = fvSignatureKey;
   }
 
   public FeatureVectorSolvedEventBatch activate(List<Alert> alertsList) {
@@ -66,6 +72,7 @@ public class IngestDataToSolvedEventRepackagerService {
         .setCorrelationId(fromJavaUuid(randomUUID()))
         .setFeatureCollection(getFeatureCollection(components))
         .setFeatureVector(getFeatureVector(alert, components))
+        .setFeatureVectorSignature(getFeatureSignatureKey(alert.getPayload()))
         .build();
   }
 
@@ -115,5 +122,9 @@ public class IngestDataToSolvedEventRepackagerService {
 
   String mapToFeaturesAndCategoriesNames(String fieldName) {
     return prefixOrSuffixPattern.matcher(fieldName).replaceAll("");
+  }
+
+  private ByteString getFeatureSignatureKey(Struct payload) {
+    return payload.getFieldsMap().get(fvSignatureKey).getStringValueBytes();
   }
 }

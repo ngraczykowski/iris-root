@@ -44,9 +44,12 @@ public class IngestFixtures {
       = "^(categories\\/(\\w)+)$|^(features\\/(\\w)+\\:solution)$";
   public static final String PREFIX_AND_SUFFIX_REGEX
       = "^(features\\/)|^(categories\\/)|(:solution)$";
+  public static final String FV_SIGNATURE_KEY_NAME = "fv_signature_key";
+  public static final String FV_SIGNATURE_KEY_FIRST = "fvSignatureFirst";
+  public static final String FV_SIGNATURE_KEY_SECOND = "fvSignatureSecond";
 
   public static final Map<String, Value> FIRST_ALERT_INGEST_PAYLOAD = Map.of(
-      "fvKey", getValueFromString("fv1"),
+      FV_SIGNATURE_KEY_NAME, getValueFromString(FV_SIGNATURE_KEY_FIRST),
       IngestFixtures.FEATURE_NAME_SOLUTION.getName(), getValueFromString(IngestFixtures.NO_DATA),
       IngestFixtures.FEATURE_GENDER_SOLUTION.getName(), getValueFromString(IngestFixtures.MATCH),
       "features/name:config", getValueFromString("agents/name/versions/1.0.0/configs/1"),
@@ -55,7 +58,7 @@ public class IngestFixtures {
       getValueFromString(IngestFixtures.DATA_SOURCE_ERROR),
       "extendedAttribute5", getValueFromString(IngestFixtures.SANCTION));
   public static final Map<String, Value> SECOND_ALERT_INGEST_PAYLOAD = Map.of(
-      "fvKey", getValueFromString("fv2"),
+      FV_SIGNATURE_KEY_NAME, getValueFromString(FV_SIGNATURE_KEY_SECOND),
       IngestFixtures.FEATURE_NAME_SOLUTION.getName(), getValueFromString(IngestFixtures.MATCH),
       IngestFixtures.FEATURE_GENDER_SOLUTION.getName(), getValueFromString(IngestFixtures.MATCH),
       "features/name:config", getValueFromString("agents/name/versions/1.0.0/configs/1"),
