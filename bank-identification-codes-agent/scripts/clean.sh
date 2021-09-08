@@ -9,4 +9,5 @@ rm -rf \
     "$basedir"/.tox \
     "$basedir"/*.egg-info \
     "$basedir"/.coverage \
+    "$basedir"/nomad/artifacts/ \
   &>/dev/null || true

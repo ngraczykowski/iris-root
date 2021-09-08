@@ -147,7 +147,7 @@ job "identification-mismatch-agent" {
       config {
         image = "python:3.7"
         command = "python"
-        args = ["/app/ts_identification_mismatch_agent-${var.identification_mismatch_agent_version}.pyz"]
+        args = ["/app/ts_identification_mismatch_agent-${var.identification_mismatch_agent_version}.pyz", "-c", "/app/config", "--grpc", "-v"]
         network_mode = "host"
         volumes = ["local:/app"]
       }
