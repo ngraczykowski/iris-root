@@ -8,17 +8,15 @@ import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlocking
 import com.silenteight.adjudication.api.v1.BatchCreateAlertMatchesRequest;
 import com.silenteight.adjudication.api.v1.BatchCreateAlertsRequest;
 import com.silenteight.adjudication.api.v1.Match;
-
 import com.silenteight.hsbc.bridge.alert.AlertServiceClient;
 import com.silenteight.hsbc.bridge.alert.dto.*;
 
 import io.grpc.StatusRuntimeException;
 import org.springframework.retry.annotation.Retryable;
+
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static com.silenteight.hsbc.bridge.common.util.TimestampUtil.fromOffsetDateTime;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 
@@ -32,7 +30,7 @@ public class AlertGrpcAdapter implements AlertServiceClient {
   @Override
   @Retryable(value = StatusRuntimeException.class)
   public BatchCreateAlertsResponseDto batchCreateAlerts(List<Alert> alerts) {
-    log.info("batchCreateAlerts alerts={}", alerts);
+    log.info("batchCreateAlerts alerts={}", alerts.size());
 
     var gprcRequest = BatchCreateAlertsRequest.newBuilder()
         .addAllAlerts(alerts)
@@ -42,7 +40,8 @@ public class AlertGrpcAdapter implements AlertServiceClient {
     var registeredAlerts = response.getAlertsList();
 
     //TODO remove it once root cause of the issue is found
-    log.info("registered alert names={}",
+    log.info(
+        "registered alert names={}",
         registeredAlerts.stream().map(Alert::getName).collect(Collectors.toList()));
 
     return BatchCreateAlertsResponseDto.builder()
@@ -67,7 +66,8 @@ public class AlertGrpcAdapter implements AlertServiceClient {
 
     //TODO remove it once root cause of the issue is found
     log.info("Create matches for alert={}", request.getAlert());
-    log.info("Registered matches names={}",
+    log.info(
+        "Registered matches names={}",
         registeredMatches.stream().map(Match::getName).collect(Collectors.toList()));
 
     return BatchCreateAlertMatchesResponseDto.builder()
