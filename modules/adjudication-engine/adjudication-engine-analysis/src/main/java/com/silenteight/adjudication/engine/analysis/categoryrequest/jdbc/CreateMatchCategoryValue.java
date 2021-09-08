@@ -25,10 +25,10 @@ class CreateMatchCategoryValue {
   int[] execute(CategoryMap categoryMap, List<CategoryValue> categoryValues) {
     return jdbcTemplate.batchUpdate(
         "INSERT INTO ae_match_category_value (match_id, category_id, created_at, value)\n"
-            + "VALUES (?, ?, now(), ?)",
+            + "VALUES (?, ?, now(), ?)\n"
+            + "ON CONFLICT DO NOTHING",
         new CategoryValueParametrizedPreparedStatementSetter(categoryMap, categoryValues));
   }
-
 
   @RequiredArgsConstructor
   private static final class CategoryValueParametrizedPreparedStatementSetter
