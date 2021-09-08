@@ -16,8 +16,11 @@ public class LoggingRetryListener extends RetryListenerSupport {
       RetryContext context,
       RetryCallback<T, E> callback, Throwable throwable) {
 
-    log.error("Unable to recover from Exception");
-    log.error("Error: {}", throwable.getMessage());
+    if (throwable != null) {
+      log.error("Unable to recover from Exception");
+      log.error("Error", throwable);
+    }
+
     super.close(context, callback, throwable);
   }
 
@@ -25,7 +28,7 @@ public class LoggingRetryListener extends RetryListenerSupport {
   public <T, E extends Throwable> void onError(
       RetryContext context, RetryCallback<T, E> callback, Throwable throwable) {
 
-    log.error("Exception Occurred, Retry Count {}", context.getRetryCount());
+    log.error("Exception Occurred, Retry Count {}", context.getRetryCount(), throwable);
     super.onError(context, callback, throwable);
   }
 
@@ -34,7 +37,7 @@ public class LoggingRetryListener extends RetryListenerSupport {
       RetryContext context,
       RetryCallback<T, E> callback) {
 
-    log.error("Exception Occurred, Retry Session Started");
+    log.debug("Retry Session Started");
     return super.open(context, callback);
   }
 }

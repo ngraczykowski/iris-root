@@ -22,7 +22,7 @@ public class BulkProcessorScheduler {
   public void processPreProcessedBulks() {
     LockAssert.assertLocked();
 
-    log.debug("Scheduler has been triggered...");
+    log.trace("Scheduler has been triggered...");
 
     bulkRepository.findFirstByStatusOrderByCreatedAtAsc(PRE_PROCESSED).ifPresent(b -> {
       log.info(
