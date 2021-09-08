@@ -70,8 +70,6 @@ class ReceiveAgentExchangeResponseUseCase {
         .addAllMatches(mapper.matches().collect(toUnmodifiableList()))
         .build();
 
-    agentExchangeFacade.removeReceivedAgentExchanges();
-
     return of(result);
   }
 
