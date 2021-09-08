@@ -46,76 +46,76 @@ job "identification-mismatch-agent" {
       }
     }
 
-//    service {
-//      name = "${var.namespace}-identification-mismatch-agent"
-//      port = "grpc"
-//
-//      check_restart {
-//        limit           = 3
-//        grace           = "90s"
-//        ignore_warnings = false
-//      }
-//
-//      check {
-//        name     = "gRPC Port Alive Check"
-//        type     = "tcp"
-//        interval = "10s"
-//        timeout  = "2s"
-//      }
-//    }
+    service {
+      name = "${var.namespace}-identification-mismatch-agent"
+      port = "grpc"
 
-//    service {
-//      name = "${var.namespace}-grpc-identification-mismatch-agent"
-//      port = "grpc"
-//      tags = [
-//        "grpc",
-//        "gRPC.port=${NOMAD_PORT_grpc}",
-//        "gRPC_port=${NOMAD_PORT_grpc}",
-//      ]
-//    }
+      check_restart {
+        limit           = 3
+        grace           = "90s"
+        ignore_warnings = false
+      }
 
-//    service {
-//      name = "${var.namespace}-identification-mismatch-agent-grpcui"
-//      port = "grpcui"
-//      tags = concat([
-//        "grpcui",
-//        "traefik.enable=true",
-//        "traefik.protocol=http",
-//      ])
-//    }
+      check {
+        name     = "gRPC Port Alive Check"
+        type     = "tcp"
+        interval = "10s"
+        timeout  = "2s"
+      }
+    }
+
+    service {
+      name = "${var.namespace}-grpc-identification-mismatch-agent"
+      port = "grpc"
+      tags = [
+        "grpc",
+        "gRPC.port=${NOMAD_PORT_grpc}",
+        "gRPC_port=${NOMAD_PORT_grpc}",
+      ]
+    }
+
+    service {
+      name = "${var.namespace}-identification-mismatch-agent-grpcui"
+      port = "grpcui"
+      tags = concat([
+        "grpcui",
+        "traefik.enable=true",
+        "traefik.protocol=http",
+      ])
+    }
 
 
-//    task "grpcui" {
-//      driver = "raw_exec"
-//
-//      lifecycle {
-//        hook = "poststart"
-//        sidecar = true
-//      }
-//
-//      artifact {
-//        source = "https://github.com/fullstorydev/grpcui/releases/download/v1.1.0/grpcui_1.1.0_linux_x86_64.tar.gz"
-//        options {
-//          checksum = "sha256:41b9b606a025561f7df892e78a8ac1819597ed74d2300183797ab8caa7b290a6"
-//        }
-//      }
-//
-//      config {
-//        command = "grpcui"
-//        args = [
-//          "-plaintext",
-//          "-bind=${NOMAD_IP_grpcui}",
-//          "-port=${NOMAD_PORT_grpcui}",
-//          "-open-browser=false",
-//          "${NOMAD_ADDR_grpc}"
-//        ]
-//      }
-//
-//      resources {
-//        cpu = 50
-//        memory = 100
-//      }
-//    }
+    task "grpcui" {
+      driver = "raw_exec"
+
+      lifecycle {
+        hook = "poststart"
+        sidecar = true
+      }
+
+      artifact {
+        source = "https://github.com/fullstorydev/grpcui/releases/download/v1.1.0/grpcui_1.1.0_linux_x86_64.tar.gz"
+        options {
+          checksum = "sha256:41b9b606a025561f7df892e78a8ac1819597ed74d2300183797ab8caa7b290a6"
+        }
+      }
+
+      config {
+        command = "grpcui"
+        args = [
+          "-plaintext",
+          "-bind=${NOMAD_IP_grpcui}",
+          "-port=${NOMAD_PORT_grpcui}",
+          "-open-browser=false",
+          "${NOMAD_ADDR_grpc}"
+        ]
+      }
+
+      resources {
+        cpu = 50
+        memory = 100
+      }
+    }
 
 
     task "identification-mismatch-agent" {
