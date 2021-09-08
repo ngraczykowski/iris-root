@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-  compileOnly group: 'org.springframework.amqp', name: 'spring-amqp'
-  compileOnly group: 'org.springframework.amqp', name: 'spring-rabbit'
+  compileOnly group: 'org.springframework.amqp', name: 'spring-amqp', version: '2.1.18.RELEASE'
+  compileOnly group: 'org.springframework.amqp', name: 'spring-rabbit', version: '2.1.18.RELEASE'
 }

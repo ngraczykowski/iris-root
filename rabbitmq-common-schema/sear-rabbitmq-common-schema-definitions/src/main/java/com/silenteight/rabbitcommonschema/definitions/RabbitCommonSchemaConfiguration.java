@@ -23,8 +23,8 @@ public class RabbitCommonSchemaConfiguration {
       topicExchange("agent.response").durable(true).build(),
       topicExchange("gov.event").durable(true).build(),
       directExchange("sim.command").durable(true).build(),
-      topicExchange("wh.event").durable(true).build(),
-      };
+      topicExchange("wh.event").durable(true).build()
+  };
 
   @Bean
   Declarables commonRabbitSchemaDeclarables() {

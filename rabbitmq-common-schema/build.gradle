@@ -5,8 +5,6 @@ plugins {
   id "com.silenteight.gradle.convention" version "1.20.0"
   id "com.silenteight.gradle.release" version "1.4.0"
   id "com.silenteight.gradle.wrapper" version "1.1.0"
-  id "org.springframework.boot" version "2.4.10" apply false
-  id "com.google.cloud.tools.jib" version "3.1.4" apply false
 }
 
 projectSetup {
@@ -16,10 +14,6 @@ projectSetup {
 subprojects {Project subproject ->
   pluginManager.withPlugin("java") {
     subproject.pluginManager.apply "maven-publish"
-
-    subproject.dependencies {
-      implementation platform(group: 'org.springframework.boot', name: 'spring-boot-dependencies', version: '2.4.10')
-    }
 
     subproject.tasks.withType(JavaCompile).configureEach {JavaCompile java ->
       java.options.fork = true
