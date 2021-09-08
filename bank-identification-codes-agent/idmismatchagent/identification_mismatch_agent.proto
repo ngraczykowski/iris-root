@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package silenteight.agent.identification_mismatch_agent.v1.api;
+
+option java_package = "com.silenteight.proto.agent.identification_mismatch_agent.v1.api";
+option java_outer_classname = "IdentificationMismatchAgentApiProto";
+option java_multiple_files = true;
+
+service IdentificationMismatchAgent {
+
+  rpc CheckIdentificationMismatch (CheckIdentificationMismatchRequest) returns (CheckIdentificationMismatchResponse) {
+  }
+}
+
+message CheckIdentificationMismatchRequest {
+  string matching_field = 1;
+  string matching_text = 2;
+  string watchlist_type = 3;
+  repeated string watchlist_search_codes = 4;
+  repeated string watchlist_bic_codes = 5;
+}
+
+message CheckIdentificationMismatchResponse {
+  string solution = 1;
+  CheckIdentificationMismatchReason reason = 2;
+}
+
+message CheckIdentificationMismatchReason {
+    string conclusion = 1;
+    string matching_text = 2;
+    string raw_matched_sequence = 3;
+    string matching_field = 4;
+    string partial_match = 5;
+    string watchlist_type = 6;
+    repeated string search_codes = 7;
+    string bic_code = 8;
+}
