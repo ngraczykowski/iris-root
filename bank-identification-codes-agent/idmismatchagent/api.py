@@ -66,3 +66,4 @@ class MatchingTextDoesNotMatchWlSearchCodeReason(Reason):
 class MatchingTextDoesNotMatchMatchingFieldReason(Reason):
     matching_text: str = attrib()
     matching_field: str = attrib()
+
