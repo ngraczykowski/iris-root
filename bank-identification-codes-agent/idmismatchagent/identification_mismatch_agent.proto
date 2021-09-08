@@ -28,7 +28,7 @@ message CheckIdentificationMismatchResponse {
 message CheckIdentificationMismatchReason {
     string conclusion = 1;
     string matching_text = 2;
-    string raw_matched_sequence = 3;
+    string matched_sequence = 3;
     string matching_field = 4;
     string partial_match = 5;
     string watchlist_type = 6;
