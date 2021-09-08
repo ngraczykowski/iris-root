@@ -10,10 +10,7 @@ import com.silenteight.serp.governance.qa.manage.analysis.create.CreateAlertWith
 import com.silenteight.serp.governance.qa.manage.domain.dto.CreateDecisionRequest;
 import com.silenteight.serp.governance.qa.sampling.domain.AlertSamplingService;
 import com.silenteight.serp.governance.qa.sampling.domain.dto.DateRangeDto;
-import com.silenteight.serp.governance.qa.sampling.generator.dto.AlertDistributionDto;
-import com.silenteight.serp.governance.qa.sampling.generator.dto.DecisionCreatedEvent;
-import com.silenteight.serp.governance.qa.sampling.generator.dto.DistributionDto;
-import com.silenteight.serp.governance.qa.sampling.generator.dto.GetAlertsSampleRequest;
+import com.silenteight.serp.governance.qa.sampling.generator.dto.*;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.transaction.annotation.Propagation;
@@ -40,6 +37,8 @@ public class AlertsGeneratorService {
   private final long totalSampleCount;
   @NonNull
   private final List<String> groupingFields;
+  @NonNull
+  private final List<Filter> defaultFilters;
   @NonNull
   private final AlertSamplingService alertSamplingService;
   @NonNull
@@ -88,15 +87,16 @@ public class AlertsGeneratorService {
     return alertDistribution.stream().mapToLong(AlertDistribution::getAlertCount).sum();
   }
 
-  private static GetAlertsSampleRequest toAlertSampleRequest(
+  private AlertsSampleRequest toAlertSampleRequest(
       AlertDistribution alertDistribution,
       DistributionCalculator distributionCalculator,
       DateRangeDto dateRangeDto) {
 
     Long requestedAmount = distributionCalculator
         .calculateAmount(alertDistribution.getAlertCount());
-    return GetAlertsSampleRequest.of(
-        dateRangeDto, alertDistribution.getGroupingFieldsList(), requestedAmount);
+
+    return AlertsSampleRequest.of(
+        dateRangeDto, alertDistribution.getGroupingFieldsList(), defaultFilters, requestedAmount);
   }
 
   private CreateDecisionRequest getCreateDecisionRequest(String discriminator) {

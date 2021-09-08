@@ -52,12 +52,16 @@ spring:
 serp.governance.qa:
   sampling:
     schedule:
-      enabled: false
+      enabled: true
       audit-cron: 0/30 * * * * ?
       alert-generator-cron: 0 0 1 1 * ?
     generator:
       sample-count: 454
       grouping-fields:
         - alert_extendedAttribute5
+      filters:
+        - field: alert_s8_recommendation
+          values:
+            - ACTION_FALSE_POSITIVE
   viewing:
     max-state-reset-delay-ms: 45000
