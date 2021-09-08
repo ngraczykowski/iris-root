@@ -39,6 +39,7 @@ class SamplingGeneratorConfiguration {
         createAlertWithDecisionUseCase,
         alertsGeneratorProperties.getSampleCount(),
         alertsGeneratorProperties.getGroupingFields(),
+        alertsGeneratorProperties.getFilters(),
         alertSamplingService,
         applicationEventPublisher);
   }

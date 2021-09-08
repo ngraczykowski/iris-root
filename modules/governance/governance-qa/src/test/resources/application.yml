@@ -4,3 +4,7 @@ serp.governance.qa:
       sample-count: 454
       grouping-fields:
         - alert_extendedAttribute5
+      filters:
+        - field: alert_s8_recommendation
+          values:
+            - ACTION_FALSE_POSITIVE

@@ -4,10 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 import com.silenteight.model.api.v1.SampleAlertServiceProto.Alert;
-import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleRequest;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleResponse;
 import com.silenteight.model.api.v1.SamplingAlertsServiceGrpc.SamplingAlertsServiceBlockingStub;
-import com.silenteight.serp.governance.qa.sampling.generator.dto.GetAlertsSampleRequest;
+import com.silenteight.serp.governance.qa.sampling.generator.dto.AlertsSampleRequest;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ class AlertProvider {
 
   private final long timeoutMs;
 
-  List<String> getAlerts(GetAlertsSampleRequest request) {
+  List<String> getAlerts(AlertsSampleRequest request) {
     AlertsSampleResponse response = samplingStub
         .withDeadlineAfter(timeoutMs, MILLISECONDS)
         .getAlertsSample(getAlertsSampleRequest(request));
@@ -35,8 +34,10 @@ class AlertProvider {
         .collect(toList());
   }
 
-  private static AlertsSampleRequest getAlertsSampleRequest(GetAlertsSampleRequest request) {
-    return AlertsSampleRequest
+  private static com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleRequest
+      getAlertsSampleRequest(AlertsSampleRequest request) {
+
+    return com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleRequest
         .newBuilder()
         .setTimeRangeFrom(toTimestamp(request.getDateRangeDto().getFrom()))
         .setTimeRangeTo(toTimestamp(request.getDateRangeDto().getTo()))

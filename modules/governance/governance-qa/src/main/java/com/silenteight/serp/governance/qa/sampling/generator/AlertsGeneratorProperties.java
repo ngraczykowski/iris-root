@@ -2,6 +2,8 @@ package com.silenteight.serp.governance.qa.sampling.generator;
 
 import lombok.Value;
 
+import com.silenteight.serp.governance.qa.sampling.generator.dto.Filter;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
@@ -18,4 +20,7 @@ class AlertsGeneratorProperties {
 
   @NotNull
   List<String> groupingFields;
+
+  @NotNull
+  List<Filter> filters;
 }

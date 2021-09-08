@@ -8,8 +8,8 @@ import com.silenteight.serp.governance.qa.manage.domain.dto.CreateDecisionReques
 import com.silenteight.serp.governance.qa.sampling.domain.AlertSamplingService;
 import com.silenteight.serp.governance.qa.sampling.domain.dto.DateRangeDto;
 import com.silenteight.serp.governance.qa.sampling.generator.dto.AlertDistributionDto;
+import com.silenteight.serp.governance.qa.sampling.generator.dto.AlertsSampleRequest;
 import com.silenteight.serp.governance.qa.sampling.generator.dto.DistributionDto;
-import com.silenteight.serp.governance.qa.sampling.generator.dto.GetAlertsSampleRequest;
 import com.silenteight.serp.governance.qa.send.SendAlertMessageCommand;
 import com.silenteight.serp.governance.qa.send.SendAlertMessageUseCase;
 import com.silenteight.serp.governance.qa.send.dto.AlertDto;
@@ -28,6 +28,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 
 import static com.silenteight.serp.governance.qa.AlertFixture.generateDiscriminator;
+import static com.silenteight.serp.governance.qa.FilterFixture.FIELD_ALERT_RECOMMENDATION;
+import static com.silenteight.serp.governance.qa.FilterFixture.VALUES_ALERT_RECOMMENDATION;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.NEW;
 import static com.silenteight.serp.governance.qa.sampling.generator.RiskType.PEP;
@@ -101,8 +103,8 @@ class AlertsGeneratorServiceTest {
   @Test
   void generateAlertsShouldCallAlertProviderWithGetAlertsSampleRequest() {
     //given
-    ArgumentCaptor<GetAlertsSampleRequest> alertsSampleRequestCaptor =
-        ArgumentCaptor.forClass(GetAlertsSampleRequest.class);
+    ArgumentCaptor<AlertsSampleRequest> alertsSampleRequestCaptor =
+        ArgumentCaptor.forClass(AlertsSampleRequest.class);
     when(distributionProvider.getDistribution(dateRangeDto, properties.getGroupingFields()))
         .thenReturn(of(
             getAlertDistribution(1400, RISK_TYPE, PEP),
@@ -110,15 +112,17 @@ class AlertsGeneratorServiceTest {
     //when
     underTest.generateAlerts(dateRangeDto, 1L);
     //then
+    RequestedAlertsFilter defaultFilter =
+        getRequestedAlertsFilter(FIELD_ALERT_RECOMMENDATION, VALUES_ALERT_RECOMMENDATION.get(0));
     verify(alertProvider, times(2))
         .getAlerts(alertsSampleRequestCaptor.capture());
     assertThat(alertsSampleRequestCaptor.getValue().getDateRangeDto()).isEqualTo(dateRangeDto);
     assertThat(alertsSampleRequestCaptor.getAllValues().get(0).getLimit()).isEqualTo(245);
     assertThat(alertsSampleRequestCaptor.getAllValues().get(1).getLimit()).isEqualTo(210);
     assertThat(alertsSampleRequestCaptor.getAllValues().get(0).getRequestedAlertsFilters())
-        .containsExactly(getRequestedAlertsFilter(RISK_TYPE, PEP));
+        .containsExactly(defaultFilter, getRequestedAlertsFilter(RISK_TYPE, PEP));
     assertThat(alertsSampleRequestCaptor.getAllValues().get(1).getRequestedAlertsFilters())
-        .containsExactly(getRequestedAlertsFilter(RISK_TYPE, SANCTION));
+        .containsExactly(defaultFilter, getRequestedAlertsFilter(RISK_TYPE, SANCTION));
   }
 
   private RequestedAlertsFilter getRequestedAlertsFilter(String fieldName, String fieldValue) {
@@ -201,9 +205,11 @@ class AlertsGeneratorServiceTest {
     assertThat(alertsCount.getValue()).isEqualTo(2);
   }
 
-  private GetAlertsSampleRequest getAlertsSampleRequest(String fieldValue) {
-    return GetAlertsSampleRequest.of(
-        dateRangeDto, of(getDistribution(RISK_TYPE, fieldValue)), 228L);
+  private AlertsSampleRequest getAlertsSampleRequest(String fieldValue) {
+    return AlertsSampleRequest.of(dateRangeDto,
+        of(getDistribution(RISK_TYPE, fieldValue)),
+        properties.getFilters(),
+        228L);
   }
 
   @Test

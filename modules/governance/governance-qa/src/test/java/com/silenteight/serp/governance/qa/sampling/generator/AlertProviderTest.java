@@ -2,12 +2,11 @@ package com.silenteight.serp.governance.qa.sampling.generator;
 
 import com.silenteight.model.api.v1.AlertsDistributionServiceProto.Distribution;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.Alert;
-import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleRequest;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleResponse;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.RequestedAlertsFilter;
 import com.silenteight.model.api.v1.SamplingAlertsServiceGrpc.SamplingAlertsServiceBlockingStub;
 import com.silenteight.serp.governance.qa.sampling.domain.dto.DateRangeDto;
-import com.silenteight.serp.governance.qa.sampling.generator.dto.GetAlertsSampleRequest;
+import com.silenteight.serp.governance.qa.sampling.generator.dto.AlertsSampleRequest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
 import static com.silenteight.serp.governance.qa.AlertFixture.generateDiscriminator;
+import static com.silenteight.serp.governance.qa.FilterFixture.ALERT_RECOMMENDATION_FILTER;
 import static com.silenteight.serp.governance.qa.sampling.generator.RiskType.RISK_TYPE;
 import static com.silenteight.serp.governance.qa.sampling.generator.RiskType.SANCTION;
 import static java.time.OffsetDateTime.parse;
@@ -46,14 +46,15 @@ class AlertProviderTest {
     //given
     DateRangeDto dateRangeDto = new DateRangeDto(
         parse("2021-05-01T01:00:00Z"), parse("2021-05-31T01:00:00Z"));
-    ArgumentCaptor<AlertsSampleRequest> requestArgumentCaptor = ArgumentCaptor
-        .forClass(AlertsSampleRequest.class);
-    GetAlertsSampleRequest getAlertsSampleRequest = GetAlertsSampleRequest.of(
-        dateRangeDto, of(getDistribution()), 100L);
+    ArgumentCaptor<com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleRequest>
+        requestArgumentCaptor = ArgumentCaptor.forClass(
+            com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleRequest.class);
+    AlertsSampleRequest alertsSampleRequest = AlertsSampleRequest.of(
+        dateRangeDto, of(getDistribution()), of(ALERT_RECOMMENDATION_FILTER),100L);
     when(samplingStub.withDeadlineAfter(anyLong(), any())).thenReturn(samplingStub);
     when(samplingStub.getAlertsSample(any())).thenReturn(getAlertsSampleResponse());
     //when
-    underTest.getAlerts(getAlertsSampleRequest);
+    underTest.getAlerts(alertsSampleRequest);
     //then
     verify(samplingStub, times(1))
         .getAlertsSample(requestArgumentCaptor.capture());
@@ -62,8 +63,13 @@ class AlertProviderTest {
     assertThat(requestArgumentCaptor.getValue().getTimeRangeFrom())
         .isEqualTo(toTimestamp(dateRangeDto.getFrom()));
     assertThat(requestArgumentCaptor.getValue().getAlertCount()).isEqualTo(100);
-    assertThat(requestArgumentCaptor.getValue().getRequestedAlertsFilter(0))
-        .isEqualTo(getRequestedAlertsFilter());
+    assertThat(requestArgumentCaptor.getValue().getRequestedAlertsFilterCount()).isEqualTo(2);
+    assertThat(requestArgumentCaptor.getValue().getRequestedAlertsFilterList())
+        .containsExactly(
+            getRequestedAlertsFilter(ALERT_RECOMMENDATION_FILTER.getField(),
+                ALERT_RECOMMENDATION_FILTER.getValues().get(0)),
+            getRequestedAlertsFilter(RISK_TYPE, SANCTION)
+        );
   }
 
   private AlertsSampleResponse getAlertsSampleResponse() {
@@ -88,11 +94,11 @@ class AlertProviderTest {
         .build();
   }
 
-  private RequestedAlertsFilter getRequestedAlertsFilter() {
+  private RequestedAlertsFilter getRequestedAlertsFilter(String field, String value) {
     return RequestedAlertsFilter
         .newBuilder()
-        .setFieldName(RISK_TYPE)
-        .setFieldValue(SANCTION)
+        .setFieldName(field)
+        .setFieldValue(value)
         .build();
   }
 }

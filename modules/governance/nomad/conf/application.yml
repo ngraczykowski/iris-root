@@ -38,6 +38,10 @@ serp:
         sample-count: 20
         grouping-fields:
           - alert_extendedAttribute5
+        filters:
+          - field: alert_s8_recommendation
+            values:
+              - ACTION_FALSE_POSITIVE
     viewing:
       max-state-reset-delay-ms: 45000
 
