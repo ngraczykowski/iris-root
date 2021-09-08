@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  add-here-configuration-classes
+  com.silenteight.rabbitcommonschema.definitions.RabbitCommonSchemaConfiguration

@@ -5,13 +5,13 @@ plugins {
 }
 
 dependencies {
+  implementation project(":sear-rabbitmq-common-schema-definitions")
+
   implementation group: 'org.springframework.boot', name: 'spring-boot-starter-amqp'
 }
 
-jar {
-  manifest {
-    attributes "Main-Class": "com.silenteight.adjudication.engine.app.AdjudicationEngineApplication"
-  }
+bootJar {
+  mainClass = "com.silenteight.rabbitcommonschema.initializr.app.RabbitCommonSchemaInitializrApplication"
 }
 
 jib {
@@ -33,11 +33,6 @@ jib {
     appRoot = "/silenteight/app"
     environment = [
         "SILENTEIGHT_HOME"            : "/silenteight",
-        "AE_DB_HOST"                  : "postgres",
-        "AE_DB_PORT"                  : "5432",
-        "AE_DB_NAME"                  : "adjudication-engine",
-        "AE_DB_USERNAME"              : "adjudication-engine",
-        "AE_DB_PASSWORD"              : "adjudication-engine",
         "SPRING_RABBITMQ_HOST"        : "rabbitmq",
         "SPRING_RABBITMQ_PORT"        : "5672",
         "SPRING_RABBITMQ_USERNAME"    : "dev",
@@ -53,10 +48,7 @@ jib {
         "-Djava.io.tmpdir=/tmp",
         "-Dsilenteight.home=/silenteight",
         "-Dspring.profiles.include=container",
-        "-Dserver.port=8080",
-        "-Dgrpc.server.port=8081",
     ]
-    ports = ["8080", "8081"]
     user = "nonroot"
     workingDirectory = "/silenteight"
   }

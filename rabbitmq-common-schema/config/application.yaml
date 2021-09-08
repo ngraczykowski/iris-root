@@ -1,0 +1,8 @@
+spring:
+  rabbitmq:
+    addresses: localhost:24166
+    # NOTE(ahaczewski): Intentionally left empty.
+    host:
+    virtual-host: /
+    username: guest
+    password: guest
