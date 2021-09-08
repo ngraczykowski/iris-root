@@ -23,8 +23,7 @@ class IdentificationMismatchAgentGrpcServicer(
     ) -> CheckIdentificationMismatchResponse:
         result: Result = await self.create_resolve_task(request)
         reason = CheckIdentificationMismatchReason(**vars(result.reason))
-        return CheckIdentificationMismatchResponse(solution=result.solution.value,
-                                                   reason=reason)
+        return CheckIdentificationMismatchResponse(solution=result.solution.value, reason=reason)
 
     def add_to_server(self, server):
         add_IdentificationMismatchAgentServicer_to_server(self, server)
