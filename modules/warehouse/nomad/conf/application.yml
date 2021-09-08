@@ -36,9 +36,12 @@ warehouse:
   alert-mapping:
     country-source-key: s8_lobCountryCode
     ignored-keys:
-      - "[02-9]{1,}\\.CustomerEntities\\..*"
-      - "\\d{1,}\\.PrivateListEntities\\..*"
+      - "\\d{1,}\\.CustomerEntities\\..*"
       - "\\d{1,}\\.CustomerIndividuals\\..*"
+      - "\\d{1,}\\.PrivateListEntities\\..*"
+      - "\\d{1,}\\.PrivateListIndividuals\\..*"
+      - "\\d{1,}\\.CTRPPRHBListEntities\\..*"
+      - "\\d{1,}\\.CTRPPRHBListIndividuals\\..*"
       - "\\d{1,}\\.DN_CASECOMMENT\\..*"
       - "\\d{1,}\\.DN_CASEHISTORY\\..*"
       - "\\d{1,}\\.Relationships\\..*"
