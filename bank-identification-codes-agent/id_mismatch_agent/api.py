@@ -19,13 +19,11 @@ from id_mismatch_agent.result import Reason
 
 @attrs(frozen=True)
 class SearchCodeMismatchAgentInput:
-    message_type: str = attrib()
-    message_tag: str = attrib()
     matching_field: str = attrib()
     matching_text: str = attrib()
-    wl_type: str = attrib()
-    wl_search_codes: list = attrib()
-    wl_bic_codes: list = attrib()
+    watchlist_type: str = attrib()
+    watchlist_search_codes: list = attrib()
+    watchlist_bic_codes: list = attrib()
 
 
 @attrs(frozen=True)
@@ -42,14 +40,14 @@ class MatchingTextTooShortToBeCodeReason(Reason):
 class MatchingTextMatchesWlSearchCodeReason(Reason):
     matching_text: str = attrib()
     search_code: str = attrib()
-    wl_type: str = attrib()
+    watchlist_type: str = attrib()
 
 
 @attrs(frozen=True)
 class MatchingTextMatchesWlBicCodeReason(Reason):
     matching_text: str = attrib()
     bic_code: str = attrib()
-    wl_type: str = attrib()
+    watchlist_type: str = attrib()
 
 
 @attrs(frozen=True)
@@ -58,21 +56,21 @@ class MatchingTextIsPartOfLongerSequenceReason(Reason):
     raw_matched_sequence: str = attrib()
     matching_field: str = attrib()
     partial_match: str = attrib()
-    wl_type: str = attrib()
+    watchlist_type: str = attrib()
 
 
 @attrs(frozen=True)
 class MatchingTextIsOnlyPartialMatchForSearchCodeReason(Reason):
     matching_text: str = attrib()
-    search_code: str = attrib()
-    wl_type: str = attrib()
+    search_codes: List[str] = attrib()
+    watchlist_type: str = attrib()
 
 
 @attrs(frozen=True)
 class MatchingTextDoesNotMatchWlSearchCodeReason(Reason):
     matching_text: str = attrib()
     search_codes: List[str] = attrib()
-    wl_type: str = attrib()
+    watchlist_type: str = attrib()
 
 
 @attrs(frozen=True)

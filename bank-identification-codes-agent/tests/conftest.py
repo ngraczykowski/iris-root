@@ -30,13 +30,11 @@ def read_test_cases():
         for row in reader:
 
             input = SearchCodeMismatchAgentInput(
-                row["T_TYPE"],
-                row["AP_TAG"],
                 row["AP_MATCHINGFIELD"],
-                row["WL_MATCHINGTEXT"],
-                row["WL_TYPE"],
-                row["WL_SEARCH_CODES"].split(),
-                row["WL_BIC_CODES"].split(),
+                row["WATCHLIST_MATCHINGTEXT"],
+                row["WATCHLIST_TYPE"],
+                row["WATCHLIST_SEARCH_CODES"].split(),
+                row["WATCHLIST_BIC_CODES"].split(),
             )
 
             result_value = row["RESULT"]

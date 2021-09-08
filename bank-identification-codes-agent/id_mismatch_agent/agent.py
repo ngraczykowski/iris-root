@@ -17,9 +17,9 @@ def identification_mismatch_agent(agent_input: SearchCodeMismatchAgentInput,) ->
     logic = IdMismatchLogic(
         agent_input.matching_field,
         agent_input.matching_text,
-        agent_input.wl_type,
-        _filter_none_values(agent_input.wl_search_codes),
-        _filter_none_values(agent_input.wl_bic_codes),
+        agent_input.watchlist_type,
+        _filter_none_values(agent_input.watchlist_search_codes),
+        _filter_none_values(agent_input.watchlist_bic_codes),
     )
 
     return logic.execute()
@@ -29,12 +29,12 @@ def identification_mismatch_agent(agent_input: SearchCodeMismatchAgentInput,) ->
 class IdMismatchLogic:
     matching_field: str = attrib()
     matching_text: str = attrib()
-    wl_type: str = attrib()
-    wl_search_codes: list = attrib()
-    wl_bic_codes: list = attrib()
+    watchlist_type: str = attrib()
+    watchlist_search_codes: list = attrib()
+    watchlist_bic_codes: list = attrib()
 
     def execute(self) -> Result:
-        if len(self.wl_search_codes) == 0 and len(self.wl_bic_codes) == 0:
+        if len(self.watchlist_search_codes) == 0 and len(self.watchlist_bic_codes) == 0:
             return Result(solution=Solution.NO_DECISION, reason=NoSearchCodeInWatchlistReason())
 
         if len(self.matching_text) < 3:
@@ -50,8 +50,8 @@ class IdMismatchLogic:
 
         matching_field_no_extra_characters = _remove_ids_separators(self.matching_field)
 
-        search_codes = [search_code.strip().upper() for search_code in self.wl_search_codes]
-        bic_codes = [bic_code.strip().upper() for bic_code in self.wl_bic_codes]
+        search_codes = [search_code.strip().upper() for search_code in self.watchlist_search_codes]
+        bic_codes = [bic_code.strip().upper() for bic_code in self.watchlist_bic_codes]
 
         pattern = fr"""
         ([\w]{{0,}}                 # Matches 0 to inf characters before actual pattern (no spaces) 
@@ -89,13 +89,13 @@ class IdMismatchLogic:
     ) -> Tuple[Solution, Reason]:
         solution = Solution.NO_DECISION
         reason = MatchingTextDoesNotMatchWlSearchCodeReason(
-            self.matching_text, search_codes, self.wl_type
+            self.matching_text, search_codes, self.watchlist_type
         )
         for search_code in search_codes:
             if whole_string == search_code:
                 solution = Solution.NO_MATCH
                 reason = MatchingTextMatchesWlSearchCodeReason(
-                    self.matching_text, search_code, self.wl_type
+                    self.matching_text, search_code, self.watchlist_type
                 )
                 break
 
@@ -109,14 +109,14 @@ class IdMismatchLogic:
                     raw_matched_string,
                     self.matching_field,
                     search_code,
-                    self.wl_type,
+                    self.watchlist_type,
                 )
                 break
 
             elif search_code.find(matching_text_no_extra_characters) != -1:
                 solution = Solution.MATCH
                 reason = MatchingTextIsOnlyPartialMatchForSearchCodeReason(
-                    self.matching_text, search_code, self.wl_type
+                    self.matching_text, [search_code], self.watchlist_type
                 )
                 break
         return solution, reason
@@ -133,13 +133,13 @@ class IdMismatchLogic:
             ):
                 solution = Solution.NO_MATCH
                 reason = MatchingTextMatchesWlBicCodeReason(
-                    self.matching_text, bic_code, self.wl_type
+                    self.matching_text, bic_code, self.watchlist_type
                 )
                 break
             elif bic_code.find(matching_text_no_extra_characters) != -1:
                 solution = Solution.MATCH
                 reason = MatchingTextMatchesWlBicCodeReason(
-                    self.matching_text, bic_code, self.wl_type
+                    self.matching_text, bic_code, self.watchlist_type
                 )
                 break
         return solution, reason

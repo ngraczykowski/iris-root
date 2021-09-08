@@ -4,6 +4,7 @@
 *.orig
 
 ### IntelliJ IDEA ###
+.idea
 /.idea/*/
 /.idea/*.xml
 out/
