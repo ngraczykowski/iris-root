@@ -53,6 +53,9 @@ pipeline {
             agent {
                 label 'nomad'
             }
+            when {
+                branch 'task/SCBOPTS-999-grpc'
+            }
             stages {
                 stage('Upload artifacts') {
                     steps {
@@ -85,19 +88,11 @@ pipeline {
                                  ]
                             }''',
                         )
-
                     }
                 }
                 stage('Deploy on nomad dev') {
                     steps {
-                        script {
-                            if (utils.getGitBranch() == 'master') {
-                                sh './nomad/deploy.sh'
-                            } else {
-                                echo 'This is not a release branch, but we are cheaters'
-                                sh './nomad/deploy.sh'
-                            }
-                        }
+                       sh './nomad/deploy.sh'
                     }
                 }
             }
