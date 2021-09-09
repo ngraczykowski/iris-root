@@ -12,13 +12,13 @@ class Solution(Enum):
 
 class Reason:
     conclusion: str = None
-    matching_text: str = None
-    matched_sequence: str = None
-    matching_field: str = None
-    partial_match: str = None
+    altered_party_matching_sequence: str = None
+    altered_party_matching_field: str = None
+    partial_match_text: str = None
+    watchlist_matching_text: str = None
     watchlist_type: str = None
-    search_codes: Sequence[str] = None
-    bic_code: str = None
+    watchlist_search_codes: Sequence[str] = None
+    watchlist_bic_code: str = None
 
     def __post_init__(self):
         self.conclusion = self.__class__.__name__

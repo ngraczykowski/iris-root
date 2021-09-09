@@ -15,11 +15,12 @@ def run(configuration_dirs, start_grpc_service):
     services = []
 
     if start_grpc_service:
-        services.append(GrpcService(config, servicers=(IdentificationMismatchAgentGrpcServicer(),)))
+        services.append(
+            GrpcService(config, servicers=(IdentificationMismatchAgentGrpcServicer(),))
+        )
 
     AgentRunner(config).run(
-        IdentificationMismatchAgent(config=config),
-        services=services,
+        IdentificationMismatchAgent(config=config), services=services,
     )
 
 
@@ -29,8 +30,8 @@ def main():
     logger.debug(
         IdentificationMismatchAgent().resolve(
             SearchCodeMismatchAgentInput(
-                matching_field="WE REFER TO 23190617054158 FOR15,990.00",
-                matching_text="190617",
+                altered_party_matching_field="WE REFER TO 23190617054158 FOR15,990.00",
+                watchlist_matching_text="190617",
                 watchlist_search_codes=["190617"],
                 watchlist_type="Individual",
                 watchlist_bic_codes=[],
@@ -46,21 +47,15 @@ def main():
         help="Path for configuration files",
     )
     parser.add_argument(
-        "--grpc",
-        action="store_true",
-        help="Start grpc service",
+        "--grpc", action="store_true", help="Start grpc service",
     )
     parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        help="Increase verbosity for debug purpose",
+        "-v", "--verbose", action="store_true", help="Increase verbosity for debug purpose",
     )
     args = parser.parse_args()
 
     run(
-        configuration_dirs=(args.configuration_dir,),
-        start_grpc_service=args.grpc,
+        configuration_dirs=(args.configuration_dir,), start_grpc_service=args.grpc,
     )
 
 

@@ -46,8 +46,10 @@ def read_test_cases():
                     for (attribute, value) in row.items()
                     if attribute.startswith("REASON_") and attribute != "REASON_TYPE"
                 }
-                if reason_dict.get("search_codes", ""):
-                    reason_dict["search_codes"] = json.loads(reason_dict["search_codes"])
+                if reason_dict.get("watchlist_search_codes", ""):
+                    reason_dict["watchlist_search_codes"] = json.loads(
+                        reason_dict["watchlist_search_codes"]
+                    )
 
                 import idmismatchagent.api as api_module
 

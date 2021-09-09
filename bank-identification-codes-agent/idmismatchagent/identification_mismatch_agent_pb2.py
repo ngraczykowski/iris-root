@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n@com.silenteight.proto.agent.identification_mismatch_agent.v1.apiB#IdentificationMismatchAgentApiProtoP\001',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n3idmismatchagent/identification_mismatch_agent.proto\x12\x36silenteight.agent.identification_mismatch_agent.v1.api\"\xa8\x01\n\"CheckIdentificationMismatchRequest\x12\x16\n\x0ematching_field\x18\x01 \x01(\t\x12\x15\n\rmatching_text\x18\x02 \x01(\t\x12\x16\n\x0ewatchlist_type\x18\x03 \x01(\t\x12\x1e\n\x16watchlist_search_codes\x18\x04 \x03(\t\x12\x1b\n\x13watchlist_bic_codes\x18\x05 \x03(\t\"\xa2\x01\n#CheckIdentificationMismatchResponse\x12\x10\n\x08solution\x18\x01 \x01(\t\x12i\n\x06reason\x18\x02 \x01(\x0b\x32Y.silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchReason\"\xd7\x01\n!CheckIdentificationMismatchReason\x12\x12\n\nconclusion\x18\x01 \x01(\t\x12\x15\n\rmatching_text\x18\x02 \x01(\t\x12\x18\n\x10matched_sequence\x18\x03 \x01(\t\x12\x16\n\x0ematching_field\x18\x04 \x01(\t\x12\x15\n\rpartial_match\x18\x05 \x01(\t\x12\x16\n\x0ewatchlist_type\x18\x06 \x01(\t\x12\x14\n\x0csearch_codes\x18\x07 \x03(\t\x12\x10\n\x08\x62ic_code\x18\x08 \x01(\t2\xf8\x01\n\x1bIdentificationMismatchAgent\x12\xd8\x01\n\x1b\x43heckIdentificationMismatch\x12Z.silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchRequest\x1a[.silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchResponse\"\x00\x42i\n@com.silenteight.proto.agent.identification_mismatch_agent.v1.apiB#IdentificationMismatchAgentApiProtoP\x01\x62\x06proto3'
+  serialized_pb=b'\n3idmismatchagent/identification_mismatch_agent.proto\x12\x36silenteight.agent.identification_mismatch_agent.v1.api\"\xc0\x01\n\"CheckIdentificationMismatchRequest\x12$\n\x1c\x61ltered_party_matching_field\x18\x01 \x01(\t\x12\x1f\n\x17watchlist_matching_text\x18\x02 \x01(\t\x12\x16\n\x0ewatchlist_type\x18\x03 \x01(\t\x12\x1e\n\x16watchlist_search_codes\x18\x04 \x03(\t\x12\x1b\n\x13watchlist_bic_codes\x18\x05 \x03(\t\"\xa2\x01\n#CheckIdentificationMismatchResponse\x12\x10\n\x08solution\x18\x01 \x01(\t\x12i\n\x06reason\x18\x02 \x01(\x0b\x32Y.silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchReason\"\x97\x02\n!CheckIdentificationMismatchReason\x12\x12\n\nconclusion\x18\x01 \x01(\t\x12\'\n\x1f\x61ltered_party_matching_sequence\x18\x02 \x01(\t\x12$\n\x1c\x61ltered_party_matching_field\x18\x03 \x01(\t\x12\x1a\n\x12partial_match_text\x18\x04 \x01(\t\x12\x1f\n\x17watchlist_matching_text\x18\x05 \x01(\t\x12\x16\n\x0ewatchlist_type\x18\x06 \x01(\t\x12\x1e\n\x16watchlist_search_codes\x18\x07 \x03(\t\x12\x1a\n\x12watchlist_bic_code\x18\x08 \x01(\t2\xf8\x01\n\x1bIdentificationMismatchAgent\x12\xd8\x01\n\x1b\x43heckIdentificationMismatch\x12Z.silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchRequest\x1a[.silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchResponse\"\x00\x42i\n@com.silenteight.proto.agent.identification_mismatch_agent.v1.apiB#IdentificationMismatchAgentApiProtoP\x01\x62\x06proto3'
 )
 
 
@@ -34,14 +34,14 @@ _CHECKIDENTIFICATIONMISMATCHREQUEST = _descriptor.Descriptor(
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='matching_field', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchRequest.matching_field', index=0,
+      name='altered_party_matching_field', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchRequest.altered_party_matching_field', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='matching_text', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchRequest.matching_text', index=1,
+      name='watchlist_matching_text', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchRequest.watchlist_matching_text', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -81,7 +81,7 @@ _CHECKIDENTIFICATIONMISMATCHREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=112,
-  serialized_end=280,
+  serialized_end=304,
 )
 
 
@@ -119,8 +119,8 @@ _CHECKIDENTIFICATIONMISMATCHRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=283,
-  serialized_end=445,
+  serialized_start=307,
+  serialized_end=469,
 )
 
 
@@ -140,28 +140,28 @@ _CHECKIDENTIFICATIONMISMATCHREASON = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='matching_text', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchReason.matching_text', index=1,
+      name='altered_party_matching_sequence', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchReason.altered_party_matching_sequence', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='matched_sequence', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchReason.matched_sequence', index=2,
+      name='altered_party_matching_field', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchReason.altered_party_matching_field', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='matching_field', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchReason.matching_field', index=3,
+      name='partial_match_text', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchReason.partial_match_text', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='partial_match', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchReason.partial_match', index=4,
+      name='watchlist_matching_text', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchReason.watchlist_matching_text', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -175,14 +175,14 @@ _CHECKIDENTIFICATIONMISMATCHREASON = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='search_codes', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchReason.search_codes', index=6,
+      name='watchlist_search_codes', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchReason.watchlist_search_codes', index=6,
       number=7, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='bic_code', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchReason.bic_code', index=7,
+      name='watchlist_bic_code', full_name='silenteight.agent.identification_mismatch_agent.v1.api.CheckIdentificationMismatchReason.watchlist_bic_code', index=7,
       number=8, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -200,8 +200,8 @@ _CHECKIDENTIFICATIONMISMATCHREASON = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=448,
-  serialized_end=663,
+  serialized_start=472,
+  serialized_end=751,
 )
 
 _CHECKIDENTIFICATIONMISMATCHRESPONSE.fields_by_name['reason'].message_type = _CHECKIDENTIFICATIONMISMATCHREASON
@@ -241,8 +241,8 @@ _IDENTIFICATIONMISMATCHAGENT = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=666,
-  serialized_end=914,
+  serialized_start=754,
+  serialized_end=1002,
   methods=[
   _descriptor.MethodDescriptor(
     name='CheckIdentificationMismatch',

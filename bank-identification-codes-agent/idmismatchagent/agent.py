@@ -25,8 +25,8 @@ HEADQUARTERS_INDICATOR = "XXX"
 class IdentificationMismatchAgent(Agent):
     def resolve(self, agent_input: SearchCodeMismatchAgentInput) -> Result:
         logic = IdMismatchLogic(
-            agent_input.matching_field,
-            agent_input.matching_text,
+            agent_input.altered_party_matching_field,
+            agent_input.watchlist_matching_text,
             agent_input.watchlist_type,
             _filter_none_values(agent_input.watchlist_search_codes),
             _filter_none_values(agent_input.watchlist_bic_codes),
@@ -38,7 +38,7 @@ class IdentificationMismatchAgent(Agent):
 @attrs(frozen=True)
 class IdMismatchLogic:
     matching_field: str = attrib()
-    matching_text: str = attrib()
+    watchlist_matching_text: str = attrib()
     watchlist_type: str = attrib()
     watchlist_search_codes: list = attrib()
     watchlist_bic_codes: list = attrib()
@@ -47,13 +47,15 @@ class IdMismatchLogic:
         if len(self.watchlist_search_codes) == 0 and len(self.watchlist_bic_codes) == 0:
             return Result(solution=Solution.NO_DECISION, reason=NoSearchCodeInWatchlistReason())
 
-        if len(self.matching_text) < 3:
+        if len(self.watchlist_matching_text) < 3:
             return Result(
                 solution=Solution.NO_DECISION,
-                reason=MatchingTextTooShortToBeCodeReason(self.matching_text),
+                reason=MatchingTextTooShortToBeCodeReason(self.watchlist_matching_text),
             )
 
-        matching_text_no_extra_characters = re.sub(r"\W+", "", self.matching_text).upper()
+        matching_text_no_extra_characters = re.sub(
+            r"\W+", "", self.watchlist_matching_text
+        ).upper()
 
         matching_text_pattern = "[ ]{0,1}".join(matching_text_no_extra_characters)
 
@@ -73,7 +75,7 @@ class IdMismatchLogic:
 
         solution = Solution.NO_DECISION
         reason = MatchingTextDoesNotMatchMatchingFieldReason(
-            self.matching_text, self.matching_field
+            self.watchlist_matching_text, self.matching_field
         )
 
         if matching_text_in_field_match:
@@ -98,13 +100,13 @@ class IdMismatchLogic:
     ) -> Tuple[Solution, Reason]:
         solution = Solution.NO_DECISION
         reason = MatchingTextDoesNotMatchWlSearchCodeReason(
-            self.matching_text, search_codes, self.watchlist_type
+            self.watchlist_matching_text, search_codes, self.watchlist_type
         )
         for search_code in search_codes:
             if whole_string == search_code:
                 solution = Solution.NO_MATCH
                 reason = MatchingTextMatchesWlSearchCodeReason(
-                    self.matching_text, [search_code], self.watchlist_type
+                    self.watchlist_matching_text, [search_code], self.watchlist_type
                 )
                 break
 
@@ -114,7 +116,7 @@ class IdMismatchLogic:
             ):
                 solution = Solution.MATCH
                 reason = MatchingTextIsPartOfLongerSequenceReason(
-                    self.matching_text,
+                    self.watchlist_matching_text,
                     raw_matched_string,
                     self.matching_field,
                     search_code,
@@ -125,7 +127,7 @@ class IdMismatchLogic:
             elif search_code.find(matching_text_no_extra_characters) != -1:
                 solution = Solution.MATCH
                 reason = MatchingTextIsOnlyPartialMatchForSearchCodeReason(
-                    self.matching_text, [search_code], self.watchlist_type
+                    self.watchlist_matching_text, [search_code], self.watchlist_type
                 )
                 break
         return solution, reason
@@ -142,13 +144,13 @@ class IdMismatchLogic:
             ):
                 solution = Solution.NO_MATCH
                 reason = MatchingTextMatchesWlBicCodeReason(
-                    self.matching_text, bic_code, self.watchlist_type
+                    self.watchlist_matching_text, bic_code, self.watchlist_type
                 )
                 break
             elif bic_code.find(matching_text_no_extra_characters) != -1:
                 solution = Solution.MATCH
                 reason = MatchingTextMatchesWlBicCodeReason(
-                    self.matching_text, bic_code, self.watchlist_type
+                    self.watchlist_matching_text, bic_code, self.watchlist_type
                 )
                 break
         return solution, reason
