@@ -1,6 +1,5 @@
 from agent_base.grpc_service.servicer import AgentGrpcServicer
 from result import Result
-
 from silenteight.agent.bankidentificationcodes.v1.api.bank_identification_codes_agent_pb2 import (
     DESCRIPTOR,
     CheckBankIdentificationCodesReason,
