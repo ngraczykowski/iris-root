@@ -1,18 +1,19 @@
 syntax = "proto3";
 
-package silenteight.agent.identification_mismatch_agent.v1.api;
+package silenteight.agent.bank_identification_codes_agent.v1.api;
 
-option java_package = "com.silenteight.proto.agent.identification_mismatch_agent.v1.api";
-option java_outer_classname = "IdentificationMismatchAgentApiProto";
+option java_package = "com.silenteight.proto.agent.bank_identification_codes_agent.v1.api";
+option java_outer_classname = "BankIdentificationCodesAgentApiProto";
 option java_multiple_files = true;
 
-service IdentificationMismatchAgent {
+service BankIdentificationCodesAgent {
 
-  rpc CheckIdentificationMismatch (CheckIdentificationMismatchRequest) returns (CheckIdentificationMismatchResponse) {
+  rpc CheckBankIdentificationCodes (CheckBankIdentificationCodesRequest)
+      returns (CheckBankIdentificationCodesResponse) {
   }
 }
 
-message CheckIdentificationMismatchRequest {
+message CheckBankIdentificationCodesRequest {
   string altered_party_matching_field = 1;
   string watchlist_matching_text = 2;
   string watchlist_type = 3;
@@ -20,12 +21,12 @@ message CheckIdentificationMismatchRequest {
   repeated string watchlist_bic_codes = 5;
 }
 
-message CheckIdentificationMismatchResponse {
+message CheckBankIdentificationCodesResponse {
   string solution = 1;
-  CheckIdentificationMismatchReason reason = 2;
+  CheckBankIdentificationCodesReason reason = 2;
 }
 
-message CheckIdentificationMismatchReason {
+message CheckBankIdentificationCodesReason {
     string conclusion = 1;
     string altered_party_matching_sequence = 2;
     string altered_party_matching_field = 3;

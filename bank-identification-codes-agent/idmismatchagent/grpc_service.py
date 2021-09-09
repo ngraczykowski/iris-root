@@ -1,29 +1,29 @@
 from agent_base.grpc_service.servicer import AgentGrpcServicer
 
-from idmismatchagent.identification_mismatch_agent_pb2 import (
+from idmismatchagent.bank_identification_codes_agent_pb2 import (
     DESCRIPTOR,
-    CheckIdentificationMismatchRequest,
-    CheckIdentificationMismatchResponse,
-    CheckIdentificationMismatchReason,
+    CheckBankIdentificationCodesReason,
+    CheckBankIdentificationCodesResponse,
+    CheckBankIdentificationCodesRequest,
 )
-from idmismatchagent.identification_mismatch_agent_pb2_grpc import (
-    IdentificationMismatchAgentServicer,
-    add_IdentificationMismatchAgentServicer_to_server,
+from idmismatchagent.bank_identification_codes_agent_pb2_grpc import (
+    BankIdentificationCodesAgentServicer,
+    add_BankIdentificationCodesAgentServicer_to_server,
 )
 from result import Result
 
 
-class IdentificationMismatchAgentGrpcServicer(
-    IdentificationMismatchAgentServicer, AgentGrpcServicer
+class BankIdentificationCodesAgentGrpcServicer(
+    BankIdentificationCodesAgentServicer, AgentGrpcServicer
 ):
-    name = DESCRIPTOR.services_by_name["IdentificationMismatchAgent"].full_name
+    name = DESCRIPTOR.services_by_name["BankIdentificationCodesAgent"].full_name
 
-    async def CheckIdentificationMismatch(
-        self, request: CheckIdentificationMismatchRequest, _context
-    ) -> CheckIdentificationMismatchResponse:
+    async def CheckBankIdentificationCodes(
+        self, request: CheckBankIdentificationCodesRequest, _context
+    ) -> CheckBankIdentificationCodesResponse:
         result: Result = await self.create_resolve_task(request)
-        reason = CheckIdentificationMismatchReason(**vars(result.reason))
-        return CheckIdentificationMismatchResponse(solution=result.solution.value, reason=reason)
+        reason = CheckBankIdentificationCodesReason(**vars(result.reason))
+        return CheckBankIdentificationCodesResponse(solution=result.solution.value, reason=reason)
 
     def add_to_server(self, server):
-        add_IdentificationMismatchAgentServicer_to_server(self, server)
+        add_BankIdentificationCodesAgentServicer_to_server(self, server)
