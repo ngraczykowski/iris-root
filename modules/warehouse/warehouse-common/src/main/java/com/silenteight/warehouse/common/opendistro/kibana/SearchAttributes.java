@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ class SearchAttributes {
   @Nullable
   @Default
   @JsonInclude(ALWAYS)
-  List<String> sort = List.of();
+  List<JsonNode> sort = List.of();
   @Nullable
   @Default
   @JsonProperty("kibanaSavedObjectMeta")
