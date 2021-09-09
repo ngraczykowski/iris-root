@@ -19,4 +19,6 @@ public class ElasticsearchProperties {
 
   @NotNull
   List<String> countryRolesIndexes = List.of();
+
+  int updateRequestBatchSize;
 }

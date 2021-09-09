@@ -8,7 +8,7 @@ import com.silenteight.data.api.v1.DataIndexResponse;
 import com.silenteight.data.api.v1.SimulationDataIndexRequest;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.indexer.alert.AlertCopyDataService;
-import com.silenteight.warehouse.indexer.alert.AlertService;
+import com.silenteight.warehouse.indexer.alert.AlertIndexService;
 import com.silenteight.warehouse.indexer.analysis.AnalysisMetadataDto;
 import com.silenteight.warehouse.indexer.analysis.SimulationNamingStrategy;
 import com.silenteight.warehouse.indexer.analysis.UniqueAnalysisFactory;
@@ -21,7 +21,7 @@ import static com.silenteight.warehouse.common.time.Timestamps.toTimestamp;
 public class SimulationAlertIndexUseCase implements SimulationIndexRequestCommandHandler {
 
   @NonNull
-  private final AlertService alertService;
+  private final AlertIndexService alertIndexService;
 
   @NonNull
   private final UniqueAnalysisFactory uniqueAnalysisFactory;
@@ -46,7 +46,8 @@ public class SimulationAlertIndexUseCase implements SimulationIndexRequestComman
 
     alertCopyDataService.copyProductionIntoSimulation(
         request.getAlertsList(), analysisMetadataDto.getElasticIndexName());
-    alertService.indexAlerts(request.getAlertsList(), analysisMetadataDto.getElasticIndexName());
+    alertIndexService.indexAlerts(
+        request.getAlertsList(), analysisMetadataDto.getElasticIndexName());
 
     log.debug("SimulationDataIndexRequest processed, requestId={}, strategy={}, analysis={}",
         request.getRequestId(), namingStrategy, analysisMetadataDto);

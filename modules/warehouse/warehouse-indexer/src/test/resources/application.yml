@@ -32,7 +32,7 @@ warehouse:
     prefix: itest
   es:
     production-query-index: ${warehouse.environment.prefix}_production
-
+    update-request-batch-size: 1000
 test:
   messaging:
     integration:
