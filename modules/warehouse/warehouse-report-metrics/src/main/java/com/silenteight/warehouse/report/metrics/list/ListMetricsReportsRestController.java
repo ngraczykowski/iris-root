@@ -21,7 +21,6 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping(ROOT)
 class ListMetricsReportsRestController {
 
-  private static final String PRODUCTION_ANALYSIS_NAME = "production";
   private static final String LIST_METRICS_REPORT_URL =
       "/v1/analysis/production/definitions/METRICS";
 
@@ -29,6 +28,6 @@ class ListMetricsReportsRestController {
   @PreAuthorize("isAuthorized('LIST_PRODUCTION_ON_DEMAND_REPORTS')")
   public ResponseEntity<List<ReportDefinitionDto>> getProductionReportDefinitions() {
     log.debug("Getting production metrics report definitions.");
-    return ok().body(MetricsReportDefinition.toReportsDefinitionDto(PRODUCTION_ANALYSIS_NAME));
+    return ok().body(MetricsReportDefinition.toProductionReportsDefinitionDto());
   }
 }
