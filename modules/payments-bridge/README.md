@@ -29,3 +29,31 @@ Use my prepared script to submit a sample request:
 ```
 ./scripts/submit-request.sh
 ```
+
+## Getting access token:
+To get access token for the client `sierra-dev-api` run: 
+
+    curl \
+        -d client_id=$CLIENT_ID \
+        -d client_secret=$CLIENT_SECRET \
+        -d grant_type=client_credentials \
+        https://auth.silent8.cloud/realms/$CLIENT_REALM/protocol/openid-connect/token
+
+where `$CLIENT_REALM` is `sierra`, `$CLIENT_ID` is `sierra-dev-api`, and `$CLIENT_SECRET` is available [here](https://auth.silent8.cloud/admin/master/console/#/realms/sierra/clients/1e5bb2aa-d17b-4746-8e24-fd3bb21d1259/credentials).
+
+### Test access token:
+The generated access token `$TOKEN` can be tested by following the steps below:
+
+1. Set `keycloak` settings in `application.yml`: 
+    - `keycloak.realm` to `sierra`
+    - `keycloak.auth-server-url` to `https://auth.silent8.cloud`
+    - `keycloak.resource` to sierra-dev
+    - `keycloak.credentials.secret` to `$CLIENT_SECRET`, which is available [here](https://auth.silent8.cloud/admin/master/console/#/realms/sierra/clients/1e5bb2aa-d17b-4746-8e24-fd3bb21d1259/credentials).
+1. Start the `PaymentsBridgeApplication`.
+1. Place the `$TOKEN` in the command below and run it:
+
+        curl 'http://localhost:24602/rest/payments/test' --header 'Authorization: Bearer $TOKEN'
+
+1. Verify the output:
+    
+        authenticated

@@ -75,7 +75,6 @@ libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 's
 libraries.spring_boot_starter_webflux = [group: 'org.springframework.boot', name: 'spring-boot-starter-webflux']
 libraries.spring_boot_starter_test = [group: 'org.springframework.boot', name: 'spring-boot-starter-test']
 libraries.spring_boot_starter_security = [group: 'org.springframework.boot', name: 'spring-boot-starter-security']
-libraries.spring_boot_starter_security = [group: 'org.springframework.boot', name: 'spring-boot-starter-security']
 libraries.spring_boot_test = [group: 'org.springframework.boot', name: 'spring-boot-test']
 libraries.spring_boot_test_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-test-autoconfigure']
 
@@ -197,6 +196,7 @@ libraries.jakarta_validation_api = [group: 'jakarta.validation', name: 'jakarta.
 libraries.javax_cache_api = [group: 'javax.cache', name: 'cache-api']
 libraries.jaxb_api = [group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api']
 libraries.jjwt = [group: 'io.jsonwebtoken', name: 'jjwt']
+libraries.keycloak_spring_boot_starter = [group: 'org.keycloak', name: 'keycloak-spring-boot-starter']
 libraries.kryo_shaded = [group: 'com.esotericsoftware', name: 'kryo-shaded']
 libraries.liquibase_core = [group: 'org.liquibase', name: 'liquibase-core', version: '3.10.3']
 libraries.liquibase_sessionlock = [group: 'com.github.blagerweij', name: 'liquibase-sessionlock', version: '1.4.0']
@@ -266,6 +266,7 @@ configurations.all {
 }
 
 dependencies {
+  implementation platform("org.keycloak.bom:keycloak-adapter-bom:15.0.2")
   implementation platform("com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
   implementation platform("org.testcontainers:testcontainers-bom:1.15.2")
   annotationProcessor platform(

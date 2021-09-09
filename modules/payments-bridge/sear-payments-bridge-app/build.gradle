@@ -30,8 +30,9 @@ dependencies {
   // Application Starters
   implementation libraries.spring_boot_starter_actuator
   implementation libraries.spring_boot_starter_logging
-  implementation libraries.spring_boot_starter_web
+  implementation libraries.spring_boot_starter_security
   implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_web
   implementation libraries.micrometer_prometheus
 
   // Cloud
@@ -85,6 +86,9 @@ dependencies {
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.adjudication_engine_api
   testImplementation libraries.awaitility
+
+  // Keycloak
+  implementation libraries.keycloak_spring_boot_starter
 }
 
 jar {

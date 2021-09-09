@@ -8,6 +8,7 @@ import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallbac
 import com.silenteight.commons.app.spring.SpringApplicationTemplate;
 import com.silenteight.payments.bridge.PaymentsBridgeModule;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -22,6 +23,8 @@ import org.springframework.integration.http.config.EnableIntegrationGraphControl
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import reactor.core.scheduler.Schedulers;
+
+import java.security.Security;
 
 import static com.silenteight.payments.common.app.EnvironmentUtils.setPropertyFromEnvironment;
 import static java.lang.System.setProperty;
@@ -39,6 +42,7 @@ import static java.lang.System.setProperty;
 public class PaymentsBridgeApplication {
 
   public static void main(String[] args) {
+    Security.addProvider(new BouncyCastleProvider());
     setUpSystemProperties();
     setUpSecuritySystemProperties();
 

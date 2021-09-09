@@ -64,3 +64,19 @@ spring:
     username: dev
     password: dev
     virtual-host: /
+
+
+#---------------------------------------------------------------------------------------------------
+# SECURITY
+#---------------------------------------------------------------------------------------------------
+
+# Keycloak configuration
+keycloak:
+  realm:
+  auth-server-url:
+  ssl-required: external
+  resource:
+  credentials:
+    secret:
+  use-resource-role-mappings: true
+  bearer-only: true
