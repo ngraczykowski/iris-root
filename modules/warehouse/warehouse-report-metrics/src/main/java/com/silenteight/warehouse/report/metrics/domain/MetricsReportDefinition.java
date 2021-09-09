@@ -70,11 +70,12 @@ public enum MetricsReportDefinition {
   @NonNull
   private final Period reportRange;
   private final boolean production;
+  private static final String PRODUCTION_ANALYSIS_NAME = "production";
 
-  public static List<ReportDefinitionDto> toReportsDefinitionDto(String analysisId) {
+  public static List<ReportDefinitionDto> toProductionReportsDefinitionDto() {
     return stream(MetricsReportDefinition.values())
         .filter(MetricsReportDefinition::isProduction)
-        .map(reportDefinition -> reportDefinition.toReportDefinitionDto(analysisId))
+        .map(reportDefinition -> reportDefinition.toReportDefinitionDto(PRODUCTION_ANALYSIS_NAME))
         .collect(toList());
   }
 
@@ -83,6 +84,13 @@ public enum MetricsReportDefinition {
         .filter(reportDefinition -> reportDefinition.hasId(id))
         .findAny()
         .orElseThrow(() -> new ReportTypeNotFoundException(id));
+  }
+
+  public static List<ReportDefinitionDto> toReportsDefinitionDto(String analysisId) {
+    return stream(MetricsReportDefinition.values())
+        .filter(reportDefinition1 -> !reportDefinition1.isProduction())
+        .map(reportDefinition -> reportDefinition.toReportDefinitionDto(analysisId))
+        .collect(toList());
   }
 
   OffsetDateTime getFrom(Instant now) {
