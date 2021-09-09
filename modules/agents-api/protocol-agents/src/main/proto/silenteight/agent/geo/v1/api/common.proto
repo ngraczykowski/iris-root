@@ -64,6 +64,7 @@ message GeoComparerReason {
   enum MatchType {
     MATCH = 0;
     NO_MATCH = 1;
+    WEAK_MATCH = 2;
   }
 }
 
