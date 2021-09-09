@@ -68,6 +68,7 @@ warehouse:
     country-roles-indexes:
       - ${warehouse.es.production-query-index}
       - ${warehouse.environment.prefix}_simulation*
+    update-request-batch-size: 1000
 
 spring:
   #-------------------------------------------------------------------------------------------------

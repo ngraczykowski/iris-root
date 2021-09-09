@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.*;
 @ContextConfiguration(initializers = {
     OpendistroElasticContainerInitializer.class
 })
-class SamplingAlertServiceTest {
+class SamplingAlertIndexServiceTest {
 
   @Autowired
   private SamplingAlertService underTest;

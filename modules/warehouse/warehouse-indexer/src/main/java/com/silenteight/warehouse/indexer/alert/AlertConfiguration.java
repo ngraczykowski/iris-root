@@ -29,9 +29,10 @@ public class AlertConfiguration {
   }
 
   @Bean
-  AlertService alertService(
+  AlertIndexService alertIndexService(
       RestHighLevelClient restHighLevelAdminClient,
       @Valid AlertMappingProperties alertMappingProperties,
+      @Valid ElasticsearchProperties elasticsearchProperties,
       TimeSource timeSource) {
 
     SkipAnyMatchingKeysStrategy ignoredKeysStrategy =
@@ -40,7 +41,10 @@ public class AlertConfiguration {
     AlertMapper alertMapper =
         new AlertMapper(timeSource, alertMappingProperties, ignoredKeysStrategy);
 
-    return new AlertService(restHighLevelAdminClient, alertMapper);
+    return new AlertIndexService(
+        restHighLevelAdminClient,
+        alertMapper,
+        elasticsearchProperties.getUpdateRequestBatchSize());
   }
 
   @Bean

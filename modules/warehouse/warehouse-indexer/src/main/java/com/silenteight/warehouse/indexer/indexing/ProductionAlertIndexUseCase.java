@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.data.api.v1.DataIndexResponse;
 import com.silenteight.data.api.v1.ProductionDataIndexRequest;
 import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.warehouse.indexer.alert.AlertService;
+import com.silenteight.warehouse.indexer.alert.AlertIndexService;
 import com.silenteight.warehouse.indexer.analysis.ProductionNamingStrategy;
 import com.silenteight.warehouse.indexer.indexing.listener.ProductionIndexRequestCommandHandler;
 
@@ -18,7 +18,7 @@ import static com.silenteight.warehouse.common.time.Timestamps.toTimestamp;
 public class ProductionAlertIndexUseCase implements ProductionIndexRequestCommandHandler {
 
   @NonNull
-  private final AlertService alertService;
+  private final AlertIndexService alertIndexService;
 
   @NonNull
   private final TimeSource timeSource;
@@ -32,7 +32,7 @@ public class ProductionAlertIndexUseCase implements ProductionIndexRequestComman
         request.getRequestId(), request.getAlertsCount());
 
     ProductionNamingStrategy namingStrategy = new ProductionNamingStrategy(environmentPrefix);
-    alertService.indexAlerts(request.getAlertsList(), namingStrategy.getElasticIndexName());
+    alertIndexService.indexAlerts(request.getAlertsList(), namingStrategy.getElasticIndexName());
 
     log.debug("ProductionDataIndexRequest processed, requestId={}, strategy={}",
         request.getRequestId(), namingStrategy);

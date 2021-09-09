@@ -54,7 +54,7 @@ class AlertIT {
   private AlertQueryService queryUnderTest;
 
   @Autowired
-  private AlertService underTest;
+  private AlertIndexService underTest;
 
   @Autowired
   private SimpleElasticTestClient simpleElasticTestClient;
