@@ -1,3 +1,4 @@
+import logging
 import re
 from typing import Tuple
 
@@ -23,15 +24,19 @@ HEADQUARTERS_INDICATOR = "XXX"
 
 class IdentificationMismatchAgent(Agent):
     def resolve(self, agent_input: SearchCodeMismatchAgentInput) -> Result:
-        logic = IdMismatchLogic(
-            agent_input.altered_party_matching_field,
-            agent_input.watchlist_matching_text,
-            agent_input.watchlist_type,
-            _filter_none_values(agent_input.watchlist_search_codes),
-            _filter_none_values(agent_input.watchlist_bic_codes),
-        )
+        try:
+            logic = IdMismatchLogic(
+                agent_input.altered_party_matching_field,
+                agent_input.watchlist_matching_text,
+                agent_input.watchlist_type,
+                _filter_none_values(agent_input.watchlist_search_codes),
+                _filter_none_values(agent_input.watchlist_bic_codes),
+            )
 
-        return logic.execute()
+            return logic.execute()
+        except Exception:
+            logging.exception(f"For agent input {agent_input}")
+            return Result(solution=Solution.AGENT_ERROR)
 
 
 @attrs(frozen=True)
