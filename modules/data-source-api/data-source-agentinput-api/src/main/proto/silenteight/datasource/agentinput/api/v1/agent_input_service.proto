@@ -24,7 +24,7 @@ message BatchCreateAgentInputsRequest {
   repeated AgentInput agent_inputs = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
-message CreateAgentInput {
+message CreatedAgentInput {
   // The name of the agent input, in form of `agent-inputs/<Agent input ID>`.
   string name = 1;
 
@@ -35,5 +35,5 @@ message CreateAgentInput {
 
 message BatchCreateAgentInputsResponse {
   // The list of created agent inputs.
-  repeated CreateAgentInput created_agent_inputs = 1;
+  repeated CreatedAgentInput created_agent_inputs = 1;
 }

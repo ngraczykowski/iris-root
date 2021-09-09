@@ -28,12 +28,20 @@ service CategoryValueService {
     };
   }
 
-  rpc BatchGetCategoryValuesForMatches (BatchGetCategoryValuesForMatchesRequest) returns (BatchGetCategoryValuesForMatchesResponse) {
+  rpc BatchGetMatchesCategoryValues (BatchGetMatchesCategoryValuesRequest) returns (BatchGetMatchesCategoryValuesResponse) {
     option (google.api.http) = {
-      post: "/v2/categories/-/values:batchGetForMatches"
+      post: "/v2/categories/-/values:batchGetMatches"
       body: "matches"
     };
   }
+}
+
+message CreateCategoryValuesRequest {
+  // The name of category to create values for, in form of `categories/<Category>`.
+  string category = 1;
+
+  // The maximum number of comment inputs accepted by the service is 30000.
+  repeated CategoryValue category_values = 2;
 }
 
 message CreatedCategoryValue {
@@ -44,14 +52,6 @@ message CreatedCategoryValue {
   // The name of a match this category value is for, in form of
   // `alerts/<Alert ID>/matches/<Match ID>`.
   string match = 2;
-}
-
-message CreateCategoryValuesRequest {
-  // The name of category to create values for, in form of `categories/<Category>`.
-  string category = 1;
-
-  // The maximum number of comment inputs accepted by the service is 30000.
-  repeated CategoryValue category_values = 2;
 }
 
 message CreateCategoryValuesResponse {
@@ -77,12 +77,12 @@ message CategoryMatches {
   repeated string matches = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
-message BatchGetCategoryValuesForMatchesRequest {
+message BatchGetMatchesCategoryValuesRequest {
   // The list of categories and matches for which to retrieve category values.
   repeated CategoryMatches category_matches = 1;
 }
 
-message BatchGetCategoryValuesForMatchesResponse {
+message BatchGetMatchesCategoryValuesResponse {
   // The list of category values for requested matches.
   repeated CategoryValue category_values = 1;
 }

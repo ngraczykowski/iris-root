@@ -19,7 +19,7 @@ service CommentInputService {
     };
   }
 
-  rpc BatchGetCommentInputsForAlerts (BatchGetCommentInputsForAlertsRequest) returns (BatchGetCommentInputsForAlertsResponse) {
+  rpc BatchGetAlertsCommentInputs (BatchGetAlertsCommentInputsRequest) returns (BatchGetAlertsCommentInputsResponse) {
     option (google.api.http) = {
       post: "/v2/comment-inputs:batchGetForAlerts"
       body: "alerts"
@@ -48,13 +48,13 @@ message BatchCreateCommentInputResponse {
   repeated CreatedCommentInput created_comment_inputs = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
-message BatchGetCommentInputsForAlertsRequest {
+message BatchGetAlertsCommentInputsRequest {
   // The list of alert names to which comment inputs are requested, in form of `alerts/<Alert ID>`.
   // The maximum number of alert names accepted by the service is 30000.
   repeated string alerts = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
-message BatchGetCommentInputsForAlertsResponse {
+message BatchGetAlertsCommentInputsResponse {
   // The list of comment inputs.
   // The maximum number of comment inputs accepted by the service is 30000.
   repeated CommentInput comment_inputs = 1 [(google.api.field_behavior) = REQUIRED];
