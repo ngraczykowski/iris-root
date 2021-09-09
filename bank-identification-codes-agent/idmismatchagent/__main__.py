@@ -4,9 +4,9 @@ import pathlib
 from agent_base.agent import AgentRunner
 from agent_base.grpc_service import GrpcService
 from agent_base.utils import Config
-from tstoolkit.utils import LogLevel, generate_logger, setup_logging
+from tstoolkit.utils import LogLevel, setup_logging
 
-from idmismatchagent.agent import IdentificationMismatchAgent, SearchCodeMismatchAgentInput
+from idmismatchagent.agent import IdentificationMismatchAgent
 from idmismatchagent.grpc_service import BankIdentificationCodesAgentGrpcServicer
 
 
@@ -26,19 +26,6 @@ def run(configuration_dirs, start_grpc_service):
 
 
 def main():
-    setup_logging()
-    logger = generate_logger(log_level=LogLevel.debug)
-    logger.debug(
-        IdentificationMismatchAgent().resolve(
-            SearchCodeMismatchAgentInput(
-                altered_party_matching_field="WE REFER TO 23190617054158 FOR15,990.00",
-                watchlist_matching_text="190617",
-                watchlist_search_codes=["190617"],
-                watchlist_type="Individual",
-                watchlist_bic_codes=[],
-            )
-        )
-    )
     parser = argparse.ArgumentParser(description="Bank identification code agent")
     parser.add_argument(
         "-c",
