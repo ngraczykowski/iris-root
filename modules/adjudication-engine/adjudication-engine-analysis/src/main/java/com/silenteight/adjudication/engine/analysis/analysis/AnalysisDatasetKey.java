@@ -13,7 +13,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor(access = PACKAGE)
 @NoArgsConstructor(access = PROTECTED)
 @Setter(NONE)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@EqualsAndHashCode(callSuper = false)
 class AnalysisDatasetKey implements Serializable {
 
   private static final long serialVersionUID = 6925160290708786662L;

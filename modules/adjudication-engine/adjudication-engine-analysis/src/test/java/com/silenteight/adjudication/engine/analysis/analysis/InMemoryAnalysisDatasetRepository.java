@@ -3,6 +3,9 @@ package com.silenteight.adjudication.engine.analysis.analysis;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.adjudication.api.v1.Dataset;
+import com.silenteight.adjudication.engine.common.resource.ResourceName;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +17,7 @@ import java.util.stream.StreamSupport;
 class InMemoryAnalysisDatasetRepository implements AnalysisDatasetRepository {
 
   private final Map<AnalysisDatasetKey, TestAnalysisDatasetEntity> store = new HashMap<>();
+  private final Map<Long, Dataset> datasets = new HashMap<>();
 
   public List<AnalysisDatasetEntity> getAnalysisDatasetList() {
     return store
@@ -30,8 +34,8 @@ class InMemoryAnalysisDatasetRepository implements AnalysisDatasetRepository {
           var testEntity = new TestAnalysisDatasetEntity(e);
           var id = e.getId();
 
-          if (store.containsKey(id))
-            testEntity.alertCount = store.get(id).alertCount;
+          if (datasets.containsKey(id.getDatasetId()))
+            testEntity.alertCount = datasets.get(id.getDatasetId()).getAlertCount();
 
           // Replace the test entity with new one.
           store.put(id, testEntity);
@@ -41,6 +45,10 @@ class InMemoryAnalysisDatasetRepository implements AnalysisDatasetRepository {
 
   public AnalysisDatasetQueryRepository getQueryRepository() {
     return new QueryRepository();
+  }
+
+  public DataSetRepository getDatasetRepository() {
+    return new InMemoryDatasetRepository();
   }
 
   @RequiredArgsConstructor
@@ -64,6 +72,15 @@ class InMemoryAnalysisDatasetRepository implements AnalysisDatasetRepository {
           .filter(store::containsKey)
           .map(store::get)
           .map(TestAnalysisDatasetEntity::toQueryEntity);
+    }
+  }
+
+  private class InMemoryDatasetRepository implements DataSetRepository {
+
+    @Override
+    public void save(Dataset dataset) {
+      var id = ResourceName.create(dataset.getName()).getLong("datasets");
+      datasets.put(id, dataset);
     }
   }
 }

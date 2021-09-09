@@ -1,15 +1,13 @@
 package com.silenteight.adjudication.engine.analysis.analysis;
 
 import com.silenteight.adjudication.api.v1.AnalysisDataset;
+import com.silenteight.adjudication.api.v1.Dataset;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class AddAndListDatasetsToAnalysisUseCaseTest {
 
@@ -21,6 +19,9 @@ class AddAndListDatasetsToAnalysisUseCaseTest {
       = new InMemoryAnalysisDatasetRepository();
   private final AnalysisDatasetQueryRepository analysisDatasetQueryRepository =
       analysisDatasetRepository.getQueryRepository();
+  private final DataSetRepository datasetRepository =
+      analysisDatasetRepository.getDatasetRepository();
+
   private final AddDatasetAlertsToAnalysisUseCase addDatasetAlertsToAnalysisUseCase =
       new AddDatasetAlertsToAnalysisUseCase(datasetAlertsAdder, gateway);
   private final AddDatasetToAnalysisUseCase addDatasetToAnalysisUseCase =
@@ -32,15 +33,17 @@ class AddAndListDatasetsToAnalysisUseCaseTest {
       new AddAndListDatasetInAnalysisUseCase(addDatasetAlertsToAnalysisUseCase,
           addDatasetToAnalysisUseCase, listAnalysisDatasetUseCase);
 
-  // TODO(ahaczewski): Fix the addDataset test and enable it.
   @Test
-  @Disabled
   void addDataset() {
     var analysisDataset = AnalysisDataset.newBuilder()
         .setName("analysis/1/datasets/1")
         .setAlertCount(10)
         .setPendingAlerts(0)
         .build();
+
+    var dataset = Dataset.newBuilder().setName("datasets/1").setAlertCount(10).build();
+
+    datasetRepository.save(dataset);
 
     List<String> datasets = List.of("datasets/1");
     List<AnalysisDataset> result = useCase.batchAddAndListDataset("analysis/1", datasets);
@@ -57,9 +60,7 @@ class AddAndListDatasetsToAnalysisUseCaseTest {
         .containsExactly(new AnalysisDatasetEntity(1L, 1L));
   }
 
-  // TODO(ahaczewski): Fix the addMultipleDatasets test and enable it.
   @Test
-  @Disabled
   void addMultipleDatasets() {
     var analysisDataset1 = AnalysisDataset.newBuilder()
         .setName("analysis/1/datasets/1")
@@ -72,9 +73,11 @@ class AddAndListDatasetsToAnalysisUseCaseTest {
         .setPendingAlerts(0)
         .build();
 
-    when(listAnalysisDatasetUseCase.listAnalysisDatasets(
-        List.of(new AnalysisDatasetKey(1L, 1L), new AnalysisDatasetKey(1L, 2L))))
-        .thenReturn(asList(analysisDataset1, analysisDataset2));
+    var dataset = Dataset.newBuilder().setName("datasets/1").setAlertCount(10).build();
+    var dataset2 = Dataset.newBuilder().setName("datasets/2").setAlertCount(20).build();
+
+    datasetRepository.save(dataset);
+    datasetRepository.save(dataset2);
 
     List<String> datasets = List.of("datasets/1", "datasets/2");
     List<AnalysisDataset> result = useCase.batchAddAndListDataset("analysis/1", datasets);
