@@ -3,6 +3,7 @@ scriptdir="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
 basedir="$(cd -- "$scriptdir"/.. && pwd -P)"
 
 rm -rf \
+    "$basedir"/build/ \
     "$basedir"/dist/ \
     "$basedir"/.pytest_cache/ \
     "$basedir"/.eggs \
