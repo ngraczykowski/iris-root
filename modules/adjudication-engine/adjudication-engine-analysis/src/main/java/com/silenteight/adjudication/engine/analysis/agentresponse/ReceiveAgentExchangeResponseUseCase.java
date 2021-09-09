@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.agentexchange.AgentExchangeFacade;
+import com.silenteight.adjudication.engine.analysis.agentexchange.domain.DeleteAgentExchangeRequest;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.engine.features.matchfeaturevalue.MatchFeatureValueFacade;
 import com.silenteight.adjudication.engine.features.matchfeaturevalue.dto.MatchFeatureValue;
@@ -70,7 +71,27 @@ class ReceiveAgentExchangeResponseUseCase {
         .addAllMatches(mapper.matches().collect(toUnmodifiableList()))
         .build();
 
+    deleteAgentExchanges(response, agentExchangeRequestId);
+
     return of(result);
+  }
+
+  @SuppressWarnings("FeatureEnvy")
+  private void deleteAgentExchanges(AgentExchangeResponse response, UUID agentExchangeRequestId) {
+    agentExchangeFacade.removeReceivedAgentExchanges(response
+        .getAgentOutputsList()
+        .stream()
+        .map(ao -> DeleteAgentExchangeRequest
+            .builder()
+            .agentExchangeRequestId(agentExchangeRequestId)
+            .matchId(ResourceName.create(ao.getMatch()).getLong("matches"))
+            .featuresIds(ao
+                .getFeaturesList()
+                .stream()
+                .map(Feature::getFeature)
+                .collect(toList()))
+            .build())
+        .collect(toList()));
   }
 
   @RequiredArgsConstructor

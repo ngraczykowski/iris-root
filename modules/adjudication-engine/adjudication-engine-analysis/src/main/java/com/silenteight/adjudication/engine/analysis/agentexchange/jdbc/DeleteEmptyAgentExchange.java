@@ -2,6 +2,7 @@ package com.silenteight.adjudication.engine.analysis.agentexchange.jdbc;
 
 import lombok.RequiredArgsConstructor;
 
+import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -9,16 +10,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 class DeleteEmptyAgentExchange {
 
+  @Language("PostgreSQL")
+  private static final String SQL = "DELETE FROM ae_agent_exchange\n"
+      + "WHERE agent_exchange_id "
+      + "NOT IN (SELECT agent_exchange_id FROM ae_agent_exchange_match_feature)";
+
   private final JdbcTemplate jdbcTemplate;
 
   void execute() {
-    jdbcTemplate.update("DELETE FROM ae_agent_exchange\n"
-        + "WHERE agent_exchange_id IN (\n"
-        + "    SELECT aae.agent_exchange_id \n"
-        + "    FROM ae_agent_exchange aae\n"
-        + "    LEFT JOIN ae_agent_exchange_match_feature aaemf "
-        + "         ON aae.agent_exchange_id = aaemf.agent_exchange_id\n"
-        + "    WHERE aaemf.agent_exchange_match_feature_id IS NULL\n"
-        + ")");
+    jdbcTemplate.update(SQL);
   }
 }

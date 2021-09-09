@@ -1,28 +1,33 @@
 package com.silenteight.adjudication.engine.analysis.agentexchange;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.base.aspects.metrics.Timed;
+import com.silenteight.adjudication.engine.analysis.agentexchange.domain.DeleteAgentExchangeRequest;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
-@Slf4j
 class RemoveAgentExchangesUseCase {
 
   private final AgentExchangeDataAccess agentExchangeDataAccess;
 
-  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "agentexchange" })
   @Transactional
-  void removeAgentExchanges() {
-    if (log.isDebugEnabled()) {
-      log.debug(
-          "Removing agent exchanges");
-    }
-
-    agentExchangeDataAccess.removeAgentExchange();
+  void remove(List<DeleteAgentExchangeRequest> deleteAgentExchangeRequests) {
+    var agentExchangeIds = new ArrayList<UUID>();
+    var matchIds = new ArrayList<Long>();
+    var features = new ArrayList<String>();
+    deleteAgentExchangeRequests.forEach(
+        request -> request.getFeaturesIds().forEach(feature -> {
+          agentExchangeIds.add(request.getAgentExchangeRequestId());
+          matchIds.add(request.getMatchId());
+          features.add(feature);
+        }));
+    agentExchangeDataAccess.removeAgentExchange(agentExchangeIds, matchIds, features);
   }
 }

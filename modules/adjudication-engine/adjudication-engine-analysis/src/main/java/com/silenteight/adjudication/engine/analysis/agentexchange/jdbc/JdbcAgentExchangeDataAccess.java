@@ -6,6 +6,9 @@ import com.silenteight.adjudication.engine.analysis.agentexchange.AgentExchangeD
 
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.UUID;
+
 @Repository
 @RequiredArgsConstructor
 class JdbcAgentExchangeDataAccess implements AgentExchangeDataAccess {
@@ -14,8 +17,9 @@ class JdbcAgentExchangeDataAccess implements AgentExchangeDataAccess {
   private final DeleteEmptyAgentExchange deleteEmptyAgentExchange;
 
   @Override
-  public void removeAgentExchange() {
-    deleteAgentExchangeMatchFeatureQuery.execute();
+  public void removeAgentExchange(
+      List<UUID> agentExchangeRequestId, List<Long> matchId, List<String> featuresIds) {
+    deleteAgentExchangeMatchFeatureQuery.execute(agentExchangeRequestId, matchId, featuresIds);
     deleteEmptyAgentExchange.execute();
   }
 }
