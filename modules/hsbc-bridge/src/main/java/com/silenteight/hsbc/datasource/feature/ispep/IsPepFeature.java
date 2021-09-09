@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.datasource.feature.ispep;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.ispep.IsPepFeatureInputDto;
@@ -15,6 +16,7 @@ import java.util.List;
 import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RequiredArgsConstructor
 public class IsPepFeature implements IsPepFeatureClientValuesRetriever<IsPepFeatureInputDto> {
 
@@ -24,10 +26,13 @@ public class IsPepFeature implements IsPepFeatureClientValuesRetriever<IsPepFeat
   public IsPepFeatureInputDto retrieve(MatchData matchData, IsPepServiceClient client) {
     var query = isPepQueryFactory.create(matchData, client);
 
+    log.debug("Datasource start retrieve data for IsPep feature.");
+
     var inputBuilder = IsPepFeatureInputDto.builder();
 
     if (matchData.isIndividual()) {
-      var apIndividualExtractLobCountry = toDistinctList(query.apIndividualExtractEdqLobCountryCode());
+      var apIndividualExtractLobCountry =
+          toDistinctList(query.apIndividualExtractEdqLobCountryCode());
       var requiredFields = query.provideRequiredModelFieldNames();
       var responses =
           query.verifyIsPep(apIndividualExtractLobCountry, requiredFields);
@@ -35,9 +40,16 @@ public class IsPepFeature implements IsPepFeatureClientValuesRetriever<IsPepFeat
       inputBuilder.featureSolutions(mapToFeatureSolutions(responses));
     }
 
-    return inputBuilder
+    var result = inputBuilder
         .feature(getFeatureName())
         .build();
+
+    log.debug(
+        "Datasource final response with solution for feature: {} is {}.",
+        result.getFeature(),
+        result.getFeatureSolutions());
+
+    return result;
   }
 
   private List<IsPepFeatureSolutionDto> mapToFeatureSolutions(List<IsPepResponseDto> responses) {

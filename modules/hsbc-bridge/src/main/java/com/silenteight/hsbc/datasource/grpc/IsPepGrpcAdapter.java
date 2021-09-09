@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.datasource.grpc;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.datasource.dto.ispep.ReasonDto;
 import com.silenteight.hsbc.datasource.extractors.ispep.*;
@@ -12,6 +13,7 @@ import org.springframework.retry.annotation.Retryable;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+@Slf4j
 @RequiredArgsConstructor
 public class IsPepGrpcAdapter implements IsPepServiceClient {
 
@@ -28,7 +30,12 @@ public class IsPepGrpcAdapter implements IsPepServiceClient {
         .setUid(request.getUid())
         .build();
 
+    log.debug("Datasource sending IsPep request to Worldcheck: {}.", grpcRequest);
+
     var response = getStub().verifyIfIsPep(grpcRequest);
+
+    log.debug(
+        "Datasource received IsPep solution response from Worldcheck: {}.", response.getSolution());
 
     return mapToIsPepResponse(response);
   }
