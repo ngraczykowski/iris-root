@@ -54,7 +54,7 @@ pipeline {
                 label 'nomad'
             }
             when {
-                branch 'task/SCBOPTS-999-grpc'
+                branch 'master'
             }
             stages {
                 stage('Upload artifacts') {
