@@ -54,6 +54,9 @@ class AnalysisOutboundAmqpIntegrationProperties {
     private String analysisAlertsAddedRoutingKey = ANALYSIS_ALERTS_ADDED_ROUTING_KEY;
 
     @NotNull
+    private String deleteAgentExchangeRoutingKey = DELETE_AGENT_EXCHANGE_ROUTING_KEY;
+
+    @NotNull
     private String pendingRecommendationsRoutingKey = PENDING_RECOMMENDATIONS_ROUTING_KEY;
 
     @NotNull

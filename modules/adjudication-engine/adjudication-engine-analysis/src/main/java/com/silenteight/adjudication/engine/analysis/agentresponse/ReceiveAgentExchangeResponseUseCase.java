@@ -3,12 +3,12 @@ package com.silenteight.adjudication.engine.analysis.agentresponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.adjudication.engine.analysis.agentexchange.AgentExchangeFacade;
-import com.silenteight.adjudication.engine.analysis.agentexchange.domain.DeleteAgentExchangeRequest;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.adjudication.engine.features.matchfeaturevalue.MatchFeatureValueFacade;
 import com.silenteight.adjudication.engine.features.matchfeaturevalue.dto.MatchFeatureValue;
+import com.silenteight.adjudication.internal.v1.AgentResponseStored;
 import com.silenteight.adjudication.internal.v1.MatchFeaturesUpdated;
+import com.silenteight.adjudication.internal.v1.StoredMatchFeatures;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 import com.silenteight.agents.v1.api.exchange.AgentOutput;
 import com.silenteight.agents.v1.api.exchange.AgentOutput.Feature;
@@ -32,7 +32,7 @@ class ReceiveAgentExchangeResponseUseCase {
 
   private final MatchFeatureValueFacade matchFeatureValueFacade;
   private final FeatureIdsProvider featureIdsProvider;
-  private final AgentExchangeFacade agentExchangeFacade;
+  private final DeleteAgentExchangeGateway gateway;
 
   @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "agentresponse" })
   Optional<MatchFeaturesUpdated> receiveAgentExchangeResponse(
@@ -78,20 +78,21 @@ class ReceiveAgentExchangeResponseUseCase {
 
   @SuppressWarnings("FeatureEnvy")
   private void deleteAgentExchanges(AgentExchangeResponse response, UUID agentExchangeRequestId) {
-    agentExchangeFacade.removeReceivedAgentExchanges(response
+    var requests = response
         .getAgentOutputsList()
         .stream()
-        .map(ao -> DeleteAgentExchangeRequest
-            .builder()
-            .agentExchangeRequestId(agentExchangeRequestId)
-            .matchId(ResourceName.create(ao.getMatch()).getLong("matches"))
-            .featuresIds(ao
+        .map(ao -> StoredMatchFeatures
+            .newBuilder()
+            .setRequest(agentExchangeRequestId.toString())
+            .setMatchId(ResourceName.create(ao.getMatch()).getLong("matches"))
+            .addAllFeatures(ao
                 .getFeaturesList()
                 .stream()
                 .map(Feature::getFeature)
                 .collect(toList()))
             .build())
-        .collect(toList()));
+        .collect(toList());
+    gateway.send(AgentResponseStored.newBuilder().addAllStoredMatchFeatures(requests).build());
   }
 
   @RequiredArgsConstructor

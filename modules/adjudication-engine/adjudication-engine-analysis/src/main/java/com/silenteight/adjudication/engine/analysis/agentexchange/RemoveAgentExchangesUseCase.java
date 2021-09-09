@@ -2,13 +2,12 @@ package com.silenteight.adjudication.engine.analysis.agentexchange;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.engine.analysis.agentexchange.domain.DeleteAgentExchangeRequest;
+import com.silenteight.adjudication.internal.v1.AgentResponseStored;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -18,13 +17,13 @@ class RemoveAgentExchangesUseCase {
   private final AgentExchangeDataAccess agentExchangeDataAccess;
 
   @Transactional
-  void remove(List<DeleteAgentExchangeRequest> deleteAgentExchangeRequests) {
+  void remove(AgentResponseStored deleteAgentExchangeRequests) {
     var agentExchangeIds = new ArrayList<UUID>();
     var matchIds = new ArrayList<Long>();
     var features = new ArrayList<String>();
-    deleteAgentExchangeRequests.forEach(
-        request -> request.getFeaturesIds().forEach(feature -> {
-          agentExchangeIds.add(request.getAgentExchangeRequestId());
+    deleteAgentExchangeRequests.getStoredMatchFeaturesList().forEach(
+        request -> request.getFeaturesList().forEach(feature -> {
+          agentExchangeIds.add(UUID.fromString(request.getRequest()));
           matchIds.add(request.getMatchId());
           features.add(feature);
         }));

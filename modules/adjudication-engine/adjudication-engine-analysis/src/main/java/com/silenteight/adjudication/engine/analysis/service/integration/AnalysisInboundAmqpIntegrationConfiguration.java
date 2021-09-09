@@ -52,6 +52,9 @@ class AnalysisInboundAmqpIntegrationConfiguration {
         properties.getAgentExchange().getInboundQueueName(),
         AgentExchangeChannels.AGENT_EXCHANGE_PENDING_RECOMMENDATIONS_INBOUND_CHANNEL);
     router.setChannelMapping(
+        properties.getDeleteAgentExchange().getInboundQueueName(),
+        AgentExchangeChannels.DELETE_AGENT_EXCHANGE_INBOUND_CHANNEL);
+    router.setChannelMapping(
         properties.getCategory().getInboundQueueName(),
         CategoryRequestChannels.CATEGORY_REQUEST_PENDING_RECOMMENDATIONS_INBOUND_CHANNEL);
     router.setChannelMapping(

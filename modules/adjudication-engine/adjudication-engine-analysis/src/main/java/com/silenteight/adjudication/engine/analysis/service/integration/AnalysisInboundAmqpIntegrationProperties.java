@@ -32,6 +32,11 @@ class AnalysisInboundAmqpIntegrationProperties {
   @NestedConfigurationProperty
   @Valid
   @NotNull
+  private DeleteAgentExchange deleteAgentExchange = new DeleteAgentExchange();
+
+  @NestedConfigurationProperty
+  @Valid
+  @NotNull
   private AgentResponse agentResponse = new AgentResponse();
 
   @NestedConfigurationProperty
@@ -69,6 +74,13 @@ class AnalysisInboundAmqpIntegrationProperties {
 
     @NotBlank
     private String inboundQueueName = AGENT_EXCHANGE_QUEUE_NAME;
+  }
+
+  @Data
+  static class DeleteAgentExchange {
+
+    @NotBlank
+    private String inboundQueueName = DELETE_AGENT_EXCHANGE_QUEUE_NAME;
   }
 
   @Data

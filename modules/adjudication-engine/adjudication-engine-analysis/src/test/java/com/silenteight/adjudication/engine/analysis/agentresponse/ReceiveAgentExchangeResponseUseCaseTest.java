@@ -1,6 +1,5 @@
 package com.silenteight.adjudication.engine.analysis.agentresponse;
 
-import com.silenteight.adjudication.engine.analysis.agentexchange.AgentExchangeFacade;
 import com.silenteight.adjudication.engine.features.matchfeaturevalue.MatchFeatureValueFacade;
 import com.silenteight.adjudication.engine.features.matchfeaturevalue.dto.MatchFeatureValue;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
@@ -44,12 +43,12 @@ class ReceiveAgentExchangeResponseUseCaseTest {
   private ArgumentCaptor<Collection<MatchFeatureValue>> featureValuesCaptor;
 
   @Mock
-  private AgentExchangeFacade agentExchangeFacade;
+  private DeleteAgentExchangeGateway gateway;
 
   @BeforeEach
   void setUp() {
     useCase =
-        new ReceiveAgentExchangeResponseUseCase(facade, featureIdsProvider, agentExchangeFacade);
+        new ReceiveAgentExchangeResponseUseCase(facade, featureIdsProvider, gateway);
   }
 
   @Test

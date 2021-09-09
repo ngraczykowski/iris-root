@@ -18,6 +18,8 @@ class AmqpDefaults {
   static final String EVENT_INTERNAL_EXCHANGE_NAME = PREFIX + "event.internal";
   static final String ANALYSIS_ALERTS_ADDED_ROUTING_KEY =
       EVENT_PREFIX + "analysis-alerts-added";
+  static final String DELETE_AGENT_EXCHANGE_ROUTING_KEY =
+      EVENT_PREFIX + "delete-agent-exchange";
   static final String PENDING_RECOMMENDATIONS_ROUTING_KEY =
       EVENT_PREFIX + "pending-recommendations";
   static final String MATCH_CATEGORIES_UPDATED_ROUTING_KEY =
@@ -31,6 +33,7 @@ class AmqpDefaults {
 
   static final String PENDING_RECOMMENDATION_QUEUE_NAME = PREFIX + "pending-recommendation";
   static final String AGENT_EXCHANGE_QUEUE_NAME = PREFIX + "agent-exchange";
+  static final String DELETE_AGENT_EXCHANGE_QUEUE_NAME = PREFIX + "delete-agent-exchange";
   static final String CATEGORY_QUEUE_NAME = PREFIX + "category";
   static final String COMMENT_INPUT_QUEUE_NAME = PREFIX + "comment-input";
   static final String MATCH_FEATURE_QUEUE_NAME = PREFIX + "match-feature";

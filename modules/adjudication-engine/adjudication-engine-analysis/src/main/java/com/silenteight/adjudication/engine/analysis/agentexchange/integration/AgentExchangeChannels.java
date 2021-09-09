@@ -14,8 +14,11 @@ public class AgentExchangeChannels {
   public static final String AGENT_EXCHANGE_PENDING_RECOMMENDATIONS_INBOUND_CHANNEL =
       "agentExchangePendingRecommendationsInboundChannel";
 
+  public static final String DELETE_AGENT_EXCHANGE_INBOUND_CHANNEL =
+      "deleteAgentExchangeInboundChannel";
+
   static final String AGENT_EXCHANGE_REQUEST_GATEWAY_CHANNEL =
-      "agentExchangeRequestGatewayChannel";
+      "deleteAgentExchangeRequestGatewayChannel";
 
   /**
    * This channel is for sending AgentExchangeRequest messages to agents.

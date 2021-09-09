@@ -18,6 +18,7 @@ import org.springframework.integration.handler.LoggingHandler.Level;
 
 import javax.validation.Valid;
 
+import static com.silenteight.adjudication.engine.analysis.agentresponse.integration.AgentResponseChannels.DELETE_AGENT_EXCHANGE_OUTBOUND_CHANNEL;
 import static org.springframework.integration.dsl.IntegrationFlows.from;
 
 @Configuration
@@ -36,6 +37,14 @@ class AnalysisOutboundAmqpIntegrationConfiguration {
         AnalysisChannels.ANALYSIS_ALERTS_ADDED_OUTBOUND_CHANNEL,
         properties.getEventInternal().getOutboundExchangeName(),
         properties.getEventInternal().getAnalysisAlertsAddedRoutingKey());
+  }
+
+  @Bean
+  IntegrationFlow deleteAgentExchangeIntegrationFlow() {
+    return createOutboundFlow(
+        DELETE_AGENT_EXCHANGE_OUTBOUND_CHANNEL,
+        properties.getEventInternal().getOutboundExchangeName(),
+        properties.getEventInternal().getDeleteAgentExchangeRoutingKey());
   }
 
   @Bean

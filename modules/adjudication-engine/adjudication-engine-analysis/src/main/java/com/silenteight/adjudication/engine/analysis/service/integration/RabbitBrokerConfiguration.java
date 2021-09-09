@@ -45,6 +45,10 @@ class RabbitBrokerConfiguration {
     var agentExchangeBinding = bind(agentExchange, eventInternalExchange,
         PENDING_RECOMMENDATIONS_ROUTING_KEY);
 
+    var deleteAgentExchange = queueDeadLetter(DELETE_AGENT_EXCHANGE_QUEUE_NAME).build();
+    var deleteAgentExchangeBinding = bind(deleteAgentExchange, eventInternalExchange,
+        DELETE_AGENT_EXCHANGE_ROUTING_KEY);
+
     var category = queueDeadLetter(CATEGORY_QUEUE_NAME).build();
     var categoryBinding = bind(category, eventInternalExchange,
         PENDING_RECOMMENDATIONS_ROUTING_KEY);
@@ -72,6 +76,7 @@ class RabbitBrokerConfiguration {
         eventExchange, eventInternalExchange, agentRequestExchange, agentResponseExchange,
         pendingRecommendation, pendingRecommendationsBinding,
         agentExchange, agentExchangeBinding,
+        deleteAgentExchange, deleteAgentExchangeBinding,
         category, categoryBinding,
         commentInput, commentInputBinding,
         agentResponse, agentResponseBinding,

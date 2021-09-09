@@ -14,4 +14,10 @@ public final class AgentResponseChannels {
 
   public static final String MATCH_FEATURES_UPDATED_OUTBOUND_CHANNEL =
       "matchFeaturesUpdatedOutboundChannel";
+
+  public static final String DELETE_AGENT_EXCHANGE_OUTBOUND_CHANNEL =
+      "deleteAgentExchangeOutboundChannel";
+
+  public static final String DELETE_AGENT_EXCHANGE_GATEWAY_CHANNEL =
+      "deleteAgentExchangeInboundChannel";
 }
