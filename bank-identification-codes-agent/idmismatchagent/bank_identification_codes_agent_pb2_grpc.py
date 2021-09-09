@@ -2,7 +2,9 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from idmismatchagent import bank_identification_codes_agent_pb2 as idmismatchagent_dot_bank__identification__codes__agent__pb2
+from idmismatchagent import (
+    bank_identification_codes_agent_pb2 as idmismatchagent_dot_bank__identification__codes__agent__pb2,
+)
 
 
 class BankIdentificationCodesAgentStub(object):
@@ -15,10 +17,10 @@ class BankIdentificationCodesAgentStub(object):
             channel: A grpc.Channel.
         """
         self.CheckBankIdentificationCodes = channel.unary_unary(
-                '/silenteight.agent.bank_identification_codes_agent.v1.api.BankIdentificationCodesAgent/CheckBankIdentificationCodes',
-                request_serializer=idmismatchagent_dot_bank__identification__codes__agent__pb2.CheckBankIdentificationCodesRequest.SerializeToString,
-                response_deserializer=idmismatchagent_dot_bank__identification__codes__agent__pb2.CheckBankIdentificationCodesResponse.FromString,
-                )
+            "/silenteight.agent.bank_identification_codes_agent.v1.api.BankIdentificationCodesAgent/CheckBankIdentificationCodes",
+            request_serializer=idmismatchagent_dot_bank__identification__codes__agent__pb2.CheckBankIdentificationCodesRequest.SerializeToString,
+            response_deserializer=idmismatchagent_dot_bank__identification__codes__agent__pb2.CheckBankIdentificationCodesResponse.FromString,
+        )
 
 
 class BankIdentificationCodesAgentServicer(object):
@@ -27,40 +29,54 @@ class BankIdentificationCodesAgentServicer(object):
     def CheckBankIdentificationCodes(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
 
 def add_BankIdentificationCodesAgentServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'CheckBankIdentificationCodes': grpc.unary_unary_rpc_method_handler(
-                    servicer.CheckBankIdentificationCodes,
-                    request_deserializer=idmismatchagent_dot_bank__identification__codes__agent__pb2.CheckBankIdentificationCodesRequest.FromString,
-                    response_serializer=idmismatchagent_dot_bank__identification__codes__agent__pb2.CheckBankIdentificationCodesResponse.SerializeToString,
-            ),
+        "CheckBankIdentificationCodes": grpc.unary_unary_rpc_method_handler(
+            servicer.CheckBankIdentificationCodes,
+            request_deserializer=idmismatchagent_dot_bank__identification__codes__agent__pb2.CheckBankIdentificationCodesRequest.FromString,
+            response_serializer=idmismatchagent_dot_bank__identification__codes__agent__pb2.CheckBankIdentificationCodesResponse.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'silenteight.agent.bank_identification_codes_agent.v1.api.BankIdentificationCodesAgent', rpc_method_handlers)
+        "silenteight.agent.bank_identification_codes_agent.v1.api.BankIdentificationCodesAgent",
+        rpc_method_handlers,
+    )
     server.add_generic_rpc_handlers((generic_handler,))
 
 
- # This class is part of an EXPERIMENTAL API.
+# This class is part of an EXPERIMENTAL API.
 class BankIdentificationCodesAgent(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def CheckBankIdentificationCodes(request,
+    def CheckBankIdentificationCodes(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/silenteight.agent.bank_identification_codes_agent.v1.api.BankIdentificationCodesAgent/CheckBankIdentificationCodes',
+            "/silenteight.agent.bank_identification_codes_agent.v1.api.BankIdentificationCodesAgent/CheckBankIdentificationCodes",
             idmismatchagent_dot_bank__identification__codes__agent__pb2.CheckBankIdentificationCodesRequest.SerializeToString,
             idmismatchagent_dot_bank__identification__codes__agent__pb2.CheckBankIdentificationCodesResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
