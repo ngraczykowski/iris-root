@@ -11,6 +11,8 @@ interface RecommendationRepository extends CrudRepository<RecommendationEntity, 
 
   Optional<RecommendationEntity> findByAlert(String alert);
 
+  boolean existsByName(String name);
+
   /**
    * Simulator test only (DEV profile). In order to simulate recommendation flow we have to pass the
    * original alert names.
