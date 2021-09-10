@@ -16,8 +16,7 @@ class AnalyzeLargeTablesQuery {
 
   @Language("PostgreSQL")
   static final String ANALYZE_SQL =
-      "ANALYZE ae_agent_exchange;\n"
-          + "ANALYZE ae_agent_exchange_feature;\n"
+      "ANALYZE ae_agent_exchange_feature;\n"
           + "ANALYZE ae_agent_exchange_match_feature;\n"
           + "ANALYZE ae_alert;\n"
           + "ANALYZE ae_alert_comment_input;\n"
