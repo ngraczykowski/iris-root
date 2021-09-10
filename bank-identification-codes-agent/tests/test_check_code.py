@@ -4,7 +4,6 @@ from data_models.reasons import NoSearchCodeInWatchlistReason
 from data_models.result import Solution
 from idmismatchagent.bank_identification_codes import BankIdentificationCodes
 
-
 WL_TYPE = "Some text"
 
 
