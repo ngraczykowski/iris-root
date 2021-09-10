@@ -1,12 +1,12 @@
 first.cfg:
-  label: confs1
+  label: nested-confs1
   year-exclusions:
     - 9999
   month-day-exclusions:
     - '01-01'
 
 second.cfg:
-  label: confs2
+  label: nested-confs2
   result-priority:
     - EXACT
     - NEAR

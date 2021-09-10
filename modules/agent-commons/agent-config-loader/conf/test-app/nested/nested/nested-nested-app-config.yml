@@ -1,0 +1,8 @@
+foo.bar:
+  name: nested-nested
+  evaluationTimeout: PT1S
+
+  decisions:
+    priority:
+      - MATCH
+      - NO_MATCH

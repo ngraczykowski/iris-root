@@ -1,4 +1,5 @@
 foo.bar:
+  name: test
   evaluationTimeout: PT1S
 
   decisions:

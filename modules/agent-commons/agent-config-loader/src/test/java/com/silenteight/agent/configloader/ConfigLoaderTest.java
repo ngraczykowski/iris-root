@@ -1,13 +1,12 @@
 package com.silenteight.agent.configloader;
 
 import lombok.Data;
+import lombok.SneakyThrows;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,22 +18,22 @@ import static org.assertj.core.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class ConfigLoaderTest {
 
-  private AgentConfigsLoader<TestConfigProperties> configLoader;
-
-  @BeforeEach
-  void setUp() {
-    configLoader =
-        new AgentConfigsLoader<>("test-app", "foo.bar", TestConfigProperties.class);
+  @SneakyThrows
+  private AgentConfigs<TestConfigProperties> loadConfigs(String configDir) {
+    return new AgentConfigsLoader<>(configDir, "foo.bar", TestConfigProperties.class).load();
   }
 
   @Test
-  void shouldLoadConfigFromFile() throws IOException {
+  void shouldLoadConfigFromFile() {
     // when
-    AgentConfigs<TestConfigProperties> agentConfigs = configLoader.load();
+    AgentConfigs<TestConfigProperties> agentConfigs = loadConfigs("test-app");
 
     // then
-    TestConfigProperties configProperties = agentConfigs.agentConfigs().get("test-app-config");
+    TestConfigProperties configProperties = agentConfigs.getRequired("test-app-config");
     assertThat(configProperties).isNotNull();
+
+    // and
+    assertThat(configProperties.getName()).isEqualTo("test");
 
     // and
     Duration evaluationTimeout = configProperties.getEvaluationTimeout();
@@ -47,11 +46,38 @@ class ConfigLoaderTest {
         "HQ_NO_MATCH", "NO_DATA");
   }
 
+  @Test
+  void shouldLoadNestedConfigs() {
+    // when
+    AgentConfigs<TestConfigProperties> configs = loadConfigs("test-app");
+
+    // then
+    assertThat(configs.size()).isEqualTo(3);
+    assertThat(configs.getRequired("test-app-config").getName()).isEqualTo("test");
+    assertThat(configs.getRequired("nested/nested-app-config").getName()).isEqualTo("nested");
+    assertThat(configs.getRequired("nested/nested/nested-nested-app-config").getName())
+        .isEqualTo("nested-nested");
+  }
+
+  @Test
+  void shouldChangeAgentInstanceName_whenLoadConfigsFromNestedDirectory() {  // when
+    AgentConfigs<TestConfigProperties> configs = loadConfigs("test-app/nested");
+
+    // then
+    assertThat(configs.size()).isEqualTo(2);
+    assertThat(configs.getRequired("nested-app-config").getName()).isEqualTo("nested");
+    assertThat(configs.getRequired("nested/nested-nested-app-config").getName())
+        .isEqualTo("nested-nested");
+  }
+
   @Data
   static class TestConfigProperties {
 
     @NotNull
     private Duration evaluationTimeout;
+
+    @NotNull
+    private String name;
 
     @Valid
     private DecisionProperties decisions = new DecisionProperties();

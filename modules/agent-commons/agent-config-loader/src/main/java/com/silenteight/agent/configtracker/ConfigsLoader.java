@@ -8,21 +8,20 @@ import com.silenteight.agent.configloader.AgentConfigsLoader;
 import java.io.IOException;
 
 @RequiredArgsConstructor
-public class ConfigsLoader<PropertiesTypeT> {
+public class ConfigsLoader<T> {
 
   private final String prefix;
-  private final Class<PropertiesTypeT> propertiesType;
+  private final Class<T> propertiesType;
 
-  public AgentConfigs<PropertiesTypeT> load(String applicationName) {
+  public AgentConfigs<T> load(String configDir) {
     try {
-      return new AgentConfigsLoader<>(applicationName, prefix, propertiesType)
-          .load();
+      return new AgentConfigsLoader<>(configDir, prefix, propertiesType).load();
     } catch (IOException e) {
-      throw new IllegalStateException("Cannot load configs for: " + applicationName, e);
+      throw new IllegalStateException("Cannot load configs from: " + configDir, e);
     }
   }
 
-  Class<PropertiesTypeT> getPropertiesType() {
+  Class<T> getPropertiesType() {
     return propertiesType;
   }
 }

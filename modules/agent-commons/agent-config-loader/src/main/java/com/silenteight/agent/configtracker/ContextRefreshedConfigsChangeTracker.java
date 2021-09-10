@@ -11,11 +11,14 @@ import org.springframework.context.event.EventListener;
 
 import java.util.List;
 
+import static java.util.Optional.ofNullable;
+
 @Slf4j
 @RequiredArgsConstructor
-public class ContextRefreshedConfigsChangeTracker {
+class ContextRefreshedConfigsChangeTracker {
 
   private static final String APPLICATION_NAME = "spring.application.name";
+  private static final String APPLICATION_CONFIG_DIR = "application.config.dir";
 
   private final ConfigsChangedEventPublisher publisher;
   private final List<ConfigsLoader<?>> configLoaders;
@@ -24,16 +27,18 @@ public class ContextRefreshedConfigsChangeTracker {
   public void onRefreshContext(ContextRefreshedEvent event) {
     log.info("Reloading agents configurations...");
 
-    var applicationName = readApplicationName(event.getApplicationContext());
+    var configDir = readConfigDir(event.getApplicationContext());
 
     configLoaders.forEach(loader -> {
-      var configs = loader.load(applicationName);
+      var configs = loader.load(configDir);
       publisher.publish(configsChangedEvent(loader.getPropertiesType(), configs));
     });
   }
 
-  private static String readApplicationName(ApplicationContext context) {
-    return context.getEnvironment().getRequiredProperty(APPLICATION_NAME);
+  private static String readConfigDir(ApplicationContext context) {
+    var env = context.getEnvironment();
+    return ofNullable(env.getProperty(APPLICATION_CONFIG_DIR))
+        .orElse(env.getRequiredProperty(APPLICATION_NAME));
   }
 
   @SuppressWarnings({ "rawtypes", "unchecked" })
