@@ -1,4 +1,3 @@
-import re
 from typing import Tuple
 
 from attr import attrib, attrs
@@ -14,7 +13,12 @@ from data_models.reasons import (
     NoSearchCodeInWatchlistReason,
 )
 from data_models.result import Reason, Result, Solution
-from idmismatchagent.utils import _is_headquarters, _remove_ids_separators, get_text_pattern
+from idmismatchagent.utils import (
+    get_first_match,
+    is_headquarters,
+    remove_no_word_characters,
+    remove_words_separators,
+)
 
 
 @attrs(frozen=True)
@@ -35,21 +39,10 @@ class BankIdentificationCodes:
                 reason=MatchingTextTooShortToBeCodeReason(self.watchlist_matching_text),
             )
 
-        matching_text_no_extra_characters = re.sub(
-            r"\W+", "", self.watchlist_matching_text
-        ).upper()
+        wl_matching_text_cleaned = remove_no_word_characters(self.watchlist_matching_text).upper()
 
-        pattern = get_text_pattern(text=matching_text_no_extra_characters)
-
-        matching_field_no_extra_characters = _remove_ids_separators(
-            self.altered_party_matching_field
-        )
-
-        search_codes = [search_code.strip().upper() for search_code in self.watchlist_search_codes]
-        bic_codes = [bic_code.strip().upper() for bic_code in self.watchlist_bic_codes]
-
-        matching_text_in_field_match = re.search(
-            pattern, matching_field_no_extra_characters, re.VERBOSE
+        ap_matched_text = get_first_match(
+            wl_matching_text_cleaned, self.altered_party_matching_field
         )
 
         solution = Solution.NO_DECISION
@@ -57,36 +50,67 @@ class BankIdentificationCodes:
             self.watchlist_matching_text, self.altered_party_matching_field
         )
 
-        if matching_text_in_field_match:
-            raw_matched_string = matching_text_in_field_match.group(0)
-            whole_string = raw_matched_string.replace(" ", "").replace(",", "").replace("-", "")
-
-            solution, reason = self._search_in_bic_codes(
-                bic_codes, matching_text_no_extra_characters, whole_string
-            )
-            if solution == Solution.NO_DECISION:
-                solution, reason = self._search_in_search_codes(
-                    matching_text_no_extra_characters,
-                    raw_matched_string,
-                    search_codes,
-                    whole_string,
-                )
+        if ap_matched_text:
+            solution, reason = self.search_in_codes(ap_matched_text, wl_matching_text_cleaned)
 
         return Result(solution=solution, reason=reason)
 
+    def search_in_codes(
+        self, ap_matched_text: str, wl_matching_text_cleaned: str
+    ) -> Tuple[Solution, Reason]:
+
+        ap_matched_text_no_separators = remove_words_separators(ap_matched_text)
+        solution, reason = self._search_in_bic_codes(
+            ap_matched_text_no_separators, wl_matching_text_cleaned
+        )
+        if solution == Solution.NO_DECISION:
+            solution, reason = self._search_in_search_codes(
+                ap_matched_text,
+                ap_matched_text_no_separators,
+                wl_matching_text_cleaned,
+            )
+        return solution, reason
+
+    def _search_in_bic_codes(
+        self, ap_matched_text_no_separators: str, wl_matching_text_cleaned: str
+    ) -> Tuple[Solution, Reason]:
+
+        solution = Solution.NO_DECISION
+        reason = None
+        for bic_code in self.watchlist_bic_codes:
+            bic_code = bic_code.strip().upper()
+            matching_text_in_bic_code = wl_matching_text_cleaned in bic_code
+            if is_headquarters(ap_matched_text_no_separators) and matching_text_in_bic_code:
+                solution = Solution.NO_MATCH
+                reason = MatchingTextMatchesWlBicCodeReason(
+                    self.watchlist_matching_text, bic_code, self.watchlist_type
+                )
+                break
+            elif matching_text_in_bic_code:
+                solution = Solution.MATCH
+                reason = MatchingTextMatchesWlBicCodeReason(
+                    self.watchlist_matching_text, bic_code, self.watchlist_type
+                )
+                break
+        return solution, reason
+
     def _search_in_search_codes(
         self,
-        matching_text_no_extra_characters,
-        raw_matched_string,
-        search_codes,
-        whole_string,
+        ap_matched_text: str,
+        ap_matched_text_no_separators: str,
+        wl_matching_text_cleaned: str,
     ) -> Tuple[Solution, Reason]:
+
+        search_codes = [search_code.strip().upper() for search_code in self.watchlist_search_codes]
         solution = Solution.NO_DECISION
         reason = MatchingTextDoesNotMatchWlSearchCodeReason(
             self.watchlist_matching_text, search_codes, self.watchlist_type
         )
+
         for search_code in search_codes:
-            if whole_string == search_code:
+            matching_text_in_search_code = wl_matching_text_cleaned in search_code
+
+            if ap_matched_text_no_separators == search_code:
                 solution = Solution.NO_MATCH
                 reason = MatchingTextMatchesWlSearchCodeReason(
                     self.watchlist_matching_text, [search_code], self.watchlist_type
@@ -94,44 +118,23 @@ class BankIdentificationCodes:
                 break
 
             elif (
-                len(matching_text_no_extra_characters) < len(whole_string)
-                and search_code.find(matching_text_no_extra_characters) != -1
+                len(wl_matching_text_cleaned) < len(ap_matched_text_no_separators)
+                and matching_text_in_search_code
             ):
                 solution = Solution.MATCH
                 reason = MatchingTextIsPartOfLongerSequenceReason(
                     self.watchlist_matching_text,
-                    raw_matched_string,
+                    ap_matched_text,
                     self.altered_party_matching_field,
                     search_code,
                     self.watchlist_type,
                 )
                 break
 
-            elif search_code.find(matching_text_no_extra_characters) != -1:
+            elif matching_text_in_search_code:
                 solution = Solution.MATCH
                 reason = MatchingTextIsOnlyPartialMatchForSearchCodeReason(
                     self.watchlist_matching_text, [search_code], self.watchlist_type
-                )
-                break
-        return solution, reason
-
-    def _search_in_bic_codes(
-        self, bic_codes, matching_text_no_extra_characters, whole_string
-    ) -> Tuple[Solution, Reason]:
-        solution = Solution.NO_DECISION
-        reason = None
-        for bic_code in bic_codes:
-            matching_text_in_bic_code_place = bic_code.find(matching_text_no_extra_characters)
-            if _is_headquarters(whole_string) and matching_text_in_bic_code_place != -1:
-                solution = Solution.NO_MATCH
-                reason = MatchingTextMatchesWlBicCodeReason(
-                    self.watchlist_matching_text, bic_code, self.watchlist_type
-                )
-                break
-            elif matching_text_in_bic_code_place - 1:
-                solution = Solution.MATCH
-                reason = MatchingTextMatchesWlBicCodeReason(
-                    self.watchlist_matching_text, bic_code, self.watchlist_type
                 )
                 break
         return solution, reason

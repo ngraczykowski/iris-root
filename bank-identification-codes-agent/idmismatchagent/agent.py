@@ -5,7 +5,7 @@ from attr import attrib, attrs
 
 from data_models.result import Result, Solution
 from idmismatchagent.bank_identification_codes import BankIdentificationCodes
-from idmismatchagent.utils import _filter_none_values
+from idmismatchagent.utils import filter_none_values
 
 
 @attrs(frozen=True)
@@ -24,8 +24,8 @@ class BankIdentificationCodesAgent(Agent):
                 agent_input.altered_party_matching_field,
                 agent_input.watchlist_matching_text,
                 agent_input.watchlist_type,
-                _filter_none_values(agent_input.watchlist_search_codes),
-                _filter_none_values(agent_input.watchlist_bic_codes),
+                filter_none_values(agent_input.watchlist_search_codes),
+                filter_none_values(agent_input.watchlist_bic_codes),
             )
 
             return codes.check()
