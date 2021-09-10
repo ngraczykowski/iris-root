@@ -36,7 +36,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @EnableIntegrationGraphController
 @EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 @EnableScheduling
-@EnableSchedulerLock(defaultLockAtMostFor = "PT5M")
+@EnableSchedulerLock(defaultLockAtLeastFor = "PT1M", defaultLockAtMostFor = "PT30M")
 @EnableJpaRepositories(basePackageClasses = AdjudicationEngineModule.class)
 @EntityScan(basePackageClasses = AdjudicationEngineModule.class)
 @IntegrationComponentScan(basePackageClasses = AdjudicationEngineModule.class)

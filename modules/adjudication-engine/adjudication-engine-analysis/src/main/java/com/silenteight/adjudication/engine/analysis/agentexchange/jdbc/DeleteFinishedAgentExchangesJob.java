@@ -16,7 +16,8 @@ class DeleteFinishedAgentExchangesJob {
 
   private final DeleteFinishedAgentExchangesQuery query;
 
-  @SchedulerLock(lockAtLeastFor = "PT20M", name = "DeleteFinishedAgentExchangesJob")
+  @SchedulerLock(lockAtLeastFor = "PT10M", lockAtMostFor = "PT30M",
+      name = "DeleteFinishedAgentExchangesJob")
   @Scheduled(initialDelayString = "300000", fixedDelayString =
       "${ae.analysis.agent-exchange.delete-finished-agent-exchanges-job.delay:300000}")
   void deleteFinishedAgentExchangesLoop() {

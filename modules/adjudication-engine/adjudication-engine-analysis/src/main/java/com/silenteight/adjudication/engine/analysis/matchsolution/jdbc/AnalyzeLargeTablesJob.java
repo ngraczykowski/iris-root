@@ -17,7 +17,7 @@ class AnalyzeLargeTablesJob {
   private final AnalyzeLargeTablesQuery query;
 
   @Timed(value = "ae.analysis.jobs", extraTags = { "package", "matchsolution" })
-  @SchedulerLock(lockAtLeastFor = "PT2M", name = "AnalyzeLargeTablesJob")
+  @SchedulerLock(lockAtLeastFor = "PT1M", lockAtMostFor = "PT3M", name = "AnalyzeLargeTablesJob")
   @Scheduled(initialDelayString = "60000", fixedDelayString =
       "${ae.analysis.match-solution.analyze-large-tables-job.delay:60000}")
   void analyzeLargeTables() {
