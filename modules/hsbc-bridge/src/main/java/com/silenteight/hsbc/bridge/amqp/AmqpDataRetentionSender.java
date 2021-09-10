@@ -21,7 +21,7 @@ class AmqpDataRetentionSender implements DataRetentionMessageSender {
   public void send(AlertsExpired alertsExpired) {
     amqpTemplate.convertAndSend(
         configuration.getExchangeName(),
-        configuration.getRoutingKey(),
+        configuration.getAlertsExpiredRoutingKey(),
         alertsExpired);
   }
 
@@ -29,7 +29,7 @@ class AmqpDataRetentionSender implements DataRetentionMessageSender {
   public void send(PersonalInformationExpired personalInformationExpired) {
     amqpTemplate.convertAndSend(
         configuration.getExchangeName(),
-        configuration.getRoutingKey(),
+        configuration.getPersonalInformationExpiredRoutingKey(),
         personalInformationExpired);
   }
 
@@ -38,6 +38,7 @@ class AmqpDataRetentionSender implements DataRetentionMessageSender {
   static class Configuration {
 
     String exchangeName;
-    String routingKey;
+    String alertsExpiredRoutingKey;
+    String personalInformationExpiredRoutingKey;
   }
 }

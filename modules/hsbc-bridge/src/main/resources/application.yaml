@@ -38,7 +38,8 @@ silenteight.bridge:
       historical-decision-exchange-name: bridge.historical
       historical-decision-routing-key: historical.historical-decisions-request.production
       data-retention-exchange-name: bridge.retention
-      data-retention-routing-key: retention.data-retention
+      data-retention-personal-information-expired-routing-key: retention.personal-information-expired
+      data-retention-alerts-expired-routing-key: retention.alerts-expired
     ingoing:
       model-promoted-queue: bridge.model-promoted.production
       dead-letter-queue: bridge.dlq

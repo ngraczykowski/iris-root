@@ -27,6 +27,7 @@ class AmqpProperties {
     String worldCheckModelPersistedRoutingKey;
     String historicalDecisionsModelPersistedRoutingKey;
     String dataRetentionExchangeName;
-    String dataRetentionRoutingKey;
+    String dataRetentionPersonalInformationExpiredRoutingKey;
+    String dataRetentionAlertsExpiredRoutingKey;
   }
 }

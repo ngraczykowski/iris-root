@@ -94,7 +94,9 @@ class SenderConfiguration {
         .amqpTemplate(rabbitTemplate)
         .configuration(AmqpDataRetentionSender.Configuration.builder()
             .exchangeName(outgoing.getDataRetentionExchangeName())
-            .routingKey(outgoing.getDataRetentionRoutingKey())
+            .alertsExpiredRoutingKey(outgoing.getDataRetentionAlertsExpiredRoutingKey())
+            .personalInformationExpiredRoutingKey(
+                outgoing.getDataRetentionPersonalInformationExpiredRoutingKey())
             .build())
         .build();
   }
