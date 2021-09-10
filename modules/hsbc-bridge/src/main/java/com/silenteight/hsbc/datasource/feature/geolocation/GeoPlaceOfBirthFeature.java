@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.datasource.feature.geolocation;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.location.LocationFeatureInputDto;
@@ -9,6 +10,7 @@ import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import static com.silenteight.hsbc.datasource.feature.Feature.GEO_PLACE_OF_BIRTH;
 
+@Slf4j
 @RequiredArgsConstructor
 public class GeoPlaceOfBirthFeature implements FeatureValuesRetriever<LocationFeatureInputDto> {
 
@@ -16,6 +18,9 @@ public class GeoPlaceOfBirthFeature implements FeatureValuesRetriever<LocationFe
 
   @Override
   public LocationFeatureInputDto retrieve(MatchData matchData) {
+
+    log.debug("Datasource start retrieve data for {} feature.", getFeature());
+
     var query = queryFactory.create(matchData);
     var inputBuilder = LocationFeatureInputDto.builder();
 
@@ -27,9 +32,17 @@ public class GeoPlaceOfBirthFeature implements FeatureValuesRetriever<LocationFe
       inputBuilder.watchlistLocation("");
     }
 
-    return inputBuilder
+    var result = inputBuilder
         .feature(getFeatureName())
         .build();
+
+    log.debug(
+        "Datasource response for feature: {} with alerted party {} and watchlist party {}.",
+        result.getFeature(),
+        result.getAlertedPartyLocation(),
+        result.getWatchlistLocation());
+
+    return result;
   }
 
   @Override

@@ -1,5 +1,7 @@
 package com.silenteight.hsbc.datasource.feature.allowedlist;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.hsbc.datasource.datamodel.*;
 import com.silenteight.hsbc.datasource.dto.allowedlist.AllowListFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
@@ -13,18 +15,29 @@ import java.util.stream.Collectors;
 import static java.util.Collections.emptySet;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
-public class AllowListCommonWpFeature
-    implements FeatureValuesRetriever<AllowListFeatureInputDto> {
+@Slf4j
+public class AllowListCommonWpFeature implements FeatureValuesRetriever<AllowListFeatureInputDto> {
 
   @Override
   public AllowListFeatureInputDto retrieve(MatchData matchData) {
+
+    log.debug("Datasource start retrieve data for {} feature.", getFeature());
+
     var characteristicsValues = getCharacteristicsValues(matchData);
 
-    return AllowListFeatureInputDto.builder()
+    var result = AllowListFeatureInputDto.builder()
         .feature(getFeatureName())
         .allowListNames(List.of("hsbc_common_watchlist_party"))
         .characteristicsValues(characteristicsValues)
         .build();
+
+    log.debug(
+        "Datasource response for feature: {} with allowed list names size {} and characteristics values size {}.",
+        result.getFeature(),
+        result.getAllowListNames().size(),
+        result.getCharacteristicsValues().size());
+
+    return result;
   }
 
   private List<String> getCharacteristicsValues(MatchData matchData) {

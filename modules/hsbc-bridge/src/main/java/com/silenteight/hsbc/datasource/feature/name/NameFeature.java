@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.datasource.feature.name;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.name.AlertedPartyNameDto;
@@ -25,6 +26,7 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.concat;
 
+@Slf4j
 @RequiredArgsConstructor
 public class NameFeature implements NameFeatureClientValuesRetriever<NameFeatureInputDto> {
 
@@ -32,6 +34,9 @@ public class NameFeature implements NameFeatureClientValuesRetriever<NameFeature
 
   @Override
   public NameFeatureInputDto retrieve(MatchData matchData, NameInformationServiceClient client) {
+
+    log.debug("Datasource start retrieve data for {} feature.", getFeature());
+
     var query = nameQueryFactory.create(matchData, client);
     var inputBuilder = NameFeatureInputDto.builder();
 
@@ -53,9 +58,18 @@ public class NameFeature implements NameFeatureClientValuesRetriever<NameFeature
     }
     inputBuilder.matchingTexts(emptyList());
 
-    return inputBuilder
+    var result = inputBuilder
         .feature(getFeatureName())
         .build();
+
+    log.debug(
+        "Datasource response for feature: {} with party type {}, alerted party size {} and watchlist party size {}.",
+        result.getFeature(),
+        result.getAlertedPartyType(),
+        result.getAlertedPartyNames().size(),
+        result.getWatchlistNames().size());
+
+    return result;
   }
 
   @Override

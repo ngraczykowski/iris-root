@@ -1,5 +1,7 @@
 package com.silenteight.hsbc.datasource.feature.gender;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
@@ -16,10 +18,14 @@ import java.util.stream.Stream;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputDto> {
 
   @Override
   public GenderFeatureInputDto retrieve(MatchData matchData) {
+
+    log.debug("Datasource start retrieve data for {} feature.", getFeature());
+
     var genderFeatureInputDtoBuilder = GenderFeatureInputDto.builder()
         .feature(getFeatureName())
         .alertedPartyGenders(emptyList())
@@ -42,7 +48,15 @@ public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputD
           .watchlistGenders(createValidGenderWatchListForAgent(wlGenders));
     }
 
-    return genderFeatureInputDtoBuilder.build();
+    var result = genderFeatureInputDtoBuilder.build();
+
+    log.debug(
+        "Datasource response for feature: {} with alerted party size {} and watchlist party size {}.",
+        result.getFeature(),
+        result.getAlertedPartyGenders().size(),
+        result.getWatchlistGenders().size());
+
+    return result;
   }
 
   @Override

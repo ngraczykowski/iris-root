@@ -24,10 +24,10 @@ public class IsPepFeature implements IsPepFeatureClientValuesRetriever<IsPepFeat
 
   @Override
   public IsPepFeatureInputDto retrieve(MatchData matchData, IsPepServiceClient client) {
+
+    log.debug("Datasource start retrieve data for {} feature.", getFeature());
+
     var query = isPepQueryFactory.create(matchData, client);
-
-    log.debug("Datasource start retrieve data for IsPep feature.");
-
     var inputBuilder = IsPepFeatureInputDto.builder();
 
     if (matchData.isIndividual()) {

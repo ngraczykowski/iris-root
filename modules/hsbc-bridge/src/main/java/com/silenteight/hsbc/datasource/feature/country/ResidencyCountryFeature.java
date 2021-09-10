@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.datasource.feature.country;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.country.CountryFeatureInputDto;
@@ -12,6 +13,7 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RequiredArgsConstructor
 public class ResidencyCountryFeature implements FeatureValuesRetriever<CountryFeatureInputDto> {
 
@@ -19,6 +21,9 @@ public class ResidencyCountryFeature implements FeatureValuesRetriever<CountryFe
 
   @Override
   public CountryFeatureInputDto retrieve(MatchData matchData) {
+
+    log.debug("Datasource start retrieve data for {} feature.", getFeature());
+
     var query = queryFactory.create(matchData);
     var inputBuilder = CountryFeatureInputDto.builder();
 
@@ -30,9 +35,17 @@ public class ResidencyCountryFeature implements FeatureValuesRetriever<CountryFe
       inputBuilder.watchlistCountries(List.of());
     }
 
-    return inputBuilder
+    var result = inputBuilder
         .feature(getFeatureName())
         .build();
+
+    log.debug(
+        "Datasource response for feature: {} with alerted party size {} and watchlist party size {}.",
+        result.getFeature(),
+        result.getAlertedPartyCountries().size(),
+        result.getWatchlistCountries().size());
+
+    return result;
   }
 
   private List<String> getDistinctValues(Stream<String> stream) {

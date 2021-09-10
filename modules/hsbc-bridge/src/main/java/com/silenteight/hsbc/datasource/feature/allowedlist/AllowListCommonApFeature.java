@@ -1,5 +1,7 @@
 package com.silenteight.hsbc.datasource.feature.allowedlist;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.hsbc.datasource.datamodel.CaseInformation;
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.allowedlist.AllowListFeatureInputDto;
@@ -11,18 +13,29 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
-public class AllowListCommonApFeature
-    implements FeatureValuesRetriever<AllowListFeatureInputDto> {
+@Slf4j
+public class AllowListCommonApFeature implements FeatureValuesRetriever<AllowListFeatureInputDto> {
 
   @Override
   public AllowListFeatureInputDto retrieve(MatchData matchData) {
+
+    log.debug("Datasource start retrieve data for {} feature.", getFeature());
+
     var characteristicsValues = getCharacteristicsValues(matchData.getCaseInformation());
 
-    return AllowListFeatureInputDto.builder()
+    var result = AllowListFeatureInputDto.builder()
         .feature(getFeatureName())
         .allowListNames(List.of("hsbc_common_alerted_party"))
         .characteristicsValues(characteristicsValues)
         .build();
+
+    log.debug(
+        "Datasource response for feature: {} with allowed list names size {} and characteristics values size {}.",
+        result.getFeature(),
+        result.getAllowListNames().size(),
+        result.getCharacteristicsValues().size());
+
+    return result;
   }
 
   private List<String> getCharacteristicsValues(CaseInformation caseInformation) {

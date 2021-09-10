@@ -1,5 +1,7 @@
 package com.silenteight.hsbc.datasource.feature.allowedlist;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.hsbc.datasource.datamodel.CustomerEntity;
 import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual;
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
@@ -16,18 +18,30 @@ import java.util.stream.Stream;
 
 import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
 
+@Slf4j
 public class AllowListCommonNameFeature
     implements FeatureValuesRetriever<AllowListFeatureInputDto> {
 
   @Override
   public AllowListFeatureInputDto retrieve(MatchData matchData) {
+
+    log.debug("Datasource start retrieve data for {} feature.", getFeature());
+
     var characteristicsValues = getCharacteristicsValues(matchData);
 
-    return AllowListFeatureInputDto.builder()
+    var result = AllowListFeatureInputDto.builder()
         .feature(getFeatureName())
         .allowListNames(List.of("hsbc_common_name"))
         .characteristicsValues(characteristicsValues)
         .build();
+
+    log.debug(
+        "Datasource response for feature: {} with allowed list names size {} and characteristics values size {}.",
+        result.getFeature(),
+        result.getAllowListNames().size(),
+        result.getCharacteristicsValues().size());
+    
+    return result;
   }
 
   protected List<String> getCharacteristicsValues(MatchData matchData) {
