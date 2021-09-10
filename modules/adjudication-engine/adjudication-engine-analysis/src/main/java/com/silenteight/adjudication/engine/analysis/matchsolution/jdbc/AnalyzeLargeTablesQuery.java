@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.google.common.base.Splitter;
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,8 @@ class AnalyzeLargeTablesQuery {
 
   @Language("PostgreSQL")
   static final String ANALYZE_SQL =
-      "ANALYZE ae_agent_exchange_feature;\n"
+      "ANALYZE ae_agent_exchange;\n"
+          + "ANALYZE ae_agent_exchange_feature;\n"
           + "ANALYZE ae_agent_exchange_match_feature;\n"
           + "ANALYZE ae_alert;\n"
           + "ANALYZE ae_alert_comment_input;\n"
@@ -33,6 +35,7 @@ class AnalyzeLargeTablesQuery {
 
   private final JdbcTemplate jdbcTemplate;
 
+  @Scheduled(fixedDelayString = "1m", initialDelayString = "1m")
   @Transactional
   void execute() {
     log.info("Performing ANALYZE of large tables...");
