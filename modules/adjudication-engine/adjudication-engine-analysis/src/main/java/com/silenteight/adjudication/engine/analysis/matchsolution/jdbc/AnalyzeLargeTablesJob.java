@@ -16,8 +16,8 @@ class AnalyzeLargeTablesJob {
   private final AnalyzeLargeTablesQuery query;
 
   @Timed(value = "ae.analysis.jobs", extraTags = { "package", "matchsolution" })
-  @Scheduled(initialDelayString = "1m", fixedDelayString =
-      "${ae.analysis.match-solution.analyze-large-tables-job.delay:1m}")
+  @Scheduled(initialDelayString = "60000", fixedDelayString =
+      "${ae.analysis.match-solution.analyze-large-tables-job.delay:60000}")
   void analyzeLargeTables() {
     log.info("Performing ANALYZE of large tables...");
     query.execute();
