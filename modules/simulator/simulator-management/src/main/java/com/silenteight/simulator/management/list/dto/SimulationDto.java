@@ -31,4 +31,5 @@ public class SimulationDto {
   @NonNull
   OffsetDateTime createdAt;
   OffsetDateTime updatedAt;
+  OffsetDateTime finishedAt;
 }

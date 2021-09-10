@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.simulator.management.create.CreateSimulationRequest;
 import com.silenteight.simulator.management.domain.exception.SimulationNotFoundException;
 
@@ -20,6 +21,8 @@ public class SimulationService {
 
   @NonNull
   private final SimulationRepository repository;
+  @NonNull
+  private final TimeSource timeSource;
 
   public void createSimulation(
       CreateSimulationRequest request, Set<String> datasets, String analysis) {
@@ -55,7 +58,7 @@ public class SimulationService {
     SimulationEntity simulationEntity = repository
         .findByAnalysisName(analysis)
         .orElseThrow(() -> new SimulationNotFoundException(analysis));
-    simulationEntity.finish();
+    simulationEntity.finish(timeSource.offsetDateTime());
     log.debug("Saved as 'DONE' SimulationEntity={}", simulationEntity);
   }
 }
