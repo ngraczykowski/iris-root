@@ -23,9 +23,11 @@ class StoreRecommendationsUseCase {
 
       if (doesNotExist(name)) {
         save(r);
-        log.debug("Recommendation stored, alert={}, recommendation={}", r.getAlert(), name);
+        if (log.isDebugEnabled()) {
+          log.debug("Recommendation stored, alert={}, recommendation={}", r.getAlert(), name);
+        }
       } else {
-        log.debug(
+        log.warn(
             "Recommendation already exists in DB, alert={}, recommendation={}", r.getAlert(), name);
       }
     });
