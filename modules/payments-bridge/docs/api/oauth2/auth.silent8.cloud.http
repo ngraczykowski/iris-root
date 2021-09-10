@@ -1,0 +1,8 @@
+## Get OAuth2 authorization token using client credentials flow
+POST https://auth.silent8.cloud/realms/sierra/protocol/openid-connect/token
+Accept: application/json
+Connection: keep-alive
+Content-Type: application/x-www-form-urlencoded; charset=utf-8
+Host: auth.silent8.cloud
+
+client_id=sierra-dev-api&client_secret=74968783-a246-44dd-8680-523813e5ab2e&grant_type=client_credentials

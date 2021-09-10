@@ -32,7 +32,7 @@ class SpecificCommonTermsAgent {
   }
 
   SpecificCommonTermsAgentResponse checkIfFieldValueContainsSpecificCommonTerms(
-      @NonNull String fieldValue, @NonNull boolean isAccountNumberFlagInMatchingField) {
+      @NonNull String fieldValue, boolean isAccountNumberFlagInMatchingField) {
     if (isAccountNumberFlagInMatchingField)
       return checkForCompany(fieldValue, 2);
     else

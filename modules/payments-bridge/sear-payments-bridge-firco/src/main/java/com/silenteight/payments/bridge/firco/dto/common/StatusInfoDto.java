@@ -6,8 +6,9 @@ import lombok.NoArgsConstructor;
 
 import com.silenteight.payments.bridge.firco.dto.validator.MinimalAlertDefinition;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
 import javax.validation.constraints.NotNull;
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonNaming(UpperCamelCaseStrategy.class)
 public class StatusInfoDto implements Serializable {
 
   private static final long serialVersionUID = 1202038844291055591L;
@@ -29,22 +31,18 @@ public class StatusInfoDto implements Serializable {
   /**
    * Identifies the name of the status.
    */
-  @JsonProperty("Name")
   @NotNull(groups = MinimalAlertDefinition.class)
   private String name;
 
   /**
    * Identifies the behavior associated to the decision made on the message.
    */
-  @JsonProperty("RoutingCode")
   @NotNull(groups = MinimalAlertDefinition.class)
-  @JsonFormat
   private String routingCode;
 
   /**
    * Fingerprint of a status info at the time this information is built.
    */
-  @JsonProperty("Checksum")
   @NotNull(groups = MinimalAlertDefinition.class)
   private String checksum;
 }

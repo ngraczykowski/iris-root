@@ -4,20 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonNaming(UpperCamelCaseStrategy.class)
 class PositionDto implements Serializable {
 
   private static final long serialVersionUID = 6840766953378816340L;
 
-  @JsonProperty("PositionStart")
   private String positionStart; // "609"
 
-  @JsonProperty("PositionEnd")
   private String positionEnd; // "612"
 }

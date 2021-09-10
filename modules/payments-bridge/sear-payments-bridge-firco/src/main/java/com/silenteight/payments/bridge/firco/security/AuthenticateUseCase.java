@@ -2,27 +2,31 @@ package com.silenteight.payments.bridge.firco.security;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 class AuthenticateUseCase {
 
-  private final SecurityDataAccess securityDataAccess;
-  private final SecurityContextUseCase securityContextUseCase;
+  private final AuthenticationManager authenticationManager;
 
   void authenticate(Authentication authentication) {
-    var username = authentication.getPrincipal().toString();
-    var password = authentication.getCredentials().toString();
+    if (isAuthenticated())
+      return;
 
-    var isPresent =
-        securityDataAccess.findByCredentials(username, password);
+    var authenticated = authenticationManager.authenticate(authentication);
 
-    if (!isPresent)
-      throw new AccessDeniedException("Couldn't authorize with provided credentials");
+    setAuthentication(authenticated);
+  }
 
-    securityContextUseCase.setAuthentication(password, username);
+  private boolean isAuthenticated() {
+    return SecurityContextHolder.getContext().getAuthentication() != null;
+  }
+
+  private void setAuthentication(Authentication authentication) {
+    SecurityContextHolder.getContext().setAuthentication(authentication);
   }
 }

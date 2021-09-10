@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,14 +17,13 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonNaming(UpperCamelCaseStrategy.class)
 public class RequestAnalystSolutionsDto implements Serializable {
 
   private static final long serialVersionUID = -7868232254808751898L;
 
-  @JsonProperty("VersionTag")
   private String versionTag;
 
-  @JsonProperty("Authentication")
   private CaseManagerAuthenticationDto authentication;
 
   @JsonProperty("Messages")

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonNaming(UpperCamelCaseStrategy.class)
 public class HittedEntityDto implements Serializable {
 
   private static final long serialVersionUID = 7668869052958833725L;
@@ -19,34 +22,24 @@ public class HittedEntityDto implements Serializable {
   @JsonProperty("ID")
   private String id; // "GSN0002899"
 
-  @JsonProperty("IsException")
   private String isException; // "0"
 
-  @JsonProperty("OfficialReferences")
   private List<RequestOfficialReferenceDto> officialReferences;
 
-  @JsonProperty("Names")
   private List<NameDto> names;
 
-  @JsonProperty("Addresses")
   private List<RequestAddressDto> addresses;
 
-  @JsonProperty("Origin")
   private String origin; // "SANCTIONSGROUP"
 
-  @JsonProperty("Designation")
   private String designation; // "XX-LISTPARTYNEX-OTH"
 
-  @JsonProperty("Keywords")
   private List<KeywordDto> keywords;
 
-  @JsonProperty("Type")
   private String type; // "C"
 
-  @JsonProperty("Codes")
   private List<HittedEntityCodeDto> codes;
 
-  @JsonProperty("AdditionalInfo")
   private String additionalInfo;
   // "This indicates the transaction is connected to a party or country sanctioned by the
   // United States. If that connection is not apparent from the transaction message, obtain from
@@ -55,28 +48,20 @@ public class HittedEntityDto implements Serializable {
   // sanctions procedures. Any transaction related to Iran must not be processed but must be
   // escalated to Group CMO or Group Trade as appropriate for onward referral to Group.",
 
-  @JsonProperty("DatesOfBirth")
   private List<DateOfBirthDto> datesOfBirth;
 
-  @JsonProperty("PlacesOfBirth")
   private List<PlaceOfBirthDto> placesOfBirth;
 
-  @JsonProperty("Hyperlinks")
-  private List<HyperlinkDto> hyperLinks;
+  private List<HyperlinkDto> hyperlinks;
 
-  @JsonProperty("UserData1")
   private String userData1; // "RFM-TS.NS.OB-DENY UPDATE"
 
-  @JsonProperty("UserData2")
   private String userData2; // ""
 
-  @JsonProperty("Nationality")
   private String nationality; // ""
 
-  @JsonProperty("IsPEP")
   private String isPep; // "0"
 
-  @JsonProperty("IsFEP")
   private String isFep; // "0"
 
   @JsonProperty("HideOnlyIDs")
@@ -85,15 +70,11 @@ public class HittedEntityDto implements Serializable {
   @JsonProperty("HideIDs")
   private List<HideIdDto> hideIds;
 
-  @JsonProperty("HideOrigins")
   private List<HideOriginDto> hideOrigins;
 
-  @JsonProperty("HideInTags")
   private List<HideInTagDto> hideInTags;
 
-  @JsonProperty("HideUnits")
   private List<HideUnitDto> hideUnits;
 
-  @JsonProperty("HideSenderReceivers")
   private List<HideSenderReceiverDto> hideSenderReceivers;
 }

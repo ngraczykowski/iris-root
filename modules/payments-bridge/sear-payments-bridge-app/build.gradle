@@ -35,6 +35,11 @@ dependencies {
   implementation libraries.spring_boot_starter_web
   implementation libraries.micrometer_prometheus
 
+  // Security
+  implementation libraries.spring_security_config
+  implementation libraries.spring_security_core
+  implementation libraries.spring_security_web
+
   // Cloud
   implementation libraries.spring_cloud_consul_discovery
   implementation libraries.spring_cloud_starter_consul_config

@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
 import javax.validation.Valid;
@@ -13,11 +14,11 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonNaming(UpperCamelCaseStrategy.class)
 public class RequestMessageDto implements Serializable {
 
   private static final long serialVersionUID = 4493075170429206804L;
 
-  @JsonProperty("Message")
   @NotNull
   @Valid
   private AlertMessageDto message;

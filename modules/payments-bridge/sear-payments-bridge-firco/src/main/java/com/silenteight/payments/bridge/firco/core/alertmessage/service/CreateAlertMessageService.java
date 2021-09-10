@@ -1,0 +1,26 @@
+package com.silenteight.payments.bridge.firco.core.alertmessage.service;
+
+import lombok.RequiredArgsConstructor;
+
+import com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus;
+import com.silenteight.payments.bridge.firco.core.alertmessage.model.FircoAlertMessage;
+import com.silenteight.payments.bridge.firco.core.alertmessage.port.CreateAlertMessageUseCase;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@RequiredArgsConstructor
+@Service
+class CreateAlertMessageService implements CreateAlertMessageUseCase {
+
+  private final PersistAlertMessageService persistAlertMessageService;
+  private final TransitionAlertMessageStatusService transitionAlertMessageStatusService;
+
+  @Transactional
+  @Override
+  public void createAlertMessage(FircoAlertMessage alertMessage) {
+    persistAlertMessageService.createAlertMessage(alertMessage);
+    transitionAlertMessageStatusService.transitionAlertMessageStatus(
+        alertMessage.getId(), AlertMessageStatus.RECEIVED);
+  }
+}

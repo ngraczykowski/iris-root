@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.firco.security.SecurityDataAccess;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 
-@Service
 @RequiredArgsConstructor
+@Component
 class JdbcSecurityDataAccess implements SecurityDataAccess {
 
   private final SelectByCredentialsQuery selectByCredentialsQuery;

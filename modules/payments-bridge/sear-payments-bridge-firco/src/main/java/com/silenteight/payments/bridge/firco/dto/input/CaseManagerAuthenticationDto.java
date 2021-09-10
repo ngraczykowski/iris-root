@@ -5,13 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonNaming(UpperCamelCaseStrategy.class)
 public class CaseManagerAuthenticationDto implements Serializable {
 
   private static final long serialVersionUID = 1172622409389133221L;
@@ -19,19 +21,16 @@ public class CaseManagerAuthenticationDto implements Serializable {
   /**
    * Case manager login.
    */
-  @JsonProperty("UserLogin")
   private String userLogin;
 
   /**
    * Case manager password.
    */
-  @JsonProperty("UserPassword")
   @ToString.Exclude
   private String userPassword;
 
   /**
    * Case manager realm.
    */
-  @JsonProperty("UserRealm")
   private String userRealm;
 }

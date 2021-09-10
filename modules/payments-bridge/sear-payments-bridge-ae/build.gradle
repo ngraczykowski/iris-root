@@ -5,4 +5,7 @@ plugins {
 
 dependencies {
   implementation project(":sear-payments-bridge-governance")
+
+  implementation libraries.adjudication_engine_api
+  implementation libraries.spring_context
 }

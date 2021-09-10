@@ -1,0 +1,17 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.proto.payments.bridge.internal.v1.event;
+
+import "google/api/field_behavior.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "MessageStoredProto";
+option java_package = "com.silenteight.proto.payments.bridge.internal.v1.event";
+
+message MessageStored {
+  // The name of the alert message to accept for processing, in form of
+  // `alert-messages/<Message UUID>`.
+  string alert = 1 [(google.api.field_behavior) = REQUIRED];
+}

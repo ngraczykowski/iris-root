@@ -7,7 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.firco.dto.common.SolutionType;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,35 +17,27 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
+@JsonNaming(UpperCamelCaseStrategy.class)
 public class HitDto implements Serializable {
 
   private static final long serialVersionUID = 2413139844772921911L;
 
-  @JsonProperty("MatchingText")
   private String matchingText; // "OFAC"
 
-  @JsonProperty("Positions")
   private List<RequestPositionDto> positions;
 
-  @JsonProperty("Score")
   private String score; // "0.0"
 
-  @JsonProperty("Tag")
   private String tag; // "MTS_BNI"
 
-  @JsonProperty("SolutionType")
   private String solutionType; // "1"
 
-  @JsonProperty("SynonymIndex")
   private String synonymIndex; // "0"
 
-  @JsonProperty("RulesContext")
-  private RulesContextDto rulesContex;
+  private RulesContextDto rulesContext;
 
-  @JsonProperty("EntityText")
   private String entityText; // "OFAC"
 
-  @JsonProperty("HittedEntity")
   private HittedEntityDto hittedEntity;
 
   String extractWlName() {

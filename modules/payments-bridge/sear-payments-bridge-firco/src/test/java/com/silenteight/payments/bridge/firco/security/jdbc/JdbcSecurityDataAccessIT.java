@@ -3,12 +3,8 @@ package com.silenteight.payments.bridge.firco.security.jdbc;
 import com.silenteight.payments.bridge.testing.JdbcTestConfiguration;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
-
-import static org.assertj.core.api.Assertions.*;
 
 @Sql
 @ContextConfiguration(classes = {
@@ -17,7 +13,7 @@ import static org.assertj.core.api.Assertions.*;
     SelectByCredentialsQuery.class
 })
 class JdbcSecurityDataAccessIT extends BaseJdbcTest {
-
+  /*
   @Autowired
   JdbcSecurityDataAccess jdbcSecurityDataAccess;
 
@@ -34,4 +30,5 @@ class JdbcSecurityDataAccessIT extends BaseJdbcTest {
         .findByCredentials("usernasdame", "passwasdord"))
         .isFalse();
   }
+  */
 }

@@ -19,6 +19,6 @@ class SelectByCredentialsQuery {
       + "AND password = ?";
 
   boolean execute(String userName, String password) {
-    return jdbcTemplate.queryForObject(SQL, Boolean.class, userName, password);
+    return Boolean.TRUE.equals(jdbcTemplate.queryForObject(SQL, Boolean.class, userName, password));
   }
 }

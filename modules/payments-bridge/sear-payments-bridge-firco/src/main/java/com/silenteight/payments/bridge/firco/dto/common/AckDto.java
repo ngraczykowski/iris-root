@@ -3,18 +3,20 @@ package com.silenteight.payments.bridge.firco.dto.common;
 import lombok.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
 import java.util.Map;
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@JsonNaming(UpperCamelCaseStrategy.class)
 public class AckDto implements Serializable {
 
   private static final long serialVersionUID = -8309071436620390430L;
 
-  @JsonProperty("Header")
-  private Map<String, Object> header;
+  private transient Map<String, Object> header;
 
   @JsonProperty("Body")
   private AckBodyDto requestBodyDto;

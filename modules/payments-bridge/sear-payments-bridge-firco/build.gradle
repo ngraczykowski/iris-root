@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+  implementation project(":sear-payments-common")
   implementation project(":sear-payments-bridge-common")
   implementation project(":sear-payments-bridge-datasource")
   implementation project(":sear-payments-bridge-ae")
@@ -18,16 +19,20 @@ dependencies {
   implementation libraries.spring_integration_amqp
   implementation libraries.spring_integration_core
   implementation libraries.spring_security_core
+  implementation libraries.spring_security_core
   implementation libraries.spring_web
   implementation libraries.spring_webmvc
 
   implementation libraries.guava
   implementation libraries.hibernate_validator
+  implementation libraries.hibernate_types
   implementation libraries.jackson_annotations
   implementation libraries.jackson_databind
   implementation libraries.jakarta_annotation_api
   implementation libraries.jakarta_validation_api
   implementation libraries.opencsv
+  implementation libraries.protobuf_java_util
 
   testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libraries.spring_security_test
 }

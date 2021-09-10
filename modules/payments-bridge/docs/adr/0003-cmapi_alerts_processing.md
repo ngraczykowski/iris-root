@@ -1,8 +1,21 @@
-# ADR 0003: CMAPI alerts processing
+# ADR 0003: CMAPI alerts processing (OBSOLETE)
+
+> **STATUS: OBSOLETE**
+>
+> See ADR 0006 for a new approach.
 
 ## Goal
 
 Determine how to process alerts received via CMAPI.
+
+## Non-functional requirements
+
+- The received alert is queued for further processing, so the ACK is send back immediately.
+  The ACK must be delivered in 2s, i.e., the response must not take longer than 2s.
+- The decision on alert must be delivered in finite time: 30s in SCB, 60s in SVB.
+- The peek rate of alerts that needs to be processed is 200 TPS (156 TPS in Tsaas Bridge, we need to beat that ;-).
+- We must take care of not overloading the rest of the system.
+  That means: we need to track and keep under control the number of alerts in flight.
 
 ## Receiving alerts from CMAPI
 
@@ -34,9 +47,8 @@ Queues:
      * Send back the MI to CMAPI
    * if not, proceed
 3. Register the alert in the AE
-4. Extract features, categories, and comment inputs from the alert
-5. Store features, categories, and comment inputs in the Data Source
-6. Trigger alert processing in the AE
+4. Extract features, categories, and comment inputs from the alert and send to Data Source
+6. Trigger alert processing in the AE (add alert to current analysis)
 7. Mark the alert as accepted in the DB
 
 ## Recommending alerts
@@ -53,7 +65,7 @@ Queues:
 ## Outdating alerts
 
 1. Check whether the alert is already recommended
-   * if it is, just drop the alert
+   * if it is, just drop the message
    * if not, proceed
 2. Mark the alert as outdated in the DB
 3. Send back the Manual Investigation to CMAPI
