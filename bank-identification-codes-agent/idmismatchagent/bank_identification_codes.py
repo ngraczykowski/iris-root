@@ -41,7 +41,9 @@ class BankIdentificationCodes:
 
         pattern = get_text_pattern(text=matching_text_no_extra_characters)
 
-        matching_field_no_extra_characters = _remove_ids_separators(self.altered_party_matching_field)
+        matching_field_no_extra_characters = _remove_ids_separators(
+            self.altered_party_matching_field
+        )
 
         search_codes = [search_code.strip().upper() for search_code in self.watchlist_search_codes]
         bic_codes = [bic_code.strip().upper() for bic_code in self.watchlist_bic_codes]
@@ -126,7 +128,7 @@ class BankIdentificationCodes:
                     self.watchlist_matching_text, bic_code, self.watchlist_type
                 )
                 break
-            elif matching_text_in_bic_code_place -1:
+            elif matching_text_in_bic_code_place - 1:
                 solution = Solution.MATCH
                 reason = MatchingTextMatchesWlBicCodeReason(
                     self.watchlist_matching_text, bic_code, self.watchlist_type

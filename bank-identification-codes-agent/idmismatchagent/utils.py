@@ -1,7 +1,6 @@
 import re
 from typing import List
 
-
 SEPARATORS_PATTERN = re.compile(r"[-),./]+")
 HEADQUARTERS_INDICATOR = "XXX"
 

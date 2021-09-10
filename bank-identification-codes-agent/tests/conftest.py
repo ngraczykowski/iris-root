@@ -7,8 +7,8 @@ from typing import Tuple
 from attr import attrib, attrs
 from cattr import structure_attrs_fromdict
 
-from idmismatchagent.agent import BankIdentificationCodesAgentInput
 from data_models.result import Reason, Solution
+from idmismatchagent.agent import BankIdentificationCodesAgentInput
 
 
 @attrs(frozen=True)

@@ -1,10 +1,10 @@
 import logging
 
 from agent_base.agent import Agent
-from attr import attrs, attrib
+from attr import attrib, attrs
 
-from idmismatchagent.bank_identification_codes import BankIdentificationCodes
 from data_models.result import Result, Solution
+from idmismatchagent.bank_identification_codes import BankIdentificationCodes
 from idmismatchagent.utils import _filter_none_values
 
 
