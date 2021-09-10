@@ -15,8 +15,8 @@ class DeleteFinishedAgentExchangesJob {
 
   private final DeleteFinishedAgentExchangesQuery query;
 
-  @Scheduled(initialDelayString = "60000", fixedDelayString =
-      "${ae.analysis.agent-exchange.delete-finished-agent-exchanges-job.delay:120000}")
+  @Scheduled(initialDelayString = "300000", fixedDelayString =
+      "${ae.analysis.agent-exchange.delete-finished-agent-exchanges-job.delay:300000}")
   void deleteFinishedAgentExchangesLoop() {
     log.info("Deleting already finished agent exchanges...");
 

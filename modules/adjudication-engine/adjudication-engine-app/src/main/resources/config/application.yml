@@ -152,18 +152,19 @@ spring:
       #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
       #  just before HikariCP runs `SET SESSION search_path TO '${ae.db.schema}'` which begins
       #  transaction. Thus, with that query as workaround, we force the transaction commit.
-      # The statement sets session timeouts to 4 minutes and it's executed on each connection.
+      # NOTE(ahaczewski): The statement sets session and statement timeouts to 8min, lock
+      #  timeout to 2min. These settings are executed for each connection.
       connection-init-sql: |
-        SET SESSION statement_timeout = 240000;
-        SET SESSION lock_timeout = 240000;
-        SET SESSION idle_in_transaction_session_timeout = 240000;
+        SET SESSION statement_timeout = 480000;
+        SET SESSION lock_timeout = 120000;
+        SET SESSION idle_in_transaction_session_timeout = 480000;
         SELECT 1;
       # In milliseconds, defaults to 10s, as the default for connect timeout is 10s.
       validation-timeout: ${ae.db.connections.validation-timeout:10000}
       # In milliseconds, defaults to 2min.
       idle-timeout: ${ae.db.connections.idle-timeout:120000}
-      # In milliseconds, defaults to 8min, as the default for socket timeout is 4min.
-      max-lifetime: ${ae.db.connections.max-lifetime:240000}
+      # In milliseconds, defaults to 8min, as the default for socket timeout is 9min.
+      max-lifetime: ${ae.db.connections.max-lifetime:480000}
       # NOTE(ahaczewski): Postgres driver properties. For more information, see
       #  the org.postgresql.PGProperty enum.
       data-source-properties:
@@ -174,7 +175,7 @@ spring:
         connectTimeout: ${ae.db.timeout.connect:10}
         loginTimeout: ${ae.db.timeout.login:10}
         cancelSignalTimeout: ${ae.db.timeout.cancel-signal:10}
-        socketTimeout: ${ae.db.timeout.socket:300}
+        socketTimeout: ${ae.db.timeout.socket:540}
 
   # Database migrations
   liquibase:
