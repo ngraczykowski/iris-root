@@ -5,7 +5,7 @@ from attr import attrib, attrs
 
 from data_models.result import Result, Solution
 from idmismatchagent.bank_identification_codes import BankIdentificationCodes
-from idmismatchagent.utils import filter_none_values
+from idmismatchagent.text_utils import filter_none_values
 
 
 @attrs(frozen=True)

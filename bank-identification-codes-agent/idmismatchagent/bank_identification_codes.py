@@ -13,7 +13,7 @@ from data_models.reasons import (
     NoSearchCodeInWatchlistReason,
 )
 from data_models.result import Reason, Result, Solution
-from idmismatchagent.utils import (
+from idmismatchagent.text_utils import (
     get_first_match,
     is_headquarters,
     remove_no_word_characters,

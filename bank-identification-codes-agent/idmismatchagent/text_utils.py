@@ -1,5 +1,5 @@
 import re
-from typing import List, Union
+from typing import List, Optional
 
 SEPARATORS_PATTERN = re.compile(r"[-),./]+")
 HEADQUARTERS_INDICATOR = "XXX"
@@ -35,7 +35,7 @@ def get_text_pattern(text: str) -> str:
     return pattern
 
 
-def get_first_match(first: str, second: str) -> Union[str, None]:
+def get_first_match(first: str, second: str) -> Optional[str]:
     pattern = get_text_pattern(text=first)
     matching_field_without_separators = remove_separators(second)
     matching_text_in_field_match = re.search(
