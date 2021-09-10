@@ -23,7 +23,7 @@ from idmismatchagent.text_utils import (
 
 @attrs(frozen=True)
 class BankIdentificationCodes:
-    altered_party_matching_field: str = attrib()
+    alerted_party_matching_field: str = attrib()
     watchlist_matching_text: str = attrib()
     watchlist_type: str = attrib()
     watchlist_search_codes: list = attrib()
@@ -42,12 +42,12 @@ class BankIdentificationCodes:
         wl_matching_text_cleaned = remove_no_word_characters(self.watchlist_matching_text).upper()
 
         ap_matched_text = get_first_match(
-            wl_matching_text_cleaned, self.altered_party_matching_field
+            wl_matching_text_cleaned, self.alerted_party_matching_field
         )
 
         solution = Solution.NO_DECISION
         reason = MatchingTextDoesNotMatchMatchingFieldReason(
-            self.watchlist_matching_text, self.altered_party_matching_field
+            self.watchlist_matching_text, self.alerted_party_matching_field
         )
 
         if ap_matched_text:
@@ -125,8 +125,8 @@ class BankIdentificationCodes:
                 reason = MatchingTextIsPartOfLongerSequenceReason(
                     self.watchlist_matching_text,
                     ap_matched_text,
-                    self.altered_party_matching_field,
-                    search_code,
+                    self.alerted_party_matching_field,
+                    search_code,  # here it goes as a 'partial match text'
                     self.watchlist_type,
                 )
                 break

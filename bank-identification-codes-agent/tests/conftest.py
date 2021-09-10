@@ -18,7 +18,7 @@ class Case:
 
 
 def read_test_cases():
-    datadir = Path(os.path.dirname(os.path.realpath(__file__))) / "test_agent"
+    datadir = Path(os.path.dirname(os.path.realpath(__file__))) / "resources"
     csvfile = datadir / "logic-test-cases.csv"
 
     test_cases = []
