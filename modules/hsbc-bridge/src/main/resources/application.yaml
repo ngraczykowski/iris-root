@@ -52,7 +52,7 @@ silenteight.bridge:
 
   analysis:
     ### Analysis timeout for 5000 alerts
-    timeout: 1h
+    timeout: 30m
 
   ### LEARNING
 
