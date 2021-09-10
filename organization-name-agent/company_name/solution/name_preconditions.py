@@ -68,6 +68,8 @@ class AlphabetRule(BasicPreconditionRule):
     def check(self, name: NameInformation):
         if self.rules_config:
             alphabets = self._get_used_alphabets(name.source.original)
+            if not alphabets:
+                return False
             acceptable_fraction = sum(
                 v for k, v in alphabets.items() if k in self.rules_config["acceptable_alphabets"]
             ) / sum(alphabets.values())
