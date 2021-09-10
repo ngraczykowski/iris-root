@@ -26,8 +26,10 @@ dependencies {
   implementation libraries.commons_lang3
   implementation libraries.commons_text
   implementation libraries.guava
+  implementation libraries.shedlock_spring
   runtimeOnly libraries.ecs_logging_core
   runtimeOnly libraries.logback_ecs_encoder
+  runtimeOnly libraries.shedlock_provider_jdbc_template
 
   // Base Libraries
   implementation libraries.silenteight_sep_base_common

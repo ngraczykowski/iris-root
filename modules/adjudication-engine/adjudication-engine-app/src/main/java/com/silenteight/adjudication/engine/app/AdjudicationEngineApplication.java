@@ -8,6 +8,7 @@ import com.silenteight.commons.app.spring.ConfigurableApplicationBuilder;
 import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallback;
 import com.silenteight.commons.app.spring.SpringApplicationTemplate;
 
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -35,6 +36,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @EnableIntegrationGraphController
 @EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 @EnableScheduling
+@EnableSchedulerLock(defaultLockAtMostFor = "PT5M")
 @EnableJpaRepositories(basePackageClasses = AdjudicationEngineModule.class)
 @EntityScan(basePackageClasses = AdjudicationEngineModule.class)
 @IntegrationComponentScan(basePackageClasses = AdjudicationEngineModule.class)

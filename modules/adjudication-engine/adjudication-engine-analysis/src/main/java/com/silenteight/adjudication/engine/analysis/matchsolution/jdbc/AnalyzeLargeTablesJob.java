@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ class AnalyzeLargeTablesJob {
   private final AnalyzeLargeTablesQuery query;
 
   @Timed(value = "ae.analysis.jobs", extraTags = { "package", "matchsolution" })
+  @SchedulerLock(lockAtLeastFor = "PT2M", name = "AnalyzeLargeTablesJob")
   @Scheduled(initialDelayString = "60000", fixedDelayString =
       "${ae.analysis.match-solution.analyze-large-tables-job.delay:60000}")
   void analyzeLargeTables() {
