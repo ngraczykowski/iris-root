@@ -1,7 +1,6 @@
 package com.silenteight.adjudication.engine.analysis.recommendation.jdbc;
 
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertRecommendation;
-import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.testing.JdbcTestConfiguration;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
@@ -50,8 +49,7 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
     var alerts = new ArrayList<AlertRecommendation>();
     recommendationDataAccess.streamAlertRecommendations(1, alerts::add);
     assertThat(alerts.size()).isEqualTo(2);
-    var alertContext = alerts.get(0);
-    assertContextData(alertContext.getAlertContext());
+    assertContextData(alerts);
   }
 
   @Test
@@ -60,8 +58,7 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
     var alerts = new ArrayList<AlertRecommendation>();
     recommendationDataAccess.streamAlertRecommendations(1, 1, alerts::add);
     assertThat(alerts.size()).isEqualTo(1);
-    var alertContext = alerts.get(0);
-    assertContextData(alertContext.getAlertContext());
+    assertContextData(alerts);
   }
 
   /**
@@ -95,7 +92,17 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
         Integer.class)).isEqualTo(1);
   }
 
-  private static void assertContextData(AlertContext alertContext) {
+  private static void assertContextData(List<AlertRecommendation> alerts) {
+    var alertContext = alerts
+        .stream()
+        .filter(a -> a
+            .getAlertContext()
+            .getAlertId()
+            .equals("AVIR128SCR13925IN123TEST0003:IN:GR-ESAN:273067"))
+        .findFirst()
+        .get()
+        .getAlertContext();
+
     assertThat(alertContext.getAlertId())
         .isEqualTo("AVIR128SCR13925IN123TEST0003:IN:GR-ESAN:273067");
     assertThat(alertContext.getMatches().size()).isEqualTo(2);
