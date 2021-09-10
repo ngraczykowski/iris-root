@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.google.common.base.Splitter;
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,11 +34,8 @@ class AnalyzeLargeTablesQuery {
 
   private final JdbcTemplate jdbcTemplate;
 
-  @Scheduled(fixedDelayString = "1m", initialDelayString = "1m")
   @Transactional
   void execute() {
-    log.info("Performing ANALYZE of large tables...");
-
     Splitter
         .on(';')
         .split(ANALYZE_SQL)
