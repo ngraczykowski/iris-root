@@ -10,7 +10,7 @@ import java.time.Duration;
 @ConfigurationProperties(prefix = "ae.grpc.client.policy-steps")
 @Validated
 @Data
-public class PolicyStepsClientProperties {
+class PolicyStepsClientProperties {
 
   private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(5);
 
