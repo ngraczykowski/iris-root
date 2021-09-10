@@ -6,8 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
+import java.time.OffsetDateTime;
+
+import static com.silenteight.sep.base.testing.time.MockTimeSource.ARBITRARY_INSTANCE;
 import static com.silenteight.simulator.management.domain.SimulationState.*;
 import static java.lang.String.format;
+import static java.time.OffsetDateTime.now;
 import static java.util.Set.of;
 import static org.assertj.core.api.Assertions.*;
 
@@ -67,12 +71,14 @@ class SimulationEntityTest {
   void shouldFinishSimulation() {
     // given
     SimulationEntity simulation = createSimulationEntity(RUNNING);
+    OffsetDateTime mockTime = ARBITRARY_INSTANCE.offsetDateTime();
 
     // when
-    simulation.finish();
+    simulation.finish(mockTime);
 
     // then
     assertThat(simulation.getState()).isEqualTo(DONE);
+    assertThat(simulation.getFinishedAt()).isEqualTo(mockTime);
   }
 
   @ParameterizedTest
@@ -80,10 +86,11 @@ class SimulationEntityTest {
   void shouldThrowExceptionWhenNotInStateForFinish(SimulationState state) {
     // given
     SimulationEntity simulation = createSimulationEntity(state);
+    OffsetDateTime currentTime = now();
 
     // then
     assertThatThrownBy(
-        simulation::finish)
+        () -> simulation.finish(currentTime))
         .isInstanceOf(SimulationNotInProperStateException.class)
         .hasMessage(format("Simulation should be in state: %s.", RUNNING));
   }
@@ -95,6 +102,7 @@ class SimulationEntityTest {
 
     // then
     assertThat(simulation.getState()).isEqualTo(NEW);
+    assertThat(simulation.getFinishedAt()).isNull();
   }
 
   private SimulationEntity createSimulationEntity(SimulationState state) {

@@ -88,9 +88,10 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
     this.state = RUNNING;
   }
 
-  void finish() {
+  void finish(OffsetDateTime finishedAt) {
     assertInState(RUNNING);
     this.state = DONE;
+    this.finishedAt = finishedAt;
   }
 
   void archive() {
@@ -113,6 +114,7 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
         .model(getModelName())
         .createdAt(getCreatedAt())
         .createdBy(getCreatedBy())
+        .finishedAt(getFinishedAt())
         .build();
   }
 
@@ -128,6 +130,7 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
         .model(getModelName())
         .createdAt(getCreatedAt())
         .createdBy(getCreatedBy())
+        .finishedAt(getFinishedAt())
         .build();
   }
 }
