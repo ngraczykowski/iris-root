@@ -211,6 +211,7 @@ libraries.protobuf_java_util = [group: 'com.google.protobuf', name: 'protobuf-ja
 libraries.querydsl_apt_jpa = [group: 'com.querydsl', name: 'querydsl-apt', classifier: 'jpa']
 libraries.querydsl_jpa = [group: 'com.querydsl', name: 'querydsl-jpa']
 libraries.reactor_grpc_stub = [group: 'com.salesforce.servicelibs', name: 'reactor-grpc-stub']
+libraries.shedlock_core = [group: 'net.javacrumbs.shedlock', name: 'shedlock-core', version: shedlockVersion ]
 libraries.shedlock_provider_jdbc_template = [group: 'net.javacrumbs.shedlock', name: 'shedlock-provider-jdbc-template', version: shedlockVersion ]
 libraries.shedlock_spring = [group: 'net.javacrumbs.shedlock', name: 'shedlock-spring', version: shedlockVersion ]
 libraries.snakeyaml = [group: 'org.yaml', name: 'snakeyaml']
