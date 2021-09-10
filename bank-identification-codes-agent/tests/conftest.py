@@ -7,13 +7,13 @@ from typing import Tuple
 from attr import attrib, attrs
 from cattr import structure_attrs_fromdict
 
-from idmismatchagent.api import SearchCodeMismatchAgentInput
-from idmismatchagent.result import Reason, Solution
+from idmismatchagent.agent import BankIdentificationCodesAgentInput
+from data_models.result import Reason, Solution
 
 
 @attrs(frozen=True)
 class Case:
-    input: SearchCodeMismatchAgentInput = attrib()
+    input: BankIdentificationCodesAgentInput = attrib()
     expected_values: Tuple[Solution, Reason] = attrib()
 
 
@@ -27,7 +27,7 @@ def read_test_cases():
 
         for row in reader:
 
-            input = SearchCodeMismatchAgentInput(
+            input = BankIdentificationCodesAgentInput(
                 row["AP_MATCHINGFIELD"],
                 row["WATCHLIST_MATCHINGTEXT"],
                 row["WATCHLIST_TYPE"],
@@ -51,7 +51,7 @@ def read_test_cases():
                         reason_dict["watchlist_search_codes"]
                     )
 
-                import idmismatchagent.api as api_module
+                import data_models.reasons as api_module
 
                 reason_type = getattr(api_module, reason_type_name)
 

@@ -10,7 +10,7 @@ from silenteight.agent.bankidentificationcodes.v1.api.bank_identification_codes_
     add_BankIdentificationCodesAgentServicer_to_server,
 )
 
-from idmismatchagent.result import Result
+from data_models.result import Result
 
 
 class BankIdentificationCodesAgentGrpcServicer(

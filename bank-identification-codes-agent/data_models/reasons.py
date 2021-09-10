@@ -2,16 +2,7 @@ from typing import List
 
 from attr import attrib, attrs
 
-from idmismatchagent.result import Reason
-
-
-@attrs(frozen=True)
-class SearchCodeMismatchAgentInput:
-    altered_party_matching_field: str = attrib()
-    watchlist_matching_text: str = attrib()
-    watchlist_type: str = attrib()
-    watchlist_search_codes: list = attrib()
-    watchlist_bic_codes: list = attrib()
+from data_models.result import Reason
 
 
 @attrs(frozen=True)
