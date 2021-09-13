@@ -51,11 +51,11 @@ class BankIdentificationCodes:
         )
 
         if ap_matched_text:
-            solution, reason = self.search_in_codes(ap_matched_text, wl_matching_text_cleaned)
+            solution, reason = self._search_in_codes(ap_matched_text, wl_matching_text_cleaned)
 
         return Result(solution=solution, reason=reason)
 
-    def search_in_codes(
+    def _search_in_codes(
         self, ap_matched_text: str, wl_matching_text_cleaned: str
     ) -> Tuple[Solution, Reason]:
 
