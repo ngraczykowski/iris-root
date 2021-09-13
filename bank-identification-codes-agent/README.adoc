@@ -6,21 +6,32 @@ Previously known as Search Code Mismatch Agent.
 === Installation
 Module needs python >= 3.7. Tested only on python 3.7.
 
-from source:
+* from source:
 pip install .
 
+* from PiPY:
+pip install bank-identification-codes-agent
+
+* from jenkins artifacts:
+https://jenkins.silenteight.com/job/id-mismatch-agent/job/master/
+
+
+== Protobufs
 Protobufs are available in:
 https://gitlab.silenteight.com/ro/agents-api/-/blob/master/protocol-agents/src/main/proto/\
 silenteight/agent/bankidentificationcodes/v1/api/bank_identification_codes_agent.proto
 
 === Execution
- python -m idmismatchagent [options]
+ python -m bank_identification_codes_agent [options]
  Optional arguments:
  -h, --help         Shows help message and exit
  -c CONFIGURATION_DIR, --configuration-dir CONFIGURATION_DIR
                     path to the configuration dir
  --grpc             Start grpc service
  -v, --verbose      Increase verbosity for debug purpos
+
+ When using .pyz file, to run type:
+ python -m <file name>.pyz [options]
 
 == Due-diligence question
 Does the trigger text match against the search codes provided in the watchlist?
