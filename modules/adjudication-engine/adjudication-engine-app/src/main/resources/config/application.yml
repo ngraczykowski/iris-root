@@ -15,12 +15,12 @@ ae:
   categories:
     missing:
       batch-size:
-        insert: 1024
-        select: 4096
+        insert: 512
+        select: 512
 
   comment-input:
     jdbc:
-      missing-batch-size-select: 8192
+      missing-batch-size-select: 512
 
   recommendation:
     jdbc:
