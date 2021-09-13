@@ -24,7 +24,7 @@ setup(
     ],
     packages=find_packages(exclude=("tests",)),
     package_data={
-        "idmismatchagent": [
+        "bank_identification_codes_agent": [
             "templates/*",
         ]
     },

@@ -1,4 +1,4 @@
-from idmismatchagent.agent import BankIdentificationCodesAgent
+from bank_identification_codes_agent.agent import BankIdentificationCodesAgent
 
 
 def test_search_code_mismatch_agent(logic_test_case):

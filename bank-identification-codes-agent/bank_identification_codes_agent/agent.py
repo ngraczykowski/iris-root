@@ -3,9 +3,9 @@ import logging
 from agent_base.agent import Agent
 from attr import attrib, attrs
 
+from bank_identification_codes_agent.bank_identification_codes import BankIdentificationCodes
+from bank_identification_codes_agent.text_utils import filter_none_values
 from data_models.result import Result, Solution
-from idmismatchagent.bank_identification_codes import BankIdentificationCodes
-from idmismatchagent.text_utils import filter_none_values
 
 
 @attrs(frozen=True)

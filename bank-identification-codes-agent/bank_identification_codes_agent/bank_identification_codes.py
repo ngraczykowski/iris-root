@@ -2,6 +2,12 @@ from typing import Tuple
 
 from attr import attrib, attrs
 
+from bank_identification_codes_agent.text_utils import (
+    get_first_match,
+    is_headquarters,
+    remove_no_word_characters,
+    remove_words_separators,
+)
 from data_models.reasons import (
     MatchingTextDoesNotMatchMatchingFieldReason,
     MatchingTextDoesNotMatchWlSearchCodeReason,
@@ -13,12 +19,6 @@ from data_models.reasons import (
     NoSearchCodeInWatchlistReason,
 )
 from data_models.result import Reason, Result, Solution
-from idmismatchagent.text_utils import (
-    get_first_match,
-    is_headquarters,
-    remove_no_word_characters,
-    remove_words_separators,
-)
 
 
 @attrs(frozen=True)

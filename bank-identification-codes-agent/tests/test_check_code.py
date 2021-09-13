@@ -1,8 +1,8 @@
 import pytest
 
+from bank_identification_codes_agent.bank_identification_codes import BankIdentificationCodes
 from data_models.reasons import NoSearchCodeInWatchlistReason
 from data_models.result import Solution
-from idmismatchagent.bank_identification_codes import BankIdentificationCodes
 
 WL_TYPE = "Some text"
 

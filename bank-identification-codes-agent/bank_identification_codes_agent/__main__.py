@@ -6,8 +6,8 @@ from agent_base.grpc_service import GrpcService
 from agent_base.utils import Config
 from tstoolkit.utils import LogLevel, setup_logging
 
-from idmismatchagent.agent import BankIdentificationCodesAgent
-from idmismatchagent.grpc_service import BankIdentificationCodesAgentGrpcServicer
+from bank_identification_codes_agent.agent import BankIdentificationCodesAgent
+from bank_identification_codes_agent.grpc_service import BankIdentificationCodesAgentGrpcServicer
 
 
 def run(configuration_dirs, start_grpc_service):
