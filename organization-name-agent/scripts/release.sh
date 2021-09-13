@@ -7,6 +7,8 @@ function gitRelease() {
   echo 'Building'
   scripts/clean.sh
   scripts/build.sh
+  echo 'Reseting release commit'
+  git reset --hard HEAD~1 # remove release commit after tag
 }
 
 branch="${CI_COMMIT_REF_NAME}"

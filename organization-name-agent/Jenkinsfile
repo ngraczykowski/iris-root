@@ -37,14 +37,19 @@ pipeline {
                         sh './scripts/test.sh --index-url $PYPI_URL'
                     }
                 }
+                stage('Prepare nomad artifacts') {
+                    steps {
+                        sh './nomad/prepare.sh'
+                    }
+                }
             }
             post {
                 always {
                     junit '.tox/*.xml'
-                    archiveArtifacts artifacts: 'dist/*', fingerprint: true
+                    archiveArtifacts artifacts: 'dist/*, nomad/*.tar.bz2', fingerprint: true
                 }
                 success {
-                    stash includes: 'dist/*', name: 'artifacts'
+                    stash includes: 'dist/*, nomad/*/artifacts/*', name: 'artifacts'
                 }
             }
         }
@@ -52,6 +57,12 @@ pipeline {
         stage('Deployment'){
             agent {
                 label 'nomad'
+            }
+            when {
+                anyOf {
+                    branch 'master'
+                    tag pattern: '^v[\\d\\.]+\$', comparator: "REGEXP"
+                }
             }
             stages {
                 stage('Upload artifacts') {
@@ -87,26 +98,10 @@ pipeline {
                         )
                     }
                 }
-                stage('Prepare nomad artifacts') {
-                    steps {
-                        sh './nomad/prepare.sh'
-                    }
-                }
                 stage('Deploy on nomad dev') {
                     steps {
-                        script {
-                            if (utils.getGitBranch() == 'master') {
-                                sh './nomad/full/deploy.sh'
-                            } else {
-                                echo 'This is not a release branch'
-                            }
-                        }
+                        sh './nomad/full/deploy.sh'
                     }
-                }
-            }
-            post {
-                always {
-                    archiveArtifacts artifacts: 'nomad/*.tar.bz2', fingerprint: true
                 }
             }
        }

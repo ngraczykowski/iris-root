@@ -144,13 +144,21 @@ Possible solutions: MATCH, INCONCLUSIVE, NO_MATCH, NO_DATA and in case of unexpe
 
 Basic application configuration for running agent. Example configuration is stored in config directory.
 
+### Files
+
 * application.yaml - configuration for external integrations, such as agent exchange or data source
 
 * reduction-rules.yaml - configuration for [scores reduction](#scores-reduction)
 
-* name-preconditions.yaml - configuration of name preconditions necessary to get full solutions range
-  
-While starting agent, you can indicate config directory. Currently there is no way to use different configuration in one running agent.
+* name-preconditions.yaml - configuration of name preconditions necessary to get full solutions range for [scores reduction](#scores-reduction)
+
+### Source
+
+Default configuration directory is `./config/`. It can be changed by:
+* environment variable `AGENT_CONFIGURATION_DIR`
+* argument `-c` or `--configuration-dirs` while starting the agent 
+
+Currently there is no way to use different configuration in one running agent.
 
 <a name="resources"/>
 
@@ -393,6 +401,12 @@ Most scores are computed on cleared names - lowercase and without national chara
 ## Scores reduction
 
 Reducing scores from comparison into single solution, for example MATCH / INCONCLUSIVE / NO_MATCH.
+
+### Setting minimal solution from names preconditions
+If any name from compared pair does not meet the conditions specified in [config file](#config),
+the pair will never end as NO_MATCH - the minimal possible solution will be INCONCLUSIVE. 
+
+### Reducing by rules
 
 Reducing algorithm is defined in [config file](#config), reduction-rules.yaml. There are two type of rules:
   * basic feature rule
