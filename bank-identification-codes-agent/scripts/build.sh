@@ -20,7 +20,7 @@ python -m tox --installpkg ./dist/"$artifact" "$@"
 
 # zipfile (executable, to run without installing)
 pip install shiv
-shiv -e idmismatchagent.__main__:main "$@" --compressed -o "./dist/$name-$version.pyz" "dist/$artifact"
+shiv -e bank_identification_codes_agent.__main__:main "$@" --compressed -o "./dist/$name-$version.pyz" "dist/$artifact"
 
 # configuration example
 example_config_path="./config"

@@ -72,7 +72,7 @@ pipeline {
                                   "files": [
                                     {
                                       "pattern": "dist/*.pyz",
-                                      "target": "dist-public-local/identification-mismatch-agent/"
+                                      "target": "dist-public-local/bank-identification-codes-agent/"
                                     }
                                  ]
                             }''',
@@ -83,7 +83,7 @@ pipeline {
                                   "files": [
                                     {
                                       "pattern": "dist/*.tgz",
-                                      "target": "dist-public-local/identification-mismatch-agent/"
+                                      "target": "dist-public-local/bank-identification-codes-agent/"
                                     }
                                  ]
                             }''',

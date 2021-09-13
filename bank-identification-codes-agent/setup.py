@@ -12,9 +12,9 @@ tests_require = [
     "pytest-cov>=2.10.0",
 ]
 setup(
-    name="ts-identification-mismatch-agent",
+    name="bank-identification-codes-agent",
     version="2.3.0-dev",
-    description="Transaction Screening Identification Mismatch Agent",
+    description="Transaction Screening Bank Identification Codes Agent",
     author="Silent Eight Pte. Ltd.",
     author_email="proj-scb-tsaas@silenteight.com",
     url="https://silenteight.com",
