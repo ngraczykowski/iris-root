@@ -54,7 +54,10 @@ pipeline {
                 label 'nomad'
             }
             when {
-                branch 'master'
+                anyOf {
+                    branch 'master'
+                    tag pattern: '^v[\\d\\.]+\$', comparator: "REGEXP"
+                }
             }
             stages {
                 stage('Upload artifacts') {
