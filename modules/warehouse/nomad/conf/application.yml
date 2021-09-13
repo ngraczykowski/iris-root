@@ -164,9 +164,9 @@ warehouse.report.rbs:
       - name: alert_qa.level-0.state
         grouping-values:
           - value: qa_decision_PASSED
-            label: QA_decision_PASSED
+            label: QA_decision_false_positive
           - value: qa_decision_FAILED
-            label: QA_decision_FAILED
+            label: QA_decision_true_positive
       - name: alert_analyst_decision
         grouping-values:
           - value: analyst_decision_true_positive
@@ -239,9 +239,9 @@ warehouse.report.rbs:
       - name: alert_qa.level-0.state
         grouping-values:
           - value: qa_decision_PASSED
-            label: QA_decision_PASSED
+            label: QA_decision_false_positive
           - value: qa_decision_FAILED
-            label: QA_decision_FAILED
+            label: QA_decision_true_positive
       - name: alert_analyst_decision
         grouping-values:
           - value: analyst_decision_true_positive

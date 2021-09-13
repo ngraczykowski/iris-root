@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Map;
 
+import static com.silenteight.warehouse.report.rbs.generation.RbScorerFixtures.ANALYSIS_DECISION_FIELD;
 import static java.time.OffsetDateTime.now;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -89,7 +90,8 @@ class RbsReportGenerationServiceTest {
     assertThat(reportContent.getReport()).isEqualTo(
         "FV Signature,policy_name,step_name,recommended_action,"
             + "categories/apType,categories/riskType,features/name,features/dob,matches_count,"
-            + "QA_decision_PASSED,QA_decision_FAILED,analyst_decision_FP,analyst_decision_PTP\n"
+            + "QA_decision_false_positive,QA_decision_true_positive,"
+            + "analyst_decision_FP,analyst_decision_PTP\n"
             + "o7uPxWV913+ljhPW2uH+g7eAFeQ=,policies/1234,steps/3456,"
             + "FALSE_POSITIVE,I,SAN,MATCH,NO_MATCH,33,0,1,0,0\n"
             + "o7uPxWV913+ljhPW2uH+g7eAFeQ=,policies/1234,steps/94526,"
@@ -171,11 +173,12 @@ class RbsReportGenerationServiceTest {
     GroupingColumnProperties groupingColumnForQa = getGroupingColumn(
         "qa_decision",
         of(
-            getGroupingValue("PASS", "QA_decision_PASSED"),
-            getGroupingValue("FAILED", "QA_decision_FAILED")));
+            getGroupingValue("PASS", "QA_decision_false_positive"),
+            getGroupingValue("FAILED", "QA_decision_true_positive")));
 
     GroupingColumnProperties groupingColumnForAnalyst =
-        getGroupingColumn(RbScorerFixtures.ANALYSIS_DECISION_FIELD,
+        getGroupingColumn(
+            ANALYSIS_DECISION_FIELD,
             of(
                 getGroupingValue("FP", "analyst_decision_FP"),
                 getGroupingValue("PTP", "analyst_decision_PTP")));
