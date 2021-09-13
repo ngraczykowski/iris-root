@@ -21,10 +21,10 @@ class ManageAgentExchangesJob {
 
   @SchedulerLock(lockAtMostFor = "PT30M",
       name = "ManageAgentExchangesJob.deleteReceivedAgentExchangesLoop")
-  @Scheduled(initialDelay = 30 * 60 * 1000, fixedDelayString =
+  @Scheduled(initialDelay = 30 * 1000, fixedDelayString =
       "${ae.analysis.agent-exchange.delete-received-job.delay:300000}")
   void deleteReceivedAgentExchangesLoop() {
-    log.info("Deleting already received agent exchange features...");
+    log.info("Deleting already received agent exchanges...");
 
     LockAssert.assertLocked();
 
@@ -40,7 +40,7 @@ class ManageAgentExchangesJob {
       totalDeleted += deletedFeatures;
 
       if (log.isDebugEnabled()) {
-        log.debug("Deleted features: count={}", deletedFeatures);
+        log.debug("Deleted match features: count={}", deletedFeatures);
       }
 
       if (deletedFeatures == 0) {
@@ -48,8 +48,8 @@ class ManageAgentExchangesJob {
       }
 
       log.info(
-          "Still deleting already received agent exchange features: loopsLeft={}, totalDeleted={}",
-          left, totalDeleted);
+          "Still deleting already received agent exchange match features: loopsLeft={}"
+              + ", totalDeleted={}", left, totalDeleted);
     }
   }
 
@@ -66,10 +66,10 @@ class ManageAgentExchangesJob {
 
   @SchedulerLock(lockAtMostFor = "PT30M",
       name = "ManageAgentExchangesJob.deleteOutdatedAgentExchanges")
-  @Scheduled(initialDelay = 180 * 60 * 1000, fixedDelayString =
+  @Scheduled(initialDelay = 180 * 1000, fixedDelayString =
       "${ae.analysis.agent-exchange.delete-outdated-job.delay:300000}")
   void deleteOutdatedAgentExchanges() {
-    log.info("Deleting already received agent exchange features...");
+    log.info("Deleting outdated agent exchanges...");
 
     LockAssert.assertLocked();
 
