@@ -6,8 +6,10 @@ import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Component
@@ -33,10 +35,13 @@ class DeleteAgentExchangeMatchFeatureQuery {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
+  @Transactional
   void execute(List<UUID> agentExchangeRequestId, List<Long> matchId, List<String> features) {
-    MapSqlParameterSource parameters = new MapSqlParameterSource("features", features);
-    parameters.addValue("requestIds", agentExchangeRequestId);
-    parameters.addValue("matchIds", matchId);
+    var parameters = new MapSqlParameterSource(Map.of(
+        "features", features,
+        "requestIds", agentExchangeRequestId,
+        "matchIds", matchId
+    ));
 
     jdbcTemplate.update(SQL, parameters);
   }

@@ -14,12 +14,13 @@ import java.util.UUID;
 class JdbcAgentExchangeDataAccess implements AgentExchangeDataAccess {
 
   private final DeleteAgentExchangeMatchFeatureQuery deleteAgentExchangeMatchFeatureQuery;
-  private final DeleteEmptyAgentExchange deleteEmptyAgentExchange;
+  private final DeleteEmptyAgentExchangesQuery deleteEmptyAgentExchangesQuery;
 
   @Override
   public void removeAgentExchange(
       List<UUID> agentExchangeRequestId, List<Long> matchId, List<String> featuresIds) {
+
     deleteAgentExchangeMatchFeatureQuery.execute(agentExchangeRequestId, matchId, featuresIds);
-    deleteEmptyAgentExchange.execute();
+    deleteEmptyAgentExchangesQuery.execute();
   }
 }

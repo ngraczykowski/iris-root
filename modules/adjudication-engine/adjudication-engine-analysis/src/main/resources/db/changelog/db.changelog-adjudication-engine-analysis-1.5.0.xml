@@ -251,19 +251,9 @@
   </changeSet>
 
   <!--
-    XXX(ahaczewski): I really didn't want to turn it on. I'm so sorry I was forced to do it.
-
-      Please...
-
-      Tell the others......
+    NOTE(ahaczewski): The `adjudication-engine-analysis-1.5.0_23` and `_24` are intentionally
+      left out!
   -->
-  <changeSet id="adjudication-engine-analysis-1.5.0_23" author="mwilkowski" runAlways="true">
-    <sqlFile
-        path="sql/alter_table_set_ridiculously_low_autovacuum_analyze_threshold.sql"
-        relativeToChangelogFile="true"/>
-  </changeSet>
-
-  <!-- NOTE(ahaczewski): The `adjudication-engine-analysis-1.5.0_24` is intentionally left out! -->
 
   <changeSet id="adjudication-engine-analysis-1.5.0_25" author="ahaczewski">
     <sqlFile
