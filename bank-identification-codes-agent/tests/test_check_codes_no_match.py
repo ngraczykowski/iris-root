@@ -34,9 +34,12 @@ def test_wl_matching_text_in_bic_codes_headquarters_string(
 
 @pytest.mark.parametrize(
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
-    [("search code", "search code", ["some other code", "searchcode"], [])],
+    [
+        ("Search code", "search code", ["searchcode"], []),
+        ("Longer text containing code", "code", ["code"], []),
+    ],
 )
-def test_exact_match_in_search_code(
+def test_exact_match_search_code(
     ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes
 ):
     codes = BankIdentificationCodes(

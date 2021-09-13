@@ -22,7 +22,7 @@ WL_TYPE = "Some text"  # this param is constant, not modified by any check rule
         )
     ],
 )
-def test_wl_matching_text_in_bic_codes(
+def test_wl_matching_text_is_part_of_one_of_bic_codes(
     ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes
 ):
     codes = BankIdentificationCodes(
@@ -37,7 +37,7 @@ def test_wl_matching_text_in_bic_codes(
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
     [("search code123", "search code", ["some other search code", "matching searchcode"], [])],
 )
-def test_wl_matching_text_in_search_codes_longer_ap(
+def test_wl_matching_text_is_part_of_one_of_search_codes_longer_ap(
     ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes
 ):
     codes = BankIdentificationCodes(
@@ -52,7 +52,7 @@ def test_wl_matching_text_in_search_codes_longer_ap(
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
     [("search code 123", "search code", ["some other search code", "matching searchcode"], [])],
 )
-def test_wl_matching_text_in_search_codes(
+def test_wl_matching_text_is_part_of_one_of_search_codes(
     ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes
 ):
     codes = BankIdentificationCodes(
