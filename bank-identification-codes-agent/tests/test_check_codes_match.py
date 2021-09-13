@@ -14,12 +14,8 @@ WL_TYPE = "Some text"  # this param is constant, not modified by any check rule
 @pytest.mark.parametrize(
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
     [
-        (
-            "Text with bic code",
-            "bic code",
-            ["some search code"],
-            ["some other bic", "matching biccode"],
-        )
+        ("bic code", "bic code", ["some search code"], ["different bic", "matching biccode"]),
+        ("Your code is: 1234", "1234", ["some search code"], ["bic: 1234"]),
     ],
 )
 def test_wl_matching_text_is_part_of_one_of_bic_codes(
@@ -35,7 +31,10 @@ def test_wl_matching_text_is_part_of_one_of_bic_codes(
 
 @pytest.mark.parametrize(
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
-    [("search code123", "search code", ["some other search code", "matching searchcode"], [])],
+    [
+        ("search code123", "search code", ["different search code", "matching searchcode"], []),
+        ("December2020", "2020", ["12 2020"], ["not matching bic"]),
+    ],
 )
 def test_wl_matching_text_is_part_of_one_of_search_codes_longer_ap(
     ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes
@@ -50,7 +49,10 @@ def test_wl_matching_text_is_part_of_one_of_search_codes_longer_ap(
 
 @pytest.mark.parametrize(
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
-    [("search code 123", "search code", ["some other search code", "matching searchcode"], [])],
+    [
+        ("search code xyz", "search code", ["some other search code", "matching searchcode"], []),
+        ("2020", "2020", ["Year 2020"], ["not matching bic"]),
+    ],
 )
 def test_wl_matching_text_is_part_of_one_of_search_codes(
     ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes

@@ -13,9 +13,10 @@ WL_TYPE = "Some text"  # this param is constant, not modified by any check rule
 
 
 @pytest.mark.parametrize(
-    "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes", [("abc", "abc", [], [])]
+    "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
+    [("Text", "Text", [], []), ("Some text", "Different Text", [], [])],
 )
-def test_empty_watchlist_codes(ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes):
+def test_empty_codes_lists(ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes):
     codes = BankIdentificationCodes(
         ap_matching_field, wl_matching_text, WL_TYPE, wl_search_codes, wl_bic_codes
     )
@@ -26,7 +27,7 @@ def test_empty_watchlist_codes(ap_matching_field, wl_matching_text, wl_search_co
 
 @pytest.mark.parametrize(
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
-    [("abc", "ab", ["some search code"], ["some bic code"])],
+    [("Code", "Co", ["some search code"], ["some bic code"])],
 )
 def test_too_short_wl_matching_text(
     ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes
@@ -43,7 +44,7 @@ def test_too_short_wl_matching_text(
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
     [("Some Text", "Another Text", ["some search code"], ["some bic code"])],
 )
-def test_not_match_ap_matching_field(
+def test_wl_text_not_match_ap_matching_field(
     ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes
 ):
     codes = BankIdentificationCodes(
@@ -58,7 +59,7 @@ def test_not_match_ap_matching_field(
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
     [("Some Text", "some text", ["some search code"], ["some bic code"])],
 )
-def test_not_match_ap_matching_field(
+def test_matching_text_not_match_any_of_codes(
     ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes
 ):
     codes = BankIdentificationCodes(

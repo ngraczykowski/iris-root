@@ -10,7 +10,7 @@ def remove_no_word_characters(text: str) -> str:
 
 
 def remove_separators(text: str) -> str:
-    return SEPARATORS_PATTERN.sub("", text).strip().upper()
+    return SEPARATORS_PATTERN.sub("", text)
 
 
 def remove_words_separators(text: str) -> str:
@@ -37,7 +37,7 @@ def get_text_pattern(text: str) -> str:
 
 def get_first_match(first: str, second: str) -> Optional[str]:
     pattern = get_text_pattern(text=first)
-    matching_field_without_separators = remove_separators(second)
+    matching_field_without_separators = remove_separators(second).strip().upper()
     matching_text_in_field_match = re.search(
         pattern, matching_field_without_separators, re.VERBOSE
     )
