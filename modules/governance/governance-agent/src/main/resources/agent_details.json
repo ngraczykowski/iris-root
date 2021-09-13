@@ -195,6 +195,7 @@
     ],
     "responses": [
       "CITY_MATCH",
+      "COUNTRY_WEAK_MATCH",
       "CITY_NO_MATCH",
       "COUNTRY_MATCH",
       "COUNTRY_NO_MATCH",
