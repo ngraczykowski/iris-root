@@ -11,5 +11,6 @@ def test_bank_identification_codes_agent(test_case):
     expected_solution, expected_reason = test_case.expected_values
 
     # then
+    print(result.reason)
     assert result.solution == expected_solution
     assert result.reason == expected_reason
