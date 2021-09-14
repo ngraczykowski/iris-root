@@ -25,7 +25,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import static com.silenteight.hsbc.bridge.aws.AwsUriUtils.getObjectKey;
-import static com.silenteight.hsbc.bridge.aws.AwsUriUtils.getObjectVersion;
 
 @RequiredArgsConstructor
 class AwsAdapter
@@ -37,20 +36,19 @@ class AwsAdapter
 
   @Override
   public URI saveModel(String modelUrl, String name) throws IOException {
-    var objectResult = putObjectFromInputStream(
+    putObjectFromInputStream(
         URI.create(modelUrl).toURL().openStream(),
         name,
         modelBucketName);
-    var url = createUrl(name, objectResult.versionId(), modelBucketName);
+    var url = createUrl(name, modelBucketName);
     return toUri(url);
   }
 
   @Override
   public URI save(InputStream inputStream, String name) throws WatchlistSavingException {
     try {
-      var objectResult = putObjectFromInputStream(
-          inputStream, name, watchlistBucketName);
-      var url = createUrl(name, objectResult.versionId(), watchlistBucketName);
+      putObjectFromInputStream(inputStream, name, watchlistBucketName);
+      var url = createUrl(name, watchlistBucketName);
       return toUri(url);
     } catch (IOException e) {
       throw new WatchlistSavingException(e);
@@ -60,8 +58,8 @@ class AwsAdapter
   @Override
   public URI saveFile(String name, String path) throws WatchlistSavingException {
     try {
-      var objectResult = putObjectFromFile(name, watchlistBucketName, path);
-      var url = createUrl(name, objectResult.versionId(), watchlistBucketName);
+      putObjectFromFile(name, watchlistBucketName, path);
+      var url = createUrl(name, watchlistBucketName);
       return toUri(url);
     } catch (IOException e) {
       throw new WatchlistSavingException(e);
@@ -74,7 +72,6 @@ class AwsAdapter
       return client.getObject(GetObjectRequest.builder()
           .bucket(watchlistBucketName)
           .key(getObjectKey(uri))
-          .versionId(getObjectVersion(uri))
           .build());
     } catch (SdkException e) {
       throw new LoadingException(e);
@@ -87,7 +84,6 @@ class AwsAdapter
       return client.getObject(GetObjectRequest.builder()
           .bucket(modelBucketName)
           .key(getObjectKey(uri))
-          .versionId(getObjectVersion(uri))
           .build());
     } catch (SdkException e) {
       throw new LoadingException(e);
@@ -115,12 +111,11 @@ class AwsAdapter
     );
   }
 
-  private URL createUrl(String fileName, String versionId, String bucketName) {
+  private URL createUrl(String fileName, String bucketName) {
     return client.utilities().getUrl(
         builder -> builder
             .bucket(bucketName)
-            .key(fileName)
-            .versionId(versionId));
+            .key(fileName));
   }
 
   private static URI toUri(URL url) throws IOException {
