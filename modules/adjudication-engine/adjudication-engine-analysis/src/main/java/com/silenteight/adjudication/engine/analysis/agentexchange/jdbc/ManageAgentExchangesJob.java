@@ -22,7 +22,7 @@ class ManageAgentExchangesJob {
   @SchedulerLock(lockAtMostFor = "PT30M",
       name = "ManageAgentExchangesJob.manageAgentExchanges")
   @Scheduled(initialDelay = 30 * 1000, fixedDelayString =
-      "${ae.analysis.agent-exchange.manage-agent-exchanges-job.delay:300000}")
+      "${ae.analysis.agent-exchange.manage-agent-exchanges-job.delay:600000}")
   void manageAgentExchanges() {
     log.info("Deleting already received agent exchanges...");
 
@@ -33,6 +33,7 @@ class ManageAgentExchangesJob {
     deleteEmptyAgentExchanges();
   }
 
+  @Timed(value = "ae.analysis.jobs", extraTags = { "package", "agentexchange" })
   private void deleteOutdatedAgentExchangeMatchFeatures() {
     var deletedCount = deleteOutdatedQuery.execute();
     log.info("Deleted outdated agent exchange match features: count={}", deletedCount);
