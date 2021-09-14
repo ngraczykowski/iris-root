@@ -27,16 +27,16 @@ public class DateOfBirthFeature implements FeatureValuesRetriever<DateFeatureInp
 
     var apDates = new ApDateExtractor(matchData.getCustomerIndividual()).extract();
 
-    var mpDobsPrivateWatchlistDates = new PrivateWatchlistDateExtractor(
+    var mpDobsPrivateWatchlistDates = new PrivateListIndividualsDateExtractor(
         matchData.getPrivateListIndividuals()).extract();
-
-    var mpDobsWorldCheckIndividuals = new WorldCheckDateExtractor(
+    var mpDobsWorldCheckIndividuals = new WorldCheckIndividualsDateExtractor(
         matchData.getWorldCheckIndividuals()).extract();
+
+    var wlDates = concat(mpDobsWorldCheckIndividuals, mpDobsPrivateWatchlistDates);
 
     var result = featureBuilder
         .alertedPartyDates(toDistinctList(apDates))
-        .watchlistDates(
-            toDistinctList(concat(mpDobsWorldCheckIndividuals, mpDobsPrivateWatchlistDates)))
+        .watchlistDates(toDistinctList(wlDates))
         .build();
 
     log.debug(

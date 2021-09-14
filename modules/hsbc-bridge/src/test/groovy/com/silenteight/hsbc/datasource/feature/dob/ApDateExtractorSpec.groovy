@@ -4,7 +4,7 @@ import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual
 
 import spock.lang.Specification
 
-class ApDateExtractorTest extends Specification {
+class ApDateExtractorSpec extends Specification {
 
   def "extracts date correctly"() {
     given:
@@ -18,6 +18,6 @@ class ApDateExtractorTest extends Specification {
     def actual = new ApDateExtractor(customerIndividual).extract()
 
     then:
-    actual.collect() == ["1992 8 23"]
+    actual.collect() == ["1992 8 23", "1994"]
   }
 }

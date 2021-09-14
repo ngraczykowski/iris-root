@@ -10,9 +10,10 @@ class DateExtractor implements UnaryOperator<String> {
 
   // Every pattern needs to have matching group
   private static final List<Pattern> REPLACING_PATTERNS = List.of(
-      Pattern.compile("^(.*)00:00:00.0$"),
+      Pattern.compile("^(.*) (00:)*00\\.0$"),
+      Pattern.compile("^(.*?)(-00)+$"),
       Pattern.compile("^(.*)0000$"),
-      Pattern.compile("^(.*)00$"),
+      Pattern.compile("^(.*)\\.0$"),
       Pattern.compile("^(.*)0{2,}.*$")
   );
 

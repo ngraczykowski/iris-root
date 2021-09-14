@@ -4,7 +4,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class DobDateFilterTest extends Specification {
+class DobDateFilterSpec extends Specification {
 
   @Shared
   def underTest = new DobDateFilter()

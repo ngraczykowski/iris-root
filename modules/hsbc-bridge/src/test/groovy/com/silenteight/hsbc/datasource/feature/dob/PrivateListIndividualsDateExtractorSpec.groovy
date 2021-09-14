@@ -4,7 +4,7 @@ import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual
 
 import spock.lang.Specification
 
-class PrivateWatchlistDateExtractorTest extends Specification {
+class PrivateListIndividualsDateExtractorSpec extends Specification {
 
   def "extracts correct dates"() {
     given:
@@ -20,7 +20,7 @@ class PrivateWatchlistDateExtractorTest extends Specification {
     ]
 
     when:
-    def actual = new PrivateWatchlistDateExtractor(given).extract()
+    def actual = new PrivateListIndividualsDateExtractor(given).extract()
 
     then:
     actual.collect().containsAll(["22 12 1990", "10 10 2012"])

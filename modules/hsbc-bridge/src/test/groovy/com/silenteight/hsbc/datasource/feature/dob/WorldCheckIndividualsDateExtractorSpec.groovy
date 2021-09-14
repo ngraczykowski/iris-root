@@ -4,7 +4,7 @@ import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual
 
 import spock.lang.Specification
 
-class WorldCheckDateExtractorTest extends Specification {
+class WorldCheckIndividualsDateExtractorSpec extends Specification {
 
   def "extracts correct values"() {
     given:
@@ -14,15 +14,15 @@ class WorldCheckDateExtractorTest extends Specification {
             getYearOfBirth: {"1994"}
         ] as WorldCheckIndividual,
         [
-            getDobs       : {"10 10 2012"},
+            getDobs       : {"1961-00-00|1963-00-00|1964-04-07"},
             getYearOfBirth: {null}
         ] as WorldCheckIndividual
     ]
 
     when:
-    def actual = new WorldCheckDateExtractor(given).extract()
+    def actual = new WorldCheckIndividualsDateExtractor(given).extract()
 
     then:
-    actual.collect().containsAll(["22 12 1990", "10 10 2012", "1994"])
+    actual.collect().containsAll(["22 12 1990", "1961", "1963", "1964-04-07", "1994"])
   }
 }

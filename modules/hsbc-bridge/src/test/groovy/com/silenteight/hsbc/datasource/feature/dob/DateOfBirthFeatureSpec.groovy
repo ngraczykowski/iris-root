@@ -4,10 +4,11 @@ import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual
 import com.silenteight.hsbc.datasource.datamodel.MatchData
 import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual
+import com.silenteight.hsbc.datasource.feature.Feature
 
 import spock.lang.Specification
 
-class DateOfBirthFeatureTest extends Specification {
+class DateOfBirthFeatureSpec extends Specification {
 
   def underTest = new DateOfBirthFeature()
 
@@ -61,11 +62,12 @@ class DateOfBirthFeatureTest extends Specification {
     var actual = underTest.retrieve(matchData)
 
     then:
-    actual.with {
-      it.getAlertedPartyDates().size() == 2
-      it.getAlertedPartyDates().containsAll(["1992 8 23", "1994"])
-      it.getWatchlistDates().size() == 5
-      it.getWatchlistDates().containsAll(["22 12 1990", "1994", "10 10 2012", "23/12/1994", "1995"])
+    with(actual) {
+      feature == Feature.DATE_OF_BIRTH.fullName
+      alertedPartyDates.size() == 2
+      alertedPartyDates == ["1992 8 23", "1994"]
+      watchlistDates.size() == 5
+      watchlistDates == ["22 12 1990", "10 10 2012", "1994", "23/12/1990", "1995"]
     }
   }
 }

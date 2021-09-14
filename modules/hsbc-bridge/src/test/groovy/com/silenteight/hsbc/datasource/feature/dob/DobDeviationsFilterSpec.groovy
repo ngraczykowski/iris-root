@@ -4,7 +4,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class DobDeviationsFilterTest extends Specification {
+class DobDeviationsFilterSpec extends Specification {
 
   @Shared
   def underTest = new DobDeviationsFilter()
@@ -20,11 +20,14 @@ class DobDeviationsFilterTest extends Specification {
     where:
     badDate << [
         "0",
-        "9999abc",
+        "00:00.0",
+        "00:00:00.0",
+        "9999-01-01",
         "11111111",
         "11971031",
-        "9999-12-31",
         "1901-01-01",
+        "9999abc",
+        "9999-12-31",
     ]
   }
 
@@ -37,6 +40,11 @@ class DobDeviationsFilterTest extends Specification {
 
     where:
     goodDate << [
+        "2000",
+        "1990",
+        "2000-01",
+        "2000-01-02",
+        "2020-01-01 00:00.0",
         "01-10-2023",
         "11-11-11",
         "1994-12-10",

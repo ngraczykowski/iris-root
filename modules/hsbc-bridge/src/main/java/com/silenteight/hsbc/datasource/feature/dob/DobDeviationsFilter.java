@@ -13,10 +13,11 @@ class DobDeviationsFilter implements Predicate<String> {
 
   private static final Predicate<String> FILTERED_PATTERNS_PREDICATE = List.of(
       compile("^0$"),
+      compile("^(00:)*00\\.0$"),
       compile("^9999.*$"),
+      compile("^9999-12-31$"),
       compile("^11111111$"),
       compile("^11971031$"),
-      compile("^9999-12-31$"),
       compile("^1901-01-01$")
   )
       .stream()

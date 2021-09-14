@@ -10,22 +10,29 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
-class WorldCheckDateExtractor {
+class WorldCheckIndividualsDateExtractor implements Extractor {
 
   private final List<WorldCheckIndividual> worldCheckIndividuals;
 
   Stream<String> extract() {
-    var mpDobs = worldCheckIndividuals
+    var mpDobsExtracted = worldCheckIndividuals
         .stream()
         .map(WorldCheckIndividual::getDobs)
-        .filter(StringUtils::isNotBlank);
+        .filter(StringUtils::isNotBlank)
+        .map(Object::toString)
+        .map(s -> s.split("\\|"))
+        .flatMap(Stream::of)
+        .distinct();
 
-    var mpYobs = worldCheckIndividuals
+    var mpYobsExtracted = worldCheckIndividuals
         .stream()
         .map(WorldCheckIndividual::getYearOfBirth)
         .filter(StringUtils::isNotBlank)
-        .map(Object::toString);
+        .map(Object::toString)
+        .map(s -> s.split(" "))
+        .flatMap(Stream::of)
+        .distinct();
 
-    return Stream.concat(mpDobs, mpYobs);
+    return result(mpDobsExtracted, mpYobsExtracted);
   }
 }
