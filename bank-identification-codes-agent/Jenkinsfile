@@ -52,10 +52,7 @@ pipeline {
         stage('Deployment'){
             agent {
                 label 'nomad'
-            }
-            when {
-                branch 'ks/code_cleaning'  // TODO remove this testing hack and replace with master
-            }
+            }  // TODO this is testing hack and replace with when condition with master branch
             stages {
                 stage('Upload artifacts') {
                     steps {
