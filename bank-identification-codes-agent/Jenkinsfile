@@ -54,7 +54,7 @@ pipeline {
                 label 'nomad'
             }
             when {
-                branch 'master'
+                branch 'ks/code_cleaning'  // TODO remove this testing hack and replace with master
             }
             stages {
                 stage('Upload artifacts') {
