@@ -21,13 +21,13 @@ IFS='-' read -r name version <<< "${artifact%.pyz}"
 config="${name}-config-${version}.tgz"
 
 
-export NOMAD_VAR_identification_mismatch_agent_artifact=${NOMAD_VAR_identification_mismatch_agent_artifact:-"${MINIO_ADDR}/artifacts/identification-mismatch-agent/${artifact}"}
-export NOMAD_VAR_identification_mismatch_agent_artifact_checksum=${NOMAD_VAR_identification_mismatch_agent_artifact_checksum:-"sha256:$(sha256sum "$artifact_path" | awk '{print $1}')"}
-export NOMAD_VAR_identification_mismatch_agent_version="$version"
-export NOMAD_VAR_identification_mismatch_agent_config=${NOMAD_VAR_identification_mismatch_agent_config:-"${MINIO_ADDR}/artifacts/identification-mismatch-agent/${config}"}
+export NOMAD_VAR_bank_identification_codes_agent_artifact=${NOMAD_VAR_bank_identification_codes_agent_artifact:-"${MINIO_ADDR}/artifacts/bank-identification-codes-agent/${artifact}"}
+export NOMAD_VAR_bank_identification_codes_agent_artifact_checksum=${NOMAD_VAR_bank_identification_codes_agent_artifact_checksum:-"sha256:$(sha256sum "$artifact_path" | awk '{print $1}')"}
+export NOMAD_VAR_bank_identification_codes_agent_version="$version"
+export NOMAD_VAR_bank_identification_codes_agent_config=${NOMAD_VAR_bank_identification_codes_agent_config:-"${MINIO_ADDR}/artifacts/bank-identification-codes-agent/${config}"}
 
 cd "$scriptdir"
 set -x
-mcli cp --recursive artifacts/ "$MINIO_ALIAS"/artifacts/identification-mismatch-agent
+mcli cp --recursive artifacts/ "$MINIO_ALIAS"/artifacts/bank-identification-codes-agent
 
-nomad job run "$@" identification-mismatch-agent.nomad
+nomad job run "$@" bank-identification-codes-agent.nomad

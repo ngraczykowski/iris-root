@@ -1,19 +1,19 @@
-variable "identification_mismatch_agent_version" {
+variable "bank_identification_codes_agent_version" {
   type = string
   description = "Company name agent version"
 }
 
-variable "identification_mismatch_agent_artifact" {
+variable "bank_identification_codes_agent_artifact" {
   type = string
   description = "The name of file containing artifact"
 }
 
-variable "identification_mismatch_agent_artifact_checksum" {
+variable "bank_identification_codes_agent_artifact_checksum" {
   type = string
   description = "Checksum of file containing artifact"
 }
 
-variable "identification_mismatch_agent_config" {
+variable "bank_identification_codes_agent_config" {
   type = string
   description = "Configuration files"
 }
@@ -23,7 +23,7 @@ variable "namespace" {
   default = "dev"
 }
 
-job "identification-mismatch-agent" {
+job "bank-identification-codes-agent" {
   type = "service"
 
   datacenters = [
@@ -36,7 +36,7 @@ job "identification-mismatch-agent" {
     auto_revert = true
   }
 
-  group "identification-mismatch-agent" {
+  group "bank-identification-codes-agent" {
     count = 1
 
     network {
@@ -47,7 +47,7 @@ job "identification-mismatch-agent" {
     }
 
     service {
-      name = "${var.namespace}-identification-mismatch-agent"
+      name = "${var.namespace}-bank-identification-codes-agent"
       port = "grpc"
 
       check_restart {
@@ -65,7 +65,7 @@ job "identification-mismatch-agent" {
     }
 
     service {
-      name = "${var.namespace}-grpc-identification-mismatch-agent"
+      name = "${var.namespace}-grpc-bank-identification-codes-agent"
       port = "grpc"
       tags = [
         "grpc",
@@ -75,7 +75,7 @@ job "identification-mismatch-agent" {
     }
 
     service {
-      name = "${var.namespace}-identification-mismatch-agent-grpcui"
+      name = "${var.namespace}-bank-identification-codes-agent-grpcui"
       port = "grpcui"
       tags = concat([
         "grpcui",
@@ -118,24 +118,24 @@ job "identification-mismatch-agent" {
     }
 
 
-    task "identification-mismatch-agent" {
+    task "bank-identification-codes-agent" {
       driver = "docker"
 
 //      template {
-//        data = "{{ key \"${var.namespace}/identification-mismatch-agent/secrets\" }}"
-//        destination = "secrets/identification-mismatch-agent.env"
+//        data = "{{ key \"${var.namespace}/bank-identification-codes-agent/secrets\" }}"
+//        destination = "secrets/bank-identification-codes-agent.env"
 //        env = true
 //      }
 
       artifact {
-        source = var.identification_mismatch_agent_artifact
+        source = var.bank_identification_codes_agent_artifact
         options {
-          checksum = "${var.identification_mismatch_agent_artifact_checksum}"
+          checksum = "${var.bank_identification_codes_agent_artifact_checksum}"
         }
       }
 
       artifact {
-        source = var.identification_mismatch_agent_config
+        source = var.bank_identification_codes_agent_config
       }
 
       template {
@@ -147,7 +147,7 @@ job "identification-mismatch-agent" {
       config {
         image = "python:3.7"
         command = "python"
-        args = ["/app/ts_identification_mismatch_agent-${var.identification_mismatch_agent_version}.pyz", "-c", "/app/config", "--grpc", "-v"]
+        args = ["/app/ts_bank_identification_codes_agent-${var.bank_identification_codes_agent_version}.pyz", "-c", "/app/config", "--grpc", "-v"]
         network_mode = "host"
         volumes = ["local:/app"]
       }
