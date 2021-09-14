@@ -69,6 +69,7 @@ libraries.spring_boot_starter_integration = [group: 'org.springframework.boot', 
 libraries.spring_boot_starter_jdbc = [group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc']
 libraries.spring_boot_starter_logging = [group: 'org.springframework.boot', name: 'spring-boot-starter-logging']
 libraries.spring_boot_starter_mail = [group: 'org.springframework.boot', name: 'spring-boot-starter-mail']
+libraries.spring_boot_starter_oauth2_client = [group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client']
 libraries.spring_boot_starter_quartz = [group: 'org.springframework.boot', name: 'spring-boot-starter-quartz']
 libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow']
 libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web']
@@ -101,6 +102,7 @@ libraries.spring_integration_mail = [group: 'org.springframework.integration', n
 libraries.spring_integration_test = [group: 'org.springframework.integration', name: 'spring-integration-test']
 
 libraries.spring_security_acl = [group: 'org.springframework.security', name: 'spring-security-acl']
+libraries.spring_security_oauth2_autoconfigure = [group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure']
 libraries.spring_security_cas = [group: 'org.springframework.security', name: 'spring-security-cas']
 libraries.spring_security_config = [group: 'org.springframework.security', name: 'spring-security-config']
 libraries.spring_security_core = [group: 'org.springframework.security', name: 'spring-security-core']

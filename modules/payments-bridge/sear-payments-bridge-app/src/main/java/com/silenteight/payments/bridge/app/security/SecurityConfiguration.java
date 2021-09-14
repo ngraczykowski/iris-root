@@ -102,4 +102,5 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
     );
     return new DelegatingPasswordEncoder("bcrypt", encoders);
   }
+
 }

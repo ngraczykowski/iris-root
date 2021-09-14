@@ -44,6 +44,14 @@ pb:
     concurrency: 2
     prefetch: 2
 
+  #-------------------------------------------------------------------------------------------------
+  # CMAPI CALLBACK
+  #-------------------------------------------------------------------------------------------------
+  cmapi:
+    callback:
+      endpoint: "http://localhost:5000/callback-recommendation"
+      enabled: false
+
 spring:
   #-------------------------------------------------------------------------------------------------
   # MULTI-THREADING
@@ -65,7 +73,6 @@ spring:
     password: dev
     virtual-host: /
 
-
 #---------------------------------------------------------------------------------------------------
 # SECURITY
 #---------------------------------------------------------------------------------------------------
@@ -80,3 +87,18 @@ keycloak:
     secret:
   use-resource-role-mappings: true
   bearer-only: true
+
+# CMAPI Auth Server configuration
+rest:
+  security:
+    issuer-uri:
+
+security:
+  oauth2:
+    client:
+      client-id:
+      client-secret:
+      user-authorization-uri: ${rest.security.issuer-uri}/protocol/openid-connect/auth
+      access-token-uri: ${rest.security.issuer-uri}/protocol/openid-connect/token
+      scope: openid
+      grant-type: client_credentials

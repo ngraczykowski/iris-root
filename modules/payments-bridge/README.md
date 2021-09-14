@@ -17,7 +17,7 @@ Entire flow assumes that alerts are sent back to Cmapi. Hence, I strongly sugges
 However, I run it on a non-standard port, hence please use the following command to start it:
 
 ```
-<TSAAS_BRIDGE_HOME>/cmapi-mock/scripts/start-web.sh --port=24609
+<PAYMENTS_BRIDGE_HOME>/cmapi-mock/scripts/start-web.sh --port=24609
 ```
 
 This step is optional and you may try to test the flow without the outbound callback. However, you will see most likely lots of errors in your log file while sending back recommendation.
@@ -30,7 +30,9 @@ Use my prepared script to submit a sample request:
 ./scripts/submit-request.sh
 ```
 
-## Getting access token:
+# Authenticate the request to the server
+
+## Getting access token from keycloak:
 To get access token for the client `sierra-dev-api` run: 
 
     curl \
@@ -52,8 +54,23 @@ The generated access token `$TOKEN` can be tested by following the steps below:
 1. Start the `PaymentsBridgeApplication`.
 1. Place the `$TOKEN` in the command below and run it:
 
-        curl 'http://localhost:24602/rest/payments/test' --header 'Authorization: Bearer $TOKEN'
+        curl 'http://localhost:24602/rest/payments/test-authentication' --header 'Authorization: Bearer $TOKEN'
 
 1. Verify the output:
     
-        authenticated
+        Authenticated
+        
+# Authorize the requests to the CMAPI
+
+## Configuration of CMAPI Auth Server:
+1. Set the following settings:
+    - `rest.security.issuer-uri`;
+    - `security.oauth2.client.client-id`;
+    - `security.oauth2.client.client-secret`;
+1. Enable callback by setting:
+    - `pb.cmapi.callback.enabled: true`
+
+### Test CMAPI callback
+1. Run `cmapi-mock` by following its `REAMDE.md`.
+1. Send a request to http://localhost:24602/rest/payments/test-callback Details on how to a send request are in [Test access token](#test-access-token) section.
+1. Verify the `Headers: Authorization: Bearer` from `cmapi-mock` debug log.

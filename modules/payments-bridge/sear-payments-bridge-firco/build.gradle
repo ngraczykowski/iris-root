@@ -19,7 +19,6 @@ dependencies {
   implementation libraries.spring_integration_amqp
   implementation libraries.spring_integration_core
   implementation libraries.spring_security_core
-  implementation libraries.spring_security_core
   implementation libraries.spring_web
   implementation libraries.spring_webmvc
 
@@ -35,4 +34,7 @@ dependencies {
 
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.spring_security_test
+
+  // Oauth2
+  implementation libraries.spring_security_oauth2_autoconfigure
 }

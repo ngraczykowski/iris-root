@@ -25,7 +25,7 @@ import static org.awaitility.Awaitility.await;
 @ContextConfiguration(initializers = { PostgresTestInitializer.class })
 @SpringBootTest(
     classes = PaymentsBridgeApplication.class,
-    properties = "debug=true")
+    properties = {"debug=true", "pb.cmapi.callback.enabled=false"})
 @ActiveProfiles({ "test" })
 @EnableConfigurationProperties
 class CategoryDatasourceIntegrationTest {
