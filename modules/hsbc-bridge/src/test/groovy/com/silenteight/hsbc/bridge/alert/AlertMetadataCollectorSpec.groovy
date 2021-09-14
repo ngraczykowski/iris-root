@@ -34,4 +34,54 @@ class AlertMetadataCollectorSpec extends Specification {
         new AlertMetadata(key: 'extendedAttribute5', value: 'extendedAttribute5')
     ] as Set<AlertMetadata>
   }
+
+  def 'should map countries from alertData'() {
+    given:
+    def alertData = new AlertData(
+        caseInformation: new CaseInformation(
+            extendedAttribute5: 'extendedAttribute5',
+            flagKey: 'flagKey',
+            keyLabel: 'keyLabel'
+        )
+    )
+    alertData.getCustomerIndividuals().add(
+        new CustomerIndividual(edqLobCountryCode: 'UK')
+    )
+
+    when:
+    def result = underTest.collectFromAlertData(alertData)
+
+    then:
+    result == [
+        new AlertMetadata(key: 'discriminator', value: 'keyLabel_flagKey'),
+        new AlertMetadata(key: 'trackingId', value: 'flagKey'),
+        new AlertMetadata(key: 's8_lobCountryCode', value: 'GB'),
+        new AlertMetadata(key: 'extendedAttribute5', value: 'extendedAttribute5')
+    ] as Set<AlertMetadata>
+  }
+
+  def 'should not map empty country from alertData'() {
+    given:
+    def alertData = new AlertData(
+        caseInformation: new CaseInformation(
+            extendedAttribute5: 'extendedAttribute5',
+            flagKey: 'flagKey',
+            keyLabel: 'keyLabel'
+        )
+    )
+    alertData.getCustomerIndividuals().add(
+        new CustomerIndividual(edqLobCountryCode: '')
+    )
+
+    when:
+    def result = underTest.collectFromAlertData(alertData)
+
+    then:
+    result == [
+        new AlertMetadata(key: 'discriminator', value: 'keyLabel_flagKey'),
+        new AlertMetadata(key: 'trackingId', value: 'flagKey'),
+        new AlertMetadata(key: 's8_lobCountryCode', value: ''),
+        new AlertMetadata(key: 'extendedAttribute5', value: 'extendedAttribute5')
+    ] as Set<AlertMetadata>
+  }
 }
