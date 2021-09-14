@@ -19,6 +19,7 @@ message CompareFreeTextRequest {
   string matched_type = 3;
   repeated string matching_texts = 4;
   string freetext = 5;
+  string name_agent_instance_name = 6;
 }
 
 message CompareFreeTextResponse {
