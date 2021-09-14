@@ -116,6 +116,8 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.xml
     default-schema: ${pb.db.schema:public}
     contexts: default
+    database-change-log-table: pb_databasechangelog
+    database-change-log-lock-table: pb_databasechangeloglock
 
   # Spring Data JPA
   jpa:
