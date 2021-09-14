@@ -52,7 +52,10 @@ pipeline {
         stage('Deployment'){
             agent {
                 label 'nomad'
-            }  // TODO this is testing hack and replace with when condition with master branch
+            }
+            when {
+                branch 'master'
+            }
             stages {
                 stage('Upload artifacts') {
                     steps {
