@@ -1,6 +1,5 @@
-from typing import Tuple
-
-from attr import attrib, attrs
+import dataclasses
+from typing import List, Tuple
 
 from bank_identification_codes_agent.text_utils import (
     get_first_match,
@@ -21,13 +20,13 @@ from data_models.reasons import (
 from data_models.result import Reason, Result, Solution
 
 
-@attrs(frozen=True)
+@dataclasses.dataclass
 class BankIdentificationCodes:
-    alerted_party_matching_field: str = attrib()
-    watchlist_matching_text: str = attrib()
-    watchlist_type: str = attrib()
-    watchlist_search_codes: list = attrib()
-    watchlist_bic_codes: list = attrib()
+    alerted_party_matching_field: str
+    watchlist_matching_text: str
+    watchlist_type: str
+    watchlist_search_codes: List[str]
+    watchlist_bic_codes: List[str]
 
     def check(self) -> Result:
         if len(self.watchlist_search_codes) == 0 and len(self.watchlist_bic_codes) == 0:

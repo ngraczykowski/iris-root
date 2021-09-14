@@ -1,20 +1,20 @@
+import dataclasses
 import logging
 
 from agent_base.agent import Agent
-from attr import attrib, attrs
 
 from bank_identification_codes_agent.bank_identification_codes import BankIdentificationCodes
 from bank_identification_codes_agent.text_utils import filter_none_values
 from data_models.result import Result, Solution
 
 
-@attrs(frozen=True)
+@dataclasses.dataclass
 class BankIdentificationCodesAgentInput:
-    altered_party_matching_field: str = attrib()
-    watchlist_matching_text: str = attrib()
-    watchlist_type: str = attrib()
-    watchlist_search_codes: list = attrib()
-    watchlist_bic_codes: list = attrib()
+    altered_party_matching_field: str
+    watchlist_matching_text: str
+    watchlist_type: str
+    watchlist_search_codes: list
+    watchlist_bic_codes: list
 
 
 class BankIdentificationCodesAgent(Agent):

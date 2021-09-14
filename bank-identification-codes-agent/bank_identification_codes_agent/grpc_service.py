@@ -22,9 +22,7 @@ class BankIdentificationCodesAgentGrpcServicer(
         self, request: CheckBankIdentificationCodesRequest, _context
     ) -> CheckBankIdentificationCodesResponse:
         result: Result = await self.create_resolve_task(request)
-        reason = CheckBankIdentificationCodesReason(
-            conclusion=result.reason.__class__.__name__, **vars(result.reason)
-        )
+        reason = CheckBankIdentificationCodesReason(**vars(result.reason))
         return CheckBankIdentificationCodesResponse(solution=result.solution.value, reason=reason)
 
     def add_to_server(self, server):

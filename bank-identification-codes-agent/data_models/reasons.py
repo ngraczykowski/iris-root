@@ -1,58 +1,56 @@
+import dataclasses
 from typing import List
-
-from attr import attrib, attrs
 
 from data_models.result import Reason
 
 
-@attrs(frozen=True)
 class NoSearchCodeInWatchlistReason(Reason):
     pass
 
 
-@attrs(frozen=True)
+@dataclasses.dataclass
 class MatchingTextTooShortToBeCodeReason(Reason):
-    watchlist_matching_text: str = attrib()
+    watchlist_matching_text: str
 
 
-@attrs(frozen=True)
+@dataclasses.dataclass
 class MatchingTextMatchesWlSearchCodeReason(Reason):
-    watchlist_matching_text: str = attrib()
-    watchlist_search_codes: List[str] = attrib()
-    watchlist_type: str = attrib()
+    watchlist_matching_text: str
+    watchlist_search_codes: List[str]
+    watchlist_type: str
 
 
-@attrs(frozen=True)
+@dataclasses.dataclass
 class MatchingTextMatchesWlBicCodeReason(Reason):
-    watchlist_matching_text: str = attrib()
-    watchlist_bic_code: str = attrib()
-    watchlist_type: str = attrib()
+    watchlist_matching_text: str
+    watchlist_bic_code: str
+    watchlist_type: str
 
 
-@attrs(frozen=True)
+@dataclasses.dataclass
 class MatchingTextIsPartOfLongerSequenceReason(Reason):
-    watchlist_matching_text: str = attrib()
-    altered_party_matching_sequence: str = attrib()
-    altered_party_matching_field: str = attrib()
-    partial_match_text: str = attrib()
-    watchlist_type: str = attrib()
+    watchlist_matching_text: str
+    altered_party_matching_sequence: str
+    altered_party_matching_field: str
+    partial_match_text: str
+    watchlist_type: str
 
 
-@attrs(frozen=True)
+@dataclasses.dataclass
 class MatchingTextIsOnlyPartialMatchForSearchCodeReason(Reason):
-    watchlist_matching_text: str = attrib()
-    watchlist_search_codes: List[str] = attrib()
-    watchlist_type: str = attrib()
+    watchlist_matching_text: str = None
+    watchlist_search_codes: List[str] = None
+    watchlist_type: str = None
 
 
-@attrs(frozen=True)
+@dataclasses.dataclass
 class MatchingTextDoesNotMatchWlSearchCodeReason(Reason):
-    watchlist_matching_text: str = attrib()
-    watchlist_search_codes: List[str] = attrib()
-    watchlist_type: str = attrib()
+    watchlist_matching_text: str
+    watchlist_search_codes: List[str]
+    watchlist_type: str
 
 
-@attrs(frozen=True)
+@dataclasses.dataclass
 class MatchingTextDoesNotMatchMatchingFieldReason(Reason):
-    watchlist_matching_text: str = attrib()
-    altered_party_matching_field: str = attrib()
+    watchlist_matching_text: str
+    altered_party_matching_field: str
