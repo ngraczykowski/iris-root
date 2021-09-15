@@ -127,9 +127,9 @@ job "hsbc-bridge" {
       ], var.http_tags)
 
       check_restart {
-        limit           = 3
-        grace           = "90s"
-        ignore_warnings = false
+        limit           = 5
+        grace           = "300s"
+        ignore_warnings = true
       }
 
       check {
@@ -137,8 +137,8 @@ job "hsbc-bridge" {
         type     = "http"
         path     = "/rest/hsbc-bridge/management/health"
         method   = "GET"
-        interval = "10s"
-        timeout  = "2s"
+        interval = "30s"
+        timeout  = "10s"
       }
     }
 
@@ -152,17 +152,11 @@ job "hsbc-bridge" {
         "gRPC_port=${NOMAD_PORT_grpc}",
       ]
 
-      check_restart {
-        limit           = 3
-        grace           = "90s"
-        ignore_warnings = false
-      }
-
       check {
         name     = "gRPC Port Alive Check"
         type     = "tcp"
-        interval = "10s"
-        timeout  = "2s"
+        interval = "30s"
+        timeout  = "10s"
       }
     }
 
