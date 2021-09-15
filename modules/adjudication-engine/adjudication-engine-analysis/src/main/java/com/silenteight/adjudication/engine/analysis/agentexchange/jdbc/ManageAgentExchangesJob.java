@@ -22,7 +22,7 @@ class ManageAgentExchangesJob {
   @SchedulerLock(lockAtMostFor = "PT30M",
       name = "ManageAgentExchangesJob.manageAgentExchanges")
   @Scheduled(initialDelay = 30 * 1000, fixedDelayString =
-      "${ae.analysis.agent-exchange.manage-agent-exchanges-job.delay:600000}")
+      "${ae.analysis.agent-exchange.manage-agent-exchanges-job.delay:3600000}")
   void manageAgentExchanges() {
     log.info("Deleting already received agent exchanges...");
 
