@@ -30,7 +30,7 @@ variable "grpcui_tags" {
 locals {
   jvm_memory                = ceil(var.memory * 0.7)
   perm_memory               = ceil(var.memory * 0.2)
-  database_node_destination = "eu2"
+  database_node_destination = "eu4"
   database_volume           = "/srv/sep-cluster/postgres/${var.namespace}-hsbc-bridge"
 }
 
