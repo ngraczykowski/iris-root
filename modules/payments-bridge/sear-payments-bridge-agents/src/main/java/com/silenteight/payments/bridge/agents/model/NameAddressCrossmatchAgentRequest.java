@@ -9,7 +9,7 @@ import java.util.Map;
 @Builder
 public class NameAddressCrossmatchAgentRequest {
 
-  private final Map<String, String> alertPartyEntities;
+  private final Map<AlertedPartyKey, String> alertPartyEntities;
   private final String watchlistName;
   private final String watchlistCountry;
   private final String watchlistType;

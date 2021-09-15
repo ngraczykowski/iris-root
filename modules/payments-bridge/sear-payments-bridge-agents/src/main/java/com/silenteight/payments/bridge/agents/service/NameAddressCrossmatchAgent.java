@@ -1,5 +1,6 @@
 package com.silenteight.payments.bridge.agents.service;
 
+import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.Result;
@@ -10,21 +11,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+import static com.silenteight.payments.bridge.agents.model.AlertedPartyKey.*;
 import static java.util.Arrays.asList;
 
 @Service
 class NameAddressCrossmatchAgent implements NameAddressCossmatchUseCase {
 
-  public static final String EMPTY_ENTITY_TYPE = "";
   public static final String EMPTY_ENTITY_VALUE = "";
-
-  private static final String WILDCARD_SYMBOL = "*";
-  private static final String ALERTED_NAME_KEY = "NAME";
-  private static final String ALERTED_COMPANY_NAME_KEY = "COMPANY NAME";
-  private static final String ALERTED_ADDRESS_KEY = "ADDRESS";
-  private static final String ALERTED_COUNTRY_TOWN_KEY = "COUNTRY TOWN";
-  private static final String ALERTED_NAMEADDRESS_SEGMENT_KEY = "NAMEADDRESS FIRST SEGMENT";
-  private static final String ALERTED_NO_MATCH_KEY = "NO_MATCH";
 
   public NameAddressCrossmatchAgentResponse call(NameAddressCrossmatchAgentRequest request) {
 
@@ -35,7 +28,7 @@ class NameAddressCrossmatchAgent implements NameAddressCossmatchUseCase {
       return NameAddressCrossmatchAgentResponse.of(
           Result.NO_DECISION, Map.of(WILDCARD_SYMBOL, EMPTY_ENTITY_VALUE));
 
-    Map<String, String> apProperties = request.getAlertPartyEntities();
+    Map<AlertedPartyKey, String> apProperties = request.getAlertPartyEntities();
     if (apProperties == null || apProperties.isEmpty())
       return NameAddressCrossmatchAgentResponse.of(
           Result.NO_DECISION, Map.of(EMPTY_ENTITY_TYPE, EMPTY_ENTITY_VALUE));
@@ -58,7 +51,7 @@ class NameAddressCrossmatchAgent implements NameAddressCossmatchUseCase {
   }
 
   private static boolean checkNameAddressCrossmatch(
-      Map<String, String> entityData, WatchlistType wlType) {
+      Map<AlertedPartyKey, String> entityData, WatchlistType wlType) {
 
     return mapNotContainsKeys(entityData, ALERTED_NAME_KEY, ALERTED_COMPANY_NAME_KEY)
         && asList(WatchlistType.COMPANY, WatchlistType.INDIVIDUAL).contains(wlType)
@@ -66,11 +59,12 @@ class NameAddressCrossmatchAgent implements NameAddressCossmatchUseCase {
         && WatchlistType.ADDRESS == wlType;
   }
 
-  private static boolean mapNotContainsKeys(Map<String, String> map, String... keys) {
+  private static boolean mapNotContainsKeys(
+      Map<AlertedPartyKey, String> map, AlertedPartyKey... keys) {
     return map.keySet().stream().noneMatch(k -> asList(keys).contains(k));
   }
 
   private static boolean isNameWildcard(String name) {
-    return WILDCARD_SYMBOL.equals(name);
+    return name.equals("*");
   }
 }

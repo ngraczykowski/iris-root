@@ -1,9 +1,9 @@
 package com.silenteight.payments.bridge.agents.service;
 
+import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.Result;
-import com.silenteight.payments.bridge.agents.service.NameAddressCrossmatchAgent;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static com.silenteight.payments.bridge.agents.model.AlertedPartyKey.*;
 import static com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.Result.CROSSMATCH;
 import static com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.Result.NO_CROSSMATCH;
 import static com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.Result.NO_DECISION;
@@ -36,7 +37,7 @@ class NameAddressCrossmatchAgentTest {
         NameAddressCrossmatchAgentRequest
             .builder()
             .alertPartyEntities(
-                Map.of("NAMEADDRESS FIRST SEGMENT", "IND LLC EMIRATES NATIONAL FACTORY"))
+                Map.of(ALERTED_NAMEADDRESS_SEGMENT_KEY, "IND LLC EMIRATES NATIONAL FACTORY"))
             .watchlistName("EMIRATES NATIONAL FACTORY FOR PLASTIC INDUSTRIES LLC")
             .watchlistCountry("UAE")
             .watchlistType("COMPANY")
@@ -44,14 +45,14 @@ class NameAddressCrossmatchAgentTest {
     assertThat(nameAddressCrossmatchAgentResponse)
         .isEqualTo(NameAddressCrossmatchAgentResponse.of(
             NO_DECISION,
-            Map.of("NAMEADDRESS FIRST SEGMENT", "IND LLC EMIRATES NATIONAL FACTORY")));
+            Map.of(ALERTED_NAMEADDRESS_SEGMENT_KEY, "IND LLC EMIRATES NATIONAL FACTORY")));
   }
 
   @ParameterizedTest
   @MethodSource("request")
   void parametrizedTest(
-      List<String> matchingTexts, Map<String, String> apEntTypeData,
-      Map<String, String> matchedEntity, WlData wlData, Result output) {
+      List<String> matchingTexts, Map<AlertedPartyKey, String> apEntTypeData,
+      Map<AlertedPartyKey, String> matchedEntity, WlData wlData, Result output) {
     NameAddressCrossmatchAgentResponse nameAddressCrossmatchAgentResponse = agent.call(
         NameAddressCrossmatchAgentRequest
             .builder()
@@ -80,12 +81,6 @@ class NameAddressCrossmatchAgentTest {
             TestData.AP_DATA_2,
             TestData.WL_INDIVIDUAL_JOHN_SMITH,
             CROSSMATCH),
-        Arguments.of(
-            List.of("ANDREWS"),
-            null,
-            Map.of("", ""),
-            TestData.WL_INDIVIDUAL_OSAMA_BIN_LADEN,
-            NO_DECISION),
         Arguments.of(
             List.of("BOG", "COFFEE"),
             TestData.AP_DATA_3,
@@ -149,32 +144,34 @@ class NameAddressCrossmatchAgentTest {
     static final WlData WL_COMPANY_OSAMA_BIN_LADEN =
         createCompWl("OSAMA BIN LADEN PVT LTD", "Iraq");
 
-    static final Map<String, String> AP_DATA_1 = Map.of("NAME", "John Smith");
-    static final Map<String, String> AP_DATA_2 =
-        Map.of("ADDRESS", "2ND FLOOR ANDREWS BUILDING NO 130 NAWALA ROAD COLOMBO 5, "
+    static final Map<AlertedPartyKey, String> AP_DATA_1 = Map.of(ALERTED_NAME_KEY, "John Smith");
+    static final Map<AlertedPartyKey, String> AP_DATA_2 =
+        Map.of(ALERTED_ADDRESS_KEY, "2ND FLOOR ANDREWS BUILDING NO 130 NAWALA ROAD COLOMBO 5, "
             + "SRI LANKA");
-    static final Map<String, String> AP_DATA_3 =
-        Map.of("COMPANY NAME", "BOGAWANTALAWA COFFEE PVT LTD");
-    static final Map<String, String> AP_DATA_4 =
-        Map.of("COMPANY NAME", "BOGAWANTALAWA COFFEE PVT LTD", "NAME",
+    static final Map<AlertedPartyKey, String> AP_DATA_3 =
+        Map.of(ALERTED_COMPANY_NAME_KEY, "BOGAWANTALAWA COFFEE PVT LTD");
+    static final Map<AlertedPartyKey, String> AP_DATA_4 =
+        Map.of(ALERTED_COMPANY_NAME_KEY, "BOGAWANTALAWA COFFEE PVT LTD", ALERTED_NAME_KEY,
             "BOGAWANTALAWA COFFEE PVT LTD");
-    static final Map<String, String> AP_DATA_5 = Map.of("ADDRESS",
+    static final Map<AlertedPartyKey, String> AP_DATA_5 = Map.of(ALERTED_ADDRESS_KEY,
         "COMPANY\n4TH FLOOR SABA ISLAMIC BUILDING\nOPP NOUGAPRIX SUPERMARKET\n"
             + "REPUBLIC OF DJIBOUTI / DJIBOUTI",
-        "NAMEADDRESS FIRST SEGMENT", "SABA INTERNATIONAL ");
-    static final Map<String, String> AP_DATA_5_MATCH =
-        Map.of("NAMEADDRESS FIRST SEGMENT", "SABA INTERNATIONAL ");
-    static final Map<String, String> AP_DATA_6 = Map.of("NAME", "BOGAWANTALAWA COFFEE "
-        + "PVT LTD");
-    static final Map<String, String> AP_DATA_7 =
-        Map.of("COUNTRY TOWN", "AM", "NAME", "BOGAWANTALAWA COFFEE PVT LTD");
-    static final Map<String, String> AP_DATA_9 = Map.of("NAME", "BOGAWANTALAWA COFFEE "
-        + "PVT LTD");
-    static final Map<String, String> AP_DATA_9_MATCH = Map.of("*", "");
+        ALERTED_NAMEADDRESS_SEGMENT_KEY, "SABA INTERNATIONAL ");
+    static final Map<AlertedPartyKey, String> AP_DATA_5_MATCH =
+        Map.of(ALERTED_NAMEADDRESS_SEGMENT_KEY, "SABA INTERNATIONAL ");
+    static final Map<AlertedPartyKey, String> AP_DATA_6 =
+        Map.of(ALERTED_NAME_KEY, "BOGAWANTALAWA COFFEE "
+            + "PVT LTD");
+    static final Map<AlertedPartyKey, String> AP_DATA_7 =
+        Map.of(ALERTED_COUNTRY_TOWN_KEY, "AM", ALERTED_NAME_KEY, "BOGAWANTALAWA COFFEE PVT LTD");
+    static final Map<AlertedPartyKey, String> AP_DATA_9 =
+        Map.of(ALERTED_NAME_KEY, "BOGAWANTALAWA COFFEE "
+            + "PVT LTD");
+    static final Map<AlertedPartyKey, String> AP_DATA_9_MATCH = Map.of(WILDCARD_SYMBOL, "");
 
-    static final Map<String, String> AP_DATA_10 =
-        Map.of("ADDRESS", "IFSCICIC0001874 CITY NASIK, BRANCH INDIRANAGAR INDIA",
-            "NAME", "ICIC BANK LTD");
+    static final Map<AlertedPartyKey, String> AP_DATA_10 =
+        Map.of(ALERTED_ADDRESS_KEY, "IFSCICIC0001874 CITY NASIK, BRANCH INDIRANAGAR INDIA",
+            ALERTED_NAME_KEY, "ICIC BANK LTD");
 
     private static WlData createIndWl(String wlName, String wlCountry) {
       return new WlData("INDIVIDUAL", wlName, wlCountry);

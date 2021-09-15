@@ -9,7 +9,7 @@ import java.util.Map;
 public class NameAddressCrossmatchAgentResponse {
 
   @NonNull Result result;
-  @NonNull Map<String, String> apProperties;
+  @NonNull Map<AlertedPartyKey, String> apProperties;
 
   public enum Result {
     NO_DECISION, CROSSMATCH, NO_CROSSMATCH

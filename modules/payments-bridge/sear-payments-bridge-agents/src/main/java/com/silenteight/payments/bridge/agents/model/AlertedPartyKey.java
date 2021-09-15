@@ -1,0 +1,13 @@
+package com.silenteight.payments.bridge.agents.model;
+
+public enum AlertedPartyKey {
+  WILDCARD_SYMBOL,
+  ALERTED_NAME_KEY,
+  ALERTED_COMPANY_NAME_KEY,
+  ALERTED_ADDRESS_KEY,
+  ALERTED_COUNTRY_TOWN_KEY,
+  ALERTED_NAMEADDRESS_SEGMENT_KEY,
+  EMPTY_ENTITY_TYPE,
+  ALERTED_NO_MATCH_KEY,
+  NO_MATCH
+}

@@ -1,0 +1,18 @@
+plugins {
+  id "java-library"
+  id "groovy"
+}
+
+dependencies {
+  implementation project(":sear-payments-bridge-agents")
+
+  implementation libraries.silenteight_sep_base_common
+
+  implementation libraries.spring_boot
+  implementation libraries.spring_context
+
+  implementation libraries.guava
+
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}

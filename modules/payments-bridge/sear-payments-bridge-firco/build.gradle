@@ -27,6 +27,7 @@ dependencies {
   implementation libraries.hibernate_types
   implementation libraries.jackson_annotations
   implementation libraries.jackson_databind
+  implementation libraries.jackson_dataformat_csv
   implementation libraries.jakarta_annotation_api
   implementation libraries.jakarta_validation_api
   implementation libraries.opencsv

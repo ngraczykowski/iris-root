@@ -1,0 +1,16 @@
+plugins {
+  id "java-library"
+  id "groovy"
+}
+
+dependencies {
+
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.data_source_api
+  implementation libraries.data_source_categories_api
+  implementation libraries.data_source_agentinput_api
+
+  implementation libraries.spring_boot
+  implementation libraries.spring_context
+  implementation libraries.grpc_server_spring_boot_starter
+}

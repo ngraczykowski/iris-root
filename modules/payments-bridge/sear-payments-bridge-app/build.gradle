@@ -13,6 +13,7 @@ dependencies {
   implementation project(":sear-payments-bridge-datasource")
   implementation project(":sear-payments-bridge-firco")
   implementation project(":sear-payments-bridge-governance")
+  implementation project(":sear-payments-bridge-svb-learning")
 
   // Utilities
   implementation libraries.commons_lang3
