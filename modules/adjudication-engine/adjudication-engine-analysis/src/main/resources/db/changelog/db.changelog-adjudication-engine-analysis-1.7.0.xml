@@ -15,4 +15,25 @@
         splitStatements="false"/>
   </changeSet>
 
+  <changeSet id="adjudication-engine-analysis-1.7.0_2" author="ahaczewski">
+    <dropView viewName="ae_alert_recommendation_query"/>
+    <dropView viewName="ae_comments_match_context"/>
+    <dropView viewName="ae_comments_feature_context"/>
+
+    <createView
+        viewName="ae_comments_feature_context"
+        path="sql/view_ae_comments_feature_context_v3.sql"
+        relativeToChangelogFile="true"/>
+
+    <createView
+        viewName="ae_comments_match_context"
+        path="sql/view_ae_comments_match_context_v4.sql"
+        relativeToChangelogFile="true"/>
+
+    <createView
+        viewName="ae_alert_recommendation_query"
+        path="sql/view_ae_alert_recommendation_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
 </databaseChangeLog>

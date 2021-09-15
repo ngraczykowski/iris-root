@@ -3,6 +3,10 @@ VALUES (1, 'AVIR128SCR13925IN123TEST0003:IN:GR-ESAN:273067', NOW(), NOW(), 5);
 INSERT INTO ae_alert
 VALUES (2, 'SCREEN8255R93250ENTSAN1065:EG:GR-ESAN:1013', NOW(), NOW(), 5);
 
+INSERT INTO ae_analysis_alert (analysis_id, alert_id, created_at)
+VALUES (1, 2, NOW())
+     , (1, 1, NOW());
+
 INSERT INTO ae_recommendation (analysis_id, alert_id, created_at, recommended_action)
 VALUES (1, 2, NOW(), 'TO_THE_MOON'),
        (1, 1, NOW(), 'TO_THE_MOON');
