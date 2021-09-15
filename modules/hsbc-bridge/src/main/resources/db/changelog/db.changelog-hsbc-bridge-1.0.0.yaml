@@ -686,3 +686,50 @@ databaseChangeLog:
         - dropView:
             catalogName: views
             viewName: hsbc_bridge_match_category_view
+
+  - changeSet:
+      id: 1.0.0-26
+      author: awojcicki
+      changes:
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: alert_payload_id
+            indexName: idx_bridge_alert_alert_payload_id
+            tableName: hsbc_bridge_alert
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: category_id
+            indexName: idx_bridge_match_category_category_id
+            tableName: hsbc_bridge_match_category
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: alert_id
+            indexName: idx_bridge_match_alert_id
+            tableName: hsbc_bridge_match
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: match_payload_id
+            indexName: idx_bridge_match_match_payload_id
+            tableName: hsbc_bridge_match
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: match_category_id
+            indexName: idx_bridge_match_category_values_match_category_id
+            tableName: hsbc_bridge_match_category_values
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: category_id
+            indexName: idx_bridge_category_allowed_values_category_id
+            tableName: hsbc_bridge_category_allowed_values
