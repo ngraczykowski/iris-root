@@ -1,15 +1,15 @@
 variable "adjudication_engine_artifact" {
-  type        = string
+  type = string
   description = "The name of file containing Adjudication Engine artifact"
 }
 
 variable "adjudication_engine_artifact_checksum" {
-  type        = string
+  type = string
   description = "Artifact SHA256 checksum should be provided"
 }
 
 variable "namespace" {
-  type    = string
+  type = string
   default = "dev"
 }
 
@@ -18,17 +18,17 @@ variable "memory" {
 }
 
 variable "http_tags" {
-  type    = list(string)
+  type = list(string)
   default = []
 }
 
 variable "grpcui_tags" {
-  type    = list(string)
+  type = list(string)
   default = []
 }
 
 locals {
-  jvm_memory                = ceil(var.memory * 0.7)
+  jvm_memory = ceil(var.memory * 0.7)
   perm_memory = ceil(var.memory * 0.2)
   database_node_destination = "eu4"
   database_volume = "/srv/sep-cluster/postgres/${var.namespace}-adjudication-engine"
@@ -52,7 +52,7 @@ job "adjudication-engine" {
 
     constraint {
       attribute = "${node.unique.name}"
-      value     = "${local.database_node_destination}"
+      value = "${local.database_node_destination}"
     }
 
     network {
@@ -65,14 +65,14 @@ job "adjudication-engine" {
       driver = "docker"
 
       template {
-        data        = "{{ key \"database/${var.namespace}-adjudication-engine/secrets\" }}"
+        data = "{{ key \"database/${var.namespace}-adjudication-engine/secrets\" }}"
         destination = "secrets/adjudication-engine-db.env"
-        env         = true
+        env = true
       }
 
       config {
-        image   = "postgres:10.18"
-        ports   = [
+        image = "postgres:10.18"
+        ports = [
           "tcp"
         ]
         volumes = [
@@ -86,14 +86,14 @@ job "adjudication-engine" {
         port = "tcp"
 
         check {
-          type     = "tcp"
+          type = "tcp"
           interval = "30s"
-          timeout  = "5s"
+          timeout = "5s"
         }
       }
 
       resources {
-        cpu    = 2048
+        cpu = 2048
         # MHz
         memory = 4096
         # MB
@@ -128,18 +128,18 @@ job "adjudication-engine" {
       ], var.http_tags)
 
       check_restart {
-        limit           = 3
-        grace           = "90s"
-        ignore_warnings = false
+        limit = 5
+        grace = "180s"
+        ignore_warnings = true
       }
 
       check {
-        name     = "Adjudication Engine HTTP Health Check"
-        type     = "http"
-        path     = "/rest/ae/management/health"
-        method   = "GET"
+        name = "Adjudication Engine HTTP Health Check"
+        type = "http"
+        path = "/rest/ae/management/health"
+        method = "GET"
         interval = "30s"
-        timeout  = "2s"
+        timeout = "10s"
       }
     }
 
@@ -152,17 +152,11 @@ job "adjudication-engine" {
         "gRPC.port=${NOMAD_PORT_grpc}",
       ]
 
-      check_restart {
-        limit           = 3
-        grace           = "90s"
-        ignore_warnings = false
-      }
-
       check {
-        name     = "gRPC Port Alive Check"
-        type     = "tcp"
-        interval = "10s"
-        timeout  = "2s"
+        name = "gRPC Port Alive Check"
+        type = "tcp"
+        interval = "30s"
+        timeout = "10s"
       }
     }
 
@@ -181,18 +175,18 @@ job "adjudication-engine" {
       driver = "raw_exec"
 
       artifact {
-        source      = var.adjudication_engine_artifact
+        source = var.adjudication_engine_artifact
         options {
           checksum = "${var.adjudication_engine_artifact_checksum}"
         }
-        mode        = "file"
+        mode = "file"
         destination = "local/adjudication-engine-app.jar"
       }
 
       template {
-        data        = "{{ key \"${var.namespace}/adjudication-engine/secrets\" }}"
+        data = "{{ key \"${var.namespace}/adjudication-engine/secrets\" }}"
         destination = "secrets/adjudication-engine.env"
-        env         = true
+        env = true
       }
 
       template {
@@ -295,6 +289,13 @@ job "adjudication-engine" {
       lifecycle {
         hook = "poststart"
         sidecar = true
+      }
+
+      restart {
+        interval = "1m"
+        attempts = 5
+        delay = "20s"
+        mode = "delay"
       }
 
       artifact {
