@@ -52,7 +52,10 @@ pipeline {
         stage('Deployment'){
             agent {
                 label 'nomad'
-            }  // TODO revert changes here
+            }
+            when {
+                branch 'master'
+            }
             stages {
                 stage('Upload artifacts') {
                     steps {
