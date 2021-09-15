@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 public class ResidencyCountryFeatureQueryFacade implements ResidencyCountryFeatureQuery {
 
   private final IndividualComposite individualComposite;
+  private static final String INDIVIDUAL_RESIDENCIES_REGEX = "([^a-zA-Z0-9' ]+)";
 
   @Override
   public Stream<String> worldCheckIndividualsResidencies() {
@@ -41,12 +42,13 @@ public class ResidencyCountryFeatureQueryFacade implements ResidencyCountryFeatu
     var customerIndividuals = individualComposite.getCustomerIndividual();
 
     return Stream.of(
-        customerIndividuals.getResidenceCountries(),
-        customerIndividuals.getAddressCountry(),
-        customerIndividuals.getCountryOfResidence(),
-        customerIndividuals.getEdqResidenceCountriesCode(),
-        customerIndividuals.getSourceCountry()
-    );
+            customerIndividuals.getResidenceCountries(),
+            customerIndividuals.getAddressCountry(),
+            customerIndividuals.getCountryOfResidence(),
+            customerIndividuals.getEdqResidenceCountriesCode(),
+            customerIndividuals.getSourceCountry()
+        )
+        .map(x -> x.replaceAll(INDIVIDUAL_RESIDENCIES_REGEX, "").trim());
   }
 
   private static Stream<String> extractWorldCheckResidencies(
