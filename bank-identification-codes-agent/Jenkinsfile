@@ -51,7 +51,8 @@ pipeline {
 
         stage('Deployment'){
             agent {
-                label 'nomad'   // TODO revert hack here
+                label 'nomad'
+            }  // TODO revert changes here
             stages {
                 stage('Upload artifacts') {
                     steps {
