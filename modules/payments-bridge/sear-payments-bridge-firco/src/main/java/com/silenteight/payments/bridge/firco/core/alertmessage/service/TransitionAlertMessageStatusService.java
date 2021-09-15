@@ -4,17 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus;
-import com.silenteight.payments.bridge.firco.core.alertmessage.port.TransitionAlertMessageStatusUseCase;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
 import java.util.UUID;
+import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @Service
-class TransitionAlertMessageStatusService implements TransitionAlertMessageStatusUseCase {
+class TransitionAlertMessageStatusService {
 
   private final AlertMessageStatusRepository repository;
 
@@ -22,15 +21,24 @@ class TransitionAlertMessageStatusService implements TransitionAlertMessageStatu
   private Clock clock = Clock.systemUTC();
 
   @Transactional
-  @Override
   public void transitionAlertMessageStatus(
       UUID alertMessageId, AlertMessageStatus destinationStatus) {
 
     var entity = repository
         .findByAlertMessageId(alertMessageId)
-        .orElseGet(() -> new AlertMessageStatusEntity(alertMessageId))
-        .transitionStatus(destinationStatus, clock);
-
+        .orElseThrow();
+    entity.transitionStatusOrElseThrow(destinationStatus, clock);
     repository.save(entity);
   }
+
+  @Transactional
+  public void initState(UUID alertMessageId) {
+    var entity = repository.findByAlertMessageId(alertMessageId);
+    if (entity.isPresent()) {
+      throw new IllegalStateException("Unable to re-initialize the initial state for alertID: " +
+          alertMessageId);
+    }
+    repository.save(new AlertMessageStatusEntity(alertMessageId));
+  }
+
 }

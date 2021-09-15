@@ -11,6 +11,11 @@ ext {
   silenteightDataSourceApiVersion = "0.6.0-SNAPSHOT"
   silenteightCommonsVersion = "2.1.0"
   silenteightSepBaseVersion = "1.12.2"
+
+  //***********************************
+  // Others libraries
+  //***********************************
+  shedlockVersion = "4.27.0"
 }
 
 // @formatter:off
@@ -225,6 +230,8 @@ libraries.querydsl_jpa = [group: 'com.querydsl', name: 'querydsl-jpa']
 libraries.reactor_grpc_stub = [group: 'com.salesforce.servicelibs', name: 'reactor-grpc-stub']
 libraries.snakeyaml = [group: 'org.yaml', name: 'snakeyaml']
 libraries.tomcat_embed_el = [group: 'org.apache.tomcat.embed', name: 'tomcat-embed-el']
+libraries.shedlock_jdbc_provider = [group: 'net.javacrumbs.shedlock', name: 'shedlock-provider-jdbc-template', version: shedlockVersion]
+libraries.shedlock_spring = [group: 'net.javacrumbs.shedlock', name: 'shedlock-spring', version: shedlockVersion]
 
 // Testing
 libraries.assertj_json = [group: 'com.revinate', name: 'assertj-json']

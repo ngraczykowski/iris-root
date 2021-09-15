@@ -7,14 +7,9 @@ import com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessag
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.UUID;
 import javax.persistence.*;
 
-import static com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus.RECOMMENDED;
-import static com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus.REJECTED_DAMAGED;
-import static com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus.REJECTED_OUTDATED;
-import static com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus.REJECTED_OVERFLOWED;
 import static lombok.AccessLevel.NONE;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -26,9 +21,6 @@ import static lombok.AccessLevel.PROTECTED;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity(name = "AlertMessageStatus")
 class AlertMessageStatusEntity extends BaseVersionedEntity {
-
-  private static final AlertMessageStatus[] FINAL_STATUSES =
-      { RECOMMENDED, REJECTED_OUTDATED, REJECTED_DAMAGED, REJECTED_OVERFLOWED };
 
   @Id
   @Column(updatable = false, nullable = false)
@@ -43,50 +35,56 @@ class AlertMessageStatusEntity extends BaseVersionedEntity {
 
   private OffsetDateTime rejectedAt;
 
-  @Column(updatable = false, nullable = false)
+  @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   @NonNull
   private AlertMessageStatus status;
 
   AlertMessageStatusEntity(UUID alertMessageId) {
     this.alertMessageId = alertMessageId;
-    status = AlertMessageStatus.RECEIVED;
+    this.status = AlertMessageStatus.RECEIVED;
   }
 
-  AlertMessageStatusEntity transitionStatus(AlertMessageStatus destinationStatus, Clock clock) {
-    if (status == destinationStatus) {
-      return this;
+  boolean transitionStatus(AlertMessageStatus destinationStatus, Clock clock) {
+    if (status == destinationStatus || status.isFinal()) {
+      return false;
     }
 
-    if (Arrays.binarySearch(FINAL_STATUSES, status) < 0) {
+    if (!status.isTransitionAllowed(destinationStatus)) {
+      return false;
+    }
+
+    status = destinationStatus;
+    updateChangeTime(OffsetDateTime.now(clock));
+    setCurrentTimeForUpdatedAt();
+    return true;
+  }
+
+  void transitionStatusOrElseThrow(AlertMessageStatus destinationStatus, Clock clock) {
+    if (!transitionStatus(destinationStatus, clock)) {
       throw new IllegalStateException(
-          "Unable to transition to status " + destinationStatus + ", from final status " + status);
+          "Unable to transition to status " + destinationStatus + ", from status " + status);
     }
+  }
 
-    switch (destinationStatus) {
+  private void updateChangeTime(OffsetDateTime dateTime) {
+    switch (status) {
       case STORED:
-        storedAt = OffsetDateTime.now(clock);
+        storedAt = dateTime;
         break;
       case ACCEPTED:
-        acceptedAt = OffsetDateTime.now(clock);
+        acceptedAt = dateTime;
         break;
       case RECOMMENDED:
-        recommendedAt = OffsetDateTime.now(clock);
+        recommendedAt = dateTime;
         break;
       case REJECTED_OUTDATED:
       case REJECTED_DAMAGED:
       case REJECTED_OVERFLOWED:
-        rejectedAt = OffsetDateTime.now(clock);
+        rejectedAt = dateTime;
         break;
-      case RECEIVED:
       default:
-        throw new IllegalStateException("Invalid destination status: " + destinationStatus);
     }
-
-    setCurrentTimeForUpdatedAt();
-
-    status = destinationStatus;
-
-    return this;
   }
+
 }

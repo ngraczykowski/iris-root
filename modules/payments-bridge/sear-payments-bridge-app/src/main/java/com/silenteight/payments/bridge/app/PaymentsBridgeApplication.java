@@ -8,6 +8,7 @@ import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallbac
 import com.silenteight.commons.app.spring.SpringApplicationTemplate;
 import com.silenteight.payments.bridge.PaymentsBridgeModule;
 
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.WebApplicationType;
@@ -36,6 +37,7 @@ import static java.lang.System.setProperty;
 @EnableIntegrationGraphController
 @EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 @EnableScheduling
+@EnableSchedulerLock(defaultLockAtMostFor = "5s")
 @EntityScan(basePackageClasses = PaymentsBridgeModule.class)
 @IntegrationComponentScan(basePackageClasses = PaymentsBridgeModule.class)
 @Slf4j

@@ -95,6 +95,10 @@ dependencies {
 
   // Keycloak
   implementation libraries.keycloak_spring_boot_starter
+
+  // Shedlock
+  implementation libraries.shedlock_spring
+  implementation libraries.shedlock_jdbc_provider
 }
 
 jar {

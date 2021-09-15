@@ -21,6 +21,7 @@ dependencies {
   implementation libraries.spring_security_core
   implementation libraries.spring_web
   implementation libraries.spring_webmvc
+  implementation libraries.spring_data_jpa
 
   implementation libraries.guava
   implementation libraries.hibernate_validator
@@ -32,6 +33,7 @@ dependencies {
   implementation libraries.jakarta_validation_api
   implementation libraries.opencsv
   implementation libraries.protobuf_java_util
+  implementation libraries.shedlock_spring
 
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.spring_security_test
