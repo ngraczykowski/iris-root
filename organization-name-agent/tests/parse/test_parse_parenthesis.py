@@ -24,7 +24,7 @@ def test_parenthesis(name, expected_parenthesis):
         ("BAIANAT (ANTIGUO SMAS IP)", ("antiguo", "smas", "ip")),
         ("Alfa Limited (Beta China) Company", ("beta",)),
         ("Parser (Brackets Poland (Second)) sp. z. o. o", ("brackets", "second")),
-        ("Name_one (Spain Name_2 Portugal Netherlands) LTD", ("name_2",)),
+        ("Name_one (Spain Name2 Portugal Netherlands) LTD", ("name2",)),
     ],
 )
 def test_get_name_from_brackets(name, expected):

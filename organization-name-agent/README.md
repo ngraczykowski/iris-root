@@ -1,4 +1,4 @@
-# Company name
+# Organization name agent
 
 - [Usage](#usage)
   - [Installing](#installing)
@@ -81,7 +81,7 @@ python company_name-0.1.0.dev0.pyz -c {configuration_dir} --grpc --agent-exchang
 
 ### using agent in your python code
 
-To use agent in your python code, installation is necessary. After that, it depends what do you want to do.
+To use agent in your python code, installation is necessary. After that, it depends on what do you want to do.
 
 For simple comparison of two names:
 ```
@@ -167,8 +167,8 @@ Currently there is no way to use different configuration in one running agent.
 Static data used for comparison is currently stored in company_name/resources directory. It contains:
 * joining_words.json - words such as "and"
 * weak_words.json - words ignored in creating abbreviation or extracting legal terms or common words
-* common_prefixes.json - commonly used at the begging of company name, such as "group"
-* common_suffixes.json - commonly used at the end of company name, such as "manufacturing", "sales" or "enterprise"
+* common_prefixes.json - commonly used at the begging of organization name, such as "group"
+* common_suffixes.json - commonly used at the end of organization name, such as "manufacturing", "sales" or "enterprise"
 * legal_terms.json - legal entity terms, with possible abbreviations and meaning
 * countries.json - different names and abbreviations for countries
 
