@@ -27,25 +27,8 @@ class SelectUnsolvedMatchesQuery {
 
   @Language("PostgreSQL")
   private static final String SQL =
-      "SELECT"
-          + " apr.alert_id,\n"
-          + "       aamfveq.match_id,\n"
-          + "       aamfveq.category_values,\n"
-          + "       aamfveq.feature_values\n"
-          + "FROM ae_pending_recommendation apr\n"
-          + "         JOIN ae_analysis_feature_vector_elements_query aafveq\n"
-          + "              on apr.analysis_id = aafveq.analysis_id\n"
-          + "         JOIN ae_analysis_match_feature_vector_elements_query aamfveq\n"
-          + "              on apr.alert_id = aamfveq.alert_id\n"
-          + "                  AND apr.analysis_id = aamfveq.analysis_id\n"
-          + "                  AND aafveq.category_ids = aamfveq.category_ids\n"
-          + "                  AND aafveq.agent_config_feature_ids ="
-          + " aamfveq.agent_config_feature_ids\n"
-          + "         LEFT JOIN ae_match_solution ams\n"
-          + "                   on aamfveq.match_id = ams.match_id"
-          + " AND apr.analysis_id = ams.analysis_id\n"
-          + "WHERE ams.match_id IS NULL\n"
-          + "  AND apr.analysis_id = ?\n"
+      "SELECT *\n"
+          + "FROM select_unsolved_matches(?)\n"
           + "LIMIT ?";
 
   private static final UnsolvedMatchMapper ROW_MAPPER = new UnsolvedMatchMapper();
