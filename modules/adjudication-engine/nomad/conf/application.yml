@@ -15,9 +15,9 @@ grpc:
     data-source:
       address: discovery:/{{ env "NOMAD_NAMESPACE" }}-hsbc-bridge
 
-ae:
-  # @formatter:off
+# @formatter:off
 
+ae:
   db:
     name: {{ env "NOMAD_NAMESPACE" }}-adjudication-engine
 {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
@@ -36,26 +36,26 @@ spring:
     host:
     virtual-host: /{{ env "NOMAD_NAMESPACE" }}
 
-  # @formatter:on
-
-#-------------------------------------------------------------------------------------------------
-# Consul Service Discovery
-#-------------------------------------------------------------------------------------------------
-cloud:
-  consul:
-    enabled: true
-    host: localhost
-    port: 8500
-    scheme: http
-      discovery:
-        enabled: true
-        register: false
-        register-health-check: false
-        catalog-services-watch:
+  #-------------------------------------------------------------------------------------------------
+  # Consul Service Discovery
+  #-------------------------------------------------------------------------------------------------
+  cloud:
+    consul:
+      enabled: true
+      host: localhost
+      port: 8500
+      scheme: http
+        discovery:
           enabled: true
-        server-list-query-tags:
-          data-source: grpc
-          governance: grpc
-      service-registry:
-        auto-registration:
-          enabled: false
+          register: false
+          register-health-check: false
+          catalog-services-watch:
+            enabled: true
+          server-list-query-tags:
+            data-source: grpc
+            governance: grpc
+        service-registry:
+          auto-registration:
+            enabled: false
+
+# @formatter:on
