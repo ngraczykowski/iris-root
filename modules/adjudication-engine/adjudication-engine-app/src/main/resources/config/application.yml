@@ -25,7 +25,7 @@ ae:
   recommendation:
     jdbc:
       pending-alerts:
-        fetch-size: 8192
+        fetch-size: 1024
     comment:
       template-name: alert
 

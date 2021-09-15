@@ -15,7 +15,7 @@ import javax.validation.constraints.Min;
 @Validated
 class JdbcRecommendationProperties {
 
-  static final int DEFAULT_FETCH_SIZE = 8_192;
+  static final int DEFAULT_FETCH_SIZE = 1_024;
 
   @Valid
   @NestedConfigurationProperty
