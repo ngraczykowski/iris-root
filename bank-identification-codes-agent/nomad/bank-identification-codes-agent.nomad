@@ -1,6 +1,6 @@
 variable "bank_identification_codes_agent_version" {
   type = string
-  description = "Company name agent version"
+  description = "Bank identification codes agent version"
 }
 
 variable "bank_identification_codes_agent_artifact" {
@@ -147,7 +147,7 @@ job "bank-identification-codes-agent" {
       config {
         image = "python:3.7"
         command = "python"
-        args = ["/app/ts_bank_identification_codes_agent-${var.bank_identification_codes_agent_version}.pyz", "-c", "/app/config", "--grpc", "-v"]
+        args = ["/app/bank_identification_codes_agent-${var.bank_identification_codes_agent_version}.pyz", "-c", "/app/config", "--grpc", "-v"]
         network_mode = "host"
         volumes = ["local:/app"]
       }
