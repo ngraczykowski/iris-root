@@ -17,5 +17,6 @@
 # Other crap
 /compiler.xml
 /jarRepositories.xml
+/libraries/
 /libraries-with-intellij-classes.xml
 /uiDesigner.xml

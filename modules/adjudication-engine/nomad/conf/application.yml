@@ -45,17 +45,17 @@ spring:
       host: localhost
       port: 8500
       scheme: http
-        discovery:
+      discovery:
+        enabled: true
+        register: false
+        register-health-check: false
+        catalog-services-watch:
           enabled: true
-          register: false
-          register-health-check: false
-          catalog-services-watch:
-            enabled: true
-          server-list-query-tags:
-            data-source: grpc
-            governance: grpc
-        service-registry:
-          auto-registration:
-            enabled: false
+        server-list-query-tags:
+          data-source: grpc
+          governance: grpc
+      service-registry:
+        auto-registration:
+          enabled: false
 
 # @formatter:on
