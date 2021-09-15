@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class KeycloakConfigResolverConfiguration {
+class KeycloakConfigResolverConfiguration {
 
   @Bean
   public KeycloakConfigResolver keycloakConfigResolver() {
