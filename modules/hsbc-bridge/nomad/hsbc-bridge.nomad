@@ -189,6 +189,13 @@ job "hsbc-bridge" {
         hook = "poststart"
         sidecar = true
       }
+      
+      restart {
+        interval = "1m"
+        attempts = 5
+        delay    = "20s"
+        mode     = "delay"
+      }
 
       artifact {
         source = "https://github.com/fullstorydev/grpcui/releases/download/v1.1.0/grpcui_1.1.0_linux_x86_64.tar.gz"
