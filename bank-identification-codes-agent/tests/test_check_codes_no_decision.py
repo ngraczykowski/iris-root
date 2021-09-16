@@ -38,6 +38,7 @@ def test_too_short_wl_matching_text(
     result = codes.check()
     assert result.solution == Solution.NO_DECISION
     assert isinstance(result.reason, MatchingTextTooShortToBeCodeReason)
+    assert result.reason.watchlist_matching_text == wl_matching_text
 
 
 @pytest.mark.parametrize(
@@ -53,6 +54,8 @@ def test_wl_text_not_match_ap_matching_field(
     result = codes.check()
     assert result.solution == Solution.NO_DECISION
     assert isinstance(result.reason, MatchingTextDoesNotMatchMatchingFieldReason)
+    assert result.reason.watchlist_matching_text == wl_matching_text
+    assert result.reason.altered_party_matching_field == ap_matching_field
 
 
 @pytest.mark.parametrize(
@@ -68,3 +71,6 @@ def test_matching_text_not_match_any_of_codes(
     result = codes.check()
     assert result.solution == Solution.NO_DECISION
     assert isinstance(result.reason, MatchingTextDoesNotMatchWlSearchCodeReason)
+    assert result.reason.watchlist_matching_text == wl_matching_text
+    assert result.reason.watchlist_type == WL_TYPE
+    assert result.reason.watchlist_search_codes == [wl_search_codes[0].upper()]
