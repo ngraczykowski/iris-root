@@ -53,6 +53,15 @@ pb:
       endpoint: "http://localhost:5000/callback-recommendation"
       enabled: false
 
+  #-------------------------------------------------------------------------------------------------
+  # SECURITY
+  #
+  # The security is disabled by default for local development.
+  # Please see the README.md for information on how to enable it.
+  #-------------------------------------------------------------------------------------------------
+  security:
+    disable-security: true
+
 spring:
   #-------------------------------------------------------------------------------------------------
   # MULTI-THREADING

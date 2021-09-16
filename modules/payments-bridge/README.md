@@ -33,6 +33,19 @@ Use my prepared script to submit a sample request:
 
 # Authenticate the request to the server
 
+## Enabling endpoint security in development
+
+The development configuration disables service security by default, to ease with testing.
+But for testing the authorization itself, you need to enable it.
+
+To enable security, set the following property:
+
+    pb.security.disable-security: false
+
+> **NOTE**
+>
+> The security is enabled by default.
+
 ## Getting access token from Keycloak
 
 To get access token for the client `sierra-dev-api` run: 
