@@ -28,7 +28,7 @@ class SelectUnsolvedMatchesQuery {
   @Language("PostgreSQL")
   private static final String SQL =
       "SELECT *\n"
-          + "FROM select_unsolved_matches(?)\n"
+          + "FROM ae_select_unsolved_matches(?)\n"
           + "LIMIT ?";
 
   private static final UnsolvedMatchMapper ROW_MAPPER = new UnsolvedMatchMapper();

@@ -36,4 +36,17 @@
         relativeToChangelogFile="true"/>
   </changeSet>
 
+  <changeSet id="adjudication-engine-analysis-1.7.0_3" author="mwilkowski">
+    <sqlFile
+        path="sql/drop_function_unsolved_matches_query.sql"
+        relativeToChangelogFile="true"/>
+    <sqlFile
+        path="sql/drop_function_ae_select_unsolved_matches.sql"
+        relativeToChangelogFile="true"/>
+    <sqlFile
+        path="sql/create_function_ae_select_unsolved_matches.sql"
+        relativeToChangelogFile="true"
+        splitStatements="false"/>
+  </changeSet>
+
 </databaseChangeLog>
