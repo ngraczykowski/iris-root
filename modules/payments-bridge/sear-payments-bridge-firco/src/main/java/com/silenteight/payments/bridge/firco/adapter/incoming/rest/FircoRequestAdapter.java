@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.firco.core.alertmessage.port.CreateAlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.dto.input.RequestDto;
-import com.silenteight.payments.bridge.firco.security.SecurityFacade;
+import com.silenteight.payments.bridge.firco.security.port.AuthenticateUseCase;
 
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 class FircoRequestAdapter {
 
-  private final SecurityFacade securityFacade;
+  private final AuthenticateUseCase authenticateUseCase;
   private final CreateAlertMessageUseCase createAlertMessageUseCase;
 
   void sendMessage(RequestDto requestDto, String receiveUrl, String dataCenter) {
@@ -29,7 +29,7 @@ class FircoRequestAdapter {
           requestDto.getAuthenticationToken().getPrincipal(), requestDto.getAuthenticationRealm());
     }
 
-    securityFacade.authenticate(requestDto.getAuthenticationToken());
+    authenticateUseCase.authenticate(requestDto.getAuthenticationToken());
   }
 
   private void handleRequest(RequestDto requestDto, String receiveUrl, String dataCenter) {

@@ -1,6 +1,9 @@
-package com.silenteight.payments.bridge.firco.security;
+package com.silenteight.payments.bridge.firco.security.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import com.silenteight.payments.bridge.firco.security.port.AuthenticateUseCase;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -9,24 +12,31 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-class AuthenticateUseCase {
+@Slf4j
+class AuthenticateService implements AuthenticateUseCase {
 
   private final AuthenticationManager authenticationManager;
 
-  void authenticate(Authentication authentication) {
-    if (isAuthenticated())
-      return;
+  @Override
+  public boolean authenticate(Authentication authentication) {
+    if (isAuthenticated()) {
+      log.info("Already authenticated!");
+      return false;
+    }
 
     var authenticated = authenticationManager.authenticate(authentication);
 
     setAuthentication(authenticated);
+
+    log.info("Authenticated successfully!");
+    return true;
   }
 
-  private boolean isAuthenticated() {
+  static boolean isAuthenticated() {
     return SecurityContextHolder.getContext().getAuthentication() != null;
   }
 
-  private void setAuthentication(Authentication authentication) {
+  static void setAuthentication(Authentication authentication) {
     SecurityContextHolder.getContext().setAuthentication(authentication);
   }
 }

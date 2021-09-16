@@ -78,10 +78,12 @@ spring:
 # SECURITY
 #---------------------------------------------------------------------------------------------------
 
-# Keycloak configuration
+#------------------------------------------------------------------------------
+# Ingress authorization
+#------------------------------------------------------------------------------
 keycloak:
-  realm:
-  auth-server-url:
+  realm: sierra
+  auth-server-url: https://auth.silent8.cloud
   ssl-required: external
   resource:
   credentials:
@@ -89,16 +91,23 @@ keycloak:
   use-resource-role-mappings: true
   bearer-only: true
 
-# CMAPI Auth Server configuration
+#------------------------------------------------------------------------------
+# Egress authorization
+#
+# NOTE(ahaczewski): The configuration below is for development purposes only,
+#   and the `egress-mock` realm in our Keycloak is used to simulate the customer
+#   auth server.
+#
+#------------------------------------------------------------------------------
 rest:
   security:
-    issuer-uri:
+    issuer-uri: https://auth.silent8.cloud/realms/egress-mock
 
 security:
   oauth2:
     client:
-      client-id:
-      client-secret:
+      client-id: cmapi-dev
+      # Set the client-secret via environment variable SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
       user-authorization-uri: ${rest.security.issuer-uri}/protocol/openid-connect/auth
       access-token-uri: ${rest.security.issuer-uri}/protocol/openid-connect/token
       scope: openid

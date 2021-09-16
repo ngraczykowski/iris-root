@@ -44,6 +44,7 @@ To get access token for the client `sierra-dev-api` run:
 where `$CLIENT_REALM` is `sierra`, `$CLIENT_ID` is `sierra-dev-api`, and `$CLIENT_SECRET` is available [here](https://auth.silent8.cloud/admin/master/console/#/realms/sierra/clients/1e5bb2aa-d17b-4746-8e24-fd3bb21d1259/credentials).
 
 ### Test access token:
+
 The generated access token `$TOKEN` can be tested by following the steps below:
 
 1. Set `keycloak` settings in `application.yml`: 
@@ -63,14 +64,14 @@ The generated access token `$TOKEN` can be tested by following the steps below:
 # Authorize the requests to the CMAPI
 
 ## Configuration of CMAPI Auth Server:
+
 1. Set the following settings:
-    - `rest.security.issuer-uri`;
-    - `security.oauth2.client.client-id`;
     - `security.oauth2.client.client-secret`;
 1. Enable callback by setting:
     - `pb.cmapi.callback.enabled: true`
 
 ### Test CMAPI callback
+
 1. Run `cmapi-mock` by following its `REAMDE.md`.
 1. Send a request to http://localhost:24602/rest/payments/test-callback Details on how to a send request are in [Test access token](#test-access-token) section.
 1. Verify the `Headers: Authorization: Bearer` from `cmapi-mock` debug log.
