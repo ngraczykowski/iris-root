@@ -5,6 +5,7 @@ import org.springframework.amqp.core.Declarables;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.*;
 import static org.springframework.amqp.core.ExchangeBuilder.directExchange;
 import static org.springframework.amqp.core.ExchangeBuilder.topicExchange;
 
@@ -17,13 +18,13 @@ public class RabbitCommonSchemaConfiguration {
    * DO NOT REMOVE ELEMENTS FROM THIS LIST.
    */
   private static final Declarable[] COMMON_SCHEMA = {
-      directExchange("ae.command").durable(true).build(),
-      topicExchange("ae.event").durable(true).build(),
-      topicExchange("agent.request").durable(true).build(),
-      topicExchange("agent.response").durable(true).build(),
-      topicExchange("gov.event").durable(true).build(),
-      directExchange("sim.command").durable(true).build(),
-      topicExchange("wh.event").durable(true).build()
+      directExchange(AE_COMMAND_EXCHANGE).durable(true).build(),
+      topicExchange(AE_EVENT_EXCHANGE).durable(true).build(),
+      topicExchange(AGENT_REQUEST_EXCHANGE).durable(true).build(),
+      topicExchange(AGENT_RESPONSE_EXCHANGE).durable(true).build(),
+      topicExchange(GOV_EVENT_EXCHANGE).durable(true).internal().build(),
+      directExchange(SIM_COMMAND_EXCHANGE).durable(true).build(),
+      topicExchange(WH_EVENT_EXCHANGE).durable(true).build()
   };
 
   @Bean
