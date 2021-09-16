@@ -58,6 +58,7 @@ silenteight.bridge:
         '[PEP True Match]': analyst_decision_true_positive
         '[True Match Exit / Retained Recommended]': analyst_decision_true_positive
         '[False Positive]': analyst_decision_false_positive
+        '[AAA False Positive]': analyst_decision_false_positive
         '[Level 1 Review]': analyst_decision_pending
         '[Level 2 Review]': analyst_decision_pending
         '[Level 3 Review]': analyst_decision_pending
