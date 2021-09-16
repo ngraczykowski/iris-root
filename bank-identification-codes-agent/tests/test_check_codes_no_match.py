@@ -17,7 +17,7 @@ WL_TYPE = "Some text"  # this param is constant, not modified by any check rule
             "Text with bic codeXXX",  # XXX - headquarters string
             "bic code",
             ["some search code"],
-            ["some other bic", "matching biccode"],
+            ["matching biccode", "some other bic"],
         )
     ],
 )
@@ -30,6 +30,10 @@ def test_wl_matching_text_in_bic_codes_headquarters_string(
     result = codes.check()
     assert result.solution == Solution.NO_MATCH
     assert isinstance(result.reason, MatchingTextMatchesWlBicCodeReason)
+    assert result.reason.watchlist_matching_text == wl_matching_text
+    assert result.reason.watchlist_type == WL_TYPE
+    assert result.reason.watchlist_bic_code == wl_bic_codes[0].upper()
+    assert result.reason.conclusion == "MatchingTextMatchesWlBicCodeReason"
 
 
 @pytest.mark.parametrize(
@@ -48,3 +52,7 @@ def test_exact_match_search_code(
     result = codes.check()
     assert result.solution == Solution.NO_MATCH
     assert isinstance(result.reason, MatchingTextMatchesWlSearchCodeReason)
+    assert result.reason.watchlist_matching_text == wl_matching_text
+    assert result.reason.watchlist_type == WL_TYPE
+    assert result.reason.watchlist_search_codes == [wl_search_codes[0].upper()]
+    assert result.reason.conclusion == "MatchingTextMatchesWlSearchCodeReason"
