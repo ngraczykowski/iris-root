@@ -42,10 +42,12 @@ class ConfigsTrackerTest {
     var firstListener = spy(FirstConfigListener.builder()
         .expectedAgent("confs", "confs1")
         .expectedAgent("nested/confs", "nested-confs1")
+        .expectedAgent("first_confs", "first-confs")
         .build());
     var secondListener = spy(SecondConfigListener.builder()
         .expectedAgent("confs", "confs2")
         .expectedAgent("nested/confs", "nested-confs2")
+        .expectedAgent("second_confs", "second-confs")
         .build());
 
     runTestFor(firstListener, secondListener);

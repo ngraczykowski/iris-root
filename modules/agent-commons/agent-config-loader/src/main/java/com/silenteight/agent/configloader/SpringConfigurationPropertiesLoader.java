@@ -22,6 +22,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 class SpringConfigurationPropertiesLoader {
 
@@ -68,14 +69,13 @@ class SpringConfigurationPropertiesLoader {
     return new Binder(ConfigurationPropertySources.from(sources));
   }
 
-  public <T> T load(@NonNull String prefix, @NonNull Class<T> propertiesClass) {
+  public <T> Optional<T> load(@NonNull String prefix, @NonNull Class<T> propertiesClass) {
     BindResult<T> bindResult = binder.bind(
         prefix,
         Bindable.of(propertiesClass),
         getBindHandler());
 
-    return bindResult
-        .orElseThrow(() -> new FailedToBindPropertiesException(prefix, propertiesClass));
+    return Optional.ofNullable(bindResult.orElse(null));
   }
 
   private static BindHandler getBindHandler() {
@@ -106,15 +106,6 @@ class SpringConfigurationPropertiesLoader {
 
     FailedToLoadPropertiesException(Resource resource, IOException cause) {
       super("Failed to load properties from '" + resource + "'", cause);
-    }
-  }
-
-  private static final class FailedToBindPropertiesException extends RuntimeException {
-
-    private static final long serialVersionUID = -1214605465150681377L;
-
-    FailedToBindPropertiesException(String prefix, Class<?> propertiesClass) {
-      super("Failed to bind properties prefixed with '" + prefix + "' to " + propertiesClass);
     }
   }
 }

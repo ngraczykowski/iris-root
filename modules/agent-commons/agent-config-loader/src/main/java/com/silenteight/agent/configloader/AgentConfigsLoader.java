@@ -1,34 +1,42 @@
 package com.silenteight.agent.configloader;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static com.silenteight.agent.configloader.ConfigParser.parse;
+import static com.silenteight.agent.configloader.ConfigsPathFinder.findDirectory;
 import static java.nio.file.Files.isHidden;
 import static java.nio.file.Files.isRegularFile;
+import static java.nio.file.Files.walk;
 import static org.apache.commons.io.FilenameUtils.removeExtension;
 
+@Slf4j
 @RequiredArgsConstructor
-public class AgentConfigsLoader<PropertiesTypeT> {
+public class AgentConfigsLoader<T> {
 
   private final String configDir;
   private final String prefix;
-  private final Class<PropertiesTypeT> propertiesType;
+  private final Class<T> propertiesType;
 
-  public AgentConfigs<PropertiesTypeT> load() throws IOException {
-    Path configsRootPath = ConfigsPathFinder.findDirectory(configDir);
+  public AgentConfigs<T> load() throws IOException {
+    Path configsRootPath = findDirectory(configDir);
 
-    AgentConfigs<PropertiesTypeT> agentConfigs = new AgentConfigs<>();
+    AgentConfigs<T> agentConfigs = new AgentConfigs<>();
 
-    try (var configFiles = Files.walk(configsRootPath)) {
+    try (var configFiles = walk(configsRootPath)) {
       for (var iterator = configFiles.iterator(); iterator.hasNext(); ) {
         var configFile = iterator.next();
         if (isRegularFile(configFile) && !isHidden(configFile)) {
           String agentName = getAgentName(configsRootPath, configFile);
-          PropertiesTypeT agentProperties = ConfigParser.parse(configFile, prefix, propertiesType);
-          agentConfigs.put(agentName, agentProperties);
+          parse(configFile, prefix, propertiesType)
+              .ifPresent(properties -> {
+                log.info("Successfully loaded config {} [{}] from {}.",
+                    agentName, properties.getClass().getSimpleName(), configFile);
+                agentConfigs.put(agentName, properties);
+              });
         }
       }
     }

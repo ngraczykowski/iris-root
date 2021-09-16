@@ -27,13 +27,14 @@ class SpringConfigurationPropertiesLoaderTest {
 
   @Test
   void givenPropertiesFile_loadsExpectedProperties() {
-    SimpleProperties simpleProperties = createLoader("simple.properties")
-        .load("", SimpleProperties.class);
+    var simpleProperties =
+        createLoader("simple.properties").load("", SimpleProperties.class);
 
-    assertThat(simpleProperties.getString()).isEqualTo(EXPECTED_STRING);
-    assertThat(simpleProperties.getNumber()).isEqualTo(EXPECTED_NUMBER);
-    assertThat(simpleProperties.getBool()).isEqualTo(EXPECTED_BOOL);
-    assertThat(simpleProperties.getDuration()).isEqualTo(EXPECTED_DURATION);
+    assertThat(simpleProperties).isPresent();
+    assertThat(simpleProperties.get().getString()).isEqualTo(EXPECTED_STRING);
+    assertThat(simpleProperties.get().getNumber()).isEqualTo(EXPECTED_NUMBER);
+    assertThat(simpleProperties.get().getBool()).isEqualTo(EXPECTED_BOOL);
+    assertThat(simpleProperties.get().getDuration()).isEqualTo(EXPECTED_DURATION);
   }
 
   private static SpringConfigurationPropertiesLoader createLoader(String testFileName) {
@@ -43,30 +44,39 @@ class SpringConfigurationPropertiesLoaderTest {
 
   @Test
   void givenPropertiesFile_loadsPrefixedProperties() {
-    SimpleProperties simpleProperties = createLoader("prefixed.properties")
-        .load(PREFIX, SimpleProperties.class);
+    var simpleProperties =
+        createLoader("prefixed.properties").load(PREFIX, SimpleProperties.class);
 
-    assertThat(simpleProperties.getString()).isEqualTo(EXPECTED_PREFIX_STRING);
-    assertThat(simpleProperties.getNumber()).isEqualTo(EXPECTED_PREFIX_NUMBER);
-    assertThat(simpleProperties.getBool()).isEqualTo(EXPECTED_PREFIX_BOOL);
-    assertThat(simpleProperties.getDuration()).isEqualTo(EXPECTED_PREFIX_DURATION);
+    assertThat(simpleProperties).isPresent();
+    assertThat(simpleProperties.get().getString()).isEqualTo(EXPECTED_PREFIX_STRING);
+    assertThat(simpleProperties.get().getNumber()).isEqualTo(EXPECTED_PREFIX_NUMBER);
+    assertThat(simpleProperties.get().getBool()).isEqualTo(EXPECTED_PREFIX_BOOL);
+    assertThat(simpleProperties.get().getDuration()).isEqualTo(EXPECTED_PREFIX_DURATION);
   }
 
   @Test
   void givenPropertiesFileWithInvalidProperties_throwsWhenLoading() {
-    assertThatThrownBy(() -> createLoader("invalid.properties").load("", ValidProperties.class))
+    var loader = createLoader("invalid.properties");
+    assertThatThrownBy(() -> loader.load("", ValidProperties.class))
         .isInstanceOf(BindException.class);
   }
 
   @Test
-  void givenYamlFileWithNestedProperties_loadsThem() {
-    NestedProperties properties = createLoader("nested.yml").load(PREFIX, NestedProperties.class);
-    SimpleProperties nested = properties.getNested();
+  void givenPropertiesFileWithUnknownProperties_returnEmpty() {
+    var loader = createLoader("unknown.properties");
+    assertThat(loader.load("prefixed.properties", SimpleProperties.class)).isEmpty();
+  }
 
-    assertThat(nested).isNotNull();
-    assertThat(nested.getString()).isEqualTo(EXPECTED_PREFIX_STRING);
-    assertThat(nested.getNumber()).isEqualTo(EXPECTED_PREFIX_NUMBER);
-    assertThat(nested.getBool()).isEqualTo(EXPECTED_PREFIX_BOOL);
+  @Test
+  void givenYamlFileWithNestedProperties_loadsThem() {
+    var nested =
+        createLoader("nested.yml").load(PREFIX, NestedProperties.class)
+            .map(NestedProperties::getNested);
+
+    assertThat(nested).isPresent();
+    assertThat(nested.get().getString()).isEqualTo(EXPECTED_PREFIX_STRING);
+    assertThat(nested.get().getNumber()).isEqualTo(EXPECTED_PREFIX_NUMBER);
+    assertThat(nested.get().getBool()).isEqualTo(EXPECTED_PREFIX_BOOL);
   }
 
   @Test

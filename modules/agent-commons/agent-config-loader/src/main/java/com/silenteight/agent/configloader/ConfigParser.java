@@ -3,8 +3,11 @@ package com.silenteight.agent.configloader;
 import lombok.NoArgsConstructor;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
-@NoArgsConstructor
+import static lombok.AccessLevel.PRIVATE;
+
+@NoArgsConstructor(access = PRIVATE)
 public class ConfigParser {
 
   /**
@@ -20,10 +23,10 @@ public class ConfigParser {
    * @return Serialized object of class <code>propertiesType</code>
    */
 
-  public static <PropertiesTypeT> PropertiesTypeT parse(
+  public static <T> Optional<T> parse(
       Path configFile,
       String prefix,
-      Class<PropertiesTypeT> propertiesType) {
+      Class<T> propertiesType) {
 
     String resourceLocation = configFile.toUri().toString();
 

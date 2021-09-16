@@ -1,0 +1,6 @@
+second.cfg:
+  label: second-confs
+  result-priority:
+    - EXACT
+    - NEAR
+    - OUT_OF_RANGE
