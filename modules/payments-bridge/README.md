@@ -8,7 +8,8 @@ This project represents the high-level implementation of SEAR Payments using hea
 2. Follow the AE readme to run it
 3. Start the database using `make up`
 4. In Run configuration settings change 'Use class path module' to 'sear-payments-bridge.sear-payments-app.main'
-5. Run the Spring Application using as a main class `PaymentsBridgeApplication`.
+5. Enable the following Spring profiles for development: `logrequest,mockdatasource,mockaws`
+6. Run the Spring Application using as a main class `PaymentsBridgeApplication`.
 
 ### Start tsaas-bridge cmapi-mockup
 
@@ -32,26 +33,22 @@ Use my prepared script to submit a sample request:
 
 # Authenticate the request to the server
 
-## Getting access token from keycloak:
+## Getting access token from Keycloak
+
 To get access token for the client `sierra-dev-api` run: 
 
     curl \
-        -d client_id=$CLIENT_ID \
+        -d client_id=sierra-dev-api \
         -d client_secret=$CLIENT_SECRET \
         -d grant_type=client_credentials \
-        https://auth.silent8.cloud/realms/$CLIENT_REALM/protocol/openid-connect/token
+        https://auth.silent8.cloud/realms/sierra/protocol/openid-connect/token
 
-where `$CLIENT_REALM` is `sierra`, `$CLIENT_ID` is `sierra-dev-api`, and `$CLIENT_SECRET` is available [here](https://auth.silent8.cloud/admin/master/console/#/realms/sierra/clients/1e5bb2aa-d17b-4746-8e24-fd3bb21d1259/credentials).
+where `$CLIENT_SECRET` is available [here](https://auth.silent8.cloud/admin/master/console/#/realms/sierra/clients/1e5bb2aa-d17b-4746-8e24-fd3bb21d1259/credentials).
 
-### Test access token:
+### Test access token
 
 The generated access token `$TOKEN` can be tested by following the steps below:
 
-1. Set `keycloak` settings in `application.yml`: 
-    - `keycloak.realm` to `sierra`
-    - `keycloak.auth-server-url` to `https://auth.silent8.cloud`
-    - `keycloak.resource` to sierra-dev
-    - `keycloak.credentials.secret` to `$CLIENT_SECRET`, which is available [here](https://auth.silent8.cloud/admin/master/console/#/realms/sierra/clients/1e5bb2aa-d17b-4746-8e24-fd3bb21d1259/credentials).
 1. Start the `PaymentsBridgeApplication`.
 1. Place the `$TOKEN` in the command below and run it:
 
@@ -63,15 +60,15 @@ The generated access token `$TOKEN` can be tested by following the steps below:
         
 # Authorize the requests to the CMAPI
 
-## Configuration of CMAPI Auth Server:
+## Configuration of CMAPI Auth Server
 
 1. Set the following settings:
-    - `security.oauth2.client.client-secret`;
+    - `security.oauth2.client.client-secret` (or the `SECURITY_OAUTH2_CLIENT_CLIENT_SECRET` environment variable).
 1. Enable callback by setting:
     - `pb.cmapi.callback.enabled: true`
 
 ### Test CMAPI callback
 
-1. Run `cmapi-mock` by following its `REAMDE.md`.
+1. Run `cmapi-mock` by following its [README.md](cmapi-mock/README.md).
 1. Send a request to http://localhost:24602/rest/payments/test-callback Details on how to a send request are in [Test access token](#test-access-token) section.
 1. Verify the `Headers: Authorization: Bearer` from `cmapi-mock` debug log.

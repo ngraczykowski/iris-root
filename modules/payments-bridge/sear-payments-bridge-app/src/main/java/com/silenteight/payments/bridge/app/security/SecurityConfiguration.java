@@ -1,9 +1,12 @@
 package com.silenteight.payments.bridge.app.security;
 
+import lombok.RequiredArgsConstructor;
+
 import net.devh.boot.grpc.server.security.authentication.BasicGrpcAuthenticationReader;
 import net.devh.boot.grpc.server.security.authentication.GrpcAuthenticationReader;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionManager;
@@ -32,7 +35,11 @@ import java.util.Map;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true)
+@EnableConfigurationProperties(SecurityProperties.class)
+@RequiredArgsConstructor
 class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
+
+  private final SecurityProperties properties;
 
   @Override
   protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
@@ -42,12 +49,14 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     super.configure(http);
+
+    if (!properties.isDisableSecurity())
+      http
+        .authorizeRequests()
+        .anyRequest().authenticated();
+
     http
         .csrf().disable()
-        .authorizeRequests()
-        .anyRequest().authenticated()
-        //.antMatchers("/**").permitAll()
-        .and()
         .formLogin().disable();
   }
 

@@ -85,9 +85,7 @@ keycloak:
   realm: sierra
   auth-server-url: https://auth.silent8.cloud
   ssl-required: external
-  resource:
-  credentials:
-    secret:
+  resource: sierra-dev-api
   use-resource-role-mappings: true
   bearer-only: true
 
