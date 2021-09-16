@@ -30,17 +30,28 @@ def test_wl_matching_text_is_part_of_one_of_bic_codes(
     assert result.reason.watchlist_matching_text == wl_matching_text
     assert result.reason.watchlist_type == WL_TYPE
     assert result.reason.watchlist_bic_code == wl_bic_codes[0].upper()
+    assert result.reason.conclusion == "MatchingTextMatchesWlBicCodeReason"
 
 
 @pytest.mark.parametrize(
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes, expected_ap_matching_text",
     [
-        ("search code123 XYZ", "search code", ["matching searchcode", "different search code"], [], 'SEARCH CODE123'),
+        (
+            "search code123 XYZ",
+            "search code",
+            ["matching searchcode", "different search code"],
+            [],
+            "SEARCH CODE123",
+        ),
         ("December2020", "2020", ["12 2020"], ["not matching bic"], "DECEMBER2020"),
     ],
 )
 def test_wl_matching_text_is_part_of_one_of_search_codes_longer_ap(
-    ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes, expected_ap_matching_text,
+    ap_matching_field,
+    wl_matching_text,
+    wl_search_codes,
+    wl_bic_codes,
+    expected_ap_matching_text,
 ):
     codes = BankIdentificationCodes(
         ap_matching_field, wl_matching_text, WL_TYPE, wl_search_codes, wl_bic_codes
@@ -53,6 +64,7 @@ def test_wl_matching_text_is_part_of_one_of_search_codes_longer_ap(
     assert result.reason.altered_party_matching_field == ap_matching_field
     assert result.reason.partial_match_text == wl_search_codes[0].upper()
     assert result.reason.altered_party_matching_sequence == expected_ap_matching_text
+    assert result.reason.conclusion == "MatchingTextIsPartOfLongerSequenceReason"
 
 
 @pytest.mark.parametrize(
@@ -74,3 +86,4 @@ def test_wl_matching_text_is_part_of_one_of_search_codes(
     assert result.reason.watchlist_matching_text == wl_matching_text
     assert result.reason.watchlist_type == WL_TYPE
     assert result.reason.watchlist_search_codes == [wl_search_codes[0].upper()]
+    assert result.reason.conclusion == "MatchingTextIsOnlyPartialMatchForSearchCodeReason"

@@ -23,6 +23,7 @@ def test_empty_codes_lists(ap_matching_field, wl_matching_text, wl_search_codes,
     result = codes.check()
     assert result.solution == Solution.NO_DECISION
     assert isinstance(result.reason, NoSearchCodeInWatchlistReason)
+    assert result.reason.conclusion == "NoSearchCodeInWatchlistReason"
 
 
 @pytest.mark.parametrize(
@@ -39,6 +40,7 @@ def test_too_short_wl_matching_text(
     assert result.solution == Solution.NO_DECISION
     assert isinstance(result.reason, MatchingTextTooShortToBeCodeReason)
     assert result.reason.watchlist_matching_text == wl_matching_text
+    assert result.reason.conclusion == "MatchingTextTooShortToBeCodeReason"
 
 
 @pytest.mark.parametrize(
@@ -56,6 +58,7 @@ def test_wl_text_not_match_ap_matching_field(
     assert isinstance(result.reason, MatchingTextDoesNotMatchMatchingFieldReason)
     assert result.reason.watchlist_matching_text == wl_matching_text
     assert result.reason.altered_party_matching_field == ap_matching_field
+    assert result.reason.conclusion == "MatchingTextDoesNotMatchMatchingFieldReason"
 
 
 @pytest.mark.parametrize(
@@ -74,3 +77,4 @@ def test_matching_text_not_match_any_of_codes(
     assert result.reason.watchlist_matching_text == wl_matching_text
     assert result.reason.watchlist_type == WL_TYPE
     assert result.reason.watchlist_search_codes == [wl_search_codes[0].upper()]
+    assert result.reason.conclusion == "MatchingTextDoesNotMatchWlSearchCodeReason"
