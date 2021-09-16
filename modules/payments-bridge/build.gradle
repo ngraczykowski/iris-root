@@ -38,8 +38,9 @@ subprojects {Project subproject ->
       aspect libraries.silenteight_sep_base_aspects
 
       // Required by aspects
-      aspect libraries.spring_web
+      aspect libraries.spring_security_aspects
       aspect libraries.spring_tx
+      aspect libraries.spring_web
 
       annotationProcessor libraries.spring_boot_configuration_processor
     }

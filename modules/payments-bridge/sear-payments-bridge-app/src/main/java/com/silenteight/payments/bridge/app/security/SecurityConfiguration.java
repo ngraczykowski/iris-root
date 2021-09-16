@@ -7,6 +7,7 @@ import net.devh.boot.grpc.server.security.authentication.GrpcAuthenticationReade
 import org.aopalliance.intercept.MethodInterceptor;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDecisionManager;
@@ -34,7 +35,7 @@ import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, mode = AdviceMode.ASPECTJ)
 @EnableConfigurationProperties(SecurityProperties.class)
 @RequiredArgsConstructor
 class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
