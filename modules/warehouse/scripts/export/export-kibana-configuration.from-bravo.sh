@@ -8,3 +8,4 @@ cd "${CURRENTDIR}"
 
 ./export-kibana-configuration.sh dev_simulation_master
 ./export-kibana-configuration.sh dev_production_ai_reasoning
+./export-kibana-configuration.sh dev_production_accuracy

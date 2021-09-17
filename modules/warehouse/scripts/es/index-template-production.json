@@ -1,0 +1,11 @@
+{
+  "index_patterns": [
+    "local_production*"
+  ],
+  "priority": 15,
+  "template": {
+    "aliases": {
+      "local_production": {}
+    }
+  }
+}

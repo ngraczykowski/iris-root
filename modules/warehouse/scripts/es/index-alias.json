@@ -1,0 +1,10 @@
+{
+  "actions": [
+    {
+      "add": {
+        "index": "local_production*",
+        "alias": "local_production"
+      }
+    }
+  ]
+}

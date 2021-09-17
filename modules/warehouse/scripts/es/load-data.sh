@@ -15,7 +15,7 @@ curl -X PUT 'http://localhost:9200/local_simulation_9630b08f-682c-4565-bf4d-c070
   "alert_recommendation": "FALSE_POSITIVE"
 }'
 
-curl -X PUT 'http://localhost:9200/local_production/_doc/457b1498-e348-4a81-8093-6079c1173010' \
+curl -X PUT 'http://localhost:9200/local_production.2021-04-15/_doc/457b1498-e348-4a81-8093-6079c1173010' \
   --silent --show-error --fail \
   -u admin:admin \
   -H 'Content-Type: application/json' \

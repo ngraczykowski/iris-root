@@ -1,6 +1,6 @@
 {
   "index_patterns": [
-    "local_production",
+    "local_production*",
     "local_simulation_*"
   ],
   "priority": 10,
