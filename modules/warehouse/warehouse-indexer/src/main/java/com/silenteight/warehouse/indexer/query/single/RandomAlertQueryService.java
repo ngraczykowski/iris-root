@@ -1,7 +1,9 @@
-package com.silenteight.warehouse.indexer.alert;
+package com.silenteight.warehouse.indexer.query.single;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import com.silenteight.warehouse.indexer.alert.MultiValueEntry;
 
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.client.RestHighLevelClient;

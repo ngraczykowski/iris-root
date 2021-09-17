@@ -1,6 +1,6 @@
 package com.silenteight.warehouse.sampling.alert;
 
-import com.silenteight.warehouse.indexer.alert.RandomAlertQueryService;
+import com.silenteight.warehouse.indexer.query.single.RandomAlertQueryService;
 import com.silenteight.warehouse.sampling.configuration.SamplingProperties;
 
 import net.devh.boot.grpc.server.service.GrpcService;

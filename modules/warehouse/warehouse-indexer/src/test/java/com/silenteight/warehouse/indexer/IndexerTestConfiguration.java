@@ -13,11 +13,13 @@ import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
+import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 import com.silenteight.warehouse.indexer.alert.AlertModule;
 import com.silenteight.warehouse.indexer.analysis.AnalysisModule;
 import com.silenteight.warehouse.indexer.indexing.IndexerIntegrationProperties;
-import com.silenteight.warehouse.indexer.indexing.IndexingModule;
+import com.silenteight.warehouse.indexer.indexing.MessageHandlerModule;
+import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 import com.silenteight.warehouse.test.client.TestClientModule;
 import com.silenteight.warehouse.test.client.gateway.IndexerClientIntegrationProperties;
 
@@ -35,11 +37,13 @@ import static org.mockito.Mockito.*;
 
 @ComponentScan(basePackageClasses = {
     AlertModule.class,
+    AmqpCommonModule.class,
     AnalysisModule.class,
     ElasticsearchRestClientModule.class,
     EnvironmentModule.class,
-    IndexingModule.class,
-    AmqpCommonModule.class,
+    MessageHandlerModule.class,
+    OpendistroModule.class,
+    QueryAlertModule.class,
     TestElasticSearchModule.class,
     TestClientModule.class
 })

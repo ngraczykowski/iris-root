@@ -1,6 +1,8 @@
 package com.silenteight.warehouse.indexer.alert;
 
 import com.silenteight.sep.base.common.time.TimeSource;
+import com.silenteight.warehouse.indexer.query.single.AlertSearchService;
+import com.silenteight.warehouse.indexer.query.single.ProductionSearchRequestBuilder;
 
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -15,18 +17,6 @@ import javax.validation.Valid;
     AlertMappingProperties.class
 })
 public class AlertConfiguration {
-
-  @Bean
-  AlertSearchService searchAlertService() {
-    return new AlertSearchService();
-  }
-
-  @Bean
-  ProductionSearchRequestBuilder productionSearchRequestBuilder(
-      @Valid ElasticsearchProperties elasticsearchProperties) {
-
-    return new ProductionSearchRequestBuilder(elasticsearchProperties);
-  }
 
   @Bean
   AlertIndexService alertIndexService(
@@ -45,24 +35,6 @@ public class AlertConfiguration {
         restHighLevelAdminClient,
         alertMapper,
         elasticsearchProperties.getUpdateRequestBatchSize());
-  }
-
-  @Bean
-  AlertQueryService alertQueryService(
-      RestHighLevelClient restHighLevelUserAwareClient, AlertSearchService alertSearchService,
-      ProductionSearchRequestBuilder productionSearchRequestBuilder) {
-
-    return new AlertQueryService(restHighLevelUserAwareClient, alertSearchService,
-        productionSearchRequestBuilder);
-  }
-
-  @Bean
-  RandomAlertQueryService randomAlertQueryService(
-      AlertSearchService alertSearchService, RestHighLevelClient restHighLevelAdminClient,
-      ProductionSearchRequestBuilder productionSearchRequestBuilder) {
-
-    return new RandomAlertQueryService(alertSearchService, restHighLevelAdminClient,
-        productionSearchRequestBuilder);
   }
 
   @Bean

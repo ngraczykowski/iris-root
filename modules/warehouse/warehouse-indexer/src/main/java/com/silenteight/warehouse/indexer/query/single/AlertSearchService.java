@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer.alert;
+package com.silenteight.warehouse.indexer.query.single;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +18,7 @@ import static org.elasticsearch.client.RequestOptions.DEFAULT;
 @RequiredArgsConstructor
 public class AlertSearchService {
 
-  List<Map<String, Object>> searchForAlerts(
+  public List<Map<String, Object>> searchForAlerts(
       RestHighLevelClient restHighLevelClient, SearchRequest searchRequest) {
 
     try {

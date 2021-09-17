@@ -12,7 +12,7 @@ import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.opendistro.roles.RolesMappingService;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
-import com.silenteight.warehouse.indexer.alert.AlertModule;
+import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 import com.silenteight.warehouse.management.ManagementModule;
 
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
@@ -25,7 +25,7 @@ import static java.time.Instant.parse;
 import static org.mockito.Mockito.*;
 
 @ComponentScan(basePackageClasses = {
-    AlertModule.class,
+    QueryAlertModule.class,
     OpendistroModule.class,
     ElasticsearchRestClientModule.class,
     ManagementModule.class,

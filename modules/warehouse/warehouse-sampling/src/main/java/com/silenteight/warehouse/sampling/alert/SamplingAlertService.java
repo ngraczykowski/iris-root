@@ -7,9 +7,9 @@ import com.silenteight.model.api.v1.SampleAlertServiceProto.Alert;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleRequest;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleResponse;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.RequestedAlertsFilter;
-import com.silenteight.warehouse.indexer.alert.AlertSearchCriteria;
 import com.silenteight.warehouse.indexer.alert.MultiValueEntry;
-import com.silenteight.warehouse.indexer.alert.RandomAlertQueryService;
+import com.silenteight.warehouse.indexer.query.single.AlertSearchCriteria;
+import com.silenteight.warehouse.indexer.query.single.RandomAlertQueryService;
 import com.silenteight.warehouse.sampling.configuration.FilterProperties;
 import com.silenteight.warehouse.sampling.configuration.SamplingProperties;
 

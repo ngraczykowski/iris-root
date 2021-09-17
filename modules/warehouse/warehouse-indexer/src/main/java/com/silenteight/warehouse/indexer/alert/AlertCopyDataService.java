@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.warehouse.common.opendistro.utils.OpendistroUtils;
+import com.silenteight.warehouse.indexer.query.single.AlertSearchService;
+import com.silenteight.warehouse.indexer.query.single.ProductionSearchRequestBuilder;
 
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.update.UpdateRequest;
