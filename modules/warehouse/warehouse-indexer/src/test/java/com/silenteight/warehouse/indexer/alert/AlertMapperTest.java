@@ -1,7 +1,7 @@
 package com.silenteight.warehouse.indexer.alert;
 
+import com.silenteight.data.api.v1.Alert;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
-import com.silenteight.warehouse.common.opendistro.roles.RolesMappedConstants;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKeys;
 
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.util.function.Predicate;
 
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_1;
-import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_2;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP;
 import static java.time.Instant.parse;
@@ -44,12 +44,14 @@ class AlertMapperTest {
   }
 
   @Test
-  void shouldNotMapCountryIfNotPresent() {
-    var preparedMap = underTest.convertAlertToAttributes(ALERT_2);
+  void shouldNotMapAnyOptionalFields() {
+    var preparedMap = underTest.convertAlertToAttributes(Alert.newBuilder()
+        .setDiscriminator(DISCRIMINATOR_1)
+        .build());
 
-    assertThat(preparedMap)
-        .doesNotContainKey(MappedKeys.COUNTRY_KEY)
-        .doesNotContainKey(RolesMappedConstants.COUNTRY_KEY);
+    assertThat(preparedMap).containsOnlyKeys(
+        AlertMapperConstants.INDEX_TIMESTAMP,
+        AlertMapperConstants.DISCRIMINATOR);
   }
 
   @Test
