@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+  <changeSet id="universal-datasource-1.0.0-1" author="jgajewski">
+    <createTable tableName="uds_category">
+      <column name="category_id" type="VARCHAR(100)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="category_display_name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="category_type" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="allowed_values" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="multi_value" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="universal-datasource-1.0.0-2" author="jgajewski">
+    <createTable tableName="uds_category_value">
+      <column name="category_value_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="category_id" type="VARCHAR(100)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="match_name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="category_value" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="uds_category_value"
+        indexName="ix_uds_category_match_name">
+      <column name="match_name"/>
+    </createIndex>
+
+    <createIndex
+        tableName="uds_category_value"
+        indexName="ix_uds_category_category_id">
+      <column name="category_id"/>
+    </createIndex>
+
+    <addForeignKeyConstraint
+        baseTableName="uds_category_value"
+        baseColumnNames="category_id"
+        constraintName="fk_uds_category_value_category_id"
+        referencedTableName="uds_category"
+        referencedColumnNames="category_id"/>
+  </changeSet>
+
+</databaseChangeLog>
