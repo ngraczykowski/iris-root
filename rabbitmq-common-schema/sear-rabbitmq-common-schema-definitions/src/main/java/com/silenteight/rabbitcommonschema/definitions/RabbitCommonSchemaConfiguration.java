@@ -22,6 +22,8 @@ public class RabbitCommonSchemaConfiguration {
       topicExchange(AE_EVENT_EXCHANGE).durable(true).build(),
       topicExchange(AGENT_REQUEST_EXCHANGE).durable(true).build(),
       topicExchange(AGENT_RESPONSE_EXCHANGE).durable(true).build(),
+      directExchange(BRIDGE_COMMAND_EXCHANGE).durable(true).build(),
+      directExchange(BRIDGE_RETENTION_EXCHANGE).durable(true).build(),
       topicExchange(GOV_EVENT_EXCHANGE).durable(true).internal().build(),
       directExchange(SIM_COMMAND_EXCHANGE).durable(true).build(),
       topicExchange(WH_EVENT_EXCHANGE).durable(true).build()
