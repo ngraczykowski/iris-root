@@ -22,6 +22,7 @@ import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX
 import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 import static java.util.Optional.ofNullable;
+import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toMap;
 
 @RequiredArgsConstructor
@@ -58,7 +59,8 @@ class AlertMapper {
   }
 
   private Optional<String> extractAlertName(Alert alert) {
-    return ofNullable(alert.getName());
+    return ofNullable(alert.getName())
+        .filter(not(String::isEmpty));
   }
 
   private Optional<String> extractAlertField(Alert alert, String fieldName) {
