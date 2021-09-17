@@ -61,4 +61,27 @@
         referencedColumnNames="category_id"/>
   </changeSet>
 
+  <changeSet id="universal-datasource-1.0.0-3" author="jgajewski">
+    <createTable tableName="uds_comment_input">
+      <column name="comment_input_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="alert" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="alert_comment_input" type="JSONB">
+        <constraints nullable="false"/>
+      </column>
+      <column name="match_comment_inputs" type="JSONB">
+        <constraints nullable="true"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="uds_comment_input"
+        indexName="ix_uds_comment_input_alert">
+      <column name="alert"/>
+    </createIndex>
+  </changeSet>
+
 </databaseChangeLog>
