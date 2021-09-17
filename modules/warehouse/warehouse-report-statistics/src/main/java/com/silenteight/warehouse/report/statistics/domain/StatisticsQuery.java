@@ -74,10 +74,10 @@ class StatisticsQuery implements SimulationStatisticsQuery {
   }
 
   private EffectivenessDto toEffectivenessDto(List<Row> rows) {
-    List<Row> solvedAsFalsePositiveByAi = getRowsSolvedAsFalsePositiveByAi(rows);
-    long solvedAsFalsePositiveByAiCount = sumAlerts(solvedAsFalsePositiveByAi);
-    long solvedAsFalsePositiveByAnalystCount =
-        sumSolvedAsFalsePositiveByAnalyst(solvedAsFalsePositiveByAi);
+    List<Row> solvedAsFalsePositiveByAnalyst = getRowsSolvedAsFalsePositiveByAnalyst(rows);
+    long solvedAsFalsePositiveByAnalystCount = sumAlerts(solvedAsFalsePositiveByAnalyst);
+    long solvedAsFalsePositiveByAiCount =
+        sumSolvedAsFalsePositiveByAi(solvedAsFalsePositiveByAnalyst);
 
     return EffectivenessDto
         .builder()
@@ -113,24 +113,24 @@ class StatisticsQuery implements SimulationStatisticsQuery {
         .sum();
   }
 
-  private long sumSolvedAsFalsePositiveByAnalyst(List<Row> rows) {
-    AnalystDecisionProperties analystDecisionProperties = properties.getAnalystDecision();
-    String analystDecisionField = analystDecisionProperties.getField();
-    String analystFalsePositiveValue = analystDecisionProperties.getFalsePositiveValue();
-    return rows
-        .stream()
-        .filter(row -> analystFalsePositiveValue.equals(row.getValue(analystDecisionField)))
-        .mapToLong(Row::getCount)
-        .sum();
-  }
-
-  private List<Row> getRowsSolvedAsFalsePositiveByAi(List<Row> rows) {
+  private long sumSolvedAsFalsePositiveByAi(List<Row> rows) {
     AiDecisionProperties aiDecisionProperties = properties.getAiDecision();
     String aiFalsePositiveValue = aiDecisionProperties.getFalsePositiveValue();
     String aiDecisionField = aiDecisionProperties.getField();
     return rows
         .stream()
         .filter(row -> aiFalsePositiveValue.equals(row.getValue(aiDecisionField)))
+        .mapToLong(Row::getCount)
+        .sum();
+  }
+
+  private List<Row> getRowsSolvedAsFalsePositiveByAnalyst(List<Row> rows) {
+    AnalystDecisionProperties analystDecisionProperties = properties.getAnalystDecision();
+    String analystDecisionField = analystDecisionProperties.getField();
+    String analystFalsePositiveValue = analystDecisionProperties.getFalsePositiveValue();
+    return rows
+        .stream()
+        .filter(row -> analystFalsePositiveValue.equals(row.getValue(analystDecisionField)))
         .collect(toList());
   }
 

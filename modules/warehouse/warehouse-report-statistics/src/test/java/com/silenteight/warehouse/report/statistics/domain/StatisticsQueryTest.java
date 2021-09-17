@@ -81,8 +81,8 @@ class StatisticsQueryTest {
     assertThat(efficiency.getAllAlerts()).isEqualTo(247);
     assertThat(efficiency.getSolvedAlerts()).isEqualTo(211);
     EffectivenessDto effectiveness = statisticsDto.getEffectiveness();
-    assertThat(effectiveness.getAiSolvedAsFalsePositive()).isEqualTo(201);
-    assertThat(effectiveness.getAnalystSolvedAsFalsePositive()).isEqualTo(200);
+    assertThat(effectiveness.getAiSolvedAsFalsePositive()).isEqualTo(200);
+    assertThat(effectiveness.getAnalystSolvedAsFalsePositive()).isEqualTo(232);
   }
 
   private FetchGroupedDataResponse getResponse() {
