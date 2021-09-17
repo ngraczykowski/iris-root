@@ -3,7 +3,7 @@ POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/{{batchId}}/recommend
 Accept: application/json
 Content-Type: application/json
 
-< ./learning.json
+< ./PB_20210915_recommend.json
 
 
 ### Check HSBC Bridge status
@@ -28,7 +28,7 @@ POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/ingestRecommendations
 Accept: application/json
 Content-Type: application/json
 
-< ./ingestResults.json
+< ./PB_20210915_ingestRecommendation.json
 
 
 ### Step 2: Learning
@@ -36,5 +36,5 @@ POST {{baseUrl}}/rest/hsbc-bridge/async/batch/v1/{{batchId}}/learning
 Accept: application/json
 Content-Type: application/json
 
-< ./learning.json
+< ./PB_20210915_recommend.json
 
