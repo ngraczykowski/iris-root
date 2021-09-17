@@ -2,7 +2,6 @@ package com.silenteight.warehouse.indexer.alert;
 
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.data.api.v1.Match;
-import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKeys;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceMatchKeys;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values;
@@ -14,7 +13,6 @@ import com.google.protobuf.Value;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_2;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_1;
@@ -22,8 +20,6 @@ import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Resour
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_2_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_2_2;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.COUNTRY_UK;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP_4;
 import static java.util.Collections.emptyList;
 import static java.util.List.of;
 
@@ -58,14 +54,6 @@ public class DataIndexFixtures {
       .setPayload(structWithValue(
           SourceAlertKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_MI))
       .addAllMatches(emptyList())
-      .build();
-
-  static final AlertSearchCriteria ALERT_SEARCH_CRITERIA = AlertSearchCriteria.builder()
-      .timeFieldName(INDEX_TIMESTAMP)
-      .timeRangeFrom(PROCESSING_TIMESTAMP)
-      .timeRangeTo(PROCESSING_TIMESTAMP_4)
-      .alertLimit(3)
-      .filter(of(new MultiValueEntry(MappedKeys.COUNTRY_KEY, of(COUNTRY_UK))))
       .build();
 
   static Builder structWithValue(String key, String value) {

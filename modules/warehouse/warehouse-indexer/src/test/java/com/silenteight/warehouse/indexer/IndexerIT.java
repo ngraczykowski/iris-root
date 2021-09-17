@@ -9,6 +9,7 @@ import com.silenteight.data.api.v1.SimulationDataIndexRequest;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
+import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKeys;
@@ -50,6 +51,7 @@ import static org.awaitility.Awaitility.await;
 @ContextConfiguration(initializers = {
     RabbitTestInitializer.class,
     OpendistroElasticContainerInitializer.class,
+    OpendistroKibanaContainerInitializer.class,
     PostgresTestInitializer.class
 })
 @AutoConfigureDataJpa

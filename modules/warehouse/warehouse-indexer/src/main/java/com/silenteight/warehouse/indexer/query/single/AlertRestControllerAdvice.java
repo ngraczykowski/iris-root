@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer.alert;
+package com.silenteight.warehouse.indexer.query.single;
 
 import com.silenteight.warehouse.common.web.exception.AbstractErrorControllerAdvice;
 import com.silenteight.warehouse.common.web.exception.ErrorDto;

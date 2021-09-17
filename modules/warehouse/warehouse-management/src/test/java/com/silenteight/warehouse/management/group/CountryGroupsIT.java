@@ -4,13 +4,12 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
-import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.common.testing.rest.WithElasticAccessCredentials;
-import com.silenteight.warehouse.indexer.alert.AlertNotFoundException;
-import com.silenteight.warehouse.indexer.alert.AlertRestController;
+import com.silenteight.warehouse.indexer.query.single.AlertNotFoundException;
+import com.silenteight.warehouse.indexer.query.single.AlertRestController;
 import com.silenteight.warehouse.management.country.get.GetCountriesRestController;
 import com.silenteight.warehouse.management.country.update.UpdateCountriesRestController;
 import com.silenteight.warehouse.management.group.create.CreateCountryGroupRestController;
@@ -65,9 +64,6 @@ class CountryGroupsIT {
 
   @Autowired
   private SimpleElasticTestClient simpleElasticTestClient;
-
-  @Autowired
-  private OpendistroElasticClient opendistroElasticClient;
 
   @Autowired
   private DeleteCountryGroupRestController deleteCountryGroupRestController;

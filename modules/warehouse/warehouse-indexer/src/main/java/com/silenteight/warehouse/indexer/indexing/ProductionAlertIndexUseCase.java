@@ -28,7 +28,7 @@ public class ProductionAlertIndexUseCase implements ProductionIndexRequestComman
 
   @Override
   public DataIndexResponse handle(ProductionDataIndexRequest request) {
-    log.debug("ProductionDataIndexRequest received, requestId={}, alertCount={}",
+    log.info("ProductionDataIndexRequest received, requestId={}, alertCount={}",
         request.getRequestId(), request.getAlertsCount());
 
     ProductionNamingStrategy namingStrategy = new ProductionNamingStrategy(environmentPrefix);

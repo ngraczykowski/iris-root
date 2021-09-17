@@ -1,8 +1,10 @@
-package com.silenteight.warehouse.indexer.alert;
+package com.silenteight.warehouse.indexer.query.single;
 
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
+
+import com.silenteight.warehouse.indexer.alert.MultiValueEntry;
 
 import java.util.List;
 
