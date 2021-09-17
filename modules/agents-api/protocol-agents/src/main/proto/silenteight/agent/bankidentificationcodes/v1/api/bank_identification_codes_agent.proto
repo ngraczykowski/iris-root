@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package silenteight.agent.bank_identification_codes_agent.v1.api;
+package silenteight.agent.bankidentificationcodes.v1.api;
 
-option java_package = "com.silenteight.proto.agent.bank_identification_codes_agent.v1.api";
+option java_package = "com.silenteight.proto.agent.bankidentificationcodes.v1.api";
 option java_outer_classname = "BankIdentificationCodesAgentApiProto";
 option java_multiple_files = true;
 
