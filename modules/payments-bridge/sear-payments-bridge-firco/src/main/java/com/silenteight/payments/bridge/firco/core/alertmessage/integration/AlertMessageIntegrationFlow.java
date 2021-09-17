@@ -7,14 +7,14 @@ import com.silenteight.payments.bridge.firco.core.alertmessage.model.FircoAlertM
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
 import org.springframework.messaging.MessageHeaders;
+import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 @Slf4j
 class AlertMessageIntegrationFlow extends IntegrationFlowAdapter {
 
   @Override
   protected IntegrationFlowDefinition<?> buildFlow() {
-    // TODO: integration mock
     return from(AlertMessageChannels.ALERT_MESSAGE_STORED_REQUEST_CHANNEL)
         .handle(FircoAlertMessage.class, this::logRequest)
         .transform(FircoAlertMessage::toRequest)
@@ -23,7 +23,7 @@ class AlertMessageIntegrationFlow extends IntegrationFlowAdapter {
 
   private FircoAlertMessage logRequest(FircoAlertMessage payload, MessageHeaders headers) {
     if (log.isDebugEnabled()) {
-      log.debug("Sending request for recommendation: alertMessageId={}", payload.getId());
+      log.debug("Queuing MessageStored event [{}] ", payload.getId());
     }
     return payload;
   }

@@ -21,7 +21,7 @@ class AlertMessageDtoValidatorImpl implements AlertMessageDtoValidator {
       @NonNull AlertMessageDto messageDto,
       @NonNull Class<? extends ValidationGroup> validationDefinitionClass) {
     Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-    var systemId = messageDto.getSystemId();
+    var systemId = messageDto.getSystemID();
     var constraintViolations =
         validator.validate(messageDto, validationDefinitionClass);
 

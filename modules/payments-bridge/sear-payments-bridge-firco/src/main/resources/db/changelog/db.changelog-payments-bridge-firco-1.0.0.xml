@@ -80,7 +80,7 @@
       </column>
     </createTable>
 
-    <createTable tableName="pb_alert_message_outdated_shedlock">
+    <createTable tableName="pb_shedlock">
       <column name="name" type="VARCHAR(64)">
         <constraints nullable="false" primaryKey="true"/>
       </column>

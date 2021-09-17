@@ -399,4 +399,4 @@ curl -v \
     }
 }
 ' \
-  http://localhost:24602/rest/payments/cmapi?dc=UK
+  http://localhost:24602/rest/payments/sendMessage?dc=UK 

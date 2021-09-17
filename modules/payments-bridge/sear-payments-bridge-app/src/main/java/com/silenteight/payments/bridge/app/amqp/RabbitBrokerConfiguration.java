@@ -3,13 +3,13 @@ package com.silenteight.payments.bridge.app.amqp;
 import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
-import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.*;
+import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.FIRCO_ALERT_STORED_ROUTING_KEY;
+import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.FIRCO_COMMAND_QUEUE_NAME;
+import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.FIRCO_EXCHANGE_NAME;
 import static org.springframework.amqp.core.ExchangeBuilder.topicExchange;
 
 @Configuration
-@Profile("rabbitdeclare")
 class RabbitBrokerConfiguration {
 
   private static final String ERROR_QUEUE = "pb.error-queue";
@@ -18,30 +18,26 @@ class RabbitBrokerConfiguration {
 
   @Bean
   Declarables rabbitBrokerDeclarables() {
+
+    var exchange = topicExchange(FIRCO_EXCHANGE_NAME).durable(true).build();
+    var commandQueue = queue(FIRCO_COMMAND_QUEUE_NAME).maxPriority(10).build();
+    var commandQueueBinding = bind(commandQueue, exchange, FIRCO_ALERT_STORED_ROUTING_KEY + ".#");
+
     var errorQueue = queue(ERROR_QUEUE).build();
     var deadLetterQueue = queue(DEAD_LETTER_QUEUE).lazy().build();
-
-    var commandExchange = topicExchange(COMMAND_EXCHANGE_NAME).durable(true).build();
-    var eventExchange = topicExchange(EVENT_EXCHANGE_NAME).durable(true).build();
-    var eventInternalExchange = topicExchange(EVENT_INTERNAL_EXCHANGE_NAME)
-        .durable(true)
-        .build();
     var deadLetterExchange = topicExchange(DEAD_LETTER_EXCHANGE)
         .durable(true)
         .internal()
         .build();
     var deadLetterBinding = bind(deadLetterQueue, deadLetterExchange, "#");
 
-    var fircoCommand = queueDeadLetter(FIRCO_COMMAND_QUEUE_NAME).maxPriority(10).build();
-    var fircoCommandBinding = bind(fircoCommand, commandExchange, FIRCO_COMMAND_PREFIX + ".#");
-
     return new Declarables(
+        exchange,
+        commandQueue,
+        commandQueueBinding,
         errorQueue,
         deadLetterExchange,
-        deadLetterQueue, deadLetterBinding,
-        commandExchange, eventExchange, eventInternalExchange,
-        fircoCommand,
-        fircoCommandBinding);
+        deadLetterQueue, deadLetterBinding);
   }
 
   private static QueueBuilder queue(String queueName) {

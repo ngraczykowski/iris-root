@@ -1,9 +1,9 @@
 package com.silenteight.payments.bridge.firco.core.alertmessage.port;
 
-import java.util.UUID;
+import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 
 public interface IssueRecommendationUseCase {
 
-  void issue(UUID alertMessageId);
+  void issue(MessageStored messageStored);
 
 }

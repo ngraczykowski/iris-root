@@ -33,10 +33,10 @@ public class AlertMessageDto implements Serializable {
   private String businessUnit; //"ROOT"
 
   @NotNull(groups = MinimalAlertDefinition.class)
-  private String messageId; // "2020082100212372"
+  private String messageID; // "2020082100212372"
 
   @NotNull(groups = MinimalAlertDefinition.class)
-  private String systemId; // "USMTS20200909074058-91828-188490"
+  private String systemID; // "USMTS20200909074058-91828-188490"
 
   private String bypass; // "0"
 

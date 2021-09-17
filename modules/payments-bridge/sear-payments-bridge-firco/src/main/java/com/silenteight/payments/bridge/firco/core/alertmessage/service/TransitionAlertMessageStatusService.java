@@ -2,6 +2,7 @@ package com.silenteight.payments.bridge.firco.core.alertmessage.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus;
 
@@ -13,6 +14,7 @@ import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 class TransitionAlertMessageStatusService {
 
   private final AlertMessageStatusRepository repository;
@@ -28,6 +30,9 @@ class TransitionAlertMessageStatusService {
         .findByAlertMessageId(alertMessageId)
         .orElseThrow();
     entity.transitionStatusOrElseThrow(destinationStatus, clock);
+    if (log.isTraceEnabled()) {
+      log.trace("AlertMessage [{}] transited to {}", alertMessageId, destinationStatus.name());
+    }
     repository.save(entity);
   }
 
@@ -37,6 +42,9 @@ class TransitionAlertMessageStatusService {
     if (entity.isPresent()) {
       throw new IllegalStateException("Unable to re-initialize the initial state for alertID: " +
           alertMessageId);
+    }
+    if (log.isTraceEnabled()) {
+      log.trace("AlertMessage [{}] transited to RECEIVED", alertMessageId);
     }
     repository.save(new AlertMessageStatusEntity(alertMessageId));
   }

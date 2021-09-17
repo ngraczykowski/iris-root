@@ -21,7 +21,7 @@ class RequestMessageDtoValidatorImpl implements RequestMessageDtoValidator {
       @NonNull RequestMessageDto messageDto,
       @NonNull Class<? extends ValidationGroup> validationDefinitionClass) {
     Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-    var systemId = messageDto.getMessage().getSystemId();
+    var systemId = messageDto.getMessage().getSystemID();
     var constraintViolations =
         validator.validate(messageDto, validationDefinitionClass);
 

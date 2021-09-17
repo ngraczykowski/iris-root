@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.firco.dto.common.AckDto;
-import com.silenteight.payments.bridge.firco.dto.output.AlertRecommendationDto;
+import com.silenteight.payments.bridge.firco.dto.output.ClientRequestDto;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.http.ResponseEntity;
@@ -18,14 +18,14 @@ class CallbackRequestImpl implements CallbackRequest {
 
   private final String endpoint;
   private final RestTemplate restTemplate;
-  private final AlertRecommendationDto recommendationDto;
+  private final ClientRequestDto clientRequestDto;
 
   @Timed("ProxyBridgeClient.send")
   @Override
   public void invoke() {
     try {
       ResponseEntity<AckDto> responseEntity =
-          restTemplate.postForEntity(endpoint, recommendationDto, AckDto.class);
+          restTemplate.postForEntity(endpoint, clientRequestDto, AckDto.class);
 
       log.debug("The response from [{}] is: {}", endpoint, responseEntity);
 

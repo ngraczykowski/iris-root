@@ -10,10 +10,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.COMMAND_EXCHANGE_NAME;
-import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.EVENT_EXCHANGE_NAME;
-import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.EVENT_INTERNAL_EXCHANGE_NAME;
-import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.FIRCO_ACCEPT_ALERT_ROUTING_KEY;
+import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.FIRCO_ALERT_STORED_ROUTING_KEY;
+import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.FIRCO_EXCHANGE_NAME;
 
 @Data
 @Validated
@@ -25,37 +23,14 @@ class FircoOutboundAmqpIntegrationProperties {
   @NotNull
   private Command command = new Command();
 
-  @NestedConfigurationProperty
-  @Valid
-  @NotNull
-  private Event event = new Event();
-
-  @NestedConfigurationProperty
-  @Valid
-  @NotNull
-  private EventInternal eventInternal = new EventInternal();
-
   @Data
   static class Command {
 
     @NotBlank
-    private String outboundExchangeName = COMMAND_EXCHANGE_NAME;
+    private String outboundExchangeName = FIRCO_EXCHANGE_NAME;
 
     @NotNull
-    private String acceptAlertRoutingKey = FIRCO_ACCEPT_ALERT_ROUTING_KEY;
+    private String alertStoredRoutingKey = FIRCO_ALERT_STORED_ROUTING_KEY;
   }
 
-  @Data
-  static class Event {
-
-    @NotBlank
-    private String outboundExchangeName = EVENT_EXCHANGE_NAME;
-  }
-
-  @Data
-  static class EventInternal {
-
-    @NotBlank
-    private String outboundExchangeName = EVENT_INTERNAL_EXCHANGE_NAME;
-  }
 }

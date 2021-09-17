@@ -13,7 +13,8 @@ public enum AlertMessageStatus {
   RECEIVED {
     @Override
     public EnumSet<AlertMessageStatus> allowedTransitions() {
-      return EnumSet.of(STORED, ACCEPTED, REJECTED_OVERFLOWED, REJECTED_OUTDATED);
+      return EnumSet.of(STORED, ACCEPTED, REJECTED_OVERFLOWED,
+          REJECTED_OUTDATED, /* temporary */ RECOMMENDED);
     }
   },
 
@@ -23,7 +24,7 @@ public enum AlertMessageStatus {
   STORED {
     @Override
     public EnumSet<AlertMessageStatus> allowedTransitions() {
-      return EnumSet.of(ACCEPTED, REJECTED_OUTDATED);
+      return EnumSet.of(ACCEPTED, REJECTED_OUTDATED, /* temporary */ RECOMMENDED);
     }
   },
 

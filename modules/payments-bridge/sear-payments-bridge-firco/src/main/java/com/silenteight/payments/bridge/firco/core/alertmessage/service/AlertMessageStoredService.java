@@ -27,24 +27,12 @@ public class AlertMessageStoredService  {
       return;
     }
 
-    if (publishEventAttempt(alertMessage)) {
+    if (alertMessageStoredPublisherPort.publish(alertMessage)) {
       transitionAlertMessageStatusService
           .transitionAlertMessageStatus(alertMessage.getId(), STORED);
-      log.debug("Publishing AlertMessageStored event was successful, alertId:{}",
-          alertMessage.getId());
     } else {
-      log.warn("Publishing AlertMessageStored event failed, alertId:{}", alertMessage.getId());
+      log.warn("Publishing AlertMessageStored [{}] event failed", alertMessage.getId());
     }
-  }
-
-  // TODO: temporary solution, should be moved to integration layer.
-  private boolean publishEventAttempt(FircoAlertMessage message) {
-    for (int i = 0; i < 3; i++) {
-      if (alertMessageStoredPublisherPort.publish(message)) {
-        return true;
-      }
-    }
-    return false;
   }
 
 }

@@ -16,7 +16,7 @@ class SchedulerLockConfiguration {
     return new JdbcTemplateLockProvider(
         JdbcTemplateLockProvider.Configuration.builder()
             .withJdbcTemplate(new JdbcTemplate(dataSource))
-            .withTableName("pb_alert_message_outdated_shedlock")
+            .withTableName("pb_shedlock")
             .usingDbTime()
             .build()
     );

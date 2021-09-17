@@ -23,6 +23,7 @@ public class ClientRequestDto implements Serializable {
   @JsonProperty("msg_ReceiveDecision")
   private ReceiveDecisionDto receiveDecisionDto;
 
+  @SuppressWarnings("unused")
   public String getOutputStatus() {
     int decisionsCount = getReceiveDecisionDto().getMessages().size();
     if (decisionsCount != 1) {

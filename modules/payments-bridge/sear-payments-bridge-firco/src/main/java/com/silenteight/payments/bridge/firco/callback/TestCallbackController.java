@@ -3,21 +3,36 @@ package com.silenteight.payments.bridge.firco.callback;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.firco.dto.output.AlertRecommendationDto;
+import com.silenteight.payments.bridge.firco.dto.common.StatusInfoDto;
+import com.silenteight.payments.bridge.firco.dto.output.AlertDecisionMessageDto;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import static com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus.RECOMMENDED;
 
 @RequiredArgsConstructor
 @RestController
 public class TestCallbackController {
 
   private final CallbackRequestFactory callbackRequestFactory;
+  private final ClientRequestDtoFactory clientRequestDtoFactory;
 
   @GetMapping("/test-callback")
   public String getTest() {
-    var callback = callbackRequestFactory.create(new AlertRecommendationDto("FP", "false alarm"));
+    var clientRequestDto = clientRequestDtoFactory
+        .create(createTestAlertDecisionMessageDto());
+    var callback = callbackRequestFactory.create(clientRequestDto);
     callback.invoke();
     return "Callback invoked\n";
+  }
+
+  private AlertDecisionMessageDto createTestAlertDecisionMessageDto() {
+    var status = new StatusInfoDto();
+    status.setName(RECOMMENDED.name());
+
+    var alertDecision = new AlertDecisionMessageDto();
+    alertDecision.setStatus(status);
+    return alertDecision;
   }
 }

@@ -1,9 +1,9 @@
 package com.silenteight.payments.bridge.firco.core.alertmessage.port;
 
-import java.util.UUID;
+import com.silenteight.payments.bridge.firco.dto.output.AlertDecisionMessageDto;
 
 public interface ResponsePublisherPort {
 
-  void send(UUID alertMessageId);
+  void send(AlertDecisionMessageDto decision);
 
 }

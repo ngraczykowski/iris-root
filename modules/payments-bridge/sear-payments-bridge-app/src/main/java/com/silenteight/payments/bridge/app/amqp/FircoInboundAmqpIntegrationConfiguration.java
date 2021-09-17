@@ -2,13 +2,20 @@ package com.silenteight.payments.bridge.app.amqp;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.firco.core.alertmessage.integration.AlertMessageChannels;
+import com.silenteight.payments.bridge.firco.core.alertmessage.port.IssueRecommendationUseCase;
+import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.amqp.dsl.AmqpInboundChannelAdapterSMLCSpec;
+import org.springframework.integration.dsl.IntegrationFlow;
 
 import javax.validation.Valid;
+
+import static org.springframework.integration.dsl.IntegrationFlows.from;
 
 @Configuration
 @EnableConfigurationProperties(FircoInboundAmqpIntegrationProperties.class)
@@ -19,29 +26,19 @@ class FircoInboundAmqpIntegrationConfiguration {
   private final FircoInboundAmqpIntegrationProperties properties;
 
   private final AmqpInboundFactory inboundFactory;
-  //
-  //  @Bean
-  //  IntegrationFlow analysisInboundIntegrationFlow() {
-  //    return from(createInboundAdapter(properties.getEventInternalInboundQueueNames()))
-  //        .<Object, Class<?>>route(Object::getClass, m -> m
-  //            .channelMapping(
-  //                AddedAnalysisDatasets.class,
-  //                PendingRecommendationChannels.ADDED_ANALYSIS_DATASETS_INBOUND_CHANNEL)
-  //            .channelMapping(
-  //                PendingRecommendations.class,
-  //                PENDING_RECOMMENDATIONS_PUB_SUB_CHANNEL)
-  //        )
-  //        .get();
-  //  }
-  //
-  //  @Bean
-  //  @ConditionalOnProperty(prefix = "ae.analysis.integration.outbound.agent", name = "enabled",
-  //      havingValue = "true", matchIfMissing = true)
-  //  IntegrationFlow agentResponseIntegrationFlow() {
-  //    return from(createInboundAdapter(properties.getAgentResponseInboundQueueName()))
-  //        .channel(AgentResponseChannels.AGENT_RESPONSE_INBOUND_CHANNEL)
-  //        .get();
-  //  }
+
+  private final IssueRecommendationUseCase issueRecommendationUseCase;
+
+  @Bean
+  IntegrationFlow alertMessageIntegrationFlow2() {
+    return from(createInboundAdapter(properties.getInboundQueueNames()))
+        .channel(AlertMessageChannels.ALERT_MESSAGE_STORED_RECEIVED_INBOUND_CHANNEL)
+        .handle(MessageStored.class, (payload, headers) -> {
+          issueRecommendationUseCase.issue(payload);
+          return null;
+        })
+        .get();
+  }
 
   private AmqpInboundChannelAdapterSMLCSpec createInboundAdapter(String... queueNames) {
     return inboundFactory

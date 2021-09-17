@@ -27,9 +27,8 @@ class AlertMessageQueueOverflowedService {
   boolean resolve(FircoAlertMessage message) {
     if (repository.countAllByStatus(RECEIVED) >
         alertMessageProperties.getQueueMessageStoredLimit()) {
-      log.debug("Rejecting requesting recommendation due to exceeding the queue limit. "
-          + "Limit:{}, Rejected alert:{}", alertMessageProperties.getQueueMessageStoredLimit(),
-          message.getId());
+      log.debug("AlertMessage [{}] rejected due to queue limit ({})",
+          message.getId(), alertMessageProperties.getQueueMessageStoredLimit());
 
       responseGeneratorService.prepareAndSendResponse(message.getId(), REJECTED_OVERFLOWED);
       transitionAlertMessageStatusService.transitionAlertMessageStatus(

@@ -70,7 +70,7 @@ class AlertMessageEntity extends BaseEntity {
     var alertMessage = message.getAlertMessage();
     unit = alertMessage.getUnit();
     businessUnit = alertMessage.getBusinessUnit();
-    messageId = alertMessage.getMessageId();
-    systemId = alertMessage.getSystemId();
+    messageId = alertMessage.getMessageID();
+    systemId = alertMessage.getSystemID();
   }
 }

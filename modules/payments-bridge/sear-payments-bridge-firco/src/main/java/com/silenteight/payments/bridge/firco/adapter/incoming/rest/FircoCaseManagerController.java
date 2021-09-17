@@ -43,7 +43,6 @@ class FircoCaseManagerController {
 
     // sendMessage to queue.
     // return;
-
     return ResponseEntity.ok(AckDto.ok());
   }
 }
