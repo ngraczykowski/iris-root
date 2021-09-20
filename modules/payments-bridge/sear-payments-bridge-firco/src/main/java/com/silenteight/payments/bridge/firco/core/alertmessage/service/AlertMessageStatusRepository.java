@@ -19,8 +19,8 @@ interface AlertMessageStatusRepository extends Repository<AlertMessageStatusEnti
   AlertMessageStatusEntity save(AlertMessageStatusEntity entity);
 
   @Query(value = "SELECT * from pb_alert_message_status a WHERE "
-      + "a.status = 'RECEIVED' OR "
-      + "(a.status = 'STORED' and a.stored_at < :dateTime) "
+      + "(a.status = 'RECEIVED' AND a.created_at < :dateTime) OR "
+      + "(a.status = 'STORED' AND a.stored_at < :dateTime) "
       + "LIMIT :limit FOR UPDATE OF a SKIP LOCKED",
       nativeQuery = true)
   List<AlertMessageStatusEntity> findOutdated(int limit, OffsetDateTime dateTime);
