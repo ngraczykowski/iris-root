@@ -4,6 +4,6 @@ import com.silenteight.payments.bridge.firco.core.alertmessage.model.FircoAlertM
 
 public interface AlertMessageStoredPublisherPort {
 
-  boolean publish(FircoAlertMessage message);
+  void publish(FircoAlertMessage message);
 
 }

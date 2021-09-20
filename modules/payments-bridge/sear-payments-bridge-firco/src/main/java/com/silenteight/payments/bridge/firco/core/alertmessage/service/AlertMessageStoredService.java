@@ -27,10 +27,11 @@ public class AlertMessageStoredService  {
       return;
     }
 
-    if (alertMessageStoredPublisherPort.publish(alertMessage)) {
+    try {
+      alertMessageStoredPublisherPort.publish(alertMessage);
       transitionAlertMessageStatusService
-          .transitionAlertMessageStatus(alertMessage.getId(), STORED);
-    } else {
+            .transitionAlertMessageStatus(alertMessage.getId(), STORED);
+    } catch (Exception exception) {
       log.warn("Publishing AlertMessageStored [{}] event failed", alertMessage.getId());
     }
   }
