@@ -31,6 +31,23 @@ Use my prepared script to submit a sample request:
 ./scripts/submit-request.sh
 ```
 
+# Configuring aws credentials
+Create credentials file with default profile
+
+``mkdir ~/.aws/``
+
+create file ``credentials`` with following content
+
+```
+[default]
+aws_access_key_id={YOUR_ACCESS_KEY_ID}
+aws_secret_access_key={YOUR_SECRET_ACCESS_KEY}
+```
+
+export enviroment variable
+
+```export AWS_CREDENTIAL_PROFILES_FILE=~/.aws/credentials```
+
 # Authenticate the request to the server
 
 ## Enabling endpoint security in development

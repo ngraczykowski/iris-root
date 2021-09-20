@@ -139,6 +139,7 @@ libraries.aspectjweaver = [group: 'org.aspectj', name: 'aspectjweaver']
 libraries.awaitility = [group: 'org.awaitility', name: 'awaitility']
 libraries.aws_encryption_sdk_java = [group: 'com.amazonaws', name: 'aws-encryption-sdk-java', version: '2.3.2']
 libraries.aws_java_sdk = [group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.12.52']
+libraries.aws_ses = [group: 'software.amazon.awssdk', name: 'auth', version: '2.17.39']
 libraries.blaze_persistence_core_api = [group: 'com.blazebit', name: 'blaze-persistence-core-api']
 libraries.blaze_persistence_core_impl = [group: 'com.blazebit', name: 'blaze-persistence-core-impl']
 libraries.blaze_persistence_entity_view_api = [group: 'com.blazebit', name: 'blaze-persistence-entity-view-api']
@@ -204,6 +205,7 @@ libraries.jakarta_servlet_api = [group: 'jakarta.servlet', name: 'jakarta.servle
 libraries.jakarta_transaction_api = [group: 'jakarta.transaction', name: 'jakarta.transaction-api']
 libraries.jakarta_validation_api = [group: 'jakarta.validation', name: 'jakarta.validation-api']
 libraries.javax_cache_api = [group: 'javax.cache', name: 'cache-api']
+libraries.javax_mail = [group: 'javax.mail', name: 'mail', version: '1.4.1']
 libraries.jaxb_api = [group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api']
 libraries.jjwt = [group: 'io.jsonwebtoken', name: 'jjwt']
 libraries.keycloak_spring_boot_starter = [group: 'org.keycloak', name: 'keycloak-spring-boot-starter']
@@ -278,6 +280,7 @@ configurations.all {
 }
 
 dependencies {
+  implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.1000')
   implementation platform("org.keycloak.bom:keycloak-adapter-bom:15.0.2")
   implementation platform("com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
   implementation platform("org.testcontainers:testcontainers-bom:1.15.2")

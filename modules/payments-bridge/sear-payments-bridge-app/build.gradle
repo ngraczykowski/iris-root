@@ -94,6 +94,10 @@ dependencies {
   testImplementation libraries.adjudication_engine_api
   testImplementation libraries.awaitility
 
+  // AWS
+  implementation libraries.aws_java_sdk
+  implementation libraries.aws_ses
+
   // Keycloak
   implementation libraries.keycloak_spring_boot_starter
 

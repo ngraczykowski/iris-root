@@ -43,6 +43,6 @@ class LearningCsvReaderTest {
     List<LearningAlert> learningAlerts = new ArrayList<>();
     learningCsvReader.read(learningAlerts::add);
 
-    assertThat(learningAlerts.size()).isEqualTo(163);
+    assertThat(learningAlerts.size()).isEqualTo(141);
   }
 }

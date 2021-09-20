@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
 
-@ConfigurationProperties(prefix = "ae.grpc.client.create-category-values")
+@ConfigurationProperties(prefix = "pb.grpc.client.create-category-values")
 @Validated
 @Data
 class CreateCategoriesValuesProperties {

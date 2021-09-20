@@ -1,7 +1,9 @@
 package com.silenteight.payments.bridge.svb.learning.reader.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.svb.learning.reader.domain.AlertsRead;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsvRow;
 
@@ -17,13 +19,14 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 class LearningCsvReader {
 
   private final CsvFileProvider csvFileProvider;
   private final CreateAlertUseCase createAlertUseCase;
 
-  void read(Consumer<LearningAlert> alertConsumer) {
+  public AlertsRead read(Consumer<LearningAlert> alertConsumer) {
     InputStream streamCsv;
     CsvMapper mapper = new CsvMapper();
     CsvSchema schema = mapper
@@ -31,20 +34,22 @@ class LearningCsvReader {
         .withHeader()
         .withColumnSeparator(',');
 
+    AlertsRead alertsRead;
+
     try {
       streamCsv = new FileInputStream(csvFileProvider.getLearningCsv());
       MappingIterator<LearningCsvRow> it = mapper
           .readerFor(LearningCsvRow.class)
           .with(schema)
           .readValues(streamCsv);
-      readByAlerts(it, alertConsumer);
-      streamCsv.close();
+      alertsRead = readByAlerts(it, alertConsumer);
     } catch (Exception e) {
       throw new RuntimeException(e.getMessage());
     }
+    return alertsRead;
   }
 
-  void readByAlerts(
+  private AlertsRead readByAlerts(
       MappingIterator<LearningCsvRow> it, Consumer<LearningAlert> alertConsumer) {
     var firstRow = it.next();
     String currentAlertID = firstRow.getFkcoId();
@@ -52,17 +57,33 @@ class LearningCsvReader {
     List<LearningCsvRow> alertRows = new ArrayList<>();
     alertRows.add(firstRow);
 
+    int failedAlertsCount = 0;
+    int successfulAlertsCount = 0;
+
     while (it.hasNext()) {
       var row = it.next();
       var rowAlertId = row.getFkcoId();
 
-      if (!currentAlertID.equals(rowAlertId)) {
-        currentAlertID = rowAlertId;
-        alertConsumer.accept(createAlertUseCase.fromCsvRows(alertRows));
-        alertRows.clear();
+      if (currentAlertID.equals(rowAlertId)) {
+        alertRows.add(row);
+        continue;
       }
 
-      alertRows.add(row);
+      currentAlertID = rowAlertId;
+      try {
+        alertConsumer.accept(createAlertUseCase.fromCsvRows(alertRows));
+        successfulAlertsCount++;
+      } catch (RuntimeException e) {
+        log.error("Failed to process alert = {} reason = {}", rowAlertId, e.getMessage());
+        failedAlertsCount++;
+      }
+      alertRows.clear();
     }
+
+    return AlertsRead
+        .builder()
+        .failedAlerts(failedAlertsCount)
+        .successfulAlerts(successfulAlertsCount)
+        .build();
   }
 }
