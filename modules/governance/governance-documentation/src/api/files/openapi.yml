@@ -1,0 +1,222 @@
+openapi: 3.0.3
+info:
+  title: Files and attachments
+  description: Upload and download process.
+  version: 0.1.0
+
+servers:
+  - url: '{environment}/rest/governance/api/v1'
+    variables:
+      environment:
+        enum:
+          - http://localhost:24204
+          - https://localhost:24111
+        default: http://localhost:24204
+
+paths:
+  /files:
+    post:
+      tags:
+        - file upload
+      description: Upload a new file.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: 'Response to file upload request with success.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadSuccessDto'
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadFailedResponseDto'
+          description: 'Response to file upload request with errors'
+
+  /files/{id}/description:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        description: File Id
+        example: 2f3a792d-66f2-4ac0-827f-dab8b1593bd0
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - file description
+      description: Returns a dto regarding a specific file.
+      responses:
+        200:
+          description: File dto.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDescriptionDto'
+
+  /changeRequest/{changeRequestId}/attachments:
+    get:
+      parameters:
+        - in: path
+          name: changeRequestId
+          required: true
+          description: Change request id
+          example: 8320ab3d-9e4d-450c-8cd0-c2ac1717c63c
+          schema:
+            type: string
+            format: uuid
+      tags:
+        - list of attachments ids
+      description: Return list of attachments ids linked with specific change request.
+      responses:
+        200:
+          description: 'List of attachments ids.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              example: [ 'files/1cc1e744-de09-4c5a-a5b5-35a02cc56381', 'files/b07e57c5-51b1-4650-9273-28e226866b10' ]
+    post:
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Change request id
+          example: 02240812-4a70-4700-88b4-5f32dc0990a5
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+            example: [ 'files/1cc1e744-de09-4c5a-a5b5-35a02cc56381', 'files/b07e57c5-51b1-4650-9273-28e226866b10' ]
+      tags:
+        - add attachment to change request
+      description: Add attachmnet to corresponding change request.
+      responses:
+        201:
+          description: OK
+
+    delete:
+      parameters:
+        - in: query
+          name: file
+          required: true
+          description: File resource
+          schema:
+            type: string
+          style: form
+          example: files/8143c5d6-b69e-4f70-8a02-c640d0aa46a9
+        - in: path
+          name: changeRequestId
+          required: true
+          description: Change request id
+          example: da9dd858-55b6-45d7-bc55-3984ea5991f6
+          schema:
+            type: string
+            format: uuid
+      tags:
+        - attachment removal
+      responses:
+        201:
+          description: "No content"
+
+  /changeRequest/{changeRequestId}/attachments/download:
+    get:
+      parameters:
+        - in: query
+          name: file
+          required: true
+          description: File resource
+          example: files/ab0264e3-3327-40fd-a6ae-8e96eff66ad4
+          schema:
+            type: string
+        - in: path
+          name: changeRequestId
+          required: true
+          description: Change request id
+          example: c0e57605-998d-41e5-9651-27d71097918c
+          schema:
+            type: string
+            format: uuid
+
+      tags:
+        - attachment download
+      description: Returns a requested attachment.
+      responses:
+        200:
+          description: 'Requested attachment'
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+components:
+  schemas:
+    FileDescriptionDto:
+      type: object
+      properties:
+        fileId:
+          type: string
+          format: uuid
+        fileName:
+          type: string
+        fileSize:
+          type: string
+          format: int64
+        uploaderName:
+          type: string
+        createdAt:
+          type: string
+          format: date
+
+    Error:
+      type: string
+      enum: [ FILE_NAME_TOO_LONG, INVALID_FILE_NAME, FILE_SIZE_TOO_LARGE, INVALID_CONTENT ]
+
+    FileUploadFailedResponseDto:
+      type: object
+      properties:
+        fileName:
+          type: string
+        fileSize:
+          type: string
+          format: int64
+        uploaderName:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#components/schemas/Error'
+
+    FileUploadSuccessDto:
+      type: object
+      properties:
+        fileId:
+          type: string
+          format: uuid
+        fileName:
+          type: string
+        fileSize:
+          type: string
+          format: int64
+        uploaderName:
+          type: string
