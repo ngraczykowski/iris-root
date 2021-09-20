@@ -14,11 +14,12 @@ WL_TYPE = "Some text"  # this param is constant, not modified by any check rule
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
     [
         (
-            "Text with bic codeXXX",  # XXX - headquarters string
+            "Text with bic codeXXX",  # XXX - headquarters string at the end
             "bic code",
             ["some search code"],
             ["matching biccode", "some other bic"],
-        )
+        ),
+        ("Headquarters codeXXXXXX", "code", [], ["code"]),
     ],
 )
 def test_wl_matching_text_in_bic_codes_headquarters_string(
@@ -41,6 +42,7 @@ def test_wl_matching_text_in_bic_codes_headquarters_string(
     [
         ("Search code", "search code", ["searchcode"], []),
         ("Longer text containing code", "code", ["code"], []),
+        ("Here is code 123", "123", ["123", "45"], []),
     ],
 )
 def test_exact_match_search_code(

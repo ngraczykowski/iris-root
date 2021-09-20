@@ -14,7 +14,12 @@ WL_TYPE = "Some text"  # this param is constant, not modified by any check rule
 
 @pytest.mark.parametrize(
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
-    [("Text", "Text", [], []), ("Some text", "Different Text", [], [])],
+    [
+        ("Text", "Text", [], []),
+        ("Some text", "Different Text", [], []),
+        ("Text", "", [], []),
+        ("", "", [], []),
+    ],
 )
 def test_empty_codes_lists(ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes):
     codes = BankIdentificationCodes(
@@ -28,9 +33,14 @@ def test_empty_codes_lists(ap_matching_field, wl_matching_text, wl_search_codes,
 
 @pytest.mark.parametrize(
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
-    [("Code", "Co", ["some search code"], ["some bic code"])],
+    [
+        ("Codes", "Co", ["some search code"], ["some bic code"]),
+        ("S8", "S8", ["S8"], ["silent eight"]),
+        ("HP Sauce", "HP", [], ["HP"]),
+        ("Code 1", "1", ["1"], []),
+    ],
 )
-def test_too_short_wl_matching_text(
+def test_too_short_wl_matching_text(  # wl text shorter than 3 chars
     ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes
 ):
     codes = BankIdentificationCodes(
@@ -45,7 +55,11 @@ def test_too_short_wl_matching_text(
 
 @pytest.mark.parametrize(
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
-    [("Some Text", "Another Text", ["some search code"], ["some bic code"])],
+    [
+        ("Some Text", "Different Text", ["some search code"], ["some bic code"]),
+        ("Alpha Beta", "Gamma", ["search"], ["bic"]),
+        ("", "Text", ["search"], ["bic"]),
+    ],
 )
 def test_wl_text_not_match_ap_matching_field(
     ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes
@@ -63,7 +77,11 @@ def test_wl_text_not_match_ap_matching_field(
 
 @pytest.mark.parametrize(
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
-    [("Some Text", "some text", ["some search code"], ["some bic code"])],
+    [
+        ("Some Text", "text", ["search code"], ["bic code"]),
+        ("Code", "Code", ["alpha", "beta"], []),
+        ("Code2", "Code2", [], ["gamma", "delta"]),
+    ],
 )
 def test_matching_text_not_match_any_of_codes(
     ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes
@@ -76,5 +94,5 @@ def test_matching_text_not_match_any_of_codes(
     assert isinstance(result.reason, MatchingTextDoesNotMatchWlSearchCodeReason)
     assert result.reason.watchlist_matching_text == wl_matching_text
     assert result.reason.watchlist_type == WL_TYPE
-    assert result.reason.watchlist_search_codes == [wl_search_codes[0].upper()]
+    assert result.reason.watchlist_search_codes == [code.upper() for code in wl_search_codes]
     assert result.reason.conclusion == "MatchingTextDoesNotMatchWlSearchCodeReason"
