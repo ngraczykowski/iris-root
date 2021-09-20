@@ -2,110 +2,51 @@
 <!DOCTYPE configuration>
 
 <configuration>
-  <!--  Include Spring defaults -->
   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-  <!--  Include conversion word allowing printing our custom MDC map -->
-  <conversionRule conversionWord="sensMdc"
-                  converterClass="com.silenteight.sens.webapp.logging.SensMdcLogConverter"/>
-  <!--  Include conversion word allowing conditionally printing another conversion word -->
-  <conversionRule conversionWord="ifNotEmpty"
-                  converterClass="com.silenteight.sens.webapp.logging.ShowIfExistsLogConverter"/>
-
-  <!-- Define custom SENS WebApp logging patterns -->
-  <property name="SENS_DATE_PATTERN"
-            value="%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}"/>
-  <property name="SENS_LOG_LEVEL_PATTERN" value="${LOG_LEVEL_PATTERN:-%5p}"/>
-  <property name="SENS_PID_PATTERN" value="${PID:- }"/>
-  <property name="SENS_THREAD_PATTERN" value="[%t]"/>
-  <property name="SENS_MARKER_PATTERN" value="%ifNotEmpty(%marker){[$]}"/>
-  <property name="SENS_CLASS_NAME_PATTERN" value="%logger{40}"/>
-  <property name="SENS_MESSAGE_PATTERN" value="%m"/>
-  <property name="SENS_EXCEPTION_PATTERN" value="${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
-  <property name="SENS_MDC_PATTERN" value="%ifNotEmpty(%sensMdc){[$]}"/>
-
-  <property name="SENS_CONSOLE_LOG_PATTERN"
-            value="%clr(${SENS_DATE_PATTERN}){faint} %clr(${SENS_LOG_LEVEL_PATTERN}) pid=%clr(${SENS_PID_PATTERN}){magenta} thread=%clr(${SENS_THREAD_PATTERN}){magenta} %clr(---){faint} %clr(${SENS_MARKER_PATTERN}){yellow} %clr(${SENS_CLASS_NAME_PATTERN}){cyan} %clr(:){faint} ${SENS_MESSAGE_PATTERN} %clr(${SENS_MDC_PATTERN}){cyan}%n${SENS_EXCEPTION_PATTERN}"/>
-  <!--  File logging pattern doesn't contain colors -->
-  <property name="SENS_FILE_LOG_PATTERN"
-            value="${SENS_DATE_PATTERN} ${SENS_LOG_LEVEL_PATTERN} pid=${SENS_PID_PATTERN} thread=${SENS_THREAD_PATTERN} --- ${SENS_MARKER_PATTERN} ${SENS_CLASS_NAME_PATTERN} : ${SENS_MESSAGE_PATTERN} ${SENS_MDC_PATTERN}%n${SENS_EXCEPTION_PATTERN}"/>
+  <springProperty name="LOG_PATH" source="serp.logging.path" defaultValue=""/>
+  <springProperty name="LOG_NAME" source="serp.logging.name" defaultValue="service"/>
+  <springProperty name="SERVICE_NAME" source="spring.application.name" defaultValue="service"/>
+  <springProperty name="HOSTNAME" source="hostname" defaultValue="undefined"/>
 
   <!-- CONSOLE appender -->
   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <pattern>${SENS_CONSOLE_LOG_PATTERN}</pattern>
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
       <charset>utf-8</charset>
     </encoder>
+    <target>System.out</target>
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <level>ERROR</level>
+      <onMatch>DENY</onMatch>
+      <onMismatch>ACCEPT</onMismatch>
+    </filter>
   </appender>
-
-  <!-- Log file paths -->
-  <springProperty scope="context" name="CONFIG_LOG_PATH" source="sens.logging.file.dir"/>
-  <springProperty scope="context" name="CONFIG_LOG_NAME" source="sens.logging.file.name"/>
-
-  <property name="LOG_PATH" value="${CONFIG_LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}"/>
-  <property name="LOG_NAME" value="${CONFIG_LOG_NAME:-webapp}"/>
-
-  <!-- FILE appender-->
-  <property
-      name="LOG_FILE"
-      value="${LOG_PATH}/${LOG_NAME}.log"/>
-  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+  <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <pattern>${SENS_FILE_LOG_PATTERN}</pattern>
+      <pattern>${CONSOLE_LOG_PATTERN}</pattern>
       <charset>utf-8</charset>
     </encoder>
-    <file>${LOG_FILE}</file>
-    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
-      <maxFileSize>${LOG_FILE_MAX_SIZE:-120MB}</maxFileSize>
-      <maxHistory>${LOG_FILE_MAX_HISTORY:-30}</maxHistory>
-      <totalSizeCap>${LOG_TOTAL_SIZE_CAP:-4GB}</totalSizeCap>
-      <cleanHistoryOnStart>true</cleanHistoryOnStart>
-    </rollingPolicy>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>ERROR</level>
+    </filter>
+    <target>System.err</target>
   </appender>
+
+  <!-- SERP defaults -->
+  <include resource="logback-defaults.xml"/>
 
   <!-- https://logback.qos.ch/manual/configuration.html#shutdownHook and https://jira.qos.ch/browse/LOGBACK-1090 -->
   <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
 
-  <!-- http://logback.qos.ch/manual/configuration.html#LevelChangePropagator -->
   <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
     <resetJUL>true</resetJUL>
   </contextListener>
 
-  <!--  FILE ERROR appender-->
-  <property
-      name="ERROR_LOG_FILE"
-      value="${LOG_PATH}/${LOG_NAME}-error.log"/>
-  <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <encoder>
-      <pattern>${SENS_FILE_LOG_PATTERN}</pattern>
-      <charset>utf-8</charset>
-    </encoder>
-    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-      <level>error</level>
-    </filter>
-    <file>${ERROR_LOG_FILE}</file>
-    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>${ERROR_LOG_FILE}.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
-      <maxFileSize>${LOG_FILE_MAX_SIZE:-120MB}</maxFileSize>
-      <maxHistory>${LOG_FILE_MAX_HISTORY:-30}</maxHistory>
-      <totalSizeCap>${LOG_TOTAL_SIZE_CAP:-4GB}</totalSizeCap>
-      <cleanHistoryOnStart>true</cleanHistoryOnStart>
-    </rollingPolicy>
-  </appender>
-
-  <!-- ASYNC appenders -->
-  <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
-    <queueSize>512</queueSize>
-    <appender-ref ref="FILE"/>
-  </appender>
-  <appender name="ASYNC_ERROR" class="ch.qos.logback.classic.AsyncAppender">
-    <queueSize>512</queueSize>
-    <appender-ref ref="ERROR"/>
-  </appender>
-
-  <root level="INFO">
-    <appender-ref ref="CONSOLE"/>
-    <appender-ref ref="ASYNC_FILE"/>
-    <appender-ref ref="ASYNC_ERROR"/>
-  </root>
+  <!-- Development configuration -->
+  <springProfile name="dev">
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="STDERR"/>
+    </root>
+  </springProfile>
 </configuration>

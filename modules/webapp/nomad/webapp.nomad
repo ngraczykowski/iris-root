@@ -116,6 +116,16 @@ job "webapp" {
         change_mode = "noop"
       }
 
+      template {
+        data = file("./conf/logback.xml")
+        destination = "secrets/conf/logback.xml"
+        change_mode = "noop"
+      }
+
+      env {
+        LOG_PATH = "${NOMAD_ALLOC_DIR}/logs"
+      }
+
       config {
         command = "java"
         args = [
@@ -126,6 +136,7 @@ job "webapp" {
           "-Dsun.jnu.encoding=UTF-8",
           "-Djava.net.preferIPv4Stack=true",
           "-Djava.io.tmpdir=${meta.silenteight.home}/tmp",
+          "-Dlogging.config=secrets/conf/logback.xml",
           "-Dserp.show-env=true",
           "-jar",
           "local/sens-webapp-backend.jar",

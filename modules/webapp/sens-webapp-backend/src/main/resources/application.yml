@@ -206,10 +206,6 @@ management:
 security.basic:
   enabled: false
 
-sens.logging.file:
-  dir: logs/
-  name: ${spring.application.name}
-
 serp:
   messaging:
     error-queue:
