@@ -22,11 +22,16 @@ def check_grpc_response():
     channel = grpc.insecure_channel("localhost:24805")
     stub = BankIdentificationCodesAgentStub(channel)
     resp = stub.CheckBankIdentificationCodes(request)
-    print("Result status: {0}".format("OK" if resp.solution == "MATCH" else "INVALID"))
-    print("Expected solution: MATCH", ", get solution: {0}".format(resp.solution))
+    print("Solution:\n", "expected: MATCH\n", "actual:   {0}\n".format(resp.solution))
     print(
-        "Expected conclusion: MatchingTextIsPartOfLongerSequenceReason",
-        ", get solution: {0}".format(resp.reason.conclusion),
+        "Conclusion: \n",
+        "expected: MatchingTextIsPartOfLongerSequenceReason\n",
+        "actual:   {0}\n".format(resp.reason.conclusion),
+    )
+    print(
+        "Field altered_party_matching_sequence:\n",
+        "expected: 2085846280FS \n",
+        "actual:   {0}\n".format(resp.reason.altered_party_matching_sequence),
     )
 
 
