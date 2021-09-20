@@ -24,6 +24,8 @@ variable "http_tags" {
 locals {
   jvm_memory = ceil(var.memory * 0.7)
   perm_memory = ceil(var.memory * 0.2)
+  database_node_destination = "eu2"
+  database_volume           = "/srv/sep-cluster/postgres/${var.namespace}-webapp"
 }
 
 job "webapp" {
@@ -34,6 +36,59 @@ job "webapp" {
   ]
 
   namespace = "${var.namespace}"
+
+  group "database" {
+    count = 1
+
+    constraint {
+      attribute = "${node.unique.name}"
+      value     = "${local.database_node_destination}"
+    }
+
+    network {
+      port "tcp" {
+        to = 5432
+      }
+    }
+
+    task "postgres" {
+      driver = "docker"
+
+      template {
+        data        = "{{ key \"database/${var.namespace}-webapp/secrets\" }}"
+        destination = "secrets/webapp-db.env"
+        env         = true
+      }
+
+      config {
+        image   = "postgres:10"
+        ports   = [
+          "tcp"]
+        volumes = [
+          "${local.database_volume}:/var/lib/postgresql/data"
+        ]
+      }
+
+      service {
+        name = "${var.namespace}-webapp-db"
+
+        port = "tcp"
+
+        check {
+          type     = "tcp"
+          interval = "30s"
+          timeout  = "5s"
+        }
+      }
+
+      resources {
+        cpu    = 2048
+        # MHz
+        memory = 2048
+        # MB
+      }
+    }
+  }
 
   group "webapp" {
     count = 1
