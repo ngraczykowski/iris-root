@@ -84,4 +84,41 @@
     </createIndex>
   </changeSet>
 
+  <changeSet id="universal-datasource-1.0.0-4" author="mbartecki">
+    <createTable tableName="uds_feature_input">
+      <column name="agent_input_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="match_name" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="feature" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <!-- The name of the type contained in `agent_input` column. -->
+      <column name="agent_input_type" type="VARCHAR(100)">
+        <constraints nullable="false"/>
+      </column>
+      <!--
+        Contains JSON-serialized Protobuf message object with Agent feature input, e.g.,
+        `com.silenteight.datasource.api.location.v1LocationFeatureInput`,
+        or `com.silenteight.datasource.api.name.v1.NameFeatureInput`.
+      -->
+      <column name="agent_input" type="JSONB">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="uds_feature_input"
+        indexName="ix_uds_feature_input_match_name">
+      <column name="match_name"/>
+    </createIndex>
+
+    <createIndex
+        tableName="uds_feature_input"
+        indexName="ix_uds_feature_input_feature">
+      <column name="feature"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>
