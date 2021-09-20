@@ -30,7 +30,7 @@ class FircoInboundAmqpIntegrationConfiguration {
   private final IssueRecommendationUseCase issueRecommendationUseCase;
 
   @Bean
-  IntegrationFlow alertMessageIntegrationFlow2() {
+  IntegrationFlow alertMessageStoredReceivedInbound() {
     return from(createInboundAdapter(properties.getInboundQueueNames()))
         .channel(AlertMessageChannels.ALERT_MESSAGE_STORED_RECEIVED_INBOUND_CHANNEL)
         .handle(MessageStored.class, (payload, headers) -> {
