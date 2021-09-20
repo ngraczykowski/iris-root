@@ -22,7 +22,6 @@ class RecommendationEntity {
   @Column(name = "id", nullable = false, insertable = false, updatable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
   private String recommendedAction;
   private String recommendationComment;
   private String alert;

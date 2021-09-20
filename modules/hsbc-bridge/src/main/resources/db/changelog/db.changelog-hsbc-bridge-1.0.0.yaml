@@ -733,3 +733,12 @@ databaseChangeLog:
                   name: category_id
             indexName: idx_bridge_category_allowed_values_category_id
             tableName: hsbc_bridge_category_allowed_values
+
+  - changeSet:
+      id: 1.0.0-27
+      author: awojcicki
+      changes:
+        - addUniqueConstraint:
+            columnNames: alert
+            constraintName: const_alert
+            tableName: hsbc_bridge_recommendation

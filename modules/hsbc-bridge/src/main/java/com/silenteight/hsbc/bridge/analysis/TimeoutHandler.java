@@ -10,7 +10,6 @@ import com.silenteight.hsbc.bridge.analysis.event.AnalysisTimeoutEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -25,7 +24,6 @@ class TimeoutHandler {
   private final ApplicationEventPublisher eventPublisher;
 
   @Scheduled(fixedRate = 60 * 1000, initialDelay = 2000)
-  @Transactional
   void process() {
     findInProgressTimeoutAnalyses().forEach(this::tryToHandleAnalysis);
   }

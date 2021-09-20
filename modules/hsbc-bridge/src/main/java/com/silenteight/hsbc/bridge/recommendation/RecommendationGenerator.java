@@ -7,7 +7,6 @@ import com.silenteight.hsbc.bridge.recommendation.event.AlertRecommendationInfo;
 import com.silenteight.hsbc.bridge.recommendation.event.RecommendationsGeneratedEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,7 +20,6 @@ public class RecommendationGenerator {
 
   private final ApplicationEventPublisher eventPublisher;
 
-  @Transactional
   public void generate(@NonNull GenerationRequest request) {
     var alerts = request.getAlerts();
     var analysis = request.getAnalysis();

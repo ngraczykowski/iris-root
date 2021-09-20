@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.hsbc.bridge.recommendation.metadata.RecommendationMetadata;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Collection;
 
@@ -19,16 +20,17 @@ class StoreRecommendationsUseCase {
 
   public void store(@NonNull Collection<RecommendationWithMetadataDto> recommendations) {
     recommendations.forEach(r -> {
-      var name = r.getName();
-
-      if (doesNotExist(name)) {
+      try {
         save(r);
         if (log.isDebugEnabled()) {
-          log.debug("Recommendation stored, alert={}, recommendation={}", r.getAlert(), name);
+          log.debug(
+              "Recommendation stored, alert={}, recommendation={}", r.getAlert(), r.getName());
         }
-      } else {
+      } catch (DataIntegrityViolationException e) {
         log.warn(
-            "Recommendation already exists in DB, alert={}, recommendation={}", r.getAlert(), name);
+            "Recommendation already exists in DB, alert={}, recommendation={}",
+            r.getAlert(),
+            r.getName());
       }
     });
   }
@@ -44,9 +46,5 @@ class StoreRecommendationsUseCase {
   private RecommendationMetadataEntity createMetadataEntity(RecommendationMetadata metadata) {
     var json = objectMapper.valueToTree(metadata);
     return new RecommendationMetadataEntity(json);
-  }
-
-  private boolean doesNotExist(String name) {
-    return !repository.existsByName(name);
   }
 }

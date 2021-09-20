@@ -8,7 +8,6 @@ import com.silenteight.hsbc.bridge.recommendation.RecommendationGenerator;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationGenerator.GenerationRequest;
 
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -26,7 +25,6 @@ class BatchProcessingSimulator {
   private final RecommendationGenerator generator;
 
   @Scheduled(fixedRateString = "PT15S", initialDelay = 2000)
-  @Transactional
   public void simulate() {
     findBatchInProcessing().ifPresent(b -> {
 
