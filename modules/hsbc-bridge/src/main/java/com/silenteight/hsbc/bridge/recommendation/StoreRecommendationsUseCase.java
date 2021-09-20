@@ -22,10 +22,7 @@ class StoreRecommendationsUseCase {
     recommendations.forEach(r -> {
       try {
         save(r);
-        if (log.isDebugEnabled()) {
-          log.debug(
-              "Recommendation stored, alert={}, recommendation={}", r.getAlert(), r.getName());
-        }
+        log.debug("Recommendation stored, alert={}, recommendation={}", r.getAlert(), r.getName());
       } catch (DataIntegrityViolationException e) {
         log.warn(
             "Recommendation already exists in DB, alert={}, recommendation={}",
