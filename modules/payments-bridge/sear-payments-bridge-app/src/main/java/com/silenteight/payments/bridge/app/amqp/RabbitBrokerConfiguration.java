@@ -20,7 +20,9 @@ class RabbitBrokerConfiguration {
   Declarables rabbitBrokerDeclarables() {
 
     var exchange = topicExchange(FIRCO_EXCHANGE_NAME).durable(true).build();
-    var commandQueue = queue(FIRCO_COMMAND_QUEUE_NAME).maxPriority(10).build();
+    var commandQueue = queue(FIRCO_COMMAND_QUEUE_NAME)
+        .withArgument("x-dead-letter-exchange", DEAD_LETTER_EXCHANGE)
+        .maxPriority(10).build();
     var commandQueueBinding = bind(commandQueue, exchange, FIRCO_ALERT_STORED_ROUTING_KEY + ".#");
 
     var errorQueue = queue(ERROR_QUEUE).build();
