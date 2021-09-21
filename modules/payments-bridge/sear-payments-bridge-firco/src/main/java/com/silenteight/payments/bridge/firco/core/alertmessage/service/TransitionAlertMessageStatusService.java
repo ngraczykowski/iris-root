@@ -27,12 +27,13 @@ class TransitionAlertMessageStatusService {
       UUID alertMessageId, AlertMessageStatus destinationStatus) {
 
     var entity = repository
-        .findByAlertMessageId(alertMessageId)
+        .findByAlertMessageIdAndLockForWrite(alertMessageId)
         .orElseThrow();
     entity.transitionStatusOrElseThrow(destinationStatus, clock);
     if (log.isTraceEnabled()) {
       log.trace("AlertMessage [{}] transited to {}", alertMessageId, destinationStatus.name());
     }
+
     repository.save(entity);
   }
 

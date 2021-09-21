@@ -25,6 +25,7 @@ public class RejectOutdatedAlertMessagesService implements RejectOutdatedAlertMe
 
   private final AlertMessageStatusRepository repository;
   private final ResponseGeneratorService responseGeneratorService;
+  private final TransitionAlertMessageStatusService transitionAlertMessageStatusService;
 
   @Setter
   private Clock clock = Clock.systemUTC();
@@ -44,10 +45,10 @@ public class RejectOutdatedAlertMessagesService implements RejectOutdatedAlertMe
   }
 
   private void sendResponse(AlertMessageStatusEntity alertMessageStatus) {
-    responseGeneratorService.prepareAndSendResponse(
-        alertMessageStatus.getAlertMessageId(), REJECTED_OUTDATED);
-    alertMessageStatus.transitionStatus(REJECTED_OUTDATED, clock);
-    repository.save(alertMessageStatus);
+    var alertMessageId = alertMessageStatus.getAlertMessageId();
+    responseGeneratorService.prepareAndSendResponse(alertMessageId, REJECTED_OUTDATED);
+    transitionAlertMessageStatusService
+        .transitionAlertMessageStatus(alertMessageId, REJECTED_OUTDATED);
   }
 
 }

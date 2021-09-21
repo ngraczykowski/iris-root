@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.time.Clock;
 import java.time.OffsetDateTime;
 import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
 
 import static com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus.ACCEPTED;
 import static com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus.RECOMMENDED;
@@ -35,7 +34,6 @@ class IssueRecommendationService implements IssueRecommendationUseCase {
   @Setter
   private Clock clock = Clock.systemUTC();
 
-  @Transactional
   @Override
   public void issue(MessageStored messageStored) {
     var alertMessageId = ResourceName.create(messageStored.getAlert()).getUuid("alert-messages");
