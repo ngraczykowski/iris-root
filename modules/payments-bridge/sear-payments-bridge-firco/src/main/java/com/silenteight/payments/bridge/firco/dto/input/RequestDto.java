@@ -10,7 +10,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -22,7 +21,7 @@ public class RequestDto implements Serializable {
 
   private static final long serialVersionUID = -2318468779346806189L;
 
-  private transient Map<String, Object> header;
+  private transient String header;
 
   @NotNull
   @Valid

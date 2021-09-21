@@ -20,18 +20,20 @@ public class ClientRequestDto implements Serializable {
 
   private static final long serialVersionUID = 4361457566013326051L;
 
-  @JsonProperty("msg_ReceiveDecision")
-  private ReceiveDecisionDto receiveDecisionDto;
+  private String header;
 
-  @SuppressWarnings("unused")
-  public String getOutputStatus() {
-    int decisionsCount = getReceiveDecisionDto().getMessages().size();
-    if (decisionsCount != 1) {
-      log.error("There are {} decisions for the alert but should be 1", decisionsCount);
-      throw new IllegalStateException();
-    }
-    AlertDecisionMessageDto messageDto =
-        getReceiveDecisionDto().getMessages().get(0).getDecisionMessage();
-    return messageDto.getStatus().getName();
+  private Body body;
+
+  public static class Body {
+    @JsonProperty("msg_ReceiveDecision")
+    private ReceiveDecisionDto receiveDecisionDto;
   }
+
+  public void setReceiveDecisionDto(ReceiveDecisionDto receiveDecisionDto) {
+    if (body == null) {
+      body = new Body();
+    }
+    body.receiveDecisionDto = receiveDecisionDto;
+  }
+
 }

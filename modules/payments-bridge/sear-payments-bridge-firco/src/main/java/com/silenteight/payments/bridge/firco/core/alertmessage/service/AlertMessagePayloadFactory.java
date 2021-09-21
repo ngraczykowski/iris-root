@@ -18,4 +18,6 @@ class AlertMessagePayloadFactory {
     var originalMessage = objectMapper.convertValue(message.getAlertMessage(), ObjectNode.class);
     return new AlertMessagePayload(message.getId(), originalMessage);
   }
+
+
 }

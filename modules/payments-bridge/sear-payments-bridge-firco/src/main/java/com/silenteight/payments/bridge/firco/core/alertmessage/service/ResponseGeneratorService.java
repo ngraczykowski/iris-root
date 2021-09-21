@@ -18,12 +18,16 @@ class ResponseGeneratorService {
 
   private final ResponsePublisherPort responsePublisherPort;
   private final AlertMessageRepository alertMessageRepository;
-  private final AlertDecisionMapper alertDecisionMapper = new AlertDecisionMapper();
+  private final AlertMessagePayloadRepository payloadRepository;
+  private final AlertDecisionMapper alertDecisionMapper;
 
   void prepareAndSendResponse(UUID alertMessageId, AlertMessageStatus status) {
     var alertMessage = alertMessageRepository
         .findById(alertMessageId).orElseThrow(EntityNotFoundException::new);
-    var alertDecision = alertDecisionMapper.mapToAlertDecision(alertMessage, status);
+    var payload = payloadRepository.findByAlertMessageId(alertMessageId)
+        .orElseThrow(EntityNotFoundException::new);
+    var alertDecision = alertDecisionMapper
+        .mapToAlertDecision(alertMessage, payload, status);
     responsePublisherPort.send(alertDecision);
   }
 

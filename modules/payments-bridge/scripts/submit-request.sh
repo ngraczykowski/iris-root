@@ -15,7 +15,7 @@ curl -v \
             "Messages": [
                 {
                     "Message": {
-                        "Unit": "HB-HK",
+                        "Unit": "HK",
                         "BusinessUnit": "ROOT",
                         "MessageID": "2020061300000008",
                         "SystemID": "MTH20210106102116-00003-16630-3",
@@ -399,4 +399,4 @@ curl -v \
     }
 }
 ' \
-  http://localhost:24602/rest/payments/sendMessage?dc=UK 
+  http://localhost:24602/rest/payments/sendMessage?dc=HK
