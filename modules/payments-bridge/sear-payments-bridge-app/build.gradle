@@ -136,7 +136,7 @@ jib {
         "PB_DB_NAME"                  : "paymentsbridge",
         "PB_DB_USERNAME"              : "paymentsbridge",
         "PB_DB_PASSWORD"              : "paymentsbridge",
-        "SPRING_RABBITMQ_HOST"        : "rabbitmq",
+        "SPRING_RABBITMQ_ADDRESSES"   : "rabbitmq",
         "SPRING_RABBITMQ_PORT"        : "5672",
         "SPRING_RABBITMQ_USERNAME"    : "dev",
         "SPRING_RABBITMQ_PASSWORD"    : "dev",

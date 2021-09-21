@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      restartPolicy: {{ .Values.restartPolicy }}
+      containers:
+        - name: {{ .Values.name }}
+          env:
+            - name: 'PB_DB_HOST'
+              value: {{ .Values.pbDbHost }}
+            - name: 'PB_DB_PORT'
+              value: {{ .Values.pbDbPort | quote }}
+            - name: 'PB_DB_NAME'
+              value: {{ .Values.pbDbName }}
+            - name: 'PB_DB_USERNAME'
+              value: {{ .Values.pbDbUsername }}
+            - name: 'PB_DB_PASSWORD'
+              value: {{ .Values.pbDbPassword }}
+            - name: 'SPRING_RABBITMQ_ADDRESSES'
+              value: {{ .Values.springRabbitmqAddresses }}
+            - name: 'SPRING_RABBITMQ_PORT'
+              value: {{ .Values.springRabbitmqPort | quote }}
+            - name: 'SPRING_RABBITMQ_USERNAME'
+              value: {{ .Values.springRabbitmqUsername }}
+            - name: 'SPRING_RABBITMQ_PASSWORD'
+              value: {{ .Values.springRabbitmqPassword }}
+            - name: 'SPRING_RABBITMQ_VIRTUAL_HOST'
+              value: {{ .Values.springRabbitmqVirtualHost }}
+            - name: 'SPRING_PROFILES_ACTIVE'
+              value: {{ .Values.springProfilesActive }}
+          image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
+          args: {{ .Values.args }}
+  backoffLimit: {{ .Values.backoffLimit }}
