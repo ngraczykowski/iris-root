@@ -13,6 +13,9 @@ import com.amazonaws.services.simpleemail.model.SendRawEmailRequest;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.Properties;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -22,12 +25,13 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.validation.Valid;
 
+import static com.silenteight.payments.bridge.svb.learning.notification.service.outgoing.GenerateLogFileUseCase.generateLogFile;
+
 @Slf4j
 @RequiredArgsConstructor
 class SendNotificationService implements SendNotificationUseCase {
 
   private final AmazonSesClient amazonSesClient;
-
   @Valid
   private final SendNotificationProperties properties;
 
@@ -80,8 +84,22 @@ class SendNotificationService implements SendNotificationUseCase {
     msgBody.addBodyPart(textPart);
     msgBody.addBodyPart(htmlPart);
 
+    if (request.getFailedRecord() > 0) {
+      msgBody.addBodyPart(createFilePart(request));
+    }
+
     wrap.setContent(msgBody);
 
     return wrap;
+  }
+
+  private static MimeBodyPart createFilePart(NotificationRequest request) throws
+      MessagingException {
+    MimeBodyPart att = new MimeBodyPart();
+    DataSource fds =
+        new FileDataSource(generateLogFile(request.getErrorLogs()));
+    att.setDataHandler(new DataHandler(fds));
+    att.setFileName(fds.getName());
+    return att;
   }
 }

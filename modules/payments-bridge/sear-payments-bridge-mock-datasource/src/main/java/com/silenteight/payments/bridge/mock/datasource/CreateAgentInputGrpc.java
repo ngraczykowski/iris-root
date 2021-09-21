@@ -19,6 +19,7 @@ class CreateAgentInputGrpc extends AgentInputServiceImplBase {
   public void batchCreateAgentInputs(
       BatchCreateAgentInputsRequest request,
       StreamObserver<BatchCreateAgentInputsResponse> responseObserver) {
-    super.batchCreateAgentInputs(request, responseObserver);
+    responseObserver.onNext(BatchCreateAgentInputsResponse.newBuilder().build());
+    responseObserver.onCompleted();
   }
 }

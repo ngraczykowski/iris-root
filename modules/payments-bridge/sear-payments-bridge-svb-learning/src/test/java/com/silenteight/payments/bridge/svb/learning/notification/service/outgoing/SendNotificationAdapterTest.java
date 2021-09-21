@@ -22,7 +22,8 @@ class SendNotificationAdapterTest {
   @BeforeEach
   void setUp() {
     sendNotificationService =
-        new SendNotificationService(amazonSesClient, new SendNotificationProperties());
+        new SendNotificationService(
+            amazonSesClient, new SendNotificationProperties());
   }
 
   @Test
@@ -30,7 +31,7 @@ class SendNotificationAdapterTest {
     sendNotificationService.sendNotification(NotificationRequest
         .builder()
         .successfullyRecords(2137)
-        .failedRecord(7)
+        .failedRecord(0)
         .build());
     verify(amazonSesClient).sendEmail(any());
   }

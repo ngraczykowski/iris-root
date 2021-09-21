@@ -4,6 +4,7 @@ import com.silenteight.payments.bridge.svb.etl.model.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.etl.port.CreateAlertedPartyEntitiesUseCase;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractAlertedPartyDataUseCase;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
+import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class LearningCsvReaderTest {
 
-  private LearningCsvReader learningCsvReader;
+  private ReadAlertsUseCase learningCsvReader;
   @Mock
   private ExtractAlertedPartyDataUseCase extractAlertedPartyDataUseCase;
   @Mock
@@ -32,7 +33,7 @@ class LearningCsvReaderTest {
     var createMatch =
         new CreateMatchUseCase(extractAlertedPartyDataUseCase, createAlertedPartyEntitiesUseCase);
     learningCsvReader =
-        new LearningCsvReader(new CsvFileProviderTestImpl(), new CreateAlertUseCase(createMatch));
+        new ReadAlertsUseCase(new CsvFileProviderTestImpl(), new CreateAlertUseCase(createMatch));
   }
 
   @Test
@@ -41,8 +42,8 @@ class LearningCsvReaderTest {
         AlertedPartyData.builder().build());
 
     List<LearningAlert> learningAlerts = new ArrayList<>();
-    learningCsvReader.read(learningAlerts::add);
+    learningCsvReader.read(new LearningRequest("", ""), learningAlerts::add);
 
-    assertThat(learningAlerts.size()).isEqualTo(141);
+    assertThat(learningAlerts.size()).isEqualTo(163);
   }
 }

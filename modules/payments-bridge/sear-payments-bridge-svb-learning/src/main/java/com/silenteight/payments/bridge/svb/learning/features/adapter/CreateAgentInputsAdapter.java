@@ -32,7 +32,7 @@ class CreateAgentInputsAdapter implements CreateAgentInputsClient {
       var response = blockingStub
           .withDeadline(deadline)
           .batchCreateAgentInputs(batchCreateAgentInputsRequest);
-      log.info("Created agent inputs");
+      log.trace("Created agent inputs for = {}", response);
     } catch (StatusRuntimeException status) {
       log.warn("Request to the datasource service failed", status);
     }

@@ -32,7 +32,7 @@ class CreateCategoriesValuesAdapter implements CreateCategoryValuesClient {
       var response = blockingStub
           .withDeadline(deadline)
           .batchCreateCategoryValues(createCategoryValuesRequest);
-      log.info("Created Categories values");
+      log.trace("Created Categories values");
     } catch (StatusRuntimeException status) {
       log.warn("Request to the datasource service failed", status);
     }

@@ -19,6 +19,7 @@ class CreateCategoryValuesGrpc extends CategoryValueServiceGrpc.CategoryValueSer
   public void batchCreateCategoryValues(
       BatchCreateCategoryValuesRequest request,
       StreamObserver<BatchCreateCategoryValuesResponse> responseObserver) {
-    super.batchCreateCategoryValues(request, responseObserver);
+    responseObserver.onNext(BatchCreateCategoryValuesResponse.newBuilder().build());
+    responseObserver.onCompleted();
   }
 }

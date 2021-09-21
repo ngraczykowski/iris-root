@@ -1,16 +1,20 @@
-package com.silenteight.payments.bridge.svb.learning.reader.service;
+package com.silenteight.payments.bridge.svb.learning.reader.adpter;
 
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsv;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CsvFileProvider;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 
-class CsvFileProviderTestImpl implements CsvFileProvider {
+@Service
+@Profile("mockaws")
+class MockCsvProvider implements CsvFileProvider {
 
   @Override
   public LearningCsv getLearningCsv(LearningRequest learningRequest) {

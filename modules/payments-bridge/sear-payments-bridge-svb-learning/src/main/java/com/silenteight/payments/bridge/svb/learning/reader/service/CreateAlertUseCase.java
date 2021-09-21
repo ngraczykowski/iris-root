@@ -38,6 +38,7 @@ class CreateAlertUseCase {
       currentWatchList = row.getFkcoVListFmmId();
       matches.add(createMatchUseCase.fromLearningRows(matchRows));
       matchRows.clear();
+      matchRows.add(row);
     }
 
     return matches;

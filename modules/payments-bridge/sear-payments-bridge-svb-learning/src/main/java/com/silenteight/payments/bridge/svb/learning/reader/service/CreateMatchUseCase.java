@@ -47,7 +47,7 @@ class CreateMatchUseCase {
                     + row.getFkcoVListCountry()))))
         .watchlistCountry(assertUnique(rows, LearningCsvRow::getFkcoVListCountry))
         .matchedFieldValue(rows.get(0).getFkcoVMatchedTagContent())
-        .matchType(assertUnique(rows, LearningCsvRow::getFkcoVHitType))
+        .matchType(assertUnique(rows, LearningCsvRow::getFkcoVListType))
         .matchingTexts(matchingTexts)
         .alertedPartyEntity(createAlertedPartyEntities(alertedPartyData, matchingTexts))
         .build();
@@ -90,7 +90,7 @@ class CreateMatchUseCase {
     for (var row : rows) {
       var rowVal = rowFunc.apply(row);
       if (!rowVal.equals(first)) {
-        throw new RuntimeException("Not unique value for match");
+        throw new NotUniqueValueException();
       }
     }
     return first;
@@ -123,5 +123,14 @@ class CreateMatchUseCase {
         .alertedPartyData(alertedPartyData)
         .allMatchingText(matchingTexts)
         .build());
+  }
+
+  private static class NotUniqueValueException extends RuntimeException {
+
+    private static final long serialVersionUID = 2491372116858557898L;
+
+    NotUniqueValueException() {
+      super("Not unique value for match");
+    }
   }
 }
