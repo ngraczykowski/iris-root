@@ -19,13 +19,9 @@ class SimulationReportsControllerAdvice extends AbstractErrorControllerAdvice {
 
   @ExceptionHandler(OpendistroKibanaClientException.class)
   public ResponseEntity<ErrorDto> handle(OpendistroKibanaClientException e) {
-    if (401 == e.getStatusCode())
-      return handle(e, "KibanaUnauthorizedError", UNAUTHORIZED, of("url", e.getUrl()));
-
-    if (403 == e.getStatusCode())
-      return handle(e, "KibanaForbiddenError", FORBIDDEN, of("url", e.getUrl()));
-
-    return handle(e, "KibanaInternalServerError", INTERNAL_SERVER_ERROR, of("url", e.getUrl()));
+    return handle(e, "KibanaUpstreamServiceError", INTERNAL_SERVER_ERROR, of(
+        "url", e.getUrl(),
+        "errorCode", e.getStatusCode()));
   }
 
   @ExceptionHandler(AnalysisDoesNotExistException.class)
