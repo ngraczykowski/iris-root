@@ -3,9 +3,9 @@ package com.silenteight.adjudication.engine.analysis.agentexchange;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.internal.v1.AgentResponseStored;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -16,8 +16,8 @@ class RemoveAgentExchangesUseCase {
 
   private final AgentExchangeDataAccess agentExchangeDataAccess;
 
-  @Transactional
-  void remove(AgentResponseStored deleteAgentExchangeRequests) {
+  @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "agentexchange" })
+  void removeAgentExchanges(AgentResponseStored deleteAgentExchangeRequests) {
     var agentExchangeIds = new ArrayList<UUID>();
     var matchIds = new ArrayList<Long>();
     var features = new ArrayList<String>();
