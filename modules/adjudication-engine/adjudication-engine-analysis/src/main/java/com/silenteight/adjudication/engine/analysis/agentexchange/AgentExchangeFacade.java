@@ -26,6 +26,6 @@ public class AgentExchangeFacade {
   }
 
   public void removeReceivedAgentExchanges(AgentResponseStored deleteAgentExchangeRequests) {
-    removeAgentExchangesUseCase.removeAgentExchanges(deleteAgentExchangeRequests);
+    removeAgentExchangesUseCase.remove(deleteAgentExchangeRequests);
   }
 }
