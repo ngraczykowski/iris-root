@@ -4,9 +4,13 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+import java.util.function.Supplier;
+
 public interface StateMappingStrategy {
 
   String getName();
+
+  MapStateOutput mapState(MapStateInput request, Supplier<? extends MapStateOutput> orElseHandler);
 
   MapStateOutput mapState(MapStateInput request);
 

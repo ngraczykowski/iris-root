@@ -9,6 +9,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,6 +27,15 @@ class PatternStateMappingStrategy implements StateMappingStrategy {
   @NonNull
   @Override
   public MapStateOutput mapState(@NonNull MapStateInput request) {
+    return mapState(request, () -> {
+      throw new CouldNotMapStateException(getName(), request);
+    });
+  }
+
+  @NonNull
+  @Override
+  public MapStateOutput mapState(@NonNull MapStateInput request,
+      Supplier<? extends MapStateOutput> orElseHandler) {
     return patterns.stream()
         .filter(patternTuple -> matches(request, patternTuple))
         .findAny()
@@ -34,7 +44,7 @@ class PatternStateMappingStrategy implements StateMappingStrategy {
           log.debug("Mapped input [{}] to output [{}]", request, mapStateOutput);
           return mapStateOutput;
         })
-        .orElseThrow(() -> new CouldNotMapStateException(getName(), request));
+        .orElseGet(orElseHandler);
   }
 
   @SuppressWarnings("FeatureEnvy")
