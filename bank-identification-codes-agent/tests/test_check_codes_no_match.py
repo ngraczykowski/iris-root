@@ -41,11 +41,11 @@ def test_wl_matching_text_in_bic_codes_headquarters_string(
     "ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes",
     [
         ("Search code", "search code", ["searchcode"], []),
+        ("Here is code123", "123", ["code123", "45"], []),
         ("Longer text containing code", "code", ["code"], []),
-        ("Here is code 123", "123", ["123", "45"], []),
     ],
 )
-def test_exact_match_search_code(
+def test_ap_matched_text_exact_match_search_code(
     ap_matching_field, wl_matching_text, wl_search_codes, wl_bic_codes
 ):
     codes = BankIdentificationCodes(
