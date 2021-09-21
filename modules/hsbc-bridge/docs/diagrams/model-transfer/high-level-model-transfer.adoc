@@ -1,0 +1,30 @@
+[plantuml,importing-steps,svg]
+-----
+@startuml
+actor User
+participant Simulation
+participant Jenkins #abdbe3
+participant Verification
+participant Production
+participant Nexus #abdbe3
+participant "Control-M" #abdbe3
+participant "CR-Minion" #abdbe3
+
+User->Simulation: 1. Approve model
+Simulation->Jenkins: 2. Trigger Move_To_NexusSnapshots job
+Jenkins->Simulation: 3. Fetch approved model JSON
+Jenkins->Nexus: 4. Upload model
+Jenkins->Verification: 5. Wait for batch processing status to be false
+Jenkins->Verification: 6. Apply model
+Verification->Jenkins: 7. Trigger Snapshot_To_Release_Upload job
+Jenkins->Simulation: 8. PUT model
+Jenkins->"CR-Minion": 9. Create CR
+Jenkins->"CR-Minion": 10. Approve CR
+Jenkins->"Control-M": 11. Stop processing on production
+Jenkins->Production: 12. Wait for batch processing status to be false
+Jenkins->Production: 13. Apply model
+Jenkins->Production: 14. Wait for batch processing status to be false, check model name?
+Jenkins->"Control-M": 15. Start processing on production
+Jenkins->Simulation: 16. PUT model
+@enduml
+-----
