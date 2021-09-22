@@ -17,7 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
@@ -75,7 +74,7 @@ class DecisionServiceTest {
     assertThat(decision.getDecidedAt()).isNull();
     assertThat(decision.getComment()).isNull();
     assertThat(decision.getDecidedBy()).isNull();
-    Mockito.verify(auditingLogger, times(2)).log(any());
+    verify(auditingLogger, times(2)).log(any());
   }
 
   @Test
@@ -140,7 +139,7 @@ class DecisionServiceTest {
   }
 
   @Test
-  void viewDecisionWillChangeAnalysisDecisionsUpdatedAt() {
+  void viewDecisionWillChangeAnalysisDecisionsUpdatedAtAndState() {
     saveAlert(DISCRIMINATOR);
     underTest.createDecision(getCreateDecisionRequest(LEVEL_ANALYSIS));
     Decision createdAnalysis = getDecisionByDiscriminatorAndLevel(DISCRIMINATOR,
@@ -148,10 +147,12 @@ class DecisionServiceTest {
     underTest.createDecision(getCreateDecisionRequest(LEVEL_VALIDATION));
     Decision createdValidation = getDecisionByDiscriminatorAndLevel(DISCRIMINATOR,
         LEVEL_VALIDATION.getValue());
+    assertThat(createdAnalysis.getState()).isEqualTo(NEW);
     assertThat(createdAnalysis.getUpdatedAt()).isNull();
     underTest.view(DISCRIMINATOR, LEVEL_ANALYSIS);
     Decision updated = getDecisionByDiscriminatorAndLevel(DISCRIMINATOR, LEVEL_ANALYSIS.getValue());
     assertThat(updated.getUpdatedAt()).isEqualToIgnoringSeconds(OffsetDateTime.now());
+    assertThat(updated.getState()).isEqualTo(VIEWING);
     assertThat(createdValidation.getUpdatedAt()).isNull();
   }
 
@@ -216,8 +217,8 @@ class DecisionServiceTest {
     return alertRepository.save(alert);
   }
 
-  private Decision saveDecision(Integer level, DecisionState state, OffsetDateTime updatedAt,
-      Long alertId) {
+  private Decision saveDecision(
+      Integer level, DecisionState state, OffsetDateTime updatedAt, Long alertId) {
 
     Decision decision = new Decision();
     decision.setAlertId(alertId);

@@ -9,7 +9,7 @@ import com.silenteight.serp.governance.qa.manage.domain.DecisionService;
 class ViewAlertValidationUseCase {
 
   @NonNull
-  DecisionService decisionService;
+  private final DecisionService decisionService;
 
   void activate(@NonNull ViewDecisionCommand command) {
     decisionService.view(command.getDiscriminator(), command.getLevel());
