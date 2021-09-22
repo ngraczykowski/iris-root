@@ -9,8 +9,8 @@ import com.silenteight.payments.bridge.firco.core.alertmessage.model.FircoAlertM
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import static com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus.RECEIVED;
 import static com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus.REJECTED_OVERFLOWED;
+import static com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus.STORED;
 
 @EnableConfigurationProperties(AlertMessageProperties.class)
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ class AlertMessageQueueOverflowedService {
   private final AlertMessageProperties alertMessageProperties;
 
   boolean resolve(FircoAlertMessage message) {
-    if (repository.countAllByStatus(RECEIVED) >
+    if (repository.countAllByStatus(STORED) >
         alertMessageProperties.getQueueMessageStoredLimit()) {
       log.debug("AlertMessage [{}] rejected due to queue limit ({})",
           message.getId(), alertMessageProperties.getQueueMessageStoredLimit());

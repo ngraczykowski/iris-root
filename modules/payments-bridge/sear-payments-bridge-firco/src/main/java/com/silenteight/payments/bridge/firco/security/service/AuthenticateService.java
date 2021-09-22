@@ -20,7 +20,7 @@ class AuthenticateService implements AuthenticateUseCase {
   @Override
   public boolean authenticate(Authentication authentication) {
     if (isAuthenticated()) {
-      log.info("Already authenticated!");
+      log.debug("Already authenticated!");
       return false;
     }
 
@@ -28,7 +28,7 @@ class AuthenticateService implements AuthenticateUseCase {
 
     setAuthentication(authenticated);
 
-    log.info("Authenticated successfully!");
+    log.debug("Authenticated successfully!");
     return true;
   }
 
