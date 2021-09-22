@@ -136,13 +136,14 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
-  void its401_whenKibanaThrows401() {
+  void its500_whenKibanaThrows401() {
     given(simulationService.createSimulationReport(ANALYSIS_ID, REPORT_DEFINITION_ID))
         .willThrow(new OpendistroKibanaClientException(401, "Unauthorized", SAMPLE_KIBANA_URL));
 
-    post(TEST_CREATE_REPORT_URL).statusCode(UNAUTHORIZED.value())
-        .body("key", is("KibanaUnauthorizedError"))
-        .body("extras.url", is(SAMPLE_KIBANA_URL));
+    post(TEST_CREATE_REPORT_URL).statusCode(INTERNAL_SERVER_ERROR.value())
+        .body("key", is("KibanaUpstreamServiceError"))
+        .body("extras.url", is(SAMPLE_KIBANA_URL))
+        .body("extras.errorCode", is(UNAUTHORIZED.value()));
   }
 
   @Test
