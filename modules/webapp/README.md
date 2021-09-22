@@ -254,3 +254,30 @@ Gradle script to the released Web App version.
 1. Create MR with your changes. Wait for an approval and merge it.
 1. [SERP release can be prepared now](https://jenkins.silenteight.com/job/sens/job/sens%252Fserp/).  
 New snapshot/release version will start using newly released Web App release.
+
+## Local running without SERP 
+You don't need to have SERP installed to run WebApp on your local environment. 
+
+In order to run WebApp locally without SERP: 
+
+1. Start the webapp postgres db via docker-compose
+   ```
+   cd sens-webapp
+   docker-compose up -d
+   ```
+
+2. Run WebApp in IntelliJ with WebApplication - local configuration, or alternatively run gradle `bootRun` task with specified args (check `WebApplication - local` configuration).
+
+WebApp needs currently keycloak to be ready to use, so you need to have keycloak installed e.g. via docker
+You need to specify your keycloak configuration in application.yml:
+```
+    keycloak:
+        client-id: <your-client-id>
+        adapter:
+            auth-server-url: https://auth.silenteight.com
+            realm: sens-webapp
+            public-client: false
+            confidential-port: 0
+            principal-attribute: preferred_username
+            ssl-required: external
+```
