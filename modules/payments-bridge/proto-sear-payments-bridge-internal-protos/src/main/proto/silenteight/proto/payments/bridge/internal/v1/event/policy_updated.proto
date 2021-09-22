@@ -1,0 +1,14 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.proto.payments.bridge.internal.v1.event;
+
+import "google/api/field_behavior.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "PolicyUpdatedProto";
+option java_package = "com.silenteight.proto.payments.bridge.internal.v1.event";
+
+message PolicyUpdated {
+}

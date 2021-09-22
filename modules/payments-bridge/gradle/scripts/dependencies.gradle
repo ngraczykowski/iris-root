@@ -28,6 +28,7 @@ libraries.data_source_categories_api = [group: 'com.silenteight.sens.date-source
 libraries.data_source_comments_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-comments-api', version: silenteightDataSourceApiVersion]
 libraries.data_source_agentinput_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-agentinput-api', version: silenteightDataSourceApiVersion]
 libraries.governance_api = [group: 'com.silenteight.governance.api', name: 'se-governance-api', version: governanceApiVersion]
+libraries.governance_model_api = [group: 'com.silenteight.governance.api', name: 'se-model-api', version: governanceApiVersion]
 libraries.governance_solving_api = [group: 'com.silenteight.governance.api', name: 'se-solving-api', version: governanceApiVersion]
 libraries.agents_api = [group: 'com.silenteight.agent.api', name: 'agents-api', version: agentsApiVersion]
 libraries.silenteight_commons_app = [group: 'com.silenteight.commons', name: 'silenteight-commons-app', version: silenteightCommonsVersion]

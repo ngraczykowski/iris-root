@@ -2,3 +2,10 @@ plugins {
   id "java-library"
   id "groovy"
 }
+
+dependencies {
+  // Application modules
+  implementation project(":proto-sear-payments-bridge-internal-protos")
+  // Governance
+  implementation libraries.governance_model_api
+}
