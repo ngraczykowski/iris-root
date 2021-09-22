@@ -6,13 +6,14 @@ gradleBuild(
     dependencyCheckEnabled: true,
     includeBuildNumberInSnapshotVersion: true,
     additionalParams: [booleanParam(name: 'deployOnTest',
-        description: '''Deploy on test environment in Nomad.''', defaultValue: false)],
+    description: '''Deploy on test environment in Nomad.''', defaultValue: false)],
     additionalStages: {
       stage('Build and deploy container image') {
         script {
           def utils = new com.silenteight.jenkins.ci.Utils()
           // FIXME(ahaczewski): Use `when` if possible.
           if (utils.getGitBranch() == 'master') {
+            def gradle = new com.silenteight.jenkins.ci.Gradle()
             gradle.gradle('jib')
           } else {
             echo 'This is not a release branch ignore docker image deployment'
