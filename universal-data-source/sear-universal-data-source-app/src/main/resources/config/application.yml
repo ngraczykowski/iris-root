@@ -23,7 +23,7 @@ server:
     include-stacktrace: never
 
   servlet:
-    context-path: /rest/payments
+    context-path: /rest/uds
 
 #---------------------------------------------------------------------------------------------------
 # MANAGEMENT
