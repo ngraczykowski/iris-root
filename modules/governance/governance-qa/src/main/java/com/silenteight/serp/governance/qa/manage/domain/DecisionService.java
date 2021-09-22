@@ -119,6 +119,7 @@ public class DecisionService {
         .orElseThrow(() -> new WrongDiscriminatorException(discriminator));
     assertCanBeProcessed(decision, discriminator);
     decision.setUpdatedAt(OffsetDateTime.now());
+    decision.setState(VIEWING);
     decisionRepository.save(decision);
   }
 
