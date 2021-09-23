@@ -75,6 +75,8 @@ dependencies {
   // AspectJ
   implementation libraries.aspectjrt
   aspect libraries.silenteight_sep_base_aspects
+  compileOnly libraries.spring_web
+  compileOnly libraries.spring_tx
 
   //  Datasource API
   implementation libraries.data_source_api
@@ -82,12 +84,16 @@ dependencies {
   implementation libraries.data_source_comments_api
   implementation libraries.data_source_agentinput_api
 
+  implementation libraries.protobuf_java_util
+
   //  Testing
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.adjudication_engine_api
   testImplementation libraries.awaitility
 
-  implementation libraries.protobuf_java_util
+  testImplementation libraries.hibernate_validator
+  testImplementation libraries.tomcat_embed_el
+
 }
 
 jar {

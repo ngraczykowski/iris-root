@@ -31,6 +31,7 @@ class SelectCommentInputsQuery {
 
     var parameters = new MapSqlParameterSource("alerts", alerts);
     return jdbcTemplate.query(SQL, parameters, new CommentInputRowMapper());
+
   }
 
   private static final class CommentInputRowMapper implements RowMapper<AlertCommentInput> {

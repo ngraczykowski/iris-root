@@ -11,6 +11,8 @@ import com.silenteight.universaldatasource.app.commentinput.port.incoming.Create
 
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @Component
 class CommentInputAdapter {
@@ -20,11 +22,12 @@ class CommentInputAdapter {
   private final CreateCommentInputsUseCase createCommentInputsUseCase;
 
   BatchGetAlertsCommentInputsResponse batchGetAlertsCommentInputs(
-      BatchGetAlertsCommentInputsRequest request) {
+      @Valid BatchGetAlertsCommentInputsRequest request) {
     return batchGetAlertsCommentInputsUseCase.batchGetAlertsCommentInputs(request.getAlertsList());
   }
 
-  BatchCreateCommentInputResponse batchCreateCommentInput(BatchCreateCommentInputRequest request) {
+  BatchCreateCommentInputResponse batchCreateCommentInput(
+      @Valid BatchCreateCommentInputRequest request) {
     return createCommentInputsUseCase.addCommentInputs(request.getCommentInputsList());
   }
 }

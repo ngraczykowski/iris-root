@@ -27,10 +27,9 @@ class StreamCommentInputQuery {
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
   int execute(Collection<String> alerts, Consumer<AlertCommentInput> consumer) {
+
     var parameters = new MapSqlParameterSource("alertNames", alerts);
-
     var commentInputs = jdbcTemplate.query(SQL, parameters, new CommentInputExtractor(consumer));
-
     return commentInputs != null ? commentInputs : 0;
   }
 }

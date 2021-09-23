@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<constraint-mappings
+    xmlns="http://xmlns.jcp.org/xml/ns/validation/mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/validation/mapping
+                      http://xmlns.jcp.org/xml/ns/validation/mapping/validation-mapping-2.0.xsd"
+    version="2.0">
+
+  <default-package>com.silenteight.datasource.comments.api.v1</default-package>
+
+  <bean class="CommentInput">
+    <field name="alertCommentInput_">
+      <valid/>
+      <constraint annotation="javax.validation.constraints.NotNull"/>
+    </field>
+    <getter name="alert">
+      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+    </getter>
+  </bean>
+
+  <bean class="StreamCommentInputsRequest">
+    <field name="alerts_">
+      <valid/>
+      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+    </field>
+  </bean>
+
+</constraint-mappings>

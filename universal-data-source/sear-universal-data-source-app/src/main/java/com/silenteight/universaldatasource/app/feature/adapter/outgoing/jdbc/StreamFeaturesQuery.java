@@ -36,7 +36,6 @@ class StreamFeaturesQuery {
     parameters.addValue("featureNames", featureNames);
 
     var features = jdbcTemplate.query(SQL, parameters, new FeatureExtractor(consumer));
-
     return features != null ? features : 0;
   }
 }

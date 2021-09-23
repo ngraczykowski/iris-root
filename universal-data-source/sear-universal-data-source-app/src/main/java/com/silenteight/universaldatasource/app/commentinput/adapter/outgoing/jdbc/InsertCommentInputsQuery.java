@@ -45,7 +45,7 @@ class InsertCommentInputsQuery {
         .stream()
         .map(it -> CreatedCommentInput
             .newBuilder()
-            .setName(it.get("comment_input_id").toString())
+            .setName("comment-inputs/" + it.get("comment_input_id").toString())
             .setAlert(it.get("alert").toString())
             .build()).collect(Collectors.toList());
   }

@@ -11,6 +11,7 @@ import com.silenteight.universaldatasource.app.category.port.incoming.ListAvaila
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @Service
@@ -25,22 +26,25 @@ class CategoryAdapter {
     return listAvailableCategoriesUseCase.getAvailableCategories();
   }
 
-  BatchCreateCategoriesResponse batchCreateCategories(BatchCreateCategoriesRequest request) {
+  BatchCreateCategoriesResponse batchCreateCategories(
+      @Valid BatchCreateCategoriesRequest request) {
     return createCategoriesUseCase.createCategories(request.getCategoriesList());
   }
 
   BatchGetMatchesCategoryValuesResponse batchGetMatchCategoryValues(
-      BatchGetMatchesCategoryValuesRequest request) {
+      @Valid BatchGetMatchesCategoryValuesRequest request) {
     return getMatchCategoryValuesUseCase.batchGetMatchCategoryValues(
         request.getCategoryMatchesList());
   }
 
   BatchCreateCategoryValuesResponse batchCreateCategoryValues(
-      BatchCreateCategoryValuesRequest request) {
+      @Valid BatchCreateCategoryValuesRequest request) {
     return createCategoryValuesUseCase.addCategoryValues(request.getRequestsList());
   }
 
-  CreateCategoryValuesResponse createCategoryValues(CreateCategoryValuesRequest request) {
+  CreateCategoryValuesResponse createCategoryValues(
+      @Valid CreateCategoryValuesRequest request) {
+
     var batchCreateCategoryValuesResponse =
         createCategoryValuesUseCase.addCategoryValues(List.of(request));
     return CreateCategoryValuesResponse.newBuilder()

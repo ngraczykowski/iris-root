@@ -8,6 +8,8 @@ import com.silenteight.datasource.categories.api.v1.ListCategoriesResponse;
 import com.silenteight.universaldatasource.app.category.port.incoming.GetMatchCategoryValuesUseCase;
 import com.silenteight.universaldatasource.app.category.port.incoming.ListAvailableCategoriesUseCase;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 class CategoryAdapter {
 
@@ -29,7 +31,7 @@ class CategoryAdapter {
   }
 
   BatchGetMatchCategoryValuesResponse batchGetMatchCategoryValues(
-      BatchGetMatchCategoryValuesRequest request) {
+      @Valid BatchGetMatchCategoryValuesRequest request) {
 
     var matchValuesList =
         categoryVersionMapper.mapStringListToCategoryMatches(request.getMatchValuesList());

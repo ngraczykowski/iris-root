@@ -14,6 +14,7 @@ import com.silenteight.universaldatasource.app.feature.port.incoming.BatchGetFea
 import org.springframework.stereotype.Component;
 
 import java.util.function.Consumer;
+import javax.validation.Valid;
 
 @Component
 @RequiredArgsConstructor
@@ -22,12 +23,13 @@ class FeatureAdapter {
   private final BatchGetFeatureInputUseCase getUseCase;
   private final BatchCreateMatchFeaturesUseCase addUseCase;
 
-  BatchCreateAgentInputsResponse batchAgentInputs(BatchCreateAgentInputsRequest request) {
+  BatchCreateAgentInputsResponse batchAgentInputs(
+      @Valid BatchCreateAgentInputsRequest request) {
     return addUseCase.batchCreateMatchFeatures(request.getAgentInputsList());
   }
 
   void batchGetMatchNameInputs(
-      BatchGetMatchNameInputsRequest request,
+      @Valid BatchGetMatchNameInputsRequest request,
       Consumer<BatchGetMatchNameInputsResponse> onNext) {
 
     getUseCase.batchGetFeatureInput(
@@ -36,7 +38,7 @@ class FeatureAdapter {
   }
 
   void batchGetMatchLocationInputs(
-      BatchGetMatchLocationInputsRequest request,
+      @Valid BatchGetMatchLocationInputsRequest request,
       Consumer<BatchGetMatchLocationInputsResponse> onNext) {
 
     getUseCase.batchGetFeatureInput(

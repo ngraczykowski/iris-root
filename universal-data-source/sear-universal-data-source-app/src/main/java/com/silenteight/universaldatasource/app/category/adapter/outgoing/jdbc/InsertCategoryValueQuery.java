@@ -53,7 +53,8 @@ class InsertCategoryValueQuery {
     return getCreatedCategoryValues(keyList);
   }
 
-  private void update(String category, CategoryValue categoryValue, GeneratedKeyHolder keyHolder) {
+  private void update(
+      String category, CategoryValue categoryValue, GeneratedKeyHolder keyHolder) {
     var paramMap =
         Map.of("category_id", category,
             "match_name", categoryValue.getMatch(),

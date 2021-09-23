@@ -12,7 +12,7 @@ public class CategoryIntegrationTestFixture {
         .setName("categories/categoryOne")
         .setDisplayName("displayNameOne")
         .setType(CategoryType.ANY_STRING)
-        .addAllAllowedValues(List.of("one", "two", "three"))
+        .addAllAllowedValues(List.of("YES", "NO", "MAYBE"))
         .setMultiValue(false)
         .build();
 

@@ -30,8 +30,7 @@ class JdbcCategoryValueDataAccess implements CategoryValueDataAccess {
 
   @Override
   @Transactional
-  public List<CreatedCategoryValue> saveAll(
-      List<CreateCategoryValuesRequest> categoryValues) {
+  public List<CreatedCategoryValue> saveAll(List<CreateCategoryValuesRequest> categoryValues) {
     return insertCategoryValueQuery.execute(categoryValues);
   }
 }

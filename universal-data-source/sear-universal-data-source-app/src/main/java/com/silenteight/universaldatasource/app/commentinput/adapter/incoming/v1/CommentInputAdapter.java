@@ -7,6 +7,7 @@ import com.silenteight.datasource.comments.api.v1.StreamCommentInputsRequest;
 import com.silenteight.universaldatasource.app.commentinput.port.incoming.StreamCommentInputsUseCase;
 
 import java.util.function.Consumer;
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 class CommentInputAdapter {
@@ -15,7 +16,8 @@ class CommentInputAdapter {
 
   private final CommentInputVersionMapper versionMapper;
 
-  void streamCommentInputs(StreamCommentInputsRequest request, Consumer<CommentInput> onNext) {
+  void streamCommentInputs(
+      @Valid StreamCommentInputsRequest request, Consumer<CommentInput> onNext) {
     streamCommentInputsUseCase.streamCommentInput(
         request.getAlertsList(),
         commentInput -> onNext.accept(versionMapper.map(commentInput)));
