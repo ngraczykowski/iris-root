@@ -31,6 +31,8 @@ variable "grpcui_tags" {
 locals {
   jvm_memory                = ceil(var.memory * 0.7)
   perm_memory               = ceil(var.memory * 0.2)
+    database_node_destination = "eu2"
+    database_volume           = "/srv/sep-cluster/postgres/${var.namespace}-universal-data-source"
 }
 
 job "universal-data-source" {
@@ -45,6 +47,60 @@ job "universal-data-source" {
   update {
     auto_revert = true
   }
+
+  group "database" {
+      count = 1
+
+      constraint {
+        attribute = "${node.unique.name}"
+        value     = "${local.database_node_destination}"
+      }
+
+      network {
+        port "tcp" {
+          to = 5432
+        }
+      }
+
+      task "postgres" {
+        driver = "docker"
+
+        template {
+          data        = "{{ key \"database/${var.namespace}-universal-datasource/secrets\" }}"
+          destination = "secrets/universal-data-source-db.env"
+          env         = true
+        }
+
+        config {
+          image   = "postgres:10.18"
+          ports   = [
+            "tcp"
+          ]
+          volumes = [
+            "${local.database_volume}:/var/lib/postgresql/data"
+          ]
+        }
+
+        service {
+          name = "${var.namespace}-universal-data-source-db"
+
+          port = "tcp"
+
+          check {
+            type     = "tcp"
+            interval = "30s"
+            timeout  = "5s"
+          }
+        }
+
+        resources {
+          cpu    = 2048
+          # MHz
+          memory = 4096
+          # MB
+        }
+      }
+    }
 
   group "universal-data-source" {
     count = 1
