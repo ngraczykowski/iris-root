@@ -1,13 +1,6 @@
-variable "repository" {
-  type = string
-  description = "URL to a remote repository with stored artifacts. Start with 's3::' if it is AWS S3-compatible."
-  default = "s3::http://localhost:9000/artifacts"
-}
-
 variable "universal_data_source_artifact" {
   type        = string
   description = "The name of file containing Universal Data Source artifact"
-  default = "dev"
 }
 
 variable "universal_data_source_artifact_checksum" {
@@ -133,7 +126,7 @@ job "universal-data-source" {
       driver = "raw_exec"
 
       artifact {
-        source = "${var.repository}/universal-data-source-app-1.0.0-SNAPSHOT-exec.jar"
+        source      = var.universal_data_source_artifact
         options {
           checksum = "${var.universal_data_source_artifact_checksum}"
         }
