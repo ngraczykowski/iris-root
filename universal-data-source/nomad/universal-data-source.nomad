@@ -156,7 +156,7 @@ job "universal-data-source" {
       }
 
       template {
-        data = file("application.yml")
+        data = file("./conf/application.yml")
         destination = "local/conf/application.yml"
         change_mode = "noop"
       }
