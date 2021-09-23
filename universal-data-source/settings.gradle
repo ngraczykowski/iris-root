@@ -1,5 +1,6 @@
 rootProject.name = 'universal-data-source'
 gradle.ext.sepDependenciesVersion = "2.2.2"
 
-include 'sear-universal-data-source-app'
-include 'sear-universal-data-source-common'
+include 'universal-data-source-app'
+include 'universal-data-source-common'
+include 'universal-data-source-dist'

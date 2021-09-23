@@ -7,7 +7,7 @@ plugins {
 
 dependencies {
   // Application modules
-  implementation project(":sear-universal-data-source-common")
+  implementation project(":universal-data-source-common")
 
   // Utilities
   implementation libraries.commons_lang3

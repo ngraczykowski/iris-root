@@ -104,7 +104,7 @@ spring:
       isolate-internal-queries: true
       # NOTE(ahaczewski): Forces HikariCP to commit the transaction after opening fresh connection.
       #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
-      #  just before HikariCP runs `SET SESSION spb.h_path TO '${ae.db.schema}'` which begins
+      #  just before HikariCP runs `SET SESSION spb.h_path TO '${uds.db.schema}'` which begins
       #  transaction. Thus, with that query as workaround, we force the transaction commit.
       connection-init-sql: SELECT 1
       data-source-properties:

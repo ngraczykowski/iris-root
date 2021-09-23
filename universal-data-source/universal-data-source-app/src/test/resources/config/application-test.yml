@@ -24,7 +24,7 @@ spring:
       # NOTE(ahaczewski): Forces HikariCP to commit the transaction after opening fresh connection.
       #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
       #  just before handing the new connection to the pool, HikariCP runs
-      #  `SET SESSION search_path TO '${ae.db.schema}'`, which automatically begins a transaction.
+      #  `SET SESSION search_path TO '${usd.db.schema}'`, which automatically begins a transaction.
       #  The `connection-init-sql` query forces a transaction commit.
       connection-init-sql: SELECT 1
       data-source-properties:
