@@ -136,8 +136,6 @@ job "universal-data-source" {
         source = "${var.repository}/universal-data-source-app-1.0.0-SNAPSHOT-exec.jar"
         options {
           checksum = "${var.universal_data_source_artifact_checksum}"
-          aws_access_key_id = "admin"
-          aws_access_key_secret = "password"
         }
         mode        = "file"
         destination = "local/universal-data-source-app.jar"
