@@ -6,12 +6,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.Duration;
 
-@ConfigurationProperties("pb.firco.alert-message")
+@ConfigurationProperties("pb.alert-message")
 @Data
 class AlertMessageProperties {
 
-  private long queueMessageStoredLimit = 1000;
+  private long storedQueueLimit = 1000;
 
-  private Duration issueDecisionRequestedTime = Duration.ofSeconds(60);
+  private Duration decisionRequestedTime = Duration.ofSeconds(30);
 
 }

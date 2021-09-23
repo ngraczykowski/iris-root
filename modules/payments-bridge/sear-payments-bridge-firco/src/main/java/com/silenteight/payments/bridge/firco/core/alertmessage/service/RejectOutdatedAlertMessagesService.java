@@ -41,7 +41,7 @@ public class RejectOutdatedAlertMessagesService implements RejectOutdatedAlertMe
 
   private OffsetDateTime decisionObsoleteSince() {
     return OffsetDateTime.now(clock).minus(
-      alertMessageProperties.getIssueDecisionRequestedTime().minusSeconds(2));
+      alertMessageProperties.getDecisionRequestedTime().minusSeconds(1));
   }
 
   private void sendResponse(AlertMessageStatusEntity alertMessageStatus) {

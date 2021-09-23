@@ -69,7 +69,7 @@ class IssueRecommendationService implements IssueRecommendationUseCase {
 
   private boolean isRequiredResolutionTimeElapsed(AlertMessageStatusEntity alertMessageStatus) {
     var isOverdue = alertMessageStatus.getLastModifyAt()
-        .plus(alertMessageProperties.getIssueDecisionRequestedTime())
+        .plus(alertMessageProperties.getDecisionRequestedTime())
         .compareTo(OffsetDateTime.now(clock)) <= 0;
     var alertMessageId = alertMessageStatus.getAlertMessageId();
     if (isOverdue) {
