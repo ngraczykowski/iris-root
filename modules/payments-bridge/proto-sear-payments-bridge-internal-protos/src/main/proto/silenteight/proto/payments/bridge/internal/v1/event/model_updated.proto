@@ -7,8 +7,8 @@ package silenteight.proto.payments.bridge.internal.v1.event;
 import "google/api/field_behavior.proto";
 
 option java_multiple_files = true;
-option java_outer_classname = "PolicyUpdatedProto";
+option java_outer_classname = "ModelUpdatedProto";
 option java_package = "com.silenteight.proto.payments.bridge.internal.v1.event";
 
-message PolicyUpdated {
+message ModelUpdated {
 }
