@@ -1,11 +1,11 @@
 server:
-  port: { { env "NOMAD_PORT_http" } }
+  port: {{ env "NOMAD_PORT_http" }}
 
 grpc:
   logging:
     enabled: true
   server:
-    port: { { env "NOMAD_PORT_grpc" } }
+    port: {{ env "NOMAD_PORT_grpc" }}
 
 # @formatter:off
 
