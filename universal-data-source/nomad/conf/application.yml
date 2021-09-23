@@ -21,23 +21,24 @@ uds:
 #-------------------------------------------------------------------------------------------------
 # Consul Service Discovery
 #-------------------------------------------------------------------------------------------------
-cloud:
-  consul:
-    enabled: true
-    host: localhost
-    port: 8500
-    scheme: http
-    discovery:
+spring:
+  cloud:
+    consul:
       enabled: true
-      register: false
-      register-health-check: false
-      catalog-services-watch:
+      host: localhost
+      port: 8500
+      scheme: http
+      discovery:
         enabled: true
-      server-list-query-tags:
-        data-source: grpc
-        governance: grpc
-    service-registry:
-      auto-registration:
-        enabled: false
+        register: false
+        register-health-check: false
+        catalog-services-watch:
+          enabled: true
+        server-list-query-tags:
+          data-source: grpc
+          governance: grpc
+      service-registry:
+        auto-registration:
+          enabled: false
 
 # @formatter:on
