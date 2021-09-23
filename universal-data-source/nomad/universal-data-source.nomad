@@ -66,7 +66,7 @@ job "universal-data-source" {
         driver = "docker"
 
         template {
-          data        = "{{ key \"database/${var.namespace}-universal-datasource/secrets\" }}"
+          data        = "{{ key \"database/${var.namespace}-universal-data-source/secrets\" }}"
           destination = "secrets/universal-data-source-db.env"
           env         = true
         }
