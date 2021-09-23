@@ -31,9 +31,11 @@ class LearningCsvReaderTest {
   @BeforeEach
   void setUp() {
     var createMatch =
-        new CreateMatchUseCase(extractAlertedPartyDataUseCase, createAlertedPartyEntitiesUseCase);
+        new CreateLearningMatchUseCase(
+            extractAlertedPartyDataUseCase, createAlertedPartyEntitiesUseCase);
     learningCsvReader =
-        new ReadAlertsUseCase(new CsvFileProviderTestImpl(), new CreateAlertUseCase(createMatch));
+        new ReadAlertsUseCase(
+            new CsvFileProviderTestImpl(), new CreateLearningAlertUseCase(createMatch));
   }
 
   @Test

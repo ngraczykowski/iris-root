@@ -5,7 +5,16 @@ plugins {
 
 dependencies {
   implementation project(":sear-payments-bridge-governance")
+  implementation project(":sear-payments-bridge-common")
+  implementation project(":sear-payments-bridge-testing")
+  implementation project(":proto-sear-payments-bridge-internal-protos")
 
   implementation libraries.adjudication_engine_api
+
   implementation libraries.spring_context
+  implementation libraries.grpc_client_spring_boot_starter
+  implementation libraries.spring_boot_starter_integration
+  implementation libraries.spring_jdbc
+
+  implementation libraries.silenteight_sep_base_testing
 }

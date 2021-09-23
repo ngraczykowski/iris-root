@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 class ReadAlertsUseCase {
 
   private final CsvFileProvider csvFileProvider;
-  private final CreateAlertUseCase createAlertUseCase;
+  private final CreateLearningAlertUseCase createLearningAlertUseCase;
 
   public AlertsReadingResponse read(
       LearningRequest learningRequest, Consumer<LearningAlert> alertConsumer) {
@@ -70,7 +70,7 @@ class ReadAlertsUseCase {
 
       currentAlertID = rowAlertId;
       try {
-        alertConsumer.accept(createAlertUseCase.fromCsvRows(alertRows));
+        alertConsumer.accept(createLearningAlertUseCase.fromCsvRows(alertRows));
         successfulAlertsCount++;
       } catch (RuntimeException e) {
         log.error("Failed to process alert = {} reason = {}", rowAlertId, e.getMessage());
