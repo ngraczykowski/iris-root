@@ -25,4 +25,4 @@ set -x
 mkdir -p artifacts/
 cp ../universal-data-source-app/build/libs/"$universal_data_source_artifact" artifacts/
 mcli cp --recursive artifacts/ "$MINIO_ALIAS"/artifacts/universal-data-source
-nomad job run "$@" nomad/universal-data-source.nomad
+nomad job run "$@" universal-data-source.nomad
