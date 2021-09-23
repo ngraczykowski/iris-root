@@ -1,7 +1,9 @@
 package com.silenteight.payments.bridge.svb.learning.reader.domain;
 
 import lombok.Builder;
+import lombok.Setter;
 import lombok.Value;
+import lombok.experimental.NonFinal;
 
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
@@ -18,7 +20,11 @@ public class LearningMatch {
 
   AlertedPartyData alertedPartyData;
 
-  String match;
+  String matchId;
+
+  @Setter
+  @NonFinal
+  String matchName;
 
   List<String> watchlistNames;
 
@@ -50,7 +56,7 @@ public class LearningMatch {
   }
 
   public String toName(String alert) {
-    return "alerts/" + alert + "/matches/" + getMatch();
+    return "alerts/" + alert + "/matches/" + getMatchName();
   }
 
   public List<String> getAlertedPartyNames() {

@@ -6,9 +6,6 @@ plugins {
 dependencies {
 
   implementation libraries.silenteight_sep_base_common
-  implementation libraries.data_source_api
-  implementation libraries.data_source_categories_api
-  implementation libraries.data_source_agentinput_api
   implementation libraries.adjudication_engine_api
 
   implementation libraries.spring_boot

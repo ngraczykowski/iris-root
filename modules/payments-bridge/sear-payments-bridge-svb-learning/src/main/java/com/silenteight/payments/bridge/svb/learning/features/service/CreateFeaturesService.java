@@ -29,7 +29,7 @@ class CreateFeaturesService implements CreateFeaturesUseCase {
       featureExtractors.forEach(fe -> features.add(fe.extract(match)));
       agentInputs.add(AgentInput
           .newBuilder()
-          .setMatch(match.toName(String.valueOf(learningAlert.getAlertId())))
+          .setMatch(match.toName(String.valueOf(learningAlert.getAlertName())))
           .addAllFeatureInputs(features)
           .build());
     });

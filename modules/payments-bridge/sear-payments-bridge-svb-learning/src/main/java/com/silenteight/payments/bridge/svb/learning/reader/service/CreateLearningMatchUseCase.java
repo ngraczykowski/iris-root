@@ -36,7 +36,7 @@ class CreateLearningMatchUseCase {
 
     return LearningMatch
         .builder()
-        .match(rows.get(0).getFkcoVListFmmId())
+        .matchId(rows.get(0).getFkcoVListFmmId())
         .alertedPartyData(alertedPartyData)
         .watchlistNames(createUniqueList(rows, LearningCsvRow::getFkcoVListName))
         .entityType(toEntityType(rows.get(0).getFkcoVListType()))

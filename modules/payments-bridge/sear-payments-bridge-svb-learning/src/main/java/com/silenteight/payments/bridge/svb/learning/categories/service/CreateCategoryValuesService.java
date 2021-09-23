@@ -28,7 +28,7 @@ class CreateCategoryValuesService implements CreateCategoryValuesUseCase {
     learningAlert
         .getMatches()
         .forEach(match -> categoryValueExtractors.forEach(ce -> categoryValues.add(
-            ce.extract(match, String.valueOf(learningAlert.getAlertId())))));
+            ce.extract(match, String.valueOf(learningAlert.getAlertName())))));
 
     createCategoryValuesClient.createCategoriesValues(BatchCreateCategoryValuesRequest
         .newBuilder()

@@ -8,5 +8,5 @@ config:
 ## Job configurations
 backoffLimit: 4
 restartPolicy: Never
-springProfilesActive: "mockaws,mockdatasource"
+springProfilesActive: "mockaws,mockdatasource,mockae"
 

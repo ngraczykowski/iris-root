@@ -8,7 +8,10 @@ This project represents the high-level implementation of SEAR Payments using hea
 2. Follow the AE readme to run it
 3. Start the database using `make up`
 4. In Run configuration settings change 'Use class path module' to 'sear-payments-bridge.sear-payments-app.main'
-5. Enable the following Spring profiles for development: `logrequest,mockdatasource,mockaws`
+5. Enable the following Spring profiles for development: 
+```
+logrequest,mockdatasource,mockaws,mockae
+```
 6. Run the Spring Application using as a main class `PaymentsBridgeApplication`.
 
 ### Start tsaas-bridge cmapi-mockup

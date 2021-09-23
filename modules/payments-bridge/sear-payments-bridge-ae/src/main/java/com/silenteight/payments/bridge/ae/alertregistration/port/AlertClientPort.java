@@ -1,13 +1,13 @@
 package com.silenteight.payments.bridge.ae.alertregistration.port;
 
-import com.silenteight.adjudication.api.v1.BatchCreateAlertsRequest;
-import com.silenteight.adjudication.api.v1.BatchCreateAlertsResponse;
-import com.silenteight.adjudication.api.v1.BatchCreateMatchesRequest;
-import com.silenteight.adjudication.api.v1.BatchCreateMatchesResponse;
+import com.silenteight.adjudication.api.v1.Alert;
+import com.silenteight.adjudication.api.v1.BatchCreateAlertMatchesRequest;
+import com.silenteight.adjudication.api.v1.BatchCreateAlertMatchesResponse;
+import com.silenteight.adjudication.api.v1.CreateAlertRequest;
 
 public interface AlertClientPort {
 
-  BatchCreateAlertsResponse createAlert(BatchCreateAlertsRequest request);
+  Alert createAlert(CreateAlertRequest request);
 
-  BatchCreateMatchesResponse createMatches(BatchCreateMatchesRequest request);
+  BatchCreateAlertMatchesResponse createMatches(BatchCreateAlertMatchesRequest request);
 }

@@ -20,7 +20,8 @@ class ReceiveAnalysisModelService implements ReceiveAnalysisModelUseCase {
 
   public CreateAnalysisRequest createAnalysisRequest() {
     var model = getCurrentModelPort.getCurrentModel();
-    return CreateAnalysisRequest
+    // TODO(wkeska) delete this when gevernance module will be finished
+    return model == null ? CreateAnalysisRequest.newBuilder().build() : CreateAnalysisRequest
         .newBuilder()
         .setAnalysis(Analysis
             .newBuilder()
