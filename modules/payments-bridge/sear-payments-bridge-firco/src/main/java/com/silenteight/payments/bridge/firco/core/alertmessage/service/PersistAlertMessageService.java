@@ -22,4 +22,5 @@ class PersistAlertMessageService {
     messageRepository.save(new AlertMessageEntity(alertMessage));
     payloadRepository.save(payloadFactory.create(alertMessage));
   }
+
 }

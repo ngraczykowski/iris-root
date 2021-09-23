@@ -19,7 +19,7 @@ import static com.silenteight.payments.bridge.firco.core.alertmessage.model.Aler
 class AlertMessageQueueOverflowedService {
 
   private final AlertMessageStatusRepository repository;
-  private final TransitionAlertMessageStatusService transitionAlertMessageStatusService;
+  private final AlertMessageStatusService alertMessageStatusService;
   private final ResponseGeneratorService responseGeneratorService;
 
   private final AlertMessageProperties alertMessageProperties;
@@ -31,7 +31,7 @@ class AlertMessageQueueOverflowedService {
           message.getId(), alertMessageProperties.getStoredQueueLimit());
 
       responseGeneratorService.prepareAndSendResponse(message.getId(), REJECTED_OVERFLOWED);
-      transitionAlertMessageStatusService.transitionAlertMessageStatus(
+      alertMessageStatusService.transitionAlertMessageStatus(
           message.getId(), REJECTED_OVERFLOWED);
       return true;
     }

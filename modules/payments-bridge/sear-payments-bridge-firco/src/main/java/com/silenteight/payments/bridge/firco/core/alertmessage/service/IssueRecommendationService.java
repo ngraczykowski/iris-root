@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
-import javax.persistence.EntityNotFoundException;
 
 import static com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus.ACCEPTED;
 import static com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus.RECOMMENDED;
@@ -27,9 +26,9 @@ class IssueRecommendationService implements IssueRecommendationUseCase {
 
   private final AlertMessageProperties alertMessageProperties;
 
-  private final AlertMessageStatusRepository alertMessageStatusRepository;
-  private final TransitionAlertMessageStatusService transitionAlertMessageStatusService;
+  private final AlertMessageStatusService alertMessageStatusService;
   private final ResponseGeneratorService responseGeneratorService;
+  private final AlertMessagePayloadRepository payloadRepository;
 
   @Setter
   private Clock clock = Clock.systemUTC();
@@ -37,8 +36,7 @@ class IssueRecommendationService implements IssueRecommendationUseCase {
   @Override
   public void issue(MessageStored messageStored) {
     var alertMessageId = ResourceName.create(messageStored.getAlert()).getUuid("alert-messages");
-    var alertStatusEntity = alertMessageStatusRepository
-        .findByAlertMessageId(alertMessageId).orElseThrow(EntityNotFoundException::new);
+    var alertStatusEntity = alertMessageStatusService.findByAlertId(alertMessageId);
 
     if (isTransitionForbidden(alertStatusEntity)) {
       return;
@@ -52,9 +50,9 @@ class IssueRecommendationService implements IssueRecommendationUseCase {
      * The request isn't sent to AE at version one, thus the artificial transition from
      * (RECEIVED, STORED) to (RECOMMENDED) has been enabled.
      */
-
     responseGeneratorService.prepareAndSendResponse(alertMessageId, RECOMMENDED);
-    transitionAlertMessageStatusService.transitionAlertMessageStatus(alertMessageId, RECOMMENDED);
+    alertMessageStatusService.transitionAlertMessageStatus(alertMessageId, RECOMMENDED);
+
   }
 
   private boolean isTransitionForbidden(AlertMessageStatusEntity alertMessageStatus) {
@@ -74,7 +72,7 @@ class IssueRecommendationService implements IssueRecommendationUseCase {
     var alertMessageId = alertMessageStatus.getAlertMessageId();
     if (isOverdue) {
       responseGeneratorService.prepareAndSendResponse(alertMessageId, REJECTED_OUTDATED);
-      transitionAlertMessageStatusService
+      alertMessageStatusService
           .transitionAlertMessageStatus(alertMessageId, REJECTED_OUTDATED);
       return true;
     }

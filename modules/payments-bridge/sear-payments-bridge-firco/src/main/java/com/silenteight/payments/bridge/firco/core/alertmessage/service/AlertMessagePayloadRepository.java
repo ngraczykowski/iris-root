@@ -11,4 +11,6 @@ interface AlertMessagePayloadRepository extends Repository<AlertMessagePayload, 
 
   Optional<AlertMessagePayload> findByAlertMessageId(UUID alertMessageId);
 
+  void deleteByAlertMessageId(UUID alertMessageId);
+
 }

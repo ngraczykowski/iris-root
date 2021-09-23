@@ -19,7 +19,7 @@ public class AlertMessageStoredService  {
 
   private final AlertMessageQueueOverflowedService alertMessageQueueOverflowedService;
   private final AlertMessageStoredPublisherPort alertMessageStoredPublisherPort;
-  private final TransitionAlertMessageStatusService transitionAlertMessageStatusService;
+  private final AlertMessageStatusService alertMessageStatusService;
 
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void send(FircoAlertMessage alertMessage) {
@@ -28,7 +28,7 @@ public class AlertMessageStoredService  {
     }
 
     alertMessageStoredPublisherPort.publish(alertMessage);
-    transitionAlertMessageStatusService
+    alertMessageStatusService
         .transitionAlertMessageStatus(alertMessage.getId(), STORED);
   }
 

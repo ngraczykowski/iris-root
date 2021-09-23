@@ -10,17 +10,24 @@ import org.springframework.stereotype.Service;
 
 import java.time.Clock;
 import java.util.UUID;
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
-class TransitionAlertMessageStatusService {
+class AlertMessageStatusService {
 
   private final AlertMessageStatusRepository repository;
+  private final AlertMessagePayloadRepository payloadRepository;
 
   @Setter
   private Clock clock = Clock.systemUTC();
+
+  AlertMessageStatusEntity findByAlertId(UUID alertMessageId) {
+    return repository.findByAlertMessageId(alertMessageId)
+        .orElseThrow(EntityNotFoundException::new);
+  }
 
   @Transactional
   public void transitionAlertMessageStatus(
@@ -35,6 +42,10 @@ class TransitionAlertMessageStatusService {
     }
 
     repository.save(entity);
+
+    if (destinationStatus.isFinal()) {
+      payloadRepository.deleteByAlertMessageId(alertMessageId);
+    }
   }
 
   @Transactional

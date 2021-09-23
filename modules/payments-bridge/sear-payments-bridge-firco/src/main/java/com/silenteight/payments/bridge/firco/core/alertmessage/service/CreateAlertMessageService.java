@@ -16,14 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
 class CreateAlertMessageService implements CreateAlertMessageUseCase {
 
   private final PersistAlertMessageService persistAlertMessageService;
-  private final TransitionAlertMessageStatusService transitionAlertMessageStatusService;
+  private final AlertMessageStatusService alertMessageStatusService;
   private final ApplicationEventPublisher applicationEventPublisher;
 
   @Transactional
   @Override
   public void createAlertMessage(FircoAlertMessage alertMessage) {
     persistAlertMessageService.createAlertMessage(alertMessage);
-    transitionAlertMessageStatusService.initState(alertMessage.getId());
+    alertMessageStatusService.initState(alertMessage.getId());
     applicationEventPublisher.publishEvent(alertMessage);
   }
+
 }
