@@ -17,6 +17,8 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers(HttpMethod.GET, "/available-categories")
         .permitAll()
+        .antMatchers(HttpMethod.GET, "/management/*")
+        .permitAll()
         .anyRequest()
         .authenticated();
   }

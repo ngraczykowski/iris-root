@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
+@RestController
 public class CategoryController {
 
   private final ListAvailableCategoriesUseCase listAvailableCategoriesUseCase;

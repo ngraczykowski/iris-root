@@ -122,7 +122,7 @@ job "universal-data-source" {
         "traefik.enable=true",
         # Those 2 tags are required to gather metrics by prometheus
         "traefik.protocol=http",
-        "prometheus.metrics.path=/management/prometheus",
+        "prometheus.metrics.path=/rest/uds/management/prometheus",
         # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
         "gRPC.port=${NOMAD_PORT_grpc}",
         "gRPC_port=${NOMAD_PORT_grpc}",
@@ -137,7 +137,7 @@ job "universal-data-source" {
       check {
         name     = "Universal Data Source HTTP Health Check"
         type     = "http"
-        path     = "/management/health"
+        path     = "/rest/uds/management/health"
         method   = "GET"
         interval = "30s"
         timeout  = "2s"
