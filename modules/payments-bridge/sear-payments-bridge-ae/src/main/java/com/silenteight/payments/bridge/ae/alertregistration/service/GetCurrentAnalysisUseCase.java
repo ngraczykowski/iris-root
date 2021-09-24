@@ -16,7 +16,9 @@ class GetCurrentAnalysisUseCase {
   long getOrCreateAnalysis() {
     var analysis = analysisDataAccessPort.findTodayAnalysis();
 
-    return analysis.isEmpty() ? createAnalysisService.createAnalysis()
-                              : analysis.get();
+    if (analysis.isEmpty())
+      return createAnalysisService.createAnalysis();
+
+    return analysis.get();
   }
 }

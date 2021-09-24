@@ -1,11 +1,17 @@
 package com.silenteight.payments.bridge.ae.alertregistration.domain;
 
+import lombok.Builder;
 import lombok.Value;
 
+import java.util.List;
+
 @Value
+@Builder
 public class AddAlertRequest {
 
-  String analysisName;
+  List<String> alertNames;
 
-  String alertName;
+  public static AddAlertRequest fromAlertNames(List<String> names) {
+    return AddAlertRequest.builder().alertNames(names).build();
+  }
 }

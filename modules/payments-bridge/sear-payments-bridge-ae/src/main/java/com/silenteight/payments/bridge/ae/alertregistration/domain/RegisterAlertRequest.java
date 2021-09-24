@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.toList;
 @Builder
 public class RegisterAlertRequest {
 
-  long alertId;
+  String alertId;
 
   int priority;
 
@@ -46,7 +46,7 @@ public class RegisterAlertRequest {
   public CreateAlertRequest toCreateAlertRequest() {
     return CreateAlertRequest.newBuilder().setAlert(Alert
         .newBuilder()
-        .setAlertId(String.valueOf(getAlertId()))
+        .setAlertId(getAlertId())
         .setPriority(getPriority())
         .build()).build();
   }

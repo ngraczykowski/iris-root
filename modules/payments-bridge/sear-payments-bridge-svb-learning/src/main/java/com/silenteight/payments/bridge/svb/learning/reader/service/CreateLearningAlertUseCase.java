@@ -20,7 +20,7 @@ class CreateLearningAlertUseCase {
 
   LearningAlert fromCsvRows(List<LearningCsvRow> rows) {
     return LearningAlert.builder()
-        .alertId(Long.parseLong(rows.get(0).getFkcoId()))
+        .alertId(rows.get(0).getFkcoVSystemId())
         .matches(createMatches(rows))
         .build();
   }

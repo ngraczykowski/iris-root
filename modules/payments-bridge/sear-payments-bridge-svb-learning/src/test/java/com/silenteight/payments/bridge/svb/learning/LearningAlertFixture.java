@@ -14,7 +14,7 @@ public class LearningAlertFixture {
   public static LearningAlert createLearningAlert() {
     return LearningAlert
         .builder()
-        .alertId(1)
+        .alertId("1")
         .matches(IntStream
             .range(1, 5)
             .mapToObj(LearningAlertFixture::createMatch)

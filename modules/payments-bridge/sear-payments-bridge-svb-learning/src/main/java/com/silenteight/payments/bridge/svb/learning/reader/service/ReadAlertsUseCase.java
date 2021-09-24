@@ -50,7 +50,7 @@ class ReadAlertsUseCase {
   private AlertsReadingResponse readByAlerts(
       MappingIterator<LearningCsvRow> it, Consumer<LearningAlert> alertConsumer) {
     var firstRow = it.next();
-    String currentAlertID = firstRow.getFkcoId();
+    String currentAlertID = firstRow.getFkcoVSystemId();
 
     List<ReadAlertError> errors = new ArrayList<>();
     List<LearningCsvRow> alertRows = new ArrayList<>();
@@ -61,7 +61,7 @@ class ReadAlertsUseCase {
 
     while (it.hasNext()) {
       var row = it.next();
-      var rowAlertId = row.getFkcoId();
+      var rowAlertId = row.getFkcoVSystemId();
 
       if (currentAlertID.equals(rowAlertId)) {
         alertRows.add(row);

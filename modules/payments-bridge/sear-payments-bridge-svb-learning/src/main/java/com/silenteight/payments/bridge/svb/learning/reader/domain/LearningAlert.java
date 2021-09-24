@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toList;
 @Value
 public class LearningAlert {
 
-  long alertId;
+  String alertId;
 
   @Setter(AccessLevel.PRIVATE)
   @NonFinal
