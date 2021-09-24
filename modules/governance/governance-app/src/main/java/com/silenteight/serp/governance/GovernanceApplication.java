@@ -6,6 +6,7 @@ import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallbac
 import com.silenteight.commons.app.spring.SpringApplicationTemplate;
 import com.silenteight.sep.auth.authentication.AuthenticationModule;
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
+import com.silenteight.sep.filestorage.minio.FileStorageMinioModule;
 import com.silenteight.serp.governance.agent.AgentModule;
 import com.silenteight.serp.governance.branch.BranchModule;
 import com.silenteight.serp.governance.changerequest.ChangeRequestModule;
@@ -13,6 +14,7 @@ import com.silenteight.serp.governance.common.grpc.GrpcCommonModule;
 import com.silenteight.serp.governance.common.integration.AmqpCommonModule;
 import com.silenteight.serp.governance.common.signature.SignatureModule;
 import com.silenteight.serp.governance.common.web.WebModule;
+import com.silenteight.serp.governance.file.FileModule;
 import com.silenteight.serp.governance.ingest.IngestModule;
 import com.silenteight.serp.governance.mailer.MailerModule;
 import com.silenteight.serp.governance.model.ModelModule;
@@ -41,6 +43,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AgentModule.class,
     BranchModule.class,
     ChangeRequestModule.class,
+    FileModule.class,
     FeatureVectorModule.class,
     IngestModule.class,
     ModelModule.class,
@@ -54,6 +57,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AmqpCommonModule.class,
     AuthenticationModule.class,
     AuthorizationModule.class,
+    FileStorageMinioModule.class,
     GrpcCommonModule.class,
     MailerModule.class,
     WebModule.class,

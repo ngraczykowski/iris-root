@@ -65,3 +65,19 @@ serp.governance.qa:
             - ACTION_FALSE_POSITIVE
   viewing:
     max-state-reset-delay-ms: 45000
+serp.governance.files:
+  validation:
+    max-file-name-length: 255
+    max-file-size-in-bytes: 20971520
+    max-number-files-to-upload: 20
+    allowed-types:
+      - image/jpeg
+      - image/png
+      - image/gif
+      - image/svg+xml
+      - application/pdf
+      - application/x-tika-msoffice
+      - application/x-tika-ooxml
+      - application/x-tika-msoffice
+      - text/plain
+  default-bucket: attachments

@@ -17,6 +17,7 @@ import java.util.UUID;
 
 import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.APPROVED;
 import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.CANCELLED;
+import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.PENDING;
 import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.REJECTED;
 import static com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures.*;
 import static org.assertj.core.api.Assertions.*;
@@ -118,7 +119,7 @@ class ChangeRequestServiceTest {
   }
 
   @Test
-  void cancelChanngeRequest() {
+  void cancelChangeRequest() {
     // given
     persistChangeRequest();
 
@@ -145,6 +146,16 @@ class ChangeRequestServiceTest {
   void throwExceptionWhenCancellingNotExistingChangeRequest() {
     assertThatThrownBy(() -> underTest.cancel(CHANGE_REQUEST_ID, CANCELLED_BY))
         .isInstanceOf(ChangeRequestNotFoundException.class);
+  }
+
+  @Test
+  void shouldGetChangeRequestState() {
+    persistChangeRequest();
+
+    ChangeRequestState changeRequestState =
+        underTest.getChangeRequestState(CHANGE_REQUEST_ID);
+
+    assertThat(changeRequestState).isEqualTo(PENDING);
   }
 
   private void persistChangeRequest() {
