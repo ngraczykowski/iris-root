@@ -1,0 +1,12 @@
+name: webapp-app
+image_tag: webapp-app
+image_repo: webapp-app
+args: [ "webapp-app" ]
+ports:
+  http: 24410
+config:
+  name: webapp
+  data:
+    - key: example-release-key
+      value: example-release-key-some-passowrd
+replicaCount: 1
