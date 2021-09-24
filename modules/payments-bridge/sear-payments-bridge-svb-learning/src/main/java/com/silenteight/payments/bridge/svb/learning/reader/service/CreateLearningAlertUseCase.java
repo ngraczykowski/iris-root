@@ -9,6 +9,7 @@ import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -25,26 +26,46 @@ class CreateLearningAlertUseCase {
   }
 
   private List<LearningMatch> createMatches(List<LearningCsvRow> rows) {
-    String currentWatchList = rows.get(0).getFkcoVListFmmId();
     List<LearningMatch> matches = new ArrayList<>();
-    List<LearningCsvRow> matchRows = new ArrayList<>();
+    var matchRows = new HashMap<String, List<LearningCsvRow>>();
 
     for (var row : rows) {
-      if (isSameWatchListEntity(currentWatchList, row) || matchRows.size() == 0) {
-        matchRows.add(row);
+      var matchId = row.getFkcoVListFmmId();
+
+      if (matchRows.containsKey(matchId)) {
+        var list = matchRows.get(matchId);
+        list.add(row);
         continue;
       }
 
-      currentWatchList = row.getFkcoVListFmmId();
-      matches.add(createLearningMatchUseCase.fromLearningRows(matchRows));
-      matchRows.clear();
-      matchRows.add(row);
+      matchRows.put(matchId, new ArrayList<>(List.of(row)));
     }
+
+    for (var key : matchRows.keySet()) {
+      matches.add(createLearningMatchUseCase.fromLearningRows(matchRows.get(key)));
+    }
+
+    assertNoDuplicateMatchIds(matches);
 
     return matches;
   }
 
-  private static boolean isSameWatchListEntity(String currentId, LearningCsvRow row) {
-    return row.getFkcoVListFmmId().equals(currentId);
+  static void assertNoDuplicateMatchIds(List<LearningMatch> matches) {
+    var ids = new ArrayList<String>();
+    for (var match : matches) {
+      if (ids.contains(match.getMatchId()))
+        throw new DuplicatedMatchIdException();
+
+      ids.add(match.getMatchId());
+    }
+  }
+
+  private static class DuplicatedMatchIdException extends RuntimeException {
+
+    private static final long serialVersionUID = 8806971682856315265L;
+
+    DuplicatedMatchIdException() {
+      super("Duplicated match id");
+    }
   }
 }

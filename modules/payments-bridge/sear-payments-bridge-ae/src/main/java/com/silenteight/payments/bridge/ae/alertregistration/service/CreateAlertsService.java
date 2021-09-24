@@ -19,7 +19,7 @@ class CreateAlertsService {
 
   public RegisterAlertResponse createAlert(RegisterAlertRequest registerAlertRequest) {
     var response = alertClient.createAlert(registerAlertRequest.toCreateAlertRequest());
-    var alertName = response.getAlertId();
+    var alertName = response.getName();
 
     var matchesNames =
         alertClient.createMatches(registerAlertRequest.toCreateMatchesRequest(alertName));

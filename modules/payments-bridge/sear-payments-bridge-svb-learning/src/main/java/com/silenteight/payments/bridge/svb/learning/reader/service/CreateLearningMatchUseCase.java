@@ -108,12 +108,11 @@ class CreateLearningMatchUseCase {
     HashMap<String, EntityType> types = new HashMap<>();
     types.put("INDIVIDUAL", EntityType.INDIVIDUAL);
     types.put("COMPANY", EntityType.ORGANIZATION);
-    types.put("OTHER", EntityType.ENTITY_TYPE_UNSPECIFIED);
 
     if (types.containsKey(type))
       return types.get(type);
 
-    return EntityType.UNRECOGNIZED;
+    return EntityType.ENTITY_TYPE_UNSPECIFIED;
   }
 
   private Map<AlertedPartyKey, String> createAlertedPartyEntities(

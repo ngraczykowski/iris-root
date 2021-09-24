@@ -21,6 +21,9 @@ class ProcessAlertUseCase {
 
   void processAlert(LearningAlert learningAlert) {
 
+    if (learningAlert.getMatches().size() == 0)
+      return;
+
     var response = registerAlertUseCase.register(List.of(learningAlert.toRegisterAlertRequest()));
     learningAlert.setAlertMatchNames(response.get(0));
 
