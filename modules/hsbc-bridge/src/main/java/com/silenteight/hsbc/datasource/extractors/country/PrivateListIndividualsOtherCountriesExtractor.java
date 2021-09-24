@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -26,6 +28,6 @@ class PrivateListIndividualsOtherCountriesExtractor {
     return of(
         privateListIndividual.getCountryCodesAll(),
         privateListIndividual.getCountriesAll()
-    );
+    ).filter(StringUtils::isNotBlank);
   }
 }

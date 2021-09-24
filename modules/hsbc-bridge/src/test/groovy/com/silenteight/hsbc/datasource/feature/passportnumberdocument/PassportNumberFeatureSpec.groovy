@@ -52,8 +52,8 @@ class PassportNumberFeatureSpec extends Specification {
     }
 
     def privateListIndividual = Mock(PrivateListIndividual) {
-      getPassportNumber() >> 'K45R78986'
-      getEdqSuffix() >> 'ID42342'
+      getPassportNumber() >> 'K45R78986 (UK)'
+      getEdqSuffix() >> 'SUFFIX'
     }
 
     def matchData = Mock(MatchData) {
@@ -73,8 +73,8 @@ class PassportNumberFeatureSpec extends Specification {
       feature == Feature.PASSPORT_NUMBER_DOCUMENT.fullName
       alertedPartyDocuments.size() == 1
       alertedPartyDocuments == ['123456']
-      watchlistDocuments.size() == 2
-      watchlistDocuments == ['KJ0114578', 'K45R78986']
+      watchlistDocuments.size() == 3
+      watchlistDocuments == ['KJ0114578', 'K45R78986', 'SUFFIX']
     }
   }
 }

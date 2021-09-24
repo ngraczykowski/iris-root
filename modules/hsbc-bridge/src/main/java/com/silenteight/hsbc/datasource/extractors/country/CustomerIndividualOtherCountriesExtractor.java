@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.stream.Stream;
 
 import static java.util.stream.Stream.of;
@@ -18,6 +20,6 @@ class CustomerIndividualOtherCountriesExtractor {
         customerIndividual.getEdqAddressCountryCode(),
         customerIndividual.getCountriesAll(),
         customerIndividual.getEdqCountriesAllCodes()
-    );
+    ).filter(StringUtils::isNotBlank);
   }
 }

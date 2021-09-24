@@ -9,6 +9,7 @@ import com.silenteight.hsbc.datasource.datamodel.WorldCheckEntity;
 import com.silenteight.hsbc.datasource.feature.country.RegistrationCountryFeatureQuery;
 
 import one.util.streamex.StreamEx;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.stream.Stream;
 
@@ -49,7 +50,7 @@ public class RegistrationCountryFeatureQueryFacade implements RegistrationCountr
         customerEntity.getRegistrationCountry(),
         customerEntity.getCountriesOfRegistrationOriginal(),
         customerEntity.getEdqRegistrationCountriesCodes()
-    );
+    ).filter(StringUtils::isNotBlank);
   }
 
   @Override
@@ -67,7 +68,7 @@ public class RegistrationCountryFeatureQueryFacade implements RegistrationCountr
       WorldCheckEntity worldCheckEntity) {
     return Stream.of(
         worldCheckEntity.getRegistrationCountry()
-    );
+    ).filter(StringUtils::isNotBlank);
   }
 
   private static Stream<String> extractPrivateListEntitiesRegistrationCountries(
@@ -75,7 +76,7 @@ public class RegistrationCountryFeatureQueryFacade implements RegistrationCountr
     return Stream.of(
         privateListEntity.getCountryCodesAll(),
         privateListEntity.getCountriesAll()
-    );
+    ).filter(StringUtils::isNotBlank);
   }
 
   private static Stream<String> extractCtrpScreeningEntitiesRegistrationCountries(
@@ -84,6 +85,6 @@ public class RegistrationCountryFeatureQueryFacade implements RegistrationCountr
         ctrpScreening.getCountryName(),
         ctrpScreening.getCountryCode(),
         ctrpScreening.getCtrpValue()
-    );
+    ).filter(StringUtils::isNotBlank);
   }
 }

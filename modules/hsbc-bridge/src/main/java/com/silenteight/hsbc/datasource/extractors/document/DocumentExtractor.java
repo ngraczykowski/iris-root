@@ -2,38 +2,14 @@ package com.silenteight.hsbc.datasource.extractors.document;
 
 import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual;
 import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
-import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
-import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
-import com.silenteight.hsbc.datasource.extractors.common.SimpleRegexBasedExtractor;
-import com.silenteight.hsbc.datasource.extractors.country.NationalIdNumberFieldCountryExtractor;
-import com.silenteight.hsbc.datasource.extractors.country.PassportNumberFieldCountryExtractor;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class DocumentExtractor {
 
-  //FIXE (mmrowka) this should be configurable from properties
-  private static final String PASSPORT_CODE = "\"P\"";
-  private static final String NATIONAL_ID_CODE = "\"NID\"";
-  private static final Pattern DOCUMENT_ID_PATTERN = Pattern.compile(".*ID$");
-  private static final Pattern OTHER_DOCUMENT_ID_PATTERN = Pattern.compile(".*(?<!ID)$");
-  private static final Pattern BASE_PATTERN = Pattern.compile("\"(.*)\"");
-  private static final Pattern DOCUMENT_GROUP = Pattern.compile("^(.*) \\((.*)\\)$");
-  private static final Pattern EDQ_SUFFIX = Pattern.compile("\"^\\s*[^0-9]+\\s*$\"");
-
   public Document convertAlertedPartyDocumentNumbers(CustomerIndividual customerIndividual) {
     var document = new Document();
+    var customerIndividualExtractor = new CustomerIndividualsExtractor(document);
 
-    extractCustomerIndividualsIdentificationDocument(customerIndividual, document);
-
+    customerIndividualExtractor.extract(customerIndividual);
     return document;
   }
 
@@ -41,181 +17,13 @@ public class DocumentExtractor {
     var document = new Document();
 
     if (individualComposite.hasWorldCheckIndividuals()) {
-      extractWorldCheckIndividualsDocuments(
-          individualComposite.getWorldCheckIndividuals(), document);
+      var worldCheckIndividualsExtractor = new WorldCheckIndividualsExtractor(document);
+      worldCheckIndividualsExtractor.extract(individualComposite.getWorldCheckIndividuals());
     }
-
     if (individualComposite.hasPrivateListIndividuals()) {
-      extractPrivateListIndividualsDocument(
-          individualComposite.getPrivateListIndividuals(), document);
+      var privateListIndividualsExtractor = new PrivateListIndividualsExtractor(document);
+      privateListIndividualsExtractor.extract(individualComposite.getPrivateListIndividuals());
     }
-
     return document;
-  }
-
-  private void extractCustomerIndividualsIdentificationDocument(
-      CustomerIndividual customerIndividual, Document document) {
-
-    Stream.of(
-        customerIndividual.getIdentificationDocument1(),
-        customerIndividual.getIdentificationDocument2(),
-        customerIndividual.getIdentificationDocument3(),
-        customerIndividual.getIdentificationDocument4(),
-        customerIndividual.getIdentificationDocument5(),
-        customerIndividual.getIdentificationDocument6(),
-        customerIndividual.getIdentificationDocument7(),
-        customerIndividual.getIdentificationDocument8(),
-        customerIndividual.getIdentificationDocument9(),
-        customerIndividual.getIdentificationDocument10())
-        .filter(Objects::nonNull)
-        .forEach(i -> extractCustomerIndividualsDocuments(document, i));
-  }
-
-  private void extractCustomerIndividualsDocuments(Document document, String i) {
-    var matcher = BASE_PATTERN.matcher(i);
-    if (matcher.find()) {
-      var group = matcher.group(0);
-      var split = group.split(",");
-
-      if (split[0].equals(PASSPORT_CODE)) {
-        document.addPassportNumber(split[1].replace("\"", ""));
-      } else if (split[0].equals(NATIONAL_ID_CODE)) {
-        document.addNationalIdNumber(split[1].replace("\"", ""));
-      } else if (!Arrays.asList(PASSPORT_CODE, NATIONAL_ID_CODE).contains(split[0])) {
-        document.addOtherDocumentNumber(split[1].replace("\"", ""));
-      }
-    }
-  }
-
-  private void extractWorldCheckIndividualsDocuments(
-      List<WorldCheckIndividual> worldCheckIndividuals, Document document) {
-
-    worldCheckIndividuals.forEach(w -> {
-      extractPassportNumbers(document, w.getPassportNumber());
-      extractPassportCountries(document, w.getPassportCountry());
-      extractIdNumbers(document, w.getIdNumbers());
-    });
-  }
-
-  private void extractIdNumbers(Document document, String idNumbers) {
-    if (isEmpty(idNumbers)) {
-      return;
-    }
-
-    var splitIdNumbers = idNumbers.split("\\|");
-
-    Arrays.stream(splitIdNumbers)
-        .map(NationalIdNumberFieldCountryExtractor::new)
-        .map(SimpleRegexBasedExtractor::extract)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .forEach(document::addNationalIdCountry);
-
-    var extractedIdNumbers = Arrays.stream(splitIdNumbers)
-        .map(this::extractDocumentId)
-        .collect(Collectors.toList());
-
-    extractedIdNumbers
-        .stream()
-        .filter(i -> DOCUMENT_ID_PATTERN.matcher(i).find())
-        .forEach(document::addNationalIdNumber);
-
-    extractedIdNumbers
-        .stream()
-        .filter(i -> OTHER_DOCUMENT_ID_PATTERN.matcher(i).find())
-        .forEach(document::addOtherDocumentNumber);
-  }
-
-  private void extractPassportNumbers(Document document, String passportNumber) {
-    if (isEmpty(passportNumber)) {
-      return;
-    }
-
-    var splitPassportNumbers = passportNumber.split(";");
-
-    Arrays.stream(splitPassportNumbers)
-        .map(this::extractDocumentId)
-        .forEach(document::addPassportNumber);
-  }
-
-  private void extractPassportCountries(Document document, String passportCountry) {
-    if (isEmpty(passportCountry)) {
-      return;
-    }
-
-    var splitPassportNumbers = passportCountry.split(";");
-
-    Arrays.stream(splitPassportNumbers)
-        .map(PassportNumberFieldCountryExtractor::new)
-        .map(SimpleRegexBasedExtractor::extract)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .forEach(document::addPassportCountry);
-  }
-
-  private void extractPrivateListIndividualsDocument(
-      List<PrivateListIndividual> privateListIndividuals, Document document) {
-    privateListIndividuals.forEach(p -> {
-      var suffix = extractEdqSuffix(p.getEdqSuffix());
-      extractPassportNumberFromPrivateListIndividual(p.getPassportNumber(), document, suffix);
-      extractNationalIdFromPrivateListIndividual(p.getNationalId(), document, suffix);
-      extractEdqDocument(document, p.getEdqDrivingLicence());
-      extractEdqDocument(document, p.getEdqTaxNumber());
-      suffix.ifPresent(document::addOtherDocumentNumber);
-    });
-  }
-
-  private void extractEdqDocument(Document document, String edqDocument) {
-    if (isEmpty(edqDocument)) {
-      return;
-    }
-    document.addOtherDocumentNumber(edqDocument);
-  }
-
-  private void extractNationalIdFromPrivateListIndividual(
-      String nationalId, Document document, Optional<String> edqSuffix) {
-    if (isEmpty(nationalId)) {
-      return;
-    }
-
-    Stream.of(nationalId
-        .split(","))
-        .filter(e -> edqSuffix.isPresent() && !edqSuffix.get().equals(e))
-        .forEach(document::addNationalIdNumber);
-  }
-
-  private void extractPassportNumberFromPrivateListIndividual(
-      String passportNumber, Document document, Optional<String> edqSuffix) {
-    if (isEmpty(passportNumber)) {
-      return;
-    }
-
-    Stream.of(passportNumber
-        .split("[,;]"))
-        .map(v -> v.split("[,;]"))
-        .flatMap(Stream::of)
-        .map(this::extractDocumentId)
-        .map(k -> k.split(";")[0])
-        .filter(e -> edqSuffix.isPresent() && !edqSuffix.get().equals(e))
-        .forEach(document::addPassportNumber);
-  }
-
-  private String extractDocumentId(String documentId) {
-    var matcher = DOCUMENT_GROUP.matcher(documentId);
-    if (matcher.find()) {
-      return matcher.group(1);
-    }
-    return documentId;
-  }
-
-  private Optional<String> extractEdqSuffix(String documentId) {
-    if (isEmpty(documentId)){
-      return Optional.empty();
-    }
-    var matcher = EDQ_SUFFIX.matcher(documentId);
-    if (!matcher.find()) {
-      return Optional.of(documentId);
-    }
-    return Optional.empty();
   }
 }

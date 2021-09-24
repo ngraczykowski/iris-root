@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.Arrays.stream;
 import static java.util.Objects.isNull;
 import static java.util.regex.Pattern.compile;
 import static java.util.stream.Collectors.joining;
@@ -23,7 +22,7 @@ class GeoLocationExtractor {
     if (isNull(values)) {
       return "";
     }
-    return stream(values)
+    return Stream.of(values)
         .filter(StringUtils::isNotBlank)
         .map(String::strip)
         .collect(joining(" "));

@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 import static com.silenteight.hsbc.datasource.extractors.name.CountryLanguageMatcher.matches;
 import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
 import static java.lang.String.join;
-import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
 import static java.util.List.of;
 import static java.util.regex.Pattern.compile;
@@ -39,7 +38,7 @@ class NameExtractor {
     if (names == null) {
       return "";
     }
-    return stream(names)
+    return Stream.of(names)
         .map(name -> (name == null) ? "" : name.strip())
         .filter(name -> !name.equals(""))
         .collect(joining(" "));

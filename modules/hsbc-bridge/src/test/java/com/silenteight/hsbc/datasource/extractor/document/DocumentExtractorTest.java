@@ -38,23 +38,24 @@ class DocumentExtractorTest {
     customerIndividuals.setIdentificationDocument5("Passport");
     customerIndividuals.setIdentificationDocument6(
         "<docno> Ref XIFEID memo dt 01Jan2016 for eID&VA details");
-    customerIndividuals.setIdentificationDocument7("\"ID\",\"987456\"");
+    customerIndividuals.setIdentificationDocument7("\"ID\",\"K987456 NumBeR\"");
     customerIndividuals.setIdentificationDocument8("");
     customerIndividuals.setIdentificationDocument9(null);
 
     worldCheckIndividuals = new WorldCheckIndividual();
     var worldCheckIndividuals = this.worldCheckIndividuals;
-    worldCheckIndividuals.setPassportNumber("KZ0212573 (UNK-UNKW);KW4444587 (GB);A52345");
-    worldCheckIndividuals.setPassportCountry("KJ0114578 (VIET NAM);KJ4514578 (IRAN);A501245");
+    worldCheckIndividuals.setPassportNumber("KZ0212573 (VIET NAM);KW4444587 (IRAN);A52345");
+    worldCheckIndividuals.setPassportCountry("PH PH PH");
     worldCheckIndividuals.setIdNumbers("BC 78845 (UNK-UNKW)|ID78845 (UNK-UNKW)|78845ID (UNK-UNKW)");
 
     privateListIndividuals = new PrivateListIndividual();
     var privateListIndividuals = this.privateListIndividuals;
     privateListIndividuals.setEdqTaxNumber("GOHA784512R12");
-    privateListIndividuals.setPassportNumber("K45R78986,T3GD45689");
-    privateListIndividuals.setNationalId("4568795132,5465498756");
+    privateListIndividuals.setPassportNumber(
+        "K45R78986I (PL);A4671286I (GER);B1232353456");
+    privateListIndividuals.setNationalId("4568795132,5465498756,,,");
     privateListIndividuals.setEdqDrivingLicence("sadasdas76@hotmail.com");
-    privateListIndividuals.setEdqSuffix("ID42342");
+    privateListIndividuals.setEdqSuffix("SUFFIX-A");
   }
 
   @Test
@@ -69,7 +70,7 @@ class DocumentExtractorTest {
     //then
     assertThat(document.getPassportNumbers()).containsOnlyOnceElementsOf(List.of("ZS12398745"));
     assertThat(document.getNationalIds()).containsOnlyOnceElementsOf(List.of("Y999999"));
-    assertThat(document.getOtherDocuments()).containsOnlyOnceElementsOf(List.of("987456"));
+    assertThat(document.getOtherDocuments()).containsOnlyOnceElementsOf(List.of("K987456 NumBeR"));
   }
 
   @Test
@@ -86,11 +87,11 @@ class DocumentExtractorTest {
 
     //then
     assertThat(document.getPassportNumbers()).containsOnlyOnceElementsOf(
-        List.of("KZ0212573", "KW4444587", "A52345", "K45R78986", "T3GD45689"));
+        List.of("KZ0212573", "KW4444587", "K45R78986I", "A4671286I", "SUFFIX-A"));
     assertThat(document.getNationalIds()).containsOnlyOnceElementsOf(
-        List.of("78845ID", "4568795132", "5465498756"));
+        List.of("4568795132", "5465498756", "78845ID", "SUFFIX-A"));
     assertThat(document.getOtherDocuments()).containsOnlyOnceElementsOf(
-        List.of("BC 78845", "ID78845", "GOHA784512R12", "sadasdas76@hotmail.com", "ID42342"));
+        List.of("BC 78845", "ID78845", "GOHA784512R12", "sadasdas76@hotmail.com", "SUFFIX-A"));
     assertThat(document.getAllCountries()).contains("VIET NAM", "IRAN", "UNK UNKW");
   }
 }

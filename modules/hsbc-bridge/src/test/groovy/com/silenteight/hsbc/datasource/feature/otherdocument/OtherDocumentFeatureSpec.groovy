@@ -32,7 +32,7 @@ class OtherDocumentFeatureSpec extends Specification {
   def 'should retrieve other document values when customer is individual'() {
     given:
     def customerIndividual = Mock(CustomerIndividual) {
-      getIdentificationDocument1() >> '"ID","987654"'
+      getIdentificationDocument1() >> '"ID","987654 nUmBeR"'
       getIdentificationDocument2() >> '3'
       getIdentificationDocument3() >> '4'
       getIdentificationDocument4() >> '4'
@@ -49,7 +49,7 @@ class OtherDocumentFeatureSpec extends Specification {
     }
 
     def privateListIndividual = Mock(PrivateListIndividual) {
-      getEdqSuffix() >> 'ID42342'
+      getEdqSuffix() >> 'SUFFIX'
       getEdqTaxNumber() >> 'WOHZ784512R12'
       getEdqDrivingLicence() >> 'test76@hotmail.com'
     }
@@ -76,10 +76,10 @@ class OtherDocumentFeatureSpec extends Specification {
     with(result) {
       feature == Feature.OTHER_DOCUMENT.fullName
       alertedPartyDocuments.size() == 1
-      alertedPartyDocuments == ['987654']
+      alertedPartyDocuments == ['987654 nUmBeR']
       watchlistDocuments.size() == 5
       watchlistDocuments ==
-          ['BC 78845', 'test76@hotmail.com', 'WOHZ784512R12', 'ID42342', 'GOHA784512R12']
+          ['BC 78845', 'test76@hotmail.com', 'WOHZ784512R12', 'SUFFIX', 'GOHA784512R12']
     }
   }
 }

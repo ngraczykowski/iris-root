@@ -8,6 +8,8 @@ import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
 import com.silenteight.hsbc.datasource.feature.country.ResidencyCountryFeatureQuery;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
@@ -47,7 +49,7 @@ public class ResidencyCountryFeatureQueryFacade implements ResidencyCountryFeatu
             customerIndividuals.getCountryOfResidence(),
             customerIndividuals.getEdqResidenceCountriesCode(),
             customerIndividuals.getSourceCountry()
-        )
+        ).filter(StringUtils::isNotBlank)
         .map(x -> x.replaceAll(INDIVIDUAL_RESIDENCIES_REGEX, "").trim());
   }
 
@@ -56,7 +58,7 @@ public class ResidencyCountryFeatureQueryFacade implements ResidencyCountryFeatu
     return Stream.of(
         worldCheckIndividual.getAddressCountry(),
         worldCheckIndividual.getResidencyCountry()
-    );
+    ).filter(StringUtils::isNotBlank);
   }
 
   private static Stream<String> extractPrivateListIndividualsResidencies(
@@ -64,7 +66,7 @@ public class ResidencyCountryFeatureQueryFacade implements ResidencyCountryFeatu
     return Stream.of(
         privateListIndividual.getAddressCountry(),
         privateListIndividual.getResidencyCountry()
-    );
+    ).filter(StringUtils::isNotBlank);
   }
 
   private static Stream<String> extractCtrpScreeningResidencies(
@@ -73,6 +75,6 @@ public class ResidencyCountryFeatureQueryFacade implements ResidencyCountryFeatu
         ctrpScreeningResidencies.getCountryName(),
         ctrpScreeningResidencies.getCountryCode(),
         ctrpScreeningResidencies.getCtrpValue()
-    );
+    ).filter(StringUtils::isNotBlank);
   }
 }

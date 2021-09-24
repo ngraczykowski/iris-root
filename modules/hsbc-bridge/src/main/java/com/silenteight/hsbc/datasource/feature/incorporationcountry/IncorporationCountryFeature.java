@@ -9,6 +9,7 @@ import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import one.util.streamex.StreamEx;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -58,7 +59,7 @@ public class IncorporationCountryFeature implements FeatureValuesRetriever<Count
         .flatMap(wce -> Stream.of(
             wce.getCountryCodesAll(),
             wce.getCountriesAll()
-        ));
+        )).filter(StringUtils::isNotBlank);
   }
 
   public static Stream<String> privateListEntitiesIncorporationCountries(
@@ -67,7 +68,7 @@ public class IncorporationCountryFeature implements FeatureValuesRetriever<Count
         .flatMap(ple -> Stream.of(
             ple.getCountryCodesAll(),
             ple.getCountriesAll()
-        ));
+        )).filter(StringUtils::isNotBlank);
   }
 
   public static Stream<String> ctrpScreeningEntitiesIncorporationCountries(
@@ -77,7 +78,7 @@ public class IncorporationCountryFeature implements FeatureValuesRetriever<Count
             cse.getCountryName(),
             cse.getCountryCode(),
             cse.getCtrpValue()
-        ));
+        )).filter(StringUtils::isNotBlank);
   }
 
   private Stream<String> getWatchlistEntitiesIncorporationCountries(EntityComposite entity) {
@@ -99,7 +100,7 @@ public class IncorporationCountryFeature implements FeatureValuesRetriever<Count
         customerEntity.getCountriesOfIncorporation(),
         customerEntity.getEdqIncorporationCountries(),
         customerEntity.getEdqIncorporationCountriesCodes()
-    );
+    ).filter(StringUtils::isNotBlank);
   }
 
   @Override

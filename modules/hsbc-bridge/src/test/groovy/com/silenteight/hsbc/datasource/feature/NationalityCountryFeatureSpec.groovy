@@ -24,7 +24,7 @@ class NationalityCountryFeatureSpec extends Specification implements FullMatch {
       assertThat(watchlistCountries).
           contains(
               "IRAN", "VIET NAM", "UNK UNKW", "UNITED STATES", "US", "IRAN, ISLAMIC REPUBLIC OF",
-              "IR", "CHABAHAR")
+              "IR", "CHABAHAR", "VNM GB IRN")
     }
   }
 }

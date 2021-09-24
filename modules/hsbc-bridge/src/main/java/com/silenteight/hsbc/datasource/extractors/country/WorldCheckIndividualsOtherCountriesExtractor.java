@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -27,6 +29,6 @@ class WorldCheckIndividualsOtherCountriesExtractor {
         worldCheckIndividual.getCountryCodesAll(),
         worldCheckIndividual.getCountriesAll(),
         worldCheckIndividual.getCountriesOriginal()
-    );
+    ).filter(StringUtils::isNotBlank);
   }
 }
