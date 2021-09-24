@@ -25,7 +25,7 @@ class AddAttachmentsRestControllerTest extends BaseRestControllerTest {
 
   private static final UUID CHANGE_REQUEST_ID = randomUUID();
   private static final String ADD_ATTACHMENT_URL =
-      "/v1/changeRequest/" + CHANGE_REQUEST_ID + "/attachments";
+      "/v1/changeRequests/" + CHANGE_REQUEST_ID + "/attachments";
 
   private static final List<String> ATTACHMENTS_LIST = of(
       "file/49b0b1e8-49f2-4d6d-9bd6-a23006a8ddee",

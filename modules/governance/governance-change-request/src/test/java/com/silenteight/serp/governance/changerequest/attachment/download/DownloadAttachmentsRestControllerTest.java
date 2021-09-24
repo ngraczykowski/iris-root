@@ -23,7 +23,7 @@ class DownloadAttachmentsRestControllerTest extends BaseRestControllerTest {
 
   private static final String FILE_NAME = "files/aae57e80-a013-41c0-bc12-1582447c26e6";
   private static final String DOWNLOAD_ATTACHMENT_URL =
-      "/v1/changeRequest/" + CHANGE_REQUEST_ID + "/attachments/download?file=" + FILE_NAME;
+      "/v1/changeRequests/" + CHANGE_REQUEST_ID + "/attachments/download?file=" + FILE_NAME;
 
   private static final byte[] FILE_CONTENT = "Test Content".getBytes(UTF_8);
   private static final FileWrapper FILE_WRAPPER = FileWrapper.builder()

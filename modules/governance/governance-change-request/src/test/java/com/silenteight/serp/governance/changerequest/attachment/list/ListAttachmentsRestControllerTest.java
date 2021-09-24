@@ -26,7 +26,7 @@ class ListAttachmentsRestControllerTest extends BaseRestControllerTest {
 
   private static final UUID CHANGE_REQUEST_ID = randomUUID();
   private static final String ATTACHMENTS_LIST_URL =
-      "/v1/changeRequest/" + CHANGE_REQUEST_ID + "/attachments";
+      "/v1/changeRequests/" + CHANGE_REQUEST_ID + "/attachments";
 
   private static final List<String> ATTACHMENTS_ID_LIST = of(
       "files/b8263cd4-a812-46e6-83fd-26f33433ba01",

@@ -23,7 +23,7 @@ class AddAttachmentsRestController {
   @NonNull
   private final AddAttachmentsUseCase addAttachmentsUseCase;
 
-  @PostMapping("/v1/changeRequest/{changeRequestId}/attachments")
+  @PostMapping("/v1/changeRequests/{changeRequestId}/attachments")
   @PreAuthorize("isAuthorized('UPLOAD_ATTACHMENTS')")
   public ResponseEntity<Void> addAttachments(
       @PathVariable UUID changeRequestId,

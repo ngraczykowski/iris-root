@@ -24,7 +24,7 @@ class DeleteAttachmentsRestControllerTest extends BaseRestControllerTest {
   private static final String FILE_NAME = "files/aae57e80-a013-41c0-bc12-1582447c26e6";
   private static final UUID CHANGE_REQUEST_ID = randomUUID();
   private static final String DELETE_ATTACHMENT_URL =
-      "/v1/changeRequest/" + CHANGE_REQUEST_ID + "/attachments?file=" + FILE_NAME;
+      "/v1/changeRequests/" + CHANGE_REQUEST_ID + "/attachments?file=" + FILE_NAME;
 
   @TestWithRole(roles = { USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {

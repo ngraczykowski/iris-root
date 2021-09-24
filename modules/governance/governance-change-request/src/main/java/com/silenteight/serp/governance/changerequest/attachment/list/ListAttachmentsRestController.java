@@ -26,7 +26,7 @@ class ListAttachmentsRestController {
   @NonNull
   private final ListAttachmentsQuery listAttachmentsQuery;
 
-  @GetMapping("/v1/changeRequest/{changeRequestId}/attachments")
+  @GetMapping("/v1/changeRequests/{changeRequestId}/attachments")
   @PreAuthorize("isAuthorized('LIST_ATTACHMENTS')")
   public ResponseEntity<List<String>> list(@PathVariable UUID changeRequestId) {
     log.debug("List attachments for changeRequest {} received.", changeRequestId);

@@ -22,7 +22,7 @@ class DeleteAttachmentsRestController {
   @NonNull
   private final DeleteAttachmentsUseCase deleteAttachmentsUseCase;
 
-  @DeleteMapping("/v1/changeRequest/{changeRequestId}/attachments")
+  @DeleteMapping("/v1/changeRequests/{changeRequestId}/attachments")
   @PreAuthorize("isAuthorized('REMOVE_ATTACHMENTS')")
   public ResponseEntity<Void> deleteAttachment(
       @PathVariable UUID changeRequestId,

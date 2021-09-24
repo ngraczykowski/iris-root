@@ -22,7 +22,7 @@ class DownloadAttachmentsRestController {
   @NonNull
   private final DownloadAttachmentsUseCase downloadAttachmentsUseCase;
 
-  @GetMapping("/v1/changeRequest/{changeRequestId}/attachments/download")
+  @GetMapping("/v1/changeRequests/{changeRequestId}/attachments/download")
   @PreAuthorize("isAuthorized('DOWNLOAD_ATTACHMENTS')")
   public ResponseEntity<byte[]> downloadFile(
       @PathVariable String changeRequestId, @RequestParam(name = "file") String file) {
