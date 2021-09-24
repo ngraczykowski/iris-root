@@ -235,7 +235,7 @@
       <column name="vector_signature"/>
     </createIndex>
   </changeSet>
-  
+
   <changeSet id="serp-governance-4.0.0-7" author="kdzieciol">
     <addColumn tableName="governance_policy_step">
       <column name="created_by" type="VARCHAR(64)" defaultValue="migration">
@@ -431,10 +431,10 @@
                           constraintName="governance_qa_alert_alert_name_key"/>
     <renameColumn oldColumnName="alert_name"
                   newColumnName="discriminator"
-                  tableName="governance_qa_alert" />
+                  tableName="governance_qa_alert"/>
     <modifyDataType tableName="governance_qa_alert"
                     columnName="discriminator"
-                    newDataType="VARCHAR(120)" />
+                    newDataType="VARCHAR(120)"/>
     <addUniqueConstraint
         tableName="governance_qa_alert"
         columnNames="discriminator"
@@ -462,6 +462,63 @@
         tableName="governance_model"
         indexName="ix_governance_governance_model_model_version">
       <column name="model_version"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="serp-governance-4.0.0-17" author="rpajdak">
+    <createTable tableName="governance_file">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="file_id" type="${type.uuid}">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="original_name" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="uploader_name" type="VARCHAR(64)"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="size" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="mime_type" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_file"
+        indexName="ix_governance_file_file_id">
+      <column name="file_id"/>
+    </createIndex>
+
+    <createTable tableName="governance_change_request_attachment">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="change_request_id" type="${type.uuid}">
+        <constraints nullable="false" unique="false"/>
+      </column>
+      <column name="file_name" type="VARCHAR(64)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="governance_change_request_attachment"
+        indexName="ix_governance_change_request_attachment_file_name">
+      <column name="file_name"/>
+    </createIndex>
+
+    <createIndex
+        tableName="governance_change_request_attachment"
+        indexName="ix_governance_change_request_attachment_change_request_id">
+      <column name="change_request_id"/>
     </createIndex>
   </changeSet>
 </databaseChangeLog>

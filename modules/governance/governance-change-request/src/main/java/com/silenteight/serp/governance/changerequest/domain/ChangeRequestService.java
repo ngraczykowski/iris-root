@@ -19,6 +19,7 @@ public class ChangeRequestService {
   @NonNull
   private final AuditingLogger auditingLogger;
 
+
   public UUID addChangeRequest(
       @NonNull UUID changeRequestId,
       @NonNull String modelName,
@@ -82,6 +83,12 @@ public class ChangeRequestService {
         .rejectorComment(rejectorComment)
         .build();
     rejectInternal(request);
+  }
+
+  public ChangeRequestState getChangeRequestState(UUID changeRequestId) {
+    return repository.findByChangeRequestId(changeRequestId)
+        .orElseThrow(() -> new ChangeRequestNotFoundException(changeRequestId))
+        .getState();
   }
 
   private void rejectInternal(RejectChangeRequestRequest request) {

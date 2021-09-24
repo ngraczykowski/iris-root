@@ -30,6 +30,7 @@ dependencies {
   implementation project(":governance-common-web-testing")
   implementation project(":governance-db-changelog")
   implementation project(":governance-feature-vector")
+  implementation project(":governance-file")
   implementation project(":governance-model")
   implementation project(":governance-policy")
   implementation project(":governance-qa")
@@ -37,6 +38,7 @@ dependencies {
 
   implementation libraries.silenteight_audit_bs
   implementation libraries.silenteight_commons_app
+  implementation libraries.silenteight_filestorage_minio
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_sep_base_testing
   implementation libraries.silenteight_serp_protocol_base

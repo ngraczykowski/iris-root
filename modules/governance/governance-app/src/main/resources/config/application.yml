@@ -151,8 +151,8 @@ spring:
         enabled: false
 
   servlet:
-    multipart.max-file-size: 10MB
-    multipart.max-request-size: 10MB
+    multipart.max-file-size: 20MB
+    multipart.max-request-size: 20MB
 
 grpc:
   server:
@@ -221,6 +221,8 @@ sep.auth:
     VIEW_APPROVAL_QUEUE:
       - "LIST_CHANGE_REQUESTS"
       - "GET_CHANGE_REQUEST"
+      - "LIST_ATTACHMENTS"
+      - "DOWNLOAD_ATTACHMENTS"
     VIEW_POLICIES:
       - "LIST_POLICIES"
       - "LIST_STEPS_LOGIC"
@@ -273,7 +275,9 @@ sep.auth:
       - "ALERTS_VALIDATION_DECISION"
     MANAGE_SIMULATION:
       - "CREATE_MODEL"
-
+    ADD_ATTACHMENT_TO_APPROVAL_TICKET:
+      - "UPLOAD_ATTACHMENTS"
+      - "REMOVE_ATTACHMENTS"
   rolePermissionsMappings:
     APPROVER:
       - "VIEW_POLICIES"
@@ -282,6 +286,7 @@ sep.auth:
       - "REJECT_APPROVAL_TICKET"
       - "DASHBOARD"
       - "VIEW_REASONING_BRANCHES"
+      - "ADD_ATTACHMENT_TO_APPROVAL_TICKET"
     MODEL_TUNER:
       - "MANAGE_POLICY"
       - "VIEW_POLICIES"
@@ -295,6 +300,7 @@ sep.auth:
       - "VIEW_AI_SUGGESTIONS"
       - "MANAGE_AI_SUGGESTION"
       - "VIEW_REASONING_BRANCHES"
+      - "ADD_ATTACHMENT_TO_APPROVAL_TICKET"
     AUDITOR:
       - "VIEW_POLICIES"
       - "VIEW_APPROVAL_QUEUE"
@@ -347,3 +353,25 @@ serp.governance.featurevector:
 serp.governance.grpc:
   client:
     timeout: 30s
+
+serp.governance.files:
+  validation:
+    max-file-name-length: 255
+    max-file-size-in-bytes: 20971520
+    max-number-files-to-upload: 20
+    allowed-types:
+      - image/jpeg
+      - image/png
+      - image/gif
+      - image/svg+xml
+      - application/pdf
+      - application/x-tika-msoffice
+      - application/x-tika-ooxml
+      - application/x-tika-msoffice
+      - text/plain
+  default-bucket: attachments
+filestorage:
+  minio:
+    url: http://localhost:9000
+    access-key: admin
+    private-key: admin123
