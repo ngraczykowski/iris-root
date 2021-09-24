@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wrkld-sierra-uat-ingress
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  labels:
+    app: wrkld-sierra-uat-ingress
+
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /rest/payments
+            pathType: Prefix
+            backend:
+              service:
+                name: sear-payments-bridge-service
+                port:
+                  name: http

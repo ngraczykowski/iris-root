@@ -4,9 +4,14 @@ image_repo: dummy
 args: [ "name" ]
 config:
   name: searPaymentsBridgeApp
+ports:
+  http: 8080
+  grpc: 8081
 
-## Job configurations
-backoffLimit: 4
-restartPolicy: Never
 springProfilesActive: "mockaws,mockdatasource,mockae"
+replicaCount: 1
+imagePullPolicy: Always
+livenessProbeHttpGetPath: "/rest/payments/management/health/livenessState"
+readinessProbeHttpGetPath: "/rest/payments/management/health/readinessState"
+
 

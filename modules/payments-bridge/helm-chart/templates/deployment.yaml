@@ -1,18 +1,31 @@
-apiVersion: batch/v1
-kind: Job
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: {{ .Values.name }}
   labels:
     app: {{ .Values.name }}
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
   template:
     metadata:
       labels:
         app: {{ .Values.name }}
     spec:
-      restartPolicy: {{ .Values.restartPolicy }}
       containers:
         - name: {{ .Values.name }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbeHttpGetPath }}
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbeHttpGetPath }}
+              port: 8080
           env:
             - name: 'PB_DB_HOST'
               value: {{ .Values.pbDbHost }}
@@ -36,6 +49,15 @@ spec:
               value: {{ .Values.springRabbitmqVirtualHost }}
             - name: 'SPRING_PROFILES_ACTIVE'
               value: {{ .Values.springProfilesActive }}
+            - name: 'GRPC_SERVER_PORT'
+              value: {{ .Values.ports.grpc | quote }}
+            - name: 'SERVER_PORT'
+              value: {{ .Values.ports.http | quote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
-  backoffLimit: {{ .Values.backoffLimit }}
+          ports:
+            - containerPort: {{ .Values.ports.http }}
+              protocol: TCP
+            - containerPort: {{ .Values.ports.grpc }}
+              protocol: TCP

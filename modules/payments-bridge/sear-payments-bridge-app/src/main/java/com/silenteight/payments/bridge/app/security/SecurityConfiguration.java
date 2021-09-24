@@ -54,7 +54,12 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
     if (properties.isDisableSecurity()) {
       http.authorizeRequests().anyRequest().permitAll();
     } else {
-      http.authorizeRequests().anyRequest().authenticated();
+      http.authorizeRequests()
+          .antMatchers("/management/health/**", "/status").permitAll()
+          .and()
+          .authorizeRequests()
+          .anyRequest()
+          .authenticated();
     }
 
     http
