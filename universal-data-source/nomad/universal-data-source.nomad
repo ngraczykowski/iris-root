@@ -31,7 +31,8 @@ variable "grpcui_tags" {
 locals {
   jvm_memory                = ceil(var.memory * 0.7)
   perm_memory               = ceil(var.memory * 0.2)
-    database_node_destination = "eu2"
+    node_destination = "eu4"
+    database_node_destination = "eu4"
     database_volume           = "/srv/sep-cluster/postgres/${var.namespace}-universal-data-source"
 }
 
@@ -94,9 +95,9 @@ job "universal-data-source" {
         }
 
         resources {
-          cpu    = 2048
+          cpu    = 1024
           # MHz
-          memory = 4096
+          memory = 2048
           # MB
         }
       }
@@ -104,6 +105,11 @@ job "universal-data-source" {
 
   group "universal-data-source" {
     count = 1
+
+    constraint {
+      attribute = "${node.unique.name}"
+      value     = "${local.node_destination}"
+    }
 
     network {
       port "http" {

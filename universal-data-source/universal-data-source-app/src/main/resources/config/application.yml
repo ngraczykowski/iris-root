@@ -31,6 +31,9 @@ server:
 
 # Management HTTP server
 management:
+  health:
+    rabbit:
+      enabled: false
   endpoint:
     health:
       show-details: always
