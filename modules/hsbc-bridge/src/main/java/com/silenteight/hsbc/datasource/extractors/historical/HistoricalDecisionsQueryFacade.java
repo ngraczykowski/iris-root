@@ -7,6 +7,8 @@ import com.silenteight.hsbc.datasource.feature.historical.HistoricalDecisionsQue
 
 import java.util.List;
 
+import static java.util.Optional.of;
+
 @RequiredArgsConstructor
 class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
 
@@ -15,7 +17,8 @@ class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
 
   @Override
   public List<ModelCountsDto> getIsApTpMarkedInput() {
-    var alertedPartyId = matchData.getCaseInformation().getExternalId();
+    var alertedPartyId = getExternalProfileId();
+
     var request =
         new AlertedPartyRequestCreator(alertedPartyId).createRequest();
 
@@ -36,5 +39,11 @@ class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
         new MatchRequestCreator(matchData).createRequest();
 
     return serviceClient.getHistoricalDecisions(request).getModelCounts();
+  }
+
+  private String getExternalProfileId() {
+    return (matchData.isIndividual()) ?
+           of(matchData.getCustomerIndividual().getExternalProfileId()).orElse("") :
+           of(matchData.getCustomerEntity().getExternalProfileId()).orElse("");
   }
 }

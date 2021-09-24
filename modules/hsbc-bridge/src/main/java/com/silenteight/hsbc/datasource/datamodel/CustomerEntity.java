@@ -51,4 +51,6 @@ public interface CustomerEntity {
   String getAddress();
 
   String getProfileFullAddress();
+
+  String getExternalProfileId();
 }

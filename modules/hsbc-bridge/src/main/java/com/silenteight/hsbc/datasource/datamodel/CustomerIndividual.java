@@ -87,4 +87,6 @@ public interface CustomerIndividual {
   String getAddress();
 
   String getProfileFullAddress();
+
+  String getExternalProfileId();
 }
