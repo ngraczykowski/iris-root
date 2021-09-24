@@ -82,15 +82,6 @@ class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase
         featureInputMessage.getClass().getSimpleName(), agentInputJson);
   }
 
-  private static class MatchFeatureInputMappingException extends RuntimeException {
-
-    private static final long serialVersionUID = -7457823269043373654L;
-
-    MatchFeatureInputMappingException(Throwable cause) {
-      super("Unable to map feature input", cause);
-    }
-  }
-
   private Message getFeatureInputClass(Any agentFeatureInput) throws
       InvalidProtocolBufferException {
 

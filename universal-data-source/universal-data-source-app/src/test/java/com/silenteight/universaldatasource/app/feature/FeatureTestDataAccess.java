@@ -1,4 +1,4 @@
-package com.silenteight.universaldatasource.app;
+package com.silenteight.universaldatasource.app.feature;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 

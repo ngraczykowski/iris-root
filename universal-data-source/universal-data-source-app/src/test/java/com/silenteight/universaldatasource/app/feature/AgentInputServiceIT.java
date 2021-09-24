@@ -1,6 +1,7 @@
-package com.silenteight.universaldatasource.app;
+package com.silenteight.universaldatasource.app.feature;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceBlockingStub;
+import com.silenteight.datasource.api.document.v1.DocumentInput;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsRequest;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsResponse;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
@@ -12,8 +13,10 @@ import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
 import com.silenteight.datasource.api.name.v1.NameInputServiceGrpc.NameInputServiceBlockingStub;
 import com.silenteight.datasource.api.name.v1.WatchlistName;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
+import com.silenteight.universaldatasource.app.UniversalDataSourceApplication;
 
 import com.google.protobuf.Message;
+import io.grpc.StatusRuntimeException;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,10 +31,11 @@ import java.time.Duration;
 import java.util.Iterator;
 import java.util.Map;
 
-import static com.silenteight.universaldatasource.app.FeatureTestDataAccess.streamedFeaturesCount;
-import static com.silenteight.universaldatasource.app.IntegrationFixture.getBatchCreateAgentInputsRequest;
+import static com.silenteight.universaldatasource.app.feature.FeatureTestDataAccess.streamedFeaturesCount;
+import static com.silenteight.universaldatasource.app.feature.IntegrationFixture.getBatchCreateAgentInputsRequest;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ContextConfiguration(initializers = { PostgresTestInitializer.class })
 @SpringBootTest(
@@ -160,5 +164,22 @@ class AgentInputServiceIT {
         .getLocationFeatureInputsList()
         .get(0)
         .getAlertedPartyLocation()).isEqualTo("Cambridge TerraceWellington 6011, New Zealand");
+  }
+
+
+  @Test
+  void addFeatureForNonExistingMapper() {
+    Map<String, Map<String, Message>> mapOfFeatureRequestsOne = Map.of(
+        "alerts/alertOne/matches/locationMatchOne",
+        Map.of(
+            "features/name",
+            DocumentInput.newBuilder().build()));
+
+    var addMatchFeatureRequestsOne =
+        getBatchCreateAgentInputsRequest(mapOfFeatureRequestsOne);
+
+    assertThrows(
+        StatusRuntimeException.class,
+        () -> agentInputServiceBlockingStub.batchCreateAgentInputs(addMatchFeatureRequestsOne));
   }
 }

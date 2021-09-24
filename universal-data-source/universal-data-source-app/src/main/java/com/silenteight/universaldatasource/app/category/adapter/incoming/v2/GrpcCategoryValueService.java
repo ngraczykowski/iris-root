@@ -19,7 +19,8 @@ class GrpcCategoryValueService extends CategoryValueServiceImplBase {
       CreateCategoryValuesRequest request,
       StreamObserver<CreateCategoryValuesResponse> responseObserver) {
 
-    responseObserver.onNext(categoryAdapter.createCategoryValues(request));
+    var categoryValues = categoryAdapter.createCategoryValues(request);
+    responseObserver.onNext(categoryValues);
     responseObserver.onCompleted();
   }
 
@@ -28,7 +29,8 @@ class GrpcCategoryValueService extends CategoryValueServiceImplBase {
       BatchCreateCategoryValuesRequest request,
       StreamObserver<BatchCreateCategoryValuesResponse> responseObserver) {
 
-    responseObserver.onNext(categoryAdapter.batchCreateCategoryValues(request));
+    var categoryValues = categoryAdapter.batchCreateCategoryValues(request);
+    responseObserver.onNext(categoryValues);
     responseObserver.onCompleted();
   }
 

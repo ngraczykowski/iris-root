@@ -1,4 +1,4 @@
-package com.silenteight.universaldatasource.app;
+package com.silenteight.universaldatasource.app.feature;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInput;
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;

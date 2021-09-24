@@ -43,22 +43,13 @@ class ValidateCategoryValueService implements ValidateCategoryValueUseCase {
         .filter(c -> c.getName().equals(category))
         .findFirst()
         .orElseThrow(() ->
-            new CategoryValueException("Invalid category given for CategoryValues: " + category));
+            new CategoryException("Invalid category given for CategoryValues: " + category));
   }
 
   private void validateCategoryValue(Category category, CategoryValue categoryValue) {
     if (!category.getAllowedValuesList().contains(categoryValue.getSingleValue())) {
       throw new CategoryValueException(
           "Invalid value of CategoryValue: " + categoryValue.getSingleValue());
-    }
-  }
-
-  private static class CategoryValueException extends RuntimeException {
-
-    private static final long serialVersionUID = -422566344416976769L;
-
-    CategoryValueException(String message) {
-      super(message);
     }
   }
 }

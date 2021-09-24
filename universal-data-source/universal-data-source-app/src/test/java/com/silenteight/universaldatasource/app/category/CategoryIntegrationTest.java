@@ -3,12 +3,16 @@ package com.silenteight.universaldatasource.app.category;
 import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesResponse;
 import com.silenteight.datasource.categories.api.v1.CategoryServiceGrpc;
+import com.silenteight.datasource.categories.api.v2.BatchCreateCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v2.CategoryServiceGrpc.CategoryServiceBlockingStub;
+import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.datasource.categories.api.v2.CategoryValueServiceGrpc.CategoryValueServiceBlockingStub;
+import com.silenteight.datasource.categories.api.v2.CreateCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v2.ListCategoriesRequest;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.universaldatasource.app.UniversalDataSourceApplication;
 
+import io.grpc.StatusRuntimeException;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +34,7 @@ import static com.silenteight.universaldatasource.app.category.CategoryTestDataA
 import static com.silenteight.universaldatasource.app.category.CategoryTestDataAccess.streamedCategoryValueCount;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ContextConfiguration(initializers = { PostgresTestInitializer.class })
 @SpringBootTest(
@@ -147,6 +152,37 @@ class CategoryIntegrationTest {
     assertThat(secondCategorySingleValue).isEqualTo("YES");
     assertThat(firstCategoryName).contains("categories/categoryTwo/value/");
     assertThat(secondCategoryName).contains("categories/categoryOne/value/");
+  }
+
+  @Test
+  void testBatchCreateCategoryValuesToNonExistingCategories() {
+    assertThrows(
+        StatusRuntimeException.class,
+        () -> addBatchCategoryValues("Nonexisting category")
+    );
+  }
+
+  @Test
+  void testBatchCreateCategoryValuesWithNonExistingCategoryValue() {
+
+    assertThrows(
+        StatusRuntimeException.class,
+        () -> categoryValueServiceBlockingStub.batchCreateCategoryValues(
+            BatchCreateCategoryValuesRequest.newBuilder()
+                .addRequests(CreateCategoryValuesRequest.newBuilder()
+                    .setCategory("categories/categoryThree")
+                    .addAllCategoryValues(
+                        List.of(
+                            CategoryValue.newBuilder()
+                                .setMatch("alerts/alertOne/matches/matchOne")
+                                .setSingleValue("NonExistingValue")
+                                .build()
+                        )
+                    )
+                    .build())
+                .build()
+        )
+    );
   }
 }
 
