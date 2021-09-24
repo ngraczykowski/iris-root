@@ -1,12 +1,21 @@
 simulator:
+  messaging:
+    broker:
+      recommendations:
+        queue-name: sim.recommendations
+        routing-key: ae.event.recommendations-generated
+      index-response:
+        queue-name: sim.index-response.simulation
+        routing-key: event.index-response.simulation
+
   processing:
     alert:
       recommendations-inbound:
-        queue-name: sim.recommendations
+        queue-name: ${simulator.messaging.broker.recommendations.queue-name}
       recommendations-outbound:
         exchange: sim.command
         routing-key: command.index-request.simulation
       ack-messages-inbound:
-        queue-name: sim.index-response.simulation
+        queue-name: ${simulator.messaging.broker.index-response.queue-name}
     feed:
       batch-size: 100
