@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.categories.api.v2.BatchGetMatchesCategoryValuesResponse;
 import com.silenteight.datasource.categories.api.v2.CategoryMatches;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.universaldatasource.app.category.model.MatchCategoryRequest;
 import com.silenteight.universaldatasource.app.category.port.incoming.GetMatchCategoryValuesUseCase;
 import com.silenteight.universaldatasource.app.category.port.outgoing.CategoryValueDataAccess;
@@ -21,6 +22,7 @@ class GetMatchCategoryValuesService implements GetMatchCategoryValuesUseCase {
 
   private final CategoryValueDataAccess categoryValueDataAccess;
 
+  @Timed(value = "uds.category.use_cases", extraTags = { "action", "batchGetCategoryValues" })
   @Override
   public BatchGetMatchesCategoryValuesResponse batchGetMatchCategoryValues(
       List<CategoryMatches> matchValuesList) {

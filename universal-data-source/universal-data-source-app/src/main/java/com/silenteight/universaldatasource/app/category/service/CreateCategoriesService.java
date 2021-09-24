@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.categories.api.v2.BatchCreateCategoriesResponse;
 import com.silenteight.datasource.categories.api.v2.Category;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.universaldatasource.app.category.port.incoming.CreateCategoriesUseCase;
 import com.silenteight.universaldatasource.app.category.port.outgoing.CategoryDataAccess;
 
@@ -19,6 +20,7 @@ class CreateCategoriesService implements CreateCategoriesUseCase {
 
   private final CategoryDataAccess categoryDataAccess;
 
+  @Timed(value = "uds.category.use_cases", extraTags = { "action", "createCategories" })
   @Override
   public BatchCreateCategoriesResponse createCategories(
       List<Category> categoriesList) {

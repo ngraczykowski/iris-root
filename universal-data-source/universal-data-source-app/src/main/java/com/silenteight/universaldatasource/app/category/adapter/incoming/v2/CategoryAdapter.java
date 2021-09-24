@@ -39,14 +39,14 @@ class CategoryAdapter {
 
   BatchCreateCategoryValuesResponse batchCreateCategoryValues(
       @Valid BatchCreateCategoryValuesRequest request) {
-    return createCategoryValuesUseCase.addCategoryValues(request.getRequestsList());
+    return createCategoryValuesUseCase.createCategoryValues(request.getRequestsList());
   }
 
   CreateCategoryValuesResponse createCategoryValues(
       @Valid CreateCategoryValuesRequest request) {
 
     var batchCreateCategoryValuesResponse =
-        createCategoryValuesUseCase.addCategoryValues(List.of(request));
+        createCategoryValuesUseCase.createCategoryValues(List.of(request));
     return CreateCategoryValuesResponse.newBuilder()
         .addAllCreatedCategoryValues(
             batchCreateCategoryValuesResponse.getCreatedCategoryValuesList())

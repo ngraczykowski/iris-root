@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.comments.api.v2.BatchGetAlertsCommentInputsResponse;
 import com.silenteight.datasource.comments.api.v2.CommentInput;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.universaldatasource.app.commentinput.model.AlertCommentInput;
 import com.silenteight.universaldatasource.app.commentinput.port.incoming.BatchGetAlertsCommentInputsUseCase;
 import com.silenteight.universaldatasource.app.commentinput.port.outgoing.CommentInputDataAccess;
@@ -23,6 +24,7 @@ class BatchGetAlertsCommentInputsService implements BatchGetAlertsCommentInputsU
 
   private final CommentInputMapper commentInputMapper;
 
+  @Timed(value = "uds.comment-input.use_cases", extraTags = { "action", "batchGetCommentInputs" })
   @Override
   public BatchGetAlertsCommentInputsResponse batchGetAlertsCommentInputs(List<String> alerts) {
     log.debug("Getting comment inputs : commentInputsCount={}", alerts.size());

@@ -7,6 +7,7 @@ import com.silenteight.datasource.agentinput.api.v1.AgentInput;
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsResponse;
 import com.silenteight.datasource.agentinput.api.v1.CreatedAgentInput;
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
+import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.sep.base.common.protocol.MessageRegistry;
 import com.silenteight.universaldatasource.app.feature.model.MatchFeatureInput;
 import com.silenteight.universaldatasource.app.feature.port.incoming.BatchCreateMatchFeaturesUseCase;
@@ -29,6 +30,7 @@ class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase
   private final FeatureDataAccess dataAccess;
   private final Map<String, FeatureMapper> mappers;
 
+  @Timed(value = "uds.comment-input.use_cases", extraTags = { "action", "batchCreateFeatures" })
   @Override
   public BatchCreateAgentInputsResponse batchCreateMatchFeatures(
       Collection<AgentInput> agentInputs) {

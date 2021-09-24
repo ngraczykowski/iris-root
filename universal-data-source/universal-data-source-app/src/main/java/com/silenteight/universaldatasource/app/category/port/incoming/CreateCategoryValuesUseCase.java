@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CreateCategoryValuesUseCase {
 
-  BatchCreateCategoryValuesResponse addCategoryValues(
+  BatchCreateCategoryValuesResponse createCategoryValues(
       List<CreateCategoryValuesRequest> categoryValues);
 
 }

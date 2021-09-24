@@ -3,6 +3,7 @@ package com.silenteight.universaldatasource.app.feature.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.universaldatasource.app.feature.port.incoming.BatchFeatureInputResponse;
 import com.silenteight.universaldatasource.app.feature.port.incoming.BatchGetFeatureInputUseCase;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.FeatureDataAccess;
@@ -20,6 +21,7 @@ class BatchGetFeatureInputService implements BatchGetFeatureInputUseCase {
   private final FeatureDataAccess dataAccess;
   private final FeatureMapperFactory featureMapperFactory;
 
+  @Timed(value = "uds.comment-input.use_cases", extraTags = { "action", "batchGetFeature" })
   @Override
   public void batchGetFeatureInput(
       Collection<String> matchNames, Collection<String> featureNames,
