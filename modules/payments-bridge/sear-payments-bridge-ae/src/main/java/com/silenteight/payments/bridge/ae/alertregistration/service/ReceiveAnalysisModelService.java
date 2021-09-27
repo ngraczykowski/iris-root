@@ -6,7 +6,7 @@ import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
 import com.silenteight.adjudication.api.v1.CreateAnalysisRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.ReceiveAnalysisModelUseCase;
-import com.silenteight.payments.bridge.governance.core.solvingmodel.port.GetCurrentModelPort;
+import com.silenteight.payments.bridge.governance.core.solvingmodel.port.CurrentModelClientPort;
 
 import org.springframework.stereotype.Service;
 
@@ -16,12 +16,11 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 class ReceiveAnalysisModelService implements ReceiveAnalysisModelUseCase {
 
-  private final GetCurrentModelPort getCurrentModelPort;
+  private final CurrentModelClientPort getCurrentModelPort;
 
   public CreateAnalysisRequest createAnalysisRequest() {
     var model = getCurrentModelPort.getCurrentModel();
-    // TODO(wkeska) delete this when gevernance module will be finished
-    return model == null ? CreateAnalysisRequest.newBuilder().build() : CreateAnalysisRequest
+    return CreateAnalysisRequest
         .newBuilder()
         .setAnalysis(Analysis
             .newBuilder()

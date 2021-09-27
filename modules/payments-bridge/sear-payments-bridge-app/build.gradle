@@ -92,6 +92,9 @@ dependencies {
   // AE API
   implementation libraries.adjudication_engine_api
 
+  // Governance
+  implementation libraries.governance_model_api
+
   //  Testing
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.adjudication_engine_api

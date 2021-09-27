@@ -15,4 +15,7 @@ class AmqpDefaults {
 
   static final String BRIDGE_RECOMMENDATION_QUEUE_NAME = "bridge.recommendations";
 
+  static final String BRIDGE_MODEL_PROMOTED_PRODUCTION_QUEUE_NAME =
+      "bridge.model-promoted.production";
+
 }
