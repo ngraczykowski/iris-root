@@ -13,7 +13,7 @@ spec:
     - host: sierra-uat.silent8.cloud
       http:
         paths:
-          - path: /rest/payments
+          - path: /rest/pb
             pathType: Prefix
             backend:
               service:

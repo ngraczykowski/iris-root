@@ -1,1 +1,1 @@
-PAYMENTS_BRIDGE_ENDPOINT = 'http://localhost:24602/rest/payments/test'
+PAYMENTS_BRIDGE_ENDPOINT = 'http://localhost:24602/rest/pb/test-callback'

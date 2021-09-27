@@ -1,4 +1,4 @@
 ###
 // Test
-GET http://localhost:24602/rest/payments/test
+GET http://localhost:24602/rest/pb/test-callback
 Accept: application/json
