@@ -1,6 +1,6 @@
 package com.silenteight.payments.bridge.svb.learning.notification.port.outgoing;
 
-import com.amazonaws.services.simpleemail.model.SendRawEmailRequest;
+import software.amazon.awssdk.services.ses.model.SendRawEmailRequest;
 
 public interface AmazonSesClient {
 

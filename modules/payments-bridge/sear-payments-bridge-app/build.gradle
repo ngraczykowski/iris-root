@@ -75,6 +75,7 @@ dependencies {
   implementation libraries.spring_integration_amqp
   implementation libraries.spring_integration_core
   implementation libraries.spring_integration_http
+  implementation libraries.sear_rabbitmq_common_schema
 
   // GRPC
   implementation libraries.brave_instrumentation_grpc
@@ -99,10 +100,6 @@ dependencies {
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.adjudication_engine_api
   testImplementation libraries.awaitility
-
-  // AWS
-  implementation libraries.aws_java_sdk
-  implementation libraries.aws_ses
 
   // Keycloak
   implementation libraries.keycloak_spring_boot_starter

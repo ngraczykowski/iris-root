@@ -3,7 +3,8 @@ package com.silenteight.payments.bridge.svb.learning.reader.domain;
 import lombok.Builder;
 import lombok.Value;
 
-import com.amazonaws.services.s3.model.S3Object;
+import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 import java.io.InputStream;
 
@@ -19,14 +20,17 @@ public class LearningCsv {
 
   InputStream content;
 
-  public static LearningCsv fromS3Object(S3Object object) {
-    var metadata = object.getObjectMetadata();
+  public static LearningCsv fromS3Object(
+      String fileName, ResponseInputStream<GetObjectResponse> responseInputStream) {
+
+    var response = responseInputStream.response();
+
     return LearningCsv
         .builder()
-        .fileName(object.getKey())
-        .fileLength(metadata.getContentLength())
-        .hash(metadata.getETag())
-        .content(object.getObjectContent())
+        .fileName(fileName)
+        .fileLength(response.contentLength())
+        .hash(response.eTag())
+        .content(responseInputStream)
         .build();
   }
 }

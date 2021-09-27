@@ -37,7 +37,8 @@ dependencies {
   implementation libraries.opencsv
   implementation libraries.commons_collections
 
-  implementation libraries.aws_java_sdk
+  implementation libraries.aws_auth
+  implementation libraries.aws_s3
   implementation libraries.aws_ses
 
   implementation libraries.javax_mail
