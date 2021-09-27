@@ -18,35 +18,35 @@ spec:
         - name: {{ .Values.name }}
           env:
             - name: 'SENS_WEBAPP_DB_HOST'
-              value: {{ .Values.sensWebappDbHost }}
+              value: {{ .Values.sensWebappDbHost | squote }}
             - name: 'SENS_WEBAPP_DB_PORT'
-              value: {{ .Values.sensWebappDbPort }}
+              value: {{ .Values.sensWebappDbPort | squote }}
             - name: 'SENS_WEBAPP_DB_NAME'
-              value: {{ .Values.sensWebappDbName }}
+              value: {{ .Values.sensWebappDbName | squote }}
             - name: 'SENS_WEBAPP_DB_USER'
-              value: {{ .Values.sensWebappDbUser }}
+              value: {{ .Values.sensWebappDbUser | squote }}
             - name: 'SENS_WEBAPP_DB_PASSWORD'
-              value: {{ .Values.sensWebappDbPassword }}
+              value: {{ .Values.sensWebappDbPassword | squote }}
             - name: 'SENS_WEBAPP_RABBITMQ_HOST'
-              value: {{ .Values.sensWebappRabbitmqHost }}
+              value: {{ .Values.sensWebappRabbitmqHost | squote }}
             - name: 'SENS_WEBAPP_RABBITMQ_PORT'
-              value: {{ .Values.sensWebappRabbitmqPort }}
+              value: {{ .Values.sensWebappRabbitmqPort | squote }}
             - name: 'SENS_WEBAPP_RABBITMQ_USER'
-              value: {{ .Values.sensWebappRabbitmqUser }}
+              value: {{ .Values.sensWebappRabbitmqUser | squote }}
             - name: 'SENS_WEBAPP_RABBITMQ_PASSWORD'
-              value: {{ .Values.sensWebappRabbitmqPassword }}
+              value: {{ .Values.sensWebappRabbitmqPassword | squote }}
             - name: 'KEYCLOAK_CLIENT_ID'
-              value: {{ .Values.keycloakClientId }}
+              value: {{ .Values.keycloakClientId | squote }}
             - name: 'KEYCLOAK_ADAPTER_AUTH_SERVER_URL'
-              value: {{ .Values.keycloakAdapterAuthServerUrl }}
+              value: {{ .Values.keycloakAdapterAuthServerUrl | squote }}
             - name: 'KEYCLOAK_ADAPTER_RESOURCE'
-              value: {{ .Values.keycloakAdapterResource }}
+              value: {{ .Values.keycloakAdapterResource | squote }}
             - name: 'KEYCLOAK_ADAPTER_CREDENTIALS_SECRET'
-              value: {{ .Values.keycloakAdapterCredentialsSecret }}
+              value: {{ .Values.keycloakAdapterCredentialsSecret | squote }}
             - name: 'KEYCLOAK_ADAPTER_REALM'
-              value: {{ .Values.keycloakAdapterRealm }}
+              value: {{ .Values.keycloakAdapterRealm | squote }}
             - name: 'SPRING_PROFILES_ACTIVE'
-              value: {{ .Values.springProfilesActive }}
+              value: {{ .Values.springProfilesActive | squote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           args: {{ .Values.args }}
           ports:
