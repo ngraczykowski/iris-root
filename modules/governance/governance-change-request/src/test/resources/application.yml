@@ -14,8 +14,9 @@ serp.governance.files:
       - application/x-tika-msoffice
       - text/plain
   default-bucket: attachments
-filestorage:
+sep.filestorage:
   minio:
     url: http://localhost:9000
     access-key: admin
     private-key: admin123
+    region: s3_test_region
