@@ -70,7 +70,11 @@ class AlertMapper {
   private Map<String, String> createAlertMetadata(AlertEntityDto alertEntity, AlertData alertData) {
     var map = new HashMap<String, String>();
     map.put("id", nullToEmpty(alertEntity.getExternalId()));
-    map.put("name", nullToEmpty(alertEntity.getName()));
+
+    if (alertEntity.getName() != null) {
+      map.put("name", alertEntity.getName());
+    }
+
     map.put("discriminator", nullToEmpty(alertEntity.getDiscriminator()));
     map.put("errorMessage", nullToEmpty(alertEntity.getErrorMessage()));
     map.put("bulkId", alertEntity.getBulkId());

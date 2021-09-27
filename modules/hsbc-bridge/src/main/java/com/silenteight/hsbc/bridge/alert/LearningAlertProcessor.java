@@ -21,7 +21,9 @@ import javax.persistence.EntityManager;
 import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.AGENTS;
 import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.WAREHOUSE;
 import static com.silenteight.hsbc.bridge.alert.AlertStatus.LEARNING_COMPLETED;
+import static com.silenteight.hsbc.bridge.alert.AlertStatus.LEARNING_REGISTERED_IN_DB;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.concat;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -33,19 +35,39 @@ public class LearningAlertProcessor {
   private final AlertSender alertSender;
 
   @Transactional
-  public void process(@NonNull Collection<Long> alertIds) {
-    log.info("Processing learning alerts, size={}", alertIds.size());
+  public void process(
+      @NonNull Collection<Long> registeredIds,
+      @NonNull Collection<Long> unregisteredIds) {
+    log.info(
+        "Processing learning alerts, registered size={}, unregistered size={}, all size={}",
+        registeredIds.size(), unregisteredIds.size(),
+        registeredIds.size() + unregisteredIds.size());
 
-    var alerts = repository.findByIdIn(alertIds);
+    updateLearningAlertsAlreadyInDb(registeredIds);
+    updateLearningAlertsCompleted(unregisteredIds);
 
-    alerts.forEach(a -> {
-      a.setStatus(LEARNING_COMPLETED);
-      repository.save(a);
-    });
+    var alertIds =
+        concat(registeredIds.stream(), unregisteredIds.stream()).collect(toList());
 
     var updatedAlerts = repository.findByIdIn(alertIds);
 
     sendAlertsChunked(updatedAlerts);
+  }
+
+  private void updateLearningAlertsCompleted(Collection<Long> ids) {
+    repository.findByIdIn(ids)
+        .forEach(a -> {
+          a.setStatus(LEARNING_COMPLETED);
+          repository.save(a);
+        });
+  }
+
+  private void updateLearningAlertsAlreadyInDb(Collection<Long> ids) {
+    repository.findByIdIn(ids)
+        .forEach(a -> {
+          a.setStatus(LEARNING_REGISTERED_IN_DB);
+          repository.save(a);
+        });
   }
 
   private void sendAlertsChunked(Stream<AlertEntity> alertEntities) {

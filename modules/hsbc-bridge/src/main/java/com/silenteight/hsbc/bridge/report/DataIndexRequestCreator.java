@@ -29,12 +29,16 @@ class DataIndexRequestCreator {
   }
 
   private static com.silenteight.data.api.v1.Alert toAlert(Alert alert) {
-    return com.silenteight.data.api.v1.Alert.newBuilder()
-        .setName(alert.getName())
+    var builder = com.silenteight.data.api.v1.Alert.newBuilder()
         .setDiscriminator(alert.getDiscriminator())
-        .setPayload(toStruct(alert.getMetadata()))
-        .addAllMatches(mapMatches(alert.getMatches()))
-        .build();
+        .setPayload(toStruct(alert.getMetadata()));
+
+    return (alert.getName() == null) ?
+           builder.build() :
+           builder
+               .setName(alert.getName())
+               .addAllMatches(mapMatches(alert.getMatches()))
+               .build();
   }
 
   private static Struct toStruct(Map<String, String> payloadMetadata) {

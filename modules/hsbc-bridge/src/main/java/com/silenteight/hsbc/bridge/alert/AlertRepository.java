@@ -26,11 +26,19 @@ interface AlertRepository extends Repository<AlertEntity, Long> {
   Stream<AlertEntity> findByNameIn(List<String> names);
 
   @Modifying
-  @Query("SELECT a.name FROM AlertEntity a WHERE a.alertTime < :expireDate")
-  Stream<String> findAlertEntityNamesByAlertTimeBefore(@Param("expireDate") OffsetDateTime expireDate);
+  @Query("SELECT a FROM AlertEntity a\n"
+      + "WHERE (CONCAT(a.externalId, '_', a.discriminator)) IN (:idsWithDiscriminators)\n"
+      + "AND a.name IS NOT NULL")
+  Stream<AlertEntity> findByExternalIdInAndDiscriminatorInAndNameIsNotNull(
+      Collection<String> idsWithDiscriminators);
 
   @Modifying
-  @Query("update AlertEntity a set a.status=:status where a.name IN :names")
+  @Query("SELECT a.name FROM AlertEntity a WHERE a.alertTime < :expireDate")
+  Stream<String> findAlertEntityNamesByAlertTimeBefore(
+      @Param("expireDate") OffsetDateTime expireDate);
+
+  @Modifying
+  @Query("UPDATE AlertEntity a SET a.status=:status WHERE a.name IN :names")
   void updateStatusByNames(@Param("status") AlertStatus status, @Param("names") List<String> names);
 
   @Query("SELECT a FROM AlertEntity a WHERE a.bulkId = :bulkId AND a.externalId IN "

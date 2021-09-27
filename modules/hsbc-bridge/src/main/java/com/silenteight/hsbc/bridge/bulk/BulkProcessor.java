@@ -4,16 +4,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.adjudication.AdjudicationFacade;
+import com.silenteight.hsbc.bridge.alert.AlertEntity;
+import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.alert.LearningAlertProcessor;
 import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 import com.silenteight.hsbc.bridge.match.MatchIdComposite;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalTime;
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.stream.Stream;
 
+import static com.silenteight.hsbc.bridge.alert.AlertStatus.ERROR;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSING;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PROCESSING;
@@ -25,13 +28,14 @@ import static java.util.stream.Collectors.toMap;
 class BulkProcessor {
 
   private final AdjudicationFacade adjudicationFacade;
+  private final AlertFacade alertFacade;
   private final LearningAlertProcessor learningAlertProcessor;
   private final BulkRepository bulkRepository;
 
   @Transactional
   public void tryToProcessBulk() {
     bulkRepository.findFirstByStatusOrderByCreatedAtAsc(PRE_PROCESSING).ifPresent(bulk -> {
-      log.info("Processing bulk: {}", bulk.getId());
+      log.info("Processing bulk id: {}", bulk.getId());
 
       try {
         if (bulk.isLearning()) {
@@ -62,14 +66,73 @@ class BulkProcessor {
 
   private void processLearningBulk(Bulk bulk) {
     var alerts = bulk.getValidAlerts();
-    var compositeById = alerts.stream()
-        .collect(toMap(BulkAlertEntity::getExternalId, BulkProcessor::toComposite));
 
-    adjudicationFacade.registerAlertWithMatches(compositeById);
-    processLearningAlerts(alerts);
+    var registeredAlerts =
+        alertFacade.getRegisteredAlerts(toIdsWithDiscriminators(alerts));
+
+    var unregisteredAlerts =
+        getUnregisteredAlerts(alerts, registeredAlerts);
+
+    log.info(
+        "Picked up learning bulk id: {}, with size of: {} registeredAlerts and {} unregisteredAlerts",
+        bulk.getId(),
+        registeredAlerts.size(),
+        unregisteredAlerts.size());
+
+    register(unregisteredAlerts);
+
+    processLearningAlerts(alerts, unregisteredAlerts);
 
     bulk.setStatus(COMPLETED);
     log.info("Learning batch {} has been completed", bulk.getId());
+  }
+
+  private void register(Collection<BulkAlertEntity> unregisteredAlerts) {
+    if (!unregisteredAlerts.isEmpty()) {
+      log.info("Start registering {} alerts", unregisteredAlerts.size());
+
+      var compositeById = unregisteredAlerts.stream()
+          .collect(toMap(BulkAlertEntity::getExternalId, BulkProcessor::toComposite));
+
+      adjudicationFacade.registerAlertWithMatches(compositeById);
+    }
+  }
+
+  private Collection<BulkAlertEntity> getUnregisteredAlerts(
+      Collection<BulkAlertEntity> alerts, Collection<AlertEntity> registeredAlerts) {
+    return alerts.stream()
+        .filter(alert -> registeredAlerts.stream()
+            .noneMatch(registeredAlert ->
+                concatIdWithDiscriminator(
+                    registeredAlert.getExternalId(), registeredAlert.getDiscriminator())
+                    .equals(
+                        concatIdWithDiscriminator(
+                            alert.getExternalId(), alert.getDiscriminator()))))
+        .collect(toList());
+  }
+
+  private List<Long> getAlreadyRegisteredAlertIdsFromRequest(
+      Collection<BulkAlertEntity> alerts, Collection<BulkAlertEntity> unregisteredAlerts) {
+    return alerts.stream()
+        .filter(alert -> unregisteredAlerts.stream()
+            .noneMatch(unregisteredAlert ->
+                concatIdWithDiscriminator(
+                    unregisteredAlert.getExternalId(), unregisteredAlert.getDiscriminator())
+                    .equals(
+                        concatIdWithDiscriminator(
+                            alert.getExternalId(), alert.getDiscriminator()))))
+        .filter(alert -> alert.getStatus() != ERROR)
+        .map(BulkAlertEntity::getId)
+        .collect(toList());
+  }
+
+  private Stream<String> toIdsWithDiscriminators(Collection<BulkAlertEntity> alerts) {
+    return alerts.stream()
+        .map(alert -> concatIdWithDiscriminator(alert.getExternalId(), alert.getDiscriminator()));
+  }
+
+  private String concatIdWithDiscriminator(String externalId, String discriminator) {
+    return externalId + "_" + discriminator;
   }
 
   private static AlertMatchIdComposite toComposite(BulkAlertEntity alert) {
@@ -81,12 +144,17 @@ class BulkProcessor {
         .build();
   }
 
-  private void processLearningAlerts(Collection<BulkAlertEntity> alertEntities) {
-    var alertIds = alertEntities.stream()
-        .map(BulkAlertEntity::getId)
-        .collect(Collectors.toSet());
+  private void processLearningAlerts(
+      Collection<BulkAlertEntity> alerts,
+      Collection<BulkAlertEntity> unregisteredAlerts) {
 
-    learningAlertProcessor.process(alertIds);
+    var registeredIds =
+        getAlreadyRegisteredAlertIdsFromRequest(alerts, unregisteredAlerts);
+
+    var unregisteredIds =
+        unregisteredAlerts.stream().map(BulkAlertEntity::getId).collect(toList());
+
+    learningAlertProcessor.process(registeredIds, unregisteredIds);
   }
 
   private static Collection<MatchIdComposite> getMatchIds(
