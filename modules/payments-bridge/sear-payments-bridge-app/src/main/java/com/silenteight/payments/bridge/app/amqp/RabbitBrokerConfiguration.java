@@ -1,12 +1,13 @@
 package com.silenteight.payments.bridge.app.amqp;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.Binding.DestinationType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.FIRCO_ALERT_STORED_ROUTING_KEY;
-import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.FIRCO_COMMAND_QUEUE_NAME;
-import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.FIRCO_EXCHANGE_NAME;
+import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.*;
+import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.AE_EVENT_EXCHANGE;
+import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.GOV_EVENT_EXCHANGE;
 import static org.springframework.amqp.core.ExchangeBuilder.topicExchange;
 
 @Configuration
@@ -33,13 +34,24 @@ class RabbitBrokerConfiguration {
         .build();
     var deadLetterBinding = bind(deadLetterQueue, deadLetterExchange, "#");
 
+    var bridgeRecommendationsQueue = queue(BRIDGE_RECOMMENDATION_QUEUE_NAME).build();
+    var bridgeRecommendationsBinding =
+        bind(bridgeRecommendationsQueue, AE_EVENT_EXCHANGE, "ae.event.recommendations-generated");
+
+    var bridgeModelPromotedProductionQueue =
+        queue(BRIDGE_MODEL_PROMOTED_PRODUCTION_QUEUE_NAME).build();
+    var bridgeModelPromotedProductionBinding = bind(
+        bridgeModelPromotedProductionQueue, GOV_EVENT_EXCHANGE, "event.model-promoted.production");
+
     return new Declarables(
         exchange,
         commandQueue,
         commandQueueBinding,
         errorQueue,
         deadLetterExchange,
-        deadLetterQueue, deadLetterBinding);
+        deadLetterQueue, deadLetterBinding,
+        bridgeRecommendationsQueue, bridgeRecommendationsBinding,
+        bridgeModelPromotedProductionQueue, bridgeModelPromotedProductionBinding);
   }
 
   private static QueueBuilder queue(String queueName) {
@@ -58,5 +70,9 @@ class RabbitBrokerConfiguration {
         .to(exchange)
         .with(routingKey)
         .noargs();
+  }
+
+  private static Binding bind(Queue queue, String exchangeName, String routingKey) {
+    return new Binding(queue.getName(), DestinationType.QUEUE, exchangeName, routingKey, null);
   }
 }
