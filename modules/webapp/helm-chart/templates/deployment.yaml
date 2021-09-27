@@ -35,9 +35,9 @@ spec:
               value: {{ .Values.sensWebappRabbitmqUser }}
             - name: 'SENS_WEBAPP_RABBITMQ_PASSWORD'
               value: {{ .Values.sensWebappRabbitmqPassword }}
-            - name: 'KEYCLOAK_CLIENT-ID'
+            - name: 'KEYCLOAK_CLIENT_ID'
               value: {{ .Values.keycloakClientId }}
-            - name: 'KEYCLOAK_ADAPTER_AUTH-SERVER-URL'
+            - name: 'KEYCLOAK_ADAPTER_AUTH_SERVER_URL'
               value: {{ .Values.keycloakAdapterAuthServerUrl }}
             - name: 'KEYCLOAK_ADAPTER_RESOURCE'
               value: {{ .Values.keycloakAdapterResource }}
