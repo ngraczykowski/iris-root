@@ -99,11 +99,12 @@ configure(subprojects) { Project subproject ->
                 "SENS_WEBAPP_RABBITMQ_PORT"           : "5672",
                 "SENS_WEBAPP_RABBITMQ_USER"           : "dev",
                 "SENS_WEBAPP_RABBITMQ_PASSWORD"       : "dev",
-                "SPRING_PROFILES_ACTIVE"              : "linux,database,rabbitmq,messaging,debug",
-                "KEYCLOAK_CLIENT-ID"                  : "backend",
-                "KEYCLOAK_ADAPTER_AUTH-SERVER-URL"    : "https://auth.silenteight.com/",
+                "SPRING_PROFILES_INCLUDE"             : "linux,database,rabbitmq,messaging,debug",
+                "SPRING_PROFILES_ACTIVE"              : "",
+                "KEYCLOAK_CLIENT_ID"                  : "backend",
+                "KEYCLOAK_ADAPTER_AUTH_SERVER_URL"    : "https://auth.silenteight.com/",
                 "KEYCLOAK_ADAPTER_RESOURCE"           : "backend",
-                "KEYCLOAK_ADAPTER_CREDENTIALS_SECRET" : "changeme",
+                "KEYCLOAK_ADAPTER_CREDENTIALS_SECRET" : "",
                 "KEYCLOAK_ADAPTER_REALM"              : "sens-webapp",
             ]
             jvmFlags = [
