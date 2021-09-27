@@ -742,3 +742,15 @@ databaseChangeLog:
             columnNames: alert
             constraintName: const_alert
             tableName: hsbc_bridge_recommendation
+
+  - changeSet:
+      id: 1.0.0-28
+      author: awojcicki
+      changes:
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  name: name
+            indexName: idx_bridge_match_category_name
+            tableName: hsbc_bridge_match_category
