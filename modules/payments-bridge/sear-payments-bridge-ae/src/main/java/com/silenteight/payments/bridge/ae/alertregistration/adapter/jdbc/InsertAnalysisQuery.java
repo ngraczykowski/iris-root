@@ -9,6 +9,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 class InsertAnalysisQuery {
@@ -19,12 +21,13 @@ class InsertAnalysisQuery {
   private final JdbcTemplate jdbcTemplate;
   private final PlatformTransactionManager platformTransactionManager;
 
-  void update(long analysisId) {
+  Optional<Long> update(long analysisId) {
     DefaultTransactionDefinition paramTransactionDefinition = new DefaultTransactionDefinition();
 
     TransactionStatus status =
         platformTransactionManager.getTransaction(paramTransactionDefinition);
     jdbcTemplate.update(SQL, analysisId);
     platformTransactionManager.commit(status);
+    return Optional.of(analysisId);
   }
 }

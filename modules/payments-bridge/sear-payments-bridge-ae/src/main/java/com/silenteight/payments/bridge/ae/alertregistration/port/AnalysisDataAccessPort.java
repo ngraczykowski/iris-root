@@ -6,5 +6,5 @@ public interface AnalysisDataAccessPort {
 
   Optional<Long> findTodayAnalysis();
 
-  void save(long analysis);
+  Optional<Long> save(long analysis);
 }
