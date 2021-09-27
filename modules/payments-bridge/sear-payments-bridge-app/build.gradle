@@ -89,6 +89,9 @@ dependencies {
   implementation libraries.data_source_api
   implementation libraries.data_source_categories_api
 
+  // AE API
+  implementation libraries.adjudication_engine_api
+
   //  Testing
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.adjudication_engine_api

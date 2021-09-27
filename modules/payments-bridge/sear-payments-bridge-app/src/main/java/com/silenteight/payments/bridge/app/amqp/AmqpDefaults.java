@@ -13,4 +13,6 @@ class AmqpDefaults {
 
   static final String FIRCO_ALERT_STORED_ROUTING_KEY = "pb.firco.command.stored";
 
+  static final String BRIDGE_RECOMMENDATION_QUEUE_NAME = "bridge.recommendations";
+
 }

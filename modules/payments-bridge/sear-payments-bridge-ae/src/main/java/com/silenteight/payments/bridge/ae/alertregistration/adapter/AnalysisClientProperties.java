@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
 
-@ConfigurationProperties("sp.grcp.client.analysis")
+@ConfigurationProperties("pb.grpc.client.analysis")
 @Data
 @Validated
 class AnalysisClientProperties {
