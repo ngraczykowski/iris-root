@@ -17,6 +17,7 @@ public class MinioContainer {
   private static final String ADMIN_ACCESS_KEY = "admin";
   private static final String ADMIN_SECRET_KEY = "admin123";
   private static final String MINIO_DOCKER_IMAGE = "minio/minio:RELEASE.2021-03-10T05-11-33Z";
+  private static final String REGION = "US_EAST_1";
   private static final int MINIO_PORT = 9000;
 
   private static final GenericContainer<?> MINIO_CONTAINER;
@@ -42,9 +43,10 @@ public class MinioContainer {
     @Override
     public void initialize(ConfigurableApplicationContext context) {
       TestPropertyValues propertyValues = TestPropertyValues.of(
-          "filestorage.minio.url=http://" + getTransportAddress(),
-          "filestorage.minio.access-key=" + ADMIN_ACCESS_KEY,
-          "filestorage.minio.private-key=" + ADMIN_SECRET_KEY
+          "sep.filestorage.minio.url=http://" + getTransportAddress(),
+          "sep.filestorage.minio.access-key=" + ADMIN_ACCESS_KEY,
+          "sep.filestorage.minio.private-key=" + ADMIN_SECRET_KEY,
+          "sep.filestorage.minio.region=" + REGION
       );
 
       propertyValues.applyTo(context.getEnvironment());

@@ -18,6 +18,7 @@ class MinioClientConfiguration {
     return new MinioClient.Builder()
         .endpoint(properties.getUrl())
         .credentials(properties.getAccessKey(), properties.getPrivateKey())
+        .region(properties.getRegion())
         .build();
   }
 }
