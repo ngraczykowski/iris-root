@@ -8,6 +8,8 @@ import com.silenteight.serp.governance.file.domain.dto.FileReferenceDto;
 import com.silenteight.serp.governance.file.storage.FileService;
 import com.silenteight.serp.governance.file.storage.FileWrapper;
 
+import static com.silenteight.serp.governance.file.common.FileResource.validateFileResourceName;
+
 @RequiredArgsConstructor
 class DownloadAttachmentsUseCase {
 
@@ -17,13 +19,14 @@ class DownloadAttachmentsUseCase {
   private final FileService fileService;
 
   FileWrapper activate(String fileName) {
+    validateFileResourceName(fileName);
     FileReferenceDto fileReferenceDto = fileDescriptionQuery.get(fileName);
     byte[] file = fileService.getFile(fileName);
 
     return FileWrapper.builder()
-                      .fileName(fileReferenceDto.getFileName())
-                      .mimeType(fileReferenceDto.getMimeType())
-                      .content(file)
-                      .build();
+        .fileName(fileReferenceDto.getFileName())
+        .mimeType(fileReferenceDto.getMimeType())
+        .content(file)
+        .build();
   }
 }

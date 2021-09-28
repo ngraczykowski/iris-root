@@ -9,7 +9,7 @@ import static java.util.regex.Pattern.compile;
 
 class FileNameCharactersValidator implements FileValidator {
 
-  private static final Pattern PATTERN = compile("^[._a-zA-Z0-9]*$");
+  private static final Pattern PATTERN = compile("^[._a-zA-Z0-9-()]*$");
 
   @Override
   public boolean validate(MultipartFile file) {

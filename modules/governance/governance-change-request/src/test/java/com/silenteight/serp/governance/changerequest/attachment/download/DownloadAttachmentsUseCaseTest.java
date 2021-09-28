@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 import com.silenteight.sep.filestorage.api.StorageManager;
 import com.silenteight.sep.filestorage.minio.container.MinioContainer.MinioContainerInitializer;
+import com.silenteight.serp.governance.file.common.exception.WrongFilesResourceFormatException;
 import com.silenteight.serp.governance.file.domain.dto.FileReferenceDto;
 import com.silenteight.serp.governance.file.storage.FileWrapper;
 import com.silenteight.serp.governance.file.upload.UploadFileUseCase;
@@ -22,6 +23,7 @@ import java.nio.file.Path;
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 @Transactional
@@ -34,6 +36,7 @@ import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 class DownloadAttachmentsUseCaseTest extends BaseDataJpaTest {
 
   private static final String NEW_FILE_NAME = "98323c8c-5253-4a54-bc84-b42c4709e151";
+  private static final String FILE_NAME_PREFIX = "files/";
   private static final String FILE_NAME = "test.doc";
 
   @Autowired
@@ -59,14 +62,21 @@ class DownloadAttachmentsUseCaseTest extends BaseDataJpaTest {
     FileReferenceDto savedFile = uploadFileUseCase.activate(fileToSave, NEW_FILE_NAME);
 
     //then
-    FileWrapper fileWrapper = underTest.activate(savedFile.getFileId().toString());
+    FileWrapper fileWrapper =
+        underTest.activate(FILE_NAME_PREFIX + savedFile.getFileId().toString());
     assertThat(fileWrapper.getFileName()).isEqualTo(FILE_NAME);
     assertThat(fileWrapper.getMimeType()).isEqualTo("application/x-tika-msoffice");
     assertThat(fileWrapper.getContent()).isEqualTo(testFileAsBytes);
   }
 
+  @Test
+  void shouldThrowExceptionWhenWrongFileResourceNameProvided() {
+    assertThrows(
+        WrongFilesResourceFormatException.class, () -> underTest.activate(NEW_FILE_NAME));
+  }
+
   @SneakyThrows
-  public static byte[] getTestFileAsBytes(String pathForFile) {
+  static byte[] getTestFileAsBytes(String pathForFile) {
     Path filePath = get(pathForFile);
     return readAllBytes(filePath);
   }

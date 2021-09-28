@@ -24,7 +24,7 @@ class FileDescriptionRestControllerTest extends BaseRestControllerTest {
   FileDescriptionQuery fileDescriptionQuery;
 
   private static final String GET_DESCRIPTION_URL =
-      "/files/7973eb42-25e6-40a5-b21f-c43deefddc0d/description";
+      "/v1/files/7973eb42-25e6-40a5-b21f-c43deefddc0d/description";
 
   private static final LocalDate UPLOAD_DATE = now();
   private static final String FILE_ID = "7973eb42-25e6-40a5-b21f-c43deefddc0d";

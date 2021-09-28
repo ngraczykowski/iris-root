@@ -25,7 +25,7 @@ class FileDescriptionRestController {
   @NonNull
   private final FileDescriptionQuery fileDescriptionQuery;
 
-  @GetMapping("/files/{id}/description")
+  @GetMapping("/v1/files/{id}/description")
   @PreAuthorize("isAuthorized('LIST_ATTACHMENTS')")
   public ResponseEntity<FileReferenceDto> getFileDescription(@PathVariable String id) {
 
