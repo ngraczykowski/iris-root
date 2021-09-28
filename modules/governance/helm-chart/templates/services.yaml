@@ -8,8 +8,10 @@ spec:
   ports:
     - protocol: TCP
       port: {{ .Values.ports.http }}
+      name: http
       targetPort: http
 
     - protocol: TCP
       port: {{ .Values.ports.grpc }}
+      name: grpc
       targetPort: grpc
