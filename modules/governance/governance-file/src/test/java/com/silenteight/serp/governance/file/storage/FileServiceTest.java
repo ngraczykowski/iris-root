@@ -81,7 +81,7 @@ class FileServiceTest {
     byte[] fileAsBytes = underTest.getFile(FILE_NAME);
 
     //then
-    assertThat(fileAsBytes.length).isEqualTo(expectedBytes.length);
+    assertThat(fileAsBytes).hasSameSizeAs(expectedBytes);
   }
 
   @Test

@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import com.silenteight.serp.governance.common.web.request.AbstractResourceExtractor;
+import com.silenteight.serp.governance.file.common.exception.WrongFilesResourceFormatException;
 
 import java.util.UUID;
 
@@ -18,5 +19,14 @@ public final class FileResource extends AbstractResourceExtractor {
 
   public static UUID fromResourceName(String resourceName) {
     return fromResourceName(resourceName, RESOURCE_NAME_PREFIX);
+  }
+
+  public static void validateFileResourceName(String fileResourceName) {
+    if (!isNameValid(fileResourceName))
+      throw new WrongFilesResourceFormatException(fileResourceName);
+  }
+
+  public static boolean isNameValid(String resourceName) {
+    return resourceName.startsWith(RESOURCE_NAME_PREFIX);
   }
 }
