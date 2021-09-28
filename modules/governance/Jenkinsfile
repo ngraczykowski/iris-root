@@ -43,5 +43,53 @@ gradleBuild(
           }
         }
       }
+
+      stage('Helm Chart registry') {
+        def utils = new com.silenteight.jenkins.ci.Utils()
+        env.INSTALLER_VERSION = utils.getProjectVersion()
+        echo 'Helm Chart building....'
+        node("aws-worker") {
+          // Stash is done in first stage
+          dir( './scripts' ) {
+            unstash 'scripts'
+          }
+          dir( './helm-chart' ) {
+            unstash 'helm'
+          }
+          withCredentials([usernamePassword(credentialsId: 'artifactory-deployment-user',  usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+            script {
+              if (utils.getGitBranch() == 'master' || utils.getGitBranch().startsWith('uat')) {
+                echo 'Helm Chart version'
+                sh './scripts/helm-chart-build.sh $USERNAME $PASSWORD'
+              } else {
+                echo 'This is not a release branch ignore Helm Chart deployment'
+              }
+            }
+          }
+        }
+      }
+
+      stage('AWS ECR') {
+        def utils = new com.silenteight.jenkins.ci.Utils()
+        //This is docker image tag version which will be used to copy from s8 repository
+        env.INSTALLER_VERSION = utils.getProjectVersion()
+        node("aws-worker") {
+          // Stash is done in first stage
+          dir( './scripts' ) {
+            unstash 'scripts'
+          }
+          dir( './helm-chart' ) {
+            unstash 'helm'
+          }
+          script {
+            if (utils.getGitBranch() == 'master' || utils.getGitBranch().startsWith('uat')) {
+              echo 'AWS image push'
+              sh './scripts/aws-deploy.sh'
+            } else {
+              echo 'This is not a release branch ignore AWS ECR push'
+            }
+          }
+        }
+      }
     }
 )

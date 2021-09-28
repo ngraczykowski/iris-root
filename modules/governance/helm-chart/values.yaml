@@ -1,0 +1,16 @@
+name: governance-app
+image_tag: governance-app
+image_repo: governance-app
+args: [ "governance-app" ]
+ports:
+  http: 8080
+  grpc: 8081
+config:
+  name: governance
+  data:
+    - key: example-release-key
+      value: example-release-key-some-passowrd
+replicaCount: 1
+imagePullPolicy: Always
+livenessProbeHttpGetPath: "/rest/governance/management/health/livenessState"
+readinessProbeHttpGetPath: "/rest/governance/management/health/readinessState"
