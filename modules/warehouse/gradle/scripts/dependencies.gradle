@@ -12,7 +12,7 @@ ext {
   silenteightSamplingAlertsApiVersion = "1.6.0"
   silenteightWarehouseInternalApiVersion = "1.6.0"
   silenteightFileStorageApiVersion = "1.3.0"
-  silenteightFileStorageMinioVersion = "1.3.0"
+  silenteightFileStorageMinioVersion = "1.6.0"
 }
 
 // @formatter:off
