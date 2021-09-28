@@ -33,6 +33,10 @@ warehouse:
   es:
     production-query-index: ${warehouse.environment.prefix}_production
     update-request-batch-size: 1000
+    scroll:
+      search:
+        batch-size: 1
+        keep-alive-seconds: 10
 test:
   messaging:
     integration:

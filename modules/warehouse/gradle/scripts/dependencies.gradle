@@ -11,6 +11,8 @@ ext {
   silenteightDataApiVersion = "1.6.0"
   silenteightSamplingAlertsApiVersion = "1.6.0"
   silenteightWarehouseInternalApiVersion = "1.6.0"
+  silenteightFileStorageApiVersion = "1.3.0"
+  silenteightFileStorageMinioVersion = "1.3.0"
 }
 
 // @formatter:off
@@ -27,6 +29,8 @@ libraries.silenteight_data_api = [group: 'com.silenteight.warehouse.api', name: 
 libraries.silenteight_sampling_alerts_api = [group: 'com.silenteight.warehouse.api', name: 'se-sampling-alerts-api', version: silenteightSamplingAlertsApiVersion]
 libraries.silenteight_warehouse_internal_api = [group: 'com.silenteight.warehouse.api', name: 'se-warehouse-internal-api', version: silenteightWarehouseInternalApiVersion]
 libraries.consul_grpc_registration = [group: 'com.silenteight.commons', name: 'consul-grpc-registration', version: '1.0.0']
+libraries.silenteight_file_storage_api =  [group: 'com.silenteight.sep.filestorage.api', name: 'sep-filestorage-api', version: silenteightFileStorageApiVersion]
+libraries.silenteight_filestorage_minio = [group: 'com.silenteight.sep.filestorage-minio', name: 'sep-filestorage-minio', version: silenteightFileStorageMinioVersion]
 
 // Spring
 libraries.spring_aop = [group: 'org.springframework', name: 'spring-aop']

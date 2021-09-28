@@ -4,68 +4,31 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.warehouse.common.opendistro.kibana.KibanaReportDto;
-import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
-import com.silenteight.warehouse.report.reporting.ReportStatus;
 import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto.ReportDefinitionDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
-import static java.lang.Long.valueOf;
-import static java.lang.String.format;
-import static org.springframework.http.HttpStatus.SEE_OTHER;
 import static org.springframework.http.ResponseEntity.ok;
-import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping(ROOT)
 @AllArgsConstructor
 @Slf4j
-public class SimulationReportsRestController {
+class SimulationReportsRestController {
 
   static final String ANALYSIS_ID_PARAM = "analysisId";
-  static final String DEFINITION_ID_PARAM = "definitionId";
-  static final String TIMESTAMP_PARAM = "timestamp";
-  static final String REPORT_STATUS = "/status";
-
-  static final String ANALYSIS_RESOURCE_NAME = "analysis/{" + ANALYSIS_ID_PARAM + "}";
-  static final String DEFINITIONS_COLLECTION_NAME = ANALYSIS_RESOURCE_NAME + "/definitions";
-  static final String DEFINITIONS_RESOURCE_NAME =
-      DEFINITIONS_COLLECTION_NAME + "/{" + DEFINITION_ID_PARAM + "}";
-  static final String REPORTS_COLLECTION_NAME = DEFINITIONS_RESOURCE_NAME + "/reports";
-  static final String REPORTS_RESOURCE_NAME =
-      REPORTS_COLLECTION_NAME + "/{" + TIMESTAMP_PARAM + "}";
-
-  static final String ANALYSIS_RESOURCE_URL = "/v1/" + ANALYSIS_RESOURCE_NAME;
-  static final String TENANT_SUBRESOURCE_URL = ANALYSIS_RESOURCE_URL + "/tenant";
-  static final String DEFINITIONS_COLLECTION_URL = "/v1/" + DEFINITIONS_COLLECTION_NAME;
-  static final String REPORTS_COLLECTION_URL = "/v1/" + REPORTS_COLLECTION_NAME;
-  static final String REPORTS_RESOURCE_URL = "/v1/" + REPORTS_RESOURCE_NAME;
-
-  static final String REPORT_STATUS_URL = REPORTS_RESOURCE_URL + REPORT_STATUS;
+  static final String DEFINITIONS_COLLECTION_URL = "/v1/analysis/{analysisId}/definitions";
 
   @NonNull
   private SimulationReportsDefinitionsUseCase reportsDefinitionsUseCase;
-
-  @NonNull
-  private SimulationReportingQuery simulationReportingQuery;
-
-  @NonNull
-  private SimulationService simulationService;
-
-  @GetMapping(TENANT_SUBRESOURCE_URL)
-  @PreAuthorize("isAuthorized('GET_SIMULATION_TENANT')")
-  public ResponseEntity<TenantDto> getTenantNameWrapper(
-      @PathVariable(ANALYSIS_ID_PARAM) String analysisId) {
-
-    log.debug("Getting tenant name for analysisId={}", analysisId);
-    return ok().body(simulationReportingQuery.getTenantDtoByAnalysisId(analysisId));
-  }
 
   @GetMapping(DEFINITIONS_COLLECTION_URL)
   @PreAuthorize("isAuthorized('LIST_SIMULATION_REPORTS')")
@@ -74,79 +37,5 @@ public class SimulationReportsRestController {
 
     log.debug("Getting report definition list for analysisId={}", analysisId);
     return ok().body(reportsDefinitionsUseCase.activate(analysisId));
-  }
-
-  @PostMapping(REPORTS_COLLECTION_URL)
-  @PreAuthorize("isAuthorized('CREATE_SIMULATION_REPORT')")
-  public ResponseEntity<Void> createReport(
-      @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
-      @PathVariable(DEFINITION_ID_PARAM) String definitionId) {
-
-    log.info(
-        "Create simulation report request received, analysisId={}, definitionId={}",
-        analysisId,
-        definitionId);
-
-    ReportInstanceReferenceDto reportInstance =
-        simulationService.createSimulationReport(analysisId, definitionId);
-
-    log.debug(
-        "Create simulation report request processed, analysisId={}, definitionId={}, reportId={}",
-        analysisId,
-        definitionId, reportInstance.getGetInstanceReferenceId());
-
-    return status(SEE_OTHER)
-        .header("Location", "reports/" + reportInstance.getGetInstanceReferenceId() + REPORT_STATUS)
-        .build();
-  }
-
-  @GetMapping(REPORTS_RESOURCE_URL)
-  @PreAuthorize("isAuthorized('DOWNLOAD_SIMULATION_REPORT')")
-  public ResponseEntity<byte[]> downloadReport(
-      @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
-      @PathVariable(DEFINITION_ID_PARAM) String definitionId,
-      @PathVariable(TIMESTAMP_PARAM) String timestamp) {
-
-    log.info(
-        "Download simulation report request received, analysisId={},definitionId={},timestamp={}",
-        analysisId, definitionId, timestamp);
-
-    KibanaReportDto kibanaReportDto =
-        simulationService.downloadReport(analysisId, definitionId, valueOf(timestamp));
-
-    String filename = kibanaReportDto.getFilename();
-    String data = kibanaReportDto.getContent();
-
-    log.debug(
-        "Download simulation report request processed, "
-            + "analysisId={},definitionId={},timestamp={},reportName={}",
-        analysisId, definitionId, timestamp, filename);
-
-    return ok()
-        .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))
-        .header("Content-Type", "text/csv")
-        .body(data.getBytes());
-  }
-
-  @GetMapping(REPORT_STATUS_URL)
-  @PreAuthorize("isAuthorized('CREATE_SIMULATION_REPORT')")
-  public ResponseEntity<ReportStatus> getReportStatus(
-      @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
-      @PathVariable(DEFINITION_ID_PARAM) String definitionId,
-      @PathVariable(TIMESTAMP_PARAM) String timestamp) {
-
-    log.debug(
-        "Request for simulation report status received, analysisId={},definitionId={},timestamp={}",
-        analysisId, definitionId, timestamp);
-
-    ReportStatus reportStatus =
-        simulationService.getReportGeneratingStatus(analysisId, definitionId, valueOf(timestamp));
-
-    log.debug(
-        "Request for simulation report status processed,"
-            + " analysisId={},definitionId={},timestamp={}, reportStatus={}",
-        analysisId, definitionId, timestamp, reportStatus.getStatus());
-
-    return ResponseEntity.ok(reportStatus);
   }
 }

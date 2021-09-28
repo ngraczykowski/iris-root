@@ -67,7 +67,7 @@ Before you can run Warehouse, you need to have a few infrastructural services ru
 1. RabbitMQ - the message broker for communicating between components and with outside services.
 2. ElasticSearch - NoSQL database optimized for searches
 3. Kibana - an open source reporting tool
-4. MinIO - a S3 compliant storage service
+4. MinIO - a S3 compliant reportStorage service
 5. PostgreSQL - SQL database
 
 ### Starting RabbitMQ 

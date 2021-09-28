@@ -53,14 +53,9 @@ warehouse:
     timezone: Europe/Warsaw
   report:
     default-bucket: reports
-    synchronization:
-      production-tenant: ${warehouse.environment.prefix}_production_periodic
-      cron: "-"
     removal:
       cron: "0 0 1 * * ?"
       duration-time: P1D
-    simulation:
-      master-tenant: ${warehouse.environment.prefix}_simulation_master
   opendistro:
     max-object-count: 1000
   es:
@@ -69,6 +64,18 @@ warehouse:
       - ${warehouse.es.production-query-index}
       - ${warehouse.environment.prefix}_simulation*
     update-request-batch-size: 1000
+    scroll:
+      search:
+        batch-size: 10000
+        keep-alive-seconds: 30
+  task:
+    async:
+      execution:
+        pool:
+          core-size: 4
+          max-size: 16
+          queue-capacity: 50
+          thread-name-prefix: async-auth-aware-
 
 spring:
   #-------------------------------------------------------------------------------------------------

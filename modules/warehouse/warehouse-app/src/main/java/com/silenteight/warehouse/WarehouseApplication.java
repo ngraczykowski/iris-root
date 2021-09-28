@@ -7,6 +7,7 @@ import com.silenteight.commons.app.spring.SpringApplicationTemplate;
 import com.silenteight.sep.auth.authentication.AuthenticationModule;
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
 import com.silenteight.sep.auth.token.TokenModule;
+import com.silenteight.sep.filestorage.minio.FileStorageMinioModule;
 import com.silenteight.warehouse.backup.BackupModule;
 import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
@@ -20,16 +21,15 @@ import com.silenteight.warehouse.indexer.analysis.AnalysisModule;
 import com.silenteight.warehouse.indexer.indexing.MessageHandlerModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 import com.silenteight.warehouse.management.ManagementModule;
+import com.silenteight.warehouse.report.accuracy.AccuracyReportModule;
 import com.silenteight.warehouse.report.billing.BillingReportModule;
 import com.silenteight.warehouse.report.metrics.MetricsReportModule;
-import com.silenteight.warehouse.report.production.ProductionReportingModule;
 import com.silenteight.warehouse.report.rbs.RbsReportModule;
 import com.silenteight.warehouse.report.remove.ReportsRemovalModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
 import com.silenteight.warehouse.report.simulation.SimulationModule;
 import com.silenteight.warehouse.report.statistics.ReportStatisticsModule;
 import com.silenteight.warehouse.report.storage.StorageModule;
-import com.silenteight.warehouse.report.synchronization.SynchronizationModule;
 import com.silenteight.warehouse.sampling.SamplingModule;
 
 import org.springframework.boot.Banner.Mode;
@@ -48,6 +48,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @ComponentScan(basePackageClasses = {
     // NOTE(ahaczewski): Keep list of modules alphabetically sorted within section.
     // Domain modules
+    AccuracyReportModule.class,
     AlertModule.class,
     AnalysisModule.class,
     BackupModule.class,
@@ -56,22 +57,21 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     MessageHandlerModule.class,
     ManagementModule.class,
     MetricsReportModule.class,
-    ProductionReportingModule.class,
     RbsReportModule.class,
-    ReportingModule.class,
-    ReportsRemovalModule.class,
     ReportStatisticsModule.class,
     QueryAlertModule.class,
     SamplingModule.class,
-    SimulationModule.class,
-    SynchronizationModule.class,
     // Interface modules
     AmqpCommonModule.class,
     AuthenticationModule.class,
     AuthorizationModule.class,
     ElasticsearchRestClientModule.class,
     EnvironmentModule.class,
+    FileStorageMinioModule.class,
     OpendistroModule.class,
+    ReportingModule.class,
+    ReportsRemovalModule.class,
+    SimulationModule.class,
     StorageModule.class,
     TokenModule.class,
     TimeModule.class,

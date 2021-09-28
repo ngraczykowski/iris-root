@@ -42,6 +42,7 @@ class MetricsReport extends BaseEntity implements IdentifiableEntity {
 
   @ToString.Include
   @Column(name = "state", nullable = false)
+  @Enumerated(EnumType.STRING)
   private ReportState state;
 
   @Basic(fetch = FetchType.LAZY)

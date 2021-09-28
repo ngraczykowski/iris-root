@@ -11,23 +11,26 @@ spring:
     default-schema: ${warehouse.db.schema:public}
     contexts: default
 warehouse:
-  kibana:
-    timezone: Europe/Warsaw
   report:
-    default-bucket: reports
-    synchronization:
-      production-tenant: ${warehouse.environment.prefix}_production_periodic
-      cron: "-"
-    simulation:
-      master-tenant: ${warehouse.environment.prefix}_simulation_master
+    default-bucket: report
   opendistro:
     max-object-count: 1000
   environment:
     prefix: itest
   es:
     production-query-index: ${warehouse.environment.prefix}_production
+    scroll:
+      search:
+        batch-size: 1
+        keep-alive-seconds: 10
+  kibana:
+    url: http://localhost:5601
+    username: technicaluser
+    password: technicaluser
+    timezone: Europe/Warsaw
+  alert-mapping:
+    country-source-key: lob_country
 logging:
   level:
     com.silenteight.warehouse.report: DEBUG
     com.silenteight.warehouse.common.opendistro.elastic: DEBUG
-    com.silenteight.warehouse.common.opendistro.kibana: DEBUG

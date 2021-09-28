@@ -7,6 +7,14 @@ warehouse:
     timezone: Europe/Warsaw
   opendistro:
     max-object-count: 1000
+  task:
+    async:
+      execution:
+        pool:
+          core-size: 4
+          max-size: 16
+          queue-capacity: 50
+          thread-name-prefix: async-auth-aware-
 logging:
   level:
     com.silenteight.warehouse.report: DEBUG
