@@ -1,0 +1,33 @@
+### Get OAuth2 authorization token using client credentials flow
+// @no-log
+// @no-cookie-jar
+POST {{authurl}}/realms/sierra/protocol/openid-connect/token
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded; charset=utf-8
+
+client_id={{client-id}}&client_secret={{client-secret}}&grant_type=client_credentials
+
+> {%
+  client.test("Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+
+  client.global.set("access_token", response.body["access_token"]);
+%}
+
+### Get info, checks whether auth works correctly.
+// @no-log
+// @no-cookie-jar
+GET {{baseurl}}/rest/pb/management/info
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+### Post an alert for solving
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/private-examples/FP_based_on_CROSSMATCH_reco_from_crossmatch_agent_sierra.json
