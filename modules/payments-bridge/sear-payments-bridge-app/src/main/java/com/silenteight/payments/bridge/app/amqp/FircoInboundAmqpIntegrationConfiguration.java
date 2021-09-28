@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.app.amqp;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.firco.core.alertmessage.integration.AlertMessageChannels;
+import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.payments.bridge.firco.core.alertmessage.port.IssueRecommendationUseCase;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
@@ -29,15 +29,21 @@ class FircoInboundAmqpIntegrationConfiguration {
 
   private final IssueRecommendationUseCase issueRecommendationUseCase;
 
+  private final CommonChannels commonChannels;
+
   @Bean
   IntegrationFlow alertMessageStoredReceivedInbound() {
     return from(createInboundAdapter(properties.getInboundQueueNames()))
-        .channel(AlertMessageChannels.ALERT_MESSAGE_STORED_RECEIVED_INBOUND_CHANNEL)
-        .handle(MessageStored.class, (payload, headers) -> {
-          issueRecommendationUseCase.issue(payload);
-          return null;
-        })
-        .get();
+       .handle(MessageStored.class, (payload, headers) -> {
+         // TODO: send back recommendation immediately (temporary)
+         issueRecommendationUseCase.issue(payload);
+         return null;
+       })
+       // .transform(MessageStored.class, source ->
+       //     new AlertDelivered(ResourceName.create(source.getAlert()).get("alert-messages"))
+       // )
+       // .channel(commonChannels.alertDelivered())
+       .get();
   }
 
   private AmqpInboundChannelAdapterSMLCSpec createInboundAdapter(String... queueNames) {

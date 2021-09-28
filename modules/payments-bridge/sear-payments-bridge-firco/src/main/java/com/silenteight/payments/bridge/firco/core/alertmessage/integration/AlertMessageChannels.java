@@ -1,9 +1,8 @@
 package com.silenteight.payments.bridge.firco.core.alertmessage.integration;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Configuration;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Configuration
 public class AlertMessageChannels {
 
   public static final String ALERT_MESSAGE_STORED_REQUEST_CHANNEL =
