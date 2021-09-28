@@ -22,7 +22,7 @@ class ExchangeConfiguration {
   private final ExchangeProperties properties;
 
   @Bean
-  Declarables commonRabbitSchemaDeclarables() {
+  Declarables governanceRabbitSchemaDeclarables() {
     return new Declarables(
         topicExchange(properties.getAnalytics()),
         topicExchange(properties.getNotification()),
