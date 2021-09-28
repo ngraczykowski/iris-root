@@ -15,6 +15,8 @@ class AmazonSesClientAdapter implements AmazonSesClient {
   public void sendEmail(SendRawEmailRequest request) {
     try (var ses = SesClient.builder().build()) {
       ses.sendRawEmail(request);
+    } catch (Exception e) {
+      throw new RuntimeException("Couldn't send notification email message = " + e.getMessage());
     }
   }
 }
