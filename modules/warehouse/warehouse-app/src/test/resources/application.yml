@@ -55,7 +55,7 @@ warehouse:
     password: warehouse
   sampling:
     time-field-name: alert_recommendationDate
-filestorage:
+sep.filestorage:
   minio:
     url: http://localhost:9000
     access-key: admin
