@@ -27,14 +27,16 @@ spec:
               value: {{ .Values.sensWebappDbUser | squote }}
             - name: 'SENS_WEBAPP_DB_PASSWORD'
               value: {{ .Values.sensWebappDbPassword | squote }}
-            - name: 'SENS_WEBAPP_RABBITMQ_HOST'
-              value: {{ .Values.sensWebappRabbitmqHost | squote }}
-            - name: 'SENS_WEBAPP_RABBITMQ_PORT'
-              value: {{ .Values.sensWebappRabbitmqPort | squote }}
-            - name: 'SENS_WEBAPP_RABBITMQ_USER'
-              value: {{ .Values.sensWebappRabbitmqUser | squote }}
-            - name: 'SENS_WEBAPP_RABBITMQ_PASSWORD'
-              value: {{ .Values.sensWebappRabbitmqPassword | squote }}
+            - name: 'SPRING_RABBITMQ_ADDRESSES'
+              value: {{ .Values.springRabbitmqAddresses }}
+            - name: 'SPRING_RABBITMQ_PORT'
+              value: {{ .Values.springRabbitmqPort | quote }}
+            - name: 'SPRING_RABBITMQ_USERNAME'
+              value: {{ .Values.springRabbitmqUsername }}
+            - name: 'SPRING_RABBITMQ_PASSWORD'
+              value: {{ .Values.springRabbitmqPassword }}
+            - name: 'SPRING_RABBITMQ_VIRTUAL_HOST'
+              value: {{ .Values.springRabbitmqVirtualHost }}
             - name: 'KEYCLOAK_CLIENT_ID'
               value: {{ .Values.keycloakClientId | squote }}
             - name: 'KEYCLOAK_ADAPTER_AUTH_SERVER_URL'
