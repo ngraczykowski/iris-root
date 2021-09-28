@@ -28,15 +28,15 @@ spec:
               port: {{ .Values.ports.http }}
           env:
             - name: 'SERP_GOVERNANCE_DB_HOST'
-              value: {{ .Values.sensGovernanceDbHost | squote }}
+              value: {{ .Values.serpGovernanceDbHost | squote }}
             - name: 'SERP_GOVERNANCE_DB_PORT'
-              value: {{ .Values.sensGovernanceDbPort | squote }}
+              value: {{ .Values.serpGovernanceDbPort | squote }}
             - name: 'SERP_GOVERNANCE_DB_NAME'
-              value: {{ .Values.sensGovernanceDbName | squote }}
+              value: {{ .Values.serpGovernanceDbName | squote }}
             - name: 'SERP_GOVERNANCE_DB_USER'
-              value: {{ .Values.sensGovernanceDbUser | squote }}
+              value: {{ .Values.serpGovernanceDbUser | squote }}
             - name: 'SERP_GOVERNANCE_DB_PASSWORD'
-              value: {{ .Values.sensGovernanceDbPassword | squote }}
+              value: {{ .Values.serpGovernanceDbPassword | squote }}
             - name: 'SPRING_RABBITMQ_HOST'
               value: ''
             - name: 'SPRING_RABBITMQ_ADDRESSES'
