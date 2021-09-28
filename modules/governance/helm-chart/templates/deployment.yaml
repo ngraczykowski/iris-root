@@ -66,7 +66,7 @@ spec:
             - name: 'SERVER_PORT'
               value: {{ .Values.ports.http | quote }}
             - name: 'GRPC_CLIENT_WAREHOUSE_ADDRESS'
-              value: 'static://warehouse-app-service:8081'
+              value: {{ .Values.grpc.client.warehouse.address | quote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}

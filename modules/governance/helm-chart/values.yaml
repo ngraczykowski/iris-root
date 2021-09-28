@@ -14,3 +14,7 @@ replicaCount: 1
 imagePullPolicy: Always
 livenessProbeHttpGetPath: "/rest/governance/management/health/livenessState"
 readinessProbeHttpGetPath: "/rest/governance/management/health/readinessState"
+grpc:
+  client:
+    warehouse:
+      address: "static://warehouse-app-service:8081"
