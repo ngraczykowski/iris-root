@@ -335,7 +335,7 @@ serp.governance.qa:
       grouping-fields:
         - alert_extendedAttribute5
       filters:
-        - name: alert_s8_recommendation
+        - field: alert_s8_recommendation
           values:
             - ACTION_FALSE_POSITIVE
   viewing:
