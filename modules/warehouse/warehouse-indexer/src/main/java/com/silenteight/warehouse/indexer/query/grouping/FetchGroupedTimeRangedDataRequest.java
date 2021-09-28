@@ -6,6 +6,8 @@ import lombok.Builder.Default;
 import lombok.NonNull;
 import lombok.Value;
 
+import com.silenteight.warehouse.indexer.query.common.QueryFilter;
+
 import java.time.OffsetDateTime;
 import java.util.LinkedList;
 import java.util.List;

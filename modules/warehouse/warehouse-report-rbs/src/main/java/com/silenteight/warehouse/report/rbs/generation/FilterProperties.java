@@ -3,7 +3,7 @@ package com.silenteight.warehouse.report.rbs.generation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import com.silenteight.warehouse.indexer.query.grouping.QueryFilter;
+import com.silenteight.warehouse.indexer.query.common.QueryFilter;
 
 import org.springframework.boot.context.properties.ConstructorBinding;
 

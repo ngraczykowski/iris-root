@@ -15,6 +15,10 @@ warehouse:
     country-roles-indexes:
       - ${warehouse.es.production-query-index}
       - ${warehouse.environment.prefix}_simulation*
+    scroll:
+      search:
+        batch-size: 1
+        keep-alive-seconds: 10
 logging:
   level:
     com.silenteight.warehouse.report: DEBUG

@@ -37,6 +37,7 @@ technical_user:
     - 'indices:data/read/search'
     - 'indices:data/read/mget'
     - 'cluster:admin/opendistro/reports/definition/create'
+    - 'indices:data/read/scroll/clear'
   index_permissions:
     - index_patterns:
         - 'itest_production'
@@ -67,6 +68,7 @@ business_user:
     - 'cluster:admin/opendistro/reports/instance/get'
     - 'cluster:admin/opendistro/reports/instance/list'
     - 'indices:monitor/settings/get'
+    - 'indices:data/read/scroll/clear'
   index_permissions:
     - index_patterns:
         - 'itest_production'

@@ -37,6 +37,7 @@ public class MappedAlertFixtures {
     public static final String RECOMMENDATION_KEY = "recommendation";
     public static final String RISK_TYPE_KEY = "risk_type";
     public static final String STATUS_KEY = "status";
+    public static final String ANALYST_DECISION_KEY = "analyst_decision";
   }
 
   public static class SourceMatchKeys {
@@ -52,6 +53,8 @@ public class MappedAlertFixtures {
         ALERT_PREFIX + SourceAlertKeys.RISK_TYPE_KEY;
     public static final String COUNTRY_KEY = ALERT_PREFIX + SourceAlertKeys.COUNTRY_KEY;
     public static final String STATUS_KEY = ALERT_PREFIX + SourceAlertKeys.STATUS_KEY;
+    public static final String ANALYST_DECISION_KEY =
+        ALERT_PREFIX + SourceAlertKeys.ANALYST_DECISION_KEY;
   }
 
   public static class Values {
@@ -70,7 +73,12 @@ public class MappedAlertFixtures {
     public static final String PROCESSING_TIMESTAMP_2 = "2021-05-05T18:17:37.098Z";
     public static final String PROCESSING_TIMESTAMP_3 = "2021-06-08T13:17:37.098Z";
     public static final String PROCESSING_TIMESTAMP_4 = "2021-06-18T12:10:31.098Z";
+    public static final String PROCESSING_TIMESTAMP_5 = "2019-06-18T12:10:31.098Z";
+    public static final String PROCESSING_TIMESTAMP_6 = "2020-06-18T12:10:31.098Z";
     public static final String ALERT_NAME = "alerts/123";
+    public static final String ANALYST_DECISION_FP = "analyst_decision_false_positive";
+    public static final String ANALYST_DECISION_TP = "analyst_decision_true_positive";
+    public static final String ANALYST_DECISION_UNKNOWN = "analyst_decision_unknown";
   }
 
   public static class ResourceName {
@@ -148,6 +156,33 @@ public class MappedAlertFixtures {
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
       MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
       MappedKeys.STATUS_KEY, Values.STATUS_ERROR,
+      AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
+      RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
+  );
+
+  public static final Map<String, Object> MAPPED_ALERT_8 = of(
+      DISCRIMINATOR, DISCRIMINATOR_7,
+      MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
+      MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
+      MappedKeys.ANALYST_DECISION_KEY, Values.ANALYST_DECISION_TP,
+      AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
+      RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
+  );
+
+  public static final Map<String, Object> MAPPED_ALERT_9 = of(
+      DISCRIMINATOR, DISCRIMINATOR_7,
+      MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
+      MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
+      MappedKeys.ANALYST_DECISION_KEY, Values.ANALYST_DECISION_FP,
+      AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP_4,
+      RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
+  );
+
+  public static final Map<String, Object> MAPPED_ALERT_10 = of(
+      DISCRIMINATOR, DISCRIMINATOR_7,
+      MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
+      MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
+      MappedKeys.ANALYST_DECISION_KEY, Values.ANALYST_DECISION_UNKNOWN,
       AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
   );

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+  <changeSet id="warehouse-1.9.0-1" author="plewandowski">
+    <createTable tableName="warehouse_report_accuracy">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="report_type" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="analysis" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="data" type="${type.text}"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_report_accuracy"
+        indexName="ix_warehouse_report_accuracy_created_at"
+        unique="false">
+      <column name="created_at"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-2" author="plewandowski">
+    <dropTable tableName="warehouse_report"/>
+
+    <createIndex
+        tableName="warehouse_report_rbs"
+        indexName="ix_warehouse_report_rbs_created_at"
+        unique="false">
+      <column name="created_at"/>
+    </createIndex>
+
+    <createIndex
+        tableName="warehouse_report_metrics"
+        indexName="ix_warehouse_report_metrics_created_at"
+        unique="false">
+      <column name="created_at"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>

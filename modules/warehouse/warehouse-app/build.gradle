@@ -26,6 +26,7 @@ dependencies {
   implementation project(":warehouse-indexer")
   implementation project(":warehouse-management")
   implementation project(":warehouse-report")
+  implementation project(":warehouse-report-accuracy")
   implementation project(":warehouse-report-billing")
   implementation project(":warehouse-report-metrics")
   implementation project(":warehouse-report-rbs")
@@ -34,6 +35,7 @@ dependencies {
 
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_commons_app
+  implementation libraries.silenteight_filestorage_minio
 
   implementation libraries.spring_boot_starter_actuator
   implementation libraries.spring_boot_starter_undertow

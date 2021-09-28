@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.warehouse.report.metrics.domain.dto.ReportDto;
 import com.silenteight.warehouse.report.metrics.download.MetricsReportDataQuery;
-import com.silenteight.warehouse.report.metrics.state.MetricsReportStatusQuery;
+import com.silenteight.warehouse.report.metrics.status.MetricsReportStatusQuery;
 
 @RequiredArgsConstructor
 class MetricsReportQuery implements MetricsReportDataQuery, MetricsReportStatusQuery {

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 
-import com.silenteight.warehouse.indexer.query.grouping.QueryFilter;
+import com.silenteight.warehouse.indexer.query.common.QueryFilter;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;

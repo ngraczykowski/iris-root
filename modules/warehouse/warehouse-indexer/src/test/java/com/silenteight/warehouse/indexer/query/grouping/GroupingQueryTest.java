@@ -4,6 +4,7 @@ import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClie
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
+import com.silenteight.warehouse.indexer.query.common.QueryFilter;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 
 import org.junit.jupiter.api.AfterEach;
