@@ -11,6 +11,12 @@ gradleBuild(
       stage('Build and deploy container image') {
         script {
           def utils = new com.silenteight.jenkins.ci.Utils()
+          dir( './scripts' ) {
+            stash includes: '**', name: 'scripts'
+          }
+          dir( './helm-chart' ) {
+            stash includes: '**', name: 'helm'
+          }
           if (utils.getGitBranch() == 'master') {
             def gradle = new com.silenteight.jenkins.ci.Gradle()
             gradle.gradle('jib')
@@ -56,14 +62,12 @@ gradleBuild(
           dir( './helm-chart' ) {
             unstash 'helm'
           }
-          withCredentials([usernamePassword(credentialsId: 'artifactory-deployment-user',  usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-            script {
-              if (utils.getGitBranch() == 'master' || utils.getGitBranch().startsWith('uat')) {
-                echo 'Helm Chart version'
-                sh './scripts/helm-chart-build.sh $USERNAME $PASSWORD'
-              } else {
-                echo 'This is not a release branch ignore Helm Chart deployment'
-              }
+          script {
+            if (utils.getGitBranch() == 'master' || utils.getGitBranch().startsWith('uat')) {
+              echo 'Helm Chart version'
+              sh './scripts/helm-chart-build.sh'
+            } else {
+              echo 'This is not a release branch ignore Helm Chart deployment'
             }
           }
         }
