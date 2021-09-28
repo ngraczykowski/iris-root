@@ -4,19 +4,19 @@
 serp:
   notifier:
     integration:
-      inbound-queue-name: notifier.incoming-event
+      inbound-queue-name: ${serp.governance.messaging.broker.notification.queue-name}
       outbound-exchange-name:
       outbound-routing-key: notifier.send-mail
       mail:
-        inbound-queue-name: notifier.send-mail
+        inbound-queue-name: ${serp.governance.messaging.broker.notification-send-mail.queue-name}
   governance:
     agent:
       agentConfigurationSource: classpath:agent_configs.json
       agentDetailsSource: classpath:agent_details.json
     integration:
       solution-discrepancy:
-        inbound-queue-name: governance.solution-discrepancy
-        outbound-exchange-name: notification
+        inbound-queue-name: ${serp.governance.messaging.broker.solution-discrepancy.queue-name}
+        outbound-exchange-name: ${serp.governance.messaging.exchange.notification}
         reasoning-branches-disabled-routing-key: notification.reasoning-branches-disabled
     model:
       categorySource: classpath:categories.json
