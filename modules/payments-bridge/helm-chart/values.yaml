@@ -8,7 +8,7 @@ ports:
   http: 8080
   grpc: 8081
 
-springProfilesActive: "mockaws,mockdatasource,mockae"
+springProfilesActive: "mockdatasource,mockae"
 replicaCount: 1
 imagePullPolicy: Always
 livenessProbeHttpGetPath: "/rest/pb/management/health/livenessState"
