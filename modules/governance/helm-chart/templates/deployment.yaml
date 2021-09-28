@@ -27,15 +27,15 @@ spec:
               path: {{ .Values.readinessProbeHttpGetPath }}
               port: {{ .Values.ports.http }}
           env:
-            - name: 'SERP_GOVERNANCE_DB_HOST'
+            - name: 'SERP_DB_HOST'
               value: {{ .Values.serpGovernanceDbHost | squote }}
-            - name: 'SERP_GOVERNANCE_DB_PORT'
+            - name: 'SERP_DB_PORT'
               value: {{ .Values.serpGovernanceDbPort | squote }}
-            - name: 'SERP_GOVERNANCE_DB_NAME'
+            - name: 'SERP_DB_NAME'
               value: {{ .Values.serpGovernanceDbName | squote }}
-            - name: 'SERP_GOVERNANCE_DB_USER'
+            - name: 'SERP_DB_USER'
               value: {{ .Values.serpGovernanceDbUser | squote }}
-            - name: 'SERP_GOVERNANCE_DB_PASSWORD'
+            - name: 'SERP_DB_PASSWORD'
               value: {{ .Values.serpGovernanceDbPassword | squote }}
             - name: 'SPRING_RABBITMQ_HOST'
               value: ''
