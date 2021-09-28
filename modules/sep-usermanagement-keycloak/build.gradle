@@ -20,7 +20,7 @@ ext {
   springBootVersion = "2.4.9"
   silenteightSepBaseVersion = "1.12.2"
   silenteightSepUsermanagementApiVersion = "1.10.0"
-  keycloakVersion = "12.0.2"
+  keycloakVersion = "15.0.2"
 }
 
 repositories {
