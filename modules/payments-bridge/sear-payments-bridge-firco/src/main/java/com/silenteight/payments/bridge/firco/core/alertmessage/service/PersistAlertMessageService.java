@@ -3,8 +3,9 @@ package com.silenteight.payments.bridge.firco.core.alertmessage.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.firco.core.alertmessage.model.FircoAlertMessage;
+import com.silenteight.payments.bridge.common.model.AlertMessageModel;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,13 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 class PersistAlertMessageService {
 
   private final AlertMessageRepository messageRepository;
-  private final AlertMessagePayloadFactory payloadFactory;
   private final AlertMessagePayloadRepository payloadRepository;
 
   @Transactional
-  public void createAlertMessage(FircoAlertMessage alertMessage) {
+  public void createAlertMessage(AlertMessageModel alertMessage, ObjectNode originalMessage) {
     messageRepository.save(new AlertMessageEntity(alertMessage));
-    payloadRepository.save(payloadFactory.create(alertMessage));
+    payloadRepository.save(new AlertMessagePayload(alertMessage.getId(), originalMessage));
   }
 
 }

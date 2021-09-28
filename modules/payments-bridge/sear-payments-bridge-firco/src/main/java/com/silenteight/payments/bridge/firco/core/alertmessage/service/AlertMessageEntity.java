@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.firco.core.alertmessage.service;
 import lombok.*;
 import lombok.EqualsAndHashCode.Include;
 
-import com.silenteight.payments.bridge.firco.core.alertmessage.model.FircoAlertMessage;
+import com.silenteight.payments.bridge.common.model.AlertMessageModel;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 
 import java.time.OffsetDateTime;
@@ -61,16 +61,15 @@ class AlertMessageEntity extends BaseEntity {
   @NonNull
   private Integer priority = 5;
 
-  AlertMessageEntity(FircoAlertMessage message) {
+  AlertMessageEntity(AlertMessageModel message) {
     id = message.getId();
     receivedAt = message.getReceivedAt();
     dataCenter = message.getDataCenter();
     decisionUrl = message.getDecisionUrl();
 
-    var alertMessage = message.getAlertMessage();
-    unit = alertMessage.getUnit();
-    businessUnit = alertMessage.getBusinessUnit();
-    messageId = alertMessage.getMessageID();
-    systemId = alertMessage.getSystemID();
+    unit = message.getUnit();
+    businessUnit = message.getBusinessUnit();
+    messageId = message.getMessageId();
+    systemId = message.getSystemId();
   }
 }

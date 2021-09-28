@@ -4,7 +4,7 @@ package com.silenteight.payments.bridge.firco.core.alertmessage.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.firco.core.alertmessage.model.FircoAlertMessage;
+import com.silenteight.payments.bridge.common.model.AlertMessageModel;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ class AlertMessageQueueOverflowedService {
 
   private final AlertMessageProperties alertMessageProperties;
 
-  boolean resolve(FircoAlertMessage message) {
+  boolean resolve(AlertMessageModel message) {
     if (repository.countAllByStatus(STORED) >
         alertMessageProperties.getStoredQueueLimit()) {
       log.debug("AlertMessage [{}] rejected due to queue limit ({})",
