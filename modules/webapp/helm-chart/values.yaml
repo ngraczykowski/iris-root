@@ -10,3 +10,4 @@ config:
     - key: example-release-key
       value: example-release-key-some-passowrd
 replicaCount: 1
+imagePullPolicy: Always

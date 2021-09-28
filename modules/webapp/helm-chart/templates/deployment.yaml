@@ -50,6 +50,7 @@ spec:
             - name: 'SPRING_PROFILES_ACTIVE'
               value: {{ .Values.springProfilesActive | squote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
           ports:
             - containerPort: {{ .Values.ports.http }}

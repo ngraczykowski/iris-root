@@ -314,3 +314,8 @@ sens.webapp.notification.enabled: true
 # Keycloak
 keycloak:
   frontend-client-id: frontend
+  adapter:
+    publicClient: false
+    confidentialPort: 0
+    principalAttribute: preferred_username
+    sslRequired: external
