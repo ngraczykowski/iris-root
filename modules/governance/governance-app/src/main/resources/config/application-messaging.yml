@@ -61,17 +61,43 @@ serp:
       nonce-header: ${serp.rabbitmq.encryption.nonce.header}
 
   governance:
+    messaging:
+      exchange:
+        analytics: feature-vector
+        notification: notification
+        solution-discrepancy: learning
+      broker:
+        analytics:
+          queue-name: governance.analytics
+          routing-key: feature-vector.solved
+        ingest:
+          queue-name: gov.feature-vector.ingest
+          routing-key: command.index-request.production
+        qa-retention:
+          queue-name: gov.retention.personal-information-expired
+          routing-key: retention.personal-information-expired
+        notification:
+          queue-name: notifier.incoming-event
+          routing-key: notification.*
+        notification-send-mail:
+          queue-name: notifier.send-mail
+          routing-key: notifier.send-mail
+        solution-discrepancy:
+          queue-name: governance.solution-discrepancy
+          routing-key: learning.discrepancy-detected
+
     feature-vector:
       integration:
         request:
-          exchange-name: feature-vector
-          routing-key: feature-vector.solved
+          exchange-name: ${serp.governance.messaging.exchange.analytics}
+          routing-key: ${serp.governance.messaging.broker.analytics.routing-key}
         receive:
-          queue-name: governance.analytics
+          queue-name: ${serp.governance.messaging.broker.analytics.queue-name}
+
     ingest:
       integration:
         receive:
-          queue-name: gov.feature-vector.ingest
+          queue-name: ${serp.governance.messaging.broker.ingest.queue-name}
 
     model:
       export:
@@ -89,4 +115,4 @@ serp:
         personal-information-expired:
           integration:
             receive:
-              queue-name: gov.retention.personal-information-expired
+              queue-name: ${serp.governance.messaging.broker.qa-retention.queue-name}
