@@ -1,6 +1,5 @@
 package com.silenteight.sep.usermanagement.keycloak.config;
 
-import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.ClientsResource;
@@ -13,6 +12,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static org.keycloak.OAuth2Constants.CLIENT_CREDENTIALS;
+
 @Configuration
 @EnableConfigurationProperties(KeycloakConfigurationProperties.class)
 public class KeycloakConfiguration {
@@ -20,20 +21,23 @@ public class KeycloakConfiguration {
   public static final String KEYCLOAK_WEBAPP_CLIENT = "keycloakWebappClient";
 
   @Bean(KEYCLOAK_WEBAPP_CLIENT)
-  Keycloak keycloakWebappClient(KeycloakConfigurationProperties keycloakConfigurationProperties) {
-    AdapterConfig adapterConfig = keycloakConfigurationProperties.getAdapter();
+  Keycloak keycloakWebappClient(KeycloakConfigurationProperties properties) {
+    AdapterConfig adapterConfig = properties.getAdapter();
     return KeycloakBuilder.builder()
         .clientId(adapterConfig.getResource())
         .clientSecret((String) adapterConfig.getCredentials().get("secret"))
-        .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+        .grantType(CLIENT_CREDENTIALS)
         .realm(adapterConfig.getRealm())
         .serverUrl(adapterConfig.getAuthServerUrl())
         .build();
   }
 
   @Bean
-  RealmResource realmResource(@Qualifier(KEYCLOAK_WEBAPP_CLIENT) Keycloak keycloak) {
-    return keycloak.realm("sens-webapp");
+  RealmResource realmResource(
+      @Qualifier(KEYCLOAK_WEBAPP_CLIENT) Keycloak keycloak,
+      KeycloakConfigurationProperties properties) {
+
+    return keycloak.realm(properties.getRealm());
   }
 
   @Bean
