@@ -57,3 +57,8 @@ spring:
         core-size: 2
         max-size: 4
         queue-capacity: 1000
+
+management:
+  health:
+    probes:
+      enabled: true
