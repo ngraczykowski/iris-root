@@ -1,5 +1,7 @@
 @Library('pipeline-shared-library@master') _
 
+def utils = new com.silenteight.jenkins.ci.Utils()
+
 gradleBuild(
     jdkVersion: 'jdk-11',
     sonarEnabled: true,
@@ -73,7 +75,6 @@ gradleBuild(
 
       stage('Deploy On Nomad Dev') {
         script {
-          def utils = new com.silenteight.jenkins.ci.Utils()
           // FIXME(ahaczewski): Use `when` if possible.
           if (utils.getGitBranch() == 'master') {
             sh './nomad/deploy.sh -var-file=dev.vars'
@@ -85,7 +86,6 @@ gradleBuild(
 
       stage('Deploy On Nomad Test') {
         script {
-          def utils = new com.silenteight.jenkins.ci.Utils()
           // FIXME(ahaczewski): Use `when` if possible.
           if (utils.getGitBranch() == 'master' && params.deployOnTest) {
             sh './nomad/deploy.sh -var-file=test.vars'
