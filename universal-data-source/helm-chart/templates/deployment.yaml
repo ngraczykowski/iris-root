@@ -21,7 +21,6 @@ spec:
             httpGet:
               path: {{ .Values.livenessProbeHttpGetPath }}
               port: 8080
-            failureThreshold: 1
             initialDelaySeconds: 10
             periodSeconds: 10
           readinessProbe:
@@ -29,6 +28,7 @@ spec:
               path: {{ .Values.readinessProbeHttpGetPath }}
               port: 8080
             failureThreshold: 30
+            initialDelaySeconds: 10
             periodSeconds: 10
           env:
             - name: "UDS_DB_HOST"
