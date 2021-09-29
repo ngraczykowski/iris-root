@@ -38,7 +38,7 @@ class AlertRegisteredChannelInterceptor implements ChannelInterceptor {
       var model = alertMessageUseCase.findByAlertMessageId(alertRegistered.getAlertId());
       alertRegistered.withAlertModel(model);
     }
-    if (alertRegistered.getAlertModel().isEmpty()) {
+    if (alertRegistered.getOriginalMessage().isEmpty()) {
       var originalMessage = alertMessagePayloadUseCase
           .findByAlertMessageId(alertRegistered.getAlertId());
       alertRegistered.withOriginalMessage(originalMessage);
