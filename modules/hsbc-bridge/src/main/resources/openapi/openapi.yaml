@@ -203,33 +203,6 @@ paths:
               schema:
                 type: string
 
-  /v1/upload:
-    post:
-      summary: Submit new model.
-      requestBody:
-        description: Model information.
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ModelInfoRequest'
-      responses:
-        '200':
-          description: Model uploaded.
-
-    put:
-      summary: Update status of new model.
-      requestBody:
-        description: Model information.
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ModelInfoStatusRequest'
-      responses:
-        '200':
-          description: Model uploaded.
-
   /watchlist/v1/upload:
     post:
       summary: Upload watchlist files with up to 1GB limit.
