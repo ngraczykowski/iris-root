@@ -7,7 +7,6 @@ import com.silenteight.universaldatasource.app.feature.service.MatchFeatureInput
 import io.grpc.Status;
 import net.devh.boot.grpc.server.advice.GrpcAdvice;
 import net.devh.boot.grpc.server.advice.GrpcExceptionHandler;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.NoSuchElementException;
 import javax.validation.ConstraintViolationException;
@@ -40,7 +39,6 @@ public class GrpcExceptionAdvice {
     return getStatusWithDescription(Status.INVALID_ARGUMENT, e);
   }
 
-  @NotNull
   private Status getStatusWithDescription(Status status, Exception e) {
     return status.withDescription(e.getMessage()).withCause(e);
   }

@@ -1,11 +1,12 @@
 package com.silenteight.universaldatasource.app.feature.port.incoming;
 
-import java.util.Collection;
+import com.silenteight.universaldatasource.app.feature.model.BatchFeatureRequest;
+
 import java.util.function.Consumer;
 
 public interface BatchGetFeatureInputUseCase {
 
   void batchGetFeatureInput(
-      Collection<String> matchNames, Collection<String> featureNames,
+      BatchFeatureRequest batchhFeatureRequest,
       Consumer<BatchFeatureInputResponse> consumer);
 }

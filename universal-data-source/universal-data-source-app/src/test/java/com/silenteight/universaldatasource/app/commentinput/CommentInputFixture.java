@@ -14,7 +14,7 @@ import com.google.protobuf.util.JsonFormat;
 
 import java.util.List;
 
-public class CommentInputFixture {
+class CommentInputFixture {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
 

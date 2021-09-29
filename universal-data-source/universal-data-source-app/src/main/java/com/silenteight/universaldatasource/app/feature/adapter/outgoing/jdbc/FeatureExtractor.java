@@ -56,7 +56,8 @@ class FeatureExtractor implements ResultSetExtractor<Integer> {
       rowNum++;
     }
 
-    consumeFeatureResponse(new MatchFeatureOutput(agentInputType, matchFeatureOutputs));
+    if (!matchFeatureOutputs.isEmpty())
+      consumeFeatureResponse(new MatchFeatureOutput(agentInputType, matchFeatureOutputs));
     return rowNum;
   }
 

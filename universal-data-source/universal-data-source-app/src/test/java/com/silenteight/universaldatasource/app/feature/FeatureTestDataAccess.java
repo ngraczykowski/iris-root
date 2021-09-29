@@ -2,7 +2,7 @@ package com.silenteight.universaldatasource.app.feature;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-public class FeatureTestDataAccess {
+class FeatureTestDataAccess {
 
   static int streamedFeaturesCount(JdbcTemplate jdbcTemplate, String matches, String features) {
     return jdbcTemplate.queryForObject(

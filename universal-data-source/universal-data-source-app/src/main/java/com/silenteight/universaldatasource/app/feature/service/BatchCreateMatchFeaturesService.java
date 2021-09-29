@@ -30,7 +30,7 @@ class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase
   private final FeatureDataAccess dataAccess;
   private final Map<String, FeatureMapper> mappers;
 
-  @Timed(value = "uds.comment-input.use_cases", extraTags = { "action", "batchCreateFeatures" })
+  @Timed(value = "uds.feature.use_cases", extraTags = { "action", "batchCreateFeatures" })
   @Override
   public BatchCreateAgentInputsResponse batchCreateMatchFeatures(
       Collection<AgentInput> agentInputs) {

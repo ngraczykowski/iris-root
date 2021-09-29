@@ -4,7 +4,7 @@ import com.silenteight.datasource.categories.api.v2.*;
 
 import java.util.List;
 
-public class CategoryIntegrationTestFixture {
+class CategoryIntegrationTestFixture {
 
   static BatchCreateCategoriesRequest getBatchCategories() {
 

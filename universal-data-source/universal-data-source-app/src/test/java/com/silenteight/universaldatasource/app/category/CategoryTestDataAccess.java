@@ -2,7 +2,7 @@ package com.silenteight.universaldatasource.app.category;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-public class CategoryTestDataAccess {
+class CategoryTestDataAccess {
 
   static int streamedCategoriesCount(JdbcTemplate jdbcTemplate) {
     return jdbcTemplate.queryForObject(
