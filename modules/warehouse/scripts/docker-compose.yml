@@ -117,6 +117,10 @@ services:
           memory: 1G
         reservations:
           memory: 1G
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_preload_libraries=pg_stat_statements"
 
 volumes:
   warehouse-es1:

@@ -30,22 +30,25 @@ public class AlertIndexService {
 
   private final int updateRequestBatchSize;
 
-  public void indexAlerts(List<Alert> alerts, String indexName) {
+  public void indexAlerts(List<Alert> alerts, WriteIndexResolver indexProvider) {
     partition(alerts, updateRequestBatchSize)
-        .forEach(alertsBatch -> indexAlertsBatch(alertsBatch, indexName));
+        .forEach(alertsBatch -> indexAlertsBatch(alertsBatch, indexProvider));
   }
 
-  void indexAlertsBatch(List<Alert> alerts, String indexName) {
+  void indexAlertsBatch(List<Alert> alerts, WriteIndexResolver indexProvider) {
+    indexProvider.prepareIndexNames(alerts);
     BulkRequest bulkRequest = new BulkRequest();
 
     alerts.stream()
-        .map(alert -> convertAlertToDocument(indexName, alert))
+        .map(alert -> convertAlertToDocument(indexProvider, alert))
         .forEach(bulkRequest::add);
 
     trySaveAlert(bulkRequest);
   }
 
-  private UpdateRequest convertAlertToDocument(String indexName, Alert alert) {
+  private UpdateRequest convertAlertToDocument(WriteIndexResolver indexProvider, Alert alert) {
+    String indexName = indexProvider.getIndexName(alert);
+
     UpdateRequest updateRequest = new UpdateRequest(indexName, alert.getDiscriminator());
     updateRequest.doc(alertMapper.convertAlertToAttributes(alert));
     updateRequest.docAsUpsert(true);

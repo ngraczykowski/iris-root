@@ -1,11 +1,17 @@
 package com.silenteight.warehouse.indexer.analysis;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import lombok.RequiredArgsConstructor;
 
-@Configuration
-@Import(AnalysisConfiguration.class)
+import com.silenteight.warehouse.common.environment.EnvironmentModule;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+
+@ComponentScan(basePackageClasses = {
+    AnalysisConfiguration.class,
+    EnvironmentModule.class
+})
+@RequiredArgsConstructor
 public class AnalysisTestConfiguration {
 
   @Bean

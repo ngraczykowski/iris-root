@@ -8,6 +8,7 @@ import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestC
 
 import org.elasticsearch.ElasticsearchException;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,44 +32,52 @@ import static org.awaitility.Awaitility.await;
 @Slf4j
 class AlertIT {
 
+  private static final String PRODUCTION_WRITE_INDEX_NAME = PRODUCTION_ELASTIC_INDEX_NAME + ".new";
+  private static final String PRODUCTION_READ_ALIAS_NAME = PRODUCTION_ELASTIC_INDEX_NAME;
+  private static final WriteIndexResolver INDEX_RESOLVER =
+      new FixedIndexedResolver(PRODUCTION_WRITE_INDEX_NAME);
+
   @Autowired
   private AlertIndexService underTest;
 
   @Autowired
   private SimpleElasticTestClient simpleElasticTestClient;
 
+  @BeforeEach
+  void init() {
+    simpleElasticTestClient.createIndexTemplate(
+        PRODUCTION_WRITE_INDEX_NAME, PRODUCTION_READ_ALIAS_NAME);
+  }
+
   @AfterEach
   void cleanup() {
-    cleanData();
+    simpleElasticTestClient.removeIndexTemplate();
+    safeDeleteIndex(PRODUCTION_WRITE_INDEX_NAME);
   }
 
   @Test
   void shouldIgnoreMissingMatches() {
-    underTest.indexAlerts(of(ALERT_WITHOUT_MATCHES), PRODUCTION_ELASTIC_INDEX_NAME);
+    underTest.indexAlerts(of(ALERT_WITHOUT_MATCHES), INDEX_RESOLVER);
 
     await()
         .atMost(5, SECONDS)
-        .until(() -> simpleElasticTestClient.getDocumentCount(PRODUCTION_ELASTIC_INDEX_NAME) > 0);
+        .until(() -> simpleElasticTestClient.getDocumentCount(PRODUCTION_READ_ALIAS_NAME) > 0);
 
-    long documentCount = simpleElasticTestClient.getDocumentCount(PRODUCTION_ELASTIC_INDEX_NAME);
+    long documentCount = simpleElasticTestClient.getDocumentCount(PRODUCTION_READ_ALIAS_NAME);
     assertThat(documentCount).isEqualTo(1);
   }
 
   @Test
   void shouldCreateSingleDocumentForEachAlert() {
     List<Alert> alerts = of(ALERT_1, ALERT_2);
-    underTest.indexAlerts(alerts, PRODUCTION_ELASTIC_INDEX_NAME);
+    underTest.indexAlerts(alerts, INDEX_RESOLVER);
 
     await()
         .atMost(5, SECONDS)
-        .until(() -> simpleElasticTestClient.getDocumentCount(PRODUCTION_ELASTIC_INDEX_NAME) > 0);
+        .until(() -> simpleElasticTestClient.getDocumentCount(PRODUCTION_READ_ALIAS_NAME) > 0);
 
-    long documentCount = simpleElasticTestClient.getDocumentCount(PRODUCTION_ELASTIC_INDEX_NAME);
+    long documentCount = simpleElasticTestClient.getDocumentCount(PRODUCTION_READ_ALIAS_NAME);
     assertThat(documentCount).isEqualTo(alerts.size());
-  }
-
-  private void cleanData() {
-    safeDeleteIndex(PRODUCTION_ELASTIC_INDEX_NAME);
   }
 
   private void safeDeleteIndex(String index) {

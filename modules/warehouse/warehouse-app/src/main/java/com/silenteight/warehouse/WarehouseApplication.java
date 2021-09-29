@@ -19,6 +19,7 @@ import com.silenteight.warehouse.configurationmanagement.ConfigurationManagement
 import com.silenteight.warehouse.indexer.alert.AlertModule;
 import com.silenteight.warehouse.indexer.analysis.AnalysisModule;
 import com.silenteight.warehouse.indexer.indexing.MessageHandlerModule;
+import com.silenteight.warehouse.indexer.indextracking.IndexTrackingModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 import com.silenteight.warehouse.management.ManagementModule;
 import com.silenteight.warehouse.report.accuracy.AccuracyReportModule;
@@ -55,6 +56,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     BillingReportModule.class,
     ConfigurationManagementModule.class,
     MessageHandlerModule.class,
+    IndexTrackingModule.class,
     ManagementModule.class,
     MetricsReportModule.class,
     RbsReportModule.class,

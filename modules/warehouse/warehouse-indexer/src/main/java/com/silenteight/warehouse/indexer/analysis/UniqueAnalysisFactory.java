@@ -15,8 +15,10 @@ public class UniqueAnalysisFactory {
   @NonNull
   private final SimulationAnalysisService simulationAnalysisService;
 
-  public AnalysisMetadataDto getUniqueAnalysis(
-      String analysis, SimulationNamingStrategy simulationNamingStrategy) {
+  @NonNull
+  private final SimulationNamingStrategy simulationNamingStrategy;
+
+  public AnalysisMetadataDto getUniqueAnalysis(String analysis) {
 
     Optional<AnalysisMetadataDto> analysisMetadata =
         simulationAnalysisService.getAnalysisMetadata(analysis);

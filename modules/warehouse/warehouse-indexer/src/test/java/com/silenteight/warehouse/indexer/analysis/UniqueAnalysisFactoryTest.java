@@ -10,7 +10,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture.ANALYSIS;
-import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture.SIMULATION_NAMING_STRATEGY;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
 
@@ -44,7 +43,7 @@ class UniqueAnalysisFactoryTest extends BaseDataJpaTest {
   @Test
   void shouldProvideAnalysisMetadata() {
     AnalysisMetadataDto uniqueAnalysis =
-        underTest.getUniqueAnalysis(ANALYSIS, SIMULATION_NAMING_STRATEGY);
+        underTest.getUniqueAnalysis(ANALYSIS);
 
     assertThat(uniqueAnalysis.getTenant()).isNotNull();
     assertThat(uniqueAnalysis.getElasticIndexName()).isNotNull();
@@ -52,8 +51,8 @@ class UniqueAnalysisFactoryTest extends BaseDataJpaTest {
 
   @Test
   void shouldHandleMultipleCalls() {
-    underTest.getUniqueAnalysis(ANALYSIS, SIMULATION_NAMING_STRATEGY);
-    underTest.getUniqueAnalysis(ANALYSIS, SIMULATION_NAMING_STRATEGY);
+    underTest.getUniqueAnalysis(ANALYSIS);
+    underTest.getUniqueAnalysis(ANALYSIS);
 
     assertThat(testNewAnalysisHandler.getEventReceivedCount()).isEqualTo(1);
   }

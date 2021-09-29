@@ -35,7 +35,7 @@ public class GroupingQueryService {
   @NonNull
   private final OpendistroElasticClient opendistroElasticClient;
   @NonNull
-  private final FieldsQueryIndexService queryIndexService;
+  private final FieldsQueryIndexService fieldsQueryIndexService;
 
   public FetchGroupedDataResponse generate(
       FetchGroupedTimeRangedDataRequest fetchGroupedDataRequest) {
@@ -43,7 +43,7 @@ public class GroupingQueryService {
     log.debug("Elastic GroupingQueryService: {}", fetchGroupedDataRequest);
 
     SafetyQueryProcessor safetyQueryProcessor =
-        new SafetyQueryProcessor(fetchGroupedDataRequest.getIndexes(), queryIndexService);
+        new SafetyQueryProcessor(fetchGroupedDataRequest.getIndexes(), fieldsQueryIndexService);
 
     List<String> existingFields = safetyQueryProcessor
         .filterOutNonExistingFields(fetchGroupedDataRequest.getFields());

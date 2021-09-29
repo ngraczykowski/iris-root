@@ -50,4 +50,25 @@
       <column name="created_at"/>
     </createIndex>
   </changeSet>
+
+  <changeSet id="warehouse-1.9.0-3" author="anowicki">
+    <createTable tableName="warehouse_production_alert">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="discriminator" type="VARCHAR(128)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="index_name" type="VARCHAR(128)">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_production_alert"
+        indexName="ix_warehouse_production_alert_discriminator"
+        unique="true">
+      <column name="discriminator"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>

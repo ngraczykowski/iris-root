@@ -42,5 +42,8 @@ spring:
       hibernate.jdbc.lob.non_contextual_creation: true
       hibernate.jdbc.time_zone: UTC
       hibernate.temp.use_jdbc_metadata_defaults: false
+      hibernate.jdbc.batch_size: 1000
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
       org.hibernate.envers.audit_table_suffix: _audit
       org.hibernate.envers.store_data_at_delete: true
