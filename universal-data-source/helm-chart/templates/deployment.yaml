@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: { { .Values.name } }
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+
+    spec:
+      containers:
+        - name: {{ .Values.name }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbeHttpGetPath }}
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbeHttpGetPath }}
+              port: 8080
+          env:
+            - name: 'UDS_DB_HOST'app
+              value: {{ .Values.udsDbHost }}
+            - name: 'USD_DB_PORT'
+              value: {{ .Values.udsDbPort | quote }}
+            - name: 'UDS_DB_NAME'
+              value: {{ .Values.udsDbName }}
+            - name: 'UDS_DB_USERNAME'
+              value: {{ .Values.udsDbUsername }}
+            - name: 'UDS_DB_PASSWORD'
+              value: {{ .Values.udsDbPassword }}
+          image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
+          imagePullPolicy: { { .Values.imagePullPolicy } }
+          args: {{ .Values.args }}
+          ports:
+            - containerPort: { { .Values.ports.http } }
+              protocol: TCP
+            - containerPort: { { .Values.ports.grpc } }
+              protocol: TCP

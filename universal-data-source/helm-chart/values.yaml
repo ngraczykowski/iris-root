@@ -1,0 +1,15 @@
+name: universal-data-source-app
+image_tag: dummy
+image_repo: dummy
+args: [ "name" ]
+config:
+  name: universalDatasourceApp
+ports:
+  http: 8080
+  grpc: 8081
+
+
+replicaCount: 1
+imagePullPolicy: Always
+livenessProbeHttpGetPath: "/rest/uds/management/health/livenessState"
+readinessProbeHttpGetPath: "/rest/uds/management/health/readinessState"
