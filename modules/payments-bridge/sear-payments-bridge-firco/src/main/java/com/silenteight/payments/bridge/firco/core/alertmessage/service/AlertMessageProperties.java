@@ -14,4 +14,6 @@ class AlertMessageProperties {
 
   private Duration decisionRequestedTime = Duration.ofSeconds(30);
 
+  private boolean originalMessageDeletedAfterRecommendation = true;
+
 }

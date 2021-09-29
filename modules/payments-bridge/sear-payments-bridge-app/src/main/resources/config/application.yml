@@ -30,6 +30,7 @@ pb:
   alert-message:
     stored-queue-limit: 1000
     decision-requested-time: 30s
+    original-message-deleted-after-recommendation: true
 
 #---------------------------------------------------------------------------------------------------
 # SERVER
