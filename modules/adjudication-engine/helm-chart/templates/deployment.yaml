@@ -19,13 +19,13 @@ spec:
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbeHttpGetPath }}
-              port: {{ .Values.ports.http | quote }}
+              port: {{ .Values.ports.http }}
             initialDelaySeconds: 10
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbeHttpGetPath }}
-              port: {{ .Values.ports.http | quote }}
+              port: {{ .Values.ports.http }}
           env:
             - name: 'AE_DB_HOST'
               value: {{ .Values.aeDbHost }}
