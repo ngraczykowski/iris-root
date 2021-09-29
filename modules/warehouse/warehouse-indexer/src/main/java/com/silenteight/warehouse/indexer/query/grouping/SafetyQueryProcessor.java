@@ -20,10 +20,10 @@ public class SafetyQueryProcessor {
 
   SafetyQueryProcessor(
       @NonNull List<String> indexes,
-      @NonNull FieldsQueryIndexService queryIndexService) {
+      @NonNull FieldsQueryIndexService fieldsQueryIndexService) {
 
     allAvailableFields = indexes.stream()
-        .flatMap(index -> queryIndexService.getFieldsList(index).stream())
+        .flatMap(index -> fieldsQueryIndexService.getFieldsList(index).stream())
         .collect(toList());
   }
 

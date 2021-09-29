@@ -9,8 +9,8 @@ import com.silenteight.data.api.v1.SimulationDataIndexRequest;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.indexer.alert.AlertCopyDataService;
 import com.silenteight.warehouse.indexer.alert.AlertIndexService;
+import com.silenteight.warehouse.indexer.alert.FixedIndexedResolver;
 import com.silenteight.warehouse.indexer.analysis.AnalysisMetadataDto;
-import com.silenteight.warehouse.indexer.analysis.SimulationNamingStrategy;
 import com.silenteight.warehouse.indexer.analysis.UniqueAnalysisFactory;
 import com.silenteight.warehouse.indexer.indexing.listener.SimulationIndexRequestCommandHandler;
 
@@ -32,29 +32,31 @@ public class SimulationAlertIndexUseCase implements SimulationIndexRequestComman
   @NonNull
   private final TimeSource timeSource;
 
-  @NonNull
-  private final String environmentPrefix;
-
   @Override
   public DataIndexResponse handle(SimulationDataIndexRequest request) {
     log.debug("SimulationDataIndexRequest received, requestId={}, alertCount={}",
         request.getRequestId(), request.getAlertsCount());
 
-    SimulationNamingStrategy namingStrategy = new SimulationNamingStrategy(environmentPrefix);
-    AnalysisMetadataDto analysisMetadataDto = uniqueAnalysisFactory.getUniqueAnalysis(
-        request.getAnalysisName(), namingStrategy);
+    AnalysisMetadataDto uniqueAnalysis =
+        uniqueAnalysisFactory.getUniqueAnalysis(request.getAnalysisName());
 
     alertCopyDataService.copyProductionIntoSimulation(
-        request.getAlertsList(), analysisMetadataDto.getElasticIndexName());
-    alertIndexService.indexAlerts(
-        request.getAlertsList(), analysisMetadataDto.getElasticIndexName());
+        request.getAlertsList(), uniqueAnalysis.getElasticIndexName());
 
-    log.debug("SimulationDataIndexRequest processed, requestId={}, strategy={}, analysis={}",
-        request.getRequestId(), namingStrategy, analysisMetadataDto);
+    alertIndexService.indexAlerts(
+        request.getAlertsList(), simulationWriteIndexProvider(uniqueAnalysis));
+
+    log.debug("SimulationDataIndexRequest processed, requestId={}", request.getRequestId());
 
     return DataIndexResponse.newBuilder()
         .setRequestId(request.getRequestId())
         .setIndexTime(toTimestamp(timeSource.now()))
         .build();
+  }
+
+  private FixedIndexedResolver simulationWriteIndexProvider(
+      AnalysisMetadataDto analysisMetadataDto) {
+
+    return new FixedIndexedResolver(analysisMetadataDto.getElasticIndexName());
   }
 }

@@ -61,20 +61,6 @@ class IndexerIT {
   static final String PRODUCTION_QUERY_INDEX_NAME = "itest_production";
   static final String SIMULATION_INDEX_NAME = "itest_simulation_" + SIMULATION_ANALYSIS_ID;
 
-  @BeforeEach
-  void init() {
-    simpleElasticTestClient.createIndexTemplate(
-        PRODUCTION_QUERY_INDEX_NAME + "*", PRODUCTION_QUERY_INDEX_NAME);
-
-    indexedEventListener.clear();
-  }
-
-  @AfterEach
-  void cleanup() {
-    testAnalysisMetadataRepository.truncateAnalysisMetadata();
-    removeData();
-  }
-
   @Autowired
   private TestAnalysisMetadataRepository testAnalysisMetadataRepository;
 
@@ -89,6 +75,21 @@ class IndexerIT {
 
   @Autowired
   private SimpleElasticTestClient simpleElasticTestClient;
+
+  @BeforeEach
+  void init() {
+    simpleElasticTestClient.createIndexTemplate(
+        PRODUCTION_QUERY_INDEX_NAME + "*", PRODUCTION_QUERY_INDEX_NAME);
+
+    indexedEventListener.clear();
+  }
+
+  @AfterEach
+  void cleanup() {
+    testAnalysisMetadataRepository.truncateAnalysisMetadata();
+    simpleElasticTestClient.removeIndexTemplate();
+    removeData();
+  }
 
   @Test
   void shouldReturnConfirmationWhenProductionDataIndexRequested() {

@@ -93,6 +93,7 @@ technical_user_testsetup:
   cluster_permissions:
     - 'cluster:admin/opendistro/reports/definition/create'
     - 'cluster:admin/opendistro/reports/definition/delete'
+    - 'indices:admin/template/delete'
   index_permissions:
     - index_patterns:
         - 'itest_production*'

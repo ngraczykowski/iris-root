@@ -19,6 +19,7 @@ import com.silenteight.warehouse.indexer.alert.AlertModule;
 import com.silenteight.warehouse.indexer.analysis.AnalysisModule;
 import com.silenteight.warehouse.indexer.indexing.IndexerIntegrationProperties;
 import com.silenteight.warehouse.indexer.indexing.MessageHandlerModule;
+import com.silenteight.warehouse.indexer.indextracking.IndexTrackingModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 import com.silenteight.warehouse.test.client.TestClientModule;
 import com.silenteight.warehouse.test.client.gateway.IndexerClientIntegrationProperties;
@@ -41,6 +42,7 @@ import static org.mockito.Mockito.*;
     AnalysisModule.class,
     ElasticsearchRestClientModule.class,
     EnvironmentModule.class,
+    IndexTrackingModule.class,
     MessageHandlerModule.class,
     OpendistroModule.class,
     QueryAlertModule.class,

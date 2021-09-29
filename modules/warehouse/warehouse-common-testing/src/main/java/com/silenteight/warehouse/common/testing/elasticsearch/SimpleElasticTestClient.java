@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
+import org.elasticsearch.action.admin.indices.template.delete.DeleteIndexTemplateRequest;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -21,6 +22,7 @@ import static org.elasticsearch.client.RequestOptions.DEFAULT;
 @RequiredArgsConstructor
 public class SimpleElasticTestClient {
 
+  private static final String INDEX_TEMPLATE = "itest-template";
   private final RestHighLevelClient restHighLevelClient;
 
   @SneakyThrows
@@ -57,10 +59,17 @@ public class SimpleElasticTestClient {
 
   @SneakyThrows
   public void createIndexTemplate(String indexPattern, String aliasName) {
-    PutIndexTemplateRequest request = new PutIndexTemplateRequest("itest-template")
+    PutIndexTemplateRequest request = new PutIndexTemplateRequest(INDEX_TEMPLATE)
         .patterns(of(indexPattern))
         .alias(new Alias(aliasName));
 
     restHighLevelClient.indices().putTemplate(request, DEFAULT);
+  }
+
+  @SneakyThrows
+  public void removeIndexTemplate() {
+    DeleteIndexTemplateRequest request = new DeleteIndexTemplateRequest(INDEX_TEMPLATE);
+
+    restHighLevelClient.indices().deleteTemplate(request, DEFAULT);
   }
 }

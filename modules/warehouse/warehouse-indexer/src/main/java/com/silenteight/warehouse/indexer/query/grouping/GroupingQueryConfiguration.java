@@ -16,8 +16,9 @@ class GroupingQueryConfiguration {
   @Bean
   GroupingQueryService customReportingService(
       OpendistroElasticClient opendistroElasticClient,
-      FieldsQueryIndexService queryIndexService) {
+      FieldsQueryIndexService fieldsQueryIndexService) {
 
-    return new GroupingQueryService(new SqlBuilder(), opendistroElasticClient, queryIndexService);
+    return new GroupingQueryService(
+        new SqlBuilder(), opendistroElasticClient, fieldsQueryIndexService);
   }
 }
