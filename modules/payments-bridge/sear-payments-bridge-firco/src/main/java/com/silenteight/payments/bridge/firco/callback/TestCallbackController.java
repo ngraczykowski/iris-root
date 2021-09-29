@@ -3,13 +3,13 @@ package com.silenteight.payments.bridge.firco.callback;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.firco.dto.common.StatusInfoDto;
-import com.silenteight.payments.bridge.firco.dto.output.AlertDecisionMessageDto;
+import com.silenteight.payments.bridge.firco.adapter.incoming.dto.common.StatusInfoDto;
+import com.silenteight.payments.bridge.firco.adapter.incoming.dto.output.AlertDecisionMessageDto;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.silenteight.payments.bridge.firco.core.alertmessage.model.AlertMessageStatus.RECOMMENDED;
+import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.RECOMMENDED;
 
 @RequiredArgsConstructor
 @RestController

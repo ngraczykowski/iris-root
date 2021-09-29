@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.model.AlertMessageModel;
-import com.silenteight.payments.bridge.firco.dto.input.AlertMessageDto;
+import com.silenteight.payments.bridge.firco.adapter.incoming.dto.input.AlertMessageDto;
 
 import org.springframework.util.AlternativeJdkIdGenerator;
 import org.springframework.util.IdGenerator;

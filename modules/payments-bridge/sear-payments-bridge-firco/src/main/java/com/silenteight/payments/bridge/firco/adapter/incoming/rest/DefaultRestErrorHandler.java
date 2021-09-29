@@ -1,6 +1,6 @@
 package com.silenteight.payments.bridge.firco.adapter.incoming.rest;
 
-import com.silenteight.payments.bridge.firco.dto.common.AckDto;
+import com.silenteight.payments.bridge.firco.adapter.incoming.dto.common.AckDto;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

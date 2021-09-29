@@ -3,9 +3,9 @@ package com.silenteight.payments.bridge.firco.adapter.incoming.rest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.firco.dto.common.AckDto;
-import com.silenteight.payments.bridge.firco.dto.input.RequestDto;
-import com.silenteight.payments.bridge.firco.dto.validator.MinimalAlertDefinition;
+import com.silenteight.payments.bridge.firco.adapter.incoming.dto.common.AckDto;
+import com.silenteight.payments.bridge.firco.adapter.incoming.dto.input.RequestDto;
+import com.silenteight.payments.bridge.firco.adapter.incoming.dto.validator.MinimalAlertDefinition;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.integration.channel.AlertDeliveredChannel;
 import com.silenteight.payments.bridge.event.AlertDelivered;
-import com.silenteight.payments.bridge.firco.core.alertmessage.port.AlertMessageUseCase;
+import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.messaging.Message;

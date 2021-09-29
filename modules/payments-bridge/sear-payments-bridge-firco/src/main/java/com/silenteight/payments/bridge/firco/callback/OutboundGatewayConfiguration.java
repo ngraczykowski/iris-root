@@ -2,8 +2,8 @@ package com.silenteight.payments.bridge.firco.callback;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.firco.core.alertmessage.integration.AlertMessageChannels;
-import com.silenteight.payments.bridge.firco.dto.output.ClientRequestDto;
+import com.silenteight.payments.bridge.firco.adapter.incoming.dto.output.ClientRequestDto;
+import com.silenteight.payments.bridge.firco.alertmessage.integration.AlertMessageChannels;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
