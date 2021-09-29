@@ -41,16 +41,4 @@ class IndexerConfiguration {
     return new ProductionAlertIndexUseCase(
         alertIndexService, timeSource, environmentProperties.getPrefix());
   }
-
-  @Bean
-  ProductionIndexingQuery productionIndexingQuery(
-      @Valid EnvironmentProperties environmentProperties) {
-    return new ProductionIndexingQuery(environmentProperties.getPrefix());
-  }
-
-  @Bean
-  SimulationIndexingQuery simulationIndexingQuery(
-      @Valid EnvironmentProperties environmentProperties) {
-    return new SimulationIndexingQuery(environmentProperties.getPrefix());
-  }
 }

@@ -32,7 +32,8 @@ public class ProductionAlertIndexUseCase implements ProductionIndexRequestComman
         request.getRequestId(), request.getAlertsCount());
 
     ProductionNamingStrategy namingStrategy = new ProductionNamingStrategy(environmentPrefix);
-    alertIndexService.indexAlerts(request.getAlertsList(), namingStrategy.getElasticIndexName());
+    alertIndexService.indexAlerts(
+        request.getAlertsList(), namingStrategy.getElasticWriteIndexName());
 
     log.debug("ProductionDataIndexRequest processed, requestId={}, strategy={}",
         request.getRequestId(), namingStrategy);

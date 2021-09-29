@@ -29,7 +29,7 @@ class QueryIndexServiceTest {
   SimpleElasticTestClient testClient;
 
   @Autowired
-  QueryIndexService underTest;
+  FieldsQueryIndexService underTest;
 
   @AfterEach
   public void cleanup() {

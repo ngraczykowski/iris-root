@@ -2,7 +2,7 @@ package com.silenteight.warehouse.indexer.query.grouping;
 
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.indexer.alert.ElasticsearchProperties;
-import com.silenteight.warehouse.indexer.query.index.QueryIndexService;
+import com.silenteight.warehouse.indexer.query.index.FieldsQueryIndexService;
 import com.silenteight.warehouse.indexer.query.sql.SqlBuilder;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -16,7 +16,7 @@ class GroupingQueryConfiguration {
   @Bean
   GroupingQueryService customReportingService(
       OpendistroElasticClient opendistroElasticClient,
-      QueryIndexService queryIndexService) {
+      FieldsQueryIndexService queryIndexService) {
 
     return new GroupingQueryService(new SqlBuilder(), opendistroElasticClient, queryIndexService);
   }

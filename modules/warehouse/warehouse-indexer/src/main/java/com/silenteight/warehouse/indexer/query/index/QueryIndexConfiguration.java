@@ -1,16 +1,35 @@
 package com.silenteight.warehouse.indexer.query.index;
 
+import com.silenteight.warehouse.common.environment.EnvironmentProperties;
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.indexer.query.sql.SqlBuilder;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.validation.Valid;
+
 @Configuration
 class QueryIndexConfiguration {
 
   @Bean
-  QueryIndexService indexService(OpendistroElasticClient opendistroElasticClient) {
-    return new QueryIndexService(new SqlBuilder(), opendistroElasticClient);
+  FieldsQueryIndexService fieldsQueryIndexService(
+      OpendistroElasticClient opendistroElasticClient) {
+
+    return new FieldsQueryIndexService(new SqlBuilder(), opendistroElasticClient);
+  }
+
+  @Bean
+  ProductionIndexingQuery productionIndexingQuery(
+      @Valid EnvironmentProperties environmentProperties) {
+
+    return new ProductionIndexingQuery(environmentProperties.getPrefix());
+  }
+
+  @Bean
+  SimulationIndexingQuery simulationIndexingQuery(
+      @Valid EnvironmentProperties environmentProperties) {
+
+    return new SimulationIndexingQuery(environmentProperties.getPrefix());
   }
 }

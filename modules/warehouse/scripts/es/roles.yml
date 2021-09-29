@@ -38,11 +38,12 @@ technical_user:
     - 'indices:data/read/mget'
     - 'cluster:admin/opendistro/reports/definition/create'
     - 'indices:data/read/scroll/clear'
+    - 'indices:admin/template/put'
   index_permissions:
     - index_patterns:
-        - 'itest_production'
+        - 'itest_production*'
         - 'itest_simulation_*'
-        - 'local_production'
+        - 'local_production*'
         - 'local_simulation_*'
       allowed_actions:
         - 'indices:data/read/get'
@@ -71,9 +72,9 @@ business_user:
     - 'indices:data/read/scroll/clear'
   index_permissions:
     - index_patterns:
-        - 'itest_production'
+        - 'itest_production*'
         - 'itest_simulation_*'
-        - 'local_production'
+        - 'local_production*'
         - 'local_simulation_*'
       allowed_actions:
         - 'indices:data/read/get'
@@ -94,9 +95,9 @@ technical_user_testsetup:
     - 'cluster:admin/opendistro/reports/definition/delete'
   index_permissions:
     - index_patterns:
-        - 'itest_production'
+        - 'itest_production*'
         - 'itest_simulation_*'
-        - 'local_production'
+        - 'local_production*'
         - 'local_simulation_*'
       allowed_actions:
         - 'indices:admin/delete'
@@ -111,8 +112,8 @@ technical_user_testsetup:
   reserved: false
   index_permissions:
     - index_patterns:
-        - 'itest_production'
+        - 'itest_production*'
         - 'itest_simulation_*'
-        - 'local_production'
+        - 'local_production*'
         - 'local_simulation_*'
       dls: '{"terms": {"s8_country.keyword": ["UK","PL"],"boost": 1}}'

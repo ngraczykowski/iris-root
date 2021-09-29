@@ -9,7 +9,7 @@ import com.silenteight.warehouse.common.opendistro.elastic.QueryDto;
 import com.silenteight.warehouse.common.opendistro.elastic.QueryResultDto;
 import com.silenteight.warehouse.common.opendistro.elastic.QueryResultDto.SchemaEntry;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
-import com.silenteight.warehouse.indexer.query.index.QueryIndexService;
+import com.silenteight.warehouse.indexer.query.index.FieldsQueryIndexService;
 import com.silenteight.warehouse.indexer.query.sql.MultiValueCondition;
 import com.silenteight.warehouse.indexer.query.sql.SingleValueCondition;
 import com.silenteight.warehouse.indexer.query.sql.SqlBuilder;
@@ -35,7 +35,7 @@ public class GroupingQueryService {
   @NonNull
   private final OpendistroElasticClient opendistroElasticClient;
   @NonNull
-  private final QueryIndexService queryIndexService;
+  private final FieldsQueryIndexService queryIndexService;
 
   public FetchGroupedDataResponse generate(
       FetchGroupedTimeRangedDataRequest fetchGroupedDataRequest) {

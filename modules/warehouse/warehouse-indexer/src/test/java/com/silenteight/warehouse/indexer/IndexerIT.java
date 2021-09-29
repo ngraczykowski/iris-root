@@ -58,11 +58,14 @@ import static org.awaitility.Awaitility.await;
 @ActiveProfiles("jpa-test")
 class IndexerIT {
 
-  static final String PRODUCTION_INDEX_NAME = "itest_production";
+  static final String PRODUCTION_QUERY_INDEX_NAME = "itest_production";
   static final String SIMULATION_INDEX_NAME = "itest_simulation_" + SIMULATION_ANALYSIS_ID;
 
   @BeforeEach
   void init() {
+    simpleElasticTestClient.createIndexTemplate(
+        PRODUCTION_QUERY_INDEX_NAME + "*", PRODUCTION_QUERY_INDEX_NAME);
+
     indexedEventListener.clear();
   }
 
@@ -104,7 +107,7 @@ class IndexerIT {
         .extracting(DataIndexResponse::getRequestId)
         .isEqualTo(request.getRequestId());
 
-    var source = simpleElasticTestClient.getSource(PRODUCTION_INDEX_NAME, DOCUMENT_ID);
+    var source = simpleElasticTestClient.getSource(PRODUCTION_QUERY_INDEX_NAME, DOCUMENT_ID);
     assertThat(source).isEqualTo(MAPPED_ALERT_1);
   }
 
@@ -140,7 +143,7 @@ class IndexerIT {
         .atMost(5, SECONDS)
         .until(() -> indexedEventListener.hasAtLeastEventCount(2));
 
-    var source = simpleElasticTestClient.getSource(PRODUCTION_INDEX_NAME, DOCUMENT_ID);
+    var source = simpleElasticTestClient.getSource(PRODUCTION_QUERY_INDEX_NAME, DOCUMENT_ID);
     assertThat(source).containsAllEntriesOf(Map.of(
         MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
         MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP));
@@ -203,7 +206,7 @@ class IndexerIT {
 
   private void removeData() {
     safeDeleteIndex(SIMULATION_INDEX_NAME);
-    safeDeleteIndex(PRODUCTION_INDEX_NAME);
+    safeDeleteIndex(PRODUCTION_QUERY_INDEX_NAME);
   }
 
   private void safeDeleteIndex(String index) {

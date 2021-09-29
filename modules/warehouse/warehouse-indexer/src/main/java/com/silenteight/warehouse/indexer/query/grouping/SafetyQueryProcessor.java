@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.warehouse.indexer.query.index.QueryIndexService;
+import com.silenteight.warehouse.indexer.query.index.FieldsQueryIndexService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class SafetyQueryProcessor {
 
   SafetyQueryProcessor(
       @NonNull List<String> indexes,
-      @NonNull QueryIndexService queryIndexService) {
+      @NonNull FieldsQueryIndexService queryIndexService) {
 
     allAvailableFields = indexes.stream()
         .flatMap(index -> queryIndexService.getFieldsList(index).stream())

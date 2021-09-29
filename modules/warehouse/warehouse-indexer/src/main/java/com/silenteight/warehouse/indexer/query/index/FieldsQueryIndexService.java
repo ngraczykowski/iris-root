@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-public class QueryIndexService {
+public class FieldsQueryIndexService {
 
   private static final String COLUMN_NAME_KEY = "COLUMN_NAME";
 

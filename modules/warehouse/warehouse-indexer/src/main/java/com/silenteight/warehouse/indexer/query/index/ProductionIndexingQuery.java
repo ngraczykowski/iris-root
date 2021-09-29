@@ -1,9 +1,9 @@
-package com.silenteight.warehouse.indexer.indexing;
+package com.silenteight.warehouse.indexer.query.index;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.warehouse.indexer.analysis.ProductionNamingStrategy;
+import com.silenteight.warehouse.indexer.indexing.IndexesQuery;
 
 import java.util.List;
 
@@ -13,10 +13,10 @@ import static java.util.Collections.singletonList;
 class ProductionIndexingQuery implements IndexesQuery {
 
   @NonNull
-  private final String environmentPrefix;
+  private final String productionAliasName;
 
   @Override
   public List<String> getIndexesForAnalysis(String analysisName) {
-    return singletonList(new ProductionNamingStrategy(environmentPrefix).getElasticIndexName());
+    return singletonList(productionAliasName);
   }
 }
