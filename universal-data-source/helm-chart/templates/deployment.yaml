@@ -37,10 +37,13 @@ spec:
             - name: 'UDS_DB_USERNAME'
               value: {{ .Values.udsDbUsername }}
             - name: 'UDS_DB_PASSWORD'
-              value: {{ .Values.udsDbPassword }}
+              value: {{ .Values.udsDbPassword | quote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
+          resources:
+            limits:
+              memory: {{ .Values.memoryLimit | quote }}
           ports:
             - containerPort: 8080
               protocol: TCP

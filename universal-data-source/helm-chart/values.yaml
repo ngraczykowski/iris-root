@@ -13,3 +13,4 @@ replicaCount: 1
 imagePullPolicy: Always
 livenessProbeHttpGetPath: "/rest/uds/management/health/livenessState"
 readinessProbeHttpGetPath: "/rest/uds/management/health/readinessState"
+memoryLimit: 512Mi
