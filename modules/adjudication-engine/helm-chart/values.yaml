@@ -15,7 +15,7 @@ livenessProbeHttpGetPath: "/rest/ae/management/health/livenessState"
 readinessProbeHttpGetPath: "/rest/ae/management/health/readinessState"
 grpc:
   client:
-    data-source:
+    data_source:
       address: "static://sear-payments-bridge-service:8081"
     governance:
       address: "static://governance-app-service:8081"

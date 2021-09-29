@@ -54,7 +54,7 @@ spec:
             - name: 'SERVER_PORT'
               value: {{ .Values.ports.http | quote }}
             - name: 'GRPC_CLIENT_DATA_SOURCE_ADDRESS'
-              value: {{ .Values.grpc.client.data-source.address | quote }}
+              value: {{ .Values.grpc.client.data_source.address | quote }}
             - name: 'GRPC_CLIENT_GOVERNANCE_ADDRESS'
               value: {{ .Values.grpc.client.governance.address | quote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
