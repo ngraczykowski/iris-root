@@ -3,6 +3,7 @@ plugins {
   id "maven-publish"
   id "io.freefair.aspectj.post-compile-weaving"
   id "org.springframework.boot"
+  id "com.google.cloud.tools.jib"
 }
 
 description = "Simulator"
