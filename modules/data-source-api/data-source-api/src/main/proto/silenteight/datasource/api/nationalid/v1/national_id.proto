@@ -40,7 +40,7 @@ message NationalIdFeatureInput {
   repeated string alerted_party_document_numbers = 2;
   repeated string watchlist_document_numbers = 3;
 
-  // country from other sources
-  string alerted_party_country = 4;
-  string watchlist_country = 5;
+  // countries from other sources
+  repeated string alerted_party_countries = 4;
+  repeated string watchlist_countries = 5;
 }
