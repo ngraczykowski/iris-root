@@ -42,6 +42,7 @@ class ReadAlertsUseCase {
 
         return alertsReadingResponse;
       } catch (Exception e) {
+        log.error("There was a problem when processing alert = {}", e.getMessage());
         throw new ReadAlertException(e);
       }
     });

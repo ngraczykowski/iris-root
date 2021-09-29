@@ -27,20 +27,35 @@ class AwsCsvProvider implements CsvFileProvider {
 
     var s3Client = S3Client.builder().build();
 
-    var responseInputStream = s3Client.getObject(
-        GetObjectRequest
-            .builder()
-            .bucket(learningRequest.getBucket())
-            .key(learningRequest.getObject())
-            .build());
+    AlertsReadingResponse response;
+    try (
+        var responseInputStream = s3Client.getObject(
+            GetObjectRequest
+                .builder()
+                .bucket(learningRequest.getBucket())
+                .key(learningRequest.getObject())
+                .build())) {
 
-    log.info("Received S3 CVS object");
+      log.info("Received S3 CVS object");
 
-    var response = csvConsumer.apply(
-        LearningCsv.fromS3Object(learningRequest.getObject(), responseInputStream));
+      response = csvConsumer.apply(
+          LearningCsv.fromS3Object(learningRequest.getObject(), responseInputStream));
+    } catch (Exception e) {
+      log.error("There was a problem when receiving s3 object = " + e.getMessage());
+      throw new AwsS3Exception(e);
+    }
 
     s3Client.close();
 
     return response;
+  }
+
+  private static final class AwsS3Exception extends RuntimeException {
+
+    private static final long serialVersionUID = 3289330223618728867L;
+
+    AwsS3Exception(Exception e) {
+      super("There was a problem when receiving s3 object = " + e.getMessage());
+    }
   }
 }
