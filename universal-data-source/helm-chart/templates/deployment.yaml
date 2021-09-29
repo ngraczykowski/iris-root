@@ -30,7 +30,7 @@ spec:
           env:
             - name: 'UDS_DB_HOST'
               value: {{ .Values.udsDbHost }}
-            - name: 'USD_DB_PORT'
+            - name: 'UDS_DB_PORT'
               value: {{ .Values.udsDbPort | quote }}
             - name: 'UDS_DB_NAME'
               value: {{ .Values.udsDbName }}
