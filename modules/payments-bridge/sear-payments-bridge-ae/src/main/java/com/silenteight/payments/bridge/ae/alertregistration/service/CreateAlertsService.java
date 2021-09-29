@@ -26,8 +26,9 @@ class CreateAlertsService {
 
     return RegisterAlertResponse
         .builder()
+        .alertId(registerAlertRequest.getAlertId())
         .alertName(alertName)
-        .matchReponses(matchesNames
+        .matchResponses(matchesNames
             .getMatchesList()
             .stream()
             .map(m -> RegisterMatchResponse

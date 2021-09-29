@@ -8,4 +8,7 @@ dependencies {
   implementation project(":proto-sear-payments-bridge-internal-protos")
   // Governance
   implementation libraries.governance_model_api
+
+  implementation libraries.grpc_client_spring_boot_starter
+  implementation libraries.spring_boot_starter_integration
 }

@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.firco.adapter.incoming.scheduler;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.firco.core.alertmessage.port.RejectOutdatedAlertMessagesUseCase;
+import com.silenteight.payments.bridge.firco.alertmessage.port.RejectOutdatedAlertMessagesUseCase;
 
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

@@ -1,3 +1,14 @@
+#------------------------------------------------------------------------------
+# Ingress authorization
+#------------------------------------------------------------------------------
+keycloak:
+  realm: sierra
+  auth-server-url: https://auth.silent8.cloud
+  ssl-required: external
+  resource: sierra-dev-api
+  use-resource-role-mappings: true
+  bearer-only: true
+
 #---------------------------------------------------------------------------------------------------
 # MESSAGING CONCURRENCY
 #---------------------------------------------------------------------------------------------------
@@ -19,6 +30,7 @@ pb:
   alert-message:
     stored-queue-limit: 1000
     decision-requested-time: 30s
+    original-message-deleted-after-recommendation: true
 
 #---------------------------------------------------------------------------------------------------
 # SERVER
@@ -37,7 +49,7 @@ server:
     include-stacktrace: never
 
   servlet:
-    context-path: /rest/payments
+    context-path: /rest/pb
 
 #---------------------------------------------------------------------------------------------------
 # MANAGEMENT

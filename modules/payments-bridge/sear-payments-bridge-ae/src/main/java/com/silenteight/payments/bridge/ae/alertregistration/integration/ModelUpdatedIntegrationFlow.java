@@ -10,6 +10,8 @@ import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
 import org.springframework.stereotype.Component;
 
+import static com.silenteight.payments.bridge.governance.core.solvingmodel.integration.SolvingModelChannels.SOLVING_MODEL_OUTBOUND_CHANNEL;
+
 @RequiredArgsConstructor
 @Component
 @Slf4j
@@ -19,7 +21,7 @@ class ModelUpdatedIntegrationFlow extends IntegrationFlowAdapter {
 
   @Override
   protected IntegrationFlowDefinition<?> buildFlow() {
-    return from("SomeChannelToBeSetLater")
+    return from(SOLVING_MODEL_OUTBOUND_CHANNEL)
         .handle(ModelUpdated.class, (payload, headers) ->
             createAnalysisUseCase.createAnalysis());
   }

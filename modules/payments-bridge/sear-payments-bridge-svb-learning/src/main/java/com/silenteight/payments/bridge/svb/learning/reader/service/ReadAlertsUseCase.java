@@ -8,7 +8,6 @@ import com.silenteight.payments.bridge.svb.learning.reader.port.CsvFileProvider;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,26 +24,28 @@ class ReadAlertsUseCase {
 
   public AlertsReadingResponse read(
       LearningRequest learningRequest, Consumer<LearningAlert> alertConsumer) {
-    CsvMapper mapper = new CsvMapper();
-    CsvSchema schema = mapper
+    var mapper = new CsvMapper();
+    var schema = mapper
         .schemaFor(LearningCsvRow.class)
         .withHeader()
         .withColumnSeparator(',');
 
-    AlertsReadingResponse alertsReadingResponse;
+    return csvFileProvider.getLearningCsv(learningRequest, learningCsv -> {
+      try {
+        MappingIterator<LearningCsvRow> it = mapper
+            .readerFor(LearningCsvRow.class)
+            .with(schema)
+            .readValues(learningCsv.getContent());
 
-    try {
-      var learningCsv = csvFileProvider.getLearningCsv(learningRequest);
-      MappingIterator<LearningCsvRow> it = mapper
-          .readerFor(LearningCsvRow.class)
-          .with(schema)
-          .readValues(learningCsv.getContent());
-      alertsReadingResponse = readByAlerts(it, alertConsumer);
-      alertsReadingResponse.setObjectData(learningCsv);
-    } catch (Exception e) {
-      throw new ReadAlertException(e);
-    }
-    return alertsReadingResponse;
+        var alertsReadingResponse = readByAlerts(it, alertConsumer);
+        alertsReadingResponse.setObjectData(learningCsv);
+
+        return alertsReadingResponse;
+      } catch (Exception e) {
+        log.error("There was a problem when processing alert = {}", e.getMessage());
+        throw new ReadAlertException(e);
+      }
+    });
   }
 
   private AlertsReadingResponse readByAlerts(

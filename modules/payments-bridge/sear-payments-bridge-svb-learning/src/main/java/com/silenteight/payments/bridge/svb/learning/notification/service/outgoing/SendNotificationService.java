@@ -7,11 +7,11 @@ import com.silenteight.payments.bridge.svb.learning.notification.model.Notificat
 import com.silenteight.payments.bridge.svb.learning.notification.port.outgoing.AmazonSesClient;
 import com.silenteight.payments.bridge.svb.learning.notification.port.outgoing.SendNotificationUseCase;
 
-import com.amazonaws.services.simpleemail.model.RawMessage;
-import com.amazonaws.services.simpleemail.model.SendRawEmailRequest;
+import software.amazon.awssdk.core.SdkBytes;
+import software.amazon.awssdk.services.ses.model.RawMessage;
+import software.amazon.awssdk.services.ses.model.SendRawEmailRequest;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
 import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -43,12 +43,12 @@ class SendNotificationService implements SendNotificationUseCase {
       var message = createMessage(request);
       message.writeTo(outputStream);
 
-      var rawMessage = new RawMessage(ByteBuffer.wrap(outputStream.toByteArray()));
+      var rawMessage =
+          RawMessage.builder().data(SdkBytes.fromByteArray(outputStream.toByteArray())).build();
 
-      var rawEmailRequest = new SendRawEmailRequest(rawMessage);
+      var rawEmailRequest = SendRawEmailRequest.builder().rawMessage(rawMessage).build();
 
       amazonSesClient.sendEmail(rawEmailRequest);
-
     } catch (Exception ex) {
       log.error("There was a problem when sending email = {}", ex.getMessage());
     }

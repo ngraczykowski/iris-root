@@ -3,15 +3,15 @@ package com.silenteight.payments.bridge.firco.callback;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.firco.dto.output.AlertDecisionMessageDto;
+import com.silenteight.payments.bridge.firco.adapter.incoming.dto.output.AlertDecisionMessageDto;
 
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Component;
 
-import static com.silenteight.payments.bridge.firco.core.alertmessage.integration.AlertMessageChannels.ALERT_MESSAGE_RESPONSE_CHANNEL;
-import static com.silenteight.payments.bridge.firco.core.alertmessage.integration.AlertMessageChannels.ALERT_MESSAGE_RESPONSE_OUTBOUND_CHANNEL;
+import static com.silenteight.payments.bridge.firco.alertmessage.integration.AlertMessageChannels.ALERT_MESSAGE_RESPONSE_CHANNEL;
+import static com.silenteight.payments.bridge.firco.alertmessage.integration.AlertMessageChannels.ALERT_MESSAGE_RESPONSE_OUTBOUND_CHANNEL;
 
 @RequiredArgsConstructor
 @Component

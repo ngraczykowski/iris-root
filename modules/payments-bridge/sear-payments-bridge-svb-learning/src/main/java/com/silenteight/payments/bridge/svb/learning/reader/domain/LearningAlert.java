@@ -33,7 +33,7 @@ public class LearningAlert {
   public void setAlertMatchNames(RegisterAlertResponse response) {
     setAlertName(response.getAlertName());
 
-    response.getMatchReponses().forEach(m -> {
+    response.getMatchResponses().forEach(m -> {
       var match = matches.stream().filter(ma -> ma.getMatchId().equals(m.getMatchId())).findFirst();
 
       if (match.isEmpty())

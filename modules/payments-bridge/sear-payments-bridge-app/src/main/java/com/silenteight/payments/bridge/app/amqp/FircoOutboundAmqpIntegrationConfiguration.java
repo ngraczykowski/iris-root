@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.app.amqp;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.firco.core.alertmessage.integration.AlertMessageChannels;
+import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -12,6 +12,7 @@ import org.springframework.integration.amqp.dsl.AmqpBaseOutboundEndpointSpec;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.StandardIntegrationFlow;
 import org.springframework.integration.handler.LoggingHandler.Level;
+import org.springframework.messaging.MessageChannel;
 
 import javax.validation.Valid;
 
@@ -27,16 +28,17 @@ class FircoOutboundAmqpIntegrationConfiguration {
 
   private final AmqpOutboundFactory outboundFactory;
 
+  private final CommonChannels commonChannels;
+
   @Bean
   IntegrationFlow alertMessageGatewayOutboundIntegrationFlow() {
-    return createOutboundFlow(
-        AlertMessageChannels.ALERT_MESSAGE_STORED_REQUEST_OUTBOUND_CHANNEL,
+    return createOutboundFlow(commonChannels.amqpOutbound(),
         properties.getCommand().getOutboundExchangeName(),
         properties.getCommand().getAlertStoredRoutingKey());
   }
 
   private StandardIntegrationFlow createOutboundFlow(
-      String outboundChannel, String outboundExchangeName, String outboundRoutingKey) {
+      MessageChannel outboundChannel, String outboundExchangeName, String outboundRoutingKey) {
 
     return from(outboundChannel)
         .log(Level.TRACE, getClass().getName() + "." + outboundExchangeName)

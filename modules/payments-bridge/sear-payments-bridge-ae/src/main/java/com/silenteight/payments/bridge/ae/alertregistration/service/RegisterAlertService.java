@@ -23,4 +23,5 @@ class RegisterAlertService implements RegisterAlertUseCase {
         ar -> registeredAlertMatches.add(createAlertsService.createAlert(ar)));
     return registeredAlertMatches;
   }
+
 }

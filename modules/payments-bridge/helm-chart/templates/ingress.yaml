@@ -13,7 +13,7 @@ spec:
     - host: {{ .Values.domain }}
       http:
         paths:
-          - path: /rest/payments
+          - path: /rest/pb
             pathType: Prefix
             backend:
               service:

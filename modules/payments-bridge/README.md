@@ -85,7 +85,7 @@ The generated access token `$TOKEN` can be tested by following the steps below:
 1. Start the `PaymentsBridgeApplication`.
 1. Place the `$TOKEN` in the command below and run it:
 
-        curl 'http://localhost:24602/rest/payments/test-authentication' --header 'Authorization: Bearer $TOKEN'
+        curl 'http://localhost:24602/rest/pb/test-authentication' --header 'Authorization: Bearer $TOKEN'
 
 1. Verify the output:
     
@@ -103,5 +103,5 @@ The generated access token `$TOKEN` can be tested by following the steps below:
 ### Test CMAPI callback
 
 1. Run `cmapi-mock` by following its [README.md](cmapi-mock/README.md).
-1. Send a request to http://localhost:24602/rest/payments/test-callback Details on how to a send request are in [Test access token](#test-access-token) section.
+1. Send a request to http://localhost:24602/rest/pb/test-callback Details on how to a send request are in [Test access token](#test-access-token) section.
 1. Verify the `Headers: Authorization: Bearer` from `cmapi-mock` debug log.
