@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toSet;
 
@@ -51,11 +52,12 @@ class SingleRequestRoleProvider implements RolesProvider {
   }
 
   private Map<String, ClientMappingsRepresentation> getClientRolesMappings(String userId) {
-    return realmResource
+    Map<String, ClientMappingsRepresentation> clientMappings = realmResource
         .users()
         .get(userId)
         .roles()
         .getAll()
         .getClientMappings();
+    return ofNullable(clientMappings).orElse(emptyMap());
   }
 }
