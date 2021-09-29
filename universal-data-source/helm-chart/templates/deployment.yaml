@@ -43,6 +43,8 @@ spec:
               value: {{ .Values.udsDbPassword | quote }}
             - name: "SERP_SHOW_ENV"
               value: "true"
+            - name: "SPRING_MAIN_CLOUD_PLATFORM"
+              value: "KUBERNETES"
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
