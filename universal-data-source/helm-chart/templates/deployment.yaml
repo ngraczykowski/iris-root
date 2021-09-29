@@ -51,6 +51,8 @@ spec:
           resources:
             limits:
               memory: {{ .Values.memoryLimit | quote }}
+            requests:
+              memory: {{ .Values.memoryRequest | quote }}
           ports:
             - containerPort: 8080
               protocol: TCP
