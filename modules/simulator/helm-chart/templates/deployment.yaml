@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      containers:
+        - name: {{ .Values.name }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.livenessProbeHttpGetPath }}
+              port: {{ .Values.ports.http }}
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.readinessProbeHttpGetPath }}
+              port: {{ .Values.ports.http }}
+          env:
+            - name: 'SIMULATOR_DB_HOST'
+              value: {{ .Values.simulatorDbHost | squote }}
+            - name: 'SIMULATOR_DB_PORT'
+              value: {{ .Values.simulatorDbPort | squote }}
+            - name: 'SIMULATOR_DB_NAME'
+              value: {{ .Values.simulatorDbName | squote }}
+            - name: 'SIMULATOR_DB_USER'
+              value: {{ .Values.simulatorDbUser | squote }}
+            - name: 'SIMULATOR_DB_PASSWORD'
+              value: {{ .Values.simulatorDbPassword | squote }}
+            - name: 'SPRING_RABBITMQ_ADDRESSES'
+              value: {{ .Values.springRabbitmqAddresses }}
+            - name: 'SPRING_RABBITMQ_PORT'
+              value: {{ .Values.springRabbitmqPort | quote }}
+            - name: 'SPRING_RABBITMQ_USERNAME'
+              value: {{ .Values.springRabbitmqUsername }}
+            - name: 'SPRING_RABBITMQ_PASSWORD'
+              value: {{ .Values.springRabbitmqPassword }}
+            - name: 'SPRING_RABBITMQ_VIRTUAL_HOST'
+              value: {{ .Values.springRabbitmqVirtualHost }}
+            - name: 'KEYCLOAK_CLIENT_ID'
+              value: {{ .Values.keycloakClientId | squote }}
+            - name: 'KEYCLOAK_ADAPTER_AUTH_SERVER_URL'
+              value: {{ .Values.keycloakAdapterAuthServerUrl | squote }}
+            - name: 'KEYCLOAK_ADAPTER_RESOURCE'
+              value: {{ .Values.keycloakAdapterResource | squote }}
+            - name: 'KEYCLOAK_ADAPTER_CREDENTIALS_SECRET'
+              value: {{ .Values.keycloakAdapterCredentialsSecret | squote }}
+            - name: 'KEYCLOAK_ADAPTER_REALM'
+              value: {{ .Values.keycloakAdapterRealm | squote }}
+            - name: 'SPRING_PROFILES_ACTIVE'
+              value: {{ .Values.springProfilesActive | squote }}
+            - name: 'GRPC_CLIENT_ADJUDICATION_ENGINE_ADDRESS'
+              value: {{ .Values.grpc.client.adjudication_engine.address | quote }}
+            - name: 'GRPC_CLIENT_GOVERNANCE_ADDRESS'
+              value: {{ .Values.grpc.client.governance.address | quote }}
+            - name: 'SERVER_PORT'
+              value: {{ .Values.ports.http | quote }}
+          image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          args: {{ .Values.args }}
+          ports:
+            - containerPort: {{ .Values.ports.http }}
+              name: http
