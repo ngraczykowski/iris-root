@@ -6,7 +6,7 @@ config:
   name: universalDatasourceApp
 ports:
   http: 8080
-  grpc: 8081
+  grpc: 9090
 
 
 replicaCount: 1

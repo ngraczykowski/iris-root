@@ -8,7 +8,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: { { .Values.name } }
+      app: {{ .Values.name }}
   template:
     metadata:
       labels:
@@ -28,7 +28,7 @@ spec:
               path: {{ .Values.readinessProbeHttpGetPath }}
               port: 8080
           env:
-            - name: 'UDS_DB_HOST'app
+            - name: 'UDS_DB_HOST'
               value: {{ .Values.udsDbHost }}
             - name: 'USD_DB_PORT'
               value: {{ .Values.udsDbPort | quote }}
@@ -39,10 +39,10 @@ spec:
             - name: 'UDS_DB_PASSWORD'
               value: {{ .Values.udsDbPassword }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
-          imagePullPolicy: { { .Values.imagePullPolicy } }
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
           ports:
-            - containerPort: { { .Values.ports.http } }
+            - containerPort: 8080
               protocol: TCP
-            - containerPort: { { .Values.ports.grpc } }
+            - containerPort: 8081
               protocol: TCP
