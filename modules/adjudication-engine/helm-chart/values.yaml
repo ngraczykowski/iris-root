@@ -1,0 +1,23 @@
+name: adjudication-engine-app
+image_tag: dummy
+image_repo: dummy
+args: [ "name" ]
+config:
+  name: AdjudicationEngineApp
+ports:
+  http: 8080
+  grpc: 8081
+
+springProfilesActive: "mockaws,mockdatasource,mockae"
+replicaCount: 1
+imagePullPolicy: Always
+livenessProbeHttpGetPath: "/rest/ae/management/health/livenessState"
+readinessProbeHttpGetPath: "/rest/ae/management/health/readinessState"
+grpc:
+  client:
+    data-source:
+      address: "static://sear-payments-bridge-service:8081"
+    governance:
+      address: "static://governance-app-service:8081"
+
+
