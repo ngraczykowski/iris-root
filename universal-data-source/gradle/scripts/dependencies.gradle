@@ -103,6 +103,7 @@ libraries.spring_integration_mail = [group: 'org.springframework.integration', n
 libraries.spring_integration_test = [group: 'org.springframework.integration', name: 'spring-integration-test']
 
 libraries.spring_security_acl = [group: 'org.springframework.security', name: 'spring-security-acl']
+libraries.spring_security_aspects = [group: 'org.springframework.security', name: 'spring-security-aspects']
 libraries.spring_security_cas = [group: 'org.springframework.security', name: 'spring-security-cas']
 libraries.spring_security_config = [group: 'org.springframework.security', name: 'spring-security-config']
 libraries.spring_security_core = [group: 'org.springframework.security', name: 'spring-security-core']
@@ -166,10 +167,10 @@ libraries.grpc_context = [group: 'io.grpc', name: 'grpc-context']
 libraries.grpc_core = [group: 'io.grpc', name: 'grpc-core']
 libraries.grpc_netty = [group: 'io.grpc', name: 'grpc-netty']
 libraries.grpc_protobuf = [group: 'io.grpc', name: 'grpc-protobuf']
+libraries.grpc_client_spring_boot_starter = [group: 'net.devh', name: 'grpc-client-spring-boot-starter']
+libraries.grpc_server_spring_boot_starter = [group: 'net.devh', name: 'grpc-server-spring-boot-starter']
 libraries.grpc_services = [group: 'io.grpc', name: 'grpc-services']
 libraries.grpc_spring_boot_starter = [group: 'net.devh', name: 'grpc-spring-boot-starter']
-libraries.grpc_server_spring_boot_starter = [group: 'net.devh', name: 'grpc-server-spring-boot-starter']
-libraries.grpc_client_spring_boot_starter = [group: 'net.devh', name: 'grpc-client-spring-boot-starter']
 libraries.grpc_stub = [group: 'io.grpc', name: 'grpc-stub']
 libraries.grpc_testing = [group: 'io.grpc', name: 'grpc-testing']
 libraries.guava = [group: 'com.google.guava', name: 'guava', version: '30.1.1-jre']
@@ -198,6 +199,7 @@ libraries.jakarta_validation_api = [group: 'jakarta.validation', name: 'jakarta.
 libraries.javax_cache_api = [group: 'javax.cache', name: 'cache-api']
 libraries.jaxb_api = [group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api']
 libraries.jjwt = [group: 'io.jsonwebtoken', name: 'jjwt']
+libraries.keycloak_spring_boot_starter = [group: 'org.keycloak', name: 'keycloak-spring-boot-starter']
 libraries.kryo_shaded = [group: 'com.esotericsoftware', name: 'kryo-shaded']
 libraries.liquibase_core = [group: 'org.liquibase', name: 'liquibase-core', version: '3.10.3']
 libraries.liquibase_sessionlock = [group: 'com.github.blagerweij', name: 'liquibase-sessionlock', version: '1.4.0']
@@ -271,6 +273,7 @@ dependencies {
   implementation platform("org.testcontainers:testcontainers-bom:1.15.2")
   annotationProcessor platform(
       "com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
+  implementation platform("org.keycloak.bom:keycloak-adapter-bom:15.0.2")
 
   implementation platform("com.blazebit:blaze-persistence-bom:1.6.0")
   annotationProcessor platform("com.blazebit:blaze-persistence-bom:1.6.0")

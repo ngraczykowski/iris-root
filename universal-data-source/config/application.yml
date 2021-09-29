@@ -38,6 +38,15 @@ uds:
     concurrency: 2
     prefetch: 2
 
+  #-------------------------------------------------------------------------------------------------
+  # SECURITY
+  #
+  # The security is disabled by default for local development.
+  # Please see the README.md for information on how to enable it.
+  #-------------------------------------------------------------------------------------------------
+  security:
+    disable-security: true
+
 spring:
   #-------------------------------------------------------------------------------------------------
   # MULTI-THREADING

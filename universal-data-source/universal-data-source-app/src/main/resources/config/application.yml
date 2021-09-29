@@ -1,3 +1,14 @@
+#------------------------------------------------------------------------------
+# Ingress authorization
+#------------------------------------------------------------------------------
+keycloak:
+  realm: sierra
+  auth-server-url: https://auth.silent8.cloud
+  ssl-required: external
+  resource: sierra-dev-api
+  use-resource-role-mappings: true
+  bearer-only: true
+
 #---------------------------------------------------------------------------------------------------
 # MESSAGING CONCURRENCY
 #---------------------------------------------------------------------------------------------------
@@ -34,9 +45,13 @@ management:
   health:
     rabbit:
       enabled: false
+
   endpoint:
     health:
-      show-details: always
+      show-details: when_authorized
+      roles: ENDPOINT_ADMIN
+      cache:
+        time-to-live: 1000ms
 
   endpoints:
     web:
@@ -49,6 +64,8 @@ management:
   metrics:
     tags:
       application: /rest/${spring.application.name}
+  auditevents:
+    enabled:
 
 spring:
   #-------------------------------------------------------------------------------------------------

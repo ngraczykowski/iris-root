@@ -24,6 +24,12 @@ management:
       exposure:
         include: "*"
 
+  endpoint:
+    health:
+      show-details: always
+      cache:
+        time-to-live: 0ms
+
 server:
   error:
     include-stacktrace: on_trace_param

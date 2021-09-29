@@ -25,6 +25,7 @@ dependencies {
   // Application Starters
   implementation libraries.spring_boot_starter_actuator
   implementation libraries.spring_boot_starter_logging
+  implementation libraries.spring_boot_starter_security
   implementation libraries.spring_boot_starter_web
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.micrometer_prometheus
@@ -33,6 +34,7 @@ dependencies {
   implementation libraries.spring_security_config
   implementation libraries.spring_security_core
   implementation libraries.spring_security_web
+  implementation libraries.keycloak_spring_boot_starter
 
   // Cloud
   implementation libraries.spring_cloud_consul_discovery
@@ -137,9 +139,9 @@ jib {
         "-Dsilenteight.home=/silenteight",
         "-Dspring.profiles.include=container",
         "-Dserver.port=8080",
-        "-Dgrpc.server.port=8081",
+        "-Dgrpc.server.port=9090",
     ]
-    ports = ["8080", "8081"]
+    ports = ["8080", "9090"]
     user = "nonroot"
     workingDirectory = "/silenteight"
   }
