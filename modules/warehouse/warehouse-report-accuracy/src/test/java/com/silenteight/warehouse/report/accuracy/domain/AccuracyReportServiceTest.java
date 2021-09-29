@@ -55,6 +55,6 @@ class AccuracyReportServiceTest {
         .isPresent()
         .get()
         .extracting(AccuracyReport::getFileName)
-        .isEqualTo(instanceReferenceId + DAY.getFilename());
+        .isEqualTo(instanceReferenceId + "-" + DAY.getFilename());
   }
 }

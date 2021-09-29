@@ -71,6 +71,6 @@ class AccuracyReport extends BaseEntity implements IdentifiableEntity {
   }
 
   String getFileName() {
-    return id + reportType.getFilename();
+    return id + "-" + reportType.getFilename();
   }
 }

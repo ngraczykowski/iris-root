@@ -59,7 +59,7 @@ class AsyncAccuracyReportGenerationServiceTest {
     // then
     accuracyReport = repository.getById(id);
     assertThat(accuracyReport.getState()).isEqualTo(DONE);
-    assertThat(accuracyReport.getFile()).isEqualTo(id + TYPE.getFilename());
+    assertThat(accuracyReport.getFile()).isEqualTo(id + "-" + TYPE.getFilename());
   }
 
   @Test
