@@ -21,23 +21,28 @@ spec:
             httpGet:
               path: {{ .Values.livenessProbeHttpGetPath }}
               port: 8080
+            failureThreshold: 1
             initialDelaySeconds: 10
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbeHttpGetPath }}
               port: 8080
+            failureThreshold: 30
+            periodSeconds: 10
           env:
-            - name: 'UDS_DB_HOST'
+            - name: "UDS_DB_HOST"
               value: {{ .Values.udsDbHost }}
-            - name: 'UDS_DB_PORT'
+            - name: "UDS_DB_PORT"
               value: {{ .Values.udsDbPort | quote }}
-            - name: 'UDS_DB_NAME'
+            - name: "UDS_DB_NAME"
               value: {{ .Values.udsDbName }}
-            - name: 'UDS_DB_USERNAME'
+            - name: "UDS_DB_USERNAME"
               value: {{ .Values.udsDbUsername }}
-            - name: 'UDS_DB_PASSWORD'
+            - name: "UDS_DB_PASSWORD"
               value: {{ .Values.udsDbPassword | quote }}
+            - name: "SERP_SHOW_ENV"
+              value: "true"
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
