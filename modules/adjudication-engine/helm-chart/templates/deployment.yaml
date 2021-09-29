@@ -62,6 +62,6 @@ spec:
           args: {{ .Values.args }}
           ports:
             - containerPort: {{ .Values.ports.http }}
-              protocol: http
+              name: http
             - containerPort: {{ .Values.ports.grpc }}
-              protocol: grpc
+              name: grpc
