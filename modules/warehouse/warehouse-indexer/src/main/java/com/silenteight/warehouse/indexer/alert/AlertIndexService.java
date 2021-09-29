@@ -11,12 +11,10 @@ import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 import static org.apache.commons.collections4.ListUtils.partition;
 import static org.elasticsearch.action.support.WriteRequest.RefreshPolicy.WAIT_UNTIL;
 
@@ -33,22 +31,18 @@ public class AlertIndexService {
   private final int updateRequestBatchSize;
 
   public void indexAlerts(List<Alert> alerts, String indexName) {
-    List<UpdateRequest> updateRequests = alerts
-        .stream()
-        .map(alert -> convertAlertToDocument(indexName, alert))
-        .collect(toList());
-
-    partition(updateRequests, updateRequestBatchSize)
-        .stream()
-        .map(this::wrapToBulkRequest)
-        .forEach(this::attemptToSaveAlert);
+    partition(alerts, updateRequestBatchSize)
+        .forEach(alertsBatch -> indexAlertsBatch(alertsBatch, indexName));
   }
 
-  @NotNull
-  private BulkRequest wrapToBulkRequest(List<UpdateRequest> requests) {
+  void indexAlertsBatch(List<Alert> alerts, String indexName) {
     BulkRequest bulkRequest = new BulkRequest();
-    requests.forEach(bulkRequest::add);
-    return bulkRequest;
+
+    alerts.stream()
+        .map(alert -> convertAlertToDocument(indexName, alert))
+        .forEach(bulkRequest::add);
+
+    trySaveAlert(bulkRequest);
   }
 
   private UpdateRequest convertAlertToDocument(String indexName, Alert alert) {
@@ -59,15 +53,15 @@ public class AlertIndexService {
     return updateRequest;
   }
 
-  private void attemptToSaveAlert(BulkRequest indexRequest) {
+  private void trySaveAlert(BulkRequest indexRequest) {
     try {
-      doAttemptToSaveAlert(indexRequest);
+      saveAlert(indexRequest);
     } catch (IOException e) {
       throw new AlertNotIndexedExceptions("Alert has not been indexed", e);
     }
   }
 
-  private void doAttemptToSaveAlert(BulkRequest indexRequest) throws IOException {
+  private void saveAlert(BulkRequest indexRequest) throws IOException {
     indexRequest.setRefreshPolicy(WAIT_UNTIL);
     BulkResponse bulk = restHighLevelClient.bulk(indexRequest, RequestOptions.DEFAULT);
     if (bulk.hasFailures())

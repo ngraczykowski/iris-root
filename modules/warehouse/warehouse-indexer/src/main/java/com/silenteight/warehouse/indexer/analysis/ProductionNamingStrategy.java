@@ -7,11 +7,7 @@ public class ProductionNamingStrategy {
 
   private final String environmentPrefix;
 
-  public String getTenantName() {
-    return environmentPrefix + "_production";
-  }
-
-  public String getElasticIndexName() {
-    return environmentPrefix + "_production";
+  public String getElasticWriteIndexName() {
+    return environmentPrefix + "_production.old";
   }
 }

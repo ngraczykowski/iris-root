@@ -9,6 +9,7 @@ import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConven
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
+import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.opendistro.roles.RolesMappingService;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
@@ -28,6 +29,7 @@ import static org.mockito.Mockito.*;
     QueryAlertModule.class,
     OpendistroModule.class,
     ElasticsearchRestClientModule.class,
+    EnvironmentModule.class,
     ManagementModule.class,
     TestElasticSearchModule.class,
     UserAwareTokenProvider.class
