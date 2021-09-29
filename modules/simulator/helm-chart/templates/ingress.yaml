@@ -10,7 +10,7 @@ metadata:
 
 spec:
   rules:
-    - host: sierra-uat.silent8.cloud
+    - host: {{ .Values.domain }}
       http:
         paths:
           - path: /rest/simulator
