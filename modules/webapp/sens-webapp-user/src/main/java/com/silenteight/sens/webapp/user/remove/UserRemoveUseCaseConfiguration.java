@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 class UserRemoveUseCaseConfiguration {
 
   @Bean
-  RemoveUserUseCase lockUserUseCase(
+  RemoveUserUseCase removeUserUseCase(
       UserQuery userQuery, 
       UserRemover userRemover,
       AuditTracer auditTracer,
