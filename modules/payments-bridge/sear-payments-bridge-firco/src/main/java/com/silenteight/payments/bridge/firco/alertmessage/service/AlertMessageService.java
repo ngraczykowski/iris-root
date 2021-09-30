@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.firco.alertmessage.service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.common.model.AlertMessageModel;
+import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
 
 import org.springframework.stereotype.Service;
@@ -15,12 +15,12 @@ class AlertMessageService implements AlertMessageUseCase {
 
   private final AlertMessageRepository alertMessageRepository;
 
-  public AlertMessageModel findByAlertMessageId(String alertMessageId) {
+  public AlertData findByAlertMessageId(String alertMessageId) {
     var entity = alertMessageRepository.findById(UUID.fromString(alertMessageId))
         .orElseThrow();
 
     // TODO: incorporate eg. mapstruct mapper to avoid such mess.
-    return AlertMessageModel.builder()
+    return AlertData.builder()
         .messageId(entity.getMessageId())
         .businessUnit(entity.getBusinessUnit())
         .dataCenter(entity.getDataCenter())

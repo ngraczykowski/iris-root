@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.firco.alertmessage.port.RejectOutdatedAlertMessagesUseCase;
+import com.silenteight.payments.bridge.firco.callback.port.CreateResponseUseCase;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -22,10 +23,9 @@ import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMess
 public class RejectOutdatedAlertMessagesService implements RejectOutdatedAlertMessagesUseCase {
 
   private final AlertMessageProperties alertMessageProperties;
-
   private final AlertMessageStatusRepository repository;
-  private final ResponseGeneratorService responseGeneratorService;
   private final AlertMessageStatusService alertMessageStatusService;
+  private final CreateResponseUseCase createResponseUseCase;
 
   @Setter
   private Clock clock = Clock.systemUTC();
@@ -46,7 +46,7 @@ public class RejectOutdatedAlertMessagesService implements RejectOutdatedAlertMe
 
   private void sendResponse(AlertMessageStatusEntity alertMessageStatus) {
     var alertMessageId = alertMessageStatus.getAlertMessageId();
-    responseGeneratorService.prepareAndSendResponse(alertMessageId, REJECTED_OUTDATED);
+    createResponseUseCase.createResponse(alertMessageId, REJECTED_OUTDATED);
     alertMessageStatusService
         .transitionAlertMessageStatus(alertMessageId, REJECTED_OUTDATED);
   }

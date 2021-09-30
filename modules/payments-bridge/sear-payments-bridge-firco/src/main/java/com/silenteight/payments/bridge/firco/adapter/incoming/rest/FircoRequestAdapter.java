@@ -3,13 +3,10 @@ package com.silenteight.payments.bridge.firco.adapter.incoming.rest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.common.dto.input.RequestDto;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.security.port.AuthenticateUseCase;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -19,7 +16,6 @@ class FircoRequestAdapter {
 
   private final AuthenticateUseCase authenticateUseCase;
   private final CreateAlertMessageUseCase createAlertMessageUseCase;
-  private final ObjectMapper objectMapper;
 
   void sendMessage(RequestDto requestDto, String receiveUrl, String dataCenter) {
     authenticateRequest(requestDto);
@@ -45,11 +41,7 @@ class FircoRequestAdapter {
       log.debug("Handling [{}] alert message(s)", alerts.size());
     }
 
-    alerts.forEach(alertDto -> createAlertMessageUseCase
-        .createAlertMessage(mapper.map(alertDto), toObjectNode(alertDto)));
+    mapper.map(alerts).forEach(createAlertMessageUseCase::createAlertMessage);
   }
 
-  private ObjectNode toObjectNode(AlertMessageDto alertMessageDto) {
-    return objectMapper.convertValue(alertMessageDto, ObjectNode.class);
-  }
 }

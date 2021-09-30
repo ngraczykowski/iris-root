@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
-import com.silenteight.payments.bridge.common.model.AlertMessageModel;
+import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 
 import org.springframework.util.AlternativeJdkIdGenerator;
 import org.springframework.util.IdGenerator;
@@ -35,22 +36,14 @@ class AlertMessageMapper {
   @Setter
   private Clock clock = Clock.systemUTC();
 
-  Stream<AlertMessageModel> map(Collection<AlertMessageDto> dtos) {
+  Stream<FircoAlertMessage> map(Collection<AlertMessageDto> dtos) {
     var receiveTime = OffsetDateTime.now(clock);
     return dtos.stream().map(dto -> mapToAlertMessage(receiveTime, dto));
   }
 
-  private AlertMessageModel mapToAlertMessage(OffsetDateTime receiveTime, AlertMessageDto dto) {
-    return AlertMessageModel.builder()
-        .id(idGenerator.generateId())
-        .messageId(dto.getMessageID())
-        .unit(dto.getUnit())
-        .dataCenter(dataCenter)
-        .decisionUrl(decisionUrl)
-        .systemId(dto.getSystemID())
-        .receivedAt(receiveTime)
-        .priority(priorityToInt(dto.getPriority()))
-        .businessUnit(dto.getBusinessUnit()).build();
+  private FircoAlertMessage mapToAlertMessage(OffsetDateTime receiveTime, AlertMessageDto dto) {
+    return new FircoAlertMessage(
+        idGenerator.generateId(), receiveTime, dto, dataCenter, decisionUrl);
   }
 
   private Integer priorityToInt(String priority) {
@@ -66,8 +59,4 @@ class AlertMessageMapper {
     return defaultPriority;
   }
 
-  AlertMessageModel map(AlertMessageDto dto) {
-    var receiveTime = OffsetDateTime.now(clock);
-    return mapToAlertMessage(receiveTime, dto);
-  }
 }

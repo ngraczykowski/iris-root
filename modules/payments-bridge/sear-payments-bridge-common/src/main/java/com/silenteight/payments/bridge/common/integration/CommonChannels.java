@@ -1,63 +1,72 @@
 package com.silenteight.payments.bridge.common.integration;
 
-import lombok.RequiredArgsConstructor;
+import com.silenteight.payments.bridge.event.*;
 
-import com.silenteight.payments.bridge.common.integration.channel.AlertDeliveredChannel;
-import com.silenteight.payments.bridge.common.integration.channel.AlertRegisteredChannel;
-import com.silenteight.payments.bridge.event.AlertInputAccepted;
-import com.silenteight.payments.bridge.event.AlertRejected;
-import com.silenteight.payments.bridge.event.AlertStored;
-
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.support.ChannelInterceptor;
+
+import java.util.List;
 
 @Configuration
-@RequiredArgsConstructor
 public class CommonChannels {
 
-  private final AlertDeliveredChannel alertDeliveryChannel;
-  private final AlertRegisteredChannel alertRegisteredChannel;
+  public static final String CHANNEL_INTERCEPTOR_QUALIFIER = "FircoChannelInterceptors";
+
+  private final List<ChannelInterceptor> channelInterceptors;
+
+  public CommonChannels(
+      @Qualifier(CHANNEL_INTERCEPTOR_QUALIFIER) List<ChannelInterceptor> channelInterceptors) {
+    this.channelInterceptors = channelInterceptors;
+  }
 
   private static final String PREFIX = "common";
 
   public static final String AMQP_OUTBOUND = "AMQPOutboundChannel";
+  public static final String CMAPI_OUTBOUND = "CMApiOutboundChannel";
 
-  public static final String ALERT_STORED = PREFIX + "AlertStoredChannel";
   public static final String ALERT_DELIVERED = PREFIX + "AlertDeliveredChannel";
   public static final String ALERT_REGISTERED = PREFIX + "AlertRegisteredChannel";
   public static final String ALERT_INPUT_ACCEPTED = PREFIX + "AlertInputAcceptedChannel";
   public static final String ALERT_REJECTED = PREFIX + "AlertRejectedChannel";
+  public static final String RECOMMENDATION_RECEIVED = PREFIX + "RecommendationReceivedChannel";
 
   @Bean(AMQP_OUTBOUND)
   public MessageChannel amqpOutbound() {
     return new DirectChannel();
   }
 
-  @Bean(ALERT_STORED)
-  public MessageChannel alertStored() {
-    return new TypedPublishSubscribeChannel(AlertStored.class);
+  @Bean(CMAPI_OUTBOUND)
+  public MessageChannel cmapiOutbound() {
+    return new DirectChannel();
   }
 
   @Bean(ALERT_DELIVERED)
   public MessageChannel alertDelivered() {
-    return alertDeliveryChannel.getChannel();
+    return new TypedPublishSubscribeChannel(AlertDelivered.class, channelInterceptors);
   }
 
   @Bean(ALERT_REGISTERED)
   public MessageChannel alertRegistered() {
-    return alertRegisteredChannel.getChannel();
+    return new TypedPublishSubscribeChannel(AlertRegistered.class, channelInterceptors);
   }
 
   @Bean(ALERT_INPUT_ACCEPTED)
   public MessageChannel alertInputAccepted() {
-    return new TypedPublishSubscribeChannel(AlertInputAccepted.class);
+    return new TypedPublishSubscribeChannel(AlertInputAccepted.class, channelInterceptors);
   }
 
   @Bean(ALERT_REJECTED)
   public MessageChannel alertRejected() {
-    return new TypedPublishSubscribeChannel(AlertRejected.class);
+    return new TypedPublishSubscribeChannel(AlertRejected.class, channelInterceptors);
+  }
+
+  @Bean(RECOMMENDATION_RECEIVED)
+  public MessageChannel recommendationReceived() {
+    return new TypedPublishSubscribeChannel(RecommendationReceived.class, channelInterceptors);
   }
 
 }

@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 @Getter
-@EqualsAndHashCode(of = "alertId")
-public class AlertInputAccepted implements DomainEvent {
+@EqualsAndHashCode(of = "alertId", callSuper = false)
+public class AlertInputAccepted extends DomainEvent {
 
   private final String alertId;
 

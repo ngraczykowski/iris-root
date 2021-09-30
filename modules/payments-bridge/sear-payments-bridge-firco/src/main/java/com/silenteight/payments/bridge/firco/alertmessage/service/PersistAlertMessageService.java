@@ -3,8 +3,9 @@ package com.silenteight.payments.bridge.firco.alertmessage.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.common.model.AlertMessageModel;
+import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +17,17 @@ class PersistAlertMessageService {
 
   private final AlertMessageRepository messageRepository;
   private final AlertMessagePayloadRepository payloadRepository;
+  private final ObjectMapper objectMapper;
 
   @Transactional
-  public void createAlertMessage(AlertMessageModel alertMessage, ObjectNode originalMessage) {
-    messageRepository.save(new AlertMessageEntity(alertMessage));
-    payloadRepository.save(new AlertMessagePayload(alertMessage.getId(), originalMessage));
+  public void createAlertMessage(FircoAlertMessage message) {
+    messageRepository.save(new AlertMessageEntity(message));
+    payloadRepository.save(convertToPayload(message));
+  }
+
+  AlertMessagePayload convertToPayload(FircoAlertMessage message) {
+    var originalMessage = objectMapper.convertValue(message.getAlertMessage(), ObjectNode.class);
+    return new AlertMessagePayload(message.getId(), originalMessage);
   }
 
 }

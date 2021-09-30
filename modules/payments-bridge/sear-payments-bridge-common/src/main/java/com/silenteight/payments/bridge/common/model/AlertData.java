@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Value
 @Builder
-public class AlertMessageModel {
+public class AlertData {
 
   UUID id;
   OffsetDateTime receivedAt;

@@ -1,6 +1,6 @@
 package com.silenteight.payments.bridge.firco.callback;
 
-interface CallbackRequest {
+public interface CallbackRequest {
 
   void invoke();
 }

@@ -4,7 +4,7 @@ import lombok.NonNull;
 
 import com.silenteight.payments.bridge.common.dto.output.ClientRequestDto;
 
-interface CallbackRequestFactory {
+public interface CallbackRequestFactory {
 
   CallbackRequest create(@NonNull ClientRequestDto clientRequestDto);
 }

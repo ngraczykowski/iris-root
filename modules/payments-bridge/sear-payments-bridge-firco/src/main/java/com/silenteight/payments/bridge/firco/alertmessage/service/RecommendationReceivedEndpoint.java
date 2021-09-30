@@ -4,16 +4,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.firco.alertmessage.port.IssueRecommendationUseCase;
-import com.silenteight.payments.common.resource.ResourceName;
-import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
+import com.silenteight.payments.bridge.event.RecommendationReceived;
+import com.silenteight.payments.bridge.firco.callback.port.CreateResponseUseCase;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.stereotype.Service;
+import org.springframework.integration.annotation.MessageEndpoint;
+import org.springframework.integration.annotation.ServiceActivator;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
+import static com.silenteight.payments.bridge.common.integration.CommonChannels.RECOMMENDATION_RECEIVED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.ACCEPTED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.RECOMMENDED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OUTDATED;
@@ -21,22 +23,21 @@ import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMess
 @EnableConfigurationProperties(AlertMessageProperties.class)
 @RequiredArgsConstructor
 @Slf4j
-@Service
-class IssueRecommendationService implements IssueRecommendationUseCase {
+@MessageEndpoint
+class RecommendationReceivedEndpoint {
 
   private final AlertMessageProperties alertMessageProperties;
 
   private final AlertMessageStatusService alertMessageStatusService;
-  private final ResponseGeneratorService responseGeneratorService;
-  private final AlertMessagePayloadRepository payloadRepository;
+  private final CreateResponseUseCase createResponseUseCase;
 
   @Setter
   private Clock clock = Clock.systemUTC();
 
-  @Override
-  public void issue(MessageStored messageStored) {
-    var alertMessageId = ResourceName.create(messageStored.getAlert()).getUuid("alert-messages");
-    var alertStatusEntity = alertMessageStatusService.findByAlertId(alertMessageId);
+  @ServiceActivator(inputChannel = RECOMMENDATION_RECEIVED)
+  public void accept(RecommendationReceived recommendation) {
+    var alertId = UUID.fromString(recommendation.getAlertId());
+    var alertStatusEntity = alertMessageStatusService.findByAlertId(alertId);
 
     if (isTransitionForbidden(alertStatusEntity)) {
       return;
@@ -50,9 +51,8 @@ class IssueRecommendationService implements IssueRecommendationUseCase {
      * The request isn't sent to AE at version one, thus the artificial transition from
      * (RECEIVED, STORED) to (RECOMMENDED) has been enabled.
      */
-    responseGeneratorService.prepareAndSendResponse(alertMessageId, RECOMMENDED);
-    alertMessageStatusService.transitionAlertMessageStatus(alertMessageId, RECOMMENDED);
-
+    createResponseUseCase.createResponse(alertId, RECOMMENDED);
+    alertMessageStatusService.transitionAlertMessageStatus(alertId, RECOMMENDED);
   }
 
   private boolean isTransitionForbidden(AlertMessageStatusEntity alertMessageStatus) {
@@ -71,7 +71,7 @@ class IssueRecommendationService implements IssueRecommendationUseCase {
         .compareTo(OffsetDateTime.now(clock)) <= 0;
     var alertMessageId = alertMessageStatus.getAlertMessageId();
     if (isOverdue) {
-      responseGeneratorService.prepareAndSendResponse(alertMessageId, REJECTED_OUTDATED);
+      createResponseUseCase.createResponse(alertMessageId, REJECTED_OUTDATED);
       alertMessageStatusService
           .transitionAlertMessageStatus(alertMessageId, REJECTED_OUTDATED);
       return true;

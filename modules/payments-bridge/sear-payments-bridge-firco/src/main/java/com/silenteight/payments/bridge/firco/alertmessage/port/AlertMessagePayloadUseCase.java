@@ -1,9 +1,11 @@
 package com.silenteight.payments.bridge.firco.alertmessage.port;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
+
+import java.util.UUID;
 
 public interface AlertMessagePayloadUseCase {
 
-  ObjectNode findByAlertMessageId(String alertMessageId);
+  AlertMessageDto findByAlertMessageId(UUID alertMessageId);
 
 }
