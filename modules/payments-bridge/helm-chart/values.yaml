@@ -8,7 +8,15 @@ ports:
   http: 8080
   grpc: 8081
 
-springProfilesActive: "mockdatasource,mockae"
+grpc:
+  server:
+    port: 9090
+  client:
+    ae:
+      address: adjudication-engine-service.default.svc.cluster.local
+      negotiation-type: PLAINTEXT
+
+springProfilesActive: "mockdatasource"
 replicaCount: 1
 imagePullPolicy: Always
 livenessProbeHttpGetPath: "/rest/pb/management/health/livenessState"
