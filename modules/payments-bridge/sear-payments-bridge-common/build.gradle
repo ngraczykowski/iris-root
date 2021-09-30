@@ -10,4 +10,7 @@ dependencies {
   implementation libraries.silenteight_sep_base_common
   implementation libraries.spring_context
   implementation libraries.protobuf_java_util
+
+  implementation libraries.jakarta_annotation_api
+  implementation libraries.jakarta_validation_api
 }

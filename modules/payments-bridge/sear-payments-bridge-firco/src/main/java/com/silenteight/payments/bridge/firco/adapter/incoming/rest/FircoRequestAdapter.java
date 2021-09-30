@@ -3,8 +3,8 @@ package com.silenteight.payments.bridge.firco.adapter.incoming.rest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.firco.adapter.incoming.dto.input.AlertMessageDto;
-import com.silenteight.payments.bridge.firco.adapter.incoming.dto.input.RequestDto;
+import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
+import com.silenteight.payments.bridge.common.dto.input.RequestDto;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.security.port.AuthenticateUseCase;
 

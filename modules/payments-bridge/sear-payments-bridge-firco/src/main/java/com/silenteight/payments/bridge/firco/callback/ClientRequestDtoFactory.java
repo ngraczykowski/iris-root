@@ -1,6 +1,6 @@
 package com.silenteight.payments.bridge.firco.callback;
 
-import com.silenteight.payments.bridge.firco.adapter.incoming.dto.output.*;
+import com.silenteight.payments.bridge.common.dto.output.*;
 
 import org.springframework.stereotype.Component;
 

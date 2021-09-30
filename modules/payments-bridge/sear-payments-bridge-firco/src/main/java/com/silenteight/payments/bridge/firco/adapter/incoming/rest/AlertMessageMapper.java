@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.common.model.AlertMessageModel;
-import com.silenteight.payments.bridge.firco.adapter.incoming.dto.input.AlertMessageDto;
 
 import org.springframework.util.AlternativeJdkIdGenerator;
 import org.springframework.util.IdGenerator;
@@ -40,11 +40,6 @@ class AlertMessageMapper {
     return dtos.stream().map(dto -> mapToAlertMessage(receiveTime, dto));
   }
 
-  AlertMessageModel map(AlertMessageDto dto) {
-    var receiveTime = OffsetDateTime.now(clock);
-    return mapToAlertMessage(receiveTime, dto);
-  }
-
   private AlertMessageModel mapToAlertMessage(OffsetDateTime receiveTime, AlertMessageDto dto) {
     return AlertMessageModel.builder()
         .id(idGenerator.generateId())
@@ -69,5 +64,10 @@ class AlertMessageMapper {
       }
     }
     return defaultPriority;
+  }
+
+  AlertMessageModel map(AlertMessageDto dto) {
+    var receiveTime = OffsetDateTime.now(clock);
+    return mapToAlertMessage(receiveTime, dto);
   }
 }

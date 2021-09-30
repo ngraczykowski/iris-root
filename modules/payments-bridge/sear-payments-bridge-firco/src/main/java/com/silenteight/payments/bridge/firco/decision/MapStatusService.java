@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.firco.decision;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.firco.adapter.incoming.dto.common.StatusInfoDto;
+import com.silenteight.payments.bridge.common.dto.common.StatusInfoDto;
 import com.silenteight.payments.bridge.firco.decision.decisionmapping.StateMappingStrategySelector;
 import com.silenteight.payments.bridge.firco.decision.statemapping.StateMappingStrategy;
 import com.silenteight.payments.bridge.firco.decision.statemapping.StateMappingStrategy.MapStateInput;

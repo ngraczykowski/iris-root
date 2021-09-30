@@ -2,9 +2,9 @@ package com.silenteight.payments.bridge.firco.alertmessage.service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.firco.adapter.incoming.dto.input.AlertMessageDto;
-import com.silenteight.payments.bridge.firco.adapter.incoming.dto.input.NextStatusDto;
-import com.silenteight.payments.bridge.firco.adapter.incoming.dto.output.AlertDecisionMessageDto;
+import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
+import com.silenteight.payments.bridge.common.dto.input.NextStatusDto;
+import com.silenteight.payments.bridge.common.dto.output.AlertDecisionMessageDto;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.decision.MapStatusRequest;
 import com.silenteight.payments.bridge.firco.decision.MapStatusUseCase;

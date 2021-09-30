@@ -5,7 +5,7 @@ import lombok.NonNull;
 import lombok.Singular;
 import lombok.Value;
 
-import com.silenteight.payments.bridge.firco.adapter.incoming.dto.common.StatusInfoDto;
+import com.silenteight.payments.bridge.common.dto.common.StatusInfoDto;
 import com.silenteight.payments.bridge.firco.decision.statemapping.StateMappingStrategy.MapStateInput;
 
 import java.util.List;

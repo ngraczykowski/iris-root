@@ -1,6 +1,6 @@
 package com.silenteight.payments.bridge.firco.alertmessage.port;
 
-import com.silenteight.payments.bridge.firco.adapter.incoming.dto.output.AlertDecisionMessageDto;
+import com.silenteight.payments.bridge.common.dto.output.AlertDecisionMessageDto;
 
 public interface ResponsePublisherPort {
 

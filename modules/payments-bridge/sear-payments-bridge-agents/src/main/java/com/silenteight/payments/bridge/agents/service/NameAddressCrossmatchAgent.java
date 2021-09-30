@@ -4,8 +4,8 @@ import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.Result;
-import com.silenteight.payments.bridge.agents.model.WatchlistType;
 import com.silenteight.payments.bridge.agents.port.NameAddressCossmatchUseCase;
+import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 
 import org.springframework.stereotype.Service;
 
