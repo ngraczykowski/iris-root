@@ -10,6 +10,10 @@ public interface NationalIdDocumentQuery {
 
   Stream<String> mpNationalIds();
 
+  Stream<String> apCountries();
+
+  Stream<String> mpCountries();
+
   interface Factory {
 
     NationalIdDocumentQuery create(MatchData matchData);

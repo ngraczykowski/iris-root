@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 class OtherDocumentQueryFacade implements OtherDocumentQuery {
 
   private final MatchData matchData;
-  private static final DocumentExtractor documentExtractor = new DocumentExtractor();
+  private static final DocumentExtractor DOCUMENT_EXTRACTOR = new DocumentExtractor();
 
   @Override
   public Stream<String> apOtherDocuments() {
@@ -31,10 +31,10 @@ class OtherDocumentQueryFacade implements OtherDocumentQuery {
   }
 
   private Document extractApDocuments() {
-    return documentExtractor.convertAlertedPartyDocumentNumbers(matchData.getCustomerIndividual());
+    return DOCUMENT_EXTRACTOR.convertAlertedPartyDocumentNumbers(matchData.getCustomerIndividual());
   }
 
   private Document extractMpDocuments() {
-    return documentExtractor.convertMatchedPartyDocumentNumbers(matchData);
+    return DOCUMENT_EXTRACTOR.convertMatchedPartyDocumentNumbers(matchData);
   }
 }

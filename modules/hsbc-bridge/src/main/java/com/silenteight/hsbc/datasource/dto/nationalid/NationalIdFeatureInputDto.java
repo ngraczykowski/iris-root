@@ -16,6 +16,8 @@ public class NationalIdFeatureInputDto {
   List<String> alertedPartyDocumentNumbers = emptyList();
   @Builder.Default
   List<String> watchlistDocumentNumbers = emptyList();
-  String alertedPartyCountry;
-  String watchlistCountry;
+  @Builder.Default
+  List<String> alertedPartyCountries = emptyList();
+  @Builder.Default
+  List<String> watchlistCountries = emptyList();
 }

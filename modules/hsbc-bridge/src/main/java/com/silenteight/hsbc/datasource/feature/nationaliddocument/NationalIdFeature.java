@@ -28,16 +28,17 @@ public class NationalIdFeature implements FeatureValuesRetriever<NationalIdFeatu
     if (matchData.isIndividual()) {
       inputBuilder.alertedPartyDocumentNumbers(toDistinctList(query.apNationalIds()));
       inputBuilder.watchlistDocumentNumbers(toDistinctList(query.mpNationalIds()));
+      inputBuilder.alertedPartyCountries(toDistinctList(query.apCountries()));
+      inputBuilder.watchlistCountries(toDistinctList(query.mpCountries()));
     } else {
       inputBuilder.alertedPartyDocumentNumbers(emptyList());
       inputBuilder.watchlistDocumentNumbers(emptyList());
+      inputBuilder.alertedPartyCountries(emptyList());
+      inputBuilder.watchlistCountries(emptyList());
     }
 
     var result = inputBuilder
         .feature(getFeatureName())
-        //FIXME mmrowka which country to choose if there is many IDs?
-        //.alertedPartyCountry("AP")
-        //.watchlistCountry("PL")
         .build();
 
     log.debug(

@@ -24,7 +24,12 @@ trait FullMatch {
             addressCountry: "PL",
             countryOfResidence: "Iran",
             edqResidenceCountriesCode: "IRN",
-            sourceCountry: "UK"
+            sourceCountry: "UK",
+            nationalityCitizenshipCountries: "UNITED KINGDOM",
+            nationalityCountries: "GB",
+            countryOfBirth: "GERMANY",
+            countryOfBirthOriginal: "DE",
+            edqBirthCountryCode: "DE"
         )
       },
       getWorldCheckIndividuals   : {

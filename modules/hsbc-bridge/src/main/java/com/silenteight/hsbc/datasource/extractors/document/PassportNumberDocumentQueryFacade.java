@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 class PassportNumberDocumentQueryFacade implements PassportNumberDocumentQuery {
 
   private final MatchData matchData;
-  private static final DocumentExtractor documentExtractor = new DocumentExtractor();
+  private static final DocumentExtractor DOCUMENT_EXTRACTOR = new DocumentExtractor();
 
   @Override
   public Stream<String> apPassportNumbers() {
@@ -24,10 +24,10 @@ class PassportNumberDocumentQueryFacade implements PassportNumberDocumentQuery {
   }
 
   private Document extractApDocuments() {
-    return documentExtractor.convertAlertedPartyDocumentNumbers(matchData.getCustomerIndividual());
+    return DOCUMENT_EXTRACTOR.convertAlertedPartyDocumentNumbers(matchData.getCustomerIndividual());
   }
 
   private Document extractMpDocuments() {
-    return documentExtractor.convertMatchedPartyDocumentNumbers(matchData);
+    return DOCUMENT_EXTRACTOR.convertMatchedPartyDocumentNumbers(matchData);
   }
 }

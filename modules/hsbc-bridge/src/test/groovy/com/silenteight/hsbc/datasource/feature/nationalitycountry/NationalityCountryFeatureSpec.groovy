@@ -1,6 +1,7 @@
-package com.silenteight.hsbc.datasource.feature
+package com.silenteight.hsbc.datasource.feature.nationalitycountry
 
 import com.silenteight.hsbc.datasource.extractors.country.NationalityCountryQueryConfigurer
+import com.silenteight.hsbc.datasource.feature.Feature
 import com.silenteight.hsbc.datasource.feature.country.NationalityCountryFeature
 import com.silenteight.hsbc.datasource.fixtures.FullMatch
 
@@ -20,11 +21,10 @@ class NationalityCountryFeatureSpec extends Specification implements FullMatch {
     with(result) {
       feature == Feature.NATIONALITY_COUNTRY.fullName
 
-      assertThat(alertedPartyCountries).contains("HK")
-      assertThat(watchlistCountries).
-          contains(
-              "IRAN", "VIET NAM", "UNK UNKW", "UNITED STATES", "US", "IRAN, ISLAMIC REPUBLIC OF",
-              "IR", "CHABAHAR", "VNM GB IRN")
+      alertedPartyCountries == ['HK', 'UNITED KINGDOM', 'GB', 'DE', 'GERMANY']
+      assertThat(watchlistCountries).containsExactly(
+          'UNK UNKW', 'VIET NAM', 'GB', 'IRAN', 'VNM GB IRN', 'UNITED STATES', 'US',
+          'IRAN, ISLAMIC REPUBLIC OF', 'IR', 'CHABAHAR')
     }
   }
 }

@@ -1,15 +1,16 @@
 package com.silenteight.hsbc.datasource.feature.nationaliddocument
 
-import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual
+import com.silenteight.hsbc.bridge.json.internal.model.CustomerIndividual
 import com.silenteight.hsbc.datasource.datamodel.MatchData
-import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual
-import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual
 import com.silenteight.hsbc.datasource.extractors.document.NationalIdDocumentQueryConfigurer
 import com.silenteight.hsbc.datasource.feature.Feature
+import com.silenteight.hsbc.datasource.fixtures.FullMatch
 
 import spock.lang.Specification
 
-class NationalIdFeatureSpec extends Specification {
+import static org.assertj.core.api.Assertions.assertThat
+
+class NationalIdFeatureSpec extends Specification implements FullMatch {
 
   def documentQueryConfigurer = new NationalIdDocumentQueryConfigurer().create()
 
@@ -19,6 +20,7 @@ class NationalIdFeatureSpec extends Specification {
     given:
     def matchData = Mock(MatchData) {
       isIndividual() >> false
+      getCustomerIndividual() >> new CustomerIndividual()
     }
 
     when:
@@ -29,50 +31,24 @@ class NationalIdFeatureSpec extends Specification {
       feature == Feature.NATIONAL_ID_DOCUMENT.fullName
       alertedPartyDocumentNumbers == []
       watchlistDocumentNumbers == []
+      alertedPartyCountries == []
+      watchlistCountries == []
     }
   }
 
   def 'should retrieve national id document values when customer is individual'() {
-    given:
-    def customerIndividual = Mock(CustomerIndividual) {
-      getIdentificationDocument1() >> '"NID","987456"'
-      getIdentificationDocument2() >> '2'
-      getIdentificationDocument3() >> '3'
-      getIdentificationDocument4() >> '4'
-      getIdentificationDocument5() >> '5'
-      getIdentificationDocument6() >> '6'
-      getIdentificationDocument7() >> '7'
-      getIdentificationDocument8() >> '8'
-      getIdentificationDocument9() >> '9'
-      getIdentificationDocument10() >> '10'
-    }
-
-    def worldCheckIndividual = Mock(WorldCheckIndividual) {
-      getIdNumbers() >> "78845ID (UNK-UNKW)"
-    }
-
-    def privateListIndividual = Mock(PrivateListIndividual) {
-      getNationalId() >> '4568795132,5465498756'
-      getEdqSuffix() >> 'ID42342'
-    }
-
-    def matchData = Mock(MatchData) {
-      isIndividual() >> true
-      getCustomerIndividual() >> customerIndividual
-      getWorldCheckIndividuals() >> [worldCheckIndividual]
-      hasWorldCheckIndividuals() >> true
-      getPrivateListIndividuals() >> [privateListIndividual]
-      hasPrivateListIndividuals() >> true
-    }
-
     when:
-    def result = underTest.retrieve(matchData)
+    def result = underTest.retrieve(FULL_MATCH_1)
 
     then:
     with(result) {
       feature == Feature.NATIONAL_ID_DOCUMENT.fullName
-      alertedPartyDocumentNumbers == ['987456']
+      alertedPartyDocumentNumbers == ['Y999999']
       watchlistDocumentNumbers == ['78845ID', '4568795132', '5465498756']
+      alertedPartyCountries == ['UNITED KINGDOM', 'GB', 'DE', 'GERMANY', 'HK']
+      assertThat(watchlistCountries).containsExactly(
+          'VNM GB IRN', 'UNITED STATES', 'US', 'IRAN, ISLAMIC REPUBLIC OF', 'IR', 'CHABAHAR',
+          'UNK UNKW', 'VIET NAM', 'GB', 'IRAN')
     }
   }
 }

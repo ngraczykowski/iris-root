@@ -59,9 +59,8 @@ class NationalIdInputGrpcService extends NationalIdInputServiceImplBase {
     return inputs.stream()
         .map(i -> NationalIdFeatureInput.newBuilder()
             .setFeature(i.getFeature())
-            //FIXME this should be fulfilled
-            //.setAlertedPartyCountry(i.getAlertedPartyCountry())
-            //.setWatchlistCountry(i.getWatchlistCountry())
+            .addAllAlertedPartyCountries(i.getAlertedPartyCountries())
+            .addAllWatchlistCountries(i.getWatchlistCountries())
             .addAllAlertedPartyDocumentNumbers(i.getAlertedPartyDocumentNumbers())
             .addAllWatchlistDocumentNumbers(i.getWatchlistDocumentNumbers())
             .build())
