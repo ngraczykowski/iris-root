@@ -17,7 +17,7 @@ import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 import com.silenteight.warehouse.indexer.alert.AlertModule;
 import com.silenteight.warehouse.indexer.analysis.AnalysisModule;
-import com.silenteight.warehouse.indexer.indexing.IndexerIntegrationProperties;
+import com.silenteight.warehouse.indexer.indexing.IndexerProperties;
 import com.silenteight.warehouse.indexer.indexing.MessageHandlerModule;
 import com.silenteight.warehouse.indexer.indextracking.IndexTrackingModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
@@ -62,7 +62,7 @@ import static org.mockito.Mockito.*;
 @Slf4j
 public class IndexerTestConfiguration {
 
-  private final IndexerIntegrationProperties properties;
+  private final IndexerProperties properties;
   private final IndexerClientIntegrationProperties testProperties;
 
   @Bean

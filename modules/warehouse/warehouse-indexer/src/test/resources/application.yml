@@ -17,17 +17,33 @@ warehouse:
   opendistro:
     max-object-count: 1000
   messaging:
-    integration:
-      production-indexing-inbound:
+    broker:
+      alert-backup-indexing:
+        queue-name: wh.index-request.backup
+        routing-key: command.index-request.production
+      qa-backup-indexing:
+        queue-name: wh.index-request.backup
+        routing-key: event.qa-alert
+      alert-production-indexing:
         queue-name: wh.index-request.production
-      production-indexed-outbound:
-        exchange-name: wh.event
-        routing-key: event.index-response.production
-      simulation-indexing-inbound:
+        routing-key: command.index-request.production
+      qa-indexing:
+        queue-name: wh.index-request.production
+        routing-key: event.qa-alert
+      alert-simulation-indexing:
         queue-name: wh.index-request.simulation
-      simulation-indexed-outbound:
-        exchange-name: wh.event
-        routing-key: event.index-response.simulation
+        routing-key: command.index-request.simulation
+  indexer:
+    production-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.alert-production-indexing.queue-name}
+    production-indexed-outbound:
+      exchange-name: wh.event
+      routing-key: event.index-response.production
+    simulation-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.alert-simulation-indexing.queue-name}
+    simulation-indexed-outbound:
+      exchange-name: wh.event
+      routing-key: event.index-response.simulation
   environment:
     prefix: itest
   es:

@@ -13,8 +13,8 @@ import javax.validation.Valid;
 
 @Data
 @Validated
-@ConfigurationProperties(prefix = "warehouse.messaging.integration")
-public class IndexerIntegrationProperties {
+@ConfigurationProperties(prefix = "warehouse.indexer")
+public class IndexerProperties {
 
   @Valid
   @NestedConfigurationProperty

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.data.api.v1.ProductionDataIndexRequest;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
-import com.silenteight.warehouse.backup.indexing.IndexerIntegrationProperties;
+import com.silenteight.warehouse.backup.indexing.IndexerProperties;
 import com.silenteight.warehouse.backup.indexing.IndexingConfiguration;
 
 import org.springframework.context.annotation.Bean;
@@ -23,7 +23,7 @@ class BackupIndexerListenerConfiguration {
       "backupIndexingInboundChannel";
 
   @NonNull
-  private final IndexerIntegrationProperties properties;
+  private final IndexerProperties properties;
 
   @NonNull
   private final AmqpInboundFactory inboundFactory;
