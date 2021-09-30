@@ -12,5 +12,5 @@ public interface FeatureDataAccess {
 
   List<CreatedAgentInput> saveAll(List<MatchFeatureInput> matchFeatureInputs);
 
-  int stream(BatchFeatureRequest batchhFeatureRequest, Consumer<MatchFeatureOutput> consumer);
+  int stream(BatchFeatureRequest batchFeatureRequest, Consumer<MatchFeatureOutput> consumer);
 }

@@ -7,6 +7,6 @@ import java.util.function.Consumer;
 public interface BatchGetFeatureInputUseCase {
 
   void batchGetFeatureInput(
-      BatchFeatureRequest batchhFeatureRequest,
+      BatchFeatureRequest batchFeatureRequest,
       Consumer<BatchFeatureInputResponse> consumer);
 }

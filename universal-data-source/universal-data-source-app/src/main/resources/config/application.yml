@@ -128,7 +128,7 @@ spring:
       #  transaction. Thus, with that query as workaround, we force the transaction commit.
       connection-init-sql: SELECT 1
       data-source-properties:
-        ApplicationName: SEAR Universal Data Source
+        ApplicationName: Universal Data Source
         reWriteBatchedInserts: true
 
   # Database migrations

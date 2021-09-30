@@ -35,18 +35,16 @@ class FeatureExtractor implements ResultSetExtractor<Integer> {
       .constructMapType(LinkedHashMap.class, String.class, ObjectNode.class);
 
   private final Consumer<MatchFeatureOutput> consumer;
-
+  private final String agentInputType;
 
   @Override
   public Integer extractData(ResultSet rs) throws SQLException, DataAccessException {
     var rowNum = 0;
 
-    var agentInputType = "Empty dataset";
     List<MatchFeatureOutput.MatchInput> matchFeatureOutputs = new ArrayList<>();
     while (rs.next()) {
       var match = rs.getString(1);
       var agentInputAggregate = rs.getString(3);
-      agentInputType =  rs.getString(2);
 
       matchFeatureOutputs.add(MatchInput.builder()
           .match(match)
@@ -56,8 +54,7 @@ class FeatureExtractor implements ResultSetExtractor<Integer> {
       rowNum++;
     }
 
-    if (!matchFeatureOutputs.isEmpty())
-      consumeFeatureResponse(new MatchFeatureOutput(agentInputType, matchFeatureOutputs));
+    consumeFeatureResponse(new MatchFeatureOutput(agentInputType, matchFeatureOutputs));
     return rowNum;
   }
 

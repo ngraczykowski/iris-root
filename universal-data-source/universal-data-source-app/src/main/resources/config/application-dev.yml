@@ -5,7 +5,6 @@ serp:
 logging:
   level:
     com.silenteight.sep: DEBUG
-    com.silenteight.searpayments.bridge: DEBUG
     io.opencensus: INFO
     io.netty: INFO
     io.grpc.netty: INFO

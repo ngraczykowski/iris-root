@@ -28,7 +28,7 @@ spring:
       #  The `connection-init-sql` query forces a transaction commit.
       connection-init-sql: SELECT 1
       data-source-properties:
-        ApplicationName: SEAR Universal Data Source
+        ApplicationName: Universal Data Source
 
   # Database migrations
   liquibase:

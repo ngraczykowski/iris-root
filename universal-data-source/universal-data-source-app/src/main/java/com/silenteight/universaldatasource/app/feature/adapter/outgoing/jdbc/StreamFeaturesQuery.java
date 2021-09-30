@@ -28,15 +28,16 @@ class StreamFeaturesQuery {
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
-  int execute(BatchFeatureRequest batchhFeatureRequest, Consumer<MatchFeatureOutput> consumer) {
+  int execute(BatchFeatureRequest batchFeatureRequest, Consumer<MatchFeatureOutput> consumer) {
 
     // TODO(jgajewski): SQL Injection
     var parameters =
-        new MapSqlParameterSource("agentInputType", batchhFeatureRequest.getAgentInputType());
-    parameters.addValue("matchNames", batchhFeatureRequest.getMatches());
-    parameters.addValue("featureNames", batchhFeatureRequest.getFeatures());
+        new MapSqlParameterSource("agentInputType", batchFeatureRequest.getAgentInputType());
+    parameters.addValue("matchNames", batchFeatureRequest.getMatches());
+    parameters.addValue("featureNames", batchFeatureRequest.getFeatures());
 
-    var features = jdbcTemplate.query(SQL, parameters, new FeatureExtractor(consumer));
+    var features = jdbcTemplate.query(SQL, parameters,
+        new FeatureExtractor(consumer, batchFeatureRequest.getAgentInputType()));
     return features != null ? features : 0;
   }
 }

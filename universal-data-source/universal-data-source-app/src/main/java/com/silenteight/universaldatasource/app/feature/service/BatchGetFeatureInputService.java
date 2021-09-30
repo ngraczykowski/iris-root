@@ -24,16 +24,15 @@ class BatchGetFeatureInputService implements BatchGetFeatureInputUseCase {
   @Timed(value = "uds.feature.use_cases", extraTags = { "action", "batchGetFeature" })
   @Override
   public void batchGetFeatureInput(
-      BatchFeatureRequest batchhFeatureRequest,
+      BatchFeatureRequest batchFeatureRequest,
       Consumer<BatchFeatureInputResponse> consumer) {
 
     log.debug("Streaming feature inputs");
 
     dataAccess.stream(
-        batchhFeatureRequest,
+        batchFeatureRequest,
         matchFeatureOutput -> consumer.accept(featureMapperFactory
             .get(matchFeatureOutput.getAgentInputType())
             .map(matchFeatureOutput)));
-
   }
 }
