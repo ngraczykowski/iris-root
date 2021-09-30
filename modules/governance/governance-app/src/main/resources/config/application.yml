@@ -11,8 +11,8 @@ serp:
         inbound-queue-name: ${serp.governance.messaging.broker.notification-send-mail.queue-name}
   governance:
     agent:
-      agentConfigurationSource: classpath:agent_configs.json
-      agentDetailsSource: classpath:agent_details.json
+      agent-configuration-source: classpath:agent_configs.json
+      agent-details-source: classpath:agent_details.json
     integration:
       solution-discrepancy:
         inbound-queue-name: ${serp.governance.messaging.broker.solution-discrepancy.queue-name}

@@ -1,0 +1,24 @@
+{
+  "agents/name/versions/1.0.0/configs/1": {
+    "agentId": "1697c58c-9a7a-4489-b315-b7c419182ceb",
+    "features": [
+      "features/name"
+    ],
+    "responses": [
+      "EXACT MATCH",
+      "STRONG MATCH",
+      "MATCH",
+      "WEAK MATCH",
+      "NO MATCH",
+      "HQ NO MATCH",
+      "NO DATA",
+      "INCONCLUSIVE"
+    ],
+    "configurations": [
+      {
+        "name": "date-entity-normal",
+        "configFile": "agents/configurations/date-enty-normal.yml"
+      }
+    ]
+  }
+}
