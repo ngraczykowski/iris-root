@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 
+import java.util.Arrays;
 import java.util.function.Function;
 
 @Service
@@ -41,7 +42,10 @@ class AwsCsvProvider implements CsvFileProvider {
       response = csvConsumer.apply(
           LearningCsv.fromS3Object(learningRequest.getObject(), responseInputStream));
     } catch (Exception e) {
-      log.error("There was a problem when receiving s3 object = " + e.getMessage());
+      log.error(
+          "There was a problem when receiving s3 object = " + e.getMessage() + "\r\n stacktrace = "
+              + Arrays.toString(
+              e.getStackTrace()));
       throw new AwsS3Exception(e);
     }
 
