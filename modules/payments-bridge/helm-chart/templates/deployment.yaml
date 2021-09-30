@@ -49,8 +49,6 @@ spec:
               value: {{ .Values.springRabbitmqVirtualHost }}
             - name: 'SPRING_PROFILES_ACTIVE'
               value: {{ .Values.springProfilesActive }}
-            - name: 'GRPC_CLIENT_AE_ADDRESS'
-              value: {{ .Values.grpc.client.ae }}
             - name: 'GRPC_SERVER_PORT'
               value: {{ .Values.ports.grpc | quote }}
             - name: 'SERVER_PORT'
