@@ -6,13 +6,9 @@ config:
   name: searPaymentsBridgeApp
 ports:
   http: 8080
-  grpc: 8081
+  grpc: 9090
 
-grpClientAeAddress: adjudication-engine-service.default.svc.cluster.local
+grpcClientAeAddress: adjudication-engine-service.default.svc.cluster.local
 springProfilesActive: "mockdatasource"
 replicaCount: 1
 imagePullPolicy: Always
-livenessProbeHttpGetPath: "/rest/pb/management/health/livenessState"
-readinessProbeHttpGetPath: "/rest/pb/management/health/readinessState"
-
-

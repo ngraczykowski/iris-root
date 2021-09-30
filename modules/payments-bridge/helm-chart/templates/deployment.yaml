@@ -18,14 +18,17 @@ spec:
         - name: {{ .Values.name }}
           livenessProbe:
             httpGet:
-              path: {{ .Values.livenessProbeHttpGetPath }}
+              path: "/rest/pb/management/health/liveness"
               port: 8080
-            initialDelaySeconds: 10
-            periodSeconds: 10
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
           readinessProbe:
             httpGet:
-              path: {{ .Values.readinessProbeHttpGetPath }}
+              path: "/rest/pb/management/health/readiness"
               port: 8080
+            failureThreshold: 30
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
           env:
             - name: 'PB_DB_HOST'
               value: {{ .Values.pbDbHost }}
@@ -50,16 +53,14 @@ spec:
             - name: 'SPRING_PROFILES_ACTIVE'
               value: {{ .Values.springProfilesActive }}
             - name: 'GRPC_CLIENT_AE_ADDRESS'
-              value: {{ .Values.grpClientAeAddress }}
-            - name: 'GRPC_SERVER_PORT'
-              value: {{ .Values.ports.grpc | quote }}
-            - name: 'SERVER_PORT'
-              value: {{ .Values.ports.http | quote }}
+              value: {{ .Values.grpcClientAeAddress }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
           ports:
-            - containerPort: {{ .Values.ports.http }}
+            - containerPort: 8080
+              protocol: UDP
+              name: http
+            - containerPort: 8081
               protocol: TCP
-            - containerPort: {{ .Values.ports.grpc }}
-              protocol: TCP
+              name: grpc
