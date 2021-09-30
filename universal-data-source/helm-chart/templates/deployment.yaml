@@ -19,17 +19,17 @@ spec:
         - name: {{ .Values.name }}
           livenessProbe:
             httpGet:
-              path: {{ .Values.livenessProbeHttpGetPath }}
+              path: "/rest/uds/management/health/liveness"
               port: 8080
-            initialDelaySeconds: 10
-            periodSeconds: 10
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
           readinessProbe:
             httpGet:
-              path: {{ .Values.readinessProbeHttpGetPath }}
+              path: "/rest/uds/management/health/readiness"
               port: 8080
             failureThreshold: 30
-            initialDelaySeconds: 10
-            periodSeconds: 10
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
           env:
             - name: "UDS_DB_HOST"
               value: {{ .Values.udsDbHost }}
@@ -47,7 +47,6 @@ spec:
               value: "KUBERNETES"
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          args: {{ .Values.args }}
           resources:
             limits:
               memory: {{ .Values.memoryLimit | quote }}
