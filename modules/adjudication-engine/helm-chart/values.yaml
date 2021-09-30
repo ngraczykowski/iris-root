@@ -11,8 +11,8 @@ ports:
 springProfilesActive: "mockaws,mockdatasource,mockae"
 replicaCount: 1
 imagePullPolicy: Always
-livenessProbeHttpGetPath: "/rest/ae/management/health/livenessState"
-readinessProbeHttpGetPath: "/rest/ae/management/health/readinessState"
+livenessProbeHttpGetPath: "/rest/uds/management/health/liveness"
+readinessProbeHttpGetPath: "/rest/uds/management/health/readiness"
 grpc:
   client:
     data_source:
