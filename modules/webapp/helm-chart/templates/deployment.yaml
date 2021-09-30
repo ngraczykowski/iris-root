@@ -39,6 +39,8 @@ spec:
               value: {{ .Values.springRabbitmqVirtualHost }}
             - name: 'KEYCLOAK_CLIENT_ID'
               value: {{ .Values.keycloakClientId | squote }}
+            - name: 'KEYCLOAK_FRONTEND_CLIENT_ID'
+              value: {{ .Values.keycloakFrontendClientId | squote }}
             - name: 'KEYCLOAK_ADAPTER_AUTH_SERVER_URL'
               value: {{ .Values.keycloakAdapterAuthServerUrl | squote }}
             - name: 'KEYCLOAK_ADAPTER_RESOURCE'
