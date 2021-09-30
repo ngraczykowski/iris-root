@@ -10,8 +10,8 @@ spec:
     - protocol: TCP
       name: http
       port: {{ .Values.ports.http }}
-      targetPort: 8080
+      targetPort: http
     - protocol: TCP
       name: grpc
       port: {{ .Values.ports.grpc }}
-      targetPort: 9090
+      targetPort: grpc
