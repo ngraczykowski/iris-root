@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
-import com.silenteight.warehouse.indexer.indexing.IndexerIntegrationProperties;
+import com.silenteight.warehouse.indexer.indexing.IndexerProperties;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,7 @@ public class IndexerGatewayConfiguration {
   @NonNull
   private final AmqpOutboundFactory outboundFactory;
   @NonNull
-  private final IndexerIntegrationProperties properties;
+  private final IndexerProperties properties;
 
   @Bean
   IntegrationFlow productionIndexedOutboundChannelToExchangeIntegrationFlow() {

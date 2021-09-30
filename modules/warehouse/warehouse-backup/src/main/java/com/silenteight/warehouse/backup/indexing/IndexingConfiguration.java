@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties(IndexerIntegrationProperties.class)
+@EnableConfigurationProperties(IndexerProperties.class)
 public class IndexingConfiguration {
 
   @Bean

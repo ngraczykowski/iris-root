@@ -17,8 +17,7 @@ class RabbitModuleConfiguration {
         "com.silenteight.data.api",
         "com.google.protobuf",
         "com.google.rpc",
-        "com.google.type"
-    );
+        "com.google.type");
 
     return factory.create();
   }

@@ -10,7 +10,7 @@ import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConven
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.warehouse.backup.BackupModule;
-import com.silenteight.warehouse.backup.indexing.IndexerIntegrationProperties;
+import com.silenteight.warehouse.backup.indexing.IndexerProperties;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.test.client.TestClientModule;
@@ -46,7 +46,7 @@ import static java.time.Instant.parse;
 public class BackupTestConfiguration {
 
   private static final String TIME_SOURCE = "2021-07-22T12:17:37.098Z";
-  private final IndexerIntegrationProperties properties;
+  private final IndexerProperties properties;
   private final IndexerClientIntegrationProperties testProperties;
   
   @Bean
