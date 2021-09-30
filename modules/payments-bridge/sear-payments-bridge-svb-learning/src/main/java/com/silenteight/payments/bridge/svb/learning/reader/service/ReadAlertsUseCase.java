@@ -36,7 +36,6 @@ class ReadAlertsUseCase {
             .readerFor(LearningCsvRow.class)
             .with(schema)
             .readValues(learningCsv.getContent());
-
         var alertsReadingResponse = readByAlerts(it, alertConsumer);
         alertsReadingResponse.setObjectData(learningCsv);
 
@@ -51,6 +50,7 @@ class ReadAlertsUseCase {
   private AlertsReadingResponse readByAlerts(
       MappingIterator<LearningCsvRow> it, Consumer<LearningAlert> alertConsumer) {
     var firstRow = it.next();
+    assertRowNotNull(firstRow);
     String currentAlertID = firstRow.getFkcoVSystemId();
 
     List<ReadAlertError> errors = new ArrayList<>();
@@ -62,6 +62,7 @@ class ReadAlertsUseCase {
 
     while (it.hasNext()) {
       var row = it.next();
+      assertRowNotNull(row);
       var rowAlertId = row.getFkcoVSystemId();
 
       if (currentAlertID.equals(rowAlertId)) {
@@ -90,12 +91,22 @@ class ReadAlertsUseCase {
         .build();
   }
 
+  static void assertRowNotNull(LearningCsvRow row) {
+    if (row.getFkcoVSystemId() == null || row.getFkcoVSystemId().equals("")) {
+      throw new ReadAlertException("Received empty row");
+    }
+  }
+
   private static class ReadAlertException extends RuntimeException {
 
     private static final long serialVersionUID = 7691761705445879166L;
 
     ReadAlertException(Exception e) {
       super(e);
+    }
+
+    ReadAlertException(String message) {
+      super(message);
     }
   }
 }

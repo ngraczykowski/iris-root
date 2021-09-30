@@ -28,7 +28,7 @@ class GenerateLogFileUseCase {
   private static String generateFileName() {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm");
     LocalDateTime now = LocalDateTime.now();
-    return "error-logs-" + dtf.format(now) + ".log";
+    return "/tmp/error-logs-" + dtf.format(now) + ".log";
   }
 
   private static class GeneratingFileException extends RuntimeException {
