@@ -18,14 +18,17 @@ spec:
         - name: {{ .Values.name }}
           livenessProbe:
             httpGet:
-              path: {{ .Values.livenessProbeHttpGetPath }}
-              port: {{ .Values.ports.http }}
-            initialDelaySeconds: 10
-            periodSeconds: 10
+              path: "/rest/governance/management/health/liveness"
+              port: 8080
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
           readinessProbe:
             httpGet:
-              path: {{ .Values.readinessProbeHttpGetPath }}
-              port: {{ .Values.ports.http }}
+              path: "/rest/governance/management/health/readiness"
+              port: 8080
+            failureThreshold: 30
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
           env:
             - name: 'SERP_DB_HOST'
               value: {{ .Values.serpGovernanceDbHost | squote }}
@@ -61,15 +64,15 @@ spec:
               value: {{ .Values.keycloakAdapterRealm | squote }}
             - name: 'SPRING_PROFILES_ACTIVE'
               value: {{ .Values.springProfilesActive | squote }}
-            - name: 'GRPC_SERVER_PORT'
-              value: {{ .Values.ports.grpc | quote }}
-            - name: 'SERVER_PORT'
-              value: {{ .Values.ports.http | quote }}
             - name: 'GRPC_CLIENT_WAREHOUSE_ADDRESS'
               value: {{ .Values.grpc.client.warehouse.address | quote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          args: {{ .Values.args }}
+          resources:
+            limits:
+              memory: {{ .Values.memoryLimit | quote }}
+            requests:
+              memory: {{ .Values.memoryRequest | quote }}
           ports:
             - containerPort: {{ .Values.ports.http }}
               name: http
