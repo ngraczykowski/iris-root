@@ -9,7 +9,7 @@ plugins {
   id "nebula.resolution-rules" version "7.7.7"
   // Spring boot plugin version should be same as Spring version in sep-dependencies
   id "org.springframework.boot" version "2.4.9" apply false
-  id "com.google.cloud.tools.jib" version "2.5.0" apply false
+  id "com.google.cloud.tools.jib" version "3.1.4" apply false
 }
 
 projectSetup {
@@ -59,6 +59,69 @@ subprojects {Project subproject ->
         subproject.jar {
           preserveFileTimestamps false
           reproducibleFileOrder true
+        }
+      }
+
+      if (subproject.pluginManager.hasPlugin("com.google.cloud.tools.jib")) {
+        subproject.jib {
+          from {
+            // NOTE(ahaczewski): Use debug version of the image for SNAPSHOT builds.
+            def imageSuffix = "$version".endsWith("-SNAPSHOT") ? "-debug" : ""
+            image = "gcr.io/distroless/java-debian10:11" + imageSuffix
+          }
+          to {
+            image = "docker.repo.silenteight.com/warehouse/${project.name}:${version}"
+            if (!"$version".endsWith("-SNAPSHOT"))
+              tags = ["latest"]
+          }
+          extraDirectories {
+            paths {
+              path {
+                from = '../config'
+                into = '/silenteight/warehouse/config/'
+                includes = ['*.yml']
+              }
+            }
+          }
+          container {
+            appRoot = "/silenteight/warehouse"
+            environment = [
+                "SILENTEIGHT_HOME"                    : "/silenteight",
+                "WAREHOUSE_DB_HOST"                   : "warehouse-db",
+                "WAREHOUSE_DB_PORT"                   : "5432",
+                "WAREHOUSE_DB_NAME"                   : "warehouse",
+                "WAREHOUSE_DB_USERNAME"               : "warehouse",
+                "WAREHOUSE_DB_PASSWORD"               : "warehouse",
+                "WAREHOUSE_ENVIRONMENT_PREFIX"        : "dev",
+                "SPRING_RABBITMQ_HOST"                : "rabbitmq",
+                "SPRING_RABBITMQ_PORT"                : "5672",
+                "SPRING_RABBITMQ_USER"                : "dev",
+                "SPRING_RABBITMQ_PASSWORD"            : "dev",
+                "SPRING_RABBITMQ_VHOST"               : "/",
+                "SERP_TRUSTSTORE_PATH"                : "/silenteight/cert/truststore.p12",
+                "SERP_TRUSTSTORE_PASSWORD"            : "changeme",
+                "SERP_KEYSTORE_PATH"                  : "/silenteight/cert/keystore.p12",
+                "SERP_KEYSTORE_PASSWORD"              : "changeme",
+                "SPRING_PROFILES_ACTIVE"              : "grpc-server,debug",
+                "SPRING_CONFIG_ADDITIONAL_LOCATION"   : "/silenteight/warehouse/config/",
+                "KEYCLOAK_ADAPTER_AUTH_SERVER_URL"    : "https://auth.silenteight.com/",
+                "KEYCLOAK_CLIENT_ID"                  : "backend",
+                "KEYCLOAK_ADAPTER_RESOURCE"           : "backend",
+                "KEYCLOAK_ADAPTER_CREDENTIALS_SECRET" : "changeme",
+                "KEYCLOAK_ADAPTER_REALM"              : "sens-webapp",
+            ]
+            jvmFlags = [
+                "-XX:MaxRAMPercentage=75",
+                "-Dfile.encoding=UTF-8",
+                "-Dsun.jnu.encoding=UTF-8",
+                "-Djava.net.preferIPv4Stack=true",
+                "-Djava.io.tmpdir=/tmp",
+            ]
+            ports = ["24900", "24206"]
+            user = "nonroot"
+            volumes = ["/silenteight/cert"]
+            workingDirectory = "/silenteight"
+          }
         }
       }
     }
