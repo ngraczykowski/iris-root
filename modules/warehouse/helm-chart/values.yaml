@@ -1,0 +1,14 @@
+name: warehouse-app
+image_tag: latest
+image_repo: latest
+args: [ "name" ]
+config:
+  name: WarehouseApp
+ports:
+  http: 8080
+  grpc: 8081
+
+replicaCount: 1
+imagePullPolicy: Always
+livenessProbeHttpGetPath: "/rest/warehouse/management/health/livenessState"
+readinessProbeHttpGetPath: "/rest/warehouse/management/health/readinessState"
