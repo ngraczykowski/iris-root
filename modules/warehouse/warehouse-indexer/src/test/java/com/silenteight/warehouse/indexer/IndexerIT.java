@@ -32,13 +32,15 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Map;
 
+import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_READ_ALIAS_NAME;
+import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_WRITE_INDEX_NAME;
+import static com.silenteight.warehouse.indexer.IndexerFixtures.SIMULATION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_1;
 import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.convertMapToPayload;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DOCUMENT_ID;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.SIMULATION_ANALYSIS_NAME;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SIMULATION_ANALYSIS_ID;
 import static java.util.List.of;
 import static java.util.UUID.randomUUID;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -58,9 +60,6 @@ import static org.awaitility.Awaitility.await;
 @ActiveProfiles("jpa-test")
 class IndexerIT {
 
-  static final String PRODUCTION_QUERY_INDEX_NAME = "itest_production";
-  static final String SIMULATION_INDEX_NAME = "itest_simulation_" + SIMULATION_ANALYSIS_ID;
-
   @Autowired
   private TestAnalysisMetadataRepository testAnalysisMetadataRepository;
 
@@ -79,7 +78,7 @@ class IndexerIT {
   @BeforeEach
   void init() {
     simpleElasticTestClient.createIndexTemplate(
-        PRODUCTION_QUERY_INDEX_NAME + "*", PRODUCTION_QUERY_INDEX_NAME);
+        PRODUCTION_ELASTIC_WRITE_INDEX_NAME, PRODUCTION_ELASTIC_READ_ALIAS_NAME);
 
     indexedEventListener.clear();
   }
@@ -108,7 +107,7 @@ class IndexerIT {
         .extracting(DataIndexResponse::getRequestId)
         .isEqualTo(request.getRequestId());
 
-    var source = simpleElasticTestClient.getSource(PRODUCTION_QUERY_INDEX_NAME, DOCUMENT_ID);
+    var source = simpleElasticTestClient.getSource(PRODUCTION_ELASTIC_READ_ALIAS_NAME, DOCUMENT_ID);
     assertThat(source).isEqualTo(MAPPED_ALERT_1);
   }
 
@@ -129,7 +128,7 @@ class IndexerIT {
         .extracting(DataIndexResponse::getRequestId)
         .isEqualTo(request.getRequestId());
 
-    var source = simpleElasticTestClient.getSource(SIMULATION_INDEX_NAME, DOCUMENT_ID);
+    var source = simpleElasticTestClient.getSource(SIMULATION_ELASTIC_INDEX_NAME, DOCUMENT_ID);
     assertThat(source).isEqualTo(MAPPED_ALERT_1);
   }
 
@@ -144,7 +143,7 @@ class IndexerIT {
         .atMost(5, SECONDS)
         .until(() -> indexedEventListener.hasAtLeastEventCount(2));
 
-    var source = simpleElasticTestClient.getSource(PRODUCTION_QUERY_INDEX_NAME, DOCUMENT_ID);
+    var source = simpleElasticTestClient.getSource(PRODUCTION_ELASTIC_READ_ALIAS_NAME, DOCUMENT_ID);
     assertThat(source).containsAllEntriesOf(Map.of(
         MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
         MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP));
@@ -164,7 +163,8 @@ class IndexerIT {
         .atMost(5, SECONDS)
         .until(() -> indexedEventListener.hasAtLeastEventCount(2));
 
-    var source = simpleElasticTestClient.getSource(SIMULATION_INDEX_NAME, Values.ALERT_NAME);
+    var source =
+        simpleElasticTestClient.getSource(SIMULATION_ELASTIC_INDEX_NAME, Values.ALERT_NAME);
     assertThat(source).containsAllEntriesOf(Map.of(
         MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
         MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP));
@@ -206,8 +206,8 @@ class IndexerIT {
   }
 
   private void removeData() {
-    safeDeleteIndex(SIMULATION_INDEX_NAME);
-    safeDeleteIndex(PRODUCTION_QUERY_INDEX_NAME);
+    safeDeleteIndex(SIMULATION_ELASTIC_INDEX_NAME);
+    safeDeleteIndex(PRODUCTION_ELASTIC_WRITE_INDEX_NAME);
   }
 
   private void safeDeleteIndex(String index) {

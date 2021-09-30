@@ -5,6 +5,7 @@ import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaCo
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +13,8 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
+import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_READ_ALIAS_NAME;
+import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_WRITE_INDEX_NAME;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.DISCRIMINATOR;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DOCUMENT_ID;
 import static java.util.Map.of;
@@ -23,7 +25,7 @@ import static org.assertj.core.api.Assertions.*;
     OpendistroElasticContainerInitializer.class,
     OpendistroKibanaContainerInitializer.class
 })
-class QueryIndexServiceTest {
+class FieldsQueryIndexServiceTest {
 
   @Autowired
   SimpleElasticTestClient testClient;
@@ -31,23 +33,30 @@ class QueryIndexServiceTest {
   @Autowired
   FieldsQueryIndexService underTest;
 
+  @BeforeEach
+  void init() {
+    testClient.createIndexTemplate(
+        PRODUCTION_ELASTIC_WRITE_INDEX_NAME, PRODUCTION_ELASTIC_READ_ALIAS_NAME);
+  }
+
   @AfterEach
-  public void cleanup() {
+  void cleanup() {
+    testClient.removeIndexTemplate();
     removeData();
   }
 
   @Test
   void shouldReturnListOfFields() {
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, of(
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, of(
         DISCRIMINATOR, DOCUMENT_ID
     ));
 
-    List<String> fields = underTest.getFieldsList(PRODUCTION_ELASTIC_INDEX_NAME);
+    List<String> fields = underTest.getFieldsList(PRODUCTION_ELASTIC_READ_ALIAS_NAME);
 
     assertThat(fields).containsExactlyInAnyOrder(DISCRIMINATOR);
   }
 
   private void removeData() {
-    testClient.removeIndex(PRODUCTION_ELASTIC_INDEX_NAME);
+    testClient.removeIndex(PRODUCTION_ELASTIC_WRITE_INDEX_NAME);
   }
 }

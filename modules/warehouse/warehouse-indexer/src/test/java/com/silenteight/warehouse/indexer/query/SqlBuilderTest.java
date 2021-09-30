@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
 
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
+import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_WRITE_INDEX_NAME;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP;
 import static java.time.OffsetDateTime.parse;
 import static java.util.Collections.emptyList;
@@ -33,7 +33,7 @@ class SqlBuilderTest {
     var conditions = of(new MultiValueCondition(
         MappedKeys.STATUS_KEY, Values.STATUS_COMPLETED, Values.STATUS_ERROR));
     String query = underTest.groupByBetweenDates(
-        of(PRODUCTION_ELASTIC_INDEX_NAME),
+        of(PRODUCTION_ELASTIC_WRITE_INDEX_NAME),
         of(MappedKeys.COUNTRY_KEY),
         conditions,
         FROM,
@@ -41,7 +41,7 @@ class SqlBuilderTest {
 
     assertThat(query).isEqualToIgnoringWhitespace(""
         + "select `alert_lob_country`, count(*) "
-        + "from itest_production "
+        + "from `itest_production.2021-04-15` "
         + "where (index_timestamp >= timestamp('2021-04-15 12:17:37.098') "
         + "  and  index_timestamp < timestamp('2021-04-15 13:17:37.098') "
         + "and (alert_status = 'COMPLETED' or alert_status = 'ERROR')) "
@@ -51,7 +51,7 @@ class SqlBuilderTest {
   @Test
   void shouldCreateSqlQueryForAllReportStatus() {
     String query = underTest.groupByBetweenDates(
-        of(PRODUCTION_ELASTIC_INDEX_NAME),
+        of(PRODUCTION_ELASTIC_WRITE_INDEX_NAME),
         of(MappedKeys.COUNTRY_KEY, MappedKeys.RISK_TYPE_KEY),
         emptyList(),
         FROM,
@@ -59,7 +59,7 @@ class SqlBuilderTest {
 
     assertThat(query).isEqualToIgnoringWhitespace(""
         + "select `alert_lob_country`, `alert_risk_type`, count(*) "
-        + "from itest_production "
+        + "from `itest_production.2021-04-15` "
         + "where (index_timestamp >= timestamp('2021-04-15 12:17:37.098') "
         + "  and  index_timestamp < timestamp('2021-04-15 13:17:37.098')) "
         + "group by `alert_lob_country`, `alert_risk_type`");

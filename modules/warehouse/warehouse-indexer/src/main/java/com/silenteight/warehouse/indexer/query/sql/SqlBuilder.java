@@ -81,6 +81,7 @@ public class SqlBuilder {
 
   private static Stream<Table<Record>> asTables(List<String> indexes) {
     return indexes.stream()
+        .map(SqlBuilder::surroundWithApostrophes)
         .map(DSL::table);
   }
 

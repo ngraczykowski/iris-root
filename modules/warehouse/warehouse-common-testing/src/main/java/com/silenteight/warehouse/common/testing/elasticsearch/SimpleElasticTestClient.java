@@ -3,6 +3,7 @@ package com.silenteight.warehouse.common.testing.elasticsearch;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
+import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.template.delete.DeleteIndexTemplateRequest;
@@ -59,6 +60,13 @@ public class SimpleElasticTestClient {
 
   @SneakyThrows
   public void createIndexTemplate(String indexPattern, String aliasName) {
+    // FIXME: there should be no index present
+    try {
+      removeIndex(aliasName);
+    } catch (ElasticsearchException e) {
+      // do nothing, proceed
+    }
+
     PutIndexTemplateRequest request = new PutIndexTemplateRequest(INDEX_TEMPLATE)
         .patterns(of(indexPattern))
         .alias(new Alias(aliasName));

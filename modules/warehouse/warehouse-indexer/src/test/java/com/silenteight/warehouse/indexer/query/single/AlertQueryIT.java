@@ -9,6 +9,7 @@ import com.silenteight.warehouse.indexer.alert.MultiValueEntry;
 
 import org.elasticsearch.ElasticsearchException;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -22,7 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
+import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_READ_ALIAS_NAME;
+import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_WRITE_INDEX_NAME;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.COUNTRY_UK;
@@ -69,8 +71,15 @@ class AlertQueryIT {
   @Autowired
   RandomAlertQueryService randomAlertQueryService;
 
+  @BeforeEach
+  void init() {
+    simpleElasticTestClient.createIndexTemplate(
+        PRODUCTION_ELASTIC_WRITE_INDEX_NAME, PRODUCTION_ELASTIC_READ_ALIAS_NAME);
+  }
+
   @AfterEach
   void cleanup() {
+    simpleElasticTestClient.removeIndexTemplate();
     cleanData();
   }
 
@@ -145,11 +154,11 @@ class AlertQueryIT {
   }
 
   private void saveAlert(String discriminator, Map<String, Object> alert) {
-    simpleElasticTestClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, discriminator, alert);
+    simpleElasticTestClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, discriminator, alert);
   }
 
   private void cleanData() {
-    safeDeleteIndex(PRODUCTION_ELASTIC_INDEX_NAME);
+    safeDeleteIndex(PRODUCTION_ELASTIC_WRITE_INDEX_NAME);
   }
 
   private void safeDeleteIndex(String index) {
