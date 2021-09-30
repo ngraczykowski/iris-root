@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.svb.etl.util;
 
 import lombok.NonNull;
 
-import com.silenteight.payments.bridge.svb.etl.model.MessageFieldStructure;
+import com.silenteight.payments.bridge.svb.etl.response.MessageFieldStructure;
 
 import org.jetbrains.annotations.NotNull;
 

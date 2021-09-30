@@ -1,8 +1,8 @@
 package com.silenteight.payments.bridge.svb.learning.reader.service;
 
-import com.silenteight.payments.bridge.svb.etl.model.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.etl.port.CreateAlertedPartyEntitiesUseCase;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractAlertedPartyDataUseCase;
+import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
 

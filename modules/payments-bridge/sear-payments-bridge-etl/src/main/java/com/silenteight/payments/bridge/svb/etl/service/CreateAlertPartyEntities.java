@@ -3,10 +3,10 @@ package com.silenteight.payments.bridge.svb.etl.service;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
-import com.silenteight.payments.bridge.svb.etl.model.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.etl.model.CreateAlertedPartyEntitiesRequest;
-import com.silenteight.payments.bridge.svb.etl.model.MessageFieldStructure;
 import com.silenteight.payments.bridge.svb.etl.port.CreateAlertedPartyEntitiesUseCase;
+import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
+import com.silenteight.payments.bridge.svb.etl.response.MessageFieldStructure;
 import com.silenteight.payments.bridge.svb.etl.util.StringUtil;
 
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.etl.model;
+package com.silenteight.payments.bridge.svb.etl.response;
 
 public enum MessageFieldStructure {
   NAMEADDRESS_FORMAT_F, NAMEADDRESS_FORMAT_UNSTRUCTURED, NAMEADDRESS_FORMAT_LASTLINE_NAME,

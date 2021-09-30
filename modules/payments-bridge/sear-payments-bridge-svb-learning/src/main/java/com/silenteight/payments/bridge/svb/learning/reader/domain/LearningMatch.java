@@ -8,8 +8,8 @@ import lombok.experimental.NonFinal;
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
-import com.silenteight.payments.bridge.svb.etl.model.AlertedPartyData;
-import com.silenteight.payments.bridge.svb.etl.model.MessageFieldStructure;
+import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
+import com.silenteight.payments.bridge.svb.etl.response.MessageFieldStructure;
 
 import java.util.List;
 import java.util.Map;

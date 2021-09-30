@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.silenteight.payments.bridge.svb.etl.model.MessageFieldStructure;
+import com.silenteight.payments.bridge.svb.etl.response.MessageFieldStructure;
 
 import java.util.ArrayList;
 import java.util.List;

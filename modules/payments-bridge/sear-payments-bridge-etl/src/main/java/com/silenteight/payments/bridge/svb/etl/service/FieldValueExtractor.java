@@ -28,6 +28,44 @@ class FieldValueExtractor {
     }
   }
 
+  static String extractMatchfieldFromNonScstarMessage(
+      @NotNull String tag, @NotNull String messageData) {
+    tag = tag.strip();
+    int spaceLength = 15 - tag.length();
+    if (tag.contains("STRIP")) {
+      tag = Pattern.quote(tag);
+    }
+    String regex = "(?s)(?:(?<=\\n\\[" + escapeRegex(tag) + "[\\s\\d]{" +
+        spaceLength + "}\\]))(.*?\\n)(?=\\[[^]]+\\]|$)";
+    return extractFieldOnRegex(messageData, regex);
+  }
+
+  static String extractMatchfieldFromScstarMessage(
+      @NotNull String tag, @NotNull String messageData) {
+    tag = tag.strip();
+    if (tag.contains("STRIP")) {
+      tag = Pattern.quote(tag);
+    }
+    String regex = "(?s)(?:(?<=\\n:" + escapeRegex(tag) + ":))(.*?\\n)(?=:[0-9]{2}\\w?:|-})";
+    return extractFieldOnRegex(messageData, regex);
+  }
+
+  @NotNull
+  private static String extractFieldOnRegex(String messageData, String regex) {
+    Pattern pattern = Pattern.compile(regex);
+    Matcher matcher = pattern.matcher(messageData);
+    StringBuilder matches = new StringBuilder();
+    boolean found = false;
+    while (matcher.find()) {
+      matches.append(matcher.group(1));
+      found = true;
+    }
+    if (found)
+      return matches.toString();
+    else
+      return "Matching field not extracted";
+  }
+
   @NotNull
   public static List<List<String>> extractFieldValues(
       AbstractMessageStructure messageStructure, String messageData) {
@@ -65,44 +103,6 @@ class FieldValueExtractor {
       fieldValues.add(singletonList(mainTagFieldValue));
     }
     return fieldValues;
-  }
-
-  static String extractMatchfieldFromNonScstarMessage(
-      @NotNull String tag, @NotNull String messageData) {
-    tag = tag.strip();
-    int spaceLength = 15 - tag.length();
-    if (tag.contains("STRIP")) {
-      tag = Pattern.quote(tag);
-    }
-    String regex = "(?s)(?:(?<=\\n\\[" + escapeRegex(tag) + "[\\s\\d]{" +
-        spaceLength + "}\\]))(.*?\\n)(?=\\[[^]]+\\]|$)";
-    return extractFieldOnRegex(messageData, regex);
-  }
-
-  static String extractMatchfieldFromScstarMessage(
-      @NotNull String tag, @NotNull String messageData) {
-    tag = tag.strip();
-    if (tag.contains("STRIP")) {
-      tag = Pattern.quote(tag);
-    }
-    String regex = "(?s)(?:(?<=\\n:" + escapeRegex(tag) + ":))(.*?\\n)(?=:[0-9]{2}\\w?:|-})";
-    return extractFieldOnRegex(messageData, regex);
-  }
-
-  @NotNull
-  private static String extractFieldOnRegex(String messageData, String regex) {
-    Pattern pattern = Pattern.compile(regex);
-    Matcher matcher = pattern.matcher(messageData);
-    StringBuilder matches = new StringBuilder();
-    boolean found = false;
-    while (matcher.find()) {
-      matches.append(matcher.group(1));
-      found = true;
-    }
-    if (found)
-      return matches.toString();
-    else
-      return "Matching field not extracted";
   }
 
 }

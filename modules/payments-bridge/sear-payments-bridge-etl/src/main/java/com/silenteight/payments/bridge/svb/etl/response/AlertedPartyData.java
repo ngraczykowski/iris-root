@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.etl.model;
+package com.silenteight.payments.bridge.svb.etl.response;
 
 import lombok.Builder;
 import lombok.Value;

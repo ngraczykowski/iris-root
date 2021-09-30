@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.svb.etl.response.MessageFieldStructure;
+import com.silenteight.payments.bridge.svb.etl.response.SourceSystem;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -60,10 +63,6 @@ public abstract class AbstractMessageStructure {
         return SourceSystem.DTP;
     }
     return SourceSystem.OTHER;
-  }
-
-  public enum SourceSystem {
-    MTS, NBP, SCSTAR, STS, DTP, OTHER
   }
 
   public static class MessageStructureDefault extends AbstractMessageStructure {

@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
-import com.silenteight.payments.bridge.svb.etl.model.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.etl.model.CreateAlertedPartyEntitiesRequest;
 import com.silenteight.payments.bridge.svb.etl.model.ExtractAlertedPartyDataRequest;
 import com.silenteight.payments.bridge.svb.etl.port.CreateAlertedPartyEntitiesUseCase;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractAlertedPartyDataUseCase;
+import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsvRow;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 

@@ -1,7 +1,7 @@
 package com.silenteight.payments.bridge.svb.learning;
 
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
-import com.silenteight.payments.bridge.svb.etl.model.AlertedPartyData;
+import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
