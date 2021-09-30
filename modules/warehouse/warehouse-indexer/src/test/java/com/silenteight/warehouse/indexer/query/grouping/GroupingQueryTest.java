@@ -1,5 +1,7 @@
 package com.silenteight.warehouse.indexer.query.grouping;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClientException;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
@@ -8,13 +10,15 @@ import com.silenteight.warehouse.indexer.query.common.QueryFilter;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import static com.silenteight.warehouse.common.opendistro.roles.RolesMappedConstants.COUNTRY_KEY;
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
+import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_READ_ALIAS_NAME;
+import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_WRITE_INDEX_NAME;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys.STATUS_KEY;
@@ -27,6 +31,7 @@ import static java.time.OffsetDateTime.parse;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 
+@Slf4j
 @SpringBootTest(classes = GroupingQueryTestConfiguration.class)
 @ContextConfiguration(initializers = {
     OpendistroElasticContainerInitializer.class,
@@ -43,19 +48,26 @@ class GroupingQueryTest {
   @Autowired
   GroupingQueryService underTest;
 
+  @BeforeEach
+  void init() {
+    testClient.createIndexTemplate(
+        PRODUCTION_ELASTIC_WRITE_INDEX_NAME, PRODUCTION_ELASTIC_READ_ALIAS_NAME);
+  }
+
   @AfterEach
-  public void cleanup() {
+  void cleanup() {
+    testClient.removeIndexTemplate();
     removeData();
   }
 
   @Test
   void shouldReturnGroupingByResult() {
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_4);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_5);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_4);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_5);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .indexes(of(PRODUCTION_ELASTIC_READ_ALIAS_NAME))
         .fields(of(COUNTRY_KEY, MappedKeys.RISK_TYPE_KEY))
         .dateField(INDEX_TIMESTAMP)
         .from(parse(PROCESSING_TIMESTAMP))
@@ -73,11 +85,11 @@ class GroupingQueryTest {
 
   @Test
   void shouldReplaceNullValuesWithPlaceholder() {
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_1);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_3);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_1);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_3);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .indexes(of(PRODUCTION_ELASTIC_READ_ALIAS_NAME))
         .fields(of(MappedKeys.RISK_TYPE_KEY))
         .dateField(INDEX_TIMESTAMP)
         .from(parse(PROCESSING_TIMESTAMP))
@@ -92,10 +104,10 @@ class GroupingQueryTest {
 
   @Test
   void shouldHandleNonExistingValue() {
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .indexes(of(PRODUCTION_ELASTIC_READ_ALIAS_NAME))
         .fields(of(MappedKeys.RISK_TYPE_KEY, NOT_EXISTING_KEY))
         .dateField(INDEX_TIMESTAMP)
         .from(parse(PROCESSING_TIMESTAMP))
@@ -112,10 +124,10 @@ class GroupingQueryTest {
 
   @Test
   void shouldHandleEmptyGroupValue() {
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .indexes(of(PRODUCTION_ELASTIC_READ_ALIAS_NAME))
         .fields(of(NOT_EXISTING_KEY))
         .dateField(INDEX_TIMESTAMP)
         .from(parse(PROCESSING_TIMESTAMP))
@@ -131,7 +143,7 @@ class GroupingQueryTest {
 
   @Test
   void shouldHandleException() {
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_1);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_1);
 
     FetchGroupedTimeRangedDataRequest invalidRequest = FetchGroupedTimeRangedDataRequest.builder()
         .indexes(of())
@@ -149,11 +161,11 @@ class GroupingQueryTest {
 
   @Test
   void shouldReturnDataThatMatchesFilters() {
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_1);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_7);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_1);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_7);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .indexes(of(PRODUCTION_ELASTIC_READ_ALIAS_NAME))
         .fields(of(STATUS_KEY))
         .dateField(INDEX_TIMESTAMP)
         .from(parse(PROCESSING_TIMESTAMP))
@@ -170,12 +182,12 @@ class GroupingQueryTest {
 
   @Test
   void shouldSupportMultipleValuesInFilters() {
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_1);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_6);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_7);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_1);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_6);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_7);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .indexes(of(PRODUCTION_ELASTIC_READ_ALIAS_NAME))
         .fields(of(STATUS_KEY))
         .dateField(INDEX_TIMESTAMP)
         .from(parse(PROCESSING_TIMESTAMP))
@@ -190,10 +202,10 @@ class GroupingQueryTest {
 
   @Test
   void shouldReturnEmptyResultIfAtLeastOneFilterFieldNotPresentInIndex() {
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_6);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_6);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .indexes(of(PRODUCTION_ELASTIC_READ_ALIAS_NAME))
         .fields(of(STATUS_KEY))
         .dateField(INDEX_TIMESTAMP)
         .from(parse(PROCESSING_TIMESTAMP))
@@ -207,6 +219,6 @@ class GroupingQueryTest {
   }
 
   private void removeData() {
-    testClient.removeIndex(PRODUCTION_ELASTIC_INDEX_NAME);
+    testClient.removeIndex(PRODUCTION_ELASTIC_WRITE_INDEX_NAME);
   }
 }

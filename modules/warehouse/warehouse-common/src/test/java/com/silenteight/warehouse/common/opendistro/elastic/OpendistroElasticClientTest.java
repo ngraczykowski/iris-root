@@ -1,12 +1,15 @@
 package com.silenteight.warehouse.common.opendistro.elastic;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.common.opendistro.elastic.RoleDto.IndexPermission;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 
+import org.elasticsearch.ElasticsearchException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ import static java.util.Collections.emptyMap;
 import static java.util.Map.of;
 import static org.assertj.core.api.Assertions.*;
 
+@Slf4j
 @SpringBootTest(classes = OpendistroElasticTestConfiguration.class)
 @ContextConfiguration(initializers = {
     OpendistroKibanaContainerInitializer.class,
@@ -34,7 +38,7 @@ class OpendistroElasticClientTest {
 
   private static final RoleDto ROLE_DTO = RoleDto.builder()
       .indexPermissions(List.of(IndexPermission.builder()
-          .indexPatterns(List.of("itest_production"))
+          .indexPatterns(List.of("itest_production*"))
           .dls("{\"terms\": {\"s8_country.keyword\": [\"UK\", \"ES\"]}}")
           .build()))
       .build();
@@ -53,6 +57,11 @@ class OpendistroElasticClientTest {
   void setUp() {
     saveRole();
     saveRoleMapping();
+  }
+
+  @AfterEach
+  void cleanup() {
+    safeDeleteIndex(PRODUCTION_ELASTIC_INDEX_NAME);
   }
 
   @Test
@@ -93,7 +102,7 @@ class OpendistroElasticClientTest {
     simpleElasticTestClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, "123", emptyMap());
 
     QueryDto queryDto = QueryDto.builder()
-        .query("select * from " + PRODUCTION_ELASTIC_INDEX_NAME)
+        .query("select * from `" + PRODUCTION_ELASTIC_INDEX_NAME + "`")
         .build();
     QueryResultDto queryResultDto = opendistroElasticClient.executeSql(queryDto);
 
@@ -109,7 +118,7 @@ class OpendistroElasticClientTest {
 
     QueryDto queryDto = QueryDto
         .builder()
-        .query("select `feature/name` from " + PRODUCTION_ELASTIC_INDEX_NAME)
+        .query("select `feature/name` from `" + PRODUCTION_ELASTIC_INDEX_NAME + "`")
         .build();
     QueryResultDto queryResultDto = opendistroElasticClient.executeSql(queryDto);
 
@@ -145,4 +154,13 @@ class OpendistroElasticClientTest {
   private void saveRoleMapping() {
     opendistroElasticClient.setRoleMapping(ELASTIC_ALLOWED_ROLE_STRING, ROLE_MAPPING_DTO);
   }
+
+  private void safeDeleteIndex(String index) {
+    try {
+      simpleElasticTestClient.removeIndex(index);
+    } catch (ElasticsearchException e) {
+      log.debug("index not present index={}", index);
+    }
+  }
+
 }

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.google.common.collect.ImmutableList.of;
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
+import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_WRITE_INDEX_NAME;
 import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys.ANALYST_DECISION_KEY;
@@ -49,14 +49,14 @@ class ScrollSearchQueryServiceTest {
   @WithElasticAccessCredentials
   void shouldFeedConsumerWith3Hits() {
     // given
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_4);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_5);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_4);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_5);
     List<String> rows = new ArrayList<>();
     Consumer<Collection<String>> consumer = rows::addAll;
 
     FetchDataRequest request = FetchDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .indexes(of(PRODUCTION_ELASTIC_WRITE_INDEX_NAME))
         .fields(of(RECOMMENDATION_KEY))
         .from(parse(PROCESSING_TIMESTAMP))
         .to(parse(PROCESSING_TIMESTAMP_3))
@@ -78,14 +78,14 @@ class ScrollSearchQueryServiceTest {
   @WithElasticAccessCredentials
   void shouldNotReturnRowsWhenDateRangeDontMatchHits() {
     // given
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_4);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_5);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_4);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_5);
     List<String> rows = new ArrayList<>();
     Consumer<Collection<String>> consumer = rows::addAll;
 
     FetchDataRequest request = FetchDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .indexes(of(PRODUCTION_ELASTIC_WRITE_INDEX_NAME))
         .fields(of(RECOMMENDATION_KEY))
         .from(parse(PROCESSING_TIMESTAMP_5))
         .to(parse(PROCESSING_TIMESTAMP_6))
@@ -107,14 +107,14 @@ class ScrollSearchQueryServiceTest {
   @WithElasticAccessCredentials
   void shouldFilterOnlyAnalystDecisionAllowedValuesRows() {
     // given
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_8);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_9);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_10);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_8);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_9);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_10);
     List<String> rows = new ArrayList<>();
     Consumer<Collection<String>> consumer = rows::addAll;
 
     FetchDataRequest request = FetchDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .indexes(of(PRODUCTION_ELASTIC_WRITE_INDEX_NAME))
         .fields(of(ANALYST_DECISION_KEY))
         .queryFilters(of(toQueryFilter()))
         .from(parse(PROCESSING_TIMESTAMP))
@@ -138,14 +138,14 @@ class ScrollSearchQueryServiceTest {
   @WithElasticAccessCredentials
   void shouldReturnEmptyReportWhenFieldsAreMissing() {
     // given
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_8);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_9);
-    testClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_10);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_8);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_9);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_10);
     List<String> rows = new ArrayList<>();
     Consumer<Collection<String>> consumer = rows::addAll;
 
     FetchDataRequest request = FetchDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+        .indexes(of(PRODUCTION_ELASTIC_WRITE_INDEX_NAME))
         .fields(of(COUNTRY_KEY))
         .from(parse(PROCESSING_TIMESTAMP))
         .to(parse(PROCESSING_TIMESTAMP_4))
@@ -171,6 +171,6 @@ class ScrollSearchQueryServiceTest {
   }
 
   private void removeData() {
-    testClient.removeIndex(PRODUCTION_ELASTIC_INDEX_NAME);
+    testClient.removeIndex(PRODUCTION_ELASTIC_WRITE_INDEX_NAME);
   }
 }
