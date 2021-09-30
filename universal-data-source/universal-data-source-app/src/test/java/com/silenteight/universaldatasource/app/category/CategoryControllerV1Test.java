@@ -3,7 +3,7 @@ package com.silenteight.universaldatasource.app.category;
 import com.silenteight.datasource.categories.api.v2.Category;
 import com.silenteight.datasource.categories.api.v2.CategoryType;
 import com.silenteight.datasource.categories.api.v2.ListCategoriesResponse;
-import com.silenteight.universaldatasource.app.category.adapter.incoming.v2.CategoryController;
+import com.silenteight.universaldatasource.app.category.adapter.incoming.v2.CategoryControllerV1;
 import com.silenteight.universaldatasource.app.category.model.CategoryDto;
 import com.silenteight.universaldatasource.app.category.port.incoming.ListAvailableCategoriesUseCase;
 import com.silenteight.universaldatasource.app.category.port.outgoing.CategoryMapper;
@@ -24,13 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CategoryControllerTest {
+class CategoryControllerV1Test {
 
   private static List<Category> categories;
   private static List<CategoryDto> categoriesDto;
 
   @InjectMocks
-  private CategoryController categoryController;
+  private CategoryControllerV1 categoryControllerV1;
 
   @Mock
   private ListAvailableCategoriesUseCase listAvailableCategoriesUseCase;
@@ -49,13 +49,13 @@ class CategoryControllerTest {
     when(listAvailableCategoriesUseCase.getAvailableCategories()).thenReturn(
         ListCategoriesResponse.newBuilder().addAllCategories(categories).build());
     when(categoryMapper.mapCategories(categories)).thenReturn(categoriesDto);
-    categoryController = new CategoryController(listAvailableCategoriesUseCase, categoryMapper);
+    categoryControllerV1 = new CategoryControllerV1(listAvailableCategoriesUseCase, categoryMapper);
   }
 
   @Test
   void throwNullPointerExceptionWhenMessageDataIsNull() {
     ResponseEntity<List<CategoryDto>> availableCategories =
-        categoryController.getAvailableCategories();
+        categoryControllerV1.getAvailableCategories();
     assertEquals(availableCategories.getBody(), categoriesDto);
     assertEquals(availableCategories.getBody().size(), 2);
     assertEquals(availableCategories.getStatusCode(), HttpStatus.OK);
