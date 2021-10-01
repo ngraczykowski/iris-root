@@ -108,8 +108,10 @@ subprojects {Project subproject ->
                 "-Dsun.jnu.encoding=UTF-8",
                 "-Djava.net.preferIPv4Stack=true",
                 "-Djava.io.tmpdir=/tmp",
+                "-server.port=8080",
+                "-grpc.server.port=9090",
             ]
-            ports = ["24204", "24205"]
+            ports = ["8080", "9090"]
             user = "nonroot"
             volumes = ["/silenteight/cert"]
             workingDirectory = "/silenteight"
