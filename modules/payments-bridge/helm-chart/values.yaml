@@ -8,9 +8,9 @@ ports:
   http: 8080
   grpc: 9090
 
-grpcClientAeAddress: adjudication-engine-service.default.svc.cluster.local
-grpcClientDataSourceAddress: universal-data-source-service.default.svc.cluster.local
-grpcClientGovernanceAddress: governance-service.default.svc.cluster.local
+grpcClientAeAddress: static://adjudication-engine-service.default.svc.cluster.local:9090
+grpcClientDataSourceAddress: static://universal-data-source-service.default.svc.cluster.local:9090
+grpcClientGovernanceAddress: static://governance-service.default.svc.cluster.local:9090
 springProfilesActive: "mockdatasource"
 replicaCount: 1
 imagePullPolicy: Always
