@@ -17,6 +17,9 @@ grpc:
     data-source:
       address: static://localhost:${grpc.server.port}
       negotiation-type: PLAINTEXT
+    governance:
+      address: static://localhost:${grpc.server.port}
+      negotiation-type: PLAINTEXT
 
 pb:
   #-------------------------------------------------------------------------------------------------

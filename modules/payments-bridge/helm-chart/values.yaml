@@ -9,6 +9,8 @@ ports:
   grpc: 9090
 
 grpcClientAeAddress: adjudication-engine-service.default.svc.cluster.local
+grpcClientDataSourceAddress: universal-data-source-service.default.svc.cluster.local
+grpcClientGovernanceAddress: governance-service.default.svc.cluster.local
 springProfilesActive: "mockdatasource"
 replicaCount: 1
 imagePullPolicy: Always

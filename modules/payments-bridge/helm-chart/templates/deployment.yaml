@@ -54,6 +54,10 @@ spec:
               value: {{ .Values.springProfilesActive }}
             - name: 'GRPC_CLIENT_AE_ADDRESS'
               value: {{ .Values.grpcClientAeAddress }}
+            - name: 'GRPC_CLIENT_DATA_SOURCE_ADDRESS'
+              value: {{ .Values.grpcClientDataSourceAddress }}
+            - name: 'GRPC_CLIENT_GOVERNANCE_ADDRESS'
+              value: { { .Values.grpcClientGovernanceAddress } }
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
