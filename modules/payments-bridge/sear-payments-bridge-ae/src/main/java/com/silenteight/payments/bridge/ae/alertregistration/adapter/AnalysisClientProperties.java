@@ -12,7 +12,7 @@ import java.time.Duration;
 @Validated
 class AnalysisClientProperties {
 
-  private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(5);
+  private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(30);
 
   private Duration timeout = DEFAULT_TIMEOUT;
 }

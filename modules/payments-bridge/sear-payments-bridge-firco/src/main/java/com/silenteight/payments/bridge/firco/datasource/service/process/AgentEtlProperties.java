@@ -12,7 +12,7 @@ import java.time.Duration;
 @Data
 class AgentEtlProperties {
 
-  private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(5);
+  private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(30);
 
   private Duration timeout = DEFAULT_TIMEOUT;
 }
