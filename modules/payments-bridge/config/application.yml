@@ -11,15 +11,14 @@ grpc:
   server:
     port: 24603
   client:
+    GLOBAL:
+      negotiation-type: PLAINTEXT
     ae:
       address: static://localhost:${grpc.server.port}
-      negotiation-type: PLAINTEXT
     datasource:
       address: static://localhost:${grpc.server.port}
-      negotiation-type: PLAINTEXT
     governance:
       address: static://localhost:${grpc.server.port}
-      negotiation-type: PLAINTEXT
 
 pb:
   #-------------------------------------------------------------------------------------------------

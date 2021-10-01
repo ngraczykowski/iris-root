@@ -60,6 +60,22 @@ spec:
               value: {{ .Values.grpcClientDatasourceAddress }}
             - name: 'GRPC_CLIENT_governance_ADDRESS'
               value: {{ .Values.grpcClientGovernanceAddress }}
+            - name: 'PB_CMAPI_CALLBACK_ENABLED'
+              value: 'enabled'
+            - name: 'PB_CMAPI_CALLBACK_ENDPOINT'
+              value: 'https://uat.api.svb.com/silenteight/v1/callback/alerts/solution'
+            - name: 'SECURITY_OAUTH_2_CLIENT_CLIENT_ID'
+              value: {{ .Values.oauthClientId }}
+            - name: 'SECURITY_OAUTH_2_CLIENT_CLIENT_SECRET'
+              value: {{ .Values.oauthClientSecret }}
+            - name: 'SECURITY_OAUTH_2_CLIENT_USER_AUTHORIZATION_URI'
+              value: {{ .Values.oauthClientAuthUri }}
+            - name: 'SECURITY_OAUTH_2_CLIENT_ACCESS_TOKEN_URI'
+              value: {{ .Values.oauthClientAccessUti }}
+            - name: 'SECURITY_OAUTH_2_CLIENT_SCOPE'
+              value: 'openid'
+            - name: 'SECURITY_OAUTH_2_CLIENT_GRANT_TYPE'
+              value: 'client_credentials'
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}

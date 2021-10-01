@@ -14,3 +14,7 @@ grpcClientGovernanceAddress: dns:///governance-app-service.default.svc.cluster.l
 springProfilesActive: ""
 replicaCount: 1
 imagePullPolicy: Always
+oauthClientId: ""
+oauthClientSecret: ""
+oauthClientAuthUri: ""
+oauthClientAccessUti: ""
