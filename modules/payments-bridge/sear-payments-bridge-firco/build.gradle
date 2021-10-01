@@ -25,6 +25,9 @@ dependencies {
   implementation libraries.spring_webmvc
   implementation libraries.spring_data_jpa
 
+  implementation libraries.grpc_client_spring_boot_starter
+  implementation libraries.grpc_server_spring_boot_starter
+
   implementation libraries.guava
   implementation libraries.hibernate_validator
   implementation libraries.hibernate_types
@@ -36,6 +39,11 @@ dependencies {
   implementation libraries.opencsv
   implementation libraries.protobuf_java_util
   implementation libraries.shedlock_spring
+
+  implementation libraries.data_source_api
+  implementation libraries.data_source_categories_api
+  implementation libraries.data_source_comments_api
+  implementation libraries.data_source_agentinput_api
 
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.spring_security_test
