@@ -6,3 +6,6 @@ serp:
     agent:
       agent-configuration-source: classpath:sierra/agent_configs.json
       agent-details-source: classpath:sierra/agent_details.json
+
+
+serp.governance.qa.sampling.schedule.enabled: false
