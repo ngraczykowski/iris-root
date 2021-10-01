@@ -17,4 +17,5 @@ imagePullPolicy: Always
 oauthClientId: ""
 oauthClientSecret: ""
 oauthClientAuthUri: ""
-oauthClientAccessUti: ""
+oauthClientAccessUri: ""
+pbCmapiCallbackEndpoint: ""

@@ -63,7 +63,7 @@ spec:
             - name: 'PB_CMAPI_CALLBACK_ENABLED'
               value: 'enabled'
             - name: 'PB_CMAPI_CALLBACK_ENDPOINT'
-              value: 'https://uat.api.svb.com/silenteight/v1/callback/alerts/solution'
+              value: {{ .Values.pbCmapiCallbackEndpoint }}
             - name: 'SECURITY_OAUTH_2_CLIENT_CLIENT_ID'
               value: {{ .Values.oauthClientId }}
             - name: 'SECURITY_OAUTH_2_CLIENT_CLIENT_SECRET'
@@ -71,7 +71,7 @@ spec:
             - name: 'SECURITY_OAUTH_2_CLIENT_USER_AUTHORIZATION_URI'
               value: {{ .Values.oauthClientAuthUri }}
             - name: 'SECURITY_OAUTH_2_CLIENT_ACCESS_TOKEN_URI'
-              value: {{ .Values.oauthClientAccessUti }}
+              value: {{ .Values.oauthClientAccessUri }}
             - name: 'SECURITY_OAUTH_2_CLIENT_SCOPE'
               value: 'openid'
             - name: 'SECURITY_OAUTH_2_CLIENT_GRANT_TYPE'
