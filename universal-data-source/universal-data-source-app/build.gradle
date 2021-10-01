@@ -34,7 +34,6 @@ dependencies {
   implementation libraries.spring_security_config
   implementation libraries.spring_security_core
   implementation libraries.spring_security_web
-  implementation libraries.keycloak_spring_boot_starter
 
   // Cloud
   implementation libraries.spring_cloud_consul_discovery
