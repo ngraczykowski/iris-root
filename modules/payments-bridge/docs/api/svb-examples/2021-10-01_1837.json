@@ -1,0 +1,1881 @@
+{
+  "Header": null,
+  "Body": {
+    "msg_SendMessage": {
+      "VersionTag": "1",
+      "Authentication": {
+        "UserLogin": "CASE_MGR_API_USER",
+        "UserPassword": "KJahpujffdN11bAlQRirhkvqNnixND6G",
+        "UserRealm": ""
+      },
+      "Messages": [
+        {
+          "Message": {
+            "Unit": "EMEA",
+            "BusinessUnit": "ROOT",
+            "MessageID": "1051a56e-1e07-4c27-ad5b-a0e4fab844a4_sanctions_svc",
+            "SystemID": "DIN20210930144654-00537-23894",
+            "Bypass": "0",
+            "Command": "1",
+            "BusinessType": "CTR",
+            "MessageType": "12345678",
+            "IOIndicator": "O",
+            "SenderReference": "5e19c829-e9ca-4e09-b3e1-328bb73c95f3",
+            "Currency": "USD",
+            "Amount": "5000.0",
+            "ApplicationCode": "GTEX",
+            "ToApplication": "",
+            "MessageFormat": "SWIFT",
+            "SenderCode": "121140399",
+            "ReceiverCode": "122100024",
+            "ApplicationPriority": "0",
+            "CutoffTime": "",
+            "NormalizedAmount": "",
+            "MessageData": "{1:F01SVBKUS6SXXXX0000000000}{2:I103IGLUGB2LXXXXN}{3:{108:TR2021031901069}{121:c1e786ea-342e-4f14-aad5-9447f6ac7c10}}{4::20:2021031901069\n:23B:CRED\n:32A:210323IDR5570695,\n:50K:\/3302032044\nOSAMA BIN LADIN INC.\n75 Broadway\nSuite 20\nUS\/CUBA Francisco\n:57A:NOBUIDJAXXX\n:59:\/9085643937530\nDavid Sibuea\njl Soekarno hatta\nBatam ID\n:70:PURP\/ PERSONAL PT 1611158\nREMITTER\/Izzeddin ismail\n:71A:OUR\n:72:\/SKNINFO\/1\/1\/0\/1\/1\n\/BNF\/BO 315141\/REMITTER\n\/\/Izzeddin ismail\n\/\/6406 Vita Dr Affton MO 63123 US\n-}",
+            "LastComment": "Suspect(s) detected by OFAC-Agent",
+            "LastOperator": "OFAC-Agent",
+            "ValueDate": "?",
+            "FilteredDate": "2021\/09\/30 14:47:01",
+            "RelatedReference": "",
+            "CreatedDate": "2021\/09\/30 14:46:54",
+            "Priority": "0",
+            "Confidentiality": "0",
+            "Blocking": "13",
+            "NonBlocking": "0",
+            "CopyService": "",
+            "Hits": [
+              {
+                "Hit": {
+                  "MatchingText": "CUBA, CUBA",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "233",
+                        "PositionEnd": "236"
+                      }
+                    },
+                    {
+                      "Position": {
+                        "PositionStart": "233",
+                        "PositionEnd": "236"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "6",
+                  "SynonymIndex": "-1",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "CUBA",
+                  "HittedEntity": {
+                    "ID": "AS00010013",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2011-11-30 12:06:11 RBL"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "*"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                            {
+                              "City": "*"
+                            }
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                            {
+                              "Country": "CUBA"
+                            },
+                            {
+                              "Country": "CUBA"
+                            },
+                            {
+                              "Country": "CUBANA"
+                            },
+                            {
+                              "Country": "KUBA"
+                            },
+                            {
+                              "Country": "REPUBLIC OF CUBA"
+                            },
+                            {
+                              "Country": "REPUBLICA DE CUBA"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "US_OFAC_ENH_LCTN",
+                    "Designation": "CUBA",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:OFAC"
+                      }
+                    ],
+                    "Type": "O",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "74 main cities:ANTILLA, ARROYO NARANJO, ARTEMISA, BANES, BARACOA, BAYAMO, BOLONDRON, CAIBARIEN, CAMAGUEY, CARDENAS, CAYO LARGO, CIEGO DE AVILA, CIENFUEGOS, DIEZ DE OCTUBRE, GRANMA, GUAIMARO, GUANABO, GUANTANAMO, HABANA, HABANAS, HAVANA, HAVANNA, HOLGUIN, ISLE OF YOUTH, JIBACOA, L AVANA, LA HABANA, LA HAVANE, LAS TUNAS, LAVANA, MAISI, MANICARAGUA, MANZANILLO, MARIEL, MATANZAS, MAYABEQUE, MAYARI, NIQUERO, NUEVA GERONA, NUEVITAS, NUEVO VEDADO, PALMA SORIANO, PINAR DEL RIO, SAGUA LA GRANDE, SANCTI SPIRITUS, SANTA CLARA, SANTA CRUZ DEL SUR, SANTIAGO DE CUBA, TANAMO, VARADERO, VILLA CLARA, VINALES, YAGUAJAY, ?????, ??????, ??????, ???, ???, VERTIENTES, SAN JOSE DE LAS LAJAS, SAN ANTONIO DE LOS BANOS, PLACETAS, NICARO LEVISA, JOVELLANOS, JIGUANI, JATIBONICO, JAGUEY, GUINES, GUANAJAY, CONSOLACION DEL SUR, CAMAJUANI, CABAIGUAN, BAUTA, AMANCIOList ID: 1072 \/ Create Date: 11\/13\/1997 00:00:00 \/ Last Update Date: 09\/24\/2015 18:10:23 \/ Program: CUBA \/ OtherInformation: XLOC. OFAC maintains a sanctions program for Cuba. Please refer to the OFAC website for detailed information: http:\/\/www.treasury.gov\/resource-center\/sanctions\/Programs\/Pages\/cuba.aspx",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "188",
+                        "PositionEnd": "202"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "BIN LADEN, USAMA BIN MUHAMMAD BIN AWAD",
+                  "HittedEntity": {
+                    "ID": "AS00238546",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2020-03-26 12:46:00 TFP"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BIN LADEN, USAMA BIN MUHAMMAD BIN AWAD"
+                      },
+                      {
+                        "Name": "BINLADEN, OSAMA"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "US_OFAC_ENH_RESEARCH",
+                    "Designation": "SDGT",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:OFAC"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 1072 \/ Create Date: 07\/25\/2008 16:23:24 \/ Last Update Date: 03\/20\/2020 16:11:42 \/ Org_PID: 6365 \/ Program: SDGT \/ OtherInformation: Variation. SDN entity BIN LADEN, Usama",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "07\/30\/1957 1958"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "Jeddah, Saudi Arabia; Yemen"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "188",
+                        "PositionEnd": "202"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "BIN LADEN, HAMZA USAMA MUHAMMAD",
+                  "HittedEntity": {
+                    "ID": "AS06213116",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2019-03-13 19:39:55 UN"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BIN LADEN, HAMZA USAMA MUHAMMAD"
+                      },
+                      {
+                        "Name": "???? ????? ???? ?? ????"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UNITED_NATIONS",
+                    "Designation": "ISILDAESHALQAIDA",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:UNITED_NATIONS"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 44 \/ Create Date: 02\/28\/2019 19:42:21 \/ Last Update Date: 06\/14\/2019 14:22:21 \/ Program: ISIL (DA'ESH) & AL-QAIDA \/ OtherInformation: SON OF USAMA BIN LADEN (DECEASED). ANNOUNCED BY AIMAN MUHAMMED RABI AL-ZAWAHIRI (QDI.006) AS AN OFFICIAL MEMBER OF AL-QAIDA (QDE.004). HAS CALLED FOR FOLLOWERS OF AL-QAIDA TO COMMIT TERROR ATTACKS. IS SEEN AS THE MOST PROBABLE SUCCESSOR OF AL-ZAWAHIRI. INTERPOL-UN Security Council Special Notice web link: https:\/\/www.interpol.int\/en\/How-we-work\/Notices\/View-UN-Notices-Individuals \/ OriginalID: QDI.421",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "05\/09\/1989"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "JEDDAH, SAUDI ARABIA"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "146420",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "188",
+                        "PositionEnd": "202"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "BIN LADEN, HAMZA USAMA MUHAMMAD",
+                  "HittedEntity": {
+                    "ID": "AS06213412",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2019-03-19 12:31:19 EU"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BIN LADEN, HAMZA USAMA MUHAMMAD"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "EUROPEAN_UNION",
+                    "Designation": "ISILDAESHALQAIDA",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:EUROPEAN_UNION"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 33 \/ Create Date: 03\/05\/2019 11:04:44 \/ Last Update Date: 03\/19\/2019 10:51:18 \/ Program: ISIL (DA'ESH) AND AL-QAIDA ORGANISATIONS \/ Legal_Basis: 2019\/431 (OJ L75) \/ OtherInformation: (a) Son of Usama bin Laden (deceased); (b) Announced by Aiman Muhammed Rabi al-Zawahiri as an official member of Al-Qaida. Has called for followers of Al-Qaida to commit terror attacks. Is seen as the most probable successor of al-Zawahiri. \/ EffectiveDate: 03\/19\/2019 \/ OriginalID: 119516",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "05\/09\/1989"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "Jeddah, Saudi Arabia"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "146420",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "188",
+                        "PositionEnd": "202"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "9",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "USAMA BIN LADEN NETWORK",
+                  "HittedEntity": {
+                    "ID": "AS00020212",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2012-03-22 16:08:21 UN"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "AL-QAIDA"
+                      },
+                      {
+                        "Name": "AL QA'IDA"
+                      },
+                      {
+                        "Name": "AL QA'IDA\/ISLAMIC ARMY"
+                      },
+                      {
+                        "Name": "AL QAEDA"
+                      },
+                      {
+                        "Name": "ISLAMIC SALVATION FOUNDATION"
+                      },
+                      {
+                        "Name": "THE BASE"
+                      },
+                      {
+                        "Name": "THE GROUP FOR THE PRESERVATION OF THE HOLY SITES"
+                      },
+                      {
+                        "Name": "THE ISLAMIC ARMY FOR THE LIBERATION OF HOLY PLACES"
+                      },
+                      {
+                        "Name": "THE WORLD ISLAMIC FRONT FOR JIHAD AGAINST JEWS AND CRUSADERS"
+                      },
+                      {
+                        "Name": "USAMA BIN LADEN NETWORK"
+                      },
+                      {
+                        "Name": "USAMA BIN LADEN ORGANIZATION"
+                      },
+                      {
+                        "Name": "???????"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UNITED_NATIONS",
+                    "Designation": "ISILDAESHALQAIDA",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:UNITED_NATIONS"
+                      }
+                    ],
+                    "Type": "C",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 44 \/ Create Date: 03\/25\/2002 00:00:00 \/ Last Update Date: 10\/22\/2019 12:56:33 \/ Program: ISIL (DA'ESH) & AL-QAIDA \/ OtherInformation: INTERPOL-UN Security Council Special Notice web link: https:\/\/www.interpol.int\/en\/How-we-work\/Notices\/View-UN-Notices-Individuals \/ OriginalID: QDe.004",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "55725",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "188",
+                        "PositionEnd": "202"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "9",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "USAMA BIN LADEN NETWORK",
+                  "HittedEntity": {
+                    "ID": "AS00021696",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2020-10-07 15:31:19 BofE"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "AL-QAIDA"
+                      },
+                      {
+                        "Name": "AL QA'IDA"
+                      },
+                      {
+                        "Name": "AL QAEDA"
+                      },
+                      {
+                        "Name": "ISLAMIC ARMY"
+                      },
+                      {
+                        "Name": "ISLAMIC SALVATION FOUNDATION"
+                      },
+                      {
+                        "Name": "THE BASE"
+                      },
+                      {
+                        "Name": "THE GROUP FOR THE PRESERVATION OF THE HOLY SITES"
+                      },
+                      {
+                        "Name": "THE ISLAMIC ARMY FOR THE LIBERATION OF HOLY PLACES"
+                      },
+                      {
+                        "Name": "THE WORLD ISLAMIC FRONT FOR JIHAD AGAINST JEWS AND CRUSADERS"
+                      },
+                      {
+                        "Name": "USAMA BIN LADEN NETWORK"
+                      },
+                      {
+                        "Name": "USAMA BIN LADEN ORGANISATION"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "GB_HMT",
+                    "Designation": "ISILDAESHALQAIDA",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:BANK_OF_ENGLAND"
+                      }
+                    ],
+                    "Type": "C",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 29 \/ Create Date: 05\/06\/2003 11:50:10 \/ Last Update Date: 10\/07\/2020 15:08:21 \/ Program: ISIL (DA'ESH) AND AL-QAIDA ORGANISATIONS \/ OtherInformation: UN Ref QDe.004. \/ EffectiveDate: 10\/2\/2020 \/ OriginalID: 6965",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "55725",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "188",
+                        "PositionEnd": "202"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "BIN LADEN, HAMZA USAMA MUHAMMAD",
+                  "HittedEntity": {
+                    "ID": "AS06213182",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2020-10-07 11:53:04 BofE"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BIN LADEN, HAMZA USAMA MUHAMMAD"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "GB_HMT",
+                    "Designation": "ISILDAESHALQAIDA",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:BANK_OF_ENGLAND"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 29 \/ Create Date: 03\/01\/2019 11:47:27 \/ Last Update Date: 10\/02\/2020 17:48:23 \/ Program: ISIL (DA'ESH) AND AL-QAIDA ORGANISATIONS \/ OtherInformation: UN Ref QDi.421. Son of Usama bin Laden (deceased). Announced by Aiman Muhammed Rabi al-Zawahiri(QDi.006) as an official member of Al-Qaida (QDe.004). Has called for followers of Al-Qaida to commit terror attacks. Is seen as the most probable successor of al-Zawahiri. UN Listing (formerly temporary listing, in accordance with Policing and Crime Act 2017). \/ EffectiveDate: 10\/2\/2020 \/ OriginalID: 13770",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "05\/09\/1989"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "Jeddah, Saudi Arabia"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "146420",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "188",
+                        "PositionEnd": "202"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "16",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "USAMA BIN LADEN NETWORK",
+                  "HittedEntity": {
+                    "ID": "AS00012708",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2019-09-10 18:30:37 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "AL QA'IDA"
+                      },
+                      {
+                        "Name": "AL QAEDA"
+                      },
+                      {
+                        "Name": "AL QAIDA"
+                      },
+                      {
+                        "Name": "AL-JIHAD"
+                      },
+                      {
+                        "Name": "EGYPTIAN AL-JIHAD"
+                      },
+                      {
+                        "Name": "EGYPTIAN ISLAMIC JIHAD"
+                      },
+                      {
+                        "Name": "INTERNATIONAL FRONT FOR FIGHTING JEWS AND CRUSADES"
+                      },
+                      {
+                        "Name": "ISLAMIC ARMY"
+                      },
+                      {
+                        "Name": "ISLAMIC ARMY FOR THE LIBERATION OF HOLY SITES"
+                      },
+                      {
+                        "Name": "ISLAMIC SALVATION FOUNDATION"
+                      },
+                      {
+                        "Name": "NEW JIHAD"
+                      },
+                      {
+                        "Name": "THE BASE"
+                      },
+                      {
+                        "Name": "THE GROUP FOR THE PRESERVATION OF THE HOLY SITES"
+                      },
+                      {
+                        "Name": "THE ISLAMIC ARMY FOR THE LIBERATION OF THE HOLY PLACES"
+                      },
+                      {
+                        "Name": "THE JIHAD GROUP"
+                      },
+                      {
+                        "Name": "THE WORLD ISLAMIC FRONT FOR JIHAD AGAINST JEWS AND CRUSADERS"
+                      },
+                      {
+                        "Name": "USAMA BIN LADEN NETWORK"
+                      },
+                      {
+                        "Name": "USAMA BIN LADEN ORGANIZATION"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "US_OFAC",
+                    "Designation": "FTO__SDGT",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:OFAC"
+                      }
+                    ],
+                    "Type": "C",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 0 \/ Create Date: 10\/01\/2001 00:00:00 \/ Last Update Date: 09\/10\/2019 14:29:45 \/ Program: FTO & SDGT \/ OriginalID: 6366",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "55725",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "188",
+                        "PositionEnd": "202"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "16",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "USAMA BIN LADEN NETWORK",
+                  "HittedEntity": {
+                    "ID": "AS00338423",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2009-12-03 14:35:31 ITL"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "AL QA'IDA \/ ISLAMIC ARMY"
+                      },
+                      {
+                        "Name": "AL QAEDA"
+                      },
+                      {
+                        "Name": "AL QAIDA"
+                      },
+                      {
+                        "Name": "AL-JIHAD"
+                      },
+                      {
+                        "Name": "EGYPTIAN AL-JIHAD"
+                      },
+                      {
+                        "Name": "EGYPTIAN ISLAMIC JIHAD"
+                      },
+                      {
+                        "Name": "INTERNATIONAL FRONT FOR FIGHTING JEWS AND CRUSADES"
+                      },
+                      {
+                        "Name": "ISLAMIC ARMY FOR THE LIBERATION OF HOLY SITES"
+                      },
+                      {
+                        "Name": "ISLAMIC SALVATION FOUNDATION"
+                      },
+                      {
+                        "Name": "ISLAMICARMY"
+                      },
+                      {
+                        "Name": "NEW JIHAD"
+                      },
+                      {
+                        "Name": "THE BASE"
+                      },
+                      {
+                        "Name": "THE GROUP FOR THE PRESERVATION OF THE HOLY SITES"
+                      },
+                      {
+                        "Name": "THE ISLAMIC ARMY FOR THE LIBERATION OF THE HOLY PLACES"
+                      },
+                      {
+                        "Name": "THE JIHAD GROUP"
+                      },
+                      {
+                        "Name": "THE WORLD ISLAMIC FRONT FOR JIHAD AGAINST JEWSAND CRUSADERS"
+                      },
+                      {
+                        "Name": "USAMA BIN LADEN NETWORK"
+                      },
+                      {
+                        "Name": "USAMA BIN LADEN ORGANIZATION"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "IL_MOD_TERROR",
+                    "Designation": "GWL",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:ISRAELI_MINISTRY_OF_DEFENSE"
+                      }
+                    ],
+                    "Type": "C",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 1078 \/ Create Date: 11\/23\/2009 15:40:57 \/ Last Update Date: 12\/03\/2009 14:34:26 \/ OriginalID: QE.A.4.01",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "55725",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "188",
+                        "PositionEnd": "202"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "65",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "USAMA BIN LADEN NETWORK",
+                  "HittedEntity": {
+                    "ID": "AS00243880",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2019-02-13 17:07:31 EU"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "AL-QAIDA"
+                      },
+                      {
+                        "Name": "AL KAIDA"
+                      },
+                      {
+                        "Name": "AL KAINTA"
+                      },
+                      {
+                        "Name": "AL KAINTA \/ ISLAMIKOS STRATOS"
+                      },
+                      {
+                        "Name": "AL KAJJDA"
+                      },
+                      {
+                        "Name": "AL QA'IDA"
+                      },
+                      {
+                        "Name": "AL QA'IDA \/ ISLAMSKA VOJSKA"
+                      },
+                      {
+                        "Name": "AL QA'IDA\/ ISLAMIC ARMY"
+                      },
+                      {
+                        "Name": "AL QA'IDA\/ ISLJAMSKA ARMIJA"
+                      },
+                      {
+                        "Name": "AL QA'IDA\/ARMATA ISLAMICA"
+                      },
+                      {
+                        "Name": "AL QAEDA"
+                      },
+                      {
+                        "Name": "AL QAIDA\/EXERCITO ISLAMICO"
+                      },
+                      {
+                        "Name": "AL-KAJDA"
+                      },
+                      {
+                        "Name": "ARMATA ISLAMICA DE ELIBERARE A LOCURILOR SFINTE"
+                      },
+                      {
+                        "Name": "ARMEE ISLAMIQUE"
+                      },
+                      {
+                        "Name": "ARMEE ISLAMIQUE POUR LA LIBERATION DES LIEUX SAINTS"
+                      },
+                      {
+                        "Name": "Al Qa�ida\/ ???????? ?????"
+                      },
+                      {
+                        "Name": "BAZA"
+                      },
+                      {
+                        "Name": "BAZATA"
+                      },
+                      {
+                        "Name": "DIKTIO TOI OSAMA MPIN LANTEN"
+                      },
+                      {
+                        "Name": "EXERCITO ISLAMICO DE LIBERTACAO DOS LUGARES SANTOS"
+                      },
+                      {
+                        "Name": "FONDACIJA ZA SPASENIE NA ISLJAMA"
+                      },
+                      {
+                        "Name": "FONDATION DU SALUT ISLAMIQUE"
+                      },
+                      {
+                        "Name": "FRENTE ISLAMICA MUNDIAL PARA O JIHAD CONTRA OS JUDEUS E OS CRUZADOS"
+                      },
+                      {
+                        "Name": "FRONT ISLAMIQUE MONDIAL POUR LE JIHAD CONTRE LES JUIFS ET LES CROISES"
+                      },
+                      {
+                        "Name": "FRONTUL ISLAMIC MONDIAL PENTRU JIHADUL IMPOTRIVA EVREILOR TI A CRUCIATILOR"
+                      },
+                      {
+                        "Name": "FUNDACAO DA SALVACAO ISLAMICA"
+                      },
+                      {
+                        "Name": "FUNDATIA SALVARII ISLAMICE"
+                      },
+                      {
+                        "Name": "GROUPE POUR LA PRESERVATION DES LIEUX SAINTS"
+                      },
+                      {
+                        "Name": "GRUPA ZA OPAZVANE NA SVETITE MESTA"
+                      },
+                      {
+                        "Name": "GRUPO PARA A PRESERVACAO DOS LUGARES SANTOS"
+                      },
+                      {
+                        "Name": "GRUPUL PENTRU PASTRAREA LOCURILOR SFINTE"
+                      },
+                      {
+                        "Name": "I BASI"
+                      },
+                      {
+                        "Name": "ISLAMIC SALVATION FOUNDATION"
+                      },
+                      {
+                        "Name": "ISLAMIKO IDRIMA SOTIRIAS"
+                      },
+                      {
+                        "Name": "ISLAMIKOS STRATOS GIA TIN APELEITHEROSI TON AGION TOPON"
+                      },
+                      {
+                        "Name": "ISLAMSKA RESILNA FUNDACIJA"
+                      },
+                      {
+                        "Name": "ISLAMSKA VOJSKA ZA OSVOBODITEV SVETIH KRAJEV"
+                      },
+                      {
+                        "Name": "ISLJAMSKA ARMIJA ZA OSVOBOZHDENIE NA SVETITE MESTA"
+                      },
+                      {
+                        "Name": "LA BASE"
+                      },
+                      {
+                        "Name": "MREZA OSAME BIN LADNA"
+                      },
+                      {
+                        "Name": "MREZHA OSAMA BIN LADEN"
+                      },
+                      {
+                        "Name": "OMILOS GIA TI DIAPHULAXI TON AGION TOPON"
+                      },
+                      {
+                        "Name": "ORGANISATION D'OUSSAMA BEN LADEN"
+                      },
+                      {
+                        "Name": "ORGANIZACAO DE OSAMA BIN LADEN"
+                      },
+                      {
+                        "Name": "ORGANIZACE USAMY BIN LADINA"
+                      },
+                      {
+                        "Name": "ORGANIZACIJA 'OSAMA BIN LADEN'"
+                      },
+                      {
+                        "Name": "ORGANIZACIJA OSAME BIN LADNA"
+                      },
+                      {
+                        "Name": "ORGANIZACJA OSAMY BIN LADENA"
+                      },
+                      {
+                        "Name": "ORGANIZATIA LUI OSAMA BEN LADEN"
+                      },
+                      {
+                        "Name": "OSAMA BIN LADEN-NETZWERK"
+                      },
+                      {
+                        "Name": "OSAMA BIN LADEN-ORGANISATION"
+                      },
+                      {
+                        "Name": "PAGKOSMIO ISLAMIKO METOPO GIA TON IERO POLEMO (TZICHANT) KATA TON EBRAION KAI STAIROPHORON"
+                      },
+                      {
+                        "Name": "REDE DE OSAMA BIN LADEN"
+                      },
+                      {
+                        "Name": "RESEAU D'OUSSAMA BEN LADEN"
+                      },
+                      {
+                        "Name": "RETEAUA LUI OSAMA BEN LADEN"
+                      },
+                      {
+                        "Name": "SIEC OSAMY BIN LAGENA"
+                      },
+                      {
+                        "Name": "SIT USAMY BIN LADINA"
+                      },
+                      {
+                        "Name": "SKUPINA ZA OHRANITEV SVETIH KRAJEV"
+                      },
+                      {
+                        "Name": "SVETOVEN ISLJAMSKI FRONT ZA DZHIKHAD SRESHHU EVREITE I KRSTONOSCITE"
+                      },
+                      {
+                        "Name": "SVETOVNA ISLAMSKA FRONTA ZA DZIHAD PROTI JUDOM IN KRIZARJEM"
+                      },
+                      {
+                        "Name": "THE BASE"
+                      },
+                      {
+                        "Name": "THE GROUP FOR THE PRESERVATION OF THE HOLY SITES"
+                      },
+                      {
+                        "Name": "THE ISLAMIC ARMY FOR THE LIBERATION OF HOLY PLACES"
+                      },
+                      {
+                        "Name": "THE WORLD ISLAMIC FRONT FOR JIHAD AGAINST JEWS AND CRUSADERS"
+                      },
+                      {
+                        "Name": "USAMA BIN LADEN NETWORK"
+                      },
+                      {
+                        "Name": "USAMA BIN LADEN ORGANISATION"
+                      },
+                      {
+                        "Name": "USAMA BIN LADEN ORGANIZATION"
+                      },
+                      {
+                        "Name": "USAMAH BIN LADEN NETWORK"
+                      },
+                      {
+                        "Name": "USAMAH BIN LADEN ORGANISATION"
+                      },
+                      {
+                        "Name": "?�???? ??? ?? ????????? ??? ????? ?????"
+                      },
+                      {
+                        "Name": "?? ??????"
+                      },
+                      {
+                        "Name": "?? ??????\/????????? ???????"
+                      },
+                      {
+                        "Name": "? ????"
+                      },
+                      {
+                        "Name": "????�??? ????�? ????????"
+                      },
+                      {
+                        "Name": "????�???? ??????? ??? ??? ???????????? ??? ????? ?????"
+                      },
+                      {
+                        "Name": "??????�?? ????�??? ?????? ??? ??? ???? ????�? (???????) ???? ??? ??????? ??? ???????????"
+                      },
+                      {
+                        "Name": "?? ?????"
+                      },
+                      {
+                        "Name": "????? ?? ???????? ?? ??????? ?????"
+                      },
+                      {
+                        "Name": "???????? ????? ?? ???????????? ?? ??????? ?????"
+                      },
+                      {
+                        "Name": "????? ????? ??? ?????"
+                      },
+                      {
+                        "Name": "??????????? �????? ??? ?????�"
+                      },
+                      {
+                        "Name": "???????? ???????? ????? ?? ?????? ????? ??????? ? ?????????????"
+                      },
+                      {
+                        "Name": "???????? ?? ???????? ?? ??????"
+                      },
+                      {
+                        "Name": "??????"
+                      },
+                      {
+                        "Name": "?????? ??? ???�? ???? ??????"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "EUROPEAN_UNION",
+                    "Designation": "ISILDAESHALQAIDA",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:EUROPEAN_UNION"
+                      }
+                    ],
+                    "Type": "C",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 33 \/ Create Date: 09\/19\/2008 16:12:34 \/ Last Update Date: 11\/14\/2019 09:05:12 \/ Program: ISIL (DA'ESH) AND AL-QAIDA ORGANISATIONS \/ Legal_Basis: 316\/2012 (OJ L 103) \/ OtherInformation: Formerly listed as Al Qa'ida\/Islamic Army. Date of designation referred to in Article 2a (4) (b): 6.10.2001. \/ EffectiveDate: 4\/13\/2012 \/ OriginalID: 329",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "55725",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "188",
+                        "PositionEnd": "202"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "5",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "BIN LADIN, OSAMA",
+                  "HittedEntity": {
+                    "ID": "AS00171748",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2013-06-26 14:05:48 EU"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BIN LADEN, USAMA MUHAMMED AWAD"
+                      },
+                      {
+                        "Name": "AL QAQA"
+                      },
+                      {
+                        "Name": "AL-HAKIM, ABU ABDALLAH ABD"
+                      },
+                      {
+                        "Name": "AWDH, BIN LADEN OSAMA MOHAMED"
+                      },
+                      {
+                        "Name": "BIN LADEN, USAMA"
+                      },
+                      {
+                        "Name": "BIN LADIN, OSAMA"
+                      },
+                      {
+                        "Name": "BIN LADIN, OSAMA BIN MUHAMMAD BIN AWAD"
+                      },
+                      {
+                        "Name": "BIN LADIN, SHAYKH USAMA"
+                      },
+                      {
+                        "Name": "BIN LADIN, USAMA"
+                      },
+                      {
+                        "Name": "BIN LADIN, USAMA BIN MUHAMMAD BIN AWAD"
+                      },
+                      {
+                        "Name": "BIN LADIN, USAMAH BIN MUHAMMAD"
+                      },
+                      {
+                        "Name": "BIN MUHAMMAD, BIN LADEN USAMAH"
+                      },
+                      {
+                        "Name": "OSAMA, BEN LADEN"
+                      },
+                      {
+                        "Name": "OSSAMA, BEN LADEN"
+                      },
+                      {
+                        "Name": "USAMA BIN MUHAMMED BIN AWAD, OSAMA BIN LADEN"
+                      },
+                      {
+                        "Name": "USAMA, BEN LADEN"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "EUROPEAN_UNION",
+                    "Designation": "ISILDAESHALQAIDA",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:EUROPEAN_UNION"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 33 \/ Create Date: 07\/19\/2007 10:01:47 \/ Last Update Date: 05\/29\/2019 12:26:44 \/ Program: ISIL (DA'ESH) AND AL-QAIDA ORGANISATIONS \/ Legal_Basis: 596\/2013 (OJ L 172) \/ Title: HAJJ; SHAYKH \/ Citizenship: Saudi Arabia (CITIZENSHIP WITHDRAWN) \/ Nationality: Afghan (nationality given by the Taliban regime) \/ Gender: M \/ OtherInformation: Confirmed to have died in Pakistan in May 2011. Date of designation referred to in Article 2a(4)(b): 25.1.2001. \/ EffectiveDate: 6\/26\/2013 \/ OriginalID: 833",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "01\/01\/1957 03\/10\/1957 07\/28\/1957 07\/30\/1957 1956 1957"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "JEDDAH, SAUDI ARABIA; YEMEN"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "45930",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "188",
+                        "PositionEnd": "202"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "3",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "BIN LADIN, OSAMA",
+                  "HittedEntity": {
+                    "ID": "AS00010914",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2019-09-10 18:30:38 UST"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BIN LADIN, USAMA BIN MUHAMMAD BIN AWAD"
+                      },
+                      {
+                        "Name": "BIN LADEN, OSAMA"
+                      },
+                      {
+                        "Name": "BIN LADEN, USAMA"
+                      },
+                      {
+                        "Name": "BIN LADIN, OSAMA"
+                      },
+                      {
+                        "Name": "BIN LADIN, OSAMA BIN MUHAMMAD BIN AWAD"
+                      },
+                      {
+                        "Name": "BIN LADIN, USAMA"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "US_OFAC",
+                    "Designation": "SDGT",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:OFAC"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 0 \/ Create Date: 08\/21\/1998 00:00:00 \/ Last Update Date: 09\/10\/2019 14:50:22 \/ Program: SDGT \/ OriginalID: 6365",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "07\/30\/1957 1958"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "JEDDAH, SAUDI ARABIA; YEMEN"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "45930",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "OSAMA BIN LADIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "188",
+                        "PositionEnd": "202"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "BIN LADEN, OSAMA",
+                  "HittedEntity": {
+                    "ID": "AS00146120",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2007-04-17 08:32:36 ITL"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "BIN LADEN, OSAMA"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "IL_MOD_TERROR",
+                    "Designation": "GWL",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:ISRAELI_MINISTRY_OF_DEFENSE"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 1078 \/ Create Date: 03\/01\/2007 10:50:02 \/ Last Update Date: 03\/02\/2007 13:24:56 \/ OtherInformation: HEAD OF AL QAEDA",
+                    "DatesOfBirth": [
+                    ],
+                    "PlacesOfBirth": [
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              }
+            ],
+            "Actions": [
+              {
+                "Action": {
+                  "DateTime": "20210930144701",
+                  "Operator": "Filter Engine",
+                  "Comment": "Stop: 13, Nonblocking: 0",
+                  "Status": {
+                    "ID": "0",
+                    "Name": "FILTER",
+                    "RoutingCode": "0",
+                    "Checksum": "c4b4872d17cf6fa4f27f06e3b5d93c78"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20210930144702",
+                  "Operator": "Stripping Engine",
+                  "Comment": "Stop: 13, Nonblocking: 0",
+                  "Status": {
+                    "ID": "-2",
+                    "Name": "NO HIT",
+                    "RoutingCode": "-2",
+                    "Checksum": "1080a07f679004254edcc4854e8f66a7"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20210930144708",
+                  "Operator": "DBCLient",
+                  "Comment": "Auto decision",
+                  "Status": {
+                    "ID": "224",
+                    "Name": "FILTER_S8",
+                    "RoutingCode": "12",
+                    "Checksum": "99e62c449aff68b09fe386e31c855ae4"
+                  }
+                }
+              }
+            ],
+            "CurrentStatus": {
+              "ID": "224",
+              "Name": "FILTER_S8",
+              "RoutingCode": "12",
+              "Checksum": "99e62c449aff68b09fe386e31c855ae4"
+            },
+            "NextStatuses": [
+              {
+                "Status": {
+                  "ID": "227",
+                  "Name": "S8_ADJ",
+                  "RoutingCode": "12",
+                  "Checksum": "4703127f72fd5ee5a62da418d452219a"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
