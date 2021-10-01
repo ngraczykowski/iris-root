@@ -21,7 +21,7 @@ class AgentEtlConfiguration {
   @Valid
   private final AgentEtlProperties properties;
 
-  @Setter(onMethod_ = @GrpcClient("data-source"))
+  @Setter(onMethod_ = @GrpcClient("datasource"))
   private Channel dataSourceChannel;
 
   @Bean

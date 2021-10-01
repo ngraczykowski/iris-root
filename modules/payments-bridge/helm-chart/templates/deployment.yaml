@@ -54,8 +54,8 @@ spec:
               value: {{ .Values.springProfilesActive }}
             - name: 'GRPC_CLIENT_AE_ADDRESS'
               value: {{ .Values.grpcClientAeAddress }}
-            - name: 'GRPC_CLIENT_DATA_SOURCE_ADDRESS'
-              value: {{ .Values.grpcClientDataSourceAddress }}
+            - name: 'GRPC_CLIENT_DATASOURCE_ADDRESS'
+              value: {{ .Values.grpcClientDatasourceAddress }}
             - name: 'GRPC_CLIENT_GOVERNANCE_ADDRESS'
               value: {{ .Values.grpcClientGovernanceAddress }}
             - name: 'DEBUG'
