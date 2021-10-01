@@ -59,19 +59,19 @@ spec:
             - name: 'GRPC_CLIENT_governance_ADDRESS'
               value: {{ .Values.grpcClientGovernanceAddress }}
             - name: 'PB_CMAPI_CALLBACK_ENABLED'
-              value: 'enabled'
+              value: {{ .Values.pbCmapiCallbackEnabled | squote }}
             - name: 'PB_CMAPI_CALLBACK_ENDPOINT'
-              value: {{ .Values.pbCmapiCallbackEndpoint }}
+              value: {{ .Values.pbCmapiCallbackEndpoint | squote }}
             - name: 'SECURITY_OAUTH_2_CLIENT_CLIENT_ID'
-              value: {{ .Values.oauthClientId }}
+              value: {{ .Values.oauthClientId | squote }}
             - name: 'SECURITY_OAUTH_2_CLIENT_CLIENT_SECRET'
-              value: {{ .Values.oauthClientSecret }}
+              value: {{ .Values.oauthClientSecret | squote }}
             - name: 'SECURITY_OAUTH_2_CLIENT_USER_AUTHORIZATION_URI'
-              value: {{ .Values.oauthClientAuthUri }}
+              value: {{ .Values.oauthClientAuthUri | squote }}
             - name: 'SECURITY_OAUTH_2_CLIENT_ACCESS_TOKEN_URI'
-              value: {{ .Values.oauthClientAccessUri }}
+              value: {{ .Values.oauthClientAccessUri | squote }}
             - name: 'SECURITY_OAUTH_2_CLIENT_SCOPE'
-              value: {{ .Values.oauthClientScope }}
+              value: {{ .Values.oauthClientScope | squote }}
             - name: 'SECURITY_OAUTH_2_CLIENT_GRANT_TYPE'
               value: 'client_credentials'
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
