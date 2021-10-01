@@ -16,13 +16,10 @@ public class NationalityCountryQueryFacade implements NationalityCountryQuery {
   private final IndividualComposite individualComposite;
 
   @Override
-  public Stream<String> apLine4DocumentCountry() {
-    var documentFieldWithPossibleCountry = individualComposite.getCustomerIndividual()
-        .getIdentificationDocument4();
-
-    return new IdentificationDocumentLine4CountryExtractor(documentFieldWithPossibleCountry)
-        .extract()
-        .stream();
+  public Stream<String> apDocumentCountries() {
+    return new DocumentExtractor()
+        .convertAlertedPartyDocumentNumbers(individualComposite.getCustomerIndividual())
+        .getAllCountries().stream();
   }
 
   @Override

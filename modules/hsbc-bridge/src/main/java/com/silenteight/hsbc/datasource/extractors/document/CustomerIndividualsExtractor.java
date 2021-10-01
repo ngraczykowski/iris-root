@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -39,18 +40,19 @@ class CustomerIndividualsExtractor {
 
     if (matcher.find()) {
       var filteredData = matcher.group(0).replace("\"", "");
-      var data = Stream.of(filteredData.split(","))
+      var documentsData = Stream.of(filteredData.split(","))
           .map(String::trim)
           .collect(Collectors.toList());
-      if (data.size() > 1) {
-        var documentType = data.get(0);
-        var documentValue = data.get(1);
-        addToDocument(documentType, documentValue);
+      if (documentsData.size() > 1) {
+        addToDocument(documentsData);
       }
     }
   }
 
-  private void addToDocument(String documentType, String documentValue) {
+  private void addToDocument(List<String> data) {
+    var documentType = data.get(0);
+    var documentValue = data.get(1);
+
     switch (documentType) {
       case PASSPORT_CODE: {
         document.addPassportNumber(documentValue);
@@ -58,6 +60,9 @@ class CustomerIndividualsExtractor {
       }
       case NATIONAL_ID_CODE: {
         document.addNationalIdNumber(documentValue);
+        if (data.size() > 2) {
+          document.addDocumentIdentificationCountry(data.get(2));
+        }
         break;
       }
       default: {

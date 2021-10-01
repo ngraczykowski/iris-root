@@ -29,10 +29,10 @@ class NationalIdDocumentQueryFacade implements NationalIdDocumentQuery {
   @Override
   public Stream<String> apCountries() {
     var countryFacade = new NationalityCountryQueryFacade(matchData);
-    var apIdDocumentCountry = countryFacade.apLine4DocumentCountry();
     var apFieldsCountries = countryFacade.apFieldsIndividualCountries();
+    var apDocumentCountries = extractApDocuments().getAllCountries().stream();
 
-    return concat(apFieldsCountries, apIdDocumentCountry);
+    return concat(apFieldsCountries, apDocumentCountries);
   }
 
   @Override

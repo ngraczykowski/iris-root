@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 public interface NationalityCountryQuery {
 
-  Stream<String> apLine4DocumentCountry();
+  Stream<String> apDocumentCountries();
 
   Stream<String> apFieldsIndividualCountries();
 

@@ -30,7 +30,7 @@ public class NationalityCountryFeature implements FeatureValuesRetriever<Country
     if (matchData.isIndividual()) {
       var query = nationalityCountryQueryFactory.create(matchData);
 
-      var apIdDocumentCountry = query.apLine4DocumentCountry();
+      var apIdDocumentCountry = query.apDocumentCountries();
       var apFieldsCountries = query.apFieldsIndividualCountries();
 
       var mpDocument = query.mpDocumentCountries();

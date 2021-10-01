@@ -20,6 +20,7 @@ public class Document {
   private final List<String> otherDocuments = new ArrayList<>();
   private final List<String> nationalIdsCountries = new ArrayList<>();
   private final List<String> passportCountries = new ArrayList<>();
+  private final List<String> documentIdentificationCountries = new ArrayList<>();
 
   public void addOtherDocumentNumber(String documentNumber) {
     this.otherDocuments.add(documentNumber);
@@ -47,8 +48,12 @@ public class Document {
     this.passportCountries.add(passportCountry);
   }
 
+  void addDocumentIdentificationCountry(String country) {
+    this.documentIdentificationCountries.add(country);
+  }
+
   public List<String> getAllCountries() {
-    return Stream.of(nationalIdsCountries, passportCountries)
+    return Stream.of(nationalIdsCountries, passportCountries, documentIdentificationCountries)
         .flatMap(Collection::stream)
         .collect(toList());
   }
