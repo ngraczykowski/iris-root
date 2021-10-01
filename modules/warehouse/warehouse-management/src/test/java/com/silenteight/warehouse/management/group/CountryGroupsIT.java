@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
-import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.common.testing.rest.WithElasticAccessCredentials;
 import com.silenteight.warehouse.indexer.query.single.AlertNotFoundException;
@@ -45,7 +44,6 @@ import static org.assertj.core.api.Assertions.*;
 @SpringBootTest(classes = CountryGroupsConfiguration.class)
 @ContextConfiguration(initializers = {
     OpendistroElasticContainerInitializer.class,
-    OpendistroKibanaContainerInitializer.class,
     PostgresTestInitializer.class
 })
 @AutoConfigureDataJpa

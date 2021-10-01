@@ -17,58 +17,14 @@ Additionally, there are two more `application.yml`:
 - `nomad/conf/application.yml` - a template rendered by Nomad that results in a deployment
   configuration that targets hosted environments.
 
-## Tenants configuration
-
-Warehouse depends heavily on the concept of tenants introduced in Opendistro and uses it
-to separate distinct reports.
-
-The following summarizes the tenants that should be preconfigured in the environment:
-
-- `[env]_production_ai_reasoning` - production flow, 'ai-reasoning' report definitions
-- `[env]_production_rb_scorer` - production flow, 'rb-scorer' report definitions
-- `[env]_production_accuracy` - production flow, 'accuracy' report definitions
-- `[env]_production_periodic` - production flow, reports that should be generated periodically and stored in Minio for auditing 
-- `[env]_simulation_master` - simulation flow, reports definitions blueprint
-
-These are the tenants create by application: 
-- `[env]_simulation_[analysisId]` - simulation flow, tenant created based on `[env]_simulation_master`.
-   Contains all the simulation reports related to a specific `analysisId`.
-
-RFU:
-- `[env]_production_custom` - RFU, production flow, custom report definitions created by user
-- `[env]_simulation_custom` - RFU, simulation flow, custom report definitions created by user
-
-## Kibana configuration synchronization
-
-In order to transfer kibana configuration from one environment to another,
-please follow the steps below for each tenant that you wish to synchronize:
-
-1. setup environment settings in `./scripts/export/.env`
-1. setup credentials in `./scripts/export/.netrc`
-1. export the configuration `./scripts/export/export-kibana-configuration.sh <tenant_name>`
-1. setup the configuration for target environment: 
-    
-   ```
-   ./scripts/prepare-kibana-configuration.sh \
-         <tenant_name> \
-         <taget_tenant_name> \
-         <source_environment_prefix> \
-         <target_environment_prefix>
-   ```
-1. import the configuration via grpc: 
-   
-    - service.method: `ConfigurationManagementService.ImportConfiguration`
-    - payload: `./scripts/export/import-defintions`
-
 ## Development Setup
 
 Before you can run Warehouse, you need to have a few infrastructural services running:
 
 1. RabbitMQ - the message broker for communicating between components and with outside services.
 2. ElasticSearch - NoSQL database optimized for searches
-3. Kibana - an open source reporting tool
-4. MinIO - a S3 compliant reportStorage service
-5. PostgreSQL - SQL database
+3. MinIO - a S3 compliant reportStorage service
+4. PostgreSQL - SQL database
 
 ### Starting RabbitMQ 
 To start RabbitMQ, follow the steps:
@@ -94,8 +50,8 @@ If you need to run services with TLS enabled:
   
 ## Testing
 
-### Initializing ElasticSearch and Kibana
-If you wish to play with ElasticSearch and Kibana:
+### Initializing ElasticSearch
+If you wish to play with ElasticSearch:
 
 1.  You need to pre-create tenants and generate some reports.
     You may want to use the following convenience script:
@@ -132,7 +88,6 @@ Swagger UI is accessible via [http](http://localhost:24900/rest/warehouse/openap
 
         @ContextConfiguration(initializers = {
         //    OpendistroElasticContainerInitializer.class,
-        //    OpendistroKibanaContainerInitializer.class
         })
         
 3. Activate local profile which provides connection setup for local environment.

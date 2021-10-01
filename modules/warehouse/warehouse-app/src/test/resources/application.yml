@@ -53,10 +53,6 @@ warehouse:
     prefix: itest
   report:
     default-bucket: reports
-  kibana:
-    url: http://localhost:5601
-    username: technicaluser
-    password: technicaluser
   es:
     production-query-index: ${warehouse.environment.prefix}_production
     scroll:

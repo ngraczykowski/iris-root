@@ -21,7 +21,6 @@ configurations {
 dependencies {
   implementation project(":warehouse-backup")
   implementation project(":warehouse-common")
-  implementation project(":warehouse-configuration-management")
   implementation project(":warehouse-db-changelog")
   implementation project(":warehouse-indexer")
   implementation project(":warehouse-management")

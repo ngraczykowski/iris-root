@@ -67,10 +67,6 @@ warehouse:
       routing-key: event.index-response.simulation
   environment:
     prefix: local
-  kibana:
-    url: http://localhost:5601
-    username: technicaluser
-    password: technicaluser
   db:
     host: localhost
     port: 24910

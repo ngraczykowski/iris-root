@@ -11,8 +11,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
 
-import static com.silenteight.warehouse.common.opendistro.kibana.KibanaReportFixture.REPORT_DEFINITION_ID;
-import static com.silenteight.warehouse.common.opendistro.kibana.KibanaReportFixture.REPORT_NAME;
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.MODEL_TUNER;
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.QA;
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.QA_ISSUE_MANAGER;
@@ -21,6 +19,8 @@ import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture
 import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.ANALYSIS_ID_PARAM;
 import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.DEFINITIONS_COLLECTION_URL;
 import static com.silenteight.warehouse.report.simulation.SimulationTestConstants.REPORT_DEFINITION_DTO;
+import static com.silenteight.warehouse.report.simulation.SimulationTestConstants.REPORT_DEFINITION_ID;
+import static com.silenteight.warehouse.report.simulation.SimulationTestConstants.REPORT_NAME;
 import static java.util.Map.of;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;

@@ -112,7 +112,7 @@ class AlertQueryIT {
 
   @Test
   @WithElasticAccessCredentials
-  void shouldReturnEmptyFieldWhenRequestedAttributeDoesNotExistsInKibana() {
+  void shouldReturnEmptyFieldWhenRequestedAttributeDoesNotExists() {
     storeData();
 
     Map<String, String> singleAlertAttributes =

@@ -10,11 +10,6 @@ public class InMemoryAccuracyRepository
     implements AccuracyReportRepository {
 
   @Override
-  public void deleteById(long id) {
-    delete(getById(id));
-  }
-
-  @Override
   public int removeAllByCreatedAtBefore(OffsetDateTime offsetDateTime) {
     // TODO: (WEB-1435)
     throw new IllegalStateException("Not implemented");

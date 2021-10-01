@@ -61,8 +61,6 @@ warehouse:
       simulation-indexed-outbound:
         exchange-name: wh.event
         routing-key: event.index-response.simulation
-  opendistro:
-    max-object-count: 10000
   environment:
     prefix: dev
   db:
@@ -74,8 +72,6 @@ warehouse:
   {{ end -}}
   minio:
     url: https://minio.silenteight.com
-  kibana:
-    url: https://kibana.silenteight.com
   sampling:
     time-field-name: alert_recommendationDate
     filters:

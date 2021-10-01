@@ -3,7 +3,6 @@ package com.silenteight.warehouse.test.generator;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.data.api.v1.Alert;
-import com.silenteight.data.api.v1.Match;
 
 import com.google.protobuf.Struct;
 import com.google.protobuf.Struct.Builder;
@@ -53,13 +52,6 @@ class AlertGenerator {
   private String getValue(String values) {
     String[] splitValues = values.split(COMMA);
     return getRandomValue(splitValues);
-  }
-
-  private static Match match(String matchName, String payloadName, String payloadSolution) {
-    return Match.newBuilder()
-        .setName(matchName)
-        .setPayload(convertMapToPayload(Map.of(payloadName, payloadSolution)))
-        .build();
   }
 
   private static Builder convertMapToPayload(Map<String, String> payload) {

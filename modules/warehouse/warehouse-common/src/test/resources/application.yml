@@ -3,10 +3,6 @@ spring:
     name: warehouse
 
 warehouse:
-  kibana:
-    timezone: Europe/Warsaw
-  opendistro:
-    max-object-count: 1000
   task:
     async:
       execution:
@@ -19,4 +15,3 @@ logging:
   level:
     com.silenteight.warehouse.report: DEBUG
     com.silenteight.warehouse.common.opendistro.elastic: DEBUG
-    com.silenteight.warehouse.common.opendistro.kibana: DEBUG

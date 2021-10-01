@@ -14,8 +14,6 @@ interface AccuracyReportRepository extends Repository<AccuracyReport, Long> {
 
   AccuracyReport getById(long id);
 
-  void deleteById(long id);
-
   @Transactional
   @Modifying
   @Query(value = "DELETE FROM warehouse_report_accuracy WHERE created_at < :offsetDateTime",

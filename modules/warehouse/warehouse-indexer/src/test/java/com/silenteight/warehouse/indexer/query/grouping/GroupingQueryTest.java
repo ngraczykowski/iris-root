@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClientException;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
-import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.indexer.query.common.QueryFilter;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
@@ -33,10 +32,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest(classes = GroupingQueryTestConfiguration.class)
-@ContextConfiguration(initializers = {
-    OpendistroElasticContainerInitializer.class,
-    OpendistroKibanaContainerInitializer.class
-})
+@ContextConfiguration(initializers = { OpendistroElasticContainerInitializer.class })
 class GroupingQueryTest {
 
   private static final String NOT_EXISTING_KEY = "NOT_EXISTING_KEY";

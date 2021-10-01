@@ -13,8 +13,6 @@ spring:
 warehouse:
   report:
     default-bucket: report
-  opendistro:
-    max-object-count: 1000
   environment:
     prefix: itest
   es:
@@ -23,11 +21,6 @@ warehouse:
       search:
         batch-size: 1
         keep-alive-seconds: 10
-  kibana:
-    url: http://localhost:5601
-    username: technicaluser
-    password: technicaluser
-    timezone: Europe/Warsaw
   alert-mapping:
     country-source-key: lob_country
 logging:

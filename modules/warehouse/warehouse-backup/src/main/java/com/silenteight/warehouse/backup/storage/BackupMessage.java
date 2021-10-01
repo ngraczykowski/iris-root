@@ -37,7 +37,6 @@ class BackupMessage extends BaseEntity implements IdentifiableEntity {
   @Column(length = 64)
   private String analysisName;
 
-  @NonNull
   @Setter(AccessLevel.PUBLIC)
   byte[] data;
 }
