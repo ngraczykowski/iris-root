@@ -21,4 +21,6 @@ class ValidationProperties {
   int maxNumberFilesToUpload;
   @NotNull
   List<String> allowedTypes;
+  @NotNull
+  String allowedCharactersForFileName;
 }

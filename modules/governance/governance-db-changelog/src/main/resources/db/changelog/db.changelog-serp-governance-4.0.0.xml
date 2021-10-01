@@ -521,4 +521,9 @@
       <column name="change_request_id"/>
     </createIndex>
   </changeSet>
+  <changeSet id="serp-governance-4.0.0-18" author="rpajdak">
+    <modifyDataType tableName="governance_file"
+                    columnName="original_name"
+                    newDataType="VARCHAR(255)"/>
+  </changeSet>
 </databaseChangeLog>

@@ -13,18 +13,18 @@ class ValidationConfiguration {
   @Bean
   ValidationService validationService(@Valid ValidationProperties properties) {
     return new ValidationService(
-        nameCharactersValidator(),
+        nameCharactersValidator(properties),
         mimeTypeValidator(properties),
         nameLengthValidator(properties),
         sizeValidator(properties));
   }
 
-  FileValidator nameCharactersValidator() {
-    return new FileNameCharactersValidator();
+  FileValidator nameCharactersValidator(@Valid ValidationProperties properties) {
+    return new FileNameCharactersValidator(properties.getAllowedCharactersForFileName());
   }
 
   FileValidator mimeTypeValidator(@Valid ValidationProperties properties) {
-    return new FileMimeTypeValidator(properties.allowedTypes);
+    return new FileMimeTypeValidator(properties.getAllowedTypes());
   }
 
   FileValidator nameLengthValidator(@Valid ValidationProperties properties) {
