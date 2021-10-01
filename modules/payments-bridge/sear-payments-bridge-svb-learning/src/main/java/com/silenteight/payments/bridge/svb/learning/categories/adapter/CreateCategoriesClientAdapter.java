@@ -29,7 +29,7 @@ class CreateCategoriesClientAdapter implements CreateCategoriesClient {
     }
 
     try {
-      var response = blockingStub
+      blockingStub
           .withDeadline(deadline)
           .batchCreateCategories(createCategoriesRequest);
       log.info("Created Categories");
