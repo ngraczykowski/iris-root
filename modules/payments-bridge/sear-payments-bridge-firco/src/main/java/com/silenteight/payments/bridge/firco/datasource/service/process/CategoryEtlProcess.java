@@ -4,6 +4,7 @@ import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.event.AlertRegistered;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
+import com.silenteight.payments.bridge.svb.etl.response.AlertEtlResponse;
 
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 class CategoryEtlProcess implements EtlProcess {
 
   @Override
-  public void extractAndLoad(AlertRegistered data) {
+  public void extractAndLoad(AlertRegistered data, AlertEtlResponse alertEtlResponse) {
     // an example how to retrieve data from event
     var alertData = data.getData(AlertData.class);
     var alertMessageDto = data.getData(AlertMessageDto.class);
