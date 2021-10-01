@@ -330,7 +330,7 @@ sep.auth:
 serp.governance.qa:
   sampling:
     schedule:
-      enabled: false
+      enabled: true
       audit-cron: 0 0 1 * * ?
       alert-generator-cron: 0 0 1 1 * ?
     generator:
