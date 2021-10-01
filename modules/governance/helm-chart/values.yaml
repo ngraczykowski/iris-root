@@ -14,4 +14,4 @@ memoryRequest: 768Mi
 grpc:
   client:
     warehouse:
-      address: "static://warehouse-app-service:8081"
+      address: "static://warehouse-app-service.default.svc.cluster.local:8081"
