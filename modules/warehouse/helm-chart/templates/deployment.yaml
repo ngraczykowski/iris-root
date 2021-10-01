@@ -20,12 +20,16 @@ spec:
             httpGet:
               path: {{ .Values.livenessProbeHttpGetPath }}
               port: {{ .Values.ports.http }}
+            failureThreshold: 30
             initialDelaySeconds: 10
-            periodSeconds: 10
+            timeoutSeconds: 10
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbeHttpGetPath }}
               port: {{ .Values.ports.http }}
+            failureThreshold: 30
+            initialDelaySeconds: 30
+            timeoutSeconds: 10
           env:
             - name: 'WAREHOUSE_DB_HOST'
               value: {{ .Values.whDbHost }}
