@@ -52,8 +52,6 @@ spec:
               value: {{ .Values.springRabbitmqVirtualHost }}
             - name: 'SPRING_PROFILES_ACTIVE'
               value: {{ .Values.springProfilesActive }}
-            - name: 'GRPC_CLIENT_GLOBAL_NEGOTIATION_TYPE'
-              value: 'PLAINTEXT'
             - name: 'GRPC_CLIENT_ae_ADDRESS'
               value: {{ .Values.grpcClientAeAddress }}
             - name: 'GRPC_CLIENT_datasource_ADDRESS'
@@ -73,7 +71,7 @@ spec:
             - name: 'SECURITY_OAUTH_2_CLIENT_ACCESS_TOKEN_URI'
               value: {{ .Values.oauthClientAccessUri }}
             - name: 'SECURITY_OAUTH_2_CLIENT_SCOPE'
-              value: 'openid'
+              value: {{ .Values.oauthClientScope }}
             - name: 'SECURITY_OAUTH_2_CLIENT_GRANT_TYPE'
               value: 'client_credentials'
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}

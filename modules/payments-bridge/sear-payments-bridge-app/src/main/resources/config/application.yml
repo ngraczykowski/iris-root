@@ -201,3 +201,8 @@ spring:
 
 info:
   env: ${spb.env:local}
+
+grpc:
+  client:
+    GLOBAL:
+      negotiation-type: PLAINTEXT

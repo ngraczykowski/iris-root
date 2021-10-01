@@ -129,6 +129,7 @@ security:
       access-token-uri: ${rest.security.issuer-uri}/protocol/openid-connect/token
       scope: openid
       grant-type: client_credentials
+
 management:
   health:
     probes:
