@@ -28,14 +28,10 @@ import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 @RequiredArgsConstructor
 public class OpendistroElasticClient {
 
-  static final String HEADER_SECURITY_TENANT = "securitytenant";
   private final RestClient restLowLevelClient;
   private final ObjectMapper objectMapper;
-  private final Integer maxObjectCount;
-  private static final String MAX_ITEMS_PARAM = "maxItems";
   private static final String ROLE_PARAM = "role";
   private static final String ROLEMAPPING_PARAM = "rolemapping";
-  private static final String LIST_REPORTS_INSTANCES_ENDPOINT = "/_opendistro/_reports/instances";
   private static final String TENANT_ENDPOINT = "/_opendistro/_security/api/tenants/";
   private static final String SQL_ENDPOINT = "/_opendistro/_sql";
   private static final String ROLES_ENDPOINT =
@@ -88,39 +84,6 @@ public class OpendistroElasticClient {
     log.debug("OpendistroElasticClient method=GET, endpoint={}, statusCode={}",
         request.getEndpoint(), response.getStatusLine());
   }
-
-  public ListReportsInstancesResponse getReportInstances(
-      ListReportsInstancesRequest listReportsInstancesRequest) {
-
-    String path = fromUriString(LIST_REPORTS_INSTANCES_ENDPOINT)
-        .queryParam(MAX_ITEMS_PARAM, maxObjectCount)
-        .toUriString();
-
-    Request request = new Request(METHOD_NAME, path);
-    String securityTenant = listReportsInstancesRequest.getTenant();
-    request.setOptions(getRequestOptions(securityTenant));
-
-    try {
-      return getListReportsInstancesResponse(request);
-    } catch (IOException e) {
-      throw handle("getReportInstances", e);
-    }
-  }
-
-  private ListReportsInstancesResponse getListReportsInstancesResponse(Request request)
-      throws IOException {
-
-    Response response = restLowLevelClient.performRequest(request);
-
-    ListReportsInstancesResponse listReportsInstancesResponse =
-        objectMapper.readValue(
-            response.getEntity().getContent(),
-            ListReportsInstancesResponse.class);
-    log.debug("OpendistroElasticClient method=GET, endpoint={}, statusCode={}, parsedBody={}",
-        request.getEndpoint(), response.getStatusLine(), listReportsInstancesResponse);
-    return listReportsInstancesResponse;
-  }
-
 
   public RoleDto getCurrentRole(String roleId) {
     try {
@@ -299,10 +262,6 @@ public class OpendistroElasticClient {
 
   private RequestOptions.Builder getRequestOptions() {
     return DEFAULT.toBuilder().addHeader(CONTENT_TYPE, APPLICATION_JSON);
-  }
-
-  RequestOptions.Builder getRequestOptions(String tenant) {
-    return DEFAULT.toBuilder().addHeader(HEADER_SECURITY_TENANT, tenant);
   }
 
   OpendistroElasticClientException handle(String context, IOException e) {

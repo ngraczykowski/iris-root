@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.common.opendistro.elastic.RoleDto.IndexPermission;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
-import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 
 import org.elasticsearch.ElasticsearchException;
@@ -28,7 +27,6 @@ import static org.assertj.core.api.Assertions.*;
 @Slf4j
 @SpringBootTest(classes = OpendistroElasticTestConfiguration.class)
 @ContextConfiguration(initializers = {
-    OpendistroKibanaContainerInitializer.class,
     OpendistroElasticContainerInitializer.class
 })
 class OpendistroElasticClientTest {

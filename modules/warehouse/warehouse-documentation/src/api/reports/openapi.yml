@@ -13,29 +13,6 @@ servers:
         default: http://localhost:24291
 
 paths:
-  /analysis/{analysisId}/tenant:
-    get:
-      description: Returns a name of the tenat in the Kibana.
-      parameters:
-        - in: path
-          name: analysisId
-          required: true
-          schema:
-            type: string
-          description: 'Analysis Id'
-          example: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
-      responses:
-        200:
-          description: Returns a name of the tenat in the Kibana.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
-              example:
-                "sim_simulation_49"
-
   /analysis/{analysisId}/definitions:
     get:
       description: Returns a list of reports for specific analysis

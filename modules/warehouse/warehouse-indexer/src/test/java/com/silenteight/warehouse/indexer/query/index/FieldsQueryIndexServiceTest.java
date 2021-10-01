@@ -1,7 +1,6 @@
 package com.silenteight.warehouse.indexer.query.index;
 
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
-import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroKibanaContainer.OpendistroKibanaContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 
 import org.junit.jupiter.api.AfterEach;
@@ -21,10 +20,7 @@ import static java.util.Map.of;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest(classes = QueryIndexServiceTestConfiguration.class)
-@ContextConfiguration(initializers = {
-    OpendistroElasticContainerInitializer.class,
-    OpendistroKibanaContainerInitializer.class
-})
+@ContextConfiguration(initializers = { OpendistroElasticContainerInitializer.class })
 class FieldsQueryIndexServiceTest {
 
   @Autowired

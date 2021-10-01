@@ -4,10 +4,6 @@ spring:
 warehouse:
   alert-mapping:
     country-source-key: lob_country
-  kibana:
-    timezone: Europe/Warsaw
-  opendistro:
-    max-object-count: 1000
   environment:
     prefix: itest
   es:
@@ -23,4 +19,3 @@ logging:
   level:
     com.silenteight.warehouse.report: DEBUG
     com.silenteight.warehouse.common.opendistro.elastic: DEBUG
-    com.silenteight.warehouse.common.opendistro.kibana: DEBUG

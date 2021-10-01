@@ -4,9 +4,3 @@ spring:
       username: technicaluser
       password: technicaluser
       uris: http://localhost:9201,http://localhost:9200
-
-warehouse:
-  kibana:
-    url: http://localhost:5601
-    username: technicaluser
-    password: technicaluser

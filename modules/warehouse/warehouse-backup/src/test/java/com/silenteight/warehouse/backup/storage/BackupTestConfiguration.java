@@ -7,8 +7,6 @@ import com.silenteight.sep.base.common.database.HibernateCacheAutoConfiguration;
 import com.silenteight.sep.base.common.messaging.IntegrationConfiguration;
 import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
 import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration;
-import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.warehouse.backup.BackupModule;
 import com.silenteight.warehouse.backup.indexing.IndexerProperties;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
@@ -23,8 +21,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.config.EnableIntegrationManagement;
-
-import static java.time.Instant.parse;
 
 @ComponentScan(basePackageClasses = {
     EnvironmentModule.class,
@@ -45,7 +41,6 @@ import static java.time.Instant.parse;
 @Slf4j
 public class BackupTestConfiguration {
 
-  private static final String TIME_SOURCE = "2021-07-22T12:17:37.098Z";
   private final IndexerProperties properties;
   private final IndexerClientIntegrationProperties testProperties;
   
@@ -65,11 +60,6 @@ public class BackupTestConfiguration {
     return QueueBuilder
         .durable(properties.getBackupIndexingInbound().getQueueName())
         .build();
-  }
-
-  @Bean
-  TimeSource timeSource() {
-    return new MockTimeSource(parse(TIME_SOURCE));
   }
 
   private Binding bind(Exchange exchange, String routingKey, Queue queue) {

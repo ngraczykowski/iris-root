@@ -12,19 +12,10 @@ public class NewAnalysisEventFixture {
   public static final String SIMULATION_FLOW = "simulation";
   public static final String SIMULATION_TENANT =
       join("_", SIMULATION_ENV, SIMULATION_FLOW, ANALYSIS_ID);
-  public static final String SIMULATION_ELASTIC_SEARCH_INDEX =
+  public static final String
+      SIMULATION_ELASTIC_SEARCH_INDEX =
       join("_", SIMULATION_ENV, SIMULATION_FLOW, ANALYSIS_ID);
-  public static final AnalysisMetadataDto SIMULATION_METADATA = AnalysisMetadataDto.builder()
-      .tenant(SIMULATION_TENANT)
-      .elasticIndexName(SIMULATION_ELASTIC_SEARCH_INDEX)
-      .build();
   public static final SimulationNamingStrategy SIMULATION_NAMING_STRATEGY =
       new SimulationNamingStrategy(SIMULATION_ENV);
 
-  public static NewSimulationAnalysisEvent createNewSimulationEvent(String analysis) {
-    return NewSimulationAnalysisEvent.builder()
-        .analysis(analysis)
-        .analysisMetadataDto(SIMULATION_METADATA)
-        .build();
-  }
 }

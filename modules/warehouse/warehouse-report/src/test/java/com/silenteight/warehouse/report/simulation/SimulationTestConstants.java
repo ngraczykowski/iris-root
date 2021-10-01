@@ -4,12 +4,13 @@ import lombok.NoArgsConstructor;
 
 import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto.ReportDefinitionDto;
 
-import static com.silenteight.warehouse.common.opendistro.kibana.KibanaReportFixture.REPORT_DEFINITION_ID;
-import static com.silenteight.warehouse.common.opendistro.kibana.KibanaReportFixture.REPORT_NAME;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
-public class SimulationTestConstants {
+final class SimulationTestConstants {
+
+  static final String REPORT_DEFINITION_ID = "248cb531-1ca3-4496-a7e4-1551ee6c90f4";
+  static final String REPORT_NAME = "Test Report";
 
   static final ReportDefinitionDto REPORT_DEFINITION_DTO = ReportDefinitionDto.builder()
       .id(REPORT_DEFINITION_ID)
