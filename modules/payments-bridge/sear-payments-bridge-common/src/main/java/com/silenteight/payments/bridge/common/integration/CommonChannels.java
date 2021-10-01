@@ -32,7 +32,10 @@ public class CommonChannels {
   public static final String ALERT_REGISTERED = PREFIX + "AlertRegisteredChannel";
   public static final String ALERT_INPUT_ACCEPTED = PREFIX + "AlertInputAcceptedChannel";
   public static final String ALERT_REJECTED = PREFIX + "AlertRejectedChannel";
-  public static final String RECOMMENDATION_RECEIVED = PREFIX + "RecommendationReceivedChannel";
+
+  // Recommendation
+  public static final String RECOMMENDATION_GENERATED = PREFIX + "RecommendationGeneratedChannel";
+  public static final String RECOMMENDATION_COMPLETED = PREFIX + "RecommendationCompletedChannel";
 
   @Bean(AMQP_OUTBOUND)
   public MessageChannel amqpOutbound() {
@@ -46,27 +49,34 @@ public class CommonChannels {
 
   @Bean(ALERT_DELIVERED)
   public MessageChannel alertDelivered() {
-    return new TypedPublishSubscribeChannel(AlertDelivered.class, channelInterceptors);
+    return new TypedPublishSubscribeChannel(AlertDeliveredEvent.class, channelInterceptors);
   }
 
   @Bean(ALERT_REGISTERED)
   public MessageChannel alertRegistered() {
-    return new TypedPublishSubscribeChannel(AlertRegistered.class, channelInterceptors);
+    return new TypedPublishSubscribeChannel(AlertRegisteredEvent.class, channelInterceptors);
   }
 
   @Bean(ALERT_INPUT_ACCEPTED)
   public MessageChannel alertInputAccepted() {
-    return new TypedPublishSubscribeChannel(AlertInputAccepted.class, channelInterceptors);
+    return new TypedPublishSubscribeChannel(AlertInputAcceptedEvent.class, channelInterceptors);
   }
 
   @Bean(ALERT_REJECTED)
   public MessageChannel alertRejected() {
-    return new TypedPublishSubscribeChannel(AlertRejected.class, channelInterceptors);
+    return new TypedPublishSubscribeChannel(AlertRejectedEvent.class, channelInterceptors);
   }
 
-  @Bean(RECOMMENDATION_RECEIVED)
-  public MessageChannel recommendationReceived() {
-    return new TypedPublishSubscribeChannel(RecommendationReceived.class, channelInterceptors);
+  @Bean(RECOMMENDATION_GENERATED)
+  public MessageChannel recommendationGenerated() {
+    return new TypedPublishSubscribeChannel(
+        RecommendationGeneratedEvent.class, channelInterceptors);
+  }
+
+  @Bean(RECOMMENDATION_COMPLETED)
+  public MessageChannel recommendationCompleted() {
+    return new TypedPublishSubscribeChannel(
+        RecommendationCompletedEvent.class, channelInterceptors);
   }
 
 }

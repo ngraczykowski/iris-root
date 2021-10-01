@@ -13,7 +13,8 @@ import com.silenteight.payments.bridge.event.data.AlertDtoIdentifier;
 @RequiredArgsConstructor
 @Getter
 @EqualsAndHashCode(of = "alertId", callSuper = false)
-public class AlertDelivered extends DomainEvent implements AlertDataIdentifier, AlertDtoIdentifier {
+public class AlertDeliveredEvent extends DomainEvent
+    implements AlertDataIdentifier, AlertDtoIdentifier {
 
   private final String alertId;
 

@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-
+  implementation project(":sear-payments-bridge-common")
   implementation libraries.silenteight_sep_base_common
   implementation libraries.adjudication_engine_api
 

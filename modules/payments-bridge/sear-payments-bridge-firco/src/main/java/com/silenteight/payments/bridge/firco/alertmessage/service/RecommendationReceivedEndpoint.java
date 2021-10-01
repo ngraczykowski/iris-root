@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.event.RecommendationReceived;
+import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.callback.port.CreateResponseUseCase;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -15,7 +15,7 @@ import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import static com.silenteight.payments.bridge.common.integration.CommonChannels.RECOMMENDATION_RECEIVED;
+import static com.silenteight.payments.bridge.common.integration.CommonChannels.RECOMMENDATION_COMPLETED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.ACCEPTED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.RECOMMENDED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OUTDATED;
@@ -34,9 +34,9 @@ class RecommendationReceivedEndpoint {
   @Setter
   private Clock clock = Clock.systemUTC();
 
-  @ServiceActivator(inputChannel = RECOMMENDATION_RECEIVED)
-  public void accept(RecommendationReceived recommendation) {
-    var alertId = UUID.fromString(recommendation.getAlertId());
+  @ServiceActivator(inputChannel = RECOMMENDATION_COMPLETED)
+  public void accept(RecommendationCompletedEvent recommendation) {
+    var alertId = UUID.fromString(recommendation.getRecommendation().getAlert());
     var alertStatusEntity = alertMessageStatusService.findByAlertId(alertId);
 
     if (isTransitionForbidden(alertStatusEntity)) {

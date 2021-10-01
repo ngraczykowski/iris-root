@@ -1,12 +1,13 @@
 package com.silenteight.payments.bridge.firco.datasource.model;
 
-import com.silenteight.payments.bridge.event.AlertRegistered;
+
+import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.svb.etl.response.AlertEtlResponse;
 
 public interface EtlProcess {
 
-  void extractAndLoad(AlertRegistered command, AlertEtlResponse alertEtlResponse);
+  void extractAndLoad(AlertRegisteredEvent command, AlertEtlResponse alertEtlResponse);
 
-  boolean supports(AlertRegistered command);
+  boolean supports(AlertRegisteredEvent command);
 
 }

@@ -7,15 +7,13 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.payments.bridge.event.data.AlertDataIdentifier;
 import com.silenteight.payments.bridge.event.data.AlertDtoIdentifier;
 
-/**
- * The alert was delivered to the inbound channel from the persistent store (rabbitMQ).
- */
 @RequiredArgsConstructor
 @Getter
 @EqualsAndHashCode(of = "alertId", callSuper = false)
-public class RecommendationReceived extends DomainEvent
-    implements AlertDataIdentifier, AlertDtoIdentifier {
+public class AlertRejectedEvent extends DomainEvent
+    implements AlertDtoIdentifier, AlertDataIdentifier {
 
   private final String alertId;
+  private final String status;
 
 }

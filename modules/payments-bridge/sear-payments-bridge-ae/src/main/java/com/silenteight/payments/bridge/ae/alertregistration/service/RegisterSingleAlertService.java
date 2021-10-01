@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.common.model.AlertData;
-import com.silenteight.payments.bridge.event.AlertDelivered;
-import com.silenteight.payments.bridge.event.AlertRegistered;
+import com.silenteight.payments.bridge.event.AlertDeliveredEvent;
+import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
@@ -26,9 +26,9 @@ class RegisterSingleAlertService {
   private final CreateAlertsService createAlertsService;
 
   @ServiceActivator(inputChannel = ALERT_DELIVERED, outputChannel = ALERT_REGISTERED)
-  public AlertRegistered apply(AlertDelivered alertDelivered) {
-    AlertData alertData = alertDelivered.getData(AlertData.class);
-    AlertMessageDto alertDto = alertDelivered.getData(AlertMessageDto.class);
+  public AlertRegisteredEvent apply(AlertDeliveredEvent alertDeliveredEvent) {
+    AlertData alertData = alertDeliveredEvent.getData(AlertData.class);
+    AlertMessageDto alertDto = alertDeliveredEvent.getData(AlertMessageDto.class);
 
     var request = RegisterAlertRequest.builder()
         .alertId(alertData.getId().toString())
@@ -38,7 +38,7 @@ class RegisterSingleAlertService {
 
     var alert = createAlertsService.createAlert(request);
 
-    return new AlertRegistered(
+    return new AlertRegisteredEvent(
         alert.getAlertId(), alert.getAlertName(),
         alert.getMatchResponsesAsMap());
   }

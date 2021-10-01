@@ -13,4 +13,6 @@ dependencies {
 
   implementation libraries.jakarta_annotation_api
   implementation libraries.jakarta_validation_api
+
+  implementation libraries.adjudication_engine_api
 }

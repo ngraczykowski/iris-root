@@ -16,16 +16,16 @@ import java.util.Map;
  */
 @Getter
 @EqualsAndHashCode(of = {"alertId", "alertRegisteredName"}, callSuper = false)
-public class AlertRegistered extends DomainEvent implements AlertDataIdentifier,
+public class AlertRegisteredEvent extends DomainEvent implements AlertDataIdentifier,
     AlertDtoIdentifier {
 
   private final String alertId;
   private final String alertRegisteredName;
   private final Map<String, String> matches;
 
-  public AlertRegistered(String alertId, String alertRegisteredName, Map<String, String> matches) {
+  public AlertRegisteredEvent(String alertId, String registeredName, Map<String, String> matches) {
     this.alertId = alertId;
-    this.alertRegisteredName = alertRegisteredName;
+    this.alertRegisteredName = registeredName;
     this.matches = CollectionUtils.isEmpty(matches) ?
                    Collections.emptyMap() : Collections.unmodifiableMap(matches);
   }

@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 @EqualsAndHashCode(of = "alertId", callSuper = false)
-public class AlertInputAccepted extends DomainEvent {
+public class AlertInputAcceptedEvent extends DomainEvent {
 
   private final String alertId;
 

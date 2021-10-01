@@ -7,7 +7,7 @@ import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentI
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.datasource.api.freetext.v1.FreeTextFeatureInput;
-import com.silenteight.payments.bridge.event.AlertRegistered;
+import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
 import com.silenteight.payments.bridge.svb.etl.response.AlertEtlResponse;
 import com.silenteight.payments.bridge.svb.etl.response.HitAndWatchlistPartyData;
@@ -33,7 +33,7 @@ class FreeTextAgentEtlProcess implements EtlProcess {
   private final Duration timeout;
 
   @Override
-  public void extractAndLoad(AlertRegistered data, AlertEtlResponse alertEtlResponse) {
+  public void extractAndLoad(AlertRegisteredEvent data, AlertEtlResponse alertEtlResponse) {
     List<HitData> hitsData = alertEtlResponse.getHits();
     data.getMatches().entrySet().forEach(matchItem -> handleMatches(hitsData, matchItem));
   }
@@ -94,7 +94,7 @@ class FreeTextAgentEtlProcess implements EtlProcess {
   }
 
   @Override
-  public boolean supports(AlertRegistered command) {
+  public boolean supports(AlertRegisteredEvent command) {
     return true;
   }
 }

@@ -50,4 +50,6 @@ dependencies {
 
   // Oauth2
   implementation libraries.spring_security_oauth2_autoconfigure
+
+  implementation libraries.adjudication_engine_api
 }
