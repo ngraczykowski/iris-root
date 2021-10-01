@@ -9,6 +9,7 @@ import com.silenteight.payments.bridge.common.dto.common.StatusInfoDto;
 import com.silenteight.payments.bridge.common.dto.validator.CompleteAlertDefinition;
 import com.silenteight.payments.bridge.common.dto.validator.MinimalAlertDefinition;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
@@ -46,6 +47,7 @@ public class AlertMessageDto implements Serializable {
 
   private String messageType; // "31"
 
+  @JsonProperty("IOIndicator")
   private String ioIndicator; // "I"
 
   private String senderReference; // "2020082100212372"
