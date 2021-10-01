@@ -63,6 +63,20 @@ spec:
               value: {{ .Values.kibanaPassword }}
             - name: 'WAREHOUSE_ENVIRONMENT_PREFIX'
               value: {{ .Values.whEnvironmentPrefix }}
+            - name: 'KEYCLOAK_CLIENT_ID'
+              value: {{ .Values.keycloakClientId | squote }}
+            - name: 'KEYCLOAK_FRONTEND_CLIENT_ID'
+              value: {{ .Values.keycloakFrontendClientId | squote }}
+            - name: 'KEYCLOAK_ADAPTER_AUTH_SERVER_URL'
+              value: {{ .Values.keycloakAdapterAuthServerUrl | squote }}
+            - name: 'KEYCLOAK_ADAPTER_RESOURCE'
+              value: {{ .Values.keycloakAdapterResource | squote }}
+            - name: 'KEYCLOAK_ADAPTER_CREDENTIALS_SECRET'
+              value: {{ .Values.keycloakAdapterCredentialsSecret | squote }}
+            - name: 'KEYCLOAK_ADAPTER_REALM'
+              value: {{ .Values.keycloakAdapterRealm | squote }}
+            - name: 'SPRING_PROFILES_ACTIVE'
+              value: {{ .Values.springProfilesActive | squote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
