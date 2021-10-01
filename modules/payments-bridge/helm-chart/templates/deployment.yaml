@@ -52,11 +52,11 @@ spec:
               value: {{ .Values.springRabbitmqVirtualHost }}
             - name: 'SPRING_PROFILES_ACTIVE'
               value: {{ .Values.springProfilesActive }}
-            - name: 'GRPC_CLIENT_AE_ADDRESS'
+            - name: 'GRPC_CLIENT_ae_ADDRESS'
               value: {{ .Values.grpcClientAeAddress }}
-            - name: 'GRPC_CLIENT_DATASOURCE_ADDRESS'
+            - name: 'GRPC_CLIENT_datasource_ADDRESS'
               value: {{ .Values.grpcClientDatasourceAddress }}
-            - name: 'GRPC_CLIENT_GOVERNANCE_ADDRESS'
+            - name: 'GRPC_CLIENT_governance_ADDRESS'
               value: {{ .Values.grpcClientGovernanceAddress }}
             - name: 'DEBUG'
               value: 'true'
