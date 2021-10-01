@@ -13,4 +13,5 @@ serp.governance.files:
       - application/x-tika-ooxml
       - application/x-tika-msoffice
       - text/plain
+    allowed-characters-for-file-name: ^[.a-zA-Z0-9-()#_\s]*$
   default-bucket: attachments

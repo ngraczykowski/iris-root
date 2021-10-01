@@ -44,6 +44,6 @@ public class ValidationService {
   }
 
   private static String createExceptionMessage(String fileName) {
-    return format("File %s is not valid, error", fileName);
+    return format("File %s is not valid.", fileName);
   }
 }
