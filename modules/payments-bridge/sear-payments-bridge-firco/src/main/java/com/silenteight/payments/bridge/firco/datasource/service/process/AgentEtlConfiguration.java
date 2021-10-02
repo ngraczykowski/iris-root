@@ -32,4 +32,14 @@ class AgentEtlConfiguration {
 
     return new FreeTextAgentEtlProcess(stub, properties.getTimeout());
   }
+
+  @Bean
+  NameAgentEtlProcess nameAgentEtlProcess() {
+    var stub = AgentInputServiceGrpc
+        .newBlockingStub(dataSourceChannel)
+        .withWaitForReady();
+
+    return new NameAgentEtlProcess(stub, properties.getTimeout());
+  }
+
 }

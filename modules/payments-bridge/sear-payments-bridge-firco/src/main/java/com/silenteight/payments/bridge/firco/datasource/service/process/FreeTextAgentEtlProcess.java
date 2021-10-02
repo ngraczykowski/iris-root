@@ -29,7 +29,6 @@ import javax.annotation.Nonnull;
 class FreeTextAgentEtlProcess implements EtlProcess {
 
   private final AgentInputServiceBlockingStub blockingStub;
-
   private final Duration timeout;
 
   @Override
@@ -47,7 +46,7 @@ class FreeTextAgentEtlProcess implements EtlProcess {
   @Nonnull
   private List<HitData> filterHitsData(List<HitData> hitsData, Entry<String, String> matchItem) {
     return hitsData.parallelStream()
-        .filter(hitData -> matchItem.getValue().equals(
+        .filter(hitData -> matchItem.getKey().equals(
             Optional.of(hitData)
                 .map(HitData::getHitAndWlPartyData)
                 .map(HitAndWatchlistPartyData::getId)
@@ -62,11 +61,11 @@ class FreeTextAgentEtlProcess implements EtlProcess {
         .withDeadline(deadline)
         .batchCreateAgentInputs(BatchCreateAgentInputsRequest.newBuilder()
             .addAgentInputs(AgentInput.newBuilder()
-                .setName("features/freeText")
-                .setMatch(matchItem.getKey())
+                .setMatch(matchItem.getValue())
                 .addFeatureInputs(getFeatureInput(hitData.getHitAndWlPartyData()))
                 .build())
             .build());
+
   }
 
   @Nonnull
@@ -76,7 +75,7 @@ class FreeTextAgentEtlProcess implements EtlProcess {
         .setFeature("features/freeText")
         .setAgentFeatureInput(Any.pack(FreeTextFeatureInput
             .newBuilder()
-            .setFeature("features/freeText")
+            .setFeature("freeText")
             .setMatchedName(hitAndWlData.getName())
             .setMatchedType(hitAndWlData.getWatchlistType().getName())
             .setFreetext(extractMatchingTexts(hitAndWlData))
