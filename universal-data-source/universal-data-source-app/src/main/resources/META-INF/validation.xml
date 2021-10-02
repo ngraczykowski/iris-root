@@ -10,8 +10,9 @@
   <constraint-mapping>META-INF/validation/category-v1-validation.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/comment-input-validation.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/comment-input-v1-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/feature-input-validation.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/feature/name-feature-validation.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/feature/location-feature-validation.xml</constraint-mapping>
-  <constraint-mapping>META-INF/validation/feature/feature-input-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/free-text-feature-validation.xml</constraint-mapping>
 
 </validation-config>

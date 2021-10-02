@@ -2,6 +2,10 @@ package com.silenteight.universaldatasource.app.feature;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceBlockingStub;
 import com.silenteight.datasource.api.document.v1.DocumentInput;
+import com.silenteight.datasource.api.freetext.v1.BatchGetMatchFreeTextInputsRequest;
+import com.silenteight.datasource.api.freetext.v1.BatchGetMatchFreeTextInputsResponse;
+import com.silenteight.datasource.api.freetext.v1.FreeTextFeatureInput;
+import com.silenteight.datasource.api.freetext.v1.FreeTextInputServiceGrpc.FreeTextInputServiceBlockingStub;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsRequest;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsResponse;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
@@ -54,6 +58,9 @@ class AgentInputServiceIT {
   @GrpcClient("uds")
   private LocationInputServiceBlockingStub locationInputServiceBlockingStub;
 
+  @GrpcClient("uds")
+  private FreeTextInputServiceBlockingStub freeTextInputServiceBlockingStub;
+
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
@@ -100,6 +107,18 @@ class AgentInputServiceIT {
                 .setFeature("city")
                 .setAlertedPartyLocation("HongKong")
                 .setWatchlistLocation("Singapore")
+                .build()),
+
+        "alerts/alertThree/matches/freeTextMatchThree",
+        Map.of(
+            "features/freetext",
+            FreeTextFeatureInput.newBuilder()
+                .setFeature("freetext")
+                .setMatchedName("Joanna")
+                .setMatchedNameSynonym("Joe")
+                .setMatchedType("name")
+                .addMatchingTexts("Joe")
+                .setFreetext("Joe")
                 .build())
     );
 
@@ -166,6 +185,39 @@ class AgentInputServiceIT {
         .getAlertedPartyLocation()).isEqualTo("Cambridge TerraceWellington 6011, New Zealand");
   }
 
+  @Test
+  void shouldGetFreeTextFeature() {
+    await()
+        .atMost(Duration.ofSeconds(5))
+        .until(() ->
+            streamedFeaturesCount(
+                jdbcTemplate, "alerts/alertThree/matches/freeTextMatchThree", "features/freetext"
+            ) > 0);
+
+    var batchGetMatchFreeTextInputs =
+        freeTextInputServiceBlockingStub.batchGetMatchFreeTextInputs(
+            BatchGetMatchFreeTextInputsRequest.newBuilder()
+                .addMatches("alerts/alertThree/matches/freeTextMatchThree")
+                .addFeatures("features/freetext")
+                .build()
+        );
+
+    assertFreeTextFeature(batchGetMatchFreeTextInputs);
+  }
+
+  private static void assertFreeTextFeature(
+      Iterator<BatchGetMatchFreeTextInputsResponse> batchGetMatchFreeTextInputs) {
+
+    var matchFreeTextInputsResponse = batchGetMatchFreeTextInputs.next();
+    assertThat(matchFreeTextInputsResponse.getFreetextInputsCount()).isEqualTo(1);
+
+    assertThat(matchFreeTextInputsResponse.getFreetextInputsList().get(0)
+        .getFreetextFeatureInputsList().stream()
+        .filter(f -> f.getFeature().equals("freetext"))
+        .filter(f -> f.getMatchedType().equals("name"))
+            .filter(f -> f.getFreetext().equals("Joe"))
+                .count()).isEqualTo(1);
+  }
 
   @Test
   void addFeatureForNonExistingMapper() {

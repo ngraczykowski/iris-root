@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsResponse;
+import com.silenteight.datasource.api.freetext.v1.BatchGetMatchFreeTextInputsRequest;
+import com.silenteight.datasource.api.freetext.v1.BatchGetMatchFreeTextInputsResponse;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsRequest;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsResponse;
 import com.silenteight.datasource.api.name.v1.BatchGetMatchNameInputsRequest;
@@ -23,6 +25,7 @@ class FeatureAdapter {
 
   private static final String LOCATION_FEATURE_INPUT = "LocationFeatureInput";
   private static final String NAME_FEATURE_INPUT = "NameFeatureInput";
+  private static final String FREE_TEXT_INPUT = "FreeTextFeatureInput";
 
   private final BatchGetFeatureInputUseCase getUseCase;
   private final BatchCreateMatchFeaturesUseCase addUseCase;
@@ -58,5 +61,19 @@ class FeatureAdapter {
 
     getUseCase.batchGetFeatureInput(featureRequest,
         batch -> onNext.accept(batch.castResponse(BatchGetMatchLocationInputsResponse.class)));
+  }
+
+  void batchGetMatchFreeTextInputs(
+      @Valid BatchGetMatchFreeTextInputsRequest request,
+      Consumer<BatchGetMatchFreeTextInputsResponse> onNext) {
+
+    var featureRequest = BatchFeatureRequest.builder()
+        .agentInputType(FREE_TEXT_INPUT)
+        .matches(request.getMatchesList())
+        .features(request.getFeaturesList())
+        .build();
+
+    getUseCase.batchGetFeatureInput(featureRequest,
+        batch -> onNext.accept(batch.castResponse(BatchGetMatchFreeTextInputsResponse.class)));
   }
 }
