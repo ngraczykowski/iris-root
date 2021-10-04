@@ -42,7 +42,7 @@ class GetAnalysisAlertDetailsRestControllerTest extends BaseRestControllerTest {
     get(ALERTS_DETAILS_URL).statusCode(NOT_FOUND.value());
   }
 
-  @TestWithRole(roles = { AUDITOR, QA })
+  @TestWithRole(roles = { AUDITOR, QA, QA_ISSUE_MANAGER })
   void its200_andAlertDetailsReturned_whenAlertDetailsFound() {
     AlertAnalysisDetailsDto alertAnalysisDetailsDto = new DummyAlertAnalysisDetailsDto();
     given(detailsQuery.details(DISCRIMINATOR)).willReturn(alertAnalysisDetailsDto);
@@ -57,7 +57,7 @@ class GetAnalysisAlertDetailsRestControllerTest extends BaseRestControllerTest {
         .body("addedAt", notNullValue());
   }
 
-  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, MODEL_TUNER, QA_ISSUE_MANAGER })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, MODEL_TUNER })
   void its403_whenNotPermittedRole() {
     get(ALERTS_DETAILS_URL).statusCode(FORBIDDEN.value());
   }

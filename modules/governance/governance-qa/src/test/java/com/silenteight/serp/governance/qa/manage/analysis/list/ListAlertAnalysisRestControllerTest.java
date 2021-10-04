@@ -51,7 +51,7 @@ class ListAlertAnalysisRestControllerTest extends BaseRestControllerTest {
   @MockBean
   ListAlertQuery listQuery;
 
-  @TestWithRole(roles = { QA, AUDITOR })
+  @TestWithRole(roles = { QA, QA_ISSUE_MANAGER, AUDITOR })
   void its200_whenAlertsListIsEmpty() {
     OffsetDateTime createdAt = OffsetDateTime.parse(CREATED_AT);
     given(listQuery.list(ALERT_STATES, createdAt, LIMIT)).willReturn(of());
@@ -64,7 +64,7 @@ class ListAlertAnalysisRestControllerTest extends BaseRestControllerTest {
     verify(listQuery, times(1)).list(ALERT_STATES, createdAt, LIMIT);
   }
 
-  @TestWithRole(roles = { QA, AUDITOR })
+  @TestWithRole(roles = { QA, QA_ISSUE_MANAGER, AUDITOR })
   void its200AndDefaultCreatedAtDateSet_whenCreatedAtNotProvided() {
     given(listQuery.list(ALERT_STATES, MIN_DATE, LIMIT)).willReturn(of());
 
@@ -73,7 +73,7 @@ class ListAlertAnalysisRestControllerTest extends BaseRestControllerTest {
     verify(listQuery, times(1)).list(ALERT_STATES, MIN_DATE, LIMIT);
   }
 
-  @TestWithRole(roles = { QA, AUDITOR })
+  @TestWithRole(roles = { QA, AUDITOR, QA_ISSUE_MANAGER })
   void its200_andAlertListReturnedWithNextPageToken_whenAlertDetailsFound() {
     //given
     AlertAnalysisDto alertAnalysisDto = new DummyAlertAnalysisDto();
@@ -94,7 +94,7 @@ class ListAlertAnalysisRestControllerTest extends BaseRestControllerTest {
         .body("[0].addedAt", notNullValue());
   }
 
-  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, MODEL_TUNER, QA_ISSUE_MANAGER })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, MODEL_TUNER })
   void its403_whenNotPermittedRole() {
     get(ALERTS_LIST_URL).statusCode(FORBIDDEN.value());
   }
