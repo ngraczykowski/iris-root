@@ -23,7 +23,7 @@ public class DefaultRestErrorHandler extends ResponseEntityExceptionHandler {
       WebRequest request) {
 
     if (status.is4xxClientError()) {
-      return ResponseEntity.ok(AckDto.clientError(ex.getMessage()));
+      return ResponseEntity.badRequest().body(AckDto.clientError(ex.getMessage()));
     }
     return ResponseEntity.ok(AckDto.serverError(ex.getMessage()));
   }
