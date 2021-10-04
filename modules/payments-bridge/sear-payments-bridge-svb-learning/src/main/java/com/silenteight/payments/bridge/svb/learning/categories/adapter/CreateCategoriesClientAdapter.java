@@ -24,15 +24,13 @@ class CreateCategoriesClientAdapter implements CreateCategoriesClient {
   public void createCategories(BatchCreateCategoriesRequest createCategoriesRequest) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 
-    if (log.isTraceEnabled()) {
-      log.trace("Sending create categories request");
-    }
+    log.info("Sending create categories request");
 
     try {
-      blockingStub
+      var result = blockingStub
           .withDeadline(deadline)
           .batchCreateCategories(createCategoriesRequest);
-      log.info("Created Categories");
+      log.info("Created Categories with result = {}", result);
     } catch (StatusRuntimeException status) {
       log.warn("Request to the datasource service failed", status);
     }

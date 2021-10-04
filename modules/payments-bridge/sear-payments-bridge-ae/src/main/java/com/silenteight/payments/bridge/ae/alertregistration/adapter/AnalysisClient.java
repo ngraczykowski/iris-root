@@ -11,6 +11,7 @@ import com.silenteight.adjudication.api.v1.CreateAnalysisRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AnalysisClientPort;
 
 import io.grpc.Deadline;
+import io.grpc.StatusRuntimeException;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +31,14 @@ class AnalysisClient implements AnalysisClientPort {
       log.trace("Requesting creating analysis: deadline={}, request={}", deadline, request);
     }
 
-    return stub.withDeadline(deadline).createAnalysis(request);
+    try {
+      var result = stub.withDeadline(deadline).createAnalysis(request);
+      log.info("Created analysis with result = {}", result);
+      return result;
+    } catch (StatusRuntimeException status) {
+      log.warn("Request to the ae service failed");
+      throw new AnalysisClientException("Failed to send create analysis", status);
+    }
   }
 
   public BatchAddAlertsResponse addAlertToAnalysis(BatchAddAlertsRequest request) {
@@ -41,6 +49,22 @@ class AnalysisClient implements AnalysisClientPort {
       log.trace("Requesting adding alert to analysis: deadline={}, request={}", deadline, request);
     }
 
-    return stub.withDeadline(deadline).batchAddAlerts(request);
+    try {
+      var result = stub.withDeadline(deadline).batchAddAlerts(request);
+      log.info("Created analysis with result = {}", result);
+      return result;
+    } catch (StatusRuntimeException status) {
+      log.warn("Request to the ae service failed");
+      throw new AnalysisClientException("Failed to send add alerts to analysis", status);
+    }
+  }
+
+  private static class AnalysisClientException extends RuntimeException {
+
+    private static final long serialVersionUID = 5869310708376584272L;
+
+    AnalysisClientException(String message, Exception e) {
+      super(message, e);
+    }
   }
 }

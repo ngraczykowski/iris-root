@@ -3,13 +3,13 @@ package com.silenteight.payments.bridge.governance.core.solvingmodel.adapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceBlockingStub;
 import com.silenteight.payments.bridge.governance.core.solvingmodel.model.ModelDto;
 import com.silenteight.payments.bridge.governance.core.solvingmodel.port.CurrentModelClientPort;
 
 import com.google.protobuf.Empty;
 import io.grpc.Deadline;
+import io.grpc.StatusRuntimeException;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -32,7 +32,22 @@ class SolvingModelClientClient implements CurrentModelClientPort {
       log.trace("Requesting solving model: deadline={}, request={}", deadline, request);
     }
 
-    SolvingModel defaultSolvingModel = stub.withDeadline(deadline).getDefaultSolvingModel(request);
-    return fromSolvingModel(defaultSolvingModel);
+    try {
+      var result = stub.withDeadline(deadline).getDefaultSolvingModel(request);
+      log.info("Received current model with result = {}", result);
+      return fromSolvingModel(result);
+    } catch (StatusRuntimeException status) {
+      log.warn("Request to the governance service failed");
+      throw new GovernanceClientException("Failed to receive current model", status);
+    }
+  }
+
+  private static class GovernanceClientException extends RuntimeException {
+
+    private static final long serialVersionUID = 7568497398228085792L;
+
+    GovernanceClientException(String message, Exception e) {
+      super(message, e);
+    }
   }
 }

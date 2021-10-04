@@ -11,6 +11,7 @@ import com.silenteight.adjudication.api.v1.CreateAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AlertClientPort;
 
 import io.grpc.Deadline;
+import io.grpc.StatusRuntimeException;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +31,14 @@ class AlertClient implements AlertClientPort {
       log.trace("Requesting creating alert: deadline={}, request={}", deadline, request);
     }
 
-    return stub.withDeadline(deadline).createAlert(request);
+    try {
+      var result = stub.withDeadline(deadline).createAlert(request);
+      log.debug("Created alert with result = {}", result);
+      return result;
+    } catch (StatusRuntimeException status) {
+      log.warn("Request to the ae service failed");
+      throw new AlertClientException("Failed to send create alert", status);
+    }
   }
 
   public BatchCreateAlertMatchesResponse createMatches(BatchCreateAlertMatchesRequest request) {
@@ -40,6 +48,22 @@ class AlertClient implements AlertClientPort {
       log.trace("Requesting adding matches to alert: deadline={}, request={}", deadline, request);
     }
 
-    return stub.batchCreateAlertMatches(request);
+    try {
+      var result = stub.batchCreateAlertMatches(request);
+      log.debug("Created matches with result = {}", result);
+      return result;
+    } catch (StatusRuntimeException status) {
+      log.warn("Request to the ae service failed");
+      throw new AlertClientException("Failed to send create matches", status);
+    }
+  }
+
+  private static class AlertClientException extends RuntimeException {
+
+    private static final long serialVersionUID = 2056703374022172581L;
+
+    AlertClientException(String message, Exception e) {
+      super(message, e);
+    }
   }
 }
