@@ -52,6 +52,8 @@ spec:
               value: {{ .Values.springRabbitmqVirtualHost }}
             - name: 'SPRING_PROFILES_ACTIVE'
               value: {{ .Values.springProfilesActive }}
+            - name: 'SERP_SHOW_ENV'
+              value: 'true'
             - name: 'GRPC_CLIENT_ae_ADDRESS'
               value: {{ .Values.grpcClientAeAddress }}
             - name: 'GRPC_CLIENT_datasource_ADDRESS'
