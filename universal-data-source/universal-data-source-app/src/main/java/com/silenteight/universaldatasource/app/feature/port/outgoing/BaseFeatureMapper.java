@@ -28,11 +28,11 @@ public abstract class BaseFeatureMapper<T extends Message> implements FeatureMap
   public BatchFeatureInputResponse map(MatchFeatureOutput matchFeatureOutput) {
 
     var batchResponseBuilder = createBatchResponseBuilder();
-    var nameInputField = batchResponseBuilder.getDescriptorForType().findFieldByNumber(1);
+    var repeatedInputField = batchResponseBuilder.getDescriptorForType().findFieldByNumber(1);
 
     for (MatchInput matchInput : matchFeatureOutput.getMatchInputs()) {
 
-      var inputBuilder = batchResponseBuilder.newBuilderForField(nameInputField);
+      var inputBuilder = batchResponseBuilder.newBuilderForField(repeatedInputField);
 
       var matchField = inputBuilder.getDescriptorForType().findFieldByNumber(1);
       inputBuilder.setField(matchField, matchInput.getMatch());
@@ -45,7 +45,7 @@ public abstract class BaseFeatureMapper<T extends Message> implements FeatureMap
         inputBuilder.addRepeatedField(featureInputsField, featureInputBuilder.build());
       }
 
-      batchResponseBuilder.addRepeatedField(nameInputField, inputBuilder.build());
+      batchResponseBuilder.addRepeatedField(repeatedInputField, inputBuilder.build());
     }
 
     return new BatchFeatureInputResponse(batchResponseBuilder.build());

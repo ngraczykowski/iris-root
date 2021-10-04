@@ -104,7 +104,7 @@ class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase
   private FeatureMapper getFeatureMapper(String featureInputClass) {
     if (!mappers.containsKey(featureInputClass))
       throw new NoSuchElementException(
-          "No feature mapper was found for agent input type of: " + featureInputClass);
+          "Agent name read from agent_feature_input not found: " + featureInputClass);
 
     return mappers.get(featureInputClass);
   }

@@ -11,7 +11,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 
 @GrpcService
 @RequiredArgsConstructor
-public class GrpcFreeTextInputService extends FreeTextInputServiceImplBase {
+class GrpcFreeTextInputService extends FreeTextInputServiceImplBase {
 
   private final FeatureAdapter featureAdapter;
 
