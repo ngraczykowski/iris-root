@@ -57,6 +57,8 @@ spec:
               value: {{ .Values.grpc.client.data_source.address | quote }}
             - name: 'GRPC_CLIENT_GOVERNANCE_ADDRESS'
               value: {{ .Values.grpc.client.governance.address | quote }}
+            - name: 'DEBUG'
+              value: 'true'
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
