@@ -2,6 +2,7 @@ package com.silenteight.warehouse.indexer.query.index;
 
 import com.silenteight.warehouse.common.environment.EnvironmentProperties;
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
+import com.silenteight.warehouse.indexer.alert.ElasticsearchProperties;
 import com.silenteight.warehouse.indexer.query.sql.SqlBuilder;
 
 import org.springframework.context.annotation.Bean;
@@ -21,9 +22,9 @@ class QueryIndexConfiguration {
 
   @Bean
   ProductionIndexingQuery productionIndexingQuery(
-      @Valid EnvironmentProperties environmentProperties) {
+      @Valid ElasticsearchProperties elasticsearchProperties) {
 
-    return new ProductionIndexingQuery(environmentProperties.getPrefix());
+    return new ProductionIndexingQuery(elasticsearchProperties.getProductionQueryIndex());
   }
 
   @Bean
