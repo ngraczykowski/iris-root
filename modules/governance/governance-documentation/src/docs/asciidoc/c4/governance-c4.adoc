@@ -63,7 +63,7 @@ Rel(gov, object_storage, Store/download attachments, https)
 
 Transfer Model (Policy, Strategy, Agents Configuration)
 
-https://gitlab.silenteight.com/sens/serp-governance/-/blob/master/governance-documentation/src/docs/asciidoc/hld/2021-04-26_transfer_model_from_sim_to_prod.adoc[HLD]
+https://gitlab.silenteight.com/sens/serp-governance/-/blob/master/governance-documentation/src/docs/asciidoc/hld/2021-04-26_transfer_model_from_sim_to_prod.adoc[Model transfer - HLD]
 
 [plantuml, bridge-governance, svg]
 -----
