@@ -101,8 +101,8 @@ Create comment input:
 ```
 grpc_cli call localhost:24805 silenteight.datasource.comments.api.v2.CommentInputService/BatchCreateCommentInput "comment_inputs: {alert: 'alerts/123' alert_comment_input: {} match_comment_inputs: {match: 'alerts/123/matches/123' comment_input: {}}}"
 ```
-Note: alert_comment_input and comment_input contain data in json format. In proto file this type
-of data is represented by google.protobuf.Struct, with which grpc cli is having an issues.
+Note: alert_comment_input and comment_input contain data in json format. In comment-input proto file this type
+of data is represented by google.protobuf.Struct, with which grpc cli is having some issues.
 This case can be tested though through other tools like for example grpc ui.
 
 Response:
@@ -170,7 +170,7 @@ agent_inputs: [
 ]
 ```
 Field agent_feature_input contains agents input data, for example: NameFeatureInput or
-LocationFeatureInput. Because of custom type of data put in a field of type google.protobuf.Any
+LocationFeatureInput. Because of custom data type put in a field of type google.protobuf.Any
 issues occur while using tools like grpc url or grpc ui.
 
 
