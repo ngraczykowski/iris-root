@@ -53,7 +53,7 @@ class FeatureAdapter {
   private static final String EVENT_INPUT = "EventFeatureInput";
   private static final String GENDER_INPUT = "GenderFeatureInput";
   private static final String HISTORICAL_DECISIONS_INPUT = "HistoricalDecisionsFeatureInput";
-  private static final String IS_PEP_INPUT = "FreeTextFeatureInput";
+  private static final String IS_PEP_INPUT = "Feature";
   private static final String NATIONAL_ID_INPUT = "NationalIdFeatureInput";
   private static final String TRANSACTION_INPUT = "TransactionFeatureInput";
 

@@ -6,6 +6,11 @@ import com.silenteight.datasource.api.freetext.v1.BatchGetMatchFreeTextInputsReq
 import com.silenteight.datasource.api.freetext.v1.BatchGetMatchFreeTextInputsResponse;
 import com.silenteight.datasource.api.freetext.v1.FreeTextFeatureInput;
 import com.silenteight.datasource.api.freetext.v1.FreeTextInputServiceGrpc.FreeTextInputServiceBlockingStub;
+import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsRequest;
+import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsResponse;
+import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsResponse.Feature;
+import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsResponse.FeatureSolution;
+import com.silenteight.datasource.api.ispep.v1.IsPepInputServiceGrpc.IsPepInputServiceBlockingStub;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsRequest;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsResponse;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
@@ -19,6 +24,7 @@ import com.silenteight.datasource.api.name.v1.WatchlistName;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.universaldatasource.app.UniversalDataSourceApplication;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import io.grpc.StatusRuntimeException;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -37,6 +43,7 @@ import java.util.Map;
 
 import static com.silenteight.universaldatasource.app.feature.FeatureTestDataAccess.streamedFeaturesCount;
 import static com.silenteight.universaldatasource.app.feature.IntegrationFixture.getBatchCreateAgentInputsRequest;
+import static com.silenteight.universaldatasource.app.feature.IntegrationFixture.getIsPepReason;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -61,12 +68,14 @@ class AgentInputServiceIT {
   @GrpcClient("uds")
   private FreeTextInputServiceBlockingStub freeTextInputServiceBlockingStub;
 
+  @GrpcClient("uds")
+  private IsPepInputServiceBlockingStub isPepInputServiceBlockingStub;
+
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
-
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvalidProtocolBufferException {
     Map<String, Map<String, Message>> mapOfFeatureRequestsOne = Map.of(
         "alerts/alertOne/matches/nameMatch",
         Map.of(
@@ -119,6 +128,18 @@ class AgentInputServiceIT {
                 .setMatchedType("name")
                 .addMatchingTexts("Joe")
                 .setFreetext("Joe")
+                .build()),
+
+        "alerts/alertFour/matches/isPepMatchFour",
+        Map.of(
+            "features/isPep",
+            Feature.newBuilder()
+                .setFeature("pep")
+                .addFeatureSolutions(
+                    FeatureSolution.newBuilder()
+                        .setSolution("isPepSolution")
+                        .setReason(getIsPepReason())
+                        .build())
                 .build())
     );
 
@@ -127,6 +148,7 @@ class AgentInputServiceIT {
 
     agentInputServiceBlockingStub.batchCreateAgentInputs(addMatchFeatureRequestsOne);
   }
+
 
   @Test
   void shouldGetNameFeature() {
@@ -205,6 +227,7 @@ class AgentInputServiceIT {
     assertFreeTextFeature(batchGetMatchFreeTextInputs);
   }
 
+
   private static void assertFreeTextFeature(
       Iterator<BatchGetMatchFreeTextInputsResponse> batchGetMatchFreeTextInputs) {
 
@@ -215,8 +238,33 @@ class AgentInputServiceIT {
         .getFreetextFeatureInputsList().stream()
         .filter(f -> f.getFeature().equals("freetext"))
         .filter(f -> f.getMatchedType().equals("name"))
-            .filter(f -> f.getFreetext().equals("Joe"))
-                .count()).isEqualTo(1);
+        .filter(f -> f.getFreetext().equals("Joe"))
+        .count()).isEqualTo(1);
+  }
+
+  @Test
+  void shouldGetIsPepFeature() {
+
+    var batchGetMatchIsPepSolutionsResponseIterator =
+        isPepInputServiceBlockingStub.batchGetMatchIsPepSolutions(
+            BatchGetMatchIsPepSolutionsRequest.newBuilder()
+                .addMatches("alerts/alertFour/matches/isPepMatchFour")
+                .addFeatures("features/isPep")
+                .build());
+
+    assertIsPepFeature(batchGetMatchIsPepSolutionsResponseIterator);
+  }
+
+  private static void assertIsPepFeature(
+      Iterator<BatchGetMatchIsPepSolutionsResponse> batchGetMatchFreeTextInputs) {
+
+    var matchFreeTextInputsResponse = batchGetMatchFreeTextInputs.next();
+    assertThat(matchFreeTextInputsResponse.getFeaturesCount()).isEqualTo(1);
+
+    assertThat(matchFreeTextInputsResponse.getFeaturesList().get(0)
+        .getFeatureSolutionsList().stream()
+        .filter(f -> f.getSolution().equals("isPepSolution"))
+        .count()).isEqualTo(1);
   }
 
   @Test
