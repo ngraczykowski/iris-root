@@ -4,15 +4,18 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
+import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure;
 import com.silenteight.payments.bridge.svb.etl.model.CreateAlertedPartyEntitiesRequest;
 import com.silenteight.payments.bridge.svb.etl.model.ExtractAlertedPartyDataRequest;
 import com.silenteight.payments.bridge.svb.etl.port.CreateAlertedPartyEntitiesUseCase;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractAlertedPartyDataUseCase;
+import com.silenteight.payments.bridge.svb.etl.port.ExtractMessageStructureUseCase;
 import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsvRow;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
 import org.apache.commons.collections4.list.SetUniqueList;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,6 +32,7 @@ class CreateLearningMatchUseCase {
 
   private final ExtractAlertedPartyDataUseCase extractAlertedPartyDataUseCase;
   private final CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;
+  private final ExtractMessageStructureUseCase extractMessageStructureUseCase;
 
   LearningMatch fromLearningRows(List<LearningCsvRow> rows) {
     var alertedPartyData = createAlertedPartyData(rows);
@@ -47,6 +51,8 @@ class CreateLearningMatchUseCase {
                     + row.getFkcoVListCountry()))))
         .watchlistCountry(assertUnique(rows, LearningCsvRow::getFkcoVListCountry))
         .matchedFieldValue(rows.get(0).getFkcoVMatchedTagContent())
+        .messageData(rows.get(0).getFkcoVContent())
+        .messageStructure(createMessageStructure(rows, matchingTexts))
         .matchType(assertUnique(rows, LearningCsvRow::getFkcoVListType))
         .matchingTexts(matchingTexts)
         .alertedPartyEntity(createAlertedPartyEntities(alertedPartyData, matchingTexts))
@@ -63,6 +69,20 @@ class CreateLearningMatchUseCase {
             .matchingText(String.join(",", createMatchingTexts(rows)))
             .tag(row.getFkcoVMatchedTag())
             .applicationCode(row.getFkcoVApplication())
+            .build());
+  }
+
+  private AbstractMessageStructure createMessageStructure(
+      List<LearningCsvRow> rows, List<String> matchingTexts) {
+    var row = rows.get(0);
+    return extractMessageStructureUseCase.extractMessageStructure(
+        ExtractAlertedPartyDataRequest
+            .builder()
+            .applicationCode(row.getFkcoVApplication())
+            .messageData(row.getFkcoVContent())
+            .messageType(row.getFkcoVType())
+            .tag(row.getFkcoVMatchedTag())
+            .matchingText(StringUtils.join(matchingTexts, ","))
             .build());
   }
 

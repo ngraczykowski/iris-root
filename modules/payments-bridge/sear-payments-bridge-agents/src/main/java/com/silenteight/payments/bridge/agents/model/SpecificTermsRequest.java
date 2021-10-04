@@ -5,9 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class OneLinerAgentRequest {
+public class SpecificTermsRequest {
 
-  boolean noAcctNumFlag;
-  int noOfLines;
-  int messageLength;
+  String allMatchFieldsValue;
 }

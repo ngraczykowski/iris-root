@@ -2,6 +2,7 @@ package com.silenteight.payments.bridge.svb.learning.reader.service;
 
 import com.silenteight.payments.bridge.svb.etl.port.CreateAlertedPartyEntitiesUseCase;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractAlertedPartyDataUseCase;
+import com.silenteight.payments.bridge.svb.etl.port.ExtractMessageStructureUseCase;
 import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
@@ -27,12 +28,15 @@ class LearningCsvReaderTest {
   private ExtractAlertedPartyDataUseCase extractAlertedPartyDataUseCase;
   @Mock
   private CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;
+  @Mock
+  private ExtractMessageStructureUseCase extractMessageStructureUseCase;
 
   @BeforeEach
   void setUp() {
     var createMatch =
         new CreateLearningMatchUseCase(
-            extractAlertedPartyDataUseCase, createAlertedPartyEntitiesUseCase);
+            extractAlertedPartyDataUseCase, createAlertedPartyEntitiesUseCase,
+            extractMessageStructureUseCase);
     learningCsvReader =
         new ReadAlertsUseCase(
             new CsvFileProviderTestImpl(), new CreateLearningAlertUseCase(createMatch));

@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.agents.service;
 import lombok.NonNull;
 
 import com.silenteight.payments.bridge.agents.model.SpecificCommonTermsAgentResponse;
+import com.silenteight.payments.bridge.agents.model.SpecificCommonTermsRequest;
 import com.silenteight.payments.bridge.agents.port.SpecificCommonTermsUseCase;
 
 import org.springframework.stereotype.Service;
@@ -30,10 +31,9 @@ class SpecificCommonTermsAgent implements SpecificCommonTermsUseCase {
           "MMERCIAL", "BLDG");
 
   @NonNull
-  public SpecificCommonTermsAgentResponse invoke(
-      @NonNull String allMatchFieldsValue, @NonNull Boolean isAccountNumberFlagInMatchingField) {
+  public SpecificCommonTermsAgentResponse invoke(SpecificCommonTermsRequest request) {
     return checkIfFieldValueContainsSpecificCommonTerms(
-        allMatchFieldsValue, isAccountNumberFlagInMatchingField);
+        request.getAllMatchFieldsValue(), request.getIsAccountNumberFlagInMatchingField());
   }
 
   static SpecificCommonTermsAgentResponse checkIfFieldValueContainsSpecificCommonTerms(

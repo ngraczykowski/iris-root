@@ -4,9 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.agents.model.SpecificTermsAgentResponse;
+import com.silenteight.payments.bridge.agents.model.SpecificTermsRequest;
 import com.silenteight.payments.bridge.agents.port.SpecificTermsUseCase;
-
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Locale;
@@ -17,15 +16,15 @@ import static com.silenteight.payments.bridge.agents.model.SpecificTermsAgentRes
 import static com.silenteight.payments.bridge.agents.model.SpecificTermsAgentResponse.YES;
 
 @RequiredArgsConstructor
-@Service
 class SpecificTermsAgent implements SpecificTermsUseCase {
 
+  private final List<String> specificTerms;
+
   @NonNull
-  public SpecificTermsAgentResponse invoke(
-      @NonNull String allMatchFieldsValue, List<String> specificTerms) {
+  public SpecificTermsAgentResponse invoke(SpecificTermsRequest request) {
 
     Pattern pattern = Pattern.compile(String.join("|", specificTerms));
-    Matcher matcher = pattern.matcher(allMatchFieldsValue.toUpperCase(Locale.ROOT));
+    Matcher matcher = pattern.matcher(request.getAllMatchFieldsValue().toUpperCase(Locale.ROOT));
 
     return matcher.find() ? YES : NO;
   }

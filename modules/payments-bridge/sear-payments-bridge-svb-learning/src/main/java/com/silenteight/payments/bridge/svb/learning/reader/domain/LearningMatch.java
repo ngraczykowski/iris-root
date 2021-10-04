@@ -6,10 +6,12 @@ import lombok.Value;
 import lombok.experimental.NonFinal;
 
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
-import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
-import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
+import com.silenteight.payments.bridge.agents.model.*;
+import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure;
 import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.etl.response.MessageFieldStructure;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -40,6 +42,10 @@ public class LearningMatch {
 
   String matchType;
 
+  String messageData;
+
+  AbstractMessageStructure messageStructure;
+
   List<String> matchingTexts;
 
   Map<AlertedPartyKey, String> alertedPartyEntity;
@@ -55,6 +61,21 @@ public class LearningMatch {
         .build();
   }
 
+  public SpecificCommonTermsRequest toSpecificCommonTermsRequest() {
+    return SpecificCommonTermsRequest
+        .builder()
+        .isAccountNumberFlagInMatchingField(messageStructure.checkMessageWithoutAccountNum())
+        .allMatchFieldsValue(StringUtils.join(matchingTexts, ", "))
+        .build();
+  }
+
+  public SpecificTermsRequest toSpecificTermsRequest() {
+    return SpecificTermsRequest
+        .builder()
+        .allMatchFieldsValue(StringUtils.join(matchingTexts, ", "))
+        .build();
+  }
+
   public String toName(String alert) {
     return "alerts/" + alert + "/matches/" + getMatchName();
   }
@@ -65,6 +86,19 @@ public class LearningMatch {
 
   public String getAlertedPartyLocation() {
     return alertedPartyData.getAddresses().stream().findFirst().orElse("");
+  }
+
+  public List<String> getAddresses() {
+    return alertedPartyData.getAddresses();
+  }
+
+  public OneLinerAgentRequest toOneLinerAgentRequest() {
+    return OneLinerAgentRequest
+        .builder()
+        .noAcctNumFlag(alertedPartyData.isNoAcctNumFlag())
+        .noOfLines(alertedPartyData.getNumOfLines())
+        .messageLength(alertedPartyData.getMessageLength())
+        .build();
   }
 
   public MessageFieldStructure getMessageFieldStructure() {

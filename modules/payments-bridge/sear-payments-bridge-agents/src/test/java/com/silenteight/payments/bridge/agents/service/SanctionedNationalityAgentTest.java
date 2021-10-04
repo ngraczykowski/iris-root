@@ -1,7 +1,6 @@
 package com.silenteight.payments.bridge.agents.service;
 
 import com.silenteight.payments.bridge.agents.model.SanctionedNationalityAgentResponse;
-import com.silenteight.payments.bridge.agents.service.SanctionedNationalityAgent;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,12 +17,12 @@ class SanctionedNationalityAgentTest {
 
   @BeforeEach
   void beforeEach() {
-    agent = new SanctionedNationalityAgent();
+    agent = new SanctionedNationalityAgent(asList("IRAN", "CUBA"));
   }
 
   @Test
   void throwNullPointerExceptionWhenMessageDataIsNull() {
-    assertThrows(NullPointerException.class, () -> agent.invoke(null, asList("IRAN","CUBA")));
+    assertThrows(NullPointerException.class, () -> agent.invoke(null));
   }
 
   @ParameterizedTest
@@ -35,7 +34,7 @@ class SanctionedNationalityAgentTest {
       "'asdf askj l k',NO",
   })
   void parameterizedTest(String messageData, SanctionedNationalityAgentResponse expected) {
-    var actual = agent.invoke(messageData, asList("IRAN","CUBA"));
+    var actual = agent.invoke(messageData);
     assertEquals(expected, actual);
   }
 

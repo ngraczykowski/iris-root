@@ -1,7 +1,7 @@
 package com.silenteight.payments.bridge.agents.service;
 
 import com.silenteight.payments.bridge.agents.model.SpecificCommonTermsAgentResponse;
-import com.silenteight.payments.bridge.agents.service.SpecificCommonTermsAgent;
+import com.silenteight.payments.bridge.agents.model.SpecificCommonTermsRequest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class SpecificCommonTermsAgentCallerTest {
   @Test
   void throwNullPointerExceptionForNullArgument() {
     assertThrows(NullPointerException.class, () -> specificCommonTermsAgent
-        .invoke(null, null));
+        .invoke(SpecificCommonTermsRequest.builder().build()));
   }
 
   @ParameterizedTest(name = "{index} {0}")
@@ -58,7 +58,11 @@ class SpecificCommonTermsAgentCallerTest {
       String fieldValue, boolean accountNumberFlagInMatchingField,
       SpecificCommonTermsAgentResponse expected) {
     SpecificCommonTermsAgentResponse actual =
-        specificCommonTermsAgent.invoke(fieldValue, accountNumberFlagInMatchingField);
+        specificCommonTermsAgent.invoke(SpecificCommonTermsRequest
+            .builder()
+            .allMatchFieldsValue(fieldValue)
+            .isAccountNumberFlagInMatchingField(accountNumberFlagInMatchingField)
+            .build());
     assertEquals(expected, actual);
   }
 }

@@ -2,7 +2,6 @@ package com.silenteight.payments.bridge.agents.service;
 
 import com.silenteight.payments.bridge.agents.model.TwoLinesNameAgentRequest;
 import com.silenteight.payments.bridge.agents.model.TwoLinesNameAgentResponse;
-import com.silenteight.payments.bridge.agents.service.TwoLinesNameAgent;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -39,8 +38,10 @@ class TwoLinesNameAgentTest {
       "'AV. FRANCIS DE MIRANDA, CENTRO LIDO, TORRE A, PISO 10, OF. 10-02, URB. EL ROSA', NO"
   })
   void parametrizedTest(String alertedPartAddress, TwoLinesNameAgentResponse expected) {
-    TwoLinesNameAgentRequest twoLinesNameAgentRequest = new TwoLinesNameAgentRequest(
-        Collections.singletonList(alertedPartAddress));
+    TwoLinesNameAgentRequest twoLinesNameAgentRequest = TwoLinesNameAgentRequest
+        .builder()
+        .alertedPartyAddresses(Collections.singletonList(alertedPartAddress))
+        .build();
     TwoLinesNameAgentResponse actual = twoLinesNameAgent.invoke(twoLinesNameAgentRequest);
     assertEquals(expected, actual);
   }

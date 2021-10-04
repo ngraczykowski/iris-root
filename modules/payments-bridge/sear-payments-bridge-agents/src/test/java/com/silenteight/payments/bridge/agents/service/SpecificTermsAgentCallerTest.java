@@ -1,7 +1,7 @@
 package com.silenteight.payments.bridge.agents.service;
 
 import com.silenteight.payments.bridge.agents.model.SpecificTermsAgentResponse;
-import com.silenteight.payments.bridge.agents.service.SpecificTermsAgent;
+import com.silenteight.payments.bridge.agents.model.SpecificTermsRequest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,12 +40,12 @@ class SpecificTermsAgentCallerTest {
 
   @BeforeEach
   void beforeEach() {
-    specificTermsAgent = new SpecificTermsAgent();
+    specificTermsAgent = new SpecificTermsAgent(SPECIFIC_TERMS);
   }
 
   @Test
   void throwNullPointerExceptionForNullArgument() {
-    assertThrows(NullPointerException.class, () -> specificTermsAgent.invoke(null, SPECIFIC_TERMS));
+    assertThrows(NullPointerException.class, () -> specificTermsAgent.invoke(null));
   }
 
   @ParameterizedTest(name = "{index} {0}")
@@ -94,7 +94,8 @@ class SpecificTermsAgentCallerTest {
       "' S O BANK OF SCOTLAND PLC\n', YES"
   })
   void parametrizedTest(String fieldValue, SpecificTermsAgentResponse expected) {
-    SpecificTermsAgentResponse actual = specificTermsAgent.invoke(fieldValue, SPECIFIC_TERMS);
+    SpecificTermsAgentResponse actual = specificTermsAgent.invoke(
+        SpecificTermsRequest.builder().allMatchFieldsValue(fieldValue).build());
     assertEquals(expected, actual);
   }
 
