@@ -241,43 +241,36 @@ job "governance" {
       template {
         data = file("./conf/application.yml")
         destination = "local/conf/application.yml"
-        change_mode = "noop"
       }
 
       template {
         data = file("./conf/application-database.yml")
         destination = "local/conf/application-database.yml"
-        change_mode = "noop"
       }
 
       template {
         data = file("./conf/application-messaging.yml")
         destination = "local/conf/application-messaging.yml"
-        change_mode = "noop"
       }
 
       template {
         data = file("./conf/logback.xml")
         destination = "secrets/conf/logback.xml"
-        change_mode = "noop"
       }
 
       template {
         data = file("./conf/agents/agent_configs.json")
         destination = "local/conf/agents/agent_configs.json"
-        change_mode = "noop"
       }
 
       template {
         data = file("./conf/agents/agent_details.json")
         destination = "local/conf/agents/agent_details.json"
-        change_mode = "noop"
       }
 
       template {
         data = file("./conf/agents/configurations/date-enty-normal.yml")
         destination = "local/conf/agents/configurations/date-enty-normal.yml"
-        change_mode = "noop"
       }
 
       env {
