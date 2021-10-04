@@ -11,6 +11,7 @@ import com.silenteight.warehouse.report.storage.ReportStorage;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
@@ -50,6 +51,7 @@ public class AccuracyReportService implements ReportsRemoval {
   private static List<String> getOutdatedReportsFileNames(List<AccuracyReport> outdatedReports) {
     return outdatedReports.stream()
         .map(AccuracyReport::getFile)
+        .filter(Objects::nonNull)
         .collect(toList());
   }
 }
