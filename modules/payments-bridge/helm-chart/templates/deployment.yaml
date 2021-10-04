@@ -64,17 +64,17 @@ spec:
               value: {{ .Values.pbCmapiCallbackEnabled | squote }}
             - name: 'PB_CMAPI_CALLBACK_ENDPOINT'
               value: {{ .Values.pbCmapiCallbackEndpoint | squote }}
-            - name: 'SECURITY_OAUTH_2_CLIENT_CLIENT_ID'
+            - name: 'SECURITY_OAUTH2_CLIENT_CLIENT_ID'
               value: {{ .Values.oauthClientId | squote }}
-            - name: 'SECURITY_OAUTH_2_CLIENT_CLIENT_SECRET'
+            - name: 'SECURITY_OAUTH2_CLIENT_CLIENT_SECRET'
               value: {{ .Values.oauthClientSecret | squote }}
-            - name: 'SECURITY_OAUTH_2_CLIENT_USER_AUTHORIZATION_URI'
+            - name: 'SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI'
               value: {{ .Values.oauthClientAuthUri | squote }}
-            - name: 'SECURITY_OAUTH_2_CLIENT_ACCESS_TOKEN_URI'
+            - name: 'SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI'
               value: {{ .Values.oauthClientAccessUri | squote }}
-            - name: 'SECURITY_OAUTH_2_CLIENT_SCOPE'
+            - name: 'SECURITY_OAUTH2_CLIENT_SCOPE'
               value: {{ .Values.oauthClientScope | squote }}
-            - name: 'SECURITY_OAUTH_2_CLIENT_GRANT_TYPE'
+            - name: 'SECURITY_OAUTH2_CLIENT_GRANT_TYPE'
               value: 'client_credentials'
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
