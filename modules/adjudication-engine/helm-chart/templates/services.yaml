@@ -5,7 +5,6 @@ metadata:
 spec:
   selector:
     app: {{ .Values.name }}
-  type: NodePort
   ports:
     - port: {{ .Values.ports.http }}
       name: http
