@@ -195,6 +195,10 @@ spring:
 
   jackson:
     default-property-inclusion: NON_NULL
+    parser:
+      # NOTE(ahaczewski): Firco Continuity sends unescaped \x02 characters in JSON.
+      allow_unquoted_control_chars: true
+    generator:
 
   webflux:
     base-path: /rest/${spring.application.name}
