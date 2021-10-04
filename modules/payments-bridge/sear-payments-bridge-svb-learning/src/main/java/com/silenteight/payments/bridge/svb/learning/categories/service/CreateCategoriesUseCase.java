@@ -24,7 +24,11 @@ class CreateCategoriesUseCase {
     createCategoriesClient.createCategories(BatchCreateCategoriesRequest
         .newBuilder()
         .addAllCategories(
-            List.of(chineseCommercialCategory(), delimiterCategory(), crossmatchCategory()))
+            List.of(
+                chineseCommercialCategory(), delimiterCategory(), crossmatchCategory(),
+                firstTokenAddressCategory(), oneLinerCategory(), sanctionedNationalityCategory(),
+                commonTermsCategory(), specificTermsCategory(), stripCategory(),
+                twoLinesCategory()))
         .build());
   }
 
@@ -53,11 +57,88 @@ class CreateCategoriesUseCase {
   private static Category crossmatchCategory() {
     return Category
         .newBuilder()
-        .setName("categories/crossmatch")
+        .setName("categories/commonTerms")
         .setDisplayName("Name Address Crossmatch Category")
         .setType(CategoryType.ENUMERATED)
         .setMultiValue(false)
         .addAllAllowedValues(List.of("NO_DECISION", "CROSSMATCH", "NO_CROSSMATCH"))
+        .build();
+  }
+
+  private static Category firstTokenAddressCategory() {
+    return Category
+        .newBuilder()
+        .setName("categories/firstTokenAddress")
+        .setDisplayName("Matchtext First Token of Address Category")
+        .setType(CategoryType.ENUMERATED)
+        .setMultiValue(false)
+        .addAllAllowedValues(List.of("YES", "NO"))
+        .build();
+  }
+
+  private static Category oneLinerCategory() {
+    return Category
+        .newBuilder()
+        .setName("categories/oneLiner")
+        .setDisplayName("One Liner Category")
+        .setType(CategoryType.ENUMERATED)
+        .setMultiValue(false)
+        .addAllAllowedValues(List.of("YES", "NO", "NO_DATA"))
+        .build();
+  }
+
+  private static Category sanctionedNationalityCategory() {
+    return Category
+        .newBuilder()
+        .setName("categories/sanctionedNationality")
+        .setDisplayName("Sanctioned Nationality Category")
+        .setType(CategoryType.ENUMERATED)
+        .setMultiValue(false)
+        .addAllAllowedValues(List.of("YES", "NO"))
+        .build();
+  }
+
+  private static Category commonTermsCategory() {
+    return Category
+        .newBuilder()
+        .setName("categories/commonTerms")
+        .setDisplayName("Specific Common Terms Category")
+        .setType(CategoryType.ENUMERATED)
+        .setMultiValue(false)
+        .addAllAllowedValues(List.of("YES", "NO"))
+        .build();
+  }
+
+  private static Category specificTermsCategory() {
+    return Category
+        .newBuilder()
+        .setName("categories/specificTerms")
+        .setDisplayName("Specific Terms Category")
+        .setType(CategoryType.ENUMERATED)
+        .setMultiValue(false)
+        .addAllAllowedValues(List.of("YES", "NO"))
+        .build();
+  }
+
+  private static Category stripCategory() {
+    return Category
+        .newBuilder()
+        .setName("categories/strip")
+        .setDisplayName("Strip Category")
+        .setType(CategoryType.ENUMERATED)
+        .setMultiValue(false)
+        .addAllAllowedValues(List.of("STRIPPED", "NOT_STRIPPED"))
+        .build();
+  }
+
+  private static Category twoLinesCategory() {
+    return Category
+        .newBuilder()
+        .setName("categories/twoLines")
+        .setDisplayName("Two Lines Name Category")
+        .setType(CategoryType.ENUMERATED)
+        .setMultiValue(false)
+        .addAllAllowedValues(List.of("YES", "NO", "NO_DATA"))
         .build();
   }
 }
