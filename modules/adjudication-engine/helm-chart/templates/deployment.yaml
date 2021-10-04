@@ -61,9 +61,7 @@ spec:
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
           ports:
-            - containerPort: {{ .Values.ports.http }}
-              protocol: TCP
+            - containerPort: 8080
               name: http
-            - containerPort: {{ .Values.ports.grpc }}
-              protocol: TCP
+            - containerPort: 9090
               name: grpc

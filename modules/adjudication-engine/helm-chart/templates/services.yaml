@@ -7,11 +7,9 @@ spec:
     app: {{ .Values.name }}
   type: NodePort
   ports:
-    - protocol: TCP
+    - port: {{ .Values.ports.http }}
       name: http
-      port: {{ .Values.ports.http }}
-      targetPort: {{ .Values.ports.http }}
-    - protocol: TCP
+      targetPort: http
+    - port: {{ .Values.ports.grpc }}
       name: grpc
-      port: {{ .Values.ports.grpc }}
-      targetPort: {{ .Values.ports.grpc }}
+      targetPort: grpc
