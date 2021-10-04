@@ -1,0 +1,128 @@
+= Governance C4 diagram
+
+- Created at: *04.10.2021*
+
+:relfileprefix: ../
+
+== C4 diagram
+
+[plantuml, c4, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Governance
+
+Container_Ext(ae, "Adjudication Engine", "Java")
+Container_Ext(wh, "Warehouse", "Java")
+Container_Ext(frontend, "Frontend", "Angular")
+Container_Ext(bridge, "Bridge", "Java")
+ContainerDb_Ext(object_storage, "Minio", "S3")
+ContainerDb_Ext(db, Data base, "PostgreSQL")
+
+Container(gov, Governance, Java)
+
+Rel(frontend, gov, " ", https)
+Rel(gov, db, " ")
+Rel_U(ae, gov, " ", gRPC)
+Rel(gov, wh, " ", gRPC)
+Rel(gov, wh, " ", AMQP)
+Rel_L(gov, bridge, " ", AMQP)
+Rel_R(bridge, gov, " ", gRPC)
+Rel(gov, gov, " ", AMQP)
+Rel_U(gov, object_storage, " ", https)
+
+@enduml
+-----
+
+== Frontend - Governance
+
+https://gitlab.silenteight.com/sens/serp-governance/-/tree/master/governance-documentation/src/api[Governance API]
+
+[plantuml, frontend-governance, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Frontend - Governance
+
+Container_Ext(frontend, "Frontend", "Angular")
+ContainerDb_Ext(object_storage, "Minio", "S3")
+
+Container(gov, Governance, Java)
+
+Rel(frontend, gov, Policy management, https)
+Rel(frontend, gov, QA process, https)
+Rel(frontend, gov, Maker/Checker process, https)
+Rel(gov, object_storage, Store/download attachments, https)
+
+@enduml
+-----
+
+== Bridge - Governance
+
+Transfer Model (Policy, Strategy, Agents Configuration)
+
+https://gitlab.silenteight.com/sens/serp-governance/-/blob/master/governance-documentation/src/docs/asciidoc/hld/2021-04-26_transfer_model_from_sim_to_prod.adoc[HLD]
+
+[plantuml, bridge-governance, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Bridge - Governance
+
+Container_Ext(bridge, Bridge, Java)
+ContainerDb_Ext(mb, "Message Broker", "RabbitMQ")
+
+Container(gov, Governance, Java)
+
+Rel(gov, mb, Model promoted on prod, AMQP)
+Rel(mb, bridge, Model promoted on prod, AMQP)
+Rel_U(bridge, gov, "Get policy, strategy, config for Model", gRPC)
+
+@enduml
+-----
+
+== Adjudication Engine - Governance
+
+Match and Alerts Solving
+
+[plantuml, ae-governance, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Adjudication Engine - Governance
+
+Container_Ext(ae, Adjudication Engine, "Java")
+Container(gov, Governance, Java)
+
+Rel(ae, gov, Solve Match, gRPC)
+Rel(ae, gov, Solve Alert, gRPC)
+
+@enduml
+-----
+
+== Warehouse - Governance
+
+QA process
+
+[plantuml, wh-governance, svg]
+-----
+@startuml
+!include <c4/C4_Container>
+
+title Adjudication Engine - Governance
+
+Container_Ext(wh, Warehouse, "Java")
+ContainerDb_Ext(mb, "Message Broker", "RabbitMQ")
+Container(gov, Governance, Java)
+
+Rel(gov, wh, Alerts distribution, gRPC)
+Rel(gov, wh, Alerts for QA process, gRPC)
+Rel(gov, mb, QA result, AMQP)
+Rel(mb, wh, QA result, AMQP)
+
+@enduml
+-----
