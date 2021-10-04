@@ -31,13 +31,17 @@ class StreamFeaturesQuery {
   int execute(BatchFeatureRequest batchFeatureRequest, Consumer<MatchFeatureOutput> consumer) {
 
     // TODO(jgajewski): SQL Injection
-    var parameters =
-        new MapSqlParameterSource("agentInputType", batchFeatureRequest.getAgentInputType());
+    String agentInputType = batchFeatureRequest.getAgentInputType();
+    var parameters = new MapSqlParameterSource("agentInputType", agentInputType);
     parameters.addValue("matchNames", batchFeatureRequest.getMatches());
     parameters.addValue("featureNames", batchFeatureRequest.getFeatures());
 
     var features = jdbcTemplate.query(SQL, parameters,
-        new FeatureExtractor(consumer, batchFeatureRequest.getAgentInputType()));
+        new FeatureExtractor(consumer, agentInputType, getChunkSize(agentInputType)));
     return features != null ? features : 0;
+  }
+
+  private int getChunkSize(String agentInputType) {
+    return "Features".equals(agentInputType) ? 1 : 1024;
   }
 }

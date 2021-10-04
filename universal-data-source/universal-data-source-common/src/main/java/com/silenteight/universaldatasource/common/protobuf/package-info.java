@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package protobuf;
+package com.silenteight.universaldatasource.common.protobuf;
 
 import javax.annotation.ParametersAreNonnullByDefault;

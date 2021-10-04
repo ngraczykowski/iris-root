@@ -12,7 +12,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.MapType;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 import java.sql.ResultSet;
@@ -36,13 +35,17 @@ class FeatureExtractor implements ResultSetExtractor<Integer> {
 
   private final Consumer<MatchFeatureOutput> consumer;
   private final String agentInputType;
+  private final int chunkSize;
 
   @Override
-  public Integer extractData(ResultSet rs) throws SQLException, DataAccessException {
+  public Integer extractData(ResultSet rs) throws SQLException {
+
     var rowNum = 0;
 
     List<MatchFeatureOutput.MatchInput> matchFeatureOutputs = new ArrayList<>();
     while (rs.next()) {
+      rowNum++;
+
       var match = rs.getString(1);
       var agentInputAggregate = rs.getString(3);
 
@@ -51,10 +54,15 @@ class FeatureExtractor implements ResultSetExtractor<Integer> {
           .agentInputs(getListOfAgentInputObjects(agentInputAggregate))
           .build());
 
-      rowNum++;
+      if (chunkSize <= matchFeatureOutputs.size()) {
+        consumeFeatureResponse(new MatchFeatureOutput(agentInputType, matchFeatureOutputs));
+      }
     }
 
-    consumeFeatureResponse(new MatchFeatureOutput(agentInputType, matchFeatureOutputs));
+    if (!matchFeatureOutputs.isEmpty()) {
+      consumeFeatureResponse(new MatchFeatureOutput(agentInputType, matchFeatureOutputs));
+    }
+
     return rowNum;
   }
 

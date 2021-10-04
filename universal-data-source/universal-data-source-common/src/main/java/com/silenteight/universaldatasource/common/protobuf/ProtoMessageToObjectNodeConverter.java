@@ -1,14 +1,15 @@
-package protobuf;
+package com.silenteight.universaldatasource.common.protobuf;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import com.silenteight.sep.base.common.protocol.MessageRegistry;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
-import com.silenteight.sep.base.common.protocol.MessageRegistry;
 
 import java.util.Optional;
 

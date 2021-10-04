@@ -6,11 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.datasource.comments.api.v2.CommentInput;
 import com.silenteight.datasource.comments.api.v2.MatchCommentInput;
 import com.silenteight.universaldatasource.app.commentinput.model.AlertCommentInput;
+import com.silenteight.universaldatasource.common.protobuf.ProtoMessageToObjectNodeConverter;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.google.protobuf.Struct;
 import org.springframework.stereotype.Component;
-import protobuf.ProtoMessageToObjectNodeConverter;
 
 import java.util.List;
 import java.util.stream.Collectors;
