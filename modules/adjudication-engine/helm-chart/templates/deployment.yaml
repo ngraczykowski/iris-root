@@ -53,10 +53,6 @@ spec:
               value: {{ .Values.springRabbitmqVirtualHost }}
             - name: 'SPRING_PROFILES_ACTIVE'
               value: {{ .Values.springProfilesActive }}
-            - name: 'GRPC_SERVER_PORT'
-              value: {{ .Values.ports.grpc | quote }}
-            - name: 'SERVER_PORT'
-              value: {{ .Values.ports.http | quote }}
             - name: 'GRPC_CLIENT_DATA_SOURCE_ADDRESS'
               value: {{ .Values.grpc.client.data_source.address | quote }}
             - name: 'GRPC_CLIENT_GOVERNANCE_ADDRESS'
