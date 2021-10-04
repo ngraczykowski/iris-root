@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePayloadUseCase;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
-import com.silenteight.payments.bridge.firco.callback.CallbackRequestFactory;
 import com.silenteight.payments.bridge.firco.callback.port.CreateResponseUseCase;
 
 import org.springframework.stereotype.Component;

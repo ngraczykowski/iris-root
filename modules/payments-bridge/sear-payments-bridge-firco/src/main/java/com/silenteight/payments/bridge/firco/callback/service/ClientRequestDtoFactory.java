@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.firco.callback;
+package com.silenteight.payments.bridge.firco.callback.service;
 
 import com.silenteight.payments.bridge.common.dto.output.*;
 
