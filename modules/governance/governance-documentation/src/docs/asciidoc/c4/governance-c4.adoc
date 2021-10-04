@@ -79,7 +79,10 @@ Container(gov, Governance, Java)
 
 Rel(gov, mb, Model promoted on prod, AMQP)
 Rel(mb, bridge, Model promoted on prod, AMQP)
-Rel_U(bridge, gov, "Get policy, strategy, config for Model", gRPC)
+Rel_U(bridge, gov, "Get policy, strategy, config for Model - solving", gRPC)
+Rel_U(bridge, gov, "Export model", gRPC)
+Rel_U(bridge, gov, "Import model", gRPC)
+Rel_U(bridge, gov, "Model applied on prod", gRPC)
 
 @enduml
 -----
