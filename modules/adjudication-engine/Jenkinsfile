@@ -18,26 +18,6 @@ gradleBuild(
             description: 'Deploy on test environment in Nomad.', defaultValue: false),
     ],
     additionalStages: {
-      stage('Deploy On Nomad Dev') {
-        script {
-          // FIXME(ahaczewski): Use `when` if possible.
-          if (utils.getGitBranch() == 'master' || params.deployOnDev) {
-            sh './nomad/deploy.sh -var-file=dev.vars'
-          } else {
-            echo 'This is not a release branch ignore Nomad deployment'
-          }
-        }
-      }
-      stage('Deploy On Nomad Test') {
-        script {
-          // FIXME(ahaczewski): Use `when` if possible.
-          if (utils.getGitBranch() == 'master' && params.deployOnTest) {
-            sh './nomad/deploy.sh -var-file=test.vars'
-          } else {
-            echo 'This is not a release branch ignore Nomad deployment'
-          }
-        }
-      }
       stage('Build and deploy container image') {
         script {
           def gradle = new com.silenteight.jenkins.ci.Gradle()
@@ -91,6 +71,26 @@ gradleBuild(
             } else {
                echo 'This is not a release branch ignore AWS ECR push'
               }
+          }
+        }
+      }
+      stage('Deploy On Nomad Dev') {
+        script {
+          // FIXME(ahaczewski): Use `when` if possible.
+          if (utils.getGitBranch() == 'master' || params.deployOnDev) {
+            sh './nomad/deploy.sh -var-file=dev.vars'
+          } else {
+            echo 'This is not a release branch ignore Nomad deployment'
+          }
+        }
+      }
+      stage('Deploy On Nomad Test') {
+        script {
+          // FIXME(ahaczewski): Use `when` if possible.
+          if (utils.getGitBranch() == 'master' && params.deployOnTest) {
+            sh './nomad/deploy.sh -var-file=test.vars'
+          } else {
+            echo 'This is not a release branch ignore Nomad deployment'
           }
         }
       }
