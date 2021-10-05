@@ -17,4 +17,5 @@ include 'sear-payments-bridge-mock-datasource'
 include 'sear-payments-bridge-etl'
 include 'sear-payments-bridge-mock-ae'
 include 'sear-payments-bridge-mock-ae'
+include 'sear-payments-bridge-mock-governance'
 
