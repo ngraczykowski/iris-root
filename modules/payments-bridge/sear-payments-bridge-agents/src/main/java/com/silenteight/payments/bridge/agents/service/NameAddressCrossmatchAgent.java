@@ -4,7 +4,7 @@ import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.Result;
-import com.silenteight.payments.bridge.agents.port.NameAddressCossmatchUseCase;
+import com.silenteight.payments.bridge.agents.port.NameAddressCrossmatchUseCase;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import static com.silenteight.payments.bridge.agents.model.AlertedPartyKey.*;
 import static java.util.Arrays.asList;
 
 @Service
-class NameAddressCrossmatchAgent implements NameAddressCossmatchUseCase {
+class NameAddressCrossmatchAgent implements NameAddressCrossmatchUseCase {
 
   public static final String EMPTY_ENTITY_VALUE = "";
 

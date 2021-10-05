@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.svb.learning.categories.service;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
-import com.silenteight.payments.bridge.agents.port.NameAddressCossmatchUseCase;
+import com.silenteight.payments.bridge.agents.port.NameAddressCrossmatchUseCase;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 class CrossmatchExtractor implements CategoryValueExtractor {
 
-  private final NameAddressCossmatchUseCase nameAddressCossmatchUseCase;
+  private final NameAddressCrossmatchUseCase nameAddressCrossmatchUseCase;
 
   @Override
   public CategoryValue extract(LearningMatch learningMatch, String alert) {
     var value =
-        nameAddressCossmatchUseCase.call(learningMatch.toCrossmatchRequest());
+        nameAddressCrossmatchUseCase.call(learningMatch.toCrossmatchRequest());
     return CategoryValue
         .newBuilder()
         .setName("categories/crossmatch")
