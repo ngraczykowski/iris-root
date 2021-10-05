@@ -29,7 +29,7 @@ class TwoLinesNameExtractor implements CategoryValueExtractor {
     return CategoryValue
         .newBuilder()
         .setName("categories/twoLines")
-        .setMatch(learningMatch.toName(alert))
+        .setMatch(learningMatch.getMatchName())
         .setSingleValue(value.toString())
         .build();
   }

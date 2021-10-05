@@ -25,6 +25,7 @@ class NameFeatureExtractor implements FeatureExtractor {
             .newBuilder()
             .setFeature("features/name")
             .setAlertedPartyType(learningMatch.getEntityType())
+            .addAllMatchingTexts(learningMatch.getMatchingTexts())
             .addAllWatchlistNames(learningMatch
                 .getWatchlistNames()
                 .stream()

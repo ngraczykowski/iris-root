@@ -1,7 +1,6 @@
 package com.silenteight.payments.bridge.svb.learning.categories.service;
 
-import com.silenteight.payments.bridge.agents.model.ChineseCommercialCodesAgentResponse;
-import com.silenteight.payments.bridge.agents.port.ChineseCommercialCodeUseCase;
+import com.silenteight.payments.bridge.agents.port.OneLinerUseCase;
 import com.silenteight.payments.bridge.svb.learning.categories.port.outgoing.CreateCategoryValuesClient;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.agents.model.OneLinerAgentResponse.YES;
 import static com.silenteight.payments.bridge.svb.learning.LearningAlertFixture.createLearningAlert;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,16 +26,15 @@ class CreateCategoryValuesServiceTest {
   private CreateCategoryValuesClient createCategoryValuesClient;
 
   @Mock
-  private ChineseCommercialCodeUseCase chineseCommercialCodeUseCase;
+  private OneLinerUseCase oneLinerUseCase;
 
   @BeforeEach
   void setUp() {
-    when(chineseCommercialCodeUseCase.invoke("matchedField")).thenReturn(
-        ChineseCommercialCodesAgentResponse.YES);
+    when(oneLinerUseCase.invoke(any())).thenReturn(YES);
 
     createCategoryValuesService = new CreateCategoryValuesService(
         List.of(
-            new ChineseCodeExtractor(chineseCommercialCodeUseCase)),
+            new OneLinerExtractor(oneLinerUseCase)),
         createCategoryValuesClient);
   }
 

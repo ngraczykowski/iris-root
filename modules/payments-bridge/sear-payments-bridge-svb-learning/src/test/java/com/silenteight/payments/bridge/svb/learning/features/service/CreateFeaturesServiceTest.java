@@ -25,7 +25,7 @@ class CreateFeaturesServiceTest {
   void setUp() {
     createFeaturesService = new CreateFeaturesService(
         createAgentInputsClient,
-        List.of(new FreeTextExtractor(), new NameFeatureExtractor(), new GeoFeatureExtractor()));
+        List.of(new GeoFeatureExtractor(), new NameFeatureExtractor(), new GeoFeatureExtractor()));
   }
 
   @Test

@@ -23,7 +23,7 @@ class SpecificTermExtractor implements CategoryValueExtractor {
     return CategoryValue
         .newBuilder()
         .setName("categories/specificTerms")
-        .setMatch(learningMatch.toName(alert))
+        .setMatch(learningMatch.getMatchName())
         .setSingleValue(value.toString())
         .build();
   }

@@ -23,7 +23,7 @@ class OneLinerExtractor implements CategoryValueExtractor {
     return CategoryValue
         .newBuilder()
         .setName("categories/oneLiner")
-        .setMatch(learningMatch.toName(alert))
+        .setMatch(learningMatch.getMatchName())
         .setSingleValue(value.toString())
         .build();
   }
