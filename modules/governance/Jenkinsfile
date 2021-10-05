@@ -31,6 +31,7 @@ gradleBuild(
         env.INSTALLER_VERSION = utils.getProjectVersion()
         echo 'Helm Chart building....'
         node("aws-worker") {
+          cleanWs()
           // Stash is done in first stage
           dir( './scripts' ) {
             unstash 'scripts'
@@ -55,6 +56,7 @@ gradleBuild(
         env.INSTALLER_VERSION = utils.getProjectVersion()
         node("aws-worker") {
           // Stash is done in first stage
+          cleanWs()
           dir( './scripts' ) {
             unstash 'scripts'
           }
