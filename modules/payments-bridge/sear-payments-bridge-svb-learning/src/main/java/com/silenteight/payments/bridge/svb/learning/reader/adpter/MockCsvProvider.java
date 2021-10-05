@@ -22,13 +22,12 @@ class MockCsvProvider implements CsvFileProvider {
   public AlertsReadingResponse getLearningCsv(
       LearningRequest learningRequest,
       Function<LearningCsv, AlertsReadingResponse> csvConsumer) {
-    Resource resource = new ClassPathResource("learning/SVB_Learn_Jun_1_to_30.csv");
+    Resource resource = new ClassPathResource("learning/provider/SVB_Learn_Jun_1_to_30.csv");
     try {
       var file = resource.getFile();
       return csvConsumer.apply(LearningCsv.builder().content(new FileInputStream(file)).build());
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new RuntimeException(e);
     }
-    return null;
   }
 }

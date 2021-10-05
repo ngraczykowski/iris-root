@@ -24,7 +24,7 @@ class CrossmatchExtractor implements CategoryValueExtractor {
         .newBuilder()
         .setName("categories/crossmatch")
         .setMatch(learningMatch.getMatchName())
-        .setSingleValue(value.toString())
+        .setSingleValue(value.getResult().toString())
         .build();
   }
 }
