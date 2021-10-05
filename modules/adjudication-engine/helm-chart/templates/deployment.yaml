@@ -59,6 +59,8 @@ spec:
               value: {{ .Values.grpc.client.governance.address | quote }}
             - name: 'DEBUG'
               value: 'true'
+            - name: "SPRING_MAIN_CLOUD_PLATFORM"
+              value: "KUBERNETES"
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
