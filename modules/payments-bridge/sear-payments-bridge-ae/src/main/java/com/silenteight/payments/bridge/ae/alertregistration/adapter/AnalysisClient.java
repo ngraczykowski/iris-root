@@ -36,7 +36,7 @@ class AnalysisClient implements AnalysisClientPort {
       log.info("Created analysis with result = {}", result);
       return result;
     } catch (StatusRuntimeException status) {
-      log.warn("Request to the ae service failed");
+      log.warn("Failed to send create analysis", status);
       throw new AnalysisClientException("Failed to send create analysis", status);
     }
   }
@@ -54,7 +54,7 @@ class AnalysisClient implements AnalysisClientPort {
       log.info("Created analysis with result = {}", result);
       return result;
     } catch (StatusRuntimeException status) {
-      log.warn("Request to the ae service failed");
+      log.warn("Failed to send add alerts to analysis", status);
       throw new AnalysisClientException("Failed to send add alerts to analysis", status);
     }
   }

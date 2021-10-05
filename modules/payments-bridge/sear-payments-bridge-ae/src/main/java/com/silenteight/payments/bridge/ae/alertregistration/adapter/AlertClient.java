@@ -36,7 +36,7 @@ class AlertClient implements AlertClientPort {
       log.debug("Created alert with result = {}", result);
       return result;
     } catch (StatusRuntimeException status) {
-      log.warn("Request to the ae service failed");
+      log.warn("Failed to send create alert", status);
       throw new AlertClientException("Failed to send create alert", status);
     }
   }
@@ -53,7 +53,7 @@ class AlertClient implements AlertClientPort {
       log.debug("Created matches with result = {}", result);
       return result;
     } catch (StatusRuntimeException status) {
-      log.warn("Request to the ae service failed");
+      log.warn("Request to the ae service failed", status);
       throw new AlertClientException("Failed to send create matches", status);
     }
   }

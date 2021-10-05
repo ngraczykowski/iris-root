@@ -37,7 +37,7 @@ class SolvingModelClientClient implements CurrentModelClientPort {
       log.info("Received current model with result = {}", result);
       return fromSolvingModel(result);
     } catch (StatusRuntimeException status) {
-      log.warn("Request to the governance service failed");
+      log.warn("Failed to receive current model", status);
       throw new GovernanceClientException("Failed to receive current model", status);
     }
   }
