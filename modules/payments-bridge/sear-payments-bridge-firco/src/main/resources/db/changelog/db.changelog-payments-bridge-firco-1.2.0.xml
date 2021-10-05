@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+  <changeSet id="payments-bridge-firco-1.2.0" author="zruchala">
+    <addColumn tableName="pb_alert_message_status">
+      <column name="delivery_status" type="VARCHAR(50)" />
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="payments-bridge-firco-1.2.1" author="zruchala">
+    <update tableName="pb_alert_message_status">
+      <column name="delivery_status" value="DELIVERED" />
+    </update>
+  </changeSet>
+
+  <changeSet id="payments-bridge-firco-1.2.2" author="zruchala">
+    <addNotNullConstraint tableName="pb_alert_message_status" columnName="delivery_status"/>
+  </changeSet>
+
+</databaseChangeLog>

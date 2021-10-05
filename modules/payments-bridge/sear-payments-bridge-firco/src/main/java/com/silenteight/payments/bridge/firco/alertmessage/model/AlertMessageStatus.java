@@ -53,29 +53,7 @@ public enum AlertMessageStatus {
       return EnumSet.noneOf(AlertMessageStatus.class);
     }
   },
-  //  /**
-  //   * The message was not delivered correctly to the requesting party.
-  //   * This may be related to network problems or other problems on the client's side.
-  //   * <p/>
-  //   * This is a final state.
-  //   */
-  //  RECOMMENDATION_UNDELIVERED {
-  //    @Override
-  //    public EnumSet<AlertMessageStatus> allowedTransitions() {
-  //      return EnumSet.noneOf(AlertMessageStatus.class);
-  //    }
-  //  },
-  //  /**
-  //   * The message was delivered successfully to the requesting party.
-  //   * <p/>
-  //   * This is a final state.
-  //   */
-  //  RECOMMENDATION_DELIVERED {
-  //    @Override
-  //    public EnumSet<AlertMessageStatus> allowedTransitions() {
-  //      return EnumSet.noneOf(AlertMessageStatus.class);
-  //    }
-  //  },
+
   /**
    * The message has been rejected due to being outdated, i.e., the expected time for processing
    * alert (a.k.a. SLA, or TTL) has expired. The alert should have been recommended as Manual

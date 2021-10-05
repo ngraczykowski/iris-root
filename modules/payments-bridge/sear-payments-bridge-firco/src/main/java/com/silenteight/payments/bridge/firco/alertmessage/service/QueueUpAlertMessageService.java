@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.integration.CommonChannels;
-import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.callback.port.CreateResponseUseCase;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
@@ -13,6 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
+import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OVERFLOWED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.STORED;
 
 @EnableConfigurationProperties(AlertMessageProperties.class)
@@ -43,7 +43,8 @@ class QueueUpAlertMessageService {
       log.debug("AlertMessage [{}] rejected due to queue limit ({})",
           message.getId(), properties.getStoredQueueLimit());
 
-      createResponseUseCase.createResponse(message.getId(), AlertMessageStatus.REJECTED_OVERFLOWED);
+      createResponseUseCase.createResponse(message.getId(), REJECTED_OVERFLOWED);
+      statusService.transitionAlertMessageStatus(message.getId(), REJECTED_OVERFLOWED);
       return true;
     }
     return false;

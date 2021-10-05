@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
+import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
@@ -32,14 +33,29 @@ class AlertMessageStatusService {
         .orElseThrow(EntityNotFoundException::new);
   }
 
+  /**
+   * Transition alert to the required status.
+   * If the destinationStatus is final, the method assumes that it was achieved
+   * after delivering response to the requesting party.
+   */
   @Transactional
   public void transitionAlertMessageStatus(
       UUID alertMessageId, AlertMessageStatus destinationStatus) {
+    transitionAlertMessageStatus(alertMessageId, destinationStatus,
+        destinationStatus.isFinal() ? DeliveryStatus.DELIVERED : DeliveryStatus.NA);
+  }
+
+  /**
+   * Transition alert to the required status.
+   */
+  @Transactional
+  public void transitionAlertMessageStatus(
+      UUID alertMessageId, AlertMessageStatus destinationStatus, DeliveryStatus delivery) {
 
     var entity = repository
         .findByAlertMessageIdAndLockForWrite(alertMessageId)
         .orElseThrow();
-    entity.transitionStatusOrElseThrow(destinationStatus, clock);
+    entity.transitionStatusOrElseThrow(destinationStatus, clock, delivery);
     if (log.isTraceEnabled()) {
       log.trace("AlertMessage [{}] transited to {}", alertMessageId, destinationStatus.name());
     }

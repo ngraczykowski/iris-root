@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.RejectOutdatedAlertMessagesUseCase;
 import com.silenteight.payments.bridge.firco.callback.port.CreateResponseUseCase;
 
@@ -34,7 +35,7 @@ public class RejectOutdatedAlertMessagesService implements RejectOutdatedAlertMe
   @Override
   public boolean process(int chunkSize) {
     var outdatedAlerts = repository.findOutdated(chunkSize, decisionObsoleteSince());
-    outdatedAlerts.forEach(this::sendResponse);
+    outdatedAlerts.forEach(this::transitionToOutdated);
     // tradeoff: case when size == chunkSize triggers an additional db hit.
     return outdatedAlerts.size() <= chunkSize;
   }
@@ -44,11 +45,25 @@ public class RejectOutdatedAlertMessagesService implements RejectOutdatedAlertMe
       alertMessageProperties.getDecisionRequestedTime().minusSeconds(1));
   }
 
-  private void sendResponse(AlertMessageStatusEntity alertMessageStatus) {
-    var alertMessageId = alertMessageStatus.getAlertMessageId();
-    createResponseUseCase.createResponse(alertMessageId, REJECTED_OUTDATED);
-    alertMessageStatusService
-        .transitionAlertMessageStatus(alertMessageId, REJECTED_OUTDATED);
+  private void transitionToOutdated(AlertMessageStatusEntity status) {
+    var alertMessageId = status.getAlertMessageId();
+    if (isDeliverable(status)) {
+      createResponseUseCase.createResponse(alertMessageId, REJECTED_OUTDATED);
+      alertMessageStatusService
+          .transitionAlertMessageStatus(alertMessageId, REJECTED_OUTDATED);
+    } else {
+      // The delivery time passed thus we transfer alert to the final state (OUTDATED)
+      // and record that it remains undelivered.
+      alertMessageStatusService
+          .transitionAlertMessageStatus(
+              alertMessageId, REJECTED_OUTDATED, DeliveryStatus.UNDELIVERED);
+    }
+  }
+
+  private boolean isDeliverable(AlertMessageStatusEntity status) {
+    return status.getLastModifyAt()
+        .plus(alertMessageProperties.getDecisionRequestedTime())
+        .isAfter(OffsetDateTime.now(clock));
   }
 
 }

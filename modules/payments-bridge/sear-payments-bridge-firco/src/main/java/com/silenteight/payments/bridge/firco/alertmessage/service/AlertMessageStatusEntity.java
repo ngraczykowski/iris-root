@@ -4,6 +4,7 @@ import lombok.*;
 
 import com.silenteight.payments.bridge.common.jpa.BaseVersionedEntity;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
+import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
@@ -38,16 +39,33 @@ class AlertMessageStatusEntity extends BaseVersionedEntity {
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   @NonNull
+  private DeliveryStatus deliveryStatus;
+
+  @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
+  @NonNull
   private AlertMessageStatus status;
 
   AlertMessageStatusEntity(UUID alertMessageId) {
     this.alertMessageId = alertMessageId;
     this.status = AlertMessageStatus.RECEIVED;
+    this.deliveryStatus = DeliveryStatus.NA;
   }
 
-  boolean transitionStatus(AlertMessageStatus destinationStatus, Clock clock) {
+  boolean transitionStatus(AlertMessageStatus destinationStatus,
+      Clock clock, DeliveryStatus deliveryStatus) {
     if (status == destinationStatus || status.isFinal()) {
       return false;
+    }
+
+    if (destinationStatus.isFinal() && deliveryStatus == DeliveryStatus.NA) {
+      // TODO:
+      throw new IllegalArgumentException();
+    }
+    if (!destinationStatus.isFinal() && (
+        deliveryStatus == DeliveryStatus.DELIVERED ||
+            deliveryStatus == DeliveryStatus.UNDELIVERED)) {
+      throw new IllegalArgumentException();
     }
 
     if (!status.isTransitionAllowed(destinationStatus)) {
@@ -55,13 +73,18 @@ class AlertMessageStatusEntity extends BaseVersionedEntity {
     }
 
     status = destinationStatus;
+    if (status.isFinal()) {
+      this.deliveryStatus = deliveryStatus;
+    }
     updateChangeTime(OffsetDateTime.now(clock));
     setCurrentTimeForUpdatedAt();
     return true;
+
   }
 
-  void transitionStatusOrElseThrow(AlertMessageStatus destinationStatus, Clock clock) {
-    if (!transitionStatus(destinationStatus, clock)) {
+  void transitionStatusOrElseThrow(AlertMessageStatus destinationStatus,
+      Clock clock, DeliveryStatus deliveryStatus) {
+    if (!transitionStatus(destinationStatus, clock, deliveryStatus)) {
       throw new IllegalStateException(
           "Unable to transition to status " + destinationStatus + ", from status " + status);
     }
