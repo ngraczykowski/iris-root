@@ -192,6 +192,13 @@ job "warehouse" {
         sidecar = true
       }
 
+      restart {
+        interval = "5m"
+        attempts = 10
+        delay = "20s"
+        mode = "delay"
+      }
+
       artifact {
         source = "https://github.com/fullstorydev/grpcui/releases/download/v1.1.0/grpcui_1.1.0_linux_x86_64.tar.gz"
         options {
