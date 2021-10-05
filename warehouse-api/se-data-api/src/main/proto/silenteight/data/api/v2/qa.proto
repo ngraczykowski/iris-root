@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package silenteight.data.api.v2;
+
+import "google/api/field_behavior.proto";
+
+option java_package = "com.silenteight.data.api.v2";
+option java_outer_classname = "QaDataProto";
+option java_multiple_files = true;
+
+message QaDataIndexRequest {
+  // Request id, if provided, is returned in the response allowing to match request with
+  // a response on the client side. It is a client responsibility to ensure its uniqueness.
+  string request_id = 1 [(google.api.field_behavior) = OPTIONAL];
+  // Alerts generated in QA.
+  repeated QaAlert alert = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message QaAlert {
+  //Name of the alert. This field should be unique across the whole system.
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  //Level of decision in QA process for alert. Set in governance
+  int32 level = 2 [(google.api.field_behavior) = REQUIRED];
+  //State of decision in QA process for alert. Set in governance
+  enum State {
+    NEW = 0;
+    PASSED = 1;
+    FAILED = 2;
+  }
+  State state = 3 [(google.api.field_behavior) = REQUIRED];
+}
