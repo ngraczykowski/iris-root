@@ -57,7 +57,7 @@ class CreateCategoriesUseCase {
   private static Category crossmatchCategory() {
     return Category
         .newBuilder()
-        .setName("categories/commonTerms")
+        .setName("categories/crossmatch")
         .setDisplayName("Name Address Crossmatch Category")
         .setType(CategoryType.ENUMERATED)
         .setMultiValue(false)

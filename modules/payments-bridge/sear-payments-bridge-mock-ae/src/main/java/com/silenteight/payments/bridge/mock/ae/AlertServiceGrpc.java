@@ -42,7 +42,7 @@ class AlertServiceGrpc extends AlertServiceImplBase {
             .map(m -> Match
                 .newBuilder()
                 .setMatchId(m.getMatchId())
-                .setName("matches/" + matchId)
+                .setName("alerts/" + alertId + "/matches/" + matchId)
                 .build())
             .collect(
                 toList()))
