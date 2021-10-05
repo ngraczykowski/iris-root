@@ -27,7 +27,7 @@ class CreateCategoriesUseCase {
             List.of(
                 chineseCommercialCategory(), delimiterCategory(), crossmatchCategory(),
                 firstTokenAddressCategory(), oneLinerCategory(), sanctionedNationalityCategory(),
-                commonTermsCategory(), specificTermsCategory(), stripCategory(),
+                specificCommonTermsCategory(), specificTermsCategory(), stripCategory(),
                 twoLinesCategory()))
         .build());
   }
@@ -98,10 +98,10 @@ class CreateCategoriesUseCase {
         .build();
   }
 
-  private static Category commonTermsCategory() {
+  private static Category specificCommonTermsCategory() {
     return Category
         .newBuilder()
-        .setName("categories/commonTerms")
+        .setName("categories/specificCommonTerms")
         .setDisplayName("Specific Common Terms Category")
         .setType(CategoryType.ENUMERATED)
         .setMultiValue(false)
