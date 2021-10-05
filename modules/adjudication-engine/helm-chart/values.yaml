@@ -1,7 +1,6 @@
 name: adjudication-engine-app
 image_tag: dummy
 image_repo: dummy
-args: [ "name" ]
 config:
   name: AdjudicationEngineApp
 ports:
