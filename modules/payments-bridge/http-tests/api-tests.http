@@ -40,7 +40,7 @@ Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
-< ../docs/api/svb-examples/2021-10-01_1837.json
+< ../docs/api/svb-examples/2021-10-01_1837_osama_bin_laden.json
 
 ### Post the SVB alert 2021-10-04-1851 for solving
 // @no-log
@@ -50,4 +50,4 @@ Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
-< ../docs/api/svb-examples/2021-10-04-1851.json
+< ../docs/api/svb-examples/2021-10-04-1851_saddam_hussain.json
