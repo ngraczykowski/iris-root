@@ -16,7 +16,7 @@ imagePullPolicy: Always
 oauthClientId: ""
 oauthClientSecret: ""
 oauthClientTokenUri: ""
-oauthClientScope: "openid"
+oauthClientScope: ""
 pbCmapiCallbackEnabled: "false"
 pbCmapiCallbackEndpoint: ""
 memoryLimit: 2048Mi
