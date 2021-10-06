@@ -19,10 +19,9 @@ grpc:
     governance:
       address: "static://governance-app-service:8081"
 resources:
-  requests:
+  request:
     memory: "512Mi"
   limits:
     memory: "2048Mi"
-
 
 
