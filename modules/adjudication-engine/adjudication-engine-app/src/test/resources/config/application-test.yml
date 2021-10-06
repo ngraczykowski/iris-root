@@ -68,5 +68,5 @@ grpc:
       address: in-process:test
     governance:
       address: in-process:test
-    data-source:
+    datasource:
       address: in-process:test

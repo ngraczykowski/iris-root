@@ -53,9 +53,9 @@ spec:
               value: {{ .Values.springRabbitmqVirtualHost }}
             - name: 'SPRING_PROFILES_ACTIVE'
               value: {{ .Values.springProfilesActive }}
-            - name: 'GRPC_CLIENT_DATA_SOURCE_ADDRESS'
-              value: {{ .Values.grpc.client.data_source.address | quote }}
-            - name: 'GRPC_CLIENT_GOVERNANCE_ADDRESS'
+            - name: 'GRPC_CLIENT_datasource_ADDRESS'
+              value: {{ .Values.grpc.client.datasource.address | quote }}
+            - name: 'GRPC_CLIENT_governance_ADDRESS'
               value: {{ .Values.grpc.client.governance.address | quote }}
             - name: 'DEBUG'
               value: 'true'

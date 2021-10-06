@@ -12,7 +12,7 @@ grpc:
       negotiation-type: PLAINTEXT
     governance:
       address: discovery:/{{ env "NOMAD_NAMESPACE" }}-governance
-    data-source:
+    datasource:
       address: discovery:/{{ env "NOMAD_NAMESPACE" }}-hsbc-bridge
 
 # @formatter:off
@@ -52,7 +52,7 @@ spring:
         catalog-services-watch:
           enabled: true
         server-list-query-tags:
-          data-source: grpc
+          datasource: grpc
           governance: grpc
       service-registry:
         auto-registration:

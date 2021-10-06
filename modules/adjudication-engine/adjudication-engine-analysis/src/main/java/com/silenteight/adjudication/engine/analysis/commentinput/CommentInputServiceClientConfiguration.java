@@ -21,7 +21,7 @@ class CommentInputServiceClientConfiguration {
   @Valid
   private final CommentInputServiceClientProperties properties;
 
-  @Setter(onMethod_ = @GrpcClient("data-source"))
+  @Setter(onMethod_ = @GrpcClient("datasource"))
   private Channel dataSourceChannel;
 
   @Bean

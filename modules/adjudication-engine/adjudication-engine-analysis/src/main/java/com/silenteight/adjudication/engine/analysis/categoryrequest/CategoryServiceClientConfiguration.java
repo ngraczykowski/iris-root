@@ -21,7 +21,7 @@ public class CategoryServiceClientConfiguration {
   @Valid
   private final CategoryServiceClientProperties properties;
 
-  @Setter(onMethod_ = @GrpcClient("data-source"))
+  @Setter(onMethod_ = @GrpcClient("datasource"))
   private Channel dataSourceChannel;
 
   @Bean
