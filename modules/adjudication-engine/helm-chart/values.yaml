@@ -15,7 +15,7 @@ readinessProbeHttpGetPath: "/rest/ae/management/health/readiness"
 grpc:
   client:
     datasource:
-      address: "dns:///sear-payments-bridge-service.default.svc.cluster.local:9090"
+      address: "dns:///universal-data-source-service.default.svc.cluster.local:9090"
     governance:
       address: "dns:///governance-app-service.default.svc.cluster.local:9090"
 

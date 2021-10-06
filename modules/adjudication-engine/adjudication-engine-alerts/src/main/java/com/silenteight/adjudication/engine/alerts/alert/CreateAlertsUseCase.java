@@ -2,6 +2,7 @@ package com.silenteight.adjudication.engine.alerts.alert;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Alert;
 import com.silenteight.sep.base.aspects.metrics.Timed;
@@ -17,6 +18,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 class CreateAlertsUseCase {
 
   private static final int MAX_PRIORITY = 10;
