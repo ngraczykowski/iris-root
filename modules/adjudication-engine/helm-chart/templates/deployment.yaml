@@ -56,9 +56,9 @@ spec:
             - name: 'SPRING_PROFILES_ACTIVE'
               value: {{ .Values.springProfilesActive }}
             - name: 'GRPC_CLIENT_datasource_ADDRESS'
-              value: {{ .Values.grpc.client.datasource.address | quote }}
+              value: {{ .Values.grpcClientDatasourceAddress }}
             - name: 'GRPC_CLIENT_governance_ADDRESS'
-              value: {{ .Values.grpc.client.governance.address | quote }}
+              value: {{ .Values.grpcClientGovernanceAddress }}
             - name: 'DEBUG'
               value: 'true'
             - name: "SPRING_MAIN_CLOUD_PLATFORM"
