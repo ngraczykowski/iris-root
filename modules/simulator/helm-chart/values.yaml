@@ -16,8 +16,8 @@ readinessProbeHttpGetPath: "/rest/simulator/management/health/readinessState"
 grpc:
   client:
     adjudicationengine:
-      address: "dns:///adjudication-engine-app-service:8081"
+      address: "dns:///adjudication-engine-service.default.svc.cluster.local:9090"
     governance:
-      address: "dns:///governance-app-service:8081"
+      address: "dns:///governance-app-service.default.svc.cluster.local:9090"
 memoryLimit: 2048Mi
 memoryRequest: 512Mi
