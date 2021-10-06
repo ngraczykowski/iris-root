@@ -46,6 +46,8 @@ spec:
               value: "true"
             - name: "SPRING_MAIN_CLOUD_PLATFORM"
               value: "KUBERNETES"
+            - name: 'DEBUG'
+              value: 'true'
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: ["--logging.config=file:/etc/logback.xml"]
