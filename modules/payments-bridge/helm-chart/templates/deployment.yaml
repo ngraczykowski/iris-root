@@ -77,6 +77,11 @@ spec:
             - name: 'SECURITY_OAUTH2_CLIENT_GRANT_TYPE'
               value: 'client_credentials'
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
+          resources:
+            requests:
+              memory: {{ .Values.resources.requests.memory }}
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
           ports:
