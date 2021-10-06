@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         app: {{ .Values.name }}
+      annotations:
+        fluentbit.io/parser: spring-logback-json
     spec:
       containers:
         - name: {{ .Values.name }}
@@ -68,8 +70,17 @@ spec:
             requests:
               memory: {{ .Values.memoryRequest | quote }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
+          args: ["--logging.config=file:/etc/logback.xml"]
+          volumeMounts:
+            - mountPath: /etc/logback.xml
+              name: logback-config
+              subPath: logback-config-file
           ports:
             - containerPort: 8080
               name: http
             - containerPort: 9090
               name: grpc
+      volumes:
+        - name: "logback-config"
+          configMap:
+            name: "adjudication-engine-logback-configmap"
