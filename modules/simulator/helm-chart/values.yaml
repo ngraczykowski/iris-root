@@ -19,3 +19,5 @@ grpc:
       address: "static://adjudication-engine-app-service:8081"
     governance:
       address: "static://governance-app-service:8081"
+memoryLimit: 2048Mi
+memoryRequest: 512Mi

@@ -67,6 +67,11 @@ spec:
             - name: 'SERVER_PORT'
               value: {{ .Values.ports.http | quote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
+          resources:
+            limits:
+              memory: {{ .Values.memoryLimit | quote }}
+            requests:
+              memory: {{ .Values.memoryRequest | quote }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
           ports:
