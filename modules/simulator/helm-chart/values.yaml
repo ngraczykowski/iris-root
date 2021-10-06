@@ -15,9 +15,9 @@ livenessProbeHttpGetPath: "/rest/simulator/management/health/livenessState"
 readinessProbeHttpGetPath: "/rest/simulator/management/health/readinessState"
 grpc:
   client:
-    adjudication_engine:
-      address: "static://adjudication-engine-app-service:8081"
+    adjudicationengine:
+      address: "dns://adjudication-engine-app-service:8081"
     governance:
-      address: "static://governance-app-service:8081"
+      address: "dns://governance-app-service:8081"
 memoryLimit: 2048Mi
 memoryRequest: 512Mi
