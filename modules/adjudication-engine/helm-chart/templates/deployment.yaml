@@ -62,6 +62,11 @@ spec:
             - name: "SPRING_MAIN_CLOUD_PLATFORM"
               value: "KUBERNETES"
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
+          resources:
+            requests:
+              memory: {{ .Values.resources.request.memory }}
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           ports:
             - containerPort: 8080
