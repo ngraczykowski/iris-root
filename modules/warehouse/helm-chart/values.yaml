@@ -12,3 +12,5 @@ replicaCount: 1
 imagePullPolicy: Always
 livenessProbeHttpGetPath: "/rest/warehouse/management/health/livenessState"
 readinessProbeHttpGetPath: "/rest/warehouse/management/health/readinessState"
+memoryLimit: 2048Mi
+memoryRequest: 512Mi

@@ -82,6 +82,11 @@ spec:
             - name: 'SPRING_PROFILES_ACTIVE'
               value: {{ .Values.springProfilesActive | squote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
+          resources:
+            limits:
+              memory: {{ .Values.memoryLimit | quote }}
+            requests:
+              memory: {{ .Values.memoryRequest | quote }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
           ports:
