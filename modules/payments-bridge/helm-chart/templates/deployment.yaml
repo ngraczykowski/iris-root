@@ -66,14 +66,6 @@ spec:
               value: {{ .Values.pbCmapiCallbackEnabled | squote }}
             - name: 'PB_CMAPI_CALLBACK_ENDPOINT'
               value: {{ .Values.pbCmapiCallbackEndpoint | squote }}
-            - name: 'SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_callback_CLIENT_ID'
-              value: {{ .Values.oauthClientId | squote }}
-            - name: 'SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_callback_CLIENT_SECRET'
-              value: {{ .Values.oauthClientSecret | squote }}
-            - name: 'SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_callback_SCOPE'
-              value: {{ .Values.oauthClientScope | squote }}
-            - name: 'SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_external_TOKEN_URI'
-              value: {{ .Values.oauthClientTokenUri | squote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           resources:
             limits:
@@ -81,7 +73,12 @@ spec:
             requests:
               memory: {{ .Values.memoryRequest | quote }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          args: [ "--logging.config=file:/etc/logback.xml" ]
+          args:
+            - "--logging.config=file:/etc/logback.xml"
+            - "--spring.security.oauth2.client.registration.callback.client-id={{ .Values.oauthClientId }}"
+            - "--spring.security.oauth2.client.registration.callback.client-secret={{ .Values.oauthClientSecret }}"
+            - "--spring.security.oauth2.client.registration.callback.scope={{ .Values.oauthClientScope }}"
+            - "--spring.security.oauth2.client.provider.external.token-uri={{ .Values.oauthClientTokenUri }}"
           volumeMounts:
             - mountPath: /etc/logback.xml
               name: logback-config

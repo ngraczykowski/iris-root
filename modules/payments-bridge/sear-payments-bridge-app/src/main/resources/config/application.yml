@@ -219,7 +219,7 @@ spring:
             scope:
         provider:
           external:
-          # token-uri: <TOKEN URI>
+            token-uri: ""
 
 info:
   env: ${spb.env:local}
