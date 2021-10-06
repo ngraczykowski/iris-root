@@ -18,10 +18,8 @@ grpc:
       address: "static://sear-payments-bridge-service:8081"
     governance:
       address: "static://governance-app-service:8081"
-resources:
-  requests:
-    memory: "512Mi"
-  limits:
-    memory: "2048Mi"
+
+memoryLimit: 2048Mi
+memoryRequest: 512Mi
 
 
