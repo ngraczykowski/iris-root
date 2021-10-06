@@ -101,9 +101,7 @@ subprojects {Project subproject ->
                 "KEYCLOAK_CLIENT_ID": "backend",
                 "KEYCLOAK_ADAPTER_RESOURCE":"backend",
                 "KEYCLOAK_ADAPTER_CREDENTIALS_SECRET":"keycloak",
-                "KEYCLOAK_ADAPTER_REALM":"sens-webapp",
-                "GRPC_CLIENT_ADJUDICATION_ENGINE_ADDRESS" : "discovery:///grpc-adjudication-engine",
-                "GRPC_CLIENT_GOVERNANCE_ADDRESS" : "discovery:///grpc-governance"
+                "KEYCLOAK_ADAPTER_REALM":"sens-webapp"
             ]
             jvmFlags = [
                 "-Xms1g",

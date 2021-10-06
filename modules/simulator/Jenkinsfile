@@ -27,29 +27,7 @@ gradleBuild(
          }
        }
 
-       stage('Deploy On Nomad Dev') {
-         script {
-           def utils = new com.silenteight.jenkins.ci.Utils()
-           // FIXME(ahaczewski): Use `when` if possible.
-           if (utils.getGitBranch() == 'master') {
-             sh './nomad/deploy.sh -var-file=dev.vars'
-           } else {
-             echo 'This is not a release branch ignore Nomad deployment'
-           }
-         }
-       }
 
-       stage('Deploy On Nomad Test') {
-         script {
-           def utils = new com.silenteight.jenkins.ci.Utils()
-           // FIXME(ahaczewski): Use `when` if possible.
-           if (utils.getGitBranch() == 'master' && params.deployOnTest) {
-             sh './nomad/deploy.sh -var-file=test.vars'
-           } else {
-             echo 'This is not a release branch ignore Nomad deployment'
-           }
-         }
-       }
 
        stage('Helm Chart registry') {
          def utils = new com.silenteight.jenkins.ci.Utils()
@@ -93,6 +71,29 @@ gradleBuild(
              } else {
                echo 'This is not a release branch ignore AWS ECR push'
              }
+           }
+         }
+       }
+       stage('Deploy On Nomad Dev') {
+         script {
+           def utils = new com.silenteight.jenkins.ci.Utils()
+           // FIXME(ahaczewski): Use `when` if possible.
+           if (utils.getGitBranch() == 'master') {
+             sh './nomad/deploy.sh -var-file=dev.vars'
+           } else {
+             echo 'This is not a release branch ignore Nomad deployment'
+           }
+         }
+       }
+
+       stage('Deploy On Nomad Test') {
+         script {
+           def utils = new com.silenteight.jenkins.ci.Utils()
+           // FIXME(ahaczewski): Use `when` if possible.
+           if (utils.getGitBranch() == 'master' && params.deployOnTest) {
+             sh './nomad/deploy.sh -var-file=test.vars'
+           } else {
+             echo 'This is not a release branch ignore Nomad deployment'
            }
          }
        }
