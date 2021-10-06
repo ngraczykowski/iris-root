@@ -8,6 +8,7 @@ export ECR_DESTINATION=docker://$IMAGE_REPO
 echo "Docker image version copied to AWS:" $INSTALLER_VERSION "build number:" $BUILD_NUMBER
 aws ecr get-login-password --region us-east-1 | skopeo login --username AWS --password-stdin $ECR_REPO
 
-skopeo copy $IMAGE_SOURCE $ECR_DESTINATION:$INSTALLER_VERSION
-skopeo copy $IMAGE_SOURCE $ECR_DESTINATION:latest
+skopeo copy docker://docker.repo.silenteight.com/pb/$CHART_NAME:$INSTALLER_VERSION $ECR_DESTINATION:$INSTALLER_VERSION
+skopeo copy docker://docker.repo.silenteight.com/pb/$CHART_NAME:snapshot  $ECR_DESTINATION:snapshot
+skopeo copy docker://docker.repo.silenteight.com/pb/$CHART_NAME:latest  $ECR_DESTINATION:latest
 
