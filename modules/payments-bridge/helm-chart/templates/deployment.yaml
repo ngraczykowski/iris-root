@@ -66,18 +66,14 @@ spec:
               value: {{ .Values.pbCmapiCallbackEnabled | squote }}
             - name: 'PB_CMAPI_CALLBACK_ENDPOINT'
               value: {{ .Values.pbCmapiCallbackEndpoint | squote }}
-            - name: 'SECURITY_OAUTH2_CLIENT_CLIENT_ID'
+            - name: 'SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_callback_CLIENT_ID'
               value: {{ .Values.oauthClientId | squote }}
-            - name: 'SECURITY_OAUTH2_CLIENT_CLIENT_SECRET'
+            - name: 'SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_callback_CLIENT_SECRET'
               value: {{ .Values.oauthClientSecret | squote }}
-            - name: 'SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI'
-              value: {{ .Values.oauthClientAuthUri | squote }}
-            - name: 'SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI'
-              value: {{ .Values.oauthClientAccessUri | squote }}
-            - name: 'SECURITY_OAUTH2_CLIENT_SCOPE'
+            - name: 'SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_callback_SCOPE'
               value: {{ .Values.oauthClientScope | squote }}
-            - name: 'SECURITY_OAUTH2_CLIENT_GRANT_TYPE'
-              value: 'client_credentials'
+            - name: 'SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_external_TOKEN_URI'
+              value: {{ .Values.oauthClientTokenUri | squote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           resources:
             limits:
@@ -85,7 +81,7 @@ spec:
             requests:
               memory: {{ .Values.memoryRequest | quote }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          args: ["--logging.config=file:/etc/logback.xml"]
+          args: [ "--logging.config=file:/etc/logback.xml" ]
           volumeMounts:
             - mountPath: /etc/logback.xml
               name: logback-config

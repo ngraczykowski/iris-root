@@ -15,8 +15,7 @@ replicaCount: 1
 imagePullPolicy: Always
 oauthClientId: ""
 oauthClientSecret: ""
-oauthClientAuthUri: ""
-oauthClientAccessUri: ""
+oauthClientTokenUri: ""
 oauthClientScope: "openid"
 pbCmapiCallbackEnabled: "false"
 pbCmapiCallbackEndpoint: ""

@@ -50,8 +50,5 @@ dependencies {
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.spring_security_test
 
-  // Oauth2
-  implementation libraries.spring_security_oauth2_autoconfigure
-
   implementation libraries.adjudication_engine_api
 }

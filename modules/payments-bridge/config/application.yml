@@ -93,9 +93,29 @@ spring:
     password: dev
     virtual-host: /
 
-#---------------------------------------------------------------------------------------------------
-# SECURITY
-#---------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------
+  # SECURITY
+  #---------------------------------------------------------------------------------------------------
+
+  #------------------------------------------------------------------------------
+  # Egress authorization
+  #
+  # NOTE(ahaczewski): The configuration below is for development purposes only,
+  #   and the `egress-mock` realm in our Keycloak is used to simulate the customer
+  #   auth server.
+  #
+  #------------------------------------------------------------------------------
+  security:
+    oauth2:
+      client:
+        registration:
+          callback:
+            client-id: cmapi-dev
+            # Set the client-secret via environment variable SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_callback_CLIENT_SECRET
+            #client-secret: <CLIENT SECRET>
+        provider:
+          external:
+            token-uri: https://auth.silent8.cloud/realms/egress-mock/protocol/openid-connect/token
 
 #------------------------------------------------------------------------------
 # Ingress authorization
@@ -107,28 +127,6 @@ keycloak:
   resource: sierra-dev-api
   use-resource-role-mappings: true
   bearer-only: true
-
-#------------------------------------------------------------------------------
-# Egress authorization
-#
-# NOTE(ahaczewski): The configuration below is for development purposes only,
-#   and the `egress-mock` realm in our Keycloak is used to simulate the customer
-#   auth server.
-#
-#------------------------------------------------------------------------------
-rest:
-  security:
-    issuer-uri: https://auth.silent8.cloud/realms/egress-mock
-
-security:
-  oauth2:
-    client:
-      client-id: cmapi-dev
-      # Set the client-secret via environment variable SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
-      user-authorization-uri: ${rest.security.issuer-uri}/protocol/openid-connect/auth
-      access-token-uri: ${rest.security.issuer-uri}/protocol/openid-connect/token
-      scope: openid
-      grant-type: client_credentials
 
 management:
   health:

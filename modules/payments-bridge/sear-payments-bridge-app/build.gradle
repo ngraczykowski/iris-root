@@ -32,6 +32,7 @@ dependencies {
   // Application Starters
   implementation libraries.spring_boot_starter_actuator
   implementation libraries.spring_boot_starter_logging
+  implementation libraries.spring_boot_starter_oauth2_client
   implementation libraries.spring_boot_starter_security
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_web

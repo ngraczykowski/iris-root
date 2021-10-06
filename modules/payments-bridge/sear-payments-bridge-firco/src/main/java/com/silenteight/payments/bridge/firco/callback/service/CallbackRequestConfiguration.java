@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 
@@ -21,10 +20,10 @@ class CallbackRequestConfiguration {
 
   @Bean
   @ConditionalOnProperty(prefix = "pb.cmapi.callback", name = "enabled", havingValue = "true")
-  CallbackRequestFactory callbackRequestFactory(OAuth2RestTemplate oAuth2RestTemplate) {
+  CallbackRequestFactory callbackRequestFactory(RestTemplate restTemplate) {
     return new CallbackRequestFactoryImpl(
         properties.getEndpoint(),
-        oAuth2RestTemplate);
+        restTemplate);
   }
 
   @Bean
@@ -33,11 +32,11 @@ class CallbackRequestConfiguration {
     return new NoCallbackRequestFactoryImpl();
   }
 
-  @Bean
-  @ConditionalOnProperty(prefix = "pb.cmapi.callback", name = "enabled", havingValue = "true")
-  public OAuth2RestTemplate oauth2RestTemplate(OAuth2ProtectedResourceDetails details) {
-    OAuth2RestTemplate oAuth2RestTemplate = new OAuth2RestTemplate(details);
-    oAuth2RestTemplate.getAccessToken();
-    return oAuth2RestTemplate;
-  }
+  //@Bean
+  //@ConditionalOnProperty(prefix = "pb.cmapi.callback", name = "enabled", havingValue = "true")
+  //public OAuth2RestTemplate oauth2RestTemplate(OAuth2ProtectedResourceDetails details) {
+  //  OAuth2RestTemplate oAuth2RestTemplate = new OAuth2RestTemplate(details);
+  //  oAuth2RestTemplate.getAccessToken();
+  //  return oAuth2RestTemplate;
+  //}
 }

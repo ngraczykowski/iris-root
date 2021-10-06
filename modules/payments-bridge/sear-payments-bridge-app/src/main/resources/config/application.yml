@@ -202,6 +202,24 @@ spring:
   webflux:
     base-path: /rest/${spring.application.name}
 
+  #-------------------------------------------------------------------------------------------------
+  # SECURITY
+  #-------------------------------------------------------------------------------------------------
+  security:
+    oauth2:
+      client:
+        registration:
+          callback:
+            provider: external
+            # client-id: <CLIENT ID>
+            # client-secret: <CLIENT SECRET>
+            client-authentication-method: basic
+            authorization-grant-type: client_credentials
+            scope:
+        provider:
+          external:
+          # token-uri: https://uat.api.svb.com/v1/security/oauth/token
+
 info:
   env: ${spb.env:local}
 
