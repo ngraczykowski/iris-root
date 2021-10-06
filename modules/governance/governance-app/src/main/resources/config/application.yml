@@ -317,7 +317,6 @@ sep.auth:
       - "VIEW_POLICIES"
       - "VIEW_QA_ALERTS"
       - "MANAGE_QA_ALERT"
-      - "VIEW_QA_VERIFICATION"
       - "DASHBOARD"
     QA_ISSUE_MANAGER:
       - "MANAGE_POLICY"

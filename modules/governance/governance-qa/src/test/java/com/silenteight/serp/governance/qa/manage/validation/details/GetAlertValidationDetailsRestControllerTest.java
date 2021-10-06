@@ -35,7 +35,7 @@ class GetAlertValidationDetailsRestControllerTest extends BaseRestControllerTest
   @MockBean
   AlertDetailsQuery query;
 
-  @TestWithRole(roles = { AUDITOR, QA, QA_ISSUE_MANAGER })
+  @TestWithRole(roles = { AUDITOR, QA_ISSUE_MANAGER })
   void its404_whenAlertDetailsNotFound() {
     WrongDiscriminatorException exception = new WrongDiscriminatorException(DISCRIMINATOR);
     given(query.details(DISCRIMINATOR)).willThrow(exception);
@@ -45,7 +45,7 @@ class GetAlertValidationDetailsRestControllerTest extends BaseRestControllerTest
         .body(containsString(exception.getMessage()));
   }
 
-  @TestWithRole(roles = { AUDITOR, QA, QA_ISSUE_MANAGER })
+  @TestWithRole(roles = { AUDITOR, QA_ISSUE_MANAGER })
   void its200_andAlertDetailsReturned_whenFound() {
     AlertValidationDetailsDto validationDetailsDto = new DummyAlertValidationDetailsDto();
     given(query.details(DISCRIMINATOR)).willReturn(validationDetailsDto);
@@ -60,7 +60,7 @@ class GetAlertValidationDetailsRestControllerTest extends BaseRestControllerTest
         .body("addedAt", notNullValue());
   }
 
-  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, MODEL_TUNER })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, MODEL_TUNER, QA })
   void its403_whenNotPermittedRole() {
     get(ALERTS_DETAILS_URL).statusCode(FORBIDDEN.value());
   }
