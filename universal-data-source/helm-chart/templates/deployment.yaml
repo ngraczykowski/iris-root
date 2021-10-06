@@ -13,7 +13,8 @@ spec:
     metadata:
       labels:
         app: {{ .Values.name }}
-
+      annotations:
+        fluentbit.io/parser: spring-logback-json
     spec:
       containers:
         - name: {{ .Values.name }}
@@ -47,6 +48,10 @@ spec:
               value: "KUBERNETES"
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
+          volumeMounts:
+            - mountPath: /etc/logback.xml
+              name: logback-config
+              subPath: logback-config-file
           resources:
             limits:
               memory: {{ .Values.memoryLimit | quote }}
@@ -59,3 +64,7 @@ spec:
             - containerPort: 9090
               protocol: TCP
               name: grpc
+      volumes:
+        - name: "logback-config"
+          configMap:
+            name: {{ .Values.name }}-logback-configmap
