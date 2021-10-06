@@ -184,7 +184,7 @@ grpc:
       enableKeepAlive: true
       negotiationType: PLAINTEXT
 
-    adjudication-engine:
+    adjudicationengine:
       address: static://localhost:24801
 
     governance:

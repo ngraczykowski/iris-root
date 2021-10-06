@@ -43,7 +43,7 @@ simulator.consul.config.enabled: false
 
 grpc:
   client:
-    adjudication-engine:
+    adjudicationengine:
       address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-adjudication-engine
 
     governance:

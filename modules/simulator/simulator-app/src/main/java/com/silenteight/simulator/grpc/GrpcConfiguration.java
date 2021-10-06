@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 class GrpcConfiguration {
 
   @Bean("adjudication-engine")
-  @GrpcClient("adjudication-engine")
+  @GrpcClient("adjudicationengine")
   Channel adjudicationEngineChannel(Channel adjudicationEngineChannel) {
     return adjudicationEngineChannel;
   }
