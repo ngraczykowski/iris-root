@@ -64,7 +64,7 @@ spec:
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           resources:
             requests:
-              memory: {{ .Values.resources.request.memory }}
+              memory: {{ .Values.resources.requests.memory }}
             limits:
               memory: {{ .Values.resources.limits.memory }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
