@@ -50,7 +50,7 @@ class ListAlertValidationRestControllerTest extends BaseRestControllerTest {
   @MockBean
   ListAlertValidationQuery alertValidationQuery;
 
-  @TestWithRole(roles = { AUDITOR, QA, QA_ISSUE_MANAGER })
+  @TestWithRole(roles = { AUDITOR, QA_ISSUE_MANAGER })
   void its200_whenAlertsListIsEmpty() {
     OffsetDateTime createdAfter = OffsetDateTime.parse(CREATED_AT);
     given(alertValidationQuery.list(ALERT_STATES, createdAfter, LIMIT)).willReturn(of());
@@ -64,7 +64,7 @@ class ListAlertValidationRestControllerTest extends BaseRestControllerTest {
         createdAfter, LIMIT);
   }
 
-  @TestWithRole(roles = { AUDITOR, QA, QA_ISSUE_MANAGER })
+  @TestWithRole(roles = { AUDITOR, QA_ISSUE_MANAGER })
   void its200AndDefaultCreatedAtDateSet_whenPageTokenNotProvided() {
     given(alertValidationQuery.list(ALERT_STATES, MIN_DATE, LIMIT)).willReturn(of());
 
@@ -74,7 +74,7 @@ class ListAlertValidationRestControllerTest extends BaseRestControllerTest {
         .list(ALERT_STATES, MIN_DATE, LIMIT);
   }
 
-  @TestWithRole(roles = { AUDITOR, QA, QA_ISSUE_MANAGER })
+  @TestWithRole(roles = { AUDITOR, QA_ISSUE_MANAGER })
   void its200_andAlertDetailsReturnedWithNextToken_whenAlertsFound() {
     //given
     AlertValidationDto alertValidationDto = new DummyAlertValidationDto();
@@ -96,12 +96,12 @@ class ListAlertValidationRestControllerTest extends BaseRestControllerTest {
         .body("[0].addedAt", notNullValue());
   }
 
-  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, MODEL_TUNER })
+  @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, MODEL_TUNER, QA })
   void its403_whenNotPermittedRole() {
     get(ALERTS_LIST_URL).statusCode(FORBIDDEN.value());
   }
 
-  @TestWithRole(roles = { AUDITOR, QA, QA_ISSUE_MANAGER })
+  @TestWithRole(roles = { AUDITOR, QA_ISSUE_MANAGER })
   void its400_whenInvalidPageTokenProvided() {
     get(ALERTS_LIST_WITH_INVALID_PAGE_TOKEN_URL).statusCode(BAD_REQUEST.value());
   }
