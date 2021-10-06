@@ -16,13 +16,14 @@ pb:
   messaging:
     concurrency: 4
     prefetch: 25
+
   #-------------------------------------------------------------------------------------------------
   # CMAPI CALLBACK
   #-------------------------------------------------------------------------------------------------
   cmapi:
     callback:
-      endpoint: "http://localhost:5000/callback-recommendation"
       enabled: false
+      client-registration-id: callback
 
   #-------------------------------------------------------------------------------------------------
   # ALERT MESSAGES
@@ -218,7 +219,7 @@ spring:
             scope:
         provider:
           external:
-          # token-uri: https://uat.api.svb.com/v1/security/oauth/token
+          # token-uri: <TOKEN URI>
 
 info:
   env: ${spb.env:local}

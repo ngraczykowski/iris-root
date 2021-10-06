@@ -56,14 +56,6 @@ pb:
       enabled: false
 
   #-------------------------------------------------------------------------------------------------
-  # ALERT MESSAGES
-  #-------------------------------------------------------------------------------------------------
-  alert-message:
-    stored-queue-limit: 1000
-    decision-requested-time: 30s
-    original-message-deleted-after-recommendation: true
-
-  #-------------------------------------------------------------------------------------------------
   # SECURITY
   #
   # The security is disabled by default for local development.
@@ -111,7 +103,7 @@ spring:
         registration:
           callback:
             client-id: cmapi-dev
-            # Set the client-secret via environment variable SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_callback_CLIENT_SECRET
+            # Set the client-secret via environment variable SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_callback_CLIENT-SECRET
             #client-secret: <CLIENT SECRET>
         provider:
           external:

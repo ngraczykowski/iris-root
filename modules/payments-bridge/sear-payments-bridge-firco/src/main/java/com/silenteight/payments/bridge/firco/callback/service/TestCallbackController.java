@@ -1,6 +1,5 @@
 package com.silenteight.payments.bridge.firco.callback.service;
 
-
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.common.dto.common.StatusInfoDto;

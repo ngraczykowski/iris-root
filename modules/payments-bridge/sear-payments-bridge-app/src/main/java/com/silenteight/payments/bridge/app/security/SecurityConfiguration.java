@@ -17,8 +17,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
-import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
@@ -33,7 +33,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
 import java.util.Map;
@@ -49,7 +49,7 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
 
   @Override
   protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-    return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
+    return new NullAuthenticatedSessionStrategy();
   }
 
   @Override
@@ -63,13 +63,16 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
           .antMatchers("/management/health/**", "/status").permitAll()
           .and()
           .authorizeRequests()
-          .anyRequest()
-          .authenticated();
+          .anyRequest().authenticated();
     }
 
-    http
+    http.sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .sessionFixation().none()
+        .and()
         .csrf().disable()
-        .formLogin().disable();
+        .formLogin().disable()
+        .logout().disable();
   }
 
   @Override
@@ -134,9 +137,8 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
             .clientCredentials()
             .build();
 
-    var authorizedClientManager =
-        new AuthorizedClientServiceOAuth2AuthorizedClientManager(
-            clientRegistrationRepository, authorizedClientService);
+    var authorizedClientManager = new AuthorizedClientServiceOAuth2AuthorizedClientManager(
+        clientRegistrationRepository, authorizedClientService);
     authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
 
     return authorizedClientManager;

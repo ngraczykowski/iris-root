@@ -18,6 +18,7 @@ dependencies {
 
   implementation libraries.spring_amqp
   implementation libraries.spring_boot
+  implementation libraries.spring_boot_starter_oauth2_client
   implementation libraries.spring_context
   implementation libraries.spring_integration_amqp
   implementation libraries.spring_integration_core

@@ -2,7 +2,6 @@ package com.silenteight.payments.bridge.firco.callback.service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.common.dto.common.StatusInfoDto;
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.common.dto.input.NextStatusDto;
 import com.silenteight.payments.bridge.common.dto.output.*;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 @Component
 class ClientRequestDtoMapper {
 
-  private static final String COMMENT = "MANUAL_INVESTIGATION";
+  private static final String COMMENT = "S8 Recommendation: Manual Investigation";
   private static final String OPERATOR = "Silent Eight";
 
   private final MapStatusUseCase mapStatusUseCase;
@@ -49,11 +48,6 @@ class ClientRequestDtoMapper {
             .build());
     decision.setStatus(destinationStatus.getStatus());
     return create(decision);
-  }
-
-  private StatusInfoDto toStatusInfoDto(StatusInfoDto info) {
-    return new StatusInfoDto(info.getId(), info.getName(),
-        info.getRoutingCode(), info.getChecksum());
   }
 
   private ClientRequestDto create(AlertDecisionMessageDto source) {

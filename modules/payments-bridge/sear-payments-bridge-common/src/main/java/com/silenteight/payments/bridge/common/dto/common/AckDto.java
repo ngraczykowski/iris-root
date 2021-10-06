@@ -22,7 +22,7 @@ public class AckDto implements Serializable {
   private AckBodyDto requestBodyDto;
 
   public static AckDto ok() {
-    return of(FaultCode.NONE, "");
+    return of(FaultCode.NONE, "OK");
   }
 
   public static AckDto clientError(String message) {
@@ -34,14 +34,16 @@ public class AckDto implements Serializable {
   }
 
   public static AckDto of(FaultCode faultCode, String faultString) {
-    AckMessageDto messageDto = new AckMessageDto(faultCode.getCode(), faultString, "");
+    AckMessageDto messageDto =
+        new AckMessageDto(faultCode.getCode(), faultString, "cmapi.send.message");
+
     AckBodyDto bodyDto = new AckBodyDto(messageDto);
     return new AckDto(null, bodyDto);
   }
 
   @RequiredArgsConstructor
   public enum FaultCode {
-    NONE(""),
+    NONE("0"),
     CLIENT("soapenv:Client"),
     SERVER("soapenv:Server");
 
