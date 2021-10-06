@@ -9,5 +9,5 @@ ports:
 
 replicaCount: 1
 imagePullPolicy: Always
-memoryLimit: 768Mi
+memoryLimit: 2048Mi
 memoryRequest: 512Mi
