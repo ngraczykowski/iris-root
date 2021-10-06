@@ -7,6 +7,12 @@ dependencies {
   implementation project(":sear-payments-bridge-common")
 
   implementation libraries.spring_boot
+  implementation libraries.grpc_client_spring_boot_starter
+
+  implementation libraries.data_source_categories_api
+
+  implementation libraries.jakarta_annotation_api
+  implementation libraries.jakarta_validation_api
 
   implementation libraries.spring_context
   implementation 'org.projectlombok:lombok:1.18.20'

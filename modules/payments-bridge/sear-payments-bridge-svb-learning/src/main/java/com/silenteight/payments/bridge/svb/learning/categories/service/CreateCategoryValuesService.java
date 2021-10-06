@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.categories.api.v2.BatchCreateCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.datasource.categories.api.v2.CreateCategoryValuesRequest;
+import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
 import com.silenteight.payments.bridge.svb.learning.categories.port.incoming.CreateCategoryValuesUseCase;
-import com.silenteight.payments.bridge.svb.learning.categories.port.outgoing.CreateCategoryValuesClient;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 
 import org.springframework.stereotype.Service;

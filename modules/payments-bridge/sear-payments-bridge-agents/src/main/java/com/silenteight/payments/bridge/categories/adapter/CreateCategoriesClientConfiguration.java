@@ -1,10 +1,10 @@
-package com.silenteight.payments.bridge.svb.learning.categories.adapter;
+package com.silenteight.payments.bridge.categories.adapter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import com.silenteight.datasource.categories.api.v2.CategoryServiceGrpc;
-import com.silenteight.payments.bridge.svb.learning.categories.port.outgoing.CreateCategoriesClient;
+import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoriesClient;
 
 import io.grpc.Channel;
 import net.devh.boot.grpc.client.inject.GrpcClient;

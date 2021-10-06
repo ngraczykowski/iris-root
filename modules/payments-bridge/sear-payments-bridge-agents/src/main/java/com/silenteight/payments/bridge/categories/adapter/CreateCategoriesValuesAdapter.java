@@ -1,11 +1,11 @@
-package com.silenteight.payments.bridge.svb.learning.categories.adapter;
+package com.silenteight.payments.bridge.categories.adapter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.categories.api.v2.BatchCreateCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v2.CategoryValueServiceGrpc.CategoryValueServiceBlockingStub;
-import com.silenteight.payments.bridge.svb.learning.categories.port.outgoing.CreateCategoryValuesClient;
+import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
 
 import io.grpc.Deadline;
 import io.grpc.StatusRuntimeException;

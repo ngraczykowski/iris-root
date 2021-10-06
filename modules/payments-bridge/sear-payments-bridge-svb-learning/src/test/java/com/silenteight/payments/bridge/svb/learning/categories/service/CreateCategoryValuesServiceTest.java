@@ -1,7 +1,7 @@
 package com.silenteight.payments.bridge.svb.learning.categories.service;
 
 import com.silenteight.payments.bridge.agents.port.OneLinerUseCase;
-import com.silenteight.payments.bridge.svb.learning.categories.port.outgoing.CreateCategoryValuesClient;
+import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
