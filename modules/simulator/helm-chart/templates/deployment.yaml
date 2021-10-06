@@ -61,7 +61,7 @@ spec:
             - name: 'SPRING_PROFILES_ACTIVE'
               value: {{ .Values.springProfilesActive | squote }}
             - name: 'GRPC_CLIENT_adjudicationengine_ADDRESS'
-              value: {{ .Values.grpc.client.adjudication_engine.address | quote }}
+              value: {{ .Values.grpc.client.adjudicationengine.address | quote }}
             - name: 'GRPC_CLIENT_governance_ADDRESS'
               value: {{ .Values.grpc.client.governance.address | quote }}
             - name: 'SERVER_PORT'
