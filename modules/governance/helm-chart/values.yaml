@@ -8,8 +8,8 @@ ports:
 replicaCount: 1
 imagePullPolicy: Always
 
-memoryLimit: 1024Mi
-memoryRequest: 768Mi
+memoryLimit: 2048Mi
+memoryRequest: 512Mi
 
 grpc:
   client:
