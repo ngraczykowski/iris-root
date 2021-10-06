@@ -9,7 +9,6 @@ import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryVa
 import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
 import com.silenteight.payments.bridge.svb.etl.response.AlertEtlResponse;
-import com.silenteight.payments.bridge.svb.etl.response.HitAndWatchlistPartyData;
 import com.silenteight.payments.bridge.svb.etl.response.HitData;
 
 import org.springframework.stereotype.Service;
@@ -17,10 +16,10 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
+
+import static com.silenteight.payments.bridge.firco.datasource.util.HitDataUtils.filterHitsData;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +39,6 @@ class CategoryEtlProcess implements EtlProcess {
 
   private void handleMatches(List<HitData> hitsData, Entry<String, String> matchItem) {
     var categoryValues = filterHitsData(hitsData, matchItem).stream()
-        .filter(Objects::nonNull)
         .map(hitData -> categoryValueExtractors
             .stream()
             .map(ce -> ce.extract(hitData, matchItem.getValue()))
@@ -66,17 +64,6 @@ class CategoryEtlProcess implements EtlProcess {
                 .collect(
                     Collectors.toList()))
         .build();
-  }
-
-  @Nonnull
-  private List<HitData> filterHitsData(List<HitData> hitsData, Entry<String, String> matchItem) {
-    return hitsData.stream()
-        .filter(hitData -> matchItem.getKey().equals(
-            Optional.of(hitData)
-                .map(HitData::getHitAndWlPartyData)
-                .map(HitAndWatchlistPartyData::getId)
-                .orElse(null)))
-        .collect(Collectors.toList());
   }
 
   @Override

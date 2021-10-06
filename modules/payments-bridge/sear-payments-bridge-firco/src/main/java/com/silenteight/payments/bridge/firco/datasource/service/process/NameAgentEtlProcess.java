@@ -15,7 +15,6 @@ import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
 import com.silenteight.payments.bridge.svb.etl.response.AlertEtlResponse;
-import com.silenteight.payments.bridge.svb.etl.response.HitAndWatchlistPartyData;
 import com.silenteight.payments.bridge.svb.etl.response.HitData;
 
 import com.google.protobuf.Any;
@@ -24,11 +23,10 @@ import io.grpc.Deadline;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import javax.annotation.Nonnull;
+
+import static com.silenteight.payments.bridge.firco.datasource.util.HitDataUtils.filterHitsData;
 
 @RequiredArgsConstructor
 class NameAgentEtlProcess implements EtlProcess {
@@ -43,21 +41,9 @@ class NameAgentEtlProcess implements EtlProcess {
   }
 
   private void handleMatches(List<HitData> hitsData, Entry<String, String> matchItem) {
-    filterHitsData(hitsData, matchItem).stream()
-        .filter(Objects::nonNull)
+    filterHitsData(hitsData, matchItem)
+        .stream()
         .forEach(hitData -> callAgentService(matchItem, hitData));
-  }
-
-  @Nonnull
-  private List<HitData> filterHitsData(List<HitData> hitsData, Entry<String, String> matchItem) {
-    return hitsData.stream()
-        .filter(hitData -> matchItem.getKey().equals(
-            Optional.of(hitData)
-                .map(HitData::getHitAndWlPartyData)
-                .map(HitAndWatchlistPartyData::getId)
-                .orElse(null)))
-        .collect(Collectors.toList());
-
   }
 
   private void callAgentService(Entry<String, String> matchItem, HitData hitData) {
@@ -73,11 +59,6 @@ class NameAgentEtlProcess implements EtlProcess {
     blockingStub
         .withDeadline(deadline)
         .batchCreateAgentInputs(batchInputRequest);
-  }
-
-  @Override
-  public boolean supports(AlertRegisteredEvent command) {
-    return true;
   }
 
   private BatchCreateAgentInputsRequest createBatchInputRequest(
@@ -128,5 +109,10 @@ class NameAgentEtlProcess implements EtlProcess {
       default:
         throw new UnsupportedOperationException();
     }
+  }
+
+  @Override
+  public boolean supports(AlertRegisteredEvent command) {
+    return true;
   }
 }

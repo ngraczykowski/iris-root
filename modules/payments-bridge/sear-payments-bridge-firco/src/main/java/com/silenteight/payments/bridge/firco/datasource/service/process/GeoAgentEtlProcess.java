@@ -21,12 +21,11 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import javax.annotation.Nonnull;
+
+import static com.silenteight.payments.bridge.firco.datasource.util.HitDataUtils.filterHitsData;
 
 @RequiredArgsConstructor
 class GeoAgentEtlProcess implements EtlProcess {
@@ -42,32 +41,23 @@ class GeoAgentEtlProcess implements EtlProcess {
 
   private void handleMatches(List<HitData> hitsData, Entry<String, String> matchItem) {
     filterHitsData(hitsData, matchItem).stream()
-        .filter(Objects::nonNull)
         .forEach(hitData -> callAgentService(matchItem, hitData));
-  }
-
-  @Nonnull
-  private List<HitData> filterHitsData(List<HitData> hitsData, Entry<String, String> matchItem) {
-    return hitsData.stream()
-        .filter(hitData -> matchItem.getKey().equals(
-            Optional.of(hitData)
-                .map(HitData::getHitAndWlPartyData)
-                .map(HitAndWatchlistPartyData::getId)
-                .orElse(null)))
-        .collect(Collectors.toList());
-
   }
 
   private void callAgentService(Entry<String, String> matchItem, HitData hitData) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 
-    String countryTown = getSpecifiedAlertedPartyLocation(hitData.getAlertedPartyData(),
+    String countryTown = getSpecifiedAlertedPartyLocation(
+        hitData.getAlertedPartyData(),
         AlertedPartyData::getCtryTowns);
-    String country = getSpecifiedWatchListLocation(hitData.getHitAndWlPartyData(),
+    String country = getSpecifiedWatchListLocation(
+        hitData.getHitAndWlPartyData(),
         HitAndWatchlistPartyData::getCountries);
-    String state = getSpecifiedWatchListLocation(hitData.getHitAndWlPartyData(),
+    String state = getSpecifiedWatchListLocation(
+        hitData.getHitAndWlPartyData(),
         HitAndWatchlistPartyData::getStates);
-    String city = getSpecifiedWatchListLocation(hitData.getHitAndWlPartyData(),
+    String city = getSpecifiedWatchListLocation(
+        hitData.getHitAndWlPartyData(),
         HitAndWatchlistPartyData::getCities);
 
     String watchListLocation = String.join(", ", country, state, city);
@@ -82,13 +72,6 @@ class GeoAgentEtlProcess implements EtlProcess {
         .withDeadline(deadline)
         .batchCreateAgentInputs(batchInputRequest);
   }
-
-
-  @Override
-  public boolean supports(AlertRegisteredEvent data) {
-    return true;
-  }
-
 
   private BatchCreateAgentInputsRequest createBatchInputRequest(
       String matchValue, String countryTown, String watchListLocation) {
@@ -132,5 +115,10 @@ class GeoAgentEtlProcess implements EtlProcess {
         .stream()
         .findFirst()
         .orElse("");
+  }
+
+  @Override
+  public boolean supports(AlertRegisteredEvent data) {
+    return true;
   }
 }
