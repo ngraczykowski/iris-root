@@ -1,7 +1,6 @@
 name: simulator-app
 image_tag: simulator-app
 image_repo: simulator-app
-args: [ "simulator-app" ]
 ports:
   http: 8080
 config:

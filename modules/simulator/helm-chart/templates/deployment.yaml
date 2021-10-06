@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         app: {{ .Values.name }}
+      annotations:
+        fluentbit.io/parser: spring-logback-json
     spec:
       containers:
         - name: {{ .Values.name }}
@@ -67,13 +69,21 @@ spec:
             - name: 'SERVER_PORT'
               value: {{ .Values.ports.http | quote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
+          args: ["--logging.config=file:/etc/logback.xml"]
+          volumeMounts:
+            - mountPath: /etc/logback.xml
+              name: logback-config
+              subPath: logback-config-file
           resources:
             limits:
               memory: {{ .Values.memoryLimit | quote }}
             requests:
               memory: {{ .Values.memoryRequest | quote }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          args: {{ .Values.args }}
           ports:
             - containerPort: {{ .Values.ports.http }}
               name: http
+      volumes:
+        - name: "logback-config"
+          configMap:
+            name: {{ .Values.name }}-logback-configmap
