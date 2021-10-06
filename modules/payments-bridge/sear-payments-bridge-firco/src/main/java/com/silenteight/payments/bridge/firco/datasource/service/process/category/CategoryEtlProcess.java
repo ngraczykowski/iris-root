@@ -35,17 +35,15 @@ class CategoryEtlProcess implements EtlProcess {
     data.getMatches()
         .entrySet()
         .forEach(
-            matchItem -> handleMatches(data, hitsData, matchItem, data.getAlertRegisteredName()));
+            matchItem -> handleMatches(hitsData, matchItem));
   }
 
-  private void handleMatches(
-      AlertRegisteredEvent data,
-      List<HitData> hitsData, Entry<String, String> matchItem, String alertRegisteredName) {
+  private void handleMatches(List<HitData> hitsData, Entry<String, String> matchItem) {
     var categoryValues = filterHitsData(hitsData, matchItem).stream()
         .filter(Objects::nonNull)
         .map(hitData -> categoryValueExtractors
             .stream()
-            .map(ce -> ce.extract(data, hitData, matchItem.getValue()))
+            .map(ce -> ce.extract(hitData, matchItem.getValue()))
             .collect(Collectors.toList())
         ).flatMap(Collection::stream).collect(Collectors.toList());
 

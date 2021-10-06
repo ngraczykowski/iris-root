@@ -6,7 +6,6 @@ import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
 import com.silenteight.payments.bridge.agents.port.NameAddressCrossmatchUseCase;
-import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.svb.etl.model.CreateAlertedPartyEntitiesRequest;
 import com.silenteight.payments.bridge.svb.etl.port.CreateAlertedPartyEntitiesUseCase;
 import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
@@ -28,7 +27,7 @@ class NameAddressCrossmatchProcess implements CategoryValueProcess {
   private final CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;
 
   @Override
-  public CategoryValue extract(AlertRegisteredEvent data, HitData hitData, String matchValue) {
+  public CategoryValue extract(HitData hitData, String matchValue) {
     var value = nameAddressCrossmatchUseCase.call(createRequest(hitData));
     return CategoryValue
         .newBuilder()
@@ -42,7 +41,8 @@ class NameAddressCrossmatchProcess implements CategoryValueProcess {
   private NameAddressCrossmatchAgentRequest createRequest(HitData hitData) {
     return NameAddressCrossmatchAgentRequest
         .builder()
-        .alertPartyEntities(createAlertedPartyEntities(hitData.getAlertedPartyData(),
+        .alertPartyEntities(createAlertedPartyEntities(
+            hitData.getAlertedPartyData(),
             hitData.getHitAndWlPartyData().getAllMatchingTexts()))
         .watchlistName(hitData.getHitAndWlPartyData().getName())
         .watchlistCountry(getWatchlistCountryIfExists(hitData))

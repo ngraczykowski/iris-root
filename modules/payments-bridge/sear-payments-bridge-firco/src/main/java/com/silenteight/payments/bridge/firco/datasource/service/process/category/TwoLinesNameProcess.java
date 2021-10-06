@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.agents.model.TwoLinesNameAgentRequest;
 import com.silenteight.payments.bridge.agents.port.TwoLinesNameUseCase;
-import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.svb.etl.response.HitData;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,7 +20,7 @@ class TwoLinesNameProcess implements CategoryValueProcess {
   private final TwoLinesNameUseCase twoLinesNameUseCase;
 
   @Override
-  public CategoryValue extract(AlertRegisteredEvent data, HitData hitData, String matchValue) {
+  public CategoryValue extract(HitData hitData, String matchValue) {
     var value = twoLinesNameUseCase.invoke(createRequest(hitData));
     return CategoryValue
         .newBuilder()

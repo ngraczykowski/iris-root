@@ -25,15 +25,6 @@ class AgentEtlConfiguration {
   private Channel dataSourceChannel;
 
   @Bean
-  FreeTextAgentEtlProcess freeTextAgentEtlProcess() {
-    var stub = AgentInputServiceGrpc
-        .newBlockingStub(dataSourceChannel)
-        .withWaitForReady();
-
-    return new FreeTextAgentEtlProcess(stub, properties.getTimeout());
-  }
-
-  @Bean
   NameAgentEtlProcess nameAgentEtlProcess() {
     var stub = AgentInputServiceGrpc
         .newBlockingStub(dataSourceChannel)

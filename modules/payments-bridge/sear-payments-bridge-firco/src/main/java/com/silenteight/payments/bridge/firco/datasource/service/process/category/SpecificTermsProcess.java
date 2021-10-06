@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.agents.model.SpecificTermsRequest;
 import com.silenteight.payments.bridge.agents.port.SpecificTermsUseCase;
-import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.svb.etl.response.HitData;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,7 +20,7 @@ class SpecificTermsProcess implements CategoryValueProcess {
   private final SpecificTermsUseCase specificTermsUseCase;
 
   @Override
-  public CategoryValue extract(AlertRegisteredEvent data, HitData hitData, String matchValue) {
+  public CategoryValue extract(HitData hitData, String matchValue) {
     var value = specificTermsUseCase.invoke(createRequest(hitData));
     return CategoryValue
         .newBuilder()

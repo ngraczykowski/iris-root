@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.agents.model.OneLinerAgentRequest;
 import com.silenteight.payments.bridge.agents.port.OneLinerUseCase;
-import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.svb.etl.response.HitData;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,7 +20,7 @@ class OneLinerProcess implements CategoryValueProcess {
   private final OneLinerUseCase oneLinerUseCase;
 
   @Override
-  public CategoryValue extract(AlertRegisteredEvent data, HitData hitData, String matchValue) {
+  public CategoryValue extract(HitData hitData, String matchValue) {
     var value = oneLinerUseCase.invoke(createRequest(hitData));
     return CategoryValue
         .newBuilder()
