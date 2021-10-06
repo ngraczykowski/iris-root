@@ -21,8 +21,5 @@ oauthClientAccessUri: ""
 oauthClientScope: "openid"
 pbCmapiCallbackEnabled: "false"
 pbCmapiCallbackEndpoint: ""
-resources:
-  requests:
-    memory: "512Mi"
-  limits:
-    memory: "2048Mi"
+memoryLimit: 2048Mi
+memoryRequest: 512Mi

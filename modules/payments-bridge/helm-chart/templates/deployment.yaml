@@ -78,10 +78,10 @@ spec:
               value: 'client_credentials'
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           resources:
-            requests:
-              memory: {{ .Values.resources.requests.memory }}
             limits:
-              memory: {{ .Values.resources.limits.memory }}
+              memory: {{ .Values.memoryLimit | quote }}
+            requests:
+              memory: {{ .Values.memoryRequest | quote }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args: {{ .Values.args }}
           ports:
