@@ -13,7 +13,7 @@ message QaDataIndexRequest {
   // a response on the client side. It is a client responsibility to ensure its uniqueness.
   string request_id = 1 [(google.api.field_behavior) = OPTIONAL];
   // Alerts generated in QA.
-  repeated QaAlert alert = 3 [(google.api.field_behavior) = REQUIRED];
+  repeated QaAlert alerts = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
 message QaAlert {
@@ -28,4 +28,6 @@ message QaAlert {
     FAILED = 2;
   }
   State state = 3 [(google.api.field_behavior) = REQUIRED];
+  //Decision comment for alert in QA process. Set in governance
+  string comment = 4 [(google.api.field_behavior) = OPTIONAL];
 }
