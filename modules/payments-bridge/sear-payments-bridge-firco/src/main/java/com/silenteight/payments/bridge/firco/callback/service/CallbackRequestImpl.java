@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.dto.common.AckDto;
 import com.silenteight.payments.bridge.common.dto.output.ClientRequestDto;
+import com.silenteight.payments.bridge.common.exception.NonRecoverableOperationException;
+import com.silenteight.payments.bridge.common.exception.RecoverableOperationException;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
@@ -38,11 +40,35 @@ class CallbackRequestImpl implements CallbackRequest {
             responseEntity.getStatusCode(), endpoint);
         throw new HttpServerErrorException(responseEntity.getStatusCode());
       }
-    } catch (ResourceAccessException e) {
-      log.warn(
-          "I was unable to send the decision to [{}] due to the exception [{}: {}]",
-          endpoint, e.getClass().getName(), e.getLocalizedMessage());
-      throw e;
+    } catch (HttpServerErrorException exception) {
+      logException(endpoint, exception);
+      throw mapToException(exception);
+
+    } catch (RestClientException exception) {
+      logException(endpoint, exception);
+      throw exception;
     }
   }
+
+  private void logException(String endpoint, Exception exception) {
+    log.warn(
+        "I was unable to send the decision to [{}] due to the exception [{}: {}]",
+        endpoint, exception.getClass().getName(), exception.getLocalizedMessage());
+  }
+
+  private RuntimeException mapToException(HttpServerErrorException exception) {
+    switch (exception.getStatusCode()) {
+      case UNAUTHORIZED:
+      case FORBIDDEN:
+      case REQUEST_TIMEOUT:
+      case TOO_MANY_REQUESTS:
+      case BAD_GATEWAY:
+      case SERVICE_UNAVAILABLE:
+      case GATEWAY_TIMEOUT:
+        return new RecoverableOperationException(exception);
+      default:
+        return new NonRecoverableOperationException(exception);
+    }
+  }
+
 }
