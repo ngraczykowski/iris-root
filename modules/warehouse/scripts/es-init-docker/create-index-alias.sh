@@ -1,18 +1,16 @@
 #!/bin/bash
-set -ue -o pipefail
+set -xue -o pipefail
 # set -o xtrace
 
 # script location is a base dir
 CURRENTDIR="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
 cd "${CURRENTDIR}"
 
-set -x
 ALIAS_NAME="local_production"
 ORIGINAL_INDEX_NAME="${ALIAS_NAME}"
 ARCHIVED_INDEX_NAME="${ALIAS_NAME}.old"
 EMPTY_INDEX_NAME="${ALIAS_NAME}.empty"
 TIMEOUT_SECONDS=120
-set +x
 echo "Checking alias status"
 ALIAS_STATUS=$(curl --head "$ES_URL/_alias/${ALIAS_NAME}" -u "$ES_CREDENTIALS" -s -w '%{http_code}' -o /dev/null)
 echo "Checking cluster status"

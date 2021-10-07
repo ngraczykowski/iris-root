@@ -103,6 +103,7 @@ spec:
       initContainers:
         - name: warehouse-es-init
           image: {{ .Values.esInitDockerImage }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
           env:
             - name: 'ES_URL'
               value: {{ .Values.elasticUrl }}

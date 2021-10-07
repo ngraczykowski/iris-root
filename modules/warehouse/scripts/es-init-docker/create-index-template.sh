@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ue -o pipefail
+set -xue -o pipefail
 # set -o xtrace
 
 # script location is a base dir
