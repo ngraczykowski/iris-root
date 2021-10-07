@@ -14,3 +14,5 @@ livenessProbeHttpGetPath: "/rest/warehouse/management/health/livenessState"
 readinessProbeHttpGetPath: "/rest/warehouse/management/health/readinessState"
 memoryLimit: 2048Mi
 memoryRequest: 512Mi
+
+esInitDockerImage: 278875966478.dkr.ecr.us-east-1.amazonaws.com/warehouse-es-init:1.0.0

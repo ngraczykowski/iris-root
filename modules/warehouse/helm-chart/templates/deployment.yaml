@@ -100,6 +100,16 @@ spec:
               name: http
             - containerPort: {{ .Values.ports.grpc }}
               name: grpc
+      initContainers:
+        - name: warehouse-es-init
+          image: {{ .Values.esInitDockerImage }}
+          env:
+            - name: 'ES_URL'
+              value: {{ .Values.elasticUrl }}
+            - name: 'ES_USERNAME'
+              value: {{ .Values.elasticRestUsername }}
+            - name: 'ES_PASSWORD'
+              value: {{ .Values.elasticRestPassword }}
       volumes:
         - name: "logback-config"
           configMap:
