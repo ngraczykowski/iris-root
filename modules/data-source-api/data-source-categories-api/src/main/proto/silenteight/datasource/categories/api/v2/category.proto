@@ -34,8 +34,7 @@ enum CategoryType {
 //   - Watchlist party type (individual, organization, etc.)
 //
 message Category {
-  // The unique name of the category. This is always system-assigned, in form of
-  // `categories/<Category>`.
+  // The unique name of the category, in form of `categories/<Category>`.
   // Must be unique.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
 

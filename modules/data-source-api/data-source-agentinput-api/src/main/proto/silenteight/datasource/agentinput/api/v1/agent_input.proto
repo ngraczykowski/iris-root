@@ -23,7 +23,7 @@ message AgentInput {
 
 message FeatureInput {
   // The name of the feature this agent input is for, in form of
-  // `feature/<Feature>`.
+  // `features/<Feature>`.
   string feature = 1 [(google.api.field_behavior) = REQUIRED];
 
   google.protobuf.Any agent_feature_input = 2 [(google.api.field_behavior) = REQUIRED];

@@ -38,7 +38,7 @@ message ListCategoriesResponse {
 
 message BatchGetMatchCategoryValuesRequest {
   // The list of matches to retrieve category values for, in form of
-  // `categories/<Category>/matches/<Match ID>`.
+  // `categories/<Category>/alerts/<Alert ID>/matches/<Match ID>`.
   repeated string match_values = 2 [(google.api.field_behavior) = REQUIRED];
 }
 

@@ -5,7 +5,6 @@ package silenteight.datasource.categories.api.v2;
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
 
-import "silenteight/datasource/categories/api/v2/category.proto";
 import "silenteight/datasource/categories/api/v2/category_value.proto";
 
 option java_package = "com.silenteight.datasource.categories.api.v2";
@@ -68,8 +67,8 @@ message BatchCreateCategoryValuesResponse {
 }
 
 message CategoryMatches {
-  // The list of category names to request values from, in form of `categories/<Category>`.
-  string categories = 1 [(google.api.field_behavior) = REQUIRED];
+  // The category name to request values for, in form of `categories/<Category>`.
+  string category = 1 [(google.api.field_behavior) = REQUIRED];
 
   // The list of matches to retrieve category values for, in form of
   // `alerts/<Alert ID>/matches/<Match ID>`.
