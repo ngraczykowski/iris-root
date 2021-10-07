@@ -2,7 +2,8 @@
   "agents/name/versions/1.0.0/configs/1": {
     "agentId": "1697c58c-9a7a-4489-b315-b7c419182ceb",
     "features": [
-      "features/name"
+      "features/nameAgentNameLine",
+      "features/nameAgentFormatted"
     ],
     "responses": [
       "EXACT MATCH",
@@ -12,13 +13,31 @@
       "NO MATCH",
       "HQ NO MATCH",
       "NO DATA",
-      "INCONCLUSIVE"
+      "INCONCLUSIVE",
+      "DATA SOURCE ERROR"
     ],
-    "configurations": [
-      {
-        "name": "date-entity-normal",
-        "configFile": "agents/configurations/date-enty-normal.yml"
-      }
-    ]
+    "configurations": []
+  },
+  "agents/geo/versions/1.0.0/configs/1": {
+    "agentId": "fd46923f-f68f-4b79-9d63-1621f081cfd0",
+    "features": [
+      "features/geoAgentLastLine",
+      "features/geoAgentLast2Line",
+      "features/geoAgent2ndLastLine",
+      "features/geoAgentCountryTownLine"
+    ],
+    "responses": [
+      "CITY MATCH",
+      "CITY NO MATCH",
+      "COUNTRY MATCH",
+      "COUNTRY NO MATCH",
+      "COUNTRY WEAK MATCH",
+      "STATE MATCH",
+      "STATE NO MATCH",
+      "NO DATA",
+      "INCONCLUSIVE",
+      "ERROR"
+    ],
+    "configurations": []
   }
 }
