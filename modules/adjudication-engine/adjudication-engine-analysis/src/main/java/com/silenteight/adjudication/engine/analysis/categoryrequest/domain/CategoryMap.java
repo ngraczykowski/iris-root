@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.analysis.categoryrequest;
+package com.silenteight.adjudication.engine.analysis.categoryrequest.domain;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ public class CategoryMap {
   @NonNull
   private final Map<String, Long> nameToId;
 
-  CategoryMap() {
+  public CategoryMap() {
     nameToId = Map.of();
   }
 

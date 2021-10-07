@@ -1,10 +1,9 @@
 package com.silenteight.adjudication.engine.analysis.categoryrequest.jdbc;
 
 
-import com.silenteight.adjudication.engine.analysis.categoryrequest.CategoryMap;
+import com.silenteight.adjudication.engine.analysis.categoryrequest.domain.CategoryMap;
+import com.silenteight.adjudication.engine.analysis.categoryrequest.domain.GetCategoryValueResponse;
 import com.silenteight.adjudication.engine.testing.RepositoryTestConfiguration;
-import com.silenteight.datasource.categories.api.v1.CategoryValue;
-import com.silenteight.datasource.categories.api.v1.MultiValue;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 
 import org.junit.jupiter.api.Test;
@@ -31,13 +30,16 @@ class JdbcMatchCategoryValuesDataAccessTest extends BaseDataJpaTest {
 
   @Test
   void shouldAddMissingCategoryForMatch() {
-    var sourceSystemCategory = CategoryValue.newBuilder()
-        .setSingleValue("ECDD")
-        .setName("categories/source_system/matches/1")
+    var sourceSystemCategory = GetCategoryValueResponse.builder()
+        .singleValue("ECDD")
+        .categoryName("categories/source_system/matches/1")
+        .matchName("matches/1")
         .build();
-    var countryCategory = CategoryValue.newBuilder()
-        .setMultiValue(MultiValue.newBuilder().addValues("PL").addValues("SE").build())
-        .setName("categories/country/matches/1")
+    var countryCategory = GetCategoryValueResponse.builder()
+        .multiValues(List.of("PL", "SE"))
+        .multiValue(true)
+        .categoryName("categories/country/matches/1")
+        .matchName("categories/country/matches/1")
         .build();
     var map = new CategoryMap(Map.of(
         "categories/source_system", 1L,

@@ -42,11 +42,10 @@ class FetchAllMissingCategoryValuesUseCase {
       }
 
       var response =
-          categoryServiceClient.batchGetMatchCategoryValues(
-              missingValues.toBatchGetMatchCategoryValuesRequest());
+          categoryServiceClient.getCategoryValue(missingValues);
 
       matchCategoryValuesDataAccess.createMatchCategoryValues(
-          missingValues.getCategoryMap(), response.getCategoryValuesList());
+          missingValues.getCategoryMap(), response);
 
       categories.addAll(missingValues.getCategories());
       missingValues.forEachMatch(matches::add);

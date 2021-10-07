@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputDataAccess;
-import com.silenteight.adjudication.engine.analysis.commentinput.MissingCommentInputsResult;
+import com.silenteight.adjudication.engine.analysis.commentinput.domain.MissingCommentInputsResult;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

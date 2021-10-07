@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.analysis.categoryrequest;
+package com.silenteight.adjudication.engine.analysis.categoryrequest.domain;
 
 public class UnknownCategoryException extends RuntimeException {
 

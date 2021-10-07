@@ -9,7 +9,7 @@ ext {
   adjudicationEngineApiVersion = "0.6.0"
   governanceApiVersion = "1.7.0"
   agentsApiVersion = "0.4.0"
-  silenteightDataSourceApiVersion = "0.1.0"
+  silenteightDataSourceApiVersion = "0.7.0"
   silenteightCommonsVersion = "2.1.0"
   silenteightSepBaseVersion = "1.12.2"
 }

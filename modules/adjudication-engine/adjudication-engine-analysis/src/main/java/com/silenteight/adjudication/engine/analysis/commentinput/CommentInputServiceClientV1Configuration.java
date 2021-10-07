@@ -10,13 +10,15 @@ import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import javax.validation.Valid;
 
 @Configuration
 @EnableConfigurationProperties(CommentInputServiceClientProperties.class)
 @RequiredArgsConstructor
-class CommentInputServiceClientConfiguration {
+@Profile("datasourcev1")
+class CommentInputServiceClientV1Configuration {
 
   @Valid
   private final CommentInputServiceClientProperties properties;
@@ -25,11 +27,11 @@ class CommentInputServiceClientConfiguration {
   private Channel dataSourceChannel;
 
   @Bean
-  CommentInputServiceClient commentInputServiceClient() {
+  CommentInputClient commentInputServiceClient() {
     var stub = CommentInputServiceGrpc
         .newBlockingStub(dataSourceChannel)
         .withWaitForReady();
 
-    return new CommentInputServiceClient(stub, properties.getTimeout());
+    return new CommentInputServiceClientV1(stub, properties.getTimeout());
   }
 }

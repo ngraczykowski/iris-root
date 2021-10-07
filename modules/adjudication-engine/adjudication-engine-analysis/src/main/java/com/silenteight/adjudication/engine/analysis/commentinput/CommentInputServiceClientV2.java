@@ -3,30 +3,39 @@ package com.silenteight.adjudication.engine.analysis.commentinput;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.datasource.comments.api.v1.CommentInput;
-import com.silenteight.datasource.comments.api.v1.CommentInputServiceGrpc.CommentInputServiceBlockingStub;
-import com.silenteight.datasource.comments.api.v1.StreamCommentInputsRequest;
+import com.silenteight.adjudication.engine.comments.commentinput.CommentInputResponse;
+import com.silenteight.datasource.comments.api.v2.BatchGetAlertsCommentInputsRequest;
+import com.silenteight.datasource.comments.api.v2.CommentInput;
+import com.silenteight.datasource.comments.api.v2.CommentInputServiceGrpc.CommentInputServiceBlockingStub;
 
-import com.google.common.collect.Lists;
 import io.grpc.Deadline;
 import io.grpc.StatusRuntimeException;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import javax.validation.constraints.NotNull;
 
 import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Slf4j
-class CommentInputServiceClient {
+class CommentInputServiceClientV2 implements CommentInputClient {
 
   private final CommentInputServiceBlockingStub stub;
   private final Duration timeout;
 
-  public List<CommentInput> getCommentInputs(@NotNull StreamCommentInputsRequest request) {
+  @Override
+  public List<CommentInputResponse> getCommentInputsResponse(List<String> alerts) {
+    var request = BatchGetAlertsCommentInputsRequest.newBuilder()
+        .addAllAlerts(alerts)
+        .build();
+    var response = getCommentInputs(request);
+    return response.stream().map(CommentInputResponse::fromCommentInputV2).collect(toList());
+  }
+
+  List<CommentInput> getCommentInputs(@NotNull BatchGetAlertsCommentInputsRequest request) {
     var commentInputs = performRequest(request);
 
     if (commentInputs.isEmpty()) {
@@ -42,13 +51,13 @@ class CommentInputServiceClient {
       return request.getAlertsList()
           .stream()
           .map(alert -> CommentInput.newBuilder().setAlert(alert).build())
-          .collect(Collectors.toList());
+          .collect(toList());
     }
 
     return commentInputs;
   }
 
-  private List<CommentInput> performRequest(StreamCommentInputsRequest request) {
+  private List<CommentInput> performRequest(BatchGetAlertsCommentInputsRequest request) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 
     if (log.isTraceEnabled()) {
@@ -57,7 +66,8 @@ class CommentInputServiceClient {
 
     List<CommentInput> commentInputs;
     try {
-      commentInputs = Lists.newArrayList(stub.withDeadline(deadline).streamCommentInputs(request));
+      commentInputs =
+          stub.withDeadline(deadline).batchGetAlertsCommentInputs(request).getCommentInputsList();
     } catch (StatusRuntimeException status) {
       // FIXME(ahaczewski): Remove that mockup once data source is fixed.
       log.warn("Oh well, data source failed to tell us comment inputs... we'll figuring it"

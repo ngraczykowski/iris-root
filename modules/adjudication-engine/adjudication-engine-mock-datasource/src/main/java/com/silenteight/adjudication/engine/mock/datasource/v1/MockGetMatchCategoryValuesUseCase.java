@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.mock.datasource;
+package com.silenteight.adjudication.engine.mock.datasource.v1;
 
 import lombok.extern.slf4j.Slf4j;
 

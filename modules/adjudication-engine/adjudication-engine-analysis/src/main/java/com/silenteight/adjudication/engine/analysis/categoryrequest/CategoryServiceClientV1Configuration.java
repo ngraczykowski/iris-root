@@ -10,13 +10,15 @@ import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @Configuration
 @EnableConfigurationProperties(CategoryServiceClientProperties.class)
-public class CategoryServiceClientConfiguration {
+@Profile("datasourcev1")
+public class CategoryServiceClientV1Configuration {
 
   @Valid
   private final CategoryServiceClientProperties properties;
@@ -25,11 +27,11 @@ public class CategoryServiceClientConfiguration {
   private Channel dataSourceChannel;
 
   @Bean
-  CategoryServiceClient dataSourceClient() {
+  CategoryServiceClientV1 dataSourceClient() {
     var stub = CategoryServiceGrpc
         .newBlockingStub(dataSourceChannel)
         .withWaitForReady();
 
-    return new CategoryServiceClient(stub, properties.getTimeout());
+    return new CategoryServiceClientV1(stub, properties.getTimeout());
   }
 }

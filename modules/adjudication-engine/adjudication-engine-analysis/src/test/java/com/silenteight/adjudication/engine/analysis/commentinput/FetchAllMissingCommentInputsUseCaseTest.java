@@ -1,8 +1,8 @@
 package com.silenteight.adjudication.engine.analysis.commentinput;
 
+import com.silenteight.adjudication.engine.analysis.commentinput.domain.MissingCommentInputsResult;
 import com.silenteight.adjudication.engine.comments.commentinput.AlertCommentInputFacade;
 import com.silenteight.datasource.comments.api.v1.CommentInput;
-import com.silenteight.datasource.comments.api.v1.StreamCommentInputsRequest;
 
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
@@ -29,7 +29,7 @@ class FetchAllMissingCommentInputsUseCaseTest {
   @Mock
   private CommentInputDataAccess commentInputDataAccess;
   @Mock
-  private CommentInputServiceClient commentInputClient;
+  private CommentInputClient commentInputClient;
 
   @BeforeEach
   void setUp() {
@@ -42,7 +42,7 @@ class FetchAllMissingCommentInputsUseCaseTest {
     var alertName = "alerts/1";
     var expectedCommentInput = createCommentInputList(alertName);
 
-    when(commentInputClient.getCommentInputs(any(StreamCommentInputsRequest.class)))
+    when(commentInputClient.getCommentInputsResponse(any(List.class)))
         .thenReturn(expectedCommentInput);
     when(commentInputDataAccess.getMissingCommentInputs(1))
         .thenReturn(Optional.of(new MissingCommentInputsResult(List.of(alertName))))

@@ -2,9 +2,10 @@ package com.silenteight.adjudication.engine.analysis.categoryrequest;
 
 import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v1.BatchGetMatchCategoryValuesResponse;
-import com.silenteight.datasource.categories.api.v1.CategoryServiceGrpc;
-import com.silenteight.datasource.categories.api.v1.CategoryServiceGrpc.CategoryServiceBlockingStub;
 import com.silenteight.datasource.categories.api.v1.CategoryServiceGrpc.CategoryServiceImplBase;
+import com.silenteight.datasource.categories.api.v2.BatchGetMatchesCategoryValuesRequest;
+import com.silenteight.datasource.categories.api.v2.CategoryValueServiceGrpc;
+import com.silenteight.datasource.categories.api.v2.CategoryValueServiceGrpc.CategoryValueServiceBlockingStub;
 import com.silenteight.sep.base.testing.grpc.GrpcServerExtension;
 
 import org.junit.jupiter.api.Assertions;
@@ -17,9 +18,9 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.*;
 
-class CategoryServiceClientTest {
+class CategoryServiceClientV2Test {
 
-  private CategoryServiceClient categoryServiceClient;
+  private CategoryServiceClientV2 categoryServiceClient;
 
   @RegisterExtension
   GrpcServerExtension grpcServer = new GrpcServerExtension().directExecutor();
@@ -28,17 +29,17 @@ class CategoryServiceClientTest {
   void setUp() {
     MockedCategoryServiceImplBase service = spy(new MockedCategoryServiceImplBase());
     grpcServer.addService(service);
-    CategoryServiceBlockingStub stub = CategoryServiceGrpc
+    CategoryValueServiceBlockingStub stub = CategoryValueServiceGrpc
         .newBlockingStub(grpcServer.getChannel());
     Duration timeout = Duration.ofMillis(500L);
-    categoryServiceClient = new CategoryServiceClient(stub, timeout);
+    categoryServiceClient = new CategoryServiceClientV2(stub, timeout);
   }
 
   @Test
   void testBatchGetMatchCategoryValues() {
 
-    BatchGetMatchCategoryValuesRequest request =
-        BatchGetMatchCategoryValuesRequest.getDefaultInstance();
+    BatchGetMatchesCategoryValuesRequest request =
+        BatchGetMatchesCategoryValuesRequest.getDefaultInstance();
     assertDoesNotThrow(() ->
         categoryServiceClient.batchGetMatchCategoryValues(request)
     );

@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.mock.datasource;
+package com.silenteight.adjudication.engine.mock.datasource.v2;
 
 import com.silenteight.datasource.categories.api.v1.Category;
 import com.silenteight.datasource.categories.api.v1.CategoryType;

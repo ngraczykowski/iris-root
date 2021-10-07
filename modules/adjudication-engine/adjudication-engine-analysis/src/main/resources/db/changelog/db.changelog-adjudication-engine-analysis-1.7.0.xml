@@ -49,4 +49,14 @@
         splitStatements="false"/>
   </changeSet>
 
+  <changeSet id="adjudication-engine-analysis-1.7.0_4" author="wkeska">
+    <dropView viewName="ae_missing_match_category_values_query"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_5" author="wkeska">
+    <createView
+        viewName="ae_missing_match_category_values_query"
+        path="sql/view_ae_missing_match_category_values_query_v3.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
 </databaseChangeLog>

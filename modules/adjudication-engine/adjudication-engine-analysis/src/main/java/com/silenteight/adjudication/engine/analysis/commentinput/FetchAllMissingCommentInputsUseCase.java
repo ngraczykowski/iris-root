@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.comments.commentinput.AlertCommentInputFacade;
+import com.silenteight.adjudication.engine.comments.commentinput.CommentInputResponse;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
-import com.silenteight.datasource.comments.api.v1.CommentInput;
-import com.silenteight.datasource.comments.api.v1.StreamCommentInputsRequest;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ import javax.validation.constraints.NotNull;
 class FetchAllMissingCommentInputsUseCase {
 
   private final CommentInputDataAccess commentInputDataAccess;
-  private final CommentInputServiceClient commentInputClient;
+  private final CommentInputClient commentInputClient;
   private final AlertCommentInputFacade alertCommentInputFacade;
 
   @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "commentinput" })
@@ -59,9 +58,7 @@ class FetchAllMissingCommentInputsUseCase {
         analysis, totalCount);
   }
 
-  private List<CommentInput> requestCommentInputs(@NotNull List<String> alerts) {
-    return commentInputClient.getCommentInputs(StreamCommentInputsRequest.newBuilder()
-        .addAllAlerts(alerts)
-        .build());
+  private List<CommentInputResponse> requestCommentInputs(@NotNull List<String> alerts) {
+    return commentInputClient.getCommentInputsResponse(alerts);
   }
 }

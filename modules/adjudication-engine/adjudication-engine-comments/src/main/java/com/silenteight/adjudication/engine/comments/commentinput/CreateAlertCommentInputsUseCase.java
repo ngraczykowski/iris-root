@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
-import com.silenteight.datasource.comments.api.v1.CommentInput;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +21,11 @@ class CreateAlertCommentInputsUseCase {
   private final ProtoMessageToObjectNodeConverter converter;
 
   @Transactional
-  void createAlertCommentInputs(Iterable<CommentInput> commentInputs) {
+  void createAlertCommentInputs(Iterable<CommentInputResponse> commentInputs) {
     commentInputs.forEach(this::saveCommentInput);
   }
 
-  private void saveCommentInput(CommentInput commentInput) {
+  private void saveCommentInput(CommentInputResponse commentInput) {
     var alertId = ResourceName.create(commentInput.getAlert()).getLong("alerts");
     var builder = AlertCommentInput.builder().alertId(alertId);
 

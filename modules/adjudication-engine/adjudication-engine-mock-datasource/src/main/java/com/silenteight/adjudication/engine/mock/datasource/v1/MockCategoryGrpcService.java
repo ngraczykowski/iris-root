@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.mock.datasource;
+package com.silenteight.adjudication.engine.mock.datasource.v1;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13,7 +13,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.context.annotation.Profile;
 
 @GrpcService
-@Profile("mockdatasource")
+@Profile("mockdatasource & datasourcev1")
 @RequiredArgsConstructor
 class MockCategoryGrpcService extends CategoryServiceImplBase {
 

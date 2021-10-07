@@ -12,3 +12,12 @@ INSERT INTO ae_category(category, created_at)
 VALUES ('categories/hitType', now());
 INSERT INTO ae_category(category, created_at)
 VALUES ('categories/country', now());
+
+INSERT INTO ae_analysis
+VALUES (1, '', '', now());
+
+INSERT INTO ae_analysis_category
+VALUES (0, 1, 1);
+
+INSERT INTO ae_pending_recommendation
+VALUES (1, 1, now());

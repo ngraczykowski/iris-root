@@ -1,11 +1,11 @@
-package com.silenteight.adjudication.engine.mock.datasource;
+package com.silenteight.adjudication.engine.mock.datasource.v2;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("mockdatasource")
+@Profile("mockdatasource & !datasourcev1")
 class GrpcDatasourceApiMockConfiguration {
 
   @Bean

@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.analysis.commentinput;
+package com.silenteight.adjudication.engine.analysis.commentinput.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
