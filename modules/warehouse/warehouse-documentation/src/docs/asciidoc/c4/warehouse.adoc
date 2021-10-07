@@ -112,12 +112,14 @@ title Simulator - Warehouse
 
 Container_Ext(sim, Simulator, Java)
 ContainerDb_Ext(mb, "Message Broker", "RabbitMQ")
+ContainerDb_Ext(db, Data base, "PostgreSQL")
 ContainerDb_Ext(es, Open Distro, "Elastic Search")
 
 Container(wh, Warehouse, Java)
 
 Rel(sim, mb, Ingest Simulation Data, AMQP)
 Rel(mb, wh, Simulation Data Index Request, AMQP)
+Rel(wh, db, Store index-analysis translation)
 Rel(wh, es, Copy learning data to sim index, https)
 Rel(wh, es, Store Data, https)
 
@@ -138,11 +140,15 @@ title Adjudication Engine - Governance
 Container(wh, Warehouse, "Java")
 ContainerDb_Ext(mb, "Message Broker", "RabbitMQ")
 Container_Ext(gov, Governance, Java)
+ContainerDb_Ext(db, Data base, "PostgreSQL")
+ContainerDb_Ext(es, Open Distro, "Elastic Search")
 
-Rel_U(mb, wh, QA result, AMQP)
-Rel_U(gov, wh, Alerts distribution, gRPC)
-Rel_U(gov, wh, Alerts for QA process, gRPC)
-Rel_U(gov, mb, QA result, AMQP)
+Rel(mb, wh, QA result, AMQP)
+Rel(gov, wh, Alerts distribution, gRPC)
+Rel(gov, wh, Alerts for QA process, gRPC)
+Rel(gov, mb, QA result, AMQP)
+Rel(wh, es, Store Data, https)
+Rel(wh, db, Get Index)
 
 @enduml
 -----
