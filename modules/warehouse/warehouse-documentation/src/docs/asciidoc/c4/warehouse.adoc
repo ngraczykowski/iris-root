@@ -35,8 +35,6 @@ Rel_U(wh, object_storage, " ", https)
 
 == Frontend - Warehouse
 
-https://gitlab.silenteight.com/sens/warehouse/-/tree/master/warehouse-documentation/src/api[Warehouse API]
-
 [plantuml, frontend-governance, svg]
 -----
 @startuml
@@ -58,6 +56,8 @@ Rel(wh, db, Store/download reports)
 
 @enduml
 -----
+
+Warehouse REST https://gitlab.silenteight.com/sens/warehouse/-/tree/master/warehouse-documentation/src/api[API].
 
 == Bridge - Warehouse
 
@@ -87,6 +87,8 @@ Rel(wh, db, Store index data)
 
 @enduml
 -----
+
+Ingest data https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-data-api/src/main/proto/silenteight/data/api/v1/data.proto![API].
 
 Bridge sends two types of data to the Warehouse.
 
@@ -126,6 +128,8 @@ Rel(wh, es, Store Data, https)
 @enduml
 -----
 
+https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-data-api/src/main/proto/silenteight/data/api/v2/sim.proto![API] for Simulations.
+
 == Warehouse - Governance
 
 QA process
@@ -145,10 +149,16 @@ ContainerDb_Ext(es, Open Distro, "Elastic Search")
 
 Rel(mb, wh, QA result, AMQP)
 Rel(gov, wh, Alerts distribution, gRPC)
-Rel(gov, wh, Alerts for QA process, gRPC)
+Rel(gov, wh, Alerts sampling for the QA process, gRPC)
 Rel(gov, mb, QA result, AMQP)
 Rel(wh, es, Store Data, https)
 Rel(wh, db, Get Index)
 
 @enduml
 -----
+
+https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-sampling-alerts-api/src/main/proto/silenteight/sampling/alerts/api/v1/get_distribution.proto![API] for alerts distribution.
+
+https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-sampling-alerts-api/src/main/proto/silenteight/sampling/alerts/api/v1/get_alerts.proto![API] for alerts sampling.
+
+https://gitlab.silenteight.com/sens/warehouse-api/-/blob/master/se-data-api/src/main/proto/silenteight/data/api/v2/qa.proto![API] for QA results.
