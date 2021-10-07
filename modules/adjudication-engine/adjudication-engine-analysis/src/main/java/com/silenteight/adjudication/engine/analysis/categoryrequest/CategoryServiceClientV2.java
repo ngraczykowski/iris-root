@@ -62,7 +62,7 @@ class CategoryServiceClientV2 implements CategoryServiceClient {
           .map(categoryValueName ->
               CategoryValue.newBuilder()
                   .setSingleValue("DATA_SOURCE_ERROR")
-                  .setName(categoryValueName.getCategories())
+                  .setName(categoryValueName.getCategory())
                   .build())
           .collect(toList());
       return BatchGetMatchesCategoryValuesResponse.newBuilder()

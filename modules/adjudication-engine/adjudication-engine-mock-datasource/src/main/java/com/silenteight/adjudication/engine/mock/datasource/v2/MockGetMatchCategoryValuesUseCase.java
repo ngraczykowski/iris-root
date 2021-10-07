@@ -17,7 +17,7 @@ class MockGetMatchCategoryValuesUseCase {
         .map(mv -> mv
             .getMatchesList()
             .stream()
-            .map(m -> getCategoryValue(mv.getCategories(), m))
+            .map(m -> getCategoryValue(mv.getCategory(), m))
             .collect(toList()))
         .collect(toList())
         .stream().flatMap(List::stream)

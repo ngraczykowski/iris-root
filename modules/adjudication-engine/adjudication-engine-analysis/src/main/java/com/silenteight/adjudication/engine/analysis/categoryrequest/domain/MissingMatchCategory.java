@@ -20,7 +20,7 @@ public class MissingMatchCategory {
   public CategoryMatches toCategoryMatches() {
     return CategoryMatches
         .newBuilder()
-        .setCategories(categoryName)
+        .setCategory(categoryName)
         .addAllMatches(matches.stream().map(MatchAlert::getName).collect(
             toList()))
         .build();
