@@ -6,14 +6,23 @@ set -ue -o pipefail
 CURRENTDIR="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
 cd "${CURRENTDIR}"
 
+set -x
 ALIAS_NAME="local_production"
 ORIGINAL_INDEX_NAME="${ALIAS_NAME}"
 ARCHIVED_INDEX_NAME="${ALIAS_NAME}.old"
 EMPTY_INDEX_NAME="${ALIAS_NAME}.empty"
 TIMEOUT_SECONDS=120
+set +x
+echo "Checking alias status"
 ALIAS_STATUS=$(curl --head "$ES_URL/_alias/${ALIAS_NAME}" -u "$ES_CREDENTIALS" -s -w '%{http_code}' -o /dev/null)
+echo "Checking cluster status"
 CLUSTER_STATUS=$(curl -X GET "$ES_URL/_cluster/health" -u "$ES_CREDENTIALS" -s | jq -r '.status' | tr -d '"')
+echo "Checking index status"
 INDEX_STATUS=$(curl --head "$ES_URL/${ORIGINAL_INDEX_NAME}" -u "$ES_CREDENTIALS" -s -w '%{http_code}' -o /dev/null)
+
+echo "ALIAS_STATUS=$ALIAS_STATUS"
+echo "CLUSTER_STATUS=$CLUSTER_STATUS"
+echo "INDEX_STATUS=$INDEX_STATUS"
 
 wait_for_status() {
   if [[ "${CLUSTER_STATUS}" != "green" ]]; then
