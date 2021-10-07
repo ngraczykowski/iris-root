@@ -18,16 +18,14 @@ import java.util.UUID;
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.RECOMMENDATION_COMPLETED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.ACCEPTED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.RECOMMENDED;
-import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OUTDATED;
 
 @EnableConfigurationProperties(AlertMessageProperties.class)
 @RequiredArgsConstructor
 @Slf4j
 @MessageEndpoint
-class RecommendationReceivedEndpoint {
+class RecommendationCompletedEndpoint {
 
   private final AlertMessageProperties alertMessageProperties;
-
   private final AlertMessageStatusService alertMessageStatusService;
   private final CreateResponseUseCase createResponseUseCase;
 
@@ -69,11 +67,10 @@ class RecommendationReceivedEndpoint {
     var isOverdue = alertMessageStatus.getLastModifyAt()
         .plus(alertMessageProperties.getDecisionRequestedTime())
         .compareTo(OffsetDateTime.now(clock)) <= 0;
-    var alertMessageId = alertMessageStatus.getAlertMessageId();
     if (isOverdue) {
-      createResponseUseCase.createResponse(alertMessageId, REJECTED_OUTDATED);
-      alertMessageStatusService
-          .transitionAlertMessageStatus(alertMessageId, REJECTED_OUTDATED);
+      log.debug("The AlertMessage [{}] is outdated. Skipping further processing.",
+          alertMessageStatus.getAlertMessageId());
+      // simply stop processing and let the RejectingOutdated process do its job (don't interfere).
       return true;
     }
     return false;

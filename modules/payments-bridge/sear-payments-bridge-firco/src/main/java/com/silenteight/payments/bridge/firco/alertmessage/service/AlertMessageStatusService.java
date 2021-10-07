@@ -56,14 +56,14 @@ class AlertMessageStatusService {
         .findByAlertMessageIdAndLockForWrite(alertMessageId)
         .orElseThrow();
     entity.transitionStatusOrElseThrow(destinationStatus, clock, delivery);
-    if (log.isTraceEnabled()) {
-      log.trace("AlertMessage [{}] transited to {}", alertMessageId, destinationStatus.name());
-    }
+    log.info("Alert [{}] is transited to {}. Delivery status: {}", alertMessageId,
+          destinationStatus, delivery);
 
     repository.save(entity);
 
     if (destinationStatus.isFinal() &&
         alertMessageProperties.isOriginalMessageDeletedAfterRecommendation()) {
+      log.debug("Removing original message of alert: {}", alertMessageId);
       payloadRepository.deleteByAlertMessageId(alertMessageId);
     }
   }

@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.app.amqp;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.common.integration.CommonChannels;
-import com.silenteight.payments.bridge.event.AlertDeliveredEvent;
+import com.silenteight.payments.bridge.event.AlertInitializedEvent;
 import com.silenteight.payments.common.resource.ResourceName;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
@@ -32,9 +32,9 @@ class FircoInboundAmqpIntegrationConfiguration {
   IntegrationFlow alertMessageStoredReceivedInbound() {
     return from(createInboundAdapter(properties.getInboundQueueNames()))
          .transform(MessageStored.class, source ->
-           new AlertDeliveredEvent(ResourceName.create(source.getAlert()).get("alert-messages"))
+           new AlertInitializedEvent(ResourceName.create(source.getAlert()).get("alert-messages"))
          )
-         .channel(commonChannels.alertDelivered())
+         .channel(commonChannels.alertInitialized())
        .get();
   }
 

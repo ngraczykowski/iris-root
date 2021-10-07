@@ -25,13 +25,14 @@ public class CommonChannels {
 
   private static final String PREFIX = "common";
 
-  public static final String AMQP_OUTBOUND = "AMQPOutboundChannel";
-  public static final String CMAPI_OUTBOUND = "CMApiOutboundChannel";
+  public static final String AMQP_OUTBOUND = PREFIX + "AMQPOutboundChannel";
+  public static final String CMAPI_OUTBOUND = PREFIX + "CMApiOutboundChannel";
 
-  public static final String ALERT_DELIVERED = PREFIX + "AlertDeliveredChannel";
+  public static final String ALERT_INITIALIZED = PREFIX + "AlertInitializedChannel";
   public static final String ALERT_REGISTERED = PREFIX + "AlertRegisteredChannel";
   public static final String ALERT_INPUT_ACCEPTED = PREFIX + "AlertInputAcceptedChannel";
   public static final String ALERT_REJECTED = PREFIX + "AlertRejectedChannel";
+  public static final String ALERT_UNDELIVERED = PREFIX + "AlertUndeliveredChannel";
 
   // Recommendation
   public static final String RECOMMENDATION_GENERATED = PREFIX + "RecommendationGeneratedChannel";
@@ -47,9 +48,14 @@ public class CommonChannels {
     return new DirectChannel();
   }
 
-  @Bean(ALERT_DELIVERED)
-  public MessageChannel alertDelivered() {
-    return new TypedPublishSubscribeChannel(AlertDeliveredEvent.class, channelInterceptors);
+  @Bean(ALERT_INITIALIZED)
+  public MessageChannel alertInitialized() {
+    return new TypedPublishSubscribeChannel(AlertInitializedEvent.class, channelInterceptors);
+  }
+
+  @Bean(ALERT_UNDELIVERED)
+  public MessageChannel undeliveredAlertChannel() {
+    return new TypedPublishSubscribeChannel(AlertUndeliveredEvent.class, channelInterceptors);
   }
 
   @Bean(ALERT_REGISTERED)

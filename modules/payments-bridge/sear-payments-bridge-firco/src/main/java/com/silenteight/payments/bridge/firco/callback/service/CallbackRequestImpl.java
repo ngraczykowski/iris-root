@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.dto.common.AckDto;
 import com.silenteight.payments.bridge.common.dto.output.ClientRequestDto;
-import com.silenteight.payments.bridge.common.exception.NonRecoverableOperationException;
-import com.silenteight.payments.bridge.common.exception.RecoverableOperationException;
+import com.silenteight.payments.bridge.firco.callback.model.NonRecoverableCallbackException;
+import com.silenteight.payments.bridge.firco.callback.model.RecoverableCallbackException;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.http.ResponseEntity;
@@ -65,9 +65,9 @@ class CallbackRequestImpl implements CallbackRequest {
       case BAD_GATEWAY:
       case SERVICE_UNAVAILABLE:
       case GATEWAY_TIMEOUT:
-        return new RecoverableOperationException(exception);
+        return new RecoverableCallbackException(exception);
       default:
-        return new NonRecoverableOperationException(exception);
+        return new NonRecoverableCallbackException(exception);
     }
   }
 

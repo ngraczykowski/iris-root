@@ -8,12 +8,12 @@ import com.silenteight.payments.bridge.event.data.AlertDataIdentifier;
 import com.silenteight.payments.bridge.event.data.AlertDtoIdentifier;
 
 /**
- * The alert was delivered to the inbound channel from the persistent store (rabbitMQ).
+ * The alert processing has been initialized.
  */
 @RequiredArgsConstructor
 @Getter
 @EqualsAndHashCode(of = "alertId", callSuper = false)
-public class AlertDeliveredEvent extends DomainEvent
+public class AlertInitializedEvent extends DomainEvent
     implements AlertDataIdentifier, AlertDtoIdentifier {
 
   private final String alertId;

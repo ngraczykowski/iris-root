@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.integration.CommonChannels;
+import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
+import com.silenteight.payments.bridge.firco.callback.model.CallbackException;
 import com.silenteight.payments.bridge.firco.callback.port.CreateResponseUseCase;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 
@@ -28,23 +30,28 @@ class QueueUpAlertMessageService {
 
   private final CommonChannels commonChannels;
 
-  void queueUp(FircoAlertMessage message) {
-    if (isQueueOverflowed(message)) {
+  void queueUp(FircoAlertMessage alert) {
+    if (isQueueOverflowed(alert)) {
       return;
     }
 
     commonChannels.amqpOutbound().send(
-        MessageBuilder.withPayload(buildMessageStore(message)).build());
-    statusService.transitionAlertMessageStatus(message.getId(), STORED);
+        MessageBuilder.withPayload(buildMessageStore(alert)).build());
+    statusService.transitionAlertMessageStatus(alert.getId(), STORED);
   }
 
-  private boolean isQueueOverflowed(FircoAlertMessage message) {
+  private boolean isQueueOverflowed(FircoAlertMessage alert) {
     if (repository.countAllByStatus(STORED) > properties.getStoredQueueLimit()) {
-      log.debug("AlertMessage [{}] rejected due to queue limit ({})",
-          message.getId(), properties.getStoredQueueLimit());
+      log.info("AlertMessage [{}] rejected due to queue limit ({})",
+          alert.getId(), properties.getStoredQueueLimit());
 
-      createResponseUseCase.createResponse(message.getId(), REJECTED_OVERFLOWED);
-      statusService.transitionAlertMessageStatus(message.getId(), REJECTED_OVERFLOWED);
+      try {
+        createResponseUseCase.createResponse(alert.getId(), REJECTED_OVERFLOWED);
+        statusService.transitionAlertMessageStatus(alert.getId(), REJECTED_OVERFLOWED);
+      } catch (CallbackException exception) {
+        statusService.transitionAlertMessageStatus(alert.getId(), REJECTED_OVERFLOWED,
+            DeliveryStatus.UNDELIVERED);
+      }
       return true;
     }
     return false;

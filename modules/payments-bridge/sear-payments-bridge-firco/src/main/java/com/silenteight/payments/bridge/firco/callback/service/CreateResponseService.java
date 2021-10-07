@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePayloadUseCase;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
+import com.silenteight.payments.bridge.firco.callback.model.CallbackException;
 import com.silenteight.payments.bridge.firco.callback.port.CreateResponseUseCase;
 
 import org.springframework.stereotype.Component;
@@ -28,6 +29,13 @@ class CreateResponseService implements CreateResponseUseCase {
         .findByAlertMessageId(alertId.toString());
     var alertDto = alertMessagePayloadUseCase.findByAlertMessageId(alertId);
     var requestDto = mapper.mapToAlertDecision(alert, alertDto, status);
-    callbackRequestFactory.create(requestDto).invoke();
+
+    try {
+      callbackRequestFactory.create(requestDto).invoke();
+    } catch (CallbackException exception) {
+      exception.setStatus(status);
+      exception.setAlertId(alertId);
+      throw exception;
+    }
   }
 }
