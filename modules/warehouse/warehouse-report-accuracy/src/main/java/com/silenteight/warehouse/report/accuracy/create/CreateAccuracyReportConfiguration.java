@@ -1,6 +1,6 @@
 package com.silenteight.warehouse.report.accuracy.create;
 
-import com.silenteight.warehouse.indexer.indexing.IndexesQuery;
+import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.report.accuracy.domain.AccuracyReportService;
 import com.silenteight.warehouse.report.accuracy.generation.AccuracyReportProperties;
 

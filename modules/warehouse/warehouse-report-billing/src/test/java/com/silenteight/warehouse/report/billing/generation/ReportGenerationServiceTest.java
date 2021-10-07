@@ -1,6 +1,6 @@
 package com.silenteight.warehouse.report.billing.generation;
 
-import com.silenteight.warehouse.indexer.indexing.IndexesQuery;
+import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;

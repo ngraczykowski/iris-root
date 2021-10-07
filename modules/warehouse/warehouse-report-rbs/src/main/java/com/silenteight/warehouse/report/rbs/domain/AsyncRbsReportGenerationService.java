@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.warehouse.indexer.indexing.IndexesQuery;
+import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.report.rbs.domain.exception.ReportGenerationException;
 import com.silenteight.warehouse.report.rbs.generation.RbsReportDefinition;
 import com.silenteight.warehouse.report.rbs.generation.RbsReportGenerationService;

@@ -16,11 +16,13 @@ import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 import com.silenteight.warehouse.indexer.alert.AlertModule;
-import com.silenteight.warehouse.indexer.analysis.AnalysisModule;
-import com.silenteight.warehouse.indexer.indexing.IndexerProperties;
-import com.silenteight.warehouse.indexer.indexing.MessageHandlerModule;
-import com.silenteight.warehouse.indexer.indextracking.IndexTrackingModule;
+import com.silenteight.warehouse.indexer.production.ProductionIndexerProperties;
+import com.silenteight.warehouse.indexer.production.ProductionMessageHandlerModule;
+import com.silenteight.warehouse.indexer.production.indextracking.IndexTrackingModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
+import com.silenteight.warehouse.indexer.simulation.SimulationIndexerProperties;
+import com.silenteight.warehouse.indexer.simulation.SimulationMessageHandlerModule;
+import com.silenteight.warehouse.indexer.simulation.analysis.AnalysisModule;
 import com.silenteight.warehouse.test.client.TestClientModule;
 import com.silenteight.warehouse.test.client.gateway.IndexerClientIntegrationProperties;
 
@@ -43,8 +45,9 @@ import static org.mockito.Mockito.*;
     ElasticsearchRestClientModule.class,
     EnvironmentModule.class,
     IndexTrackingModule.class,
-    MessageHandlerModule.class,
     OpendistroModule.class,
+    ProductionMessageHandlerModule.class,
+    SimulationMessageHandlerModule.class,
     QueryAlertModule.class,
     TestElasticSearchModule.class,
     TestClientModule.class
@@ -62,7 +65,8 @@ import static org.mockito.Mockito.*;
 @Slf4j
 public class IndexerTestConfiguration {
 
-  private final IndexerProperties properties;
+  private final ProductionIndexerProperties productionProperties;
+  private final SimulationIndexerProperties simulationProperties;
   private final IndexerClientIntegrationProperties testProperties;
 
   @Bean
@@ -94,7 +98,7 @@ public class IndexerTestConfiguration {
 
     return bind(
         whEventExchange,
-        properties.getProductionIndexedOutbound().getRoutingKey(),
+        productionProperties.getProductionIndexedOutbound().getRoutingKey(),
         productionIndexedQueue);
   }
 
@@ -105,28 +109,28 @@ public class IndexerTestConfiguration {
 
     return bind(
         whEventExchange,
-        properties.getSimulationIndexedOutbound().getRoutingKey(),
+        simulationProperties.getSimulationIndexedOutbound().getRoutingKey(),
         simulationIndexedQueue);
   }
 
   @Bean
   Queue productionIndexingQueue() {
     return QueueBuilder
-        .durable(properties.getProductionIndexingInbound().getQueueName())
+        .durable(productionProperties.getProductionIndexingInbound().getQueueName())
         .build();
   }
 
   @Bean
   Queue simulationIndexingQueue() {
     return QueueBuilder
-        .durable(properties.getSimulationIndexingInbound().getQueueName())
+        .durable(simulationProperties.getSimulationIndexingInbound().getQueueName())
         .build();
   }
 
   @Bean
   TopicExchange whEventExchange() {
     return ExchangeBuilder
-        .topicExchange(properties.getProductionIndexedOutbound().getExchangeName())
+        .topicExchange(productionProperties.getProductionIndexedOutbound().getExchangeName())
         .build();
   }
 

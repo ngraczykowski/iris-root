@@ -16,10 +16,11 @@ import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.time.TimeModule;
 import com.silenteight.warehouse.common.web.WebModule;
 import com.silenteight.warehouse.indexer.alert.AlertModule;
-import com.silenteight.warehouse.indexer.analysis.AnalysisModule;
-import com.silenteight.warehouse.indexer.indexing.MessageHandlerModule;
-import com.silenteight.warehouse.indexer.indextracking.IndexTrackingModule;
+import com.silenteight.warehouse.indexer.production.ProductionMessageHandlerModule;
+import com.silenteight.warehouse.indexer.production.indextracking.IndexTrackingModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
+import com.silenteight.warehouse.indexer.simulation.SimulationMessageHandlerModule;
+import com.silenteight.warehouse.indexer.simulation.analysis.AnalysisModule;
 import com.silenteight.warehouse.management.ManagementModule;
 import com.silenteight.warehouse.report.accuracy.AccuracyReportModule;
 import com.silenteight.warehouse.report.billing.BillingReportModule;
@@ -53,14 +54,15 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AnalysisModule.class,
     BackupModule.class,
     BillingReportModule.class,
-    MessageHandlerModule.class,
     IndexTrackingModule.class,
     ManagementModule.class,
     MetricsReportModule.class,
+    ProductionMessageHandlerModule.class,
     RbsReportModule.class,
     ReportStatisticsModule.class,
     QueryAlertModule.class,
     SamplingModule.class,
+    SimulationMessageHandlerModule.class,
     // Interface modules
     AmqpCommonModule.class,
     AuthenticationModule.class,

@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.base.common.time.TimeConverter;
-import com.silenteight.warehouse.indexer.indexing.IndexesQuery;
+import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDataRequest;
