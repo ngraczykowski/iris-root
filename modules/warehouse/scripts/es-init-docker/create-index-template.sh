@@ -6,12 +6,12 @@ set -xue -o pipefail
 CURRENTDIR="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
 cd "${CURRENTDIR}"
 
-curl -X PUT "$ES_URL/_index_template/analysis" \
+curl -v -k -X PUT "$ES_URL/_index_template/analysis" \
   -u "$ES_CREDENTIALS" \
   -H 'Content-Type: application/json' \
   -d "@index-template-analysis.json"
 
-curl -X PUT "$ES_URL/_index_template/production" \
+curl -v -k -X PUT "$ES_URL/_index_template/production" \
   -u "$ES_CREDENTIALS" \
   -H 'Content-Type: application/json' \
   -d "@index-template-production.json"

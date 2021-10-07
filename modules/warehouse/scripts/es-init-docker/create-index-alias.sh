@@ -12,11 +12,11 @@ ARCHIVED_INDEX_NAME="${ALIAS_NAME}.old"
 EMPTY_INDEX_NAME="${ALIAS_NAME}.empty"
 TIMEOUT_SECONDS=120
 echo "Checking alias status"
-ALIAS_STATUS=$(curl --head "$ES_URL/_alias/${ALIAS_NAME}" -u "$ES_CREDENTIALS" -s -w '%{http_code}' -o /dev/null)
+ALIAS_STATUS=$(curl -v -k --head "$ES_URL/_alias/${ALIAS_NAME}" -u "$ES_CREDENTIALS" -s -w '%{http_code}' -o /dev/null)
 echo "Checking cluster status"
-CLUSTER_STATUS=$(curl -X GET "$ES_URL/_cluster/health" -u "$ES_CREDENTIALS" -s | jq -r '.status' | tr -d '"')
+CLUSTER_STATUS=$(curl -v -k -X GET "$ES_URL/_cluster/health" -u "$ES_CREDENTIALS" -s | jq -r '.status' | tr -d '"')
 echo "Checking index status"
-INDEX_STATUS=$(curl --head "$ES_URL/${ORIGINAL_INDEX_NAME}" -u "$ES_CREDENTIALS" -s -w '%{http_code}' -o /dev/null)
+INDEX_STATUS=$(curl -v -k --head "$ES_URL/${ORIGINAL_INDEX_NAME}" -u "$ES_CREDENTIALS" -s -w '%{http_code}' -o /dev/null)
 
 echo "ALIAS_STATUS=$ALIAS_STATUS"
 echo "CLUSTER_STATUS=$CLUSTER_STATUS"
@@ -32,7 +32,7 @@ wait_for_status() {
 
 block_index() {
   printf "\nBlocking index: ${ORIGINAL_INDEX_NAME} "
-  curl -X PUT "$ES_URL/${ORIGINAL_INDEX_NAME}/_settings" -s -u "$ES_CREDENTIALS" \
+  curl -v -k -X PUT "$ES_URL/${ORIGINAL_INDEX_NAME}/_settings" -s -u "$ES_CREDENTIALS" \
     -H 'Content-Type: application/json' \
     -d '
   {
@@ -44,7 +44,7 @@ block_index() {
 
 unblock_index() {
   printf "\nUnblocking index: ${ARCHIVED_INDEX_NAME} "
-  curl -X PUT "$ES_URL/${ARCHIVED_INDEX_NAME}/_settings" -s -u "$ES_CREDENTIALS" \
+  curl -v -k -X PUT "$ES_URL/${ARCHIVED_INDEX_NAME}/_settings" -s -u "$ES_CREDENTIALS" \
     -H 'Content-Type: application/json' \
     -d '
   {
@@ -56,24 +56,24 @@ unblock_index() {
 
 clone_index() {
   printf "\nCloning index: ${ORIGINAL_INDEX_NAME} -> ${ARCHIVED_INDEX_NAME} "
-  curl -X POST "$ES_URL/${ORIGINAL_INDEX_NAME}/_clone/${ARCHIVED_INDEX_NAME}" -s -u "$ES_CREDENTIALS"
-  curl -X GET "$ES_URL/_cluster/health?wait_for_status=green&timeout=${TIMEOUT_SECONDS}s" -s -u "$ES_CREDENTIALS"
+  curl -v -k -X POST "$ES_URL/${ORIGINAL_INDEX_NAME}/_clone/${ARCHIVED_INDEX_NAME}" -s -u "$ES_CREDENTIALS"
+  curl -v -k -X GET "$ES_URL/_cluster/health?wait_for_status=green&timeout=${TIMEOUT_SECONDS}s" -s -u "$ES_CREDENTIALS"
 }
 
 remove_source_index() {
   printf "\nRemoving original index "
-  curl -X DELETE "$ES_URL/${ORIGINAL_INDEX_NAME}" -s -u "$ES_CREDENTIALS"
+  curl -v -k -X DELETE "$ES_URL/${ORIGINAL_INDEX_NAME}" -s -u "$ES_CREDENTIALS"
 }
 
 create_alias() {
   printf "\nCreating alias "
-  curl -X POST "$ES_URL/_aliases" -s -u "$ES_CREDENTIALS" \
+  curl -v -k -X POST "$ES_URL/_aliases" -s -u "$ES_CREDENTIALS" \
     -H 'Content-Type: application/json' \
     -d '@index-alias.json'
 }
 
 create_empty_index() {
-  curl -X PUT "$ES_URL/${EMPTY_INDEX_NAME}" -s -u "$ES_CREDENTIALS"
+  curl -v -k -X PUT "$ES_URL/${EMPTY_INDEX_NAME}" -s -u "$ES_CREDENTIALS"
 }
 
 if [[ "${ALIAS_STATUS}" == "200" ]]; then
