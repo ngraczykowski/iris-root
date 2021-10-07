@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
-import com.silenteight.payments.bridge.firco.alertmessage.port.RejectOutdatedAlertMessagesUseCase;
+import com.silenteight.payments.bridge.firco.alertmessage.port.OutdatedAlertMessagesUseCase;
 import com.silenteight.payments.bridge.firco.callback.port.CreateResponseUseCase;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -21,7 +21,7 @@ import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMess
 @RequiredArgsConstructor
 @Component
 @Slf4j
-public class RejectOutdatedAlertMessagesService implements RejectOutdatedAlertMessagesUseCase {
+public class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCase {
 
   private final AlertMessageProperties alertMessageProperties;
   private final AlertMessageStatusRepository repository;
