@@ -11,7 +11,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.util.Map;
 
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
-import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture.ANALYSIS_ID;
+import static com.silenteight.warehouse.indexer.simulation.analysis.NewAnalysisEventFixture.ANALYSIS_ID;
 import static com.silenteight.warehouse.report.accuracy.AccuracyReportTestFixtures.DAY_DEFINITION_ID;
 import static com.silenteight.warehouse.report.accuracy.AccuracyReportTestFixtures.REPORT_INSTANCE;
 import static com.silenteight.warehouse.report.accuracy.AccuracyReportTestFixtures.SIMULATION_DEFINITION_ID;

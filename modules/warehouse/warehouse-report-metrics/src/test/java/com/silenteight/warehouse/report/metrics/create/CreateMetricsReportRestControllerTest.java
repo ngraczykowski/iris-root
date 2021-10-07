@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
-import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture.ANALYSIS_ID;
+import static com.silenteight.warehouse.indexer.simulation.analysis.NewAnalysisEventFixture.ANALYSIS_ID;
 import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.*;
 import static com.silenteight.warehouse.report.metrics.domain.MetricsReportDefinition.DAY;
 import static com.silenteight.warehouse.report.metrics.domain.MetricsReportDefinition.SIMULATION;

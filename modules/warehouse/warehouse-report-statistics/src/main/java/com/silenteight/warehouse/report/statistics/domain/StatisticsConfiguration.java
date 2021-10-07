@@ -1,6 +1,6 @@
 package com.silenteight.warehouse.report.statistics.domain;
 
-import com.silenteight.warehouse.indexer.indexing.IndexesQuery;
+import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 
 import org.springframework.beans.factory.annotation.Qualifier;

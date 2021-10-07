@@ -13,7 +13,7 @@ import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestC
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKeys;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values;
-import com.silenteight.warehouse.indexer.analysis.TestAnalysisMetadataRepository;
+import com.silenteight.warehouse.indexer.simulation.analysis.TestAnalysisMetadataRepository;
 import com.silenteight.warehouse.test.client.gateway.ProductionIndexClientGateway;
 import com.silenteight.warehouse.test.client.gateway.SimulationIndexClientGateway;
 import com.silenteight.warehouse.test.client.listener.IndexedEventListener;

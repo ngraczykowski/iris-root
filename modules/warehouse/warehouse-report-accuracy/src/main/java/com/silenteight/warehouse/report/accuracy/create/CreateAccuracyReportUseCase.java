@@ -3,7 +3,7 @@ package com.silenteight.warehouse.report.accuracy.create;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.warehouse.indexer.indexing.IndexesQuery;
+import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.report.accuracy.domain.AccuracyReportService;
 import com.silenteight.warehouse.report.accuracy.generation.AccuracyReportDefinitionProperties;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;

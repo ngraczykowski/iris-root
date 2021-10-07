@@ -3,8 +3,8 @@ package com.silenteight.warehouse.indexer.query.index;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.warehouse.indexer.analysis.SimulationNamingStrategy;
-import com.silenteight.warehouse.indexer.indexing.IndexesQuery;
+import com.silenteight.warehouse.indexer.query.IndexesQuery;
+import com.silenteight.warehouse.indexer.simulation.analysis.SimulationNamingStrategy;
 
 import java.util.List;
 

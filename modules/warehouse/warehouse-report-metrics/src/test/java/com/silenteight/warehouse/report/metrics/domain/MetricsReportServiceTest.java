@@ -1,7 +1,7 @@
 package com.silenteight.warehouse.report.metrics.domain;
 
 
-import com.silenteight.warehouse.indexer.indexing.IndexesQuery;
+import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.report.metrics.domain.dto.ReportDto;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 

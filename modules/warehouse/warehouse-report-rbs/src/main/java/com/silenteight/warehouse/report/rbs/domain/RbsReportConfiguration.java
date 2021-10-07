@@ -1,7 +1,7 @@
 package com.silenteight.warehouse.report.rbs.domain;
 
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
-import com.silenteight.warehouse.indexer.indexing.IndexesQuery;
+import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.report.rbs.generation.RbsReportGenerationService;
 import com.silenteight.warehouse.report.rbs.generation.RbsReportProperties;
 

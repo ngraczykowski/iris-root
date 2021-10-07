@@ -2,7 +2,7 @@ package com.silenteight.warehouse.report.simulation;
 
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.common.web.exception.GenericExceptionControllerAdvice;
-import com.silenteight.warehouse.indexer.analysis.AnalysisDoesNotExistException;
+import com.silenteight.warehouse.indexer.simulation.analysis.AnalysisDoesNotExistException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,7 +15,7 @@ import static com.silenteight.warehouse.common.testing.rest.TestRoles.MODEL_TUNE
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.QA;
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.QA_ISSUE_MANAGER;
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
-import static com.silenteight.warehouse.indexer.analysis.NewAnalysisEventFixture.ANALYSIS_ID;
+import static com.silenteight.warehouse.indexer.simulation.analysis.NewAnalysisEventFixture.ANALYSIS_ID;
 import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.ANALYSIS_ID_PARAM;
 import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.DEFINITIONS_COLLECTION_URL;
 import static com.silenteight.warehouse.report.simulation.SimulationTestConstants.REPORT_DEFINITION_DTO;

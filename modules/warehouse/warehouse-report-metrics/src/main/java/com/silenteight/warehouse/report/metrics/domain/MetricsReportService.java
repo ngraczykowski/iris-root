@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.warehouse.indexer.indexing.IndexesQuery;
+import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.report.metrics.generation.PropertiesDefinition;
 import com.silenteight.warehouse.report.remove.ReportsRemoval;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
