@@ -242,6 +242,7 @@ libraries.awaitility = [group: 'org.awaitility', name: 'awaitility', version: '4
 libraries.hamcrest = [group: 'org.hamcrest', name: 'hamcrest']
 libraries.json_path = [group: 'com.jayway.jsonpath', name: 'json-path']
 libraries.junit_jupiter_api = [group: 'org.junit.jupiter', name: 'junit-jupiter-api']
+libraries.junit_jupiter_engine = [group: 'org.junit.jupiter', name: 'junit-jupiter-engine']
 libraries.objenesis = [group: 'org.objenesis', name: 'objenesis']
 libraries.rabbitmq_mock = [group: 'com.github.fridujo', name: 'rabbitmq-mock', version: '1.1.1']
 libraries.rest_assured = [group: 'io.rest-assured', name: 'rest-assured']

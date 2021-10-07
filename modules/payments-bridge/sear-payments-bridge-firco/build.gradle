@@ -11,7 +11,6 @@ dependencies {
   implementation project(":sear-payments-bridge-datasource")
   implementation project(":sear-payments-bridge-etl")
   implementation project(":proto-sear-payments-bridge-internal-protos")
-  implementation project(":sear-payments-bridge-svb-learning")
   implementation project(":sear-payments-bridge-testing")
 
   implementation libraries.silenteight_sep_base_common
@@ -52,4 +51,10 @@ dependencies {
   testImplementation libraries.spring_security_test
 
   implementation libraries.adjudication_engine_api
+
+  // Tests
+  testImplementation libraries.junit_jupiter_api
+  testImplementation libraries.grpc_testing
+
+  testRuntimeOnly libraries.junit_jupiter_engine
 }
