@@ -78,11 +78,10 @@ class GeoAgentEtlProcess implements EtlProcess {
 
     var batchInputRequest = BatchCreateAgentInputsRequest.newBuilder()
         .addAgentInputs(AgentInput.newBuilder()
-            .setName("features/location")
             .setMatch(matchValue)
             .addFeatureInputs(
                 FeatureInput.newBuilder()
-                    .setFeature("location")
+                    .setFeature("features/location")
                     .setAgentFeatureInput(Any.pack(
                         LocationFeatureInput.newBuilder()
                             .setAlertedPartyLocation(countryTown)

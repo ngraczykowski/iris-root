@@ -42,4 +42,13 @@ class AgentEtlConfiguration {
     return new GeoAgentEtlProcess(stub, properties.getTimeout());
   }
 
+  @Bean
+  OrganizationNameAgentEtlProcess organizationNameAgentEtlProcess() {
+    var stub = AgentInputServiceGrpc
+        .newBlockingStub(dataSourceChannel)
+        .withWaitForReady();
+
+    return new OrganizationNameAgentEtlProcess(stub, properties.getTimeout());
+  }
+
 }

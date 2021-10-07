@@ -1,6 +1,5 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInput;
@@ -9,7 +8,6 @@ import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsReques
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.datasource.api.name.v1.AlertedPartyName;
 import com.silenteight.datasource.api.name.v1.NameFeatureInput;
-import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
 import com.silenteight.datasource.api.name.v1.WatchlistName;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
@@ -21,15 +19,18 @@ import com.google.protobuf.Any;
 import io.grpc.Deadline;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.silenteight.payments.bridge.firco.datasource.util.HitDataUtils.filterHitsData;
 
 @RequiredArgsConstructor
-class NameAgentEtlProcess implements EtlProcess {
+class OrganizationNameAgentEtlProcess implements EtlProcess {
 
   private final AgentInputServiceBlockingStub blockingStub;
   private final Duration timeout;
@@ -49,70 +50,77 @@ class NameAgentEtlProcess implements EtlProcess {
   private void callAgentService(Entry<String, String> matchItem, HitData hitData) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 
+    WatchlistType watchlistType = hitData.getHitAndWlPartyData().getWatchlistType();
+    List<String> alertedPartyNames =
+        Optional.ofNullable(hitData.getAlertedPartyData().getNames()).orElseGet(
+            Collections::emptyList);
+    String watchlistPartyNames =
+        Optional.ofNullable(hitData.getHitAndWlPartyData().getName()).orElse("");
+
     var batchInputRequest = createBatchInputRequest(
         matchItem.getValue(),
-        hitData.getAlertedPartyData().getNames(),
-        hitData.getHitAndWlPartyData().getName(),
-        mapWatchListTypeToEntityType(hitData.getHitAndWlPartyData().getWatchlistType()),
-        hitData.getHitAndWlPartyData().getAllMatchingTexts());
+        watchlistType,
+        alertedPartyNames,
+        watchlistPartyNames
+    );
 
     blockingStub
         .withDeadline(deadline)
         .batchCreateAgentInputs(batchInputRequest);
   }
 
+  @Override
+  public boolean supports(AlertRegisteredEvent data) {
+    return true;
+  }
+
+
   private BatchCreateAgentInputsRequest createBatchInputRequest(
-      String matchValue, List<String> alertedPartyNames, String watchlistName,
-      EntityType alertedPartyType,
-      List<String> matchingTexts) {
+      String matchValue, WatchlistType watchlistType, List<String> alertedPartyNames,
+      String watchlistPartyNames) {
+
+    var createCompareOrganizationNamesRequest =
+        createCompareOrganizationNamesRequest(watchlistType, alertedPartyNames,
+            watchlistPartyNames);
+
     var batchInputRequest = BatchCreateAgentInputsRequest.newBuilder()
         .addAgentInputs(AgentInput.newBuilder()
             .setMatch(matchValue)
-            .addFeatureInputs(FeatureInput
-                .newBuilder()
-                .setFeature("features/name")
-                .setAgentFeatureInput(Any.pack(NameFeatureInput.newBuilder()
-                    .setFeature("name")
-                    .addAllAlertedPartyNames(alertedPartyNames
-                        .stream()
-                        .map(alertedPartyName -> AlertedPartyName
-                            .newBuilder()
-                            .setName(alertedPartyName)
-                            .build())
-                        .collect(
-                            Collectors.toList()))
-                    .addWatchlistNames(WatchlistName.newBuilder()
-                        .setName(watchlistName)
-                        .build())
-                    .setAlertedPartyType(alertedPartyType)
-                    .addAllMatchingTexts(matchingTexts)
-                    .build()))
-                .build())
+            .addFeatureInputs(
+                FeatureInput.newBuilder()
+                    .setFeature("features/organizationName")
+                    .setAgentFeatureInput(Any.pack(createCompareOrganizationNamesRequest))
+                    .build())
             .build())
         .build();
 
     return batchInputRequest;
   }
 
-  @NonNull
-  private static EntityType mapWatchListTypeToEntityType(WatchlistType watchlistType) {
-
-    switch (watchlistType) {
-      case INDIVIDUAL:
-        return EntityType.INDIVIDUAL;
-      case COMPANY:
-        return EntityType.ORGANIZATION;
-      case ADDRESS:
-        return EntityType.ENTITY_TYPE_UNSPECIFIED;
-      case VESSEL:
-        return EntityType.ENTITY_TYPE_UNSPECIFIED;
-      default:
-        throw new UnsupportedOperationException();
+  private NameFeatureInput createCompareOrganizationNamesRequest(
+      WatchlistType watchlistType, List<String> alertedPartyNames, String watchlistPartyNames) {
+    if (watchlistType == WatchlistType.COMPANY) {
+      return NameFeatureInput.newBuilder()
+          .setFeature("organizationName")
+          .addAllAlertedPartyNames(alertedPartyNames
+              .stream()
+              .map(alertedPartyName -> AlertedPartyName
+                  .newBuilder()
+                  .setName(alertedPartyName)
+                  .build())
+              .collect(Collectors.toList()))
+          .addWatchlistNames(WatchlistName.newBuilder()
+              .setName(watchlistPartyNames)
+              .build())
+          .build();
+    } else {
+      return NameFeatureInput.newBuilder()
+          .setFeature("organizationName")
+          .addAllAlertedPartyNames(new ArrayList<>())
+          .addWatchlistNames(WatchlistName.newBuilder()
+              .setName(watchlistPartyNames)
+              .build())
+          .build();
     }
-  }
-
-  @Override
-  public boolean supports(AlertRegisteredEvent command) {
-    return true;
   }
 }

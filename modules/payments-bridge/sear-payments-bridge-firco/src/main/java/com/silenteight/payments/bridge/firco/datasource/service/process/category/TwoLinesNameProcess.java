@@ -24,7 +24,7 @@ class TwoLinesNameProcess implements CategoryValueProcess {
     var value = twoLinesNameUseCase.invoke(createRequest(hitData));
     return CategoryValue
         .newBuilder()
-        .setName("category/twoLines")
+        .setName("categories/twoLines")
         .setMatch(matchValue)
         .setSingleValue(value.toString())
         .build();
