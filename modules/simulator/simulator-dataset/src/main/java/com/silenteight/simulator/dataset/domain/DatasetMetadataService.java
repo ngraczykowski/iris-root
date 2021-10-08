@@ -39,7 +39,7 @@ public class DatasetMetadataService {
         .countries(request.getCountries())
         .build();
     repository.save(datasetEntity);
-    log.trace("Created Metadata DatasetEntity={}", datasetEntity);
+    log.debug("Created Metadata DatasetEntity={}", datasetEntity);
   }
 
   public long countAllAlerts(Set<String> datasetNames) {

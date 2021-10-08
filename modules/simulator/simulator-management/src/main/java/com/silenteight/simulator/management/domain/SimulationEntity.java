@@ -11,6 +11,7 @@ import com.silenteight.simulator.management.list.dto.SimulationDto;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
@@ -100,13 +101,13 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
   }
 
   void cancel() {
-    assertInState(PENDING);
+    assertInState(PENDING, RUNNING);
     this.state = CANCELED;
   }
 
-  private void assertInState(SimulationState requiredState) {
-    if (this.state != requiredState)
-      throw new SimulationNotInProperStateException(requiredState);
+  private void assertInState(SimulationState... requiredStates) {
+    if (Arrays.stream(requiredStates).noneMatch(requiredState -> requiredState == this.state))
+      throw new SimulationNotInProperStateException(requiredStates);
   }
 
   SimulationDto toDto() {

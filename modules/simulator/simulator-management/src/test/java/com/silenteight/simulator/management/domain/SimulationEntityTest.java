@@ -41,7 +41,7 @@ class SimulationEntityTest {
     assertThatThrownBy(
         simulation::archive)
         .isInstanceOf(SimulationNotInProperStateException.class)
-        .hasMessage(format("Simulation should be in state: %s.", DONE));
+        .hasMessage(format("Simulation should be in state: [DONE]."));
   }
 
   @Test
@@ -68,7 +68,7 @@ class SimulationEntityTest {
     assertThatThrownBy(
         simulation::run)
         .isInstanceOf(SimulationNotInProperStateException.class)
-        .hasMessage(format("Simulation should be in state: %s.", PENDING));
+        .hasMessage(format("Simulation should be in state: [PENDING]."));
   }
 
   @Test
@@ -98,13 +98,25 @@ class SimulationEntityTest {
     assertThatThrownBy(
         () -> simulation.finish(currentTime))
         .isInstanceOf(SimulationNotInProperStateException.class)
-        .hasMessage(format("Simulation should be in state: %s.", RUNNING));
+        .hasMessage(format("Simulation should be in state: [RUNNING]."));
   }
 
   @Test
-  void shouldCancelSimulation() {
+  void shouldCancelSimulationWhenPending() {
     // given
     SimulationEntity simulation = createSimulationEntity(PENDING);
+
+    // when
+    simulation.cancel();
+
+    // then
+    assertThat(simulation.getState()).isEqualTo(CANCELED);
+  }
+
+  @Test
+  void shouldCancelSimulationWhenRunning() {
+    // given
+    SimulationEntity simulation = createSimulationEntity(RUNNING);
 
     // when
     simulation.cancel();
@@ -116,16 +128,15 @@ class SimulationEntityTest {
   @ParameterizedTest
   @EnumSource(
       value = SimulationState.class,
-      names = { "RUNNING", "DONE", "ARCHIVED", "NEW", "CANCELED" })
+      names = { "DONE", "ARCHIVED", "NEW", "CANCELED" })
   void shouldThrowExceptionWhenNotInStateForCancel(SimulationState state) {
     // given
     SimulationEntity simulation = createSimulationEntity(state);
 
     // then
-    assertThatThrownBy(
-        () -> simulation.cancel())
+    assertThatThrownBy(simulation::cancel)
         .isInstanceOf(SimulationNotInProperStateException.class)
-        .hasMessage(format("Simulation should be in state: %s.", PENDING));
+        .hasMessage("Simulation should be in state: [PENDING, RUNNING].");
   }
 
   @Test
