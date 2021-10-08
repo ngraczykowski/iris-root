@@ -9,6 +9,8 @@ import lombok.experimental.NonFinal;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 
+import com.google.protobuf.Timestamp;
+
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -23,11 +25,18 @@ public class LearningAlert {
   @NonFinal
   String alertName;
 
+  Timestamp alertTime;
+
   List<LearningMatch> matches;
 
   public RegisterAlertRequest toRegisterAlertRequest() {
-    return RegisterAlertRequest.builder().alertId(alertId).matchIds(matches.stream().map(
-        LearningMatch::getMatchId).collect(toList())).build();
+    return RegisterAlertRequest
+        .builder()
+        .alertId(alertId)
+        .alertTime(alertTime)
+        .matchIds(matches.stream().map(
+            LearningMatch::getMatchId).collect(toList()))
+        .build();
   }
 
   public void setAlertMatchNames(RegisterAlertResponse response) {

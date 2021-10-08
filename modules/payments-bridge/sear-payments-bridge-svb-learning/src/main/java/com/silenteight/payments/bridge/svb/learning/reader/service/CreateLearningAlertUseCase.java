@@ -6,11 +6,17 @@ import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsvRow;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
+import com.google.protobuf.Timestamp;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.silenteight.payments.bridge.common.protobuf.TimestampConverter.fromSqlTimestamp;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +27,7 @@ class CreateLearningAlertUseCase {
   LearningAlert fromCsvRows(List<LearningCsvRow> rows) {
     return LearningAlert.builder()
         .alertId(rows.get(0).getFkcoVSystemId())
+        .alertTime(createAlertTime(rows.get(0).getFkcoDFilteredDatetime()))
         .matches(createMatches(rows))
         .build();
   }
@@ -58,6 +65,18 @@ class CreateLearningAlertUseCase {
 
       ids.add(match.getMatchId());
     }
+  }
+
+  static Timestamp createAlertTime(String time) {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss.SSS");
+    Date parsedDate;
+    try {
+      parsedDate = dateFormat.parse(time);
+    } catch (ParseException e) {
+      throw new IllegalArgumentException(e);
+    }
+    var timestamp = new java.sql.Timestamp(parsedDate.getTime());
+    return fromSqlTimestamp(timestamp);
   }
 
   private static class DuplicatedMatchIdException extends RuntimeException {
