@@ -2,7 +2,7 @@ version: '3'
 
 services:
   odfe-node1:
-    image: amazon/opendistro-for-elasticsearch:1.13.1
+    build: ./es
     container_name: warehouse-es1
     environment:
       - opendistro_security.ssl.http.enabled=false
@@ -11,7 +11,10 @@ services:
       - discovery.seed_hosts=odfe-node1,odfe-node2
       - cluster.initial_master_nodes=odfe-node1,odfe-node2
       - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
+      - path.repo=/usr/share/elasticsearch/snapshot
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+      - AWS_ACCESS_KEY_ID=admin
+      - AWS_SECRET_ACCESS_KEY=admin123
     ulimits:
       memlock:
         soft: -1
@@ -24,6 +27,7 @@ services:
       - ./es/internal_users.yml:/usr/share/elasticsearch/plugins/opendistro_security/securityconfig/internal_users.yml:ro
       - ./es/roles_mapping.yml:/usr/share/elasticsearch/plugins/opendistro_security/securityconfig/roles_mapping.yml:ro
       - ./es/roles.yml:/usr/share/elasticsearch/plugins/opendistro_security/securityconfig/roles.yml:ro
+      - warehouse-snapshot-storage:/usr/share/elasticsearch/snapshot
 
     ports:
       - 9200:9200
@@ -31,7 +35,7 @@ services:
     networks:
       - odfe-net
   odfe-node2:
-    image: amazon/opendistro-for-elasticsearch:1.13.1
+    build: ./es
     container_name: warehouse-es2
     environment:
       - opendistro_security.ssl.http.enabled=false
@@ -40,7 +44,11 @@ services:
       - discovery.seed_hosts=odfe-node1,odfe-node2
       - cluster.initial_master_nodes=odfe-node1,odfe-node2
       - bootstrap.memory_lock=true
+      - path.repo=/usr/share/elasticsearch/snapshot
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - AWS_ACCESS_KEY_ID=admin
+      - AWS_SECRET_ACCESS_KEY=admin123
+      - AWS_DEFAULT_REGION=US_EAST_1
     ulimits:
       memlock:
         soft: -1
@@ -53,6 +61,7 @@ services:
       - ./es/internal_users.yml:/usr/share/elasticsearch/plugins/opendistro_security/securityconfig/internal_users.yml:ro
       - ./es/roles_mapping.yml:/usr/share/elasticsearch/plugins/opendistro_security/securityconfig/roles_mapping.yml:ro
       - ./es/roles.yml:/usr/share/elasticsearch/plugins/opendistro_security/securityconfig/roles.yml:ro
+      - warehouse-snapshot-storage:/usr/share/elasticsearch/snapshot
     ports:
       - 9201:9200
       - 9601:9600 # required for Performance Analyzer
@@ -88,6 +97,8 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
+    networks:
+      - odfe-net
   createbuckets:
     image: minio/mc
     depends_on:
@@ -96,8 +107,11 @@ services:
       /bin/sh -c "
       /usr/bin/mc config host add myminio http://minio:9000 admin admin123;
       /usr/bin/mc mb --ignore-existing myminio/reports;
+      /usr/bin/mc mb --ignore-existing myminio/snapshots;
       exit 0;
       "
+    networks:
+      - odfe-net
   db:
     image: docker.io/library/postgres:12
     container_name: warehouse-db
@@ -127,6 +141,6 @@ volumes:
   warehouse-es2:
   minio-fs:
   warehouse-storage:
-
+  warehouse-snapshot-storage:
 networks:
   odfe-net:
