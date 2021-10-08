@@ -61,6 +61,7 @@ spec:
               value: {{ .Values.grpcClientGovernanceAddress }}
             - name: 'DEBUG'
               value: 'true'
+            - name: 'TRACE'
             - name: "SPRING_MAIN_CLOUD_PLATFORM"
               value: "KUBERNETES"
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}

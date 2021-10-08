@@ -12,10 +12,11 @@ grpc:
     port: 24801
   client:
     datasource:
-      address: static://localhost:24803
+      address: static://localhost:${grpc.server.port}
       negotiation-type: PLAINTEXT
     governance:
       address: static://localhost:${grpc.server.port}
+      negotiation-type: PLAINTEXT
 
 ae:
   #-------------------------------------------------------------------------------------------------
