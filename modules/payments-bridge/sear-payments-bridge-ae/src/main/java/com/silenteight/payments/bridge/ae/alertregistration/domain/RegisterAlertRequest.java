@@ -47,11 +47,13 @@ public class RegisterAlertRequest {
   }
 
   public CreateAlertRequest toCreateAlertRequest() {
-    return CreateAlertRequest.newBuilder().setAlert(Alert
+    var alert = Alert
         .newBuilder()
         .setAlertId(getAlertId())
-        .setAlertTime(getAlertTime())
-        .setPriority(getPriority())
-        .build()).build();
+        .setPriority(getPriority());
+    if (alertTime != null) {
+      alert.setAlertTime(alertTime);
+    }
+    return CreateAlertRequest.newBuilder().setAlert(alert.build()).build();
   }
 }
