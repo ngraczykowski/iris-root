@@ -11,3 +11,5 @@ serp:
 
     qa.sampling.schedule.enabled: false
 
+    model:
+      modelTransfer: LOCAL

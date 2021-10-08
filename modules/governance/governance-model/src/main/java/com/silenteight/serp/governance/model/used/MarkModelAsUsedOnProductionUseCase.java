@@ -11,6 +11,8 @@ import com.silenteight.serp.governance.policy.details.PolicyDetailsQuery;
 import com.silenteight.serp.governance.policy.domain.PolicyService;
 import com.silenteight.serp.governance.policy.domain.dto.PolicyDto;
 
+import org.springframework.context.event.EventListener;
+
 import java.util.UUID;
 
 import static com.silenteight.serp.governance.policy.domain.dto.MarkPolicyAsUsedRequest.of;
@@ -31,6 +33,11 @@ public class MarkModelAsUsedOnProductionUseCase {
 
   public void applyByVersion(String version) {
     apply(modelDetailsQuery.getModelIdByVersion(version));
+  }
+
+  @EventListener
+  public void handle(@NonNull ModelDeployedEvent event) {
+    applyByName(event.getModel());
   }
 
   private void apply(UUID id) {

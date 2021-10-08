@@ -1,8 +1,10 @@
 package com.silenteight.serp.governance.model.accept;
 
+import com.silenteight.serp.governance.model.ModelProperties;
 import com.silenteight.serp.governance.model.get.ModelDetailsQuery;
 import com.silenteight.serp.governance.policy.promote.PromotePolicyUseCase;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,9 +15,15 @@ class ModelAcceptConfiguration {
   ModelAcceptedEventListener modelAcceptedEventListener(
       ModelDetailsQuery modelDetailsQuery,
       PromotePolicyUseCase promotePolicyUseCase,
-      SendPromoteMessageUseCase sendPromoteMessageUseCase) {
+      SendPromoteMessageUseCase sendPromoteMessageUseCase,
+      ModelProperties properties,
+      ApplicationEventPublisher eventPublisher) {
 
     return new ModelAcceptedEventListener(
-        modelDetailsQuery, promotePolicyUseCase, sendPromoteMessageUseCase);
+        modelDetailsQuery,
+        promotePolicyUseCase,
+        sendPromoteMessageUseCase,
+        properties.getModelTransfer(),
+        eventPublisher);
   }
 }

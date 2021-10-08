@@ -404,6 +404,7 @@ public class PolicyService {
 
   @Transactional
   public void markPolicyAsUsed(MarkPolicyAsUsedRequest request) {
+    //similar to usePolicy method, but here we don't update the `updated_at` field
     request.preAudit(auditingLogger::log);
     stopUsingOtherPolicies(request.getActivatedBy());
     Policy policy = policyRepository.getByPolicyId(request.getPolicyId());

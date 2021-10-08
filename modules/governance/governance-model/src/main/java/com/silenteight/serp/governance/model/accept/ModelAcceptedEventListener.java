@@ -7,9 +7,11 @@ import com.silenteight.serp.governance.changerequest.approve.event.ModelAccepted
 import com.silenteight.serp.governance.model.common.ModelResource;
 import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 import com.silenteight.serp.governance.model.get.ModelDetailsQuery;
+import com.silenteight.serp.governance.model.used.ModelDeployedEvent;
 import com.silenteight.serp.governance.policy.promote.PromotePolicyCommand;
 import com.silenteight.serp.governance.policy.promote.PromotePolicyUseCase;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 
 @RequiredArgsConstructor
@@ -21,6 +23,10 @@ class ModelAcceptedEventListener {
   private final PromotePolicyUseCase promotePolicyUseCase;
   @NonNull
   private final SendPromoteMessageUseCase sendPromoteMessageUseCase;
+  @NonNull
+  private final ModelTransfer modelTransfer;
+  @NonNull
+  private final ApplicationEventPublisher eventPublisher;
 
   @EventListener
   public void handle(@NonNull ModelAcceptedEvent event) {
@@ -32,5 +38,8 @@ class ModelAcceptedEventListener {
 
     sendPromoteMessageUseCase.activate(SendPromoteMessageCommand.of(
         event.getCorrelationId(), event.getModelName(), modelDto.getModelVersion()));
+
+    if (modelTransfer == ModelTransfer.LOCAL)
+      eventPublisher.publishEvent(ModelDeployedEvent.of(event.getModelName()));
   }
 }

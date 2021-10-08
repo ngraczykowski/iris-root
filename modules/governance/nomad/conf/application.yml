@@ -25,26 +25,27 @@ keycloak:
 
 serp:
   governance:
+    modelTransfer: LOCAL
     agent:
       agent-configuration-source: file:local/conf/agents/agent_configs.json
       agent-details-source: file:local/conf/agents/agent_details.json
     files.default-bucket: attachments-dev
-  governance.qa:
-    sampling:
-      schedule:
-        enabled: true
-        audit-cron: 0 0 2/6 * * ?
-        alert-generator-cron: 0 0 2 ? * MON-FRI *
-      generator:
-        sample-count: 20
-        grouping-fields:
-          - alert_extendedAttribute5
-        filters:
-          - field: alert_s8_recommendation
-            values:
-              - ACTION_FALSE_POSITIVE
-    viewing:
-      max-state-reset-delay-ms: 45000
+    qa:
+      sampling:
+        schedule:
+          enabled: true
+          audit-cron: 0 0 2/6 * * ?
+          alert-generator-cron: 0 0 2 ? * MON-FRI *
+        generator:
+          sample-count: 20
+          grouping-fields:
+            - alert_extendedAttribute5
+          filters:
+            - field: alert_s8_recommendation
+              values:
+                - ACTION_FALSE_POSITIVE
+      viewing:
+        max-state-reset-delay-ms: 45000
 
 spring:
   cloud:

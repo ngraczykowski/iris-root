@@ -92,7 +92,7 @@ paths:
     post:
       parameters:
         - in: path
-          name: id
+          name: changeRequestId
           required: true
           description: Change request id
           example: 02240812-4a70-4700-88b4-5f32dc0990a5
