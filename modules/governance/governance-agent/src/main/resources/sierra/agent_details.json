@@ -2,8 +2,7 @@
   "agents/name/versions/1.0.0/configs/1": {
     "agentId": "1697c58c-9a7a-4489-b315-b7c419182ceb",
     "features": [
-      "features/nameAgentNameLine",
-      "features/nameAgentFormatted"
+      "features/name"
     ],
     "responses": [
       "EXACT_MATCH",
@@ -21,10 +20,7 @@
   "agents/geo/versions/1.0.0/configs/1": {
     "agentId": "fd46923f-f68f-4b79-9d63-1621f081cfd0",
     "features": [
-      "features/geoAgentLastLine",
-      "features/geoAgentLast2Line",
-      "features/geoAgent2ndLastLine",
-      "features/geoAgentCountryTownLine"
+      "features/geo"
     ],
     "responses": [
       "CITY_MATCH",
