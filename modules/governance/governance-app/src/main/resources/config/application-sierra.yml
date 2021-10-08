@@ -7,5 +7,7 @@ serp:
       agent-configuration-source: classpath:sierra/agent_configs.json
       agent-details-source: classpath:sierra/agent_details.json
 
-    qa:
-      sampling.schedule.enabled: false
+    featurevector.event.strategy: SOLVE
+
+    qa.sampling.schedule.enabled: false
+
