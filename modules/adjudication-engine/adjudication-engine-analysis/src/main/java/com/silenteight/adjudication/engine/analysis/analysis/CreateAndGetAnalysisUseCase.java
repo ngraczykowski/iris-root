@@ -28,7 +28,9 @@ class CreateAndGetAnalysisUseCase {
     var analysisName = createAnalysisUseCase.createAnalysis(prototype);
     var analysis = getAnalysisUseCase.getAnalysis(analysisName);
 
-    log.info("Created new analysis: analysis={}, with categories = {}", analysisName, analysis.getCategoriesList());
+    log.info(
+        "Created new analysis: analysis={}, with categories = {}", analysisName,
+        analysis.getCategoriesList());
     if (log.isDebugEnabled()) {
       log.debug(
           "New analysis: analysisMessage={}", TextFormat.printer().shortDebugString(analysis));

@@ -65,7 +65,8 @@ class SelectMissingMatchCategoryValuesQuery {
         categories.putIfAbsent(category, categoryId);
       }
 
-      log.info("Missing Match Categories = {}, categories = {}", missingMatchCategories, categories);
+      log.info(
+          "Missing Match Categories = {}, categories = {}", missingMatchCategories, categories);
       return new MissingCategoryResult(missingMatchCategories, new CategoryMap(categories));
     }
   }
