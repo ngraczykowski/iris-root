@@ -4,11 +4,15 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
+import com.silenteight.warehouse.report.accuracy.domain.exception.WrongReportStateException;
 
 import javax.persistence.*;
 
 import static com.silenteight.warehouse.report.accuracy.domain.ReportState.DONE;
 import static com.silenteight.warehouse.report.accuracy.domain.ReportState.FAILED;
+import static com.silenteight.warehouse.report.accuracy.domain.ReportState.GENERATING;
+import static com.silenteight.warehouse.report.accuracy.domain.ReportState.NEW;
+import static java.util.Arrays.stream;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -35,7 +39,7 @@ class AccuracyReport extends BaseEntity implements IdentifiableEntity {
 
   @ToString.Include
   @Column(name = "analysis", nullable = false)
-  String analysisId;
+  private String analysisId;
 
   @ToString.Include
   @Column(name = "state", nullable = false)
@@ -48,22 +52,34 @@ class AccuracyReport extends BaseEntity implements IdentifiableEntity {
 
   static AccuracyReport of(AccuracyReportDefinition definition, String analysisId) {
     AccuracyReport report = new AccuracyReport();
-    report.state = ReportState.NEW;
+    report.state = NEW;
     report.analysisId = analysisId;
     report.reportType = definition;
     return report;
   }
 
   void generating() {
-    state = ReportState.GENERATING;
+    assertAllowedStateChange(GENERATING, NEW);
+    state = GENERATING;
   }
 
   void done() {
+    assertAllowedStateChange(DONE, GENERATING);
     state = DONE;
   }
 
   void failed() {
+    assertAllowedStateChange(FAILED, NEW, GENERATING);
     state = FAILED;
+  }
+
+  private void assertAllowedStateChange(ReportState desirable, ReportState... state) {
+    if (notInState(state))
+      throw new WrongReportStateException(getId(), getState(), desirable);
+  }
+
+  private boolean notInState(ReportState... allowedStates) {
+    return stream(allowedStates).noneMatch(allowedState -> allowedState == getState());
   }
 
   void storeReport(String report) {

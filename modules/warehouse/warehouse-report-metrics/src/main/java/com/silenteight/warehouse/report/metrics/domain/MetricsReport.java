@@ -38,7 +38,7 @@ class MetricsReport extends BaseEntity implements IdentifiableEntity {
 
   @ToString.Include
   @Column(name = "analysis", nullable = false)
-  String analysisId;
+  private String analysisId;
 
   @ToString.Include
   @Column(name = "state", nullable = false)
