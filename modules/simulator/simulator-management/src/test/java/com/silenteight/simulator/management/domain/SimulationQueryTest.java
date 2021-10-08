@@ -12,8 +12,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.silenteight.simulator.management.SimulationFixtures.*;
+import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional
@@ -30,7 +32,9 @@ class SimulationQueryTest extends BaseDataJpaTest {
   @Test
   void shouldListSimulations() {
     // given
-    persistSimulation();
+    UUID canceledSimulationId = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
+    persistSimulation(ID, PENDING_STATE);
+    persistSimulation(canceledSimulationId, CANCELED_STATE);
 
     // when
     List<SimulationDto> result = underTest.list();
@@ -43,7 +47,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
   @Test
   void shouldFindSimulationByModel() {
     // given
-    persistSimulation();
+    persistSimulation(ID, PENDING_STATE);
 
     // when
     List<SimulationDto> result = underTest.findByModel(MODEL_NAME);
@@ -63,7 +67,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
   @Test
   void shouldGetSimulationDetailsById() {
     // given
-    persistSimulation();
+    persistSimulation(ID, PENDING_STATE);
 
     // when
     SimulationDetailsDto result = underTest.get(ID);
@@ -82,7 +86,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
   @Test
   void shouldGetSimulationDetailsByAnalysisName() {
     // given
-    persistSimulation();
+    persistSimulation(ID, PENDING_STATE);
 
     // when
     SimulationDetailsDto result = underTest.get(ANALYSIS_NAME);
@@ -101,7 +105,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
   private static void assertSimulation(SimulationDto result) {
     assertThat(result.getId()).isEqualTo(ID);
     assertThat(result.getSimulationName()).isEqualTo(SIMULATION_NAME);
-    assertThat(result.getState()).isEqualTo(STATE);
+    assertThat(result.getState()).isEqualTo(PENDING_STATE);
     assertThat(result.getDatasets()).isEqualTo(DATASETS);
     assertThat(result.getModel()).isEqualTo(MODEL_NAME);
     assertThat(result.getCreatedBy()).isEqualTo(USERNAME);
@@ -112,7 +116,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
     assertThat(result.getId()).isEqualTo(ID);
     assertThat(result.getSimulationName()).isEqualTo(SIMULATION_NAME);
     assertThat(result.getDescription()).isEqualTo(DESCRIPTION);
-    assertThat(result.getState()).isEqualTo(STATE);
+    assertThat(result.getState()).isEqualTo(PENDING_STATE);
     assertThat(result.getDatasets()).isEqualTo(DATASETS);
     assertThat(result.getModel()).isEqualTo(MODEL_NAME);
     assertThat(result.getAnalysis()).isEqualTo(ANALYSIS_NAME);
@@ -120,13 +124,13 @@ class SimulationQueryTest extends BaseDataJpaTest {
     assertThat(result.getCreatedAt()).isNotNull();
   }
 
-  private void persistSimulation() {
+  private void persistSimulation(UUID simulationId, SimulationState state) {
     SimulationEntity simulationEntity = SimulationEntity
         .builder()
-        .simulationId(ID)
+        .simulationId(simulationId)
         .name(SIMULATION_NAME)
         .description(DESCRIPTION)
-        .state(STATE)
+        .state(state)
         .createdBy(USERNAME)
         .datasetNames(DATASETS)
         .modelName(MODEL_NAME)

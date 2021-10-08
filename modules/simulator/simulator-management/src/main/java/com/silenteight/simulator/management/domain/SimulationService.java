@@ -12,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
+import java.util.UUID;
 
 import static com.silenteight.simulator.management.domain.SimulationState.PENDING;
 
@@ -60,5 +61,14 @@ public class SimulationService {
         .orElseThrow(() -> new SimulationNotFoundException(analysis));
     simulationEntity.finish(timeSource.offsetDateTime());
     log.debug("Saved as 'DONE' SimulationEntity={}", simulationEntity);
+  }
+
+  @Transactional
+  public void cancel(UUID simulationId) {
+    SimulationEntity simulationEntity = repository
+        .findBySimulationId(simulationId)
+        .orElseThrow(() -> new SimulationNotFoundException(simulationId));
+    simulationEntity.cancel();
+    log.debug("Saved as 'CANCELLED' SimulationEntity={}", simulationEntity);
   }
 }

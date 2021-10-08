@@ -15,10 +15,10 @@ servers:
 paths:
   /simulations:
     get:
-      description: Returns a list of simulations
+      description: Returns a list of active simulations (in state NEW, PENDING, RUNNING, DONE)
       responses:
         200:
-          description: List of simulations
+          description: List of active simulations
           content:
             application/json:
               schema:

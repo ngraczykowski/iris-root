@@ -222,6 +222,7 @@ serp:
 sep.auth:
   permissionMethodsMappings:
     MANAGE_SIMULATION:
+      - "CANCEL_SIMULATION"
       - "CREATE_SIMULATION"
       - "LIST_DATASETS"
     VIEW_SIMULATIONS:

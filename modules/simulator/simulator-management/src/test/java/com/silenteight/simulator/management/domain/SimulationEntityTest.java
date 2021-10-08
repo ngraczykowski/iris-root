@@ -30,7 +30,9 @@ class SimulationEntityTest {
   }
 
   @ParameterizedTest
-  @EnumSource(value = SimulationState.class, names = { "ARCHIVED", "PENDING", "RUNNING", "NEW" })
+  @EnumSource(
+      value = SimulationState.class,
+      names = { "ARCHIVED", "PENDING", "RUNNING", "NEW", "CANCELED" })
   void shouldThrowExceptionWhenNotInStateForArchive(SimulationState state) {
     // given
     SimulationEntity simulation = createSimulationEntity(state);
@@ -55,7 +57,9 @@ class SimulationEntityTest {
   }
 
   @ParameterizedTest
-  @EnumSource(value = SimulationState.class, names = { "ARCHIVED", "DONE", "RUNNING", "NEW" })
+  @EnumSource(
+      value = SimulationState.class,
+      names = { "ARCHIVED", "DONE", "RUNNING", "NEW", "CANCELED" })
   void shouldThrowExceptionWhenNotInStateForRun(SimulationState state) {
     // given
     SimulationEntity simulation = createSimulationEntity(state);
@@ -82,7 +86,9 @@ class SimulationEntityTest {
   }
 
   @ParameterizedTest
-  @EnumSource(value = SimulationState.class, names = { "PENDING", "DONE", "ARCHIVED", "NEW" })
+  @EnumSource(
+      value = SimulationState.class,
+      names = { "PENDING", "DONE", "ARCHIVED", "NEW", "CANCELED" })
   void shouldThrowExceptionWhenNotInStateForFinish(SimulationState state) {
     // given
     SimulationEntity simulation = createSimulationEntity(state);
@@ -93,6 +99,33 @@ class SimulationEntityTest {
         () -> simulation.finish(currentTime))
         .isInstanceOf(SimulationNotInProperStateException.class)
         .hasMessage(format("Simulation should be in state: %s.", RUNNING));
+  }
+
+  @Test
+  void shouldCancelSimulation() {
+    // given
+    SimulationEntity simulation = createSimulationEntity(PENDING);
+
+    // when
+    simulation.cancel();
+
+    // then
+    assertThat(simulation.getState()).isEqualTo(CANCELED);
+  }
+
+  @ParameterizedTest
+  @EnumSource(
+      value = SimulationState.class,
+      names = { "RUNNING", "DONE", "ARCHIVED", "NEW", "CANCELED" })
+  void shouldThrowExceptionWhenNotInStateForCancel(SimulationState state) {
+    // given
+    SimulationEntity simulation = createSimulationEntity(state);
+
+    // then
+    assertThatThrownBy(
+        () -> simulation.cancel())
+        .isInstanceOf(SimulationNotInProperStateException.class)
+        .hasMessage(format("Simulation should be in state: %s.", PENDING));
   }
 
   @Test
