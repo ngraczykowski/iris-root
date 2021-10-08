@@ -28,6 +28,9 @@ public class RegisterAlertRequest {
   List<String> matchIds;
 
   public BatchCreateAlertMatchesRequest toCreateMatchesRequest(String alertName) {
+    if (matchIds.isEmpty())
+      throw new IllegalStateException("Match ids must not be empty");
+
     return BatchCreateAlertMatchesRequest
         .newBuilder()
         .addAllMatches(createMatches())
