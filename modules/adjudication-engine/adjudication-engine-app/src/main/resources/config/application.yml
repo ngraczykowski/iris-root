@@ -239,3 +239,7 @@ spring:
 
 info:
   env: ${ae.env:local}
+grpc:
+  client:
+    GLOBAL:
+      negotiation-type: PLAINTEXT

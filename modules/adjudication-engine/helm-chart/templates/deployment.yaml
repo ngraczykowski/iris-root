@@ -55,14 +55,6 @@ spec:
               value: {{ .Values.springRabbitmqVirtualHost }}
             - name: 'SPRING_PROFILES_ACTIVE'
               value: {{ .Values.springProfilesActive }}
-            - name: 'GRPC_CLIENT_datasource_ADDRESS'
-              value: {{ .Values.grpcClientDatasourceAddress }}
-            - name: 'GRPC_CLIENT_governance_ADDRESS'
-              value: {{ .Values.grpcClientGovernanceAddress }}
-            - name: 'DEBUG'
-              value: 'true'
-            - name: "SPRING_MAIN_CLOUD_PLATFORM"
-              value: "KUBERNETES"
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           resources:
             limits:
@@ -70,7 +62,12 @@ spec:
             requests:
               memory: {{ .Values.memoryRequest | quote }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          args: ["--logging.config=file:/etc/logback.xml"]
+          args:
+            - "--debug=true"
+            - "--logging.config=file:/etc/logback.xml"
+            - "--grpc.client.GLOBAL.negotiation-type=PLAINTEXT"
+            - "--grpc.client.datasource.address={{ .Values.grpcClientDatasourceAddress }}"
+            - "--grpc.client.governance.address={{ .Values.grpcClientGovernanceAddress }}"
           volumeMounts:
             - mountPath: /etc/logback.xml
               name: logback-config
