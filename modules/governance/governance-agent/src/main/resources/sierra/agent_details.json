@@ -6,15 +6,15 @@
       "features/nameAgentFormatted"
     ],
     "responses": [
-      "EXACT MATCH",
-      "STRONG MATCH",
+      "EXACT_MATCH",
+      "STRONG_MATCH",
       "MATCH",
-      "WEAK MATCH",
-      "NO MATCH",
-      "HQ NO MATCH",
-      "NO DATA",
+      "WEAK_MATCH",
+      "NO_MATCH",
+      "HQ_NO_MATCH",
+      "NO_DATA",
       "INCONCLUSIVE",
-      "DATA SOURCE ERROR"
+      "DATA_SOURCE_ERROR"
     ],
     "configurations": []
   },
@@ -27,14 +27,14 @@
       "features/geoAgentCountryTownLine"
     ],
     "responses": [
-      "CITY MATCH",
-      "CITY NO MATCH",
-      "COUNTRY MATCH",
-      "COUNTRY NO MATCH",
-      "COUNTRY WEAK MATCH",
-      "STATE MATCH",
-      "STATE NO MATCH",
-      "NO DATA",
+      "CITY_MATCH",
+      "CITY_NO_MATCH",
+      "COUNTRY_MATCH",
+      "COUNTRY_NO_MATCH",
+      "COUNTRY_WEAK_MATCH",
+      "STATE_MATCH",
+      "STATE_NO_MATCH",
+      "NO_DATA",
       "INCONCLUSIVE",
       "ERROR"
     ],
