@@ -47,4 +47,5 @@ id;CDDOVERFLOWASP[HUBID][CUSTOMER][AAAGLOBAL165R1089]:ID:GG-ESCION-EX:2020021201
 recommendation;Level 1 Review,Level 2 Review
 comment;S8 recommended action: Manual Investigation GR-ISAN 2868757
 lastCaseComment;test comment 1,test comment 2
-lob_country;IN,PL,UK
+lob_country;PL,UK
+DN_CASE.ExtendedAttribute5;SAN,PEP,SCION

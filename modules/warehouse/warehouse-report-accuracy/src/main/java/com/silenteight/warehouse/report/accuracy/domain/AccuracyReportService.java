@@ -43,8 +43,9 @@ public class AccuracyReportService implements ReportsRemoval {
     List<AccuracyReport> outdatedReports = repository.getAllByCreatedAtBefore(dayToRemoveReports);
     List<String> outdatedReportsFileNames = getOutdatedReportsFileNames(outdatedReports);
     reportStorage.removeReports(outdatedReportsFileNames);
-    long numberOfRemovedReports = repository.removeAllByCreatedAtBefore(dayToRemoveReports);
-    log.info("Number of removed accuracy reports reportsCount={}", numberOfRemovedReports);
+    repository.deleteAll(outdatedReports);
+    int numberOfRemovedReports = outdatedReports.size();
+    log.info("Number of removed Accuracy reports reportsCount={}", numberOfRemovedReports);
     return numberOfRemovedReports;
   }
 

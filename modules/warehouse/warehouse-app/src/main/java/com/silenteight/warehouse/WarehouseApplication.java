@@ -26,6 +26,7 @@ import com.silenteight.warehouse.report.accuracy.AccuracyReportModule;
 import com.silenteight.warehouse.report.billing.BillingReportModule;
 import com.silenteight.warehouse.report.metrics.MetricsReportModule;
 import com.silenteight.warehouse.report.rbs.RbsReportModule;
+import com.silenteight.warehouse.report.reasoning.AiReasoningReportModule;
 import com.silenteight.warehouse.report.remove.ReportsRemovalModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
 import com.silenteight.warehouse.report.simulation.SimulationModule;
@@ -50,6 +51,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     // NOTE(ahaczewski): Keep list of modules alphabetically sorted within section.
     // Domain modules
     AccuracyReportModule.class,
+    AiReasoningReportModule.class,
     AlertModule.class,
     AnalysisModule.class,
     BackupModule.class,

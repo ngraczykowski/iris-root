@@ -9,14 +9,14 @@ public class InMemoryAccuracyRepository
     extends BasicInMemoryRepository<AccuracyReport>
     implements AccuracyReportRepository {
 
+
   @Override
-  public int removeAllByCreatedAtBefore(OffsetDateTime offsetDateTime) {
-    // TODO: (WEB-1435)
-    throw new IllegalStateException("Not implemented");
+  public void deleteAll(Iterable<AccuracyReport> reports) {
+    throw new UnsupportedOperationException("Not implemented");
   }
 
   @Override
   public List<AccuracyReport> getAllByCreatedAtBefore(OffsetDateTime offsetDateTime) {
-    throw new IllegalStateException("Not implemented");
+    throw new UnsupportedOperationException("Not implemented");
   }
 }

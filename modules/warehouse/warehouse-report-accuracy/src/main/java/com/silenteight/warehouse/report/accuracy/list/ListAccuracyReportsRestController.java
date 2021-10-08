@@ -27,7 +27,7 @@ class ListAccuracyReportsRestController {
   @GetMapping(LIST_METRICS_REPORT_URL)
   @PreAuthorize("isAuthorized('LIST_PRODUCTION_ON_DEMAND_REPORTS')")
   public ResponseEntity<List<ReportDefinitionDto>> getProductionReportDefinitions() {
-    log.debug("Getting production metrics report definitions.");
+    log.debug("Getting production accuracy report definitions.");
     return ok().body(toProductionReportsDefinitionDto());
   }
 }
