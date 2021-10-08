@@ -45,7 +45,7 @@ message CreateCategoryValuesRequest {
 
 message CreatedCategoryValue {
   // The name of category value, in form of
-  // `categories/<Category>/value/<Value ID>`.
+  // `categories/<Category>/values/<Value ID>`.
   string name = 1;
 
   // The name of a match this category value is for, in form of
