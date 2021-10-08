@@ -28,6 +28,7 @@ silenteight/agent/bankidentificationcodes/v1/api/bank_identification_codes_agent
  -c CONFIGURATION_DIR, --configuration-dir CONFIGURATION_DIR
                     path to the configuration dir
  --grpc             Start grpc service
+ --agent-exchange      Start agent exchange
  -v, --verbose      Increase verbosity for debug purpos
 
  When using .pyz file, to run type:

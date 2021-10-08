@@ -1,4 +1,26 @@
+grpc:
+  client:
+    data-source:
+      address: localhost:24803
+      timeout: 5
+
+rabbitmq:
+  host: localhost
+  port: 24160
+  login: dev
+  password: dev
+  virtualhost: /
+
+
 agent:
   process: 2
+  agent-exchange:
+      request:
+          exchange: 'agent.request'
+          routing-key: 'agents.bankIdentificationCodes.versions.1_0_0.configs.1'
+          queue-name: 'agent.bankidentificationcodes-requests'
+
+      response:
+          exchange: 'agent.response'
   grpc:
     port: 24805

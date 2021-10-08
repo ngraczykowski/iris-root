@@ -7,13 +7,22 @@ from agent_base.utils import Config
 from tstoolkit.utils import LogLevel, setup_logging
 
 from bank_identification_codes_agent.agent import BankIdentificationCodesAgent
+from bank_identification_codes_agent.agent_data_source import BankIdentificationCodesAgentDataSource
+from bank_identification_codes_agent.agent_exchange import BankIdentificationCodesAgentExchange
 from bank_identification_codes_agent.grpc_service import BankIdentificationCodesAgentGrpcServicer
 
 
-def run(configuration_dirs, start_grpc_service):
+def run(configuration_dirs, start_agent_exchange, start_grpc_service):
     config = Config(configuration_dirs=configuration_dirs, required=True)
     services = []
 
+    if start_agent_exchange:
+        services.append(
+            BankIdentificationCodesAgentExchange(
+                config,
+                data_source=BankIdentificationCodesAgentDataSource(config),
+            )
+        )
     if start_grpc_service:
         services.append(
             GrpcService(config, servicers=(BankIdentificationCodesAgentGrpcServicer(),))
@@ -40,6 +49,11 @@ def main():
         help="Start grpc service",
     )
     parser.add_argument(
+        "--agent-exchange",
+        action="store_true",
+        help="Start agent exchange",
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
@@ -50,6 +64,7 @@ def main():
     setup_logging(log_level=LogLevel.debug if args.verbose else LogLevel.info)
     run(
         configuration_dirs=(args.configuration_dir,),
+        start_agent_exchange=args.agent_exchange,
         start_grpc_service=args.grpc,
     )
 
