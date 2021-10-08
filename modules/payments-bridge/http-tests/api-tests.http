@@ -51,3 +51,13 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 < ../docs/api/svb-examples/2021-10-04-1851_saddam_hussain.json
+
+### Post the SVB alert 2021-10-04-1851 for solving
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/2021_10_08-1754_uat_firco_alert.json
