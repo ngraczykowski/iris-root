@@ -23,7 +23,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 })
 class ArchiveDatasetRestControllerTest extends BaseRestControllerTest {
 
-  private static final String ARVHICE_DATASET_URL = format("/v1/datasets/%s:archive", ID);
+  private static final String ARCHIVE_DATASET_URL = format("/v1/datasets/%s:archive", ID);
 
   @MockBean
   private ArchiveDatasetUseCase useCase;
@@ -33,7 +33,7 @@ class ArchiveDatasetRestControllerTest extends BaseRestControllerTest {
   void its204_whenDatasetArchived() {
     doNothing().when(useCase).activate(any());
 
-    post(ARVHICE_DATASET_URL, ARCHIVE_DATASET_REQUEST)
+    post(ARCHIVE_DATASET_URL, ARCHIVE_DATASET_REQUEST)
         .statusCode(NO_CONTENT.value());
   }
 
@@ -42,7 +42,7 @@ class ArchiveDatasetRestControllerTest extends BaseRestControllerTest {
       username = USERNAME,
       authorities = { APPROVER, AUDITOR, USER_ADMINISTRATOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRoleForArchiving() {
-    post(ARVHICE_DATASET_URL, ARCHIVE_DATASET_REQUEST)
+    post(ARCHIVE_DATASET_URL, ARCHIVE_DATASET_REQUEST)
         .statusCode(FORBIDDEN.value());
   }
 }

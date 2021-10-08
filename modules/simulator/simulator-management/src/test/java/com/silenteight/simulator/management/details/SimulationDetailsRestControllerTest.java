@@ -4,6 +4,7 @@ import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.simulator.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.simulator.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.simulator.management.SimulationFixtures;
+import com.silenteight.simulator.management.common.SimulationControllerAdvice;
 import com.silenteight.simulator.management.domain.exception.SimulationNotFoundException;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,7 +22,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @Import({
     SimulationDetailsRestController.class,
-    SimulationDetailsControllerAdvice.class,
+    SimulationControllerAdvice.class,
     GenericExceptionControllerAdvice.class,
 })
 class SimulationDetailsRestControllerTest extends BaseRestControllerTest {
@@ -39,7 +40,7 @@ class SimulationDetailsRestControllerTest extends BaseRestControllerTest {
         .body("id", is(ID.toString()))
         .body("name", is(NAME))
         .body("simulationName", is(SIMULATION_NAME))
-        .body("state", is(STATE.toString()))
+        .body("state", is(PENDING_STATE.toString()))
         .body("datasets", hasItems(DATASET_NAME_1))
         .body("model", is(MODEL_NAME))
         .body("createdAt", notNullValue())

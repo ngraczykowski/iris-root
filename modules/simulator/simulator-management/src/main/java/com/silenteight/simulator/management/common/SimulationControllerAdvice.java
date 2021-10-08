@@ -1,4 +1,4 @@
-package com.silenteight.simulator.management.details;
+package com.silenteight.simulator.management.common;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,7 +12,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Slf4j
 @ControllerAdvice
-class SimulationDetailsControllerAdvice {
+public class SimulationControllerAdvice {
 
   @ExceptionHandler(SimulationNotFoundException.class)
   public ResponseEntity<String> handle(SimulationNotFoundException e) {

@@ -10,7 +10,7 @@ interface SimulationRepository extends Repository<SimulationEntity, Long> {
 
   SimulationEntity save(SimulationEntity simulationEntity);
 
-  Collection<SimulationEntity> findAll();
+  Collection<SimulationEntity> findAllByStateIn(Collection<SimulationState> states);
 
   Collection<SimulationEntity> findAllByModelName(String modelName);
 

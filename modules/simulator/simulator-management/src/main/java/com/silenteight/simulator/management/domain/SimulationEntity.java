@@ -99,6 +99,11 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
     this.state = ARCHIVED;
   }
 
+  void cancel() {
+    assertInState(PENDING);
+    this.state = CANCELED;
+  }
+
   private void assertInState(SimulationState requiredState) {
     if (this.state != requiredState)
       throw new SimulationNotInProperStateException(requiredState);

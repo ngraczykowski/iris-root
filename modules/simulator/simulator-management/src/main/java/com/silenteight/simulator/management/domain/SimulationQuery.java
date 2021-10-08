@@ -14,21 +14,28 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import static com.silenteight.simulator.management.domain.SimulationState.DONE;
+import static com.silenteight.simulator.management.domain.SimulationState.NEW;
+import static com.silenteight.simulator.management.domain.SimulationState.PENDING;
+import static com.silenteight.simulator.management.domain.SimulationState.RUNNING;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
 class SimulationQuery implements ListSimulationsQuery, SimulationDetailsQuery {
 
+  private static final Collection<SimulationState> ACTIVE_SIMULATION_STATES =
+      List.of(NEW, PENDING, RUNNING, DONE);
+
   @NonNull
   private final SimulationRepository repository;
 
   @Override
   public List<SimulationDto> list() {
-    log.debug("Listing all SimulationDto");
+    log.debug("Listing active SimulationDto");
 
     return repository
-        .findAll()
+        .findAllByStateIn(ACTIVE_SIMULATION_STATES)
         .stream()
         .map(SimulationEntity::toDto)
         .collect(toList());

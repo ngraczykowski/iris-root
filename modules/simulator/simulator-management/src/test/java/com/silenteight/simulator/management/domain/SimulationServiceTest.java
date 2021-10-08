@@ -13,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static com.silenteight.simulator.management.SimulationFixtures.*;
+import static com.silenteight.simulator.management.domain.SimulationState.CANCELED;
 import static com.silenteight.simulator.management.domain.SimulationState.DONE;
+import static com.silenteight.simulator.management.domain.SimulationState.PENDING;
 import static com.silenteight.simulator.management.domain.SimulationState.RUNNING;
 import static org.assertj.core.api.Assertions.*;
 
@@ -98,8 +100,29 @@ class SimulationServiceTest extends BaseDataJpaTest {
         .hasMessageContaining("analysisName=" + ANALYSIS_NAME);
   }
 
+  @Test
+  void shouldCancel() {
+    // given
+    SimulationEntity simulation = persistSimulation(PENDING);
+
+    // when
+    underTest.cancel(ID);
+
+    // then
+    SimulationEntity savedSimulation =
+        entityManager.find(SimulationEntity.class, simulation.getId());
+    assertThat(savedSimulation.getState()).isEqualTo(CANCELED);
+  }
+
+  @Test
+  void shouldThrowIfCancelingAndSimulationNotFound() {
+    assertThatThrownBy(() -> underTest.cancel(ID))
+        .isInstanceOf(SimulationNotFoundException.class)
+        .hasMessageContaining("simulationId=" + ID);
+  }
+
   private SimulationEntity persistSimulation() {
-    return persistSimulation(STATE);
+    return persistSimulation(PENDING_STATE);
   }
 
   private SimulationEntity persistSimulation(SimulationState state) {
