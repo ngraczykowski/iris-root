@@ -1,7 +1,7 @@
 name: webapp-app
 image_tag: webapp-app
 image_repo: webapp-app
-args: [ "webapp-app" ]
+args: ["--logging.config=file:/etc/logback.xml"]
 ports:
   http: 24410
 config:
@@ -11,3 +11,5 @@ config:
       value: example-release-key-some-passowrd
 replicaCount: 1
 imagePullPolicy: Always
+memoryLimit: 2048Mi
+memoryRequest: 512Mi
