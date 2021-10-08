@@ -68,7 +68,7 @@ class CreateLearningAlertUseCase {
   }
 
   static Timestamp createAlertTime(String time) {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss.SSS");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
     Date parsedDate;
     try {
       parsedDate = dateFormat.parse(time);
