@@ -1,5 +1,6 @@
 from agent_base.agent_exchange.agent_data_source import AgentDataSource
 from silenteight.agents.v1.api.exchange.exchange_pb2 import AgentExchangeRequest
+
 from bank_identification_codes_pb2 import (
     BatchGetMatchBankIdentificationCodesInputsRequest,
     BatchGetMatchBankIdentificationCodesInputsResponse,
@@ -13,10 +14,11 @@ class BankIdentificationCodesAgentDataSource(AgentDataSource):
         stub = BankIdentificationCodesInputServiceStub(self.channel)
         self.command = stub.BatchGetMatchBankIdentificationCodesInputs
 
-    def prepare_request(self, request: AgentExchangeRequest) -> BatchGetMatchBankIdentificationCodesInputsRequest:
+    def prepare_request(
+        self, request: AgentExchangeRequest
+    ) -> BatchGetMatchBankIdentificationCodesInputsRequest:
         return BatchGetMatchBankIdentificationCodesInputsRequest(
-            matches=request.matches,
-            features=[request.features]
+            matches=request.matches, features=[request.features]
         )
 
     def parse_response(self, response: BatchGetMatchBankIdentificationCodesInputsResponse):

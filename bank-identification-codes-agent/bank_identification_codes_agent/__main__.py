@@ -7,7 +7,9 @@ from agent_base.utils import Config
 from tstoolkit.utils import LogLevel, setup_logging
 
 from bank_identification_codes_agent.agent import BankIdentificationCodesAgent
-from bank_identification_codes_agent.agent_data_source import BankIdentificationCodesAgentDataSource
+from bank_identification_codes_agent.agent_data_source import (
+    BankIdentificationCodesAgentDataSource,
+)
 from bank_identification_codes_agent.agent_exchange import BankIdentificationCodesAgentExchange
 from bank_identification_codes_agent.grpc_service import BankIdentificationCodesAgentGrpcServicer
 
