@@ -56,12 +56,12 @@ class SelectMissingMatchCategoryValuesQuery {
         try {
           var matchAlerts = objectMapper.readValue(
               rs.getString("match_alert"), new TypeReference<List<MatchAlert>>() {});
+          log.info("mapped match alerts = {} for category = {}", matchAlerts, category);
           missingMatchCategories.add(
               MissingMatchCategory.builder().categoryName(category).matches(matchAlerts).build());
         } catch (JsonProcessingException e) {
           throw new RuntimeException("Couldn't map match alert", e);
         }
-
         categories.putIfAbsent(category, categoryId);
       }
 

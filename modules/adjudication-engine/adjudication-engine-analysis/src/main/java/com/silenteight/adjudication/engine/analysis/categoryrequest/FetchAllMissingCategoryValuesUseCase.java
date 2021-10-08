@@ -30,6 +30,8 @@ class FetchAllMissingCategoryValuesUseCase {
       var missingValues =
           matchCategoryValuesDataAccess.getMissingCategoryValues(analysisId);
 
+      log.info("Received missing values = {}", missingValues);
+
       if (missingValues.isEmpty()) {
         log.debug("No more missing category values: analysis={}, categoryCount={}, matchCount={}",
             analysis, categories.size(), matches.size());
