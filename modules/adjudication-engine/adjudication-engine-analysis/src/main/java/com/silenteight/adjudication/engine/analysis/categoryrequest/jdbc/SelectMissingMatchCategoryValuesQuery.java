@@ -56,7 +56,6 @@ class SelectMissingMatchCategoryValuesQuery {
         try {
           var matchAlerts = objectMapper.readValue(
               rs.getString("match_alert"), new TypeReference<List<MatchAlert>>() {});
-          log.info("mapped match alerts = {} for category = {}", matchAlerts, category);
           missingMatchCategories.add(
               MissingMatchCategory.builder().categoryName(category).matches(matchAlerts).build());
         } catch (JsonProcessingException e) {
@@ -65,8 +64,6 @@ class SelectMissingMatchCategoryValuesQuery {
         categories.putIfAbsent(category, categoryId);
       }
 
-      log.info(
-          "Missing Match Categories = {}, categories = {}", missingMatchCategories, categories);
       return new MissingCategoryResult(missingMatchCategories, new CategoryMap(categories));
     }
   }
