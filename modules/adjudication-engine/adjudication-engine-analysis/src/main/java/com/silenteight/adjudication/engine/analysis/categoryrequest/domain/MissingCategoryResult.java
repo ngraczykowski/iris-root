@@ -26,6 +26,10 @@ public class MissingCategoryResult {
     return missingMatchCategories.isEmpty();
   }
 
+  public List<MissingMatchCategory> getMissingMatchCategories() {
+    return missingMatchCategories;
+  }
+
   public int getCount() {
     return missingMatchCategories.size();
   }

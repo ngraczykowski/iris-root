@@ -23,10 +23,12 @@ class CreateAndGetAnalysisUseCase {
 
   @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "analysis" })
   Analysis createAndGetAnalysis(Analysis prototype) {
+    log.info("Creating analysis with categories = {}", prototype.getCategoriesList());
+
     var analysisName = createAnalysisUseCase.createAnalysis(prototype);
     var analysis = getAnalysisUseCase.getAnalysis(analysisName);
 
-    log.info("Created new analysis: analysis={}", analysisName);
+    log.info("Created new analysis: analysis={}, with categories = {}", analysisName, analysis.getCategoriesList());
     if (log.isDebugEnabled()) {
       log.debug(
           "New analysis: analysisMessage={}", TextFormat.printer().shortDebugString(analysis));
