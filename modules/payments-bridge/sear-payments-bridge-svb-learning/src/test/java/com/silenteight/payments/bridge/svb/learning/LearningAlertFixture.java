@@ -26,7 +26,7 @@ public class LearningAlertFixture {
     return LearningMatch
         .builder()
         .matchId(String.valueOf(matchId))
-        .matchName("alert/1/matches/" + matchId)
+        .matchName("alerts/1/matches/" + matchId)
         .watchlistNames(List.of("watchlist1", "watchlist2"))
         .watchlistLocation("watchlist1")
         .matchType("type")

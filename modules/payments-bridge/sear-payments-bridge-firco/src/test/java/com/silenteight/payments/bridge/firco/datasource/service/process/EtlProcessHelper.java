@@ -17,7 +17,7 @@ public class EtlProcessHelper {
   public static AlertRegisteredEvent createAlertRegisteredEvent(int numberOfMatches) {
     Map<String, String> matches = createMatches(numberOfMatches);
     var id = UUID.randomUUID();
-    return new AlertRegisteredEvent(id, "alert/" + id, matches);
+    return new AlertRegisteredEvent(id, "alerts/" + id, matches);
   }
 
   @Nonnull
@@ -36,7 +36,7 @@ public class EtlProcessHelper {
 
   @Nonnull
   public static String getMatchValue(int id) {
-    return "match/" + String.valueOf(id);
+    return "matches/" + String.valueOf(id);
   }
 
   public static AlertEtlResponse createAlertEtlResponse(int numberOfHits) {

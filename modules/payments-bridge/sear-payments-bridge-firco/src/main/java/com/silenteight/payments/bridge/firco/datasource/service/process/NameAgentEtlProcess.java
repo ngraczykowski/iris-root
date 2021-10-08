@@ -42,7 +42,6 @@ class NameAgentEtlProcess implements EtlProcess {
 
   private void handleMatches(List<HitData> hitsData, Entry<String, String> matchItem) {
     filterHitsData(hitsData, matchItem)
-        .stream()
         .forEach(hitData -> callAgentService(matchItem, hitData));
   }
 
@@ -61,11 +60,12 @@ class NameAgentEtlProcess implements EtlProcess {
         .batchCreateAgentInputs(batchInputRequest);
   }
 
-  private BatchCreateAgentInputsRequest createBatchInputRequest(
+  private static BatchCreateAgentInputsRequest createBatchInputRequest(
       String matchValue, List<String> alertedPartyNames, String watchlistName,
       EntityType alertedPartyType,
       List<String> matchingTexts) {
-    var batchInputRequest = BatchCreateAgentInputsRequest.newBuilder()
+
+    return BatchCreateAgentInputsRequest.newBuilder()
         .addAgentInputs(AgentInput.newBuilder()
             .setMatch(matchValue)
             .addFeatureInputs(FeatureInput
@@ -90,8 +90,6 @@ class NameAgentEtlProcess implements EtlProcess {
                 .build())
             .build())
         .build();
-
-    return batchInputRequest;
   }
 
   @NonNull
@@ -103,7 +101,6 @@ class NameAgentEtlProcess implements EtlProcess {
       case COMPANY:
         return EntityType.ORGANIZATION;
       case ADDRESS:
-        return EntityType.ENTITY_TYPE_UNSPECIFIED;
       case VESSEL:
         return EntityType.ENTITY_TYPE_UNSPECIFIED;
       default:
