@@ -5,13 +5,12 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.feature.geolocation.GeoResidencyFeatureQuery;
 
-import java.util.HashSet;
-import java.util.stream.Stream;
+import java.util.Optional;
 
+import static com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.SignType.SPACE;
 import static com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.mergeFields;
-import static java.lang.String.join;
-import static java.util.List.of;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Stream.of;
 
 @RequiredArgsConstructor
 public class GeoResidenciesFeatureQueryFacade implements GeoResidencyFeatureQuery {
@@ -20,28 +19,24 @@ public class GeoResidenciesFeatureQueryFacade implements GeoResidencyFeatureQuer
 
   @Override
   public String getApIndividualsGeoResidencies() {
-    var customerIndividuals = matchData.getCustomerIndividuals();
-    var mergedFields = new HashSet<String>();
-
-    customerIndividuals.forEach(customerIndividual -> {
-      var fields = of(customerIndividual.getAddress(), customerIndividual.getProfileFullAddress());
-      mergedFields.add(mergeFields(fields));
-    });
-
-    return join(" ", mergedFields);
+    return Optional.ofNullable(matchData.getCustomerIndividuals())
+        .map(entities ->
+            entities.stream()
+                .flatMap(ent -> of(ent.getAddress(), ent.getProfileFullAddress()))
+                .map(GeoLocationExtractor::stripAndUpper)
+                .distinct()
+                .collect(joining(SPACE.getSign()))).orElse("");
   }
 
   @Override
   public String getApEntitiesGeoResidencies() {
-    var customerEntities = matchData.getCustomerEntities();
-    var mergedFields = new HashSet<String>();
-
-    customerEntities.forEach(customerEntity -> {
-      var fields = of(customerEntity.getAddress(), customerEntity.getProfileFullAddress());
-      mergedFields.add(mergeFields(fields));
-    });
-
-    return join(" ", mergedFields);
+    return Optional.ofNullable(matchData.getCustomerEntities())
+        .map(entities ->
+            entities.stream()
+                .flatMap(ent -> of(ent.getAddress(), ent.getProfileFullAddress()))
+                .map(GeoLocationExtractor::stripAndUpper)
+                .distinct()
+                .collect(joining(SPACE.getSign()))).orElse("");
   }
 
   @Override
@@ -50,7 +45,7 @@ public class GeoResidenciesFeatureQueryFacade implements GeoResidencyFeatureQuer
     var privateListIndividualsGeoResidencies = privateListIndividualsGeoResidencies();
     var ctrpScreeningIndividualsGeoResidencies = ctrpScreeningIndividualsGeoResidencies();
 
-    var fields = Stream.of(
+    var fields = of(
         worldCheckIndividualsGeoResidencies,
         privateListIndividualsGeoResidencies,
         ctrpScreeningIndividualsGeoResidencies);
@@ -61,7 +56,7 @@ public class GeoResidenciesFeatureQueryFacade implements GeoResidencyFeatureQuer
   @Override
   public String getMpEntitiesGeoResidencies() {
     var ctrpScreeningEntitiesGeoResidencies = ctrpScreeningEntitiesGeoResidencies();
-    var fields = Stream.of(ctrpScreeningEntitiesGeoResidencies);
+    var fields = of(ctrpScreeningEntitiesGeoResidencies);
     return fields.distinct().collect(joining(" "));
   }
 

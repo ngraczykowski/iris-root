@@ -34,9 +34,13 @@ class GeoLocationExtractor {
     }
     return values.stream()
         .filter(StringUtils::isNotBlank)
-        .map(value -> value.strip().toUpperCase())
+        .map(GeoLocationExtractor::stripAndUpper)
         .distinct()
         .collect(joining(" "));
+  }
+
+  static String stripAndUpper(String value) {
+    return value.strip().toUpperCase();
   }
 
   static Stream<String> splitExtractedValueBySign(SignType signType, String value) {
