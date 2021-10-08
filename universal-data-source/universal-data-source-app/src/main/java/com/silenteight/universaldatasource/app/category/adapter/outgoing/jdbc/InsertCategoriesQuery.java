@@ -71,7 +71,7 @@ public class InsertCategoriesQuery {
     batchSqlUpdate.updateByNamedParam(paramMap, keyHolder);
   }
 
-  private List<Category> getCategories(List<Map<String, Object>> keyList) {
+  private static List<Category> getCategories(List<Map<String, Object>> keyList) {
     return keyList
         .stream()
         .map(it -> Category
@@ -84,7 +84,7 @@ public class InsertCategoriesQuery {
             .build()).collect(Collectors.toList());
   }
 
-  private String getDisplayName(Category category) {
+  private static String getDisplayName(Category category) {
     if (StringUtils.isBlank(category.getDisplayName()))
       return category.getName();
 

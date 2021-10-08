@@ -59,7 +59,7 @@ class SelectCategoryValueQuery {
     public CategoryValue mapRow(ResultSet rs, int rowNum) throws SQLException {
       return CategoryValue
           .newBuilder()
-          .setName(rs.getString(2) + "/value/" + rs.getLong(1))
+          .setName(rs.getString(2) + "/values/" + rs.getLong(1))
           .setMatch(rs.getString(3))
           .setSingleValue(rs.getString(4))
           .build();

@@ -150,8 +150,8 @@ class CategoryIntegrationTest {
     assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesList()).isNotNull();
     assertThat(firstCategorySingleValue).isEqualTo("NO");
     assertThat(secondCategorySingleValue).isEqualTo("YES");
-    assertThat(firstCategoryName).contains("categories/categoryTwo/value/");
-    assertThat(secondCategoryName).contains("categories/categoryOne/value/");
+    assertThat(firstCategoryName).startsWith("categories/categoryTwo/values/");
+    assertThat(secondCategoryName).startsWith("categories/categoryOne/values/");
   }
 
   @Test
@@ -185,4 +185,3 @@ class CategoryIntegrationTest {
     );
   }
 }
-

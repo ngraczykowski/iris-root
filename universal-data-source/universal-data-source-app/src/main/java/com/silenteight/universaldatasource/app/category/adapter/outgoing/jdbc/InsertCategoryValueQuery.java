@@ -68,7 +68,7 @@ class InsertCategoryValueQuery {
     for (Map<String, Object> it : keyList) {
       CreatedCategoryValue build = CreatedCategoryValue
           .newBuilder()
-          .setName(it.get("category_id").toString() + "/value/" + it.get("category_value_id"))
+          .setName(it.get("category_id").toString() + "/values/" + it.get("category_value_id"))
           .setMatch(it.get("match_name").toString())
           .build();
       categoryValueList.add(build);

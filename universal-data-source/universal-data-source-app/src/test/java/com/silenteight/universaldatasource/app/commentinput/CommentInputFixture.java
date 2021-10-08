@@ -66,7 +66,7 @@ class CommentInputFixture {
       InvalidProtocolBufferException {
 
     return MatchCommentInput.newBuilder()
-        .setMatch("alert/" + alertId + "/match/" + matchId)
+        .setMatch("alerts/" + alertId + "/matches/" + matchId)
         .setCommentInput(getMatchCommentInput())
         .build();
   }

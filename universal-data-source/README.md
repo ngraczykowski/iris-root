@@ -76,7 +76,7 @@ grpc_cli call localhost:24805 silenteight.datasource.categories.api.v2.CategoryV
 Response:
 ```
 created_category_values {
-  name: "categories/crossmatch/value/387666"
+  name: "categories/crossmatch/values/387666"
   match: "alerts/123/matches/123"
 }
 ```
@@ -90,7 +90,7 @@ grpc_cli call localhost:24805 silenteight.datasource.categories.api.v2.CategoryV
 Response:
 ```
 category_values {
-  name: "categories/crossmatch/value/387666"
+  name: "categories/crossmatch/values/387666"
   match: "alerts/123/matches/123"
   single_value: "YES"
 }
@@ -172,17 +172,3 @@ agent_inputs: [
 Field agent_feature_input contains agents input data, for example: NameFeatureInput or
 LocationFeatureInput. Because of custom data type put in a field of type google.protobuf.Any
 issues occur while using tools like grpc url or grpc ui.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
