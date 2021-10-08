@@ -10,10 +10,11 @@ trait Match {
 
   static MatchData MATCH_WITHOUT_AP_GENDER_DERIVED_FLAG_1 = [
       getCaseInformation       : {new CaseInformation(id: 1)},
-      getCustomerIndividual    : {
-        new CustomerIndividual(
+      getCustomerEntities      : {null},
+      getCustomerIndividuals   : {
+        [new CustomerIndividual(
             gender: "M",
-        )
+        )]
       },
       getWorldCheckIndividuals : {
         [new WorldCheckIndividual(
@@ -31,12 +32,13 @@ trait Match {
 
   static MatchData MATCH_WITHOUT_WP_GENDER_DERIVED_FLAG_1 = [
       getCaseInformation       : {new CaseInformation(id: 1)},
-      getCustomerIndividual    : {
-        new CustomerIndividual(
+      getCustomerEntities      : {null},
+      getCustomerIndividuals   : {
+        [new CustomerIndividual(
             gender: "M",
             genderDerivedFlag: "N",
 
-        )
+        )]
       },
       getWorldCheckIndividuals : {
         [new WorldCheckIndividual(

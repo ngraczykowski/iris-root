@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature.nationalitycountry
+package com.silenteight.hsbc.datasource.feature.country
 
 import com.silenteight.hsbc.datasource.extractors.country.NationalityCountryQueryConfigurer
 import com.silenteight.hsbc.datasource.feature.Feature

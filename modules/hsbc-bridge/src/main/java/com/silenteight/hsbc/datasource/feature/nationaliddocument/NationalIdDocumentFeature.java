@@ -13,7 +13,7 @@ import static java.util.Collections.emptyList;
 
 @Slf4j
 @RequiredArgsConstructor
-public class NationalIdFeature implements FeatureValuesRetriever<NationalIdFeatureInputDto> {
+public class NationalIdDocumentFeature implements FeatureValuesRetriever<NationalIdFeatureInputDto> {
 
   private final NationalIdDocumentQuery.Factory documentQueryFactory;
 

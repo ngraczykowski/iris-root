@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.datamodel.PrivateListEntity;
-import com.silenteight.hsbc.datasource.feature.otherdocument.OtherDocumentQuery;
+import com.silenteight.hsbc.datasource.feature.document.OtherDocumentQuery;
 
 import java.util.stream.Stream;
 
@@ -31,7 +31,7 @@ class OtherDocumentQueryFacade implements OtherDocumentQuery {
   }
 
   private Document extractApDocuments() {
-    return DOCUMENT_EXTRACTOR.convertAlertedPartyDocumentNumbers(matchData.getCustomerIndividual());
+    return DOCUMENT_EXTRACTOR.convertAlertedPartyDocumentNumbers(matchData.getCustomerIndividuals());
   }
 
   private Document extractMpDocuments() {

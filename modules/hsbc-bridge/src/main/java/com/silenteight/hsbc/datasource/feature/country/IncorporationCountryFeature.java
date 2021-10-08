@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature.incorporationcountry;
+package com.silenteight.hsbc.datasource.feature.country;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +29,7 @@ public class IncorporationCountryFeature implements FeatureValuesRetriever<Count
     var builder = CountryFeatureInputDto.builder();
 
     if (matchData.isEntity()) {
-      var apIncorporationCountries = customerEntitiesIncorporationCountries(
-          matchData.getCustomerEntity());
+      var apIncorporationCountries = customerEntitiesIncorporationCountries(matchData.getCustomerEntities());
       var mpIncorporationCountries = getWatchlistEntitiesIncorporationCountries(matchData);
 
       builder.alertedPartyCountries(toDistinctList(apIncorporationCountries));
@@ -95,12 +94,13 @@ public class IncorporationCountryFeature implements FeatureValuesRetriever<Count
   }
 
   private static Stream<String> customerEntitiesIncorporationCountries(
-      CustomerEntity customerEntity) {
-    return Stream.of(
-        customerEntity.getCountriesOfIncorporation(),
-        customerEntity.getEdqIncorporationCountries(),
-        customerEntity.getEdqIncorporationCountriesCodes()
-    ).filter(StringUtils::isNotBlank);
+      List<CustomerEntity> customerEntities) {
+    return customerEntities.stream()
+        .flatMap(customerEntity -> Stream.of(
+            customerEntity.getCountriesOfIncorporation(),
+            customerEntity.getEdqIncorporationCountries(),
+            customerEntity.getEdqIncorporationCountriesCodes()))
+        .filter(StringUtils::isNotBlank);
   }
 
   @Override

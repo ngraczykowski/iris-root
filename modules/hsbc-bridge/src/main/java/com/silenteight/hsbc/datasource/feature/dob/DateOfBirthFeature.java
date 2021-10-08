@@ -25,7 +25,7 @@ public class DateOfBirthFeature implements FeatureValuesRetriever<DateFeatureInp
       return featureBuilder.build();
     }
 
-    var apDates = new ApDateExtractor(matchData.getCustomerIndividual()).extract();
+    var apDates = new ApDateExtractor(matchData.getCustomerIndividuals()).extract();
 
     var mpDobsPrivateWatchlistDates = new PrivateListIndividualsDateExtractor(
         matchData.getPrivateListIndividuals()).extract();

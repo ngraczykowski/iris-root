@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature.passportnumberdocument;
+package com.silenteight.hsbc.datasource.feature.document;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

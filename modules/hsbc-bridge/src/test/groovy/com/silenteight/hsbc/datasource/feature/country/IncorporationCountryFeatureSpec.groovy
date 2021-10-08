@@ -1,7 +1,8 @@
-package com.silenteight.hsbc.datasource.feature.incorporationcountry
+package com.silenteight.hsbc.datasource.feature.country
 
 import com.silenteight.hsbc.datasource.datamodel.*
 import com.silenteight.hsbc.datasource.feature.Feature
+import com.silenteight.hsbc.datasource.feature.country.IncorporationCountryFeature
 
 import spock.lang.Specification
 
@@ -35,7 +36,7 @@ class IncorporationCountryFeatureSpec extends Specification {
 
     def matchData = Mock(MatchData) {
       isEntity() >> true
-      getCustomerEntity() >> customerEntity
+      getCustomerEntities() >> [customerEntity]
       getWorldCheckEntities() >> [worldCheckEntity]
       hasWorldCheckEntities() >> true
       getPrivateListEntities() >> [privateListEntity]

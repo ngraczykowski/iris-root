@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
 import com.silenteight.hsbc.datasource.feature.geolocation.GeoPlaceOfBirthFeatureQuery;
 
+import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import static com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.joinFields;
@@ -19,18 +20,23 @@ public class GeoPlaceOfBirthFeatureQueryFacade implements GeoPlaceOfBirthFeature
 
   @Override
   public String getApGeoPlacesOfBirth() {
-    var customerIndividuals = individualComposite.getCustomerIndividual();
+    var customerIndividuals = individualComposite.getCustomerIndividuals();
+    var placesOfBirth = new ArrayList<String>();
 
-    var joinFields = joinFields(
-        customerIndividuals.getCountryOfBirth(),
-        customerIndividuals.getStateProvinceOrCountyOfBirth(),
-        customerIndividuals.getTownOfBirth());
+    customerIndividuals.forEach(customerIndividual -> {
+      var joinFields = joinFields(
+          customerIndividual.getCountryOfBirth(),
+          customerIndividual.getStateProvinceOrCountyOfBirth(),
+          customerIndividual.getTownOfBirth());
 
-    var placeOfBirth = customerIndividuals.getPlaceOfBirth();
+      var placeOfBirth = customerIndividual.getPlaceOfBirth();
 
-    var fields = of(joinFields, placeOfBirth);
+      var fields = of(joinFields, placeOfBirth);
 
-    return mergeFields(fields);
+      placesOfBirth.add(mergeFields(fields));
+    });
+
+    return placesOfBirth.stream().distinct().collect(joining(" "));
   }
 
   @Override

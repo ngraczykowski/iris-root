@@ -15,7 +15,7 @@ class ApDateExtractorSpec extends Specification {
     ] as CustomerIndividual
 
     when:
-    def actual = new ApDateExtractor(customerIndividual).extract()
+    def actual = new ApDateExtractor([customerIndividual]).extract()
 
     then:
     actual.collect() == ["1992 8 23", "1994"]

@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.feature.geolocation.GeoResidencyFeatureQuery;
 
+import java.util.HashSet;
 import java.util.stream.Stream;
 
 import static com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.mergeFields;
+import static java.lang.String.join;
 import static java.util.List.of;
 import static java.util.stream.Collectors.joining;
 
@@ -18,16 +20,28 @@ public class GeoResidenciesFeatureQueryFacade implements GeoResidencyFeatureQuer
 
   @Override
   public String getApIndividualsGeoResidencies() {
-    var customerIndividuals = matchData.getCustomerIndividual();
-    var fields = of(customerIndividuals.getAddress(), customerIndividuals.getProfileFullAddress());
-    return mergeFields(fields);
+    var customerIndividuals = matchData.getCustomerIndividuals();
+    var mergedFields = new HashSet<String>();
+
+    customerIndividuals.forEach(customerIndividual -> {
+      var fields = of(customerIndividual.getAddress(), customerIndividual.getProfileFullAddress());
+      mergedFields.add(mergeFields(fields));
+    });
+
+    return join(" ", mergedFields);
   }
 
   @Override
   public String getApEntitiesGeoResidencies() {
-    var customerEntity = matchData.getCustomerEntity();
-    var fields = of(customerEntity.getAddress(), customerEntity.getProfileFullAddress());
-    return mergeFields(fields);
+    var customerEntities = matchData.getCustomerEntities();
+    var mergedFields = new HashSet<String>();
+
+    customerEntities.forEach(customerEntity -> {
+      var fields = of(customerEntity.getAddress(), customerEntity.getProfileFullAddress());
+      mergedFields.add(mergeFields(fields));
+    });
+
+    return join(" ", mergedFields);
   }
 
   @Override

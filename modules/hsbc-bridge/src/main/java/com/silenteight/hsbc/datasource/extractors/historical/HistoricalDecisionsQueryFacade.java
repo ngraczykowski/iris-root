@@ -5,9 +5,13 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.feature.historical.HistoricalDecisionsQuery;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static java.util.Optional.of;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.empty;
 
 @RequiredArgsConstructor
 class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
@@ -17,12 +21,12 @@ class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
 
   @Override
   public List<ModelCountsDto> getIsApTpMarkedInput() {
-    var alertedPartyId = getExternalProfileId();
-
-    var request =
-        new AlertedPartyRequestCreator(alertedPartyId).createRequest();
-
-    return serviceClient.getHistoricalDecisions(request).getModelCounts();
+    return getExternalProfileIds().map(AlertedPartyRequestCreator::new)
+        .map(AlertedPartyRequestCreator::createRequest)
+        .map(serviceClient::getHistoricalDecisions)
+        .map(GetHistoricalDecisionsResponseDto::getModelCounts)
+        .flatMap(Collection::stream)
+        .collect(toList());
   }
 
   @Override
@@ -41,9 +45,19 @@ class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
     return serviceClient.getHistoricalDecisions(request).getModelCounts();
   }
 
-  private String getExternalProfileId() {
+  private Stream<String> getExternalProfileIds() {
     return (matchData.isIndividual()) ?
-           of(matchData.getCustomerIndividual().getExternalProfileId()).orElse("") :
-           of(matchData.getCustomerEntity().getExternalProfileId()).orElse("");
+           of(matchData
+               .getCustomerIndividuals()
+               .stream()
+               .flatMap(customerEntity -> Stream.of(customerEntity.getExternalProfileId()))
+               .distinct())
+               .orElse(empty()) :
+           of(matchData
+               .getCustomerEntities()
+               .stream()
+               .flatMap(customerEntity -> Stream.of(customerEntity.getExternalProfileId()))
+               .distinct())
+               .orElse(empty());
   }
 }

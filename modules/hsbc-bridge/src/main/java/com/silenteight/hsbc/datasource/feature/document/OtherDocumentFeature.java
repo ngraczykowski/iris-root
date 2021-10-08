@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature.otherdocument;
+package com.silenteight.hsbc.datasource.feature.document;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

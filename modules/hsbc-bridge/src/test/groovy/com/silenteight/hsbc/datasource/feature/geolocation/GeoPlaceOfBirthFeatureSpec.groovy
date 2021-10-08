@@ -37,7 +37,7 @@ class GeoPlaceOfBirthFeatureSpec extends Specification {
 
     def matchData = Mock(MatchData) {
       isIndividual() >> true
-      getCustomerIndividual() >> customerIndividual
+      getCustomerIndividuals() >> [customerIndividual]
       getWorldCheckIndividuals() >> [worldCheckIndividual]
       hasWorldCheckIndividuals() >> true
       getPrivateListIndividuals() >> [privateListIndividual]

@@ -2,18 +2,18 @@ package com.silenteight.hsbc.datasource.datamodel;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
-import javax.annotation.Nullable;
 
 import static com.silenteight.hsbc.datasource.datamodel.WatchlistType.CTRPPRHB_LIST_INDIVIDUALS;
 import static com.silenteight.hsbc.datasource.datamodel.WatchlistType.PRIVATE_LIST_INDIVIDUALS;
 import static com.silenteight.hsbc.datasource.datamodel.WatchlistType.WORLDCHECK_INDIVIDUALS;
 import static java.util.Objects.nonNull;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static java.util.stream.Stream.concat;
 
 public interface IndividualComposite {
 
-  @Nullable
-  CustomerIndividual getCustomerIndividual();
+  List<CustomerIndividual> getCustomerIndividuals();
 
   List<WorldCheckIndividual> getWorldCheckIndividuals();
 
@@ -35,7 +35,7 @@ public interface IndividualComposite {
 
   default Optional<String> getIndividualWatchlistId() {
     var listRecordId =
-        Stream.concat(getWorldCheckIndividuals().stream(), getPrivateListIndividuals().stream())
+        concat(getWorldCheckIndividuals().stream(), getPrivateListIndividuals().stream())
             .map(ListRecordId::getListRecordId).findFirst();
 
     return listRecordId.or(this::getCtrpScreeningIndividualId);
@@ -49,12 +49,12 @@ public interface IndividualComposite {
 
   default Optional<WatchlistType> getIndividualWatchlistType() {
     if (!getWorldCheckIndividuals().isEmpty()) {
-      return Optional.of(WORLDCHECK_INDIVIDUALS);
+      return of(WORLDCHECK_INDIVIDUALS);
     } else if (!getPrivateListIndividuals().isEmpty()) {
-      return Optional.of(PRIVATE_LIST_INDIVIDUALS);
+      return of(PRIVATE_LIST_INDIVIDUALS);
     } else if (!getCtrpScreeningIndividuals().isEmpty()) {
-      return Optional.of(CTRPPRHB_LIST_INDIVIDUALS);
+      return of(CTRPPRHB_LIST_INDIVIDUALS);
     } else
-      return Optional.empty();
+      return empty();
   }
 }

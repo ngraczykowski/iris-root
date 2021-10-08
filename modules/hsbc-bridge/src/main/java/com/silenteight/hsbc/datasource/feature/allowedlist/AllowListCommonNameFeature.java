@@ -14,9 +14,9 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Stream;
 
-import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.of;
 
 @Slf4j
 public class AllowListCommonNameFeature
@@ -40,39 +40,44 @@ public class AllowListCommonNameFeature
         result.getFeature(),
         result.getAllowListNames().size(),
         result.getCharacteristicsValues().size());
-    
+
     return result;
   }
 
   protected List<String> getCharacteristicsValues(MatchData matchData) {
     var values = new ArrayList<String>();
     if (matchData.isIndividual()) {
-      values.addAll(extractNamesFromIndividual(matchData.getCustomerIndividual()));
+      values.addAll(extractNamesFromIndividual(matchData.getCustomerIndividuals()));
     } else {
-      values.addAll(extractNamesFromEntity(matchData.getCustomerEntity()));
+      values.addAll(extractNamesFromEntity(matchData.getCustomerEntities()));
     }
     return values;
   }
 
-  private Collection<String> extractNamesFromEntity(CustomerEntity customerEntity) {
-    return toDistinctList(
-        Stream.of(
+  private Collection<String> extractNamesFromEntity(List<CustomerEntity> customerEntities) {
+    return customerEntities.stream()
+        .flatMap(customerEntity -> of(
             customerEntity.getEntityName(),
             customerEntity.getEntityNameOriginal(),
-            customerEntity.getOriginalScriptName()
-        ).filter(StringUtils::isNotEmpty));
+            customerEntity.getOriginalScriptName()))
+        .filter(StringUtils::isNotEmpty)
+        .distinct()
+        .collect(toList());
   }
 
-  private Collection<String> extractNamesFromIndividual(CustomerIndividual customerIndividual) {
-    return toDistinctList(
-        Stream.of(
+  private Collection<String> extractNamesFromIndividual(
+      List<CustomerIndividual> customerIndividuals) {
+    return customerIndividuals.stream()
+        .flatMap(customerIndividual -> of(
             customerIndividual.getGivenName(),
             customerIndividual.getFamilyNameOriginal(),
             customerIndividual.getFullNameDerived(),
             customerIndividual.getMiddleName(),
             customerIndividual.getOriginalScriptName(),
-            customerIndividual.getProfileFullName()
-        ).filter(StringUtils::isNotEmpty));
+            customerIndividual.getProfileFullName()))
+        .filter(StringUtils::isNotEmpty)
+        .distinct()
+        .collect(toList());
   }
 
   @Override

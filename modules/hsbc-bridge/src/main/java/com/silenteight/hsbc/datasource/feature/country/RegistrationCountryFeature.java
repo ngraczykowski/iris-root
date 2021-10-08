@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature.registrationcountry;
+package com.silenteight.hsbc.datasource.feature.country;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +8,6 @@ import com.silenteight.hsbc.datasource.datamodel.WorldCheckEntity;
 import com.silenteight.hsbc.datasource.dto.country.CountryFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
-import com.silenteight.hsbc.datasource.feature.country.RegistrationCountryFeatureQuery;
 
 import java.util.List;
 import java.util.stream.Stream;

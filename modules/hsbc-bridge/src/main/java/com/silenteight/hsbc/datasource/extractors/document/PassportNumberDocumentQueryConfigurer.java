@@ -1,6 +1,6 @@
 package com.silenteight.hsbc.datasource.extractors.document;
 
-import com.silenteight.hsbc.datasource.feature.passportnumberdocument.PassportNumberDocumentQuery;
+import com.silenteight.hsbc.datasource.feature.document.PassportNumberDocumentQuery;
 
 public class PassportNumberDocumentQueryConfigurer {
 

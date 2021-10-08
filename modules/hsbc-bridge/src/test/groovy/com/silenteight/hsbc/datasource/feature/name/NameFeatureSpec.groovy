@@ -69,7 +69,7 @@ class NameFeatureSpec extends Specification {
 
     def matchData = Mock(MatchData) {
       isIndividual() >> true
-      getCustomerIndividual() >> customerIndividual
+      getCustomerIndividuals() >> [customerIndividual]
       getWorldCheckIndividuals() >> [worldCheckIndividual]
       hasWorldCheckIndividuals() >> true
       getPrivateListIndividuals() >> [privateListIndividual]
@@ -80,7 +80,8 @@ class NameFeatureSpec extends Specification {
     def result = underTest.retrieve(matchData, client)
 
     then:
-    1 * client.getNameInformation(getNameInformationRequestDto) >> Optional.of(getNameInformationResponseDto)
+    1 * client.getNameInformation(getNameInformationRequestDto) >>
+        Optional.of(getNameInformationResponseDto)
 
     with(result) {
       feature == Feature.NAME.fullName
@@ -119,7 +120,8 @@ class NameFeatureSpec extends Specification {
     def customerEntity = Mock(CustomerEntity) {
       getEntityNameOriginal() >>
           'AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE'
-      getEntityName() >> 'AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE'
+      getEntityName() >>
+          'AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE'
       getOriginalScriptName() >> ''
     }
 
@@ -147,7 +149,7 @@ class NameFeatureSpec extends Specification {
 
     def matchData = Mock(MatchData) {
       isEntity() >> true
-      getCustomerEntity() >> customerEntity
+      getCustomerEntities() >> [customerEntity]
       getWorldCheckEntities() >> [worldCheckEntity]
       hasWorldCheckEntities() >> true
       getPrivateListEntities() >> [privateListEntity]
@@ -158,7 +160,8 @@ class NameFeatureSpec extends Specification {
     def result = underTest.retrieve(matchData, client)
 
     then:
-    1 * client.getNameInformation(getNameInformationRequestDto) >> Optional.of(getNameInformationResponseDto)
+    1 * client.getNameInformation(getNameInformationRequestDto) >>
+        Optional.of(getNameInformationResponseDto)
 
     with(result) {
       feature == Feature.NAME.fullName

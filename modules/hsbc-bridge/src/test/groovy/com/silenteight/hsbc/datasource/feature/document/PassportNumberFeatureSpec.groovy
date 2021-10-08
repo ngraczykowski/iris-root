@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature.passportnumberdocument
+package com.silenteight.hsbc.datasource.feature.document
 
 import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual
 import com.silenteight.hsbc.datasource.datamodel.MatchData
@@ -6,6 +6,7 @@ import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual
 import com.silenteight.hsbc.datasource.extractors.document.PassportNumberDocumentQueryConfigurer
 import com.silenteight.hsbc.datasource.feature.Feature
+import com.silenteight.hsbc.datasource.feature.document.PassportNumberFeature
 
 import spock.lang.Specification
 
@@ -58,7 +59,7 @@ class PassportNumberFeatureSpec extends Specification {
 
     def matchData = Mock(MatchData) {
       isIndividual() >> true
-      getCustomerIndividual() >> customerIndividual
+      getCustomerIndividuals() >> [customerIndividual]
       getWorldCheckIndividuals() >> [worldCheckIndividual]
       hasWorldCheckIndividuals() >> true
       getPrivateListIndividuals() >> [privateListIndividual]

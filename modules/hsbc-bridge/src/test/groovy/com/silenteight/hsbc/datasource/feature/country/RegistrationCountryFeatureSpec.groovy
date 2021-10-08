@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature.registrationcountry
+package com.silenteight.hsbc.datasource.feature.country
 
 import com.silenteight.hsbc.bridge.json.internal.model.CustomerEntity
 import com.silenteight.hsbc.datasource.datamodel.CtrpScreening
@@ -7,6 +7,7 @@ import com.silenteight.hsbc.datasource.datamodel.PrivateListEntity
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckEntity
 import com.silenteight.hsbc.datasource.extractors.country.RegistrationCountryFeatureQueryConfigurer
 import com.silenteight.hsbc.datasource.feature.Feature
+import com.silenteight.hsbc.datasource.feature.country.RegistrationCountryFeature
 
 import spock.lang.Specification
 
@@ -41,7 +42,7 @@ class RegistrationCountryFeatureSpec extends Specification {
 
     def matchData = Mock(MatchData) {
       isEntity() >> true
-      getCustomerEntity() >> customerEntity
+      getCustomerEntities() >> [customerEntity]
       getWorldCheckEntities() >> [worldCheckEntity]
       hasWorldCheckEntities() >> true
       getPrivateListEntities() >> [privateListEntity]

@@ -41,15 +41,14 @@ public class ResidencyCountryFeatureQueryFacade implements ResidencyCountryFeatu
 
   @Override
   public Stream<String> customerIndividualResidencies() {
-    var customerIndividuals = individualComposite.getCustomerIndividual();
-
-    return Stream.of(
-            customerIndividuals.getResidenceCountries(),
-            customerIndividuals.getAddressCountry(),
-            customerIndividuals.getCountryOfResidence(),
-            customerIndividuals.getEdqResidenceCountriesCode(),
-            customerIndividuals.getSourceCountry()
-        ).filter(StringUtils::isNotBlank)
+    return individualComposite.getCustomerIndividuals().stream()
+        .flatMap(customerIndividual -> Stream.of(
+            customerIndividual.getResidenceCountries(),
+            customerIndividual.getAddressCountry(),
+            customerIndividual.getCountryOfResidence(),
+            customerIndividual.getEdqResidenceCountriesCode(),
+            customerIndividual.getSourceCountry()))
+        .filter(StringUtils::isNotBlank)
         .map(x -> x.replaceAll(INDIVIDUAL_RESIDENCIES_REGEX, "").trim());
   }
 

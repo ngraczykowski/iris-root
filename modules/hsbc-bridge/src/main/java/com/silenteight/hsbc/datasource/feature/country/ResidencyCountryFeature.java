@@ -11,6 +11,8 @@ import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -29,10 +31,13 @@ public class ResidencyCountryFeature implements FeatureValuesRetriever<CountryFe
 
     if (matchData.isIndividual()) {
       inputBuilder.alertedPartyCountries(getDistinctValues(query.customerIndividualResidencies()));
-      inputBuilder.watchlistCountries(getDistinctValues(query.worldCheckIndividualsResidencies()));
+      inputBuilder.watchlistCountries(toDistinctList(
+          query.worldCheckIndividualsResidencies(),
+          query.privateListIndividualsResidencies(),
+          query.ctrpScreeningResidencies()));
     } else {
-      inputBuilder.alertedPartyCountries(List.of());
-      inputBuilder.watchlistCountries(List.of());
+      inputBuilder.alertedPartyCountries(emptyList());
+      inputBuilder.watchlistCountries(emptyList());
     }
 
     var result = inputBuilder

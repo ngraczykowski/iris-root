@@ -10,7 +10,6 @@ import com.silenteight.hsbc.datasource.dto.gender.GenderFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -64,10 +63,14 @@ public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputD
     return Feature.GENDER;
   }
 
-  private Optional<String> getCustomerIndividualsGender(IndividualComposite individualComposite) {
-    var customerIndividual = individualComposite.getCustomerIndividual();
+  private Stream<String> getCustomerIndividualsGender(IndividualComposite individualComposite) {
+    var customerIndividuals = individualComposite.getCustomerIndividuals();
 
-    return GenderFieldsWrapper.fromCustomerIndividual(customerIndividual).tryExtracting();
+    return customerIndividuals.stream()
+        .map(GenderFieldsWrapper::fromCustomerIndividual)
+        .map(GenderFieldsWrapper::tryExtracting)
+        .filter(Optional::isPresent)
+        .map(Optional::get);
   }
 
   private List<String> mergeLists(
@@ -95,8 +98,8 @@ public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputD
         .map(Optional::get);
   }
 
-  private List<String> createValidGenderAlertPartyListForAgents(Optional<String> apGender) {
-    return apGender.map(List::of).orElseGet(Collections::emptyList);
+  private List<String> createValidGenderAlertPartyListForAgents(Stream<String> apGenders) {
+    return apGenders.distinct().collect(toList());
   }
 
   private List<String> createValidGenderWatchListForAgent(List<String> wlGenders) {

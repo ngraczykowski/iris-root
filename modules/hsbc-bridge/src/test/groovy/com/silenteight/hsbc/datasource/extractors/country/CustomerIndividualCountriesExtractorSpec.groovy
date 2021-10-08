@@ -10,15 +10,18 @@ class CustomerIndividualCountriesExtractorSpec extends Specification {
 
   def "returns correct values"() {
     given:
-    def customerIndividuals = Stub(CustomerIndividual) {
-      getNationalityCitizenshipCountries() >> Fixtures.NATIONALITY_CITIZENSHIP
-      getNationalityOrCitizenship() >> Fixtures.NATIONALITY_OR_CITIZENSHIP
-      getNationalityCountries() >> Fixtures.NATIONALITY_COUNTRIES
-      getPassportIssueCountry() >> Fixtures.PASSPORT_ISSUE_COUNTRY
-      getCountryOfBirthOriginal() >> Fixtures.COUNTRY_OF_BIRTH_ORIGINAL
-      getCountryOfBirth() >> Fixtures.COUNTRY_OF_BIRTH
-      getEdqBirthCountryCode() >> Fixtures.COUNTRY_EDQ_BIRTH_COUNTRY_CODE
-    }
+    def customerIndividuals =
+        [
+            Stub(CustomerIndividual) {
+              getNationalityCitizenshipCountries() >> Fixtures.NATIONALITY_CITIZENSHIP
+              getNationalityOrCitizenship() >> Fixtures.NATIONALITY_OR_CITIZENSHIP
+              getNationalityCountries() >> Fixtures.NATIONALITY_COUNTRIES
+              getPassportIssueCountry() >> Fixtures.PASSPORT_ISSUE_COUNTRY
+              getCountryOfBirthOriginal() >> Fixtures.COUNTRY_OF_BIRTH_ORIGINAL
+              getCountryOfBirth() >> Fixtures.COUNTRY_OF_BIRTH
+              getEdqBirthCountryCode() >> Fixtures.COUNTRY_EDQ_BIRTH_COUNTRY_CODE
+            }
+        ]
 
     when:
     def underTest = new CustomerIndividualCountriesExtractor(customerIndividuals)

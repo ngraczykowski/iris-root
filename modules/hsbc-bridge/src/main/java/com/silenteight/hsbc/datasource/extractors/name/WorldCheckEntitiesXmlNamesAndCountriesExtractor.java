@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckEntity;
 import com.silenteight.hsbc.datasource.extractors.country.OtherCountryQueryFacade;
-import com.silenteight.hsbc.datasource.feature.incorporationcountry.IncorporationCountryFeature;
-import com.silenteight.hsbc.datasource.feature.registrationcountry.RegistrationCountryFeature;
+import com.silenteight.hsbc.datasource.feature.country.IncorporationCountryFeature;
+import com.silenteight.hsbc.datasource.feature.country.RegistrationCountryFeature;
 
 import one.util.streamex.StreamEx;
 

@@ -3,6 +3,8 @@ package com.silenteight.hsbc.datasource.dto.date;
 import lombok.Builder;
 import lombok.Value;
 
+import com.silenteight.hsbc.datasource.dto.name.EntityType;
+
 import java.util.List;
 
 import static java.util.Collections.emptyList;
@@ -16,4 +18,6 @@ public class DateFeatureInputDto {
   List<String> alertedPartyDates = emptyList();
   @Builder.Default
   List<String> watchlistDates = emptyList();
+  EntityType alertedPartyType;
+  SeverityMode mode;
 }

@@ -3,7 +3,7 @@ package com.silenteight.hsbc.datasource.extractors.document;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
-import com.silenteight.hsbc.datasource.feature.passportnumberdocument.PassportNumberDocumentQuery;
+import com.silenteight.hsbc.datasource.feature.document.PassportNumberDocumentQuery;
 
 import java.util.stream.Stream;
 
@@ -24,7 +24,7 @@ class PassportNumberDocumentQueryFacade implements PassportNumberDocumentQuery {
   }
 
   private Document extractApDocuments() {
-    return DOCUMENT_EXTRACTOR.convertAlertedPartyDocumentNumbers(matchData.getCustomerIndividual());
+    return DOCUMENT_EXTRACTOR.convertAlertedPartyDocumentNumbers(matchData.getCustomerIndividuals());
   }
 
   private Document extractMpDocuments() {

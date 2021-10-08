@@ -18,13 +18,13 @@ public class NationalityCountryQueryFacade implements NationalityCountryQuery {
   @Override
   public Stream<String> apDocumentCountries() {
     return new DocumentExtractor()
-        .convertAlertedPartyDocumentNumbers(individualComposite.getCustomerIndividual())
+        .convertAlertedPartyDocumentNumbers(individualComposite.getCustomerIndividuals())
         .getAllCountries().stream();
   }
 
   @Override
   public Stream<String> apFieldsIndividualCountries() {
-    return new CustomerIndividualCountriesExtractor(individualComposite.getCustomerIndividual())
+    return new CustomerIndividualCountriesExtractor(individualComposite.getCustomerIndividuals())
         .extract();
   }
 

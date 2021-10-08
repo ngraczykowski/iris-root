@@ -1,6 +1,8 @@
 package com.silenteight.hsbc.datasource.feature.allowedlist
 
-import com.silenteight.hsbc.datasource.datamodel.*
+import com.silenteight.hsbc.datasource.datamodel.CustomerEntity
+import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual
+import com.silenteight.hsbc.datasource.datamodel.MatchData
 
 import spock.lang.Specification
 
@@ -12,14 +14,17 @@ class AllowListCommonNameFeatureSpec extends Specification {
     given:
     def matchData = Mock(MatchData) {
       isIndividual() >> true
-      getCustomerIndividual() >> Mock(CustomerIndividual) {
-        getGivenName() >> 'givenName'
-        getFamilyNameOriginal() >> 'familyNameOriginal'
-        getFullNameDerived() >> 'fullNameDerived'
-        getMiddleName() >> 'middleName'
-        getOriginalScriptName() >> 'originalScriptName'
-        getProfileFullName() >> 'profileFullName'
-      }
+      getCustomerIndividuals() >>
+          [
+              Mock(CustomerIndividual) {
+                getGivenName() >> 'givenName'
+                getFamilyNameOriginal() >> 'familyNameOriginal'
+                getFullNameDerived() >> 'fullNameDerived'
+                getMiddleName() >> 'middleName'
+                getOriginalScriptName() >> 'originalScriptName'
+                getProfileFullName() >> 'profileFullName'
+              }
+          ]
     }
 
     when:
@@ -38,11 +43,14 @@ class AllowListCommonNameFeatureSpec extends Specification {
     given:
     def matchData = Mock(MatchData) {
       isIndividual() >> false
-      getCustomerEntity() >> Mock(CustomerEntity) {
-        getEntityName() >> 'entityName'
-        getEntityNameOriginal() >> 'entityNameOriginal'
-        getOriginalScriptName() >> 'originalScriptName'
-      }
+      getCustomerEntities() >>
+          [
+              Mock(CustomerEntity) {
+                getEntityName() >> 'entityName'
+                getEntityNameOriginal() >> 'entityNameOriginal'
+                getOriginalScriptName() >> 'originalScriptName'
+              }
+          ]
     }
 
     when:

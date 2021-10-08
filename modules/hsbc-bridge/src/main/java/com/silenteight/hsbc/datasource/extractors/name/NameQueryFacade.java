@@ -19,37 +19,36 @@ class NameQueryFacade implements NameQuery {
 
   @Override
   public Stream<String> apIndividualExtractProfileFullName() {
-    var name = matchData.getCustomerIndividual().getProfileFullName();
-    return new CustomerIndividualOriginalScriptAliasesNameExtractor(name)
-        .extract();
+    return matchData.getCustomerIndividuals().stream()
+        .flatMap(customerIndividual -> Stream.of(customerIndividual.getProfileFullName()))
+        .flatMap(name -> new CustomerIndividualOriginalScriptAliasesNameExtractor(name).extract());
   }
 
   @Override
   public Stream<String> apIndividualExtractNames() {
-    var customerIndividual = matchData.getCustomerIndividual();
-    return new CustomerIndividualNamesExtractor(customerIndividual)
-        .extract();
+    return matchData.getCustomerIndividuals().stream()
+        .flatMap(customerIndividual -> new CustomerIndividualNamesExtractor(
+            customerIndividual).extract());
   }
 
   @Override
   public Stream<String> apIndividualExtractOtherNames() {
-    var customerIndividual = matchData.getCustomerIndividual();
-    return new CustomerIndividualOtherNamesExtractor(customerIndividual)
-        .extract();
+    return matchData.getCustomerIndividuals().stream()
+        .flatMap(customerIndividual -> new CustomerIndividualOtherNamesExtractor(
+            customerIndividual).extract());
   }
 
   @Override
   public Stream<String> apEntityExtractEntityNameOriginal() {
-    var name = matchData.getCustomerEntity().getEntityNameOriginal();
-    return new CustomerEntityOriginalScriptAliasesNameExtractor(name)
-        .extract();
+    return matchData.getCustomerEntities().stream()
+        .flatMap(customerEntity -> Stream.of(customerEntity.getEntityNameOriginal()))
+        .flatMap(name -> new CustomerEntityOriginalScriptAliasesNameExtractor(name).extract());
   }
 
   @Override
   public Stream<String> apEntityExtractOtherNames() {
-    var customerEntity = matchData.getCustomerEntity();
-    return new CustomerEntityOtherNamesExtractor(customerEntity)
-        .extract();
+    return matchData.getCustomerEntities().stream()
+        .flatMap(customerEntity -> new CustomerEntityOtherNamesExtractor(customerEntity).extract());
   }
 
   @Override

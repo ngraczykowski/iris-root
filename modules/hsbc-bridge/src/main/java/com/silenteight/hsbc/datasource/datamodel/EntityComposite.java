@@ -2,18 +2,18 @@ package com.silenteight.hsbc.datasource.datamodel;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
-import javax.annotation.Nullable;
 
 import static com.silenteight.hsbc.datasource.datamodel.WatchlistType.CTRPPRHB_LIST_ENTITIES;
 import static com.silenteight.hsbc.datasource.datamodel.WatchlistType.PRIVATE_LIST_ENTITIES;
 import static com.silenteight.hsbc.datasource.datamodel.WatchlistType.WORLDCHECK_ENTITIES;
 import static java.util.Objects.nonNull;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static java.util.stream.Stream.concat;
 
 public interface EntityComposite {
 
-  @Nullable
-  CustomerEntity getCustomerEntity();
+  List<CustomerEntity> getCustomerEntities();
 
   List<WorldCheckEntity> getWorldCheckEntities();
 
@@ -35,7 +35,7 @@ public interface EntityComposite {
 
   default Optional<String> getEntityWatchlistId() {
     var listRecordId =
-        Stream.concat(getWorldCheckEntities().stream(), getPrivateListEntities().stream())
+        concat(getWorldCheckEntities().stream(), getPrivateListEntities().stream())
             .map(ListRecordId::getListRecordId).findFirst();
 
     return listRecordId.or(this::getCtrpScreeningEntityId);
@@ -49,12 +49,12 @@ public interface EntityComposite {
 
   default Optional<WatchlistType> getEntityWatchlistType() {
     if (!getWorldCheckEntities().isEmpty()) {
-      return Optional.of(WORLDCHECK_ENTITIES);
+      return of(WORLDCHECK_ENTITIES);
     } else if (!getPrivateListEntities().isEmpty()) {
-      return Optional.of(PRIVATE_LIST_ENTITIES);
+      return of(PRIVATE_LIST_ENTITIES);
     } else if (!getCtrpScreeningEntities().isEmpty()) {
-      return Optional.of(CTRPPRHB_LIST_ENTITIES);
+      return of(CTRPPRHB_LIST_ENTITIES);
     } else
-      return Optional.empty();
+      return empty();
   }
 }

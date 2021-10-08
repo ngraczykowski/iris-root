@@ -1,6 +1,5 @@
 package com.silenteight.hsbc.datasource.feature.nationaliddocument
 
-import com.silenteight.hsbc.bridge.json.internal.model.CustomerIndividual
 import com.silenteight.hsbc.datasource.datamodel.MatchData
 import com.silenteight.hsbc.datasource.extractors.document.NationalIdDocumentQueryConfigurer
 import com.silenteight.hsbc.datasource.feature.Feature
@@ -10,17 +9,16 @@ import spock.lang.Specification
 
 import static org.assertj.core.api.Assertions.assertThat
 
-class NationalIdFeatureSpec extends Specification implements FullMatch {
+class NationalIdDocumentFeatureSpec extends Specification implements FullMatch {
 
   def documentQueryConfigurer = new NationalIdDocumentQueryConfigurer().create()
 
-  def underTest = new NationalIdFeature(documentQueryConfigurer)
+  def underTest = new NationalIdDocumentFeature(documentQueryConfigurer)
 
-  def 'should retrieve national id document empty lists when values when customer is entity'() {
+  def 'should retrieve national id document empty lists when customer is entity'() {
     given:
     def matchData = Mock(MatchData) {
-      isIndividual() >> false
-      getCustomerIndividual() >> new CustomerIndividual()
+      isEntity() >> true
     }
 
     when:

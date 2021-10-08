@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature.location
+package com.silenteight.hsbc.datasource.feature.country
 
 import com.silenteight.hsbc.datasource.extractors.country.ResidencyCountryFeatureQueryConfigurer
 import com.silenteight.hsbc.datasource.feature.country.ResidencyCountryFeature
@@ -6,6 +6,8 @@ import com.silenteight.hsbc.datasource.fixtures.FullMatch
 
 import spock.lang.Shared
 import spock.lang.Specification
+
+import static org.assertj.core.api.Assertions.assertThat
 
 class ResidencyCountryFeatureSpec extends Specification implements FullMatch {
 
@@ -20,14 +22,14 @@ class ResidencyCountryFeatureSpec extends Specification implements FullMatch {
     def match = FULL_MATCH_1
 
     when:
-    def actual = underTest.retrieve(match)
+    def result = underTest.retrieve(match)
 
     then:
-    actual.with {
-      alertedPartyCountries.containsAll(["PL", "Polska", "IRN", "Iran", "UK"])
-      watchlistCountries.
-          containsAll(
-              ["PL", "Polska", "UNITED STATES", "US", 'IRAN, ISLAMIC REPUBLIC OF', 'IR', 'CHABAHAR'])
+    with(result) {
+      alertedPartyCountries == ['Polska', 'PL', 'Iran', 'IRN', 'UK']
+      assertThat(watchlistCountries)
+          .containsExactly('PL', 'Polska', 'IRAN, ISLAMIC REPUBLIC OF', 'IR', 'CHABAHAR')
+      feature == 'features/residencyCountry'
     }
   }
 }

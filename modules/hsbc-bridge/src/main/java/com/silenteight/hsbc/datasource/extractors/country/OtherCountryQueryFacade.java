@@ -14,14 +14,14 @@ public class OtherCountryQueryFacade implements OtherCountryQuery {
 
   @Override
   public Stream<String> apCustomerIndividualOtherCountries() {
-    return new CustomerIndividualOtherCountriesExtractor(matchData.getCustomerIndividual())
-        .extract();
+    return matchData.getCustomerIndividuals().stream()
+        .flatMap(customerIndividual -> new CustomerIndividualOtherCountriesExtractor(customerIndividual).extract());
   }
 
   @Override
   public Stream<String> apCustomerEntityOtherCountries() {
-    return new CustomerEntityOtherCountriesExtractor(matchData.getCustomerEntity())
-        .extract();
+    return matchData.getCustomerEntities().stream()
+        .flatMap(customerEntity -> new CustomerEntityOtherCountriesExtractor(customerEntity).extract());
   }
 
   @Override

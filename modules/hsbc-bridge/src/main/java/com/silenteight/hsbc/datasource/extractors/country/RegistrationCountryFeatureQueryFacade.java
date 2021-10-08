@@ -44,13 +44,12 @@ public class RegistrationCountryFeatureQueryFacade implements RegistrationCountr
 
   @Override
   public Stream<String> getCustomerEntityRegistrationCountries() {
-    var customerEntity = entityComposite.getCustomerEntity();
-
-    return Stream.of(
-        customerEntity.getRegistrationCountry(),
-        customerEntity.getCountriesOfRegistrationOriginal(),
-        customerEntity.getEdqRegistrationCountriesCodes()
-    ).filter(StringUtils::isNotBlank);
+    return entityComposite.getCustomerEntities().stream()
+        .flatMap(customerEntity -> Stream.of(
+            customerEntity.getRegistrationCountry(),
+            customerEntity.getCountriesOfRegistrationOriginal(),
+            customerEntity.getEdqRegistrationCountriesCodes()))
+        .filter(StringUtils::isNotBlank);
   }
 
   @Override

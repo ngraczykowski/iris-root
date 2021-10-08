@@ -19,23 +19,19 @@ import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListCommonApFeat
 import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListCommonNameFeature;
 import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListCommonWpFeature;
 import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListInvalidAlertFeature;
-import com.silenteight.hsbc.datasource.feature.country.NationalityCountryFeature;
-import com.silenteight.hsbc.datasource.feature.country.OtherCountryFeature;
-import com.silenteight.hsbc.datasource.feature.country.ResidencyCountryFeature;
+import com.silenteight.hsbc.datasource.feature.country.*;
 import com.silenteight.hsbc.datasource.feature.dob.DateOfBirthFeature;
+import com.silenteight.hsbc.datasource.feature.document.OtherDocumentFeature;
+import com.silenteight.hsbc.datasource.feature.document.PassportNumberFeature;
 import com.silenteight.hsbc.datasource.feature.gender.GenderFeature;
 import com.silenteight.hsbc.datasource.feature.geolocation.GeoPlaceOfBirthFeature;
 import com.silenteight.hsbc.datasource.feature.geolocation.GeoResidencyFeature;
 import com.silenteight.hsbc.datasource.feature.historical.HistoricalIsApTpMarkedFeature;
 import com.silenteight.hsbc.datasource.feature.historical.HistoricalIsCaseTpMarkedFeature;
 import com.silenteight.hsbc.datasource.feature.historical.HistoricalIsTpMarkedFeature;
-import com.silenteight.hsbc.datasource.feature.incorporationcountry.IncorporationCountryFeature;
 import com.silenteight.hsbc.datasource.feature.ispep.IsPepFeature;
 import com.silenteight.hsbc.datasource.feature.name.NameFeature;
-import com.silenteight.hsbc.datasource.feature.nationaliddocument.NationalIdFeature;
-import com.silenteight.hsbc.datasource.feature.otherdocument.OtherDocumentFeature;
-import com.silenteight.hsbc.datasource.feature.passportnumberdocument.PassportNumberFeature;
-import com.silenteight.hsbc.datasource.feature.registrationcountry.RegistrationCountryFeature;
+import com.silenteight.hsbc.datasource.feature.nationaliddocument.NationalIdDocumentFeature;
 
 import java.util.Map;
 
@@ -76,7 +72,7 @@ public class FeatureModel {
         entry(OTHER_COUNTRY, new OtherCountryFeature(new OtherCountryQueryConfigurer().create())),
         entry(
             NATIONAL_ID_DOCUMENT,
-            new NationalIdFeature(new NationalIdDocumentQueryConfigurer().create())),
+            new NationalIdDocumentFeature(new NationalIdDocumentQueryConfigurer().create())),
         entry(
             PASSPORT_NUMBER_DOCUMENT,
             new PassportNumberFeature(new PassportNumberDocumentQueryConfigurer().create())),

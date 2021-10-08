@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature.passportnumberdocument;
+package com.silenteight.hsbc.datasource.feature.document;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 

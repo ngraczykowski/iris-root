@@ -34,7 +34,7 @@ class GeoResidencyFeatureSpec extends Specification {
 
     def matchData = Mock(MatchData) {
       isIndividual() >> true
-      getCustomerIndividual() >> customerIndividual
+      getCustomerIndividuals() >> [customerIndividual]
       getWorldCheckIndividuals() >> [worldCheckIndividual]
       hasWorldCheckIndividuals() >> true
       getPrivateListIndividuals() >> [privateListIndividual]
@@ -69,7 +69,7 @@ class GeoResidencyFeatureSpec extends Specification {
 
     def matchData = Mock(MatchData) {
       isEntity() >> true
-      getCustomerEntity() >> customerEntity
+      getCustomerEntities() >> [customerEntity]
       getCtrpScreeningEntities() >> [ctrpScreeningEntity]
       hasCtrpScreeningEntities() >> true
     }

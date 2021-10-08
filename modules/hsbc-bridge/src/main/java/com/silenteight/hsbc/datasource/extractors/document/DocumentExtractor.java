@@ -3,13 +3,15 @@ package com.silenteight.hsbc.datasource.extractors.document;
 import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual;
 import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
 
+import java.util.List;
+
 public class DocumentExtractor {
 
-  public Document convertAlertedPartyDocumentNumbers(CustomerIndividual customerIndividual) {
+  public Document convertAlertedPartyDocumentNumbers(List<CustomerIndividual> customerIndividuals) {
     var document = new Document();
     var customerIndividualExtractor = new CustomerIndividualsExtractor(document);
 
-    customerIndividualExtractor.extract(customerIndividual);
+    customerIndividualExtractor.extract(customerIndividuals);
     return document;
   }
 

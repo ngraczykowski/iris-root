@@ -15,14 +15,18 @@ class DateOfBirthFeatureSpec extends Specification {
   def "extracts correctly without duplicates"() {
     given:
     def matchData = [
-        getCustomerEntity        : {null},
-        getCustomerIndividual    : {
-          [
-              getBirthDate  : {"1992 8 23 00:00:00.0"},
-              getDateOfBirth: {"11111111"},
-              getYearOfBirth: {"1994"}
-          ] as CustomerIndividual
-        },
+        getCustomerEntities      : {null},
+        getCustomerIndividuals   :
+            {
+              [
+                  [
+                      getBirthDate  : {"1992 8 23 00:00:00.0"},
+                      getDateOfBirth: {"11111111"},
+                      getYearOfBirth: {"1994"}
+                  ] as CustomerIndividual
+
+              ]
+            },
         getWorldCheckIndividuals : {
           [
               [

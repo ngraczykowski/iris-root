@@ -6,22 +6,24 @@ import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 class CustomerIndividualCountriesExtractor {
 
-  private final CustomerIndividual customerIndividual;
+  private final List<CustomerIndividual> customerIndividuals;
 
   public Stream<String> extract() {
-    return Stream.of(
-        customerIndividual.getNationalityCitizenshipCountries(),
-        customerIndividual.getNationalityOrCitizenship(),
-        customerIndividual.getNationalityCountries(),
-        customerIndividual.getPassportIssueCountry(),
-        customerIndividual.getCountryOfBirthOriginal(),
-        customerIndividual.getCountryOfBirth(),
-        customerIndividual.getEdqBirthCountryCode()
-    ).filter(StringUtils::isNotBlank);
+    return customerIndividuals.stream()
+        .flatMap(customerIndividual -> Stream.of(
+            customerIndividual.getNationalityCitizenshipCountries(),
+            customerIndividual.getNationalityOrCitizenship(),
+            customerIndividual.getNationalityCountries(),
+            customerIndividual.getPassportIssueCountry(),
+            customerIndividual.getCountryOfBirthOriginal(),
+            customerIndividual.getCountryOfBirth(),
+            customerIndividual.getEdqBirthCountryCode()))
+        .filter(StringUtils::isNotBlank);
   }
 }

@@ -8,13 +8,10 @@ import com.silenteight.hsbc.bridge.alert.ProcessingResult.ProcessedAlert;
 import com.silenteight.hsbc.bridge.json.external.model.*;
 import com.silenteight.hsbc.bridge.match.Match;
 
-import io.jsonwebtoken.lang.Collections;
-
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
-import static java.util.Optional.empty;
+import static java.util.stream.Stream.concat;
+import static java.util.stream.Stream.of;
 
 @Slf4j
 class RelationshipProcessor {
@@ -47,6 +44,8 @@ class RelationshipProcessor {
     private HsbcMatch createHsbcMatch() {
       var hsbcMatch = new HsbcMatch();
       hsbcMatch.setCaseInformation(alertData.getCaseInformation());
+      hsbcMatch.setCustomerEntities(alertData.getCustomerEntities());
+      hsbcMatch.setCustomerIndividuals(alertData.getCustomerIndividuals());
       hsbcMatch.setCtrpScreeningEntities(alertData.getCtrpScreeningEntities());
       hsbcMatch.setCtrpScreeningIndividuals(alertData.getCtrpScreeningIndividuals());
       hsbcMatch.setPrivateListEntities(alertData.getPrivateListEntities());
@@ -55,25 +54,7 @@ class RelationshipProcessor {
       hsbcMatch.setWorldCheckIndividuals(alertData.getWorldCheckIndividuals());
       hsbcMatch.setCaseComments(alertData.getCaseComments());
 
-      getCustomerEntity().ifPresent(hsbcMatch::setCustomerEntity);
-      getCustomerIndividual().ifPresent(hsbcMatch::setCustomerIndividual);
       return hsbcMatch;
-    }
-
-    private Optional<CustomerIndividual> getCustomerIndividual() {
-      if (Collections.isEmpty(alertData.getCustomerIndividuals())) {
-        return empty();
-      }
-
-      return alertData.getCustomerIndividuals().stream().findFirst();
-    }
-
-    private Optional<CustomerEntity> getCustomerEntity() {
-      if (Collections.isEmpty(alertData.getCustomerEntities())) {
-        return empty();
-      }
-
-      return alertData.getCustomerEntities().stream().findFirst();
     }
 
     private void validateRelationships() {
@@ -91,7 +72,7 @@ class RelationshipProcessor {
     }
 
     private boolean existWatchlistDataWithoutRelationship() {
-      var watchlistRecordIds = Stream.of(
+      var watchlistRecordIds = of(
           alertData.getCtrpScreeningEntities().stream().map(CtrpScreeningEntity::getRecordId),
           alertData.getCtrpScreeningIndividuals().stream().map(CtrpScreeningIndividual::getRecordId),
           alertData.getPrivateListEntities().stream().map(PrivateListEntity::getRecordId),
@@ -104,7 +85,7 @@ class RelationshipProcessor {
     }
 
     private boolean existCustomerEntityOrIndividualWithoutRelationship() {
-      var customerRecordIds = Stream.concat(
+      var customerRecordIds = concat(
           alertData.getCustomerEntities().stream().map(CustomerEntity::getRecordId),
           alertData.getCustomerIndividuals().stream().map(CustomerIndividual::getRecordId)
       );

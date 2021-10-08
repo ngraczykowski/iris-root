@@ -14,14 +14,17 @@ class AllowListInvalidAlertFeatureSpec extends Specification {
     given:
     def matchData = Mock(MatchData) {
       isIndividual() >> true
-      getCustomerIndividual() >> Mock(CustomerIndividual) {
-        getGivenName() >> 'givenName'
-        getFamilyNameOriginal() >> 'familyNameOriginal'
-        getFullNameDerived() >> 'fullNameDerived'
-        getMiddleName() >> 'middleName'
-        getOriginalScriptName() >> 'originalScriptName'
-        getProfileFullName() >> 'profileFullName'
-      }
+      getCustomerIndividuals() >>
+          [
+              Mock(CustomerIndividual) {
+                getGivenName() >> 'givenName'
+                getFamilyNameOriginal() >> 'familyNameOriginal'
+                getFullNameDerived() >> 'fullNameDerived'
+                getMiddleName() >> 'middleName'
+                getOriginalScriptName() >> 'originalScriptName'
+                getProfileFullName() >> 'profileFullName'
+              }
+          ]
     }
 
     when:
@@ -40,11 +43,14 @@ class AllowListInvalidAlertFeatureSpec extends Specification {
     given:
     def matchData = Mock(MatchData) {
       isIndividual() >> false
-      getCustomerEntity() >> Mock(CustomerEntity) {
-        getEntityName() >> 'entityName'
-        getEntityNameOriginal() >> 'entityNameOriginal'
-        getOriginalScriptName() >> 'originalScriptName'
-      }
+      getCustomerEntities() >>
+          [
+              Mock(CustomerEntity) {
+                getEntityName() >> 'entityName'
+                getEntityNameOriginal() >> 'entityNameOriginal'
+                getOriginalScriptName() >> 'originalScriptName'
+              }
+          ]
     }
 
     when:

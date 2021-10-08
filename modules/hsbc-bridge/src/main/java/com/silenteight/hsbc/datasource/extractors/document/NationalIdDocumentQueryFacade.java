@@ -45,7 +45,7 @@ class NationalIdDocumentQueryFacade implements NationalIdDocumentQuery {
   }
 
   private Document extractApDocuments() {
-    return DOCUMENT_EXTRACTOR.convertAlertedPartyDocumentNumbers(matchData.getCustomerIndividual());
+    return DOCUMENT_EXTRACTOR.convertAlertedPartyDocumentNumbers(matchData.getCustomerIndividuals());
   }
 
   private Document extractMpDocuments() {
