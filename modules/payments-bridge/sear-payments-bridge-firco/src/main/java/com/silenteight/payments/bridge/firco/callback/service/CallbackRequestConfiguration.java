@@ -28,7 +28,10 @@ class CallbackRequestConfiguration {
       OAuth2AuthorizedClientManager manager, RestTemplateBuilder restTemplateBuilder) {
 
     var interceptor = getOAuth2Interceptor(manager);
-    var restTemplate = restTemplateBuilder.additionalInterceptors(interceptor).build();
+    var restTemplate = restTemplateBuilder.additionalInterceptors(interceptor)
+        .setConnectTimeout(properties.getConnectionTimeout())
+        .setReadTimeout(properties.getReadTimeout())
+        .build();
 
     return new CallbackRequestFactoryImpl(properties.getEndpoint(), restTemplate);
   }

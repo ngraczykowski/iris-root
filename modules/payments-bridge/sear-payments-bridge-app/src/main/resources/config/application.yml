@@ -24,6 +24,8 @@ pb:
     callback:
       enabled: false
       client-registration-id: callback
+      connectionTimeout: 10s
+      readTimeout: 30s
 
   #-------------------------------------------------------------------------------------------------
   # ALERT MESSAGES

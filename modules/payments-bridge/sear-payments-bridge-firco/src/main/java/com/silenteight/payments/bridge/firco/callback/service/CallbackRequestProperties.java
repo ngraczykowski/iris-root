@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2Clien
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.Duration;
+
 @Data
 @Validated
 @ConfigurationProperties(prefix = "pb.cmapi.callback")
@@ -21,4 +23,8 @@ class CallbackRequestProperties {
    * For more information, see {@link Registration}.
    */
   private String clientRegistrationId;
+
+  private Duration connectionTimeout = Duration.ofSeconds(10);
+
+  private Duration readTimeout = Duration.ofSeconds(30);
 }
