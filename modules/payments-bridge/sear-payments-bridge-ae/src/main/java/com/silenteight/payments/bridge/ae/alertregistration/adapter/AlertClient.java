@@ -26,7 +26,6 @@ class AlertClient implements AlertClientPort {
 
   public Alert createAlert(CreateAlertRequest request) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
-
     if (log.isTraceEnabled()) {
       log.trace("Requesting creating alert: deadline={}, request={}", deadline, request);
     }

@@ -25,7 +25,7 @@ class CreateCategoriesValuesAdapter implements CreateCategoryValuesClient {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 
     if (log.isTraceEnabled()) {
-      log.trace("Sending create categories vaues request");
+      log.trace("Sending create categories values request");
     }
 
     try {

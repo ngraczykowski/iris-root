@@ -8,6 +8,7 @@ import com.silenteight.adjudication.api.v1.BatchCreateAlertMatchesRequest;
 import com.silenteight.adjudication.api.v1.CreateAlertRequest;
 import com.silenteight.adjudication.api.v1.Match;
 
+import com.google.protobuf.Timestamp;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -21,6 +22,8 @@ public class RegisterAlertRequest {
   String alertId;
 
   int priority;
+
+  Timestamp alertTime;
 
   List<String> matchIds;
 
@@ -47,6 +50,7 @@ public class RegisterAlertRequest {
     return CreateAlertRequest.newBuilder().setAlert(Alert
         .newBuilder()
         .setAlertId(getAlertId())
+        .setAlertTime(getAlertTime())
         .setPriority(getPriority())
         .build()).build();
   }
