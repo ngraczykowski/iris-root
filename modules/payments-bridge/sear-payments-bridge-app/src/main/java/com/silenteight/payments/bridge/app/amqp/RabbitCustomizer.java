@@ -11,11 +11,12 @@ import com.silenteight.payments.bridge.firco.callback.model.RecoverableCallbackE
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.retry.MessageRecoverer;
 import org.springframework.amqp.rabbit.retry.RejectAndDontRequeueRecoverer;
+import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.retry.backoff.ExponentialBackOffPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
 
@@ -23,18 +24,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@EnableConfigurationProperties(RabbitProperties.class)
 @Configuration
 @RequiredArgsConstructor
 class RabbitCustomizer {
 
   private final CommonChannels commonChannels;
+  private final RabbitProperties rabbitProperties;
 
   @Bean
   RabbitRetryTemplateCustomizer rabbitRetryTemplateCustomizer() {
     return new RetryTemplateCustomizer();
   }
 
-  private static class RetryTemplateCustomizer
+  private class RetryTemplateCustomizer
       implements RabbitRetryTemplateCustomizer {
 
     @Override
@@ -43,14 +46,10 @@ class RabbitCustomizer {
       retryableClassifier.put(NonRecoverableCallbackException.class, false);
       retryableClassifier.put(RecoverableCallbackException.class, true);
 
-      var backOffPolicy = new ExponentialBackOffPolicy();
-      backOffPolicy.setInitialInterval(200);
-      backOffPolicy.setMultiplier(2);
-
+      var maxAttempts = rabbitProperties.getListener().getSimple().getRetry().getMaxAttempts();
       if (Target.LISTENER.equals(target)) {
         retryTemplate.setRetryPolicy(
-            new SimpleRetryPolicy(8, retryableClassifier, true));
-        retryTemplate.setBackOffPolicy(backOffPolicy);
+            new SimpleRetryPolicy(maxAttempts, retryableClassifier, true));
       }
     }
   }

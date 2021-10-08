@@ -6,10 +6,7 @@ import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.etl.response.HitAndWatchlistPartyData;
 import com.silenteight.payments.bridge.svb.etl.response.HitData;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.annotation.Nonnull;
 
 import static com.silenteight.payments.bridge.common.dto.common.WatchlistType.COMPANY;
@@ -19,7 +16,8 @@ public class EtlProcessHelper {
 
   public static AlertRegisteredEvent createAlertRegisteredEvent(int numberOfMatches) {
     Map<String, String> matches = createMatches(numberOfMatches);
-    return new AlertRegisteredEvent("1", "alert/1", matches);
+    var id = UUID.randomUUID();
+    return new AlertRegisteredEvent(id, "alert/" + id, matches);
   }
 
   @Nonnull

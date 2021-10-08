@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
+import com.silenteight.sep.base.common.exception.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,9 @@ class AlertMessageService implements AlertMessageUseCase {
 
   private final AlertMessageRepository alertMessageRepository;
 
-  public AlertData findByAlertMessageId(String alertMessageId) {
-    var entity = alertMessageRepository.findById(UUID.fromString(alertMessageId))
-        .orElseThrow();
+  public AlertData findByAlertMessageId(UUID alertMessageId) {
+    var entity = alertMessageRepository.findById(alertMessageId).
+        orElseThrow(EntityNotFoundException::new);
 
     // TODO: incorporate eg. mapstruct mapper to avoid such mess.
     return AlertData.builder()
@@ -28,7 +29,7 @@ class AlertMessageService implements AlertMessageUseCase {
         .priority(entity.getPriority())
         .receivedAt(entity.getReceivedAt())
         .systemId(entity.getSystemId())
-        .id(entity.getId())
+        .alertId(entity.getId())
         .unit(entity.getUnit()).build();
   }
 

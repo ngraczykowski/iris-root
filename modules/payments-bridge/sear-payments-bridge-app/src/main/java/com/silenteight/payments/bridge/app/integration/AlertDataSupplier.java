@@ -7,12 +7,13 @@ import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCa
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.UUID;
 import java.util.function.Supplier;
 
 @RequiredArgsConstructor
 class AlertDataSupplier implements Supplier<AlertData> {
 
-  private final String identifier;
+  private final UUID identifier;
 
   private @Autowired AlertMessageUseCase alertMessageUseCase;
   private AlertData result;

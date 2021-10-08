@@ -3,7 +3,10 @@ package com.silenteight.payments.bridge.app.amqp;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.common.integration.CommonChannels;
+import com.silenteight.payments.bridge.common.model.AlertId;
+import com.silenteight.payments.bridge.common.model.SimpleAlertId;
 import com.silenteight.payments.bridge.event.AlertInitializedEvent;
+import com.silenteight.payments.bridge.firco.alertmessage.port.AcceptAlertMessageUseCase;
 import com.silenteight.payments.common.resource.ResourceName;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
@@ -27,15 +30,20 @@ class FircoInboundAmqpIntegrationConfiguration {
   private final FircoInboundAmqpIntegrationProperties properties;
   private final AmqpInboundFactory inboundFactory;
   private final CommonChannels commonChannels;
+  private final AcceptAlertMessageUseCase alertMessageUseCase;
 
   @Bean
-  IntegrationFlow alertMessageStoredReceivedInbound() {
+  IntegrationFlow messageStoredInbound() {
     return from(createInboundAdapter(properties.getInboundQueueNames()))
-         .transform(MessageStored.class, source ->
-           new AlertInitializedEvent(ResourceName.create(source.getAlert()).get("alert-messages"))
-         )
-         .channel(commonChannels.alertInitialized())
-       .get();
+        .transform(MessageStored.class, source ->
+          new SimpleAlertId(ResourceName.create(source.getAlert()).getUuid("alert-messages"))
+        )
+        .filter(alertMessageUseCase::test)
+        .transform(AlertId.class, source ->
+            new AlertInitializedEvent(source.getAlertId())
+        )
+        .channel(commonChannels.alertInitialized())
+        .get();
   }
 
   private AmqpInboundChannelAdapterSMLCSpec createInboundAdapter(String... queueNames) {

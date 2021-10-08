@@ -2,6 +2,7 @@ package com.silenteight.payments.bridge.event;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import java.util.UUID;
 
@@ -11,6 +12,7 @@ import java.util.UUID;
  */
 @RequiredArgsConstructor
 @Getter
+@ToString
 public class AlertUndeliveredEvent extends DomainEvent {
 
   private final UUID alertId;

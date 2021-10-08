@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import javax.persistence.EntityNotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +21,8 @@ class AlertMessagePayloadService implements AlertMessagePayloadUseCase {
 
   @Override
   public AlertMessageDto findByAlertMessageId(UUID alertMessageId) {
-    var payload = payloadRepository.findByAlertMessageId(alertMessageId).orElseThrow();
+    var payload = payloadRepository.findByAlertMessageId(alertMessageId)
+        .orElseThrow(EntityNotFoundException::new);
     return mapToDto(payload.getOriginalMessage());
   }
 

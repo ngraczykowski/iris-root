@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 class AlertDtoSupplier implements Supplier<AlertMessageDto> {
 
-  private final String identifier;
+  private final UUID identifier;
 
   private @Autowired AlertMessagePayloadUseCase alertMessagePayloadUseCase;
   private AlertMessageDto result;
@@ -26,7 +26,7 @@ class AlertDtoSupplier implements Supplier<AlertMessageDto> {
   @Override
   public AlertMessageDto get() {
     if (result == null) {
-      result = alertMessagePayloadUseCase.findByAlertMessageId(UUID.fromString(identifier));
+      result = alertMessagePayloadUseCase.findByAlertMessageId(identifier);
     }
     return result;
   }

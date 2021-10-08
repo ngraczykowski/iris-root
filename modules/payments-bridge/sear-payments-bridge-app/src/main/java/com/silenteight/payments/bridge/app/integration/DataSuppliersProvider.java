@@ -5,18 +5,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+import java.util.UUID;
+
 @Configuration
 class DataSuppliersProvider {
 
   @Bean
   @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-  AlertDataSupplier alertDataSupplierPrototype(String identifier) {
+  AlertDataSupplier alertDataSupplierPrototype(UUID identifier) {
     return new AlertDataSupplier(identifier);
   }
 
   @Bean
   @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-  AlertDtoSupplier alertDtoSupplierPrototype(String identifier) {
+  AlertDtoSupplier alertDtoSupplierPrototype(UUID identifier) {
     return new AlertDtoSupplier(identifier);
   }
 

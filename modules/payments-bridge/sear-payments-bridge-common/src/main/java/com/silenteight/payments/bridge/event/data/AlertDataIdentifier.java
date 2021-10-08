@@ -1,7 +1,7 @@
 package com.silenteight.payments.bridge.event.data;
 
-public interface AlertDataIdentifier {
+import com.silenteight.payments.bridge.common.model.AlertId;
 
-  String getAlertId();
+public interface AlertDataIdentifier extends AlertId {
 
 }

@@ -27,7 +27,7 @@ class RecommendationShortPathIntegration {
     var recommendationsGenerated = RecommendationsGenerated.newBuilder()
         .addRecommendationInfos(
             RecommendationInfo.newBuilder()
-                .setAlert(event.getAlertId())
+                .setAlert(event.getAlertId().toString())
                 .setRecommendation("analysis/MOCKAE/recommendation/" + UUID.randomUUID())
                 .build()).build();
 

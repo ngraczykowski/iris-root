@@ -193,6 +193,10 @@ spring:
         retry:
           enabled: true
           multiplier: 2
+          max-attempts: 6
+          initial-interval: 500
+          max-interval: 4000
+
 
   jackson:
     default-property-inclusion: NON_NULL

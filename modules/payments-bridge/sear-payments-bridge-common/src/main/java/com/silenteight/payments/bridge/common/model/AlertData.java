@@ -8,9 +8,9 @@ import java.util.UUID;
 
 @Value
 @Builder
-public class AlertData {
+public class AlertData implements AlertId {
 
-  UUID id;
+  UUID alertId;
   OffsetDateTime receivedAt;
   String dataCenter;
   String unit;

@@ -36,12 +36,12 @@ class DataSupplierChannelInterceptor implements ChannelInterceptor {
     DomainEvent domainEvent = (DomainEvent) message.getPayload();
 
     if (message.getPayload() instanceof AlertDataIdentifier) {
-      String alertId = ((AlertDataIdentifier)message.getPayload()).getAlertId();
+      var alertId = ((AlertDataIdentifier)message.getPayload()).getAlertId();
       domainEvent.registerCollector(
           AlertData.class, suppliers.alertDataSupplierPrototype(alertId));
     }
     if (message.getPayload() instanceof AlertDtoIdentifier) {
-      String alertId = ((AlertDtoIdentifier)message.getPayload()).getAlertId();
+      var alertId = ((AlertDtoIdentifier)message.getPayload()).getAlertId();
       domainEvent.registerCollector(
           AlertMessageDto.class, suppliers.alertDtoSupplierPrototype(alertId));
     }

@@ -13,6 +13,7 @@ import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.ALERT_INITIALIZED;
@@ -31,7 +32,7 @@ class RegisterSingleAlertService {
     AlertMessageDto alertDto = alertInitializedEvent.getData(AlertMessageDto.class);
 
     var request = RegisterAlertRequest.builder()
-        .alertId(alertData.getId().toString())
+        .alertId(alertData.getAlertId().toString())
         .priority(alertData.getPriority())
         .matchIds(getMatchIds(alertDto))
         .build();
@@ -39,7 +40,7 @@ class RegisterSingleAlertService {
     var alert = createAlertsService.createAlert(request);
 
     return new AlertRegisteredEvent(
-        alert.getAlertId(), alert.getAlertName(),
+        UUID.fromString(alert.getAlertId()), alert.getAlertName(),
         alert.getMatchResponsesAsMap());
   }
 
