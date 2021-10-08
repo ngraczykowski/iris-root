@@ -56,6 +56,14 @@ pb:
       enabled: false
 
   #-------------------------------------------------------------------------------------------------
+  # ALERT MESSAGES
+  #-------------------------------------------------------------------------------------------------
+  alert-message:
+    # NOTE(ahaczewski): For ease of debugging, the original message is stored indefinitely
+    #  in the pb_alert_message_payload table.
+    original-message-deleted-after-recommendation: false
+
+  #-------------------------------------------------------------------------------------------------
   # SECURITY
   #
   # The security is disabled by default for local development.
