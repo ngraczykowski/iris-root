@@ -9,9 +9,13 @@ import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.decision.MapStatusRequest;
 import com.silenteight.payments.bridge.firco.decision.MapStatusUseCase;
+import com.silenteight.payments.bridge.svb.etl.util.StringUtil;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,12 +23,15 @@ import java.util.stream.Collectors;
 @Component
 class ClientRequestDtoMapper {
 
+  private static final String ATTACHMENT_COMMENT_NAME = "comment.txt";
   private static final String COMMENT = "S8 Recommendation: Manual Investigation";
+  private static final String COMMENT_CUT_MSG = " === See attachment for full comments ===";
   private static final String OPERATOR = "Silent Eight";
-
+  private static final int MAX_COMMENT_LENGTH = 1024;
   private final MapStatusUseCase mapStatusUseCase;
 
-  ClientRequestDto mapToAlertDecision(AlertData alert,
+  ClientRequestDto mapToAlertDecision(
+      AlertData alert,
       AlertMessageDto alertDto, AlertMessageStatus status) {
     var decision = new AlertDecisionMessageDto();
     decision.setUnit(alertDto.getUnit());
@@ -32,8 +39,9 @@ class ClientRequestDtoMapper {
     decision.setMessageId(alertDto.getMessageID());
     decision.setSystemId(alertDto.getSystemID());
     decision.setOperator(OPERATOR);
-    decision.setComment(COMMENT);
     decision.setActions(List.of());
+    decision.setAttachment(createAttachment(COMMENT));
+    setComment(COMMENT, decision);
 
     var destinationStatus = mapStatusUseCase.mapStatus(
         MapStatusRequest.builder()
@@ -48,6 +56,26 @@ class ClientRequestDtoMapper {
             .build());
     decision.setStatus(destinationStatus.getStatus());
     return create(decision);
+  }
+
+  private void setComment(String comment, AlertDecisionMessageDto messageDetails) {
+    if (comment.length() > MAX_COMMENT_LENGTH) {
+      messageDetails.setComment(comment.substring(0, getCommentEndIndex()) + COMMENT_CUT_MSG);
+    } else {
+      messageDetails.setComment(comment);
+    }
+  }
+
+  private int getCommentEndIndex() {
+    return MAX_COMMENT_LENGTH - COMMENT_CUT_MSG.length();
+  }
+
+  @NotNull
+  private static AttachmentDto createAttachment(String comment) {
+    String encoded = StringUtil.lfToCrLf(
+        Base64.getEncoder().encodeToString(
+            comment.getBytes(StandardCharsets.UTF_8)));
+    return new AttachmentDto(ATTACHMENT_COMMENT_NAME, encoded);
   }
 
   private ClientRequestDto create(AlertDecisionMessageDto source) {
