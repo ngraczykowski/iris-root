@@ -1,15 +1,13 @@
 package com.silenteight.universaldatasource.app.feature.adapter.incoming;
 
-import com.silenteight.datasource.api.bankidentificationcodes.v1.BatchGetMatchBankIdentificationCodesInputsRequest;
-
-import com.silenteight.datasource.api.bankidentificationcodes.v1.BatchGetMatchBankIdentificationCodesInputsResponse;
-
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsResponse;
 import com.silenteight.datasource.api.allowlist.v1.BatchGetMatchAllowListInputsRequest;
 import com.silenteight.datasource.api.allowlist.v1.BatchGetMatchAllowListInputsResponse;
+import com.silenteight.datasource.api.bankidentificationcodes.v1.BatchGetMatchBankIdentificationCodesInputsRequest;
+import com.silenteight.datasource.api.bankidentificationcodes.v1.BatchGetMatchBankIdentificationCodesInputsResponse;
 import com.silenteight.datasource.api.country.v1.BatchGetMatchCountryInputsRequest;
 import com.silenteight.datasource.api.country.v1.BatchGetMatchCountryInputsResponse;
 import com.silenteight.datasource.api.date.v1.BatchGetMatchDateInputsRequest;
@@ -60,7 +58,8 @@ class FeatureAdapter {
   private static final String IS_PEP_INPUT = "Feature";
   private static final String NATIONAL_ID_INPUT = "NationalIdFeatureInput";
   private static final String TRANSACTION_INPUT = "TransactionFeatureInput";
-  private static final String BANK_IDENTIFICATION_CODES_INPUT = "BankIdentificationCodesFeatureInput";
+  private static final String BANK_IDENTIFICATION_CODES_INPUT =
+      "BankIdentificationCodesFeatureInput";
 
   private final BatchGetFeatureInputUseCase getUseCase;
   private final BatchCreateMatchFeaturesUseCase addUseCase;
@@ -172,7 +171,8 @@ class FeatureAdapter {
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
-        batch -> onNext.accept(batch.castResponse(BatchGetMatchBankIdentificationCodesInputsResponse.class)));
+        batch -> onNext.accept(
+            batch.castResponse(BatchGetMatchBankIdentificationCodesInputsResponse.class)));
   }
 
   public void batchGetMatchCountryInputs(
