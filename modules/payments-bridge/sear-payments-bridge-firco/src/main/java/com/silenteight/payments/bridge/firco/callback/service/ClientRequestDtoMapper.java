@@ -41,6 +41,8 @@ class ClientRequestDtoMapper {
     decision.setOperator(OPERATOR);
     decision.setActions(List.of());
     decision.setAttachment(createAttachment(COMMENT));
+    decision.setUserLogin(alert.getUserLogin());
+    decision.setUserPassword(alert.getUserPassword());
     setComment(COMMENT, decision);
 
     var destinationStatus = mapStatusUseCase.mapStatus(
@@ -91,10 +93,10 @@ class ClientRequestDtoMapper {
     return clientRequestDto;
   }
 
-  private FircoAuthenticationDto mapToAuthentication(AlertDecisionMessageDto source) {
+  static FircoAuthenticationDto mapToAuthentication(AlertDecisionMessageDto source) {
     FircoAuthenticationDto authentication = new FircoAuthenticationDto();
-    authentication.setContinuityLogin("Login");
-    authentication.setContinuityPassword("Password");
+    authentication.setContinuityLogin(source.getUserLogin());
+    authentication.setContinuityPassword(source.getUserPassword());
     authentication.setContinuityBusinessUnit(source.getBusinessUnit());
     return authentication;
   }

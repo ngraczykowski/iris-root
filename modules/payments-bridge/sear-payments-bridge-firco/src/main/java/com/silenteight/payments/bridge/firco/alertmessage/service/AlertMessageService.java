@@ -31,7 +31,10 @@ class AlertMessageService implements AlertMessageUseCase {
         .systemId(entity.getSystemId())
         .alertId(entity.getId())
         .unit(entity.getUnit())
-        .numberOfHits(entity.getNumberOfHits()).build();
+        .numberOfHits(entity.getNumberOfHits())
+        .userLogin(entity.getUserLogin())
+        .userPassword(entity.getUserPassword())
+        .build();
   }
 
 }

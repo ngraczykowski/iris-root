@@ -1,9 +1,6 @@
 package com.silenteight.payments.bridge.firco.alertmessage.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 
@@ -25,5 +22,10 @@ public class FircoAlertMessage {
   private String dataCenter;
 
   private String decisionUrl;
+
+  private String userLogin;
+
+  @ToString.Exclude
+  private String userPassword;
 
 }

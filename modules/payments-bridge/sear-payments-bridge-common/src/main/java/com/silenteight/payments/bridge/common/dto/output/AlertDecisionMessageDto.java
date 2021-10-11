@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.common.dto.output;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import com.silenteight.payments.bridge.common.dto.common.StatusInfoDto;
 
@@ -40,4 +41,9 @@ public class AlertDecisionMessageDto implements Serializable {
   private AttachmentDto attachment;
 
   private List<AlertDecisionActionDto> actions;
+
+  private String userLogin;
+
+  @ToString.Exclude
+  private String userPassword;
 }

@@ -1,10 +1,15 @@
 package com.silenteight.payments.bridge.firco.callback.service;
 
-import com.silenteight.payments.bridge.common.dto.output.*;
+import com.silenteight.payments.bridge.common.dto.output.AlertDecisionMessageDto;
+import com.silenteight.payments.bridge.common.dto.output.ClientRequestDto;
+import com.silenteight.payments.bridge.common.dto.output.ReceiveDecisionDto;
+import com.silenteight.payments.bridge.common.dto.output.ReceiveDecisionMessageDto;
 
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static com.silenteight.payments.bridge.firco.callback.service.ClientRequestDtoMapper.mapToAuthentication;
 
 @Component
 class ClientRequestDtoFactory {
@@ -21,13 +26,4 @@ class ClientRequestDtoFactory {
     clientRequestDto.setReceiveDecisionDto(receiveDecisionDto);
     return clientRequestDto;
   }
-
-  private FircoAuthenticationDto mapToAuthentication(AlertDecisionMessageDto source) {
-    FircoAuthenticationDto authentication = new FircoAuthenticationDto();
-    authentication.setContinuityLogin("Login");
-    authentication.setContinuityPassword("Password");
-    authentication.setContinuityBusinessUnit(source.getBusinessUnit());
-    return authentication;
-  }
-
 }

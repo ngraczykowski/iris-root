@@ -36,4 +36,16 @@
     <addNotNullConstraint tableName="pb_alert_message" columnName="number_of_hits"/>
   </changeSet>
 
+  <changeSet id="payments-bridge-firco-1.2.6" author="mbartecki">
+    <addColumn tableName="pb_alert_message">
+      <column name="user_login" type="VARCHAR(50)" />
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="payments-bridge-firco-1.2.7" author="mbartecki">
+    <addColumn tableName="pb_alert_message">
+      <column name="user_password" type="VARCHAR(50)" />
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

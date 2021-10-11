@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.common.model;
 
 import lombok.Builder;
+import lombok.ToString;
 import lombok.Value;
 
 import java.time.OffsetDateTime;
@@ -20,5 +21,8 @@ public class AlertData implements AlertId {
   String decisionUrl;
   Integer priority;
   Integer numberOfHits;
+  String userLogin;
+  @ToString.Exclude
+  String userPassword;
 
 }

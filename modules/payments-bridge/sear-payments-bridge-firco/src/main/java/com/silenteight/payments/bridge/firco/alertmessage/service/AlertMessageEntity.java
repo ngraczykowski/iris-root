@@ -65,11 +65,20 @@ class AlertMessageEntity extends BaseEntity {
   @NonNull
   private Integer numberOfHits;
 
+  @Column(updatable = false)
+  private String userLogin;
+
+  @Column(updatable = false)
+  private String userPassword;
+
   AlertMessageEntity(FircoAlertMessage message) {
     id = message.getId();
     receivedAt = message.getReceivedAt();
     dataCenter = message.getDataCenter();
     decisionUrl = message.getDecisionUrl();
+    userLogin = message.getUserLogin();
+    userPassword = message.getUserPassword();
+
     var alert = message.getAlertMessage();
 
     unit = alert.getUnit();
