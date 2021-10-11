@@ -1,5 +1,9 @@
 package com.silenteight.universaldatasource.app.feature.adapter.incoming;
 
+import com.silenteight.datasource.api.bankidentificationcodes.v1.BatchGetMatchBankIdentificationCodesInputsRequest;
+
+import com.silenteight.datasource.api.bankidentificationcodes.v1.BatchGetMatchBankIdentificationCodesInputsResponse;
+
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
@@ -56,6 +60,7 @@ class FeatureAdapter {
   private static final String IS_PEP_INPUT = "Feature";
   private static final String NATIONAL_ID_INPUT = "NationalIdFeatureInput";
   private static final String TRANSACTION_INPUT = "TransactionFeatureInput";
+  private static final String BANK_IDENTIFICATION_CODES_INPUT = "BankIdentificationCodesFeatureInput";
 
   private final BatchGetFeatureInputUseCase getUseCase;
   private final BatchCreateMatchFeaturesUseCase addUseCase;
@@ -153,6 +158,21 @@ class FeatureAdapter {
     getUseCase.batchGetFeatureInput(
         featureRequest,
         batch -> onNext.accept(batch.castResponse(BatchGetMatchAllowListInputsResponse.class)));
+  }
+
+  public void batchGetMatchBankIdentificationCodesInputs(
+      @Valid BatchGetMatchBankIdentificationCodesInputsRequest request,
+      Consumer<BatchGetMatchBankIdentificationCodesInputsResponse> onNext) {
+
+    var featureRequest = BatchFeatureRequest.builder()
+        .agentInputType(BANK_IDENTIFICATION_CODES_INPUT)
+        .matches(request.getMatchesList())
+        .features(request.getFeaturesList())
+        .build();
+
+    getUseCase.batchGetFeatureInput(
+        featureRequest,
+        batch -> onNext.accept(batch.castResponse(BatchGetMatchBankIdentificationCodesInputsResponse.class)));
   }
 
   public void batchGetMatchCountryInputs(
