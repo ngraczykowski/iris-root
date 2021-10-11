@@ -24,3 +24,7 @@ To enable tracing of gRPC calls, enable the `tracegrpc` Spring profile.
 
 The Adjudication Engine validates incoming gRPC requests.
 To add validation to your requests, see the [Validation Guide](doc/validation-guide.md).
+
+## Alert labels
+
+To see available alert labels and it's values see [Alert labels and values list](doc/alert-labes-values.md)

@@ -24,7 +24,7 @@ interface DatasetAlertRepository extends Repository<DatasetAlertEntity, DatasetA
       + "    LEFT JOIN ae_alert_labels aal ON aea.alert_id = aal.alert_id\n"
       + "    WHERE aea.alerted_at >= ?3\n"
       + "    AND aea.alerted_at <= ?4\n"
-      + "    AND (?2 IS NULL OR(aal.name || aal.value IN (?2)))\n"
+      + "    AND (?2 IS NULL OR (aal.name || aal.value IN (?2)))\n"
       + "ON CONFLICT DO NOTHING",
       nativeQuery = true)
   void createFilteredDataset(
