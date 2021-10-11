@@ -40,9 +40,9 @@ class CategoryIntegrationTestFixture {
   static BatchGetMatchesCategoryValuesRequest getBatchCategoryValueRequest() {
 
     var categoryMatch = CategoryMatches.newBuilder()
-        .setCategories("categories/categoryThree")
+        .setCategory("categories/categoryThree")
         .addAllMatches(
-            List.of("alerts/alertOne/matches/matchOne", "alerts/alertTwo/matches/matchTwo"))
+            List.of("alerts/1/matches/1", "alerts/2/matches/2"))
         .build();
 
     return BatchGetMatchesCategoryValuesRequest.newBuilder()
@@ -53,17 +53,17 @@ class CategoryIntegrationTestFixture {
   static CreateCategoryValuesRequest getCreateCategoryValuesRequest(String category) {
 
     var categoryValueOne = CategoryValue.newBuilder()
-        .setMatch("alerts/alertOne/matches/matchOne")
+        .setMatch("alerts/1/matches/1")
         .setSingleValue("YES")
         .build();
 
     var categoryValueTwo = CategoryValue.newBuilder()
-        .setMatch("alerts/alertTwo/matches/matchTwo")
+        .setMatch("alerts/2/matches/2")
         .setSingleValue("NO")
         .build();
 
     var categoryValueThree = CategoryValue.newBuilder()
-        .setMatch("alerts/alertTwo/matches/matchThree")
+        .setMatch("alerts/2/matches/3")
         .setSingleValue("YES")
         .build();
 

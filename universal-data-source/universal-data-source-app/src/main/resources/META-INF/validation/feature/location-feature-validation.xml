@@ -12,10 +12,14 @@
     <field name="matches_">
       <valid/>
       <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint
+          annotation="com.silenteight.universaldatasource.common.validator.MatchListNameConstraint"/>
     </field>
     <field name="features_">
       <valid/>
       <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint
+          annotation="com.silenteight.universaldatasource.app.feature.validator.FeatureListNameConstraint"/>
     </field>
   </bean>
 

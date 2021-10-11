@@ -1,4 +1,4 @@
-package com.silenteight.universaldatasource.app.commentinput.validator;
+package com.silenteight.universaldatasource.app.category.validator;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

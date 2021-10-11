@@ -10,4 +10,5 @@ dependencies {
   implementation libraries.commons_lang3
   implementation libraries.guava
   implementation libraries.grpc_protobuf
+  implementation libraries.hibernate_validator
 }

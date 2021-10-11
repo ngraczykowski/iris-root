@@ -59,7 +59,7 @@ class CommentInputIntegrationTest {
 
     assertThat(batchCreateCommentInputResponse.getCreatedCommentInputsList()
         .stream()
-        .filter(c -> c.getAlert().equals("alerts/alertOne"))
+        .filter(c -> c.getAlert().equals("alerts/1"))
         .count()).isEqualTo(1);
   }
 
@@ -68,7 +68,7 @@ class CommentInputIntegrationTest {
     populateDbWithCommentInputs();
 
     var request = BatchGetAlertsCommentInputsRequest.newBuilder()
-        .addAllAlerts(List.of("alerts/alertOne", "alerts/alertTwo", "alerts/alertThree"))
+        .addAllAlerts(List.of("alerts/1", "alerts/2", "alerts/3"))
         .build();
 
     var batchGetAlertsCommentInputsResponse =
@@ -78,13 +78,13 @@ class CommentInputIntegrationTest {
 
     var commentInputsList = batchGetAlertsCommentInputsResponse.getCommentInputsList();
     assertThat(commentInputsList.stream()
-        .filter(c -> c.getAlert().equals("alerts/alertOne"))
+        .filter(c -> c.getAlert().equals("alerts/1"))
         .filter(c -> c.getAlertCommentInput().containsFields("field1"))
         .filter(c -> c.getMatchCommentInputsCount() == 2)
         .filter(c -> c.getName().contains("comment-inputs/"))
         .count()).isEqualTo(1);
     assertThat(commentInputsList.stream()
-        .filter(c -> c.getAlert().equals("alerts/alertTwo"))
+        .filter(c -> c.getAlert().equals("alerts/2"))
         .filter(c -> c.getAlertCommentInput().containsFields("field1"))
         .filter(c -> c.getMatchCommentInputsCount() == 2)
         .filter(c -> c.getName().contains("comment-inputs/"))
@@ -96,7 +96,7 @@ class CommentInputIntegrationTest {
     populateDbWithCommentInputs();
 
     var request = StreamCommentInputsRequest.newBuilder()
-        .addAllAlerts(List.of("alerts/alertOne", "alerts/alertTwo"))
+        .addAllAlerts(List.of("alerts/1", "alerts/2"))
         .build();
 
     var commentInputIterator =

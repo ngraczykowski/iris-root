@@ -14,7 +14,17 @@
       <constraint annotation="javax.validation.constraints.NotNull"/>
     </field>
     <getter name="alert">
-      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">alerts/\d+</element>
+      </constraint>
+    </getter>
+  </bean>
+
+  <bean class="MatchCommentInput">
+    <getter name="match">
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">alerts/\d+/matches/\d+</element>
+      </constraint>
     </getter>
   </bean>
 
@@ -29,6 +39,8 @@
     <field name="alerts_">
       <valid/>
       <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint
+          annotation="com.silenteight.universaldatasource.common.validator.AlertListNameConstraint"/>
     </field>
   </bean>
 

@@ -14,7 +14,9 @@
       <constraint annotation="javax.validation.constraints.NotEmpty"/>
     </field>
     <getter name="match">
-      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">alerts/\d+/matches/\d+</element>
+      </constraint>
     </getter>
   </bean>
 
@@ -24,7 +26,9 @@
       <constraint annotation="javax.validation.constraints.NotNull"/>
     </field>
     <getter name="feature">
-      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">features/\w+</element>
+      </constraint>
     </getter>
   </bean>
 

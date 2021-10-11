@@ -8,20 +8,12 @@
 
   <default-package>com.silenteight.datasource.comments.api.v1</default-package>
 
-  <bean class="CommentInput">
-    <field name="alertCommentInput_">
-      <valid/>
-      <constraint annotation="javax.validation.constraints.NotNull"/>
-    </field>
-    <getter name="alert">
-      <constraint annotation="javax.validation.constraints.NotEmpty"/>
-    </getter>
-  </bean>
-
   <bean class="StreamCommentInputsRequest">
     <field name="alerts_">
       <valid/>
       <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint
+          annotation="com.silenteight.universaldatasource.common.validator.AlertListNameConstraint"/>
     </field>
   </bean>
 

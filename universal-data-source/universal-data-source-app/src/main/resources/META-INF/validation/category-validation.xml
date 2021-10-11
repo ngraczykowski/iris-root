@@ -10,11 +10,13 @@
 
   <bean class="Category">
     <getter name="name">
-      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">categories/\w+</element>
+      </constraint>
     </getter>
     <getter name="type">
       <constraint
-          annotation="com.silenteight.universaldatasource.app.commentinput.validator.CategoryTypeConstraint"/>
+          annotation="com.silenteight.universaldatasource.app.category.validator.CategoryTypeConstraint"/>
     </getter>
   </bean>
 
@@ -23,6 +25,14 @@
       <valid/>
       <constraint annotation="javax.validation.constraints.NotEmpty"/>
     </field>
+
+  </bean>
+  <bean class="CategoryValue">
+    <getter name="match">
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">alerts/\d+/matches/\d+</element>
+      </constraint>
+    </getter>
   </bean>
 
   <bean class="CreateCategoryValuesRequest">
@@ -30,6 +40,11 @@
       <valid/>
       <constraint annotation="javax.validation.constraints.NotEmpty"/>
     </field>
+    <getter name="category">
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">categories/\w+</element>
+      </constraint>
+    </getter>
   </bean>
 
   <bean class="BatchCreateCategoryValuesRequest">
@@ -44,6 +59,21 @@
       <valid/>
       <constraint annotation="javax.validation.constraints.NotEmpty"/>
     </field>
+  </bean>
+
+  <bean class="CategoryMatches">
+    <field name="matches_">
+      <valid/>
+      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint
+          annotation="com.silenteight.universaldatasource.common.validator.MatchListNameConstraint"/>
+    </field>
+
+    <getter name="category">
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">categories/\w+</element>
+      </constraint>
+    </getter>
   </bean>
 
 </constraint-mappings>

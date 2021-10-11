@@ -87,7 +87,7 @@ class CategoryVersionMapper {
 
   private CategoryMatches getCategoryBuilder(Entry<String, List<String>> entry) {
     var builder = CategoryMatches.newBuilder()
-        .setCategories(entry.getKey());
+        .setCategory(entry.getKey());
     for (String match : entry.getValue()) {
       builder.addMatches(match);
     }

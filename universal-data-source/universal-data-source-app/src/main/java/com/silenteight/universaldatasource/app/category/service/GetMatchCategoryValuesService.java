@@ -42,7 +42,7 @@ class GetMatchCategoryValuesService implements GetMatchCategoryValuesUseCase {
     List<MatchCategoryRequest> matchCategoryRequestList = new ArrayList<>();
 
     for (CategoryMatches categoryMatch : categoryMatches) {
-      var category = categoryMatch.getCategories();
+      var category = categoryMatch.getCategory();
       categoryMatch
           .getMatchesList()
           .stream()

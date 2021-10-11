@@ -1,4 +1,4 @@
-package com.silenteight.universaldatasource.app.commentinput.validator;
+package com.silenteight.universaldatasource.app.category.validator;
 
 import com.silenteight.datasource.categories.api.v2.CategoryType;
 

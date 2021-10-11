@@ -77,7 +77,7 @@ class AgentInputServiceIT {
   @BeforeEach
   void setUp() throws InvalidProtocolBufferException {
     Map<String, Map<String, Message>> mapOfFeatureRequestsOne = Map.of(
-        "alerts/alertOne/matches/nameMatch",
+        "alerts/1/matches/0",
         Map.of(
             "features/name",
             NameFeatureInput.newBuilder()
@@ -87,7 +87,7 @@ class AgentInputServiceIT {
                 .setAlertedPartyType(EntityType.INDIVIDUAL)
                 .addMatchingTexts("Doe")
                 .build()),
-        "alerts/alertOne/matches/locationMatchOne",
+        "alerts/1/matches/1",
         Map.of(
             "features/country",
             LocationFeatureInput.newBuilder()
@@ -109,7 +109,7 @@ class AgentInputServiceIT {
                 .setWatchlistLocation("Cambridge 6011, New Zealand")
                 .build()),
 
-        "alerts/alertTwo/matches/locationMatchTwo",
+        "alerts/2/matches/2",
         Map.of(
             "features/city",
             LocationFeatureInput.newBuilder()
@@ -118,7 +118,7 @@ class AgentInputServiceIT {
                 .setWatchlistLocation("Singapore")
                 .build()),
 
-        "alerts/alertThree/matches/freeTextMatchThree",
+        "alerts/3/matches/3",
         Map.of(
             "features/freetext",
             FreeTextFeatureInput.newBuilder()
@@ -130,7 +130,7 @@ class AgentInputServiceIT {
                 .setFreetext("Joe")
                 .build()),
 
-        "alerts/alertFour/matches/isPepMatchFour",
+        "alerts/4/matches/4",
         Map.of(
             "features/isPep",
             Feature.newBuilder()
@@ -156,19 +156,19 @@ class AgentInputServiceIT {
         .atMost(Duration.ofSeconds(5))
         .until(() ->
             streamedFeaturesCount(jdbcTemplate,
-                "alerts/alertOne/matches/nameMatch", "features/name"
+                "alerts/1/matches/0", "features/name"
             ) > 0);
 
     var batchGetMatchNameInputsResponses =
         nameInputServiceBlockingStub.batchGetMatchNameInputs(
             BatchGetMatchNameInputsRequest.newBuilder()
-                .addMatches("alerts/alertOne/matches/nameMatch")
+                .addMatches("alerts/1/matches/0")
                 .addFeatures("features/name")
                 .build());
 
     var matchNameInputsResponse = batchGetMatchNameInputsResponses.next();
     assertThat(matchNameInputsResponse.getNameInputs(0).getMatch()).isEqualTo(
-        "alerts/alertOne/matches/nameMatch");
+        "alerts/1/matches/0");
     assertThat(matchNameInputsResponse.getNameInputsCount()).isEqualTo(1);
   }
 
@@ -178,14 +178,14 @@ class AgentInputServiceIT {
         .atMost(Duration.ofSeconds(5))
         .until(() ->
             streamedFeaturesCount(
-                jdbcTemplate, "alerts/alertOne/matches/locationMatchOne", "features/state"
+                jdbcTemplate, "alerts/1/matches/1", "features/state"
             ) > 0);
 
     var batchGetMatchLocationInputs =
         locationInputServiceBlockingStub.batchGetMatchLocationInputs(
             BatchGetMatchLocationInputsRequest.newBuilder()
-                .addMatches("alerts/alertOne/matches/locationMatchOne")
-                .addMatches("alerts/alertTwo/matches/locationMatchTwo")
+                .addMatches("alerts/1/matches/1")
+                .addMatches("alerts/2/matches/2")
                 .addFeatures("features/state")
                 .addFeatures("features/city")
                 .build());
@@ -199,7 +199,7 @@ class AgentInputServiceIT {
     var matchLocationInputsResponse = batchGetMatchLocationInputs.next();
     assertThat(matchLocationInputsResponse.getLocationInputsCount()).isEqualTo(2);
     assertThat(matchLocationInputsResponse.getLocationInputs(0).getMatch()).isEqualTo(
-        "alerts/alertOne/matches/locationMatchOne");
+        "alerts/1/matches/1");
     assertThat(matchLocationInputsResponse
         .getLocationInputs(0)
         .getLocationFeatureInputsList()
@@ -213,13 +213,13 @@ class AgentInputServiceIT {
         .atMost(Duration.ofSeconds(5))
         .until(() ->
             streamedFeaturesCount(
-                jdbcTemplate, "alerts/alertThree/matches/freeTextMatchThree", "features/freetext"
+                jdbcTemplate, "alerts/3/matches/3", "features/freetext"
             ) > 0);
 
     var batchGetMatchFreeTextInputs =
         freeTextInputServiceBlockingStub.batchGetMatchFreeTextInputs(
             BatchGetMatchFreeTextInputsRequest.newBuilder()
-                .addMatches("alerts/alertThree/matches/freeTextMatchThree")
+                .addMatches("alerts/3/matches/3")
                 .addFeatures("features/freetext")
                 .build()
         );
@@ -248,7 +248,7 @@ class AgentInputServiceIT {
     var batchGetMatchIsPepSolutionsResponseIterator =
         isPepInputServiceBlockingStub.batchGetMatchIsPepSolutions(
             BatchGetMatchIsPepSolutionsRequest.newBuilder()
-                .addMatches("alerts/alertFour/matches/isPepMatchFour")
+                .addMatches("alerts/4/matches/4")
                 .addFeatures("features/isPep")
                 .build());
 
@@ -270,7 +270,7 @@ class AgentInputServiceIT {
   @Test
   void addFeatureForNonExistingMapper() {
     Map<String, Map<String, Message>> mapOfFeatureRequestsOne = Map.of(
-        "alerts/alertOne/matches/locationMatchOne",
+        "alerts/1/matches/1",
         Map.of(
             "features/name",
             DocumentInput.newBuilder().build()));

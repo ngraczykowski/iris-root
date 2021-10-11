@@ -24,8 +24,8 @@ class CommentInputFixture {
     return BatchCreateCommentInputRequest.newBuilder()
         .addAllCommentInputs(
             List.of(
-                getCommentInput("alertOne"), getCommentInput("alertTwo"),
-                getCommentInputWithoutMatchCommentInput("alertThree")))
+                getCommentInput("1"), getCommentInput("2"),
+                getCommentInputWithoutMatchCommentInput("3")))
         .build();
   }
 
@@ -37,8 +37,8 @@ class CommentInputFixture {
         .setAlertCommentInput(getAlertCommentInput())
         .addAllMatchCommentInputs(
             List.of(
-                getMatchCommentInput(alertId, "matchOne"),
-                getMatchCommentInput(alertId, "matchTwo")))
+                getMatchCommentInput(alertId, "1"),
+                getMatchCommentInput(alertId, "2")))
         .build();
   }
 

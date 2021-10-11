@@ -89,7 +89,7 @@ class CategoryIntegrationTest {
     assertThat((int) categoryValues
         .getCreatedCategoryValuesList()
         .stream()
-        .filter(c -> c.getMatch().equals("alerts/alertOne/matches/matchOne")).count()).isEqualTo(1);
+        .filter(c -> c.getMatch().equals("alerts/1/matches/1")).count()).isEqualTo(1);
   }
 
   @Test
@@ -106,7 +106,7 @@ class CategoryIntegrationTest {
     assertThat((int) batchGetMatchesCategoryValuesResponse
         .getCategoryValuesList()
         .stream()
-        .filter(c -> c.getMatch().equals("alerts/alertOne/matches/matchOne")).count()).isEqualTo(2);
+        .filter(c -> c.getMatch().equals("alerts/1/matches/1")).count()).isEqualTo(2);
   }
 
   private void addBatchCategoryValues(String category) {
@@ -132,26 +132,21 @@ class CategoryIntegrationTest {
         categoryServiceBlockingStubV1.batchGetMatchCategoryValues(
             BatchGetMatchCategoryValuesRequest.newBuilder()
                 .addAllMatchValues(List.of(
-                    "categories/categoryOne/alerts/alertOne/matches/matchOne",
-                    "categories/categoryTwo/alerts/alertTwo/matches/matchTwo"))
+                    "categories/categoryOne/alerts/1/matches/1",
+                    "categories/categoryTwo/alerts/2/matches/2"))
                 .build()
         );
-
-    var firstCategorySingleValue =
-        batchGetMatchCategoryValuesResponse.getCategoryValuesList().get(0).getSingleValue();
-    var firstCategoryName =
-        batchGetMatchCategoryValuesResponse.getCategoryValuesList().get(0).getName();
-    var secondCategorySingleValue =
-        batchGetMatchCategoryValuesResponse.getCategoryValuesList().get(1).getSingleValue();
-    var secondCategoryName =
-        batchGetMatchCategoryValuesResponse.getCategoryValuesList().get(1).getName();
-
     assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesCount()).isEqualTo(2);
-    assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesList()).isNotNull();
-    assertThat(firstCategorySingleValue).isEqualTo("NO");
-    assertThat(secondCategorySingleValue).isEqualTo("YES");
-    assertThat(firstCategoryName).startsWith("categories/categoryTwo/values/");
-    assertThat(secondCategoryName).startsWith("categories/categoryOne/values/");
+
+    assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesList().stream()
+        .filter(c -> c.getSingleValue().equals("NO"))
+        .filter(c -> c.getName().startsWith("categories/categoryTwo/values/"))
+        .count()).isEqualTo(1);
+
+    assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesList().stream()
+        .filter(c -> c.getSingleValue().equals("YES"))
+        .filter(c -> c.getName().startsWith("categories/categoryOne/values/"))
+        .count()).isEqualTo(1);
   }
 
   @Test
@@ -174,7 +169,7 @@ class CategoryIntegrationTest {
                     .addAllCategoryValues(
                         List.of(
                             CategoryValue.newBuilder()
-                                .setMatch("alerts/alertOne/matches/matchOne")
+                                .setMatch("alerts/1/matches/1")
                                 .setSingleValue("NonExistingValue")
                                 .build()
                         )

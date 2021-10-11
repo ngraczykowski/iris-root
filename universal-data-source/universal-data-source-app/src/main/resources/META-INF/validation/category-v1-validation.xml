@@ -10,11 +10,13 @@
 
   <bean class="Category">
     <getter name="name">
-      <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">categories/\w+</element>
+      </constraint>
     </getter>
     <getter name="type">
       <constraint
-          annotation="com.silenteight.universaldatasource.app.commentinput.validator.CategoryTypeConstraint"/>
+          annotation="com.silenteight.universaldatasource.app.category.validator.CategoryTypeConstraint"/>
     </getter>
   </bean>
 
@@ -22,6 +24,8 @@
     <field name="matchValues_">
       <valid/>
       <constraint annotation="javax.validation.constraints.NotEmpty"/>
+      <constraint
+          annotation="com.silenteight.universaldatasource.app.category.validator.CategoryValueMatchConstraintV1"/>
     </field>
   </bean>
 
