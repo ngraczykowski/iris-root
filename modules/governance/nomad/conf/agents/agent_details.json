@@ -238,23 +238,5 @@
         "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
       }
     ]
-  },
-  "agents/companyName/versions/1.0.0/configs/1": {
-    "agentId": "e7cbc43a-ca0e-400b-b1d5-97a5400273b8",
-    "features": [
-      "features/companyName"
-    ],
-    "responses": [
-      "MATCH",
-      "INCONCLUSIVE",
-      "NO_MATCH",
-      "NO_DATA"
-    ],
-    "configurations": [
-      {
-        "name": "date-entity-normal",
-        "configFile": "file:local/conf/agents/configurations/date-enty-normal.yml"
-      }
-    ]
   }
 }
