@@ -12,6 +12,7 @@ import com.google.protobuf.Timestamp;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Locale;
 
 import static java.util.stream.Collectors.toList;
 
@@ -26,6 +27,8 @@ public class RegisterAlertRequest {
   Timestamp alertTime;
 
   List<String> matchIds;
+
+  HitAmount hitAmount;
 
   public BatchCreateAlertMatchesRequest toCreateMatchesRequest(String alertName) {
     if (matchIds.isEmpty())
@@ -56,6 +59,9 @@ public class RegisterAlertRequest {
         .setPriority(getPriority());
     if (alertTime != null) {
       alert.setAlertTime(alertTime);
+    }
+    if (hitAmount != null) {
+      alert.putLabels("hitAmount", hitAmount.name().toLowerCase(Locale.ROOT));
     }
     return CreateAlertRequest.newBuilder().setAlert(alert.build()).build();
   }

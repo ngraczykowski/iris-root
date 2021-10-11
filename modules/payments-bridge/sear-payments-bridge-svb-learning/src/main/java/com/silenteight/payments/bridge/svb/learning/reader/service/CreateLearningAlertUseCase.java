@@ -28,28 +28,29 @@ class CreateLearningAlertUseCase {
     return LearningAlert.builder()
         .alertId(rows.get(0).getFkcoVSystemId())
         .alertTime(createAlertTime(rows.get(0).getFkcoDFilteredDatetime()))
+        .hitCount(rows.size())
         .matches(createMatches(rows))
         .build();
   }
 
   private List<LearningMatch> createMatches(List<LearningCsvRow> rows) {
     List<LearningMatch> matches = new ArrayList<>();
-    var matchRows = new HashMap<String, List<LearningCsvRow>>();
+    var hits = new HashMap<String, List<LearningCsvRow>>();
 
     for (var row : rows) {
       var matchId = row.getFkcoVListFmmId();
 
-      if (matchRows.containsKey(matchId)) {
-        var list = matchRows.get(matchId);
+      if (hits.containsKey(matchId)) {
+        var list = hits.get(matchId);
         list.add(row);
         continue;
       }
 
-      matchRows.put(matchId, new ArrayList<>(List.of(row)));
+      hits.put(matchId, new ArrayList<>(List.of(row)));
     }
 
-    for (var key : matchRows.keySet()) {
-      matches.add(createLearningMatchUseCase.fromLearningRows(matchRows.get(key)));
+    for (var key : hits.keySet()) {
+      matches.add(createLearningMatchUseCase.fromLearningRows(hits.get(key)));
     }
 
     assertNoDuplicateMatchIds(matches);
