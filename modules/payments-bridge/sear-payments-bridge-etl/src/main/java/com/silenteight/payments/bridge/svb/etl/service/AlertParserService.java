@@ -7,8 +7,6 @@ import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.common.dto.input.RequestHitDto;
-import com.silenteight.payments.bridge.svb.etl.countrycode.CountryCodeExtractRequest;
-import com.silenteight.payments.bridge.svb.etl.countrycode.CountryCodeExtractor;
 import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure;
 import com.silenteight.payments.bridge.svb.etl.model.ExtractAlertedPartyDataRequest;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractAlertEtlResponseUseCase;
@@ -29,7 +27,6 @@ import java.util.Optional;
 @Service
 public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
-  private final CountryCodeExtractor countryCodeExtractor;
   private final ExtractMessageStructureUseCase extractMessageStructureUseCase;
   private final ExtractAlertedPartyDataUseCase extractAlertedPartyDataUseCase;
 
@@ -136,16 +133,5 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         .origin((requestHitDto.getHit().getHittedEntity().getOrigin()))
         .designation((requestHitDto.getHit().getHittedEntity().getDesignation()))
         .build();
-  }
-
-  private String extractCountryCode(SourceSystem sourceSystem, AlertMessageDto alertMessageDto) {
-    return countryCodeExtractor
-        .invoke(new CountryCodeExtractRequest(
-            sourceSystem,
-            alertMessageDto.getUnit(),
-            alertMessageDto.getIoIndicator(),
-            alertMessageDto.getSenderCode(),
-            alertMessageDto.getReceiverCode()
-        ));
   }
 }
