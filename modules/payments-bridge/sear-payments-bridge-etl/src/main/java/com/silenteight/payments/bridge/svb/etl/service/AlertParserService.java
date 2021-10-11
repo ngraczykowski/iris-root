@@ -5,8 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
-import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
-import com.silenteight.payments.bridge.common.dto.input.RequestHitDto;
+import com.silenteight.payments.bridge.common.dto.input.*;
 import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure;
 import com.silenteight.payments.bridge.svb.etl.model.ExtractAlertedPartyDataRequest;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractAlertEtlResponseUseCase;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -112,6 +112,34 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
             messageStructure.getMessageData(), allMatchingFieldValues,
             messageFieldStructure).invoke();
 
+    List<CodeDto> codes = Optional.of(requestHitDto.getHit())
+        .map(HitDto::getHittedEntity)
+        .map(HittedEntityDto::getCodes)
+        .orElseGet(Collections::emptyList)
+        .stream()
+        .map(HittedEntityCodeDto::getCode)
+        .collect(Collectors.toList());
+
+    List<String> searchCodes = codes.stream()
+        .filter(codeDto -> "SearchCode".equals(codeDto.getType()))
+        .map(CodeDto::getName)
+        .collect(Collectors.toList());
+
+    List<String> passports = codes.stream()
+        .filter(codeDto -> "Passport".equals(codeDto.getType()))
+        .map(CodeDto::getName)
+        .collect(Collectors.toList());
+
+    List<String> natIds = codes.stream()
+        .filter(codeDto -> "NationalID".equals(codeDto.getType()))
+        .map(CodeDto::getName)
+        .collect(Collectors.toList());
+
+    List<String> bics = codes.stream()
+        .filter(codeDto -> "Bic".equals(codeDto.getType()))
+        .map(CodeDto::getName)
+        .collect(Collectors.toList());
+
     return HitAndWatchlistPartyData.builder()
         .messageStructure(messageStructure)
         .solutionType(SolutionType.ofCode(requestHitDto.getHit().getSolutionType()))
@@ -132,6 +160,10 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         .mainAddress(LocationExtractorHelper.extractIsMainAddress(requestHitDto))
         .origin((requestHitDto.getHit().getHittedEntity().getOrigin()))
         .designation((requestHitDto.getHit().getHittedEntity().getDesignation()))
+        .searchCodes(searchCodes)
+        .passports(passports)
+        .natIds(natIds)
+        .bics(bics)
         .build();
   }
 }

@@ -13,7 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(UpperCamelCaseStrategy.class)
-class HittedEntityCodeDto implements Serializable {
+public class HittedEntityCodeDto implements Serializable {
 
   private static final long serialVersionUID = 164865933921417120L;
 

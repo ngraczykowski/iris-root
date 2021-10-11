@@ -80,7 +80,7 @@ class OrganizationNameAgentEtlProcess implements EtlProcess {
       String watchlistPartyNames) {
 
     var createCompareOrganizationNamesRequest =
-        createCompareOrganizationNamesRequest(watchlistType, alertedPartyNames,
+        createNameFeatureInput(watchlistType, alertedPartyNames,
             watchlistPartyNames);
 
     var batchInputRequest = BatchCreateAgentInputsRequest.newBuilder()
@@ -97,7 +97,7 @@ class OrganizationNameAgentEtlProcess implements EtlProcess {
     return batchInputRequest;
   }
 
-  private NameFeatureInput createCompareOrganizationNamesRequest(
+  private NameFeatureInput createNameFeatureInput(
       WatchlistType watchlistType, List<String> alertedPartyNames, String watchlistPartyNames) {
     if (watchlistType == WatchlistType.COMPANY) {
       return NameFeatureInput.newBuilder()

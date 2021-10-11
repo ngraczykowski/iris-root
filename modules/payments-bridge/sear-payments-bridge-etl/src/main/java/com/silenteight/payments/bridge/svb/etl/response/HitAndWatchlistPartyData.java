@@ -33,4 +33,8 @@ public class HitAndWatchlistPartyData {
   String origin;
   String designation;
   String direction;
+  List<String> searchCodes;
+  List<String> passports;
+  List<String> natIds;
+  List<String> bics;
 }
