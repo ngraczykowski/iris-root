@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.api.v1.Dataset;
 import com.silenteight.adjudication.api.v1.FilteredAlerts;
 import com.silenteight.adjudication.api.v1.FilteredAlerts.AlertTimeRange;
+import com.silenteight.adjudication.api.v1.FilteredAlerts.LabelValues;
 import com.silenteight.adjudication.api.v1.NamedAlerts;
 import com.silenteight.adjudication.engine.common.protobuf.TimestampConverter;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
@@ -17,6 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -53,7 +58,9 @@ class CreateDatasetUseCase {
   Dataset createDataset(FilteredAlerts filteredAlerts) {
     var dataset = datasetRepository.save(DatasetEntity.builder().build());
 
-    createFilteredDatasetAlerts(dataset.getId(), filteredAlerts.getAlertTimeRange());
+    createFilteredDatasetAlerts(
+        dataset.getId(), filteredAlerts.getLabelsFilter().getLabelsMap(),
+        filteredAlerts.getAlertTimeRange());
     var alertCount = datasetAlertRepository.countByIdDatasetId(dataset.getId());
 
     return Dataset
@@ -64,11 +71,24 @@ class CreateDatasetUseCase {
         .build();
   }
 
-  private void createFilteredDatasetAlerts(long datasetId, AlertTimeRange alertTimeRange) {
+  private void createFilteredDatasetAlerts(
+      long datasetId, Map<String, LabelValues> labels, AlertTimeRange alertTimeRange) {
     datasetAlertRepository.createFilteredDataset(
         datasetId,
+        toLabelValueList(labels),
         TimestampConverter.toOffsetDateTime(alertTimeRange.getStartTime()),
         TimestampConverter.toOffsetDateTime(alertTimeRange.getEndTime()));
+  }
+
+  private static List<String> toLabelValueList(Map<String, LabelValues> labels) {
+    var labelsValues = new ArrayList<String>();
+
+    labels
+        .keySet()
+        .forEach(
+            key -> labels.get(key).getValueList().forEach(value -> labelsValues.add(key + value)));
+
+    return labelsValues;
   }
 
   Dataset getDataset(String name) {

@@ -10,3 +10,5 @@ INSERT INTO ae_alert(alert_id,alerted_at,created_at,client_alert_identifier,prio
 INSERT INTO ae_alert(alert_id,alerted_at,created_at,client_alert_identifier,priority) VALUES (10,now(),now(),'some-uuid-10',5);
 INSERT INTO ae_alert(alert_id,alerted_at,created_at,client_alert_identifier,priority) VALUES (11,'2006-01-01',now(),'some-uuid-11',5);
 
+INSERT INTO ae_alert_labels VALUES (1, 'label', 'value');
+INSERT INTO ae_alert_labels VALUES (2, 'label', 'value');

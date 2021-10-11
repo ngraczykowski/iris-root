@@ -7,10 +7,12 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -23,6 +25,8 @@ public class DatasetAlertRepositoryIT extends BaseDataJpaTest {
   private DatasetAlertRepository datasetAlertRepository;
   @Autowired
   private DatasetRepository datasetRepository;
+  @Autowired
+  JdbcTemplate jdbcTemplate;
 
   @Test
   void shouldPersistDatasetAlert() {
@@ -68,7 +72,17 @@ public class DatasetAlertRepositoryIT extends BaseDataJpaTest {
   void shouldCreateDatasetAlertByFilter() {
     DatasetEntity dataset = createDatasetEntity();
     datasetAlertRepository.createFilteredDataset(
-        dataset.getId(), OffsetDateTime.parse("2007-12-03T10:15:30+01:00"), OffsetDateTime.now());
+        dataset.getId(), List.of(), OffsetDateTime.parse("2007-12-03T10:15:30+01:00"),
+        OffsetDateTime.now());
+    assertThat(datasetAlertRepository.countByIdDatasetId(dataset.getId())).isEqualTo(10);
+  }
+
+  @Test
+  void shouldCreateDatasetAlertByLabelFilter() {
+    DatasetEntity dataset = createDatasetEntity();
+    datasetAlertRepository.createFilteredDataset(
+        dataset.getId(), List.of(), OffsetDateTime.parse("2007-12-03T10:15:30+01:00"),
+        OffsetDateTime.now());
     assertThat(datasetAlertRepository.countByIdDatasetId(dataset.getId())).isEqualTo(10);
   }
 
@@ -76,8 +90,9 @@ public class DatasetAlertRepositoryIT extends BaseDataJpaTest {
   void shouldCreateEmptyDatasetAlertByFilter() {
     DatasetEntity dataset = createDatasetEntity();
     datasetAlertRepository.createFilteredDataset(
-        dataset.getId(), OffsetDateTime.now(), OffsetDateTime.now());
-    assertThat(datasetAlertRepository.countByIdDatasetId(dataset.getId())).isEqualTo(0);
+        dataset.getId(), List.of("labelvalue"), OffsetDateTime.parse("2007-12-03T10:15:30+01:00"),
+        OffsetDateTime.now());
+    assertThat(datasetAlertRepository.countByIdDatasetId(dataset.getId())).isEqualTo(2);
   }
 
 

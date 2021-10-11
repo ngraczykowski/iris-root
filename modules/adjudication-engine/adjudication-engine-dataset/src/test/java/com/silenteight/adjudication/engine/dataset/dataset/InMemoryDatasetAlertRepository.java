@@ -47,7 +47,7 @@ public class InMemoryDatasetAlertRepository implements DatasetAlertRepository {
 
   @Override
   public void createFilteredDataset(
-      long datasetId, OffsetDateTime startDate, OffsetDateTime endDate) {
+      long datasetId, List<String> labels, OffsetDateTime startDate, OffsetDateTime endDate) {
     for (int i = 1; i <= 10; i++) {
       var entity = getRandomEntity(datasetId, i);
       store.add(entity);
