@@ -57,7 +57,6 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         .ioIndicator(alertMessageDto.getIoIndicator())
         //TODO check why AlertStatusExtractor is no longer needed
         .currentStatus(alertMessageDto.getCurrentStatus())
-        .countryCode(extractCountryCode(sourceSystem, alertMessageDto))
         .hits(hits)
         .build();
   }
