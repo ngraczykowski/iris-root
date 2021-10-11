@@ -20,4 +20,20 @@
     <addNotNullConstraint tableName="pb_alert_message_status" columnName="delivery_status"/>
   </changeSet>
 
+  <changeSet id="payments-bridge-firco-1.2.3" author="msitarski">
+    <addColumn tableName="pb_alert_message">
+      <column name="number_of_hits" type="INTEGER" />
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="payments-bridge-firco-1.2.4" author="msitarski">
+    <update tableName="pb_alert_message">
+      <column name="number_of_hits" value="1" />
+    </update>
+  </changeSet>
+
+  <changeSet id="payments-bridge-firco-1.2.5" author="msitarski">
+    <addNotNullConstraint tableName="pb_alert_message" columnName="number_of_hits"/>
+  </changeSet>
+
 </databaseChangeLog>

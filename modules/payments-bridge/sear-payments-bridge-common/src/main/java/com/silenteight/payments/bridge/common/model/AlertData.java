@@ -19,5 +19,6 @@ public class AlertData implements AlertId {
   String systemId;
   String decisionUrl;
   Integer priority;
+  Integer numberOfHits;
 
 }

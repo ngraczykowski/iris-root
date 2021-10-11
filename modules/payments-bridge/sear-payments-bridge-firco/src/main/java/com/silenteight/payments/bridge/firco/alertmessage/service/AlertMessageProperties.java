@@ -16,4 +16,6 @@ class AlertMessageProperties {
 
   private boolean originalMessageDeletedAfterRecommendation = true;
 
+  private int maxHitsPerAlert = 10;
+
 }

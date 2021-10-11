@@ -61,17 +61,21 @@ class AlertMessageEntity extends BaseEntity {
   @NonNull
   private Integer priority = 5;
 
+  @Column(updatable = false, nullable = false)
+  @NonNull
+  private Integer numberOfHits;
+
   AlertMessageEntity(FircoAlertMessage message) {
     id = message.getId();
     receivedAt = message.getReceivedAt();
     dataCenter = message.getDataCenter();
     decisionUrl = message.getDecisionUrl();
-
     var alert = message.getAlertMessage();
 
     unit = alert.getUnit();
     businessUnit = alert.getBusinessUnit();
     messageId = alert.getMessageID();
     systemId = alert.getSystemID();
+    numberOfHits = alert.getHits().size();
   }
 }

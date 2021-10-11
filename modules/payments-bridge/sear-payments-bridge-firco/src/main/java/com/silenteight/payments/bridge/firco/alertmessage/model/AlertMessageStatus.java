@@ -24,7 +24,7 @@ public enum AlertMessageStatus {
   STORED {
     @Override
     public EnumSet<AlertMessageStatus> allowedTransitions() {
-      return EnumSet.of(ACCEPTED, REJECTED_OUTDATED, /* temporary */ RECOMMENDED);
+      return EnumSet.of(ACCEPTED, REJECTED_OUTDATED, /* temporary */ RECOMMENDED, REJECTED_DAMAGED);
     }
   },
 

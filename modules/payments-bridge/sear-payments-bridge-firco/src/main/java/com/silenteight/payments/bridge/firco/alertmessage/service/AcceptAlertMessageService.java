@@ -4,16 +4,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.common.model.AlertId;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AcceptAlertMessageUseCase;
+import com.silenteight.payments.bridge.firco.callback.port.CreateResponseUseCase;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
+import java.util.Optional;
+import java.util.UUID;
 
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.ACCEPTED;
+import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_DAMAGED;
 
 @Service
 @EnableConfigurationProperties(AlertMessageProperties.class)
@@ -23,13 +28,17 @@ class AcceptAlertMessageService implements AcceptAlertMessageUseCase {
 
   private final AlertMessageProperties alertMessageProperties;
   private final AlertMessageStatusService alertMessageStatusService;
+  private final AlertMessageService alertMessageService;
+  private final CreateResponseUseCase createResponseUseCase;
   @Setter private Clock clock = Clock.systemUTC();
 
   @Override
   public boolean test(AlertId alert) {
+
     var status = alertMessageStatusService.findByAlertId(alert.getAlertId());
     return !isTransitionForbidden(status) &&
-        !isRequiredResolutionTimeElapsed(status);
+        !isRequiredResolutionTimeElapsed(status) &&
+        !isMaxHitsPerAlertExceeded(alert);
   }
 
   private boolean isTransitionForbidden(AlertMessageStatusEntity alertMessageStatus) {
@@ -47,11 +56,35 @@ class AcceptAlertMessageService implements AcceptAlertMessageUseCase {
         .plus(alertMessageProperties.getDecisionRequestedTime())
         .compareTo(OffsetDateTime.now(clock)) <= 0;
     if (isOverdue) {
-      log.debug("The AlertMessage [{}] is outdated. Skipping further processing.",
+      log.debug(
+          "The AlertMessage [{}] is outdated. Skipping further processing.",
           alertMessageStatus.getAlertMessageId());
       // simply stop processing and let the RejectingOutdated process do its job (don't interfere).
       return true;
     }
+    return false;
+  }
+
+  private boolean isMaxHitsPerAlertExceeded(AlertId alert) {
+    UUID alertId = alert.getAlertId();
+    Integer numberOfHits = Optional.of(alertId)
+        .map(alertMessageService::findByAlertMessageId)
+        .map(AlertData::getNumberOfHits)
+        .orElse(0);
+
+    if (alertMessageProperties.getMaxHitsPerAlert() < numberOfHits) {
+      log.debug(
+          "The AlertMessage [{}] has too many hits. Skipping further processing.",
+          alertId);
+
+      createResponseUseCase.createResponse(alertId, REJECTED_DAMAGED);
+
+      alertMessageStatusService.transitionAlertMessageStatus(
+          alertId,
+          REJECTED_DAMAGED);
+      return true;
+    }
+
     return false;
   }
 

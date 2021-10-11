@@ -34,6 +34,7 @@ pb:
     stored-queue-limit: 1000
     decision-requested-time: 30s
     original-message-deleted-after-recommendation: true
+    max-hits-per-alert: 10
 
 #---------------------------------------------------------------------------------------------------
 # SERVER
