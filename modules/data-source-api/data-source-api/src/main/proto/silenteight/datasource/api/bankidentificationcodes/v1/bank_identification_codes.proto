@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.bankidentificationcodes.v1;
+
+import "google/api/annotations.proto";
+
+option java_package = "com.silenteight.datasource.api.bankidentificationcodes.v1";
+option java_outer_classname = "BankIdentificationCodesProto";
+option java_multiple_files = true;
+
+
+service BankIdentificationCodesInputService {
+  rpc BatchGetMatchBankIdentificationCodesInputs (BatchGetMatchBankIdentificationCodesInputsRequest)
+      returns (stream BatchGetMatchBankIdentificationCodesInputsResponse) {
+    option (google.api.http) = {
+      post: "/agent-inputs/bankidentificationcodes/versions/v1/matches:batchGet"
+      body: "*"
+    };
+  }
+}
+
+message BatchGetMatchBankIdentificationCodesInputsRequest {
+  // The list of matches data is requested for, in form of `alerts/<Alert ID>/matches/<Match ID>`.
+  repeated string matches = 1;
+  // The list of features the input data for each match is requested, in form of `features/<Feature ID>`.
+  repeated string features = 2;
+}
+
+message BatchGetMatchBankIdentificationCodesInputsResponse {
+  repeated BankIdentificationCodesInput bank_identification_codes_inputs = 1;
+}
+
+message BankIdentificationCodesInput {
+  string match = 1;
+  repeated BankIdentificationCodesFeatureInput bank_identification_codes_feature_inputs = 2;
+}
+
+message BankIdentificationCodesFeatureInput {
+    string feature = 1;
+    string alerted_party_matching_field = 2;
+    string watchlist_matching_text = 3;
+    string watchlist_type = 4;
+    repeated string watchlist_search_codes = 5;
+    repeated string watchlist_bic_codes = 6;
+}
