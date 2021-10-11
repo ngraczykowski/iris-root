@@ -6,6 +6,9 @@ plugins {
 dependencies {
   implementation project(":sear-payments-bridge-common")
 
+  implementation libraries.commons_lang3
+  implementation libraries.opencsv
+
   implementation libraries.spring_boot
   implementation libraries.grpc_client_spring_boot_starter
 
@@ -16,4 +19,7 @@ dependencies {
 
   implementation libraries.spring_context
   implementation 'org.projectlombok:lombok:1.18.20'
+
+  //  Testing
+  testImplementation libraries.silenteight_sep_base_testing
 }

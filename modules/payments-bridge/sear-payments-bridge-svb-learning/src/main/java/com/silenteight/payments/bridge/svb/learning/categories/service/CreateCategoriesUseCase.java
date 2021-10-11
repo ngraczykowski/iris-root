@@ -28,7 +28,7 @@ class CreateCategoriesUseCase {
                 chineseCommercialCategory(), delimiterCategory(), crossmatchCategory(),
                 firstTokenAddressCategory(), oneLinerCategory(), sanctionedNationalityCategory(),
                 specificCommonTermsCategory(), specificTermsCategory(), stripCategory(),
-                twoLinesCategory()))
+                twoLinesCategory(), historicalRiskAssessmentCategory()))
         .build());
   }
 
@@ -139,6 +139,17 @@ class CreateCategoriesUseCase {
         .setType(CategoryType.ENUMERATED)
         .setMultiValue(false)
         .addAllAllowedValues(List.of("YES", "NO", "NO_DATA"))
+        .build();
+  }
+
+  private static Category historicalRiskAssessmentCategory() {
+    return Category
+        .newBuilder()
+        .setName("categories/historicalRiskAssessment")
+        .setDisplayName("Historical Risk Assessment Category")
+        .setType(CategoryType.ENUMERATED)
+        .setMultiValue(false)
+        .addAllAllowedValues(List.of("YES", "NO"))
         .build();
   }
 }
