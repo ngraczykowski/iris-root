@@ -27,6 +27,10 @@ class InsertFeatureQuery {
           + " ON CONFLICT DO NOTHING\n"
           + "RETURNING agent_input_id, match_name, feature, agent_input_type, agent_input";
 
+  private static final String MATCH_NAME = "match_name";
+  private static final String FEATURE = "feature";
+  private static final String AGENT_INPUT_TYPE = "agent_input_type";
+  private static final String AGENT_INPUT = "agent_input";
 
   private final BatchSqlUpdate batchSqlUpdate;
 
@@ -35,10 +39,10 @@ class InsertFeatureQuery {
 
     batchSqlUpdate.setJdbcTemplate(jdbcTemplate);
     batchSqlUpdate.setSql(SQL);
-    batchSqlUpdate.declareParameter(new SqlParameter("match_name", Types.VARCHAR));
-    batchSqlUpdate.declareParameter(new SqlParameter("feature", Types.VARCHAR));
-    batchSqlUpdate.declareParameter(new SqlParameter("agent_input_type", Types.VARCHAR));
-    batchSqlUpdate.declareParameter(new SqlParameter("agent_input", Types.OTHER));
+    batchSqlUpdate.declareParameter(new SqlParameter(MATCH_NAME, Types.VARCHAR));
+    batchSqlUpdate.declareParameter(new SqlParameter(FEATURE, Types.VARCHAR));
+    batchSqlUpdate.declareParameter(new SqlParameter(AGENT_INPUT_TYPE, Types.VARCHAR));
+    batchSqlUpdate.declareParameter(new SqlParameter(AGENT_INPUT, Types.OTHER));
     batchSqlUpdate.setReturnGeneratedKeys(true);
 
     batchSqlUpdate.compile();
@@ -59,21 +63,21 @@ class InsertFeatureQuery {
 
   private void update(MatchFeatureInput matchFeatureInput, KeyHolder keyHolder) {
     var paramMap =
-        Map.of("match_name", matchFeatureInput.getMatch(),
-            "feature", matchFeatureInput.getFeature(),
-            "agent_input_type", matchFeatureInput.getAgentInputType(),
-            "agent_input", matchFeatureInput.getAgentInput());
+        Map.of(MATCH_NAME, matchFeatureInput.getMatch(),
+            FEATURE, matchFeatureInput.getFeature(),
+            AGENT_INPUT_TYPE, matchFeatureInput.getAgentInputType(),
+            AGENT_INPUT, matchFeatureInput.getAgentInput());
 
     batchSqlUpdate.updateByNamedParam(paramMap, keyHolder);
   }
 
-  private List<CreatedAgentInput> getCreatedAgentInputs(List<Map<String, Object>> keyList) {
+  private static List<CreatedAgentInput> getCreatedAgentInputs(List<Map<String, Object>> keyList) {
     return keyList
         .stream()
         .map(it -> CreatedAgentInput
             .newBuilder()
             .setName("agent-inputs/" + it.get("agent_input_id").toString())
-            .setMatch(it.get("match_name").toString())
+            .setMatch(it.get(MATCH_NAME).toString())
             .build()).collect(Collectors.toList());
   }
 }

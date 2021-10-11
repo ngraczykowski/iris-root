@@ -1,6 +1,8 @@
 package com.silenteight.universaldatasource.app.category.adapter.outgoing.jdbc;
 
-import com.silenteight.datasource.categories.api.v2.*;
+import com.silenteight.datasource.categories.api.v2.CategoryValue;
+import com.silenteight.datasource.categories.api.v2.CreateCategoryValuesRequest;
+import com.silenteight.datasource.categories.api.v2.CreatedCategoryValue;
 
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,6 +24,11 @@ class InsertCategoryValueQuery {
           + " ON CONFLICT DO NOTHING\n"
           + " RETURNING category_value_id, category_id, match_name";
 
+  private static final String CATEGORY_VALUE_ID = "category_value_id";
+  private static final String CATEGORY_ID = "category_id";
+  private static final String MATCH_NAME = "match_name";
+  private static final String CATEGORY_VALUE = "category_value";
+
   private final BatchSqlUpdate batchSqlUpdate;
 
   InsertCategoryValueQuery(JdbcTemplate jdbcTemplate) {
@@ -30,9 +37,9 @@ class InsertCategoryValueQuery {
     batchSqlUpdate.setJdbcTemplate(jdbcTemplate);
     batchSqlUpdate.setSql(SQL);
 
-    batchSqlUpdate.declareParameter(new SqlParameter("category_id", Types.VARCHAR));
-    batchSqlUpdate.declareParameter(new SqlParameter("match_name", Types.VARCHAR));
-    batchSqlUpdate.declareParameter(new SqlParameter("category_value", Types.VARCHAR));
+    batchSqlUpdate.declareParameter(new SqlParameter(CATEGORY_ID, Types.VARCHAR));
+    batchSqlUpdate.declareParameter(new SqlParameter(MATCH_NAME, Types.VARCHAR));
+    batchSqlUpdate.declareParameter(new SqlParameter(CATEGORY_VALUE, Types.VARCHAR));
     batchSqlUpdate.setReturnGeneratedKeys(true);
 
     batchSqlUpdate.compile();
@@ -56,9 +63,9 @@ class InsertCategoryValueQuery {
   private void update(
       String category, CategoryValue categoryValue, GeneratedKeyHolder keyHolder) {
     var paramMap =
-        Map.of("category_id", category,
-            "match_name", categoryValue.getMatch(),
-            "category_value", categoryValue.getSingleValue());
+        Map.of(CATEGORY_ID, category,
+            MATCH_NAME, categoryValue.getMatch(),
+            CATEGORY_VALUE, categoryValue.getSingleValue());
     batchSqlUpdate.updateByNamedParam(paramMap, keyHolder);
   }
 
@@ -68,8 +75,8 @@ class InsertCategoryValueQuery {
     for (Map<String, Object> it : keyList) {
       CreatedCategoryValue build = CreatedCategoryValue
           .newBuilder()
-          .setName(it.get("category_id").toString() + "/values/" + it.get("category_value_id"))
-          .setMatch(it.get("match_name").toString())
+          .setName(it.get(CATEGORY_ID).toString() + "/values/" + it.get("CATEGORY_VALUE_ID"))
+          .setMatch(it.get(MATCH_NAME).toString())
           .build();
       categoryValueList.add(build);
     }

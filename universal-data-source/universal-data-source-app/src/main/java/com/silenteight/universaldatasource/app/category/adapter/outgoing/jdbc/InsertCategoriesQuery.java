@@ -29,6 +29,11 @@ public class InsertCategoriesQuery {
           + " RETURNING category_id, category_display_name,\n"
           + " category_type, allowed_values, multi_value";
 
+  private static final String CATEGORY_ID = "category_id";
+  private static final String CATEGORY_DISPLAY_NAME = "category_display_name";
+  private static final String CATEGORY_TYPE = "category_type";
+  private static final String ALLOWED_VALUES = "allowed_values";
+  private static final String MULTI_VALUE = "multi_value";
 
   private final BatchSqlUpdate batchSqlUpdate;
 
@@ -37,11 +42,11 @@ public class InsertCategoriesQuery {
 
     batchSqlUpdate.setJdbcTemplate(jdbcTemplate);
     batchSqlUpdate.setSql(SQL);
-    batchSqlUpdate.declareParameter(new SqlParameter("category_id", Types.VARCHAR));
-    batchSqlUpdate.declareParameter(new SqlParameter("category_display_name", Types.VARCHAR));
-    batchSqlUpdate.declareParameter(new SqlParameter("category_type", Types.VARCHAR));
-    batchSqlUpdate.declareParameter(new SqlParameter("allowed_values", Types.VARCHAR));
-    batchSqlUpdate.declareParameter(new SqlParameter("multi_value", Types.BOOLEAN));
+    batchSqlUpdate.declareParameter(new SqlParameter(CATEGORY_ID, Types.VARCHAR));
+    batchSqlUpdate.declareParameter(new SqlParameter(CATEGORY_DISPLAY_NAME, Types.VARCHAR));
+    batchSqlUpdate.declareParameter(new SqlParameter(CATEGORY_TYPE, Types.VARCHAR));
+    batchSqlUpdate.declareParameter(new SqlParameter(ALLOWED_VALUES, Types.VARCHAR));
+    batchSqlUpdate.declareParameter(new SqlParameter(MULTI_VALUE, Types.BOOLEAN));
     batchSqlUpdate.setReturnGeneratedKeys(true);
 
     batchSqlUpdate.compile();
@@ -62,11 +67,11 @@ public class InsertCategoriesQuery {
 
   private void update(Category category, KeyHolder keyHolder) {
     var paramMap =
-        Map.of("category_id", category.getName(),
-            "category_display_name", getDisplayName(category),
-            "category_type", category.getType(),
-            "allowed_values", String.join(",", category.getAllowedValuesList()),
-            "multi_value", category.getMultiValue());
+        Map.of(CATEGORY_ID, category.getName(),
+            CATEGORY_DISPLAY_NAME, getDisplayName(category),
+            CATEGORY_TYPE, category.getType(),
+            ALLOWED_VALUES, String.join(",", category.getAllowedValuesList()),
+            MULTI_VALUE, category.getMultiValue());
 
     batchSqlUpdate.updateByNamedParam(paramMap, keyHolder);
   }
@@ -76,11 +81,11 @@ public class InsertCategoriesQuery {
         .stream()
         .map(it -> Category
             .newBuilder()
-            .setName(it.get("category_id").toString())
-            .setDisplayName(it.get("category_display_name").toString())
-            .setType(CategoryType.valueOf(it.get("category_type").toString()))
-            .addAllAllowedValues(List.of(it.get("allowed_values").toString().split(",")))
-            .setMultiValue((boolean) it.get("multi_value"))
+            .setName(it.get(CATEGORY_ID).toString())
+            .setDisplayName(it.get(CATEGORY_DISPLAY_NAME).toString())
+            .setType(CategoryType.valueOf(it.get(CATEGORY_TYPE).toString()))
+            .addAllAllowedValues(List.of(it.get(ALLOWED_VALUES).toString().split(",")))
+            .setMultiValue((boolean) it.get(MULTI_VALUE))
             .build()).collect(Collectors.toList());
   }
 

@@ -24,7 +24,7 @@ class CommentInputVersionMapper {
         .build();
   }
 
-  private List<MatchCommentInput> getMatchCommentInputList(
+  private static List<MatchCommentInput> getMatchCommentInputList(
       List<com.silenteight.datasource.comments.api.v2.MatchCommentInput> matchCommentInputs) {
     return matchCommentInputs.stream()
         .map(m -> MatchCommentInput.newBuilder()

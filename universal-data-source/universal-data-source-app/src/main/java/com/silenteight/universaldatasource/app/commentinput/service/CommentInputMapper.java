@@ -42,7 +42,7 @@ class CommentInputMapper {
     return commentInputBuilder.build();
   }
 
-  private void mapToStruct(Struct.Builder structBuilder, String commentInput) {
+  private static void mapToStruct(Struct.Builder structBuilder, String commentInput) {
     try {
       JsonFormat.parser().merge(
           commentInput,
@@ -67,7 +67,7 @@ class CommentInputMapper {
     return matchCommentInputList;
   }
 
-  private Iterator<JsonNode> getJsonNodeIterator(String matchCommentInputs) {
+  private static Iterator<JsonNode> getJsonNodeIterator(String matchCommentInputs) {
     try {
       return new ObjectMapper().readTree(matchCommentInputs).iterator();
     } catch (JsonProcessingException e) {
@@ -76,7 +76,7 @@ class CommentInputMapper {
     }
   }
 
-  private void mapToMessage(
+  private static void mapToMessage(
       Message.Builder featureInputBuilder, String messageCommentInput) {
     try {
       JsonFormat.parser().merge(

@@ -92,7 +92,7 @@ class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase
     return featureMapper.unpackAnyMessage(agentFeatureInput);
   }
 
-  private String getAgentInputClassName(String classTypeUrl) {
+  private static String getAgentInputClassName(String classTypeUrl) {
     var arrayOfClassPath = classTypeUrl.split("\\.");
     if (arrayOfClassPath.length < 1)
       throw new NoSuchElementException(

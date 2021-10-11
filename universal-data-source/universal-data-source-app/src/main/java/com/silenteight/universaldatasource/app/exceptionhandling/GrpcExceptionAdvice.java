@@ -39,7 +39,7 @@ public class GrpcExceptionAdvice {
     return getStatusWithDescription(Status.INVALID_ARGUMENT, e);
   }
 
-  private Status getStatusWithDescription(Status status, Exception e) {
+  private static Status getStatusWithDescription(Status status, Exception e) {
     return status.withDescription(e.getMessage()).withCause(e);
   }
 }

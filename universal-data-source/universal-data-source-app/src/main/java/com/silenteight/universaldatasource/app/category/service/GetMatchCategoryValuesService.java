@@ -38,7 +38,8 @@ class GetMatchCategoryValuesService implements GetMatchCategoryValuesUseCase {
         .build();
   }
 
-  private List<MatchCategoryRequest> getMatchCategoryList(List<CategoryMatches> categoryMatches) {
+  private static List<MatchCategoryRequest> getMatchCategoryList(
+      List<CategoryMatches> categoryMatches) {
     List<MatchCategoryRequest> matchCategoryRequestList = new ArrayList<>();
 
     for (CategoryMatches categoryMatch : categoryMatches) {

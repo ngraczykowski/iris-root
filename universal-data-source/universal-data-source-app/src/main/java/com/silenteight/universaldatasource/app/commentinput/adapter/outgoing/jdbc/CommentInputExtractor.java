@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.universaldatasource.app.commentinput.model.AlertCommentInput;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 import java.sql.ResultSet;
@@ -20,7 +19,7 @@ class CommentInputExtractor implements ResultSetExtractor<Integer> {
   private final Consumer<AlertCommentInput> consumer;
 
   @Override
-  public Integer extractData(ResultSet rs) throws SQLException, DataAccessException {
+  public Integer extractData(ResultSet rs) throws SQLException {
     var rowCount = 0;
 
     while (rs.next()) {

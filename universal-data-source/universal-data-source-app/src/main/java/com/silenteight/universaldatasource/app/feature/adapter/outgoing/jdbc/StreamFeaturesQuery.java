@@ -41,7 +41,7 @@ class StreamFeaturesQuery {
     return features != null ? features : 0;
   }
 
-  private int getChunkSize(String agentInputType) {
+  private static int getChunkSize(String agentInputType) {
     return "Features".equals(agentInputType) ? 1 : 1024;
   }
 }

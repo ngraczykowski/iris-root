@@ -38,7 +38,7 @@ class ValidateCategoryValueService implements ValidateCategoryValueUseCase {
     return availableCategories.getCategoriesList();
   }
 
-  private Category getCategory(List<Category> categoriesList, String category) {
+  private static Category getCategory(List<Category> categoriesList, String category) {
     return categoriesList.stream()
         .filter(c -> c.getName().equals(category))
         .findFirst()
@@ -46,7 +46,7 @@ class ValidateCategoryValueService implements ValidateCategoryValueUseCase {
             new CategoryException("Invalid category given for CategoryValues: " + category));
   }
 
-  private void validateCategoryValue(Category category, CategoryValue categoryValue) {
+  private static void validateCategoryValue(Category category, CategoryValue categoryValue) {
     if (!category.getAllowedValuesList().contains(categoryValue.getSingleValue())) {
       throw new CategoryValueException(
           "Invalid value of CategoryValue: " + categoryValue.getSingleValue());

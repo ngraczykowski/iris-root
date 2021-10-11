@@ -25,6 +25,10 @@ class InsertCommentInputsQuery {
           + " ON CONFLICT DO NOTHING\n"
           + "RETURNING comment_input_id, alert";
 
+  private static final String ALERT = "alert";
+  private static final String ALERT_COMMENT_INPUT = "alert_comment_input";
+  private static final String MATCH_COMMENT_INPUT = "match_comment_inputs";
+
   private final BatchSqlUpdate batchSqlUpdate;
 
   InsertCommentInputsQuery(JdbcTemplate jdbcTemplate) {
@@ -32,21 +36,22 @@ class InsertCommentInputsQuery {
 
     batchSqlUpdate.setJdbcTemplate(jdbcTemplate);
     batchSqlUpdate.setSql(SQL);
-    batchSqlUpdate.declareParameter(new SqlParameter("alert", Types.VARCHAR));
-    batchSqlUpdate.declareParameter(new SqlParameter("alert_comment_input", Types.OTHER));
-    batchSqlUpdate.declareParameter(new SqlParameter("match_comment_inputs", Types.OTHER));
+    batchSqlUpdate.declareParameter(new SqlParameter(ALERT, Types.VARCHAR));
+    batchSqlUpdate.declareParameter(new SqlParameter(ALERT_COMMENT_INPUT, Types.OTHER));
+    batchSqlUpdate.declareParameter(new SqlParameter(MATCH_COMMENT_INPUT, Types.OTHER));
     batchSqlUpdate.setReturnGeneratedKeys(true);
 
     batchSqlUpdate.compile();
   }
 
-  private List<CreatedCommentInput> getCreatedCommentInputs(List<Map<String, Object>> keyList) {
+  private static List<CreatedCommentInput> getCreatedCommentInputs(
+      List<Map<String, Object>> keyList) {
     return keyList
         .stream()
         .map(it -> CreatedCommentInput
             .newBuilder()
             .setName("comment-inputs/" + it.get("comment_input_id").toString())
-            .setAlert(it.get("alert").toString())
+            .setAlert(it.get(ALERT).toString())
             .build()).collect(Collectors.toList());
   }
 
@@ -64,9 +69,9 @@ class InsertCommentInputsQuery {
 
   private void update(AlertCommentInput alertCommentInput, KeyHolder keyHolder) {
     var paramMap =
-        Map.of("alert", alertCommentInput.getAlert(),
-            "alert_comment_input", alertCommentInput.getCommentInput(),
-            "match_comment_inputs", alertCommentInput.getMatchCommentInputs()
+        Map.of(ALERT, alertCommentInput.getAlert(),
+            ALERT_COMMENT_INPUT, alertCommentInput.getCommentInput(),
+            MATCH_COMMENT_INPUT, alertCommentInput.getMatchCommentInputs()
         );
     batchSqlUpdate.updateByNamedParam(paramMap, keyHolder);
   }

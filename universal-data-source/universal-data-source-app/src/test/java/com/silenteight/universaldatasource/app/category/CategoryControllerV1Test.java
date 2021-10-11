@@ -57,8 +57,8 @@ class CategoryControllerV1Test {
     ResponseEntity<List<CategoryDto>> availableCategories =
         categoryControllerV1.getAvailableCategories();
     assertEquals(availableCategories.getBody(), categoriesDto);
-    assertEquals(availableCategories.getBody().size(), 2);
-    assertEquals(availableCategories.getStatusCode(), HttpStatus.OK);
+    assertEquals(2, availableCategories.getBody().size());
+    assertEquals(HttpStatus.OK, availableCategories.getStatusCode());
   }
 
   private static List<Category> generateCategories() {
