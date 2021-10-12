@@ -38,7 +38,7 @@ class ClientRequestDtoMapper {
     decision.setBusinessUnit(alertDto.getBusinessUnit());
     decision.setMessageID(alertDto.getMessageID());
     decision.setSystemID(alertDto.getSystemID());
-    decision.setOperator(OPERATOR);
+    decision.setOperator(alert.getUserLogin());
     decision.setActions(List.of());
     decision.setAttachment(createAttachment(COMMENT));
     decision.setUserLogin(alert.getUserLogin());
@@ -57,6 +57,7 @@ class ClientRequestDtoMapper {
             .recommendedAction(COMMENT)
             .build());
     decision.setStatus(destinationStatus.getStatus());
+
     return create(decision);
   }
 
@@ -97,7 +98,7 @@ class ClientRequestDtoMapper {
     FircoAuthenticationDto authentication = new FircoAuthenticationDto();
     authentication.setContinuityLogin(source.getUserLogin());
     authentication.setContinuityPassword(source.getUserPassword());
-    authentication.setContinuityBusinessUnit(source.getBusinessUnit());
+    authentication.setContinuityBusinessUnit(source.ge());
     return authentication;
   }
 
