@@ -26,11 +26,4 @@ class IndexTrackingConfiguration {
 
     return new ProductionAlertTrackingService(productionAlertRepository, productionNamingStrategy);
   }
-
-  @Bean
-  IndexByDiscriminatorResolverFactory productionWriteIndexProviderFactory(
-      ProductionAlertTrackingService productionAlertTrackingService) {
-
-    return new IndexByDiscriminatorResolverFactory(productionAlertTrackingService);
-  }
 }

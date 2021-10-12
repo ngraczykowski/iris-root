@@ -3,7 +3,7 @@ package com.silenteight.warehouse.indexer.query.single;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.warehouse.indexer.alert.MultiValueEntry;
+import com.silenteight.warehouse.indexer.query.MultiValueEntry;
 
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -16,7 +16,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import static com.silenteight.warehouse.common.opendistro.utils.OpendistroUtils.getRawField;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.DISCRIMINATOR;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.DISCRIMINATOR;
 import static java.util.stream.Collectors.toList;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.functionScoreQuery;

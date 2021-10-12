@@ -2,7 +2,7 @@ package com.silenteight.warehouse.sampling.distribution;
 
 import com.silenteight.model.api.v1.AlertsDistributionServiceProto.AlertDistribution;
 import com.silenteight.model.api.v1.AlertsDistributionServiceProto.AlertsDistributionResponse;
-import com.silenteight.warehouse.indexer.alert.ElasticsearchProperties;
+import com.silenteight.warehouse.indexer.alert.indexing.ElasticsearchProperties;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDataRequest;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 import com.silenteight.warehouse.sampling.configuration.SamplingProperties;
@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.INDEX_TIMESTAMP;
 import static com.silenteight.warehouse.sampling.distribution.DistributionTestFixtures.*;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;

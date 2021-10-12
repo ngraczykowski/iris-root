@@ -1,7 +1,7 @@
 package com.silenteight.warehouse.management.country.update;
 
 import com.silenteight.warehouse.common.opendistro.roles.RoleService;
-import com.silenteight.warehouse.indexer.alert.ElasticsearchProperties;
+import com.silenteight.warehouse.indexer.alert.indexing.ElasticsearchProperties;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

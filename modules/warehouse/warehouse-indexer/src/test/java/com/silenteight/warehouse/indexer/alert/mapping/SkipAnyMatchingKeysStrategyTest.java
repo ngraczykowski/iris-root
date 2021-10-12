@@ -1,4 +1,6 @@
-package com.silenteight.warehouse.indexer.alert;
+package com.silenteight.warehouse.indexer.alert.mapping;
+
+import com.silenteight.warehouse.indexer.alert.mapping.SkipAnyMatchingKeysStrategy;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -3,7 +3,7 @@ package com.silenteight.warehouse.indexer.query.single;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.warehouse.indexer.alert.ElasticsearchProperties;
+import com.silenteight.warehouse.indexer.alert.indexing.ElasticsearchProperties;
 
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.search.builder.SearchSourceBuilder;

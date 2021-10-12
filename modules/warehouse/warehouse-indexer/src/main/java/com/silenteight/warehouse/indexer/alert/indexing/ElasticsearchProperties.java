@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer.alert;
+package com.silenteight.warehouse.indexer.alert.indexing;
 
 import lombok.Data;
 

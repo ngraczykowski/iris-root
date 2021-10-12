@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer.alert;
+package com.silenteight.warehouse.indexer.alert.mapping;
 
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.function.Predicate;
 
-import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_1;
+import static com.silenteight.warehouse.indexer.IndexerFixtures.ALERT_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP;

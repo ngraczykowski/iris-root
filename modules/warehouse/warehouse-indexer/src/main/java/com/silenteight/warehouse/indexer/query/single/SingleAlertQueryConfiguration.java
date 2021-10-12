@@ -1,7 +1,7 @@
 package com.silenteight.warehouse.indexer.query.single;
 
-import com.silenteight.warehouse.indexer.alert.AlertMappingProperties;
-import com.silenteight.warehouse.indexer.alert.ElasticsearchProperties;
+import com.silenteight.warehouse.indexer.alert.indexing.ElasticsearchProperties;
+import com.silenteight.warehouse.indexer.alert.mapping.AlertMappingProperties;
 
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

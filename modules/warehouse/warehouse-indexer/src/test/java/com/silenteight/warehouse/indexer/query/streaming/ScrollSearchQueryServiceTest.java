@@ -19,12 +19,12 @@ import java.util.function.Consumer;
 
 import static com.google.common.collect.ImmutableList.of;
 import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_WRITE_INDEX_NAME;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys.ANALYST_DECISION_KEY;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys.COUNTRY_KEY;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys.RECOMMENDATION_KEY;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.*;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.INDEX_TIMESTAMP;
 import static com.silenteight.warehouse.indexer.query.streaming.StreamingFixtures.RESOURCE_NAME;
 import static java.time.OffsetDateTime.parse;
 import static java.util.stream.Collectors.toList;

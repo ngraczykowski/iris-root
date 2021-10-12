@@ -1,6 +1,6 @@
 package com.silenteight.warehouse.indexer.query.streaming;
 
-import com.silenteight.warehouse.indexer.alert.ElasticsearchProperties;
+import com.silenteight.warehouse.indexer.alert.indexing.ElasticsearchProperties;
 
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_PREFIX;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_PREFIX;
 import static com.silenteight.warehouse.sampling.alert.SamplingTestFixtures.*;
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;

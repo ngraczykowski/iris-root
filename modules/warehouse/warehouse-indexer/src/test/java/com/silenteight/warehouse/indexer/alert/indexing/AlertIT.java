@@ -1,10 +1,11 @@
-package com.silenteight.warehouse.indexer.alert;
+package com.silenteight.warehouse.indexer.alert.indexing;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.data.api.v1.Alert;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
+import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys;
+import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values;
 
 import org.elasticsearch.ElasticsearchException;
 import org.junit.jupiter.api.AfterEach;
@@ -15,13 +16,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_READ_ALIAS_NAME;
 import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_WRITE_INDEX_NAME;
-import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_1;
-import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_2;
-import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_WITHOUT_MATCHES;
-import static java.util.List.of;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DOCUMENT_ID;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
@@ -32,9 +31,6 @@ import static org.awaitility.Awaitility.await;
 })
 @Slf4j
 class AlertIT {
-
-  private static final WriteIndexResolver INDEX_RESOLVER =
-      new FixedIndexedResolver(PRODUCTION_ELASTIC_READ_ALIAS_NAME);
 
   @Autowired
   private AlertIndexService underTest;
@@ -55,8 +51,13 @@ class AlertIT {
   }
 
   @Test
-  void shouldIgnoreMissingMatches() {
-    underTest.indexAlerts(of(ALERT_WITHOUT_MATCHES), INDEX_RESOLVER);
+  void shouldStoreAlerts() {
+    MapWithIndex mapWithIndex = new MapWithIndex(
+        PRODUCTION_ELASTIC_WRITE_INDEX_NAME,
+        DOCUMENT_ID,
+        Map.of(MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP));
+
+    underTest.saveAlerts(List.of(mapWithIndex));
 
     await()
         .atMost(5, SECONDS)
@@ -66,21 +67,6 @@ class AlertIT {
     long documentCount =
         simpleElasticTestClient.getDocumentCount(PRODUCTION_ELASTIC_READ_ALIAS_NAME);
     assertThat(documentCount).isEqualTo(1);
-  }
-
-  @Test
-  void shouldCreateSingleDocumentForEachAlert() {
-    List<Alert> alerts = of(ALERT_1, ALERT_2);
-    underTest.indexAlerts(alerts, INDEX_RESOLVER);
-
-    await()
-        .atMost(5, SECONDS)
-        .until(
-            () -> simpleElasticTestClient.getDocumentCount(PRODUCTION_ELASTIC_READ_ALIAS_NAME) > 0);
-
-    long documentCount =
-        simpleElasticTestClient.getDocumentCount(PRODUCTION_ELASTIC_READ_ALIAS_NAME);
-    assertThat(documentCount).isEqualTo(alerts.size());
   }
 
   private void safeDeleteIndex(String index) {
