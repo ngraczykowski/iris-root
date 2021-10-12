@@ -38,4 +38,9 @@ class DomainConfiguration {
     return new DecisionService(
         alertRepository, decisionRepository, auditingLogger, sendAlertMessageUseCase);
   }
+
+  @Bean
+  AlertService alertService(AlertRepository alertRepository, AuditingLogger auditingLogger) {
+    return new AlertService(alertRepository, auditingLogger);
+  }
 }

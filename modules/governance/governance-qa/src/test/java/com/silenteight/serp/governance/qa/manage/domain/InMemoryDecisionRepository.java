@@ -41,7 +41,8 @@ class InMemoryDecisionRepository
 
   @Override
   public AlertAnalysisDetailsDto findAnalysisDetails(String discriminator, Integer level) {
-    Alert alert = alertRepository.findByDiscriminator(discriminator);
+    Alert alert = alertRepository.findByDiscriminator(discriminator)
+        .orElseThrow(() -> new WrongDiscriminatorException(discriminator));
     Decision decision = findDecisionByDiscriminatorAndLevel(alert, level);
 
     return DummyAlertAnalysisDetailsDto.builder()
@@ -113,7 +114,8 @@ class InMemoryDecisionRepository
 
   @Override
   public AlertValidationDetailsDto findValidationDetails(String discriminator, Integer level) {
-    Alert alert = alertRepository.findByDiscriminator(discriminator);
+    Alert alert = alertRepository.findByDiscriminator(discriminator)
+        .orElseThrow(() -> new WrongDiscriminatorException(discriminator));
     Decision decision = findDecisionByDiscriminatorAndLevel(alert, level);
 
     return AlertValidationDetailsDtoBuilder.builder()

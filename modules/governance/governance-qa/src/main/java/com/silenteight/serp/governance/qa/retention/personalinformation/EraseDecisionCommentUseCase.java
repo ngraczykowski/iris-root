@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.qa.retention.erase;
+package com.silenteight.serp.governance.qa.retention.personalinformation;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

@@ -50,12 +50,21 @@ class BrokerConfiguration {
   }
 
   @Bean
-  Declarables qaRetentionBinding() {
+  Declarables qaRetentionPersonalInformationExpiredBinding() {
     return new Declarables(
         binding(
-            brokerProperties.qaRetentionQueueName(),
+            brokerProperties.qaRetentionPersonalInformationExpiredQueueName(),
             BRIDGE_RETENTION_EXCHANGE,
-            brokerProperties.qaRetentionRoutingKey()));
+            brokerProperties.qaRetentionPersonalInformationExpiredRoutingKey()));
+  }
+
+  @Bean
+  Declarables qaRetentionAlertsExpiredBinding() {
+    return new Declarables(
+        binding(
+            brokerProperties.qaRetentionAlertsExpiredQueueName(),
+            BRIDGE_RETENTION_EXCHANGE,
+            brokerProperties.qaRetentionAlertsExpiredRoutingKey()));
   }
 
   @Bean
@@ -100,8 +109,8 @@ class BrokerConfiguration {
   }
 
   @Bean
-  Queue qaRetentionQueue() {
-    return queue(brokerProperties.qaRetentionQueueName());
+  Queue qaRetentionPersonalInformationExpiredQueue() {
+    return queue(brokerProperties.qaRetentionPersonalInformationExpiredQueueName());
   }
 
   @Bean

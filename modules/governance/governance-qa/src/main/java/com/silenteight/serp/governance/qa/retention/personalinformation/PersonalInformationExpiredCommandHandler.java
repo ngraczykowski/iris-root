@@ -1,11 +1,10 @@
-package com.silenteight.serp.governance.qa.retention.listener;
+package com.silenteight.serp.governance.qa.retention.personalinformation;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.dataretention.api.v1.PersonalInformationExpired;
-import com.silenteight.serp.governance.qa.retention.erase.EraseDecisionCommentUseCase;
 
 @Slf4j
 @RequiredArgsConstructor

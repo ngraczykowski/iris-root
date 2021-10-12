@@ -58,19 +58,19 @@ public class DecisionService {
     return decision;
   }
 
-  public Decision eraseComment(EraseDecisionCommentRequest request) {
-    log.debug("Erasing decision comment: {}", request);
+  public void eraseComment(EraseDecisionCommentRequest request) {
+    Decision decision = decisionRepository.findByDiscriminatorAndLevel(
+        request.getDiscriminator(), request.getLevel().getValue()).orElse(null);
+    if (decision == null)
+      return;
 
     request.preAudit(auditingLogger::log);
+    log.debug("Erasing decision comment: {}", request);
 
-    Decision decision = getDecisionByDiscriminatorAndLevel(
-        request.getDiscriminator(), request.getLevel());
     decision.eraseComment();
-    decision = decisionRepository.save(decision);
+    decisionRepository.save(decision);
 
     request.postAudit(auditingLogger::log);
-
-    return decision;
   }
 
   private Decision getDecisionByDiscriminatorAndLevel(
@@ -107,10 +107,8 @@ public class DecisionService {
   }
 
   private Alert getAlert(String discriminator) {
-    Alert alert = alertRepository.findByDiscriminator(discriminator);
-    if (alert == null)
-      throw new WrongDiscriminatorException(discriminator);
-    return alert;
+    return alertRepository.findByDiscriminator(discriminator)
+        .orElseThrow(() -> new WrongDiscriminatorException(discriminator));
   }
 
   public void view(String discriminator, DecisionLevel level) {
