@@ -25,33 +25,10 @@ class CreateCategoriesUseCase {
         .newBuilder()
         .addAllCategories(
             List.of(
-                chineseCommercialCategory(), delimiterCategory(), crossmatchCategory(),
-                firstTokenAddressCategory(), oneLinerCategory(), sanctionedNationalityCategory(),
-                specificCommonTermsCategory(), specificTermsCategory(), stripCategory(),
+                crossmatchCategory(),
+                oneLinerCategory(), specificTermsCategory(),
                 twoLinesCategory(), historicalRiskAssessmentCategory()))
         .build());
-  }
-
-  private static Category chineseCommercialCategory() {
-    return Category
-        .newBuilder()
-        .setName("categories/chineseCode")
-        .setDisplayName("Chinese Commercial Code Category")
-        .setType(CategoryType.ENUMERATED)
-        .setMultiValue(false)
-        .addAllAllowedValues(List.of("YES", "NO"))
-        .build();
-  }
-
-  private static Category delimiterCategory() {
-    return Category
-        .newBuilder()
-        .setName("categories/delimiter")
-        .setDisplayName("Delimiter Category")
-        .setType(CategoryType.ENUMERATED)
-        .setMultiValue(false)
-        .addAllAllowedValues(List.of("YES", "NO"))
-        .build();
   }
 
   private static Category crossmatchCategory() {
@@ -62,17 +39,6 @@ class CreateCategoriesUseCase {
         .setType(CategoryType.ENUMERATED)
         .setMultiValue(false)
         .addAllAllowedValues(List.of("NO_DECISION", "CROSSMATCH", "NO_CROSSMATCH"))
-        .build();
-  }
-
-  private static Category firstTokenAddressCategory() {
-    return Category
-        .newBuilder()
-        .setName("categories/firstTokenAddress")
-        .setDisplayName("Matchtext First Token of Address Category")
-        .setType(CategoryType.ENUMERATED)
-        .setMultiValue(false)
-        .addAllAllowedValues(List.of("YES", "NO"))
         .build();
   }
 
@@ -87,28 +53,6 @@ class CreateCategoriesUseCase {
         .build();
   }
 
-  private static Category sanctionedNationalityCategory() {
-    return Category
-        .newBuilder()
-        .setName("categories/sanctionedNationality")
-        .setDisplayName("Sanctioned Nationality Category")
-        .setType(CategoryType.ENUMERATED)
-        .setMultiValue(false)
-        .addAllAllowedValues(List.of("YES", "NO"))
-        .build();
-  }
-
-  private static Category specificCommonTermsCategory() {
-    return Category
-        .newBuilder()
-        .setName("categories/specificCommonTerms")
-        .setDisplayName("Specific Common Terms Category")
-        .setType(CategoryType.ENUMERATED)
-        .setMultiValue(false)
-        .addAllAllowedValues(List.of("YES", "NO"))
-        .build();
-  }
-
   private static Category specificTermsCategory() {
     return Category
         .newBuilder()
@@ -117,17 +61,6 @@ class CreateCategoriesUseCase {
         .setType(CategoryType.ENUMERATED)
         .setMultiValue(false)
         .addAllAllowedValues(List.of("YES", "NO"))
-        .build();
-  }
-
-  private static Category stripCategory() {
-    return Category
-        .newBuilder()
-        .setName("categories/strip")
-        .setDisplayName("Strip Category")
-        .setType(CategoryType.ENUMERATED)
-        .setMultiValue(false)
-        .addAllAllowedValues(List.of("STRIPPED", "NOT_STRIPPED"))
         .build();
   }
 

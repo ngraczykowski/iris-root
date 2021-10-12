@@ -8,9 +8,11 @@ import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.common.dto.input.*;
 import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure;
 import com.silenteight.payments.bridge.svb.etl.model.ExtractAlertedPartyDataRequest;
+import com.silenteight.payments.bridge.svb.etl.model.GetAccountNumberRequest;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractAlertEtlResponseUseCase;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractAlertedPartyDataUseCase;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractMessageStructureUseCase;
+import com.silenteight.payments.bridge.svb.etl.port.GetAccountNumberUseCase;
 import com.silenteight.payments.bridge.svb.etl.response.*;
 import com.silenteight.payments.bridge.svb.etl.util.CommonUtils;
 
@@ -29,6 +31,9 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
   private final ExtractMessageStructureUseCase extractMessageStructureUseCase;
   private final ExtractAlertedPartyDataUseCase extractAlertedPartyDataUseCase;
+  private final GetAccountNumberUseCase getAccountNumberUseCase;
+  private final FieldValueExtractor fieldValueExtractor;
+  private final ExtractMatchTextUseCase extractMatchTextUseCase;
 
   public AlertEtlResponse createAlertEtlResponse(AlertMessageDto alertMessageDto) {
     log.debug("invoke");
@@ -89,28 +94,31 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
     int synonymIndex = CommonUtils.toPositiveInt(requestHitDto.getHit().getSynonymIndex(), 0);
     String extractedName = HitNameExtractor.extractName(requestHitDto, synonymIndex);
-    List<String> allMatchingTexts = ExtractMatchTextListHelper.extractAllMatchingTexts(
-        messageStructure, messageStructure.getMessageData(),
-        requestHitDto.getHit().getMatchingText());
-    String fieldValue = FieldValueExtractor
-        .extractFieldValues(messageStructure, messageStructure.getMessageData())
+    List<String> allMatchingTexts = extractMatchTextUseCase.extractAllMatchingTexts(
+        messageStructure, requestHitDto.getHit().getMatchingText());
+    String fieldValue = fieldValueExtractor
+        .extractFieldValues(messageStructure)
         .get(0)
         .stream()
         .findFirst()
         .orElse(null);
-    List<String> allMatchingFieldValues = FieldValueExtractor
-        .extractFieldValues(messageStructure, messageStructure.getMessageData())
+    List<String> allMatchingFieldValues = fieldValueExtractor
+        .extractFieldValues(messageStructure)
         .stream()
         .findFirst()
         .orElse(Collections.emptyList());
 
     MessageFieldStructure messageFieldStructure = messageStructure.getMessageFieldStructure();
 
-    Optional<String> accountNumberOrNormalizedName =
-        new AccountNumberExtract(
-            alertMessageDto.getApplicationCode(), requestHitDto.getHit().getTag(),
-            messageStructure.getMessageData(), allMatchingFieldValues,
-            messageFieldStructure).invoke();
+    Optional<String> accountNumberOrNormalizedName = getAccountNumberUseCase.getAccountNumber(
+        GetAccountNumberRequest
+            .builder()
+            .applicationCode(alertMessageDto.getApplicationCode())
+            .tag(requestHitDto.getHit().getTag())
+            .message(messageStructure.getMessageData())
+            .matchingFields(allMatchingFieldValues)
+            .messageFieldStructure(messageFieldStructure)
+            .build());
 
     List<CodeDto> codes = Optional.of(requestHitDto.getHit())
         .map(HitDto::getHittedEntity)

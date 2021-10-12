@@ -1,8 +1,11 @@
 package com.silenteight.payments.bridge.svb.etl.service;
 
+import lombok.RequiredArgsConstructor;
+
 import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure;
 import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure.*;
 import com.silenteight.payments.bridge.svb.etl.model.ExtractAlertedPartyDataRequest;
+import com.silenteight.payments.bridge.svb.etl.model.ExtractFieldStructureValue;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractMessageStructureUseCase;
 import com.silenteight.payments.bridge.svb.etl.response.SourceSystem;
 
@@ -12,7 +15,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ExtractMessageStructureService implements ExtractMessageStructureUseCase {
+
+  private final FieldValueExtractor fieldValueExtractor;
 
   @Override
   public AbstractMessageStructure extractMessageStructure(
@@ -40,13 +46,13 @@ public class ExtractMessageStructureService implements ExtractMessageStructureUs
   }
 
   @NotNull
-  private AbstractMessageStructure.MessageStructureDefault defaultMessageStructure(
+  private static AbstractMessageStructure.MessageStructureDefault defaultMessageStructure(
       String messageType, String tag, String messageData) {
     return new MessageStructureDefault(messageType, tag, messageData);
   }
 
   @NotNull
-  private AbstractMessageStructure.MessageStructureDtp messageStructureForDtp(
+  private static AbstractMessageStructure.MessageStructureDtp messageStructureForDtp(
       String matchingText, String messageType, String tag, String messageData) {
     String matchText = null;
     List<String> mainTagFieldValues = null;
@@ -64,13 +70,13 @@ public class ExtractMessageStructureService implements ExtractMessageStructureUs
   }
 
   @NotNull
-  private AbstractMessageStructure.MessageStructureSts messageStructureForSts(
+  private static AbstractMessageStructure.MessageStructureSts messageStructureForSts(
       String messageType, String tag, String messageData) {
     return new MessageStructureSts(messageType, tag, messageData);
   }
 
   @NotNull
-  private AbstractMessageStructure.MessageStructureNbp messageStructureForNbp(
+  private static AbstractMessageStructure.MessageStructureNbp messageStructureForNbp(
       String messageType, String tag, String messageData) {
     return new MessageStructureNbp(messageType, tag, messageData);
   }
@@ -79,11 +85,16 @@ public class ExtractMessageStructureService implements ExtractMessageStructureUs
   private AbstractMessageStructure.MessageStructureMts messageStructureForMts(
       String messageType, String tag, String messageData, SourceSystem sourceSystem) {
     return new MessageStructureMts(
-        messageType, tag, messageData, FieldValueExtractor.extractFieldValue(
-        sourceSystem.name(), tag, messageData));
+        messageType, tag, messageData, fieldValueExtractor.extractFieldValue(
+        ExtractFieldStructureValue
+            .builder()
+            .sourceSystem(sourceSystem.name())
+            .tag(tag)
+            .messageData(messageData)
+            .build()));
   }
 
-  private MessageStructureScstar messageStructureForScstar(
+  private static MessageStructureScstar messageStructureForScstar(
       String messageType, String tag, String messageData) {
     return new MessageStructureScstar(messageType, tag, messageData);
   }

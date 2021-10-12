@@ -9,6 +9,7 @@ import com.silenteight.payments.bridge.svb.etl.model.CreateAlertedPartyEntitiesR
 import com.silenteight.payments.bridge.svb.etl.model.ExtractAlertedPartyDataRequest;
 import com.silenteight.payments.bridge.svb.etl.port.CreateAlertedPartyEntitiesUseCase;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractAlertedPartyDataUseCase;
+import com.silenteight.payments.bridge.svb.etl.port.ExtractFieldValueUseCase;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractMessageStructureUseCase;
 import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsvRow;
@@ -33,10 +34,12 @@ class CreateLearningMatchUseCase {
   private final ExtractAlertedPartyDataUseCase extractAlertedPartyDataUseCase;
   private final CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;
   private final ExtractMessageStructureUseCase extractMessageStructureUseCase;
+  private final ExtractFieldValueUseCase extractFieldValueUseCase;
 
   LearningMatch fromLearningRows(List<LearningCsvRow> rows) {
     var alertedPartyData = createAlertedPartyData(rows);
     var matchingTexts = createMatchingTexts(rows);
+    var messageStructure = createMessageStructure(rows, matchingTexts);
 
     return LearningMatch
         .builder()
@@ -52,11 +55,22 @@ class CreateLearningMatchUseCase {
         .watchlistCountry(assertUnique(rows, LearningCsvRow::getFkcoVListCountry))
         .matchedFieldValue(rows.get(0).getFkcoVMatchedTagContent())
         .messageData(rows.get(0).getFkcoVContent())
-        .messageStructure(createMessageStructure(rows, matchingTexts))
+        .messageStructure(messageStructure)
         .matchType(assertUnique(rows, LearningCsvRow::getFkcoVListType))
         .matchingTexts(matchingTexts)
+        .applicationCode(rows.get(0).getFkcoVApplication())
+        .hitTag(rows.get(0).getFkcoVMatchedTag())
+        .allMatchFieldsValue(createAllMatchFieldsValue(messageStructure))
         .alertedPartyEntity(createAlertedPartyEntities(alertedPartyData, matchingTexts))
         .build();
+  }
+
+  private List<String> createAllMatchFieldsValue(AbstractMessageStructure messageStructure) {
+    return extractFieldValueUseCase
+        .extractFieldValues(messageStructure)
+        .stream()
+        .flatMap(List::stream)
+        .collect(toList());
   }
 
   private AlertedPartyData createAlertedPartyData(List<LearningCsvRow> rows) {

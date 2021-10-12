@@ -1,11 +1,12 @@
 package com.silenteight.payments.bridge.svb.etl.service;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure;
+import com.silenteight.payments.bridge.svb.etl.port.ExtractFieldValueUseCase;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,14 +16,17 @@ import java.util.regex.Pattern;
 import static java.util.Arrays.copyOfRange;
 import static java.util.Collections.singletonList;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class ExtractMatchTextListHelper {
+@Service
+@RequiredArgsConstructor
+final class ExtractMatchTextUseCase {
 
-  public static List<String> extractAllMatchingTexts(
-      AbstractMessageStructure messageStructure, String messageData, String matchingText) {
+  private final ExtractFieldValueUseCase extractFieldValueUseCase;
+
+  public List<String> extractAllMatchingTexts(
+      AbstractMessageStructure messageStructure, String matchingText) {
 
     List<List<String>> fieldValues =
-        FieldValueExtractor.extractFieldValues(messageStructure, messageData);
+        extractFieldValueUseCase.extractFieldValues(messageStructure);
     if (!fieldValues.get(0).isEmpty()) {
       return extractMatchTextLs(fieldValues.get(0).get(0), matchingText);
     } else {

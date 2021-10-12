@@ -19,16 +19,16 @@ import java.util.List;
 class ExtractAlertedPartyDataService implements ExtractAlertedPartyDataUseCase {
 
   private final ExtractMessageStructureUseCase extractMessageStructureUseCase;
+  private final FieldValueExtractor fieldValueExtractor;
 
   @Override
   public AlertedPartyData extractAlertedPartyData(ExtractAlertedPartyDataRequest request) {
     AbstractMessageStructure messageStructure =
         extractMessageStructureUseCase.extractMessageStructure(request);
     List<List<String>> fieldValues =
-        FieldValueExtractor.extractFieldValues(
+        fieldValueExtractor.extractFieldValues(
             request.getApplicationCode(),
-            messageStructure,
-            request.getMessageData());
+            messageStructure);
 
     MessageFieldStructure messageFieldStructure = messageStructure.getMessageFieldStructure();
     MessageNameAddressResult messageNameAddressResult = MessageFieldExtractor.extractNameAddress(

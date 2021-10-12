@@ -6,8 +6,11 @@ import lombok.NoArgsConstructor;
 import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure;
 import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure.MessageStructureDtp;
 import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure.MessageStructureScstar;
+import com.silenteight.payments.bridge.svb.etl.model.ExtractFieldStructureValue;
+import com.silenteight.payments.bridge.svb.etl.port.ExtractFieldValueUseCase;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +21,15 @@ import static com.silenteight.payments.bridge.svb.etl.util.CommonUtils.escapeReg
 import static java.util.Collections.singletonList;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class FieldValueExtractor {
+@Service
+class FieldValueExtractor implements ExtractFieldValueUseCase {
 
-  public static String extractFieldValue(String sourceSystem, String tag, String messageData) {
-    if (sourceSystem.contains("STA") || sourceSystem.contains("AMH")) {
-      return extractMatchfieldFromScstarMessage(tag, messageData);
+  @Override
+  public String extractFieldValue(ExtractFieldStructureValue request) {
+    if (request.getSourceSystem().contains("STA") || request.getSourceSystem().contains("AMH")) {
+      return extractMatchfieldFromScstarMessage(request.getTag(), request.getMessageData());
     } else {
-      return extractMatchfieldFromNonScstarMessage(tag, messageData);
+      return extractMatchfieldFromNonScstarMessage(request.getTag(), request.getMessageData());
     }
   }
 
@@ -66,26 +71,29 @@ class FieldValueExtractor {
       return "Matching field not extracted";
   }
 
-  @NotNull
-  public static List<List<String>> extractFieldValues(
-      AbstractMessageStructure messageStructure, String messageData) {
+  @Override
+  public List<List<String>> extractFieldValues(AbstractMessageStructure messageStructure) {
     List<List<String>> fieldValues;
     if (messageStructure instanceof MessageStructureScstar) {
-      fieldValues = extractFieldValues("STA", messageStructure, messageData);
+      fieldValues =
+          extractFieldValues("STA", messageStructure);
     } else if (messageStructure instanceof MessageStructureDtp) {
-      fieldValues = extractFieldValues("DTP", messageStructure, messageData);
+      fieldValues =
+          extractFieldValues("DTP", messageStructure);
     } else {
-      fieldValues = extractFieldValues("", messageStructure, messageData);
+      fieldValues = extractFieldValues("", messageStructure);
     }
     return fieldValues;
   }
 
-  public static List<List<String>> extractFieldValues(
-      String sourceSystem, AbstractMessageStructure messageStructure, String messageData) {
+  @Override
+  public List<List<String>> extractFieldValues(
+      String sourceSystem, AbstractMessageStructure messageStructure) {
     String tag = messageStructure.getApTag();
     List<List<String>> fieldValues = new ArrayList<>();
     if (sourceSystem.contains("STA") || sourceSystem.contains("AMH")) {
-      String mainTagFieldValue = extractMatchfieldFromScstarMessage(tag, messageData);
+      String mainTagFieldValue =
+          extractMatchfieldFromScstarMessage(tag, messageStructure.getMessageData());
       fieldValues.add(singletonList(mainTagFieldValue));
     } else if (sourceSystem.contains("DTP")) {
       if (MessageStructureDtp.DTP_PAIRS_SCOPE.contains(tag)) {
@@ -95,14 +103,15 @@ class FieldValueExtractor {
         fieldValues.add(mainTagFieldValueList);
         fieldValues.add(nextTagFieldValueList);
       } else {
-        String mainTagFieldValue = extractMatchfieldFromNonScstarMessage(tag, messageData);
+        String mainTagFieldValue =
+            extractMatchfieldFromNonScstarMessage(tag, messageStructure.getMessageData());
         fieldValues.add(singletonList(mainTagFieldValue));
       }
     } else {
-      String mainTagFieldValue = extractMatchfieldFromNonScstarMessage(tag, messageData);
+      String mainTagFieldValue =
+          extractMatchfieldFromNonScstarMessage(tag, messageStructure.getMessageData());
       fieldValues.add(singletonList(mainTagFieldValue));
     }
     return fieldValues;
   }
-
 }

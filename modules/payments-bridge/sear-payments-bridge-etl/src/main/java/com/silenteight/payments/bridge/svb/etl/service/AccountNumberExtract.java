@@ -1,10 +1,13 @@
 package com.silenteight.payments.bridge.svb.etl.service;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure.MessageStructureSts;
+import com.silenteight.payments.bridge.svb.etl.model.GetAccountNumberRequest;
+import com.silenteight.payments.bridge.svb.etl.port.GetAccountNumberUseCase;
 import com.silenteight.payments.bridge.svb.etl.response.MessageFieldStructure;
+
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,113 +17,111 @@ import static com.silenteight.payments.bridge.svb.etl.util.CommonUtils.createOne
 
 
 @RequiredArgsConstructor
-public class AccountNumberExtract {
+@Service
+public class AccountNumberExtract implements GetAccountNumberUseCase {
 
-  @NonNull private final String sourceSystem;
-  @NonNull private final String tag;
-  @NonNull private final String message;
-  @NonNull private final List<String> matchingFields;
-  @NonNull private final MessageFieldStructure messageFieldStructure;
-
-  private String accountNumber;
-  private String matchingField;
-  private String trimmedTag;
-
-  public Optional<String> invoke() {
-    extractAccountNumber();
-    cleanAccountNumber();
-    return Optional.ofNullable(accountNumber);
+  @Override
+  public Optional<String> getAccountNumber(GetAccountNumberRequest request) {
+    var accountNumber = extractAccountNumber(request);
+    return accountNumber == null ? Optional.empty() : Optional.of(accountNumber);
   }
 
   @SuppressWarnings("java:S126")
-  private void extractAccountNumber() {
-    matchingField = matchingFields.stream()
+  private String extractAccountNumber(GetAccountNumberRequest request) {
+    var matchingField = request.getMatchingFields().stream()
         .findFirst()
         .orElse("");
-    trimmedTag = tag.trim();
-    accountNumber = null;
+    var trimmedTag = request.getTag().trim();
+    var sourceSystem = request.getApplicationCode();
 
     if (sourceSystem.contains("STA") || sourceSystem.contains("AMX")) {
-      processStaAmx();
+      return processStaAmx(request.getMessageFieldStructure(), matchingField);
     } else if (sourceSystem.contains("MTS")) {
-      processMts();
+      return processMts(trimmedTag, matchingField, request.getMessage());
     } else if (sourceSystem.contains("STS")) {
-      processSts();
+      return processSts(trimmedTag, matchingField, request.getMessage());
     } else if (sourceSystem.contains("NBP")) {
-      processNbp();
+      return processNbp(trimmedTag, matchingField, request.getMessage());
     } else if (sourceSystem.contains("DTP")) {
-      processDtp();
+      return processDtp(trimmedTag, matchingField);
     }
+
+    return null;
   }
 
-  private void processDtp() {
+  private String processDtp(String trimmedTag, String matchingField) {
     if (List
         .of("C_AGENTCO", "C_CARRIER", "C_OTHBANK", "C_APLICANT", "C_SHIPPING", "C_BENFICRY",
             "C_DRAWEE", "C_DRAWER").contains(trimmedTag)) {
-      accountNumber = matchingField.split(",")[0];
+      return matchingField.split(",")[0];
     }
+    return null;
   }
 
   @SuppressWarnings("java:S126")
-  private void processNbp() {
+  private String processNbp(String trimmedTag, String matchingField, String message) {
     if (List.of("C_CREDITOR", "UC_CRED").contains(trimmedTag)) {
-      accountNumber = extractAccountNumberOrFirstLine(
+      return extractAccountNumberOrFirstLine(
           List.of("C_CREDACCT", "C_CAGTCLRC"), message, matchingField, null);
     } else if ("PD_DEBTOR".equals(trimmedTag)) {
-      accountNumber = extractAccountNumberOrFirstLine(
+      return extractAccountNumberOrFirstLine(
           createOneElementList("PD_ACCOUNT"), message, matchingField, null);
     }
+    return null;
   }
 
   @SuppressWarnings("java:S126")
-  private void processSts() {
+  private String processSts(String trimmedTag, String matchingField, String message) {
     if (List.of("C_CREDITOR", "S_CREDIT").contains(trimmedTag)) {
-      accountNumber = extractAccountNumberOrFirstLine(createOneElementList("C_CREDACCT"), message,
+      return extractAccountNumberOrFirstLine(createOneElementList("C_CREDACCT"), message,
           matchingField, null);
     } else if ("PD_DEBTOR".equals(trimmedTag)) {
-      accountNumber = extractAccountNumberOrFirstLine(createOneElementList("PD_ACCOUNT"), message,
+      return extractAccountNumberOrFirstLine(createOneElementList("PD_ACCOUNT"), message,
           matchingField, null);
     } else if ("S_DEBTOR".equals(trimmedTag)) {
-      accountNumber = extractAccountNumberOrFirstLine(createOneElementList("S_DEBTACC"), message,
+      return extractAccountNumberOrFirstLine(createOneElementList("S_DEBTACC"), message,
           matchingField, null);
     } else if ("S_UDEBTOR".equals(trimmedTag)) {
-      accountNumber = extractAccountNumberOrFirstLine(createOneElementList("UD_UDEBTID"), message,
+      return extractAccountNumberOrFirstLine(createOneElementList("UD_UDEBTID"), message,
           matchingField, "S_UDEBTOR");
     } else if ("UD_UDEBTOR".equals(trimmedTag)) {
-      accountNumber = extractAccountNumberOrFirstLine(createOneElementList("UD_UDEBTID"), message,
+      return extractAccountNumberOrFirstLine(createOneElementList("UD_UDEBTID"), message,
           matchingField, null);
     }
+    return null;
   }
 
   @SuppressWarnings("java:S126")
-  private void processMts() {
+  private String processMts(String trimmedTag, String matchingField, String message) {
     if (List
         .of("SWF_4_50F", "SWF_4_59F", "SWF_4_59", "SWF_4_50K", "CHP_502")
         .contains(trimmedTag)) {
-      accountNumber = matchingField.split("\n")[0];
+      return matchingField.split("\n")[0];
     } else if ("MTS_OPI".equals(trimmedTag)) {
-      accountNumber = extractAccountNumberOrFirstLine(createOneElementList("MTS_OPD"),
+      return extractAccountNumberOrFirstLine(createOneElementList("MTS_OPD"),
           message, matchingField, null);
     } else if ("MTS_BPI".equals(trimmedTag)) {
-      accountNumber = extractAccountNumberOrFirstLine(createOneElementList("MTS_BPD"),
+      return extractAccountNumberOrFirstLine(createOneElementList("MTS_BPD"),
           message, matchingField, null);
     } else if ("MTS_BBI".equals(trimmedTag)) {
-      accountNumber = extractAccountNumberOrFirstLine(createOneElementList("MTS_BBD"),
+      return extractAccountNumberOrFirstLine(createOneElementList("MTS_BBD"),
           message, matchingField, null);
     } else if ("MTS_OBI".equals(trimmedTag)) {
-      accountNumber = extractAccountNumberOrFirstLine(createOneElementList("MTS_OBD"),
+      return extractAccountNumberOrFirstLine(createOneElementList("MTS_OBD"),
           message, matchingField, null);
     }
+    return null;
   }
 
-  private void processStaAmx() {
+  private String processStaAmx(MessageFieldStructure messageFieldStructure, String matchingField) {
     if (List
         .of(
             MessageFieldStructure.NAMEADDRESS_FORMAT_F,
             MessageFieldStructure.NAMEADDRESS_FORMAT_UNSTRUCTURED)
         .contains(messageFieldStructure)) {
-      accountNumber = matchingField.split("\n")[0];
+      return matchingField.split("\n")[0];
     }
+    return null;
   }
 
   private static String extractAccountNumberOrFirstLine(
@@ -142,11 +143,4 @@ public class AccountNumberExtract {
 
     return splittedMatchingField[0];
   }
-
-  private void cleanAccountNumber() {
-    if (accountNumber != null) {
-      accountNumber = AccountNumberCleaner.clean(accountNumber, tag);
-    }
-  }
-
 }

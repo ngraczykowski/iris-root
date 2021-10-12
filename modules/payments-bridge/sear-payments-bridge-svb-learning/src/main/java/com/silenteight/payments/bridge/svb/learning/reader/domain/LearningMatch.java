@@ -6,10 +6,13 @@ import lombok.Value;
 import lombok.experimental.NonFinal;
 
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
-import com.silenteight.payments.bridge.agents.model.*;
+import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
+import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
+import com.silenteight.payments.bridge.agents.model.OneLinerAgentRequest;
+import com.silenteight.payments.bridge.agents.model.SpecificTermsRequest;
 import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure;
+import com.silenteight.payments.bridge.svb.etl.model.GetAccountNumberRequest;
 import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
-import com.silenteight.payments.bridge.svb.etl.response.MessageFieldStructure;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -44,9 +47,15 @@ public class LearningMatch {
 
   String messageData;
 
+  String applicationCode;
+
+  String hitTag;
+
   AbstractMessageStructure messageStructure;
 
   List<String> matchingTexts;
+
+  List<String> allMatchFieldsValue;
 
   Map<AlertedPartyKey, String> alertedPartyEntity;
 
@@ -61,18 +70,10 @@ public class LearningMatch {
         .build();
   }
 
-  public SpecificCommonTermsRequest toSpecificCommonTermsRequest() {
-    return SpecificCommonTermsRequest
-        .builder()
-        .isAccountNumberFlagInMatchingField(messageStructure.checkMessageWithoutAccountNum())
-        .allMatchFieldsValue(StringUtils.join(matchingTexts, ", "))
-        .build();
-  }
-
   public SpecificTermsRequest toSpecificTermsRequest() {
     return SpecificTermsRequest
         .builder()
-        .allMatchFieldsValue(StringUtils.join(matchingTexts, ", "))
+        .allMatchFieldsValue(StringUtils.join(allMatchFieldsValue, ", "))
         .build();
   }
 
@@ -101,7 +102,13 @@ public class LearningMatch {
         .build();
   }
 
-  public MessageFieldStructure getMessageFieldStructure() {
-    return alertedPartyData.getMessageFieldStructure();
+  public GetAccountNumberRequest toGetAccountNumberRequest() {
+    return GetAccountNumberRequest
+        .builder()
+        .applicationCode(applicationCode)
+        .tag(hitTag)
+        .message(messageData)
+        .matchingFields(allMatchFieldsValue)
+        .build();
   }
 }

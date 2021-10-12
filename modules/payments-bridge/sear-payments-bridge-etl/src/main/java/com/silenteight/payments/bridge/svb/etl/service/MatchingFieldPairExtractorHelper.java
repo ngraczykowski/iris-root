@@ -33,7 +33,7 @@ class MatchingFieldPairExtractorHelper {
       String matchField = ComponentExtractorHelper
           .extractComponentsFromMatchFieldPair(tag, matchFieldPair).get(0);
       List<String> matchingTextList =
-          ExtractMatchTextListHelper.extractMatchTextLs(matchField, matchText);
+          ExtractMatchTextUseCase.extractMatchTextLs(matchField, matchText);
       for (int i = 0; i < matchingTextList.size(); i++) {
         int matchTextListLength = matchingTextList.size() - 1;
         Pattern textPattern = Pattern.compile(Pattern.quote(matchingTextList.get(i)));
