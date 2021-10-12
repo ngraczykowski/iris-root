@@ -73,8 +73,11 @@ serp:
         ingest:
           queue-name: gov.feature-vector.ingest
           routing-key: command.index-request.production
-        qa-retention:
+        qa-retention-personal-information-expired:
           queue-name: gov.retention.personal-information-expired
+          routing-key: retention.personal-information-expired
+        qa-retention-alerts-expired:
+          queue-name: gov.retention.alerts-expired
           routing-key: retention.personal-information-expired
         notification:
           queue-name: notifier.incoming-event
@@ -115,4 +118,8 @@ serp:
         personal-information-expired:
           integration:
             receive:
-              queue-name: ${serp.governance.messaging.broker.qa-retention.queue-name}
+              queue-name: ${serp.governance.messaging.broker.qa-retention-personal-information-expired.queue-name}
+        alerts-expired:
+          integration:
+            receive:
+              queue-name: ${serp.governance.messaging.broker.qa-retention-alerts-expired.queue-name}

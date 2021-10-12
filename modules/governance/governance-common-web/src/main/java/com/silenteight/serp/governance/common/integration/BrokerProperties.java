@@ -23,7 +23,11 @@ class BrokerProperties {
 
   @Valid
   @NestedConfigurationProperty
-  private AmpqProperties qaRetention;
+  private AmpqProperties qaRetentionPersonalInformationExpired;
+
+  @Valid
+  @NestedConfigurationProperty
+  private AmpqProperties qaRetentionAlertsExpired;
 
   @Valid
   @NestedConfigurationProperty
@@ -53,12 +57,20 @@ class BrokerProperties {
     return ingest.getRoutingKey();
   }
 
-  String qaRetentionQueueName() {
-    return qaRetention.getQueueName();
+  String qaRetentionPersonalInformationExpiredQueueName() {
+    return qaRetentionPersonalInformationExpired.getQueueName();
   }
 
-  String qaRetentionRoutingKey() {
-    return qaRetention.getRoutingKey();
+  String qaRetentionPersonalInformationExpiredRoutingKey() {
+    return qaRetentionPersonalInformationExpired.getRoutingKey();
+  }
+
+  String qaRetentionAlertsExpiredQueueName() {
+    return qaRetentionAlertsExpired.getQueueName();
+  }
+
+  String qaRetentionAlertsExpiredRoutingKey() {
+    return qaRetentionAlertsExpired.getRoutingKey();
   }
 
   String notificationQueueName() {

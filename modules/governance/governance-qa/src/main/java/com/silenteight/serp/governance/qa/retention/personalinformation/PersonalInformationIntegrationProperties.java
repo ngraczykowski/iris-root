@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.qa.retention.listener;
+package com.silenteight.serp.governance.qa.retention.personalinformation;
 
 import lombok.Data;
 

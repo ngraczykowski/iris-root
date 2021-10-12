@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.qa.retention.erase;
+package com.silenteight.serp.governance.qa.retention.personalinformation;
 
 import com.silenteight.serp.governance.qa.manage.domain.DecisionService;
 import com.silenteight.serp.governance.qa.manage.domain.dto.EraseDecisionCommentRequest;
@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
-import static com.silenteight.serp.governance.qa.retention.erase.EraseDecisionCommentUseCase.PRINCIPAL_NAME;
+import static com.silenteight.serp.governance.qa.retention.personalinformation.EraseDecisionCommentUseCase.PRINCIPAL_NAME;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

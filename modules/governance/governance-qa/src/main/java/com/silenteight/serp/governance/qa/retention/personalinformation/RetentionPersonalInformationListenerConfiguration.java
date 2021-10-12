@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.qa.retention.listener;
+package com.silenteight.serp.governance.qa.retention.personalinformation;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.dataretention.api.v1.PersonalInformationExpired;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 import com.silenteight.serp.governance.common.integration.AmqpInboundProperties;
-import com.silenteight.serp.governance.qa.retention.erase.EraseDecisionCommentUseCase;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
