@@ -90,7 +90,12 @@ spec:
             requests:
               memory: {{ .Values.memoryRequest | quote }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          args: ["--logging.config=file:/etc/logback.xml"]
+          {{ if .Values.args }}
+          args:
+          {{ range .Values.args }}
+          - {{ . }}
+          {{ end }}
+          {{ end }}
           volumeMounts:
             - mountPath: /etc/logback.xml
               name: logback-config
