@@ -12,10 +12,8 @@ import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestIni
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.awaitility.core.ConditionEvaluationLogger;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.messaging.Message;
@@ -35,7 +33,7 @@ import java.util.stream.Stream;
 
 import static org.awaitility.Awaitility.await;
 
-@SpringBootTest(classes = PaymentsBridgeApplication.class)
+//@SpringBootTest(classes = PaymentsBridgeApplication.class)
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
 @Slf4j
 @ActiveProfiles({"mockae", "mockdatasource", "test"})
@@ -50,14 +48,14 @@ class PaymentsBridgeApplicationTests {
   @Autowired CreateAlertMessageUseCase createAlertMessageUseCase;
   @Autowired ResourceLoader resourceLoader;
 
-  @ParameterizedTest
+  // @ParameterizedTest
   @MethodSource("filesFactory")
   public void shouldRegisterAlertAndInputs(String fileName) {
     var eventRecorder = createRegistrationEventRecorder();
     createAlert(fileName);
     await()
         .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
-        .atMost(Duration.ofSeconds(3))
+        .atMost(Duration.ofSeconds(10))
         .until(eventRecorder::allCaught);
     eventRecorder.unsubscribeAll();
   }
@@ -86,7 +84,8 @@ class PaymentsBridgeApplicationTests {
       var requestDto = objectMapper.readValue(srcFile, RequestDto.class);
       var dto = requestDto.getAlerts().get(0);
       return new FircoAlertMessage(
-          UUID.randomUUID(), OffsetDateTime.now(Clock.systemUTC()), dto, "", "");
+          UUID.randomUUID(), OffsetDateTime.now(Clock.systemUTC()), dto,
+          "", "", "login", "password");
     } catch (Exception exception) {
       throw new RuntimeException(exception);
     }
