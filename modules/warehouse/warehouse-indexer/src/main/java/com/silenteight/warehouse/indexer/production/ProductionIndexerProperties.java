@@ -10,11 +10,15 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Validated
 @ConfigurationProperties(prefix = "warehouse.indexer")
 public class ProductionIndexerProperties {
+
+  @NotNull
+  private Integer productionBatchSize;
 
   @Valid
   @NestedConfigurationProperty

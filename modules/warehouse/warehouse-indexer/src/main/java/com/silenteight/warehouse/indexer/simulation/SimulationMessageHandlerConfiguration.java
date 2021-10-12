@@ -6,10 +6,13 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.warehouse.indexer.alert.AlertCopyDataService;
-import com.silenteight.warehouse.indexer.alert.AlertIndexService;
+import com.silenteight.warehouse.indexer.alert.indexing.AlertIndexService;
+import com.silenteight.warehouse.indexer.alert.mapping.AlertMapper;
+import com.silenteight.warehouse.indexer.query.single.AlertSearchService;
+import com.silenteight.warehouse.indexer.query.single.ProductionSearchRequestBuilder;
 import com.silenteight.warehouse.indexer.simulation.analysis.UniqueAnalysisFactory;
 
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,16 +40,17 @@ public class SimulationMessageHandlerConfiguration {
 
   @Bean
   SimulationAlertIndexUseCase simulationAlertIndexUseCase(
+      SimulationAlertMappingService simulationAlertMappingService,
       AlertIndexService alertIndexService,
       UniqueAnalysisFactory uniqueAnalysisFactory,
-      AlertCopyDataService alertCopyDataService,
       TimeSource timeSource) {
 
     return new SimulationAlertIndexUseCase(
+        simulationAlertMappingService,
         alertIndexService,
         uniqueAnalysisFactory,
-        alertCopyDataService,
-        timeSource);
+        timeSource,
+        properties.getSimulationBatchSize());
   }
 
   @Bean
@@ -90,5 +94,18 @@ public class SimulationMessageHandlerConfiguration {
             .outboundAdapter()
             .exchangeName(exchange)
             .routingKey(routingKey));
+  }
+
+  @Bean
+  SimulationAlertMappingService simulationAlertMappingService(
+      AlertMapper alertMapper,
+      RestHighLevelClient restHighLevelAdminClient,
+      AlertSearchService alertSearchService,
+      ProductionSearchRequestBuilder productionSearchRequestBuilder) {
+    return new SimulationAlertMappingService(
+        alertMapper,
+        restHighLevelAdminClient,
+        alertSearchService,
+        productionSearchRequestBuilder);
   }
 }

@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_PREFIX;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_PREFIX;
 import static com.silenteight.warehouse.report.billing.generation.BillingScorerFixtures.ACTION_PREFIX;
 import static java.time.OffsetDateTime.now;
 import static java.util.Arrays.asList;

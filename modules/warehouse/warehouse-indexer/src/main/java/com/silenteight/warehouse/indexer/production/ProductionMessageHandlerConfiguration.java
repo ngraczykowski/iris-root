@@ -6,8 +6,9 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.warehouse.indexer.alert.AlertIndexService;
-import com.silenteight.warehouse.indexer.production.indextracking.IndexByDiscriminatorResolverFactory;
+import com.silenteight.warehouse.indexer.alert.indexing.AlertIndexService;
+import com.silenteight.warehouse.indexer.alert.mapping.AlertMapper;
+import com.silenteight.warehouse.indexer.production.indextracking.ProductionAlertTrackingService;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -34,15 +35,19 @@ class ProductionMessageHandlerConfiguration {
   @NonNull
   private final ProductionIndexerProperties properties;
 
-
   @Bean
   ProductionAlertIndexUseCase productionAlertIndexUseCase(
+      ProductionAlertMappingService productionAlertMappingService,
+      ProductionAlertIndexResolvingService productionAlertIndexResolvingService,
       AlertIndexService alertIndexService,
-      TimeSource timeSource,
-      IndexByDiscriminatorResolverFactory productionWriteIndexProviderFactory) {
+      TimeSource timeSource) {
 
     return new ProductionAlertIndexUseCase(
-        alertIndexService, timeSource, productionWriteIndexProviderFactory);
+        productionAlertIndexResolvingService,
+        productionAlertMappingService,
+        alertIndexService,
+        timeSource,
+        properties.getProductionBatchSize());
   }
 
   @Bean
@@ -86,5 +91,17 @@ class ProductionMessageHandlerConfiguration {
             .outboundAdapter()
             .exchangeName(exchange)
             .routingKey(routingKey));
+  }
+
+  @Bean
+  ProductionAlertIndexResolvingService productionAlertIndexResolvingService(
+      ProductionAlertTrackingService productionAlertTrackingService) {
+
+    return new ProductionAlertIndexResolvingService(productionAlertTrackingService);
+  }
+
+  @Bean
+  ProductionAlertMappingService productionAlertMappingService(AlertMapper alertMapper) {
+    return new ProductionAlertMappingService(alertMapper);
   }
 }

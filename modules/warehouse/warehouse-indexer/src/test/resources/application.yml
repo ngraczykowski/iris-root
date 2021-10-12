@@ -30,6 +30,8 @@ warehouse:
         queue-name: wh.index-request.simulation
         routing-key: command.index-request.simulation
   indexer:
+    production-batch-size: 200
+    simulation-batch-size: 200
     production-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.alert-production-indexing.queue-name}
     production-indexed-outbound:

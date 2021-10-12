@@ -1,7 +1,7 @@
 package com.silenteight.warehouse.indexer.query.grouping;
 
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
-import com.silenteight.warehouse.indexer.alert.ElasticsearchProperties;
+import com.silenteight.warehouse.indexer.alert.indexing.ElasticsearchProperties;
 import com.silenteight.warehouse.indexer.query.index.FieldsQueryIndexService;
 import com.silenteight.warehouse.indexer.query.sql.SqlBuilder;
 

@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer.alert;
+package com.silenteight.warehouse.indexer.alert.mapping;
 
 import lombok.NoArgsConstructor;
 

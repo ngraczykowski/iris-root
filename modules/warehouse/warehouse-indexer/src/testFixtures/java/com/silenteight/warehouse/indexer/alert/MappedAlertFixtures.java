@@ -1,11 +1,12 @@
 package com.silenteight.warehouse.indexer.alert;
 
 import com.silenteight.warehouse.common.opendistro.roles.RolesMappedConstants;
+import com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants;
 
 import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_PREFIX;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.DISCRIMINATOR;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_PREFIX;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.DISCRIMINATOR;
 import static java.util.Map.of;
 
 public class MappedAlertFixtures {
@@ -86,10 +87,10 @@ public class MappedAlertFixtures {
     private static final String MATCH_RESOURCE_PREFIX = "matches/";
     public static final String ANALYSIS_RESOURCE_PREFIX = "analysis/";
 
-    static final String MATCH_NAME_1_1 = MATCH_RESOURCE_PREFIX + MATCH_ID_1_1;
-    static final String MATCH_NAME_1_2 = MATCH_RESOURCE_PREFIX + MATCH_ID_1_2;
-    static final String MATCH_NAME_2_1 = MATCH_RESOURCE_PREFIX + MATCH_ID_2_1;
-    static final String MATCH_NAME_2_2 = MATCH_RESOURCE_PREFIX + MATCH_ID_2_2;
+    public static final String MATCH_NAME_1_1 = MATCH_RESOURCE_PREFIX + MATCH_ID_1_1;
+    public static final String MATCH_NAME_1_2 = MATCH_RESOURCE_PREFIX + MATCH_ID_1_2;
+    public static final String MATCH_NAME_2_1 = MATCH_RESOURCE_PREFIX + MATCH_ID_2_1;
+    public static final String MATCH_NAME_2_2 = MATCH_RESOURCE_PREFIX + MATCH_ID_2_2;
     public static final String SIMULATION_ANALYSIS_NAME =
         ANALYSIS_RESOURCE_PREFIX + SIMULATION_ANALYSIS_ID;
   }

@@ -2,7 +2,7 @@ package com.silenteight.warehouse.indexer.query.index;
 
 import com.silenteight.warehouse.common.environment.EnvironmentProperties;
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
-import com.silenteight.warehouse.indexer.alert.ElasticsearchProperties;
+import com.silenteight.warehouse.indexer.alert.indexing.ElasticsearchProperties;
 import com.silenteight.warehouse.indexer.query.sql.SqlBuilder;
 
 import org.springframework.context.annotation.Bean;

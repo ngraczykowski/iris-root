@@ -31,11 +31,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_READ_ALIAS_NAME;
-import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_WRITE_INDEX_NAME;
-import static com.silenteight.warehouse.indexer.IndexerFixtures.SIMULATION_ELASTIC_INDEX_NAME;
-import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.ALERT_1;
-import static com.silenteight.warehouse.indexer.alert.DataIndexFixtures.convertMapToPayload;
+import static com.silenteight.warehouse.indexer.IndexerFixtures.*;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DOCUMENT_ID;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
@@ -126,7 +122,8 @@ class IndexerIT {
         .extracting(DataIndexResponse::getRequestId)
         .isEqualTo(request.getRequestId());
 
-    var source = simpleElasticTestClient.getSource(SIMULATION_ELASTIC_INDEX_NAME, DOCUMENT_ID);
+    var source = simpleElasticTestClient.getSource(
+        SIMULATION_ELASTIC_INDEX_NAME, ALERT_1.getName());
     assertThat(source).isEqualTo(MAPPED_ALERT_1);
   }
 

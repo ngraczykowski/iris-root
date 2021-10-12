@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer.alert;
+package com.silenteight.warehouse.indexer.alert.mapping;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,10 +15,10 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import static com.silenteight.warehouse.common.opendistro.roles.RolesMappedConstants.COUNTRY_KEY;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_NAME;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.ALERT_PREFIX;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.DISCRIMINATOR;
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.INDEX_TIMESTAMP;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_NAME;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_PREFIX;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.DISCRIMINATOR;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.INDEX_TIMESTAMP;
 import static java.time.ZoneOffset.UTC;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 import static java.util.Optional.ofNullable;
@@ -26,13 +26,13 @@ import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toMap;
 
 @RequiredArgsConstructor
-class AlertMapper {
+public class AlertMapper {
 
   private final TimeSource timeSource;
   private final AlertMappingProperties alertMappingProperties;
   private final Predicate<String> allowedKeysPredicate;
 
-  Map<String, Object> convertAlertToAttributes(Alert alert) {
+  public Map<String, Object> convertAlertToAttributes(Alert alert) {
     OffsetDateTime now = timeSource.now().atOffset(UTC);
 
     Map<String, Object> documentAttributes = new LinkedHashMap<>();

@@ -1,8 +1,8 @@
 package com.silenteight.warehouse.indexer.query;
 
-import com.silenteight.warehouse.indexer.alert.AlertMapperConstants;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values;
+import com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants;
 import com.silenteight.warehouse.indexer.query.sql.MultiValueCondition;
 import com.silenteight.warehouse.indexer.query.sql.SingleValueCondition;
 import com.silenteight.warehouse.indexer.query.sql.SqlBuilder;

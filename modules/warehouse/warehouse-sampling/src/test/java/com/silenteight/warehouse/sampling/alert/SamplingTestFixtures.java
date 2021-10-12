@@ -7,7 +7,7 @@ import com.google.protobuf.Timestamp;
 
 import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.alert.AlertMapperConstants.*;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.*;
 
 public class SamplingTestFixtures {
 

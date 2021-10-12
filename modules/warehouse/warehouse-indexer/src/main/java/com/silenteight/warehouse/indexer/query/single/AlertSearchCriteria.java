@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
-import com.silenteight.warehouse.indexer.alert.MultiValueEntry;
+import com.silenteight.warehouse.indexer.query.MultiValueEntry;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer.alert;
+package com.silenteight.warehouse.indexer.alert.mapping;
 
 import java.util.List;
 import java.util.function.Predicate;

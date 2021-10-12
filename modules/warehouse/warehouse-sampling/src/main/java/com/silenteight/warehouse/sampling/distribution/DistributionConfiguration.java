@@ -1,7 +1,7 @@
 package com.silenteight.warehouse.sampling.distribution;
 
 
-import com.silenteight.warehouse.indexer.alert.ElasticsearchProperties;
+import com.silenteight.warehouse.indexer.alert.indexing.ElasticsearchProperties;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 import com.silenteight.warehouse.sampling.configuration.SamplingProperties;
 
