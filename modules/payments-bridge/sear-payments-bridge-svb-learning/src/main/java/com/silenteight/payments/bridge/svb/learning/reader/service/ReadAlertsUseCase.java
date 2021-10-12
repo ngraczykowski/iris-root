@@ -28,6 +28,7 @@ class ReadAlertsUseCase {
     var schema = mapper
         .schemaFor(LearningCsvRow.class)
         .withHeader()
+        .withEscapeChar('"')
         .withColumnSeparator(',');
 
     return csvFileProvider.getLearningCsv(learningRequest, learningCsv -> {
