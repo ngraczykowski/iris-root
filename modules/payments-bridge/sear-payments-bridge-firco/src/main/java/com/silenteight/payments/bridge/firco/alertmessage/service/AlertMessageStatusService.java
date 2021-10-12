@@ -4,16 +4,24 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.common.integration.CommonChannels;
+import com.silenteight.payments.bridge.event.AlertRejectedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
+import java.util.EnumSet;
 import java.util.UUID;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+
+import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_DAMAGED;
+import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OUTDATED;
+import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OVERFLOWED;
 
 @EnableConfigurationProperties(AlertMessageProperties.class)
 @RequiredArgsConstructor
@@ -24,6 +32,7 @@ class AlertMessageStatusService {
   private final AlertMessageStatusRepository repository;
   private final AlertMessagePayloadRepository payloadRepository;
   private final AlertMessageProperties alertMessageProperties;
+  private final CommonChannels commonChannels;
 
   @Setter
   private Clock clock = Clock.systemUTC();
@@ -65,6 +74,18 @@ class AlertMessageStatusService {
         alertMessageProperties.isOriginalMessageDeletedAfterRecommendation()) {
       log.debug("Removing original message of alert: {}", alertMessageId);
       payloadRepository.deleteByAlertMessageId(alertMessageId);
+    }
+
+    publishRejectionIfApply(alertMessageId, destinationStatus);
+  }
+
+  private void publishRejectionIfApply(UUID alertId, AlertMessageStatus destinationStatus) {
+    if (EnumSet.of(REJECTED_OVERFLOWED, REJECTED_DAMAGED, REJECTED_OUTDATED)
+        .contains(destinationStatus)) {
+      commonChannels.alertRejected().send(
+          MessageBuilder.withPayload(
+              new AlertRejectedEvent(alertId, destinationStatus.name())).build()
+      );
     }
   }
 

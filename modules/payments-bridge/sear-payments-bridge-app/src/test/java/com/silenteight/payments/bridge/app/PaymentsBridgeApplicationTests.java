@@ -12,8 +12,11 @@ import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestIni
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.awaitility.core.ConditionEvaluationLogger;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.messaging.Message;
@@ -33,22 +36,25 @@ import java.util.stream.Stream;
 
 import static org.awaitility.Awaitility.await;
 
-//@SpringBootTest(classes = PaymentsBridgeApplication.class)
+@SpringBootTest(classes = PaymentsBridgeApplication.class)
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
 @Slf4j
 @ActiveProfiles({"mockae", "mockdatasource", "test"})
 class PaymentsBridgeApplicationTests {
 
   private static final String SAMPLE_REQUESTS_DIR = "requests";
-  private static final List<String> FILES = List.of(
-      "2021-10-04-1851_saddam_hussain.json");
+  private static final List<String> VALID_REQUEST_FILES = List.of(
+      "2021_10_08-1754_uat_firco_alert.json");
+
+  private static final String TOO_MANY_HITS_REQUEST_FILE =
+      "2021-10-01_1837_osama_bin_laden.json";
 
   @Autowired CommonChannels channels;
   @Autowired ObjectMapper objectMapper;
   @Autowired CreateAlertMessageUseCase createAlertMessageUseCase;
   @Autowired ResourceLoader resourceLoader;
 
-  // @ParameterizedTest
+  @ParameterizedTest
   @MethodSource("filesFactory")
   public void shouldRegisterAlertAndInputs(String fileName) {
     var eventRecorder = createRegistrationEventRecorder();
@@ -61,11 +67,12 @@ class PaymentsBridgeApplicationTests {
   }
 
   static Stream<String> filesFactory() {
-    return FILES.stream();
+    return VALID_REQUEST_FILES.stream();
   }
 
   private DomainEventRecorder createRegistrationEventRecorder() {
     var recorder = new DomainEventRecorder();
+    recorder.subscribe(AlertStoredEvent.class, channels.alertStored());
     recorder.subscribe(AlertInitializedEvent.class, channels.alertInitialized());
     recorder.subscribe(AlertRegisteredEvent.class, channels.alertRegistered());
     recorder.subscribe(AlertInputAcceptedEvent.class, channels.alertInputAccepted());
@@ -98,6 +105,24 @@ class PaymentsBridgeApplicationTests {
     } catch (IOException exception) {
       throw new RuntimeException(exception);
     }
+  }
+
+  @Test
+  public void shouldRejectAlertWithTooManyHits() {
+    var eventRecorder = createTooManyHitsEventRecorder();
+    createAlert(TOO_MANY_HITS_REQUEST_FILE);
+    await()
+        .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
+        .atMost(Duration.ofSeconds(10))
+        .until(eventRecorder::allCaught);
+    eventRecorder.unsubscribeAll();
+  }
+
+  private DomainEventRecorder createTooManyHitsEventRecorder() {
+    var recorder = new DomainEventRecorder();
+    recorder.subscribe(AlertStoredEvent.class, channels.alertStored());
+    recorder.subscribe(AlertRejectedEvent.class, channels.alertRejected());
+    return recorder;
   }
 
   private static class DomainEventRecorder implements MessageHandler, Ordered {

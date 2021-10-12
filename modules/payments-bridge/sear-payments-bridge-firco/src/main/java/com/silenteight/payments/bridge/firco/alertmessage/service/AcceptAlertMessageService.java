@@ -78,10 +78,7 @@ class AcceptAlertMessageService implements AcceptAlertMessageUseCase {
           alertId);
 
       createResponseUseCase.createResponse(alertId, REJECTED_DAMAGED);
-
-      alertMessageStatusService.transitionAlertMessageStatus(
-          alertId,
-          REJECTED_DAMAGED);
+      alertMessageStatusService.transitionAlertMessageStatus(alertId, REJECTED_DAMAGED);
       return true;
     }
 

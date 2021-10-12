@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.integration.CommonChannels;
+import com.silenteight.payments.bridge.event.AlertStoredEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.callback.model.CallbackException;
@@ -38,6 +39,9 @@ class QueueUpAlertMessageService {
     commonChannels.amqpOutbound().send(
         MessageBuilder.withPayload(buildMessageStore(alert)).build());
     statusService.transitionAlertMessageStatus(alert.getId(), STORED);
+    commonChannels.alertStored().send(
+        MessageBuilder.withPayload(new AlertStoredEvent(alert.getId())).build()
+    );
   }
 
   private boolean isQueueOverflowed(FircoAlertMessage alert) {

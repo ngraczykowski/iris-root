@@ -29,6 +29,7 @@ public class CommonChannels {
   public static final String AMQP_OUTBOUND = PREFIX + "AMQPOutboundChannel";
   public static final String CMAPI_OUTBOUND = PREFIX + "CMApiOutboundChannel";
 
+  public static final String ALERT_STORED = PREFIX + "AlertStoredChannel";
   public static final String ALERT_INITIALIZED = PREFIX + "AlertInitializedChannel";
   public static final String ALERT_REGISTERED = PREFIX + "AlertRegisteredChannel";
   public static final String ALERT_INPUT_ACCEPTED = PREFIX + "AlertInputAcceptedChannel";
@@ -47,6 +48,11 @@ public class CommonChannels {
   @Bean(CMAPI_OUTBOUND)
   public MessageChannel cmapiOutbound() {
     return new DirectChannel();
+  }
+
+  @Bean(ALERT_STORED)
+  public SubscribableChannel alertStored() {
+    return new TypedPublishSubscribeChannel(AlertStoredEvent.class, channelInterceptors);
   }
 
   @Bean(ALERT_INITIALIZED)
