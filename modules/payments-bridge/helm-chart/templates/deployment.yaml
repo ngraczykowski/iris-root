@@ -79,6 +79,7 @@ spec:
             - "--spring.security.oauth2.client.registration.callback.client-secret={{ .Values.oauthClientSecret }}"
             - "--spring.security.oauth2.client.registration.callback.scope={{ .Values.oauthClientScope }}"
             - "--spring.security.oauth2.client.provider.external.token-uri={{ .Values.oauthClientTokenUri }}"
+            - "--pb.alert-message.original-message-deleted-after-recommendation=false"
           volumeMounts:
             - mountPath: /etc/logback.xml
               name: logback-config
