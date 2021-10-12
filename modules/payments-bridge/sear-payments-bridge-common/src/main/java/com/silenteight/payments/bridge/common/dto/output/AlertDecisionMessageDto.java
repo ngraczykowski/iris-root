@@ -27,9 +27,9 @@ public class AlertDecisionMessageDto implements Serializable {
 
   private String businessUnit;
 
-  private String messageId;
+  private String messageID;
 
-  private String systemId;
+  private String systemID;
 
   private StatusInfoDto status;
 

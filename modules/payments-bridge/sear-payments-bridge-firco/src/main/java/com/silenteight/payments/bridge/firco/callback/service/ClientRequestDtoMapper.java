@@ -36,8 +36,8 @@ class ClientRequestDtoMapper {
     var decision = new AlertDecisionMessageDto();
     decision.setUnit(alertDto.getUnit());
     decision.setBusinessUnit(alertDto.getBusinessUnit());
-    decision.setMessageId(alertDto.getMessageID());
-    decision.setSystemId(alertDto.getSystemID());
+    decision.setMessageID(alertDto.getMessageID());
+    decision.setSystemID(alertDto.getSystemID());
     decision.setOperator(OPERATOR);
     decision.setActions(List.of());
     decision.setAttachment(createAttachment(COMMENT));
