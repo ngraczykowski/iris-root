@@ -9,7 +9,6 @@ import com.silenteight.payments.bridge.common.dto.common.StatusInfoDto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
@@ -28,10 +27,8 @@ public class AlertDecisionMessageDto implements Serializable {
 
   private String businessUnit;
 
-  @JsonProperty("messageID")
   private String messageId;
 
-  @JsonProperty("systemID")
   private String systemId;
 
   private StatusInfoDto status;
