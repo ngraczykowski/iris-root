@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.firco.decision;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.dto.common.StatusInfoDto;
 import com.silenteight.payments.bridge.firco.decision.decisionmapping.StateMappingStrategySelector;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 class MapStatusService implements MapStatusUseCase {
 
   private static final MapStateOutput INVALID = new MapStateOutput("");
@@ -40,6 +42,8 @@ class MapStatusService implements MapStatusUseCase {
         request.getNextStatuses().isEmpty() ?
           new StatusInfoDto(null, request.getCurrentStatusName(), null, null) :
           request.getNextStatuses().iterator().next();
+    log.info("No destination status found for the request: {}. The selected replacement : {}",
+        request, invalidStatusInfo.getName());
     return DestinationStatus.createInvalid(invalidStatusInfo);
   }
 
