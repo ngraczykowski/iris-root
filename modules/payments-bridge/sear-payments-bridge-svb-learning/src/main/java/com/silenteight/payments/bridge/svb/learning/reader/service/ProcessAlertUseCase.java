@@ -15,9 +15,9 @@ import java.util.List;
 @RequiredArgsConstructor
 class ProcessAlertUseCase {
 
-  private final RegisterAlertUseCase registerAlertUseCase;
   private final CreateDataSourceValuesUseCase createDataSourceValuesUseCase;
   private final AddAlertsToAnalysisUseCase addAlertsToAnalysisUseCase;
+  private final RegisterAlertUseCase registerAlertUseCase;
 
   void processAlert(LearningAlert learningAlert) {
 

@@ -57,6 +57,21 @@ spring:
       org.hibernate.envers.audit_table_suffix: _audit
       org.hibernate.envers.store_data_at_delete: true
 
+  security:
+    oauth2:
+      client:
+        registration:
+          callback:
+            provider: external
+            client-id: testClientId
+            client-secret: testClientSecret
+            client-authentication-method: basic
+            authorization-grant-type: client_credentials
+            scope:
+        provider:
+          external:
+            token-uri: "https://somewhere/token/uri"
+
 grpc:
   server:
     in-process-name: test
@@ -64,6 +79,8 @@ grpc:
   client:
     GLOBAL:
       negotiation-type: PLAINTEXT
+    ae:
+      address: in-process:test
     pb:
       address: in-process:test
     governance:

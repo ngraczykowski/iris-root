@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.SubscribableChannel;
 import org.springframework.messaging.support.ChannelInterceptor;
 
 import java.util.List;
@@ -49,38 +50,38 @@ public class CommonChannels {
   }
 
   @Bean(ALERT_INITIALIZED)
-  public MessageChannel alertInitialized() {
+  public SubscribableChannel alertInitialized() {
     return new TypedPublishSubscribeChannel(AlertInitializedEvent.class, channelInterceptors);
   }
 
   @Bean(ALERT_UNDELIVERED)
-  public MessageChannel undeliveredAlertChannel() {
+  public SubscribableChannel undeliveredAlertChannel() {
     return new TypedPublishSubscribeChannel(AlertUndeliveredEvent.class, channelInterceptors);
   }
 
   @Bean(ALERT_REGISTERED)
-  public MessageChannel alertRegistered() {
+  public SubscribableChannel alertRegistered() {
     return new TypedPublishSubscribeChannel(AlertRegisteredEvent.class, channelInterceptors);
   }
 
   @Bean(ALERT_INPUT_ACCEPTED)
-  public MessageChannel alertInputAccepted() {
+  public SubscribableChannel alertInputAccepted() {
     return new TypedPublishSubscribeChannel(AlertInputAcceptedEvent.class, channelInterceptors);
   }
 
   @Bean(ALERT_REJECTED)
-  public MessageChannel alertRejected() {
+  public SubscribableChannel alertRejected() {
     return new TypedPublishSubscribeChannel(AlertRejectedEvent.class, channelInterceptors);
   }
 
   @Bean(RECOMMENDATION_GENERATED)
-  public MessageChannel recommendationGenerated() {
+  public SubscribableChannel recommendationGenerated() {
     return new TypedPublishSubscribeChannel(
         RecommendationGeneratedEvent.class, channelInterceptors);
   }
 
   @Bean(RECOMMENDATION_COMPLETED)
-  public MessageChannel recommendationCompleted() {
+  public SubscribableChannel recommendationCompleted() {
     return new TypedPublishSubscribeChannel(
         RecommendationCompletedEvent.class, channelInterceptors);
   }

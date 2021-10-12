@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
+import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.event.AlertInitializedEvent;
@@ -22,9 +23,9 @@ import static com.silenteight.payments.bridge.common.integration.CommonChannels.
 @MessageEndpoint
 @Slf4j
 @RequiredArgsConstructor
-class RegisterSingleAlertService {
+class RegisterAlertEndpoint {
 
-  private final CreateAlertsService createAlertsService;
+  private final RegisterAlertUseCase registerAlertUseCase;
 
   @ServiceActivator(inputChannel = ALERT_INITIALIZED, outputChannel = ALERT_REGISTERED)
   public AlertRegisteredEvent apply(AlertInitializedEvent alertInitializedEvent) {
@@ -37,7 +38,7 @@ class RegisterSingleAlertService {
         .matchIds(getMatchIds(alertDto))
         .build();
 
-    var alert = createAlertsService.createAlert(request);
+    var alert = registerAlertUseCase.register(request);
 
     return new AlertRegisteredEvent(
         UUID.fromString(alert.getAlertId()), alert.getAlertName(),
