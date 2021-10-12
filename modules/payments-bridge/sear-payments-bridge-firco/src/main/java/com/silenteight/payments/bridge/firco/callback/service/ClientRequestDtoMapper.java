@@ -26,7 +26,6 @@ class ClientRequestDtoMapper {
   private static final String ATTACHMENT_COMMENT_NAME = "comment.txt";
   private static final String COMMENT = "S8 Recommendation: Manual Investigation";
   private static final String COMMENT_CUT_MSG = " === See attachment for full comments ===";
-  private static final String OPERATOR = "Silent Eight";
   private static final int MAX_COMMENT_LENGTH = 1024;
   private final MapStatusUseCase mapStatusUseCase;
 
@@ -98,7 +97,7 @@ class ClientRequestDtoMapper {
     FircoAuthenticationDto authentication = new FircoAuthenticationDto();
     authentication.setContinuityLogin(source.getUserLogin());
     authentication.setContinuityPassword(source.getUserPassword());
-    authentication.setContinuityBusinessUnit(source.ge());
+    authentication.setContinuityBusinessUnit(source.getBusinessUnit());
     return authentication;
   }
 
