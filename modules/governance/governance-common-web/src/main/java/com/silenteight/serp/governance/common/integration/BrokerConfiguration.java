@@ -114,6 +114,11 @@ class BrokerConfiguration {
   }
 
   @Bean
+  Queue qaRetentionAlertsExpiredQueue() {
+    return queue(brokerProperties.qaRetentionAlertsExpiredQueueName());
+  }
+
+  @Bean
   Queue notificationQueue() {
     return queue(brokerProperties.notificationQueueName());
   }
