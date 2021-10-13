@@ -3,10 +3,10 @@ package com.silenteight.payments.bridge.ae.alertregistration.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.ae.alertregistration.domain.AddAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
-import com.silenteight.payments.bridge.ae.alertregistration.port.AddAlertsToAnalysisUseCase;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.TriggerAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
+import com.silenteight.payments.bridge.ae.alertregistration.port.TriggerAlertAnalysisUseCase;
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.event.AlertInitializedEvent;
@@ -28,7 +28,7 @@ import static com.silenteight.payments.bridge.common.integration.CommonChannels.
 class RegisterAlertEndpoint {
 
   private final RegisterAlertUseCase registerAlertUseCase;
-  private final AddAlertsToAnalysisUseCase addAlertsToAnalysisUseCase;
+  private final TriggerAlertAnalysisUseCase triggerAlertAnalysisUseCase;
 
   @ServiceActivator(inputChannel = ALERT_INITIALIZED, outputChannel = ALERT_REGISTERED)
   public AlertRegisteredEvent apply(AlertInitializedEvent alertInitializedEvent) {
@@ -42,15 +42,15 @@ class RegisterAlertEndpoint {
         .build();
 
     var alert = registerAlertUseCase.register(request);
-    addAlertsToAnalysisUseCase.addAlerts(
-        AddAlertRequest.builder().alertNames(List.of(alert.getAlertName())).build());
+    triggerAlertAnalysisUseCase.triggerAlertAnalysis(
+        TriggerAlertRequest.builder().alertNames(List.of(alert.getAlertName())).build());
 
     return new AlertRegisteredEvent(
         UUID.fromString(alert.getAlertId()), alert.getAlertName(),
         alert.getMatchResponsesAsMap());
   }
 
-  private List<String> getMatchIds(AlertMessageDto alertDto) {
+  private static List<String> getMatchIds(AlertMessageDto alertDto) {
     return alertDto.getHits()
         .stream()
         .map(hit -> hit.getHit().getHittedEntity().getId())

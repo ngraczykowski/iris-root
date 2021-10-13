@@ -7,11 +7,11 @@ import java.util.List;
 
 @Value
 @Builder
-public class AddAlertRequest {
+public class TriggerAlertRequest {
 
   List<String> alertNames;
 
-  public static AddAlertRequest fromAlertNames(List<String> names) {
-    return AddAlertRequest.builder().alertNames(names).build();
+  public static TriggerAlertRequest fromAlertNames(List<String> names) {
+    return TriggerAlertRequest.builder().alertNames(names).build();
   }
 }
