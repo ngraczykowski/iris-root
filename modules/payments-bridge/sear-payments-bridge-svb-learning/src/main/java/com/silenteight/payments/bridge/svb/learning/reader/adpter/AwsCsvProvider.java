@@ -36,7 +36,9 @@ class AwsCsvProvider implements CsvFileProvider {
                 .key(learningRequest.getObject())
                 .build())) {
 
-      log.info("Received S3 CSV object");
+      log.info(
+          "Received S3 CSV object with content type = {}",
+          responseInputStream.response().contentType());
 
       response = csvConsumer.apply(
           LearningCsv.fromS3Object(learningRequest.getObject(), responseInputStream));
