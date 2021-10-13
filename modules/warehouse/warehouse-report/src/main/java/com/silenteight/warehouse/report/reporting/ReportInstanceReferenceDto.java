@@ -5,5 +5,5 @@ import lombok.Value;
 @Value
 public class ReportInstanceReferenceDto {
 
-  long getInstanceReferenceId;
+  long instanceReferenceId;
 }

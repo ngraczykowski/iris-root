@@ -50,10 +50,10 @@ class CreateAccuracyReportRestController {
     log.debug(
         "Create simulation accuracy report request processed, "
             + "analysisId={}, id={}, reportId={}",
-        analysisId, id, reportInstance.getGetInstanceReferenceId());
+        analysisId, id, reportInstance.getInstanceReferenceId());
 
     return status(SEE_OTHER)
-        .header("Location", getReportLocation(reportInstance.getGetInstanceReferenceId()))
+        .header("Location", getReportLocation(reportInstance.getInstanceReferenceId()))
         .build();
   }
 
@@ -68,7 +68,7 @@ class CreateAccuracyReportRestController {
 
     log.debug("Create production accuracy report request processed, reportId={}", id);
     return status(SEE_OTHER)
-        .header("Location", getReportLocation(reportInstance.getGetInstanceReferenceId()))
+        .header("Location", getReportLocation(reportInstance.getInstanceReferenceId()))
         .build();
   }
 

@@ -38,7 +38,7 @@ class CreateBillingReportRestController {
 
     log.debug("Create billing report request processed, reportId={}", reportId);
     return status(SEE_OTHER)
-        .header("Location", "reports/" + reportInstance.getGetInstanceReferenceId() + "/status")
+        .header("Location", "reports/" + reportInstance.getInstanceReferenceId() + "/status")
         .build();
   }
 }

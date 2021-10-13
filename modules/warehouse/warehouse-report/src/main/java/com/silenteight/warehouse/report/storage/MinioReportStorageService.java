@@ -11,7 +11,6 @@ import com.silenteight.sep.filestorage.api.dto.FileDto;
 import com.silenteight.sep.filestorage.api.dto.StoreFileRequestDto;
 import com.silenteight.warehouse.report.reporting.Report;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 @Slf4j
@@ -40,7 +39,7 @@ class MinioReportStorageService implements ReportStorage {
           "Report has been successfully saved in Minio, reportName={}", report.getReportName());
 
     } catch (Exception e) {
-      throw new ReportNotSavedException("Report has not been successfully saved.", e);
+      throw new ReportNotSavedException(e);
     }
   }
 
@@ -59,7 +58,7 @@ class MinioReportStorageService implements ReportStorage {
     reportNames.forEach(this::removeReport);
   }
 
-  private StoreFileRequestDto toStoreFileRequestDto(Report report) throws FileNotFoundException {
+  private StoreFileRequestDto toStoreFileRequestDto(Report report) {
     return StoreFileRequestDto.builder()
         .storageName(bucketName)
         .fileName(report.getReportName())

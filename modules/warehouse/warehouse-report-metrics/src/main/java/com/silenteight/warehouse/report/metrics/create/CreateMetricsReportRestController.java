@@ -47,10 +47,10 @@ class CreateMetricsReportRestController {
 
     log.debug(
         "Create simulation metrics report request processed, analysisId={},id={}, reportId={}",
-        analysisId, id, reportInstance.getGetInstanceReferenceId());
+        analysisId, id, reportInstance.getInstanceReferenceId());
 
     return status(SEE_OTHER)
-        .header("Location", getReportLocation(reportInstance.getGetInstanceReferenceId()))
+        .header("Location", getReportLocation(reportInstance.getInstanceReferenceId()))
         .build();
   }
 
@@ -65,7 +65,7 @@ class CreateMetricsReportRestController {
 
     log.debug("Create production Metrics report request processed, reportId={}", id);
     return status(SEE_OTHER)
-        .header("Location", getReportLocation(reportInstance.getGetInstanceReferenceId()))
+        .header("Location", getReportLocation(reportInstance.getInstanceReferenceId()))
         .build();
   }
 
