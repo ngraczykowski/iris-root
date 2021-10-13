@@ -24,9 +24,9 @@ class RecommendationClient implements RecommendationClientPort {
   public Recommendation receiveRecommendation(GetRecommendationRequest request) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 
-    if (log.isTraceEnabled()) {
-      log.trace("Requesting recommendation: deadline={}, request={}", deadline, request);
-    }
+    log.debug(
+        "Requesting recommendation: deadline={}, recommendation={}", deadline,
+        request.getRecommendation());
 
     return stub.withDeadline(deadline).getRecommendation(request);
   }
