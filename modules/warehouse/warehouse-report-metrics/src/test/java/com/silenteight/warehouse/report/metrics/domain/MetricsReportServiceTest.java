@@ -50,9 +50,9 @@ class MetricsReportServiceTest {
         underTest.createProductionReportInstance(TYPE, PRODUCTION_ANALYSIS_NAME);
 
     // then
-    ReportDto report = query.getReport(reportInstance.getGetInstanceReferenceId());
+    ReportDto report = query.getReport(reportInstance.getInstanceReferenceId());
     assertThat(report.getFilename()).isEqualTo(TYPE.getFilename());
-    assertThat(repository.findById(reportInstance.getGetInstanceReferenceId()))
+    assertThat(repository.findById(reportInstance.getInstanceReferenceId()))
         .isPresent()
         .get()
         .extracting(MetricsReport::getState)
@@ -65,13 +65,13 @@ class MetricsReportServiceTest {
     ReportInstanceReferenceDto reportInstance =
         underTest.createProductionReportInstance(TYPE, PRODUCTION_ANALYSIS_NAME);
 
-    ReportDto report = query.getReport(reportInstance.getGetInstanceReferenceId());
+    ReportDto report = query.getReport(reportInstance.getInstanceReferenceId());
     assertThat(report.getFilename()).isEqualTo(TYPE.getFilename());
 
     // when
-    underTest.removeReport(reportInstance.getGetInstanceReferenceId());
+    underTest.removeReport(reportInstance.getInstanceReferenceId());
 
     // then
-    assertThat(repository.findById(reportInstance.getGetInstanceReferenceId())).isEmpty();
+    assertThat(repository.findById(reportInstance.getInstanceReferenceId())).isEmpty();
   }
 }

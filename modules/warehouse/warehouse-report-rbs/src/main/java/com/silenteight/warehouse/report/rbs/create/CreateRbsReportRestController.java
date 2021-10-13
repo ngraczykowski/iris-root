@@ -38,7 +38,7 @@ class CreateRbsReportRestController {
 
     log.debug("Create production RB Scorer report request processed, reportId={}", reportId);
     return status(SEE_OTHER)
-        .header("Location", "reports/" + reportInstance.getGetInstanceReferenceId() + "/status")
+        .header("Location", "reports/" + reportInstance.getInstanceReferenceId() + "/status")
         .build();
   }
 
@@ -58,7 +58,7 @@ class CreateRbsReportRestController {
         analysisId, reportId);
 
     return status(SEE_OTHER)
-        .header("Location", "reports/" + reportInstance.getGetInstanceReferenceId() + "/status")
+        .header("Location", "reports/" + reportInstance.getInstanceReferenceId() + "/status")
         .build();
   }
 }

@@ -52,10 +52,10 @@ class CreateAiReasoningReportRestController {
     log.debug(
         "Create simulation AI Reasoning report request processed, "
             + "analysisId={}, id={}, reportId={}",
-        analysisId, id, reportInstance.getGetInstanceReferenceId());
+        analysisId, id, reportInstance.getInstanceReferenceId());
 
     return status(SEE_OTHER)
-        .header("Location", getReportLocation(reportInstance.getGetInstanceReferenceId()))
+        .header("Location", getReportLocation(reportInstance.getInstanceReferenceId()))
         .build();
   }
 
@@ -70,7 +70,7 @@ class CreateAiReasoningReportRestController {
 
     log.debug("Create production AI Reasoning report request processed, reportId={}", id);
     return status(SEE_OTHER)
-        .header("Location", getReportLocation(reportInstance.getGetInstanceReferenceId()))
+        .header("Location", getReportLocation(reportInstance.getInstanceReferenceId()))
         .build();
   }
 

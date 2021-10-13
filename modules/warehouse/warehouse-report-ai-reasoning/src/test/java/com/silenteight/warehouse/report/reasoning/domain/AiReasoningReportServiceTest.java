@@ -43,7 +43,7 @@ class AiReasoningReportServiceTest {
         underTest.createReportInstance(TYPE, PRODUCTION_ANALYSIS_NAME, of(), PROPERTIES);
 
     // then
-    long instanceReferenceId = reportInstance.getGetInstanceReferenceId();
+    long instanceReferenceId = reportInstance.getInstanceReferenceId();
     Optional<AiReasoningReport> report = repository.findById(instanceReferenceId);
     assertThat(report)
         .isPresent()
