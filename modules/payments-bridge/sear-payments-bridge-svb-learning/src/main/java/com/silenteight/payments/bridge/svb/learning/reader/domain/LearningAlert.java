@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.Value;
 import lombok.experimental.NonFinal;
 
-import com.silenteight.payments.bridge.ae.alertregistration.domain.HitAmount;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.MatchQuantity;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 
@@ -37,7 +37,7 @@ public class LearningAlert {
         .builder()
         .alertId(alertId)
         .alertTime(alertTime)
-        .hitAmount(hitCount > 0 ? HitAmount.MULTIPLE : HitAmount.SINGLE)
+        .matchQuantity(hitCount > 0 ? MatchQuantity.MULTIPLE : MatchQuantity.SINGLE)
         .matchIds(matches.stream().map(
             LearningMatch::getMatchId).collect(toList()))
         .build();

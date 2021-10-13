@@ -28,7 +28,7 @@ public class RegisterAlertRequest {
 
   List<String> matchIds;
 
-  HitAmount hitAmount;
+  MatchQuantity matchQuantity;
 
   public BatchCreateAlertMatchesRequest toCreateMatchesRequest(String alertName) {
     if (matchIds.isEmpty())
@@ -60,8 +60,8 @@ public class RegisterAlertRequest {
     if (alertTime != null) {
       alert.setAlertTime(alertTime);
     }
-    if (hitAmount != null) {
-      alert.putLabels("hitAmount", hitAmount.name().toLowerCase(Locale.ROOT));
+    if (matchQuantity != null) {
+      alert.putLabels("matchQuantity", matchQuantity.name().toLowerCase(Locale.ROOT));
     }
     return CreateAlertRequest.newBuilder().setAlert(alert.build()).build();
   }
