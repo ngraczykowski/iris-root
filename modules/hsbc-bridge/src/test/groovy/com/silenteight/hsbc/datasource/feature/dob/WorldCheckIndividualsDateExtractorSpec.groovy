@@ -10,7 +10,7 @@ class WorldCheckIndividualsDateExtractorSpec extends Specification {
     given:
     def given = [
         [
-            getDobs       : {"22 12 1990"},
+            getDobs       : {"01 01 1900"},
             getYearOfBirth: {"1994"}
         ] as WorldCheckIndividual,
         [
@@ -23,6 +23,6 @@ class WorldCheckIndividualsDateExtractorSpec extends Specification {
     def actual = new WorldCheckIndividualsDateExtractor(given).extract()
 
     then:
-    actual.collect().containsAll(["22 12 1990", "1961", "1963", "1964-04-07", "1994"])
+    actual.collect() == ["01 01 1900", "1961", "1963", "1964-04-07", "1994"]
   }
 }

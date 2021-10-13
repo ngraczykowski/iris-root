@@ -2,16 +2,16 @@ package com.silenteight.hsbc.datasource.feature.dob;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.compile;
+import static java.util.stream.Stream.of;
 
 @RequiredArgsConstructor
 class DobDeviationsFilter implements Predicate<String> {
 
-  private static final Predicate<String> FILTERED_PATTERNS_PREDICATE = List.of(
+  private static final Predicate<String> FILTERED_PATTERNS_PREDICATE = of(
       compile("^0$"),
       compile("^(00:)*00\\.0$"),
       compile("^9999.*$"),
@@ -20,7 +20,6 @@ class DobDeviationsFilter implements Predicate<String> {
       compile("^11971031$"),
       compile("^1901-01-01$")
   )
-      .stream()
       .map(Pattern::asMatchPredicate)
       .reduce(Predicate::or)
       .get();

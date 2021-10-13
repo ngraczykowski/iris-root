@@ -10,7 +10,7 @@ class PrivateListIndividualsDateExtractorSpec extends Specification {
     given:
     def given = [
         [
-            getDateOfBirth: {"22 12 1990"},
+            getDateOfBirth: {"01 01 1900"},
             getYearOfBirth: {"1994"}
         ] as PrivateListIndividual,
         [
@@ -23,6 +23,6 @@ class PrivateListIndividualsDateExtractorSpec extends Specification {
     def actual = new PrivateListIndividualsDateExtractor(given).extract()
 
     then:
-    actual.collect().containsAll(["22 12 1990", "10 10 2012"])
+    actual.collect() == ["01 01 1900", "10 10 2012", "1994"]
   }
 }
