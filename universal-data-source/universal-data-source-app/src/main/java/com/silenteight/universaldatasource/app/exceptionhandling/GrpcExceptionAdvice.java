@@ -1,5 +1,7 @@
 package com.silenteight.universaldatasource.app.exceptionhandling;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.universaldatasource.app.category.service.CategoryException;
 import com.silenteight.universaldatasource.app.category.service.CategoryValueException;
 import com.silenteight.universaldatasource.app.feature.service.MatchFeatureInputMappingException;
@@ -11,6 +13,7 @@ import net.devh.boot.grpc.server.advice.GrpcExceptionHandler;
 import java.util.NoSuchElementException;
 import javax.validation.ConstraintViolationException;
 
+@Slf4j
 @GrpcAdvice
 public class GrpcExceptionAdvice {
 
@@ -40,6 +43,7 @@ public class GrpcExceptionAdvice {
   }
 
   private static Status getStatusWithDescription(Status status, Exception e) {
+    log.error(status.getDescription(), e);
     return status.withDescription(e.getMessage()).withCause(e);
   }
 }
