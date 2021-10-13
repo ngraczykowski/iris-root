@@ -24,12 +24,12 @@ import com.silenteight.warehouse.indexer.simulation.analysis.AnalysisModule;
 import com.silenteight.warehouse.management.ManagementModule;
 import com.silenteight.warehouse.report.accuracy.AccuracyReportModule;
 import com.silenteight.warehouse.report.billing.BillingReportModule;
-import com.silenteight.warehouse.report.metrics.MetricsReportModule;
+import com.silenteight.warehouse.report.metrics.DeprecatedMetricsReportModule;
 import com.silenteight.warehouse.report.rbs.RbsReportModule;
 import com.silenteight.warehouse.report.reasoning.AiReasoningReportModule;
 import com.silenteight.warehouse.report.remove.ReportsRemovalModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
-import com.silenteight.warehouse.report.simulation.SimulationModule;
+import com.silenteight.warehouse.report.simulation.DeprecatedSimulationModule;
 import com.silenteight.warehouse.report.statistics.ReportStatisticsModule;
 import com.silenteight.warehouse.report.storage.StorageModule;
 import com.silenteight.warehouse.sampling.SamplingModule;
@@ -56,9 +56,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AnalysisModule.class,
     BackupModule.class,
     BillingReportModule.class,
+    DeprecatedMetricsReportModule.class,
     IndexTrackingModule.class,
     ManagementModule.class,
-    MetricsReportModule.class,
     ProductionMessageHandlerModule.class,
     RbsReportModule.class,
     ReportStatisticsModule.class,
@@ -69,13 +69,13 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AmqpCommonModule.class,
     AuthenticationModule.class,
     AuthorizationModule.class,
+    DeprecatedSimulationModule.class,
     ElasticsearchRestClientModule.class,
     EnvironmentModule.class,
     FileStorageMinioModule.class,
     OpendistroModule.class,
     ReportingModule.class,
     ReportsRemovalModule.class,
-    SimulationModule.class,
     StorageModule.class,
     TokenModule.class,
     TimeModule.class,
