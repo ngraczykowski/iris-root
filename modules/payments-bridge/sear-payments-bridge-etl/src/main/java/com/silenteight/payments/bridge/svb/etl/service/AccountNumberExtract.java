@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.svb.etl.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure.MessageStructureSts;
 import com.silenteight.payments.bridge.svb.etl.model.GetAccountNumberRequest;
@@ -18,6 +19,7 @@ import static com.silenteight.payments.bridge.svb.etl.util.CommonUtils.createOne
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class AccountNumberExtract implements GetAccountNumberUseCase {
 
   @Override
@@ -45,6 +47,8 @@ public class AccountNumberExtract implements GetAccountNumberUseCase {
     } else if (sourceSystem.contains("DTP")) {
       return processDtp(trimmedTag, matchingField);
     }
+
+    log.warn("couldn't match source system to extract account number");
 
     return null;
   }

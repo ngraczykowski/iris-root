@@ -32,19 +32,20 @@ class ReadAlertsUseCase {
         .withColumnSeparator(',');
 
     return csvFileProvider.getLearningCsv(learningRequest, learningCsv -> {
+      AlertsReadingResponse alertsReadingResponse = null;
       try {
         MappingIterator<LearningCsvRow> it = mapper
             .readerFor(LearningCsvRow.class)
             .with(schema)
             .readValues(learningCsv.getContent());
-        var alertsReadingResponse = readByAlerts(it, alertConsumer);
+        alertsReadingResponse = readByAlerts(it, alertConsumer);
         alertsReadingResponse.setObjectData(learningCsv);
 
         return alertsReadingResponse;
       } catch (Exception e) {
-        log.error("There was a problem when processing alert = {}", e.getMessage());
-        throw new ReadAlertException(e);
+        log.error("There was a problem when processing alert: ", e);
       }
+      return alertsReadingResponse;
     });
   }
 
