@@ -39,7 +39,7 @@ import static org.awaitility.Awaitility.await;
 @SpringBootTest(classes = PaymentsBridgeApplication.class)
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
 @Slf4j
-@ActiveProfiles({"mockae", "mockdatasource", "test"})
+@ActiveProfiles({"mockae", "mockdatasource", "mockgovernance", "test"})
 class PaymentsBridgeApplicationTests {
 
   private static final String SAMPLE_REQUESTS_DIR = "requests";
@@ -121,7 +121,7 @@ class PaymentsBridgeApplicationTests {
   private DomainEventRecorder createTooManyHitsEventRecorder() {
     var recorder = new DomainEventRecorder();
     recorder.subscribe(AlertStoredEvent.class, channels.alertStored());
-    recorder.subscribe(AlertRejectedEvent.class, channels.alertRejected());
+    recorder.subscribe(RecommendationCompletedEvent.class, channels.recommendationCompleted());
     return recorder;
   }
 

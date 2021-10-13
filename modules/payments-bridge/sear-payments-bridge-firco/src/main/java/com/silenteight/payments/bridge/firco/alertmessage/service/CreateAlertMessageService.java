@@ -22,6 +22,8 @@ class CreateAlertMessageService implements CreateAlertMessageUseCase {
   @Transactional
   @Override
   public void createAlertMessage(FircoAlertMessage message) {
+    log.info("Creating alert [{}] from message: [{}]",
+        message.getId(), message.getAlertMessage().getMessageID());
     persistAlertMessageService.createAlertMessage(message);
     alertMessageStatusService.initState(message.getId());
     applicationEventPublisher.publishEvent(message);

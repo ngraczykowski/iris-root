@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.common.model.AlertId;
-import com.silenteight.payments.bridge.firco.alertmessage.port.AcceptAlertMessageUseCase;
+import com.silenteight.payments.bridge.firco.alertmessage.port.FilterAlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.callback.port.CreateResponseUseCase;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -18,13 +18,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.ACCEPTED;
-import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_DAMAGED;
 
 @Service
 @EnableConfigurationProperties(AlertMessageProperties.class)
 @RequiredArgsConstructor
 @Slf4j
-class AcceptAlertMessageService implements AcceptAlertMessageUseCase {
+class FilterAlertMessageService implements FilterAlertMessageUseCase {
 
   private final AlertMessageProperties alertMessageProperties;
   private final AlertMessageStatusService alertMessageStatusService;
@@ -33,12 +32,14 @@ class AcceptAlertMessageService implements AcceptAlertMessageUseCase {
   @Setter private Clock clock = Clock.systemUTC();
 
   @Override
-  public boolean test(AlertId alert) {
-
+  public boolean isResolvedOrOutdated(AlertId alert) {
     var status = alertMessageStatusService.findByAlertId(alert.getAlertId());
-    return !isTransitionForbidden(status) &&
-        !isRequiredResolutionTimeElapsed(status) &&
-        !isMaxHitsPerAlertExceeded(alert);
+    return isTransitionForbidden(status) || isRequiredResolutionTimeElapsed(status);
+  }
+
+  @Override
+  public boolean hasTooManyHits(AlertId alert) {
+    return isMaxHitsPerAlertExceeded(alert);
   }
 
   private boolean isTransitionForbidden(AlertMessageStatusEntity alertMessageStatus) {
@@ -73,15 +74,11 @@ class AcceptAlertMessageService implements AcceptAlertMessageUseCase {
         .orElse(0);
 
     if (alertMessageProperties.getMaxHitsPerAlert() < numberOfHits) {
-      log.debug(
-          "The AlertMessage [{}] has too many hits. Skipping further processing.",
-          alertId);
-
-      createResponseUseCase.createResponse(alertId, REJECTED_DAMAGED);
-      alertMessageStatusService.transitionAlertMessageStatus(alertId, REJECTED_DAMAGED);
+      log.info(
+          "The AlertMessage [{}] has too many hits [{}]. Responding with MANUAL_INVESTIGATION",
+          alertId, numberOfHits);
       return true;
     }
-
     return false;
   }
 
