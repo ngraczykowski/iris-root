@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package silenteight.agent.strictname.v1.api;
+
+option java_package = "com.silenteight.proto.agent.strictname.v1.api";
+option java_outer_classname = "StrictNameAgentApiProto";
+option java_multiple_files = true;
+
+service StrictNameAgent {
+
+  rpc CompareStrictNames (CompareStrictNamesRequest) returns (CompareStrictNamesResponse) {
+  }
+}
+
+message CompareStrictNamesRequest {
+  string alerted_party_name = 1;
+  string watchlist_party_name = 2;
+}
+
+message CompareStrictNamesResponse {
+  string solution = 1;
+  string reason = 2;
+  string alerted_party_name = 3;
+  string watchlist_party_name = 4;
+}
