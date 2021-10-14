@@ -754,3 +754,9 @@ databaseChangeLog:
                   name: name
             indexName: idx_bridge_match_category_name
             tableName: hsbc_bridge_match_category
+
+  - changeSet:
+      id: 1.0.0-29
+      author: awojcicki
+      changes:
+        - sql: ALTER TABLE hsbc_bridge_recommendation RENAME CONSTRAINT const_alert TO unique_recommendation_alert;
