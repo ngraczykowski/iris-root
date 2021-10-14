@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -37,7 +39,7 @@ class ReadAlertsUseCase {
         MappingIterator<LearningCsvRow> it = mapper
             .readerFor(LearningCsvRow.class)
             .with(schema)
-            .readValues(learningCsv.getContent());
+            .readValues(new InputStreamReader(learningCsv.getContent(), Charset.forName("CP1250")));
         alertsReadingResponse = readByAlerts(it, alertConsumer);
         alertsReadingResponse.setObjectData(learningCsv);
 
@@ -72,15 +74,16 @@ class ReadAlertsUseCase {
         continue;
       }
 
-      currentAlertID = rowAlertId;
       try {
         alertConsumer.accept(createLearningAlertUseCase.fromCsvRows(alertRows));
+        log.debug("Successfully processed alert = {}", currentAlertID);
         successfulAlertsCount++;
       } catch (RuntimeException e) {
         log.error("Failed to process alert = {} reason = {}", rowAlertId, e.getMessage());
         errors.add(ReadAlertError.builder().alertId(rowAlertId).exception(e).build());
         failedAlertsCount++;
       }
+      currentAlertID = rowAlertId;
       alertRows.clear();
       alertRows.add(row);
     }
