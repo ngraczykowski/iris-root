@@ -65,7 +65,8 @@ class AlertMessageStatusEntity extends BaseVersionedEntity {
       return TransitionResult.FAILED;
     }
 
-    if (this.status.isFinal() && this.status == destinationStatus && this.deliveryStatus.isFinal()) {
+    if (this.status.isFinal() && this.status == destinationStatus
+        && this.deliveryStatus.isFinal()) {
       return deliveryStatus == PENDING ?
              TransitionResult.IGNORED : TransitionResult.FAILED;
     }
