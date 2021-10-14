@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package silenteight.agent.dummy.v1.api;
+
+option java_package = "com.silenteight.proto.agent.dummy.v1.api";
+option java_outer_classname = "DummyAgentApiProto";
+option java_multiple_files = true;
+
+/**
+  This proto is meant only as a placeholder for agent template.
+ */
+service DummyAgent {
+
+  rpc Solve (SolveRequest) returns (SolveResponse) {
+  }
+}
+
+message SolveRequest {
+  string input = 1;
+}
+
+message SolveResponse {
+  string solution = 1;
+}
+
