@@ -1,3 +1,8 @@
 @Library('pipeline-shared-library') _
 
-gradleBuild(jdkVersion: 'jdk-11', archiveArtifactsPattern: '**/build/libs/*.jar')
+gradleBuild(
+    jdkVersion: 'jdk-11',
+    sonarEnabled: true,
+    failPipeline: true,
+    dependencyCheckEnabled: true,
+    archiveArtifactsPattern: '**/build/libs/*.jar')
