@@ -11,15 +11,16 @@ option java_multiple_files = true;
  */
 service DummyAgent {
 
-  rpc Solve (SolveRequest) returns (SolveResponse) {
+  rpc SolveDummy (SolveDummyRequest) returns (SolveDummyResponse) {
   }
 }
 
-message SolveRequest {
-  string input = 1;
+message SolveDummyRequest {
+  string alertedPartyInput = 1;
+  string watchlistInput = 2;
 }
 
-message SolveResponse {
+message SolveDummyResponse {
   string solution = 1;
 }
 
