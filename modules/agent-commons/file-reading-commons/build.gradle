@@ -7,8 +7,12 @@ plugins {
 description = "Agent File Reading Common"
 
 dependencies {
+  implementation project(":agent-config-loader")
+
   api libraries.univocity_parsers
   implementation libraries.guava
+  implementation libraries.commons_lang3
+  implementation libraries.commons_csv
 
   testImplementation libraries.spock_core
 

@@ -55,6 +55,7 @@ libraries.byte_buddy = "net.bytebuddy:byte-buddy:$byteBuddyVersion"
 libraries.byte_buddy_agent = "net.bytebuddy:byte-buddy-agent:$byteBuddyVersion"
 libraries.commons_lang3 = "org.apache.commons:commons-lang3"
 libraries.commons_text = "org.apache.commons:commons-text"
+libraries.commons_csv = "org.apache.commons:commons-csv"
 
 // gRPC
 libraries.grpc_api = "io.grpc:grpc-api"
