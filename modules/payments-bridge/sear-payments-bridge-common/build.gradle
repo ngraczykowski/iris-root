@@ -14,5 +14,9 @@ dependencies {
   implementation libraries.jakarta_annotation_api
   implementation libraries.jakarta_validation_api
 
+  // Hibernate validators
+  implementation libraries.hibernate_validator
+  implementation libraries.jakarta_el
+
   implementation libraries.adjudication_engine_api
 }

@@ -27,6 +27,7 @@ public class RequestSendMessageDto implements Serializable {
   /**
    * List of parameters used to connect to Case Manager, it is Payments Bridge in our case.
    */
+  @Valid
   private CaseManagerAuthenticationDto authentication;
 
   @Size(min = 1)

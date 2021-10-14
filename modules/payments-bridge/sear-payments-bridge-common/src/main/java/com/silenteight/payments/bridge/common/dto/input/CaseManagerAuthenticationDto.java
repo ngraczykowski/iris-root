@@ -5,10 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import com.silenteight.payments.bridge.common.dto.validator.MinimalAlertDefinition;
+
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
+import javax.validation.constraints.NotEmpty;
 
 @Data
 @AllArgsConstructor
@@ -21,12 +24,14 @@ public class CaseManagerAuthenticationDto implements Serializable {
   /**
    * Case manager login.
    */
+  @NotEmpty(groups = MinimalAlertDefinition.class)
   private String userLogin;
 
   /**
    * Case manager password.
    */
   @ToString.Exclude
+  @NotEmpty(groups = MinimalAlertDefinition.class)
   private String userPassword;
 
   /**
