@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
+import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure;
 import com.silenteight.payments.bridge.svb.etl.model.CreateAlertedPartyEntitiesRequest;
 import com.silenteight.payments.bridge.svb.etl.model.ExtractAlertedPartyDataRequest;
@@ -62,6 +63,7 @@ class CreateLearningMatchUseCase {
         .hitTag(rows.get(0).getFkcoVMatchedTag())
         .allMatchFieldsValue(createAllMatchFieldsValue(messageStructure))
         .alertedPartyEntity(createAlertedPartyEntities(alertedPartyData, matchingTexts))
+        .watchlistType(WatchlistType.ofCode(rows.get(0).getFkcoVListType()))
         .build();
   }
 
