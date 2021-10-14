@@ -99,4 +99,14 @@
       <column name="created_at"/>
     </createIndex>
   </changeSet>
+
+  <changeSet id="warehouse-1.9.0-5" author="plewandowski">
+    <addColumn tableName="warehouse_report_metrics">
+      <column name="file_name" type="VARCHAR(64)"/>
+    </addColumn>
+    <dropNotNullConstraint columnName="report_type"
+                           tableName="warehouse_report_metrics"/>
+    <dropNotNullConstraint columnName="analysis"
+                           tableName="warehouse_report_metrics"/>
+  </changeSet>
 </databaseChangeLog>

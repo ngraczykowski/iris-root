@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @ConstructorBinding
 @AllArgsConstructor
 @Getter
-class GroupingColumnProperties implements Column {
+class GroupingColumnProperties {
 
   @NotNull
   private final String name;
@@ -19,7 +19,7 @@ class GroupingColumnProperties implements Column {
   private final String sourcePattern;
   private final String targetPattern;
 
-  public boolean isDateColumn() {
+  boolean isDateColumn() {
     return sourcePattern != null && targetPattern != null;
   }
 }

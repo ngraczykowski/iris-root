@@ -8,7 +8,7 @@ import com.silenteight.warehouse.indexer.query.common.QueryFilter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import javax.validation.Valid;
 
@@ -42,6 +42,7 @@ public class PropertiesDefinition {
   @Valid
   @NotNull
   private ColumnProperties qaDecisionField;
+  @Valid
   @Nullable
   private List<FilterProperties> filters;
 
@@ -55,10 +56,9 @@ public class PropertiesDefinition {
 
   @NotNull
   List<String> getStaticFields() {
-    return of(country, riskType, dateField, hitType)
-        .stream()
+    return Stream.of(country, riskType, dateField, hitType)
         .map(GroupingColumnProperties::getName)
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 
   List<GroupingColumnProperties> getGroupingColumns() {
