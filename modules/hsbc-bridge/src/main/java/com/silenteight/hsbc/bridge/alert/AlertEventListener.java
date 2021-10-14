@@ -38,11 +38,9 @@ class AlertEventListener {
         .map(AlertRecommendationInfo::getAlert)
         .collect(toList());
 
-    log.debug("Received newRecommendationsEvent, analysis={}, no of alerts={}",
-        event.getAnalysis(), alerts.size());
+    log.info("Received Recommendations analysis={}, no of alerts={}", event.getAnalysis(), alerts.size());
 
     updater.updateWithRecommendationReadyStatus(alerts);
-
     eventPublisher.publishEvent(new RecalculateAnalysisStatusEvent(event.getAnalysis()));
   }
 

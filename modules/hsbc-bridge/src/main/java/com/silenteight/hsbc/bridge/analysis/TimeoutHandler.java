@@ -29,6 +29,7 @@ class TimeoutHandler {
   }
 
   private void tryToHandleAnalysis(AnalysisEntity entity) {
+    log.info("Analysis with id: {} and name: {}. Timeout handling started.", entity.getId(), entity.getName());
     try {
       handleAnalysis(entity);
     } catch (RuntimeException ex) {
@@ -44,6 +45,7 @@ class TimeoutHandler {
       handleTimeoutError(entity);
     } else {
       handleCompletedAnalysis(entity);
+      log.info("Analysis with id: {} and name: {}. Timeout handling completed.", entity.getId(), entity.getName());
     }
   }
 

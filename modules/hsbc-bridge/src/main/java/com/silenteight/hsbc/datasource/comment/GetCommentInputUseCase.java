@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.datasource.comment;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.match.MatchComposite;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
@@ -18,6 +19,7 @@ import java.util.stream.Stream;
 
 import static java.util.Collections.sort;
 
+@Slf4j
 @RequiredArgsConstructor
 public class GetCommentInputUseCase {
 
@@ -28,6 +30,7 @@ public class GetCommentInputUseCase {
 
   @Transactional(readOnly = true)
   public List<CommentInputDto> getInputRequestsResponse(StreamCommentInputsRequestDto request) {
+    log.info("Create comments request received.");
     var alertsSorted = new ArrayList<>(request.getAlerts());
     sort(alertsSorted);
 
@@ -50,6 +53,7 @@ public class GetCommentInputUseCase {
                 .matchCommentInputsDto(createMatchCommentInputs(match))
                 .build()));
 
+    log.info("Comment inputs created.");
     return commentInputs;
   }
 

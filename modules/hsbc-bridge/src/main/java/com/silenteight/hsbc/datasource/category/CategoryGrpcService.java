@@ -29,6 +29,8 @@ class CategoryGrpcService extends CategoryServiceImplBase {
       BatchGetMatchCategoryValuesRequest request,
       StreamObserver<BatchGetMatchCategoryValuesResponse> responseObserver) {
     responseObserver.onNext(getMatchCategoryValues(request));
+
+    log.info("Category values has been sent.");
     responseObserver.onCompleted();
   }
 
@@ -41,7 +43,7 @@ class CategoryGrpcService extends CategoryServiceImplBase {
 
   private BatchGetMatchCategoryValuesResponse getMatchCategoryValues(
       BatchGetMatchCategoryValuesRequest request) {
-    log.info("NOMAD: received getMatchCategoryValues request: " + request.getMatchValuesList());
+    log.info("Received getMatchCategoryValues request: " + request.getMatchValuesList());
 
     var command = GetMatchCategoryValuesCommand.builder()
         .matchValues(request.getMatchValuesList())

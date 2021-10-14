@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.util.Optional.*;
+import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
 @Slf4j
@@ -27,7 +27,7 @@ class RecommendationHandler {
   private final ApplicationEventPublisher eventPublisher;
 
   void getAndStoreRecommendations(@NonNull String analysis) {
-    log.info("Get and store recommendations for analysis={}", analysis);
+    log.info("Storing recommendations for analysis={}", analysis);
 
     tryToGetRecommendations(analysis).ifPresent(recommendations -> {
       storeRecommendationsUseCase.store(recommendations);

@@ -18,15 +18,17 @@ class AlertUpdater {
 
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void updateNames(@NonNull Map<Long, String> alertIdWithName) {
-    alertIdWithName.forEach((k,v) -> {
+    alertIdWithName.forEach((k, v) -> {
       var findResult = repository.findById(k);
 
       findResult.ifPresent(alert -> {
         alert.setName(v);
         alert.setStatus(AlertStatus.PROCESSING);
         repository.save(alert);
+        log.trace("Alert id:{} stored with name:{}", k, v);
       });
     });
+    log.info("Alerts names have been updated. Status: PROCESSING.");
   }
 
   @Transactional
@@ -35,12 +37,12 @@ class AlertUpdater {
       alert.setStatus(AlertStatus.RECOMMENDATION_READY);
       repository.save(alert);
     });
-
-    log.debug("Alert with names: {} has not been updated", names);
+    log.info("Alerts statuses have been updated. Status: RECOMMENDATION_READY.");
   }
 
   @Transactional
   public void updateWithCompletedStatus(@NonNull List<String> alerts) {
     repository.updateStatusByNames(AlertStatus.COMPLETED, alerts);
+    log.info("Alerts statuses have been updated. Status: COMPLETED.");
   }
 }

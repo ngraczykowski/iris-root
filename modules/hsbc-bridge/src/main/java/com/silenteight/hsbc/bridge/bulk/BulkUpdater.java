@@ -6,7 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.*;
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.ERROR;
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSED;
+import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSING;
+
 
 @RequiredArgsConstructor
 @Slf4j
@@ -20,6 +24,7 @@ class BulkUpdater {
         .ifPresent(bulk -> {
           bulk.error("Analysis timeout exception");
           bulkRepository.save(bulk);
+          log.error("Set batch with id:{} status ERROR", bulk.getId());
         });
   }
 
@@ -28,7 +33,7 @@ class BulkUpdater {
     bulkRepository.findByAnalysisName(analysis).ifPresent(bulk -> {
       bulk.setStatus(COMPLETED);
       bulkRepository.save(bulk);
-      log.info("Solving batch {} has been completed", bulk.getId());
+      log.info("Solving batch with id:{} has been completed", bulk.getId());
     });
   }
 
@@ -37,7 +42,7 @@ class BulkUpdater {
     bulkRepository.findById(bulkId).ifPresent(b -> {
       b.setStatus(PRE_PROCESSED);
       bulkRepository.save(b);
-      log.info("Set batch {} status PRE_PROCESSED", bulkId);
+      log.info("Set batch with id:{} status PRE_PROCESSED", bulkId);
     });
   }
 
@@ -46,7 +51,7 @@ class BulkUpdater {
     bulkRepository.findById(bulkId).ifPresent(b -> {
       b.setStatus(PRE_PROCESSING);
       bulkRepository.save(b);
-      log.info("Set batch {} status PRE_PROCESSING", bulkId);
+      log.info("Set batch with id:{} status PRE_PROCESSING", bulkId);
     });
   }
 
@@ -55,6 +60,7 @@ class BulkUpdater {
     bulkRepository.findByAnalysisName(analysis).ifPresent(bulk -> {
       bulk.setStatus(ERROR);
       bulkRepository.save(bulk);
+      log.error("Set batch with id:{} status ERROR", bulk.getId());
     });
   }
 }

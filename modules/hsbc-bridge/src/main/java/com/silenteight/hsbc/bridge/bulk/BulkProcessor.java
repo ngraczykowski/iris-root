@@ -35,7 +35,7 @@ class BulkProcessor {
   @Transactional
   public void tryToProcessBulk() {
     bulkRepository.findFirstByStatusOrderByCreatedAtAsc(PRE_PROCESSING).ifPresent(bulk -> {
-      log.info("Processing bulk id: {}", bulk.getId());
+      log.debug("Pre_Processing batch taken to process id: {}", bulk.getId());
 
       try {
         if (bulk.isLearning()) {
@@ -44,8 +44,8 @@ class BulkProcessor {
           processSolvingBulk(bulk);
         }
       } catch (Exception exception) {
-        log.error("Bulk processing failed!", exception);
-        bulk.error("Bulk processing failed due to: " + exception.getMessage());
+        log.error("Batch processing failed!", exception);
+        bulk.error("Batch processing failed due to: " + exception.getMessage());
       }
 
       bulkRepository.save(bulk);
@@ -61,7 +61,7 @@ class BulkProcessor {
 
     bulk.setAnalysisId(analysisId);
     bulk.setStatus(PROCESSING);
-    log.info("Set batch {} status PROCESSING", bulk.getId());
+    log.info("Batch sent to AE: {}. Status set to PROCESSING", bulk.getId());
   }
 
   private void processLearningBulk(Bulk bulk) {
@@ -74,7 +74,7 @@ class BulkProcessor {
         getUnregisteredAlerts(alerts, registeredAlerts);
 
     log.info(
-        "Picked up learning bulk id: {}, with size of: {} registeredAlerts and {} unregisteredAlerts",
+        "Picked up learning batch id: {}, with size of: {} registeredAlerts and {} unregisteredAlerts",
         bulk.getId(),
         registeredAlerts.size(),
         unregisteredAlerts.size());
@@ -84,7 +84,7 @@ class BulkProcessor {
     processLearningAlerts(alerts, unregisteredAlerts);
 
     bulk.setStatus(COMPLETED);
-    log.info("Learning batch {} has been completed", bulk.getId());
+    log.info("Learning batch {} has been completed. Status set to COMPLETED", bulk.getId());
   }
 
   private void register(Collection<BulkAlertEntity> unregisteredAlerts) {

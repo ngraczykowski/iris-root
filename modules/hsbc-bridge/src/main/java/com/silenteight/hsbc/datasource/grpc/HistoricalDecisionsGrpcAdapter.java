@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.datasource.grpc;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.datasource.extractors.historical.*;
 import com.silenteight.hsbc.datasource.extractors.historical.ModelKeyDto.ModelKeyType;
@@ -15,6 +16,7 @@ import java.util.List;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RequiredArgsConstructor
 public class HistoricalDecisionsGrpcAdapter implements HistoricalDecisionsServiceClient {
 
@@ -29,7 +31,12 @@ public class HistoricalDecisionsGrpcAdapter implements HistoricalDecisionsServic
         .addAllModelKeys(requestMapToModelKeys(request.getModelKeys()))
         .build();
 
+    log.debug("Datasource sending HistoricalDecisions grpc request: {}.", grpcRequest);
+
     var response = getBlockingStub().batchGetHistoricalDecisionsModelCounts(grpcRequest);
+
+    log.debug(
+        "Datasource received HistoricalDecisions grpc response: modelCountsList={}.", response.getModelCountsList());
 
     return GetHistoricalDecisionsResponseDto.builder()
         .modelCounts(mapToModelCountsDto(response.getModelCountsList()))
