@@ -9,8 +9,8 @@ option java_outer_classname = "FreeTextAgentApiProto";
 option java_multiple_files = true;
 
 service FreeTextAgent {
-    rpc CompareFreeText (CompareFreeTextRequest) returns (stream CompareFreeTextResponse) {
-    }
+  rpc CompareFreeText (CompareFreeTextRequest) returns (stream CompareFreeTextResponse) {
+  }
 }
 
 message CompareFreeTextRequest {
@@ -25,5 +25,6 @@ message CompareFreeTextRequest {
 message CompareFreeTextResponse {
   string solution = 1;
   string context = 2;
+  string error_message = 3;
 }
 
