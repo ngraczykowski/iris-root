@@ -86,6 +86,9 @@ spec:
             - mountPath: /etc/logback.xml
               name: logback-config
               subPath: logback-config-file
+            - mountPath: /etc/logback-defaults.xml
+              name: logback-config
+              subPath: logback-defaults-file
           ports:
             - containerPort: 8080
               name: http
