@@ -8,8 +8,10 @@ import com.silenteight.payments.bridge.common.model.SimpleAlertId;
 import com.silenteight.payments.bridge.event.AlertInitializedEvent;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.port.FilterAlertMessageUseCase;
+import com.silenteight.payments.bridge.firco.callback.port.SendResponseUseCase;
 import com.silenteight.payments.common.resource.ResourceName;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
+import com.silenteight.proto.payments.bridge.internal.v1.event.ResponseCompleted;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -38,9 +40,12 @@ class FircoInboundAmqpIntegrationConfiguration {
   private final CommonChannels commonChannels;
   private final FilterAlertMessageUseCase alertMessageUseCase;
 
+  // TODO
+  private final SendResponseUseCase sendResponseUseCase;
+
   @Bean
   IntegrationFlow messageStoredInbound() {
-    return from(createInboundAdapter(properties.getInboundQueueNames()))
+    return from(createInboundAdapter(properties.getCommands().getInboundQueueName()))
         .transform(MessageStored.class, source ->
           new SimpleAlertId(ResourceName.create(source.getAlert()).getUuid("alert-messages"))
         )
@@ -65,6 +70,16 @@ class FircoInboundAmqpIntegrationConfiguration {
     return from(discardChannel())
         .transform(AlertId.class, alertId -> new RecommendationCompletedEvent(alertId.getAlertId()))
         .channel(commonChannels.recommendationCompleted())
+        .get();
+  }
+
+  @Bean
+  IntegrationFlow responseCompletedInbound() {
+    return from(createInboundAdapter(properties.getCommands().getResponseCompletedQueueName()))
+        .handle(ResponseCompleted.class, (payload, headers) -> {
+          sendResponseUseCase.send(payload);
+          return null;
+        })
         .get();
   }
 

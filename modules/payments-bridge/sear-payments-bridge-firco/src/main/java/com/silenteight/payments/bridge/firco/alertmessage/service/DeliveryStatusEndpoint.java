@@ -3,19 +3,22 @@ package com.silenteight.payments.bridge.firco.alertmessage.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.event.AlertDeliveredEvent;
 import com.silenteight.payments.bridge.event.AlertUndeliveredEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 
+import static com.silenteight.payments.bridge.common.integration.CommonChannels.ALERT_DELIVERED;
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.ALERT_UNDELIVERED;
+import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.DELIVERED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.UNDELIVERED;
 
 @MessageEndpoint
 @Slf4j
 @RequiredArgsConstructor
-class UndeliveredAlertEndpoint {
+class DeliveryStatusEndpoint {
 
   private final AlertMessageStatusService alertMessageStatusService;
 
@@ -24,4 +27,11 @@ class UndeliveredAlertEndpoint {
     alertMessageStatusService.transitionAlertMessageStatus(
         event.getAlertId(), AlertMessageStatus.valueOf(event.getStatus()), UNDELIVERED);
   }
+
+  @ServiceActivator(inputChannel = ALERT_DELIVERED)
+  void apply(AlertDeliveredEvent event) {
+    alertMessageStatusService.transitionAlertMessageStatus(
+        event.getAlertId(), AlertMessageStatus.valueOf(event.getStatus()), DELIVERED);
+  }
+
 }

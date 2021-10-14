@@ -11,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.FIRCO_COMMAND_QUEUE_NAME;
+import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.FIRCO_RESPONSE_QUEUE_NAME;
 
 @Data
 @Validated
@@ -22,16 +23,13 @@ class FircoInboundAmqpIntegrationProperties {
   @NotNull
   private Commands commands = new Commands();
 
-  String[] getInboundQueueNames() {
-    return new String[] {
-        commands.getInboundQueueName(),
-        };
-  }
-
   @Data
   static class Commands {
-
     @NotBlank
     private String inboundQueueName = FIRCO_COMMAND_QUEUE_NAME;
+
+    @NotBlank
+    private String responseCompletedQueueName = FIRCO_RESPONSE_QUEUE_NAME;
+
   }
 }

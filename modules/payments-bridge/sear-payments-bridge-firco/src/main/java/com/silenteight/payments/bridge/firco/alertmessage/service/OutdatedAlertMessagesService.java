@@ -6,16 +6,18 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.OutdatedAlertMessagesUseCase;
-import com.silenteight.payments.bridge.firco.callback.port.CreateResponseUseCase;
+import com.silenteight.payments.bridge.firco.recommendation.port.CreateResponseUseCase;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 import javax.transaction.Transactional;
 
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OUTDATED;
+import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.PENDING;
 
 @EnableConfigurationProperties(AlertMessageProperties.class)
 @RequiredArgsConstructor
@@ -42,21 +44,22 @@ public class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCas
 
   private OffsetDateTime decisionObsoleteSince() {
     return OffsetDateTime.now(clock).minus(
-      alertMessageProperties.getDecisionRequestedTime().minusSeconds(1));
+      alertMessageProperties.getDecisionRequestedTime().minusSeconds(5));
   }
 
   private void transitionToOutdated(AlertMessageStatusEntity status) {
-    var alertMessageId = status.getAlertMessageId();
+    var alertId = status.getAlertMessageId();
     if (isDeliverable(status)) {
-      createResponseUseCase.createResponse(alertMessageId, REJECTED_OUTDATED);
+      // TODO: recommendation-uuid
+      createResponseUseCase.createResponse(alertId, UUID.randomUUID(), REJECTED_OUTDATED);
       alertMessageStatusService
-          .transitionAlertMessageStatus(alertMessageId, REJECTED_OUTDATED);
+          .transitionAlertMessageStatus(alertId, REJECTED_OUTDATED, PENDING);
     } else {
       // The delivery time passed thus we transfer alert to the final state (OUTDATED)
       // and record that it remains undelivered.
       alertMessageStatusService
           .transitionAlertMessageStatus(
-              alertMessageId, REJECTED_OUTDATED, DeliveryStatus.UNDELIVERED);
+              alertId, REJECTED_OUTDATED, DeliveryStatus.UNDELIVERED);
     }
   }
 

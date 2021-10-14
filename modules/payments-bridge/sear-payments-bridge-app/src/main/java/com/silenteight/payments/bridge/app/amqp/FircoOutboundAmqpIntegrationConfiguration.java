@@ -31,10 +31,17 @@ class FircoOutboundAmqpIntegrationConfiguration {
   private final CommonChannels commonChannels;
 
   @Bean
-  IntegrationFlow alertMessageGatewayOutboundIntegrationFlow() {
-    return createOutboundFlow(commonChannels.amqpOutbound(),
+  IntegrationFlow messageStoredOutboundFlow() {
+    return createOutboundFlow(commonChannels.messageStoredOutbound(),
         properties.getCommand().getOutboundExchangeName(),
         properties.getCommand().getAlertStoredRoutingKey());
+  }
+
+  @Bean
+  IntegrationFlow responseCompletedOutboundFlow() {
+    return createOutboundFlow(commonChannels.responseCompletedOutbound(),
+        properties.getResponse().getOutboundExchangeName(),
+        properties.getResponse().getResponseCompletedRoutingKey());
   }
 
   private StandardIntegrationFlow createOutboundFlow(

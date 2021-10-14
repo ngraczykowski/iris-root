@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.common.model.AlertId;
 import com.silenteight.payments.bridge.firco.alertmessage.port.FilterAlertMessageUseCase;
-import com.silenteight.payments.bridge.firco.callback.port.CreateResponseUseCase;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,6 @@ class FilterAlertMessageService implements FilterAlertMessageUseCase {
   private final AlertMessageProperties alertMessageProperties;
   private final AlertMessageStatusService alertMessageStatusService;
   private final AlertMessageService alertMessageService;
-  private final CreateResponseUseCase createResponseUseCase;
   @Setter private Clock clock = Clock.systemUTC();
 
   @Override

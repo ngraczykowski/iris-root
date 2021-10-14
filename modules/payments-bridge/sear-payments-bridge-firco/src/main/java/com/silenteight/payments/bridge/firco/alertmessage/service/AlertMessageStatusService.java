@@ -44,18 +44,6 @@ class AlertMessageStatusService {
 
   /**
    * Transition alert to the required status.
-   * If the destinationStatus is final, the method assumes that it was achieved
-   * after delivering response to the requesting party.
-   */
-  @Transactional
-  public void transitionAlertMessageStatus(
-      UUID alertMessageId, AlertMessageStatus destinationStatus) {
-    transitionAlertMessageStatus(alertMessageId, destinationStatus,
-        destinationStatus.isFinal() ? DeliveryStatus.DELIVERED : DeliveryStatus.NA);
-  }
-
-  /**
-   * Transition alert to the required status.
    */
   @Transactional
   public void transitionAlertMessageStatus(
@@ -64,7 +52,7 @@ class AlertMessageStatusService {
     var entity = repository
         .findByAlertMessageIdAndLockForWrite(alertMessageId)
         .orElseThrow();
-    entity.transitionStatusOrElseThrow(destinationStatus, clock, delivery);
+    entity.transitionStatusOrElseThrow(destinationStatus, delivery, clock);
     log.info("Alert [{}] is transited to {}. Delivery status: {}", alertMessageId,
           destinationStatus, delivery);
 

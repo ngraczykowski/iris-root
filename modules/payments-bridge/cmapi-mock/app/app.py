@@ -1,6 +1,7 @@
 import requests
 import logging
 import json
+import time
 
 from flask import Flask, render_template, flash, request
 from flask_bootstrap import Bootstrap
@@ -56,6 +57,7 @@ def ack():
 
 @app.route("/callback-recommendation", methods=["POST"])
 def recommendation():
+    time.sleep(35)
     return "", 204
 
 

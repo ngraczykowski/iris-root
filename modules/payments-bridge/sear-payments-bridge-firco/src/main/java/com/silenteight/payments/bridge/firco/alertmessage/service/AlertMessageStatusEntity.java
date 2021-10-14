@@ -11,6 +11,8 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.persistence.*;
 
+import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.NA;
+import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.PENDING;
 import static lombok.AccessLevel.NONE;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -52,39 +54,38 @@ class AlertMessageStatusEntity extends BaseVersionedEntity {
     this.deliveryStatus = DeliveryStatus.NA;
   }
 
-  boolean transitionStatus(AlertMessageStatus destinationStatus,
-      Clock clock, DeliveryStatus deliveryStatus) {
-    if (status == destinationStatus || status.isFinal()) {
-      return false;
+  TransitionResult transitionStatus(AlertMessageStatus destinationStatus,
+      DeliveryStatus deliveryStatus, Clock clock) {
+
+    if (this.status == destinationStatus && this.deliveryStatus == deliveryStatus) {
+      return TransitionResult.IGNORED;
     }
 
-    if (destinationStatus.isFinal() && deliveryStatus == DeliveryStatus.NA) {
-      // TODO:
-      throw new IllegalArgumentException();
-    }
-    if (!destinationStatus.isFinal() && (
-        deliveryStatus == DeliveryStatus.DELIVERED ||
-            deliveryStatus == DeliveryStatus.UNDELIVERED)) {
-      throw new IllegalArgumentException();
+    if (destinationStatus.isFinal() == deliveryStatus.equals(NA)) {
+      return TransitionResult.FAILED;
     }
 
-    if (!status.isTransitionAllowed(destinationStatus)) {
-      return false;
+    if (this.status.isFinal() && this.status == destinationStatus && this.deliveryStatus.isFinal()) {
+      return deliveryStatus == PENDING ?
+             TransitionResult.IGNORED : TransitionResult.FAILED;
     }
 
-    status = destinationStatus;
-    if (status.isFinal()) {
-      this.deliveryStatus = deliveryStatus;
+    if (this.status != destinationStatus &&
+        !status.isTransitionAllowed(destinationStatus)) {
+      return TransitionResult.FAILED;
     }
+
+    this.status = destinationStatus;
+    this.deliveryStatus = deliveryStatus;
+
     updateChangeTime(OffsetDateTime.now(clock));
     setCurrentTimeForUpdatedAt();
-    return true;
-
+    return TransitionResult.SUCCESS;
   }
 
   void transitionStatusOrElseThrow(AlertMessageStatus destinationStatus,
-      Clock clock, DeliveryStatus deliveryStatus) {
-    if (!transitionStatus(destinationStatus, clock, deliveryStatus)) {
+      DeliveryStatus deliveryStatus, Clock clock) {
+    if (transitionStatus(destinationStatus, deliveryStatus, clock) == TransitionResult.FAILED) {
       throw new IllegalStateException(
           "Unable to transition to status " + destinationStatus + ", from status " + status);
     }

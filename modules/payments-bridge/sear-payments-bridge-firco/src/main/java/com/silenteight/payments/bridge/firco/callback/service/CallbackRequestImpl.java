@@ -46,7 +46,7 @@ class CallbackRequestImpl implements CallbackRequest {
 
     } catch (RestClientException exception) {
       logException(endpoint, exception);
-      throw exception;
+      throw new NonRecoverableCallbackException(exception);
     }
   }
 

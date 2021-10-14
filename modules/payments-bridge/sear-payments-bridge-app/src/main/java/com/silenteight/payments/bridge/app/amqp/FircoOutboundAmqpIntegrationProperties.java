@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 
 import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.FIRCO_ALERT_STORED_ROUTING_KEY;
 import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.FIRCO_EXCHANGE_NAME;
+import static com.silenteight.payments.bridge.app.amqp.AmqpDefaults.FIRCO_RESPONSE_COMPLETED_ROUTING_KEY;
 
 @Data
 @Validated
@@ -23,6 +24,11 @@ class FircoOutboundAmqpIntegrationProperties {
   @NotNull
   private Command command = new Command();
 
+  @NestedConfigurationProperty
+  @Valid
+  @NotNull
+  private Response response = new Response();
+
   @Data
   static class Command {
 
@@ -32,5 +38,16 @@ class FircoOutboundAmqpIntegrationProperties {
     @NotNull
     private String alertStoredRoutingKey = FIRCO_ALERT_STORED_ROUTING_KEY;
   }
+
+  @Data
+  static class Response {
+
+    @NotBlank
+    private String outboundExchangeName = FIRCO_EXCHANGE_NAME;
+
+    @NotNull
+    private String responseCompletedRoutingKey = FIRCO_RESPONSE_COMPLETED_ROUTING_KEY;
+  }
+
 
 }

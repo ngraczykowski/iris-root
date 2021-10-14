@@ -8,15 +8,19 @@ import com.silenteight.payments.bridge.event.AlertStoredEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.callback.model.CallbackException;
-import com.silenteight.payments.bridge.firco.callback.port.CreateResponseUseCase;
+import com.silenteight.payments.bridge.firco.recommendation.port.CreateResponseUseCase;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OVERFLOWED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.STORED;
+import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.NA;
+import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.PENDING;
 
 @EnableConfigurationProperties(AlertMessageProperties.class)
 @Component
@@ -36,9 +40,9 @@ class QueueUpAlertMessageService {
       return;
     }
 
-    commonChannels.amqpOutbound().send(
+    commonChannels.messageStoredOutbound().send(
         MessageBuilder.withPayload(buildMessageStore(alert)).build());
-    statusService.transitionAlertMessageStatus(alert.getId(), STORED);
+    statusService.transitionAlertMessageStatus(alert.getId(), STORED, NA);
     commonChannels.alertStored().send(
         MessageBuilder.withPayload(new AlertStoredEvent(alert.getId())).build()
     );
@@ -50,8 +54,9 @@ class QueueUpAlertMessageService {
           alert.getId(), properties.getStoredQueueLimit());
 
       try {
-        createResponseUseCase.createResponse(alert.getId(), REJECTED_OVERFLOWED);
-        statusService.transitionAlertMessageStatus(alert.getId(), REJECTED_OVERFLOWED);
+        // TODO: recommendationUUID
+        createResponseUseCase.createResponse(alert.getId(), UUID.randomUUID(), REJECTED_OVERFLOWED);
+        statusService.transitionAlertMessageStatus(alert.getId(), REJECTED_OVERFLOWED, PENDING);
       } catch (CallbackException exception) {
         statusService.transitionAlertMessageStatus(alert.getId(), REJECTED_OVERFLOWED,
             DeliveryStatus.UNDELIVERED);

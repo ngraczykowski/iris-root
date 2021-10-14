@@ -26,9 +26,12 @@ public class CommonChannels {
 
   private static final String PREFIX = "common";
 
-  public static final String AMQP_OUTBOUND = PREFIX + "AMQPOutboundChannel";
-  public static final String CMAPI_OUTBOUND = PREFIX + "CMApiOutboundChannel";
+  // AMQP outbound channels
+  public static final String MESSAGE_STORED_OUTBOUND = PREFIX + "MessageStoredOutboundChannel";
+  public static final String RESPONSE_COMPLETED_OUTBOUND =
+      PREFIX + "ResponseCompletedOutboundChannel";
 
+  // Domain Events channels
   public static final String ALERT_STORED = PREFIX + "AlertStoredChannel";
   public static final String ALERT_INITIALIZED = PREFIX + "AlertInitializedChannel";
   public static final String ALERT_REGISTERED = PREFIX + "AlertRegisteredChannel";
@@ -36,19 +39,19 @@ public class CommonChannels {
   public static final String ALERT_ADDED_TO_ANALYSIS = PREFIX + "AlertAddedToAnalysisChannel";
 
   public static final String ALERT_REJECTED = PREFIX + "AlertRejectedChannel";
+  public static final String ALERT_DELIVERED = PREFIX + "AlertDeliveredChannel";
   public static final String ALERT_UNDELIVERED = PREFIX + "AlertUndeliveredChannel";
 
-  // Recommendation
   public static final String RECOMMENDATION_GENERATED = PREFIX + "RecommendationGeneratedChannel";
   public static final String RECOMMENDATION_COMPLETED = PREFIX + "RecommendationCompletedChannel";
 
-  @Bean(AMQP_OUTBOUND)
-  public MessageChannel amqpOutbound() {
+  @Bean(MESSAGE_STORED_OUTBOUND)
+  public MessageChannel messageStoredOutbound() {
     return new DirectChannel();
   }
 
-  @Bean(CMAPI_OUTBOUND)
-  public MessageChannel cmapiOutbound() {
+  @Bean(RESPONSE_COMPLETED_OUTBOUND)
+  public MessageChannel responseCompletedOutbound() {
     return new DirectChannel();
   }
 
@@ -65,6 +68,11 @@ public class CommonChannels {
   @Bean(ALERT_UNDELIVERED)
   public SubscribableChannel undeliveredAlertChannel() {
     return new TypedPublishSubscribeChannel(AlertUndeliveredEvent.class, channelInterceptors);
+  }
+
+  @Bean(ALERT_DELIVERED)
+  public SubscribableChannel deliveredAlertChannel() {
+    return new TypedPublishSubscribeChannel(AlertDeliveredEvent.class, channelInterceptors);
   }
 
   @Bean(ALERT_REGISTERED)
