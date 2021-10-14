@@ -9,14 +9,11 @@ import com.silenteight.payments.bridge.common.model.AlertId;
 
 import java.util.UUID;
 
-/**
- * The alert input data was delivered to the Universal Data Source.
- */
 @RequiredArgsConstructor
 @Getter
 @EqualsAndHashCode(of = "alertId", callSuper = false)
 @ToString
-public class AlertInputAcceptedEvent extends DomainEvent implements AlertId {
+public class AlertAddedToAnalysisEvent extends DomainEvent implements AlertId {
 
   private final UUID alertId;
   private final String alertRegisteredName;

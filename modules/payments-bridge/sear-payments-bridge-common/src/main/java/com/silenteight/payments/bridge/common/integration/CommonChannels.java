@@ -33,6 +33,8 @@ public class CommonChannels {
   public static final String ALERT_INITIALIZED = PREFIX + "AlertInitializedChannel";
   public static final String ALERT_REGISTERED = PREFIX + "AlertRegisteredChannel";
   public static final String ALERT_INPUT_ACCEPTED = PREFIX + "AlertInputAcceptedChannel";
+  public static final String ALERT_ADDED_TO_ANALYSIS = PREFIX + "AlertAddedToAnalysisChannel";
+
   public static final String ALERT_REJECTED = PREFIX + "AlertRejectedChannel";
   public static final String ALERT_UNDELIVERED = PREFIX + "AlertUndeliveredChannel";
 
@@ -73,6 +75,11 @@ public class CommonChannels {
   @Bean(ALERT_INPUT_ACCEPTED)
   public SubscribableChannel alertInputAccepted() {
     return new TypedPublishSubscribeChannel(AlertInputAcceptedEvent.class, channelInterceptors);
+  }
+
+  @Bean(ALERT_ADDED_TO_ANALYSIS)
+  public SubscribableChannel alertAddedToAnalysis() {
+    return new TypedPublishSubscribeChannel(AlertAddedToAnalysisEvent.class, channelInterceptors);
   }
 
   @Bean(ALERT_REJECTED)

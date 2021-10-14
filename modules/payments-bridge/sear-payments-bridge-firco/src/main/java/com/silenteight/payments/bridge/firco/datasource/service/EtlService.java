@@ -32,7 +32,7 @@ class EtlService {
         .filter(process -> process.supports(command))
         .forEach(process -> process.extractAndLoad(command, getAlertEtlResponse(command)));
 
-    return new AlertInputAcceptedEvent(command.getAlertId());
+    return new AlertInputAcceptedEvent(command.getAlertId(), command.getAlertRegisteredName());
   }
 
   private AlertEtlResponse getAlertEtlResponse(AlertRegisteredEvent command) {
