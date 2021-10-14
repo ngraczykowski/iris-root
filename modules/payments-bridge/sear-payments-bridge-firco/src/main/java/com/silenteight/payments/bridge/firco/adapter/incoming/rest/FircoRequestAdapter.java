@@ -34,9 +34,7 @@ class FircoRequestAdapter {
 
   private void handleRequest(RequestDto requestDto, String receiveUrl, String dataCenter) {
     var mapper = new AlertMessageMapper(receiveUrl, dataCenter);
-    if (log.isDebugEnabled()) {
-      log.debug("Handling [{}] alert message(s)", requestDto.getAlerts().size());
-    }
+    log.info("Handling [{}] alert message(s)", requestDto.getAlerts().size());
     mapper.map(requestDto).forEach(createAlertMessageUseCase::createAlertMessage);
   }
 

@@ -67,7 +67,7 @@ spec:
             - name: 'PB_CMAPI_CALLBACK_ENDPOINT'
               value: {{ .Values.pbCmapiCallbackEndpoint | squote }}
             - name: 'DEBUG'
-              value: 'true'
+              value: 'false'
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           resources:
             limits:

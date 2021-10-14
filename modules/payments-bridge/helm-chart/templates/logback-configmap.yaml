@@ -38,7 +38,7 @@ data:
         <appender-ref ref="CONSOLE"/>
       </appender>
 
-      <root level="INFO">
+      <root level="DEBUG">
         <appender-ref ref="ASYNC_CONSOLE"/>
       </root>
     </configuration>

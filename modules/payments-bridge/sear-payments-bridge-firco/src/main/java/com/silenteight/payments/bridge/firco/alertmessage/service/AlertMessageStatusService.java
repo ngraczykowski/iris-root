@@ -96,8 +96,8 @@ class AlertMessageStatusService {
       throw new IllegalStateException("Unable to re-initialize the initial state for alertID: " +
           alertMessageId);
     }
-    if (log.isTraceEnabled()) {
-      log.trace("AlertMessage [{}] transited to RECEIVED", alertMessageId);
+    if (log.isDebugEnabled()) {
+      log.debug("AlertMessage [{}] transited to RECEIVED", alertMessageId);
     }
     repository.save(new AlertMessageStatusEntity(alertMessageId));
   }
