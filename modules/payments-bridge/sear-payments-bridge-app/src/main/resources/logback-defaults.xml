@@ -45,4 +45,5 @@
   <logger name="sun.rmi" level="WARN"/>
   <logger name="sun.rmi.transport" level="WARN"/>
   <logger name="Hibernate Types" level="OFF"/>
+  <logger name="net.javacrumbs" level="INFO"/>
 </included>

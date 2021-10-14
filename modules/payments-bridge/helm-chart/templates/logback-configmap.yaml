@@ -51,6 +51,8 @@ data:
       <logger name="sun.rmi" level="WARN"/>
       <logger name="sun.rmi.transport" level="WARN"/>
       <logger name="Hibernate Types" level="OFF"/>
+      <logger name="net.javacrumbs" level="INFO"/>
+
     </included>
   logback-config-file: |
     <?xml version="1.0" encoding="UTF-8"?>
