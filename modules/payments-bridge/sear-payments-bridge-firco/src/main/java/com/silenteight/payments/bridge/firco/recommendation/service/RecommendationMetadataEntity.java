@@ -3,6 +3,8 @@ package com.silenteight.payments.bridge.firco.recommendation.service;
 import lombok.*;
 import lombok.EqualsAndHashCode.Include;
 
+import com.silenteight.sep.base.common.entity.BaseEntity;
+
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import org.hibernate.annotations.Type;
@@ -26,7 +28,7 @@ import static lombok.AccessLevel.PUBLIC;
 @Entity
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @Builder(access = PACKAGE)
-class RecommendationMetadataEntity {
+class RecommendationMetadataEntity extends BaseEntity {
 
   @Id
   @Column(insertable = false, updatable = false, nullable = false)
