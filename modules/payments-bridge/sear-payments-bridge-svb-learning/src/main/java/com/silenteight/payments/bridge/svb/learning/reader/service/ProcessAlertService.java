@@ -13,19 +13,19 @@ import org.springframework.stereotype.Service;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-class ReadAlertsUseCase {
+class ProcessAlertService {
 
   private final CsvFileProvider csvFileProvider;
-  private final CreateLearningAlertUseCase createLearningAlertUseCase;
+  private final EtlAlertService etlAlertService;
 
   public AlertsReadingResponse read(
       LearningRequest learningRequest, Consumer<LearningAlert> alertConsumer) {
+
     var mapper = new CsvMapper();
     var schema = mapper
         .schemaFor(LearningCsvRow.class)
@@ -53,12 +53,13 @@ class ReadAlertsUseCase {
 
   private AlertsReadingResponse readByAlerts(
       MappingIterator<LearningCsvRow> it, Consumer<LearningAlert> alertConsumer) {
+
     var firstRow = it.next();
     assertRowNotNull(firstRow);
     String currentAlertID = firstRow.getFkcoVSystemId();
 
-    List<ReadAlertError> errors = new ArrayList<>();
-    List<LearningCsvRow> alertRows = new ArrayList<>();
+    var errors = new ArrayList<ReadAlertError>();
+    var alertRows = new ArrayList<LearningCsvRow>();
     alertRows.add(firstRow);
 
     int failedAlertsCount = 0;
@@ -75,7 +76,7 @@ class ReadAlertsUseCase {
       }
 
       try {
-        alertConsumer.accept(createLearningAlertUseCase.fromCsvRows(alertRows));
+        alertConsumer.accept(etlAlertService.fromCsvRows(alertRows));
         log.debug("Successfully processed alert = {}", currentAlertID);
         successfulAlertsCount++;
       } catch (RuntimeException e) {
@@ -83,6 +84,7 @@ class ReadAlertsUseCase {
         errors.add(ReadAlertError.builder().alertId(rowAlertId).exception(e).build());
         failedAlertsCount++;
       }
+
       currentAlertID = rowAlertId;
       alertRows.clear();
       alertRows.add(row);

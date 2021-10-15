@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class LearningCsvReaderTest {
 
-  private ReadAlertsUseCase learningCsvReader;
+  private ProcessAlertService learningCsvReader;
   @Mock
   private ExtractAlertedPartyDataUseCase extractAlertedPartyDataUseCase;
   @Mock
@@ -37,12 +37,12 @@ class LearningCsvReaderTest {
   @BeforeEach
   void setUp() {
     var createMatch =
-        new CreateLearningMatchUseCase(
+        new EtlMatchService(
             extractAlertedPartyDataUseCase, createAlertedPartyEntitiesUseCase,
             extractMessageStructureUseCase, extractFieldValueUseCase);
     learningCsvReader =
-        new ReadAlertsUseCase(
-            new CsvFileProviderTestImpl(), new CreateLearningAlertUseCase(createMatch));
+        new ProcessAlertService(
+            new CsvFileProviderTestImpl(), new EtlAlertService(createMatch));
   }
 
   @Test

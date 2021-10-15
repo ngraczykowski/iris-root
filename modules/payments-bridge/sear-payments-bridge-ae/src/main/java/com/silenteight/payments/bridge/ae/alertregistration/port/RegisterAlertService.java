@@ -6,7 +6,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlert
 import java.util.List;
 import java.util.stream.Collectors;
 
-public interface RegisterAlertUseCase {
+public interface RegisterAlertService {
 
   RegisterAlertResponse register(RegisterAlertRequest registerAlertRequest);
 

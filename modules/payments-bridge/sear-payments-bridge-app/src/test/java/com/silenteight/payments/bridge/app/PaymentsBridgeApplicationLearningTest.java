@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.mock.ae.MockAlertUseCase;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
-import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningDataUseCase;
+import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningAlertsUseCase;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 
@@ -25,11 +25,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class PaymentsBridgeApplicationLearningTest {
 
   @Autowired
-  HandleLearningDataUseCase handleLearningDataUseCase;
+  HandleLearningAlertsUseCase handleLearningAlertsUseCase;
 
   @Test
   void shouldProcessLearningCsv() {
-    handleLearningDataUseCase.readAlerts(new LearningRequest("bucket", "object"));
+    handleLearningAlertsUseCase.readAlerts(new LearningRequest("bucket", "object"));
     assertThat(MockAlertUseCase.getCreatedAlertsCount()).isEqualTo(163);
   }
 }

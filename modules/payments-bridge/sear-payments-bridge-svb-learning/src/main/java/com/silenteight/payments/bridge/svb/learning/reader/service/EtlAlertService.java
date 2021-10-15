@@ -20,9 +20,9 @@ import static com.silenteight.payments.bridge.common.protobuf.TimestampConverter
 
 @Service
 @RequiredArgsConstructor
-class CreateLearningAlertUseCase {
+class EtlAlertService {
 
-  private final CreateLearningMatchUseCase createLearningMatchUseCase;
+  private final EtlMatchService etlMatchService;
 
   LearningAlert fromCsvRows(List<LearningCsvRow> rows) {
     return LearningAlert.builder()
@@ -49,7 +49,7 @@ class CreateLearningAlertUseCase {
     }
 
     for (var key : hits.keySet()) {
-      matches.add(createLearningMatchUseCase.fromLearningRows(hits.get(key)));
+      matches.add(etlMatchService.fromLearningRows(hits.get(key)));
     }
 
     assertNoDuplicateMatchIds(matches);

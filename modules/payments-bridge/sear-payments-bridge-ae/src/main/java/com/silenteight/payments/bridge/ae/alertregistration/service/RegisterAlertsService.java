@@ -6,7 +6,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlert
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterMatchResponse;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AlertClientPort;
-import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
+import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertService;
 
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
-class RegisterAlertsService implements RegisterAlertUseCase {
+class RegisterAlertsService implements RegisterAlertService {
 
   private final AlertClientPort alertClient;
 

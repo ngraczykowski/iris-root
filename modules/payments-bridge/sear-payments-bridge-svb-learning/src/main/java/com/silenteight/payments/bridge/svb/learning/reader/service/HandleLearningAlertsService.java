@@ -5,24 +5,24 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.payments.bridge.svb.learning.notification.port.outgoing.SendNotificationUseCase;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
-import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningDataUseCase;
+import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningAlertsUseCase;
 
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-class HandleLearningDataService implements HandleLearningDataUseCase {
+class HandleLearningAlertsService implements HandleLearningAlertsUseCase {
 
-  private final ReadAlertsUseCase readAlertsUseCase;
+  private final ProcessAlertService processAlertService;
   private final SendNotificationUseCase sendNotificationUseCase;
-  private final ProcessAlertUseCase processAlertUseCase;
+  private final IngestService ingestService;
 
   public void readAlerts(LearningRequest learningRequest) {
-    var alertsRead = readAlertsUseCase.read(learningRequest, this::processAlert);
+    var alertsRead = processAlertService.read(learningRequest, this::registerAndIngest);
     sendNotificationUseCase.sendNotification(alertsRead.toNotificationRequest());
   }
 
-  void processAlert(LearningAlert learningAlert) {
-    processAlertUseCase.processAlert(learningAlert);
+  void registerAndIngest(LearningAlert learningAlert) {
+    ingestService.ingest(learningAlert);
   }
 }

@@ -30,7 +30,7 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
-class CreateLearningMatchUseCase {
+class EtlMatchService {
 
   private final ExtractAlertedPartyDataUseCase extractAlertedPartyDataUseCase;
   private final CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;

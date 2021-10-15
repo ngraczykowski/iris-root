@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-class CreateDataSourceValuesUseCase {
+class DataSourceIngestService {
 
   private final CreateFeaturesUseCase createFeaturesUseCase;
   private final CreateCategoryValuesUseCase createCategoryValuesUseCase;
