@@ -4,9 +4,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure;
-import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure.MessageStructureDtp;
-import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure.MessageStructureScstar;
 import com.silenteight.payments.bridge.svb.etl.model.ExtractFieldStructureValue;
+import com.silenteight.payments.bridge.svb.etl.model.MessageStructureDtp;
+import com.silenteight.payments.bridge.svb.etl.model.MessageStructureScstar;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractFieldValueUseCase;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ import static java.util.Collections.singletonList;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Service
-class FieldValueExtractor implements ExtractFieldValueUseCase {
+public class FieldValueExtractor implements ExtractFieldValueUseCase {
 
   @Override
   public String extractFieldValue(ExtractFieldStructureValue request) {
@@ -33,7 +33,7 @@ class FieldValueExtractor implements ExtractFieldValueUseCase {
     }
   }
 
-  static String extractMatchfieldFromNonScstarMessage(
+  public static String extractMatchfieldFromNonScstarMessage(
       @NotNull String tag, @NotNull String messageData) {
     tag = tag.strip();
     int spaceLength = 15 - tag.length();

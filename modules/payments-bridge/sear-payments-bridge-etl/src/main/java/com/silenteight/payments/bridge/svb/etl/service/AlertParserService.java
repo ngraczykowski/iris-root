@@ -12,8 +12,10 @@ import com.silenteight.payments.bridge.svb.etl.model.GetAccountNumberRequest;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractAlertEtlResponseUseCase;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractAlertedPartyDataUseCase;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractMessageStructureUseCase;
-import com.silenteight.payments.bridge.svb.etl.port.GetAccountNumberUseCase;
-import com.silenteight.payments.bridge.svb.etl.response.*;
+import com.silenteight.payments.bridge.svb.etl.response.AlertEtlResponse;
+import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
+import com.silenteight.payments.bridge.svb.etl.response.HitAndWatchlistPartyData;
+import com.silenteight.payments.bridge.svb.etl.response.HitData;
 import com.silenteight.payments.bridge.svb.etl.util.CommonUtils;
 
 import org.springframework.stereotype.Service;
@@ -31,7 +33,6 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
   private final ExtractMessageStructureUseCase extractMessageStructureUseCase;
   private final ExtractAlertedPartyDataUseCase extractAlertedPartyDataUseCase;
-  private final GetAccountNumberUseCase getAccountNumberUseCase;
   private final FieldValueExtractor fieldValueExtractor;
   private final ExtractMatchTextUseCase extractMatchTextUseCase;
 
@@ -39,11 +40,8 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     log.debug("invoke");
     List<HitData> hits = new ArrayList<>();
 
-    SourceSystem sourceSystem =
-        AbstractMessageStructure.extractSourceSystem(alertMessageDto.getApplicationCode());
-
     for (RequestHitDto requestHitDto : alertMessageDto.getHits()) {
-      hits.add(createHitData(sourceSystem, alertMessageDto, requestHitDto));
+      hits.add(createHitData(alertMessageDto, requestHitDto));
     }
 
     return AlertEtlResponse.builder()
@@ -63,8 +61,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         .build();
   }
 
-  private HitData createHitData(
-      SourceSystem sourceSystem, AlertMessageDto alertMessageDto, RequestHitDto requestHitDto) {
+  private HitData createHitData(AlertMessageDto alertMessageDto, RequestHitDto requestHitDto) {
     ExtractAlertedPartyDataRequest alertedPartyDataRequest =
         createExtractAlertedPartyDataRequest(alertMessageDto, requestHitDto);
     AbstractMessageStructure messageStructure =
@@ -76,7 +73,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     return new HitData(alertedPartyData, hitAndWatchlistPartyData);
   }
 
-  private ExtractAlertedPartyDataRequest createExtractAlertedPartyDataRequest(
+  private static ExtractAlertedPartyDataRequest createExtractAlertedPartyDataRequest(
       AlertMessageDto alertMessageDto, RequestHitDto requestHitDto) {
     return ExtractAlertedPartyDataRequest
         .builder()
@@ -108,16 +105,13 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         .findFirst()
         .orElse(Collections.emptyList());
 
-    MessageFieldStructure messageFieldStructure = messageStructure.getMessageFieldStructure();
-
-    Optional<String> accountNumberOrNormalizedName = getAccountNumberUseCase.getAccountNumber(
+    Optional<String> accountNumberOrNormalizedName = messageStructure.getAccountNumber(
         GetAccountNumberRequest
             .builder()
             .applicationCode(alertMessageDto.getApplicationCode())
             .tag(requestHitDto.getHit().getTag())
             .message(messageStructure.getMessageData())
             .matchingFields(allMatchingFieldValues)
-            .messageFieldStructure(messageFieldStructure)
             .build());
 
     List<CodeDto> codes = Optional.of(requestHitDto.getHit())

@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Value
 @Builder
@@ -85,10 +86,6 @@ public class LearningMatch {
         .build();
   }
 
-  public String toName(String alert) {
-    return "alerts/" + alert + "/matches/" + getMatchName();
-  }
-
   public List<String> getAlertedPartyNames() {
     return alertedPartyData.getNames();
   }
@@ -118,5 +115,9 @@ public class LearningMatch {
         .message(messageData)
         .matchingFields(allMatchFieldsValue)
         .build();
+  }
+
+  public Optional<String> getAccountNumber() {
+    return messageStructure.getAccountNumber(toGetAccountNumberRequest());
   }
 }

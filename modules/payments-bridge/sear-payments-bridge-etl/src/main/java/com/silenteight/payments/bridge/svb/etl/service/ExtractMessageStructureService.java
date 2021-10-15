@@ -2,10 +2,7 @@ package com.silenteight.payments.bridge.svb.etl.service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure;
-import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure.*;
-import com.silenteight.payments.bridge.svb.etl.model.ExtractAlertedPartyDataRequest;
-import com.silenteight.payments.bridge.svb.etl.model.ExtractFieldStructureValue;
+import com.silenteight.payments.bridge.svb.etl.model.*;
 import com.silenteight.payments.bridge.svb.etl.port.ExtractMessageStructureUseCase;
 import com.silenteight.payments.bridge.svb.etl.response.SourceSystem;
 
@@ -27,32 +24,29 @@ public class ExtractMessageStructureService implements ExtractMessageStructureUs
     String messageType = request.getMessageType();
     String tag = request.getTag();
     String messageData = request.getMessageData();
-    var sourceSystem =
-        AbstractMessageStructure.extractSourceSystem(request.getApplicationCode());
-    switch (sourceSystem) {
-      case SCSTAR:
-        return messageStructureForScstar(messageType, tag, messageData);
-      case MTS:
-        return messageStructureForMts(messageType, tag, messageData, sourceSystem);
-      case NBP:
-        return messageStructureForNbp(messageType, tag, messageData);
-      case STS:
-        return messageStructureForSts(messageType, tag, messageData);
-      case DTP:
-        return messageStructureForDtp(request.getMatchingText(), messageType, tag, messageData);
-      default:
-        return defaultMessageStructure(messageType, tag, messageData);
-    }
+    var sourceSystemId = request.getApplicationCode();
+
+    if (sourceSystemId.startsWith("MTS"))
+      return messageStructureForMts(messageType, tag, messageData, SourceSystem.MTS);
+    if (sourceSystemId.startsWith("NBP"))
+      return messageStructureForNbp(messageType, tag, messageData);
+    if (sourceSystemId.startsWith("STAR") || sourceSystemId.startsWith("AMH"))
+      return messageStructureForScstar(messageType, tag, messageData);
+    if (sourceSystemId.startsWith("STS"))
+      return messageStructureForSts(messageType, tag, messageData);
+    if (sourceSystemId.startsWith("DTP"))
+      return messageStructureForDtp(request.getMatchingText(), messageType, tag, messageData);
+
+    return defaultMessageStructure(messageType, tag, messageData);
   }
 
   @NotNull
-  private static AbstractMessageStructure.MessageStructureDefault defaultMessageStructure(
+  private static MessageStructureDefault defaultMessageStructure(
       String messageType, String tag, String messageData) {
     return new MessageStructureDefault(messageType, tag, messageData);
   }
 
-  @NotNull
-  private static AbstractMessageStructure.MessageStructureDtp messageStructureForDtp(
+  private static MessageStructureDtp messageStructureForDtp(
       String matchingText, String messageType, String tag, String messageData) {
     String matchText = null;
     List<String> mainTagFieldValues = null;
@@ -69,20 +63,17 @@ public class ExtractMessageStructureService implements ExtractMessageStructureUs
         nextTagFieldValues);
   }
 
-  @NotNull
-  private static AbstractMessageStructure.MessageStructureSts messageStructureForSts(
+  private static MessageStructureSts messageStructureForSts(
       String messageType, String tag, String messageData) {
     return new MessageStructureSts(messageType, tag, messageData);
   }
 
-  @NotNull
-  private static AbstractMessageStructure.MessageStructureNbp messageStructureForNbp(
+  private static MessageStructureNbp messageStructureForNbp(
       String messageType, String tag, String messageData) {
     return new MessageStructureNbp(messageType, tag, messageData);
   }
 
-  @NotNull
-  private AbstractMessageStructure.MessageStructureMts messageStructureForMts(
+  private MessageStructureMts messageStructureForMts(
       String messageType, String tag, String messageData, SourceSystem sourceSystem) {
     return new MessageStructureMts(
         messageType, tag, messageData, fieldValueExtractor.extractFieldValue(

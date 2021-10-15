@@ -3,8 +3,6 @@ package com.silenteight.payments.bridge.svb.etl.model;
 import lombok.Builder;
 import lombok.Value;
 
-import com.silenteight.payments.bridge.svb.etl.response.MessageFieldStructure;
-
 import java.util.List;
 
 @Value
@@ -15,5 +13,4 @@ public class GetAccountNumberRequest {
   String tag;
   String message;
   List<String> matchingFields;
-  MessageFieldStructure messageFieldStructure;
 }
