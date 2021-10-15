@@ -37,7 +37,7 @@ public class LearningAlert {
         .builder()
         .alertId(alertId)
         .alertTime(alertTime)
-        .matchQuantity(hitCount > 0 ? MatchQuantity.MULTIPLE : MatchQuantity.SINGLE)
+        .matchQuantity(matches.size() > 1 ? MatchQuantity.MANY : MatchQuantity.SINGLE)
         .matchIds(matches.stream().map(
             LearningMatch::getMatchId).collect(toList()))
         .build();

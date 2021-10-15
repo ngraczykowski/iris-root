@@ -28,7 +28,6 @@ class CreateLearningAlertUseCase {
     return LearningAlert.builder()
         .alertId(rows.get(0).getFkcoVSystemId())
         .alertTime(createAlertTime(rows.get(0).getFkcoDFilteredDatetime()))
-        .hitCount(rows.size())
         .matches(createMatches(rows))
         .build();
   }
