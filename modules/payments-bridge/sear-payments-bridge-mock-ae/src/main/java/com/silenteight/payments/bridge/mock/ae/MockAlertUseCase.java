@@ -8,19 +8,24 @@ import com.silenteight.adjudication.api.v1.Match;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 import static java.util.stream.Collectors.toList;
 
 @Service
 @Profile("mockae")
 public class MockAlertUseCase {
 
-  private static int alertId = 1;
+  private static long alertId = 1;
   private static int matchId = 1;
 
-  static Alert createAlert(Alert alert) {
+  static Alert createAlert(Alert alert, Set<Long> existing) {
+    while(existing.contains(alertId)) {
+      alertId++;
+    }
+
     var response =
         Alert.newBuilder().setAlertId(alert.getAlertId()).setName("alerts/" + alertId).build();
-    alertId++;
     return response;
   }
 
@@ -43,7 +48,7 @@ public class MockAlertUseCase {
     return response;
   }
 
-  public static int getCreatedAlertsCount() {
+  public static long getCreatedAlertsCount() {
     return alertId;
   }
 
