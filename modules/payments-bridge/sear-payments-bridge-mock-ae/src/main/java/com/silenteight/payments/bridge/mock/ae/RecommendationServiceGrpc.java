@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v2.GetRecommendationRequest;
+import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationServiceGrpc.RecommendationServiceImplBase;
+import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.payments.bridge.event.RecommendationGeneratedEvent;
 
 import io.grpc.stub.StreamObserver;
@@ -30,6 +32,19 @@ class RecommendationServiceGrpc extends RecommendationServiceImplBase {
     responseObserver.onNext(
         Recommendation.newBuilder()
                 .setAlert(cache.get(request.getRecommendation())).build());
+    responseObserver.onCompleted();
+  }
+
+  @Override
+  public void getRecommendationWithMetadata(
+      GetRecommendationRequest request,
+      StreamObserver<RecommendationWithMetadata> responseObserver) {
+    responseObserver.onNext(
+        RecommendationWithMetadata.newBuilder()
+            .setMetadata(RecommendationMetadata.newBuilder().build())
+            .setRecommendation(
+                Recommendation.newBuilder()
+                    .setAlert(cache.get(request.getRecommendation()))).build());
     responseObserver.onCompleted();
   }
 

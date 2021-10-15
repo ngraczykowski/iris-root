@@ -1,9 +1,9 @@
 package com.silenteight.payments.bridge.ae.recommendation.port;
 
-import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v2.GetRecommendationRequest;
+import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 
 public interface RecommendationClientPort {
 
-  Recommendation receiveRecommendation(GetRecommendationRequest request);
+  RecommendationWithMetadata receiveRecommendation(GetRecommendationRequest request);
 }

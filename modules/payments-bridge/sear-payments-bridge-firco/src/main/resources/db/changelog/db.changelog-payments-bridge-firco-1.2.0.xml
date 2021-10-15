@@ -48,4 +48,58 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="payments-bridge-firco-1.2.8" author="mbartecki">
+    <createTable tableName="pb_recommendation">
+      <column name="recommendation_id" type="UUID">
+        <constraints primaryKey="true" primaryKeyName="pk_pb_recommendation"/>
+      </column>
+      <column name="alert_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="recommendation_name" type="VARCHAR(20)">
+      </column>
+      <column name="alert_name" type="VARCHAR(50)">
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="generated_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="recommended_action" type="VARCHAR(50)">
+      </column>
+      <column name="recommendation_comment" type="VARCHAR(50)">
+      </column>
+      <column name="recommendation_source" type="VARCHAR(50)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="recommendation_reason" type="VARCHAR(50)">
+      </column>
+    </createTable>
+    <createIndex
+        tableName="pb_recommendation"
+        indexName="ix_pb_recommendation_recommended_action">
+      <column name="recommended_action"/>
+    </createIndex>
+
+    <createTable tableName="pb_recommendation_metadata">
+      <column name="recommendation_id" type="UUID">
+        <constraints
+            primaryKey="true"
+            primaryKeyName="pk_pb_recommendation_payload"
+            foreignKeyName="fk_pb_recommendation_payload_recommendation_id"
+            referencedTableName="pb_recommendation"
+            referencedColumnNames="recommendation_id"
+            deleteCascade="true"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="metadata" type="JSONB">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+  </changeSet>
+
 </databaseChangeLog>

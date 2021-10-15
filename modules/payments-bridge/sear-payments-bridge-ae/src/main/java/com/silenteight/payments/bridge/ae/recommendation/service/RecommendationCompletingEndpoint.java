@@ -3,8 +3,11 @@ package com.silenteight.payments.bridge.ae.recommendation.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.api.v2.GetRecommendationRequest;
+import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
+import com.silenteight.payments.bridge.ae.alertregistration.port.GetRegisteredAlertIdUseCase;
 import com.silenteight.payments.bridge.ae.recommendation.port.RecommendationClientPort;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.event.RecommendationGeneratedEvent;
@@ -17,6 +20,7 @@ import org.springframework.integration.channel.DirectChannel;
 import org.springframework.messaging.MessageChannel;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.RECOMMENDATION_COMPLETED;
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.RECOMMENDATION_GENERATED;
@@ -29,6 +33,7 @@ class RecommendationCompletingEndpoint {
   private static final String INT_CHANNEL = "RecommendationCompletingEndpoint_int_channel";
 
   private final RecommendationClientPort recommendationClientPort;
+  private final GetRegisteredAlertIdUseCase getRegisteredAlertIdUseCase;
 
   @Splitter(inputChannel = RECOMMENDATION_GENERATED, outputChannel = INT_CHANNEL)
   List<RecommendationInfo> split(RecommendationGeneratedEvent event) {
@@ -37,10 +42,14 @@ class RecommendationCompletingEndpoint {
 
   @ServiceActivator(inputChannel = INT_CHANNEL, outputChannel = RECOMMENDATION_COMPLETED)
   RecommendationCompletedEvent completing(RecommendationInfo recommendationInfo) {
-    return new RecommendationCompletedEvent(
+    RecommendationWithMetadata recommendationWithMetadata =
         recommendationClientPort.receiveRecommendation(
-          GetRecommendationRequest.newBuilder()
-            .setRecommendation(recommendationInfo.getRecommendation()).build()));
+            GetRecommendationRequest.newBuilder()
+                .setRecommendation(recommendationInfo.getRecommendation()).build());
+
+    Recommendation recommendation = recommendationWithMetadata.getRecommendation();
+    String alertId = getRegisteredAlertIdUseCase.getAlertId(recommendation.getAlert());
+    return new RecommendationCompletedEvent(recommendationWithMetadata, UUID.fromString(alertId));
   }
 
   @Bean(INT_CHANNEL)

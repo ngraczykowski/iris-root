@@ -26,6 +26,7 @@ import static com.silenteight.payments.bridge.common.integration.CommonChannels.
 class RegisterAlertEndpoint {
 
   private final RegisterAlertUseCase registerAlertUseCase;
+  private final CreateRegisteredAlertUseCase createRegisteredAlertUseCase;
 
   @ServiceActivator(inputChannel = ALERT_INITIALIZED, outputChannel = ALERT_REGISTERED)
   AlertRegisteredEvent apply(AlertInitializedEvent alertInitializedEvent) {
@@ -39,6 +40,9 @@ class RegisterAlertEndpoint {
         .build();
 
     var alert = registerAlertUseCase.register(request);
+
+    UUID alertId = UUID.fromString(request.getAlertId());
+    createRegisteredAlertUseCase.save(alertId, alert.getAlertName());
 
     return new AlertRegisteredEvent(
         UUID.fromString(alert.getAlertId()), alert.getAlertName(),

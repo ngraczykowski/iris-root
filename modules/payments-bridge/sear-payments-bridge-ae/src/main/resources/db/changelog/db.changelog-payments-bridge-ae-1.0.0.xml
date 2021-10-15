@@ -14,4 +14,26 @@
       </column>
     </createTable>
   </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.0.0_2" author="jgajewski">
+    <createTable tableName="pb_registered_alert">
+      <column name="alert_id" type="UUID">
+        <constraints primaryKey="true" primaryKeyName="pk_pb_alert_id"/>
+      </column>
+      <column name="alert_name" type="VARCHAR(30)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="pb_registered_alert"
+        indexName="ix_pb_registered_alert_alert_name">
+      <column name="alert_name"/>
+    </createIndex>
+
+    <addUniqueConstraint
+        columnNames="alert_id, alert_name"
+        constraintName="uq_apb_registered_alert_alert_id_alert_name"
+        tableName="pb_registered_alert"/>
+  </changeSet>
 </databaseChangeLog>
