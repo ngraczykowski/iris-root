@@ -11,20 +11,22 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.date.DateFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.date.DateInputDto;
 import com.silenteight.hsbc.datasource.dto.date.DateInputResponse;
+import com.silenteight.hsbc.datasource.feature.DateFeatureValuesRetriever;
 import com.silenteight.hsbc.datasource.feature.Feature;
-import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import static com.silenteight.hsbc.datasource.feature.Feature.DATE_OF_BIRTH;
 import static java.util.List.of;
+import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 class DateInputProvider implements DataSourceInputProvider<DateInputResponse> {
 
   @Getter
   private final MatchFacade matchFacade;
+  private final Map<String, List<String>> watchlistTypes;
 
   @Override
   public DateInputResponse toResponse(DataSourceInputCommand command) {
@@ -42,14 +44,14 @@ class DateInputProvider implements DataSourceInputProvider<DateInputResponse> {
             .match(match.getName())
             .featureInputs(getFeatureInputs(features, match.getMatchData()))
             .build())
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 
   private List<DateFeatureInputDto> getFeatureInputs(List<String> features, MatchData matchData) {
     return features.stream()
         .map(featureName -> (DateFeatureInputDto)
-            ((FeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData))
-        .collect(Collectors.toList());
+            ((DateFeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData, watchlistTypes))
+        .collect(toList());
   }
 
   @Override

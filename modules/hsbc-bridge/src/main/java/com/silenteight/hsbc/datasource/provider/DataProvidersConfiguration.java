@@ -19,10 +19,12 @@ import com.silenteight.hsbc.datasource.extractors.historical.HistoricalDecisions
 import com.silenteight.hsbc.datasource.extractors.ispep.IsPepServiceClient;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@EnableConfigurationProperties(SeverityResolverProperties.class)
 @RequiredArgsConstructor
 class DataProvidersConfiguration {
 
@@ -30,6 +32,7 @@ class DataProvidersConfiguration {
   private final IsPepServiceClient isPepServiceClient;
   private final NameInformationServiceClient nameInformationServiceClient;
   private final HistoricalDecisionsServiceClient historicalDecisionsServiceClient;
+  private final SeverityResolverProperties severityResolverProperties;
 
   @Bean
   DataSourceInputProvider<AllowedListInputResponse> allowedListProvider() {
@@ -43,7 +46,7 @@ class DataProvidersConfiguration {
 
   @Bean
   DataSourceInputProvider<DateInputResponse> dateInputProvider() {
-    return new DateInputProvider(matchFacade);
+    return new DateInputProvider(matchFacade, severityResolverProperties.getWatchlistTypes());
   }
 
   @Bean

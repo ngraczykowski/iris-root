@@ -326,6 +326,31 @@
       "description": "Map's key value 'SSC' for comment watchlist types."
     },
     {
+      "name": "silenteight.bridge.date.watchlist-types.SAN",
+      "type": "java.util.List",
+      "description": "Map's key value 'SAN' for comment watchlist types."
+    },
+    {
+      "name": "silenteight.bridge.date.watchlist-types.AML",
+      "type": "java.util.List",
+      "description": "Map's key value 'AML' for comment watchlist types."
+    },
+    {
+      "name": "silenteight.bridge.date.watchlist-types.PEP",
+      "type": "java.util.List",
+      "description": "Map's key value 'PEP' for comment watchlist types."
+    },
+    {
+      "name": "silenteight.bridge.date.watchlist-types.EXITS",
+      "type": "java.util.List",
+      "description": "Map's key value 'EXITS' for comment watchlist types."
+    },
+    {
+      "name": "silenteight.bridge.date.watchlist-types.SSC",
+      "type": "java.util.List",
+      "description": "Map's key value 'SSC' for comment watchlist types."
+    },
+    {
       "name": "silenteight.bridge.recommendation.silentEightValues.MANUAL_INVESTIGATION",
       "type": "java.lang.String",
       "description": "Recommendation action for manual investigation solution."

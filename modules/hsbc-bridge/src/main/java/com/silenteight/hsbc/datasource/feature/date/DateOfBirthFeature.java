@@ -1,12 +1,15 @@
-package com.silenteight.hsbc.datasource.feature.dob;
+package com.silenteight.hsbc.datasource.feature.date;
 
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.date.DateFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.date.DateFeatureInputDto.DateFeatureInputDtoBuilder;
+import com.silenteight.hsbc.datasource.feature.DateFeatureValuesRetriever;
 import com.silenteight.hsbc.datasource.feature.Feature;
-import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
+
+import java.util.List;
+import java.util.Map;
 
 import static com.silenteight.hsbc.datasource.dto.name.EntityType.INDIVIDUAL;
 import static com.silenteight.hsbc.datasource.dto.name.EntityType.ORGANIZATION;
@@ -14,14 +17,14 @@ import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
 import static java.util.stream.Stream.concat;
 
 @Slf4j
-public class DateOfBirthFeature implements FeatureValuesRetriever<DateFeatureInputDto> {
+public class DateOfBirthFeature implements DateFeatureValuesRetriever<DateFeatureInputDto> {
 
   @Override
-  public DateFeatureInputDto retrieve(MatchData matchData) {
+  public DateFeatureInputDto retrieve(MatchData matchData, Map<String, List<String>> watchlistTypes) {
 
     log.debug("Datasource start retrieve data for {} feature.", getFeature());
 
-    var severityResolver = new SeverityResolver(matchData);
+    var severityResolver = new SeverityResolver(matchData, watchlistTypes);
     var featureBuilder = featureInputBuilder();
 
     if (matchData.isEntity()) {

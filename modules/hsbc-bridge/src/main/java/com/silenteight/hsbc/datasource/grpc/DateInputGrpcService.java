@@ -3,6 +3,8 @@ package com.silenteight.hsbc.datasource.grpc;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.api.date.v1.*;
+import com.silenteight.datasource.api.date.v1.DateFeatureInput.EntityType;
+import com.silenteight.datasource.api.date.v1.DateFeatureInput.SeverityMode;
 import com.silenteight.hsbc.datasource.common.DataSourceInputProvider;
 import com.silenteight.hsbc.datasource.common.dto.DataSourceInputRequest;
 import com.silenteight.hsbc.datasource.dto.date.DateFeatureInputDto;
@@ -62,6 +64,8 @@ class DateInputGrpcService extends DateInputServiceGrpc.DateInputServiceImplBase
         .setFeature(dateFeatureInputDto.getFeature())
         .addAllAlertedPartyDates(dateFeatureInputDto.getAlertedPartyDates())
         .addAllWatchlistDates(dateFeatureInputDto.getWatchlistDates())
+        .setAlertedPartyType(EntityType.valueOf(dateFeatureInputDto.getAlertedPartyType().name()))
+        .setMode(SeverityMode.valueOf(dateFeatureInputDto.getMode().name()))
         .build();
   }
 

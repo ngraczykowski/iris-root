@@ -1,13 +1,13 @@
-package com.silenteight.hsbc.datasource.feature.dob
+package com.silenteight.hsbc.datasource.feature.date
 
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class DobDateFilterSpec extends Specification {
+class DateFilterSpec extends Specification {
 
   @Shared
-  def underTest = new DobDateFilter()
+  def underTest = new DateFilter()
 
   @Unroll
   def "filters bad dates"() {

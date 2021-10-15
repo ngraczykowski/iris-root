@@ -1,9 +1,9 @@
-package com.silenteight.hsbc.datasource.feature.dob;
+package com.silenteight.hsbc.datasource.feature.date;
 
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-class DobDateFilter implements Predicate<String> {
+class DateFilter implements Predicate<String> {
 
   private static final Predicate<String> DATE_PATTERN_PREDICATE =
       Pattern.compile("^.*[0-9]+.*$").asMatchPredicate();

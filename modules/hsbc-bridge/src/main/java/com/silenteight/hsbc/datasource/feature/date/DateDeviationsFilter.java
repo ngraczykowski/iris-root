@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature.dob;
+package com.silenteight.hsbc.datasource.feature.date;
 
 import lombok.RequiredArgsConstructor;
 
@@ -9,7 +9,7 @@ import static java.util.regex.Pattern.compile;
 import static java.util.stream.Stream.of;
 
 @RequiredArgsConstructor
-class DobDeviationsFilter implements Predicate<String> {
+class DateDeviationsFilter implements Predicate<String> {
 
   private static final Predicate<String> FILTERED_PATTERNS_PREDICATE = of(
       compile("^0$"),

@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature.dob;
+package com.silenteight.hsbc.datasource.feature.date;
 
 import one.util.streamex.StreamEx;
 

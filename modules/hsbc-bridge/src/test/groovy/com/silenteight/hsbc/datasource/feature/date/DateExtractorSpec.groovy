@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.feature.dob
+package com.silenteight.hsbc.datasource.feature.date
 
 import spock.lang.Shared
 import spock.lang.Specification

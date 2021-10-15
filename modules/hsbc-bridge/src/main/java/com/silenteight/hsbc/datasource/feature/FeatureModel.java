@@ -20,7 +20,7 @@ import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListCommonNameFe
 import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListCommonWpFeature;
 import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListInvalidAlertFeature;
 import com.silenteight.hsbc.datasource.feature.country.*;
-import com.silenteight.hsbc.datasource.feature.dob.DateOfBirthFeature;
+import com.silenteight.hsbc.datasource.feature.date.DateOfBirthFeature;
 import com.silenteight.hsbc.datasource.feature.document.OtherDocumentFeature;
 import com.silenteight.hsbc.datasource.feature.document.PassportNumberFeature;
 import com.silenteight.hsbc.datasource.feature.gender.GenderFeature;

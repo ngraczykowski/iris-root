@@ -48,6 +48,30 @@ silenteight.bridge:
       SSC:
         - SSC
 
+  ### DATE WATCHLIST TYPES MAP
+
+  date:
+    watchlist-types:
+      SAN:
+        - AE-MEWOLF
+        - MENA-GREY
+        - MEWOLF
+        - MX-DARK-GREY
+        - SAN
+        - US-HBUS
+      AML:
+        - AML
+        - CTF-P2
+        - INNIA
+        - MX-AML
+        - MX-SHCP
+      PEP:
+        - PEP
+      EXITS:
+        - SCION
+      SSC:
+        - SSC
+
   ### ALERT DECISION MAP
 
   alert:
