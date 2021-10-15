@@ -8,6 +8,8 @@ import com.silenteight.hsbc.datasource.dto.date.DateFeatureInputDto.DateFeatureI
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
+import static com.silenteight.hsbc.datasource.dto.name.EntityType.INDIVIDUAL;
+import static com.silenteight.hsbc.datasource.dto.name.EntityType.ORGANIZATION;
 import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
 import static java.util.stream.Stream.concat;
 
@@ -19,10 +21,14 @@ public class DateOfBirthFeature implements FeatureValuesRetriever<DateFeatureInp
 
     log.debug("Datasource start retrieve data for {} feature.", getFeature());
 
+    var severityResolver = new SeverityResolver(matchData);
     var featureBuilder = featureInputBuilder();
 
     if (matchData.isEntity()) {
-      return featureBuilder.build();
+      return featureBuilder
+          .alertedPartyType(ORGANIZATION)
+          .mode(severityResolver.resolve())
+          .build();
     }
 
     var apDates = new ApDateExtractor(matchData.getCustomerIndividuals()).extract();
@@ -37,6 +43,8 @@ public class DateOfBirthFeature implements FeatureValuesRetriever<DateFeatureInp
     var result = featureBuilder
         .alertedPartyDates(toDistinctList(apDates))
         .watchlistDates(toDistinctList(wlDates))
+        .alertedPartyType(INDIVIDUAL)
+        .mode(severityResolver.resolve())
         .build();
 
     log.debug(

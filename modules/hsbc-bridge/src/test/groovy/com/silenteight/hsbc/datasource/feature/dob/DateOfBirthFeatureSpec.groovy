@@ -1,9 +1,11 @@
 package com.silenteight.hsbc.datasource.feature.dob
 
+import com.silenteight.hsbc.datasource.datamodel.CaseInformation
 import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual
 import com.silenteight.hsbc.datasource.datamodel.MatchData
 import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual
+import com.silenteight.hsbc.datasource.dto.date.SeverityMode
 import com.silenteight.hsbc.datasource.feature.Feature
 
 import spock.lang.Specification
@@ -15,6 +17,11 @@ class DateOfBirthFeatureSpec extends Specification {
   def "extracts correctly without duplicates"() {
     given:
     def matchData = [
+        getCaseInformation       : {
+          [
+              getExtendedAttribute5  : {"AML"}
+          ] as CaseInformation
+        },
         getCustomerEntities      : {null},
         getCustomerIndividuals   :
             {
@@ -72,6 +79,7 @@ class DateOfBirthFeatureSpec extends Specification {
       alertedPartyDates == ["1992 8 23", "1994"]
       watchlistDates.size() == 5
       watchlistDates == ["22 12 1990", "10 10 2012", "1994", "23/12/1990", "1995"]
+      mode == SeverityMode.NORMAL
     }
   }
 }
