@@ -22,7 +22,7 @@ public class TestCallbackController {
     var clientRequestDto = clientRequestDtoFactory
         .create(createTestAlertDecisionMessageDto());
     var callback = callbackRequestFactory.create(clientRequestDto);
-    callback.invoke();
+    callback.execute();
     return "Callback invoked\n";
   }
 

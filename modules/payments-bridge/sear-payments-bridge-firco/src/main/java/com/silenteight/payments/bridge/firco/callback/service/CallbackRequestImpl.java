@@ -24,7 +24,7 @@ class CallbackRequestImpl implements CallbackRequest {
 
   @Timed("ProxyBridgeClient.send")
   @Override
-  public void invoke() {
+  public void execute() {
     try {
       ResponseEntity<AckDto> responseEntity =
           restTemplate.postForEntity(endpoint, clientRequestDto, AckDto.class);
@@ -32,31 +32,31 @@ class CallbackRequestImpl implements CallbackRequest {
       log.debug("The response from [{}] is: {}", endpoint, responseEntity);
 
       if (responseEntity.getStatusCodeValue() < 400) {
-        if (log.isDebugEnabled())
-          log.debug("I sent the decision to [{}] and received the response [{}]",
+        if (log.isDebugEnabled()) {
+          log.debug("Sent the decision to [{}] and received the response [{}]",
               endpoint, responseEntity.getStatusCode());
+        }
       } else {
-        log.warn("I received the error code [{}] when sending the decision for the alert to [{}]",
+        log.warn("Received an error code [{}] when sending the decision for the alert to [{}]",
             responseEntity.getStatusCode(), endpoint);
         throw new HttpServerErrorException(responseEntity.getStatusCode());
       }
     } catch (HttpServerErrorException exception) {
       logException(endpoint, exception);
       throw mapToException(exception);
-
     } catch (RestClientException exception) {
       logException(endpoint, exception);
       throw new NonRecoverableCallbackException(exception);
     }
   }
 
-  private void logException(String endpoint, Exception exception) {
+  private static void logException(String endpoint, Exception exception) {
     log.warn(
-        "I was unable to send the decision to [{}] due to the exception [{}: {}]",
+        "Unable to send the decision to [{}] due to the exception [{}: {}]",
         endpoint, exception.getClass().getName(), exception.getLocalizedMessage());
   }
 
-  private RuntimeException mapToException(HttpServerErrorException exception) {
+  private static RuntimeException mapToException(HttpServerErrorException exception) {
     switch (exception.getStatusCode()) {
       case UNAUTHORIZED:
       case FORBIDDEN:
@@ -70,5 +70,4 @@ class CallbackRequestImpl implements CallbackRequest {
         return new NonRecoverableCallbackException(exception);
     }
   }
-
 }

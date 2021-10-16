@@ -43,7 +43,7 @@ class SendResponseService implements SendResponseUseCase {
 
     try {
       log.info("Calling callback. Alert: [{}], status: [{}]", alertId, status);
-      callbackRequestFactory.create(requestDto).invoke();
+      callbackRequestFactory.create(requestDto).execute();
       log.info("The callback invoked successfully. Alert: [{}], status: [{}]", alertId, status);
 
       commonChannels.deliveredAlertChannel().send(

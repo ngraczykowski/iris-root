@@ -6,8 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 class NoCallbackRequestImpl implements CallbackRequest {
 
   @Override
-  public void invoke() {
-    log.debug("invoke");
+  public void execute() {
+    log.debug("No decision callback executed.");
   }
-
 }
