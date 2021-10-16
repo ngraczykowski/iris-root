@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.firco.datasource.service.process.categor
 
 import com.silenteight.payments.bridge.agents.model.HistoricalRiskAssessmentAgentResponse;
 import com.silenteight.payments.bridge.agents.port.HistoricalRiskAssessmentUseCase;
-import com.silenteight.payments.bridge.svb.etl.response.HitData;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

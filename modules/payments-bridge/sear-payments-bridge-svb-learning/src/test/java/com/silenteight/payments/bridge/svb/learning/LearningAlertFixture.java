@@ -1,9 +1,9 @@
 package com.silenteight.payments.bridge.svb.learning;
 
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
-import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import java.util.List;
 import java.util.stream.Collectors;

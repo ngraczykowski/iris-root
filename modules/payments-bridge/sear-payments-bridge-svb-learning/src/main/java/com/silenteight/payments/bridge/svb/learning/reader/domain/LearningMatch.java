@@ -8,9 +8,9 @@ import lombok.experimental.NonFinal;
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
 import com.silenteight.payments.bridge.agents.model.*;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
-import com.silenteight.payments.bridge.svb.etl.model.AbstractMessageStructure;
-import com.silenteight.payments.bridge.svb.etl.model.GetAccountNumberRequest;
-import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
+import com.silenteight.payments.bridge.svb.oldetl.model.AbstractMessageStructure;
+import com.silenteight.payments.bridge.svb.oldetl.model.GetAccountNumberRequest;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import org.apache.commons.lang3.StringUtils;
 

@@ -4,7 +4,7 @@ import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRe
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.Result;
 import com.silenteight.payments.bridge.agents.port.NameAddressCrossmatchUseCase;
 import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
-import com.silenteight.payments.bridge.svb.etl.port.CreateAlertedPartyEntitiesUseCase;
+import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

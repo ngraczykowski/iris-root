@@ -1,7 +1,7 @@
 package com.silenteight.payments.bridge.firco.datasource.util;
 
-import com.silenteight.payments.bridge.svb.etl.response.HitAndWatchlistPartyData;
-import com.silenteight.payments.bridge.svb.etl.response.HitData;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import java.util.List;
 import java.util.Map.Entry;

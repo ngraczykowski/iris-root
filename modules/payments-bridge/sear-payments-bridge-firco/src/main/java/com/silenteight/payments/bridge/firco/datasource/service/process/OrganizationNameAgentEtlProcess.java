@@ -12,8 +12,8 @@ import com.silenteight.datasource.api.name.v1.WatchlistName;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
-import com.silenteight.payments.bridge.svb.etl.response.AlertEtlResponse;
-import com.silenteight.payments.bridge.svb.etl.response.HitData;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import com.google.protobuf.Any;
 import io.grpc.Deadline;

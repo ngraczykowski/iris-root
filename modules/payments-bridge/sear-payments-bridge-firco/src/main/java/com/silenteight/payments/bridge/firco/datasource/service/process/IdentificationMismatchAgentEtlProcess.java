@@ -10,9 +10,9 @@ import com.silenteight.datasource.api.bankidentificationcodes.v1.BankIdentificat
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
-import com.silenteight.payments.bridge.svb.etl.response.AlertEtlResponse;
-import com.silenteight.payments.bridge.svb.etl.response.HitAndWatchlistPartyData;
-import com.silenteight.payments.bridge.svb.etl.response.HitData;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import com.google.protobuf.Any;
 import io.grpc.Deadline;

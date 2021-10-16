@@ -1,12 +1,12 @@
 package com.silenteight.payments.bridge.svb.learning.reader.service;
 
-import com.silenteight.payments.bridge.svb.etl.port.CreateAlertedPartyEntitiesUseCase;
-import com.silenteight.payments.bridge.svb.etl.port.ExtractAlertedPartyDataUseCase;
-import com.silenteight.payments.bridge.svb.etl.port.ExtractFieldValueUseCase;
-import com.silenteight.payments.bridge.svb.etl.port.ExtractMessageStructureUseCase;
-import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
+import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
+import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertedPartyDataUseCase;
+import com.silenteight.payments.bridge.svb.oldetl.port.ExtractFieldValueUseCase;
+import com.silenteight.payments.bridge.svb.oldetl.port.ExtractMessageStructureUseCase;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

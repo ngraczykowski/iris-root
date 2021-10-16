@@ -7,8 +7,8 @@ import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.event.AlertInputAcceptedEvent;
 import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
-import com.silenteight.payments.bridge.svb.etl.port.ExtractAlertEtlResponseUseCase;
-import com.silenteight.payments.bridge.svb.etl.response.AlertEtlResponse;
+import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertEtlResponseUseCase;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
 
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;

@@ -1,10 +1,10 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process;
 
 import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
-import com.silenteight.payments.bridge.svb.etl.response.AlertEtlResponse;
-import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
-import com.silenteight.payments.bridge.svb.etl.response.HitAndWatchlistPartyData;
-import com.silenteight.payments.bridge.svb.etl.response.HitData;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import java.util.*;
 import javax.annotation.Nonnull;

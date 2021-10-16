@@ -8,8 +8,8 @@ import com.silenteight.datasource.categories.api.v2.CreateCategoryValuesRequest;
 import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
 import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
-import com.silenteight.payments.bridge.svb.etl.response.AlertEtlResponse;
-import com.silenteight.payments.bridge.svb.etl.response.HitData;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import org.springframework.stereotype.Service;
 

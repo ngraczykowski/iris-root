@@ -6,10 +6,10 @@ import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
 import com.silenteight.payments.bridge.agents.port.NameAddressCrossmatchUseCase;
-import com.silenteight.payments.bridge.svb.etl.model.CreateAlertedPartyEntitiesRequest;
-import com.silenteight.payments.bridge.svb.etl.port.CreateAlertedPartyEntitiesUseCase;
-import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
-import com.silenteight.payments.bridge.svb.etl.response.HitData;
+import com.silenteight.payments.bridge.svb.oldetl.model.CreateAlertedPartyEntitiesRequest;
+import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

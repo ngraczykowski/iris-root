@@ -9,7 +9,7 @@ import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.decision.MapStatusRequest;
 import com.silenteight.payments.bridge.firco.decision.MapStatusUseCase;
-import com.silenteight.payments.bridge.svb.etl.util.StringUtil;
+import com.silenteight.payments.bridge.svb.oldetl.util.StringUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;

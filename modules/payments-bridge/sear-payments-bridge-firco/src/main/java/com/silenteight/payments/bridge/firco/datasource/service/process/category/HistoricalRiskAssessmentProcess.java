@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.agents.model.HistoricalRiskAssessmentAgentRequest;
 import com.silenteight.payments.bridge.agents.port.HistoricalRiskAssessmentUseCase;
-import com.silenteight.payments.bridge.svb.etl.response.HitData;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

@@ -9,10 +9,10 @@ import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
 import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
-import com.silenteight.payments.bridge.svb.etl.response.AlertEtlResponse;
-import com.silenteight.payments.bridge.svb.etl.response.AlertedPartyData;
-import com.silenteight.payments.bridge.svb.etl.response.HitAndWatchlistPartyData;
-import com.silenteight.payments.bridge.svb.etl.response.HitData;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import com.google.protobuf.Any;
 import io.grpc.Deadline;
