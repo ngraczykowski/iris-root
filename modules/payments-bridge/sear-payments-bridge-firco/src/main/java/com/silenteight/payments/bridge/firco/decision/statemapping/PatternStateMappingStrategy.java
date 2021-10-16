@@ -34,8 +34,10 @@ class PatternStateMappingStrategy implements StateMappingStrategy {
 
   @NonNull
   @Override
-  public MapStateOutput mapState(@NonNull MapStateInput request,
+  public MapStateOutput mapState(
+      @NonNull MapStateInput request,
       Supplier<? extends MapStateOutput> orElseHandler) {
+
     return patterns.stream()
         .filter(patternTuple -> matches(request, patternTuple))
         .findAny()
@@ -64,9 +66,8 @@ class PatternStateMappingStrategy implements StateMappingStrategy {
     private static final long serialVersionUID = 872963616208335082L;
 
     public CouldNotMapStateException(String strategyName, MapStateInput input) {
-      super("I could not map alert input to output. You probably need to fix "
-          + "configuration of " + strategyName + ". Input: " + input);
+      super("Could not map alert input to output. You probably need to fix"
+          + " configuration of " + strategyName + ". Input: " + input);
     }
   }
-
 }
