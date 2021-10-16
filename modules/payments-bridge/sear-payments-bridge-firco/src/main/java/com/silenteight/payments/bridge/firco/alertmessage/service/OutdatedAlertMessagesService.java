@@ -46,13 +46,14 @@ public class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCas
 
   private OffsetDateTime decisionObsoleteSince() {
     return OffsetDateTime.now(clock).minus(
-      alertMessageProperties.getDecisionRequestedTime().minusSeconds(5));
+        alertMessageProperties.getDecisionRequestedTime().minusSeconds(5));
   }
 
   private void transitionToOutdated(AlertMessageStatusEntity status) {
     var alertId = status.getAlertMessageId();
     if (isDeliverable(status)) {
-      var entity = createRecommendationUseCase.createRecommendation(new RecommendationWrapper(alertId));
+      var entity =
+          createRecommendationUseCase.createRecommendation(new RecommendationWrapper(alertId));
       createResponseUseCase.createResponse(alertId, entity.getId(), REJECTED_OUTDATED);
       alertMessageStatusService
           .transitionAlertMessageStatus(alertId, REJECTED_OUTDATED, PENDING);
