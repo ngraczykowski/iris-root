@@ -20,7 +20,7 @@ public class MockAlertUseCase {
   private static int matchId = 1;
 
   static Alert createAlert(Alert alert, Set<Long> existing) {
-    while(existing.contains(alertId)) {
+    while (existing.contains(alertId)) {
       alertId++;
     }
 
