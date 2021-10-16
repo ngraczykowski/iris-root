@@ -41,7 +41,7 @@ class FircoMessageParserTest {
   private final FircoMessageParser parser = new FircoMessageParser(MESSAGE);
 
   @Test
-  void shouldExtractKeyValues() {
+  void shouldExtractFircoMessageData() {
     var messageData = parser.parse();
     assertThat(messageData.get("APPLI")).isEqualTo("GFX");
     assertThat(messageData.get("ORIGINATOR")).isEqualTo("AC\n"

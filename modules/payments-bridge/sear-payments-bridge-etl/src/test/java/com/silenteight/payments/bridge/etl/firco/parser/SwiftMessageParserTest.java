@@ -30,7 +30,7 @@ class SwiftMessageParserTest {
   private final SwiftMessageParser parser = new SwiftMessageParser(MESSAGE);
 
   @Test
-  void shouldExtractKeyValues() {
+  void shouldExtractSwiftMessageData() {
     var messageData = parser.parse();
     assertThat(messageData.get("33B")).isEqualTo("EUR12345,");
     assertThat(messageData.get("50K")).isEqualTo(
