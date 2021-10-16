@@ -15,24 +15,13 @@ gradleBuild(
           gradle.gradle('jib')
         }
         // Stash data to AWS nodes - scripts, helm etc.
-        dir('./scripts') {
-          stash includes: '**', name: 'scripts'
-        }
-        dir('./helm-chart') {
-          stash includes: '**', name: 'helm'
-        }
+        stash includes: 'scripts/**, helm-chart/**', name: 'scripts-and-chart'
       }
       stage('Helm Chart registry') {
         env.INSTALLER_VERSION = utils.getProjectVersion()
         node("aws-worker") {
           sh 'rm -rf ./scripts ./helm-chart'
-          // Stash is done in first stage
-          dir('./scripts') {
-            unstash 'scripts'
-          }
-          dir('./helm-chart') {
-            unstash 'helm'
-          }
+          unstash 'scripts-and-chart'
           withCredentials(
               [usernamePassword(
                   credentialsId: 'artifactory-deployment-user', usernameVariable: 'USERNAME',
@@ -54,14 +43,7 @@ gradleBuild(
         env.INSTALLER_VERSION = utils.getProjectVersion()
         node("aws-worker") {
           sh 'rm -rf ./scripts ./helm-chart'
-          // Stash is done in first stage
-          dir('./scripts') {
-            unstash 'scripts'
-          }
-
-          dir('./helm-chart') {
-            unstash 'helm'
-          }
+          unstash 'scripts-and-chart'
           script {
             if (utils.getGitBranch() == 'master') {
               echo 'AWS image push'
