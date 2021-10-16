@@ -1,8 +1,7 @@
 package com.silenteight.payments.bridge.etl.firco.parser;
 
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class FircoMessageParserTest {
 
@@ -14,6 +13,9 @@ class FircoMessageParserTest {
           + "[TYPE          X] FED 1000 O\n"
           + "[VALUEDATE      ] 2021/08/13\n"
           + "[AMOUNT         ] USD 12345.00\n"
+          + "[EMPTY          ]\n"
+          + "[UNENDING       ]"
+          + "[LOOOOOOOOOOOONG] TEST\n"
           + "[SENDER         ] 999999999\n"
           + "[ORIGINATOR     ] AC\n"
           + "1234567890\n"
@@ -43,14 +45,19 @@ class FircoMessageParserTest {
   @Test
   void shouldExtractFircoMessageData() {
     var messageData = parser.parse();
-    assertThat(messageData.get("APPLI")).isEqualTo("GFX");
-    assertThat(messageData.get("ORIGINATOR")).isEqualTo("AC\n"
+    var softly = new SoftAssertions();
+    softly.assertThat(messageData.get("APPLI")).isEqualTo("GFX");
+    softly.assertThat(messageData.get("ORIGINATOR")).isEqualTo("AC\n"
         + "1234567890\n"
         + "XXXXXXXXXXXXXX XXX\n"
         + "123456 XXXXXXXXXXXX\n"
         + "JERSEY CITY, NJ 07302\n"
         + "US");
-    assertThat(messageData.get("CHARGESCD")).isEqualTo("SHA");
-    assertThat(messageData.get("FXRATE")).isEqualTo("1.000000");
+    softly.assertThat(messageData.get("CHARGESCD")).isEqualTo("SHA");
+    softly.assertThat(messageData.get("FXRATE")).isEqualTo("1.000000");
+    softly.assertThat(messageData.get("EMPTY")).isEmpty();
+    softly.assertThat(messageData.get("UNENDING")).isEmpty();
+    softly.assertThat(messageData.get("LOOOOOOOOOOOONG")).isEqualTo("TEST");
+    softly.assertAll();
   }
 }

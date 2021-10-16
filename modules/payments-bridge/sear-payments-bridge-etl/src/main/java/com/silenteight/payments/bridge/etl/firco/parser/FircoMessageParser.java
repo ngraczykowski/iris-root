@@ -35,7 +35,7 @@ class FircoMessageParser {
     index++;
 
     for (var i = index; i < chars.length; i++) {
-      if (chars[i] == ' ')
+      if (chars[i] == ' ' || chars[i] == ']')
         return new IndexValue(readUntilClose(i), word.toString());
 
       word.append(chars[i]);
@@ -58,6 +58,9 @@ class FircoMessageParser {
 
     if (chars[index] != ']')
       throw new IllegalArgumentException();
+
+    if (chars[index + 1] == '[')
+      return new IndexValue(index + 1, word.toString());
 
     index += 2;
 
