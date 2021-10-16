@@ -9,6 +9,7 @@ import com.silenteight.adjudication.api.v2.RecommendationServiceGrpc.Recommendat
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.payments.bridge.event.RecommendationGeneratedEvent;
 
+import com.google.protobuf.Timestamp;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.context.annotation.Profile;
@@ -41,10 +42,20 @@ class RecommendationServiceGrpc extends RecommendationServiceImplBase {
       StreamObserver<RecommendationWithMetadata> responseObserver) {
     responseObserver.onNext(
         RecommendationWithMetadata.newBuilder()
-            .setMetadata(RecommendationMetadata.newBuilder().build())
             .setRecommendation(
                 Recommendation.newBuilder()
-                    .setAlert(cache.get(request.getRecommendation()))).build());
+                  .setName(request.getRecommendation())
+                  .setAlert(cache.get(request.getRecommendation()))
+                  .setCreateTime(Timestamp.newBuilder().build())
+                  .setRecommendationComment("MOCKAE recommendation comment")
+                  .setRecommendedAction("MOCKAE recommendation action")
+            )
+            .setMetadata(
+                RecommendationMetadata.newBuilder()
+                  .setAlert(cache.get(request.getRecommendation()))
+                  .setName(request.getRecommendation() + "/metadata")
+            )
+            .build());
     responseObserver.onCompleted();
   }
 

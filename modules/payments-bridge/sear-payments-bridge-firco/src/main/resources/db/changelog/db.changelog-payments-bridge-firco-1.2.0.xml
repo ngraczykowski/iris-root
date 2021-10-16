@@ -102,4 +102,11 @@
 
   </changeSet>
 
+  <changeSet id="payments-bridge-firco-1.2.8" author="zruchala">
+    <modifyDataType
+        columnName="recommendation_name"
+        newDataType="varchar(50)"
+        tableName="pb_recommendation"/>
+  </changeSet>
+
 </databaseChangeLog>

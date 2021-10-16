@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 
-import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.ALERT_INPUT_ACCEPTED;
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.RECOMMENDATION_GENERATED;
@@ -24,11 +24,13 @@ class RecommendationShortPathIntegration {
    */
   @ServiceActivator(inputChannel = ALERT_INPUT_ACCEPTED, outputChannel = RECOMMENDATION_GENERATED)
   RecommendationGeneratedEvent generateRecommendation(AlertInputAcceptedEvent event) {
+    var recommendationId = ThreadLocalRandom.current().nextInt(10000) + 1;
     var recommendationsGenerated = RecommendationsGenerated.newBuilder()
+        .setAnalysis("analysis/MOCKAE")
         .addRecommendationInfos(
             RecommendationInfo.newBuilder()
                 .setAlert(event.getAlertRegisteredName())
-                .setRecommendation("analysis/MOCKAE/recommendations/" + UUID.randomUUID())
+                .setRecommendation("analysis/MOCKAE/recommendations/" + recommendationId)
                 .build()).build();
 
     return new RecommendationGeneratedEvent(recommendationsGenerated);

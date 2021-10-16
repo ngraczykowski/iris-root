@@ -6,14 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.OutdatedAlertMessagesUseCase;
+import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateResponseUseCase;
+import com.silenteight.payments.bridge.firco.recommendation.service.RecommendationWrapper;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
-import java.util.UUID;
 import javax.transaction.Transactional;
 
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OUTDATED;
@@ -29,6 +30,7 @@ public class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCas
   private final AlertMessageStatusRepository repository;
   private final AlertMessageStatusService alertMessageStatusService;
   private final CreateResponseUseCase createResponseUseCase;
+  private final CreateRecommendationUseCase createRecommendationUseCase;
 
   @Setter
   private Clock clock = Clock.systemUTC();
@@ -50,8 +52,8 @@ public class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCas
   private void transitionToOutdated(AlertMessageStatusEntity status) {
     var alertId = status.getAlertMessageId();
     if (isDeliverable(status)) {
-      // TODO: recommendation-uuid
-      createResponseUseCase.createResponse(alertId, UUID.randomUUID(), REJECTED_OUTDATED);
+      var entity = createRecommendationUseCase.createRecommendation(new RecommendationWrapper(alertId));
+      createResponseUseCase.createResponse(alertId, entity.getId(), REJECTED_OUTDATED);
       alertMessageStatusService
           .transitionAlertMessageStatus(alertId, REJECTED_OUTDATED, PENDING);
     } else {
