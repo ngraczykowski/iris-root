@@ -157,9 +157,9 @@ jib {
         "-Dsilenteight.home=/silenteight",
         "-Dspring.profiles.include=container",
         "-Dserver.port=8080",
-        "-Dgrpc.server.port=8081",
+        "-Dgrpc.server.port=9090",
     ]
-    ports = ["8080", "8081"]
+    ports = ["8080", "9090"]
     user = "nonroot"
     workingDirectory = "/silenteight"
   }

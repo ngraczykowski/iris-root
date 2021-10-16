@@ -92,7 +92,7 @@ spec:
           ports:
             - containerPort: 8080
               name: http
-            - containerPort: 8081
+            - containerPort: 9090
               name: grpc
       volumes:
         - name: "logback-config"
