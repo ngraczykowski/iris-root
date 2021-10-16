@@ -63,6 +63,7 @@ class AlertMessageEntity extends BaseEntity {
 
   @Column(updatable = false, nullable = false)
   @NonNull
+  // FIXME(ahaczewski): Rename to `hitCount`.
   private Integer numberOfHits;
 
   @Column(updatable = false)

@@ -4,7 +4,7 @@ import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStat
 
 import java.util.UUID;
 
-public interface CreateResponseUseCase {
+public interface NotifyResponseCompletedUseCase {
 
-  void createResponse(UUID alertId, UUID recommendationId, AlertMessageStatus status);
+  void notify(UUID alertId, UUID recommendationId, AlertMessageStatus status);
 }

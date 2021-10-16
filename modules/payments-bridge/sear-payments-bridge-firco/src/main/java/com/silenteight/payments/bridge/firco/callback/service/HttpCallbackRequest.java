@@ -16,13 +16,13 @@ import org.springframework.web.client.RestTemplate;
 
 @RequiredArgsConstructor
 @Slf4j
-class CallbackRequestImpl implements CallbackRequest {
+class HttpCallbackRequest implements CallbackRequest {
 
   private final String endpoint;
   private final RestTemplate restTemplate;
   private final ClientRequestDto clientRequestDto;
 
-  @Timed("ProxyBridgeClient.send")
+  @Timed("pb.firco.callback")
   @Override
   public void execute() {
     try {

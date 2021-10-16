@@ -7,7 +7,6 @@ import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationId;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationWrapper;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
-import com.silenteight.sep.base.common.exception.EntityNotFoundException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,12 +32,6 @@ class RecommendationService implements CreateRecommendationUseCase {
   private final RecommendationMetadataRepository recommendationMetadataRepository;
   private final ObjectMapper objectMapper;
 
-  public RecommendationEntity findById(UUID recommendationId) {
-    return recommendationRepository
-        .findById(recommendationId)
-        .orElseThrow(EntityNotFoundException::new);
-  }
-
   @Transactional
   public RecommendationId createRecommendation(RecommendationWrapper wrapper) {
     var entity = new RecommendationEntity(wrapper);
@@ -48,10 +41,9 @@ class RecommendationService implements CreateRecommendationUseCase {
 
     var recommendationEntity = recommendationRepository.save(entity);
 
-    if (wrapper.hasRecommendation()) {
-      createMetadata(wrapper.getMetadata(), recommendationEntity.getId())
-          .ifPresent(recommendationMetadataRepository::save);
-    }
+    wrapper.getMetadata()
+        .flatMap(md -> createMetadata(md, recommendationEntity.getId()))
+        .ifPresent(recommendationMetadataRepository::save);
 
     return new RecommendationId(id);
   }

@@ -40,7 +40,7 @@ class FilterAlertMessageService implements FilterAlertMessageUseCase {
     return isMaxHitsPerAlertExceeded(alert);
   }
 
-  private boolean isTransitionForbidden(AlertMessageStatusEntity alertMessageStatus) {
+  private static boolean isTransitionForbidden(AlertMessageStatusEntity alertMessageStatus) {
     if (!alertMessageStatus.getStatus().isTransitionAllowed(ACCEPTED)) {
       // the received event seems to be obsolete. Skip gracefully.
       log.debug("The AlertMessage [{}] is already solved (status={}). Skipping further processing.",
@@ -79,5 +79,4 @@ class FilterAlertMessageService implements FilterAlertMessageUseCase {
     }
     return false;
   }
-
 }

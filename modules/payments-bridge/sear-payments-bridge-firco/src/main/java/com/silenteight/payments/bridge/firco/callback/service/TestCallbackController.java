@@ -12,7 +12,7 @@ import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMess
 
 @RequiredArgsConstructor
 @RestController
-public class TestCallbackController {
+class TestCallbackController {
 
   private final CallbackRequestFactory callbackRequestFactory;
   private final ClientRequestDtoFactory clientRequestDtoFactory;
@@ -26,7 +26,7 @@ public class TestCallbackController {
     return "Callback invoked\n";
   }
 
-  private AlertDecisionMessageDto createTestAlertDecisionMessageDto() {
+  private static AlertDecisionMessageDto createTestAlertDecisionMessageDto() {
     var status = new StatusInfoDto();
     status.setName(RECOMMENDED.name());
 

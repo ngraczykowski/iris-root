@@ -33,7 +33,7 @@ class CallbackRequestConfiguration {
         .setReadTimeout(properties.getReadTimeout())
         .build();
 
-    return new CallbackRequestFactoryImpl(properties.getEndpoint(), restTemplate);
+    return new HttpCallbackRequestFactory(properties.getEndpoint(), restTemplate);
   }
 
   private OAuth2AuthorizedClientInterceptor getOAuth2Interceptor(
@@ -54,6 +54,6 @@ class CallbackRequestConfiguration {
   @ConditionalOnProperty(prefix = "pb.cmapi.callback", name = "enabled", havingValue = "false",
       matchIfMissing = true)
   CallbackRequestFactory noCallbackRequestFactory() {
-    return new NoCallbackRequestFactoryImpl();
+    return new NoopCallbackRequestFactory();
   }
 }

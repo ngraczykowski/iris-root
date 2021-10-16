@@ -39,8 +39,6 @@ class FircoInboundAmqpIntegrationConfiguration {
   private final AmqpInboundFactory inboundFactory;
   private final CommonChannels commonChannels;
   private final FilterAlertMessageUseCase alertMessageUseCase;
-
-  // TODO
   private final SendResponseUseCase sendResponseUseCase;
 
   @Bean

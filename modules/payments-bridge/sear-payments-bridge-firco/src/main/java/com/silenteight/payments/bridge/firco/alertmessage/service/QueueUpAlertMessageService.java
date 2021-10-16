@@ -10,7 +10,7 @@ import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessag
 import com.silenteight.payments.bridge.firco.callback.model.CallbackException;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationWrapper;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
-import com.silenteight.payments.bridge.firco.recommendation.port.CreateResponseUseCase;
+import com.silenteight.payments.bridge.firco.recommendation.port.NotifyResponseCompletedUseCase;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -31,13 +31,14 @@ class QueueUpAlertMessageService {
   private final AlertMessageStatusService statusService;
   private final AlertMessageStatusRepository repository;
   private final AlertMessageProperties properties;
-  private final CreateResponseUseCase createResponseUseCase;
+  private final NotifyResponseCompletedUseCase notifyResponseCompletedUseCase;
   private final CreateRecommendationUseCase createRecommendationUseCase;
 
   private final CommonChannels commonChannels;
 
   void queueUp(FircoAlertMessage alert) {
-    if (isQueueOverflowed(alert)) {
+    if (isQueueOverflowed()) {
+      handleOverflow(alert);
       return;
     }
 
@@ -49,28 +50,27 @@ class QueueUpAlertMessageService {
     );
   }
 
-  private boolean isQueueOverflowed(FircoAlertMessage alert) {
-    if (repository.countAllByStatus(STORED) > properties.getStoredQueueLimit()) {
-      log.info("AlertMessage [{}] rejected due to queue limit ({})",
-          alert.getId(), properties.getStoredQueueLimit());
+  private boolean isQueueOverflowed() {
+    return repository.countAllByStatus(STORED) > properties.getStoredQueueLimit();
+  }
 
-      try {
-        var entity = createRecommendationUseCase.createRecommendation(
-            new RecommendationWrapper(alert.getId()));
-        createResponseUseCase.createResponse(alert.getId(), entity.getId(), REJECTED_OVERFLOWED);
-        statusService.transitionAlertMessageStatus(alert.getId(), REJECTED_OVERFLOWED, PENDING);
-      } catch (CallbackException exception) {
-        statusService.transitionAlertMessageStatus(alert.getId(), REJECTED_OVERFLOWED,
-            DeliveryStatus.UNDELIVERED);
-      }
-      return true;
+  private void handleOverflow(FircoAlertMessage alert) {
+    log.info("AlertMessage [{}] rejected due to queue limit ({})",
+        alert.getId(), properties.getStoredQueueLimit());
+
+    try {
+      var entity = createRecommendationUseCase.createRecommendation(
+          new RecommendationWrapper(alert.getId()));
+      notifyResponseCompletedUseCase.notify(alert.getId(), entity.getId(), REJECTED_OVERFLOWED);
+      statusService.transitionAlertMessageStatus(alert.getId(), REJECTED_OVERFLOWED, PENDING);
+    } catch (CallbackException exception) {
+      statusService.transitionAlertMessageStatus(
+          alert.getId(), REJECTED_OVERFLOWED, DeliveryStatus.UNDELIVERED);
     }
-    return false;
   }
 
   private MessageStored buildMessageStore(FircoAlertMessage message) {
     var id = "alert-messages/" + message.getId();
     return MessageStored.newBuilder().setAlert(id).build();
   }
-
 }

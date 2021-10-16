@@ -8,10 +8,12 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.silenteight.payments.bridge.firco.recommendation.model.RecommendationSource.AE;
 import static com.silenteight.payments.bridge.firco.recommendation.model.RecommendationSource.BRIDGE;
+import static java.util.Optional.ofNullable;
 
 @Data
 @AllArgsConstructor
@@ -31,7 +33,7 @@ public class RecommendationWrapper {
     return recommendationWithMetadata != null;
   }
 
-  public RecommendationMetadata getMetadata() {
-    return recommendationWithMetadata.getMetadata();
+  public Optional<RecommendationMetadata> getMetadata() {
+    return ofNullable(recommendationWithMetadata).map(RecommendationWithMetadata::getMetadata);
   }
 }

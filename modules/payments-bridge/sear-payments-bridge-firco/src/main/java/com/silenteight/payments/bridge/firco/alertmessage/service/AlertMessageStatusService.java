@@ -53,8 +53,8 @@ class AlertMessageStatusService {
         .findByAlertMessageIdAndLockForWrite(alertMessageId)
         .orElseThrow();
     entity.transitionStatusOrElseThrow(destinationStatus, delivery, clock);
-    log.info("Alert [{}] is transited to {}. Delivery status: {}", alertMessageId,
-          destinationStatus, delivery);
+    log.info("Alert [{}] transitioned to {}. Delivery status: {}", alertMessageId,
+        destinationStatus, delivery);
 
     repository.save(entity);
 

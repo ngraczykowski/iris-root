@@ -15,9 +15,9 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
+import javax.annotation.Nullable;
 import javax.persistence.*;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static lombok.AccessLevel.NONE;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -37,24 +37,28 @@ class RecommendationEntity extends BaseEntity {
   @Include
   private UUID id;
 
-  @Column(name = "alert_id", nullable = false, updatable = false)
+  @Column(nullable = false, updatable = false)
   @NonNull
   private UUID alertId;
 
   @Column(name = "recommendation_name", updatable = false)
+  @Getter(onMethod_ = @Nullable)
   private String name;
 
   @Column(name = "alert_name", updatable = false)
+  @Getter(onMethod_ = @Nullable)
   private String alert;
 
-  @Column(name = "generated_at", nullable = false, updatable = false)
+  @Column(nullable = false, updatable = false)
   @NonNull
   private OffsetDateTime generatedAt;
 
   @Column(name = "recommended_action", updatable = false)
+  @Getter(onMethod_ = @Nullable)
   private String action;
 
   @Column(name = "recommendation_comment", updatable = false)
+  @Getter(onMethod_ = @Nullable)
   private String comment;
 
   @Column(name = "recommendation_source", updatable = false, nullable = false)
@@ -64,6 +68,7 @@ class RecommendationEntity extends BaseEntity {
 
   @Column(name = "recommendation_reason", updatable = false)
   @Enumerated(EnumType.STRING)
+  @Getter(onMethod_ = @Nullable)
   private RecommendationReason reason;
 
   RecommendationEntity(RecommendationWrapper wrapper) {
@@ -82,11 +87,9 @@ class RecommendationEntity extends BaseEntity {
     }
   }
 
-  private OffsetDateTime extractCreateTime(Timestamp timestamp) {
-    checkNotNull(timestamp, "timestamp");
+  private static OffsetDateTime extractCreateTime(Timestamp timestamp) {
     return Instant
         .ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos())
         .atOffset(ZoneOffset.UTC);
   }
-
 }

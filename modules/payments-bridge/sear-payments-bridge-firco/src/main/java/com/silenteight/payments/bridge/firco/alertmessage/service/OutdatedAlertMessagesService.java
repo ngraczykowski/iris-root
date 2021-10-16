@@ -8,7 +8,7 @@ import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.OutdatedAlertMessagesUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationWrapper;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
-import com.silenteight.payments.bridge.firco.recommendation.port.CreateResponseUseCase;
+import com.silenteight.payments.bridge.firco.recommendation.port.NotifyResponseCompletedUseCase;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCase {
   private final AlertMessageProperties alertMessageProperties;
   private final AlertMessageStatusRepository repository;
   private final AlertMessageStatusService alertMessageStatusService;
-  private final CreateResponseUseCase createResponseUseCase;
+  private final NotifyResponseCompletedUseCase notifyResponseCompletedUseCase;
   private final CreateRecommendationUseCase createRecommendationUseCase;
 
   @Setter
@@ -54,7 +54,7 @@ class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCase {
     if (isDeliverable(status)) {
       var entity =
           createRecommendationUseCase.createRecommendation(new RecommendationWrapper(alertId));
-      createResponseUseCase.createResponse(alertId, entity.getId(), REJECTED_OUTDATED);
+      notifyResponseCompletedUseCase.notify(alertId, entity.getId(), REJECTED_OUTDATED);
       alertMessageStatusService
           .transitionAlertMessageStatus(alertId, REJECTED_OUTDATED, PENDING);
     } else {
