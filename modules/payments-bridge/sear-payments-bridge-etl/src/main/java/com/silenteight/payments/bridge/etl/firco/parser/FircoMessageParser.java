@@ -1,30 +1,31 @@
-package com.silenteight.payments.bridge.svb.etl.util;
-
-import com.silenteight.payments.bridge.svb.etl.model.IndexValue;
+package com.silenteight.payments.bridge.etl.firco.parser;
 
 import java.util.HashMap;
-import java.util.Map;
 
-class ExtractFircoMessageTagValueMap {
+class FircoMessageParser {
 
-  public static Map<String, String> extract(String message) {
-    var tagValues = new HashMap<String, String>();
+  private final HashMap<String, String> tagValues;
+  private final char[] chars;
 
-    var chars = message.toCharArray();
+  FircoMessageParser(String message) {
+    tagValues = new HashMap<String, String>();
+    chars = message.toCharArray();
+  }
 
+  MessageData parse() {
     var i = 0;
     while (i < chars.length) {
-      var keyIndex = readKey(i, chars);
+      var keyIndex = readKey(i);
       i = keyIndex.getIndex();
-      var valueIndex = readValue(i, chars);
+      var valueIndex = readValue(i);
       i = valueIndex.getIndex();
       tagValues.put(keyIndex.getValue(), valueIndex.getValue());
     }
 
-    return tagValues;
+    return new MessageData(tagValues);
   }
 
-  private static IndexValue readKey(int index, char[] chars) {
+  private IndexValue readKey(int index) {
     var word = new StringBuilder();
 
     if (chars[index] != '[')
@@ -34,14 +35,14 @@ class ExtractFircoMessageTagValueMap {
 
     for (int i = index; i < chars.length; i++) {
       if (chars[i] == ' ')
-        return new IndexValue(readUnilClose(i, chars), word.toString());
+        return new IndexValue(readUntilClose(i, chars), word.toString());
       word.append(chars[i]);
     }
 
     return new IndexValue(chars.length, word.toString());
   }
 
-  private static int readUnilClose(int index, char[] chars) {
+  private int readUntilClose(int index) {
     for (int i = index; i <= chars.length; i++) {
       if (chars[i] == ']')
         return i;
@@ -49,7 +50,7 @@ class ExtractFircoMessageTagValueMap {
     return chars.length;
   }
 
-  private static IndexValue readValue(int index, char[] chars) {
+  private IndexValue readValue(int index) {
     var word = new StringBuilder();
 
     if (chars[index] != ']')

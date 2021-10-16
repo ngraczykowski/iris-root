@@ -18,7 +18,6 @@ dependencies {
   implementation libraries.jakarta_validation_api
 
   implementation libraries.spring_context
-  implementation 'org.projectlombok:lombok:1.18.20'
 
   //  Testing
   testImplementation libraries.silenteight_sep_base_testing

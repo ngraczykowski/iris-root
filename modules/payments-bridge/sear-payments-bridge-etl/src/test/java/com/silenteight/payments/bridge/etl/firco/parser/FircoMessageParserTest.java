@@ -1,11 +1,10 @@
-package com.silenteight.payments.bridge.svb.etl.util;
+package com.silenteight.payments.bridge.etl.firco.parser;
 
 import org.junit.jupiter.api.Test;
 
-import static com.silenteight.payments.bridge.svb.etl.util.ExtractFircoMessageTagValueMap.extract;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class ExtractFircoMessageTagValueMapTest {
+class FircoMessageParserTest {
 
   private static final String MESSAGE =
       "[FIRCOSOFT     X] SVB BE MUX FILTER\n"
@@ -39,15 +38,19 @@ class ExtractFircoMessageTagValueMapTest {
           + "[TRANCD         ] DOMPC\n"
           + "[CHARGESCD      ] SHA";
 
+  private final FircoMessageParser parser = new FircoMessageParser(MESSAGE);
+
   @Test
   void shouldExtractKeyValues() {
-    var tagValues = extract(MESSAGE);
-    assertThat(tagValues.get("APPLI")).isEqualTo("GFX\n");
-    assertThat(tagValues.get("ORIGINATOR")).isEqualTo("AC\n"
+    var messageData = parser.parse();
+    assertThat(messageData.get("APPLI")).isEqualTo("GFX");
+    assertThat(messageData.get("ORIGINATOR")).isEqualTo("AC\n"
         + "1234567890\n"
         + "XXXXXXXXXXXXXX XXX\n"
         + "123456 XXXXXXXXXXXX\n"
         + "JERSEY CITY, NJ 07302\n"
-        + "US\n");
+        + "US");
+    assertThat(messageData.get("CHARGESCD")).isEqualTo("SHA");
+    assertThat(messageData.get("FXRATE")).isEqualTo("1.000000");
   }
 }

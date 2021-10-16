@@ -1,11 +1,10 @@
-package com.silenteight.payments.bridge.svb.etl.util;
+package com.silenteight.payments.bridge.etl.firco.parser;
 
 import org.junit.jupiter.api.Test;
 
-import static com.silenteight.payments.bridge.svb.etl.util.ExtractSwiftMessageTagValueMap.extract;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class ExtractSwiftMessageTagValueMapTest {
+class SwiftMessageParserTest {
 
   private static final String MESSAGE =
       "{1:F01SVBKGB2LAXXX2279020053}{2:O1030930210920SCBLDEFXAXXX08611918842109200830N}"
@@ -28,16 +27,18 @@ class ExtractSwiftMessageTagValueMapTest {
           + ":71A:OUR\n"
           + "-}{5:{CHK:911D95750D93}}";
 
+  private final SwiftMessageParser parser = new SwiftMessageParser(MESSAGE);
+
   @Test
   void shouldExtractKeyValues() {
-    var tagValues = extract(MESSAGE);
-    assertThat(tagValues.get("33B")).isEqualTo("EUR12345,\n");
-    assertThat(tagValues.get("50K")).isEqualTo("/12345678901\n"
-        + "XXXXXXXX XXXXXXXX, INC.\n"
-        + "1234 BROADWAY - FLOOR 123\n"
-        + "NEW YORK NY 10004\n"
-        + "US/NEW YORK\n");
-    assertThat(tagValues.get("71A")).isEqualTo("OUR\n");
+    var messageData = parser.parse();
+    assertThat(messageData.get("33B")).isEqualTo("EUR12345,");
+    assertThat(messageData.get("50K")).isEqualTo(
+        "/12345678901\n"
+            + "XXXXXXXX XXXXXXXX, INC.\n"
+            + "1234 BROADWAY - FLOOR 123\n"
+            + "NEW YORK NY 10004\n"
+            + "US/NEW YORK");
+    assertThat(messageData.get("71A")).isEqualTo("OUR");
   }
 }
-
