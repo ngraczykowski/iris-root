@@ -8,9 +8,9 @@ import com.silenteight.payments.bridge.event.AlertStoredEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.callback.model.CallbackException;
+import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationWrapper;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateResponseUseCase;
-import com.silenteight.payments.bridge.firco.recommendation.service.RecommendationWrapper;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

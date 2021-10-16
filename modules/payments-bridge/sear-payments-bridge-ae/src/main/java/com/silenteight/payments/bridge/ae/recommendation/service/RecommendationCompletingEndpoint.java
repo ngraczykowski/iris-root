@@ -3,10 +3,8 @@ package com.silenteight.payments.bridge.ae.recommendation.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.api.v2.GetRecommendationRequest;
-import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.payments.bridge.ae.alertregistration.port.GetRegisteredAlertIdUseCase;
 import com.silenteight.payments.bridge.ae.recommendation.port.RecommendationClientPort;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
@@ -42,13 +40,14 @@ class RecommendationCompletingEndpoint {
 
   @ServiceActivator(inputChannel = INT_CHANNEL, outputChannel = RECOMMENDATION_COMPLETED)
   RecommendationCompletedEvent completing(RecommendationInfo recommendationInfo) {
-    RecommendationWithMetadata recommendationWithMetadata =
+    var recommendationWithMetadata =
         recommendationClientPort.receiveRecommendation(
             GetRecommendationRequest.newBuilder()
                 .setRecommendation(recommendationInfo.getRecommendation()).build());
 
-    Recommendation recommendation = recommendationWithMetadata.getRecommendation();
-    String alertId = getRegisteredAlertIdUseCase.getAlertId(recommendation.getAlert());
+    var recommendation = recommendationWithMetadata.getRecommendation();
+    var alertId = getRegisteredAlertIdUseCase.getAlertId(recommendation.getAlert());
+
     return new RecommendationCompletedEvent(recommendationWithMetadata, UUID.fromString(alertId));
   }
 

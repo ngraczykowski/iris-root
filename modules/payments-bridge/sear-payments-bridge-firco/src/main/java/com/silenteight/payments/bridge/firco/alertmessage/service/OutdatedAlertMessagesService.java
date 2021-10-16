@@ -6,9 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.OutdatedAlertMessagesUseCase;
+import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationWrapper;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateResponseUseCase;
-import com.silenteight.payments.bridge.firco.recommendation.service.RecommendationWrapper;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;

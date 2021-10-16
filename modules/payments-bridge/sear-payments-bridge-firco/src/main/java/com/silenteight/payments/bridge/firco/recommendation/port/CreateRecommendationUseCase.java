@@ -1,9 +1,9 @@
 package com.silenteight.payments.bridge.firco.recommendation.port;
 
-import com.silenteight.payments.bridge.firco.recommendation.service.RecommendationEntity;
-import com.silenteight.payments.bridge.firco.recommendation.service.RecommendationWrapper;
+import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationId;
+import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationWrapper;
 
 public interface CreateRecommendationUseCase {
 
-  RecommendationEntity createRecommendation(RecommendationWrapper recommendationWrapper);
+  RecommendationId createRecommendation(RecommendationWrapper recommendationWrapper);
 }

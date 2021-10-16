@@ -6,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.port.FilterAlertMessageUseCase;
+import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationId;
+import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationWrapper;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateResponseUseCase;
-import com.silenteight.payments.bridge.firco.recommendation.service.RecommendationEntity;
-import com.silenteight.payments.bridge.firco.recommendation.service.RecommendationWrapper;
 
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
@@ -31,10 +31,10 @@ class RecommendationCompletedEndpoint {
   private final CreateRecommendationUseCase createRecommendationUseCase;
 
   @ServiceActivator(inputChannel = RECOMMENDATION_COMPLETED)
-  void accept(RecommendationCompletedEvent recommendation) {
-    var alertId = recommendation.getAlertId();
-    RecommendationEntity recommendationEntity = saveRecommendation(recommendation);
-    if (alertMessageUseCase.isResolvedOrOutdated(recommendation)) {
+  void accept(RecommendationCompletedEvent event) {
+    var alertId = event.getAlertId();
+    var recommendation = saveRecommendation(event);
+    if (alertMessageUseCase.isResolvedOrOutdated(event)) {
       return;
     }
 
@@ -44,12 +44,11 @@ class RecommendationCompletedEndpoint {
      * The request isn't sent to AE at version one, thus the artificial transition from
      * (RECEIVED, STORED) to (RECOMMENDED) has been enabled.
      */
-    createResponseUseCase.createResponse(alertId, recommendationEntity.getId(), RECOMMENDED);
+    createResponseUseCase.createResponse(alertId, recommendation.getId(), RECOMMENDED);
     alertMessageStatusService.transitionAlertMessageStatus(alertId, RECOMMENDED, PENDING);
   }
 
-  private RecommendationEntity saveRecommendation(
-      RecommendationCompletedEvent recommendation) {
+  private RecommendationId saveRecommendation(RecommendationCompletedEvent recommendation) {
     RecommendationWrapper wrapper;
     var alertId = recommendation.getAlertId();
     Optional<RecommendationWithMetadata> recommendationWithMetadata =
@@ -61,6 +60,7 @@ class RecommendationCompletedEndpoint {
     } else {
       wrapper = new RecommendationWrapper(alertId);
     }
+
     return createRecommendationUseCase.createRecommendation(wrapper);
   }
 }

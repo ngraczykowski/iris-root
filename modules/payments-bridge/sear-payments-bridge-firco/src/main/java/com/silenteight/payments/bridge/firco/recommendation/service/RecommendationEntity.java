@@ -4,6 +4,9 @@ import lombok.*;
 import lombok.EqualsAndHashCode.Include;
 
 import com.silenteight.adjudication.api.v1.Recommendation;
+import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
+import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationSource;
+import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationWrapper;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 
 import com.google.protobuf.Timestamp;
@@ -26,7 +29,7 @@ import static lombok.AccessLevel.PUBLIC;
 @Setter(NONE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity(name = "RecommendationEntity")
-public class RecommendationEntity extends BaseEntity {
+class RecommendationEntity extends BaseEntity {
 
   @Id
   @Column(name = "recommendation_id", insertable = false, updatable = false, nullable = false)
@@ -66,6 +69,7 @@ public class RecommendationEntity extends BaseEntity {
   RecommendationEntity(RecommendationWrapper wrapper) {
     source = wrapper.getSource();
     alertId = wrapper.getAlertId();
+
     if (wrapper.hasRecommendation()) {
       Recommendation recommendation = wrapper.getRecommendationWithMetadata().getRecommendation();
       name = recommendation.getName();
