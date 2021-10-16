@@ -1,12 +1,12 @@
 name: sear-payments-bridge-app
 image_tag: dummy
 image_repo: dummy
-config:
-  name: searPaymentsBridgeApp
+
 ports:
   http: 8080
   grpc: 9090
 
+loggingLevelRoot: INFO
 grpcClientAeAddress: dns:///adjudication-engine-service.default.svc.cluster.local:9090
 grpcClientDatasourceAddress: dns:///universal-data-source-service.default.svc.cluster.local:9090
 grpcClientGovernanceAddress: dns:///governance-app-service.default.svc.cluster.local:9090

@@ -5,7 +5,7 @@ metadata:
   labels:
     app: {{ .Values.name }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: {{ .Values.name }}
@@ -32,42 +32,26 @@ spec:
             initialDelaySeconds: 30
             timeoutSeconds: 10
           env:
-            - name: 'PB_DB_HOST'
+            - name: PB_DB_HOST
               value: {{ .Values.pbDbHost }}
-            - name: 'PB_DB_PORT'
+            - name: PB_DB_PORT
               value: {{ .Values.pbDbPort | quote }}
-            - name: 'PB_DB_NAME'
+            - name: PB_DB_NAME
               value: {{ .Values.pbDbName }}
-            - name: 'PB_DB_USERNAME'
+            - name: PB_DB_USERNAME
               value: {{ .Values.pbDbUsername }}
-            - name: 'PB_DB_PASSWORD'
+            - name: PB_DB_PASSWORD
               value: {{ .Values.pbDbPassword }}
-            - name: 'SPRING_RABBITMQ_ADDRESSES'
+            - name: SPRING_RABBITMQ_ADDRESSES
               value: {{ .Values.springRabbitmqAddresses }}
-            - name: 'SPRING_RABBITMQ_PORT'
+            - name: SPRING_RABBITMQ_PORT
               value: {{ .Values.springRabbitmqPort | quote }}
-            - name: 'SPRING_RABBITMQ_USERNAME'
+            - name: SPRING_RABBITMQ_USERNAME
               value: {{ .Values.springRabbitmqUsername }}
-            - name: 'SPRING_RABBITMQ_PASSWORD'
+            - name: SPRING_RABBITMQ_PASSWORD
               value: {{ .Values.springRabbitmqPassword }}
-            - name: 'SPRING_RABBITMQ_VIRTUAL_HOST'
+            - name: SPRING_RABBITMQ_VIRTUAL_HOST
               value: {{ .Values.springRabbitmqVirtualHost }}
-            - name: 'SPRING_PROFILES_ACTIVE'
-              value: {{ .Values.springProfilesActive }}
-            - name: 'SERP_SHOW_ENV'
-              value: 'true'
-            - name: 'GRPC_CLIENT_ae_ADDRESS'
-              value: {{ .Values.grpcClientAeAddress }}
-            - name: 'GRPC_CLIENT_datasource_ADDRESS'
-              value: {{ .Values.grpcClientDatasourceAddress }}
-            - name: 'GRPC_CLIENT_governance_ADDRESS'
-              value: {{ .Values.grpcClientGovernanceAddress }}
-            - name: 'PB_CMAPI_CALLBACK_ENABLED'
-              value: {{ .Values.pbCmapiCallbackEnabled | squote }}
-            - name: 'PB_CMAPI_CALLBACK_ENDPOINT'
-              value: {{ .Values.pbCmapiCallbackEndpoint | squote }}
-            - name: 'DEBUG'
-              value: 'false'
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           resources:
             limits:
@@ -76,25 +60,24 @@ spec:
               memory: {{ .Values.memoryRequest | quote }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args:
-            - "--logging.config=file:/etc/logback.xml"
-            - "--spring.security.oauth2.client.registration.callback.client-id={{ .Values.oauthClientId }}"
-            - "--spring.security.oauth2.client.registration.callback.client-secret={{ .Values.oauthClientSecret }}"
-            - "--spring.security.oauth2.client.registration.callback.scope={{ .Values.oauthClientScope }}"
-            - "--spring.security.oauth2.client.provider.external.token-uri={{ .Values.oauthClientTokenUri }}"
-            - "--pb.alert-message.original-message-deleted-after-recommendation=false"
+            - --serp.show-env=true
+            - --spring.profiles.active={{ .Values.springProfilesActive }}
+            - --logging.config=file:/etc/logback/logback.xml
+            - --spring.config.additional-location=file:/etc/spring/
           volumeMounts:
-            - mountPath: /etc/logback.xml
-              name: logback-config
-              subPath: logback-config-file
-            - mountPath: /etc/logback-defaults.xml
-              name: logback-config
-              subPath: logback-defaults-file
+            - name: logback-configmap
+              mountPath: /etc/logback
+            - name: spring-configmap
+              mountPath: /etc/spring
           ports:
             - containerPort: 8080
               name: http
             - containerPort: 9090
               name: grpc
       volumes:
-        - name: "logback-config"
+        - name: logback-configmap
           configMap:
-            name: "{{ .Values.name }}-logback-configmap"
+            name: {{ .Values.name }}-logback
+        - name: spring-configmap
+          configMap:
+            name: {{ .Values.name }}-spring

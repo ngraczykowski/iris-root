@@ -11,8 +11,9 @@
   <logger name="com.zaxxer" level="INFO"/>
   <logger name="freemarker.cache" level="INFO"/>
   <logger name="io.grpc.Context" level="INFO"/>
-  <logger name="io.grpc.internal.AbstractServerImplBuilder" level="INFO"/>
   <logger name="io.grpc.internal.AbstractManagedChannelImplBuilder" level="INFO"/>
+  <logger name="io.grpc.internal.AbstractServerImplBuilder" level="INFO"/>
+  <logger name="io.grpc.netty" level="WARN"/>
   <logger name="io.micrometer" level="INFO"/>
   <logger name="io.perfmark.PerfMark" level="INFO"/>
   <logger name="io.undertow" level="WARN"/>

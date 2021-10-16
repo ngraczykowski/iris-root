@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.name }}-spring
+data:
+  application.yml: |
+    pb:
+      alert-message:
+        original-message-deleted-after-recommendation: false
+      cmapi:
+        callback:
+          client-registration-id: callback
+          enabled: {{ .Values.pbCmapiCallbackEnabled }}
+          endpoint: {{ .Values.pbCmapiCallbackEndpoint | quote }}
+
+    grpc:
+      client:
+        GLOBAL:
+          negotiation-type: PLAINTEXT
+        ae:
+          address: {{ .Values.grpcClientAeAddress | quote }}
+        datasource:
+          address: {{ .Values.grpcClientDatasourceAddress | quote }}
+        governance:
+          address: {{ .Values.grpcClientGovernanceAddress | quote }}
+
+    spring:
+      security:
+        oauth2:
+          client:
+            registration:
+              callback:
+                client-id: {{ .Values.oauthClientId | quote }}
+                client-secret: {{ .Values.oauthClientSecret | quote }}
+                scope: {{ .Values.oauthClientScope | quote }}
+            provider:
+              external:
+                token-uri: {{ .Values.oauthClientTokenUri | quote }}
