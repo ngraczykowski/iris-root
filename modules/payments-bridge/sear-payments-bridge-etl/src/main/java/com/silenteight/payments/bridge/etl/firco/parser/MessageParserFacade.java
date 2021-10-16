@@ -1,8 +1,13 @@
 package com.silenteight.payments.bridge.etl.firco.parser;
 
+import com.silenteight.payments.bridge.etl.processing.model.MessageData;
+
+import org.springframework.stereotype.Component;
+
+@Component
 public class MessageParserFacade {
 
-  MessageData get(MessageFormat messageFormat, String message) {
+  MessageData parse(MessageFormat messageFormat, String message) {
     switch (messageFormat) {
       case ALL:
         return new FircoMessageParser(message).parse();

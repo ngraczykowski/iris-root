@@ -32,13 +32,13 @@ class SwiftMessageParserTest {
   @Test
   void shouldExtractSwiftMessageData() {
     var messageData = parser.parse();
-    assertThat(messageData.get("33B")).isEqualTo("EUR12345,");
-    assertThat(messageData.get("50K")).isEqualTo(
+    assertThat(messageData.getValue("33B")).isEqualTo("EUR12345,");
+    assertThat(messageData.getValue("50K")).isEqualTo(
         "/12345678901\n"
             + "XXXXXXXX XXXXXXXX, INC.\n"
             + "1234 BROADWAY - FLOOR 123\n"
             + "NEW YORK NY 10004\n"
             + "US/NEW YORK");
-    assertThat(messageData.get("71A")).isEqualTo("OUR");
+    assertThat(messageData.getValue("71A")).isEqualTo("OUR");
   }
 }

@@ -75,11 +75,9 @@ public class FieldValueExtractor implements ExtractFieldValueUseCase {
   public List<List<String>> extractFieldValues(AbstractMessageStructure messageStructure) {
     List<List<String>> fieldValues;
     if (messageStructure instanceof MessageStructureScstar) {
-      fieldValues =
-          extractFieldValues("STA", messageStructure);
+      fieldValues = extractFieldValues("STA", messageStructure);
     } else if (messageStructure instanceof MessageStructureDtp) {
-      fieldValues =
-          extractFieldValues("DTP", messageStructure);
+      fieldValues = extractFieldValues("DTP", messageStructure);
     } else {
       fieldValues = extractFieldValues("", messageStructure);
     }
@@ -89,8 +87,10 @@ public class FieldValueExtractor implements ExtractFieldValueUseCase {
   @Override
   public List<List<String>> extractFieldValues(
       String sourceSystem, AbstractMessageStructure messageStructure) {
+
     String tag = messageStructure.getApTag();
     List<List<String>> fieldValues = new ArrayList<>();
+
     if (sourceSystem.contains("STA") || sourceSystem.contains("AMH")) {
       String mainTagFieldValue =
           extractMatchfieldFromScstarMessage(tag, messageStructure.getMessageData());

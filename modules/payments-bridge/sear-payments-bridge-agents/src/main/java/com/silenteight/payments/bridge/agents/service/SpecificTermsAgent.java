@@ -18,12 +18,14 @@ import static com.silenteight.payments.bridge.agents.model.SpecificTermsAgentRes
 @RequiredArgsConstructor
 class SpecificTermsAgent implements SpecificTermsUseCase {
 
-  private final List<String> specificTerms;
+  private final Pattern pattern;
+
+  SpecificTermsAgent(List<String> specificTerms) {
+    pattern = Pattern.compile(String.join("|", specificTerms));
+  }
 
   @NonNull
   public SpecificTermsAgentResponse invoke(SpecificTermsRequest request) {
-
-    Pattern pattern = Pattern.compile(String.join("|", specificTerms));
     Matcher matcher = pattern.matcher(request.getAllMatchFieldsValue().toUpperCase(Locale.ROOT));
 
     return matcher.find() ? YES : NO;

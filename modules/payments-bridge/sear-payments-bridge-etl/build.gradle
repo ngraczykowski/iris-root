@@ -14,4 +14,10 @@ dependencies {
 
   implementation libraries.guava
   implementation libraries.pw_swift_core
+
+  //implementation libraries.graalvm_js
+
+  implementation libraries.data_source_categories_api
+  implementation libraries.data_source_comments_api
+  implementation libraries.data_source_agentinput_api
 }

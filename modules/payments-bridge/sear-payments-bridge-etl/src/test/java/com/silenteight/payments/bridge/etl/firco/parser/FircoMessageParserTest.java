@@ -46,18 +46,18 @@ class FircoMessageParserTest {
   void shouldExtractFircoMessageData() {
     var messageData = parser.parse();
     var softly = new SoftAssertions();
-    softly.assertThat(messageData.get("APPLI")).isEqualTo("GFX");
-    softly.assertThat(messageData.get("ORIGINATOR")).isEqualTo("AC\n"
+    softly.assertThat(messageData.getValue("APPLI")).isEqualTo("GFX");
+    softly.assertThat(messageData.getValue("ORIGINATOR")).isEqualTo("AC\n"
         + "1234567890\n"
         + "XXXXXXXXXXXXXX XXX\n"
         + "123456 XXXXXXXXXXXX\n"
         + "JERSEY CITY, NJ 07302\n"
         + "US");
-    softly.assertThat(messageData.get("CHARGESCD")).isEqualTo("SHA");
-    softly.assertThat(messageData.get("FXRATE")).isEqualTo("1.000000");
-    softly.assertThat(messageData.get("EMPTY")).isEmpty();
-    softly.assertThat(messageData.get("UNENDING")).isEmpty();
-    softly.assertThat(messageData.get("LOOOOOOOOOOOONG")).isEqualTo("TEST");
+    softly.assertThat(messageData.getValue("CHARGESCD")).isEqualTo("SHA");
+    softly.assertThat(messageData.getValue("FXRATE")).isEqualTo("1.000000");
+    softly.assertThat(messageData.getValue("EMPTY")).isEmpty();
+    softly.assertThat(messageData.getValue("UNENDING")).isEmpty();
+    softly.assertThat(messageData.getValue("LOOOOOOOOOOOONG")).isEqualTo("TEST");
     softly.assertAll();
   }
 }

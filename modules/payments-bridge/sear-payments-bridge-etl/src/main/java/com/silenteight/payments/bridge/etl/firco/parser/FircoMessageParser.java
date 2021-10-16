@@ -1,29 +1,33 @@
 package com.silenteight.payments.bridge.etl.firco.parser;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.silenteight.payments.bridge.etl.processing.model.MessageData;
+import com.silenteight.payments.bridge.etl.processing.model.MessageTag;
+
+import java.util.ArrayList;
+import java.util.List;
 
 class FircoMessageParser {
 
-  private final Map<String, String> tagValues;
+  private final List<MessageTag> tags;
   private final char[] chars;
 
   FircoMessageParser(String message) {
-    tagValues = new HashMap<>();
+    tags = new ArrayList<>();
     chars = message.toCharArray();
   }
 
   MessageData parse() {
     var i = 0;
+
     while (i < chars.length) {
       var keyIndex = readKey(i);
       i = keyIndex.getIndex();
       var valueIndex = readValue(i);
       i = valueIndex.getIndex();
-      tagValues.put(keyIndex.getValue(), valueIndex.getValue().stripTrailing());
+      tags.add(new MessageTag(keyIndex.getValue(), valueIndex.getValue().stripTrailing()));
     }
 
-    return new MessageData(tagValues);
+    return new MessageData(tags);
   }
 
   private IndexValue readKey(int index) {
