@@ -7,65 +7,70 @@ gradleBuild(
     sonarEnabled: true,
     dependencyCheckEnabled: true,
     includeBuildNumberInSnapshotVersion: true,
-   additionalParams: [],
-   additionalStages: {
-     stage('Build and deploy container image') {
-       script {
-         def gradle = new com.silenteight.jenkins.ci.Gradle()
-         gradle.gradle('jib')
-       }
-     // Stash data to AWS nodes - scripts, helm etc.
-       dir( './scripts' ) {
+    additionalParams: [],
+    additionalStages: {
+      stage('Build and deploy container image') {
+        script {
+          def gradle = new com.silenteight.jenkins.ci.Gradle()
+          gradle.gradle('jib')
+        }
+        // Stash data to AWS nodes - scripts, helm etc.
+        dir('./scripts') {
           stash includes: '**', name: 'scripts'
-       }
-       dir( './helm-chart' ) {
+        }
+        dir('./helm-chart') {
           stash includes: '**', name: 'helm'
-       }
-     }
+        }
+      }
       stage('Helm Chart registry') {
         env.INSTALLER_VERSION = utils.getProjectVersion()
-        node("aws-worker"){
+        node("aws-worker") {
+          sh 'rm -rf ./scripts ./helm-chart'
           // Stash is done in first stage
-          dir( './scripts' ) {
+          dir('./scripts') {
             unstash 'scripts'
           }
-          dir( './helm-chart' ) {
+          dir('./helm-chart') {
             unstash 'helm'
           }
-          withCredentials([usernamePassword(credentialsId: 'artifactory-deployment-user',  usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+          withCredentials(
+              [usernamePassword(
+                  credentialsId: 'artifactory-deployment-user', usernameVariable: 'USERNAME',
+                  passwordVariable: 'PASSWORD')]) {
             script {
-               if (utils.getGitBranch() == 'master') {
-                 echo 'Helm Chart registry'
-                 sh './scripts/helm-chart-build.sh $USERNAME $PASSWORD'
-               } else {
-                 echo 'This is not a release branch ignore Helm Chart deployment'
-               }
-             }
+              if (utils.getGitBranch() == 'master') {
+                echo 'Helm Chart registry'
+                sh './scripts/helm-chart-build.sh $USERNAME $PASSWORD'
+              } else {
+                echo 'This is not a release branch ignore Helm Chart deployment'
+              }
+            }
           }
         }
       }
 
       stage('AWS ECR') {
-         //This is docker image tag version which will be used to copy from s8 repository
-         env.INSTALLER_VERSION = utils.getProjectVersion()
-         node("aws-worker"){
-           // Stash is done in first stage
-           dir( './scripts' ) {
-             unstash 'scripts'
-           }
+        //This is docker image tag version which will be used to copy from s8 repository
+        env.INSTALLER_VERSION = utils.getProjectVersion()
+        node("aws-worker") {
+          sh 'rm -rf ./scripts ./helm-chart'
+          // Stash is done in first stage
+          dir('./scripts') {
+            unstash 'scripts'
+          }
 
-           dir( './helm-chart' ) {
-             unstash 'helm'
-           }
-           script {
-             if (utils.getGitBranch() == 'master') {
-               echo 'AWS image push'
-               sh './scripts/aws-deploy.sh'
-             } else {
-                echo 'This is not a release branch ignore AWS ECR push'
-             }
-           }
-         }
+          dir('./helm-chart') {
+            unstash 'helm'
+          }
+          script {
+            if (utils.getGitBranch() == 'master') {
+              echo 'AWS image push'
+              sh './scripts/aws-deploy.sh'
+            } else {
+              echo 'This is not a release branch ignore AWS ECR push'
+            }
+          }
+        }
       }
-   }
+    }
 )
