@@ -24,7 +24,7 @@ import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryS
 @RequiredArgsConstructor
 @Component
 @Slf4j
-public class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCase {
+class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCase {
 
   private final AlertMessageProperties alertMessageProperties;
   private final AlertMessageStatusRepository repository;
