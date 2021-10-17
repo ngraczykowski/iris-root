@@ -28,7 +28,7 @@ class AnalysisJdbcDataAccessIT extends BaseJdbcTest {
 
   @Test
   void shouldSelectTodayAnalysis() {
-    var analysis = analysisJdbcDataAccess.findTodayAnalysis();
+    var analysis = analysisJdbcDataAccess.findCurrentAnalysis();
     assertTrue(analysis.isPresent());
     assertThat(analysis.get()).isEqualTo(2);
   }
@@ -39,7 +39,7 @@ class AnalysisJdbcDataAccessIT extends BaseJdbcTest {
     var count = jdbcTemplate.queryForObject("SELECT count(*) FROM pb_analysis", Integer.class);
     assertThat(count).isEqualTo(4);
 
-    var analysis = analysisJdbcDataAccess.findTodayAnalysis();
+    var analysis = analysisJdbcDataAccess.findCurrentAnalysis();
     assertTrue(analysis.isPresent());
     assertThat(analysis.get()).isEqualTo(4);
   }

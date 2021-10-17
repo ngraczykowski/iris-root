@@ -18,7 +18,7 @@ class AnalysisJdbcDataAccess implements AnalysisDataAccessPort {
 
   @Override
   @Cacheable(value = "analysis")
-  public Optional<Long> findTodayAnalysis() {
+  public Optional<Long> findCurrentAnalysis() {
     return findTodayAnalysisQuery.execute();
   }
 

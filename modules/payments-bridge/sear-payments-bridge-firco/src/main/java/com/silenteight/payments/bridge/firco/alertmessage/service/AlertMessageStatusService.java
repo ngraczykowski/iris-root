@@ -53,6 +53,7 @@ class AlertMessageStatusService {
         .findByAlertMessageIdAndLockForWrite(alertMessageId)
         .orElseThrow();
     entity.transitionStatusOrElseThrow(destinationStatus, delivery, clock);
+
     log.info("Alert [{}] transitioned to {}. Delivery status: {}", alertMessageId,
         destinationStatus, delivery);
 
@@ -84,9 +85,9 @@ class AlertMessageStatusService {
       throw new IllegalStateException("Unable to re-initialize the initial state for alertID: " +
           alertMessageId);
     }
-    if (log.isDebugEnabled()) {
-      log.debug("AlertMessage [{}] transited to RECEIVED", alertMessageId);
-    }
+
+    log.debug("Alert [{}] initialized with RECEIVED", alertMessageId);
+
     repository.save(new AlertMessageStatusEntity(alertMessageId));
   }
 

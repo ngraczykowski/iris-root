@@ -10,6 +10,7 @@ import com.silenteight.adjudication.api.v1.BatchAddAlertsResponse;
 import com.silenteight.adjudication.api.v1.CreateAnalysisRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AnalysisClientPort;
 
+import com.google.protobuf.TextFormat;
 import io.grpc.Deadline;
 import io.grpc.StatusRuntimeException;
 
@@ -32,12 +33,14 @@ class AnalysisClient implements AnalysisClientPort {
     }
 
     try {
-      var result = stub.withDeadline(deadline).createAnalysis(request);
-      log.info("Created analysis with result = {}", result);
-      return result;
-    } catch (StatusRuntimeException status) {
-      log.warn("Failed to send create analysis", status);
-      throw new AnalysisClientException("Failed to send create analysis", status);
+      var analysis = stub.withDeadline(deadline).createAnalysis(request);
+      log.info("Created analysis: {}", TextFormat.shortDebugString(analysis));
+      return analysis;
+    } catch (StatusRuntimeException e) {
+      var status = e.getStatus();
+      log.error("Unable to create analysis: code={}, description={}",
+          status.getCode(), status.getDescription(), e);
+      throw new AnalysisClientException("Failed to send create analysis", e);
     }
   }
 
@@ -53,9 +56,11 @@ class AnalysisClient implements AnalysisClientPort {
       var result = stub.withDeadline(deadline).batchAddAlerts(request);
       log.info("Created analysis with result = {}", result);
       return result;
-    } catch (StatusRuntimeException status) {
-      log.warn("Failed to send add alerts to analysis", status);
-      throw new AnalysisClientException("Failed to send add alerts to analysis", status);
+    } catch (StatusRuntimeException e) {
+      var status = e.getStatus();
+      log.error("Unable to add alerts to analysis: code={}, description={}",
+          status.getCode(), status.getDescription(), e);
+      throw new AnalysisClientException("Failed to add alerts to analysis", e);
     }
   }
 

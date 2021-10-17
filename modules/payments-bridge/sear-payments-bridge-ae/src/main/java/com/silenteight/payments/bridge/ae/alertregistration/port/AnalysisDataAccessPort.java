@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public interface AnalysisDataAccessPort {
 
-  Optional<Long> findTodayAnalysis();
+  Optional<Long> findCurrentAnalysis();
 
   Optional<Long> save(long analysis);
 }

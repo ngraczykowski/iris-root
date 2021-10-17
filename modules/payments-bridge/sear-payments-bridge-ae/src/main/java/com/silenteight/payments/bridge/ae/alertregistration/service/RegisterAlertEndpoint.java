@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
-import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertService;
+import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
+import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.event.AlertInitializedEvent;
@@ -25,8 +26,8 @@ import static com.silenteight.payments.bridge.common.integration.CommonChannels.
 @RequiredArgsConstructor
 class RegisterAlertEndpoint {
 
-  private final RegisterAlertService registerAlertService;
-  private final CreateRegisteredAlertUseCase createRegisteredAlertUseCase;
+  private final RegisterAlertUseCase registerAlertUseCase;
+  private final RegisteredAlertDataAccessPort registeredAlertDataAccessPort;
 
   @ServiceActivator(inputChannel = ALERT_INITIALIZED, outputChannel = ALERT_REGISTERED)
   AlertRegisteredEvent apply(AlertInitializedEvent alertInitializedEvent) {
@@ -39,10 +40,11 @@ class RegisterAlertEndpoint {
         .matchIds(getMatchIds(alertDto))
         .build();
 
-    var alert = registerAlertService.register(request);
+    var alert = registerAlertUseCase.register(request);
 
     UUID alertId = UUID.fromString(request.getAlertId());
-    createRegisteredAlertUseCase.save(alertId, alert.getAlertName());
+
+    registeredAlertDataAccessPort.save(alertId, alert.getAlertName());
 
     return new AlertRegisteredEvent(
         UUID.fromString(alert.getAlertId()), alert.getAlertName(),

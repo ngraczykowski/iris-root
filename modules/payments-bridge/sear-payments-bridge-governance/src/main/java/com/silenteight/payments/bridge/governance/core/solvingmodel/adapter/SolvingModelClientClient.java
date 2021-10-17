@@ -8,6 +8,7 @@ import com.silenteight.payments.bridge.governance.core.solvingmodel.model.ModelD
 import com.silenteight.payments.bridge.governance.core.solvingmodel.port.CurrentModelClientPort;
 
 import com.google.protobuf.Empty;
+import com.google.protobuf.TextFormat;
 import io.grpc.Deadline;
 import io.grpc.StatusRuntimeException;
 
@@ -34,11 +35,13 @@ class SolvingModelClientClient implements CurrentModelClientPort {
 
     try {
       var result = stub.withDeadline(deadline).getDefaultSolvingModel(request);
-      log.info("Received current model with result = {}", result);
+      log.info("Received current model: {}", TextFormat.shortDebugString(result));
       return fromSolvingModel(result);
-    } catch (StatusRuntimeException status) {
-      log.warn("Failed to receive current model", status);
-      throw new GovernanceClientException("Failed to receive current model", status);
+    } catch (StatusRuntimeException e) {
+      var status = e.getStatus();
+      log.error("Unable to get the default model from Governance: code={}, description={}",
+          status.getCode(), status.getDescription(), e);
+      throw new GovernanceClientException("Failed to get the default model", e);
     }
   }
 

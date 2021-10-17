@@ -5,5 +5,4 @@ import com.silenteight.payments.bridge.governance.core.solvingmodel.model.ModelD
 public interface CurrentModelClientPort {
 
   ModelDto getCurrentModel();
-
 }

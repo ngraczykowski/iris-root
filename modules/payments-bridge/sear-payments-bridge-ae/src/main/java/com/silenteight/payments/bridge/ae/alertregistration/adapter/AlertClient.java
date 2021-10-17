@@ -10,6 +10,7 @@ import com.silenteight.adjudication.api.v1.BatchCreateAlertMatchesResponse;
 import com.silenteight.adjudication.api.v1.CreateAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AlertClientPort;
 
+import com.google.protobuf.TextFormat;
 import io.grpc.Deadline;
 import io.grpc.StatusRuntimeException;
 
@@ -26,17 +27,20 @@ class AlertClient implements AlertClientPort {
 
   public Alert createAlert(CreateAlertRequest request) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
+
     if (log.isTraceEnabled()) {
       log.trace("Requesting creating alert: deadline={}, request={}", deadline, request);
     }
 
     try {
-      var result = stub.withDeadline(deadline).createAlert(request);
-      log.debug("Created alert with result = {}", result);
-      return result;
-    } catch (StatusRuntimeException status) {
-      log.warn("Failed to send create alert", status);
-      throw new AlertClientException("Failed to send create alert", status);
+      var response = stub.withDeadline(deadline).createAlert(request);
+      log.debug("Created alert: {}", TextFormat.shortDebugString(response));
+      return response;
+    } catch (StatusRuntimeException e) {
+      var status = e.getStatus();
+      log.error("Unable to create alert: code={}, description={}",
+          status.getCode(), status.getDescription(), e);
+      throw new AlertClientException("Failed to send create alert", e);
     }
   }
 
@@ -48,12 +52,14 @@ class AlertClient implements AlertClientPort {
     }
 
     try {
-      var result = stub.batchCreateAlertMatches(request);
-      log.debug("Created matches with result = {}", result);
-      return result;
-    } catch (StatusRuntimeException status) {
-      log.warn("Request to the ae service failed", status);
-      throw new AlertClientException("Failed to send create matches", status);
+      var response = stub.batchCreateAlertMatches(request);
+      log.debug("Created matches: {}", TextFormat.shortDebugString(response));
+      return response;
+    } catch (StatusRuntimeException e) {
+      var status = e.getStatus();
+      log.error("Unable to create matches: code={}, description={}",
+          status.getCode(), status.getDescription(), e);
+      throw new AlertClientException("Failed to create matches", e);
     }
   }
 

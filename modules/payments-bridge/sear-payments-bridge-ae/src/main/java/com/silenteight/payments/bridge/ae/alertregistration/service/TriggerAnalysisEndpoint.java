@@ -26,8 +26,11 @@ class TriggerAnalysisEndpoint {
   AlertAddedToAnalysisEvent apply(AlertInputAcceptedEvent event) {
     log.info("Adding alert [{}], ae name: [{}] to analysis",
         event.getAlertId(), event.getAlertRegisteredName());
-    triggerAlertAnalysisService.triggerAlertAnalysis(
-        TriggerAlertRequest.builder().alertNames(List.of(event.getAlertRegisteredName())).build());
+
+    var request = TriggerAlertRequest.builder()
+        .alertNames(List.of(event.getAlertRegisteredName()))
+        .build();
+    triggerAlertAnalysisService.triggerAlertAnalysis(request);
 
     return new AlertAddedToAnalysisEvent(event.getAlertId(), event.getAlertRegisteredName());
   }

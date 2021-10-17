@@ -20,5 +20,4 @@ public class AlertInputAcceptedEvent extends DomainEvent implements AlertId {
 
   private final UUID alertId;
   private final String alertRegisteredName;
-
 }

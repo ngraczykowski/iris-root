@@ -13,11 +13,12 @@ import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertEtlResponseUs
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertedPartyDataUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractMessageStructureUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
-import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 import com.silenteight.payments.bridge.svb.oldetl.util.CommonUtils;
+import com.silenteight.sep.base.aspects.logging.LogContext;
 
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,63 +37,73 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
   private final FieldValueExtractor fieldValueExtractor;
   private final ExtractMatchTextUseCase extractMatchTextUseCase;
 
-  public AlertEtlResponse createAlertEtlResponse(AlertMessageDto alertMessageDto) {
-    log.debug("invoke");
+  @LogContext
+  public AlertEtlResponse createAlertEtlResponse(AlertMessageDto dto) {
+    MDC.put("systemId", dto.getSystemID());
+    MDC.put("messageId", dto.getMessageID());
+
+    if (log.isDebugEnabled()) {
+      log.debug("Parsing message: systemId={}, messageId={}",
+          dto.getSystemID(), dto.getMessageID());
+    }
+
     List<HitData> hits = new ArrayList<>();
 
-    for (RequestHitDto requestHitDto : alertMessageDto.getHits()) {
-      hits.add(createHitData(alertMessageDto, requestHitDto));
+    for (RequestHitDto requestHitDto : dto.getHits()) {
+      hits.add(createHitData(dto, requestHitDto));
     }
 
     return AlertEtlResponse.builder()
-        .systemId(alertMessageDto.getSystemID())
-        .messageId(alertMessageDto.getMessageID())
-        .messageType(alertMessageDto.getMessageType())
-        .applicationCode(alertMessageDto.getApplicationCode())
-        .messageFormat(alertMessageDto.getMessageFormat())
-        .messageData(alertMessageDto.getMessageData())
-        .businessUnit(alertMessageDto.getBusinessUnit())
-        .unit(alertMessageDto.getUnit())
-        .senderReference(alertMessageDto.getSenderReference())
-        .ioIndicator(alertMessageDto.getIoIndicator())
+        .systemId(dto.getSystemID())
+        .messageId(dto.getMessageID())
+        .messageType(dto.getMessageType())
+        .applicationCode(dto.getApplicationCode())
+        .messageFormat(dto.getMessageFormat())
+        .messageData(dto.getMessageData())
+        .businessUnit(dto.getBusinessUnit())
+        .unit(dto.getUnit())
+        .senderReference(dto.getSenderReference())
+        .ioIndicator(dto.getIoIndicator())
         //TODO check why AlertStatusExtractor is no longer needed
-        .currentStatus(alertMessageDto.getCurrentStatus())
+        .currentStatus(dto.getCurrentStatus())
         .hits(hits)
         .build();
   }
 
-  private HitData createHitData(AlertMessageDto alertMessageDto, RequestHitDto requestHitDto) {
-    ExtractAlertedPartyDataRequest alertedPartyDataRequest =
-        createExtractAlertedPartyDataRequest(alertMessageDto, requestHitDto);
-    AbstractMessageStructure messageStructure =
+  private HitData createHitData(AlertMessageDto alert, RequestHitDto hit) {
+    var alertedPartyDataRequest =
+        createExtractAlertedPartyDataRequest(alert, hit);
+    var messageStructure =
         extractMessageStructureUseCase.extractMessageStructure(alertedPartyDataRequest);
-    AlertedPartyData alertedPartyData =
+    var alertedPartyData =
         extractAlertedPartyDataUseCase.extractAlertedPartyData(alertedPartyDataRequest);
-    HitAndWatchlistPartyData hitAndWatchlistPartyData =
-        extractHitAndWatchlistPartyData(alertMessageDto, requestHitDto, messageStructure);
+    var hitAndWatchlistPartyData =
+        extractHitAndWatchlistPartyData(alert, hit, messageStructure);
+
     return new HitData(alertedPartyData, hitAndWatchlistPartyData);
   }
 
   private static ExtractAlertedPartyDataRequest createExtractAlertedPartyDataRequest(
-      AlertMessageDto alertMessageDto, RequestHitDto requestHitDto) {
+      AlertMessageDto alert, RequestHitDto hit) {
     return ExtractAlertedPartyDataRequest
         .builder()
-        .messageData(alertMessageDto.getMessageData())
-        .messageType(alertMessageDto.getMessageType())
-        .matchingText(requestHitDto.getHit().getMatchingText())
-        .tag(requestHitDto.getHit().getTag())
-        .applicationCode(alertMessageDto.getApplicationCode())
+        .messageData(alert.getMessageData())
+        .messageType(alert.getMessageType())
+        .matchingText(hit.getHit().getMatchingText())
+        .tag(hit.getHit().getTag())
+        .applicationCode(alert.getApplicationCode())
         .build();
   }
 
   private HitAndWatchlistPartyData extractHitAndWatchlistPartyData(
-      AlertMessageDto alertMessageDto,
-      RequestHitDto requestHitDto, AbstractMessageStructure messageStructure) {
+      AlertMessageDto alert,
+      RequestHitDto hit, AbstractMessageStructure messageStructure) {
 
-    int synonymIndex = CommonUtils.toPositiveInt(requestHitDto.getHit().getSynonymIndex(), 0);
-    String extractedName = HitNameExtractor.extractName(requestHitDto, synonymIndex);
+    int synonymIndex = CommonUtils.toPositiveInt(hit.getHit().getSynonymIndex(), 0);
+    String extractedName = HitNameExtractor.extractName(hit, synonymIndex);
+
     List<String> allMatchingTexts = extractMatchTextUseCase.extractAllMatchingTexts(
-        messageStructure, requestHitDto.getHit().getMatchingText());
+        messageStructure, hit.getHit().getMatchingText());
     String fieldValue = fieldValueExtractor
         .extractFieldValues(messageStructure)
         .get(0)
@@ -108,13 +119,13 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     Optional<String> accountNumberOrNormalizedName = messageStructure.getAccountNumber(
         GetAccountNumberRequest
             .builder()
-            .applicationCode(alertMessageDto.getApplicationCode())
-            .tag(requestHitDto.getHit().getTag())
+            .applicationCode(alert.getApplicationCode())
+            .tag(hit.getHit().getTag())
             .message(messageStructure.getMessageData())
             .matchingFields(allMatchingFieldValues)
             .build());
 
-    List<CodeDto> codes = Optional.of(requestHitDto.getHit())
+    List<CodeDto> codes = Optional.of(hit.getHit())
         .map(HitDto::getHittedEntity)
         .map(HittedEntityDto::getCodes)
         .orElseGet(Collections::emptyList)
@@ -144,24 +155,24 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
     return HitAndWatchlistPartyData.builder()
         .messageStructure(messageStructure)
-        .solutionType(SolutionType.ofCode(requestHitDto.getHit().getSolutionType()))
-        .watchlistType(WatchlistType.ofCode(requestHitDto.getHit().getHittedEntity().getType()))
-        .tag(requestHitDto.getHit().getTag())
-        .id(requestHitDto.getHit().getHittedEntity().getId())
+        .solutionType(SolutionType.ofCode(hit.getHit().getSolutionType()))
+        .watchlistType(WatchlistType.ofCode(hit.getHit().getHittedEntity().getType()))
+        .tag(hit.getHit().getTag())
+        .id(hit.getHit().getHittedEntity().getId())
         .name(extractedName)
-        .entityText(requestHitDto.getHit().getEntityText())
-        .matchingText(requestHitDto.getHit().getMatchingText())
+        .entityText(hit.getHit().getEntityText())
+        .matchingText(hit.getHit().getMatchingText())
         .allMatchingTexts(allMatchingTexts)
         .allMatchingFieldValues(allMatchingFieldValues)
         .fieldValue(fieldValue)
         .accountNumberOrNormalizedName(accountNumberOrNormalizedName.orElse("no_data"))
-        .postalAddresses(LocationExtractorHelper.extractPostalAddresses(requestHitDto))
-        .cities(LocationExtractorHelper.extractListOfCities(requestHitDto))
-        .states(LocationExtractorHelper.extractListOfStates(requestHitDto))
-        .countries(LocationExtractorHelper.extractListOfCountries(requestHitDto))
-        .mainAddress(LocationExtractorHelper.extractIsMainAddress(requestHitDto))
-        .origin((requestHitDto.getHit().getHittedEntity().getOrigin()))
-        .designation((requestHitDto.getHit().getHittedEntity().getDesignation()))
+        .postalAddresses(LocationExtractorHelper.extractPostalAddresses(hit))
+        .cities(LocationExtractorHelper.extractListOfCities(hit))
+        .states(LocationExtractorHelper.extractListOfStates(hit))
+        .countries(LocationExtractorHelper.extractListOfCountries(hit))
+        .mainAddress(LocationExtractorHelper.extractIsMainAddress(hit))
+        .origin((hit.getHit().getHittedEntity().getOrigin()))
+        .designation((hit.getHit().getHittedEntity().getDesignation()))
         .searchCodes(searchCodes)
         .passports(passports)
         .natIds(natIds)

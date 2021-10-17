@@ -20,6 +20,7 @@ class ReceiveAnalysisModelService implements ReceiveAnalysisModelUseCase {
 
   public CreateAnalysisRequest createAnalysisRequest() {
     var model = getCurrentModelPort.getCurrentModel();
+
     return CreateAnalysisRequest
         .newBuilder()
         .setAnalysis(Analysis

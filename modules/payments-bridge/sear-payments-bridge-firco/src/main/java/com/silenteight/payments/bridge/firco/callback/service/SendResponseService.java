@@ -65,8 +65,7 @@ class SendResponseService implements SendResponseUseCase {
       UUID alertId, AlertMessageStatus status, ClientRequestDto requestDto, String action) {
 
     try {
-      log.info("Executing the callback: alertId={}, recommendation={}", alertId,
-          action);
+      log.info("Executing the callback for alert [{}]. Recommendation: [{}]", alertId, action);
       callbackRequestFactory.create(requestDto).execute();
       log.info("The callback invoked successfully.");
 

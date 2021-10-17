@@ -42,7 +42,7 @@ class MapStatusService implements MapStatusUseCase {
         request.getNextStatuses().isEmpty() ?
           new StatusInfoDto(null, request.getCurrentStatusName(), null, null) :
           request.getNextStatuses().iterator().next();
-    log.info("No destination status found for the request: {}. The selected replacement : {}",
+    log.warn("No destination status found for the request: {}. The selected replacement : {}",
         request, invalidStatusInfo.getName());
     return DestinationStatus.createInvalid(invalidStatusInfo);
   }
