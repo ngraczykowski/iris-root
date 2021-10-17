@@ -4,6 +4,8 @@ warehouse:
     ignored-keys:
   environment:
     prefix: sierra
+  sampling:
+    time-field-name: alert_recommendationDate
 
 warehouse.report.rbs:
   production:
