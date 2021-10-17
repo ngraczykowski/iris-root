@@ -2,15 +2,15 @@
 Mock for CMAPI endpoints.
 
 ## Setup environment
-Use following commands to create venv:
+Use following commands to create the virtual environment:
 
-    python3 -m venv venv
+    python3 -m venv .venv
     venv/bin/pip install -U pip setuptools wheel
     venv/bin/pip install -r requirements.txt
 
-To activate venv:
+To activate the virtual environment:
 
-    source venv/bin/activate
+    source .venv/bin/activate
 
 ## Running
 Make sure that `settings.cfg` is created (`cp settings.cfg.template settings.cfg`):
