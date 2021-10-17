@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(UpperCamelCaseStrategy.class)
-@JsonIgnoreProperties({ "userLogin", "userPassword" })
+@JsonIgnoreProperties({ "UserLogin", "UserPassword" })
 public class AlertDecisionMessageDto implements Serializable {
 
   private static final long serialVersionUID = -6851877425739319284L;
