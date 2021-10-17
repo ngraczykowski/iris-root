@@ -9,8 +9,6 @@ import java.util.List;
 @Builder
 public class GetAccountNumberRequest {
 
-  String applicationCode;
   String tag;
-  String message;
   List<String> matchingFields;
 }

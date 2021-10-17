@@ -28,14 +28,13 @@ public class MessageStructureNbp extends MessageStructureDefault {
         .findFirst()
         .orElse("");
     var trimmedTag = request.getTag().trim();
-    var message = request.getMessage();
 
     if (List.of("C_CREDITOR", "UC_CRED").contains(trimmedTag)) {
       return Optional.of(extractAccountNumberOrFirstLine(
-          List.of("C_CREDACCT", "C_CAGTCLRC"), message, matchingField, null));
+          List.of("C_CREDACCT", "C_CAGTCLRC"), getMessageData(), matchingField));
     } else if ("PD_DEBTOR".equals(trimmedTag)) {
       return Optional.of(extractAccountNumberOrFirstLine(
-          createOneElementList("PD_ACCOUNT"), message, matchingField, null));
+          createOneElementList("PD_ACCOUNT"), getMessageData(), matchingField));
     }
     return Optional.empty();
   }

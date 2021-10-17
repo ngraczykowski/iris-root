@@ -55,7 +55,7 @@ public class MessageStructureMts extends MessageStructureDefault {
     var matchingField = request.getMatchingFields().stream()
         .findFirst()
         .orElse("");
-    var message = request.getMessage();
+    var message = getMessageData();
     String accountNumTag = null;
     if (List
         .of("SWF_4_50F", "SWF_4_59F", "SWF_4_59", "SWF_4_50K", "CHP_502")
@@ -72,6 +72,6 @@ public class MessageStructureMts extends MessageStructureDefault {
     }
     return accountNumTag == null ? Optional.empty() : Optional.of(
         extractAccountNumberOrFirstLine(createOneElementList(accountNumTag),
-            message, matchingField, null));
+            message, matchingField));
   }
 }

@@ -110,9 +110,7 @@ public class LearningMatch {
   public GetAccountNumberRequest toGetAccountNumberRequest() {
     return GetAccountNumberRequest
         .builder()
-        .applicationCode(applicationCode)
         .tag(hitTag)
-        .message(messageData)
         .matchingFields(allMatchFieldsValue)
         .build();
   }

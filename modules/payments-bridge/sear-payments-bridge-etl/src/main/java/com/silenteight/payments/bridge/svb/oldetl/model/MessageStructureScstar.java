@@ -36,7 +36,7 @@ public class MessageStructureScstar extends MessageStructureDefault {
             MessageFieldStructure.NAMEADDRESS_FORMAT_F,
             MessageFieldStructure.NAMEADDRESS_FORMAT_UNSTRUCTURED)
         .contains(getMessageFieldStructure())) {
-      return Optional.of(request.getMessage().split("\n")[0]);
+      return Optional.of(getMessageData().split("\n")[0]);
     }
     return Optional.empty();
   }

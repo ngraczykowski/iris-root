@@ -10,4 +10,6 @@ public class ExtractFieldStructureValue {
   String sourceSystem;
   String tag;
   String messageData;
+  boolean isScstar;
+
 }

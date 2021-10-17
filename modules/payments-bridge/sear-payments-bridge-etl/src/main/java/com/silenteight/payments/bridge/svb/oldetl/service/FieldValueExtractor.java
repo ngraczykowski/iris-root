@@ -26,7 +26,7 @@ public class FieldValueExtractor implements ExtractFieldValueUseCase {
 
   @Override
   public String extractFieldValue(ExtractFieldStructureValue request) {
-    if (request.getSourceSystem().contains("STA") || request.getSourceSystem().contains("AMH")) {
+    if (request.isScstar()) {
       return extractMatchfieldFromScstarMessage(request.getTag(), request.getMessageData());
     } else {
       return extractMatchfieldFromNonScstarMessage(request.getTag(), request.getMessageData());
@@ -45,7 +45,7 @@ public class FieldValueExtractor implements ExtractFieldValueUseCase {
     return extractFieldOnRegex(messageData, regex);
   }
 
-  static String extractMatchfieldFromScstarMessage(
+  public static String extractMatchfieldFromScstarMessage(
       @NotNull String tag, @NotNull String messageData) {
     tag = tag.strip();
     if (tag.contains("STRIP")) {

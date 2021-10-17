@@ -27,7 +27,7 @@ public class ExtractMessageStructureService implements ExtractMessageStructureUs
     var sourceSystemId = request.getApplicationCode();
 
     if (sourceSystemId.startsWith("MTS"))
-      return messageStructureForMts(messageType, tag, messageData, SourceSystem.MTS);
+      return messageStructureForMts(messageType, tag, messageData);
     if (sourceSystemId.startsWith("NBP"))
       return messageStructureForNbp(messageType, tag, messageData);
     if (sourceSystemId.startsWith("STAR") || sourceSystemId.startsWith("AMH"))
@@ -36,6 +36,12 @@ public class ExtractMessageStructureService implements ExtractMessageStructureUs
       return messageStructureForSts(messageType, tag, messageData);
     if (sourceSystemId.startsWith("DTP"))
       return messageStructureForDtp(request.getMatchingText(), messageType, tag, messageData);
+    if (sourceSystemId.startsWith("GFX"))
+      return messageStructureForGfx(messageType, tag, messageData);
+    if (sourceSystemId.startsWith("PEP"))
+      return messageStructureForPep(messageType, tag, messageData);
+    if (sourceSystemId.startsWith("GTEX"))
+      return messageStructureForGtex(messageType, tag, messageData);
 
     return defaultMessageStructure(messageType, tag, messageData);
   }
@@ -74,12 +80,13 @@ public class ExtractMessageStructureService implements ExtractMessageStructureUs
   }
 
   private MessageStructureMts messageStructureForMts(
-      String messageType, String tag, String messageData, SourceSystem sourceSystem) {
+      String messageType, String tag, String messageData) {
     return new MessageStructureMts(
         messageType, tag, messageData, fieldValueExtractor.extractFieldValue(
         ExtractFieldStructureValue
             .builder()
-            .sourceSystem(sourceSystem.name())
+            .sourceSystem(SourceSystem.MTS.name())
+            .isScstar(false)
             .tag(tag)
             .messageData(messageData)
             .build()));
@@ -88,5 +95,20 @@ public class ExtractMessageStructureService implements ExtractMessageStructureUs
   private static MessageStructureScstar messageStructureForScstar(
       String messageType, String tag, String messageData) {
     return new MessageStructureScstar(messageType, tag, messageData);
+  }
+
+  private static MessageStructureGfx messageStructureForGfx(
+      String messageType, String tag, String messageData) {
+    return new MessageStructureGfx(messageType, tag, messageData);
+  }
+
+  private static MessageStructurePep messageStructureForPep(
+      String messageType, String tag, String messageData) {
+    return new MessageStructurePep(messageType, tag, messageData);
+  }
+
+  private static MessageStructureGtex messageStructureForGtex(
+      String messageType, String tag, String messageData) {
+    return new MessageStructureGtex(messageType, tag, messageData);
   }
 }

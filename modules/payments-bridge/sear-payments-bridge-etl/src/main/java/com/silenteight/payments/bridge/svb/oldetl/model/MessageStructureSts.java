@@ -48,7 +48,7 @@ public class MessageStructureSts extends MessageStructureDefault {
         .orElse("");
     var trimmedTag = request.getTag().trim();
     String accountNumTag = null;
-    var message = request.getMessage();
+    var message = getMessageData();
 
     if (List.of("C_CREDITOR", "S_CREDIT").contains(trimmedTag)) {
       accountNumTag = "C_CREDACCT";
@@ -63,6 +63,6 @@ public class MessageStructureSts extends MessageStructureDefault {
     }
     return accountNumTag == null ? Optional.empty() : Optional.of(
         extractAccountNumberOrFirstLine(createOneElementList("UD_UDEBTID"), message,
-            matchingField, null));
+            matchingField));
   }
 }

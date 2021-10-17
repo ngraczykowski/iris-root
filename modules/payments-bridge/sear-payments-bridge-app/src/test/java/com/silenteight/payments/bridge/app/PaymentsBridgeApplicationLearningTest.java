@@ -25,11 +25,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class PaymentsBridgeApplicationLearningTest {
 
   @Autowired
-  HandleLearningAlertsUseCase handleLearningAlertsUseCase;
+  HandleLearningAlertsUseCase handleLearningDataUseCase;
 
   @Test
   void shouldProcessLearningCsv() {
-    handleLearningAlertsUseCase.readAlerts(new LearningRequest("bucket", "object"));
-    assertThat(MockAlertUseCase.getCreatedAlertsCount()).isEqualTo(163);
+    handleLearningDataUseCase.readAlerts(new LearningRequest("bucket", "object"));
+    assertThat(MockAlertUseCase.getCreatedAlertsCount()).isEqualTo(163 + 1);
   }
 }

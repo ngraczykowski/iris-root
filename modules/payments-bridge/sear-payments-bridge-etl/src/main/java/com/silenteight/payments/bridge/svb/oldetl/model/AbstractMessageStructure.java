@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
-import com.silenteight.payments.bridge.svb.oldetl.response.SourceSystem;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,27 +48,8 @@ public abstract class AbstractMessageStructure {
       return MessageFieldStructure.UNSTRUCTURED;
   }
 
-  public static SourceSystem extractSourceSystem(String sourceSystemId) {
-    log.debug("invoked extractSourceSystem: {}", sourceSystemId);
-
-    if (sourceSystemId != null) {
-      if (sourceSystemId.startsWith("MTS"))
-        return SourceSystem.MTS;
-      if (sourceSystemId.startsWith("NBP"))
-        return SourceSystem.NBP;
-      if (sourceSystemId.startsWith("STAR") || sourceSystemId.startsWith("AMH"))
-        return SourceSystem.SCSTAR;
-      if (sourceSystemId.startsWith("STS"))
-        return SourceSystem.STS;
-      if (sourceSystemId.startsWith("DTP"))
-        return SourceSystem.DTP;
-    }
-    return SourceSystem.OTHER;
-  }
-
   protected static String extractAccountNumberOrFirstLine(
-      List<String> accountNumTags, String messageData, String matchingfield,
-      String addditionalTag) {
+      List<String> accountNumTags, String messageData, String matchingfield) {
 
     for (String accountNumTag : accountNumTags) {
       String extractedMatchingFieldFromNonScstarMessage =
@@ -78,12 +58,8 @@ public abstract class AbstractMessageStructure {
         return extractedMatchingFieldFromNonScstarMessage;
       }
     }
+
     String[] splittedMatchingField = matchingfield.split("\n");
-    if (MessageStructureSts.S_UDEBTOR.equals(addditionalTag)) {
-
-      return splittedMatchingField[splittedMatchingField.length - 1];
-    }
-
     return splittedMatchingField[0];
   }
 }

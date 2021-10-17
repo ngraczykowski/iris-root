@@ -8,7 +8,6 @@ import com.silenteight.payments.bridge.common.dto.output.*;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.firco.decision.MapStatusRequest;
 import com.silenteight.payments.bridge.firco.decision.MapStatusUseCase;
-import com.silenteight.payments.bridge.firco.recommendation.model.Recommendation;
 import com.silenteight.payments.bridge.svb.oldetl.util.StringUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,13 +23,14 @@ import java.util.stream.Collectors;
 class ClientRequestDtoMapper {
 
   private static final String ATTACHMENT_COMMENT_NAME = "comment.txt";
-  private static final String COMMENT_CUT_MSG = "...\n=== See attachment for full comments ===";
+  private static final String COMMENT = "S8 Recommendation: Manual Investigation";
+  private static final String COMMENT_CUT_MSG = " === See attachment for full comments ===";
   private static final int MAX_COMMENT_LENGTH = 1024;
   private final MapStatusUseCase mapStatusUseCase;
 
   ClientRequestDto mapToAlertDecision(
-      AlertData alert, AlertMessageDto alertDto, Recommendation recommendation) {
-
+      AlertData alert,
+      AlertMessageDto alertDto) {
     var decision = new AlertDecisionMessageDto();
     decision.setUnit(alertDto.getUnit());
     decision.setBusinessUnit(alertDto.getBusinessUnit());
@@ -38,11 +38,10 @@ class ClientRequestDtoMapper {
     decision.setSystemID(alertDto.getSystemID());
     decision.setOperator(alert.getUserLogin());
     decision.setActions(List.of());
-    decision.setAttachment(createAttachment(recommendation.getComment()));
+    decision.setAttachment(createAttachment(COMMENT));
     decision.setUserLogin(alert.getUserLogin());
     decision.setUserPassword(alert.getUserPassword());
-
-    setComment(recommendation.getComment(), decision);
+    setComment(COMMENT, decision);
 
     var destinationStatus = mapStatusUseCase.mapStatus(
         MapStatusRequest.builder()
@@ -53,7 +52,7 @@ class ClientRequestDtoMapper {
                 .map(NextStatusDto::getStatus)
                 .collect(Collectors.toList()))
             .currentStatusName(alertDto.getCurrentStatus().getName())
-            .recommendedAction(recommendation.getAction())
+            .recommendedAction(COMMENT)
             .build());
     decision.setStatus(destinationStatus.getStatus());
 

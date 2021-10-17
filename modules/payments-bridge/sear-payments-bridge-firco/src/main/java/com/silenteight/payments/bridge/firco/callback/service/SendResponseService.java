@@ -56,7 +56,7 @@ class SendResponseService implements SendResponseUseCase {
         RecommendationId.fromName(responseCompleted.getRecommendation()));
     MDC.put("recommendation", recommendation.getAction());
 
-    var requestDto = mapper.mapToAlertDecision(alert, alertDto, recommendation);
+    var requestDto = mapper.mapToAlertDecision(alert, alertDto);
 
     sendDecision(alertId, status, requestDto, recommendation.getAction());
   }
