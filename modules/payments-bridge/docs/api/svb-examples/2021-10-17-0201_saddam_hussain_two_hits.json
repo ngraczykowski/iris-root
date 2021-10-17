@@ -1,0 +1,436 @@
+{
+  "Header": null,
+  "Body": {
+    "msg_SendMessage": {
+      "VersionTag": "1",
+      "Authentication": {
+        "UserLogin": "CMAPI_LOGIN",
+        "UserPassword": "abc",
+        "UserRealm": ""
+      },
+      "Messages": [
+        {
+          "Message": {
+            "Unit": "MTS-SCB",
+            "BusinessUnit": "ROOT",
+            "MessageID": "8DDC55A6-2E5A-0BE3-E053-150A6C0AD492",
+            "SystemID": "DIN20200319153450-00010-18253",
+            "Bypass": "0",
+            "Command": "1",
+            "BusinessType": "SWF",
+            "MessageType": "O-FPS",
+            "IOIndicator": "O",
+            "SenderReference": "ABCOFP1123",
+            "Currency": "EUR",
+            "Amount": "5431.26",
+            "ApplicationCode": "GTEX",
+            "ToApplication": "",
+            "MessageFormat": "SWIFT",
+            "SenderCode": "SVBKGB20XXXX",
+            "ReceiverCode": "091036164",
+            "ApplicationPriority": "0",
+            "CutoffTime": "20190606173000",
+            "NormalizedAmount": "",
+            "MessageData": "{1:F01SVBKUS60XXXX0000000000}{2:I199SVBKUS60XXXXN}{3:{108:ECSAMT0000418871}{121:f299c3d8-0121-12c5-b352-1d16b7017419}}{4:\n:20:ABCOFP1123\n:23B:CRED BP00000009LK\n:32A:10606CAD5431,26\n:50K:\/3300565427\nSINA BANK\nABCD LTD\nSADDAM HUSSAIN CUBA Clara\n:59A:nosccatt\nSCOTT PLAZA 40 king street West\nsuite 5800 PO Box 1011\nTORONTO ON MSH 351 Canada\n:71A:SHA\n-}{5:{CHK:370453F95D8E}{TNG:}}",
+            "LastComment": "",
+            "LastOperator": "svb_user1",
+            "ValueDate": "?",
+            "FilteredDate": "2020\/03\/19 15:34:51",
+            "RelatedReference": "",
+            "CreatedDate": "2020\/03\/19 15:34:50",
+            "Priority": "0",
+            "Confidentiality": "0",
+            "Blocking": "16",
+            "NonBlocking": "0",
+            "CopyService": "",
+            "Hits": [
+              {
+                "Hit": {
+                  "MatchingText": "HUSSAIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "224",
+                        "PositionEnd": "230"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "1",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "'HUSSAIN'",
+                  "HittedEntity": {
+                    "ID": "AS00495156",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2013-10-17 15:34:20 UN"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "ALI MUHAMMAD, MATI UR-REHMAN"
+                      },
+                      {
+                        "Name": "'HUSSAIN'"
+                      },
+                      {
+                        "Name": "'TARIQ'"
+                      },
+                      {
+                        "Name": "MATI-UR REHMAN"
+                      },
+                      {
+                        "Name": "MATIUR RAHMAN"
+                      },
+                      {
+                        "Name": "MATIUR REHMAN"
+                      },
+                      {
+                        "Name": "MATTI AL-REHMAN"
+                      },
+                      {
+                        "Name": "MUSHTAQ, QARI"
+                      },
+                      {
+                        "Name": "REHMAN, MATI UR"
+                      },
+                      {
+                        "Name": "SAMAD, ABDUL"
+                      },
+                      {
+                        "Name": "SIAL, ABDUL SAMAD"
+                      },
+                      {
+                        "Name": "SIAL, SAMAD"
+                      },
+                      {
+                        "Name": "TALHA, USTAD"
+                      },
+                      {
+                        "Name": "مطیع الرحمن علی محمد"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "UNITED_NATIONS",
+                    "Designation": "ISILDAESHALQAIDA",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:UNITED_NATIONS"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 44 \/ Create Date: 08\/22\/2011 16:02:58 \/ Last Update Date: 01\/19\/2017 17:12:54 \/ Program: ISIL (DA'ESH) & AL-QAIDA \/ Nationality: Pakistan \/ OtherInformation: Physical description: 5 feet 2 inches; 157,4 cm. Name of father: Ali Muhammad. Mati ur-Rehman is the chief operational commander of Lashkar i Jhangvi (LJ) (QDe.096). Associated with Harakat-ul Jihad Islami (QDe.130). INTERPOL-UN Security Council Special Notice web link: https:\/\/www.interpol.int\/en\/notice\/search\/un\/4674457 \/ OriginalID: QDi.296",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "APPROXIMATELY 1977"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "Chak number 36\/DNB, Rajkan, Madina Colony, Bahawalpur District, Punjab Province, Pakistan"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "49361",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              },
+              {
+                "Hit": {
+                  "MatchingText": "SADDAM HUSSAIN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "217",
+                        "PositionEnd": "230"
+                      }
+                    }
+                  ],
+                  "Score": "0.0",
+                  "Tag": "50K",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "AL-TIKRITI, ALI SADDAM HUSSEIN",
+                  "HittedEntity": {
+                    "ID": "AS00307517",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "2009-05-06 12:41:36 HK"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "AL-TIKRITI, ALI SADDAM HUSSEIN"
+                      },
+                      {
+                        "Name": "HASSAN"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "HK_HKMA",
+                    "Designation": "IRAQ",
+                    "Keywords": [
+                      {
+                        "Keyword": "OS:HONG_KONG"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "List ID: 37 \/ Create Date: 04\/15\/2009 14:32:23 \/ Last Update Date: 01\/19\/2010 10:21:07 \/ Program: IRAQ \/ Nationality: IRAQI \/ OtherInformation: SON OF SAMIRA SHAHBANDAR AND SADDAM HUSSEIN",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "1980 1983"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "IRAQ"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "6669",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              }
+            ],
+            "Actions": [
+              {
+                "Action": {
+                  "DateTime": "20200319153451",
+                  "Operator": "Filter Engine",
+                  "Comment": "Stop: 16, Nonblocking: 0",
+                  "Status": {
+                    "ID": "0",
+                    "Name": "FILTER",
+                    "RoutingCode": "0",
+                    "Checksum": "c4b4872d17cf6fa4f27f06e3b5d93c78"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20200319153452",
+                  "Operator": "Stripping Engine",
+                  "Comment": "Stop: 16, Nonblocking: 0",
+                  "Status": {
+                    "ID": "-2",
+                    "Name": "NO HIT",
+                    "RoutingCode": "-2",
+                    "Checksum": "1080a07f679004254edcc4854e8f66a7"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20200319153505",
+                  "Operator": "svb_user1",
+                  "Comment": "svb_user1 opened this message",
+                  "Status": {
+                    "ID": "-1000",
+                    "Name": "N\/A",
+                    "RoutingCode": "-1",
+                    "Checksum": "7163dc6253aa3c4467fdcb2ad60600df"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20200319153614",
+                  "Operator": "svb_user1",
+                  "Comment": "svb_user1 opened this message in read-only mode",
+                  "Status": {
+                    "ID": "-1000",
+                    "Name": "N\/A",
+                    "RoutingCode": "-1",
+                    "Checksum": "7163dc6253aa3c4467fdcb2ad60600df"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20200319153625",
+                  "Operator": "svb_user1",
+                  "Comment": "svb_user1 unlocked this message",
+                  "Status": {
+                    "ID": "-1000",
+                    "Name": "N\/A",
+                    "RoutingCode": "-1",
+                    "Checksum": "7163dc6253aa3c4467fdcb2ad60600df"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20200319153629",
+                  "Operator": "svb_user1",
+                  "Comment": "svb_user1 opened this message",
+                  "Status": {
+                    "ID": "-1000",
+                    "Name": "N\/A",
+                    "RoutingCode": "-1",
+                    "Checksum": "7163dc6253aa3c4467fdcb2ad60600df"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20200319153635",
+                  "Operator": "svb_user1",
+                  "Comment": "",
+                  "Status": {
+                    "ID": "202",
+                    "Name": "ESC_TO_L2",
+                    "RoutingCode": "12",
+                    "Checksum": "66930351d743258bf108503fcb90a93b"
+                  }
+                }
+              }
+            ],
+            "CurrentStatus": {
+              "ID": "202",
+              "Name": "ESC_TO_L2",
+              "RoutingCode": "12",
+              "Checksum": "66930351d743258bf108503fcb90a93b"
+            },
+            "NextStatuses": [
+              {
+                "Status": {
+                  "ID": "203",
+                  "Name": "ESC_TO_L3",
+                  "RoutingCode": "12",
+                  "Checksum": "5fc5b53ca380d9625b9da3808cc5b149"
+                }
+              },
+              {
+                "Status": {
+                  "ID": "207",
+                  "Name": "L2_PASS",
+                  "RoutingCode": "2",
+                  "Checksum": "9062bff0fa674708bf0c37520e5d2e46"
+                }
+              },
+              {
+                "Status": {
+                  "ID": "5",
+                  "Name": "CANCELLED",
+                  "RoutingCode": "9",
+                  "Checksum": "dd14a73271d20ce1bcd2fd4468dcb3e8"
+                }
+              },
+              {
+                "Status": {
+                  "ID": "9",
+                  "Name": "HALF_PASSED",
+                  "RoutingCode": "12",
+                  "Checksum": "728566e441f9253a054cb24d39fcb186"
+                }
+              },
+              {
+                "Status": {
+                  "ID": "201",
+                  "Name": "PASS",
+                  "RoutingCode": "2",
+                  "Checksum": "7fce6ccfe67556c54a0bd069a86033d8"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

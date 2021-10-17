@@ -32,7 +32,7 @@ Authorization: Bearer {{access_token}}
 
 < ../docs/api/private-examples/FP_based_on_CROSSMATCH_reco_from_crossmatch_agent_sierra.json
 
-### Post the SVB alert 2021-10-01_1837 for solving
+### Post the SVB alert 2021-10-01_1837_osama_bin_laden for solving
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -42,7 +42,7 @@ Authorization: Bearer {{access_token}}
 
 < ../docs/api/svb-examples/2021-10-01_1837_osama_bin_laden.json
 
-### Post the SVB alert 2021-10-04-1851 for solving
+### Post the SVB alert 2021-10-04-1851_saddam_hussain for solving
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -52,7 +52,7 @@ Authorization: Bearer {{access_token}}
 
 < ../docs/api/svb-examples/2021-10-04-1851_saddam_hussain.json
 
-### Post the SVB alert 2021-10-04-1851 for solving
+### Post the SVB alert 2021_10_08-1754_uat_firco_alert for solving
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert
@@ -60,4 +60,14 @@ Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
-< ../docs/api/svb-examples/2021_10_08-1754_uat_firco_alert.json
+< ../docs/api/svb-examples/2021-10-08-1754_uat_firco_alert.json
+
+### Post the SVB alert 2021-10-17-0201_saddam_hussain_two_hits for solving
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/svb-examples/2021-10-17-0201_saddam_hussain_two_hits.json
