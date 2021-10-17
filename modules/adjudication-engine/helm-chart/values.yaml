@@ -1,8 +1,7 @@
 name: adjudication-engine-app
 image_tag: dummy
 image_repo: dummy
-config:
-  name: AdjudicationEngineApp
+
 ports:
   http: 8080
   grpc: 9090

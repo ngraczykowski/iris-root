@@ -243,3 +243,4 @@ grpc:
   client:
     GLOBAL:
       negotiation-type: PLAINTEXT
+      enable-keep-alive: false
