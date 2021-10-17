@@ -17,7 +17,7 @@ gradleBuild(
           gradle.gradle('jib')
         }
         // Stash data to AWS nodes - scripts, helm etc.
-        stash includes: './scripts/**, ./helm-chart/**', name: 'chart-scripts'
+        stash includes: 'scripts/**, helm-chart/**', name: 'chart-scripts'
       }
       stage('Helm Chart registry') {
         env.INSTALLER_VERSION = utils.getProjectVersion()
