@@ -11,6 +11,7 @@ ext {
   silenteightDataSourceApiVersion = "0.9.0"
   silenteightCommonsVersion = "2.1.0"
   silenteightSepBaseVersion = "1.12.2"
+  warehouseProtocolVersion = "2.1.0-SNAPSHOT"
 
   //***********************************
   // Others libraries
@@ -38,6 +39,7 @@ libraries.silenteight_sep_base_aspects = [group: 'com.silenteight.sep.base', nam
 libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name: 'sep-base-common', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_testing = [group: 'com.silenteight.sep.base', name: 'sep-base-testing', version: silenteightSepBaseVersion]
 libraries.silenteight_agents_protocol = [group: 'com.silenteight.agent.api', name: 'protocol-agents', version: agentsProtocolVersion]
+libraries.warehouse_data_api = [group: 'com.silenteight.warehouse.api', name: 'se-data-api', version: warehouseProtocolVersion]
 
 // Spring
 libraries.spring_aop = [group: 'org.springframework', name: 'spring-aop']

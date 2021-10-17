@@ -46,6 +46,7 @@ dependencies {
   implementation libraries.data_source_categories_api
   implementation libraries.data_source_comments_api
   implementation libraries.data_source_agentinput_api
+  implementation libraries.warehouse_data_api
 
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.spring_security_test
