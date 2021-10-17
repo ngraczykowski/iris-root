@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import com.silenteight.payments.bridge.common.dto.common.StatusInfoDto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
@@ -19,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(UpperCamelCaseStrategy.class)
+@JsonIgnoreProperties({ "userLogin", "userPassword" })
 public class AlertDecisionMessageDto implements Serializable {
 
   private static final long serialVersionUID = -6851877425739319284L;
