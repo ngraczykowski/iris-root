@@ -4,8 +4,6 @@ warehouse:
     ignored-keys:
   environment:
     prefix: sierra
-  minio:
-    url: https://minio.silenteight.com
 
 warehouse.report.rbs:
   production:
@@ -124,6 +122,10 @@ warehouse.report.metrics:
       name: alert_analyst_decision
       positive-value: analyst_decision_true_positive
       negative-value: analyst_decision_false_positive
+    qa-decision-field:
+      name: alert_qa.level-0.state
+      positive-value: qa_decision_PASSED
+      negative-value: qa_decision_FAILED
 
   simulation:
     date-field:
@@ -148,6 +150,10 @@ warehouse.report.metrics:
       name: alert_analyst_decision
       positive-value: analyst_decision_true_positive
       negative-value: analyst_decision_false_positive
+    qa-decision-field:
+      name: alert_qa.level-0.state
+      positive-value: qa_decision_PASSED
+      negative-value: qa_decision_FAILED
 
 warehouse.report.statistics:
   date-field-name: index_timestamp
