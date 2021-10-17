@@ -17,23 +17,13 @@ gradleBuild(
           gradle.gradle('jib')
         }
         // Stash data to AWS nodes - scripts, helm etc.
-        dir('./scripts') {
-          stash includes: '**', name: 'scripts'
-        }
-        dir('./helm-chart') {
-          stash includes: '**', name: 'helm'
-        }
+        stash includes: './scripts/**, ./helm-chart/**', name: 'chart-scripts'
       }
       stage('Helm Chart registry') {
         env.INSTALLER_VERSION = utils.getProjectVersion()
         node("aws-worker") {
-          // Stash is done in first stage
-          dir('./scripts') {
-            unstash 'scripts'
-          }
-          dir('./helm-chart') {
-            unstash 'helm'
-          }
+          sh 'rm -rf ./scripts ./helm-chart'
+          unstash 'chart-scripts'
           withCredentials(
               [usernamePassword(
                   credentialsId: 'artifactory-deployment-user', usernameVariable: 'USERNAME',
@@ -54,14 +44,8 @@ gradleBuild(
         //This is docker image tag version which will be used to copy from s8 repository
         env.INSTALLER_VERSION = utils.getProjectVersion()
         node("aws-worker") {
-          // Stash is done in first stage
-          dir('./scripts') {
-            unstash 'scripts'
-          }
-
-          dir('./helm-chart') {
-            unstash 'helm'
-          }
+          sh 'rm -rf ./scripts ./helm-chart'
+          unstash 'chart-scripts'
           script {
             if (utils.getGitBranch() == 'master') {
               echo 'AWS image push'

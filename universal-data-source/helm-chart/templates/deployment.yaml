@@ -42,19 +42,12 @@ spec:
               value: {{ .Values.udsDbUsername }}
             - name: "UDS_DB_PASSWORD"
               value: {{ .Values.udsDbPassword | quote }}
-            - name: "SERP_SHOW_ENV"
-              value: "true"
-            - name: "SPRING_MAIN_CLOUD_PLATFORM"
-              value: "KUBERNETES"
-            - name: 'DEBUG'
-              value: 'true'
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          args: ["--logging.config=file:/etc/logback.xml"]
-          volumeMounts:
-            - mountPath: /etc/logback.xml
-              name: logback-config
-              subPath: logback-config-file
+          args:
+            - --serp.show-env=true
+            - --spring.profiles.active={{ .Values.springProfilesActive }}
+            - --logging.config=file:/etc/logback/logback.xml
           resources:
             limits:
               memory: {{ .Values.memoryLimit | quote }}
@@ -67,6 +60,9 @@ spec:
             - containerPort: 9090
               protocol: TCP
               name: grpc
+          volumeMounts:
+            - name: logback-config
+              mountPath: /etc/logback
       volumes:
         - name: "logback-config"
           configMap:

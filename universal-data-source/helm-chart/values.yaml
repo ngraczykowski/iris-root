@@ -1,8 +1,7 @@
 name: universal-data-source-app
 image_tag: dummy
 image_repo: dummy
-config:
-  name: universalDatasourceApp
+
 ports:
   http: 8080
   grpc: 9090
@@ -11,3 +10,4 @@ replicaCount: 1
 imagePullPolicy: Always
 memoryLimit: 2048Mi
 memoryRequest: 512Mi
+springProfilesActive:

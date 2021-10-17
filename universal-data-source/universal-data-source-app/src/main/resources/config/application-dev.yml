@@ -5,6 +5,7 @@ serp:
 logging:
   level:
     com.silenteight.sep: DEBUG
+    com.silenteight.universaldatasource: DEBUG
     io.opencensus: INFO
     io.netty: INFO
     io.grpc.netty: INFO
