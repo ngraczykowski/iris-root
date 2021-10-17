@@ -18,6 +18,7 @@ public class MessageRegistryConfiguration {
         "com.google.protobuf",
         "com.google.rpc",
         "com.google.type",
+        "com.silenteight.adjudication",
         "com.silenteight.agents",
         "com.silenteight.datasource",
         "com.silenteight.proto.payments.bridge"
