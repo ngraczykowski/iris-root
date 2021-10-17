@@ -53,10 +53,6 @@ spec:
               value: {{ .Values.springRabbitmqPassword }}
             - name: 'SPRING_RABBITMQ_VIRTUAL_HOST'
               value: {{ .Values.springRabbitmqVirtualHost }}
-            - name: 'SPRING_PROFILES_ACTIVE'
-              value: {{ .Values.springProfilesActive }}
-            - name: 'DEBUG'
-              value: 'true'
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           resources:
             limits:
@@ -65,11 +61,11 @@ spec:
               memory: {{ .Values.memoryRequest | quote }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args:
-            - "--debug=true"
-            - "--logging.config=file:/etc/logback.xml"
-            - "--grpc.client.GLOBAL.negotiation-type=PLAINTEXT"
-            - "--grpc.client.datasource.address={{ .Values.grpcClientDatasourceAddress }}"
-            - "--grpc.client.governance.address={{ .Values.grpcClientGovernanceAddress }}"
+            - --spring.profiles.active={{ .Values.springProfilesActive }}
+            - --logging.config=file:/etc/logback/logback.xml
+            - --grpc.client.GLOBAL.negotiation-type=PLAINTEXT
+            - --grpc.client.datasource.address={{ .Values.grpcClientDatasourceAddress }}
+            - --grpc.client.governance.address={{ .Values.grpcClientGovernanceAddress }}
           volumeMounts:
             - mountPath: /etc/logback.xml
               name: logback-config
