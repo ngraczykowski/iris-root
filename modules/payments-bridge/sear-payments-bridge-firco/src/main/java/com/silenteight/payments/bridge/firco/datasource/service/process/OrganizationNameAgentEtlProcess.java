@@ -101,7 +101,7 @@ class OrganizationNameAgentEtlProcess implements EtlProcess {
       WatchlistType watchlistType, List<String> alertedPartyNames, String watchlistPartyNames) {
     if (watchlistType == WatchlistType.COMPANY) {
       return NameFeatureInput.newBuilder()
-          .setFeature("organizationName")
+          .setFeature("features/organizationName")
           .addAllAlertedPartyNames(alertedPartyNames
               .stream()
               .map(alertedPartyName -> AlertedPartyName
@@ -115,7 +115,7 @@ class OrganizationNameAgentEtlProcess implements EtlProcess {
           .build();
     } else {
       return NameFeatureInput.newBuilder()
-          .setFeature("organizationName")
+          .setFeature("features/organizationName")
           .addAllAlertedPartyNames(new ArrayList<>())
           .addWatchlistNames(WatchlistName.newBuilder()
               .setName(watchlistPartyNames)

@@ -84,6 +84,7 @@ class GeoAgentEtlProcess implements EtlProcess {
                     .setFeature("features/location")
                     .setAgentFeatureInput(Any.pack(
                         LocationFeatureInput.newBuilder()
+                            .setFeature("features/location")
                             .setAlertedPartyLocation(countryTown)
                             .setWatchlistLocation(watchListLocation)
                             .build()))

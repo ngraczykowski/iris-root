@@ -137,7 +137,7 @@ class IdentificationMismatchAgentEtlProcess implements EtlProcess {
         .newBuilder()
         .setAlertedPartyMatchingField(fieldValue)
         .setWatchlistMatchingText(matchingText)
-        .setFeature("bankIdentificationCodes");
+        .setFeature("features/bankIdentificationCodes");
 
     if (SolutionType.SEARCH_CODE == solutionType) {
       builder.addAllWatchlistSearchCodes(searchCodes);

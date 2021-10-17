@@ -72,7 +72,7 @@ class NameAgentEtlProcess implements EtlProcess {
                 .newBuilder()
                 .setFeature("features/name")
                 .setAgentFeatureInput(Any.pack(NameFeatureInput.newBuilder()
-                    .setFeature("name")
+                    .setFeature("features/name")
                     .addAllAlertedPartyNames(alertedPartyNames
                         .stream()
                         .map(alertedPartyName -> AlertedPartyName
