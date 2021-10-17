@@ -23,52 +23,20 @@ warehouse.report.rbs:
         label: step_title
       - name: alert_s8_recommendation
         label: alert_recommendation
-      - name: alert_extendedAttribute5
-        label: risk_type
-      - name: alert_features/commonAp:solution
-        label: common_ap
-      - name: alert_features/commonMp:solution
-        label: common_mp
-      - name: alert_features/commonNames:solution
-        label: common_names
-      - name: alert_features/dateOfBirth:solution
-        label: date_of_birth
-      - name: alert_features/gender:solution
-        label: gender
-      - name: alert_features/geoPlaceOfBirth:solution
-        label: geo_place_of_birth
-      - name: alert_features/geoResidencies:solution
-        label: geo_residencies
-      - name: alert_features/incorporationCountry:solution
-        label: incorporation_country
-      - name: alert_features/invalidAlert:solution
-        label: invalid_alert
-      - name: alert_features/isApTpMarked:solution
-        label: is_ap_tp_marked
-      - name: alert_features/isCaseTpMarked:solution
-        label: is_case_tp_marked
-      - name: alert_features/isPep:solution
-        label: is_pep
-      - name: alert_features/isTpMarked:solution
-        label: is_tp_marked
-      - name: alert_features/logicalDiscountingDob:solution
-        label: logical_discounting_dob
+      - name: alert_categories/crossmatch
+        label: Name Address Crossmatch Category
+      - name: alert_categories/oneLiner
+        label: One Liner Category
+      - name: alert_categories/specificTerms
+        label: Specific Terms Category
+      - name: alert_categories/twoLines
+        label: Two Lines Name Category
+      - name: alert_categories/historicalRiskAssessment
+        label: Historical Risk Assessment Category
       - name: alert_features/name:solution
-        label: name
-      - name: alert_features/nationalIdDocument:solution
-        label: national_id_document
-      - name: alert_features/nationalityCountry:solution
-        label: nationality_country
-      - name: alert_features/otherCountry:solution
-        label: other_country
-      - name: alert_features/otherDocument:solution
-        label: other_document
-      - name: alert_features/passportNumberDocument:solution
-        label: passport_number_document
-      - name: alert_features/registrationCountry:solution
-        label: registration_country
-      - name: alert_features/residencyCountry:solution
-        label: residency_country
+        label: Name Feature
+      - name: alert_features/geo:solution
+        label: Geo Feature
     grouping-columns:
       - name: alert_analyst_decision
         grouping-values:
@@ -92,52 +60,20 @@ warehouse.report.rbs:
         label: step_title
       - name: alert_recommendation_recommended_action
         label: alert_recommendation
-      - name: alert_categories/hitType
-        label: risk_type
-      - name: alert_features/commonAp:solution
-        label: common_ap
-      - name: alert_features/commonMp:solution
-        label: common_mp
-      - name: alert_features/commonNames:solution
-        label: common_names
-      - name: alert_features/dateOfBirth:solution
-        label: date_of_birth
-      - name: alert_features/gender:solution
-        label: gender
-      - name: alert_features/geoPlaceOfBirth:solution
-        label: geo_place_of_birth
-      - name: alert_features/geoResidencies:solution
-        label: geo_residencies
-      - name: alert_features/incorporationCountry:solution
-        label: incorporation_country
-      - name: alert_features/invalidAlert:solution
-        label: invalid_alert
-      - name: alert_features/isApTpMarked:solution
-        label: is_ap_tp_marked
-      - name: alert_features/isCaseTpMarked:solution
-        label: is_case_tp_marked
-      - name: alert_features/isPep:solution
-        label: is_pep
-      - name: alert_features/isTpMarked:solution
-        label: is_tp_marked
-      - name: alert_features/logicalDiscountingDob:solution
-        label: logical_discounting_dob
+      - name: alert_categories/crossmatch
+        label: Name Address Crossmatch Category
+      - name: alert_categories/oneLiner
+        label: One Liner Category
+      - name: alert_categories/specificTerms
+        label: Specific Terms Category
+      - name: alert_categories/twoLines
+        label: Two Lines Name Category
+      - name: alert_categories/historicalRiskAssessment
+        label: Historical Risk Assessment Category
       - name: alert_features/name:solution
-        label: name
-      - name: alert_features/nationalIdDocument:solution
-        label: national_id_document
-      - name: alert_features/nationalityCountry:solution
-        label: nationality_country
-      - name: alert_features/otherCountry:solution
-        label: other_country
-      - name: alert_features/otherDocument:solution
-        label: other_document
-      - name: alert_features/passportNumberDocument:solution
-        label: passport_number_document
-      - name: alert_features/registrationCountry:solution
-        label: registration_country
-      - name: alert_features/residencyCountry:solution
-        label: residency_country
+        label: Name Feature
+      - name: alert_features/geo:solution
+        label: Geo Feature
     grouping-columns:
       - name: alert_analyst_decision
         grouping-values:
@@ -222,3 +158,135 @@ warehouse.report.statistics:
   analyst-decision:
     field: alert_analyst_decision
     false-positive-value: analyst_decision_false_positive
+
+warehouse.report.accuracy:
+  production:
+    date-field-name: alert_recommendationDate
+    columns:
+      - name: alert_fvSignature
+        label: alert_fvSignature
+      - name: alert_policy
+        label: alert_policy
+      - name: alert_policy_title
+        label: alert_policy_title
+      - name: alert_step
+        label: alert_step
+      - name: alert_step_title
+        label: alert_step_title
+      - name: alert_id
+        label: alert_id
+      - name: alert_status
+        label: alert_status
+      - name: alert_recommendation
+        label: alert_recommendation
+      - name: alert_s8_recommendation
+        label: alert_s8_recommendation
+      - name: alert_recommendationDate
+        label: alert_recommendationDate
+      - name: alert_comment
+        label: alert_comment
+      - name: s8_country
+        label: s8_country
+      - name: alert_analyst_decision
+        label: alert_analyst_decision
+      - name: s8_discriminator
+        label: s8_discriminator
+    filters:
+      - name: alert_analyst_decision
+        allowed-values:
+          - analyst_decision_false_positive
+          - analyst_decision_true_positive
+  simulation:
+    date-field-name: index_timestamp
+    columns:
+      - name: alert_fvSignature
+        label: alert_fvSignature
+      - name: alert_policy
+        label: alert_policy
+      - name: alert_policy_title
+        label: alert_policy_title
+      - name: alert_step
+        label: alert_step
+      - name: alert_step_title
+        label: alert_step_title
+      - name: alert_id
+        label: alert_id
+      - name: alert_status
+        label: alert_status
+      - name: alert_recommendation
+        label: alert_recommendation
+      - name: alert_s8_recommendation
+        label: alert_s8_recommendation
+      - name: alert_recommendationDate
+        label: alert_recommendationDate
+      - name: alert_comment
+        label: alert_comment
+      - name: s8_country
+        label: s8_country
+      - name: s8_discriminator
+        label: s8_discriminator
+    filters:
+      - name: alert_analyst_decision
+        allowed-values:
+          - analyst_decision_false_positive
+          - analyst_decision_true_positive
+
+warehouse.report.ai-reasoning:
+  production:
+    date-field-name: alert_recommendationDate
+    columns:
+      - name: alert_fvSignature
+        label: alert_fvSignature
+      - name: alert_policy
+        label: alert_policy
+      - name: alert_policy_title
+        label: alert_policy_title
+      - name: alert_step
+        label: alert_step
+      - name: alert_step_title
+        label: alert_step_title
+      - name: alert_id
+        label: alert_id
+      - name: alert_status
+        label: alert_status
+      - name: alert_recommendation
+        label: alert_recommendation
+      - name: alert_s8_recommendation
+        label: alert_s8_recommendation
+      - name: alert_recommendationDate
+        label: alert_recommendationDate
+      - name: alert_comment
+        label: alert_comment
+      - name: s8_country
+        label: s8_country
+      - name: s8_discriminator
+        label: s8_discriminator
+  simulation:
+    date-field-name: index_timestamp
+    columns:
+      - name: alert_fvSignature
+        label: alert_fvSignature
+      - name: alert_policy
+        label: alert_policy
+      - name: alert_policy_title
+        label: alert_policy_title
+      - name: alert_step
+        label: alert_step
+      - name: alert_step_title
+        label: alert_step_title
+      - name: alert_id
+        label: alert_id
+      - name: alert_status
+        label: alert_status
+      - name: alert_recommendation
+        label: alert_recommendation
+      - name: alert_s8_recommendation
+        label: alert_s8_recommendation
+      - name: alert_recommendationDate
+        label: alert_recommendationDate
+      - name: alert_comment
+        label: alert_comment
+      - name: s8_country
+        label: s8_country
+      - name: s8_discriminator
+        label: s8_discriminator
