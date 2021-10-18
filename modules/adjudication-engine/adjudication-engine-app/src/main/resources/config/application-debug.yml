@@ -6,6 +6,8 @@ logging:
   level:
     com.silenteight.sep: DEBUG
     com.silenteight.adjudication.engine: DEBUG
+    com.silenteight.adjudication.engine.comments.comment.PebbleTemplateEngine: INFO
+    com.silenteight.adjudication.engine.comments.comment.FreemarkerTemplateEngine: INFO
     io.opencensus: INFO
     io.netty: INFO
     io.grpc.netty: INFO
