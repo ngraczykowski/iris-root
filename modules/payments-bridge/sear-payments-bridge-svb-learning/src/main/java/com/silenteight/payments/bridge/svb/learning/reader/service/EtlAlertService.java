@@ -24,10 +24,12 @@ class EtlAlertService {
 
   private final EtlMatchService etlMatchService;
 
-  LearningAlert fromCsvRows(List<LearningCsvRow> rows) {
+  LearningAlert fromCsvRows(List<LearningCsvRow> rows, String batchStamp, String fileName) {
     return LearningAlert.builder()
         .alertId(rows.get(0).getFkcoVSystemId())
         .alertTime(createAlertTime(rows.get(0).getFkcoDFilteredDatetime()))
+        .batchStamp(batchStamp)
+        .fileName(fileName)
         .matches(createMatches(rows))
         .build();
   }

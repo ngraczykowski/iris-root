@@ -30,6 +30,8 @@ public class RegisterAlertRequest {
 
   MatchQuantity matchQuantity;
 
+  List<Label> labels;
+
   public BatchCreateAlertMatchesRequest toCreateMatchesRequest(String alertName) {
     if (matchIds.isEmpty())
       throw new IllegalStateException("Match ids must not be empty");
@@ -63,6 +65,11 @@ public class RegisterAlertRequest {
     if (matchQuantity != null) {
       alert.putLabels("matchQuantity", matchQuantity.name().toLowerCase(Locale.ROOT));
     }
+
+    if (labels != null) {
+      labels.forEach(l -> alert.putLabels(l.getName(), l.getValue()));
+    }
+
     return CreateAlertRequest.newBuilder().setAlert(alert.build()).build();
   }
 }

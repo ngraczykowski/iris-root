@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 @Service
@@ -22,6 +25,9 @@ class ProcessAlertService {
 
   private final CsvFileProvider csvFileProvider;
   private final EtlAlertService etlAlertService;
+
+  private static final SimpleDateFormat TIME_STAMP_FORMAT =
+      new SimpleDateFormat("yyyyMMdd'T'HHmmssSSSXXX");
 
   public AlertsReadingResponse read(
       LearningRequest learningRequest, Consumer<LearningAlert> alertConsumer) {
@@ -40,7 +46,7 @@ class ProcessAlertService {
             .readerFor(LearningCsvRow.class)
             .with(schema)
             .readValues(new InputStreamReader(learningCsv.getContent(), Charset.forName("CP1250")));
-        alertsReadingResponse = readByAlerts(it, alertConsumer);
+        alertsReadingResponse = readByAlerts(it, alertConsumer, learningCsv.getFileName());
         alertsReadingResponse.setObjectData(learningCsv);
 
         return alertsReadingResponse;
@@ -52,7 +58,7 @@ class ProcessAlertService {
   }
 
   private AlertsReadingResponse readByAlerts(
-      MappingIterator<LearningCsvRow> it, Consumer<LearningAlert> alertConsumer) {
+      MappingIterator<LearningCsvRow> it, Consumer<LearningAlert> alertConsumer, String fileName) {
 
     var firstRow = it.next();
     assertRowNotNull(firstRow);
@@ -65,6 +71,8 @@ class ProcessAlertService {
     int failedAlertsCount = 0;
     int successfulAlertsCount = 0;
 
+    var batchStamp = createBatchStamp();
+
     while (it.hasNext()) {
       var row = it.next();
       assertRowNotNull(row);
@@ -76,7 +84,7 @@ class ProcessAlertService {
       }
 
       try {
-        alertConsumer.accept(etlAlertService.fromCsvRows(alertRows));
+        alertConsumer.accept(etlAlertService.fromCsvRows(alertRows, batchStamp, fileName));
         log.debug("Successfully processed alert = {}", currentAlertID);
         successfulAlertsCount++;
       } catch (RuntimeException e) {
@@ -102,6 +110,11 @@ class ProcessAlertService {
     if (row.getFkcoVSystemId() == null || row.getFkcoVSystemId().equals("")) {
       throw new ReadAlertException("Received empty row");
     }
+  }
+
+  private static String createBatchStamp() {
+    var timestamp = new Timestamp(System.currentTimeMillis());
+    return TIME_STAMP_FORMAT.format(timestamp) + "-" + UUID.randomUUID().toString().substring(0, 7);
   }
 
   private static class ReadAlertException extends RuntimeException {
