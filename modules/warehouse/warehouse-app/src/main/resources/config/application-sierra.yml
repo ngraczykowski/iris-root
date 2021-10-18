@@ -1,6 +1,6 @@
 warehouse:
   alert-mapping:
-    country-source-key: s8_lobCountryCode
+    country-source-key: access_permission_tag
     ignored-keys:
   environment:
     prefix: sierra
