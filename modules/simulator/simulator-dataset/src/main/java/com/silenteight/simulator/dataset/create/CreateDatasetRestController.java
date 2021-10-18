@@ -44,6 +44,7 @@ class CreateDatasetRestController {
         .rangeTo(dto.getQuery().getRangeTo())
         .createdBy(authentication.getName())
         .build();
+    request.addCountries(dto.getQuery().getCountries());
     useCase.activate(request);
     log.debug("Create dataset request processed.");
 

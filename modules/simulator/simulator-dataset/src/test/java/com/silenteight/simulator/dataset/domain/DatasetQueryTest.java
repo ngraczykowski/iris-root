@@ -1,5 +1,6 @@
 package com.silenteight.simulator.dataset.domain;
 
+import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 import com.silenteight.simulator.dataset.dto.DatasetDto;
 
@@ -80,7 +81,7 @@ class DatasetQueryTest extends BaseDataJpaTest {
         .state(ACTIVE)
         .generationDateFrom(FROM)
         .generationDateTo(TO)
-        .countries(COUNTRIES)
+        .labels(JsonConversionHelper.INSTANCE.serializeToString(LABELS))
         .build();
 
     repository.save(datasetEntity);

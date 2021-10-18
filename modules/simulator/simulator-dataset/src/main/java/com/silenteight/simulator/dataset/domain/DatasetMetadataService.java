@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Dataset;
+import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 import com.silenteight.simulator.dataset.common.DatasetResource;
 import com.silenteight.simulator.dataset.create.CreateDatasetRequest;
 import com.silenteight.simulator.dataset.domain.exception.DatasetNotFoundException;
@@ -36,7 +37,7 @@ public class DatasetMetadataService {
         .state(ACTIVE)
         .generationDateFrom(request.getRangeFrom())
         .generationDateTo(request.getRangeTo())
-        .countries(request.getCountries())
+        .labels(JsonConversionHelper.INSTANCE.serializeToString(request.getLabels()))
         .build();
     repository.save(datasetEntity);
     log.debug("Created Metadata DatasetEntity={}", datasetEntity);

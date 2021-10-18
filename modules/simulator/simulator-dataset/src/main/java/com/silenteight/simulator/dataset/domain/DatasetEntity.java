@@ -3,7 +3,8 @@ package com.silenteight.simulator.dataset.domain;
 import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
-import com.silenteight.sep.base.common.support.hibernate.StringListConverter;
+import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
+import com.silenteight.simulator.dataset.create.DatasetLabel;
 import com.silenteight.simulator.dataset.domain.exception.DatasetNotInProperStateException;
 import com.silenteight.simulator.dataset.dto.AlertSelectionCriteriaDto;
 import com.silenteight.simulator.dataset.dto.DatasetDto;
@@ -16,8 +17,10 @@ import java.util.UUID;
 import javax.persistence.*;
 
 import static com.silenteight.simulator.dataset.common.DatasetResource.toResourceName;
+import static com.silenteight.simulator.dataset.domain.DatasetLabelName.COUNTRY;
 import static com.silenteight.simulator.dataset.domain.DatasetState.ACTIVE;
 import static com.silenteight.simulator.dataset.domain.DatasetState.ARCHIVED;
+import static java.util.Collections.emptyList;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -83,9 +86,8 @@ class DatasetEntity extends BaseEntity implements Serializable {
   private OffsetDateTime generationDateTo;
 
   @ToString.Include
-  @Convert(converter = StringListConverter.class)
-  @Column(name = "countries")
-  private List<String> countries;
+  @Column(name = "labels")
+  private String labels;
 
   void archive() {
     assertInState(ACTIVE);
@@ -116,6 +118,16 @@ class DatasetEntity extends BaseEntity implements Serializable {
         .alertGenerationDate(toRange())
         .countries(getCountries())
         .build();
+  }
+
+  private List<String> getCountries() {
+    return JsonConversionHelper.INSTANCE
+        .deserializeCollection(getLabels(), DatasetLabel.class)
+        .stream()
+        .filter(label -> label.hasName(COUNTRY))
+        .findFirst()
+        .map(DatasetLabel::getValues)
+        .orElse(emptyList());
   }
 
   private RangeQueryDto toRange() {

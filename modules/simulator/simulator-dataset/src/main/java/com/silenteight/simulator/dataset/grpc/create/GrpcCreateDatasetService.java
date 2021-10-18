@@ -12,17 +12,17 @@ import com.silenteight.adjudication.api.v1.FilteredAlerts.LabelValues;
 import com.silenteight.adjudication.api.v1.FilteredAlerts.LabelsFilter;
 import com.silenteight.simulator.dataset.create.CreateDatasetRequest;
 import com.silenteight.simulator.dataset.create.CreateDatasetService;
+import com.silenteight.simulator.dataset.create.DatasetLabel;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
-import static java.util.Map.of;
+import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 @RequiredArgsConstructor
 class GrpcCreateDatasetService implements CreateDatasetService {
-
-  private static final String COUNTRY_LABEL = "country";
 
   @NonNull
   private final DatasetServiceBlockingStub datasetStub;
@@ -45,7 +45,7 @@ class GrpcCreateDatasetService implements CreateDatasetService {
   private static FilteredAlerts toFilteredAlerts(CreateDatasetRequest request) {
     return FilteredAlerts.newBuilder()
         .setAlertTimeRange(toAlertTimeRange(request))
-        .setLabelsFilter(toLabelsFilter(COUNTRY_LABEL, request.getCountries()))
+        .setLabelsFilter(toLabelsFilter(request.getLabels()))
         .build();
   }
 
@@ -56,10 +56,16 @@ class GrpcCreateDatasetService implements CreateDatasetService {
         .build();
   }
 
-  private static LabelsFilter toLabelsFilter(String label, List<String> values) {
+  private static LabelsFilter toLabelsFilter(List<DatasetLabel> labels) {
     return LabelsFilter.newBuilder()
-        .putAllLabels(of(label, toLabelValues(values)))
+        .putAllLabels(toLabelsMap(labels))
         .build();
+  }
+
+  private static Map<String, LabelValues> toLabelsMap(List<DatasetLabel> labels) {
+    return labels
+        .stream()
+        .collect(toMap(DatasetLabel::getName, label -> toLabelValues(label.getValues())));
   }
 
   private static LabelValues toLabelValues(List<String> values) {

@@ -5,10 +5,10 @@ import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.simulator.dataset.create.exception.EmptyDatasetException;
 import com.silenteight.simulator.dataset.domain.DatasetMetadataService;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -16,18 +16,13 @@ import java.util.List;
 
 import static com.silenteight.simulator.dataset.create.CreateDatasetRequest.POST_AUDIT_TYPE;
 import static com.silenteight.simulator.dataset.create.CreateDatasetRequest.PRE_AUDIT_TYPE;
-import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.CREATE_DATASET_REQUEST;
-import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.DATASET;
-import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.EMPTY_DATASET;
+import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CreateDatasetUseCaseTest {
-
-  @InjectMocks
-  private CreateDatasetUseCase underTest;
 
   @Mock
   private CreateDatasetService createDatasetService;
@@ -38,16 +33,25 @@ class CreateDatasetUseCaseTest {
   @Mock
   private AuditingLogger auditingLogger;
 
+  private CreateDatasetUseCase underTest;
+
+  @BeforeEach
+  void setUp() {
+    underTest = new CreateDatasetUseCase(
+        createDatasetService, datasetMetadataService, LABELS, auditingLogger);
+  }
+
   @Test
   void createDataset() {
     // given
-    when(createDatasetService.createDataset(CREATE_DATASET_REQUEST)).thenReturn(DATASET);
+    CreateDatasetRequest request = makeCreateDatasetRequest();
+    when(createDatasetService.createDataset(request)).thenReturn(DATASET);
 
     // when
-    underTest.activate(CREATE_DATASET_REQUEST);
+    underTest.activate(request);
 
     // then
-    verify(datasetMetadataService).createMetadata(CREATE_DATASET_REQUEST, DATASET);
+    verify(datasetMetadataService).createMetadata(request, DATASET);
     var logCaptor = forClass(AuditDataDto.class);
     verify(auditingLogger, times(2)).log(logCaptor.capture());
     AuditDataDto preAudit = getPreAudit(logCaptor);
@@ -59,13 +63,25 @@ class CreateDatasetUseCaseTest {
   @Test
   void throwExceptionIfDatasetIsEmpty() {
     // given
-    when(createDatasetService.createDataset(CREATE_DATASET_REQUEST)).thenReturn(EMPTY_DATASET);
+    CreateDatasetRequest request = makeCreateDatasetRequest();
+    when(createDatasetService.createDataset(request)).thenReturn(EMPTY_DATASET);
 
     // then
-    assertThatThrownBy(() -> underTest.activate(CREATE_DATASET_REQUEST))
+    assertThatThrownBy(() -> underTest.activate(request))
         .isInstanceOf(EmptyDatasetException.class)
         .hasMessage("Dataset contains no alerts");
     verifyNoInteractions(datasetMetadataService);
+  }
+
+  private static CreateDatasetRequest makeCreateDatasetRequest() {
+    return CreateDatasetRequest.builder()
+        .id(ID)
+        .datasetName(DATASET_NAME)
+        .description(DESCRIPTION)
+        .rangeFrom(FROM)
+        .rangeTo(TO)
+        .createdBy(CREATED_BY)
+        .build();
   }
 
   private static AuditDataDto getPreAudit(ArgumentCaptor<AuditDataDto> logCaptor) {

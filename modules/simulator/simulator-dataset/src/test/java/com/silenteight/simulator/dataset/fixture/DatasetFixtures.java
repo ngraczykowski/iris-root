@@ -9,7 +9,7 @@ import com.silenteight.adjudication.api.v1.FilteredAlerts.AlertTimeRange;
 import com.silenteight.adjudication.api.v1.FilteredAlerts.LabelValues;
 import com.silenteight.adjudication.api.v1.FilteredAlerts.LabelsFilter;
 import com.silenteight.simulator.dataset.archive.ArchiveDatasetRequest;
-import com.silenteight.simulator.dataset.create.CreateDatasetRequest;
+import com.silenteight.simulator.dataset.create.DatasetLabel;
 import com.silenteight.simulator.dataset.create.dto.CreateDatasetRequestDto;
 import com.silenteight.simulator.dataset.domain.DatasetState;
 import com.silenteight.simulator.dataset.dto.AlertSelectionCriteriaDto;
@@ -18,12 +18,12 @@ import com.silenteight.simulator.dataset.dto.RangeQueryDto;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
 import static com.silenteight.simulator.dataset.domain.DatasetState.ACTIVE;
 import static java.time.ZoneOffset.UTC;
-import static java.util.Map.of;
 import static java.util.UUID.fromString;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -46,9 +46,14 @@ public final class DatasetFixtures {
   public static final OffsetDateTime CREATED_AT =
       OffsetDateTime.of(2021, 3, 12, 11, 25, 10, 0, UTC);
   public static final String CREATED_BY = "asmith";
+  public static final String ARCHIVED_BY = "jdoe";
   public static final String COUNTRY_LABEL = "country";
   public static final List<String> COUNTRIES = List.of("PL", "RU", "DE");
-  public static final String ARCHIVED_BY = "jdoe";
+  private static final String MATCH_QUANTITY_LABEL = "matchQuantity";
+  private static final List<String> MATCH_QUANTITIES = List.of("single");
+  public static final List<DatasetLabel> LABELS = List.of(
+      new DatasetLabel(COUNTRY_LABEL, COUNTRIES),
+      new DatasetLabel(MATCH_QUANTITY_LABEL, MATCH_QUANTITIES));
 
   public static final CreateDatasetRequestDto CREATE_DATASET_REQUEST_DTO =
       new CreateDatasetRequestDto(
@@ -65,17 +70,6 @@ public final class DatasetFixtures {
       .createdAt(CREATED_AT)
       .createdBy(CREATED_BY)
       .build();
-
-  public static final CreateDatasetRequest CREATE_DATASET_REQUEST =
-      CreateDatasetRequest.builder()
-          .id(ID)
-          .datasetName(DATASET_NAME)
-          .description(DESCRIPTION)
-          .rangeFrom(FROM)
-          .rangeTo(TO)
-          .countries(COUNTRIES)
-          .createdBy(CREATED_BY)
-          .build();
 
   public static final Dataset DATASET =
       Dataset.newBuilder()
@@ -111,14 +105,24 @@ public final class DatasetFixtures {
           .setEndTime(toTimestamp(TO))
           .build();
 
-  private static final LabelValues LABEL_VALUES =
+  private static final LabelValues COUNTRY_LABEL_VALUES =
       LabelValues.newBuilder()
           .addAllValue(COUNTRIES)
           .build();
 
+  private static final LabelValues MATCH_QUANTITY_LABEL_VALUES =
+      LabelValues.newBuilder()
+          .addAllValue(MATCH_QUANTITIES)
+          .build();
+
+  private static final Map<String, LabelValues> LABELS_MAP =
+      Map.of(
+          COUNTRY_LABEL, COUNTRY_LABEL_VALUES,
+          MATCH_QUANTITY_LABEL, MATCH_QUANTITY_LABEL_VALUES);
+
   private static final LabelsFilter LABELS_FILTER =
       LabelsFilter.newBuilder()
-          .putAllLabels(of(COUNTRY_LABEL, LABEL_VALUES))
+          .putAllLabels(LABELS_MAP)
           .build();
 
   public static final FilteredAlerts FILTERED_ALERTS =
