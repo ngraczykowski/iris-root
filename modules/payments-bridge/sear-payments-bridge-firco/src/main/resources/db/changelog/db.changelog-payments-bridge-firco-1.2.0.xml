@@ -109,4 +109,21 @@
         tableName="pb_recommendation"/>
   </changeSet>
 
+  <changeSet id="payments-bridge-firco-1.2.9" author="jgajewski">
+    <modifyDataType
+        columnName="recommendation_name"
+        newDataType="VARCHAR(150)"
+        tableName="pb_recommendation"/>
+
+    <modifyDataType
+        columnName="alert_name"
+        newDataType="VARCHAR(150)"
+        tableName="pb_recommendation"/>
+
+    <modifyDataType
+        columnName="recommendation_comment"
+        newDataType="TEXT"
+        tableName="pb_recommendation"/>
+  </changeSet>
+
 </databaseChangeLog>
