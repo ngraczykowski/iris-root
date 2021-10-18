@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.simulator.dataset.create.dto.CreateDatasetRequestDto;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import javax.validation.Valid;
 
 import static com.silenteight.simulator.common.web.rest.RestConstants.ROOT;
@@ -44,7 +46,7 @@ class CreateDatasetRestController {
         .rangeTo(dto.getQuery().getRangeTo())
         .createdBy(authentication.getName())
         .build();
-    request.addCountries(dto.getQuery().getCountries());
+    request.addCountries(ObjectUtils.defaultIfNull(dto.getQuery().getCountries(), List.of()));
     useCase.activate(request);
     log.debug("Create dataset request processed.");
 
