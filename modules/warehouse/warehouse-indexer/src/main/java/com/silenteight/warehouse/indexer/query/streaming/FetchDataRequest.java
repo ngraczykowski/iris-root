@@ -18,7 +18,7 @@ import java.util.List;
 public class FetchDataRequest {
 
   @NonNull
-  List<String> fields;
+  ReportFieldDefinitions fieldsDefinitions;
   @NonNull
   List<String> indexes;
   @NonNull
@@ -36,7 +36,7 @@ public class FetchDataRequest {
     return indexes.toArray(String[]::new);
   }
 
-  String[] getFieldsArray() {
-    return fields.toArray(String[]::new);
+  String[] getFieldsNamesArray() {
+    return fieldsDefinitions.getNames().toArray(String[]::new);
   }
 }

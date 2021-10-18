@@ -54,7 +54,12 @@ class ScrollSearchStreamingService implements DataProvider {
 
     QueryBuilder query = scrollSearchQueryBuilder.buildQuery(request);
     SearchResponse searchResponse = executeSearch(request, scroll, query);
-    writeCsv(scroll, searchResponse, request.getFields(), consumer);
+    writeCsv(
+        scroll,
+        searchResponse,
+        request.getFieldsDefinitions().getNames(),
+        request.getFieldsDefinitions().getLabels(),
+        consumer);
   }
 
   private SearchResponse executeSearch(
@@ -69,7 +74,7 @@ class ScrollSearchStreamingService implements DataProvider {
     SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
     searchSourceBuilder.query(query);
     searchSourceBuilder.size(scrollSearchProperties.getBatchSize());
-    searchSourceBuilder.fetchSource(request.getFieldsArray(), null);
+    searchSourceBuilder.fetchSource(request.getFieldsNamesArray(), null);
     return searchSourceBuilder;
   }
 
@@ -86,15 +91,16 @@ class ScrollSearchStreamingService implements DataProvider {
       Scroll scroll,
       SearchResponse searchResponse,
       List<String> fieldNames,
+      List<String> fieldLabels,
       Consumer<Collection<String>> consumer) throws IOException {
 
-    writeHeader(fieldNames, consumer);
+    writeHeader(fieldLabels, consumer);
     String scrollId = writeBody(scroll, searchResponse, fieldNames, consumer);
     cleanUp(scrollId);
   }
 
-  private void writeHeader(List<String> fieldNames, Consumer<Collection<String>> consumer) {
-    String labels = responseParser.parseLabels(fieldNames);
+  private void writeHeader(List<String> fieldLabels, Consumer<Collection<String>> consumer) {
+    String labels = responseParser.parseLabels(fieldLabels);
     consumer.accept(of(labels));
   }
 

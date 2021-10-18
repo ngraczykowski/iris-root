@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 
 import com.silenteight.warehouse.indexer.query.common.QueryFilter;
 import com.silenteight.warehouse.indexer.query.streaming.FetchDataRequest;
+import com.silenteight.warehouse.indexer.query.streaming.FieldDefinition;
+import com.silenteight.warehouse.indexer.query.streaming.ReportFieldDefinitions;
 
 import java.time.OffsetDateTime;
 
@@ -29,8 +31,32 @@ public final class ReportFixture {
   public static final QueryFilter QUERY_FILTER =
       new QueryFilter(RECOMMENDATION_KEY, of(RECOMMENDATION_FP));
 
+  public static final String ALERT_COUNTRY_FIELD_LABEL = "Country LoB";
+  public static final String ALERT_RECOMMENDATION_LABEL = "Alert Recommendation";
+  public static final String ALERT_S8_ID_LABEL = "Alert S8 ID";
+
+  public static final FieldDefinition FIELDS_DEFINITION_1 = FieldDefinition.builder()
+      .name(COUNTRY_KEY)
+      .label(ALERT_COUNTRY_FIELD_LABEL)
+      .build();
+
+  public static final FieldDefinition FIELDS_DEFINITION_2 = FieldDefinition.builder()
+      .name(RECOMMENDATION_KEY)
+      .label(ALERT_RECOMMENDATION_LABEL)
+      .build();
+
+  public static final FieldDefinition FIELDS_DEFINITION_3 = FieldDefinition.builder()
+      .name(DISCRIMINATOR)
+      .label(ALERT_S8_ID_LABEL)
+      .build();
+
+  public static final ReportFieldDefinitions REPORT_FIELDS_DEFINITION =
+      ReportFieldDefinitions.builder()
+          .fieldDefinitions(of(FIELDS_DEFINITION_1, FIELDS_DEFINITION_2, FIELDS_DEFINITION_3))
+          .build();
+
   public static final FetchDataRequest FETCH_DATA_REQUEST = FetchDataRequest.builder()
-      .fields(of(COUNTRY_KEY, RECOMMENDATION_KEY, DISCRIMINATOR))
+      .fieldsDefinitions(REPORT_FIELDS_DEFINITION)
       .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
       .queryFilters(of(QUERY_FILTER))
       .dateField(INDEX_TIMESTAMP)

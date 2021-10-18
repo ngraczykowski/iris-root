@@ -424,61 +424,65 @@ warehouse.report.ai-reasoning:
     date-field-name: alert_recommendationDate
     columns:
       - name: alert_fvSignature
-        label: alert_fvSignature
+        label: Reasoning Branch ID
       - name: alert_policy
-        label: alert_policy
+        label: Policy ID
       - name: alert_policy_title
-        label: alert_policy_title
+        label: Policy Name
       - name: alert_step
-        label: alert_step
+        label: Step ID
       - name: alert_step_title
-        label: alert_step_title
-      - name: alert_id
-        label: alert_id
-      - name: alert_status
-        label: alert_status
-      - name: alert_recommendation
-        label: alert_recommendation
+        label: Step Name
       - name: alert_s8_recommendation
-        label: alert_s8_recommendation
+        label: S8 Alert Resolution
       - name: alert_recommendationDate
-        label: alert_recommendationDate
+        label: S8 Alert Resolution Timestamp
+      - name: alert_recommendation
+        label: HSBC Alert Resolution
       - name: alert_comment
-        label: alert_comment
+        label: Alert Comment
       - name: s8_country
-        label: s8_country
+        label: Country LoB
+      - name: alert_categories/hitType
+        label: Risk Type
       - name: alert_DN_CASE.ExtendedAttribute5
-        label: alert_DN_CASE.ExtendedAttribute5
+        label: List Type
+      - name: alert_id
+        label: Alert Client ID
+      - name: alert_status
+        label: Alert Status
       - name: s8_discriminator
-        label: s8_discriminator
+        label: Alert S8 ID
   simulation:
     date-field-name: index_timestamp
     columns:
       - name: alert_fvSignature
-        label: alert_fvSignature
+        label: Reasoning Branch ID
       - name: alert_policy
-        label: alert_policy
+        label: Policy ID
       - name: alert_policy_title
-        label: alert_policy_title
+        label: Policy Name
       - name: alert_step
-        label: alert_step
+        label: Step ID
       - name: alert_step_title
-        label: alert_step_title
-      - name: alert_id
-        label: alert_id
-      - name: alert_status
-        label: alert_status
-      - name: alert_recommendation
-        label: alert_recommendation
+        label: Step Name
       - name: alert_s8_recommendation
-        label: alert_s8_recommendation
+        label: S8 Alert Resolution
       - name: alert_recommendationDate
-        label: alert_recommendationDate
+        label: S8 Alert Resolution Timestamp
+      - name: alert_recommendation
+        label: HSBC Alert Resolution
       - name: alert_comment
-        label: alert_comment
+        label: Alert Comment
       - name: s8_country
-        label: s8_country
+        label: Country LoB
+      - name: alert_categories/hitType
+        label: Risk Type
       - name: alert_DN_CASE.ExtendedAttribute5
-        label: alert_DN_CASE.ExtendedAttribute5
+        label: List Type
+      - name: alert_id
+        label: Alert Client ID
+      - name: alert_status
+        label: Alert Status
       - name: s8_discriminator
-        label: s8_discriminator
+        label: Alert S8 ID
