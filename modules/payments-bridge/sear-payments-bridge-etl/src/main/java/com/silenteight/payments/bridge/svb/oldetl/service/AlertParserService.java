@@ -38,7 +38,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
   public AlertEtlResponse createAlertEtlResponse(AlertMessageDto alertMessageDto) {
     if (log.isDebugEnabled()) {
-      log.debug("Parsing alert for ELT: systemId={}", alertMessageDto.getSystemID());
+      log.debug("Parsing alert for ETL: systemId={}", alertMessageDto.getSystemID());
     }
 
     List<HitData> hits = new ArrayList<>();
