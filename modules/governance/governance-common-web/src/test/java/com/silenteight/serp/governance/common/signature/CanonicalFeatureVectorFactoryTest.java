@@ -29,7 +29,7 @@ class CanonicalFeatureVectorFactoryTest {
       of(PERFECT_MATCH, EXACT, NO_DATA);
   private static final List<String> FEATURE_VALUES_LIST_WITH_ONE_BLANK_VALUE =
       of(PERFECT_MATCH, " ", NO_DATA);
-  private static final List<String> EMPTY_FEATURE_VALUE_LIST = of();
+  private static final List<String> EMPTY_FEATURE_VALUES_LIST = of();
 
   private SignatureCalculator signatureCalculator;
   private CanonicalFeatureVectorFactory underTest;
@@ -83,12 +83,23 @@ class CanonicalFeatureVectorFactoryTest {
   }
 
   @Test
-  void shouldThrowExceptionWhenNoDataInInput() {
+  void shouldThrowExceptionWhenEmptyAgentNameListInInput() {
     assertThatThrownBy(
-        () -> underTest.fromNamesAndValues(EMPTY_AGENT_NAME_LIST, EMPTY_FEATURE_VALUE_LIST))
+        () -> underTest.fromNamesAndValues(
+            EMPTY_AGENT_NAME_LIST, CORRECT_FEATURE_VALUES_LIST_WITH_THREE_VALUES))
         .isInstanceOf(
             InvalidInputException.class)
-        .hasMessage("Missing data");
+        .hasMessage("Missing data: featureNames are empty");
+  }
+
+  @Test
+  void shouldThrowExceptionWhenEmptyFeatureValuesListInInput() {
+    assertThatThrownBy(
+        () -> underTest.fromNamesAndValues(
+            CORRECT_AGENT_NAME_LIST_WITH_TWO_NAMES, EMPTY_FEATURE_VALUES_LIST))
+        .isInstanceOf(
+            InvalidInputException.class)
+        .hasMessage("Missing data: featureValues are empty");
   }
 
   @Test
