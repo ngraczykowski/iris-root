@@ -47,6 +47,7 @@ message DiscountDatesReason {
   string watchlist_match_date = 1;
   string customer_match_date = 2;
   DiscountDatesConfig config = 3;
+  string error_message = 4;
 }
 
 message DiscountDatesConfig {
