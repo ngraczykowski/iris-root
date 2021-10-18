@@ -3,7 +3,9 @@ package com.silenteight.payments.bridge.app.amqp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.payments.bridge.common.integration.CommonChannels;
+import com.silenteight.payments.bridge.event.RecommendationGeneratedEvent;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -31,6 +33,7 @@ class AeInboundAmqpIntegrationConfiguration {
   @Bean
   IntegrationFlow recommendationGeneratedInbound() {
     return from(createInboundAdapter(properties.getInboundQueueNames()))
+        .transform(RecommendationsGenerated.class, RecommendationGeneratedEvent::new)
         .channel(commonChannels.recommendationGenerated())
         .get();
   }
