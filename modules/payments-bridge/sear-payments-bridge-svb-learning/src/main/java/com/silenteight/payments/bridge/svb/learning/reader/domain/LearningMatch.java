@@ -6,7 +6,10 @@ import lombok.Value;
 import lombok.experimental.NonFinal;
 
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
-import com.silenteight.payments.bridge.agents.model.*;
+import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
+import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
+import com.silenteight.payments.bridge.agents.model.OneLinerAgentRequest;
+import com.silenteight.payments.bridge.agents.model.SpecificTermsRequest;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.svb.oldetl.model.AbstractMessageStructure;
 import com.silenteight.payments.bridge.svb.oldetl.model.GetAccountNumberRequest;
@@ -56,9 +59,15 @@ public class LearningMatch {
 
   List<String> allMatchFieldsValue;
 
+  List<String> matchedNames;
+
+  List<String> matchedCountries;
+
   Map<AlertedPartyKey, String> alertedPartyEntity;
 
   WatchlistType watchlistType;
+
+  List<String> hitType;
 
 
   public NameAddressCrossmatchAgentRequest toCrossmatchRequest() {
@@ -68,14 +77,6 @@ public class LearningMatch {
         .watchlistName(getWatchlistNames().get(0))
         .watchlistCountry(getWatchlistCountry())
         .watchlistType(getMatchType())
-        .build();
-  }
-
-  public SpecificCommonTermsRequest toSpecificCommonTermsRequest() {
-    return SpecificCommonTermsRequest
-        .builder()
-        .isAccountNumberFlagInMatchingField(messageStructure.checkMessageWithoutAccountNum())
-        .allMatchFieldsValue(StringUtils.join(matchingTexts, ", "))
         .build();
   }
 
@@ -117,5 +118,15 @@ public class LearningMatch {
 
   public Optional<String> getAccountNumber() {
     return messageStructure.getAccountNumber(toGetAccountNumberRequest());
+  }
+
+  public List<String> getSearchCodes() {
+    var codes = matchedNames;
+
+    if (hitType.contains("EMBARGO")) {
+      codes.addAll(matchedCountries);
+    }
+
+    return codes;
   }
 }
