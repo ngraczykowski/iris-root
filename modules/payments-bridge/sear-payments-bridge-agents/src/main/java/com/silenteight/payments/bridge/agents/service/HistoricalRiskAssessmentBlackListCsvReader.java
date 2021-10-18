@@ -23,8 +23,8 @@ import static org.apache.commons.lang3.exception.ExceptionUtils.rethrow;
 @Slf4j
 class HistoricalRiskAssessmentBlackListCsvReader {
 
-  private static final String COL_NAME_ONE = "blacklisted_account_number";
-  private static final String COL_NAME_TWO = "ofac_id";
+  private static final String COL_NAME_ONE = "Name / Account Number";
+  private static final String COL_NAME_TWO = "FKCO_V_LIST_FMM_ID";
 
   static List<ConfigTuple> getConfigListFromCsv(
       ResourceLoader resourceLoader, String blackListCsvUrl) throws IOException {
