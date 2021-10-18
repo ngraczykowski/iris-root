@@ -66,7 +66,7 @@ public class AlertIndexService {
     if (bulk.hasFailures())
       log.error(
           "There were some errors while indexing data: {}. "
-              + "Other data in the bulkd request may have been indexed successfully.",
+              + "Other data in the bulk request may have been indexed successfully.",
           bulk.buildFailureMessage());
   }
 }

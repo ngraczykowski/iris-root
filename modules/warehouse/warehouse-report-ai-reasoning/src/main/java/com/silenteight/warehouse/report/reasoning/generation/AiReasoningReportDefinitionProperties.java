@@ -6,6 +6,8 @@ import lombok.Builder.Default;
 import lombok.Data;
 
 import com.silenteight.warehouse.indexer.query.common.QueryFilter;
+import com.silenteight.warehouse.indexer.query.streaming.FieldDefinition;
+import com.silenteight.warehouse.indexer.query.streaming.ReportFieldDefinitions;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,13 +36,6 @@ public class AiReasoningReportDefinitionProperties {
   @Valid
   private List<FilterProperties> filters;
 
-  List<String> getFieldNames() {
-    return columns
-        .stream()
-        .map(ColumnProperties::getName)
-        .collect(toList());
-  }
-
   List<QueryFilter> getQueryFilters() {
     if (isNull(getFilters()))
       return emptyList();
@@ -48,5 +43,24 @@ public class AiReasoningReportDefinitionProperties {
     return getFilters().stream()
         .map(FilterProperties::toQueryFilter)
         .collect(toList());
+  }
+
+  public ReportFieldDefinitions getReportFieldsDefinition() {
+    return ReportFieldDefinitions.builder()
+        .fieldDefinitions(getFieldDefinition())
+        .build();
+  }
+
+  private List<FieldDefinition> getFieldDefinition() {
+    return columns.stream()
+        .map(this::convertToFieldDefinition)
+        .collect(toList());
+  }
+
+  private FieldDefinition convertToFieldDefinition(ColumnProperties columnProperties) {
+    return FieldDefinition.builder()
+        .name(columnProperties.getName())
+        .label(columnProperties.getLabel())
+        .build();
   }
 }

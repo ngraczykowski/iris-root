@@ -40,6 +40,40 @@ class ScrollSearchQueryServiceTest {
   @Autowired
   private ScrollSearchStreamingService underTest;
 
+  private static final String RECOMMENDATION_LABEL = "Alert Resolution";
+  private static final String ANALYST_DECISION_LABEL = "Analyst Decision";
+
+  private static final FieldDefinition FIELDS_DEFINITION_1 = FieldDefinition.builder()
+      .name(RECOMMENDATION_KEY)
+      .label(RECOMMENDATION_LABEL)
+      .build();
+
+  private static final ReportFieldDefinitions REPORT_FIELDS_DEFINITION_1 =
+      ReportFieldDefinitions.builder()
+          .fieldDefinitions(of(FIELDS_DEFINITION_1))
+          .build();
+
+  private static final FieldDefinition FIELDS_DEFINITION_2 = FieldDefinition.builder()
+      .name(COUNTRY_KEY)
+      .label(RECOMMENDATION_LABEL)
+      .build();
+
+  private static final ReportFieldDefinitions REPORT_FIELDS_DEFINITION_2 =
+      ReportFieldDefinitions.builder()
+          .fieldDefinitions(of(FIELDS_DEFINITION_2))
+          .build();
+
+  private static final FieldDefinition FIELDS_DEFINITION_3 = FieldDefinition.builder()
+      .name(ANALYST_DECISION_KEY)
+      .label(ANALYST_DECISION_LABEL)
+      .build();
+
+  private static final ReportFieldDefinitions REPORT_FIELDS_DEFINITION_3 =
+      ReportFieldDefinitions.builder()
+          .fieldDefinitions(of(FIELDS_DEFINITION_3))
+          .build();
+
+
   @AfterEach
   public void cleanup() {
     removeData();
@@ -57,7 +91,7 @@ class ScrollSearchQueryServiceTest {
 
     FetchDataRequest request = FetchDataRequest.builder()
         .indexes(of(PRODUCTION_ELASTIC_WRITE_INDEX_NAME))
-        .fields(of(RECOMMENDATION_KEY))
+        .fieldsDefinitions(REPORT_FIELDS_DEFINITION_1)
         .from(parse(PROCESSING_TIMESTAMP))
         .to(parse(PROCESSING_TIMESTAMP_3))
         .dateField(INDEX_TIMESTAMP)
@@ -86,7 +120,7 @@ class ScrollSearchQueryServiceTest {
 
     FetchDataRequest request = FetchDataRequest.builder()
         .indexes(of(PRODUCTION_ELASTIC_WRITE_INDEX_NAME))
-        .fields(of(RECOMMENDATION_KEY))
+        .fieldsDefinitions(REPORT_FIELDS_DEFINITION_1)
         .from(parse(PROCESSING_TIMESTAMP_5))
         .to(parse(PROCESSING_TIMESTAMP_6))
         .dateField(INDEX_TIMESTAMP)
@@ -115,7 +149,7 @@ class ScrollSearchQueryServiceTest {
 
     FetchDataRequest request = FetchDataRequest.builder()
         .indexes(of(PRODUCTION_ELASTIC_WRITE_INDEX_NAME))
-        .fields(of(ANALYST_DECISION_KEY))
+        .fieldsDefinitions(REPORT_FIELDS_DEFINITION_3)
         .queryFilters(of(toQueryFilter()))
         .from(parse(PROCESSING_TIMESTAMP))
         .to(parse(PROCESSING_TIMESTAMP_4))
@@ -146,7 +180,7 @@ class ScrollSearchQueryServiceTest {
 
     FetchDataRequest request = FetchDataRequest.builder()
         .indexes(of(PRODUCTION_ELASTIC_WRITE_INDEX_NAME))
-        .fields(of(COUNTRY_KEY))
+        .fieldsDefinitions(REPORT_FIELDS_DEFINITION_2)
         .from(parse(PROCESSING_TIMESTAMP))
         .to(parse(PROCESSING_TIMESTAMP_4))
         .dateField(INDEX_TIMESTAMP)

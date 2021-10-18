@@ -28,7 +28,7 @@ public class AiReasoningReportGenerationService {
         .from(from)
         .to(to)
         .dateField(properties.getDateFieldName())
-        .fields(properties.getFieldNames())
+        .fieldsDefinitions(properties.getReportFieldsDefinition())
         .queryFilters(properties.getQueryFilters())
         .indexes(indexes)
         .name(name)

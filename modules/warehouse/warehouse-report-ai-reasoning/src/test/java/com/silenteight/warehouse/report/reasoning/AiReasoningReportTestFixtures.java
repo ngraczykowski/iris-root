@@ -24,9 +24,9 @@ public final class AiReasoningReportTestFixtures {
   public static final String STUB_REPORT_RESPONSE = "test row";
   public static final String DATE_FIELD_NAME = "index_timestamp";
   public static final String ALERT_STATUS_FIELD_NAME = "alert_status";
-  public static final String ALERT_STATUS_FIELD_LABEL = "alert_status";
+  public static final String ALERT_STATUS_FIELD_LABEL = "Alert Status";
   public static final String ALERT_COMMENT_FIELD_NAME = "alert_comment";
-  public static final String ALERT_COMMENT_FIELD_LABEL = "alert_comment";
+  public static final String ALERT_COMMENT_FIELD_LABEL = "Alert Comment";
   public static final List<String> INDEXES = of("index444");
   public static final ReportInstanceReferenceDto REPORT_INSTANCE =
       new ReportInstanceReferenceDto(TIMESTAMP);

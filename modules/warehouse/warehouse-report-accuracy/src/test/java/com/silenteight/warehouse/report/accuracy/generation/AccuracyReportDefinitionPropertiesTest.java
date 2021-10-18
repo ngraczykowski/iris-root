@@ -30,12 +30,23 @@ class AccuracyReportDefinitionPropertiesTest {
   @Test
   void shouldReturnFieldNames() {
     // when
-    List<String> fields = PROPERTIES.getFieldNames();
+    List<String> fields = PROPERTIES.getReportFieldsDefinition().getNames();
 
     // then
     assertThat(fields)
         .hasSize(2)
         .containsExactly(HIT_TYPE_FIELD_NAME, COUNTRY_FIELD_NAME);
+  }
+
+  @Test
+  void shouldReturnFieldLabels() {
+    // when
+    List<String> labels = PROPERTIES.getReportFieldsDefinition().getLabels();
+
+    // then
+    assertThat(labels)
+        .hasSize(2)
+        .containsExactly(HIT_TYPE_FIELD_LABEL, COUNTRY_FIELD_LABEL);
   }
 
   @Test
