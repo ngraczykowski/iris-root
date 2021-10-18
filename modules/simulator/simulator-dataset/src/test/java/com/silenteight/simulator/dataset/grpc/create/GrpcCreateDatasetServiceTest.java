@@ -26,19 +26,31 @@ class GrpcCreateDatasetServiceTest {
   @Test
   void shouldCreateDataset() {
     // given
-    when(datasetStub.createDataset(makeCreateDatasetRequest())).thenReturn(DATASET);
+    when(datasetStub.createDataset(makeGrpcRequest())).thenReturn(DATASET);
 
     // when
-    Dataset dataset = underTest.createDataset(CREATE_DATASET_REQUEST);
+    Dataset dataset = underTest.createDataset(makeDomainRequest());
 
     // then
     assertThat(dataset.getName()).isEqualTo(EXTERNAL_RESOURCE_NAME);
     assertThat(dataset.getAlertCount()).isEqualTo(ALERTS_COUNT);
   }
 
-  private static CreateDatasetRequest makeCreateDatasetRequest() {
+  private static CreateDatasetRequest makeGrpcRequest() {
     return CreateDatasetRequest.newBuilder()
         .setFilteredAlerts(FILTERED_ALERTS)
+        .build();
+  }
+
+  private static com.silenteight.simulator.dataset.create.CreateDatasetRequest makeDomainRequest() {
+    return com.silenteight.simulator.dataset.create.CreateDatasetRequest.builder()
+        .id(ID)
+        .datasetName(DATASET_NAME)
+        .description(DESCRIPTION)
+        .rangeFrom(FROM)
+        .rangeTo(TO)
+        .labels(LABELS)
+        .createdBy(CREATED_BY)
         .build();
   }
 }

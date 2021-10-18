@@ -1,6 +1,8 @@
 package com.silenteight.simulator.dataset.domain;
 
+import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
+import com.silenteight.simulator.dataset.create.CreateDatasetRequest;
 import com.silenteight.simulator.dataset.domain.exception.DatasetNotFoundException;
 
 import org.junit.jupiter.api.Test;
@@ -32,7 +34,7 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
   @Test
   void createMetadata() {
     // when
-    underTest.createMetadata(CREATE_DATASET_REQUEST, DATASET);
+    underTest.createMetadata(makeCreateDatasetRequest(), DATASET);
 
     // then
     Optional<DatasetEntity> datasetOpt = repository.findByDatasetId(ID);
@@ -76,6 +78,18 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
         .hasMessageContaining("datasetId=" + ID);
   }
 
+  private static CreateDatasetRequest makeCreateDatasetRequest() {
+    return CreateDatasetRequest.builder()
+        .id(ID)
+        .datasetName(DATASET_NAME)
+        .description(DESCRIPTION)
+        .rangeFrom(FROM)
+        .rangeTo(TO)
+        .labels(LABELS)
+        .createdBy(CREATED_BY)
+        .build();
+  }
+
   private DatasetEntity persistDataset(UUID datasetId, long initialAlertCount) {
     DatasetEntity datasetEntity = DatasetEntity.builder()
         .datasetId(datasetId)
@@ -87,7 +101,7 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
         .state(ACTIVE)
         .generationDateFrom(FROM)
         .generationDateTo(TO)
-        .countries(COUNTRIES)
+        .labels(JsonConversionHelper.INSTANCE.serializeToString(LABELS))
         .build();
 
     return repository.save(datasetEntity);

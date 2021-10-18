@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import static com.silenteight.simulator.dataset.domain.DatasetLabelName.COUNTRY;
 import static java.sql.Timestamp.from;
 import static java.time.Instant.now;
 import static java.util.UUID.randomUUID;
@@ -37,7 +38,7 @@ public class CreateDatasetRequest implements AuditableRequest {
   @NonNull
   OffsetDateTime rangeTo;
   @Default
-  List<String> countries = new ArrayList<>();
+  List<DatasetLabel> labels = new ArrayList<>();
   @Builder.Default
   UUID correlationId = randomUUID();
 
@@ -63,5 +64,13 @@ public class CreateDatasetRequest implements AuditableRequest {
         .details(toString())
         .principal(createdBy)
         .build();
+  }
+
+  void addCountries(List<String> countries) {
+    labels.add(new DatasetLabel(COUNTRY, countries));
+  }
+
+  void addLabels(List<DatasetLabel> labels) {
+    this.labels.addAll(labels);
   }
 }
