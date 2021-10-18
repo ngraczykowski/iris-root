@@ -18,6 +18,7 @@ import static java.nio.file.Files.readAllLines;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
+@SuppressWarnings("unused") //used in agents as helper
 public class FileReader {
 
   /**
@@ -50,14 +51,22 @@ public class FileReader {
         .collect(toMap(extractMultipleKeys(), extractMultipleValues()));
   }
 
-  public static Set<String> readLines(
+  /**
+   * Load lines from file located under AGENT_HOME/conf/{path} Returns all UPPER CASE, unique lines
+   * ignoring comments or empty lines
+   */
+  public static Set<String> readLinesAsSet(String path) {
+    return readLinesAsStream(path, DEFAULT_DICT_FORMAT_FILTERS, DEFAULT_DICT_FORMAT_TRANSFORMERS)
+        .collect(toSet());
+  }
+
+  public static Set<String> readLinesAsSet(
       String path,
       Collection<Predicate<String>> filters,
       Collection<UnaryOperator<String>> lineTransformers) {
     return readLinesAsStream(path, filters, lineTransformers)
         .collect(toSet());
   }
-
 
   /**
    * Load lines from file located under AGENT_HOME/conf/{path} without any filtering or
@@ -98,7 +107,6 @@ public class FileReader {
       throw new FileReadingException(path, e);
     }
   }
-
 
   private static Function<String[], String> extractSingleKey() {
     return split -> split[0];
