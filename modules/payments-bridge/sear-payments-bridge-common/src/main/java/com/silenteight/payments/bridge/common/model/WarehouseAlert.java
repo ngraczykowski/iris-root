@@ -19,4 +19,5 @@ public class WarehouseAlert {
   String fircoSystemId;  // From FKCO_V_SYSTEM_ID OR CMAPI [Message][SystemID]
   String status;  // PB's own AlertMessageStatusEntity.status
   String deliveryStatus;  // PB's own AlertMessageStatusEntity.deliveryStatus
+  String accessPermissionTag;
 }

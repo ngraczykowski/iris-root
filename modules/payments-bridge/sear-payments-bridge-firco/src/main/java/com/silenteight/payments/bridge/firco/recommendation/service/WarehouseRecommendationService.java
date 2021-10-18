@@ -89,6 +89,7 @@ class WarehouseRecommendationService {
           .recommendationComment(mapComment(recommendation.getRecommendationComment()))
           .recommendedAction(mapAction(recommendation.getRecommendedAction()))
           .createTime(toDateFormat(recommendation.getCreateTime()))
+          .accessPermissionTag("US")
           .policy("").policyTitle("")
           .build();
     } else {
@@ -96,6 +97,7 @@ class WarehouseRecommendationService {
           .recommendationComment(mapComment(null))
           .recommendedAction(mapAction(null))
           .createTime(toDateFormat(Timestamps.fromMicros(System.currentTimeMillis())))
+          .accessPermissionTag("US")
           .policy("").policyTitle("")
           .build();
     }

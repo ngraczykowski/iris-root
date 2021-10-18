@@ -56,8 +56,8 @@ class WarehouseIngestService {
           WarehouseAlert.builder()
               .alertMessageId(learningAlert.getAlertId())
               .fircoSystemId(learningAlert.getSystemId())
-              .deliveryStatus("")
-              .status("").build());
+              .accessPermissionTag("US")
+              .deliveryStatus("").status("").build());
       JSON_TO_STRUCT_PARSER.merge(alertDataJson, payloadBuilder);
       return Optional.of(payloadBuilder.build());
     } catch (InvalidProtocolBufferException | JsonProcessingException e) {
@@ -92,6 +92,7 @@ class WarehouseIngestService {
                 .fircoAnalystDecision(learningAlert.getFircoAnalystDecision())
                 .fircoAnalystComment(learningAlert.getFircoAnalystComment())
                 .fircoAnalystDecisionTime(learningAlert.getFircoAnalystDecisionTime())
+                .accessPermissionTag("US")
                 .build());
       JSON_TO_STRUCT_PARSER.merge(analystSolutionJson, payloadBuilder);
       return Optional.of(payloadBuilder.build());

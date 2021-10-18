@@ -15,4 +15,5 @@ public class WarehouseAnalystSolution {
   String fircoAnalystDecision;  // Translated from FKCO_STATUS to FP/PTP
   String fircoAnalystDecisionTime;  // Taken from FKCO_D_ACTION_DATETIME
   String fircoAnalystComment;  // FKCO_V_ACTION_COMMENT
+  String accessPermissionTag;
 }

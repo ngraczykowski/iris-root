@@ -16,4 +16,5 @@ public class WarehouseRecommendation {
   String createTime;  // from Recommendation.getCreateTime()
   String recommendedAction;  // from Recommendation.getAction()
   String recommendationComment;  // from Recommendation.getComment()
+  String accessPermissionTag;
 }

@@ -66,6 +66,7 @@ class WarehouseAlertService {
           WarehouseAlert.builder()
               .alertMessageId(event.getAlertId().toString())
               .fircoSystemId(alertData.getSystemId())
+              .accessPermissionTag("US")
               .deliveryStatus("") // TODO:
               .status(status.getStatus().name()).build());
       JSON_TO_STRUCT_PARSER.merge(alertDataJson, payloadBuilder);
