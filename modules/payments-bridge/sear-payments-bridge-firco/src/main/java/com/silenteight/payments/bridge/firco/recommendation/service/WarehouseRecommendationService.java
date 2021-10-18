@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.firco.recommendation.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.data.api.v1.ProductionDataIndexRequest;
@@ -22,12 +23,15 @@ import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.support.MessageBuilder;
 
+import java.util.Optional;
+import java.util.UUID;
 import javax.annotation.Nullable;
 
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.RECOMMENDATION_COMPLETED;
 
 @MessageEndpoint
 @RequiredArgsConstructor
+@Slf4j
 class WarehouseRecommendationService {
 
   protected static final Parser JSON_TO_STRUCT_PARSER = JsonFormat.parser();
@@ -39,28 +43,34 @@ class WarehouseRecommendationService {
   @ServiceActivator(inputChannel = RECOMMENDATION_COMPLETED)
   void accept(RecommendationCompletedEvent event) {
     var alertData = event.getData(AlertData.class);
+    createWarehouseRecommendation(event).ifPresent(payload -> {
+      var alertBuilder = Alert.newBuilder()
+          .setAccessPermissionTag("US")
+          .setDiscriminator(alertData.getDiscriminator())
+          .setPayload(payload)
+          .build();
+
+      var indexRequest = ProductionDataIndexRequest.newBuilder()
+          .setRequestId(UUID.randomUUID().toString())
+          .addAlerts(alertBuilder)
+          .build();
+
+      commonChannels.warehouseRequested().send(
+          MessageBuilder.withPayload(indexRequest).build());
+    });
+  }
+
+  private Optional<Struct> createWarehouseRecommendation(RecommendationCompletedEvent event) {
     var payloadBuilder = Struct.newBuilder();
     try {
       var warehouseRecommendation = buildWarehouseRecommendation(event);
       var alertDataJson = objectMapper.writeValueAsString(warehouseRecommendation);
-
-      // Unknown alert
       JSON_TO_STRUCT_PARSER.merge(alertDataJson, payloadBuilder);
+      return Optional.of(payloadBuilder.build());
     } catch (InvalidProtocolBufferException | JsonProcessingException e) {
-      e.printStackTrace();
+      log.error("Could not convert to WarehouseRecommendation payload", e);
+      return Optional.empty();
     }
-
-    var alertBuilder = Alert.newBuilder()
-        .setDiscriminator(alertData.getDiscriminator())
-        .setPayload(payloadBuilder)
-        .build();
-
-    var indexRequest = ProductionDataIndexRequest.newBuilder()
-        .addAlerts(alertBuilder)
-        .build();
-
-    commonChannels.warehouseRequested().send(
-        MessageBuilder.withPayload(indexRequest).build());
   }
 
   private WarehouseRecommendation buildWarehouseRecommendation(
@@ -70,12 +80,11 @@ class WarehouseRecommendationService {
       AdjudicationRecommendationCompletedEvent event =
           (AdjudicationRecommendationCompletedEvent) original;
       var recommendation = event.getRecommendation().getRecommendation();
-      return WarehouseRecommendation.builder()
+      return  WarehouseRecommendation.builder()
           .recommendationComment(mapComment(recommendation.getRecommendationComment()))
           .recommendedAction(mapAction(recommendation.getRecommendedAction()))
           .policy("")
           .policyTitle("")
-          // TODO
           .build();
     } else {
       return WarehouseRecommendation.builder()
@@ -83,7 +92,6 @@ class WarehouseRecommendationService {
           .recommendedAction(mapAction(null))
           .policy("")
           .policyTitle("")
-          // TODO
           .build();
     }
   }

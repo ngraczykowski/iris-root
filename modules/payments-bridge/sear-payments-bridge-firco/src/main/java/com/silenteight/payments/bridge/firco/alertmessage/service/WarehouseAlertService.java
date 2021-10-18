@@ -19,6 +19,8 @@ import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.support.MessageBuilder;
 
+import java.util.UUID;
+
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.ALERT_ADDED_TO_ANALYSIS;
 
 @MessageEndpoint
@@ -52,11 +54,13 @@ class WarehouseAlertService {
     }
 
     var alertBuilder = Alert.newBuilder()
+        .setAccessPermissionTag("US")
         .setDiscriminator(alertData.getDiscriminator())
         .setPayload(payloadBuilder)
         .build();
 
     var indexRequest = ProductionDataIndexRequest.newBuilder()
+        .setRequestId(UUID.randomUUID().toString())
         .addAlerts(alertBuilder)
         .build();
 

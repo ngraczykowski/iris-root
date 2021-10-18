@@ -1,6 +1,6 @@
 package com.silenteight.payments.bridge.firco.integration;
 
-interface FircoIntegrationChannels {
+public interface FircoIntegrationChannels {
 
   String PREFIX = "firco";
 

@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.svb.learning.reader.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.data.api.v1.ProductionDataIndexRequest;
@@ -18,8 +19,12 @@ import com.google.protobuf.util.JsonFormat.Parser;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @RequiredArgsConstructor
 @Service
+@Slf4j
 class WarehouseIngestService {
 
   protected static final Parser JSON_TO_STRUCT_PARSER = JsonFormat.parser();
@@ -27,8 +32,24 @@ class WarehouseIngestService {
   private final CommonChannels commonChannels;
 
   void ingestReportData(LearningAlert learningAlert) {
-    var learningMatch = learningAlert.getMatches().get(0);
+    buildWarehouseAlert(learningAlert).ifPresent(payload -> {
+      var alertBuilder = Alert.newBuilder()
+          .setAccessPermissionTag("US")
+          .setDiscriminator(learningAlert.getDiscriminator())
+          .setPayload(payload)
+          .build();
 
+      var indexRequest = ProductionDataIndexRequest.newBuilder()
+          .setRequestId(UUID.randomUUID().toString())
+          .addAlerts(alertBuilder)
+          .build();
+
+      commonChannels.warehouseRequested().send(
+          MessageBuilder.withPayload(indexRequest).build());
+    });
+  }
+
+  private Optional<Struct> buildWarehouseAlert(LearningAlert learningAlert) {
     var payloadBuilder = Struct.newBuilder();
     try {
       var alertDataJson = objectMapper.writeValueAsString(
@@ -37,52 +58,47 @@ class WarehouseIngestService {
               .fircoSystemId(learningAlert.getSystemId())
               .deliveryStatus("")
               .status("").build());
-
-      // Unknown alert
       JSON_TO_STRUCT_PARSER.merge(alertDataJson, payloadBuilder);
+      return Optional.of(payloadBuilder.build());
     } catch (InvalidProtocolBufferException | JsonProcessingException e) {
-      e.printStackTrace();
+      log.error("Could not convert to WarehouseAlert payload", e);
+      return Optional.empty();
     }
-
-    var alertBuilder = Alert.newBuilder()
-        .setDiscriminator(learningAlert.getDiscriminator())
-        .setPayload(payloadBuilder)
-        .build();
-
-    var indexRequest = ProductionDataIndexRequest.newBuilder()
-        .addAlerts(alertBuilder)
-        .build();
-
-    commonChannels.warehouseRequested().send(
-        MessageBuilder.withPayload(indexRequest).build());
   }
 
   void ingestAnalystSolution(LearningAlert learningAlert) {
+    buildWarehouseAnalystSolution(learningAlert).ifPresent(payload -> {
+      var alertBuilder = Alert.newBuilder()
+          .setAccessPermissionTag("US")
+          .setDiscriminator(learningAlert.getDiscriminator())
+          .setPayload(payload)
+          .build();
 
+      var indexRequest = ProductionDataIndexRequest.newBuilder()
+          .setRequestId(UUID.randomUUID().toString())
+          .addAlerts(alertBuilder)
+          .build();
+      commonChannels.warehouseRequested().send(
+          MessageBuilder.withPayload(indexRequest).build());
+    });
+  }
+
+  private Optional<Struct> buildWarehouseAnalystSolution(LearningAlert learningAlert) {
     var payloadBuilder = Struct.newBuilder();
     try {
       var analystSolutionJson =
-          objectMapper.writeValueAsString(WarehouseAnalystSolution.builder()
-              .fircoAnalystDecision(learningAlert.getFircoAnalystDecision())
-              .fircoAnalystComment(learningAlert.getFircoAnalystComment())
-              .fircoAnalystDecisionTime(learningAlert.getFircoAnalystDecisionTime())
-              .build());
+          objectMapper.writeValueAsString(
+              WarehouseAnalystSolution.builder()
+                .fircoAnalystDecision(learningAlert.getFircoAnalystDecision())
+                .fircoAnalystComment(learningAlert.getFircoAnalystComment())
+                .fircoAnalystDecisionTime(learningAlert.getFircoAnalystDecisionTime())
+                .build());
       JSON_TO_STRUCT_PARSER.merge(analystSolutionJson, payloadBuilder);
-
+      return Optional.of(payloadBuilder.build());
     } catch (InvalidProtocolBufferException | JsonProcessingException e) {
-      e.printStackTrace();
+      log.error("Could not convert to WarehouseAnalystSolution payload", e);
+      return Optional.empty();
     }
-
-    var alertBuilder = Alert.newBuilder()
-        .setDiscriminator(learningAlert.getDiscriminator())
-        .setPayload(payloadBuilder)
-        .build();
-
-    var indexRequest = ProductionDataIndexRequest.newBuilder()
-        .addAlerts(alertBuilder)
-        .build();
-    commonChannels.warehouseRequested().send(
-        MessageBuilder.withPayload(indexRequest).build());
   }
 
 }
