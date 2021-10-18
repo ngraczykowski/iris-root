@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
-import javax.transaction.Transactional;
 
 @EnableConfigurationProperties(AlertMessageProperties.class)
 @RequiredArgsConstructor
@@ -30,7 +29,6 @@ class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCase {
   @Setter
   private Clock clock = Clock.systemUTC();
 
-  @Transactional
   @Override
   public boolean process(int chunkSize) {
     var outdatedAlerts = repository.findOutdated(chunkSize, decisionObsoleteSince());
