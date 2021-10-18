@@ -54,7 +54,7 @@ class AnalysisClient implements AnalysisClientPort {
 
     try {
       var result = stub.withDeadline(deadline).batchAddAlerts(request);
-      log.info("Created analysis with result = {}", result);
+      log.info("Added alert to analysis: {}", TextFormat.shortDebugString(result));
       return result;
     } catch (StatusRuntimeException e) {
       var status = e.getStatus();

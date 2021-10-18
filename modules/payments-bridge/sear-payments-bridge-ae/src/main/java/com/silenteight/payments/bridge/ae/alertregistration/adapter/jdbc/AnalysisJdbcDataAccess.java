@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.ae.alertregistration.port.AnalysisDataAccessPort;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -17,7 +16,6 @@ class AnalysisJdbcDataAccess implements AnalysisDataAccessPort {
   private final InsertAnalysisQuery insertAnalysisQuery;
 
   @Override
-  @Cacheable(value = "analysis")
   public Optional<Long> findCurrentAnalysis() {
     return findTodayAnalysisQuery.execute();
   }
