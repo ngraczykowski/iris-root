@@ -298,3 +298,6 @@ warehouse.report.ai-reasoning:
         label: s8_country
       - name: s8_discriminator
         label: s8_discriminator
+
+warehouse.report.deprecated-simulation:
+  hidden-types: [METRICS,SIMULATION]

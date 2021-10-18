@@ -295,3 +295,5 @@ sep:
         - "VIEW_QA_VERIFICATION"
         - "MANAGE_QA_VERIFICATION"
         - "DASHBOARD"
+warehouse.report.deprecated-simulation:
+  hidden-types: []
