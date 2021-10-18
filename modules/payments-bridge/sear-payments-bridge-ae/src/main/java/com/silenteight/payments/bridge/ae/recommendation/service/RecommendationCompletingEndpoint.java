@@ -47,8 +47,8 @@ class RecommendationCompletingEndpoint {
 
     var recommendation = recommendationWithMetadata.getRecommendation();
     var alertId = getRegisteredAlertIdUseCase.getAlertId(recommendation.getAlert());
-
-    return new RecommendationCompletedEvent(recommendationWithMetadata, UUID.fromString(alertId));
+    return RecommendationCompletedEvent.fromAdjudication(
+        UUID.fromString(alertId), recommendationWithMetadata);
   }
 
   @Bean(INT_CHANNEL)

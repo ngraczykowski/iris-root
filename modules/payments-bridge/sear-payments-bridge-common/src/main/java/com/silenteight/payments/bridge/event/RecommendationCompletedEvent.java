@@ -7,7 +7,6 @@ import lombok.ToString;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.payments.bridge.common.model.AlertId;
 
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -17,20 +16,41 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RecommendationCompletedEvent extends DomainEvent implements AlertId {
 
-  private final RecommendationWithMetadata recommendationWithMetadata;
   @ToString.Include
   private final UUID alertId;
 
-  public RecommendationCompletedEvent(UUID alertId) {
-    this.alertId = alertId;
-    this.recommendationWithMetadata = null;
+  public static RecommendationCompletedEvent fromBridge(UUID alertId, String reason) {
+    return new BridgeRecommendationCompletedEvent(alertId, reason);
   }
 
-  public Optional<RecommendationWithMetadata> getRecommendation() {
-    return Optional.ofNullable(recommendationWithMetadata);
+  public static RecommendationCompletedEvent fromAdjudication(UUID alertId,
+      RecommendationWithMetadata recommendation) {
+    return new AdjudicationRecommendationCompletedEvent(alertId, recommendation);
   }
 
-  public Optional<String> getAlertName() {
-    return getRecommendation().map(r -> r.getRecommendation().getAlert());
+  @Getter
+  public static class BridgeRecommendationCompletedEvent extends RecommendationCompletedEvent {
+    private final String reason;
+
+    public BridgeRecommendationCompletedEvent(UUID alertId, String reason) {
+      super(alertId);
+      this.reason = reason;
+    }
+  }
+
+  @Getter
+  public static class AdjudicationRecommendationCompletedEvent
+      extends RecommendationCompletedEvent {
+    private final RecommendationWithMetadata recommendation;
+
+    public AdjudicationRecommendationCompletedEvent(UUID alertId,
+        RecommendationWithMetadata recommendationWithMetadata) {
+      super(alertId);
+      this.recommendation = recommendationWithMetadata;
+    }
+
+    public String getAlertName() {
+      return getRecommendation().getRecommendation().getAlert();
+    }
   }
 }

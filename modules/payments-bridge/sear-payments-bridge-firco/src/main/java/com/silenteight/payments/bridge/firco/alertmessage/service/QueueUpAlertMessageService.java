@@ -5,22 +5,17 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.payments.bridge.event.AlertStoredEvent;
-import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
+import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
-import com.silenteight.payments.bridge.firco.callback.model.CallbackException;
-import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationWrapper;
-import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
-import com.silenteight.payments.bridge.firco.recommendation.port.NotifyResponseCompletedUseCase;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
-import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OVERFLOWED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.STORED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.NA;
-import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.PENDING;
+import static com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason.QUEUE_OVERFLOWED;
 
 @EnableConfigurationProperties(AlertMessageProperties.class)
 @Component
@@ -31,8 +26,6 @@ class QueueUpAlertMessageService {
   private final AlertMessageStatusService statusService;
   private final AlertMessageStatusRepository repository;
   private final AlertMessageProperties properties;
-  private final NotifyResponseCompletedUseCase notifyResponseCompletedUseCase;
-  private final CreateRecommendationUseCase createRecommendationUseCase;
 
   private final CommonChannels commonChannels;
 
@@ -58,15 +51,11 @@ class QueueUpAlertMessageService {
     log.info("AlertMessage [{}] rejected due to queue limit ({})",
         alert.getId(), properties.getStoredQueueLimit());
 
-    try {
-      var entity = createRecommendationUseCase.createRecommendation(
-          new RecommendationWrapper(alert.getId()));
-      notifyResponseCompletedUseCase.notify(alert.getId(), entity.getId(), REJECTED_OVERFLOWED);
-      statusService.transitionAlertMessageStatus(alert.getId(), REJECTED_OVERFLOWED, PENDING);
-    } catch (CallbackException exception) {
-      statusService.transitionAlertMessageStatus(
-          alert.getId(), REJECTED_OVERFLOWED, DeliveryStatus.UNDELIVERED);
-    }
+    commonChannels.recommendationCompleted().send(
+        MessageBuilder.withPayload(
+            RecommendationCompletedEvent.fromBridge(
+                alert.getId(), QUEUE_OVERFLOWED.name())).build()
+    );
   }
 
   private MessageStored buildMessageStore(FircoAlertMessage message) {

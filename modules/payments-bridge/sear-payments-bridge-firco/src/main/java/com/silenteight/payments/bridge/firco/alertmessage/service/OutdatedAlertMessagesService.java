@@ -4,21 +4,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
+import com.silenteight.payments.bridge.common.integration.CommonChannels;
+import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.port.OutdatedAlertMessagesUseCase;
-import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationWrapper;
-import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
-import com.silenteight.payments.bridge.firco.recommendation.port.NotifyResponseCompletedUseCase;
+import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.integration.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
 import javax.transaction.Transactional;
-
-import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OUTDATED;
-import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.PENDING;
 
 @EnableConfigurationProperties(AlertMessageProperties.class)
 @RequiredArgsConstructor
@@ -28,9 +25,7 @@ class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCase {
 
   private final AlertMessageProperties alertMessageProperties;
   private final AlertMessageStatusRepository repository;
-  private final AlertMessageStatusService alertMessageStatusService;
-  private final NotifyResponseCompletedUseCase notifyResponseCompletedUseCase;
-  private final CreateRecommendationUseCase createRecommendationUseCase;
+  private final CommonChannels commonChannels;
 
   @Setter
   private Clock clock = Clock.systemUTC();
@@ -51,25 +46,10 @@ class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCase {
 
   private void transitionToOutdated(AlertMessageStatusEntity status) {
     var alertId = status.getAlertMessageId();
-    if (isDeliverable(status)) {
-      var entity =
-          createRecommendationUseCase.createRecommendation(new RecommendationWrapper(alertId));
-      notifyResponseCompletedUseCase.notify(alertId, entity.getId(), REJECTED_OUTDATED);
-      alertMessageStatusService
-          .transitionAlertMessageStatus(alertId, REJECTED_OUTDATED, PENDING);
-    } else {
-      // The delivery time passed thus we transfer alert to the final state (OUTDATED)
-      // and record that it remains undelivered.
-      alertMessageStatusService
-          .transitionAlertMessageStatus(
-              alertId, REJECTED_OUTDATED, DeliveryStatus.UNDELIVERED);
-    }
-  }
-
-  private boolean isDeliverable(AlertMessageStatusEntity status) {
-    return status.getLastModifyAt()
-        .plus(alertMessageProperties.getDecisionRequestedTime())
-        .isAfter(OffsetDateTime.now(clock));
+    commonChannels.recommendationCompleted().send(
+        MessageBuilder.withPayload(
+            RecommendationCompletedEvent.fromBridge(alertId, RecommendationReason.OUTDATED.name())
+        ).build());
   }
 
 }

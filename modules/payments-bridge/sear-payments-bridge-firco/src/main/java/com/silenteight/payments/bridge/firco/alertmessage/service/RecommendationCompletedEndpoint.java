@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
+import com.silenteight.payments.bridge.event.RecommendationCompletedEvent.AdjudicationRecommendationCompletedEvent;
+import com.silenteight.payments.bridge.event.RecommendationCompletedEvent.BridgeRecommendationCompletedEvent;
+import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.FilterAlertMessageUseCase;
-import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationId;
-import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationWrapper;
+import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.port.NotifyResponseCompletedUseCase;
 import com.silenteight.sep.base.aspects.logging.LogContext;
@@ -15,9 +17,15 @@ import org.slf4j.MDC;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.RECOMMENDATION_COMPLETED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.RECOMMENDED;
+import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OUTDATED;
+import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OVERFLOWED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.PENDING;
+import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.UNDELIVERED;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -29,32 +37,85 @@ class RecommendationCompletedEndpoint {
   private final NotifyResponseCompletedUseCase notifyResponseCompletedUseCase;
   private final CreateRecommendationUseCase createRecommendationUseCase;
 
+  private final List<Consumer<RecommendationCompletedEvent>> eventConsumers =
+      List.of(
+          new AdjudicationRecommendationCommand(),
+          new BridgeRecommendationCommand()
+      );
+
   @ServiceActivator(inputChannel = RECOMMENDATION_COMPLETED)
   @LogContext
   void accept(RecommendationCompletedEvent event) {
-    var alertId = event.getAlertId();
-    MDC.put("alertId", alertId.toString());
-    event.getRecommendation().ifPresent(r ->
-        MDC.put("recommendation", r.getRecommendation().getRecommendedAction()));
+    MDC.put("alertId", event.getAlertId().toString());
+    eventConsumers.forEach(c -> c.accept(event));
+    log.info("Alert recommendation completed.");
+  }
 
-    var recommendation = saveRecommendation(event);
-    if (alertMessageUseCase.isResolvedOrOutdated(event)) {
-      return;
+  private class BridgeRecommendationCommand implements Consumer<RecommendationCompletedEvent> {
+    @Override
+    public void accept(RecommendationCompletedEvent event) {
+      if (!BridgeRecommendationCompletedEvent.class
+          .isAssignableFrom(event.getClass())) {
+        return;
+      }
+
+      BridgeRecommendationCompletedEvent bridgeEvent = (BridgeRecommendationCompletedEvent) event;
+
+      var reason = RecommendationReason.valueOf(bridgeEvent.getReason());
+      var alertId = bridgeEvent.getAlertId();
+      var recommendationId = createRecommendationUseCase
+          .createBridgeRecommendation(bridgeEvent.getAlertId(), reason);
+
+      var status = map(reason);
+      if (alertMessageUseCase.isOutdated(event)) {
+        alertMessageStatusService.transitionAlertMessageStatus(alertId, status, UNDELIVERED);
+      } else {
+        notifyResponseCompletedUseCase.notify(alertId, recommendationId.getId(), status);
+        alertMessageStatusService.transitionAlertMessageStatus(alertId, status, PENDING);
+      }
     }
 
-    log.info("Alert recommendation completed.");
-
-    notifyResponseCompletedUseCase.notify(alertId, recommendation.getId(), RECOMMENDED);
-    alertMessageStatusService.transitionAlertMessageStatus(alertId, RECOMMENDED, PENDING);
+    private AlertMessageStatus map(RecommendationReason reason) {
+      switch (reason) {
+        case TOO_MANY_HITS:
+          return RECOMMENDED;
+        case OUTDATED:
+          return REJECTED_OUTDATED;
+        case QUEUE_OVERFLOWED:
+          return REJECTED_OVERFLOWED;
+        default:
+          throw new IllegalArgumentException("Unmapped recommendation reason");
+      }
+    }
   }
 
-  private RecommendationId saveRecommendation(RecommendationCompletedEvent event) {
-    var alertId = event.getAlertId();
-    var wrapper = event
-        .getRecommendation()
-        .map(r -> new RecommendationWrapper(alertId, r))
-        .orElseGet(() -> new RecommendationWrapper(alertId));
+  private class AdjudicationRecommendationCommand
+      implements Consumer<RecommendationCompletedEvent> {
 
-    return createRecommendationUseCase.createRecommendation(wrapper);
+    @Override
+    public void accept(
+        RecommendationCompletedEvent event) {
+      if (!AdjudicationRecommendationCompletedEvent.class
+          .isAssignableFrom(event.getClass())) {
+        return;
+      }
+
+      AdjudicationRecommendationCompletedEvent adjudicationEvent =
+          (AdjudicationRecommendationCompletedEvent) event;
+
+
+      MDC.put("recommendation",
+          adjudicationEvent.getRecommendation().getRecommendation().getRecommendedAction());
+
+      var alertId = adjudicationEvent.getAlertId();
+      var recommendationId = createRecommendationUseCase
+          .createAdjudicationRecommendation(alertId,adjudicationEvent.getRecommendation());
+
+      if (!alertMessageUseCase.isResolvedOrOutdated(event)) {
+        notifyResponseCompletedUseCase.notify(alertId, recommendationId.getId(), RECOMMENDED);
+        alertMessageStatusService.transitionAlertMessageStatus(alertId, RECOMMENDED, PENDING);
+      }
+    }
   }
 }
+

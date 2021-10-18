@@ -30,6 +30,12 @@ class FilterAlertMessageService implements FilterAlertMessageUseCase {
   @Setter private Clock clock = Clock.systemUTC();
 
   @Override
+  public boolean isOutdated(AlertId alert) {
+    var status = alertMessageStatusService.findByAlertId(alert.getAlertId());
+    return isRequiredResolutionTimeElapsed(status);
+  }
+
+  @Override
   public boolean isResolvedOrOutdated(AlertId alert) {
     var status = alertMessageStatusService.findByAlertId(alert.getAlertId());
     return isTransitionForbidden(status) || isRequiredResolutionTimeElapsed(status);
@@ -58,7 +64,7 @@ class FilterAlertMessageService implements FilterAlertMessageUseCase {
       log.debug(
           "The AlertMessage [{}] is outdated. Skipping further processing.",
           alertMessageStatus.getAlertMessageId());
-      // simply stop processing and let the RejectingOutdated process do its job (don't interfere).
+      // simply stop processing and let the RejectingOutdated process finishes (don't interfere).
       return true;
     }
     return false;

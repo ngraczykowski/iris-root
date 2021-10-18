@@ -9,6 +9,7 @@ import com.silenteight.payments.bridge.event.AlertInitializedEvent;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.port.FilterAlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.callback.port.SendResponseUseCase;
+import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
 import com.silenteight.payments.common.resource.ResourceName;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 import com.silenteight.proto.payments.bridge.internal.v1.event.ResponseCompleted;
@@ -66,7 +67,8 @@ class FircoInboundAmqpIntegrationConfiguration {
   @Bean
   IntegrationFlow discard() {
     return from(discardChannel())
-        .transform(AlertId.class, alertId -> new RecommendationCompletedEvent(alertId.getAlertId()))
+        .transform(AlertId.class, alertId -> RecommendationCompletedEvent.fromBridge(
+            alertId.getAlertId(), RecommendationReason.TOO_MANY_HITS.name()))
         .channel(commonChannels.recommendationCompleted())
         .get();
   }

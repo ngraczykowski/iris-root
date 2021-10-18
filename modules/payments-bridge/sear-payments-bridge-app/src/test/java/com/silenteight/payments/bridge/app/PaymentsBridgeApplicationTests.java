@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.common.dto.input.RequestDto;
 import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.payments.bridge.event.*;
+import com.silenteight.payments.bridge.event.RecommendationCompletedEvent.AdjudicationRecommendationCompletedEvent;
+import com.silenteight.payments.bridge.event.RecommendationCompletedEvent.BridgeRecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
@@ -77,7 +79,8 @@ class PaymentsBridgeApplicationTests {
     recorder.subscribe(AlertRegisteredEvent.class, channels.alertRegistered());
     recorder.subscribe(AlertInputAcceptedEvent.class, channels.alertInputAccepted());
     recorder.subscribe(RecommendationGeneratedEvent.class, channels.recommendationGenerated());
-    recorder.subscribe(RecommendationCompletedEvent.class, channels.recommendationCompleted());
+    recorder.subscribe(AdjudicationRecommendationCompletedEvent.class,
+        channels.recommendationCompleted());
     return recorder;
   }
 
@@ -121,7 +124,8 @@ class PaymentsBridgeApplicationTests {
   private DomainEventRecorder createTooManyHitsEventRecorder() {
     var recorder = new DomainEventRecorder();
     recorder.subscribe(AlertStoredEvent.class, channels.alertStored());
-    recorder.subscribe(RecommendationCompletedEvent.class, channels.recommendationCompleted());
+    recorder.subscribe(BridgeRecommendationCompletedEvent.class,
+        channels.recommendationCompleted());
     return recorder;
   }
 

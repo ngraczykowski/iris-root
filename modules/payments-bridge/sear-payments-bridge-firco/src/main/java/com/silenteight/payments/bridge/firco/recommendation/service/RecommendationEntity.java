@@ -3,10 +3,9 @@ package com.silenteight.payments.bridge.firco.recommendation.service;
 import lombok.*;
 import lombok.EqualsAndHashCode.Include;
 
-import com.silenteight.adjudication.api.v1.Recommendation;
+import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationSource;
-import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationWrapper;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 
 import com.google.protobuf.Timestamp;
@@ -71,20 +70,27 @@ class RecommendationEntity extends BaseEntity {
   @Getter(onMethod_ = @Nullable)
   private RecommendationReason reason;
 
-  RecommendationEntity(RecommendationWrapper wrapper) {
-    source = wrapper.getSource();
-    alertId = wrapper.getAlertId();
+  RecommendationEntity(UUID recommendationId,
+      UUID alertId, RecommendationWithMetadata recommendationWithData) {
+    this.id = recommendationId;
+    this.source = RecommendationSource.AE;
+    this.alertId = alertId;
 
-    if (wrapper.hasRecommendation()) {
-      Recommendation recommendation = wrapper.getRecommendationWithMetadata().getRecommendation();
-      name = recommendation.getName();
-      alert = recommendation.getAlert();
-      generatedAt = extractCreateTime(recommendation.getCreateTime());
-      action = recommendation.getRecommendedAction();
-      comment = recommendation.getRecommendationComment();
-    } else {
-      generatedAt = OffsetDateTime.now();
-    }
+    var recommendation = recommendationWithData.getRecommendation();
+    name = recommendation.getName();
+    alert = recommendation.getAlert();
+    generatedAt = extractCreateTime(recommendation.getCreateTime());
+    action = recommendation.getRecommendedAction();
+    comment = recommendation.getRecommendationComment();
+  }
+
+  RecommendationEntity(UUID recommendationId,
+      UUID alertId, RecommendationReason reason) {
+    this.id = recommendationId;
+    this.source = RecommendationSource.BRIDGE;
+    this.alertId = alertId;
+    this.reason = reason;
+    this.generatedAt = OffsetDateTime.now();
   }
 
   private static OffsetDateTime extractCreateTime(Timestamp timestamp) {

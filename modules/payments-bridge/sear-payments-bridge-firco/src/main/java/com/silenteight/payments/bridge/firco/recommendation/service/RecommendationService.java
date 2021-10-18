@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v2.RecommendationMetadata;
+import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationId;
-import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationWrapper;
+import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -33,23 +34,29 @@ class RecommendationService implements CreateRecommendationUseCase {
   private final ObjectMapper objectMapper;
 
   @Transactional
-  public RecommendationId createRecommendation(RecommendationWrapper wrapper) {
-    var entity = new RecommendationEntity(wrapper);
-
+  @Override
+  public RecommendationId createAdjudicationRecommendation(UUID alertId,
+      RecommendationWithMetadata recommendation) {
     var id = DEFAULT_ID_GENERATOR.generateId();
-    entity.setId(id);
+    var entity = new RecommendationEntity(id, alertId, recommendation);
 
-    var recommendationEntity = recommendationRepository.save(entity);
-
-    wrapper.getMetadata()
-        .flatMap(md -> createMetadata(md, recommendationEntity.getId()))
+    recommendationRepository.save(entity);
+    createMetadata(id, recommendation.getMetadata())
         .ifPresent(recommendationMetadataRepository::save);
+    return new RecommendationId(id);
+  }
 
+  @Transactional
+  @Override
+  public RecommendationId createBridgeRecommendation(UUID alertId, RecommendationReason reason) {
+    var id = DEFAULT_ID_GENERATOR.generateId();
+    var entity = new RecommendationEntity(id, alertId, reason);
+    recommendationRepository.save(entity);
     return new RecommendationId(id);
   }
 
   private Optional<RecommendationMetadataEntity> createMetadata(
-      RecommendationMetadata metadata, UUID recommendationId) {
+      UUID recommendationId, RecommendationMetadata metadata) {
     try {
       var json = JsonFormat.printer().print(metadata);
       return convertToObjectNode(json)
