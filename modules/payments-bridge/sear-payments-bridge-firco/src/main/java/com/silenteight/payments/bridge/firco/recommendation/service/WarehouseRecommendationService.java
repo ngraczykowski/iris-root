@@ -40,8 +40,7 @@ import static com.silenteight.payments.bridge.common.integration.CommonChannels.
 class WarehouseRecommendationService {
 
   protected static final Parser JSON_TO_STRUCT_PARSER = JsonFormat.parser();
-  private static final SimpleDateFormat DATE_FORMAT =
-      new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+  private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
   private final ObjectMapper objectMapper;
   private final CommonChannels commonChannels;
@@ -115,7 +114,7 @@ class WarehouseRecommendationService {
   private String toDateFormat(Timestamp timestamp) {
     try {
       var date = Date.from(TimestampConverter.toInstant(timestamp));
-      return DATE_FORMAT.format(date);
+      return new SimpleDateFormat(DATE_FORMAT).format(date);
     } catch (Exception exception) {
       log.warn("Could not format create-time {}", timestamp);
       return "";
