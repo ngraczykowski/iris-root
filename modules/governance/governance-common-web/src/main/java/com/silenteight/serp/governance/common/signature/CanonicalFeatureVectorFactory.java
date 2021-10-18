@@ -96,9 +96,12 @@ public class CanonicalFeatureVectorFactory {
       throw new InvalidInputException("Some fields are empty");
   }
 
-  private void checkIfInputHasData(List<String> featureName, List<String> featureValues) {
-    if (featureName.isEmpty() || featureValues.isEmpty())
-      throw new InvalidInputException("Missing data");
+  private void checkIfInputHasData(List<String> featureNames, List<String> featureValues) {
+    if (featureNames.isEmpty())
+      throw new InvalidInputException("Missing data: featureNames are empty");
+
+    if (featureValues.isEmpty())
+      throw new InvalidInputException("Missing data: featureValues are empty");
   }
 
   private boolean isAnyFieldEmpty(List<String> featureFields) {
