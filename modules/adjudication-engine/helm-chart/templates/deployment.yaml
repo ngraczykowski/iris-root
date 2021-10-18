@@ -63,6 +63,7 @@ spec:
             - --spring.profiles.active={{ .Values.springProfilesActive }}
             - --logging.config=file:/etc/logback/logback.xml
             - --grpc.client.GLOBAL.negotiation-type=PLAINTEXT
+            - --ae.comments.template.cache.invalidation={{ .Values.templateCacheInvalidation }}
             - --grpc.client.datasource.address={{ .Values.grpcClientDatasourceAddress }}
             - --grpc.client.governance.address={{ .Values.grpcClientGovernanceAddress }}
           volumeMounts:
