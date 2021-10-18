@@ -12,6 +12,7 @@ import static java.nio.file.Files.isHidden;
 import static java.nio.file.Files.isRegularFile;
 import static java.nio.file.Files.walk;
 import static org.apache.commons.io.FilenameUtils.removeExtension;
+import static org.apache.commons.io.FilenameUtils.separatorsToUnix;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -46,6 +47,7 @@ public class AgentConfigsLoader<T> {
 
   private static String getAgentName(Path root, Path configFile) {
     var relativePath = root.relativize(configFile);
-    return removeExtension(relativePath.toString());
+    var pathWithUnixSeparators = separatorsToUnix(relativePath.toString());
+    return removeExtension(pathWithUnixSeparators);
   }
 }
