@@ -28,9 +28,14 @@ class EtlAlertService {
     return LearningAlert.builder()
         .alertId(rows.get(0).getFkcoVSystemId())
         .alertTime(createAlertTime(rows.get(0).getFkcoDFilteredDatetime()))
+        .systemId(rows.get(0).getFkcoVSystemId())
+        .messageId(rows.get(0).getFkcoVMessageid())
+        .fircoAnalystComment(rows.get(0).getFkcoVActionComment())
+        .fircoAnalystDecision(rows.get(0).getFkcoStatus())
+        .fircoAnalystDecisionTime(rows.get(0).getFkcoDActionDatetime())
+        .matches(createMatches(rows))
         .batchStamp(batchStamp)
         .fileName(fileName)
-        .matches(createMatches(rows))
         .build();
   }
 

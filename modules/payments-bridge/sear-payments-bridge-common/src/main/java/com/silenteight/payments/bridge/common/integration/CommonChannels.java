@@ -45,6 +45,8 @@ public class CommonChannels {
   public static final String RECOMMENDATION_GENERATED = PREFIX + "RecommendationGeneratedChannel";
   public static final String RECOMMENDATION_COMPLETED = PREFIX + "RecommendationCompletedChannel";
 
+  public static final String WAREHOUSE_REQUESTED = PREFIX + "WarehouseRequestedChannel";
+
   @Bean(MESSAGE_STORED_OUTBOUND)
   public MessageChannel messageStoredOutbound() {
     return new DirectChannel();
@@ -52,6 +54,11 @@ public class CommonChannels {
 
   @Bean(RESPONSE_COMPLETED_OUTBOUND)
   public MessageChannel responseCompletedOutbound() {
+    return new DirectChannel();
+  }
+
+  @Bean(WAREHOUSE_REQUESTED)
+  public MessageChannel warehouseRequested() {
     return new DirectChannel();
   }
 
@@ -106,5 +113,6 @@ public class CommonChannels {
     return new TypedPublishSubscribeChannel(
         RecommendationCompletedEvent.class, channelInterceptors);
   }
+
 
 }

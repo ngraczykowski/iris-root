@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.payments.bridge.common.model.AlertId;
+import com.silenteight.payments.bridge.event.data.AlertDataIdentifier;
 
 import java.util.UUID;
 
@@ -14,7 +15,8 @@ import java.util.UUID;
  */
 @Getter
 @AllArgsConstructor
-public class RecommendationCompletedEvent extends DomainEvent implements AlertId {
+public class RecommendationCompletedEvent extends DomainEvent
+    implements AlertId, AlertDataIdentifier {
 
   @ToString.Include
   private final UUID alertId;

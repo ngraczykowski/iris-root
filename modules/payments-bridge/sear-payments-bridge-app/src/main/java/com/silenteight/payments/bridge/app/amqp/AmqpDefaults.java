@@ -20,4 +20,8 @@ class AmqpDefaults {
   static final String BRIDGE_RECOMMENDATION_QUEUE_NAME = "pb.recommendation";
 
   static final String BRIDGE_MODEL_PROMOTED_PRODUCTION_QUEUE_NAME = "pb.model";
+
+  static final String BRIDGE_WAREHOUSE_EXCHANGE_NAME = "bridge.command";
+
+  static final String BRIDGE_WAREHOUSE_ROUTING_KEY = "command.index-request.production";
 }

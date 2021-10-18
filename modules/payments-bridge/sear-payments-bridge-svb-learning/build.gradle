@@ -16,6 +16,7 @@ dependencies {
   implementation libraries.data_source_api
   implementation libraries.data_source_categories_api
   implementation libraries.data_source_agentinput_api
+  implementation libraries.warehouse_data_api
 
   implementation libraries.spring_amqp
   implementation libraries.spring_boot
@@ -36,6 +37,7 @@ dependencies {
   implementation libraries.jakarta_validation_api
   implementation libraries.opencsv
   implementation libraries.commons_collections
+  implementation libraries.protobuf_java_util
 
   implementation libraries.aws_auth
   implementation libraries.aws_s3

@@ -19,4 +19,6 @@ dependencies {
   implementation libraries.jakarta_el
 
   implementation libraries.adjudication_engine_api
+
+  implementation libraries.warehouse_data_api
 }

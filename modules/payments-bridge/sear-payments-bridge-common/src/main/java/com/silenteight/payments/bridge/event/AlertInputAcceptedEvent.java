@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import com.silenteight.payments.bridge.common.model.AlertId;
+import com.silenteight.payments.bridge.event.data.AlertDataIdentifier;
 
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ import java.util.UUID;
 @Getter
 @EqualsAndHashCode(of = "alertId", callSuper = false)
 @ToString
-public class AlertInputAcceptedEvent extends DomainEvent implements AlertId {
+public class AlertInputAcceptedEvent extends DomainEvent implements AlertId, AlertDataIdentifier {
 
   private final UUID alertId;
   private final String alertRegisteredName;

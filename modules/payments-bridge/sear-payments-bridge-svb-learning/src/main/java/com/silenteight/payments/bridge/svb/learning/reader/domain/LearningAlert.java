@@ -10,6 +10,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.Label;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.MatchQuantity;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
+import com.silenteight.payments.bridge.common.model.AlertRegistration;
 
 import com.google.protobuf.Timestamp;
 
@@ -22,6 +23,10 @@ import static java.util.stream.Collectors.toList;
 public class LearningAlert {
 
   String alertId;
+
+  String systemId;
+
+  String messageId;
 
   @Setter(AccessLevel.PRIVATE)
   @NonFinal
@@ -36,6 +41,18 @@ public class LearningAlert {
   String fileName;
 
   int hitCount;
+
+  String fircoAnalystDecision;  // Taken from FKCO_STATUS
+  String fircoAnalystDecisionTime;  // Taken from FKCO_D_ACTION_DATETIME
+  String fircoAnalystComment;  // FKCO_V_ACTION_COMMENT
+
+  public AlertRegistration getAlertRegistration() {
+    return new AlertRegistration(systemId, messageId);
+  }
+
+  public String getDiscriminator() {
+    return systemId + "|" + messageId;
+  }
 
   public RegisterAlertRequest toRegisterAlertRequest() {
     return RegisterAlertRequest

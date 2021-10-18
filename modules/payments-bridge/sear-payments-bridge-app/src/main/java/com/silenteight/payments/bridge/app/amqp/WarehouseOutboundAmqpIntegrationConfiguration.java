@@ -19,32 +19,24 @@ import javax.validation.Valid;
 import static org.springframework.integration.dsl.IntegrationFlows.from;
 
 @Configuration
-@EnableConfigurationProperties(FircoOutboundAmqpIntegrationProperties.class)
+@EnableConfigurationProperties(WarehouseOutboundAmqpIntegrationProperties.class)
 @RequiredArgsConstructor
-class FircoOutboundAmqpIntegrationConfiguration {
+class WarehouseOutboundAmqpIntegrationConfiguration {
 
   @Valid
-  private final FircoOutboundAmqpIntegrationProperties properties;
+  private final WarehouseOutboundAmqpIntegrationProperties properties;
 
   private final AmqpOutboundFactory outboundFactory;
 
   private final CommonChannels commonChannels;
 
   @Bean
-  IntegrationFlow messageStoredOutboundFlow() {
-    return createOutboundFlow(commonChannels.messageStoredOutbound(),
+  IntegrationFlow messageStoredInWarehouseOutboundFlow() {
+    return createOutboundFlow(
+        commonChannels.warehouseRequested(),
         properties.getCommand().getOutboundExchangeName(),
         properties.getCommand().getAlertStoredRoutingKey());
   }
-
-  @Bean
-  IntegrationFlow responseCompletedOutboundFlow() {
-    return createOutboundFlow(commonChannels.responseCompletedOutbound(),
-        properties.getResponse().getOutboundExchangeName(),
-        properties.getResponse().getResponseCompletedRoutingKey());
-  }
-
-
 
   private StandardIntegrationFlow createOutboundFlow(
       MessageChannel outboundChannel, String outboundExchangeName, String outboundRoutingKey) {

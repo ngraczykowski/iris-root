@@ -14,6 +14,7 @@ import com.silenteight.payments.bridge.firco.recommendation.port.NotifyResponseC
 import com.silenteight.sep.base.aspects.logging.LogContext;
 
 import org.slf4j.MDC;
+import org.springframework.core.annotation.Order;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 
@@ -43,6 +44,7 @@ class RecommendationCompletedEndpoint {
           new BridgeRecommendationCommand()
       );
 
+  @Order(2)
   @ServiceActivator(inputChannel = RECOMMENDATION_COMPLETED)
   @LogContext
   void accept(RecommendationCompletedEvent event) {

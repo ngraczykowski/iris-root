@@ -11,7 +11,7 @@ ext {
   silenteightDataSourceApiVersion = "0.9.0"
   silenteightCommonsVersion = "2.1.0"
   silenteightSepBaseVersion = "1.12.2"
-  warehouseProtocolVersion = "2.1.0-SNAPSHOT"
+  warehouseProtocolVersion = "2.1.0"
 
   //***********************************
   // Others libraries

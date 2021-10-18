@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @Slf4j
+@SuppressWarnings("java:S110")
 public class TypedPublishSubscribeChannel extends PublishSubscribeChannel {
 
   public TypedPublishSubscribeChannel(Class<? extends DomainEvent> domainEvent) {
