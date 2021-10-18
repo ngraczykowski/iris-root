@@ -47,6 +47,10 @@ message Alert {
   // All messages describing the same alert should have the same value in this field.
   // This field should be unique across the whole system.
   string discriminator = 4  [(google.api.field_behavior) = REQUIRED];
+  // The value of this field is used to control access permission to the data
+  // This value should be REQUIRED in the future but for compatibility reasons it is set
+  // to OPTIONAL for now (until Simulator and Governance do not switch to data.api.v2)
+  string access_permission_tag = 5  [(google.api.field_behavior) = OPTIONAL];
 }
 
 message Match {
