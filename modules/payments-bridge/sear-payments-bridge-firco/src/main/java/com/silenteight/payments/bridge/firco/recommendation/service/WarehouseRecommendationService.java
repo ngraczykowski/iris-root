@@ -8,6 +8,7 @@ import com.silenteight.data.api.v1.ProductionDataIndexRequest;
 import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.common.model.WarehouseRecommendation;
+import com.silenteight.payments.bridge.common.protobuf.TimestampConverter;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent.AdjudicationRecommendationCompletedEvent;
 
@@ -15,14 +16,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Struct;
+import com.google.protobuf.Timestamp;
 import com.google.protobuf.util.JsonFormat;
 import com.google.protobuf.util.JsonFormat.Parser;
+import com.google.protobuf.util.Timestamps;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.support.MessageBuilder;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 import javax.annotation.Nullable;
@@ -35,6 +40,8 @@ import static com.silenteight.payments.bridge.common.integration.CommonChannels.
 class WarehouseRecommendationService {
 
   protected static final Parser JSON_TO_STRUCT_PARSER = JsonFormat.parser();
+  private static final SimpleDateFormat DATE_FORMAT =
+      new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 
   private final ObjectMapper objectMapper;
   private final CommonChannels commonChannels;
@@ -75,7 +82,6 @@ class WarehouseRecommendationService {
 
   private WarehouseRecommendation buildWarehouseRecommendation(
       RecommendationCompletedEvent original) {
-
     if (AdjudicationRecommendationCompletedEvent.class.isAssignableFrom(original.getClass())) {
       AdjudicationRecommendationCompletedEvent event =
           (AdjudicationRecommendationCompletedEvent) original;
@@ -83,15 +89,15 @@ class WarehouseRecommendationService {
       return  WarehouseRecommendation.builder()
           .recommendationComment(mapComment(recommendation.getRecommendationComment()))
           .recommendedAction(mapAction(recommendation.getRecommendedAction()))
-          .policy("")
-          .policyTitle("")
+          .createTime(toDateFormat(recommendation.getCreateTime()))
+          .policy("").policyTitle("")
           .build();
     } else {
       return WarehouseRecommendation.builder()
           .recommendationComment(mapComment(null))
           .recommendedAction(mapAction(null))
-          .policy("")
-          .policyTitle("")
+          .createTime(toDateFormat(Timestamps.fromMicros(System.currentTimeMillis())))
+          .policy("").policyTitle("")
           .build();
     }
   }
@@ -104,6 +110,16 @@ class WarehouseRecommendationService {
     return StringUtils.isNotBlank(comment)
            ? comment
            : "S8 recommended action: Manual Investigation";
+  }
+
+  private String toDateFormat(Timestamp timestamp) {
+    try {
+      var date = Date.from(TimestampConverter.toInstant(timestamp));
+      return DATE_FORMAT.format(date);
+    } catch (Exception exception) {
+      log.warn("Could not format create-time {}", timestamp);
+      return "";
+    }
   }
 
 }
