@@ -64,7 +64,7 @@ class EtlMatchService {
         .allMatchFieldsValue(createAllMatchFieldsValue(messageStructure))
         .matchedNames(createUniqueList(rows, LearningCsvRow::getFkcoVListMatchedName))
         .matchedCountries(createUniqueList(rows, LearningCsvRow::getFkcoVListCountry))
-        .matchedCountries(createUniqueList(rows, LearningCsvRow::getFkcoVHitType))
+        .hitTypes(createUniqueList(rows, LearningCsvRow::getFkcoVHitType))
         .alertedPartyEntity(createAlertedPartyEntities(alertedPartyData, matchingTexts))
         .watchlistType(WatchlistType.ofCode(rows.get(0).getFkcoVListType()))
         .build();

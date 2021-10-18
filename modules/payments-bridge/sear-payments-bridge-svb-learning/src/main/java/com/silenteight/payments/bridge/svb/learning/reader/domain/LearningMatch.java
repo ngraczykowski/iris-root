@@ -67,7 +67,7 @@ public class LearningMatch {
 
   WatchlistType watchlistType;
 
-  List<String> hitType;
+  List<String> hitTypes;
 
 
   public NameAddressCrossmatchAgentRequest toCrossmatchRequest() {
@@ -123,7 +123,7 @@ public class LearningMatch {
   public List<String> getSearchCodes() {
     var codes = matchedNames;
 
-    if (hitType.contains("EMBARGO")) {
+    if (hitTypes.contains("EMBARGO")) {
       codes.addAll(matchedCountries);
     }
 

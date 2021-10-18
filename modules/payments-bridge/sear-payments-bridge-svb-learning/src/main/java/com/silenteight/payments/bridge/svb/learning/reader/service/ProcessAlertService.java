@@ -46,7 +46,7 @@ class ProcessAlertService {
             .readerFor(LearningCsvRow.class)
             .with(schema)
             .readValues(new InputStreamReader(learningCsv.getContent(), Charset.forName("CP1250")));
-        alertsReadingResponse = readByAlerts(it, alertConsumer, learningCsv.getFileName());
+        alertsReadingResponse = readByAlerts(it, alertConsumer, learningRequest.getObject());
         alertsReadingResponse.setObjectData(learningCsv);
 
         return alertsReadingResponse;
