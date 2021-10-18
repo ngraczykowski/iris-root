@@ -57,7 +57,8 @@ class WarehouseAlertService {
     });
   }
 
-  private Optional<Struct> buildWarehouseAlert(AlertAddedToAnalysisEvent event, AlertData alertData) {
+  private Optional<Struct> buildWarehouseAlert(
+      AlertAddedToAnalysisEvent event, AlertData alertData) {
     var status = alertMessageStatusService.findByAlertId(event.getAlertId());
     var payloadBuilder = Struct.newBuilder();
     try {
