@@ -9,7 +9,9 @@ import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertEtlResponseUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
+import com.silenteight.sep.base.aspects.logging.LogContext;
 
+import org.slf4j.MDC;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 
@@ -27,7 +29,11 @@ class EtlService {
   private final ExtractAlertEtlResponseUseCase extractAlertEtlResponseUseCase;
 
   @ServiceActivator(inputChannel = ALERT_REGISTERED, outputChannel = ALERT_INPUT_ACCEPTED)
+  @LogContext
   AlertInputAcceptedEvent accept(AlertRegisteredEvent command) {
+    MDC.put("alertId", command.getAlertId().toString());
+    MDC.put("alertName", command.getAlertRegisteredName());
+
     processes.stream() // parallel stream ?
         .filter(process -> process.supports(command))
         .forEach(process -> process.extractAndLoad(command, getAlertEtlResponse(command)));
@@ -36,8 +42,11 @@ class EtlService {
   }
 
   private AlertEtlResponse getAlertEtlResponse(AlertRegisteredEvent command) {
-    return extractAlertEtlResponseUseCase.createAlertEtlResponse(
-        command.getData(AlertMessageDto.class));
+    var alertMessageDto = command.getData(AlertMessageDto.class);
+
+    MDC.put("systemId", alertMessageDto.getSystemID());
+
+    return extractAlertEtlResponseUseCase.createAlertEtlResponse(alertMessageDto);
   }
 
 }

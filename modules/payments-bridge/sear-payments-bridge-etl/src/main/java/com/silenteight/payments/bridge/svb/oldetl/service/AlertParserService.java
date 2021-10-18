@@ -37,7 +37,10 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
   private final ExtractMatchTextUseCase extractMatchTextUseCase;
 
   public AlertEtlResponse createAlertEtlResponse(AlertMessageDto alertMessageDto) {
-    log.debug("invoke");
+    if (log.isDebugEnabled()) {
+      log.debug("Parsing alert for ELT: systemId={}", alertMessageDto.getSystemID());
+    }
+
     List<HitData> hits = new ArrayList<>();
 
     for (RequestHitDto requestHitDto : alertMessageDto.getHits()) {
