@@ -70,8 +70,9 @@ class WarehouseRecommendationService {
     var payloadBuilder = Struct.newBuilder();
     try {
       var warehouseRecommendation = buildWarehouseRecommendation(event);
-      var alertDataJson = objectMapper.writeValueAsString(warehouseRecommendation);
-      JSON_TO_STRUCT_PARSER.merge(alertDataJson, payloadBuilder);
+      var json = objectMapper.writeValueAsString(warehouseRecommendation);
+      log.debug("WarehouseRecommendation: {}", json);
+      JSON_TO_STRUCT_PARSER.merge(json, payloadBuilder);
       return Optional.of(payloadBuilder.build());
     } catch (InvalidProtocolBufferException | JsonProcessingException e) {
       log.error("Could not convert to WarehouseRecommendation payload", e);

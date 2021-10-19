@@ -52,13 +52,14 @@ class WarehouseIngestService {
   private Optional<Struct> buildWarehouseAlert(LearningAlert learningAlert) {
     var payloadBuilder = Struct.newBuilder();
     try {
-      var alertDataJson = objectMapper.writeValueAsString(
+      var json = objectMapper.writeValueAsString(
           WarehouseAlert.builder()
               .alertMessageId(learningAlert.getAlertId())
               .fircoSystemId(learningAlert.getSystemId())
               .accessPermissionTag("US")
               .deliveryStatus("").status("").build());
-      JSON_TO_STRUCT_PARSER.merge(alertDataJson, payloadBuilder);
+      log.debug("WarehouseAlert message payload: {}", json);
+      JSON_TO_STRUCT_PARSER.merge(json, payloadBuilder);
       return Optional.of(payloadBuilder.build());
     } catch (InvalidProtocolBufferException | JsonProcessingException e) {
       log.error("Could not convert to WarehouseAlert payload", e);
@@ -86,7 +87,7 @@ class WarehouseIngestService {
   private Optional<Struct> buildWarehouseAnalystSolution(LearningAlert learningAlert) {
     var payloadBuilder = Struct.newBuilder();
     try {
-      var analystSolutionJson =
+      var json =
           objectMapper.writeValueAsString(
               WarehouseAnalystSolution.builder()
                 .fircoAnalystDecision(learningAlert.getFircoAnalystDecision())
@@ -94,7 +95,8 @@ class WarehouseIngestService {
                 .fircoAnalystDecisionTime(learningAlert.getFircoAnalystDecisionTime())
                 .accessPermissionTag("US")
                 .build());
-      JSON_TO_STRUCT_PARSER.merge(analystSolutionJson, payloadBuilder);
+      log.debug("WarehouseAnalystSolution: {}", json);
+      JSON_TO_STRUCT_PARSER.merge(json, payloadBuilder);
       return Optional.of(payloadBuilder.build());
     } catch (InvalidProtocolBufferException | JsonProcessingException e) {
       log.error("Could not convert to WarehouseAnalystSolution payload", e);

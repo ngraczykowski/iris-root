@@ -98,6 +98,9 @@ dependencies {
   // Governance
   implementation libraries.governance_model_api
 
+  // Warehouse API
+  implementation libraries.warehouse_data_api
+
   //  Testing
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.adjudication_engine_api
@@ -109,6 +112,8 @@ dependencies {
   // Shedlock
   implementation libraries.shedlock_spring
   implementation libraries.shedlock_jdbc_provider
+
+
 }
 
 jar {

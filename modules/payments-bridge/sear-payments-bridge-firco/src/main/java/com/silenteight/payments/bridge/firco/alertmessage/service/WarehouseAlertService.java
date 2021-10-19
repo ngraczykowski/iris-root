@@ -62,19 +62,19 @@ class WarehouseAlertService {
     var status = alertMessageStatusService.findByAlertId(event.getAlertId());
     var payloadBuilder = Struct.newBuilder();
     try {
-      var alertDataJson = objectMapper.writeValueAsString(
+      var json = objectMapper.writeValueAsString(
           WarehouseAlert.builder()
               .alertMessageId(event.getAlertId().toString())
               .fircoSystemId(alertData.getSystemId())
               .accessPermissionTag("US")
               .deliveryStatus("") // TODO:
               .status(status.getStatus().name()).build());
-      JSON_TO_STRUCT_PARSER.merge(alertDataJson, payloadBuilder);
+      log.debug("WarehouseAlert: {}", json);
+      JSON_TO_STRUCT_PARSER.merge(json, payloadBuilder);
       return Optional.of(payloadBuilder.build());
     } catch (InvalidProtocolBufferException | JsonProcessingException e) {
       log.error("Could not convert to WarehouseAlert payload", e);
       return Optional.empty();
     }
-
   }
 }
