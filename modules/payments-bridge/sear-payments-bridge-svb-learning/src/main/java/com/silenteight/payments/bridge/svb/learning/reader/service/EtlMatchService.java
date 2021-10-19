@@ -66,6 +66,7 @@ class EtlMatchService {
         .matchedCountries(createUniqueList(rows, LearningCsvRow::getFkcoVListCountry))
         .hitTypes(createUniqueList(rows, LearningCsvRow::getFkcoVHitType))
         .alertedPartyEntity(createAlertedPartyEntities(alertedPartyData, matchingTexts))
+        .nameMatchedTexts(createUniqueList(rows, LearningCsvRow::getFkcoVNameMatchedText))
         .watchlistType(WatchlistType.ofCode(rows.get(0).getFkcoVListType()))
         .build();
   }

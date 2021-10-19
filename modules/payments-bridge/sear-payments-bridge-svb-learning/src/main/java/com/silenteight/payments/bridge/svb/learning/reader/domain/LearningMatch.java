@@ -63,6 +63,8 @@ public class LearningMatch {
 
   List<String> matchedCountries;
 
+  List<String> nameMatchedTexts;
+
   Map<AlertedPartyKey, String> alertedPartyEntity;
 
   WatchlistType watchlistType;

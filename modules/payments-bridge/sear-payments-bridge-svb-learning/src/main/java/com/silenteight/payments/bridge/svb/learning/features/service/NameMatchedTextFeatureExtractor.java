@@ -24,13 +24,13 @@ class NameMatchedTextFeatureExtractor implements FeatureExtractor {
   @Override
   public FeatureInput extract(LearningMatch learningMatch) {
     var watchlistNames = learningMatch
-        .getWatchlistNames()
+        .getNameMatchedTexts()
         .stream()
         .map(name -> WatchlistName.newBuilder().setName(name).setType(NameType.REGULAR).build())
         .collect(toList());
 
     var alertedPartyNames = learningMatch
-        .getAlertedPartyNames()
+        .getMatchedNames()
         .stream()
         .map(name -> AlertedPartyName.newBuilder().setName(name).build())
         .collect(toList());
