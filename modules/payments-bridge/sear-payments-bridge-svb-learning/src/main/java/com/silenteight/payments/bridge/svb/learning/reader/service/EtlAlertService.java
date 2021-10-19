@@ -27,6 +27,7 @@ class EtlAlertService {
       DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss");
   private final EtlMatchService etlMatchService;
 
+  //TODO(wkeska): Set zone ID from configurable properties
   @Setter
   private String zoneId = "UTC";
 
