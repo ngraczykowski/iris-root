@@ -4,6 +4,8 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.jdbc;
 import com.silenteight.datasource.agentinput.api.v1.CreatedAgentInput;
 import com.silenteight.universaldatasource.app.feature.model.MatchFeatureInput;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlParameter;
@@ -12,12 +14,10 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 class InsertFeatureQuery {
 
   @Language("PostgreSQL")
@@ -49,6 +49,16 @@ class InsertFeatureQuery {
   }
 
   List<CreatedAgentInput> execute(Collection<MatchFeatureInput> matchFeatureInputs) {
+
+    if (log.isDebugEnabled()) {
+      var agentInputTypeOptional =
+          matchFeatureInputs.stream().findFirst().map(MatchFeatureInput::getAgentInputType);
+
+      agentInputTypeOptional.ifPresent(type -> log.debug(
+          "Saving feature inputs for: agentInputType={}, count={}",
+          type, matchFeatureInputs.size()));
+    }
+
     List<Map<String, Object>> keyList = new ArrayList<>();
     var keyHolder = new GeneratedKeyHolder();
     for (MatchFeatureInput matchFeatureInput : matchFeatureInputs) {

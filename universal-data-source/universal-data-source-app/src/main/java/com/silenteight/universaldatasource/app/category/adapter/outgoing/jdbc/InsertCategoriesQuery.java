@@ -25,8 +25,7 @@ public class InsertCategoriesQuery {
           + " category_type, allowed_values, multi_value)\n"
           + " VALUES (:category_id, :category_display_name,\n"
           + " :category_type, :allowed_values, :multi_value)\n"
-          + " ON CONFLICT(category_id) DO UPDATE\n"
-          + " SET category_display_name = :category_display_name\n"
+          + " ON CONFLICT DO NOTHING\n"
           + " RETURNING category_id, category_display_name,\n"
           + " category_type, allowed_values, multi_value";
 
