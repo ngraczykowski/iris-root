@@ -2,7 +2,8 @@
   "agents/name/versions/1.0.0/configs/1": {
     "agentId": "1697c58c-9a7a-4489-b315-b7c419182ceb",
     "features": [
-      "features/name"
+      "features/name",
+      "features/nameMatchedText"
     ],
     "responses": [
       "EXACT_MATCH",
