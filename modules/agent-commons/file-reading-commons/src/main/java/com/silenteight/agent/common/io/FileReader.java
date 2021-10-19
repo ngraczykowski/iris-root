@@ -2,6 +2,7 @@ package com.silenteight.agent.common.io;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -12,6 +13,7 @@ import java.util.stream.Stream;
 import static com.silenteight.agent.common.io.FileFormatConstants.*;
 import static com.silenteight.agent.configloader.ConfigsPathFinder.findFile;
 import static java.nio.file.Files.readAllLines;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
@@ -52,11 +54,13 @@ public class FileReader {
    * <pre>
    *   Load lines from file located under AGENT_HOME/conf/{path}
    *   Returns unique lines ignoring comments or empty lines
+   *   Order of lines is preserved
    * </pre>
    */
-  public static Set<String> readRegexpPatternsAsSet(String path) {
+  public static List<String> readRegexpPatternsAsList(String path) {
     return readLinesAsStream(path, DEFAULT_DICT_FORMAT_FILTERS, DEFAULT_REGEXP_FORMAT_TRANSFORMERS)
-        .collect(toSet());
+        .distinct()
+        .collect(toList());
   }
 
   /**
