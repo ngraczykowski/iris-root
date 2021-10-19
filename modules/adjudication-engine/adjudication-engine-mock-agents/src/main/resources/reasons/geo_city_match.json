@@ -1,0 +1,14 @@
+{
+  "geoCompareResults": [
+    {
+      "type": "COUNTRY",
+      "alertedPartyValue": "MACEDONIA",
+      "watchlistPartyValue": "MACEDONIA"
+    },
+    {
+      "type": "LOCALITY",
+      "alertedPartyValue": "SKOPJE",
+      "watchlistPartyValue": "SKOPJE"
+    }
+  ]
+}

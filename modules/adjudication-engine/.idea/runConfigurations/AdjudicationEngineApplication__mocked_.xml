@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="AdjudicationEngineApplication (mocked)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="adjudication-engine.adjudication-engine-app.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.silenteight.adjudication.engine.app.AdjudicationEngineApplication" />
+    <option name="ACTIVE_PROFILES" value="mockgovernance, mockagents, mockdatasource, rabbitdeclare, tracegrpc" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <option name="SHORTEN_COMMAND_LINE" value="NONE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeRequest;
 import com.silenteight.agents.v1.api.exchange.AgentExchangeResponse;
 import com.silenteight.agents.v1.api.exchange.AgentOutput;
-import com.silenteight.agents.v1.api.exchange.AgentOutput.Feature;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
@@ -26,7 +25,7 @@ class AgentMockIntegrationFlow extends IntegrationFlowAdapter {
         .channel("agentResponseInboundChannel");
   }
 
-  private AgentExchangeResponse mockResponse(AgentExchangeRequest request) {
+  private static AgentExchangeResponse mockResponse(AgentExchangeRequest request) {
     return AgentExchangeResponse
         .newBuilder()
         .addAllAgentOutputs(request
@@ -38,7 +37,7 @@ class AgentMockIntegrationFlow extends IntegrationFlowAdapter {
                 .addAllFeatures(request
                     .getFeaturesList()
                     .stream()
-                    .map(f -> Feature.newBuilder().setFeature(f).build())
+                    .map(AgentMockedFeatures::getRandomFeature)
                     .collect(Collectors.toList()))
                 .build())
             .collect(Collectors.toList()))

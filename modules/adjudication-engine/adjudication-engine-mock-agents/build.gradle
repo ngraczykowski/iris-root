@@ -18,4 +18,6 @@ dependencies {
   implementation libraries.spring_boot_starter_integration
   implementation libraries.spring_integration_amqp
   implementation libraries.spring_integration_core
+
+  implementation libraries.protobuf_java_util
 }
