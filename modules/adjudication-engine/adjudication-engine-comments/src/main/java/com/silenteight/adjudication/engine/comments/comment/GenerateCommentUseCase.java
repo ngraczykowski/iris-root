@@ -34,6 +34,11 @@ class GenerateCommentUseCase {
       //TODO(iwnek) the proper error state should be set in
       // com.silenteight.adjudication.api.v1.Recommendation message
       return "";
+    } finally {
+      if (log.isTraceEnabled()) {
+        log.trace("Alert context (ID = {}): {}",
+            alertContext.getAlertId(), alertContext);
+      }
     }
   }
 }
