@@ -16,12 +16,12 @@ class AnalysisJdbcDataAccess implements AnalysisDataAccessPort {
   private final InsertAnalysisQuery insertAnalysisQuery;
 
   @Override
-  public Optional<Long> findCurrentAnalysis() {
+  public Optional<String> findCurrentAnalysis() {
     return findTodayAnalysisQuery.execute();
   }
 
   @Override
-  public Optional<Long> save(long analysisId) {
-    return insertAnalysisQuery.update(analysisId);
+  public Optional<String> save(String analysisName) {
+    return insertAnalysisQuery.update(analysisName);
   }
 }

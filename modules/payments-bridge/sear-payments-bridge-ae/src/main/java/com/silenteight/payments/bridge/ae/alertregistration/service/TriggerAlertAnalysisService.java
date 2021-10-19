@@ -24,12 +24,12 @@ class TriggerAlertAnalysisService implements TriggerAlertAnalysisUseCase {
 
   @Override
   public void triggerAlertAnalysis(TriggerAlertRequest triggerAlertRequest) {
-    var analysisId = getCurrentAnalysisUseCase.getOrCreateAnalysis();
+    var analysisName = getCurrentAnalysisUseCase.getOrCreateAnalysis();
 
     analysisClient.addAlertToAnalysis(
         BatchAddAlertsRequest
             .newBuilder()
-            .setAnalysis("analysis/" + analysisId)
+            .setAnalysis(analysisName)
             .addAllAnalysisAlerts(
                 triggerAlertRequest.getAlertNames()
                     .stream()
@@ -39,6 +39,6 @@ class TriggerAlertAnalysisService implements TriggerAlertAnalysisUseCase {
             .build());
 
     log.info("Alerts {} added to analysis [{}]",
-        Arrays.toString(triggerAlertRequest.getAlertNames().toArray()), analysisId);
+        Arrays.toString(triggerAlertRequest.getAlertNames().toArray()), analysisName);
   }
 }

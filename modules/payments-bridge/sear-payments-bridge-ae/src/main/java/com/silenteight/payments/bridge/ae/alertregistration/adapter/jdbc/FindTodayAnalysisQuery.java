@@ -14,16 +14,16 @@ import java.util.Optional;
 class FindTodayAnalysisQuery {
 
   @Language("PostgreSQL")
-  private static final String SQL = "SELECT analysis_id\n"
+  private static final String SQL = "SELECT analysis_name\n"
       + "FROM pb_analysis\n"
-      + "WHERE date(created_at) = CURRENT_DATE\n"
+      + "WHERE date(created_at) = current_date\n"
       + "ORDER BY created_at DESC\n"
       + "LIMIT 1";
 
   private final JdbcTemplate jdbcTemplate;
 
-  Optional<Long> execute() {
+  Optional<String> execute() {
     var result = DataAccessUtils.singleResult(jdbcTemplate.queryForList(SQL));
-    return result == null ? Optional.empty() : Optional.of((Long) result.get("analysis_id"));
+    return result == null ? Optional.empty() : Optional.of((String) result.get("analysis_name"));
   }
 }

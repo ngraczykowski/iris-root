@@ -30,17 +30,17 @@ class AnalysisJdbcDataAccessIT extends BaseJdbcTest {
   void shouldSelectTodayAnalysis() {
     var analysis = analysisJdbcDataAccess.findCurrentAnalysis();
     assertTrue(analysis.isPresent());
-    assertThat(analysis.get()).isEqualTo(2);
+    assertThat(analysis.get()).isEqualTo("analysis/2");
   }
 
   @Test
   void shouldInsertAnalysis() {
-    analysisJdbcDataAccess.save(4);
+    analysisJdbcDataAccess.save("analysis/4");
     var count = jdbcTemplate.queryForObject("SELECT count(*) FROM pb_analysis", Integer.class);
     assertThat(count).isEqualTo(4);
 
     var analysis = analysisJdbcDataAccess.findCurrentAnalysis();
     assertTrue(analysis.isPresent());
-    assertThat(analysis.get()).isEqualTo(4);
+    assertThat(analysis.get()).isEqualTo("analysis/4");
   }
 }

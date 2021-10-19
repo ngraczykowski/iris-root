@@ -13,8 +13,7 @@ class GetCurrentAnalysisUseCase {
   private final AnalysisDataAccessPort analysisDataAccessPort;
   private final CreateAnalysisService createAnalysisService;
 
-  // FIXME(ahaczewski): Stop using IDs! The Analysis name is a String, not Long!!!
-  long getOrCreateAnalysis() {
+  String getOrCreateAnalysis() {
     var analysis = analysisDataAccessPort.findCurrentAnalysis();
 
     if (analysis.isEmpty())
