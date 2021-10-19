@@ -4,16 +4,20 @@ import lombok.Data;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.Map;
+import javax.validation.constraints.NotEmpty;
 
-import static java.util.Collections.emptyMap;
-
+@Validated
 @ConfigurationProperties("silenteight.bridge.recommendation")
 @Data
 @ConstructorBinding
 class RecommendationProperties {
 
-  private Map<S8Recommendation, String> silentEightValues = emptyMap();
-  private Map<HsbcRecommendation, String> userFriendlyValues = emptyMap();
+  @NotEmpty
+  private Map<S8Recommendation, String> silentEightValues;
+
+  @NotEmpty
+  private Map<HsbcRecommendation, String> userFriendlyValues;
 }
