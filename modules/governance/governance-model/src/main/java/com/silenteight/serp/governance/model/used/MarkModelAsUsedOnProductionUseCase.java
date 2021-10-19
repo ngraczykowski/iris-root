@@ -26,6 +26,8 @@ public class MarkModelAsUsedOnProductionUseCase {
   private final PolicyDetailsQuery policyDetailsQuery;
   @NonNull
   private final PolicyService policyService;
+  @NonNull
+  private final SendModelUsedOnProductionUseCase sendModelUsedOnProductionUseCase;
 
   public void applyByName(@NonNull String model) {
     apply(ModelResource.fromResourceName(model));
@@ -44,6 +46,8 @@ public class MarkModelAsUsedOnProductionUseCase {
     ModelDto savedModel = modelDetailsQuery.get(id);
     PolicyDto policyDetails = policyDetailsQuery.details(
         PolicyResource.fromResourceName(savedModel.getPolicy()));
+
     policyService.markPolicyAsUsed(of(policyDetails.getId(), policyDetails.getUpdatedBy()));
+    sendModelUsedOnProductionUseCase.activate(savedModel);
   }
 }

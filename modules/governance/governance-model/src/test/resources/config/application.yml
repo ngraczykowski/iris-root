@@ -12,3 +12,9 @@ serp:
           request:
             exchange: gov.event
             routingKey: event.model-promoted.production
+
+      send-in-use:
+        integration:
+          request:
+            exchange: gov.event
+            routingKey: event.model-in-use.production

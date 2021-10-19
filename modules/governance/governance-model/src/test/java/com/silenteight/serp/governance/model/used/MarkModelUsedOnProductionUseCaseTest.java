@@ -1,5 +1,6 @@
 package com.silenteight.serp.governance.model.used;
 
+import com.silenteight.serp.governance.model.domain.dto.ModelDto;
 import com.silenteight.serp.governance.model.get.ModelDetailsQuery;
 import com.silenteight.serp.governance.policy.details.PolicyDetailsQuery;
 import com.silenteight.serp.governance.policy.domain.PolicyService;
@@ -25,6 +26,8 @@ class MarkModelUsedOnProductionUseCaseTest {
   private PolicyDetailsQuery policyDetailsQuery;
   @Mock
   private PolicyService policyService;
+  @Mock
+  private SendModelUsedOnProductionUseCase sendModelUsedOnProductionUseCase;
 
   @InjectMocks
   private MarkModelAsUsedOnProductionUseCase underTest;
@@ -34,16 +37,19 @@ class MarkModelUsedOnProductionUseCaseTest {
     // given
     when(modelDetailsQuery.get(MODEL_ID)).thenReturn(MODEL_DTO);
     when(policyDetailsQuery.details(POLICY_ID)).thenReturn(POLICY_DTO);
-
     // when
     underTest.applyByName(MODEL_RESOURCE_NAME);
-
     // then
     ArgumentCaptor<MarkPolicyAsUsedRequest> argumentCaptor = ArgumentCaptor
         .forClass(MarkPolicyAsUsedRequest.class);
+    ArgumentCaptor<ModelDto> modelDtoArgumentCaptor = ArgumentCaptor
+        .forClass(ModelDto.class);
+
     verify(policyService).markPolicyAsUsed(argumentCaptor.capture());
+    verify(sendModelUsedOnProductionUseCase).activate(modelDtoArgumentCaptor.capture());
     MarkPolicyAsUsedRequest request = argumentCaptor.getValue();
     assertThat(request.getPolicyId()).isEqualTo(POLICY_ID);
     assertThat(request.getActivatedBy()).isEqualTo(UPDATED_BY);
+    assertThat(modelDtoArgumentCaptor.getValue()).isEqualTo(MODEL_DTO);
   }
 }
