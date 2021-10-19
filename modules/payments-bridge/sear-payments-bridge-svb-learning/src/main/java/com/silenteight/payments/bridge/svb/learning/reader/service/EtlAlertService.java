@@ -24,7 +24,7 @@ import static com.silenteight.payments.bridge.common.protobuf.TimestampConverter
 class EtlAlertService {
 
   private static final DateTimeFormatter DATE_FORMAT =
-      DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss");
+      DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
   private final EtlMatchService etlMatchService;
 
   //TODO(wkeska): Set zone ID from configurable properties
