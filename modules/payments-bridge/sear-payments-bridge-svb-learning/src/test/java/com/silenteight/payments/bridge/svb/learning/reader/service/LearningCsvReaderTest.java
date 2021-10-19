@@ -36,13 +36,13 @@ class LearningCsvReaderTest {
 
   @BeforeEach
   void setUp() {
-    var createMatch =
-        new EtlMatchService(
-            extractAlertedPartyDataUseCase, createAlertedPartyEntitiesUseCase,
-            extractMessageStructureUseCase, extractFieldValueUseCase);
-    learningCsvReader =
-        new ProcessAlertService(
-            new CsvFileProviderTestImpl(), new EtlAlertService(createMatch));
+    var etlMatchService = new EtlMatchService(
+        extractAlertedPartyDataUseCase, createAlertedPartyEntitiesUseCase,
+        extractMessageStructureUseCase, extractFieldValueUseCase);
+
+    learningCsvReader = new ProcessAlertService(
+        new CsvFileProviderTestImpl(),
+        new EtlAlertService(etlMatchService, new EtlAlertServiceProperties()));
   }
 
   @Test

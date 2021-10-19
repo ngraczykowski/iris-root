@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.learning.reader.adpter;
+package com.silenteight.payments.bridge.svb.learning.reader.adapter;
 
 import com.silenteight.payments.bridge.svb.learning.reader.domain.AlertsReadingResponse;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsv;

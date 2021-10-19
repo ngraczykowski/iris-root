@@ -12,10 +12,10 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlert
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.common.model.AlertRegistration;
 
-import com.google.protobuf.Timestamp;
-
+import java.time.OffsetDateTime;
 import java.util.List;
 
+import static com.silenteight.payments.bridge.common.protobuf.TimestampConverter.fromOffsetDateTime;
 import static java.util.stream.Collectors.toList;
 
 @Builder
@@ -32,7 +32,7 @@ public class LearningAlert {
   @NonFinal
   String alertName;
 
-  Timestamp alertTime;
+  OffsetDateTime alertTime;
 
   List<LearningMatch> matches;
 
@@ -42,9 +42,7 @@ public class LearningAlert {
 
   int hitCount;
 
-  String fircoAnalystDecision;  // Taken from FKCO_STATUS
-  String fircoAnalystDecisionTime;  // Taken from FKCO_D_ACTION_DATETIME
-  String fircoAnalystComment;  // FKCO_V_ACTION_COMMENT
+  AnalystDecision analystDecision;
 
   public AlertRegistration getAlertRegistration() {
     return new AlertRegistration(systemId, messageId);
@@ -58,7 +56,7 @@ public class LearningAlert {
     return RegisterAlertRequest
         .builder()
         .alertId(alertId)
-        .alertTime(alertTime)
+        .alertTime(fromOffsetDateTime(alertTime))
         .matchQuantity(matches.size() > 1 ? MatchQuantity.MANY : MatchQuantity.SINGLE)
         .matchIds(matches.stream().map(
             LearningMatch::getMatchId).collect(toList()))

@@ -3,24 +3,15 @@ package com.silenteight.payments.bridge.firco.alertmessage.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.data.api.v1.Alert;
-import com.silenteight.data.api.v1.ProductionDataIndexRequest;
-import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.payments.bridge.common.model.AlertData;
-import com.silenteight.payments.bridge.common.model.WarehouseAlert;
 import com.silenteight.payments.bridge.event.AlertAddedToAnalysisEvent;
+import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory;
+import com.silenteight.payments.bridge.warehouse.index.model.payload.WarehouseAlert;
+import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertUseCase;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.Struct;
-import com.google.protobuf.util.JsonFormat;
-import com.google.protobuf.util.JsonFormat.Parser;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
-import org.springframework.messaging.support.MessageBuilder;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.ALERT_ADDED_TO_ANALYSIS;
@@ -30,52 +21,30 @@ import static com.silenteight.payments.bridge.common.integration.CommonChannels.
 @Slf4j
 class WarehouseAlertService {
 
-  protected static final Parser JSON_TO_STRUCT_PARSER = JsonFormat.parser();
-
-  private final ObjectMapper objectMapper;
+  private final IndexedAlertBuilderFactory payloadBuilderFactory;
   private final AlertMessageStatusService alertMessageStatusService;
-  private final CommonChannels commonChannels;
+  private final IndexAlertUseCase indexAlertUseCase;
 
   @ServiceActivator(inputChannel = ALERT_ADDED_TO_ANALYSIS)
   void accept(AlertAddedToAnalysisEvent event) {
     var alertData = event.getData(AlertData.class);
 
-    buildWarehouseAlert(event, alertData).ifPresent(payload -> {
-      var alertBuilder = Alert.newBuilder()
-          .setName(event.getAlertRegisteredName())
-          .setAccessPermissionTag("US")
-          .setDiscriminator(alertData.getDiscriminator())
-          .setPayload(payload)
-          .build();
+    var alert = payloadBuilderFactory.newBuilder()
+        .setName(event.getAlertRegisteredName())
+        .setDiscriminator(alertData.getDiscriminator())
+        .addPayload(mapToWarehouseAlert(event.getAlertId(), alertData))
+        .build();
 
-      var indexRequest = ProductionDataIndexRequest.newBuilder()
-          .setRequestId(UUID.randomUUID().toString())
-          .addAlerts(alertBuilder)
-          .build();
-
-      commonChannels.warehouseRequested().send(
-          MessageBuilder.withPayload(indexRequest).build());
-    });
+    indexAlertUseCase.index(alert);
   }
 
-  private Optional<Struct> buildWarehouseAlert(
-      AlertAddedToAnalysisEvent event, AlertData alertData) {
-    var status = alertMessageStatusService.findByAlertId(event.getAlertId());
-    var payloadBuilder = Struct.newBuilder();
-    try {
-      var json = objectMapper.writeValueAsString(
-          WarehouseAlert.builder()
-              .alertMessageId(event.getAlertId().toString())
-              .fircoSystemId(alertData.getSystemId())
-              .accessPermissionTag("US")
-              .deliveryStatus("") // TODO:
-              .status(status.getStatus().name()).build());
-      log.debug("WarehouseAlert: {}", json);
-      JSON_TO_STRUCT_PARSER.merge(json, payloadBuilder);
-      return Optional.of(payloadBuilder.build());
-    } catch (InvalidProtocolBufferException | JsonProcessingException e) {
-      log.error("Could not convert to WarehouseAlert payload", e);
-      return Optional.empty();
-    }
+  private WarehouseAlert mapToWarehouseAlert(UUID alertId, AlertData alertData) {
+    var status = alertMessageStatusService.findByAlertId(alertId);
+
+    return WarehouseAlert.builder()
+        .alertMessageId(alertId.toString())
+        .fircoSystemId(alertData.getSystemId())
+        .deliveryStatus("") // TODO:
+        .status(status.getStatus().name()).build();
   }
 }

@@ -58,7 +58,7 @@ class PaymentsBridgeApplicationTests {
 
   @ParameterizedTest
   @MethodSource("filesFactory")
-  public void shouldRegisterAlertAndInputs(String fileName) {
+  void shouldRegisterAlertAndInputs(String fileName) {
     var eventRecorder = createRegistrationEventRecorder();
     createAlert(fileName);
     await()
@@ -111,7 +111,7 @@ class PaymentsBridgeApplicationTests {
   }
 
   @Test
-  public void shouldRejectAlertWithTooManyHits() {
+  void shouldRejectAlertWithTooManyHits() {
     var eventRecorder = createTooManyHitsEventRecorder();
     createAlert(TOO_MANY_HITS_REQUEST_FILE);
     await()

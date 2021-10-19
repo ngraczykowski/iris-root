@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.learning.reader.adpter;
+package com.silenteight.payments.bridge.svb.learning.reader.adapter;
 
 import lombok.extern.slf4j.Slf4j;
 

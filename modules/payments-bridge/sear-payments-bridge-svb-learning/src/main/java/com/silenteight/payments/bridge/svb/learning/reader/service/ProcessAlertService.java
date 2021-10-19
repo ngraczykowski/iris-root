@@ -8,14 +8,15 @@ import com.silenteight.payments.bridge.svb.learning.reader.port.CsvFileProvider;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
+import java.time.Clock;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.UUID;
 import java.util.function.Consumer;
 
 @Service
@@ -23,11 +24,11 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 class ProcessAlertService {
 
+  private static final DateTimeFormatter STAMP_FORMATTER =
+      DateTimeFormatter.ofPattern("yyyyMMdd'-'HHmmss");
+
   private final CsvFileProvider csvFileProvider;
   private final EtlAlertService etlAlertService;
-
-  private static final SimpleDateFormat TIME_STAMP_FORMAT =
-      new SimpleDateFormat("yyyyMMdd'T'HHmmssSSSXXX");
 
   public AlertsReadingResponse read(
       LearningRequest learningRequest, Consumer<LearningAlert> alertConsumer) {
@@ -62,7 +63,7 @@ class ProcessAlertService {
 
     var firstRow = it.next();
     assertRowNotNull(firstRow);
-    String currentAlertID = firstRow.getFkcoVSystemId();
+    String currentAlertId = firstRow.getFkcoVSystemId();
 
     var errors = new ArrayList<ReadAlertError>();
     var alertRows = new ArrayList<LearningCsvRow>();
@@ -78,14 +79,20 @@ class ProcessAlertService {
       assertRowNotNull(row);
       var rowAlertId = row.getFkcoVSystemId();
 
-      if (currentAlertID.equals(rowAlertId)) {
+      if (currentAlertId.equals(rowAlertId)) {
         alertRows.add(row);
         continue;
       }
 
       try {
-        alertConsumer.accept(etlAlertService.fromCsvRows(alertRows, batchStamp, fileName));
-        log.debug("Successfully processed alert = {}", currentAlertID);
+        var alert = etlAlertService
+            .fromCsvRows(alertRows)
+            .batchStamp(batchStamp)
+            .fileName(fileName)
+            .build();
+
+        alertConsumer.accept(alert);
+        log.debug("Successfully processed alert = {}", currentAlertId);
         successfulAlertsCount++;
       } catch (RuntimeException e) {
         log.error("Failed to process alert = {} reason = {}", rowAlertId, e.getMessage());
@@ -93,7 +100,7 @@ class ProcessAlertService {
         failedAlertsCount++;
       }
 
-      currentAlertID = rowAlertId;
+      currentAlertId = rowAlertId;
       alertRows.clear();
       alertRows.add(row);
     }
@@ -113,8 +120,8 @@ class ProcessAlertService {
   }
 
   private static String createBatchStamp() {
-    var timestamp = new Timestamp(System.currentTimeMillis());
-    return TIME_STAMP_FORMAT.format(timestamp) + "-" + UUID.randomUUID().toString().substring(0, 7);
+    return STAMP_FORMATTER.format(OffsetDateTime.now(Clock.systemUTC())) + "-"
+        + RandomStringUtils.randomAlphabetic(7);
   }
 
   private static class ReadAlertException extends RuntimeException {

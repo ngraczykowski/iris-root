@@ -94,6 +94,7 @@ class EtlMatchService {
 
   private AbstractMessageStructure createMessageStructure(
       List<LearningCsvRow> rows, List<String> matchingTexts) {
+
     var row = rows.get(0);
     return extractMessageStructureUseCase.extractMessageStructure(
         ExtractAlertedPartyDataRequest
@@ -107,7 +108,7 @@ class EtlMatchService {
   }
 
   private static List<String> createMatchingTexts(List<LearningCsvRow> rows) {
-    List<String> matchingText = SetUniqueList.setUniqueList(new ArrayList<>());
+    var matchingText = SetUniqueList.setUniqueList(new ArrayList<String>());
 
     rows.forEach(row -> {
       matchingText.add(row.getFkcoVCityMatchedText());
@@ -126,6 +127,7 @@ class EtlMatchService {
 
   private static String assertUnique(
       List<LearningCsvRow> rows, Function<LearningCsvRow, String> rowFunc) {
+
     var first = rowFunc.apply(rows.get(0));
     for (var row : rows) {
       var rowVal = rowFunc.apply(row);
@@ -138,14 +140,15 @@ class EtlMatchService {
 
   private static List<String> createUniqueList(
       List<LearningCsvRow> rows, Function<LearningCsvRow, String> rowFunc) {
-    List<String> uniqueList = SetUniqueList.setUniqueList(new ArrayList<>());
+
+    var uniqueList = SetUniqueList.setUniqueList(new ArrayList<String>());
     rows.forEach(row -> uniqueList.add(rowFunc.apply(row)));
     return uniqueList;
   }
 
 
   private static EntityType toEntityType(String type) {
-    HashMap<String, EntityType> types = new HashMap<>();
+    var types = new HashMap<String, EntityType>();
     types.put("INDIVIDUAL", EntityType.INDIVIDUAL);
     types.put("COMPANY", EntityType.ORGANIZATION);
 
@@ -157,6 +160,7 @@ class EtlMatchService {
 
   private Map<AlertedPartyKey, String> createAlertedPartyEntities(
       AlertedPartyData alertedPartyData, List<String> matchingTexts) {
+
     return createAlertedPartyEntitiesUseCase.create(CreateAlertedPartyEntitiesRequest
         .builder()
         .alertedPartyData(alertedPartyData)

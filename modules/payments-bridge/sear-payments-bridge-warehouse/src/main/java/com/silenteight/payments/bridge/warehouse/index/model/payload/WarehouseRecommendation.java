@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.common.model;
+package com.silenteight.payments.bridge.warehouse.index.model.payload;
 
 import lombok.Builder;
 import lombok.Value;
@@ -9,12 +9,11 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 @Value
 @Builder
 @JsonNaming(SnakeCaseStrategy.class)
-public class WarehouseRecommendation {
+public class WarehouseRecommendation implements IndexPayload {
 
   String policy;  // from RecommendationMetadata ?
   String policyTitle;  // from RecommendationMetadata ?
   String createTime;  // from Recommendation.getCreateTime()
   String recommendedAction;  // from Recommendation.getAction()
   String recommendationComment;  // from Recommendation.getComment()
-  String accessPermissionTag;
 }

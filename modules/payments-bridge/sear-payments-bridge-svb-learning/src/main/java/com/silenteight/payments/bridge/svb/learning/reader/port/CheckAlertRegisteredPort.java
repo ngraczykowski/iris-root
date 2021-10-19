@@ -11,5 +11,4 @@ public interface CheckAlertRegisteredPort {
   @Gateway(requestChannel = "fircoAlertRegisteredRequestChannel",
       replyChannel = "fircoAlertRegisteredResponseChannel")
   boolean isAlertRegistered(AlertRegistration alertRegistration);
-
 }

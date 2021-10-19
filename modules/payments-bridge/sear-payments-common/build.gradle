@@ -6,4 +6,7 @@ plugins {
 dependencies {
   implementation libraries.commons_lang3
   implementation libraries.guava
+  implementation libraries.protobuf_java
+  implementation libraries.protobuf_java_util
+  implementation libraries.jackson_databind
 }

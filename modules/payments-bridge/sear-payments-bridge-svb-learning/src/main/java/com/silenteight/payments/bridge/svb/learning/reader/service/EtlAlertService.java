@@ -1,53 +1,72 @@
 package com.silenteight.payments.bridge.svb.learning.reader.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
+import com.silenteight.payments.bridge.svb.learning.reader.domain.AnalystDecision;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
+import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert.LearningAlertBuilder;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsvRow;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
-import com.google.protobuf.Timestamp;
+import com.google.common.base.Preconditions;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+import javax.annotation.Nonnull;
 
-import static com.silenteight.payments.bridge.common.protobuf.TimestampConverter.fromOffsetDateTime;
+import static java.util.Comparator.comparing;
 
 @Service
 @RequiredArgsConstructor
+@EnableConfigurationProperties(EtlAlertServiceProperties.class)
 class EtlAlertService {
 
   private static final DateTimeFormatter DATE_FORMAT =
       DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
   private final EtlMatchService etlMatchService;
 
-  //TODO(wkeska): Set zone ID from configurable properties
-  @Setter
-  private String zoneId = "UTC";
+  private final EtlAlertServiceProperties properties;
 
-  LearningAlert fromCsvRows(List<LearningCsvRow> rows, String batchStamp, String fileName) {
+  LearningAlertBuilder fromCsvRows(List<LearningCsvRow> rows) {
+    Preconditions.checkArgument(!rows.isEmpty(), "rows must not be empty");
+
+    var firstRow = rows.get(0);
+
     return LearningAlert.builder()
-        .alertId(rows.get(0).getFkcoVSystemId())
-        .alertTime(createAlertTime(rows.get(0).getFkcoDFilteredDatetime()))
-        .systemId(rows.get(0).getFkcoVSystemId())
-        .messageId(rows.get(0).getFkcoVMessageid())
-        .fircoAnalystComment(rows.get(0).getFkcoVActionComment())
-        .fircoAnalystDecision(rows.get(0).getFkcoStatus())
-        .fircoAnalystDecisionTime(rows.get(0).getFkcoDActionDatetime())
-        .matches(createMatches(rows))
-        .batchStamp(batchStamp)
-        .fileName(fileName)
+        .alertId(firstRow.getFkcoVSystemId())
+        .alertTime(getOffsetDateTime(firstRow.getFkcoDFilteredDatetime()))
+        .systemId(firstRow.getFkcoVSystemId())
+        .messageId(firstRow.getFkcoVMessageid())
+        .analystDecision(makeAnalystDecision(rows))
+        .matches(createMatches(rows));
+  }
+
+  private AnalystDecision makeAnalystDecision(List<LearningCsvRow> rows) {
+    var firstRow = rows.get(0);
+    var latestDecision = findLatestDecision(rows).orElse(firstRow);
+
+    return AnalystDecision.builder()
+        .status(latestDecision.getFkcoStatus())
+        .comment(latestDecision.getFkcoVActionComment())
+        .actionDateTime(getOffsetDateTime(latestDecision.getFkcoDActionDatetime()))
         .build();
   }
 
+  private Optional<LearningCsvRow> findLatestDecision(List<LearningCsvRow> rows) {
+    return rows.stream().max(comparing(r -> getOffsetDateTime(r.getFkcoDActionDatetime())));
+  }
+
   private List<LearningMatch> createMatches(List<LearningCsvRow> rows) {
-    List<LearningMatch> matches = new ArrayList<>();
+    var matches = new ArrayList<LearningMatch>();
     var hits = new HashMap<String, List<LearningCsvRow>>();
 
     for (var row : rows) {
@@ -81,9 +100,12 @@ class EtlAlertService {
     }
   }
 
-  private Timestamp createAlertTime(String time) {
-    var zonedDateTime = LocalDateTime.parse(time, DATE_FORMAT).atZone(ZoneId.of(zoneId));
-    return fromOffsetDateTime(zonedDateTime.toOffsetDateTime());
+  @Nonnull
+  private OffsetDateTime getOffsetDateTime(String time) {
+    return LocalDateTime
+        .parse(time, DATE_FORMAT)
+        .atZone(ZoneId.of(properties.getTimeZone()))
+        .toOffsetDateTime();
   }
 
   private static class DuplicatedMatchIdException extends RuntimeException {
@@ -91,7 +113,7 @@ class EtlAlertService {
     private static final long serialVersionUID = 8806971682856315265L;
 
     DuplicatedMatchIdException() {
-      super("Duplicated match id");
+      super("Duplicated Match ID");
     }
   }
 }
