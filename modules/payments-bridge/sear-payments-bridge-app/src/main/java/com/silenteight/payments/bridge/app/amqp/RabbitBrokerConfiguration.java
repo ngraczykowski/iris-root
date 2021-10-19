@@ -40,7 +40,7 @@ class RabbitBrokerConfiguration {
     var bridgeModelPromotedProductionQueue =
         queue(BRIDGE_MODEL_PROMOTED_PRODUCTION_QUEUE_NAME).build();
     var bridgeModelPromotedProductionBinding = bind(
-        bridgeModelPromotedProductionQueue, GOV_EVENT_EXCHANGE, "event.model-promoted.production");
+        bridgeModelPromotedProductionQueue, GOV_EVENT_EXCHANGE, "event.model-in-use.production");
 
     var responseCompletedQueue = queue(FIRCO_RESPONSE_QUEUE_NAME)
         .withArgument("x-dead-letter-exchange", DEAD_LETTER_EXCHANGE)

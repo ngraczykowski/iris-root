@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.governance.core.solvingmodel.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.model.api.v1.ModelPromotedForProduction;
+import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.payments.bridge.governance.core.solvingmodel.port.ModelPromotedToProductionReceivedGateway;
 import com.silenteight.payments.bridge.governance.core.solvingmodel.port.ReceiveCurrentModelUseCase;
 import com.silenteight.proto.payments.bridge.internal.v1.event.ModelUpdated;
@@ -21,7 +21,7 @@ class ReceiveCurrentModelService implements ReceiveCurrentModelUseCase {
 
   @Override
   public void handleModelPromotedForProductionMessage(
-      @Nonnull ModelPromotedForProduction modelPromotedForProduction) {
+      @Nonnull SolvingModel modelPromotedForProduction) {
 
     ModelUpdated modelUpdated = ModelUpdated.newBuilder().build();
     modelPromotedToProductionReceivedGateway.send(modelUpdated);

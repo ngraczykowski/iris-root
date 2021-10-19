@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.app.amqp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.model.api.v1.ModelPromotedForProduction;
+import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.payments.bridge.governance.core.solvingmodel.port.ReceiveCurrentModelUseCase;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 
@@ -37,21 +37,17 @@ class GovernanceInboundAmqpIntegrationConfiguration {
     return from(createInboundAdapter(properties.getInboundQueueNames()))
         .handle(message -> {
           var payload = message.getPayload();
-          if (payload == null) {
-            log.trace("Received null model promoted for production message");
-          } else {
-            try {
-              var modelPromotedForProduction =
-                  ((Any) payload).unpack(ModelPromotedForProduction.class);
-              log.trace(
-                  "Received model promoted for production message = {}",
-                  modelPromotedForProduction);
-              receiveCurrentModelUseCase.handleModelPromotedForProductionMessage(
-                  modelPromotedForProduction);
-            } catch (InvalidProtocolBufferException e) {
-              log.error(
-                  "Unable to unpack model promoted for production message");
-            }
+          try {
+            var solvingModel =
+                ((Any) payload).unpack(SolvingModel.class);
+            log.trace(
+                "Received model promoted for production message = {}",
+                solvingModel);
+            receiveCurrentModelUseCase.handleModelPromotedForProductionMessage(
+                solvingModel);
+          } catch (InvalidProtocolBufferException e) {
+            log.error(
+                "Unable to unpack model promoted for production message");
           }
         })
         .get();

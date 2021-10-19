@@ -1,7 +1,6 @@
 package com.silenteight.payments.bridge.governance.core.solvingmodel.service;
 
-
-import com.silenteight.model.api.v1.ModelPromotedForProduction;
+import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.payments.bridge.governance.core.solvingmodel.port.ModelPromotedToProductionReceivedGateway;
 import com.silenteight.proto.payments.bridge.internal.v1.event.ModelUpdated;
 
@@ -28,7 +27,7 @@ class ReceiveCurrentModelServiceTest {
   @Test
   void shouldSendMessage() {
     service.handleModelPromotedForProductionMessage(
-        ModelPromotedForProduction.newBuilder().build());
+        SolvingModel.newBuilder().build());
 
     verify(gateway).send(ModelUpdated.newBuilder().build());
   }
