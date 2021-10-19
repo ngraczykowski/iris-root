@@ -11,6 +11,7 @@ import com.silenteight.datasource.api.name.v1.AlertedPartyName;
 import com.silenteight.datasource.api.name.v1.NameFeatureInput;
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
 import com.silenteight.datasource.api.name.v1.WatchlistName;
+import com.silenteight.datasource.api.name.v1.WatchlistName.NameType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
@@ -83,6 +84,7 @@ class NameAgentEtlProcess implements EtlProcess {
                             Collectors.toList()))
                     .addWatchlistNames(WatchlistName.newBuilder()
                         .setName(watchlistName)
+                        .setType(NameType.REGULAR)
                         .build())
                     .setAlertedPartyType(alertedPartyType)
                     .addAllMatchingTexts(matchingTexts)
