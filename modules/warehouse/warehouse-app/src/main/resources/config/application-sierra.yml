@@ -5,11 +5,11 @@ warehouse:
   environment:
     prefix: sierra
   sampling:
-    time-field-name: alert_recommendationDate
+    time-field-name: alert_create_time
 
 warehouse.report.rbs:
   production:
-    date-field-name: alert_recommendationDate
+    date-field-name: alert_create_time
     columns:
       - name: alert_fvSignature
         label: fv_signature
@@ -85,7 +85,7 @@ warehouse.report.rbs:
 warehouse.report.billing:
   year-field-name: alert_recommendationYear
   month-field-name: alert_recommendationMonth
-  date-field-name: alert_recommendationDate
+  date-field-name: alert_create_time
   year-month-label: date
   transpose-column:
     name: alert_s8_recommendation
@@ -103,7 +103,7 @@ warehouse.report.billing:
 warehouse.report.metrics:
   production:
     date-field:
-      name: alert_recommendationDate
+      name: alert_create_time
       label: Date
       source-pattern: yyyy-MM-dd HH:mm:ss
       target-pattern: yyyy-MM
@@ -169,7 +169,7 @@ warehouse.report.statistics:
 
 warehouse.report.accuracy:
   production:
-    date-field-name: alert_recommendationDate
+    date-field-name: alert_create_time
     columns:
       - name: alert_policy
         label: Policy ID
@@ -201,13 +201,13 @@ warehouse.report.accuracy:
   simulation:
     date-field-name: index_timestamp
     columns:
-      - name: alert_policy
+      - name: alert_match_reason:policy
         label: Policy ID
-      - name: alert_policy_title
+      - name: alert_match_reason:policy_title
         label: Policy Name
-      - name: alert_recommended_action
+      - name: alert_recommendation_recommended_action
         label: S8 Alert Resolution
-      - name: alert_create_time
+      - name: alert_recommendation_create_time
         label: S8 Alert Resolution Timestamp
       - name: alert_recommendation_comment
         label: Alert Comment
@@ -252,13 +252,13 @@ warehouse.report.ai-reasoning:
   simulation:
     date-field-name: index_timestamp
     columns:
-      - name: alert_policy
+      - name: alert_match_reason:policy
         label: Policy ID
-      - name: alert_policy_title
+      - name: alert_match_reason:policy_title
         label: Policy Name
-      - name: alert_recommended_action
+      - name: alert_recommendation_recommended_action
         label: S8 Alert Resolution
-      - name: alert_create_time
+      - name: aalert_recommendation_create_time
         label: S8 Alert Resolution Timestamp
       - name: alert_recommendation_comment
         label: Alert Comment
