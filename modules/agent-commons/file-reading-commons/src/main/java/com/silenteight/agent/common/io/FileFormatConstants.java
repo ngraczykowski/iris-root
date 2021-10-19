@@ -27,4 +27,6 @@ class FileFormatConstants {
       Set.of(IGNORE_COMMENT_LINES, IGNORE_EMPTY_LINES);
   static final Set<UnaryOperator<String>> DEFAULT_DICT_FORMAT_TRANSFORMERS =
       Set.of(TRIM, UPPER_CASE);
+  static final Set<UnaryOperator<String>> DEFAULT_REGEXP_FORMAT_TRANSFORMERS =
+      Set.of(TRIM);
 }

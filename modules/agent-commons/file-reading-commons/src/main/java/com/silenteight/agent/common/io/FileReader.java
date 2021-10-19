@@ -9,10 +9,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-import static com.silenteight.agent.common.io.FileFormatConstants.DEFAULT_DICT_FORMAT_FILTERS;
-import static com.silenteight.agent.common.io.FileFormatConstants.DEFAULT_DICT_FORMAT_TRANSFORMERS;
-import static com.silenteight.agent.common.io.FileFormatConstants.KEY_VALUE_SEPARATOR;
-import static com.silenteight.agent.common.io.FileFormatConstants.VALUES_SEPARATOR;
+import static com.silenteight.agent.common.io.FileFormatConstants.*;
 import static com.silenteight.agent.configloader.ConfigsPathFinder.findFile;
 import static java.nio.file.Files.readAllLines;
 import static java.util.stream.Collectors.toMap;
@@ -52,8 +49,21 @@ public class FileReader {
   }
 
   /**
-   * Load lines from file located under AGENT_HOME/conf/{path} Returns all UPPER CASE, unique lines
-   * ignoring comments or empty lines
+   * <pre>
+   *   Load lines from file located under AGENT_HOME/conf/{path}
+   *   Returns unique lines ignoring comments or empty lines
+   * </pre>
+   */
+  public static Set<String> readRegexpPatternsAsSet(String path) {
+    return readLinesAsStream(path, DEFAULT_DICT_FORMAT_FILTERS, DEFAULT_REGEXP_FORMAT_TRANSFORMERS)
+        .collect(toSet());
+  }
+
+  /**
+   * <pre>
+   *  Load lines from file located under AGENT_HOME/conf/{path}
+   *  Returns all UPPER CASE, unique lines ignoring comments or empty lines
+   * </pre>
    */
   public static Set<String> readLinesAsSet(String path) {
     return readLinesAsStream(path, DEFAULT_DICT_FORMAT_FILTERS, DEFAULT_DICT_FORMAT_TRANSFORMERS)
