@@ -8,10 +8,15 @@ import com.silenteight.datasource.categories.api.v1.ListCategoriesResponse;
 import com.silenteight.universaldatasource.app.category.port.incoming.GetMatchCategoryValuesUseCase;
 import com.silenteight.universaldatasource.app.category.port.incoming.ListAvailableCategoriesUseCase;
 
+import org.springframework.stereotype.Service;
+
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
+@Service(CategoryAdapter.BEAN_NAME)
 class CategoryAdapter {
+
+  static final String BEAN_NAME = "categoryAdapterV1";
 
   private final ListAvailableCategoriesUseCase listAvailableCategoriesUseCase;
 

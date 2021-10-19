@@ -18,6 +18,9 @@ import java.util.function.Consumer;
 @Component
 class StreamFeaturesQuery {
 
+  private static final String PEP_AGENT_INPUT_TYPE = "Feature";
+  private static final int DEFAULT_BATCH_SIZE = 1024;
+
   @Language("PostgreSQL")
   private static final String SQL = "SELECT match_name, agent_input_type,\n"
       + "JSON_OBJECT_AGG(feature, agent_input)\n"
@@ -31,17 +34,18 @@ class StreamFeaturesQuery {
   int execute(BatchFeatureRequest batchFeatureRequest, Consumer<MatchFeatureOutput> consumer) {
 
     // TODO(jgajewski): SQL Injection
-    String agentInputType = batchFeatureRequest.getAgentInputType();
+    var agentInputType = batchFeatureRequest.getAgentInputType();
     var parameters = new MapSqlParameterSource("agentInputType", agentInputType);
     parameters.addValue("matchNames", batchFeatureRequest.getMatches());
     parameters.addValue("featureNames", batchFeatureRequest.getFeatures());
 
     var features = jdbcTemplate.query(SQL, parameters,
         new FeatureExtractor(consumer, agentInputType, getChunkSize(agentInputType)));
+
     return features != null ? features : 0;
   }
 
   private static int getChunkSize(String agentInputType) {
-    return "Features".equals(agentInputType) ? 1 : 1024;
+    return PEP_AGENT_INPUT_TYPE.equals(agentInputType) ? 1 : DEFAULT_BATCH_SIZE;
   }
 }

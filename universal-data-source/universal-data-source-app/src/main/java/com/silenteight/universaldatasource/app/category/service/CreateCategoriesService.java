@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -24,10 +26,12 @@ class CreateCategoriesService implements CreateCategoriesUseCase {
   @Override
   public BatchCreateCategoriesResponse createCategories(
       List<Category> categoriesList) {
+
     var categories = categoryDataAccess.saveAll(categoriesList);
 
     if (log.isDebugEnabled()) {
-      log.debug("Saved categories: categoriesCount={}", categories.size());
+      log.debug("Saved categories: count={}, categories={}", categories.size(),
+          categories.stream().map(Category::getName).collect(toList()));
     }
 
     return BatchCreateCategoriesResponse.newBuilder()

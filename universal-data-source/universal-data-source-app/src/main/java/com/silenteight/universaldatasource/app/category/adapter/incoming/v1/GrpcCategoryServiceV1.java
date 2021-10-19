@@ -10,12 +10,14 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import static com.silenteight.universaldatasource.app.category.adapter.incoming.v1.CategoryAdapter.BEAN_NAME;
+
 @GrpcService
 class GrpcCategoryServiceV1 extends CategoryServiceImplBase {
 
   private final CategoryAdapter categoryAdapter;
 
-  GrpcCategoryServiceV1(@Qualifier("categoryAdapterV1") CategoryAdapter categoryAdapter) {
+  GrpcCategoryServiceV1(@Qualifier(BEAN_NAME) CategoryAdapter categoryAdapter) {
     this.categoryAdapter = categoryAdapter;
   }
 

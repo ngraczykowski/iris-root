@@ -27,11 +27,21 @@ class GetMatchCategoryValuesService implements GetMatchCategoryValuesUseCase {
   public BatchGetMatchesCategoryValuesResponse batchGetMatchCategoryValues(
       List<CategoryMatches> matchValuesList) {
 
-    log.debug("Getting category values : categoryValuesCount={}", matchValuesList.size());
+    if (log.isDebugEnabled()) {
+      var matchesCount =
+          matchValuesList.stream().flatMap(cm -> cm.getMatchesList().stream()).distinct().count();
+
+      log.debug("Getting category values: categoryCount={}, matchCount={}",
+          matchValuesList.size(), matchesCount);
+    }
 
     var matchCategoryList = getMatchCategoryList(matchValuesList);
     var categoryValues =
         categoryValueDataAccess.batchGetMatchCategoryValues(matchCategoryList);
+
+    if (log.isDebugEnabled()) {
+      log.debug("Returning category values: categoryValueCount={}", categoryValues.size());
+    }
 
     return BatchGetMatchesCategoryValuesResponse.newBuilder()
         .addAllCategoryValues(categoryValues)
