@@ -27,12 +27,21 @@ class BatchGetFeatureInputService implements BatchGetFeatureInputUseCase {
       BatchFeatureRequest batchFeatureRequest,
       Consumer<BatchFeatureInputResponse> consumer) {
 
-    log.debug("Streaming feature inputs");
+    if (log.isDebugEnabled()) {
+      log.debug("Streaming feature inputs: agentInputType={}, features={}, matchCount={}",
+          batchFeatureRequest.getAgentInputType(), batchFeatureRequest.getFeatures(),
+          batchFeatureRequest.getMatches().size());
+    }
 
-    dataAccess.stream(
+    int featuresCount = dataAccess.stream(
         batchFeatureRequest,
         matchFeatureOutput -> consumer.accept(featureMapperFactory
             .get(matchFeatureOutput.getAgentInputType())
             .map(matchFeatureOutput)));
+
+    if (log.isDebugEnabled()) {
+      log.debug("Finished streaming feature inputs: agentInputType={}, featuresCount={}",
+          batchFeatureRequest.getAgentInputType(), featuresCount);
+    }
   }
 }

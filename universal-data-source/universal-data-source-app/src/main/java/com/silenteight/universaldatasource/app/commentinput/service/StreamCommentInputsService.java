@@ -25,12 +25,17 @@ class StreamCommentInputsService implements StreamCommentInputsUseCase {
   @Timed(value = "uds.comment-input.use_cases", extraTags = { "action", "streamCommentInput" })
   @Override
   public void streamCommentInput(List<String> alerts, Consumer<CommentInput> consumer) {
-    log.debug("Streaming comment inputs");
+
+    if (log.isDebugEnabled()) {
+      log.debug("Streaming comment inputs: count={}", alerts.size());
+    }
 
     var commentInputsCount = dataAccess.stream(
         alerts,
         commentInput -> consumer.accept(commentInputMapper.map(commentInput)));
 
-    log.info("Finished streaming comment inputs: commentInputs={}", commentInputsCount);
+    if (log.isDebugEnabled()) {
+      log.debug("Finished streaming comment inputs: count={}", commentInputsCount);
+    }
   }
 }

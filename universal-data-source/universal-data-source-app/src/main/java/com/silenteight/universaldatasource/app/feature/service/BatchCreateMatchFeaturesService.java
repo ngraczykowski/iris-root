@@ -37,7 +37,7 @@ class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase
     var createdAgentInputs = getCreatedAgentInputs(agentInputs);
 
     if (log.isDebugEnabled()) {
-      log.debug("Saved feature inputs: featureInputsCount={}", createdAgentInputs.size());
+      log.debug("Saved feature inputs: count={}", createdAgentInputs.size());
     }
 
     return BatchCreateAgentInputsResponse.newBuilder()
@@ -51,8 +51,8 @@ class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase
 
     // NOTE(jgajewski): For those afraid of such a loop nesting: the input agentInputs collection
     //  will have very small number of elements.
-    for (AgentInput agentInput : agentInputs) {
-      for (FeatureInput featureInput : agentInput.getFeatureInputsList()) {
+    for (var agentInput : agentInputs) {
+      for (var featureInput : agentInput.getFeatureInputsList()) {
         matchFeatureInputs.add(createFeatureInput(agentInput, featureInput));
         if (matchFeatureInputs.size() >= MAX_BATCH_SIZE) {
           createdAgentInputs.addAll(dataAccess.saveAll(matchFeatureInputs));
@@ -87,13 +87,17 @@ class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase
   private Message getFeatureInputClass(Any agentFeatureInput) throws
       InvalidProtocolBufferException {
 
-    var featureInputClass = getAgentInputClassName(agentFeatureInput.getTypeUrl());
-    var featureMapper = getFeatureMapper(featureInputClass);
+    var featureInputType = getAgentInputClassName(agentFeatureInput.getTypeUrl());
+
+    log.debug("Saving feature inputs for: agentInputType={}", featureInputType);
+
+    var featureMapper = getFeatureMapper(featureInputType);
     return featureMapper.unpackAnyMessage(agentFeatureInput);
   }
 
   private static String getAgentInputClassName(String classTypeUrl) {
     var arrayOfClassPath = classTypeUrl.split("\\.");
+
     if (arrayOfClassPath.length < 1)
       throw new NoSuchElementException(
           "No class was found for agent input type, with url: " + classTypeUrl);
@@ -101,11 +105,11 @@ class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase
     return arrayOfClassPath[arrayOfClassPath.length - 1];
   }
 
-  private FeatureMapper getFeatureMapper(String featureInputClass) {
-    if (!mappers.containsKey(featureInputClass))
+  private FeatureMapper getFeatureMapper(String featureInputType) {
+    if (!mappers.containsKey(featureInputType))
       throw new NoSuchElementException(
-          "Agent name read from agent_feature_input not found: " + featureInputClass);
+          "Agent name read from agent_feature_input not found: " + featureInputType);
 
-    return mappers.get(featureInputClass);
+    return mappers.get(featureInputType);
   }
 }

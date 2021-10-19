@@ -33,7 +33,7 @@ class CreateCommentInputsService implements CreateCommentInputsUseCase {
     var createdCommentInputs = dataAccess.saveAll(alertCommentInputs);
 
     if (log.isDebugEnabled()) {
-      log.debug("Saved comment inputs: commentInputsCount={}", createdCommentInputs.size());
+      log.debug("Saved comment inputs: count={}", createdCommentInputs.size());
     }
 
     return BatchCreateCommentInputResponse.newBuilder()

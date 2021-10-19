@@ -61,7 +61,7 @@ class CategoryVersionMapper {
       ProtocolStringList matchValuesList) {
     Map<String, List<String>> matchValueMap = new HashMap<>();
 
-    for (String matchValue : matchValuesList) {
+    for (var matchValue : matchValuesList) {
 
       var resourceName = ResourceName.create(matchValue);
       var category = resourceName.get("categories");
@@ -88,7 +88,7 @@ class CategoryVersionMapper {
   private static CategoryMatches getCategoryBuilder(Entry<String, List<String>> entry) {
     var builder = CategoryMatches.newBuilder()
         .setCategory(entry.getKey());
-    for (String match : entry.getValue()) {
+    for (var match : entry.getValue()) {
       builder.addMatches(match);
     }
     return builder.build();

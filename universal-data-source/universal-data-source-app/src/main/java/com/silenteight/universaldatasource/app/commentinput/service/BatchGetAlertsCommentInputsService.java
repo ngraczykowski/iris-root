@@ -27,9 +27,17 @@ class BatchGetAlertsCommentInputsService implements BatchGetAlertsCommentInputsU
   @Timed(value = "uds.comment-input.use_cases", extraTags = { "action", "batchGetCommentInputs" })
   @Override
   public BatchGetAlertsCommentInputsResponse batchGetAlertsCommentInputs(List<String> alerts) {
-    log.debug("Getting comment inputs : commentInputsCount={}", alerts.size());
+
+    if (log.isDebugEnabled()) {
+      log.debug("Getting comment inputs: count={}", alerts.size());
+    }
 
     var commentInputs = getCommentInputs(dataAccess.batchGetCommentInputs(alerts));
+
+    if (log.isDebugEnabled()) {
+      log.debug("Returning comment inputs : count={}", commentInputs.size());
+    }
+
     return BatchGetAlertsCommentInputsResponse.newBuilder()
         .addAllCommentInputs(commentInputs)
         .build();
