@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.model.used;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.model.common.ModelResource;
 import com.silenteight.serp.governance.model.domain.dto.ModelDto;
@@ -18,6 +19,7 @@ import java.util.UUID;
 import static com.silenteight.serp.governance.policy.domain.dto.MarkPolicyAsUsedRequest.of;
 
 @RequiredArgsConstructor
+@Slf4j
 public class MarkModelAsUsedOnProductionUseCase {
 
   @NonNull
@@ -43,6 +45,8 @@ public class MarkModelAsUsedOnProductionUseCase {
   }
 
   private void apply(UUID id) {
+    log.info("Mark model as used on production (solvingModels/{}).", id);
+
     ModelDto savedModel = modelDetailsQuery.get(id);
     PolicyDto policyDetails = policyDetailsQuery.details(
         PolicyResource.fromResourceName(savedModel.getPolicy()));
