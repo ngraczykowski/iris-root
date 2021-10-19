@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.svb.learning.reader.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsvRow;
@@ -9,20 +10,25 @@ import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 import com.google.protobuf.Timestamp;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.silenteight.payments.bridge.common.protobuf.TimestampConverter.fromSqlTimestamp;
+import static com.silenteight.payments.bridge.common.protobuf.TimestampConverter.fromOffsetDateTime;
 
 @Service
 @RequiredArgsConstructor
 class EtlAlertService {
 
+  private static final DateTimeFormatter DATE_FORMAT =
+      DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm:ss");
   private final EtlMatchService etlMatchService;
+
+  @Setter
+  private String zoneId = "UTC";
 
   LearningAlert fromCsvRows(List<LearningCsvRow> rows, String batchStamp, String fileName) {
     return LearningAlert.builder()
@@ -74,16 +80,9 @@ class EtlAlertService {
     }
   }
 
-  static Timestamp createAlertTime(String time) {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
-    Date parsedDate;
-    try {
-      parsedDate = dateFormat.parse(time);
-    } catch (ParseException e) {
-      throw new IllegalArgumentException(e);
-    }
-    var timestamp = new java.sql.Timestamp(parsedDate.getTime());
-    return fromSqlTimestamp(timestamp);
+  private Timestamp createAlertTime(String time) {
+    var zonedDateTime = LocalDateTime.parse(time, DATE_FORMAT).atZone(ZoneId.of(zoneId));
+    return fromOffsetDateTime(zonedDateTime.toOffsetDateTime());
   }
 
   private static class DuplicatedMatchIdException extends RuntimeException {
