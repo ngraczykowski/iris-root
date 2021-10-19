@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Struct;
 import com.google.protobuf.Timestamp;
+import com.google.protobuf.Value;
 import com.google.protobuf.util.JsonFormat;
 import com.google.protobuf.util.JsonFormat.Parser;
 import com.google.protobuf.util.Timestamps;
@@ -51,6 +52,7 @@ class WarehouseRecommendationService {
     var alertData = event.getData(AlertData.class);
     createWarehouseRecommendation(event).ifPresent(payload -> {
       var alertBuilder = Alert.newBuilder()
+          .setName(getAeAlertName(event))
           .setAccessPermissionTag("US")
           .setDiscriminator(alertData.getDiscriminator())
           .setPayload(payload)
@@ -85,23 +87,37 @@ class WarehouseRecommendationService {
     if (AdjudicationRecommendationCompletedEvent.class.isAssignableFrom(original.getClass())) {
       AdjudicationRecommendationCompletedEvent event =
           (AdjudicationRecommendationCompletedEvent) original;
+
+      var policy = getFieldFromFirstMatch(event, "policy");
+      var policyTitle = getFieldFromFirstMatch(event, "policy_title");
+
       var recommendation = event.getRecommendation().getRecommendation();
       return  WarehouseRecommendation.builder()
           .recommendationComment(mapComment(recommendation.getRecommendationComment()))
           .recommendedAction(mapAction(recommendation.getRecommendedAction()))
           .createTime(toDateFormat(recommendation.getCreateTime()))
           .accessPermissionTag("US")
-          .policy("").policyTitle("")
+          .policy(policy).policyTitle(policyTitle)
           .build();
     } else {
       return WarehouseRecommendation.builder()
           .recommendationComment(mapComment(null))
           .recommendedAction(mapAction(null))
-          .createTime(toDateFormat(Timestamps.fromMicros(System.currentTimeMillis())))
+          .createTime(toDateFormat(Timestamps.fromMillis(System.currentTimeMillis())))
           .accessPermissionTag("US")
           .policy("").policyTitle("")
           .build();
     }
+  }
+
+  private String getFieldFromFirstMatch(
+      AdjudicationRecommendationCompletedEvent event, String name) {
+    var metadata = event.getRecommendation().getMetadata();
+    if (!metadata.getMatchesList().isEmpty()) {
+      return metadata.getMatchesList().get(0).getReason().getFieldsOrDefault(name,
+          Value.newBuilder().setStringValue("").build()).getStringValue();
+    }
+    return "";
   }
 
   private static String mapAction(@Nullable String action) {
@@ -122,6 +138,15 @@ class WarehouseRecommendationService {
       log.warn("Could not format create-time {}", timestamp);
       return "";
     }
+  }
+
+  private String getAeAlertName(RecommendationCompletedEvent original) {
+    if (AdjudicationRecommendationCompletedEvent.class.isAssignableFrom(original.getClass())) {
+      AdjudicationRecommendationCompletedEvent event =
+          (AdjudicationRecommendationCompletedEvent) original;
+      return event.getAlertName();
+    }
+    return "";
   }
 
 }

@@ -9,6 +9,7 @@ import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.payments.bridge.common.model.WarehouseAlert;
 import com.silenteight.payments.bridge.common.model.WarehouseAnalystSolution;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
+import com.silenteight.payments.bridge.svb.learning.reader.service.DecisionMapperConfiguration.DecisionMapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,10 +31,12 @@ class WarehouseIngestService {
   protected static final Parser JSON_TO_STRUCT_PARSER = JsonFormat.parser();
   private final ObjectMapper objectMapper;
   private final CommonChannels commonChannels;
+  private final DecisionMapper decisionMapper;
 
   void ingestReportData(LearningAlert learningAlert) {
     buildWarehouseAlert(learningAlert).ifPresent(payload -> {
       var alertBuilder = Alert.newBuilder()
+          .setName(learningAlert.getAlertName())
           .setAccessPermissionTag("US")
           .setDiscriminator(learningAlert.getDiscriminator())
           .setPayload(payload)
@@ -87,10 +90,14 @@ class WarehouseIngestService {
   private Optional<Struct> buildWarehouseAnalystSolution(LearningAlert learningAlert) {
     var payloadBuilder = Struct.newBuilder();
     try {
+
+      var decision = decisionMapper.map(learningAlert.getFircoAnalystDecision());
+
       var json =
           objectMapper.writeValueAsString(
               WarehouseAnalystSolution.builder()
-                .fircoAnalystDecision(learningAlert.getFircoAnalystDecision())
+                .fircoAnalystStatus(learningAlert.getFircoAnalystDecision())
+                .fircoAnalystDecision(decision)
                 .fircoAnalystComment(learningAlert.getFircoAnalystComment())
                 .fircoAnalystDecisionTime(learningAlert.getFircoAnalystDecisionTime())
                 .accessPermissionTag("US")
@@ -103,5 +110,6 @@ class WarehouseIngestService {
       return Optional.empty();
     }
   }
+
 
 }
