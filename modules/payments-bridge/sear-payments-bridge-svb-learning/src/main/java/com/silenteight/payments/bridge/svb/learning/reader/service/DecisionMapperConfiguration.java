@@ -17,7 +17,7 @@ import static org.apache.commons.lang3.exception.ExceptionUtils.rethrow;
 @RequiredArgsConstructor
 class DecisionMapperConfiguration {
 
-  private final static String analystDecisionMapping =
+  private static final String DECISION_MAPPING_CSV =
       "classpath:analyst-decision-mapping/analyst-decision-mapping.csv";
 
   private final ResourceLoader resourceLoader;
@@ -25,7 +25,7 @@ class DecisionMapperConfiguration {
   @Bean
   public DecisionMapper decisionMapper() {
     try (var csvReader = new CSVReader(new InputStreamReader(
-        resourceLoader.getResource(analystDecisionMapping).getInputStream()))) {
+        resourceLoader.getResource(DECISION_MAPPING_CSV).getInputStream()))) {
       Map<String, String> decisionMap = new HashMap<>();
       String defaultValue = null;
 
