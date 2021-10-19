@@ -42,6 +42,7 @@ class WarehouseAlertService {
 
     buildWarehouseAlert(event, alertData).ifPresent(payload -> {
       var alertBuilder = Alert.newBuilder()
+          .setName(event.getAlertRegisteredName())
           .setAccessPermissionTag("US")
           .setDiscriminator(alertData.getDiscriminator())
           .setPayload(payload)

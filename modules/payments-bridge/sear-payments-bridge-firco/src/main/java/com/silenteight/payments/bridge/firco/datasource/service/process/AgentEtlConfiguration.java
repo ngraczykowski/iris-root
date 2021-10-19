@@ -60,4 +60,13 @@ class AgentEtlConfiguration {
     return new IdentificationMismatchAgentEtlProcess(stub, properties.getTimeout());
   }
 
+  @Bean
+  NameMatchedTextAgentEtlProcess nameMatchedTextAgentEtlProcess() {
+    var stub = AgentInputServiceGrpc
+        .newBlockingStub(dataSourceChannel)
+        .withWaitForReady();
+
+    return new NameMatchedTextAgentEtlProcess(stub, properties.getTimeout());
+  }
+
 }

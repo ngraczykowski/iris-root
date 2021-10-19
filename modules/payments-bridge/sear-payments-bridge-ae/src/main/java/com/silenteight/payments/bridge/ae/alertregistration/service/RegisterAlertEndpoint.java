@@ -34,7 +34,7 @@ class RegisterAlertEndpoint {
     AlertMessageDto alertDto = alertInitializedEvent.getData(AlertMessageDto.class);
 
     var request = RegisterAlertRequest.builder()
-        .alertId(alertDto.getSystemID())
+        .alertId(alertData.getAlertId().toString())
         .priority(alertData.getPriority())
         .matchIds(getMatchIds(alertDto))
         .build();
