@@ -49,4 +49,9 @@ class BulkUseCaseConfiguration {
   IngestRecommendationsUseCase ingestRecommendationsUseCase() {
     return new IngestRecommendationsUseCase(warehouseApi);
   }
+
+  @Bean
+  CreateSolvingBulkUseCase createSolvingBulkUseCase() {
+    return new CreateSolvingBulkUseCase(bulkRepository, alertFacade, eventPublisher);
+  }
 }

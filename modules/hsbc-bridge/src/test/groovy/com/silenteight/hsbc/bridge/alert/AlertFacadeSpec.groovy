@@ -13,10 +13,12 @@ class AlertFacadeSpec extends Specification {
   def alertPayloadConverter = Mock(AlertPayloadConverter)
   def entityManger = Mock(EntityManager)
   def repository = Mock(AlertRepository)
+  def alertReProcessor = Mock(AlertReProcessor)
 
   def underTest = AlertFacade.builder()
       .alertPayloadConverter(alertPayloadConverter)
       .repository(repository)
+      .alertReProcessor(alertReProcessor)
       .entityManager(entityManger)
       .build()
 
@@ -47,5 +49,13 @@ class AlertFacadeSpec extends Specification {
     1 * repository.findByExternalIdInAndDiscriminatorInAndNameIsNotNull(_ as Collection) >>
         of(new AlertEntity("bulk-1"))
     result.size() == 1
+  }
+
+  def 'should re-process alerts'() {
+    when:
+    underTest.reProcessAlerts('someBulkId', List.of('alert/1'))
+
+    then:
+    1 * alertReProcessor.reProcessAlerts(_ as String, _ as List<String>)
   }
 }

@@ -27,12 +27,14 @@ class AlertFacadeConfiguration {
   private final AnalystDecisionProperties decisionProperties;
   private final LearningProperties learningProperties;
   private final DataRetentionMessageSender dataRetentionMessageSender;
+  private final AlertReProcessor reProcessor;
 
   @Bean
   AlertFacade alertFacade(EntityManager entityManager) {
     return AlertFacade.builder()
         .alertPayloadConverter(alertPayloadConverter)
         .repository(alertRepository)
+        .alertReProcessor(reProcessor)
         .entityManager(entityManager)
         .build();
   }

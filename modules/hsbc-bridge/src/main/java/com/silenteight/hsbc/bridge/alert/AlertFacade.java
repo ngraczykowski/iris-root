@@ -30,6 +30,7 @@ public class AlertFacade implements Consumer<AlertDataComposite> {
   private final AlertPayloadConverter alertPayloadConverter;
   private final AlertRepository repository;
   private final EntityManager entityManager;
+  private final AlertReProcessor alertReProcessor;
 
   @Transactional
   public void createRawAlerts(String bulkId, @NonNull InputStream inputStream) throws IOException {
@@ -72,5 +73,9 @@ public class AlertFacade implements Consumer<AlertDataComposite> {
 
   private List<AlertInfo> mapToAlertInfo(List<AlertEntity> alertEntities) {
     return alertEntities.stream().map(a -> new AlertInfo(a.getId())).collect(toList());
+  }
+
+  public void reProcessAlerts(String bulkId, List<String> alerts) {
+    alertReProcessor.reProcessAlerts(bulkId, alerts);
   }
 }
