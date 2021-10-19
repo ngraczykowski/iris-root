@@ -6,7 +6,6 @@ import com.silenteight.payments.bridge.ae.alertregistration.port.AnalysisClientP
 import com.silenteight.payments.bridge.ae.alertregistration.port.AnalysisDataAccessPort;
 import com.silenteight.payments.bridge.ae.alertregistration.port.CreateAnalysisUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.ReceiveAnalysisModelUseCase;
-import com.silenteight.payments.bridge.common.resource.ResourceName;
 
 import org.springframework.stereotype.Service;
 
@@ -19,10 +18,9 @@ class CreateAnalysisService implements CreateAnalysisUseCase {
   private final AnalysisDataAccessPort analysisDataAccessPort;
 
   @Override
-  public long createAnalysis() {
+  public String createAnalysis() {
     var analysis = analysisClient.createAnalysis(receiveAnalysisModel.createAnalysisRequest());
-    var analysisId = ResourceName.create(analysis.getName()).getLong("analysis");
-    analysisDataAccessPort.save(analysisId);
-    return analysisId;
+    analysisDataAccessPort.save(analysis.getName());
+    return analysis.getName();
   }
 }

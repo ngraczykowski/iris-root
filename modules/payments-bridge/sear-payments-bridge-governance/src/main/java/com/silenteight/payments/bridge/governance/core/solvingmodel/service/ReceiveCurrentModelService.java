@@ -10,6 +10,8 @@ import com.silenteight.proto.payments.bridge.internal.v1.event.ModelUpdated;
 
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nonnull;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -19,7 +21,7 @@ class ReceiveCurrentModelService implements ReceiveCurrentModelUseCase {
 
   @Override
   public void handleModelPromotedForProductionMessage(
-      ModelPromotedForProduction modelPromotedForProduction) {
+      @Nonnull ModelPromotedForProduction modelPromotedForProduction) {
 
     ModelUpdated modelUpdated = ModelUpdated.newBuilder().build();
     modelPromotedToProductionReceivedGateway.send(modelUpdated);

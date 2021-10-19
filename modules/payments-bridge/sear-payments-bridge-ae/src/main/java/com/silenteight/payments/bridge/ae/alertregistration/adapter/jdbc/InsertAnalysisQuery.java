@@ -21,13 +21,13 @@ class InsertAnalysisQuery {
   private final JdbcTemplate jdbcTemplate;
   private final PlatformTransactionManager platformTransactionManager;
 
-  Optional<Long> update(long analysisId) {
+  Optional<String> update(String analysisName) {
     DefaultTransactionDefinition paramTransactionDefinition = new DefaultTransactionDefinition();
 
     TransactionStatus status =
         platformTransactionManager.getTransaction(paramTransactionDefinition);
-    jdbcTemplate.update(SQL, analysisId);
+    jdbcTemplate.update(SQL, analysisName);
     platformTransactionManager.commit(status);
-    return Optional.of(analysisId);
+    return Optional.of(analysisName);
   }
 }

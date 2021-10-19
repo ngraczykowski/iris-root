@@ -30,14 +30,14 @@ class GetCurrentAnalysisUseCaseTest {
 
   @Test
   void shouldReturnCurrentAnalysis() {
-    when(analysisDataAccessPort.findCurrentAnalysis()).thenReturn(Optional.of(420L));
-    assertThat(getCurrentAnalysisUseCase.getOrCreateAnalysis()).isEqualTo(420L);
+    when(analysisDataAccessPort.findCurrentAnalysis()).thenReturn(Optional.of("analysis/420"));
+    assertThat(getCurrentAnalysisUseCase.getOrCreateAnalysis()).isEqualTo("analysis/420");
   }
 
   @Test
   void shouldReturnNewAnalysis() {
     when(analysisDataAccessPort.findCurrentAnalysis()).thenReturn(Optional.empty());
-    when(createAnalysisService.createAnalysis()).thenReturn(2L);
-    assertThat(getCurrentAnalysisUseCase.getOrCreateAnalysis()).isEqualTo(2L);
+    when(createAnalysisService.createAnalysis()).thenReturn("analysis/2");
+    assertThat(getCurrentAnalysisUseCase.getOrCreateAnalysis()).isEqualTo("analysis/2");
   }
 }
