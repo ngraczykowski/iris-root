@@ -89,8 +89,6 @@ class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase
 
     var featureInputType = getAgentInputClassName(agentFeatureInput.getTypeUrl());
 
-    log.debug("Saving feature inputs for: agentInputType={}", featureInputType);
-
     var featureMapper = getFeatureMapper(featureInputType);
     return featureMapper.unpackAnyMessage(agentFeatureInput);
   }
