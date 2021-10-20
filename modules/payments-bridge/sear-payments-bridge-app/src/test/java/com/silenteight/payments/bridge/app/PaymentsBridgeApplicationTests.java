@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 
 import static org.awaitility.Awaitility.await;
 
-@SpringBootTest(classes = PaymentsBridgeApplication.class)
+@SpringBootTest(classes = TestApplicationConfiguration.class)
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
 @Slf4j
 @ActiveProfiles({"mockae", "mockdatasource", "mockgovernance", "test"})
