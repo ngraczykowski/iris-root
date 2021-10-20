@@ -20,13 +20,10 @@ class GovernanceInboundAmqpIntegrationProperties {
   @NestedConfigurationProperty
   @Valid
   @NotNull
-  private GovernanceInboundAmqpIntegrationProperties.Commands
-      commands = new GovernanceInboundAmqpIntegrationProperties.Commands();
+  private Commands commands = new Commands();
 
   String[] getInboundQueueNames() {
-    return new String[] {
-        commands.getInboundQueueName(),
-        };
+    return new String[] { commands.getInboundQueueName(), };
   }
 
   @Data

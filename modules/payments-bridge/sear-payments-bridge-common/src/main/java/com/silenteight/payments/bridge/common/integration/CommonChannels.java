@@ -53,6 +53,9 @@ public class CommonChannels {
       PREFIX + "AlertRegisteredResponseChannel";
 
 
+  public static final String SOLVING_MODEL_UPDATED = PREFIX + "SolvingModelUpdatedChannel";
+  public static final String NEW_MODEL_RECEIVED = PREFIX + "NewModelReceivedChannel";
+
   @Bean(MESSAGE_STORED_OUTBOUND)
   public MessageChannel messageStoredOutbound() {
     return new DirectChannel();
@@ -133,4 +136,13 @@ public class CommonChannels {
     return new DirectChannel();
   }
 
+  @Bean(SOLVING_MODEL_UPDATED)
+  public SubscribableChannel solvingModelUpdated() {
+    return new TypedPublishSubscribeChannel(ModelUpdatedEvent.class, channelInterceptors);
+  }
+
+  @Bean(NEW_MODEL_RECEIVED)
+  public SubscribableChannel newModelReceived() {
+    return new TypedPublishSubscribeChannel(ModelUpdatedEvent.class, channelInterceptors);
+  }
 }

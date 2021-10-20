@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.ae.alertregistration.service;
 
 import com.silenteight.payments.bridge.ae.alertregistration.port.AnalysisDataAccessPort;
+import com.silenteight.payments.bridge.ae.alertregistration.port.BuildCreateAnalysisRequestPort;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,11 +22,13 @@ class GetCurrentAnalysisUseCaseTest {
   private AnalysisDataAccessPort analysisDataAccessPort;
   @Mock
   private CreateAnalysisService createAnalysisService;
+  @Mock
+  private BuildCreateAnalysisRequestPort buildCreateAnalysisRequestPort;
 
   @BeforeEach
   void setUp() {
-    getCurrentAnalysisUseCase =
-        new GetCurrentAnalysisUseCase(analysisDataAccessPort, createAnalysisService);
+    getCurrentAnalysisUseCase = new GetCurrentAnalysisUseCase(
+        analysisDataAccessPort, createAnalysisService, buildCreateAnalysisRequestPort);
   }
 
   @Test
@@ -37,7 +40,7 @@ class GetCurrentAnalysisUseCaseTest {
   @Test
   void shouldReturnNewAnalysis() {
     when(analysisDataAccessPort.findCurrentAnalysis()).thenReturn(Optional.empty());
-    when(createAnalysisService.createAnalysis()).thenReturn("analysis/2");
+    when(createAnalysisService.createAnalysis(any())).thenReturn("analysis/2");
     assertThat(getCurrentAnalysisUseCase.getOrCreateAnalysis()).isEqualTo("analysis/2");
   }
 }

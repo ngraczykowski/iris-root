@@ -4,17 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.model.api.v1.SolvingModel;
-import com.silenteight.payments.bridge.governance.core.solvingmodel.port.ReceiveCurrentModelUseCase;
+import com.silenteight.payments.bridge.common.integration.CommonChannels;
+import com.silenteight.payments.bridge.event.ModelUpdatedEvent;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 
-import com.google.protobuf.Any;
-import com.google.protobuf.InvalidProtocolBufferException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.amqp.dsl.AmqpInboundChannelAdapterSMLCSpec;
 import org.springframework.integration.dsl.IntegrationFlow;
 
+import javax.annotation.Nonnull;
 import javax.validation.Valid;
 
 import static org.springframework.integration.dsl.IntegrationFlows.from;
@@ -29,28 +29,21 @@ class GovernanceInboundAmqpIntegrationConfiguration {
   private final GovernanceInboundAmqpIntegrationProperties properties;
 
   private final AmqpInboundFactory inboundFactory;
-
-  private final ReceiveCurrentModelUseCase receiveCurrentModelUseCase;
+  private final CommonChannels commonChannels;
 
   @Bean
   IntegrationFlow modelPromotedForProductionInbound() {
     return from(createInboundAdapter(properties.getInboundQueueNames()))
-        .handle(message -> {
-          var payload = message.getPayload();
-          try {
-            var solvingModel =
-                ((Any) payload).unpack(SolvingModel.class);
-            log.trace(
-                "Received model promoted for production message = {}",
-                solvingModel);
-            receiveCurrentModelUseCase.handleModelPromotedForProductionMessage(
-                solvingModel);
-          } catch (InvalidProtocolBufferException e) {
-            log.error(
-                "Unable to unpack model promoted for production message");
-          }
-        })
+        .transform(SolvingModel.class, this::buildModelEvent)
+        .channel(commonChannels.solvingModelUpdated())
         .get();
+  }
+
+  @Nonnull
+  private ModelUpdatedEvent buildModelEvent(SolvingModel model) {
+    var event = new ModelUpdatedEvent();
+    event.registerCollector(SolvingModel.class, () -> model);
+    return event;
   }
 
   private AmqpInboundChannelAdapterSMLCSpec createInboundAdapter(String... queueNames) {

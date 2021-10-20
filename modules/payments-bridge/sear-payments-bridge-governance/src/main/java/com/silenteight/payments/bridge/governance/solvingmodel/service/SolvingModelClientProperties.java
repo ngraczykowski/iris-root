@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.governance.core.solvingmodel.adapter;
+package com.silenteight.payments.bridge.governance.solvingmodel.service;
 
 import lombok.Data;
 

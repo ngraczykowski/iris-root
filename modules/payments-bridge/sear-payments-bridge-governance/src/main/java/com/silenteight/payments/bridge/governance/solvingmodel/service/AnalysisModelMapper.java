@@ -1,27 +1,19 @@
-package com.silenteight.payments.bridge.governance.core.solvingmodel.model;
+package com.silenteight.payments.bridge.governance.solvingmodel.service;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import com.silenteight.model.api.v1.SolvingModel;
-
-import java.util.List;
+import com.silenteight.payments.bridge.governance.solvingmodel.model.AnalysisModel;
+import com.silenteight.payments.bridge.governance.solvingmodel.model.AnalysisModel.Feature;
 
 import static java.util.stream.Collectors.toList;
 
-@Data
-@AllArgsConstructor
-@Builder
-@NoArgsConstructor
-public class ModelDto {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+class AnalysisModelMapper {
 
-  private String name;
-  private String policyName;
-  private String strategyName;
-  private List<Feature> features;
-  private List<String> categories;
-
-  public static ModelDto fromSolvingModel(SolvingModel model) {
-    return ModelDto.builder()
+  static AnalysisModel fromSolvingModel(SolvingModel model) {
+    return AnalysisModel.builder()
         .name(model.getName())
         .policyName(model.getPolicyName())
         .strategyName(model.getStrategyName())
@@ -38,13 +30,4 @@ public class ModelDto {
         .categories(model.getCategoriesList())
         .build();
   }
-
-  @Value
-  @Builder
-  public static class Feature {
-
-    String name;
-    String agentConfig;
-  }
 }
-

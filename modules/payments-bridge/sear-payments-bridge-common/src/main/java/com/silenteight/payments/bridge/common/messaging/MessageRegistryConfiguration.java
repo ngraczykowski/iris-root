@@ -21,6 +21,7 @@ public class MessageRegistryConfiguration {
         "com.silenteight.adjudication",
         "com.silenteight.agents",
         "com.silenteight.datasource",
+        "com.silenteight.model",
         "com.silenteight.proto.payments.bridge"
     );
 

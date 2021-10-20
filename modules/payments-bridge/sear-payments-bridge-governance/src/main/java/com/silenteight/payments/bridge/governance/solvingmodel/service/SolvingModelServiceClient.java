@@ -1,11 +1,10 @@
-package com.silenteight.payments.bridge.governance.core.solvingmodel.adapter;
+package com.silenteight.payments.bridge.governance.solvingmodel.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceBlockingStub;
-import com.silenteight.payments.bridge.governance.core.solvingmodel.model.ModelDto;
-import com.silenteight.payments.bridge.governance.core.solvingmodel.port.CurrentModelClientPort;
 
 import com.google.protobuf.Empty;
 import com.google.protobuf.TextFormat;
@@ -15,17 +14,15 @@ import io.grpc.StatusRuntimeException;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-import static com.silenteight.payments.bridge.governance.core.solvingmodel.model.ModelDto.fromSolvingModel;
-
 @RequiredArgsConstructor
 @Slf4j
-class SolvingModelClientClient implements CurrentModelClientPort {
+class SolvingModelServiceClient {
 
   private final SolvingModelServiceBlockingStub stub;
 
   private final Duration timeout;
 
-  public ModelDto getCurrentModel() {
+  SolvingModel getCurrentModel() {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
     var request = Empty.newBuilder().build();
 
@@ -35,8 +32,8 @@ class SolvingModelClientClient implements CurrentModelClientPort {
 
     try {
       var result = stub.withDeadline(deadline).getDefaultSolvingModel(request);
-      log.info("Received current model: {}", TextFormat.shortDebugString(result));
-      return fromSolvingModel(result);
+      log.info("Got default solving model: {}", TextFormat.shortDebugString(result));
+      return result;
     } catch (StatusRuntimeException e) {
       var status = e.getStatus();
       log.error("Unable to get the default model from Governance: code={}, description={}",
@@ -45,7 +42,7 @@ class SolvingModelClientClient implements CurrentModelClientPort {
     }
   }
 
-  private static class GovernanceClientException extends RuntimeException {
+  private static final class GovernanceClientException extends RuntimeException {
 
     private static final long serialVersionUID = 7568497398228085792L;
 

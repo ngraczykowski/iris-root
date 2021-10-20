@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.silenteight.payments.bridge.governance.core.solvingmodel.port;
+package com.silenteight.payments.bridge.governance.solvingmodel.service;
 
 import javax.annotation.ParametersAreNonnullByDefault;

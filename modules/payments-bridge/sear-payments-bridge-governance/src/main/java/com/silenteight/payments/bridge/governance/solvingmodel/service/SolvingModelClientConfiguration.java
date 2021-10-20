@@ -1,10 +1,9 @@
-package com.silenteight.payments.bridge.governance.core.solvingmodel.adapter;
+package com.silenteight.payments.bridge.governance.solvingmodel.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc;
-import com.silenteight.payments.bridge.governance.core.solvingmodel.port.CurrentModelClientPort;
 
 import io.grpc.Channel;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -23,10 +22,10 @@ class SolvingModelClientConfiguration {
   private Channel solvingModelChannel;
 
   @Bean
-  CurrentModelClientPort solvingModelClient() {
+  SolvingModelServiceClient solvingModelClient() {
     var stub = SolvingModelServiceGrpc
         .newBlockingStub(solvingModelChannel)
         .withWaitForReady();
-    return new SolvingModelClientClient(stub, properties.getTimeout());
+    return new SolvingModelServiceClient(stub, properties.getTimeout());
   }
 }

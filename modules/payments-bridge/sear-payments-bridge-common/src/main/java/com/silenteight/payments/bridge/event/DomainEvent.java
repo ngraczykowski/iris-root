@@ -29,5 +29,4 @@ public class DomainEvent {
   public void registerCollector(Class<?> type, Supplier<?> supplier) {
     dataSuppliers.put(type, supplier);
   }
-
 }
