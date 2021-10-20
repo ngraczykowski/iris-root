@@ -7,6 +7,7 @@ import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsv;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CsvFileProvider;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.regions.Region;
@@ -27,7 +28,7 @@ class AwsCsvProvider implements CsvFileProvider {
     log.info("Sending request to S3");
 
     var s3ClientBuilder = S3Client.builder();
-    if (learningRequest.getRegion() != null)
+    if (StringUtils.isBlank(learningRequest.getRegion()))
       s3ClientBuilder.region(Region.of(learningRequest.getRegion()));
 
     var s3Client = s3ClientBuilder.build();

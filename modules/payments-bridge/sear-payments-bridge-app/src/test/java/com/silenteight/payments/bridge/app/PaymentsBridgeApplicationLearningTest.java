@@ -18,7 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Disabled
-@SpringBootTest(classes = PaymentsBridgeApplication.class)
+@SpringBootTest(classes = TestApplicationConfiguration.class)
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
 @Slf4j
 @ActiveProfiles({ "mockae", "mockaws", "mockdatasource", "mockgovernance", "test" })
@@ -29,7 +29,8 @@ class PaymentsBridgeApplicationLearningTest {
 
   @Test
   void shouldProcessLearningCsv() {
-    handleLearningDataUseCase.readAlerts(new LearningRequest("bucket", "object"));
+    var request = LearningRequest.builder().bucket("bucket").object("object").build();
+    handleLearningDataUseCase.readAlerts(request);
     assertThat(MockAlertUseCase.getCreatedAlertsCount()).isEqualTo(163 + 1);
   }
 }

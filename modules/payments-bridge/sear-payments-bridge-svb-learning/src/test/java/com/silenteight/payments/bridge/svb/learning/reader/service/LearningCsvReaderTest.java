@@ -51,7 +51,7 @@ class LearningCsvReaderTest {
         AlertedPartyData.builder().build());
 
     List<LearningAlert> learningAlerts = new ArrayList<>();
-    learningCsvReader.read(new LearningRequest("", ""), learningAlerts::add);
+    learningCsvReader.read(LearningRequest.builder().build(), learningAlerts::add);
 
     assertThat(learningAlerts.size()).isEqualTo(163);
   }
