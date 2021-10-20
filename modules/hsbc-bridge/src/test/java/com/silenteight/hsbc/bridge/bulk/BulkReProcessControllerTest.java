@@ -1,5 +1,8 @@
 package com.silenteight.hsbc.bridge.bulk;
 
+import com.silenteight.hsbc.bridge.bulk.rest.AlertIdWrapper;
+import com.silenteight.hsbc.bridge.bulk.rest.AlertReRecommend;
+
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +13,7 @@ import org.springframework.http.MediaType;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,7 +37,7 @@ class BulkReProcessControllerTest {
     var bulkId = "re-process/some_uuid";
 
     //given
-    given(createSolvingBulkUseCase.createBulkWithAlerts(anyList()))
+    given(createSolvingBulkUseCase.createBulkWithAlerts(any()))
         .willReturn(bulkId);
     var mockMvc = standaloneSetup(underTest).build();
 
@@ -50,7 +53,11 @@ class BulkReProcessControllerTest {
 
   private String createRequestContent(){
     var gson = new Gson();
-    var alerts = List.of("alert/1", "alert/2");
+    var alerts = new AlertReRecommend(List.of(
+        new AlertIdWrapper("alert/1"),
+        new AlertIdWrapper("alert/2"),
+        new AlertIdWrapper("alert/3")
+    ));
     return gson.toJson(alerts);
   }
 }

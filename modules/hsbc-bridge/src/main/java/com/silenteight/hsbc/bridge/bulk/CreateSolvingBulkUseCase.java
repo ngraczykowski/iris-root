@@ -5,26 +5,32 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.alert.AlertFacade;
 import com.silenteight.hsbc.bridge.bulk.event.BulkStoredEvent;
+import com.silenteight.hsbc.bridge.bulk.rest.AlertIdWrapper;
+import com.silenteight.hsbc.bridge.bulk.rest.AlertReRecommend;
 
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
 class CreateSolvingBulkUseCase {
 
-  private static final String PREFIX = "re-recommend/";
+  private static final String PREFIX = "reRecommend-";
   private final BulkRepository repository;
   private final AlertFacade alertFacade;
   private final ApplicationEventPublisher eventPublisher;
 
-  public String createBulkWithAlerts(List<String> alerts) {
+  public String createBulkWithAlerts(AlertReRecommend alertReRecommend) {
     var bulkId = generateBulkId();
     repository.save(new Bulk(bulkId, false));
-    createAlerts(bulkId, alerts);
 
+    var alertNames = alertReRecommend.getAlerts().stream()
+            .map(AlertIdWrapper::getAlertId)
+            .collect(Collectors.toList());
+    createAlerts(bulkId, alertNames);
     return bulkId;
   }
 

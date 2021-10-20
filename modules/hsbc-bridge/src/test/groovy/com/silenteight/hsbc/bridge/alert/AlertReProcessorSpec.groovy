@@ -8,7 +8,7 @@ import javax.persistence.EntityManager
 class AlertReProcessorSpec extends Specification {
 
   private static List<String> ALERTS = List.of('alert/1')
-  private static String BULK_ID = "re-recommend/some_uuid"
+  private static String BULK_ID = "reRecommend-some-uuid"
   def alertRepository = Mock(AlertRepository)
   def entityManager = Mock(EntityManager)
   def underTest = new AlertReProcessor(alertRepository, entityManager)
