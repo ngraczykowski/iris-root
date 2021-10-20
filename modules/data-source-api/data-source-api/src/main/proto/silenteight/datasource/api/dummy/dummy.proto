@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package silenteight.datasource.api.dummy.v1;
+
+import "google/api/annotations.proto";
+
+option java_package = "com.silenteight.datasource.api.dummy.v1";
+option java_outer_classname = "DummyProto";
+option java_multiple_files = true;
+
+/**
+  This is a dummy proto for agent template between agent's facade and data-source.
+  It MUST NOT be ever implemented by production code
+ */
+service DummyInputService {
+  rpc BatchGetMatchDummyInputs (BatchGetMatchDummyInputsRequest) returns (stream BatchGetMatchDummyInputsResponse) {
+    option (google.api.http) = {
+      post: "/agent-inputs/dummy/versions/v1/matches:batchGet"
+      body: "*"
+    };
+  }
+}
+
+message BatchGetMatchDummyInputsRequest {
+  // The list of matches data is requested for, in form of `alerts/<Alert ID>/matches/<Match ID>`.
+  repeated string matches = 1;
+  // The list of features the input data for each match is requested, in form of `features/<Feature ID>`.
+  repeated string features = 2;
+}
+
+message BatchGetMatchDummyInputsResponse {
+  repeated DummyInput dummy_inputs = 1;
+}
+
+message DummyInput {
+  string match = 1;
+  repeated DummyFeatureInput dummy_feature_inputs = 2;
+}
+
+message DummyFeatureInput {
+  string feature = 1;
+  string alerted_party_input = 2;
+  string watchlist_input = 3;
+}
