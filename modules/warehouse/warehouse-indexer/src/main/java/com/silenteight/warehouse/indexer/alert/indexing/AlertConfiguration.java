@@ -23,6 +23,7 @@ public class AlertConfiguration {
 
     return new AlertIndexService(
         restHighLevelAdminClient,
-        elasticsearchProperties.getUpdateRequestBatchSize());
+        elasticsearchProperties.getUpdateRequestBatchSize(),
+        elasticsearchProperties.getRetryOnConflictCount());
   }
 }

@@ -25,6 +25,8 @@ public class AlertIndexService {
 
   private final int updateRequestBatchSize;
 
+  private final int retryOnConflictCount;
+
   public void saveAlerts(List<MapWithIndex> alerts) {
     partition(alerts, updateRequestBatchSize).stream()
         .map(this::asBulkRequest)
@@ -45,6 +47,7 @@ public class AlertIndexService {
     UpdateRequest updateRequest = new UpdateRequest(alert.getIndexName(), alert.getDocumentId());
     updateRequest.doc(alert.getPayload());
     updateRequest.docAsUpsert(true);
+    updateRequest.retryOnConflict(retryOnConflictCount);
 
     return updateRequest;
   }
