@@ -47,6 +47,7 @@ warehouse:
   es:
     production-query-index: ${warehouse.environment.prefix}_production
     update-request-batch-size: 1000
+    retry-on-conflict-count: 2
     scroll:
       search:
         batch-size: 1

@@ -21,4 +21,6 @@ public class ElasticsearchProperties {
   List<String> countryRolesIndexes = List.of();
 
   int updateRequestBatchSize;
+
+  int retryOnConflictCount;
 }

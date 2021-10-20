@@ -91,6 +91,7 @@ warehouse:
       - ${warehouse.environment.prefix}_production*
       - ${warehouse.environment.prefix}_simulation*
     update-request-batch-size: 1000
+    retry-on-conflict-count: 2
     scroll:
       search:
         batch-size: 10000
