@@ -31,7 +31,9 @@ class AwsCsvProvider implements CsvFileProvider {
     if (!StringUtils.isBlank(learningRequest.getRegion()))
       s3ClientBuilder.region(Region.of(learningRequest.getRegion()));
 
-    var s3Client = s3ClientBuilder.build();
+    var s3Client = s3ClientBuilder
+        .serviceConfiguration(sc -> sc.useArnRegionEnabled(true))
+        .build();
 
     AlertsReadingResponse response;
     try (
@@ -52,9 +54,9 @@ class AwsCsvProvider implements CsvFileProvider {
       log.error(
           "There was a problem when receiving s3 object: ", e);
       throw new AwsS3Exception(e);
+    } finally {
+      s3Client.close();
     }
-
-    s3Client.close();
 
     return response;
   }
