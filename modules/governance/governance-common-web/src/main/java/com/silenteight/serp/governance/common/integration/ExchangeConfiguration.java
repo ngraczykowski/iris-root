@@ -25,6 +25,7 @@ class ExchangeConfiguration {
   Declarables governanceRabbitSchemaDeclarables() {
     return new Declarables(
         topicExchange(properties.getAnalytics()),
+        topicExchange(properties.getModel()),
         topicExchange(properties.getNotification()),
         topicExchange(properties.getSolutionDiscrepancy()));
   }
