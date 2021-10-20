@@ -25,7 +25,7 @@ public class CsvReader {
       .withTrim()
       .withCommentMarker(COMMENT_MARKER);
 
-  public <T> List<T> readCsv(String path, Function<CSVRecord, T> rowParser) {
+  public static <T> List<T> readCsv(String path, Function<CSVRecord, T> rowParser) {
     var file = findFile(path);
 
     try (CSVParser csvParser = parse(file, UTF_8, CSV_FORMAT)) {
