@@ -4,8 +4,11 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.warehouse.report.billing.domain.dto.ReportDto;
+import com.silenteight.warehouse.report.billing.domain.exception.ReportNotFoundException;
 import com.silenteight.warehouse.report.billing.download.ReportDataQuery;
 import com.silenteight.warehouse.report.billing.status.ReportStatusQuery;
+
+import static java.util.Optional.ofNullable;
 
 @RequiredArgsConstructor
 class BillingReportQuery implements ReportStatusQuery, ReportDataQuery {
@@ -15,11 +18,15 @@ class BillingReportQuery implements ReportStatusQuery, ReportDataQuery {
 
   @Override
   public ReportState getReportGeneratingState(long id) {
-    return repository.getById(id).getState();
+    return ofNullable(repository.getById(id))
+        .map(BillingReport::getState)
+        .orElseThrow(() -> new ReportNotFoundException(id));
   }
 
   @Override
   public ReportDto getReport(long id) {
-    return repository.getById(id).toDto();
+    return ofNullable(repository.getById(id))
+        .map(BillingReport::toDto)
+        .orElseThrow(() -> new ReportNotFoundException(id));
   }
 }

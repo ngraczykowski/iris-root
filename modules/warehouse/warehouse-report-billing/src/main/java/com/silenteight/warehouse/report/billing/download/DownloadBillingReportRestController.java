@@ -4,7 +4,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.warehouse.report.billing.domain.BillingReportService;
 import com.silenteight.warehouse.report.billing.domain.dto.ReportDto;
 
 import org.springframework.http.ResponseEntity;
@@ -24,24 +23,20 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping(ROOT)
 class DownloadBillingReportRestController {
 
-  @NonNull
-  private final ReportDataQuery reportDataQuery;
-  @NonNull
-  private final BillingReportService reportService;
+  public static final String DOWNLOAD_PRODUCTION_REPORT_URL =
+      "/v2/analysis/production/reports/BILLING/{id}";
 
-  @GetMapping("/v1/analysis/production/definitions/BILLING/{definitionId}/reports/{id}")
+  @NonNull
+  private final DownloadBillingReportUseCase useCase;
+
+  @GetMapping(DOWNLOAD_PRODUCTION_REPORT_URL)
   @PreAuthorize("isAuthorized('DOWNLOAD_PRODUCTION_ON_DEMAND_REPORT')")
-  public ResponseEntity<String> downloadReport(
-      @PathVariable("definitionId") String definitionId,
-      @PathVariable("id") Long id) {
-
-    ReportDto reportDto = reportDataQuery.getReport(id);
+  public ResponseEntity<String> downloadReport(@PathVariable("id") Long id) {
+    log.info("Download Billing report request received, reportId={}", id);
+    ReportDto reportDto = useCase.activate(id);
     String filename = reportDto.getFilename();
     String data = reportDto.getContent();
-
-    reportService.removeReport(id);
-    log.debug("Billing report removed, reportId={},id");
-
+    log.debug("Download Billingreport request processed, reportId={}, reportName={}", id, filename);
     return ok()
         .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))
         .header("Content-Type", "text/csv")

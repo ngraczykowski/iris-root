@@ -1,6 +1,5 @@
 package com.silenteight.warehouse.report.billing.generation;
 
-import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
@@ -15,9 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_PREFIX;
-import static com.silenteight.warehouse.report.billing.generation.BillingScorerFixtures.ACTION_PREFIX;
-import static java.time.OffsetDateTime.now;
+import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.*;
@@ -28,30 +25,28 @@ class ReportGenerationServiceTest {
 
   @Mock
   private GroupingQueryService groupingQueryService;
-  @Mock
-  private IndexesQuery indexerQuery;
 
   private BillingReportGenerationService underTest;
 
   @BeforeEach
   void setUp() {
     TransposeColumnProperties transposeColumnProperties = new TransposeColumnProperties(
-        "alert_s8_recommendation",
+        RECOMMENDATION_FIELD_NAME,
         asList(
-            getColumn("ACTION_FALSE_POSITIVE", "count_solved_FP"),
-            getColumn("ACTION_POTENTIAL_TRUE_POSITIVE", "count_solved_PTP"),
-            getColumn("ACTION_INVESTIGATE", "count_solved_MI")),
-        "count_alerts_received",
-        asList("ACTION_FALSE_POSITIVE", "ACTION_POTENTIAL_TRUE_POSITIVE"),
-        "count_alerts_solved");
+            getColumn(ACTION_FALSE_POSITIVE, COUNT_SOLVED_FP),
+            getColumn(ACTION_POTENTIAL_TRUE_POSITIVE, COUNT_SOLVED_PTP),
+            getColumn(ACTION_INVESTIGATE, COUNT_SOLVED_MI)),
+        COUNT_ALERTS_RECEIVED_FIELD,
+        asList(ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE),
+        COUNT_ALERTS_SOLVED_FIELD);
 
-    BillingReportProperties billingReportProperties = new BillingReportProperties("date",
-        "index_timestamp", "alert_recommendationYear", "alert_recommendationMonth",
+    BillingReportProperties billingReportProperties = new BillingReportProperties(DATE_LABEL,
+        DATE_FIELD_NAME, ALERT_RECOMMENDATION_YEAR, ALERT_RECOMMENDATION_MONTH,
         transposeColumnProperties, emptyList()
     );
 
     underTest = new BillingReportGenerationConfiguration().billingReportGenerationService(
-        groupingQueryService, indexerQuery, billingReportProperties);
+        groupingQueryService, billingReportProperties);
   }
 
   @Test
@@ -60,22 +55,23 @@ class ReportGenerationServiceTest {
         FetchGroupedDataResponse.builder().rows(emptyList()).build());
 
     CsvReportContentDto reportContent = underTest.generateReport(
-        now(), now(), "analysis/production");
+        REPORT_RANGE.getFrom(), REPORT_RANGE.getTo(), INDEXES);
+
     assertThat(reportContent.getLines()).isEmpty();
   }
 
   @Test
   void generateTwoRowsReport() {
     List<Row> responseData = asList(
-        buildRow("2020", "1", ACTION_PREFIX + "FALSE_POSITIVE", 30000),
-        buildRow("2020", "1", ACTION_PREFIX + "POTENTIAL_TRUE_POSITIVE", 100),
-        buildRow("2020", "1", ACTION_PREFIX + "INVESTIGATE", 3000),
-        buildRow("2020", "2", ACTION_PREFIX + "FALSE_POSITIVE", 20000),
-        buildRow("2020", "2", ACTION_PREFIX + "POTENTIAL_TRUE_POSITIVE", 150),
-        buildRow("2020", "2", ACTION_PREFIX + "INVESTIGATE", 4000),
-        buildRow("2020", "10", ACTION_PREFIX + "FALSE_POSITIVE", 15000),
-        buildRow("2020", "10", ACTION_PREFIX + "POTENTIAL_TRUE_POSITIVE", 90),
-        buildRow("2020", "10", ACTION_PREFIX + "INVESTIGATE", 4000)
+        buildRow("2020", "1", ACTION_FALSE_POSITIVE, 30000),
+        buildRow("2020", "1", ACTION_POTENTIAL_TRUE_POSITIVE, 100),
+        buildRow("2020", "1", ACTION_INVESTIGATE, 3000),
+        buildRow("2020", "2", ACTION_FALSE_POSITIVE, 20000),
+        buildRow("2020", "2", ACTION_POTENTIAL_TRUE_POSITIVE, 150),
+        buildRow("2020", "2", ACTION_INVESTIGATE, 4000),
+        buildRow("2020", "10", ACTION_FALSE_POSITIVE, 15000),
+        buildRow("2020", "10", ACTION_POTENTIAL_TRUE_POSITIVE, 90),
+        buildRow("2020", "10", ACTION_INVESTIGATE, 4000)
     );
 
     FetchGroupedDataResponse response = FetchGroupedDataResponse
@@ -83,7 +79,7 @@ class ReportGenerationServiceTest {
     when(groupingQueryService.generate(any())).thenReturn(response);
 
     CsvReportContentDto reportContent = underTest.generateReport(
-        now(), now(), "analysis/production");
+        REPORT_RANGE.getFrom(), REPORT_RANGE.getTo(), INDEXES);
 
     assertThat(reportContent.getReport()).isEqualTo(
         "date,count_solved_FP,count_solved_PTP,"
@@ -102,9 +98,9 @@ class ReportGenerationServiceTest {
       String action,
       long count) {
     Map<String, String> map = Map.of(
-        ALERT_PREFIX + BillingScorerFixtures.BILLING_YEAR_FIELD, year,
-        ALERT_PREFIX + BillingScorerFixtures.BILLING_MONTH_FIELD, month,
-        ALERT_PREFIX + BillingScorerFixtures.RECOMMENDED_ACTION_PREFIX_FIELD, action);
+        ALERT_RECOMMENDATION_YEAR, year,
+        ALERT_RECOMMENDATION_MONTH, month,
+        RECOMMENDATION_FIELD_NAME, action);
     return Row.builder().data(map).count(count).build();
   }
 

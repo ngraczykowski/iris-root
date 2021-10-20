@@ -1,11 +1,11 @@
-package com.silenteight.warehouse.report.billing.domain;
+package com.silenteight.warehouse.report.billing.v1.domain;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.time.DigitsOnlyDateFormatter;
-import com.silenteight.warehouse.report.billing.domain.exception.ReportTypeNotFoundException;
+import com.silenteight.warehouse.report.billing.v1.domain.exception.ReportTypeNotFoundException;
 import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto.ReportDefinitionDto;
 
 import java.time.OffsetDateTime;
@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Getter
-public enum ReportDefinition {
+public enum DeprecatedReportDefinition {
 
   THIS_YEAR(
       "3aa046a1-6c0f-4ac2-bd79-635147db1e01",
@@ -73,12 +73,12 @@ public enum ReportDefinition {
   private final OffsetDateTime to;
 
   public static List<ReportDefinitionDto> toReportsDefinitionDto() {
-    return stream(ReportDefinition.values())
-        .map(ReportDefinition::toReportDefinitionDto)
+    return stream(DeprecatedReportDefinition.values())
+        .map(DeprecatedReportDefinition::toReportDefinitionDto)
         .collect(toList());
   }
 
-  public static ReportDefinition getReportType(String id) {
+  public static DeprecatedReportDefinition getReportType(String id) {
     return stream(values())
         .filter(reportDefinition -> reportDefinition.hasId(id))
         .findAny()

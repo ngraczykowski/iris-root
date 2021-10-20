@@ -10,17 +10,20 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.REPORT_FILENAME;
+import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.REPORT_ID;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import(DownloadBillingReportRestController.class)
+@Import({
+    DownloadBillingReportRestController.class,
+    DownloadBillingReportConfiguration.class
+})
 class DownloadReportRestControllerTest extends BaseRestControllerTest {
 
-  private static final long REPORT_ID = 5;
-  public static final String FILE_NAME = "BILLING_FILENAME";
-  public static final String CONTENT = "report_content";
+  private static final String CONTENT = "report_content";
 
   @MockBean
   ReportDataQuery query;
@@ -30,12 +33,10 @@ class DownloadReportRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenDownloadingReport() {
-    when(query.getReport(REPORT_ID)).thenReturn(ReportDto.of(FILE_NAME, CONTENT));
+    when(query.getReport(REPORT_ID)).thenReturn(ReportDto.of(REPORT_FILENAME, CONTENT));
 
-    String expectedContentDisposition = format("attachment; filename=\"%s\"", FILE_NAME);
-    String response = get(
-        "/v1/analysis/production/definitions/BILLING/3aa046a1-6c0f-4ac2-bd79-635147db1e01/"
-            + "reports/" + REPORT_ID)
+    String expectedContentDisposition = format("attachment; filename=\"%s\"", REPORT_FILENAME);
+    String response = get("/v2/analysis/production/reports/BILLING/" + REPORT_ID)
         .statusCode(OK.value())
         .contentType("text/csv")
         .header("Content-Disposition", expectedContentDisposition)

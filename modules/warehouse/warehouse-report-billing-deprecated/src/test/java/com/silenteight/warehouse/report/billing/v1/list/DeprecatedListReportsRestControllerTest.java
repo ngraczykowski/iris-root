@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.billing.list;
+package com.silenteight.warehouse.report.billing.v1.list;
 
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 
@@ -8,14 +8,14 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.MODEL_TUNER;
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
-import static com.silenteight.warehouse.report.billing.domain.ReportDefinition.PREVIOUS_YEAR;
-import static com.silenteight.warehouse.report.billing.domain.ReportDefinition.THIS_YEAR;
+import static com.silenteight.warehouse.report.billing.v1.domain.DeprecatedReportDefinition.PREVIOUS_YEAR;
+import static com.silenteight.warehouse.report.billing.v1.domain.DeprecatedReportDefinition.THIS_YEAR;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import(ListBillingReportsRestController.class)
-class ListReportsRestControllerTest extends BaseRestControllerTest {
+@Import(DeprecatedListBillingReportsRestController.class)
+class DeprecatedListReportsRestControllerTest extends BaseRestControllerTest {
 
   private static final String LIST_REPORTS_URL = "/v1/analysis/production/definitions/BILLING";
 

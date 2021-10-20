@@ -39,6 +39,7 @@ public class BillingReportProperties {
   @Valid
   @NotNull
   private final TransposeColumnProperties transposeColumn;
+  @Valid
   @Nullable
   private final List<FilterProperties> filters;
 

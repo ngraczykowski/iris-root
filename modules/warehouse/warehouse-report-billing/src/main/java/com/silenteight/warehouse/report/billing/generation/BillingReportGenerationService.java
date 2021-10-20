@@ -3,8 +3,6 @@ package com.silenteight.warehouse.report.billing.generation;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.commons.CSVUtils;
-import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDataRequest;
@@ -14,11 +12,14 @@ import com.silenteight.warehouse.report.billing.generation.dto.CsvReportContentD
 import org.jetbrains.annotations.NotNull;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+import javax.validation.Valid;
 
+import static com.silenteight.commons.CSVUtils.getCSVRecordWithDefaultDelimiter;
+import static com.silenteight.warehouse.report.billing.generation.ChecksumGenerator.generateChecksum;
 import static java.lang.String.valueOf;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
@@ -32,28 +33,30 @@ public class BillingReportGenerationService {
 
   private static final String DELIMITER = "-";
   private static final String EMPTY_STRING = "";
+  private static final String CHECKSUM = "checksum";
 
   @NonNull
   private final GroupingQueryService groupingQueryService;
-  @NonNull
-  private final IndexesQuery indexerQuery;
+  @Valid
   @NonNull
   private final BillingReportProperties properties;
 
   public CsvReportContentDto generateReport(
-      OffsetDateTime from, OffsetDateTime to, String analysisName) {
+      @NonNull OffsetDateTime from,
+      @NonNull OffsetDateTime to,
+      @NonNull List<String> indexes) {
 
-    FetchGroupedDataResponse rawData = fetchRawData(from, to, analysisName);
+    FetchGroupedDataResponse rawData = fetchRawData(from, to, indexes);
     List<String> reportData = transpose(rawData);
     String checksum = getChecksumLine(reportData);
-
     return new CsvReportContentDto(getLabelsRow(), reportData, checksum);
   }
 
   private FetchGroupedDataResponse fetchRawData(
-      OffsetDateTime from, OffsetDateTime to, String analysisName) {
+      OffsetDateTime from,
+      OffsetDateTime to,
+      List<String> indexes) {
 
-    List<String> indexes = indexerQuery.getIndexesForAnalysis(analysisName);
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest
         .builder()
         .from(from)
@@ -63,12 +66,12 @@ public class BillingReportGenerationService {
         .queryFilters(properties.getQueryFilters())
         .indexes(indexes)
         .build();
+
     return groupingQueryService.generate(request);
   }
 
   private String getLabelsRow() {
-    return CSVUtils.getCSVRecordWithDefaultDelimiter(
-        properties.getLabels().toArray(String[]::new));
+    return getCSVRecordWithDefaultDelimiter(properties.getLabels().toArray(String[]::new));
   }
 
   private List<String> transpose(FetchGroupedDataResponse rawData) {
@@ -100,7 +103,7 @@ public class BillingReportGenerationService {
         .getDateColumnsLabel()
         .stream()
         .map(fieldName -> rowWithGroupedData.getValueOrDefault(fieldName, EMPTY_STRING))
-        .map(this::convertToTwoDigitValue)
+        .map(BillingReportGenerationService::convertToTwoDigitValue)
         .collect(joining(DELIMITER));
 
     Stream<String> staticFieldsStream = Stream.<String>builder()
@@ -109,15 +112,14 @@ public class BillingReportGenerationService {
 
     Stream<String> rowCells = concat(staticFieldsStream, transposedCells);
 
-    return CSVUtils.getCSVRecordWithDefaultDelimiter(rowCells.toArray(String[]::new));
+    return getCSVRecordWithDefaultDelimiter(rowCells.toArray(String[]::new));
   }
 
-  private String convertToTwoDigitValue(String field) {
+  private static String convertToTwoDigitValue(String field) {
     return leftPad(field, 2, "0");
   }
 
   private Stream<String> getValues(TransposeColumnProperties column, List<Row> rows) {
-    List<String> result = new ArrayList<>();
     Map<String, Long> values = rows
         .stream()
         .collect(toMap(
@@ -125,17 +127,18 @@ public class BillingReportGenerationService {
             Row::getCount,
             Long::sum));
 
-    column.getGroupingValues()
+    List<String> result = column.getGroupingValues()
         .stream()
         .map(ColumnProperties::getName)
         .map(groupingValue -> values.getOrDefault(groupingValue.toLowerCase(), 0L))
         .map(String::valueOf)
-        .forEach(result::add);
+        .collect(toList());
 
     result.add(getAllSignificantValuesSum(
         values,
         getSignificantValues()));
-    result.add(getAllValuesSum(values));
+
+    result.add(getAllValuesSum(values.values()));
     return result.stream();
   }
 
@@ -160,12 +163,12 @@ public class BillingReportGenerationService {
         .sum());
   }
 
-  private static String getAllValuesSum(Map<String, Long> values) {
-    return valueOf(values.values().stream().mapToLong(l -> l).sum());
+  private static String getAllValuesSum(Collection<Long> values) {
+    return valueOf(values.stream().mapToLong(Long::longValue).sum());
   }
 
   private static String getChecksumLine(List<String> reportData) {
-    return CSVUtils.getCSVRecordWithDefaultDelimiter(
-        "checksum", ChecksumGenerator.generateChecksum(reportData));
+    return getCSVRecordWithDefaultDelimiter(
+        CHECKSUM, generateChecksum(reportData));
   }
 }

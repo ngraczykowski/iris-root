@@ -2,20 +2,22 @@ package com.silenteight.warehouse.report.billing.create;
 
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.common.web.exception.GenericExceptionControllerAdvice;
-import com.silenteight.warehouse.report.billing.domain.BillingReportService;
-import com.silenteight.warehouse.report.billing.domain.ReportDefinition;
-import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import static com.silenteight.warehouse.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
+import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.FROM_QUERY_PARAM;
+import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.REPORT_ID;
+import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.REPORT_INSTANCE_REFERENCE_DTO;
+import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.TO_QUERY_PARAM;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpStatus.NOT_ACCEPTABLE;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.SEE_OTHER;
+import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 
 @Import({
     CreateBillingReportRestController.class,
@@ -25,26 +27,31 @@ import static org.springframework.http.HttpStatus.SEE_OTHER;
 })
 class CreateReportRestControllerTest extends BaseRestControllerTest {
 
-  private static final long REPORT_ID = 7;
+  private static final String CREATE_PRODUCTION_REPORT_URL =
+      fromUriString("/v2/analysis/production/reports/BILLING")
+          .queryParam("from", FROM_QUERY_PARAM)
+          .queryParam("to", TO_QUERY_PARAM)
+          .build()
+          .toString();
+
   @MockBean
-  BillingReportService reportService;
+  CreateBillingReportUseCase useCase;
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its303_whenRequestingReportGeneration() {
-    when(reportService.createReportInstance(ReportDefinition.THIS_YEAR))
-        .thenReturn(new ReportInstanceReferenceDto(REPORT_ID));
+    when(useCase.createProductionReport(any(), any())).thenReturn(REPORT_INSTANCE_REFERENCE_DTO);
 
-    post("/v1/analysis/production/definitions/BILLING/"
-             + "3aa046a1-6c0f-4ac2-bd79-635147db1e01/reports")
+    post(CREATE_PRODUCTION_REPORT_URL)
         .statusCode(SEE_OTHER.value())
-        .header("location", is("reports/" + REPORT_ID + "/status"));
+        .header("location", is("BILLING/" + REPORT_ID + "/status"));
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
-  void its406_whenReportTypeUnknown() {
-    post("/v1/analysis/production/definitions/BILLING/UNKNOWN_TYPE/reports")
-        .statusCode(NOT_ACCEPTABLE.value());
+  @WithMockUser(
+      username = USERNAME,
+      authorities = { USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
+  void its403_whenNotPermittedRoleForCreatingProductionReports() {
+    post(CREATE_PRODUCTION_REPORT_URL).statusCode(FORBIDDEN.value());
   }
 }

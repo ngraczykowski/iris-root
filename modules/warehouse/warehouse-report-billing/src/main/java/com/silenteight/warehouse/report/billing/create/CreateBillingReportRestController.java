@@ -6,14 +6,19 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
+import static java.lang.String.format;
+import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE;
 import static org.springframework.http.HttpStatus.SEE_OTHER;
 import static org.springframework.http.ResponseEntity.status;
 
@@ -23,22 +28,34 @@ import static org.springframework.http.ResponseEntity.status;
 @RequiredArgsConstructor
 class CreateBillingReportRestController {
 
+  private static final String CREATE_PRODUCTION_REPORT_URL =
+      "/v2/analysis/production/reports/BILLING";
+
   @NonNull
   private final CreateBillingReportUseCase generateReportUseCase;
 
-  @PostMapping("/v1/analysis/production/definitions/BILLING/{reportId}/reports")
+  @PostMapping(CREATE_PRODUCTION_REPORT_URL)
   @PreAuthorize("isAuthorized('CREATE_PRODUCTION_ON_DEMAND_REPORT')")
   public ResponseEntity<Void> createReport(
-      @PathVariable("reportId") String reportId) {
+      @DateTimeFormat(iso = DATE)
+      @RequestParam LocalDate from,
+      @DateTimeFormat(iso = DATE)
+      @RequestParam LocalDate to) {
 
-    log.info("Create billing report request received, reportId={}", reportId);
+    log.info("Create Billing report request received, from={} - to={}", from, to);
 
     ReportInstanceReferenceDto reportInstance =
-        generateReportUseCase.createProductionReport(reportId);
+        generateReportUseCase.createProductionReport(from, to);
 
-    log.debug("Create billing report request processed, reportId={}", reportId);
+    log.debug("Create billing report request processed, from={} - to={}, reportId={}",
+        from, to, reportInstance.getInstanceReferenceId());
+
     return status(SEE_OTHER)
-        .header("Location", "reports/" + reportInstance.getInstanceReferenceId() + "/status")
+        .header("Location", getReportLocation(reportInstance.getInstanceReferenceId()))
         .build();
+  }
+
+  private static String getReportLocation(long id) {
+    return format("BILLING/%d/status", id);
   }
 }

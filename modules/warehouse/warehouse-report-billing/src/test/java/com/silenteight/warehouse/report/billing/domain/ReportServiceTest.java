@@ -9,12 +9,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.INDEXES;
+import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.REPORT_FILENAME;
+import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.REPORT_RANGE;
 import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReportServiceTest {
-
-  private static final ReportDefinition TYPE = ReportDefinition.THIS_YEAR;
 
   private final InMemoryBillingRepository rbsReportRepository = new InMemoryBillingRepository();
 
@@ -32,10 +33,13 @@ class ReportServiceTest {
 
   @Test
   void generateReportAndReportAvailable() {
-    ReportInstanceReferenceDto reportInstance = service.createReportInstance(TYPE);
+    // when
+    ReportInstanceReferenceDto reportInstance =
+        service.createReportInstance(REPORT_RANGE, REPORT_FILENAME, INDEXES);
 
+    // then
     ReportDto report = query.getReport(reportInstance.getInstanceReferenceId());
-    assertThat(report.getFilename()).isEqualTo(TYPE.getFilename());
+    assertThat(report.getFilename()).isEqualTo(REPORT_FILENAME);
     assertThat(rbsReportRepository.findById(reportInstance.getInstanceReferenceId()))
         .isPresent()
         .get()
@@ -45,14 +49,17 @@ class ReportServiceTest {
 
   @Test
   void removeReport() {
-    ReportInstanceReferenceDto reportInstance = service.createReportInstance(TYPE);
+    // given
+    ReportInstanceReferenceDto reportInstance =
+        service.createReportInstance(REPORT_RANGE, REPORT_FILENAME, INDEXES);
 
     ReportDto report = query.getReport(reportInstance.getInstanceReferenceId());
-    assertThat(report.getFilename()).isEqualTo(TYPE.getFilename());
+    assertThat(report.getFilename()).isEqualTo(REPORT_FILENAME);
 
+    // when
     service.removeReport(reportInstance.getInstanceReferenceId());
 
+    // then
     assertThat(rbsReportRepository.findById(reportInstance.getInstanceReferenceId())).isEmpty();
   }
 }
-

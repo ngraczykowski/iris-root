@@ -4,22 +4,28 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
+import com.silenteight.warehouse.report.reporting.ReportRange;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 public class BillingReportService {
 
-  static final String PRODUCTION_ANALYSIS_NAME = "production";
   @NonNull
   private final BillingReportRepository repository;
   @NonNull
   private final BillingReportAsyncGenerationService asyncReportGenerationService;
 
-  public ReportInstanceReferenceDto createReportInstance(ReportDefinition reportType) {
-    BillingReport report = BillingReport.of(reportType);
+  public ReportInstanceReferenceDto createReportInstance(
+      @NonNull ReportRange range,
+      @NonNull String fileName,
+      @NonNull List<String> indexes) {
+
+    BillingReport report = BillingReport.of(fileName);
     BillingReport savedReport = repository.save(report);
     //FIXME(kdzieciol): Here we should send a request to the queue (internally) to generate this
     // report. Due to the lack of time, we will generate it in the thread (WEB-1358)
-    asyncReportGenerationService.generateReport(savedReport.getId());
+    asyncReportGenerationService.generateReport(savedReport.getId(), range, indexes);
     return new ReportInstanceReferenceDto(savedReport.getId());
   }
 
