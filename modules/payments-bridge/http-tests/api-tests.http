@@ -79,4 +79,4 @@ Accept: application/json
 Content-Type: application/x-www-form-urlencoded
 Authorization: Bearer {{access_token}}
 
-region=us-west-1&bucket=workload-sierra-uat-371608975349-decrypted-files&object=sierra-user/learning_feed/svb_learn_may_export_sorted.csv
+bucket=workload-sierra-uat-371608975349-decrypted-files&object=sierra-user/learning_feed/svb_learn_may_export_sorted.csv

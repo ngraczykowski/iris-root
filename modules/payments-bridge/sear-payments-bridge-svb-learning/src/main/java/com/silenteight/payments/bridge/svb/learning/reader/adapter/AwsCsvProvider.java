@@ -28,7 +28,7 @@ class AwsCsvProvider implements CsvFileProvider {
     log.info("Sending request to S3");
 
     var s3ClientBuilder = S3Client.builder();
-    if (StringUtils.isBlank(learningRequest.getRegion()))
+    if (!StringUtils.isBlank(learningRequest.getRegion()))
       s3ClientBuilder.region(Region.of(learningRequest.getRegion()));
 
     var s3Client = s3ClientBuilder.build();
