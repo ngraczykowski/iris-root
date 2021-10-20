@@ -23,6 +23,14 @@ class BrokerProperties {
 
   @Valid
   @NestedConfigurationProperty
+  private RoutingKeyProperties modelExport;
+
+  @Valid
+  @NestedConfigurationProperty
+  private RoutingKeyProperties modelInUse;
+
+  @Valid
+  @NestedConfigurationProperty
   private AmpqProperties qaRetentionPersonalInformationExpired;
 
   @Valid
@@ -55,6 +63,14 @@ class BrokerProperties {
 
   String ingestRoutingKey() {
     return ingest.getRoutingKey();
+  }
+
+  String modelExportRoutingKey() {
+    return modelExport.getRoutingKey();
+  }
+
+  String modelInUseRoutingKey() {
+    return modelInUse.getRoutingKey();
   }
 
   String qaRetentionPersonalInformationExpiredQueueName() {

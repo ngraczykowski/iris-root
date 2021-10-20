@@ -10,11 +10,11 @@ serp:
       export:
         integration:
           request:
-            exchange: gov.event
+            exchange: gov.model
             routingKey: event.model-promoted.production
 
       send-in-use:
         integration:
           request:
-            exchange: gov.event
+            exchange: gov.model
             routingKey: event.model-in-use.production

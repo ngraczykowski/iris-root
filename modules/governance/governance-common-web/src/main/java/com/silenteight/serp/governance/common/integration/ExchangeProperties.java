@@ -16,6 +16,9 @@ class ExchangeProperties {
   String analytics;
 
   @NotBlank
+  String model;
+
+  @NotBlank
   String notification;
 
   @NotBlank

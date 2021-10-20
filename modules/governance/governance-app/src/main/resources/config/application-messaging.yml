@@ -64,6 +64,7 @@ serp:
     messaging:
       exchange:
         analytics: feature-vector
+        model: gov.model
         notification: notification
         solution-discrepancy: learning
       broker:
@@ -73,6 +74,10 @@ serp:
         ingest:
           queue-name: gov.feature-vector.ingest
           routing-key: command.index-request.production
+        model-export:
+          routing-key: event.model-promoted.production
+        model-in-use:
+          routing-key: event.model-in-use.production
         qa-retention-personal-information-expired:
           queue-name: gov.retention.personal-information-expired
           routing-key: retention.personal-information-expired
@@ -106,13 +111,13 @@ serp:
       export:
         integration:
           request:
-            exchange: gov.event
-            routingKey: event.model-promoted.production
+            exchange: ${serp.governance.messaging.exchange.model}
+            routingKey: ${serp.governance.messaging.broker.model-export.routing-key}
       send-in-use:
         integration:
           request:
-            exchange: gov.event
-            routingKey: event.model-in-use.production
+            exchange: ${serp.governance.messaging.exchange.model}
+            routingKey: ${serp.governance.messaging.broker.model-export.routing-key}
 
     qa:
       integration:
