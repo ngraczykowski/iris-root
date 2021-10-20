@@ -1,7 +1,7 @@
 ### Get OAuth2 authorization token using client credentials flow
 // @no-log
 // @no-cookie-jar
-POST {{authurl}}/realms/sierra/protocol/openid-connect/token
+POST {{authurl}}/protocol/openid-connect/token
 Accept: application/json
 Content-Type: application/x-www-form-urlencoded; charset=utf-8
 
@@ -71,3 +71,12 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 < ../docs/api/svb-examples/2021-10-17-0201_saddam_hussain_two_hits.json
+
+
+### Notify CSV is ready for processing
+POST {{baseurl}}/rest/pb/learn
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded
+Authorization: Bearer {{access_token}}
+
+bucket=workload-sierra-uat-371608975349-decrypted-files&object=sierra-user/learning_feed/svb_learn_may_export_sorted.csv
