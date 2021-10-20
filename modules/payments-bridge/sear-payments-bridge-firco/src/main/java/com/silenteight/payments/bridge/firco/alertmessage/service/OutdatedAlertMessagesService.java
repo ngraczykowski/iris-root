@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
+import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.OutdatedAlertMessagesUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
 
@@ -46,7 +47,9 @@ class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCase {
     var alertId = status.getAlertMessageId();
     commonChannels.recommendationCompleted().send(
         MessageBuilder.withPayload(
-            RecommendationCompletedEvent.fromBridge(alertId, RecommendationReason.OUTDATED.name())
+            RecommendationCompletedEvent.fromBridge(alertId,
+                AlertMessageStatus.REJECTED_OUTDATED.name(),
+                RecommendationReason.OUTDATED.name())
         ).build());
   }
 

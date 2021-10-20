@@ -21,8 +21,9 @@ public class RecommendationCompletedEvent extends DomainEvent
   @ToString.Include
   private final UUID alertId;
 
-  public static RecommendationCompletedEvent fromBridge(UUID alertId, String reason) {
-    return new BridgeRecommendationCompletedEvent(alertId, reason);
+  public static RecommendationCompletedEvent fromBridge(
+      UUID alertId, String status, String reason) {
+    return new BridgeRecommendationCompletedEvent(alertId, status, reason);
   }
 
   public static RecommendationCompletedEvent fromAdjudication(UUID alertId,
@@ -32,10 +33,12 @@ public class RecommendationCompletedEvent extends DomainEvent
 
   @Getter
   public static class BridgeRecommendationCompletedEvent extends RecommendationCompletedEvent {
+    private final String status;
     private final String reason;
 
-    public BridgeRecommendationCompletedEvent(UUID alertId, String reason) {
+    public BridgeRecommendationCompletedEvent(UUID alertId, String status, String reason) {
       super(alertId);
+      this.status = status;
       this.reason = reason;
     }
   }

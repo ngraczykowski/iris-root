@@ -3,17 +3,16 @@ package com.silenteight.payments.bridge.firco.recommendation.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent.AdjudicationRecommendationCompletedEvent;
+import com.silenteight.payments.bridge.event.RecommendationCompletedEvent.BridgeRecommendationCompletedEvent;
+import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
+import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory;
 import com.silenteight.payments.bridge.warehouse.index.model.payload.WarehouseRecommendation;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertUseCase;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.protobuf.util.JsonFormat;
-import com.google.protobuf.util.JsonFormat.Parser;
 import com.google.protobuf.util.Values;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.Order;
@@ -31,10 +30,6 @@ import static com.silenteight.payments.bridge.common.protobuf.TimestampConverter
 @Slf4j
 class WarehouseRecommendationService {
 
-  protected static final Parser JSON_TO_STRUCT_PARSER = JsonFormat.parser();
-
-  private final ObjectMapper objectMapper;
-  private final CommonChannels commonChannels;
   private final IndexAlertUseCase indexAlertUseCase;
   private final IndexedAlertBuilderFactory alertBuilderFactory;
 
@@ -68,12 +63,18 @@ class WarehouseRecommendationService {
           .createTime(toInstant(recommendation.getCreateTime()).toString())
           .policy(policy)
           .policyTitle(policyTitle)
+          .status(AlertMessageStatus.RECOMMENDED.name())
+          .deliveryStatus(DeliveryStatus.PENDING.name())
           .build();
     } else {
+      var event = (BridgeRecommendationCompletedEvent) original;
       return WarehouseRecommendation.builder()
           .recommendationComment(mapComment(null))
           .recommendedAction(mapAction(null))
           .createTime(Instant.now().toString())
+          .status(event.getStatus())
+          .reason(event.getReason())
+          .deliveryStatus(DeliveryStatus.PENDING.name())
           .policy("")
           .policyTitle("")
           .build();

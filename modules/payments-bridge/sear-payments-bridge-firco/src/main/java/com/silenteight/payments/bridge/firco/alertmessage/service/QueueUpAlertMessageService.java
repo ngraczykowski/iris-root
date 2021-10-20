@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.payments.bridge.event.AlertStoredEvent;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
+import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 
@@ -54,7 +55,9 @@ class QueueUpAlertMessageService {
     commonChannels.recommendationCompleted().send(
         MessageBuilder.withPayload(
             RecommendationCompletedEvent.fromBridge(
-                alert.getId(), QUEUE_OVERFLOWED.name())).build()
+                alert.getId(),
+                AlertMessageStatus.REJECTED_OVERFLOWED.name(),
+                QUEUE_OVERFLOWED.name())).build()
     );
   }
 

@@ -16,4 +16,8 @@ public class WarehouseRecommendation implements IndexPayload {
   String createTime;  // from Recommendation.getCreateTime()
   String recommendedAction;  // from Recommendation.getAction()
   String recommendationComment;  // from Recommendation.getComment()
+  String status;
+  String deliveryStatus;
+  String reason;
+
 }

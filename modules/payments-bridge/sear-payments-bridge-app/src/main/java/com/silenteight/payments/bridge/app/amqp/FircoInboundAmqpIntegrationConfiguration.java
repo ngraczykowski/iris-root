@@ -7,6 +7,7 @@ import com.silenteight.payments.bridge.common.model.AlertId;
 import com.silenteight.payments.bridge.common.model.SimpleAlertId;
 import com.silenteight.payments.bridge.event.AlertInitializedEvent;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
+import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.FilterAlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.callback.port.SendResponseUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
@@ -68,7 +69,9 @@ class FircoInboundAmqpIntegrationConfiguration {
   IntegrationFlow discard() {
     return from(discardChannel())
         .transform(AlertId.class, alertId -> RecommendationCompletedEvent.fromBridge(
-            alertId.getAlertId(), RecommendationReason.TOO_MANY_HITS.name()))
+            alertId.getAlertId(),
+            AlertMessageStatus.RECOMMENDED.name(),
+            RecommendationReason.TOO_MANY_HITS.name()))
         .channel(commonChannels.recommendationCompleted())
         .get();
   }
