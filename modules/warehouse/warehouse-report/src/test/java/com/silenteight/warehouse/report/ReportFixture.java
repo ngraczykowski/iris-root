@@ -8,6 +8,7 @@ import com.silenteight.warehouse.indexer.query.streaming.FetchDataRequest;
 import com.silenteight.warehouse.indexer.query.streaming.FieldDefinition;
 import com.silenteight.warehouse.indexer.query.streaming.ReportFieldDefinitions;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
@@ -18,6 +19,7 @@ import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.RECOMMENDATION_FP;
 import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.DISCRIMINATOR;
 import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.INDEX_TIMESTAMP;
+import static java.time.LocalDate.of;
 import static java.time.OffsetDateTime.parse;
 import static java.util.List.of;
 
@@ -26,8 +28,9 @@ public final class ReportFixture {
 
   public static final OffsetDateTime FROM_TIMESTAMP = parse(PROCESSING_TIMESTAMP);
   public static final OffsetDateTime TO_TIMESTAMP = parse(PROCESSING_TIMESTAMP_3);
+  public static final LocalDate LOCAL_DATE_FROM = of(2020, 10, 15);
+  public static final LocalDate LOCAL_DATE_TO = of(2021, 10, 15);
   public static final String FILE_NAME = "report-test.csv";
-
   public static final QueryFilter QUERY_FILTER =
       new QueryFilter(RECOMMENDATION_KEY, of(RECOMMENDATION_FP));
 

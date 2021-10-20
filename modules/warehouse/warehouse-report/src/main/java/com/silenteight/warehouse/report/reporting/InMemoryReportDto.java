@@ -8,7 +8,7 @@ import java.io.InputStream;
 
 @Value
 @Builder
-public class InMemoryReportDto implements Report {
+class InMemoryReportDto implements Report {
 
   @NonNull
   String reportName;
