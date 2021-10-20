@@ -30,8 +30,8 @@ class CreateProductionMetricsReportUseCase {
   private final PropertiesDefinition productionProperties;
 
   ReportInstanceReferenceDto createReport(LocalDate from, LocalDate to) {
-    List<String> indexes = productionIndexerQuery.getIndexesForAnalysis(PRODUCTION_ANALYSIS_NAME);
     ReportRange range = of(from, to);
+    List<String> indexes = productionIndexerQuery.getIndexesForAnalysis(PRODUCTION_ANALYSIS_NAME);
     String fileName = getFileName(from, to);
     return reportService.createReportInstance(range, fileName, indexes, productionProperties);
   }
