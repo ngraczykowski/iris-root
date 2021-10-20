@@ -25,17 +25,20 @@ class CreateCategoriesService implements CreateCategoriesUseCase {
   @Timed(value = "uds.category.use_cases", extraTags = { "action", "createCategories" })
   @Override
   public BatchCreateCategoriesResponse createCategories(
-      List<Category> categoriesList) {
+      List<Category> newCategories) {
 
-    var categories = categoryDataAccess.saveAll(categoriesList);
+    log.info("Creating categories: count={}, categories={}", newCategories.size(),
+        newCategories.stream().map(Category::getName).collect(toList()));
+
+    var createdCategories = categoryDataAccess.saveAll(newCategories);
 
     if (log.isDebugEnabled()) {
-      log.debug("Saved categories: count={}, categories={}", categories.size(),
-          categories.stream().map(Category::getName).collect(toList()));
+      log.debug("Created new categories: count={}, categories={}", createdCategories.size(),
+          createdCategories.stream().map(Category::getName).collect(toList()));
     }
 
     return BatchCreateCategoriesResponse.newBuilder()
-        .addAllCategories(categories)
+        .addAllCategories(createdCategories)
         .build();
   }
 }

@@ -21,7 +21,7 @@ class SelectCategoryValueQuery {
 
   List<CategoryValue> execute(List<MatchCategoryRequest> matchCategoryRequestList) {
 
-    jdbcTemplate.execute("CREATE TEMP TABLE IF NOT EXISTS category_temp\n"
+    jdbcTemplate.execute("CREATE TEMPORARY TABLE IF NOT EXISTS category_temp\n"
         + " (match_name VARCHAR NOT NULL, category_id VARCHAR NOT NULL)");
 
     jdbcTemplate.batchUpdate(
