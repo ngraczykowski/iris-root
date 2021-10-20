@@ -38,7 +38,7 @@ class WarehouseOutboundAmqpIntegrationConfiguration {
   @Bean
   IntegrationFlow messageStoredInWarehouseOutboundFlow() {
     return createOutboundFlow(
-        commonChannels.warehouseRequested(),
+        commonChannels.warehouseOutbound(),
         properties.getCommand().getOutboundExchangeName(),
         properties.getCommand().getAlertStoredRoutingKey());
   }

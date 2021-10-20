@@ -3,7 +3,6 @@ package com.silenteight.payments.bridge.firco.alertmessage.service;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.common.model.AlertData;
-import com.silenteight.payments.bridge.common.model.AlertRegistration;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
 import com.silenteight.sep.base.common.exception.EntityNotFoundException;
 
@@ -38,9 +37,4 @@ class AlertMessageService implements AlertMessageUseCase {
         .build();
   }
 
-  @Override
-  public boolean exists(AlertRegistration alertRegistration) {
-    return alertMessageRepository.existsByMessageIdAndSystemId(
-        alertRegistration.getMessageId(), alertRegistration.getSystemId());
-  }
 }

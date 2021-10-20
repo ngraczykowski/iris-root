@@ -30,6 +30,7 @@ public class CommonChannels {
   public static final String MESSAGE_STORED_OUTBOUND = PREFIX + "MessageStoredOutboundChannel";
   public static final String RESPONSE_COMPLETED_OUTBOUND =
       PREFIX + "ResponseCompletedOutboundChannel";
+  public static final String WAREHOUSE_UPDATE_OUTBOUND = PREFIX + "WarehouseOutboundChannel";
 
   // Domain Events channels
   public static final String ALERT_STORED = PREFIX + "AlertStoredChannel";
@@ -45,7 +46,12 @@ public class CommonChannels {
   public static final String RECOMMENDATION_GENERATED = PREFIX + "RecommendationGeneratedChannel";
   public static final String RECOMMENDATION_COMPLETED = PREFIX + "RecommendationCompletedChannel";
 
-  public static final String WAREHOUSE_REQUESTED = PREFIX + "WarehouseRequestedChannel";
+  // Integration
+  public static final String ALERT_REGISTERED_REQUEST_CHANNEL =
+      PREFIX + "AlertRegisteredRequestChannel";
+  public static final String ALERT_REGISTERED_RESPONSE_CHANNEL =
+      PREFIX + "AlertRegisteredResponseChannel";
+
 
   @Bean(MESSAGE_STORED_OUTBOUND)
   public MessageChannel messageStoredOutbound() {
@@ -57,8 +63,8 @@ public class CommonChannels {
     return new DirectChannel();
   }
 
-  @Bean(WAREHOUSE_REQUESTED)
-  public MessageChannel warehouseRequested() {
+  @Bean(WAREHOUSE_UPDATE_OUTBOUND)
+  public MessageChannel warehouseOutbound() {
     var directChannel = new DirectChannel();
     directChannel.addInterceptor(new LoggingChannelInterceptor());
     return directChannel;
@@ -116,5 +122,15 @@ public class CommonChannels {
         RecommendationCompletedEvent.class, channelInterceptors);
   }
 
+  // Integration
+  @Bean(ALERT_REGISTERED_REQUEST_CHANNEL)
+  public MessageChannel alertRegisteredRequestChannel() {
+    return new DirectChannel();
+  }
+
+  @Bean(ALERT_REGISTERED_RESPONSE_CHANNEL)
+  public MessageChannel alertRegisteredResponseChannel() {
+    return new DirectChannel();
+  }
 
 }
