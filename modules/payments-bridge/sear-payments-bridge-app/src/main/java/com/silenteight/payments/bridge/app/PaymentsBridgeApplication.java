@@ -18,6 +18,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.http.config.EnableIntegrationGraphController;
@@ -36,6 +37,7 @@ import static java.lang.System.setProperty;
 @EnableIntegration
 @EnableIntegrationGraphController
 @EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
+@EnableJpaRepositories(basePackageClasses = PaymentsBridgeModule.class)
 @EnableScheduling
 @EnableSchedulerLock(defaultLockAtMostFor = "5s")
 @EntityScan(basePackageClasses = PaymentsBridgeModule.class)
