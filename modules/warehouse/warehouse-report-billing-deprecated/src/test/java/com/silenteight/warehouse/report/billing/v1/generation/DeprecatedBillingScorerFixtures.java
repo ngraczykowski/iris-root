@@ -1,6 +1,6 @@
-package com.silenteight.warehouse.report.billing.generation;
+package com.silenteight.warehouse.report.billing.v1.generation;
 
-class BillingScorerFixtures {
+class DeprecatedBillingScorerFixtures {
 
   public static final String BILLING_YEAR_FIELD = "recommendationYear";
   public static final String BILLING_MONTH_FIELD = "recommendationMonth";

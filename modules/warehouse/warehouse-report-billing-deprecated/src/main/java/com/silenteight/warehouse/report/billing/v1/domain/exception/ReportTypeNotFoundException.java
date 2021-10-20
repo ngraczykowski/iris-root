@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.billing.domain.exception;
+package com.silenteight.warehouse.report.billing.v1.domain.exception;
 
 import static java.lang.String.format;
 

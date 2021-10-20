@@ -7,23 +7,29 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.warehouse.report.billing.domain.exception.ReportGenerationException;
 import com.silenteight.warehouse.report.billing.generation.BillingReportGenerationService;
 import com.silenteight.warehouse.report.billing.generation.dto.CsvReportContentDto;
+import com.silenteight.warehouse.report.reporting.ReportRange;
 
 import org.springframework.scheduling.annotation.Async;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Slf4j
-public class BillingReportAsyncGenerationService {
+class BillingReportAsyncGenerationService {
 
-  static final String PRODUCTION_ANALYSIS_NAME = "production";
   @NonNull
   private final BillingReportRepository repository;
   @NonNull
   private final BillingReportGenerationService reportGenerationService;
 
   @Async
-  public void generateReport(long id) {
+  public void generateReport(
+      long id,
+      @NonNull ReportRange range,
+      @NonNull List<String> indexes) {
+
     try {
-      doGenerateReport(id);
+      doGenerateReport(id, range, indexes);
     } catch (RuntimeException e) {
       doFailReport(id);
       log.error("Error occurred during the report generating process", e);
@@ -31,13 +37,15 @@ public class BillingReportAsyncGenerationService {
     }
   }
 
-  private void doGenerateReport(long id) {
+  private void doGenerateReport(long id, ReportRange range, List<String> indexes) {
     BillingReport report = getReport(id);
     report.generating();
     repository.save(report);
-    ReportDefinition reportType = report.getReportType();
     CsvReportContentDto reportContent = reportGenerationService.generateReport(
-        reportType.getFrom(), reportType.getTo(), PRODUCTION_ANALYSIS_NAME);
+        range.getFrom(),
+        range.getTo(),
+        indexes);
+
     report.storeReport(reportContent.getReport());
     report.done();
     repository.save(report);

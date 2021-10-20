@@ -22,21 +22,21 @@ import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 @RequestMapping(ROOT)
 class StatusBillingReportRestController {
 
+  private static final String STATUS_PRODUCTION_REPORT_URL =
+      "/v2/analysis/production/reports/BILLING/{id}/status";
+
   @NonNull
   private final ReportStatusQuery reportQuery;
 
-  @GetMapping("/v1/analysis/production/definitions/BILLING/{definitionId}/reports/{id}/status")
+  @GetMapping(STATUS_PRODUCTION_REPORT_URL)
   @PreAuthorize("isAuthorized('CREATE_PRODUCTION_ON_DEMAND_REPORT')")
-  public ResponseEntity<ReportStatus> getReportStatus(
-      @PathVariable("definitionId") String definitionId, @PathVariable("id") Long id) {
+  public ResponseEntity<ReportStatus> getReportStatus(@PathVariable("id") long id) {
     ReportState state = reportQuery.getReportGeneratingState(id);
-
-    log.debug("Getting billing report status, definitionId={}, reportId={}", definitionId, id);
-    return ResponseEntity.ok(state.getReportStatus(getReportName(definitionId, id)));
+    log.debug("Getting billing report status, reportId={}", id);
+    return ResponseEntity.ok(state.getReportStatus(getReportName(id)));
   }
 
-  private String getReportName(String definitionId, long id) {
-    return String.format(
-        "analysis/production/definitions/BILLING/%s/reports/%d", definitionId, id);
+  private static String getReportName(long id) {
+    return String.format("analysis/production/reports/BILLING/%s", id);
   }
 }

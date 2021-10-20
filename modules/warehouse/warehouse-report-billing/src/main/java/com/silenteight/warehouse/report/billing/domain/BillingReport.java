@@ -5,6 +5,7 @@ import lombok.*;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 import com.silenteight.warehouse.report.billing.domain.dto.ReportDto;
+import com.silenteight.warehouse.report.billing.domain.exception.WrongReportStateException;
 
 import javax.persistence.*;
 
@@ -12,6 +13,7 @@ import static com.silenteight.warehouse.report.billing.domain.ReportState.DONE;
 import static com.silenteight.warehouse.report.billing.domain.ReportState.FAILED;
 import static com.silenteight.warehouse.report.billing.domain.ReportState.GENERATING;
 import static com.silenteight.warehouse.report.billing.domain.ReportState.NEW;
+import static java.util.Arrays.stream;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -34,43 +36,54 @@ class BillingReport extends BaseEntity implements IdentifiableEntity {
   private Long id;
 
   @ToString.Include
-  @Column(name = "report_type", nullable = false)
-  @Enumerated(EnumType.STRING)
-  private ReportDefinition reportType;
-
-  @ToString.Include
   @Column(name = "state", nullable = false)
   @Enumerated(EnumType.STRING)
   private ReportState state;
 
   @Basic(fetch = FetchType.LAZY)
   @Column(name = "data")
-  private String file;
+  private String data;
 
-  static BillingReport of(ReportDefinition reportType) {
+  @Basic(fetch = FetchType.LAZY)
+  @Column(name = "file_name")
+  private String fileName;
+
+  static BillingReport of(String fileName) {
     BillingReport rbsReport = new BillingReport();
-    rbsReport.setReportType(reportType);
+    rbsReport.setFileName(fileName);
     rbsReport.setState(NEW);
     return rbsReport;
   }
 
   void generating() {
-    state = GENERATING;
+    assertAllowedStateChange(GENERATING, NEW);
+    setState(GENERATING);
   }
 
   void done() {
-    state = DONE;
+    assertAllowedStateChange(DONE, GENERATING);
+    setState(DONE);
   }
 
   void failed() {
-    state = FAILED;
+    assertAllowedStateChange(FAILED, NEW, GENERATING);
+    setState(FAILED);
+  }
+
+  private void assertAllowedStateChange(ReportState desirable, ReportState... state) {
+    if (notInState(state))
+      throw new WrongReportStateException(getId(), getState(), desirable);
+  }
+
+  private boolean notInState(ReportState... allowedStates) {
+    return stream(allowedStates).noneMatch(allowedState -> allowedState == getState());
   }
 
   void storeReport(String report) {
-    file = report;
+    setData(report);
   }
 
   ReportDto toDto() {
-    return ReportDto.of(reportType.getFilename(), getFile());
+    return ReportDto.of(getFileName(), getData());
   }
 }

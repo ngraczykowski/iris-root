@@ -109,4 +109,12 @@
     <dropNotNullConstraint columnName="analysis"
                            tableName="warehouse_report_metrics"/>
   </changeSet>
+
+  <changeSet id="warehouse-1.9.0-7" author="plewandowski">
+    <addColumn tableName="warehouse_report_billing">
+      <column name="file_name" type="VARCHAR(64)"/>
+    </addColumn>
+    <dropNotNullConstraint columnName="report_type"
+                           tableName="warehouse_report_billing"/>
+  </changeSet>
 </databaseChangeLog>

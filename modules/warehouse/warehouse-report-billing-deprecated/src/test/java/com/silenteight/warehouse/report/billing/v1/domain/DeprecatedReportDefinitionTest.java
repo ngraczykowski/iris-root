@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.billing.domain;
+package com.silenteight.warehouse.report.billing.v1.domain;
 
 import lombok.NonNull;
 
@@ -9,11 +9,11 @@ import java.time.OffsetDateTime;
 
 import static org.assertj.core.api.Assertions.*;
 
-class ReportDefinitionTest {
+class DeprecatedReportDefinitionTest {
 
   @ParameterizedTest
-  @EnumSource(ReportDefinition.class)
-  void testProperTimeRange(ReportDefinition definition) {
+  @EnumSource(DeprecatedReportDefinition.class)
+  void testProperTimeRange(DeprecatedReportDefinition definition) {
     @NonNull OffsetDateTime result = definition.getFrom();
     assertThat(result).isBefore(OffsetDateTime.now());
   }
