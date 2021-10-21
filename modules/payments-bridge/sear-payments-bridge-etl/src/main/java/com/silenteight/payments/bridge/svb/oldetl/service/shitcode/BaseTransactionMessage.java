@@ -1,5 +1,7 @@
 package com.silenteight.payments.bridge.svb.oldetl.service.shitcode;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
@@ -12,6 +14,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public abstract class BaseTransactionMessage implements TransactionMessage {
 
+  @Getter(AccessLevel.PROTECTED)
   private final MessageData messageData;
 
   @Override

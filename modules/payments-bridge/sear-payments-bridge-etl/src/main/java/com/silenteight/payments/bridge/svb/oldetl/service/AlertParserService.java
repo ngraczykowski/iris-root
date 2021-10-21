@@ -85,7 +85,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
     switch (applicationCode) {
       case "GFX":
-        return new ExtractGfxAlertedPartyData(messageData, hit).extract();
+        return new ExtractGfxAlertedPartyData(messageData, hit.getTag()).extract();
       case "PEP":
         return new ExtractPepAlertedPartyData(messageData).extract();
       case "GTEX":
@@ -117,11 +117,12 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     var synonymIndex = CommonUtils.toPositiveInt(hit.getSynonymIndex(), 0);
     var extractedName = HitNameExtractor.extractName(synonymIndex, hittedEntity);
 
-    var allMatchingTexts = transactionMessage.getAllMatchingTexts(hit.getTag());
-    var fieldValue = transactionMessage.getHitTagValue(hit.getTag());
+    var tag = hit.getTag();
+    var allMatchingTexts = transactionMessage.getAllMatchingTexts(tag);
+    var fieldValue = transactionMessage.getHitTagValue(tag);
     var allMatchingFieldValues = transactionMessage.getAllMatchingTagValues(
-        hit.getTag(), hit.getMatchingText());
-    var accountNumberOrNormalizedName = transactionMessage.getAccountNumber();
+        tag, hit.getMatchingText());
+    var accountNumberOrNormalizedName = transactionMessage.getAccountNumber(tag);
 
     List<CodeDto> codes = Optional.of(hit)
         .map(HitDto::getHittedEntity)
@@ -154,7 +155,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     return HitAndWatchlistPartyData.builder()
         .solutionType(SolutionType.ofCode(hit.getSolutionType()))
         .watchlistType(WatchlistType.ofCode(hittedEntity.getType()))
-        .tag(hit.getTag())
+        .tag(tag)
         .id(hittedEntity.getId())
         .name(extractedName)
         .entityText(hit.getEntityText())
