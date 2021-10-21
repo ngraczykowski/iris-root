@@ -31,6 +31,7 @@ pipeline {
                         sh './scripts/bootstrap.sh --index-url $PYPI_URL'
                         sh './scripts/build.sh --index-url $PYPI_URL'
                     }
+                }
             }
             post {
                 always {
