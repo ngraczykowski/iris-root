@@ -13,11 +13,11 @@ import com.silenteight.payments.bridge.svb.oldetl.model.AbstractMessageStructure
 import com.silenteight.payments.bridge.svb.oldetl.model.CreateAlertedPartyEntitiesRequest;
 import com.silenteight.payments.bridge.svb.oldetl.model.ExtractAlertedPartyDataRequest;
 import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
-import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertedPartyDataUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractFieldValueUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractMessageStructureUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
+import com.silenteight.payments.bridge.svb.oldetl.service.AlertParserService;
 
 import org.apache.commons.collections4.list.SetUniqueList;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +35,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 class EtlMatchService {
 
-  private final ExtractAlertedPartyDataUseCase extractAlertedPartyDataUseCase;
+  private final AlertParserService alertParserService;
   private final CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;
   private final ExtractMessageStructureUseCase extractMessageStructureUseCase;
   private final ExtractFieldValueUseCase extractFieldValueUseCase;
@@ -88,9 +88,9 @@ class EtlMatchService {
       List<LearningCsvRow> rows, MessageFieldStructure messageFieldStructure) {
     var row = rows.get(0);
     var messageData = messageParserFacade.parse(
-        row.getFkcoVApplication().equals("GTEX") ? MessageFormat.SWIFT : MessageFormat.ALL,
+        row.getFkcoVContent().startsWith("{") ? MessageFormat.SWIFT : MessageFormat.ALL,
         row.getFkcoVContent());
-    return extractAlertedPartyDataUseCase.extractAlertedPartyData(row.getFkcoVApplication(),
+    return alertParserService.extractAlertedPartyData(row.getFkcoVApplication(),
         messageData, row.getFkcoVMatchedTag(), messageFieldStructure);
   }
 
