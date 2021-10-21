@@ -34,9 +34,11 @@ class EtlService {
     MDC.put("alertId", command.getAlertId().toString());
     MDC.put("alertName", command.getAlertRegisteredName());
 
+    var alertEtlResponse = getAlertEtlResponse(command);
+
     processes.stream() // parallel stream ?
         .filter(process -> process.supports(command))
-        .forEach(process -> process.extractAndLoad(command, getAlertEtlResponse(command)));
+        .forEach(process -> process.extractAndLoad(command, alertEtlResponse));
 
     return new AlertInputAcceptedEvent(command.getAlertId(), command.getAlertRegisteredName());
   }

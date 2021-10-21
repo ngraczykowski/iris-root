@@ -27,7 +27,8 @@ class CreateCategoriesUseCase {
             List.of(
                 crossmatchCategory(),
                 oneLinerCategory(), specificTermsCategory(),
-                twoLinesCategory(), historicalRiskAssessmentCategory()))
+                twoLinesCategory(), historicalRiskAssessmentCategory(),
+                watchListTypeCategory(), matchTypeCategory()))
         .build());
   }
 
@@ -85,4 +86,29 @@ class CreateCategoriesUseCase {
         .addAllAllowedValues(List.of("YES", "NO"))
         .build();
   }
+
+  private static Category watchListTypeCategory() {
+    return Category
+        .newBuilder()
+        .setName("categories/watchListType")
+        .setDisplayName("WatchList Type Category")
+        .setType(CategoryType.ENUMERATED)
+        .addAllAllowedValues(List.of("INDIVIDUAL", "ORGANIZATION", "ENTITY_TYPE_UNSPECIFIED"))
+        .setMultiValue(false)
+        .build();
+  }
+
+  private static Category matchTypeCategory() {
+    return Category
+        .newBuilder()
+        .setName("categories/matchType")
+        .setDisplayName("Match Type Category")
+        .setType(CategoryType.ENUMERATED)
+        .addAllAllowedValues(
+            List.of("ERROR", "UNKNOWN", "NAME", "SEARCH_CODE", "PASSPORT", "NATIONAL_ID", "BIC",
+                "EMBARGO", "FML_RULE"))
+        .setMultiValue(false)
+        .build();
+  }
+
 }
