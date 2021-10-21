@@ -10,7 +10,6 @@ public class ExtractPepAlertedPartyData {
 
   private final MessageData messageData;
 
-  // Wiktor
   public AlertedPartyData extract() {
     return null;
   }

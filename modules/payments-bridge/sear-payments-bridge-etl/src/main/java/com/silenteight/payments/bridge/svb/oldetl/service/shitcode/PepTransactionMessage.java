@@ -2,12 +2,10 @@ package com.silenteight.payments.bridge.svb.oldetl.service.shitcode;
 
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 
-import java.util.List;
 import java.util.Optional;
 
 public class PepTransactionMessage extends BaseTransactionMessage {
 
-  // Tomasz
   public PepTransactionMessage(MessageData messageData) {
     super(messageData);
   }
@@ -15,15 +13,5 @@ public class PepTransactionMessage extends BaseTransactionMessage {
   @Override
   public Optional<String> getAccountNumber(String tag) {
     return Optional.empty();
-  }
-
-  @Override
-  public List<String> getAllMatchingTexts(String tag, String matchingText) {
-    return null;
-  }
-
-  @Override
-  public List<String> getAllMatchingTagValues(String tag, String matchingText) {
-    return null;
   }
 }

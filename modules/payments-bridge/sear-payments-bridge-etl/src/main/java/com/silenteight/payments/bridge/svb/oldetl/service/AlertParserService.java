@@ -161,7 +161,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         .allMatchingTexts(allMatchingTexts)
         .allMatchingFieldValues(allMatchingFieldValues)
         .fieldValue(fieldValue)
-        .accountNumberOrNormalizedName(accountNumberOrNormalizedName.orElse("no_data"))
+        .accountNumber(accountNumberOrNormalizedName.orElse("no_data"))
         .postalAddresses(
             LocationExtractorHelper.extractPostalAddresses(hittedEntity.getAddresses()))
         .cities(LocationExtractorHelper.extractListOfCities(hittedEntity.getAddresses()))

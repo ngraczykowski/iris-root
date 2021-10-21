@@ -34,7 +34,7 @@ class HistoricalRiskAssessmentProcess implements CategoryValueProcess {
   private HistoricalRiskAssessmentAgentRequest createRequest(HitData hitData) {
     return HistoricalRiskAssessmentAgentRequest
         .builder()
-        .accountNumber(hitData.getHitAndWlPartyData().getAccountNumberOrNormalizedName())
+        .accountNumber(hitData.getHitAndWlPartyData().getAccountNumber())
         .ofacID(hitData.getHitAndWlPartyData().getId())
         .build();
   }

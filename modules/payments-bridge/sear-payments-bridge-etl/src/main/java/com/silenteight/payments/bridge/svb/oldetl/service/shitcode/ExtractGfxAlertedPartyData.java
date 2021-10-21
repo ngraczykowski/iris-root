@@ -9,58 +9,66 @@ import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure
 @RequiredArgsConstructor
 public class ExtractGfxAlertedPartyData {
 
+  private static final int LINE_3 = 2;
+  private static final int LINE_4 = 3;
+  private static final int LINE_5 = 4;
+  private static final int LINE_6 = 5;
+  private static final int TO_LINE_5 = 5;
+  private static final int LINE_7 = 6;
+  private static final int TO_LINE_6 = 6;
+
   private final MessageData messageData;
   private final String hitTag;
 
   public AlertedPartyData extract(MessageFieldStructure messageFieldStructure) {
-    var hitTagLines = messageData.getLines(hitTag);
+    var lines = messageData.getLines(hitTag);
 
-    if (hitTagLines.size() < 3 && hitTagLines.size() > 7)
+    if (lines.size() < 3 && lines.size() > 7)
       throw new IllegalArgumentException("I've no idea how to get data from " + hitTag);
 
     var partyDataBuilder = AlertedPartyData.builder()
         .messageFieldStructure(messageFieldStructure);
 
-    switch (hitTagLines.size()) {
+    switch (lines.size()) {
       default:
       case 3:
         return partyDataBuilder
-            .name(hitTagLines.get(2))
-            .nameAddress(hitTagLines.get(2))
+            .name(lines.get(LINE_3))
+            .nameAddress(lines.get(LINE_3))
             .build();
 
       case 4:
         return partyDataBuilder
-            .name(hitTagLines.get(2))
-            .address(hitTagLines.get(3))
-            .ctryTown(hitTagLines.get(3))
-            .nameAddresses(hitTagLines.subList(2, 4))
+            .name(lines.get(LINE_3))
+            .address(lines.get(LINE_4))
+            .ctryTown(lines.get(LINE_4))
+            .nameAddresses(lines.subList(LINE_3, LINE_5))
             .build();
 
       case 5:
         return partyDataBuilder
-            .name(hitTagLines.get(2))
-            .address(hitTagLines.get(3))
-            .address(hitTagLines.get(4))
-            .ctryTown(hitTagLines.get(4))
-            .nameAddresses(hitTagLines.subList(2, 5))
+            .name(lines.get(LINE_3))
+            .address(lines.get(LINE_4))
+            .address(lines.get(LINE_5))
+            .ctryTown(lines.get(LINE_5))
+            .nameAddresses(lines.subList(LINE_3, TO_LINE_5))
             .build();
 
-      case 6: {
+      case LINE_7: {
         var builder = partyDataBuilder
-            .name(hitTagLines.get(2))
-            .address(hitTagLines.get(3))
-            .address(hitTagLines.get(4));
+            .name(lines.get(LINE_3))
+            .address(lines.get(LINE_4))
+            .address(lines.get(LINE_5));
 
-        if (hitTagLines.get(5).length() > 2) {
+        if (lines.get(LINE_6).length() > LINE_3) {
           builder
-              .address(hitTagLines.get(5))
-              .ctryTown(hitTagLines.get(5))
-              .nameAddresses(hitTagLines.subList(2, 6));
+              .address(lines.get(LINE_6))
+              .ctryTown(lines.get(LINE_6))
+              .nameAddresses(lines.subList(LINE_3, TO_LINE_6));
         } else {
           builder
-              .ctryTown(hitTagLines.get(4))
-              .nameAddresses(hitTagLines.subList(2, 5));
+              .ctryTown(lines.get(LINE_5))
+              .nameAddresses(lines.subList(LINE_3, TO_LINE_5));
         }
 
         return builder.build();
@@ -68,12 +76,12 @@ public class ExtractGfxAlertedPartyData {
 
       case 7:
         return partyDataBuilder
-            .name(hitTagLines.get(2))
-            .address(hitTagLines.get(3))
-            .address(hitTagLines.get(4))
-            .address(hitTagLines.get(5))
-            .ctryTown(hitTagLines.get(5))
-            .nameAddresses(hitTagLines.subList(2, 6))
+            .name(lines.get(LINE_3))
+            .address(lines.get(LINE_4))
+            .address(lines.get(LINE_5))
+            .address(lines.get(LINE_6))
+            .ctryTown(lines.get(LINE_6))
+            .nameAddresses(lines.subList(LINE_3, TO_LINE_6))
             .build();
     }
   }

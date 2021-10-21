@@ -72,7 +72,7 @@ Authorization: Bearer {{access_token}}
 
 < ../docs/api/svb-examples/2021-10-17-0201_saddam_hussain_two_hits.json
 
-### Post the SVB alert 2021-10-17-0201_saddam_hussain_two_hits for solving
+### Post the SVB alert GFX for solving
 // @no-log
 // @no-cookie-jar
 POST {{baseurl}}/rest/pb/alert

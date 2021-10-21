@@ -77,7 +77,7 @@ public class EtlProcessHelper {
         .allMatchingTexts(of("matchingText_" + id))
         .allMatchingFieldValues(of("matchingFieldValue_" + id))
         .countries(of("country_" + id))
-        .accountNumberOrNormalizedName("no_data")
+        .accountNumber("no_data")
         .build();
   }
 }

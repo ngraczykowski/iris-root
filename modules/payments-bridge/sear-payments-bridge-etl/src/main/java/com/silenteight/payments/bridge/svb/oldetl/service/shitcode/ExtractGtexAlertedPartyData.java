@@ -10,7 +10,6 @@ public class ExtractGtexAlertedPartyData {
 
   private final MessageData messageData;
 
-  // Zbyszek
   public AlertedPartyData extract() {
     return null;
   }

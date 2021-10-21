@@ -22,7 +22,7 @@ public class HitAndWatchlistPartyData {
   List<String> allMatchingTexts;
   String fieldValue;
   List<String> allMatchingFieldValues;
-  String accountNumberOrNormalizedName;
+  String accountNumber;
   List<String> postalAddresses;
   List<String> cities;
   List<String> states;
