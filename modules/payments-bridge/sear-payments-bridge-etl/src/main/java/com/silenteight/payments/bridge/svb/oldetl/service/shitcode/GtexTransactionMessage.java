@@ -18,7 +18,7 @@ public class GtexTransactionMessage extends BaseTransactionMessage {
   }
 
   @Override
-  public List<String> getAllMatchingTexts(String tag) {
+  public List<String> getAllMatchingTexts(String tag, String matchingText) {
     return null;
   }
 

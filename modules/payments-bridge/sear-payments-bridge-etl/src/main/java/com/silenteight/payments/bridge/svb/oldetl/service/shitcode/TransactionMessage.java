@@ -7,7 +7,7 @@ public interface TransactionMessage {
 
   Optional<String> getAccountNumber(String tag);
 
-  List<String> getAllMatchingTexts(String tag);
+  List<String> getAllMatchingTexts(String tag, String matchingText);
 
   String getHitTagValue(String tag);
 

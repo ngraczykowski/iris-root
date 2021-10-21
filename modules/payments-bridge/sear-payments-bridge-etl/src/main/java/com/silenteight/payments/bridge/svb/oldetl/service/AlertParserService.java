@@ -9,10 +9,8 @@ import com.silenteight.payments.bridge.common.dto.input.*;
 import com.silenteight.payments.bridge.etl.firco.parser.MessageFormat;
 import com.silenteight.payments.bridge.etl.firco.parser.MessageParserFacade;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
-import com.silenteight.payments.bridge.svb.oldetl.model.ExtractAlertedPartyDataRequest;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertEtlResponseUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertedPartyDataUseCase;
-import com.silenteight.payments.bridge.svb.oldetl.port.ExtractMessageStructureUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
@@ -36,7 +34,6 @@ import java.util.stream.Collectors;
 @Service
 public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
-  private final ExtractMessageStructureUseCase extractMessageStructureUseCase;
   private final ExtractAlertedPartyDataUseCase extractAlertedPartyDataUseCase;
 
   public AlertEtlResponse createAlertEtlResponse(AlertMessageDto alertMessageDto) {
@@ -52,18 +49,9 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     for (var requestHitDto : alertMessageDto.getHits()) {
       var hit = requestHitDto.getHit();
 
-      var awefulMessageStructure = extractMessageStructureUseCase.extractMessageStructure(
-          ExtractAlertedPartyDataRequest.builder()
-              .messageData(alertMessageDto.getMessageData())
-              .applicationCode(alertMessageDto.getApplicationCode())
-              .messageType(alertMessageDto.getMessageType())
-              .matchingText(hit.getMatchingText())
-              .tag(hit.getTag())
-              .build());
-
       var hitData = createHitData(
           alertMessageDto.getApplicationCode(), messageData, hit,
-          awefulMessageStructure.getMessageFieldStructure());
+          MessageFieldStructure.UNSTRUCTURED);
 
       hits.add(hitData);
     }
@@ -121,7 +109,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     var extractedName = HitNameExtractor.extractName(synonymIndex, hittedEntity);
 
     var tag = hit.getTag();
-    var allMatchingTexts = transactionMessage.getAllMatchingTexts(tag);
+    var allMatchingTexts = transactionMessage.getAllMatchingTexts(tag, hit.getMatchingText());
     var fieldValue = transactionMessage.getHitTagValue(tag);
     var allMatchingFieldValues = transactionMessage.getAllMatchingTagValues(
         tag, hit.getMatchingText());
