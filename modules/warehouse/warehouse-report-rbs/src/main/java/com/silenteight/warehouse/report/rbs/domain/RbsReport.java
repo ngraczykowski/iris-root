@@ -5,6 +5,8 @@ import lombok.*;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 import com.silenteight.warehouse.report.rbs.domain.dto.ReportDto;
+import com.silenteight.warehouse.report.rbs.domain.exception.WrongReportStateException;
+import com.silenteight.warehouse.report.reporting.ReportTypeListDto.ReportTypeDto;
 
 import javax.persistence.*;
 
@@ -12,6 +14,7 @@ import static com.silenteight.warehouse.report.rbs.domain.ReportState.DONE;
 import static com.silenteight.warehouse.report.rbs.domain.ReportState.FAILED;
 import static com.silenteight.warehouse.report.rbs.domain.ReportState.GENERATING;
 import static com.silenteight.warehouse.report.rbs.domain.ReportState.NEW;
+import static java.util.Arrays.stream;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -25,6 +28,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 class RbsReport extends BaseEntity implements IdentifiableEntity {
 
   private static final long serialVersionUID = -4592869339522050083L;
+  private static final String PRODUCTION_ANALYSIS_NAME = "production";
+  private static final String REPORT_TYPE = "RB_SCORER";
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
@@ -34,43 +39,66 @@ class RbsReport extends BaseEntity implements IdentifiableEntity {
   private Long id;
 
   @ToString.Include
-  @Column(name = "report_type", nullable = false)
-  @Enumerated(EnumType.STRING)
-  private ReportDefinition reportType;
-
-  @ToString.Include
   @Column(name = "state", nullable = false)
   @Enumerated(EnumType.STRING)
   private ReportState state;
 
   @Basic(fetch = FetchType.LAZY)
   @Column(name = "data")
-  private String file;
+  private String data;
 
-  static RbsReport of(ReportDefinition reportType) {
+  @Basic(fetch = FetchType.LAZY)
+  @Column(name = "file_name")
+  private String fileName;
+
+  static RbsReport of(String fileName) {
     RbsReport rbsReport = new RbsReport();
-    rbsReport.setReportType(reportType);
+    rbsReport.setFileName(fileName);
     rbsReport.setState(NEW);
     return rbsReport;
   }
 
   void generating() {
-    state = GENERATING;
+    assertAllowedStateChange(GENERATING, NEW);
+    setState(GENERATING);
   }
 
   void done() {
-    state = DONE;
+    assertAllowedStateChange(DONE, GENERATING);
+    setState(DONE);
   }
 
   void failed() {
-    state = FAILED;
+    assertAllowedStateChange(FAILED, NEW, GENERATING);
+    setState(FAILED);
+  }
+
+  private void assertAllowedStateChange(ReportState desirable, ReportState... state) {
+    if (notInState(state))
+      throw new WrongReportStateException(getId(), getState(), desirable);
+  }
+
+  private boolean notInState(ReportState... allowedStates) {
+    return stream(allowedStates).noneMatch(allowedState -> allowedState == getState());
   }
 
   void storeReport(String report) {
-    file = report;
+    setData(report);
   }
 
   ReportDto toDto() {
-    return ReportDto.of(reportType.getFilename(), getFile());
+    return ReportDto.of(getFileName(), getData());
+  }
+
+  static ReportTypeDto toSimulationReportTypeDto(String analysisId) {
+    return ReportTypeDto
+        .builder()
+        .name(getReportName(analysisId))
+        .type(REPORT_TYPE)
+        .build();
+  }
+
+  private static String getReportName(String analysisId) {
+    return "analysis/" + analysisId + "/reports/" + REPORT_TYPE;
   }
 }

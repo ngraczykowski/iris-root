@@ -11,6 +11,7 @@ class DownloadRbsReportConfiguration {
   @Bean
   DownloadRbsReportUseCase downloadRbsReportUseCase(
       RbsReportService reportService, RbsReportDataQuery query) {
+
     return new DownloadRbsReportUseCase(query, reportService);
   }
 }

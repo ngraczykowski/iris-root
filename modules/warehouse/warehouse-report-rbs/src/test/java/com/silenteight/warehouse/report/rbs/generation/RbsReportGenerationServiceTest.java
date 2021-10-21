@@ -15,7 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.warehouse.report.rbs.generation.RbScorerFixtures.ANALYSIS_DECISION_FIELD;
+import static com.silenteight.warehouse.report.rbs.RbsReportTestFixtures.DATE_FIELD_NAME;
+import static com.silenteight.warehouse.report.rbs.RbsReportTestFixtures.TEST_INDEX;
+import static com.silenteight.warehouse.report.rbs.generation.GenerationRbScorerReportTestFixtures.*;
 import static java.time.OffsetDateTime.now;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -28,13 +30,12 @@ class RbsReportGenerationServiceTest {
 
   @Mock
   private GroupingQueryService groupingQueryService;
-
   private RbsReportGenerationService underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new RbsReportGenerationConfiguration().rbsReportGenerationService(
-        groupingQueryService);
+    underTest =
+        new RbsReportGenerationConfiguration().rbsReportGenerationService(groupingQueryService);
   }
 
   @Test
@@ -43,7 +44,8 @@ class RbsReportGenerationServiceTest {
         FetchGroupedDataResponse.builder().rows(emptyList()).build());
 
     CsvReportContentDto reportContent = underTest.generateReport(
-        now(), now(), of("index123"), getRbsReportDefinition());
+        now(), now(), of(TEST_INDEX), getRbsReportDefinition());
+
     assertThat(reportContent.getLines()).isEmpty();
   }
 
@@ -82,10 +84,11 @@ class RbsReportGenerationServiceTest {
 
     FetchGroupedDataResponse response = FetchGroupedDataResponse
         .builder().rows(asList(first, second, third, fourth, fifth)).build();
+
     when(groupingQueryService.generate(any())).thenReturn(response);
 
     CsvReportContentDto reportContent = underTest.generateReport(
-        now(), now(), of("index123"), getRbsReportDefinition());
+        now(), now(), of(TEST_INDEX), getRbsReportDefinition());
 
     assertThat(reportContent.getReport()).isEqualTo(
         "FV Signature,policy_name,step_name,recommended_action,"
@@ -111,17 +114,19 @@ class RbsReportGenerationServiceTest {
       String qa,
       String learning,
       long count) {
-    Map<String, String> map = Map
-        .of(RbScorerFixtures.FV_SIGNATURE_FIELD_NAME, fvs,
-            RbScorerFixtures.POLICY_NAME_FIELD, policy,
-            RbScorerFixtures.STEP_NAME_FIELD, step,
-            RbScorerFixtures.RECOMMENDED_ACTION, action,
-            RbScorerFixtures.CATEGORIES_AP_TYPE_FIELD, apType,
-            RbScorerFixtures.CATEGORIES_RISK_TYPE_FIELD, riskType,
-            RbScorerFixtures.FEATURES_NAME_FIELD, name,
-            RbScorerFixtures.FEATURES_DOB_FIELD, dob,
-            RbScorerFixtures.QA_DECISION_FIELD, qa,
-            RbScorerFixtures.ANALYSIS_DECISION_FIELD, learning);
+
+    Map<String, String> map = Map.of(
+            GenerationRbScorerReportTestFixtures.FV_SIGNATURE_FIELD_NAME, fvs,
+            GenerationRbScorerReportTestFixtures.POLICY_NAME_FIELD, policy,
+            GenerationRbScorerReportTestFixtures.STEP_NAME_FIELD, step,
+            GenerationRbScorerReportTestFixtures.RECOMMENDED_ACTION, action,
+            GenerationRbScorerReportTestFixtures.CATEGORIES_AP_TYPE_FIELD, apType,
+            GenerationRbScorerReportTestFixtures.CATEGORIES_RISK_TYPE_FIELD, riskType,
+            GenerationRbScorerReportTestFixtures.FEATURES_NAME_FIELD, name,
+            GenerationRbScorerReportTestFixtures.FEATURES_DOB_FIELD, dob,
+            GenerationRbScorerReportTestFixtures.QA_DECISION_FIELD, qa,
+            ANALYSIS_DECISION_FIELD, learning);
+
     return Row.builder().data(map).count(count).build();
   }
 
@@ -139,21 +144,21 @@ class RbsReportGenerationServiceTest {
   @NotNull
   private RbsReportDefinition getRbsReportDefinition() {
     return new RbsReportDefinition(
-        "alert_date",
+        DATE_FIELD_NAME,
         asList(
             getColumn(
-                RbScorerFixtures.FV_SIGNATURE_FIELD_NAME,
-                RbScorerFixtures.FV_SIGNATURE_FIELD_LABEL),
-            getColumn(RbScorerFixtures.POLICY_NAME_FIELD),
-            getColumn(RbScorerFixtures.STEP_NAME_FIELD),
-            getColumn(RbScorerFixtures.RECOMMENDED_ACTION),
-            getColumn(RbScorerFixtures.CATEGORIES_AP_TYPE_FIELD),
-            getColumn(RbScorerFixtures.CATEGORIES_RISK_TYPE_FIELD),
-            getColumn(RbScorerFixtures.FEATURES_NAME_FIELD),
-            getColumn(RbScorerFixtures.FEATURES_DOB_FIELD)),
+                GenerationRbScorerReportTestFixtures.FV_SIGNATURE_FIELD_NAME,
+                GenerationRbScorerReportTestFixtures.FV_SIGNATURE_FIELD_LABEL),
+            getColumn(GenerationRbScorerReportTestFixtures.POLICY_NAME_FIELD),
+            getColumn(GenerationRbScorerReportTestFixtures.STEP_NAME_FIELD),
+            getColumn(GenerationRbScorerReportTestFixtures.RECOMMENDED_ACTION),
+            getColumn(GenerationRbScorerReportTestFixtures.CATEGORIES_AP_TYPE_FIELD),
+            getColumn(GenerationRbScorerReportTestFixtures.CATEGORIES_RISK_TYPE_FIELD),
+            getColumn(GenerationRbScorerReportTestFixtures.FEATURES_NAME_FIELD),
+            getColumn(GenerationRbScorerReportTestFixtures.FEATURES_DOB_FIELD)),
         getGroupingColumn(),
         asList(
-            getFilter(RbScorerFixtures.ALERT_STATUS_FIELD, of("COMPLETED"))));
+            getFilter(GenerationRbScorerReportTestFixtures.ALERT_STATUS_FIELD, of(COMPLETED))));
 
   }
 
@@ -171,19 +176,18 @@ class RbsReportGenerationServiceTest {
 
   private List<GroupingColumnProperties> getGroupingColumn() {
     GroupingColumnProperties groupingColumnForQa = getGroupingColumn(
-        "qa_decision",
+        QA_DECISION_FIELD,
         of(
-            getGroupingValue("PASS", "QA_decision_false_positive"),
-            getGroupingValue("FAILED", "QA_decision_true_positive")));
+            getGroupingValue(PASS_VALUE, QA_DECISION_FALSE_POSITIVE),
+            getGroupingValue(FAILED_VALUE, QA_DECISION_TRUE_POSITIVE)));
 
     GroupingColumnProperties groupingColumnForAnalyst =
         getGroupingColumn(
             ANALYSIS_DECISION_FIELD,
             of(
-                getGroupingValue("FP", "analyst_decision_FP"),
-                getGroupingValue("PTP", "analyst_decision_PTP")));
+                getGroupingValue(FP_VALUE, ANALYST_DECISION_FP),
+                getGroupingValue(PTP_VALUE, ANALYST_DECISION_PTP)));
 
     return of(groupingColumnForQa, groupingColumnForAnalyst);
-
   }
 }

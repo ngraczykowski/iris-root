@@ -23,6 +23,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 public class RbsReportDefinition {
 
   private static final String DELIMITER = "_";
+  private static final String MATCHES_COUNT_LABEL = "matches_count";
 
   @NotBlank
   private final String dateFieldName;
@@ -38,13 +39,21 @@ public class RbsReportDefinition {
 
   List<String> getListOfFields() {
     List<String> fields = new ArrayList<>();
-    fields.addAll(columns.stream().map(Column::getName).collect(toUnmodifiableList()));
-    fields.addAll(groupingColumns
-        .stream()
-        .map(GroupingColumnProperties::getName)
-        .collect(toUnmodifiableList()));
-
+    fields.addAll(getColumnNames());
+    fields.addAll(getGroupingColumnLabels());
     return fields;
+  }
+
+  private List<String> getColumnNames() {
+    return columns.stream()
+        .map(Column::getName)
+        .collect(toUnmodifiableList());
+  }
+
+  private List<String> getGroupingColumnLabels() {
+    return groupingColumns.stream()
+        .map(GroupingColumnProperties::getName)
+        .collect(toUnmodifiableList());
   }
 
   List<String> getListOfStaticFields() {
@@ -54,11 +63,11 @@ public class RbsReportDefinition {
   List<String> getListOfLabels() {
     List<String> result = new ArrayList<>();
     getStaticColumns().forEach(column -> result.addAll(column.getLabels()));
-    result.add("matches_count");
+    result.add(MATCHES_COUNT_LABEL);
 
     List<String> columnsLabels = groupingColumns
         .stream()
-        .map(this::getColumnsLabels)
+        .map(RbsReportDefinition::getColumnsLabels)
         .flatMap(Collection::stream)
         .collect(toList());
 
@@ -75,7 +84,7 @@ public class RbsReportDefinition {
         .collect(toList());
   }
 
-  private List<String> getColumnsLabels(GroupingColumnProperties groupingColumnProperties) {
+  private static List<String> getColumnsLabels(GroupingColumnProperties groupingColumnProperties) {
     return groupingColumnProperties.getGroupingValues().stream()
         .map(GroupingValues::getLabel)
         .collect(toList());

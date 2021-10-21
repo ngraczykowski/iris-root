@@ -4,7 +4,7 @@ import com.silenteight.sep.base.common.support.persistence.BasicInMemoryReposito
 
 import java.time.OffsetDateTime;
 
-public class InMemoryRbsRepository
+class InMemoryRbsRepository
     extends BasicInMemoryRepository<RbsReport>
     implements RbsReportRepository {
 

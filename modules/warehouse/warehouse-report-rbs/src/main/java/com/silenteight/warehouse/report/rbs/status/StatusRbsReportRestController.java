@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
+import static java.lang.String.format;
 
 @Slf4j
 @RestController
@@ -22,36 +23,40 @@ import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 @RequestMapping(ROOT)
 class StatusRbsReportRestController {
 
+  private static final String PRODUCTION_ANALYSIS_NAME = "production";
+  private static final String ANALYSIS_ID_PARAM = "analysisId";
+  private static final String ID_PARAM = "id";
+  private static final String STATUS_SIMULATION_REPORT_URL =
+      "/v2/analysis/{analysisId}/reports/RB_SCORER/{id}/status";
+
+  private static final String STATUS_PRODUCTION_REPORT_URL =
+      "/v2/analysis/production/reports/RB_SCORER/{id}/status";
+
   @NonNull
   private final RbsReportStatusQuery reportQuery;
 
-  @GetMapping("/v1/analysis/production/definitions/RB_SCORER/{definitionId}/reports/{id}/status")
+  @GetMapping(STATUS_PRODUCTION_REPORT_URL)
   @PreAuthorize("isAuthorized('CREATE_PRODUCTION_ON_DEMAND_REPORT')")
-  public ResponseEntity<ReportStatus> getProductionReportStatus(
-      @PathVariable("definitionId") String definitionId, @PathVariable("id") Long id) {
-
-    log.debug("Getting production report status, definitionId={},reportId={}", definitionId, id);
-
+  public ResponseEntity<ReportStatus> getProductionReportStatus(@PathVariable(ID_PARAM) long id) {
+    log.debug("Getting production RB Scorer report status, reportId={}", id);
     ReportState state = reportQuery.getReportGeneratingState(id);
-    return ResponseEntity.ok(state.getReportStatus(getReportName("production", definitionId, id)));
+    return ResponseEntity.ok(state.getReportStatus(getReportName(PRODUCTION_ANALYSIS_NAME, id)));
   }
 
-  @GetMapping("/v1/analysis/{analysisId}/definitions/RB_SCORER/{definitionId}/reports/{id}/status")
+  @GetMapping(STATUS_SIMULATION_REPORT_URL)
   @PreAuthorize("isAuthorized('CREATE_SIMULATION_REPORT')")
   public ResponseEntity<ReportStatus> getSimulationReportStatus(
-      @PathVariable("analysisId") String analysisId,
-      @PathVariable("definitionId") String definitionId,
-      @PathVariable("id") Long id) {
+      @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
+      @PathVariable(ID_PARAM) long id) {
 
-    log.debug("Getting simulation report status, analysisId={}, definitionId={},reportId={}",
-        analysisId, definitionId, id);
+    log.debug("Getting simulation RB Scorer report status, analysisId={}, reportId={}",
+        analysisId, id);
 
     ReportState state = reportQuery.getReportGeneratingState(id);
-    return ResponseEntity.ok(state.getReportStatus(getReportName(analysisId, definitionId, id)));
+    return ResponseEntity.ok(state.getReportStatus(getReportName(analysisId, id)));
   }
 
-  private String getReportName(String analysis, String definitionId, long id) {
-    return String.format(
-        "analysis/%s/definitions/RB_SCORER/%s/reports/%d", analysis, definitionId, id);
+  private static String getReportName(String analysis, long id) {
+    return format("analysis/%s/reports/RB_SCORER/%d", analysis, id);
   }
 }

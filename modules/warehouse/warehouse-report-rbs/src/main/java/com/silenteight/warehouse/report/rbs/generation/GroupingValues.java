@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @AllArgsConstructor
 @Getter
 public class GroupingValues {
+
   @NonNull
   String value;
   @NonNull
