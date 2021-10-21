@@ -82,11 +82,11 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
       String applicationCode, MessageData messageData) {
 
     switch (applicationCode) {
-      case "GTX":
+      case "GFX":
         return new ExtractGfxAlertedPartyData(messageData).extract();
       case "PEP":
         return new ExtractPepAlertedPartyData(messageData).extract();
-      case "GFEX":
+      case "GTEX":
         return new ExtractGtexAlertedPartyData(messageData).extract();
       default:
         throw new IllegalArgumentException("Application not supported " + applicationCode);
@@ -97,11 +97,11 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
       String applicationCode, MessageData messageData) {
 
     switch (applicationCode) {
-      case "GTX":
+      case "GFX":
         return new GfxTransactionMessage(messageData);
       case "PEP":
         return new PepTransactionMessage(messageData);
-      case "GFEX":
+      case "GTEX":
         return new GtexTransactionMessage(messageData);
       default:
         throw new IllegalArgumentException("Application not supported " + applicationCode);
