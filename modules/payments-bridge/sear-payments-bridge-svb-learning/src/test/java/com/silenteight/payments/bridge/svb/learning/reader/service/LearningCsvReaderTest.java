@@ -1,5 +1,6 @@
 package com.silenteight.payments.bridge.svb.learning.reader.service;
 
+import com.silenteight.payments.bridge.etl.firco.parser.MessageParserFacade;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
 import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
@@ -33,12 +34,14 @@ class LearningCsvReaderTest {
   private ExtractMessageStructureUseCase extractMessageStructureUseCase;
   @Mock
   private ExtractFieldValueUseCase extractFieldValueUseCase;
+  @Mock
+  private MessageParserFacade messageParserFacade;
 
   @BeforeEach
   void setUp() {
     var etlMatchService = new EtlMatchService(
         extractAlertedPartyDataUseCase, createAlertedPartyEntitiesUseCase,
-        extractMessageStructureUseCase, extractFieldValueUseCase);
+        extractMessageStructureUseCase, extractFieldValueUseCase, messageParserFacade);
 
     learningCsvReader = new ProcessAlertService(
         new CsvFileProviderTestImpl(),
@@ -47,7 +50,7 @@ class LearningCsvReaderTest {
 
   @Test
   void shouldReadAlerts() {
-    when(extractAlertedPartyDataUseCase.extractAlertedPartyData(any())).thenReturn(
+    when(extractAlertedPartyDataUseCase.extractAlertedPartyData(any(), any(), any())).thenReturn(
         AlertedPartyData.builder().build());
 
     List<LearningAlert> learningAlerts = new ArrayList<>();

@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
+import com.silenteight.payments.bridge.etl.firco.parser.MessageFormat;
+import com.silenteight.payments.bridge.etl.firco.parser.MessageParserFacade;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsvRow;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 import com.silenteight.payments.bridge.svb.oldetl.model.AbstractMessageStructure;
@@ -36,6 +38,7 @@ class EtlMatchService {
   private final CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;
   private final ExtractMessageStructureUseCase extractMessageStructureUseCase;
   private final ExtractFieldValueUseCase extractFieldValueUseCase;
+  private final MessageParserFacade messageParserFacade;
 
   LearningMatch fromLearningRows(List<LearningCsvRow> rows) {
     var alertedPartyData = createAlertedPartyData(rows);
@@ -81,15 +84,11 @@ class EtlMatchService {
 
   private AlertedPartyData createAlertedPartyData(List<LearningCsvRow> rows) {
     var row = rows.get(0);
-    return extractAlertedPartyDataUseCase.extractAlertedPartyData(
-        ExtractAlertedPartyDataRequest
-            .builder()
-            .messageData(row.getFkcoVContent())
-            .messageType(row.getFkcoVType())
-            .matchingText(String.join(",", createMatchingTexts(rows)))
-            .tag(row.getFkcoVMatchedTag())
-            .applicationCode(row.getFkcoVApplication())
-            .build());
+    var messageData = messageParserFacade.parse(
+        row.getFkcoVApplication().equals("GTEX") ? MessageFormat.SWIFT : MessageFormat.ALL,
+        row.getFkcoVContent());
+    return extractAlertedPartyDataUseCase.extractAlertedPartyData(row.getFkcoVApplication(),
+        messageData, row.getFkcoVMatchedTag());
   }
 
   private AbstractMessageStructure createMessageStructure(
