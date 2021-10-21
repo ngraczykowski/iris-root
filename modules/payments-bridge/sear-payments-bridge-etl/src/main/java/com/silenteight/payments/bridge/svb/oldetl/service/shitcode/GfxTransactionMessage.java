@@ -5,10 +5,10 @@ import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import java.util.List;
 import java.util.Optional;
 
-public class GfexTransactionMessage extends BaseTransactionMessage {
+public class GfxTransactionMessage extends BaseTransactionMessage {
 
-  // Jacek
-  public GfexTransactionMessage(MessageData messageData) {
+  // Mateusz
+  public GfxTransactionMessage(MessageData messageData) {
     super(messageData);
   }
 

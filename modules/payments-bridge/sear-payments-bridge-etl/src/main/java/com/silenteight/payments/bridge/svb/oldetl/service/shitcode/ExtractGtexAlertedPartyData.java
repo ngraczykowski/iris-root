@@ -6,11 +6,11 @@ import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 @RequiredArgsConstructor
-public class ExtractGtxAlertedPartyData {
+public class ExtractGtexAlertedPartyData {
 
   private final MessageData messageData;
 
-  // Marek
+  // Zbyszek
   public AlertedPartyData extract() {
     return null;
   }
