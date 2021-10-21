@@ -78,6 +78,7 @@ Authorization: Bearer {{access_token}}
 POST {{baseurl}}/rest/pb/alert
 Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{access_token}}
 
 < ../docs/api/svb-examples/2021-10-21-0905_x.json
 

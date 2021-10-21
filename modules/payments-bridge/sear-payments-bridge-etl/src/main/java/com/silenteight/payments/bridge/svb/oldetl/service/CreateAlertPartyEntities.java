@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.svb.oldetl.model.CreateAlertedPartyEntitiesRequest;
 import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
-import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
 import com.silenteight.payments.bridge.svb.oldetl.util.StringUtil;
 
@@ -38,24 +37,24 @@ class CreateAlertPartyEntities implements CreateAlertedPartyEntitiesUseCase {
     Pattern textPattern;
 
     for (String matchingText : request.getAllMatchingText()) {
-
       matchingText = matchingText.strip();
       textPattern = getPattern(messageFieldStructure, matchingText);
       boolean noMatchCond = true;
 
-      List<String> names = getNames(request.getAlertedPartyData());
+      var alertedPartyData = request.getAlertedPartyData();
+      List<String> names = alertedPartyData.getNames();
       if (matchesPattern(textPattern, names)) {
         noMatchCond = false;
         alertPartyEntities.put(ALERTED_NAME_KEY, names.get(0));
       }
 
-      List<String> addresses = getAddresses(request.getAlertedPartyData());
+      List<String> addresses = alertedPartyData.getAddresses();
       if (matchesPattern(textPattern, addresses)) {
         alertPartyEntities.put(ALERTED_ADDRESS_KEY, addresses.get(0));
         noMatchCond = false;
       }
 
-      List<String> ctryTowns = getCtryTowns(request.getAlertedPartyData());
+      List<String> ctryTowns = alertedPartyData.getCtryTowns();
       if (matchesPattern(textPattern, ctryTowns)) {
         noMatchCond = false;
         alertPartyEntities.put(ALERTED_COUNTRY_TOWN_KEY, ctryTowns.get(0));
@@ -90,18 +89,6 @@ class CreateAlertPartyEntities implements CreateAlertedPartyEntitiesUseCase {
       textPattern = compile(matchingTextPattern);
     }
     return textPattern;
-  }
-
-  private static List<String> getCtryTowns(AlertedPartyData alertedPartyData) {
-    return alertedPartyData.getCtryTowns();
-  }
-
-  private static List<String> getAddresses(AlertedPartyData alertedPartyData) {
-    return alertedPartyData.getAddresses();
-  }
-
-  private static List<String> getNames(AlertedPartyData alertedPartyData) {
-    return alertedPartyData.getNames();
   }
 
   private static boolean matchesPattern(Pattern textPattern, List<String> location) {
