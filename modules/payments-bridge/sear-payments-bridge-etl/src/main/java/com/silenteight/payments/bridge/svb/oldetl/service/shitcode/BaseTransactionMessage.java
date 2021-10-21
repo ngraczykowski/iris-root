@@ -7,6 +7,8 @@ import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.toList;
+
 @RequiredArgsConstructor
 public abstract class BaseTransactionMessage implements TransactionMessage {
 
@@ -24,7 +26,7 @@ public abstract class BaseTransactionMessage implements TransactionMessage {
 
   @Override
   public List<String> getAllMatchingTagValues(String tag, String matchingText) {
-    return List.of();
+    return messageData.findAllValues(tag).filter(s -> s.contains(matchingText)).collect(toList());
   }
 
   @Override

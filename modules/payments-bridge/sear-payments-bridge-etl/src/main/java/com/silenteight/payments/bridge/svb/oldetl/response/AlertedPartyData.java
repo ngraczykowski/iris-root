@@ -18,6 +18,6 @@ public class AlertedPartyData {
   boolean noAcctNumFlag;
   int numOfLines;
   int messageLength;
-  SourceSystem sourceSystem;
+
   MessageFieldStructure messageFieldStructure;
 }
