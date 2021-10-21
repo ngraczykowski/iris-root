@@ -11,11 +11,12 @@ public class ExtractGfxAlertedPartyData {
 
   private static final int LINE_3 = 2;
   private static final int LINE_4 = 3;
+  private static final int TO_LINE_4 = 4;
   private static final int LINE_5 = 4;
-  private static final int LINE_6 = 5;
   private static final int TO_LINE_5 = 5;
-  private static final int LINE_7 = 6;
+  private static final int LINE_6 = 5;
   private static final int TO_LINE_6 = 6;
+  private static final int LINE_7 = 6;
 
   private final MessageData messageData;
   private final String hitTag;
@@ -42,7 +43,7 @@ public class ExtractGfxAlertedPartyData {
             .name(lines.get(LINE_3))
             .address(lines.get(LINE_4))
             .ctryTown(lines.get(LINE_4))
-            .nameAddresses(lines.subList(LINE_3, LINE_5))
+            .nameAddresses(lines.subList(LINE_3, TO_LINE_4))
             .build();
 
       case 5:
