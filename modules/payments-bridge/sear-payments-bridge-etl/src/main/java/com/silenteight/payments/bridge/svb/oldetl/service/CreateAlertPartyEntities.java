@@ -29,7 +29,6 @@ import static java.util.regex.Pattern.compile;
 class CreateAlertPartyEntities implements CreateAlertedPartyEntitiesUseCase {
 
   public Map<AlertedPartyKey, String> create(CreateAlertedPartyEntitiesRequest request) {
-
     Map<AlertedPartyKey, String> alertPartyEntities = new HashMap<>();
     MessageFieldStructure messageFieldStructure =
         request.getMessageFieldStructure();

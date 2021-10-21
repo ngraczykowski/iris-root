@@ -9,13 +9,10 @@ import com.silenteight.payments.bridge.common.dto.input.*;
 import com.silenteight.payments.bridge.etl.firco.parser.MessageFormat;
 import com.silenteight.payments.bridge.etl.firco.parser.MessageParserFacade;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
+import com.silenteight.payments.bridge.svb.oldetl.model.ExtractAlertedPartyDataRequest;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertEtlResponseUseCase;
-import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertedPartyDataUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractMessageStructureUseCase;
-import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
-import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
-import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
-import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
+import com.silenteight.payments.bridge.svb.oldetl.response.*;
 import com.silenteight.payments.bridge.svb.oldetl.service.shitcode.*;
 import com.silenteight.payments.bridge.svb.oldetl.util.CommonUtils;
 
@@ -33,9 +30,6 @@ import java.util.stream.Collectors;
 public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
   private final ExtractMessageStructureUseCase extractMessageStructureUseCase;
-  private final ExtractAlertedPartyDataUseCase extractAlertedPartyDataUseCase;
-  private final FieldValueExtractor fieldValueExtractor;
-  private final ExtractMatchTextUseCase extractMatchTextUseCase;
 
   public AlertEtlResponse createAlertEtlResponse(AlertMessageDto alertMessageDto) {
     if (log.isDebugEnabled()) {
@@ -47,9 +41,21 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         MessageFormat.valueOf(alertMessageDto.getMessageFormat()),
         alertMessageDto.getMessageData());
 
-    for (RequestHitDto requestHitDto : alertMessageDto.getHits()) {
+    for (var requestHitDto : alertMessageDto.getHits()) {
+      var hit = requestHitDto.getHit();
+
+      var awefulMessageStructure = extractMessageStructureUseCase.extractMessageStructure(
+          ExtractAlertedPartyDataRequest.builder()
+              .messageData(alertMessageDto.getMessageData())
+              .applicationCode(alertMessageDto.getApplicationCode())
+              .messageType(alertMessageDto.getMessageType())
+              .matchingText(hit.getMatchingText())
+              .tag(hit.getTag())
+              .build());
+
       var hitData = createHitData(
-          alertMessageDto.getApplicationCode(), messageData, requestHitDto.getHit());
+          alertMessageDto.getApplicationCode(), messageData, hit,
+          awefulMessageStructure.getMessageFieldStructure());
 
       hits.add(hitData);
     }
@@ -71,9 +77,13 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         .build();
   }
 
-  private HitData createHitData(String applicationCode, MessageData messageData, HitDto hit) {
+  private HitData createHitData(
+      String applicationCode, MessageData messageData, HitDto hit,
+      MessageFieldStructure messageFieldStructure) {
+
     var alertedPartyData = extractAlertedPartyData(
-        applicationCode, messageData, hit);
+        applicationCode, messageData, hit.getTag(), messageFieldStructure);
+
     var hitAndWatchlistPartyData = extractHitAndWatchlistPartyData(
         buildTransactionMessage(applicationCode, messageData), hit);
 
@@ -81,11 +91,12 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
   }
 
   private AlertedPartyData extractAlertedPartyData(
-      String applicationCode, MessageData messageData, HitDto hit) {
+      String applicationCode, MessageData messageData, String tag,
+      MessageFieldStructure messageFieldStructure) {
 
     switch (applicationCode) {
       case "GFX":
-        return new ExtractGfxAlertedPartyData(messageData, hit.getTag()).extract();
+        return new ExtractGfxAlertedPartyData(messageData, tag).extract(messageFieldStructure);
       case "PEP":
         return new ExtractPepAlertedPartyData(messageData).extract();
       case "GTEX":
