@@ -10,7 +10,7 @@ public class ExtractPepAlertedPartyData {
 
   private final MessageData messageData;
 
-  // Zbyszek
+  // Wiktor
   public AlertedPartyData extract() {
     return null;
   }

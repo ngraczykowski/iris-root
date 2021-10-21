@@ -10,7 +10,7 @@ public class ExtractGfexAlertedPartyData {
 
   private final MessageData messageData;
 
-  // Wiktor
+  // Zbyszek
   public AlertedPartyData extract() {
     return null;
   }
