@@ -1,12 +1,28 @@
 import argparse
 import pathlib
-import sys
 
-from surrounding_check import get_company_token_count
+from agent_base.agent import AgentRunner
+from agent_base.grpc_service import GrpcService
+from agent_base.utils import Config
+
+from company_name_surrounding.agent import CompanyNameSurroundingAgent
+from company_name_surrounding.grpc_service import CompanyNameSurroundingAgentGrpcServicer
+
+
+def run(configuration_dirs, start_grpc_service):
+    config = Config(configuration_dirs=configuration_dirs, required=True)
+    services = []
+
+    if start_grpc_service:
+        services.append(
+            GrpcService(config, servicers=(CompanyNameSurroundingAgentGrpcServicer(),))
+        )
+
+    AgentRunner(config).run(CompanyNameSurroundingAgent(config=config), services=services)
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Company name surrounding agent")
+    parser = argparse.ArgumentParser(description="Strict name agent")
     parser.add_argument(
         "-c",
         "--configuration-dir",
@@ -19,25 +35,13 @@ def main():
         action="store_true",
         help="Start grpc service",
     )
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        help="Increase verbosity for debug purpose",
-    )
-    parser.add_argument(
-        "-n",
-        "--names",
-        nargs="+",
-        help="names to check surrounding",
-    )
     args = parser.parse_args()
-
-    if args.names:
-        return str(get_company_token_count(args.names))
-    else:
-        return ""
+    print("App running")
+    run(
+        configuration_dirs=(args.configuration_dir,),
+        start_grpc_service=args.grpc,
+    )
 
 
 if __name__ == "__main__":
-    sys.stdout.write(main() + "\n")
+    main()

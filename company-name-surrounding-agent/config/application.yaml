@@ -1,0 +1,4 @@
+agent:
+  process: 2
+  grpc:
+    port: 23456
