@@ -12,6 +12,7 @@ public class PepTransactionMessage extends BaseTransactionMessage {
 
   @Override
   public Optional<String> getAccountNumber(String tag) {
-    return Optional.empty();
+    var lines = getMessageData().getLines(tag);
+    return Optional.of(lines.get(0));
   }
 }

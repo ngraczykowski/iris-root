@@ -85,7 +85,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
       case "GFX":
         return new ExtractGfxAlertedPartyData(messageData, hitTag).extract(messageFieldStructure);
       case "PEP":
-        return new ExtractPepAlertedPartyData(messageData).extract();
+        return new ExtractPepAlertedPartyData(messageData, hitTag).extract(messageFieldStructure);
       case "GTEX":
         return new ExtractGtexAlertedPartyData(messageData).extract();
       default:
