@@ -95,7 +95,7 @@ class ProcessAlertService {
         log.debug("Successfully processed alert = {}", currentAlertId);
         successfulAlertsCount++;
       } catch (RuntimeException e) {
-        log.error("Failed to process alert = {} reason = {}", rowAlertId, e.getMessage());
+        log.error("Failed to process alert = {} reason = {}", rowAlertId, e);
         errors.add(ReadAlertError.builder().alertId(rowAlertId).exception(e).build());
         failedAlertsCount++;
       }
