@@ -1,6 +1,7 @@
 [tool.black]
 line-length = 99
 target-version = ['py36', 'py37', 'py38']
+extend-exclude = "\\w+pb2.py|\\w+pb2_grpc.py"
 
 [build-system]
 requires = ["setuptools >= 49.2.0", "wheel >= 0.34.2"]

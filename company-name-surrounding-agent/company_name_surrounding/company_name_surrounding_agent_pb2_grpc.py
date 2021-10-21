@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import company_name_surrounding_agent_pb2 as company__name__surrounding__agent__pb2
+import company_name_surrounding.company_name_surrounding_agent_pb2 as company__name__surrounding__agent__pb2
 
 
 class CompanyNameSurroundingAgentStub(object):
