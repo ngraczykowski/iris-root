@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public class GtxTransactionMessage extends BaseTransactionMessage {
 
+  // Mateusz
   public GtxTransactionMessage(MessageData messageData) {
     super(messageData);
   }

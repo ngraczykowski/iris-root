@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public class PepTransactionMessage extends BaseTransactionMessage {
 
+  // Tomasz
   public PepTransactionMessage(MessageData messageData) {
     super(messageData);
   }

@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public class GfexTransactionMessage extends BaseTransactionMessage {
 
+  // Jacek
   public GfexTransactionMessage(MessageData messageData) {
     super(messageData);
   }

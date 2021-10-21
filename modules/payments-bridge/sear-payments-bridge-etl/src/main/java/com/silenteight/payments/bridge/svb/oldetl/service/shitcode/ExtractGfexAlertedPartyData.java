@@ -10,6 +10,7 @@ public class ExtractGfexAlertedPartyData {
 
   private final MessageData messageData;
 
+  // Wiktor
   public AlertedPartyData extract() {
     return null;
   }

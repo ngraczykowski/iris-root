@@ -10,6 +10,7 @@ public class ExtractGtxAlertedPartyData {
 
   private final MessageData messageData;
 
+  // Marek
   public AlertedPartyData extract() {
     return null;
   }
