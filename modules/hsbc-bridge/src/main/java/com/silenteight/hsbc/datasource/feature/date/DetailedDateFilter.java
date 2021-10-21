@@ -1,7 +1,9 @@
 package com.silenteight.hsbc.datasource.feature.date;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -31,6 +33,9 @@ class DetailedDateFilter implements Predicate<String> {
       entry("dec", "12")
   );
 
+  @Getter
+  private final Map<String, String> detailDates = new HashMap<>();
+
   private final List<String> dates;
 
   @Override
@@ -38,10 +43,21 @@ class DetailedDateFilter implements Predicate<String> {
     return dates.stream().anyMatch(d -> isDetailed(date, d));
   }
 
-  private static boolean isDetailed(String date, String otherDate) {
+  private boolean isDetailed(String date, String otherDate) {
     date = normalize(date);
     otherDate = normalize(otherDate);
-    return date.length() > otherDate.length() && date.contains(otherDate);
+
+    var isDetailed = date.length() > otherDate.length() && date.contains(otherDate);
+
+    fillDetailDates(date, otherDate, isDetailed);
+
+    return isDetailed;
+  }
+
+  private void fillDetailDates(String date, String otherDate, boolean isDetailed) {
+    if (isDetailed) {
+      detailDates.put(date, otherDate);
+    }
   }
 
   private static String normalize(String date) {

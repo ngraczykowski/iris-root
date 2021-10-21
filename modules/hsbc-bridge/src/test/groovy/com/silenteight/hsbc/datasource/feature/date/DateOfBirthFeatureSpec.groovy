@@ -45,14 +45,14 @@ class DateOfBirthFeatureSpec extends Specification {
               ] as WorldCheckIndividual,
               [
                   getDobs       : {"10 10 2012"},
-                  getYearOfBirth: {null}
+                  getYearOfBirth: {"2012"}
               ] as WorldCheckIndividual
           ]
         },
         getPrivateListIndividuals: {
           [
               [
-                  getDateOfBirth: {"23/12/1990"},
+                  getDateOfBirth: {"23/12/1995"},
                   getYearOfBirth: {"1995"}
               ] as PrivateListIndividual,
               [
@@ -76,7 +76,7 @@ class DateOfBirthFeatureSpec extends Specification {
       feature == Feature.DATE_OF_BIRTH.fullName
       alertedPartyDates.size() == 2
       watchlistDates.size() == 5
-      watchlistDates == ["22 12 1990", "10 10 2012", "1994", "23/12/1990", "1995"]
+      watchlistDates == ["22 12 1990", "10 10 2012", "1994", "23/12/1995", "23/12/1990"]
       mode == SeverityMode.NORMAL
       alertedPartyType == INDIVIDUAL
       alertedPartyDates == ["1992 8 23", "1994"]

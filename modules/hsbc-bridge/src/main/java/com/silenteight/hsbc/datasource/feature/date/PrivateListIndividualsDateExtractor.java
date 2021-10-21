@@ -15,7 +15,7 @@ class PrivateListIndividualsDateExtractor implements Extractor {
   private final List<PrivateListIndividual> privateListIndividuals;
 
   Stream<String> extract() {
-    var mpDobsExtracted = privateListIndividuals
+    var mpDateOfBirthsExtracted = privateListIndividuals
         .stream()
         .map(PrivateListIndividual::getDateOfBirth)
         .filter(StringUtils::isNotBlank)
@@ -30,6 +30,6 @@ class PrivateListIndividualsDateExtractor implements Extractor {
         .flatMap(Stream::of)
         .distinct();
 
-    return result(mpDobsExtracted, mpYobsExtracted);
+    return result(mpDateOfBirthsExtracted, mpYobsExtracted);
   }
 }

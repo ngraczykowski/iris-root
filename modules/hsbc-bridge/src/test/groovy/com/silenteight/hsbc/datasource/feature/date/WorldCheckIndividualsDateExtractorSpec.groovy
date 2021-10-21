@@ -15,7 +15,7 @@ class WorldCheckIndividualsDateExtractorSpec extends Specification {
         ] as WorldCheckIndividual,
         [
             getDobs       : {"1961-00-00|1963-00-00|1964-04-07"},
-            getYearOfBirth: {null}
+            getYearOfBirth: {"1964"}
         ] as WorldCheckIndividual
     ]
 

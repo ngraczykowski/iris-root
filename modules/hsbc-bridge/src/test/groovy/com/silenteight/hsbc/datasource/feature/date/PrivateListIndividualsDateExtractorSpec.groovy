@@ -15,7 +15,7 @@ class PrivateListIndividualsDateExtractorSpec extends Specification {
         ] as PrivateListIndividual,
         [
             getDateOfBirth: {"10 10 2012"},
-            getYearOfBirth: {null}
+            getYearOfBirth: {"2012"}
         ] as PrivateListIndividual
     ]
 
