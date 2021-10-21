@@ -32,8 +32,8 @@ class MatchingFieldPairExtractorHelper {
     for (String matchFieldPair : matchFieldPairList) {
       String matchField = ComponentExtractorHelper
           .extractComponentsFromMatchFieldPair(tag, matchFieldPair).get(0);
-      List<String> matchingTextList =
-          ExtractMatchTextUseCase.extractMatchTextLs(matchField, matchText);
+      List<String> matchingTextList = List.of();
+      //ExtractMatchTextUseCase.extractMatchTextLs(matchField, matchText);
       for (int i = 0; i < matchingTextList.size(); i++) {
         int matchTextListLength = matchingTextList.size() - 1;
         Pattern textPattern = Pattern.compile(Pattern.quote(matchingTextList.get(i)));
