@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package silenteight.agent.companynamesurrounding.v1.api;
+
+option java_package = "com.silenteight.proto.agent.companynamesurrounding.v1.api";
+option java_outer_classname = "CompanyNameSurroundingAgentApiProto";
+option java_multiple_files = true;
+
+service CompanyNameSurroundingAgent {
+
+  rpc CheckCompanyNameSurrounding (CheckCompanyNameSurroundingRequest)
+      returns (CheckCompanyNameSurroundingResponse) {
+  }
+}
+
+message CheckCompanyNameSurroundingRequest {
+  repeated string names = 1;
+}
+
+message CheckCompanyNameSurroundingResponse {
+  repeated string names = 1;
+  uint32 result = 2;
+}
+
