@@ -8,6 +8,7 @@ import com.silenteight.warehouse.indexer.query.common.QueryFilter;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
 import java.util.List;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @ConstructorBinding
@@ -20,7 +21,7 @@ class FilterProperties {
   @NotNull
   private final List<String> values;
 
-  static QueryFilter toQueryFilter(FilterProperties filterProperties) {
+  static QueryFilter toQueryFilter(@Valid FilterProperties filterProperties) {
     return new QueryFilter(filterProperties.getName(), filterProperties.getValues());
   }
 }

@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.silenteight.warehouse.report.rbs.v1.list.DeprecatedListRbsReportsConfiguration

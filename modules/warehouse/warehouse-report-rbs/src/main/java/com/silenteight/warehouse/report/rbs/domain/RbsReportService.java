@@ -4,10 +4,14 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.warehouse.report.rbs.generation.RbsReportDefinition;
 import com.silenteight.warehouse.report.remove.ReportsRemoval;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
+import com.silenteight.warehouse.report.reporting.ReportRange;
 
 import java.time.OffsetDateTime;
+import java.util.List;
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -18,27 +22,22 @@ public class RbsReportService implements ReportsRemoval {
   @NonNull
   private final AsyncRbsReportGenerationService asyncReportGenerationService;
 
-  public ReportInstanceReferenceDto createProductionReportInstance(ReportDefinition reportType) {
-    RbsReport report = RbsReport.of(reportType);
+  public ReportInstanceReferenceDto createReportInstance(
+      @NonNull ReportRange range,
+      @NonNull String fileName,
+      @NonNull List<String> indexes,
+      @NonNull @Valid RbsReportDefinition properties) {
+
+    RbsReport report = RbsReport.of(fileName);
     RbsReport savedReport = repository.save(report);
     //FIXME(kdzieciol): Here we should send a request to the queue (internally) to generate this
     // report. Due to the lack of time, we will generate it in the thread (WEB-1358)
-    asyncReportGenerationService.generateReport(savedReport.getId());
+    asyncReportGenerationService.generateReport(savedReport.getId(), range, indexes, properties);
     return new ReportInstanceReferenceDto(savedReport.getId());
   }
 
   public void removeReport(long id) {
     repository.deleteById(id);
-  }
-
-  public ReportInstanceReferenceDto createSimulationReportInstance(
-      String analysisId, ReportDefinition reportType) {
-
-    RbsReport report = RbsReport.of(reportType);
-    RbsReport savedReport = repository.save(report);
-
-    asyncReportGenerationService.generateReport(savedReport.getId(), analysisId);
-    return new ReportInstanceReferenceDto(savedReport.getId());
   }
 
   @Override
@@ -47,5 +46,4 @@ public class RbsReportService implements ReportsRemoval {
     log.info("Number of removed RB Scorer reports reportsCount={}", numberOfRemovedReports);
     return numberOfRemovedReports;
   }
-
 }

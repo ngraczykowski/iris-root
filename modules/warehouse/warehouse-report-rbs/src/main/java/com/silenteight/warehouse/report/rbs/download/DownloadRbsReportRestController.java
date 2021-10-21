@@ -23,51 +23,56 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping(ROOT)
 class DownloadRbsReportRestController {
 
+  private static final String ANALYSIS_ID_PARAM = "analysisId";
+  private static final String ID_PARAM = "id";
+  private static final String DOWNLOAD_SIMULATION_REPORT_URL =
+      "/v2/analysis/{analysisId}/reports/RB_SCORER/{id}";
+
+  private static final String DOWNLOAD_PRODUCTION_REPORT_URL =
+      "/v2/analysis/production/reports/RB_SCORER/{id}";
+
   @NonNull
   private final DownloadRbsReportUseCase useCase;
 
-  @GetMapping("/v1/analysis/production/definitions/RB_SCORER/{definitionId}/reports/{id}")
+  @GetMapping(DOWNLOAD_PRODUCTION_REPORT_URL)
   @PreAuthorize("isAuthorized('DOWNLOAD_PRODUCTION_ON_DEMAND_REPORT')")
-  public ResponseEntity<String> downloadProductionReport(
-      @PathVariable("definitionId") String definitionId,
-      @PathVariable("id") long id) {
-
-    log.info("Download production report on demand request received, reportId={}", id);
-
+  public ResponseEntity<String> downloadProductionReport(@PathVariable(ID_PARAM) long id) {
+    log.info("Download production Rb Scorer report request received, reportId={}", id);
     ReportDto reportDto = useCase.activate(id);
     String filename = reportDto.getFilename();
     String data = reportDto.getContent();
-
-    log.debug(
-        "Download production report on demand request processed, reportId={}, reportName={}", id,
-        reportDto.getFilename());
+    log.debug("Download production Rb Scorer report request processed, reportId={}, reportName={}",
+        id, filename);
 
     return ok()
-        .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))
+        .header("Content-Disposition", getContentDisposition(filename))
         .header("Content-Type", "text/csv")
         .body(data);
   }
 
-  @GetMapping("/v1/analysis/{analysisId}/definitions/RB_SCORER/{definitionId}/reports/{id}")
+  @GetMapping(DOWNLOAD_SIMULATION_REPORT_URL)
   @PreAuthorize("isAuthorized('DOWNLOAD_SIMULATION_REPORT')")
   public ResponseEntity<String> downloadSimulationReport(
-      @PathVariable("analysisId") String analysisId,
-      @PathVariable("definitionId") String definitionId,
-      @PathVariable("id") long id) {
+      @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
+      @PathVariable(ID_PARAM) long id) {
 
-    log.info("Download rbscorer simulation report request received, reportId={}", id);
+    log.info("Download RB Scorer simulation report request received, analysisId={}, reportId={}",
+        analysisId, id);
 
     ReportDto reportDto = useCase.activate(id);
     String filename = reportDto.getFilename();
     String data = reportDto.getContent();
 
-    log.debug(
-        "Download simulation report request processed, reportId={}, reportName={}", id,
-        reportDto.getFilename());
+    log.debug("Download simulation RB Scorer report request processed, reportId={}, reportName={}",
+        id, filename);
 
     return ok()
-        .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))
+        .header("Content-Disposition", getContentDisposition(filename))
         .header("Content-Type", "text/csv")
         .body(data);
+  }
+
+  private static String getContentDisposition(String filename) {
+    return format("attachment; filename=\"%s\"", filename);
   }
 }

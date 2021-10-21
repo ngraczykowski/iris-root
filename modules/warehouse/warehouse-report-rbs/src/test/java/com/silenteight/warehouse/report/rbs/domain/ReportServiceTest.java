@@ -9,13 +9,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.silenteight.warehouse.report.rbs.domain.ReportDefinition.DAY;
+import static com.silenteight.warehouse.report.rbs.RbsReportTestFixtures.INDEXES;
+import static com.silenteight.warehouse.report.rbs.RbsReportTestFixtures.REPORT_FILENAME;
+import static com.silenteight.warehouse.report.rbs.RbsReportTestFixtures.REPORT_RANGE;
+import static com.silenteight.warehouse.report.rbs.domain.ReportState.NEW;
+import static com.silenteight.warehouse.report.rbs.generation.GenerationRbScorerReportTestFixtures.PROPERTIES;
 import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReportServiceTest {
-
-  private static final ReportDefinition TYPE = DAY;
 
   private final InMemoryRbsRepository rbsReportRepository = new InMemoryRbsRepository();
 
@@ -33,27 +35,28 @@ class ReportServiceTest {
 
   @Test
   void generateReportAndReportAvailable() {
-    ReportInstanceReferenceDto reportInstance = service.createProductionReportInstance(TYPE);
+    ReportInstanceReferenceDto reportInstance =
+        service.createReportInstance(REPORT_RANGE, REPORT_FILENAME, INDEXES, PROPERTIES);
 
     ReportDto report = query.getReport(reportInstance.getInstanceReferenceId());
-    assertThat(report.getFilename()).isEqualTo(TYPE.getFilename());
+    assertThat(report.getFilename()).isEqualTo(REPORT_FILENAME);
     assertThat(rbsReportRepository.findById(reportInstance.getInstanceReferenceId()))
         .isPresent()
         .get()
         .extracting(RbsReport::getState)
-        .isEqualTo(ReportState.NEW);
+        .isEqualTo(NEW);
   }
 
   @Test
   void removeReport() {
-    ReportInstanceReferenceDto reportInstance = service.createProductionReportInstance(TYPE);
+    ReportInstanceReferenceDto reportInstance =
+        service.createReportInstance(REPORT_RANGE, REPORT_FILENAME, INDEXES, PROPERTIES);
 
     ReportDto report = query.getReport(reportInstance.getInstanceReferenceId());
-    assertThat(report.getFilename()).isEqualTo(TYPE.getFilename());
+    assertThat(report.getFilename()).isEqualTo(REPORT_FILENAME);
 
     service.removeReport(reportInstance.getInstanceReferenceId());
 
     assertThat(rbsReportRepository.findById(reportInstance.getInstanceReferenceId())).isEmpty();
   }
 }
-

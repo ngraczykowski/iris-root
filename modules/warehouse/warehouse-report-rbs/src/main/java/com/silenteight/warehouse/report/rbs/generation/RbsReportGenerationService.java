@@ -11,10 +11,10 @@ import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 import com.silenteight.warehouse.report.rbs.generation.dto.CsvReportContentDto;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+import javax.validation.Valid;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
@@ -31,10 +31,10 @@ public class RbsReportGenerationService {
   private final GroupingQueryService groupingQueryService;
 
   public CsvReportContentDto generateReport(
-      OffsetDateTime from,
-      OffsetDateTime to,
-      List<String> indexes,
-      RbsReportDefinition properties) {
+      @NonNull OffsetDateTime from,
+      @NonNull OffsetDateTime to,
+      @NonNull List<String> indexes,
+      @NonNull @Valid RbsReportDefinition properties) {
 
     FetchGroupedDataResponse rawData = fetchRawData(from, to, indexes, properties);
     return CsvReportContentDto.of(getLabelsRow(properties), transpose(rawData, properties));
@@ -60,6 +60,7 @@ public class RbsReportGenerationService {
         .queryFilters(properties.getQueryFilters())
         .indexes(indexes)
         .build();
+
     return groupingQueryService.generate(request);
   }
 
@@ -76,7 +77,7 @@ public class RbsReportGenerationService {
         .collect(toList());
   }
 
-  private String generateStaticFields(Row row, RbsReportDefinition properties) {
+  private static String generateStaticFields(Row row, RbsReportDefinition properties) {
     return properties
         .getListOfStaticFields()
         .stream()
@@ -97,15 +98,14 @@ public class RbsReportGenerationService {
         .map(fieldName -> rowWithGroupedData.getValueOrDefault(fieldName, EMPTY_STRING));
 
     long matchCount = rowsToTranspose.stream().mapToLong(Row::getCount).sum();
-    Stream<String> staticCellsWithCount = concat(
-        staticCells, Stream.of(String.valueOf(matchCount)));
+    Stream<String> staticCellsWithCount =
+        concat(staticCells, Stream.of(String.valueOf(matchCount)));
 
     Stream<String> rowCells = concat(staticCellsWithCount, transposedCells);
     return CSVUtils.getCSVRecordWithDefaultDelimiter(rowCells.toArray(String[]::new));
   }
 
-  private Stream<String> getValues(GroupingColumnProperties column, List<Row> rows) {
-    List<String> result = new ArrayList<>();
+  private static Stream<String> getValues(GroupingColumnProperties column, List<Row> rows) {
     Map<String, Long> values = rows
         .stream()
         .collect(toMap(
@@ -113,14 +113,11 @@ public class RbsReportGenerationService {
             Row::getCount,
             Long::sum));
 
-    column
-        .getGroupingValues()
+    return column.getGroupingValues()
         .stream()
         .map(GroupingValues::getValue)
         .map(String::toLowerCase)
         .map(groupingValue -> values.getOrDefault(groupingValue, 0L))
-        .map(String::valueOf)
-        .forEach(result::add);
-    return result.stream();
+        .map(String::valueOf);
   }
 }

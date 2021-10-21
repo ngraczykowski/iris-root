@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.MODEL_TUNER;
+import static com.silenteight.warehouse.report.rbs.RbsReportTestFixtures.REPORT_FILENAME;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -22,7 +23,6 @@ import static org.springframework.http.HttpStatus.OK;
 class DownloadReportRestControllerTest extends BaseRestControllerTest {
 
   private static final long REPORT_ID = 5;
-  public static final String FILE_NAME = "RBS_FILENAME";
   public static final String CONTENT = "report_content";
 
   @MockBean
@@ -33,11 +33,10 @@ class DownloadReportRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenDownloadingReport() {
-    when(query.getReport(REPORT_ID)).thenReturn(ReportDto.of(FILE_NAME, CONTENT));
+    when(query.getReport(REPORT_ID)).thenReturn(ReportDto.of(REPORT_FILENAME, CONTENT));
 
-    String expectedContentDisposition = format("attachment; filename=\"%s\"", FILE_NAME);
-    String response = get(
-        "/v1/analysis/production/definitions/RB_SCORER/rb-scorer-1-day/reports/" + REPORT_ID)
+    String expectedContentDisposition = format("attachment; filename=\"%s\"", REPORT_FILENAME);
+    String response = get("/v2/analysis/production/reports/RB_SCORER/" + REPORT_ID)
         .statusCode(OK.value())
         .contentType("text/csv")
         .header("Content-Disposition", expectedContentDisposition)
@@ -52,11 +51,10 @@ class DownloadReportRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenDownloadingSimReport() {
-    when(query.getReport(REPORT_ID)).thenReturn(ReportDto.of(FILE_NAME, CONTENT));
+    when(query.getReport(REPORT_ID)).thenReturn(ReportDto.of(REPORT_FILENAME, CONTENT));
 
-    String expectedContentDisposition = format("attachment; filename=\"%s\"", FILE_NAME);
-    String response = get(
-        "/v1/analysis/123/definitions/RB_SCORER/rb-scorer-1-day/reports/" + REPORT_ID)
+    String expectedContentDisposition = format("attachment; filename=\"%s\"", REPORT_FILENAME);
+    String response = get("/v2/analysis/123/reports/RB_SCORER/" + REPORT_ID)
         .statusCode(OK.value())
         .contentType("text/csv")
         .header("Content-Disposition", expectedContentDisposition)

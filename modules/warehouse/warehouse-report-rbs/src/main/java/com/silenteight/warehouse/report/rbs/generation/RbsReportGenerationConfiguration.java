@@ -11,9 +11,7 @@ import org.springframework.context.annotation.Configuration;
 class RbsReportGenerationConfiguration {
 
   @Bean
-  RbsReportGenerationService rbsReportGenerationService(
-      GroupingQueryService groupingQueryService) {
-
+  RbsReportGenerationService rbsReportGenerationService(GroupingQueryService groupingQueryService) {
     return new RbsReportGenerationService(groupingQueryService);
   }
 }
