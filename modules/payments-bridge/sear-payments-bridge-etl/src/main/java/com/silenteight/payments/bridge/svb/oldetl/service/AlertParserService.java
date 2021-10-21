@@ -11,9 +11,16 @@ import com.silenteight.payments.bridge.etl.firco.parser.MessageParserFacade;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.svb.oldetl.model.ExtractAlertedPartyDataRequest;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertEtlResponseUseCase;
+import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertedPartyDataUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractMessageStructureUseCase;
-import com.silenteight.payments.bridge.svb.oldetl.response.*;
-import com.silenteight.payments.bridge.svb.oldetl.service.shitcode.*;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
+import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
+import com.silenteight.payments.bridge.svb.oldetl.service.shitcode.GfxTransactionMessage;
+import com.silenteight.payments.bridge.svb.oldetl.service.shitcode.GtexTransactionMessage;
+import com.silenteight.payments.bridge.svb.oldetl.service.shitcode.PepTransactionMessage;
+import com.silenteight.payments.bridge.svb.oldetl.service.shitcode.TransactionMessage;
 import com.silenteight.payments.bridge.svb.oldetl.util.CommonUtils;
 
 import org.springframework.stereotype.Service;
@@ -30,6 +37,7 @@ import java.util.stream.Collectors;
 public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
   private final ExtractMessageStructureUseCase extractMessageStructureUseCase;
+  private final ExtractAlertedPartyDataUseCase extractAlertedPartyDataUseCase;
 
   public AlertEtlResponse createAlertEtlResponse(AlertMessageDto alertMessageDto) {
     if (log.isDebugEnabled()) {
@@ -81,29 +89,13 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
       String applicationCode, MessageData messageData, HitDto hit,
       MessageFieldStructure messageFieldStructure) {
 
-    var alertedPartyData = extractAlertedPartyData(
+    var alertedPartyData = extractAlertedPartyDataUseCase.extractAlertedPartyData(
         applicationCode, messageData, hit.getTag(), messageFieldStructure);
 
     var hitAndWatchlistPartyData = extractHitAndWatchlistPartyData(
         buildTransactionMessage(applicationCode, messageData), hit);
 
     return new HitData(alertedPartyData, hitAndWatchlistPartyData);
-  }
-
-  private AlertedPartyData extractAlertedPartyData(
-      String applicationCode, MessageData messageData, String tag,
-      MessageFieldStructure messageFieldStructure) {
-
-    switch (applicationCode) {
-      case "GFX":
-        return new ExtractGfxAlertedPartyData(messageData, tag).extract(messageFieldStructure);
-      case "PEP":
-        return new ExtractPepAlertedPartyData(messageData).extract();
-      case "GTEX":
-        return new ExtractGtexAlertedPartyData(messageData).extract();
-      default:
-        throw new IllegalArgumentException("Application not supported " + applicationCode);
-    }
   }
 
   private TransactionMessage buildTransactionMessage(

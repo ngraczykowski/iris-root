@@ -17,6 +17,7 @@ import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertedPartyDataUs
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractFieldValueUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractMessageStructureUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
+import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
 
 import org.apache.commons.collections4.list.SetUniqueList;
 import org.apache.commons.lang3.StringUtils;
@@ -41,9 +42,10 @@ class EtlMatchService {
   private final MessageParserFacade messageParserFacade;
 
   LearningMatch fromLearningRows(List<LearningCsvRow> rows) {
-    var alertedPartyData = createAlertedPartyData(rows);
     var matchingTexts = createMatchingTexts(rows);
     var messageStructure = createMessageStructure(rows, matchingTexts);
+    var alertedPartyData =
+        createAlertedPartyData(rows, messageStructure.getMessageFieldStructure());
 
     return LearningMatch
         .builder()
@@ -82,13 +84,14 @@ class EtlMatchService {
         .collect(toList());
   }
 
-  private AlertedPartyData createAlertedPartyData(List<LearningCsvRow> rows) {
+  private AlertedPartyData createAlertedPartyData(
+      List<LearningCsvRow> rows, MessageFieldStructure messageFieldStructure) {
     var row = rows.get(0);
     var messageData = messageParserFacade.parse(
         row.getFkcoVApplication().equals("GTEX") ? MessageFormat.SWIFT : MessageFormat.ALL,
         row.getFkcoVContent());
     return extractAlertedPartyDataUseCase.extractAlertedPartyData(row.getFkcoVApplication(),
-        messageData, row.getFkcoVMatchedTag());
+        messageData, row.getFkcoVMatchedTag(), messageFieldStructure);
   }
 
   private AbstractMessageStructure createMessageStructure(
