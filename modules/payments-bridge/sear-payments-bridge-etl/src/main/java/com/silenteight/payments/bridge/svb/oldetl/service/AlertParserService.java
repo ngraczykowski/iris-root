@@ -48,8 +48,10 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         alertMessageDto.getMessageData());
 
     for (RequestHitDto requestHitDto : alertMessageDto.getHits()) {
-      hits.add(
-          createHitData(alertMessageDto.getApplicationCode(), messageData, requestHitDto.getHit()));
+      var hitData = createHitData(
+          alertMessageDto.getApplicationCode(), messageData, requestHitDto.getHit());
+
+      hits.add(hitData);
     }
 
     return AlertEtlResponse.builder()
