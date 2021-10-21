@@ -13,11 +13,11 @@ public class AlertedPartyData {
   List<String> addresses;
   List<String> ctryTowns;
   List<String> nameAddresses;
+
+  // DO NOT USE THIS:
   boolean noAcctNumFlag;
   int numOfLines;
   int messageLength;
-
-  // DO NOT USE THIS:
   SourceSystem sourceSystem;
   MessageFieldStructure messageFieldStructure;
 }
