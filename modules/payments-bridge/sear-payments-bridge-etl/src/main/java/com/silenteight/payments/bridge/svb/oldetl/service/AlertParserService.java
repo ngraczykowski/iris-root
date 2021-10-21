@@ -42,10 +42,14 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
       log.debug("Parsing alert for ETL: systemId={}", alertMessageDto.getSystemID());
     }
 
-    List<HitData> hits = new ArrayList<>();
+    var hits = new ArrayList<HitData>();
+    var messageData = new MessageParserFacade().parse(
+        MessageFormat.valueOf(alertMessageDto.getMessageFormat()),
+        alertMessageDto.getMessageData());
 
     for (RequestHitDto requestHitDto : alertMessageDto.getHits()) {
-      hits.add(createHitData(alertMessageDto, requestHitDto.getHit()));
+      hits.add(
+          createHitData(alertMessageDto.getApplicationCode(), messageData, requestHitDto.getHit()));
     }
 
     return AlertEtlResponse.builder()
@@ -65,14 +69,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         .build();
   }
 
-  private HitData createHitData(
-      AlertMessageDto alertMessageDto, HitDto hit) {
-
-    var messageData = new MessageParserFacade().parse(
-        MessageFormat.valueOf(alertMessageDto.getMessageFormat()),
-        alertMessageDto.getMessageData());
-
-    var applicationCode = alertMessageDto.getApplicationCode();
+  private HitData createHitData(String applicationCode, MessageData messageData, HitDto hit) {
     var alertedPartyData = extractAlertedPartyData(
         applicationCode, messageData);
     var hitAndWatchlistPartyData = extractHitAndWatchlistPartyData(
