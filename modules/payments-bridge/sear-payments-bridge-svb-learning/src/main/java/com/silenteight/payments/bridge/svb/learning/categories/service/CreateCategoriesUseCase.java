@@ -90,10 +90,10 @@ class CreateCategoriesUseCase {
   private static Category watchListTypeCategory() {
     return Category
         .newBuilder()
-        .setName("categories/watchListType")
-        .setDisplayName("WatchList Type Category")
+        .setName("categories/watchlistType")
+        .setDisplayName("Watchlist Type Category")
         .setType(CategoryType.ENUMERATED)
-        .addAllAllowedValues(List.of("INDIVIDUAL", "ORGANIZATION", "ENTITY_TYPE_UNSPECIFIED"))
+        .addAllAllowedValues(List.of("ADDRESS", "COMPANY", "INDIVIDUAL", "VESSEL"))
         .setMultiValue(false)
         .build();
   }
