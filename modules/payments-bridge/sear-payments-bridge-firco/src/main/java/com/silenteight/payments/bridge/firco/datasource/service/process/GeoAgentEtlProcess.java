@@ -76,23 +76,23 @@ class GeoAgentEtlProcess implements EtlProcess {
   private BatchCreateAgentInputsRequest createBatchInputRequest(
       String matchValue, String countryTown, String watchListLocation) {
 
-    var batchInputRequest = BatchCreateAgentInputsRequest.newBuilder()
+    var geoFeatureInput = FeatureInput.newBuilder()
+        .setFeature("features/geo")
+        .setAgentFeatureInput(Any.pack(
+            LocationFeatureInput.newBuilder()
+                .setFeature("features/geo")
+                .setAlertedPartyLocation(countryTown)
+                .setWatchlistLocation(watchListLocation)
+                .build()))
+        .build();
+
+    return BatchCreateAgentInputsRequest.newBuilder()
         .addAgentInputs(AgentInput.newBuilder()
             .setMatch(matchValue)
             .addFeatureInputs(
-                FeatureInput.newBuilder()
-                    .setFeature("features/geo")
-                    .setAgentFeatureInput(Any.pack(
-                        LocationFeatureInput.newBuilder()
-                            .setFeature("features/geo")
-                            .setAlertedPartyLocation(countryTown)
-                            .setWatchlistLocation(watchListLocation)
-                            .build()))
-                    .build())
+                geoFeatureInput)
             .build())
         .build();
-
-    return batchInputRequest;
   }
 
   private String getSpecifiedWatchListLocation(

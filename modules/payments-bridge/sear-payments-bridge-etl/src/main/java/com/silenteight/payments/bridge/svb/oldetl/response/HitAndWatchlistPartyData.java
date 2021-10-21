@@ -5,7 +5,6 @@ import lombok.Value;
 
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
-import com.silenteight.payments.bridge.svb.oldetl.model.AbstractMessageStructure;
 
 import java.util.List;
 
@@ -13,7 +12,6 @@ import java.util.List;
 @Builder
 public class HitAndWatchlistPartyData {
 
-  AbstractMessageStructure messageStructure;
   SolutionType solutionType;
   WatchlistType watchlistType;
   String tag;

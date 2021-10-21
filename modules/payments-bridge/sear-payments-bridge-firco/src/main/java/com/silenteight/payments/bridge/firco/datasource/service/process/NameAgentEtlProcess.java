@@ -66,29 +66,31 @@ class NameAgentEtlProcess implements EtlProcess {
       EntityType alertedPartyType,
       List<String> matchingTexts) {
 
+    var nameFeatureInput = NameFeatureInput.newBuilder()
+        .setFeature("features/name")
+        .addAllAlertedPartyNames(alertedPartyNames
+            .stream()
+            .map(alertedPartyName -> AlertedPartyName
+                .newBuilder()
+                .setName(alertedPartyName)
+                .build())
+            .collect(
+                Collectors.toList()))
+        .addWatchlistNames(WatchlistName.newBuilder()
+            .setName(watchlistName)
+            .setType(NameType.REGULAR)
+            .build())
+        .setAlertedPartyType(alertedPartyType)
+        .addAllMatchingTexts(matchingTexts)
+        .build();
+
     return BatchCreateAgentInputsRequest.newBuilder()
         .addAgentInputs(AgentInput.newBuilder()
             .setMatch(matchValue)
             .addFeatureInputs(FeatureInput
                 .newBuilder()
                 .setFeature("features/name")
-                .setAgentFeatureInput(Any.pack(NameFeatureInput.newBuilder()
-                    .setFeature("features/name")
-                    .addAllAlertedPartyNames(alertedPartyNames
-                        .stream()
-                        .map(alertedPartyName -> AlertedPartyName
-                            .newBuilder()
-                            .setName(alertedPartyName)
-                            .build())
-                        .collect(
-                            Collectors.toList()))
-                    .addWatchlistNames(WatchlistName.newBuilder()
-                        .setName(watchlistName)
-                        .setType(NameType.REGULAR)
-                        .build())
-                    .setAlertedPartyType(alertedPartyType)
-                    .addAllMatchingTexts(matchingTexts)
-                    .build()))
+                .setAgentFeatureInput(Any.pack(nameFeatureInput))
                 .build())
             .build())
         .build();

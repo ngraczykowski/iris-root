@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.svb.oldetl.service;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import com.silenteight.payments.bridge.common.dto.input.RequestHitDto;
+import com.silenteight.payments.bridge.common.dto.input.HittedEntityDto;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -11,9 +11,10 @@ import org.jetbrains.annotations.Nullable;
 public class HitNameExtractor {
 
   @Nullable
-  public static String extractName(RequestHitDto requestHitDto, int synonymIndex) {
-    if (requestHitDto.getHit().getHittedEntity().getNames().size() > synonymIndex) {
-      return requestHitDto.getHit().getHittedEntity().getNames().get(synonymIndex).getName();
+  public static String extractName(
+      int synonymIndex, HittedEntityDto hittedEntity) {
+    if (hittedEntity.getNames().size() > synonymIndex) {
+      return hittedEntity.getNames().get(synonymIndex).getName();
     }
     return null;
   }
