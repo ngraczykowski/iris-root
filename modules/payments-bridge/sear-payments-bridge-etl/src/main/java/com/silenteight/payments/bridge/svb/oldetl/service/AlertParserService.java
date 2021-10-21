@@ -73,7 +73,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
   private HitData createHitData(String applicationCode, MessageData messageData, HitDto hit) {
     var alertedPartyData = extractAlertedPartyData(
-        applicationCode, messageData);
+        applicationCode, messageData, hit);
     var hitAndWatchlistPartyData = extractHitAndWatchlistPartyData(
         buildTransactionMessage(applicationCode, messageData), hit);
 
@@ -81,11 +81,11 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
   }
 
   private AlertedPartyData extractAlertedPartyData(
-      String applicationCode, MessageData messageData) {
+      String applicationCode, MessageData messageData, HitDto hit) {
 
     switch (applicationCode) {
       case "GFX":
-        return new ExtractGfxAlertedPartyData(messageData).extract();
+        return new ExtractGfxAlertedPartyData(messageData, hit).extract();
       case "PEP":
         return new ExtractPepAlertedPartyData(messageData).extract();
       case "GTEX":

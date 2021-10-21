@@ -2,6 +2,7 @@ package com.silenteight.payments.bridge.svb.oldetl.service.shitcode;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.common.dto.input.HitDto;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
@@ -9,8 +10,8 @@ import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 public class ExtractGfxAlertedPartyData {
 
   private final MessageData messageData;
+  private final HitDto hit;
 
-  // Marek
   public AlertedPartyData extract() {
     return null;
   }
