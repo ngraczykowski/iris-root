@@ -87,7 +87,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
       case "PEP":
         return new ExtractPepAlertedPartyData(messageData, hitTag).extract(messageFieldStructure);
       case "GTEX":
-        return new ExtractGtexAlertedPartyData(messageData).extract();
+        return new ExtractGtexAlertedPartyData(messageData, hitTag).extract(messageFieldStructure);
       default:
         throw new IllegalArgumentException("Application not supported " + applicationCode);
     }
