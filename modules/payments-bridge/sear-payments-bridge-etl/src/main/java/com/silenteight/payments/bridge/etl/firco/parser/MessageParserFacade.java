@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageParserFacade {
 
-  MessageData parse(MessageFormat messageFormat, String message) {
+  public MessageData parse(MessageFormat messageFormat, String message) {
     switch (messageFormat) {
       case ALL:
         return new FircoMessageParser(message).parse();
