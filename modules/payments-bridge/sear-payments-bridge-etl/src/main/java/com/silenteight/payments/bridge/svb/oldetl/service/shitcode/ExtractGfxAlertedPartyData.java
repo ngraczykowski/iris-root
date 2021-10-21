@@ -24,7 +24,7 @@ public class ExtractGfxAlertedPartyData {
   public AlertedPartyData extract(MessageFieldStructure messageFieldStructure) {
     var lines = messageData.getLines(hitTag);
 
-    if (lines.size() < 3 && lines.size() > 7)
+    if (lines.size() < 3 || lines.size() > 7)
       throw new IllegalArgumentException("I've no idea how to get data from " + hitTag);
 
     var partyDataBuilder = AlertedPartyData.builder()
