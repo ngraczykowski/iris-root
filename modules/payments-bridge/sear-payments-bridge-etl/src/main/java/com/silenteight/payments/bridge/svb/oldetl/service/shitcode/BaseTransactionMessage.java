@@ -15,7 +15,7 @@ public abstract class BaseTransactionMessage implements TransactionMessage {
   private final MessageData messageData;
 
   @Override
-  public Optional<String> getAccountNumber() {
+  public Optional<String> getAccountNumber(String tag) {
     return Optional.empty();
   }
 

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface TransactionMessage {
 
-  Optional<String> getAccountNumber();
+  Optional<String> getAccountNumber(String tag);
 
   List<String> getAllMatchingTexts(String tag);
 

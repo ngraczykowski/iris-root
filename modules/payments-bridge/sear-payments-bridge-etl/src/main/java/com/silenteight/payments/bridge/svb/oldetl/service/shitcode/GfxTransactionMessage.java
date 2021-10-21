@@ -13,7 +13,7 @@ public class GfxTransactionMessage extends BaseTransactionMessage {
   }
 
   @Override
-  public Optional<String> getAccountNumber() {
+  public Optional<String> getAccountNumber(String tag) {
     return Optional.empty();
   }
 
