@@ -49,7 +49,7 @@ class EtlMatchService {
 
     return LearningMatch
         .builder()
-        .matchId(row.getFkcoVListFmmId())
+        .matchId(row.getFkcoVListFmmId() + "(" + row.getFkcoVMatchedTag() + ")")
         .alertedPartyData(alertedPartyData)
         .watchlistNames(List.of(row.getFkcoVListName().split(",")))
         .entityType(toEntityType(row.getFkcoVListType()))
