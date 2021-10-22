@@ -41,7 +41,7 @@ class RegisterAlertEndpoint {
 
     var matchIds = getMatchIds(alertDto);
     var request = RegisterAlertRequest.builder()
-        .alertId(alertData.getAlertId().toString())
+        .alertId(alertDto.getSystemID())
         .alertTime(fromOffsetDateTime(alertDto.getFilteredAt(ZoneOffset.UTC)))
         .priority(alertData.getPriority())
         .matchIds(matchIds)
@@ -53,8 +53,7 @@ class RegisterAlertEndpoint {
     registeredAlertDataAccessPort.save(alertData.getAlertId(), alert.getAlertName());
 
     return new AlertRegisteredEvent(
-        alertData.getAlertId(), alert.getAlertName(),
-        alert.getMatchResponsesAsMap());
+        alertData.getAlertId(), alert.getAlertName(), alert.getMatchResponsesAsMap());
   }
 
   @Nonnull
