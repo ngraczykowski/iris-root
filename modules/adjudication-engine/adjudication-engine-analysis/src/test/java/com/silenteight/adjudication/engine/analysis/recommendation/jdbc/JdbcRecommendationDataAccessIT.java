@@ -1,6 +1,7 @@
 package com.silenteight.adjudication.engine.analysis.recommendation.jdbc;
 
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertRecommendation;
+import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 import com.silenteight.adjudication.engine.testing.JdbcTestConfiguration;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.silenteight.adjudication.engine.analysis.recommendation.RecommendationFixture.createInsertRequest;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @ContextConfiguration(classes = {
     JdbcTestConfiguration.class,
@@ -88,7 +89,7 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
     recommendationDataAccess.insertAlertRecommendation(List.of(createInsertRequest()));
     recommendationDataAccess.insertAlertRecommendation(List.of(createInsertRequest()));
     assertThat(jdbcTemplate.queryForObject(
-        "SELECT count(*) FROM ae_recommendation",
+        "SELECT COUNT(*) FROM ae_recommendation",
         Integer.class)).isEqualTo(1);
   }
 
@@ -105,11 +106,9 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
 
     assertThat(alertContext.getAlertId())
         .isEqualTo("AVIR128SCR13925IN123TEST0003:IN:GR-ESAN:273067");
-    assertThat(alertContext.getMatches().size()).isEqualTo(2);
-    var match = alertContext.getMatches().get(1);
-    assertThat(match.getMatchId()).isEqualTo("DB00051992");
-    assertThat(match.getSolution()).isEqualTo("SOLUTION_NO_DECISION");
-    assertThat(match.getFeatures().get("features/dob").getAgentName())
-        .isEqualTo("agents/date");
+    assertThat(alertContext.getMatches())
+        .hasSize(2)
+        .extracting(MatchContext::getMatchId)
+        .containsExactly("GSN00067068", "DB00051992");
   }
 }

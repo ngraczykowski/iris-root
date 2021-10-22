@@ -21,9 +21,9 @@ VALUES (2, 1000)
 ;
 
 -- ...with the match solved in both analysis...
-INSERT INTO ae_match_solution (analysis_id, match_id, created_at, solution, reason)
-VALUES (1, 1000, now(), 'SOLUTION_NO_DECISION', '{}')
-     , (2, 1000, now(), 'SOLUTION_NO_DECISION', '{}')
+INSERT INTO ae_match_solution (analysis_id, match_id, created_at, solution, reason, match_context)
+VALUES (1, 1000, now(), 'SOLUTION_NO_DECISION', '{}', '{}')
+     , (2, 1000, now(), 'SOLUTION_NO_DECISION', '{}', '{}')
 ;
 
 -- ...with pending recommendation in second analysis...

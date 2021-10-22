@@ -20,9 +20,9 @@ INSERT INTO ae_match
 VALUES (2, 1, NOW(), 'adss', 2);
 
 -- ...which are solved...
-INSERT INTO ae_match_solution (analysis_id, match_id, created_at, solution)
-VALUES (1, 1, NOW(), 'SOLUTION_NO_DECISION'),
-       (1, 2, NOW(), 'SOLUTION_NO_DECISION');
+INSERT INTO ae_match_solution (analysis_id, match_id, created_at, solution, reason, match_context)
+VALUES (1, 1, NOW(), 'SOLUTION_NO_DECISION', '{}', '{}'),
+       (1, 2, NOW(), 'SOLUTION_NO_DECISION', '{}', '{}');
 
 -- ...and all comment inputs are ready...
 INSERT INTO ae_alert_comment_input (alert_id, created_at, value)

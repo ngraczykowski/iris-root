@@ -35,19 +35,19 @@ VALUES (2, 1, NOW(), 'MATCH', '{
 INSERT INTO ae_dataset_alert
 VALUES (1, 1);
 
-INSERT INTO ae_match_solution (analysis_id, match_id, created_at, solution, reason)
+INSERT INTO ae_match_solution (analysis_id, match_id, created_at, solution, reason, match_context)
 VALUES (1, 1, NOW(), 'SOLUTION_NO_DECISION', '{
   "stepId": "",
   "featureVectorSignature": "C7pHOd+hYXCB9mXF0m+g7iHU33E="
-}'),
+}', '{ "matchId": "GSN00067068"}'),
        (1, 2, NOW(), 'SOLUTION_NO_DECISION', '{
          "stepId": "",
          "featureVectorSignature": "C7pHOd+hYXCB9mXF0m+g7iHU33E="
-       }'),
+       }', '{ "matchId": "DB00051992"}'),
        (1, 3, NOW(), 'SOLUTION_NO_DECISION', '{
          "stepId": "",
          "featureVectorSignature": "C7pHOd+hYXCB9mXF0m+g7iHU33E="
-       }');
+       }', '{ "matchId": "DB00051992"}');
 
 INSERT INTO ae_alert_comment_input (alert_id, created_at, value)
 VALUES (1, NOW(), '{

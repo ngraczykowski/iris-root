@@ -1,6 +1,9 @@
 package com.silenteight.adjudication.engine.analysis.matchsolution.dto;
 
-import com.silenteight.solving.api.v1.*;
+import com.silenteight.solving.api.v1.BatchSolveFeaturesRequest;
+import com.silenteight.solving.api.v1.FeatureVector;
+import com.silenteight.solving.api.v1.FeatureVectorSolution;
+import com.silenteight.solving.api.v1.SolutionResponse;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +15,9 @@ import static com.silenteight.adjudication.engine.analysis.matchsolution.Feature
 import static com.silenteight.adjudication.engine.analysis.matchsolution.FeaturesFixtures.makeFeatureVector;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toUnmodifiableList;
 import static org.assertj.core.api.Assertions.*;
 
 class UnsolvedMatchesChunkTest {
@@ -54,7 +59,7 @@ class UnsolvedMatchesChunkTest {
     assertThat(request.getPolicyName()).isEqualTo(POLICY);
     assertThat(request.getFeatureVectorsList()).containsAll(featureVectors);
     assertThat(request.getFeatureCollection().getFeatureList())
-        .extracting(Feature::getName)
+        .extracting(com.silenteight.solving.api.v1.Feature::getName)
         .containsExactly("F1", "F2");
   }
 
@@ -96,9 +101,14 @@ class UnsolvedMatchesChunkTest {
   private UnsolvedMatchesChunk whenNewChunk() {
     var unsolvedMatches = IntStream
         .range(0, matchIds.length)
-        .mapToObj(idx -> new UnsolvedMatch(
-            ALERT_ID, matchIds[idx], new String[0],
-            featureVectors.get(idx).getFeatureValueList().toArray(String[]::new)))
+        .mapToObj(idx ->
+            UnsolvedMatch
+                .builder()
+                .alertId(ALERT_ID)
+                .matchId(matchIds[idx])
+                .categories(emptyList())
+                .features(toFeatures(featureVectors.get(idx)))
+                .build())
         .collect(toList());
 
     chunk = new UnsolvedMatchesChunk(unsolvedMatches);
@@ -116,5 +126,17 @@ class UnsolvedMatchesChunkTest {
         .collect(toList());
 
     return whenNewChunk().toMatchSolutionCollection(ANALYSIS_ID, solutionResponses);
+  }
+
+  private static List<Feature> toFeatures(
+      FeatureVector vector) {
+    return IntStream.range(0, vector.getFeatureValueCount())
+        .mapToObj(idx -> Feature
+            .builder()
+            .name("feature" + idx)
+            .agentConfig("config" + idx)
+            .value(vector.getFeatureValue(idx))
+            .build())
+        .collect(toUnmodifiableList());
   }
 }

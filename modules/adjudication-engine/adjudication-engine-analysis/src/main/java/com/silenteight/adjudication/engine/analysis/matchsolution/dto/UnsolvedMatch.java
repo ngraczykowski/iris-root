@@ -1,15 +1,16 @@
 package com.silenteight.adjudication.engine.analysis.matchsolution.dto;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Value;
+import lombok.*;
 
 import com.silenteight.solving.api.v1.FeatureVector;
 import com.silenteight.solving.api.v1.SolutionResponse;
 
-import java.util.Arrays;
+import java.util.List;
+
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 @Value
+@Builder
 @Getter(AccessLevel.NONE)
 public class UnsolvedMatch {
 
@@ -18,23 +19,35 @@ public class UnsolvedMatch {
   @Getter
   long matchId;
 
-  String[] categoryValues;
+  String clientMatchIdentifier;
 
-  String[] featureValues;
+  @Singular
+  List<Category> categories;
+
+  @Singular
+  List<Feature> features;
 
   public FeatureVector toFeatureVector() {
     return FeatureVector.newBuilder()
-        .addAllFeatureValue(Arrays.asList(categoryValues))
-        .addAllFeatureValue(Arrays.asList(featureValues))
+        .addAllFeatureValue(
+            categories.stream().map(Category::getValue).collect(toUnmodifiableList()))
+        .addAllFeatureValue(features.stream().map(Feature::getValue).collect(toUnmodifiableList()))
         .build();
   }
 
   public int getFeatureValueCount() {
-    return categoryValues.length + featureValues.length;
+    return categories.size() + features.size();
   }
 
   public MatchSolution toMatchSolution(SolutionResponse response) {
-    return new MatchSolution(alertId, matchId, response);
+    return MatchSolution.builder()
+        .alertId(alertId)
+        .matchId(matchId)
+        .clientMatchIdentifier(clientMatchIdentifier)
+        .response(response)
+        .categories(categories)
+        .features(features)
+        .build();
   }
 
   public String getMatchName() {

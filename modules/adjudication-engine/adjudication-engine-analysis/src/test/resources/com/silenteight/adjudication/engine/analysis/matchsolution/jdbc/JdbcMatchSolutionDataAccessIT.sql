@@ -14,5 +14,9 @@ VALUES (1, 1, NOW(), 'asd', 1),
        (2, 2, NOW(), 'asd', 2);
 
 -- ..One solution..
-INSERT INTO ae_match_solution (match_solution_id, analysis_id, match_id, created_at, solution)
-VALUES (1, 1, 1, NOW(), 'asd')
+INSERT INTO ae_match_solution (match_solution_id, analysis_id, match_id, created_at, solution,
+                               match_context)
+VALUES (1, 1, 1, NOW(), 'asd', '{
+  "alertId": 1,
+  "matchId": 2
+}')

@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.adjudication.engine.analysis.matchsolution.dto.MatchSolution;
-import com.silenteight.adjudication.engine.analysis.matchsolution.dto.MatchSolutionCollection;
-import com.silenteight.adjudication.engine.analysis.matchsolution.dto.SaveMatchSolutionRequest;
+import com.silenteight.adjudication.engine.analysis.matchsolution.dto.*;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.proto.protobuf.Uuid;
 import com.silenteight.sep.base.aspects.metrics.Timed;
@@ -46,22 +44,14 @@ class CreateMatchSolutionsUseCase {
   }
 
   private SaveMatchSolutionRequest makeEntity(long analysisId, MatchSolution matchSolution) {
-    var solutionResponse = matchSolution.getResponse();
+    var matchContext = createMatchContext(matchSolution);
 
     var builder = SaveMatchSolutionRequest.builder()
         .analysisId(analysisId)
         .matchId(matchSolution.getMatchId())
-        .solution(solutionResponse.getFeatureVectorSolution().toString());
-
-    if (!solutionResponse.hasReason()) {
-      builder.reason(makeDeprecatedReason(
-          solutionResponse.getFeatureVectorSignature(), solutionResponse.getStepId()));
-    } else {
-      protoMessageToObjectNodeConverter.convert(solutionResponse.getReason())
-          .ifPresentOrElse(builder::reason, () -> log.error(
-              "Failed to convert the solution reason to JSON: response={}",
-              solutionResponse));
-    }
+        .solution(matchContext.getSolution())
+        .reason(matchContext.getReason())
+        .context(objectMapper.convertValue(matchContext, ObjectNode.class));
 
     return builder.build();
   }
@@ -78,5 +68,34 @@ class CreateMatchSolutionsUseCase {
     reason.set("stepId", nodeFactory.textNode(stepId.toString()));
 
     return reason;
+  }
+
+  private MatchContext createMatchContext(MatchSolution matchSolution) {
+    var solutionResponse = matchSolution.getResponse();
+
+    var builder = MatchContext.builder()
+        .matchId(matchSolution.getClientMatchIdentifier())
+        .solution(solutionResponse.getFeatureVectorSolution().toString());
+
+    if (!solutionResponse.hasReason()) {
+      builder.reason(makeDeprecatedReason(
+          solutionResponse.getFeatureVectorSignature(), solutionResponse.getStepId()));
+    } else {
+      protoMessageToObjectNodeConverter.convert(solutionResponse.getReason())
+          .ifPresentOrElse(builder::reason, () -> log.error(
+              "Failed to convert the solution reason to JSON: response={}",
+              solutionResponse));
+    }
+
+    matchSolution.getCategories().forEach(c -> builder.category(c.getName(), c.getValue()));
+
+    matchSolution.getFeatures().forEach(f ->
+        builder.feature(f.getName(), FeatureContext.builder()
+            .solution(f.getValue())
+            .reason(f.getReason())
+            .agentConfig(f.getAgentConfig())
+            .build()));
+
+    return builder.build();
   }
 }

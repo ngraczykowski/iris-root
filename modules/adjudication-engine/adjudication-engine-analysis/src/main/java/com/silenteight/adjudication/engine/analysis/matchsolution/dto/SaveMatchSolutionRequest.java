@@ -17,7 +17,13 @@ public class SaveMatchSolutionRequest {
 
   ObjectNode reason;
 
+  ObjectNode context;
+
   public String getReasonString() {
     return reason.toString();
+  }
+
+  public String getContextString() {
+    return context.toString();
   }
 }
