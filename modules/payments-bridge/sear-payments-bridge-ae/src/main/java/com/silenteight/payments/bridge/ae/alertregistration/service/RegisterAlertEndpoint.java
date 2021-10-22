@@ -46,6 +46,7 @@ class RegisterAlertEndpoint {
         .priority(alertData.getPriority())
         .matchIds(matchIds)
         .label(Label.of("source", "CMAPI"))
+        .label(Label.of("alertMessageId", alertData.getAlertId().toString()))
         .build();
 
     var alert = registerAlertUseCase.register(request);
