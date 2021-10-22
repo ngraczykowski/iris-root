@@ -40,7 +40,7 @@ class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCase {
 
   private OffsetDateTime decisionObsoleteSince() {
     return OffsetDateTime.now(clock).minus(
-        alertMessageProperties.getDecisionRequestedTime().minusSeconds(5));
+        alertMessageProperties.getDecisionRequestedTime().minusSeconds(1));
   }
 
   private void transitionToOutdated(AlertMessageStatusEntity status) {

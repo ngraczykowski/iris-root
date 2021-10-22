@@ -12,7 +12,7 @@ class AlertMessageProperties {
 
   private long storedQueueLimit = 1000;
 
-  private Duration decisionRequestedTime = Duration.ofSeconds(60);
+  private Duration decisionRequestedTime = Duration.ofSeconds(15);
 
   private boolean originalMessageDeletedAfterRecommendation = true;
 

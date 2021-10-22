@@ -25,14 +25,14 @@ pb:
       enabled: false
       client-registration-id: callback
       connectionTimeout: 10s
-      readTimeout: 30s
+      readTimeout: 10s
 
   #-------------------------------------------------------------------------------------------------
   # ALERT MESSAGES
   #-------------------------------------------------------------------------------------------------
   alert-message:
     stored-queue-limit: 1000
-    decision-requested-time: 60s
+    decision-requested-time: 15s
     original-message-deleted-after-recommendation: true
     max-hits-per-alert: 10
 
@@ -204,10 +204,9 @@ spring:
         retry:
           enabled: true
           multiplier: 2
-          max-attempts: 6
+          max-attempts: 5
           initial-interval: 500
           max-interval: 4000
-
 
   jackson:
     default-property-inclusion: NON_NULL
