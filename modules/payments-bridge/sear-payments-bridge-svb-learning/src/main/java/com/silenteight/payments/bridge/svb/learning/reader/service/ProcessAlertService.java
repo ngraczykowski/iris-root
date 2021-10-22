@@ -17,6 +17,7 @@ import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 @Service
@@ -69,7 +70,6 @@ class ProcessAlertService {
     var alertRows = new ArrayList<LearningCsvRow>();
     alertRows.add(firstRow);
 
-    int failedAlertsCount = 0;
     int successfulAlertsCount = 0;
 
     var batchStamp = createBatchStamp();
@@ -84,33 +84,64 @@ class ProcessAlertService {
         continue;
       }
 
-      try {
-        var alert = etlAlertService
-            .fromCsvRows(alertRows)
-            .batchStamp(batchStamp)
-            .fileName(fileName)
-            .build();
+      var optError = proccessAlert(
+          alertConsumer,
+          AlertMetaData.builder().batchStamp(batchStamp).fileName(fileName).build(),
+          alertRows);
 
-        alertConsumer.accept(alert);
-        log.debug("Successfully processed alert = {}", currentAlertId);
+      if (optError.isPresent())
+        errors.add(optError.get());
+      else
         successfulAlertsCount++;
-      } catch (RuntimeException e) {
-        log.error("Failed to process alert = {} reason = {}", rowAlertId, e.getMessage(), e);
-        errors.add(ReadAlertError.builder().alertId(rowAlertId).exception(e).build());
-        failedAlertsCount++;
-      }
 
       currentAlertId = rowAlertId;
       alertRows.clear();
       alertRows.add(row);
     }
 
+    if (!alertRows.isEmpty()) {
+      var optError = proccessAlert(
+          alertConsumer,
+          AlertMetaData.builder().batchStamp(batchStamp).fileName(fileName).build(),
+          alertRows);
+
+      if (optError.isPresent())
+        errors.add(optError.get());
+      else
+        successfulAlertsCount++;
+    }
+
     return AlertsReadingResponse
         .builder()
-        .failedAlerts(failedAlertsCount)
+        .failedAlerts(errors.size())
         .successfulAlerts(successfulAlertsCount)
         .readAlertErrorList(errors)
         .build();
+  }
+
+  private Optional<ReadAlertError> proccessAlert(
+      Consumer<LearningAlert> alertConsumer, AlertMetaData alertMetaData,
+      ArrayList<LearningCsvRow> alertRows) {
+    try {
+      var alert = etlAlertService
+          .fromCsvRows(alertRows)
+          .batchStamp(alertMetaData.getBatchStamp())
+          .fileName(alertMetaData.getFileName())
+          .build();
+
+      alertConsumer.accept(alert);
+      log.debug("Successfully processed alert = {}", alert.getAlertId());
+      return Optional.empty();
+    } catch (RuntimeException e) {
+      log.error(
+          "Failed to process alert = {} reason = {}", alertRows.get(0).getFkcoVSystemId(),
+          e.getMessage(), e);
+      return Optional.of(ReadAlertError
+          .builder()
+          .alertId(alertRows.get(0).getFkcoVSystemId())
+          .exception(e)
+          .build());
+    }
   }
 
   static void assertRowNotNull(LearningCsvRow row) {
@@ -127,10 +158,6 @@ class ProcessAlertService {
   private static class ReadAlertException extends RuntimeException {
 
     private static final long serialVersionUID = 7691761705445879166L;
-
-    ReadAlertException(Exception e) {
-      super(e);
-    }
 
     ReadAlertException(String message) {
       super(message);

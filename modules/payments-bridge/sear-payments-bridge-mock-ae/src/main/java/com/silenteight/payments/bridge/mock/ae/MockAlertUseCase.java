@@ -8,6 +8,8 @@ import com.silenteight.adjudication.api.v1.Match;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
@@ -19,14 +21,16 @@ public class MockAlertUseCase {
   private static long alertId = 1;
   private static int matchId = 1;
 
+  private static final List<Alert> ALERTS = new ArrayList<>();
+
   static Alert createAlert(Alert alert, Set<Long> existing) {
     while (existing.contains(alertId)) {
       alertId++;
     }
-
-    var response =
+    var savedAlert =
         Alert.newBuilder().setAlertId(alert.getAlertId()).setName("alerts/" + alertId).build();
-    return response;
+    ALERTS.add(savedAlert);
+    return savedAlert;
   }
 
   static BatchCreateAlertMatchesResponse batchCreateAlertMatches(
@@ -49,7 +53,7 @@ public class MockAlertUseCase {
   }
 
   public static long getCreatedAlertsCount() {
-    return alertId;
+    return ALERTS.size();
   }
 
   public static int getCreatedMatchesCount() {

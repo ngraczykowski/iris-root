@@ -46,7 +46,7 @@ class EtlMatchService {
     var messageStructure = createMessageStructure(rows, matchingTexts);
     var alertedPartyData =
         createAlertedPartyData(rows, messageStructure.getMessageFieldStructure());
-
+    var a = 1;
     return LearningMatch
         .builder()
         .matchId(rows.get(0).getFkcoVListFmmId())
