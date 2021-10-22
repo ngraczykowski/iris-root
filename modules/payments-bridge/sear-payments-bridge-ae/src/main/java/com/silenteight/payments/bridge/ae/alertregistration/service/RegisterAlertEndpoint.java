@@ -49,10 +49,14 @@ class RegisterAlertEndpoint {
   }
 
   private static List<String> getMatchIds(AlertMessageDto alertDto) {
+
     return alertDto.getHits()
         .stream()
-        .map(hit -> hit.getHit().getHittedEntity().getId())
-        .distinct()
+        .map(hit -> {
+          String hitId = hit.getHit().getHittedEntity().getId();
+          String tag = hit.getHit().getTag();
+          return String.format("%s(%s)", hitId, tag);
+        })
         .collect(Collectors.toList());
   }
 

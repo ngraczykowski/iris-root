@@ -60,6 +60,6 @@ public class ExtractGtexAlertedPartyData {
   private final String hitTag;
 
   public AlertedPartyData extract(MessageFieldStructure messageFieldStructure) {
-    return null;
+    return AlertedPartyData.builder().messageFieldStructure(messageFieldStructure).build();
   }
 }

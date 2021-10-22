@@ -31,7 +31,7 @@ public class EtlProcessHelper {
 
   @Nonnull
   public static String getMatchId(int id) {
-    return String.valueOf(id);
+    return String.format("%s(%s)",String.valueOf(id), String.valueOf(id));
   }
 
   @Nonnull
@@ -48,7 +48,7 @@ public class EtlProcessHelper {
   private static List<HitData> createHitDataList(int size) {
     List<HitData> hitDataList = new ArrayList<>();
     for (int i = 0; i < size; i++) {
-      hitDataList.add(createHitData(getMatchId(i)));
+      hitDataList.add(createHitData(String.valueOf(i)));
     }
     return hitDataList;
   }
@@ -72,6 +72,7 @@ public class EtlProcessHelper {
     return HitAndWatchlistPartyData
         .builder()
         .id(id)
+        .tag(id)
         .name("WP_name_" + id)
         .watchlistType(COMPANY)
         .allMatchingTexts(of("matchingText_" + id))
