@@ -314,6 +314,7 @@ sens.webapp.notification.enabled: true
 # Keycloak
 keycloak:
   frontend-client-id: frontend
+  hide-users-with-roles: []
   adapter:
     publicClient: false
     confidentialPort: 0
