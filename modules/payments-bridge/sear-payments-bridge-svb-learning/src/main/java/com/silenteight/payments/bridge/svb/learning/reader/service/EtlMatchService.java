@@ -89,8 +89,9 @@ class EtlMatchService {
     var messageData = messageParserFacade.parse(
         row.getFkcoVContent().startsWith("{") ? MessageFormat.SWIFT : MessageFormat.ALL,
         row.getFkcoVContent());
-    return alertParserService.extractAlertedPartyData(row.getFkcoVApplication(),
-        messageData, row.getFkcoVMatchedTag(), messageFieldStructure);
+    return AlertParserService.extractAlertedPartyData(
+        messageData, row.getFkcoVMatchedTag(), messageFieldStructure,
+        MessageFormat.valueOf(row.getFkcoVFormat()));
   }
 
   private AbstractMessageStructure createMessageStructure(

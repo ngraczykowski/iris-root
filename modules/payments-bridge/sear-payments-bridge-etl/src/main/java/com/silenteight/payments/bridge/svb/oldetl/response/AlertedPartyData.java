@@ -19,6 +19,8 @@ public class AlertedPartyData {
   @Singular
   List<String> nameAddresses;
 
+  String accountNumber;
+
   // DO NOT USE THIS:
   boolean noAcctNumFlag;
   int numOfLines;

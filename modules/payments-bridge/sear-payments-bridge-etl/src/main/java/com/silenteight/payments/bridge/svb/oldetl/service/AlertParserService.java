@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure.NAMEADDRESS_FORMAT_F;
+
 @RequiredArgsConstructor
 @Slf4j
 @Service
@@ -43,7 +45,8 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
       if (hit.isBlocking()) {
         var hitData = createHitData(
             alertMessageDto.getApplicationCode(), messageData, hit,
-            MessageFieldStructure.UNSTRUCTURED);
+            MessageFieldStructure.UNSTRUCTURED,
+            MessageFormat.valueOf(alertMessageDto.getMessageFormat()));
         hits.add(hitData);
       } else {
         skippedHits.add(hit.getHittedEntity().getId() + "(" + hit.getTag() + ")");
@@ -73,30 +76,56 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
   private HitData createHitData(
       String applicationCode, MessageData messageData, HitDto hit,
-      MessageFieldStructure messageFieldStructure) {
+      MessageFieldStructure messageFieldStructure, MessageFormat messageFormat) {
 
-    var alertedPartyData = extractAlertedPartyData(
-        applicationCode, messageData, hit.getTag(), messageFieldStructure);
+    var alertedPartyData =
+        extractAlertedPartyData(messageData, hit.getTag(), messageFieldStructure, messageFormat);
 
     var hitAndWatchlistPartyData = extractHitAndWatchlistPartyData(
-        buildTransactionMessage(applicationCode, messageData), hit);
+        buildTransactionMessage(applicationCode, messageData), hit,
+        alertedPartyData.getAccountNumber() == null ? alertedPartyData.getNames().get(0)
+                                                    : alertedPartyData.getAccountNumber());
 
     return new HitData(alertedPartyData, hitAndWatchlistPartyData);
   }
 
-  public AlertedPartyData extractAlertedPartyData(
-      String applicationCode, MessageData messageData, String hitTag,
-      MessageFieldStructure messageFieldStructure) {
+  public static AlertedPartyData extractAlertedPartyData(
+      MessageData messageData, String hitTag,
+      MessageFieldStructure messageFieldStructure,
+      MessageFormat messageFormat) {
 
-    switch (applicationCode) {
-      case "GFX":
-        return new ExtractGfxAlertedPartyData(messageData, hitTag).extract(messageFieldStructure);
-      case "PEP":
-        return new ExtractPepAlertedPartyData(messageData, hitTag).extract(messageFieldStructure);
-      case "GTEX":
-        return new ExtractGtexAlertedPartyData(messageData, hitTag).extract(messageFieldStructure);
+    boolean tagValueInFormatF = ifTagValueInFormatF(messageData.getLines(hitTag));
+    switch (hitTag) {
+      case "ORIGINATOR":
+        if (tagValueInFormatF) {
+          return new ExtractOriginatorBeneFormatFAlertedPartyData(messageData, hitTag).extract(
+              NAMEADDRESS_FORMAT_F);
+        } else {
+          return new ExtractOriginatorAlertedPartyData(messageData).extract(
+              messageFieldStructure, messageFormat);
+        }
+      case "BENE":
+        if (tagValueInFormatF) {
+          return new ExtractOriginatorBeneFormatFAlertedPartyData(messageData, hitTag).extract(
+              NAMEADDRESS_FORMAT_F);
+        } else {
+          return new ExtractBeneOrgbankInsbankAlertedPartyData(
+              messageData, hitTag, messageFormat.toString()).extract(messageFieldStructure);
+        }
+      case "ORGBANK":
+      case "INSBANK":
+        return new ExtractBeneOrgbankInsbankAlertedPartyData(
+            messageData, hitTag, messageFormat.toString()).extract(messageFieldStructure);
+      case "50F":
+        return new Extract50FAlertedPartyData(messageData, hitTag).extract(messageFieldStructure);
+      case "RECEIVBANK":
+        return new ExtractReceivbankAlertedPartyData(
+            messageData, hitTag, messageFormat.toString()).extract(messageFieldStructure);
+      case "50K":
+      case "59":
+        return new Extract50k59AlertedPartyData(messageData).extract(hitTag, messageFieldStructure);
       default:
-        throw new IllegalArgumentException("Application not supported " + applicationCode);
+        throw new IllegalArgumentException("Tag not supported " + hitTag);
     }
   }
 
@@ -116,7 +145,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
   }
 
   private HitAndWatchlistPartyData extractHitAndWatchlistPartyData(
-      TransactionMessage transactionMessage, HitDto hit) {
+      TransactionMessage transactionMessage, HitDto hit, String accountNumberOrNormalizedName) {
 
     var hittedEntity = hit.getHittedEntity();
     var synonymIndex = CommonUtils.toPositiveInt(hit.getSynonymIndex(), 0);
@@ -127,7 +156,6 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     var fieldValue = transactionMessage.getHitTagValue(tag);
     var allMatchingFieldValues = transactionMessage.getAllMatchingTagValues(
         tag, hit.getMatchingText());
-    var accountNumberOrNormalizedName = transactionMessage.getAccountNumber(tag);
 
     List<CodeDto> codes = Optional.of(hit)
         .map(HitDto::getHittedEntity)
@@ -168,7 +196,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         .allMatchingTexts(allMatchingTexts)
         .allMatchingFieldValues(allMatchingFieldValues)
         .fieldValue(fieldValue)
-        .accountNumber(accountNumberOrNormalizedName.orElse("no_data"))
+        .accountNumber(accountNumberOrNormalizedName)
         .postalAddresses(
             LocationExtractorHelper.extractPostalAddresses(hittedEntity.getAddresses()))
         .cities(LocationExtractorHelper.extractListOfCities(hittedEntity.getAddresses()))
@@ -182,5 +210,15 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         .natIds(natIds)
         .bics(bics)
         .build();
+  }
+
+  private static boolean ifTagValueInFormatF(List<String> tagValueLines) {
+    List<String> formatFPrefixes = List.of("2/", "3/");
+    long numberOfLinesContainsFormatFPrefixes =
+        tagValueLines
+            .stream()
+            .filter(element -> formatFPrefixes.contains(element.substring(0, 2)))
+            .count();
+    return numberOfLinesContainsFormatFPrefixes >= 2;
   }
 }
