@@ -7,7 +7,7 @@ import java.util.Map;
 
 @Builder
 @Value
-public class MatchCommentInputDto {
+class MatchCommentInputDto {
 
   String match;
   Map<String, String> commentInput;

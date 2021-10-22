@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Builder
 @Value
-public class AlertId {
+class AlertId {
 
   long id;
   String externalId;

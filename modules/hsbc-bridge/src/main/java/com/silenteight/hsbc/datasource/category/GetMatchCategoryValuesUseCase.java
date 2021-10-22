@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Slf4j
-public class GetMatchCategoryValuesUseCase {
+class GetMatchCategoryValuesUseCase {
 
   private final MatchCategoryRepository matchCategoryRepository;
 

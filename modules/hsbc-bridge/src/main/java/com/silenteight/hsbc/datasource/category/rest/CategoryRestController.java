@@ -15,7 +15,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequiredArgsConstructor
-public class CategoryRestController {
+class CategoryRestController {
 
   private final ListCategoriesUseCase listCategoriesUseCase;
 

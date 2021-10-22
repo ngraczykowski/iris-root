@@ -13,7 +13,7 @@ import static com.silenteight.hsbc.bridge.bulk.BulkStatus.STORED;
 import static java.util.List.of;
 
 @RequiredArgsConstructor
-public class GetBulkStatusUseCase {
+class GetBulkStatusUseCase {
 
   private final BulkRepository bulkRepository;
 

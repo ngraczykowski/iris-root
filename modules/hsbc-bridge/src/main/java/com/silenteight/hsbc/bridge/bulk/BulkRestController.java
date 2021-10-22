@@ -22,7 +22,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/async/batch/v1")
 @RequiredArgsConstructor
-public class BulkRestController {
+class BulkRestController {
 
   private final AcknowledgeBulkDeliveryUseCase acknowledgeBulkDeliveryUseCase;
   private final CancelBulkUseCase cancelBulkUseCase;

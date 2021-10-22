@@ -8,7 +8,7 @@ import com.silenteight.hsbc.bridge.bulk.rest.BatchCancelResponse;
 import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
-public class CancelBulkUseCase {
+class CancelBulkUseCase {
 
   private final BulkRepository bulkRepository;
 

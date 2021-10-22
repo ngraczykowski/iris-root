@@ -11,7 +11,7 @@ import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSED;
 
 @RequiredArgsConstructor
 @Slf4j
-public class BulkProcessorScheduler {
+class BulkProcessorScheduler {
 
   private final BulkProcessor bulkProcessor;
   private final BulkRepository bulkRepository;

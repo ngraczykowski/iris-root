@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.OffsetDateTime;
 
-public interface MatchPayloadRepository extends Repository<MatchPayloadEntity, Long> {
+interface MatchPayloadRepository extends Repository<MatchPayloadEntity, Long> {
 
   @Modifying
   @Query(value = "UPDATE hsbc_bridge_match_payload p\n"

@@ -18,7 +18,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @RequiredArgsConstructor
 @Slf4j
-public class CaseCommentsMapper {
+class CaseCommentsMapper {
 
   private final DateTimeFormatter dateTimeFormatter;
   private static final String COMMENT_KEY = "lastCaseComment";

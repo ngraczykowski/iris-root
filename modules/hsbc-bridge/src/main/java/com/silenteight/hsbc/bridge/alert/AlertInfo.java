@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Builder
 @Value
-public class AlertInfo {
+class AlertInfo {
 
   Long id;
 }

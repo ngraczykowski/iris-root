@@ -21,7 +21,7 @@ import static java.util.Collections.sort;
 
 @Slf4j
 @RequiredArgsConstructor
-public class GetCommentInputUseCase {
+class GetCommentInputUseCase {
 
   private static final String INDIVIDUAL = "I";
   private static final String ENTITY = "C";

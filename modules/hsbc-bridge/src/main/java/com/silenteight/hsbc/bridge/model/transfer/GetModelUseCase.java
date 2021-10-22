@@ -12,7 +12,7 @@ import static com.silenteight.hsbc.bridge.model.dto.ModelStatus.SUCCESS;
 
 @RequiredArgsConstructor
 @Slf4j
-public class GetModelUseCase {
+class GetModelUseCase {
 
   private final ModelInformationRepository modelInformationRepository;
 

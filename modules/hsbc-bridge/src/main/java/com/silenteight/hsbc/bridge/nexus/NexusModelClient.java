@@ -18,7 +18,7 @@ import java.util.Base64;
 
 @Slf4j
 @RequiredArgsConstructor
-public class NexusModelClient implements RepositoryClient {
+class NexusModelClient implements RepositoryClient {
 
   private final HttpClient httpClient;
   private final NexusApiProperties nexusApiProperties;

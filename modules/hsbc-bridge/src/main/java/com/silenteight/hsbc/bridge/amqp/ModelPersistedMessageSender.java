@@ -8,8 +8,6 @@ import com.silenteight.hsbc.bridge.model.transfer.WorldCheckMessageSender;
 import com.silenteight.worldcheck.api.v1.ModelPersisted;
 
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.core.MessageProperties;
-import org.springframework.amqp.support.converter.MessageConverter;
 
 @Builder
 class ModelPersistedMessageSender implements WorldCheckMessageSender {

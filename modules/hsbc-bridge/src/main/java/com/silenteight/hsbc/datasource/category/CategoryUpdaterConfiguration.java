@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableConfigurationProperties(value = { CategoriesProperties.class })
 @RequiredArgsConstructor
-public class CategoryUpdaterConfiguration {
+class CategoryUpdaterConfiguration {
 
   private final CategoryRepository categoryRepository;
 

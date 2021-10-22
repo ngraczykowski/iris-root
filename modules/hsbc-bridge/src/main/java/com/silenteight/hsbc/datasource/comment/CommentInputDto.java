@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Builder
 @Value
-public class CommentInputDto {
+class CommentInputDto {
 
   String alert;
   Map<String, String> alertCommentInput;

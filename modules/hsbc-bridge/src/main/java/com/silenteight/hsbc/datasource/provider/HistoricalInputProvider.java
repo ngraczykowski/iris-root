@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-public class HistoricalInputProvider
+class HistoricalInputProvider
     implements DataSourceInputProvider<HistoricalInputResponse> {
 
   @Getter

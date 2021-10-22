@@ -11,7 +11,7 @@ import com.silenteight.hsbc.bridge.bulk.rest.BatchStatusResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-public class AcknowledgeBulkDeliveryUseCase {
+class AcknowledgeBulkDeliveryUseCase {
 
   private final BulkRepository bulkRepository;
 

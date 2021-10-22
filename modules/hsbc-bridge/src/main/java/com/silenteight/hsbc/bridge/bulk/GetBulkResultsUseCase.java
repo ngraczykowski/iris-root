@@ -24,7 +24,7 @@ import static java.util.List.of;
 
 @RequiredArgsConstructor
 @Slf4j
-public class GetBulkResultsUseCase {
+class GetBulkResultsUseCase {
 
   private final BulkRepository bulkRepository;
   private final GetRecommendationUseCase getRecommendationUseCase;

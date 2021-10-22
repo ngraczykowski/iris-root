@@ -22,7 +22,7 @@ import java.util.Base64;
 
 @RequiredArgsConstructor
 @Slf4j
-public class JenkinsModelClient implements ModelClient {
+class JenkinsModelClient implements ModelClient {
 
   private static final String AUTHORIZATION = "Authorization";
 

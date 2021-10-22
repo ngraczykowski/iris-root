@@ -28,7 +28,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/model")
 @RequiredArgsConstructor
-public class ModelRestController {
+class ModelRestController {
 
   private final List<ModelManager> modelManagers;
   private final ModelServiceClient modelServiceClient;

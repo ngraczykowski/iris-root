@@ -5,8 +5,6 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Optional.ofNullable;
-
 @RequiredArgsConstructor
 class CategoryModelHolder {
 

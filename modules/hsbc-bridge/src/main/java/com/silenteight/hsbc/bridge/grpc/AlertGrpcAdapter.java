@@ -22,7 +22,7 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Slf4j
-public class AlertGrpcAdapter implements AlertServiceClient {
+class AlertGrpcAdapter implements AlertServiceClient {
 
   private final AlertServiceBlockingStub alertServiceBlockingStub;
   private final long deadlineInSeconds;
