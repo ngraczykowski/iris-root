@@ -32,7 +32,7 @@ class CreateCategoriesUseCase {
         crossmatchCategory(),
         oneLinerCategory(), specificTermsCategory(),
         twoLinesCategory(), historicalRiskAssessmentCategory(),
-        watchListTypeCategory(), matchTypeCategory(), organizationNameCategory()
+        watchListTypeCategory(), matchTypeCategory()
     );
   }
 

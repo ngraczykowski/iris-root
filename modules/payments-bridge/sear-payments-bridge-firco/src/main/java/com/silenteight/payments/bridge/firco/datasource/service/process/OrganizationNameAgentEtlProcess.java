@@ -45,7 +45,6 @@ class OrganizationNameAgentEtlProcess implements EtlProcess {
 
   private void handleMatches(List<HitData> hitsData, Entry<String, String> matchItem) {
     filterHitsData(hitsData, matchItem)
-        .stream()
         .forEach(hitData -> callAgentService(matchItem, hitData));
   }
 

@@ -19,10 +19,6 @@ grpc:
       address: static://localhost:${grpc.server.port}
     governance:
       address: static://localhost:${grpc.server.port}
-    organization-name-agent:
-      address: static://localhost:${grpc.server.port}
-    company-name-surrounding-agent:
-      address: static://localhost:${grpc.server.port}
 
 pb:
   #-------------------------------------------------------------------------------------------------
