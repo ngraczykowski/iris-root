@@ -79,6 +79,28 @@ class CreateMatchesUseCaseAcceptanceSpec extends Specification {
     matches[1].index == 2
   }
 
+  def "should check latest sort index and set correct indexes in new matches"() {
+    given:
+    facade.createMatches(
+        [NewAlertMatches.builder()
+             .parentAlert("alerts/123")
+             .match(match("match 1").build())
+             .match(match("match 2").build())
+             .build()])
+    def newAlertMatches = NewAlertMatches.builder()
+        .parentAlert("alerts/123")
+        .match(match("match 3").build())
+        .match(match("match 4").build())
+        .build()
+
+    when:
+    def matches = facade.createMatches([newAlertMatches])
+
+    then:
+    matches[0].index == 3
+    matches[1].index == 4
+  }
+
   private static Builder match(String matchId) {
     Match.newBuilder().setMatchId(matchId)
   }
