@@ -3,11 +3,13 @@ package com.silenteight.warehouse.report.reasoning.domain;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.warehouse.report.reasoning.domain.dto.AiReasoningReportDto;
 import com.silenteight.warehouse.report.reasoning.domain.exception.ReportNotFoundException;
 import com.silenteight.warehouse.report.reasoning.download.AiReasoningReportDataQuery;
 import com.silenteight.warehouse.report.reasoning.status.AiReasoningReportStatusQuery;
+import com.silenteight.warehouse.report.reporting.ReportRange;
 
-import static java.lang.String.valueOf;
+import static com.silenteight.warehouse.report.reporting.ReportRange.of;
 import static java.util.Optional.ofNullable;
 
 @RequiredArgsConstructor
@@ -17,16 +19,27 @@ class AiReasoningReportQuery implements AiReasoningReportDataQuery, AiReasoningR
   private final AiReasoningReportRepository repository;
 
   @Override
-  public String getReportFileName(long id) {
+  public AiReasoningReportDto getAiReasoningReportDto(long id) {
     return ofNullable(repository.getById(id))
-        .map(AiReasoningReport::getFile)
-        .orElseThrow(() -> new ReportNotFoundException(valueOf(id)));
+        .map(AiReasoningReportQuery::toAiReasoningReportDto)
+        .orElseThrow(() -> new ReportNotFoundException(id));
+  }
+
+  private static AiReasoningReportDto toAiReasoningReportDto(AiReasoningReport report) {
+    return AiReasoningReportDto.builder()
+        .fileStorageName(report.getFileStorageName())
+        .range(toReportRange(report))
+        .build();
+  }
+
+  private static ReportRange toReportRange(AiReasoningReport report) {
+    return of(report.getFrom(), report.getTo());
   }
 
   @Override
   public ReportState getReportGeneratingState(long id) {
     return ofNullable(repository.getById(id))
         .map(AiReasoningReport::getState)
-        .orElseThrow(() -> new ReportNotFoundException(valueOf(id)));
+        .orElseThrow(() -> new ReportNotFoundException(id));
   }
 }

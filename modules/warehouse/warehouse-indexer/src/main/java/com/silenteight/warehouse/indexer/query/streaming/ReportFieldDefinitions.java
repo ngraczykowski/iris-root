@@ -3,6 +3,7 @@ package com.silenteight.warehouse.indexer.query.streaming;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import static java.util.stream.Collectors.toList;
 
 @Builder
 @Getter
+@ToString
 public class ReportFieldDefinitions {
 
   @NonNull

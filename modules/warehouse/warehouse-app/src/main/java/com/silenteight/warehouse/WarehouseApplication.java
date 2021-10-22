@@ -30,6 +30,7 @@ import com.silenteight.warehouse.report.metrics.v1.DeprecatedMetricsReportModule
 import com.silenteight.warehouse.report.rbs.RbsReportModule;
 import com.silenteight.warehouse.report.rbs.v1.DeprecatedRbsReportModule;
 import com.silenteight.warehouse.report.reasoning.AiReasoningReportModule;
+import com.silenteight.warehouse.report.reasoning.v1.DeprecatedAiReasoningReportModule;
 import com.silenteight.warehouse.report.remove.ReportsRemovalModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
 import com.silenteight.warehouse.report.simulation.SimulationModule;
@@ -58,8 +59,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AiReasoningReportModule.class,
     AlertModule.class,
     AnalysisModule.class,
-    BillingReportModule.class,
     BackupModule.class,
+    BillingReportModule.class,
+    DeprecatedAiReasoningReportModule.class,
     DeprecatedBillingReportModule.class,
     DeprecatedMetricsReportModule.class,
     DeprecatedRbsReportModule.class,

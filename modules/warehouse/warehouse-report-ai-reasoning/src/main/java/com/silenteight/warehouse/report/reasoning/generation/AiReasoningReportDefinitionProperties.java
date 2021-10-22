@@ -40,7 +40,8 @@ public class AiReasoningReportDefinitionProperties {
     if (isNull(getFilters()))
       return emptyList();
 
-    return getFilters().stream()
+    return getFilters()
+        .stream()
         .map(FilterProperties::toQueryFilter)
         .collect(toList());
   }
@@ -52,12 +53,13 @@ public class AiReasoningReportDefinitionProperties {
   }
 
   private List<FieldDefinition> getFieldDefinition() {
-    return columns.stream()
-        .map(this::convertToFieldDefinition)
+    return columns
+        .stream()
+        .map(AiReasoningReportDefinitionProperties::convertToFieldDefinition)
         .collect(toList());
   }
 
-  private FieldDefinition convertToFieldDefinition(ColumnProperties columnProperties) {
+  private static FieldDefinition convertToFieldDefinition(ColumnProperties columnProperties) {
     return FieldDefinition.builder()
         .name(columnProperties.getName())
         .label(columnProperties.getLabel())

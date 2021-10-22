@@ -9,10 +9,16 @@ import org.springframework.context.annotation.Configuration;
 class DownloadAiReasoningReportConfiguration {
 
   @Bean
-  DownloadAiReasoningReportUseCase downloadAiReasoningReportUseCase(
-      AiReasoningReportDataQuery query,
-      ReportStorage reportStorage) {
+  DownloadProductionAiReasoningReportUseCase downloadProductionAiReasoningReportUseCase(
+      AiReasoningReportDataQuery query, ReportStorage reportStorage) {
 
-    return new DownloadAiReasoningReportUseCase(query, reportStorage);
+    return new DownloadProductionAiReasoningReportUseCase(query, reportStorage);
+  }
+
+  @Bean
+  DownloadSimulationAiReasoningReportUseCase downloadSimulationAiReasoningReportUseCase(
+      AiReasoningReportDataQuery query, ReportStorage reportStorage) {
+
+    return new DownloadSimulationAiReasoningReportUseCase(query, reportStorage);
   }
 }

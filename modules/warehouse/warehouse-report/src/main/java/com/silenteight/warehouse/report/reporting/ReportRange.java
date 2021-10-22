@@ -5,12 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
 
+import com.silenteight.warehouse.report.reporting.exception.InvalidDateFromParameterException;
+import com.silenteight.warehouse.report.reporting.exception.InvalidDateRangeParametersOrderException;
+
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
 
 import static com.silenteight.sep.base.common.time.DefaultTimeSource.INSTANCE;
-import static java.time.ZoneId.systemDefault;
+import static java.time.LocalTime.MAX;
+import static java.time.LocalTime.MIDNIGHT;
+import static java.time.ZoneOffset.UTC;
 
 @Value
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -23,10 +28,25 @@ public class ReportRange {
 
   public static ReportRange of(@NonNull LocalDate from, @NonNull LocalDate to) {
     validateRange(from, to);
-    ZoneId zoneId = systemDefault();
-    OffsetDateTime parsedFrom = from.atStartOfDay(zoneId).toOffsetDateTime();
-    OffsetDateTime parsedTo = to.atStartOfDay(zoneId).toOffsetDateTime();
+    OffsetDateTime parsedFrom = parseToOffsetDateTime(from, MIDNIGHT);
+    OffsetDateTime parsedTo = parseToOffsetDateTime(to, MAX);
     return new ReportRange(parsedFrom, parsedTo);
+  }
+
+  public static ReportRange of(OffsetDateTime from, OffsetDateTime to) {
+    return new ReportRange(from, to);
+  }
+
+  public LocalDate getFromAsLocalDate() {
+    return getFrom().toLocalDate();
+  }
+
+  public LocalDate getToAsLocalDate() {
+    return getTo().toLocalDate();
+  }
+
+  private static OffsetDateTime parseToOffsetDateTime(LocalDate localDate, LocalTime localTime) {
+    return OffsetDateTime.of(localDate, localTime, UTC);
   }
 
   private static void validateRange(LocalDate from, LocalDate to) {

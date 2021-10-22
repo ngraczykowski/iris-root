@@ -3,7 +3,7 @@ package com.silenteight.warehouse.report.storage;
 import com.silenteight.sep.filestorage.api.dto.FileDto;
 import com.silenteight.warehouse.report.reporting.Report;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface ReportStorage {
 
@@ -11,7 +11,7 @@ public interface ReportStorage {
 
   void removeReport(String reportName);
 
-  void removeReports(List<String> reportNames);
+  void removeReports(Collection<String> reportNames);
 
   FileDto getReport(String reportName);
 }
