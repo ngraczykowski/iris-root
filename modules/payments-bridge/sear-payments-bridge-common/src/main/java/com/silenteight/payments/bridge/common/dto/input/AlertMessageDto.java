@@ -14,6 +14,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrat
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -25,6 +29,10 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @JsonNaming(UpperCamelCaseStrategy.class)
 public class AlertMessageDto implements Serializable {
+
+  // "2020/09/09 07:40:59"
+  private static final DateTimeFormatter DATE_TIME_FORMATTER =
+      DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
   private static final long serialVersionUID = 6631585786553870920L;
 
@@ -141,4 +149,8 @@ public class AlertMessageDto implements Serializable {
   @NotNull(groups = MinimalAlertDefinition.class)
   @Valid
   private List<NextStatusDto> nextStatuses;
+
+  public OffsetDateTime getFilteredAt(ZoneId zoneId) {
+    return LocalDateTime.parse(filteredDate, DATE_TIME_FORMATTER).atZone(zoneId).toOffsetDateTime();
+  }
 }

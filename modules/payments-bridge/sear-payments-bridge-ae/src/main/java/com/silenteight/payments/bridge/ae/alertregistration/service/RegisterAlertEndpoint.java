@@ -37,6 +37,7 @@ class RegisterAlertEndpoint {
 
     var request = RegisterAlertRequest.builder()
         .alertId(alertData.getAlertId().toString())
+        .alertTime(fromOffsetDateTime(alertDto.getFilteredAt(ZoneOffset.UTC)))
         .priority(alertData.getPriority())
         .matchIds(getMatchIds(alertDto))
         .build();
