@@ -54,7 +54,7 @@ public class DeprecatedRbsReportDefinition {
   List<String> getListOfLabels() {
     List<String> result = new ArrayList<>();
     getStaticColumns().forEach(column -> result.addAll(column.getLabels()));
-    result.add("matches_count");
+    result.add("Hits Count");
 
     List<String> columnsLabels = groupingColumns
         .stream()

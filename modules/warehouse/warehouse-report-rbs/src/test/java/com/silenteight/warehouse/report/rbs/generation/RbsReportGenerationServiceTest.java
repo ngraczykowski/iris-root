@@ -92,7 +92,7 @@ class RbsReportGenerationServiceTest {
 
     assertThat(reportContent.getReport()).isEqualTo(
         "FV Signature,policy_name,step_name,recommended_action,"
-            + "categories/apType,categories/riskType,features/name,features/dob,matches_count,"
+            + "categories/apType,categories/riskType,features/name,features/dob,Hits Count,"
             + "QA_decision_false_positive,QA_decision_true_positive,"
             + "analyst_decision_FP,analyst_decision_PTP\n"
             + "o7uPxWV913+ljhPW2uH+g7eAFeQ=,policies/1234,steps/3456,"
