@@ -107,151 +107,154 @@ warehouse.report.rbs:
     date-field-name: alert_recommendationDate
     columns:
       - name: alert_fvSignature
-        label: fv_signature
+        label: Reasoning Branch ID
       - name: alert_policyId
-        label: policy_id
+        label: Policy ID
       - name: alert_policy_title
-        label: policy_title
+        label: Policy Name
       - name: alert_stepId
-        label: step_id
+        label: Step ID
       - name: alert_step_title
-        label: step_title
+        label: Step Name
       - name: alert_s8_recommendation
-        label: alert_recommendation
+        label: S8 Alert Resolution
+      - name: alert_categories/customerType
+        label: Customer Type
       - name: alert_extendedAttribute5
-        label: risk_type
+        label: Risk Type
       - name: alert_features/commonAp:solution
-        label: common_ap
+        label: Common Alerted Party
       - name: alert_features/commonMp:solution
-        label: common_mp
+        label: Common Watchlist Party
       - name: alert_features/commonNames:solution
-        label: common_names
+        label: Common Name
       - name: alert_features/dateOfBirth:solution
-        label: date_of_birth
+        label: Date of Birth / Incorporation
       - name: alert_features/gender:solution
-        label: gender
+        label: Gender
       - name: alert_features/geoPlaceOfBirth:solution
-        label: geo_place_of_birth
+        label: Geo Place of Birth
       - name: alert_features/geoResidencies:solution
-        label: geo_residencies
-      - name: alert_features/incorporationCountry:solution
-        label: incorporation_country
+        label: Geo Residencies
       - name: alert_features/invalidAlert:solution
-        label: invalid_alert
+        label: Invalid Alert
       - name: alert_features/isApTpMarked:solution
-        label: is_ap_tp_marked
-      - name: alert_features/isCaseTpMarked:solution
-        label: is_case_tp_marked
-      - name: alert_features/isPep:solution
-        label: is_pep
+        label: True Case - Alerted Party
       - name: alert_features/isTpMarked:solution
-        label: is_tp_marked
+        label: True Case - Watchlist
+      - name: alert_features/isCaseTpMarked:solution
+        label: True Case - Historical
+      - name: alert_features/isPep:solution
+        label: PEP
       - name: alert_features/logicalDiscountingDob:solution
-        label: logical_discounting_dob
+        label: Logical Discounting
       - name: alert_features/name:solution
-        label: name
-      - name: alert_features/nationalIdDocument:solution
-        label: national_id_document
+        label: Name
+      - name: alert_features/incorporationCountry:solution
+        label: Incorporation Country
       - name: alert_features/nationalityCountry:solution
-        label: nationality_country
+        label: Nationality Country
       - name: alert_features/otherCountry:solution
-        label: other_country
+        label: Other Country
+      - name: alert_features/nationalIdDocument:solution
+        label: National ID
       - name: alert_features/otherDocument:solution
-        label: other_document
+        label: Other Document
       - name: alert_features/passportNumberDocument:solution
-        label: passport_number_document
+        label: Passport Number Document
       - name: alert_features/registrationCountry:solution
-        label: registration_country
+        label: Registration Country
       - name: alert_features/residencyCountry:solution
-        label: residency_country
-    grouping-columns:
-      - name: alert_qa.level-0.state
-        grouping-values:
-          - value: qa_decision_PASSED
-            label: QA_decision_false_positive
-          - value: qa_decision_FAILED
-            label: QA_decision_true_positive
-      - name: alert_analyst_decision
-        grouping-values:
-          - value: analyst_decision_true_positive
-            label: analyst_decision_FP
-          - value: analyst_decision_false_positive
-            label: analyst_decision_PTP
-
+        label: Residency Country
+      grouping-columns:
+        - name: alert_qa.level-0.state
+          grouping-values:
+            - value: qa_decision_PASSED
+              label: QA decision False Positive
+            - value: qa_decision_FAILED
+              label: QA decision True Positive
+        - name: alert_analyst_decision
+          grouping-values:
+            - value: analyst_decision_true_positive
+              label: Analyst decision False Positive
+            - value: analyst_decision_false_positive
+              label: Analyst decision True Positive
   simulation:
     date-field-name: index_timestamp
     columns:
-      - name: alert_match_reason:feature_vector_signature
-        label: fv_signature
-      - name: alert_match_reason:policy
-        label: policy_id
-      - name: alert_match_reason:policy_title
-        label: policy_title
-      - name: alert_match_reason:step
-        label: step_id
-      - name: alert_match_reason:step_title
-        label: step_title
-      - name: alert_recommendation_recommended_action
-        label: alert_recommendation
-      - name: alert_categories/hitType
-        label: risk_type
+      - name: alert_fvSignature
+        label: Reasoning Branch ID
+      - name: alert_policyId
+        label: Policy ID
+      - name: alert_policy_title
+        label: Policy Name
+      - name: alert_stepId
+        label: Step ID
+      - name: alert_step_title
+        label: Step Name
+      - name: alert_s8_recommendation
+        label: S8 Alert Resolution
+      - name: alert_categories/customerType
+        label: Customer Type
+      - name: alert_extendedAttribute5
+        label: Risk Type
       - name: alert_features/commonAp:solution
-        label: common_ap
+        label: Common Alerted Party
       - name: alert_features/commonMp:solution
-        label: common_mp
+        label: Common Watchlist Party
       - name: alert_features/commonNames:solution
-        label: common_names
+        label: Common Name
       - name: alert_features/dateOfBirth:solution
-        label: date_of_birth
+        label: Date of Birth / Incorporation
       - name: alert_features/gender:solution
-        label: gender
+        label: Gender
       - name: alert_features/geoPlaceOfBirth:solution
-        label: geo_place_of_birth
+        label: Geo Place of Birth
       - name: alert_features/geoResidencies:solution
-        label: geo_residencies
-      - name: alert_features/incorporationCountry:solution
-        label: incorporation_country
+        label: Geo Residencies
       - name: alert_features/invalidAlert:solution
-        label: invalid_alert
+        label: Invalid Alert
       - name: alert_features/isApTpMarked:solution
-        label: is_ap_tp_marked
-      - name: alert_features/isCaseTpMarked:solution
-        label: is_case_tp_marked
-      - name: alert_features/isPep:solution
-        label: is_pep
+        label: True Case - Alerted Party
       - name: alert_features/isTpMarked:solution
-        label: is_tp_marked
+        label: True Case - Watchlist
+      - name: alert_features/isCaseTpMarked:solution
+        label: True Case - Historical
+      - name: alert_features/isPep:solution
+        label: PEP
       - name: alert_features/logicalDiscountingDob:solution
-        label: logical_discounting_dob
+        label: Logical Discounting
       - name: alert_features/name:solution
-        label: name
-      - name: alert_features/nationalIdDocument:solution
-        label: national_id_document
+        label: Name
+      - name: alert_features/incorporationCountry:solution
+        label: Incorporation Country
       - name: alert_features/nationalityCountry:solution
-        label: nationality_country
+        label: Nationality Country
       - name: alert_features/otherCountry:solution
-        label: other_country
+        label: Other Country
+      - name: alert_features/nationalIdDocument:solution
+        label: National ID
       - name: alert_features/otherDocument:solution
-        label: other_document
+        label: Other Document
       - name: alert_features/passportNumberDocument:solution
-        label: passport_number_document
+        label: Passport Number Document
       - name: alert_features/registrationCountry:solution
-        label: registration_country
+        label: Registration Country
       - name: alert_features/residencyCountry:solution
-        label: residency_country
-    grouping-columns:
-      - name: alert_qa.level-0.state
-        grouping-values:
-          - value: qa_decision_PASSED
-            label: QA_decision_false_positive
-          - value: qa_decision_FAILED
-            label: QA_decision_true_positive
-      - name: alert_analyst_decision
-        grouping-values:
-          - value: analyst_decision_true_positive
-            label: analyst_decision_FP
-          - value: analyst_decision_false_positive
-            label: analyst_decision_PTP
+        label: Residency Country
+      grouping-columns:
+        - name: alert_qa.level-0.state
+          grouping-values:
+            - value: qa_decision_PASSED
+              label: QA decision False Positive
+            - value: qa_decision_FAILED
+              label: QA decision True Positive
+        - name: alert_analyst_decision
+          grouping-values:
+            - value: analyst_decision_true_positive
+              label: Analyst decision False Positive
+            - value: analyst_decision_false_positive
+              label: Analyst decision True Positive
 
 warehouse.report.billing:
   year-field-name: alert_recommendationYear

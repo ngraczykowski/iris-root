@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 public class RbsReportDefinition {
 
   private static final String DELIMITER = "_";
-  private static final String MATCHES_COUNT_LABEL = "matches_count";
+  private static final String MATCHES_COUNT_LABEL = "Hits Count";
 
   @NotBlank
   private final String dateFieldName;
