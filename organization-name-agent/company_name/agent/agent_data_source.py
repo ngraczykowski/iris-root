@@ -9,9 +9,6 @@ from silenteight.datasource.api.name.v1.name_pb2_grpc import NameInputServiceStu
 
 
 class CompanyNameAgentDataSource(AgentDataSource):
-    data_source_feature = "features/name"
-    response_feature = "features/companyName"
-
     async def start(self):
         await super().start()
         stub = NameInputServiceStub(self.channel)
@@ -20,18 +17,14 @@ class CompanyNameAgentDataSource(AgentDataSource):
     def prepare_request(self, request: AgentExchangeRequest) -> BatchGetMatchNameInputsRequest:
         return BatchGetMatchNameInputsRequest(
             matches=request.matches,
-            features=[
-                self.data_source_feature
-            ],  # TODO after data source implementation: request.features
+            features=request.features,
         )
 
     def parse_response(self, response: BatchGetMatchNameInputsResponse):
         for name_input in response.name_inputs:
             match = name_input.match
             for feature_input in name_input.name_feature_inputs:
-                feature = (
-                    self.response_feature
-                )  # TODO after data source implementation: feature_input.feature
+                feature = feature_input.feature
                 if feature_input.alerted_party_type not in (
                     NameFeatureInput.EntityType.ORGANIZATION,
                     NameFeatureInput.EntityType.ENTITY_TYPE_UNSPECIFIED,
