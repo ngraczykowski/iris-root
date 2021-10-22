@@ -9,7 +9,7 @@ import com.silenteight.data.api.v1.ProductionDataIndexRequest;
 @RequiredArgsConstructor
 @Getter
 @ToString
-public class WarehouseIndexRequestedEvent {
+public class WarehouseIndexRequestedEvent extends DomainEvent {
 
   private final ProductionDataIndexRequest request;
   private final IndexRequestOrigin indexRequestOrigin;

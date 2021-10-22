@@ -52,7 +52,6 @@ public class CommonChannels {
   public static final String ALERT_REGISTERED_RESPONSE_CHANNEL =
       PREFIX + "AlertRegisteredResponseChannel";
 
-
   public static final String SOLVING_MODEL_UPDATED = PREFIX + "SolvingModelUpdatedChannel";
   public static final String NEW_MODEL_RECEIVED = PREFIX + "NewModelReceivedChannel";
 
@@ -68,7 +67,8 @@ public class CommonChannels {
 
   @Bean(WAREHOUSE_UPDATE_OUTBOUND)
   public MessageChannel warehouseOutbound() {
-    return new DirectChannel();
+    return new TypedPublishSubscribeChannel(
+        WarehouseIndexRequestedEvent.class, channelInterceptors);
   }
 
   @Bean(ALERT_STORED)
