@@ -46,6 +46,8 @@ public class KeycloakUserQuery implements UserQuery {
   private final ClientsResource clientsResource;
   @NonNull
   private final ClientQuery clientQuery;
+  @NonNull
+  private final List<String> hideUsersWithRealmRoles;
 
   @Override
   public List<UserDto> listAll(Set<String> roleScopes) {
@@ -53,6 +55,7 @@ public class KeycloakUserQuery implements UserQuery {
     return usersResource
         .list(0, MAX_VALUE)
         .stream()
+        .filter(this::noHidingRole)
         .map(userRepresentation -> mapToDto(userRepresentation, roleScopes))
         .collect(toUnmodifiableList());
   }
@@ -66,8 +69,16 @@ public class KeycloakUserQuery implements UserQuery {
         .get(roleName)
         .getRoleUserMembers()
         .stream()
+        .filter(this::noHidingRole)
         .map(userRepresentation -> mapToDto(userRepresentation, of(roleScope)))
         .collect(toList());
+  }
+
+  private boolean noHidingRole(UserRepresentation userRepresentation) {
+    return Optional.ofNullable(userRepresentation.getRealmRoles())
+        .orElse(emptyList())
+        .stream()
+        .noneMatch(hideUsersWithRealmRoles::contains);
   }
 
   @Override

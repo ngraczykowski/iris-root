@@ -7,6 +7,7 @@ import com.silenteight.sep.usermanagement.keycloak.query.KeycloakUserQueryTestFi
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 import com.silenteight.sep.usermanagement.keycloak.query.role.InMemoryTestRoleProvider;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +34,8 @@ import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProvid
 import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.USER_ROLES_3;
 import static java.lang.Integer.MAX_VALUE;
 import static java.time.OffsetDateTime.now;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static java.util.Set.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,8 +44,10 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class KeycloakUserQueryTest {
 
-  public static final TimeConverter TIME_CONVERTER =
+  private static final TimeConverter TIME_CONVERTER =
       new TimeConverter(MockTimeSource.ARBITRARY_INSTANCE);
+  private static final String BLOKING_ROLE = "BLOKING_ROLE";
+  private static final String OTHER_ROLE = "OTHER_ROLE";
 
   @Mock
   private UsersResource usersResource;
@@ -74,7 +79,8 @@ class KeycloakUserQueryTest {
         roleProvider,
         TIME_CONVERTER,
         clientsResource,
-        clientQuery);
+        clientQuery,
+        singletonList(BLOKING_ROLE));
   }
 
   @Test
@@ -155,6 +161,36 @@ class KeycloakUserQueryTest {
     assertThat(userDto.getCreatedAt()).isEqualTo(createdAt);
     assertThat(userDto.getOrigin()).isEqualTo(userOrigin);
     assertThat(userDto.getLockedAt()).isEqualTo(lockedAt);
+  }
+
+  @Test
+  void filterUsersWithBlockingRole() {
+    UserRepresentation userRepresentation1 = getUserRepresentation(
+        "user1", singletonList(BLOKING_ROLE));
+    UserRepresentation userRepresentation2 = getUserRepresentation(
+        "user2", asList(BLOKING_ROLE, OTHER_ROLE));
+    UserRepresentation userRepresentation3 = getUserRepresentation(
+        "user3", singletonList(OTHER_ROLE));
+
+    given(usersResource.list(0, MAX_VALUE)).willReturn(
+        List.of(userRepresentation1, userRepresentation2, userRepresentation3));
+
+    List<UserDto> usersList = underTest.listAll(FRONTEND_USER_ROLES_1);
+
+    assertThat(usersList).hasSize(1);
+
+    UserDto userDto = usersList.get(0);
+    assertThat(userDto.getUserName()).isEqualTo("user3");
+  }
+
+  @NotNull
+  private UserRepresentation getUserRepresentation(String userName, List<String> realmRoles) {
+    OffsetDateTime createdAt = now().minusDays(1).withNano(0);
+    UserRepresentation userRepresentation = new UserRepresentation();
+    userRepresentation.setUsername(userName);
+    userRepresentation.setRealmRoles(realmRoles);
+    userRepresentation.setCreatedTimestamp(createdAt.toInstant().toEpochMilli());
+    return userRepresentation;
   }
 
   static class KeycloakUserQueryUserDtoAssert extends UserDtoAssert {

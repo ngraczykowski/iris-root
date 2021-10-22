@@ -14,6 +14,7 @@ import org.keycloak.representations.idm.RealmRepresentation;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -37,7 +38,7 @@ class KeycloakConfigurationQueryTest {
     adapterConfig.setRealm(REALM);
 
     KeycloakConfigurationProperties keycloakConfigurationProperties =
-        new KeycloakConfigurationProperties(adapterConfig, FRONTEND_CLIENT_ID);
+        new KeycloakConfigurationProperties(adapterConfig, FRONTEND_CLIENT_ID, emptyList());
 
     underTest = new KeycloakConfigurationQuery(realmResource, keycloakConfigurationProperties);
   }

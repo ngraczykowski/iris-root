@@ -21,7 +21,8 @@ class KeycloakQueryConfiguration {
       RolesProvider rolesProvider,
       UsersResource usersResource,
       ClientsResource clientsResource,
-      ClientQuery clientQuery) {
+      ClientQuery clientQuery,
+      KeycloakConfigurationProperties keycloakConfigurationProperties) {
 
     return new KeycloakUserQuery(
         usersResource,
@@ -29,7 +30,8 @@ class KeycloakQueryConfiguration {
         rolesProvider,
         DefaultTimeSource.TIME_CONVERTER,
         clientsResource,
-        clientQuery);
+        clientQuery,
+        keycloakConfigurationProperties.getHideUsersWithRoles());
   }
 
   @Bean
