@@ -9,7 +9,7 @@ import static com.silenteight.hsbc.datasource.extractors.historical.ModelKeyDto.
 import static com.silenteight.hsbc.datasource.extractors.historical.ModelKeyDto.ModelKeyType.MATCH;
 import static com.silenteight.hsbc.datasource.extractors.historical.ModelKeyDto.ModelKeyType.WATCHLIST_PARTY;
 
-public class HistoricalDecisionsServiceClientMock implements HistoricalDecisionsServiceClient {
+class HistoricalDecisionsServiceClientMock implements HistoricalDecisionsServiceClient {
 
   private static final int TRUE_POSITIVES_COUNT = 1;
 

@@ -2,9 +2,12 @@ package com.silenteight.hsbc.datasource.grpc;
 
 import lombok.extern.slf4j.Slf4j;
 
-import io.grpc.*;
 import io.grpc.ForwardingServerCallListener.SimpleForwardingServerCallListener;
+import io.grpc.Metadata;
+import io.grpc.ServerCall;
 import io.grpc.ServerCall.Listener;
+import io.grpc.ServerCallHandler;
+import io.grpc.ServerInterceptor;
 import org.springframework.stereotype.Component;
 
 import static java.util.Optional.ofNullable;
@@ -27,8 +30,7 @@ class DatasourceGrpcInterceptor implements ServerInterceptor {
 
     private final GrpcErrorHandler grpcErrorHandler = new GrpcErrorHandler();
 
-    protected ErrorHandlingCallListener(
-        Listener delegate, ServerCall<ReqT, RespT> serverCall, Metadata headers) {
+    protected ErrorHandlingCallListener(Listener delegate, ServerCall<ReqT, RespT> serverCall, Metadata headers) {
       super(delegate);
       this.call = serverCall;
       this.headers = headers;

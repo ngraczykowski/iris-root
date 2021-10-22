@@ -24,7 +24,7 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Slf4j
-public class NameInformationGrpcAdapter implements NameInformationServiceClient {
+class NameInformationGrpcAdapter implements NameInformationServiceClient {
 
   private final NamesInformationServiceBlockingStub namesInformationServiceBlockingStub;
   private final long deadlineInSeconds;

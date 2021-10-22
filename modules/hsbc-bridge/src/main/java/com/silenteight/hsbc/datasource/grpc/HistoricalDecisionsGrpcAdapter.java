@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
-public class HistoricalDecisionsGrpcAdapter implements HistoricalDecisionsServiceClient {
+class HistoricalDecisionsGrpcAdapter implements HistoricalDecisionsServiceClient {
 
   private final HistoricalDecisionsModelServiceBlockingStub blockingStub;
   private final long deadlineInSeconds;

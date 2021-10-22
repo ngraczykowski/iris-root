@@ -72,6 +72,7 @@ public class PrivateListIndividual implements
   private String edqRole;
   private String edqListCategory;
   private String edqFurtherInfo;
+  private String furtherInfo;
   private String edqSsn;
   private String edqCustomerId;
   private String edqListName;

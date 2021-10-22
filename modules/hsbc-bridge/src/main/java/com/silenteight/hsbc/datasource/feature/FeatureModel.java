@@ -30,6 +30,7 @@ import com.silenteight.hsbc.datasource.feature.historical.HistoricalIsApTpMarked
 import com.silenteight.hsbc.datasource.feature.historical.HistoricalIsCaseTpMarkedFeature;
 import com.silenteight.hsbc.datasource.feature.historical.HistoricalIsTpMarkedFeature;
 import com.silenteight.hsbc.datasource.feature.ispep.IsPepFeature;
+import com.silenteight.hsbc.datasource.feature.ispep.IsPepFeatureV2;
 import com.silenteight.hsbc.datasource.feature.name.NameFeature;
 import com.silenteight.hsbc.datasource.feature.nationaliddocument.NationalIdDocumentFeature;
 
@@ -37,6 +38,7 @@ import java.util.Map;
 
 import static com.silenteight.hsbc.datasource.feature.Feature.*;
 import static java.util.Map.entry;
+import static java.util.Map.ofEntries;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeatureModel {
@@ -44,7 +46,7 @@ public class FeatureModel {
   private static final Map<Feature, Retriever> model;
 
   static {
-    model = Map.ofEntries(
+    model = ofEntries(
         entry(ALLOW_LIST_COMMON_AP, new AllowListCommonApFeature()),
         entry(ALLOW_LIST_COMMON_NAME, new AllowListCommonNameFeature()),
         entry(ALLOW_LIST_COMMON_WP, new AllowListCommonWpFeature()),
@@ -52,6 +54,10 @@ public class FeatureModel {
         entry(GENDER, new GenderFeature()),
         entry(NAME, new NameFeature(new NameQueryConfigurer().create())),
         entry(IS_PEP, new IsPepFeature(new IsPepQueryConfigurer().create())),
+        entry(
+            IS_PEP_V2,
+            new IsPepFeatureV2(
+                new com.silenteight.hsbc.datasource.extractors.ispepV2.IsPepQueryConfigurer().create())),
         entry(
             GEO_PLACE_OF_BIRTH,
             new GeoPlaceOfBirthFeature(new GeoPlaceOfBirthConfigurer().create())),
@@ -93,7 +99,7 @@ public class FeatureModel {
   }
 
   public static Retriever getFeatureRetriever(String featureName) {
-    var feature = Feature.getByFullName(featureName);
+    var feature = getByFullName(featureName);
     return model.get(feature);
   }
 }

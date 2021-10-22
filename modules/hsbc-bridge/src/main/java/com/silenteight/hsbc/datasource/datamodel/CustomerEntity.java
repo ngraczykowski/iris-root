@@ -53,4 +53,6 @@ public interface CustomerEntity {
   String getProfileFullAddress();
 
   String getExternalProfileId();
+
+  String getEdqLobCountryCode();
 }

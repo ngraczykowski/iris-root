@@ -15,7 +15,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 @Slf4j
 @RequiredArgsConstructor
-public class IsPepGrpcAdapter implements IsPepServiceClient {
+class IsPepGrpcAdapter implements IsPepServiceClient {
 
   private final IsPepServiceBlockingStub isPepServiceBlockingStub;
   private final long deadlineInSeconds;

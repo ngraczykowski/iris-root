@@ -70,6 +70,11 @@ class DataProvidersConfiguration {
   }
 
   @Bean
+  IsPepInputProviderV2 isPepInputProviderV2() {
+    return new IsPepInputProviderV2(matchFacade);
+  }
+
+  @Bean
   DataSourceInputProvider<LocationInputResponse> locationInputProvider() {
     return new LocationInputProvider(matchFacade);
   }

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 
-import java.util.stream.Stream;
+import static java.util.stream.Stream.of;
 
 @Getter
 @AllArgsConstructor
@@ -19,6 +19,7 @@ public enum Feature {
   GEO_PLACE_OF_BIRTH("geoPlaceOfBirth"),
   GEO_RESIDENCIES("geoResidencies"),
   IS_PEP("isPep"),
+  IS_PEP_V2("isPepV2"),
   REGISTRATION_COUNTRY("registrationCountry"),
   INCORPORATION_COUNTRY("incorporationCountry"),
   RESIDENCY_COUNTRY("residencyCountry"),
@@ -32,7 +33,7 @@ public enum Feature {
   HISTORICAL_IS_AP_TP_MARKED("isApTpMarked"),
   HISTORICAL_IS_TP_MARKED("isTpMarked");
 
-  private final static String PREFIX = "features/";
+  private static final String PREFIX = "features/";
 
   private final String name;
 
@@ -41,7 +42,7 @@ public enum Feature {
   }
 
   public static Feature getByFullName(@NonNull String name) {
-    return Stream.of(values())
+    return of(values())
         .filter(n -> n.getFullName().equalsIgnoreCase(name))
         .findFirst()
         .orElseThrow(() -> new FeatureNotFoundException(name));

@@ -49,4 +49,8 @@ public interface WorldCheckIndividual extends ListRecordId {
   String getYearOfBirth();
 
   String getAddress();
+
+  String getFurtherInformation();
+
+  String getLinkedTo();
 }
