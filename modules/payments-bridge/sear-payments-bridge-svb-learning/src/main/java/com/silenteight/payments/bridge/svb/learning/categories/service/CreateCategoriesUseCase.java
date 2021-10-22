@@ -30,9 +30,10 @@ class CreateCategoriesUseCase {
   private static List<Category> getAllCategories() {
     return List.of(
         crossmatchCategory(),
-        oneLinerCategory(), specificTermsCategory(),
-        twoLinesCategory(), historicalRiskAssessmentCategory(),
-        watchListTypeCategory(), matchTypeCategory()
+        specificTermsCategory(),
+        historicalRiskAssessmentCategory(),
+        watchListTypeCategory(),
+        matchTypeCategory()
     );
   }
 
@@ -40,21 +41,10 @@ class CreateCategoriesUseCase {
     return Category
         .newBuilder()
         .setName("categories/crossmatch")
-        .setDisplayName("Name Address Crossmatch Category")
+        .setDisplayName("Name Address Crossmatch")
         .setType(CategoryType.ENUMERATED)
         .setMultiValue(false)
         .addAllAllowedValues(List.of("NO_DECISION", "CROSSMATCH", "NO_CROSSMATCH"))
-        .build();
-  }
-
-  private static Category oneLinerCategory() {
-    return Category
-        .newBuilder()
-        .setName("categories/oneLiner")
-        .setDisplayName("One Liner Category")
-        .setType(CategoryType.ENUMERATED)
-        .setMultiValue(false)
-        .addAllAllowedValues(List.of("YES", "NO", "NO_DATA"))
         .build();
   }
 
@@ -62,21 +52,10 @@ class CreateCategoriesUseCase {
     return Category
         .newBuilder()
         .setName("categories/specificTerms")
-        .setDisplayName("Specific Terms Category")
+        .setDisplayName("Specific Terms")
         .setType(CategoryType.ENUMERATED)
         .setMultiValue(false)
         .addAllAllowedValues(List.of("YES", "NO"))
-        .build();
-  }
-
-  private static Category twoLinesCategory() {
-    return Category
-        .newBuilder()
-        .setName("categories/twoLines")
-        .setDisplayName("Two Lines Name Category")
-        .setType(CategoryType.ENUMERATED)
-        .setMultiValue(false)
-        .addAllAllowedValues(List.of("YES", "NO", "NO_DATA"))
         .build();
   }
 
@@ -84,7 +63,7 @@ class CreateCategoriesUseCase {
     return Category
         .newBuilder()
         .setName("categories/historicalRiskAssessment")
-        .setDisplayName("Historical Risk Assessment Category")
+        .setDisplayName("Historical Risk Assessment")
         .setType(CategoryType.ENUMERATED)
         .setMultiValue(false)
         .addAllAllowedValues(List.of("YES", "NO"))
@@ -95,7 +74,7 @@ class CreateCategoriesUseCase {
     return Category
         .newBuilder()
         .setName("categories/watchlistType")
-        .setDisplayName("Watchlist Type Category")
+        .setDisplayName("Watchlist Type")
         .setType(CategoryType.ENUMERATED)
         .addAllAllowedValues(List.of("ADDRESS", "COMPANY", "INDIVIDUAL", "VESSEL"))
         .setMultiValue(false)
@@ -106,7 +85,7 @@ class CreateCategoriesUseCase {
     return Category
         .newBuilder()
         .setName("categories/matchType")
-        .setDisplayName("Match Type Category")
+        .setDisplayName("Match Type")
         .setType(CategoryType.ENUMERATED)
         .addAllAllowedValues(
             List.of("ERROR", "UNKNOWN", "NAME", "SEARCH_CODE", "PASSPORT", "NATIONAL_ID", "BIC",
@@ -114,25 +93,4 @@ class CreateCategoriesUseCase {
         .setMultiValue(false)
         .build();
   }
-
-  private static Category organizationNameCategory() {
-    return Category
-        .newBuilder()
-        .setName("categories/organizationName")
-        .setDisplayName("Organization Name Category")
-        .setType(CategoryType.ANY_STRING)
-        .setMultiValue(false)
-        .build();
-  }
-
-  private static Category companyNameSurroundingCategory() {
-    return Category
-        .newBuilder()
-        .setName("categories/companyNameSurrounding")
-        .setDisplayName("Company Name Surrounding")
-        .setType(CategoryType.ANY_STRING)
-        .setMultiValue(false)
-        .build();
-  }
-
 }
