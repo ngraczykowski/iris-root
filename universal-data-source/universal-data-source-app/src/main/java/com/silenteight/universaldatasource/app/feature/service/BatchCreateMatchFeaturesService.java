@@ -19,6 +19,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,7 +38,10 @@ class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase
     var createdAgentInputs = getCreatedAgentInputs(agentInputs);
 
     if (log.isDebugEnabled()) {
-      log.debug("Saved feature inputs: count={}", createdAgentInputs.size());
+      var features = agentInputs.stream()
+          .flatMap(i -> i.getFeatureInputsList().stream().map(FeatureInput::getFeature))
+          .collect(Collectors.toList());
+      log.debug("Saved feature inputs: count={}, features={}", createdAgentInputs.size(), features);
     }
 
     return BatchCreateAgentInputsResponse.newBuilder()
