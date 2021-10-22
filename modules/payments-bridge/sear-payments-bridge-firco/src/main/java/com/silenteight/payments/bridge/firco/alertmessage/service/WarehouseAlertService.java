@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.event.AlertAddedToAnalysisEvent;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory;
+import com.silenteight.payments.bridge.warehouse.index.model.RequestOrigin;
 import com.silenteight.payments.bridge.warehouse.index.model.payload.WarehouseAlert;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertUseCase;
 
@@ -35,7 +36,7 @@ class WarehouseAlertService {
         .addPayload(mapToWarehouseAlert(event.getAlertId(), alertData))
         .build();
 
-    indexAlertUseCase.index(alert);
+    indexAlertUseCase.index(alert, RequestOrigin.CMAPI);
   }
 
   private WarehouseAlert mapToWarehouseAlert(UUID alertId, AlertData alertData) {

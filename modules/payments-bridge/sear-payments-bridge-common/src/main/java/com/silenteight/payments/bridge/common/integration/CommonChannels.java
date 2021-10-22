@@ -68,9 +68,7 @@ public class CommonChannels {
 
   @Bean(WAREHOUSE_UPDATE_OUTBOUND)
   public MessageChannel warehouseOutbound() {
-    var directChannel = new DirectChannel();
-    directChannel.addInterceptor(new LoggingChannelInterceptor());
-    return directChannel;
+    return new DirectChannel();
   }
 
   @Bean(ALERT_STORED)

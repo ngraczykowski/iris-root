@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.data.api.v1.ProductionDataIndexRequest;
+import com.silenteight.payments.bridge.event.WarehouseIndexRequestedEvent;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexRequestId;
+import com.silenteight.payments.bridge.warehouse.index.model.RequestOrigin;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertUseCase;
 
 import com.google.common.base.Preconditions;
@@ -26,7 +28,7 @@ class IndexAlertService implements IndexAlertUseCase {
   private IdGenerator idGenerator = new AlternativeJdkIdGenerator();
 
   @Override
-  public IndexRequestId index(Iterable<Alert> alerts) {
+  public IndexRequestId index(Iterable<Alert> alerts, RequestOrigin requestOrigin) {
     var requestId = idGenerator.generateId();
     var indexRequest = ProductionDataIndexRequest.newBuilder()
         .setRequestId(requestId.toString())
@@ -39,10 +41,12 @@ class IndexAlertService implements IndexAlertUseCase {
       log.debug("Sending indexing request: {}", TextFormat.shortDebugString(indexRequest));
     }
 
-    indexAlertPublisher.send(indexRequest);
+    indexAlertPublisher.send(
+        new WarehouseIndexRequestedEvent(indexRequest, requestOrigin.mapToIndexRequestOrigin()));
     log.info("Sent payload for indexing: requestId={}, alertCount={}",
         requestId, indexRequest.getAlertsCount());
 
     return new IndexRequestId(requestId);
   }
+
 }

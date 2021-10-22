@@ -9,6 +9,7 @@ dependencies {
   implementation project(":proto-sear-payments-bridge-internal-protos")
   testImplementation project(":sear-payments-bridge-testing")
 
+  implementation libraries.spring_boot
   implementation libraries.guava
   implementation libraries.jackson_databind
   implementation libraries.protobuf_java

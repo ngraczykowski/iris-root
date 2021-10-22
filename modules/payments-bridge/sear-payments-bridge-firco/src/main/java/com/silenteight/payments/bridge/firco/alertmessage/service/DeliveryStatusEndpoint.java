@@ -10,6 +10,7 @@ import com.silenteight.payments.bridge.event.DomainEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory;
+import com.silenteight.payments.bridge.warehouse.index.model.RequestOrigin;
 import com.silenteight.payments.bridge.warehouse.index.model.payload.WarehouseResponseDelivery;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertUseCase;
 
@@ -54,7 +55,7 @@ class DeliveryStatusEndpoint {
             .deliveryStatus(deliveryStatus.name())
             .build())
         .build();
-    indexAlertUseCase.index(alert);
+    indexAlertUseCase.index(alert, RequestOrigin.UNSET);
   }
 
 }

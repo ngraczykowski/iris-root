@@ -6,6 +6,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUs
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CheckAlertRegisteredPort;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory;
+import com.silenteight.payments.bridge.warehouse.index.model.RequestOrigin;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertUseCase;
 
 import org.springframework.stereotype.Service;
@@ -38,6 +39,6 @@ class IngestService {
       alertBuilder.addPayload(warehouseMapper.makeAlert(learningAlert));
     }
 
-    indexAlertUseCase.index(alertBuilder.build());
+    indexAlertUseCase.index(alertBuilder.build(), RequestOrigin.LEARNING);
   }
 }

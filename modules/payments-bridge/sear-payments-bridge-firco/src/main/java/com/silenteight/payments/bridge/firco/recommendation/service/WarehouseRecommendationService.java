@@ -10,6 +10,7 @@ import com.silenteight.payments.bridge.event.RecommendationCompletedEvent.Bridge
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory;
+import com.silenteight.payments.bridge.warehouse.index.model.RequestOrigin;
 import com.silenteight.payments.bridge.warehouse.index.model.payload.WarehouseRecommendation;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertUseCase;
 
@@ -45,7 +46,7 @@ class WarehouseRecommendationService {
         .addPayload(buildWarehouseRecommendation(event))
         .build();
 
-    indexAlertUseCase.index(alert);
+    indexAlertUseCase.index(alert, RequestOrigin.CMAPI);
   }
 
   private WarehouseRecommendation buildWarehouseRecommendation(
