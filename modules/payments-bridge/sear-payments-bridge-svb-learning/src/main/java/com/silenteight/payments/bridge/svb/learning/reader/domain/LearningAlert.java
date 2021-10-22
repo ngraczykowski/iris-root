@@ -7,7 +7,6 @@ import lombok.Value;
 import lombok.experimental.NonFinal;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.Label;
-import com.silenteight.payments.bridge.ae.alertregistration.domain.MatchQuantity;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.common.model.AlertRegistration;
@@ -57,12 +56,10 @@ public class LearningAlert {
         .builder()
         .alertId(alertId)
         .alertTime(fromOffsetDateTime(alertTime))
-        .matchQuantity(matches.size() > 1 ? MatchQuantity.MANY : MatchQuantity.SINGLE)
-        .matchIds(matches.stream().map(
-            LearningMatch::getMatchId).collect(toList()))
-        .labels(List.of(
-            Label.builder().name("learningBatch").value(batchStamp).build(),
-            Label.builder().name("fileName").value(fileName).build()))
+        .matchIds(matches.stream().map(LearningMatch::getMatchId).collect(toList()))
+        .label(Label.of("learningBatch", batchStamp))
+        .label(Label.of("fileName", fileName))
+        .label(Label.of("source", "CSV"))
         .build();
   }
 

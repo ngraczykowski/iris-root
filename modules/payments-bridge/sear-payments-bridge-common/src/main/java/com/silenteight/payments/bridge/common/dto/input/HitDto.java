@@ -72,4 +72,8 @@ public class HitDto implements Serializable {
   public boolean isBlocking() {
     return getRulesContext().getType().equals("1");
   }
+
+  public String getMatchId() {
+    return hittedEntity.getId() + "(" + getTag() + ")";
+  }
 }

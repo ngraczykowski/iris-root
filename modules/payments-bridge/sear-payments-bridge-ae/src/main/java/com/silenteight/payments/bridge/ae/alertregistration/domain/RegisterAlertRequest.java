@@ -1,6 +1,9 @@
 package com.silenteight.payments.bridge.ae.alertregistration.domain;
 
 import lombok.Builder;
+import lombok.Builder.Default;
+import lombok.NonNull;
+import lombok.Singular;
 import lombok.Value;
 
 import com.silenteight.adjudication.api.v1.Alert;
@@ -8,11 +11,12 @@ import com.silenteight.adjudication.api.v1.BatchCreateAlertMatchesRequest;
 import com.silenteight.adjudication.api.v1.CreateAlertRequest;
 import com.silenteight.adjudication.api.v1.Match;
 
+import com.google.common.base.Preconditions;
 import com.google.protobuf.Timestamp;
-import org.jetbrains.annotations.NotNull;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
-import java.util.Locale;
+import javax.annotation.Nonnull;
 
 import static java.util.stream.Collectors.toList;
 
@@ -20,18 +24,22 @@ import static java.util.stream.Collectors.toList;
 @Builder
 public class RegisterAlertRequest {
 
+  @NonNull
   String alertId;
 
-  int priority;
+  @Default
+  int priority = 5;
 
+  @NonNull
   Timestamp alertTime;
 
+  @NonNull
   List<String> matchIds;
 
-  MatchQuantity matchQuantity;
-
+  @Singular
   List<Label> labels;
 
+  @Nonnull
   public BatchCreateAlertMatchesRequest toCreateMatchesRequest(String alertName) {
     if (matchIds.isEmpty())
       throw new IllegalStateException("Match ids must not be empty");
@@ -43,30 +51,30 @@ public class RegisterAlertRequest {
         .build();
   }
 
+  @Nonnull
   private List<Match> createMatches() {
-    return matchIds.stream()
-        .map(RegisterAlertRequest::createMatch)
-        .collect(toList());
+    return matchIds.stream().map(RegisterAlertRequest::createMatch).collect(toList());
   }
 
-  @NotNull
+  @Nonnull
   private static Match createMatch(String matchId) {
     return Match.newBuilder().setMatchId(matchId).build();
   }
 
+  @Nonnull
   public CreateAlertRequest toCreateAlertRequest() {
+    Preconditions.checkState(matchIds.size() > 1, "At least one match is required.");
+
     var alert = Alert
         .newBuilder()
         .setAlertId(getAlertId())
-        .setPriority(getPriority());
-    if (alertTime != null) {
-      alert.setAlertTime(alertTime);
-    }
-    if (matchQuantity != null) {
-      alert.putLabels("matchQuantity", matchQuantity.name().toLowerCase(Locale.ROOT));
-    }
+        .setPriority(getPriority())
+        .setAlertTime(alertTime);
 
-    if (labels != null) {
+    var matchQuantity = matchIds.size() > 1 ? MatchQuantity.MANY : MatchQuantity.SINGLE;
+    alert.putLabels("matchQuantity", matchQuantity.name().toLowerCase());
+
+    if (!CollectionUtils.isEmpty(labels)) {
       labels.forEach(l -> alert.putLabels(l.getName(), l.getValue()));
     }
 

@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.ae.alertregistration.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.ae.alertregistration.domain.Label;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
@@ -16,11 +17,14 @@ import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.ALERT_INITIALIZED;
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.ALERT_REGISTERED;
+import static com.silenteight.payments.bridge.common.protobuf.TimestampConverter.fromOffsetDateTime;
 
 @MessageEndpoint
 @Slf4j
@@ -35,11 +39,13 @@ class RegisterAlertEndpoint {
     AlertData alertData = alertInitializedEvent.getData(AlertData.class);
     AlertMessageDto alertDto = alertInitializedEvent.getData(AlertMessageDto.class);
 
+    var matchIds = getMatchIds(alertDto);
     var request = RegisterAlertRequest.builder()
         .alertId(alertData.getAlertId().toString())
         .alertTime(fromOffsetDateTime(alertDto.getFilteredAt(ZoneOffset.UTC)))
         .priority(alertData.getPriority())
-        .matchIds(getMatchIds(alertDto))
+        .matchIds(matchIds)
+        .label(Label.of("source", "CMAPI"))
         .build();
 
     var alert = registerAlertUseCase.register(request);
@@ -51,18 +57,13 @@ class RegisterAlertEndpoint {
         alert.getMatchResponsesAsMap());
   }
 
+  @Nonnull
   private static List<String> getMatchIds(AlertMessageDto alertDto) {
-
     return alertDto.getHits()
         .stream()
         .map(RequestHitDto::getHit)
         .filter(HitDto::isBlocking)
-        .map(hit -> {
-          String hitId = hit.getHittedEntity().getId();
-          String tag = hit.getTag();
-          return String.format("%s(%s)", hitId, tag);
-        })
+        .map(HitDto::getMatchId)
         .collect(Collectors.toList());
   }
-
 }

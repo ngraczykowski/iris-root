@@ -1,10 +1,10 @@
 package com.silenteight.payments.bridge.ae.alertregistration.domain;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Value;
 
 @Value
-@Builder
+@AllArgsConstructor(staticName = "of")
 public class Label {
 
   String name;
