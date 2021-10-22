@@ -1,15 +1,19 @@
 package com.silenteight.agent.common.io;
 
+import lombok.experimental.UtilityClass;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
+import static com.silenteight.agent.common.io.Common.extractMultipleKeys;
+import static com.silenteight.agent.common.io.Common.extractMultipleValues;
+import static com.silenteight.agent.common.io.Common.extractSingleKey;
 import static com.silenteight.agent.common.io.FileFormatConstants.*;
 import static com.silenteight.agent.configloader.ConfigsPathFinder.findFile;
 import static java.nio.file.Files.readAllLines;
@@ -18,6 +22,7 @@ import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
 @SuppressWarnings("unused") //used in agents as helper
+@UtilityClass
 public class FileReader {
 
   /**
@@ -41,7 +46,8 @@ public class FileReader {
    *
    *   Expected dict format: "key=value1;value2"
    *
-   *   Returns unique keys and unique values, all UPPER CASE, ignores # comments or empty lines
+   *   Returns unique keys and unique values, all UPPER CASE,
+   *   ignores # comments or empty lines
    * </pre>
    */
   public static Map<String, Set<String>> readSingleKeyMultipleValues(String path) {
@@ -56,7 +62,8 @@ public class FileReader {
    *
    *   Expected dict format: "key1;key2=value1;value2"
    *
-   *   Returns unique keys and unique values, all UPPER CASE, ignores # comments or empty lines
+   *   Returns unique keys and unique values, all UPPER CASE,
+   *   ignores # comments or empty lines
    * </pre>
    */
   public static Map<Set<String>, Set<String>> readMultipleKeyMultipleValues(String path) {
@@ -89,6 +96,7 @@ public class FileReader {
         .collect(toSet());
   }
 
+
   public static Set<String> readLinesAsSet(
       String path,
       Collection<Predicate<String>> filters,
@@ -98,8 +106,10 @@ public class FileReader {
   }
 
   /**
-   * Load lines from file located under AGENT_HOME/conf/{path} without any filtering or
-   * transformations
+   * <pre>
+   *   Load lines from file located under AGENT_HOME/conf/{path}
+   *   without any filtering or transformations
+   * </pre>
    */
   public static Stream<String> readLinesAsStream(String path) {
     var file = findFile(path);
@@ -112,8 +122,10 @@ public class FileReader {
   }
 
   /**
-   * Load lines from file located under AGENT_HOME/conf/{path} applying filters and transformers for
-   * each line
+   * <pre>
+   *   Load lines from file located under AGENT_HOME/conf/{path}
+   *   applying filters and transformers for each line
+   * </pre>
    */
   public static Stream<String> readLinesAsStream(
       String path,
@@ -135,17 +147,5 @@ public class FileReader {
     } catch (Exception e) {
       throw new FileReadingException(path, e);
     }
-  }
-
-  private static Function<String[], String> extractSingleKey() {
-    return split -> split[0];
-  }
-
-  private static Function<String[], Set<String>> extractMultipleKeys() {
-    return split -> Set.of(split[0].split(VALUES_SEPARATOR));
-  }
-
-  private static Function<String[], Set<String>> extractMultipleValues() {
-    return split -> Set.of(split[1].split(VALUES_SEPARATOR));
   }
 }

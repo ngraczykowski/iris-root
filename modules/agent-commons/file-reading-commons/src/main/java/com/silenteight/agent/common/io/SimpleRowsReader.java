@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.function.Supplier;
 
 @RequiredArgsConstructor
+@Deprecated
 public class SimpleRowsReader implements RowsReader<String> {
 
   private final Supplier<InputStream> inputStreamSupplier;

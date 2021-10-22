@@ -1,5 +1,7 @@
 package com.silenteight.agent.common.io;
 
+import lombok.experimental.UtilityClass;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -16,6 +18,8 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
 import static org.apache.commons.csv.CSVParser.parse;
 
+@SuppressWarnings("unused") //used in agents as helper
+@UtilityClass
 public class CsvReader {
 
   private static final CSVFormat CSV_FORMAT = CSVFormat

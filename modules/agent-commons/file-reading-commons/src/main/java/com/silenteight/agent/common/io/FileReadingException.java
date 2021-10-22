@@ -9,4 +9,8 @@ public class FileReadingException extends RuntimeException {
   public FileReadingException(String path, Exception e) {
     super(format("Can't load file %s", path), e);
   }
+
+  public FileReadingException(Exception e) {
+    super("Can't load file", e);
+  }
 }
