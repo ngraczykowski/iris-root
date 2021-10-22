@@ -96,4 +96,41 @@
         relativeToChangelogFile="true"
         splitStatements="false"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_9" author="iwnek">
+    <addColumn tableName="ae_recommendation">
+      <column name="match_ids" type="BIGINT[]"/>
+      <column name="match_contexts" type="JSONB"/>
+    </addColumn>
+
+    <sqlFile path="sql/insert_matches_to_alert_recommendation.sql" relativeToChangelogFile="true"/>
+
+    <addNotNullConstraint tableName="ae_recommendation" columnName="match_ids"/>
+    <addNotNullConstraint tableName="ae_recommendation" columnName="match_contexts"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_10" author="iwnek">
+    <dropView viewName="ae_alert_recommendation_query"/>
+    <dropView viewName="ae_comments_match_context"/>
+
+    <createView
+        viewName="ae_alert_recommendation_query"
+        path="sql/view_ae_alert_recommendation_query_v2.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_11" author="iwnek">
+    <dropView viewName="ae_pending_alert_matches_query"/>
+    <dropView viewName="ae_alert_match_solutions_query"/>
+
+    <createView
+        viewName="ae_alert_match_solutions_query"
+        path="sql/view_ae_alert_match_solutions_query_v4.sql"
+        relativeToChangelogFile="true"/>
+
+    <createView
+        viewName="ae_pending_alert_matches_query"
+        path="sql/view_ae_pending_alert_matches_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
 </databaseChangeLog>

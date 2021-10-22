@@ -5,6 +5,10 @@ import com.silenteight.adjudication.engine.analysis.recommendation.domain.Insert
 import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.FeatureContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
+import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -14,6 +18,8 @@ import java.util.stream.LongStream;
 import static java.util.stream.Collectors.toList;
 
 public class RecommendationFixture {
+
+  private static final ObjectMapper MAPPER = JsonConversionHelper.INSTANCE.objectMapper();
 
   public static AlertRecommendation createAlertRecommendation() {
     return AlertRecommendation.builder()
@@ -32,6 +38,10 @@ public class RecommendationFixture {
         .analysisId(1)
         .recommendationId(1)
         .recommendedAction("MATCH")
+        .matchIds(new long[] { 11 })
+        .matchContexts(new ObjectNode[] {
+            MAPPER.convertValue(createMatchContext(), ObjectNode.class)
+        })
         .build();
   }
 

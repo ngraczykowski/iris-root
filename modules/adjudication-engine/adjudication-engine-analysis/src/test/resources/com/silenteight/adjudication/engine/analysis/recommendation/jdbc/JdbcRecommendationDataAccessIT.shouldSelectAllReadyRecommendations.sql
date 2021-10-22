@@ -10,8 +10,9 @@ VALUES (1, 1, NOW()),
        (1, 2, NOW());
 
 -- ...but one already has a recommendation...
-INSERT INTO ae_recommendation (analysis_id, alert_id, created_at, recommended_action)
-VALUES (1, 2, NOW(), 'TO_THE_MOON');
+INSERT INTO ae_recommendation (analysis_id, alert_id, created_at, recommended_action,
+                               match_ids, match_contexts)
+VALUES (1, 2, NOW(), 'TO_THE_MOON', array[]::integer[], '[]');
 
 -- ...each has a single match...
 INSERT INTO ae_match

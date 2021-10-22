@@ -21,10 +21,10 @@ VALUES (2, 1, NOW());
 
 -- ...two solved for first analysis...
 INSERT INTO ae_recommendation
-VALUES (1, 1, 1, NOW(), 'blabla');
+VALUES (1, 1, 1, NOW(), 'blabla', array[]::integer[], '[]');
 INSERT INTO ae_recommendation
-VALUES (2, 1, 2, NOW(), 'babol');
+VALUES (2, 1, 2, NOW(), 'babol', array[]::integer[], '[]');
 
 -- ...third solved in second analysis and is not pending...
 INSERT INTO ae_recommendation
-VALUES (3, 2, 3, NOW(), 'blabla');
+VALUES (3, 2, 3, NOW(), 'blabla', array[]::integer[], '[]');

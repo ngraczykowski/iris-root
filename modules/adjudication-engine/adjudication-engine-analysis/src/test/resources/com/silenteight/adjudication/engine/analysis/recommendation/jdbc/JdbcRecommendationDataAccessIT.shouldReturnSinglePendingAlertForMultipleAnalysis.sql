@@ -31,5 +31,6 @@ INSERT INTO ae_pending_recommendation (analysis_id, alert_id, created_at)
 VALUES (2, 1000, now());
 
 -- ...and the recommendation in just the first analysis.
-INSERT INTO ae_recommendation (analysis_id, alert_id, created_at, recommended_action)
-VALUES (1, 1000, now(), 'GO_HOME_MATE');
+INSERT INTO ae_recommendation (analysis_id, alert_id, created_at, recommended_action,
+                               match_ids, match_contexts)
+VALUES (1, 1000, now(), 'GO_HOME_MATE', array[]::integer[], '[]');

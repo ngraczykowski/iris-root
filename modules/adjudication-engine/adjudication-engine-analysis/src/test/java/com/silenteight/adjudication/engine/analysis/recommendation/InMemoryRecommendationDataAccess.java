@@ -3,6 +3,8 @@ package com.silenteight.adjudication.engine.analysis.recommendation;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.*;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
@@ -22,7 +24,12 @@ class InMemoryRecommendationDataAccess implements RecommendationDataAccess {
       return new PendingAlerts(List.of());
 
     return new PendingAlerts(
-        List.of(new PendingAlert(1, List.of(FeatureVectorSolution.SOLUTION_FALSE_POSITIVE))));
+        List.of(PendingAlert.builder()
+            .alertId(1)
+            .matchSolutions(List.of(FeatureVectorSolution.SOLUTION_FALSE_POSITIVE))
+            .matchIds(new long[] { 11 })
+            .matchContexts(new ObjectNode[] {})
+            .build()));
   }
 
   @Override

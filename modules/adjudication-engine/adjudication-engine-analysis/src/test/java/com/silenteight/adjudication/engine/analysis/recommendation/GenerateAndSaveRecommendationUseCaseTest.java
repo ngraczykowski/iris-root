@@ -6,6 +6,7 @@ import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertS
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
 import com.silenteight.solving.api.v1.SolveAlertSolutionResponse;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,8 +55,14 @@ class GenerateAndSaveRecommendationUseCaseTest {
     when(analysisFacade.getAnalysisStrategy(1)).thenReturn("strategies");
 
     when(createRecommendationsUseCase.createRecommendations(
-        eq(1L),
-        eq(List.of(new AlertSolution(1, "solved"))))).thenReturn(List.of(
+        1L,
+        List.of(
+            AlertSolution.builder()
+                .alertId(1)
+                .recommendedAction("solved")
+                .matchIds(new long[] { 11 })
+                .matchContexts(new ObjectNode[] {})
+                .build()))).thenReturn(List.of(
         RecommendationInfo.newBuilder().build()));
 
     var generated =

@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.engine.analysis.analysis.AnalysisFacade;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertSolution;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlert;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlerts;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRecommendationRequest;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.sep.base.aspects.metrics.Timed;
@@ -42,7 +44,8 @@ class GenerateRecommendationsUseCase {
 
     log.debug("Starting generating recommendations: analysis={}", analysisName);
     do {
-      var request = createRequest(analysisId);
+      var pendingAlerts = recommendationDataAccess.selectPendingAlerts(analysisId);
+      var request = createRequest(analysisId, pendingAlerts);
 
       if (request.isEmpty()) {
         log.debug("No more alerts pending recommendation: analysis={}", analysisName);
@@ -51,7 +54,7 @@ class GenerateRecommendationsUseCase {
 
       var response = client.batchSolveAlerts(request.get());
 
-      var alertSolutions = createAlertSolutions(response);
+      var alertSolutions = createAlertSolutions(pendingAlerts, response);
       recommendationInfos.addAll(
           saveRecommendation.apply(new SaveRecommendationRequest(analysisId, alertSolutions)));
 
@@ -67,16 +70,18 @@ class GenerateRecommendationsUseCase {
   }
 
   @NotNull
-  private List<AlertSolution> createAlertSolutions(BatchSolveAlertsResponse response) {
+  private static List<AlertSolution> createAlertSolutions(
+      PendingAlerts alerts, BatchSolveAlertsResponse response) {
+
     return response
         .getSolutionsList()
         .stream()
-        .map(GenerateRecommendationsUseCase::createAlertSolution)
+        .map(s -> createAlertSolution(alerts, s))
         .collect(toList());
   }
 
-  private Optional<BatchSolveAlertsRequest> createRequest(long analysisId) {
-    var pendingAlerts = recommendationDataAccess.selectPendingAlerts(analysisId);
+  private Optional<BatchSolveAlertsRequest> createRequest(
+      long analysisId, PendingAlerts pendingAlerts) {
 
     if (pendingAlerts.isEmpty()) {
       log.debug("No pending alerts: analysis=analysis/{}", analysisId);
@@ -92,8 +97,30 @@ class GenerateRecommendationsUseCase {
     return Optional.of(pendingAlerts.toBatchSolveAlertsRequest(strategy));
   }
 
-  private static AlertSolution createAlertSolution(SolveAlertSolutionResponse response) {
+  private static AlertSolution createAlertSolution(
+      PendingAlerts alerts, SolveAlertSolutionResponse response) {
+
     var alertId = ResourceName.create(response.getAlertName()).getLong("alerts");
-    return new AlertSolution(alertId, response.getAlertSolution());
+    var pendingAlert = getPendingAlert(alerts, alertId);
+    return AlertSolution.builder()
+        .alertId(alertId)
+        .recommendedAction(response.getAlertSolution())
+        .matchIds(pendingAlert.getMatchIds())
+        .matchContexts(pendingAlert.getMatchContexts())
+        .build();
+  }
+
+  private static PendingAlert getPendingAlert(PendingAlerts alerts, long alertId) {
+    return alerts.getById(alertId)
+        .orElseThrow(() -> new PendingAlertSolutionNotMatchedException(alertId));
+  }
+
+  static class PendingAlertSolutionNotMatchedException extends IllegalStateException {
+
+    private static final long serialVersionUID = -1681350458025837494L;
+
+    PendingAlertSolutionNotMatchedException(long alertId) {
+      super("Could not match Pending Alert with the Solution, alertId=" + alertId);
+    }
   }
 }

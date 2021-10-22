@@ -6,7 +6,9 @@ import lombok.Value;
 
 import com.silenteight.solving.api.v1.BatchSolveAlertsRequest;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -14,23 +16,36 @@ import static java.util.stream.Collectors.toList;
 @Getter(AccessLevel.NONE)
 public class PendingAlerts {
 
-  List<PendingAlert> pendingAlerts;
+  LinkedHashMap<Long, PendingAlert> pendingAlertsMap;
+
+  public PendingAlerts(List<PendingAlert> pendingAlerts) {
+    pendingAlertsMap = new LinkedHashMap<>();
+    pendingAlerts.forEach(p -> pendingAlertsMap.put(p.getAlertId(), p));
+  }
 
   public boolean isEmpty() {
-    return pendingAlerts.isEmpty();
+    return pendingAlertsMap.isEmpty();
   }
 
   public int size() {
-    return pendingAlerts.size();
+    return pendingAlertsMap.size();
   }
 
   public BatchSolveAlertsRequest toBatchSolveAlertsRequest(String strategy) {
-    var requestAlerts = pendingAlerts.stream().map(PendingAlert::toAlert).collect(toList());
+    var requestAlerts = pendingAlertsMap
+        .values()
+        .stream()
+        .map(PendingAlert::toAlert)
+        .collect(toList());
 
     return BatchSolveAlertsRequest
         .newBuilder()
         .setStrategy(strategy)
         .addAllAlerts(requestAlerts)
         .build();
+  }
+
+  public Optional<PendingAlert> getById(long alertId) {
+    return Optional.ofNullable(pendingAlertsMap.get(alertId));
   }
 }
