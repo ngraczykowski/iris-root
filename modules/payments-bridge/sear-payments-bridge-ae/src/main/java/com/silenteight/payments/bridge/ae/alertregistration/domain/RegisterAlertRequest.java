@@ -63,7 +63,7 @@ public class RegisterAlertRequest {
 
   @Nonnull
   public CreateAlertRequest toCreateAlertRequest() {
-    Preconditions.checkState(matchIds.size() > 1, "At least one match is required.");
+    Preconditions.checkState(matchIds.size() > 0, "At least one match is required.");
 
     var alert = Alert
         .newBuilder()
