@@ -12,15 +12,11 @@ public class GfxTransactionMessage extends BaseTransactionMessage {
 
   @Override
   public Optional<String> getAccountNumber(String tag) {
-    //var lines = messageData.getLines(tag);
-    //for (int line = 0; line < lines.size(); line++) {
-    //  if ("AC".equals(lines.get(line))) {
-    //    if (line + 1 < lines.size())
-    //      return Optional.of(lines.get(line + 1));
-    //    else
-    //      return Optional.empty();
-    //  }
-    //}
+    var lines = getMessageData().getLines(tag);
+
+    if (lines.size() < 3 || lines.size() > 7)
+      return Optional.empty();
+
     return Optional.of(getMessageData().getLines(tag).get(1));
   }
 }
