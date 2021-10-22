@@ -24,6 +24,21 @@ public class FileReader {
    * <pre>
    *   Load lines from file located under AGENT_HOME/conf/{path}
    *
+   *   Expected dict format: "value1;value2"
+   *
+   *   Returns unique unique values, all UPPER CASE, ignores # comments or empty lines
+   * </pre>
+   */
+  public static Set<Set<String>> readMultipleValues(String path) {
+    return readLinesAsStream(path, DEFAULT_DICT_FORMAT_FILTERS, DEFAULT_DICT_FORMAT_TRANSFORMERS)
+        .map(line -> Set.of(line.split(VALUES_SEPARATOR)))
+        .collect(toSet());
+  }
+
+  /**
+   * <pre>
+   *   Load lines from file located under AGENT_HOME/conf/{path}
+   *
    *   Expected dict format: "key=value1;value2"
    *
    *   Returns unique keys and unique values, all UPPER CASE, ignores # comments or empty lines
