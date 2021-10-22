@@ -1,0 +1,745 @@
+{
+  "Unit": "US",
+  "BusinessUnit": "ROOT",
+  "MessageID": "CE9EE2A5-E751-7B57-E053-1A186C0A2A88",
+  "SystemID": "DIN20211019104342-00028-28242",
+  "Bypass": "0",
+  "Command": "1",
+  "BusinessType": "NACHA",
+  "MessageType": "IAT",
+  "IOIndicator": "I",
+  "SenderReference": "0011870",
+  "Currency": "USD",
+  "Amount": "6.61",
+  "ApplicationCode": "PEP",
+  "ToApplication": "",
+  "MessageFormat": "ALL",
+  "SenderCode": "255570069",
+  "ReceiverCode": "121140399",
+  "ApplicationPriority": "0",
+  "CutoffTime": "",
+  "NormalizedAmount": "",
+  "MessageData": "[FIRCOSOFT     X] SVB BE MUX FILTER\n[APPLI         X] PEP\n[UNIT          X] US\n[REFERENCE     X] 0011870\n[TYPE          X] IAT-I\n[VALUEDATE     X] 2021/05/01\n[PURPOSE        ] 501133010\n[AMOUNT        X] USD 6.61\n[INSPMTAMT     X] USD 10\n[SENDER         ] 255570069\n[SENDERBANK     ] 25557006\nTEST SYSTEM BUNK1\n01\n255570069\nUS\n[ORIGINATOR     ] 3300354583\nHARA COMPANY\nFLAT 1 4, 15AOSWALD \nGLASGOW\nUS\n[CRDACCNUM      ] 3302306795\n[RECEIVBANK     ] 12114039\nTEST SYSTEM BUNK2\n01\n121140399\nUS\n[RECEIVER       ] 121140399\n[BENE           ] 3302306795\ngoodguy\n316 MAIN\nPGH\nUS\n[ORGBENEINF     ] value1\nvalue2\n3300440074\n[TRANCD        X] 27\n[DESTCNTRY      ] US\n[ITMBANK        ] Adm\n1\n101\nUS \n[ITMBANK1       ] Boris\n2\n202\nUK\n[FXMATH        X] FF\n[FXREFNB       X] \n[ADDENDACNT    X] 0007\n[ORIGSTSCD     X] 1\n",
+  "LastComment": "Suspect(s) detected by OFAC-Agent",
+  "LastOperator": "OFAC-Agent",
+  "ValueDate": "2021/05/01",
+  "FilteredDate": "2021/10/19 10:43:49",
+  "RelatedReference": "",
+  "CreatedDate": "2021/10/19 10:43:42",
+  "Priority": "2",
+  "Confidentiality": "0",
+  "Blocking": "4",
+  "NonBlocking": "2",
+  "CopyService": "",
+  "Hits": [
+    {
+      "Hit": {
+        "MatchingText": "HARA COMPANY",
+        "Positions": [
+          {
+            "Position": {
+              "PositionStart": "356",
+              "PositionEnd": "367"
+            }
+          }
+        ],
+        "Score": "0.0",
+        "Tag": "ORIGINATOR",
+        "SolutionType": "1",
+        "SynonymIndex": "0",
+        "RulesContext": {
+          "Type": "1",
+          "Priority": "0",
+          "Confidentiality": "0",
+          "Info": "none"
+        },
+        "EntityText": "HARA COMPANY",
+        "HittedEntity": {
+          "ID": "AS00187009",
+          "IsException": "0",
+          "OfficialReferences": [
+            {
+              "OfficialReference": {
+                "Name": "2017-10-31 13:25:11 UST"
+              }
+            }
+          ],
+          "Names": [
+            {
+              "Name": "HARA COMPANY"
+            },
+            {
+              "Name": "HARA INSTITUTE"
+            },
+            {
+              "Name": "HARA COMPANY"
+            },
+            {
+              "Name": "HARA INSTITUTE"
+            }
+          ],
+          "Addresses": [
+            {
+              "Address": {
+                "IsMain": "1",
+                "PostalAddress": "",
+                "Cities": [
+                  {
+                    "City": "TEHRAN"
+                  },
+                  {
+                    "City": "TEHERAN"
+                  },
+                  {
+                    "City": "TEHRAN"
+                  },
+                  {
+                    "City": "TEHRAN"
+                  },
+                  {
+                    "City": "TEHERAN"
+                  },
+                  {
+                    "City": "TEHRAN"
+                  }
+                ],
+                "States": [],
+                "Countries": [
+                  {
+                    "Country": "IRAN ISLAMIC REPUBLIC OF"
+                  },
+                  {
+                    "Country": "IRAN"
+                  },
+                  {
+                    "Country": "IRAN (ISLAMIC REPUBLIC OF)"
+                  },
+                  {
+                    "Country": "IRAN ISLAMIC REPUBLIC OF"
+                  },
+                  {
+                    "Country": "IRAO"
+                  },
+                  {
+                    "Country": "ISLAMIC REPUBLIC OF IRAN"
+                  },
+                  {
+                    "Country": "JOMHURI YE ESLAMI YE IRAN"
+                  },
+                  {
+                    "Country": "JOMHURI-YE ESLAMI-YE IRAN"
+                  },
+                  {
+                    "Country": "PERSIA"
+                  },
+                  {
+                    "Country": "REPUBLIQUE ISLAMIQUE D'IRAN"
+                  },
+                  {
+                    "Country": "REPUBLIQUE ISLAMIQUE D IRAN"
+                  },
+                  {
+                    "Country": "IRAN ISLAMIC REPUBLIC OF"
+                  },
+                  {
+                    "Country": "IRAN"
+                  },
+                  {
+                    "Country": "IRAN (ISLAMIC REPUBLIC OF)"
+                  },
+                  {
+                    "Country": "IRAN ISLAMIC REPUBLIC OF"
+                  },
+                  {
+                    "Country": "IRAO"
+                  },
+                  {
+                    "Country": "ISLAMIC REPUBLIC OF IRAN"
+                  },
+                  {
+                    "Country": "JOMHURI YE ESLAMI YE IRAN"
+                  },
+                  {
+                    "Country": "JOMHURI-YE ESLAMI-YE IRAN"
+                  },
+                  {
+                    "Country": "PERSIA"
+                  },
+                  {
+                    "Country": "REPUBLIQUE ISLAMIQUE D'IRAN"
+                  },
+                  {
+                    "Country": "REPUBLIQUE ISLAMIQUE D IRAN"
+                  }
+                ]
+              }
+            }
+          ],
+          "Origin": "US_OFAC",
+          "Designation": "SDGT__NPWMD__IRGC__I",
+          "Keywords": [
+            {
+              "Keyword": "OS:OFAC"
+            }
+          ],
+          "Type": "C",
+          "Codes": [],
+          "AdditionalInfo": "List ID: 0 / Create Date: 10/25/2007 14:09:24 / Last Update Date: 10/31/2017 12:54:05 / Program: SDGT & NPWMD & IRGC & IFSR / OtherInformation: Additional Sanctions Information -Subject to Secondary Sanctions / OriginalID: 10495",
+          "DatesOfBirth": [],
+          "PlacesOfBirth": [],
+          "Hyperlinks": [
+            {
+              "Hyperlink": "none"
+            }
+          ],
+          "UserData1": "60558",
+          "UserData2": "",
+          "Nationality": "",
+          "IsPep": null,
+          "IsFep": null,
+          "HideOnlyIDs": [
+            {
+              "HideOnlyID": ""
+            }
+          ],
+          "HideIDs": [],
+          "HideOrigins": [],
+          "HideInTags": [],
+          "HideUnits": [],
+          "HideSenderReceivers": []
+        }
+      }
+    },
+    {
+      "Hit": {
+        "MatchingText": "HARA COMPANY",
+        "Positions": [
+          {
+            "Position": {
+              "PositionStart": "356",
+              "PositionEnd": "367"
+            }
+          }
+        ],
+        "Score": "0.0",
+        "Tag": "ORIGINATOR",
+        "SolutionType": "1",
+        "SynonymIndex": "0",
+        "RulesContext": {
+          "Type": "1",
+          "Priority": "0",
+          "Confidentiality": "0",
+          "Info": "none"
+        },
+        "EntityText": "HARA COMPANY",
+        "HittedEntity": {
+          "ID": "AS00379527",
+          "IsException": "0",
+          "OfficialReferences": [
+            {
+              "OfficialReference": {
+                "Name": "2021-01-12 11:54:02 BofE"
+              }
+            }
+          ],
+          "Names": [
+            {
+              "Name": "HARA COMPANY"
+            },
+            {
+              "Name": "HARA COMPANY"
+            }
+          ],
+          "Addresses": [
+            {
+              "Address": {
+                "IsMain": "1",
+                "PostalAddress": "",
+                "Cities": [],
+                "States": [],
+                "Countries": []
+              }
+            }
+          ],
+          "Origin": "GB_HMT",
+          "Designation": "IRAN_NUCLEAR",
+          "Keywords": [
+            {
+              "Keyword": "OS:BANK_OF_ENGLAND"
+            }
+          ],
+          "Type": "C",
+          "Codes": [],
+          "AdditionalInfo": "List ID: 29 / Create Date: 06/10/2010 14:50:32 / Last Update Date: 01/12/2021 11:46:56 / Program: IRAN (NUCLEAR) / OtherInformation: (UK Sanctions List Ref):IWD0151 (UN Ref):IRe.025 (Further Identifiying Information):Owned or controlled by Ghorb Nooh.[Old Reference # E.29.II.5] (Parent company):Ghorb Nooh / EffectiveDate: 12/31/2020 / OriginalID: 11138",
+          "DatesOfBirth": [],
+          "PlacesOfBirth": [],
+          "Hyperlinks": [
+            {
+              "Hyperlink": "none"
+            }
+          ],
+          "UserData1": "60558",
+          "UserData2": "",
+          "Nationality": "",
+          "IsPep": null,
+          "IsFep": null,
+          "HideOnlyIDs": [
+            {
+              "HideOnlyID": ""
+            }
+          ],
+          "HideIDs": [],
+          "HideOrigins": [],
+          "HideInTags": [],
+          "HideUnits": [],
+          "HideSenderReceivers": []
+        }
+      }
+    },
+    {
+      "Hit": {
+        "MatchingText": "HARA COMPANY",
+        "Positions": [
+          {
+            "Position": {
+              "PositionStart": "356",
+              "PositionEnd": "367"
+            }
+          }
+        ],
+        "Score": "0.0",
+        "Tag": "ORIGINATOR",
+        "SolutionType": "1",
+        "SynonymIndex": "0",
+        "RulesContext": {
+          "Type": "1",
+          "Priority": "0",
+          "Confidentiality": "0",
+          "Info": "none"
+        },
+        "EntityText": "HARA COMPANY",
+        "HittedEntity": {
+          "ID": "AS00379753",
+          "IsException": "0",
+          "OfficialReferences": [
+            {
+              "OfficialReference": {
+                "Name": "2015-04-16 18:25:28 UN"
+              }
+            }
+          ],
+          "Names": [
+            {
+              "Name": "HARA COMPANY"
+            },
+            {
+              "Name": "HARA COMPANY"
+            }
+          ],
+          "Addresses": [
+            {
+              "Address": {
+                "IsMain": "1",
+                "PostalAddress": "",
+                "Cities": [],
+                "States": [],
+                "Countries": []
+              }
+            }
+          ],
+          "Origin": "UNITED_NATIONS",
+          "Designation": "IRAN",
+          "Keywords": [
+            {
+              "Keyword": "OS:UNITED_NATIONS"
+            }
+          ],
+          "Type": "C",
+          "Codes": [],
+          "AdditionalInfo": "List ID: 44 / Create Date: 06/10/2010 15:35:44 / Last Update Date: 04/16/2015 18:20:19 / Program: ISLAMIC REPUBLIC OF IRAN / OtherInformation: Owned or controlled by Ghorb Nooh. / OriginalID: IRE.025",
+          "DatesOfBirth": [],
+          "PlacesOfBirth": [],
+          "Hyperlinks": [
+            {
+              "Hyperlink": "none"
+            }
+          ],
+          "UserData1": "60558",
+          "UserData2": "",
+          "Nationality": "",
+          "IsPep": null,
+          "IsFep": null,
+          "HideOnlyIDs": [
+            {
+              "HideOnlyID": ""
+            }
+          ],
+          "HideIDs": [],
+          "HideOrigins": [],
+          "HideInTags": [],
+          "HideUnits": [],
+          "HideSenderReceivers": []
+        }
+      }
+    },
+    {
+      "Hit": {
+        "MatchingText": "HARA COMPANY",
+        "Positions": [
+          {
+            "Position": {
+              "PositionStart": "356",
+              "PositionEnd": "367"
+            }
+          }
+        ],
+        "Score": "0.0",
+        "Tag": "ORIGINATOR",
+        "SolutionType": "1",
+        "SynonymIndex": "0",
+        "RulesContext": {
+          "Type": "1",
+          "Priority": "0",
+          "Confidentiality": "0",
+          "Info": "none"
+        },
+        "EntityText": "HARA COMPANY",
+        "HittedEntity": {
+          "ID": "AS00383861",
+          "IsException": "0",
+          "OfficialReferences": [
+            {
+              "OfficialReference": {
+                "Name": "2012-12-06 14:53:51 EU"
+              }
+            }
+          ],
+          "Names": [
+            {
+              "Name": "HARA COMPANY"
+            },
+            {
+              "Name": "HARA COMPANY"
+            }
+          ],
+          "Addresses": [
+            {
+              "Address": {
+                "IsMain": "1",
+                "PostalAddress": "",
+                "Cities": [],
+                "States": [],
+                "Countries": []
+              }
+            }
+          ],
+          "Origin": "EUROPEAN_UNION",
+          "Designation": "IRAN",
+          "Keywords": [
+            {
+              "Keyword": "OS:EUROPEAN_UNION"
+            }
+          ],
+          "Type": "C",
+          "Codes": [],
+          "AdditionalInfo": "List ID: 33 / Create Date: 06/22/2010 11:51:59 / Last Update Date: 12/05/2012 16:37:08 / Program: IRAN / Legal_Basis: 267/2012 (OJ L 88) / OtherInformation: Owned or controlled by, or acting on behalf of, the Iranian Revolutionary Guard Corps. Owned or controlled by Ghorb Nooh. Date of UN designation: 9.6.2010. / EffectiveDate: 3/24/2012 / OriginalID: 5656",
+          "DatesOfBirth": [],
+          "PlacesOfBirth": [],
+          "Hyperlinks": [
+            {
+              "Hyperlink": "none"
+            }
+          ],
+          "UserData1": "60558",
+          "UserData2": "",
+          "Nationality": "",
+          "IsPep": null,
+          "IsFep": null,
+          "HideOnlyIDs": [
+            {
+              "HideOnlyID": ""
+            }
+          ],
+          "HideIDs": [],
+          "HideOrigins": [],
+          "HideInTags": [],
+          "HideUnits": [],
+          "HideSenderReceivers": []
+        }
+      }
+    },
+    {
+      "Hit": {
+        "MatchingText": "3302306795",
+        "Positions": [
+          {
+            "Position": {
+              "PositionStart": "419",
+              "PositionEnd": "428"
+            }
+          }
+        ],
+        "Score": "0.0",
+        "Tag": "CRDACCNUM",
+        "SolutionType": "2",
+        "SynonymIndex": "-1",
+        "RulesContext": {
+          "Type": "2",
+          "Priority": "2",
+          "Confidentiality": "0",
+          "Info": "+NON-BLOCKING HIT GENERATED DUE TO HIGH-PRIORITY CLIENT STATUS"
+        },
+        "EntityText": "Greenspring Opportunities V, L.P.",
+        "HittedEntity": {
+          "ID": "TA00024500",
+          "IsException": "0",
+          "OfficialReferences": [
+            {
+              "OfficialReference": {
+                "Name": "SVB_PRIORITY_CLIENT"
+              }
+            }
+          ],
+          "Names": [
+            {
+              "Name": "Greenspring Opportunities V, L.P."
+            },
+            {
+              "Name": "Greenspring Opportunities V, L.P."
+            },
+            {
+              "Name": "Greenspring Opportunities V, L.P."
+            }
+          ],
+          "Addresses": [
+            {
+              "Address": {
+                "IsMain": "1",
+                "PostalAddress": "",
+                "Cities": [],
+                "States": [],
+                "Countries": []
+              }
+            }
+          ],
+          "Origin": "SVB_PRIORITY_CLIENT",
+          "Designation": "SVB_PRIORITY_CLIENT",
+          "Keywords": [
+            {
+              "Keyword": "none"
+            }
+          ],
+          "Type": "O",
+          "Codes": [
+            {
+              "Code": {
+                "Name": "3302306795",
+                "Type": "SearchCode"
+              }
+            },
+            {
+              "Code": {
+                "Name": "3302306795",
+                "Type": "SearchCode"
+              }
+            },
+            {
+              "Code": {
+                "Name": "3302306795",
+                "Type": "SearchCode"
+              }
+            }
+          ],
+          "AdditionalInfo": "",
+          "DatesOfBirth": [],
+          "PlacesOfBirth": [],
+          "Hyperlinks": [
+            {
+              "Hyperlink": "none"
+            }
+          ],
+          "UserData1": "",
+          "UserData2": "",
+          "Nationality": "",
+          "IsPep": null,
+          "IsFep": null,
+          "HideOnlyIDs": [
+            {
+              "HideOnlyID": ""
+            }
+          ],
+          "HideIDs": [],
+          "HideOrigins": [],
+          "HideInTags": [],
+          "HideUnits": [],
+          "HideSenderReceivers": []
+        }
+      }
+    },
+    {
+      "Hit": {
+        "MatchingText": "3302306795",
+        "Positions": [
+          {
+            "Position": {
+              "PositionStart": "537",
+              "PositionEnd": "546"
+            }
+          }
+        ],
+        "Score": "0.0",
+        "Tag": "BENE",
+        "SolutionType": "2",
+        "SynonymIndex": "-1",
+        "RulesContext": {
+          "Type": "2",
+          "Priority": "2",
+          "Confidentiality": "0",
+          "Info": "+NON-BLOCKING HIT GENERATED DUE TO HIGH-PRIORITY CLIENT STATUS+"
+        },
+        "EntityText": "Greenspring Opportunities V, L.P.",
+        "HittedEntity": {
+          "ID": "TA00024500",
+          "IsException": "0",
+          "OfficialReferences": [
+            {
+              "OfficialReference": {
+                "Name": "SVB_PRIORITY_CLIENT"
+              }
+            }
+          ],
+          "Names": [
+            {
+              "Name": "Greenspring Opportunities V, L.P."
+            },
+            {
+              "Name": "Greenspring Opportunities V, L.P."
+            },
+            {
+              "Name": "Greenspring Opportunities V, L.P."
+            }
+          ],
+          "Addresses": [
+            {
+              "Address": {
+                "IsMain": "1",
+                "PostalAddress": "",
+                "Cities": [],
+                "States": [],
+                "Countries": []
+              }
+            }
+          ],
+          "Origin": "SVB_PRIORITY_CLIENT",
+          "Designation": "SVB_PRIORITY_CLIENT",
+          "Keywords": [
+            {
+              "Keyword": "none"
+            }
+          ],
+          "Type": "O",
+          "Codes": [
+            {
+              "Code": {
+                "Name": "3302306795",
+                "Type": "SearchCode"
+              }
+            },
+            {
+              "Code": {
+                "Name": "3302306795",
+                "Type": "SearchCode"
+              }
+            },
+            {
+              "Code": {
+                "Name": "3302306795",
+                "Type": "SearchCode"
+              }
+            }
+          ],
+          "AdditionalInfo": "",
+          "DatesOfBirth": [],
+          "PlacesOfBirth": [],
+          "Hyperlinks": [
+            {
+              "Hyperlink": "none"
+            }
+          ],
+          "UserData1": "",
+          "UserData2": "",
+          "Nationality": "",
+          "IsPep": null,
+          "IsFep": null,
+          "HideOnlyIDs": [
+            {
+              "HideOnlyID": ""
+            }
+          ],
+          "HideIDs": [],
+          "HideOrigins": [],
+          "HideInTags": [],
+          "HideUnits": [],
+          "HideSenderReceivers": []
+        }
+      }
+    }
+  ],
+  "Actions": [
+    {
+      "Action": {
+        "DateTime": "20211019104349",
+        "Operator": "Filter Engine",
+        "Comment": "Stop: 4, Nonblocking: 2",
+        "Status": {
+          "ID": "0",
+          "Name": "FILTER",
+          "RoutingCode": "0",
+          "Checksum": "c4b4872d17cf6fa4f27f06e3b5d93c78"
+        }
+      }
+    },
+    {
+      "Action": {
+        "DateTime": "20211019104350",
+        "Operator": "Stripping Engine",
+        "Comment": "Stop: 4, Nonblocking: 2",
+        "Status": {
+          "ID": "-2",
+          "Name": "NO HIT",
+          "RoutingCode": "-2",
+          "Checksum": "1080a07f679004254edcc4854e8f66a7"
+        }
+      }
+    },
+    {
+      "Action": {
+        "DateTime": "20211019104352",
+        "Operator": "DBCLient",
+        "Comment": "Auto decision",
+        "Status": {
+          "ID": "224",
+          "Name": "FILTER_S8_PR",
+          "RoutingCode": "12",
+          "Checksum": "52e44434a2b046a6516c5f77a341d24c"
+        }
+      }
+    }
+  ],
+  "CurrentStatus": {
+    "ID": "224",
+    "Name": "FILTER_S8_PR",
+    "RoutingCode": "12",
+    "Checksum": "52e44434a2b046a6516c5f77a341d24c"
+  },
+  "NextStatuses": [
+    {
+      "Status": {
+        "ID": "203",
+        "Name": "ESC_TO_L2",
+        "RoutingCode": "12",
+        "Checksum": "a6bbe146cef0948076d7f62680312112"
+      }
+    }
+  ]
+}

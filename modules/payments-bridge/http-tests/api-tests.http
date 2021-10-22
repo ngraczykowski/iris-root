@@ -70,7 +70,7 @@ Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
-< ../docs/api/svb-examples/2021-10-17-0201_saddam_hussain_two_hits.json
+< ../docs/api/svb-examples/2021-10-17-0201_saddam_hussain_two-2_hits.json
 
 ### Post the SVB alert GFX for solving
 // @no-log
@@ -80,7 +80,7 @@ Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
-< ../docs/api/svb-examples/2021-10-21-0905_x.json
+< ../docs/api/svb-examples/2021-10-21-0905_sovremennye_tekhnologii-3_hits.json
 
 ### Post the SVB alert GFX for solving
 // @no-log
