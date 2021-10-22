@@ -10,6 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import static java.util.Arrays.copyOfRange;
@@ -21,6 +22,11 @@ public abstract class BaseTransactionMessage implements TransactionMessage {
 
   @Getter(AccessLevel.PROTECTED)
   private final MessageData messageData;
+
+  @Override
+  public Optional<String> getAccountNumber(String tag) {
+    return Optional.empty();
+  }
 
   @Override
   public List<String> getAllMatchingTexts(String tag, String matchingText) {
