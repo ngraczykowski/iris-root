@@ -45,7 +45,7 @@ class OrganizationNameProcess implements CategoryValueProcess {
         .compareOrganizationNames(request);
 
     if (response == null)
-      throw new MisOrganizationNameAgentResultException();
+      throw new MissingAgentResultException("Organization Name Agent");
 
     return response;
   }
@@ -64,14 +64,5 @@ class OrganizationNameProcess implements CategoryValueProcess {
         .addAllAlertedPartyNames(alertedPartyNames)
         .addWatchlistPartyNames(watchlistPartyNames)
         .build();
-  }
-
-  private static class MisOrganizationNameAgentResultException extends IllegalStateException {
-
-    private static final long serialVersionUID = -5855371634231994522L;
-
-    public MisOrganizationNameAgentResultException() {
-      super("Organization Name Agent has not returned any result.");
-    }
   }
 }

@@ -22,7 +22,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
 @Slf4j
 @ActiveProfiles({
-    "mockae", "mockaws", "mockdatasource", "mockgovernance", "test", "mockorganizationagent" })
+    "mockae", "mockaws", "mockdatasource", "mockgovernance", "test", "mockagents" })
 class PaymentsBridgeApplicationLearningTest {
 
   @Autowired

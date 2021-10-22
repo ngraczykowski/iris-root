@@ -10,7 +10,7 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.context.annotation.Profile;
 
-@Profile("mockorganizationagent")
+@Profile("mockagents")
 @GrpcService
 @RequiredArgsConstructor
 class GetOrganizationNameAgentGrpc extends OrganizationNameAgentImplBase {

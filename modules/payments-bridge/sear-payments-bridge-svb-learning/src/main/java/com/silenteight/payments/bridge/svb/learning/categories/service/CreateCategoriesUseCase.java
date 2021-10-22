@@ -32,7 +32,8 @@ class CreateCategoriesUseCase {
         crossmatchCategory(),
         oneLinerCategory(), specificTermsCategory(),
         twoLinesCategory(), historicalRiskAssessmentCategory(),
-        watchListTypeCategory(), matchTypeCategory(), organizationNameCategory());
+        watchListTypeCategory(), matchTypeCategory(), organizationNameCategory(),
+        companyNameSurroundingCategory());
   }
 
   private static Category crossmatchCategory() {
@@ -119,6 +120,16 @@ class CreateCategoriesUseCase {
         .newBuilder()
         .setName("categories/organizationName")
         .setDisplayName("Organization Name Category")
+        .setType(CategoryType.ANY_STRING)
+        .setMultiValue(false)
+        .build();
+  }
+
+  private static Category companyNameSurroundingCategory() {
+    return Category
+        .newBuilder()
+        .setName("categories/companyNameSurrounding")
+        .setDisplayName("Company Name Surrounding")
         .setType(CategoryType.ANY_STRING)
         .setMultiValue(false)
         .build();

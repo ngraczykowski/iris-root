@@ -10,7 +10,7 @@ dependencies {
   implementation project(":sear-payments-bridge-common")
   implementation project(":sear-payments-bridge-datasource")
   implementation project(":sear-payments-bridge-etl")
-  implementation project(":sear-payments-bridge-mock-organization-agent")
+  implementation project(":sear-payments-bridge-mock-agents")
   implementation project(":sear-payments-bridge-warehouse")
   implementation project(":proto-sear-payments-bridge-internal-protos")
   testImplementation project(":sear-payments-bridge-testing")
