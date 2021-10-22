@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import static com.silenteight.sep.base.common.time.DefaultTimeSource.INSTANCE;
-
 @Configuration
 @EntityScan
 @EnableJpaRepositories
@@ -30,12 +28,16 @@ class AiReasoningReportConfiguration {
       AiReasoningReportRepository reportRepository,
       AiReasoningReportGenerationService reportGenerationService) {
 
-    return new AsyncAiReasoningReportGenerationService(
-        reportRepository, reportGenerationService, INSTANCE);
+    return new AsyncAiReasoningReportGenerationService(reportRepository, reportGenerationService);
   }
 
   @Bean
   AiReasoningReportQuery aiReasoningReportQuery(AiReasoningReportRepository repository) {
     return new AiReasoningReportQuery(repository);
+  }
+
+  @Bean
+  SimulationAiReasoningReportProvider simulationAiReasoningReportProvider() {
+    return new SimulationAiReasoningReportProvider();
   }
 }

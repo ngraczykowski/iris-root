@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.filestorage.api.dto.FileDto;
+import com.silenteight.warehouse.report.reasoning.download.dto.DownloadAiReasoningReportDto;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -28,54 +28,56 @@ import static org.springframework.http.ResponseEntity.ok;
 class DownloadAiReasoningReportRestController {
 
   private static final String ANALYSIS_ID_PARAM = "analysisId";
-  private static final String DEFINITION_ID_PARAM = "definitionId";
   private static final String ID_PARAM = "id";
-  private static final String DOWNLOAD_PRODUCTION_REPORT_URL =
-      "/v1/analysis/production/definitions/AI_REASONING/{definitionId}/reports/{id}";
   private static final String DOWNLOAD_SIMULATION_REPORT_URL =
-      "/v1/analysis/{analysisId}/definitions/AI_REASONING/{definitionId}/reports/{id}";
+      "/v2/analysis/{analysisId}/reports/AI_REASONING/{id}";
+
+  private static final String DOWNLOAD_PRODUCTION_REPORT_URL =
+      "/v2/analysis/production/reports/AI_REASONING/{id}";
 
   @NonNull
-  private final DownloadAiReasoningReportUseCase useCase;
+  private final DownloadProductionAiReasoningReportUseCase productionUseCase;
+  @NonNull
+  private final DownloadSimulationAiReasoningReportUseCase simulationUseCase;
 
   @GetMapping(DOWNLOAD_PRODUCTION_REPORT_URL)
   @PreAuthorize("isAuthorized('DOWNLOAD_PRODUCTION_ON_DEMAND_REPORT')")
-  public ResponseEntity<Resource> downloadProductionReport(
-      @PathVariable(DEFINITION_ID_PARAM) String definitionId,
-      @PathVariable(ID_PARAM) long id) {
+  public ResponseEntity<Resource> downloadProductionReport(@PathVariable(ID_PARAM) long id) {
 
     log.info("Download production AI Reasoning report on demand request received, reportId={}", id);
-
-    FileDto fileDto = useCase.activate(id);
-
+    DownloadAiReasoningReportDto reportDto = productionUseCase.activate(id);
     log.debug(
-        "Download production AI Reasoning report request processed, reportId={}, reportName={}", id,
-        fileDto.getName());
+        "Download production AI Reasoning report request processed, reportId={}, reportName={}",
+        id, reportDto.getName());
 
     return ok()
-        .header(CONTENT_DISPOSITION, format("attachment; filename=%s", fileDto.getName()))
+        .header(CONTENT_DISPOSITION, getContentDisposition(reportDto.getName()))
         .contentType(APPLICATION_OCTET_STREAM)
-        .body(new InputStreamResource(fileDto.getContent()));
+        .body(new InputStreamResource(reportDto.getContent()));
   }
 
   @GetMapping(DOWNLOAD_SIMULATION_REPORT_URL)
   @PreAuthorize("isAuthorized('DOWNLOAD_SIMULATION_REPORT')")
   public ResponseEntity<Resource> downloadReport(
       @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
-      @PathVariable(DEFINITION_ID_PARAM) String definitionId,
       @PathVariable(ID_PARAM) long id) {
 
-    log.info("Download simulation AI Reasoning report on demand request received, reportId={}", id);
+    log.info(
+        "Download simulation AI Reasoning report on demand request received, "
+            + "analysisId={}, reportId={}", id, analysisId);
 
-    FileDto fileDto = useCase.activate(id);
-
+    DownloadAiReasoningReportDto reportDto = simulationUseCase.activate(id, analysisId);
     log.debug(
-        "Download simulation AI Reasoning report request processed, reportId={}, reportName={}", id,
-        fileDto.getName());
+        "Download simulation AI Reasoning report request processed, reportId={}, reportName={}",
+        id, reportDto.getName());
 
     return ok()
-        .header(CONTENT_DISPOSITION, format("attachment; filename=%s", fileDto.getName()))
+        .header(CONTENT_DISPOSITION, getContentDisposition(reportDto.getName()))
         .contentType(APPLICATION_OCTET_STREAM)
-        .body(new InputStreamResource(fileDto.getContent()));
+        .body(new InputStreamResource(reportDto.getContent()));
+  }
+
+  private static String getContentDisposition(String filename) {
+    return format("attachment; filename=\"%s\"", filename);
   }
 }

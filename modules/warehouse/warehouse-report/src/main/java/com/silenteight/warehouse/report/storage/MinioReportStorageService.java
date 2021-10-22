@@ -11,7 +11,7 @@ import com.silenteight.sep.filestorage.api.dto.FileDto;
 import com.silenteight.sep.filestorage.api.dto.StoreFileRequestDto;
 import com.silenteight.warehouse.report.reporting.Report;
 
-import java.util.List;
+import java.util.Collection;
 
 @Slf4j
 @AllArgsConstructor
@@ -54,7 +54,7 @@ class MinioReportStorageService implements ReportStorage {
   }
 
   @Override
-  public void removeReports(List<String> reportNames) {
+  public void removeReports(Collection<String> reportNames) {
     reportNames.forEach(this::removeReport);
   }
 

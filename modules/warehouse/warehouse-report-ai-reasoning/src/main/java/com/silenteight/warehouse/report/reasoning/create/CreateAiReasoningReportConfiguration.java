@@ -1,5 +1,6 @@
 package com.silenteight.warehouse.report.reasoning.create;
 
+import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.report.reasoning.domain.AiReasoningReportService;
 import com.silenteight.warehouse.report.reasoning.generation.AiReasoningReportProperties;
@@ -29,11 +30,13 @@ class CreateAiReasoningReportConfiguration {
   CreateSimulationAiReasoningReportUseCase createSimulationAiReasoningReportUseCase(
       AiReasoningReportService service,
       @Valid AiReasoningReportProperties properties,
-      @Qualifier(value = "simulationIndexingQuery") IndexesQuery simulationIndexerQuery) {
+      @Qualifier(value = "simulationIndexingQuery") IndexesQuery simulationIndexerQuery,
+      TimeSource timeSource) {
 
     return new CreateSimulationAiReasoningReportUseCase(
         service,
         properties.getSimulation(),
-        simulationIndexerQuery);
+        simulationIndexerQuery,
+        timeSource);
   }
 }

@@ -1,9 +1,8 @@
 package com.silenteight.warehouse.report.reasoning.download;
 
-import com.silenteight.sep.filestorage.api.dto.FileDto;
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.common.web.exception.GenericExceptionControllerAdvice;
-import com.silenteight.warehouse.report.reasoning.AiReasoningReportTestFixtures;
+import com.silenteight.warehouse.report.reasoning.download.dto.DownloadAiReasoningReportDto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,54 +32,56 @@ class DownloadAiReasoningReportRestControllerTest extends BaseRestControllerTest
 
   private static final String DOWNLOAD_SIMULATION_REPORT_URL =
       fromUriString(
-          "/v1/analysis/{analysisId}/definitions/AI_REASONING/{definitionId}/reports/{id}")
-          .build(of(
-              "analysisId", AiReasoningReportTestFixtures.ANALYSIS_ID,
-              "definitionId", SIMULATION_DEFINITION_ID,
-              "id", REPORT_ID))
+          "/v2/analysis/{analysisId}/reports/AI_REASONING/{id}")
+          .build(of("analysisId", ANALYSIS_ID, "id", REPORT_ID))
           .toString();
 
   private static final String DOWNLOAD_PRODUCTION_REPORT_URL =
-      fromUriString("/v1/analysis/production/definitions/AI_REASONING/"
-          + "{definitionId}/reports/{id}")
-          .build(of("definitionId", MONTH_DEFINITION_ID, "id", REPORT_ID))
+      fromUriString("/v2/analysis/production/reports/AI_REASONING/{id}")
+          .build(of("id", REPORT_ID))
           .toString();
 
   @MockBean
-  DownloadAiReasoningReportUseCase useCase;
+  DownloadProductionAiReasoningReportUseCase productionUseCase;
+  @MockBean
+  DownloadSimulationAiReasoningReportUseCase simulationUseCase;
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenInvokedDownloadSimulationReport() {
-    given(useCase.activate(REPORT_ID)).willReturn(createFileDto());
+    given(simulationUseCase.activate(REPORT_ID, ANALYSIS_ID))
+        .willReturn(createDownloadAiReasoningReportDto(SIMULATION_REPORT_FILENAME));
 
-    String expectedContentDisposition = format("attachment; filename=%s", REPORT_FILENAME);
     String response = get(DOWNLOAD_SIMULATION_REPORT_URL)
         .statusCode(OK.value())
         .contentType("application/octet-stream")
-        .header("Content-Disposition", expectedContentDisposition)
+        .header("Content-Disposition", getExpectedContentDisposition(SIMULATION_REPORT_FILENAME))
         .extract()
         .body()
         .asString();
 
-    assertThat(response).isEqualTo(STUB_REPORT_RESPONSE);
+    assertThat(response).isEqualTo(REPORT_CONTENT);
   }
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenInvokedDownloadProductionReport() {
-    given(useCase.activate(REPORT_ID)).willReturn(createFileDto());
+    given(productionUseCase.activate(REPORT_ID))
+        .willReturn(createDownloadAiReasoningReportDto(PRODUCTION_REPORT_FILENAME));
 
-    String expectedContentDisposition = format("attachment; filename=%s", REPORT_FILENAME);
     String response = get(DOWNLOAD_PRODUCTION_REPORT_URL)
         .statusCode(OK.value())
         .contentType("application/octet-stream")
-        .header("Content-Disposition", expectedContentDisposition)
+        .header("Content-Disposition", getExpectedContentDisposition(PRODUCTION_REPORT_FILENAME))
         .extract()
         .body()
         .asString();
 
-    assertThat(response).isEqualTo(STUB_REPORT_RESPONSE);
+    assertThat(response).isEqualTo(REPORT_CONTENT);
+  }
+
+  private String getExpectedContentDisposition(String fileName) {
+    return format("attachment; filename=\"%s\"", fileName);
   }
 
   @Test
@@ -99,12 +100,11 @@ class DownloadAiReasoningReportRestControllerTest extends BaseRestControllerTest
     get(DOWNLOAD_PRODUCTION_REPORT_URL).statusCode(FORBIDDEN.value());
   }
 
-  private FileDto createFileDto() {
-    InputStream inputStream = toInputStream(STUB_REPORT_RESPONSE, UTF_8);
-    return FileDto.builder()
-        .name(REPORT_FILENAME)
+  private DownloadAiReasoningReportDto createDownloadAiReasoningReportDto(String fileName) {
+    InputStream inputStream = toInputStream(REPORT_CONTENT, UTF_8);
+    return DownloadAiReasoningReportDto.builder()
+        .name(fileName)
         .content(inputStream)
-        .sizeInBytes(-1L)
         .build();
   }
 }

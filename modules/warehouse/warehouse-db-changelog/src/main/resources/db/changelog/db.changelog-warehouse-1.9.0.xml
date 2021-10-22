@@ -125,4 +125,26 @@
     <dropNotNullConstraint columnName="report_type"
                            tableName="warehouse_report_billing"/>
   </changeSet>
+
+  <changeSet id="warehouse-1.9.0-8" author="plewandowski">
+    <dropNotNullConstraint columnName="report_type"
+                           tableName="warehouse_report_ai_reasoning"/>
+    <dropNotNullConstraint columnName="analysis"
+                           tableName="warehouse_report_ai_reasoning"/>
+
+    <renameColumn newColumnName="file_storage_name"
+                  oldColumnName="data"
+                  tableName="warehouse_report_ai_reasoning"/>
+
+    <modifyDataType columnName="file_storage_name"
+                    newDataType="VARCHAR(64)"
+                    tableName="warehouse_report_ai_reasoning"/>
+
+    <addColumn tableName="warehouse_report_ai_reasoning">
+      <column name="from_range" type="TIMESTAMP"/>
+    </addColumn>
+    <addColumn tableName="warehouse_report_ai_reasoning">
+      <column name="to_range" type="TIMESTAMP"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

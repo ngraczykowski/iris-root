@@ -7,14 +7,16 @@ import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.report.reasoning.domain.AiReasoningReportService;
 import com.silenteight.warehouse.report.reasoning.generation.AiReasoningReportDefinitionProperties;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
+import com.silenteight.warehouse.report.reporting.ReportRange;
 
+import java.time.LocalDate;
 import java.util.List;
 import javax.validation.Valid;
 
-import static com.silenteight.warehouse.report.reasoning.domain.AiReasoningReportDefinition.getReportType;
+import static com.silenteight.warehouse.report.reporting.ReportRange.of;
 
 @RequiredArgsConstructor
-public class CreateProductionAiReasoningReportUseCase {
+class CreateProductionAiReasoningReportUseCase {
 
   private static final String PRODUCTION_ANALYSIS_NAME = "production";
 
@@ -26,9 +28,9 @@ public class CreateProductionAiReasoningReportUseCase {
   @NonNull
   private final IndexesQuery productionIndexerQuery;
 
-  ReportInstanceReferenceDto createReport(String reportId) {
+  ReportInstanceReferenceDto createReport(LocalDate from, LocalDate to) {
+    ReportRange range = of(from, to);
     List<String> indexes = productionIndexerQuery.getIndexesForAnalysis(PRODUCTION_ANALYSIS_NAME);
-    return reportService.createReportInstance(
-        getReportType(reportId), PRODUCTION_ANALYSIS_NAME, indexes, productionProperties);
+    return reportService.createReportInstance(range, indexes, productionProperties);
   }
 }

@@ -5,7 +5,10 @@ import lombok.*;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 import com.silenteight.warehouse.report.reasoning.domain.exception.WrongReportStateException;
+import com.silenteight.warehouse.report.reporting.ReportRange;
+import com.silenteight.warehouse.report.reporting.ReportTypeListDto.ReportTypeDto;
 
+import java.time.OffsetDateTime;
 import javax.persistence.*;
 
 import static com.silenteight.warehouse.report.reasoning.domain.ReportState.DONE;
@@ -13,6 +16,7 @@ import static com.silenteight.warehouse.report.reasoning.domain.ReportState.FAIL
 import static com.silenteight.warehouse.report.reasoning.domain.ReportState.GENERATING;
 import static com.silenteight.warehouse.report.reasoning.domain.ReportState.NEW;
 import static java.util.Arrays.stream;
+import static java.util.UUID.randomUUID;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -25,6 +29,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "warehouse_report_ai_reasoning")
 class AiReasoningReport extends BaseEntity implements IdentifiableEntity {
 
+  private static final String REPORT_TYPE = "AI_REASONING";
+
   @Id
   @GeneratedValue(strategy = IDENTITY)
   @Column(name = "id", updatable = false)
@@ -33,44 +39,49 @@ class AiReasoningReport extends BaseEntity implements IdentifiableEntity {
   private Long id;
 
   @ToString.Include
-  @Column(name = "report_type", nullable = false)
-  @Enumerated(EnumType.STRING)
-  private AiReasoningReportDefinition reportType;
-
-  @ToString.Include
-  @Column(name = "analysis", nullable = false)
-  private String analysisId;
-
-  @ToString.Include
   @Column(name = "state", nullable = false)
   @Enumerated(EnumType.STRING)
   private ReportState state;
 
   @Basic(fetch = FetchType.LAZY)
-  @Column(name = "data")
-  private String file;
+  @Column(name = "file_storage_name")
+  private String fileStorageName;
 
-  static AiReasoningReport of(AiReasoningReportDefinition definition, String analysisId) {
+  @Basic(fetch = FetchType.LAZY)
+  @Column(name = "from_range")
+  private OffsetDateTime from;
+
+  @Basic(fetch = FetchType.LAZY)
+  @Column(name = "to_range")
+  private OffsetDateTime to;
+
+  static AiReasoningReport of(ReportRange range) {
     AiReasoningReport report = new AiReasoningReport();
-    report.state = NEW;
-    report.analysisId = analysisId;
-    report.reportType = definition;
+    report.setState(NEW);
+    report.setFrom(range.getFrom());
+    report.setTo(range.getTo());
+    report.generateFileStorageName();
     return report;
+  }
+
+  void generateFileStorageName() {
+    setFileStorageName(randomUUID().toString());
   }
 
   void generating() {
     assertAllowedStateChange(GENERATING, NEW);
-    state = GENERATING;
+    setState(GENERATING);
   }
 
   void done() {
     assertAllowedStateChange(DONE, GENERATING);
-    state = DONE;
+    setState(DONE);
   }
 
   void failed() {
     assertAllowedStateChange(FAILED, NEW, GENERATING);
-    state = FAILED;
+    setState(FAILED);
+    setFileStorageName(null);
   }
 
   private void assertAllowedStateChange(ReportState desirable, ReportState... state) {
@@ -82,11 +93,15 @@ class AiReasoningReport extends BaseEntity implements IdentifiableEntity {
     return stream(allowedStates).noneMatch(allowedState -> allowedState == getState());
   }
 
-  void storeReport(String report) {
-    file = report;
+  static ReportTypeDto toSimulationReportTypeDto(String analysisId) {
+    return ReportTypeDto
+        .builder()
+        .name(getReportName(analysisId))
+        .type(REPORT_TYPE)
+        .build();
   }
 
-  String getFileName() {
-    return id + "-" + reportType.getFilename();
+  private static String getReportName(String analysisId) {
+    return "analysis/" + analysisId + "/reports/" + REPORT_TYPE;
   }
 }
