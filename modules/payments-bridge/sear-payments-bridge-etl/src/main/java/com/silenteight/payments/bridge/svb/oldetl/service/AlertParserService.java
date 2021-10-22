@@ -33,18 +33,25 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     }
 
     var hits = new ArrayList<HitData>();
+    var skippedHits = new ArrayList<String>();
     var messageData = new MessageParserFacade().parse(
         MessageFormat.valueOf(alertMessageDto.getMessageFormat()),
         alertMessageDto.getMessageData());
 
     for (var requestHitDto : alertMessageDto.getHits()) {
       var hit = requestHitDto.getHit();
-
-      var hitData = createHitData(
-          alertMessageDto.getApplicationCode(), messageData, hit,
-          MessageFieldStructure.UNSTRUCTURED);
-
-      hits.add(hitData);
+      if (hit.isBlocking()) {
+        var hitData = createHitData(
+            alertMessageDto.getApplicationCode(), messageData, hit,
+            MessageFieldStructure.UNSTRUCTURED);
+        hits.add(hitData);
+      } else {
+        skippedHits.add(hit.getHittedEntity().getId() + "(" + hit.getTag() + ")");
+      }
+    }
+    if (!skippedHits.isEmpty()) {
+      log.info("Skipping non-blocking hits: systemId={}, hits={}",
+          alertMessageDto.getSystemID(), skippedHits);
     }
 
     return AlertEtlResponse.builder()

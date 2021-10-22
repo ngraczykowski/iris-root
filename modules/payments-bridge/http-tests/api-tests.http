@@ -82,6 +82,14 @@ Authorization: Bearer {{access_token}}
 
 < ../docs/api/svb-examples/2021-10-21-0905_x.json
 
+### Post the SVB alert GFX for solving
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+
+< ../docs/api/svb-examples/2021-10-21-0905_x_non_blocking_hit.json
 
 ### Notify CSV is ready for processing (PREPROD ONLY!!!)
 POST {{baseurl}}/rest/pb/learn

@@ -7,6 +7,8 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlert
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
+import com.silenteight.payments.bridge.common.dto.input.HitDto;
+import com.silenteight.payments.bridge.common.dto.input.RequestHitDto;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.event.AlertInitializedEvent;
 import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
@@ -52,9 +54,11 @@ class RegisterAlertEndpoint {
 
     return alertDto.getHits()
         .stream()
+        .map(RequestHitDto::getHit)
+        .filter(HitDto::isBlocking)
         .map(hit -> {
-          String hitId = hit.getHit().getHittedEntity().getId();
-          String tag = hit.getHit().getTag();
+          String hitId = hit.getHittedEntity().getId();
+          String tag = hit.getTag();
           return String.format("%s(%s)", hitId, tag);
         })
         .collect(Collectors.toList());

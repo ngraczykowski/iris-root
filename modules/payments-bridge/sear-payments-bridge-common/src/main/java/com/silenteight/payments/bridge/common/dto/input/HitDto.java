@@ -68,4 +68,8 @@ public class HitDto implements Serializable {
     }
     return wlName;
   }
+
+  public boolean isBlocking() {
+    return getRulesContext().getType().equals("1");
+  }
 }
