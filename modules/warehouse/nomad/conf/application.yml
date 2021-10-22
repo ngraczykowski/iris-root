@@ -166,19 +166,19 @@ warehouse.report.rbs:
         label: Registration Country
       - name: alert_features/residencyCountry:solution
         label: Residency Country
-      grouping-columns:
-        - name: alert_qa.level-0.state
-          grouping-values:
-            - value: qa_decision_PASSED
-              label: QA decision False Positive
-            - value: qa_decision_FAILED
-              label: QA decision True Positive
-        - name: alert_analyst_decision
-          grouping-values:
-            - value: analyst_decision_true_positive
-              label: Analyst decision False Positive
-            - value: analyst_decision_false_positive
-              label: Analyst decision True Positive
+    grouping-columns:
+      - name: alert_qa.level-0.state
+        grouping-values:
+          - value: qa_decision_PASSED
+            label: QA decision False Positive
+          - value: qa_decision_FAILED
+            label: QA decision True Positive
+      - name: alert_analyst_decision
+        grouping-values:
+          - value: analyst_decision_true_positive
+            label: Analyst decision False Positive
+          - value: analyst_decision_false_positive
+            label: Analyst decision True Positive
   simulation:
     date-field-name: index_timestamp
     columns:
@@ -242,19 +242,19 @@ warehouse.report.rbs:
         label: Registration Country
       - name: alert_features/residencyCountry:solution
         label: Residency Country
-      grouping-columns:
-        - name: alert_qa.level-0.state
-          grouping-values:
-            - value: qa_decision_PASSED
-              label: QA decision False Positive
-            - value: qa_decision_FAILED
-              label: QA decision True Positive
-        - name: alert_analyst_decision
-          grouping-values:
-            - value: analyst_decision_true_positive
-              label: Analyst decision False Positive
-            - value: analyst_decision_false_positive
-              label: Analyst decision True Positive
+    grouping-columns:
+      - name: alert_qa.level-0.state
+        grouping-values:
+          - value: qa_decision_PASSED
+            label: QA decision False Positive
+          - value: qa_decision_FAILED
+            label: QA decision True Positive
+      - name: alert_analyst_decision
+        grouping-values:
+          - value: analyst_decision_true_positive
+            label: Analyst decision False Positive
+          - value: analyst_decision_false_positive
+            label: Analyst decision True Positive
 
 warehouse.report.billing:
   year-field-name: alert_recommendationYear
