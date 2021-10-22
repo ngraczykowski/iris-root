@@ -36,5 +36,19 @@
       "ERROR"
     ],
     "configurations": []
+  },
+  "agents/companyName/versions/1.0.0/configs/1": {
+    "agentId": "fd46923f-f68f-4b79-9d63-1621f081cfd0",
+    "features": [
+      "features/organizationName"
+    ],
+    "responses": [
+      "MATCH",
+      "INCONCLUSIVE",
+      "NO_MATCH",
+      "NO_DATA",
+      "AGENT_ERROR"
+    ],
+    "configurations": []
   }
 }

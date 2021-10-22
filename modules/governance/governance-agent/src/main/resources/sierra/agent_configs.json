@@ -1,6 +1,7 @@
 {
   "agentConfigs": [
     { "name": "agents/name/versions/1.0.0/configs/1" },
-    { "name": "agents/geo/versions/1.0.0/configs/1" }
+    { "name": "agents/geo/versions/1.0.0/configs/1" },
+    { "name": "agents/companyName/versions/1.0.0/configs/1" }
   ]
 }
