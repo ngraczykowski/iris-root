@@ -10,6 +10,7 @@ import org.keycloak.representations.idm.ClientMappingsRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,6 +29,21 @@ class SingleRequestRoleProvider implements RolesProvider {
   public UserRoles getForUserId(String userId, Set<String> roleClientIds) {
     Map<String, ClientMappingsRepresentation> rolesMappings = getClientRolesMappings(userId);
     return new ExtractedUserRoles(getRolesForScopes(roleClientIds, rolesMappings));
+  }
+
+  @Override
+  public boolean hasRoleInRealm(String userId, List<String> roles) {
+    if (roles.isEmpty())
+      return false;
+    return realmResource
+        .users()
+        .get(userId)
+        .roles()
+        .realmLevel()
+        .listAll()
+        .stream()
+        .map(RoleRepresentation::getName)
+        .anyMatch(roles::contains);
   }
 
   private Map<String, Set<String>> getRolesForScopes(

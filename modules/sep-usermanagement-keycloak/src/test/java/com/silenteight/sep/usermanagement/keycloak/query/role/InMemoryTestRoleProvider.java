@@ -5,6 +5,7 @@ import lombok.NonNull;
 import com.silenteight.sep.usermanagement.api.UserRoles;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,5 +22,10 @@ public class InMemoryTestRoleProvider implements RolesProvider {
   @Override
   public @NonNull UserRoles getForUserId(String userId, Set<String> roleClientIds) {
     return repository.getOrDefault(userId, new ExtractedUserRoles(emptyMap()));
+  }
+
+  @Override
+  public boolean hasRoleInRealm(String userId, List<String> roles) {
+    return false;
   }
 }
