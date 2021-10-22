@@ -41,38 +41,38 @@ class EtlMatchService {
   private final ExtractFieldValueUseCase extractFieldValueUseCase;
   private final MessageParserFacade messageParserFacade;
 
-  LearningMatch fromLearningRows(List<LearningCsvRow> rows) {
-    var matchingTexts = createMatchingTexts(rows);
-    var messageStructure = createMessageStructure(rows, matchingTexts);
+  LearningMatch fromLearningRows(LearningCsvRow row) {
+    var matchingTexts = createMatchingTexts(row);
+    var messageStructure = createMessageStructure(row, matchingTexts);
     var alertedPartyData =
-        createAlertedPartyData(rows, messageStructure.getMessageFieldStructure());
-    var a = 1;
+        createAlertedPartyData(row, messageStructure.getMessageFieldStructure());
+
     return LearningMatch
         .builder()
-        .matchId(rows.get(0).getFkcoVListFmmId())
+        .matchId(row.getFkcoVListFmmId())
         .alertedPartyData(alertedPartyData)
-        .watchlistNames(createUniqueList(rows, LearningCsvRow::getFkcoVListName))
-        .entityType(toEntityType(rows.get(0).getFkcoVListType()))
-        .watchlistLocation(assertUnique(rows, row ->
+        .watchlistNames(List.of(row.getFkcoVListName().split(",")))
+        .entityType(toEntityType(row.getFkcoVListType()))
+        .watchlistLocation(
             String.join(
                 ", ",
                 List.of(row.getFkcoVListCity() + row.getFkcoVListState()
-                    + row.getFkcoVListCountry()))))
-        .watchlistCountry(assertUnique(rows, LearningCsvRow::getFkcoVListCountry))
-        .matchedFieldValue(rows.get(0).getFkcoVMatchedTagContent())
-        .messageData(rows.get(0).getFkcoVContent())
+                    + row.getFkcoVListCountry())))
+        .watchlistCountry(row.getFkcoVListCountry())
+        .matchedFieldValue(row.getFkcoVMatchedTagContent())
+        .messageData(row.getFkcoVContent())
         .messageStructure(messageStructure)
-        .matchType(assertUnique(rows, LearningCsvRow::getFkcoVListType))
+        .matchType(row.getFkcoVListType())
         .matchingTexts(matchingTexts)
-        .applicationCode(rows.get(0).getFkcoVApplication())
-        .hitTag(rows.get(0).getFkcoVMatchedTag())
+        .applicationCode(row.getFkcoVApplication())
+        .hitTag(row.getFkcoVMatchedTag())
         .allMatchFieldsValue(createAllMatchFieldsValue(messageStructure))
-        .matchedNames(createUniqueList(rows, LearningCsvRow::getFkcoVListMatchedName))
-        .matchedCountries(createUniqueList(rows, LearningCsvRow::getFkcoVListCountry))
-        .hitTypes(createUniqueList(rows, LearningCsvRow::getFkcoVHitType))
+        .matchedNames(List.of(row.getFkcoVListMatchedName().split(",")))
+        .matchedCountries(List.of(row.getFkcoVListCountry().split(",")))
+        .hitType(row.getFkcoVHitType())
         .alertedPartyEntity(createAlertedPartyEntities(alertedPartyData, matchingTexts))
-        .nameMatchedTexts(createUniqueList(rows, LearningCsvRow::getFkcoVNameMatchedText))
-        .watchlistType(WatchlistType.ofCode(rows.get(0).getFkcoVListType()))
+        .nameMatchedTexts(List.of(row.getFkcoVNameMatchedText()))
+        .watchlistType(WatchlistType.ofCode(row.getFkcoVListType()))
         .build();
   }
 
@@ -85,8 +85,7 @@ class EtlMatchService {
   }
 
   private AlertedPartyData createAlertedPartyData(
-      List<LearningCsvRow> rows, MessageFieldStructure messageFieldStructure) {
-    var row = rows.get(0);
+      LearningCsvRow row, MessageFieldStructure messageFieldStructure) {
     var messageData = messageParserFacade.parse(
         row.getFkcoVContent().startsWith("{") ? MessageFormat.SWIFT : MessageFormat.ALL,
         row.getFkcoVContent());
@@ -95,9 +94,7 @@ class EtlMatchService {
   }
 
   private AbstractMessageStructure createMessageStructure(
-      List<LearningCsvRow> rows, List<String> matchingTexts) {
-
-    var row = rows.get(0);
+      LearningCsvRow row, List<String> matchingTexts) {
     return extractMessageStructureUseCase.extractMessageStructure(
         ExtractAlertedPartyDataRequest
             .builder()
@@ -109,16 +106,14 @@ class EtlMatchService {
             .build());
   }
 
-  private static List<String> createMatchingTexts(List<LearningCsvRow> rows) {
+  private static List<String> createMatchingTexts(LearningCsvRow row) {
     var matchingText = SetUniqueList.setUniqueList(new ArrayList<String>());
 
-    rows.forEach(row -> {
-      matchingText.add(row.getFkcoVCityMatchedText());
-      matchingText.add(row.getFkcoVAddressMatchedText());
-      matchingText.add(row.getFkcoVCityMatchedText());
-      matchingText.add(row.getFkcoVStateMatchedText());
-      matchingText.add(row.getFkcoVCountryMatchedText());
-    });
+    matchingText.add(row.getFkcoVCityMatchedText());
+    matchingText.add(row.getFkcoVAddressMatchedText());
+    matchingText.add(row.getFkcoVCityMatchedText());
+    matchingText.add(row.getFkcoVStateMatchedText());
+    matchingText.add(row.getFkcoVCountryMatchedText());
 
     return matchingText
         .stream()

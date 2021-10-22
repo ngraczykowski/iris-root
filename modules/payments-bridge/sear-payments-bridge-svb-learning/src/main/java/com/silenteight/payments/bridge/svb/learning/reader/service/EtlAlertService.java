@@ -17,7 +17,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nonnull;
@@ -67,22 +66,9 @@ class EtlAlertService {
 
   private List<LearningMatch> createMatches(List<LearningCsvRow> rows) {
     var matches = new ArrayList<LearningMatch>();
-    var hits = new HashMap<String, List<LearningCsvRow>>();
 
     for (var row : rows) {
-      var matchId = row.getFkcoVListFmmId();
-
-      if (hits.containsKey(matchId)) {
-        var list = hits.get(matchId);
-        list.add(row);
-        continue;
-      }
-
-      hits.put(matchId, new ArrayList<>(List.of(row)));
-    }
-
-    for (var key : hits.keySet()) {
-      matches.add(etlMatchService.fromLearningRows(hits.get(key)));
+      matches.add(etlMatchService.fromLearningRows(row));
     }
 
     assertNoDuplicateMatchIds(matches);
