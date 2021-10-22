@@ -24,7 +24,8 @@ spring:
 keycloak:
   frontend-client-id: {{ env "NOMAD_NAMESPACE" }}-frontend
   client-id: ${keycloak.frontend-client-id}
-  hide-users-with-roles: ['blocked-user']
+  hide-users-with-roles:
+    - blocked-user
   adapter:
     auth-server-url: https://auth.silenteight.com
     realm: sens-webapp

@@ -1,2 +1,3 @@
 keycloak:
-  hide-users-with-roles: ['blocked-user']
+  hide-users-with-roles:
+    - 'blocked-user'

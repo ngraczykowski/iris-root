@@ -3,3 +3,12 @@ logging:
     com.silenteight: DEBUG
     org.springframework: INFO
 
+
+keycloak:
+  frontend-client-id: dev-frontend
+  client-id: ${keycloak.frontend-client-id}
+  adapter:
+    resource: backend
+    credentials:
+      secret: check-in-bravo-consul
+

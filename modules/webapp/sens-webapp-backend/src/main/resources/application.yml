@@ -314,8 +314,13 @@ sens.webapp.notification.enabled: true
 # Keycloak
 keycloak:
   frontend-client-id: frontend
+  client-id: ${keycloak.frontend-client-id}
   hide-users-with-roles: []
   adapter:
+    auth-server-url: https://auth.silenteight.com
+    realm: sens-webapp
+    creadentials:
+
     publicClient: false
     confidentialPort: 0
     principalAttribute: preferred_username
