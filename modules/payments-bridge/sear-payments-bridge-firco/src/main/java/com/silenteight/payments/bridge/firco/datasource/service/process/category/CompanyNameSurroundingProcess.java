@@ -9,12 +9,15 @@ import com.silenteight.proto.agent.companynamesurrounding.v1.api.CheckCompanyNam
 import com.silenteight.proto.agent.companynamesurrounding.v1.api.CheckCompanyNameSurroundingResponse;
 import com.silenteight.proto.agent.companynamesurrounding.v1.api.CompanyNameSurroundingAgentGrpc.CompanyNameSurroundingAgentBlockingStub;
 
+import org.springframework.context.annotation.Profile;
+
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
+@Profile("companynamesurrounding")
 class CompanyNameSurroundingProcess implements CategoryValueProcess {
 
   public static final String CATEGORIES_COMPANY_NAME_SURROUNDING =
