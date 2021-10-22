@@ -23,6 +23,8 @@ data:
           address: {{ .Values.grpcClientDatasourceAddress | quote }}
         governance:
           address: {{ .Values.grpcClientGovernanceAddress | quote }}
+        organization-name-agent:
+          address: {{ .Values.grpcClientOrganizationNameAgentAddress | quote }}
 
     spring:
       security:

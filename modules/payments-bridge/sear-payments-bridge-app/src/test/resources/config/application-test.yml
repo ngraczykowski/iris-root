@@ -87,3 +87,5 @@ grpc:
       address: in-process:test
     datasource:
       address: in-process:test
+    organization-name-agent:
+      address: in-process:test

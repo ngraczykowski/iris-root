@@ -32,6 +32,8 @@ import static com.silenteight.payments.bridge.firco.datasource.util.HitDataUtils
 @RequiredArgsConstructor
 class OrganizationNameAgentEtlProcess implements EtlProcess {
 
+  private static final String ORGANIZATION_NAME_FEATURE = "features/organizationName";
+
   private final AgentInputServiceBlockingStub blockingStub;
   private final Duration timeout;
 
@@ -83,25 +85,24 @@ class OrganizationNameAgentEtlProcess implements EtlProcess {
         createNameFeatureInput(watchlistType, alertedPartyNames,
             watchlistPartyNames);
 
-    var batchInputRequest = BatchCreateAgentInputsRequest.newBuilder()
+
+    return BatchCreateAgentInputsRequest.newBuilder()
         .addAgentInputs(AgentInput.newBuilder()
             .setMatch(matchValue)
             .addFeatureInputs(
                 FeatureInput.newBuilder()
-                    .setFeature("features/organizationName")
+                    .setFeature(ORGANIZATION_NAME_FEATURE)
                     .setAgentFeatureInput(Any.pack(createCompareOrganizationNamesRequest))
                     .build())
             .build())
         .build();
-
-    return batchInputRequest;
   }
 
   private NameFeatureInput createNameFeatureInput(
       WatchlistType watchlistType, List<String> alertedPartyNames, String watchlistPartyNames) {
     if (watchlistType == WatchlistType.COMPANY) {
       return NameFeatureInput.newBuilder()
-          .setFeature("features/organizationName")
+          .setFeature(ORGANIZATION_NAME_FEATURE)
           .addAllAlertedPartyNames(alertedPartyNames
               .stream()
               .map(alertedPartyName -> AlertedPartyName
@@ -115,7 +116,7 @@ class OrganizationNameAgentEtlProcess implements EtlProcess {
           .build();
     } else {
       return NameFeatureInput.newBuilder()
-          .setFeature("features/organizationName")
+          .setFeature(ORGANIZATION_NAME_FEATURE)
           .addAllAlertedPartyNames(new ArrayList<>())
           .addWatchlistNames(WatchlistName.newBuilder()
               .setName(watchlistPartyNames)

@@ -23,13 +23,16 @@ class CreateCategoriesUseCase {
   public void createCategories() {
     createCategoriesClient.createCategories(BatchCreateCategoriesRequest
         .newBuilder()
-        .addAllCategories(
-            List.of(
-                crossmatchCategory(),
-                oneLinerCategory(), specificTermsCategory(),
-                twoLinesCategory(), historicalRiskAssessmentCategory(),
-                watchListTypeCategory(), matchTypeCategory()))
+        .addAllCategories(getAllCategories())
         .build());
+  }
+
+  private static List<Category> getAllCategories() {
+    return List.of(
+        crossmatchCategory(),
+        oneLinerCategory(), specificTermsCategory(),
+        twoLinesCategory(), historicalRiskAssessmentCategory(),
+        watchListTypeCategory(), matchTypeCategory(), organizationNameCategory());
   }
 
   private static Category crossmatchCategory() {
@@ -107,6 +110,16 @@ class CreateCategoriesUseCase {
         .addAllAllowedValues(
             List.of("ERROR", "UNKNOWN", "NAME", "SEARCH_CODE", "PASSPORT", "NATIONAL_ID", "BIC",
                 "EMBARGO", "FML_RULE"))
+        .setMultiValue(false)
+        .build();
+  }
+
+  private static Category organizationNameCategory() {
+    return Category
+        .newBuilder()
+        .setName("categories/organizationName")
+        .setDisplayName("Organization Name Category")
+        .setType(CategoryType.ANY_STRING)
         .setMultiValue(false)
         .build();
   }
