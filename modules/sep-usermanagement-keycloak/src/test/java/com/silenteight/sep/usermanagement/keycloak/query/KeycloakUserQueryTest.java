@@ -34,11 +34,13 @@ import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProvid
 import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProviderFixtures.USER_ROLES_3;
 import static java.lang.Integer.MAX_VALUE;
 import static java.time.OffsetDateTime.now;
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.Set.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class KeycloakUserQueryTest {
@@ -62,6 +64,8 @@ class KeycloakUserQueryTest {
   private RolesResource rolesResource;
   @Mock
   private RoleResource roleResource;
+  @Mock
+  private UsersListFilter usersListFilter;
 
   private InMemoryTestLastLoginTimeProvider lastLoginTimeProvider =
       new InMemoryTestLastLoginTimeProvider();
@@ -79,7 +83,8 @@ class KeycloakUserQueryTest {
         TIME_CONVERTER,
         clientsResource,
         clientQuery,
-        singletonList(BLOKING_ROLE));
+        usersListFilter);
+    when(usersListFilter.isVisible(any())).thenReturn(true);
   }
 
   @Test
@@ -162,31 +167,28 @@ class KeycloakUserQueryTest {
     assertThat(userDto.getLockedAt()).isEqualTo(lockedAt);
   }
 
-//  @Test
-//  void filterUsersWithBlockingRole() {
-//    UserRepresentation userRepresentation1 = getUserRepresentation(
-//        "user1", singletonList(BLOKING_ROLE));
-//    UserRepresentation userRepresentation2 = getUserRepresentation(
-//        "user2", asList(BLOKING_ROLE, OTHER_ROLE));
-//    UserRepresentation userRepresentation3 = getUserRepresentation(
-//        "user3", singletonList(OTHER_ROLE));
-//    Mockito.when(roleProvider.hasRoleInRealm(
-//        userRepresentation1.getId(), singletonList(BLOKING_ROLE))).thenReturn(false);
-//    Mockito.when(roleProvider.hasRoleInRealm(
-//        userRepresentation2.getId(), singletonList(BLOKING_ROLE))).thenReturn(false);
-//    Mockito.when(roleProvider.hasRoleInRealm(
-//        userRepresentation3.getId(), singletonList(BLOKING_ROLE))).thenReturn(true);
-//
-//    given(usersResource.list(0, MAX_VALUE)).willReturn(
-//        List.of(userRepresentation1, userRepresentation2, userRepresentation3));
-//
-//    List<UserDto> usersList = underTest.listAll(FRONTEND_USER_ROLES_1);
-//
-//    assertThat(usersList).hasSize(1);
-//
-//    UserDto userDto = usersList.get(0);
-//    assertThat(userDto.getUserName()).isEqualTo("user3");
-//  }
+  @Test
+  void filterUsersWithBlockingRole() {
+    UserRepresentation userRepresentation1 = getUserRepresentation(
+        "user1", singletonList(BLOKING_ROLE));
+    UserRepresentation userRepresentation2 = getUserRepresentation(
+        "user2", asList(BLOKING_ROLE, OTHER_ROLE));
+    UserRepresentation userRepresentation3 = getUserRepresentation(
+        "user3", singletonList(OTHER_ROLE));
+    when(usersListFilter.isVisible(userRepresentation1)).thenReturn(false);
+    when(usersListFilter.isVisible(userRepresentation2)).thenReturn(false);
+    when(usersListFilter.isVisible(userRepresentation3)).thenReturn(true);
+
+    given(usersResource.list(0, MAX_VALUE)).willReturn(
+        List.of(userRepresentation1, userRepresentation2, userRepresentation3));
+
+    List<UserDto> usersList = underTest.listAll(FRONTEND_USER_ROLES_1);
+
+    assertThat(usersList).hasSize(1);
+
+    UserDto userDto = usersList.get(0);
+    assertThat(userDto.getUserName()).isEqualTo("user3");
+  }
 
   @NotNull
   private UserRepresentation getUserRepresentation(String userName, List<String> realmRoles) {

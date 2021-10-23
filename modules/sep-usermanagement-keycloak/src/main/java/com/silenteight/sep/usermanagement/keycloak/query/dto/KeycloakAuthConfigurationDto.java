@@ -4,6 +4,7 @@ import lombok.*;
 
 import com.silenteight.sep.usermanagement.api.dto.AuthConfigurationDto;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @NoArgsConstructor

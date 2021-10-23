@@ -1,5 +1,7 @@
 package com.silenteight.sep.usermanagement.keycloak.query;
 
+import lombok.RequiredArgsConstructor;
+
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.usermanagement.keycloak.config.KeycloakConfigurationProperties;
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
@@ -9,10 +11,13 @@ import com.silenteight.sep.usermanagement.keycloak.query.role.RolesProvider;
 import org.keycloak.admin.client.resource.ClientsResource;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UsersResource;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@EnableConfigurationProperties(UsersListFilterProperties.class)
+@RequiredArgsConstructor
 class KeycloakQueryConfiguration {
 
   @Bean
@@ -22,7 +27,7 @@ class KeycloakQueryConfiguration {
       UsersResource usersResource,
       ClientsResource clientsResource,
       ClientQuery clientQuery,
-      KeycloakConfigurationProperties keycloakConfigurationProperties) {
+      UsersListFilter usersListFilter) {
 
     return new KeycloakUserQuery(
         usersResource,
@@ -31,7 +36,20 @@ class KeycloakQueryConfiguration {
         DefaultTimeSource.TIME_CONVERTER,
         clientsResource,
         clientQuery,
-        keycloakConfigurationProperties.getHideUsersWithRoles());
+        usersListFilter);
+  }
+
+  @Bean
+  UsersListFilter usersListFilter(
+      UsersListFilterProperties usersListFilterProperties,
+      RolesProvider rolesProvider) {
+
+    AttributeFilter attributeFilter = new AttributeFilter(
+        usersListFilterProperties.getAttributeFilters());
+    RealmRoleFilter realmRoleFilter = new RealmRoleFilter(
+        usersListFilterProperties.getRealmRoleFilterRoles(), rolesProvider);
+
+    return new UsersListFilter(attributeFilter, realmRoleFilter);
   }
 
   @Bean
