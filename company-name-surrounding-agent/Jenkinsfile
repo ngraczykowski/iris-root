@@ -51,6 +51,7 @@ pipeline {
                 anyOf {
                     branch 'master'
                     tag pattern: '^v[\\d\\.]+\$', comparator: "REGEXP"
+                    branch pattern: '^MR-\\d+\$', comparator: "REGEXP"
                 }
             }
             stages {

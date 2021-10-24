@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n9com.silenteight.proto.agent.companynamesurrounding.v1.apiB#CompanyNameSurroundingAgentApiProtoP\001',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n$company_name_surrounding_agent.proto\x12/silenteight.agent.companynamesurrounding.v1.api\"3\n\"CheckCompanyNameSurroundingRequest\x12\r\n\x05names\x18\x01 \x03(\t\"D\n#CheckCompanyNameSurroundingResponse\x12\r\n\x05names\x18\x01 \x03(\t\x12\x0e\n\x06result\x18\x02 \x01(\r2\xea\x01\n\x1b\x43ompanyNameSurroundingAgent\x12\xca\x01\n\x1b\x43heckCompanyNameSurrounding\x12S.silenteight.agent.companynamesurrounding.v1.api.CheckCompanyNameSurroundingRequest\x1aT.silenteight.agent.companynamesurrounding.v1.api.CheckCompanyNameSurroundingResponse\"\x00\x42\x62\n9com.silenteight.proto.agent.companynamesurrounding.v1.apiB#CompanyNameSurroundingAgentApiProtoP\x01\x62\x06proto3'
+  serialized_pb=b'\n$company_name_surrounding_agent.proto\x12/silenteight.agent.companynamesurrounding.v1.api\"3\n\"CheckCompanyNameSurroundingRequest\x12\r\n\x05names\x18\x01 \x03(\t\"V\n#CheckCompanyNameSurroundingResponse\x12\r\n\x05names\x18\x01 \x03(\t\x12\x0e\n\x06result\x18\x02 \x01(\r\x12\x10\n\x08solution\x18\x03 \x01(\t2\xea\x01\n\x1b\x43ompanyNameSurroundingAgent\x12\xca\x01\n\x1b\x43heckCompanyNameSurrounding\x12S.silenteight.agent.companynamesurrounding.v1.api.CheckCompanyNameSurroundingRequest\x1aT.silenteight.agent.companynamesurrounding.v1.api.CheckCompanyNameSurroundingResponse\"\x00\x42\x62\n9com.silenteight.proto.agent.companynamesurrounding.v1.apiB#CompanyNameSurroundingAgentApiProtoP\x01\x62\x06proto3'
 )
 
 
@@ -80,6 +80,13 @@ _CHECKCOMPANYNAMESURROUNDINGRESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='solution', full_name='silenteight.agent.companynamesurrounding.v1.api.CheckCompanyNameSurroundingResponse.solution', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -93,7 +100,7 @@ _CHECKCOMPANYNAMESURROUNDINGRESPONSE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=142,
-  serialized_end=210,
+  serialized_end=228,
 )
 
 DESCRIPTOR.message_types_by_name['CheckCompanyNameSurroundingRequest'] = _CHECKCOMPANYNAMESURROUNDINGREQUEST
@@ -124,8 +131,8 @@ _COMPANYNAMESURROUNDINGAGENT = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=213,
-  serialized_end=447,
+  serialized_start=231,
+  serialized_end=465,
   methods=[
   _descriptor.MethodDescriptor(
     name='CheckCompanyNameSurrounding',

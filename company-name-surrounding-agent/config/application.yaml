@@ -2,3 +2,7 @@ agent:
   process: 2
   grpc:
     port: 23456
+
+solution_rules:
+  - solution: MATCH
+    threshold: 1

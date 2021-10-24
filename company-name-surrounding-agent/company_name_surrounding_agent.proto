@@ -20,5 +20,6 @@ message CheckCompanyNameSurroundingRequest {
 message CheckCompanyNameSurroundingResponse {
   repeated string names = 1;
   uint32 result = 2;
+  string solution = 3;
 }
 
