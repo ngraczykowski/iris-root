@@ -12,5 +12,8 @@ class Rule:
 
 
 def load_rules(config: Config):
-    rules = [Rule(**rule) for rule in config.application_config["solution_rules"]]
+    rules = [
+        Rule(threshold=rule["threshold"], solution=Solution[rule["solution"]])
+        for rule in config.application_config["solution_rules"]
+    ]
     return sorted(rules, key=lambda rule: rule.threshold, reverse=True)
