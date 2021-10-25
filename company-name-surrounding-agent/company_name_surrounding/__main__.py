@@ -1,4 +1,5 @@
 import argparse
+import logging
 import pathlib
 
 from agent_base.agent import AgentRunner
@@ -22,7 +23,7 @@ def run(configuration_dirs, start_grpc_service):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Strict name agent")
+    parser = argparse.ArgumentParser(description="Company name surrounding agent")
     parser.add_argument(
         "-c",
         "--configuration-dir",
@@ -35,8 +36,17 @@ def main():
         action="store_true",
         help="Start grpc service",
     )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Increase verbosity for debug purpose",
+    )
     args = parser.parse_args()
-    print("App running")
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.INFO,
+        format="%(asctime)s %(name)-20s %(levelname)-8s %(message)s",
+    )
     run(
         configuration_dirs=(args.configuration_dir,),
         start_grpc_service=args.grpc,

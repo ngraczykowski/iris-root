@@ -1,14 +1,14 @@
 from agent_base.grpc_service.servicer import AgentGrpcServicer
-
-from company_name_surrounding.company_name_surrounding_agent_pb2 import (
+from silenteight.agent.companynamesurrounding.v1.api.company_name_surrounding_agent_pb2 import (
     DESCRIPTOR,
     CheckCompanyNameSurroundingRequest,
     CheckCompanyNameSurroundingResponse,
 )
-from company_name_surrounding.company_name_surrounding_agent_pb2_grpc import (
+from silenteight.agent.companynamesurrounding.v1.api.company_name_surrounding_agent_pb2_grpc import (
     CompanyNameSurroundingAgentServicer,
     add_CompanyNameSurroundingAgentServicer_to_server,
 )
+
 from company_name_surrounding.data_models import Result
 
 
