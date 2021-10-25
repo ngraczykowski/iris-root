@@ -81,7 +81,7 @@ public class RegisterAlertRequest {
     if (!CollectionUtils.isEmpty(labels)) {
       labels.forEach(l -> alert.putLabels(l.getName(), l.getValue()));
     }
+
     return alert.build();
   }
-
 }

@@ -8,8 +8,6 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlert
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
-import com.silenteight.payments.bridge.common.dto.input.HitDto;
-import com.silenteight.payments.bridge.common.dto.input.RequestHitDto;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.event.AlertInitializedEvent;
 import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
@@ -19,7 +17,9 @@ import org.springframework.integration.annotation.ServiceActivator;
 
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import javax.annotation.Nonnull;
 
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.ALERT_INITIALIZED;
@@ -59,11 +59,15 @@ class RegisterAlertEndpoint {
 
   @Nonnull
   private static List<String> getMatchIds(AlertMessageDto alertDto) {
-    return alertDto.getHits()
-        .stream()
-        .map(RequestHitDto::getHit)
-        .filter(HitDto::isBlocking)
-        .map(HitDto::getMatchId)
+    var hits = alertDto.getHits();
+
+    return IntStream.range(0, hits.size())
+        .<Optional<String>>mapToObj(idx -> {
+          var hit = hits.get(idx).getHit();
+          return hit.isBlocking() ? Optional.empty() : Optional.of(hit.getMatchId(idx));
+        })
+        .filter(Optional::isPresent)
+        .map(Optional::get)
         .collect(Collectors.toList());
   }
 }

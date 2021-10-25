@@ -76,4 +76,9 @@ public class HitDto implements Serializable {
   public String getMatchId() {
     return hittedEntity.getId() + "(" + getTag() + ")";
   }
+
+  public String getMatchId(int sequenceIndex) {
+    var sequenceNumber = sequenceIndex + 1;
+    return hittedEntity.getId() + "(" + getTag() + ", #" + sequenceNumber + ")";
+  }
 }

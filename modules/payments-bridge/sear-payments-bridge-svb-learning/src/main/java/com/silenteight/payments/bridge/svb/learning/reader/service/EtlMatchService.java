@@ -43,11 +43,14 @@ class EtlMatchService {
     var messageStructure = createMessageStructure(row, matchingTexts);
     var alertedPartyData =
         createAlertedPartyData(row, messageStructure.getMessageFieldStructure());
-    var a = 1;
+
+    var matchId =
+        row.getFkcoVListFmmId() + "(" + row.getFkcoVMatchedTag() + ", #" + row.getFkcoISequence()
+            + ")";
 
     return LearningMatch
         .builder()
-        .matchId(row.getFkcoVListFmmId() + "(" + row.getFkcoVMatchedTag() + ")")
+        .matchId(matchId)
         .alertedPartyData(alertedPartyData)
         .watchlistNames(List.of(row.getFkcoVListName().split(",")))
         .entityType(toEntityType(row.getFkcoVListType()))

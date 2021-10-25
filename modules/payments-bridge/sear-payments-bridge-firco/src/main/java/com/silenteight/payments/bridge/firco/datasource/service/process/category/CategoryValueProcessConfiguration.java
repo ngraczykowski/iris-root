@@ -23,6 +23,4 @@ public class CategoryValueProcessConfiguration {
 
     return new CompanyNameSurroundingProcess(stub);
   }
-
-
 }
