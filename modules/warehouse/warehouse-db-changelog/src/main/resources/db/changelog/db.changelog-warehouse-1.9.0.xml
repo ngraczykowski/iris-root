@@ -147,4 +147,46 @@
       <column name="to_range" type="TIMESTAMP"/>
     </addColumn>
   </changeSet>
+
+  <changeSet id="warehouse-1.9.0-9" author="anowicki">
+    <createTable tableName="warehouse_production_match">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="alert_discriminator" type="VARCHAR(128)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="discriminator" type="VARCHAR(128)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="index_name" type="VARCHAR(128)">
+        <constraints nullable="false" />
+      </column>
+      <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_production_match"
+        indexName="ix_warehouse_production_match_discriminator"
+        unique="true">
+      <column name="discriminator"/>
+    </createIndex>
+
+    <createIndex
+        tableName="warehouse_production_match"
+        indexName="ix_warehouse_production_match_alert_discriminator"
+        unique="true">
+      <column name="alert_discriminator"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-10" author="anowicki">
+    <addColumn tableName="warehouse_production_alert">
+      <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+        <constraints nullable="false" />
+      </column>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

@@ -10,19 +10,22 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.xml
     default-schema: ${warehouse.db.schema:public}
     contexts: default
+
 warehouse:
   report:
     default-bucket: report
   environment:
     prefix: itest
   es:
-    production-query-index: ${warehouse.environment.prefix}_production
+    production-query-index: ${warehouse.environment.prefix}_production_alert
     scroll:
       search:
         batch-size: 1
         keep-alive-seconds: 10
   alert-mapping:
     country-source-key: lob_country
+  match-mapping:
+
 logging:
   level:
     com.silenteight.warehouse.report: DEBUG

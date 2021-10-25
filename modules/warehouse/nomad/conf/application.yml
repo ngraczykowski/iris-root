@@ -47,6 +47,7 @@ warehouse:
       - "\\d{1,}\\.Relationships\\..*"
       - "\\d{1,}\\.WorldCheckEntities\\..*"
       - "\\d{1,}\\.WorldCheckIndividuals\\..*"
+  match-mapping:
   messaging:
     integration:
       backup-indexing-inbound:

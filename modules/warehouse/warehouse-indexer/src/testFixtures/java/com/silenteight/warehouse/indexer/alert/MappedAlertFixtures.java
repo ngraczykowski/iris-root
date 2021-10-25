@@ -60,7 +60,6 @@ public class MappedAlertFixtures {
 
   public static class Values {
 
-    public static final String SOLUTION_EXACT_MATCH = "EXACT_MATCH";
     public static final String SOLUTION_NO_DECISION = "NO_DECISION";
     public static final String SOLUTION_NO_DATA = "NO_DATA";
     public static final String RECOMMENDATION_FP = "FALSE_POSITIVE";

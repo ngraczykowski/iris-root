@@ -17,11 +17,11 @@ public class ProductionAlertTrackingService {
   private final ProductionAlertRepository productionAlertRepository;
 
   @NotNull
-  private final ProductionNamingStrategy productionNamingStrategy;
+  private final ProductionAlertNamingStrategy productionAlertNamingStrategy;
 
   @Transactional
   public Map<String, String> getIndexNameByDiscriminator(List<String> discriminators) {
-    String elasticWriteIndexName = productionNamingStrategy.getElasticWriteIndexName();
+    String elasticWriteIndexName = productionAlertNamingStrategy.getElasticWriteIndexName();
 
     discriminators.forEach(discriminator ->
         productionAlertRepository.updateIfNotExists(discriminator, elasticWriteIndexName));

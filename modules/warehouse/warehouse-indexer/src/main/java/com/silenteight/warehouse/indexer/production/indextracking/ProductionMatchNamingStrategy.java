@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
-class ProductionNamingStrategy {
+class ProductionMatchNamingStrategy {
 
   @NotNull
   private final TimeSource timeSource;
@@ -23,7 +23,6 @@ class ProductionNamingStrategy {
         .atZone(ZoneOffset.UTC)
         .format(DateTimeFormatter.ISO_LOCAL_DATE);
 
-
-    return environmentPrefix + "_production." + utcDate;
+    return environmentPrefix + "_production_match." + utcDate;
   }
 }

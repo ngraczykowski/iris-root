@@ -6,7 +6,7 @@ set -e -o pipefail
 CURRENTDIR="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
 cd "${CURRENTDIR}"
 
-ALIAS_NAME="local_production"
+ALIAS_NAME="local_production_alert"
 ORIGINAL_INDEX_NAME="${ALIAS_NAME}"
 ARCHIVED_INDEX_NAME="${ALIAS_NAME}.old"
 EMPTY_INDEX_NAME="${ALIAS_NAME}.empty"
@@ -77,7 +77,7 @@ fi
 echo "Alias not exists."
 
 if [[ "${INDEX_STATUS}" == "200" ]]; then
-  echo "Index exists under alias name. Migration required."
+  echo "Index exists under alert alias name. Migration required."
   wait_for_status
   block_index
   clone_index

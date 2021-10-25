@@ -16,6 +16,7 @@ import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 import com.silenteight.warehouse.indexer.alert.AlertModule;
+import com.silenteight.warehouse.indexer.match.MatchModule;
 import com.silenteight.warehouse.indexer.production.ProductionIndexerProperties;
 import com.silenteight.warehouse.indexer.production.ProductionMessageHandlerModule;
 import com.silenteight.warehouse.indexer.production.indextracking.IndexTrackingModule;
@@ -45,6 +46,7 @@ import static org.mockito.Mockito.*;
     ElasticsearchRestClientModule.class,
     EnvironmentModule.class,
     IndexTrackingModule.class,
+    MatchModule.class,
     OpendistroModule.class,
     ProductionMessageHandlerModule.class,
     SimulationMessageHandlerModule.class,

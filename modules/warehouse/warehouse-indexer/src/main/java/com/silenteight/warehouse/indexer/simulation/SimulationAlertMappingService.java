@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.data.api.v1.Alert;
 import com.silenteight.warehouse.common.opendistro.utils.OpendistroUtils;
 import com.silenteight.warehouse.indexer.alert.indexing.MapWithIndex;
+import com.silenteight.warehouse.indexer.alert.mapping.AlertDefinition;
 import com.silenteight.warehouse.indexer.alert.mapping.AlertMapper;
 import com.silenteight.warehouse.indexer.query.single.AlertSearchService;
 import com.silenteight.warehouse.indexer.query.single.ProductionSearchRequestBuilder;
@@ -57,7 +58,8 @@ public class SimulationAlertMappingService {
         throw new IllegalArgumentException("alertName not set in simulation request.");
 
       Map<String, Object> productionData = getAlertFromProductionIndex(alertName);
-      Map<String, Object> simulationData = alertMapper.convertAlertToAttributes(alert);
+      Map<String, Object> simulationData =
+          alertMapper.convertAlertToAttributes(toAlertDefinition(alert));
 
       HashMap<String, Object> payload = new HashMap<>();
       payload.putAll(productionData);
@@ -100,4 +102,11 @@ public class SimulationAlertMappingService {
     return new MatchQueryBuilder(OpendistroUtils.getRawField(fieldName), value);
   }
 
+  private static AlertDefinition toAlertDefinition(Alert alert) {
+    return AlertDefinition.builder()
+        .discriminator(alert.getDiscriminator())
+        .name(alert.getName())
+        .payload(alert.getPayload())
+        .build();
+  }
 }

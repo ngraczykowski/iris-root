@@ -12,6 +12,7 @@ keycloak:
 warehouse:
   alert-mapping:
     country-source-key: lob_country
+  match-mapping:
   messaging:
     integration:
       production-indexing-inbound:
@@ -27,13 +28,12 @@ warehouse:
   environment:
     prefix: itest
   es:
-    production-query-index: ${warehouse.environment.prefix}_production
+    production-query-index: ${warehouse.environment.prefix}_production_alert
   sampling:
     time-field-name: index_timestamp
     filters:
       - name: alert_status
         values: COMPLETED, LEARNING_COMPLETED
-
 
 test:
   messaging:

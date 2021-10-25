@@ -6,5 +6,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ElasticSearchTestConstants {
 
-  public static final String PRODUCTION_ELASTIC_INDEX_NAME = "itest_production";
+  public static final String PRODUCTION_ELASTIC_INDEX_NAME = "itest_production_alert";
 }

@@ -12,6 +12,7 @@ keycloak:
 warehouse:
   alert-mapping:
     country-source-key: lob_country
+  match-mapping:
   messaging:
     broker:
       alert-backup-indexing:
@@ -45,7 +46,7 @@ warehouse:
   environment:
     prefix: itest
   es:
-    production-query-index: ${warehouse.environment.prefix}_production
+    production-query-index: ${warehouse.environment.prefix}_production_alert
     update-request-batch-size: 1000
     retry-on-conflict-count: 2
     scroll:

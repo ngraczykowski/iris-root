@@ -17,3 +17,15 @@ curl -X PUT "http://localhost:9200/_index_template/production" \
   -d "@index-template-production.json"
 
 
+curl -X PUT "http://localhost:9200/_index_template/production-alert" \
+  -u admin:admin \
+  -H 'Content-Type: application/json' \
+  -d "@index-template-production-alert.json"
+
+
+curl -X PUT "http://localhost:9200/_index_template/production-match" \
+  -u admin:admin \
+  -H 'Content-Type: application/json' \
+  -d "@index-template-production-match.json"
+
+

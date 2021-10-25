@@ -2,6 +2,7 @@ package com.silenteight.warehouse.indexer.production.indextracking;
 
 import lombok.*;
 
+import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 
 import javax.persistence.*;
@@ -17,7 +18,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @ToString(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "warehouse_production_alert")
-class ProductionAlertEntity implements IdentifiableEntity {
+class ProductionAlertEntity extends BaseEntity implements IdentifiableEntity {
 
   @Id
   @GeneratedValue(strategy = IDENTITY)

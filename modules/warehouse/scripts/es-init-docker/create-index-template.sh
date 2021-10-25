@@ -16,4 +16,14 @@ curl -v -k -X PUT "$ES_URL/_index_template/production" \
   -H 'Content-Type: application/json' \
   -d "@index-template-production.json"
 
+curl -v -k -X PUT "$ES_URL/_index_template/production-alert" \
+  -u "$ES_CREDENTIALS" \
+  -H 'Content-Type: application/json' \
+  -d "@index-template-production-alert.json"
+
+curl -v -k -X PUT "$ES_URL/_index_template/production-match" \
+  -u "$ES_CREDENTIALS" \
+  -H 'Content-Type: application/json' \
+  -d "@index-template-production-match.json"
+
 

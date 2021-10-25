@@ -1,4 +1,6 @@
-package com.silenteight.warehouse.indexer.alert.mapping;
+package com.silenteight.warehouse.indexer.support;
+
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -8,6 +10,7 @@ import static java.util.stream.Collectors.toList;
 
 class SkipAnyMatchingKeysStrategy implements Predicate<String> {
 
+  @NonNull
   private final List<Pattern> predicates;
 
   SkipAnyMatchingKeysStrategy(List<String> ignoredKeysRegExp) {

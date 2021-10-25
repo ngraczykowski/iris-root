@@ -46,9 +46,8 @@ class ProductionAlertTrackingServiceTest {
     Map<String, String> alertDateByDiscriminator =
         underTest.getIndexNameByDiscriminator(List.of(DISCRIMINATOR_NEW));
 
-    assertThat(alertDateByDiscriminator).containsExactlyInAnyOrderEntriesOf(Map.of(
-        DISCRIMINATOR_NEW, "itest_production.2021-07-22"
-    ));
+    assertThat(alertDateByDiscriminator).containsExactlyInAnyOrderEntriesOf(
+        Map.of(DISCRIMINATOR_NEW, "itest_production_alert.2021-07-22"));
   }
 
   @Test
@@ -58,9 +57,9 @@ class ProductionAlertTrackingServiceTest {
     Map<String, String> indexNameByDiscriminator =
         underTest.getIndexNameByDiscriminator(List.of(DISCRIMINATOR_OLD, DISCRIMINATOR_NEW));
 
-    assertThat(indexNameByDiscriminator).containsExactlyInAnyOrderEntriesOf(Map.of(
-        DISCRIMINATOR_NEW, "itest_production.2021-07-22",
-        DISCRIMINATOR_OLD, "old"
-    ));
+    assertThat(indexNameByDiscriminator).containsExactlyInAnyOrderEntriesOf(
+        Map.of(
+            DISCRIMINATOR_NEW, "itest_production_alert.2021-07-22",
+            DISCRIMINATOR_OLD, "old"));
   }
 }
