@@ -4,6 +4,7 @@ import com.silenteight.adjudication.api.v1.*;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AlertClientPort;
 
+import com.google.protobuf.Timestamp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,13 +43,15 @@ class RegisterAlertServiceTests {
     List<RegisterAlertRequest> requests = new ArrayList<>();
     requests.add(
         RegisterAlertRequest.builder()
-          .alertId(alertId1)
-          .matchIds(List.of("1:ONE", "1:TWO"))
-          .build());
+            .alertId(alertId1)
+            .matchIds(List.of("1:ONE", "1:TWO"))
+            .alertTime(Timestamp.getDefaultInstance())
+            .build());
     requests.add(
         RegisterAlertRequest.builder()
             .alertId(alertId2)
             .matchIds(List.of("2:ONE", "2:TWO"))
+            .alertTime(Timestamp.getDefaultInstance())
             .build());
 
     when(alertClient.batchCreateAlerts(argThat(arg ->
@@ -57,7 +60,7 @@ class RegisterAlertServiceTests {
         BatchCreateAlertsResponse.newBuilder()
             .addAlerts(
                 Alert.newBuilder()
-                .setAlertId(alertId1).setName(alertName1).build()
+                    .setAlertId(alertId1).setName(alertName1).build()
             )
             .addAlerts(
                 Alert.newBuilder()
@@ -68,24 +71,24 @@ class RegisterAlertServiceTests {
     when(alertClient.batchCreateMatches(
         argThat(arg -> {
           var alertCondition = arg.getAlertMatchesList().stream()
-                .map(BatchCreateAlertMatchesRequest::getAlert)
-                .collect(Collectors.toSet()).containsAll(Set.of(alertName1, alertName2));
+              .map(BatchCreateAlertMatchesRequest::getAlert)
+              .collect(Collectors.toSet()).containsAll(Set.of(alertName1, alertName2));
 
           var matchCondition = arg.getAlertMatchesList().stream().map(
-                    BatchCreateAlertMatchesRequest::getMatchesList)
-                .flatMap(Collection::stream)
-                .map(Match::getMatchId)
-                .collect(Collectors.toSet())
-                .containsAll(Set.of("1:ONE", "1:TWO", "2:ONE", "2:TWO"));
+                  BatchCreateAlertMatchesRequest::getMatchesList)
+              .flatMap(Collection::stream)
+              .map(Match::getMatchId)
+              .collect(Collectors.toSet())
+              .containsAll(Set.of("1:ONE", "1:TWO", "2:ONE", "2:TWO"));
           return alertCondition && matchCondition;
         }))).thenReturn(
-          BatchCreateMatchesResponse.newBuilder()
+        BatchCreateMatchesResponse.newBuilder()
             .addMatches(
                 Match.newBuilder()
-                .setName(alertName1 + "/matches/1:ONE").build())
+                    .setName(alertName1 + "/matches/1:ONE").build())
             .addMatches(
                 Match.newBuilder()
-                .setName(alertName1 + "/matches/1:TWO").build())
+                    .setName(alertName1 + "/matches/1:TWO").build())
             .addMatches(
                 Match.newBuilder()
                     .setName(alertName2 + "/matches/1:ONE").build())
