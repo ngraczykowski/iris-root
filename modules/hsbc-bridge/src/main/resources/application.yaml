@@ -5,7 +5,7 @@ silenteight.bridge:
 
   grpc:
     port: 24803
-    recommendation-deadline: 5m
+    recommendation-deadline: 15m
     dataset-deadline: 1m
     historical-decisions-deadline: 20s
     analysis-deadline: 1m
