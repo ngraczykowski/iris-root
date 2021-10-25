@@ -202,4 +202,18 @@ spring:
 
 # METRICS CONFIGURATION
 
-management.metrics.tags.application: ${spring.application.name}
+management:
+  endpoint:
+    health.show-details: always
+
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers" ]
+    loggers:
+      sensitive: false
+
+  metrics:
+    tags:
+      application: ${spring.application.name}

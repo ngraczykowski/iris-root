@@ -389,6 +389,11 @@
       "name": "silenteight.bridge.learning.batch-size",
       "type": "java.lang.String",
       "description": "Batch size of sending messages for learning data."
+    },
+    {
+      "name": "management.endpoints.loggers.sensitive",
+      "type": "java.lang.Boolean",
+      "description": "Sensitive loggers endpoints for metrics enabled/disabled."
     }
   ]
 }
