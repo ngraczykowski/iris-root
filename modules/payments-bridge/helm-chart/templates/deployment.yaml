@@ -15,6 +15,7 @@ spec:
         app: {{ .Values.name }}
       annotations:
         fluentbit.io/parser: spring-logback-json
+        deployment-tag: {{ randAlphaNum 5 | quote }}
     spec:
       containers:
         - name: {{ .Values.name }}
@@ -33,25 +34,25 @@ spec:
             timeoutSeconds: 10
           env:
             - name: PB_DB_HOST
-              value: {{ .Values.pbDbHost }}
+              value: {{ .Values.pbDbHost | quote }}
             - name: PB_DB_PORT
               value: {{ .Values.pbDbPort | quote }}
             - name: PB_DB_NAME
-              value: {{ .Values.pbDbName }}
+              value: {{ .Values.pbDbName | quote }}
             - name: PB_DB_USERNAME
-              value: {{ .Values.pbDbUsername }}
+              value: {{ .Values.pbDbUsername | quote }}
             - name: PB_DB_PASSWORD
-              value: {{ .Values.pbDbPassword }}
+              value: {{ .Values.pbDbPassword | quote }}
             - name: SPRING_RABBITMQ_ADDRESSES
-              value: {{ .Values.springRabbitmqAddresses }}
+              value: {{ .Values.springRabbitmqAddresses | quote }}
             - name: SPRING_RABBITMQ_PORT
               value: {{ .Values.springRabbitmqPort | quote }}
             - name: SPRING_RABBITMQ_USERNAME
-              value: {{ .Values.springRabbitmqUsername }}
+              value: {{ .Values.springRabbitmqUsername | quote }}
             - name: SPRING_RABBITMQ_PASSWORD
-              value: {{ .Values.springRabbitmqPassword }}
+              value: {{ .Values.springRabbitmqPassword | quote }}
             - name: SPRING_RABBITMQ_VIRTUAL_HOST
-              value: {{ .Values.springRabbitmqVirtualHost }}
+              value: {{ .Values.springRabbitmqVirtualHost | quote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           resources:
             limits:
