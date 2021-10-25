@@ -164,7 +164,8 @@ jib {
         "-Dspring.profiles.include=container",
         "-Dserver.port=8080",
         "-Dgrpc.server.port=9090",
-        "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+        "-Xdebug",
+        "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
     ]
     ports = ["8080", "9090", "5005"]
     user = "nonroot"
