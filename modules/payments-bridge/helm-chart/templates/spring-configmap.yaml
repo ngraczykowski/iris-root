@@ -23,7 +23,7 @@ data:
           address: {{ .Values.grpcClientDatasourceAddress | quote }}
         governance:
           address: {{ .Values.grpcClientGovernanceAddress | quote }}
-        company-name-surrounding-agent:
+        companyNameSurroundingAgent:
           address: {{ .Values.grpcClientCompanyNameSurroundingAgentAddress | quote }}
 
 

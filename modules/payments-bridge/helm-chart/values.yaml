@@ -10,7 +10,7 @@ loggingLevelRoot: INFO
 grpcClientAeAddress: dns:///adjudication-engine-service.default.svc.cluster.local:9090
 grpcClientDatasourceAddress: dns:///universal-data-source-service.default.svc.cluster.local:9090
 grpcClientGovernanceAddress: dns:///governance-app-service.default.svc.cluster.local:9090
-grpcClientOrganizationNameAgentAddress: dns:///organization-name-agent-grpc.default.svc.cluster.local:9090
+grpcClientCompanyNameSurroundingAgentAddress: dns:///company-name-surrounding-agent-grpc.default.svc.cluster.local:9090
 springProfilesActive: ""
 replicaCount: 1
 imagePullPolicy: Always

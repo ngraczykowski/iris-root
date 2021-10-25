@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 
 public class CategoryValueProcessConfiguration {
 
-  @Setter(onMethod_ = @GrpcClient("company-name-surrounding-agent"))
+  @Setter(onMethod_ = @GrpcClient("companyNameSurroundingAgent"))
   private Channel companyNameSurroundingAgentChannel;
 
   @Bean

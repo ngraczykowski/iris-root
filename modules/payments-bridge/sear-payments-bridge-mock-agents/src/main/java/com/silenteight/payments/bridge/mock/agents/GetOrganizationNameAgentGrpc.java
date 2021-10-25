@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.mock.organizationagent;
+package com.silenteight.payments.bridge.mock.agents;
 
 import lombok.RequiredArgsConstructor;
 
