@@ -77,10 +77,13 @@ class JdbcRecommendationDataAccessIT extends BaseJdbcTest {
   @Test
   @Sql
   void shouldInsertAlertRecommendation() {
-    var result =
-        recommendationDataAccess.insertAlertRecommendation(List.of(createInsertRequest()));
-    assertThat(result.size()).isEqualTo(1);
+    var request = List.of(createInsertRequest(1), createInsertRequest(2));
+
+    var result = recommendationDataAccess.insertAlertRecommendation(request);
+
+    assertThat(result.size()).isEqualTo(2);
     assertThat(result.get(0).getAlertId()).isEqualTo(1);
+    assertThat(result.get(1).getAlertId()).isEqualTo(2);
   }
 
   @Test

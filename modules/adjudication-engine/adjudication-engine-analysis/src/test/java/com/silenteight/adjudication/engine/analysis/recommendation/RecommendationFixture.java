@@ -33,12 +33,16 @@ public class RecommendationFixture {
   }
 
   public static InsertRecommendationRequest createInsertRequest() {
+    return createInsertRequest(1);
+  }
+
+  public static InsertRecommendationRequest createInsertRequest(long identifier) {
     return InsertRecommendationRequest.builder()
-        .alertId(1)
-        .analysisId(1)
-        .recommendationId(1)
+        .alertId(identifier)
+        .analysisId(identifier)
+        .recommendationId(identifier)
         .recommendedAction("MATCH")
-        .matchIds(new long[] { 11 })
+        .matchIds(new long[] { identifier * 10 + 1 })
         .matchContexts(new ObjectNode[] {
             MAPPER.convertValue(createMatchContext(), ObjectNode.class)
         })
