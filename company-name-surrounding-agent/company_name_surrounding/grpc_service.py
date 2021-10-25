@@ -26,7 +26,7 @@ class CompanyNameSurroundingAgentGrpcServicer(
         return CheckCompanyNameSurroundingResponse(
             names=names,
             result=result.count,
-            solution=result.solution.value,
+            solution=result.solution,
         )
 
     def add_to_server(self, server):
