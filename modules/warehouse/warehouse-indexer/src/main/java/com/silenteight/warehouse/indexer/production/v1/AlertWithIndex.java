@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer.production.indextracking;
+package com.silenteight.warehouse.indexer.production.v1;
 
 import lombok.NonNull;
 import lombok.Value;

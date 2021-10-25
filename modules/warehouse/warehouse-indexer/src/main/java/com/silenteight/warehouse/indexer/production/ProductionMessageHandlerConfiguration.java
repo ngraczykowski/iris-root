@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
-import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.warehouse.indexer.alert.indexing.AlertIndexService;
-import com.silenteight.warehouse.indexer.alert.mapping.AlertMapper;
-import com.silenteight.warehouse.indexer.production.indextracking.ProductionAlertTrackingService;
+import com.silenteight.warehouse.indexer.production.v1.ProductionIndexRequestV1CommandHandler;
+import com.silenteight.warehouse.indexer.production.v2.ProductionIndexRequestV2CommandHandler;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -36,21 +34,6 @@ class ProductionMessageHandlerConfiguration {
   private final ProductionIndexerProperties properties;
 
   @Bean
-  ProductionAlertIndexUseCase productionAlertIndexUseCase(
-      ProductionAlertMappingService productionAlertMappingService,
-      ProductionAlertIndexResolvingService productionAlertIndexResolvingService,
-      AlertIndexService alertIndexService,
-      TimeSource timeSource) {
-
-    return new ProductionAlertIndexUseCase(
-        productionAlertIndexResolvingService,
-        productionAlertMappingService,
-        alertIndexService,
-        timeSource,
-        properties.getProductionBatchSize());
-  }
-
-  @Bean
   IntegrationFlow productionIndexingQueueToChannelIntegrationFlow() {
     return createInputFlow(
         PRODUCTION_INDEXING_INBOUND_CHANNEL,
@@ -68,10 +51,12 @@ class ProductionMessageHandlerConfiguration {
 
   @Bean
   ProductionRequestCommandIntegrationFlowAdapter productionRequestCommandIntegrationFlowAdapter(
-      ProductionIndexRequestCommandHandler productionIndexRequestCommandHandler) {
+      ProductionIndexRequestV1CommandHandler productionIndexRequestV1CommandHandler,
+      ProductionIndexRequestV2CommandHandler productionIndexRequestV2CommandHandler) {
 
     return new ProductionRequestCommandIntegrationFlowAdapter(
-        productionIndexRequestCommandHandler,
+        productionIndexRequestV1CommandHandler,
+        productionIndexRequestV2CommandHandler,
         PRODUCTION_INDEXING_INBOUND_CHANNEL,
         PRODUCTION_INDEXED_OUTBOUND_CHANNEL);
   }
@@ -91,17 +76,5 @@ class ProductionMessageHandlerConfiguration {
             .outboundAdapter()
             .exchangeName(exchange)
             .routingKey(routingKey));
-  }
-
-  @Bean
-  ProductionAlertIndexResolvingService productionAlertIndexResolvingService(
-      ProductionAlertTrackingService productionAlertTrackingService) {
-
-    return new ProductionAlertIndexResolvingService(productionAlertTrackingService);
-  }
-
-  @Bean
-  ProductionAlertMappingService productionAlertMappingService(AlertMapper alertMapper) {
-    return new ProductionAlertMappingService(alertMapper);
   }
 }

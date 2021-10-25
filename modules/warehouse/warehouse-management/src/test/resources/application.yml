@@ -4,10 +4,11 @@ spring:
 warehouse:
   alert-mapping:
     country-source-key: lob_country
+  match-mapping:
   environment:
     prefix: itest
   es:
-    production-query-index: ${warehouse.environment.prefix}_production
+    production-query-index: ${warehouse.environment.prefix}_production_alert
     country-roles-indexes:
       - ${warehouse.es.production-query-index}
       - ${warehouse.environment.prefix}_simulation*

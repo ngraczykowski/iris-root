@@ -2,6 +2,7 @@ warehouse:
   alert-mapping:
     country-source-key: access_permission_tag
     ignored-keys:
+  match-mapping:
   environment:
     prefix: sierra
   sampling:

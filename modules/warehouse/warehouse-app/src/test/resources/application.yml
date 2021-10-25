@@ -19,6 +19,7 @@ keycloak:
 warehouse:
   alert-mapping:
     country-source-key: lob_country
+  match-mapping:
   messaging:
     broker:
       alert-backup-indexing:
@@ -54,7 +55,7 @@ warehouse:
   report:
     default-bucket: reports
   es:
-    production-query-index: ${warehouse.environment.prefix}_production
+    production-query-index: ${warehouse.environment.prefix}_production_alert
     scroll:
       search:
         batch-size: 1

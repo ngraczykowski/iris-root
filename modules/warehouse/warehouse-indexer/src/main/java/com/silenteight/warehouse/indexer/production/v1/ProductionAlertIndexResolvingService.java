@@ -1,10 +1,9 @@
-package com.silenteight.warehouse.indexer.production;
+package com.silenteight.warehouse.indexer.production.v1;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.data.api.v1.Alert;
-import com.silenteight.warehouse.indexer.production.indextracking.AlertWithIndex;
 import com.silenteight.warehouse.indexer.production.indextracking.ProductionAlertTrackingService;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public class ProductionAlertIndexResolvingService {
   @NonNull
   private final ProductionAlertTrackingService productionAlertTrackingService;
 
-  public List<AlertWithIndex> getIndex(List<Alert> alerts) {
+  public List<AlertWithIndex> getTargetIndices(List<Alert> alerts) {
     List<String> discriminators = alerts.stream()
         .map(Alert::getDiscriminator)
         .collect(toList());

@@ -21,9 +21,21 @@ class IndexTrackingConfiguration {
       TimeSource timeSource,
       @Valid EnvironmentProperties environmentProperties) {
 
-    ProductionNamingStrategy productionNamingStrategy =
-        new ProductionNamingStrategy(timeSource, environmentProperties.getPrefix());
+    ProductionAlertNamingStrategy productionNamingStrategy =
+        new ProductionAlertNamingStrategy(timeSource, environmentProperties.getPrefix());
 
     return new ProductionAlertTrackingService(productionAlertRepository, productionNamingStrategy);
+  }
+
+  @Bean
+  ProductionMatchTrackingService productionMatchTrackingService(
+      ProductionMatchRepository productionMatchRepository,
+      TimeSource timeSource,
+      @Valid EnvironmentProperties environmentProperties) {
+
+    ProductionMatchNamingStrategy productionNamingStrategy =
+        new ProductionMatchNamingStrategy(timeSource, environmentProperties.getPrefix());
+
+    return new ProductionMatchTrackingService(productionMatchRepository, productionNamingStrategy);
   }
 }

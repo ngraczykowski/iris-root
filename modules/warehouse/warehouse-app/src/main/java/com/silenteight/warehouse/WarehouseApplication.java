@@ -16,6 +16,7 @@ import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.time.TimeModule;
 import com.silenteight.warehouse.common.web.WebModule;
 import com.silenteight.warehouse.indexer.alert.AlertModule;
+import com.silenteight.warehouse.indexer.match.MatchModule;
 import com.silenteight.warehouse.indexer.production.ProductionMessageHandlerModule;
 import com.silenteight.warehouse.indexer.production.indextracking.IndexTrackingModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
@@ -67,6 +68,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     DeprecatedRbsReportModule.class,
     IndexTrackingModule.class,
     ManagementModule.class,
+    MatchModule.class,
     MetricsReportModule.class,
     ProductionMessageHandlerModule.class,
     RbsReportModule.class,

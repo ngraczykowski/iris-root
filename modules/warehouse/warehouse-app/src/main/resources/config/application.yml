@@ -86,7 +86,7 @@ warehouse:
       cron: "0 0 1 * * ?"
       duration-time: P1D
   es:
-    production-query-index: ${warehouse.environment.prefix}_production
+    production-query-index: ${warehouse.environment.prefix}_production_alert
     country-roles-indexes:
       - ${warehouse.environment.prefix}_production*
       - ${warehouse.environment.prefix}_simulation*
