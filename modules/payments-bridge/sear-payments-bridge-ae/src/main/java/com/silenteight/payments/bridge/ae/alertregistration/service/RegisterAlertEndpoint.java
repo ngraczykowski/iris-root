@@ -64,7 +64,7 @@ class RegisterAlertEndpoint {
     return IntStream.range(0, hits.size())
         .<Optional<String>>mapToObj(idx -> {
           var hit = hits.get(idx).getHit();
-          return hit.isBlocking() ? Optional.empty() : Optional.of(hit.getMatchId(idx));
+          return hit.isBlocking() ? Optional.of(hit.getMatchId(idx)) : Optional.empty();
         })
         .filter(Optional::isPresent)
         .map(Optional::get)
