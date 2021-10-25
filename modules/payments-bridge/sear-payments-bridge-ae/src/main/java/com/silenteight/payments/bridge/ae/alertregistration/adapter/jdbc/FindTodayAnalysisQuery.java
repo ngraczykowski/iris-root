@@ -13,10 +13,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 class FindTodayAnalysisQuery {
 
+  // FIXME(ahaczewski): Make the 15 minutes configurable please.
   @Language("PostgreSQL")
   private static final String SQL = "SELECT analysis_name\n"
       + "FROM pb_analysis\n"
-      + "WHERE date(created_at) = current_date\n"
+      + "WHERE created_at > now() - interval '15 min'\n"
       + "ORDER BY created_at DESC\n"
       + "LIMIT 1";
 
