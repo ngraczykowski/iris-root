@@ -8,6 +8,7 @@ import com.silenteight.adjudication.engine.analysis.categoryrequest.domain.GetCa
 import com.silenteight.adjudication.engine.analysis.categoryrequest.domain.MissingCategoryResult;
 import com.silenteight.datasource.categories.api.v2.BatchGetMatchesCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v2.BatchGetMatchesCategoryValuesResponse;
+import com.silenteight.datasource.categories.api.v2.CategoryMatches;
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.datasource.categories.api.v2.CategoryValueServiceGrpc.CategoryValueServiceBlockingStub;
 
@@ -16,9 +17,16 @@ import io.grpc.StatusRuntimeException;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
+import javax.annotation.Nonnull;
 
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -47,30 +55,59 @@ class CategoryServiceClientV2 implements CategoryServiceClient {
 
     BatchGetMatchesCategoryValuesResponse response = performRequest(request);
 
-    if (response.getCategoryValuesCount() == 0) {
-      // FIXME(ahaczewski): Uncomment this exception, instead of hiding Data Source shit.
-      // throw new EmptyCategoryServiceResponseException(stub.getChannel().authority());
-    }
-
     if (response.getCategoryValuesCount() < request.getCategoryMatchesCount()) {
       log.error("Not all requested category values received: requestedCount={}, receivedCount={}",
           request.getCategoryMatchesCount(), response.getCategoryValuesCount());
 
       // FIXME(ahaczewski): Remove this mocked response, instead of hiding Data Source shit.
-      var mockedResults = request.getCategoryMatchesList()
-          .stream()
-          .map(categoryValueName ->
-              CategoryValue.newBuilder()
-                  .setSingleValue("DATA_SOURCE_ERROR")
-                  .setName(categoryValueName.getCategory())
-                  .build())
-          .collect(toList());
-      return BatchGetMatchesCategoryValuesResponse.newBuilder()
-          .addAllCategoryValues(mockedResults)
-          .build();
+      return buildMockResponse(request, response);
     }
 
     return response;
+  }
+
+  @Nonnull
+  private BatchGetMatchesCategoryValuesResponse buildMockResponse(
+      BatchGetMatchesCategoryValuesRequest request,
+      BatchGetMatchesCategoryValuesResponse response) {
+
+    var mockedResponseBuilder = response.toBuilder();
+
+    var responseCategoryMatches = response.getCategoryValuesList().stream()
+        .collect(groupingBy(CategoryValue::getName, mapping(CategoryValue::getMatch, toSet())));
+
+    request.getCategoryMatchesList()
+        .stream()
+        .flatMap(categoryMatch -> buildNotReceived(responseCategoryMatches, categoryMatch))
+        .forEach(mockedResponseBuilder::addCategoryValues);
+
+    return mockedResponseBuilder.build();
+  }
+
+  private Stream<CategoryValue> buildNotReceived(
+      Map<String, Set<String>> responseCategoryMatches, CategoryMatches categoryMatch) {
+
+    var category = categoryMatch.getCategory();
+    var hasReceivedCategory = responseCategoryMatches.containsKey(category);
+
+    if (!hasReceivedCategory) {
+      return categoryMatch.getMatchesList().stream()
+          .map(m -> CategoryValue.newBuilder()
+              .setName(category)
+              .setMatch(m)
+              .setSingleValue("DATA_SOURCE_ERROR")
+              .build());
+    } else {
+      var receivedMatches = responseCategoryMatches.get(category);
+
+      return categoryMatch.getMatchesList().stream()
+          .filter(m -> !receivedMatches.contains(m))
+          .map(m -> CategoryValue.newBuilder()
+              .setName(category)
+              .setMatch(m)
+              .setSingleValue("DATA_SOURCE_ERROR")
+              .build());
+    }
   }
 
   private BatchGetMatchesCategoryValuesResponse performRequest(
@@ -97,14 +134,5 @@ class CategoryServiceClientV2 implements CategoryServiceClient {
     }
 
     return response;
-  }
-
-  private static final class EmptyCategoryServiceResponseException extends RuntimeException {
-
-    private static final long serialVersionUID = 7750138753922426634L;
-
-    EmptyCategoryServiceResponseException(String authority) {
-      super("Received empty response from Category Service at [" + authority + "]");
-    }
   }
 }
