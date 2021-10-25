@@ -24,6 +24,7 @@ class GetCompanyNameSurroundingAgentGrpc extends CompanyNameSurroundingAgentImpl
         CheckCompanyNameSurroundingResponse.newBuilder()
             .addAllNames(request.getNamesList())
             .setResult(1)
+            .setSolution("MATCH")
             .build());
     responseObserver.onCompleted();
   }

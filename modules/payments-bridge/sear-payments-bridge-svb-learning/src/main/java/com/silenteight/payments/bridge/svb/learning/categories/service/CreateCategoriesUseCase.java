@@ -33,7 +33,8 @@ class CreateCategoriesUseCase {
         specificTermsCategory(),
         historicalRiskAssessmentCategory(),
         watchListTypeCategory(),
-        matchTypeCategory()
+        matchTypeCategory(),
+        companyNameSurroundingCategory()
     );
   }
 
@@ -90,6 +91,16 @@ class CreateCategoriesUseCase {
         .addAllAllowedValues(
             List.of("ERROR", "UNKNOWN", "NAME", "SEARCH_CODE", "PASSPORT", "NATIONAL_ID", "BIC",
                 "EMBARGO", "FML_RULE"))
+        .setMultiValue(false)
+        .build();
+  }
+
+  private static Category companyNameSurroundingCategory() {
+    return Category
+        .newBuilder()
+        .setName("categories/companyNameSurrounding")
+        .setDisplayName("Company Name Surrounding")
+        .setType(CategoryType.ANY_STRING)
         .setMultiValue(false)
         .build();
   }

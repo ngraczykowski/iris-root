@@ -87,3 +87,5 @@ grpc:
       address: in-process:test
     datasource:
       address: in-process:test
+    company-name-surrounding-agent:
+      address: in-process:test
