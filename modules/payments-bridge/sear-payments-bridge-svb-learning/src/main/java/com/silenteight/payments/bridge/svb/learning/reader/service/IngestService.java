@@ -6,7 +6,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUs
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CheckAlertRegisteredPort;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory;
-import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory.Builder;
+import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory.AlertBuilder;
 import com.silenteight.payments.bridge.warehouse.index.model.RequestOrigin;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertUseCase;
 
@@ -64,7 +64,7 @@ class IngestService {
   }
 
   private void processRegistered(List<LearningAlert> learningAlerts) {
-    indexRegistered(learningAlerts);
+    indexForLearning(learningAlerts);
   }
 
   private void register(List<LearningAlert> learningAlerts) {
@@ -86,27 +86,40 @@ class IngestService {
 
   private void index(List<LearningAlert> learningAlerts) {
     var alerts = learningAlerts.stream()
-        .map(learningAlert ->
-          createIndexAlertBuilder(learningAlert)
-            .setName(learningAlert.getAlertName())
-            .addPayload(warehouseMapper.makeAnalystDecision(learningAlert.getAnalystDecision()))
-            .addPayload(warehouseMapper.makeAlert(learningAlert)).build())
+        .map(learningAlert -> {
+          var alertBuilder = createIndexAlertBuilder(learningAlert)
+              .addPayload(warehouseMapper.makeAlert(learningAlert));
+          learningAlert.getMatches().forEach(m -> alertBuilder
+              .newMatch()
+              .setName(m.getMatchName())
+              .setDiscriminator(m.getMatchName())
+              .addPayload(warehouseMapper.makeMatch(m))
+              .finish());
+          return alertBuilder.build();
+        })
         .collect(toList());
     indexAlertUseCase.index(alerts, RequestOrigin.LEARNING);
   }
 
-  private void indexRegistered(List<LearningAlert> learningAlerts) {
+  private void indexForLearning(List<LearningAlert> learningAlerts) {
     var alerts = learningAlerts.stream()
-        .map(this::createIndexAlertBuilder)
-        .map(Builder::build)
+        .map(learningAlert -> {
+          var alertBuilder = createIndexAlertBuilder(learningAlert);
+          learningAlert.getMatches().forEach(m -> alertBuilder
+              .newMatch()
+              .setName(m.getMatchName())
+              .setDiscriminator(m.getMatchName())
+              .finish());
+          return alertBuilder.build();
+        })
         .collect(toList());
     indexAlertUseCase.index(alerts, RequestOrigin.LEARNING);
   }
 
-  private Builder createIndexAlertBuilder(LearningAlert learningAlert) {
+  private AlertBuilder createIndexAlertBuilder(LearningAlert learningAlert) {
     return alertBuilderFactory.newBuilder()
         .setDiscriminator(learningAlert.getDiscriminator())
+        .setName(learningAlert.getAlertName())
         .addPayload(warehouseMapper.makeAnalystDecision(learningAlert.getAnalystDecision()));
   }
-
 }

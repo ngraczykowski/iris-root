@@ -11,13 +11,11 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 @JsonNaming(SnakeCaseStrategy.class)
 public class WarehouseRecommendation implements IndexPayload {
 
-  String policy;  // from RecommendationMetadata ?
-  String policyTitle;  // from RecommendationMetadata ?
+  String recommendationName;
   String createTime;  // from Recommendation.getCreateTime()
   String recommendedAction;  // from Recommendation.getAction()
   String recommendationComment;  // from Recommendation.getComment()
   String status;
   String deliveryStatus;
   String reason;
-
 }

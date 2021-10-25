@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import com.silenteight.data.api.v2.Alert;
+import com.silenteight.data.api.v2.Match;
 import com.silenteight.payments.bridge.warehouse.index.model.payload.IndexPayload;
 import com.silenteight.payments.common.protobuf.ObjectMapperStructBuilder;
 
@@ -27,8 +28,8 @@ public class IndexedAlertBuilderFactory {
   @Setter
   private String accessPermissionTag = DEFAULT_ACCESS_PERMISSION_TAG;
 
-  public Builder newBuilder() {
-    return new Builder(createStructBuilder());
+  public AlertBuilder newBuilder() {
+    return new AlertBuilder(createStructBuilder());
   }
 
   private ObjectMapperStructBuilder createStructBuilder() {
@@ -40,38 +41,75 @@ public class IndexedAlertBuilderFactory {
   }
 
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  public static final class Builder {
+  public final class AlertBuilder {
 
     private final Alert.Builder messageBuilder = Alert.newBuilder();
     private final ObjectMapperStructBuilder payloadBuilder;
 
-    public Builder setName(String value) {
+    public AlertBuilder setName(String value) {
       messageBuilder.setName(value);
       return this;
     }
 
-    public Builder setDiscriminator(String value) {
+    public AlertBuilder setDiscriminator(String value) {
       messageBuilder.setDiscriminator(value);
       return this;
     }
 
-    public Builder addPayload(IndexPayload payload) {
+    public AlertBuilder addPayload(IndexPayload payload) {
       payloadBuilder.add(payload);
       return this;
     }
 
+    public MatchBuilder newMatch() {
+      return new MatchBuilder(this, new ObjectMapperStructBuilder(objectMapper));
+    }
+
+    void addMatch(Match match) {
+      messageBuilder.addMatches(match);
+    }
+
     public Alert build() {
-      var payload = payloadBuilder.build();
-
-      var accessPermissionTag = payload.getFieldsOrDefault(
-          ACCESS_PERMISSION_TAG_FIELD,
-          Values.of(DEFAULT_ACCESS_PERMISSION_TAG)).getStringValue();
-
       return messageBuilder
           .clone()
           .setAccessPermissionTag(accessPermissionTag)
-          .setPayload(payload)
+          .setPayload(payloadBuilder.build())
           .build();
+    }
+  }
+
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+  public static final class MatchBuilder {
+
+    @NonNull
+    private final AlertBuilder parentBuilder;
+
+    private final Match.Builder messageBuilder = Match.newBuilder();
+    private final ObjectMapperStructBuilder payloadBuilder;
+
+    public MatchBuilder setName(String value) {
+      messageBuilder.setName(value);
+      return this;
+    }
+
+    public MatchBuilder setDiscriminator(String value) {
+      messageBuilder.setDiscriminator(value);
+      return this;
+    }
+
+    public MatchBuilder addPayload(IndexPayload payload) {
+      payloadBuilder.add(payload);
+      return this;
+    }
+
+    public void finish() {
+      var payload = payloadBuilder.build();
+
+      parentBuilder.addMatch(messageBuilder
+          .clone()
+          .setPayload(payload)
+          .build()
+      );
     }
   }
 }

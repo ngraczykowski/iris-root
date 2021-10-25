@@ -46,6 +46,7 @@ public class RecommendationCompletedEvent extends DomainEvent
   @Getter
   public static class AdjudicationRecommendationCompletedEvent
       extends RecommendationCompletedEvent {
+
     private final RecommendationWithMetadata recommendation;
 
     public AdjudicationRecommendationCompletedEvent(UUID alertId,

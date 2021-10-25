@@ -45,6 +45,7 @@ class WarehouseAlertService {
     return WarehouseAlert.builder()
         .alertMessageId(alertId.toString())
         .fircoSystemId(alertData.getSystemId())
-        .status(status.getStatus().name()).build();
+        .status(status.getStatus().name())
+        .build();
   }
 }

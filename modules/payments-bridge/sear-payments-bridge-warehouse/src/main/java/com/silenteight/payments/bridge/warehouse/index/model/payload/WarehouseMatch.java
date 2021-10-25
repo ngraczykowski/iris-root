@@ -9,8 +9,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 @Value
 @Builder
 @JsonNaming(SnakeCaseStrategy.class)
-public class WarehouseResponseDelivery implements IndexPayload {
+public class WarehouseMatch implements IndexPayload {
 
-  String status;
-  String deliveryStatus;
+  String matchId;
+  String matchingText;
 }
