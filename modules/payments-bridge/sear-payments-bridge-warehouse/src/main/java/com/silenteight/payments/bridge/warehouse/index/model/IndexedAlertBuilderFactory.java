@@ -5,7 +5,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import com.silenteight.data.api.v1.Alert;
+import com.silenteight.data.api.v2.Alert;
 import com.silenteight.payments.bridge.warehouse.index.model.payload.IndexPayload;
 import com.silenteight.payments.common.protobuf.ObjectMapperStructBuilder;
 

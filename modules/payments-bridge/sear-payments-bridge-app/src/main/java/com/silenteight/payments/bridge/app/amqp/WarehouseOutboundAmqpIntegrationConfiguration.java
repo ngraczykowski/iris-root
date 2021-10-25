@@ -3,8 +3,8 @@ package com.silenteight.payments.bridge.app.amqp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.data.api.v1.Alert;
-import com.silenteight.data.api.v1.ProductionDataIndexRequest;
+import com.silenteight.data.api.v2.Alert;
+import com.silenteight.data.api.v2.ProductionDataIndexRequest;
 import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.payments.bridge.event.WarehouseIndexRequestedEvent;
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;

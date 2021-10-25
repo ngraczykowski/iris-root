@@ -1,6 +1,6 @@
 package com.silenteight.payments.bridge.warehouse.index.port;
 
-import com.silenteight.data.api.v1.Alert;
+import com.silenteight.data.api.v2.Alert;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexRequestId;
 import com.silenteight.payments.bridge.warehouse.index.model.RequestOrigin;
 
