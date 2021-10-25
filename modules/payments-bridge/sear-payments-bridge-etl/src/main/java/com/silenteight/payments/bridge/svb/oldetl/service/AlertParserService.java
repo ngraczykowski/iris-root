@@ -36,23 +36,24 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
       log.debug("Parsing alert for ETL: systemId={}", alertMessageDto.getSystemID());
     }
 
-    var hits = new ArrayList<HitData>();
+    var hitData = new ArrayList<HitData>();
     var skippedHits = new ArrayList<String>();
     var messageData = new MessageParserFacade().parse(
         MessageFormat.valueOf(alertMessageDto.getMessageFormat()),
         alertMessageDto.getMessageData());
 
-    for (var requestHitDto : alertMessageDto.getHits()) {
-      var hit = requestHitDto.getHit();
+    var alertMessageDtoHits = alertMessageDto.getHits();
+    for (int idx = 0, hitCount = alertMessageDtoHits.size(); idx < hitCount; idx++) {
+      var hit = alertMessageDtoHits.get(idx).getHit();
       if (hit.isBlocking()) {
-        var hitData = createHitData(
+        hitData.add(createHitData(
             alertMessageDto.getApplicationCode(), messageData, hit,
-            MessageFieldStructure.UNSTRUCTURED);
-        hits.add(hitData);
+            MessageFieldStructure.UNSTRUCTURED, idx));
       } else {
-        skippedHits.add(hit.getHittedEntity().getId() + "(" + hit.getTag() + ")");
+        skippedHits.add(hit.getMatchId(idx));
       }
     }
+
     if (!skippedHits.isEmpty()) {
       log.info("Skipping non-blocking hits: systemId={}, hits={}",
           alertMessageDto.getSystemID(), skippedHits);
@@ -71,25 +72,27 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         .ioIndicator(alertMessageDto.getIoIndicator())
         //TODO check why AlertStatusExtractor is no longer needed
         .currentStatus(alertMessageDto.getCurrentStatus())
-        .hits(hits)
+        .hits(hitData)
         .build();
   }
 
   private HitData createHitData(
       String applicationCode, MessageData messageData, HitDto hit,
-      MessageFieldStructure messageFieldStructure) {
+      MessageFieldStructure messageFieldStructure, int index) {
 
     var alertedPartyData =
         extractAlertedPartyData(
             messageData, hit.getTag(), messageFieldStructure,
             extractMessageFormat(applicationCode, messageData));
 
-    var hitAndWatchlistPartyData = extractHitAndWatchlistPartyData(
-        buildTransactionMessage(applicationCode, messageData), hit,
+    var accountNumberOrNormalizedName =
         alertedPartyData.getAccountNumber() == null ? alertedPartyData.getNames().get(0)
-                                                    : alertedPartyData.getAccountNumber());
+                                                    : alertedPartyData.getAccountNumber();
 
-    return new HitData(alertedPartyData, hitAndWatchlistPartyData);
+    var hitAndWatchlistPartyData = extractHitAndWatchlistPartyData(
+        buildTransactionMessage(applicationCode, messageData), hit, accountNumberOrNormalizedName);
+
+    return new HitData(hit.getMatchId(index), alertedPartyData, hitAndWatchlistPartyData);
   }
 
   public static AlertedPartyData extractAlertedPartyData(

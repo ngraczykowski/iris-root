@@ -50,7 +50,7 @@ class CategoryEtlProcess implements EtlProcess {
             .collect(Collectors.toList())
         ).flatMap(Collection::stream).collect(Collectors.toList());
 
-    BatchCreateCategoryValuesRequest request = createRequest(categoryValues);
+    var request = createRequest(categoryValues);
     createCategoryValuesClient.createCategoriesValues(request);
   }
 
