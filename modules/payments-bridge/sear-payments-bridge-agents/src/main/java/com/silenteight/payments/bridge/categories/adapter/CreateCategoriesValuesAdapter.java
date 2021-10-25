@@ -33,8 +33,8 @@ class CreateCategoriesValuesAdapter implements CreateCategoryValuesClient {
           .withDeadline(deadline)
           .batchCreateCategoryValues(createCategoryValuesRequest);
       log.trace("Created Categories values");
-    } catch (StatusRuntimeException status) {
-      log.warn("Request to the datasource service failed", status);
+    } catch (StatusRuntimeException e) {
+      log.error("Request to the datasource service failed", e);
     }
   }
 }
