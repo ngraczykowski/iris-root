@@ -31,12 +31,12 @@ public class EtlProcessHelper {
 
   @Nonnull
   public static String getMatchId(int id) {
-    return String.format("%s(%s)",String.valueOf(id), String.valueOf(id));
+    return String.format("%d(%d, #%d)", id, id, id);
   }
 
   @Nonnull
   public static String getMatchValue(int id) {
-    return "matches/" + String.valueOf(id);
+    return "matches/" + id;
   }
 
   public static AlertEtlResponse createAlertEtlResponse(int numberOfHits) {
@@ -48,14 +48,14 @@ public class EtlProcessHelper {
   private static List<HitData> createHitDataList(int size) {
     List<HitData> hitDataList = new ArrayList<>();
     for (int i = 0; i < size; i++) {
-      hitDataList.add(createHitData(String.valueOf(i)));
+      hitDataList.add(createHitData(getMatchId(i)));
     }
     return hitDataList;
   }
 
   @Nonnull
   public static HitData createHitData(String matchId) {
-    return new HitData(createAlertedPartyData(matchId), createHitAndWlPartyData(matchId));
+    return new HitData(matchId, createAlertedPartyData(matchId), createHitAndWlPartyData(matchId));
   }
 
   @Nonnull

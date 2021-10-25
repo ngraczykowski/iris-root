@@ -73,10 +73,6 @@ public class HitDto implements Serializable {
     return getRulesContext().getType().equals("1");
   }
 
-  public String getMatchId() {
-    return hittedEntity.getId() + "(" + getTag() + ")";
-  }
-
   public String getMatchId(int sequenceIndex) {
     var sequenceNumber = sequenceIndex + 1;
     return hittedEntity.getId() + "(" + getTag() + ", #" + sequenceNumber + ")";

@@ -43,6 +43,8 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         alertMessageDto.getMessageData());
 
     var alertMessageDtoHits = alertMessageDto.getHits();
+    // XXX(ahaczewski): WATCH OUT! RegisterAlertEndpoint#getMatchIds() assumes the same iteration
+    //  order!!! Make sure you keep it in sync, until shit gets cleaned!!!
     for (int idx = 0, hitCount = alertMessageDtoHits.size(); idx < hitCount; idx++) {
       var hit = alertMessageDtoHits.get(idx).getHit();
       if (hit.isBlocking()) {
@@ -129,6 +131,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
             messageData, hitTag, messageFormat).extract(messageFieldStructure);
       case "50K":
       case "59":
+      case "50":
         return new Extract50k59AlertedPartyData(messageData).extract(hitTag, messageFieldStructure);
       default:
         throw new IllegalArgumentException("Tag not supported " + hitTag);

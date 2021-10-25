@@ -35,11 +35,25 @@ class RecommendationCompletingEndpoint {
 
   @Splitter(inputChannel = RECOMMENDATION_GENERATED, outputChannel = INT_CHANNEL)
   List<RecommendationInfo> split(RecommendationGeneratedEvent event) {
-    return event.getRecommendationsGenerated().getRecommendationInfosList();
+    var notification = event.getRecommendationsGenerated();
+
+    if (log.isDebugEnabled()) {
+      log.debug(
+          "Received recommendation generated notification: count={}",
+          notification.getRecommendationInfosCount());
+    }
+
+    return notification.getRecommendationInfosList();
   }
 
   @ServiceActivator(inputChannel = INT_CHANNEL, outputChannel = RECOMMENDATION_COMPLETED)
   RecommendationCompletedEvent completing(RecommendationInfo recommendationInfo) {
+    if (log.isDebugEnabled()) {
+      log.debug(
+          "Retrieving recommendation: recommendation={}, alert={}",
+          recommendationInfo.getRecommendation(), recommendationInfo.getAlert());
+    }
+
     var recommendationWithMetadata =
         recommendationClientPort.receiveRecommendation(
             GetRecommendationRequest.newBuilder()

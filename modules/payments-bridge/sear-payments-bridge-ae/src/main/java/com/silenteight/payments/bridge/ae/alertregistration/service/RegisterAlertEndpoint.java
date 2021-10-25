@@ -61,6 +61,8 @@ class RegisterAlertEndpoint {
   private static List<String> getMatchIds(AlertMessageDto alertDto) {
     var hits = alertDto.getHits();
 
+    // XXX(ahaczewski): WATCH OUT! AlertParserService#createAlertEtlResponse() assumes the same
+    //  iteration order!!! Make sure you keep it in sync, until shit gets cleaned!!!
     return IntStream.range(0, hits.size())
         .<Optional<String>>mapToObj(idx -> {
           var hit = hits.get(idx).getHit();

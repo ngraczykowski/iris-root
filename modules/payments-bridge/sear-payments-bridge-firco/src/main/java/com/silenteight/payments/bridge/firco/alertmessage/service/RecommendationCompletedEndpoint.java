@@ -105,7 +105,6 @@ class RecommendationCompletedEndpoint {
       AdjudicationRecommendationCompletedEvent adjudicationEvent =
           (AdjudicationRecommendationCompletedEvent) event;
 
-
       MDC.put("recommendation",
           adjudicationEvent.getRecommendation().getRecommendation().getRecommendedAction());
 
@@ -120,4 +119,3 @@ class RecommendationCompletedEndpoint {
     }
   }
 }
-

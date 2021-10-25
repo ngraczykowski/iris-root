@@ -21,6 +21,8 @@ import static java.util.stream.Collectors.toList;
 @Value
 public class LearningAlert {
 
+  private static final int LEARNING_PRIORITY = 3;
+
   String alertId;
 
   String systemId;
@@ -56,6 +58,7 @@ public class LearningAlert {
         .builder()
         .alertId(alertId)
         .alertTime(fromOffsetDateTime(alertTime))
+        .priority(LEARNING_PRIORITY)
         .matchIds(matches.stream().map(LearningMatch::getMatchId).collect(toList()))
         .label(Label.of("learningBatch", batchStamp))
         .label(Label.of("fileName", fileName))
