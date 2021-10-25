@@ -94,7 +94,7 @@ class ProcessAlertService {
     return AlertsReadingResponse
         .builder()
         .failedAlerts(learningAlertCreator.getErrors().size())
-        .successfulAlerts(learningAlertCreator.getSuccessfulAlertsCount())
+        .successfulAlerts(batchAlertConsumer.getSuccessfulAlertsCount())
         .readAlertErrorList(learningAlertCreator.getErrors())
         .build();
   }
@@ -105,14 +105,10 @@ class ProcessAlertService {
     private final AlertMetaData alertMetaData;
 
     @Getter private final List<ReadAlertError> errors = new ArrayList<>();
-    @Getter private int successfulAlertsCount = 0;
 
     void create(List<LearningCsvRow> alertRows, boolean force) {
       var learningAlert = doCreate(alertMetaData, alertRows, errors);
-      if (learningAlert.isPresent()) {
-        batchAlertConsumer.accept(learningAlert.get(), force);
-        successfulAlertsCount++;
-      }
+      learningAlert.ifPresent(alert -> batchAlertConsumer.accept(alert, errors, force));
     }
 
     private Optional<LearningAlert> doCreate(
@@ -136,6 +132,7 @@ class ProcessAlertService {
         return Optional.empty();
       }
     }
+
   }
 
   static void assertRowNotNull(LearningCsvRow row) {

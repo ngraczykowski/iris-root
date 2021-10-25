@@ -67,7 +67,7 @@ class IngestService {
     indexForLearning(learningAlerts);
   }
 
-  private void register(List<LearningAlert> learningAlerts) {
+  private List<LearningAlert> register(List<LearningAlert> learningAlerts) {
     var alerts = learningAlerts.stream()
         .map(LearningAlert::toRegisterAlertRequest)
         .collect(toList());
@@ -81,7 +81,7 @@ class IngestService {
       alert.setAlertMatchNames(alertResponse);
     });
 
-    dataSourceIngestService.createValues(learningAlerts);
+    return new ArrayList<>(learningAlertsMap.values());
   }
 
   private void index(List<LearningAlert> learningAlerts) {

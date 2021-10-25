@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.svb.learning.features.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInput;
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
@@ -9,6 +10,7 @@ import com.silenteight.payments.bridge.svb.learning.features.port.incoming.Creat
 import com.silenteight.payments.bridge.svb.learning.features.port.outgoing.CreateAgentInputsClient;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
+import com.silenteight.payments.bridge.svb.learning.reader.domain.ReadAlertError;
 
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 class CreateFeaturesService implements CreateFeaturesUseCase {
 
   private final CreateAgentInputsClient createAgentInputsClient;
@@ -44,9 +47,22 @@ class CreateFeaturesService implements CreateFeaturesUseCase {
   }
 
   @Override
-  public void createMatchFeatures(List<LearningAlert> learningAlerts) {
-    var inputs = learningAlerts.stream()
-        .flatMap(this::createAgentInputs).collect(Collectors.toList());
+  public void createMatchFeatures(List<LearningAlert> learningAlerts, List<ReadAlertError> errors) {
+    List<AgentInput> inputs = new ArrayList<>();
+    for (var learningAlert : learningAlerts) {
+      try {
+        inputs.addAll(createAgentInputs(learningAlert).collect(Collectors.toList()));
+      } catch (Exception exception) {
+        log.error("Failed to create features for LearningAlert = {} reason = {}",
+            learningAlert.getAlertId(), exception.getMessage(), exception);
+        errors.add(ReadAlertError
+            .builder()
+            .alertId(learningAlert.getAlertId())
+            .exception(exception)
+            .build());
+      }
+    }
+
     createAgentInputsClient.createAgentInputs(
         BatchCreateAgentInputsRequest.newBuilder().addAllAgentInputs(inputs).build());
   }
