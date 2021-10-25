@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process.category;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.categories.api.v2.BatchCreateCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
@@ -21,6 +22,7 @@ import javax.annotation.Nonnull;
 
 import static com.silenteight.payments.bridge.firco.datasource.util.HitDataUtils.filterHitsData;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 class CategoryEtlProcess implements EtlProcess {
@@ -41,7 +43,10 @@ class CategoryEtlProcess implements EtlProcess {
     var categoryValues = filterHitsData(hitsData, matchItem).stream()
         .map(hitData -> categoryValueExtractors
             .stream()
-            .map(ce -> ce.extract(hitData, matchItem.getValue()))
+            .map(ce -> {
+              log.debug("Processing category: {}", ce.getClass().getSimpleName());
+              return ce.extract(hitData, matchItem.getValue());
+            })
             .collect(Collectors.toList())
         ).flatMap(Collection::stream).collect(Collectors.toList());
 
@@ -50,7 +55,8 @@ class CategoryEtlProcess implements EtlProcess {
   }
 
   @Nonnull
-  private BatchCreateCategoryValuesRequest createRequest(List<CategoryValue> categoryValues) {
+  private static BatchCreateCategoryValuesRequest createRequest(
+      List<CategoryValue> categoryValues) {
     return BatchCreateCategoryValuesRequest
         .newBuilder()
         .addAllRequests(

@@ -100,7 +100,9 @@ class CreateCategoriesUseCase {
         .newBuilder()
         .setName("categories/companyNameSurrounding")
         .setDisplayName("Company Name Surrounding")
-        .setType(CategoryType.ANY_STRING)
+        .setType(CategoryType.ENUMERATED)
+        .addAllAllowedValues(
+            List.of("NO_MATCH", "MATCH_1", "MATCH_2", "MATCH_3", "MATCH_4", "MATCH_5_OR_MORE"))
         .setMultiValue(false)
         .build();
   }

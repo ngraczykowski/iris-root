@@ -2,6 +2,7 @@ package com.silenteight.payments.bridge.firco.datasource.service.process.categor
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
@@ -14,6 +15,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RequiredArgsConstructor
 class CompanyNameSurroundingProcess implements CategoryValueProcess {
 
@@ -28,7 +30,7 @@ class CompanyNameSurroundingProcess implements CategoryValueProcess {
   @Override
   public CategoryValue extract(HitData hitData, String matchValue) {
 
-    var response = compareNames(hitData);
+    var response = sendRequest(hitData);
     return CategoryValue
         .newBuilder()
         .setName(CATEGORIES_COMPANY_NAME_SURROUNDING)
@@ -37,9 +39,11 @@ class CompanyNameSurroundingProcess implements CategoryValueProcess {
         .build();
   }
 
-  private CheckCompanyNameSurroundingResponse compareNames(HitData hitData) {
+  private CheckCompanyNameSurroundingResponse sendRequest(HitData hitData) {
 
     var request = getRequest(hitData);
+
+    log.debug("Sending request to Company Name Surrounding Agent");
 
     var response = stub
         .withDeadlineAfter(deadlineDuration.toMillis(), TimeUnit.MILLISECONDS)
@@ -47,6 +51,8 @@ class CompanyNameSurroundingProcess implements CategoryValueProcess {
 
     if (response == null)
       throw new MissingAgentResultException("Company Name Surrounding Agent");
+
+    log.debug("Response received from Company Name Surrounding Agent: {}", response.getSolution());
 
     return response;
   }
