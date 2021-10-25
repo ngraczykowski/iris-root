@@ -17,6 +17,7 @@ import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -123,7 +124,7 @@ public class LearningMatch {
   }
 
   public List<String> getSearchCodes() {
-    var codes = matchedNames;
+    var codes = new ArrayList<>(matchedNames);
 
     if (hitType.contains("EMBARGO")) {
       codes.addAll(matchedCountries);
