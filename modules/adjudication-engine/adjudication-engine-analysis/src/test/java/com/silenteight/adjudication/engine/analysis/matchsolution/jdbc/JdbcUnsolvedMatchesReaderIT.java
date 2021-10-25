@@ -110,10 +110,7 @@ class JdbcUnsolvedMatchesReaderIT extends BaseJdbcTest {
   @Test
   void readsAllRecordsInMultipleBatches() {
     var analysisId = 2;
-    doAnswer((Answer<Object>) invocation -> {
-      insertSolutionForChunk(analysisId, invocation.getArgument(0, UnsolvedMatchesChunk.class));
-      return null;
-    }).when(chunkHandler).handle(any());
+    mockInsertSolutionOnReceive(analysisId);
 
     var readMatches = reader.readInChunks(analysisId, chunkHandler);
 
@@ -121,6 +118,33 @@ class JdbcUnsolvedMatchesReaderIT extends BaseJdbcTest {
 
     verify(chunkHandler, times(7)).handle(unsolvedMatchesChunkArgumentCaptor.capture());
     verify(chunkHandler, times(3)).finished();
+  }
+
+  @Test
+  void shouldReadRecordsForAnalysisWithoutAnyCategories() {
+    var analysisId = 3;
+    mockInsertSolutionOnReceive(analysisId);
+
+    var readMatches = reader.readInChunks(analysisId, chunkHandler);
+
+    assertThat(readMatches).isEqualTo(11);
+  }
+
+  @Test
+  void shouldReadRecordsForAnalysisWithoutAnyFeatures() {
+    var analysisId = 4;
+    mockInsertSolutionOnReceive(analysisId);
+
+    var readMatches = reader.readInChunks(analysisId, chunkHandler);
+
+    assertThat(readMatches).isEqualTo(11);
+  }
+
+  private void mockInsertSolutionOnReceive(int analysisId) {
+    doAnswer((Answer<Object>) invocation -> {
+      insertSolutionForChunk(analysisId, invocation.getArgument(0, UnsolvedMatchesChunk.class));
+      return null;
+    }).when(chunkHandler).handle(any());
   }
 
   private void insertSolutionForChunk(long analysisId, UnsolvedMatchesChunk chunk) {

@@ -61,12 +61,16 @@ VALUES (1, 1),
 -- Analysis
 INSERT INTO ae_analysis (analysis_id, policy, strategy, created_at)
 VALUES (1, 'policies/0864f110-8381-4e8c-b8f4-4eac6a53c409', 'strategies/back_test', now()),
-       (2, 'policies/0864f110-8381-4e8c-b8f4-4eac6a53c409', 'strategies/back_test', now());
+       (2, 'policies/0864f110-8381-4e8c-b8f4-4eac6a53c409', 'strategies/back_test', now()),
+       (3, 'policies/0864f110-8381-4e8c-b8f4-4eac6a53c409', 'strategies/back_test', now()),
+       (4, 'policies/0864f110-8381-4e8c-b8f4-4eac6a53c409', 'strategies/back_test', now());
 INSERT INTO ae_analysis_category (analysis_category_id, analysis_id, category_id)
 VALUES (11, 1, 1),
        (12, 1, 2),
        (21, 2, 1),
-       (22, 2, 2)
+       (22, 2, 2),
+       (41, 4, 1),
+       (42, 4, 2)
 ;
 INSERT INTO ae_analysis_feature (analysis_feature_id, analysis_id, agent_config_feature_id)
 VALUES (11, 1, 1),
@@ -74,17 +78,26 @@ VALUES (11, 1, 1),
        (13, 1, 3),
        (21, 2, 1),
        (22, 2, 2),
-       (23, 2, 3)
+       (23, 2, 3),
+       (31, 3, 1),
+       (32, 3, 2),
+       (33, 3, 3)
 ;
 INSERT INTO ae_analysis_dataset (analysis_id, dataset_id)
 VALUES (1, 1),
-       (2, 2);
+       (2, 2),
+       (3, 2),
+       (4, 2);
 
 INSERT INTO ae_analysis_alert
 VALUES (1, 1, now(), now()),
        (1, 2, now(), now()),
        (2, 3, now(), now()),
-       (2, 4, now(), now())
+       (2, 4, now(), now()),
+       (3, 3, now(), now()),
+       (3, 4, now(), now()),
+       (4, 3, now(), now()),
+       (4, 4, now(), now())
 ;
 
 -- Pending recommendations
@@ -92,7 +105,11 @@ INSERT INTO ae_pending_recommendation (analysis_id, alert_id, created_at)
 VALUES (1, 1, now()),
        (1, 2, now()),
        (2, 3, now()),
-       (2, 4, now())
+       (2, 4, now()),
+       (3, 3, now()),
+       (3, 4, now()),
+       (4, 3, now()),
+       (4, 4, now())
 ;
 
 -- COMMIT;
