@@ -85,6 +85,7 @@ class WarehouseRecommendationService {
       buildBridgeRecommendation(alertBuilder, (BridgeRecommendationCompletedEvent) event);
     }
 
+
     return alertBuilder.build();
   }
 
@@ -92,8 +93,11 @@ class WarehouseRecommendationService {
       AlertBuilder alertBuilder,
       AdjudicationRecommendationCompletedEvent event) {
 
+    var alertData = event.getData(AlertData.class);
+
     var recommendation = event.getRecommendation().getRecommendation();
     var indexRecommendation = WarehouseRecommendation.builder()
+        .fircoSystemId(alertData.getSystemId())
         .recommendationName(recommendation.getName())
         .recommendationComment(mapComment(recommendation.getRecommendationComment()))
         .recommendedAction(mapAction(recommendation.getRecommendedAction()))
@@ -151,7 +155,9 @@ class WarehouseRecommendationService {
       AlertBuilder alertBuilder,
       BridgeRecommendationCompletedEvent event) {
 
+    var alertData = event.getData(AlertData.class);
     var bridgeRecommendation = WarehouseRecommendation.builder()
+        .fircoSystemId(alertData.getSystemId())
         .recommendationComment(mapComment(null))
         .recommendedAction(mapAction(null))
         .createTime(Instant.now().toString())
