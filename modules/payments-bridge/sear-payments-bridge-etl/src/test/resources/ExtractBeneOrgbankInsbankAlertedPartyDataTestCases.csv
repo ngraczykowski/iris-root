@@ -1,0 +1,4 @@
+messageData, fkcoFormat, name, address, ctryTown, nameAddress, accountNumber
+AC\n<acctnum>\n<name>\n<address>\n<address>\n<ctrytown>,FED,<name>,<address> <address>,<ctrytown>,<name> <address> <address> <ctrytown>,<acctnum>
+<name>\n<address>\n<address>\n<ctrytown>,IAT-O,<name>,<address> <address>,<ctrytown>,<name> <address> <address> <ctrytown>,
+<acctnum>\n<name>\n<address>\n<address>\n<ctrytown>,IAT-I,<name>,<address> <address>,<ctrytown>,<name> <address> <address> <ctrytown>,<acctnum>

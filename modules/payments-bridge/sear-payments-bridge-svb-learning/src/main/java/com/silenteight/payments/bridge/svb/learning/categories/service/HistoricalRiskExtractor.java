@@ -21,14 +21,12 @@ class HistoricalRiskExtractor implements CategoryValueExtractor {
   @Override
   public CategoryValue extract(LearningMatch learningMatch, String alert) {
 
-    var optAccount = learningMatch.getAccountNumber();
-
-    if (optAccount.isEmpty())
-      throw new IllegalArgumentException("Couldn't get match account number");
+    var accountNumer = learningMatch.getAccountNumber();
 
     var result = historicalRiskAssessmentUseCase.invoke(HistoricalRiskAssessmentAgentRequest
         .builder()
-        .accountNumber(optAccount.get())
+        .accountNumber(accountNumer.isEmpty() ? learningMatch.getAlertedPartyNames().get(0)
+            .trim() : accountNumer.get())
         .ofacID(learningMatch.getMatchId())
         .build());
 

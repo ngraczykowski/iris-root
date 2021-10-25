@@ -30,6 +30,16 @@ Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
+< ../docs/api/hq-messages/0b28ab3a-354d-8b2e-ddd0-a34581a10765.json
+
+### Post an alert for solving
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
 < ../docs/api/private-examples/FP_based_on_CROSSMATCH_reco_from_crossmatch_agent_sierra.json
 
 ### Post the SVB alert 2021-10-01_1837_osama_bin_laden for solving

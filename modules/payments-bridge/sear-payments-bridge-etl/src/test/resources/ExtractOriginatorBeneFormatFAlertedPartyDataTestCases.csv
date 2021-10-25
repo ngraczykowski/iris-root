@@ -1,0 +1,2 @@
+messageData, name, address, ctryTown, nameAddress, accountNumber
+AC\n<acctnum>\n1/<name>\n2/<address>\n2/<address>\n3/<ctrytown>,<name>,<address> <address>,<ctrytown>,<name> <address> <address> <ctrytown>,<acctnum>

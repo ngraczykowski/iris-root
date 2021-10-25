@@ -23,10 +23,7 @@ import org.apache.commons.collections4.list.SetUniqueList;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
@@ -46,6 +43,7 @@ class EtlMatchService {
     var messageStructure = createMessageStructure(row, matchingTexts);
     var alertedPartyData =
         createAlertedPartyData(row, messageStructure.getMessageFieldStructure());
+    var a = 1;
 
     return LearningMatch
         .builder()
@@ -67,7 +65,7 @@ class EtlMatchService {
         .applicationCode(row.getFkcoVApplication())
         .hitTag(row.getFkcoVMatchedTag())
         .allMatchFieldsValue(createAllMatchFieldsValue(messageStructure))
-        .matchedNames(List.of(row.getFkcoVListMatchedName().split(",")))
+        .matchedNames(new ArrayList<>(Arrays.asList(row.getFkcoVListMatchedName().split(","))))
         .matchedCountries(List.of(row.getFkcoVListCountry().split(",")))
         .hitType(row.getFkcoVHitType())
         .alertedPartyEntity(createAlertedPartyEntities(alertedPartyData, matchingTexts))
@@ -89,8 +87,9 @@ class EtlMatchService {
     var messageData = messageParserFacade.parse(
         row.getFkcoVContent().startsWith("{") ? MessageFormat.SWIFT : MessageFormat.ALL,
         row.getFkcoVContent());
-    return alertParserService.extractAlertedPartyData(row.getFkcoVApplication(),
-        messageData, row.getFkcoVMatchedTag(), messageFieldStructure);
+    return AlertParserService.extractAlertedPartyData(
+        messageData, row.getFkcoVMatchedTag(), messageFieldStructure,
+        row.getFkcoVFormat());
   }
 
   private AbstractMessageStructure createMessageStructure(

@@ -1,0 +1,2 @@
+messageData, fkcoFormat, name, address, ctryTown, nameAddress, accountNumber
+<acctnum>\n<name>\n<address>\n<address>\n<ctrytown>,IAT-I,<name>,<address> <address>,<ctrytown>,<name> <address> <address> <ctrytown>,<acctnum>

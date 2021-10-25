@@ -71,19 +71,7 @@ class EtlAlertService {
       matches.add(etlMatchService.fromLearningRows(row));
     }
 
-    assertNoDuplicateMatchIds(matches);
-
     return matches;
-  }
-
-  static void assertNoDuplicateMatchIds(List<LearningMatch> matches) {
-    var ids = new ArrayList<String>();
-    for (var match : matches) {
-      if (ids.contains(match.getMatchId()))
-        throw new DuplicatedMatchIdException();
-
-      ids.add(match.getMatchId());
-    }
   }
 
   @Nonnull
@@ -92,14 +80,5 @@ class EtlAlertService {
         .parse(time, DATE_FORMAT)
         .atZone(ZoneId.of(properties.getTimeZone()))
         .toOffsetDateTime();
-  }
-
-  private static class DuplicatedMatchIdException extends RuntimeException {
-
-    private static final long serialVersionUID = 8806971682856315265L;
-
-    DuplicatedMatchIdException() {
-      super("Duplicated Match ID");
-    }
   }
 }

@@ -15,6 +15,7 @@ import com.silenteight.payments.bridge.svb.oldetl.model.AbstractMessageStructure
 import com.silenteight.payments.bridge.svb.oldetl.model.GetAccountNumberRequest;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -98,10 +99,6 @@ public class LearningMatch {
     return alertedPartyData.getAddresses().stream().findFirst().orElse("");
   }
 
-  public List<String> getAddresses() {
-    return alertedPartyData.getAddresses();
-  }
-
   public OneLinerAgentRequest toOneLinerAgentRequest() {
     return OneLinerAgentRequest
         .builder()
@@ -124,7 +121,7 @@ public class LearningMatch {
   }
 
   public List<String> getSearchCodes() {
-    var codes = new ArrayList<>(matchedNames);
+    var codes = ObjectUtils.defaultIfNull(matchedNames, new ArrayList<String>());
 
     if (hitType.contains("EMBARGO")) {
       codes.addAll(matchedCountries);
