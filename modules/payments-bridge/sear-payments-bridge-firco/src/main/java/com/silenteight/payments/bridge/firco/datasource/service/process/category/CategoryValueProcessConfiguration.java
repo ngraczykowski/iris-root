@@ -14,7 +14,7 @@ public class CategoryValueProcessConfiguration {
   private Channel companyNameSurroundingAgentChannel;
 
   @Bean
-  CategoryValueProcess companyNameSurroundingProcess() {
+  CompanyNameSurroundingProcess companyNameSurroundingProcess() {
     var stub = CompanyNameSurroundingAgentGrpc
         .newBlockingStub(companyNameSurroundingAgentChannel)
         .withWaitForReady();
