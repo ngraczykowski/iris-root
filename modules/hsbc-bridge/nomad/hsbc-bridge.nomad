@@ -120,7 +120,7 @@ job "hsbc-bridge" {
         "traefik.enable=true",
         # Those 2 tags are required to gather metrics by prometheus
         "traefik.protocol=http",
-        "prometheus.metrics.path=/hsbc-bridge/management/prometheus",
+        "prometheus.metrics.path=/rest/hsbc-bridge/management/prometheus",
         # FIXME(ahaczewski): Remove when Consul Discovery can filter through results based on tags.
         "gRPC.port=${NOMAD_PORT_grpc}",
         "gRPC_port=${NOMAD_PORT_grpc}",
