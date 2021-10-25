@@ -71,6 +71,8 @@ spec:
             - name: spring-configmap
               mountPath: /etc/spring
           ports:
+            - containerPort: 5005
+              name: debug
             - containerPort: 8080
               name: http
             - containerPort: 9090
