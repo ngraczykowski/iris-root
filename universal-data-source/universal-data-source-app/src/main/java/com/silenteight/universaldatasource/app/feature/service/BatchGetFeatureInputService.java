@@ -28,9 +28,13 @@ class BatchGetFeatureInputService implements BatchGetFeatureInputUseCase {
       Consumer<BatchFeatureInputResponse> consumer) {
 
     if (log.isDebugEnabled()) {
-      log.debug("Streaming feature inputs: agentInputType={}, features={}, matchCount={}",
+      var matches = batchFeatureRequest.getMatches();
+
+      log.debug(
+          "Streaming feature inputs: agentInputType={}, features={}, matchCount={}"
+              + ", firstTenMatches={}",
           batchFeatureRequest.getAgentInputType(), batchFeatureRequest.getFeatures(),
-          batchFeatureRequest.getMatches().size());
+          matches.size(), matches.subList(0, Math.min(10, matches.size())));
     }
 
     int featuresCount = dataAccess.stream(

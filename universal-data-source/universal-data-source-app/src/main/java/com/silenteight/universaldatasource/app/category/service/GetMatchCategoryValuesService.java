@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,11 +29,13 @@ class GetMatchCategoryValuesService implements GetMatchCategoryValuesUseCase {
       List<CategoryMatches> matchValuesList) {
 
     if (log.isDebugEnabled()) {
-      var matchesCount =
-          matchValuesList.stream().flatMap(cm -> cm.getMatchesList().stream()).distinct().count();
+      var matches = matchValuesList.stream()
+          .flatMap(cm -> cm.getMatchesList().stream())
+          .distinct()
+          .collect(Collectors.toList());
 
-      log.debug("Getting category values: categoryCount={}, matchCount={}",
-          matchValuesList.size(), matchesCount);
+      log.debug("Getting category values: categoryCount={}, matchCount={}, firstTenMatches={}",
+          matchValuesList.size(), matches.size(), matches.subList(0, Math.min(10, matches.size())));
     }
 
     var matchCategoryList = getMatchCategoryList(matchValuesList);
