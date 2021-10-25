@@ -8,4 +8,7 @@ import java.util.List;
 public interface CreateFeaturesUseCase {
 
   List<AgentInput> createMatchFeatures(LearningAlert learningAlert);
+
+  void createMatchFeatures(List<LearningAlert> learningAlerts);
+
 }

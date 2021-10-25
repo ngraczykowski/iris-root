@@ -15,8 +15,12 @@ class EtlAlertServiceProperties {
 
   static final String DEFAULT_TIME_ZONE = "America/Los_Angeles";
 
+  static final int BATCH_SIZE = 50;
+
   @NotEmpty
   private String timeZone = DEFAULT_TIME_ZONE;
+
+  private int batchSize = BATCH_SIZE;
 
   @PostConstruct
   void initialize() {

@@ -8,6 +8,8 @@ import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 class DataSourceIngestService {
@@ -18,5 +20,11 @@ class DataSourceIngestService {
   void createValues(LearningAlert learningAlert) {
     createFeaturesUseCase.createMatchFeatures(learningAlert);
     createCategoryValuesUseCase.createCategoryValues(learningAlert);
+  }
+
+  void createValues(List<LearningAlert> learningAlerts) {
+    createFeaturesUseCase.createMatchFeatures(learningAlerts);
+    createCategoryValuesUseCase.createCategoryValues(learningAlerts);
+
   }
 }

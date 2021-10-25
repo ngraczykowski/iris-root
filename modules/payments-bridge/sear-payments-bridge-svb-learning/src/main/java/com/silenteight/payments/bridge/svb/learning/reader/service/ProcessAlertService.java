@@ -1,5 +1,6 @@
 package com.silenteight.payments.bridge.svb.learning.reader.service;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,8 +18,8 @@ import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Service
 @Slf4j
@@ -30,9 +31,9 @@ class ProcessAlertService {
 
   private final CsvFileProvider csvFileProvider;
   private final EtlAlertService etlAlertService;
+  private final BatchAlertConsumer batchAlertConsumer;
 
-  public AlertsReadingResponse read(
-      LearningRequest learningRequest, Consumer<LearningAlert> alertConsumer) {
+  public AlertsReadingResponse read(LearningRequest learningRequest) {
 
     var mapper = new CsvMapper();
     var schema = mapper
@@ -43,12 +44,13 @@ class ProcessAlertService {
 
     return csvFileProvider.getLearningCsv(learningRequest, learningCsv -> {
       AlertsReadingResponse alertsReadingResponse = null;
-      try {
+      try (var inputStream =
+          new InputStreamReader(learningCsv.getContent(), Charset.forName("CP1250"))) {
         MappingIterator<LearningCsvRow> it = mapper
             .readerFor(LearningCsvRow.class)
             .with(schema)
-            .readValues(new InputStreamReader(learningCsv.getContent(), Charset.forName("CP1250")));
-        alertsReadingResponse = readByAlerts(it, alertConsumer, learningRequest.getObject());
+            .readValues(inputStream);
+        alertsReadingResponse = readByAlerts(it, learningRequest.getObject());
         alertsReadingResponse.setObjectData(learningCsv);
 
         return alertsReadingResponse;
@@ -59,88 +61,80 @@ class ProcessAlertService {
     });
   }
 
-  private AlertsReadingResponse readByAlerts(
-      MappingIterator<LearningCsvRow> it, Consumer<LearningAlert> alertConsumer, String fileName) {
+  private AlertsReadingResponse readByAlerts(MappingIterator<LearningCsvRow> it, String fileName) {
 
     var firstRow = it.next();
     assertRowNotNull(firstRow);
     String currentAlertId = firstRow.getFkcoVSystemId();
 
-    var errors = new ArrayList<ReadAlertError>();
+    var alertMetaData = AlertMetaData.builder()
+        .batchStamp(createBatchStamp()).fileName(fileName).build();
+    var learningAlertCreator = new LearningAlertCreator(alertMetaData);
+
     var alertRows = new ArrayList<LearningCsvRow>();
     alertRows.add(firstRow);
-
-    int successfulAlertsCount = 0;
-
-    var batchStamp = createBatchStamp();
 
     while (it.hasNext()) {
       var row = it.next();
       assertRowNotNull(row);
+
       var rowAlertId = row.getFkcoVSystemId();
-
-      if (currentAlertId.equals(rowAlertId)) {
-        alertRows.add(row);
-        continue;
+      if (!currentAlertId.equals(rowAlertId)) {
+        learningAlertCreator.create(alertRows, false);
+        currentAlertId = rowAlertId;
+        alertRows.clear();
       }
-
-      var optError = proccessAlert(
-          alertConsumer,
-          AlertMetaData.builder().batchStamp(batchStamp).fileName(fileName).build(),
-          alertRows);
-
-      if (optError.isPresent())
-        errors.add(optError.get());
-      else
-        successfulAlertsCount++;
-
-      currentAlertId = rowAlertId;
-      alertRows.clear();
       alertRows.add(row);
     }
 
     if (!alertRows.isEmpty()) {
-      var optError = proccessAlert(
-          alertConsumer,
-          AlertMetaData.builder().batchStamp(batchStamp).fileName(fileName).build(),
-          alertRows);
-
-      if (optError.isPresent())
-        errors.add(optError.get());
-      else
-        successfulAlertsCount++;
+      learningAlertCreator.create(alertRows, true);
     }
 
     return AlertsReadingResponse
         .builder()
-        .failedAlerts(errors.size())
-        .successfulAlerts(successfulAlertsCount)
-        .readAlertErrorList(errors)
+        .failedAlerts(learningAlertCreator.getErrors().size())
+        .successfulAlerts(learningAlertCreator.getSuccessfulAlertsCount())
+        .readAlertErrorList(learningAlertCreator.getErrors())
         .build();
   }
 
-  private Optional<ReadAlertError> proccessAlert(
-      Consumer<LearningAlert> alertConsumer, AlertMetaData alertMetaData,
-      ArrayList<LearningCsvRow> alertRows) {
-    try {
-      var alert = etlAlertService
-          .fromCsvRows(alertRows)
-          .batchStamp(alertMetaData.getBatchStamp())
-          .fileName(alertMetaData.getFileName())
-          .build();
+  @RequiredArgsConstructor
+  private class LearningAlertCreator {
 
-      alertConsumer.accept(alert);
-      log.debug("Successfully processed alert = {}", alert.getAlertId());
-      return Optional.empty();
-    } catch (RuntimeException e) {
-      log.error(
-          "Failed to process alert = {} reason = {}", alertRows.get(0).getFkcoVSystemId(),
-          e.getMessage(), e);
-      return Optional.of(ReadAlertError
-          .builder()
-          .alertId(alertRows.get(0).getFkcoVSystemId())
-          .exception(e)
-          .build());
+    private final AlertMetaData alertMetaData;
+
+    @Getter private final List<ReadAlertError> errors = new ArrayList<>();
+    @Getter private int successfulAlertsCount = 0;
+
+    void create(List<LearningCsvRow> alertRows, boolean force) {
+      var learningAlert = doCreate(alertMetaData, alertRows, errors);
+      if (learningAlert.isPresent()) {
+        batchAlertConsumer.accept(learningAlert.get(), force);
+        successfulAlertsCount++;
+      }
+    }
+
+    private Optional<LearningAlert> doCreate(
+        AlertMetaData alertMetaData, List<LearningCsvRow> alertRows, List<ReadAlertError> errors) {
+      try {
+        var learningAlert = etlAlertService
+            .fromCsvRows(alertRows)
+            .batchStamp(alertMetaData.getBatchStamp())
+            .fileName(alertMetaData.getFileName())
+            .build();
+        log.debug("LearningAlert {} created successfully", learningAlert.getAlertId());
+        return Optional.of(learningAlert);
+      } catch (RuntimeException e) {
+        log.error("Failed to create LearningAlert = {} reason = {}",
+            alertRows.get(0).getFkcoVSystemId(), e.getMessage(), e);
+        errors.add(ReadAlertError
+            .builder()
+            .alertId(alertRows.get(0).getFkcoVSystemId())
+            .exception(e)
+            .build());
+        return Optional.empty();
+      }
     }
   }
 

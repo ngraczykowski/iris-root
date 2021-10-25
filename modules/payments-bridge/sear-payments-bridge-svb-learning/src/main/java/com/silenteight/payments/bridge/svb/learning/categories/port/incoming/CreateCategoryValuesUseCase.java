@@ -8,4 +8,6 @@ import java.util.List;
 public interface CreateCategoryValuesUseCase {
 
   List<CategoryValue> createCategoryValues(LearningAlert learningAlert);
+
+  void createCategoryValues(List<LearningAlert> learningAlerts);
 }

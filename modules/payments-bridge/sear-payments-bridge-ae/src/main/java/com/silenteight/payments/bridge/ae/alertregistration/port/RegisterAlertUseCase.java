@@ -4,15 +4,11 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlert
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public interface RegisterAlertUseCase {
 
   RegisterAlertResponse register(RegisterAlertRequest registerAlertRequest);
 
-  default List<RegisterAlertResponse> register(List<RegisterAlertRequest> registerAlertRequest) {
-    return registerAlertRequest.stream()
-        .map(this::register)
-        .collect(Collectors.toList());
-  }
+  List<RegisterAlertResponse> batchRegistration(List<RegisterAlertRequest> registerAlertRequest);
+
 }

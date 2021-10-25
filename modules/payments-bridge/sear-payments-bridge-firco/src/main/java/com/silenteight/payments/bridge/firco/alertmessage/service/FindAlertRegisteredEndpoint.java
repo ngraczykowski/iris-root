@@ -7,20 +7,21 @@ import com.silenteight.payments.bridge.common.model.AlertRegistration;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 
+import java.util.List;
+
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.ALERT_REGISTERED_REQUEST_CHANNEL;
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.ALERT_REGISTERED_RESPONSE_CHANNEL;
 
 @MessageEndpoint
 @RequiredArgsConstructor
-class CheckAlertRegisteredEndpoint {
+class FindAlertRegisteredEndpoint {
 
-  private final AlertMessageRepository repository;
+  private final AlertRegisteredJdbcDataAccess alertRegisteredJdbcDataAccess;
 
   @ServiceActivator(inputChannel = ALERT_REGISTERED_REQUEST_CHANNEL,
       outputChannel = ALERT_REGISTERED_RESPONSE_CHANNEL)
-  boolean apply(AlertRegistration alertRegistration) {
-    return repository.existsByMessageIdAndSystemId(
-        alertRegistration.getMessageId(), alertRegistration.getSystemId());
+  List<AlertRegistration> apply(List<AlertRegistration> alertRegistration) {
+    return alertRegisteredJdbcDataAccess.findRegistered(alertRegistration);
   }
 
 }

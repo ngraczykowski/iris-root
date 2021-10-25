@@ -11,6 +11,4 @@ interface AlertMessageRepository extends Repository<AlertMessageEntity, UUID> {
 
   Optional<AlertMessageEntity> findById(UUID alertMessageId);
 
-  boolean existsByMessageIdAndSystemId(String messageId, String systemId);
-
 }

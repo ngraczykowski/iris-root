@@ -65,7 +65,10 @@ public class RegisterAlertRequest {
   @Nonnull
   public CreateAlertRequest toCreateAlertRequest() {
     Preconditions.checkState(!matchIds.isEmpty(), "At least one match is required.");
+    return CreateAlertRequest.newBuilder().setAlert(toAlert()).build();
+  }
 
+  public Alert toAlert() {
     var alert = Alert
         .newBuilder()
         .setAlertId(getAlertId())
@@ -78,7 +81,7 @@ public class RegisterAlertRequest {
     if (!CollectionUtils.isEmpty(labels)) {
       labels.forEach(l -> alert.putLabels(l.getName(), l.getValue()));
     }
-
-    return CreateAlertRequest.newBuilder().setAlert(alert.build()).build();
+    return alert.build();
   }
+
 }
