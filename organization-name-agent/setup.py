@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 install_require = [
-    "agent-base",
+    "agent-base>=0.4.0",
     "agents-api",
     "aiohttp",
     "data-source-api",
