@@ -11,6 +11,10 @@ spec:
       port: {{ .Values.ports.http }}
       targetPort: http
     - protocol: TCP
+      name: debug
+      port: {{ .Values.ports.debug }}
+      targetPort: debug
+    - protocol: TCP
       name: grpc
       port: {{ .Values.ports.grpc }}
       targetPort: grpc
