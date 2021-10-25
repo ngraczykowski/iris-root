@@ -1,4 +1,5 @@
 import argparse
+import logging
 import pathlib
 
 from agent_base.agent import AgentRunner
@@ -36,7 +37,10 @@ def main():
         help="Start grpc service",
     )
     args = parser.parse_args()
-    print("App running")
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s %(name)-20s %(levelname)-8s %(message)s",
+    )
     run(
         configuration_dirs=(args.configuration_dir,),
         start_grpc_service=args.grpc,
