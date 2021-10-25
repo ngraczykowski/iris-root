@@ -23,7 +23,7 @@ def run(configuration_dirs, start_grpc_service):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Strict name agent")
+    parser = argparse.ArgumentParser(description="Company name surrounding agent")
     parser.add_argument(
         "-c",
         "--configuration-dir",
@@ -36,9 +36,15 @@ def main():
         action="store_true",
         help="Start grpc service",
     )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Increase verbosity for debug purpose",
+    )
     args = parser.parse_args()
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.DEBUG if args.verbose else logging.INFO,
         format="%(asctime)s %(name)-20s %(levelname)-8s %(message)s",
     )
     run(
