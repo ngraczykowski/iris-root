@@ -15,6 +15,7 @@ spec:
         app: {{ .Values.name }}
       annotations:
         fluentbit.io/parser: spring-logback-json
+        deployment-tag: {{ randAlphaNum 5 | quote }}
     spec:
       containers:
         - name: {{ .Values.name }}
