@@ -9,5 +9,5 @@ if [[ -z $TWINE_REPOSITORY_URL ]]; then
   echo "ERROR: TWINE_REPOSITORY_URL environmental variable not set!"
   exit 1
 fi
-
+pip install "$@" twine
 twine upload --non-interactive dist/*.whl
