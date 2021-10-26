@@ -7,6 +7,7 @@ pipeline {
     environment {
         PYPI_URL = credentials('pypi-readonly-url')
         TWINE_REPOSITORY_URL = 'https://repo.silenteight.com/artifactory/api/pypi/pypi'
+        PIP_DOWNLOAD_CACHE = '/root/.cache/pip'
     }
     options {
         timeout(time: 1, unit: 'HOURS')   // just to be safe
@@ -26,6 +27,7 @@ pipeline {
             agent {
                 docker {
                     image 'python:3.7'
+                    args '-v $HOME/.cache/agent/pip:/root/.cache/pip'
                 }
             }
             stages {
@@ -53,7 +55,7 @@ pipeline {
                         allOf {
                             anyOf {
                                 branch 'master'
-                                branch pattern: 'release-\\d+(\.\\d+)?', comparator: 'REGEXP'
+                                branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
                             }
                             expression { return params.RELEASE }
                         }
