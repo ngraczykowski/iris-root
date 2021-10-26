@@ -10,6 +10,9 @@ pipeline {
     options {
         timeout(time: 1, unit: 'HOURS')   // just to be safe
     }
+    parameters {
+        booleanParam(name: 'RELEASE', defaultValue: false, description: 'Release new version')
+    }
 
     stages {
         stage('Prepare python image') {
@@ -28,13 +31,21 @@ pipeline {
                 stage('Build') {
                     steps {
                         sh './scripts/clean.sh'
-                        sh './scripts/bootstrap.sh --index-url $PYPI_URL'
-                        sh './scripts/build.sh --index-url $PYPI_URL'
+                        sh './scripts/bootstrap.sh --index-url "${PYPI_URL}"'
+                        sh './scripts/build.sh --index-url "${PYPI_URL}"'
                     }
                 }
                 stage('Test') {
                     steps {
-                        sh './scripts/test.sh --index-url $PYPI_URL'
+                        sh './scripts/test.sh --index-url "${PYPI_URL}"'
+                    }
+                }
+                stage('Release') {
+                    when { expression { return params.RELEASE } }
+                    steps {
+                        sh 'pip install bump2version tox'
+                        sh 'git tag --delete "$(git tag --list)"'
+                        sh './scripts/release.sh --index-url ${PYPI_URL}'
                     }
                 }
                 stage('Prepare nomad artifacts') {
