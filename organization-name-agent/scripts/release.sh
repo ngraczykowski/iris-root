@@ -11,7 +11,7 @@ function gitRelease() {
   git reset --hard HEAD~1 # remove release commit after tag
 }
 
-branch="${CI_COMMIT_REF_NAME}"
+branch="${CI_COMMIT_REF_NAME:-}"
 if [[ -z "${branch}" ]]; then
   branch=$(git rev-parse --abbrev-ref HEAD)
 fi

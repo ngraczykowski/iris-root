@@ -70,7 +70,7 @@ pipeline {
                     }
                     steps {
                         sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
-                        sh 'git tag --delete "$(git tag --list)"'
+                        sh 'git tag --delete $(git tag --list)'
                         sh './scripts/release.sh --index-url ${PYPI_URL}'
                         withCredentials([usernamePassword(
                             credentialsId: 'pypi-deployment-user',
