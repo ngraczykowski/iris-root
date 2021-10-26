@@ -21,7 +21,7 @@ class WatchlistTypeProcess implements CategoryValueProcess {
         .newBuilder()
         .setName("categories/watchlistType")
         .setMatch(matchValue)
-        .setSingleValue(watchlistType.getName())
+        .setSingleValue(watchlistType.toString())
         .build();
   }
 }

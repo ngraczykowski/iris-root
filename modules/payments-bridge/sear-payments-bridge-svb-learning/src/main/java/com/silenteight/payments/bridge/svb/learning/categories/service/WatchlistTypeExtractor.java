@@ -19,7 +19,7 @@ class WatchlistTypeExtractor implements CategoryValueExtractor {
         .newBuilder()
         .setName("categories/watchlistType")
         .setMatch(learningMatch.getMatchName())
-        .setSingleValue(learningMatch.getWatchlistType().name())
+        .setSingleValue(learningMatch.getWatchlistType().toString())
         .build();
   }
 }
