@@ -58,7 +58,10 @@ class AsyncAiReasoningReportGenerationServiceTest {
     doThrow(RuntimeException.class)
         .when(reportGenerationService)
         .generateReport(
-            REPORT_RANGE.getFrom(), REPORT_RANGE.getTo(), INDEXES, PROPERTIES,
+            REPORT_RANGE.getFrom(),
+            REPORT_RANGE.getTo(),
+            INDEXES,
+            PROPERTIES,
             PRODUCTION_REPORT_FILENAME);
 
     // when + then

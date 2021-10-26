@@ -1,6 +1,8 @@
 package com.silenteight.warehouse.report.accuracy.download;
 
+import com.silenteight.warehouse.report.accuracy.domain.dto.AccuracyReportDto;
+
 public interface AccuracyReportDataQuery {
 
-  String getReportFileName(long id);
+  AccuracyReportDto getAccuracyReportDto(long id);
 }

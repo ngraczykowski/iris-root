@@ -17,11 +17,11 @@ public class AccuracyReportGenerationService {
   private final ReportGenerationService generationStreamingService;
 
   public void generateReport(
-      OffsetDateTime from,
-      OffsetDateTime to,
-      List<String> indexes,
-      @Valid AccuracyReportDefinitionProperties properties,
-      String name) {
+      @NonNull OffsetDateTime from,
+      @NonNull OffsetDateTime to,
+      @NonNull List<String> indexes,
+      @NonNull @Valid AccuracyReportDefinitionProperties properties,
+      @NonNull String name) {
 
     FetchDataRequest request = FetchDataRequest
         .builder()

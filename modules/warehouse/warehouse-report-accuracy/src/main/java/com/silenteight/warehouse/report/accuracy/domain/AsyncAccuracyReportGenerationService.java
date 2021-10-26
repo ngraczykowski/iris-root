@@ -4,10 +4,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.report.accuracy.domain.exception.ReportGenerationException;
 import com.silenteight.warehouse.report.accuracy.generation.AccuracyReportDefinitionProperties;
 import com.silenteight.warehouse.report.accuracy.generation.AccuracyReportGenerationService;
+import com.silenteight.warehouse.report.reporting.ReportRange;
 
 import org.springframework.scheduling.annotation.Async;
 
@@ -22,14 +22,16 @@ class AsyncAccuracyReportGenerationService {
   private final AccuracyReportRepository repository;
   @NonNull
   private final AccuracyReportGenerationService reportGenerationService;
-  @NonNull
-  private final TimeSource timeSource;
 
   @Async
-  void generateReport(
-      Long id, List<String> indexes, @Valid AccuracyReportDefinitionProperties properties) {
+  public void generateReport(
+      long id,
+      @NonNull ReportRange range,
+      @NonNull List<String> indexes,
+      @NonNull @Valid AccuracyReportDefinitionProperties properties) {
+
     try {
-      doGenerateReport(id, indexes, properties);
+      doGenerateReport(id, range, indexes, properties);
     } catch (RuntimeException e) {
       doFailReport(id);
       throw new ReportGenerationException(id, e);
@@ -37,22 +39,24 @@ class AsyncAccuracyReportGenerationService {
   }
 
   private void doGenerateReport(
-      Long id, List<String> indexes, AccuracyReportDefinitionProperties properties) {
+      long id,
+      ReportRange range,
+      List<String> indexes,
+      AccuracyReportDefinitionProperties properties) {
+
     AccuracyReport report = repository.getById(id);
     report.generating();
     repository.save(report);
     log.debug("Generating report with id={}", id);
-    AccuracyReportDefinition reportType = report.getReportType();
-    String fileName = report.getFileName();
+    String fileStorageName = report.getFileStorageName();
 
     reportGenerationService.generateReport(
-        reportType.getFrom(timeSource.now()),
-        reportType.getTo(timeSource.now()),
+        range.getFrom(),
+        range.getTo(),
         indexes,
         properties,
-        fileName);
+        fileStorageName);
 
-    report.storeReport(fileName);
     report.done();
     repository.save(report);
     log.debug("Report generation done, id={}", id);

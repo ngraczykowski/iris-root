@@ -1,6 +1,5 @@
 package com.silenteight.warehouse.report.accuracy.generation;
 
-
 import com.silenteight.warehouse.report.reporting.ReportGenerationService;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

@@ -24,6 +24,7 @@ import com.silenteight.warehouse.indexer.simulation.SimulationMessageHandlerModu
 import com.silenteight.warehouse.indexer.simulation.analysis.AnalysisModule;
 import com.silenteight.warehouse.management.ManagementModule;
 import com.silenteight.warehouse.report.accuracy.AccuracyReportModule;
+import com.silenteight.warehouse.report.accuracy.v1.DeprecatedAccuracyReportModule;
 import com.silenteight.warehouse.report.billing.BillingReportModule;
 import com.silenteight.warehouse.report.billing.v1.DeprecatedBillingReportModule;
 import com.silenteight.warehouse.report.metrics.MetricsReportModule;
@@ -62,6 +63,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AnalysisModule.class,
     BackupModule.class,
     BillingReportModule.class,
+    DeprecatedAccuracyReportModule.class,
     DeprecatedAiReasoningReportModule.class,
     DeprecatedBillingReportModule.class,
     DeprecatedMetricsReportModule.class,

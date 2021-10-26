@@ -1,5 +1,6 @@
 package com.silenteight.warehouse.report.accuracy.create;
 
+import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.report.accuracy.domain.AccuracyReportService;
 import com.silenteight.warehouse.report.accuracy.generation.AccuracyReportProperties;
@@ -14,17 +15,28 @@ import javax.validation.Valid;
 class CreateAccuracyReportConfiguration {
 
   @Bean
-  CreateAccuracyReportUseCase createAccuracyReportUseCase(
+  CreateSimulationAccuracyReportUseCase createSimulationAccuracyReportUseCase(
       AccuracyReportService service,
       @Valid AccuracyReportProperties properties,
-      @Qualifier(value = "productionIndexingQuery") IndexesQuery productionIndexerQuery,
-      @Qualifier(value = "simulationIndexingQuery") IndexesQuery simulationIndexerQuery) {
+      @Qualifier(value = "simulationIndexingQuery") IndexesQuery simulationIndexerQuery,
+      TimeSource timeSource) {
 
-    return new CreateAccuracyReportUseCase(
+    return new CreateSimulationAccuracyReportUseCase(
+        service,
+        properties.getSimulation(),
+        simulationIndexerQuery,
+        timeSource);
+  }
+
+  @Bean
+  CreateProductionAccuracyReportUseCase createProductionAccuracyReportUseCase(
+      AccuracyReportService service,
+      @Valid AccuracyReportProperties properties,
+      @Qualifier(value = "productionIndexingQuery") IndexesQuery indexesQuery) {
+
+    return new CreateProductionAccuracyReportUseCase(
         service,
         properties.getProduction(),
-        properties.getSimulation(),
-        productionIndexerQuery,
-        simulationIndexerQuery);
+        indexesQuery);
   }
 }

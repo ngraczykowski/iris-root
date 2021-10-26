@@ -7,12 +7,15 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.warehouse.report.accuracy.generation.AccuracyReportDefinitionProperties;
 import com.silenteight.warehouse.report.remove.ReportsRemoval;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
+import com.silenteight.warehouse.report.reporting.ReportRange;
 import com.silenteight.warehouse.report.storage.ReportStorage;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
+import javax.validation.Valid;
 
+import static com.silenteight.warehouse.report.accuracy.domain.AccuracyReport.of;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -27,14 +30,13 @@ public class AccuracyReportService implements ReportsRemoval {
   private final ReportStorage reportStorage;
 
   public ReportInstanceReferenceDto createReportInstance(
-      AccuracyReportDefinition definition,
-      String analysisId,
-      List<String> indexes,
-      AccuracyReportDefinitionProperties properties) {
+      @NonNull ReportRange range,
+      @NonNull List<String> indexes,
+      @NonNull @Valid AccuracyReportDefinitionProperties properties) {
 
-    AccuracyReport report = AccuracyReport.of(definition, analysisId);
+    AccuracyReport report = of(range);
     AccuracyReport savedReport = repository.save(report);
-    asyncReportGenerationService.generateReport(savedReport.getId(), indexes, properties);
+    asyncReportGenerationService.generateReport(savedReport.getId(), range, indexes, properties);
     return new ReportInstanceReferenceDto(savedReport.getId());
   }
 
@@ -51,7 +53,7 @@ public class AccuracyReportService implements ReportsRemoval {
 
   private static List<String> getOutdatedReportsFileNames(List<AccuracyReport> outdatedReports) {
     return outdatedReports.stream()
-        .map(AccuracyReport::getFile)
+        .map(AccuracyReport::getFileStorageName)
         .filter(Objects::nonNull)
         .collect(toList());
   }

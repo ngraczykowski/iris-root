@@ -14,22 +14,25 @@ import java.time.OffsetDateTime;
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys.COUNTRY_KEY;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys.RECOMMENDATION_KEY;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP_3;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.RECOMMENDATION_FP;
 import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.DISCRIMINATOR;
 import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.INDEX_TIMESTAMP;
 import static java.time.LocalDate.of;
-import static java.time.OffsetDateTime.parse;
+import static java.time.LocalTime.MAX;
+import static java.time.LocalTime.MIDNIGHT;
+import static java.time.OffsetDateTime.of;
+import static java.time.ZoneOffset.UTC;
 import static java.util.List.of;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ReportFixture {
 
-  public static final OffsetDateTime FROM_TIMESTAMP = parse(PROCESSING_TIMESTAMP);
-  public static final OffsetDateTime TO_TIMESTAMP = parse(PROCESSING_TIMESTAMP_3);
   public static final LocalDate LOCAL_DATE_FROM = of(2020, 10, 15);
   public static final LocalDate LOCAL_DATE_TO = of(2021, 10, 15);
+  public static final OffsetDateTime FROM_OFFSET_DATE_TIME = of(LOCAL_DATE_FROM, MIDNIGHT, UTC);
+  public static final OffsetDateTime TO_OFFSET_DATE_TIME =
+      of(LOCAL_DATE_TO, MAX.minusSeconds(1), UTC);
+
   public static final String FILE_NAME = "report-test.csv";
   public static final QueryFilter QUERY_FILTER =
       new QueryFilter(RECOMMENDATION_KEY, of(RECOMMENDATION_FP));
@@ -37,7 +40,6 @@ public final class ReportFixture {
   public static final String ALERT_COUNTRY_FIELD_LABEL = "Country LoB";
   public static final String ALERT_RECOMMENDATION_LABEL = "Alert Recommendation";
   public static final String ALERT_S8_ID_LABEL = "Alert S8 ID";
-
   public static final FieldDefinition FIELDS_DEFINITION_1 = FieldDefinition.builder()
       .name(COUNTRY_KEY)
       .label(ALERT_COUNTRY_FIELD_LABEL)
@@ -63,8 +65,8 @@ public final class ReportFixture {
       .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
       .queryFilters(of(QUERY_FILTER))
       .dateField(INDEX_TIMESTAMP)
-      .from(FROM_TIMESTAMP)
-      .to(TO_TIMESTAMP)
+      .from(FROM_OFFSET_DATE_TIME)
+      .to(TO_OFFSET_DATE_TIME)
       .name(FILE_NAME)
       .build();
 }
