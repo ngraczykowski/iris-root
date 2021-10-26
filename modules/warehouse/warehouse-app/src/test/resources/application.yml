@@ -37,6 +37,8 @@ warehouse:
       alert-simulation-indexing:
         queue-name: wh.index-request.simulation
         routing-key: command.index-request.simulation
+      to-remove:
+        bindings: []
   indexer:
     backup-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.alert-backup-indexing.queue-name}

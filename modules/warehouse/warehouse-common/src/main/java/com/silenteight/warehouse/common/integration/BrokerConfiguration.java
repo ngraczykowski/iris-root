@@ -7,6 +7,8 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.Declarables;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -79,32 +81,54 @@ class BrokerConfiguration {
 
   @Bean
   Queue alertBackupIndexingQueue() {
-    return queue(properties.alertBackupIndexingQueueName());
+    return queue(
+        properties.alertBackupIndexingQueueName(),
+        properties.alertBackupIndexingMaxPriority());
   }
 
   @Bean
   Queue qaBackupIndexingQueue() {
-    return queue(properties.qaBackupIndexingQueueName());
+    return queue(
+        properties.qaBackupIndexingQueueName(),
+        properties.qaBackupIndexingMaxPriority());
   }
 
   @Bean
   Queue alertProductionIndexingQueue() {
-    return queue(properties.alertProductionIndexingQueueName());
+    return queue(
+        properties.alertProductionIndexingQueueName(),
+        properties.alertProductionIndexingMaxPriority());
   }
 
   @Bean
   Queue qaIndexingQueue() {
-    return queue(properties.qaIndexingQueueName());
+    return queue(
+        properties.qaIndexingQueueName(),
+        properties.qaIndexingMaxPriority());
   }
 
   @Bean
   Queue alertSimulationIndexingQueue() {
-    return queue(properties.alertSimulationIndexingQueueName());
+    return queue(
+        properties.alertSimulationIndexingQueueName(),
+        properties.alertSimulationIndexingMaxPriority());
   }
 
-  private static Queue queue(String queueName) {
-    return QueueBuilder
-        .durable(queueName)
-        .build();
+  private static Queue queue(String queueName, Integer maxPriority) {
+    QueueBuilder builder = QueueBuilder.durable(queueName);
+    if (maxPriority != null)
+      builder.maxPriority(maxPriority);
+
+    return builder.build();
+  }
+
+  @Bean
+  RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+    return new RabbitAdmin(connectionFactory);
+  }
+
+  @Bean
+  BindingRemover bindingRemover(RabbitAdmin rabbitAdmin) {
+    return new BindingRemover(rabbitAdmin, properties.bindingsToRemove());
   }
 }
