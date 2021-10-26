@@ -104,7 +104,7 @@ pipeline {
             }
         }
 
-        stage('Deployment'){
+        stage('Deployment') {
             agent {
                 label 'nomad'
             }
@@ -127,23 +127,16 @@ pipeline {
                         rtUpload (
                             serverId: 'silenteight-repo',
                             spec: '''{
-                                  "files": [
+                                "files": [
                                     {
                                       "pattern": "dist/*.pyz",
                                       "target": "dist-public-local/organization-name-agent/"
-                                    }
-                                 ]
-                            }''',
-                        )
-                        rtUpload (
-                            serverId: 'silenteight-repo',
-                            spec: '''{
-                                  "files": [
+                                    },
                                     {
                                       "pattern": "dist/*.tgz",
                                       "target": "dist-public-local/organization-name-agent/"
                                     }
-                                 ]
+                                ]
                             }''',
                         )
                     }
