@@ -93,6 +93,8 @@ serp:
         solution-discrepancy:
           queue-name: governance.solution-discrepancy
           routing-key: learning.discrepancy-detected
+        to-remove:
+          bindings: []
 
     feature-vector:
       integration:

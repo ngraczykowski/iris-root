@@ -11,5 +11,13 @@ serp:
 
     qa.sampling.schedule.enabled: false
 
+    messaging:
+      broker:
+        to-remove:
+          bindings:
+            - queue-name: gov.feature-vector.ingest
+              exchange: bridge.command
+              routing-key: command.index-request.production
+
     model:
       modelTransfer: LOCAL

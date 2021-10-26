@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import javax.validation.Valid;
 
 @Data
@@ -48,6 +49,10 @@ class BrokerProperties {
   @Valid
   @NestedConfigurationProperty
   private AmpqProperties solutionDiscrepancy;
+
+  @Valid
+  @NestedConfigurationProperty
+  private ToRemoveProperties toRemove;
 
   String analyticsQueueName() {
     return analytics.getQueueName();
@@ -111,5 +116,9 @@ class BrokerProperties {
 
   String solutionDiscrepancyRoutingKey() {
     return solutionDiscrepancy.getRoutingKey();
+  }
+
+  List<BindingProperties> bindingsToRemove() {
+    return toRemove.getBindings();
   }
 }

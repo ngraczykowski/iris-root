@@ -7,6 +7,8 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.Declarables;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -161,5 +163,15 @@ class BrokerConfiguration {
     return QueueBuilder
         .durable(queueName)
         .build();
+  }
+
+  @Bean
+  RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+    return new RabbitAdmin(connectionFactory);
+  }
+
+  @Bean
+  BindingRemover bindingRemover(RabbitAdmin rabbitAdmin) {
+    return new BindingRemover(rabbitAdmin, brokerProperties.bindingsToRemove());
   }
 }
