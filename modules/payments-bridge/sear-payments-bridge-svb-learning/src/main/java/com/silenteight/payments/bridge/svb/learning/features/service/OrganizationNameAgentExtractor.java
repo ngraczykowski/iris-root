@@ -27,7 +27,7 @@ class OrganizationNameAgentExtractor implements FeatureExtractor {
         .newBuilder()
         .setFeature("features/organizationName")
         .setAgentFeatureInput(Any.pack(NameFeatureInput.newBuilder()
-            .setFeature("organizationName")
+            .setFeature("features/organizationName")
             .addAllAlertedPartyNames(getAlertedParties(learningMatch))
             .addAllWatchlistNames(learningMatch
                 .getWatchlistNames()
