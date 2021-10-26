@@ -64,10 +64,19 @@ class AdjudicationEngineMock:
         assert correlation_id not in self._events
         self._events[correlation_id] = asyncio.Event()
 
+        body = lz4.frame.compress(
+            message.SerializeToString(),
+            block_size=lz4.frame.BLOCKSIZE_MAX64KB,
+            block_linked=False,
+            compression_level=lz4.frame.COMPRESSIONLEVEL_MINHC,
+            content_checksum=True,
+            store_size=False,
+        )
+
         await self._exchange.publish(
             routing_key=routing_key,
             message=aio_pika.Message(
-                lz4.frame.compress(message.SerializeToString()),
+                body,
                 content_encoding="lz4",
                 content_type="application/x-protobuf",
                 delivery_mode=aio_pika.DeliveryMode.PERSISTENT,
