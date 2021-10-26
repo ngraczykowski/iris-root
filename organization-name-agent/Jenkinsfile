@@ -49,9 +49,17 @@ pipeline {
                     }
                 }
                 stage('Release') {
-                    when { expression { return params.RELEASE } }
+                    when {
+                        allOf {
+                            anyOf {
+                                when { branch 'master' }
+                                when { branch pattern: 'release-\\d+(\.\\d+)?', comparator: 'REGEXP' }
+                            }
+                            expression { return params.RELEASE }
+                        }
+                    }
                     steps {
-                        sh 'pip install bump2version tox --index-url ${PYPI_URL}'
+                        sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
                         sh 'git tag --delete "$(git tag --list)"'
                         sh './scripts/release.sh --index-url ${PYPI_URL}'
                         withCredentials([usernamePassword([
