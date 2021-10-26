@@ -12,7 +12,7 @@ else
 fi
 
 cd "$basedir"
-if [ -d venv ]; then
+if [[ -d venv ]]; then
   rm -rf venv
 fi
 

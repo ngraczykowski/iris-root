@@ -6,6 +6,7 @@ pipeline {
     agent none
     environment {
         PYPI_URL = credentials('pypi-readonly-url')
+        TWINE_REPOSITORY_URL = 'https://repo.silenteight.com/artifactory/api/pypi/pypi'
     }
     options {
         timeout(time: 1, unit: 'HOURS')   // just to be safe
@@ -33,6 +34,13 @@ pipeline {
                         sh './scripts/clean.sh'
                         sh './scripts/bootstrap.sh --index-url "${PYPI_URL}"'
                         sh './scripts/build.sh --index-url "${PYPI_URL}"'
+                        withCredentials([usernamePassword(
+                            credentialsId: 'pypi-deployment-user',
+                            usernameVariable: 'TWINE_USERNAME',
+                            passwordVariable: 'TWINE_PASSWORD',
+                        ]) {
+                            sh './scripts/publish.sh'
+                        }
                     }
                 }
                 stage('Test') {
@@ -46,6 +54,13 @@ pipeline {
                         sh 'pip install bump2version tox --index-url ${PYPI_URL}'
                         sh 'git tag --delete "$(git tag --list)"'
                         sh './scripts/release.sh --index-url ${PYPI_URL}'
+                        withCredentials([usernamePassword(
+                            credentialsId: 'pypi-deployment-user',
+                            usernameVariable: 'TWINE_USERNAME',
+                            passwordVariable: 'TWINE_PASSWORD',
+                        ]) {
+                            sh './scripts/publish.sh'
+                        }
                     }
                 }
                 stage('Prepare nomad artifacts') {
@@ -56,10 +71,11 @@ pipeline {
             }
             post {
                 always {
-                    junit '.tox/*.xml'
+                    junit '.tox/flake8-report.xml, .tox/mypy-report.xml, .tox/pytest-report.xml'
                     archiveArtifacts artifacts: 'dist/*, nomad/*.tar.bz2', fingerprint: true
                 }
                 success {
+                    publishCoverage adapters: [cobertura('.tox/coverage-report.xml')]
                     stash includes: 'dist/*, nomad/*/artifacts/*', name: 'artifacts'
                 }
             }
