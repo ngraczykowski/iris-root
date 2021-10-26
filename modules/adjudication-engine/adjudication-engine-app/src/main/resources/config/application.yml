@@ -48,9 +48,9 @@ ae:
   grpc:
     client:
       category-service:
-        timeout: 10m
+        timeout: 15m
       comment-input:
-        timeout: 10m
+        timeout: 15m
       policy-steps:
         timeout: 30s
       alert-solving:
