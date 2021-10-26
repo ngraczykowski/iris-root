@@ -44,6 +44,12 @@ pipeline {
                     }
                 }
                 stage('Publish') {
+                    when {
+                        anyOf {
+                            branch 'master'
+                            branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                        }
+                    }
                     withCredentials([usernamePassword([
                         credentialsId: 'pypi-deployment-user',
                         usernameVariable: 'TWINE_USERNAME',
