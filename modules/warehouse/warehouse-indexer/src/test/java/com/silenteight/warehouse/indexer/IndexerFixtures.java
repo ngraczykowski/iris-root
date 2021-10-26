@@ -12,6 +12,7 @@ import com.silenteight.warehouse.indexer.alert.mapping.AlertDefinition;
 import com.google.protobuf.Struct;
 import com.google.protobuf.Struct.Builder;
 import com.google.protobuf.Value;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +20,7 @@ import java.util.Map;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_2;
+import static java.util.Collections.emptyMap;
 import static java.util.List.of;
 
 @NoArgsConstructor
@@ -42,21 +44,30 @@ public final class IndexerFixtures {
       SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DECISION
   );
 
-  public static final AlertDefinition ALERT_DEFINITION_1 = AlertDefinition.builder()
+  public static final AlertDefinition ALERT_DEFINITION_1 = AlertDefinition
+      .builder()
       .discriminator(DISCRIMINATOR_1)
       .name(Values.ALERT_NAME)
       .payload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES).build())
       .build();
 
+  private static final Map<String, Value> FEATURES_PAYLOAD = Map
+      .of("features/name", toValue("EXACT"));
   public static final Alert ALERT_1 = Alert
-          .newBuilder()
-          .setDiscriminator(DISCRIMINATOR_1)
-          .setName(Values.ALERT_NAME)
-          .setPayload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES))
-          .addAllMatches(of(
-              match(MATCH_NAME_1_1, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DECISION),
-              match(MATCH_NAME_1_2, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DATA)))
-          .build();
+      .newBuilder()
+      .setDiscriminator(DISCRIMINATOR_1)
+      .setName(Values.ALERT_NAME)
+      .setPayload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES))
+      .addAllMatches(of(
+          match(MATCH_NAME_1_1,
+                SourceMatchKeys.SOLUTION_KEY,
+                Values.SOLUTION_NO_DECISION,
+                FEATURES_PAYLOAD),
+          match(MATCH_NAME_1_2,
+                SourceMatchKeys.SOLUTION_KEY,
+                Values.SOLUTION_NO_DATA,
+                FEATURES_PAYLOAD)))
+      .build();
 
   public static final com.silenteight.data.api.v1.Alert ALERT_SIM_1 =
       com.silenteight.data.api.v1.Alert
@@ -69,29 +80,34 @@ public final class IndexerFixtures {
               simMatch(MATCH_NAME_1_2, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DATA)))
           .build();
 
-  private static Builder structWithValue(String key, String value) {
-
-    return Struct.newBuilder()
-        .putFields(key, Value.newBuilder()
-            .setStringValue(value)
-            .build());
-  }
-
-  private static Match match(String matchName, String payloadName, String payloadSolution) {
+  private static Match match(
+      String matchName, String payloadName, String payloadSolution, Map<String, Value> features) {
     return Match
         .newBuilder()
         .setName(matchName)
         .setDiscriminator(matchName)
-        .setPayload(structWithValue(payloadName, payloadSolution))
+        .setPayload(structWithValues(payloadName, payloadSolution, features))
         .build();
   }
 
   private static com.silenteight.data.api.v1.Match simMatch(
       String matchName, String payloadName, String payloadSolution) {
 
-    return com.silenteight.data.api.v1.Match.newBuilder()
+    return com.silenteight.data.api.v1.Match
+        .newBuilder()
         .setName(matchName)
-        .setPayload(structWithValue(payloadName, payloadSolution))
+        .setPayload(structWithValues(payloadName, payloadSolution, emptyMap()))
+        .build();
+  }
+
+  private static Struct structWithValues(
+      String key, String value, Map<String, Value> features) {
+    Struct featuresStruct = Struct.newBuilder().putAllFields(features).build();
+    Value featuresValue = Value.newBuilder().setStructValue(featuresStruct).build();
+    return Struct
+        .newBuilder()
+        .putFields(key, toValue(value))
+        .putFields("features", featuresValue)
         .build();
   }
 
@@ -99,9 +115,14 @@ public final class IndexerFixtures {
     Builder builder = Struct.newBuilder();
     Map<String, Value> convertedMap = new HashMap<>();
     for (String key : payload.keySet()) {
-      convertedMap.put(key, Value.newBuilder().setStringValue(payload.get(key)).build());
+      convertedMap.put(key, toValue(payload.get(key)));
     }
     return builder.putAllFields(convertedMap);
+  }
+
+  @NotNull
+  private static Value toValue(String value) {
+    return Value.newBuilder().setStringValue(value).build();
   }
 
   public static final Struct EMPTY_PAYLOAD = Struct.newBuilder().build();

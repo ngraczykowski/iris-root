@@ -14,7 +14,7 @@ import java.util.Map;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-public class ProductionAlertIndexResolvingService {
+class ProductionAlertIndexResolvingService {
 
   @NonNull
   private final ProductionAlertTrackingService productionAlertTrackingService;
