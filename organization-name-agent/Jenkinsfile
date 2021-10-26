@@ -34,7 +34,7 @@ pipeline {
                         sh './scripts/clean.sh'
                         sh './scripts/bootstrap.sh --index-url "${PYPI_URL}"'
                         sh './scripts/build.sh --index-url "${PYPI_URL}"'
-                        withCredentials([usernamePassword(
+                        withCredentials([usernamePassword([
                             credentialsId: 'pypi-deployment-user',
                             usernameVariable: 'TWINE_USERNAME',
                             passwordVariable: 'TWINE_PASSWORD',
@@ -54,7 +54,7 @@ pipeline {
                         sh 'pip install bump2version tox --index-url ${PYPI_URL}'
                         sh 'git tag --delete "$(git tag --list)"'
                         sh './scripts/release.sh --index-url ${PYPI_URL}'
-                        withCredentials([usernamePassword(
+                        withCredentials([usernamePassword([
                             credentialsId: 'pypi-deployment-user',
                             usernameVariable: 'TWINE_USERNAME',
                             passwordVariable: 'TWINE_PASSWORD',
