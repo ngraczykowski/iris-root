@@ -9,6 +9,7 @@ import com.silenteight.datasource.categories.api.v2.CreateCategoryValuesRequest;
 import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
 import com.silenteight.payments.bridge.svb.learning.categories.port.incoming.CreateCategoryValuesUseCase;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
+import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.ReadAlertError;
 
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
+import javax.annotation.Nonnull;
 
 import static java.util.stream.Collectors.toList;
 
@@ -31,10 +33,17 @@ class CreateCategoryValuesService implements CreateCategoryValuesUseCase {
   public List<CategoryValue> createCategoryValues(LearningAlert learningAlert) {
     var categoryValues = new ArrayList<CategoryValue>();
 
-    learningAlert
-        .getMatches()
-        .forEach(match -> categoryValueExtractors.forEach(ce -> categoryValues.add(
-            ce.extract(match, String.valueOf(learningAlert.getAlertName())))));
+    for (LearningMatch match : learningAlert.getMatches()) {
+      for (CategoryValueExtractor ce : categoryValueExtractors) {
+
+        if (log.isDebugEnabled()) {
+          log.debug("Extracting category value: {}", ce.getClass().getSimpleName());
+        }
+
+        var categoryValue = ce.extract(match, String.valueOf(learningAlert.getAlertName()));
+        categoryValues.add(categoryValue);
+      }
+    }
 
     createCategoryValuesClient.createCategoriesValues(BatchCreateCategoryValuesRequest
         .newBuilder()
@@ -80,18 +89,30 @@ class CreateCategoryValuesService implements CreateCategoryValuesUseCase {
       List<LearningAlert> learningAlerts) {
     return learningAlerts.stream()
         .flatMap(this::extractCategoryValues)
-        .map(this::mapToCreateCategoryValuesRequest)
+        .map(CreateCategoryValuesService::mapToCreateCategoryValuesRequest)
         .collect(toList());
   }
 
   private Stream<CategoryValue> extractCategoryValues(LearningAlert alert) {
     return alert.getMatches().stream()
-        .flatMap(match ->
-            categoryValueExtractors.stream()
-                .map(extractor -> extractor.extract(match, alert.getAlertName())));
+        .flatMap(match -> getCategoryValueStream(alert, match));
   }
 
-  private CreateCategoryValuesRequest mapToCreateCategoryValuesRequest(CategoryValue value) {
+  @Nonnull
+  private Stream<CategoryValue> getCategoryValueStream(LearningAlert alert, LearningMatch match) {
+    return categoryValueExtractors.stream()
+        .map(extractor -> {
+
+          if (log.isDebugEnabled()) {
+            log.debug("Extracting category value: {}", extractor.getClass().getSimpleName());
+          }
+
+          return extractor.extract(match, alert.getAlertName());
+        }
+        );
+  }
+
+  private static CreateCategoryValuesRequest mapToCreateCategoryValuesRequest(CategoryValue value) {
     return CreateCategoryValuesRequest
         .newBuilder()
         .setCategory(value.getName())

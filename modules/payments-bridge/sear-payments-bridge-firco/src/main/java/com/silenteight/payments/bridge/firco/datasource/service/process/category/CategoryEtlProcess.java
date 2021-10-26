@@ -44,7 +44,9 @@ class CategoryEtlProcess implements EtlProcess {
         .map(hitData -> categoryValueExtractors
             .stream()
             .map(ce -> {
-              log.debug("Processing category: {}", ce.getClass().getSimpleName());
+              if (log.isDebugEnabled()) {
+                log.debug("Processing category: {}", ce.getClass().getSimpleName());
+              }
               return ce.extract(hitData, matchItem.getValue());
             })
             .collect(Collectors.toList())

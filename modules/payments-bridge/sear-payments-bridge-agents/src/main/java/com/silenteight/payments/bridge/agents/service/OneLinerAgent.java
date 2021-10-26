@@ -13,7 +13,7 @@ import static com.silenteight.payments.bridge.agents.model.OneLinerAgentResponse
 import static com.silenteight.payments.bridge.agents.model.OneLinerAgentResponse.YES;
 
 @Service
-public class OneLinerAgent implements OneLinerUseCase {
+class OneLinerAgent implements OneLinerUseCase {
 
   @NonNull
   public OneLinerAgentResponse invoke(@NonNull OneLinerAgentRequest oneLinerAgentRequest) {

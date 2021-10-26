@@ -13,6 +13,7 @@ dependencies {
   implementation libraries.grpc_client_spring_boot_starter
 
   implementation libraries.data_source_categories_api
+  implementation libraries.silenteight_agents_protocol
 
   implementation libraries.jakarta_annotation_api
   implementation libraries.jakarta_validation_api

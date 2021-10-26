@@ -4,17 +4,17 @@ import lombok.Builder;
 import lombok.Setter;
 import lombok.Value;
 import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
-import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
-import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
-import com.silenteight.payments.bridge.agents.model.OneLinerAgentRequest;
-import com.silenteight.payments.bridge.agents.model.SpecificTermsRequest;
+import com.silenteight.payments.bridge.agents.model.*;
+import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.svb.oldetl.model.AbstractMessageStructure;
 import com.silenteight.payments.bridge.svb.oldetl.model.GetAccountNumberRequest;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @Value
 @Builder
 public class LearningMatch {
@@ -108,6 +109,13 @@ public class LearningMatch {
         .build();
   }
 
+  public CompanyNameSurroundingRequest toCompanyNameSurroundingRequest() {
+    return CompanyNameSurroundingRequest
+        .builder()
+        .allNames(getAlertedPartyNames())
+        .build();
+  }
+
   public GetAccountNumberRequest toGetAccountNumberRequest() {
     return GetAccountNumberRequest
         .builder()
@@ -128,5 +136,15 @@ public class LearningMatch {
     }
 
     return codes;
+  }
+
+  public SolutionType getSolutionType() {
+    var solutionType = hitType.replace(" ", "_");
+
+    if (!EnumUtils.isValidEnum(SolutionType.class, solutionType)) {
+      log.warn("Solution type: {} is not valid", solutionType);
+      return SolutionType.UNKNOWN;
+    }
+    return SolutionType.valueOf(hitType);
   }
 }

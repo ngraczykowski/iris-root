@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.categories.api.v2.BatchCreateCategoriesRequest;
 import com.silenteight.datasource.categories.api.v2.Category;
 import com.silenteight.datasource.categories.api.v2.CategoryType;
+import com.silenteight.payments.bridge.agents.model.CompanyNameSurroundingAgentResponse;
 import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoriesClient;
 
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -101,8 +102,7 @@ class CreateCategoriesUseCase {
         .setName("categories/companyNameSurrounding")
         .setDisplayName("Company Name Surrounding")
         .setType(CategoryType.ENUMERATED)
-        .addAllAllowedValues(
-            List.of("NO_MATCH", "MATCH_1", "MATCH_2", "MATCH_3", "MATCH_4", "MATCH_5_OR_MORE"))
+        .addAllAllowedValues(CompanyNameSurroundingAgentResponse.getValues())
         .setMultiValue(false)
         .build();
   }

@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.firco.datasource.service.process.category;
+package com.silenteight.payments.bridge.agents.service;
 
 import lombok.Setter;
 
@@ -10,17 +10,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class CategoryValueProcessConfiguration {
+class CompanyNameSurroundingAgentConfiguration {
 
   @Setter(onMethod_ = @GrpcClient("companynamesurroundingagent"))
   private Channel companyNameSurroundingAgentChannel;
 
   @Bean
-  CompanyNameSurroundingProcess companyNameSurroundingProcess() {
+  CompanyNameSurroundingAgent companyNameSurroundingAgent() {
     var stub = CompanyNameSurroundingAgentGrpc
         .newBlockingStub(companyNameSurroundingAgentChannel)
         .withWaitForReady();
 
-    return new CompanyNameSurroundingProcess(stub);
+    return new CompanyNameSurroundingAgent(stub);
   }
 }

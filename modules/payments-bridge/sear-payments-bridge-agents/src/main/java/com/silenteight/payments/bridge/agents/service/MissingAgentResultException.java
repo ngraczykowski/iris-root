@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.firco.datasource.service.process.category;
+package com.silenteight.payments.bridge.agents.service;
 
 class MissingAgentResultException extends IllegalStateException {
 
