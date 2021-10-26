@@ -44,18 +44,12 @@ pipeline {
                     }
                 }
                 stage('Publish') {
-                    sh 'pip install --index-url "${PYPI_URL}" twine'
                     withCredentials([usernamePassword([
                         credentialsId: 'pypi-deployment-user',
                         usernameVariable: 'TWINE_USERNAME',
                         passwordVariable: 'TWINE_PASSWORD',
                     )]) {
                         sh './scripts/publish.sh --index-url "${PYPI_URL}"'
-                    }
-                }
-                stage('Test') {
-                    steps {
-                        sh './scripts/test.sh --index-url "${PYPI_URL}"'
                     }
                 }
                 stage('Release') {
@@ -77,7 +71,7 @@ pipeline {
                             usernameVariable: 'TWINE_USERNAME',
                             passwordVariable: 'TWINE_PASSWORD',
                         )]) {
-                            sh './scripts/publish.sh'
+                            sh './scripts/publish.sh --index-url "${PYPI_URL}"'
                         }
                     }
                 }
