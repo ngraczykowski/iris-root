@@ -227,7 +227,9 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     long numberOfLinesContainsFormatFPrefixes =
         tagValueLines
             .stream()
-            .filter(element -> formatFPrefixes.contains(element.substring(0, 2)))
+            .filter(line -> line.length() > 1)
+            .filter(line -> formatFPrefixes.contains(
+                line.substring(0, 2)))
             .count();
     return numberOfLinesContainsFormatFPrefixes >= 2;
   }
