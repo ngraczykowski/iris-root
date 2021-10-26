@@ -53,7 +53,7 @@ pipeline {
                         allOf {
                             anyOf {
                                 branch 'master'
-                                branch pattern: 'release-\\d+(\.\\d+)?', comparator: 'REGEXP'
+                                branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
                             }
                             expression { return params.RELEASE }
                         }
