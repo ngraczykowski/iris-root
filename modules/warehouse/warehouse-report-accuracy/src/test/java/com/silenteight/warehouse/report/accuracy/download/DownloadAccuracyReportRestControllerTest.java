@@ -1,9 +1,8 @@
 package com.silenteight.warehouse.report.accuracy.download;
 
-import com.silenteight.sep.filestorage.api.dto.FileDto;
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.common.web.exception.GenericExceptionControllerAdvice;
-import com.silenteight.warehouse.report.accuracy.AccuracyReportTestFixtures;
+import com.silenteight.warehouse.report.accuracy.download.dto.DownloadAccuracyReportDto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -32,55 +31,57 @@ import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 class DownloadAccuracyReportRestControllerTest extends BaseRestControllerTest {
 
   private static final String DOWNLOAD_SIMULATION_REPORT_URL =
-      fromUriString(
-          "/v1/analysis/{analysisId}/definitions/ACCURACY/{definitionId}/reports/{id}")
-          .build(of(
-              "analysisId", AccuracyReportTestFixtures.ANALYSIS_ID,
-              "definitionId", SIMULATION_DEFINITION_ID,
-              "id", REPORT_ID))
+      fromUriString("/v2/analysis/{analysisId}/reports/ACCURACY/{id}")
+          .build(of("analysisId", ANALYSIS_ID, "id", REPORT_ID))
           .toString();
 
   private static final String DOWNLOAD_PRODUCTION_REPORT_URL =
-      fromUriString("/v1/analysis/production/definitions/ACCURACY/"
-          + "{definitionId}/reports/{id}")
-          .build(of("definitionId", DAY_DEFINITION_ID, "id", REPORT_ID))
+      fromUriString("/v2/analysis/production/reports/ACCURACY/{id}")
+          .build(of("id", REPORT_ID))
           .toString();
 
   @MockBean
-  DownloadAccuracyReportUseCase useCase;
+  DownloadProductionAccuracyReportUseCase productionUseCase;
+
+  @MockBean
+  DownloadSimulationAccuracyReportUseCase simulationUseCase;
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenInvokedDownloadSimulationReport() {
-    given(useCase.activate(REPORT_ID)).willReturn(createFileDto());
+    given(simulationUseCase.activate(REPORT_ID, ANALYSIS_ID))
+        .willReturn(createDownloadAccuracyReportDto(SIMULATION_REPORT_FILENAME));
 
-    String expectedContentDisposition = format("attachment; filename=%s", REPORT_FILENAME);
     String response = get(DOWNLOAD_SIMULATION_REPORT_URL)
         .statusCode(OK.value())
         .contentType("application/octet-stream")
-        .header("Content-Disposition", expectedContentDisposition)
+        .header("Content-Disposition", getExpectedContentDisposition(SIMULATION_REPORT_FILENAME))
         .extract()
         .body()
         .asString();
 
-    assertThat(response).isEqualTo(STUB_REPORT_RESPONSE);
+    assertThat(response).isEqualTo(REPORT_CONTENT);
   }
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenInvokedDownloadProductionReport() {
-    given(useCase.activate(REPORT_ID)).willReturn(createFileDto());
+    given(productionUseCase.activate(REPORT_ID))
+        .willReturn(createDownloadAccuracyReportDto(PRODUCTION_REPORT_FILENAME));
 
-    String expectedContentDisposition = format("attachment; filename=%s", REPORT_FILENAME);
     String response = get(DOWNLOAD_PRODUCTION_REPORT_URL)
         .statusCode(OK.value())
         .contentType("application/octet-stream")
-        .header("Content-Disposition", expectedContentDisposition)
+        .header("Content-Disposition", getExpectedContentDisposition(PRODUCTION_REPORT_FILENAME))
         .extract()
         .body()
         .asString();
 
-    assertThat(response).isEqualTo(STUB_REPORT_RESPONSE);
+    assertThat(response).isEqualTo(REPORT_CONTENT);
+  }
+
+  private String getExpectedContentDisposition(String fileName) {
+    return format("attachment; filename=\"%s\"", fileName);
   }
 
   @Test
@@ -99,12 +100,11 @@ class DownloadAccuracyReportRestControllerTest extends BaseRestControllerTest {
     get(DOWNLOAD_PRODUCTION_REPORT_URL).statusCode(FORBIDDEN.value());
   }
 
-  private FileDto createFileDto() {
-    InputStream inputStream = toInputStream(STUB_REPORT_RESPONSE, UTF_8);
-    return FileDto.builder()
-        .name(REPORT_FILENAME)
+  private DownloadAccuracyReportDto createDownloadAccuracyReportDto(String fileName) {
+    InputStream inputStream = toInputStream(REPORT_CONTENT, UTF_8);
+    return DownloadAccuracyReportDto.builder()
+        .name(fileName)
         .content(inputStream)
-        .sizeInBytes(-1L)
         .build();
   }
 }

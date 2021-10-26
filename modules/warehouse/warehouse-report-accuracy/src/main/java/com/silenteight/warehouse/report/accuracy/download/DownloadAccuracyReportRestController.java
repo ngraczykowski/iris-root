@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.filestorage.api.dto.FileDto;
+import com.silenteight.warehouse.report.accuracy.download.dto.DownloadAccuracyReportDto;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -28,54 +28,53 @@ import static org.springframework.http.ResponseEntity.ok;
 class DownloadAccuracyReportRestController {
 
   private static final String ANALYSIS_ID_PARAM = "analysisId";
-  private static final String DEFINITION_ID_PARAM = "definitionId";
   private static final String ID_PARAM = "id";
-  private static final String DOWNLOAD_PRODUCTION_REPORT_URL =
-      "/v1/analysis/production/definitions/ACCURACY/{definitionId}/reports/{id}";
   private static final String DOWNLOAD_SIMULATION_REPORT_URL =
-      "/v1/analysis/{analysisId}/definitions/ACCURACY/{definitionId}/reports/{id}";
+      "/v2/analysis/{analysisId}/reports/ACCURACY/{id}";
+
+  private static final String DOWNLOAD_PRODUCTION_REPORT_URL =
+      "/v2/analysis/production/reports/ACCURACY/{id}";
 
   @NonNull
-  private final DownloadAccuracyReportUseCase useCase;
+  private final DownloadProductionAccuracyReportUseCase productionUseCase;
+  @NonNull
+  private final DownloadSimulationAccuracyReportUseCase simulationUseCase;
 
   @GetMapping(DOWNLOAD_PRODUCTION_REPORT_URL)
   @PreAuthorize("isAuthorized('DOWNLOAD_PRODUCTION_ON_DEMAND_REPORT')")
-  public ResponseEntity<Resource> downloadProductionReport(
-      @PathVariable(DEFINITION_ID_PARAM) String definitionId,
-      @PathVariable(ID_PARAM) long id) {
+  public ResponseEntity<Resource> downloadProductionReport(@PathVariable(ID_PARAM) long id) {
 
-    log.info("Download production accuracy report on demand request received, reportId={}", id);
-
-    FileDto fileDto = useCase.activate(id);
-
-    log.info(
-        "Download production accuracy report request processed, reportId={}, reportName={}", id,
-        fileDto.getName());
+    log.info("Download production Accuracy report on demand request received, reportId={}", id);
+    DownloadAccuracyReportDto reportDto = productionUseCase.activate(id);
+    log.debug("Download production Accuracy report request processed, reportId={}, reportName={}",
+        id, reportDto.getName());
 
     return ok()
-        .header(CONTENT_DISPOSITION, format("attachment; filename=%s", fileDto.getName()))
+        .header(CONTENT_DISPOSITION, getContentDisposition(reportDto.getName()))
         .contentType(APPLICATION_OCTET_STREAM)
-        .body(new InputStreamResource(fileDto.getContent()));
+        .body(new InputStreamResource(reportDto.getContent()));
   }
 
   @GetMapping(DOWNLOAD_SIMULATION_REPORT_URL)
   @PreAuthorize("isAuthorized('DOWNLOAD_SIMULATION_REPORT')")
-  public ResponseEntity<Resource> downloadReport(
+  public ResponseEntity<Resource> downloadSimulationReport(
       @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
-      @PathVariable(DEFINITION_ID_PARAM) String definitionId,
       @PathVariable(ID_PARAM) long id) {
 
-    log.info("Download simulation accuracy report on demand request received, reportId={}", id);
+    log.info("Download simulation Accuracy report on demand request received, analysisId={}, "
+        + "reportId={}", id, analysisId);
 
-    FileDto fileDto = useCase.activate(id);
-
-    log.info(
-        "Download simulation accuracy report request processed, reportId={}, reportName={}", id,
-        fileDto.getName());
+    DownloadAccuracyReportDto reportDto = simulationUseCase.activate(id, analysisId);
+    log.debug("Download simulation Accuracy report request processed, reportId={}, reportName={}",
+        id, reportDto.getName());
 
     return ok()
-        .header(CONTENT_DISPOSITION, format("attachment; filename=%s", fileDto.getName()))
+        .header(CONTENT_DISPOSITION, getContentDisposition(reportDto.getName()))
         .contentType(APPLICATION_OCTET_STREAM)
-        .body(new InputStreamResource(fileDto.getContent()));
+        .body(new InputStreamResource(reportDto.getContent()));
+  }
+
+  private static String getContentDisposition(String filename) {
+    return format("attachment; filename=\"%s\"", filename);
   }
 }

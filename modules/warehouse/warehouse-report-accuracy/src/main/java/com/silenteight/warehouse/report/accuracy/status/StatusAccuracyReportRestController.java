@@ -25,13 +25,12 @@ class StatusAccuracyReportRestController {
 
   private static final String PRODUCTION_ANALYSIS_NAME = "production";
   private static final String ANALYSIS_ID_PARAM = "analysisId";
-  private static final String DEFINITION_ID_PARAM = "definitionId";
   private static final String ID_PARAM = "id";
   private static final String STATUS_SIMULATION_REPORT_URL =
-      "/v1/analysis/{analysisId}/definitions/ACCURACY/{definitionId}/reports/{id}/status";
+      "/v2/analysis/{analysisId}/reports/ACCURACY/{id}/status";
 
   private static final String STATUS_PRODUCTION_REPORT_URL =
-      "/v1/analysis/production/definitions/ACCURACY/{definitionId}/reports/{id}/status";
+      "/v2/analysis/production/reports/ACCURACY/{id}/status";
 
   @NonNull
   private final AccuracyReportStatusQuery reportQuery;
@@ -40,34 +39,24 @@ class StatusAccuracyReportRestController {
   @PreAuthorize("isAuthorized('CREATE_SIMULATION_REPORT')")
   public ResponseEntity<ReportStatus> getReportStatus(
       @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
-      @PathVariable(DEFINITION_ID_PARAM) String definitionId,
       @PathVariable(ID_PARAM) long id) {
 
-    log.debug("Getting simulation accuracy report status, analysisId={}, reportId={}", analysisId,
-        id);
+    log.debug("Getting simulation Accuracy report status, analysisId={}, reportId={}",
+        analysisId, id);
 
     ReportState state = reportQuery.getReportGeneratingState(id);
-    return ResponseEntity.ok(
-        state.getReportStatus(getReportName(analysisId, definitionId, id)));
+    return ResponseEntity.ok(state.getReportStatus(getReportName(analysisId, id)));
   }
 
   @GetMapping(STATUS_PRODUCTION_REPORT_URL)
   @PreAuthorize("isAuthorized('CREATE_PRODUCTION_ON_DEMAND_REPORT')")
-  public ResponseEntity<ReportStatus> getReportStatus(
-      @PathVariable(DEFINITION_ID_PARAM) String definitionId,
-      @PathVariable(ID_PARAM) long id) {
-
-    log.debug(
-        "Getting production accuracy report status, definitionId={}, reportId={}",
-        definitionId,
-        id);
-
+  public ResponseEntity<ReportStatus> getReportStatus(@PathVariable(ID_PARAM) long id) {
+    log.debug("Getting production Accuracy report status, reportId={}", id);
     ReportState state = reportQuery.getReportGeneratingState(id);
-    return ResponseEntity.ok(
-        state.getReportStatus(getReportName(PRODUCTION_ANALYSIS_NAME, definitionId, id)));
+    return ResponseEntity.ok(state.getReportStatus(getReportName(PRODUCTION_ANALYSIS_NAME, id)));
   }
 
-  private static String getReportName(String analysis, String definitionId, long id) {
-    return format("analysis/%s/definitions/ACCURACY/%s/reports/%d", analysis, definitionId, id);
+  private static String getReportName(String analysis, long id) {
+    return format("analysis/%s/reports/ACCURACY/%d", analysis, id);
   }
 }

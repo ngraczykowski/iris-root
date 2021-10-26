@@ -9,7 +9,6 @@ public class InMemoryAccuracyRepository
     extends BasicInMemoryRepository<AccuracyReport>
     implements AccuracyReportRepository {
 
-
   @Override
   public void deleteAll(Iterable<AccuracyReport> reports) {
     throw new UnsupportedOperationException("Not implemented");

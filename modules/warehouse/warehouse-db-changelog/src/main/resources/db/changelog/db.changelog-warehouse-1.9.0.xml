@@ -189,4 +189,26 @@
       </column>
     </addColumn>
   </changeSet>
+
+  <changeSet id="warehouse-1.9.0-11" author="plewandowski">
+    <dropNotNullConstraint columnName="report_type"
+                           tableName="warehouse_report_accuracy"/>
+    <dropNotNullConstraint columnName="analysis"
+                           tableName="warehouse_report_accuracy"/>
+
+    <renameColumn newColumnName="file_storage_name"
+                  oldColumnName="data"
+                  tableName="warehouse_report_accuracy"/>
+
+    <modifyDataType columnName="file_storage_name"
+                    newDataType="VARCHAR(64)"
+                    tableName="warehouse_report_accuracy"/>
+
+    <addColumn tableName="warehouse_report_accuracy">
+      <column name="from_range" type="TIMESTAMP"/>
+    </addColumn>
+    <addColumn tableName="warehouse_report_accuracy">
+      <column name="to_range" type="TIMESTAMP"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

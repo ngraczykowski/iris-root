@@ -1,7 +1,5 @@
 package com.silenteight.warehouse.report.accuracy.domain;
 
-
-import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.storage.ReportStorage;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -12,16 +10,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.silenteight.warehouse.report.accuracy.AccuracyReportTestFixtures.PRODUCTION_ANALYSIS_NAME;
-import static com.silenteight.warehouse.report.accuracy.domain.AccuracyReportDefinition.DAY;
+import static com.silenteight.warehouse.report.accuracy.AccuracyReportTestFixtures.INDEXES;
+import static com.silenteight.warehouse.report.accuracy.AccuracyReportTestFixtures.REPORT_RANGE;
 import static com.silenteight.warehouse.report.accuracy.generation.GenerationAccuracyReportTestFixtures.PROPERTIES;
-import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class AccuracyReportServiceTest {
-
-  private static final AccuracyReportDefinition TYPE = DAY;
 
   private final InMemoryAccuracyRepository repository = new InMemoryAccuracyRepository();
 
@@ -39,8 +34,8 @@ class AccuracyReportServiceTest {
   @Test
   void shouldGenerateReport() {
     // when
-    ReportInstanceReferenceDto reportInstance =
-        underTest.createReportInstance(TYPE, PRODUCTION_ANALYSIS_NAME, of(), PROPERTIES);
+    var reportInstance = underTest.createReportInstance(
+        REPORT_RANGE, INDEXES, PROPERTIES);
 
     // then
     long instanceReferenceId = reportInstance.getInstanceReferenceId();
@@ -54,7 +49,7 @@ class AccuracyReportServiceTest {
     assertThat(report)
         .isPresent()
         .get()
-        .extracting(AccuracyReport::getFileName)
-        .isEqualTo(instanceReferenceId + "-" + DAY.getFilename());
+        .extracting(AccuracyReport::getFileStorageName)
+        .isNotNull();
   }
 }

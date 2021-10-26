@@ -53,11 +53,11 @@ public class AccuracyReportDefinitionProperties {
 
   private List<FieldDefinition> getFieldDefinition() {
     return columns.stream()
-        .map(this::convertToFieldDefinition)
+        .map(AccuracyReportDefinitionProperties::convertToFieldDefinition)
         .collect(toList());
   }
 
-  private FieldDefinition convertToFieldDefinition(ColumnProperties columnProperties) {
+  private static FieldDefinition convertToFieldDefinition(ColumnProperties columnProperties) {
     return FieldDefinition.builder()
         .name(columnProperties.getName())
         .label(columnProperties.getLabel())

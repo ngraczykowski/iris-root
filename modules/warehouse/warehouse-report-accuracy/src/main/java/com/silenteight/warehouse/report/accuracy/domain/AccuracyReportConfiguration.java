@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import static com.silenteight.sep.base.common.time.DefaultTimeSource.INSTANCE;
-
 @Configuration
 @EntityScan
 @EnableJpaRepositories
@@ -29,12 +27,16 @@ class AccuracyReportConfiguration {
       AccuracyReportRepository reportRepository,
       AccuracyReportGenerationService reportGenerationService) {
 
-    return new AsyncAccuracyReportGenerationService(
-        reportRepository, reportGenerationService, INSTANCE);
+    return new AsyncAccuracyReportGenerationService(reportRepository, reportGenerationService);
   }
 
   @Bean
   AccuracyReportQuery accuracyReportQuery(AccuracyReportRepository repository) {
     return new AccuracyReportQuery(repository);
+  }
+
+  @Bean
+  SimulationAccuracyReportProvider simulationAccuracyReportProvider() {
+    return new SimulationAccuracyReportProvider();
   }
 }

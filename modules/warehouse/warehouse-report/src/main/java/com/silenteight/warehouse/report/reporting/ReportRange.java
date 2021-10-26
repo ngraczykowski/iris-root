@@ -29,7 +29,7 @@ public class ReportRange {
   public static ReportRange of(@NonNull LocalDate from, @NonNull LocalDate to) {
     validateRange(from, to);
     OffsetDateTime parsedFrom = parseToOffsetDateTime(from, MIDNIGHT);
-    OffsetDateTime parsedTo = parseToOffsetDateTime(to, MAX);
+    OffsetDateTime parsedTo = parseToOffsetDateTime(to, MAX.minusSeconds(1));
     return new ReportRange(parsedFrom, parsedTo);
   }
 
@@ -38,11 +38,11 @@ public class ReportRange {
   }
 
   public LocalDate getFromAsLocalDate() {
-    return getFrom().toLocalDate();
+    return getFrom().atZoneSameInstant(UTC).toLocalDate();
   }
 
   public LocalDate getToAsLocalDate() {
-    return getTo().toLocalDate();
+    return getTo().atZoneSameInstant(UTC).toLocalDate();
   }
 
   private static OffsetDateTime parseToOffsetDateTime(LocalDate localDate, LocalTime localTime) {

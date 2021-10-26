@@ -9,10 +9,18 @@ import org.springframework.context.annotation.Configuration;
 class DownloadAccuracyReportConfiguration {
 
   @Bean
-  DownloadAccuracyReportUseCase downloadAccuracyReportUseCase(
+  DownloadProductionAccuracyReportUseCase downloadProductionAccuracyReportUseCase(
       AccuracyReportDataQuery query,
       ReportStorage reportStorage) {
 
-    return new DownloadAccuracyReportUseCase(query, reportStorage);
+    return new DownloadProductionAccuracyReportUseCase(query, reportStorage);
+  }
+
+  @Bean
+  DownloadSimulationAccuracyReportUseCase downloadSimulationAccuracyReportUseCase(
+      AccuracyReportDataQuery query,
+      ReportStorage reportStorage) {
+
+    return new DownloadSimulationAccuracyReportUseCase(query, reportStorage);
   }
 }
