@@ -52,8 +52,8 @@ pipeline {
                     when {
                         allOf {
                             anyOf {
-                                when { branch 'master' }
-                                when { branch pattern: 'release-\\d+(\.\\d+)?', comparator: 'REGEXP' }
+                                branch 'master'
+                                branch pattern: 'release-\\d+(\.\\d+)?', comparator: 'REGEXP'
                             }
                             expression { return params.RELEASE }
                         }
