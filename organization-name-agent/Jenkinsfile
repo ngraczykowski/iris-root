@@ -50,12 +50,14 @@ pipeline {
                             branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
                         }
                     }
-                    withCredentials([usernamePassword(
-                        credentialsId: 'pypi-deployment-user',
-                        usernameVariable: 'TWINE_USERNAME',
-                        passwordVariable: 'TWINE_PASSWORD',
-                    )]) {
-                        sh './scripts/publish.sh --index-url "${PYPI_URL}"'
+                    steps {
+                        withCredentials([usernamePassword(
+                            credentialsId: 'pypi-deployment-user',
+                            usernameVariable: 'TWINE_USERNAME',
+                            passwordVariable: 'TWINE_PASSWORD',
+                        )]) {
+                            sh './scripts/publish.sh --index-url "${PYPI_URL}"'
+                        }
                     }
                 }
                 stage('Release') {
