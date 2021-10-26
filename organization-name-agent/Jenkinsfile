@@ -7,7 +7,6 @@ pipeline {
     environment {
         PYPI_URL = credentials('pypi-readonly-url')
         TWINE_REPOSITORY_URL = 'https://repo.silenteight.com/artifactory/api/pypi/pypi'
-        PIP_DOWNLOAD_CACHE = '/root/.cache/pip'
     }
     options {
         timeout(time: 1, unit: 'HOURS')   // just to be safe
@@ -17,29 +16,28 @@ pipeline {
     }
 
     stages {
-        stage('Prepare python image') {
-            agent any
-            steps {
-                sh 'docker pull python:3.7'
-            }
-        }
-        stage('Prepare') {
+        stage('Build and publish') {
             agent {
                 docker {
-                    image 'python:3.7'
-                    args '-v $HOME/.cache/agent/pip:/root/.cache/pip'
+                    image 'docker.repo.silenteight.com/python-build-image:3.7-bullseye'
+                    args '--volume $HOME/.cache/agent/pip:/home/jenkins/.cache/pip'
                 }
             }
             stages {
+                stage('Prepare') {
+                    steps {
+                        sh 'pip install --index-url "${PYPI_URL}" --requirement requirements.txt'
+                    }
+                }
                 stage('Build') {
                     steps {
                         sh './scripts/clean.sh'
-                        sh './scripts/bootstrap.sh --index-url "${PYPI_URL}"'
                         sh './scripts/build.sh --index-url "${PYPI_URL}"'
                     }
                 }
                 stage('Test') {
                     steps {
+                        sh 'pip install --index-url "${PYPI_URL}" tox'
                         sh './scripts/test.sh --index-url "${PYPI_URL}"'
                     }
                 }
@@ -95,7 +93,7 @@ pipeline {
                     archiveArtifacts artifacts: 'dist/*, nomad/*.tar.bz2', fingerprint: true
                 }
                 success {
-                    publishCoverage adapters: [cobertura('.tox/coverage-report.xml')]
+                    publishCoverage adapters: [istanbulCoberturaAdapter('.tox/coverage-report.xml')]
                     stash includes: 'dist/*, nomad/*/artifacts/*', name: 'artifacts'
                 }
             }
@@ -108,7 +106,7 @@ pipeline {
             when {
                 anyOf {
                     branch 'master'
-                    tag pattern: '^v[\\d\\.]+\$', comparator: "REGEXP"
+                    tag pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
                 }
             }
             stages {
