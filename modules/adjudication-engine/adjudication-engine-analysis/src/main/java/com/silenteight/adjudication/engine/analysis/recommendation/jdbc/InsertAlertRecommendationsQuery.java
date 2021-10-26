@@ -9,27 +9,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlParameter;
-import org.springframework.jdbc.object.SqlUpdate;
+import org.springframework.jdbc.object.BatchSqlUpdate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.Types;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
-import static java.util.Optional.ofNullable;
-
-//TODO (iwnek) Use SQL Bulk update
 class InsertAlertRecommendationsQuery {
 
   private static final ObjectMapper MAPPER = JsonConversionHelper.INSTANCE.objectMapper();
 
-  private final SqlUpdate sql;
+  private final BatchSqlUpdate sql;
 
   InsertAlertRecommendationsQuery(JdbcTemplate jdbcTemplate) {
-    sql = new SqlUpdate();
+    sql = new BatchSqlUpdate();
 
     sql.setJdbcTemplate(jdbcTemplate);
     sql.setSql(
@@ -49,40 +46,33 @@ class InsertAlertRecommendationsQuery {
     sql.compile();
   }
 
+  @SuppressWarnings("FeatureEnvy")
   List<RecommendationResponse> execute(Collection<InsertRecommendationRequest> requests) {
-    List<RecommendationResponse> responses = new ArrayList<>();
-    requests.forEach(r -> update(r, responses::add));
-    return responses;
+    var keyHolder = new GeneratedKeyHolder();
+    requests.forEach(r -> update(r, keyHolder));
+    sql.flush();
+    return keyHolder
+        .getKeyList()
+        .stream()
+        .map(it -> RecommendationResponse
+            .builder()
+            .recommendationId((long) it.get("recommendation_id"))
+            .analysisId((long) it.get("analysis_id"))
+            .alertId((long) it.get("alert_id"))
+            .build())
+        .collect(
+            Collectors.toList());
   }
 
   @SuppressWarnings("FeatureEnvy")
-  private void update(
-      InsertRecommendationRequest alertRecommendation,
-      Consumer<RecommendationResponse> consumer) {
-
-    var keyHolder = new GeneratedKeyHolder();
+  private void update(InsertRecommendationRequest alertRecommendation, KeyHolder keyHolder) {
     var paramMap =
         Map.of("alert_id", alertRecommendation.getAlertId(),
             "analysis_id", alertRecommendation.getAnalysisId(),
             "recommended_action", alertRecommendation.getRecommendedAction(),
             "match_ids", alertRecommendation.getMatchIds(),
             "match_contexts", writeMatchContexts(alertRecommendation.getMatchContexts()));
-
     sql.updateByNamedParam(paramMap, keyHolder);
-
-    ofNullable(keyHolder.getKeys())
-        .map(InsertAlertRecommendationsQuery::buildRecommendationResponse)
-        .ifPresent(consumer);
-  }
-
-  @SuppressWarnings("FeatureEnvy")
-  private static RecommendationResponse buildRecommendationResponse(Map<String, Object> it) {
-    return RecommendationResponse
-        .builder()
-        .recommendationId((long) it.get("recommendation_id"))
-        .analysisId((long) it.get("analysis_id"))
-        .alertId((long) it.get("alert_id"))
-        .build();
   }
 
   private static String writeMatchContexts(ObjectNode[] matchContexts) {
