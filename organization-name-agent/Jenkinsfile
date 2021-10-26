@@ -50,7 +50,7 @@ pipeline {
                             branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
                         }
                     }
-                    withCredentials([usernamePassword([
+                    withCredentials([usernamePassword(
                         credentialsId: 'pypi-deployment-user',
                         usernameVariable: 'TWINE_USERNAME',
                         passwordVariable: 'TWINE_PASSWORD',
@@ -72,7 +72,7 @@ pipeline {
                         sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
                         sh 'git tag --delete "$(git tag --list)"'
                         sh './scripts/release.sh --index-url ${PYPI_URL}'
-                        withCredentials([usernamePassword([
+                        withCredentials([usernamePassword(
                             credentialsId: 'pypi-deployment-user',
                             usernameVariable: 'TWINE_USERNAME',
                             passwordVariable: 'TWINE_PASSWORD',
