@@ -9,6 +9,7 @@ import com.silenteight.payments.bridge.common.dto.input.*;
 import com.silenteight.payments.bridge.etl.firco.parser.MessageFormat;
 import com.silenteight.payments.bridge.etl.firco.parser.MessageParserFacade;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
+import com.silenteight.payments.bridge.svb.oldetl.model.InvalidMessageException;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertEtlResponseUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.*;
 import com.silenteight.payments.bridge.svb.oldetl.service.shitcode.*;
@@ -134,7 +135,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
       case "50":
         return new Extract50k59AlertedPartyData(messageData).extract(hitTag, messageFieldStructure);
       default:
-        throw new IllegalArgumentException("Tag not supported " + hitTag);
+        throw new InvalidMessageException("Tag not supported " + hitTag);
     }
   }
 
@@ -149,7 +150,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
       case "GTEX":
         return new GtexTransactionMessage(messageData);
       default:
-        throw new IllegalArgumentException("Application not supported " + applicationCode);
+        throw new InvalidMessageException("Application not supported " + applicationCode);
     }
   }
 
@@ -245,6 +246,6 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     if (type.contains("BOO"))
       return "IAT-O";
 
-    throw new IllegalArgumentException("Couldn't map cmapi to FKCO_V_FORMAT");
+    throw new InvalidMessageException("Couldn't map cmapi to FKCO_V_FORMAT");
   }
 }

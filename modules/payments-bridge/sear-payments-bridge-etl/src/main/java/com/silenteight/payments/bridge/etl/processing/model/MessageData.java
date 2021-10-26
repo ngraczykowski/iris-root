@@ -2,8 +2,9 @@ package com.silenteight.payments.bridge.etl.processing.model;
 
 import lombok.NonNull;
 
+import com.silenteight.payments.bridge.svb.oldetl.model.InvalidMessageException;
+
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
@@ -38,7 +39,7 @@ public class MessageData {
   @Nonnull
   private MessageTag get(String tagName) {
     return findFirst(tagName)
-        .orElseThrow(() -> new NoSuchElementException("Tag '" + tagName + "' not found."));
+        .orElseThrow(() -> new InvalidMessageException("Tag '" + tagName + "' not found."));
   }
 
   @Nonnull

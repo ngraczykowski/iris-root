@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.RECOMMENDATION_COMPLETED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.RECOMMENDED;
+import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_DAMAGED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OUTDATED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OVERFLOWED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.PENDING;
@@ -83,6 +84,8 @@ class RecommendationCompletedEndpoint {
           return RECOMMENDED;
         case OUTDATED:
           return REJECTED_OUTDATED;
+        case DAMAGED:
+          return REJECTED_DAMAGED;
         case QUEUE_OVERFLOWED:
           return REJECTED_OVERFLOWED;
         default:
