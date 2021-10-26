@@ -3,7 +3,7 @@ package com.silenteight.warehouse.backup.indexing.listener;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.data.api.v1.ProductionDataIndexRequest;
+import com.silenteight.data.api.v2.ProductionDataIndexRequest;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 import com.silenteight.warehouse.backup.indexing.IndexerProperties;
 import com.silenteight.warehouse.backup.indexing.IndexingConfiguration;

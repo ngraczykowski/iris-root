@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.data.api.v1.ProductionDataIndexRequest;
+import com.silenteight.data.api.v2.ProductionDataIndexRequest;
 import com.silenteight.warehouse.backup.indexing.listener.ProductionIndexRequestCommandHandler;
 import com.silenteight.warehouse.backup.storage.StorageService;
 

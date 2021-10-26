@@ -3,7 +3,7 @@ package com.silenteight.warehouse.backup.storage;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.data.api.v1.ProductionDataIndexRequest;
+import com.silenteight.data.api.v2.ProductionDataIndexRequest;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
@@ -18,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import static com.silenteight.warehouse.backup.storage.ProductionDataIndexRequestFixtures.PRODUCTION_DATA_INDEX_REQUEST_1;
+import static com.silenteight.warehouse.backup.storage.ProductionDataIndexRequestFixtures.PRODUCTION_DATA_JSON_FORMAT;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
@@ -40,6 +41,7 @@ class BackupIT {
   @Autowired
   private BackupMessageRepository backupMessageRepository;
 
+  @SneakyThrows
   @Test
   void shouldSaveBackupMessageWhenProductionDataIndexRequested() {
     //given
@@ -56,6 +58,7 @@ class BackupIT {
     assertThat(backupMessage).isNotNull();
     assertThat(backupMessage.getRequestId()).isEqualTo(productionRequest.getRequestId());
     assertThat(backupMessage.getAnalysisName()).isEqualTo(productionRequest.getAnalysisName());
+    assertThat(backupMessage.getDiagnostic()).isEqualTo(PRODUCTION_DATA_JSON_FORMAT);
 
     ProductionDataIndexRequest savedProductionRequest =
         toProductionDataIndexRequest(backupMessage.getData());

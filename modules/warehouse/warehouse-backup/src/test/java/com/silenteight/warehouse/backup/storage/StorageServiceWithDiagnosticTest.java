@@ -1,14 +1,17 @@
 package com.silenteight.warehouse.backup.storage;
 
+import lombok.SneakyThrows;
+
 import com.silenteight.data.api.v2.ProductionDataIndexRequest;
 
+import com.google.protobuf.util.JsonFormat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.silenteight.warehouse.backup.storage.ProductionDataIndexRequestFixtures.PRODUCTION_DATA_INDEX_REQUEST_1;
 import static org.assertj.core.api.Assertions.*;
 
-class StorageServiceTest {
+class StorageServiceWithDiagnosticTest {
 
   StorageService underTest;
 
@@ -17,9 +20,10 @@ class StorageServiceTest {
   @BeforeEach
   void setUp() {
     messageRepository = new InMemoryBackupMessageRepository();
-    underTest = new StorageService(messageRepository, false);
+    underTest = new StorageService(messageRepository, true);
   }
 
+  @SneakyThrows
   @Test
   void shouldSaveProductionDataIndexRequestAsMessage() {
     //given
@@ -36,6 +40,8 @@ class StorageServiceTest {
         .isEqualTo(productionDataIndexRequest.getRequestId());
     assertThat(savedBackupMessage.getAnalysisName())
         .isEqualTo(productionDataIndexRequest.getAnalysisName());
+    assertThat(savedBackupMessage.getDiagnostic()).isEqualTo(
+        JsonFormat.printer().print(PRODUCTION_DATA_INDEX_REQUEST_1));
     assertThat(savedBackupMessage.getCreatedAt()).isNotNull();
   }
 }

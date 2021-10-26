@@ -3,7 +3,7 @@ package com.silenteight.warehouse.test.generator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.data.api.v1.ProductionDataIndexRequest;
+import com.silenteight.data.api.v2.ProductionDataIndexRequest;
 import com.silenteight.warehouse.test.client.gateway.ProductionIndexClientGateway;
 
 import org.springframework.scheduling.annotation.Scheduled;

@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.test.client.listener;
+package com.silenteight.warehouse.test.client.listener.sim;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import static java.util.Optional.of;
 
 @RequiredArgsConstructor
 @Slf4j
-public class IndexedEventListener {
+public class IndexedSimEventListener {
 
   @NonNull
   private final List<DataIndexResponse> responses = new CopyOnWriteArrayList<>();
@@ -30,7 +30,7 @@ public class IndexedEventListener {
   }
 
   public boolean hasAnyEvent() {
-    return responses.size() > 0;
+    return !responses.isEmpty();
   }
 
   public boolean hasAtLeastEventCount(int count) {

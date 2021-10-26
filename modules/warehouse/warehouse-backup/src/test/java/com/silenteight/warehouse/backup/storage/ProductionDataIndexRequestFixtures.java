@@ -1,7 +1,7 @@
 package com.silenteight.warehouse.backup.storage;
 
-import com.silenteight.data.api.v1.Alert;
-import com.silenteight.data.api.v1.ProductionDataIndexRequest;
+import com.silenteight.data.api.v2.Alert;
+import com.silenteight.data.api.v2.ProductionDataIndexRequest;
 
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
@@ -29,6 +29,12 @@ public class ProductionDataIndexRequestFixtures {
           .setRequestId(REQUEST_ID)
           .addAllAlerts(of(ALERT))
           .build();
+
+  static final String PRODUCTION_DATA_JSON_FORMAT = ""
+      + "{\"alerts\": [{\"payload\": {\"riskType\": \"SAN\"}, "
+      + "\"discriminator\": \"457b1498-e348-4a81-8093-6079c1173010\"}], "
+      + "\"requestId\": \"d25641e9-71d6-4705-a90b-5bc3d5303425\", "
+      + "\"analysisName\": \"analysis/24dbf320-57dd-43fe-85a0-101f6f33d81a\"}";
 
   private static Value getValue(String value) {
     return Value.newBuilder()
