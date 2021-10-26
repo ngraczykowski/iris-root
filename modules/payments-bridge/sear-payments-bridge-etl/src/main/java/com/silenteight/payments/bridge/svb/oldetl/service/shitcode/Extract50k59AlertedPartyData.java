@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.svb.oldetl.service.shitcode;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
+import com.silenteight.payments.bridge.svb.oldetl.model.InvalidMessageException;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
 
@@ -20,7 +21,7 @@ public class Extract50k59AlertedPartyData {
     var lastLine = lines.size() - 1;
 
     if (lines.get(0).charAt(0) != '/')
-      throw new IllegalArgumentException("First char is not /");
+      throw new InvalidMessageException("First char is not /");
 
     return AlertedPartyData.builder()
         .messageFieldStructure(messageFieldStructure)
