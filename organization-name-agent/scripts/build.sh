@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -eu -o pipefail
 
 scriptdir="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
 basedir="$(cd -- "$scriptdir"/.. && pwd -P)"
@@ -13,7 +13,6 @@ fi
 python setup.py bdist_wheel
 artifact=$(basename -- "$(ls ./dist/company_name-*.whl)")
 version=$(ls -al "./dist/$artifact" | awk -F'company_name-|-py3-none-any.whl' '{print $2}')
-
 
 # zipfile (executable, to run without installing)
 pip install shiv

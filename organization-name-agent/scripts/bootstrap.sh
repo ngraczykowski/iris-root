@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -eu -o pipefail
 
 scriptdir="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
 basedir="$(cd -- "$scriptdir"/.. && pwd -P)"
@@ -19,6 +19,6 @@ fi
 "$PYTHON" -m venv venv
 source venv/bin/activate
 
-pip install "$@" -U pip setuptools wheel
-pip install "$@" -r requirements.txt
-pip install "$@" -e .[tests]
+pip install "$@" --upgrade pip setuptools wheel
+pip install "$@" --requirement requirements.txt
+pip install "$@" --editable ".[tests]"

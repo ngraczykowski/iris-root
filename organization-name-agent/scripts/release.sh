@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -eu -o pipefail
 
 function gitRelease() {
   echo 'Releasing'
@@ -7,7 +7,7 @@ function gitRelease() {
   echo 'Building'
   scripts/clean.sh
   scripts/build.sh
-  echo 'Reseting release commit'
+  echo 'Resetting release commit'
   git reset --hard HEAD~1 # remove release commit after tag
 }
 

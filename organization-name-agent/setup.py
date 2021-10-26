@@ -30,7 +30,6 @@ tests_require = [
     "pytest>=6.1.2",
     "shiv",
     "tox>=3.20.1",
-    "tox>=3.20.1",
 ]
 
 setup(
