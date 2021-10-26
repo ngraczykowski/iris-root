@@ -27,10 +27,16 @@ public class ReadAlertError {
     return String.join("\r\n", logElements);
   }
 
+  public String toShortMessage() {
+    return "{ AlertId: '" + alertId + "', message: '" + exception.getMessage() + "' }";
+  }
+
   private List<String> getStackTrace() {
     return Arrays
         .stream(exception.getStackTrace())
         .map(StackTraceElement::toString)
         .collect(toList());
   }
+
+
 }

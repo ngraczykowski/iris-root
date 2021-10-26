@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
+import com.silenteight.payments.bridge.svb.learning.reader.domain.ReadAlertError;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CheckAlertRegisteredPort;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory.AlertBuilder;
@@ -30,8 +31,8 @@ class IngestService {
   private final IndexedAlertBuilderFactory alertBuilderFactory;
   private final LearningWarehouseMapper warehouseMapper;
 
-  void ingest(List<LearningAlert> learningAlerts) {
-    var alerts = learningAlerts.stream()
+  void ingest(LearningAlertBatch batch) {
+    var alerts = batch.getLearningAlerts().stream()
         .filter(a -> a.getMatches().size() > 0)
         .collect(toList());
 
@@ -48,7 +49,7 @@ class IngestService {
         .filter(learningAlert -> !existing.contains(learningAlert.getAlertRegistration()))
         .collect(toList());
     if (unregisteredAlerts.size() > 0) {
-      processUnregistered(unregisteredAlerts);
+      processUnregistered(unregisteredAlerts, batch.getErrors());
     }
 
     var registeredAlerts = new ArrayList<>(alerts);
@@ -58,8 +59,10 @@ class IngestService {
     }
   }
 
-  private void processUnregistered(List<LearningAlert> learningAlerts) {
+  private void processUnregistered(
+      List<LearningAlert> learningAlerts, List<ReadAlertError> errors) {
     register(learningAlerts);
+    dataSourceIngestService.createValues(learningAlerts, errors);
     index(learningAlerts);
   }
 

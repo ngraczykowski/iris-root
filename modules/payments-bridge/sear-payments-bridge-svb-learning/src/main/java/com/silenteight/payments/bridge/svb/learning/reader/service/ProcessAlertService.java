@@ -1,6 +1,5 @@
 package com.silenteight.payments.bridge.svb.learning.reader.service;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,8 +17,6 @@ import java.time.Clock;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -30,7 +27,6 @@ class ProcessAlertService {
       DateTimeFormatter.ofPattern("yyyyMMdd'-'HHmmss");
 
   private final CsvFileProvider csvFileProvider;
-  private final EtlAlertService etlAlertService;
   private final BatchAlertConsumer batchAlertConsumer;
 
   public AlertsReadingResponse read(LearningRequest learningRequest) {
@@ -69,10 +65,14 @@ class ProcessAlertService {
 
     var alertMetaData = AlertMetaData.builder()
         .batchStamp(createBatchStamp()).fileName(fileName).build();
-    var learningAlertCreator = new LearningAlertCreator(alertMetaData);
+
+    var currentBatch = new LearningAlertBatch(alertMetaData);
 
     var alertRows = new ArrayList<LearningCsvRow>();
     alertRows.add(firstRow);
+
+    int successfulAlertsCount = 0;
+    var errors = new ArrayList<ReadAlertError>();
 
     while (it.hasNext()) {
       var row = it.next();
@@ -80,7 +80,12 @@ class ProcessAlertService {
 
       var rowAlertId = row.getFkcoVSystemId();
       if (!currentAlertId.equals(rowAlertId)) {
-        learningAlertCreator.create(alertRows, false);
+        if (batchAlertConsumer.add(currentBatch, alertRows, false)) {
+          successfulAlertsCount += currentBatch.getSuccess().size();
+          errors.addAll(currentBatch.getErrors());
+          currentBatch = new LearningAlertBatch(alertMetaData);
+
+        }
         currentAlertId = rowAlertId;
         alertRows.clear();
       }
@@ -88,51 +93,17 @@ class ProcessAlertService {
     }
 
     if (!alertRows.isEmpty()) {
-      learningAlertCreator.create(alertRows, true);
+      batchAlertConsumer.add(currentBatch, alertRows, true);
+      successfulAlertsCount += currentBatch.getSuccess().size();
+      errors.addAll(currentBatch.getErrors());
     }
 
     return AlertsReadingResponse
         .builder()
-        .failedAlerts(learningAlertCreator.getErrors().size())
-        .successfulAlerts(batchAlertConsumer.getSuccessfulAlertsCount())
-        .readAlertErrorList(learningAlertCreator.getErrors())
+        .failedAlerts(errors.size())
+        .successfulAlerts(successfulAlertsCount)
+        .readAlertErrorList(errors)
         .build();
-  }
-
-  @RequiredArgsConstructor
-  private class LearningAlertCreator {
-
-    private final AlertMetaData alertMetaData;
-
-    @Getter private final List<ReadAlertError> errors = new ArrayList<>();
-
-    void create(List<LearningCsvRow> alertRows, boolean force) {
-      var learningAlert = doCreate(alertMetaData, alertRows, errors);
-      learningAlert.ifPresent(alert -> batchAlertConsumer.accept(alert, errors, force));
-    }
-
-    private Optional<LearningAlert> doCreate(
-        AlertMetaData alertMetaData, List<LearningCsvRow> alertRows, List<ReadAlertError> errors) {
-      try {
-        var learningAlert = etlAlertService
-            .fromCsvRows(alertRows)
-            .batchStamp(alertMetaData.getBatchStamp())
-            .fileName(alertMetaData.getFileName())
-            .build();
-        log.debug("LearningAlert {} created successfully", learningAlert.getAlertId());
-        return Optional.of(learningAlert);
-      } catch (RuntimeException e) {
-        log.error("Failed to create LearningAlert = {} reason = {}",
-            alertRows.get(0).getFkcoVSystemId(), e.getMessage(), e);
-        errors.add(ReadAlertError
-            .builder()
-            .alertId(alertRows.get(0).getFkcoVSystemId())
-            .exception(e)
-            .build());
-        return Optional.empty();
-      }
-    }
-
   }
 
   static void assertRowNotNull(LearningCsvRow row) {
