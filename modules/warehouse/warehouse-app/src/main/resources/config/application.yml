@@ -65,6 +65,8 @@ warehouse:
       alert-simulation-indexing:
         queue-name: wh.index-request.simulation
         routing-key: command.index-request.simulation
+      to-remove:
+        bindings: []
   indexer:
     production-batch-size: 200
     simulation-batch-size: 200

@@ -8,6 +8,21 @@ warehouse:
   sampling:
     time-field-name: alert_create_time
 
+warehouse.messaging:
+  broker:
+    alert-production-indexing:
+      queue-name: wh.prioritized-index-request.production
+      routing-key: command.index-request.production
+      max-priority: 10
+    to-remove:
+      bindings:
+        - queue-name: wh.index-request.production
+          exchange: bridge.command
+          routing-key: command.index-request.production
+  integration:
+    production-indexing-inbound:
+      queue-name: wh.prioritized-index-request.production
+
 warehouse.report.rbs:
   production:
     date-field-name: alert_create_time

@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import javax.validation.Valid;
 
 @Data
@@ -33,12 +34,20 @@ class BrokerProperties {
   @NestedConfigurationProperty
   private AmpqProperties alertSimulationIndexing;
 
+  @Valid
+  @NestedConfigurationProperty
+  private ToRemoveProperties toRemove;
+
   String alertBackupIndexingQueueName() {
     return alertBackupIndexing.getQueueName();
   }
 
   String alertBackupIndexingRoutingKey() {
     return alertBackupIndexing.getRoutingKey();
+  }
+
+  Integer alertBackupIndexingMaxPriority() {
+    return alertBackupIndexing.getMaxPriority();
   }
 
   String qaBackupIndexingQueueName() {
@@ -49,12 +58,20 @@ class BrokerProperties {
     return qaBackupIndexing.getRoutingKey();
   }
 
+  Integer qaBackupIndexingMaxPriority() {
+    return alertBackupIndexing.getMaxPriority();
+  }
+
   String alertProductionIndexingQueueName() {
     return alertProductionIndexing.getQueueName();
   }
 
   String alertProductionIndexingRoutingKey() {
     return alertProductionIndexing.getRoutingKey();
+  }
+
+  Integer alertProductionIndexingMaxPriority() {
+    return alertBackupIndexing.getMaxPriority();
   }
 
   String qaIndexingQueueName() {
@@ -65,11 +82,23 @@ class BrokerProperties {
     return qaIndexing.getRoutingKey();
   }
 
+  Integer qaIndexingMaxPriority() {
+    return alertBackupIndexing.getMaxPriority();
+  }
+
   String alertSimulationIndexingQueueName() {
     return alertSimulationIndexing.getQueueName();
   }
 
   String alertSimulationIndexingRoutingKey() {
     return alertSimulationIndexing.getRoutingKey();
+  }
+
+  Integer alertSimulationIndexingMaxPriority() {
+    return alertBackupIndexing.getMaxPriority();
+  }
+
+  List<BindingProperties> bindingsToRemove() {
+    return toRemove.getBindings();
   }
 }
