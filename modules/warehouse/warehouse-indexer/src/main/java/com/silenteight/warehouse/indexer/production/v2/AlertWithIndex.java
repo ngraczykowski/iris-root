@@ -8,7 +8,7 @@ import com.silenteight.data.api.v2.Alert;
 import java.util.List;
 
 @Value
-public class AlertWithIndex {
+class AlertWithIndex {
 
   @NonNull
   Alert alert;

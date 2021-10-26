@@ -6,7 +6,7 @@ import lombok.Value;
 import com.silenteight.data.api.v2.Match;
 
 @Value
-public class MatchWithIndex {
+class MatchWithIndex {
 
   @NonNull
   Match match;
