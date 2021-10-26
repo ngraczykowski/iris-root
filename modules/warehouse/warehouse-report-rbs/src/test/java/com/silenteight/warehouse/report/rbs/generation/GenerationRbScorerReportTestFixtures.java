@@ -46,7 +46,8 @@ public final class GenerationRbScorerReportTestFixtures {
           getColumn(FEATURES_NAME_FIELD),
           getColumn(FEATURES_DOB_FIELD)),
       getGroupingColumn(),
-      getFilters(ALERT_STATUS_FIELD, of(COMPLETED)));
+      getFilters(ALERT_STATUS_FIELD, of(COMPLETED)),
+      TEST_INDEX);
 
   private static ColumnProperties getColumn(String name, String label) {
     return new ColumnProperties(name, label);

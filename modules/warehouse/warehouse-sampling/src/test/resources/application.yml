@@ -29,6 +29,7 @@ warehouse:
     prefix: itest
   es:
     production-query-index: ${warehouse.environment.prefix}_production_alert
+    production-match-query-index: ${warehouse.environment.prefix}_production_match
   sampling:
     time-field-name: index_timestamp
     filters:

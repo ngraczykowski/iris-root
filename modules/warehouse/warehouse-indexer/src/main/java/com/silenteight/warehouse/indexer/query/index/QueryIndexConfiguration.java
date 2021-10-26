@@ -28,6 +28,13 @@ class QueryIndexConfiguration {
   }
 
   @Bean
+  ProductionIndexingQuery productionMatchIndexingQuery(
+      @Valid ElasticsearchProperties elasticsearchProperties) {
+
+    return new ProductionIndexingQuery(elasticsearchProperties.getProductionMatchQueryIndex());
+  }
+
+  @Bean
   SimulationIndexingQuery simulationIndexingQuery(
       @Valid EnvironmentProperties environmentProperties) {
 

@@ -32,6 +32,7 @@ import com.silenteight.warehouse.report.metrics.v1.DeprecatedMetricsReportModule
 import com.silenteight.warehouse.report.rbs.RbsReportModule;
 import com.silenteight.warehouse.report.rbs.v1.DeprecatedRbsReportModule;
 import com.silenteight.warehouse.report.reasoning.AiReasoningReportModule;
+import com.silenteight.warehouse.report.reasoning.match.AiReasoningMatchLevelReportModule;
 import com.silenteight.warehouse.report.reasoning.v1.DeprecatedAiReasoningReportModule;
 import com.silenteight.warehouse.report.remove.ReportsRemovalModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
@@ -58,6 +59,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     // NOTE(ahaczewski): Keep list of modules alphabetically sorted within section.
     // Domain modules
     AccuracyReportModule.class,
+    AiReasoningMatchLevelReportModule.class,
     AiReasoningReportModule.class,
     AlertModule.class,
     AnalysisModule.class,
