@@ -56,10 +56,11 @@ pipeline {
             }
             post {
                 always {
-                    junit '.tox/*.xml'
+                    junit '.tox/flake8-report.xml, .tox/mypy-report.xml, .tox/pytest-report.xml'
                     archiveArtifacts artifacts: 'dist/*, nomad/*.tar.bz2', fingerprint: true
                 }
                 success {
+                    publishCoverage adapters: [cobertura('.tox/coverage-report.xml')]
                     stash includes: 'dist/*, nomad/*/artifacts/*', name: 'artifacts'
                 }
             }
