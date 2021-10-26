@@ -48,13 +48,13 @@ ae:
   grpc:
     client:
       category-service:
-        timeout: 2m
+        timeout: 10m
       comment-input:
-        timeout: 2m
+        timeout: 10m
       policy-steps:
-        timeout: 5s
+        timeout: 30s
       alert-solving:
-        timeout: 5s
+        timeout: 30s
 
 #---------------------------------------------------------------------------------------------------
 # SERVER
