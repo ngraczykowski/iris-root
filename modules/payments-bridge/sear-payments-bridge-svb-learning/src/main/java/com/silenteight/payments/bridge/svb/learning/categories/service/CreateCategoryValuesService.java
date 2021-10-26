@@ -36,8 +36,8 @@ class CreateCategoryValuesService implements CreateCategoryValuesUseCase {
     for (LearningMatch match : learningAlert.getMatches()) {
       for (CategoryValueExtractor ce : categoryValueExtractors) {
 
-        if (log.isDebugEnabled()) {
-          log.debug("Extracting category value: {}", ce.getClass().getSimpleName());
+        if (log.isTraceEnabled()) {
+          log.trace("Extracting category value: {}", ce.getClass().getSimpleName());
         }
 
         var categoryValue = ce.extract(match, String.valueOf(learningAlert.getAlertName()));
@@ -103,8 +103,8 @@ class CreateCategoryValuesService implements CreateCategoryValuesUseCase {
     return categoryValueExtractors.stream()
         .map(extractor -> {
 
-          if (log.isDebugEnabled()) {
-            log.debug("Extracting category value: {}", extractor.getClass().getSimpleName());
+          if (log.isTraceEnabled()) {
+            log.trace("Extracting category value: {}", extractor.getClass().getSimpleName());
           }
 
           return extractor.extract(match, alert.getAlertName());
