@@ -38,6 +38,7 @@ warehouse:
     prefix: itest
   es:
     production-query-index: ${warehouse.environment.prefix}_production_alert
+    production-match-query-index: ${warehouse.environment.prefix}_production_match
 
 test:
   messaging:

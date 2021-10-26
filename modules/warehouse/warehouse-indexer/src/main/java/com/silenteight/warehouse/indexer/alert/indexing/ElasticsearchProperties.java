@@ -17,6 +17,9 @@ public class ElasticsearchProperties {
   @NotBlank
   String productionQueryIndex;
 
+  @NotBlank
+  String productionMatchQueryIndex;
+
   @NotNull
   List<String> countryRolesIndexes = List.of();
 

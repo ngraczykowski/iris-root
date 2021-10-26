@@ -257,4 +257,33 @@
       <column name="alert_discriminator"/>
     </createIndex>
   </changeSet>
+
+
+  <changeSet id="warehouse-1.9.0-16" author="plewandowski">
+    <createTable tableName="warehouse_report_ai_reasoning_match_level">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="report_type" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="analysis" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="file_storage_name" type="VARCHAR(64)"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_report_ai_reasoning_match_level"
+        indexName="ix_warehouse_report_ai_reasoning_match_level_created_at"
+        unique="false">
+      <column name="created_at"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>

@@ -17,12 +17,10 @@ class CreateRbsReportConfiguration {
   @Bean
   CreateProductionRbsReportUseCase createProductionRbsReportUseCase(
       RbsReportService service,
-      @Qualifier(value = "productionIndexingQuery") IndexesQuery productionIndexerQuery,
       @Valid RbsReportProperties properties) {
 
     return new CreateProductionRbsReportUseCase(
         service,
-        productionIndexerQuery,
         properties.getProduction());
   }
 

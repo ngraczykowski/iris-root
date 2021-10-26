@@ -29,6 +29,7 @@ dependencies {
   implementation project(":warehouse-report-accuracy-deprecated")
   implementation project(":warehouse-report-ai-reasoning")
   implementation project(":warehouse-report-ai-reasoning-deprecated")
+  implementation project(":warehouse-report-ai-reasoning-match-level")
   implementation project(":warehouse-report-billing")
   implementation project(":warehouse-report-billing-deprecated")
   implementation project(":warehouse-report-metrics")

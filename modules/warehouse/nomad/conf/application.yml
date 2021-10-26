@@ -498,3 +498,67 @@ warehouse.report.ai-reasoning:
         label: Alert Status
       - name: s8_discriminator
         label: Alert S8 ID
+
+warehouse.report.ai-reasoning-match-level:
+  production:
+    date-field-name: alert_recommendationDate
+    columns:
+      - name: alert_fvSignature
+        label: alert_fvSignature
+      - name: alert_policy
+        label: alert_policy
+      - name: alert_policy_title
+        label: alert_policy_title
+      - name: alert_step
+        label: alert_step
+      - name: alert_step_title
+        label: alert_step_title
+      - name: alert_id
+        label: alert_id
+      - name: alert_status
+        label: alert_status
+      - name: alert_recommendation
+        label: alert_recommendation
+      - name: alert_s8_recommendation
+        label: alert_s8_recommendation
+      - name: alert_recommendationDate
+        label: alert_recommendationDate
+      - name: alert_comment
+        label: alert_comment
+      - name: s8_country
+        label: s8_country
+      - name: alert_DN_CASE.ExtendedAttribute5
+        label: alert_DN_CASE.ExtendedAttribute5
+      - name: s8_discriminator
+        label: s8_discriminator
+  simulation:
+    date-field-name: index_timestamp
+    columns:
+      - name: alert_fvSignature
+        label: alert_fvSignature
+      - name: alert_policy
+        label: alert_policy
+      - name: alert_policy_title
+        label: alert_policy_title
+      - name: alert_step
+        label: alert_step
+      - name: alert_step_title
+        label: alert_step_title
+      - name: alert_id
+        label: alert_id
+      - name: alert_status
+        label: alert_status
+      - name: alert_recommendation
+        label: alert_recommendation
+      - name: alert_s8_recommendation
+        label: alert_s8_recommendation
+      - name: alert_recommendationDate
+        label: alert_recommendationDate
+      - name: alert_comment
+        label: alert_comment
+      - name: s8_country
+        label: s8_country
+      - name: alert_DN_CASE.ExtendedAttribute5
+        label: alert_DN_CASE.ExtendedAttribute5
+      - name: s8_discriminator
+        label: s8_discriminator

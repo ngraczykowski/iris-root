@@ -87,6 +87,7 @@ warehouse:
       duration-time: P1D
   es:
     production-query-index: ${warehouse.environment.prefix}_production_alert
+    production-match-query-index: ${warehouse.environment.prefix}_production_match
     country-roles-indexes:
       - ${warehouse.environment.prefix}_production*
       - ${warehouse.environment.prefix}_simulation*
@@ -298,3 +299,6 @@ sep:
         - "DASHBOARD"
 warehouse.report.deprecated-simulation:
   hidden-types: []
+
+warehouse.report.rbs.production:
+  index-name: ${warehouse.es.production-query-index}
