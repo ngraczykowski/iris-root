@@ -33,6 +33,7 @@ warehouse:
   indexer:
     backup-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.alert-backup-indexing.queue-name}
+    diagnostic.enabled: true
   environment:
     prefix: itest
   es:

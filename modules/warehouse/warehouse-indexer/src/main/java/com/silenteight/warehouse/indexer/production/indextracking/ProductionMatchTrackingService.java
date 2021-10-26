@@ -21,14 +21,14 @@ public class ProductionMatchTrackingService {
 
   @Transactional
   public Map<String, String> getIndexNameByDiscriminator(
-      String alertDiscriminator, List<String> discriminators) {
+      String alertDiscriminator, List<String> matchDiscriminators) {
     String elasticWriteIndexName = productionMatchNamingStrategy.getElasticWriteIndexName();
 
-    discriminators.forEach(discriminator ->
+    matchDiscriminators.forEach(matchDiscriminator ->
         productionMatchRepository.updateIfNotExists(
-            alertDiscriminator, discriminator, elasticWriteIndexName));
+            alertDiscriminator, matchDiscriminator, elasticWriteIndexName));
 
-    return productionMatchRepository.findAllByDiscriminatorIn(discriminators).stream()
+    return productionMatchRepository.findAllByDiscriminatorIn(matchDiscriminators).stream()
         .collect(toMap(
             ProductionMatchEntity::getDiscriminator,
             ProductionMatchEntity::getIndexName));

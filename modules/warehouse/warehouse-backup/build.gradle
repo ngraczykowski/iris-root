@@ -22,6 +22,8 @@ dependencies {
   implementation libraries.silenteight_data_api
   implementation libraries.jakarta_validation_api
   implementation libraries.silenteight_sep_base_common
+  implementation libraries.protobuf_java_util
+  implementation libraries.hibernate_types
 
   testImplementation project(":warehouse-common-testing")
   testImplementation project(":warehouse-test-client")

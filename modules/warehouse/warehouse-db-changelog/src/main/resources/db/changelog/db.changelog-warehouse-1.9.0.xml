@@ -211,4 +211,50 @@
       <column name="to_range" type="TIMESTAMP"/>
     </addColumn>
   </changeSet>
+
+  <changeSet id="warehouse-1.9.0-12" author="kdzieciol">
+    <addColumn tableName="warehouse_message_backup">
+      <column name="diagnostic" type="JSONB"/>
+    </addColumn>
+
+    <createIndex
+        tableName="warehouse_message_backup"
+        indexName="ix_warehouse_message_backup_request_id">
+      <column name="request_id"/>
+    </createIndex>
+    <createIndex
+        tableName="warehouse_message_backup"
+        indexName="ix_warehouse_message_backup_analysis_name">
+      <column name="analysis_name"/>
+    </createIndex>
+    <createIndex
+        tableName="warehouse_message_backup"
+        indexName="ix_warehouse_message_backup_created_at">
+      <column name="created_at"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-13" author="kdzieciol">
+    <dropIndex
+        tableName="warehouse_production_match"
+        indexName="ix_warehouse_production_match_alert_discriminator"/>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-14" author="kdzieciol">
+    <createIndex
+        tableName="warehouse_production_match"
+        indexName="ix_warehouse_production_match_alert_discriminator_discriminator"
+        unique="true">
+      <column name="alert_discriminator"/>
+      <column name="discriminator"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="warehouse-1.9.0-15" author="kdzieciol">
+    <createIndex
+        tableName="warehouse_production_match"
+        indexName="ix_warehouse_production_match_alert_discriminator">
+      <column name="alert_discriminator"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>

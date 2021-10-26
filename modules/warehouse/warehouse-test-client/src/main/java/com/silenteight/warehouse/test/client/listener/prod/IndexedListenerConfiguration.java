@@ -1,10 +1,11 @@
-package com.silenteight.warehouse.test.client.listener;
+package com.silenteight.warehouse.test.client.listener.prod;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
+import com.silenteight.warehouse.test.client.listener.IndexedEventIntegrationProperties;
 
 import org.springframework.amqp.core.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -35,13 +36,6 @@ class IndexedListenerConfiguration {
   }
 
   @Bean
-  Queue simulationIndexedQueue() {
-    return QueueBuilder
-        .durable(testProperties.getSimulationIndexedEventTestListenerInbound().getQueueName())
-        .build();
-  }
-
-  @Bean
   IndexedEventListener indexedEventListener() {
     return new IndexedEventListener();
   }
@@ -53,17 +47,10 @@ class IndexedListenerConfiguration {
   }
 
   @Bean
-  IntegrationFlow simulationAlertIndexedQueueToChannelIntegrationFlow() {
-    return createInputFlow(
-        ALERT_INDEXED_INBOUND_CHANNEL,
-        testProperties.getProductionIndexedEventTestListenerInbound().getQueueName());
-  }
-
-  @Bean
   IntegrationFlow productionAlertIndexedQueueToChannelIntegrationFlow() {
     return createInputFlow(
         ALERT_INDEXED_INBOUND_CHANNEL,
-        testProperties.getSimulationIndexedEventTestListenerInbound().getQueueName());
+        testProperties.getProductionIndexedEventTestListenerInbound().getQueueName());
   }
 
   private IntegrationFlow createInputFlow(String channel, String queue) {

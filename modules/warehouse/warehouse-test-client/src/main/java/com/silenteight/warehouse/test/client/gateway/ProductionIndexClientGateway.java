@@ -1,6 +1,6 @@
 package com.silenteight.warehouse.test.client.gateway;
 
-import com.silenteight.data.api.v1.ProductionDataIndexRequest;
+import com.silenteight.data.api.v2.ProductionDataIndexRequest;
 
 public interface ProductionIndexClientGateway {
 

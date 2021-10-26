@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @Data
 @Validated
 @ConfigurationProperties(prefix = "test.messaging.integration")
-class IndexedEventIntegrationProperties {
+public class IndexedEventIntegrationProperties {
 
   @Valid
   @NestedConfigurationProperty

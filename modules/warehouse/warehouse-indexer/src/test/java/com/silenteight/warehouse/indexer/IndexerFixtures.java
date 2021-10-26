@@ -2,8 +2,8 @@ package com.silenteight.warehouse.indexer;
 
 import lombok.NoArgsConstructor;
 
-import com.silenteight.data.api.v1.Alert;
-import com.silenteight.data.api.v1.Match;
+import com.silenteight.data.api.v2.Alert;
+import com.silenteight.data.api.v2.Match;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKeys;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceMatchKeys;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values;
@@ -48,14 +48,26 @@ public final class IndexerFixtures {
       .payload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES).build())
       .build();
 
-  public static final Alert ALERT_1 = Alert.newBuilder()
-      .setDiscriminator(DISCRIMINATOR_1)
-      .setName(Values.ALERT_NAME)
-      .setPayload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES))
-      .addAllMatches(of(
-          match(MATCH_NAME_1_1, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DECISION),
-          match(MATCH_NAME_1_2, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DATA)))
-      .build();
+  public static final Alert ALERT_1 = Alert
+          .newBuilder()
+          .setDiscriminator(DISCRIMINATOR_1)
+          .setName(Values.ALERT_NAME)
+          .setPayload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES))
+          .addAllMatches(of(
+              match(MATCH_NAME_1_1, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DECISION),
+              match(MATCH_NAME_1_2, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DATA)))
+          .build();
+
+  public static final com.silenteight.data.api.v1.Alert ALERT_SIM_1 =
+      com.silenteight.data.api.v1.Alert
+          .newBuilder()
+          .setDiscriminator(DISCRIMINATOR_1)
+          .setName(Values.ALERT_NAME)
+          .setPayload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES))
+          .addAllMatches(of(
+              simMatch(MATCH_NAME_1_1, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DECISION),
+              simMatch(MATCH_NAME_1_2, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DATA)))
+          .build();
 
   private static Builder structWithValue(String key, String value) {
 
@@ -66,7 +78,18 @@ public final class IndexerFixtures {
   }
 
   private static Match match(String matchName, String payloadName, String payloadSolution) {
-    return Match.newBuilder()
+    return Match
+        .newBuilder()
+        .setName(matchName)
+        .setDiscriminator(matchName)
+        .setPayload(structWithValue(payloadName, payloadSolution))
+        .build();
+  }
+
+  private static com.silenteight.data.api.v1.Match simMatch(
+      String matchName, String payloadName, String payloadSolution) {
+
+    return com.silenteight.data.api.v1.Match.newBuilder()
         .setName(matchName)
         .setPayload(structWithValue(payloadName, payloadSolution))
         .build();

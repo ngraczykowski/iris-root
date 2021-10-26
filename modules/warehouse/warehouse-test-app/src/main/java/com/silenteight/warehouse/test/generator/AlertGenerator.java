@@ -2,7 +2,7 @@ package com.silenteight.warehouse.test.generator;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.data.api.v1.Alert;
+import com.silenteight.data.api.v2.Alert;
 
 import com.google.protobuf.Struct;
 import com.google.protobuf.Struct.Builder;
@@ -34,8 +34,8 @@ class AlertGenerator {
         .build();
   }
 
-  Alert generateSimulation() {
-    return Alert.newBuilder()
+  com.silenteight.data.api.v1.Alert generateSimulation() {
+    return com.silenteight.data.api.v1.Alert.newBuilder()
         .setDiscriminator(getRandomDiscriminator())
         .setName(getRandomValue(ALERT_NAMES))
         .setPayload(convertMapToPayload(generateRandomPayload()))

@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 
 import com.silenteight.data.api.v1.ProductionDataIndexRequest;
 
+import com.google.protobuf.util.JsonFormat;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -35,7 +36,8 @@ class RestoreBackupMessageTest {
     //then
     assertThat(FILE_RESOURCE.exists()).isTrue();
     assertThat(fileContent).isNotNull();
-    assertThat(productionDataIndexRequest).isEqualTo(PRODUCTION_DATA_INDEX_REQUEST_1);
+    assertThat(JsonFormat.printer().print(productionDataIndexRequest))
+        .isEqualTo(JsonFormat.printer().print(PRODUCTION_DATA_INDEX_REQUEST_1));
   }
 
   private byte[] getFileAsBytes(Resource resource) {
