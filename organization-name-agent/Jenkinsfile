@@ -38,7 +38,7 @@ pipeline {
                             credentialsId: 'pypi-deployment-user',
                             usernameVariable: 'TWINE_USERNAME',
                             passwordVariable: 'TWINE_PASSWORD',
-                        ]) {
+                        )]) {
                             sh './scripts/publish.sh'
                         }
                     }
@@ -66,7 +66,7 @@ pipeline {
                             credentialsId: 'pypi-deployment-user',
                             usernameVariable: 'TWINE_USERNAME',
                             passwordVariable: 'TWINE_PASSWORD',
-                        ]) {
+                        )]) {
                             sh './scripts/publish.sh'
                         }
                     }
