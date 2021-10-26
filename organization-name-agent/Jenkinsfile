@@ -59,7 +59,7 @@ pipeline {
                         }
                     }
                     steps {
-                        sh 'pip install bump2version tox --index-url ${PYPI_URL}'
+                        sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
                         sh 'git tag --delete "$(git tag --list)"'
                         sh './scripts/release.sh --index-url ${PYPI_URL}'
                         withCredentials([usernamePassword(
