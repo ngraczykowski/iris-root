@@ -276,33 +276,33 @@ warehouse.report.ai-reasoning-match-level:
     date-field-name: alert_create_time
     columns:
       - name: match_feature_vector_signature
-        label: match_feature_vector_signature
+        label: Reasoning Branch ID
       - name: match_policy
-        label: match_policy
+        label: Policy ID
       - name: match_policy_title
-        label: match_policy_title
+        label: Policy Name
       - name: match_step
-        label: match_step
+        label: Step ID
       - name: match_step_title
-        label: match_step_title
-      - name: alert_firco_system_id
-        label: alert_firco_system_id
-      - name: alert_status
-        label: alert_status
-      - name: alert_recommended_action
-        label: alert_recommended_action
+        label: Step Name
       - name: match_solution
-        label: match_solution
-      - name: alert_create_time
-        label: alert_create_time
+        label: S8 Match Resolution
+      - name: alert_recommended_action
+        label: S8 Alert Resolution
       - name: alert_recommendation_comment
-        label: alert_recommendation_comment
-      - name: s8_country
-        label: s8_country
-      - name: s8_discriminator
-        label: s8_discriminator
-      - name: s8_match_discriminator
-        label: s8_match_discriminator
+        label: S8 Alert Comment
+      - name: alert_create_time
+        label: S8 Alert Resolution timestamp (UTC)
+      - name: alert_firco_system_id
+        label: Alert Client ID
+      - name: s8_alert_name
+        label: Alert S8 ID
+      - name: alert_status
+        label: Alert Status
+      - name: alert_delivery_status
+        label: Alert Delivery Status
+      - name: s8_match_name
+        label: Match S8 ID
   simulation:
     date-field-name: index_timestamp
     columns:
