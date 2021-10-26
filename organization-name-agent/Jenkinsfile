@@ -41,7 +41,7 @@ pipeline {
                             usernameVariable: 'TWINE_USERNAME',
                             passwordVariable: 'TWINE_PASSWORD',
                         )]) {
-                            sh './scripts/publish.sh'
+                            sh './scripts/publish.sh --index-url "${PYPI_URL}"'
                         }
                     }
                 }
