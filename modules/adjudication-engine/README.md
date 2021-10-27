@@ -28,3 +28,7 @@ To add validation to your requests, see the [Validation Guide](doc/validation-gu
 ## Alert labels
 
 To see available alert labels and it's values see [Alert labels and values list](doc/alert-labes-values.md)
+
+## Datasource V1
+
+To run AE using datasource API V1 use `datasourcev1` profile
