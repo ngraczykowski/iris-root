@@ -260,10 +260,6 @@ warehouse.report.ai-reasoning:
   production:
     date-field-name: alert_create_time
     columns:
-      - name: alert_policy
-        label: Policy ID
-      - name: alert_policy_title
-        label: Policy Name
       - name: alert_recommended_action
         label: S8 Alert Resolution
       - name: alert_create_time
