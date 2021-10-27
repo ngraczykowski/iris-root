@@ -23,8 +23,7 @@ import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 @Import({
     CreateAiReasoningMatchLevelReportRestController.class,
     CreateAiReasoningMatchLevelReportControllerAdvice.class,
-    CreateProductionAiReasoningMatchLevelReportUseCase.class,
-    CreateSimulationAiReasoningMatchLevelReportUseCase.class
+    CreateProductionAiReasoningMatchLevelReportUseCase.class
 })
 class CreateAiReasoningMatchLevelReportRestControllerTest extends BaseRestControllerTest {
 
@@ -46,18 +45,6 @@ class CreateAiReasoningMatchLevelReportRestControllerTest extends BaseRestContro
 
   @MockBean
   private CreateProductionAiReasoningMatchLevelReportUseCase productionUseCase;
-  @MockBean
-  private CreateSimulationAiReasoningMatchLevelReportUseCase simulationUseCase;
-
-  @Test
-  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER, APPROVER })
-  void its303_whenSimulationReportCreated() {
-    given(simulationUseCase.createReport(any())).willReturn(REPORT_INSTANCE);
-
-    post(CREATE_SIMULATION_REPORT_URL)
-        .statusCode(SEE_OTHER.value())
-        .header("Location", "reports/" + TIMESTAMP + "/status");
-  }
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER, APPROVER })
@@ -82,15 +69,7 @@ class CreateAiReasoningMatchLevelReportRestControllerTest extends BaseRestContro
   @WithMockUser(
       username = USERNAME,
       authorities = { USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
-  void its403_whenNotPermittedRoleForCreatingSimulationReports() {
-    post(CREATE_SIMULATION_REPORT_URL).statusCode(FORBIDDEN.value());
-  }
-
-  @Test
-  @WithMockUser(
-      username = USERNAME,
-      authorities = { USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRoleForCreatingProductionReports() {
-    post(CREATE_SIMULATION_REPORT_URL).statusCode(FORBIDDEN.value());
+    post(CREATE_PRODUCTION_REPORT_URL).statusCode(FORBIDDEN.value());
   }
 }
