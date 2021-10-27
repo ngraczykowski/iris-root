@@ -15,17 +15,17 @@ ae:
   categories:
     missing:
       batch-size:
-        insert: 128
-        select: 128
+        insert: 1024
+        select: 1024
 
   comment-input:
     jdbc:
-      missing-batch-size-select: 256
+      missing-batch-size-select: 1024
 
   recommendation:
     jdbc:
       pending-alerts:
-        fetch-size: 256
+        fetch-size: 1024
     comment:
       template-name: alert
 
@@ -223,13 +223,15 @@ spring:
         retry:
           enabled: true
           max-attempts: 5
+          multiplier: 1.5
       simple:
-        concurrency: 1
+        concurrency: ${ae.messaging.concurrency:4}
         max-concurrency: ${ae.messaging.concurrency:4}
         prefetch: ${ae.messaging.prefetch:1}
         retry:
           enabled: true
           max-attempts: 5
+          multiplier: 1.5
 
   jackson:
     default-property-inclusion: NON_NULL
