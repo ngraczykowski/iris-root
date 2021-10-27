@@ -73,39 +73,45 @@ warehouse.report.rbs:
   simulation:
     date-field-name: index_timestamp
     columns:
-      - name: alert_match_reason:feature_vector_signature
-        label: fv_signature
-      - name: alert_match_reason:policy
-        label: policy_id
-      - name: alert_match_reason:policy_title
-        label: policy_title
-      - name: alert_match_reason:step
-        label: step_id
-      - name: alert_match_reason:step_title
-        label: step_title
-      - name: alert_recommendation_recommended_action
-        label: alert_recommendation
-      - name: alert_categories/crossmatch
-        label: Name Address Crossmatch Category
-      - name: alert_categories/oneLiner
-        label: One Liner Category
-      - name: alert_categories/specificTerms
-        label: Specific Terms Category
-      - name: alert_categories/twoLines
-        label: Two Lines Name Category
-      - name: alert_categories/historicalRiskAssessment
-        label: Historical Risk Assessment Category
-      - name: alert_features/name:solution
-        label: Name Feature
-      - name: alert_features/geo:solution
-        label: Geo Feature
-    grouping-columns:
-      - name: alert_analyst_decision
-        grouping-values:
-          - value: analyst_decision_true_positive
-            label: analyst_decision_FP
-          - value: analyst_decision_false_positive
-            label: analyst_decision_PTP
+      - name: match_feature_vector_signature
+        label: Reasoning Branch ID
+      - name: match_policy
+        label: Policy Id
+      - name: match_policy_title
+        label: Policy Title
+      - name: match_step
+        label: Step Id
+      - name: match_step_title
+        label: Step Title
+      - name: match_solution
+        label: S8 Match Resolution
+      - name: match_category_values_categories/crossmatch
+        label: Name Address Crossmatch
+      - name: match_category_values_categories/specificTerms
+        label: Specific Terms
+      - name: match_category_values_categories/historicalRiskAssessment
+        label: Historical Risk Assessment
+      - name: match_category_values_categories/watchlistType
+        label: Watchlist Type
+      - name: match_category_values_categories/matchType
+        label: Match Type
+      - name: match_category_values_categories/companyNameSurrounding
+        label: Company Name Surrounding
+      - name: match_feature_values_features/geo
+        label: Geo
+      - name: match_feature_values_features/name
+        label: Name
+      - name: match_feature_values_features/nameMatchedText
+        label: Name Matched Text
+      - name: match_feature_values_features/organizationName
+        label: Organization Name
+    grouping-columns: []
+#      - name: alert_analyst_decision
+#        grouping-values:
+#          - value: analyst_decision_true_positive
+#            label: analyst_decision_FP
+#          - value: analyst_decision_false_positive
+#            label: analyst_decision_PTP
 
 warehouse.report.billing:
   year-field-name: alert_recommendationYear
