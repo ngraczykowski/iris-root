@@ -63,7 +63,8 @@ class CategoryGrpcServiceValues extends CategoryValueServiceImplBase {
 
   private CategoryValue mapCategoryValue(CategoryValueDto categoryValue) {
     var builder = CategoryValue.newBuilder()
-        .setName(categoryValue.getName());
+        .setName(categoryValue.getName())
+        .setMatch(categoryValue.getMatch());
 
     var values = categoryValue.getValues();
     if (categoryValue.isMultiValue()) {
