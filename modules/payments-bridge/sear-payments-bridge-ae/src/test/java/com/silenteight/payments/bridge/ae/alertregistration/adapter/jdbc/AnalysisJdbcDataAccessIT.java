@@ -17,7 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     JdbcTestConfiguration.class,
     AnalysisJdbcDataAccess.class,
     FindTodayAnalysisQuery.class,
-    InsertAnalysisQuery.class
+    InsertAnalysisQuery.class,
+    ExistsAnalysisQuery.class
 })
 class AnalysisJdbcDataAccessIT extends BaseJdbcTest {
 

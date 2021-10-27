@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.common.dto.input.RequestDto;
 import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.payments.bridge.event.*;
-import com.silenteight.payments.bridge.event.RecommendationCompletedEvent.AdjudicationRecommendationCompletedEvent;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent.BridgeRecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
@@ -100,9 +99,6 @@ class PaymentsBridgeApplicationTests {
     recorder.subscribe(AlertRegisteredEvent.class, channels.alertRegistered());
     recorder.subscribe(AlertInputAcceptedEvent.class, channels.alertInputAccepted());
     recorder.subscribe(RecommendationGeneratedEvent.class, channels.recommendationGenerated());
-    recorder.subscribe(
-        AdjudicationRecommendationCompletedEvent.class,
-        channels.recommendationCompleted());
     return recorder;
   }
 
