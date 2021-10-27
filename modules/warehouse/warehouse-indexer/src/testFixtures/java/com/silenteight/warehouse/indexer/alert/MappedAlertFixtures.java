@@ -5,8 +5,11 @@ import com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants;
 
 import java.util.Map;
 
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_1;
 import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_PREFIX;
 import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.DISCRIMINATOR;
+import static com.silenteight.warehouse.indexer.match.mapping.MatchMapperConstants.MATCH_NAME;
+import static com.silenteight.warehouse.indexer.match.mapping.MatchMapperConstants.MATCH_PREFIX;
 import static java.util.Map.of;
 
 public class MappedAlertFixtures {
@@ -88,8 +91,6 @@ public class MappedAlertFixtures {
 
     public static final String MATCH_NAME_1_1 = MATCH_RESOURCE_PREFIX + MATCH_ID_1_1;
     public static final String MATCH_NAME_1_2 = MATCH_RESOURCE_PREFIX + MATCH_ID_1_2;
-    public static final String MATCH_NAME_2_1 = MATCH_RESOURCE_PREFIX + MATCH_ID_2_1;
-    public static final String MATCH_NAME_2_2 = MATCH_RESOURCE_PREFIX + MATCH_ID_2_2;
     public static final String SIMULATION_ANALYSIS_NAME =
         ANALYSIS_RESOURCE_PREFIX + SIMULATION_ANALYSIS_ID;
   }
@@ -185,5 +186,17 @@ public class MappedAlertFixtures {
       MappedKeys.ANALYST_DECISION_KEY, Values.ANALYST_DECISION_UNKNOWN,
       AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
+  );
+
+  public static final Map<String, Object> MAPPED_ALERT_11 = of(
+      DISCRIMINATOR, DISCRIMINATOR_1,
+      MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
+      MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
+      MappedKeys.STATUS_KEY, Values.STATUS_COMPLETED,
+      AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
+      AlertMapperConstants.ALERT_NAME, Values.ALERT_NAME,
+      RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK,
+      MATCH_PREFIX + SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DECISION,
+      MATCH_NAME, MATCH_NAME_1_1
   );
 }

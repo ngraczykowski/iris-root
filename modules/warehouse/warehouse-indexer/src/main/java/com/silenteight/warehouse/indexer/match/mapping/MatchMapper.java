@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.INDEX_TIMESTAMP;
-import static com.silenteight.warehouse.indexer.match.mapping.MatchMapperConstants.DISCRIMINATOR;
+import static com.silenteight.warehouse.indexer.match.mapping.MatchMapperConstants.MATCH_DISCRIMINATOR;
 import static com.silenteight.warehouse.indexer.match.mapping.MatchMapperConstants.MATCH_NAME;
 import static com.silenteight.warehouse.indexer.match.mapping.MatchMapperConstants.MATCH_PREFIX;
 import static java.time.ZoneOffset.UTC;
@@ -37,7 +37,9 @@ public class MatchMapper {
     documentAttributes.putAll(
         payloadConverter.convertPayloadToMap(match.getPayload(), MATCH_PREFIX));
     documentAttributes.put(INDEX_TIMESTAMP, now.format(ISO_DATE_TIME));
-    documentAttributes.put(DISCRIMINATOR, match.getDiscriminator());
+    ofNullable(match.getDiscriminator())
+        .ifPresent(discriminator -> documentAttributes.put(
+            MATCH_DISCRIMINATOR, match.getDiscriminator()));
 
     extractMatchName(match)
         .ifPresent(matchName -> documentAttributes.put(MATCH_NAME, matchName));

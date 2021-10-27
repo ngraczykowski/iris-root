@@ -35,6 +35,7 @@ import static com.silenteight.warehouse.indexer.IndexerFixtures.*;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DOCUMENT_ID;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_11;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.SIMULATION_ANALYSIS_NAME;
 import static java.util.List.of;
 import static java.util.UUID.randomUUID;
@@ -127,7 +128,7 @@ class IndexerIT {
 
     var source = simpleElasticTestClient.getSource(
         SIMULATION_ELASTIC_INDEX_NAME, ALERT_1.getName());
-    assertThat(source).isEqualTo(MAPPED_ALERT_1);
+    assertThat(source).isEqualTo(MAPPED_ALERT_11);
   }
 
   @Test
