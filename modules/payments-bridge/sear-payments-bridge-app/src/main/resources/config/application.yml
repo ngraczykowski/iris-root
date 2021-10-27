@@ -254,6 +254,9 @@ info:
   env: ${spb.env:local}
 
 grpc:
+  server:
+    max-inbound-message-size: 8MB
   client:
     GLOBAL:
       negotiation-type: PLAINTEXT
+      max-inbound-message-size: 8MB
