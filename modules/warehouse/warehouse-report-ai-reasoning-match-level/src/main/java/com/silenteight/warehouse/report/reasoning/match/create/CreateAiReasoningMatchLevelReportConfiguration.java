@@ -24,16 +24,4 @@ class CreateAiReasoningMatchLevelReportConfiguration {
         properties.getProduction(),
         productionIndexerQuery);
   }
-
-  @Bean
-  CreateSimulationAiReasoningMatchLevelReportUseCase aiReasoningMatchLevelSimulationUseCase(
-      AiReasoningMatchLevelReportService service,
-      @Valid AiReasoningReportProperties properties,
-      @Qualifier(value = "simulationIndexingQuery") IndexesQuery simulationIndexerQuery) {
-
-    return new CreateSimulationAiReasoningMatchLevelReportUseCase(
-        service,
-        properties.getSimulation(),
-        simulationIndexerQuery);
-  }
 }

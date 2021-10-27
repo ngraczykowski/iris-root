@@ -24,39 +24,11 @@ import static org.springframework.http.ResponseEntity.status;
 @RequestMapping(ROOT)
 class CreateAiReasoningMatchLevelReportRestController {
 
-  private static final String CREATE_SIMULATION_REPORT_URL =
-      "/v1/analysis/{analysisId}/definitions/AI_REASONING_MATCH_LEVEL/{id}/reports";
-
   private static final String CREATE_PRODUCTION_REPORT_URL =
       "/v1/analysis/production/definitions/AI_REASONING_MATCH_LEVEL/{id}/reports";
 
   @NonNull
   private final CreateProductionAiReasoningMatchLevelReportUseCase createProductionReportUseCase;
-  @NonNull
-  private final CreateSimulationAiReasoningMatchLevelReportUseCase createSimulationReportUseCase;
-
-  @PostMapping(CREATE_SIMULATION_REPORT_URL)
-  @PreAuthorize("isAuthorized('CREATE_SIMULATION_REPORT')")
-  public ResponseEntity<Void> createReport(
-      @PathVariable String analysisId,
-      @PathVariable String id) {
-
-    log.info(
-        "Create simulation AI Reasoning Match Level report request received, analysisId={},id={}",
-        analysisId, id);
-
-    ReportInstanceReferenceDto reportInstance = createSimulationReportUseCase
-        .createReport(analysisId);
-
-    log.debug(
-        "Create simulation AI Reasoning Match Level report request processed, "
-            + "analysisId={}, id={}, reportId={}",
-        analysisId, id, reportInstance.getInstanceReferenceId());
-
-    return status(SEE_OTHER)
-        .header("Location", getReportLocation(reportInstance.getInstanceReferenceId()))
-        .build();
-  }
 
   @PostMapping(CREATE_PRODUCTION_REPORT_URL)
   @PreAuthorize("isAuthorized('CREATE_PRODUCTION_ON_DEMAND_REPORT')")
