@@ -6,6 +6,7 @@ import com.silenteight.adjudication.engine.analysis.categoryrequest.domain.GetCa
 import com.silenteight.adjudication.engine.testing.RepositoryTestConfiguration;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -54,8 +55,8 @@ class JdbcMatchCategoryValuesDataAccessTest extends BaseDataJpaTest {
 
   @Test
   void shouldSelectMissingCategories() {
-    var missingCategoryResult
-        = new SelectMissingMatchCategoryValuesQuery(dataSource, 4096).execute(1);
+    var missingCategoryResult =
+        new SelectMissingMatchCategoryValuesQuery(new ObjectMapper(), dataSource, 4096).execute(1);
 
     assertThat(missingCategoryResult).isNotNull();
   }

@@ -41,8 +41,10 @@ class CategoryServiceClientV2 implements CategoryServiceClient {
   @Override
   public List<GetCategoryValueResponse> getCategoryValue(
       MissingCategoryResult missingCategoryResult) {
+
     var response =
         batchGetMatchCategoryValues(missingCategoryResult.toBatchGetMatchCategoryValuesRequestV2());
+
     return response
         .getCategoryValuesList()
         .stream()
@@ -59,7 +61,6 @@ class CategoryServiceClientV2 implements CategoryServiceClient {
       log.error("Not all requested category values received: requestedCount={}, receivedCount={}",
           request.getCategoryMatchesCount(), response.getCategoryValuesCount());
 
-      // FIXME(ahaczewski): Remove this mocked response, instead of hiding Data Source shit.
       return buildMockResponse(request, response);
     }
 

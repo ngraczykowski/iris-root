@@ -36,8 +36,8 @@ class FetchAllMissingCategoryValuesUseCase {
         break;
       }
 
-      if (log.isTraceEnabled()) {
-        log.trace("Analysis is missing match category values: analysis={}, missingCount={}",
+      if (log.isDebugEnabled()) {
+        log.debug("Analysis is missing match category values: analysis={}, missingCount={}",
             analysis, missingValues.getCount());
       }
 
