@@ -1,3 +1,4 @@
+-- Create alerts with matches
 INSERT INTO ae_alert(alert_id,alerted_at,created_at,client_alert_identifier,priority) VALUES (1,now(),now(),'some-uuid-1',5);
 INSERT INTO ae_alert(alert_id,alerted_at,created_at,client_alert_identifier,priority) VALUES (2,now(),now(),'some-uuid-2',5);
 INSERT INTO ae_alert(alert_id,alerted_at,created_at,client_alert_identifier,priority) VALUES (3,now(),now(),'some-uuid-3',5);
@@ -10,5 +11,12 @@ INSERT INTO ae_alert(alert_id,alerted_at,created_at,client_alert_identifier,prio
 INSERT INTO ae_alert(alert_id,alerted_at,created_at,client_alert_identifier,priority) VALUES (10,now(),now(),'some-uuid-10',5);
 INSERT INTO ae_alert(alert_id,alerted_at,created_at,client_alert_identifier,priority) VALUES (11,'2006-01-01',now(),'some-uuid-11',5);
 
+-- Insert matches into all alerts
+INSERT INTO ae_match (SELECT aa.alert_id, aa.alert_id, now(), 'clientId', 1 FROM ae_alert aa);
+
+-- Create alert without match
+INSERT INTO ae_alert(alert_id,alerted_at,created_at,client_alert_identifier,priority) VALUES (12,now(),now(),'some-uuid-12',5);
+
+-- Add labels to alerts
 INSERT INTO ae_alert_labels VALUES (1, 'label', 'value');
 INSERT INTO ae_alert_labels VALUES (2, 'label', 'value');
