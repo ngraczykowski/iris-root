@@ -8,6 +8,8 @@ warehouse:
   sampling:
     time-field-name: alert_create_time
 
+  indexer.diagnostic.enabled: true
+
 warehouse.messaging:
   broker:
     alert-production-indexing:
