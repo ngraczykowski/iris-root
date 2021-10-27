@@ -74,20 +74,11 @@ public class DatasetAlertRepositoryIT extends BaseDataJpaTest {
     datasetAlertRepository.createFilteredDataset(
         dataset.getId(), List.of(), OffsetDateTime.parse("2007-12-03T10:15:30+01:00"),
         OffsetDateTime.now());
-    assertThat(datasetAlertRepository.countByIdDatasetId(dataset.getId())).isEqualTo(10);
+    assertThat(datasetAlertRepository.countByIdDatasetId(dataset.getId())).isEqualTo(11);
   }
 
   @Test
   void shouldCreateDatasetAlertByLabelFilter() {
-    DatasetEntity dataset = createDatasetEntity();
-    datasetAlertRepository.createFilteredDataset(
-        dataset.getId(), List.of(), OffsetDateTime.parse("2007-12-03T10:15:30+01:00"),
-        OffsetDateTime.now());
-    assertThat(datasetAlertRepository.countByIdDatasetId(dataset.getId())).isEqualTo(10);
-  }
-
-  @Test
-  void shouldCreateEmptyDatasetAlertByFilter() {
     DatasetEntity dataset = createDatasetEntity();
     datasetAlertRepository.createFilteredDataset(
         dataset.getId(), List.of("labelvalue"), OffsetDateTime.parse("2007-12-03T10:15:30+01:00"),
