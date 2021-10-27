@@ -43,7 +43,8 @@ class EtlService {
 
     process(command);
 
-    return new AlertInputAcceptedEvent(command.getAlertId(), command.getAlertRegisteredName());
+    return new AlertInputAcceptedEvent(
+        command.getAlertId(), command.getAlertRegisteredName(), command.getMatches());
   }
 
   private void process(AlertRegisteredEvent command) {

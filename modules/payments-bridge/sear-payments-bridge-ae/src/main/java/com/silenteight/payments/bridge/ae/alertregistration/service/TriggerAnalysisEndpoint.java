@@ -32,6 +32,7 @@ class TriggerAnalysisEndpoint {
         .build();
     triggerAlertAnalysisService.triggerAlertAnalysis(request);
 
-    return new AlertAddedToAnalysisEvent(event.getAlertId(), event.getAlertRegisteredName());
+    return new AlertAddedToAnalysisEvent(
+        event.getAlertId(), event.getAlertRegisteredName(), event.getMatches());
   }
 }

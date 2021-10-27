@@ -8,6 +8,7 @@ import lombok.ToString;
 import com.silenteight.payments.bridge.common.model.AlertId;
 import com.silenteight.payments.bridge.event.data.AlertDataIdentifier;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -21,4 +22,5 @@ public class AlertInputAcceptedEvent extends DomainEvent implements AlertId, Ale
 
   private final UUID alertId;
   private final String alertRegisteredName;
+  private final Map<String, String> matches;
 }
