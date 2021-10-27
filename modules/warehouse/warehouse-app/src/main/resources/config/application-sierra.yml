@@ -281,7 +281,7 @@ warehouse.report.ai-reasoning:
         label: Policy Name
       - name: alert_recommendation_recommended_action
         label: S8 Alert Resolution
-      - name: aalert_recommendation_create_time
+      - name: alert_recommendation_create_time
         label: S8 Alert Resolution Timestamp
       - name: alert_recommendation_comment
         label: Alert Comment
