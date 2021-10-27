@@ -355,4 +355,4 @@ warehouse.report.ai-reasoning-match-level:
         label: s8_discriminator
 
 warehouse.report.deprecated-simulation:
-  hidden-types: [METRICS,SIMULATION]
+  hidden-types: [METRICS]
