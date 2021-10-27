@@ -29,7 +29,6 @@ class DeprecatedRbsReportConfiguration {
       DeprecatedRbsReportRepository rbsReportRepository,
       DeprecatedRbsReportGenerationService reportGenerationService,
       RbsReportProperties properties,
-      @Qualifier(value = "productionIndexingQuery") IndexesQuery productionIndexerQuery,
       @Qualifier(value = "simulationIndexingQuery") IndexesQuery simulationIndexerQuery) {
 
     return new DeprecatedAsyncRbsReportGenerationService(
@@ -38,7 +37,6 @@ class DeprecatedRbsReportConfiguration {
         DefaultTimeSource.INSTANCE,
         properties.getProduction(),
         properties.getSimulation(),
-        productionIndexerQuery,
         simulationIndexerQuery);
   }
 

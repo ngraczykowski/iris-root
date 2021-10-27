@@ -194,10 +194,6 @@ warehouse.report.accuracy:
   production:
     date-field-name: alert_create_time
     columns:
-      - name: alert_policy
-        label: Policy ID
-      - name: alert_policy_title
-        label: Policy Name
       - name: alert_recommended_action
         label: S8 Alert Resolution
       - name: alert_create_time
@@ -214,7 +210,7 @@ warehouse.report.accuracy:
         label: Alert Client ID
       - name: alert_status
         label: Alert Status
-      - name: alert_alert_message_id
+      - name: s8_alert_name
         label: Alert S8 ID
     filters:
       - name: alert_firco_analyst_decision
@@ -244,7 +240,7 @@ warehouse.report.accuracy:
         label: Alert Client ID
       - name: alert_status
         label: Alert Status
-      - name: alert_alert_message_id
+      - name: s8_alert_name
         label: Alert S8 ID
     filters:
       - name: alert_firco_analyst_decision

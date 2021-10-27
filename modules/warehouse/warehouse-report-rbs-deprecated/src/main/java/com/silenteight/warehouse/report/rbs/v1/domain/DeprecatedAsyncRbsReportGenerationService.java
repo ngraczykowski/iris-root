@@ -15,11 +15,12 @@ import org.springframework.scheduling.annotation.Async;
 
 import java.util.List;
 
+import static java.util.Collections.singletonList;
+
 @RequiredArgsConstructor
 @Slf4j
 public class DeprecatedAsyncRbsReportGenerationService {
 
-  static final String PRODUCTION_ANALYSIS_NAME = "production";
   @NonNull
   private final DeprecatedRbsReportRepository repository;
   @NonNull
@@ -31,13 +32,11 @@ public class DeprecatedAsyncRbsReportGenerationService {
   @NonNull
   private final DeprecatedRbsReportDefinition simulationReportProperties;
   @NonNull
-  private final IndexesQuery productionIndexerQuery;
-  @NonNull
   private final IndexesQuery simulationIndexerQuery;
 
   @Async
   public void generateReport(long id) {
-    List<String> indexes = productionIndexerQuery.getIndexesForAnalysis(PRODUCTION_ANALYSIS_NAME);
+    List<String> indexes = singletonList(productionReportProperties.getIndexName());
     try {
       doGenerateReport(id, productionReportProperties, indexes);
     } catch (RuntimeException e) {

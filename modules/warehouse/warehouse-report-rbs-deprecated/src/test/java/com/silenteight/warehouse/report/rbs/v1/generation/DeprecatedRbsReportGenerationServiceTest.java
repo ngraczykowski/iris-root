@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.silenteight.warehouse.report.rbs.v1.generation.DeprecatedRbScorerFixtures.ANALYSIS_DECISION_FIELD;
+import static com.silenteight.warehouse.report.rbs.v1.generation.DeprecatedRbScorerFixtures.TEST_INDEX;
 import static java.time.OffsetDateTime.now;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -44,7 +45,7 @@ class DeprecatedRbsReportGenerationServiceTest {
         FetchGroupedDataResponse.builder().rows(emptyList()).build());
 
     CsvReportContentDto reportContent = underTest.generateReport(
-        now(), now(), of("index123"), getRbsReportDefinition());
+        now(), now(), of(TEST_INDEX), getRbsReportDefinition());
     assertThat(reportContent.getLines()).isEmpty();
   }
 
@@ -86,7 +87,7 @@ class DeprecatedRbsReportGenerationServiceTest {
     when(groupingQueryService.generate(any())).thenReturn(response);
 
     CsvReportContentDto reportContent = underTest.generateReport(
-        now(), now(), of("index123"), getRbsReportDefinition());
+        now(), now(), of(TEST_INDEX), getRbsReportDefinition());
 
     assertThat(reportContent.getReport()).isEqualTo(
         "FV Signature,policy_name,step_name,recommended_action,"
@@ -155,7 +156,8 @@ class DeprecatedRbsReportGenerationServiceTest {
             getColumn(DeprecatedRbScorerFixtures.FEATURES_DOB_FIELD)),
         getGroupingColumn(),
         asList(
-            getFilter(DeprecatedRbScorerFixtures.ALERT_STATUS_FIELD, of("COMPLETED"))));
+            getFilter(DeprecatedRbScorerFixtures.ALERT_STATUS_FIELD, of("COMPLETED"))),
+        TEST_INDEX);
 
   }
 
