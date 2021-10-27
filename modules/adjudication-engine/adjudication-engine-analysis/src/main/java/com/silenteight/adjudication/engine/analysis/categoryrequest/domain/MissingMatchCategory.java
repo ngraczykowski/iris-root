@@ -29,4 +29,8 @@ public class MissingMatchCategory {
   public List<String> getMatchCategoryName() {
     return matches.stream().map(m -> m.getMatchCategoryName(categoryName)).collect(toList());
   }
+
+  public int getMatchCount() {
+    return matches.size();
+  }
 }

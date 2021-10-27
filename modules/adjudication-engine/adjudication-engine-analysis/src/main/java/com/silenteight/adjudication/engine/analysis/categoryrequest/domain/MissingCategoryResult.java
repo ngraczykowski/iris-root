@@ -30,6 +30,10 @@ public class MissingCategoryResult {
     return missingMatchCategories.size();
   }
 
+  public int getMatchCount() {
+    return missingMatchCategories.stream().mapToInt(MissingMatchCategory::getMatchCount).sum();
+  }
+
   public BatchGetMatchesCategoryValuesRequest toBatchGetMatchCategoryValuesRequestV2() {
     return BatchGetMatchesCategoryValuesRequest.newBuilder()
         .addAllCategoryMatches(
