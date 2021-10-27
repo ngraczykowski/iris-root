@@ -73,37 +73,37 @@ warehouse.report.rbs:
   simulation:
     date-field-name: index_timestamp
     columns:
-      - name: match_feature_vector_signature
+      - name: alert_match_reason:feature_vector_signature
         label: Reasoning Branch ID
-      - name: match_policy
+      - name: alert_match_reason:policy
         label: Policy Id
-      - name: match_policy_title
+      - name: alert_match_reason:policy_title
         label: Policy Title
-      - name: match_step
+      - name: alert_match_reason:step
         label: Step Id
-      - name: match_step_title
+      - name: alert_match_reason:step_title
         label: Step Title
-      - name: match_solution
+      - name: alert_match_solution
         label: S8 Match Resolution
-      - name: match_category_values_categories/crossmatch
+      - name: alert_categories/crossmatch:value
         label: Name Address Crossmatch
-      - name: match_category_values_categories/specificTerms
+      - name: alert_categories/specificTerms:value
         label: Specific Terms
-      - name: match_category_values_categories/historicalRiskAssessment
+      - name: alert_categories/historicalRiskAssessment:value
         label: Historical Risk Assessment
-      - name: match_category_values_categories/watchlistType
+      - name: alert_categories/watchlistType:value
         label: Watchlist Type
-      - name: match_category_values_categories/matchType
+      - name: alert_categories/matchType:value
         label: Match Type
-      - name: match_category_values_categories/companyNameSurrounding
+      - name: alert_categories/companyNameSurrounding:value
         label: Company Name Surrounding
-      - name: match_feature_values_features/geo
+      - name: alert_features/geo:solution
         label: Geo
-      - name: match_feature_values_features/name
+      - name: alert_features/name:solution
         label: Name
-      - name: match_feature_values_features/nameMatchedText
+      - name: alert_features/nameMatchedText:solution
         label: Name Matched Text
-      - name: match_feature_values_features/organizationName
+      - name: alert_features/organizationName:solution
         label: Organization Name
     grouping-columns: []
 #      - name: alert_analyst_decision
