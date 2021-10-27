@@ -68,7 +68,9 @@ class EtlAlertService {
     var matches = new ArrayList<LearningMatch>();
 
     for (var row : rows) {
-      matches.add(etlMatchService.fromLearningRows(row));
+      var match = etlMatchService.fromLearningRows(row);
+      if (matches.stream().noneMatch(m -> m.getMatchId().equals(match.getMatchId())))
+        matches.add(match);
     }
 
     return matches;

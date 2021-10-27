@@ -32,7 +32,6 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 class EtlMatchService {
 
-  private final AlertParserService alertParserService;
   private final CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;
   private final ExtractMessageStructureUseCase extractMessageStructureUseCase;
   private final ExtractFieldValueUseCase extractFieldValueUseCase;

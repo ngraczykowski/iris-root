@@ -22,7 +22,7 @@ class MockCsvProvider implements CsvFileProvider {
   public AlertsReadingResponse getLearningCsv(
       LearningRequest learningRequest,
       Function<LearningCsv, AlertsReadingResponse> csvConsumer) {
-    Resource resource = new ClassPathResource("learning/provider/06-06-2001.csv");
+    Resource resource = new ClassPathResource("learning/provider/SVB_Jun_1_to_30_sorted.csv");
     try {
       var file = resource.getFile();
       return csvConsumer.apply(LearningCsv.builder().content(new FileInputStream(file)).build());
