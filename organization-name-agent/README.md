@@ -24,18 +24,13 @@
 
 ## Installing
 
-Module needs python >= 3.7. Tested only on python 3.7.
+Module needs python == 3.7. Tested only on python 3.7.
 
 
 * from PiPY (repo.silenteight.com/artifactory/api/pypi/pypi/simple):
   ```
   pip install company-name
   ```
-
-* using jenkins artifacts:
-  
-  latest wheel available at https://jenkins.silenteight.com/view/all/job/company-name-agent/job/master/
-
 
 * from source:
 
@@ -73,10 +68,12 @@ For local run simply copy `config/application.local.yaml` into `config/applicati
 ### running agent without installation
 
 Installation is not needed, if zipfile for your python version / system is available.
-Zipfile for latest python3.7 is available as artifact in jenkins (https://jenkins.silenteight.com/view/all/job/company-name-agent/job/master/)
+Zipfile for latest python3.7 is available as artifact in 
+
+https://repo.silenteight.com:443/artifactory/dist-public/organization-name-agent/
 
 ```
-python company_name-0.1.0.dev0.pyz -c {configuration_dir} --grpc --agent-exchange
+python company_name-{VERSION}.pyz -c {configuration_dir} --grpc --agent-exchange
 ```
 
 ### using agent in your python code
@@ -114,8 +111,7 @@ or, if you want to solution as simple python dict:
 <a name="deploying"/>
 
 ## Deploying
-See `Jenkinsfile` for building, testing and deploying on Nomad
-or `.gitlab-ci` for building, testing and deploying in PiPY. 
+See `Jenkinsfile` for building, testing and deploying on PYPI, repo.silenteight, Nomad
 
 <a name="agent-exchange"/>
 
@@ -470,7 +466,7 @@ Run tests with pytest:
 
 Some tests are skipped - those are examples that needs a little more care to work correctly
 
-For jenkins and gitlab runs, flag `--without-rabbitmq` is added - so tests with agent exchange
+For jenkins runs, flag `--without-rabbitmq` is added - so tests with agent exchange
 are not run, as it needs running rabbitmq instance.
 
 

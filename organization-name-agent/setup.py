@@ -44,7 +44,7 @@ setup(
     classifiers=[
         "License :: Other/Proprietary License",
     ],
-    python_requires=">=3.7",
+    python_requires="==3.7.*",
     install_requires=install_require,
     extras_require={"tests": tests_require},
     setup_requires=[],
