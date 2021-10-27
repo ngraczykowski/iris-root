@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ class GetMatchCategoryValuesUseCase {
 
   @Transactional(readOnly = true)
   public List<CategoryValueDto> activate(@NonNull GetMatchCategoryValuesCommand command) {
-    var matchValues = command.getMatchValues();
+    var matchValues = mapToMatchValues(command);
     var matchCategoryValues = findMatchCategoryValues(matchValues)
         .map(this::mapMatchCategoryEntity)
         .collect(toList());
@@ -33,6 +34,35 @@ class GetMatchCategoryValuesUseCase {
     }
 
     return matchCategoryValues;
+  }
+
+  private List<String> mapToMatchValues(GetMatchCategoryValuesCommand command) {
+    return command.getCategoryMatches().stream()
+        .flatMap(categoryMatch -> categoryMatch.getMatches().stream()
+            .map(match -> categoryMatch.getCategory() + '/' + match)
+        )
+        .collect(toList());
+  }
+
+  private Stream<MatchCategoryEntity> findMatchCategoryValues(List<String> matchValues) {
+    return matchCategoryRepository.findByNameIn(matchValues);
+  }
+
+  private CategoryValueDto mapMatchCategoryEntity(MatchCategoryEntity matchCategoryEntity) {
+    var names = separateCategoryAndMatchName(matchCategoryEntity.getName());
+    return CategoryValueDto.builder()
+        .multiValue(matchCategoryEntity.getMultiValue())
+        .name(names.get(0))
+        .match(names.get(1))
+        .values(new ArrayList<>(matchCategoryEntity.getValues()))
+        .build();
+  }
+
+  private static List<String> separateCategoryAndMatchName(String fullName) {
+    var index = fullName.indexOf('/', fullName.indexOf('/') + 1);
+    var name = fullName.substring(0, index);
+    var match = fullName.substring(index + 1);
+    return of(name, match);
   }
 
   private List<CategoryValueDto> addMissingValues(
@@ -49,22 +79,10 @@ class GetMatchCategoryValuesUseCase {
 
   private List<CategoryValueDto> addMissingValues(List<String> names) {
     return names.stream().map(n ->
-        CategoryValueDto.builder()
-            .name(n)
-            .values(List.of("NO_DATA"))
-            .build())
+            CategoryValueDto.builder()
+                .name(n)
+                .values(of("NO_DATA"))
+                .build())
         .collect(toList());
-  }
-
-  private Stream<MatchCategoryEntity> findMatchCategoryValues(List<String> matchValues) {
-    return matchCategoryRepository.findByNameIn(matchValues);
-  }
-
-  private CategoryValueDto mapMatchCategoryEntity(MatchCategoryEntity matchCategoryEntity) {
-    return CategoryValueDto.builder()
-        .multiValue(matchCategoryEntity.getMultiValue())
-        .name(matchCategoryEntity.getName())
-        .values(new ArrayList<>(matchCategoryEntity.getValues()))
-        .build();
   }
 }

@@ -7,10 +7,8 @@ import java.util.List;
 
 @Builder
 @Value
-public class CategoryValueDto {
+public class CategoryMatchesDto {
 
-  String name;
-  String match;
-  List<String> values;
-  boolean multiValue;
+  String category;
+  List<String> matches;
 }
