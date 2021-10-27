@@ -27,7 +27,7 @@ class ProcessAlertService {
       DateTimeFormatter.ofPattern("yyyyMMdd'-'HHmmss");
 
   private final CsvFileProvider csvFileProvider;
-  private final BatchAlertConsumer batchAlertConsumer;
+  private final LearningAlertBatchService learningAlertBatchService;
 
   public AlertsReadingResponse read(LearningRequest learningRequest) {
 
@@ -80,7 +80,7 @@ class ProcessAlertService {
 
       var rowAlertId = row.getFkcoVSystemId();
       if (!currentAlertId.equals(rowAlertId)) {
-        if (batchAlertConsumer.add(currentBatch, alertRows, false)) {
+        if (learningAlertBatchService.addToBatch(currentBatch, alertRows, false)) {
           successfulAlertsCount += currentBatch.getSuccess().size();
           errors.addAll(currentBatch.getErrors());
           currentBatch = new LearningAlertBatch(alertMetaData);
@@ -93,7 +93,7 @@ class ProcessAlertService {
     }
 
     if (!alertRows.isEmpty()) {
-      batchAlertConsumer.add(currentBatch, alertRows, true);
+      learningAlertBatchService.addToBatch(currentBatch, alertRows, true);
       successfulAlertsCount += currentBatch.getSuccess().size();
       errors.addAll(currentBatch.getErrors());
     }
