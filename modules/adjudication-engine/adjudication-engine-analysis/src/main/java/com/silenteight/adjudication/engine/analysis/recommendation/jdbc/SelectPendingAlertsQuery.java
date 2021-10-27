@@ -46,12 +46,13 @@ class SelectPendingAlertsQuery {
             + "                  AND aamsq.match_ids = apamq.match_ids\n"
             + "                  AND aamsq.analysis_id = apamq.analysis_id\n"
             + "         JOIN ae_alert_comment_input aaci ON apamq.alert_id = aaci.alert_id\n"
-            + "         LEFT JOIN ae_recommendation ar\n"
-            + "                   ON aamsq.alert_id = ar.alert_id"
-            + " AND aamsq.analysis_id = ar.analysis_id\n"
             + "WHERE aamsq.analysis_id = ?\n"
-            + "  AND ar.recommendation_id IS NULL",
-        ROW_MAPPER, analysisId);
+            + "  AND NOT EXISTS(\n"
+            + "        SELECT 1\n"
+            + "        FROM ae_recommendation ar\n"
+            + "        WHERE aamsq.alert_id = ar.alert_id\n"
+            + "          AND ar.analysis_id = ?)",
+        ROW_MAPPER, analysisId, analysisId);
 
     return new PendingAlerts(pendingAlerts);
   }
