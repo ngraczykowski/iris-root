@@ -3,7 +3,7 @@ package com.silenteight.adjudication.engine.analysis.categoryrequest;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import com.silenteight.datasource.categories.api.v1.CategoryServiceGrpc;
+import com.silenteight.datasource.categories.api.v2.CategoryValueServiceGrpc;
 
 import io.grpc.Channel;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -17,8 +17,8 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Configuration
 @EnableConfigurationProperties(CategoryServiceClientProperties.class)
-@Profile("datasourcev1")
-public class CategoryServiceClientV1Configuration {
+@Profile("!datasourcev1")
+public class CategoryServiceClientConfiguration {
 
   @Valid
   private final CategoryServiceClientProperties properties;
@@ -27,11 +27,11 @@ public class CategoryServiceClientV1Configuration {
   private Channel dataSourceChannel;
 
   @Bean
-  CategoryServiceClientV1 dataSourceClient() {
-    var stub = CategoryServiceGrpc
+  CategoryServiceClient dataSourceClient() {
+    var stub = CategoryValueServiceGrpc
         .newBlockingStub(dataSourceChannel)
         .withWaitForReady();
 
-    return new CategoryServiceClientV1(stub, properties.getTimeout());
+    return new CategoryServiceClient(stub, properties.getTimeout());
   }
 }

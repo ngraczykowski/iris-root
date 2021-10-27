@@ -38,22 +38,23 @@ class FetchAllMissingCategoryValuesUseCase {
 
       if (log.isDebugEnabled()) {
         log.debug("Analysis is missing match category values: analysis={}, categoryCount={}"
-                + ", matchCount={}",
-            analysis, missingValues.getCount(), missingValues.getMatchCount());
+                + ", matchValueCount={}",
+            analysis, missingValues.getCount(), missingValues.getMatchValueCount());
       }
 
       var response =
-          categoryServiceClient.getCategoryValue(missingValues);
+          categoryServiceClient.batchGetMatchCategoryValues(
+              missingValues.toBatchGetMatchCategoryValuesRequest());
 
       matchCategoryValuesDataAccess.createMatchCategoryValues(
           missingValues.getCategoryMap(), response);
 
       categories.addAll(missingValues.getCategories());
-      missingValues.forEachMatch(matches::add);
+      response.getCategoryValuesList().forEach(cv -> matches.add(cv.getMatch()));
     } while (true);
 
-    log.info("Fetched all missing category values: analysis={}, categories={}, matches={}",
-        analysis, categories, matches);
+    log.info("Fetched all missing category values: analysis={}, categories={}, match count={}",
+        analysis, categories, matches.size());
 
     return MatchCategoriesUpdated
         .newBuilder()

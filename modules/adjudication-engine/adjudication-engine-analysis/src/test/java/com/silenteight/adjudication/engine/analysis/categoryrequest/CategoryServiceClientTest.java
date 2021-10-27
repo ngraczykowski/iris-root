@@ -18,9 +18,9 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.*;
 
-class CategoryServiceClientV2Test {
+class CategoryServiceClientTest {
 
-  private CategoryServiceClientV2 categoryServiceClient;
+  private CategoryServiceClient categoryServiceClient;
 
   @RegisterExtension
   GrpcServerExtension grpcServer = new GrpcServerExtension().directExecutor();
@@ -32,7 +32,7 @@ class CategoryServiceClientV2Test {
     CategoryValueServiceBlockingStub stub = CategoryValueServiceGrpc
         .newBlockingStub(grpcServer.getChannel());
     Duration timeout = Duration.ofMillis(500L);
-    categoryServiceClient = new CategoryServiceClientV2(stub, timeout);
+    categoryServiceClient = new CategoryServiceClient(stub, timeout);
   }
 
   @Test

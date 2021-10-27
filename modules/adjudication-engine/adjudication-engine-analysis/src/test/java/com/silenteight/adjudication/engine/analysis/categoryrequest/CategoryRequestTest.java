@@ -23,12 +23,12 @@ class CategoryRequestTest {
 
   private HandlePendingRecommendationsUseCase handlePendingRecommendationsUseCase;
   private MatchCategoryValuesDataAccess matchCategoryValuesDataAccess;
-  private CategoryServiceClientV2 datasourceClient;
+  private CategoryServiceClient datasourceClient;
 
   @BeforeEach
   void setUp() {
     matchCategoryValuesDataAccess = Mockito.mock(MatchCategoryValuesDataAccess.class);
-    datasourceClient = Mockito.mock(CategoryServiceClientV2.class);
+    datasourceClient = Mockito.mock(CategoryServiceClient.class);
     handlePendingRecommendationsUseCase = new HandlePendingRecommendationsUseCase(
         new FetchAllMissingCategoryValuesUseCase(matchCategoryValuesDataAccess, datasourceClient));
   }

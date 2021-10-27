@@ -6,13 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.engine.analysis.categoryrequest.MatchCategoryValuesDataAccess;
 import com.silenteight.adjudication.engine.analysis.categoryrequest.domain.CategoryMap;
-import com.silenteight.adjudication.engine.analysis.categoryrequest.domain.GetCategoryValueResponse;
 import com.silenteight.adjudication.engine.analysis.categoryrequest.domain.MissingCategoryResult;
+import com.silenteight.datasource.categories.api.v2.BatchGetMatchesCategoryValuesResponse;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
@@ -31,7 +29,8 @@ class JdbcMatchCategoryValuesDataAccess implements MatchCategoryValuesDataAccess
   @Override
   @Transactional
   public void createMatchCategoryValues(
-      @NonNull CategoryMap categoryMap, @NonNull List<GetCategoryValueResponse> categoryValues) {
+      @NonNull CategoryMap categoryMap,
+      @NonNull BatchGetMatchesCategoryValuesResponse categoryValues) {
 
     createMatchCategoryValue.execute(categoryMap, categoryValues);
   }

@@ -2,8 +2,10 @@ package com.silenteight.adjudication.engine.analysis.categoryrequest.jdbc;
 
 
 import com.silenteight.adjudication.engine.analysis.categoryrequest.domain.CategoryMap;
-import com.silenteight.adjudication.engine.analysis.categoryrequest.domain.GetCategoryValueResponse;
 import com.silenteight.adjudication.engine.testing.RepositoryTestConfiguration;
+import com.silenteight.datasource.categories.api.v2.BatchGetMatchesCategoryValuesResponse;
+import com.silenteight.datasource.categories.api.v2.CategoryValue;
+import com.silenteight.datasource.categories.api.v2.MultiValue;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,23 +33,25 @@ class JdbcMatchCategoryValuesDataAccessTest extends BaseDataJpaTest {
 
   @Test
   void shouldAddMissingCategoryForMatch() {
-    var sourceSystemCategory = GetCategoryValueResponse.builder()
-        .singleValue("ECDD")
-        .categoryName("categories/source_system/matches/1")
-        .matchName("matches/1")
-        .build();
-    var countryCategory = GetCategoryValueResponse.builder()
-        .multiValues(List.of("PL", "SE"))
-        .multiValue(true)
-        .categoryName("categories/country/matches/1")
-        .matchName("categories/country/matches/1")
-        .build();
+    var batchGetMatchesCategoryValuesResponse = BatchGetMatchesCategoryValuesResponse.newBuilder()
+        .addCategoryValues(CategoryValue
+            .newBuilder()
+            .setName("categories/source_system/matches/1")
+            .setMatch("matches/1")
+            .setSingleValue("ASD")
+            .build())
+        .addCategoryValues(CategoryValue
+            .newBuilder()
+            .setName("categories/country/matches/1")
+            .setMatch("categories/country/matches/1")
+            .setMultiValue(MultiValue.newBuilder().addAllValues(List.of("PL", "SE")).build())
+            .build()).build();
     var map = new CategoryMap(Map.of(
         "categories/source_system", 1L,
         "categories/country", 4L
     ));
     var inserts = new CreateMatchCategoryValue(jdbcTemplate)
-        .execute(map, List.of(countryCategory, sourceSystemCategory));
+        .execute(map, batchGetMatchesCategoryValuesResponse);
 
     assertThat(inserts[0]).isEqualTo(1);
     assertThat(inserts[1]).isEqualTo(1);
