@@ -287,7 +287,7 @@ warehouse.report.ai-reasoning:
         label: Alert Comment
       - name: alert_firco_system_id
         label: Alert Client ID
-      - name: alert_alert_message_id
+      - name: s8_alert_name
         label: Alert S8 ID
 
 warehouse.report.ai-reasoning-match-level:
