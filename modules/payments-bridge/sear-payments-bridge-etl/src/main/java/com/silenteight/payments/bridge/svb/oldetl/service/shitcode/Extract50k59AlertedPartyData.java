@@ -21,15 +21,22 @@ public class Extract50k59AlertedPartyData {
     var lastLine = lines.size() - 1;
 
     if (lines.get(0).charAt(0) != '/')
-      throw new InvalidMessageException("First char is not /");
+      throw new InvalidMessageException("First char is not / when tag= " + tag);
+
+    String address = lines.size() > 2 ?
+                     String.join(" ", lines.subList(LINE_3, lastLine)) :
+                     "";
+    String ctryTown = lines.size() > 2 ?
+                      lines.get(lastLine) :
+                      "";
 
     return AlertedPartyData.builder()
         .messageFieldStructure(messageFieldStructure)
         .accountNumber(lines.get(LINE_1).substring(1))
         .name(lines.get(LINE_2))
-        .addresses(lines.subList(LINE_3, lastLine))
-        .nameAddresses(lines.subList(LINE_2, lastLine))
-        .ctryTown(lines.get(lastLine))
+        .address(address)
+        .nameAddress(String.join(" ", lines.subList(LINE_2, lastLine + 1)))
+        .ctryTown(ctryTown)
         .build();
   }
 }
