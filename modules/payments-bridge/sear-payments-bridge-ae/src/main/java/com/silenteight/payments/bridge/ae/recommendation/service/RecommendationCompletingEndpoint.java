@@ -5,12 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.api.v2.GetRecommendationRequest;
+import com.silenteight.payments.bridge.ae.alertregistration.port.AnalysisDataAccessPort;
 import com.silenteight.payments.bridge.ae.alertregistration.port.GetRegisteredAlertIdUseCase;
 import com.silenteight.payments.bridge.ae.recommendation.port.RecommendationClientPort;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.event.RecommendationGeneratedEvent;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.integration.annotation.Filter;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.annotation.Splitter;
@@ -29,14 +31,22 @@ import static com.silenteight.payments.bridge.common.integration.CommonChannels.
 class RecommendationCompletingEndpoint {
 
   private static final String INT_CHANNEL = "RecommendationCompletingEndpoint_int_channel";
+  private static final String INT_SPLITTER_CHANNEL =
+      "RecommendationCompletingEndpoint_int_splitter_channel";
 
   private final RecommendationClientPort recommendationClientPort;
   private final GetRegisteredAlertIdUseCase getRegisteredAlertIdUseCase;
+  private final AnalysisDataAccessPort analysisDataAccessPort;
 
-  @Splitter(inputChannel = RECOMMENDATION_GENERATED, outputChannel = INT_CHANNEL)
+  @Filter(inputChannel = RECOMMENDATION_GENERATED, outputChannel = INT_SPLITTER_CHANNEL)
+  boolean filterAnalysis(RecommendationGeneratedEvent event) {
+    var notification = event.getRecommendationsGenerated();
+    return analysisDataAccessPort.existsAnalysis(notification.getAnalysis());
+  }
+
+  @Splitter(inputChannel = INT_SPLITTER_CHANNEL, outputChannel = INT_CHANNEL)
   List<RecommendationInfo> split(RecommendationGeneratedEvent event) {
     var notification = event.getRecommendationsGenerated();
-
     if (log.isDebugEnabled()) {
       log.debug(
           "Received recommendation generated notification: count={}",
@@ -63,6 +73,11 @@ class RecommendationCompletingEndpoint {
     var alertId = getRegisteredAlertIdUseCase.getAlertId(recommendation.getAlert());
     return RecommendationCompletedEvent.fromAdjudication(
         UUID.fromString(alertId), recommendationWithMetadata);
+  }
+
+  @Bean(INT_SPLITTER_CHANNEL)
+  MessageChannel intSplitterChannel() {
+    return new DirectChannel();
   }
 
   @Bean(INT_CHANNEL)

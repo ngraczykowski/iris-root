@@ -29,7 +29,7 @@ import static java.util.Comparator.comparing;
 class EtlAlertService {
 
   private static final DateTimeFormatter DATE_FORMAT =
-      DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+      DateTimeFormatter.ofPattern("[dd/MM/yyyy HH:mm:ss][dd/MM/yyyy H:mm:ss]");
 
   private final EtlMatchService etlMatchService;
 
