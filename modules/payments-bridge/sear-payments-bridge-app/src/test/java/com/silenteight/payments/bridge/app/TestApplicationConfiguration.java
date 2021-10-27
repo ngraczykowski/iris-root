@@ -12,9 +12,11 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.http.config.EnableIntegrationGraphController;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+@EnableAsync(mode = AdviceMode.ASPECTJ)
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan(basePackageClasses = PaymentsBridgeModule.class,

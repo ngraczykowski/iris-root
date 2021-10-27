@@ -2,11 +2,8 @@ package com.silenteight.payments.bridge.mock.ae;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.adjudication.api.v1.Alert;
+import com.silenteight.adjudication.api.v1.*;
 import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceImplBase;
-import com.silenteight.adjudication.api.v1.BatchCreateAlertMatchesRequest;
-import com.silenteight.adjudication.api.v1.BatchCreateAlertMatchesResponse;
-import com.silenteight.adjudication.api.v1.CreateAlertRequest;
 
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -15,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Profile("mockae")
 @GrpcService
@@ -28,10 +26,31 @@ class AlertServiceGrpc extends AlertServiceImplBase {
       CreateAlertRequest request,
       StreamObserver<Alert> responseObserver) {
 
-    List<Long> ids = jdbcTemplate.query("select alert_name from pb_registered_alert",
+    List<Long> ids = jdbcTemplate.query(
+        "SELECT alert_name FROM pb_registered_alert",
         (rs, rowNum) -> Long.parseLong(rs.getString(1).split("/")[1])
     );
     responseObserver.onNext(MockAlertUseCase.createAlert(request.getAlert(), new HashSet<>(ids)));
+    responseObserver.onCompleted();
+  }
+
+  @Override
+  public void batchCreateAlerts(
+      BatchCreateAlertsRequest request,
+      StreamObserver<BatchCreateAlertsResponse> responseObserver) {
+    List<Long> ids = jdbcTemplate.query(
+        "SELECT alert_name FROM pb_registered_alert",
+        (rs, rowNum) -> Long.parseLong(rs.getString(1).split("/")[1])
+    );
+    responseObserver.onNext(BatchCreateAlertsResponse
+        .newBuilder()
+        .addAllAlerts(request
+            .getAlertsList()
+            .stream()
+            .map(alert -> MockAlertUseCase.createAlert(alert, new HashSet<>(ids)))
+            .collect(
+                Collectors.toList()))
+        .build());
     responseObserver.onCompleted();
   }
 

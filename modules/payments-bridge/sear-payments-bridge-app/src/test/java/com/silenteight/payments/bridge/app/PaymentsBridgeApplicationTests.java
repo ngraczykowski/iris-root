@@ -9,6 +9,9 @@ import com.silenteight.payments.bridge.event.RecommendationCompletedEvent.Adjudi
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent.BridgeRecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
+import com.silenteight.payments.bridge.mock.ae.MockAlertUseCase;
+import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
+import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningAlertsUseCase;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 
@@ -36,12 +39,13 @@ import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @SpringBootTest(classes = TestApplicationConfiguration.class)
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
 @Slf4j
-@ActiveProfiles({"mockae", "mockdatasource", "mockgovernance", "test", "mockagents"})
+@ActiveProfiles({ "mockae", "mockdatasource", "mockgovernance", "test", "mockagents", "mockaws" })
 class PaymentsBridgeApplicationTests {
 
   private static final String SAMPLE_REQUESTS_DIR = "requests";
@@ -55,6 +59,7 @@ class PaymentsBridgeApplicationTests {
   @Autowired ObjectMapper objectMapper;
   @Autowired CreateAlertMessageUseCase createAlertMessageUseCase;
   @Autowired ResourceLoader resourceLoader;
+  @Autowired HandleLearningAlertsUseCase handleLearningDataUseCase;
 
   @ParameterizedTest
   @MethodSource("filesFactory")
@@ -68,6 +73,22 @@ class PaymentsBridgeApplicationTests {
     eventRecorder.unsubscribeAll();
   }
 
+  @Test
+  void shouldProcessLearningCsv() {
+    var request =
+        LearningRequest.builder().bucket("bucket").object("SVB_Jun_1_to_30_sorted.csv").build();
+    handleLearningDataUseCase.readAlerts(request);
+    await()
+        .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
+        .atMost(Duration.ofSeconds(10))
+        .until(PaymentsBridgeApplicationTests::createdAlerts);
+    assertThat(MockAlertUseCase.getCreatedAlertsCount()).isGreaterThanOrEqualTo(16);
+  }
+
+  public static boolean createdAlerts() {
+    return MockAlertUseCase.getCreatedAlertsCount() >= 16;
+  }
+
   static Stream<String> filesFactory() {
     return VALID_REQUEST_FILES.stream();
   }
@@ -79,7 +100,8 @@ class PaymentsBridgeApplicationTests {
     recorder.subscribe(AlertRegisteredEvent.class, channels.alertRegistered());
     recorder.subscribe(AlertInputAcceptedEvent.class, channels.alertInputAccepted());
     recorder.subscribe(RecommendationGeneratedEvent.class, channels.recommendationGenerated());
-    recorder.subscribe(AdjudicationRecommendationCompletedEvent.class,
+    recorder.subscribe(
+        AdjudicationRecommendationCompletedEvent.class,
         channels.recommendationCompleted());
     return recorder;
   }
@@ -124,7 +146,8 @@ class PaymentsBridgeApplicationTests {
   private DomainEventRecorder createTooManyHitsEventRecorder() {
     var recorder = new DomainEventRecorder();
     recorder.subscribe(AlertStoredEvent.class, channels.alertStored());
-    recorder.subscribe(BridgeRecommendationCompletedEvent.class,
+    recorder.subscribe(
+        BridgeRecommendationCompletedEvent.class,
         channels.recommendationCompleted());
     return recorder;
   }
