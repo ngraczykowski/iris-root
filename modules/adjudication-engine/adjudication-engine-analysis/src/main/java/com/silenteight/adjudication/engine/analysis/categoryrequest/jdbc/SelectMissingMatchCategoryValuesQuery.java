@@ -12,46 +12,77 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.SqlRowSetResultSetExtractor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import javax.sql.DataSource;
 
 import static org.apache.commons.lang3.exception.ExceptionUtils.rethrow;
 
 @Slf4j
 class SelectMissingMatchCategoryValuesQuery {
 
+  private static final String QUERY = "WITH missing_match_category_values AS (\n"
+      + "    SELECT apr.analysis_id                 as analysis_id,\n"
+      + "           ac.category                     as category,\n"
+      + "           ac.category_id                  as category_id,\n"
+      + "           jsonb_build_object(\n"
+      + "                   'matchId', am.match_id,\n"
+      + "                   'alertId', am.alert_id) as match_alert\n"
+      + "    FROM ae_pending_recommendation apr\n"
+      + "             JOIN ae_match am ON am.alert_id = apr.alert_id\n"
+      + "             JOIN ae_analysis_category aac ON apr.analysis_id = aac.analysis_id\n"
+      + "             JOIN ae_category ac ON ac.category_id = aac.category_id\n"
+      + "             LEFT JOIN ae_match_category_value amcv\n"
+      + "                       ON amcv.match_id = am.match_id AND\n"
+      + "                          amcv.category_id = ac.category_id\n"
+      + "    WHERE amcv.category_id IS NULL\n"
+      + "    LIMIT ?\n"
+      + ")\n"
+      + "SELECT mmcv.analysis_id,\n"
+      + "       mmcv.category,\n"
+      + "       mmcv.category_id,\n"
+      + "       jsonb_agg(mmcv.match_alert) as match_alerts\n"
+      + "FROM missing_match_category_values mmcv\n"
+      + "WHERE mmcv.analysis_id = ?\n"
+      + "GROUP BY 1, 2, 3";
+
   private final JdbcTemplate jdbcTemplate;
   private final ObjectMapper objectMapper;
   private final int batchSize;
-  private CollectionType matchAlertListType;
+  private final CollectionType matchAlertListType;
 
   SelectMissingMatchCategoryValuesQuery(
-      ObjectMapper objectMapper, DataSource datasource, int batchSize) {
+      ObjectMapper objectMapper, JdbcTemplate jdbcTemplate, int batchSize) {
 
     this.objectMapper = objectMapper;
+    this.jdbcTemplate = jdbcTemplate;
     this.batchSize = batchSize;
 
     matchAlertListType = this.objectMapper
         .getTypeFactory()
         .constructCollectionType(ArrayList.class, MatchAlert.class);
-
-    jdbcTemplate = new JdbcTemplate(datasource, true);
-    jdbcTemplate.setMaxRows(this.batchSize);
   }
 
   MissingCategoryResult execute(long analysisId) {
+    var rowSet = jdbcTemplate.query(
+        "EXPLAIN " + QUERY, new SqlRowSetResultSetExtractor(), batchSize, analysisId);
+
+    if (rowSet != null) {
+      while (rowSet.next()) {
+        log.info("PLAN: {}", rowSet.getString(1));
+      }
+    } else {
+      log.warn("PLAN IS NULL, RUN AWAY!");
+    }
+
     return jdbcTemplate.query(
-        "SELECT category, category_id, match_alert\n"
-            + "FROM ae_missing_match_category_values_query\n"
-            + "WHERE analysis_id = ?\n"
-            + "LIMIT ?",
+        QUERY,
         new SqlMissingMatchCategoryExtractor(),
-        analysisId, batchSize);
+        batchSize, analysisId);
   }
 
   private final class SqlMissingMatchCategoryExtractor implements
@@ -78,7 +109,7 @@ class SelectMissingMatchCategoryValuesQuery {
 
     private List<MatchAlert> deserializeMatchAlerts(ResultSet rs) throws SQLException {
       try {
-        return objectMapper.readValue(rs.getString("match_alert"), matchAlertListType);
+        return objectMapper.readValue(rs.getString("match_alerts"), matchAlertListType);
       } catch (JsonProcessingException e) {
         return rethrow(e);
       }

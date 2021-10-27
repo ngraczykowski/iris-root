@@ -59,8 +59,8 @@ class JdbcMatchCategoryValuesDataAccessTest extends BaseDataJpaTest {
 
   @Test
   void shouldSelectMissingCategories() {
-    var missingCategoryResult =
-        new SelectMissingMatchCategoryValuesQuery(new ObjectMapper(), dataSource, 4096).execute(1);
+    var missingCategoryResult = new SelectMissingMatchCategoryValuesQuery(
+        new ObjectMapper(), jdbcTemplate, 4096).execute(1);
 
     assertThat(missingCategoryResult).isNotNull();
   }

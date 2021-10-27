@@ -14,8 +14,4 @@ public class MatchAlert {
   public String getName() {
     return "alerts/" + alertId + "/matches/" + matchId;
   }
-
-  public String getMatchCategoryName(String category) {
-    return category + "/" + getName();
-  }
 }
