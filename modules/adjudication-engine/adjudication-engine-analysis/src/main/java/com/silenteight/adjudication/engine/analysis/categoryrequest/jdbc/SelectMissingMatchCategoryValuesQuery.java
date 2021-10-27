@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.SqlRowSetResultSetExtractor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -68,17 +67,6 @@ class SelectMissingMatchCategoryValuesQuery {
   }
 
   MissingCategoryResult execute(long analysisId) {
-    var rowSet = jdbcTemplate.query(
-        "EXPLAIN " + QUERY, new SqlRowSetResultSetExtractor(), batchSize, analysisId);
-
-    if (rowSet != null) {
-      while (rowSet.next()) {
-        log.info("PLAN: {}", rowSet.getString(1));
-      }
-    } else {
-      log.warn("PLAN IS NULL, RUN AWAY!");
-    }
-
     return jdbcTemplate.query(
         QUERY,
         new SqlMissingMatchCategoryExtractor(),
