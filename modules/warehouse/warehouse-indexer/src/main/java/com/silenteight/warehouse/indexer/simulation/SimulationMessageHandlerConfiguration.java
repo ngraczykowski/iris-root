@@ -8,6 +8,7 @@ import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.indexer.alert.indexing.AlertIndexService;
 import com.silenteight.warehouse.indexer.alert.mapping.AlertMapper;
+import com.silenteight.warehouse.indexer.match.mapping.MatchMapper;
 import com.silenteight.warehouse.indexer.query.single.AlertSearchService;
 import com.silenteight.warehouse.indexer.query.single.ProductionSearchRequestBuilder;
 import com.silenteight.warehouse.indexer.simulation.analysis.UniqueAnalysisFactory;
@@ -99,11 +100,13 @@ public class SimulationMessageHandlerConfiguration {
   @Bean
   SimulationAlertMappingService simulationAlertMappingService(
       AlertMapper alertMapper,
+      MatchMapper matchMapper,
       RestHighLevelClient restHighLevelAdminClient,
       AlertSearchService alertSearchService,
       ProductionSearchRequestBuilder productionSearchRequestBuilder) {
     return new SimulationAlertMappingService(
         alertMapper,
+        matchMapper,
         restHighLevelAdminClient,
         alertSearchService,
         productionSearchRequestBuilder);
