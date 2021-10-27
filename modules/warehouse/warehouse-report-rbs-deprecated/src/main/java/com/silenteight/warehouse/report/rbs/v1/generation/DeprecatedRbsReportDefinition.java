@@ -35,6 +35,8 @@ public class DeprecatedRbsReportDefinition {
   @Valid
   @Nullable
   private final List<FilterProperties> filters;
+  @Nullable
+  private final String indexName;
 
   List<String> getListOfFields() {
     List<String> fields = new ArrayList<>();

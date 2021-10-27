@@ -1,6 +1,6 @@
 package com.silenteight.warehouse.report.rbs.v1.generation;
 
-class DeprecatedRbScorerFixtures {
+public class DeprecatedRbScorerFixtures {
 
   public static final String FV_SIGNATURE_FIELD_NAME = "fvsignature";
   public static final String FV_SIGNATURE_FIELD_LABEL = "FV Signature";
@@ -14,4 +14,5 @@ class DeprecatedRbScorerFixtures {
   public static final String QA_DECISION_FIELD = "qa_decision";
   public static final String ANALYSIS_DECISION_FIELD = "analysis_decision";
   public static final String ALERT_STATUS_FIELD = "alert_status";
+  public static final String TEST_INDEX = "test_index";
 }

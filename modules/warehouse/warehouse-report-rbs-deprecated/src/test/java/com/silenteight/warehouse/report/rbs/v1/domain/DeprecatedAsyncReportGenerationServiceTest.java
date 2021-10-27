@@ -16,6 +16,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 import static com.silenteight.warehouse.report.rbs.v1.domain.DeprecatedReportDefinition.DAY;
+import static com.silenteight.warehouse.report.rbs.v1.generation.DeprecatedRbScorerFixtures.TEST_INDEX;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -23,14 +24,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class DeprecatedAsyncReportGenerationServiceTest {
 
-  static final String PRODUCTION_ANALYSIS_NAME = "production";
   private static final MockTimeSource TIME_SOURCE = MockTimeSource.ARBITRARY_INSTANCE;
   private static final DeprecatedReportDefinition TYPE = DAY;
   private static final OffsetDateTime FROM = TYPE.getFrom(TIME_SOURCE.now());
   private static final OffsetDateTime TO = TYPE.getTo(TIME_SOURCE.now());
   private static final CsvReportContentDto REPORT_CONTENT = CsvReportContentDto
       .of("test", of("lines"));
-  private static final List<String> INDEXES = of("index123");
+  private static final List<String> INDEXES = of(TEST_INDEX);
 
   private final DeprecatedInMemoryRbsRepository
       rbsReportRepository = new DeprecatedInMemoryRbsRepository();
@@ -51,15 +51,14 @@ class DeprecatedAsyncReportGenerationServiceTest {
         TIME_SOURCE,
         properties,
         properties,
-        indexQuery,
         indexQuery);
   }
 
   @Test
   void generateReportAndReportAvailable() {
+    when(properties.getIndexName()).thenReturn(TEST_INDEX);
     when(reportGenerationService.generateReport(FROM, TO, INDEXES, properties))
         .thenReturn(REPORT_CONTENT);
-    when(indexQuery.getIndexesForAnalysis(PRODUCTION_ANALYSIS_NAME)).thenReturn(INDEXES);
     DeprecatedRbsReport rbsReport = rbsReportRepository.save(DeprecatedRbsReport.of(TYPE));
     assertThat(rbsReport.getState()).isEqualTo(DeprecatedReportState.NEW);
 
