@@ -15,25 +15,25 @@ ae:
   categories:
     missing:
       batch-size:
-        insert: 512
-        select: 512
+        insert: 128
+        select: 128
 
   comment-input:
     jdbc:
-      missing-batch-size-select: 512
+      missing-batch-size-select: 256
 
   recommendation:
     jdbc:
       pending-alerts:
-        fetch-size: 1024
+        fetch-size: 256
     comment:
       template-name: alert
 
   analysis:
     agent-exchange:
       missing-match-feature-reader:
-        chunk-size: 8192
-        max-rows: 65536
+        chunk-size: 1024
+        max-rows: 8192
 
     analysis:
       dataset-alerts-adder:
