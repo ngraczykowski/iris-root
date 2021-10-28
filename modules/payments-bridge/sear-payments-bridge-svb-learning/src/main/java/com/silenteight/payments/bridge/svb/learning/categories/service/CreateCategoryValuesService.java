@@ -40,7 +40,7 @@ class CreateCategoryValuesService implements CreateCategoryValuesUseCase {
           log.trace("Extracting category value: {}", ce.getClass().getSimpleName());
         }
 
-        var categoryValue = ce.extract(match, String.valueOf(learningAlert.getAlertName()));
+        var categoryValue = ce.extract(match);
         categoryValues.add(categoryValue);
       }
     }
@@ -95,20 +95,20 @@ class CreateCategoryValuesService implements CreateCategoryValuesUseCase {
 
   private Stream<CategoryValue> extractCategoryValues(LearningAlert alert) {
     return alert.getMatches().stream()
-        .flatMap(match -> getCategoryValueStream(alert, match));
+        .flatMap(this::getCategoryValueStream);
   }
 
   @Nonnull
-  private Stream<CategoryValue> getCategoryValueStream(LearningAlert alert, LearningMatch match) {
+  private Stream<CategoryValue> getCategoryValueStream(LearningMatch match) {
     return categoryValueExtractors.stream()
         .map(extractor -> {
 
-          if (log.isTraceEnabled()) {
-            log.trace("Extracting category value: {}", extractor.getClass().getSimpleName());
-          }
+              if (log.isTraceEnabled()) {
+                log.trace("Extracting category value: {}", extractor.getClass().getSimpleName());
+              }
 
-          return extractor.extract(match, alert.getAlertName());
-        }
+              return extractor.extract(match);
+            }
         );
   }
 

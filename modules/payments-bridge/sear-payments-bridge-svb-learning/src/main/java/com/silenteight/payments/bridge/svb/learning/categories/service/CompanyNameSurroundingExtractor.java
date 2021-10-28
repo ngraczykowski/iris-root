@@ -18,7 +18,7 @@ class CompanyNameSurroundingExtractor implements CategoryValueExtractor {
   private final CompanyNameSurroundingUseCase companyNameSurroundingUseCase;
 
   @Override
-  public CategoryValue extract(LearningMatch learningMatch, String alert) {
+  public CategoryValue extract(LearningMatch learningMatch) {
 
     CompanyNameSurroundingAgentResponse result =
         companyNameSurroundingUseCase.invoke(learningMatch.toCompanyNameSurroundingRequest());

@@ -19,7 +19,7 @@ class HistoricalRiskExtractor implements CategoryValueExtractor {
   private final HistoricalRiskAssessmentUseCase historicalRiskAssessmentUseCase;
 
   @Override
-  public CategoryValue extract(LearningMatch learningMatch, String alert) {
+  public CategoryValue extract(LearningMatch learningMatch) {
 
     var accountNumer = learningMatch.getAccountNumber();
 

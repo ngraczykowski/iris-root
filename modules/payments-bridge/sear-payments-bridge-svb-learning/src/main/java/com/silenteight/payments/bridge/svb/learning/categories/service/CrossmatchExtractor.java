@@ -17,7 +17,7 @@ class CrossmatchExtractor implements CategoryValueExtractor {
   private final NameAddressCrossmatchUseCase nameAddressCrossmatchUseCase;
 
   @Override
-  public CategoryValue extract(LearningMatch learningMatch, String alert) {
+  public CategoryValue extract(LearningMatch learningMatch) {
     var value =
         nameAddressCrossmatchUseCase.call(learningMatch.toCrossmatchRequest());
     return CategoryValue

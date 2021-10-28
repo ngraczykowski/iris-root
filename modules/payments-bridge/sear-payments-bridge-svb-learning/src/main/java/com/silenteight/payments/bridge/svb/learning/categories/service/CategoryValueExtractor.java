@@ -5,5 +5,5 @@ import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
 interface CategoryValueExtractor {
 
-  CategoryValue extract(LearningMatch learningMatch, String alert);
+  CategoryValue extract(LearningMatch learningMatch);
 }

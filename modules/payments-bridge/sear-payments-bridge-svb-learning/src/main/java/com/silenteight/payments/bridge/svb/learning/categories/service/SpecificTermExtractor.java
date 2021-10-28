@@ -17,7 +17,7 @@ class SpecificTermExtractor implements CategoryValueExtractor {
   private final SpecificTermsUseCase specificTermsUseCase;
 
   @Override
-  public CategoryValue extract(LearningMatch learningMatch, String alert) {
+  public CategoryValue extract(LearningMatch learningMatch) {
     var value = specificTermsUseCase.invoke(learningMatch.toSpecificTermsRequest());
 
     return CategoryValue
