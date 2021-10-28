@@ -11,3 +11,8 @@ imagePullPolicy: Always
 memoryLimit: 2048Mi
 memoryRequest: 512Mi
 springProfilesActive:
+
+#Additional service metadata annotations
+service:
+  metadata:
+    annotations: {}
