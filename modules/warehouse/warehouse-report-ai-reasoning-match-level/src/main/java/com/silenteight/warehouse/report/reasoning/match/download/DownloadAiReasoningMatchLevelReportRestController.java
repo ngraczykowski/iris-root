@@ -27,14 +27,10 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping(ROOT)
 class DownloadAiReasoningMatchLevelReportRestController {
 
-  private static final String ANALYSIS_ID_PARAM = "analysisId";
   private static final String DEFINITION_ID_PARAM = "definitionId";
   private static final String ID_PARAM = "id";
   private static final String DOWNLOAD_PRODUCTION_REPORT_URL =
       "/v1/analysis/production/definitions/AI_REASONING_MATCH_LEVEL/{definitionId}/reports/{id}";
-
-  private static final String DOWNLOAD_SIMULATION_REPORT_URL =
-      "/v1/analysis/{analysisId}/definitions/AI_REASONING_MATCH_LEVEL/{definitionId}/reports/{id}";
 
   @NonNull
   private final DownloadAiReasoningMatchLevelReportUseCase useCase;
@@ -52,29 +48,6 @@ class DownloadAiReasoningMatchLevelReportRestController {
 
     log.debug("Download production AI Reasoning Match Level report request processed, reportId={}, "
         + "reportName={}", id, fileDto.getName());
-
-    return ok()
-        .header(CONTENT_DISPOSITION, format("attachment; filename=%s", fileDto.getName()))
-        .contentType(APPLICATION_OCTET_STREAM)
-        .body(new InputStreamResource(fileDto.getContent()));
-  }
-
-  @GetMapping(DOWNLOAD_SIMULATION_REPORT_URL)
-  @PreAuthorize("isAuthorized('DOWNLOAD_SIMULATION_REPORT')")
-  public ResponseEntity<Resource> downloadReport(
-      @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
-      @PathVariable(DEFINITION_ID_PARAM) String definitionId,
-      @PathVariable(ID_PARAM) long id) {
-
-    log.info(
-        "Download simulation AI Reasoning Match Level report on demand request received, "
-            + "reportId={}", id);
-
-    FileDto fileDto = useCase.activate(id);
-
-    log.debug(
-        "Download simulation AI Reasoning Match Level report request processed, reportId={}, "
-            + "reportName={}", id, fileDto.getName());
 
     return ok()
         .header(CONTENT_DISPOSITION, format("attachment; filename=%s", fileDto.getName()))

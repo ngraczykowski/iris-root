@@ -29,16 +29,6 @@ import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 })
 class DownloadAiReasoningMatchLevelReportRestControllerTest extends BaseRestControllerTest {
 
-  private static final String DOWNLOAD_SIMULATION_REPORT_URL =
-      fromUriString(
-          "/v1/analysis/{analysisId}/definitions/AI_REASONING_MATCH_LEVEL/"
-              + "{definitionId}/reports/{id}")
-          .build(of(
-              "analysisId", AiReasoningMatchLevelReportTestFixtures.ANALYSIS_ID,
-              "definitionId", AiReasoningMatchLevelReportTestFixtures.SIMULATION_DEFINITION_ID,
-              "id", AiReasoningMatchLevelReportTestFixtures.REPORT_ID))
-          .toString();
-
   private static final String DOWNLOAD_PRODUCTION_REPORT_URL =
       fromUriString("/v1/analysis/production/definitions/AI_REASONING_MATCH_LEVEL/"
           + "{definitionId}/reports/{id}")
@@ -49,26 +39,6 @@ class DownloadAiReasoningMatchLevelReportRestControllerTest extends BaseRestCont
 
   @MockBean
   private DownloadAiReasoningMatchLevelReportUseCase useCase;
-
-  @Test
-  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
-  void its200_whenInvokedDownloadSimulationReport() {
-    given(useCase.activate(AiReasoningMatchLevelReportTestFixtures.REPORT_ID)).willReturn(
-        createFileDto());
-
-    String expectedContentDisposition = String.format(
-        "attachment; filename=%s",
-        AiReasoningMatchLevelReportTestFixtures.REPORT_FILENAME);
-    String response = get(DOWNLOAD_SIMULATION_REPORT_URL)
-        .statusCode(OK.value())
-        .contentType("application/octet-stream")
-        .header("Content-Disposition", expectedContentDisposition)
-        .extract()
-        .body()
-        .asString();
-
-    assertThat(response).isEqualTo(AiReasoningMatchLevelReportTestFixtures.STUB_REPORT_RESPONSE);
-  }
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
@@ -88,14 +58,6 @@ class DownloadAiReasoningMatchLevelReportRestControllerTest extends BaseRestCont
         .asString();
 
     assertThat(response).isEqualTo(AiReasoningMatchLevelReportTestFixtures.STUB_REPORT_RESPONSE);
-  }
-
-  @Test
-  @WithMockUser(
-      username = USERNAME,
-      authorities = { USER_ADMINISTRATOR, AUDITOR, QA, QA_ISSUE_MANAGER })
-  void its403_whenNotPermittedRoleForDownloadingSimulationReport() {
-    get(DOWNLOAD_SIMULATION_REPORT_URL).statusCode(FORBIDDEN.value());
   }
 
   @Test

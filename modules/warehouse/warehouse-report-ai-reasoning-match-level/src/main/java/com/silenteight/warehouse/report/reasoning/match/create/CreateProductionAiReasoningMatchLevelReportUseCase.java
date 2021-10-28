@@ -29,6 +29,7 @@ public class CreateProductionAiReasoningMatchLevelReportUseCase {
   ReportInstanceReferenceDto createReport(String reportId) {
     List<String> indexes = productionMatchIndexingQuery
         .getIndexesForAnalysis(PRODUCTION_ANALYSIS_NAME);
+
     return reportService.createReportInstance(
         getReportType(reportId), PRODUCTION_ANALYSIS_NAME, indexes, productionProperties);
   }
