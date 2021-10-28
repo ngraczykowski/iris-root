@@ -13,6 +13,7 @@ import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestIni
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -138,6 +139,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
   }
 
   @Test
+  @Disabled
   void shouldSaveRecommendationsWhenSecondAnalysisAdded() {
     var analysisId = givenSecondAnalysis();
 
@@ -145,6 +147,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
   }
 
   @Test
+  @Disabled
   void shouldStreamRecommendationsWhenSecondAnalysisAdded() {
     givenSecondAnalysis();
 
