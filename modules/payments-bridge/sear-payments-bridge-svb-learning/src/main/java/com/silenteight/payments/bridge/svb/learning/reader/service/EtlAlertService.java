@@ -46,6 +46,7 @@ class EtlAlertService {
         .systemId(firstRow.getFkcoVSystemId())
         .messageId(firstRow.getFkcoVMessageid())
         .analystDecision(makeAnalystDecision(rows))
+        .hitCount(rows.size())
         .matches(createMatches(rows));
   }
 

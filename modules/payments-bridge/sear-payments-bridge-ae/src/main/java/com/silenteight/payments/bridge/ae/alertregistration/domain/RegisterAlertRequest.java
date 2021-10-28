@@ -16,7 +16,6 @@ import com.google.protobuf.Timestamp;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
-import java.util.Locale;
 import javax.annotation.Nonnull;
 
 import static java.util.stream.Collectors.toList;
@@ -74,9 +73,6 @@ public class RegisterAlertRequest {
         .setAlertId(getAlertId())
         .setPriority(getPriority())
         .setAlertTime(alertTime);
-
-    var matchQuantity = matchIds.size() > 1 ? MatchQuantity.MANY : MatchQuantity.SINGLE;
-    alert.putLabels("matchQuantity", matchQuantity.name().toLowerCase(Locale.ROOT));
 
     if (!CollectionUtils.isEmpty(labels)) {
       labels.forEach(l -> alert.putLabels(l.getName(), l.getValue()));
