@@ -7,14 +7,12 @@ import lombok.Value;
 import lombok.experimental.NonFinal;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.Label;
-import com.silenteight.payments.bridge.ae.alertregistration.domain.MatchQuantity;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.common.model.AlertRegistration;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Locale;
 
 import static com.silenteight.payments.bridge.common.protobuf.TimestampConverter.fromOffsetDateTime;
 import static java.util.stream.Collectors.toList;
@@ -56,7 +54,6 @@ public class LearningAlert {
   }
 
   public RegisterAlertRequest toRegisterAlertRequest() {
-    var matchQuantity = hitCount > 1 ? MatchQuantity.MANY : MatchQuantity.SINGLE;
     return RegisterAlertRequest
         .builder()
         .alertId(alertId)
@@ -66,7 +63,6 @@ public class LearningAlert {
         .label(Label.of("learningBatch", batchStamp))
         .label(Label.of("fileName", fileName))
         .label(Label.of("source", "CSV"))
-        .label(Label.of("matchQuantity", matchQuantity.name().toLowerCase(Locale.ROOT)))
         .build();
   }
 
