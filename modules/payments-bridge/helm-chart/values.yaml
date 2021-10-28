@@ -22,3 +22,8 @@ pbCmapiCallbackEnabled: "false"
 pbCmapiCallbackEndpoint: ""
 memoryLimit: 2048Mi
 memoryRequest: 512Mi
+
+#Additional service metadata annotations
+service:
+  metadata:
+    annotations: {}
