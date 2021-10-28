@@ -47,8 +47,13 @@ class ExtractFormatFData {
 
     var name = valueMap.containsKey(NAME) ? valueMap.get(NAME) : tagValueLines.get(nameLine);
 
+    var unprocessedAccountNumberLine = tagValueLines.get(accountLine);
+    String accountNumber = unprocessedAccountNumberLine.charAt(0) == '/' ?
+                           unprocessedAccountNumberLine.substring(1) :
+                           unprocessedAccountNumberLine;
+
     return AlertedPartyData.builder()
-        .accountNumber(tagValueLines.get(accountLine).trim())
+        .accountNumber(accountNumber.trim())
         .name(name)
         .address(valueMap.get(ADDRESS).trim())
         .ctryTown(valueMap.get(COUNTRY_TOWN).trim())
