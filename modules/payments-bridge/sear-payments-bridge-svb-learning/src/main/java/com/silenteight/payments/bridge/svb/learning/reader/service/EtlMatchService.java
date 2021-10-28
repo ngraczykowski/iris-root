@@ -56,8 +56,8 @@ class EtlMatchService {
         .watchlistLocation(
             String.join(
                 ", ",
-                List.of(row.getFkcoVListCity() + row.getFkcoVListState()
-                    + row.getFkcoVListCountry())))
+                List.of(
+                    row.getFkcoVListCountry(), row.getFkcoVListState(), row.getFkcoVListCity())))
         .watchlistCountry(row.getFkcoVListCountry())
         .matchedFieldValue(row.getFkcoVMatchedTagContent())
         .messageData(row.getFkcoVContent())

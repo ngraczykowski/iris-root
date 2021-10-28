@@ -97,7 +97,7 @@ public class LearningMatch {
   }
 
   public String getAlertedPartyLocation() {
-    return alertedPartyData.getAddresses().stream().findFirst().orElse("");
+    return alertedPartyData.getCtryTowns().stream().findFirst().orElse("");
   }
 
   public OneLinerAgentRequest toOneLinerAgentRequest() {
