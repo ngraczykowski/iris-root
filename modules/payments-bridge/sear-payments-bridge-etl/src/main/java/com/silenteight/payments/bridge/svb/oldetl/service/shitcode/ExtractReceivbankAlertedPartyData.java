@@ -14,9 +14,10 @@ public class ExtractReceivbankAlertedPartyData {
   private static final List<String> MESSAGE_FORMATS_INT_FED = List.of("FED", "INT");
   private static final List<String> MESSAGE_FORMATS_IAT_I_IAT_O = List.of("IAT-I", "IAT-O");
 
-  private static final int FIRST_LINE = 0;
-  private static final int SECOND_LINE = 1;
-  private static final int FIFTH_LINE = 4;
+  private static final int LINE_1 = 0;
+  private static final int LINE_2 = 1;
+  private static final int LINE_3 = 2;
+  private static final int LINE_5 = 4;
 
   private final MessageData messageData;
   private final String hitTag;
@@ -29,16 +30,17 @@ public class ExtractReceivbankAlertedPartyData {
 
     if (MESSAGE_FORMATS_INT_FED.contains(messageFormat)) {
       return AlertedPartyData.builder()
-          .name(tagValueLines.get(FIRST_LINE).trim())
+          .name(tagValueLines.get(LINE_1).trim())
+          .nameAddress(tagValueLines.get(LINE_1).trim())
           .messageFieldStructure(messageFieldStructure)
           .build();
     } else if (MESSAGE_FORMATS_IAT_I_IAT_O.contains(messageFormat)) {
       return AlertedPartyData.builder()
-          .accountNumber(tagValueLines.get(FIRST_LINE).trim())
-          .name(tagValueLines.get(SECOND_LINE).trim())
-          .addresses(tagValueLines.subList(SECOND_LINE, lastLine))
-          .ctryTown(tagValueLines.get(FIFTH_LINE).trim())
-          .nameAddresses(tagValueLines.subList(SECOND_LINE, lastLine + 1))
+          .accountNumber(tagValueLines.get(LINE_1).trim())
+          .name(tagValueLines.get(LINE_2).trim())
+          .address(String.join(" ", tagValueLines.subList(LINE_3, lastLine)))
+          .ctryTown(tagValueLines.get(LINE_5).trim())
+          .nameAddress(String.join(" ", tagValueLines.subList(LINE_2, lastLine + 1)))
           .messageFieldStructure(messageFieldStructure)
           .build();
     } else {

@@ -5,7 +5,6 @@ import com.silenteight.payments.bridge.etl.processing.model.MessageTag;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
@@ -13,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Disabled
+
 class ExtractReceivAlertedPartyDataTest {
 
   ExtractReceivbankAlertedPartyData extractReceivbankAlertedPartyData;
@@ -44,9 +43,9 @@ class ExtractReceivAlertedPartyDataTest {
     assertEquals(AlertedPartyData.builder()
         .accountNumber(accountNumber)
         .name(name)
-        .address(address)
-        .ctryTown(ctryTown)
-        .nameAddress(nameAddress)
+        .addresses(address != null ? List.of(address) : List.of())
+        .ctryTowns(ctryTown != null ? List.of(ctryTown) : List.of())
+        .nameAddresses(nameAddress != null ? List.of(nameAddress) : List.of())
         .messageFieldStructure(MessageFieldStructure.UNSTRUCTURED)
         .build(), actual);
 
