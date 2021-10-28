@@ -13,7 +13,6 @@ import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestIni
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -128,7 +127,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
   @Test
   void shouldStreamRecommendations() {
-    assertGeneratedRecommendation("analysis/1/recommendations/1");
+    assertGeneratedRecommendation(savedAnalysis.getName());
   }
 
   @Test
@@ -139,7 +138,6 @@ class AdjudicationEngineAnalysisIntegrationTest {
   }
 
   @Test
-  @Disabled
   void shouldSaveRecommendationsWhenSecondAnalysisAdded() {
     var analysisId = givenSecondAnalysis();
 
@@ -147,7 +145,6 @@ class AdjudicationEngineAnalysisIntegrationTest {
   }
 
   @Test
-  @Disabled
   void shouldStreamRecommendationsWhenSecondAnalysisAdded() {
     givenSecondAnalysis();
 
@@ -173,11 +170,12 @@ class AdjudicationEngineAnalysisIntegrationTest {
   }
 
   private void assertGeneratedRecommendation(String analysisName) {
+    var analysisId = ResourceName.create(analysisName).getLong("analysis");
     await()
         .atMost(Duration.ofSeconds(10))
         .until(() -> generatedRecommendationCount(
             jdbcTemplate,
-            ResourceName.create(analysisName).getLong("analysis")) > 0);
+            analysisId) > 0);
 
     var recommendations = analysisService.streamRecommendations(
         StreamRecommendationsRequest.newBuilder().setAnalysis(analysisName).build());
@@ -185,7 +183,8 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
     assertThat(recommendation.getRecommendationComment())
         .contains("NOTE: This is the default alert comment template!");
-    assertThat(recommendation.getName()).isEqualTo(analysisName);
+    assertThat(
+        ResourceName.create(recommendation.getName()).getLong("analysis")).isEqualTo(analysisId);
     assertThat(recommendation.getRecommendedAction()).isEqualTo("MATCH");
   }
 
