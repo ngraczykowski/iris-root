@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.Label;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.MatchQuantity;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
@@ -17,6 +18,7 @@ import org.springframework.integration.annotation.ServiceActivator;
 
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -39,6 +41,7 @@ class RegisterAlertEndpoint {
     AlertData alertData = alertInitializedEvent.getData(AlertData.class);
     AlertMessageDto alertDto = alertInitializedEvent.getData(AlertMessageDto.class);
 
+    var matchQuantity = alertDto.getHits().size() > 1 ? MatchQuantity.MANY : MatchQuantity.SINGLE;
     var matchIds = getMatchIds(alertDto);
     var request = RegisterAlertRequest.builder()
         .alertId(alertDto.getSystemID())
@@ -47,6 +50,7 @@ class RegisterAlertEndpoint {
         .matchIds(matchIds)
         .label(Label.of("source", "CMAPI"))
         .label(Label.of("alertMessageId", alertData.getAlertId().toString()))
+        .label(Label.of("matchQuantity", matchQuantity.name().toLowerCase(Locale.ROOT)))
         .build();
 
     var alert = registerAlertUseCase.register(request);
