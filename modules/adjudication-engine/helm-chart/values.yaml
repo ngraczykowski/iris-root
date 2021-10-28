@@ -17,3 +17,7 @@ templateCacheInvalidation: "*/15 * * * * *"
 
 memoryLimit: 2048Mi
 memoryRequest: 512Mi
+
+service:
+  metadata:
+    annotations: {}
