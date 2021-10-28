@@ -36,7 +36,7 @@ message IsPepInput {
 message WatchlistItem {
   string id = 1; // watchlist uid
   string type = 2; // e.g. WorldCheckIndividuals | WorldCheckEntities | PrivateListIndividuals | PrivateListEntities
-  repeated string countries = 3; // e.g List of ap EdqLobCountries
+  string country = 3; // e.g ap EdqLobCountries
   string further_information = 4;
   repeated string linked_peps_uids = 5;
 }
