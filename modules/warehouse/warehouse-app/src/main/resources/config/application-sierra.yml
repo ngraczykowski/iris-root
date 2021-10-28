@@ -300,6 +300,8 @@ warehouse.report.ai-reasoning-match-level:
   production:
     date-field-name: alert_create_time
     columns:
+      - name: match_feature_vector_signature
+        label: Reasoning Branch ID
       - name: match_policy
         label: Policy ID
       - name: match_policy_title
@@ -308,8 +310,6 @@ warehouse.report.ai-reasoning-match-level:
         label: Step ID
       - name: match_step_title
         label: Step Name
-      - name: match_feature_vector_signature
-        label: Reasoning Branch ID
       - name: match_solution
         label: S8 Match Resolution
       - name: alert_recommended_action
