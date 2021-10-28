@@ -103,11 +103,11 @@ warehouse.report.metrics:
       source-pattern: yyyy-MM-dd HH:mm:ss
       target-pattern: yyyy-MM
     risk-type:
-      name: alert_extendedAttribute5
+      name: alert_categories/hitType
       label: Risk Type
     hit-type:
-      name: alert_categories/hitType
-      label: Hit Type
+      name: alert_DN_CASE.ExtendedAttribute5
+      label: List Type
     country:
       name: s8_country
       label: Country
@@ -130,11 +130,11 @@ warehouse.report.metrics:
       source-pattern: yyyy-MM-dd HH:mm:ss
       target-pattern: yyyy-MM
     risk-type:
-      name: alert_extendedAttribute5
+      name: alert_categories/hitType
       label: Risk Type
     hit-type:
-      name: alert_categories/hitType
-      label: Hit Type
+      name: alert_DN_CASE.ExtendedAttribute5
+      label: List Type
     country:
       name: s8_country
       label: Country

@@ -65,7 +65,7 @@ class MetricsReportGenerationServiceTest {
 
     // then
     assertThat(reportContent.getReport()).isEqualTo(
-        "Date,Country,Risk Type,Hit Type,Efficiency,PTP Effectiveness,FP Effectiveness\n"
+        "Date,Country LoB,Risk Type,List Type,Efficiency,PTP Effectiveness,FP Effectiveness\n"
             + "2021-06,DE,Fraud,Fraud,0.882,0.583,0.333\n"
             + "2021-06,UK,Sanctions,San,1.000,1.000,0.000\n"
             + "2021-07,DE,Fraud,Fraud,1.000,0.000,0.714\n"
