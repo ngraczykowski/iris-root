@@ -35,8 +35,8 @@ public final class MetricsReportTestFixtures {
   public static final String DATE_OLD_PATTERN = "yyyy-MM-dd HH:mm:ss";
   public static final String DATE_NEW_PATTERN = "yyyy-MM";
   public static final String COUNTRY_FIELD_NAME = "s8_country";
-  public static final String COUNTRY_FIELD_LABEL = "Country";
-  public static final String RISK_TYPE_FIELD_NAME = "alert_extendedAttribute5";
+  public static final String COUNTRY_FIELD_LABEL = "Country LoB";
+  public static final String RISK_TYPE_FIELD_NAME = "alert_categories/hitType";
   public static final String RISK_TYPE_FIELD_LABEL = "Risk Type";
   public static final String RECOMMENDATION_FIELD_NAME = "alert_s8_recommendation";
   public static final String RECOMMENDATION_FIELD_POSITIVE_VALUE = "ACTION_POTENTIAL_TRUE_POSITIVE";
@@ -51,8 +51,8 @@ public final class MetricsReportTestFixtures {
   public static final List<String> INDEXES = of("index123");
   public static final String COUNTRY_DE = "DE";
   public static final String RISK_TYPE_FRAUD = "Fraud";
-  public static final String HIT_TYPE_FIELD_NAME = "alert_categories/hitType:value";
-  public static final String HIT_TYPE_FIELD_LABEL = "Hit Type";
+  public static final String HIT_TYPE_FIELD_NAME = "alert_DN_CASE.ExtendedAttribute5";
+  public static final String HIT_TYPE_FIELD_LABEL = "List Type";
   public static final String ALERT_STATUS_FIELD = "alert_status";
   public static final String COMPLETED_VALUE = "COMPLETED";
   public static final LocalDate LOCAL_DATE_FROM = parse(FROM_QUERY_PARAM);
