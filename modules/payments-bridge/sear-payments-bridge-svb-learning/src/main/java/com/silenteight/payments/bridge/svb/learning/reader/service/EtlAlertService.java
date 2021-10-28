@@ -54,7 +54,7 @@ class EtlAlertService {
     var latestDecision = findLatestDecision(rows).orElse(firstRow);
 
     return AnalystDecision.builder()
-        .status(latestDecision.getFkcoStatus())
+        .status(latestDecision.getFkcoVStatusName())
         .comment(latestDecision.getFkcoVActionComment())
         .actionDateTime(getOffsetDateTime(latestDecision.getFkcoDActionDatetime()))
         .build();
