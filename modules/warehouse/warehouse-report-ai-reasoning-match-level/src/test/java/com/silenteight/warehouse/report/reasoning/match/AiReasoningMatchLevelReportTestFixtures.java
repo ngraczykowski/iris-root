@@ -19,8 +19,6 @@ public final class AiReasoningMatchLevelReportTestFixtures {
   public static final String MONTH_DEFINITION_ID = "daa38c15-e811-412b-ac31-d7053fdc319d";
   public static final String PRODUCTION_ANALYSIS_NAME = "production";
   public static final String REPORT_FILENAME = "ai-reasoning-match-level-30-days.csv";
-  public static final String SIMULATION_REPORT_TITLE = "AI Reasoning Match Level";
-  public static final String SIMULATION_REPORT_DESC = "Simulation AI Reasoning Match Level report";
   public static final String STUB_REPORT_RESPONSE = "test row";
   public static final String DATE_FIELD_NAME = "index_timestamp";
   public static final String ALERT_STATUS_FIELD_NAME = "alert_status";

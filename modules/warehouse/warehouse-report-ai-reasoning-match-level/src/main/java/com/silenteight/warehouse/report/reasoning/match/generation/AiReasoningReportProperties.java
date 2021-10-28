@@ -20,8 +20,4 @@ public class AiReasoningReportProperties {
   @Valid
   @NotNull
   AiReasoningReportDefinitionProperties production;
-
-  @Valid
-  @NotNull
-  AiReasoningReportDefinitionProperties simulation;
 }

@@ -24,12 +24,8 @@ import static java.lang.String.format;
 class StatusAiReasoningMatchLevelReportRestController {
 
   private static final String PRODUCTION_ANALYSIS_NAME = "production";
-  private static final String ANALYSIS_ID_PARAM = "analysisId";
   private static final String DEFINITION_ID_PARAM = "definitionId";
   private static final String ID_PARAM = "id";
-  private static final String STATUS_SIMULATION_REPORT_URL =
-      "/v1/analysis/{analysisId}/definitions/AI_REASONING_MATCH_LEVEL/"
-          + "{definitionId}/reports/{id}/status";
 
   private static final String STATUS_PRODUCTION_REPORT_URL =
       "/v1/analysis/production/definitions/AI_REASONING_MATCH_LEVEL/"
@@ -38,22 +34,6 @@ class StatusAiReasoningMatchLevelReportRestController {
   @NonNull
   private final AiReasoningMatchLevelReportStatusQuery reportQuery;
 
-  @GetMapping(STATUS_SIMULATION_REPORT_URL)
-  @PreAuthorize("isAuthorized('CREATE_SIMULATION_REPORT')")
-  public ResponseEntity<ReportStatus> getReportStatus(
-      @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
-      @PathVariable(DEFINITION_ID_PARAM) String definitionId,
-      @PathVariable(ID_PARAM) long id) {
-
-    log.debug(
-        "Getting simulation AI Reasoning Match Level report status, analysisId={}, "
-            + "reportId={}", analysisId, id);
-
-    ReportState state = reportQuery.getReportGeneratingState(id);
-    return ResponseEntity.ok(
-        state.getReportStatus(getReportName(analysisId, definitionId, id)));
-  }
-
   @GetMapping(STATUS_PRODUCTION_REPORT_URL)
   @PreAuthorize("isAuthorized('CREATE_PRODUCTION_ON_DEMAND_REPORT')")
   public ResponseEntity<ReportStatus> getReportStatus(
@@ -61,7 +41,7 @@ class StatusAiReasoningMatchLevelReportRestController {
       @PathVariable(ID_PARAM) long id) {
 
     log.debug("Getting production AI Reasoning Match Level report status, definitionId={}, "
-            + "reportId={}", definitionId, id);
+        + "reportId={}", definitionId, id);
 
     ReportState state = reportQuery.getReportGeneratingState(id);
     return ResponseEntity.ok(
