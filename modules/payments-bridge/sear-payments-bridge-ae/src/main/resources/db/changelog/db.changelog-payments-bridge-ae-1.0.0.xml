@@ -61,4 +61,42 @@
         path="sql/rename_analysis_name.sql"
         relativeToChangelogFile="true"/>
   </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.0.0_7" author="wkeska">
+    <modifyDataType
+        columnName="alert_id"
+        newDataType="UUID"
+        tableName="pb_registered_alert"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.0.0_8" author="wkeska">
+    <renameColumn tableName="pb_registered_alert"
+                  oldColumnName="alert_id"
+                  newColumnName="alert_message_id"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.0.0_10" author="wkeska">
+    <createTable tableName="pb_registered_match">
+      <column name="alert_message_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="match_name" type="VARCHAR(30)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="pb_registered_match"
+        indexName="ix_pb_registered_match_match_name">
+      <column name="match_name"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.0.0_11" author="wkeska">
+    <addForeignKeyConstraint baseTableName="pb_registered_match"
+                             baseColumnNames="alert_message_id"
+                             constraintName="fk_pb_registered_match_alert_message_id"
+                             referencedTableName="pb_registered_alert"
+                             referencedColumnNames="alert_message_id"/>
+  </changeSet>
 </databaseChangeLog>

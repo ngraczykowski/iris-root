@@ -2,7 +2,8 @@ package com.silenteight.payments.bridge.firco.alertmessage.service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.common.model.AlertRegistration;
+import com.silenteight.payments.bridge.common.model.FindRegisteredAlertRequest;
+import com.silenteight.payments.bridge.common.model.RegisteredAlert;
 
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
@@ -20,8 +21,8 @@ class FindAlertRegisteredEndpoint {
 
   @ServiceActivator(inputChannel = ALERT_REGISTERED_REQUEST_CHANNEL,
       outputChannel = ALERT_REGISTERED_RESPONSE_CHANNEL)
-  List<AlertRegistration> apply(List<AlertRegistration> alertRegistration) {
-    return alertRegisteredJdbcDataAccess.findRegistered(alertRegistration);
+  List<RegisteredAlert> apply(List<FindRegisteredAlertRequest> registeredAlert) {
+    return alertRegisteredJdbcDataAccess.findRegistered(registeredAlert);
   }
 
 }
