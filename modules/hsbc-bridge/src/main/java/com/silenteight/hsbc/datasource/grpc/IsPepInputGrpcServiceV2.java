@@ -62,7 +62,7 @@ class IsPepInputGrpcServiceV2 extends IsPepInputServiceImplBase {
         .setId(watchListItem.getId())
         .setType(watchListItem.getType())
         .setFurtherInformation(watchListItem.getFurtherInformation())
-        .addAllCountries(watchListItem.getCountries())
+        .setCountry(watchListItem.getCountry())
         .addAllLinkedPepsUids(watchListItem.getLinkedPepsUids())
         .build();
   }

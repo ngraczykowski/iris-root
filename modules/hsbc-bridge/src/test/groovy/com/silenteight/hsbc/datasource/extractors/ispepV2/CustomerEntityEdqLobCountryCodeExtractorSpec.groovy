@@ -4,11 +4,9 @@ import com.silenteight.hsbc.datasource.datamodel.CustomerEntity
 
 import spock.lang.Specification
 
-import static org.assertj.core.api.Assertions.assertThat
-
 class CustomerEntityEdqLobCountryCodeExtractorSpec extends Specification {
 
-  def 'returns correct values'() {
+  def 'returns correct value for customerEntities even if edqLobCountry that should be the same has different value'() {
     given:
     def firstLobCountryCode = Mock(CustomerEntity) {
       getEdqLobCountryCode() >> 'EG'
@@ -23,6 +21,6 @@ class CustomerEntityEdqLobCountryCodeExtractorSpec extends Specification {
     def actual = underTest.extract()
 
     then:
-    assertThat(actual).containsExactly('EG', 'TR')
+    actual == 'EG'
   }
 }

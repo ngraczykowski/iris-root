@@ -15,8 +15,7 @@ public class WatchListItemDto {
   String id;
   String type;
   String furtherInformation;
-  @Builder.Default
-  List<String> countries = emptyList();
+  String country;
   @Builder.Default
   List<String> linkedPepsUids = emptyList();
 }

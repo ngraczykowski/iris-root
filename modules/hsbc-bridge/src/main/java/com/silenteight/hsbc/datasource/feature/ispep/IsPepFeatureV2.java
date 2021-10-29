@@ -39,7 +39,7 @@ public class IsPepFeatureV2 implements IsPepFeatureValuesRetriever<IsPepInputDto
 
   private IsPepInputDto getIsPepInputForIndividual(MatchData matchData, String matchName) {
     var query = isPepQueryFactory.create(matchData);
-    var apIndividualExtractLobCountry = toDistinctList(query.apWorldCheckIndividualsExtractEdqLobCountryCode());
+    var apIndividualExtractLobCountry = query.apWorldCheckIndividualsExtractEdqLobCountryCode();
     var furtherInformation = query.mpWorldCheckIndividualsFurtherInformation();
     var linkedTo = toDistinctList(query.mpWorldCheckIndividualsLinkedTo());
 
@@ -57,7 +57,7 @@ public class IsPepFeatureV2 implements IsPepFeatureValuesRetriever<IsPepInputDto
 
   private IsPepInputDto getIsPepInputForEntities(MatchData matchData, String matchName) {
     var query = isPepQueryFactory.create(matchData);
-    var apEntityExtractLobCountry = toDistinctList(query.apWorldCheckEntitiesExtractEdqLobCountryCode());
+    var apEntityExtractLobCountry = query.apWorldCheckEntitiesExtractEdqLobCountryCode();
     var furtherInformation = query.mpWorldCheckEntitiesFurtherInformation();
     var linkedTo = toDistinctList(query.mpWorldCheckEntitiesLinkedTo());
 
@@ -74,11 +74,11 @@ public class IsPepFeatureV2 implements IsPepFeatureValuesRetriever<IsPepInputDto
   }
 
   private static WatchListItemDto createWatchListItem(
-      MatchData matchData, List<String> apEntityExtractLobCountry, String furtherInformation, List<String> linkedTo) {
+      MatchData matchData, String apEntityExtractLobCountry, String furtherInformation, List<String> linkedTo) {
     return getWatchListItemDtoBuilderWithType(matchData)
         .id(matchData.getWatchlistId().orElse(""))
         .furtherInformation(furtherInformation)
-        .countries(apEntityExtractLobCountry)
+        .country(apEntityExtractLobCountry)
         .linkedPepsUids(linkedTo)
         .build();
   }

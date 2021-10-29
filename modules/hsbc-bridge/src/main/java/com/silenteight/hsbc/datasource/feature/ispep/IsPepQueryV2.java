@@ -6,9 +6,9 @@ import java.util.stream.Stream;
 
 public interface IsPepQueryV2 {
 
-  Stream<String> apWorldCheckIndividualsExtractEdqLobCountryCode();
+  String apWorldCheckIndividualsExtractEdqLobCountryCode();
 
-  Stream<String> apWorldCheckEntitiesExtractEdqLobCountryCode();
+  String apWorldCheckEntitiesExtractEdqLobCountryCode();
 
   String mpWorldCheckIndividualsFurtherInformation();
 

@@ -49,7 +49,7 @@ class IsPepFeatureV2Spec extends Specification {
       watchListItem.id == '376829'
       watchListItem.type == 'WorldCheckIndividuals'
       watchListItem.furtherInformation == FURTHER_INFORMATION
-      watchListItem.countries == ['SG']
+      watchListItem.country == 'SG'
       watchListItem.linkedPepsUids == ['28966;376830;376831;376832;448756;80217']
     }
   }
@@ -87,7 +87,7 @@ class IsPepFeatureV2Spec extends Specification {
       watchListItem.id == '376829'
       watchListItem.type == 'WorldCheckEntities'
       watchListItem.furtherInformation == FURTHER_INFORMATION
-      watchListItem.countries == ['SG']
+      watchListItem.country == 'SG'
       watchListItem.linkedPepsUids == ['28966;376830;376831;376832;448756;80217']
     }
   }
@@ -122,7 +122,7 @@ class IsPepFeatureV2Spec extends Specification {
       watchListItem.id == '376829'
       watchListItem.type == 'PrivateListEntities'
       watchListItem.furtherInformation == ''
-      watchListItem.countries == ['SG']
+      watchListItem.country == 'SG'
       watchListItem.linkedPepsUids == []
     }
   }

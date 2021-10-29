@@ -4,15 +4,20 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.CustomerEntity;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
-import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 class CustomerEntityEdqLobCountryCodeExtractor {
 
   private final List<CustomerEntity> customerEntities;
 
-  public Stream<String> extract() {
-    return customerEntities.stream().map(CustomerEntity::getEdqLobCountryCode);
+  public String extract() {
+    return customerEntities.stream()
+        .map(CustomerEntity::getEdqLobCountryCode)
+        .filter(StringUtils::isNotBlank)
+        .findFirst()
+        .orElse("");
   }
 }

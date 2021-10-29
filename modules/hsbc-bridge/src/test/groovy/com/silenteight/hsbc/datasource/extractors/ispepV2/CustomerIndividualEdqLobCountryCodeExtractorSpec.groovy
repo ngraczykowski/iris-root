@@ -4,11 +4,9 @@ import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual
 
 import spock.lang.Specification
 
-import static org.assertj.core.api.Assertions.assertThat
-
 class CustomerIndividualEdqLobCountryCodeExtractorSpec extends Specification {
 
-  def 'returns correct values'() {
+  def 'returns correct value for customerIndividuals even if edqLobCountry that should be the same has different value'() {
     given:
     def firstLobCountryCode = Mock(CustomerIndividual) {
       getEdqLobCountryCode() >> 'SG'
@@ -23,6 +21,6 @@ class CustomerIndividualEdqLobCountryCodeExtractorSpec extends Specification {
     def actual = underTest.extract()
 
     then:
-    assertThat(actual).containsExactly('SG', 'PL')
+    actual == 'SG'
   }
 }

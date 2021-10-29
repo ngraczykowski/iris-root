@@ -15,12 +15,12 @@ class IsPepQueryFacade implements IsPepQueryV2 {
   private final MatchData matchData;
 
   @Override
-  public Stream<String> apWorldCheckIndividualsExtractEdqLobCountryCode() {
+  public String apWorldCheckIndividualsExtractEdqLobCountryCode() {
     return new CustomerIndividualEdqLobCountryCodeExtractor(matchData.getCustomerIndividuals()).extract();
   }
 
   @Override
-  public Stream<String> apWorldCheckEntitiesExtractEdqLobCountryCode() {
+  public String apWorldCheckEntitiesExtractEdqLobCountryCode() {
     return new CustomerEntityEdqLobCountryCodeExtractor(matchData.getCustomerEntities()).extract();
   }
 
