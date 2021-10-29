@@ -19,38 +19,36 @@ public class ExtractOriginatorAlertedPartyData {
   private final MessageData messageData;
 
   public AlertedPartyData extract(
-      MessageFieldStructure messageFieldStructure, String format) {
+      MessageFieldStructure messageFieldStructure, String fircoFormat) {
+
     var lines = messageData.getLines("ORIGINATOR");
     var lastLine = getLastLineNotUS(lines);
     var firstLineLength = lines.get(0).length();
 
-    if (firstLineLength == 2)
-      return AlertedPartyData.builder()
-          .messageFieldStructure(messageFieldStructure)
+    var builder = AlertedPartyData.builder()
+        .messageFieldStructure(messageFieldStructure)
+        .ctryTown(lines.get(lastLine));
+
+    if (firstLineLength == 2) {
+      builder
           .accountNumber(lines.get(LINE_2))
           .name(lines.get(LINE_3))
           .addresses(lines.subList(LINE_4, lastLine))
-          .nameAddresses(lines.subList(LINE_3, lastLine + 1))
-          .ctryTown(lines.get(lastLine))
-          .build();
-
-    if (format.equals("FED"))
-      return AlertedPartyData.builder()
-          .messageFieldStructure(messageFieldStructure)
+          .nameAddresses(lines.subList(LINE_3, lastLine + 1));
+    } else if (fircoFormat.equals("FED")) {
+      builder
           .name(lines.get(LINE_1))
           .addresses(lines.subList(LINE_2, lastLine))
-          .nameAddresses(lines.subList(LINE_1, lastLine + 1))
-          .ctryTown(lines.get(lastLine))
-          .build();
+          .nameAddresses(lines.subList(LINE_1, lastLine + 1));
+    } else {
+      builder
+          .accountNumber(lines.get(LINE_1))
+          .name(lines.get(LINE_2))
+          .addresses(lines.subList(LINE_3, lastLine))
+          .nameAddresses(lines.subList(LINE_2, lastLine + 1));
+    }
 
-    return AlertedPartyData.builder()
-        .messageFieldStructure(messageFieldStructure)
-        .accountNumber(lines.get(LINE_1))
-        .name(lines.get(LINE_2))
-        .addresses(lines.subList(LINE_3, lastLine))
-        .nameAddresses(lines.subList(LINE_2, lastLine + 1))
-        .ctryTown(lines.get(lastLine))
-        .build();
+    return builder.build();
   }
 
   private static int getLastLineNotUS(List<String> lines) {

@@ -45,8 +45,8 @@ class LearningAlertBatchService {
       batch.addLearningAlert(learningAlert);
       log.debug("LearningAlert {} created successfully", learningAlert.getAlertId());
     } catch (RuntimeException e) {
-      log.error("Failed to create LearningAlert = {} reason = {}",
-          alertRows.get(0).getFkcoVSystemId(), e.getMessage(), e);
+      log.warn("Failed to create LearningAlert = {} reason = {}",
+          alertRows.get(0).getFkcoVSystemId(), e.getMessage());
       batch.addError(ReadAlertError
           .builder()
           .alertId(alertRows.get(0).getFkcoVSystemId())

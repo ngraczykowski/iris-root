@@ -9,7 +9,7 @@ import com.silenteight.payments.bridge.common.dto.input.*;
 import com.silenteight.payments.bridge.etl.firco.parser.MessageFormat;
 import com.silenteight.payments.bridge.etl.firco.parser.MessageParserFacade;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
-import com.silenteight.payments.bridge.svb.oldetl.model.InvalidMessageException;
+import com.silenteight.payments.bridge.svb.oldetl.model.UnsupportedMessageException;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertEtlResponseUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.*;
 import com.silenteight.payments.bridge.svb.oldetl.service.shitcode.*;
@@ -30,7 +30,8 @@ import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldSt
 @Service
 public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
-  private static final List<String> FORMATS = List.of("INT", "FED", "IAT-I", "IAT-O", "O-F");
+  private static final List<String> SUPPORTED_FIRCO_FORMATS =
+      List.of("INT", "FED", "IAT-I", "IAT-O", "O-F");
 
   public AlertEtlResponse createAlertEtlResponse(AlertMessageDto alertMessageDto) {
     if (log.isDebugEnabled()) {
@@ -86,7 +87,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     var alertedPartyData =
         extractAlertedPartyData(
             messageData, hit.getTag(), messageFieldStructure,
-            extractMessageFormat(applicationCode, messageData));
+            extractFircoFormat(applicationCode, messageData));
 
     var accountNumberOrNormalizedName =
         alertedPartyData.getAccountNumber() == null ? alertedPartyData.getNames().get(0)
@@ -101,7 +102,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
   public static AlertedPartyData extractAlertedPartyData(
       MessageData messageData, String hitTag,
       MessageFieldStructure messageFieldStructure,
-      String messageFormat) {
+      String fircoFormat) {
 
     boolean tagValueInFormatF = ifTagValueInFormatF(messageData.getLines(hitTag));
     switch (hitTag) {
@@ -111,7 +112,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
               NAMEADDRESS_FORMAT_F);
         } else {
           return new ExtractOriginatorAlertedPartyData(messageData).extract(
-              messageFieldStructure, messageFormat);
+              messageFieldStructure, fircoFormat);
         }
       case "BENE":
         if (tagValueInFormatF) {
@@ -119,23 +120,23 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
               NAMEADDRESS_FORMAT_F);
         } else {
           return new ExtractBeneOrgbankInsbankAlertedPartyData(
-              messageData, hitTag, messageFormat).extract(messageFieldStructure);
+              messageData, hitTag, fircoFormat).extract(messageFieldStructure);
         }
       case "ORGBANK":
       case "INSBANK":
         return new ExtractBeneOrgbankInsbankAlertedPartyData(
-            messageData, hitTag, messageFormat).extract(messageFieldStructure);
+            messageData, hitTag, fircoFormat).extract(messageFieldStructure);
       case "50F":
         return new Extract50FAlertedPartyData(messageData, hitTag).extract(messageFieldStructure);
       case "RECEIVBANK":
         return new ExtractReceivbankAlertedPartyData(
-            messageData, hitTag, messageFormat).extract(messageFieldStructure);
+            messageData, hitTag, fircoFormat).extract(messageFieldStructure);
       case "50K":
       case "59":
       case "50":
         return new Extract50k59AlertedPartyData(messageData).extract(hitTag, messageFieldStructure);
       default:
-        throw new InvalidMessageException("Tag not supported " + hitTag);
+        throw new UnsupportedMessageException("Tag not supported " + hitTag);
     }
   }
 
@@ -150,7 +151,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
       case "GTEX":
         return new GtexTransactionMessage(messageData);
       default:
-        throw new InvalidMessageException("Application not supported " + applicationCode);
+        throw new UnsupportedMessageException("Application not supported " + applicationCode);
     }
   }
 
@@ -223,24 +224,23 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
   }
 
   private static boolean ifTagValueInFormatF(List<String> tagValueLines) {
-    List<String> formatFPrefixes = List.of("2/", "3/");
-    long numberOfLinesContainsFormatFPrefixes =
-        tagValueLines
-            .stream()
-            .filter(line -> line.length() > 1)
-            .filter(line -> formatFPrefixes.contains(
-                line.substring(0, 2)))
-            .count();
+    var formatFPrefixes = List.of("2/", "3/");
+    var numberOfLinesContainsFormatFPrefixes = tagValueLines.stream()
+        .filter(line -> line.length() > 1)
+        .filter(line -> formatFPrefixes.contains(
+            line.substring(0, 2)))
+        .count();
+
     return numberOfLinesContainsFormatFPrefixes >= 2;
   }
 
-  private static String extractMessageFormat(String applicationCode, MessageData messageData) {
+  private static String extractFircoFormat(String applicationCode, MessageData messageData) {
     if (applicationCode.equals("GTEX"))
       return "SWF";
 
     var type = messageData.getValue("TYPE");
 
-    for (var format : FORMATS) {
+    for (var format : SUPPORTED_FIRCO_FORMATS) {
       if (type.contains(format))
         return format;
     }
@@ -248,6 +248,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     if (type.contains("BOO"))
       return "IAT-O";
 
-    throw new InvalidMessageException("Couldn't map cmapi to FKCO_V_FORMAT");
+    throw new UnsupportedMessageException(
+        "Unable to map unknown TYPE " + type + " to FKCO_V_FORMAT");
   }
 }
