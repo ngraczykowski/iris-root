@@ -149,4 +149,8 @@ public class LearningMatch {
     }
     return SolutionType.valueOf(hitType);
   }
+
+  public Optional<String> getFirstAlertedPartyName() {
+    return getAlertedPartyNames().stream().map(String::trim).findFirst();
+  }
 }

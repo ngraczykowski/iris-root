@@ -10,7 +10,6 @@ import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @RequiredArgsConstructor
 @Qualifier("historicalRisk")
@@ -20,15 +19,13 @@ class HistoricalRiskExtractor implements CategoryValueExtractor {
 
   @Override
   public CategoryValue extract(LearningMatch learningMatch) {
-
-    var accountNumer = learningMatch.getAccountNumber();
+    var accountNumberOrFirstName = learningMatch.getAccountNumber()
+        .filter(String::isBlank)
+        .orElseGet(() -> learningMatch.getFirstAlertedPartyName().orElse(""));
 
     var result = historicalRiskAssessmentUseCase.invoke(HistoricalRiskAssessmentAgentRequest
         .builder()
-        .accountNumber(accountNumer.isEmpty() || accountNumer.get().isBlank() ? learningMatch
-            .getAlertedPartyNames()
-            .get(0)
-            .trim() : accountNumer.get())
+        .accountNumber(accountNumberOrFirstName)
         .ofacID(learningMatch.getOfacId())
         .build());
 
