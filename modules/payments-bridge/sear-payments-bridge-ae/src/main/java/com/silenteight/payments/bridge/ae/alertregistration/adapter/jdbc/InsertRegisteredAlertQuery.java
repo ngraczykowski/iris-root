@@ -14,7 +14,7 @@ class InsertRegisteredAlertQuery {
 
   @Language("PostgreSQL")
   private static final String SQL =
-      "INSERT INTO pb_registered_alert(alert_id, alert_name) VALUES (?, ?)";
+      "INSERT INTO pb_registered_alert(alert_message_id, alert_name) VALUES (?, ?)";
 
   private final JdbcTemplate jdbcTemplate;
 
