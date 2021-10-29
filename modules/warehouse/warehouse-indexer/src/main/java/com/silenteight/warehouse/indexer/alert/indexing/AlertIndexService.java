@@ -8,8 +8,10 @@ import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.springframework.retry.annotation.Retryable;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.List;
 
 import static org.apache.commons.collections4.ListUtils.partition;
@@ -27,6 +29,7 @@ public class AlertIndexService {
 
   private final int retryOnConflictCount;
 
+  @Retryable(value = { SocketTimeoutException.class, AlertNotIndexedExceptions.class })
   public void saveAlerts(List<MapWithIndex> alerts) {
     partition(alerts, updateRequestBatchSize).stream()
         .map(this::asBulkRequest)
