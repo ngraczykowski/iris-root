@@ -9,8 +9,7 @@ import lombok.experimental.NonFinal;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.Label;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
-import com.silenteight.payments.bridge.common.model.FindRegisteredAlertRequest;
-import com.silenteight.payments.bridge.common.model.RegisteredAlert;
+import com.silenteight.payments.bridge.common.model.AlertRegistration;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -30,7 +29,7 @@ public class LearningAlert {
 
   String messageId;
 
-  @Setter(AccessLevel.PUBLIC)
+  @Setter(AccessLevel.PRIVATE)
   @NonFinal
   String alertName;
 
@@ -42,10 +41,12 @@ public class LearningAlert {
 
   String fileName;
 
+  int hitCount;
+
   AnalystDecision analystDecision;
 
-  public FindRegisteredAlertRequest toFindRegisterAlertRequest() {
-    return new FindRegisteredAlertRequest(systemId, messageId);
+  public AlertRegistration getAlertRegistration() {
+    return new AlertRegistration(systemId, messageId);
   }
 
   public String getDiscriminator() {
@@ -76,10 +77,5 @@ public class LearningAlert {
 
       match.get().setMatchName(m.getMatchName());
     });
-  }
-
-  public void setAlertMatchNames(RegisteredAlert response) {
-    setAlertName(response.getAlertName());
-
   }
 }

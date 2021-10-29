@@ -17,7 +17,6 @@ import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestIni
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.awaitility.core.ConditionEvaluationLogger;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -75,10 +74,9 @@ class PaymentsBridgeApplicationTests {
   }
 
   @Test
-  @Disabled
   void shouldProcessLearningCsv() {
     var request =
-        LearningRequest.builder().bucket("bucket").object("02-02-2001.csv").build();
+        LearningRequest.builder().bucket("bucket").object("SVB_Jun_1_to_30_sorted.csv").build();
     handleLearningDataUseCase.readAlerts(request);
     await()
         .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))

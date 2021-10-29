@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
   implementation project(":sear-payments-bridge-common")
+  testImplementation project(":sear-payments-bridge-testing")
   implementation project(":proto-sear-payments-bridge-internal-protos")
   implementation project(":sear-payments-bridge-mock-ae")
 
@@ -17,5 +18,4 @@ dependencies {
   implementation libraries.spring_jdbc
 
   testImplementation libraries.silenteight_sep_base_testing
-  testImplementation project(":sear-payments-bridge-testing")
 }
