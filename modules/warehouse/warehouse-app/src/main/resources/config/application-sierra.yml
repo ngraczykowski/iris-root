@@ -279,11 +279,11 @@ warehouse.report.ai-reasoning:
         label: Policy ID
       - name: alert_match_reason:policy_title
         label: Policy Name
-      - name: match_step
+      - name: alert_match_reason:step
         label: Step ID
-      - name: match_step_title
+      - name: alert_match_reason:step_title
         label: Step Name
-      - name: match_feature_vector_signature
+      - name: alert_match_reason:feature_vector_signature
         label: Reasoning Branch ID
       - name: alert_recommendation_recommended_action
         label: S8 Alert Resolution
