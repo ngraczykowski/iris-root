@@ -63,6 +63,7 @@ class EtlMatchService {
         .messageData(row.getFkcoVContent())
         .messageStructure(messageStructure)
         .matchType(row.getFkcoVListType())
+        .ofacId(row.getFkcoVListFmmId())
         .matchingTexts(matchingTexts)
         .applicationCode(row.getFkcoVApplication())
         .hitTag(row.getFkcoVMatchedTag())

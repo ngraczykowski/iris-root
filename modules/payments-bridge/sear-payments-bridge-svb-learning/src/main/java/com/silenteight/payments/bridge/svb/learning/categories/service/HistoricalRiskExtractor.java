@@ -25,9 +25,11 @@ class HistoricalRiskExtractor implements CategoryValueExtractor {
 
     var result = historicalRiskAssessmentUseCase.invoke(HistoricalRiskAssessmentAgentRequest
         .builder()
-        .accountNumber(accountNumer.isEmpty() ? learningMatch.getAlertedPartyNames().get(0)
+        .accountNumber(accountNumer.isEmpty() || accountNumer.get().isBlank() ? learningMatch
+            .getAlertedPartyNames()
+            .get(0)
             .trim() : accountNumer.get())
-        .ofacID(learningMatch.getMatchId())
+        .ofacID(learningMatch.getOfacId())
         .build());
 
     return CategoryValue

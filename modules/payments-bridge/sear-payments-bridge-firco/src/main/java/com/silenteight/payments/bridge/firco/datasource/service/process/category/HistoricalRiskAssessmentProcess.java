@@ -5,11 +5,14 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.agents.model.HistoricalRiskAssessmentAgentRequest;
 import com.silenteight.payments.bridge.agents.port.HistoricalRiskAssessmentUseCase;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 
 @Service
@@ -32,9 +35,24 @@ class HistoricalRiskAssessmentProcess implements CategoryValueProcess {
 
   @Nonnull
   private HistoricalRiskAssessmentAgentRequest createRequest(HitData hitData) {
+
+    var alertedPartyData = hitData.getAlertedPartyData();
+
+    String name = Optional.of(alertedPartyData)
+        .map(AlertedPartyData::getNames)
+        .orElseGet(Collections::emptyList)
+        .stream()
+        .findFirst()
+        .orElse("");
+
+    String accountNumberOrName = Optional.of(alertedPartyData)
+        .map(AlertedPartyData::getAccountNumber)
+        .filter(accountNumber -> !accountNumber.isBlank())
+        .orElse(name);
+
     return HistoricalRiskAssessmentAgentRequest
         .builder()
-        .accountNumber(hitData.getHitAndWlPartyData().getAccountNumber())
+        .accountNumber(accountNumberOrName)
         .ofacID(hitData.getHitAndWlPartyData().getId())
         .build();
   }

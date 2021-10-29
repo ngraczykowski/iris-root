@@ -74,6 +74,8 @@ public class LearningMatch {
 
   String hitType;
 
+  String ofacId;
+
 
   public NameAddressCrossmatchAgentRequest toCrossmatchRequest() {
     return NameAddressCrossmatchAgentRequest
