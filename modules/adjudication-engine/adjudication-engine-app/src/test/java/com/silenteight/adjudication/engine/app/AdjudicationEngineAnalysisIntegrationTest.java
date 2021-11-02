@@ -144,13 +144,6 @@ class AdjudicationEngineAnalysisIntegrationTest {
     assertGeneratedRecommendation(analysisId, 2);
   }
 
-  @Test
-  void shouldStreamRecommendationsWhenSecondAnalysisAdded() {
-    givenSecondAnalysis();
-
-    assertGeneratedRecommendation("analysis/2/recommendations/3");
-  }
-
   private void assertSolvedAlerts(long analysisId, int solvedCount) {
     await()
         .atMost(Duration.ofSeconds(10))
@@ -162,7 +155,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
   private void assertGeneratedRecommendation(long analysisId, int recommendationCount) {
     await()
-        .atMost(Duration.ofSeconds(10000))
+        .atMost(Duration.ofSeconds(10))
         .until(() -> generatedRecommendationCount(jdbcTemplate, analysisId) > 0);
 
     assertThat(generatedRecommendationCount(jdbcTemplate, analysisId))
