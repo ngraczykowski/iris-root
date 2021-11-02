@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package silenteight.agent.geo.ispep.api;
+
+option java_package = "com.silenteight.proto.agent.ispep.v1.api";
+option java_outer_classname = "IsPepAgentApiProto";
+option java_multiple_files = true;
+
+service IsPepAgent {
+
+  rpc IsHistoricalPep(IsHistoricalPepRequest) returns (IsHistoricalPepResponse) {
+  }
+}
+
+message IsHistoricalPepRequest {
+  string watchlist_id = 1;
+  string watchlist_type = 2;
+  string country = 3;
+  string further_information = 4;
+  repeated string linked_peps_uids = 5;
+}
+
+message IsHistoricalPepResponse {
+  string solution = 1;
+  IsHistoricalPepReason reason = 2;
+}
+
+message IsHistoricalPepReason {
+  string biography = 1;
+}
