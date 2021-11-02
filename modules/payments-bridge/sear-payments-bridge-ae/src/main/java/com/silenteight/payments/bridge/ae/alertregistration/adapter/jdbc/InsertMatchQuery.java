@@ -9,7 +9,7 @@ import java.sql.Types;
 import java.util.List;
 import java.util.UUID;
 
-class RegisterMatchQuery {
+class InsertMatchQuery {
 
   private final BatchSqlUpdate sql;
 
@@ -17,7 +17,7 @@ class RegisterMatchQuery {
   private static final String SQL =
       "INSERT INTO pb_registered_match(alert_message_id, match_name) VALUES (?, ?)";
 
-  RegisterMatchQuery(JdbcTemplate jdbcTemplate) {
+  InsertMatchQuery(JdbcTemplate jdbcTemplate) {
     sql = new BatchSqlUpdate();
 
     sql.setJdbcTemplate(jdbcTemplate);

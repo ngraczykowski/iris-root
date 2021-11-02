@@ -1,5 +1,6 @@
 package com.silenteight.payments.bridge.ae.alertregistration.adapter.jdbc;
 
+import com.silenteight.payments.bridge.ae.alertregistration.domain.SaveRegisteredAlertRequest;
 import com.silenteight.payments.bridge.testing.JdbcTestConfiguration;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
@@ -17,21 +18,31 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @Sql
 @ContextConfiguration(classes = {
     JdbcTestConfiguration.class,
-    RegisterMatchJdbcDataAccess.class,
-    RegisterMatchJdbcConfiguration.class
+    RegisteredAlertJdbcDataAccess.class,
+    InsertMatchJdbcConfiguration.class,
+    InsertRegisteredAlertQuery.class,
+    SelectRegisteredAlertQuery.class
 })
 class RegisterMatchJdbcDataAccessIT extends BaseJdbcTest {
 
   @Autowired
-  private RegisterMatchJdbcDataAccess dataAccess;
+  private RegisteredAlertJdbcDataAccess dataAccess;
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
   @Test
   void shouldInsertAllMatches() {
-    dataAccess.save(
-        UUID.fromString("f07f327c-58c2-e2e5-b02d-b2bdeee79adc"),
-        List.of("alerts/1/matches/1", "alerts/1/matches/2"));
+    var request = SaveRegisteredAlertRequest
+        .builder()
+        .alertId(UUID.fromString("f07f327c-58c2-e2e5-b02d-b2bdeee79adc"))
+        .alertName("alerts/1")
+        .matchNames(List.of("alerts/1/matches/1", "alerts/1/matches/2"))
+        .build();
+    dataAccess.save(request);
+
+    assertThat(jdbcTemplate.queryForObject(
+        "SELECT count(*) FROM pb_registered_alert",
+        Integer.class)).isEqualTo(1);
     assertThat(jdbcTemplate.queryForObject(
         "SELECT count(*) FROM pb_registered_match",
         Integer.class)).isEqualTo(2);

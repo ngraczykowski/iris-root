@@ -8,12 +8,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 @RequiredArgsConstructor
 @Configuration
-class RegisterMatchJdbcConfiguration {
+class InsertMatchJdbcConfiguration {
 
   private final JdbcTemplate jdbcTemplate;
 
   @Bean
-  RegisterMatchQuery registerMatchQuery() {
-    return new RegisterMatchQuery(jdbcTemplate);
+  InsertMatchQuery registerMatchQuery() {
+    return new InsertMatchQuery(jdbcTemplate);
   }
 }

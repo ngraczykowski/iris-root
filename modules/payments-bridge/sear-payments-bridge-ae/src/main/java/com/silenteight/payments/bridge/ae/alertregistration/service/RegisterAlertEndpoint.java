@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.Label;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterMatchResponse;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.SaveRegisteredAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
-import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterMatchDataAccessPort;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.common.model.AlertData;
@@ -35,7 +35,6 @@ class RegisterAlertEndpoint {
 
   private final RegisterAlertUseCase registerAlertUseCase;
   private final RegisteredAlertDataAccessPort registeredAlertDataAccessPort;
-  private final RegisterMatchDataAccessPort registerMatchDataAccessPort;
 
   @ServiceActivator(inputChannel = ALERT_INITIALIZED, outputChannel = ALERT_REGISTERED)
   AlertRegisteredEvent apply(AlertInitializedEvent alertInitializedEvent) {
@@ -54,14 +53,16 @@ class RegisterAlertEndpoint {
 
     var alert = registerAlertUseCase.register(request);
 
-    registeredAlertDataAccessPort.save(alertData.getAlertId(), alert.getAlertName());
-    registerMatchDataAccessPort.save(
-        alertData.getAlertId(),
-        alert
+    registeredAlertDataAccessPort.save(SaveRegisteredAlertRequest
+        .builder()
+        .alertId(alertData.getAlertId())
+        .alertName(alert.getAlertName())
+        .matchNames(alert
             .getMatchResponses()
             .stream()
             .map(RegisterMatchResponse::getMatchName)
-            .collect(toList()));
+            .collect(toList()))
+        .build());
 
     return new AlertRegisteredEvent(
         alertData.getAlertId(), alert.getAlertName(), alert.getMatchResponsesAsMap());
