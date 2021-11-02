@@ -5,74 +5,46 @@ import com.silenteight.payments.bridge.etl.processing.model.MessageTag;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Disabled
 class ExtractOriginatorAlertedPartyDataTest {
 
-  private ExtractOriginatorAlertedPartyData extractOriginatorAlertedPartyData;
+  ExtractOriginatorAlertedPartyData extractOriginatorAlertedPartyData;
 
-  @Test
-  void shouldExtractFirstLineLengthTwoSecondTest() {
-    extractOriginatorAlertedPartyData = new ExtractOriginatorAlertedPartyData(
-        new MessageData(List.of(new MessageTag("ORIGINATOR", "AC\n"
-            + "NL60SNSB0907370640\n"
-            + "SADDAM HUSSEIN\n"
-            + "2/BREED 9\n"
-            + "3/NL/1621KA HOORN NH\n"
-            + "US"))));
-    assertThat(extractOriginatorAlertedPartyData.extract(
-        MessageFieldStructure.NAMEADDRESS_FORMAT_F, "IAT-I")).isEqualTo(
-        AlertedPartyData.builder()
-            .messageFieldStructure(MessageFieldStructure.NAMEADDRESS_FORMAT_F)
-            .accountNumber("NL60SNSB0907370640")
-            .name("SADDAM HUSSEIN")
-            .addresses(List.of("2/BREED 9"))
-            .nameAddresses(List.of("SADDAM HUSSEIN", "2/BREED 9"))
-            .ctryTown("3/NL/1621KA HOORN NH")
-            .build());
-  }
+  private static final String TAG_ORIGINATOR = "ORIGINATOR";
 
-  @Test
-  void shouldExtractFedFormat() {
-    extractOriginatorAlertedPartyData = new ExtractOriginatorAlertedPartyData(
-        new MessageData(List.of(new MessageTag("ORIGINATOR", "NAME\n"
-            + "ADDRESS\n"
-            + "COUNTRYTOWN\n"
-            + "US"))));
-    assertThat(extractOriginatorAlertedPartyData.extract(
-        MessageFieldStructure.NAMEADDRESS_FORMAT_F, "FED")).isEqualTo(
-        AlertedPartyData.builder()
-            .messageFieldStructure(MessageFieldStructure.NAMEADDRESS_FORMAT_F)
-            .name("NAME")
-            .addresses(List.of("ADDRESS"))
-            .nameAddresses(List.of("NAME", "ADDRESS"))
-            .ctryTown("COUNTRYTOWN")
-            .build());
-  }
+  @ParameterizedTest
+  @CsvFileSource(
+      resources = "/ExtractOriginatorAlertedPartyDataTestCases.csv",
+      delimiter = ',',
+      numLinesToSkip = 1)
+  void parameterizedTest(
+      String messageData,
+      String fkcoFormat,
+      String name,
+      String address,
+      String ctryTown,
+      String nameAddress,
+      String accountNumber) {
 
-  @Test
-  void shouldExtractLongFirstLine() {
     extractOriginatorAlertedPartyData = new ExtractOriginatorAlertedPartyData(
-        new MessageData(List.of(new MessageTag("ORIGINATOR", "ACCOUNTNUMBER\n"
-            + "NAME\n"
-            + "ADDRESS\n"
-            + "COUNTRYTOWN\n"
-            + "US"))));
-    assertThat(extractOriginatorAlertedPartyData.extract(
-        MessageFieldStructure.NAMEADDRESS_FORMAT_F, "IAT-I")).isEqualTo(
-        AlertedPartyData.builder()
-            .messageFieldStructure(MessageFieldStructure.NAMEADDRESS_FORMAT_F)
-            .accountNumber("ACCOUNTNUMBER")
-            .name("NAME")
-            .addresses(List.of("ADDRESS"))
-            .nameAddresses(List.of("NAME", "ADDRESS"))
-            .ctryTown("COUNTRYTOWN")
-            .build());
+        new MessageData(List.of(new MessageTag(TAG_ORIGINATOR, messageData.replace("\\n", "\n")))));
+
+    var actual =
+        extractOriginatorAlertedPartyData.extract(MessageFieldStructure.UNSTRUCTURED, fkcoFormat);
+    assertEquals(AlertedPartyData.builder()
+        .accountNumber(accountNumber)
+        .names(name != null ? List.of(name) : List.of(""))
+        .addresses(address != null ? List.of(address) : List.of(""))
+        .ctryTowns(ctryTown != null ? List.of(ctryTown) : List.of(""))
+        .nameAddresses(nameAddress != null ? List.of(nameAddress) : List.of(""))
+        .messageFieldStructure(MessageFieldStructure.UNSTRUCTURED)
+        .build(), actual);
+
   }
 }

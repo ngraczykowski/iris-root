@@ -16,39 +16,51 @@ public class ExtractOriginatorAlertedPartyData {
   private static final int LINE_3 = 2;
   private static final int LINE_4 = 3;
 
+  private static final String ORIGINATOR_TAG = "ORIGINATOR";
+  private static final String FED_FIRCO_FORMAT = "FED";
+
   private final MessageData messageData;
 
   public AlertedPartyData extract(
       MessageFieldStructure messageFieldStructure, String fircoFormat) {
 
-    var lines = messageData.getLines("ORIGINATOR");
+    var lines = messageData.getLines(ORIGINATOR_TAG);
     var lastLine = getLastLineNotUS(lines);
     var firstLineLength = lines.get(0).length();
 
-    var builder = AlertedPartyData.builder()
-        .messageFieldStructure(messageFieldStructure)
-        .ctryTown(lines.get(lastLine));
+    var alertedPartyDataBuilder = AlertedPartyData.builder()
+        .messageFieldStructure(messageFieldStructure);
 
-    if (firstLineLength == 2) {
-      builder
-          .accountNumber(lines.get(LINE_2))
-          .name(lines.get(LINE_3))
-          .addresses(lines.subList(LINE_4, lastLine))
-          .nameAddresses(lines.subList(LINE_3, lastLine + 1));
-    } else if (fircoFormat.equals("FED")) {
-      builder
-          .name(lines.get(LINE_1))
-          .addresses(lines.subList(LINE_2, lastLine))
-          .nameAddresses(lines.subList(LINE_1, lastLine + 1));
-    } else {
-      builder
-          .accountNumber(lines.get(LINE_1))
-          .name(lines.get(LINE_2))
-          .addresses(lines.subList(LINE_3, lastLine))
-          .nameAddresses(lines.subList(LINE_2, lastLine + 1));
-    }
+    if (lines.size() == 2)
+      return alertedPartyDataBuilder
+          .name(lines.get(LINE_1).trim())
+          .nameAddress(lines.get(LINE_1).trim())
+          .build();
 
-    return builder.build();
+    if (firstLineLength == 2)
+      return alertedPartyDataBuilder
+          .accountNumber(lines.get(LINE_2).trim())
+          .name(lines.get(LINE_3).trim())
+          .address(String.join(" ", lines.subList(LINE_4, lastLine)).trim())
+          .nameAddress(String.join(" ", lines.subList(LINE_3, lastLine + 1)).trim())
+          .ctryTown(lines.get(lastLine).trim())
+          .build();
+
+    if (FED_FIRCO_FORMAT.equals(fircoFormat))
+      return alertedPartyDataBuilder
+          .name(lines.get(LINE_1).trim())
+          .address(String.join(" ", lines.subList(LINE_2, lastLine)).trim())
+          .nameAddress(String.join(" ", lines.subList(LINE_1, lastLine + 1)).trim())
+          .ctryTown(lines.get(lastLine).trim())
+          .build();
+
+    return alertedPartyDataBuilder
+        .accountNumber(lines.get(LINE_1).trim())
+        .name(lines.get(LINE_2).trim())
+        .address(String.join(" ", lines.subList(LINE_3, lastLine)).trim())
+        .nameAddress(String.join(" ", lines.subList(LINE_2, lastLine + 1)).trim())
+        .ctryTown(lines.get(lastLine).trim())
+        .build();
   }
 
   private static int getLastLineNotUS(List<String> lines) {
