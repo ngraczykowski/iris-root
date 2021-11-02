@@ -52,7 +52,11 @@ class AlertMessageStatusService {
     var entity = repository
         .findByAlertMessageIdAndLockForWrite(alertMessageId)
         .orElseThrow();
-    entity.transitionStatusOrElseThrow(destinationStatus, delivery, clock);
+
+    var result = entity.transitionStatus(destinationStatus, delivery, clock);
+    if (result != TransitionResult.SUCCESS) {
+      return;
+    }
 
     log.info("Alert [{}] transitioned to {}. Delivery status: {}", alertMessageId,
         destinationStatus, delivery);

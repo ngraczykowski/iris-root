@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.firco.alertmessage.service;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.jpa.BaseVersionedEntity;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
@@ -23,6 +24,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Setter(NONE)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity(name = "AlertMessageStatus")
+@Slf4j
 class AlertMessageStatusEntity extends BaseVersionedEntity {
 
   @Id
@@ -62,6 +64,7 @@ class AlertMessageStatusEntity extends BaseVersionedEntity {
     }
 
     if (destinationStatus.isFinal() == deliveryStatus.equals(NA)) {
+      log.error("DeliveryStatus NA is only applicable to final state.");
       return TransitionResult.FAILED;
     }
 
@@ -73,6 +76,7 @@ class AlertMessageStatusEntity extends BaseVersionedEntity {
 
     if (this.status != destinationStatus &&
         !status.isTransitionAllowed(destinationStatus)) {
+      log.error("Unable to transition to status " + destinationStatus + ", from status " + status);
       return TransitionResult.FAILED;
     }
 
@@ -82,14 +86,6 @@ class AlertMessageStatusEntity extends BaseVersionedEntity {
     updateChangeTime(OffsetDateTime.now(clock));
     setCurrentTimeForUpdatedAt();
     return TransitionResult.SUCCESS;
-  }
-
-  void transitionStatusOrElseThrow(AlertMessageStatus destinationStatus,
-      DeliveryStatus deliveryStatus, Clock clock) {
-    if (transitionStatus(destinationStatus, deliveryStatus, clock) == TransitionResult.FAILED) {
-      throw new IllegalStateException(
-          "Unable to transition to status " + destinationStatus + ", from status " + status);
-    }
   }
 
   private void updateChangeTime(OffsetDateTime dateTime) {
