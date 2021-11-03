@@ -12,6 +12,7 @@
   <constraint-mapping>META-INF/validation/comment-input-v1-validation.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/feature/feature-input-validation.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/feature/allow-list-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/bank-identification-codes-feature-validation.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/feature/country-feature-validation.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/feature/date-feature-validation.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/feature/document-feature-validation.xml</constraint-mapping>
