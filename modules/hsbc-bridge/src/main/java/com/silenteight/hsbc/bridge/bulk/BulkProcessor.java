@@ -10,6 +10,7 @@ import com.silenteight.hsbc.bridge.alert.LearningAlertProcessor;
 import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 import com.silenteight.hsbc.bridge.match.MatchIdComposite;
 
+import io.micrometer.core.annotation.Timed;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -18,7 +19,6 @@ import java.util.stream.Stream;
 
 import static com.silenteight.hsbc.bridge.alert.AlertStatus.ERROR;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSING;
 import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PROCESSING;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -33,21 +33,31 @@ class BulkProcessor {
   private final BulkRepository bulkRepository;
 
   @Transactional
-  public void tryToProcessBulk() {
-    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(PRE_PROCESSING).ifPresent(bulk -> {
-      log.debug("Pre_Processing batch taken to process id: {}", bulk.getId());
-
+  @Timed(histogram = true)
+  public void tryToProcessSolvingBulk() {
+    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSING).ifPresent(bulk -> {
+      log.debug("Pre_Processing solving batch taken to process id: {}", bulk.getId());
       try {
-        if (bulk.isLearning()) {
-          processLearningBulk(bulk);
-        } else {
-          processSolvingBulk(bulk);
-        }
+        processSolvingBulk(bulk);
       } catch (Exception exception) {
-        log.error("Batch processing failed!", exception);
-        bulk.error("Batch processing failed due to: " + exception.getMessage());
+        log.error("Solving batch processing failed!", exception);
+        bulk.error("Solving batch processing failed due to: " + exception.getMessage());
       }
+      bulkRepository.save(bulk);
+    });
+  }
 
+  @Transactional
+  @Timed(histogram = true)
+  public void tryToProcessLearningBulk() {
+    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSING).ifPresent(bulk -> {
+      log.debug("Pre_Processing learning batch taken to process id: {}", bulk.getId());
+      try {
+        processLearningBulk(bulk);
+      } catch (Exception exception) {
+        log.error("Learning batch processing failed!", exception);
+        bulk.error("Learning batch processing failed due to: " + exception.getMessage());
+      }
       bulkRepository.save(bulk);
     });
   }

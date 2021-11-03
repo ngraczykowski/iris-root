@@ -24,12 +24,16 @@ class BulkProcessorScheduler {
 
     log.trace("Scheduler has been triggered...");
 
-    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(PRE_PROCESSED).ifPresent(b -> {
+    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(PRE_PROCESSED).ifPresent(bulk -> {
       log.info(
           "Try to pre process bulk from status PRE_PROCESSED to PRE_PROCESSING with id: {}",
-          b.getId());
-      bulkUpdater.updateWithPreProcessingStatus(b.getId());
-      bulkProcessor.tryToProcessBulk();
+          bulk.getId());
+      bulkUpdater.updateWithPreProcessingStatus(bulk.getId());
+      if (bulk.isLearning()) {
+        bulkProcessor.tryToProcessLearningBulk();
+      } else {
+        bulkProcessor.tryToProcessSolvingBulk();
+      }
     });
   }
 }

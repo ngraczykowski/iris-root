@@ -29,7 +29,7 @@ class AlertProcessorSpec extends Specification {
     def someBulkId = 'bulk-test'
 
     when:
-    underTest.preProcessAlertsWithinBulk(someBulkId)
+    underTest.preProcessAlertsWithinSolvingBulk(someBulkId)
 
     then:
     fixtures.okAlert.status == AlertStatus.PRE_PROCESSED

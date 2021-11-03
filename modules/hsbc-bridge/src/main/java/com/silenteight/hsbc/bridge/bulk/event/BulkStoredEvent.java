@@ -6,4 +6,5 @@ import lombok.Value;
 public class BulkStoredEvent {
 
   String bulkId;
+  boolean isLearning;
 }

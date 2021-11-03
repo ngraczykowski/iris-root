@@ -29,7 +29,7 @@ class BulkProcessorSpec extends Specification {
     LockAssert.TestHelper.makeAllAssertsPass(true)
 
     when:
-    underTest.tryToProcessBulk()
+    underTest.tryToProcessLearningBulk()
 
     then:
     1 * bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSING) >>
@@ -44,7 +44,7 @@ class BulkProcessorSpec extends Specification {
     LockAssert.TestHelper.makeAllAssertsPass(true)
 
     when:
-    underTest.tryToProcessBulk()
+    underTest.tryToProcessSolvingBulk()
 
     then:
     1 * bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSING) >>

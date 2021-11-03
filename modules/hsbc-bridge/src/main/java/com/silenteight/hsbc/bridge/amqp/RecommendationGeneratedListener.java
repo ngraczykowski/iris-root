@@ -8,6 +8,7 @@ import com.silenteight.adjudication.api.v1.RecommendationsGenerated.Recommendati
 import com.silenteight.hsbc.bridge.recommendation.event.AlertRecommendationInfo;
 import com.silenteight.hsbc.bridge.recommendation.event.RecommendationsGeneratedEvent;
 
+import io.micrometer.core.annotation.Timed;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -22,6 +23,7 @@ class RecommendationGeneratedListener {
   private final ApplicationEventPublisher eventPublisher;
 
   @RabbitListener(queues = "${silenteight.bridge.amqp.ingoing.recommendations-queue}")
+  @Timed(histogram = true)
   void onRecommendation(RecommendationsGenerated recommendation) {
     log.debug("Received RecommendationsGenerated amqp message for analysis={}", recommendation.getAnalysis());
 

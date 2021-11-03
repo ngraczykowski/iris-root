@@ -11,6 +11,7 @@ import com.silenteight.hsbc.bridge.grpc.GrpcModule;
 import com.silenteight.hsbc.bridge.jenkins.JenkinsModule;
 import com.silenteight.hsbc.bridge.json.JsonModule;
 import com.silenteight.hsbc.bridge.match.MatchModule;
+import com.silenteight.hsbc.bridge.metrics.MetricsModule;
 import com.silenteight.hsbc.bridge.model.Model;
 import com.silenteight.hsbc.bridge.nexus.NexusModule;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationModule;
@@ -62,6 +63,7 @@ import javax.sql.DataSource;
     UnpackerModule.class,
     WatchlistModule.class,
     UtilModule.class,
+    MetricsModule.class,
 
     DataSourceApiGrpcModule.class,
     DataSourceCategoryModule.class,

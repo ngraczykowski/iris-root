@@ -19,17 +19,18 @@ import java.util.stream.Collectors;
 class CreateSolvingBulkUseCase {
 
   private static final String PREFIX = "reRecommend-";
+  private static final boolean IS_LEARNING_BULK = false;
   private final BulkRepository repository;
   private final AlertFacade alertFacade;
   private final ApplicationEventPublisher eventPublisher;
 
   public String createBulkWithAlerts(AlertReRecommend alertReRecommend) {
     var bulkId = generateBulkId();
-    repository.save(new Bulk(bulkId, false));
+    repository.save(new Bulk(bulkId, IS_LEARNING_BULK));
 
     var alertNames = alertReRecommend.getAlerts().stream()
-            .map(AlertIdWrapper::getAlertId)
-            .collect(Collectors.toList());
+        .map(AlertIdWrapper::getAlertId)
+        .collect(Collectors.toList());
     createAlerts(bulkId, alertNames);
     return bulkId;
   }
@@ -38,7 +39,7 @@ class CreateSolvingBulkUseCase {
     try {
       log.info("Start re-processing alerts, batchId: {}", bulkId);
       alertFacade.reProcessAlerts(bulkId, alerts);
-      eventPublisher.publishEvent(new BulkStoredEvent(bulkId));
+      eventPublisher.publishEvent(new BulkStoredEvent(bulkId, IS_LEARNING_BULK));
     } catch (Exception e) {
       log.error("Cannot create alerts, batchId = {}", bulkId, e);
       repository.findById(bulkId).ifPresent(bulk -> {

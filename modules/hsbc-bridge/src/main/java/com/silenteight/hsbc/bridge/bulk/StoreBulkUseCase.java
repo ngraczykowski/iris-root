@@ -46,7 +46,7 @@ class StoreBulkUseCase {
     try {
       log.info("Creating raw alerts, batchId: {}", bulkId);
       alertFacade.createRawAlerts(bulkId, inputStream);
-      eventPublisher.publishEvent(new BulkStoredEvent(bulkId));
+      eventPublisher.publishEvent(new BulkStoredEvent(bulkId, bulk.isLearning()));
     } catch (BatchAlertsLimitException e) {
       setBulkError(bulkId, e);
       throw e;

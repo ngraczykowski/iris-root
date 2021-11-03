@@ -56,7 +56,11 @@ class AlertEventListener {
   public void onBulkStoredEvent(BulkStoredEvent event) {
     var bulkId = event.getBulkId();
 
-    alertProcessor.preProcessAlertsWithinBulk(bulkId);
+    if (event.isLearning()) {
+      alertProcessor.preProcessAlertsWithinLearningBulk(bulkId);
+    } else {
+      alertProcessor.preProcessAlertsWithinSolvingBulk(bulkId);
+    }
     eventPublisher.publishEvent(new AlertsPreProcessingCompletedEvent(bulkId));
 
     log.debug("BatchStoredEvent handled, batchId={}", bulkId);

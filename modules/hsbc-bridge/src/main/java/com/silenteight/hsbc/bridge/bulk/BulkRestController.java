@@ -9,6 +9,7 @@ import com.silenteight.hsbc.bridge.bulk.exception.BatchResultNotAvailableExcepti
 import com.silenteight.hsbc.bridge.bulk.exception.BatchWithGivenIdAlreadyCreatedException;
 import com.silenteight.hsbc.bridge.bulk.rest.*;
 
+import io.micrometer.core.annotation.Timed;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -22,6 +23,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/async/batch/v1")
 @RequiredArgsConstructor
+@Timed(histogram = true)
 class BulkRestController {
 
   private final AcknowledgeBulkDeliveryUseCase acknowledgeBulkDeliveryUseCase;

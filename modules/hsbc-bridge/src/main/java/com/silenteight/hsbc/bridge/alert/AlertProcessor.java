@@ -8,6 +8,7 @@ import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 import com.silenteight.hsbc.bridge.json.external.model.CaseInformation;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
 
+import io.micrometer.core.annotation.Timed;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
@@ -25,15 +26,27 @@ class AlertProcessor {
   private final MatchFacade matchFacade;
   private final AlertTimeCalculator alertTimeCalculator;
 
+  @Timed(histogram = true)
   @Transactional
-  public void preProcessAlertsWithinBulk(@NonNull String bulkId) {
-    log.info("Pre-processing alerts, batchId: {}", bulkId);
+  public void preProcessAlertsWithinSolvingBulk(@NonNull String bulkId) {
+    log.info("Pre-processing solving alerts, batchId: {}", bulkId);
+    preProcessAlerts(bulkId);
+    log.info("Solving alerts pre-processing has been completed, batchId: {}", bulkId);
+  }
+
+  @Timed(histogram = true)
+  @Transactional
+  public void preProcessAlertsWithinLearningBulk(@NonNull String bulkId) {
+    log.info("Pre-processing learning alerts, batchId: {}", bulkId);
+    preProcessAlerts(bulkId);
+    log.info("Learning alerts pre-processing has been completed, batchId: {}", bulkId);
+  }
+
+  private void preProcessAlerts(String bulkId) {
     try (var alerts = repository.findByBulkIdAndStatus(bulkId, STORED)) {
       alerts.forEach(this::tryToPreProcessAlert);
     }
-
     handleDuplicatedAlerts(bulkId);
-    log.info("Alerts pre-processing have been completed, batchId: {}", bulkId);
   }
 
   private void handleDuplicatedAlerts(String bulkId) {
