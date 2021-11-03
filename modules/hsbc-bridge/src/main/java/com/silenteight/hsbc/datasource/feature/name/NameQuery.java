@@ -35,6 +35,8 @@ public interface NameQuery {
 
   Party applyOriginalScriptEnhancementsForIndividualNames();
 
+  Party applyOriginalScriptEnhancementsForIndividualNamesAll();
+
   interface Factory {
 
     NameQuery create(MatchData matchData, NameInformationServiceClient client);

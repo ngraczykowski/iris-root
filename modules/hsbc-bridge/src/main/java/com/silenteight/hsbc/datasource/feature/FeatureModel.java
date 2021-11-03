@@ -63,7 +63,7 @@ public class FeatureModel {
             new GeoPlaceOfBirthFeature(new GeoPlaceOfBirthConfigurer().create())),
         entry(
             GEO_RESIDENCIES,
-            new GeoResidencyFeature(new GeoResidenciesConfigurer().create())),
+            new GeoResidencyFeature(new GeoResidenciesConfigurer().create(), new NameQueryConfigurer().create())),
         entry(
             NATIONALITY_COUNTRY,
             new NationalityCountryFeature(new NationalityCountryQueryConfigurer().create())),

@@ -2,21 +2,33 @@ package com.silenteight.hsbc.datasource.feature.geolocation
 
 import com.silenteight.hsbc.datasource.datamodel.*
 import com.silenteight.hsbc.datasource.extractors.geolocation.GeoResidenciesConfigurer
+import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient
+import com.silenteight.hsbc.datasource.extractors.name.NameQueryConfigurer
 import com.silenteight.hsbc.datasource.feature.Feature
+import com.silenteight.hsbc.datasource.feature.country.CountryDiscoverer
 
 import spock.lang.Specification
 
 class GeoResidencyFeatureSpec extends Specification {
 
-  def geoResidenciesQueryConfigurer = new GeoResidenciesConfigurer().create()
+  def geoResidenciesQueryFactory = new GeoResidenciesConfigurer().create()
+  def nameQueryFactory = new NameQueryConfigurer().create()
 
-  def underTest = new GeoResidencyFeature(geoResidenciesQueryConfigurer)
+  def underTest = new GeoResidencyFeature(geoResidenciesQueryFactory, nameQueryFactory)
 
   def 'should retrieve geoResidencies values when customer is individual'() {
     given:
     def customerIndividual = Mock(CustomerIndividual) {
-      getAddress() >> 'Los Angeles, US, California'
+      getAddress() >> 'John Doe Los Angeles, US, California'
       getProfileFullAddress() >> 'LOS ANGELES US, CALIFORNIA'
+      getResidenceCountries() >> 'United States'
+      getAddressCountry() >> 'United States'
+      getProfileFullName() >> 'John Doe'
+      getFamilyNameOriginal() >> 'Doe'
+      getMiddleName() >> 'John'
+      getGivenName() >> 'John'
+      getOriginalScriptName() >> 'John'
+      getFullNameDerived() >> 'John Doe'
     }
 
     def worldCheckIndividual = Mock(WorldCheckIndividual) {
@@ -25,6 +37,7 @@ class GeoResidencyFeatureSpec extends Specification {
 
     def privateListIndividual = Mock(PrivateListIndividual) {
       getAddress() >> 'California'
+      getAddressCountry() >> "United States"
     }
 
     def ctrpScreeningIndividuals = Mock(CtrpScreening) {
@@ -34,7 +47,7 @@ class GeoResidencyFeatureSpec extends Specification {
 
     def matchData = Mock(MatchData) {
       isIndividual() >> true
-      getCustomerIndividuals() >> [customerIndividual]
+      getCustomerIndividuals() >> [customerIndividual, customerIndividual]
       getWorldCheckIndividuals() >> [worldCheckIndividual]
       hasWorldCheckIndividuals() >> true
       getPrivateListIndividuals() >> [privateListIndividual]
@@ -43,15 +56,17 @@ class GeoResidencyFeatureSpec extends Specification {
       hasCtrpScreeningIndividuals() >> true
     }
 
+    def nameServiceInfoClient = Mock(NameInformationServiceClient)
+
     when:
-    def actual = underTest.retrieve(matchData)
+    def actual = underTest.retrieve(matchData, new CountryDiscoverer(), nameServiceInfoClient)
 
     then:
     with(actual) {
       feature == Feature.GEO_RESIDENCIES.fullName
-      alertedPartyLocation == 'LOS ANGELES, US, CALIFORNIA LOS ANGELES US, CALIFORNIA'
+      alertedPartyLocation == 'LOS ANGELES, US, CALIFORNIA UNITED STATES LOS ANGELES US, CALIFORNIA UNITED STATES'
       watchlistLocation ==
-          'MINSK;ST PETERSBURG,MINSK;LENINGRAD REGION,BELARUS;RUSSIAN FEDERATION CALIFORNIA CHABAHAR IR'
+          'MINSK;ST PETERSBURG,MINSK;LENINGRAD REGION,BELARUS;RUSSIAN FEDERATION CALIFORNIA UNITED STATES CHABAHAR IR'
     }
   }
 
@@ -59,7 +74,11 @@ class GeoResidencyFeatureSpec extends Specification {
     given:
     def customerEntity = Mock(CustomerEntity) {
       getAddress() >> 'SAINT PETERSBURG LENINGRAD REGION RUSSIAN FEDERATION'
-      getProfileFullAddress() >> 'Saint Petersburg,Leningrad Region,RUSSIAN FEDERATION'
+      getProfileFullAddress() >> 'John Company Ltd Saint Petersburg,Leningrad Region,RUSSIAN FEDERATION'
+      getEntityNameOriginal() >> 'John Company Ltd'
+      getOriginalScriptName() >> 'John Company Ltd'
+      getEntityName() >> 'John Company Ltd'
+      getAddressCountry() >> 'Russian FEDERATION'
     }
 
     def ctrpScreeningEntity = Mock(CtrpScreening) {
@@ -74,8 +93,10 @@ class GeoResidencyFeatureSpec extends Specification {
       hasCtrpScreeningEntities() >> true
     }
 
+    def nameServiceInfoClient = Mock(NameInformationServiceClient)
+
     when:
-    def actual = underTest.retrieve(matchData)
+    def actual = underTest.retrieve(matchData, new CountryDiscoverer(), nameServiceInfoClient)
 
     then:
     with(actual) {

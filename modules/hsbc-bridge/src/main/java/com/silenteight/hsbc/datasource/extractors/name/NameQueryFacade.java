@@ -6,9 +6,11 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.feature.name.NameQuery;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.silenteight.hsbc.datasource.extractors.name.NameExtractor.applyOriginalScriptEnhancements;
+import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
 import static one.util.streamex.StreamEx.of;
 
 @RequiredArgsConstructor
@@ -96,14 +98,20 @@ class NameQueryFacade implements NameQuery {
   @Override
   public Collection<String> applyOriginalScriptEnhancementsForIndividualNamesWithAliases() {
     return applyOriginalScriptEnhancements(
-        apAllIndividualNames(), mpWorldCheckIndividualsExtractXmlNamesWithCountries())
+        toDistinctList(apAllIndividualNames()), toDistinctList(mpWorldCheckIndividualsExtractXmlNamesWithCountries()))
         .getWatchlistPartyIndividuals();
   }
 
   @Override
   public Party applyOriginalScriptEnhancementsForIndividualNames() {
     return applyOriginalScriptEnhancements(
-        apAllIndividualNames(), mpAllIndividualNamesWithoutXmlAliases());
+        toDistinctList(apAllIndividualNames()), toDistinctList(mpAllIndividualNamesWithoutXmlAliases()));
+  }
+
+  @Override
+  public Party applyOriginalScriptEnhancementsForIndividualNamesAll() {
+    return applyOriginalScriptEnhancements(
+        apAllIndividualNames().collect(Collectors.toList()), mpAllIndividualNamesWithoutXmlAliases().collect(Collectors.toList()));
   }
 
   private Stream<String> apAllIndividualNames() {

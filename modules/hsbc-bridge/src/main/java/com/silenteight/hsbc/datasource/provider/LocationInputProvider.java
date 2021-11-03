@@ -11,10 +11,16 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.location.LocationFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.location.LocationInputDto;
 import com.silenteight.hsbc.datasource.dto.location.LocationInputResponse;
+import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
 import com.silenteight.hsbc.datasource.feature.Feature;
+import com.silenteight.hsbc.datasource.feature.FeatureModel;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
+import com.silenteight.hsbc.datasource.feature.LocationFeatureClientValuesRetriever;
+import com.silenteight.hsbc.datasource.feature.country.CountryDiscoverer;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.silenteight.hsbc.datasource.feature.Feature.GEO_PLACE_OF_BIRTH;
 import static com.silenteight.hsbc.datasource.feature.Feature.GEO_RESIDENCIES;
@@ -22,10 +28,12 @@ import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
-class LocationInputProvider implements DataSourceInputProvider<LocationInputResponse> {
+public class LocationInputProvider implements DataSourceInputProvider<LocationInputResponse> {
 
   @Getter
   private final MatchFacade matchFacade;
+  private final CountryDiscoverer countryDiscoverer;
+  private final NameInformationServiceClient nameInformationServiceClient;
 
   @Override
   public LocationInputResponse toResponse(DataSourceInputCommand command) {
@@ -46,12 +54,20 @@ class LocationInputProvider implements DataSourceInputProvider<LocationInputResp
         .collect(toList());
   }
 
-  private List<LocationFeatureInputDto> getFeatureInputs(
-      List<String> features, MatchData matchData) {
+  private List<LocationFeatureInputDto> getFeatureInputs(List<String> features, MatchData matchData) {
     return features.stream()
-        .map(featureName -> (LocationFeatureInputDto)
-            ((FeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData))
+        .map(feature -> this.retrieve(feature, matchData))
         .collect(toList());
+  }
+
+  private LocationFeatureInputDto retrieve(String feature, MatchData matchData) {
+    if (GEO_PLACE_OF_BIRTH.getFullName().equals(feature)) {
+      return (LocationFeatureInputDto) ((FeatureValuesRetriever) FeatureModel.getFeatureRetriever(feature)).retrieve(matchData);
+    }
+    if (GEO_RESIDENCIES.getFullName().equals(feature)) {
+      return ((LocationFeatureClientValuesRetriever) FeatureModel.getFeatureRetriever(feature)).retrieve(matchData, countryDiscoverer, nameInformationServiceClient);
+    }
+    throw new FeatureNotAllowedException(feature, Stream.of(GEO_PLACE_OF_BIRTH, GEO_RESIDENCIES).map(Feature::getFullName).collect(Collectors.toList()));
   }
 
   @Override

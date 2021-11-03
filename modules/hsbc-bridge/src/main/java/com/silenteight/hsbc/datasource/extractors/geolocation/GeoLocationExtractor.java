@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
@@ -40,7 +41,7 @@ class GeoLocationExtractor {
   }
 
   static String stripAndUpper(String value) {
-    return value.strip().toUpperCase();
+    return Optional.ofNullable(value).map(String::strip).map(String::toUpperCase).orElse("");
   }
 
   static Stream<String> splitExtractedValueBySign(SignType signType, String value) {

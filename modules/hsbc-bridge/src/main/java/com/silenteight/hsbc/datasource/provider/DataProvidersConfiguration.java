@@ -18,6 +18,8 @@ import com.silenteight.hsbc.datasource.dto.transaction.TransactionInputResponse;
 import com.silenteight.hsbc.datasource.extractors.historical.HistoricalDecisionsServiceClient;
 import com.silenteight.hsbc.datasource.extractors.ispep.IsPepServiceClient;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
+import com.silenteight.hsbc.datasource.feature.country.CountryDiscoverer;
+import com.silenteight.hsbc.datasource.feature.geolocation.GeoResidencyFeature;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -76,7 +78,7 @@ class DataProvidersConfiguration {
 
   @Bean
   DataSourceInputProvider<LocationInputResponse> locationInputProvider() {
-    return new LocationInputProvider(matchFacade);
+    return new LocationInputProvider(matchFacade, new CountryDiscoverer(), nameInformationServiceClient);
   }
 
   @Bean

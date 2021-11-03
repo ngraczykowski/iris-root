@@ -93,11 +93,8 @@ class NameExtractor {
     return values;
   }
 
-  static Party applyOriginalScriptEnhancements(Stream<String> apStream, Stream<String> mpStream) {
-    var alertedPartyNames = toDistinctList(apStream);
-    var watchlistPartyNames = toDistinctList(mpStream);
-
-    var party = keepOnlyOriginalScriptNamesIfAvailable(alertedPartyNames, watchlistPartyNames);
+  static Party applyOriginalScriptEnhancements(List<String> alertedParty, List<String> matchParty) {
+    var party = keepOnlyOriginalScriptNamesIfAvailable(alertedParty, matchParty);
 
     var apWithoutChineseNumeric =
         removeRedundantNumericChineseScript(party.getAlertedPartyIndividuals());
