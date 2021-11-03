@@ -13,10 +13,10 @@ class InMemoryAlertRepository
     implements AlertRepository {
 
   @Override
-  public Alert findById(Long id) {
+  public Optional<Alert> findById(Long id) {
     return stream()
         .filter(alert -> alert.getId().equals(id))
-        .findFirst().orElse(null);
+        .findFirst();
   }
 
   @Override
@@ -24,6 +24,14 @@ class InMemoryAlertRepository
     return stream()
         .filter(alert -> alert.getDiscriminator().equals(discriminator))
         .findFirst();
+  }
+
+  @Override
+  public List<Long> findIdByDiscriminatorIn(List<String> discriminators) {
+    return stream()
+        .filter(alert -> discriminators.contains(alert.getDiscriminator()))
+        .map(Alert::getId)
+        .collect(toList());
   }
 
   public List<Alert> findNewerThan(OffsetDateTime createdAt, Integer limit) {

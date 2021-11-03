@@ -12,6 +12,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import static java.lang.String.valueOf;
 import static java.sql.Timestamp.from;
 import static java.time.Instant.now;
 import static java.util.UUID.randomUUID;
@@ -24,8 +25,7 @@ public class EraseDecisionCommentRequest implements AuditableRequest {
   static final String POST_AUDIT_TYPE = "DecisionCommentErased";
 
   UUID correlationId = randomUUID();
-  @NonNull
-  String discriminator;
+  long alertId;
   @NonNull
   DecisionLevel level;
   @NonNull
@@ -49,7 +49,7 @@ public class EraseDecisionCommentRequest implements AuditableRequest {
         .eventId(randomUUID())
         .timestamp(from(now()))
         .type(type)
-        .entityId(discriminator)
+        .entityId(valueOf(alertId))
         .entityClass("Decision")
         .entityAction("UPDATE")
         .details(toString())

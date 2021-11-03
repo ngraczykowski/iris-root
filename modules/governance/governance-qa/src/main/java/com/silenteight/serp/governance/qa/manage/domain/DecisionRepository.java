@@ -5,6 +5,7 @@ import com.silenteight.serp.governance.qa.manage.analysis.list.dto.AlertAnalysis
 import com.silenteight.serp.governance.qa.manage.validation.details.dto.AlertValidationDetailsDto;
 import com.silenteight.serp.governance.qa.manage.validation.list.dto.AlertValidationDto;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
@@ -64,4 +65,9 @@ interface DecisionRepository extends Repository<Decision, Long> {
       String state, OffsetDateTime olderThan, Integer limit);
 
   Decision getById(Long id);
+
+  @Modifying
+  @Query("UPDATE Decision d SET d.comment = null, updated_at = :updatedAt "
+      + "WHERE d.alertId = :alertId")
+  void eraseCommentByAlertId(Long alertId, OffsetDateTime updatedAt);
 }
