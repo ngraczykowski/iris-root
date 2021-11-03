@@ -81,10 +81,11 @@ class StatisticsQuery implements SimulationStatisticsQuery {
         solvedAsFalsePositiveByAi);
     long solvedAsFalsePositiveByAnalystCount = sumAlerts(solvedAsFalsePositiveByAnalyst);
 
+    // TODO(mmastylo): fix calculations and remove 0's
     return EffectivenessDto
         .builder()
-        .aiSolvedAsFalsePositive(solvedAsFalsePositiveByAiCount)
-        .analystSolvedAsFalsePositive(solvedAsFalsePositiveByAnalystCount)
+        .aiSolvedAsFalsePositive(0)
+        .analystSolvedAsFalsePositive(0)
         .build();
   }
 
