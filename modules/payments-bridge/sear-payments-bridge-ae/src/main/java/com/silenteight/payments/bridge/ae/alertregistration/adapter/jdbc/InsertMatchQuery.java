@@ -6,11 +6,13 @@ import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.BatchSqlUpdate;
+import org.springframework.stereotype.Component;
 
 import java.sql.Types;
 import java.util.List;
 import java.util.UUID;
 
+@Component
 @RequiredArgsConstructor
 class InsertMatchQuery {
 

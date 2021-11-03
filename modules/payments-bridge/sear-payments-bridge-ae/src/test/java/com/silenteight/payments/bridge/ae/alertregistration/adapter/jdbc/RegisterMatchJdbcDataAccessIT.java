@@ -19,9 +19,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @ContextConfiguration(classes = {
     JdbcTestConfiguration.class,
     RegisteredAlertJdbcDataAccess.class,
-    InsertMatchJdbcConfiguration.class,
     InsertRegisteredAlertQuery.class,
-    SelectRegisteredAlertQuery.class
+    SelectRegisteredAlertQuery.class,
+    InsertMatchQuery.class
 })
 class RegisterMatchJdbcDataAccessIT extends BaseJdbcTest {
 
