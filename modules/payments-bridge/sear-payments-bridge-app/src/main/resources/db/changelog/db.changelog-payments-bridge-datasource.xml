@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+  <changeSet id="payments-bridge-datasource-1.0.0-4" author="wkeska">
+    <preConditions onFail="MARK_RAN">
+      <tableExists schemaName="public" tableName="pb_category_value"/>
+    </preConditions>
+    <dropTable cascadeConstraints="true"
+               schemaName="public"
+               tableName="pb_category_value"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-datasource-1.0.0-5" author="wkeska">
+    <preConditions onFail="MARK_RAN">
+      <tableExists schemaName="public" tableName="pb_match_feature_input"/>
+    </preConditions>
+    <dropTable cascadeConstraints="true"
+               schemaName="public"
+               tableName="pb_match_feature_input"/>
+  </changeSet>
+</databaseChangeLog>
