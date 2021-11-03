@@ -1,5 +1,6 @@
 package com.silenteight.agent.common.io;
 
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 import java.io.BufferedReader;
@@ -11,6 +12,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
+
 
 import static com.silenteight.agent.common.io.FileFormatConstants.DEFAULT_DICT_FORMAT_FILTERS;
 import static com.silenteight.agent.common.io.FileFormatConstants.DEFAULT_DICT_FORMAT_TRANSFORMERS;
@@ -32,7 +34,7 @@ public class ResourcesReader {
    *   Returns unique unique values, all UPPER CASE, ignores # comments or empty lines
    * </pre>
    */
-  public static Set<Set<String>> readMultipleValues(InputStream is) {
+  public static Set<Set<String>> readMultipleValues(@NonNull InputStream is) {
     return readLinesAsStream(is, DEFAULT_DICT_FORMAT_FILTERS, DEFAULT_DICT_FORMAT_TRANSFORMERS)
         .map(line -> Set.of(line.split(VALUES_SEPARATOR)))
         .collect(toSet());
@@ -45,13 +47,13 @@ public class ResourcesReader {
    *   Returns all UPPER CASE, unique lines ignoring comments or empty lines
    * </pre>
    */
-  public static Set<String> readLinesAsSet(InputStream is) {
+  public static Set<String> readLinesAsSet(@NonNull InputStream is) {
     return readLinesAsStream(is, DEFAULT_DICT_FORMAT_FILTERS, DEFAULT_DICT_FORMAT_TRANSFORMERS)
         .collect(toSet());
   }
 
   public static Set<String> readLinesAsSet(
-      InputStream is,
+      @NonNull InputStream is,
       Collection<Predicate<String>> filters,
       Collection<UnaryOperator<String>> lineTransformers) {
     return readLinesAsStream(is, filters, lineTransformers)
@@ -64,7 +66,7 @@ public class ResourcesReader {
    *   without any filtering or transformations
    * </pre>
    */
-  public static Stream<String> readLinesAsStream(InputStream is) {
+  public static Stream<String> readLinesAsStream(@NonNull InputStream is) {
     return readLinesAsStream(is, emptyList(), emptyList());
   }
 
@@ -77,7 +79,7 @@ public class ResourcesReader {
    * </pre>
    */
   public static Stream<String> readLinesAsStream(
-      InputStream is,
+      @NonNull InputStream is,
       Collection<Predicate<String>> filters,
       Collection<UnaryOperator<String>> lineTransformers) {
     try (is) {
