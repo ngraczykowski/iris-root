@@ -13,11 +13,6 @@ class AgentConfigFeatureDataAccessConfiguration {
   private final JdbcTemplate jdbcTemplate;
 
   @Bean
-  InsertAgentConfigFeatureQuery insertAgentConfigFeatureSqlUpdate() {
-    return new InsertAgentConfigFeatureQuery(jdbcTemplate);
-  }
-
-  @Bean
   SelectAgentConfigFeatureQuery selectAgentConfigFeatureQuery() {
     return new SelectAgentConfigFeatureQuery(jdbcTemplate);
   }

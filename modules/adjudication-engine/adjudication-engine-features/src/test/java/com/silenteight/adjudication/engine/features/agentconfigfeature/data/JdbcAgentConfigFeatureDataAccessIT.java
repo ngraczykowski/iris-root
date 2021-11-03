@@ -17,8 +17,9 @@ import static org.assertj.core.api.Assertions.*;
 
 @ContextConfiguration(classes = {
     JdbcTestConfiguration.class,
-    AgentConfigFeatureDataAccessConfiguration.class,
+    InsertAgentConfigFeatureQuery.class,
     JdbcAgentConfigFeatureDataAccess.class,
+    AgentConfigFeatureDataAccessConfiguration.class
 })
 class JdbcAgentConfigFeatureDataAccessIT extends BaseJdbcTest {
 

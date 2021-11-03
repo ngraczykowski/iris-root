@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @ContextConfiguration(classes = {
     JdbcTestConfiguration.class,
-    CategoryDataAccessConfiguration.class,
+    InsertCategoryBatchSqlUpdate.class,
     JdbcCategoryDataAccess.class,
 })
 class JdbcCategoryDataAccessIT extends BaseJdbcTest {
