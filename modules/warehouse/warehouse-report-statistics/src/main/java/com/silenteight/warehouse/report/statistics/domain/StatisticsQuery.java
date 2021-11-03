@@ -74,16 +74,27 @@ class StatisticsQuery implements SimulationStatisticsQuery {
   }
 
   private EffectivenessDto toEffectivenessDto(List<Row> rows) {
-    List<Row> solvedAsFalsePositiveByAnalyst = getRowsSolvedAsFalsePositiveByAnalyst(rows);
+    List<Row> solvedAsFalsePositiveByAi = getRowsSolvedAsFalsePositiveByAI(rows);
+    long solvedAsFalsePositiveByAiCount = sumAlerts(solvedAsFalsePositiveByAi);
+
+    List<Row> solvedAsFalsePositiveByAnalyst = getRowsSolvedAsFalsePositiveByAnalyst(solvedAsFalsePositiveByAi);
     long solvedAsFalsePositiveByAnalystCount = sumAlerts(solvedAsFalsePositiveByAnalyst);
-    long solvedAsFalsePositiveByAiCount =
-        sumSolvedAsFalsePositiveByAi(solvedAsFalsePositiveByAnalyst);
 
     return EffectivenessDto
         .builder()
         .aiSolvedAsFalsePositive(solvedAsFalsePositiveByAiCount)
         .analystSolvedAsFalsePositive(solvedAsFalsePositiveByAnalystCount)
         .build();
+  }
+
+  private List<Row> getRowsSolvedAsFalsePositiveByAI(List<Row> rows) {
+    AiDecisionProperties aiDecisionProperties = properties.getAiDecision();
+    String aiDecisionField = aiDecisionProperties.getField();
+    String aiFalsePositiveValue = aiDecisionProperties.getFalsePositiveValue();
+    return rows
+        .stream()
+        .filter(row -> aiFalsePositiveValue.equals(row.getValue(aiDecisionField)))
+        .collect(toList());
   }
 
   private FetchGroupedDataResponse fetchRawData(String analysis) {
@@ -109,17 +120,6 @@ class StatisticsQuery implements SimulationStatisticsQuery {
     return rows
         .stream()
         .filter(row -> significantValues.contains(row.getValue(aiDecisionField)))
-        .mapToLong(Row::getCount)
-        .sum();
-  }
-
-  private long sumSolvedAsFalsePositiveByAi(List<Row> rows) {
-    AiDecisionProperties aiDecisionProperties = properties.getAiDecision();
-    String aiFalsePositiveValue = aiDecisionProperties.getFalsePositiveValue();
-    String aiDecisionField = aiDecisionProperties.getField();
-    return rows
-        .stream()
-        .filter(row -> aiFalsePositiveValue.equals(row.getValue(aiDecisionField)))
         .mapToLong(Row::getCount)
         .sum();
   }
