@@ -77,7 +77,8 @@ class StatisticsQuery implements SimulationStatisticsQuery {
     List<Row> solvedAsFalsePositiveByAi = getRowsSolvedAsFalsePositiveByAI(rows);
     long solvedAsFalsePositiveByAiCount = sumAlerts(solvedAsFalsePositiveByAi);
 
-    List<Row> solvedAsFalsePositiveByAnalyst = getRowsSolvedAsFalsePositiveByAnalyst(solvedAsFalsePositiveByAi);
+    List<Row> solvedAsFalsePositiveByAnalyst = getRowsSolvedAsFalsePositiveByAnalyst(
+        solvedAsFalsePositiveByAi);
     long solvedAsFalsePositiveByAnalystCount = sumAlerts(solvedAsFalsePositiveByAnalyst);
 
     return EffectivenessDto
