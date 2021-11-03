@@ -10,7 +10,7 @@ ext {
   protocVersion = protobufVersion
   grpcVersion = "1.27.2"
   commonProtosVersion = "1.17.0"
-  reactiveGrpcVersion = "1.0.0"
+  reactiveGrpcVersion = "1.0.1"
 }
 
 projectSetup {
