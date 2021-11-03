@@ -342,6 +342,9 @@ serp.governance.qa:
         - field: alert_s8_recommendation
           values:
             - ACTION_FALSE_POSITIVE
+  retention:
+    personal-information:
+      batch-size: 200
   viewing:
     max-state-reset-delay-ms: 45000
 

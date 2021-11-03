@@ -17,11 +17,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
-import java.util.Optional;
 
 import static com.silenteight.serp.governance.qa.AlertFixture.DISCRIMINATOR;
 import static com.silenteight.serp.governance.qa.AlertFixture.generateDiscriminator;
@@ -272,30 +270,13 @@ class DecisionServiceTest {
     //given
     Alert alert = saveAlert(DISCRIMINATOR);
     Decision decision = saveDecision(LEVEL_ANALYSIS.getValue(), NEW, CREATED_AT, alert.getId());
-    EraseDecisionCommentRequest.of(
-        DISCRIMINATOR, LEVEL_ANALYSIS, "governance-app", CREATED_AT);
     //when
-    underTest.eraseComment(EraseDecisionCommentRequest.of(
-        DISCRIMINATOR, LEVEL_ANALYSIS, "governance-app", CREATED_AT));
+    underTest.eraseComments(EraseDecisionCommentRequest.of(alert.getId(), LEVEL_ANALYSIS,
+        "governance-app", CREATED_AT));
     //then
     Decision updated = decisionRepository.getById(decision.getId());
     assertThat(updated.getComment()).isNull();
     assertThat(updated.getState()).isEqualTo(decision.getState());
     assertThat(updated.getLevel()).isEqualTo(decision.getLevel());
-  }
-
-  @Test
-  void eraseCommentShouldIgnoreNotFoundAlerts() {
-    //given
-    DecisionRepository decisionRepository = Mockito.mock(DecisionRepository.class);
-    underTest = new DomainConfiguration().decisionService(alertRepository,
-        decisionRepository, auditingLogger, sendAlertMessageUseCase);
-    when(decisionRepository.findByDiscriminatorAndLevel(DISCRIMINATOR, LEVEL_ANALYSIS.getValue()))
-        .thenReturn(Optional.empty());
-    //when
-    underTest.eraseComment(EraseDecisionCommentRequest.of(
-        DISCRIMINATOR, LEVEL_ANALYSIS, "governance-app", CREATED_AT));
-    //then
-    verify(decisionRepository, never()).save(any());
   }
 }

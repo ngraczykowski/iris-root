@@ -3,6 +3,7 @@ package com.silenteight.serp.governance.qa.manage.domain;
 import com.silenteight.sep.base.common.support.persistence.BasicInMemoryRepository;
 import com.silenteight.serp.governance.qa.manage.analysis.details.dto.AlertAnalysisDetailsDto;
 import com.silenteight.serp.governance.qa.manage.analysis.list.dto.AlertAnalysisDto;
+import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertIdException;
 import com.silenteight.serp.governance.qa.manage.domain.exception.WrongDiscriminatorException;
 import com.silenteight.serp.governance.qa.manage.validation.details.dto.AlertValidationDetailsDto;
 import com.silenteight.serp.governance.qa.manage.validation.list.dto.AlertValidationDto;
@@ -67,7 +68,8 @@ class InMemoryDecisionRepository
 
     return findAllByLevelAndStatesNewerThan(level, states, createdAt, limit)
         .map(decision -> {
-          Alert alert = alertRepository.findById(decision.getAlertId());
+          Alert alert = alertRepository.findById(decision.getAlertId())
+              .orElseThrow(() -> new WrongAlertIdException(decision.getAlertId()));
 
           return AlertAnalysisDtoBuilder.builder()
               .discriminator(alert.getDiscriminator())
@@ -95,7 +97,8 @@ class InMemoryDecisionRepository
       Integer level, List<String> states, OffsetDateTime createdAt, Integer limit) {
     return findAllByLevelAndStatesNewerThan(level, states, createdAt, limit)
         .map(decision -> {
-          Alert alert = alertRepository.findById(decision.getAlertId());
+          Alert alert = alertRepository.findById(decision.getAlertId())
+              .orElseThrow(() -> new WrongAlertIdException(decision.getAlertId()));
 
           return AlertValidationDtoBuilder.builder()
               .discriminator(alert.getDiscriminator())
@@ -140,5 +143,15 @@ class InMemoryDecisionRepository
   @Override
   public Decision getById(Long id) {
     return stream().filter(decision -> decision.hasId(id)).findAny().orElse(null);
+  }
+
+  @Override
+  public void eraseCommentByAlertId(Long alertId, OffsetDateTime updatedAt) {
+    stream()
+        .filter(decision -> decision.getAlertId().equals(alertId))
+        .forEach(decision -> {
+          decision.eraseComment();
+          decision.setUpdatedAt(updatedAt);
+        });
   }
 }

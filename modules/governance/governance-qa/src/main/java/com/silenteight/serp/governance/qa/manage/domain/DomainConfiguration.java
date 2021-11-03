@@ -30,6 +30,11 @@ class DomainConfiguration {
   }
 
   @Bean
+  AlertQuery alertQuery(AlertRepository alertRepository) {
+    return new AlertQuery(alertRepository);
+  }
+
+  @Bean
   DecisionService decisionService(AlertRepository alertRepository,
       DecisionRepository decisionRepository,
       AuditingLogger auditingLogger,

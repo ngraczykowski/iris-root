@@ -58,18 +58,13 @@ public class DecisionService {
     return decision;
   }
 
-  public void eraseComment(EraseDecisionCommentRequest request) {
-    Decision decision = decisionRepository.findByDiscriminatorAndLevel(
-        request.getDiscriminator(), request.getLevel().getValue()).orElse(null);
-    if (decision == null)
-      return;
+  @Transactional
+  public void eraseComments(EraseDecisionCommentRequest request) {
+    long alertId = request.getAlertId();
 
     request.preAudit(auditingLogger::log);
-    log.debug("Erasing decision comment: {}", request);
-
-    decision.eraseComment();
-    decisionRepository.save(decision);
-
+    log.debug("Erasing decision comments for alert: {}", alertId);
+    decisionRepository.eraseCommentByAlertId(alertId, request.getCreatedAt());
     request.postAudit(auditingLogger::log);
   }
 

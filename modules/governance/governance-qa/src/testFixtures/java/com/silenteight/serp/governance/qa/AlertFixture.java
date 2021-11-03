@@ -12,6 +12,8 @@ public class AlertFixture {
       parse(ALERT_CREATED_AT_FORMAT, ISO_OFFSET_DATE_TIME);
   public static final String DISCRIMINATOR =
       "CR769FINAL068:SG:LR-EAML:1040502_cdf2433cf535829966563030fe72e438";
+  public static final String DISCRIMINATOR_2 =
+      "CR769FINAL068:SG:LR-EAML:1040502_96a48ce8-f7c6-4934-b112-990ebf3585b5";
 
   public static String generateDiscriminator() {
     return "CR769FINAL068:SG:LR-EAML:1040502_" + UUID.randomUUID();
