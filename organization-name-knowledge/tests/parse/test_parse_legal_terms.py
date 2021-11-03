@@ -76,23 +76,6 @@ def test_words_after_legal_terms_are_ignored(name, expected):
         assert set(getattr(information, key)) == set(value)
 
 
-@pytest.mark.skip
-@pytest.mark.parametrize(
-    "name",
-    (
-        "Eitan private bureau",
-        "REDCLIFFS PUBLIC LIBRARY",
-        "Department of Housing and Public Works",
-        "Xilin County Wanma Public Traffic Automotive",
-        "JENNI NEWMAN PUBLIC RELATIONS",
-    ),
-)
-def test_words_not_always_legal(name: str):
-    parsed = parse_name(name)
-    assert parsed.legal == []
-    assert parsed.other == []
-
-
 @pytest.mark.parametrize(
     ("name", "legal"),
     (
@@ -111,7 +94,6 @@ def test_legal_in_parenthesis(name: str, legal: str):
     assert set(information.legal) == legal
 
 
-@pytest.mark.skip
 @pytest.mark.parametrize(
     ("name", "expected"),
     (("TADIRAN TELECOM (TTL), LIMITED PRTNERSHIP", {"base": ("tadiran", "telecom")}),),
@@ -121,22 +103,6 @@ def test_legal_with_typos(name: str, expected):
     print(information)
     for key, value in expected.items():
         assert getattr(information, key) == value
-
-
-@pytest.mark.skip
-@pytest.mark.parametrize(
-    ("name", "expected"),
-    (
-        ("D A D Sales", {"base": "D A D Sales"}),
-        ("G S L Savings Bank", {"base": "G S L Saving Bank"}),
-        ("Y K D, K.K.", {"base": "Y K D", "legal": "K.K."}),
-    ),
-)
-def test_legal_in_company_abbreviation(name: str, expected):
-    information = parse_name(name)
-    print(information)
-    for key, value in expected.items():
-        assert getattr(information, key) == value.lower().split()
 
 
 @pytest.mark.parametrize(

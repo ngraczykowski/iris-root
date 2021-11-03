@@ -3,34 +3,42 @@ import pytest
 from organization_name_knowledge.names.parse.parse import parse_name
 
 
-@pytest.mark.skip
 @pytest.mark.parametrize(
-    ("name", "expected"),
-    (
-        (
-            "SDB (Schoonmaak Diensten Bennekom)",
-            {"base": "Schoonmaak Diensten Bennekom"},
-        ),
-        (
-            "I.m.e.o. (international Multicultural Events Organisation) Emmanuel Kollie",
-            {"base": "international Multicultural Events Organisation"},
-        ),
+    ("name", "expected_base"),
+    [
         (
             "Genossenschaft für die Wasserversorgung Kalpetran (GWK)",
-            {"base": "Genossenschaft für die Wasserversorgung Kalpetran"},
+            "Genossenschaft fur die Wasserversorgung Kalpetran",
         ),
         (
             "ASSOCIATION OF RESPIRATORY CARE PRACTITIONERS PHILS. (ARCPP) INC.",
-            {"base:": "ASSOCIATION OF RESPIRATORY CARE PRACTITIONERS PHILS."},
+            "ASSOCIATION OF RESPIRATORY CARE PRACTITIONERS PHILS",
+        ),
+    ],
+)
+def test_name_with_additional_abbreviation(name, expected_base):
+    information = parse_name(name)
+    assert information.base == tuple(expected_base.lower().split())
+
+
+@pytest.mark.skip
+@pytest.mark.parametrize(
+    ("name", "expected_base"),
+    (
+        (
+            "SDB (Schoonmaak Diensten Bennekom)",
+            "Schoonmaak Diensten Bennekom",
+        ),
+        (
+            "I.m.e.o. (international Multicultural Events Organisation) Emmanuel Kollie",
+            "international Multicultural Events Organisation",
         ),
         (
             "I.C.M (INDUSTRIAL CONSTRUCTION AND MAINTENANCE) CO., LTD",
-            {"base": "INDUSTRIAL CONSTRUCTION AND MAINTENANCE"},
+            "INDUSTRIAL CONSTRUCTION AND MAINTENANCE",
         ),
     ),
 )
-def test_name_with_additional_abbreviation(name, expected):
+def test_name_with_additional_abbreviation_at_start(name, expected_base):
     information = parse_name(name)
-    print(information)
-    for key, value in expected.items():
-        assert set(getattr(information, key)) == set(value.split())
+    assert information.base == tuple(expected_base.lower().split())

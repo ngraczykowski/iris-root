@@ -9,7 +9,6 @@ from organization_name_knowledge.names.tokens_sequence import TokensSequence
 @dataclasses.dataclass
 class NameInformation:
     source: Token
-
     common_prefixes: TokensSequence
     base: TokensSequence
     common_suffixes: TokensSequence

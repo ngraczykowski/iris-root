@@ -80,8 +80,3 @@ class KnowledgeBase:
     @classproperty
     def words_mapping(cls) -> Mapping[str, str]:
         return cls.get("words_mapping")
-
-
-if __name__ == '__main__':
-    clasa = KnowledgeBase()
-    print(clasa.default_source_path)

@@ -15,16 +15,12 @@ def extract_common(
     )
     if not without_prefixes:
         without_prefixes, common_prefixes = name, TokensSequence()
-    if common_prefixes:
-        pass
 
     without_suffixes, common_suffixes = cut_terms(
         without_prefixes,
         KnowledgeBase.common_suffixes.terms,
         saving_at_least_one_word=True,
     )
-    if common_suffixes:
-        pass
 
     return common_prefixes, without_suffixes, common_suffixes
 
@@ -33,5 +29,5 @@ def extract_countries(name: TokensSequence) -> Tuple[TokensSequence, TokensSeque
     return cut_terms(name, KnowledgeBase.countries.countries)
 
 
-def extract_weak(name: TokensSequence):
+def extract_weak(name: TokensSequence) -> Tuple[TokensSequence, TokensSequence]:
     return cut_terms(name, TermSources(), with_weak_words=True)

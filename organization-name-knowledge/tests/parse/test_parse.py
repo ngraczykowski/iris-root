@@ -75,23 +75,6 @@ def test_the_on_the_end_do_not_destroy_cutting_other_information(name, expected)
         assert set(getattr(information, key)) == set(value)
 
 
-@pytest.mark.skip
-@pytest.mark.parametrize(
-    ("name", "expected"),
-    (
-        (
-            "M2A SOLUTIONS SOCIEDAD COMERCIAL DE RESPONSABILIDAD LIMITADA  M2A SOLUTIONS S.R.L.",
-            {"base": "M2A SOLUTIONS"},
-        ),
-    ),
-)
-def test_parse_duplicated_entries(name, expected):
-    information = parse_name(name)
-    print(information)
-    for key, value in expected.items():
-        assert set(getattr(information, key)) == set(value)
-
-
 @pytest.mark.parametrize(
     ("name", "expected"),
     (
