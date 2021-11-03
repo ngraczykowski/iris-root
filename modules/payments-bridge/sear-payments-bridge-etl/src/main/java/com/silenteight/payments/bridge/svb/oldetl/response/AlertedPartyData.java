@@ -37,4 +37,20 @@ public class AlertedPartyData {
     else
       return names.stream().map(String::trim).findFirst();
   }
+
+  public Optional<String> getFirstAlertedPartyName() {
+    return names.stream().findFirst();
+  }
+
+  public Optional<String> getFirstAlertedPartyAddress() {
+    return addresses.stream().findFirst();
+  }
+
+  public Optional<String> getFirstAlertedPartyCtryTown() {
+    return ctryTowns.stream().findFirst();
+  }
+
+  public Optional<String> getFirstAlertedPartyNameAddress() {
+    return nameAddresses.stream().findFirst();
+  }
 }

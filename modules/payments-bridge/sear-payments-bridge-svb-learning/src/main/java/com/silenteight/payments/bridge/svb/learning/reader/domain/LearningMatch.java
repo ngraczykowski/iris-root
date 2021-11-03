@@ -81,7 +81,7 @@ public class LearningMatch {
     return NameAddressCrossmatchAgentRequest
         .builder()
         .alertPartyEntities(getAlertedPartyEntity())
-        .watchlistName(getWatchlistNames().get(0))
+        .watchlistName(getFirstWatchlistName().orElse(""))
         .watchlistCountry(getWatchlistCountry())
         .watchlistType(getMatchType())
         .build();
@@ -152,5 +152,9 @@ public class LearningMatch {
 
   public Optional<String> getFirstAlertedPartyName() {
     return getAlertedPartyNames().stream().map(String::trim).findFirst();
+  }
+
+  private Optional<String> getFirstWatchlistName() {
+    return getWatchlistNames().stream().findFirst();
   }
 }

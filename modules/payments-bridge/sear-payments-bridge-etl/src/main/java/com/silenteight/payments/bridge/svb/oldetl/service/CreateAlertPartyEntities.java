@@ -44,19 +44,22 @@ class CreateAlertPartyEntities implements CreateAlertedPartyEntitiesUseCase {
       List<String> names = alertedPartyData.getNames();
       if (matchesPattern(textPattern, names)) {
         noMatchCond = false;
-        alertPartyEntities.put(ALERTED_NAME_KEY, names.get(0));
+        alertPartyEntities.put(
+            ALERTED_NAME_KEY, alertedPartyData.getFirstAlertedPartyName().orElse(""));
       }
 
       List<String> addresses = alertedPartyData.getAddresses();
       if (matchesPattern(textPattern, addresses)) {
-        alertPartyEntities.put(ALERTED_ADDRESS_KEY, addresses.get(0));
+        alertPartyEntities.put(
+            ALERTED_ADDRESS_KEY, alertedPartyData.getFirstAlertedPartyAddress().orElse(""));
         noMatchCond = false;
       }
 
       List<String> ctryTowns = alertedPartyData.getCtryTowns();
       if (matchesPattern(textPattern, ctryTowns)) {
         noMatchCond = false;
-        alertPartyEntities.put(ALERTED_COUNTRY_TOWN_KEY, ctryTowns.get(0));
+        alertPartyEntities.put(
+            ALERTED_COUNTRY_TOWN_KEY, alertedPartyData.getFirstAlertedPartyCtryTown().orElse(""));
       }
 
       if (noMatchCond) {

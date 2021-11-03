@@ -89,12 +89,8 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
             messageData, hit.getTag(), messageFieldStructure,
             extractFircoFormat(applicationCode, messageData));
 
-    var accountNumberOrNormalizedName =
-        alertedPartyData.getAccountNumber() == null ? alertedPartyData.getNames().get(0)
-                                                    : alertedPartyData.getAccountNumber();
-
     var hitAndWatchlistPartyData = extractHitAndWatchlistPartyData(
-        buildTransactionMessage(applicationCode, messageData), hit, accountNumberOrNormalizedName);
+        buildTransactionMessage(applicationCode, messageData), hit);
 
     return new HitData(hit.getMatchId(index), alertedPartyData, hitAndWatchlistPartyData);
   }
@@ -156,7 +152,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
   }
 
   private HitAndWatchlistPartyData extractHitAndWatchlistPartyData(
-      TransactionMessage transactionMessage, HitDto hit, String accountNumberOrNormalizedName) {
+      TransactionMessage transactionMessage, HitDto hit) {
 
     var hittedEntity = hit.getHittedEntity();
     var synonymIndex = CommonUtils.toPositiveInt(hit.getSynonymIndex(), 0);
@@ -207,7 +203,6 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         .allMatchingTexts(allMatchingTexts)
         .allMatchingFieldValues(allMatchingFieldValues)
         .fieldValue(fieldValue)
-        .accountNumber(accountNumberOrNormalizedName)
         .postalAddresses(
             LocationExtractorHelper.extractPostalAddresses(hittedEntity.getAddresses()))
         .cities(LocationExtractorHelper.extractListOfCities(hittedEntity.getAddresses()))
