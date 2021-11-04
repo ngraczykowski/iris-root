@@ -151,7 +151,7 @@ spring:
     hikari:
       pool-name: Database-Pool
       minimum-idle: ${pb.db.connections.min:1}
-      maximum-pool-size: ${pb.db.connections.max:10}
+      maximum-pool-size: ${pb.db.connections.max:25}
       auto-commit: false
       schema: ${pb.db.schema:public}
       isolate-internal-queries: true
