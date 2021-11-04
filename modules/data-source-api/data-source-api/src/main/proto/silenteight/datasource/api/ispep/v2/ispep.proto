@@ -28,15 +28,16 @@ message BatchGetMatchIsPepInputsResponse {
 }
 
 message IsPepInput {
-  string feature = 1;
-  string match = 2;
-  WatchlistItem watchlist_item = 3;
+  string match = 1;
+  WatchlistItem watchlist_item = 2;
 }
 
 message WatchlistItem {
-  string id = 1; // watchlist uid
-  string type = 2; // e.g. WorldCheckIndividuals | WorldCheckEntities | PrivateListIndividuals | PrivateListEntities
-  string country = 3; // e.g ap EdqLobCountries
-  string further_information = 4;
-  repeated string linked_peps_uids = 5;
+  string feature = 1;
+  string id = 2; // watchlist uid
+  string type = 3; // e.g. WorldCheckIndividuals | WorldCheckEntities | PrivateListIndividuals | PrivateListEntities
+  string country = 4; // e.g ap EdqLobCountries
+  string further_information = 5;
+  repeated string linked_peps_uids = 6;
+
 }
