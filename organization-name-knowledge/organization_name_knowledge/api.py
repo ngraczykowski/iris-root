@@ -9,7 +9,7 @@ from organization_name_knowledge.names.parse import create_tokens, parse_name
 
 def parse(name: str) -> NameInformation:
     """
-    Parser for organization names, to extract base organization name, and its surrounding:
+    Parse organization name, to extract base of name, and its surrounding:
     legal terms, country names, prefixes, suffixes, parentheses.
     For details, check out *NameInformation* class docstrings.
 

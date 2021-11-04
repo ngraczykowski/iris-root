@@ -25,6 +25,7 @@ def test_country(name, expected_countries):
         ("Company of Fun Limited", {"Company", "Limited"}),
         ("Company of Fun", {"Company"}),
         ("Cracow City Foundation for Foreigners", {"Foundation"}),
+        ("Firma sp. z. o. o.", {"sp. z. o. o.", "sp."}),
     ],
 )
 def test_legal(name, expected_legal):
@@ -39,6 +40,7 @@ def test_legal(name, expected_legal):
         ("Company of Fun Limited", ("Fun",)),
         ("Corporation of London", ("Corporation", "of", "London")),
         ("The Hewlett and Packard Company", ("Hewlett", "and", "Packard")),
+        ("Aladeen Wadiya Inc.", ("Aladeen", "Wadiya"))
     ],
 )
 def test_base(name, expected_base):
