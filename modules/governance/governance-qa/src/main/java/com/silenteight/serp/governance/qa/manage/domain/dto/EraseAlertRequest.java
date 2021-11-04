@@ -11,6 +11,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import static java.lang.String.valueOf;
 import static java.sql.Timestamp.from;
 import static java.util.UUID.randomUUID;
 
@@ -20,8 +21,7 @@ public class EraseAlertRequest implements AuditableRequest {
 
   UUID correlationId = randomUUID();
   String entityClass = "Alert";
-  @NonNull
-  String discriminator;
+  long alertId;
   @NonNull
   String deletedBy;
   @NonNull
@@ -44,7 +44,7 @@ public class EraseAlertRequest implements AuditableRequest {
         .eventId(randomUUID())
         .timestamp(from(deletedAt.toInstant()))
         .type(this.getClass().getSimpleName())
-        .entityId(discriminator)
+        .entityId(valueOf(alertId))
         .entityClass(entityClass)
         .entityAction(actionType.toString())
         .details(this.toString())

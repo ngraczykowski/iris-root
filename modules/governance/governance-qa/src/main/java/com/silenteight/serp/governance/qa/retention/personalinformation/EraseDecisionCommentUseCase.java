@@ -35,12 +35,12 @@ public class EraseDecisionCommentUseCase {
         .forEach(this::eraseComments);
   }
 
-  private static EraseDecisionCommentRequest getEraseDecisionCommentRequest(long alertId) {
+  private static EraseDecisionCommentRequest toEraseDecisionCommentRequest(long alertId) {
     return EraseDecisionCommentRequest.of(alertId, ANALYSIS, PRINCIPAL_NAME, now());
   }
 
   private void eraseComments(List<Long> alertIds) {
     alertIds.forEach(
-        alertId -> decisionService.eraseComments(getEraseDecisionCommentRequest(alertId)));
+        alertId -> decisionService.eraseComments(toEraseDecisionCommentRequest(alertId)));
   }
 }
