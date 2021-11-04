@@ -1,6 +1,21 @@
 import pytest
 
-from organization_name_knowledge.api import get_all_legal_terms, parse
+from organization_name_knowledge.api import get_all_country_names, get_all_legal_terms, parse
+
+
+@pytest.mark.parametrize(
+    "name, expected_countries",
+    [
+        ("Silent Eight PTE LTD", set()),
+        ("Company of Fun of Poland", {"Poland"}),
+        ("Corporation of United Kingdom, London", {"United Kingdom"}),
+        ("The Netherlands Football Association", {"The Netherlands", "Netherlands"}),
+        ("Poland - Lithuania Union", {"Poland", "Lithuania"}),
+    ],
+)
+def test_country(name, expected_countries):
+    countries = get_all_country_names(name)
+    assert countries == expected_countries
 
 
 @pytest.mark.parametrize(
