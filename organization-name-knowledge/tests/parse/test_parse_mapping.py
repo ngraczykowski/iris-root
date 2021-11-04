@@ -4,8 +4,8 @@ import tempfile
 
 import pytest
 
-from organization_name_knowledge.names.parse.parse import parse_name
 from organization_name_knowledge.knowledge_base import KnowledgeBase
+from organization_name_knowledge.names.parse.parse import parse_name
 
 
 @pytest.mark.parametrize(

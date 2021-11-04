@@ -1,4 +1,5 @@
 from typing import Tuple
+
 from organization_name_knowledge.names.name_information import NameInformation
 from organization_name_knowledge.names.parse import (
     create_tokens,
