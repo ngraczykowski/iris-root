@@ -1,21 +1,20 @@
 import pytest
 
-from organization_name_knowledge.api import get_legal_terms, parse
+from organization_name_knowledge.api import get_all_legal_terms, parse
 
 
 @pytest.mark.parametrize(
     "name, expected_legal",
     [
-        ("Silent Eight PTE LTD", ("PTE", "LTD")),
-        # if legal at the end, trailing considered as name part
-        ("Company of Fun Limited", ("Limited",)),
-        ("Company of Fun", ("Company", "of")),
-        ("Cracow City Foundation for Foreigners", ("Foundation",)),
+        ("Silent Eight PTE LTD", {"PTE", "LTD"}),
+        ("Company of Fun Limited", {"Company", "Limited"}),
+        ("Company of Fun", {"Company"}),
+        ("Cracow City Foundation for Foreigners", {"Foundation"}),
     ],
 )
 def test_legal(name, expected_legal):
-    countries = get_legal_terms(name)
-    assert countries == expected_legal
+    legal_terms = get_all_legal_terms(name)
+    assert legal_terms == expected_legal
 
 
 @pytest.mark.parametrize(
