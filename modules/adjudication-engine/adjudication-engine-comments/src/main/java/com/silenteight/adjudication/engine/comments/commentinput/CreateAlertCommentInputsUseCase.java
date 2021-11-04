@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.engine.comments.commentinput.domain.InsertCommentInputRequest;
 import com.silenteight.adjudication.engine.common.protobuf.ProtoMessageToObjectNodeConverter;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 class CreateAlertCommentInputsUseCase {
 
   @NonNull
-  private final AlertCommentInputRepository repository;
+  private final CommentInputDataAccess dataAccess;
   @NonNull
   private final ProtoMessageToObjectNodeConverter converter;
 
@@ -27,12 +28,12 @@ class CreateAlertCommentInputsUseCase {
 
   private void saveCommentInput(CommentInputResponse commentInput) {
     var alertId = ResourceName.create(commentInput.getAlert()).getLong("alerts");
-    var builder = AlertCommentInput.builder().alertId(alertId);
+    var builder = InsertCommentInputRequest.builder().alertId(alertId);
 
     // XXX(ahaczewski): How should the invalid comment input be handled?
     converter.convert(commentInput.getAlertCommentInput())
         .ifPresentOrElse(builder::value, () -> log.warn("Failed to convert comment input to JSON"));
 
-    repository.save(builder.build());
+    dataAccess.insertCommentInput(builder.build());
   }
 }

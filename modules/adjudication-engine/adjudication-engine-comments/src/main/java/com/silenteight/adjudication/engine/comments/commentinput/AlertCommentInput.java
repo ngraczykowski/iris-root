@@ -46,4 +46,5 @@ class AlertCommentInput extends BaseEntity implements IdentifiableEntity {
   @Column(columnDefinition = "jsonb")
   ObjectNode value;
 
+
 }
