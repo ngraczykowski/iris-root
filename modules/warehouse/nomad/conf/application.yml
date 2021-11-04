@@ -339,6 +339,7 @@ warehouse.report.statistics:
     false-positive-value: ACTION_FALSE_POSITIVE
   analyst-decision:
     field: alert_analyst_decision
+    analyst-significant-values: [analyst_decision_true_positive, analyst_decision_false_positive]
     false-positive-value: analyst_decision_false_positive
 
 warehouse.report.accuracy:

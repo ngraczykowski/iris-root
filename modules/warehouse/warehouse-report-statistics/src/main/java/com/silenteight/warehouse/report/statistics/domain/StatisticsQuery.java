@@ -74,19 +74,48 @@ class StatisticsQuery implements SimulationStatisticsQuery {
   }
 
   private EffectivenessDto toEffectivenessDto(List<Row> rows) {
-    List<Row> solvedAsFalsePositiveByAi = getRowsSolvedAsFalsePositiveByAI(rows);
+    List<Row> rowsWithAnalystDecision = getRowsWithAnalystDecision(
+        rows, properties.getAnalystDecision());
+
+    List<Row> solvedAsFalsePositiveByAi = getRowsSolvedAsFalsePositiveByAI(rowsWithAnalystDecision);
     long solvedAsFalsePositiveByAiCount = sumAlerts(solvedAsFalsePositiveByAi);
 
     List<Row> solvedAsFalsePositiveByAnalyst = getRowsSolvedAsFalsePositiveByAnalyst(
         solvedAsFalsePositiveByAi);
     long solvedAsFalsePositiveByAnalystCount = sumAlerts(solvedAsFalsePositiveByAnalyst);
 
-    // TODO(mmastylo): fix calculations and remove 0's
+    return getEffectivenessDto(solvedAsFalsePositiveByAiCount, solvedAsFalsePositiveByAnalystCount);
+  }
+
+  private EffectivenessDto getEffectivenessDto(
+      long solvedAsFalsePositiveByAiCount, long solvedAsFalsePositiveByAnalystCount) {
+
+    if (solvedAsFalsePositiveByAiCount < solvedAsFalsePositiveByAnalystCount)
+      return buildDto(0, 0);
+
+    return buildDto(solvedAsFalsePositiveByAiCount, solvedAsFalsePositiveByAnalystCount);
+  }
+
+  private EffectivenessDto buildDto(
+      long solvedAsFalsePositiveByAiCount, long solvedAsFalsePositiveByAnalystCount) {
+
     return EffectivenessDto
         .builder()
-        .aiSolvedAsFalsePositive(0)
-        .analystSolvedAsFalsePositive(0)
+        .aiSolvedAsFalsePositive(solvedAsFalsePositiveByAiCount)
+        .analystSolvedAsFalsePositive(solvedAsFalsePositiveByAnalystCount)
         .build();
+  }
+
+  private List<Row> getRowsWithAnalystDecision(
+      List<Row> rows, AnalystDecisionProperties analystSignificantValues) {
+
+    List<String> significantValues = analystSignificantValues.getAnalystSignificantValues();
+    String analystDecisionField = analystSignificantValues.getField();
+
+    return rows
+        .stream()
+        .filter(row -> significantValues.contains(row.getValue(analystDecisionField)))
+        .collect(toList());
   }
 
   private List<Row> getRowsSolvedAsFalsePositiveByAI(List<Row> rows) {

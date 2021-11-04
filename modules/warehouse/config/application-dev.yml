@@ -141,6 +141,7 @@ warehouse.report.statistics:
     false-positive-value: ACTION_FALSE_POSITIVE
   analyst-decision:
     field: alert_DN_CASE.currentState
+    analyst-significant-values: [Level 2 Review, Level 1 Review]
     false-positive-value: Level 1 Review
 
 warehouse.report.rbs:
