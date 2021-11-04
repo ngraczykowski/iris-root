@@ -38,7 +38,7 @@ class SelectMissingMatchCategoryValuesQuery {
       + "             LEFT JOIN ae_match_category_value amcv\n"
       + "                       ON amcv.match_id = am.match_id AND\n"
       + "                          amcv.category_id = ac.category_id\n"
-      + "    WHERE amcv.category_id IS NULL\n"
+      + "    WHERE amcv.category_id IS NULL AND apr.analysis_id = ?\n"
       + "    LIMIT ?\n"
       + ")\n"
       + "SELECT mmcv.analysis_id,\n"
@@ -46,7 +46,6 @@ class SelectMissingMatchCategoryValuesQuery {
       + "       mmcv.category_id,\n"
       + "       jsonb_agg(mmcv.match_alert) as match_alerts\n"
       + "FROM missing_match_category_values mmcv\n"
-      + "WHERE mmcv.analysis_id = ?\n"
       + "GROUP BY 1, 2, 3";
 
   private final JdbcTemplate jdbcTemplate;
@@ -70,7 +69,7 @@ class SelectMissingMatchCategoryValuesQuery {
     return jdbcTemplate.query(
         QUERY,
         new SqlMissingMatchCategoryExtractor(),
-        batchSize, analysisId);
+        analysisId, batchSize);
   }
 
   private final class SqlMissingMatchCategoryExtractor implements
