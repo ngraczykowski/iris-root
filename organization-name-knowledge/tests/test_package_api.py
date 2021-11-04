@@ -40,7 +40,7 @@ def test_legal(name, expected_legal):
         ("Company of Fun Limited", ("Fun",)),
         ("Corporation of London", ("Corporation", "of", "London")),
         ("The Hewlett and Packard Company", ("Hewlett", "and", "Packard")),
-        ("Aladeen Wadiya Inc.", ("Aladeen", "Wadiya"))
+        ("Aladeen Wadiya Inc.", ("Aladeen", "Wadiya")),
     ],
 )
 def test_base(name, expected_base):
