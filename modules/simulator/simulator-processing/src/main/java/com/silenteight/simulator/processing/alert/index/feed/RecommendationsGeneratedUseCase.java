@@ -18,8 +18,11 @@ import com.silenteight.simulator.processing.alert.index.amqp.listener.Recommenda
 import com.silenteight.simulator.processing.alert.index.domain.IndexedAlertService;
 
 import com.google.protobuf.Struct;
+import com.google.protobuf.Timestamp;
 import com.google.protobuf.Value;
+import org.jetbrains.annotations.NotNull;
 
+import java.time.Instant;
 import java.util.*;
 
 import static com.silenteight.adjudication.api.v1.Analysis.State.DONE;
@@ -156,7 +159,7 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
     Map<String, Value> fields = new HashMap<>();
     fields.put(RECOMMENDATION_ALERT_FIELD, toValue(recommendation.getAlert()));
     fields.put(RECOMMENDATION_CREATE_TIME_FIELD,
-        toValue(recommendation.getCreateTime().toString()));
+               toValue(toIsoString(recommendation.getCreateTime())));
     fields.put(RECOMMENDATION_RECOMMENDED_ACTION_FIELD,
         toValue(recommendation.getRecommendedAction()));
     fields.put(RECOMMENDATION_COMMENT_FIELD, toValue(recommendation.getRecommendationComment()));
@@ -169,6 +172,11 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
         .ifPresent(matchMetadata -> fields.putAll(toMatchFields(matchMetadata)));
 
     return fields;
+  }
+
+  @NotNull
+  private static String toIsoString(Timestamp timestamp) {
+    return Instant.ofEpochSecond(timestamp.getSeconds() , timestamp.getNanos()).toString();
   }
 
   private static Map<String, Value> toMatchFields(MatchMetadata matchMetadata) {
