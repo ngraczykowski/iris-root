@@ -176,7 +176,7 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
 
   @NotNull
   private static String toIsoString(Timestamp timestamp) {
-    return Instant.ofEpochSecond(timestamp.getSeconds() , timestamp.getNanos()).toString();
+    return Instant.ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos()).toString();
   }
 
   private static Map<String, Value> toMatchFields(MatchMetadata matchMetadata) {
