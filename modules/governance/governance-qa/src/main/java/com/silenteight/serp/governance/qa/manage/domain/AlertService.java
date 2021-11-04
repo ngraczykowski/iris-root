@@ -21,7 +21,7 @@ public class AlertService {
 
   @Transactional
   public void eraseAlert(EraseAlertRequest request) {
-    Optional<Alert> alert = getAlert(request.getDiscriminator());
+    Optional<Alert> alert = getAlert(request.getAlertId());
     if (alert.isEmpty())
       return;
 
@@ -30,7 +30,7 @@ public class AlertService {
     request.postAudit(auditingLogger::log);
   }
 
-  private Optional<Alert> getAlert(String discriminator) {
-    return alertRepository.findByDiscriminator(discriminator);
+  private Optional<Alert> getAlert(long alertId) {
+    return alertRepository.findById(alertId);
   }
 }

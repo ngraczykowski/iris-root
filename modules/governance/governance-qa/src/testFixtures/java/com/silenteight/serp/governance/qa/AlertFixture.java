@@ -6,7 +6,13 @@ import java.util.UUID;
 import static java.time.OffsetDateTime.parse;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
-public class AlertFixture {
+public final class AlertFixture {
+
+  private AlertFixture() {
+    
+  }
+
+  public static final long ALERT_ID = 1L;
   public static final String ALERT_CREATED_AT_FORMAT = "2020-05-20T01:01:01+01:00";
   public static final OffsetDateTime ALERT_CREATED_AT =
       parse(ALERT_CREATED_AT_FORMAT, ISO_OFFSET_DATE_TIME);

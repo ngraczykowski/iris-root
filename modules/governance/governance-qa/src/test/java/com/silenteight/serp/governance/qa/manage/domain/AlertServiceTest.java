@@ -10,14 +10,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
-import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 
+import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_ID;
 import static com.silenteight.serp.governance.qa.AlertFixture.DISCRIMINATOR;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.FAILED;
 import static java.lang.String.format;
 import static java.time.OffsetDateTime.parse;
+import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -54,7 +55,7 @@ class AlertServiceTest {
     decisionRepository.save(decision);
 
     //when
-    underTest.eraseAlert(EraseAlertRequest.of(DISCRIMINATOR, "governance-app", NOW));
+    underTest.eraseAlert(EraseAlertRequest.of(alertId, "governance-app", NOW));
     //then
     assertThatThrownBy(() -> alertRepository.getById(alertId))
         .isInstanceOf(EntityNotFoundException.class)
@@ -66,9 +67,9 @@ class AlertServiceTest {
     //given
     AlertRepository alertRepository = mock(AlertRepository.class);
     underTest = new DomainConfiguration().alertService(alertRepository, auditingLogger);
-    when(alertRepository.findByDiscriminator(DISCRIMINATOR)).thenReturn(Optional.empty());
+    when(alertRepository.findById(ALERT_ID)).thenReturn(empty());
     //when
-    underTest.eraseAlert(EraseAlertRequest.of(DISCRIMINATOR, "governance-app", NOW));
+    underTest.eraseAlert(EraseAlertRequest.of(ALERT_ID, "governance-app", NOW));
     //then
     verify(alertRepository, never()).delete(any());
     verify(auditingLogger, never()).log(any());

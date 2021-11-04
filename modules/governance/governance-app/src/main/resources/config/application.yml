@@ -345,6 +345,8 @@ serp.governance.qa:
   retention:
     personal-information:
       batch-size: 200
+    alert:
+      batch-size: 200
   viewing:
     max-state-reset-delay-ms: 45000
 
