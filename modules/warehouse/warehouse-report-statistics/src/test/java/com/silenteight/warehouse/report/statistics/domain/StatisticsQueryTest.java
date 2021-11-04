@@ -57,6 +57,7 @@ class StatisticsQueryTest {
                 AI_DECISION_FP),
             new AnalystDecisionProperties(
                 ANALYST_DECISION_FIELD,
+                of(ANALYST_DECISION_FP, ANALYST_DECISION_PTP),
                 ANALYST_DECISION_FP
             ),
             emptyList());
@@ -68,7 +69,7 @@ class StatisticsQueryTest {
   }
 
   @Test
-  void shouldGetStatistics() {
+  void shouldGetValidStatistics() {
     // given
     when(indexerQuery.getIndexesForAnalysis(ANALYSIS_ID)).thenReturn(of(INDEXES));
     when(groupingQueryService.generate(any())).thenReturn(getResponse());
@@ -78,12 +79,11 @@ class StatisticsQueryTest {
 
     // then
     EfficiencyDto efficiency = statisticsDto.getEfficiency();
-    assertThat(efficiency.getAllAlerts()).isEqualTo(247);
-    assertThat(efficiency.getSolvedAlerts()).isEqualTo(211);
+    assertThat(efficiency.getAllAlerts()).isEqualTo(114987);
+    assertThat(efficiency.getSolvedAlerts()).isEqualTo(36694);
     EffectivenessDto effectiveness = statisticsDto.getEffectiveness();
-    // TODO(mmastylo): fix calculations and remove 0's
-    assertThat(effectiveness.getAiSolvedAsFalsePositive()).isEqualTo(0);
-    assertThat(effectiveness.getAnalystSolvedAsFalsePositive()).isEqualTo(0);
+    assertThat(effectiveness.getAiSolvedAsFalsePositive()).isEqualTo(29408);
+    assertThat(effectiveness.getAnalystSolvedAsFalsePositive()).isEqualTo(29405);
   }
 
   private FetchGroupedDataResponse getResponse() {
@@ -95,12 +95,15 @@ class StatisticsQueryTest {
 
   private List<Row> buildRows() {
     return of(
-        buildRow(AI_DECISION_FP, ANALYST_DECISION_FP, 200),
-        buildRow(AI_DECISION_FP, ANALYST_DECISION_PTP, 1),
-        buildRow(AI_DECISION_PTP, ANALYST_DECISION_FP, 2),
-        buildRow(AI_DECISION_PTP, ANALYST_DECISION_PTP, 8),
-        buildRow(AI_DECISION_MI, ANALYST_DECISION_FP, 30),
-        buildRow(AI_DECISION_MI, ANALYST_DECISION_PTP, 6)
+        buildRow(AI_DECISION_FP, ANALYST_DECISION_FP, 29405),
+        buildRow(AI_DECISION_FP, ANALYST_DECISION_PTP, 3),
+        buildRow(AI_DECISION_FP, "", 233),
+        buildRow(AI_DECISION_PTP, ANALYST_DECISION_FP, 6907),
+        buildRow(AI_DECISION_PTP, ANALYST_DECISION_PTP, 145),
+        buildRow(AI_DECISION_PTP, "", 1),
+        buildRow(AI_DECISION_MI, ANALYST_DECISION_FP, 78260),
+        buildRow(AI_DECISION_MI, ANALYST_DECISION_PTP, 21),
+        buildRow(AI_DECISION_MI, "", 12)
     );
   }
 
