@@ -6,6 +6,7 @@ gradleBuild(
     jdkVersion: 'jdk-11',
     sonarEnabled: true,
     dependencyCheckEnabled: true,
+    archiveArtifactsPattern: 'build/reports/*.zip',
     includeBuildNumberInSnapshotVersion: true,
     additionalParams: [],
     additionalStages: {
