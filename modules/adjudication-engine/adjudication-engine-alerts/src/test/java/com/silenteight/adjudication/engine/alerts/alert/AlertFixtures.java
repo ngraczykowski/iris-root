@@ -3,6 +3,8 @@ package com.silenteight.adjudication.engine.alerts.alert;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import com.silenteight.adjudication.engine.alerts.alert.domain.InsertLabelRequest;
+
 import java.time.OffsetDateTime;
 import java.util.Locale;
 import java.util.UUID;
@@ -10,7 +12,7 @@ import java.util.UUID;
 import static java.util.concurrent.ThreadLocalRandom.current;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class AlertFixtures {
+public class AlertFixtures {
 
   private static final String[] COUNTRIES = Locale.getISOCountries();
   private static final String[] BATCHES = { "BTCH", "PERD", "EMPL" };
@@ -18,10 +20,13 @@ class AlertFixtures {
 
   static AlertFacade inMemoryAlertFacade() {
     var alertRepository = new InMemoryAlertRepository();
+    var alertLabelDataAccess = new InMemoryAlertLabelDataAccess();
 
     var createAlertsUseCase = new CreateAlertsUseCase(alertRepository);
+    var addAlertLabels = new AddLabelsUseCase(alertLabelDataAccess);
+    var removeAlertLabels = new RemoveLabelUseCase(alertLabelDataAccess);
 
-    return new AlertFacade(createAlertsUseCase);
+    return new AlertFacade(createAlertsUseCase, addAlertLabels, removeAlertLabels);
   }
 
   static AlertEntity randomAlertEntity() {
@@ -52,5 +57,14 @@ class AlertFixtures {
 
   static String getRandomCountry() {
     return COUNTRIES[current().nextInt(0, COUNTRIES.length)];
+  }
+
+  public static InsertLabelRequest createLabelInsertRequest() {
+    return InsertLabelRequest
+        .builder()
+        .alertId(1L)
+        .labelName("labeleczka")
+        .labelValue("valueczka")
+        .build();
   }
 }

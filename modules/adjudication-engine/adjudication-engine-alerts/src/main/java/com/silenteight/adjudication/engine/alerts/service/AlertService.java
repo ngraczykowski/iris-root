@@ -42,6 +42,16 @@ class AlertService {
     return matchFacade.createMatches(List.of(newAlertMatches)).get(0);
   }
 
+  BatchAddLabelsResponse addLabels(BatchAddLabelsRequest request) {
+    var createdLabels = alertFacade.addLabels(request.getAlertsList(), request.getLabelsMap());
+    return BatchAddLabelsResponse.newBuilder().putAllLabels(createdLabels).build();
+  }
+
+  BatchRemoveLabelsResponse removeLabels(BatchRemoveLabelsRequest request) {
+    var alerts = alertFacade.removeLabels(request.getAlertsList(), request.getLabelsNamesList());
+    return BatchRemoveLabelsResponse.newBuilder().addAllAlerts(alerts).build();
+  }
+
   BatchCreateAlertMatchesResponse batchCreateAlertMatches(
       @Valid BatchCreateAlertMatchesRequest request) {
 

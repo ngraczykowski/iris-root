@@ -37,4 +37,17 @@ class JdbcCommentInputDataAccessIT extends BaseJdbcTest {
     assertThat(jdbcTemplate.queryForObject("SELECT count(*) FROM ae_alert_comment_input",
         Integer.class)).isEqualTo(1);
   }
+
+  @Test
+  void shouldDoNothingWhenDuplicatedKey() {
+    var commentInput = InsertCommentInputRequest
+        .builder()
+        .alertId(1L)
+        .value(OBJECT_MAPPER.createObjectNode())
+        .build();
+    dataAccess.insertCommentInput(commentInput);
+    dataAccess.insertCommentInput(commentInput);
+    assertThat(jdbcTemplate.queryForObject("SELECT count(*) FROM ae_alert_comment_input",
+        Integer.class)).isEqualTo(1);
+  }
 }

@@ -32,6 +32,22 @@ class GrpcAlertServiceImpl extends AlertServiceImplBase {
   }
 
   @Override
+  public void batchAddLabels(
+      BatchAddLabelsRequest request,
+      StreamObserver<BatchAddLabelsResponse> responseObserver) {
+    responseObserver.onNext(alertService.addLabels(request));
+    responseObserver.onCompleted();
+  }
+
+  @Override
+  public void batchRemoveLabels(
+      BatchRemoveLabelsRequest request,
+      StreamObserver<BatchRemoveLabelsResponse> responseObserver) {
+    responseObserver.onNext(alertService.removeLabels(request));
+    responseObserver.onCompleted();
+  }
+
+  @Override
   public void createMatch(CreateMatchRequest request, StreamObserver<Match> responseObserver) {
     responseObserver.onNext(alertService.createMatch(request));
     responseObserver.onCompleted();
