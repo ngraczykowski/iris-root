@@ -1,0 +1,3 @@
+rootProject.name = 'adjudication-engine-connector'
+
+include('ae-lib')
