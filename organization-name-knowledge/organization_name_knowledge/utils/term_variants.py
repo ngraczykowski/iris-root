@@ -4,7 +4,7 @@ from typing import Set
 from organization_name_knowledge.utils.clear_name import remove_split_chars
 
 
-def term_variants(term: str) -> Set[str]:
+def get_term_variants(term: str) -> Set[str]:
     def _single_word_variants(word: str):
         word_without_splits = remove_split_chars(word)
         return (

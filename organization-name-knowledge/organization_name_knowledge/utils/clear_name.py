@@ -3,8 +3,6 @@ from typing import Tuple
 
 import unidecode
 
-POSSIBLE_SEPARATORS = re.compile(r"[-—]")
-
 SEPARATE_BY_CHARS = [
     ",",
     " -",
