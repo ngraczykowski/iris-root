@@ -23,3 +23,8 @@ message PersonalInformationExpired {
   // List of alerts from which PII data need to be removed
   repeated string alerts = 1 [(google.api.field_behavior) = REQUIRED];
 }
+
+message SimulationsExpired {
+  // List of simulations' resource name from which PII data need to be removed
+  repeated string simulations = 1 [(google.api.field_behavior) = REQUIRED];
+}
