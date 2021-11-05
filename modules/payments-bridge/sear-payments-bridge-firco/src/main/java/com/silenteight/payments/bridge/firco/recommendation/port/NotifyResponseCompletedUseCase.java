@@ -1,10 +1,15 @@
 package com.silenteight.payments.bridge.firco.recommendation.port;
 
-import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
+import com.silenteight.proto.payments.bridge.internal.v1.event.ResponseCompleted;
 
-import java.util.UUID;
+import org.springframework.integration.annotation.Gateway;
+import org.springframework.integration.annotation.MessagingGateway;
 
+import static com.silenteight.payments.bridge.common.integration.CommonChannels.RESPONSE_COMPLETED_OUTBOUND;
+
+@MessagingGateway
 public interface NotifyResponseCompletedUseCase {
 
-  void notify(UUID alertId, UUID recommendationId, AlertMessageStatus status);
+  @Gateway(requestChannel = RESPONSE_COMPLETED_OUTBOUND)
+  void notify(ResponseCompleted responseCompleted);
 }
