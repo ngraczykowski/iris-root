@@ -271,6 +271,8 @@ warehouse.report.ai-reasoning:
         label: Alert Client ID
       - name: alert_status
         label: Alert Status
+      - name: alert_firco_analyst_decision
+        label: Analyst Decision
       - name: alert_alert_message_id
         label: Alert S8 ID
   simulation:
@@ -294,6 +296,8 @@ warehouse.report.ai-reasoning:
         label: Alert Comment
       - name: alert_firco_system_id
         label: Alert Client ID
+      - name: alert_firco_analyst_decision
+        label: Analyst Decision
       - name: s8_alert_name
         label: Alert S8 ID
 
