@@ -3,13 +3,17 @@ package com.silenteight.warehouse.test.generator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.data.api.v2.Alert;
 import com.silenteight.data.api.v2.ProductionDataIndexRequest;
 import com.silenteight.warehouse.test.client.gateway.ProductionIndexClientGateway;
 
 import org.springframework.scheduling.annotation.Scheduled;
 
-import static java.util.List.of;
+import java.util.List;
+import java.util.stream.IntStream;
+
 import static java.util.UUID.randomUUID;
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,10 +27,18 @@ public class ProductionIndexClient {
     String requestId = randomUUID().toString();
     ProductionDataIndexRequest request = ProductionDataIndexRequest.newBuilder()
         .setRequestId(requestId)
-        .addAllAlerts(of(alertGenerator.generateProduction()))
+        .addAllAlerts(getAlerts())
         .build();
 
     productionIndexClientGateway.indexRequest(request);
     log.info("Production msg sent, requestId={}", requestId);
+  }
+
+  private List<Alert> getAlerts() {
+    return IntStream
+        .range(0, 1000)
+        .boxed()
+        .map(i -> alertGenerator.generateProduction())
+        .collect(toList());
   }
 }

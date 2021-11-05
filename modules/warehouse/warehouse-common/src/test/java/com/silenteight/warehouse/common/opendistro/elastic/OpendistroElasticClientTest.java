@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.common.opendistro.elastic.RoleDto.IndexPermission;
+import com.silenteight.warehouse.common.opendistro.elastic.exception.OpendistroElasticClientException;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 
@@ -108,6 +109,28 @@ class OpendistroElasticClientTest {
   }
 
   @Test
+  void shouldExecuteSearchQuery() {
+    simpleElasticTestClient.storeData(
+        PRODUCTION_ELASTIC_INDEX_NAME,
+        "123",
+        of("feature/name", "feature value", "key", "value"));
+
+    simpleElasticTestClient.storeData(PRODUCTION_ELASTIC_INDEX_NAME, "123", emptyMap());
+
+    String query = "select `feature/name`, `key` from `" + PRODUCTION_ELASTIC_INDEX_NAME
+        + "` group by `feature/name`, `key` limit 10000";
+
+    QueryDto queryDto = QueryDto.builder()
+        .query(query)
+        .build();
+
+    SearchResultDto searchResultDto = opendistroElasticClient.executeGroupingSearch(
+        queryDto, PRODUCTION_ELASTIC_INDEX_NAME);
+
+    assertThat(searchResultDto).isNotNull();
+  }
+
+  @Test
   void shouldExecuteQueryWithFields() {
     simpleElasticTestClient.storeData(
         PRODUCTION_ELASTIC_INDEX_NAME,
@@ -160,5 +183,4 @@ class OpendistroElasticClientTest {
       log.debug("index not present index={}", index);
     }
   }
-
 }
