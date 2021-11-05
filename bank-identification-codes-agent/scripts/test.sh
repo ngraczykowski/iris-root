@@ -9,5 +9,5 @@ if [[ -d venv ]]; then
   source venv/bin/activate
 fi
 
-artifact=$(basename -- "$(ls ./dist/bank_identification_codes-*.whl)")
+artifact=$(basename -- "$(ls ./dist/bank_identification_codes_agent-*.whl)")
 python -m tox --installpkg "./dist/$artifact" "$@"
