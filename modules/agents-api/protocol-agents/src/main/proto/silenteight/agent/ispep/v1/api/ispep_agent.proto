@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package silenteight.agent.geo.ispep.api;
+package silenteight.agent.ispep.api;
 
 option java_package = "com.silenteight.proto.agent.ispep.v1.api";
 option java_outer_classname = "IsPepAgentApiProto";
