@@ -21,5 +21,5 @@ shiv -e bank_identification_codes_agent.__main__:main "$@" --compressed \
 
 # configuration example
 example_config_path="./config"
-example_config="${name}-config-${version}.tgz"
+example_config="bank_identification_codes-config-${version}.tgz"
 tar -cvzf "./dist/$example_config" "$example_config_path"
