@@ -2,11 +2,8 @@ package com.silenteight.payments.bridge.svb.learning.reader.service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.svb.learning.reader.domain.AnalystDecision;
-import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
+import com.silenteight.payments.bridge.svb.learning.reader.domain.*;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert.LearningAlertBuilder;
-import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsvRow;
-import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
 import com.google.common.base.Preconditions;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -17,11 +14,13 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -66,12 +65,29 @@ class EtlAlertService {
 
   private List<LearningMatch> createMatches(List<LearningCsvRow> rows) {
     var matches = new ArrayList<LearningMatch>();
+    var matchRows = new HashMap<String, List<LearningCsvRow>>();
 
     for (var row : rows) {
-      var match = etlMatchService.fromLearningRows(row);
-      if (matches.stream().noneMatch(m -> m.getMatchId().equals(match.getMatchId())))
-        matches.add(match);
+      var matchId = row.getMatchId();
+      if (matchRows.containsKey(matchId)) {
+        matchRows.get(matchId).add(row);
+        continue;
+      }
+      var list = new ArrayList<LearningCsvRow>();
+      list.add(row);
+      matchRows.put(matchId, list);
     }
+
+    matchRows.forEach((id, mrows) -> {
+      var comparableRows = mrows
+          .stream()
+          .map(mr -> ComparableRow
+              .builder()
+              .learningCsvRow(mr)
+              .actionDateTime(getOffsetDateTime(mr.getFkcoDActionDatetime()))
+              .build()).sorted().collect(toList());
+      matches.add(etlMatchService.fromLearningRows(comparableRows.get(0).getLearningCsvRow()));
+    });
 
     return matches;
   }

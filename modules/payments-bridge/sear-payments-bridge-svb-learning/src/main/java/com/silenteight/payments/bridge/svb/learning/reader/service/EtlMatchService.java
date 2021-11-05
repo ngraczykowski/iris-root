@@ -32,14 +32,9 @@ class EtlMatchService {
     var matchingTexts = createMatchingTexts(row);
     var alertedPartyData =
         createAlertedPartyData(row);
-
-    var matchId =
-        row.getFkcoVListFmmId() + "(" + row.getFkcoVMatchedTag() + ", #" + row.getFkcoISequence()
-            + ")";
-
     return LearningMatch
         .builder()
-        .matchId(matchId)
+        .matchId(row.getMatchId())
         .alertedPartyData(alertedPartyData)
         .watchlistNames(List.of(row.getFkcoVListName().split(",")))
         .entityType(toEntityType(row.getFkcoVListType()))

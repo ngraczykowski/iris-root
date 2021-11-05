@@ -242,4 +242,9 @@ public class LearningCsvRow {
 
   @JsonProperty("FKCO_I_BLOCKINGHITS")
   private String fkcoIBlockinghits;
+
+  public String getMatchId() {
+    return getFkcoVListFmmId() + "(" + getFkcoVMatchedTag() + ", #" + getFkcoISequence()
+        + ")";
+  }
 }

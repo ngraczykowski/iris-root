@@ -58,10 +58,7 @@ class AlertServiceGrpc extends AlertServiceImplBase {
   public void batchCreateMatches(
       BatchCreateMatchesRequest request,
       StreamObserver<BatchCreateMatchesResponse> responseObserver) {
-    responseObserver.onNext(BatchCreateMatchesResponse
-        .newBuilder()
-        .addMatches(Match.newBuilder().setMatchId("fiona").setName("alerts/1/matches/1").build())
-        .build());
+    responseObserver.onNext(MockAlertUseCase.batchCreateMatches(request));
     responseObserver.onCompleted();
   }
 

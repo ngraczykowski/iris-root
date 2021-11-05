@@ -17,7 +17,6 @@ import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestIni
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.awaitility.core.ConditionEvaluationLogger;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -75,20 +74,20 @@ class PaymentsBridgeApplicationTests {
   }
 
   @Test
-  @Disabled
   void shouldProcessLearningCsv() {
     var request =
-        LearningRequest.builder().bucket("bucket").object("02-02-2001.csv").build();
+        LearningRequest.builder().bucket("bucket").object("analystdecison-2-hits.csv").build();
     handleLearningDataUseCase.readAlerts(request);
     await()
         .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
         .atMost(Duration.ofSeconds(10))
         .until(PaymentsBridgeApplicationTests::createdAlerts);
-    assertThat(MockAlertUseCase.getCreatedAlertsCount()).isGreaterThanOrEqualTo(16);
+    assertThat(MockAlertUseCase.getCreatedAlertsCount()).isEqualTo(2);
+    assertThat(MockAlertUseCase.getCreatedMatchesCount()).isEqualTo(2);
   }
 
   public static boolean createdAlerts() {
-    return MockAlertUseCase.getCreatedAlertsCount() >= 16;
+    return MockAlertUseCase.getCreatedAlertsCount() >= 2;
   }
 
   static Stream<String> filesFactory() {
