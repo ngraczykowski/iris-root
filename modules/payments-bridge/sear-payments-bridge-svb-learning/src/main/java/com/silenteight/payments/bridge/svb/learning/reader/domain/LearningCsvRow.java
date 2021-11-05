@@ -96,9 +96,6 @@ public class LearningCsvRow {
   @JsonProperty("FKCO_I_TOTAL_ACTION")
   private String fkcoITotalAction;
 
-  @JsonProperty("FKCO_UNIT_1")
-  private String fkcoUnit1;
-
   @JsonProperty("FKCO_MESSAGES")
   private String fkcoMessages;
 
@@ -162,9 +159,6 @@ public class LearningCsvRow {
   @JsonProperty("FKCO_I_SEQUENCE")
   private String fkcoISequence;
 
-  @JsonProperty("FKCO_UNIT_2")
-  private String fkcoUnit2;
-
   @JsonProperty("FKCO_V_LIST_FMM_ID")
   private String fkcoVListFmmId;
 
@@ -215,9 +209,6 @@ public class LearningCsvRow {
 
   @JsonProperty("FKCO_V_STATUS_BEHAVIOR")
   private String fkcoVStatusBehavior;
-
-  @JsonProperty("FKCO_MESSAGES_1")
-  private String fkcoMessages1;
 
   @JsonProperty("FKCO_I_BLOCKINGHITS")
   private String fkcoIBlockinghits;
