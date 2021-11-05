@@ -77,9 +77,12 @@ class RecommendationCompletedEndpoint {
       if (alertMessageUseCase.isOutdated(event)) {
         alertMessageStatusService.transitionAlertMessageStatus(alertId, status, UNDELIVERED);
       } else {
-        applicationEventPublisher.publishEvent(
-            buildResponseCompleted(alertId, recommendationId.getId(), status));
-        alertMessageStatusService.transitionAlertMessageStatus(alertId, status, PENDING);
+        var transited = alertMessageStatusService
+            .transitionAlertMessageStatus(alertId, status, PENDING);
+        if (transited) {
+          applicationEventPublisher.publishEvent(
+              buildResponseCompleted(alertId, recommendationId.getId(), status));
+        }
       }
     }
 
@@ -130,9 +133,12 @@ class RecommendationCompletedEndpoint {
           .createAdjudicationRecommendation(alertId,adjudicationEvent.getRecommendation());
 
       if (!alertMessageUseCase.isResolvedOrOutdated(event)) {
-        applicationEventPublisher.publishEvent(
-            buildResponseCompleted(alertId, recommendationId.getId(), RECOMMENDED));
-        alertMessageStatusService.transitionAlertMessageStatus(alertId, RECOMMENDED, PENDING);
+        var transited = alertMessageStatusService
+            .transitionAlertMessageStatus(alertId, RECOMMENDED, PENDING);
+        if (transited) {
+          applicationEventPublisher.publishEvent(
+              buildResponseCompleted(alertId, recommendationId.getId(), RECOMMENDED));
+        }
       }
     }
   }

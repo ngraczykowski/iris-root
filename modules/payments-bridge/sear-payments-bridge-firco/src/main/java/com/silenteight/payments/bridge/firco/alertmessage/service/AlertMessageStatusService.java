@@ -46,7 +46,7 @@ class AlertMessageStatusService {
    * Transition alert to the required status.
    */
   @Transactional
-  public void transitionAlertMessageStatus(
+  public boolean transitionAlertMessageStatus(
       UUID alertMessageId, AlertMessageStatus destinationStatus, DeliveryStatus delivery) {
 
     var entity = repository
@@ -55,7 +55,7 @@ class AlertMessageStatusService {
 
     var result = entity.transitionStatus(destinationStatus, delivery, clock);
     if (result != TransitionResult.SUCCESS) {
-      return;
+      return false;
     }
 
     log.info("Alert [{}] transitioned to {}. Delivery status: {}", alertMessageId,
@@ -70,6 +70,7 @@ class AlertMessageStatusService {
     }
 
     publishRejectionIfApply(alertMessageId, destinationStatus);
+    return true;
   }
 
   private void publishRejectionIfApply(UUID alertId, AlertMessageStatus destinationStatus) {

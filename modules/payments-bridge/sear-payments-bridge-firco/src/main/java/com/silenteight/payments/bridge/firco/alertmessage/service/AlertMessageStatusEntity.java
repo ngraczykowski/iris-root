@@ -74,9 +74,8 @@ class AlertMessageStatusEntity extends BaseVersionedEntity {
              TransitionResult.IGNORED : TransitionResult.FAILED;
     }
 
-    if (this.status != destinationStatus &&
-        !status.isTransitionAllowed(destinationStatus)) {
-      log.error("Unable to transition to status " + destinationStatus + ", from status " + status);
+    if (this.status != destinationStatus && !status.isTransitionAllowed(destinationStatus)) {
+      log.debug("Unable to transition to status " + destinationStatus + " from status " + status);
       return TransitionResult.FAILED;
     }
 
