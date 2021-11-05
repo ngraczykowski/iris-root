@@ -14,6 +14,11 @@ message AlertsExpired {
   repeated string alerts = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
+message DatasetsExpired {
+  // List of datasets' resource name to be marked as expired
+  repeated string datasets = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
 message PersonalInformationExpired {
   // List of alerts from which PII data need to be removed
   repeated string alerts = 1 [(google.api.field_behavior) = REQUIRED];
