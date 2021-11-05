@@ -1,6 +1,8 @@
 @Library('pipeline-shared-library@master') _
 
-def utils = new com.silenteight.jenkins.ci.Utils()
+def gradle = new com.silenteight.jenkins.ci.Gradle()
+def git = new com.silenteight.jenkins.ci.Git()
+def jenkins = new com.silenteight.jenkins.ci.Jenkins()
 
 gradleBuild(
     jdkVersion: 'jdk-11',
@@ -13,14 +15,13 @@ gradleBuild(
     additionalStages: {
       stage('Build and deploy container image') {
         script {
-          def gradle = new com.silenteight.jenkins.ci.Gradle()
           gradle.gradle('jib')
         }
         // Stash data to AWS nodes - scripts, helm etc.
         stash includes: 'scripts/**, helm-chart/**', name: 'chart-scripts'
       }
       stage('Helm Chart registry') {
-        env.INSTALLER_VERSION = utils.getProjectVersion()
+        env.INSTALLER_VERSION = gradle.getGradleProjectVersion()
         node("aws-worker") {
           sh 'rm -rf ./scripts ./helm-chart'
           unstash 'chart-scripts'
@@ -29,7 +30,7 @@ gradleBuild(
                   credentialsId: 'artifactory-deployment-user', usernameVariable: 'USERNAME',
                   passwordVariable: 'PASSWORD')]) {
             script {
-              if (utils.getGitBranch() == 'master') {
+              if (git.getGitBranch() == 'master' || git.buildingReleaseBranch()) {
                 echo 'Helm Chart registry'
                 sh './scripts/helm-chart-build.sh $USERNAME $PASSWORD'
               } else {
@@ -42,12 +43,12 @@ gradleBuild(
 
       stage('AWS ECR') {
         //This is docker image tag version which will be used to copy from s8 repository
-        env.INSTALLER_VERSION = utils.getProjectVersion()
+        env.INSTALLER_VERSION = gradle.getGradleProjectVersion()
         node("aws-worker") {
           sh 'rm -rf ./scripts ./helm-chart'
           unstash 'chart-scripts'
           script {
-            if (utils.getGitBranch() == 'master') {
+            if (git.getGitBranch() == 'master' || git.buildingReleaseBranch()) {
               echo 'AWS image push'
               sh './scripts/aws-deploy.sh'
             } else {
@@ -60,7 +61,7 @@ gradleBuild(
       stage('Deploy On Nomad Dev') {
         script {
           // FIXME(ahaczewski): Use `when` if possible.
-          if (utils.getGitBranch() == 'master') {
+          if (git.getGitBranch() == 'master' || git.buildingReleaseBranch()) {
             sh './nomad/deploy.sh -var-file=dev.vars'
           } else {
             echo 'This is not a release branch ignore Nomad deployment'
@@ -71,7 +72,7 @@ gradleBuild(
       stage('Deploy On Nomad Test') {
         script {
           // FIXME(ahaczewski): Use `when` if possible.
-          if (utils.getGitBranch() == 'master' && params.deployOnTest) {
+          if (git.getGitBranch() == 'master' && params.deployOnTest) {
             sh './nomad/deploy.sh -var-file=test.vars'
           } else {
             echo 'This is not a release branch ignore Nomad deployment'
