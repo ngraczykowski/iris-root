@@ -49,18 +49,18 @@ def check_grpc_response():
         resp = stub.CheckBankIdentificationCodes(request)
         print(
             "Solution:\n",
-            "  expected: {0}\n".format(test_case["solution"]),
-            "  actual:   {0}".format(resp.solution),
+            f"  expected: {test_case['solution']}\n",
+            f"  actual:   {resp.solution}",
         )
         print(
             "Conclusion: \n",
-            "  expected: {0}\n".format(test_case["conclusion"]),
-            "  actual:   {0}".format(resp.reason.conclusion),
+            f"  expected: {test_case['conclusion']}\n",
+            f"  actual:   {resp.reason.conclusion}",
         )
         print(
-            "Field {0}:\n".format(test_case["field_to_check"]),
-            "  expected: {0}\n".format(test_case["field_to_check_expected_value"]),
-            "  actual:   {0}".format(getattr(resp.reason, test_case["field_to_check"])),
+            f"Field {test_case['field_to_check']}:\n",
+            f"  expected: {test_case['field_to_check_expected_value']}\n",
+            f"  actual:   {getattr(resp.reason, test_case['field_to_check'])}",
         )
         print("\n")
 
