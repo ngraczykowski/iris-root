@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.common.opendistro.elastic;
+package com.silenteight.warehouse.common.opendistro.elastic.exception;
 
 import lombok.Getter;
 

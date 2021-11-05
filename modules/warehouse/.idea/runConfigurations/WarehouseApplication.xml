@@ -2,7 +2,7 @@
   <configuration default="false" name="WarehouseApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="warehouse.warehouse-app.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.silenteight.warehouse.WarehouseApplication" />
-    <option name="ACTIVE_PROFILES" value="swagger,basic-auth,debug,dev,sierra" />
+    <option name="ACTIVE_PROFILES" value="swagger,basic-auth,debug,dev" />
     <option name="VM_PARAMETERS" value="-Xms1g -Xmx1g -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 -Djava.net.preferIPv4Stack=true -Djava.io.tmpdir=./tmp" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <option name="SHORTEN_COMMAND_LINE" value="NONE" />

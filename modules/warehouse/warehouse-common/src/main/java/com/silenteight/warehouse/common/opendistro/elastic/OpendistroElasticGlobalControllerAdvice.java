@@ -1,5 +1,6 @@
 package com.silenteight.warehouse.common.opendistro.elastic;
 
+import com.silenteight.warehouse.common.opendistro.elastic.exception.OpendistroElasticClientException;
 import com.silenteight.warehouse.common.web.exception.AbstractErrorControllerAdvice;
 import com.silenteight.warehouse.common.web.exception.ControllerAdviceOrder;
 import com.silenteight.warehouse.common.web.exception.ErrorDto;

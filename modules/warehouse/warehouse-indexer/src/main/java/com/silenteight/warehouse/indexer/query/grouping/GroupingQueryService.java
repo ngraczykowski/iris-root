@@ -6,22 +6,16 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
 import com.silenteight.warehouse.common.opendistro.elastic.QueryDto;
-import com.silenteight.warehouse.common.opendistro.elastic.QueryResultDto;
-import com.silenteight.warehouse.common.opendistro.elastic.QueryResultDto.SchemaEntry;
+import com.silenteight.warehouse.common.opendistro.elastic.SearchResultDto;
+import com.silenteight.warehouse.common.opendistro.elastic.SearchResultDto.Bucket;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.index.FieldsQueryIndexService;
 import com.silenteight.warehouse.indexer.query.sql.MultiValueCondition;
 import com.silenteight.warehouse.indexer.query.sql.SingleValueCondition;
 import com.silenteight.warehouse.indexer.query.sql.SqlBuilder;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.query.sql.SqlBuilder.KEY_COUNT;
-import static java.lang.Integer.parseInt;
-import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -79,15 +73,18 @@ public class GroupingQueryService {
         .query(query)
         .build();
 
-    QueryResultDto queryResultDto = opendistroElasticClient.executeSql(queryDto);
-    return asFetchGroupedDataResponse(queryResultDto);
+    SearchResultDto searchResultDto = opendistroElasticClient.executeGroupingSearch(
+        queryDto, fetchGroupedDataRequest.getIndexes().get(0));
+
+    return asFetchGroupedDataResponse(searchResultDto);
   }
 
-  private FetchGroupedDataResponse asFetchGroupedDataResponse(QueryResultDto queryResultDto) {
-    List<SchemaEntry> schema = queryResultDto.getSchema();
+  private FetchGroupedDataResponse asFetchGroupedDataResponse(SearchResultDto searchResultDto) {
 
-    List<Row> rows = queryResultDto.getDatarows().stream()
-        .map(dataRow -> mapDataRow(schema, dataRow))
+    List<Row> rows = searchResultDto
+        .getBuckets()
+        .stream()
+        .map(this::toRow)
         .collect(toList());
 
     return FetchGroupedDataResponse.builder()
@@ -95,26 +92,10 @@ public class GroupingQueryService {
         .build();
   }
 
-  private Row mapDataRow(List<SchemaEntry> schema, List<Object> dataRow) {
-    if (schema.size() != dataRow.size()) {
-      throw new GroupingQueryException("Invalid response structure.");
-    }
-
-    Map<String, String> map = new HashMap<>();
-    Iterator<SchemaEntry> schemaIterator = schema.iterator();
-    Iterator<Object> dataRowIterator = dataRow.iterator();
-
-    while (schemaIterator.hasNext() && dataRowIterator.hasNext()) {
-      String key = schemaIterator.next().getName();
-      String value = ofNullable(dataRowIterator.next())
-          .map(Object::toString)
-          .orElse(EMPTY_VALUE_PLACEHOLDER);
-      map.put(key, value);
-    }
-
+  private Row toRow(Bucket bucket) {
     return FetchGroupedDataResponse.Row.builder()
-        .data(map)
-        .count(parseInt(map.get(KEY_COUNT)))
+        .data(bucket.getKey())
+        .count(bucket.getDocCount())
         .build();
   }
 }

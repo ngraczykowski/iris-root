@@ -3,6 +3,8 @@ package com.silenteight.warehouse.common.opendistro.elastic;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.warehouse.common.opendistro.elastic.exception.OpendistroElasticClientException;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONObject;
@@ -28,19 +30,26 @@ import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
 @RequiredArgsConstructor
 public class OpendistroElasticClient {
 
-  private final RestClient restLowLevelClient;
-  private final ObjectMapper objectMapper;
+  private static final String ACTUAL_SIZE_LIMIT = "\"size\":1000,";
+  private static final String DESIRED_SIZE_LIMIT = "\"size\":65000,";
   private static final String ROLE_PARAM = "role";
   private static final String ROLEMAPPING_PARAM = "rolemapping";
   private static final String TENANT_ENDPOINT = "/_opendistro/_security/api/tenants/";
   private static final String SQL_ENDPOINT = "/_opendistro/_sql";
+  private static final String SQL_EXPLAIN_ENDPOINT = "/_opendistro/_sql/_explain";
+  private static final String SEARCH_ENDPOINT = "_search";
   private static final String ROLES_ENDPOINT =
       "/_opendistro/_security/api/roles/{" + ROLE_PARAM + "}";
+
   private static final String ROLES_MAPPING_ENDPOINT =
       "/_opendistro/_security/api/rolesmapping/{" + ROLEMAPPING_PARAM + "}";
+
   private static final String TENANT_DESCRIPTION = "description";
   private static final String CONTENT_TYPE = "Content-type";
   private static final String APPLICATION_JSON = "application/json";
+
+  private final RestClient restLowLevelClient;
+  private final ObjectMapper objectMapper;
 
   public Set<String> getTenantsList() {
     Request request = new Request(METHOD_NAME, TENANT_ENDPOINT);
@@ -278,5 +287,65 @@ public class OpendistroElasticClient {
     }
 
     return new OpendistroElasticClientException(500, e.getMessage(), null, context, e);
+  }
+
+  public SearchResultDto executeGroupingSearch(QueryDto queryDto, String index) {
+    try {
+      return doExecuteGroupingSearch(queryDto, index);
+    } catch (IOException e) {
+      throw handle("executeGroupingSearch", e);
+    }
+  }
+
+  // Przemek L.: cause of ES limitations (1000 rows), there was need to implement some work around
+  // first send sql explain request to ES, then change response
+  // 'composite_buckets -> composite -> size': from 1000 to 65000
+  // and send it as _search request
+  private SearchResultDto doExecuteGroupingSearch(QueryDto queryDto, String index) throws
+      IOException {
+
+    String dlsQuery = getDlsQuery(queryDto);
+    String dlsQueryWithHigherLimit = dlsQuery.replace(ACTUAL_SIZE_LIMIT, DESIRED_SIZE_LIMIT);
+    return doGroupingSearch(dlsQueryWithHigherLimit, index);
+  }
+
+  private String getDlsQuery(QueryDto queryDto) throws IOException {
+    String explainPath = fromUriString(SQL_EXPLAIN_ENDPOINT).toUriString();
+    String query = objectMapper.writeValueAsString(queryDto);
+    log.info("Query to explain: {}", query);
+
+    Request request = new Request(HttpPost.METHOD_NAME, explainPath);
+    request.setJsonEntity(query);
+    Response response = restLowLevelClient.performRequest(request);
+
+    ExplainResultDto explainResultDto =
+        objectMapper.readValue(response.getEntity().getContent(), ExplainResultDto.class);
+
+    log.debug("OpendistroElasticClient method=POST, endpoint={}, statusCode={}, parsedBody={}",
+        request.getEndpoint(), response.getStatusLine(), explainResultDto);
+
+    return extractDlsQuery(explainResultDto.getRequest());
+  }
+
+  private String extractDlsQuery(String request) {
+    return request.substring(
+        request.lastIndexOf("sourceBuilder={") + 14,
+        request.lastIndexOf(","));
+  }
+
+  private SearchResultDto doGroupingSearch(String dlsQuery, String index) throws IOException {
+    String searchPath = fromUriString(index).pathSegment(SEARCH_ENDPOINT).toUriString();
+
+    Request request = new Request(HttpPost.METHOD_NAME, searchPath);
+    request.setJsonEntity(dlsQuery);
+    Response response = restLowLevelClient.performRequest(request);
+
+    SearchResultDto searchResultDto = objectMapper.readValue(
+        response.getEntity().getContent(), SearchResultDto.class);
+
+    log.debug("OpendistroElasticClient method=POST, endpoint={}, statusCode={}, parsedBody={}",
+        request.getEndpoint(), response.getStatusLine(), searchResultDto);
+
+    return searchResultDto;
   }
 }
