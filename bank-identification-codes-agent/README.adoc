@@ -4,7 +4,7 @@ Previously known as Search Code Mismatch Agent.
 
 == Usage
 === Installation
-Module needs python >= 3.7. Tested only on python 3.7.
+Module needs python >= 3.7.
 
 * from source:
 pip install .

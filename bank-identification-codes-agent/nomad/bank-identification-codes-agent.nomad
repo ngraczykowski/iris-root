@@ -147,7 +147,7 @@ job "bank-identification-codes-agent" {
       config {
         image = "python:3.7"
         command = "python"
-        args = ["/app/bank_identification_codes_agent-${var.bank_identification_codes_agent_version}.pyz", "-c", "/app/config", "--grpc", "-v"]
+        args = ["/app/bank_identification_codes_agent-${var.bank_identification_codes_agent_version}.pyz", "-c", "/app/config", "--grpc", "--agent-exchange", "-v"]
         network_mode = "host"
         volumes = ["local:/app"]
       }

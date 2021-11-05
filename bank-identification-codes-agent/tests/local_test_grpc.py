@@ -42,7 +42,7 @@ test_cases = [
 
 
 def check_grpc_response():
-    channel = grpc.insecure_channel("localhost:24805")
+    channel = grpc.insecure_channel("localhost:9090")
     stub = BankIdentificationCodesAgentStub(channel)
     for test_case in test_cases:
         request = CheckBankIdentificationCodesRequest(**test_case["data"])
