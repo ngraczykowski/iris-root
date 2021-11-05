@@ -7,11 +7,12 @@ import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
-import com.silenteight.payments.bridge.agents.model.*;
+import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
+import com.silenteight.payments.bridge.agents.model.CompanyNameSurroundingRequest;
+import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
+import com.silenteight.payments.bridge.agents.model.SpecificTermsRequest;
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
-import com.silenteight.payments.bridge.svb.oldetl.model.AbstractMessageStructure;
-import com.silenteight.payments.bridge.svb.oldetl.model.GetAccountNumberRequest;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import org.apache.commons.lang3.EnumUtils;
@@ -55,8 +56,6 @@ public class LearningMatch {
   String applicationCode;
 
   String hitTag;
-
-  AbstractMessageStructure messageStructure;
 
   List<String> matchingTexts;
 
@@ -102,15 +101,6 @@ public class LearningMatch {
     return alertedPartyData.getCtryTowns().stream().findFirst().orElse("");
   }
 
-  public OneLinerAgentRequest toOneLinerAgentRequest() {
-    return OneLinerAgentRequest
-        .builder()
-        .noAcctNumFlag(alertedPartyData.isNoAcctNumFlag())
-        .noOfLines(alertedPartyData.getNumOfLines())
-        .messageLength(alertedPartyData.getMessageLength())
-        .build();
-  }
-
   public CompanyNameSurroundingRequest toCompanyNameSurroundingRequest() {
     return CompanyNameSurroundingRequest
         .builder()
@@ -118,16 +108,8 @@ public class LearningMatch {
         .build();
   }
 
-  public GetAccountNumberRequest toGetAccountNumberRequest() {
-    return GetAccountNumberRequest
-        .builder()
-        .tag(hitTag)
-        .matchingFields(allMatchFieldsValue)
-        .build();
-  }
-
-  public Optional<String> getAccountNumber() {
-    return messageStructure.getAccountNumber(toGetAccountNumberRequest());
+  public Optional<String> getAccountNumberOrFirstName() {
+    return alertedPartyData.getAccountNumberOrFirstName();
   }
 
   public List<String> getSearchCodes() {

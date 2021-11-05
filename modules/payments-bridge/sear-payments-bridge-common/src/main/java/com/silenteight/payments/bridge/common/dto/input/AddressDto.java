@@ -1,15 +1,19 @@
 package com.silenteight.payments.bridge.common.dto.input;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,4 +31,19 @@ public class AddressDto implements Serializable {
   private List<AddressStateDto> states;
 
   private List<AddressCountryDto> countries;
+
+  @NotNull
+  public List<String> findCities() {
+    return cities.stream().map(AddressCityDto::getCity).collect(Collectors.toList());
+  }
+
+  @NotNull
+  public List<String> findStates() {
+    return states.stream().map(AddressStateDto::getState).collect(Collectors.toList());
+  }
+
+  @NotNull
+  public List<String> findCountries() {
+    return countries.stream().map(AddressCountryDto::getCountry).collect(Collectors.toList());
+  }
 }

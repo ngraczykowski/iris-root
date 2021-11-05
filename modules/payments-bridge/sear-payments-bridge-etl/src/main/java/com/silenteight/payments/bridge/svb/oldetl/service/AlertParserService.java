@@ -5,25 +5,26 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
-import com.silenteight.payments.bridge.common.dto.input.*;
+import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
+import com.silenteight.payments.bridge.common.dto.input.HitDto;
 import com.silenteight.payments.bridge.etl.firco.parser.MessageFormat;
 import com.silenteight.payments.bridge.etl.firco.parser.MessageParserFacade;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.svb.oldetl.model.UnsupportedMessageException;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertEtlResponseUseCase;
-import com.silenteight.payments.bridge.svb.oldetl.response.*;
-import com.silenteight.payments.bridge.svb.oldetl.service.shitcode.*;
-import com.silenteight.payments.bridge.svb.oldetl.util.CommonUtils;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
+import com.silenteight.payments.bridge.svb.oldetl.service.impl.*;
 
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure.NAMEADDRESS_FORMAT_F;
+import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure.UNSTRUCTURED;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -51,8 +52,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
       var hit = alertMessageDtoHits.get(idx).getHit();
       if (hit.isBlocking()) {
         hitData.add(createHitData(
-            alertMessageDto.getApplicationCode(), messageData, hit,
-            MessageFieldStructure.UNSTRUCTURED, idx));
+            alertMessageDto.getApplicationCode(), messageData, hit, idx));
       } else {
         skippedHits.add(hit.getMatchId(idx));
       }
@@ -81,23 +81,21 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
   }
 
   private HitData createHitData(
-      String applicationCode, MessageData messageData, HitDto hit,
-      MessageFieldStructure messageFieldStructure, int index) {
+      String applicationCode, MessageData messageData, HitDto hit, int index) {
 
     var alertedPartyData =
         extractAlertedPartyData(
-            messageData, hit.getTag(), messageFieldStructure,
+            messageData, hit.getTag(),
             extractFircoFormat(applicationCode, messageData));
 
     var hitAndWatchlistPartyData = extractHitAndWatchlistPartyData(
-        buildTransactionMessage(applicationCode, messageData), hit);
+        new TransactionMessageImpl(messageData), hit);
 
     return new HitData(hit.getMatchId(index), alertedPartyData, hitAndWatchlistPartyData);
   }
 
   public static AlertedPartyData extractAlertedPartyData(
       MessageData messageData, String hitTag,
-      MessageFieldStructure messageFieldStructure,
       String fircoFormat) {
 
     boolean tagValueInFormatF = ifTagValueInFormatF(messageData.getLines(hitTag));
@@ -108,7 +106,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
               NAMEADDRESS_FORMAT_F);
         } else {
           return new ExtractOriginatorAlertedPartyData(messageData).extract(
-              messageFieldStructure, fircoFormat);
+              UNSTRUCTURED, fircoFormat);
         }
       case "BENE":
         if (tagValueInFormatF) {
@@ -116,38 +114,23 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
               NAMEADDRESS_FORMAT_F);
         } else {
           return new ExtractBeneOrgbankInsbankAlertedPartyData(
-              messageData, hitTag, fircoFormat).extract(messageFieldStructure);
+              messageData, hitTag, fircoFormat).extract(UNSTRUCTURED);
         }
       case "ORGBANK":
       case "INSBANK":
         return new ExtractBeneOrgbankInsbankAlertedPartyData(
-            messageData, hitTag, fircoFormat).extract(messageFieldStructure);
+            messageData, hitTag, fircoFormat).extract(UNSTRUCTURED);
       case "50F":
-        return new Extract50FAlertedPartyData(messageData, hitTag).extract(messageFieldStructure);
+        return new Extract50FAlertedPartyData(messageData, hitTag).extract(UNSTRUCTURED);
       case "RECEIVBANK":
         return new ExtractReceivbankAlertedPartyData(
-            messageData, hitTag, fircoFormat).extract(messageFieldStructure);
+            messageData, hitTag, fircoFormat).extract(UNSTRUCTURED);
       case "50K":
       case "59":
       case "50":
-        return new Extract50k59AlertedPartyData(messageData).extract(hitTag, messageFieldStructure);
+        return new Extract50k59AlertedPartyData(messageData).extract(hitTag, UNSTRUCTURED);
       default:
         throw new UnsupportedMessageException("Tag not supported " + hitTag);
-    }
-  }
-
-  private TransactionMessage buildTransactionMessage(
-      String applicationCode, MessageData messageData) {
-
-    switch (applicationCode) {
-      case "GFX":
-        return new GfxTransactionMessage(messageData);
-      case "PEP":
-        return new PepTransactionMessage(messageData);
-      case "GTEX":
-        return new GtexTransactionMessage(messageData);
-      default:
-        throw new UnsupportedMessageException("Application not supported " + applicationCode);
     }
   }
 
@@ -155,8 +138,6 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
       TransactionMessage transactionMessage, HitDto hit) {
 
     var hittedEntity = hit.getHittedEntity();
-    var synonymIndex = CommonUtils.toPositiveInt(hit.getSynonymIndex(), 0);
-    var extractedName = HitNameExtractor.extractName(synonymIndex, hittedEntity);
 
     var tag = hit.getTag();
     var allMatchingTexts = transactionMessage.getAllMatchingTexts(tag, hit.getMatchingText());
@@ -164,57 +145,29 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     var allMatchingFieldValues = transactionMessage.getAllMatchingTagValues(
         tag, hit.getMatchingText());
 
-    List<CodeDto> codes = Optional.of(hit)
-        .map(HitDto::getHittedEntity)
-        .map(HittedEntityDto::getCodes)
-        .orElseGet(Collections::emptyList)
-        .stream()
-        .map(HittedEntityCodeDto::getCode)
-        .collect(Collectors.toList());
-
-    List<String> searchCodes = codes.stream()
-        .filter(codeDto -> "SearchCode".equals(codeDto.getType()))
-        .map(CodeDto::getName)
-        .collect(Collectors.toList());
-
-    List<String> passports = codes.stream()
-        .filter(codeDto -> "Passport".equals(codeDto.getType()))
-        .map(CodeDto::getName)
-        .collect(Collectors.toList());
-
-    List<String> natIds = codes.stream()
-        .filter(codeDto -> "NationalID".equals(codeDto.getType()))
-        .map(CodeDto::getName)
-        .collect(Collectors.toList());
-
-    List<String> bics = codes.stream()
-        .filter(codeDto -> "Bic".equals(codeDto.getType()))
-        .map(CodeDto::getName)
-        .collect(Collectors.toList());
-
     return HitAndWatchlistPartyData.builder()
         .solutionType(SolutionType.ofCode(hit.getSolutionType()))
         .watchlistType(WatchlistType.ofCode(hittedEntity.getType()))
         .tag(tag)
         .id(hittedEntity.getId())
-        .name(extractedName)
+        .name(hit.extractWlName())
         .entityText(hit.getEntityText())
         .matchingText(hit.getMatchingText())
         .allMatchingTexts(allMatchingTexts)
         .allMatchingFieldValues(allMatchingFieldValues)
         .fieldValue(fieldValue)
         .postalAddresses(
-            LocationExtractorHelper.extractPostalAddresses(hittedEntity.getAddresses()))
-        .cities(LocationExtractorHelper.extractListOfCities(hittedEntity.getAddresses()))
-        .states(LocationExtractorHelper.extractListOfStates(hittedEntity.getAddresses()))
-        .countries(LocationExtractorHelper.extractListOfCountries(hittedEntity.getAddresses()))
-        .mainAddress(LocationExtractorHelper.extractIsMainAddress(hittedEntity.getAddresses()))
+            hittedEntity.findPostalAddresses())
+        .cities(hittedEntity.findCities())
+        .states(hittedEntity.findStates())
+        .countries(hittedEntity.findCountries())
+        .mainAddress(hittedEntity.findIsMainAddress())
         .origin((hittedEntity.getOrigin()))
         .designation((hittedEntity.getDesignation()))
-        .searchCodes(searchCodes)
-        .passports(passports)
-        .natIds(natIds)
-        .bics(bics)
+        .searchCodes(hit.findSearchCodes())
+        .passports(hit.findPassports())
+        .natIds(hit.findNatIds())
+        .bics(hit.findBics())
         .build();
   }
 

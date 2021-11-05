@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.common.dto.input;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,9 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,7 +43,7 @@ public class HitDto implements Serializable {
 
   private HittedEntityDto hittedEntity;
 
-  String extractWlName() {
+  public String extractWlName() {
     String wlName = "";
     if (SolutionType.NAME.getCode().equals(getSolutionType())) {
       try {
@@ -76,5 +79,37 @@ public class HitDto implements Serializable {
   public String getMatchId(int sequenceIndex) {
     var sequenceNumber = sequenceIndex + 1;
     return hittedEntity.getId() + "(" + getTag() + ", #" + sequenceNumber + ")";
+  }
+
+  public List<String> findSearchCodes() {
+    return getCodes().stream()
+        .filter(codeDto -> "SearchCode".equals(codeDto.getType()))
+        .map(CodeDto::getName)
+        .collect(Collectors.toList());
+  }
+
+  public List<String> findPassports() {
+    return getCodes().stream()
+        .filter(codeDto -> "Passport".equals(codeDto.getType()))
+        .map(CodeDto::getName)
+        .collect(Collectors.toList());
+  }
+
+  public List<String> findNatIds() {
+    return getCodes().stream()
+        .filter(codeDto -> "NationalID".equals(codeDto.getType()))
+        .map(CodeDto::getName)
+        .collect(Collectors.toList());
+  }
+
+  public List<String> findBics() {
+    return getCodes().stream()
+        .filter(codeDto -> "Bic".equals(codeDto.getType()))
+        .map(CodeDto::getName)
+        .collect(Collectors.toList());
+  }
+
+  private List<CodeDto> getCodes() {
+    return hittedEntity.findCodes();
   }
 }

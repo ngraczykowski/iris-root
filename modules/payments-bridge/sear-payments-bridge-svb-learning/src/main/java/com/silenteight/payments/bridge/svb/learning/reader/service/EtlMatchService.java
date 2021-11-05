@@ -9,22 +9,15 @@ import com.silenteight.payments.bridge.etl.firco.parser.MessageFormat;
 import com.silenteight.payments.bridge.etl.firco.parser.MessageParserFacade;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsvRow;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
-import com.silenteight.payments.bridge.svb.oldetl.model.AbstractMessageStructure;
 import com.silenteight.payments.bridge.svb.oldetl.model.CreateAlertedPartyEntitiesRequest;
-import com.silenteight.payments.bridge.svb.oldetl.model.ExtractAlertedPartyDataRequest;
 import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
-import com.silenteight.payments.bridge.svb.oldetl.port.ExtractFieldValueUseCase;
-import com.silenteight.payments.bridge.svb.oldetl.port.ExtractMessageStructureUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
-import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
 import com.silenteight.payments.bridge.svb.oldetl.service.AlertParserService;
 
 import org.apache.commons.collections4.list.SetUniqueList;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -33,15 +26,12 @@ import static java.util.stream.Collectors.toList;
 class EtlMatchService {
 
   private final CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;
-  private final ExtractMessageStructureUseCase extractMessageStructureUseCase;
-  private final ExtractFieldValueUseCase extractFieldValueUseCase;
   private final MessageParserFacade messageParserFacade;
 
   LearningMatch fromLearningRows(LearningCsvRow row) {
     var matchingTexts = createMatchingTexts(row);
-    var messageStructure = createMessageStructure(row, matchingTexts);
     var alertedPartyData =
-        createAlertedPartyData(row, messageStructure.getMessageFieldStructure());
+        createAlertedPartyData(row);
 
     var matchId =
         row.getFkcoVListFmmId() + "(" + row.getFkcoVMatchedTag() + ", #" + row.getFkcoISequence()
@@ -61,13 +51,12 @@ class EtlMatchService {
         .watchlistCountry(row.getFkcoVListCountry())
         .matchedFieldValue(row.getFkcoVMatchedTagContent())
         .messageData(row.getFkcoVContent())
-        .messageStructure(messageStructure)
         .matchType(row.getFkcoVListType())
         .ofacId(row.getFkcoVListFmmId())
         .matchingTexts(matchingTexts)
         .applicationCode(row.getFkcoVApplication())
         .hitTag(row.getFkcoVMatchedTag())
-        .allMatchFieldsValue(createAllMatchFieldsValue(messageStructure))
+        .allMatchFieldsValue(createAllMatchFieldsValue(row))
         .matchedNames(new ArrayList<>(Arrays.asList(row.getFkcoVListMatchedName().split(","))))
         .matchedCountries(List.of(row.getFkcoVListCountry().split(",")))
         .hitType(row.getFkcoVHitType())
@@ -77,35 +66,23 @@ class EtlMatchService {
         .build();
   }
 
-  private List<String> createAllMatchFieldsValue(AbstractMessageStructure messageStructure) {
-    return extractFieldValueUseCase
-        .extractFieldValues(messageStructure)
-        .stream()
-        .flatMap(List::stream)
-        .collect(toList());
+  private List<String> createAllMatchFieldsValue(LearningCsvRow row) {
+    var messageData = messageParserFacade.parse(
+        row.getFkcoVContent().startsWith("{") ? MessageFormat.SWIFT : MessageFormat.ALL,
+        row.getFkcoVContent());
+
+    return messageData.findAllValues(row.getFkcoVMatchedTag()).collect(toList());
+
   }
 
   private AlertedPartyData createAlertedPartyData(
-      LearningCsvRow row, MessageFieldStructure messageFieldStructure) {
+      LearningCsvRow row) {
     var messageData = messageParserFacade.parse(
         row.getFkcoVContent().startsWith("{") ? MessageFormat.SWIFT : MessageFormat.ALL,
         row.getFkcoVContent());
     return AlertParserService.extractAlertedPartyData(
-        messageData, row.getFkcoVMatchedTag(), messageFieldStructure,
+        messageData, row.getFkcoVMatchedTag(),
         row.getFkcoVFormat());
-  }
-
-  private AbstractMessageStructure createMessageStructure(
-      LearningCsvRow row, List<String> matchingTexts) {
-    return extractMessageStructureUseCase.extractMessageStructure(
-        ExtractAlertedPartyDataRequest
-            .builder()
-            .applicationCode(row.getFkcoVApplication())
-            .messageData(row.getFkcoVContent())
-            .messageType(row.getFkcoVType())
-            .tag(row.getFkcoVMatchedTag())
-            .matchingText(StringUtils.join(matchingTexts, ","))
-            .build());
   }
 
   private static List<String> createMatchingTexts(LearningCsvRow row) {
@@ -121,28 +98,6 @@ class EtlMatchService {
         .stream()
         .filter(s -> !s.equalsIgnoreCase("N/A"))
         .collect(toList());
-  }
-
-
-  private static String assertUnique(
-      List<LearningCsvRow> rows, Function<LearningCsvRow, String> rowFunc) {
-
-    var first = rowFunc.apply(rows.get(0));
-    for (var row : rows) {
-      var rowVal = rowFunc.apply(row);
-      if (!rowVal.equals(first)) {
-        throw new NotUniqueValueException();
-      }
-    }
-    return first;
-  }
-
-  private static List<String> createUniqueList(
-      List<LearningCsvRow> rows, Function<LearningCsvRow, String> rowFunc) {
-
-    var uniqueList = SetUniqueList.setUniqueList(new ArrayList<String>());
-    rows.forEach(row -> uniqueList.add(rowFunc.apply(row)));
-    return uniqueList;
   }
 
 
@@ -167,12 +122,4 @@ class EtlMatchService {
         .build());
   }
 
-  private static class NotUniqueValueException extends RuntimeException {
-
-    private static final long serialVersionUID = 2491372116858557898L;
-
-    NotUniqueValueException() {
-      super("Not unique value for match");
-    }
-  }
 }

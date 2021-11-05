@@ -19,7 +19,7 @@ class HistoricalRiskExtractor implements CategoryValueExtractor {
 
   @Override
   public CategoryValue extract(LearningMatch learningMatch) {
-    var accountNumberOrFirstName = learningMatch.getAccountNumber()
+    var accountNumberOrFirstName = learningMatch.getAccountNumberOrFirstName()
         .filter(String::isBlank)
         .orElseGet(() -> learningMatch.getFirstAlertedPartyName().orElse(""));
 
