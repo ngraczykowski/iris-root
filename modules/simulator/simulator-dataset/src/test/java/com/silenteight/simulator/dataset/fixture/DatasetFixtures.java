@@ -29,9 +29,13 @@ import static java.util.UUID.fromString;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DatasetFixtures {
 
-  public static final UUID ID = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
+  public static final UUID ID_1 = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
+  public static final UUID ID_2 = fromString("65608792-1086-4fe8-bc80-55a351bd2018");
+  public static final UUID ID_3 = fromString("794d362c-0a1d-4794-ae71-ac715bf956f3");
+  public static final UUID ID_4 = fromString("f36a59e8-5793-4053-86b4-01dca35b9e63");
+  public static final UUID ID_5 = fromString("0258e788-793a-45e6-b577-858283ee6165");
   public static final UUID SECOND_ID = fromString("d17b4708-6fde-8dc0-4832-d17b4708d8ca");
-  public static final String RESOURCE_NAME = "datasets/" + ID;
+  public static final String RESOURCE_NAME = "datasets/" + ID_1;
   public static final String SECOND_RESOURCE_NAME = "datasets/" + SECOND_ID;
   public static final String DATASET_NAME = "Dataset name";
   public static final String DESCRIPTION = "Dataset description";
@@ -57,10 +61,10 @@ public final class DatasetFixtures {
 
   public static final CreateDatasetRequestDto CREATE_DATASET_REQUEST_DTO =
       new CreateDatasetRequestDto(
-          ID, DATASET_NAME, DESCRIPTION, selectionCriteria(FROM, TO, COUNTRIES));
+          ID_1, DATASET_NAME, DESCRIPTION, selectionCriteria(FROM, TO, COUNTRIES));
 
   public static final DatasetDto DATASET_DTO = DatasetDto.builder()
-      .id(ID)
+      .id(ID_1)
       .name(RESOURCE_NAME)
       .datasetName(DATASET_NAME)
       .description(DESCRIPTION)
@@ -133,7 +137,7 @@ public final class DatasetFixtures {
 
   public static final ArchiveDatasetRequest ARCHIVE_DATASET_REQUEST =
       ArchiveDatasetRequest.builder()
-          .id(ID)
+          .id(ID_1)
           .archivedBy(ARCHIVED_BY)
           .build();
 }

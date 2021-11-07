@@ -16,7 +16,7 @@ import java.util.List;
 import static com.silenteight.simulator.dataset.archive.ArchiveDatasetRequest.POST_AUDIT_TYPE;
 import static com.silenteight.simulator.dataset.archive.ArchiveDatasetRequest.PRE_AUDIT_TYPE;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.ARCHIVE_DATASET_REQUEST;
-import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.ID;
+import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.ID_1;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentCaptor.forClass;
 import static org.mockito.Mockito.*;
@@ -39,7 +39,7 @@ class ArchiveDatasetUseCaseTest {
     underTest.activate(ARCHIVE_DATASET_REQUEST);
 
     // then
-    verify(datasetMetadataService).archive(ID);
+    verify(datasetMetadataService).archive(ID_1);
     var logCaptor = forClass(AuditDataDto.class);
     verify(auditingLogger, times(2)).log(logCaptor.capture());
     AuditDataDto preAudit = getPreAudit(logCaptor);

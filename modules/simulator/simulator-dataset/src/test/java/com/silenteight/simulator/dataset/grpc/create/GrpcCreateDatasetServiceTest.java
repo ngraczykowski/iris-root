@@ -44,7 +44,7 @@ class GrpcCreateDatasetServiceTest {
 
   private static com.silenteight.simulator.dataset.create.CreateDatasetRequest makeDomainRequest() {
     return com.silenteight.simulator.dataset.create.CreateDatasetRequest.builder()
-        .id(ID)
+        .id(ID_1)
         .datasetName(DATASET_NAME)
         .description(DESCRIPTION)
         .rangeFrom(FROM)

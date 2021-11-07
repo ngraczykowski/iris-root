@@ -25,17 +25,17 @@ import static org.springframework.http.HttpStatus.OK;
 })
 class GetDatasetRestControllerTest extends BaseRestControllerTest {
 
-  private static final String GET_DATASET_URL = "/v1/datasets/" + ID;
+  private static final String GET_DATASET_URL = "/v1/datasets/" + ID_1;
 
   @MockBean
   private DatasetQuery datasetQuery;
 
   @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its200_whenDatasetFound() {
-    given(datasetQuery.get(ID)).willReturn(DATASET_DTO);
+    given(datasetQuery.get(ID_1)).willReturn(DATASET_DTO);
     get(GET_DATASET_URL)
         .statusCode(OK.value())
-        .body("id", is(ID.toString()))
+        .body("id", is(ID_1.toString()))
         .body("name", is(RESOURCE_NAME))
         .body("datasetName", is(DATASET_NAME))
         .body("description", is(DESCRIPTION))
@@ -48,7 +48,7 @@ class GetDatasetRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { MODEL_TUNER, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its404_whenDatasetNotFound() {
-    given(datasetQuery.get(ID)).willThrow(DatasetNotFoundException.class);
+    given(datasetQuery.get(ID_1)).willThrow(DatasetNotFoundException.class);
     get(GET_DATASET_URL)
         .statusCode(NOT_FOUND.value());
   }
