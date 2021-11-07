@@ -37,10 +37,10 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
     underTest.createMetadata(makeCreateDatasetRequest(), DATASET);
 
     // then
-    Optional<DatasetEntity> datasetOpt = repository.findByDatasetId(ID);
+    Optional<DatasetEntity> datasetOpt = repository.findByDatasetId(ID_1);
     assertThat(datasetOpt).isPresent();
     DatasetEntity dataset = datasetOpt.get();
-    assertThat(dataset.getDatasetId()).isEqualTo(ID);
+    assertThat(dataset.getDatasetId()).isEqualTo(ID_1);
     assertThat(dataset.getState()).isEqualTo(ACTIVE);
     assertThat(dataset.getExternalResourceName()).isEqualTo(EXTERNAL_RESOURCE_NAME);
   }
@@ -48,7 +48,7 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
   @Test
   void countAllAlerts() {
     // given
-    persistDataset(ID, ALERTS_COUNT);
+    persistDataset(ID_1, ALERTS_COUNT);
     persistDataset(SECOND_ID, SECOND_ALERTS_COUNT);
 
     // when
@@ -61,10 +61,10 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
   @Test
   void shouldArchive() {
     // given
-    DatasetEntity dataset = persistDataset(ID, ALERTS_COUNT);
+    DatasetEntity dataset = persistDataset(ID_1, ALERTS_COUNT);
 
     // when
-    underTest.archive(ID);
+    underTest.archive(ID_1);
 
     // then
     DatasetEntity savedDataset = entityManager.find(DatasetEntity.class, dataset.getId());
@@ -73,14 +73,14 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
 
   @Test
   void shouldThrowIfArchivingAndDatasetNotFound() {
-    assertThatThrownBy(() -> underTest.archive(ID))
+    assertThatThrownBy(() -> underTest.archive(ID_1))
         .isInstanceOf(DatasetNotFoundException.class)
-        .hasMessageContaining("datasetId=" + ID);
+        .hasMessageContaining("datasetId=" + ID_1);
   }
 
   private static CreateDatasetRequest makeCreateDatasetRequest() {
     return CreateDatasetRequest.builder()
-        .id(ID)
+        .id(ID_1)
         .datasetName(DATASET_NAME)
         .description(DESCRIPTION)
         .rangeFrom(FROM)

@@ -75,7 +75,7 @@ class CreateDatasetUseCaseTest {
 
   private static CreateDatasetRequest makeCreateDatasetRequest() {
     return CreateDatasetRequest.builder()
-        .id(ID)
+        .id(ID_1)
         .datasetName(DATASET_NAME)
         .description(DESCRIPTION)
         .rangeFrom(FROM)

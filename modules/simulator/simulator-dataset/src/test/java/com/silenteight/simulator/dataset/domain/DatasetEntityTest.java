@@ -11,7 +11,7 @@ import static com.silenteight.simulator.dataset.domain.DatasetState.ARCHIVED;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.CREATED_BY;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.DATASET_NAME;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.EXTERNAL_RESOURCE_NAME;
-import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.ID;
+import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.ID_1;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.*;
 
@@ -44,7 +44,7 @@ class DatasetEntityTest {
 
   private DatasetEntity createDatasetEntity(DatasetState state) {
     return DatasetEntity.builder()
-        .datasetId(ID)
+        .datasetId(ID_1)
         .name(DATASET_NAME)
         .externalResourceName(EXTERNAL_RESOURCE_NAME)
         .createdBy(CREATED_BY)

@@ -10,7 +10,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.ARCHIVE_DATASET_REQUEST;
-import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.ID;
+import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.ID_1;
 import static java.lang.String.format;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -23,7 +23,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 })
 class ArchiveDatasetRestControllerTest extends BaseRestControllerTest {
 
-  private static final String ARCHIVE_DATASET_URL = format("/v1/datasets/%s:archive", ID);
+  private static final String ARCHIVE_DATASET_URL = format("/v1/datasets/%s:archive", ID_1);
 
   @MockBean
   private ArchiveDatasetUseCase useCase;
