@@ -22,6 +22,7 @@ import org.springframework.integration.annotation.ServiceActivator;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
+import javax.transaction.Transactional;
 
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.RECOMMENDATION_COMPLETED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.RECOMMENDED;
@@ -49,6 +50,7 @@ class RecommendationCompletedEndpoint {
 
   @Order(2)
   @ServiceActivator(inputChannel = RECOMMENDATION_COMPLETED)
+  @Transactional
   @LogContext
   void accept(RecommendationCompletedEvent event) {
     MDC.put("alertId", event.getAlertId().toString());
