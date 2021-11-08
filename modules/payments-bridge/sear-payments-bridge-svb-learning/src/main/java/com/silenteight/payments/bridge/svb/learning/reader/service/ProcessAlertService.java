@@ -8,7 +8,6 @@ import com.silenteight.payments.bridge.svb.learning.reader.port.CsvFileProvider;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +32,7 @@ class ProcessAlertService {
   public AlertsReadingResponse read(LearningRequest learningRequest) {
 
     var mapper = new CsvMapper();
-    var schema = CsvSchema.emptySchema()
+    var schema = mapper.schemaFor(LearningCsvRow.class)
         .withHeader()
         .withEscapeChar('"')
         .withColumnSeparator(',');
