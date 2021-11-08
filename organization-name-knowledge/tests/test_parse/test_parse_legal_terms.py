@@ -3,8 +3,8 @@ from typing import List
 
 import pytest
 
-from organization_name_knowledge.names.parse.parse import parse_name
 from organization_name_knowledge.knowledge_base.legal_terms import LegalTerms
+from organization_name_knowledge.names.parse.parse import parse_name
 
 
 def test_basic_legal_terms():

@@ -1,8 +1,7 @@
 import json
 import pathlib
-from typing import List, Mapping, Set
-
 from importlib import resources
+from typing import List, Mapping, Set
 
 from organization_name_knowledge.knowledge_base.common_terms import CommonTerms
 from organization_name_knowledge.knowledge_base.countries import Countries
@@ -74,7 +73,7 @@ class KnowledgeBase:
         return cls.get("legal_terms", LegalTerms)
 
     @classproperty
-    def countries(cls) -> LegalTerms:
+    def countries(cls) -> Countries:
         return cls.get("countries", Countries)
 
     @classproperty

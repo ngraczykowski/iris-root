@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Mapping, NamedTuple, Sequence, Set, Tuple
 
 from organization_name_knowledge.knowledge_base.term_sources import TermSources
 from organization_name_knowledge.utils.clear_name import clear_name, divide
-from organization_name_knowledge.utils.term_variants import term_variants
+from organization_name_knowledge.utils.term_variants import get_term_variants
 
 
 class LegalTermJsonEntity(NamedTuple):
@@ -52,7 +52,7 @@ class LegalTerms:
                     tuple(filter(None, map(clear_name, divide(n))))
                     for n in (
                         *itertools.chain.from_iterable(
-                            term_variants(n) for n in entity_data.get("abbreviations", ())
+                            get_term_variants(n) for n in entity_data.get("abbreviations", ())
                         ),
                         clear_name(entity_name),
                     )
