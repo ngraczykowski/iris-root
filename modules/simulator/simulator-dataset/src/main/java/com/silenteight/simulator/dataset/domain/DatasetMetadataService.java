@@ -63,6 +63,18 @@ public class DatasetMetadataService {
     log.debug("Saved as 'ARCHIVED' DatasetEntity={}", datasetEntity);
   }
 
+  @Transactional
+  public void expire(@NonNull Collection<String> externalResourceNames) {
+    repository
+        .findAllByExternalResourceNameIn(externalResourceNames)
+        .forEach(DatasetMetadataService::expire);
+  }
+
+  private static void expire(@NonNull DatasetEntity datasetEntity) {
+    datasetEntity.expire();
+    log.debug("Saved as 'EXPIRED' DatasetEntity={}", datasetEntity);
+  }
+
   private DatasetEntity getByDatasetId(@NonNull UUID datasetId) {
     return repository
         .findByDatasetId(datasetId)

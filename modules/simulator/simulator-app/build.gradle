@@ -27,6 +27,7 @@ dependencies {
   implementation project(":simulator-db-changelog")
   implementation project(":simulator-management")
   implementation project(":simulator-processing")
+  implementation project(":simulator-retention")
 
   implementation libraries.silenteight_audit_bs
   implementation libraries.silenteight_sep_base_common

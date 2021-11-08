@@ -45,6 +45,15 @@ class BrokerConfiguration {
             properties.indexResponseRoutingKey()));
   }
 
+  @Bean
+  Declarables datasetExpiredBinding() {
+    return new Declarables(
+        binding(
+            properties.datasetExpiredQueueName(),
+            AE_EVENT_EXCHANGE,
+            properties.datasetExpiredRoutingKey()));
+  }
+
   private static Binding binding(String queueName, String exchange, String routingKey) {
     return new Binding(queueName, QUEUE, exchange, routingKey, emptyMap());
   }
@@ -57,6 +66,11 @@ class BrokerConfiguration {
   @Bean
   Queue indexResponseQueue() {
     return queue(properties.indexResponseQueueName());
+  }
+
+  @Bean
+  Queue datasetExpiredQueue() {
+    return queue(properties.datasetExpiredQueueName());
   }
 
   private static Queue queue(String queueName) {

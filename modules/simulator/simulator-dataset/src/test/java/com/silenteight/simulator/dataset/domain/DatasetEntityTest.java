@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import static com.silenteight.simulator.dataset.domain.DatasetState.ACTIVE;
 import static com.silenteight.simulator.dataset.domain.DatasetState.ARCHIVED;
+import static com.silenteight.simulator.dataset.domain.DatasetState.EXPIRED;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.CREATED_BY;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.DATASET_NAME;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.EXTERNAL_RESOURCE_NAME;
@@ -30,7 +31,7 @@ class DatasetEntityTest {
   }
 
   @ParameterizedTest
-  @EnumSource(value = DatasetState.class, names = { "ARCHIVED" })
+  @EnumSource(value = DatasetState.class, names = { "ARCHIVED", "EXPIRED" })
   void shouldThrowExceptionWhenNotInStateForArchive(DatasetState state) {
     // given
     DatasetEntity dataset = createDatasetEntity(state);
@@ -40,6 +41,19 @@ class DatasetEntityTest {
         dataset::archive)
         .isInstanceOf(DatasetNotInProperStateException.class)
         .hasMessage(format("Dataset should be in state: %s.", ACTIVE));
+  }
+
+  @ParameterizedTest
+  @EnumSource(value = DatasetState.class, names = { "ACTIVE", "ARCHIVED", "EXPIRED" })
+  void shouldExpire(DatasetState state) {
+    // given
+    DatasetEntity dataset = createDatasetEntity(state);
+
+    // when
+    dataset.expire();
+
+    // then
+    assertThat(dataset.getState()).isEqualTo(EXPIRED);
   }
 
   private DatasetEntity createDatasetEntity(DatasetState state) {

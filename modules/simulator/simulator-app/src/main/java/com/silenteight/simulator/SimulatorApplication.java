@@ -12,6 +12,7 @@ import com.silenteight.simulator.dataset.DatasetModule;
 import com.silenteight.simulator.grpc.GrpcModule;
 import com.silenteight.simulator.management.ManagementModule;
 import com.silenteight.simulator.processing.ProcessingModule;
+import com.silenteight.simulator.retention.RetentionModule;
 
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -31,6 +32,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     DatasetModule.class,
     ManagementModule.class,
     ProcessingModule.class,
+    RetentionModule.class,
     // Interface modules
     AmqpCommonModule.class,
     AuthenticationModule.class,

@@ -2,5 +2,5 @@ package com.silenteight.simulator.dataset.domain;
 
 public enum DatasetState {
 
-  ACTIVE, ARCHIVED
+  ACTIVE, ARCHIVED, EXPIRED
 }

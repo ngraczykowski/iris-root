@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -100,6 +101,18 @@ class SimulationQueryTest extends BaseDataJpaTest {
     assertThatThrownBy(() -> underTest.get(ANALYSIS_NAME))
         .isInstanceOf(SimulationNotFoundException.class)
         .hasMessageContaining("analysisName=" + ANALYSIS_NAME);
+  }
+
+  @Test
+  void shouldGetAnalysisNames() {
+    // given
+    persistSimulation(ID, PENDING_STATE);
+
+    // when
+    Collection<String> result = underTest.getAnalysisNames(DATASETS);
+
+    // then
+    assertThat(result).isEqualTo(List.of(ANALYSIS_NAME));
   }
 
   private static void assertSimulation(SimulationDto result) {

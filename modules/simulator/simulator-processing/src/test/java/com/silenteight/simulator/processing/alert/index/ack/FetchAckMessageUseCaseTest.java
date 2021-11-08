@@ -36,6 +36,7 @@ class FetchAckMessageUseCaseTest {
     doNothing().when(indexedAlertService).ack(any());
     when(indexedAlertQuery.getAnalysisNameByRequestId(any())).thenReturn(ANALYSIS_NAME);
     when(indexedAlertQuery.count(ANALYSIS_NAME, of(SENT))).thenReturn(0L);
+
     // when
     underTest.handle(INDEX_RESPONSE);
 
