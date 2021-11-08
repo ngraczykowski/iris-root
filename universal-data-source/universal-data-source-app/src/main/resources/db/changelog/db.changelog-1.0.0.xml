@@ -121,4 +121,11 @@
       <column name="feature"/>
     </createIndex>
   </changeSet>
+
+  <changeSet id="universal-datasource-1.0.0-5" author="jgajewski">
+    <modifyDataType
+        columnName="agent_input_type"
+        newDataType="VARCHAR(150)"
+        tableName="uds_feature_input"/>
+  </changeSet>
 </databaseChangeLog>

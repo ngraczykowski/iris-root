@@ -4,34 +4,48 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsResponse;
+import com.silenteight.datasource.api.allowlist.v1.AllowListFeatureInput;
 import com.silenteight.datasource.api.allowlist.v1.BatchGetMatchAllowListInputsRequest;
 import com.silenteight.datasource.api.allowlist.v1.BatchGetMatchAllowListInputsResponse;
+import com.silenteight.datasource.api.bankidentificationcodes.v1.BankIdentificationCodesFeatureInput;
 import com.silenteight.datasource.api.bankidentificationcodes.v1.BatchGetMatchBankIdentificationCodesInputsRequest;
 import com.silenteight.datasource.api.bankidentificationcodes.v1.BatchGetMatchBankIdentificationCodesInputsResponse;
 import com.silenteight.datasource.api.country.v1.BatchGetMatchCountryInputsRequest;
 import com.silenteight.datasource.api.country.v1.BatchGetMatchCountryInputsResponse;
+import com.silenteight.datasource.api.country.v1.CountryFeatureInput;
 import com.silenteight.datasource.api.date.v1.BatchGetMatchDateInputsRequest;
 import com.silenteight.datasource.api.date.v1.BatchGetMatchDateInputsResponse;
+import com.silenteight.datasource.api.date.v1.DateFeatureInput;
 import com.silenteight.datasource.api.document.v1.BatchGetMatchDocumentInputsRequest;
 import com.silenteight.datasource.api.document.v1.BatchGetMatchDocumentInputsResponse;
+import com.silenteight.datasource.api.document.v1.DocumentFeatureInput;
 import com.silenteight.datasource.api.event.v1.BatchGetMatchEventInputsRequest;
 import com.silenteight.datasource.api.event.v1.BatchGetMatchEventInputsResponse;
+import com.silenteight.datasource.api.event.v1.EventFeatureInput;
 import com.silenteight.datasource.api.freetext.v1.BatchGetMatchFreeTextInputsRequest;
 import com.silenteight.datasource.api.freetext.v1.BatchGetMatchFreeTextInputsResponse;
+import com.silenteight.datasource.api.freetext.v1.FreeTextFeatureInput;
 import com.silenteight.datasource.api.gender.v1.BatchGetMatchGenderInputsRequest;
 import com.silenteight.datasource.api.gender.v1.BatchGetMatchGenderInputsResponse;
+import com.silenteight.datasource.api.gender.v1.GenderFeatureInput;
 import com.silenteight.datasource.api.historicaldecisions.v1.BatchGetMatchHistoricalDecisionsInputsRequest;
 import com.silenteight.datasource.api.historicaldecisions.v1.BatchGetMatchHistoricalDecisionsInputsResponse;
+import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisionsInput.HistoricalDecisionsFeatureInput;
 import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsRequest;
 import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsResponse;
+import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsResponse.Feature;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsRequest;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsResponse;
+import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
 import com.silenteight.datasource.api.name.v1.BatchGetMatchNameInputsRequest;
 import com.silenteight.datasource.api.name.v1.BatchGetMatchNameInputsResponse;
+import com.silenteight.datasource.api.name.v1.NameFeatureInput;
 import com.silenteight.datasource.api.nationalid.v1.BatchGetMatchNationalIdInputsRequest;
 import com.silenteight.datasource.api.nationalid.v1.BatchGetMatchNationalIdInputsResponse;
+import com.silenteight.datasource.api.nationalid.v1.NationalIdFeatureInput;
 import com.silenteight.datasource.api.transaction.v1.BatchGetMatchTransactionInputsRequest;
 import com.silenteight.datasource.api.transaction.v1.BatchGetMatchTransactionInputsResponse;
+import com.silenteight.datasource.api.transaction.v1.TransactionFeatureInput;
 import com.silenteight.universaldatasource.app.feature.model.BatchFeatureRequest;
 import com.silenteight.universaldatasource.app.feature.port.incoming.BatchCreateMatchFeaturesUseCase;
 import com.silenteight.universaldatasource.app.feature.port.incoming.BatchGetFeatureInputUseCase;
@@ -45,21 +59,23 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 class FeatureAdapter {
 
-  private static final String LOCATION_FEATURE_INPUT = "LocationFeatureInput";
-  private static final String NAME_FEATURE_INPUT = "NameFeatureInput";
-  private static final String FREE_TEXT_INPUT = "FreeTextFeatureInput";
-  private static final String ALLOW_LIST_INPUT = "AllowListFeatureInput";
-  private static final String COUNTRY_INPUT = "CountryFeatureInput";
-  private static final String DATE_INPUT = "DateFeatureInput";
-  private static final String DOCUMENT_INPUT = "DocumentFeatureInput";
-  private static final String EVENT_INPUT = "EventFeatureInput";
-  private static final String GENDER_INPUT = "GenderFeatureInput";
-  private static final String HISTORICAL_DECISIONS_INPUT = "HistoricalDecisionsFeatureInput";
-  private static final String IS_PEP_INPUT = "Feature";
-  private static final String NATIONAL_ID_INPUT = "NationalIdFeatureInput";
-  private static final String TRANSACTION_INPUT = "TransactionFeatureInput";
+  private static final String LOCATION_FEATURE_INPUT =
+      LocationFeatureInput.class.getCanonicalName();
+  private static final String NAME_FEATURE_INPUT = NameFeatureInput.class.getCanonicalName();
+  private static final String FREE_TEXT_INPUT = FreeTextFeatureInput.class.getCanonicalName();
+  private static final String ALLOW_LIST_INPUT = AllowListFeatureInput.class.getCanonicalName();
+  private static final String COUNTRY_INPUT = CountryFeatureInput.class.getCanonicalName();
+  private static final String DATE_INPUT = DateFeatureInput.class.getCanonicalName();
+  private static final String DOCUMENT_INPUT = DocumentFeatureInput.class.getCanonicalName();
+  private static final String EVENT_INPUT = EventFeatureInput.class.getCanonicalName();
+  private static final String GENDER_INPUT = GenderFeatureInput.class.getCanonicalName();
+  private static final String HISTORICAL_DECISIONS_INPUT =
+      HistoricalDecisionsFeatureInput.class.getCanonicalName();
+  private static final String IS_PEP_INPUT = Feature.class.getCanonicalName();
+  private static final String NATIONAL_ID_INPUT = NationalIdFeatureInput.class.getCanonicalName();
+  private static final String TRANSACTION_INPUT = TransactionFeatureInput.class.getCanonicalName();
   private static final String BANK_IDENTIFICATION_CODES_INPUT =
-      "BankIdentificationCodesFeatureInput";
+      BankIdentificationCodesFeatureInput.class.getCanonicalName();
 
   private final BatchGetFeatureInputUseCase getUseCase;
   private final BatchCreateMatchFeaturesUseCase addUseCase;

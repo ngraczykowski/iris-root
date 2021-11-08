@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase {
 
   private static final int MAX_BATCH_SIZE = 4096;
+  private static final String PATH_PREFIX = "com.";
 
   private final MessageRegistry messageRegistry;
   private final FeatureDataAccess dataAccess;
@@ -84,8 +85,12 @@ class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase
     var featureInputMessage = getFeatureInputClass(agentFeatureInput);
     var agentInputJson = messageRegistry.toJson(featureInputMessage);
 
-    return new MatchFeatureInput(agentInput.getMatch(), featureInput.getFeature(),
-        featureInputMessage.getClass().getSimpleName(), agentInputJson);
+    return MatchFeatureInput.builder()
+        .match(agentInput.getMatch())
+        .feature(featureInput.getFeature())
+        .agentInputType(getAgentInputType(agentFeatureInput.getTypeUrl()))
+        .agentInput(agentInputJson)
+        .build();
   }
 
   private Message getFeatureInputClass(Any agentFeatureInput) throws
@@ -98,13 +103,13 @@ class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase
   }
 
   private static String getAgentInputClassName(String classTypeUrl) {
-    var arrayOfClassPath = classTypeUrl.split("\\.");
+    var arrayOfClassPath = classTypeUrl.split("/");
 
     if (arrayOfClassPath.length < 1)
       throw new NoSuchElementException(
           "No class was found for agent input type, with url: " + classTypeUrl);
 
-    return arrayOfClassPath[arrayOfClassPath.length - 1];
+    return PATH_PREFIX + arrayOfClassPath[arrayOfClassPath.length - 1];
   }
 
   private FeatureMapper getFeatureMapper(String featureInputType) {
@@ -113,5 +118,10 @@ class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase
           "Agent name read from agent_feature_input not found: " + featureInputType);
 
     return mappers.get(featureInputType);
+  }
+
+  private String getAgentInputType(String classTypeUrl) {
+    var arrayOfClassPath = classTypeUrl.split("/");
+    return PATH_PREFIX + arrayOfClassPath[1];
   }
 }

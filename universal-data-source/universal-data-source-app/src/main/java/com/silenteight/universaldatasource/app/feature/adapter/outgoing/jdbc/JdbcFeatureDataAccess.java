@@ -20,6 +20,8 @@ class JdbcFeatureDataAccess implements FeatureDataAccess {
 
   private final StreamFeaturesQuery streamFeaturesQuery;
   private final InsertFeatureQuery insertFeatureQuery;
+  private final UpdateAgentInputTypeQuery updateAgentInputTypeQuery;
+  private final SelectOldAgentInputTypeQuery selectOldAgentInputTypeQuery;
 
   @Override
   @Transactional
@@ -33,4 +35,14 @@ class JdbcFeatureDataAccess implements FeatureDataAccess {
     return streamFeaturesQuery.execute(batchFeatureRequest, consumer);
   }
 
+  @Override
+  @Transactional
+  public int updateAgentInputType() {
+    return updateAgentInputTypeQuery.execute();
+  }
+
+  @Override
+  public int isAgentInputTypeUpdated() {
+    return selectOldAgentInputTypeQuery.execute();
+  }
 }

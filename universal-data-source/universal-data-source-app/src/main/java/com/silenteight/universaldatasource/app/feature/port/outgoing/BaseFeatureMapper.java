@@ -15,7 +15,7 @@ public abstract class BaseFeatureMapper<T extends Message> implements FeatureMap
   private final String className;
 
   protected BaseFeatureMapper(Class<T> featureInputType) {
-    this.className = featureInputType.getSimpleName();
+    this.className = featureInputType.getCanonicalName();
   }
 
   @Override

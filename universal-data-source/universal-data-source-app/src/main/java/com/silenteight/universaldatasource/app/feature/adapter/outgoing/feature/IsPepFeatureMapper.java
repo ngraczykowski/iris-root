@@ -20,7 +20,7 @@ class IsPepFeatureMapper implements FeatureMapper {
 
   @Override
   public String getType() {
-    return Feature.class.getSimpleName();
+    return Feature.class.getCanonicalName();
   }
 
   @Override
