@@ -46,7 +46,8 @@ TEST_CASES = [
     },
 ]
 
-GRPC_ADDRESS = "localhost:9090"
+PORT = 9090
+GRPC_ADDRESS = f"localhost:{PORT}"
 
 
 def grpc_server_on(channel) -> bool:
@@ -59,7 +60,8 @@ def grpc_server_on(channel) -> bool:
 
 
 class TestServer(unittest.TestCase):
-    def wait_for_server(self):
+    @staticmethod
+    def wait_for_server():
         channel = grpc.insecure_channel(GRPC_ADDRESS)
         counter = 0
         while counter < 10 and not grpc_server_on(channel):
@@ -68,7 +70,18 @@ class TestServer(unittest.TestCase):
         if counter == 10:
             raise ServerIsNotRunning("Check server and if package is installed")
 
+    @staticmethod
+    def kill_process_on_the_port():
+        kill = subprocess.Popen(
+            f"kill -9 $(netstat -ltnp | "
+            "grep -w :{PORT} | "
+            "awk '{ print $7 }' | "
+            "grep -o '[0-9]\+' )".split()
+        )
+        kill.wait()
+
     def setUp(self):
+        self.kill_process_on_the_port()
         self.server_process = subprocess.Popen(
             "python bank_identification_codes_agent -v --grpc".split()
         )

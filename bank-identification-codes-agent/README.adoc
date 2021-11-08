@@ -7,7 +7,7 @@ Previously known as Search Code Mismatch Agent.
 Module needs python >= 3.7.
 
 * from source:
-pip install .
+pip install -e .
 
 * from PiPY:
 pip install bank-identification-codes-agent
@@ -18,8 +18,7 @@ https://jenkins.silenteight.com/job/id-mismatch-agent/job/master/
 
 == Protobufs
 Protobufs are available in:
-https://gitlab.silenteight.com/ro/agents-api/-/blob/master/protocol-agents/src/main/proto/\
-silenteight/agent/bankidentificationcodes/v1/api/bank_identification_codes_agent.proto
+https://gitlab.silenteight.com/ro/agents-api/-/blob/master/protocol-agents/src/main/proto/silenteight/agent/bankidentificationcodes/v1/api/bank_identification_codes_agent.proto
 
 === Execution
  python -m bank_identification_codes_agent [options]
