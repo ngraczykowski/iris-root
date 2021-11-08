@@ -34,6 +34,7 @@ class BulkRestController {
   private final StoreBulkUseCase storeBulkUseCase;
 
   @PostMapping("/{batchId}/recommend")
+  @Timed(value = "http_server_requests_recommend", histogram = true)
   public ResponseEntity<BatchAcceptedResponse> receiveBatch(
       @PathVariable String batchId, HttpServletRequest request) throws IOException {
     storeBulkUseCase.handle(
@@ -47,6 +48,7 @@ class BulkRestController {
   }
 
   @PostMapping("/{batchId}/learning")
+  @Timed(value = "http_server_requests_learning", histogram = true)
   public ResponseEntity<BatchAcceptedResponse> receiveLearningBatch(
       @PathVariable String batchId, HttpServletRequest request) throws IOException {
     storeBulkUseCase.handle(

@@ -22,7 +22,7 @@ class RecommendationGeneratedListener {
   private final ApplicationEventPublisher eventPublisher;
 
   @RabbitListener(queues = "${silenteight.bridge.amqp.ingoing.recommendations-queue}")
-  @Timed(histogram = true)
+  @Timed(value = "recommendation_generated_on_recommendation", histogram = true)
   void onRecommendation(RecommendationsGenerated recommendation) {
     log.debug("Received RecommendationsGenerated amqp message for analysis={}", recommendation.getAnalysis());
 

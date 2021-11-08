@@ -217,3 +217,20 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+    distribution:
+      minimum-expected-value:
+        http_server_requests_recommend: 500ms
+        http_server_requests_learning: 500ms
+        alert_processor_pre_process_alerts_within_solving_bulk: 500ms
+        alert_processor_pre_process_alerts_within_learning_bulk: 500ms
+        bulk_processor_try_to_process_solving_bulk: 1s
+        bulk_processor_try_to_process_learning_bulk: 1s
+        recommendation_generated_on_recommendation: 1s
+      maximum-expected-value:
+        http_server_requests_recommend: 20m
+        http_server_requests_learning: 20m
+        alert_processor_pre_process_alerts_within_solving_bulk: 20m
+        alert_processor_pre_process_alerts_within_learning_bulk: 20m
+        bulk_processor_try_to_process_solving_bulk: 20m
+        bulk_processor_try_to_process_learning_bulk: 20m
+        recommendation_generated_on_recommendation: 20m

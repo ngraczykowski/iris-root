@@ -23,7 +23,7 @@ class AlertProcessor {
   private final MatchFacade matchFacade;
   private final AlertTimeCalculator alertTimeCalculator;
 
-  @Timed(histogram = true)
+  @Timed(value = "alert_processor_pre_process_alerts_within_solving_bulk", histogram = true)
   @Transactional
   public void preProcessAlertsWithinSolvingBulk(@NonNull String bulkId) {
     log.info("Pre-processing solving alerts, batchId: {}", bulkId);
@@ -31,7 +31,7 @@ class AlertProcessor {
     log.info("Solving alerts pre-processing has been completed, batchId: {}", bulkId);
   }
 
-  @Timed(histogram = true)
+  @Timed(value = "alert_processor_pre_process_alerts_within_learning_bulk", histogram = true)
   @Transactional
   public void preProcessAlertsWithinLearningBulk(@NonNull String bulkId) {
     log.info("Pre-processing learning alerts, batchId: {}", bulkId);

@@ -29,7 +29,7 @@ class BulkProcessor {
   private final BulkRepository bulkRepository;
 
   @Transactional
-  @Timed(histogram = true)
+  @Timed(value = "bulk_processor_try_to_process_solving_bulk", histogram = true)
   public void tryToProcessSolvingBulk() {
     bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSING).ifPresent(bulk -> {
       log.debug("Pre_Processing solving batch taken to process id: {}", bulk.getId());
@@ -44,7 +44,7 @@ class BulkProcessor {
   }
 
   @Transactional
-  @Timed(histogram = true)
+  @Timed(value = "bulk_processor_try_to_process_learning_bulk",histogram = true)
   public void tryToProcessLearningBulk() {
     bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSING).ifPresent(bulk -> {
       log.debug("Pre_Processing learning batch taken to process id: {}", bulk.getId());
