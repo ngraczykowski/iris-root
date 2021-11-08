@@ -13,9 +13,18 @@ interface DatasetEntityRepository extends Repository<DatasetEntity, Long> {
 
   Collection<DatasetEntity> findAll();
 
-  Collection<DatasetEntity> findAllByState(DatasetState state);
+  Collection<DatasetEntity> findAllByStateIn(Collection<DatasetState> states);
+
+  Collection<DatasetEntity> findAllByExternalResourceNameIn(
+      Collection<String> externalResourceNames);
 
   Optional<DatasetEntity> findByDatasetId(UUID datasetId);
+
+  @Query("SELECT d.datasetId"
+      + " FROM DatasetEntity d"
+      + " WHERE d.externalResourceName IN :externalResourceNames")
+  Collection<UUID> findAllDatasetIdsByExternalResourceNameIn(
+      Collection<String> externalResourceNames);
 
   @Query("SELECT SUM(d.initialAlertCount)"
       + " FROM DatasetEntity d"

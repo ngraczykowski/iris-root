@@ -20,6 +20,7 @@ import static com.silenteight.simulator.dataset.common.DatasetResource.toResourc
 import static com.silenteight.simulator.dataset.domain.DatasetLabelName.COUNTRY;
 import static com.silenteight.simulator.dataset.domain.DatasetState.ACTIVE;
 import static com.silenteight.simulator.dataset.domain.DatasetState.ARCHIVED;
+import static com.silenteight.simulator.dataset.domain.DatasetState.EXPIRED;
 import static java.util.Collections.emptyList;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -92,6 +93,10 @@ class DatasetEntity extends BaseEntity implements Serializable {
   void archive() {
     assertInState(ACTIVE);
     this.state = ARCHIVED;
+  }
+
+  void expire() {
+    this.state = EXPIRED;
   }
 
   private void assertInState(DatasetState requiredState) {

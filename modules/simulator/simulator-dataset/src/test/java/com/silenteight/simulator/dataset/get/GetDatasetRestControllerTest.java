@@ -36,7 +36,7 @@ class GetDatasetRestControllerTest extends BaseRestControllerTest {
     get(GET_DATASET_URL)
         .statusCode(OK.value())
         .body("id", is(ID_1.toString()))
-        .body("name", is(RESOURCE_NAME))
+        .body("name", is(RESOURCE_NAME_1))
         .body("datasetName", is(DATASET_NAME))
         .body("description", is(DESCRIPTION))
         .body("state", is(STATE.toString()))

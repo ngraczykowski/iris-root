@@ -7,6 +7,16 @@ simulator:
       index-response:
         queue-name: sim.index-response.simulation
         routing-key: event.index-response.simulation
+      dataset-expired:
+        queue-name: sim.dataset-expired
+        routing-key: ae.event.datasets-expired
+
+  retention:
+    dataset-expired-inbound:
+      queue-name: ${simulator.messaging.broker.dataset-expired.queue-name}
+    simulation-expired-outbound:
+      exchange: sim.command
+      routing-key: command.analysis-expired
 
   processing:
     alert:

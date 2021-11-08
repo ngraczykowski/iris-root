@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.silenteight.simulator.common.web.rest.RestConstants.ROOT;
+import static java.util.Optional.ofNullable;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -29,7 +32,15 @@ class ListDatasetRestController {
 
   @GetMapping("/v1/datasets")
   @PreAuthorize("isAuthorized('LIST_DATASETS')")
-  public ResponseEntity<List<DatasetDto>> list(@RequestParam(required = false) DatasetState state) {
-    return ok(datasetQuery.list(state));
+  public ResponseEntity<List<DatasetDto>> list(
+      @RequestParam(required = false) DatasetState... state) {
+
+    return ok(datasetQuery.list(asSet(state)));
+  }
+
+  private static Set<DatasetState> asSet(DatasetState... state) {
+    return ofNullable(state)
+        .map(Set::of)
+        .orElse(new HashSet<>());
   }
 }

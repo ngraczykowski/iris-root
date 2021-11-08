@@ -19,7 +19,7 @@ import static com.silenteight.simulator.processing.alert.index.amqp.gateway.Gate
 @Configuration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(AlertIndexProperties.class)
-class ListenerConfiguration {
+class AlertIndexListenerConfiguration {
 
   public static final String RECOMMENDATIONS_INBOUND_CHANNEL = "recommendationsInboundChannel";
   public static final String ACK_MESSAGES_INBOUND_CHANNEL = "ackMessagesInboundChannel";

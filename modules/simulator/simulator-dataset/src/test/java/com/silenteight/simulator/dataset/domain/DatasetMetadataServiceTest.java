@@ -11,12 +11,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 import static com.silenteight.simulator.dataset.domain.DatasetState.ACTIVE;
 import static com.silenteight.simulator.dataset.domain.DatasetState.ARCHIVED;
+import static com.silenteight.simulator.dataset.domain.DatasetState.EXPIRED;
 import static com.silenteight.simulator.dataset.fixture.DatasetFixtures.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -49,10 +51,10 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
   void countAllAlerts() {
     // given
     persistDataset(ID_1, ALERTS_COUNT);
-    persistDataset(SECOND_ID, SECOND_ALERTS_COUNT);
+    persistDataset(ID_2, SECOND_ALERTS_COUNT);
 
     // when
-    long result = underTest.countAllAlerts(Set.of(RESOURCE_NAME, SECOND_RESOURCE_NAME));
+    long result = underTest.countAllAlerts(Set.of(RESOURCE_NAME_1, RESOURCE_NAME_2));
 
     // then
     assertThat(result).isEqualTo(ALERTS_COUNT + SECOND_ALERTS_COUNT);
@@ -76,6 +78,19 @@ class DatasetMetadataServiceTest extends BaseDataJpaTest {
     assertThatThrownBy(() -> underTest.archive(ID_1))
         .isInstanceOf(DatasetNotFoundException.class)
         .hasMessageContaining("datasetId=" + ID_1);
+  }
+
+  @Test
+  void shouldExpire() {
+    // given
+    DatasetEntity dataset = persistDataset(ID_1, ALERTS_COUNT);
+
+    // when
+    underTest.expire(List.of(EXTERNAL_RESOURCE_NAME));
+
+    // then
+    DatasetEntity savedDataset = entityManager.find(DatasetEntity.class, dataset.getId());
+    assertThat(savedDataset.getState()).isEqualTo(EXPIRED);
   }
 
   private static CreateDatasetRequest makeCreateDatasetRequest() {

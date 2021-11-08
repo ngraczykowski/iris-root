@@ -34,9 +34,9 @@ public final class DatasetFixtures {
   public static final UUID ID_3 = fromString("794d362c-0a1d-4794-ae71-ac715bf956f3");
   public static final UUID ID_4 = fromString("f36a59e8-5793-4053-86b4-01dca35b9e63");
   public static final UUID ID_5 = fromString("0258e788-793a-45e6-b577-858283ee6165");
-  public static final UUID SECOND_ID = fromString("d17b4708-6fde-8dc0-4832-d17b4708d8ca");
-  public static final String RESOURCE_NAME = "datasets/" + ID_1;
-  public static final String SECOND_RESOURCE_NAME = "datasets/" + SECOND_ID;
+  public static final UUID ID_6 = fromString("b95eb010-7f98-45b1-8c13-78eee94923fc");
+  public static final String RESOURCE_NAME_1 = "datasets/" + ID_1;
+  public static final String RESOURCE_NAME_2 = "datasets/" + ID_2;
   public static final String DATASET_NAME = "Dataset name";
   public static final String DESCRIPTION = "Dataset description";
   public static final String EXTERNAL_RESOURCE_NAME =
@@ -65,7 +65,7 @@ public final class DatasetFixtures {
 
   public static final DatasetDto DATASET_DTO = DatasetDto.builder()
       .id(ID_1)
-      .name(RESOURCE_NAME)
+      .name(RESOURCE_NAME_1)
       .datasetName(DATASET_NAME)
       .description(DESCRIPTION)
       .state(STATE)
