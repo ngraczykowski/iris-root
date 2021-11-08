@@ -73,7 +73,7 @@ class KnowledgeBase:
         return cls.get("legal_terms", LegalTerms)
 
     @classproperty
-    def countries(cls) -> LegalTerms:
+    def countries(cls) -> Countries:
         return cls.get("countries", Countries)
 
     @classproperty
