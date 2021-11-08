@@ -3,7 +3,7 @@ package com.silenteight.hsbc.datasource.grpc;
 import com.silenteight.hsbc.datasource.dto.ispep.ReasonDto;
 import com.silenteight.hsbc.datasource.extractors.ispep.*;
 
-import static java.util.List.of;
+import java.util.List;
 
 class IsPepServiceClientMock implements IsPepServiceClient {
 
@@ -19,7 +19,7 @@ class IsPepServiceClientMock implements IsPepServiceClient {
   public GetModelFieldNamesResponseDto getModelFieldNames(
       GetModelFieldNamesRequestDto getModelFieldNamesRequest) {
     return GetModelFieldNamesResponseDto.builder()
-        .fieldNames(of(""))
+        .fieldNames(List.of(""))
         .version("")
         .regionName("")
         .build();
@@ -28,10 +28,10 @@ class IsPepServiceClientMock implements IsPepServiceClient {
   private ReasonDto createReason() {
     return ReasonDto.builder()
         .message("")
-        .noPepPositions(of(""))
-        .notMatchedPositions(of(""))
-        .pepPositions(of(""))
-        .linkedPepsUids(of(""))
+        .noPepPositions(List.of(""))
+        .notMatchedPositions(List.of(""))
+        .pepPositions(List.of(""))
+        .linkedPepsUids(List.of(""))
         .numberOfNotPepDecisions(0)
         .numberOfPepDecisions(0)
         .version("")

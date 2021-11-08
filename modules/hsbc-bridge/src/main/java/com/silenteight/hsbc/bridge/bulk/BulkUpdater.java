@@ -6,12 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.ERROR;
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSED;
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSING;
-
-
 @RequiredArgsConstructor
 @Slf4j
 class BulkUpdater {
@@ -31,7 +25,7 @@ class BulkUpdater {
   @Transactional
   public void updateWithCompletedStatus(@NonNull String analysis) {
     bulkRepository.findByAnalysisName(analysis).ifPresent(bulk -> {
-      bulk.setStatus(COMPLETED);
+      bulk.setStatus(BulkStatus.COMPLETED);
       bulkRepository.save(bulk);
       log.info("Solving batch with id:{} has been completed", bulk.getId());
     });
@@ -40,7 +34,7 @@ class BulkUpdater {
   @Transactional
   public void updateWithPreProcessedStatus(@NonNull String bulkId) {
     bulkRepository.findById(bulkId).ifPresent(b -> {
-      b.setStatus(PRE_PROCESSED);
+      b.setStatus(BulkStatus.PRE_PROCESSED);
       bulkRepository.save(b);
       log.info("Set batch with id:{} status PRE_PROCESSED", bulkId);
     });
@@ -49,7 +43,7 @@ class BulkUpdater {
   @Transactional
   public void updateWithPreProcessingStatus(@NonNull String bulkId) {
     bulkRepository.findById(bulkId).ifPresent(b -> {
-      b.setStatus(PRE_PROCESSING);
+      b.setStatus(BulkStatus.PRE_PROCESSING);
       bulkRepository.save(b);
       log.info("Set batch with id:{} status PRE_PROCESSING", bulkId);
     });
@@ -58,7 +52,7 @@ class BulkUpdater {
   @Transactional
   public void updateWithUnavailableRecommendation(String analysis) {
     bulkRepository.findByAnalysisName(analysis).ifPresent(bulk -> {
-      bulk.setStatus(ERROR);
+      bulk.setStatus(BulkStatus.ERROR);
       bulkRepository.save(bulk);
       log.error("Set batch with id:{} status ERROR", bulk.getId());
     });

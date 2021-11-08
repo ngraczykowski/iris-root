@@ -14,9 +14,8 @@ import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
 import java.util.Map;
-
-import static java.util.Objects.nonNull;
-import static java.util.stream.Collectors.toList;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @GrpcService
 @RequiredArgsConstructor
@@ -49,13 +48,13 @@ class CommentInputGrpcService extends CommentInputServiceImplBase {
             .setAlertCommentInput(toStruct(commentInputDto.getAlertCommentInput()))
             .addAllMatchCommentInputs(mapToMatchCommentInputs(commentInputDto))
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private static Struct toStruct(Map<String, String> commentData) {
     var builder = Struct.newBuilder();
     commentData.forEach((k,v) -> {
-      if (nonNull(v)) {
+      if (Objects.nonNull(v)) {
         builder.putFields(k, Value.newBuilder().setStringValue(v).build());
       }
     });
@@ -68,6 +67,6 @@ class CommentInputGrpcService extends CommentInputServiceImplBase {
             .setMatch(matchCommentInputDto.getMatch())
             .setCommentInput(Struct.getDefaultInstance())
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 }

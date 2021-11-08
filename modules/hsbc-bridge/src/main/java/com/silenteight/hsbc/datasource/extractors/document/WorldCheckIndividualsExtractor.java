@@ -7,13 +7,13 @@ import com.silenteight.hsbc.datasource.extractors.common.SimpleRegexBasedExtract
 import com.silenteight.hsbc.datasource.extractors.country.NationalIdNumberFieldCountryExtractor;
 import com.silenteight.hsbc.datasource.extractors.country.PassportNumberFieldCountryExtractor;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @RequiredArgsConstructor
 class WorldCheckIndividualsExtractor {
@@ -35,7 +35,7 @@ class WorldCheckIndividualsExtractor {
   }
 
   private void extractIdNumbers(String idNumbers) {
-    if (isEmpty(idNumbers)) {
+    if (StringUtils.isEmpty(idNumbers)) {
       return;
     }
 
@@ -68,7 +68,7 @@ class WorldCheckIndividualsExtractor {
   }
 
   private void extractPassportNumbers(String passportNumber) {
-    if (isEmpty(passportNumber)) {
+    if (StringUtils.isEmpty(passportNumber)) {
       return;
     }
 
@@ -83,7 +83,7 @@ class WorldCheckIndividualsExtractor {
   }
 
   private void extractPassportCountries(String passportCountry) {
-    if (isEmpty(passportCountry)) {
+    if (StringUtils.isEmpty(passportCountry)) {
       return;
     }
     var splitPassportNumbers = passportCountry.split(";");

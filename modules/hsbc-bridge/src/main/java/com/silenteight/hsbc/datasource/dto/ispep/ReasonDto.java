@@ -4,8 +4,7 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.util.Collection;
-
-import static java.util.Collections.emptyList;
+import java.util.Collections;
 
 @Builder
 @Value
@@ -13,13 +12,13 @@ public class ReasonDto {
 
   String message;
   @Builder.Default
-  Collection<String> noPepPositions = emptyList();
+  Collection<String> noPepPositions = Collections.emptyList();
   @Builder.Default
-  Collection<String> notMatchedPositions = emptyList();
+  Collection<String> notMatchedPositions = Collections.emptyList();
   @Builder.Default
-  Collection<String> pepPositions = emptyList();
+  Collection<String> pepPositions = Collections.emptyList();
   @Builder.Default
-  Collection<String> linkedPepsUids = emptyList();
+  Collection<String> linkedPepsUids = Collections.emptyList();
   int numberOfNotPepDecisions;
   int numberOfPepDecisions;
   String version;

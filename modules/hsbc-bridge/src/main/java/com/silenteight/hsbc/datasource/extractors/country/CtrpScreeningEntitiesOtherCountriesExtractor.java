@@ -9,8 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.stream.Stream.of;
-
 @RequiredArgsConstructor
 class CtrpScreeningEntitiesOtherCountriesExtractor {
 
@@ -25,7 +23,7 @@ class CtrpScreeningEntitiesOtherCountriesExtractor {
 
   private static Stream<String> extractCtrpScreeningEntitiesOtherCountries(
       CtrpScreening ctrpScreeningEntity) {
-    return of(
+    return Stream.of(
         ctrpScreeningEntity.getCountryName(),
         ctrpScreeningEntity.getCountryCode(),
         ctrpScreeningEntity.getCtrpValue()

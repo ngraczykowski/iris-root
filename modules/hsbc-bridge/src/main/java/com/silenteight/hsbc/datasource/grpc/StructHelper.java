@@ -7,8 +7,7 @@ import com.google.protobuf.ListValue;
 import com.google.protobuf.Value;
 
 import java.util.Collection;
-
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class StructHelper {
@@ -29,6 +28,6 @@ class StructHelper {
   private static Iterable<? extends Value> mapToValues(Collection<String> collection) {
     return collection.stream()
         .map(value -> Value.newBuilder().setStringValue(value).build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 }

@@ -9,15 +9,12 @@ import com.silenteight.hsbc.bridge.match.MatchFacade;
 import com.silenteight.hsbc.datasource.dto.ispep.IsPepInputDto;
 import com.silenteight.hsbc.datasource.dto.ispep.IsPepInputRequest;
 import com.silenteight.hsbc.datasource.feature.Feature;
+import com.silenteight.hsbc.datasource.feature.FeatureModel;
 import com.silenteight.hsbc.datasource.feature.IsPepFeatureValuesRetriever;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.silenteight.hsbc.datasource.feature.Feature.IS_PEP_V2;
-import static com.silenteight.hsbc.datasource.feature.FeatureModel.getFeatureRetriever;
-import static java.util.List.of;
-import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 public class IsPepInputProviderV2 {
@@ -35,20 +32,20 @@ public class IsPepInputProviderV2 {
   private List<IsPepInputDto> getInputs(List<MatchComposite> matches, List<String> features) {
     return matches.stream()
         .flatMap(match -> getIsPepInputs(features, match))
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private Stream<IsPepInputDto> getIsPepInputs(List<String> features, MatchComposite match) {
     return features.stream()
         .map(featureName -> (IsPepInputDto)
-            ((IsPepFeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(
+            ((IsPepFeatureValuesRetriever) FeatureModel.getFeatureRetriever(featureName)).retrieve(
                 match.getMatchData(), match.getName()));
   }
 
   private List<String> validateFeatures(List<String> features) {
     var allowedFeatures = getAllowedFeatures().stream()
         .map(Feature::getFullName)
-        .collect(toList());
+        .collect(Collectors.toList());
 
     features.forEach(feature -> {
       if (!allowedFeatures.contains(feature)) {
@@ -59,6 +56,6 @@ public class IsPepInputProviderV2 {
   }
 
   public List<Feature> getAllowedFeatures() {
-    return of(IS_PEP_V2);
+    return List.of(Feature.IS_PEP_V2);
   }
 }

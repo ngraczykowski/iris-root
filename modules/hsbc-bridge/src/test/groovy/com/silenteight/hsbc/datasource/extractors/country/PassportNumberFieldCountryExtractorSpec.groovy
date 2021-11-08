@@ -3,9 +3,6 @@ package com.silenteight.hsbc.datasource.extractors.country
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static java.util.Optional.empty
-import static java.util.Optional.of
-
 class PassportNumberFieldCountryExtractorSpec extends Specification {
 
   @Unroll
@@ -21,8 +18,8 @@ class PassportNumberFieldCountryExtractorSpec extends Specification {
 
     where:
     inputField             | expected
-    "KJ0114578 (VIET NAM)" | of("VIET NAM")
-    "KJ4514578 (IRAN)"     | of("IRAN")
-    "A501245"              | empty()
+    "KJ0114578 (VIET NAM)" | Optional.of("VIET NAM")
+    "KJ4514578 (IRAN)"     | Optional.of("IRAN")
+    "A501245"              | Optional.empty()
   }
 }

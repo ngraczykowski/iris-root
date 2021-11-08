@@ -7,6 +7,7 @@ import com.silenteight.adjudication.api.v2.RecommendationServiceGrpc.Recommendat
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.adjudication.api.v2.StreamRecommendationsWithMetadataRequest;
 import com.silenteight.hsbc.bridge.common.protobuf.StructMapper;
+import com.silenteight.hsbc.bridge.common.util.TimestampUtil;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationServiceClient;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationWithMetadataDto;
 import com.silenteight.hsbc.bridge.recommendation.metadata.FeatureMetadata;
@@ -20,11 +21,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import static com.silenteight.hsbc.bridge.common.util.TimestampUtil.toOffsetDateTime;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -43,7 +41,7 @@ class RecommendationGrpcAdapter implements RecommendationServiceClient {
         .build();
 
     try {
-      recommendationServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, SECONDS)
+      recommendationServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, TimeUnit.SECONDS)
           .streamRecommendationsWithMetadata(grpcRequest)
           .forEachRemaining(item -> recommendations.add(mapRecommendation(item)));
     } catch (StatusRuntimeException ex) {
@@ -62,7 +60,7 @@ class RecommendationGrpcAdapter implements RecommendationServiceClient {
     return RecommendationWithMetadataDto.builder()
         .alert(recommendation.getAlert())
         .name(recommendation.getName())
-        .date(toOffsetDateTime(recommendation.getCreateTimeOrBuilder()))
+        .date(TimestampUtil.toOffsetDateTime(recommendation.getCreateTimeOrBuilder()))
         .recommendedAction(recommendation.getRecommendedAction())
         .recommendationComment(recommendation.getRecommendationComment())
         .metadata(mapMetadata(metadata))
@@ -87,14 +85,14 @@ class RecommendationGrpcAdapter implements RecommendationServiceClient {
       matchMetadata.setReason(StructMapper.toMap(m.getReason()));
 
       return matchMetadata;
-    }).collect(toList());
+    }).collect(Collectors.toList());
   }
 
   private Map<String, FeatureMetadata> mapFeatures(
       Map<String, com.silenteight.adjudication.api.v2.RecommendationMetadata.FeatureMetadata> map) {
     return map.entrySet()
         .stream()
-        .collect(toMap(Map.Entry::getKey, e -> mapFeature(e.getValue())));
+        .collect(Collectors.toMap(Map.Entry::getKey, e -> mapFeature(e.getValue())));
   }
 
   private FeatureMetadata mapFeature(

@@ -13,13 +13,12 @@ import com.silenteight.hsbc.bridge.json.external.model.CaseInformation;
 import com.silenteight.hsbc.bridge.report.Alert;
 import com.silenteight.hsbc.bridge.report.Alert.Match;
 
+import com.google.common.base.Strings;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static com.google.common.base.Strings.nullToEmpty;
-import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -32,7 +31,7 @@ class AlertMapper {
   public Collection<Alert> toReportAlerts(@NonNull Collection<AlertDataComposite> alerts) {
     return alerts.stream()
         .map(this::mapToAlert)
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   public AlertData toAlertData(byte[] payload) {
@@ -62,24 +61,24 @@ class AlertMapper {
       public Collection<Match> getMatches() {
         return entity.getMatches().stream()
             .map(AlertMapper::mapToMatch)
-            .collect(toList());
+            .collect(Collectors.toList());
       }
     };
   }
 
   private Map<String, String> createAlertMetadata(AlertEntityDto alertEntity, AlertData alertData) {
     var map = new HashMap<String, String>();
-    map.put("id", nullToEmpty(alertEntity.getExternalId()));
+    map.put("id", Strings.nullToEmpty(alertEntity.getExternalId()));
 
     if (alertEntity.getName() != null) {
       map.put("name", alertEntity.getName());
     }
 
-    map.put("discriminator", nullToEmpty(alertEntity.getDiscriminator()));
-    map.put("errorMessage", nullToEmpty(alertEntity.getErrorMessage()));
+    map.put("discriminator", Strings.nullToEmpty(alertEntity.getDiscriminator()));
+    map.put("errorMessage", Strings.nullToEmpty(alertEntity.getErrorMessage()));
     map.put("bulkId", alertEntity.getBulkId());
     map.put("status", alertEntity.getStatus().toString());
-    map.put("analyst_decision", nullToEmpty(getAnalystDecision(alertData.getCaseInformation())));
+    map.put("analyst_decision", Strings.nullToEmpty(getAnalystDecision(alertData.getCaseInformation())));
     map.putAll(payloadConverter.convertAlertDataToMap(alertData));
     map.putAll(caseCommentsMapper.getLastCaseCommentWithDate(alertData.getCaseComments()));
     map.putAll(getAlertEntityMetadata(alertEntity));
@@ -112,8 +111,8 @@ class AlertMapper {
 
   private static Map<String, String> createMatchMetadata(AlertMatchEntityDto matchEntity) {
     var map = new HashMap<String, String>();
-    map.put("id", nullToEmpty(matchEntity.getExternalId()));
-    map.put("name", nullToEmpty(matchEntity.getName()));
+    map.put("id", Strings.nullToEmpty(matchEntity.getExternalId()));
+    map.put("name", Strings.nullToEmpty(matchEntity.getName()));
 
     return map;
   }

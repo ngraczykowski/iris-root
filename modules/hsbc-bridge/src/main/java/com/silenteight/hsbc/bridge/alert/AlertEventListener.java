@@ -15,7 +15,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,7 +36,7 @@ class AlertEventListener {
   public void onAlertRecommendationReadyEvent(RecommendationsGeneratedEvent event) {
     var alerts = event.getAlertRecommendationInfos().stream()
         .map(AlertRecommendationInfo::getAlert)
-        .collect(toList());
+        .collect(Collectors.toList());
 
     log.info("Received Recommendations analysis={}, no of alerts={}", event.getAnalysis(), alerts.size());
 

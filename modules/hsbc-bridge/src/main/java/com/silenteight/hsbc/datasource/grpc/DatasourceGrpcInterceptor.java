@@ -10,7 +10,7 @@ import io.grpc.ServerCallHandler;
 import io.grpc.ServerInterceptor;
 import org.springframework.stereotype.Component;
 
-import static java.util.Optional.ofNullable;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -83,7 +83,7 @@ class DatasourceGrpcInterceptor implements ServerInterceptor {
 
     void handleException(RuntimeException ex, Metadata headers) {
       var status = grpcErrorHandler.handle(ex);
-      call.close(status, ofNullable(headers).orElse(new Metadata()));
+      call.close(status, Optional.ofNullable(headers).orElse(new Metadata()));
     }
   }
 }

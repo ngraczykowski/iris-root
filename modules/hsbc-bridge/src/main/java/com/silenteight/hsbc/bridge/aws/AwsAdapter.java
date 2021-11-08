@@ -24,8 +24,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import static com.silenteight.hsbc.bridge.aws.AwsUriUtils.getObjectKey;
-
 @RequiredArgsConstructor
 class AwsAdapter
     implements ModelRepository, WatchlistSaver, WatchlistLoader, ModelTransferModelLoader {
@@ -71,7 +69,7 @@ class AwsAdapter
     try {
       return client.getObject(GetObjectRequest.builder()
           .bucket(watchlistBucketName)
-          .key(getObjectKey(uri))
+          .key(AwsUriUtils.getObjectKey(uri))
           .build());
     } catch (SdkException e) {
       throw new LoadingException(e);
@@ -83,7 +81,7 @@ class AwsAdapter
     try {
       return client.getObject(GetObjectRequest.builder()
           .bucket(modelBucketName)
-          .key(getObjectKey(uri))
+          .key(AwsUriUtils.getObjectKey(uri))
           .build());
     } catch (SdkException e) {
       throw new LoadingException(e);

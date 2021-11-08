@@ -15,8 +15,6 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.silenteight.hsbc.bridge.retention.DataRetentionType.PERSONAL_INFO_EXPIRED;
-
 @RequiredArgsConstructor
 class AlertRetentionMessageSender implements AlertRetentionSender {
 
@@ -37,7 +35,7 @@ class AlertRetentionMessageSender implements AlertRetentionSender {
   }
 
   private void sendMessageByType(DataRetentionType type, List<String> chunk) {
-    if (type == PERSONAL_INFO_EXPIRED) {
+    if (type == DataRetentionType.PERSONAL_INFO_EXPIRED) {
       var message = PersonalInformationExpired.newBuilder().addAllAlerts(chunk).build();
       messageSender.send(message);
     } else {

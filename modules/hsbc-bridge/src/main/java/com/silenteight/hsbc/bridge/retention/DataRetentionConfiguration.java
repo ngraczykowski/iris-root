@@ -11,9 +11,6 @@ import org.springframework.scheduling.TaskScheduler;
 
 import java.time.Duration;
 
-import static com.silenteight.hsbc.bridge.retention.DataRetentionType.ALERTS_EXPIRED;
-import static com.silenteight.hsbc.bridge.retention.DataRetentionType.PERSONAL_INFO_EXPIRED;
-
 @Configuration
 @EnableConfigurationProperties(DataRetentionProperties.class)
 @RequiredArgsConstructor
@@ -41,10 +38,10 @@ class DataRetentionConfiguration {
   private void schedulePayloadRetentionJobForGivenEnvironment(boolean isPersonalInfoExpired) {
     if (isPersonalInfoExpired) {
       var personalInfoExpiredDuration = properties.getPersonalInformationExpired().getDuration();
-      schedulePayloadRetentionJob(personalInfoExpiredDuration, PERSONAL_INFO_EXPIRED);
+      schedulePayloadRetentionJob(personalInfoExpiredDuration, DataRetentionType.PERSONAL_INFO_EXPIRED);
     } else {
       var alertsExpiredDuration = properties.getAlertsExpired().getDuration();
-      schedulePayloadRetentionJob(alertsExpiredDuration, ALERTS_EXPIRED);
+      schedulePayloadRetentionJob(alertsExpiredDuration, DataRetentionType.ALERTS_EXPIRED);
     }
   }
 

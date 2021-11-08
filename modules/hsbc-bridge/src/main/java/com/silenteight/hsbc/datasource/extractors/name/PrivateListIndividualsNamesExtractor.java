@@ -7,10 +7,6 @@ import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.silenteight.hsbc.datasource.extractors.name.NameExtractor.collectNames;
-import static com.silenteight.hsbc.datasource.extractors.name.NameExtractor.joinNameParts;
-import static java.util.stream.Stream.of;
-
 @RequiredArgsConstructor
 class PrivateListIndividualsNamesExtractor {
 
@@ -19,14 +15,14 @@ class PrivateListIndividualsNamesExtractor {
   public Stream<String> extract() {
     var names = privateListIndividuals.stream()
         .flatMap(PrivateListIndividualsNamesExtractor::extractPrivateListIndividualNames);
-    return collectNames(names);
+    return NameExtractor.collectNames(names);
   }
 
   private static Stream<String> extractPrivateListIndividualNames(
       PrivateListIndividual privateListIndividual) {
-    return of(
+    return Stream.of(
         privateListIndividual.getFullNameOriginal(),
-        joinNameParts(
+        NameExtractor.joinNameParts(
             privateListIndividual.getGivenNamesOriginal(),
             privateListIndividual.getFamilyNameOriginal()),
         privateListIndividual.getFullNameDerived()

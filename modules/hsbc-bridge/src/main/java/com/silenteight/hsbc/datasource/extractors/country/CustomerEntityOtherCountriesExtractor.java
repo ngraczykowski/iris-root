@@ -8,15 +8,13 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.stream.Stream;
 
-import static java.util.stream.Stream.of;
-
 @RequiredArgsConstructor
 class CustomerEntityOtherCountriesExtractor {
 
   private final CustomerEntity customerEntity;
 
   public Stream<String> extract() {
-    return of(
+    return Stream.of(
         customerEntity.getTradesWithCountries(),
         customerEntity.getSubsidiariesOperatesInCountries(),
         customerEntity.getCountriesOfBusiness(),

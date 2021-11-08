@@ -6,9 +6,8 @@ import com.silenteight.hsbc.bridge.alert.dto.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
-
-import static java.util.UUID.randomUUID;
 
 class AlertServiceClientMock implements AlertServiceClient {
 
@@ -16,7 +15,7 @@ class AlertServiceClientMock implements AlertServiceClient {
   public BatchCreateAlertsResponseDto batchCreateAlerts(List<Alert> alerts) {
     var requestedAlerts = alerts.stream().map(a -> AlertDto.builder()
             .alertId(a.getAlertId())
-            .name("alerts/" + randomUUID())
+            .name("alerts/" + UUID.randomUUID())
             .build())
         .collect(Collectors.toList());
 
@@ -37,7 +36,7 @@ class AlertServiceClientMock implements AlertServiceClient {
     return matchIds.stream()
         .map(m -> AlertMatchDto.builder()
             .matchId(m)
-            .name("alerts/"+ randomUUID() +"/matches/" + randomUUID())
+            .name("alerts/" + UUID.randomUUID() + "/matches/" + UUID.randomUUID())
             .build())
         .collect(Collectors.toList());
   }

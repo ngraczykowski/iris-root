@@ -3,10 +3,8 @@ package com.silenteight.hsbc.datasource.extractors.name
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.util.stream.Collectors
 import java.util.stream.Stream
-
-import static com.silenteight.hsbc.datasource.extractors.name.NameExtractor.*
-import static java.util.stream.Collectors.toList
 
 class NameExtractorSpec extends Specification {
 
@@ -16,7 +14,7 @@ class NameExtractorSpec extends Specification {
     def inputStream = listToStream(input)
 
     when:
-    def names = collectNames(inputStream)
+    def names = NameExtractor.collectNames(inputStream)
 
     then:
     streamToList(names) == expected
@@ -37,7 +35,7 @@ class NameExtractorSpec extends Specification {
   @Unroll
   def 'should join name parts'() {
     when:
-    def joinedName = joinNameParts(input as String[])
+    def joinedName = NameExtractor.joinNameParts(input as String[])
 
     then:
     joinedName == expected
@@ -57,7 +55,7 @@ class NameExtractorSpec extends Specification {
   @Unroll
   def 'should remove unnecessary asterisk'() {
     when:
-    def output = removeUnnecessaryAsterisk(input)
+    def output = NameExtractor.removeUnnecessaryAsterisk(input)
 
     then:
     output == expected
@@ -78,7 +76,7 @@ class NameExtractorSpec extends Specification {
   @Unroll
   def 'should extract name and original script aliases'() {
     when:
-    def extractedNames = extractNameAndOriginalScriptAliases(input)
+    def extractedNames = NameExtractor.extractNameAndOriginalScriptAliases(input)
 
     then:
     streamToList(extractedNames) == expected
@@ -101,7 +99,7 @@ class NameExtractorSpec extends Specification {
   @Unroll
   def 'should collect country matching aliases'() {
     when:
-    def output = collectCountryMatchingAliases(foreignAliases, countries)
+    def output = NameExtractor.collectCountryMatchingAliases(foreignAliases, countries)
 
     then:
     output == expected
@@ -127,7 +125,7 @@ class NameExtractorSpec extends Specification {
     def wp = watchlistParty
 
     when:
-    def output = applyOriginalScriptEnhancements(ap, wp)
+    def output = NameExtractor.applyOriginalScriptEnhancements(ap, wp)
 
     then:
     output.alertedPartyIndividuals == apExpected
@@ -147,7 +145,7 @@ class NameExtractorSpec extends Specification {
   }
 
   private static streamToList(Stream<String> names) {
-    names.collect(toList())
+    names.collect(Collectors.toList())
   }
 
   private static listToStream(List<String> names) {

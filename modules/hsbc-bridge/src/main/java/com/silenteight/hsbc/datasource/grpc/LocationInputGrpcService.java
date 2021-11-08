@@ -17,8 +17,7 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 @GrpcService(interceptors = DatasourceGrpcInterceptor.class)
 @RequiredArgsConstructor
@@ -54,7 +53,7 @@ class LocationInputGrpcService extends LocationInputServiceImplBase {
             .setMatch(i.getMatch())
             .addAllLocationFeatureInputs(mapFeatureInputs(i.getFeatureInputs()))
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private List<LocationFeatureInput> mapFeatureInputs(List<LocationFeatureInputDto> inputs) {
@@ -64,6 +63,6 @@ class LocationInputGrpcService extends LocationInputServiceImplBase {
             .setAlertedPartyLocation(i.getAlertedPartyLocation())
             .setWatchlistLocation(i.getWatchlistLocation())
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 }

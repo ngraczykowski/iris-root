@@ -14,11 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static com.google.protobuf.Value.KindCase.BOOL_VALUE;
-import static com.google.protobuf.Value.KindCase.NULL_VALUE;
-import static com.google.protobuf.Value.KindCase.NUMBER_VALUE;
-import static com.google.protobuf.Value.KindCase.STRING_VALUE;
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public class StructMapper {
@@ -76,6 +71,7 @@ public class StructMapper {
   }
 
   private static boolean isSingleValueType(KindCase type) {
-    return type == BOOL_VALUE || type == NULL_VALUE || type == STRING_VALUE || type == NUMBER_VALUE;
+    return type == KindCase.BOOL_VALUE || type == KindCase.NULL_VALUE || type == KindCase.STRING_VALUE
+        || type == KindCase.NUMBER_VALUE;
   }
 }

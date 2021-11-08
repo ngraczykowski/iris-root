@@ -4,9 +4,8 @@ import com.silenteight.hsbc.bridge.alert.AlertPayloadConverter.InputCommand
 
 import spock.lang.Specification
 
+import java.util.stream.Stream
 import javax.persistence.EntityManager
-
-import static java.util.stream.Stream.of
 
 class AlertFacadeSpec extends Specification {
 
@@ -40,14 +39,14 @@ class AlertFacadeSpec extends Specification {
   def 'should get registered alerts'() {
     given:
     def alerts =
-        of('AVIR126SCR5640LU259TEST0018:LU:GR-ESAN:2371395248263046 867ff30e589c42cfeb3c4997fd378a1a24826')
+        Stream.of('AVIR126SCR5640LU259TEST0018:LU:GR-ESAN:2371395248263046 867ff30e589c42cfeb3c4997fd378a1a24826')
 
     when:
     def result = underTest.getRegisteredAlerts(alerts)
 
     then:
     1 * repository.findByExternalIdInAndDiscriminatorInAndNameIsNotNull(_ as Collection) >>
-        of(new AlertEntity("bulk-1"))
+        Stream.of(new AlertEntity("bulk-1"))
     result.size() == 1
   }
 

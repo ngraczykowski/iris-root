@@ -4,20 +4,19 @@ import com.silenteight.hsbc.bridge.bulk.rest.AlertIdWrapper;
 import com.silenteight.hsbc.bridge.bulk.rest.AlertReRecommend;
 
 import com.google.gson.Gson;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 class BulkReProcessControllerTest {
 
@@ -37,21 +36,21 @@ class BulkReProcessControllerTest {
     var bulkId = "re-process/some_uuid";
 
     //given
-    given(createSolvingBulkUseCase.createBulkWithAlerts(any()))
+    BDDMockito.given(createSolvingBulkUseCase.createBulkWithAlerts(ArgumentMatchers.any()))
         .willReturn(bulkId);
-    var mockMvc = standaloneSetup(underTest).build();
+    var mockMvc = MockMvcBuilders.standaloneSetup(underTest).build();
 
     //then
-    var mvcResult = mockMvc.perform(post("/async/batch/s8/reRecommend")
-        .contentType(MediaType.APPLICATION_JSON).content(createRequestContent()))
-        .andExpect(status().isOk())
+    var mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/async/batch/s8/reRecommend")
+            .contentType(MediaType.APPLICATION_JSON).content(createRequestContent()))
+        .andExpect(MockMvcResultMatchers.status().isOk())
         .andReturn();
 
     var response = mvcResult.getResponse().getContentAsString();
-    assertThat(response).contains(bulkId);
+    AssertionsForClassTypes.assertThat(response).contains(bulkId);
   }
 
-  private String createRequestContent(){
+  private String createRequestContent() {
     var gson = new Gson();
     var alerts = new AlertReRecommend(List.of(
         new AlertIdWrapper("alert/1"),

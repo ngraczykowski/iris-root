@@ -5,16 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.json.external.model.CaseInformation;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-
-import static java.time.LocalDateTime.parse;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -38,24 +35,24 @@ class AlertTimeCalculator {
     var modifiedDateResult = safeGetAsDate(caseInformation.getExtendedAttribute13DateTime());
 
     if (createdDateResult.isEmpty() || modifiedDateResult.isEmpty()) {
-      return empty();
+      return Optional.empty();
     }
 
     var createdDate = createdDateResult.get();
     var modifiedDate = modifiedDateResult.get();
-    return modifiedDate.isAfter(createdDate) ? of(createdDate) : empty();
+    return modifiedDate.isAfter(createdDate) ? Optional.of(createdDate) : Optional.empty();
   }
 
   private Optional<LocalDateTime> safeGetAsDate(String date) {
-    if (isEmpty(date)) {
-      return empty();
+    if (StringUtils.isEmpty(date)) {
+      return Optional.empty();
     }
 
     try {
-      return of(parse(date.toUpperCase(), formatter));
+      return Optional.of(LocalDateTime.parse(date.toUpperCase(), formatter));
     } catch (RuntimeException ex) {
       log.error("Invalid date format, value = {}", date, ex);
-      return empty();
+      return Optional.empty();
     }
   }
 }

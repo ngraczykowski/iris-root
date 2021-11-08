@@ -16,10 +16,7 @@ import com.silenteight.hsbc.datasource.feature.Feature;
 
 import java.util.List;
 import java.util.Map;
-
-import static com.silenteight.hsbc.datasource.feature.Feature.DATE_OF_BIRTH;
-import static java.util.List.of;
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 class DateInputProvider implements DataSourceInputProvider<DateInputResponse> {
@@ -44,18 +41,18 @@ class DateInputProvider implements DataSourceInputProvider<DateInputResponse> {
             .match(match.getName())
             .featureInputs(getFeatureInputs(features, match.getMatchData()))
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private List<DateFeatureInputDto> getFeatureInputs(List<String> features, MatchData matchData) {
     return features.stream()
         .map(featureName -> (DateFeatureInputDto)
             ((DateFeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData, watchlistTypes))
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   @Override
   public List<Feature> getAllowedFeatures() {
-    return of(DATE_OF_BIRTH);
+    return List.of(Feature.DATE_OF_BIRTH);
   }
 }

@@ -5,10 +5,6 @@ import com.silenteight.hsbc.datasource.extractors.historical.ModelKeyDto.ModelKe
 
 import java.util.List;
 
-import static com.silenteight.hsbc.datasource.extractors.historical.ModelKeyDto.ModelKeyType.ALERTED_PARTY;
-import static com.silenteight.hsbc.datasource.extractors.historical.ModelKeyDto.ModelKeyType.MATCH;
-import static com.silenteight.hsbc.datasource.extractors.historical.ModelKeyDto.ModelKeyType.WATCHLIST_PARTY;
-
 class HistoricalDecisionsServiceClientMock implements HistoricalDecisionsServiceClient {
 
   private static final int TRUE_POSITIVES_COUNT = 1;
@@ -37,17 +33,17 @@ class HistoricalDecisionsServiceClientMock implements HistoricalDecisionsService
     switch (modelKeyType) {
       case ALERTED_PARTY:
         return ModelKeyDto.builder()
-            .modelKeyType(ALERTED_PARTY)
+            .modelKeyType(ModelKeyType.ALERTED_PARTY)
             .modelKeyValue(new AlertedPartyDto("alertedParty_id"))
             .build();
       case WATCHLIST_PARTY:
         return ModelKeyDto.builder()
-            .modelKeyType(WATCHLIST_PARTY)
+            .modelKeyType(ModelKeyType.WATCHLIST_PARTY)
             .modelKeyValue(getWatchlistParty())
             .build();
       case MATCH:
         return ModelKeyDto.builder()
-            .modelKeyType(MATCH)
+            .modelKeyType(ModelKeyType.MATCH)
             .modelKeyValue(getMatch())
             .build();
       default: {

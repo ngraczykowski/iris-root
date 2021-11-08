@@ -6,16 +6,13 @@ import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual;
 
 import java.util.stream.Stream;
 
-import static com.silenteight.hsbc.datasource.extractors.name.NameExtractor.collectNames;
-import static java.util.stream.Stream.of;
-
 @RequiredArgsConstructor
 class CustomerIndividualOtherNamesExtractor {
 
   private final CustomerIndividual customerIndividual;
 
   public Stream<String> extract() {
-    return collectNames(of(
+    return NameExtractor.collectNames(Stream.of(
         customerIndividual.getFullNameDerived(),
         customerIndividual.getOriginalScriptName()));
   }

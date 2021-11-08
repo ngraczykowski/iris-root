@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.hsbc.bridge.bulk.rest.ErrorResponse;
 import com.silenteight.hsbc.bridge.watchlist.event.ZipFileWatchlistSavedEvent;
 
+import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -16,8 +17,6 @@ import org.springframework.web.multipart.MultipartRequest;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
 
 @Slf4j
 @RestController
@@ -44,7 +43,7 @@ class WatchlistController {
   }
 
   private void validateZipFile(MultipartFile file) {
-    if (isNullOrEmpty(file.getOriginalFilename()))
+    if (Strings.isNullOrEmpty(file.getOriginalFilename()))
       throw new NoFileException("No file was specified");
     if (!StringUtils.endsWith(file.getOriginalFilename(), ".zip"))
       throw new IncorrectFileExtensionException("File extension is incorrect");

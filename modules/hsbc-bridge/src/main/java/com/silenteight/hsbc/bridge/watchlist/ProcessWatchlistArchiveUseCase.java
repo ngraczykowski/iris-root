@@ -5,17 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.unpacker.FileManager;
 import com.silenteight.hsbc.bridge.unpacker.UnzippedObject;
+import com.silenteight.worldcheck.api.v1.WatchlistType;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
-
-import static com.silenteight.worldcheck.api.v1.WatchlistType.WORLD_CHECK;
-import static com.silenteight.worldcheck.api.v1.WatchlistType.WORLD_CHECK_ALIASES;
-import static com.silenteight.worldcheck.api.v1.WatchlistType.WORLD_CHECK_KEYWORDS;
-import static java.util.Set.of;
+import java.util.Set;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,10 +26,10 @@ class ProcessWatchlistArchiveUseCase {
     var savedCoreUri = processWatchlist(retrievedWatchlist.getCore());
     var savedAliasesUri = processWatchlist(retrievedWatchlist.getAliases());
 
-    var watchlistCollection = of(
-        new WatchlistIdentifier(savedCoreUri, WORLD_CHECK),
-        new WatchlistIdentifier(savedAliasesUri, WORLD_CHECK_ALIASES),
-        new WatchlistIdentifier(retrievedWatchlist.getKeywordsUri(), WORLD_CHECK_KEYWORDS)
+    var watchlistCollection = Set.of(
+        new WatchlistIdentifier(savedCoreUri, WatchlistType.WORLD_CHECK),
+        new WatchlistIdentifier(savedAliasesUri, WatchlistType.WORLD_CHECK_ALIASES),
+        new WatchlistIdentifier(retrievedWatchlist.getKeywordsUri(), WatchlistType.WORLD_CHECK_KEYWORDS)
     );
 
     worldCheckNotifier.notify(watchlistCollection);
@@ -63,15 +60,20 @@ class ProcessWatchlistArchiveUseCase {
 
   private RawWatchlist getRawWatchlist(List<UnzippedObject> unzippedFiles) {
     var core = findWatchlistByName(unzippedFiles, "world-check.xml", ".gz")
-        .orElseThrow(() -> new WatchlistNotFoundException("Watchlist core not found! File should contain name 'world-check.xml' and have .gz extension"));
+        .orElseThrow(() -> new WatchlistNotFoundException(
+            "Watchlist core not found! File should contain name 'world-check.xml' and have .gz extension"));
     var nameAliases = findWatchlistByName(unzippedFiles, "native-aliases", ".gz")
-        .orElseThrow(() -> new WatchlistNotFoundException("Watchlist aliases not found! File should contain name 'native-aliases' and have .gz extension "));
+        .orElseThrow(() -> new WatchlistNotFoundException(
+            "Watchlist aliases not found! File should contain name 'native-aliases' and have .gz extension "));
     var keywords = findWatchlistByName(unzippedFiles, "keywords", ".xml")
-        .orElseThrow(() -> new WatchlistNotFoundException("Watchlist keywords not found! File should contain name 'keywords' and have .xml extension"));
+        .orElseThrow(() -> new WatchlistNotFoundException(
+            "Watchlist keywords not found! File should contain name 'keywords' and have .xml extension"));
     var coreChecksum = findWatchlistByName(unzippedFiles, "world-check-checksum", ".md5")
-        .orElseThrow(() -> new WatchlistNotFoundException("Core checksum not found! File should contain name 'world-check-checksum' and have .md5 extension"));
+        .orElseThrow(() -> new WatchlistNotFoundException(
+            "Core checksum not found! File should contain name 'world-check-checksum' and have .md5 extension"));
     var nameAliasesChecksum = findWatchlistByName(unzippedFiles, "native-aliases", ".md5")
-        .orElseThrow(() -> new WatchlistNotFoundException("Aliases checksum not found! File should contain name 'native-aliases' and have .md5 extension"));
+        .orElseThrow(() -> new WatchlistNotFoundException(
+            "Aliases checksum not found! File should contain name 'native-aliases' and have .md5 extension"));
 
     return RawWatchlist.builder()
         .core(core)

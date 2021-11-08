@@ -8,10 +8,9 @@ import com.silenteight.hsbc.datasource.datamodel.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
-
-import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -51,6 +50,6 @@ class MatchRawData implements MatchData {
   @Override
   @JsonIgnore
   public boolean isIndividual() {
-    return isNotEmpty(getCustomerIndividuals());
+    return CollectionUtils.isNotEmpty(getCustomerIndividuals());
   }
 }

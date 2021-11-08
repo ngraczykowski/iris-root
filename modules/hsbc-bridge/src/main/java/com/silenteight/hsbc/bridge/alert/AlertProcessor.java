@@ -13,9 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 
-import static com.silenteight.hsbc.bridge.alert.AlertStatus.PRE_PROCESSED;
-import static com.silenteight.hsbc.bridge.alert.AlertStatus.STORED;
-
 @RequiredArgsConstructor
 @Slf4j
 class AlertProcessor {
@@ -43,7 +40,7 @@ class AlertProcessor {
   }
 
   private void preProcessAlerts(String bulkId) {
-    try (var alerts = repository.findByBulkIdAndStatus(bulkId, STORED)) {
+    try (var alerts = repository.findByBulkIdAndStatus(bulkId, AlertStatus.STORED)) {
       alerts.forEach(this::tryToPreProcessAlert);
     }
     handleDuplicatedAlerts(bulkId);
@@ -85,7 +82,7 @@ class AlertProcessor {
     try {
       var processedAlert = relationshipProcessor.process(alertData);
       matchFacade.prepareAndSaveMatches(alert.getId(), processedAlert.getMatches());
-      alert.setStatus(PRE_PROCESSED);
+      alert.setStatus(AlertStatus.PRE_PROCESSED);
     } catch (InvalidAlertDataException exception) {
       alert.error(exception.getMessage());
     }

@@ -14,9 +14,8 @@ import io.grpc.StatusRuntimeException;
 import org.springframework.retry.annotation.Retryable;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -83,6 +82,6 @@ class AnalysisGrpcAdapter implements AnalysisServiceClient {
   }
 
   private AnalysisServiceBlockingStub getStub() {
-    return analysisServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, SECONDS);
+    return analysisServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, TimeUnit.SECONDS);
   }
 }

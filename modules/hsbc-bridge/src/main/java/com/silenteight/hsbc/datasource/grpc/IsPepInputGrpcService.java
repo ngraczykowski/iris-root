@@ -18,11 +18,7 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
-
-import static com.silenteight.hsbc.datasource.grpc.StructHelper.buildListValues;
-import static com.silenteight.hsbc.datasource.grpc.StructHelper.buildNumberValue;
-import static com.silenteight.hsbc.datasource.grpc.StructHelper.buildStringValue;
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 @GrpcService(interceptors = DatasourceGrpcInterceptor.class)
 @RequiredArgsConstructor
@@ -51,7 +47,7 @@ class IsPepInputGrpcService extends IsPepInputServiceImplBase {
             .addAllFeatures(mapFeatureInputs(input.getFeatureInputs()))
             .build()
         )
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private List<Feature> mapFeatureInputs(List<IsPepFeatureInputDto> inputs) {
@@ -60,7 +56,7 @@ class IsPepInputGrpcService extends IsPepInputServiceImplBase {
             .setFeature(i.getFeature())
             .addAllFeatureSolutions(mapFeatureSolutionInputs(i.getFeatureSolutions()))
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private List<FeatureSolution> mapFeatureSolutionInputs(List<IsPepFeatureSolutionDto> inputs) {
@@ -69,20 +65,20 @@ class IsPepInputGrpcService extends IsPepInputServiceImplBase {
             .setSolution(i.getSolution())
             .setReason(mapToStruct(i.getReason()))
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private Struct mapToStruct(ReasonDto reason) {
     var builder = Struct.newBuilder()
-        .putFields("message", buildStringValue(reason.getMessage()))
-        .putFields("noPepPositions", buildListValues(reason.getNoPepPositions()))
-        .putFields("notMatchedPositions", buildListValues(reason.getNotMatchedPositions()))
-        .putFields("pepPositions", buildListValues(reason.getPepPositions()))
-        .putFields("linkedPepsUids", buildListValues(reason.getLinkedPepsUids()))
-        .putFields("numberOfNotPepDecisions", buildNumberValue(reason.getNumberOfNotPepDecisions()))
-        .putFields("numberOfPepDecisions", buildNumberValue(reason.getNumberOfPepDecisions()))
-        .putFields("version", buildStringValue(reason.getVersion()))
-        .putFields("regionName", buildStringValue(reason.getRegionName()));
+        .putFields("message", StructHelper.buildStringValue(reason.getMessage()))
+        .putFields("noPepPositions", StructHelper.buildListValues(reason.getNoPepPositions()))
+        .putFields("notMatchedPositions", StructHelper.buildListValues(reason.getNotMatchedPositions()))
+        .putFields("pepPositions", StructHelper.buildListValues(reason.getPepPositions()))
+        .putFields("linkedPepsUids", StructHelper.buildListValues(reason.getLinkedPepsUids()))
+        .putFields("numberOfNotPepDecisions", StructHelper.buildNumberValue(reason.getNumberOfNotPepDecisions()))
+        .putFields("numberOfPepDecisions", StructHelper.buildNumberValue(reason.getNumberOfPepDecisions()))
+        .putFields("version", StructHelper.buildStringValue(reason.getVersion()))
+        .putFields("regionName", StructHelper.buildStringValue(reason.getRegionName()));
     return builder.build();
   }
 }

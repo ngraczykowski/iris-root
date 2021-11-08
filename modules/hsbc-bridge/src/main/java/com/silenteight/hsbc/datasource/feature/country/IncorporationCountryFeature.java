@@ -7,15 +7,14 @@ import com.silenteight.hsbc.datasource.datamodel.*;
 import com.silenteight.hsbc.datasource.dto.country.CountryFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
+import com.silenteight.hsbc.datasource.util.StreamUtils;
 
 import one.util.streamex.StreamEx;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
-
-import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
-import static java.util.Collections.emptyList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,11 +31,11 @@ public class IncorporationCountryFeature implements FeatureValuesRetriever<Count
       var apIncorporationCountries = customerEntitiesIncorporationCountries(matchData.getCustomerEntities());
       var mpIncorporationCountries = getWatchlistEntitiesIncorporationCountries(matchData);
 
-      builder.alertedPartyCountries(toDistinctList(apIncorporationCountries));
-      builder.watchlistCountries(toDistinctList(mpIncorporationCountries));
+      builder.alertedPartyCountries(StreamUtils.toDistinctList(apIncorporationCountries));
+      builder.watchlistCountries(StreamUtils.toDistinctList(mpIncorporationCountries));
     } else {
-      builder.watchlistCountries(emptyList());
-      builder.alertedPartyCountries(emptyList());
+      builder.watchlistCountries(Collections.emptyList());
+      builder.alertedPartyCountries(Collections.emptyList());
     }
 
     var result = builder

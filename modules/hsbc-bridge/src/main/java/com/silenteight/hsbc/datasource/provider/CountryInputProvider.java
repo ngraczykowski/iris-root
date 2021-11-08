@@ -17,9 +17,6 @@ import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.silenteight.hsbc.datasource.feature.Feature.*;
-import static java.util.List.of;
-
 @RequiredArgsConstructor
 class CountryInputProvider implements DataSourceInputProvider<CountryInputResponse> {
 
@@ -55,11 +52,11 @@ class CountryInputProvider implements DataSourceInputProvider<CountryInputRespon
 
   @Override
   public List<Feature> getAllowedFeatures() {
-    return of(
-        NATIONALITY_COUNTRY,
-        OTHER_COUNTRY,
-        RESIDENCY_COUNTRY,
-        INCORPORATION_COUNTRY,
-        REGISTRATION_COUNTRY);
+    return List.of(
+        Feature.NATIONALITY_COUNTRY,
+        Feature.OTHER_COUNTRY,
+        Feature.RESIDENCY_COUNTRY,
+        Feature.INCORPORATION_COUNTRY,
+        Feature.REGISTRATION_COUNTRY);
   }
 }

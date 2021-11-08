@@ -10,8 +10,7 @@ import com.silenteight.hsbc.datasource.feature.Retriever;
 import com.silenteight.hsbc.datasource.provider.FeatureNotAllowedException;
 
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 public interface DataSourceInputProvider<R> {
 
@@ -40,7 +39,7 @@ public interface DataSourceInputProvider<R> {
   private void validateFeatures(List<String> features) {
     var allowedFeatures = getAllowedFeatures().stream()
         .map(Feature::getFullName)
-        .collect(toList());
+        .collect(Collectors.toList());
 
     features.forEach(feature -> {
       if (!allowedFeatures.contains(feature)) {

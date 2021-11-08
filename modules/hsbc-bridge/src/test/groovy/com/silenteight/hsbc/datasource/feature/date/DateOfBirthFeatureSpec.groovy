@@ -2,12 +2,10 @@ package com.silenteight.hsbc.datasource.feature.date
 
 import com.silenteight.hsbc.datasource.datamodel.*
 import com.silenteight.hsbc.datasource.dto.date.SeverityMode
+import com.silenteight.hsbc.datasource.dto.name.EntityType
 import com.silenteight.hsbc.datasource.feature.Feature
 
 import spock.lang.Specification
-
-import static com.silenteight.hsbc.datasource.dto.name.EntityType.INDIVIDUAL
-import static com.silenteight.hsbc.datasource.dto.name.EntityType.ORGANIZATION
 
 class DateOfBirthFeatureSpec extends Specification {
 
@@ -78,7 +76,7 @@ class DateOfBirthFeatureSpec extends Specification {
       watchlistDates.size() == 5
       watchlistDates == ["22 12 1990", "10 10 2012", "1994", "23/12/1995", "23/12/1990"]
       mode == SeverityMode.NORMAL
-      alertedPartyType == INDIVIDUAL
+      alertedPartyType == EntityType.INDIVIDUAL
       alertedPartyDates == ["1992 8 23", "1994"]
     }
   }
@@ -106,7 +104,7 @@ class DateOfBirthFeatureSpec extends Specification {
     then:
     with(actual) {
       feature == Feature.DATE_OF_BIRTH.fullName
-      alertedPartyType == ORGANIZATION
+      alertedPartyType == EntityType.ORGANIZATION
       mode == SeverityMode.STRICT
     }
   }

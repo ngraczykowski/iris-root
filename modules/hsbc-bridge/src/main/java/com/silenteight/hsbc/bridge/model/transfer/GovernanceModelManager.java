@@ -5,17 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.model.ModelServiceClient;
 import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
+import com.silenteight.hsbc.bridge.model.dto.ModelStatus;
 import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
 import com.silenteight.hsbc.bridge.model.dto.ModelType;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
 
 import java.io.IOException;
-
-import static com.silenteight.hsbc.bridge.model.dto.ModelStatus.FAILURE;
-import static com.silenteight.hsbc.bridge.model.dto.ModelStatus.SUCCESS;
-import static com.silenteight.hsbc.bridge.model.dto.ModelType.MODEL;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.convertToModelStatusUpdated;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -49,7 +45,7 @@ public class GovernanceModelManager implements ModelManager {
 
   @Override
   public boolean supportsModelType(ModelType modelType) {
-    return modelType == MODEL;
+    return modelType == ModelType.MODEL;
   }
 
   private ModelStatusUpdatedDto transferModelFromNexus(ModelInfoRequest request) {
@@ -58,10 +54,10 @@ public class GovernanceModelManager implements ModelManager {
       log.info("Transferring model length = {}", jsonModel.length);
       var model = governanceServiceClient.transferModel(jsonModel);
       log.info("Update model successful: {}", model);
-      return convertToModelStatusUpdated(request, SUCCESS);
+      return ModelMapper.convertToModelStatusUpdated(request, ModelStatus.SUCCESS);
     } catch (IOException | RuntimeException e) {
       log.error("Unable to update model: " + request.getName(), e);
-      return convertToModelStatusUpdated(request, FAILURE);
+      return ModelMapper.convertToModelStatusUpdated(request, ModelStatus.FAILURE);
     }
   }
 }

@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.hsbc.datasource.datamodel.CtrpScreening;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.of;
 
 @RequiredArgsConstructor
 class CtrpScreeningExtractor {
@@ -19,11 +17,11 @@ class CtrpScreeningExtractor {
     return ctrpScreening.stream()
         .flatMap(
             CtrpScreeningExtractor::extractCtrpScreeningFields)
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private static Stream<String> extractCtrpScreeningFields(CtrpScreening ctrpScreeningEntities) {
-    return of(
+    return Stream.of(
         ctrpScreeningEntities.getCtrpValue(),
         ctrpScreeningEntities.getCountryCode()
     );

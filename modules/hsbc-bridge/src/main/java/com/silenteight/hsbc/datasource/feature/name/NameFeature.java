@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.name.AlertedPartyNameDto;
+import com.silenteight.hsbc.datasource.dto.name.EntityType;
 import com.silenteight.hsbc.datasource.dto.name.NameFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.name.WatchlistNameDto;
 import com.silenteight.hsbc.datasource.dto.name.WatchlistNameDto.NameType;
@@ -12,19 +13,13 @@ import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceCli
 import com.silenteight.hsbc.datasource.extractors.name.Party;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.NameFeatureClientValuesRetriever;
+import com.silenteight.hsbc.datasource.util.StreamUtils;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.silenteight.hsbc.datasource.dto.name.EntityType.INDIVIDUAL;
-import static com.silenteight.hsbc.datasource.dto.name.EntityType.ORGANIZATION;
-import static com.silenteight.hsbc.datasource.dto.name.WatchlistNameDto.NameType.ALIAS;
-import static com.silenteight.hsbc.datasource.dto.name.WatchlistNameDto.NameType.REGULAR;
-import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.concat;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -46,17 +41,17 @@ public class NameFeature implements NameFeatureClientValuesRetriever<NameFeature
 
       inputBuilder.alertedPartyNames(mapToAlertedPartyNames(party.getAlertedPartyIndividuals()));
       inputBuilder.watchlistNames(watchListIndividual);
-      inputBuilder.alertedPartyType(INDIVIDUAL);
+      inputBuilder.alertedPartyType(EntityType.INDIVIDUAL);
     } else {
       var watchListEntities = getWatchListEntities(query);
 
-      inputBuilder.alertedPartyNames(mapToAlertedPartyNames(toDistinctList(
+      inputBuilder.alertedPartyNames(mapToAlertedPartyNames(StreamUtils.toDistinctList(
           query.apEntityExtractEntityNameOriginal(),
           query.apEntityExtractOtherNames())));
       inputBuilder.watchlistNames(watchListEntities);
-      inputBuilder.alertedPartyType(ORGANIZATION);
+      inputBuilder.alertedPartyType(EntityType.ORGANIZATION);
     }
-    inputBuilder.matchingTexts(emptyList());
+    inputBuilder.matchingTexts(Collections.emptyList());
 
     var result = inputBuilder
         .feature(getFeatureName())
@@ -79,23 +74,23 @@ public class NameFeature implements NameFeatureClientValuesRetriever<NameFeature
 
   private List<WatchlistNameDto> getWatchListIndividual(NameQuery query, Party party) {
     var wlIndividualWithoutAliases =
-        mapToWatchlistNames(party.getWatchlistPartyIndividuals(), REGULAR);
+        mapToWatchlistNames(party.getWatchlistPartyIndividuals(), NameType.REGULAR);
 
     var wlIndividualWithAliases = mapToWatchlistNames(
-        query.applyOriginalScriptEnhancementsForIndividualNamesWithAliases(), ALIAS);
+        query.applyOriginalScriptEnhancementsForIndividualNamesWithAliases(), NameType.ALIAS);
 
-    return concat(wlIndividualWithAliases, wlIndividualWithoutAliases).collect(toList());
+    return Stream.concat(wlIndividualWithAliases, wlIndividualWithoutAliases).collect(Collectors.toList());
   }
 
   private List<WatchlistNameDto> getWatchListEntities(NameQuery query) {
     var wlEntitiesWithAliases = mapToWatchlistNames(
-        toDistinctList(query.mpWorldCheckEntitiesExtractXmlNamesWithCountries()), ALIAS);
+        StreamUtils.toDistinctList(query.mpWorldCheckEntitiesExtractXmlNamesWithCountries()), NameType.ALIAS);
 
-    var wlEntitiesWithoutAliases = mapToWatchlistNames(toDistinctList(
+    var wlEntitiesWithoutAliases = mapToWatchlistNames(StreamUtils.toDistinctList(
         query.mpWorldCheckEntitiesExtractNames(),
-        query.mpPrivateListEntitiesExtractNames()), REGULAR);
+        query.mpPrivateListEntitiesExtractNames()), NameType.REGULAR);
 
-    return concat(wlEntitiesWithAliases, wlEntitiesWithoutAliases).collect(toList());
+    return Stream.concat(wlEntitiesWithAliases, wlEntitiesWithoutAliases).collect(Collectors.toList());
   }
 
   private List<AlertedPartyNameDto> mapToAlertedPartyNames(List<String> names) {
@@ -103,7 +98,7 @@ public class NameFeature implements NameFeatureClientValuesRetriever<NameFeature
         .map(name -> AlertedPartyNameDto.builder()
             .name(name)
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private Stream<WatchlistNameDto> mapToWatchlistNames(Collection<String> names, NameType type) {

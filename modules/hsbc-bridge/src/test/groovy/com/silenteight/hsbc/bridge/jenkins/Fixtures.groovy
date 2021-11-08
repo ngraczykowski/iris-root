@@ -2,15 +2,13 @@ package com.silenteight.hsbc.bridge.jenkins
 
 import com.silenteight.hsbc.bridge.BridgeApiProperties
 import com.silenteight.hsbc.bridge.model.dto.ModelInfo
-import com.silenteight.hsbc.bridge.model.dto.ModelStatus
 import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto
 import com.silenteight.hsbc.bridge.model.dto.ModelType
 import com.silenteight.hsbc.bridge.nexus.NexusApiProperties
 import com.silenteight.model.api.v1.ModelPromotedForProduction
 import com.silenteight.worldcheck.api.v1.ModelPersisted
+import com.silenteight.worldcheck.api.v1.ModelStatus
 import com.silenteight.worldcheck.api.v1.ModelStatusUpdated
-
-import static com.silenteight.worldcheck.api.v1.ModelStatus.SUCCESS
 
 class Fixtures {
 
@@ -106,21 +104,21 @@ class Fixtures {
       .setModelName(testModelVersion)
       .setModelUri(testWorldCheckNameAliasesVersionUrl)
       .setModelType(com.silenteight.worldcheck.api.v1.ModelType.NAME_ALIASES)
-      .setModelStatus(SUCCESS)
+      .setModelStatus(ModelStatus.SUCCESS)
       .build()
 
   def proceduralModelStatusUpdated = ModelStatusUpdated.newBuilder()
       .setModelName(testModelVersion)
       .setModelUri(testWorldCheckIsPepProceduralVersionUrl)
       .setModelType(com.silenteight.worldcheck.api.v1.ModelType.IS_PEP_PROCEDURAL)
-      .setModelStatus(SUCCESS)
+      .setModelStatus(ModelStatus.SUCCESS)
       .build()
 
   def historicalModelStatusUpdated = ModelStatusUpdated.newBuilder()
       .setModelName(testModelVersion)
       .setModelUri(testWorldCheckIsPepHistoricalVersionUrl)
       .setModelType(com.silenteight.worldcheck.api.v1.ModelType.IS_PEP_HISTORICAL)
-      .setModelStatus(SUCCESS)
+      .setModelStatus(ModelStatus.SUCCESS)
       .build()
 
   def governanceModelStatusUpdatedDto = ModelStatusUpdatedDto.builder()

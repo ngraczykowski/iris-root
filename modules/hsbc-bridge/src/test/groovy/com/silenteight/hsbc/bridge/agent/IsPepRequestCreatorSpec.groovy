@@ -6,8 +6,6 @@ import com.silenteight.hsbc.bridge.util.CustomDateTimeFormatter
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 
-import static com.silenteight.hsbc.bridge.agent.Fixtures.FURTHER_INFORMATION
-
 class IsPepRequestCreatorSpec extends Specification {
 
   def dateTimeFormatter = new CustomDateTimeFormatter("[yyyy-MMM-dd HH:mm:ss][dd-MMM-yy]")
@@ -29,7 +27,7 @@ class IsPepRequestCreatorSpec extends Specification {
     alert.getMatchId() == '1'
     alert.getAlertedPartyCountry() == 'someEdqLoBCountryCodeProd'
     alert.getWatchlistId() == '1'
-    alert.getFurtherInformation() == FURTHER_INFORMATION
+    alert.getFurtherInformation() == Fixtures.FURTHER_INFORMATION
 
     def comment = alert.commentsList.first()
     comment.id == '1'
@@ -53,7 +51,7 @@ class IsPepRequestCreatorSpec extends Specification {
     alert.getMatchId() == '1'
     alert.getAlertedPartyCountry() == 'someEdqLoBCountryCodeTest'
     alert.getWatchlistId() == '1'
-    alert.getFurtherInformation() == FURTHER_INFORMATION
+    alert.getFurtherInformation() == Fixtures.FURTHER_INFORMATION
 
     def comment = alert.commentsList.first()
     comment.id == '2'

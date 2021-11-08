@@ -9,12 +9,10 @@ import com.silenteight.hsbc.datasource.dto.ispep.WatchListItemDto;
 import com.silenteight.hsbc.datasource.dto.ispep.WatchListItemDto.WatchListItemDtoBuilder;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.IsPepFeatureValuesRetriever;
+import com.silenteight.hsbc.datasource.util.StreamUtils;
 
 import java.util.List;
-
-import static com.silenteight.hsbc.datasource.feature.Feature.IS_PEP_V2;
-import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
-import static java.util.Optional.of;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,7 +25,7 @@ public class IsPepFeatureV2 implements IsPepFeatureValuesRetriever<IsPepInputDto
 
     log.debug("Datasource start retrieve data for {} feature.", getFeature());
 
-    var result = of(matchData)
+    var result = Optional.of(matchData)
         .filter(MatchData::isIndividual)
         .map(md -> getIsPepInputForIndividual(md, matchName))
         .orElseGet(() -> getIsPepInputForEntities(matchData, matchName));
@@ -41,7 +39,7 @@ public class IsPepFeatureV2 implements IsPepFeatureValuesRetriever<IsPepInputDto
     var query = isPepQueryFactory.create(matchData);
     var apIndividualExtractLobCountry = query.apWorldCheckIndividualsExtractEdqLobCountryCode();
     var furtherInformation = query.mpWorldCheckIndividualsFurtherInformation();
-    var linkedTo = toDistinctList(query.mpWorldCheckIndividualsLinkedTo());
+    var linkedTo = StreamUtils.toDistinctList(query.mpWorldCheckIndividualsLinkedTo());
 
     return IsPepInputDto.builder()
         .feature(getFeatureName())
@@ -59,7 +57,7 @@ public class IsPepFeatureV2 implements IsPepFeatureValuesRetriever<IsPepInputDto
     var query = isPepQueryFactory.create(matchData);
     var apEntityExtractLobCountry = query.apWorldCheckEntitiesExtractEdqLobCountryCode();
     var furtherInformation = query.mpWorldCheckEntitiesFurtherInformation();
-    var linkedTo = toDistinctList(query.mpWorldCheckEntitiesLinkedTo());
+    var linkedTo = StreamUtils.toDistinctList(query.mpWorldCheckEntitiesLinkedTo());
 
     return IsPepInputDto.builder()
         .feature(getFeatureName())
@@ -95,6 +93,6 @@ public class IsPepFeatureV2 implements IsPepFeatureValuesRetriever<IsPepInputDto
 
   @Override
   public Feature getFeature() {
-    return IS_PEP_V2;
+    return Feature.IS_PEP_V2;
   }
 }

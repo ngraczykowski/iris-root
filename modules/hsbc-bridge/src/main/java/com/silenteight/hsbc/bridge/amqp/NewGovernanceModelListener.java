@@ -3,14 +3,13 @@ package com.silenteight.hsbc.bridge.amqp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.hsbc.bridge.model.dto.ChangeType;
 import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
 import com.silenteight.hsbc.bridge.model.dto.ModelType;
 import com.silenteight.hsbc.bridge.model.transfer.GovernanceModelManager;
 import com.silenteight.model.api.v1.ModelPromotedForProduction;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-
-import static com.silenteight.hsbc.bridge.model.dto.ChangeType.MAJOR;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,7 +37,7 @@ class NewGovernanceModelListener {
         .name(version)
         .url(address + "/model/export/" + type + "/" + version)
         .type(type)
-        .changeType(MAJOR.name())
+        .changeType(ChangeType.MAJOR.name())
         .build();
   }
 }

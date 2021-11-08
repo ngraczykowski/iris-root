@@ -11,10 +11,8 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.*;
-
-import static java.util.Objects.isNull;
-import static lombok.AccessLevel.NONE;
 
 @Entity
 @Table(name = "hsbc_bridge_alert")
@@ -38,19 +36,19 @@ class BulkAlertEntity {
   @Enumerated(EnumType.STRING)
   private AlertStatus status = AlertStatus.STORED;
 
-  @Setter(NONE)
+  @Setter(AccessLevel.NONE)
   @OneToMany
   @JoinColumn(name = "alert_id")
   private Collection<BulkAlertMatchEntity> matches = new ArrayList<>();
 
-  @Setter(NONE)
+  @Setter(AccessLevel.NONE)
   @ElementCollection
   @CollectionTable(name = "hsbc_bridge_alert_metadata", joinColumns = @JoinColumn(name = "id"))
   private List<BulkAlertMetadata> metadata = new ArrayList<>();
 
   @Transient
   boolean isValid() {
-    return isNull(errorMessage) && status != AlertStatus.ERROR;
+    return Objects.isNull(errorMessage) && status != AlertStatus.ERROR;
   }
 
   @Transient

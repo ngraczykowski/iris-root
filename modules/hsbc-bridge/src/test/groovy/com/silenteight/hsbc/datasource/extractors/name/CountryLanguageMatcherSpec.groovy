@@ -3,14 +3,12 @@ package com.silenteight.hsbc.datasource.extractors.name
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.silenteight.hsbc.datasource.extractors.name.CountryLanguageMatcher.matches
-
 class CountryLanguageMatcherSpec extends Specification {
 
   @Unroll
   def 'should check matches variations'() {
     when:
-    def isMatching = matches(languages, countries)
+    def isMatching = CountryLanguageMatcher.matches(languages, countries)
 
     then:
     isMatching == expected

@@ -7,10 +7,6 @@ import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.silenteight.hsbc.datasource.extractors.name.NameExtractor.collectNames;
-import static com.silenteight.hsbc.datasource.extractors.name.NameExtractor.joinNameParts;
-import static java.util.stream.Stream.of;
-
 @RequiredArgsConstructor
 class WorldCheckIndividualsNamesExtractor {
 
@@ -19,15 +15,15 @@ class WorldCheckIndividualsNamesExtractor {
   public Stream<String> extract() {
     var names = worldCheckIndividuals.stream()
         .flatMap(WorldCheckIndividualsNamesExtractor::extractWorldCheckNames);
-    return collectNames(names);
+    return NameExtractor.collectNames(names);
   }
 
   private static Stream<String> extractWorldCheckNames(WorldCheckIndividual worldCheckIndividual) {
-    return of(
+    return Stream.of(
         worldCheckIndividual.getFullNameOriginal(),
         worldCheckIndividual.getFullNameDerived(),
         worldCheckIndividual.getOriginalScriptName(),
-        joinNameParts(
+        NameExtractor.joinNameParts(
             worldCheckIndividual.getGivenNamesOriginal(),
             worldCheckIndividual.getFamilyNameOriginal())
     );

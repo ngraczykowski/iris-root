@@ -9,8 +9,6 @@ import spock.lang.Specification
 
 import java.time.OffsetDateTime
 
-import static com.silenteight.hsbc.bridge.alert.AlertStatus.STORED
-
 class AlertProcessorSpec extends Specification {
 
   def payloadConverter = Mock(AlertPayloadConverter)
@@ -44,7 +42,7 @@ class AlertProcessorSpec extends Specification {
       errorMessage == 'Alert ID is duplicated within a batch'
     }
 
-    1 * repository.findByBulkIdAndStatus(someBulkId, STORED) >>
+    1 * repository.findByBulkIdAndStatus(someBulkId, AlertStatus.STORED) >>
         [fixtures.okAlert, fixtures.invalidAlert, fixtures.duplicatedAlert].stream()
     1 * payloadConverter.convertAlertData(fixtures.invalidAlert.getPayloadAsBytes()) >>
         {throw new RuntimeException()}

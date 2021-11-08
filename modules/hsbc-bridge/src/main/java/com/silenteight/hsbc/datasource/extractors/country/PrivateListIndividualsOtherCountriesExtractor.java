@@ -9,8 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.stream.Stream.of;
-
 @RequiredArgsConstructor
 class PrivateListIndividualsOtherCountriesExtractor {
 
@@ -25,7 +23,7 @@ class PrivateListIndividualsOtherCountriesExtractor {
 
   private static Stream<String> extractPrivateListIndividualsOtherCountries(
       PrivateListIndividual privateListIndividual) {
-    return of(
+    return Stream.of(
         privateListIndividual.getCountryCodesAll(),
         privateListIndividual.getCountriesAll()
     ).filter(StringUtils::isNotBlank);

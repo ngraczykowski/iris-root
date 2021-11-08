@@ -17,8 +17,6 @@ import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.List.of;
-
 @RequiredArgsConstructor
 class TransactionInputProvider implements DataSourceInputProvider<TransactionInputResponse> {
 
@@ -54,6 +52,6 @@ class TransactionInputProvider implements DataSourceInputProvider<TransactionInp
 
   @Override
   public List<Feature> getAllowedFeatures() {
-    return of(/*Implement with feature*/);
+    return List.of(/*Implement with feature*/);
   }
 }

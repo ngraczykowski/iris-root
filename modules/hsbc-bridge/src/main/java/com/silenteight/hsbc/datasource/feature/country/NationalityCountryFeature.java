@@ -9,9 +9,8 @@ import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.concat;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,9 +36,9 @@ public class NationalityCountryFeature implements FeatureValuesRetriever<Country
       var mpWorldCheckCountries = query.getWatchlistIndividualsNationalityCountry();
 
       inputBuilder.alertedPartyCountries(
-          concat(apIdDocumentCountry, apFieldsCountries).distinct().collect(toList()));
+          Stream.concat(apIdDocumentCountry, apFieldsCountries).distinct().collect(Collectors.toList()));
       inputBuilder.watchlistCountries(
-          concat(mpDocument, mpWorldCheckCountries).distinct().collect(toList()));
+          Stream.concat(mpDocument, mpWorldCheckCountries).distinct().collect(Collectors.toList()));
     } else {
       inputBuilder.alertedPartyCountries(List.of());
       inputBuilder.watchlistCountries(List.of());

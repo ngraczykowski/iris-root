@@ -4,14 +4,13 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.feature.name.NameQuery;
+import com.silenteight.hsbc.datasource.util.StreamUtils;
+
+import one.util.streamex.StreamEx;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.silenteight.hsbc.datasource.extractors.name.NameExtractor.applyOriginalScriptEnhancements;
-import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
-import static one.util.streamex.StreamEx.of;
 
 @RequiredArgsConstructor
 class NameQueryFacade implements NameQuery {
@@ -97,31 +96,34 @@ class NameQueryFacade implements NameQuery {
 
   @Override
   public Collection<String> applyOriginalScriptEnhancementsForIndividualNamesWithAliases() {
-    return applyOriginalScriptEnhancements(
-        toDistinctList(apAllIndividualNames()), toDistinctList(mpWorldCheckIndividualsExtractXmlNamesWithCountries()))
+    return NameExtractor.applyOriginalScriptEnhancements(
+            StreamUtils.toDistinctList(apAllIndividualNames()),
+            StreamUtils.toDistinctList(mpWorldCheckIndividualsExtractXmlNamesWithCountries()))
         .getWatchlistPartyIndividuals();
   }
 
   @Override
   public Party applyOriginalScriptEnhancementsForIndividualNames() {
-    return applyOriginalScriptEnhancements(
-        toDistinctList(apAllIndividualNames()), toDistinctList(mpAllIndividualNamesWithoutXmlAliases()));
+    return NameExtractor.applyOriginalScriptEnhancements(
+        StreamUtils.toDistinctList(apAllIndividualNames()),
+        StreamUtils.toDistinctList(mpAllIndividualNamesWithoutXmlAliases()));
   }
 
   @Override
   public Party applyOriginalScriptEnhancementsForIndividualNamesAll() {
-    return applyOriginalScriptEnhancements(
-        apAllIndividualNames().collect(Collectors.toList()), mpAllIndividualNamesWithoutXmlAliases().collect(Collectors.toList()));
+    return NameExtractor.applyOriginalScriptEnhancements(
+        apAllIndividualNames().collect(Collectors.toList()),
+        mpAllIndividualNamesWithoutXmlAliases().collect(Collectors.toList()));
   }
 
   private Stream<String> apAllIndividualNames() {
-    return of(apIndividualExtractProfileFullName())
+    return StreamEx.of(apIndividualExtractProfileFullName())
         .append(apIndividualExtractNames())
         .append(apIndividualExtractOtherNames());
   }
 
   private Stream<String> mpAllIndividualNamesWithoutXmlAliases() {
-    return of(mpWorldCheckIndividualsExtractNames())
+    return StreamEx.of(mpWorldCheckIndividualsExtractNames())
         .append(mpPrivateListIndividualsExtractNames());
   }
 }

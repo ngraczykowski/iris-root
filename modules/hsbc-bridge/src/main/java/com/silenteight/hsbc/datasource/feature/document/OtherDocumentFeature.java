@@ -7,9 +7,9 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.document.DocumentFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
+import com.silenteight.hsbc.datasource.util.StreamUtils;
 
-import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
-import static java.util.Collections.emptyList;
+import java.util.Collections;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,12 +26,12 @@ public class OtherDocumentFeature implements FeatureValuesRetriever<DocumentFeat
     var inputBuilder = DocumentFeatureInputDto.builder();
 
     if (matchData.isIndividual()) {
-      inputBuilder.alertedPartyDocuments(toDistinctList(query.apOtherDocuments()));
+      inputBuilder.alertedPartyDocuments(StreamUtils.toDistinctList(query.apOtherDocuments()));
       inputBuilder.watchlistDocuments(
-          toDistinctList(query.mpOtherDocuments(), query.mpEdqTaxNumber()));
+          StreamUtils.toDistinctList(query.mpOtherDocuments(), query.mpEdqTaxNumber()));
     } else {
-      inputBuilder.alertedPartyDocuments(emptyList());
-      inputBuilder.watchlistDocuments(emptyList());
+      inputBuilder.alertedPartyDocuments(Collections.emptyList());
+      inputBuilder.watchlistDocuments(Collections.emptyList());
     }
 
     var result = inputBuilder

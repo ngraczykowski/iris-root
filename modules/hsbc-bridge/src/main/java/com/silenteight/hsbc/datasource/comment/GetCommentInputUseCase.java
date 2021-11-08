@@ -10,14 +10,9 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import one.util.streamex.StreamEx;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
-
-import static java.util.Collections.sort;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,7 +27,7 @@ class GetCommentInputUseCase {
   public List<CommentInputDto> getInputRequestsResponse(StreamCommentInputsRequestDto request) {
     log.info("Create comments request received.");
     var alertsSorted = new ArrayList<>(request.getAlerts());
-    sort(alertsSorted);
+    Collections.sort(alertsSorted);
 
     var matches = matchFacade.getMatchesByAlertNames(alertsSorted);
 

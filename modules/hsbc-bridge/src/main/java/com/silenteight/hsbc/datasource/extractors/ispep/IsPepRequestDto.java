@@ -4,20 +4,18 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import static java.util.Collections.emptyList;
-import static java.util.Collections.emptyMap;
 
 @Builder
 @Value
 public class IsPepRequestDto {
 
   @Builder.Default
-  List<String> fieldNames = emptyList();
+  List<String> fieldNames = Collections.emptyList();
   @Builder.Default
-  Map<String, String> apFields = emptyMap();
+  Map<String, String> apFields = Collections.emptyMap();
   @NonNull
   String bankRegion;
   @NonNull

@@ -12,15 +12,11 @@ import com.silenteight.hsbc.datasource.dto.ispep.IsPepInputRequest;
 import com.silenteight.hsbc.datasource.dto.ispep.IsPepInputResponse;
 import com.silenteight.hsbc.datasource.extractors.ispep.IsPepServiceClient;
 import com.silenteight.hsbc.datasource.feature.Feature;
+import com.silenteight.hsbc.datasource.feature.FeatureModel;
 import com.silenteight.hsbc.datasource.feature.IsPepFeatureClientValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.silenteight.hsbc.datasource.feature.Feature.IS_PEP;
-import static com.silenteight.hsbc.datasource.feature.FeatureModel.getFeatureRetriever;
-import static java.util.List.of;
-import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 public class IsPepInputProvider {
@@ -50,7 +46,7 @@ public class IsPepInputProvider {
       List<String> features, MatchData matchData) {
     return features.stream()
         .map(featureName -> (IsPepFeatureInputDto)
-            ((IsPepFeatureClientValuesRetriever) getFeatureRetriever(featureName))
+            ((IsPepFeatureClientValuesRetriever) FeatureModel.getFeatureRetriever(featureName))
                 .retrieve(matchData, isPepServiceClient))
         .collect(Collectors.toList());
   }
@@ -58,7 +54,7 @@ public class IsPepInputProvider {
   private List<String> validateFeatures(List<String> features) {
     var allowedFeatures = getAllowedFeatures().stream()
         .map(Feature::getFullName)
-        .collect(toList());
+        .collect(Collectors.toList());
 
     features.forEach(feature -> {
       if (!allowedFeatures.contains(feature)) {
@@ -69,6 +65,6 @@ public class IsPepInputProvider {
   }
 
   public List<Feature> getAllowedFeatures() {
-    return of(IS_PEP);
+    return List.of(Feature.IS_PEP);
   }
 }

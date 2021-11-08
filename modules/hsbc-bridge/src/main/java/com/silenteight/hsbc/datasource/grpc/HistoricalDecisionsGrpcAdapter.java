@@ -12,9 +12,8 @@ import io.grpc.StatusRuntimeException;
 import org.springframework.retry.annotation.Retryable;
 
 import java.util.List;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static java.util.stream.Collectors.toList;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,13 +43,13 @@ class HistoricalDecisionsGrpcAdapter implements HistoricalDecisionsServiceClient
   }
 
   private HistoricalDecisionsModelServiceBlockingStub getBlockingStub() {
-    return blockingStub.withDeadlineAfter(deadlineInSeconds, SECONDS);
+    return blockingStub.withDeadlineAfter(deadlineInSeconds, TimeUnit.SECONDS);
   }
 
   private List<ModelKey> requestMapToModelKeys(List<ModelKeyDto> modelKeys) {
     return modelKeys.stream()
         .map(this::mapToModelKey)
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private ModelKey mapToModelKey(ModelKeyDto modelKey) {
@@ -100,7 +99,7 @@ class HistoricalDecisionsGrpcAdapter implements HistoricalDecisionsServiceClient
             .modelKey(mapToModelKeyDto(modelCount.getModelKey()))
             .truePositivesCount(modelCount.getTruePositivesCount())
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private ModelKeyDto mapToModelKeyDto(ModelKey modelKey) {

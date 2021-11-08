@@ -9,12 +9,13 @@ import com.silenteight.hsbc.datasource.extractors.document.DocumentExtractor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static java.util.List.of;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -64,20 +65,20 @@ class DocumentExtractorTest {
 
     //when
     var document =
-        nationalIdFeatureConverter.convertAlertedPartyDocumentNumbers(of(customerIndividuals));
+        nationalIdFeatureConverter.convertAlertedPartyDocumentNumbers(List.of(customerIndividuals));
 
     //then
-    assertThat(document.getPassportNumbers()).containsOnlyOnceElementsOf(of("ZS12398745"));
-    assertThat(document.getNationalIds()).containsOnlyOnceElementsOf(of("Y999999"));
-    assertThat(document.getOtherDocuments()).containsOnlyOnceElementsOf(of("K987456 NumBeR"));
+    assertThat(document.getPassportNumbers()).containsOnlyOnceElementsOf(List.of("ZS12398745"));
+    assertThat(document.getNationalIds()).containsOnlyOnceElementsOf(List.of("Y999999"));
+    assertThat(document.getOtherDocuments()).containsOnlyOnceElementsOf(List.of("K987456 NumBeR"));
   }
 
   @Test
   void shouldExtractMatchedPartyDocumentNumbers() {
     //given
     var nationalIdFeatureConverter = new DocumentExtractor();
-    given(matchData.getWorldCheckIndividuals()).willReturn(of(worldCheckIndividuals));
-    given(matchData.getPrivateListIndividuals()).willReturn(of(privateListIndividuals));
+    BDDMockito.given(matchData.getWorldCheckIndividuals()).willReturn(List.of(worldCheckIndividuals));
+    BDDMockito.given(matchData.getPrivateListIndividuals()).willReturn(List.of(privateListIndividuals));
 
     //when
     when(matchData.hasPrivateListIndividuals()).thenReturn(true);
@@ -86,11 +87,11 @@ class DocumentExtractorTest {
 
     //then
     assertThat(document.getPassportNumbers()).containsOnlyOnceElementsOf(
-        of("KZ0212573", "KW4444587", "K45R78986I", "A4671286I", "SUFFIX-A"));
+        List.of("KZ0212573", "KW4444587", "K45R78986I", "A4671286I", "SUFFIX-A"));
     assertThat(document.getNationalIds()).containsOnlyOnceElementsOf(
-        of("4568795132", "5465498756", "78845ID", "SUFFIX-A"));
+        List.of("4568795132", "5465498756", "78845ID", "SUFFIX-A"));
     assertThat(document.getOtherDocuments()).containsOnlyOnceElementsOf(
-        of("BC 78845", "ID78845", "GOHA784512R12", "sadasdas76@hotmail.com", "SUFFIX-A"));
+        List.of("BC 78845", "ID78845", "GOHA784512R12", "sadasdas76@hotmail.com", "SUFFIX-A"));
     assertThat(document.getAllCountries()).contains("VIET NAM", "IRAN", "UNK UNKW");
   }
 }

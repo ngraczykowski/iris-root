@@ -15,10 +15,8 @@ import io.grpc.StatusRuntimeException;
 import org.springframework.retry.annotation.Retryable;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -55,7 +53,7 @@ class AlertGrpcAdapter implements AlertServiceClient {
       BatchCreateAlertMatchesRequestDto request) {
     var matches = request.getMatchIds().stream()
         .map(m -> Match.newBuilder().setMatchId(m).build())
-        .collect(toList());
+        .collect(Collectors.toList());
     var gprcRequest = BatchCreateAlertMatchesRequest.newBuilder()
         .setAlert(request.getAlert())
         .addAllMatches(matches)
@@ -81,7 +79,7 @@ class AlertGrpcAdapter implements AlertServiceClient {
             .matchId(m.getMatchId())
             .name(m.getName())
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private List<AlertDto> mapAlerts(List<Alert> alertsList) {
@@ -90,10 +88,10 @@ class AlertGrpcAdapter implements AlertServiceClient {
             .alertId(a.getAlertId())
             .name(a.getName())
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private AlertServiceBlockingStub getStub() {
-    return alertServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, SECONDS);
+    return alertServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, TimeUnit.SECONDS);
   }
 }

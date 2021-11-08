@@ -6,19 +6,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.nio.file.Files.createDirectories;
-import static java.nio.file.Files.deleteIfExists;
-import static java.nio.file.Files.exists;
-import static java.nio.file.Paths.get;
-import static org.apache.commons.io.IOUtils.copyLarge;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -56,7 +53,7 @@ public class FileManager {
   }
 
   private boolean deleteArchive(String filePath) throws IOException {
-    var result = deleteIfExists(get(filePath));
+    var result = Files.deleteIfExists(Paths.get(filePath));
     if (result) {
       log.info("File successfully deleted from path: " + filePath);
     } else {
@@ -71,7 +68,7 @@ public class FileManager {
     var filePath = createPath(name);
 
     var fileOutputStream = new FileOutputStream(filePath);
-    copyLarge(gzipInputStream, fileOutputStream);
+    IOUtils.copyLarge(gzipInputStream, fileOutputStream);
     fileOutputStream.close();
 
     log.info("File successfully unzipped to: " + filePath);
@@ -105,7 +102,7 @@ public class FileManager {
     var name = entry.getName();
     var filePath = createPath(name);
     var fileOutputStream = new FileOutputStream(filePath);
-    copyLarge(zipInputStream, fileOutputStream);
+    IOUtils.copyLarge(zipInputStream, fileOutputStream);
     fileOutputStream.close();
 
     log.info("File successfully unzipped to: {}", filePath);
@@ -113,12 +110,12 @@ public class FileManager {
   }
 
   private void createDirectory() throws IOException {
-    var directoryPath = get(path);
-    if (exists(directoryPath)) {
+    var directoryPath = Paths.get(path);
+    if (Files.exists(directoryPath)) {
       log.info("Directory already exists on path: " + directoryPath);
     } else {
       log.info("Create new directory on path: " + directoryPath);
-      createDirectories(directoryPath);
+      Files.createDirectories(directoryPath);
     }
   }
 

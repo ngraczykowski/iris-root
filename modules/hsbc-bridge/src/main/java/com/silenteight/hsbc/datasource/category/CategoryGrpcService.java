@@ -15,8 +15,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 @GrpcService
 @RequiredArgsConstructor
@@ -42,7 +41,7 @@ class CategoryGrpcService extends CategoryServiceImplBase {
   private List<Category> mapCategories(List<CategoryDto> categories) {
     return categories.stream()
         .map(this::mapCategory)
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private Category mapCategory(CategoryDto category) {

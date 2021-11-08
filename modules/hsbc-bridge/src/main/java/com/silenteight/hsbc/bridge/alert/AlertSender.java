@@ -8,13 +8,11 @@ import com.silenteight.hsbc.bridge.alert.dto.AlertEntityDto;
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 import com.silenteight.hsbc.bridge.report.Alert;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.util.Collection;
 import java.util.List;
-
-import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.AGENTS;
-import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.WAREHOUSE;
-import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.ArrayUtils.contains;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 class AlertSender {
@@ -26,11 +24,11 @@ class AlertSender {
   void send(@NonNull Collection<AlertEntityDto> alerts, SendOption[] options) {
     var alertComposites = getAlertInformation(alerts);
 
-    if (contains(options, AGENTS)) {
+    if (ArrayUtils.contains(options, SendOption.AGENTS)) {
       sendToAgents(alertComposites);
     }
 
-    if (contains(options, WAREHOUSE)) {
+    if (ArrayUtils.contains(options, SendOption.WAREHOUSE)) {
       sendToWarehouse(alertComposites);
     }
   }
@@ -38,7 +36,7 @@ class AlertSender {
   private void sendToAgents(Collection<AlertDataComposite> alerts) {
     var alertsData = alerts.stream()
         .map(AlertDataComposite::getPayload)
-        .collect(toList());
+        .collect(Collectors.toList());
 
     agentApi.sendIsPep(alertsData);
     agentApi.sendHistorical(alertsData);
@@ -52,7 +50,7 @@ class AlertSender {
   private List<AlertDataComposite> getAlertInformation(Collection<AlertEntityDto> alerts) {
     return alerts.stream()
         .map(a -> new AlertDataComposite(a, mapper.toAlertData(a.getPayload())))
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private Collection<Alert> getReportAlerts(Collection<AlertDataComposite> alerts) {

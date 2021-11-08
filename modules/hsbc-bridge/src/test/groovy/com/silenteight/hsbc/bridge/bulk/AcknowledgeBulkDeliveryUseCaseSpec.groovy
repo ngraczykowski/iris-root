@@ -4,8 +4,6 @@ import com.silenteight.hsbc.bridge.bulk.exception.BatchResultNotAvailableExcepti
 
 import spock.lang.Specification
 
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.*
-
 class AcknowledgeBulkDeliveryUseCaseSpec extends Specification {
 
   def bulkRepository = Mock(BulkRepository)
@@ -14,9 +12,9 @@ class AcknowledgeBulkDeliveryUseCaseSpec extends Specification {
   def 'should update bulk status to DELIVERY'() {
     given:
     def bulk = new Bulk('20210101-1111')
-    bulk.setStatus(COMPLETED)
+    bulk.setStatus(BulkStatus.COMPLETED)
     def updatedBulk = new Bulk('20210101-1111')
-    updatedBulk.setStatus(DELIVERED)
+    updatedBulk.setStatus(BulkStatus.DELIVERED)
 
     when:
     def result = underTest.apply(bulk.id)
@@ -36,7 +34,7 @@ class AcknowledgeBulkDeliveryUseCaseSpec extends Specification {
   def 'should not update bulk status to DELIVERY and throw BatchResultNotAvailableException'() {
     given:
     def bulk = new Bulk('20210101-1111')
-    bulk.setStatus(PROCESSING)
+    bulk.setStatus(BulkStatus.PROCESSING)
 
     when:
     underTest.apply(bulk.id)

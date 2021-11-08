@@ -8,12 +8,9 @@ import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 import java.time.OffsetDateTime;
 import javax.persistence.*;
 
-import static lombok.AccessLevel.NONE;
-import static lombok.AccessLevel.PROTECTED;
-
 @Data
-@NoArgsConstructor(access = PROTECTED)
-@Setter(NONE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter(AccessLevel.NONE)
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
 @Entity

@@ -8,9 +8,10 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
-import javax.persistence.*;
-
-import static java.time.OffsetDateTime.now;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 
 @Data
 @Setter(AccessLevel.NONE)
@@ -20,7 +21,7 @@ public abstract class BaseEntity {
   @Column(nullable = false, updatable = false)
   @Access(AccessType.FIELD)
   @CreationTimestamp
-  private OffsetDateTime createdAt = now();
+  private OffsetDateTime createdAt = OffsetDateTime.now();
 
   @Column(nullable = false)
   @Access(AccessType.FIELD)

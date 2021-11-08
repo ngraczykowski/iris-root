@@ -14,10 +14,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,7 +30,7 @@ class IngestRecommendationsUseCase {
         recommendations.getBatchId(), recommendations.getAlerts().size());
 
     var alerts = mapAlerts(recommendations.getAlerts())
-        .collect(toList());
+        .collect(Collectors.toList());
 
     log.info("Mapping completed with alert count: {}", alerts.size());
 
@@ -72,7 +70,7 @@ class IngestRecommendationsUseCase {
         map.put("status", alert.getStatus().getValue());
         map.putAll(alert.getAlertMetadata()
             .stream()
-            .collect(toMap(AlertMetadata::getKey, AlertMetadata::getValue)));
+            .collect(Collectors.toMap(AlertMetadata::getKey, AlertMetadata::getValue)));
         return map;
       }
 

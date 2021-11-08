@@ -1,10 +1,9 @@
 package com.silenteight.hsbc.bridge.model.transfer
 
-import spock.lang.Specification
+import com.silenteight.hsbc.bridge.model.dto.ModelStatus
+import com.silenteight.hsbc.bridge.model.dto.ModelType
 
-import static com.silenteight.hsbc.bridge.model.dto.ModelStatus.SUCCESS
-import static com.silenteight.hsbc.bridge.model.dto.ModelType.*
-import static java.util.Optional.of
+import spock.lang.Specification
 
 class GetModelUseCaseSpec extends Specification {
 
@@ -13,20 +12,21 @@ class GetModelUseCaseSpec extends Specification {
 
   def 'should get IS_PEP_PROCEDURAL model from database'() {
     given:
-    def modelInformationEntity = of(
+    def modelInformationEntity = Optional.of(
         ModelInformationEntity.builder()
             .name('test_model')
             .minIoUrl('test_url')
-            .type(IS_PEP_PROCEDURAL)
-            .status(SUCCESS)
+            .type(ModelType.IS_PEP_PROCEDURAL)
+            .status(ModelStatus.SUCCESS)
             .build())
     def entity = modelInformationEntity.get()
 
     when:
-    def result = underTest.getModel(IS_PEP_PROCEDURAL)
+    def result = underTest.getModel(ModelType.IS_PEP_PROCEDURAL)
 
     then:
-    1 * modelRepository.findFirstByTypeAndStatusOrderByCreatedAtDesc(IS_PEP_PROCEDURAL, SUCCESS) >>
+    1 * modelRepository
+        .findFirstByTypeAndStatusOrderByCreatedAtDesc(ModelType.IS_PEP_PROCEDURAL, ModelStatus.SUCCESS) >>
         modelInformationEntity
 
     with(result) {
@@ -39,20 +39,21 @@ class GetModelUseCaseSpec extends Specification {
 
   def 'should get IS_PEP_HISTORICAL model from database'() {
     given:
-    def modelInformationEntity = of(
+    def modelInformationEntity = Optional.of(
         ModelInformationEntity.builder()
             .name('test_model')
             .minIoUrl('test_url')
-            .type(IS_PEP_HISTORICAL)
-            .status(SUCCESS)
+            .type(ModelType.IS_PEP_HISTORICAL)
+            .status(ModelStatus.SUCCESS)
             .build())
     def entity = modelInformationEntity.get()
 
     when:
-    def result = underTest.getModel(IS_PEP_HISTORICAL)
+    def result = underTest.getModel(ModelType.IS_PEP_HISTORICAL)
 
     then:
-    1 * modelRepository.findFirstByTypeAndStatusOrderByCreatedAtDesc(IS_PEP_HISTORICAL, SUCCESS) >>
+    1 * modelRepository
+        .findFirstByTypeAndStatusOrderByCreatedAtDesc(ModelType.IS_PEP_HISTORICAL, ModelStatus.SUCCESS) >>
         modelInformationEntity
 
     with(result) {
@@ -65,20 +66,20 @@ class GetModelUseCaseSpec extends Specification {
 
   def 'should get NAME_ALIASES model from database'() {
     given:
-    def modelInformationEntity = of(
+    def modelInformationEntity = Optional.of(
         ModelInformationEntity.builder()
             .name('test_model')
             .minIoUrl('test_url')
-            .type(NAME_ALIASES)
-            .status(SUCCESS)
+            .type(ModelType.NAME_ALIASES)
+            .status(ModelStatus.SUCCESS)
             .build())
     def entity = modelInformationEntity.get()
 
     when:
-    def result = underTest.getModel(NAME_ALIASES)
+    def result = underTest.getModel(ModelType.NAME_ALIASES)
 
     then:
-    1 * modelRepository.findFirstByTypeAndStatusOrderByCreatedAtDesc(NAME_ALIASES, SUCCESS) >>
+    1 * modelRepository.findFirstByTypeAndStatusOrderByCreatedAtDesc(ModelType.NAME_ALIASES, ModelStatus.SUCCESS) >>
         modelInformationEntity
 
     with(result) {

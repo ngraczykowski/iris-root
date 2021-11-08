@@ -13,8 +13,7 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 @GrpcService
 @RequiredArgsConstructor
@@ -52,13 +51,13 @@ class CategoryGrpcServiceValues extends CategoryValueServiceImplBase {
             .category(categoryMatch.getCategory())
             .matches(categoryMatch.getMatchesList())
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private List<CategoryValue> mapMatchCategoryValues(List<CategoryValueDto> categoryValues) {
     return categoryValues.stream()
         .map(this::mapCategoryValue)
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private CategoryValue mapCategoryValue(CategoryValueDto categoryValue) {

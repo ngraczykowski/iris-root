@@ -7,9 +7,8 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
 
 @Data
 @Setter(AccessLevel.NONE)
@@ -37,7 +36,7 @@ public class Document {
   public List<String> getAllDocumentsNumbers() {
     return Stream.of(passportNumbers, nationalIds, otherDocuments)
         .flatMap(Collection::stream)
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   void addNationalIdCountry(String nationalIdsCountry) {
@@ -55,6 +54,6 @@ public class Document {
   public List<String> getAllCountries() {
     return Stream.of(nationalIdsCountries, passportCountries, documentIdentificationCountries)
         .flatMap(Collection::stream)
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 }

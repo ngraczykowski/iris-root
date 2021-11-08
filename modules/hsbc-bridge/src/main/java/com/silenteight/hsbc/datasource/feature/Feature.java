@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 
-import static java.util.stream.Stream.of;
+import java.util.stream.Stream;
 
 @Getter
 @AllArgsConstructor
@@ -42,7 +42,7 @@ public enum Feature {
   }
 
   public static Feature getByFullName(@NonNull String name) {
-    return of(values())
+    return Stream.of(values())
         .filter(n -> n.getFullName().equalsIgnoreCase(name))
         .findFirst()
         .orElseThrow(() -> new FeatureNotFoundException(name));

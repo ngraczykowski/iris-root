@@ -13,8 +13,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -28,14 +27,14 @@ class RecommendationGeneratedListener {
     log.debug("Received RecommendationsGenerated amqp message for analysis={}", recommendation.getAnalysis());
 
     eventPublisher.publishEvent(RecommendationsGeneratedEvent.builder()
-            .analysis(recommendation.getAnalysis())
-            .alertRecommendationInfos(map(recommendation.getRecommendationInfosList()))
-            .build());
+        .analysis(recommendation.getAnalysis())
+        .alertRecommendationInfos(map(recommendation.getRecommendationInfosList()))
+        .build());
   }
 
   private List<AlertRecommendationInfo> map(List<RecommendationInfo> list) {
     return list.stream()
-        .map(a-> new AlertRecommendationInfo(a.getAlert(), a.getRecommendation()))
-        .collect(toList());
+        .map(a -> new AlertRecommendationInfo(a.getAlert(), a.getRecommendation()))
+        .collect(Collectors.toList());
   }
 }

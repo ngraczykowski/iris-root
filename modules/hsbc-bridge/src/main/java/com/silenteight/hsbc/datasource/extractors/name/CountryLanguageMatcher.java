@@ -8,20 +8,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-import static java.util.List.of;
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
-import static java.util.regex.Pattern.compile;
-
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class CountryLanguageMatcher {
 
-  private static final List<String> COUNTRIES = of(
+  private static final List<String> COUNTRIES = List.of(
       "CN", "CHINA",
       "HK", "HONG KONG",
       "SG", "SINGAPORE",
       "TW", "TAIWAN");
 
-  private static final List<String> LANGUAGES = of("zh(-.+)?");
+  private static final List<String> LANGUAGES = List.of("zh(-.+)?");
 
   static boolean matches(List<String> languages, List<String> countries) {
     if ((countries != null && !countries.isEmpty()) &&
@@ -62,13 +58,13 @@ class CountryLanguageMatcher {
         .filter(Objects::nonNull)
         .forEach(regex -> {
           if (hasBoundaries && noCaseIntense) {
-            patterns.add(compile("\\b" + regex + "\\b", CASE_INSENSITIVE));
+            patterns.add(Pattern.compile("\\b" + regex + "\\b", Pattern.CASE_INSENSITIVE));
           } else if (hasBoundaries) {
-            patterns.add(compile("\\b" + regex + "\\b"));
+            patterns.add(Pattern.compile("\\b" + regex + "\\b"));
           } else if (noCaseIntense) {
-            patterns.add(compile(regex, CASE_INSENSITIVE));
+            patterns.add(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));
           } else {
-            patterns.add(compile(regex));
+            patterns.add(Pattern.compile(regex));
           }
         });
     return patterns;

@@ -13,8 +13,6 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PROCESSING;
-
 /**
  * DEV ONLY
  */
@@ -50,6 +48,6 @@ class BatchProcessingSimulator {
   }
 
   private Optional<Bulk> findBatchInProcessing() {
-    return bulkRepository.findFirstByStatusOrderByCreatedAtAsc(PROCESSING);
+    return bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PROCESSING);
   }
 }

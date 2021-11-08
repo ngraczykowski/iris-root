@@ -9,10 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.of;
 
 @RequiredArgsConstructor
 class VerifyIsPepResponseExtractor {
@@ -49,11 +47,11 @@ class VerifyIsPepResponseExtractor {
             .build())
         .map(isPepServiceClient::verifyIfIsPep)
         .distinct()
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private static Stream<String> extractWorldCheckListRecordIds(
       WorldCheckIndividual worldCheckIndividual) {
-    return of(worldCheckIndividual.getListRecordId());
+    return Stream.of(worldCheckIndividual.getListRecordId());
   }
 }

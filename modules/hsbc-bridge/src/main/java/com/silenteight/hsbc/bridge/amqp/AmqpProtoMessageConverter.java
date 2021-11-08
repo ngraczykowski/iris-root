@@ -22,9 +22,6 @@ import org.springframework.amqp.support.converter.MessageConversionException;
 
 import java.util.Optional;
 
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-
 @RequiredArgsConstructor
 @Builder
 class AmqpProtoMessageConverter extends AbstractMessageConverter {
@@ -152,11 +149,11 @@ class AmqpProtoMessageConverter extends AbstractMessageConverter {
 
     if (parser.isEmpty()) {
       if (!wrapUnknown)
-        return empty();
+        return Optional.empty();
 
-      return of(AnyUtils.wrap(typeName, ByteString.copyFrom(body)));
+      return Optional.of(AnyUtils.wrap(typeName, ByteString.copyFrom(body)));
     }
 
-    return of(parser.get().parseFrom(body));
+    return Optional.of(parser.get().parseFrom(body));
   }
 }

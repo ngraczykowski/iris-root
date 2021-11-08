@@ -3,15 +3,13 @@ package com.silenteight.hsbc.bridge.alert
 import com.silenteight.dataretention.api.v1.AlertsExpired
 import com.silenteight.dataretention.api.v1.PersonalInformationExpired
 import com.silenteight.hsbc.bridge.retention.DataRetentionMessageSender
+import com.silenteight.hsbc.bridge.retention.DataRetentionType
 
 import spock.lang.Specification
 
 import java.time.Duration
 import java.time.OffsetDateTime
 import java.util.stream.Stream
-
-import static com.silenteight.hsbc.bridge.retention.DataRetentionType.ALERTS_EXPIRED
-import static com.silenteight.hsbc.bridge.retention.DataRetentionType.PERSONAL_INFO_EXPIRED
 
 class AlertRetentionMessageSenderSpec extends Specification {
 
@@ -30,7 +28,7 @@ class AlertRetentionMessageSenderSpec extends Specification {
     def message = AlertsExpired.newBuilder().addAllAlerts(alerts).build()
 
     when:
-    underTest.send(expireDate, chunkSize, ALERTS_EXPIRED)
+    underTest.send(expireDate, chunkSize, DataRetentionType.ALERTS_EXPIRED)
 
     then:
     1 * alertRepository.findAlertEntityNamesByAlertTimeBefore(expireDate) >> alertsStream
@@ -51,7 +49,7 @@ class AlertRetentionMessageSenderSpec extends Specification {
     def thirdMessage = PersonalInformationExpired.newBuilder().addAllAlerts(thirdAlertList).build()
 
     when:
-    underTest.send(expireDate, chunkSize, PERSONAL_INFO_EXPIRED)
+    underTest.send(expireDate, chunkSize, DataRetentionType.PERSONAL_INFO_EXPIRED)
 
     then:
     1 * alertRepository.findAlertEntityNamesByAlertTimeBefore(expireDate) >> alertsStream

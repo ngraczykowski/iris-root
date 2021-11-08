@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static java.util.concurrent.Executors.newFixedThreadPool;
+import java.util.concurrent.Executors;
 
 @Configuration
 @ConditionalOnClass(name = "net.devh.boot.grpc.server.serverfactory.NettyGrpcServerFactory")
@@ -36,7 +36,7 @@ public class GrpcConfiguration {
           .orElse(NettyRuntime.availableProcessors());
 
       log.info("Using executor service with " + threads + " threads for gRPC handling.");
-      nettyServerBuilder.executor(newFixedThreadPool(threads));
+      nettyServerBuilder.executor(Executors.newFixedThreadPool(threads));
     }
   }
 }

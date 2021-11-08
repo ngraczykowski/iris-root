@@ -3,13 +3,12 @@ package com.silenteight.hsbc.bridge.amqp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.hsbc.bridge.model.dto.ChangeType;
 import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
 import com.silenteight.hsbc.bridge.model.transfer.WorldCheckModelManager;
 import com.silenteight.worldcheck.api.v1.ModelPersisted;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-
-import static com.silenteight.hsbc.bridge.model.dto.ChangeType.MINOR;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,7 +33,7 @@ class NewWorldCheckModelListener {
         .name(version)
         .url(address + "/model/export/" + type + "/" + version)
         .type(type)
-        .changeType(MINOR.name())
+        .changeType(ChangeType.MINOR.name())
         .build();
   }
 }

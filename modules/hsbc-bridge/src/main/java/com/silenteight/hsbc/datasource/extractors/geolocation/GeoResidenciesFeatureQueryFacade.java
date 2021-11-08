@@ -3,6 +3,7 @@ package com.silenteight.hsbc.datasource.extractors.geolocation;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
+import com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.SignType;
 import com.silenteight.hsbc.datasource.extractors.name.Party;
 import com.silenteight.hsbc.datasource.feature.country.CountryDiscoverer;
 import com.silenteight.hsbc.datasource.feature.geolocation.GeoResidencyFeatureQuery;
@@ -11,11 +12,8 @@ import one.util.streamex.EntryStream;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-
-import static com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.SignType.SPACE;
-import static com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.mergeFields;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Stream.of;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public class GeoResidenciesFeatureQueryFacade implements GeoResidencyFeatureQuery {
@@ -46,22 +44,24 @@ public class GeoResidenciesFeatureQueryFacade implements GeoResidencyFeatureQuer
     var privateListIndividualsGeoResidencies = privateListIndividualsGeoResidencies();
     var ctrpScreeningIndividualsGeoResidencies = ctrpScreeningIndividualsGeoResidencies();
 
-    var fields = of(worldCheckIndividualsGeoResidencies, privateListIndividualsGeoResidencies, ctrpScreeningIndividualsGeoResidencies);
+    var fields = Stream.of(worldCheckIndividualsGeoResidencies, privateListIndividualsGeoResidencies,
+        ctrpScreeningIndividualsGeoResidencies);
 
     return fields.distinct()
         .filter(StringUtils::isNotBlank)
-        .collect(joining(SPACE.getSign()));
+        .collect(Collectors.joining(SignType.SPACE.getSign()));
   }
 
   @Override
   public String getMpEntitiesGeoResidencies() {
     var ctrpScreeningEntitiesGeoResidencies = ctrpScreeningEntitiesGeoResidencies();
-    var fields = of(ctrpScreeningEntitiesGeoResidencies);
-    return fields.distinct().collect(joining(" "));
+    var fields = Stream.of(ctrpScreeningEntitiesGeoResidencies);
+    return fields.distinct().collect(Collectors.joining(" "));
   }
 
 
-  private String getCustomersWithoutNamesAndWithCountries(List<List<String>> addresses, List<List<String>> countries, List<String> allNames) {
+  private String getCustomersWithoutNamesAndWithCountries(
+      List<List<String>> addresses, List<List<String>> countries, List<String> allNames) {
     validateSize(addresses, countries);
 
     var addressTransformers = EntryStream.of(addresses)
@@ -73,27 +73,29 @@ public class GeoResidenciesFeatureQueryFacade implements GeoResidencyFeatureQuer
 
     return addressTransformers.map(CustomerAddressTransformer::getAddressWithoutNamesAndWithCountries)
         .distinct()
-        .collect(joining(SPACE.getSign()));
+        .collect(Collectors.joining(SignType.SPACE.getSign()));
   }
 
   private void validateSize(List<List<String>> addresses, List<List<String>> countries) {
     if (addresses.size() != countries.size()) {
       throw new IllegalStateException(
           String.format(
-              "Can not retrieve residencies for a given customers. Sizes don't match. Addresses size: %s, countries size: %s", addresses.size(), countries.size()));
+              "Can not retrieve residencies for a given customers. Sizes don't match. Addresses size: %s, countries size: %s",
+              addresses.size(), countries.size()));
     }
   }
 
   private String worldCheckIndividualsGeoResidencies() {
     var worldCheckIndividuals = matchData.getWorldCheckIndividuals();
     var fields = new WorldCheckIndividualsResidenciesExtractor(worldCheckIndividuals).extract();
-    return mergeFields(fields);
+    return GeoLocationExtractor.mergeFields(fields);
   }
 
   private String privateListIndividualsGeoResidencies() {
     var privateListIndividuals = matchData.getPrivateListIndividuals();
     var addresses = new PrivateListIndividualsAddressExtractor(privateListIndividuals).extract();
-    var countries = countryDiscoverer.discover(new PrivateListIndividualsCountryExtractor(privateListIndividuals).extract());
+    var countries =
+        countryDiscoverer.discover(new PrivateListIndividualsCountryExtractor(privateListIndividuals).extract());
 
     validateSize(addresses, countries);
 
@@ -104,18 +106,18 @@ public class GeoResidenciesFeatureQueryFacade implements GeoResidencyFeatureQuer
             .build());
 
     return addressTransformers.map(CustomerAddressTransformer::getAddressWithCountry)
-        .collect(joining(SPACE.getSign()));
+        .collect(Collectors.joining(SignType.SPACE.getSign()));
   }
 
   private String ctrpScreeningIndividualsGeoResidencies() {
     var ctrpScreeningIndividuals = matchData.getCtrpScreeningIndividuals();
     var fields = new CtrpScreeningExtractor(ctrpScreeningIndividuals).extract();
-    return mergeFields(fields);
+    return GeoLocationExtractor.mergeFields(fields);
   }
 
   private String ctrpScreeningEntitiesGeoResidencies() {
     var ctrpScreeningEntities = matchData.getCtrpScreeningEntities();
     var fields = new CtrpScreeningExtractor(ctrpScreeningEntities).extract();
-    return mergeFields(fields);
+    return GeoLocationExtractor.mergeFields(fields);
   }
 }

@@ -5,9 +5,8 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
 
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.of;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 class PrivateListIndividualsCountryExtractor {
@@ -16,10 +15,10 @@ class PrivateListIndividualsCountryExtractor {
 
   List<List<String>> extract() {
     return privateListIndividuals.stream()
-        .map(individual -> of(individual.getAddressCountry())
+        .map(individual -> Stream.of(individual.getAddressCountry())
             .map(GeoLocationExtractor::stripAndUpper)
-            .collect(toList()))
-        .collect(toList());
+            .collect(Collectors.toList()))
+        .collect(Collectors.toList());
   }
 
 }

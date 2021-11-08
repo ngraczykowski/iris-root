@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
+import com.silenteight.hsbc.bridge.model.dto.ModelStatus;
 import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
 import com.silenteight.hsbc.bridge.model.dto.ModelType;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
@@ -14,14 +15,6 @@ import org.apache.commons.io.IOUtils;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import static com.silenteight.hsbc.bridge.model.dto.ModelStatus.FAILURE;
-import static com.silenteight.hsbc.bridge.model.dto.ModelType.HISTORICAL_DECISIONS_ALERTED_PARTY;
-import static com.silenteight.hsbc.bridge.model.dto.ModelType.HISTORICAL_DECISIONS_MATCH;
-import static com.silenteight.hsbc.bridge.model.dto.ModelType.HISTORICAL_DECISIONS_WATCHLIST_PARTY;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.convertToModelStatusUpdated;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.createModelStatusUpdate;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.toHistoricalDecisionsModelPersisted;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -47,7 +40,7 @@ public class HistoricalDecisionsModelManager implements ModelManager {
 
   @Override
   public void transferModelStatus(ModelInfoStatusRequest request) {
-    var modelPersisted = toHistoricalDecisionsModelPersisted(request);
+    var modelPersisted = ModelMapper.toHistoricalDecisionsModelPersisted(request);
     historicalDecisionsMessageSender.send(modelPersisted);
   }
 
@@ -59,9 +52,9 @@ public class HistoricalDecisionsModelManager implements ModelManager {
 
   @Override
   public boolean supportsModelType(ModelType type) {
-    return type == HISTORICAL_DECISIONS_ALERTED_PARTY
-        || type == HISTORICAL_DECISIONS_WATCHLIST_PARTY
-        || type == HISTORICAL_DECISIONS_MATCH;
+    return type == ModelType.HISTORICAL_DECISIONS_ALERTED_PARTY
+        || type == ModelType.HISTORICAL_DECISIONS_WATCHLIST_PARTY
+        || type == ModelType.HISTORICAL_DECISIONS_MATCH;
   }
 
   public void transferHistoricalDecisionsModelStatus(ModelStatusUpdatedDto modelStatusUpdated) {
@@ -71,10 +64,10 @@ public class HistoricalDecisionsModelManager implements ModelManager {
   private ModelStatusUpdatedDto trySavingModel(ModelInfoRequest request) {
     try {
       var modelUri = modelRepository.saveModel(request.getUrl(), request.getName());
-      return createModelStatusUpdate(request, modelUri);
+      return ModelMapper.createModelStatusUpdate(request, modelUri);
     } catch (IOException e) {
       log.error("Unable to update model uri on minio: " + request.getName(), e);
-      return convertToModelStatusUpdated(request, FAILURE);
+      return ModelMapper.convertToModelStatusUpdated(request, ModelStatus.FAILURE);
     }
   }
 

@@ -5,16 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.date.DateFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.date.DateFeatureInputDto.DateFeatureInputDtoBuilder;
+import com.silenteight.hsbc.datasource.dto.name.EntityType;
 import com.silenteight.hsbc.datasource.feature.DateFeatureValuesRetriever;
 import com.silenteight.hsbc.datasource.feature.Feature;
+import com.silenteight.hsbc.datasource.util.StreamUtils;
 
 import java.util.List;
 import java.util.Map;
-
-import static com.silenteight.hsbc.datasource.dto.name.EntityType.INDIVIDUAL;
-import static com.silenteight.hsbc.datasource.dto.name.EntityType.ORGANIZATION;
-import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
-import static java.util.stream.Stream.concat;
+import java.util.stream.Stream;
 
 @Slf4j
 public class DateOfBirthFeature implements DateFeatureValuesRetriever<DateFeatureInputDto> {
@@ -29,7 +27,7 @@ public class DateOfBirthFeature implements DateFeatureValuesRetriever<DateFeatur
 
     if (matchData.isEntity()) {
       return featureBuilder
-          .alertedPartyType(ORGANIZATION)
+          .alertedPartyType(EntityType.ORGANIZATION)
           .mode(severityResolver.resolve())
           .build();
     }
@@ -41,12 +39,12 @@ public class DateOfBirthFeature implements DateFeatureValuesRetriever<DateFeatur
     var mpDobsWorldCheckIndividuals = new WorldCheckIndividualsDateExtractor(
         matchData.getWorldCheckIndividuals()).extract();
 
-    var wlDates = concat(mpDobsWorldCheckIndividuals, mpDobsPrivateWatchlistDates);
+    var wlDates = Stream.concat(mpDobsWorldCheckIndividuals, mpDobsPrivateWatchlistDates);
 
     var result = featureBuilder
-        .alertedPartyDates(toDistinctList(apDates))
-        .watchlistDates(toDistinctList(wlDates))
-        .alertedPartyType(INDIVIDUAL)
+        .alertedPartyDates(StreamUtils.toDistinctList(apDates))
+        .watchlistDates(StreamUtils.toDistinctList(wlDates))
+        .alertedPartyType(EntityType.INDIVIDUAL)
         .mode(severityResolver.resolve())
         .build();
 

@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.datasource.feature.country;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -8,10 +9,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class CountryDiscoverer {
 
@@ -48,14 +45,13 @@ public class CountryDiscoverer {
   private Optional<Stream<String>> discoverSingleCountry(String country) {
     var normalizedSingleCountry = matchNormalizer.normalize(country);
 
-    if (isEmpty(normalizedSingleCountry)) {
-      return of(Stream.empty());
+    if (StringUtils.isEmpty(normalizedSingleCountry)) {
+      return Optional.of(Stream.empty());
     }
 
     if (countryValidator.validate(normalizedSingleCountry)) {
-      return of(Stream.of(displayNormalizer.normalize(country)));
+      return Optional.of(Stream.of(displayNormalizer.normalize(country)));
     }
-    return empty();
+    return Optional.empty();
   }
-
 }

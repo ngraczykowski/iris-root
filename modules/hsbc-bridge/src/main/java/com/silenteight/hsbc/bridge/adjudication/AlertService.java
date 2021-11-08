@@ -10,6 +10,7 @@ import com.silenteight.hsbc.bridge.alert.AlertServiceClient;
 import com.silenteight.hsbc.bridge.alert.dto.AlertDto;
 import com.silenteight.hsbc.bridge.alert.dto.BatchCreateAlertMatchesRequestDto;
 import com.silenteight.hsbc.bridge.alert.event.UpdateAlertWithNameEvent;
+import com.silenteight.hsbc.bridge.common.util.TimestampUtil;
 import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 import com.silenteight.hsbc.bridge.match.MatchIdComposite;
 import com.silenteight.hsbc.bridge.match.event.UpdateMatchWithNameEvent;
@@ -20,9 +21,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static com.silenteight.hsbc.bridge.common.util.TimestampUtil.fromOffsetDateTime;
-import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -40,7 +38,7 @@ class AlertService {
 
     return alerts.stream()
         .map(AlertDto::getName)
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private List<AlertDto> registerAlerts(Collection<AlertMatchIdComposite> alertMatchIdComposites) {
@@ -48,9 +46,9 @@ class AlertService {
         .map(a -> Alert
             .newBuilder()
             .setAlertId(a.getAlertExternalId())
-            .setAlertTime(fromOffsetDateTime(a.getAlertTime()))
+            .setAlertTime(TimestampUtil.fromOffsetDateTime(a.getAlertTime()))
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
 
     return alertServiceClient.batchCreateAlerts(alertsForCreation).getAlerts();
   }
@@ -63,7 +61,7 @@ class AlertService {
       var alertMatchIdComposite = alertMatchIds.get(alertId);
       var matchExternalIds = alertMatchIdComposite.getMatchExternalIds();
       return registerMatchesForAlert(alertId, a.getName(), matchExternalIds);
-    }).flatMap(Collection::stream).collect(toList());
+    }).flatMap(Collection::stream).collect(Collectors.toList());
   }
 
   private List<MatchWithAlert> registerMatchesForAlert(
@@ -77,7 +75,7 @@ class AlertService {
 
     return response.getAlertMatches().stream()
         .map(a -> new MatchWithAlert(alertInternalId, alertName, a.getMatchId(), a.getName()))
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private void publishUpdateAlertsWithNameEvent(

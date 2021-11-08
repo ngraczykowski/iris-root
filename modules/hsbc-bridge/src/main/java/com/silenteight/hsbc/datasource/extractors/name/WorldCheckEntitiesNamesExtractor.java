@@ -7,11 +7,6 @@ import com.silenteight.hsbc.datasource.datamodel.WorldCheckEntity;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.silenteight.hsbc.datasource.extractors.name.NameExtractor.collectNames;
-import static com.silenteight.hsbc.datasource.extractors.name.NameExtractor.extractNameAndOriginalScriptAliases;
-import static java.util.stream.Stream.concat;
-import static java.util.stream.Stream.of;
-
 @RequiredArgsConstructor
 class WorldCheckEntitiesNamesExtractor {
 
@@ -20,18 +15,18 @@ class WorldCheckEntitiesNamesExtractor {
   public Stream<String> extract() {
     var names = worldCheckEntities.stream()
         .flatMap(WorldCheckEntitiesNamesExtractor::extractWorldCheckEntitiesNames);
-    return collectNames(names);
+    return NameExtractor.collectNames(names);
   }
 
   private static Stream<String> extractWorldCheckEntitiesNames(WorldCheckEntity worldCheckEntity) {
     var streamEntityNameOriginal =
-        extractNameAndOriginalScriptAliases(worldCheckEntity.getEntityNameOriginal());
+        NameExtractor.extractNameAndOriginalScriptAliases(worldCheckEntity.getEntityNameOriginal());
 
     var streamEntityNames =
-        of(
+        Stream.of(
             worldCheckEntity.getEntityNameDerived(),
             worldCheckEntity.getOriginalScriptName());
 
-    return concat(streamEntityNameOriginal, streamEntityNames);
+    return Stream.concat(streamEntityNameOriginal, streamEntityNames);
   }
 }

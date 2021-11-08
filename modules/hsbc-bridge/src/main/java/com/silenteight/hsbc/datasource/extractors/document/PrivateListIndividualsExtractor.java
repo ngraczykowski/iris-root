@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
 import com.silenteight.hsbc.datasource.extractors.common.SimpleRegexBasedExtractor;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @RequiredArgsConstructor
 class PrivateListIndividualsExtractor {
@@ -29,7 +29,7 @@ class PrivateListIndividualsExtractor {
   }
 
   private void extractPassportNumber(String passportNumber) {
-    if (isEmpty(passportNumber)) {
+    if (StringUtils.isEmpty(passportNumber)) {
       return;
     }
     Stream.of(passportNumber.split("[,;]"))
@@ -41,7 +41,7 @@ class PrivateListIndividualsExtractor {
   }
 
   private void extractNationalId(String nationalId) {
-    if (isEmpty(nationalId)) {
+    if (StringUtils.isEmpty(nationalId)) {
       return;
     }
     Stream.of(nationalId.split(","))
@@ -49,14 +49,14 @@ class PrivateListIndividualsExtractor {
   }
 
   private void extractEdqDocument(String edqDocument) {
-    if (isEmpty(edqDocument)) {
+    if (StringUtils.isEmpty(edqDocument)) {
       return;
     }
     document.addOtherDocumentNumber(edqDocument);
   }
 
   private void extractEdqSuffix(String edqSuffix) {
-    if (isEmpty(edqSuffix)) {
+    if (StringUtils.isEmpty(edqSuffix)) {
       return;
     }
     var matcher = EDQ_SUFFIX.matcher(edqSuffix);

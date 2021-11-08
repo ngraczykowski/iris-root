@@ -5,9 +5,8 @@ import com.silenteight.hsbc.datasource.extractors.name.GetNameInformationRequest
 import com.silenteight.hsbc.datasource.extractors.name.GetNameInformationResponseDto;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
 
+import java.util.List;
 import java.util.Optional;
-
-import static java.util.List.of;
 
 class NameInformationServiceClientMock implements NameInformationServiceClient {
 
@@ -16,8 +15,8 @@ class NameInformationServiceClientMock implements NameInformationServiceClient {
     return Optional.of(GetNameInformationResponseDto.builder()
         .firstName("")
         .lastName("")
-        .aliases(of(""))
-        .foreignAliases(of(new ForeignAliasDto("", "")))
+        .aliases(List.of(""))
+        .foreignAliases(List.of(new ForeignAliasDto("", "")))
         .build());
   }
 }

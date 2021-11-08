@@ -8,8 +8,6 @@ import com.silenteight.hsbc.datasource.dto.location.LocationFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
-import static com.silenteight.hsbc.datasource.feature.Feature.GEO_PLACE_OF_BIRTH;
-
 @Slf4j
 @RequiredArgsConstructor
 public class GeoPlaceOfBirthFeature implements FeatureValuesRetriever<LocationFeatureInputDto> {
@@ -47,6 +45,6 @@ public class GeoPlaceOfBirthFeature implements FeatureValuesRetriever<LocationFe
 
   @Override
   public Feature getFeature() {
-    return GEO_PLACE_OF_BIRTH;
+    return Feature.GEO_PLACE_OF_BIRTH;
   }
 }

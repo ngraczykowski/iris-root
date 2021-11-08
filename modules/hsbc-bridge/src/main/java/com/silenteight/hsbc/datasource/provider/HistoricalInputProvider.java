@@ -18,8 +18,6 @@ import com.silenteight.hsbc.datasource.feature.HistoricalFeatureClientValuesRetr
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toList;
-
 @RequiredArgsConstructor
 class HistoricalInputProvider
     implements DataSourceInputProvider<HistoricalInputResponse> {
@@ -45,7 +43,7 @@ class HistoricalInputProvider
             .match(match.getName())
             .features(getFeatureInputs(features, match.getMatchData()))
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private List<HistoricalFeatureInputDto> getFeatureInputs(

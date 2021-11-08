@@ -15,9 +15,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-
 @Slf4j
 @RequiredArgsConstructor
 class RecommendationHandler {
@@ -41,11 +38,11 @@ class RecommendationHandler {
 
   private Optional<Collection<RecommendationWithMetadataDto>> tryToGetRecommendations(String analysis) {
     try {
-      return of(recommendationServiceClient.getRecommendations(analysis));
+      return Optional.of(recommendationServiceClient.getRecommendations(analysis));
     } catch (CannotGetRecommendationsException ex) {
       log.error("Cannot get recommendation for analysis={}", analysis);
       eventPublisher.publishEvent(new FailedToGetRecommendationsEvent(analysis));
-      return empty();
+      return Optional.empty();
     }
   }
 

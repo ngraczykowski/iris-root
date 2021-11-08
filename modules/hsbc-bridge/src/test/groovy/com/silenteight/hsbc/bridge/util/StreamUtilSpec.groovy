@@ -2,8 +2,7 @@ package com.silenteight.hsbc.bridge.util
 
 import spock.lang.Specification
 
-import static com.silenteight.hsbc.bridge.util.StreamUtils.distinctBy
-import static java.util.stream.Collectors.toList
+import java.util.stream.Collectors
 
 class StreamUtilsSpec extends Specification {
 
@@ -13,8 +12,8 @@ class StreamUtilsSpec extends Specification {
 
     when:
     def result = collection.stream()
-        .filter(distinctBy(s -> s))
-        .collect(toList())
+        .filter(StreamUtils.distinctBy(s -> s))
+        .collect(Collectors.toList())
 
     then:
     result.size() == 4

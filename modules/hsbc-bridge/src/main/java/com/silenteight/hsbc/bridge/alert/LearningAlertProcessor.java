@@ -15,15 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.persistence.EntityManager;
-
-import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.AGENTS;
-import static com.silenteight.hsbc.bridge.alert.AlertSender.SendOption.WAREHOUSE;
-import static com.silenteight.hsbc.bridge.alert.AlertStatus.LEARNING_COMPLETED;
-import static com.silenteight.hsbc.bridge.alert.AlertStatus.LEARNING_REGISTERED_IN_DB;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.concat;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -47,7 +41,7 @@ public class LearningAlertProcessor {
     updateLearningAlertsCompleted(unregisteredIds);
 
     var alertIds =
-        concat(registeredIds.stream(), unregisteredIds.stream()).collect(toList());
+        Stream.concat(registeredIds.stream(), unregisteredIds.stream()).collect(Collectors.toList());
 
     var updatedAlerts = repository.findByIdIn(alertIds);
 
@@ -57,7 +51,7 @@ public class LearningAlertProcessor {
   private void updateLearningAlertsCompleted(Collection<Long> ids) {
     repository.findByIdIn(ids)
         .forEach(a -> {
-          a.setStatus(LEARNING_COMPLETED);
+          a.setStatus(AlertStatus.LEARNING_COMPLETED);
           repository.save(a);
         });
   }
@@ -65,7 +59,7 @@ public class LearningAlertProcessor {
   private void updateLearningAlertsAlreadyInDb(Collection<Long> ids) {
     repository.findByIdIn(ids)
         .forEach(a -> {
-          a.setStatus(LEARNING_REGISTERED_IN_DB);
+          a.setStatus(AlertStatus.LEARNING_REGISTERED_IN_DB);
           repository.save(a);
         });
   }
@@ -78,7 +72,7 @@ public class LearningAlertProcessor {
           .forEach(chunk -> {
             var alertsDto = chunk.stream()
                 .map(this::mapToAlertEntityDto)
-                .collect(toList());
+                .collect(Collectors.toList());
 
             entityManager.flush();
             entityManager.clear();
@@ -109,16 +103,16 @@ public class LearningAlertProcessor {
             .name(match.getName())
             .externalId(match.getExternalId())
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private List<AlertMetadataDto> mapToAlertMetadataDto(List<AlertMetadata> metadata) {
     return metadata.stream()
         .map(m -> new AlertMetadataDto(m.getKey(), m.getValue()))
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private void sendAlerts(List<AlertEntityDto> alerts) {
-    alertSender.send(alerts, new SendOption[] { AGENTS, WAREHOUSE });
+    alertSender.send(alerts, new SendOption[] { SendOption.AGENTS, SendOption.WAREHOUSE });
   }
 }

@@ -11,7 +11,7 @@ import com.silenteight.worldcheck.api.v1.IsPepServiceGrpc.IsPepServiceBlockingSt
 import io.grpc.StatusRuntimeException;
 import org.springframework.retry.annotation.Retryable;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -83,6 +83,6 @@ class IsPepGrpcAdapter implements IsPepServiceClient {
   }
 
   private IsPepServiceBlockingStub getStub() {
-    return isPepServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, SECONDS);
+    return isPepServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, TimeUnit.SECONDS);
   }
 }

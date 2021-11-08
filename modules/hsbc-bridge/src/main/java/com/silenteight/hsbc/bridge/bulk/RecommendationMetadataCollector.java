@@ -10,18 +10,15 @@ import com.silenteight.hsbc.bridge.recommendation.metadata.RecommendationMetadat
 
 import java.util.*;
 
-import static java.util.Collections.emptyList;
-import static java.util.Objects.isNull;
-
 @Slf4j
 class RecommendationMetadataCollector {
 
   Collection<AlertMetadata> collectFromRecommendationMetadata(RecommendationMetadata metadata) {
     var matchesMetadata = metadata.getMatchesMetadata();
 
-    if (isNull(matchesMetadata) || matchesMetadata.size() != 1) {
+    if (Objects.isNull(matchesMetadata) || matchesMetadata.size() != 1) {
       log.error("Incorrect number of matches metadata");
-      return emptyList();
+      return Collections.emptyList();
     }
 
     return new MatchMetadataCollector(matchesMetadata.get(0)).collect();

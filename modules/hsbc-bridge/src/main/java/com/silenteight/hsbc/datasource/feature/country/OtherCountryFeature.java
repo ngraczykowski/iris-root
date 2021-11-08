@@ -7,8 +7,7 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.dto.country.CountryFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
-
-import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
+import com.silenteight.hsbc.datasource.util.StreamUtils;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,16 +24,16 @@ public class OtherCountryFeature implements FeatureValuesRetriever<CountryFeatur
     var inputBuilder = CountryFeatureInputDto.builder();
 
     if (matchData.isIndividual()) {
-      inputBuilder.alertedPartyCountries(toDistinctList(
+      inputBuilder.alertedPartyCountries(StreamUtils.toDistinctList(
           query.apCustomerIndividualOtherCountries()));
-      inputBuilder.watchlistCountries(toDistinctList(
+      inputBuilder.watchlistCountries(StreamUtils.toDistinctList(
           query.mpWorldCheckIndividualsOtherCountries(),
           query.mpPrivateListIndividualsOtherCountries(),
           query.mpCtrpScreeningIndividualsOtherCountries()));
     } else {
-      inputBuilder.alertedPartyCountries(toDistinctList(
+      inputBuilder.alertedPartyCountries(StreamUtils.toDistinctList(
           query.apCustomerEntityOtherCountries()));
-      inputBuilder.watchlistCountries(toDistinctList(
+      inputBuilder.watchlistCountries(StreamUtils.toDistinctList(
           query.mpWorldCheckEntitiesOtherCountries(),
           query.mpPrivateListEntitiesOtherCountries(),
           query.mpCtrpScreeningEntitiesOtherCountries()));

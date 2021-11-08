@@ -4,9 +4,8 @@ import lombok.*;
 
 import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 
+import java.util.Objects;
 import javax.persistence.*;
-
-import static java.util.Objects.isNull;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -15,7 +14,7 @@ import static java.util.Objects.isNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "hsbc_bridge_match_payload")
-class MatchPayloadEntity  extends BaseEntity {
+class MatchPayloadEntity extends BaseEntity {
 
   @Id
   @Column(name = "id", nullable = false, insertable = false, updatable = false)
@@ -29,6 +28,6 @@ class MatchPayloadEntity  extends BaseEntity {
 
   @Transient
   boolean isArchived() {
-    return isNull(payload);
+    return Objects.isNull(payload);
   }
 }

@@ -4,22 +4,22 @@ import com.silenteight.hsbc.bridge.watchlist.WatchlistController.NoFileException
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockMultipartHttpServletRequest;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.io.InputStream;
 import java.net.URI;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 class WatchlistControllerTest {
 
@@ -42,15 +42,15 @@ class WatchlistControllerTest {
   @Test
   public void saveFile_shouldVerifyStatus() throws Exception {
     //given
-    var mockMvc = standaloneSetup(underTest).build();
-    given(watchlistSaver.save(any(InputStream.class), any(String.class)))
+    var mockMvc = MockMvcBuilders.standaloneSetup(underTest).build();
+    BDDMockito.given(watchlistSaver.save(ArgumentMatchers.any(InputStream.class), ArgumentMatchers.any(String.class)))
         .willReturn(URI.create("someUri"));
 
     //then
-    mockMvc.perform(multipart("/watchlist/v1/upload")
-        .file(getMultipartFileMock())
-        .accept(MediaType.parseMediaType("multipart/form-data")))
-        .andExpect(status().isOk());
+    mockMvc.perform(MockMvcRequestBuilders.multipart("/watchlist/v1/upload")
+            .file(getMultipartFileMock())
+            .accept(MediaType.parseMediaType("multipart/form-data")))
+        .andExpect(MockMvcResultMatchers.status().isOk());
   }
 
   @Test

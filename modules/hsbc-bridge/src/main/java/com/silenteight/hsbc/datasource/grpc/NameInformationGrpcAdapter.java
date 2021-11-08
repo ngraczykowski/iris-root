@@ -18,9 +18,8 @@ import org.springframework.retry.annotation.Retryable;
 
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static java.util.stream.Collectors.toList;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -61,7 +60,7 @@ class NameInformationGrpcAdapter implements NameInformationServiceClient {
   }
 
   private NamesInformationServiceBlockingStub getStub() {
-    return namesInformationServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, SECONDS);
+    return namesInformationServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, TimeUnit.SECONDS);
   }
 
   private List<ForeignAliasDto> mapToForeignAliases(List<ForeignAlias> foreignAliases) {
@@ -70,6 +69,6 @@ class NameInformationGrpcAdapter implements NameInformationServiceClient {
             foreignAlias -> new ForeignAliasDto(
                 foreignAlias.getName(),
                 foreignAlias.getLanguage()))
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 }

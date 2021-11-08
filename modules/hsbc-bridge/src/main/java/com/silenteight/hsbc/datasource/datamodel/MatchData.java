@@ -1,19 +1,19 @@
 package com.silenteight.hsbc.datasource.datamodel;
 
-import java.util.Optional;
+import org.apache.commons.collections.CollectionUtils;
 
-import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
+import java.util.Optional;
 
 public interface MatchData extends EntityComposite, IndividualComposite {
 
   CaseInformation getCaseInformation();
 
   default boolean isIndividual() {
-    return isNotEmpty(getCustomerIndividuals());
+    return CollectionUtils.isNotEmpty(getCustomerIndividuals());
   }
 
   default boolean isEntity() {
-    return isNotEmpty(getCustomerEntities());
+    return CollectionUtils.isNotEmpty(getCustomerEntities());
   }
 
   default Optional<String> getWatchlistId() {

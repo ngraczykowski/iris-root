@@ -7,9 +7,8 @@ import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.of;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 class CustomerEntitiesAddressesExtractor {
@@ -20,8 +19,10 @@ class CustomerEntitiesAddressesExtractor {
     return Optional.ofNullable(matchData.getCustomerEntities())
         .map(entities ->
             entities.stream()
-                .map(ent -> of(ent.getAddress(), ent.getProfileFullAddress()).map(GeoLocationExtractor::stripAndUpper).collect(toList()))
-                .collect(toList()))
+                .map(ent -> Stream
+                    .of(ent.getAddress(), ent.getProfileFullAddress()).map(GeoLocationExtractor::stripAndUpper).collect(
+                        Collectors.toList()))
+                .collect(Collectors.toList()))
         .orElse(Collections.emptyList());
   }
 }

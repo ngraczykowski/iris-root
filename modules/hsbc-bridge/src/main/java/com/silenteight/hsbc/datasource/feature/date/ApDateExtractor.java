@@ -9,8 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.stream.Stream.of;
-
 @RequiredArgsConstructor
 class ApDateExtractor implements Extractor {
 
@@ -18,7 +16,7 @@ class ApDateExtractor implements Extractor {
 
   Stream<String> extract() {
     var apDobs = customerIndividuals.stream()
-        .flatMap(customerIndividual -> of(
+        .flatMap(customerIndividual -> Stream.of(
             customerIndividual.getDateOfBirth(),
             customerIndividual.getBirthDate(),
             customerIndividual.getYearOfBirth()))

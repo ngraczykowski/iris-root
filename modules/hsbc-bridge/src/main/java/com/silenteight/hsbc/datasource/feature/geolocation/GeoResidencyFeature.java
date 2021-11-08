@@ -15,8 +15,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.silenteight.hsbc.datasource.feature.Feature.GEO_RESIDENCIES;
-
 @Slf4j
 @RequiredArgsConstructor
 public class GeoResidencyFeature implements LocationFeatureClientValuesRetriever {
@@ -66,6 +64,6 @@ public class GeoResidencyFeature implements LocationFeatureClientValuesRetriever
 
   @Override
   public Feature getFeature() {
-    return GEO_RESIDENCIES;
+    return Feature.GEO_RESIDENCIES;
   }
 }

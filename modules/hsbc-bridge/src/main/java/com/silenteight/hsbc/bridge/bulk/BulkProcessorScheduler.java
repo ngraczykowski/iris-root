@@ -7,8 +7,6 @@ import net.javacrumbs.shedlock.core.LockAssert;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.PRE_PROCESSED;
-
 @RequiredArgsConstructor
 @Slf4j
 class BulkProcessorScheduler {
@@ -24,7 +22,7 @@ class BulkProcessorScheduler {
 
     log.trace("Scheduler has been triggered...");
 
-    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(PRE_PROCESSED).ifPresent(bulk -> {
+    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSED).ifPresent(bulk -> {
       log.info(
           "Try to pre process bulk from status PRE_PROCESSED to PRE_PROCESSING with id: {}",
           bulk.getId());

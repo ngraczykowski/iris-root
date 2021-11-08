@@ -2,12 +2,10 @@ package com.silenteight.hsbc.datasource.feature.date
 
 import com.silenteight.hsbc.datasource.datamodel.CaseInformation
 import com.silenteight.hsbc.datasource.datamodel.MatchData
+import com.silenteight.hsbc.datasource.dto.date.SeverityMode
 
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import static com.silenteight.hsbc.datasource.dto.date.SeverityMode.NORMAL
-import static com.silenteight.hsbc.datasource.dto.date.SeverityMode.STRICT
 
 class SeverityResolverSpec extends Specification {
 
@@ -21,25 +19,25 @@ class SeverityResolverSpec extends Specification {
 
     where:
     sourceValue                  || expectedResult
-    getMatchData('AE-MEWOLF')    || STRICT
-    getMatchData('MENA-GREY')    || STRICT
-    getMatchData('MEWOLF')       || STRICT
-    getMatchData('MX-DARK-GREY') || STRICT
-    getMatchData('SAN')          || STRICT
-    getMatchData('US-HBUS')      || STRICT
+    getMatchData('AE-MEWOLF')    || SeverityMode.STRICT
+    getMatchData('MENA-GREY')    || SeverityMode.STRICT
+    getMatchData('MEWOLF')       || SeverityMode.STRICT
+    getMatchData('MX-DARK-GREY') || SeverityMode.STRICT
+    getMatchData('SAN')          || SeverityMode.STRICT
+    getMatchData('US-HBUS')      || SeverityMode.STRICT
 
-    getMatchData('AML')          || NORMAL
-    getMatchData('CTF-P2')       || NORMAL
-    getMatchData('INNIA')        || NORMAL
-    getMatchData('MX-AML')       || NORMAL
-    getMatchData('MX-SHCP')      || NORMAL
+    getMatchData('AML')          || SeverityMode.NORMAL
+    getMatchData('CTF-P2')       || SeverityMode.NORMAL
+    getMatchData('INNIA')        || SeverityMode.NORMAL
+    getMatchData('MX-AML')       || SeverityMode.NORMAL
+    getMatchData('MX-SHCP')      || SeverityMode.NORMAL
 
-    getMatchData('PEP')          || NORMAL
-    getMatchData('SCION')        || NORMAL
-    getMatchData('SSC')          || NORMAL
+    getMatchData('PEP')          || SeverityMode.NORMAL
+    getMatchData('SCION')        || SeverityMode.NORMAL
+    getMatchData('SSC')          || SeverityMode.NORMAL
 
-    getMatchData('')             || NORMAL
-    getMatchData('     ')        || NORMAL
+    getMatchData('')             || SeverityMode.NORMAL
+    getMatchData('     ')        || SeverityMode.NORMAL
   }
 
 

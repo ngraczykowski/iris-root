@@ -15,8 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 class IsPepRequestCreator {
@@ -33,7 +32,7 @@ class IsPepRequestCreator {
     return alerts.stream()
         .filter(e -> !e.getWorldCheckIndividuals().isEmpty())
         .map(this::toAlert)
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private Alert toAlert(AlertData alert) {
@@ -57,7 +56,7 @@ class IsPepRequestCreator {
             .setValue(e.getCaseComment())
             .setCreatedAt(timestampMapper.toUnixTimestamp(e.getCommentDateTime()))
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private List<String> getLinkedToPepsUids(List<WorldCheckIndividual> worldchecks) {
@@ -65,7 +64,7 @@ class IsPepRequestCreator {
         .map(WorldCheckIndividual::getLinkedTo)
         .filter(StringUtils::isNotBlank)
         .distinct()
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private Optional<String> findApCountry(List<CustomerIndividual> customers) {

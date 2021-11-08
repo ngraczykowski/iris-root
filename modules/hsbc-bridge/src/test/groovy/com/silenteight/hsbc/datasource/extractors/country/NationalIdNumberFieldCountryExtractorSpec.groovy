@@ -3,9 +3,6 @@ package com.silenteight.hsbc.datasource.extractors.country
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static java.util.Optional.empty
-import static java.util.Optional.of
-
 class NationalIdNumberFieldCountryExtractorSpec extends Specification {
 
   @Unroll
@@ -21,10 +18,10 @@ class NationalIdNumberFieldCountryExtractorSpec extends Specification {
 
     where:
     inputField             | expected
-    "BC 78845 (UNK-UNKW)"  | of("UNK UNKW")
-    "ID78845 (UNK-UNKW)"   | of("UNK UNKW")
-    "78845ID (UNK-UNKW)"   | of("UNK UNKW")
-    "78845ID (POL-POLAND)" | of("POL POLAND")
-    "78845ID"              | empty()
+    "BC 78845 (UNK-UNKW)"  | Optional.of("UNK UNKW")
+    "ID78845 (UNK-UNKW)"   | Optional.of("UNK UNKW")
+    "78845ID (UNK-UNKW)"   | Optional.of("UNK UNKW")
+    "78845ID (POL-POLAND)" | Optional.of("POL POLAND")
+    "78845ID"              | Optional.empty()
   }
 }

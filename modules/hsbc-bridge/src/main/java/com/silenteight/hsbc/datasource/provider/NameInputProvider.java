@@ -18,9 +18,6 @@ import com.silenteight.hsbc.datasource.feature.NameFeatureClientValuesRetriever;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.silenteight.hsbc.datasource.feature.Feature.NAME;
-import static java.util.List.of;
-
 @RequiredArgsConstructor
 class NameInputProvider implements DataSourceInputProvider<NameInputResponse> {
 
@@ -57,6 +54,6 @@ class NameInputProvider implements DataSourceInputProvider<NameInputResponse> {
 
   @Override
   public List<Feature> getAllowedFeatures() {
-    return of(NAME);
+    return List.of(Feature.NAME);
   }
 }

@@ -19,11 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
-
-import static com.silenteight.hsbc.bridge.model.rest.input.ModelType.fromValue;
-import static java.util.stream.Collectors.toList;
-import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/model")
@@ -36,15 +33,15 @@ class ModelRestController {
   @GetMapping
   public ResponseEntity<SimpleModelResponse> getModel() {
     var solvingModel = modelServiceClient.getSolvingModel();
-    return ok(createSimpleModelResponse(solvingModel));
+    return ResponseEntity.ok(createSimpleModelResponse(solvingModel));
   }
 
   @GetMapping("/export/**")
   public ResponseEntity<String> export(HttpServletRequest request) {
     var modelDetails = getModelDetailsFromUri(request.getRequestURI());
-    var modelManager = getMatchingModelManager(fromValue(modelDetails.getType()));
+    var modelManager = getMatchingModelManager(ModelType.fromValue(modelDetails.getType()));
     var model = modelManager.exportModel(modelDetails);
-    return ok(convertJsonModelInBytesToString(model));
+    return ResponseEntity.ok(convertJsonModelInBytesToString(model));
   }
 
   @PostMapping
@@ -82,7 +79,7 @@ class ModelRestController {
     var matchingManagers = modelManagers.stream()
         .filter(manager -> manager.supportsModelType(mapToModelType(modelType)))
         .distinct()
-        .collect(toList());
+        .collect(Collectors.toList());
 
     if (matchingManagers.isEmpty()) {
       throw new ModelNotRecognizedException(modelType.name());

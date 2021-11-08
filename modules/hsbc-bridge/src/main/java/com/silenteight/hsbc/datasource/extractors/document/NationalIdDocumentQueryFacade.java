@@ -8,8 +8,6 @@ import com.silenteight.hsbc.datasource.feature.nationaliddocument.NationalIdDocu
 
 import java.util.stream.Stream;
 
-import static java.util.stream.Stream.concat;
-
 @RequiredArgsConstructor
 class NationalIdDocumentQueryFacade implements NationalIdDocumentQuery {
 
@@ -32,7 +30,7 @@ class NationalIdDocumentQueryFacade implements NationalIdDocumentQuery {
     var apFieldsCountries = countryFacade.apFieldsIndividualCountries();
     var apDocumentCountries = extractApDocuments().getAllCountries().stream();
 
-    return concat(apFieldsCountries, apDocumentCountries);
+    return Stream.concat(apFieldsCountries, apDocumentCountries);
   }
 
   @Override

@@ -6,10 +6,6 @@ import com.silenteight.hsbc.datasource.feature.Feature
 
 import spock.lang.Specification
 
-import static com.silenteight.hsbc.datasource.datamodel.WatchlistType.*
-import static com.silenteight.hsbc.datasource.feature.ispep.IsPepFeatureV2Spec.Fixtures.FURTHER_INFORMATION
-import static java.util.Optional.of
-
 class IsPepFeatureV2Spec extends Specification {
 
   def isPepQueryConfigurer = new IsPepQueryConfigurer().create()
@@ -27,13 +23,13 @@ class IsPepFeatureV2Spec extends Specification {
     def worldCheckIndividual = Mock(WorldCheckIndividual) {
       getListRecordId() >> '376829'
       getLinkedTo() >> '28966;376830;376831;376832;448756;80217'
-      getFurtherInformation() >> FURTHER_INFORMATION
+      getFurtherInformation() >> Fixtures.FURTHER_INFORMATION
     }
 
     def matchData = Mock(MatchData) {
       isIndividual() >> true
-      getWatchlistId() >> of('376829')
-      getWatchlistType() >> of(WORLDCHECK_INDIVIDUALS)
+      getWatchlistId() >> Optional.of('376829')
+      getWatchlistType() >> Optional.of(WatchlistType.WORLDCHECK_INDIVIDUALS)
       getCustomerIndividuals() >> [customerIndividual]
       getWorldCheckIndividuals() >> [worldCheckIndividual]
       hasWorldCheckIndividuals() >> true
@@ -48,7 +44,7 @@ class IsPepFeatureV2Spec extends Specification {
       match == matchName
       watchListItem.id == '376829'
       watchListItem.type == 'WorldCheckIndividuals'
-      watchListItem.furtherInformation == FURTHER_INFORMATION
+      watchListItem.furtherInformation == Fixtures.FURTHER_INFORMATION
       watchListItem.country == 'SG'
       watchListItem.linkedPepsUids == ['28966;376830;376831;376832;448756;80217']
     }
@@ -65,13 +61,13 @@ class IsPepFeatureV2Spec extends Specification {
     def worldCheckEntity = Mock(WorldCheckEntity) {
       getListRecordId() >> '376829'
       getLinkedTo() >> '28966;376830;376831;376832;448756;80217'
-      getFurtherInformation() >> FURTHER_INFORMATION
+      getFurtherInformation() >> Fixtures.FURTHER_INFORMATION
     }
 
     def matchData = Mock(MatchData) {
       isEntity() >> true
-      getWatchlistId() >> of('376829')
-      getWatchlistType() >> of(WORLDCHECK_ENTITIES)
+      getWatchlistId() >> Optional.of('376829')
+      getWatchlistType() >> Optional.of(WatchlistType.WORLDCHECK_ENTITIES)
       getCustomerEntities() >> [customerEntity]
       getWorldCheckEntities() >> [worldCheckEntity]
       hasWorldCheckEntities() >> true
@@ -86,7 +82,7 @@ class IsPepFeatureV2Spec extends Specification {
       match == matchName
       watchListItem.id == '376829'
       watchListItem.type == 'WorldCheckEntities'
-      watchListItem.furtherInformation == FURTHER_INFORMATION
+      watchListItem.furtherInformation == Fixtures.FURTHER_INFORMATION
       watchListItem.country == 'SG'
       watchListItem.linkedPepsUids == ['28966;376830;376831;376832;448756;80217']
     }
@@ -105,8 +101,8 @@ class IsPepFeatureV2Spec extends Specification {
 
     def matchData = Mock(MatchData) {
       isEntity() >> true
-      getWatchlistId() >> of('376829')
-      getWatchlistType() >> of(PRIVATE_LIST_ENTITIES)
+      getWatchlistId() >> Optional.of('376829')
+      getWatchlistType() >> Optional.of(WatchlistType.PRIVATE_LIST_ENTITIES)
       getCustomerEntities() >> [customerEntity]
       getPrivateListEntities() >> [privateListEntity]
       hasPrivateListEntities() >> true

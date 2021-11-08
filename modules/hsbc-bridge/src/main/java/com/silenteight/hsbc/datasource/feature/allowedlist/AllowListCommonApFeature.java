@@ -8,10 +8,10 @@ import com.silenteight.hsbc.datasource.dto.allowedlist.AllowListFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
-import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
-import static java.util.Collections.emptyList;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 public class AllowListCommonApFeature implements FeatureValuesRetriever<AllowListFeatureInputDto> {
@@ -41,7 +41,7 @@ public class AllowListCommonApFeature implements FeatureValuesRetriever<AllowLis
   private List<String> getCharacteristicsValues(CaseInformation caseInformation) {
     var parentId = caseInformation.getParentId();
 
-    return isNotEmpty(parentId) ? List.of(parentId) : emptyList();
+    return StringUtils.isNotEmpty(parentId) ? List.of(parentId) : Collections.emptyList();
   }
 
   @Override

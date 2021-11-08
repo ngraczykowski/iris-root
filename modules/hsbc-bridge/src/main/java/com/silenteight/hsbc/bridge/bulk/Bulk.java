@@ -7,26 +7,20 @@ import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.persistence.*;
-
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.COMPLETED;
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.DELIVERED;
-import static com.silenteight.hsbc.bridge.bulk.BulkStatus.ERROR;
-import static java.util.Objects.nonNull;
-import static lombok.AccessLevel.NONE;
-import static lombok.AccessLevel.PRIVATE;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
 @Entity
-@NoArgsConstructor(access = PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "hsbc_bridge_bulk")
 class Bulk extends BaseEntity {
 
   @Id
-  @Setter(NONE)
+  @Setter(AccessLevel.NONE)
   private String id;
 
   @Enumerated(value = EnumType.STRING)
@@ -37,7 +31,7 @@ class Bulk extends BaseEntity {
   private OffsetDateTime errorTimestamp;
   private boolean learning;
 
-  @Setter(NONE)
+  @Setter(AccessLevel.NONE)
   @OneToMany
   @JoinColumn(name = "bulk_id")
   private Collection<BulkAlertEntity> alerts = new ArrayList<>();
@@ -57,17 +51,17 @@ class Bulk extends BaseEntity {
 
   @Transient
   boolean hasAnalysis() {
-    return nonNull(analysis);
+    return Objects.nonNull(analysis);
   }
 
   @Transient
   void delivered() {
-    this.status = DELIVERED;
+    this.status = BulkStatus.DELIVERED;
   }
 
   @Transient
   void error(String errorMessage) {
-    this.status = ERROR;
+    this.status = BulkStatus.ERROR;
     this.errorMessage = errorMessage;
     this.errorTimestamp = OffsetDateTime.now();
   }
@@ -79,6 +73,6 @@ class Bulk extends BaseEntity {
 
   @Transient
   boolean isNotCompleted() {
-    return status != COMPLETED;
+    return status != BulkStatus.COMPLETED;
   }
 }

@@ -3,13 +3,11 @@ package com.silenteight.hsbc.datasource.extractors.geolocation;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
+import com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.SignType;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.SignType.SEMICOLON;
-import static com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.splitExtractedValueBySign;
-import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 class WorldCheckIndividualsPlaceOfBirthExtractor {
@@ -19,10 +17,11 @@ class WorldCheckIndividualsPlaceOfBirthExtractor {
   public List<String> extract() {
     return worldCheckIndividuals.stream()
         .flatMap(WorldCheckIndividualsPlaceOfBirthExtractor::extractWorldCheckFields)
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private static Stream<String> extractWorldCheckFields(WorldCheckIndividual worldCheckIndividual) {
-    return splitExtractedValueBySign(SEMICOLON, worldCheckIndividual.getPlaceOfBirthOriginal());
+    return GeoLocationExtractor.splitExtractedValueBySign(
+        SignType.SEMICOLON, worldCheckIndividual.getPlaceOfBirthOriginal());
   }
 }

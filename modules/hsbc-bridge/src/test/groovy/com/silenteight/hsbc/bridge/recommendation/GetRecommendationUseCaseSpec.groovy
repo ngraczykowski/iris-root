@@ -7,9 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import spock.lang.Specification
 
-import static java.util.Optional.empty
-import static java.util.Optional.of
-
 class GetRecommendationUseCaseSpec extends Specification {
 
   def mapper = Mock(RecommendationMapper)
@@ -38,7 +35,7 @@ class GetRecommendationUseCaseSpec extends Specification {
       recommendedAction == 'Level 1 Review'
       metadata
     }
-    1 * repository.findByAlert(request.getAlert()) >> of(
+    1 * repository.findByAlert(request.getAlert()) >> Optional.of(
         new RecommendationEntity(
             recommendedAction: 'FP',
             recommendationComment: 'Comment',
@@ -63,7 +60,7 @@ class GetRecommendationUseCaseSpec extends Specification {
 
     then:
     thrown(RecommendationNotFoundException)
-    1 * repository.findByAlert(request.getAlert()) >> empty()
+    1 * repository.findByAlert(request.getAlert()) >> Optional.empty()
     0 * mapper.getRecommendationValue(_ as String, _ as String)
   }
 

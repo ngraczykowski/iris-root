@@ -8,8 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 
-import static java.time.OffsetDateTime.now;
-
 @Builder
 @Slf4j
 class DataRetentionJob {
@@ -50,6 +48,6 @@ class DataRetentionJob {
   }
 
   private OffsetDateTime getExpireDate() {
-    return now().minus(dataRetentionDuration);
+    return OffsetDateTime.now().minus(dataRetentionDuration);
   }
 }

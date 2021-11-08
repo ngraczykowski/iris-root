@@ -3,14 +3,11 @@ package com.silenteight.hsbc.bridge.protocol;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
+import com.google.common.base.Throwables;
 import com.google.protobuf.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-
-import static com.google.common.base.Throwables.getRootCause;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
 
 @Slf4j
 public final class AnyUtils {
@@ -31,10 +28,10 @@ public final class AnyUtils {
       @NonNull Class<T> type) {
 
     try {
-      return of(anyMessage.unpack(type));
+      return Optional.of(anyMessage.unpack(type));
     } catch (InvalidProtocolBufferException e) {
       if (log.isDebugEnabled()) {
-        Throwable rootCause = getRootCause(e);
+        Throwable rootCause = Throwables.getRootCause(e);
         log.debug(
             "Unable to unpack message: type={}, exception={}, error={}, message={}",
             type.getName(),
@@ -42,7 +39,7 @@ public final class AnyUtils {
             rootCause.getMessage(),
             TextFormat.shortDebugString(anyMessage));
       }
-      return empty();
+      return Optional.empty();
     }
   }
 

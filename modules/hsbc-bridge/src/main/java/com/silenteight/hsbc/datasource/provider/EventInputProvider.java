@@ -17,8 +17,6 @@ import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.List.of;
-
 @RequiredArgsConstructor
 class EventInputProvider implements DataSourceInputProvider<EventInputResponse> {
 
@@ -54,6 +52,6 @@ class EventInputProvider implements DataSourceInputProvider<EventInputResponse> 
 
   @Override
   public List<Feature> getAllowedFeatures() {
-    return of(/*Implement with feature*/);
+    return List.of(/*Implement with feature*/);
   }
 }

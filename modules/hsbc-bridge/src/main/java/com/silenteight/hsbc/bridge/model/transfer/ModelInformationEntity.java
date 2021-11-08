@@ -8,11 +8,9 @@ import com.silenteight.hsbc.bridge.model.dto.ModelType;
 
 import javax.persistence.*;
 
-import static lombok.AccessLevel.NONE;
-
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = NONE)
+@NoArgsConstructor(access = AccessLevel.NONE)
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
 @Getter

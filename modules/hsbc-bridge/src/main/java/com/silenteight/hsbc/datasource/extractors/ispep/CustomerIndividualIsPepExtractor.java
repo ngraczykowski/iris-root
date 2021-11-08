@@ -7,8 +7,6 @@ import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static java.util.stream.Stream.of;
-
 @RequiredArgsConstructor
 class CustomerIndividualIsPepExtractor {
 
@@ -16,6 +14,6 @@ class CustomerIndividualIsPepExtractor {
 
   public Stream<String> extract() {
     return customerIndividuals.stream()
-        .flatMap(customerIndividual -> of(customerIndividual.getEdqLobCountryCode()));
+        .flatMap(customerIndividual -> Stream.of(customerIndividual.getEdqLobCountryCode()));
   }
 }

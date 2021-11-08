@@ -5,9 +5,8 @@ import lombok.Value;
 
 import com.silenteight.hsbc.datasource.dto.name.EntityType;
 
+import java.util.Collections;
 import java.util.List;
-
-import static java.util.Collections.emptyList;
 
 @Value
 @Builder
@@ -15,9 +14,9 @@ public class DateFeatureInputDto {
 
   String feature;
   @Builder.Default
-  List<String> alertedPartyDates = emptyList();
+  List<String> alertedPartyDates = Collections.emptyList();
   @Builder.Default
-  List<String> watchlistDates = emptyList();
+  List<String> watchlistDates = Collections.emptyList();
   EntityType alertedPartyType;
   SeverityMode mode;
 }

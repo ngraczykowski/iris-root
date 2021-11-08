@@ -1,19 +1,14 @@
 package com.silenteight.hsbc.datasource.category;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import com.silenteight.hsbc.bridge.common.entity.BaseEntity;
 
 import java.util.List;
 import javax.persistence.*;
 
-import static lombok.AccessLevel.PROTECTED;
-
 @Data
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
 @Entity

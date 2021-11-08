@@ -1,20 +1,19 @@
 package com.silenteight.hsbc.datasource.extractors.geolocation
 
+import com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.SignType
+
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.util.stream.Collectors
 import java.util.stream.Stream
-
-import static com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.*
-import static com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.SignType.*
-import static java.util.stream.Collectors.toList
 
 class GeoLocationExtractorSpec extends Specification {
 
   @Unroll
   def 'should join given fields: #input to expected string: #expected'() {
     when:
-    def joinedFields = joinFields(input as String[])
+    def joinedFields = GeoLocationExtractor.joinFields(input as String[])
 
     then:
     joinedFields == expected
@@ -36,7 +35,7 @@ class GeoLocationExtractorSpec extends Specification {
   @Unroll
   def 'should merge given fields: #input to expected string: #expected'() {
     when:
-    def mergedFields = mergeFields(input as List<String>)
+    def mergedFields = GeoLocationExtractor.mergeFields(input as List<String>)
 
     then:
     mergedFields == expected
@@ -58,7 +57,8 @@ class GeoLocationExtractorSpec extends Specification {
   @Unroll
   def 'should split extracted value: #input by SEMICOLON to specific stream: #expected'() {
     when:
-    def result = splitExtractedValueBySign(SEMICOLON, input as String)
+    def result = GeoLocationExtractor
+        .splitExtractedValueBySign(SignType.SEMICOLON, input as String)
 
     then:
     streamToList(result) == expected
@@ -75,7 +75,7 @@ class GeoLocationExtractorSpec extends Specification {
   @Unroll
   def 'should split extracted value: #input by COMA to specific stream: #expected'() {
     when:
-    def result = splitExtractedValueBySign(COMA, input as String)
+    def result = GeoLocationExtractor.splitExtractedValueBySign(SignType.COMA, input as String)
 
     then:
     streamToList(result) == expected
@@ -92,7 +92,7 @@ class GeoLocationExtractorSpec extends Specification {
   @Unroll
   def 'should split extracted value: #input by SPACE to specific stream: #expected'() {
     when:
-    def result = splitExtractedValueBySign(SPACE, input as String)
+    def result = GeoLocationExtractor.splitExtractedValueBySign(SignType.SPACE, input as String)
 
     then:
     streamToList(result) == expected
@@ -106,6 +106,6 @@ class GeoLocationExtractorSpec extends Specification {
   }
 
   private static streamToList(Stream<String> names) {
-    names.collect(toList())
+    names.collect(Collectors.toList())
   }
 }

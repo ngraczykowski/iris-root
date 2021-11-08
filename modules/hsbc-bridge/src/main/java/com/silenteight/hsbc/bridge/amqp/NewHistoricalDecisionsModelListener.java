@@ -3,14 +3,13 @@ package com.silenteight.hsbc.bridge.amqp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.hsbc.bridge.model.dto.ChangeType;
 import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
 import com.silenteight.hsbc.bridge.model.transfer.HistoricalDecisionsModelManager;
 import com.silenteight.proto.historicaldecisions.model.v1.api.ModelPersisted;
 
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-
-import static com.silenteight.hsbc.bridge.model.dto.ChangeType.MINOR;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,7 +35,7 @@ class NewHistoricalDecisionsModelListener {
         .name(version)
         .url(address + "/model/export/" + type + "/" + version)
         .type(type)
-        .changeType(MINOR.name())
+        .changeType(ChangeType.MINOR.name())
         .build();
   }
 }

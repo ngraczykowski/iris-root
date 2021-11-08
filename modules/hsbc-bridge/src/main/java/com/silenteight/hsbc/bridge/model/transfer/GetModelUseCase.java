@@ -4,11 +4,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.hsbc.bridge.model.dto.ModelStatus;
 import com.silenteight.hsbc.bridge.model.dto.ModelType;
 
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.silenteight.hsbc.bridge.model.dto.ModelStatus.SUCCESS;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -19,7 +18,7 @@ class GetModelUseCase {
   @Transactional
   public ModelInformationEntity getModel(@NonNull ModelType type) {
     var modelEntity =
-        modelInformationRepository.findFirstByTypeAndStatusOrderByCreatedAtDesc(type, SUCCESS);
+        modelInformationRepository.findFirstByTypeAndStatusOrderByCreatedAtDesc(type, ModelStatus.SUCCESS);
 
     if (modelEntity.isPresent()) {
       var model = modelEntity.get();

@@ -22,11 +22,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.silenteight.hsbc.datasource.feature.Feature.GEO_PLACE_OF_BIRTH;
-import static com.silenteight.hsbc.datasource.feature.Feature.GEO_RESIDENCIES;
-import static java.util.List.of;
-import static java.util.stream.Collectors.toList;
-
 @RequiredArgsConstructor
 public class LocationInputProvider implements DataSourceInputProvider<LocationInputResponse> {
 
@@ -51,27 +46,33 @@ public class LocationInputProvider implements DataSourceInputProvider<LocationIn
             .match(match.getName())
             .featureInputs(getFeatureInputs(features, match.getMatchData()))
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private List<LocationFeatureInputDto> getFeatureInputs(List<String> features, MatchData matchData) {
     return features.stream()
         .map(feature -> this.retrieve(feature, matchData))
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private LocationFeatureInputDto retrieve(String feature, MatchData matchData) {
-    if (GEO_PLACE_OF_BIRTH.getFullName().equals(feature)) {
-      return (LocationFeatureInputDto) ((FeatureValuesRetriever) FeatureModel.getFeatureRetriever(feature)).retrieve(matchData);
+    if (Feature.GEO_PLACE_OF_BIRTH.getFullName().equals(feature)) {
+      return (LocationFeatureInputDto) ((FeatureValuesRetriever) FeatureModel.getFeatureRetriever(feature)).retrieve(
+          matchData);
     }
-    if (GEO_RESIDENCIES.getFullName().equals(feature)) {
-      return ((LocationFeatureClientValuesRetriever) FeatureModel.getFeatureRetriever(feature)).retrieve(matchData, countryDiscoverer, nameInformationServiceClient);
+    if (Feature.GEO_RESIDENCIES.getFullName().equals(feature)) {
+      return ((LocationFeatureClientValuesRetriever) FeatureModel.getFeatureRetriever(feature)).retrieve(
+          matchData, countryDiscoverer, nameInformationServiceClient);
     }
-    throw new FeatureNotAllowedException(feature, Stream.of(GEO_PLACE_OF_BIRTH, GEO_RESIDENCIES).map(Feature::getFullName).collect(Collectors.toList()));
+    throw new FeatureNotAllowedException(
+        feature, Stream
+        .of(Feature.GEO_PLACE_OF_BIRTH, Feature.GEO_RESIDENCIES)
+        .map(Feature::getFullName)
+        .collect(Collectors.toList()));
   }
 
   @Override
   public List<Feature> getAllowedFeatures() {
-    return of(GEO_PLACE_OF_BIRTH, GEO_RESIDENCIES);
+    return List.of(Feature.GEO_PLACE_OF_BIRTH, Feature.GEO_RESIDENCIES);
   }
 }

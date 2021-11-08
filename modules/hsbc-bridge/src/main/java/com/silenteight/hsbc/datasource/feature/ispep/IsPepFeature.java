@@ -10,11 +10,10 @@ import com.silenteight.hsbc.datasource.extractors.ispep.IsPepResponseDto;
 import com.silenteight.hsbc.datasource.extractors.ispep.IsPepServiceClient;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.IsPepFeatureClientValuesRetriever;
+import com.silenteight.hsbc.datasource.util.StreamUtils;
 
 import java.util.List;
-
-import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,7 +31,7 @@ public class IsPepFeature implements IsPepFeatureClientValuesRetriever<IsPepFeat
 
     if (matchData.isIndividual()) {
       var apIndividualExtractLobCountry =
-          toDistinctList(query.apIndividualExtractEdqLobCountryCode());
+          StreamUtils.toDistinctList(query.apIndividualExtractEdqLobCountryCode());
       var requiredFields = query.provideRequiredModelFieldNames();
       var responses =
           query.verifyIsPep(apIndividualExtractLobCountry, requiredFields);
@@ -58,7 +57,7 @@ public class IsPepFeature implements IsPepFeatureClientValuesRetriever<IsPepFeat
             .solution(response.getSolution())
             .reason(response.getReason())
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   @Override

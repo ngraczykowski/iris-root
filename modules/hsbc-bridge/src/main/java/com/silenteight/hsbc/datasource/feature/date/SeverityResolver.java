@@ -8,9 +8,6 @@ import com.silenteight.hsbc.datasource.dto.date.SeverityMode;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.hsbc.datasource.dto.date.SeverityMode.NORMAL;
-import static com.silenteight.hsbc.datasource.dto.date.SeverityMode.STRICT;
-
 @RequiredArgsConstructor
 class SeverityResolver {
 
@@ -19,7 +16,8 @@ class SeverityResolver {
   private static final String SAN = "SAN";
 
   SeverityMode resolve() {
-    return isSanctioned(matchData.getCaseInformation().getExtendedAttribute5()) ? STRICT : NORMAL;
+    return isSanctioned(matchData.getCaseInformation().getExtendedAttribute5()) ? SeverityMode.STRICT
+                                                                                : SeverityMode.NORMAL;
   }
 
   private boolean isSanctioned(String extendedAttribute5) {

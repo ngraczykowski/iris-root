@@ -3,15 +3,12 @@ package com.silenteight.hsbc.bridge.recommendation;
 import lombok.*;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 import javax.persistence.*;
 
-import static java.util.Objects.nonNull;
-import static lombok.AccessLevel.NONE;
-import static lombok.AccessLevel.PROTECTED;
-
 @Data
-@NoArgsConstructor(access = PROTECTED)
-@Setter(NONE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter(AccessLevel.NONE)
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
 @Entity
@@ -35,7 +32,7 @@ class RecommendationEntity {
 
   @Transient
   boolean hasMetadata() {
-    return nonNull(metadata);
+    return Objects.nonNull(metadata);
   }
 
   RecommendationEntity(RecommendationWithMetadataDto recommendation) {

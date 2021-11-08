@@ -10,12 +10,9 @@ import java.util.Collection;
 import java.util.List;
 import javax.persistence.*;
 
-import static lombok.AccessLevel.NONE;
-import static lombok.AccessLevel.PROTECTED;
-
 @Data
-@NoArgsConstructor(access = PROTECTED)
-@Setter(NONE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter(AccessLevel.NONE)
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
 @Entity
@@ -48,7 +45,7 @@ public class AlertEntity extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private AlertStatus status = AlertStatus.STORED;
 
-  @Setter(NONE)
+  @Setter(AccessLevel.NONE)
   @OneToMany
   @JoinColumn(name = "alert_id")
   private Collection<AlertMatchEntity> matches = new ArrayList<>();

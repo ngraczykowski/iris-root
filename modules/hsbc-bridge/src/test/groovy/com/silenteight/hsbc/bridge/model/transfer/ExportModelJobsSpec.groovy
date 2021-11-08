@@ -6,8 +6,6 @@ import com.silenteight.hsbc.bridge.model.dto.ModelType
 
 import spock.lang.Specification
 
-import static com.silenteight.hsbc.bridge.model.dto.ModelType.*
-
 class ExportModelJobsSpec extends Specification {
 
   def fixtures = new Fixtures()
@@ -22,7 +20,7 @@ class ExportModelJobsSpec extends Specification {
     def modelInformation = createModelInformationEntity(
         fixtures.testModelVersion,
         fixtures.testWorldCheckNameAliasesVersionUrl,
-        NAME_ALIASES
+        ModelType.NAME_ALIASES
     )
     def modelInfo = createModelInformation(modelInformation, address)
 
@@ -30,7 +28,7 @@ class ExportModelJobsSpec extends Specification {
     underTest.exportNameModel()
 
     then:
-    1 * getModelUseCase.getModel(NAME_ALIASES) >> modelInformation
+    1 * getModelUseCase.getModel(ModelType.NAME_ALIASES) >> modelInformation
     1 * jenkinsModelClient.updateModel(modelInfo)
   }
 
@@ -39,7 +37,7 @@ class ExportModelJobsSpec extends Specification {
     def modelInformation = createModelInformationEntity(
         fixtures.testModelVersion,
         fixtures.testWorldCheckIsPepProceduralVersionUrl,
-        IS_PEP_PROCEDURAL
+        ModelType.IS_PEP_PROCEDURAL
     )
     def modelInfo = createModelInformation(modelInformation, address)
 
@@ -47,7 +45,7 @@ class ExportModelJobsSpec extends Specification {
     underTest.exportIsPepProceduralModel()
 
     then:
-    1 * getModelUseCase.getModel(IS_PEP_PROCEDURAL) >> modelInformation
+    1 * getModelUseCase.getModel(ModelType.IS_PEP_PROCEDURAL) >> modelInformation
     1 * jenkinsModelClient.updateModel(modelInfo)
   }
 
@@ -56,7 +54,7 @@ class ExportModelJobsSpec extends Specification {
     def modelInformation = createModelInformationEntity(
         fixtures.testModelVersion,
         fixtures.testWorldCheckIsPepHistoricalVersionUrl,
-        IS_PEP_HISTORICAL
+        ModelType.IS_PEP_HISTORICAL
     )
     def modelInfo = createModelInformation(modelInformation, address)
 
@@ -64,7 +62,7 @@ class ExportModelJobsSpec extends Specification {
     underTest.exportIsPepHistoricalModel()
 
     then:
-    1 * getModelUseCase.getModel(IS_PEP_HISTORICAL) >> modelInformation
+    1 * getModelUseCase.getModel(ModelType.IS_PEP_HISTORICAL) >> modelInformation
     1 * jenkinsModelClient.updateModel(modelInfo)
   }
 

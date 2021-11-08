@@ -8,12 +8,10 @@ import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static java.util.Collections.emptySet;
-import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Slf4j
 public class AllowListCommonWpFeature implements FeatureValuesRetriever<AllowListFeatureInputDto> {
@@ -69,8 +67,8 @@ public class AllowListCommonWpFeature implements FeatureValuesRetriever<AllowLis
   }
 
   private Set<String> collectCountryCodes(List<CtrpScreening> ctrpScreenings) {
-    if (isEmpty(ctrpScreenings)) {
-      return emptySet();
+    if (CollectionUtils.isEmpty(ctrpScreenings)) {
+      return Collections.emptySet();
     }
 
     return ctrpScreenings.stream()
@@ -80,8 +78,8 @@ public class AllowListCommonWpFeature implements FeatureValuesRetriever<AllowLis
   }
 
   private Set<String> collectIds(List<? extends ListRecordId> listRecordIds) {
-    if (isEmpty(listRecordIds)) {
-      return emptySet();
+    if (CollectionUtils.isEmpty(listRecordIds)) {
+      return Collections.emptySet();
     }
 
     return listRecordIds.stream()

@@ -12,14 +12,13 @@ import com.silenteight.model.api.v1.*;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceBlockingStub;
 
 import com.google.protobuf.ByteString;
+import com.google.protobuf.Empty;
 import io.grpc.StatusRuntimeException;
 import org.springframework.retry.annotation.Retryable;
 
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import static com.google.protobuf.Empty.getDefaultInstance;
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,7 +30,7 @@ class ModelGrpcAdapter implements ModelServiceClient {
   @Override
   @Retryable(value = StatusRuntimeException.class)
   public SolvingModelDto getSolvingModel() {
-    var solvingModel = getStub().getDefaultSolvingModel(getDefaultInstance());
+    var solvingModel = getStub().getDefaultSolvingModel(Empty.getDefaultInstance());
     return mapSolvingModel(solvingModel);
   }
 
@@ -90,7 +89,7 @@ class ModelGrpcAdapter implements ModelServiceClient {
   }
 
   private SolvingModelServiceBlockingStub getStub() {
-    return solvingModelServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, SECONDS);
+    return solvingModelServiceBlockingStub.withDeadlineAfter(deadlineInSeconds, TimeUnit.SECONDS);
   }
 
   private SolvingModelDto mapSolvingModel(SolvingModel solvingModel) {

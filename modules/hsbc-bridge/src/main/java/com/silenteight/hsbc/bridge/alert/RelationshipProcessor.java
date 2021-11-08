@@ -9,9 +9,7 @@ import com.silenteight.hsbc.bridge.json.external.model.*;
 import com.silenteight.hsbc.bridge.match.Match;
 
 import java.util.List;
-
-import static java.util.stream.Stream.concat;
-import static java.util.stream.Stream.of;
+import java.util.stream.Stream;
 
 @Slf4j
 class RelationshipProcessor {
@@ -72,7 +70,7 @@ class RelationshipProcessor {
     }
 
     private boolean existWatchlistDataWithoutRelationship() {
-      var watchlistRecordIds = of(
+      var watchlistRecordIds = Stream.of(
           alertData.getCtrpScreeningEntities().stream().map(CtrpScreeningEntity::getRecordId),
           alertData.getCtrpScreeningIndividuals().stream().map(CtrpScreeningIndividual::getRecordId),
           alertData.getPrivateListEntities().stream().map(PrivateListEntity::getRecordId),
@@ -85,7 +83,7 @@ class RelationshipProcessor {
     }
 
     private boolean existCustomerEntityOrIndividualWithoutRelationship() {
-      var customerRecordIds = concat(
+      var customerRecordIds = Stream.concat(
           alertData.getCustomerEntities().stream().map(CustomerEntity::getRecordId),
           alertData.getCustomerIndividuals().stream().map(CustomerIndividual::getRecordId)
       );

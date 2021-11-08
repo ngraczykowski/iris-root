@@ -8,19 +8,15 @@ import com.silenteight.hsbc.bridge.bulk.exception.BatchIdNotFoundException;
 import com.silenteight.hsbc.bridge.bulk.exception.BatchResultNotAvailableException;
 import com.silenteight.hsbc.bridge.bulk.exception.BatchResultNotAvailableException.Reason;
 import com.silenteight.hsbc.bridge.bulk.rest.*;
+import com.silenteight.hsbc.bridge.recommendation.GetRecommendationUseCase;
 import com.silenteight.hsbc.bridge.recommendation.GetRecommendationUseCase.GetRecommendationRequest;
 import com.silenteight.hsbc.bridge.recommendation.RecommendationWithMetadataDto;
-import com.silenteight.hsbc.bridge.recommendation.GetRecommendationUseCase;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.silenteight.hsbc.bridge.bulk.rest.BatchAlertItemStatus.COMPLETED;
-import static com.silenteight.hsbc.bridge.bulk.rest.BatchAlertItemStatus.ERROR;
-import static java.lang.String.valueOf;
-import static java.util.List.of;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -75,7 +71,7 @@ class GetBulkResultsUseCase {
   private AlertRecommendation getErrorAlert(BulkAlertEntity alert) {
     var errorAlert = new AlertRecommendation();
     errorAlert.setId(alert.getExternalId());
-    errorAlert.status(ERROR);
+    errorAlert.status(BatchAlertItemStatus.ERROR);
 
     errorAlert.setComment(
         "Adjudication failed. Invalid alert data or an unexpected error occurred.");
@@ -90,7 +86,7 @@ class GetBulkResultsUseCase {
     var metadata = alert.getMetadata();
     solvedAlert.setAlertMetadata(map(metadata));
     solvedAlert.setId(alert.getExternalId());
-    solvedAlert.status(COMPLETED);
+    solvedAlert.status(BatchAlertItemStatus.COMPLETED);
 
     var recommendation = getRecommendation(alert.getName(), metadata);
     solvedAlert.setRecommendation(recommendation.getRecommendedAction());
@@ -117,12 +113,12 @@ class GetBulkResultsUseCase {
   @NotNull
   private List<AlertMetadata> getAlertRecommendation(RecommendationWithMetadataDto recommendation) {
     var date = recommendation.getDate();
-    return of(
+    return List.of(
         new AlertMetadata("s8_recommendation", recommendation.getS8recommendedAction()),
-        new AlertMetadata("recommendationYear", valueOf(date.getYear())),
-        new AlertMetadata("recommendationMonth", valueOf(date.getMonthValue())),
-        new AlertMetadata("recommendationDay", valueOf(date.getDayOfMonth())),
-        new AlertMetadata("recommendationDate", valueOf(date))
+        new AlertMetadata("recommendationYear", String.valueOf(date.getYear())),
+        new AlertMetadata("recommendationMonth", String.valueOf(date.getMonthValue())),
+        new AlertMetadata("recommendationDay", String.valueOf(date.getDayOfMonth())),
+        new AlertMetadata("recommendationDate", String.valueOf(date))
     );
   }
 

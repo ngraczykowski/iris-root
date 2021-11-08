@@ -7,8 +7,6 @@ import com.silenteight.hsbc.datasource.feature.ispep.IsPepQueryV2;
 
 import java.util.stream.Stream;
 
-import static java.util.stream.Stream.empty;
-
 @RequiredArgsConstructor
 class IsPepQueryFacade implements IsPepQueryV2 {
 
@@ -33,7 +31,7 @@ class IsPepQueryFacade implements IsPepQueryV2 {
   @Override
   public Stream<String> mpWorldCheckIndividualsLinkedTo() {
     return matchData.hasWorldCheckIndividuals() ?
-           new WorldCheckIndividualsLinkedToExtractor(matchData.getWorldCheckIndividuals()).extract() : empty();
+           new WorldCheckIndividualsLinkedToExtractor(matchData.getWorldCheckIndividuals()).extract() : Stream.empty();
   }
 
   @Override
@@ -45,6 +43,6 @@ class IsPepQueryFacade implements IsPepQueryV2 {
   @Override
   public Stream<String> mpWorldCheckEntitiesLinkedTo() {
     return matchData.hasWorldCheckEntities() ?
-           new WorldCheckEntitiesLinkedToExtractor(matchData.getWorldCheckEntities()).extract() : empty();
+           new WorldCheckEntitiesLinkedToExtractor(matchData.getWorldCheckEntities()).extract() : Stream.empty();
   }
 }

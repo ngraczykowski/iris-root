@@ -9,8 +9,6 @@ import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
 import java.util.Optional;
 import javax.annotation.Nullable;
 
-import static java.util.Optional.empty;
-
 @RequiredArgsConstructor(staticName = "of")
 class GenderFieldsWrapper {
 
@@ -35,11 +33,11 @@ class GenderFieldsWrapper {
 
   Optional<String> tryExtracting() {
     if (gender == null || genderDerivedFlag == null) {
-      return empty();
+      return Optional.empty();
     }
 
     if (!genderDerivedFlag.equals(CORRECT_GENDER_FLAG)) {
-      return empty();
+      return Optional.empty();
     }
 
     return Optional.of(gender);

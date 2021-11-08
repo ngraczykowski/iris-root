@@ -1,9 +1,6 @@
 package com.silenteight.hsbc.bridge.model;
 
-import static com.silenteight.hsbc.bridge.model.rest.input.ModelType.IS_PEP_HISTORICAL;
-import static com.silenteight.hsbc.bridge.model.rest.input.ModelType.IS_PEP_PROCEDURAL;
-import static com.silenteight.hsbc.bridge.model.rest.input.ModelType.MODEL;
-import static com.silenteight.hsbc.bridge.model.rest.input.ModelType.NAME_ALIASES;
+import com.silenteight.hsbc.bridge.model.rest.input.ModelType;
 
 class ModelNotRecognizedException extends RuntimeException {
 
@@ -11,9 +8,9 @@ class ModelNotRecognizedException extends RuntimeException {
 
   public ModelNotRecognizedException(String modelType) {
     super("Model type: " + modelType + " is not allowed. Allowed values are: " +
-        MODEL.name() + ", " +
-        IS_PEP_PROCEDURAL.name() + ", " +
-        IS_PEP_HISTORICAL.name() + ", " +
-        NAME_ALIASES.name());
+        ModelType.MODEL.name() + ", " +
+        ModelType.IS_PEP_PROCEDURAL.name() + ", " +
+        ModelType.IS_PEP_HISTORICAL.name() + ", " +
+        ModelType.NAME_ALIASES.name());
   }
 }

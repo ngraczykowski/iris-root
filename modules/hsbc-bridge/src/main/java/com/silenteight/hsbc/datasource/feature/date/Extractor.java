@@ -2,10 +2,8 @@ package com.silenteight.hsbc.datasource.feature.date;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.concat;
 
 interface Extractor {
 
@@ -30,11 +28,11 @@ interface Extractor {
 
   @SafeVarargs
   private static List<String> collectDobs(Stream<String>... streams) {
-    return ((streams.length == 2) ? concat(streams[0], streams[1]) : streams[0])
+    return ((streams.length == 2) ? Stream.concat(streams[0], streams[1]) : streams[0])
         .filter(DATE_DEVIATIONS_FILTER)
         .filter(DATE_FILTER)
         .map(DATE_EXTRACTOR)
         .distinct()
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 }

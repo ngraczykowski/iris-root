@@ -4,16 +4,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.hsbc.bridge.analysis.AnalysisEntity.Status;
 import com.silenteight.hsbc.bridge.analysis.dto.GetAnalysisResponseDto;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-
-import static com.silenteight.hsbc.bridge.analysis.AnalysisEntity.Status.COMPLETED;
-import static java.lang.Boolean.FALSE;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -28,33 +24,33 @@ class AnalysisStatusCalculator {
 
     if (entity.isEmpty()) {
       log.error("Analysis: {} does not exist", name);
-      return empty();
+      return Optional.empty();
     }
 
     var analysis = entity.get();
     if (analysis.isInProgress() && hasNoPendingAlerts(name)) {
-      analysis.setStatus(COMPLETED);
+      analysis.setStatus(Status.COMPLETED);
       repository.save(analysis);
     }
 
-    return of(analysis.getStatus());
+    return Optional.of(analysis.getStatus());
   }
 
   private boolean hasNoPendingAlerts(String name) {
     var result = safeGetAnalysisResults(name);
     return result
         .map(GetAnalysisResponseDto::hasNoPendingAlerts)
-        .orElse(FALSE);
+        .orElse(Boolean.FALSE);
   }
 
   private Optional<GetAnalysisResponseDto> safeGetAnalysisResults(String name) {
     try {
       var analysisResult = analysisServiceClient.getAnalysis(name);
       log.info("GetAnalysisRequest, analysis={}, pendingAlerts={}", name, analysisResult.getPendingAlerts());
-      return of(analysisResult);
+      return Optional.of(analysisResult);
     } catch (Exception ex) {
       log.error("Exception on get analysis", ex);
-      return empty();
+      return Optional.empty();
     }
   }
 }

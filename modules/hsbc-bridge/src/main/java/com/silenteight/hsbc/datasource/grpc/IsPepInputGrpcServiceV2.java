@@ -16,8 +16,7 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 @GrpcService(interceptors = DatasourceGrpcInterceptor.class)
 @RequiredArgsConstructor
@@ -54,7 +53,7 @@ class IsPepInputGrpcServiceV2 extends IsPepInputServiceImplBase {
             .setMatch(input.getMatch())
             .setWatchlistItem(mapWatchlistItem(input.getWatchListItem()))
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private WatchlistItem mapWatchlistItem(WatchListItemDto watchListItem) {

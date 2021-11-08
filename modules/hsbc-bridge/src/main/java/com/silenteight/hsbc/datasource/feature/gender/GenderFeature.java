@@ -10,12 +10,11 @@ import com.silenteight.hsbc.datasource.dto.gender.GenderFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputDto> {
@@ -27,8 +26,8 @@ public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputD
 
     var genderFeatureInputDtoBuilder = GenderFeatureInputDto.builder()
         .feature(getFeatureName())
-        .alertedPartyGenders(emptyList())
-        .watchlistGenders(emptyList());
+        .alertedPartyGenders(Collections.emptyList())
+        .watchlistGenders(Collections.emptyList());
 
     if (matchData.isIndividual()) {
       var worldCheckIndividualsGenders =
@@ -77,7 +76,7 @@ public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputD
       Stream<String> worldCheckIndividualsGenders, Stream<String> privateListIndividualsGenders) {
     return Stream
         .concat(worldCheckIndividualsGenders, privateListIndividualsGenders)
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private Stream<String> getPrivateListIndividualsGenders(
@@ -99,7 +98,7 @@ public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputD
   }
 
   private List<String> createValidGenderAlertPartyListForAgents(Stream<String> apGenders) {
-    return apGenders.distinct().collect(toList());
+    return apGenders.distinct().collect(Collectors.toList());
   }
 
   private List<String> createValidGenderWatchListForAgent(List<String> wlGenders) {
@@ -107,9 +106,9 @@ public class GenderFeature implements FeatureValuesRetriever<GenderFeatureInputD
       return wlGenders.stream()
           .findFirst()
           .stream()
-          .collect(toList());
+          .collect(Collectors.toList());
     } else {
-      return emptyList();
+      return Collections.emptyList();
     }
   }
 

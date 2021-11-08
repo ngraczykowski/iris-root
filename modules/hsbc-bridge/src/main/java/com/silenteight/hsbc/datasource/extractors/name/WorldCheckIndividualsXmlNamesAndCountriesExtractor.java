@@ -15,14 +15,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.silenteight.hsbc.datasource.extractors.name.NameExtractor.collectCountryMatchingAliases;
-import static com.silenteight.hsbc.datasource.extractors.name.NameExtractor.collectNames;
-import static com.silenteight.hsbc.datasource.extractors.name.NameExtractor.joinNameParts;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.concat;
-import static java.util.stream.Stream.of;
 
 @RequiredArgsConstructor
 class WorldCheckIndividualsXmlNamesAndCountriesExtractor {
@@ -38,18 +32,18 @@ class WorldCheckIndividualsXmlNamesAndCountriesExtractor {
     var joinedNamesStream = extractJoinedNamesStream(responses);
 
     var countryMatchingAliasesStream =
-        collectCountryMatchingAliases(foreignAliases, countries).stream();
+        NameExtractor.collectCountryMatchingAliases(foreignAliases, countries).stream();
 
     var mergedNames = mergeStreams(
         joinedNamesStream,
         countryMatchingAliasesStream);
 
-    return collectNames(mergedNames);
+    return NameExtractor.collectNames(mergedNames);
   }
 
   private Stream<String> mergeStreams(
       Stream<String> joinedNamesStream, Stream<String> countryMatchingAliasesStream) {
-    return concat(joinedNamesStream, countryMatchingAliasesStream);
+    return Stream.concat(joinedNamesStream, countryMatchingAliasesStream);
   }
 
   private List<String> extractCountries() {
@@ -75,7 +69,7 @@ class WorldCheckIndividualsXmlNamesAndCountriesExtractor {
         .append(residenceCountries)
         .append(otherCountries)
         .filter(Objects::nonNull)
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private List<ForeignAliasDto> extractForeignAliases(
@@ -83,7 +77,7 @@ class WorldCheckIndividualsXmlNamesAndCountriesExtractor {
     return responses.stream()
         .map(GetNameInformationResponseDto::getForeignAliases)
         .flatMap(Collection::stream)
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private List<GetNameInformationResponseDto> extractNameInformation() {
@@ -98,16 +92,16 @@ class WorldCheckIndividualsXmlNamesAndCountriesExtractor {
         .filter(Optional::isPresent)
         .map(Optional::get)
         .distinct()
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private Stream<String> extractJoinedNamesStream(List<GetNameInformationResponseDto> responses) {
     return responses.stream()
-        .map(response -> joinNameParts(response.getFirstName(), response.getLastName()));
+        .map(response -> NameExtractor.joinNameParts(response.getFirstName(), response.getLastName()));
   }
 
   private static Stream<String> extractWorldCheckListRecordIds(
       WorldCheckIndividual worldCheckIndividual) {
-    return of(worldCheckIndividual.getListRecordId());
+    return Stream.of(worldCheckIndividual.getListRecordId());
   }
 }

@@ -12,9 +12,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.Optional;
 
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-
 @RequiredArgsConstructor
 @Slf4j
 public class GetRecommendationUseCase {
@@ -62,10 +59,10 @@ public class GetRecommendationUseCase {
 
   private Optional<RecommendationMetadata> tryToConvertMetadata(ObjectNode objectNode) {
     try {
-      return of(objectMapper.treeToValue(objectNode, RecommendationMetadata.class));
+      return Optional.of(objectMapper.treeToValue(objectNode, RecommendationMetadata.class));
     } catch (JsonProcessingException e) {
       log.error("Recommendation metadata conversion error", e);
-      return empty();
+      return Optional.empty();
     }
   }
 

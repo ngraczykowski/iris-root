@@ -7,11 +7,9 @@ import com.silenteight.hsbc.datasource.feature.historical.HistoricalDecisionsQue
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.Optional.of;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Stream.empty;
 
 @RequiredArgsConstructor
 class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
@@ -26,7 +24,7 @@ class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
         .map(serviceClient::getHistoricalDecisions)
         .map(GetHistoricalDecisionsResponseDto::getModelCounts)
         .flatMap(Collection::stream)
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -47,17 +45,17 @@ class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
 
   private Stream<String> getExternalProfileIds() {
     return (matchData.isIndividual()) ?
-           of(matchData
-               .getCustomerIndividuals()
-               .stream()
-               .flatMap(customerEntity -> Stream.of(customerEntity.getExternalProfileId()))
-               .distinct())
-               .orElse(empty()) :
-           of(matchData
-               .getCustomerEntities()
-               .stream()
-               .flatMap(customerEntity -> Stream.of(customerEntity.getExternalProfileId()))
-               .distinct())
-               .orElse(empty());
+           Optional.of(matchData
+                   .getCustomerIndividuals()
+                   .stream()
+                   .flatMap(customerEntity -> Stream.of(customerEntity.getExternalProfileId()))
+                   .distinct())
+               .orElse(Stream.empty()) :
+           Optional.of(matchData
+                   .getCustomerEntities()
+                   .stream()
+                   .flatMap(customerEntity -> Stream.of(customerEntity.getExternalProfileId()))
+                   .distinct())
+               .orElse(Stream.empty());
   }
 }

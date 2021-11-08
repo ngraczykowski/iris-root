@@ -1,15 +1,12 @@
 package com.silenteight.hsbc.datasource.feature.name
 
 import com.silenteight.hsbc.datasource.datamodel.*
+import com.silenteight.hsbc.datasource.dto.name.EntityType
+import com.silenteight.hsbc.datasource.dto.name.WatchlistNameDto.NameType
 import com.silenteight.hsbc.datasource.extractors.name.*
 import com.silenteight.hsbc.datasource.feature.Feature
 
 import spock.lang.Specification
-
-import static com.silenteight.hsbc.datasource.dto.name.EntityType.INDIVIDUAL
-import static com.silenteight.hsbc.datasource.dto.name.EntityType.ORGANIZATION
-import static com.silenteight.hsbc.datasource.dto.name.WatchlistNameDto.NameType.ALIAS
-import static com.silenteight.hsbc.datasource.dto.name.WatchlistNameDto.NameType.REGULAR
 
 class NameFeatureSpec extends Specification {
 
@@ -98,9 +95,9 @@ class NameFeatureSpec extends Specification {
              'Akiaksandr Leanidavich ZIMOUSKI'])
       }
       with(watchlistNames.type) {
-        containsAll([ALIAS, REGULAR, REGULAR, REGULAR])
+        containsAll([NameType.ALIAS, NameType.REGULAR, NameType.REGULAR, NameType.REGULAR])
       }
-      alertedPartyType == INDIVIDUAL
+      alertedPartyType == EntityType.INDIVIDUAL
       matchingTexts == []
     }
   }
@@ -177,9 +174,9 @@ class NameFeatureSpec extends Specification {
              'AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE'])
       }
       with(watchlistNames.type) {
-        containsAll([REGULAR, REGULAR, ALIAS])
+        containsAll([NameType.REGULAR, NameType.REGULAR, NameType.ALIAS])
       }
-      alertedPartyType == ORGANIZATION
+      alertedPartyType == EntityType.ORGANIZATION
       matchingTexts == []
     }
   }

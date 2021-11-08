@@ -3,13 +3,6 @@ package com.silenteight.hsbc.bridge.alert
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.silenteight.hsbc.bridge.alert.AlertStatus.COMPLETED
-import static com.silenteight.hsbc.bridge.alert.AlertStatus.ERROR
-import static com.silenteight.hsbc.bridge.alert.AlertStatus.PRE_PROCESSED
-import static com.silenteight.hsbc.bridge.alert.AlertStatus.PROCESSING
-import static com.silenteight.hsbc.bridge.alert.AlertStatus.RECOMMENDATION_READY
-import static com.silenteight.hsbc.bridge.alert.AlertStatus.STORED
-
 class AlertStatusSpec extends Specification {
 
   @Unroll
@@ -22,7 +15,7 @@ class AlertStatusSpec extends Specification {
 
     where:
     status << [
-        PRE_PROCESSED, RECOMMENDATION_READY
+        AlertStatus.PRE_PROCESSED, AlertStatus.RECOMMENDATION_READY
     ]
   }
 
@@ -36,7 +29,7 @@ class AlertStatusSpec extends Specification {
 
     where:
     status << [
-        COMPLETED, PROCESSING, ERROR, STORED
+        AlertStatus.COMPLETED, AlertStatus.PROCESSING, AlertStatus.ERROR, AlertStatus.STORED
     ]
   }
 }

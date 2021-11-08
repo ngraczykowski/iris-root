@@ -4,16 +4,15 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+import java.util.Collections;
 import java.util.List;
-
-import static java.util.Collections.emptyList;
 
 @Builder
 @Value
 public class GetModelFieldNamesResponseDto {
 
   @Builder.Default
-  List<String> fieldNames = emptyList();
+  List<String> fieldNames = Collections.emptyList();
   @NonNull
   String version;
   @NonNull

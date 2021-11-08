@@ -6,11 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.google.common.base.Preconditions;
-import com.google.protobuf.Any;
+import com.google.protobuf.*;
 import com.google.protobuf.Descriptors.Descriptor;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.Message;
-import com.google.protobuf.Parser;
 import com.google.protobuf.util.JsonFormat;
 import com.google.protobuf.util.JsonFormat.TypeRegistry;
 import org.springframework.amqp.support.converter.MessageConversionException;
@@ -18,13 +15,8 @@ import org.springframework.amqp.support.converter.MessageConversionException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import static com.google.protobuf.TextFormat.shortDebugString;
-import static com.silenteight.hsbc.bridge.protocol.ReflectionUtils.invokeStaticGetter;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static java.util.function.Predicate.not;
 
 @Slf4j
 public class MessageRegistry {
@@ -48,8 +40,8 @@ public class MessageRegistry {
   @SuppressWarnings("unchecked")
   private void registerMessageType(Class<? extends Message> type) {
 
-    Descriptor descriptor = (Descriptor) invokeStaticGetter(type, "getDescriptor").orElse(null);
-    Parser<Message> parser = (Parser<Message>) invokeStaticGetter(type, "parser").orElse(null);
+    Descriptor descriptor = (Descriptor) ReflectionUtils.invokeStaticGetter(type, "getDescriptor").orElse(null);
+    Parser<Message> parser = (Parser<Message>) ReflectionUtils.invokeStaticGetter(type, "parser").orElse(null);
 
     if (descriptor == null || parser == null) {
       if (log.isDebugEnabled())
@@ -81,7 +73,7 @@ public class MessageRegistry {
     messageTypes
         .values()
         .stream()
-        .filter(not(MessageType::isGoogleType))
+        .filter(Predicate.not(MessageType::isGoogleType))
         .map(MessageType::getDescriptor)
         .forEach(typeRegistryBuilder::add);
 
@@ -107,9 +99,9 @@ public class MessageRegistry {
 
   private Optional<MessageType> findMessageType(String typeName) {
     if (!messageTypes.containsKey(typeName))
-      return empty();
+      return Optional.empty();
 
-    return of(messageTypes.get(typeName));
+    return Optional.of(messageTypes.get(typeName));
   }
 
   private static String getTypeNameFromTypeUrl(String typeUrl) {
@@ -137,10 +129,10 @@ public class MessageRegistry {
 
   public Optional<String> maybeToJson(Message message) {
     try {
-      return of(toJson(message));
+      return Optional.of(toJson(message));
     } catch (InvalidProtocolBufferException e) {
-      log.error("Cannot convert message to JSON: message={}", shortDebugString(message), e);
-      return empty();
+      log.error("Cannot convert message to JSON: message={}", TextFormat.shortDebugString(message), e);
+      return Optional.empty();
     }
   }
 

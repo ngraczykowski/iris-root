@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.model.dto.ModelInfo;
+import com.silenteight.hsbc.bridge.model.dto.ModelStatus;
 import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
 import com.silenteight.hsbc.bridge.model.dto.ModelType;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
@@ -14,14 +15,6 @@ import org.apache.commons.io.IOUtils;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import static com.silenteight.hsbc.bridge.model.dto.ModelStatus.FAILURE;
-import static com.silenteight.hsbc.bridge.model.dto.ModelType.IS_PEP_HISTORICAL;
-import static com.silenteight.hsbc.bridge.model.dto.ModelType.IS_PEP_PROCEDURAL;
-import static com.silenteight.hsbc.bridge.model.dto.ModelType.NAME_ALIASES;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.convertToModelStatusUpdated;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.createModelStatusUpdate;
-import static com.silenteight.hsbc.bridge.model.transfer.ModelMapper.toModelPersisted;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -47,7 +40,7 @@ public class WorldCheckModelManager implements ModelManager {
 
   @Override
   public void transferModelStatus(ModelInfoStatusRequest request) {
-    var modelPersisted = toModelPersisted(request);
+    var modelPersisted = ModelMapper.toModelPersisted(request);
     worldCheckMessageSender.send(modelPersisted);
   }
 
@@ -69,10 +62,10 @@ public class WorldCheckModelManager implements ModelManager {
   private ModelStatusUpdatedDto trySavingModel(ModelInfoRequest request) {
     try {
       var modelUri = modelRepository.saveModel(request.getUrl(), request.getName());
-      return createModelStatusUpdate(request, modelUri);
+      return ModelMapper.createModelStatusUpdate(request, modelUri);
     } catch (IOException e) {
       log.error("Unable to update model uri on minio: " + request.getName(), e);
-      return convertToModelStatusUpdated(request, FAILURE);
+      return ModelMapper.convertToModelStatusUpdated(request, ModelStatus.FAILURE);
     }
   }
 
@@ -87,6 +80,6 @@ public class WorldCheckModelManager implements ModelManager {
   }
 
   private boolean isPepOrNameAliases(ModelType type) {
-    return type == IS_PEP_PROCEDURAL || type == IS_PEP_HISTORICAL || type == NAME_ALIASES;
+    return type == ModelType.IS_PEP_PROCEDURAL || type == ModelType.IS_PEP_HISTORICAL || type == ModelType.NAME_ALIASES;
   }
 }

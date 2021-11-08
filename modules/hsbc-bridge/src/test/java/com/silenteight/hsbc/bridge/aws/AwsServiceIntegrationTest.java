@@ -1,8 +1,10 @@
 package com.silenteight.hsbc.bridge.aws;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.localstack.LocalStackContainer;
+import org.testcontainers.containers.localstack.LocalStackContainer.Service;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
@@ -17,7 +19,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.testcontainers.containers.localstack.LocalStackContainer.Service.S3;
 
 @Testcontainers
 class AwsServiceIntegrationTest {
@@ -30,7 +31,7 @@ class AwsServiceIntegrationTest {
       DockerImageName.parse("localstack/localstack:0.12.11");
   @Container
   private static final LocalStackContainer LOCALSTACK =
-      new LocalStackContainer(LOCALSTACK_IMAGE).withServices(S3);
+      new LocalStackContainer(LOCALSTACK_IMAGE).withServices(Service.S3);
   private AwsAdapter awsAdapter;
   private S3Client s3client;
 

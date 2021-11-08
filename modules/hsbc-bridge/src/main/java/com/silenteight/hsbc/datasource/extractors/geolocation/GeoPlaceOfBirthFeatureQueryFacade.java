@@ -6,12 +6,9 @@ import com.silenteight.hsbc.datasource.datamodel.IndividualComposite;
 import com.silenteight.hsbc.datasource.feature.geolocation.GeoPlaceOfBirthFeatureQuery;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.joinFields;
-import static com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.mergeFields;
-import static java.util.List.of;
-import static java.util.stream.Collectors.joining;
 
 @RequiredArgsConstructor
 public class GeoPlaceOfBirthFeatureQueryFacade implements GeoPlaceOfBirthFeatureQuery {
@@ -24,19 +21,19 @@ public class GeoPlaceOfBirthFeatureQueryFacade implements GeoPlaceOfBirthFeature
     var placesOfBirth = new ArrayList<String>();
 
     customerIndividuals.forEach(customerIndividual -> {
-      var joinFields = joinFields(
+      var joinFields = GeoLocationExtractor.joinFields(
           customerIndividual.getCountryOfBirth(),
           customerIndividual.getStateProvinceOrCountyOfBirth(),
           customerIndividual.getTownOfBirth());
 
       var placeOfBirth = customerIndividual.getPlaceOfBirth();
 
-      var fields = of(joinFields, placeOfBirth);
+      var fields = List.of(joinFields, placeOfBirth);
 
-      placesOfBirth.add(mergeFields(fields));
+      placesOfBirth.add(GeoLocationExtractor.mergeFields(fields));
     });
 
-    return placesOfBirth.stream().distinct().collect(joining(" "));
+    return placesOfBirth.stream().distinct().collect(Collectors.joining(" "));
   }
 
   @Override
@@ -50,24 +47,24 @@ public class GeoPlaceOfBirthFeatureQueryFacade implements GeoPlaceOfBirthFeature
         privateListIndividualsGeoPlaceOfBirth,
         ctrpScreeningIndividualsGeoPlaceOfBirth);
 
-    return fields.distinct().collect(joining(" "));
+    return fields.distinct().collect(Collectors.joining(" "));
   }
 
   private String worldCheckIndividualsGeoPlaceOfBirth() {
     var worldCheckIndividuals = individualComposite.getWorldCheckIndividuals();
     var fields = new WorldCheckIndividualsPlaceOfBirthExtractor(worldCheckIndividuals).extract();
-    return mergeFields(fields);
+    return GeoLocationExtractor.mergeFields(fields);
   }
 
   private String privateListIndividualsGeoPlaceOfBirth() {
     var privateListIndividuals = individualComposite.getPrivateListIndividuals();
     var fields = new PrivateListIndividualsPlaceOfBirthExtractor(privateListIndividuals).extract();
-    return mergeFields(fields);
+    return GeoLocationExtractor.mergeFields(fields);
   }
 
   private String ctrpScreeningIndividualsGeoPlaceOfBirth() {
     var ctrpScreeningIndividuals = individualComposite.getCtrpScreeningIndividuals();
     var fields = new CtrpScreeningExtractor(ctrpScreeningIndividuals).extract();
-    return mergeFields(fields);
+    return GeoLocationExtractor.mergeFields(fields);
   }
 }

@@ -3,13 +3,11 @@ package com.silenteight.hsbc.datasource.extractors.geolocation;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
+import com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.SignType;
 
-import static com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.SignType.SPACE;
-import static java.lang.String.format;
-import static java.util.regex.Pattern.CASE_INSENSITIVE;
-import static java.util.regex.Pattern.compile;
-import static java.util.stream.Collectors.joining;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Builder
 @Getter
@@ -27,18 +25,19 @@ class CustomerAddressTransformer {
         .map(this::addCountries)
         .distinct()
         .map(GeoLocationExtractor::stripAndUpper)
-        .collect(joining(SPACE.getSign()));
+        .collect(Collectors.joining(SignType.SPACE.getSign()));
   }
 
   public String getAddressWithCountry() {
     return addresses
         .stream()
         .map(this::addCountries)
-        .collect(joining(SPACE.getSign()));
+        .collect(Collectors.joining(SignType.SPACE.getSign()));
   }
 
   private String removeNames(String address) {
-    var allInOnePattern = compile(names.stream().map(name -> format(WORD_PATTERN, name)).collect(joining("|")), CASE_INSENSITIVE);
+    var allInOnePattern = Pattern.compile(names.stream().map(name -> String.format(WORD_PATTERN, name)).collect(
+        Collectors.joining("|")), Pattern.CASE_INSENSITIVE);
     var allInOneMatcher = allInOnePattern.matcher(address);
 
     var sb = new StringBuilder();
@@ -52,12 +51,12 @@ class CustomerAddressTransformer {
   private String addCountries(String address) {
     return countries.stream()
         .filter(country -> !containsCountry(address, country))
-        .map(country -> format(" %s", country))
-        .collect(joining("", address, ""));
+        .map(country -> String.format(" %s", country))
+        .collect(Collectors.joining("", address, ""));
   }
 
   private boolean containsCountry(String address, String country) {
-    return compile(format(WORD_PATTERN, country), CASE_INSENSITIVE).matcher(address).find();
+    return Pattern.compile(String.format(WORD_PATTERN, country), Pattern.CASE_INSENSITIVE).matcher(address).find();
   }
 
 }

@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.silenteight.hsbc.datasource.datamodel.WatchlistType.*;
-
 @RequiredArgsConstructor
 class HistoricalDecisionRequestCreator {
 
@@ -74,32 +72,32 @@ class HistoricalDecisionRequestCreator {
 
     if (!alert.getWorldCheckIndividuals().isEmpty()) {
       var wl = alert.getWorldCheckIndividuals().get(0);
-      return getWatchlist(wl.getListRecordId(), WORLDCHECK_INDIVIDUALS);
+      return getWatchlist(wl.getListRecordId(), WatchlistType.WORLDCHECK_INDIVIDUALS);
     }
 
     if (!alert.getWorldCheckEntities().isEmpty()) {
       var wl = alert.getWorldCheckEntities().get(0);
-      return getWatchlist(wl.getListRecordId(), WORLDCHECK_ENTITIES);
+      return getWatchlist(wl.getListRecordId(), WatchlistType.WORLDCHECK_ENTITIES);
     }
 
     if (!alert.getPrivateListIndividuals().isEmpty()) {
       var wl = alert.getPrivateListIndividuals().get(0);
-      return getWatchlist(wl.getListRecordId(), PRIVATE_LIST_INDIVIDUALS);
+      return getWatchlist(wl.getListRecordId(), WatchlistType.PRIVATE_LIST_INDIVIDUALS);
     }
 
     if (!alert.getPrivateListEntities().isEmpty()) {
       var wl = alert.getPrivateListEntities().get(0);
-      return getWatchlist(wl.getListRecordId(), PRIVATE_LIST_ENTITIES);
+      return getWatchlist(wl.getListRecordId(), WatchlistType.PRIVATE_LIST_ENTITIES);
     }
 
     if (!alert.getCtrpScreeningIndividuals().isEmpty()) {
       var wl = alert.getCtrpScreeningIndividuals().get(0);
-      return getWatchlist(wl.getCountryCode(), CTRPPRHB_LIST_INDIVIDUALS);
+      return getWatchlist(wl.getCountryCode(), WatchlistType.CTRPPRHB_LIST_INDIVIDUALS);
     }
 
     if (!alert.getCtrpScreeningEntities().isEmpty()) {
       var wl = alert.getCtrpScreeningEntities().get(0);
-      return getWatchlist(wl.getCountryCode(), CTRPPRHB_LIST_ENTITIES);
+      return getWatchlist(wl.getCountryCode(), WatchlistType.CTRPPRHB_LIST_ENTITIES);
     }
 
     return Watchlist.getDefaultInstance();

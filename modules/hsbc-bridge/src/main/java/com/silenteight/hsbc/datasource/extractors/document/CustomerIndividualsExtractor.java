@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Stream.of;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 class CustomerIndividualsExtractor {
@@ -22,7 +21,7 @@ class CustomerIndividualsExtractor {
 
   void extract(List<CustomerIndividual> customerIndividuals) {
     customerIndividuals.stream()
-        .flatMap(customerIndividual -> of(
+        .flatMap(customerIndividual -> Stream.of(
             customerIndividual.getIdentificationDocument1(),
             customerIndividual.getIdentificationDocument2(),
             customerIndividual.getIdentificationDocument3(),
@@ -42,7 +41,7 @@ class CustomerIndividualsExtractor {
 
     if (matcher.find()) {
       var filteredData = matcher.group(0).replace("\"", "");
-      var documentsData = of(filteredData.split(","))
+      var documentsData = Stream.of(filteredData.split(","))
           .map(String::trim)
           .collect(Collectors.toList());
       if (documentsData.size() > 1) {

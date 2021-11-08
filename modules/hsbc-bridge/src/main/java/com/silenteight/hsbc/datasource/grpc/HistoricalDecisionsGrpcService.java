@@ -19,8 +19,7 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
+import java.util.stream.Collectors;
 
 @GrpcService(interceptors = DatasourceGrpcInterceptor.class)
 @RequiredArgsConstructor
@@ -57,7 +56,7 @@ class HistoricalDecisionsGrpcService extends HistoricalDecisionsInputServiceImpl
             .setMatch(input.getMatch())
             .addAllFeatureInputs(mapFeatures(input.getFeatures()))
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 
   private List<HistoricalDecisionsFeatureInput> mapFeatures(
@@ -69,6 +68,6 @@ class HistoricalDecisionsGrpcService extends HistoricalDecisionsInputServiceImpl
             .setModelType(ModelType.valueOf(input.getModelKeyType().name()))
             .setReason(Struct.newBuilder().build())
             .build())
-        .collect(toList());
+        .collect(Collectors.toList());
   }
 }

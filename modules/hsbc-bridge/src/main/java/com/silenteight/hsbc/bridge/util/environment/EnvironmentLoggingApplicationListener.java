@@ -12,10 +12,9 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.*;
 
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
-import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.joining;
 
 @Slf4j
 class EnvironmentLoggingApplicationListener implements ApplicationListener<SpringApplicationEvent> {
@@ -99,7 +98,7 @@ class EnvironmentLoggingApplicationListener implements ApplicationListener<Sprin
     var propertySources = StreamSupport
         .stream(sources.spliterator(), false)
         .map(PropertySource::getName)
-        .collect(joining(
+        .collect(Collectors.joining(
             "\n",
             "\n==================== Property sources ===================\n",
             "\n================ End of property sources ================\n"));
@@ -116,7 +115,7 @@ class EnvironmentLoggingApplicationListener implements ApplicationListener<Sprin
         .distinct()
         .sorted()
         .map(prop -> prop + ": " + getPropertyValue(prop))
-        .collect(joining(
+        .collect(Collectors.joining(
             "\n",
             "\n==================== Property values ====================\n",
             "\n================ End of property values =================\n"));
@@ -129,7 +128,7 @@ class EnvironmentLoggingApplicationListener implements ApplicationListener<Sprin
       if (isPropertySensitive(prop)) {
         return "<********>";
       }
-      return ofNullable(environment.getProperty(prop))
+      return Optional.ofNullable(environment.getProperty(prop))
           .map(this::sanitizePropertyValue)
           .orElse("<null>");
     } catch (Exception e) {

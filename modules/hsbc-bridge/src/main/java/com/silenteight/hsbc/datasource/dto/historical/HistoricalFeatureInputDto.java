@@ -5,9 +5,8 @@ import lombok.Value;
 
 import com.silenteight.hsbc.datasource.extractors.historical.ModelKeyDto.ModelKeyType;
 
+import java.util.Collections;
 import java.util.Map;
-
-import static java.util.Collections.emptyMap;
 
 @Builder
 @Value
@@ -17,5 +16,5 @@ public class HistoricalFeatureInputDto {
   int truePositiveCount;
   ModelKeyType modelKeyType;
   @Builder.Default
-  Map<String, String> reason = emptyMap();
+  Map<String, String> reason = Collections.emptyMap();
 }

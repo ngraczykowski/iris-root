@@ -8,11 +8,10 @@ import com.silenteight.hsbc.datasource.datamodel.WorldCheckEntity;
 import com.silenteight.hsbc.datasource.dto.country.CountryFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
+import com.silenteight.hsbc.datasource.util.StreamUtils;
 
 import java.util.List;
 import java.util.stream.Stream;
-
-import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,8 +30,8 @@ public class RegistrationCountryFeature implements FeatureValuesRetriever<Countr
     if (matchData.isEntity()) {
       var apRegistrationCountries = query.getCustomerEntityRegistrationCountries();
       var wlRegistrationCountries = query.getWatchlistEntityRegistrationCountries();
-      builder.alertedPartyCountries(toDistinctList(apRegistrationCountries));
-      builder.watchlistCountries(toDistinctList(wlRegistrationCountries));
+      builder.alertedPartyCountries(StreamUtils.toDistinctList(apRegistrationCountries));
+      builder.watchlistCountries(StreamUtils.toDistinctList(wlRegistrationCountries));
     }
 
     var result = builder

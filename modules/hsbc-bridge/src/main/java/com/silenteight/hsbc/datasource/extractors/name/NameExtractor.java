@@ -4,29 +4,18 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.silenteight.hsbc.datasource.extractors.name.CountryLanguageMatcher.matches;
-import static com.silenteight.hsbc.datasource.util.StreamUtils.toDistinctList;
-import static java.lang.String.join;
-import static java.util.Collections.emptyList;
-import static java.util.List.of;
-import static java.util.regex.Pattern.compile;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class NameExtractor {
 
   private static final Pattern EXTRACT_NAME =
-      compile("(?<firstNamePart>.*)(\\((?<alias>[^A-Za-z0-9]+)\\))(?<secondNamePart>.*)");
-  private static final Pattern IS_ORIGINAL_SCRIPT = compile("[^A-Za-z0-9]+");
-  private static final Pattern IS_NUMERIC_SCRIPT_NAME = compile("^[0-9]{4}(\\s+[0-9]{4})*$");
+      Pattern.compile("(?<firstNamePart>.*)(\\((?<alias>[^A-Za-z0-9]+)\\))(?<secondNamePart>.*)");
+  private static final Pattern IS_ORIGINAL_SCRIPT = Pattern.compile("[^A-Za-z0-9]+");
+  private static final Pattern IS_NUMERIC_SCRIPT_NAME = Pattern.compile("^[0-9]{4}(\\s+[0-9]{4})*$");
 
   static Stream<String> collectNames(Stream<String> names) {
     var map = new LinkedHashMap<String, String>();
@@ -41,7 +30,7 @@ class NameExtractor {
     return Stream.of(names)
         .map(name -> (name == null) ? "" : name.strip())
         .filter(name -> !name.equals(""))
-        .collect(joining(" "));
+        .collect(Collectors.joining(" "));
   }
 
   static Stream<String> extractNameAndOriginalScriptAliases(String name) {
@@ -55,7 +44,7 @@ class NameExtractor {
         var secondNamePart = matcher.group("secondNamePart").strip();
         var alias = matcher.group("alias").strip();
 
-        names.add(join(" ", firstNamePart, secondNamePart).strip());
+        names.add(String.join(" ", firstNamePart, secondNamePart).strip());
         names.add(alias);
       } else {
         names.add(name);
@@ -76,7 +65,7 @@ class NameExtractor {
       tmp = tmp.replaceFirst("\\*+$", "");
       names[i] = tmp;
     }
-    return join(" ", names);
+    return String.join(" ", names);
   }
 
   static List<String> collectCountryMatchingAliases(
@@ -85,7 +74,7 @@ class NameExtractor {
 
     if (foreignAliases != null && !foreignAliases.isEmpty()) {
       foreignAliases.stream().filter(Objects::nonNull).forEach(foreignAlias -> {
-        if (matches(of(foreignAlias.getLanguage()), countries)) {
+        if (CountryLanguageMatcher.matches(List.of(foreignAlias.getLanguage()), countries)) {
           values.add(foreignAlias.getName());
         }
       });
@@ -109,9 +98,9 @@ class NameExtractor {
       List<String> apNames, List<String> mpNames) {
     if (apNames != null && mpNames != null) {
       var apOriginalScriptNames =
-          apNames.stream().filter(NameExtractor::isOriginalScript).collect(toList());
+          apNames.stream().filter(NameExtractor::isOriginalScript).collect(Collectors.toList());
       var mpOriginalScriptNames =
-          mpNames.stream().filter(NameExtractor::isOriginalScript).collect(toList());
+          mpNames.stream().filter(NameExtractor::isOriginalScript).collect(Collectors.toList());
 
       if (!apOriginalScriptNames.isEmpty() && !mpOriginalScriptNames.isEmpty()) {
         return new Party(apOriginalScriptNames, mpOriginalScriptNames);
@@ -122,20 +111,20 @@ class NameExtractor {
 
   private static List<String> removeRedundantNumericChineseScript(List<String> names) {
     if (names == null || names.isEmpty()) {
-      return emptyList();
+      return Collections.emptyList();
     }
 
     if (names.stream().anyMatch((NameExtractor::isOriginalScript))) {
       var filteredNames = names.stream()
           .filter(Objects::nonNull)
           .filter(name -> !isNumericScriptName(name))
-          .collect(toList());
+          .collect(Collectors.toList());
 
       if (!filteredNames.isEmpty()) {
         return filteredNames;
       }
     }
-    return names.stream().filter(Objects::nonNull).collect(toList());
+    return names.stream().filter(Objects::nonNull).collect(Collectors.toList());
   }
 
   private static boolean isOriginalScript(String name) {
