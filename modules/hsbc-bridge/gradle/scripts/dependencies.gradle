@@ -9,7 +9,7 @@ ext {
   silenteightLearningEngineApiVersion = "0.3.0"
   silenteightDataSourceApiVersion = "0.12.0"
   warehouseApiVersion = "1.6.0"
-  worldCheckApiVersion = "0.1.0"
+  worldCheckApiVersion = "0.3.0"
   historicalDecisionsApiVersion = "0.2.0"
   dataRetentionApiVersion = "0.0.1"
 

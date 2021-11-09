@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.unpacker.FileManager;
 import com.silenteight.hsbc.bridge.unpacker.UnzippedObject;
-import com.silenteight.worldcheck.api.v1.WatchlistType;
+import com.silenteight.proto.worldcheck.api.v1.WatchlistType;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

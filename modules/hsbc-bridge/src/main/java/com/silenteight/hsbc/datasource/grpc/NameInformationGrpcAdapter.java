@@ -7,9 +7,9 @@ import com.silenteight.hsbc.datasource.extractors.name.ForeignAliasDto;
 import com.silenteight.hsbc.datasource.extractors.name.GetNameInformationRequestDto;
 import com.silenteight.hsbc.datasource.extractors.name.GetNameInformationResponseDto;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
-import com.silenteight.worldcheck.api.v1.ForeignAlias;
-import com.silenteight.worldcheck.api.v1.GetNameInformationRequest;
-import com.silenteight.worldcheck.api.v1.NamesInformationServiceGrpc.NamesInformationServiceBlockingStub;
+import com.silenteight.proto.worldcheck.api.v1.ForeignAlias;
+import com.silenteight.proto.worldcheck.api.v1.GetNameInformationRequest;
+import com.silenteight.proto.worldcheck.api.v1.NamesInformationServiceGrpc.NamesInformationServiceBlockingStub;
 
 import io.grpc.Status;
 import io.grpc.Status.Code;

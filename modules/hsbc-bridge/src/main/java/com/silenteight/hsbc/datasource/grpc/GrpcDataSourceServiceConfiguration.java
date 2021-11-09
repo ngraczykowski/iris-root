@@ -8,8 +8,8 @@ import com.silenteight.hsbc.datasource.extractors.historical.HistoricalDecisions
 import com.silenteight.hsbc.datasource.extractors.ispep.IsPepServiceClient;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
 import com.silenteight.proto.historicaldecisions.model.v1.api.HistoricalDecisionsModelServiceGrpc.HistoricalDecisionsModelServiceBlockingStub;
-import com.silenteight.worldcheck.api.v1.IsPepServiceGrpc.IsPepServiceBlockingStub;
-import com.silenteight.worldcheck.api.v1.NamesInformationServiceGrpc.NamesInformationServiceBlockingStub;
+import com.silenteight.proto.worldcheck.api.v1.IsPepServiceGrpc.IsPepServiceBlockingStub;
+import com.silenteight.proto.worldcheck.api.v1.NamesInformationServiceGrpc.NamesInformationServiceBlockingStub;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

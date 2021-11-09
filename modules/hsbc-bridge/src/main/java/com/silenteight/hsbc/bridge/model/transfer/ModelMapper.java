@@ -7,7 +7,8 @@ import com.silenteight.hsbc.bridge.model.dto.ModelStatus;
 import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoRequest;
 import com.silenteight.hsbc.bridge.model.rest.input.ModelInfoStatusRequest;
-import com.silenteight.worldcheck.api.v1.ModelPersisted;
+import com.silenteight.proto.worldcheck.api.v1.ModelPersisted;
+import com.silenteight.proto.worldcheck.api.v1.ModelType;
 
 import java.net.URI;
 
@@ -20,7 +21,7 @@ class ModelMapper {
     return ModelPersisted.newBuilder()
         .setModelName(request.getName())
         .setModelUri(request.getUrl())
-        .setModelType(com.silenteight.worldcheck.api.v1.ModelType.valueOf(request.getType().name()))
+        .setModelType(ModelType.valueOf(request.getType().name()))
         .build();
   }
 

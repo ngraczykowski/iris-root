@@ -2,7 +2,8 @@ package com.silenteight.hsbc.bridge.watchlist;
 
 import lombok.Value;
 
-import com.silenteight.worldcheck.api.v1.WatchlistType;
+import com.silenteight.proto.worldcheck.api.v1.WatchlistType;
+
 
 @Value
 public class WatchlistIdentifier {

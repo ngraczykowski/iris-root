@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.watchlist.WatchlistIdentifier;
 import com.silenteight.hsbc.bridge.watchlist.WorldCheckNotifier;
-import com.silenteight.worldcheck.api.v1.MultipleWatchlistPersisted;
-import com.silenteight.worldcheck.api.v1.WatchlistPersisted;
+import com.silenteight.proto.worldcheck.api.v1.MultipleWatchlistPersisted;
+import com.silenteight.proto.worldcheck.api.v1.WatchlistPersisted;
 
 import org.springframework.amqp.core.AmqpTemplate;
 

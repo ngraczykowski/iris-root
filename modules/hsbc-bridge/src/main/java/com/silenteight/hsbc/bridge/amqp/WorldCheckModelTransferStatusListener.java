@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto;
 import com.silenteight.hsbc.bridge.model.transfer.WorldCheckModelManager;
-import com.silenteight.worldcheck.api.v1.ModelStatusUpdated;
+import com.silenteight.proto.worldcheck.api.v1.ModelStatusUpdated;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 

@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.datasource.dto.ispep.ReasonDto;
 import com.silenteight.hsbc.datasource.extractors.ispep.*;
-import com.silenteight.worldcheck.api.v1.*;
-import com.silenteight.worldcheck.api.v1.IsPepServiceGrpc.IsPepServiceBlockingStub;
+import com.silenteight.proto.worldcheck.api.v1.*;
+import com.silenteight.proto.worldcheck.api.v1.IsPepServiceGrpc.IsPepServiceBlockingStub;
 
 import io.grpc.StatusRuntimeException;
 import org.springframework.retry.annotation.Retryable;
@@ -73,8 +73,7 @@ class IsPepGrpcAdapter implements IsPepServiceClient {
         .build();
   }
 
-  private GetModelFieldNamesResponseDto mapToGetModelFieldNames(
-      GetModelFieldNamesResponse response) {
+  private GetModelFieldNamesResponseDto mapToGetModelFieldNames(GetModelFieldNamesResponse response) {
     return GetModelFieldNamesResponseDto.builder()
         .fieldNames(response.getModelFieldNames().getFieldNamesList())
         .version(response.getModelFieldNames().getModelDetails().getVersion())

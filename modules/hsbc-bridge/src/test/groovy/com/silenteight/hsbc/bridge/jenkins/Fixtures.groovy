@@ -6,9 +6,9 @@ import com.silenteight.hsbc.bridge.model.dto.ModelStatusUpdatedDto
 import com.silenteight.hsbc.bridge.model.dto.ModelType
 import com.silenteight.hsbc.bridge.nexus.NexusApiProperties
 import com.silenteight.model.api.v1.ModelPromotedForProduction
-import com.silenteight.worldcheck.api.v1.ModelPersisted
-import com.silenteight.worldcheck.api.v1.ModelStatus
-import com.silenteight.worldcheck.api.v1.ModelStatusUpdated
+import com.silenteight.proto.worldcheck.api.v1.ModelPersisted
+import com.silenteight.proto.worldcheck.api.v1.ModelStatus
+import com.silenteight.proto.worldcheck.api.v1.ModelStatusUpdated
 
 class Fixtures {
 
@@ -82,42 +82,42 @@ class Fixtures {
   def nameModelPersisted = ModelPersisted.newBuilder()
       .setModelName(testWorldCheckModelName)
       .setModelUri(testWorldCheckNameUidUrl)
-      .setModelType(com.silenteight.worldcheck.api.v1.ModelType.NAME_ALIASES)
+      .setModelType(com.silenteight.proto.worldcheck.api.v1.ModelType.NAME_ALIASES)
       .setModelVersion(testModelVersion)
       .build()
 
   def proceduralModelPersisted = ModelPersisted.newBuilder()
       .setModelName(testWorldCheckModelName)
       .setModelUri(testWorldCheckIsPepProceduralUidUrl)
-      .setModelType(com.silenteight.worldcheck.api.v1.ModelType.IS_PEP_PROCEDURAL)
+      .setModelType(com.silenteight.proto.worldcheck.api.v1.ModelType.IS_PEP_PROCEDURAL)
       .setModelVersion(testModelVersion)
       .build()
 
   def historicalModelPersisted = ModelPersisted.newBuilder()
       .setModelName(testWorldCheckModelName)
       .setModelUri(testWorldCheckIsPepHistoricalUidUrl)
-      .setModelType(com.silenteight.worldcheck.api.v1.ModelType.IS_PEP_HISTORICAL)
+      .setModelType(com.silenteight.proto.worldcheck.api.v1.ModelType.IS_PEP_HISTORICAL)
       .setModelVersion(testModelVersion)
       .build()
 
   def nameModelStatusUpdated = ModelStatusUpdated.newBuilder()
       .setModelName(testModelVersion)
       .setModelUri(testWorldCheckNameAliasesVersionUrl)
-      .setModelType(com.silenteight.worldcheck.api.v1.ModelType.NAME_ALIASES)
+      .setModelType(com.silenteight.proto.worldcheck.api.v1.ModelType.NAME_ALIASES)
       .setModelStatus(ModelStatus.SUCCESS)
       .build()
 
   def proceduralModelStatusUpdated = ModelStatusUpdated.newBuilder()
       .setModelName(testModelVersion)
       .setModelUri(testWorldCheckIsPepProceduralVersionUrl)
-      .setModelType(com.silenteight.worldcheck.api.v1.ModelType.IS_PEP_PROCEDURAL)
+      .setModelType(com.silenteight.proto.worldcheck.api.v1.ModelType.IS_PEP_PROCEDURAL)
       .setModelStatus(ModelStatus.SUCCESS)
       .build()
 
   def historicalModelStatusUpdated = ModelStatusUpdated.newBuilder()
       .setModelName(testModelVersion)
       .setModelUri(testWorldCheckIsPepHistoricalVersionUrl)
-      .setModelType(com.silenteight.worldcheck.api.v1.ModelType.IS_PEP_HISTORICAL)
+      .setModelType(com.silenteight.proto.worldcheck.api.v1.ModelType.IS_PEP_HISTORICAL)
       .setModelStatus(ModelStatus.SUCCESS)
       .build()
 

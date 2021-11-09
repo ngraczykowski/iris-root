@@ -5,7 +5,7 @@ import lombok.NonNull;
 import lombok.Value;
 
 import com.silenteight.hsbc.bridge.model.transfer.WorldCheckMessageSender;
-import com.silenteight.worldcheck.api.v1.ModelPersisted;
+import com.silenteight.proto.worldcheck.api.v1.ModelPersisted;
 
 import org.springframework.amqp.core.AmqpTemplate;
 
