@@ -24,4 +24,13 @@ class AmqpDefaults {
   static final String BRIDGE_WAREHOUSE_EXCHANGE_NAME = "bridge.command";
 
   static final String BRIDGE_WAREHOUSE_ROUTING_KEY = "command.index-request.production";
+
+  static final String DATA_RETENTION_EXCHANGE_NAME = "bridge.retention";
+
+  static final String DATA_RETENTION_PERSONAL_INFORMATION_EXPIRED_ROUTING_KEY =
+      "retention.personal-information-expired";
+
+  static final String DATA_RETENTION_ALERT_EXPIRED_ROUTING_KEY =
+      "retention.alerts-expired";
+
 }

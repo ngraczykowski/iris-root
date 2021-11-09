@@ -10,4 +10,5 @@
   <include file="db/changelog/db.changelog-payments-bridge-firco-master.xml"/>
   <include file="db/changelog/db.changelog-payments-bridge-ae-master.xml"/>
   <include file="db/changelog/db.changelog-payments-bridge-svb-learning-master.xml"/>
+  <include file="db/changelog/db.changelog-payments-bridge-data-retention-master.xml"/>
 </databaseChangeLog>

@@ -7,6 +7,7 @@ import com.silenteight.payments.bridge.svb.learning.reader.domain.IndexRegisterA
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.ReadAlertError;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CheckAlertRegisteredPort;
+import com.silenteight.payments.bridge.svb.learning.reader.port.CreateAlertRetentionPort;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory.AlertBuilder;
 import com.silenteight.payments.bridge.warehouse.index.model.RequestOrigin;
@@ -32,6 +33,7 @@ class IngestService {
   private final CheckAlertRegisteredPort checkAlertRegisteredPort;
   private final IndexedAlertBuilderFactory alertBuilderFactory;
   private final LearningWarehouseMapper warehouseMapper;
+  private final CreateAlertRetentionPort createAlertRetentionPort;
 
   void ingest(LearningAlertBatch batch) {
     var alerts = batch.getLearningAlerts().stream()
@@ -64,6 +66,7 @@ class IngestService {
         existing.stream().map(ra -> fromLearningAlerts(ra, registeredAlerts)).collect(toList());
     if (registeredAlerts.size() > 0) {
       processRegistered(indexAlertsRequest);
+      createAlertRetentionPort.create(registeredAlerts);
     }
   }
 
@@ -72,6 +75,7 @@ class IngestService {
     register(learningAlerts);
     dataSourceIngestService.createValues(learningAlerts, errors);
     index(learningAlerts);
+    createAlertRetentionPort.create(learningAlerts);
   }
 
   private void processRegistered(List<IndexRegisterAlertRequest> indexRegisterAlertRequest) {

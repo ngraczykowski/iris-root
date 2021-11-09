@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.svb.learning.reader.service;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.common.model.RegisteredAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CheckAlertRegisteredPort;
+import com.silenteight.payments.bridge.svb.learning.reader.port.CreateAlertRetentionPort;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory;
 import com.silenteight.payments.bridge.warehouse.index.model.payload.WarehouseAnalystSolution;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertUseCase;
@@ -34,6 +35,8 @@ class IngestServiceTest {
   private IndexedAlertBuilderFactory alertBuilderFactory;
   @Mock
   private LearningWarehouseMapper warehouseMapper;
+  @Mock
+  private CreateAlertRetentionPort createAlertRetentionPort;
   private IngestService ingestService;
 
   @BeforeEach
@@ -41,7 +44,7 @@ class IngestServiceTest {
     ingestService =
         new IngestService(registerAlertUseCase, dataSourceIngestService, indexAlertUseCase,
             checkAlertRegisteredPort, new IndexedAlertBuilderFactory(new ObjectMapper()),
-            warehouseMapper);
+            warehouseMapper, createAlertRetentionPort);
   }
 
   @Test

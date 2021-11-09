@@ -31,6 +31,9 @@ public class CommonChannels {
   public static final String RESPONSE_COMPLETED_OUTBOUND =
       PREFIX + "ResponseCompletedOutboundChannel";
   public static final String WAREHOUSE_UPDATE_OUTBOUND = PREFIX + "WarehouseOutboundChannel";
+  public static final String PERSONAL_INFORMATION_EXPIRED_OUTBOUND =
+      PREFIX + "PersonalInformationExpiredOutboundChannel";
+  public static final String ALERT_EXPIRED_OUTBOUND = PREFIX + "AlertExpiredOutboundChannel";
 
   // Domain Events channels
   public static final String ALERT_STORED = PREFIX + "AlertStoredChannel";
@@ -69,6 +72,16 @@ public class CommonChannels {
   public MessageChannel warehouseOutbound() {
     return new TypedPublishSubscribeChannel(
         WarehouseIndexRequestedEvent.class, channelInterceptors);
+  }
+
+  @Bean(PERSONAL_INFORMATION_EXPIRED_OUTBOUND)
+  public MessageChannel personalInformationExpiredOutbound() {
+    return new DirectChannel();
+  }
+
+  @Bean(ALERT_EXPIRED_OUTBOUND)
+  public MessageChannel alertExpiredOutbound() {
+    return new DirectChannel();
   }
 
   @Bean(ALERT_STORED)
