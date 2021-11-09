@@ -4,3 +4,11 @@ serp:
       declare: false
       enabled: true
       name: payments.error-queue
+
+keycloak:
+  realm: sierra-prod
+  auth-server-url: https://auth.silent8.cloud
+  ssl-required: external
+  resource: sierra-prod-api
+  use-resource-role-mappings: true
+  bearer-only: true
