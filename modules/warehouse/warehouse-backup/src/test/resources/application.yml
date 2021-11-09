@@ -30,6 +30,9 @@ warehouse:
       alert-simulation-indexing:
         queue-name: wh.index-request.simulation
         routing-key: command.index-request.simulation
+      personal-information-expired-indexing:
+        queue-name: wh.retention.personal-information-expired
+        routing-key: retention.personal-information-expired
       to-remove:
         bindings: []
   indexer:
@@ -51,6 +54,9 @@ test:
       simulation-indexing-test-client-outbound:
         exchange-name: testapp.command
         routing-key: command.index-request.simulation
+      personal-information-expired-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: retention.personal-information-expired
       production-indexed-event-test-listener-inbound:
         queue-name: testapp.index-response.production
       simulation-indexed-event-test-listener-inbound:

@@ -15,6 +15,7 @@ dependencies {
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_commons_core
   implementation libraries.silenteight_data_api
+  implementation libraries.silenteight_data_retention_api
   implementation libraries.jakarta_validation_api
   implementation libraries.spring_context_support
 

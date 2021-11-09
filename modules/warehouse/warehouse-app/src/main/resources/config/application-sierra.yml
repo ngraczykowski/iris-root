@@ -9,6 +9,12 @@ warehouse:
     time-field-name: alert_create_time
 
   indexer.diagnostic.enabled: true
+  retention:
+    personal-information:
+      batch-size: 200
+      fields-to-erase:
+        - 'recommendation_comment'
+        - 'firco_analyst_comment'
 
 warehouse.messaging:
   broker:

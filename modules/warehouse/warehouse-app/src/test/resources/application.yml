@@ -37,6 +37,9 @@ warehouse:
       alert-simulation-indexing:
         queue-name: wh.index-request.simulation
         routing-key: command.index-request.simulation
+      personal-information-expired-indexing:
+        queue-name: wh.retention.personal-information-expired
+        routing-key: retention.personal-information-expired
       to-remove:
         bindings: []
   indexer:
@@ -52,6 +55,8 @@ warehouse:
     simulation-indexed-outbound:
       exchange-name: wh.event
       routing-key: event.index-response.simulation
+    personal-information-expired-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.alert-production-indexing.queue-name}
   environment:
     prefix: itest
   report:

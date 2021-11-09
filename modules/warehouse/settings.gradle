@@ -27,3 +27,5 @@ include 'warehouse-report-statistics'
 include 'warehouse-sampling'
 include 'warehouse-test-app'
 include 'warehouse-test-client'
+include 'warehouse-retention-production'
+

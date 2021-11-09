@@ -9,6 +9,7 @@ ext {
   silenteightSepAuthVersion = "1.16.0"
   silenteightSepBaseVersion = "1.12.2"
   silenteightDataApiVersion = "2.2.0"
+  silenteightDataRetentionApiVersion = "0.0.1"
   silenteightSamplingAlertsApiVersion = "1.6.0"
   silenteightWarehouseInternalApiVersion = "1.6.0"
   silenteightFileStorageApiVersion = "1.3.0"
@@ -27,6 +28,7 @@ libraries.silenteight_sep_base_aspects = [group: 'com.silenteight.sep.base', nam
 libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name: 'sep-base-common', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_testing = [group: 'com.silenteight.sep.base', name: 'sep-base-testing', version: silenteightSepBaseVersion]
 libraries.silenteight_data_api = [group: 'com.silenteight.warehouse.api', name: 'se-data-api', version: silenteightDataApiVersion]
+libraries.silenteight_data_retention_api = [group: 'com.silenteight.sens.data-retention-api', name: 'data-retention-api', version: silenteightDataRetentionApiVersion]
 libraries.silenteight_sampling_alerts_api = [group: 'com.silenteight.warehouse.api', name: 'se-sampling-alerts-api', version: silenteightSamplingAlertsApiVersion]
 libraries.silenteight_warehouse_internal_api = [group: 'com.silenteight.warehouse.api', name: 'se-warehouse-internal-api', version: silenteightWarehouseInternalApiVersion]
 libraries.silenteight_rabbit_mq_common_schema = [group: 'com.silenteight.rabbitmqcommonschema', name: 'sear-rabbitmq-common-schema-definitions', version: silenteightRabbitMqCommonSchemaVersion]
