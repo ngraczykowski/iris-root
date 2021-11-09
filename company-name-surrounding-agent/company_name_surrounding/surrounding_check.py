@@ -1,7 +1,8 @@
+import logging
 import re
 from typing import List
 
-from company_name import parse_name
+from organization_name_knowledge import parse
 
 
 def get_company_token_count(ap_names: List[str]):
@@ -10,7 +11,7 @@ def get_company_token_count(ap_names: List[str]):
     else:
         ap_name = ap_names[0]
         if is_ascii(ap_name):
-            name_info = parse_name(ap_name)
+            name_info = parse(ap_name)
             legal = name_info.legal
             prefix = name_info.common_prefixes
             suffix = name_info.common_suffixes
@@ -20,11 +21,12 @@ def get_company_token_count(ap_names: List[str]):
             return 0
 
 
-def is_ascii(text):
+def is_ascii(text: str) -> bool:
     try:
         if re.search(r"[^\x00-\x7F]", text):
             return False
         else:
             return True
-    except Exception:
+    except Exception as exc:
+        logging.error(exc)
         pass
