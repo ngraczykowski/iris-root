@@ -10,11 +10,16 @@ public enum CompanyNameSurroundingAgentResponse {
   MATCH_2,
   MATCH_3,
   MATCH_4,
-  MATCH_5_OR_MORE;
+  MATCH_5_OR_MORE,
+  AGENT_ERROR;
 
   public static List<String> getValues() {
     return Stream.of(CompanyNameSurroundingAgentResponse.values())
         .map(CompanyNameSurroundingAgentResponse::name)
+        // XXX(ahaczewski): Do not count AGENT_ERROR towards category values, breaking the
+        //  protobuf contract, BUT this is to prevent AGENT_ERROR showing up as a value to choose
+        //  from in Policy Editor.
+        .filter(s -> !s.contains("ERROR"))
         .collect(Collectors.toList());
   }
 }

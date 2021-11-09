@@ -10,6 +10,8 @@ import com.silenteight.payments.bridge.agents.port.CompanyNameSurroundingUseCase
 import com.silenteight.proto.agent.companynamesurrounding.v1.api.CheckCompanyNameSurroundingRequest;
 import com.silenteight.proto.agent.companynamesurrounding.v1.api.CompanyNameSurroundingAgentGrpc.CompanyNameSurroundingAgentBlockingStub;
 
+import io.grpc.StatusRuntimeException;
+
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -31,19 +33,34 @@ class CompanyNameSurroundingAgent implements CompanyNameSurroundingUseCase {
 
     log.debug("Sending request to Company Name Surrounding Agent");
 
-    var response = stub
-        .withDeadlineAfter(deadlineDuration.toMillis(), TimeUnit.MILLISECONDS)
-        .checkCompanyNameSurrounding(request);
+    try {
+      var response = stub
+          .withDeadlineAfter(deadlineDuration.toMillis(), TimeUnit.MILLISECONDS)
+          .checkCompanyNameSurrounding(request);
 
-    if (response == null)
-      throw new MissingAgentResultException("Company Name Surrounding Agent");
+      if (response.getSolution().isEmpty()) {
+        log.error(
+            "Company Name Surrounding Agent returned empty solution: result={}",
+            response.getResult());
+        return CompanyNameSurroundingAgentResponse.AGENT_ERROR;
+      }
 
-    if (log.isDebugEnabled()) {
-      log.debug(
-          "Response received from Company Name Surrounding Agent: {}", response.getSolution());
+      if (log.isDebugEnabled()) {
+        log.debug(
+            "Response received from Company Name Surrounding Agent: solution={}, result={}",
+            response.getSolution(), response.getResult());
+      }
+
+      return CompanyNameSurroundingAgentResponse.valueOf(response.getSolution());
+    } catch (StatusRuntimeException e) {
+      var status = e.getStatus();
+      log.error("Failed to call Company Name Surrounding Agent: code={}, description={})",
+          status.getCode(), status.getDescription());
+      return CompanyNameSurroundingAgentResponse.AGENT_ERROR;
+    } catch (Exception e) {
+      log.error("Unable to get Company Name Surrounding response", e);
+      return CompanyNameSurroundingAgentResponse.AGENT_ERROR;
     }
-
-    return CompanyNameSurroundingAgentResponse.valueOf(response.getSolution());
   }
 
   private static CheckCompanyNameSurroundingRequest getRequest(List<String> allNames) {
