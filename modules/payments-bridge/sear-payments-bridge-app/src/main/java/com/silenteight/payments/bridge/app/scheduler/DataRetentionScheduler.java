@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.app.scheduler;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.data.retention.port.CheckAlertExpirationUseCase;
 import com.silenteight.payments.bridge.data.retention.port.CheckPersonalInformationExpirationUseCase;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 class DataRetentionScheduler {
 
   private final CheckAlertExpirationUseCase checkAlertExpirationUseCase;
@@ -19,12 +21,15 @@ class DataRetentionScheduler {
   @Scheduled(cron = "${pb.data-retention.alert-data.cron}")
   @SchedulerLock(name = "alert_data_cron_lock", lockAtMostFor = "3600")
   void scheduleAlertValidator() {
+    log.info("The data-retention scheduler has started looking for expired alert-data");
     checkAlertExpirationUseCase.execute();
   }
 
   @Scheduled(cron = "${pb.data-retention.personal-information.cron}")
   @SchedulerLock(name = "pii_cron_lock", lockAtMostFor = "3600")
   void schedulePersonalInformationValidator() {
+    log.info("The data-retention scheduler has started looking for "
+        + "expired personal identifiable information data.");
     checkPersonalInformationExpirationUseCase.execute();
   }
 }

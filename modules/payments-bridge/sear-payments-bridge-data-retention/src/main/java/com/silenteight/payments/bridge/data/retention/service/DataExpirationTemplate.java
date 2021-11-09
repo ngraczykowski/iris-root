@@ -26,6 +26,8 @@ abstract class DataExpirationTemplate {
     if (!alertNames.isEmpty()) {
       sendMessage(alertNames);
       alertDataRetentionAccessPort.update(alertNames, OffsetDateTime.now(), dataType);
+    } else {
+      log.info("No expired {} data found", dataType.name().toLowerCase());
     }
   }
 
