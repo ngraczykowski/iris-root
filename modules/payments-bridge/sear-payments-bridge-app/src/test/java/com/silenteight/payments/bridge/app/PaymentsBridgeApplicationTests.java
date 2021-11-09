@@ -80,7 +80,7 @@ class PaymentsBridgeApplicationTests {
     handleLearningDataUseCase.readAlerts(request);
     await()
         .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
-        .atMost(Duration.ofSeconds(10))
+        .atMost(Duration.ofSeconds(1))
         .until(PaymentsBridgeApplicationTests::createdAlerts);
     assertThat(MockAlertUseCase.getCreatedAlertsCount()).isEqualTo(2);
     assertThat(MockAlertUseCase.getCreatedMatchesCount()).isEqualTo(2);
