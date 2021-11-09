@@ -279,7 +279,7 @@ warehouse.report.ai-reasoning:
         label: Alert Status
       - name: alert_firco_analyst_decision
         label: Analyst Decision
-      - name: alert_alert_message_id
+      - name: s8_alert_name
         label: Alert S8 ID
   simulation:
     date-field-name: index_timestamp
