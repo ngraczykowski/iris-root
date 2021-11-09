@@ -16,6 +16,8 @@ message Location {
     // A reference id to the parent location.
     uint32 parent_id = 5;
     google.protobuf.Any details = 6;
+    // Whether location was derived from state or country
+    bool derived = 7;
 }
 
 enum LocationType {
