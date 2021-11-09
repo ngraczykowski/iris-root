@@ -65,6 +65,9 @@ warehouse:
       alert-simulation-indexing:
         queue-name: wh.index-request.simulation
         routing-key: command.index-request.simulation
+      personal-information-expired-indexing:
+        queue-name: wh.retention.personal-information-expired
+        routing-key: retention.personal-information-expired
       to-remove:
         bindings: []
   indexer:
@@ -82,6 +85,8 @@ warehouse:
     simulation-indexed-outbound:
       exchange-name: wh.event
       routing-key: event.index-response.simulation
+    personal-information-expired-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.personal-information-expired-indexing.queue-name}
   report:
     default-bucket: reports
     removal:
@@ -99,6 +104,11 @@ warehouse:
       search:
         batch-size: 10000
         keep-alive-seconds: 30
+  retention:
+    personal-information:
+      batch-size: 200
+      fields-to-erase: []
+
   task:
     async:
       execution:

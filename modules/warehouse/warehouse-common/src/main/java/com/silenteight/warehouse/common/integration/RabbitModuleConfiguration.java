@@ -15,6 +15,7 @@ class RabbitModuleConfiguration {
   MessageRegistry messageRegistryOverwrite() {
     MessageRegistryFactory factory = new MessageRegistryFactory(
         "com.silenteight.data.api",
+        "com.silenteight.dataretention.api",
         "com.google.protobuf",
         "com.google.rpc",
         "com.google.type");

@@ -36,6 +36,10 @@ class BrokerProperties {
 
   @Valid
   @NestedConfigurationProperty
+  private AmpqProperties personalInformationExpiredIndexing;
+
+  @Valid
+  @NestedConfigurationProperty
   private ToRemoveProperties toRemove;
 
   String alertBackupIndexingQueueName() {
@@ -96,6 +100,18 @@ class BrokerProperties {
 
   Integer alertSimulationIndexingMaxPriority() {
     return alertBackupIndexing.getMaxPriority();
+  }
+
+  String personalInformationExpiredIndexingQueueName() {
+    return personalInformationExpiredIndexing.getQueueName();
+  }
+
+  String personalInformationExpiredIndexingRoutingKey() {
+    return personalInformationExpiredIndexing.getRoutingKey();
+  }
+
+  Integer personalInformationExpiredIndexingMaxPriority() {
+    return personalInformationExpiredIndexing.getMaxPriority();
   }
 
   List<BindingProperties> bindingsToRemove() {

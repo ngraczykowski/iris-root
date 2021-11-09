@@ -3,12 +3,14 @@ package com.silenteight.warehouse.test.generator;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.data.api.v2.Alert;
+import com.silenteight.dataretention.api.v1.PersonalInformationExpired;
 
 import com.google.protobuf.Struct;
 import com.google.protobuf.Struct.Builder;
 import com.google.protobuf.Value;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -39,6 +41,13 @@ class AlertGenerator {
         .setDiscriminator(getRandomDiscriminator())
         .setName(getRandomValue(ALERT_NAMES))
         .setPayload(convertMapToPayload(generateRandomPayload()))
+        .build();
+  }
+
+  PersonalInformationExpired generatePersonalInformationExpired(List<String> alertNames) {
+    return PersonalInformationExpired
+        .newBuilder()
+        .addAllAlerts(alertNames)
         .build();
   }
 

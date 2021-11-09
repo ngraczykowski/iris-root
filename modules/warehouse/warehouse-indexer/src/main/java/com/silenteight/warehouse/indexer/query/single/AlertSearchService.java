@@ -33,6 +33,7 @@ public class AlertSearchService {
 
     SearchResponse search = restHighLevelClient.search(searchRequest, DEFAULT);
     SearchHit[] hits = search.getHits().getHits();
+
     return stream(hits)
         .map(SearchHit::getSourceAsMap)
         .collect(toList());

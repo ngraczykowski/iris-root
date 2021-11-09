@@ -23,6 +23,8 @@ public class IndexerClientConfiguration {
       "productionIndexingOutboundChannel";
   public static final String SIMULATION_INDEXING_OUTBOUND_CHANNEL =
       "simulationIndexingOutboundChannel";
+  public static final String PII_EXPIRED_INDEXING_OUTBOUND_CHANNEL =
+      "personalInformationExpiredIndexingOutboundChannel";
 
   @NonNull
   private final AmqpOutboundFactory outboundFactory;
@@ -53,6 +55,16 @@ public class IndexerClientConfiguration {
   }
 
   @Bean
+  GatewayProxyFactoryBean personalInformationExpiredClientGateway() {
+    GatewayProxyFactoryBean factoryBean =
+        new GatewayProxyFactoryBean(PersonalInformationExpiredClientGateway.class);
+    factoryBean.setDefaultRequestChannel(new DirectChannel());
+    factoryBean.setDefaultRequestChannelName(PII_EXPIRED_INDEXING_OUTBOUND_CHANNEL);
+    return factoryBean;
+  }
+
+
+  @Bean
   DirectExchange productionCommandExchange() {
     return ExchangeBuilder
         .directExchange(properties.getProductionIndexingTestClientOutbound().getExchangeName())
@@ -80,6 +92,14 @@ public class IndexerClientConfiguration {
         SIMULATION_INDEXING_OUTBOUND_CHANNEL,
         properties.getSimulationIndexingTestClientOutbound().getExchangeName(),
         properties.getSimulationIndexingTestClientOutbound().getRoutingKey());
+  }
+
+  @Bean
+  IntegrationFlow piiDataExpiredChannelToExchangeIntegrationFlow() {
+    return createOutputFlow(
+        PII_EXPIRED_INDEXING_OUTBOUND_CHANNEL,
+        properties.getPersonalInformationExpiredIndexingTestClientOutbound().getExchangeName(),
+        properties.getPersonalInformationExpiredIndexingTestClientOutbound().getRoutingKey());
   }
 
   private IntegrationFlow createOutputFlow(String channel, String exchange, String routingKey) {

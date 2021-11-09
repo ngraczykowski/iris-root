@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.validation.Valid;
 
 import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.BRIDGE_COMMAND_EXCHANGE;
+import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.BRIDGE_RETENTION_EXCHANGE;
 import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.GOV_EVENT_EXCHANGE;
 import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.SIM_COMMAND_EXCHANGE;
 import static java.util.Collections.emptyMap;
@@ -75,6 +76,15 @@ class BrokerConfiguration {
             properties.alertSimulationIndexingRoutingKey()));
   }
 
+  @Bean
+  Declarables personalInformationExpiredIndexingBinding() {
+    return new Declarables(
+        binding(
+            properties.personalInformationExpiredIndexingQueueName(),
+            BRIDGE_RETENTION_EXCHANGE,
+            properties.personalInformationExpiredIndexingRoutingKey()));
+  }
+
   private static Binding binding(String queueName, String exchange, String routingKey) {
     return new Binding(queueName, QUEUE, exchange, routingKey, emptyMap());
   }
@@ -112,6 +122,13 @@ class BrokerConfiguration {
     return queue(
         properties.alertSimulationIndexingQueueName(),
         properties.alertSimulationIndexingMaxPriority());
+  }
+
+  @Bean
+  Queue personalInformationExpiredIndexingQueue() {
+    return queue(
+        properties.personalInformationExpiredIndexingQueueName(),
+        properties.personalInformationExpiredIndexingMaxPriority());
   }
 
   private static Queue queue(String queueName, Integer maxPriority) {

@@ -21,4 +21,7 @@ public class IndexerClientIntegrationProperties {
   @Valid
   @NestedConfigurationProperty
   private AmqpOutboundProperties simulationIndexingTestClientOutbound;
+  @Valid
+  @NestedConfigurationProperty
+  private AmqpOutboundProperties personalInformationExpiredIndexingTestClientOutbound;
 }

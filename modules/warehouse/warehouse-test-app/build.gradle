@@ -22,6 +22,7 @@ dependencies {
   implementation libraries.spring_context_support
 
   implementation libraries.silenteight_data_api
+  implementation libraries.silenteight_data_retention_api
 
   implementation libraries.commons_lang3
 

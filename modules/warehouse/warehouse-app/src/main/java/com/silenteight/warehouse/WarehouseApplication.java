@@ -40,6 +40,7 @@ import com.silenteight.warehouse.report.simulation.SimulationModule;
 import com.silenteight.warehouse.report.simulation.v1.DeprecatedSimulationModule;
 import com.silenteight.warehouse.report.statistics.ReportStatisticsModule;
 import com.silenteight.warehouse.report.storage.StorageModule;
+import com.silenteight.warehouse.retention.production.RetentionProductionModule;
 import com.silenteight.warehouse.sampling.SamplingModule;
 
 import org.springframework.boot.Banner.Mode;
@@ -91,6 +92,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     OpendistroModule.class,
     ReportingModule.class,
     ReportsRemovalModule.class,
+    RetentionProductionModule.class,
     SimulationModule.class,
     StorageModule.class,
     TokenModule.class,

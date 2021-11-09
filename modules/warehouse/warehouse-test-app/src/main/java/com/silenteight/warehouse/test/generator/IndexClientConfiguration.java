@@ -2,6 +2,7 @@ package com.silenteight.warehouse.test.generator;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.warehouse.test.client.gateway.PersonalInformationExpiredClientGateway;
 import com.silenteight.warehouse.test.client.gateway.ProductionIndexClientGateway;
 import com.silenteight.warehouse.test.client.gateway.SimulationIndexClientGateway;
 
@@ -35,6 +36,18 @@ class IndexClientConfiguration {
     log.info("SimulationIndexClient created");
     return new SimulationIndexClient(
         simulationIndexClientGateway, alertGenerator, getAnalysisName());
+  }
+
+  @Bean
+  @Autowired
+  @ConditionalOnProperty(value = "test.generator.pii-expired-enabled", havingValue = "true")
+  PersonalInformationDataExpiredClient personalInformationDataExpiredClient(
+      PersonalInformationExpiredClientGateway personalInformationExpiredClientGateway,
+      AlertGenerator alertGenerator) {
+
+    log.info("PersonalInformationDataExpiredClient created");
+    return new PersonalInformationDataExpiredClient(
+        personalInformationExpiredClientGateway, alertGenerator);
   }
 
   @Bean
