@@ -15,7 +15,7 @@ idna==3.2
 importlib-metadata==4.8.1
 iniconfig==1.1.1
 isort==5.9.3
-organization-name-knowledge==0.1.0.dev0
+organization-name-knowledge==0.1.0
 packaging==21.0
 protobuf==3.17.3
 protocol-agents==0.14.0.68
