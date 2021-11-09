@@ -23,7 +23,7 @@ setup(
         "License :: Other/Proprietary License",
     ],
     packages=find_packages(exclude=("tests",)),
-    package_data={"organization_name_knowledge": ["templates/*", "resources/*"]},
+    package_data={"organization_name_knowledge": ["resources/*"]},
     install_requires=[
         # Keep sorted alphabetically (case-insensitive)
         "rapidfuzz==1.7.1",
