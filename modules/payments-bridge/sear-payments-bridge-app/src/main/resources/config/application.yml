@@ -14,7 +14,7 @@ keycloak:
 #---------------------------------------------------------------------------------------------------
 pb:
   messaging:
-    concurrency: 4
+    concurrency: 8
     prefetch: 25
 
   #-------------------------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ pb:
   # ALERT MESSAGES
   #-------------------------------------------------------------------------------------------------
   alert-message:
-    stored-queue-limit: 1000
+    stored-queue-limit: 100
     decision-requested-time: 15s
     original-message-deleted-after-recommendation: true
     max-hits-per-alert: 10
@@ -44,6 +44,17 @@ pb:
       alert:
         time-zone: America/Los_Angeles
         batch-size: 50
+
+  #-------------------------------------------------------------------------------------------------
+  # Data retention
+  #-------------------------------------------------------------------------------------------------
+  data-retention:
+    alert-data:
+      expiration: 366d
+      cron: 30 0 1 * * *
+    personal-information:
+      expiration: 151d
+      cron: 30 15 1 * * *
 
 #---------------------------------------------------------------------------------------------------
 # Warehouse
@@ -151,7 +162,7 @@ spring:
     hikari:
       pool-name: Database-Pool
       minimum-idle: ${pb.db.connections.min:1}
-      maximum-pool-size: ${pb.db.connections.max:10}
+      maximum-pool-size: ${pb.db.connections.max:25}
       auto-commit: false
       schema: ${pb.db.schema:public}
       isolate-internal-queries: true

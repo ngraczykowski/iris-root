@@ -1,16 +1,20 @@
 package com.silenteight.payments.bridge.common.dto.input;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -77,4 +81,49 @@ public class HittedEntityDto implements Serializable {
   private List<HideUnitDto> hideUnits;
 
   private List<HideSenderReceiverDto> hideSenderReceivers;
+
+  List<CodeDto> findCodes() {
+    return getCodes().stream()
+        .map(HittedEntityCodeDto::getCode)
+        .collect(Collectors.toList());
+  }
+
+  @NotNull
+  public List<String> findCities() {
+    return addresses
+        .stream()
+        .map(RequestAddressDto::findCities)
+        .flatMap(List::stream)
+        .collect(Collectors.toList());
+  }
+
+  @NotNull
+  public List<String> findStates() {
+    return addresses
+        .stream()
+        .map(RequestAddressDto::findStates)
+        .flatMap(List::stream)
+        .collect(Collectors.toList());
+  }
+
+  @NotNull
+  public List<String> findCountries() {
+    return addresses
+        .stream()
+        .map(RequestAddressDto::findCountries)
+        .flatMap(List::stream)
+        .collect(Collectors.toList());
+  }
+
+  public boolean findIsMainAddress() {
+    return addresses.stream().map(RequestAddressDto::findIsMainAddress).anyMatch("1"::equals);
+  }
+
+  @NotNull
+  public List<String> findPostalAddresses() {
+    return addresses
+        .stream()
+        .map(RequestAddressDto::findPostalAddress)
+        .collect(Collectors.toList());
+  }
 }

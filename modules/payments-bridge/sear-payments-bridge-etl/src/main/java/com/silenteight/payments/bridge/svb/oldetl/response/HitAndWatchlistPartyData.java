@@ -22,7 +22,6 @@ public class HitAndWatchlistPartyData {
   List<String> allMatchingTexts;
   String fieldValue;
   List<String> allMatchingFieldValues;
-  String accountNumber;
   List<String> postalAddresses;
   List<String> cities;
   List<String> states;

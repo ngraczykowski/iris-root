@@ -1,24 +1,25 @@
 @Library('pipeline-shared-library@master') _
 
-def utils = new com.silenteight.jenkins.ci.Utils()
+def gradle = new com.silenteight.jenkins.ci.Gradle()
+def git = new com.silenteight.jenkins.ci.Git()
 
 gradleBuild(
     jdkVersion: 'jdk-11',
     sonarEnabled: true,
     dependencyCheckEnabled: true,
+    archiveArtifactsPattern: 'build/reports/*.zip',
     includeBuildNumberInSnapshotVersion: true,
     additionalParams: [],
     additionalStages: {
       stage('Build and deploy container image') {
         script {
-          def gradle = new com.silenteight.jenkins.ci.Gradle()
           gradle.gradle('jib')
         }
         // Stash data to AWS nodes - scripts, helm etc.
         stash includes: 'scripts/**, helm-chart/**', name: 'scripts-and-chart'
       }
       stage('Helm Chart registry') {
-        env.INSTALLER_VERSION = utils.getProjectVersion()
+        env.INSTALLER_VERSION = gradle.getGradleProjectVersion()
         node("aws-worker") {
           sh 'rm -rf ./scripts ./helm-chart'
           unstash 'scripts-and-chart'
@@ -27,7 +28,7 @@ gradleBuild(
                   credentialsId: 'artifactory-deployment-user', usernameVariable: 'USERNAME',
                   passwordVariable: 'PASSWORD')]) {
             script {
-              if (utils.getGitBranch() == 'master') {
+              if (git.getGitBranch() == 'master' || git.buildingReleaseBranch()) {
                 echo 'Helm Chart registry'
                 sh './scripts/helm-chart-build.sh $USERNAME $PASSWORD'
               } else {
@@ -40,12 +41,12 @@ gradleBuild(
 
       stage('AWS ECR') {
         //This is docker image tag version which will be used to copy from s8 repository
-        env.INSTALLER_VERSION = utils.getProjectVersion()
+        env.INSTALLER_VERSION = gradle.getGradleProjectVersion()
         node("aws-worker") {
           sh 'rm -rf ./scripts ./helm-chart'
           unstash 'scripts-and-chart'
           script {
-            if (utils.getGitBranch() == 'master') {
+            if (git.getGitBranch() == 'master' || git.buildingReleaseBranch()) {
               echo 'AWS image push'
               sh './scripts/aws-deploy.sh'
             } else {

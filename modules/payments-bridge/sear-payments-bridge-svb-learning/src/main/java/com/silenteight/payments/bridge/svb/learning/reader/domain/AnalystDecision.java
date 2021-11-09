@@ -9,7 +9,7 @@ import java.time.OffsetDateTime;
 @Value
 public class AnalystDecision {
 
-  String status;  // Taken from FKCO_STATUS
+  String status;  // Taken from FKCO_V_STATUS_NAME
   OffsetDateTime actionDateTime;  // Taken from FKCO_D_ACTION_DATETIME
   String comment;  // FKCO_V_ACTION_COMMENT
 

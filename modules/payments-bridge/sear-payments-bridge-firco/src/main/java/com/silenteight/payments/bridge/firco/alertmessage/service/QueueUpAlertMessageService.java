@@ -49,7 +49,7 @@ class QueueUpAlertMessageService {
   }
 
   private void handleOverflow(FircoAlertMessage alert) {
-    log.info("AlertMessage [{}] rejected due to queue limit ({})",
+    log.warn("AlertMessage [{}] rejected due to queue limit ({})",
         alert.getId(), properties.getStoredQueueLimit());
 
     commonChannels.recommendationCompleted().send(

@@ -11,7 +11,7 @@ import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
-import com.silenteight.payments.bridge.svb.oldetl.model.InvalidMessageException;
+import com.silenteight.payments.bridge.svb.oldetl.model.UnsupportedMessageException;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertEtlResponseUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
 import com.silenteight.sep.base.aspects.logging.LogContext;
@@ -54,12 +54,13 @@ class EtlService {
           .filter(process -> process.supports(command))
           .forEach(process -> process.extractAndLoad(command, alertEtlResponse));
 
-    } catch (InvalidMessageException exception) {
+    } catch (UnsupportedMessageException exception) {
       log.error("Failed to process a message payload associated with the alert: {}. "
-              + "Reject the message as DAMAGED", command.getAlertId(), exception);
+          + "Reject the message as DAMAGED", command.getAlertId(), exception);
       commonChannels.recommendationCompleted().send(
           MessageBuilder.withPayload(
-              RecommendationCompletedEvent.fromBridge(command.getAlertId(),
+              RecommendationCompletedEvent.fromBridge(
+                  command.getAlertId(),
                   AlertMessageStatus.REJECTED_DAMAGED.name(),
                   RecommendationReason.DAMAGED.name())
           ).build());

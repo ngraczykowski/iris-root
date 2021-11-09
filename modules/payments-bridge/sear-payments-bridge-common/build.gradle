@@ -21,4 +21,5 @@ dependencies {
   implementation libraries.adjudication_engine_api
 
   implementation libraries.warehouse_data_api
+  implementation libraries.data_retention_api
 }

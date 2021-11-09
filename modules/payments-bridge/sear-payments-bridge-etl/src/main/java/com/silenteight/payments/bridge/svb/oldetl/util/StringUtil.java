@@ -58,7 +58,6 @@ public class StringUtil {
       return replaceEveryRegexFromListWithString(matchingText, LINE_BREAKERS1, "");
     else
       return replaceEveryRegexFromListWithString(matchingText, LINE_BREAKERS2, "");
-
   }
 
   @NotNull

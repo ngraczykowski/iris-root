@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 class ClientRequestDtoMapper {
 
   private static final String ATTACHMENT_COMMENT_NAME = "comment.txt";
-  private static final String COMMENT_CUT_MSG = " === See attachment for full comments ===";
+  private static final String COMMENT_CUT_MSG = "\n\n=== See attachment for full comments ===";
   private static final int MAX_COMMENT_LENGTH = 1024;
   private final MapStatusUseCase mapStatusUseCase;
 

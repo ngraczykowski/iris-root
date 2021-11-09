@@ -10,16 +10,19 @@ import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStat
 import com.silenteight.payments.bridge.firco.alertmessage.port.FilterAlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
-import com.silenteight.payments.bridge.firco.recommendation.port.NotifyResponseCompletedUseCase;
+import com.silenteight.proto.payments.bridge.internal.v1.event.ResponseCompleted;
 import com.silenteight.sep.base.aspects.logging.LogContext;
 
 import org.slf4j.MDC;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.annotation.Order;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
+import javax.transaction.Transactional;
 
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.RECOMMENDATION_COMPLETED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.RECOMMENDED;
@@ -36,8 +39,8 @@ class RecommendationCompletedEndpoint {
 
   private final AlertMessageStatusService alertMessageStatusService;
   private final FilterAlertMessageUseCase alertMessageUseCase;
-  private final NotifyResponseCompletedUseCase notifyResponseCompletedUseCase;
   private final CreateRecommendationUseCase createRecommendationUseCase;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   private final List<Consumer<RecommendationCompletedEvent>> eventConsumers =
       List.of(
@@ -47,6 +50,7 @@ class RecommendationCompletedEndpoint {
 
   @Order(2)
   @ServiceActivator(inputChannel = RECOMMENDATION_COMPLETED)
+  @Transactional
   @LogContext
   void accept(RecommendationCompletedEvent event) {
     MDC.put("alertId", event.getAlertId().toString());
@@ -73,8 +77,12 @@ class RecommendationCompletedEndpoint {
       if (alertMessageUseCase.isOutdated(event)) {
         alertMessageStatusService.transitionAlertMessageStatus(alertId, status, UNDELIVERED);
       } else {
-        notifyResponseCompletedUseCase.notify(alertId, recommendationId.getId(), status);
-        alertMessageStatusService.transitionAlertMessageStatus(alertId, status, PENDING);
+        var transited = alertMessageStatusService
+            .transitionAlertMessageStatus(alertId, status, PENDING);
+        if (transited) {
+          applicationEventPublisher.publishEvent(
+              buildResponseCompleted(alertId, recommendationId.getId(), status));
+        }
       }
     }
 
@@ -92,6 +100,15 @@ class RecommendationCompletedEndpoint {
           throw new IllegalArgumentException("Unmapped recommendation reason");
       }
     }
+  }
+
+  private ResponseCompleted buildResponseCompleted(UUID alertId, UUID recommendationId,
+      AlertMessageStatus status) {
+    return ResponseCompleted.newBuilder()
+        .setAlert("alerts/" + alertId)
+        .setStatus("alerts/" + alertId + "/status/" + status.name())
+        .setRecommendation("alerts/" + alertId + "/recommendations/" + recommendationId)
+        .build();
   }
 
   private class AdjudicationRecommendationCommand
@@ -116,8 +133,12 @@ class RecommendationCompletedEndpoint {
           .createAdjudicationRecommendation(alertId,adjudicationEvent.getRecommendation());
 
       if (!alertMessageUseCase.isResolvedOrOutdated(event)) {
-        notifyResponseCompletedUseCase.notify(alertId, recommendationId.getId(), RECOMMENDED);
-        alertMessageStatusService.transitionAlertMessageStatus(alertId, RECOMMENDED, PENDING);
+        var transited = alertMessageStatusService
+            .transitionAlertMessageStatus(alertId, RECOMMENDED, PENDING);
+        if (transited) {
+          applicationEventPublisher.publishEvent(
+              buildResponseCompleted(alertId, recommendationId.getId(), RECOMMENDED));
+        }
       }
     }
   }

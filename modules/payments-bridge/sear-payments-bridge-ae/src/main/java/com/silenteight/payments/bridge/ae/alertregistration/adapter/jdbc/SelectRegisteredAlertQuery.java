@@ -15,7 +15,7 @@ import java.sql.SQLException;
 class SelectRegisteredAlertQuery {
 
   @Language("PostgreSQL")
-  private static final String SQL = "SELECT alert_id, alert_name FROM pb_registered_alert\n"
+  private static final String SQL = "SELECT alert_message_id, alert_name FROM pb_registered_alert\n"
       + " WHERE alert_name = ?";
 
   private static final RegisteredAlertRowMapper ROW_MAPPER = new RegisteredAlertRowMapper();

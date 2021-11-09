@@ -11,10 +11,10 @@ dependencies {
   implementation project(":sear-payments-bridge-common")
   implementation project(":sear-payments-bridge-ae")
   implementation project(":sear-payments-bridge-mock-ae")
-  implementation project(":sear-payments-bridge-datasource")
   implementation project(":sear-payments-bridge-firco")
   implementation project(":sear-payments-bridge-governance")
   implementation project(":sear-payments-bridge-svb-learning")
+  implementation project(":sear-payments-bridge-data-retention")
   implementation project(":proto-sear-payments-bridge-internal-protos")
   testImplementation project(":sear-payments-bridge-testing")
 

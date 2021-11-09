@@ -23,7 +23,13 @@ pbCmapiCallbackEndpoint: ""
 memoryLimit: 2048Mi
 memoryRequest: 512Mi
 
+dataRetention:
+  alertExpiration: "366d"
+  alertCron: "30 0 1 * * *"
+  piiExpiration: "151d"
+  piiCron: "30 15 1 * * *"
+
 #Additional service metadata annotations
 service:
   metadata:
-    annotations: {}
+    annotations: { }

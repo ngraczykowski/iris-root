@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 class WatchlistTypeExtractor implements CategoryValueExtractor {
 
   @Override
-  public CategoryValue extract(LearningMatch learningMatch, String alert) {
+  public CategoryValue extract(LearningMatch learningMatch) {
     return CategoryValue
         .newBuilder()
         .setName("categories/watchlistType")

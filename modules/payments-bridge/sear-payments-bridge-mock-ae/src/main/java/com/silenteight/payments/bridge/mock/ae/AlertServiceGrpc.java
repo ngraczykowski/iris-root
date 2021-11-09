@@ -55,6 +55,14 @@ class AlertServiceGrpc extends AlertServiceImplBase {
   }
 
   @Override
+  public void batchCreateMatches(
+      BatchCreateMatchesRequest request,
+      StreamObserver<BatchCreateMatchesResponse> responseObserver) {
+    responseObserver.onNext(MockAlertUseCase.batchCreateMatches(request));
+    responseObserver.onCompleted();
+  }
+
+  @Override
   public void batchCreateAlertMatches(
       BatchCreateAlertMatchesRequest request,
       StreamObserver<BatchCreateAlertMatchesResponse> responseObserver) {

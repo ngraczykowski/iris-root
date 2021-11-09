@@ -76,17 +76,18 @@ class PaymentsBridgeApplicationTests {
   @Test
   void shouldProcessLearningCsv() {
     var request =
-        LearningRequest.builder().bucket("bucket").object("SVB_Jun_1_to_30_sorted.csv").build();
+        LearningRequest.builder().bucket("bucket").object("analystdecison-2-hits.csv").build();
     handleLearningDataUseCase.readAlerts(request);
     await()
         .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
-        .atMost(Duration.ofSeconds(10))
+        .atMost(Duration.ofSeconds(1))
         .until(PaymentsBridgeApplicationTests::createdAlerts);
-    assertThat(MockAlertUseCase.getCreatedAlertsCount()).isGreaterThanOrEqualTo(16);
+    assertThat(MockAlertUseCase.getCreatedAlertsCount()).isEqualTo(2);
+    assertThat(MockAlertUseCase.getCreatedMatchesCount()).isEqualTo(2);
   }
 
   public static boolean createdAlerts() {
-    return MockAlertUseCase.getCreatedAlertsCount() >= 16;
+    return MockAlertUseCase.getCreatedAlertsCount() >= 2;
   }
 
   static Stream<String> filesFactory() {

@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.Label;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterMatchResponse;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.SaveRegisteredAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
@@ -18,13 +20,13 @@ import org.springframework.integration.annotation.ServiceActivator;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.annotation.Nonnull;
 
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.ALERT_INITIALIZED;
 import static com.silenteight.payments.bridge.common.integration.CommonChannels.ALERT_REGISTERED;
 import static com.silenteight.payments.bridge.common.protobuf.TimestampConverter.fromOffsetDateTime;
+import static java.util.stream.Collectors.toList;
 
 @MessageEndpoint
 @Slf4j
@@ -51,7 +53,16 @@ class RegisterAlertEndpoint {
 
     var alert = registerAlertUseCase.register(request);
 
-    registeredAlertDataAccessPort.save(alertData.getAlertId(), alert.getAlertName());
+    registeredAlertDataAccessPort.save(SaveRegisteredAlertRequest
+        .builder()
+        .alertId(alertData.getAlertId())
+        .alertName(alert.getAlertName())
+        .matchNames(alert
+            .getMatchResponses()
+            .stream()
+            .map(RegisterMatchResponse::getMatchName)
+            .collect(toList()))
+        .build());
 
     return new AlertRegisteredEvent(
         alertData.getAlertId(), alert.getAlertName(), alert.getMatchResponsesAsMap());
@@ -70,6 +81,6 @@ class RegisterAlertEndpoint {
         })
         .filter(Optional::isPresent)
         .map(Optional::get)
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 }

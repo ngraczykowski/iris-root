@@ -1,2 +1,7 @@
 messageData, fkcoFormat, name, address, ctryTown, nameAddress, accountNumber
 <acctnum>\n<name>\n<address>\n<address>\n<ctrytown>,IAT-I,<name>,<address> <address>,<ctrytown>,<name> <address> <address> <ctrytown>,<acctnum>
+BANK OF CHINA,INT,BANK OF CHINA,,,BANK OF CHINA,
+CITIBANK FSB,INT,CITIBANK FSB,,,CITIBANK FSB,
+CATHAY BANK,FED,CATHAY BANK,,,CATHAY BANK,
+2342342342\nEdward Hamilton\n01\n233455643\nUS,IAT-I,Edward Hamilton,01 233455643,US,Edward Hamilton 01 233455643 US,2342342342
+221312444412\nENIOLDA MILI\n01\n23124234234\nUS,IAT-O,ENIOLDA MILI,01 23124234234,US,ENIOLDA MILI 01 23124234234 US,221312444412

@@ -12,6 +12,13 @@ data:
           client-registration-id: callback
           enabled: {{ .Values.pbCmapiCallbackEnabled }}
           endpoint: {{ .Values.pbCmapiCallbackEndpoint | quote }}
+      data-retention:
+        alert-data:
+          expiration: {{ .Values.dataRetention.alertExpiration | quote }}
+          cron: {{ .Values.dataRetention.alertCron | quote }}
+        personal-information:
+          expiration: {{ .Values.dataRetention.piiExpiration | quote }}
+          cron: {{ .Values.dataRetention.piiCron | quote }}
 
     grpc:
       client:

@@ -32,9 +32,11 @@ class HistoricalRiskAssessmentProcess implements CategoryValueProcess {
 
   @Nonnull
   private HistoricalRiskAssessmentAgentRequest createRequest(HitData hitData) {
+    var accountNumberOrName = hitData.getAlertedPartyAccountNumberOrFirstName().orElse("");
+
     return HistoricalRiskAssessmentAgentRequest
         .builder()
-        .accountNumber(hitData.getHitAndWlPartyData().getAccountNumber())
+        .accountNumber(accountNumberOrName)
         .ofacID(hitData.getHitAndWlPartyData().getId())
         .build();
   }

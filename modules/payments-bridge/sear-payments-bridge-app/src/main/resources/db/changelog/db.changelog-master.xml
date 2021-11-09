@@ -5,8 +5,10 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
 
-  <include file="db/changelog/db.changelog-payments-bridge-datasource-master.xml"/>
+  <include file="db/changelog/db.changelog-payments-bridge-datasource.xml"/>
+
   <include file="db/changelog/db.changelog-payments-bridge-firco-master.xml"/>
   <include file="db/changelog/db.changelog-payments-bridge-ae-master.xml"/>
   <include file="db/changelog/db.changelog-payments-bridge-svb-learning-master.xml"/>
+  <include file="db/changelog/db.changelog-payments-bridge-data-retention-master.xml"/>
 </databaseChangeLog>

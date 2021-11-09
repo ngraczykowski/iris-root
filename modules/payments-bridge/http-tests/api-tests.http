@@ -118,3 +118,12 @@ Content-Type: application/x-www-form-urlencoded
 Authorization: Bearer {{access_token}}
 
 bucket=s3-us-west-2-371608975349-decrypted-files&object=svb_learn_april_export_sorted.csv
+
+### UAT files - USE WITH EXTREME CARE!!!
+// bucket=workload-sierra-uat-371608975349-decrypted-files&object=XXX.csv
+// svb_learn_march_export_sorted.csv
+// svb_learn_april_export_sorted.csv
+// svb_learn_may_export_sorted.csv
+// svb_learn_june_export_sorted.csv
+// svb_learn_july_export_sorted.csv
+// svb_learn_august_export_sorted.csv

@@ -1,10 +1,10 @@
 package com.silenteight.payments.bridge.ae.alertregistration.port;
 
-import java.util.UUID;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.SaveRegisteredAlertRequest;
 
 public interface RegisteredAlertDataAccessPort {
 
-  void save(UUID alertId, String alertName);
+  void save(SaveRegisteredAlertRequest request);
 
   String getAlertId(String alertName);
 }

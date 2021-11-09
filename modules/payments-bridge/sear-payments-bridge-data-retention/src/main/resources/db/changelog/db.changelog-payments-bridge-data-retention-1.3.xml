@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+  <changeSet id="payments-bridge-data-retention-1.3.0" author="zruchala">
+    <createTable tableName="pb_alert_data_retention">
+      <column name="alert_name" type="VARCHAR(30)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="alert_time" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="alert_data_removed_at" type="TIMESTAMP">
+        <constraints nullable="true"/>
+      </column>
+      <column name="pii_removed_at" type="TIMESTAMP">
+        <constraints nullable="true"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="pb_alert_data_retention"
+        indexName="ix_pb_alert_data_retention_alert_name"
+        unique="true">
+      <column name="alert_name"/>
+    </createIndex>
+
+  </changeSet>
+</databaseChangeLog>
