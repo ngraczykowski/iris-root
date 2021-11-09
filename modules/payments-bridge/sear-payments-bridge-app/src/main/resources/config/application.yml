@@ -50,7 +50,7 @@ pb:
   #-------------------------------------------------------------------------------------------------
   data-retention:
     alert-data:
-      expiration: 48h
+      expiration: 366d
       cron: 30 0 1 * * *
     personal-information:
       expiration: 151d
