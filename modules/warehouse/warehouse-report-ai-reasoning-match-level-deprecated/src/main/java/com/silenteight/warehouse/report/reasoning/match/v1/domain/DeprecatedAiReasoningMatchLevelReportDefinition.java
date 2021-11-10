@@ -1,10 +1,10 @@
-package com.silenteight.warehouse.report.reasoning.match.domain;
+package com.silenteight.warehouse.report.reasoning.match.v1.domain;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.warehouse.report.reasoning.match.domain.exception.ReportTypeNotFoundException;
+import com.silenteight.warehouse.report.reasoning.match.v1.domain.exception.ReportTypeNotFoundException;
 import com.silenteight.warehouse.report.reporting.ReportsDefinitionListDto.ReportDefinitionDto;
 
 import java.time.Instant;
@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Getter
-public enum AiReasoningMatchLevelReportDefinition {
+public enum DeprecatedAiReasoningMatchLevelReportDefinition {
 
   MONTH(
       "daa38c15-e811-412b-ac31-d7053fdc319d",
@@ -44,13 +44,13 @@ public enum AiReasoningMatchLevelReportDefinition {
   private final boolean production;
 
   public static List<ReportDefinitionDto> toProductionReportsDefinitionDto() {
-    return stream(AiReasoningMatchLevelReportDefinition.values())
-        .filter(AiReasoningMatchLevelReportDefinition::isProduction)
+    return stream(DeprecatedAiReasoningMatchLevelReportDefinition.values())
+        .filter(DeprecatedAiReasoningMatchLevelReportDefinition::isProduction)
         .map(reportDefinition -> reportDefinition.toReportDefinitionDto(PRODUCTION_ANALYSIS_NAME))
         .collect(toList());
   }
 
-  public static AiReasoningMatchLevelReportDefinition getReportType(String id) {
+  public static DeprecatedAiReasoningMatchLevelReportDefinition getReportType(String id) {
     return stream(values())
         .filter(reportDefinition -> reportDefinition.hasId(id))
         .findAny()

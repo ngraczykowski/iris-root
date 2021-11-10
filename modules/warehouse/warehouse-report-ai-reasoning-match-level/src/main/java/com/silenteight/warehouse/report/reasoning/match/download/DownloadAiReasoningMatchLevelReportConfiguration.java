@@ -9,10 +9,16 @@ import org.springframework.context.annotation.Configuration;
 class DownloadAiReasoningMatchLevelReportConfiguration {
 
   @Bean
-  DownloadAiReasoningMatchLevelReportUseCase downloadAiReasoningMatchLevelReportUseCase(
-      AiReasoningMatchLevelReportDataQuery query,
-      ReportStorage reportStorage) {
+  DownloadProductionAiReasoningMatchLevelReportUseCase downloadProductionAiMatchLevelReportUseCase(
+      AiReasoningMatchLevelReportDataQuery query, ReportStorage reportStorage) {
 
-    return new DownloadAiReasoningMatchLevelReportUseCase(query, reportStorage);
+    return new DownloadProductionAiReasoningMatchLevelReportUseCase(query, reportStorage);
+  }
+
+  @Bean
+  DownloadSimulationAiReasoningMatchLevelReportUseCase downloadSimulationAiMatchLevelReportUseCase(
+      AiReasoningMatchLevelReportDataQuery query, ReportStorage reportStorage) {
+
+    return new DownloadSimulationAiReasoningMatchLevelReportUseCase(query, reportStorage);
   }
 }

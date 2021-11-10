@@ -1,24 +1,20 @@
 package com.silenteight.warehouse.report.reasoning.match.generation;
 
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import com.silenteight.warehouse.report.reasoning.match.AiReasoningMatchLevelReportTestFixtures;
-
+import static com.silenteight.warehouse.report.reasoning.match.AiReasoningMatchLevelReportTestFixtures.*;
 import static java.util.List.of;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class GenerationAiReasoningMatchLevelReportTestFixtures {
 
-  public static final AiReasoningReportDefinitionProperties PROPERTIES =
-      new AiReasoningReportDefinitionProperties(
-          AiReasoningMatchLevelReportTestFixtures.DATE_FIELD_NAME,
+  public static final AiReasoningMatchLevelReportDefinitionProperties PROPERTIES =
+      new AiReasoningMatchLevelReportDefinitionProperties(
+          DATE_FIELD_NAME,
           of(
-              getColumn(
-                  AiReasoningMatchLevelReportTestFixtures.ALERT_STATUS_FIELD_NAME,
-                  AiReasoningMatchLevelReportTestFixtures.ALERT_STATUS_FIELD_LABEL),
-              getColumn(
-                  AiReasoningMatchLevelReportTestFixtures.ALERT_COMMENT_FIELD_NAME,
-                  AiReasoningMatchLevelReportTestFixtures.ALERT_COMMENT_FIELD_LABEL)),
+              getColumn(ALERT_STATUS_FIELD_NAME, ALERT_STATUS_FIELD_LABEL),
+              getColumn(ALERT_COMMENT_FIELD_NAME, ALERT_COMMENT_FIELD_LABEL)),
           null);
 
   private static ColumnProperties getColumn(String name, String label) {

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static java.lang.String.format;
+import static org.springframework.http.ResponseEntity.ok;
 
 @Slf4j
 @RestController
@@ -24,32 +25,39 @@ import static java.lang.String.format;
 class StatusAiReasoningMatchLevelReportRestController {
 
   private static final String PRODUCTION_ANALYSIS_NAME = "production";
-  private static final String DEFINITION_ID_PARAM = "definitionId";
+  private static final String ANALYSIS_ID_PARAM = "analysisId";
   private static final String ID_PARAM = "id";
+  private static final String STATUS_SIMULATION_REPORT_URL =
+      "/v2/analysis/{analysisId}/reports/AI_REASONING_MATCH_LEVEL/{id}/status";
 
   private static final String STATUS_PRODUCTION_REPORT_URL =
-      "/v1/analysis/production/definitions/AI_REASONING_MATCH_LEVEL/"
-          + "{definitionId}/reports/{id}/status";
+      "/v2/analysis/production/reports/AI_REASONING_MATCH_LEVEL/{id}/status";
 
   @NonNull
   private final AiReasoningMatchLevelReportStatusQuery reportQuery;
 
-  @GetMapping(STATUS_PRODUCTION_REPORT_URL)
-  @PreAuthorize("isAuthorized('CREATE_PRODUCTION_ON_DEMAND_REPORT')")
+  @GetMapping(STATUS_SIMULATION_REPORT_URL)
+  @PreAuthorize("isAuthorized('CREATE_SIMULATION_REPORT')")
   public ResponseEntity<ReportStatus> getReportStatus(
-      @PathVariable(DEFINITION_ID_PARAM) String definitionId,
+      @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
       @PathVariable(ID_PARAM) long id) {
 
-    log.debug("Getting production AI Reasoning Match Level report status, definitionId={}, "
-        + "reportId={}", definitionId, id);
+    log.debug("Getting simulation AI Reasoning Match Level report status, "
+            + "analysisId={}, reportId={}", analysisId, id);
 
     ReportState state = reportQuery.getReportGeneratingState(id);
-    return ResponseEntity.ok(
-        state.getReportStatus(getReportName(PRODUCTION_ANALYSIS_NAME, definitionId, id)));
+    return ok(state.getReportStatus(getReportName(analysisId, id)));
   }
 
-  private static String getReportName(String analysis, String definitionId, long id) {
-    return format("analysis/%s/definitions/AI_REASONING_MATCH_LEVEL/%s/reports/%d",
-        analysis, definitionId, id);
+  @GetMapping(STATUS_PRODUCTION_REPORT_URL)
+  @PreAuthorize("isAuthorized('CREATE_PRODUCTION_ON_DEMAND_REPORT')")
+  public ResponseEntity<ReportStatus> getReportStatus(@PathVariable(ID_PARAM) long id) {
+    log.debug("Getting production AI Reasoning Match Level report status, reportId={}", id);
+    ReportState state = reportQuery.getReportGeneratingState(id);
+    return ok(state.getReportStatus(getReportName(PRODUCTION_ANALYSIS_NAME, id)));
+  }
+
+  private static String getReportName(String analysis, long id) {
+    return format("analysis/%s/reports/AI_REASONING_MATCH_LEVEL/%d", analysis, id);
   }
 }

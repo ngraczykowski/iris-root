@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.reasoning.match.list;
+package com.silenteight.warehouse.report.reasoning.match.v1.list;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
-import static com.silenteight.warehouse.report.reasoning.match.domain.AiReasoningMatchLevelReportDefinition.toProductionReportsDefinitionDto;
+import static com.silenteight.warehouse.report.reasoning.match.v1.domain.DeprecatedAiReasoningMatchLevelReportDefinition.toProductionReportsDefinitionDto;
 import static org.springframework.http.ResponseEntity.ok;
 
 @Slf4j
 @RestController
 @RequestMapping(ROOT)
-class ListAiReasoningMatchLevelReportsRestController {
+class DeprecatedListAiReasoningMatchLevelReportsRestController {
 
   private static final String LIST_METRICS_REPORT_URL =
       "/v1/analysis/production/definitions/AI_REASONING_MATCH_LEVEL";

@@ -3,29 +3,48 @@ package com.silenteight.warehouse.report.reasoning.match;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import com.silenteight.warehouse.report.reasoning.match.domain.dto.AiReasoningMatchLevelReportDto;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
+import com.silenteight.warehouse.report.reporting.ReportRange;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import static com.silenteight.warehouse.report.reporting.ReportRange.of;
+import static java.time.LocalDate.parse;
 import static java.util.List.of;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AiReasoningMatchLevelReportTestFixtures {
 
-  public static final long TIMESTAMP = 162449303142L;
-  public static final long REPORT_ID = 32;
-  public static final String ANALYSIS_ID = "386028d5-811d-48fd-9b34-56c6b10c48c6";
-  public static final String SIMULATION_DEFINITION_ID = "92caf78a-723f-42b1-bde1-21b77e7a5c21";
-  public static final String MONTH_DEFINITION_ID = "daa38c15-e811-412b-ac31-d7053fdc319d";
+  public static final String FROM_QUERY_PARAM = "2015-08-25";
+  public static final String TO_QUERY_PARAM = "2017-12-24";
+  public static final LocalDate LOCAL_DATE_FROM = parse(FROM_QUERY_PARAM);
+  public static final LocalDate LOCAL_DATE_TO = parse(TO_QUERY_PARAM);
+  public static final ReportRange REPORT_RANGE = of(LOCAL_DATE_FROM, LOCAL_DATE_TO);
+  public static final String ANALYSIS_ID = "070be771-2107-4ac2-b6f2-81899364aeea";
   public static final String PRODUCTION_ANALYSIS_NAME = "production";
-  public static final String REPORT_FILENAME = "ai-reasoning-match-level-30-days.csv";
-  public static final String STUB_REPORT_RESPONSE = "test row";
+  public static final String REPORT_CONTENT = "test row";
   public static final String DATE_FIELD_NAME = "index_timestamp";
   public static final String ALERT_STATUS_FIELD_NAME = "alert_status";
   public static final String ALERT_STATUS_FIELD_LABEL = "Alert Status";
   public static final String ALERT_COMMENT_FIELD_NAME = "alert_comment";
   public static final String ALERT_COMMENT_FIELD_LABEL = "Alert Comment";
-  public static final List<String> INDEXES = of("index455");
+  public static final String FILE_STORAGE_NAME = "0931655c-6b3e-4e50-a27e-85226ab16ca2";
+  public static final List<String> INDEXES = of("index999");
+  public static final long REPORT_ID = 109;
   public static final ReportInstanceReferenceDto REPORT_INSTANCE =
-      new ReportInstanceReferenceDto(TIMESTAMP);
+      new ReportInstanceReferenceDto(REPORT_ID);
+
+  public static final String PRODUCTION_REPORT_FILENAME =
+      "AI_Reasoning_Match_Level_" + FROM_QUERY_PARAM + "_To_" + TO_QUERY_PARAM + ".csv";
+
+  public static final String SIMULATION_REPORT_FILENAME =
+      "simulation_" + ANALYSIS_ID + "_AI_Reasoning_Match_Level.csv";
+
+  public static final AiReasoningMatchLevelReportDto AI_REASONING_MATCH_LEVEL_REPORT_DTO =
+      AiReasoningMatchLevelReportDto.builder()
+          .fileStorageName(FILE_STORAGE_NAME)
+          .range(REPORT_RANGE)
+          .build();
 }

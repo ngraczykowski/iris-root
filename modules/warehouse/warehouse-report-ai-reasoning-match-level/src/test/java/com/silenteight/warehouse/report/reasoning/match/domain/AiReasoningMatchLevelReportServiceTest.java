@@ -10,20 +10,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.silenteight.warehouse.report.reasoning.match.AiReasoningMatchLevelReportTestFixtures.PRODUCTION_ANALYSIS_NAME;
-import static com.silenteight.warehouse.report.reasoning.match.domain.AiReasoningMatchLevelReportDefinition.MONTH;
+import static com.silenteight.warehouse.report.reasoning.match.AiReasoningMatchLevelReportTestFixtures.INDEXES;
+import static com.silenteight.warehouse.report.reasoning.match.AiReasoningMatchLevelReportTestFixtures.REPORT_RANGE;
 import static com.silenteight.warehouse.report.reasoning.match.domain.ReportState.NEW;
 import static com.silenteight.warehouse.report.reasoning.match.generation.GenerationAiReasoningMatchLevelReportTestFixtures.PROPERTIES;
-import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class AiReasoningMatchLevelReportServiceTest {
 
-  private static final AiReasoningMatchLevelReportDefinition TYPE = MONTH;
-
-  private final InMemoryMatchLevelAiReasoningRepository
-      repository = new InMemoryMatchLevelAiReasoningRepository();
+  private final InMemoryAiReasoningMatchLevelRepository repository =
+      new InMemoryAiReasoningMatchLevelRepository();
 
   @Mock
   private AsyncAiReasoningMatchLevelReportGenerationService asyncReportGenerationService;
@@ -33,15 +30,15 @@ class AiReasoningMatchLevelReportServiceTest {
 
   @BeforeEach
   void setUp() {
-    underTest = new AiReasoningMatchLevelReportService(repository, asyncReportGenerationService,
-        reportStorage);
+    underTest = new AiReasoningMatchLevelReportService(
+        repository, asyncReportGenerationService, reportStorage);
   }
 
   @Test
   void shouldGenerateReport() {
     // when
-    var reportInstance =
-        underTest.createReportInstance(TYPE, PRODUCTION_ANALYSIS_NAME, of(), PROPERTIES);
+    var reportInstance = underTest.createReportInstance(
+        REPORT_RANGE, INDEXES, PROPERTIES);
 
     // then
     long instanceReferenceId = reportInstance.getInstanceReferenceId();
@@ -51,11 +48,5 @@ class AiReasoningMatchLevelReportServiceTest {
         .get()
         .extracting(AiReasoningMatchLevelReport::getState)
         .isEqualTo(NEW);
-
-    assertThat(report)
-        .isPresent()
-        .get()
-        .extracting(AiReasoningMatchLevelReport::getFileStorageName)
-        .isEqualTo(instanceReferenceId + "-" + MONTH.getFilename());
   }
 }

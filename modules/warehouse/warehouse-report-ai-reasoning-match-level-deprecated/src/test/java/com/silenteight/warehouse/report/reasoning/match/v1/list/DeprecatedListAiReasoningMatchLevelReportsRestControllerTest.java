@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.reasoning.match.list;
+package com.silenteight.warehouse.report.reasoning.match.v1.list;
 
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 
@@ -8,13 +8,13 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.MODEL_TUNER;
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
-import static com.silenteight.warehouse.report.reasoning.match.domain.AiReasoningMatchLevelReportDefinition.MONTH;
+import static com.silenteight.warehouse.report.reasoning.match.v1.domain.DeprecatedAiReasoningMatchLevelReportDefinition.MONTH;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import(ListAiReasoningMatchLevelReportsRestController.class)
-class ListAiReasoningMatchLevelReportsRestControllerTest extends BaseRestControllerTest {
+@Import(DeprecatedListAiReasoningMatchLevelReportsRestController.class)
+class DeprecatedListAiReasoningMatchLevelReportsRestControllerTest extends BaseRestControllerTest {
 
   private static final String LIST_AI_REASONING_MATCH_LEVEL_REPORT_URL =
       "/v1/analysis/production/definitions/AI_REASONING_MATCH_LEVEL";

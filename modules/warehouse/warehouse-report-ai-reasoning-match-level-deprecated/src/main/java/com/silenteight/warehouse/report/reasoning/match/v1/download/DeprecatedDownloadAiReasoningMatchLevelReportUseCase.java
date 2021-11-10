@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.reasoning.match.download;
+package com.silenteight.warehouse.report.reasoning.match.v1.download;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -9,10 +9,10 @@ import com.silenteight.warehouse.report.storage.ReportStorage;
 
 @Slf4j
 @RequiredArgsConstructor
-public class DownloadAiReasoningMatchLevelReportUseCase {
+public class DeprecatedDownloadAiReasoningMatchLevelReportUseCase {
 
   @NonNull
-  private final AiReasoningMatchLevelReportDataQuery reportDataQuery;
+  private final DeprecatedAiReasoningMatchLevelReportDataQuery reportDataQuery;
   @NonNull
   private final ReportStorage reportStorageService;
 

@@ -286,4 +286,18 @@
       <column name="created_at"/>
     </createIndex>
   </changeSet>
+
+  <changeSet id="warehouse-1.9.0-17" author="plewandowski">
+    <dropNotNullConstraint columnName="report_type"
+                           tableName="warehouse_report_ai_reasoning_match_level"/>
+    <dropNotNullConstraint columnName="analysis"
+                           tableName="warehouse_report_ai_reasoning_match_level"/>
+
+    <addColumn tableName="warehouse_report_ai_reasoning_match_level">
+      <column name="from_range" type="TIMESTAMP"/>
+    </addColumn>
+    <addColumn tableName="warehouse_report_ai_reasoning_match_level">
+      <column name="to_range" type="TIMESTAMP"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

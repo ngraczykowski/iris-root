@@ -4,10 +4,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.report.reasoning.match.domain.exception.ReportGenerationException;
+import com.silenteight.warehouse.report.reasoning.match.generation.AiReasoningMatchLevelReportDefinitionProperties;
 import com.silenteight.warehouse.report.reasoning.match.generation.AiReasoningMatchLevelReportGenerationService;
-import com.silenteight.warehouse.report.reasoning.match.generation.AiReasoningReportDefinitionProperties;
+import com.silenteight.warehouse.report.reporting.ReportRange;
 
 import org.springframework.scheduling.annotation.Async;
 
@@ -22,14 +22,16 @@ class AsyncAiReasoningMatchLevelReportGenerationService {
   private final AiReasoningMatchLevelReportRepository repository;
   @NonNull
   private final AiReasoningMatchLevelReportGenerationService reportGenerationService;
-  @NonNull
-  private final TimeSource timeSource;
 
   @Async
-  void generateReport(
-      Long id, List<String> indexes, @Valid AiReasoningReportDefinitionProperties properties) {
+  public void generateReport(
+      long id,
+      @NonNull ReportRange range,
+      @NonNull List<String> indexes,
+      @NonNull @Valid AiReasoningMatchLevelReportDefinitionProperties properties) {
+
     try {
-      doGenerateReport(id, indexes, properties);
+      doGenerateReport(id, range, indexes, properties);
     } catch (RuntimeException e) {
       doFailReport(id);
       throw new ReportGenerationException(id, e);
@@ -37,25 +39,27 @@ class AsyncAiReasoningMatchLevelReportGenerationService {
   }
 
   private void doGenerateReport(
-      Long id, List<String> indexes, AiReasoningReportDefinitionProperties properties) {
+      long id,
+      ReportRange range,
+      List<String> indexes,
+      AiReasoningMatchLevelReportDefinitionProperties properties) {
+
     AiReasoningMatchLevelReport report = repository.getById(id);
     report.generating();
+    String fileStorageName = report.getFileStorageName();
     repository.save(report);
-    log.debug("Generating report with id={}", id);
-    AiReasoningMatchLevelReportDefinition reportType = report.getReportType();
-    String fileName = report.getFileStorageName();
+    log.debug("Generating report with id={}, fileStorageName={}", id, fileStorageName);
 
     reportGenerationService.generateReport(
-        reportType.getFrom(timeSource.now()),
-        reportType.getTo(timeSource.now()),
+        range.getFrom(),
+        range.getTo(),
         indexes,
         properties,
-        fileName);
+        fileStorageName);
 
-    report.storeReport(fileName);
     report.done();
     repository.save(report);
-    log.debug("Report generation done, id={}", id);
+    log.debug("Report generation done, id={}, fileStorageName={}", id, fileStorageName);
   }
 
   private void doFailReport(Long id) {

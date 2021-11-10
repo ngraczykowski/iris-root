@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.reasoning.match.domain.exception;
+package com.silenteight.warehouse.report.reasoning.match.v1.domain.exception;
 
 import static java.lang.String.format;
 
