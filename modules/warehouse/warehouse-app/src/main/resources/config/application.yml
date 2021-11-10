@@ -68,6 +68,9 @@ warehouse:
       personal-information-expired-indexing:
         queue-name: wh.retention.personal-information-expired
         routing-key: retention.personal-information-expired
+      analysis-expired-indexing:
+        queue-name: wh.retention.analysis-expired
+        routing-key: command.analysis-expired
       to-remove:
         bindings: []
   indexer:
@@ -87,6 +90,8 @@ warehouse:
       routing-key: event.index-response.simulation
     personal-information-expired-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.personal-information-expired-indexing.queue-name}
+    analysis-expired-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.analysis-expired-indexing.queue-name}
   report:
     default-bucket: reports
     removal:
@@ -108,7 +113,9 @@ warehouse:
     personal-information:
       batch-size: 200
       fields-to-erase: []
-
+    simulation:
+      analysis-expired:
+        fields-to-erase: []
   task:
     async:
       execution:
@@ -117,7 +124,6 @@ warehouse:
           max-size: 16
           queue-capacity: 50
           thread-name-prefix: async-auth-aware-
-
 spring:
   #-------------------------------------------------------------------------------------------------
   # GENERAL

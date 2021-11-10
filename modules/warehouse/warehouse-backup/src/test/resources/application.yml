@@ -33,6 +33,9 @@ warehouse:
       personal-information-expired-indexing:
         queue-name: wh.retention.personal-information-expired
         routing-key: retention.personal-information-expired
+      analysis-expired-indexing:
+        queue-name: wh.retention.analysis-expired
+        routing-key: command.analysis-expired
       to-remove:
         bindings: []
   indexer:

@@ -22,6 +22,9 @@ warehouse:
   match-mapping:
   messaging:
     broker:
+      analysis-expired-indexing:
+        queue-name: wh.retention.analysis-expired
+        routing-key: command.analysis-expired
       alert-backup-indexing:
         queue-name: wh.index-request.backup
         routing-key: command.index-request.production
@@ -43,6 +46,8 @@ warehouse:
       to-remove:
         bindings: []
   indexer:
+    analysis-expired-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.alert-production-indexing.queue-name}
     backup-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.alert-backup-indexing.queue-name}
     production-indexing-inbound:
@@ -56,7 +61,7 @@ warehouse:
       exchange-name: wh.event
       routing-key: event.index-response.simulation
     personal-information-expired-indexing-inbound:
-      queue-name: ${warehouse.messaging.broker.alert-production-indexing.queue-name}
+      queue-name: ${warehouse.messaging.broker.analysis-expired-indexing.queue-name.queue-name}
   environment:
     prefix: itest
   report:

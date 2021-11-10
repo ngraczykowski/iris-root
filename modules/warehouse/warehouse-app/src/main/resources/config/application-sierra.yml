@@ -15,6 +15,11 @@ warehouse:
       fields-to-erase:
         - 'recommendation_comment'
         - 'firco_analyst_comment'
+    simulation:
+      analysis-expired:
+        fields-to-erase:
+          - 'alert_recommendation_comment'
+          - 'alert_firco_analyst_comment'
 
 warehouse.messaging:
   broker:

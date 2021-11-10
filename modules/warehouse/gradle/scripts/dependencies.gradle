@@ -9,7 +9,7 @@ ext {
   silenteightSepAuthVersion = "1.16.0"
   silenteightSepBaseVersion = "1.12.2"
   silenteightDataApiVersion = "2.2.0"
-  silenteightDataRetentionApiVersion = "0.0.1"
+  silenteightDataRetentionApiVersion = "0.3.0"
   silenteightSamplingAlertsApiVersion = "1.6.0"
   silenteightWarehouseInternalApiVersion = "1.6.0"
   silenteightFileStorageApiVersion = "1.3.0"

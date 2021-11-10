@@ -28,11 +28,14 @@ class AnalysisConfiguration {
   @Bean
   UniqueAnalysisFactory uniqueAnalysisFactory(
       SimulationAnalysisService simulationAnalysisService,
+      SimulationNamingStrategy simulationNamingStrategy) {
+
+    return new UniqueAnalysisFactory(simulationAnalysisService, simulationNamingStrategy);
+  }
+
+  @Bean
+  SimulationNamingStrategy simulationNamingStrategy(
       @Valid EnvironmentProperties environmentProperties) {
-
-    SimulationNamingStrategy namingStrategy =
-        new SimulationNamingStrategy(environmentProperties.getPrefix());
-
-    return new UniqueAnalysisFactory(simulationAnalysisService, namingStrategy);
+    return new SimulationNamingStrategy(environmentProperties.getPrefix());
   }
 }
