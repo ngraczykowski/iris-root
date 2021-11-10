@@ -5,7 +5,10 @@ import lombok.*;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 import com.silenteight.warehouse.report.reasoning.match.domain.exception.WrongReportStateException;
+import com.silenteight.warehouse.report.reporting.ReportRange;
+import com.silenteight.warehouse.report.reporting.ReportTypeListDto.ReportTypeDto;
 
+import java.time.OffsetDateTime;
 import javax.persistence.*;
 
 import static com.silenteight.warehouse.report.reasoning.match.domain.ReportState.DONE;
@@ -13,6 +16,7 @@ import static com.silenteight.warehouse.report.reasoning.match.domain.ReportStat
 import static com.silenteight.warehouse.report.reasoning.match.domain.ReportState.GENERATING;
 import static com.silenteight.warehouse.report.reasoning.match.domain.ReportState.NEW;
 import static java.util.Arrays.stream;
+import static java.util.UUID.randomUUID;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -25,21 +29,14 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "warehouse_report_ai_reasoning_match_level")
 class AiReasoningMatchLevelReport extends BaseEntity implements IdentifiableEntity {
 
+  private static final String REPORT_TYPE = "AI_REASONING_MATCH_LEVEL";
+
   @Id
   @GeneratedValue(strategy = IDENTITY)
   @Column(name = "id", updatable = false)
   @ToString.Include
   @Setter(AccessLevel.PUBLIC)
   private Long id;
-
-  @ToString.Include
-  @Column(name = "report_type", nullable = false)
-  @Enumerated(EnumType.STRING)
-  private AiReasoningMatchLevelReportDefinition reportType;
-
-  @ToString.Include
-  @Column(name = "analysis", nullable = false)
-  private String analysisId;
 
   @ToString.Include
   @Column(name = "state", nullable = false)
@@ -50,34 +47,44 @@ class AiReasoningMatchLevelReport extends BaseEntity implements IdentifiableEnti
   @Column(name = "file_storage_name")
   private String fileStorageName;
 
-  static AiReasoningMatchLevelReport of(
-      AiReasoningMatchLevelReportDefinition definition, String analysisId) {
+  @Basic(fetch = FetchType.LAZY)
+  @Column(name = "from_range")
+  private OffsetDateTime from;
 
+  @Basic(fetch = FetchType.LAZY)
+  @Column(name = "to_range")
+  private OffsetDateTime to;
+
+  static AiReasoningMatchLevelReport of(ReportRange range) {
     AiReasoningMatchLevelReport report = new AiReasoningMatchLevelReport();
     report.setState(NEW);
-    report.setAnalysisId(analysisId);
-    report.setReportType(definition);
+    report.setFrom(range.getFrom());
+    report.setTo(range.getTo());
+    report.generateFileStorageName();
     return report;
+  }
+
+  void generateFileStorageName() {
+    setFileStorageName(randomUUID().toString());
   }
 
   void generating() {
     assertAllowedStateChange(GENERATING, NEW);
-    state = GENERATING;
+    setState(GENERATING);
   }
 
   void done() {
     assertAllowedStateChange(DONE, GENERATING);
-    state = DONE;
+    setState(DONE);
   }
 
   void failed() {
     assertAllowedStateChange(FAILED, NEW, GENERATING);
-    state = FAILED;
+    setState(FAILED);
+    setFileStorageName(null);
   }
 
-  private void assertAllowedStateChange(
-      ReportState desirable, ReportState... state) {
-
+  private void assertAllowedStateChange(ReportState desirable, ReportState... state) {
     if (notInState(state))
       throw new WrongReportStateException(getId(), getState(), desirable);
   }
@@ -86,11 +93,15 @@ class AiReasoningMatchLevelReport extends BaseEntity implements IdentifiableEnti
     return stream(allowedStates).noneMatch(allowedState -> allowedState == getState());
   }
 
-  void storeReport(String report) {
-    fileStorageName = report;
+  static ReportTypeDto toSimulationReportTypeDto(String analysisId) {
+    return ReportTypeDto
+        .builder()
+        .name(getReportName(analysisId))
+        .type(REPORT_TYPE)
+        .build();
   }
 
-  String getFileStorageName() {
-    return id + "-" + reportType.getFilename();
+  private static String getReportName(String analysisId) {
+    return "analysis/" + analysisId + "/reports/" + REPORT_TYPE;
   }
 }

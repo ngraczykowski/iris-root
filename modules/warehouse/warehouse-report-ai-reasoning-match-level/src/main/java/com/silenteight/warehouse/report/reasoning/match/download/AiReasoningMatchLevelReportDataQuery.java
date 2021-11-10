@@ -1,6 +1,8 @@
 package com.silenteight.warehouse.report.reasoning.match.download;
 
+import com.silenteight.warehouse.report.reasoning.match.domain.dto.AiReasoningMatchLevelReportDto;
+
 public interface AiReasoningMatchLevelReportDataQuery {
 
-  String getReportFileName(long id);
+  AiReasoningMatchLevelReportDto getAiReasoningReportDto(long id);
 }

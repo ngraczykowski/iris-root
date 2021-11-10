@@ -1,12 +1,15 @@
 package com.silenteight.warehouse.report.reasoning.match.generation;
 
 import com.silenteight.warehouse.indexer.query.common.QueryFilter;
-import com.silenteight.warehouse.report.reasoning.match.AiReasoningMatchLevelReportTestFixtures;
 
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.silenteight.warehouse.report.reasoning.match.AiReasoningMatchLevelReportTestFixtures.ALERT_COMMENT_FIELD_LABEL;
+import static com.silenteight.warehouse.report.reasoning.match.AiReasoningMatchLevelReportTestFixtures.ALERT_COMMENT_FIELD_NAME;
+import static com.silenteight.warehouse.report.reasoning.match.AiReasoningMatchLevelReportTestFixtures.ALERT_STATUS_FIELD_LABEL;
+import static com.silenteight.warehouse.report.reasoning.match.AiReasoningMatchLevelReportTestFixtures.ALERT_STATUS_FIELD_NAME;
 import static com.silenteight.warehouse.report.reasoning.match.generation.GenerationAiReasoningMatchLevelReportTestFixtures.PROPERTIES;
 import static org.assertj.core.api.Assertions.*;
 
@@ -20,9 +23,7 @@ class AiReasoningMatchLevelReportDefinitionPropertiesTest {
     // then
     assertThat(fields)
         .hasSize(2)
-        .containsExactly(
-            AiReasoningMatchLevelReportTestFixtures.ALERT_STATUS_FIELD_NAME,
-            AiReasoningMatchLevelReportTestFixtures.ALERT_COMMENT_FIELD_NAME);
+        .containsExactly(ALERT_STATUS_FIELD_NAME, ALERT_COMMENT_FIELD_NAME);
   }
 
   @Test
@@ -33,9 +34,7 @@ class AiReasoningMatchLevelReportDefinitionPropertiesTest {
     //then
     assertThat(fieldLabels)
         .hasSize(2)
-        .containsExactly(
-            AiReasoningMatchLevelReportTestFixtures.ALERT_STATUS_FIELD_LABEL,
-            AiReasoningMatchLevelReportTestFixtures.ALERT_COMMENT_FIELD_LABEL);
+        .containsExactly(ALERT_STATUS_FIELD_LABEL, ALERT_COMMENT_FIELD_LABEL);
   }
 
   @Test

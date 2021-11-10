@@ -5,7 +5,7 @@ import com.silenteight.sep.base.common.support.persistence.BasicInMemoryReposito
 import java.time.OffsetDateTime;
 import java.util.List;
 
-public class InMemoryMatchLevelAiReasoningRepository
+public class InMemoryAiReasoningMatchLevelRepository
     extends BasicInMemoryRepository<AiReasoningMatchLevelReport>
     implements AiReasoningMatchLevelReportRepository {
 

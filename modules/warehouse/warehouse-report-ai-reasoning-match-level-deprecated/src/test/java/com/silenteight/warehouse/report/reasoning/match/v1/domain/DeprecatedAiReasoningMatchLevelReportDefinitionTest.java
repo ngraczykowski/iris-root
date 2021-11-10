@@ -1,7 +1,7 @@
-package com.silenteight.warehouse.report.reasoning.match.domain;
+package com.silenteight.warehouse.report.reasoning.match.v1.domain;
 
 import com.silenteight.sep.base.testing.time.MockTimeSource;
-import com.silenteight.warehouse.report.reasoning.match.domain.exception.ReportTypeNotFoundException;
+import com.silenteight.warehouse.report.reasoning.match.v1.domain.exception.ReportTypeNotFoundException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -9,14 +9,14 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import java.time.OffsetDateTime;
 
-import static com.silenteight.warehouse.report.reasoning.match.domain.AiReasoningMatchLevelReportDefinition.getReportType;
+import static com.silenteight.warehouse.report.reasoning.match.v1.domain.DeprecatedAiReasoningMatchLevelReportDefinition.getReportType;
 import static org.assertj.core.api.Assertions.*;
 
-class AiReasoningMatchLevelReportDefinitionTest {
+class DeprecatedAiReasoningMatchLevelReportDefinitionTest {
 
   @ParameterizedTest
-  @EnumSource(AiReasoningMatchLevelReportDefinition.class)
-  void testProperTimeRange(AiReasoningMatchLevelReportDefinition definition) {
+  @EnumSource(DeprecatedAiReasoningMatchLevelReportDefinition.class)
+  void testProperTimeRange(DeprecatedAiReasoningMatchLevelReportDefinition definition) {
     OffsetDateTime result = definition.getFrom(MockTimeSource.ARBITRARY_INSTANCE.now());
     assertThat(result).isBefore(MockTimeSource.ARBITRARY_INSTANCE.offsetDateTime());
   }

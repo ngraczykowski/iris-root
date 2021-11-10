@@ -15,9 +15,13 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Validated
 @ConfigurationProperties(prefix = "warehouse.report.ai-reasoning-match-level")
-public class AiReasoningReportProperties {
+public class AiReasoningMatchLevelReportProperties {
 
   @Valid
   @NotNull
-  AiReasoningReportDefinitionProperties production;
+  AiReasoningMatchLevelReportDefinitionProperties production;
+
+  @Valid
+  @NotNull
+  AiReasoningMatchLevelReportDefinitionProperties simulation;
 }

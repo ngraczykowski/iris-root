@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.reasoning.match.generation;
+package com.silenteight.warehouse.report.reasoning.match.v1.generation;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

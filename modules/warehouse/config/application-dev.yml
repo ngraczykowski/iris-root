@@ -456,7 +456,7 @@ warehouse.report.ai-reasoning:
       - name: s8_discriminator
         label: Alert S8 ID
 
-warehouse.report.ai-reasoning-match-level:
+warehouse.report.ai-reasoning-match-level-v1:
   production:
     date-field-name: alert_recommendationDate
     columns:
@@ -490,3 +490,68 @@ warehouse.report.ai-reasoning-match-level:
         label: s8_discriminator
       - name: s8_match_discriminator
         label: s8_match_discriminator
+
+warehouse.report.ai-reasoning-match-level:
+  production:
+    date-field-name: alert_recommendationDate
+    columns:
+      - name: match_feature_vector_signature
+        label: Reasoning Branch ID
+      - name: match_policy
+        label: Policy ID
+      - name: match_policy_title
+        label: Policy Name
+      - name: match_step
+        label: Step ID
+      - name: match_step_title
+        label: Step Name
+      - name: match_solution
+        label: S8 Match Resolution
+      - name: alert_recommended_action
+        label: S8 Alert Resolution
+      - name: alert_recommendation_comment
+        label: S8 Alert Comment
+      - name: alert_create_time
+        label: S8 Alert Resolution Timestamp (UTC)
+      - name: alert_firco_system_id
+        label: Alert Client ID
+      - name: s8_alert_name
+        label: Alert S8 ID
+      - name: alert_status
+        label: Alert Status
+      - name: alert_delivery_status
+        label: Alert Delivery Status
+      - name: s8_match_name
+        label: Match S8 ID
+  simulation:
+    visible: false
+    date-field-name: index_timestamp
+    columns:
+      - name: match_feature_vector_signature
+        label: Reasoning Branch ID
+      - name: match_policy
+        label: Policy ID
+      - name: match_policy_title
+        label: Policy Name
+      - name: match_step
+        label: Step ID
+      - name: match_step_title
+        label: Step Name
+      - name: match_solution
+        label: S8 Match Resolution
+      - name: alert_recommended_action
+        label: S8 Alert Resolution
+      - name: alert_recommendation_comment
+        label: S8 Alert Comment
+      - name: alert_create_time
+        label: S8 Alert Resolution Timestamp (UTC)
+      - name: alert_firco_system_id
+        label: Alert Client ID
+      - name: s8_alert_name
+        label: Alert S8 ID
+      - name: alert_status
+        label: Alert Status
+      - name: alert_delivery_status
+        label: Alert Delivery Status
+      - name: s8_match_name
+        label: Match S8 ID
