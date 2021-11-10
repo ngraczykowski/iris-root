@@ -12,7 +12,7 @@ ext {
   silenteightDataSourceApiVersion = "0.8.0"
   silenteightCommonsVersion = "2.1.0"
   silenteightSepBaseVersion = "1.12.2"
-  silenteightDataRetentionVersion = "0.1.0"
+  silenteightDataRetentionVersion = "0.3.0"
 }
 
 // @formatter:off
