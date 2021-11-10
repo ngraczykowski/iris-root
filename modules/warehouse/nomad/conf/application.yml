@@ -50,8 +50,12 @@ warehouse:
   match-mapping:
   messaging:
     integration:
+      analysis-expired-indexing-inbound:
+        queue-name: wh.retention.analysis-expired
       backup-indexing-inbound:
         queue-name: wh.index-request.backup
+      personal-information-expired-indexing-inbound:
+        queue-name: wh.retention.analysis-expired
       production-indexing-inbound:
         queue-name: wh.index-request.production
       production-indexed-outbound:
