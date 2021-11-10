@@ -43,7 +43,8 @@ class NationalIdDocumentFeatureSpec extends Specification implements FullMatch {
       feature == Feature.NATIONAL_ID_DOCUMENT.fullName
       alertedPartyDocumentNumbers == ['Y999999']
       watchlistDocumentNumbers == ['78845ID', '4568795132', '5465498756']
-      alertedPartyCountries == ['UNITED KINGDOM', 'GB', 'DE', 'GERMANY', 'HK']
+      assertThat(alertedPartyCountries)
+          .containsExactlyInAnyOrder('UNITED KINGDOM', 'GB', 'DE', 'GERMANY', 'HK')
       assertThat(watchlistCountries).containsExactly(
           'VNM GB IRN', 'UNITED STATES', 'US', 'IRAN, ISLAMIC REPUBLIC OF', 'IR', 'CHABAHAR',
           'UNK UNKW', 'VIET NAM', 'GB', 'IRAN')

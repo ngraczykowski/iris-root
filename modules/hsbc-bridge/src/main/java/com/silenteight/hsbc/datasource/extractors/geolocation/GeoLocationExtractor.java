@@ -1,9 +1,9 @@
 package com.silenteight.hsbc.datasource.extractors.geolocation;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import com.silenteight.hsbc.datasource.extractors.common.SignType;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -44,15 +44,5 @@ class GeoLocationExtractor {
 
   static Stream<String> splitExtractedValueBySign(SignType signType, String value) {
     return Objects.isNull(value) ? Stream.empty() : Pattern.compile(signType.getSign()).splitAsStream(value);
-  }
-
-  @AllArgsConstructor
-  @Getter
-  enum SignType {
-    SPACE(" "),
-    SEMICOLON(";"),
-    COMA(",");
-
-    private final String sign;
   }
 }

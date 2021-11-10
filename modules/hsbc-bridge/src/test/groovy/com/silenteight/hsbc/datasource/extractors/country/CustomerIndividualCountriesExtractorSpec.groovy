@@ -4,9 +4,55 @@ import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual
 
 import spock.lang.Specification
 
+import java.util.stream.Collectors
+
 import static org.assertj.core.api.Assertions.assertThat
 
 class CustomerIndividualCountriesExtractorSpec extends Specification {
+
+  def 'should split fields by comma and semicolon'() {
+    given:
+    def customerIndividuals = [
+        Stub(CustomerIndividual) {
+          getNationalityOrCitizenship() >> nationalityOrCitizenship
+          getNationalityCountries() >> nationalityCountries
+          getPassportIssueCountry() >> passportIssueCountry
+        }]
+
+    when:
+    def underTest = new CustomerIndividualCountriesExtractor(customerIndividuals)
+    def actual = underTest.extract()
+
+    then:
+    actual.collect(Collectors.toList()) == countriesExpected
+
+    where:
+    nationalityOrCitizenship | nationalityCountries | passportIssueCountry | countriesExpected
+    "AUSTRALIA;GERMANY"      | "AU, GER"            | "AUSTRALIA"          | ["AUSTRALIA",
+                                                                              "GERMANY", "AU",
+                                                                              "GER", "AUSTRALIA"]
+  }
+
+  def 'should remove only backslash and quote signs'() {
+    given:
+    def customerIndividuals = [
+        Stub(CustomerIndividual) {
+          getNationalityOrCitizenship() >> nationalityOrCitizenship
+          getNationalityCountries() >> nationalityCountries
+        }]
+
+    when:
+    def underTest = new CustomerIndividualCountriesExtractor(customerIndividuals)
+    def actual = underTest.extract()
+
+    then:
+    actual.collect(Collectors.toList()) == countriesExpected
+
+    where:
+    nationalityOrCitizenship              | nationalityCountries | countriesExpected
+    "Republic of the Congo;Guinea-Bissau" | "\"COG\", \"GNB\""   | ["Republic of the Congo",
+                                                                    "Guinea-Bissau", "COG", "GNB"]
+  }
 
   def "returns correct values"() {
     given:

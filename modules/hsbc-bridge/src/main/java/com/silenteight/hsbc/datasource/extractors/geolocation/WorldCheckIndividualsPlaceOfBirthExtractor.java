@@ -3,7 +3,7 @@ package com.silenteight.hsbc.datasource.extractors.geolocation;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
-import com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.SignType;
+import com.silenteight.hsbc.datasource.extractors.common.SignType;
 
 import java.util.List;
 import java.util.stream.Collectors;

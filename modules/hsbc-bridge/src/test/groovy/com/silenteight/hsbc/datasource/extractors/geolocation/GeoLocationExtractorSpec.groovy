@@ -1,6 +1,6 @@
 package com.silenteight.hsbc.datasource.extractors.geolocation
 
-import com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.SignType
+import com.silenteight.hsbc.datasource.extractors.common.SignType
 
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -75,7 +75,7 @@ class GeoLocationExtractorSpec extends Specification {
   @Unroll
   def 'should split extracted value: #input by COMA to specific stream: #expected'() {
     when:
-    def result = GeoLocationExtractor.splitExtractedValueBySign(SignType.COMA, input as String)
+    def result = GeoLocationExtractor.splitExtractedValueBySign(SignType.COMMA, input as String)
 
     then:
     streamToList(result) == expected

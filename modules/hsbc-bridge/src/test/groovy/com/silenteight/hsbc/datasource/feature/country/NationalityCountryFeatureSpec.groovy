@@ -21,7 +21,8 @@ class NationalityCountryFeatureSpec extends Specification implements FullMatch {
     with(result) {
       feature == Feature.NATIONALITY_COUNTRY.fullName
 
-      alertedPartyCountries == ['HK', 'UNITED KINGDOM', 'GB', 'DE', 'GERMANY']
+      assertThat(alertedPartyCountries)
+          .containsExactlyInAnyOrder('HK', 'UNITED KINGDOM', 'GB', 'DE', 'GERMANY')
       assertThat(watchlistCountries).containsExactly(
           'UNK UNKW', 'VIET NAM', 'GB', 'IRAN', 'VNM GB IRN', 'UNITED STATES', 'US',
           'IRAN, ISLAMIC REPUBLIC OF', 'IR', 'CHABAHAR')

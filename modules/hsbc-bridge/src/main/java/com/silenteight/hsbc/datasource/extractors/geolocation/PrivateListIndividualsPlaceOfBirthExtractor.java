@@ -3,7 +3,7 @@ package com.silenteight.hsbc.datasource.extractors.geolocation;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
-import com.silenteight.hsbc.datasource.extractors.geolocation.GeoLocationExtractor.SignType;
+import com.silenteight.hsbc.datasource.extractors.common.SignType;
 
 import one.util.streamex.StreamEx;
 
