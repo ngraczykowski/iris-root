@@ -1,6 +1,6 @@
 import pytest
 
-from company_name_surrounding.surrounding_check import get_company_token_count
+from company_name_surrounding.surrounding_check import get_company_token_number
 
 
 @pytest.mark.parametrize(
@@ -13,4 +13,4 @@ from company_name_surrounding.surrounding_check import get_company_token_count
     ],
 )
 def test_surrounding_count(name, expected):
-    assert get_company_token_count(name) == expected
+    assert get_company_token_number(name) == expected
