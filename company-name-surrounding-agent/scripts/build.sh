@@ -11,7 +11,7 @@ fi
 
 # wheel, for developing and PyPi
 python setup.py bdist_wheel
-artifact=$(basename -- "$(ls ./dist/strict_name_agent-*.whl)")
+artifact=$(basename -- "$(ls ./dist/company_name_surrounding_agent-*.whl)")
 version=$(ls -al "./dist/$artifact" | awk -F'company_name_surrounding_agent-|-py3-none-any.whl' '{print $2}')
 
 # zipfile (executable, to run without installing)
