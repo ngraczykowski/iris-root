@@ -15,7 +15,7 @@ class AmqpDefaults {
   static final String RECOMMENDATIONS_GENERATED_ROUTING_KEY =
       EVENT_PREFIX + "recommendations-generated";
   static final String DATASET_EXPIRED_ROUTING_KEY =
-      EVENT_PREFIX + "dataset-expired";
+      EVENT_PREFIX + "datasets-expired";
 
   static final String EVENT_INTERNAL_EXCHANGE_NAME = PREFIX + "event.internal";
   static final String ANALYSIS_ALERTS_ADDED_ROUTING_KEY =
