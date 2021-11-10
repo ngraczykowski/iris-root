@@ -45,7 +45,7 @@ class SimulationAlertMappingServiceTest {
   @Test
   void shouldMapFieldsForAlertWithNoMatches() {
     // given
-    when(alertSearchService.searchForAlerts(any(), any())).thenReturn(List.of(PRODUCTION_DATA));
+    when(alertSearchService.searchForDocuments(any(), any())).thenReturn(List.of(PRODUCTION_DATA));
     when(alertMapper.convertAlertToAttributes(any())).thenReturn(ALERT_DATA);
 
     // when
@@ -67,7 +67,7 @@ class SimulationAlertMappingServiceTest {
   @Test
   void shouldMapFieldsForAlertWithOneMatch() {
     // given
-    when(alertSearchService.searchForAlerts(any(), any())).thenReturn(List.of(PRODUCTION_DATA));
+    when(alertSearchService.searchForDocuments(any(), any())).thenReturn(List.of(PRODUCTION_DATA));
     when(alertMapper.convertAlertToAttributes(any())).thenReturn(ALERT_DATA);
     when(matchMapper.convertMatchToAttributes(any(), any())).thenReturn(MATCH_DATA);
 
@@ -91,7 +91,7 @@ class SimulationAlertMappingServiceTest {
   @Test
   void shouldMapFieldsForAlertWithTwoMatches() {
     // given
-    when(alertSearchService.searchForAlerts(any(), any())).thenReturn(List.of(PRODUCTION_DATA));
+    when(alertSearchService.searchForDocuments(any(), any())).thenReturn(List.of(PRODUCTION_DATA));
     when(alertMapper.convertAlertToAttributes(any())).thenReturn(ALERT_DATA);
     when(matchMapper.convertMatchToAttributes(any(), any())).thenReturn(MATCH_DATA);
 

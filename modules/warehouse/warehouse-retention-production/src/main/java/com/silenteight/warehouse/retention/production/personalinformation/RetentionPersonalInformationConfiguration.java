@@ -21,11 +21,13 @@ class RetentionPersonalInformationConfiguration {
   @Bean
   ErasePersonalInformationUseCase eraseDecisionCommentUseCase(
       AlertDiscriminatorResolvingService alertDiscriminatorResolvingService,
+      MatchDiscriminatorResolvingService matchDiscriminatorResolvingService,
       ProductionAlertIndexV2UseCase productionAlertIndexUseCase,
       @Valid PersonalInformationProperties properties) {
 
     return new ErasePersonalInformationUseCase(
         alertDiscriminatorResolvingService,
+        matchDiscriminatorResolvingService,
         productionAlertIndexUseCase,
         properties.getBatchSize(),
         properties.getFieldsToErase());
@@ -39,5 +41,15 @@ class RetentionPersonalInformationConfiguration {
 
     return new AlertDiscriminatorResolvingService(restHighLevelAdminClient,
         productionSearchRequestBuilder, alertSearchService);
+  }
+
+  @Bean
+  MatchDiscriminatorResolvingService matchDiscriminatorResolvingService(
+      RestHighLevelClient restHighLevelAdminClient,
+      ProductionSearchRequestBuilder productionMatchSearchRequestBuilder,
+      AlertSearchService alertSearchService) {
+
+    return new MatchDiscriminatorResolvingService(restHighLevelAdminClient,
+        productionMatchSearchRequestBuilder, alertSearchService);
   }
 }

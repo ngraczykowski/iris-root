@@ -26,7 +26,16 @@ public class SingleAlertQueryConfiguration {
   ProductionSearchRequestBuilder productionSearchRequestBuilder(
       @Valid ElasticsearchProperties elasticsearchProperties) {
 
-    return new ProductionSearchRequestBuilder(elasticsearchProperties);
+    return new ProductionSearchRequestBuilder(new String[] {
+        elasticsearchProperties.getProductionQueryIndex() });
+  }
+
+  @Bean
+  ProductionSearchRequestBuilder productionMatchSearchRequestBuilder(
+      @Valid ElasticsearchProperties elasticsearchProperties) {
+
+    return new ProductionSearchRequestBuilder(new String[] {
+        elasticsearchProperties.getProductionMatchQueryIndex() });
   }
 
   @Bean

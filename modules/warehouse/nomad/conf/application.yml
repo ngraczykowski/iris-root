@@ -73,6 +73,12 @@ warehouse:
   {{ end -}}
   minio:
     url: https://minio.silenteight.com
+  retention:
+    personal-information:
+      batch-size: 200
+      fields-to-erase:
+        - 'comment'
+        - 'lastCaseComment'
   sampling:
     time-field-name: alert_recommendationDate
     filters:

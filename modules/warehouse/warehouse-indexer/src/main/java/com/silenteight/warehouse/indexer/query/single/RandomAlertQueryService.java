@@ -43,7 +43,7 @@ public class RandomAlertQueryService {
     SearchRequest searchRequest = buildSearchRequestForRandomAlerts(criteria);
 
     List<Map<String, Object>> maps =
-        alertSearchService.searchForAlerts(restHighLevelAdminClient, searchRequest);
+        alertSearchService.searchForDocuments(restHighLevelAdminClient, searchRequest);
 
     return maps.stream()
         .map(alert -> alert.get(DISCRIMINATOR).toString())
