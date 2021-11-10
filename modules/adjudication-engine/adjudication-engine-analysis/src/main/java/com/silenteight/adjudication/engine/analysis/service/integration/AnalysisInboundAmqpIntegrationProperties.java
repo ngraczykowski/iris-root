@@ -32,6 +32,11 @@ class AnalysisInboundAmqpIntegrationProperties {
   @NestedConfigurationProperty
   @Valid
   @NotNull
+  private AlertExpired alertExpired = new AlertExpired();
+
+  @NestedConfigurationProperty
+  @Valid
+  @NotNull
   private DeleteAgentExchange deleteAgentExchange = new DeleteAgentExchange();
 
   @NestedConfigurationProperty
@@ -62,6 +67,10 @@ class AnalysisInboundAmqpIntegrationProperties {
     return agentResponse.getInboundQueueName();
   }
 
+  String getDataRetentionInboundQueueName() {
+    return alertExpired.getInboundQueueName();
+  }
+
   @Data
   static class PendingRecommendation {
 
@@ -90,6 +99,13 @@ class AnalysisInboundAmqpIntegrationProperties {
     private String inboundQueueName = AGENT_RESPONSE_QUEUE_NAME;
 
     private boolean enabled = AGENT_RESPONSE_ENABLED_DEFAULT;
+  }
+
+  @Data
+  static class AlertExpired {
+
+    @NotBlank
+    private String inboundQueueName = ALERT_EXPIRED_QUEUE_NAME;
   }
 
   @Data

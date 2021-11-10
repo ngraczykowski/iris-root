@@ -42,6 +42,9 @@ class AnalysisOutboundAmqpIntegrationProperties {
 
     @NotNull
     private String recommendationsGeneratedRoutingKey = RECOMMENDATIONS_GENERATED_ROUTING_KEY;
+
+    @NotNull
+    private String datasetExpiredRoutingKey = DATASET_EXPIRED_ROUTING_KEY;
   }
 
   @Data

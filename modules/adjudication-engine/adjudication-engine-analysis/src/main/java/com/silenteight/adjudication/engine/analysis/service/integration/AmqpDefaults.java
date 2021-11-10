@@ -14,6 +14,8 @@ class AmqpDefaults {
   static final String EVENT_EXCHANGE_NAME = PREFIX + "event";
   static final String RECOMMENDATIONS_GENERATED_ROUTING_KEY =
       EVENT_PREFIX + "recommendations-generated";
+  static final String DATASET_EXPIRED_ROUTING_KEY =
+      EVENT_PREFIX + "dataset-expired";
 
   static final String EVENT_INTERNAL_EXCHANGE_NAME = PREFIX + "event.internal";
   static final String ANALYSIS_ALERTS_ADDED_ROUTING_KEY =
@@ -43,4 +45,7 @@ class AmqpDefaults {
 
   static final String AGENT_RESPONSE_EXCHANGE_NAME = "agent.response";
   static final String AGENT_RESPONSE_QUEUE_NAME = PREFIX + "agent-response";
+
+  static final String DATA_RETENTION_EXCHANGE_NAME = "bridge.retention";
+  static final String ALERT_EXPIRED_QUEUE_NAME = PREFIX + "alert-expired";
 }

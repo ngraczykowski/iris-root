@@ -19,6 +19,7 @@ import org.springframework.integration.handler.LoggingHandler.Level;
 import javax.validation.Valid;
 
 import static com.silenteight.adjudication.engine.analysis.agentresponse.integration.AgentResponseChannels.DELETE_AGENT_EXCHANGE_OUTBOUND_CHANNEL;
+import static com.silenteight.adjudication.engine.dataset.dataset.integration.DataRetentionChannels.ALERTS_EXPIRED_OUTBOUND_CHANNEL;
 import static org.springframework.integration.dsl.IntegrationFlows.from;
 
 @Configuration
@@ -69,6 +70,14 @@ class AnalysisOutboundAmqpIntegrationConfiguration {
         RecommendationChannels.RECOMMENDATIONS_GENERATED_OUTBOUND_CHANNEL,
         properties.getEvent().getOutboundExchangeName(),
         properties.getEvent().getRecommendationsGeneratedRoutingKey());
+  }
+
+  @Bean
+  IntegrationFlow datasetExpiredOutboundIntegrationFlow() {
+    return createOutboundFlow(
+        ALERTS_EXPIRED_OUTBOUND_CHANNEL,
+        properties.getEvent().getOutboundExchangeName(),
+        properties.getEvent().getDatasetExpiredRoutingKey());
   }
 
   private StandardIntegrationFlow createOutboundFlow(

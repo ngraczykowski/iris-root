@@ -7,6 +7,7 @@ description = "Adjudication Engine Dataset"
 
 dependencies {
   implementation libraries.adjudication_engine_api
+  implementation libraries.silenteight_data_retention_api
   implementation libraries.grpc_spring_boot_starter
   implementation libraries.silenteight_sep_base_common
   implementation libraries.spring_data_jpa

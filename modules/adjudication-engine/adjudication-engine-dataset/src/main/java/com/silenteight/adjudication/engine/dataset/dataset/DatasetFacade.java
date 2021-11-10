@@ -9,6 +9,7 @@ import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
@@ -17,6 +18,9 @@ public class DatasetFacade {
 
   @NonNull
   private final CreateDatasetUseCase createDatasetUseCase;
+
+  @NonNull
+  private final GetDatasetsByAlertsUseCase getDatasetsByAlertsUseCase;
 
   public Dataset createDataset(@Valid NamedAlerts namedAlerts) {
     return createDatasetUseCase.createDataset(namedAlerts);
@@ -28,6 +32,10 @@ public class DatasetFacade {
 
   public Dataset getDataset(String name) {
     return createDatasetUseCase.getDataset(name);
+  }
+
+  public List<String> getDatasetsByAlerts(List<String> alerts) {
+    return getDatasetsByAlertsUseCase.getDatasets(alerts);
   }
 
   public ListDatasetsResponse listDataset(Pageable pageable) {

@@ -5,10 +5,12 @@ class DatasetFixture {
   static DatasetFacade inMemoryDatasetFacade() {
     var datasetRepository = new InMemoryDatasetRepository();
     var datasetAlertRepository = new InMemoryDatasetAlertRepository();
+    var datasatDataAccess = new InMemoryDatasetAlertDataAccess();
 
     var createAlertsUseCase = new CreateDatasetUseCase(datasetRepository, datasetAlertRepository);
+    var getDatasetsUseCase = new GetDatasetsByAlertsUseCase(datasatDataAccess);
 
-    return new DatasetFacade(createAlertsUseCase);
+    return new DatasetFacade(createAlertsUseCase, getDatasetsUseCase);
   }
 
   public static DatasetEntity randomDatasetEntity() {

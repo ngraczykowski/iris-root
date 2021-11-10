@@ -7,6 +7,7 @@ import com.silenteight.adjudication.engine.analysis.agentresponse.integration.Ag
 import com.silenteight.adjudication.engine.analysis.categoryrequest.integration.CategoryRequestChannels;
 import com.silenteight.adjudication.engine.analysis.commentinput.integration.CommentInputChannels;
 import com.silenteight.adjudication.engine.analysis.pendingrecommendation.integration.PendingRecommendationChannels;
+import com.silenteight.adjudication.engine.dataset.dataset.integration.DataRetentionChannels;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 
 import org.springframework.amqp.support.AmqpHeaders;
@@ -71,6 +72,14 @@ class AnalysisInboundAmqpIntegrationConfiguration {
     return from(createInboundAdapter(properties.getAgentResponseInboundQueueName()))
         .log(Level.TRACE, getClass().getName() + ".agentResponseIntegrationFlow")
         .channel(AgentResponseChannels.AGENT_RESPONSE_INBOUND_CHANNEL)
+        .get();
+  }
+
+  @Bean
+  IntegrationFlow dataRetentionIntegrationFlow() {
+    return from(createInboundAdapter(properties.getDataRetentionInboundQueueName()))
+        .log(Level.TRACE, getClass().getName() + ".dataRetentionIntegrationFlow")
+        .channel(DataRetentionChannels.ALERTS_EXPIRED_INBOUND_CHANNEL)
         .get();
   }
 

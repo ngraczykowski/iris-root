@@ -31,6 +31,10 @@ class RabbitBrokerConfiguration {
     var agentResponseExchange = topicExchange(AGENT_RESPONSE_EXCHANGE_NAME)
         .durable(true)
         .build();
+
+    var dataRetentionExchange = topicExchange(DATA_RETENTION_EXCHANGE_NAME)
+        .durable(true)
+        .build();
     var deadLetterExchange = topicExchange(DEAD_LETTER_EXCHANGE)
         .durable(true)
         .internal()
@@ -66,6 +70,10 @@ class RabbitBrokerConfiguration {
     var agentResponse = queueDeadLetter(AGENT_RESPONSE_QUEUE_NAME).maxPriority(10).build();
     var agentResponseBinding = bind(agentResponse, agentResponseExchange, "#");
 
+    var dataRetention = queueDeadLetter(ALERT_EXPIRED_QUEUE_NAME).maxPriority(10).build();
+    var dataRetentionBinding =
+        bind(dataRetention, dataRetentionExchange, "retention.alerts-expired");
+
     var tmpAgentRequest = queue(TMP_AGENT_REQUEST_QUEUE_NAME).maxPriority(10).build();
     var tmpAgentRequestBinding = bind(tmpAgentRequest, agentRequestExchange, "#");
 
@@ -80,7 +88,8 @@ class RabbitBrokerConfiguration {
         category, categoryBinding,
         commentInput, commentInputBinding,
         agentResponse, agentResponseBinding,
-        tmpAgentRequest, tmpAgentRequestBinding);
+        tmpAgentRequest, tmpAgentRequestBinding,
+        dataRetention, dataRetentionBinding);
   }
 
   private static QueueBuilder queue(String queueName) {
