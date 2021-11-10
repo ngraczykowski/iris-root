@@ -25,7 +25,7 @@ class CompanyNameSurroundingAgentGrpcServicer(
         result: Result = await self.create_resolve_task(names)
         return CheckCompanyNameSurroundingResponse(
             names=names,
-            result=result.count,
+            result=result.result,
             solution=result.solution,
         )
 

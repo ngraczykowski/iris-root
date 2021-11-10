@@ -2,8 +2,7 @@
 
 The agent purpose is to count organization - name related tokens: legal terms, pre- and suffixes.
 Agent returns this number only when gets a list of length 1. Otherwise, returns 0. 
-This number is returned as Result's *count* field or grpc's *result*, 
-and *solution* is created based on rules provided in config and returned as *solution* in both
+This number is returned as *result*. *solution* is created based on rules provided in config.
 
 Rules specified in application.yaml, are checked from top to bottom, if any range met - return its solution.
 If no range met, returns the 'default response' 

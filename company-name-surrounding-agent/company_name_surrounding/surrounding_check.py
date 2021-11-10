@@ -5,7 +5,7 @@ from typing import List
 from organization_name_knowledge import parse
 
 
-def get_company_token_count(names: List[str]) -> int:
+def get_company_token_number(names: List[str]) -> int:
     """Function to count organization - name related tokens: legal terms, pre- and suffixes.
     As requested by DS, counts this number only when gets a list of length 1. Otherwise, returns 0.
 
