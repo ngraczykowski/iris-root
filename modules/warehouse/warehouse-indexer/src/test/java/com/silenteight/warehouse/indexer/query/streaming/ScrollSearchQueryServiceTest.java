@@ -38,7 +38,7 @@ class ScrollSearchQueryServiceTest {
   private SimpleElasticTestClient testClient;
 
   @Autowired
-  private ScrollSearchStreamingService underTest;
+  private CsvScrollSearchStreamingService underTest;
 
   private static final String RECOMMENDATION_LABEL = "Alert Resolution";
   private static final String ANALYST_DECISION_LABEL = "Analyst Decision";

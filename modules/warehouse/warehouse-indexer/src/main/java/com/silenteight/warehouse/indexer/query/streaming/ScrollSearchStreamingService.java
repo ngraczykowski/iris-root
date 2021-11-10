@@ -2,14 +2,20 @@ package com.silenteight.warehouse.indexer.query.streaming;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+
+import com.silenteight.warehouse.indexer.query.common.QueryFilter;
+import com.silenteight.warehouse.indexer.query.streaming.exception.FetchAllDataException;
 
 import org.elasticsearch.action.search.*;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.TermsQueryBuilder;
 import org.elasticsearch.search.Scroll;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -17,60 +23,60 @@ import java.util.List;
 import java.util.function.Consumer;
 import javax.validation.Valid;
 
-import static java.util.List.of;
+import static com.silenteight.warehouse.common.opendistro.utils.OpendistroUtils.getRawField;
+import static java.util.Arrays.stream;
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
 import static org.elasticsearch.client.RequestOptions.DEFAULT;
 import static org.elasticsearch.common.unit.TimeValue.timeValueSeconds;
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 
 @Slf4j
 @RequiredArgsConstructor
-class ScrollSearchStreamingService implements DataProvider {
+class ScrollSearchStreamingService implements AllDataProvider {
 
   @NonNull
   private final RestHighLevelClient restHighLevelClient;
   @Valid
   @NonNull
   private final ScrollSearchProperties scrollSearchProperties;
-  @NonNull
-  private final ScrollSearchQueryBuilder scrollSearchQueryBuilder;
-  @NonNull
-  private final DataResponseParser responseParser;
 
   @Override
-  public void fetchData(FetchDataRequest request, Consumer<Collection<String>> consumer) {
+  public void fetchData(
+      FetchAllDataRequest request, Consumer<Collection<FetchedDocument>> consumer) {
     try {
       log.debug("Elastic ScrollSearchStreamingService: {}", request);
       doFetchData(request, consumer);
     } catch (IOException e) {
-      throw new ReportGenerationException(
-          request.getName(), "Error while streaming data from ES to Consumer", e);
+      throw new FetchAllDataException(e);
     }
   }
 
   private void doFetchData(
-      FetchDataRequest request, Consumer<Collection<String>> consumer) throws IOException {
+      FetchAllDataRequest request,
+      Consumer<Collection<FetchedDocument>> consumer) throws IOException {
 
-    final Scroll scroll =
-        new Scroll(timeValueSeconds(scrollSearchProperties.getKeepAliveSeconds()));
+    SearchSourceBuilder searchSourceBuilder = getSearchSourceBuilder(request);
 
-    QueryBuilder query = scrollSearchQueryBuilder.buildQuery(request);
-    SearchResponse searchResponse = executeSearch(request, scroll, query);
-    writeCsv(
-        scroll,
-        searchResponse,
-        request.getFieldsDefinitions().getNames(),
-        request.getFieldsDefinitions().getLabels(),
-        consumer);
+    ScrollManager scrollManager = new ScrollManager(
+        restHighLevelClient,
+        searchSourceBuilder,
+        request.getIndexesArray(),
+        scrollSearchProperties.getKeepAliveSeconds());
+
+    while (scrollManager.hasData()) {
+      consumer.accept(scrollManager.fetchDocuments());
+    }
+    scrollManager.cleanUp();
   }
 
-  private SearchResponse executeSearch(
-      FetchDataRequest request, Scroll scroll, QueryBuilder query) throws IOException {
+  @NotNull
+  private SearchSourceBuilder getSearchSourceBuilder(FetchAllDataRequest request) {
+    List<QueryFilter> queryFilters = request.getQueryFilters();
+    BoolQueryBuilder query = boolQuery();
+    queryFilters.forEach(queryFilter -> query.must(buildTermsQuery(queryFilter)));
 
-    SearchSourceBuilder searchSourceBuilder = toSearchSourceBuilder(request, query);
-    SearchRequest searchRequest = toSearchRequest(request, scroll, searchSourceBuilder);
-    return restHighLevelClient.search(searchRequest, DEFAULT);
-  }
-
-  private SearchSourceBuilder toSearchSourceBuilder(FetchDataRequest request, QueryBuilder query) {
     SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
     searchSourceBuilder.query(query);
     searchSourceBuilder.size(scrollSearchProperties.getBatchSize());
@@ -78,63 +84,68 @@ class ScrollSearchStreamingService implements DataProvider {
     return searchSourceBuilder;
   }
 
-  private static SearchRequest toSearchRequest(
-      FetchDataRequest request, Scroll scroll, SearchSourceBuilder searchSourceBuilder) {
-
-    SearchRequest searchRequest = new SearchRequest(request.getIndexesArray());
-    searchRequest.scroll(scroll);
-    searchRequest.source(searchSourceBuilder);
-    return searchRequest;
+  private static TermsQueryBuilder buildTermsQuery(QueryFilter queryFilters) {
+    return termsQuery(getRawField(queryFilters.getField()), queryFilters.getAllowedValues());
   }
 
-  private void writeCsv(
-      Scroll scroll,
-      SearchResponse searchResponse,
-      List<String> fieldNames,
-      List<String> fieldLabels,
-      Consumer<Collection<String>> consumer) throws IOException {
+  @RequiredArgsConstructor
+  private static class ScrollManager {
 
-    writeHeader(fieldLabels, consumer);
-    String scrollId = writeBody(scroll, searchResponse, fieldNames, consumer);
-    cleanUp(scrollId);
-  }
+    private final RestHighLevelClient restHighLevelClient;
+    private final SearchSourceBuilder searchSourceBuilder;
+    private final String[] indexesArray;
+    private final Integer keepAliveSeconds;
+    private boolean firstRun = true;
+    private String scrollId;
+    private Scroll scroll;
 
-  private void writeHeader(List<String> fieldLabels, Consumer<Collection<String>> consumer) {
-    String labels = responseParser.parseLabels(fieldLabels);
-    consumer.accept(of(labels));
-  }
-
-  private String writeBody(
-      Scroll scroll, SearchResponse response, List<String> fieldNames,
-      Consumer<Collection<String>> consumer) throws IOException {
-
-    SearchHit[] searchHits = writeLines(response, fieldNames, consumer);
-    String scrollId = response.getScrollId();
-    while (searchHits.length > 0) {
-      SearchScrollRequest request = new SearchScrollRequest(scrollId);
-      request.scroll(scroll);
-      response = restHighLevelClient.scroll(request, DEFAULT);
-      scrollId = response.getScrollId();
-      searchHits = writeLines(response, fieldNames, consumer);
+    boolean hasData() {
+      return firstRun || !ofNullable(scrollId).map(String::isBlank).orElse(true);
     }
-    return scrollId;
-  }
 
-  private SearchHit[] writeLines(
-      SearchResponse searchResponse, List<String> fieldNames,
-      Consumer<Collection<String>> consumer) {
+    Collection<FetchedDocument> fetchDocuments() {
+      if (firstRun)
+        return firstRun();
+      else
+        return doScroll();
+    }
 
-    SearchHit[] searchHits = searchResponse.getHits().getHits();
-    List<String> lines = responseParser.parseValues(searchHits, fieldNames);
-    consumer.accept(lines);
-    return searchHits;
-  }
+    @SneakyThrows
+    private List<FetchedDocument> firstRun() {
+      firstRun = false;
+      scroll = new Scroll(timeValueSeconds(keepAliveSeconds));
 
-  private void cleanUp(String scrollId) throws IOException {
-    ClearScrollRequest clearScrollRequest = new ClearScrollRequest();
-    clearScrollRequest.addScrollId(scrollId);
-    ClearScrollResponse response = restHighLevelClient.clearScroll(clearScrollRequest, DEFAULT);
-    if (!response.isSucceeded())
-      log.warn("Something went wrong with clearing Scroll with scrollId={}", scrollId);
+      SearchRequest searchRequest = new SearchRequest(indexesArray);
+      searchRequest.scroll(scroll);
+      searchRequest.source(searchSourceBuilder);
+      SearchResponse searchResponse = restHighLevelClient.search(searchRequest, DEFAULT);
+      scrollId = searchResponse.getScrollId();
+      return toDocument(searchResponse);
+    }
+
+    @SneakyThrows
+    private List<FetchedDocument> doScroll() {
+      SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
+      scrollRequest.scroll(scroll);
+      SearchResponse searchResponse = restHighLevelClient.scroll(scrollRequest, DEFAULT);
+      scrollId = searchResponse.getScrollId();
+      return toDocument(searchResponse);
+    }
+
+    private static List<FetchedDocument> toDocument(SearchResponse searchResponse) {
+      return stream(searchResponse.getHits().getHits())
+          .map(SearchHit::getSourceAsMap)
+          .map(FetchedDocument::new)
+          .collect(toList());
+    }
+
+    @SneakyThrows
+    void cleanUp() {
+      ClearScrollRequest clearScrollRequest = new ClearScrollRequest();
+      clearScrollRequest.addScrollId(scrollId);
+      ClearScrollResponse response = restHighLevelClient.clearScroll(clearScrollRequest, DEFAULT);
+      if (!response.isSucceeded())
+        log.warn("Something went wrong with clearing Scroll with scrollId={}", scrollId);
+    }
   }
 }

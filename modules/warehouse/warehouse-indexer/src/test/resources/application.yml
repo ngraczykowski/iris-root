@@ -30,6 +30,9 @@ warehouse:
       alert-simulation-indexing:
         queue-name: wh.index-request.simulation
         routing-key: command.index-request.simulation
+      analysis-expired-indexing:
+        queue-name: wh.retention.analysis-expired
+        routing-key: retention.analysis-expired
       personal-information-expired-indexing:
         queue-name: wh.retention.personal-information-expired
         routing-key: retention.personal-information-expired

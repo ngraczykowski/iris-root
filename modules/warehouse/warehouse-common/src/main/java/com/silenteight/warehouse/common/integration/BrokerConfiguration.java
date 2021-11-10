@@ -90,6 +90,15 @@ class BrokerConfiguration {
   }
 
   @Bean
+  Declarables analysisExpiredIndexingBinding() {
+    return new Declarables(
+        binding(
+            properties.analysisExpiredQueueName(),
+            SIM_COMMAND_EXCHANGE,
+            properties.analysisExpiredRoutingKey()));
+  }
+
+  @Bean
   Queue alertBackupIndexingQueue() {
     return queue(
         properties.alertBackupIndexingQueueName(),
@@ -130,6 +139,14 @@ class BrokerConfiguration {
         properties.personalInformationExpiredIndexingQueueName(),
         properties.personalInformationExpiredIndexingMaxPriority());
   }
+
+  @Bean
+  Queue analysisExpiredIndexingQueue() {
+    return queue(
+        properties.analysisExpiredQueueName(),
+        properties.analysisExpiredIndexingMaxPriority());
+  }
+
 
   private static Queue queue(String queueName, Integer maxPriority) {
     QueueBuilder builder = QueueBuilder.durable(queueName);

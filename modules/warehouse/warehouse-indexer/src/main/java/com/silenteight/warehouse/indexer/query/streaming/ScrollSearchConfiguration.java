@@ -14,17 +14,25 @@ import javax.validation.Valid;
 class ScrollSearchConfiguration {
 
   @Bean
-  ScrollSearchStreamingService scrollSearchStreamingService(
+  CsvScrollSearchStreamingService csvScrollSearchStreamingService(
       RestHighLevelClient restHighLevelUserAwareClient,
       @Valid ScrollSearchProperties scrollSearchProperties,
       ScrollSearchQueryBuilder queryBuilder,
       DataResponseParser parser) {
 
-    return new ScrollSearchStreamingService(
+    return new CsvScrollSearchStreamingService(
         restHighLevelUserAwareClient,
         scrollSearchProperties,
         queryBuilder,
         parser);
+  }
+
+  @Bean
+  ScrollSearchStreamingService scrollSearchStreamingService(
+      RestHighLevelClient restHighLevelUserAwareClient,
+      @Valid ScrollSearchProperties scrollSearchProperties) {
+
+    return new ScrollSearchStreamingService(restHighLevelUserAwareClient, scrollSearchProperties);
   }
 
   @Bean

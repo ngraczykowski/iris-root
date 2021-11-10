@@ -79,6 +79,11 @@ warehouse:
       fields-to-erase:
         - 'comment'
         - 'lastCaseComment'
+    simulation:
+      analysis-expired:
+        fields-to-erase:
+          - 'alert_comment'
+          - 'alert_lastCaseComment'
   sampling:
     time-field-name: alert_recommendationDate
     filters:
@@ -92,7 +97,6 @@ warehouse:
           max-size: 16
           queue-capacity: 50
           thread-name-prefix: async-auth-aware-
-
 keycloak:
   client-id: {{ env "NOMAD_NAMESPACE" }}-frontend
   adapter:
