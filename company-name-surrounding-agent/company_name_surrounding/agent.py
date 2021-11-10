@@ -20,7 +20,7 @@ class CompanyNameSurroundingAgent(Agent):
 
     def resolve(self, names: List[str]) -> Result:
         logger.info("Checking {0}".format(names))
-        count = get_company_token_count(ap_names=names)
+        count = get_company_token_count(names=names)
         solution = self._get_solution(count)
         logger.info("For {0} get count {1} and solution {2}".format(names, count, solution))
         return Result(solution, count)

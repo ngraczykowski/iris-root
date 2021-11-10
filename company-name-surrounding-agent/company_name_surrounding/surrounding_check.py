@@ -5,11 +5,25 @@ from typing import List
 from organization_name_knowledge import parse
 
 
-def get_company_token_count(ap_names: List[str]):
-    if ap_names is None or len(ap_names) != 1:
+def get_company_token_count(names: List[str]) -> int:
+    """Function to count organization - name related tokens: legal terms, pre- and suffixes.
+    As requested by DS, counts this number only when gets a list of length 1. Otherwise, returns 0.
+
+    Parameters
+    ----------
+    names : List[str]
+        A list of names to check. Usually, a alerted party names list
+
+    Returns
+    -------
+    int
+        The number of organization - related tokens..
+    """
+
+    if names is None or len(names) != 1:
         return 0
     else:
-        ap_name = ap_names[0]
+        ap_name = names[0]
         if is_ascii(ap_name):
             name_info = parse(ap_name)
             legal = name_info.legal
