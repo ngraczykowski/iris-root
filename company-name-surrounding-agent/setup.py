@@ -27,7 +27,7 @@ setup(
     install_requires=[
         # Keep sorted alphabetically (case-insensitive)
         "agent-base==0.3.0",
-        "company-name==0.3.0",
+        "organization-name-knowledge==0.1.0",
     ],
     extras_require={
         "tests": tests_require,

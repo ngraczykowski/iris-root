@@ -6,52 +6,107 @@ pipeline {
     agent none
     environment {
         PYPI_URL = credentials('pypi-readonly-url')
+        TWINE_REPOSITORY_URL = 'https://repo.silenteight.com/artifactory/api/pypi/pypi'
     }
     options {
         timeout(time: 1, unit: 'HOURS')   // just to be safe
     }
+    parameters {
+        booleanParam(name: 'RELEASE', defaultValue: false, description: 'Release new version')
+    }
 
     stages {
-        stage('Prepare python image') {
-            agent any
-            steps {
-                sh 'docker pull python:3.7'
-            }
-        }
-        stage('Prepare') {
+        stage('Build and publish') {
             agent {
                 docker {
-                    image 'python:3.7'
+                    image 'docker.repo.silenteight.com/python-build-image:3.7-bullseye'
+                    args '--volume $HOME/.cache/agent/pip:/home/jenkins/.cache/pip'
+                    alwaysPull true
                 }
             }
             stages {
+                stage('Prepare') {
+                    steps {
+                        sh 'pip install --index-url "${PYPI_URL}" --requirement requirements.txt'
+                    }
+                }
                 stage('Build') {
                     steps {
                         sh './scripts/clean.sh'
-                        sh './scripts/bootstrap.sh --index-url $PYPI_URL'
-                        sh './scripts/build.sh --index-url $PYPI_URL'
+                        sh './scripts/build.sh --index-url "${PYPI_URL}"'
+                    }
+                }
+                stage('Test') {
+                    steps {
+                        sh 'pip install --index-url "${PYPI_URL}" tox'
+                        sh './scripts/test.sh --index-url "${PYPI_URL}"'
+                    }
+                }
+                stage('Publish') {
+                    when {
+                        anyOf {
+                            branch 'master'
+                            branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                        }
+                    }
+                    steps {
+                        withCredentials([usernamePassword(
+                            credentialsId: 'pypi-deployment-user',
+                            usernameVariable: 'TWINE_USERNAME',
+                            passwordVariable: 'TWINE_PASSWORD',
+                        )]) {
+                            sh './scripts/publish.sh --index-url "${PYPI_URL}"'
+                        }
+                    }
+                }
+                stage('Release') {
+                    when {
+                        allOf {
+                            anyOf {
+                                branch 'master'
+                                branch pattern: 'release-\\d+(\\.\\d+)?', comparator: 'REGEXP'
+                            }
+                            expression { return params.RELEASE }
+                        }
+                    }
+                    steps {
+                        sh 'pip install --index-url "${PYPI_URL}" bump2version tox'
+                        sh 'git tag --delete $(git tag --list)'
+                        sshagent([env.JENKINS_SSH_NAME]) {
+                            sh './scripts/release.sh --index-url ${PYPI_URL}'
+                        }
+                        withCredentials([usernamePassword(
+                            credentialsId: 'pypi-deployment-user',
+                            usernameVariable: 'TWINE_USERNAME',
+                            passwordVariable: 'TWINE_PASSWORD',
+                        )]) {
+                            sh './scripts/publish.sh --index-url "${PYPI_URL}"'
+                        }
                     }
                 }
             }
             post {
                 always {
-                    junit '.tox/*.xml'
+                    junit testResults: '.tox/flake8-report.xml, .tox/mypy-report.xml, .tox/pytest-report.xml',
+                          allowEmptyResults: true
                     archiveArtifacts artifacts: 'dist/*', fingerprint: true
                 }
                 success {
+                    publishCoverage adapters: [istanbulCoberturaAdapter('.tox/coverage-report.xml')],
+                                    failNoReports: false
                     stash includes: 'dist/*', name: 'artifacts'
                 }
             }
         }
-        stage('Deployment'){
+
+        stage('Deployment') {
             agent {
                 label 'nomad'
             }
             when {
                 anyOf {
                     branch 'master'
-                    tag pattern: '^v[\\d\\.]+\$', comparator: "REGEXP"
-                    branch pattern: '^MR-\\d+\$', comparator: "REGEXP"
+                    tag pattern: '^v(\\d+(\\.\\d+)*)\$', comparator: 'REGEXP'
                 }
             }
             stages {
@@ -67,28 +122,22 @@ pipeline {
                         rtUpload (
                             serverId: 'silenteight-repo',
                             spec: '''{
-                                  "files": [
+                                "files": [
                                     {
                                       "pattern": "dist/*.pyz",
-                                      "target": "dist-public-local/company-name-surrounding-agent/"
-                                    }
-                                 ]
-                            }''',
-                        )
-                        rtUpload (
-                            serverId: 'silenteight-repo',
-                            spec: '''{
-                                  "files": [
+                                      "target": "datascience-local/company-name-surrounding-agent/"
+                                    },
                                     {
                                       "pattern": "dist/*.tgz",
-                                      "target": "dist-public-local/company-name-surrounding-agent/"
+                                      "target": "datascience-local/company-name-surrounding-agent/"
                                     }
-                                 ]
+                                ]
                             }''',
                         )
                     }
                 }
             }
-        }
+       }
     }
 }
+
