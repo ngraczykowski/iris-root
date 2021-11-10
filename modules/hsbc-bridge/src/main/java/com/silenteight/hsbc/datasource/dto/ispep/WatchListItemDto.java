@@ -13,8 +13,9 @@ public class WatchListItemDto {
 
   String id;
   String type;
+  @Builder.Default
+  List<String> countries = Collections.emptyList();
   String furtherInformation;
-  String country;
   @Builder.Default
   List<String> linkedPepsUids = Collections.emptyList();
 }

@@ -13,7 +13,6 @@ import com.silenteight.hsbc.datasource.extractors.document.PassportNumberDocumen
 import com.silenteight.hsbc.datasource.extractors.geolocation.GeoPlaceOfBirthConfigurer;
 import com.silenteight.hsbc.datasource.extractors.geolocation.GeoResidenciesConfigurer;
 import com.silenteight.hsbc.datasource.extractors.historical.HistoricalDecisionsQueryConfigurer;
-import com.silenteight.hsbc.datasource.extractors.ispep.IsPepQueryConfigurer;
 import com.silenteight.hsbc.datasource.extractors.name.NameQueryConfigurer;
 import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListCommonApFeature;
 import com.silenteight.hsbc.datasource.feature.allowedlist.AllowListCommonNameFeature;
@@ -30,7 +29,6 @@ import com.silenteight.hsbc.datasource.feature.historical.HistoricalIsApTpMarked
 import com.silenteight.hsbc.datasource.feature.historical.HistoricalIsCaseTpMarkedFeature;
 import com.silenteight.hsbc.datasource.feature.historical.HistoricalIsTpMarkedFeature;
 import com.silenteight.hsbc.datasource.feature.ispep.IsPepFeature;
-import com.silenteight.hsbc.datasource.feature.ispep.IsPepFeatureV2;
 import com.silenteight.hsbc.datasource.feature.name.NameFeature;
 import com.silenteight.hsbc.datasource.feature.nationaliddocument.NationalIdDocumentFeature;
 
@@ -49,11 +47,10 @@ public class FeatureModel {
         Map.entry(Feature.ALLOW_LIST_INVALID_ALERT, new AllowListInvalidAlertFeature()),
         Map.entry(Feature.GENDER, new GenderFeature()),
         Map.entry(Feature.NAME, new NameFeature(new NameQueryConfigurer().create())),
-        Map.entry(Feature.IS_PEP, new IsPepFeature(new IsPepQueryConfigurer().create())),
         Map.entry(
-            Feature.IS_PEP_V2,
-            new IsPepFeatureV2(
-                new com.silenteight.hsbc.datasource.extractors.ispepV2.IsPepQueryConfigurer().create())),
+            Feature.IS_PEP,
+            new IsPepFeature(
+                new com.silenteight.hsbc.datasource.extractors.ispep.IsPepQueryConfigurer().create())),
         Map.entry(
             Feature.GEO_PLACE_OF_BIRTH,
             new GeoPlaceOfBirthFeature(new GeoPlaceOfBirthConfigurer().create())),

@@ -3,9 +3,9 @@ package com.silenteight.hsbc.datasource.grpc;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.hsbc.datasource.extractors.name.ForeignAliasDto;
-import com.silenteight.hsbc.datasource.extractors.name.GetNameInformationRequestDto;
-import com.silenteight.hsbc.datasource.extractors.name.GetNameInformationResponseDto;
+import com.silenteight.hsbc.datasource.dto.name.ForeignAliasDto;
+import com.silenteight.hsbc.datasource.dto.name.GetNameInformationRequestDto;
+import com.silenteight.hsbc.datasource.dto.name.GetNameInformationResponseDto;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
 import com.silenteight.proto.worldcheck.api.v1.ForeignAlias;
 import com.silenteight.proto.worldcheck.api.v1.GetNameInformationRequest;
@@ -39,9 +39,6 @@ class NameInformationGrpcAdapter implements NameInformationServiceClient {
     try {
       var response = getStub().getNameInformation(grpcRequest);
       return Optional.of(GetNameInformationResponseDto.builder()
-          .firstName(response.getFirstName())
-          .lastName(response.getLastName())
-          .aliases(response.getAliasesList())
           .foreignAliases(mapToForeignAliases(response.getForeignAliasesList()))
           .build());
 

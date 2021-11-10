@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.extractors.ispepV2;
+package com.silenteight.hsbc.datasource.extractors.ispep;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13,7 +13,7 @@ class CustomerEntityEdqLobCountryCodeExtractor {
 
   private final List<CustomerEntity> customerEntities;
 
-  public String extract() {
+  String extract() {
     return customerEntities.stream()
         .map(CustomerEntity::getEdqLobCountryCode)
         .filter(StringUtils::isNotBlank)

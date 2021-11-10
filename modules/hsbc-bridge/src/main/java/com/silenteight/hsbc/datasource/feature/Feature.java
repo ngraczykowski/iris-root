@@ -19,7 +19,6 @@ public enum Feature {
   GEO_PLACE_OF_BIRTH("geoPlaceOfBirth"),
   GEO_RESIDENCIES("geoResidencies"),
   IS_PEP("isPep"),
-  IS_PEP_V2("isPepV2"),
   REGISTRATION_COUNTRY("registrationCountry"),
   INCORPORATION_COUNTRY("incorporationCountry"),
   RESIDENCY_COUNTRY("residencyCountry"),

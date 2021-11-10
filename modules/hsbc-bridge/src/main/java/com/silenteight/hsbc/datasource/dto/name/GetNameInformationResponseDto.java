@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.extractors.name;
+package com.silenteight.hsbc.datasource.dto.name;
 
 import lombok.Builder;
 import lombok.Value;
@@ -9,8 +9,5 @@ import java.util.List;
 @Value
 public class GetNameInformationResponseDto {
 
-  String firstName;
-  String lastName;
-  List<String> aliases;
   List<ForeignAliasDto> foreignAliases;
 }

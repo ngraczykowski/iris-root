@@ -7,9 +7,9 @@ ext {
   adjudicationEngineApiVersion = "0.6.0"
   governanceModelApiVersion = "1.9.0"
   silenteightLearningEngineApiVersion = "0.3.0"
-  silenteightDataSourceApiVersion = "0.12.0"
+  silenteightDataSourceApiVersion = "0.15.0"
   warehouseApiVersion = "1.6.0"
-  worldCheckApiVersion = "0.3.0"
+  worldCheckApiVersion = "0.4.0"
   historicalDecisionsApiVersion = "0.2.0"
   dataRetentionApiVersion = "0.0.1"
 

@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckIndividual;
+import com.silenteight.hsbc.datasource.dto.name.ForeignAliasDto;
+import com.silenteight.hsbc.datasource.dto.name.GetNameInformationRequestDto;
+import com.silenteight.hsbc.datasource.dto.name.GetNameInformationResponseDto;
 import com.silenteight.hsbc.datasource.extractors.country.NationalityCountryQueryFacade;
 import com.silenteight.hsbc.datasource.extractors.country.OtherCountryQueryFacade;
 import com.silenteight.hsbc.datasource.extractors.country.ResidencyCountryFeatureQueryFacade;
@@ -28,22 +31,10 @@ class WorldCheckIndividualsXmlNamesAndCountriesExtractor {
     var responses = extractNameInformation();
     var foreignAliases = extractForeignAliases(responses);
     var countries = extractCountries();
-
-    var joinedNamesStream = extractJoinedNamesStream(responses);
-
     var countryMatchingAliasesStream =
         NameExtractor.collectCountryMatchingAliases(foreignAliases, countries).stream();
 
-    var mergedNames = mergeStreams(
-        joinedNamesStream,
-        countryMatchingAliasesStream);
-
-    return NameExtractor.collectNames(mergedNames);
-  }
-
-  private Stream<String> mergeStreams(
-      Stream<String> joinedNamesStream, Stream<String> countryMatchingAliasesStream) {
-    return Stream.concat(joinedNamesStream, countryMatchingAliasesStream);
+    return NameExtractor.collectNames(countryMatchingAliasesStream);
   }
 
   private List<String> extractCountries() {
@@ -93,11 +84,6 @@ class WorldCheckIndividualsXmlNamesAndCountriesExtractor {
         .map(Optional::get)
         .distinct()
         .collect(Collectors.toList());
-  }
-
-  private Stream<String> extractJoinedNamesStream(List<GetNameInformationResponseDto> responses) {
-    return responses.stream()
-        .map(response -> NameExtractor.joinNameParts(response.getFirstName(), response.getLastName()));
   }
 
   private static Stream<String> extractWorldCheckListRecordIds(

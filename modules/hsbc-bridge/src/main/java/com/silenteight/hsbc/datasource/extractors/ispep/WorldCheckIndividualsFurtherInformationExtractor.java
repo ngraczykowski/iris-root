@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.extractors.ispepV2;
+package com.silenteight.hsbc.datasource.extractors.ispep;
 
 import lombok.RequiredArgsConstructor;
 
@@ -9,13 +9,13 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 
 @RequiredArgsConstructor
-class IndividualsListRecordIdExtractor {
+class WorldCheckIndividualsFurtherInformationExtractor {
 
   private final List<WorldCheckIndividual> worldCheckIndividuals;
 
-  public String extract() {
+  String extract() {
     return worldCheckIndividuals.stream()
-        .map(WorldCheckIndividual::getListRecordId)
+        .map(WorldCheckIndividual::getFurtherInformation)
         .filter(StringUtils::isNotBlank)
         .findFirst()
         .orElse("");

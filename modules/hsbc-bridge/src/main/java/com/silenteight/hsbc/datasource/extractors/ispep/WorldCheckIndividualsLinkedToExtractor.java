@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.extractors.ispepV2;
+package com.silenteight.hsbc.datasource.extractors.ispep;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,7 +12,7 @@ class WorldCheckIndividualsLinkedToExtractor {
 
   private final List<WorldCheckIndividual> worldCheckIndividuals;
 
-  public Stream<String> extract() {
+  Stream<String> extract() {
     return worldCheckIndividuals.stream().map(WorldCheckIndividual::getLinkedTo);
   }
 }

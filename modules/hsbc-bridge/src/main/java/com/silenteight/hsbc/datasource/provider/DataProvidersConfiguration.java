@@ -16,10 +16,8 @@ import com.silenteight.hsbc.datasource.dto.name.NameInputResponse;
 import com.silenteight.hsbc.datasource.dto.nationalid.NationalIdInputResponse;
 import com.silenteight.hsbc.datasource.dto.transaction.TransactionInputResponse;
 import com.silenteight.hsbc.datasource.extractors.historical.HistoricalDecisionsServiceClient;
-import com.silenteight.hsbc.datasource.extractors.ispep.IsPepServiceClient;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
 import com.silenteight.hsbc.datasource.feature.country.CountryDiscoverer;
-import com.silenteight.hsbc.datasource.feature.geolocation.GeoResidencyFeature;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +29,6 @@ import org.springframework.context.annotation.Configuration;
 class DataProvidersConfiguration {
 
   private final MatchFacade matchFacade;
-  private final IsPepServiceClient isPepServiceClient;
   private final NameInformationServiceClient nameInformationServiceClient;
   private final HistoricalDecisionsServiceClient historicalDecisionsServiceClient;
   private final SeverityResolverProperties severityResolverProperties;
@@ -67,13 +64,8 @@ class DataProvidersConfiguration {
   }
 
   @Bean
-  IsPepInputProvider isPepInputProvider() {
-    return new IsPepInputProvider(matchFacade, isPepServiceClient);
-  }
-
-  @Bean
-  IsPepInputProviderV2 isPepInputProviderV2() {
-    return new IsPepInputProviderV2(matchFacade);
+  IsPepInputProvider isPepInputProviderV2() {
+    return new IsPepInputProvider(matchFacade);
   }
 
   @Bean

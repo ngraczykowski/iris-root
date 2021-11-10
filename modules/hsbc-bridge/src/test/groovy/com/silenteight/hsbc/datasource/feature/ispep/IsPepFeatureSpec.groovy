@@ -1,16 +1,16 @@
 package com.silenteight.hsbc.datasource.feature.ispep
 
 import com.silenteight.hsbc.datasource.datamodel.*
-import com.silenteight.hsbc.datasource.extractors.ispepV2.IsPepQueryConfigurer
+import com.silenteight.hsbc.datasource.extractors.ispep.IsPepQueryConfigurer
 import com.silenteight.hsbc.datasource.feature.Feature
 
 import spock.lang.Specification
 
-class IsPepFeatureV2Spec extends Specification {
+class IsPepFeatureSpec extends Specification {
 
   def isPepQueryConfigurer = new IsPepQueryConfigurer().create()
 
-  def underTest = new IsPepFeatureV2(isPepQueryConfigurer)
+  def underTest = new IsPepFeature(isPepQueryConfigurer)
 
   def 'should retrieve isPep values when customer is individual'() {
     given:
@@ -24,6 +24,7 @@ class IsPepFeatureV2Spec extends Specification {
       getListRecordId() >> '376829'
       getLinkedTo() >> '28966;376830;376831;376832;448756;80217'
       getFurtherInformation() >> Fixtures.FURTHER_INFORMATION
+      getCountryCodesAll() >> 'PL US RU'
     }
 
     def matchData = Mock(MatchData) {
@@ -40,13 +41,14 @@ class IsPepFeatureV2Spec extends Specification {
 
     then:
     with(result) {
-      feature == Feature.IS_PEP_V2.fullName
       match == matchName
-      watchListItem.id == '376829'
-      watchListItem.type == 'WorldCheckIndividuals'
-      watchListItem.furtherInformation == Fixtures.FURTHER_INFORMATION
-      watchListItem.country == 'SG'
-      watchListItem.linkedPepsUids == ['28966;376830;376831;376832;448756;80217']
+      isPepFeatureInput.feature == Feature.IS_PEP.fullName
+      isPepFeatureInput.watchListItem.id == '376829'
+      isPepFeatureInput.watchListItem.type == 'WorldCheckIndividuals'
+      isPepFeatureInput.watchListItem.furtherInformation == Fixtures.FURTHER_INFORMATION
+      isPepFeatureInput.watchListItem.linkedPepsUids == ['28966;376830;376831;376832;448756;80217']
+      isPepFeatureInput.watchListItem.countries == ['PL', 'US', 'RU']
+      isPepFeatureInput.alertedPartyItem.country == 'SG'
     }
   }
 
@@ -62,6 +64,7 @@ class IsPepFeatureV2Spec extends Specification {
       getListRecordId() >> '376829'
       getLinkedTo() >> '28966;376830;376831;376832;448756;80217'
       getFurtherInformation() >> Fixtures.FURTHER_INFORMATION
+      getCountryCodesAll() >> 'PL US RU'
     }
 
     def matchData = Mock(MatchData) {
@@ -78,17 +81,18 @@ class IsPepFeatureV2Spec extends Specification {
 
     then:
     with(result) {
-      feature == Feature.IS_PEP_V2.fullName
       match == matchName
-      watchListItem.id == '376829'
-      watchListItem.type == 'WorldCheckEntities'
-      watchListItem.furtherInformation == Fixtures.FURTHER_INFORMATION
-      watchListItem.country == 'SG'
-      watchListItem.linkedPepsUids == ['28966;376830;376831;376832;448756;80217']
+      isPepFeatureInput.feature == Feature.IS_PEP.fullName
+      isPepFeatureInput.watchListItem.id == '376829'
+      isPepFeatureInput.watchListItem.type == 'WorldCheckEntities'
+      isPepFeatureInput.watchListItem.furtherInformation == Fixtures.FURTHER_INFORMATION
+      isPepFeatureInput.watchListItem.linkedPepsUids == ['28966;376830;376831;376832;448756;80217']
+      isPepFeatureInput.watchListItem.countries == ['PL', 'US', 'RU']
+      isPepFeatureInput.alertedPartyItem.country == 'SG'
     }
   }
 
-  def 'should not retrieve furtherInformation and linkedPepsUids when watchlist type is different than WorldCheck'() {
+  def 'should not retrieve countries, furtherInformation and linkedPepsUids when watchlist type is different than WorldCheck'() {
     def matchName = "alerts/f20b466a-8bc7-4703-9dc3-48bea4d97872/matches/e6b4ebd0-e901-4671-9969-a61bf537ca75"
 
     def customerEntity = Mock(CustomerEntity) {
@@ -113,13 +117,13 @@ class IsPepFeatureV2Spec extends Specification {
 
     then:
     with(result) {
-      feature == Feature.IS_PEP_V2.fullName
       match == matchName
-      watchListItem.id == '376829'
-      watchListItem.type == 'PrivateListEntities'
-      watchListItem.furtherInformation == ''
-      watchListItem.country == 'SG'
-      watchListItem.linkedPepsUids == []
+      isPepFeatureInput.feature == Feature.IS_PEP.fullName
+      isPepFeatureInput.watchListItem.id == '376829'
+      isPepFeatureInput.watchListItem.type == 'PrivateListEntities'
+      isPepFeatureInput.watchListItem.furtherInformation == ''
+      isPepFeatureInput.watchListItem.linkedPepsUids == []
+      isPepFeatureInput.alertedPartyItem.country == 'SG'
     }
   }
 

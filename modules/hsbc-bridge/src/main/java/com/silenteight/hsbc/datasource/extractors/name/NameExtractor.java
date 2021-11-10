@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.hsbc.datasource.dto.name.ForeignAliasDto;
+
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;

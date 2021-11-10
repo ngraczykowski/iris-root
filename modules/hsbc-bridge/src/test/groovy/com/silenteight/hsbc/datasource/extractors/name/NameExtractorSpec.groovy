@@ -1,5 +1,7 @@
 package com.silenteight.hsbc.datasource.extractors.name
 
+import com.silenteight.hsbc.datasource.dto.name.ForeignAliasDto
+
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -111,7 +113,7 @@ class NameExtractorSpec extends Specification {
     []                                                            | []        | []
     [null]                                                        | []        | []
     [null]                                                        | [null]    | []
-    [new ForeignAliasDto('a', 'zh-CN')]                           | [null]    | []
+    [new ForeignAliasDto('a', 'zh-CN')] | [null] | []
     [null]                                                        | ['CN']    | []
     [new ForeignAliasDto('李显龙', 'zh-CN')]                         | ['CHINA'] | ['李显龙']
     [new ForeignAliasDto('李显龙', 'zh-CN'),

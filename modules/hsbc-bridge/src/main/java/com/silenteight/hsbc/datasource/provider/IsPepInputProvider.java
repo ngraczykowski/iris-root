@@ -6,49 +6,40 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.match.MatchComposite;
 import com.silenteight.hsbc.bridge.match.MatchFacade;
-import com.silenteight.hsbc.datasource.datamodel.MatchData;
-import com.silenteight.hsbc.datasource.dto.ispep.IsPepFeatureInputDto;
+import com.silenteight.hsbc.datasource.dto.ispep.IsPepInputDto;
 import com.silenteight.hsbc.datasource.dto.ispep.IsPepInputRequest;
-import com.silenteight.hsbc.datasource.dto.ispep.IsPepInputResponse;
-import com.silenteight.hsbc.datasource.extractors.ispep.IsPepServiceClient;
 import com.silenteight.hsbc.datasource.feature.Feature;
 import com.silenteight.hsbc.datasource.feature.FeatureModel;
-import com.silenteight.hsbc.datasource.feature.IsPepFeatureClientValuesRetriever;
+import com.silenteight.hsbc.datasource.feature.IsPepFeatureValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 public class IsPepInputProvider {
 
   @Getter
   private final MatchFacade matchFacade;
-  private final IsPepServiceClient isPepServiceClient;
 
-  public List<IsPepInputResponse> provideInput(@NonNull IsPepInputRequest request) {
+  public List<IsPepInputDto> provideInput(@NonNull IsPepInputRequest request) {
     var features = validateFeatures(request.getFeatures());
     var matches = matchFacade.getMatches(request.getMatches());
 
     return getInputs(matches, features);
   }
 
-  private List<IsPepInputResponse> getInputs(List<MatchComposite> matches, List<String> features) {
+  private List<IsPepInputDto> getInputs(List<MatchComposite> matches, List<String> features) {
     return matches.stream()
-        .map(match -> IsPepInputResponse.builder()
-            .match(match.getName())
-            .featureInputs(getFeatureInputs(
-                features, match.getMatchData()))
-            .build())
+        .flatMap(match -> getIsPepInputs(features, match))
         .collect(Collectors.toList());
   }
 
-  private List<IsPepFeatureInputDto> getFeatureInputs(
-      List<String> features, MatchData matchData) {
+  private Stream<IsPepInputDto> getIsPepInputs(List<String> features, MatchComposite match) {
     return features.stream()
-        .map(featureName -> (IsPepFeatureInputDto)
-            ((IsPepFeatureClientValuesRetriever) FeatureModel.getFeatureRetriever(featureName))
-                .retrieve(matchData, isPepServiceClient))
-        .collect(Collectors.toList());
+        .map(featureName -> (IsPepInputDto)
+            ((IsPepFeatureValuesRetriever) FeatureModel.getFeatureRetriever(featureName)).retrieve(
+                match.getMatchData(), match.getName()));
   }
 
   private List<String> validateFeatures(List<String> features) {

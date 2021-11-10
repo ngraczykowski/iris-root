@@ -8,7 +8,6 @@ import lombok.Value;
 @Value
 public class IsPepInputDto {
 
-  String feature;
   String match;
-  WatchListItemDto watchListItem;
+  IsPepFeatureInputDto isPepFeatureInput;
 }

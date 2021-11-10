@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.extractors.name;
+package com.silenteight.hsbc.datasource.dto.name;
 
 import lombok.Value;
 

@@ -5,8 +5,7 @@ import lombok.Value;
 
 @Builder
 @Value
-public class IsPepFeatureSolutionDto {
+public class AlertedPartyItemDto {
 
-  String solution;
-  ReasonDto reason;
+  String country;
 }

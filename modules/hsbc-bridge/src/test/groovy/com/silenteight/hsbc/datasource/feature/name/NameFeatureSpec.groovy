@@ -2,8 +2,12 @@ package com.silenteight.hsbc.datasource.feature.name
 
 import com.silenteight.hsbc.datasource.datamodel.*
 import com.silenteight.hsbc.datasource.dto.name.EntityType
+import com.silenteight.hsbc.datasource.dto.name.ForeignAliasDto
+import com.silenteight.hsbc.datasource.dto.name.GetNameInformationRequestDto
+import com.silenteight.hsbc.datasource.dto.name.GetNameInformationResponseDto
 import com.silenteight.hsbc.datasource.dto.name.WatchlistNameDto.NameType
-import com.silenteight.hsbc.datasource.extractors.name.*
+import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient
+import com.silenteight.hsbc.datasource.extractors.name.NameQueryConfigurer
 import com.silenteight.hsbc.datasource.feature.Feature
 
 import spock.lang.Specification
@@ -19,9 +23,6 @@ class NameFeatureSpec extends Specification {
   def 'should retrieve name values when customer is individual'() {
     given:
     def getNameInformationResponseDto = GetNameInformationResponseDto.builder()
-        .firstName('ALAKSANDR')
-        .lastName('ZIMOUSKI')
-        .aliases(['AZ'])
         .foreignAliases(createForeignAliases())
         .build()
 
@@ -86,16 +87,15 @@ class NameFeatureSpec extends Specification {
       with(alertedPartyNames.name) {
         containsAll(['ALAKSANDR LEANIDAVICH ZIMOUSKI', 'AKIAKSANDR LEANIDAVICH ZIMOUSKI'])
       }
-      watchlistNames.size() == 4
+      watchlistNames.size() == 3
       with(watchlistNames.name) {
         containsAll(
             ['Aleksandr Leonidovich ZIMOWSKI',
              'Akiaksandr Leanidavich ZIMOWSKI',
-             'ALAKSANDR ZIMOUSKI',
              'Akiaksandr Leanidavich ZIMOUSKI'])
       }
       with(watchlistNames.type) {
-        containsAll([NameType.ALIAS, NameType.REGULAR, NameType.REGULAR, NameType.REGULAR])
+        containsAll([NameType.REGULAR, NameType.REGULAR, NameType.REGULAR])
       }
       alertedPartyType == EntityType.INDIVIDUAL
       matchingTexts == []
@@ -105,8 +105,6 @@ class NameFeatureSpec extends Specification {
   def 'should retrieve name values when customer is entity'() {
     given:
     def getNameInformationResponseDto = GetNameInformationResponseDto.builder()
-        .lastName('DONALD INDUSTRIES GROUP')
-        .aliases(['DI', 'DIG', 'Koncern Donald Industries Group'])
         .foreignAliases(createForeignAliases())
         .build()
 
@@ -166,15 +164,14 @@ class NameFeatureSpec extends Specification {
       with(alertedPartyNames.name) {
         containsAll(['AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE'])
       }
-      watchlistNames.size() == 3
+      watchlistNames.size() == 2
       with(watchlistNames.name) {
         containsAll(
             ['AKTSIONERNOE',
-             'DONALD INDUSTRIES GROUP',
              'AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE'])
       }
       with(watchlistNames.type) {
-        containsAll([NameType.REGULAR, NameType.REGULAR, NameType.ALIAS])
+        containsAll([NameType.REGULAR, NameType.REGULAR])
       }
       alertedPartyType == EntityType.ORGANIZATION
       matchingTexts == []

@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckEntity;
+import com.silenteight.hsbc.datasource.dto.name.ForeignAliasDto;
+import com.silenteight.hsbc.datasource.dto.name.GetNameInformationRequestDto;
+import com.silenteight.hsbc.datasource.dto.name.GetNameInformationResponseDto;
 import com.silenteight.hsbc.datasource.extractors.country.OtherCountryQueryFacade;
 import com.silenteight.hsbc.datasource.feature.country.IncorporationCountryFeature;
 import com.silenteight.hsbc.datasource.feature.country.RegistrationCountryFeature;
@@ -27,22 +30,10 @@ class WorldCheckEntitiesXmlNamesAndCountriesExtractor {
     var responses = extractNameInformation();
     var foreignAliases = extractForeignAliases(responses);
     var countries = extractCountries();
-
-    var lastNamesStream = extractLastNamesStream(responses);
-
     var countryMatchingAliasesStream =
         NameExtractor.collectCountryMatchingAliases(foreignAliases, countries).stream();
 
-    var mergedNames = mergeStreams(
-        lastNamesStream,
-        countryMatchingAliasesStream);
-
-    return NameExtractor.collectNames(mergedNames);
-  }
-
-  private Stream<String> mergeStreams(
-      Stream<String> lastNamesStream, Stream<String> countryMatchingAliasesStream) {
-    return Stream.concat(lastNamesStream, countryMatchingAliasesStream);
+    return NameExtractor.collectNames(countryMatchingAliasesStream);
   }
 
   private List<String> extractCountries() {
@@ -84,10 +75,6 @@ class WorldCheckEntitiesXmlNamesAndCountriesExtractor {
         .map(Optional::get)
         .distinct()
         .collect(Collectors.toList());
-  }
-
-  private Stream<String> extractLastNamesStream(List<GetNameInformationResponseDto> responses) {
-    return responses.stream().map(GetNameInformationResponseDto::getLastName);
   }
 
   private static Stream<String> extractWorldCheckListRecordIds(WorldCheckEntity worldCheckEntity) {

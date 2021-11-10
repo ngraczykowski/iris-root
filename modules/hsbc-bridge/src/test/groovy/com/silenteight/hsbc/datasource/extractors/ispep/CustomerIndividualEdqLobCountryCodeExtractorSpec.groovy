@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.extractors.ispepV2
+package com.silenteight.hsbc.datasource.extractors.ispep
 
 import com.silenteight.hsbc.datasource.datamodel.CustomerIndividual
 

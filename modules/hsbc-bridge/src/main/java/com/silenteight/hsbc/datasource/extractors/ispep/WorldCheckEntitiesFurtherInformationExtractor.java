@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.extractors.ispepV2;
+package com.silenteight.hsbc.datasource.extractors.ispep;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13,7 +13,7 @@ class WorldCheckEntitiesFurtherInformationExtractor {
 
   private final List<WorldCheckEntity> worldCheckEntities;
 
-  public String extract() {
+  String extract() {
     return worldCheckEntities.stream()
         .map(WorldCheckEntity::getFurtherInformation)
         .filter(StringUtils::isNotBlank)
