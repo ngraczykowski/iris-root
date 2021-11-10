@@ -74,7 +74,7 @@ class AlertQueryService {
 
   private List<Map<String, Object>> searchForAlert(String requestedField, String discriminator) {
     SearchRequest searchRequest = buildSearchRequestForSpecificField(requestedField, discriminator);
-    return alertSearchService.searchForAlerts(restHighLevelClient, searchRequest);
+    return alertSearchService.searchForDocuments(restHighLevelClient, searchRequest);
   }
 
   private SearchRequest buildSearchRequestForSpecificField(

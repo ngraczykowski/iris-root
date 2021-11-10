@@ -107,7 +107,7 @@ public class SimulationAlertMappingService {
   private Map<String, Object> getAlertFromProductionIndex(String alertName) {
     try {
       SearchRequest searchRequest = buildSearchRequestForSpecificField(ALERT_NAME, alertName);
-      return alertSearchService.searchForAlerts(restHighLevelClient, searchRequest).stream()
+      return alertSearchService.searchForDocuments(restHighLevelClient, searchRequest).stream()
           .findFirst()
           .orElseGet(() -> getDefaultProductionData(alertName));
     } catch (RuntimeException e) {

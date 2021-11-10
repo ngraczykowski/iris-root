@@ -18,7 +18,7 @@ import static org.elasticsearch.client.RequestOptions.DEFAULT;
 @RequiredArgsConstructor
 public class AlertSearchService {
 
-  public List<Map<String, Object>> searchForAlerts(
+  public List<Map<String, Object>> searchForDocuments(
       RestHighLevelClient restHighLevelClient, SearchRequest searchRequest) {
 
     try {
