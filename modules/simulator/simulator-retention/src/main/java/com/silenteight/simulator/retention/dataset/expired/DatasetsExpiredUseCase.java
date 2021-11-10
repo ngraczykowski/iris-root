@@ -28,16 +28,16 @@ public class DatasetsExpiredUseCase implements DatasetsExpiredMessageHandler {
   @Override
   public AnalysisExpired handle(@NonNull DatasetsExpired request) {
     List<String> externalResourceNames = request.getDatasetsList();
-    log.debug("Expired datasets: externalResourceNames={}" + externalResourceNames);
+    log.info("Expired datasets: externalResourceNames={}" + externalResourceNames);
 
     datasetMetadataService.expire(externalResourceNames);
 
-    log.debug("Marked all datasets as expired: " + externalResourceNames);
+    log.info("Marked all datasets as expired: " + externalResourceNames);
 
     Collection<String> datasetNames = datasetQuery.getDatasetNames(externalResourceNames);
     Collection<String> analysisNames = listSimulationsQuery.getAnalysisNames(datasetNames);
 
-    log.debug("Expired simulations: analysisNames={}" + analysisNames);
+    log.info("Expired simulations: analysisNames={}" + analysisNames);
 
     return AnalysisExpired.newBuilder()
         .addAllAnalysis(analysisNames)
