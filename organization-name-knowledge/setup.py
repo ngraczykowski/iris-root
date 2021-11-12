@@ -26,7 +26,6 @@ setup(
     package_data={"organization_name_knowledge": ["resources/*"]},
     install_requires=[
         # Keep sorted alphabetically (case-insensitive)
-        "rapidfuzz==1.7.1",
         "unidecode==1.2.0",
     ],
     extras_require={
