@@ -7,8 +7,6 @@ import com.silenteight.adjudication.engine.dataset.dataset.DatasetFacade;
 import com.silenteight.dataretention.api.v1.AlertsExpired;
 import com.silenteight.dataretention.api.v1.DatasetsExpired;
 
-import com.google.protobuf.Any;
-import com.google.protobuf.InvalidProtocolBufferException;
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
 import org.springframework.messaging.MessageHeaders;
@@ -27,19 +25,14 @@ class ReceiveExpiredAlertsIntegrationFlow extends IntegrationFlowAdapter {
   @Override
   protected IntegrationFlowDefinition<?> buildFlow() {
     return from(ALERTS_EXPIRED_INBOUND_CHANNEL)
-        .handle(Object.class, this::handleResponse)
+        .handle(AlertsExpired.class, this::handleResponse)
         .channel(ALERTS_EXPIRED_OUTBOUND_CHANNEL);
   }
 
-  private Object handleResponse(Object payload, MessageHeaders headers) {
-    AlertsExpired alerts;
-    try {
-      alerts = ((Any) payload).unpack(AlertsExpired.class);
-    } catch (InvalidProtocolBufferException e) {
-      throw new IllegalArgumentException();
-    }
-    log.debug("Received expired alerts. alerts count = {}", alerts.getAlertsCount());
-    var result = facade.getDatasetsByAlerts(alerts.getAlertsList());
-    return DatasetsExpired.newBuilder().addAllDatasets(result).build();
+  private DatasetsExpired handleResponse(AlertsExpired payload, MessageHeaders headers) {
+    log.debug("Received expired alerts = {}", payload.getAlertsList());
+    var expiredDatasets = facade.getDatasetsByAlerts(payload.getAlertsList());
+    log.debug("Sending expired datasets = {}", expiredDatasets);
+    return DatasetsExpired.newBuilder().addAllDatasets(expiredDatasets).build();
   }
 }

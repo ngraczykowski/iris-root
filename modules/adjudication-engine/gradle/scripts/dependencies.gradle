@@ -12,7 +12,7 @@ ext {
   silenteightDataSourceApiVersion = "0.8.0"
   silenteightCommonsVersion = "2.1.0"
   silenteightSepBaseVersion = "1.12.2"
-  silenteightDataRetentionVersion = "0.3.0"
+  dataRetentionVersion = "0.3.0"
 }
 
 // @formatter:off
@@ -31,7 +31,7 @@ libraries.silenteight_commons_core = [group: 'com.silenteight.commons', name: 's
 libraries.silenteight_sep_base_aspects = [group: 'com.silenteight.sep.base', name: 'sep-base-aspects', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name: 'sep-base-common', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_testing = [group: 'com.silenteight.sep.base', name: 'sep-base-testing', version: silenteightSepBaseVersion]
-libraries.silenteight_data_retention_api = [group: 'com.silenteight.sens.data-retention-api', name: 'data-retention-api', version: silenteightDataRetentionVersion]
+libraries.data_retention_api = [group: 'com.silenteight.sens.data-retention-api', name: 'data-retention-api', version: dataRetentionVersion]
 
 // Spring
 libraries.spring_aop = [group: 'org.springframework', name: 'spring-aop']

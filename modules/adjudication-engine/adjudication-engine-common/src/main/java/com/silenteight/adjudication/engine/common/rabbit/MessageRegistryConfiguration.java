@@ -19,7 +19,8 @@ public class MessageRegistryConfiguration {
         "com.silenteight.agents",
         "com.google.protobuf",
         "com.google.rpc",
-        "com.google.type"
+        "com.google.type",
+        "com.silenteight.dataretention"
     );
 
     return factory.create();
