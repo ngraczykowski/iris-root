@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.PrivateListEntity;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -13,16 +15,21 @@ class PrivateListEntitiesNamesExtractor {
   private final List<PrivateListEntity> privateListEntities;
 
   public Stream<String> extract() {
-    var names = privateListEntities.stream()
-        .flatMap(PrivateListEntitiesNamesExtractor::extractPrivateListEntityNames);
-    return NameExtractor.collectNames(names);
-  }
+    var primaryNames = new ArrayList<String>();
+    var entityNamesOriginal = new ArrayList<String>();
+    var entityNamesDerived = new ArrayList<String>();
 
-  private static Stream<String> extractPrivateListEntityNames(PrivateListEntity privateListEntity) {
-    return Stream.of(
-        NameExtractor.joinNameParts(
-            privateListEntity.getEntityNameOriginal(),
-            privateListEntity.getEntityNameDerived())
-    );
+    privateListEntities.forEach(e -> {
+      primaryNames.add(e.getPrimaryName());
+      entityNamesOriginal.add(e.getEntityNameOriginal());
+      entityNamesDerived.add(e.getEntityNameDerived());
+    });
+
+    var names = Stream.of(
+            primaryNames,
+            entityNamesOriginal,
+            entityNamesDerived)
+        .flatMap(Collection::stream);
+    return NameExtractor.collectNames(names);
   }
 }

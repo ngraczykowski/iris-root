@@ -41,6 +41,7 @@ class NameFeatureSpec extends Specification {
 
     def worldCheckIndividual = Mock(WorldCheckIndividual) {
       getListRecordId() >> '12'
+      getPrimaryName() >> 'Aleksander ZIMOWSKI'
       getFullNameOriginal() >> 'Aleksandr Leonidovich ZIMOWSKI'
       getFullNameDerived() >> 'Aleksandr Leonidovich ZIMOWSKI'
       getOriginalScriptName() >> ''
@@ -59,6 +60,7 @@ class NameFeatureSpec extends Specification {
     }
 
     def privateListIndividual = Mock(PrivateListIndividual) {
+      getPrimaryName() >> ''
       getFullNameOriginal() >> 'Aleksandr Leonidovich ZIMOWSKI'
       getGivenNamesOriginal() >> 'Akiaksandr Leanidavich'
       getFamilyNameOriginal() >> 'ZIMOUSKI'
@@ -87,15 +89,19 @@ class NameFeatureSpec extends Specification {
       with(alertedPartyNames.name) {
         containsAll(['ALAKSANDR LEANIDAVICH ZIMOUSKI', 'AKIAKSANDR LEANIDAVICH ZIMOUSKI'])
       }
-      watchlistNames.size() == 3
+      watchlistNames.size() == 5
       with(watchlistNames.name) {
         containsAll(
-            ['Aleksandr Leonidovich ZIMOWSKI',
+            ['Aleksander ZIMOWSKI',
+             'Aleksandr Leonidovich ZIMOWSKI',
+             'AKIAKSANDR LEANIDAVICH ZIMOUSKI',
              'Akiaksandr Leanidavich ZIMOWSKI',
              'Akiaksandr Leanidavich ZIMOUSKI'])
       }
       with(watchlistNames.type) {
-        containsAll([NameType.REGULAR, NameType.REGULAR, NameType.REGULAR])
+        containsAll(
+            [NameType.REGULAR, NameType.REGULAR, NameType.REGULAR,
+             NameType.ALIAS, NameType.ALIAS])
       }
       alertedPartyType == EntityType.INDIVIDUAL
       matchingTexts == []
@@ -122,6 +128,7 @@ class NameFeatureSpec extends Specification {
 
     def worldCheckEntity = Mock(WorldCheckEntity) {
       getListRecordId() >> '12'
+      getPrimaryName() >> 'AKTSIONERNOER'
       getEntityNameOriginal() >> 'AKTSIONERNOE'
       getEntityNameDerived() >> 'AKTSIONERNOE'
       getOriginalScriptName() >> ''
@@ -164,14 +171,15 @@ class NameFeatureSpec extends Specification {
       with(alertedPartyNames.name) {
         containsAll(['AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE'])
       }
-      watchlistNames.size() == 2
+      watchlistNames.size() == 3
       with(watchlistNames.name) {
         containsAll(
-            ['AKTSIONERNOE',
-             'AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE'])
+            ['AKTSIONERNOER',
+             'AKTSIONERNOE',
+             'AKTSIONERNOE OBSHCHESTVO KORPORATSIIA AVIAKOSMICHESKOE OBORUDOVANIE'])
       }
       with(watchlistNames.type) {
-        containsAll([NameType.REGULAR, NameType.REGULAR])
+        containsAll([NameType.REGULAR, NameType.REGULAR, NameType.REGULAR])
       }
       alertedPartyType == EntityType.ORGANIZATION
       matchingTexts == []

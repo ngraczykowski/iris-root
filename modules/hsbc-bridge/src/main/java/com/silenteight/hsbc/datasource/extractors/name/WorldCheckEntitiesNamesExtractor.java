@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.WorldCheckEntity;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
@@ -13,20 +16,37 @@ class WorldCheckEntitiesNamesExtractor {
   private final List<WorldCheckEntity> worldCheckEntities;
 
   public Stream<String> extract() {
-    var names = worldCheckEntities.stream()
-        .flatMap(WorldCheckEntitiesNamesExtractor::extractWorldCheckEntitiesNames);
+    var primaryNames = new ArrayList<String>();
+    var entityNamesOriginal = new ArrayList<String>();
+    var entityNamesDerived = new ArrayList<String>();
+
+    worldCheckEntities.forEach(e -> {
+      primaryNames.add(e.getPrimaryName());
+      entityNamesOriginal.addAll(extractEntityOriginalName(e.getEntityNameOriginal()));
+      entityNamesDerived.add(e.getEntityNameDerived());
+    });
+
+    var names = Stream.of(
+            primaryNames,
+            entityNamesOriginal,
+            entityNamesDerived)
+        .flatMap(Collection::stream);
     return NameExtractor.collectNames(names);
   }
 
-  private static Stream<String> extractWorldCheckEntitiesNames(WorldCheckEntity worldCheckEntity) {
-    var streamEntityNameOriginal =
-        NameExtractor.extractNameAndOriginalScriptAliases(worldCheckEntity.getEntityNameOriginal());
+  public Stream<String> extractOtherNames() {
+    var names = worldCheckEntities.stream()
+        .flatMap(this::extractWorldCheckEntitiesOtherNames);
 
-    var streamEntityNames =
-        Stream.of(
-            worldCheckEntity.getEntityNameDerived(),
-            worldCheckEntity.getOriginalScriptName());
+    return NameExtractor.collectNames(names);
+  }
 
-    return Stream.concat(streamEntityNameOriginal, streamEntityNames);
+  private Stream<String> extractWorldCheckEntitiesOtherNames(WorldCheckEntity worldCheckEntity) {
+    return Stream.of(worldCheckEntity.getOriginalScriptName());
+  }
+
+  private List<String> extractEntityOriginalName(String name) {
+    return NameExtractor.extractNameAndOriginalScriptAliases(name)
+        .collect(Collectors.toList());
   }
 }

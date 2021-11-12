@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.PrivateListIndividual;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -13,19 +15,32 @@ class PrivateListIndividualsNamesExtractor {
   private final List<PrivateListIndividual> privateListIndividuals;
 
   public Stream<String> extract() {
-    var names = privateListIndividuals.stream()
-        .flatMap(PrivateListIndividualsNamesExtractor::extractPrivateListIndividualNames);
+    var primaryNames = new ArrayList<String>();
+    var fullNamesOriginal = new ArrayList<String>();
+    var fullNamesDerived = new ArrayList<String>();
+
+    privateListIndividuals.forEach(e -> {
+      primaryNames.add(e.getPrimaryName());
+      fullNamesOriginal.add(e.getFullNameOriginal());
+      fullNamesDerived.add(e.getFullNameDerived());
+    });
+
+    var names = Stream.of(
+            primaryNames,
+            fullNamesOriginal,
+            fullNamesDerived)
+        .flatMap(Collection::stream);
     return NameExtractor.collectNames(names);
   }
 
-  private static Stream<String> extractPrivateListIndividualNames(
-      PrivateListIndividual privateListIndividual) {
-    return Stream.of(
-        privateListIndividual.getFullNameOriginal(),
-        NameExtractor.joinNameParts(
-            privateListIndividual.getGivenNamesOriginal(),
-            privateListIndividual.getFamilyNameOriginal()),
-        privateListIndividual.getFullNameDerived()
-    );
+  public Stream<String> extractOtherNames() {
+    var names = privateListIndividuals.stream()
+        .flatMap(privateListIndividual -> Stream.of(
+            NameExtractor.joinNameParts(
+                privateListIndividual.getGivenNamesOriginal(),
+                privateListIndividual.getFamilyNameOriginal())
+        ));
+
+    return NameExtractor.collectNames(names);
   }
 }

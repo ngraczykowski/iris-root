@@ -79,18 +79,20 @@ public class NameFeature implements NameFeatureClientValuesRetriever<NameFeature
     var wlIndividualWithAliases = mapToWatchlistNames(
         query.applyOriginalScriptEnhancementsForIndividualNamesWithAliases(), NameType.ALIAS);
 
-    return Stream.concat(wlIndividualWithAliases, wlIndividualWithoutAliases).collect(Collectors.toList());
+    return Stream.concat(wlIndividualWithoutAliases, wlIndividualWithAliases).collect(Collectors.toList());
   }
 
   private List<WatchlistNameDto> getWatchListEntities(NameQuery query) {
     var wlEntitiesWithAliases = mapToWatchlistNames(
-        StreamUtils.toDistinctList(query.mpWorldCheckEntitiesExtractXmlNamesWithCountries()), NameType.ALIAS);
+        StreamUtils.toDistinctList(
+            query.mpWorldCheckEntitiesExtractOtherNames(),
+            query.mpWorldCheckEntitiesExtractXmlNamesWithCountries()), NameType.ALIAS);
 
     var wlEntitiesWithoutAliases = mapToWatchlistNames(StreamUtils.toDistinctList(
         query.mpWorldCheckEntitiesExtractNames(),
         query.mpPrivateListEntitiesExtractNames()), NameType.REGULAR);
 
-    return Stream.concat(wlEntitiesWithAliases, wlEntitiesWithoutAliases).collect(Collectors.toList());
+    return Stream.concat(wlEntitiesWithoutAliases, wlEntitiesWithAliases).collect(Collectors.toList());
   }
 
   private List<AlertedPartyNameDto> mapToAlertedPartyNames(List<String> names) {

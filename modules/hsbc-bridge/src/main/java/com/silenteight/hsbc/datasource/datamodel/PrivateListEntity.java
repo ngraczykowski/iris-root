@@ -15,4 +15,6 @@ public interface PrivateListEntity extends ListRecordId {
   String getEntityNameOriginal();
 
   String getEntityNameDerived();
+
+  String getPrimaryName();
 }

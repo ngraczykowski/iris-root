@@ -60,6 +60,13 @@ class NameQueryFacade implements NameQuery {
   }
 
   @Override
+  public Stream<String> mpWorldCheckIndividualsExtractOtherNames() {
+    var worldCheckIndividuals = matchData.getWorldCheckIndividuals();
+    return new WorldCheckIndividualsNamesExtractor(worldCheckIndividuals)
+        .extractOtherNames();
+  }
+
+  @Override
   public Stream<String> mpWorldCheckIndividualsExtractXmlNamesWithCountries() {
     return new WorldCheckIndividualsXmlNamesAndCountriesExtractor(
         matchData, nameInformationServiceClient)
@@ -71,6 +78,13 @@ class NameQueryFacade implements NameQuery {
     var worldCheckEntities = matchData.getWorldCheckEntities();
     return new WorldCheckEntitiesNamesExtractor(worldCheckEntities)
         .extract();
+  }
+
+  @Override
+  public Stream<String> mpWorldCheckEntitiesExtractOtherNames() {
+    var worldCheckEntities = matchData.getWorldCheckEntities();
+    return new WorldCheckEntitiesNamesExtractor(worldCheckEntities)
+        .extractOtherNames();
   }
 
   @Override
@@ -88,6 +102,13 @@ class NameQueryFacade implements NameQuery {
   }
 
   @Override
+  public Stream<String> mpPrivateListIndividualsExtractOtherNames() {
+    var privateListIndividuals = matchData.getPrivateListIndividuals();
+    return new PrivateListIndividualsNamesExtractor(privateListIndividuals)
+        .extractOtherNames();
+  }
+
+  @Override
   public Stream<String> mpPrivateListEntitiesExtractNames() {
     var privateListEntities = matchData.getPrivateListEntities();
     return new PrivateListEntitiesNamesExtractor(privateListEntities)
@@ -98,7 +119,9 @@ class NameQueryFacade implements NameQuery {
   public Collection<String> applyOriginalScriptEnhancementsForIndividualNamesWithAliases() {
     return NameExtractor.applyOriginalScriptEnhancements(
             StreamUtils.toDistinctList(apAllIndividualNames()),
-            StreamUtils.toDistinctList(mpWorldCheckIndividualsExtractXmlNamesWithCountries()))
+            StreamUtils.toDistinctList(
+                mpAllIndividualOtherNames(),
+                mpWorldCheckIndividualsExtractXmlNamesWithCountries()))
         .getWatchlistPartyIndividuals();
   }
 
@@ -125,5 +148,10 @@ class NameQueryFacade implements NameQuery {
   private Stream<String> mpAllIndividualNamesWithoutXmlAliases() {
     return StreamEx.of(mpWorldCheckIndividualsExtractNames())
         .append(mpPrivateListIndividualsExtractNames());
+  }
+
+  private Stream<String> mpAllIndividualOtherNames() {
+    return StreamEx.of(mpWorldCheckIndividualsExtractOtherNames())
+        .append(mpPrivateListIndividualsExtractOtherNames());
   }
 }

@@ -21,13 +21,19 @@ public interface NameQuery {
 
   Stream<String> mpWorldCheckIndividualsExtractNames();
 
+  Stream<String> mpWorldCheckIndividualsExtractOtherNames();
+
   Stream<String> mpWorldCheckIndividualsExtractXmlNamesWithCountries();
 
   Stream<String> mpWorldCheckEntitiesExtractNames();
 
+  Stream<String> mpWorldCheckEntitiesExtractOtherNames();
+
   Stream<String> mpWorldCheckEntitiesExtractXmlNamesWithCountries();
 
   Stream<String> mpPrivateListIndividualsExtractNames();
+
+  Stream<String> mpPrivateListIndividualsExtractOtherNames();
 
   Stream<String> mpPrivateListEntitiesExtractNames();
 

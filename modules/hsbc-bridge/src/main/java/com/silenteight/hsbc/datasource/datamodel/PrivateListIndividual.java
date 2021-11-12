@@ -45,4 +45,6 @@ public interface PrivateListIndividual extends ListRecordId {
   String getAddress();
 
   String getFurtherInfo();
+
+  String getPrimaryName();
 }
