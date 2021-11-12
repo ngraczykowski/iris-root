@@ -22,7 +22,8 @@ public class MessageRegistryConfiguration {
         "com.silenteight.agents",
         "com.silenteight.datasource",
         "com.silenteight.model",
-        "com.silenteight.proto.payments.bridge"
+        "com.silenteight.proto.payments.bridge",
+        "com.silenteight.dataretention"
     );
 
     return factory.create();
