@@ -11,7 +11,7 @@
       "date_detection": false,
       "numeric_detection": false,
       "properties": {
-        "alert_create_time" : {
+        "alert_recommendationDate" : {
           "type" : "date"
         },
         "index_timestamp" : {

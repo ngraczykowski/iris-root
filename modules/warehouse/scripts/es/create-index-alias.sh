@@ -7,9 +7,11 @@ CURRENTDIR="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
 cd "${CURRENTDIR}"
 
 ALIAS_NAME="local_production_alert"
+MATCH_ALIAS_NAME="local_production_match"
 ORIGINAL_INDEX_NAME="${ALIAS_NAME}"
 ARCHIVED_INDEX_NAME="${ALIAS_NAME}.old"
 EMPTY_INDEX_NAME="${ALIAS_NAME}.empty"
+EMPTY_MATCH_INDEX_NAME="${MATCH_ALIAS_NAME}.empty"
 TIMEOUT_SECONDS=120
 ALIAS_STATUS=$(curl --head "http://localhost:9200/_alias/${ALIAS_NAME}" -u admin:admin -s -w '%{http_code}' -o /dev/null)
 CLUSTER_STATUS=$(curl -X GET "http://localhost:9200/_cluster/health" -u admin:admin -s | jq -r '.status' | tr -d '"')
@@ -67,6 +69,7 @@ create_alias() {
 
 create_empty_index() {
   curl -X PUT "http://localhost:9200/${EMPTY_INDEX_NAME}" -s -u admin:admin
+  curl -X PUT "http://localhost:9200/${EMPTY_MATCH_INDEX_NAME}" -s -u admin:admin
 }
 
 if [[ "${ALIAS_STATUS}" == "200" ]]; then
