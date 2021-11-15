@@ -15,7 +15,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
 @Entity
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "hsbc_bridge_bulk")
 class Bulk extends BaseEntity {
 

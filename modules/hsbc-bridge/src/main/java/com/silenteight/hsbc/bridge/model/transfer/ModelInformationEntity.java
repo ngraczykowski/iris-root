@@ -10,7 +10,7 @@ import javax.persistence.*;
 
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.NONE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
 @Getter
