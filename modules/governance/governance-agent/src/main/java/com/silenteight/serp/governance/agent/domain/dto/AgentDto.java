@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+import com.silenteight.serp.governance.agent.details.dto.FeatureDto;
+
 import java.util.List;
 
 @Value
@@ -17,9 +19,7 @@ public class AgentDto {
   @NonNull
   List<String> features;
   @NonNull
+  List<FeatureDto> featuresList;
+  @NonNull
   List<String> solutions;
-
-  public boolean canHandleFeature(String featureName) {
-    return features.contains(featureName);
-  }
 }

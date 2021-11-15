@@ -1,5 +1,7 @@
 package com.silenteight.serp.governance.agent.domain.file.details;
 
+import com.silenteight.serp.governance.agent.details.dto.FeatureDto;
+
 import static com.silenteight.serp.governance.agent.domain.file.config.AgentConfigFixture.DATE_AGENT_CONFIG_NAME;
 import static com.silenteight.serp.governance.agent.domain.file.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
 import static com.silenteight.serp.governance.agent.domain.file.configuration.AgentConfigurationDetailsFixture.AGENT_DETAILS_CONF_DATE_INDV_NORMAL_DTO;
@@ -17,10 +19,17 @@ public class AgentDetailsFixture {
   public static final String NAME_AGENT_AGENT_NAME = "nameAgent";
   public static final String AGENT_VERSION = "1.0.0";
   public static final String AGENT_FEATURE_NAME = "features/name";
-  public static final String AGENT_FEATURE_DATE = "features/dob";
-  public static final String AGENT_FEATURE_DOCUMENT = "features/dob";
-  public static final String AGENT_FEATURE_NATIONALITY = "features/nationality";
-  public static final String AGENT_FEATURE_RESIDENCY = "features/residency";
+  public static final String AGENT_FEATURE_NAME_DISPLAY_NAME = "Name";
+  public static final String AGENT_FEATURE_PEP = "features/pep";
+  public static final String AGENT_FEATURE_DATE = "features/dateOfBirth";
+  public static final String AGENT_FEATURE_DATE_DISPLAY_NAME = "Date of Birth / Incorporation";
+  public static final String AGENT_FEATURE_PEP_DISPLAY_NAME = "PEP";
+  public static final String AGENT_FEATURE_DOCUMENT = "features/doc";
+  public static final String AGENT_FEATURE_DOCUMENT_DISPLAY_NAME = "Other Document";
+  public static final String AGENT_FEATURE_NATIONALITY = "features/nationalityCountry";
+  public static final String AGENT_FEATURE__DISPLAY_NAME = "Nationality Country";
+  public static final String AGENT_FEATURE_RESIDENCY = "features/residencyCountry";
+  public static final String AGENT_FEATURE_RESIDENCY_DISPLAY_NAME = "Residency Country";
   public static final String AGENT_FEATURE_GENDER = "features/gender";
   public static final String AGENT_RESPONSE_MATCH = "MATCH";
   public static final String AGENT_RESPONSE_WEAK_MATCH = "WEAK_MATCH";
@@ -30,11 +39,41 @@ public class AgentDetailsFixture {
   public static final String AGENT_RESPONSE_DIGIT_MATCH = "DIGIT_MATCH";
   public static final String AGENT_RESPONSE_WEAK_DIGIT_MATCH = "WEAK_DIGIT_MATCH";
 
+  public static final FeatureDto AGENT_FEATURE_NAME_DTO = FeatureDto.builder()
+      .name(AGENT_FEATURE_NAME)
+      .displayName(AGENT_FEATURE_NAME_DISPLAY_NAME)
+      .build();
+
+  public static final FeatureDto AGENT_FEATURE_PEP_DTO = FeatureDto.builder()
+      .name(AGENT_FEATURE_PEP)
+      .displayName(AGENT_FEATURE_PEP_DISPLAY_NAME)
+      .build();
+
+  public static final FeatureDto AGENT_DOCUMENT_FEATURE_DTO = FeatureDto.builder()
+      .name(AGENT_FEATURE_DOCUMENT)
+      .displayName(AGENT_FEATURE_DOCUMENT_DISPLAY_NAME)
+      .build();
+
+  public static final FeatureDto AGENT_FEATURE_NATIONALITY_DTO = FeatureDto.builder()
+      .name(AGENT_FEATURE_NATIONALITY)
+      .displayName(AGENT_FEATURE__DISPLAY_NAME)
+      .build();
+
+  public static final FeatureDto AGENT_FEATURE_RESIDENCY_DTO = FeatureDto.builder()
+      .name(AGENT_FEATURE_RESIDENCY)
+      .displayName(AGENT_FEATURE_RESIDENCY_DISPLAY_NAME)
+      .build();
+
+  public static final FeatureDto AGENT_FEATURE_DATE_DTO = FeatureDto.builder()
+      .name(AGENT_FEATURE_DATE)
+      .displayName(AGENT_FEATURE_DATE_DISPLAY_NAME)
+      .build();
 
   public static final AgentDetailDto NAME_AGENT_DETAIL_DTO = AgentDetailDto.builder()
       .id(NAME_AGENT_ID)
       .name(NAME_AGENT_CONFIG_NAME)
       .features(of(AGENT_FEATURE_NAME))
+      .featuresList(of(AGENT_FEATURE_NAME_DTO))
       .responses(of(AGENT_RESPONSE_MATCH, AGENT_RESPONSE_NO_DATA))
       .configurations(of())
       .build();
@@ -43,6 +82,7 @@ public class AgentDetailsFixture {
       .id(DATE_AGENT_ID)
       .name(DATE_AGENT_CONFIG_NAME)
       .features(of(AGENT_FEATURE_DATE))
+      .featuresList(of(AGENT_FEATURE_DATE_DTO))
       .responses(of(AGENT_RESPONSE_MATCH, AGENT_RESPONSE_WEAK_MATCH))
       .configurations(of(
           AGENT_DETAILS_CONF_DATE_NORMAL_DTO,

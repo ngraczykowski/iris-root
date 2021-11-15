@@ -12,9 +12,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static com.silenteight.serp.governance.agent.AgentFixture.COUNTRY_AGENT;
-import static com.silenteight.serp.governance.agent.AgentFixture.DOB_AGENT;
 import static com.silenteight.serp.governance.agent.AgentFixture.DOCUMENT_AGENT;
 import static com.silenteight.serp.governance.agent.AgentFixture.NAME_AGENT;
+import static com.silenteight.serp.governance.agent.AgentFixture.PEP_AGENT;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.List.of;
@@ -40,7 +40,7 @@ class AgentMappingServiceTest {
   @Test
   void shouldReturnListMappedAgentsWithCorrectSize() {
     when(agentsRegistry.getAllAgents())
-        .thenReturn(asList(DOB_AGENT, NAME_AGENT, DOCUMENT_AGENT, COUNTRY_AGENT));
+        .thenReturn(asList(PEP_AGENT, NAME_AGENT, DOCUMENT_AGENT, COUNTRY_AGENT));
 
     FeaturesListDto allAgents = agentMappingService.getFeaturesListDto();
 

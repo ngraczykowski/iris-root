@@ -18,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.silenteight.serp.governance.agent.domain.file.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
-import static com.silenteight.serp.governance.agent.domain.file.details.AgentDetailsFixture.AGENT_FEATURE_DATE;
 import static com.silenteight.serp.governance.agent.domain.file.details.AgentDetailsFixture.AGENT_FEATURE_NAME;
+import static com.silenteight.serp.governance.agent.domain.file.details.AgentDetailsFixture.AGENT_FEATURE_PEP;
 import static com.silenteight.serp.governance.model.category.CategoryFixture.APTYPE_CATEGORY_NAME;
 import static com.silenteight.serp.governance.model.category.CategoryFixture.ISDENY_CATEGORY_NAME;
 import static com.silenteight.serp.governance.model.fixture.ModelFixtures.DEFAULT_MODEL_DTO;
@@ -58,10 +58,10 @@ class ModelTest extends BaseDataJpaTest {
     when(currentPolicyProviderMock.getCurrentPolicy()).thenReturn(of(CURRENT_POLICY_NAME));
     when(policyFeatureProviderMock.resolveFeatures(any())).thenReturn(List.of(
         getFeature(AGENT_FEATURE_NAME, NAME_AGENT_CONFIG_NAME),
-        getFeature(AGENT_FEATURE_DATE, AGENT_FEATURE_DATE)));
+        getFeature(AGENT_FEATURE_PEP, AGENT_FEATURE_PEP)));
     when(policyStepsConditionsProvider.getMatchConditionsNames(CURRENT_POLICY_UUID))
         .thenReturn(List.of(
-            AGENT_FEATURE_NAME, AGENT_FEATURE_DATE, APTYPE_CATEGORY_NAME, ISDENY_CATEGORY_NAME));
+            AGENT_FEATURE_NAME, AGENT_FEATURE_PEP, APTYPE_CATEGORY_NAME, ISDENY_CATEGORY_NAME));
 
     SolvingModel solvingModel = solvingModelProvider.get(DEFAULT_MODEL_DTO);
 
@@ -69,7 +69,7 @@ class ModelTest extends BaseDataJpaTest {
     assertThat(solvingModel.getPolicyName()).isEqualTo(CURRENT_POLICY_NAME);
     assertThat(solvingModel.getFeaturesList())
         .extracting(Feature::getName)
-        .containsExactlyInAnyOrder(AGENT_FEATURE_NAME, AGENT_FEATURE_DATE);
+        .containsExactlyInAnyOrder(AGENT_FEATURE_NAME, AGENT_FEATURE_PEP);
     assertThat(solvingModel.getCategoriesList())
         .containsExactlyInAnyOrder(APTYPE_CATEGORY_NAME, ISDENY_CATEGORY_NAME);
   }

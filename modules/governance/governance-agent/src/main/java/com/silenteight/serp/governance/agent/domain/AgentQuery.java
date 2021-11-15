@@ -32,6 +32,7 @@ class AgentQuery implements AgentDetailsQuery, ListAgentQuery {
             AgentDetailsResolver.resolveConfigurations(agentDetailDto.getConfigurations()))
         .responses(agentDetailDto.getResponses())
         .features(agentDetailDto.getFeatures())
+        .featuresList(agentDetailDto.getFeaturesList())
         .build();
   }
 
@@ -52,6 +53,7 @@ class AgentQuery implements AgentDetailsQuery, ListAgentQuery {
         .agentName(AgentDetailsResolver.resolveAgentName(agentDto.getName()))
         .agentVersion(AgentDetailsResolver.resolveAgentVersion(agentDto.getName()))
         .features(agentDto.getFeatures())
+        .featuresList(agentDto.getFeaturesList())
         .build();
   }
 }

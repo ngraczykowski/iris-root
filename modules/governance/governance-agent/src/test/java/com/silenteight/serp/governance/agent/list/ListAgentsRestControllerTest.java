@@ -33,7 +33,8 @@ class ListAgentsRestControllerTest extends BaseRestControllerTest {
         .body("[0].name", is(LIST_AGENT_DATE_DTO.getName()))
         .body("[0].agentName", is(LIST_AGENT_DATE_DTO.getAgentName()))
         .body("[0].agentVersion", is(LIST_AGENT_DATE_DTO.getAgentVersion()))
-        .body("[0].features", is(LIST_AGENT_DATE_DTO.getFeatures()));
+        .body(
+            "[0].featuresList[0].name", is(LIST_AGENT_DATE_DTO.getFeaturesList().get(0).getName()));
   }
 
   @TestWithRole(roles = { USER_ADMINISTRATOR })

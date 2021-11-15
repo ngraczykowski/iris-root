@@ -51,6 +51,7 @@ public class AgentsRegistry {
         .id(agentDetailDto.getId())
         .name(agentConfigDto.getName())
         .features(agentDetailDto.getFeatures())
+        .featuresList(agentDetailDto.getFeaturesList())
         .solutions(agentDetailDto.getResponses())
         .build();
   }

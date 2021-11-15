@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static com.silenteight.serp.governance.agent.domain.file.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
 import static com.silenteight.serp.governance.agent.domain.file.configuration.AgentConfigurationDetailsFixture.AGENT_CONF_DATE_ENT_NORMAL;
 import static com.silenteight.serp.governance.agent.domain.file.configuration.AgentConfigurationDetailsFixture.AGENT_CONF_DATE_ENT_NORMAL_FILE;
-import static com.silenteight.serp.governance.agent.domain.file.details.AgentDetailsFixture.NAME_AGENT_ID;
+import static com.silenteight.serp.governance.agent.domain.file.details.AgentDetailsFixture.*;
 import static org.assertj.core.api.Assertions.*;
 
 class AgentDetailsClientTest {
@@ -18,11 +18,21 @@ class AgentDetailsClientTest {
       + "  \"" + NAME_AGENT_CONFIG_NAME + "\": {"
       + "    \"agentId\": \"" + NAME_AGENT_ID + "\","
       + "    \"features\": ["
-      + "      \"" + AgentDetailsFixture.AGENT_FEATURE_NAME + "\""
+      + "      \"" + AGENT_FEATURE_NAME + "\""
+      + "    ],"
+      + "    \"featuresList\": ["
+      + "      {"
+      + "         \"name\": \"" + AGENT_FEATURE_NAME + "\","
+      + "         \"displayName\": \"" + AGENT_FEATURE_NAME_DISPLAY_NAME + "\""
+      + "       },"
+      + "      {"
+      + "         \"name\": \"" + AGENT_FEATURE_DATE + "\","
+      + "         \"displayName\": \"" + AGENT_FEATURE_DATE_DISPLAY_NAME + "\""
+      + "       }"
       + "    ],"
       + "    \"responses\": ["
-      + "      \"" + AgentDetailsFixture.AGENT_RESPONSE_MATCH + "\","
-      + "      \"" + AgentDetailsFixture.AGENT_RESPONSE_NO_DATA + "\""
+      + "      \"" + AGENT_RESPONSE_MATCH + "\","
+      + "      \"" + AGENT_RESPONSE_NO_DATA + "\""
       + "    ],"
       + "    \"configurations\": ["
       + "      {"
@@ -41,15 +51,23 @@ class AgentDetailsClientTest {
   void shouldReturnAgentDetailsForSpecificAgentConfig() {
     AgentDetailsClient underTest =
         new AgentDetailsClient(SOURCE, objectMapper, new TestResourceLoader(SAMPLE_INPUT));
+
     underTest.init();
     AgentDetailDto agentDetailsDto = underTest.getAgentDetailsForAgentConfig(
         new AgentConfigDto(NAME_AGENT_CONFIG_NAME));
 
     assertThat(agentDetailsDto.getFeatures())
-        .containsExactlyInAnyOrder(AgentDetailsFixture.AGENT_FEATURE_NAME);
+        .containsExactlyInAnyOrder(AGENT_FEATURE_NAME);
+
+    assertThat((agentDetailsDto.getFeaturesList())).hasSize(2);
+    assertThat(agentDetailsDto.getFeaturesList().get(0).getName())
+        .isEqualTo(AGENT_FEATURE_NAME);
+
+    assertThat(agentDetailsDto.getFeaturesList().get(0).getDisplayName())
+        .isEqualTo(AGENT_FEATURE_NAME_DISPLAY_NAME);
+
     assertThat(agentDetailsDto.getResponses())
-        .containsExactlyInAnyOrder(
-            AgentDetailsFixture.AGENT_RESPONSE_MATCH, AgentDetailsFixture.AGENT_RESPONSE_NO_DATA);
+        .containsExactlyInAnyOrder(AGENT_RESPONSE_MATCH, AGENT_RESPONSE_NO_DATA);
   }
 
   @Test
