@@ -9,12 +9,9 @@ import com.silenteight.warehouse.report.reporting.exception.InvalidDateFromParam
 import com.silenteight.warehouse.report.reporting.exception.InvalidDateRangeParametersOrderException;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
 import static com.silenteight.sep.base.common.time.DefaultTimeSource.INSTANCE;
-import static java.time.LocalTime.MAX;
-import static java.time.LocalTime.MIDNIGHT;
 import static java.time.ZoneOffset.UTC;
 
 @Value
@@ -26,14 +23,8 @@ public class ReportRange {
   @NonNull
   OffsetDateTime to;
 
-  public static ReportRange of(@NonNull LocalDate from, @NonNull LocalDate to) {
+  public static ReportRange of(@NonNull OffsetDateTime from, @NonNull OffsetDateTime to) {
     validateRange(from, to);
-    OffsetDateTime parsedFrom = parseToOffsetDateTime(from, MIDNIGHT);
-    OffsetDateTime parsedTo = parseToOffsetDateTime(to, MAX.minusSeconds(1));
-    return new ReportRange(parsedFrom, parsedTo);
-  }
-
-  public static ReportRange of(OffsetDateTime from, OffsetDateTime to) {
     return new ReportRange(from, to);
   }
 
@@ -45,27 +36,23 @@ public class ReportRange {
     return getTo().atZoneSameInstant(UTC).toLocalDate();
   }
 
-  private static OffsetDateTime parseToOffsetDateTime(LocalDate localDate, LocalTime localTime) {
-    return OffsetDateTime.of(localDate, localTime, UTC);
-  }
-
-  private static void validateRange(LocalDate from, LocalDate to) {
+  private static void validateRange(OffsetDateTime from, OffsetDateTime to) {
     validateRangeParametersOrder(from, to);
     validateFromParameterIsNotFuture(from);
   }
 
-  private static void validateRangeParametersOrder(LocalDate from, LocalDate to) {
+  private static void validateRangeParametersOrder(OffsetDateTime from, OffsetDateTime to) {
     if (from.isAfter(to))
       throw new InvalidDateRangeParametersOrderException();
   }
 
-  private static void validateFromParameterIsNotFuture(LocalDate from) {
-    LocalDate todayDate = getTodayDate();
-    if (from.isAfter(todayDate))
+  private static void validateFromParameterIsNotFuture(OffsetDateTime from) {
+    OffsetDateTime currentDateTime = getCurrentDateTime();
+    if (from.isAfter(currentDateTime))
       throw new InvalidDateFromParameterException();
   }
 
-  private static LocalDate getTodayDate() {
-    return INSTANCE.localDateTime().toLocalDate();
+  private static OffsetDateTime getCurrentDateTime() {
+    return INSTANCE.now().atOffset(UTC);
   }
 }

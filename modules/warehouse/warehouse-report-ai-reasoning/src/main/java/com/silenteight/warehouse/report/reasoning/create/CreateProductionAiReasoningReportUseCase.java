@@ -9,7 +9,7 @@ import com.silenteight.warehouse.report.reasoning.generation.AiReasoningReportDe
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 import javax.validation.Valid;
 
@@ -28,7 +28,7 @@ class CreateProductionAiReasoningReportUseCase {
   @NonNull
   private final IndexesQuery productionIndexerQuery;
 
-  ReportInstanceReferenceDto createReport(LocalDate from, LocalDate to) {
+  ReportInstanceReferenceDto createReport(OffsetDateTime from, OffsetDateTime to) {
     ReportRange range = of(from, to);
     List<String> indexes = productionIndexerQuery.getIndexesForAnalysis(PRODUCTION_ANALYSIS_NAME);
     return reportService.createReportInstance(range, indexes, productionProperties);

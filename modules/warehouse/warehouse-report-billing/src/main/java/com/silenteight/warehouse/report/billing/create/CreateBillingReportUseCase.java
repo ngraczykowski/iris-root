@@ -8,7 +8,7 @@ import com.silenteight.warehouse.report.billing.domain.BillingReportService;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import static com.silenteight.warehouse.report.reporting.ReportRange.of;
@@ -25,14 +25,14 @@ class CreateBillingReportUseCase {
   @NonNull
   private final IndexesQuery productionIndexerQuery;
 
-  ReportInstanceReferenceDto createProductionReport(LocalDate from, LocalDate to) {
+  ReportInstanceReferenceDto createReport(OffsetDateTime from, OffsetDateTime to) {
     ReportRange range = of(from, to);
     List<String> indexes = productionIndexerQuery.getIndexesForAnalysis(PRODUCTION_ANALYSIS_NAME);
-    String fileName = getFileName(from, to);
+    String fileName = getFileName(range);
     return reportService.createReportInstance(range, fileName, indexes);
   }
 
-  private static String getFileName(LocalDate from, LocalDate to) {
-    return format(FILE_NAME, from, to);
+  private static String getFileName(ReportRange range) {
+    return format(FILE_NAME, range.getFromAsLocalDate(), range.getToAsLocalDate());
   }
 }

@@ -8,7 +8,7 @@ import com.silenteight.warehouse.report.rbs.generation.RbsReportDefinition;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import javax.validation.Valid;
@@ -27,14 +27,14 @@ class CreateProductionRbsReportUseCase {
   @NonNull
   private final RbsReportDefinition productionProperties;
 
-  ReportInstanceReferenceDto createReport(LocalDate from, LocalDate to) {
+  ReportInstanceReferenceDto createReport(OffsetDateTime from, OffsetDateTime to) {
     ReportRange range = of(from, to);
     List<String> indexes = Collections.singletonList(productionProperties.getIndexName());
-    String fileName = getFileName(from, to);
+    String fileName = getFileName(range);
     return reportService.createReportInstance(range, fileName, indexes, productionProperties);
   }
 
-  private static String getFileName(LocalDate from, LocalDate to) {
-    return format(FILE_NAME, from, to);
+  private static String getFileName(ReportRange range) {
+    return format(FILE_NAME, range.getFromAsLocalDate(), range.getToAsLocalDate());
   }
 }

@@ -29,8 +29,8 @@ public final class ReportFixture {
 
   public static final LocalDate LOCAL_DATE_FROM = of(2020, 10, 15);
   public static final LocalDate LOCAL_DATE_TO = of(2021, 10, 15);
-  public static final OffsetDateTime FROM_OFFSET_DATE_TIME = of(LOCAL_DATE_FROM, MIDNIGHT, UTC);
-  public static final OffsetDateTime TO_OFFSET_DATE_TIME =
+  public static final OffsetDateTime OFFSET_DATE_TIME_FROM = of(LOCAL_DATE_FROM, MIDNIGHT, UTC);
+  public static final OffsetDateTime OFFSET_DATE_TIME_TO =
       of(LOCAL_DATE_TO, MAX.minusSeconds(1), UTC);
 
   public static final String FILE_NAME = "report-test.csv";
@@ -65,8 +65,8 @@ public final class ReportFixture {
       .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
       .queryFilters(of(QUERY_FILTER))
       .dateField(INDEX_TIMESTAMP)
-      .from(FROM_OFFSET_DATE_TIME)
-      .to(TO_OFFSET_DATE_TIME)
+      .from(OFFSET_DATE_TIME_FROM)
+      .to(OFFSET_DATE_TIME_TO)
       .name(FILE_NAME)
       .build();
 }

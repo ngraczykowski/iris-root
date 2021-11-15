@@ -6,10 +6,14 @@ import com.silenteight.warehouse.report.accuracy.domain.dto.AccuracyReportDto;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 
+import static com.silenteight.warehouse.report.reporting.ReportRange.of;
 import static java.time.LocalDate.parse;
+import static java.time.LocalTime.MIDNIGHT;
+import static java.time.OffsetDateTime.of;
+import static java.time.ZoneOffset.UTC;
 import static java.util.List.of;
 
 @NoArgsConstructor
@@ -26,19 +30,21 @@ public final class AccuracyReportTestFixtures {
   public static final String ANALYST_FIELD_NAME = "alert_analyst_decision";
   public static final String ANALYST_FIELD_POSITIVE_VALUE = "analyst_decision_true_positive";
   public static final String ANALYST_FIELD_NEGATIVE_VALUE = "analyst_decision_false_positive";
-  public static final String FROM_QUERY_PARAM = "2019-04-11";
-  public static final String TO_QUERY_PARAM = "2021-04-11";
-  public static final LocalDate LOCAL_DATE_FROM = parse(FROM_QUERY_PARAM);
-  public static final LocalDate LOCAL_DATE_TO = parse(TO_QUERY_PARAM);
-  public static final ReportRange REPORT_RANGE = ReportRange.of(LOCAL_DATE_FROM, LOCAL_DATE_TO);
   public static final List<String> INDEXES = of("index213");
   public static final String FILE_STORAGE_NAME = "ed4e4857-14af-4ed6-bd53-a12e36f86856";
   public static final long REPORT_ID = 9;
+  public static final String QUERY_PARAM_FROM = "2019-04-11";
+  public static final String QUERY_PARAM_TO = "2021-04-11";
+  public static final OffsetDateTime OFFSET_DATE_TIME_TO = of(parse(QUERY_PARAM_TO), MIDNIGHT, UTC);
+  public static final OffsetDateTime OFFSET_DATE_TIME_FROM =
+      of(parse(QUERY_PARAM_FROM), MIDNIGHT, UTC);
+
+  public static final ReportRange REPORT_RANGE = of(OFFSET_DATE_TIME_FROM, OFFSET_DATE_TIME_TO);
   public static final ReportInstanceReferenceDto REPORT_INSTANCE =
       new ReportInstanceReferenceDto(REPORT_ID);
 
   public static final String PRODUCTION_REPORT_FILENAME =
-      "Accuracy_" + FROM_QUERY_PARAM + "_To_" + TO_QUERY_PARAM + ".csv";
+      "Accuracy_" + QUERY_PARAM_FROM + "_To_" + QUERY_PARAM_TO + ".csv";
 
   public static final String SIMULATION_REPORT_FILENAME =
       "simulation_" + ANALYSIS_ID + "_Accuracy.csv";

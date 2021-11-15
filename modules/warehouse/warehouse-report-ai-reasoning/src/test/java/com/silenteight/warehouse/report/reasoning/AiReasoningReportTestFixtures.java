@@ -7,21 +7,26 @@ import com.silenteight.warehouse.report.reasoning.domain.dto.AiReasoningReportDt
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import static com.silenteight.warehouse.report.reporting.ReportRange.of;
 import static java.time.LocalDate.parse;
+import static java.time.LocalTime.MIDNIGHT;
+import static java.time.OffsetDateTime.of;
+import static java.time.ZoneOffset.UTC;
 import static java.util.List.of;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AiReasoningReportTestFixtures {
 
-  public static final String FROM_QUERY_PARAM = "2020-08-15";
-  public static final String TO_QUERY_PARAM = "2021-10-15";
-  public static final LocalDate LOCAL_DATE_FROM = parse(FROM_QUERY_PARAM);
-  public static final LocalDate LOCAL_DATE_TO = parse(TO_QUERY_PARAM);
-  public static final ReportRange REPORT_RANGE = of(LOCAL_DATE_FROM, LOCAL_DATE_TO);
+  public static final String QUERY_PARAM_FROM = "2020-08-15";
+  public static final String QUERY_PARAM_TO = "2021-10-15";
+  public static final OffsetDateTime OFFSET_DATE_TIME_TO = of(parse(QUERY_PARAM_TO), MIDNIGHT, UTC);
+  public static final OffsetDateTime OFFSET_DATE_TIME_FROM =
+      of(parse(QUERY_PARAM_FROM), MIDNIGHT, UTC);
+
+  public static final ReportRange REPORT_RANGE = of(OFFSET_DATE_TIME_FROM, OFFSET_DATE_TIME_TO);
   public static final String ANALYSIS_ID = "8ce609a3-660a-4808-9c39-fdf425793070";
   public static final String PRODUCTION_ANALYSIS_NAME = "production";
   public static final String REPORT_CONTENT = "test row";
@@ -37,7 +42,7 @@ public final class AiReasoningReportTestFixtures {
       new ReportInstanceReferenceDto(REPORT_ID);
 
   public static final String PRODUCTION_REPORT_FILENAME =
-      "AI_Reasoning_" + FROM_QUERY_PARAM + "_To_" + TO_QUERY_PARAM + ".csv";
+      "AI_Reasoning_" + QUERY_PARAM_FROM + "_To_" + QUERY_PARAM_TO + ".csv";
 
   public static final String SIMULATION_REPORT_FILENAME =
       "simulation_" + ANALYSIS_ID + "_AI_Reasoning.csv";

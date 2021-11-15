@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
-import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.FROM_QUERY_PARAM;
+import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.OFFSET_DATE_TIME_FROM;
+import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.OFFSET_DATE_TIME_TO;
 import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.REPORT_ID;
 import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.REPORT_INSTANCE_REFERENCE_DTO;
-import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.TO_QUERY_PARAM;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -29,8 +29,8 @@ class CreateReportRestControllerTest extends BaseRestControllerTest {
 
   private static final String CREATE_PRODUCTION_REPORT_URL =
       fromUriString("/v2/analysis/production/reports/BILLING")
-          .queryParam("from", FROM_QUERY_PARAM)
-          .queryParam("to", TO_QUERY_PARAM)
+          .queryParam("from", OFFSET_DATE_TIME_TO)
+          .queryParam("to", OFFSET_DATE_TIME_FROM)
           .build()
           .toString();
 
@@ -40,7 +40,7 @@ class CreateReportRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its303_whenRequestingReportGeneration() {
-    when(useCase.createProductionReport(any(), any())).thenReturn(REPORT_INSTANCE_REFERENCE_DTO);
+    when(useCase.createReport(any(), any())).thenReturn(REPORT_INSTANCE_REFERENCE_DTO);
 
     post(CREATE_PRODUCTION_REPORT_URL)
         .statusCode(SEE_OTHER.value())
