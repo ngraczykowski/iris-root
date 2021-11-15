@@ -116,7 +116,16 @@ components:
           "features/nationality",
           "features/residency"
         ]
-
+        featuresList: [
+          {
+            "name": "features/geoResidencies",
+            "displayName": "Geo Residencies"
+          },
+          {
+            "name": "features/geoPlaceOfBirth",
+            "displayName": "Geo Place of Birth"
+          }
+        ]
     AgentDetailsDto:
       type: object
       properties:
@@ -159,6 +168,16 @@ components:
         features: [
            "features/dob",
            "features/doi"
+        ]
+        featuresList: [
+          {
+            "name": "features/geoResidencies",
+            "displayName": "Geo Residencies"
+          },
+          {
+            "name": "features/geoPlaceOfBirth",
+            "displayName": "Geo Place of Birth"
+          }
         ]
         responses: [
            "EXACT",

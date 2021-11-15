@@ -21,6 +21,8 @@ public class AgentDetailsDto {
   @NotNull
   List<String> features;
   @NotNull
+  List<FeatureDto> featuresList;
+  @NotNull
   List<String> responses;
   @NotNull
   List<String> configurations;

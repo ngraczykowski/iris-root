@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
+import com.silenteight.serp.governance.agent.details.dto.FeatureDto;
+
 import java.util.List;
 import javax.validation.constraints.NotNull;
 
@@ -22,4 +24,6 @@ public class ListAgentDto {
   String agentVersion;
   @NotNull
   List<String> features;
+  @NotNull
+  List<FeatureDto> featuresList;
 }

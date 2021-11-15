@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Import;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.serp.governance.agent.details.AgentDetailsFixture.DETAILS_DATE_AGENT_DTO;
+import static com.silenteight.serp.governance.agent.domain.file.details.AgentDetailsFixture.AGENT_FEATURE_DATE;
 import static com.silenteight.serp.governance.agent.domain.file.details.AgentDetailsFixture.DATE_AGENT_ID;
 import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.is;
@@ -33,6 +34,7 @@ class GetAgentDetailsRestControllerTest extends BaseRestControllerTest {
         .body("agentName", is(DETAILS_DATE_AGENT_DTO.getAgentName()))
         .body("agentVersion", is(DETAILS_DATE_AGENT_DTO.getAgentVersion()))
         .body("features", is(DETAILS_DATE_AGENT_DTO.getFeatures()))
+        .body("featuresList[0].name", is(AGENT_FEATURE_DATE))
         .body("responses", is(DETAILS_DATE_AGENT_DTO.getResponses()))
         .body("configurations", is(DETAILS_DATE_AGENT_DTO.getConfigurations()));
   }
