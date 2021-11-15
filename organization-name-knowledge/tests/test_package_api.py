@@ -1,6 +1,26 @@
 import pytest
 
-from organization_name_knowledge.api import get_all_legal_terms, parse
+from organization_name_knowledge.api import (
+    generate_matching_legal_terms,
+    get_all_legal_terms,
+    parse,
+)
+from organization_name_knowledge.names.parse import create_tokens
+
+
+@pytest.mark.parametrize(
+    "name, expected_terms",
+    [
+        ("Silent Limited", ["limited liability company"]),
+        ("Silent Eight Pte Ltd", ["Private limited company", "limited liability company"]),
+        ("Corporation of Cracow", ["Corporation"]),
+        ("The Corp. of XYZ", ["Corporation"]),
+    ],
+)
+def test_generate_matching_legal_terms(name, expected_terms):
+    tokens = create_tokens(name)
+    for actual, expected in zip(generate_matching_legal_terms(tokens), expected_terms):
+        assert actual[0].normalized == expected
 
 
 @pytest.mark.parametrize(

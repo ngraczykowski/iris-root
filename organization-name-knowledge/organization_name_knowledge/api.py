@@ -83,16 +83,8 @@ def _get_matching_tokens(name: str, term_sources: TermSources) -> Set[str]:
 def generate_matching_legal_terms(
     tokens: TokensSequence,
 ) -> Generator[Sequence[LegalTerm], None, None]:
+    """For given TokensSequence, yielding LegalTerm sequences that match any of tokens"""
     for token in tokens:
         key = tuple(token.cleaned.split())
         if key in KnowledgeBase.legal_terms.source_to_legal_terms:
             yield KnowledgeBase.legal_terms.source_to_legal_terms[key]
-
-
-def get_all_legal_terms_meanings(legal_terms_sequence: Sequence[Sequence[LegalTerm]]) -> Set[str]:
-    return {
-        meaning
-        for legal_terms in legal_terms_sequence
-        for legal_term in legal_terms
-        for meaning in legal_term.meaning
-    }

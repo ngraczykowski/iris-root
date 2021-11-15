@@ -83,8 +83,12 @@ def cut_until_any_term_matches(
         if term:
             break
 
-        non_matching_tokens.append(name[-1])
-        name = name[:-1]
+        if from_start:
+            non_matching_tokens.append(name[0])
+            name = name[1:]
+        else:
+            non_matching_tokens.append(name[-1])
+            name = name[:-1]
 
     if not from_start:
         non_matching_tokens = list(reversed(non_matching_tokens))

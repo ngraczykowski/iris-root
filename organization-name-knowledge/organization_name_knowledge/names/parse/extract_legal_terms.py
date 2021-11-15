@@ -26,7 +26,11 @@ def extract_legal_terms(
 
     if start_legal.endswith(end_legal.cleaned_name) and start_legal != end_legal:
         if _check_is_legal_part_of_name(start_legal):
-            return start_legal + without_legal_at_start, start_legal, start_other
+            return (
+                start_other + start_legal + without_legal_at_start,
+                start_legal,
+                TokensSequence(),
+            )
         else:
             return without_legal_at_start, start_legal, start_other
     else:
@@ -52,4 +56,4 @@ def _extract_legal_from_chosen_name_part(
 
 
 def _check_is_legal_part_of_name(legal: TokensSequence) -> bool:
-    return len(legal.cleaned_name.split()) < 3 or any(x in legal for x in ["of", "and"])
+    return len(legal.cleaned_name.split()) < 3 or any(x in legal for x in ["of", "and", "for"])

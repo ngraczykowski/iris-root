@@ -93,6 +93,8 @@ def test_cut_terms_with_weak_words(source, expected):
         ("mouse", (("mouse",), ())),
         ("field mouse", (("field",), ("mouse",))),
         ("mouse possum rat", (("mouse",), ("possum", "rat"))),
+        ("funny mouse possum", (("funny",), ("mouse", "possum"))),
+        ("rat mouse possum", (("rat",), ("mouse", "possum"))),
     ),
 )
 def test_cut_terms_saving_at_least_one_word(source, expected):
@@ -161,6 +163,8 @@ def test_cut_terms_from_start_with_weak_words_between(source, expected):
         ("house", ((), ("house",))),
         ("mouse", (("mouse",), ())),
         ("mouse and", (("mouse",), ("and",))),
+        ("mouse and aladeen", (("mouse",), ("and", "aladeen"))),
+        ("very funny mouse catches cheese", (("very", "funny", "mouse"), ("catches", "cheese"))),
     ),
 )
 def test_cut_until_any_term_matches(source, expected):
@@ -174,6 +178,8 @@ def test_cut_until_any_term_matches(source, expected):
         ("house", ((), ("house",))),
         ("mouse", (("mouse",), ())),
         ("mouse and", (("mouse", "and"), ())),
+        ("funny mouse met bug", (("mouse", "met", "bug"), ("funny",))),
+        ("Go far far away rat stuart", (("rat", "stuart"), ("go", "far", "far", "away"))),
     ),
 )
 def test_cut_until_any_term_matched_from_start(source, expected):
