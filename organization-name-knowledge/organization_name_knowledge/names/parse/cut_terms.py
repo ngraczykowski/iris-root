@@ -90,7 +90,6 @@ def cut_until_any_term_matches(
             non_matching_tokens.append(name[-1])
             name = name[:-1]
 
-
     if not from_start:
         non_matching_tokens = list(reversed(non_matching_tokens))
 
