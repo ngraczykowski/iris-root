@@ -1,5 +1,5 @@
 from itertools import combinations
-from typing import Generator, Sequence, Set
+from typing import Generator, List, Sequence, Set
 
 from organization_name_knowledge.knowledge_base.knowledge_base import KnowledgeBase
 from organization_name_knowledge.knowledge_base.legal_terms import LegalTerm
@@ -7,6 +7,8 @@ from organization_name_knowledge.knowledge_base.term_sources import TermSources
 from organization_name_knowledge.names.name_information import NameInformation
 from organization_name_knowledge.names.parse import create_tokens, parse_name
 from organization_name_knowledge.names.tokens_sequence import TokensSequence
+from organization_name_knowledge.utils import cut_name_to_leftmost_match
+from organization_name_knowledge.utils.term_variants import get_name_variants
 
 
 def parse(name: str) -> NameInformation:
@@ -27,6 +29,20 @@ def parse(name: str) -> NameInformation:
 
     name_information = parse_name(name)
     return name_information
+
+
+def parse_freetext(freetext: str) -> List[NameInformation]:
+    names_with_legals = [
+        (name, get_all_legal_terms(name)) for name in get_name_variants(freetext.lower())
+    ]
+
+    cut_names = {
+        cut_name_to_leftmost_match(name, legal_terms)
+        for name, legal_terms in names_with_legals
+        if legal_terms
+    }
+    parsed_names = [parse(name) for name in sorted(cut_names)]
+    return parsed_names
 
 
 def get_all_legal_terms(name: str) -> Set[str]:

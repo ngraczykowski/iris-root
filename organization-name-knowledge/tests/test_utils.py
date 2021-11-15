@@ -1,5 +1,7 @@
 import pytest
 
+from organization_name_knowledge.api import get_all_legal_terms
+from organization_name_knowledge.utils import cut_name_to_leftmost_match
 from organization_name_knowledge.utils.clear_name import clear_name, divide, remove_split_chars
 from organization_name_knowledge.utils.term_variants import get_term_variants
 
@@ -61,3 +63,14 @@ def test_get_term_variants(term, expected_variants):
 )
 def test_remove_split_chars(name, expected):
     assert remove_split_chars(name) == expected
+
+
+@pytest.mark.parametrize(
+    "name, expected",
+    [
+        ("Silent Eight Pte Ltd means our team", "Silent Eight Pte"),
+        ("The ABCD company based in poland", "The ABCD company"),
+    ],
+)
+def test_cut_name_to_leftmost_legal(name, expected):
+    assert cut_name_to_leftmost_match(name, get_all_legal_terms(name)) == expected
