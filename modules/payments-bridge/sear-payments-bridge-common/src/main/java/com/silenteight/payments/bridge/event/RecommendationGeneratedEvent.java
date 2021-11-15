@@ -14,6 +14,8 @@ import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 @ToString
 public class RecommendationGeneratedEvent extends DomainEvent {
 
+  public static final String CHANNEL = "recommendationGeneratedEventChannel";
+
   private final RecommendationsGenerated recommendationsGenerated;
 
 }

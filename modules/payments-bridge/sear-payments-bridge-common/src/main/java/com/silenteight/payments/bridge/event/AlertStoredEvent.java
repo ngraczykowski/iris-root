@@ -16,5 +16,7 @@ import java.util.UUID;
 @ToString
 public class AlertStoredEvent extends DomainEvent implements AlertId {
 
+  public static final String CHANNEL = "alertStoredEventChannel";
+
   private final UUID alertId;
 }

@@ -15,8 +15,9 @@ dependencies {
   implementation libraries.protobuf_java
   implementation libraries.protobuf_java_util
   implementation libraries.spring_messaging
-  implementation libraries.spring_integration_core
   implementation libraries.warehouse_data_api
+  implementation libraries.adjudication_engine_api
+  implementation libraries.commons_lang3
 
   testImplementation libraries.silenteight_sep_base_testing
 }

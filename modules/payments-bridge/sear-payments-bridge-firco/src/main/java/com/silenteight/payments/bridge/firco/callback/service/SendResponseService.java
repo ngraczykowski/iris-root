@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.dto.output.ClientRequestDto;
-import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.payments.bridge.event.AlertDeliveredEvent;
+import com.silenteight.payments.bridge.event.EventPublisher;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePayloadUseCase;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
@@ -21,7 +21,6 @@ import com.silenteight.sep.base.aspects.logging.LogContext;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.slf4j.MDC;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -36,7 +35,7 @@ class SendResponseService implements SendResponseUseCase {
   private final GetRecommendationUseCase getRecommendationUseCase;
   private final CallbackRequestFactory callbackRequestFactory;
   private final ClientRequestDtoMapper mapper;
-  private final CommonChannels commonChannels;
+  private final EventPublisher eventPublisher;
 
   @LogContext
   @Override
@@ -69,8 +68,8 @@ class SendResponseService implements SendResponseUseCase {
       callbackRequestFactory.create(requestDto).execute();
       log.info("The callback invoked successfully.");
 
-      commonChannels.deliveredAlertChannel().send(
-          MessageBuilder.withPayload(new AlertDeliveredEvent(alertId, status.name())).build());
+      eventPublisher.send(new AlertDeliveredEvent(alertId, status.name()));
+
     } catch (NonRecoverableCallbackException exception) {
       log.error("The callback failed with non-recoverable exception.");
       enrichException(exception, alertId, status);

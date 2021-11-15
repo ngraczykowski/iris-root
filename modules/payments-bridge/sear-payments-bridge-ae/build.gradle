@@ -13,7 +13,6 @@ dependencies {
   implementation libraries.spring_context
   implementation libraries.grpc_client_spring_boot_starter
   implementation libraries.grpc_server_spring_boot_starter
-  implementation libraries.spring_boot_starter_integration
   implementation libraries.spring_jdbc
 
   testImplementation libraries.silenteight_sep_base_testing

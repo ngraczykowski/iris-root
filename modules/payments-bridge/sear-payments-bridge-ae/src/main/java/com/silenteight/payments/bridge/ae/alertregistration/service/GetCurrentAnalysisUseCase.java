@@ -24,6 +24,7 @@ class GetCurrentAnalysisUseCase {
   }
 
   private String createNewAnalysis() {
-    return createAnalysisService.createAnalysis(buildCreateAnalysisRequestPort.build());
+    return createAnalysisService.createAnalysis(
+        buildCreateAnalysisRequestPort.buildFromCurrentModel());
   }
 }

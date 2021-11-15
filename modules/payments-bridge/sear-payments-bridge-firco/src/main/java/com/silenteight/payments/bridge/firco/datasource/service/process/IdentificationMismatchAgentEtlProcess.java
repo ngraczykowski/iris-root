@@ -35,7 +35,8 @@ class IdentificationMismatchAgentEtlProcess implements EtlProcess {
   @Override
   public void extractAndLoad(AlertRegisteredEvent data, AlertEtlResponse alertEtlResponse) {
     List<HitData> hitsData = alertEtlResponse.getHits();
-    data.getMatches().entrySet().forEach(matchItem -> handleMatches(hitsData, matchItem));
+    data.getAeAlert().getMatches().entrySet()
+        .forEach(matchItem -> handleMatches(hitsData, matchItem));
   }
 
   private void handleMatches(List<HitData> hitsData, Entry<String, String> matchItem) {

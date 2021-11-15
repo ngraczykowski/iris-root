@@ -33,7 +33,7 @@ class CategoryEtlProcess implements EtlProcess {
   @Override
   public void extractAndLoad(AlertRegisteredEvent data, AlertEtlResponse alertEtlResponse) {
     List<HitData> hitsData = alertEtlResponse.getHits();
-    data.getMatches()
+    data.getAeAlert().getMatches()
         .entrySet()
         .forEach(
             matchItem -> handleMatches(hitsData, matchItem));

@@ -20,8 +20,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static com.silenteight.payments.bridge.common.integration.CommonChannels.RECOMMENDATION_GENERATED;
-
 @Profile("mockae")
 @GrpcService
 @RequiredArgsConstructor
@@ -67,7 +65,7 @@ class RecommendationServiceGrpc extends RecommendationServiceImplBase {
   };
 
   @Order(0)
-  @ServiceActivator(inputChannel = RECOMMENDATION_GENERATED)
+  @ServiceActivator(inputChannel = RecommendationGeneratedEvent.CHANNEL)
   void cacheAlertId(RecommendationGeneratedEvent event) {
     event.getRecommendationsGenerated()
         .getRecommendationInfosList().forEach(info -> {

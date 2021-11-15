@@ -4,5 +4,5 @@ import com.silenteight.adjudication.api.v1.CreateAnalysisRequest;
 
 public interface BuildCreateAnalysisRequestPort {
 
-  CreateAnalysisRequest build();
+  CreateAnalysisRequest buildFromCurrentModel();
 }

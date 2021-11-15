@@ -9,7 +9,7 @@ import com.silenteight.data.api.v2.ProductionDataIndexRequest;
 import com.silenteight.payments.bridge.event.WarehouseIndexRequestedEvent;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexRequestId;
 import com.silenteight.payments.bridge.warehouse.index.model.RequestOrigin;
-import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertUseCase;
+import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertPort;
 
 import com.google.common.base.Preconditions;
 import com.google.protobuf.TextFormat;
@@ -22,7 +22,7 @@ import org.springframework.util.IdGenerator;
 @Slf4j
 class IndexAlertService implements IndexAlertUseCase {
 
-  private final IndexAlertPublisher indexAlertPublisher;
+  private final IndexAlertPort indexAlertPort;
 
   @Setter
   private IdGenerator idGenerator = new AlternativeJdkIdGenerator();
@@ -41,7 +41,7 @@ class IndexAlertService implements IndexAlertUseCase {
       log.debug("Sending indexing request: {}", TextFormat.shortDebugString(indexRequest));
     }
 
-    indexAlertPublisher.send(
+    indexAlertPort.send(
         new WarehouseIndexRequestedEvent(indexRequest, requestOrigin.mapToIndexRequestOrigin()));
     log.info("Sent payload for indexing: requestId={}, alertCount={}",
         requestId, indexRequest.getAlertsCount());

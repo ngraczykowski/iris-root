@@ -4,20 +4,29 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.*;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.Label;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterMatchResponse;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AlertClientPort;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
+import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
+import com.silenteight.payments.bridge.common.model.AlertData;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import javax.annotation.Nonnull;
 
+import static com.silenteight.payments.bridge.common.protobuf.TimestampConverter.fromOffsetDateTime;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -30,16 +39,47 @@ class RegisterAlertService implements RegisterAlertUseCase {
   private final AlertClientPort alertClient;
 
   @Override
-  public RegisterAlertResponse register(RegisterAlertRequest registerAlertRequest) {
-    var response = alertClient.createAlert(registerAlertRequest.toCreateAlertRequest());
+  public RegisterAlertResponse register(AlertData alertData, AlertMessageDto alertDto) {
+    var request = createRequest(alertData, alertDto);
+    var response = alertClient.createAlert(request.toCreateAlertRequest());
     var alertName = response.getName();
 
     var matchesNames =
-        alertClient.createMatches(registerAlertRequest.toCreateMatchesRequest(alertName));
-
+        alertClient.createMatches(request.toCreateMatchesRequest(alertName));
     return createRegisterAlertResponse(
-        registerAlertRequest.getAlertId(), alertName, matchesNames.getMatchesList());
+        request.getAlertId(), alertName, matchesNames.getMatchesList());
   }
+
+  private RegisterAlertRequest createRequest(AlertData alertData, AlertMessageDto alertDto) {
+
+    var matchIds = getMatchIds(alertDto);
+    var request = RegisterAlertRequest.builder()
+        .alertId(alertDto.getSystemID())
+        .alertTime(fromOffsetDateTime(alertDto.getFilteredAt(ZoneOffset.UTC)))
+        .priority(alertData.getPriority())
+        .matchIds(matchIds)
+        .label(Label.of("source", "CMAPI"))
+        .label(Label.of("alertMessageId", alertData.getAlertId().toString()))
+        .build();
+    return request;
+  }
+
+  @Nonnull
+  private static List<String> getMatchIds(AlertMessageDto alertDto) {
+    var hits = alertDto.getHits();
+
+    // XXX(ahaczewski): WATCH OUT! AlertParserService#createAlertEtlResponse() assumes the same
+    //  iteration order!!! Make sure you keep it in sync, until shit gets cleaned!!!
+    return IntStream.range(0, hits.size())
+        .<Optional<String>>mapToObj(idx -> {
+          var hit = hits.get(idx).getHit();
+          return hit.isBlocking() ? Optional.of(hit.getMatchId(idx)) : Optional.empty();
+        })
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .collect(Collectors.toList());
+  }
+
 
   private RegisterAlertResponse createRegisterAlertResponse(
       String alertId, String alertName, List<Match> matches) {
@@ -58,6 +98,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
         .build();
   }
 
+  @Override
   public List<RegisterAlertResponse> batchRegistration(
       List<RegisterAlertRequest> registerAlertRequests) {
     if (CollectionUtils.isEmpty(registerAlertRequests)) {

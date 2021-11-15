@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.payments.bridge.event.AlertRejectedEvent;
+import com.silenteight.payments.bridge.event.EventPublisher;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
+import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageStatusUseCase;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
@@ -27,12 +27,12 @@ import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMess
 @RequiredArgsConstructor
 @Service
 @Slf4j
-class AlertMessageStatusService {
+class AlertMessageStatusService implements AlertMessageStatusUseCase {
 
   private final AlertMessageStatusRepository repository;
   private final AlertMessagePayloadRepository payloadRepository;
   private final AlertMessageProperties alertMessageProperties;
-  private final CommonChannels commonChannels;
+  private final EventPublisher eventPublisher;
 
   @Setter
   private Clock clock = Clock.systemUTC();
@@ -40,6 +40,11 @@ class AlertMessageStatusService {
   AlertMessageStatusEntity findByAlertId(UUID alertMessageId) {
     return repository.findByAlertMessageId(alertMessageId)
         .orElseThrow(EntityNotFoundException::new);
+  }
+
+  @Override
+  public AlertMessageStatus getStatus(UUID alertMessageId) {
+    return findByAlertId(alertMessageId).getStatus();
   }
 
   /**
@@ -63,7 +68,7 @@ class AlertMessageStatusService {
 
     repository.save(entity);
 
-    if (destinationStatus.isFinal() &&
+    if (destinationStatus.isFinal() && delivery.isFinal() &&
         alertMessageProperties.isOriginalMessageDeletedAfterRecommendation()) {
       log.debug("Removing original message of alert: {}", alertMessageId);
       payloadRepository.deleteByAlertMessageId(alertMessageId);
@@ -76,10 +81,7 @@ class AlertMessageStatusService {
   private void publishRejectionIfApply(UUID alertId, AlertMessageStatus destinationStatus) {
     if (EnumSet.of(REJECTED_OVERFLOWED, REJECTED_DAMAGED, REJECTED_OUTDATED)
         .contains(destinationStatus)) {
-      commonChannels.alertRejected().send(
-          MessageBuilder.withPayload(
-              new AlertRejectedEvent(alertId, destinationStatus.name())).build()
-      );
+      eventPublisher.send(new AlertRejectedEvent(alertId, destinationStatus.name()));
     }
   }
 

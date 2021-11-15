@@ -8,4 +8,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ModelUpdatedEvent extends DomainEvent {
+
+  public static final String CHANNEL = "modelUpdatedEventChannel";
+
 }

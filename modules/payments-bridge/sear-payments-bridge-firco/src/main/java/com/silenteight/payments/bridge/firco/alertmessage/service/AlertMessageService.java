@@ -20,7 +20,6 @@ class AlertMessageService implements AlertMessageUseCase {
     var entity = alertMessageRepository.findById(alertMessageId)
         .orElseThrow(EntityNotFoundException::new);
 
-    // TODO: incorporate eg. mapstruct mapper to avoid such mess.
     return AlertData.builder()
         .messageId(entity.getMessageId())
         .businessUnit(entity.getBusinessUnit())

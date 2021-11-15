@@ -2,8 +2,8 @@ package com.silenteight.payments.bridge.app.amqp;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.payments.bridge.event.AlertUndeliveredEvent;
+import com.silenteight.payments.bridge.event.EventPublisher;
 import com.silenteight.payments.bridge.firco.callback.model.CallbackException;
 import com.silenteight.payments.bridge.firco.callback.model.NonRecoverableCallbackException;
 import com.silenteight.payments.bridge.firco.callback.model.RecoverableCallbackException;
@@ -16,7 +16,6 @@ import org.springframework.boot.autoconfigure.amqp.RabbitRetryTemplateCustomizer
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
 
@@ -29,8 +28,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 class RabbitCustomizer {
 
-  private final CommonChannels commonChannels;
   private final RabbitProperties rabbitProperties;
+  private final EventPublisher eventPublisher;
 
   @Bean
   RabbitRetryTemplateCustomizer rabbitRetryTemplateCustomizer() {
@@ -61,10 +60,8 @@ class RabbitCustomizer {
       public void recover(Message message, Throwable cause) {
         findCallbackException(cause)
             .ifPresent(exception ->
-              commonChannels.undeliveredAlertChannel().send(
-                  MessageBuilder.withPayload(
-                      new AlertUndeliveredEvent(exception.getAlertId(),
-                          exception.getStatus().name())).build())
+                eventPublisher.send(new AlertUndeliveredEvent(exception.getAlertId(),
+                        exception.getStatus().name()))
             );
         super.recover(message, cause);
       }

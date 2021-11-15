@@ -8,7 +8,7 @@ import com.silenteight.payments.bridge.governance.solvingmodel.port.GetCurrentPr
 
 import org.springframework.stereotype.Service;
 
-import static com.silenteight.payments.bridge.governance.solvingmodel.service.AnalysisModelMapper.fromSolvingModel;
+import static com.silenteight.payments.bridge.governance.solvingmodel.model.AnalysisModel.fromSolvingModel;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +20,6 @@ class GetCurrentProductionModelService implements GetCurrentProductionModelUseCa
   @Override
   public AnalysisModel getModel() {
     var currentModel = client.getCurrentModel();
-
     return fromSolvingModel(currentModel);
   }
 }

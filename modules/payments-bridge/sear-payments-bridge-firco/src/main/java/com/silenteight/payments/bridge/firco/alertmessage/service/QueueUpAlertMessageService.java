@@ -3,15 +3,15 @@ package com.silenteight.payments.bridge.firco.alertmessage.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.common.integration.CommonChannels;
 import com.silenteight.payments.bridge.event.AlertStoredEvent;
+import com.silenteight.payments.bridge.event.EventPublisher;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
+import com.silenteight.payments.bridge.firco.alertmessage.port.MessageStoredPublisherPort;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.STORED;
@@ -28,7 +28,8 @@ class QueueUpAlertMessageService {
   private final AlertMessageStatusRepository repository;
   private final AlertMessageProperties properties;
 
-  private final CommonChannels commonChannels;
+  private final MessageStoredPublisherPort messageStoredPublisherPort;
+  private final EventPublisher eventPublisher;
 
   void queueUp(FircoAlertMessage alert) {
     if (isQueueOverflowed()) {
@@ -36,12 +37,9 @@ class QueueUpAlertMessageService {
       return;
     }
 
-    commonChannels.messageStoredOutbound().send(
-        MessageBuilder.withPayload(buildMessageStore(alert)).build());
+    messageStoredPublisherPort.send(buildMessageStore(alert));
     statusService.transitionAlertMessageStatus(alert.getId(), STORED, NA);
-    commonChannels.alertStored().send(
-        MessageBuilder.withPayload(new AlertStoredEvent(alert.getId())).build()
-    );
+    eventPublisher.send(new AlertStoredEvent(alert.getId()));
   }
 
   private boolean isQueueOverflowed() {
@@ -52,13 +50,9 @@ class QueueUpAlertMessageService {
     log.warn("AlertMessage [{}] rejected due to queue limit ({})",
         alert.getId(), properties.getStoredQueueLimit());
 
-    commonChannels.recommendationCompleted().send(
-        MessageBuilder.withPayload(
-            RecommendationCompletedEvent.fromBridge(
-                alert.getId(),
-                AlertMessageStatus.REJECTED_OVERFLOWED.name(),
-                QUEUE_OVERFLOWED.name())).build()
-    );
+    eventPublisher.send(RecommendationCompletedEvent.fromBridge(
+        alert.getId(), AlertMessageStatus.REJECTED_OVERFLOWED.name(),
+        QUEUE_OVERFLOWED.name()));
   }
 
   private MessageStored buildMessageStore(FircoAlertMessage message) {

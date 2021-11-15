@@ -3,20 +3,18 @@ package com.silenteight.payments.bridge.svb.learning.reader.service;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
-import com.silenteight.payments.bridge.svb.learning.reader.domain.IndexRegisterAlertRequest;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.ReadAlertError;
-import com.silenteight.payments.bridge.svb.learning.reader.port.CheckAlertRegisteredPort;
+import com.silenteight.payments.bridge.svb.learning.reader.domain.RegisteredAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CreateAlertRetentionPort;
-import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory;
-import com.silenteight.payments.bridge.warehouse.index.model.IndexedAlertBuilderFactory.AlertBuilder;
-import com.silenteight.payments.bridge.warehouse.index.model.RequestOrigin;
-import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertUseCase;
+import com.silenteight.payments.bridge.svb.learning.reader.port.FindRegisteredAlertPort;
+import com.silenteight.payments.bridge.svb.learning.reader.port.IndexLearningAlertPort;
 
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import static com.silenteight.payments.bridge.svb.learning.reader.domain.IndexRegisterAlertRequest.fromLearningAlerts;
@@ -29,11 +27,10 @@ class IngestService {
 
   private final RegisterAlertUseCase registerAlertUseCase;
   private final DataSourceIngestService dataSourceIngestService;
-  private final IndexAlertUseCase indexAlertUseCase;
-  private final CheckAlertRegisteredPort checkAlertRegisteredPort;
-  private final IndexedAlertBuilderFactory alertBuilderFactory;
-  private final LearningWarehouseMapper warehouseMapper;
+  private final FindRegisteredAlertPort findRegisteredAlertPort;
   private final CreateAlertRetentionPort createAlertRetentionPort;
+  private final DecisionMapper decisionMapper;
+  private final IndexLearningAlertPort indexLearningAlertPort;
 
   void ingest(LearningAlertBatch batch) {
     var alerts = batch.getLearningAlerts().stream()
@@ -44,17 +41,12 @@ class IngestService {
       return;
     }
 
-    var alertRegistrations = alerts.stream()
-        .map(LearningAlert::toFindRegisterAlertRequest)
-        .distinct().collect(toList());
-    var existing = checkAlertRegisteredPort.findAlertRegistered(alertRegistrations);
+    alerts.forEach(alert ->
+        alert.setDecision(decisionMapper.map(alert.getAnalystDecision().getStatus())));
 
+    var registeredAlertMap = buildRegisteredAlertMap(alerts);
     var unregisteredAlerts = alerts.stream()
-        .filter(learningAlert -> existing
-            .stream()
-            .filter(e -> e.getDiscriminator().equals(learningAlert.getDiscriminator()))
-            .findAny()
-            .isEmpty())
+        .filter(la -> !registeredAlertMap.containsKey(la.getDiscriminator()))
         .collect(toList());
     if (unregisteredAlerts.size() > 0) {
       processUnregistered(unregisteredAlerts, batch.getErrors());
@@ -63,23 +55,28 @@ class IngestService {
     var registeredAlerts = new ArrayList<>(alerts);
     registeredAlerts.removeAll(unregisteredAlerts);
     var indexAlertsRequest =
-        existing.stream().map(ra -> fromLearningAlerts(ra, registeredAlerts)).collect(toList());
+        registeredAlertMap.values().stream()
+            .map(ra -> fromLearningAlerts(ra, registeredAlerts)).collect(toList());
     if (registeredAlerts.size() > 0) {
-      processRegistered(indexAlertsRequest);
+      indexLearningAlertPort.indexForLearning(indexAlertsRequest);
       createAlertRetentionPort.create(registeredAlerts);
     }
+  }
+
+  private Map<String, RegisteredAlert> buildRegisteredAlertMap(List<LearningAlert> alerts) {
+    var registeredAlertRequests = alerts.stream()
+        .map(LearningAlert::toFindRegisterAlertRequest)
+        .distinct().collect(toList());
+    return findRegisteredAlertPort.find(registeredAlertRequests).stream()
+        .collect(toMap(RegisteredAlert::getDiscriminator, Function.identity()));
   }
 
   private void processUnregistered(
       List<LearningAlert> learningAlerts, List<ReadAlertError> errors) {
     register(learningAlerts);
     dataSourceIngestService.createValues(learningAlerts, errors);
-    index(learningAlerts);
+    indexLearningAlertPort.index(learningAlerts);
     createAlertRetentionPort.create(learningAlerts);
-  }
-
-  private void processRegistered(List<IndexRegisterAlertRequest> indexRegisterAlertRequest) {
-    indexForLearning(indexRegisterAlertRequest);
   }
 
   private List<LearningAlert> register(List<LearningAlert> learningAlerts) {
@@ -99,42 +96,4 @@ class IngestService {
     return new ArrayList<>(learningAlertsMap.values());
   }
 
-  private void index(List<LearningAlert> learningAlerts) {
-    var alerts = learningAlerts.stream()
-        .map(learningAlert -> {
-          var alertBuilder = createIndexAlertBuilder(learningAlert)
-              .addPayload(warehouseMapper.makeAlert(learningAlert));
-          learningAlert.getMatches().forEach(m -> alertBuilder
-              .newMatch()
-              .setName(m.getMatchName())
-              .setDiscriminator(m.getMatchName())
-              .addPayload(warehouseMapper.makeMatch(m))
-              .finish());
-          return alertBuilder.build();
-        })
-        .collect(toList());
-    indexAlertUseCase.index(alerts, RequestOrigin.LEARNING);
-  }
-
-  private void indexForLearning(List<IndexRegisterAlertRequest> indexRegisterAlertRequest) {
-    var alerts = indexRegisterAlertRequest.stream()
-        .map(indexAlert -> {
-          var alertBuilder = createIndexAlertBuilder(indexAlert.getLearningAlert());
-          indexAlert.getMatchNames().forEach(matchName -> alertBuilder
-              .newMatch()
-              .setName(matchName)
-              .setDiscriminator(matchName)
-              .finish());
-          return alertBuilder.build();
-        })
-        .collect(toList());
-    indexAlertUseCase.index(alerts, RequestOrigin.LEARNING);
-  }
-
-  private AlertBuilder createIndexAlertBuilder(LearningAlert learningAlert) {
-    return alertBuilderFactory.newBuilder()
-        .setDiscriminator(learningAlert.getDiscriminator())
-        .setName(learningAlert.getAlertName())
-        .addPayload(warehouseMapper.makeAnalystDecision(learningAlert.getAnalystDecision()));
-  }
 }

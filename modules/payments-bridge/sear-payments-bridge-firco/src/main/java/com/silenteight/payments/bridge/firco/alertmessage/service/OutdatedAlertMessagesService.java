@@ -4,14 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.common.integration.CommonChannels;
+import com.silenteight.payments.bridge.event.EventPublisher;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.OutdatedAlertMessagesUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.integration.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 import java.time.Clock;
@@ -25,7 +24,7 @@ class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCase {
 
   private final AlertMessageProperties alertMessageProperties;
   private final AlertMessageStatusRepository repository;
-  private final CommonChannels commonChannels;
+  private final EventPublisher eventPublisher;
 
   @Setter
   private Clock clock = Clock.systemUTC();
@@ -45,12 +44,9 @@ class OutdatedAlertMessagesService implements OutdatedAlertMessagesUseCase {
 
   private void transitionToOutdated(AlertMessageStatusEntity status) {
     var alertId = status.getAlertMessageId();
-    commonChannels.recommendationCompleted().send(
-        MessageBuilder.withPayload(
-            RecommendationCompletedEvent.fromBridge(alertId,
-                AlertMessageStatus.REJECTED_OUTDATED.name(),
-                RecommendationReason.OUTDATED.name())
-        ).build());
+    eventPublisher.send(RecommendationCompletedEvent.fromBridge(alertId,
+            AlertMessageStatus.REJECTED_OUTDATED.name(),
+            RecommendationReason.OUTDATED.name()));
   }
 
 }

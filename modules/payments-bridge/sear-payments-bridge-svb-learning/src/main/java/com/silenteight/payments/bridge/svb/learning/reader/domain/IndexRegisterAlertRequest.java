@@ -3,8 +3,6 @@ package com.silenteight.payments.bridge.svb.learning.reader.domain;
 import lombok.Builder;
 import lombok.Value;
 
-import com.silenteight.payments.bridge.common.model.RegisteredAlert;
-
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -13,7 +11,6 @@ import java.util.NoSuchElementException;
 public class IndexRegisterAlertRequest {
 
   LearningAlert learningAlert;
-
   List<String> matchNames;
 
   public static IndexRegisterAlertRequest fromLearningAlerts(

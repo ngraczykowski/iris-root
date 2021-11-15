@@ -14,9 +14,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.silenteight.payments.bridge.common.integration.CommonChannels.ALERT_INPUT_ACCEPTED;
-import static com.silenteight.payments.bridge.common.integration.CommonChannels.RECOMMENDATION_GENERATED;
-
 @Profile("mockae")
 @MessageEndpoint
 @RequiredArgsConstructor
@@ -25,10 +22,16 @@ class RecommendationShortPathIntegration {
   private final JdbcTemplate jdbcTemplate;
 
   /*
-   * Simulate issuing recommendation just after universal-data-source confirmed input values.
-   * This short-path does not exist in reality.
+   * Simulate issuing recommendation just after universal-data-source has accepted input values.
    */
-  @ServiceActivator(inputChannel = ALERT_INPUT_ACCEPTED, outputChannel = RECOMMENDATION_GENERATED)
+  private String getAnalysisName() {
+    return jdbcTemplate.queryForObject("select analysis_name from pb_analysis "
+        + "where created_at > now() - interval '15 min' order by created_at desc limit 1",
+        String.class);
+  }
+
+  @ServiceActivator(inputChannel = AlertInputAcceptedEvent.CHANNEL,
+      outputChannel = RecommendationGeneratedEvent.CHANNEL)
   RecommendationGeneratedEvent generateRecommendation(AlertInputAcceptedEvent event) {
     var analysisName = getAnalysisName();
     var recommendationId = ThreadLocalRandom.current().nextInt(10000) + 1;
@@ -36,17 +39,11 @@ class RecommendationShortPathIntegration {
         .setAnalysis(analysisName)
         .addRecommendationInfos(
             RecommendationInfo.newBuilder()
-                .setAlert(event.getAlertRegisteredName())
+                .setAlert(event.getAeAlert().getAlertName())
                 .setRecommendation("analysis/MOCKAE/recommendations/" + recommendationId)
                 .build()).build();
 
     return new RecommendationGeneratedEvent(recommendationsGenerated);
-  }
-
-  private String getAnalysisName() {
-    return jdbcTemplate.queryForObject("select analysis_name from pb_analysis "
-        + "where created_at > now() - interval '15 min' order by created_at desc limit 1",
-        String.class);
   }
 
 }

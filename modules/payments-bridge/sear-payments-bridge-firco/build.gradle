@@ -5,7 +5,6 @@ plugins {
 
 dependencies {
   implementation project(":sear-payments-common")
-  implementation project(":sear-payments-bridge-ae")
   implementation project(":sear-payments-bridge-agents")
   implementation project(":sear-payments-bridge-common")
   implementation project(":sear-payments-bridge-etl")
@@ -20,9 +19,6 @@ dependencies {
   implementation libraries.spring_boot
   implementation libraries.spring_boot_starter_oauth2_client
   implementation libraries.spring_context
-  implementation libraries.spring_integration_amqp
-  implementation libraries.spring_integration_core
-  implementation libraries.spring_integration_http
   implementation libraries.spring_security_core
   implementation libraries.spring_web
   implementation libraries.spring_webmvc
@@ -47,7 +43,6 @@ dependencies {
   implementation libraries.data_source_categories_api
   implementation libraries.data_source_comments_api
   implementation libraries.data_source_agentinput_api
-  implementation libraries.warehouse_data_api
 
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.spring_security_test

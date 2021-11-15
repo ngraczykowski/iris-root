@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-import com.silenteight.payments.bridge.event.data.AlertDataIdentifier;
-
 import java.util.UUID;
 
 /**
@@ -15,7 +13,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Getter
 @ToString
-public class AlertUndeliveredEvent extends DomainEvent implements AlertDataIdentifier {
+public class AlertUndeliveredEvent extends DomainEvent {
+
+  public static final String CHANNEL = "alertUndeliveredEventChannel";
 
   private final UUID alertId;
   private final String status;

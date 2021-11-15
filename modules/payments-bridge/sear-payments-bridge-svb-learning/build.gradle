@@ -10,7 +10,6 @@ dependencies {
   implementation project(":sear-payments-bridge-agents")
   implementation project(":sear-payments-bridge-etl")
   implementation project(":sear-payments-bridge-mock-datasource")
-  implementation project(":sear-payments-bridge-warehouse")
   implementation project(":proto-sear-payments-bridge-internal-protos")
 
   implementation libraries.silenteight_sep_base_common
@@ -22,8 +21,6 @@ dependencies {
   implementation libraries.spring_amqp
   implementation libraries.spring_boot
   implementation libraries.spring_context
-  implementation libraries.spring_integration_amqp
-  implementation libraries.spring_integration_core
   implementation libraries.spring_security_core
   implementation libraries.spring_web
   implementation libraries.spring_webmvc
