@@ -1,5 +1,5 @@
 import re
-from typing import Dict, Sequence, Tuple
+from typing import Dict, List, Sequence, Tuple
 
 from organization_name_knowledge.knowledge_base import KnowledgeBase
 from organization_name_knowledge.names.name_information import (
@@ -23,7 +23,7 @@ from organization_name_knowledge.utils.clear_name import clear_name
 
 def _fix_expression_divided(information: Tuple[TokensSequence, ...]) -> Tuple[TokensSequence, ...]:
     # handle common prefixes separately - words move right, not left as in other cases
-    information = list(information)
+    information: List[TokensSequence] = list(information)
     if information[0] and information[0][-1].cleaned in KnowledgeBase.joining_words:
         information[1] = TokensSequence([*information[0][-2:], *information[1]])
         information[0] = TokensSequence(information[0][:-2])
