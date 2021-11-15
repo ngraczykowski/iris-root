@@ -7,20 +7,24 @@ import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import static com.silenteight.warehouse.report.reporting.ReportRange.of;
 import static java.time.LocalDate.parse;
+import static java.time.LocalTime.MIDNIGHT;
+import static java.time.OffsetDateTime.of;
+import static java.time.ZoneOffset.UTC;
 import static java.util.List.of;
 
 @NoArgsConstructor
 public final class MetricsReportTestFixtures {
 
   public static final String ANALYSIS_ID = "07fdee7c-9a66-416d-b835-32aebcb63013";
-  public static final String FROM_QUERY_PARAM = "2021-08-15";
-  public static final String TO_QUERY_PARAM = "2021-10-15";
+  public static final String QUERY_PARAM_FROM = "2021-08-15";
+  public static final String QUERY_PARAM_TO = "2021-10-15";
   public static final String REPORT_FILENAME =
-      "Production_Metrics_" + FROM_QUERY_PARAM + "_To_" + TO_QUERY_PARAM + ".csv";
+      "Production_Metrics_" + QUERY_PARAM_FROM + "_To_" + QUERY_PARAM_TO + ".csv";
 
   public static final String REPORT_CONTENT = "content";
   public static final long REPORT_ID = 4;
@@ -55,7 +59,9 @@ public final class MetricsReportTestFixtures {
   public static final String HIT_TYPE_FIELD_LABEL = "List Type";
   public static final String ALERT_STATUS_FIELD = "alert_status";
   public static final String COMPLETED_VALUE = "COMPLETED";
-  public static final LocalDate LOCAL_DATE_FROM = parse(FROM_QUERY_PARAM);
-  public static final LocalDate LOCAL_DATE_TO = parse(TO_QUERY_PARAM);
-  public static final ReportRange REPORT_RANGE = of(LOCAL_DATE_FROM, LOCAL_DATE_TO);
+  public static final LocalDate LOCAL_DATE_FROM = parse(QUERY_PARAM_FROM);
+  public static final OffsetDateTime OFFSET_DATE_TIME_FROM = of(LOCAL_DATE_FROM, MIDNIGHT, UTC);
+  public static final LocalDate LOCAL_DATE_TO = parse(QUERY_PARAM_TO);
+  public static final OffsetDateTime OFFSET_DATE_TIME_TO = of(LOCAL_DATE_TO, MIDNIGHT, UTC);
+  public static final ReportRange REPORT_RANGE = of(OFFSET_DATE_TIME_FROM, OFFSET_DATE_TIME_TO);
 }

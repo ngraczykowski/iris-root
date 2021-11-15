@@ -29,8 +29,8 @@ class CreateRbsReportRestControllerTest extends BaseRestControllerTest {
 
   private static final String CREATE_PRODUCTION_REPORT_URL =
       fromUriString("/v2/analysis/production/reports/RB_SCORER")
-          .queryParam("from", FROM_QUERY_PARAM)
-          .queryParam("to", TO_QUERY_PARAM)
+          .queryParam("from", OFFSET_DATE_TIME_FROM)
+          .queryParam("to", OFFSET_DATE_TIME_TO)
           .build()
           .toString();
 

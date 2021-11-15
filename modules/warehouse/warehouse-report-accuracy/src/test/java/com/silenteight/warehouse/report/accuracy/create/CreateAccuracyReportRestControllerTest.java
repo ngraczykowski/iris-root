@@ -35,8 +35,8 @@ class CreateAccuracyReportRestControllerTest extends BaseRestControllerTest {
 
   private static final String CREATE_PRODUCTION_REPORT_URL =
       fromUriString("/v2/analysis/production/reports/ACCURACY")
-          .queryParam("from", FROM_QUERY_PARAM)
-          .queryParam("to", TO_QUERY_PARAM)
+          .queryParam("from", OFFSET_DATE_TIME_FROM)
+          .queryParam("to", OFFSET_DATE_TIME_TO)
           .build()
           .toString();
 
@@ -58,7 +58,7 @@ class CreateAccuracyReportRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER, APPROVER })
   void its303_whenProductionReportCreated() {
-    given(productionUseCase.createReport(LOCAL_DATE_FROM, LOCAL_DATE_TO))
+    given(productionUseCase.createReport(OFFSET_DATE_TIME_FROM, OFFSET_DATE_TIME_TO))
         .willReturn(REPORT_INSTANCE);
 
     post(CREATE_PRODUCTION_REPORT_URL)
@@ -70,12 +70,12 @@ class CreateAccuracyReportRestControllerTest extends BaseRestControllerTest {
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER, APPROVER })
   void its400_whenInvalidDateRangeParametersOrder() {
     String invalidParametersUrl = fromUriString("/v2/analysis/production/reports/ACCURACY")
-        .queryParam("from", TO_QUERY_PARAM)
-        .queryParam("to", FROM_QUERY_PARAM)
+        .queryParam("from", QUERY_PARAM_TO)
+        .queryParam("to", QUERY_PARAM_FROM)
         .build()
         .toString();
 
-    given(productionUseCase.createReport(LOCAL_DATE_TO, LOCAL_DATE_FROM))
+    given(productionUseCase.createReport(OFFSET_DATE_TIME_FROM, OFFSET_DATE_TIME_TO))
         .willThrow(InvalidDateRangeParametersOrderException.class);
 
     post(invalidParametersUrl).statusCode(BAD_REQUEST.value());

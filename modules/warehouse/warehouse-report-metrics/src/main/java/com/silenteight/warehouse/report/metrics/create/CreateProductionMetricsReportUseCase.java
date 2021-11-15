@@ -9,7 +9,7 @@ import com.silenteight.warehouse.report.metrics.generation.PropertiesDefinition;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 import javax.validation.Valid;
 
@@ -20,6 +20,7 @@ import static java.lang.String.format;
 class CreateProductionMetricsReportUseCase {
 
   private static final String PRODUCTION_ANALYSIS_NAME = "production";
+  private static final String FILE_NAME = "Production_Metrics_%s_To_%s.csv";
 
   @NonNull
   private final MetricsReportService reportService;
@@ -29,14 +30,14 @@ class CreateProductionMetricsReportUseCase {
   @NonNull
   private final PropertiesDefinition productionProperties;
 
-  ReportInstanceReferenceDto createReport(LocalDate from, LocalDate to) {
+  ReportInstanceReferenceDto createReport(OffsetDateTime from, OffsetDateTime to) {
     ReportRange range = of(from, to);
     List<String> indexes = productionIndexerQuery.getIndexesForAnalysis(PRODUCTION_ANALYSIS_NAME);
-    String fileName = getFileName(from, to);
+    String fileName = getFileName(range);
     return reportService.createReportInstance(range, fileName, indexes, productionProperties);
   }
 
-  private static String getFileName(LocalDate from, LocalDate to) {
-    return format("Production_Metrics_%s_To_%s.csv", from, to);
+  private static String getFileName(ReportRange range) {
+    return format(FILE_NAME, range.getFromAsLocalDate(), range.getToAsLocalDate());
   }
 }
