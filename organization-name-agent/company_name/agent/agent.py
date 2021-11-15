@@ -4,14 +4,15 @@ import pathlib
 from typing import Optional, Sequence
 
 from agent_base.agent import Agent
+from organization_name_knowledge import parse
+from organization_name_knowledge.knowledge_base import KnowledgeBase
+from organization_name_knowledge.names.name_information import NameInformation
 
 from company_name.compare import compare_names
-from company_name.knowledge_base import KnowledgeBase
-from company_name.names.names_abbreviations_filtering import remove_redundant_abbreviations
-from company_name.names.parse.parse import NameInformation, parse_name
 from company_name.solution.name_preconditions import NamePreconditions
 from company_name.solution.scores_reduction import ScoresReduction
 from company_name.solution.solution import PairResult, Reason, Result, Solution
+from company_name.utils.names_abbreviations_filtering import remove_redundant_abbreviations
 
 
 class CompanyNameAgent(Agent):
@@ -58,7 +59,7 @@ class CompanyNameAgent(Agent):
 
     @staticmethod
     def _parse_names(names: Sequence[str]) -> Sequence[NameInformation]:
-        return [parse_name(name) for name in set(names) if name]
+        return [parse(name) for name in set(names) if name]
 
     @classmethod
     def _prepare_names(cls, names: Sequence[str]) -> Sequence[NameInformation]:

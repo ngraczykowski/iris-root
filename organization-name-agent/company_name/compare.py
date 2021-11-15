@@ -1,8 +1,9 @@
 from typing import Mapping
 
+from organization_name_knowledge import parse
+from organization_name_knowledge.names.name_information import NameInformation
+
 from company_name.errors import ComparisonError
-from company_name.names.name_information import NameInformation
-from company_name.names.parse.parse import parse_name
 from company_name.scores.abbreviation import get_abbreviation_score
 from company_name.scores.blacklist import get_blacklist_score
 from company_name.scores.country import get_country_score
@@ -55,6 +56,6 @@ def compare_names(
 
 def compare(alerted_name: str, watchlist_name: str) -> Mapping[str, Score]:
     try:
-        return compare_names(parse_name(alerted_name), parse_name(watchlist_name))
+        return compare_names(parse(alerted_name), parse(watchlist_name))
     except Exception:
         raise ComparisonError(alerted_name, watchlist_name)

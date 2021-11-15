@@ -1,20 +1,21 @@
 from setuptools import setup, find_packages
 
 install_require = [
-    "agent-base>=0.4.0",
-    "agents-api",
-    "aiohttp",
-    "data-source-api",
-    "googleapis-common-protos",
-    "grpcio",
-    "grpcio-tools",
-    "importlib_resources",
-    "phonetics",
-    "python-consul2",
-    "pyyaml",
-    "rapidfuzz",
-    "scikit-learn",
-    "unidecode",
+    "agent-base==0.4.0",
+    "agents-api==0.8.0.42",
+    "aiohttp==3.7.4.post0",
+    "data-source-api==0.4.0.23",
+    "googleapis-common-protos==1.53.0",
+    "grpcio==1.39.0",
+    "grpcio-tools==1.39.0",
+    "importlib_resources==5.2.2",
+    "organization-name-knowledge==0.3.0",
+    "phonetics==1.0.5",
+    "python-consul2==0.1.5",
+    "pyyaml==5.4.1",
+    "rapidfuzz==1.7.1",
+    "scikit-learn==0.22.1",
+    "unidecode==1.2.0",
 ]
 
 tests_require = [

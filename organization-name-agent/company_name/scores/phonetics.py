@@ -3,8 +3,8 @@ from typing import Tuple
 
 import phonetics
 import rapidfuzz.fuzz as fuzz
+from organization_name_knowledge.names.name_information import TokensSequence
 
-from company_name.names.name_information import TokensSequence
 from company_name.scores.score import Score
 
 

@@ -1,7 +1,7 @@
 import rapidfuzz.fuzz as fuzz
+from organization_name_knowledge.knowledge_base import KnowledgeBase
+from organization_name_knowledge.names.name_information import NameInformation, TokensSequence
 
-from company_name.knowledge_base import KnowledgeBase
-from company_name.names.name_information import NameInformation, TokensSequence
 from company_name.scores.score import Score
 
 

@@ -1,4 +1,5 @@
-from company_name.names.name_information import NameInformation
+from organization_name_knowledge.names.name_information import NameInformation
+
 from company_name.scores.score import Score
 
 

@@ -6,8 +6,8 @@ from typing import List, Mapping
 import pytest
 import yaml
 from agent_base.utils.config import Config, ConfigurationException
+from organization_name_knowledge import parse
 
-from company_name import parse_name
 from company_name.solution.name_preconditions import NamePreconditions
 
 
@@ -41,7 +41,7 @@ def get_name_preconditions(configuration: Mapping) -> NamePreconditions:
 )
 def test_under_max_length(configuration: Mapping[str, int], name: str):
     with get_name_preconditions({"length": configuration}) as name_preconditions:
-        assert name_preconditions.preconditions_met(parse_name(name))
+        assert name_preconditions.preconditions_met(parse(name))
 
 
 @pytest.mark.parametrize(
@@ -63,7 +63,7 @@ def test_under_max_length(configuration: Mapping[str, int], name: str):
 )
 def test_over_max_length(configuration: Mapping[str, int], name: str):
     with get_name_preconditions({"length": configuration}) as name_preconditions:
-        assert not name_preconditions.preconditions_met(parse_name(name))
+        assert not name_preconditions.preconditions_met(parse(name))
 
 
 @pytest.mark.parametrize(
@@ -93,7 +93,7 @@ def test_over_max_length(configuration: Mapping[str, int], name: str):
 )
 def test_inclusion_not_in_name(configuration: Mapping[str, List[str]], name: str):
     with get_name_preconditions({"inclusion": configuration}) as name_preconditions:
-        assert name_preconditions.preconditions_met(parse_name(name))
+        assert name_preconditions.preconditions_met(parse(name))
 
 
 @pytest.mark.parametrize(
@@ -123,7 +123,7 @@ def test_inclusion_not_in_name(configuration: Mapping[str, List[str]], name: str
 )
 def test_inclusion_matching_name(configuration: Mapping[str, List[str]], name: str):
     with get_name_preconditions({"inclusion": configuration}) as name_preconditions:
-        assert not name_preconditions.preconditions_met(parse_name(name))
+        assert not name_preconditions.preconditions_met(parse(name))
 
 
 @pytest.mark.parametrize(
@@ -153,7 +153,7 @@ def test_inclusion_matching_name(configuration: Mapping[str, List[str]], name: s
 )
 def test_alphabet(configuration: Mapping, name: str):
     with get_name_preconditions({"alphabet": configuration}) as name_preconditions:
-        assert name_preconditions.preconditions_met(parse_name(name))
+        assert name_preconditions.preconditions_met(parse(name))
 
 
 @pytest.mark.parametrize(
@@ -179,7 +179,7 @@ def test_alphabet(configuration: Mapping, name: str):
 )
 def test_alphabet_precondition_not_met(configuration: Mapping, name: str):
     with get_name_preconditions({"alphabet": configuration}) as name_preconditions:
-        assert not name_preconditions.preconditions_met(parse_name(name))
+        assert not name_preconditions.preconditions_met(parse(name))
 
 
 @pytest.mark.parametrize(

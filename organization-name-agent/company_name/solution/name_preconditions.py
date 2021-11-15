@@ -4,8 +4,8 @@ import unicodedata
 from typing import Any, Callable, Mapping
 
 from agent_base.utils.config import Config, ConfigurationException
+from organization_name_knowledge.names.name_information import NameInformation
 
-from company_name.names.parse.parse import NameInformation
 from company_name.utils.clear_name import clear_name
 
 

@@ -1,10 +1,11 @@
 from typing import Sequence
 
 import pytest
+from organization_name_knowledge import parse
 
-from company_name import CompanyNameAgent, Solution, parse_name
-from company_name.names.names_abbreviations_filtering import remove_redundant_abbreviations
+from company_name import CompanyNameAgent, Solution
 from company_name.scores.abbreviation import get_abbreviation_score
+from company_name.utils.names_abbreviations_filtering import remove_redundant_abbreviations
 
 
 @pytest.mark.parametrize(
@@ -18,7 +19,7 @@ from company_name.scores.abbreviation import get_abbreviation_score
     ],
 )
 def test_abbreviation_recognition(abbreviation: str, full: str):
-    abbreviation_from_full = get_abbreviation_score(parse_name(full), parse_name(abbreviation))
+    abbreviation_from_full = get_abbreviation_score(parse(full), parse(abbreviation))
     assert abbreviation_from_full.status.name == "OK"
     assert abbreviation_from_full.value == 1
 
@@ -51,7 +52,7 @@ def test_abbreviation_recognition(abbreviation: str, full: str):
 )
 def test_members_abbreviations_removing(names: Sequence[str], expected_names: Sequence[str]):
     without_redundant_abbreviations = remove_redundant_abbreviations(
-        [parse_name(name) for name in names]
+        [parse(name) for name in names]
     )
     names_without_redundant_abbreviations = [
         name.source.original for name in without_redundant_abbreviations

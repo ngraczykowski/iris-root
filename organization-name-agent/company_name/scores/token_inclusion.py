@@ -1,7 +1,12 @@
 import itertools
 from typing import List, Sequence
 
-from company_name.names.name_information import NameInformation, Token, TokensSequence
+from organization_name_knowledge.names.name_information import (
+    NameInformation,
+    Token,
+    TokensSequence,
+)
+
 from company_name.scores.score import Score
 from company_name.utils.clear_name import POSSIBLE_SEPARATORS, clear_name
 from company_name.utils.generate_subsets import generate_words_subsets
