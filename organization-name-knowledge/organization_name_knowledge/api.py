@@ -31,18 +31,33 @@ def parse(name: str) -> NameInformation:
     return name_information
 
 
-def parse_freetext(freetext: str) -> List[NameInformation]:
+def parse_freetext(freetext: str, tokens_limit: int = 5) -> List[NameInformation]:
+    """Parse freetext to find each organization name that is present within passed text
+
+    Parameters
+    ----------
+    freetext : str
+        Any string which contains or not, an organization name(s)
+    tokens_limit : int
+        The maximum number of tokens in parsed organization name(s)
+
+    Returns
+    -------
+    List[NameInformation]
+        A list of found and parsed organization names, as NameInformation objects
+    """
     names_with_legals = [
         (name, get_all_legal_terms(name)) for name in get_name_variants(freetext.lower())
     ]
-
     cut_names = {
         cut_name_to_leftmost_match(name, legal_terms)
         for name, legal_terms in names_with_legals
         if legal_terms
     }
+
     parsed_names = [parse(name) for name in sorted(cut_names)]
-    return parsed_names
+    parsed_names_filtered = list(filter(lambda name: len(name.base) <= tokens_limit, parsed_names))
+    return parsed_names_filtered
 
 
 def get_all_legal_terms(name: str) -> Set[str]:
