@@ -135,3 +135,9 @@ message ModelDeployedOnProductionRequest {
     string version = 2;
   }
 }
+
+// Message that informs about list of archiving model
+message ModelsArchived {
+  // List of models' resource name that have been archived
+  repeated string models = 1 [(google.api.field_behavior) = REQUIRED];
+}
