@@ -11,6 +11,14 @@ from organization_name_knowledge import parse_freetext
             [{"base": "Silent Eight", "legal": "pte ltd"}],
         ),
         (
+            "Isn't this the best test case for Silent Eight Pte Ltd written by me ?",
+            [
+                {"base": "best test case for Silent Eight", "legal": "pte ltd"},
+                {"base": "isnt this the best test case for Silent Eight", "legal": "pte ltd"},
+                {"base": "Silent Eight", "legal": "pte ltd"},
+            ],
+        ),
+        (
             "First Company Limited, Second sp. z. o. o.",
             [
                 {"base": "First", "legal": "company limited"},
@@ -42,7 +50,6 @@ from organization_name_knowledge import parse_freetext
     ],
 )
 def test_freetext(freetext, expected_names):
-    print(len(parse_freetext(freetext)))
     for name_information, expected in zip(parse_freetext(freetext), expected_names):
         assert name_information.base.cleaned_name == expected["base"].lower()
         assert name_information.legal.cleaned_name == expected["legal"].lower()
