@@ -68,8 +68,9 @@ def test_remove_split_chars(name, expected):
 @pytest.mark.parametrize(
     "name, expected",
     [
-        ("Silent Eight Pte Ltd means our team", "Silent Eight Pte"),
-        ("The ABCD company based in poland", "The ABCD company"),
+        ("The ABCD company", "The ABCD company"),
+        ("KGHM SA - the biggest based in Poland company", "KGHM SA"),
+        ("Silent Eight Pte Ltd means our team", "Silent Eight Pte Ltd"),
     ],
 )
 def test_cut_name_to_leftmost_legal(name, expected):
