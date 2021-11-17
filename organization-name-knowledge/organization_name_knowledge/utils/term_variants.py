@@ -5,8 +5,11 @@ from importlib.resources import open_text
 from typing import Dict, List, Set
 
 from organization_name_knowledge import resources
-from organization_name_knowledge.utils.clear_name import remove_split_chars, split_text_by_too_long_numbers, \
-    remove_too_long_numbers
+from organization_name_knowledge.utils.clear_name import (
+    remove_split_chars,
+    remove_too_long_numbers,
+    split_text_by_too_long_numbers,
+)
 
 NAMES_SYNONYMS: Dict[str, List[str]]
 

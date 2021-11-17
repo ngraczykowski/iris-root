@@ -8,7 +8,6 @@ from organization_name_knowledge.names.name_information import NameInformation
 from organization_name_knowledge.names.parse import create_tokens, parse_name
 from organization_name_knowledge.names.tokens_sequence import TokensSequence
 from organization_name_knowledge.utils import cut_name_to_leftmost_match
-from organization_name_knowledge.utils.clear_name import split_text_by_too_long_numbers
 from organization_name_knowledge.utils.term_variants import get_name_variants
 
 
