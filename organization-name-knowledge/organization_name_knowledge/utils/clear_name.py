@@ -39,3 +39,7 @@ def clear_name(name: str) -> str:
 
 def split_text_by_too_long_numbers(text: str) -> List[str]:
     return [name.strip() for name in TOO_LONG_NUMBER_REGEX.split(text)]
+
+
+def remove_too_long_numbers(text: str) -> str:
+    return TOO_LONG_NUMBER_REGEX.sub("", text)

@@ -47,9 +47,8 @@ def parse_freetext(freetext: str, tokens_limit: int = 5) -> List[NameInformation
     List[NameInformation]
         A list of found and parsed organization names, as NameInformation objects
     """
-    freetext_cleaned = split_text_by_too_long_numbers(freetext)
     names_with_legals = [
-        (name, get_all_legal_terms(name)) for name in get_name_variants(freetext_cleaned.lower())
+        (name, get_all_legal_terms(name)) for name in get_name_variants(freetext.lower())
     ]
     cut_names = {
         cut_name_to_leftmost_match(name, legal_terms)
