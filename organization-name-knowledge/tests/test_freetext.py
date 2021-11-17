@@ -59,6 +59,10 @@ from organization_name_knowledge import parse_freetext
             "KGHM Polska Miedź S A",
             [{"base": "KGHM Polska Miedz", "legal": "s a"}],
         ),
+        (
+            "12345 ABC Company",
+            [{"base": "ABC", "legal": "company"}],
+        ),
     ],
 )
 def test_freetext(freetext, expected_names):
