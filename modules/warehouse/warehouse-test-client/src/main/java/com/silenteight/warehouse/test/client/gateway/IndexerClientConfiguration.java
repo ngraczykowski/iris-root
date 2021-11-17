@@ -79,6 +79,14 @@ public class IndexerClientConfiguration {
   }
 
   @Bean
+  DirectExchange retentionCommandExchange() {
+    return ExchangeBuilder
+        .directExchange(properties.getPersonalInformationExpiredIndexingTestClientOutbound()
+            .getExchangeName())
+        .build();
+  }
+
+  @Bean
   IntegrationFlow productionIndexChannelToExchangeIntegrationFlow() {
     return createOutputFlow(
         PRODUCTION_INDEXING_OUTBOUND_CHANNEL,

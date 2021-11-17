@@ -73,13 +73,13 @@ class AlertQueryIT {
 
   @BeforeEach
   void init() {
-    simpleElasticTestClient.createIndexTemplate(
+    simpleElasticTestClient.createDefaultIndexTemplate(
         PRODUCTION_ELASTIC_WRITE_INDEX_NAME, PRODUCTION_ELASTIC_READ_ALIAS_NAME);
   }
 
   @AfterEach
   void cleanup() {
-    simpleElasticTestClient.removeIndexTemplate();
+    simpleElasticTestClient.removeDefaultIndexTemplate();
     cleanData();
   }
 

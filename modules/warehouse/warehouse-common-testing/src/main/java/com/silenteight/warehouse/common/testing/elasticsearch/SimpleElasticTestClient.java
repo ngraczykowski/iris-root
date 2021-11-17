@@ -23,7 +23,7 @@ import static org.elasticsearch.client.RequestOptions.DEFAULT;
 @RequiredArgsConstructor
 public class SimpleElasticTestClient {
 
-  private static final String INDEX_TEMPLATE = "itest-template";
+  private static final String DEFAULT_INDEX_TEMPLATE = "itest-template";
   private final RestHighLevelClient restHighLevelClient;
 
   @SneakyThrows
@@ -59,7 +59,7 @@ public class SimpleElasticTestClient {
   }
 
   @SneakyThrows
-  public void createIndexTemplate(String indexPattern, String aliasName) {
+  public void createIndexTemplate(String indexPattern, String aliasName, String templateName) {
     // FIXME: there should be no index present
     try {
       removeIndex(aliasName);
@@ -67,7 +67,7 @@ public class SimpleElasticTestClient {
       // do nothing, proceed
     }
 
-    PutIndexTemplateRequest request = new PutIndexTemplateRequest(INDEX_TEMPLATE)
+    PutIndexTemplateRequest request = new PutIndexTemplateRequest(templateName)
         .patterns(of(indexPattern))
         .alias(new Alias(aliasName));
 
@@ -75,8 +75,20 @@ public class SimpleElasticTestClient {
   }
 
   @SneakyThrows
-  public void removeIndexTemplate() {
-    DeleteIndexTemplateRequest request = new DeleteIndexTemplateRequest(INDEX_TEMPLATE);
+  public void createDefaultIndexTemplate(String indexPattern, String aliasName) {
+    createIndexTemplate(indexPattern, aliasName, DEFAULT_INDEX_TEMPLATE);
+  }
+
+  @SneakyThrows
+  public void removeDefaultIndexTemplate() {
+    DeleteIndexTemplateRequest request = new DeleteIndexTemplateRequest(DEFAULT_INDEX_TEMPLATE);
+
+    restHighLevelClient.indices().deleteTemplate(request, DEFAULT);
+  }
+
+  @SneakyThrows
+  public void removeIndexTemplate(String templateName) {
+    DeleteIndexTemplateRequest request = new DeleteIndexTemplateRequest(templateName);
 
     restHighLevelClient.indices().deleteTemplate(request, DEFAULT);
   }

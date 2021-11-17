@@ -1,0 +1,37 @@
+# Spring `dev` profile configuration
+serp:
+  show-env: true
+
+spring:
+  jackson:
+    serialization:
+      indent-output: true
+
+logging:
+  level:
+    ROOT: DEBUG
+    com.silenteight.sep: DEBUG
+    com.silenteight.serp: DEBUG
+    com.silenteight.warehouse: DEBUG
+    io.opencensus: INFO
+    io.netty: INFO
+    io.grpc.netty: INFO
+    jdk.internal.httpclient.debug: INFO
+
+management:
+  info:
+    git:
+      mode: full
+
+  endpoints:
+    enabled-by-default: true
+
+    web:
+      exposure:
+        include: "*"
+
+server:
+  error:
+    include-stacktrace: on_trace_param
+
+debug: true
