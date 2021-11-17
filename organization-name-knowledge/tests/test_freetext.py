@@ -8,11 +8,15 @@ from organization_name_knowledge import parse_freetext
     [
         (
             "Some Text about The Silent Eight PTE LTD founded years ago in Singapore",
-            [{"base": "Silent Eight", "legal": "pte ltd"}],
+            [
+                {"base": "Eight", "legal": "pte ltd"},
+                {"base": "Silent Eight", "legal": "pte ltd"},
+            ],
         ),
         (
             "This is the best test case for Silent Eight Pte Ltd ever created",
             [
+                {"base": "Eight", "legal": "pte ltd"},
                 {"base": "Silent Eight", "legal": "pte ltd"},
             ],
         ),
@@ -25,13 +29,17 @@ from organization_name_knowledge import parse_freetext
         ),
         (
             "Magic LTD and The Hogwarts Inc.",
-            [{"base": "Hogwarts", "legal": "inc"}, {"base": "Magic", "legal": "ltd"}],
+            [
+                {"base": "Hogwarts", "legal": "inc"},
+                {"base": "Hogwarts", "legal": "inc"},
+                {"base": "Magic", "legal": "ltd"},
+            ],
         ),
         (
             "The Hewlett and Packard Company",
             [
-                {"base": "Packard", "legal": "company"},
                 {"base": "Hewlett and Packard", "legal": "company"},
+                {"base": "Packard", "legal": "company"},
             ],
         ),
         (
@@ -41,7 +49,9 @@ from organization_name_knowledge import parse_freetext
         (
             "Paramount Pictures LLC or Walt Disney Company",
             [
+                {"base": "Disney", "legal": "Company"},
                 {"base": "Paramount Pictures", "legal": "LLC"},
+                {"base": "Pictures", "legal": "LLC"},
                 {"base": "Walt Disney", "legal": "Company"},
             ],
         ),
@@ -57,7 +67,11 @@ from organization_name_knowledge import parse_freetext
         ),
         (
             "KGHM Polska Miedź S A",
-            [{"base": "KGHM Polska Miedz", "legal": "s a"}],
+            [
+                {"base": "KGHM Polska Miedz", "legal": "s a"},
+                {"base": "Miedz", "legal": "s a"},
+                {"base": "Polska Miedz", "legal": "s a"},
+            ],
         ),
         (
             "12345 ABC Company",

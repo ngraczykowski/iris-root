@@ -31,6 +31,21 @@ def parse(name: str) -> NameInformation:
     return name_information
 
 
+def _add_long_names_substrings_parsed(names: List[NameInformation]):
+    substrings_names = []
+    for name_information in names:
+        base_tokens_number = len(name_information.base)
+        if base_tokens_number >= 2:
+            print(name_information.source.original)
+            replaced = name_information.source.original
+            for index in range(1, base_tokens_number):
+                for name in name_information.base.original_tuple[:index]:
+                    replaced = replaced.replace(name, "")
+                substrings_names.append(replaced)
+    print(name_information.source.original)
+    names.extend([parse(name) for name in substrings_names])
+
+
 def parse_freetext(freetext: str, tokens_limit: int = 5) -> List[NameInformation]:
     """Parse freetext to find each organization name that is present within passed text
 
@@ -55,9 +70,10 @@ def parse_freetext(freetext: str, tokens_limit: int = 5) -> List[NameInformation
         if legal_terms
     }
 
-    parsed_names = [parse(name) for name in sorted(cut_names)]
+    parsed_names = [parse(name) for name in cut_names]
     parsed_names_filtered = list(filter(lambda name: len(name.base) <= tokens_limit, parsed_names))
-    return parsed_names_filtered
+    _add_long_names_substrings_parsed(parsed_names_filtered)
+    return sorted(parsed_names_filtered, key=lambda name: name.base.cleaned_name)
 
 
 def get_all_legal_terms(name: str) -> Set[str]:
