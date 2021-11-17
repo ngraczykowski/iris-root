@@ -63,6 +63,10 @@ from organization_name_knowledge import parse_freetext
             "12345 ABC Company",
             [{"base": "ABC", "legal": "company"}],
         ),
+        (
+            "Some long name with number 1234567 ABC Corporation",
+            [{"base": "ABC", "legal": "Corporation"}]
+        )
     ],
 )
 def test_freetext(freetext, expected_names):

@@ -6,7 +6,7 @@ from organization_name_knowledge.utils.clear_name import (
     clear_name,
     divide,
     remove_split_chars,
-    remove_too_long_numbers,
+    split_text_by_too_long_numbers,
 )
 from organization_name_knowledge.utils.term_variants import get_term_variants
 
@@ -85,13 +85,13 @@ def test_cut_name_to_leftmost_legal(name, expected):
 @pytest.mark.parametrize(
     "name, expected",
     [
-        ("123", "123"),
-        ("123 456", "123 456"),
-        ("M1 Centrum Handlowe", "M1 Centrum Handlowe"),
-        ("1111 Aloha Hawai", " Aloha Hawai"),
-        ("Number between 12345 strings", "Number between  strings"),
-        ("123456 XD 5656778887665", " XD "),
+        ("123", ["123"]),
+        ("123 456", ["123 456"]),
+        ("M1 Centrum Handlowe", ["M1 Centrum Handlowe"]),
+        ("1111 Aloha Hawai", ["", "Aloha Hawai"]),
+        ("Number between 12345 strings", ["Number between", "strings"]),
+        ("123456 XD 5656778887665", ["", "XD", ""]),
     ],
 )
 def test_remove_too_long_numbers(name, expected):
-    assert remove_too_long_numbers(name) == expected
+    assert split_text_by_too_long_numbers(name) == expected

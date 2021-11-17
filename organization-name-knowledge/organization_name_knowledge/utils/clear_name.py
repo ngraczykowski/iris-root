@@ -1,5 +1,5 @@
 import re
-from typing import Tuple
+from typing import Tuple, List
 
 import unidecode
 
@@ -37,5 +37,5 @@ def clear_name(name: str) -> str:
     return REMOVE_CHARS_REGEX.sub("", name)
 
 
-def remove_too_long_numbers(name: str) -> str:
-    return TOO_LONG_NUMBER_REGEX.sub("", name)
+def split_text_by_too_long_numbers(text: str) -> List[str]:
+    return [name.strip() for name in TOO_LONG_NUMBER_REGEX.split(text)]
