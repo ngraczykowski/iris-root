@@ -36,13 +36,11 @@ def _add_long_names_substrings_parsed(names: List[NameInformation]):
     for name_information in names:
         base_tokens_number = len(name_information.base)
         if base_tokens_number >= 2:
-            print(name_information.source.original)
-            replaced = name_information.source.original
             for index in range(1, base_tokens_number):
-                for name in name_information.base.original_tuple[:index]:
-                    replaced = replaced.replace(name, "")
+                replaced = name_information.source.original
+                for token_from_first_text_part in name_information.base.original_tuple[:index]:
+                    replaced = replaced.replace(token_from_first_text_part, "")
                 substrings_names.append(replaced)
-    print(name_information.source.original)
     names.extend([parse(name) for name in substrings_names])
 
 
