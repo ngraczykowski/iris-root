@@ -13,7 +13,6 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-
 import static com.silenteight.agent.common.io.FileFormatConstants.DEFAULT_DICT_FORMAT_FILTERS;
 import static com.silenteight.agent.common.io.FileFormatConstants.DEFAULT_DICT_FORMAT_TRANSFORMERS;
 import static com.silenteight.agent.common.io.FileFormatConstants.VALUES_SEPARATOR;
@@ -49,6 +48,20 @@ public class ResourcesReader {
    */
   public static Set<String> readLinesAsSet(@NonNull InputStream is) {
     return readLinesAsStream(is, DEFAULT_DICT_FORMAT_FILTERS, DEFAULT_DICT_FORMAT_TRANSFORMERS)
+        .collect(toSet());
+  }
+
+  /**
+   * <pre>
+   *   Load lines from resources with:
+   *   default filters
+   *   custom transformers
+   * </pre>
+   */
+  public static Set<String> readLinesAsSet(
+      @NonNull InputStream is,
+      Collection<UnaryOperator<String>> lineTransformers) {
+    return readLinesAsStream(is, DEFAULT_DICT_FORMAT_FILTERS, lineTransformers)
         .collect(toSet());
   }
 
