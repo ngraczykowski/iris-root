@@ -76,7 +76,7 @@ class IndexerIT {
 
   @BeforeEach
   void init() {
-    simpleElasticTestClient.createIndexTemplate(
+    simpleElasticTestClient.createDefaultIndexTemplate(
         PRODUCTION_ELASTIC_WRITE_INDEX_NAME, PRODUCTION_ELASTIC_READ_ALIAS_NAME);
 
     indexedEventListener.clear();
@@ -86,7 +86,7 @@ class IndexerIT {
   @AfterEach
   void cleanup() {
     testAnalysisMetadataRepository.truncateAnalysisMetadata();
-    simpleElasticTestClient.removeIndexTemplate();
+    simpleElasticTestClient.removeDefaultIndexTemplate();
     removeData();
   }
 

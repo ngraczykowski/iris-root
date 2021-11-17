@@ -31,13 +31,13 @@ class FieldsQueryIndexServiceTest {
 
   @BeforeEach
   void init() {
-    testClient.createIndexTemplate(
+    testClient.createDefaultIndexTemplate(
         PRODUCTION_ELASTIC_WRITE_INDEX_NAME, PRODUCTION_ELASTIC_READ_ALIAS_NAME);
   }
 
   @AfterEach
   void cleanup() {
-    testClient.removeIndexTemplate();
+    testClient.removeDefaultIndexTemplate();
     removeData();
   }
 
