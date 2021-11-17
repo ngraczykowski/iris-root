@@ -3,13 +3,11 @@ package com.silenteight.adjudication.engine.analysis.service.integration;
 import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 import static com.silenteight.adjudication.engine.analysis.service.integration.AmqpDefaults.*;
 import static org.springframework.amqp.core.ExchangeBuilder.topicExchange;
 
 @Configuration
-@Profile("rabbitdeclare")
 class RabbitBrokerConfiguration {
 
   private static final String ERROR_QUEUE = "ae.error-queue";
