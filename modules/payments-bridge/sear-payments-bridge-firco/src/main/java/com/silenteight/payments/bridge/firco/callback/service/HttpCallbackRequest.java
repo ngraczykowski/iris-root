@@ -11,6 +11,7 @@ import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -44,6 +45,9 @@ class HttpCallbackRequest implements CallbackRequest {
     } catch (HttpServerErrorException exception) {
       logException(endpoint, exception);
       throw mapToException(exception);
+    } catch (ResourceAccessException exception) {
+      logException(endpoint, exception);
+      throw new RecoverableCallbackException(exception);
     } catch (RestClientException exception) {
       logException(endpoint, exception);
       throw new NonRecoverableCallbackException(exception);

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.payments.bridge.common.model.AlertId;
 import com.silenteight.payments.bridge.common.model.SimpleAlertId;
 import com.silenteight.payments.bridge.event.AlertInitializedEvent;
+import com.silenteight.payments.bridge.event.AlertUndeliveredEvent;
 import com.silenteight.payments.bridge.event.EventPublisher;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
@@ -35,11 +36,13 @@ class FircoInboundAmqpIntegrationConfiguration {
 
   private static final String INT_DISCARD =
       "FircoInboundAmqpIntegrationConfiguration_int_discardChannel";
+  private static final String RESPONSE_COMPLETED_INT_DISCARD =
+      "FircoInboundAmqpIntegrationConfiguration_int_responseCompletedDiscardChannel";
 
   @Valid
   private final FircoInboundAmqpIntegrationProperties properties;
   private final AmqpInboundFactory inboundFactory;
-  private final FilterAlertMessageUseCase alertMessageUseCase;
+  private final FilterAlertMessageUseCase filterAlertMessageUseCase;
   private final SendResponseUseCase sendResponseUseCase;
   private final EventPublisher eventPublisher;
 
@@ -49,9 +52,9 @@ class FircoInboundAmqpIntegrationConfiguration {
         .transform(MessageStored.class, source ->
           new SimpleAlertId(ResourceName.create(source.getAlert()).getUuid("alert-messages"))
         )
-        .filter(AlertId.class, alertId -> !alertMessageUseCase.isResolvedOrOutdated(alertId))
-        .filter(AlertId.class, alertId -> !alertMessageUseCase.hasTooManyHits(alertId), spec ->
-          spec.discardChannel(INT_DISCARD)
+        .filter(AlertId.class, alertId -> !filterAlertMessageUseCase.isResolvedOrOutdated(alertId))
+        .filter(AlertId.class, alertId -> !filterAlertMessageUseCase.hasTooManyHits(alertId),
+            spec -> spec.discardChannel(INT_DISCARD)
         )
         .transform(AlertId.class, source ->
             new AlertInitializedEvent(source.getAlertId())
@@ -82,11 +85,39 @@ class FircoInboundAmqpIntegrationConfiguration {
   @Bean
   IntegrationFlow responseCompletedInbound() {
     return from(createInboundAdapter(properties.getCommands().getResponseCompletedQueueName()))
+        .filter(ResponseCompleted.class,
+            source -> !filterAlertMessageUseCase.isOutdated(buildAlertId(source)),
+            spec -> spec.discardChannel(RESPONSE_COMPLETED_INT_DISCARD))
         .handle(ResponseCompleted.class, (payload, headers) -> {
           sendResponseUseCase.send(payload);
           return null;
-        })
+        }).get();
+  }
+
+  private AlertId buildAlertId(ResponseCompleted responseCompleted) {
+    return new SimpleAlertId(ResourceName.create(
+        responseCompleted.getAlert()).getUuid("alerts"));
+  }
+
+  @Bean(RESPONSE_COMPLETED_INT_DISCARD)
+  MessageChannel responseCompletedDiscardChannel() {
+    return new DirectChannel();
+  }
+
+  @Bean
+  IntegrationFlow responseCompletedDiscard() {
+    return from(responseCompletedDiscardChannel())
+        .transform(ResponseCompleted.class, source ->
+          new AlertUndeliveredEvent(
+              buildAlertId(source).getAlertId(),
+              extractStatus(source).name()))
+        .channel(AlertUndeliveredEvent.CHANNEL)
         .get();
+  }
+
+  private AlertMessageStatus extractStatus(ResponseCompleted responseCompleted) {
+    return AlertMessageStatus.valueOf(
+        ResourceName.create(responseCompleted.getStatus()).get("status"));
   }
 
   private AmqpInboundChannelAdapterSMLCSpec createInboundAdapter(String... queueNames) {
