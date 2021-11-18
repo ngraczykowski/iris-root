@@ -1,5 +1,7 @@
 package com.silenteight.payments.bridge.svb.oldetl.util;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
@@ -13,16 +15,13 @@ import java.util.regex.Pattern;
 
 import static java.util.regex.Pattern.compile;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StringUtil {
 
   private static final String LINE_BREAK = "\r\n|\n|\r";
   private static final Pattern LINE_BREAK_PATTERN = compile(LINE_BREAK);
   private static final List<String> LINE_BREAKERS1 = Arrays.asList("\r\n[1-8]/", "\n[1-8]/");
   private static final List<String> LINE_BREAKERS2 = Arrays.asList("\r\n", "\n", "\r");
-
-  private StringUtil() {
-
-  }
 
   public static String lfToCrLf(String input) {
     if (input == null)
@@ -33,31 +32,6 @@ public class StringUtil {
     return input
         .replace("\r\n", "\n")
         .replace("\n", "\r\n");
-  }
-
-  private static final String LEGAL_REGEX_CHARACTERS =
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_ ";
-
-  public static String regexEscape(@NonNull String input) {
-    var len = input.length();
-    StringBuilder buffer = new StringBuilder();
-    for (int i = 0; i < len; i++) {
-      var c = input.charAt(i);
-      if (LEGAL_REGEX_CHARACTERS.indexOf(c) < 0)
-        buffer.append('\\');
-      buffer.append(c);
-    }
-
-    return buffer.toString();
-  }
-
-  public static String removeLineBreakersFromMatchingText(
-      String matchingText, String messageFieldStructure) {
-
-    if (messageFieldStructure.equals(MessageFieldStructure.NAMEADDRESS_FORMAT_F.toString()))
-      return replaceEveryRegexFromListWithString(matchingText, LINE_BREAKERS1, "");
-    else
-      return replaceEveryRegexFromListWithString(matchingText, LINE_BREAKERS2, "");
   }
 
   @NotNull

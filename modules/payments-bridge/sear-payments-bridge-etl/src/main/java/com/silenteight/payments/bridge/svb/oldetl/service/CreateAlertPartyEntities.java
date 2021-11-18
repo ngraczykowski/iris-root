@@ -26,7 +26,7 @@ import static java.util.regex.Pattern.compile;
 
 @Service
 @RequiredArgsConstructor
-class CreateAlertPartyEntities implements CreateAlertedPartyEntitiesUseCase {
+public class CreateAlertPartyEntities implements CreateAlertedPartyEntitiesUseCase {
 
   public Map<AlertedPartyKey, String> create(CreateAlertedPartyEntitiesRequest request) {
     Map<AlertedPartyKey, String> alertPartyEntities = new HashMap<>();
@@ -94,6 +94,8 @@ class CreateAlertPartyEntities implements CreateAlertedPartyEntitiesUseCase {
   }
 
   private static boolean matchesPattern(Pattern textPattern, List<String> location) {
-    return location != null && !location.isEmpty() && textPattern.matcher(location.get(0)).find();
+    return location != null && !location.isEmpty() && textPattern
+        .matcher(location.get(0).toUpperCase())
+        .find();
   }
 }

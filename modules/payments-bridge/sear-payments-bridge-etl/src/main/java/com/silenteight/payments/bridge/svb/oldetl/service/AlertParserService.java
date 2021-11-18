@@ -121,7 +121,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
         return new ExtractBeneOrgbankInsbankAlertedPartyData(
             messageData, hitTag, fircoFormat).extract(UNSTRUCTURED);
       case "50F":
-        return new Extract50FAlertedPartyData(messageData, hitTag).extract(UNSTRUCTURED);
+        return new Extract50FAlertedPartyData(messageData, hitTag).extract(NAMEADDRESS_FORMAT_F);
       case "RECEIVBANK":
         return new ExtractReceivbankAlertedPartyData(
             messageData, hitTag, fircoFormat).extract(UNSTRUCTURED);

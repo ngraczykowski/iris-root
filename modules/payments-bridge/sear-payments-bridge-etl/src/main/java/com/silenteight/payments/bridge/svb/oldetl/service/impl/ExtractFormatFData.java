@@ -50,8 +50,8 @@ class ExtractFormatFData {
                            unprocessedAccountNumberLine;
 
     return AlertedPartyData.builder()
-        .accountNumber(accountNumber.trim())
-        .name(name)
+        .accountNumber(accountNumber.trim().toUpperCase())
+        .name(name.trim())
         .address(valueMap.get(ADDRESS).trim())
         .ctryTown(valueMap.get(COUNTRY_TOWN).trim())
         .nameAddress(String.join(

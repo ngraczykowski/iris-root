@@ -301,4 +301,5 @@ dependencies {
   annotationProcessor platform("com.blazebit:blaze-persistence-bom:1.6.0")
 
   implementation libraries.slf4j_api
+  implementation platform("org.spockframework:spock-bom:2.0-groovy-3.0")
 }

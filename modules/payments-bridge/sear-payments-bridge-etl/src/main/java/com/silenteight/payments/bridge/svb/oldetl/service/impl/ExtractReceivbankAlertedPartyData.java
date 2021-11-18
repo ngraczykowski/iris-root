@@ -36,7 +36,7 @@ public class ExtractReceivbankAlertedPartyData {
           .build();
     } else if (MESSAGE_FORMATS_IAT_I_IAT_O.contains(messageFormat)) {
       return AlertedPartyData.builder()
-          .accountNumber(tagValueLines.get(LINE_1).trim())
+          .accountNumber(tagValueLines.get(LINE_1).trim().toUpperCase())
           .name(tagValueLines.get(LINE_2).trim())
           .address(String.join(" ", tagValueLines.subList(LINE_3, lastLine)))
           .ctryTown(tagValueLines.get(LINE_5).trim())

@@ -1,5 +1,5 @@
 messageData, fkcoFormat, name, address, ctryTown, nameAddress, accountNumber
-<acctnum>\n<name>\n<address>\n<address>\n<ctrytown>,IAT-I,<name>,<address> <address>,<ctrytown>,<name> <address> <address> <ctrytown>,<acctnum>
+<acctnum>\n<name>\n<address>\n<address>\n<ctrytown>,IAT-I,<name>,<address> <address>,<ctrytown>,<name> <address> <address> <ctrytown>,<ACCTNUM>
 BANK OF CHINA,INT,BANK OF CHINA,,,BANK OF CHINA,
 CITIBANK FSB,INT,CITIBANK FSB,,,CITIBANK FSB,
 CATHAY BANK,FED,CATHAY BANK,,,CATHAY BANK,

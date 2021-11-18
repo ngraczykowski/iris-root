@@ -29,42 +29,42 @@ public class ExtractBeneOrgbankInsbankAlertedPartyData {
 
     if (tagValueLines.get(0).length() == 2) {
 
-      String accountNumber = tagValueLines.get(SECOND_LINE).trim();
-      String name = tagValueLines.get(THIRD_LINE).trim();
+      String accountNumber = tagValueLines.get(SECOND_LINE);
+      String name = tagValueLines.get(THIRD_LINE);
       String address = tagValueLines.size() > 3 ?
                        String.join(" ", tagValueLines.subList(FOURTH_LINE, lastLine)) :
                        "";
       String ctryTown = tagValueLines.size() > 3 ?
                         tagValueLines.get(lastLine).trim() :
                         "";
-      String nameAddresses = String.join(" ", tagValueLines.subList(THIRD_LINE, lastLine + 1));
+      String nameAddress = String.join(" ", tagValueLines.subList(THIRD_LINE, lastLine + 1));
 
       return AlertedPartyData.builder()
-          .accountNumber(accountNumber)
-          .name(name)
-          .address(address)
-          .ctryTown(ctryTown)
-          .nameAddress(nameAddresses)
+          .accountNumber(accountNumber.trim().toUpperCase())
+          .name(name.trim())
+          .address(address.trim())
+          .ctryTown(ctryTown.trim())
+          .nameAddress(nameAddress.trim())
           .messageFieldStructure(messageFieldStructure)
           .build();
     } else if (tagValueLines.get(0).length() > 2) {
       if (MESSAGE_FORMATS_FED_IAT_O_INT.contains(messageFormat)) {
-        String accountNumber = null;
-        String name = tagValueLines.get(FIRST_LINE).trim();
+        String accountNumber = "";
+        String name = tagValueLines.get(FIRST_LINE);
         String address = tagValueLines.size() > 1 ?
                          String.join(" ", tagValueLines.subList(SECOND_LINE, lastLine)) :
                          "";
         String ctryTown = tagValueLines.size() > 3 ?
-                          tagValueLines.get(lastLine).trim() :
+                          tagValueLines.get(lastLine) :
                           "";
         String nameAddress = String.join(" ", tagValueLines.subList(FIRST_LINE, lastLine + 1));
 
         return AlertedPartyData.builder()
-            .accountNumber(accountNumber)
-            .name(name)
-            .address(address)
-            .ctryTown(ctryTown)
-            .nameAddress(nameAddress)
+            .accountNumber(accountNumber.trim().toUpperCase())
+            .name(name.trim())
+            .address(address.trim())
+            .ctryTown(ctryTown.trim())
+            .nameAddress(nameAddress.trim())
             .messageFieldStructure(messageFieldStructure)
             .build();
       } else if (MESSAGE_FORMATS_IAT_I.contains(messageFormat)) {
@@ -72,18 +72,19 @@ public class ExtractBeneOrgbankInsbankAlertedPartyData {
           return AlertedPartyData.builder()
               .accountNumber("")
               .name(tagValueLines.get(FIRST_LINE).trim())
-              .address(String.join(" ", tagValueLines.subList(SECOND_LINE, lastLine)))
+              .address(String.join(" ", tagValueLines.subList(SECOND_LINE, lastLine)).trim())
               .ctryTown(tagValueLines.get(lastLine).trim())
-              .nameAddress(String.join(" ", tagValueLines.subList(FIRST_LINE, lastLine + 1)))
+              .nameAddress(String.join(" ", tagValueLines.subList(FIRST_LINE, lastLine + 1)).trim())
               .messageFieldStructure(messageFieldStructure)
               .build();
         } else if (tagValueLines.size() > 4) {
           return AlertedPartyData.builder()
-              .accountNumber(tagValueLines.get(FIRST_LINE).trim())
+              .accountNumber(tagValueLines.get(FIRST_LINE).trim().toUpperCase())
               .name(tagValueLines.get(SECOND_LINE).trim())
-              .address(String.join(" ", tagValueLines.subList(THIRD_LINE, lastLine)))
+              .address(String.join(" ", tagValueLines.subList(THIRD_LINE, lastLine)).trim())
               .ctryTown(tagValueLines.get(lastLine).trim())
-              .nameAddress(String.join(" ", tagValueLines.subList(SECOND_LINE, lastLine + 1)))
+              .nameAddress(
+                  String.join(" ", tagValueLines.subList(SECOND_LINE, lastLine + 1)).trim())
               .messageFieldStructure(messageFieldStructure)
               .build();
         }

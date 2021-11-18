@@ -39,7 +39,7 @@ public class ExtractOriginatorAlertedPartyData {
 
     if (firstLineLength == 2)
       return alertedPartyDataBuilder
-          .accountNumber(lines.get(LINE_2).trim())
+          .accountNumber(lines.get(LINE_2).trim().toUpperCase())
           .name(lines.get(LINE_3).trim())
           .address(String.join(" ", lines.subList(LINE_4, lastLine)).trim())
           .nameAddress(String.join(" ", lines.subList(LINE_3, lastLine + 1)).trim())
@@ -55,7 +55,7 @@ public class ExtractOriginatorAlertedPartyData {
           .build();
 
     return alertedPartyDataBuilder
-        .accountNumber(lines.get(LINE_1).trim())
+        .accountNumber(lines.get(LINE_1).trim().toUpperCase())
         .name(lines.get(LINE_2).trim())
         .address(String.join(" ", lines.subList(LINE_3, lastLine)).trim())
         .nameAddress(String.join(" ", lines.subList(LINE_2, lastLine + 1)).trim())

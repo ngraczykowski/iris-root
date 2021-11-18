@@ -1,13 +1,13 @@
 messageData, fkcoFormat, name, address, ctryTown, nameAddress, accountNumber
-AC\n<acctnum>\n<name>\n<address>\n<address>\n<ctrytown>,FED,<name>,<address> <address>,<ctrytown>,<name> <address> <address> <ctrytown>,<acctnum>
-<name>\n<address>\n<address>\n<ctrytown>,IAT-O,<name>,<address> <address>,<ctrytown>,<name> <address> <address> <ctrytown>,
-<acctnum>\n<name>\n<address>\n<address>\n<ctrytown>,IAT-I,<name>,<address> <address>,<ctrytown>,<name> <address> <address> <ctrytown>,<acctnum>
+AC\n<acctnum>\n<name>\n<address>\n<address>\n<ctrytown>,FED,<name>,<address> <address>,<ctrytown>,<name> <address> <address> <ctrytown>,<ACCTNUM>
+<name>\n<address>\n<address>\n<ctrytown>,IAT-O,<name>,<address> <address>,<ctrytown>,<name> <address> <address> <ctrytown>,""
+<acctnum>\n<name>\n<address>\n<address>\n<ctrytown>,IAT-I,<name>,<address> <address>,<ctrytown>,<name> <address> <address> <ctrytown>,<ACCTNUM>
 AC\n472364186217\nFOX CLUB,"",FOX CLUB,"","",FOX CLUB,472364186217
 AC\n42526768435123\nNAH CHING\nHONG KONG,"",NAH CHING,"",HONG KONG,NAH CHING HONG KONG,42526768435123
 AC\n342445345\nGEORGE FLORIDA AND BEATRICE FLORIDA\n.\n.\n.,"",GEORGE FLORIDA AND BEATRICE FLORIDA,. .,.,GEORGE FLORIDA AND BEATRICE FLORIDA . . .,342445345
 "AC\n7843627848\nSPANISH GROCERY, INC.\n64 BERTOLD ROAD, SUITE 14A\nMARTINEZ, CA 34242","","SPANISH GROCERY, INC.","64 BERTOLD ROAD, SUITE 14A","MARTINEZ, CA 34242","SPANISH GROCERY, INC. 64 BERTOLD ROAD, SUITE 14A MARTINEZ, CA 34242",7843627848
-FERNANDO DOS SANTOS,FED,FERNANDO DOS SANTOS,,,FERNANDO DOS SANTOS,
-DRO LOCAL UNION\n5HG8YRD35D KIM IR SEN,FED,DRO LOCAL UNION,"",,DRO LOCAL UNION 5HG8YRD35D KIM IR SEN,
-WIRE FROM DEWOO INC\nWIRE CLOSED ACCOUNT\nDR DAMI 213123D342CD89342213,FED,WIRE FROM DEWOO INC,WIRE CLOSED ACCOUNT,"",WIRE FROM DEWOO INC WIRE CLOSED ACCOUNT DR DAMI 213123D342CD89342213,
+FERNANDO DOS SANTOS,FED,FERNANDO DOS SANTOS,,,FERNANDO DOS SANTOS,""
+DRO LOCAL UNION\n5HG8YRD35D KIM IR SEN,FED,DRO LOCAL UNION,"",,DRO LOCAL UNION 5HG8YRD35D KIM IR SEN,""
+WIRE FROM DEWOO INC\nWIRE CLOSED ACCOUNT\nDR DAMI 213123D342CD89342213,FED,WIRE FROM DEWOO INC,WIRE CLOSED ACCOUNT,"",WIRE FROM DEWOO INC WIRE CLOSED ACCOUNT DR DAMI 213123D342CD89342213,""
 Some Technologies\n556 S Sinaloan Street Suite 450 3\nLos Angeles\\nUS,IAT-I,Some Technologies,556 S Sinaloan Street Suite 450 3 Los Angeles\,US,Some Technologies 556 S Sinaloan Street Suite 450 3 Los Angeles\ US,""
 92183917831289391839\nANY SOFTWARE INC.\n96534 B RIVER BACK PARKWAY\nRIVERTON\nUS,IAT-I,ANY SOFTWARE INC.,96534 B RIVER BACK PARKWAY RIVERTON,US,ANY SOFTWARE INC. 96534 B RIVER BACK PARKWAY RIVERTON US,92183917831289391839
