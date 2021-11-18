@@ -5,7 +5,11 @@ from importlib.resources import open_text
 from typing import Dict, List, Set
 
 from organization_name_knowledge import resources
-from organization_name_knowledge.utils.clear_name import remove_split_chars
+from organization_name_knowledge.utils.clear_name import (
+    remove_split_chars,
+    remove_too_long_numbers,
+    split_text_by_too_long_numbers,
+)
 
 NAMES_SYNONYMS: Dict[str, List[str]]
 
@@ -46,13 +50,20 @@ def get_term_variants(term: str) -> Set[str]:
     }
 
 
-def get_name_variants(name: str) -> List[str]:
+def get_name_variants(name: str) -> Set[str]:
     variants = set()
     # assuming single level instead of a recursive split
-    for name_delimiter in NAME_DELIMITERS:
-        for name_variant in name.split(name_delimiter):
-            variants.add(name_variant.strip())
-    for title in TITLES_FOR_VARIANTS:
-        for name_variant in name.split(title):
-            variants.add(name_variant.strip())
-    return sorted(variants)
+    _add_variants(name, NAME_DELIMITERS, variants)
+    _add_variants(name, TITLES_FOR_VARIANTS, variants)
+
+    for name_variant in split_text_by_too_long_numbers(name):
+        variants.add(name_variant)
+    variants.add(name)
+    return {remove_too_long_numbers(variant).strip() for variant in variants}
+
+
+def _add_variants(name: str, delimiters: List[str], variants: Set[str]):
+    for delimiter in delimiters:
+        if delimiter in name:
+            for name_variant in name.split(delimiter):
+                variants.add(name_variant.strip())
