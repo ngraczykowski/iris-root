@@ -11,13 +11,13 @@ from organization_name_knowledge.utils.term_variants import get_name_variants
 
 
 def parse_freetext_names(freetext: str, tokens_limit: int) -> List[NameInformation]:
-    freetext = clear_freetext(freetext)
-    names_with_legals = [
-        (name, get_all_contained_legal_terms(name)) for name in get_name_variants(freetext.lower())
+    freetext = clear_freetext(freetext).lower()
+    names_to_their_legals = [
+        (name, get_all_contained_legal_terms(name)) for name in get_name_variants(freetext)
     ]
     names_cut_to_leftmost_legals = {
         cut_name_to_leftmost_match(name, legal_terms)
-        for name, legal_terms in names_with_legals
+        for name, legal_terms in names_to_their_legals
         if legal_terms
     }
     parsed_names = [parse_name(name) for name in names_cut_to_leftmost_legals]
@@ -30,6 +30,11 @@ def parse_freetext_names(freetext: str, tokens_limit: int) -> List[NameInformati
 
 
 def _get_long_names_substrings_based_names(names: List[NameInformation]) -> List[NameInformation]:
+    """For each name information, produces all consecutive shorter name-based name information list
+    i.e. for 'Silent Eight Pte Ltd' which base is 'Silent Eight' and legal 'Pte Ltd',
+    we want to produce also another one, with base 'Eight' and the same legal 'Pte Ltd'
+    This is needed to properly check all variations produced from freetext
+    """
     names_from_substrings = []
     for name_information in names:
         base_tokens_number = len(name_information.base)

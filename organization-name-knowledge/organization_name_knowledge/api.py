@@ -1,7 +1,7 @@
 from typing import List, Set
 
-from organization_name_knowledge.freetext.freetext import parse_freetext_names
 from organization_name_knowledge.freetext.name_matching import get_all_contained_legal_terms
+from organization_name_knowledge.freetext.parse import parse_freetext_names
 from organization_name_knowledge.names.name_information import NameInformation
 from organization_name_knowledge.names.parse import parse_name
 
