@@ -25,8 +25,8 @@ def parse_freetext_names(freetext: str, tokens_limit: int) -> List[NameInformati
 
     names_from_long_names = _get_long_names_substrings_based_names(parsed_names_proper_length)
     names = parsed_names_proper_length + names_from_long_names
-    _remove_names_with_duplicated_bases(names)
-    return names
+
+    return _get_names_with_unique_bases(names)
 
 
 def _get_long_names_substrings_based_names(names: List[NameInformation]) -> List[NameInformation]:
@@ -55,10 +55,11 @@ def _add_names_from_name_substrings(
         names_from_substrings.append(replaced.strip())
 
 
-def _remove_names_with_duplicated_bases(names: List[NameInformation]):
+def _get_names_with_unique_bases(names: List[NameInformation]) -> List[NameInformation]:
+    unique_base_names = []
     bases = []
     for name in names:
-        if name.base in bases:
-            names.remove(name)
-        else:
+        if name.base not in bases:
+            unique_base_names.append(name)
             bases.append(name.base)
+    return unique_base_names
