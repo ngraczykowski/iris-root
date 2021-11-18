@@ -1,19 +1,13 @@
-from itertools import combinations
 from typing import Generator, List, Sequence, Set
 
+from organization_name_knowledge.knowledge_base import KnowledgeBase
 from organization_name_knowledge.knowledge_base.knowledge_base import KnowledgeBase
 from organization_name_knowledge.knowledge_base.legal_terms import LegalTerm
-from organization_name_knowledge.knowledge_base.term_sources import TermSources
+from organization_name_knowledge.knowledge_base.term_sources import _get_matching_tokens
 from organization_name_knowledge.names.name_information import NameInformation
-from organization_name_knowledge.names.name_information_helpers import (
-    filter_duplicate_bases,
-    get_long_names_substrings,
-)
-from organization_name_knowledge.names.parse import create_tokens, parse_name
+from organization_name_knowledge.names.parse import parse_name
+from organization_name_knowledge.names.parse.freetext import parse_freetext_names
 from organization_name_knowledge.names.tokens_sequence import TokensSequence
-from organization_name_knowledge.utils import cut_name_to_leftmost_match
-from organization_name_knowledge.utils.clear_name import clear_freetext
-from organization_name_knowledge.utils.term_variants import get_name_variants
 
 
 def parse(name: str) -> NameInformation:
@@ -52,22 +46,8 @@ def parse_freetext(freetext: str, tokens_limit: int = 5) -> List[NameInformation
         A list of found and parsed organization names, as NameInformation objects
     """
 
-    freetext = clear_freetext(freetext)
-    names_with_legals = [
-        (name, get_all_legal_terms(name)) for name in get_name_variants(freetext.lower())
-    ]
-    cut_names = {
-        cut_name_to_leftmost_match(name, legal_terms)
-        for name, legal_terms in names_with_legals
-        if legal_terms
-    }
-
-    parsed_names = [parse(name) for name in cut_names]
-    parsed_names_filtered = list(filter(lambda name: len(name.base) <= tokens_limit, parsed_names))
-    names_from_long_names = get_long_names_substrings(parsed_names_filtered)
-    parsed_names_filtered.extend([parse(name) for name in names_from_long_names])
-    filter_duplicate_bases(parsed_names_filtered)
-    return sorted(set(parsed_names_filtered), key=lambda name: name.base.cleaned_name)
+    names: List[NameInformation] = parse_freetext_names(freetext, tokens_limit)
+    return sorted(set(names), key=lambda name: name.base.cleaned_name)
 
 
 def get_all_legal_terms(name: str) -> Set[str]:
@@ -85,37 +65,8 @@ def get_all_legal_terms(name: str) -> Set[str]:
     Set[str]
         Set of name substrings that match any of known legal terms
     """
-
     legal_term_sources = KnowledgeBase.legal_terms.legal_term_sources
     return _get_matching_tokens(name, legal_term_sources)
-
-
-def _get_matching_tokens(name: str, term_sources: TermSources) -> Set[str]:
-    """For given name, produces all substrings, i. e.:
-    "A B C" -> "A", "B", "C" ,"A B", "B C", "A B C"
-    Then producing a set of all these that are present in given term_sources
-
-    Parameters
-    ----------
-    name : str
-        In most of use cases it is an organization name
-    term_sources : TermSources
-        TermSources object, containing set of known terms to check name tokens matching
-
-    Returns
-    -------
-    Set[str]
-        Set with all name tokens subsets, that match any of given term_sources
-    """
-    name_tokens = create_tokens(name)
-    found_tokens = set()
-
-    for first_index, last_index in combinations(range(len(name_tokens) + 1), 2):
-        name_tokens_subset = name_tokens[first_index:last_index]
-
-        if name_tokens_subset.cleaned_tuple in term_sources:
-            found_tokens.add(name_tokens_subset.original_name)
-    return found_tokens
 
 
 # functions from scores
