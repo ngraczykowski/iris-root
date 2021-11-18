@@ -33,7 +33,7 @@
       "STATE_NO_MATCH",
       "NO_DATA",
       "INCONCLUSIVE",
-      "ERROR"
+      "AGENT_ERROR"
     ],
     "configurations": []
   },
