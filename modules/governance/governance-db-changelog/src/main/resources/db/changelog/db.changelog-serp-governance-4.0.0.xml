@@ -526,4 +526,8 @@
                     columnName="original_name"
                     newDataType="VARCHAR(255)"/>
   </changeSet>
+  <changeSet id="serp-governance-4.0.0-19" author="wkeska">
+    <sqlFile path="sql/update_geo_agent_error_value.sql"
+             relativeToChangelogFile="true"/>
+  </changeSet>
 </databaseChangeLog>
