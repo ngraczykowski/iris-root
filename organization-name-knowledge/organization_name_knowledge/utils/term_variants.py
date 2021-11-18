@@ -50,7 +50,7 @@ def get_term_variants(term: str) -> Set[str]:
     }
 
 
-def get_name_variants(name: str) -> List[str]:
+def get_name_variants(name: str) -> Set[str]:
     variants = set()
     # assuming single level instead of a recursive split
     _add_variants(name, NAME_DELIMITERS, variants)
@@ -59,7 +59,7 @@ def get_name_variants(name: str) -> List[str]:
     for name_variant in split_text_by_too_long_numbers(name):
         variants.add(name_variant)
     variants.add(name)
-    return sorted((remove_too_long_numbers(variant) for variant in variants))
+    return {remove_too_long_numbers(variant).strip() for variant in variants}
 
 
 def _add_variants(name: str, delimiters: List[str], variants: Set[str]):

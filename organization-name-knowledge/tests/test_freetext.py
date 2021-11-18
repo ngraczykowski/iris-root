@@ -31,7 +31,6 @@ from organization_name_knowledge import parse_freetext
             "Magic LTD and The Hogwarts Inc.",
             [
                 {"base": "Hogwarts", "legal": "inc"},
-                {"base": "Hogwarts", "legal": "inc"},
                 {"base": "Magic", "legal": "ltd"},
             ],
         ),
@@ -40,6 +39,7 @@ from organization_name_knowledge import parse_freetext
             [
                 {"base": "Hewlett and Packard", "legal": "company"},
                 {"base": "Packard", "legal": "company"},
+                {"base": "The and Packard", "legal": "company"},
             ],
         ),
         (
@@ -57,9 +57,12 @@ from organization_name_knowledge import parse_freetext
         ),
         (
             "The NASA Hubble Space Telescope is a project of international cooperation "
-            "between NASA, ESA and the ABC DEF Company. AURA’s Space Telescope Science "
+            "between NASA, ESA also conducted by the ABC DEF Company. AURA’s Space Telescope Science "
             "Institute in Baltimore, Maryland, conducts Hubble science operations.",
-            [{"base": "ABC DEF", "legal": "company"}],
+            [
+                {"base": "ABC DEF", "legal": "company"},
+                {"base": "DEF", "legal": "company"},
+            ],
         ),
         (
             "At World's End The Dutchman arrives to the XYZ Limited",
@@ -87,13 +90,14 @@ from organization_name_knowledge import parse_freetext
                 {"base": "First", "legal": "company limited"},
                 {"base": "Second", "legal": "company"},
             ],
-        )
+        ),
     ],
 )
 def test_freetext(freetext, expected_names):
     parsed_freetext = parse_freetext(freetext, tokens_limit=5)
-    # print([x.base.cleaned_name for x in parsed_freetext])
-    assert parsed_freetext
+    print([x.base for x in parsed_freetext])
+    print(parsed_freetext)
+    assert len(parsed_freetext) == len(expected_names)
     for name_information, expected in zip(parsed_freetext, expected_names):
         assert name_information
         assert name_information.base.cleaned_name == expected["base"].lower()

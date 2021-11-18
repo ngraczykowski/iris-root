@@ -37,6 +37,12 @@ def clear_name(name: str) -> str:
     return REMOVE_CHARS_REGEX.sub("", name)
 
 
+def clear_freetext(text: str) -> str:
+    text = clear_name(text)
+    text = text.replace(" is ", "")  # hacky trick to avoid 'is' as a legal
+    return text
+
+
 def split_text_by_too_long_numbers(text: str) -> List[str]:
     return [name.strip() for name in TOO_LONG_NUMBER_REGEX.split(text)]
 

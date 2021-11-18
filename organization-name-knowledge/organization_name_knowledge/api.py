@@ -5,9 +5,14 @@ from organization_name_knowledge.knowledge_base.knowledge_base import KnowledgeB
 from organization_name_knowledge.knowledge_base.legal_terms import LegalTerm
 from organization_name_knowledge.knowledge_base.term_sources import TermSources
 from organization_name_knowledge.names.name_information import NameInformation
+from organization_name_knowledge.names.name_information_helpers import (
+    filter_duplicate_bases,
+    get_long_names_substrings,
+)
 from organization_name_knowledge.names.parse import create_tokens, parse_name
 from organization_name_knowledge.names.tokens_sequence import TokensSequence
 from organization_name_knowledge.utils import cut_name_to_leftmost_match
+from organization_name_knowledge.utils.clear_name import clear_freetext
 from organization_name_knowledge.utils.term_variants import get_name_variants
 
 
@@ -31,19 +36,6 @@ def parse(name: str) -> NameInformation:
     return name_information
 
 
-def _add_long_names_substrings_parsed(names: List[NameInformation]):
-    substrings_names = []
-    for name_information in names:
-        base_tokens_number = len(name_information.base)
-        if base_tokens_number >= 2:
-            for index in range(1, base_tokens_number):
-                replaced = name_information.source.original
-                for token_from_first_text_part in name_information.base.original_tuple[:index]:
-                    replaced = replaced.replace(token_from_first_text_part, "")
-                substrings_names.append(replaced)
-    names.extend([parse(name) for name in substrings_names])
-
-
 def parse_freetext(freetext: str, tokens_limit: int = 5) -> List[NameInformation]:
     """Parse freetext to find each organization name that is present within passed text
 
@@ -59,6 +51,8 @@ def parse_freetext(freetext: str, tokens_limit: int = 5) -> List[NameInformation
     List[NameInformation]
         A list of found and parsed organization names, as NameInformation objects
     """
+
+    freetext = clear_freetext(freetext)
     names_with_legals = [
         (name, get_all_legal_terms(name)) for name in get_name_variants(freetext.lower())
     ]
@@ -70,8 +64,10 @@ def parse_freetext(freetext: str, tokens_limit: int = 5) -> List[NameInformation
 
     parsed_names = [parse(name) for name in cut_names]
     parsed_names_filtered = list(filter(lambda name: len(name.base) <= tokens_limit, parsed_names))
-    _add_long_names_substrings_parsed(parsed_names_filtered)
-    return sorted(parsed_names_filtered, key=lambda name: name.base.cleaned_name)
+    names_from_long_names = get_long_names_substrings(parsed_names_filtered)
+    parsed_names_filtered.extend([parse(name) for name in names_from_long_names])
+    filter_duplicate_bases(parsed_names_filtered)
+    return sorted(set(parsed_names_filtered), key=lambda name: name.base.cleaned_name)
 
 
 def get_all_legal_terms(name: str) -> Set[str]:
