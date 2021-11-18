@@ -1,12 +1,11 @@
 from typing import Generator, List, Sequence, Set
 
-from organization_name_knowledge.knowledge_base import KnowledgeBase
+from organization_name_knowledge.freetext.freetext import parse_freetext_names
+from organization_name_knowledge.freetext.name_matching import get_matching_tokens
 from organization_name_knowledge.knowledge_base.knowledge_base import KnowledgeBase
 from organization_name_knowledge.knowledge_base.legal_terms import LegalTerm
-from organization_name_knowledge.knowledge_base.term_sources import _get_matching_tokens
 from organization_name_knowledge.names.name_information import NameInformation
 from organization_name_knowledge.names.parse import parse_name
-from organization_name_knowledge.names.parse.freetext import parse_freetext_names
 from organization_name_knowledge.names.tokens_sequence import TokensSequence
 
 
@@ -66,7 +65,7 @@ def get_all_legal_terms(name: str) -> Set[str]:
         Set of name substrings that match any of known legal terms
     """
     legal_term_sources = KnowledgeBase.legal_terms.legal_term_sources
-    return _get_matching_tokens(name, legal_term_sources)
+    return get_matching_tokens(name, legal_term_sources)
 
 
 # functions from scores

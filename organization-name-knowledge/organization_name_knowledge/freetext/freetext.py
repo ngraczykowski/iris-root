@@ -1,17 +1,22 @@
 from typing import List
 
-from organization_name_knowledge.api import get_all_name_legal_terms
+from organization_name_knowledge.freetext.name_matching import (
+    cut_name_to_leftmost_match,
+    get_matching_tokens,
+)
+from organization_name_knowledge.knowledge_base import KnowledgeBase
 from organization_name_knowledge.names.name_information import NameInformation
 from organization_name_knowledge.names.parse.parse import parse_name
-from organization_name_knowledge.utils import cut_name_to_leftmost_match
 from organization_name_knowledge.utils.clear_name import clear_freetext
 from organization_name_knowledge.utils.term_variants import get_name_variants
 
 
 def parse_freetext_names(freetext: str, tokens_limit: int) -> List[NameInformation]:
     freetext = clear_freetext(freetext)
+    legal_term_sources = KnowledgeBase.legal_terms.legal_term_sources
     names_with_legals = [
-        (name, get_all_name_legal_terms(name)) for name in get_name_variants(freetext.lower())
+        (name, get_matching_tokens(name, legal_term_sources))
+        for name in get_name_variants(freetext.lower())
     ]
     cut_names = {
         cut_name_to_leftmost_match(name, legal_terms)

@@ -1,7 +1,7 @@
 import pytest
 
 from organization_name_knowledge.api import get_all_legal_terms
-from organization_name_knowledge.utils import cut_name_to_leftmost_match
+from organization_name_knowledge.freetext.name_matching import cut_name_to_leftmost_match
 from organization_name_knowledge.utils.clear_name import (
     clear_name,
     divide,

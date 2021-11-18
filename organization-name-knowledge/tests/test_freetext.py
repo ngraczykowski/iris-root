@@ -88,15 +88,13 @@ from organization_name_knowledge import parse_freetext
             "First Company Limited oraz Second Company",
             [
                 {"base": "First", "legal": "company limited"},
-                {"base": "Second", "legal": "company"},
             ],
         ),
     ],
 )
 def test_freetext(freetext, expected_names):
     parsed_freetext = parse_freetext(freetext, tokens_limit=5)
-    print([x.base for x in parsed_freetext])
-    print(parsed_freetext)
+    # print([x.base for x in parsed_freetext])
     assert len(parsed_freetext) == len(expected_names)
     for name_information, expected in zip(parsed_freetext, expected_names):
         assert name_information
