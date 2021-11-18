@@ -5,6 +5,16 @@
       "features/name",
       "features/nameMatchedText"
     ],
+    "featuresList": [
+      {
+        "name": "features/name",
+        "displayName": "Name"
+      },
+      {
+        "name": "features/nameMatchedText",
+        "displayName": "Name Matched Text"
+      }
+    ],
     "responses": [
       "EXACT_MATCH",
       "STRONG_MATCH",
@@ -22,6 +32,12 @@
     "agentId": "fd46923f-f68f-4b79-9d63-1621f081cfd0",
     "features": [
       "features/geo"
+    ],
+    "featuresList": [
+      {
+        "name": "features/geo",
+        "displayName": "Geo"
+      }
     ],
     "responses": [
       "CITY_MATCH",
@@ -41,6 +57,12 @@
     "agentId": "080101a1-ef44-4f4b-ab1d-cfdbc2acbe9e",
     "features": [
       "features/organizationName"
+    ],
+    "featuresList": [
+      {
+        "name": "features/organizationName",
+        "displayName": "Organization Name"
+      }
     ],
     "responses": [
       "MATCH",

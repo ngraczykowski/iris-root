@@ -4,6 +4,12 @@
     "features": [
       "features/name"
     ],
+    "featuresList": [
+      {
+        "name": "features/name",
+        "displayName": "Name"
+      }
+    ],
     "responses": [
       "EXACT_MATCH",
       "STRONG_MATCH",
@@ -25,6 +31,12 @@
     "features": [
       "features/dateOfBirth"
     ],
+    "featuresList": [
+      {
+        "name": "features/dateOfBirth",
+        "displayName": "Date of Birth / Incorporation"
+      }
+    ],
     "responses": [
       "EXACT",
       "NEAR",
@@ -44,6 +56,16 @@
     "features": [
       "features/passportNumberDocument",
       "features/otherDocument"
+    ],
+    "featuresList": [
+      {
+        "name": "features/passportNumberDocument",
+        "displayName": "Passport Number Document"
+      },
+      {
+        "name": "features/otherDocument",
+        "displayName": "Other Document"
+      }
     ],
     "responses": [
       "PERFECT_MATCH",
@@ -66,6 +88,12 @@
     "features": [
       "features/nationalIdDocument"
     ],
+    "featuresList": [
+      {
+        "name": "features/nationalIdDocument",
+        "displayName": "National Id Document"
+      }
+    ],
     "responses": [
       "PERFECT_MATCH",
       "DIGIT_MATCH",
@@ -86,6 +114,12 @@
     "agentId": "bf5a2cdd-e797-428d-9657-85a3b241c9ba",
     "features": [
       "features/gender"
+    ],
+    "featuresList": [
+      {
+        "name": "features/gender",
+        "displayName": "Gender"
+      }
     ],
     "responses": [
       "MATCH",
@@ -109,6 +143,28 @@
       "features/nationalityCountry",
       "features/otherCountry"
     ],
+    "featuresList": [
+      {
+        "name": "features/residencyCountry",
+        "displayName": "Residency Country"
+      },
+      {
+        "name": "features/registrationCountry",
+        "displayName": "Registration Country"
+      },
+      {
+        "name": "features/incorporationCountry",
+        "displayName": "Incorporation Country"
+      },
+      {
+        "name": "features/nationalityCountry",
+        "displayName": "Nationality Country"
+      },
+      {
+        "name": "features/otherCountry",
+        "displayName": "Other Country"
+      }
+    ],
     "responses": [
       "MATCH",
       "WEAK_MATCH",
@@ -130,6 +186,20 @@
       "features/isApTpMarked",
       "features/isCaseTpMarked"
     ],
+    "featuresList": [
+      {
+        "name": "features/isTpMarked",
+        "displayName": "True Case - Watchlist"
+      },
+      {
+        "name": "features/isApTpMarked",
+        "displayName": "True Case - Alerted Party "
+      },
+      {
+        "name": "features/isCaseTpMarked",
+        "displayName": "True Case - Historical"
+      }
+    ],
     "responses": [
       "TRUE_POSITIVE",
       "NOT_TRUE_POSITIVE",
@@ -146,6 +216,12 @@
     "agentId": "cdf2ffda-2011-4dd9-9d56-e8740becda35",
     "features": [
       "features/invalidAlert"
+    ],
+    "featuresList": [
+      {
+        "name": "features/invalidAlert",
+        "displayName": "Invalid Alert"
+      }
     ],
     "responses": [
       "FI",
@@ -167,6 +243,20 @@
       "features/commonAp",
       "features/commonMp"
     ],
+    "featuresList": [
+      {
+        "name": "features/commonNames",
+        "displayName": "Common Name"
+      },
+      {
+        "name": "features/commonAp",
+        "displayName": "Common Alerted Party"
+      },
+      {
+        "name": "features/commonMp",
+        "displayName": "Common Watchlist Party"
+      }
+    ],
     "responses": [
       "YES",
       "NO",
@@ -184,6 +274,16 @@
     "features": [
       "features/geoResidencies",
       "features/geoPlaceOfBirth"
+    ],
+    "featuresList": [
+      {
+        "name": "features/geoResidencies",
+        "displayName": "Geo Residencies"
+      },
+      {
+        "name": "features/geoPlaceOfBirth",
+        "displayName": "Geo Place of Birth"
+      }
     ],
     "responses": [
       "CITY_MATCH",
@@ -208,6 +308,12 @@
     "features": [
       "features/isPep"
     ],
+    "featuresList": [
+      {
+        "name": "features/isPep",
+        "displayName": "PEP"
+      }
+    ],
     "responses": [
       "INCONCLUSIVE",
       "NOT_PEP_ANYMORE",
@@ -226,6 +332,12 @@
     "agentId": "f4a4911e-f57d-4a34-a6a6-b3e47e242a80",
     "features": [
       "features/logicalDiscountingDob"
+    ],
+    "featuresList": [
+      {
+        "name": "features/logicalDiscountingDob",
+        "displayName": "Logical Discounting"
+      }
     ],
     "responses": [
       "IMBOSSIBLE",
