@@ -20,6 +20,7 @@ def parse_freetext_names(freetext: str, tokens_limit: int) -> List[NameInformati
         for name, legal_terms in names_to_their_legals
         if legal_terms
     }
+
     parsed_names = [parse_name(name) for name in names_cut_to_leftmost_legals]
     parsed_names_proper_length = [name for name in parsed_names if len(name.base) <= tokens_limit]
 

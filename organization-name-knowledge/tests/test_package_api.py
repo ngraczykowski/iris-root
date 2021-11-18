@@ -1,6 +1,10 @@
+import logging
+
 import pytest
 
 from organization_name_knowledge.api import get_all_legal_terms, parse, parse_freetext
+
+LOGGER = logging.getLogger(__name__)
 
 
 @pytest.mark.parametrize(
@@ -120,11 +124,24 @@ def test_parse_name_base(name, expected_base):
                 {"base": "First", "legal": "company limited"},
             ],
         ),
+        # (
+        #     "IT36701908273410\r\n1/OTHER COMPANY",
+        #     [{"base": "OTHER", "legal": "COMPANY"}],
+        # ),
+        (
+            "123456 PR RETAIL LLC C/O BLACKPOINT PARTNERS, LLC 123 ABC ST SUITE 88 US 12345",
+            [
+                {"base": base, "legal": legal}
+                for base, legal in zip(
+                    ["blackpoint", "o blackpoint", "pr retail", "retail"],
+                    ["llc", "llc", "llc", "llc"],
+                )
+            ],
+        ),
     ],
 )
 def test_parse_freetext(freetext, expected_names):
     parsed_freetext = parse_freetext(freetext, tokens_limit=5)
-    # print([x.base for x in parsed_freetext])
     assert len(parsed_freetext) == len(expected_names)
     for name_information, expected in zip(parsed_freetext, expected_names):
         assert name_information

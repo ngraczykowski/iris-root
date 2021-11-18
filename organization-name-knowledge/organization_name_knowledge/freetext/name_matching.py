@@ -12,7 +12,7 @@ def cut_name_to_leftmost_match(name: str, matches: Set[str]) -> str:
     """This function goal is to cut organization name from the longer name string. The leftmost
     matching sequence is found (just one term or group of consecutive, i. e. 'Company Limited'),
     and the name is cut from start of name to the end of first found match(es) group.
-    If no match found, non-changed name is returned.
+    The cut name must contain more tokens than just a match. If no rules met, returns full name.
 
     Parameters
     ----------
@@ -29,7 +29,12 @@ def cut_name_to_leftmost_match(name: str, matches: Set[str]) -> str:
     def get_match_last_index(match: Dict):
         return 1 + match["idx"] + len(match["match"])  # 1 because of leading " " cutting
 
-    match_to_index = [{"match": match, "idx": name.find(" " + match)} for match in matches]
+    matches_indexes = [name.find(" " + match) for match in matches]
+    match_to_index = [
+        {"match": match, "idx": index}
+        for match, index in zip(matches, matches_indexes)
+        if index > 0
+    ]
 
     if not match_to_index:
         return name
