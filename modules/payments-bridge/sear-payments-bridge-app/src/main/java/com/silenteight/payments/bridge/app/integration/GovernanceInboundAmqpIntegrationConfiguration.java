@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.app.integration.model;
+package com.silenteight.payments.bridge.app.integration;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

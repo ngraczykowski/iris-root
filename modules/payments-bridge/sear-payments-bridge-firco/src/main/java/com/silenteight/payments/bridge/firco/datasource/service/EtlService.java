@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
-import com.silenteight.payments.bridge.event.EventPublisher;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePayloadUseCase;
+import com.silenteight.payments.bridge.firco.alertmessage.port.RecommendationCompletedPublisherPort;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
 import com.silenteight.payments.bridge.firco.datasource.port.EtlUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
@@ -29,7 +29,7 @@ class EtlService implements EtlUseCase {
   private final List<EtlProcess> processes;
   private final ExtractAlertEtlResponseUseCase extractAlertEtlResponseUseCase;
   private final AlertMessagePayloadUseCase alertMessagePayloadUseCase;
-  private final EventPublisher eventPublisher;
+  private final RecommendationCompletedPublisherPort recommendationCompletedPublisherPort;
 
   @LogContext
   @Override
@@ -48,7 +48,7 @@ class EtlService implements EtlUseCase {
     } catch (UnsupportedMessageException exception) {
       log.error("Failed to process a message payload associated with the alert: {}. "
           + "Reject the message as DAMAGED", alertId, exception);
-      eventPublisher.send(RecommendationCompletedEvent.fromBridge(alertId,
+      recommendationCompletedPublisherPort.send(RecommendationCompletedEvent.fromBridge(alertId,
           AlertMessageStatus.REJECTED_DAMAGED.name(),
           RecommendationReason.DAMAGED.name()));
       throw exception;

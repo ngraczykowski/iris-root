@@ -12,10 +12,10 @@ import javax.annotation.Nonnull;
 import static java.util.stream.Collectors.toList;
 
 @Component
-class CreateAnalysisRequestMapper {
+public class CreateAnalysisRequestMapper {
 
   @Nonnull
-  CreateAnalysisRequest map(AnalysisModel model) {
+  public CreateAnalysisRequest map(AnalysisModel model) {
     return CreateAnalysisRequest
         .newBuilder()
         .setAnalysis(Analysis

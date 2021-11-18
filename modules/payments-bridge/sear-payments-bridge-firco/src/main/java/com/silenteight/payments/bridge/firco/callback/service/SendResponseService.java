@@ -5,13 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.dto.output.ClientRequestDto;
 import com.silenteight.payments.bridge.event.AlertDeliveredEvent;
-import com.silenteight.payments.bridge.event.EventPublisher;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePayloadUseCase;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.callback.model.CallbackException;
 import com.silenteight.payments.bridge.firco.callback.model.NonRecoverableCallbackException;
 import com.silenteight.payments.bridge.firco.callback.model.RecoverableCallbackException;
+import com.silenteight.payments.bridge.firco.callback.port.AlertDeliveredPublisherPort;
 import com.silenteight.payments.bridge.firco.callback.port.SendResponseUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationId;
 import com.silenteight.payments.bridge.firco.recommendation.port.GetRecommendationUseCase;
@@ -35,7 +35,7 @@ class SendResponseService implements SendResponseUseCase {
   private final GetRecommendationUseCase getRecommendationUseCase;
   private final CallbackRequestFactory callbackRequestFactory;
   private final ClientRequestDtoMapper mapper;
-  private final EventPublisher eventPublisher;
+  private final AlertDeliveredPublisherPort alertDeliveredPublisherPort;
 
   @LogContext
   @Override
@@ -68,7 +68,7 @@ class SendResponseService implements SendResponseUseCase {
       callbackRequestFactory.create(requestDto).execute();
       log.info("The callback invoked successfully.");
 
-      eventPublisher.send(new AlertDeliveredEvent(alertId, status.name()));
+      alertDeliveredPublisherPort.send(new AlertDeliveredEvent(alertId, status.name()));
 
     } catch (NonRecoverableCallbackException exception) {
       log.error("The callback failed with non-recoverable exception.");

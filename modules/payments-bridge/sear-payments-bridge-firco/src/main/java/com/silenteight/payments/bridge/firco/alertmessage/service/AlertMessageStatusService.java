@@ -5,10 +5,10 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.event.AlertRejectedEvent;
-import com.silenteight.payments.bridge.event.EventPublisher;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageStatusUseCase;
+import com.silenteight.payments.bridge.firco.alertmessage.port.AlertRejectedPublisherPort;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ class AlertMessageStatusService implements AlertMessageStatusUseCase {
   private final AlertMessageStatusRepository repository;
   private final AlertMessagePayloadRepository payloadRepository;
   private final AlertMessageProperties alertMessageProperties;
-  private final EventPublisher eventPublisher;
+  private final AlertRejectedPublisherPort alertRejectedPublisherPort;
 
   @Setter
   private Clock clock = Clock.systemUTC();
@@ -81,7 +81,7 @@ class AlertMessageStatusService implements AlertMessageStatusUseCase {
   private void publishRejectionIfApply(UUID alertId, AlertMessageStatus destinationStatus) {
     if (EnumSet.of(REJECTED_OVERFLOWED, REJECTED_DAMAGED, REJECTED_OUTDATED)
         .contains(destinationStatus)) {
-      eventPublisher.send(new AlertRejectedEvent(alertId, destinationStatus.name()));
+      alertRejectedPublisherPort.send(new AlertRejectedEvent(alertId, destinationStatus.name()));
     }
   }
 

@@ -2,8 +2,8 @@ package com.silenteight.payments.bridge.app.amqp;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.app.integration.AlertUndeliveredGateway;
 import com.silenteight.payments.bridge.event.AlertUndeliveredEvent;
-import com.silenteight.payments.bridge.event.EventPublisher;
 import com.silenteight.payments.bridge.firco.callback.model.CallbackException;
 import com.silenteight.payments.bridge.firco.callback.model.NonRecoverableCallbackException;
 import com.silenteight.payments.bridge.firco.callback.model.RecoverableCallbackException;
@@ -29,7 +29,7 @@ import java.util.Optional;
 class RabbitCustomizer {
 
   private final RabbitProperties rabbitProperties;
-  private final EventPublisher eventPublisher;
+  private final AlertUndeliveredGateway alertUndeliveredGateway;
 
   @Bean
   RabbitRetryTemplateCustomizer rabbitRetryTemplateCustomizer() {
@@ -60,7 +60,7 @@ class RabbitCustomizer {
       public void recover(Message message, Throwable cause) {
         findCallbackException(cause)
             .ifPresent(exception ->
-                eventPublisher.send(new AlertUndeliveredEvent(exception.getAlertId(),
+                alertUndeliveredGateway.send(new AlertUndeliveredEvent(exception.getAlertId(),
                         exception.getStatus().name()))
             );
         super.recover(message, cause);

@@ -1,8 +1,9 @@
-package com.silenteight.payments.bridge.app.integration.model;
+package com.silenteight.payments.bridge.app.integration;
 
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.ae.alertregistration.port.CreateAnalysisUseCase;
+import com.silenteight.payments.bridge.app.integration.model.CreateAnalysisRequestMapper;
 import com.silenteight.payments.bridge.event.ModelUpdatedEvent;
 import com.silenteight.payments.bridge.governance.solvingmodel.model.AnalysisModel;
 

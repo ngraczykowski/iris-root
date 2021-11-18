@@ -4,11 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.event.AlertStoredEvent;
-import com.silenteight.payments.bridge.event.EventPublisher;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
+import com.silenteight.payments.bridge.firco.alertmessage.port.AlertStoredPublisherPort;
 import com.silenteight.payments.bridge.firco.alertmessage.port.MessageStoredPublisherPort;
+import com.silenteight.payments.bridge.firco.alertmessage.port.RecommendationCompletedPublisherPort;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -29,7 +30,8 @@ class QueueUpAlertMessageService {
   private final AlertMessageProperties properties;
 
   private final MessageStoredPublisherPort messageStoredPublisherPort;
-  private final EventPublisher eventPublisher;
+  private final AlertStoredPublisherPort alertStoredPublisherPort;
+  private final RecommendationCompletedPublisherPort recommendationCompletedPublisherPort;
 
   void queueUp(FircoAlertMessage alert) {
     if (isQueueOverflowed()) {
@@ -39,7 +41,7 @@ class QueueUpAlertMessageService {
 
     messageStoredPublisherPort.send(buildMessageStore(alert));
     statusService.transitionAlertMessageStatus(alert.getId(), STORED, NA);
-    eventPublisher.send(new AlertStoredEvent(alert.getId()));
+    alertStoredPublisherPort.send(new AlertStoredEvent(alert.getId()));
   }
 
   private boolean isQueueOverflowed() {
@@ -50,7 +52,7 @@ class QueueUpAlertMessageService {
     log.warn("AlertMessage [{}] rejected due to queue limit ({})",
         alert.getId(), properties.getStoredQueueLimit());
 
-    eventPublisher.send(RecommendationCompletedEvent.fromBridge(
+    recommendationCompletedPublisherPort.send(RecommendationCompletedEvent.fromBridge(
         alert.getId(), AlertMessageStatus.REJECTED_OVERFLOWED.name(),
         QUEUE_OVERFLOWED.name()));
   }

@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.app.integration.register;
+package com.silenteight.payments.bridge.app.integration;
 
 import lombok.RequiredArgsConstructor;
 
@@ -6,7 +6,6 @@ import com.silenteight.payments.bridge.common.model.AlertId;
 import com.silenteight.payments.bridge.common.model.SimpleAlertId;
 import com.silenteight.payments.bridge.event.AlertInitializedEvent;
 import com.silenteight.payments.bridge.event.AlertUndeliveredEvent;
-import com.silenteight.payments.bridge.event.EventPublisher;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.FilterAlertMessageUseCase;
@@ -44,7 +43,6 @@ class FircoInboundAmqpIntegrationConfiguration {
   private final AmqpInboundFactory inboundFactory;
   private final FilterAlertMessageUseCase filterAlertMessageUseCase;
   private final SendResponseUseCase sendResponseUseCase;
-  private final EventPublisher eventPublisher;
 
   @Bean
   IntegrationFlow messageStoredInbound() {
@@ -59,10 +57,7 @@ class FircoInboundAmqpIntegrationConfiguration {
         .transform(AlertId.class, source ->
             new AlertInitializedEvent(source.getAlertId())
         )
-        .handle(AlertInitializedEvent.class, (payload, headers) -> {
-          eventPublisher.send(payload);
-          return null;
-        })
+        .channel(AlertInitializedEvent.CHANNEL)
         .get();
   }
 

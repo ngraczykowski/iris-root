@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.app.integration.retention;
+package com.silenteight.payments.bridge.app.integration;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.app.integration.register;
+package com.silenteight.payments.bridge.app.integration;
 
 import lombok.Data;
 

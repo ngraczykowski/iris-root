@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.app.integration.delivery;
+package com.silenteight.payments.bridge.app.integration;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,8 +42,6 @@ class DeliveryStatusUpdateEndpoint {
     alertMessageStatusUseCase.transitionAlertMessageStatus(alertId, status, deliveryStatus);
     var alertData = alertMessageUseCase.findByAlertMessageId(alertId);
     indexResponseDeliveredUseCase.index(alertData, status.name(), deliveryStatus.name());
-
   }
-
 
 }
