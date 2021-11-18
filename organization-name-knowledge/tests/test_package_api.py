@@ -1,10 +1,7 @@
 import pytest
 
-from organization_name_knowledge.api import (
-    generate_matching_legal_terms,
-    get_all_legal_terms,
-    parse,
-)
+from organization_name_knowledge.api import get_all_legal_terms, parse
+from organization_name_knowledge.freetext.name_matching import generate_matching_legal_terms
 from organization_name_knowledge.names.parse import create_tokens
 
 

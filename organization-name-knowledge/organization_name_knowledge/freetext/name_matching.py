@@ -1,8 +1,11 @@
 from itertools import combinations
-from typing import Dict, Set
+from typing import Dict, Generator, Sequence, Set
 
+from organization_name_knowledge.knowledge_base import KnowledgeBase
+from organization_name_knowledge.knowledge_base.legal_terms import LegalTerm
 from organization_name_knowledge.knowledge_base.term_sources import TermSources
 from organization_name_knowledge.names.parse import create_tokens
+from organization_name_knowledge.names.tokens_sequence import TokensSequence
 
 
 def cut_name_to_leftmost_match(name: str, matches: Set[str]) -> str:
@@ -28,6 +31,11 @@ def cut_name_to_leftmost_match(name: str, matches: Set[str]) -> str:
         leftmost_legal_sequence_last_char_index = get_match_last_index(sorted_matches[0])
 
     return name[:leftmost_legal_sequence_last_char_index]
+
+
+def get_all_contained_legal_terms(name: str) -> Set[str]:
+    legal_term_sources = KnowledgeBase.legal_terms.legal_term_sources
+    return get_matching_tokens(name, legal_term_sources)
 
 
 def get_matching_tokens(name: str, term_sources: TermSources) -> Set[str]:
@@ -56,3 +64,13 @@ def get_matching_tokens(name: str, term_sources: TermSources) -> Set[str]:
         if name_tokens_subset.cleaned_tuple in term_sources:
             found_tokens.add(name_tokens_subset.original_name)
     return found_tokens
+
+
+def generate_matching_legal_terms(
+    tokens: TokensSequence,
+) -> Generator[Sequence[LegalTerm], None, None]:
+    """For given TokensSequence, yielding LegalTerm sequences that match any of tokens"""
+    for token in tokens:
+        key = tuple(token.cleaned.split())
+        if key in KnowledgeBase.legal_terms.source_to_legal_terms:
+            yield KnowledgeBase.legal_terms.source_to_legal_terms[key]

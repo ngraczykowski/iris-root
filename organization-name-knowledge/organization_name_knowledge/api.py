@@ -1,12 +1,9 @@
-from typing import Generator, List, Sequence, Set
+from typing import List, Set
 
 from organization_name_knowledge.freetext.freetext import parse_freetext_names
-from organization_name_knowledge.freetext.name_matching import get_matching_tokens
-from organization_name_knowledge.knowledge_base.knowledge_base import KnowledgeBase
-from organization_name_knowledge.knowledge_base.legal_terms import LegalTerm
+from organization_name_knowledge.freetext.name_matching import get_all_contained_legal_terms
 from organization_name_knowledge.names.name_information import NameInformation
 from organization_name_knowledge.names.parse import parse_name
-from organization_name_knowledge.names.tokens_sequence import TokensSequence
 
 
 def parse(name: str) -> NameInformation:
@@ -64,18 +61,4 @@ def get_all_legal_terms(name: str) -> Set[str]:
     Set[str]
         Set of name substrings that match any of known legal terms
     """
-    legal_term_sources = KnowledgeBase.legal_terms.legal_term_sources
-    return get_matching_tokens(name, legal_term_sources)
-
-
-# functions from scores
-
-
-def generate_matching_legal_terms(
-    tokens: TokensSequence,
-) -> Generator[Sequence[LegalTerm], None, None]:
-    """For given TokensSequence, yielding LegalTerm sequences that match any of tokens"""
-    for token in tokens:
-        key = tuple(token.cleaned.split())
-        if key in KnowledgeBase.legal_terms.source_to_legal_terms:
-            yield KnowledgeBase.legal_terms.source_to_legal_terms[key]
+    return get_all_contained_legal_terms(name)
