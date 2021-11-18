@@ -13,6 +13,9 @@ message AgentInput {
   // The name of the agent input, in form of `agent-inputs/<Agent input ID>`.
   string name = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
 
+  // Alert name in form of `alerts/<Alert ID>`.
+  string alert = 4 [(google.api.field_behavior) = REQUIRED];
+
   // The name of the match this agent input is for, in form of
   // `alerts/<Alert ID>/matches/<Match ID>`.
   string match = 2 [(google.api.field_behavior) = REQUIRED];
