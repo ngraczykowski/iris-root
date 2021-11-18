@@ -9,10 +9,26 @@ from organization_name_knowledge.names.tokens_sequence import TokensSequence
 
 
 def cut_name_to_leftmost_match(name: str, matches: Set[str]) -> str:
+    """This function goal is to cut organization name from the longer name string. The leftmost
+    matching sequence is found (just one term or group of consecutive, i. e. 'Company Limited'),
+    and the name is cut from start of name to the end of first found match(es) group.
+    If no match found, non-changed name is returned.
+
+    Parameters
+    ----------
+    name : str
+        A text, where the matches were found
+    matches : Set[str]
+        A set of strings that are matches of specific terms found in name
+    Returns
+    -------
+    str
+        A name cut to the leftmost match group end
+    """
+
     def get_match_last_index(match: Dict):
         return 1 + match["idx"] + len(match["match"])  # 1 because of leading " " cutting
 
-    matches = filter(lambda match: match in name, matches)  # to avoid using no-matches
     match_to_index = [{"match": match, "idx": name.find(" " + match)} for match in matches]
 
     if not match_to_index:

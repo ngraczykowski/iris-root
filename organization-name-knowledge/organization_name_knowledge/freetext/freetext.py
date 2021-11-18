@@ -15,16 +15,17 @@ def parse_freetext_names(freetext: str, tokens_limit: int) -> List[NameInformati
     names_with_legals = [
         (name, get_all_contained_legal_terms(name)) for name in get_name_variants(freetext.lower())
     ]
-    cut_names = {
+    names_cut_to_leftmost_legals = {
         cut_name_to_leftmost_match(name, legal_terms)
         for name, legal_terms in names_with_legals
         if legal_terms
     }
-    parsed_names = [parse_name(name) for name in cut_names]
-    parsed_names_filtered = list(filter(lambda name: len(name.base) <= tokens_limit, parsed_names))
-    names_from_long_names = _get_long_names_substrings_based_names(parsed_names_filtered)
-    names = parsed_names_filtered + names_from_long_names
-    _filter_duplicate_bases(names)
+    parsed_names = [parse_name(name) for name in names_cut_to_leftmost_legals]
+    parsed_names_proper_length = [name for name in parsed_names if len(name.base) <= tokens_limit]
+
+    names_from_long_names = _get_long_names_substrings_based_names(parsed_names_proper_length)
+    names = parsed_names_proper_length + names_from_long_names
+    _remove_names_with_duplicated_bases(names)
     return names
 
 
@@ -49,7 +50,7 @@ def _add_names_from_name_substrings(
         names_from_substrings.append(replaced.strip())
 
 
-def _filter_duplicate_bases(names: List[NameInformation]):
+def _remove_names_with_duplicated_bases(names: List[NameInformation]):
     bases = []
     for name in names:
         if name.base in bases:
