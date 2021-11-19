@@ -7,7 +7,7 @@ from organization_name_knowledge.names.parse import create_tokens
 
 
 def cut_name_to_leftmost_match(name: str, matches: Set[str]) -> str:
-    """This function goal is to cut organization name from the longer name string. The leftmost
+    """Cut organization name from the longer name string. The leftmost
     matching sequence is found (just one term or group of consecutive, i. e. 'Company Limited'),
     and the name is cut from start of name to the end of first found match(es) group.
     The cut name must contain more tokens than just a match. If no rules met, returns full name.
