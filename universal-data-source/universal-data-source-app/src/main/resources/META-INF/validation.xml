@@ -20,6 +20,7 @@
   <constraint-mapping>META-INF/validation/feature/free-text-feature-validation.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/feature/gender-feature-validation.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/feature/historical-decisions-feature-validation.xml</constraint-mapping>
+  <constraint-mapping>META-INF/validation/feature/is-pep-feature-validation-v1.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/feature/is-pep-feature-validation.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/feature/location-feature-validation.xml</constraint-mapping>
   <constraint-mapping>META-INF/validation/feature/name-feature-validation.xml</constraint-mapping>

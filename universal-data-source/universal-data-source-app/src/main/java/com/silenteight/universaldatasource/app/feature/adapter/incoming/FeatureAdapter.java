@@ -34,6 +34,9 @@ import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisions
 import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsRequest;
 import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsResponse;
 import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsResponse.Feature;
+import com.silenteight.datasource.api.ispep.v2.BatchGetMatchIsPepInputsRequest;
+import com.silenteight.datasource.api.ispep.v2.BatchGetMatchIsPepInputsResponse;
+import com.silenteight.datasource.api.ispep.v2.IsPepInput;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsRequest;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsResponse;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
@@ -71,7 +74,8 @@ class FeatureAdapter {
   private static final String GENDER_INPUT = GenderFeatureInput.class.getCanonicalName();
   private static final String HISTORICAL_DECISIONS_INPUT =
       HistoricalDecisionsFeatureInput.class.getCanonicalName();
-  private static final String IS_PEP_INPUT = Feature.class.getCanonicalName();
+  private static final String IS_PEP_INPUT_V1 = Feature.class.getCanonicalName();
+  private static final String IS_PEP_INPUT = IsPepInput.class.getCanonicalName();
   private static final String NATIONAL_ID_INPUT = NationalIdFeatureInput.class.getCanonicalName();
   private static final String TRANSACTION_INPUT = TransactionFeatureInput.class.getCanonicalName();
   private static final String BANK_IDENTIFICATION_CODES_INPUT =
@@ -283,9 +287,24 @@ class FeatureAdapter {
             batch.castResponse(BatchGetMatchHistoricalDecisionsInputsResponse.class)));
   }
 
-  public void batchGetMatchIsPepSolutions(
+  public void batchGetMatchIsPepSolutionsV1(
       @Valid BatchGetMatchIsPepSolutionsRequest request,
       Consumer<BatchGetMatchIsPepSolutionsResponse> onNext) {
+
+    var featureRequest = BatchFeatureRequest.builder()
+        .agentInputType(IS_PEP_INPUT_V1)
+        .matches(request.getMatchesList())
+        .features(request.getFeaturesList())
+        .build();
+
+    getUseCase.batchGetFeatureInput(
+        featureRequest,
+        batch -> onNext.accept(batch.castResponse(BatchGetMatchIsPepSolutionsResponse.class)));
+  }
+
+  public void batchGetMatchIsPepInputs(
+      @Valid BatchGetMatchIsPepInputsRequest request,
+      Consumer<BatchGetMatchIsPepInputsResponse> onNext) {
 
     var featureRequest = BatchFeatureRequest.builder()
         .agentInputType(IS_PEP_INPUT)
@@ -295,6 +314,6 @@ class FeatureAdapter {
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
-        batch -> onNext.accept(batch.castResponse(BatchGetMatchIsPepSolutionsResponse.class)));
+        batch -> onNext.accept(batch.castResponse(BatchGetMatchIsPepInputsResponse.class)));
   }
 }

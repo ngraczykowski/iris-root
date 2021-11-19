@@ -2,9 +2,9 @@ package com.silenteight.universaldatasource.app.feature.adapter.incoming;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsRequest;
-import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsResponse;
-import com.silenteight.datasource.api.ispep.v1.IsPepInputServiceGrpc.IsPepInputServiceImplBase;
+import com.silenteight.datasource.api.ispep.v2.BatchGetMatchIsPepInputsRequest;
+import com.silenteight.datasource.api.ispep.v2.BatchGetMatchIsPepInputsResponse;
+import com.silenteight.datasource.api.ispep.v2.IsPepInputServiceGrpc.IsPepInputServiceImplBase;
 
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -16,11 +16,11 @@ class GrpcIsPepInputService extends IsPepInputServiceImplBase {
   private final FeatureAdapter featureAdapter;
 
   @Override
-  public void batchGetMatchIsPepSolutions(
-      BatchGetMatchIsPepSolutionsRequest request,
-      StreamObserver<BatchGetMatchIsPepSolutionsResponse> responseObserver) {
+  public void batchGetMatchIsPepInputs(
+      BatchGetMatchIsPepInputsRequest request,
+      StreamObserver<BatchGetMatchIsPepInputsResponse> responseObserver) {
 
-    featureAdapter.batchGetMatchIsPepSolutions(request, responseObserver::onNext);
+    featureAdapter.batchGetMatchIsPepInputs(request, responseObserver::onNext);
     responseObserver.onCompleted();
   }
 }

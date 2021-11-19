@@ -8,7 +8,7 @@ ext {
   governanceApiVersion = "1.7.0"
   agentsApiVersion = "0.4.0"
   agentsProtocolVersion = "0.6.0"
-  silenteightDataSourceApiVersion = "0.10.0"
+  silenteightDataSourceApiVersion = "0.11.0"
   silenteightCommonsVersion = "2.1.0"
   silenteightSepBaseVersion = "1.12.2"
 }
@@ -30,7 +30,6 @@ libraries.silenteight_commons_core = [group: 'com.silenteight.commons', name: 's
 libraries.silenteight_sep_base_aspects = [group: 'com.silenteight.sep.base', name: 'sep-base-aspects', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name: 'sep-base-common', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_testing = [group: 'com.silenteight.sep.base', name: 'sep-base-testing', version: silenteightSepBaseVersion]
-libraries.silenteight_agents_protocol = [group: 'com.silenteight.agent.api', name: 'protocol-agents', version: agentsProtocolVersion]
 
 
 // Spring
