@@ -7,6 +7,12 @@ serp:
       categorySource: classpath:test_categories.json
       modelTransfer: LOCAL
 
+      archived:
+        integration:
+          request:
+            exchange: gov.model
+            routingKey: event.models-archived
+
       export:
         integration:
           request:

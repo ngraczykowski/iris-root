@@ -1,4 +1,4 @@
-package com.silenteight.serp.governance.model.used.amqp;
+package com.silenteight.serp.governance.model.archive.amqp;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -17,35 +17,36 @@ import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @Configuration
-@EnableConfigurationProperties(ModelUsedOnProductionMessagingProperties.class)
-class ModelUsedOnProductionMessagingConfiguration {
+@EnableConfigurationProperties(ModelsArchivedMessagingProperties.class)
+class ModelsArchivedMessagingConfiguration {
 
-  private static final String MODEL_USED_OUTBOUND_CHANNEL = "modelUsedOutboundChannel";
+  private static final String MODELS_ARCHIVED_OUTBOUND_CHANNEL = "modelsArchivedOutboundChannel";
 
   @NonNull
   private final AmqpOutboundFactory outboundFactory;
 
   @Bean
-  DirectChannel modelInUseOutboundChannel() {
+  DirectChannel modelsArchivedOutboundChannel() {
     return new DirectChannel();
   }
 
   @Bean
-  GatewayProxyFactoryBean modelUsedMessageGateway(MessageChannel modelInUseOutboundChannel) {
-    GatewayProxyFactoryBean result = new GatewayProxyFactoryBean(
-        ModelUsedOnProductionMessageGateway.class);
+  GatewayProxyFactoryBean modelsArchivedMessageGateway(
+      MessageChannel modelsArchivedOutboundChannel) {
 
-    result.setDefaultRequestChannel(modelInUseOutboundChannel);
-    result.setDefaultRequestChannelName(MODEL_USED_OUTBOUND_CHANNEL);
+    GatewayProxyFactoryBean result = new GatewayProxyFactoryBean(
+        ModelsArchivedMessageGateway.class);
+    result.setDefaultRequestChannel(modelsArchivedOutboundChannel);
+    result.setDefaultRequestChannelName(MODELS_ARCHIVED_OUTBOUND_CHANNEL);
     return result;
   }
 
   @Bean
-  IntegrationFlow modelUsedChannelToExchangeIntegrationFlow(
-      @Valid ModelUsedOnProductionMessagingProperties properties) {
+  IntegrationFlow modelsArchivedChannelToExchangeIntegrationFlow(
+      @Valid ModelsArchivedMessagingProperties properties) {
 
     return createOutputFlow(
-        MODEL_USED_OUTBOUND_CHANNEL,
+        MODELS_ARCHIVED_OUTBOUND_CHANNEL,
         properties.getExchange(),
         properties.getRoutingKey());
   }

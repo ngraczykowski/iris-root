@@ -24,11 +24,14 @@ class EditPolicyConfiguration {
   @Bean
   UsePolicyUseCase usePolicyUseCase(
       @NonNull PolicyService policyService, @NonNull ApplicationEventPublisher eventPublisher) {
+
     return new UsePolicyUseCase(policyService, eventPublisher);
   }
 
   @Bean
-  ArchivePolicyUseCase archivePolicyUseCase(@NonNull PolicyService policyService) {
-    return new ArchivePolicyUseCase(policyService);
+  ArchivePolicyUseCase archivePolicyUseCase(
+      @NonNull PolicyService policyService, @NonNull ApplicationEventPublisher eventPublisher) {
+
+    return new ArchivePolicyUseCase(policyService, eventPublisher);
   }
 }

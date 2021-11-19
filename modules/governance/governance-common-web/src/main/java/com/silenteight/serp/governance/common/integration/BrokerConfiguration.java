@@ -116,6 +116,15 @@ class BrokerConfiguration {
             brokerProperties.modelInUseRoutingKey()));
   }
 
+  @Bean
+  Declarables modelsArchivedBinding() {
+    return new Declarables(
+        exchangeBinding(
+            GOV_EVENT_EXCHANGE,
+            exchangeProperties.getModel(),
+            brokerProperties.modelsArchivedRoutingKey()));
+  }
+
   private static Binding queueBinding(String queueName, String exchange, String routingKey) {
     return new Binding(queueName, QUEUE, exchange, routingKey, emptyMap());
   }
