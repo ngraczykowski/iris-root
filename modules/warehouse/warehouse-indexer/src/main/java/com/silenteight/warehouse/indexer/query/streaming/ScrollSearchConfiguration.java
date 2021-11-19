@@ -29,10 +29,10 @@ class ScrollSearchConfiguration {
 
   @Bean
   ScrollSearchStreamingService scrollSearchStreamingService(
-      RestHighLevelClient restHighLevelUserAwareClient,
+      RestHighLevelClient restHighLevelAdminClient,
       @Valid ScrollSearchProperties scrollSearchProperties) {
 
-    return new ScrollSearchStreamingService(restHighLevelUserAwareClient, scrollSearchProperties);
+    return new ScrollSearchStreamingService(restHighLevelAdminClient, scrollSearchProperties);
   }
 
   @Bean
