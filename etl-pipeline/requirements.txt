@@ -1,0 +1,5 @@
+pyspark==3.2.0
+serp-python-client>=1.1.0
+serp-protocol-agent>=0.24.0.118
+serp-protocol-base>=0.24.0.118
+serp-protocol-ns>=0.24.0.118
