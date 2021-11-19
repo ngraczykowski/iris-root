@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.validation.Valid;
 
 import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.AE_EVENT_EXCHANGE;
+import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.GOV_EVENT_EXCHANGE;
 import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.WH_EVENT_EXCHANGE;
 import static java.util.Collections.emptyMap;
 import static org.springframework.amqp.core.Binding.DestinationType.QUEUE;
@@ -54,6 +55,15 @@ class BrokerConfiguration {
             properties.datasetExpiredRoutingKey()));
   }
 
+  @Bean
+  Declarables  modelsArchivedBinding() {
+    return new Declarables(
+        binding(
+            properties.modelsArchivedQueueName(),
+            GOV_EVENT_EXCHANGE,
+            properties.modelsArchivedRoutingKey()));
+  }
+
   private static Binding binding(String queueName, String exchange, String routingKey) {
     return new Binding(queueName, QUEUE, exchange, routingKey, emptyMap());
   }
@@ -71,6 +81,11 @@ class BrokerConfiguration {
   @Bean
   Queue datasetExpiredQueue() {
     return queue(properties.datasetExpiredQueueName());
+  }
+
+  @Bean
+  Queue modelsArchivedQueue() {
+    return queue(properties.modelsArchivedQueueName());
   }
 
   private static Queue queue(String queueName) {

@@ -27,4 +27,20 @@ public class AlertIndexProperties {
   @Valid
   @NestedConfigurationProperty
   private AmqpInboundProperties ackMessagesInbound;
+
+  public String recommendationsInboundQueueName() {
+    return recommendationsInbound.getQueueName();
+  }
+
+  public String recommendationsOutboundExchange() {
+    return recommendationsOutbound.getExchange();
+  }
+
+  public String recommendationsOutboundRoutingKey() {
+    return recommendationsOutbound.getRoutingKey();
+  }
+
+  public String ackMessagesInboundQueueName() {
+    return ackMessagesInbound.getQueueName();
+  }
 }

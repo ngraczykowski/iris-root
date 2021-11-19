@@ -56,6 +56,17 @@ class SimulationQuery implements ListSimulationsQuery, SimulationDetailsQuery {
   }
 
   @Override
+  public List<SimulationDto> findByModels(@NonNull Collection<String> models) {
+    log.debug("Listing all SimulationDto by models={}", models);
+
+    return repository
+        .findAllByModelNameIn(models)
+        .stream()
+        .map(SimulationEntity::toDto)
+        .collect(toList());
+  }
+
+  @Override
   public SimulationDetailsDto get(@NonNull UUID simulationId) {
     log.debug("Getting SimulationDetailsDto by simulationId={}", simulationId);
 

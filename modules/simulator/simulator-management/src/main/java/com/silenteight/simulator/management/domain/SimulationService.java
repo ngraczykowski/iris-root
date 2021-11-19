@@ -59,16 +59,32 @@ public class SimulationService {
     SimulationEntity simulationEntity = repository
         .findByAnalysisName(analysis)
         .orElseThrow(() -> new SimulationNotFoundException(analysis));
-    simulationEntity.finish(timeSource.offsetDateTime());
-    log.debug("Saved as 'DONE' SimulationEntity={}", simulationEntity);
+
+    if (simulationEntity.isArchived()) {
+      log.info("Simulation is already 'ARCHIVED' SimulationEntity={}", simulationEntity);
+    } else {
+      simulationEntity.finish(timeSource.offsetDateTime());
+      log.debug("Saved as 'DONE' SimulationEntity={}", simulationEntity);
+    }
   }
 
   @Transactional
-  public void cancel(UUID simulationId) {
-    SimulationEntity simulationEntity = repository
-        .findBySimulationId(simulationId)
-        .orElseThrow(() -> new SimulationNotFoundException(simulationId));
+  public void cancel(@NonNull UUID simulationId) {
+    SimulationEntity simulationEntity = getBySimulationId(simulationId);
     simulationEntity.cancel();
     log.debug("Saved as 'CANCELLED' SimulationEntity={}", simulationEntity);
+  }
+
+  @Transactional
+  public void archive(@NonNull UUID simulationId) {
+    SimulationEntity simulationEntity = getBySimulationId(simulationId);
+    simulationEntity.archive();
+    log.debug("Saved as 'ARCHIVED' SimulationEntity={}", simulationEntity);
+  }
+
+  private SimulationEntity getBySimulationId(UUID simulationId) {
+    return repository
+        .findBySimulationId(simulationId)
+        .orElseThrow(() -> new SimulationNotFoundException(simulationId));
   }
 }

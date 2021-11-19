@@ -116,7 +116,7 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
     simulationDataIndexRequestGateway.send(indexRequest);
   }
 
-  private SimulationDataIndexRequest toIndexRequest(
+  private static SimulationDataIndexRequest toIndexRequest(
       String requestId, String analysisName,
       List<RecommendationWithMetadata> recommendationsWithMetadata) {
 

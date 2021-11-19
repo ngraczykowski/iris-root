@@ -10,6 +10,13 @@ simulator:
       dataset-expired:
         queue-name: sim.dataset-expired
         routing-key: ae.event.datasets-expired
+      models-archived:
+        queue-name: sim.models-archived
+        routing-key: event.models-archived
+
+  model-archiving:
+    models-archived-inbound:
+      queue-name: ${simulator.messaging.broker.models-archived.queue-name}
 
   retention:
     dataset-expired-inbound:

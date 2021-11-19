@@ -96,7 +96,6 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
   }
 
   void archive() {
-    assertInState(DONE);
     this.state = ARCHIVED;
   }
 
@@ -108,6 +107,10 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
   private void assertInState(SimulationState... requiredStates) {
     if (Arrays.stream(requiredStates).noneMatch(requiredState -> requiredState == this.state))
       throw new SimulationNotInProperStateException(requiredStates);
+  }
+
+  boolean isArchived() {
+    return getState() == ARCHIVED;
   }
 
   SimulationDto toDto() {

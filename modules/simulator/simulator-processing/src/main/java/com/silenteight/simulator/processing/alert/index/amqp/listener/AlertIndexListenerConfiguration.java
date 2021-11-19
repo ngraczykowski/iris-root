@@ -33,7 +33,7 @@ class AlertIndexListenerConfiguration {
 
     return createInputFlow(
         RECOMMENDATIONS_INBOUND_CHANNEL,
-        properties.getRecommendationsInbound().getQueueName());
+        properties.recommendationsInboundQueueName());
   }
 
   @Bean
@@ -42,7 +42,7 @@ class AlertIndexListenerConfiguration {
 
     return createInputFlow(
         ACK_MESSAGES_INBOUND_CHANNEL,
-        properties.getAckMessagesInbound().getQueueName());
+        properties.ackMessagesInboundQueueName());
   }
 
   @Bean
