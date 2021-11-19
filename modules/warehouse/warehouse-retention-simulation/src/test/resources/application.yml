@@ -39,14 +39,41 @@ warehouse:
       to-remove:
         bindings: []
   indexer:
+    production-batch-size: 200
+    simulation-batch-size: 200
     backup-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.alert-backup-indexing.queue-name}
+    production-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.alert-production-indexing.queue-name}
+    production-indexed-outbound:
+      exchange-name: wh.event
+      routing-key: event.index-response.production
+    simulation-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.alert-simulation-indexing.queue-name}
+    simulation-indexed-outbound:
+      exchange-name: wh.event
+      routing-key: event.index-response.simulation
+    personal-information-expired-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.personal-information-expired-indexing.queue-name}
+    analysis-expired-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.analysis-expired-indexing.queue-name}
     diagnostic.enabled: true
   environment:
     prefix: itest
   es:
     production-query-index: ${warehouse.environment.prefix}_production_alert
     production-match-query-index: ${warehouse.environment.prefix}_production_match
+    update-request-batch-size: 1000
+    scroll:
+      search:
+        batch-size: 10000
+        keep-alive-seconds: 30
+  retention:
+    simulation:
+      analysis-expired:
+        fields-to-erase:
+          - 'alert_recommendation_comment'
+          - 'alert_analyst_comment'
 
 test:
   messaging:

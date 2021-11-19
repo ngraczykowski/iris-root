@@ -34,6 +34,13 @@ public class SimpleElasticTestClient {
   }
 
   @SneakyThrows
+  public boolean isDocUpdated(String index, String documentId, int updateCount) {
+    GetRequest getRequest = new GetRequest(index, documentId);
+    GetResponse getResponse = restHighLevelClient.get(getRequest, DEFAULT);
+    return getResponse.getVersion() > updateCount;
+  }
+
+  @SneakyThrows
   public void storeData(String index, String id, Map<String, Object> attributes) {
     IndexRequest indexRequest = new IndexRequest(index);
     indexRequest.id(id);

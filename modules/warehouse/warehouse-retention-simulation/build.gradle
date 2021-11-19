@@ -19,19 +19,17 @@ dependencies {
   implementation project(":warehouse-indexer")
 
   implementation libraries.silenteight_commons_core
-  implementation libraries.silenteight_data_api
   implementation libraries.silenteight_data_retention_api
   implementation libraries.jakarta_validation_api
   implementation libraries.silenteight_sep_base_common
   implementation libraries.protobuf_java_util
 
-  implementation libraries.silenteight_sampling_alerts_api
   implementation libraries.spring_boot_starter_elasticsearch
   implementation libraries.spring_security_config
 
-
   testImplementation project(":warehouse-common-testing")
   testImplementation project(":warehouse-test-client")
+  testImplementation testFixtures(project(':warehouse-indexer'))
 
-  testFixturesImplementation testFixtures(project(':warehouse-common'))
+  testImplementation libraries.awaitility
 }
