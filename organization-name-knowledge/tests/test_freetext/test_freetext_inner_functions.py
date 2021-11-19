@@ -1,11 +1,10 @@
 import pytest
 
-from organization_name_knowledge import generate_matching_legal_terms
 from organization_name_knowledge.freetext.parse import (
     _get_long_names_substrings_based_names,
     _get_names_with_unique_bases,
 )
-from organization_name_knowledge.names.parse import create_tokens, parse_name
+from organization_name_knowledge.names.parse import parse_name
 
 
 @pytest.mark.parametrize(
@@ -40,18 +39,3 @@ def test_get_names_with_unique_bases(names, expected_names):
     assert len(names) == len(expected_names)
     for name, expected in zip(names, expected_names):
         assert name.base.original_name == expected
-
-
-@pytest.mark.parametrize(
-    "name, expected_terms",
-    [
-        ("Silent Limited", ["limited liability company"]),
-        ("Silent Eight Pte Ltd", ["Private limited company", "limited liability company"]),
-        ("Corporation of Cracow", ["Corporation"]),
-        ("The Corp. of XYZ", ["Corporation"]),
-    ],
-)
-def test_generate_matching_legal_terms(name, expected_terms):
-    tokens = create_tokens(name)
-    for actual, expected in zip(generate_matching_legal_terms(tokens), expected_terms):
-        assert actual[0].normalized == expected
