@@ -41,8 +41,7 @@ class IngestService {
       return;
     }
 
-    alerts.forEach(alert ->
-        alert.setDecision(decisionMapper.map(alert.getAnalystDecision().getStatus())));
+    fillUpAnalystDecision(alerts);
 
     var registeredAlertMap = buildRegisteredAlertMap(alerts);
     var unregisteredAlerts = alerts.stream()
@@ -61,6 +60,14 @@ class IngestService {
       indexLearningAlertPort.indexForLearning(indexAlertsRequest);
       createAlertRetentionPort.create(registeredAlerts);
     }
+  }
+
+  private void fillUpAnalystDecision(List<LearningAlert> alerts) {
+    alerts.forEach(alert -> {
+      var analystDecision = alert.getAnalystDecision();
+      alert.setDecision(decisionMapper.map(
+          analystDecision.getPreviousStatuses(), analystDecision.getStatus()));
+    });
   }
 
   private Map<String, RegisteredAlert> buildRegisteredAlertMap(List<LearningAlert> alerts) {

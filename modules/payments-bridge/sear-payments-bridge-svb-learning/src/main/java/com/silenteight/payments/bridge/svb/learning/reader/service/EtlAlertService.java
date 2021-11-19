@@ -16,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import static java.util.Comparator.comparing;
@@ -50,17 +49,23 @@ class EtlAlertService {
 
   private AnalystDecision makeAnalystDecision(List<LearningCsvRow> rows) {
     var firstRow = rows.get(0);
-    var latestDecision = findLatestDecision(rows).orElse(firstRow);
+    var orderedRows = orderByActionTime(rows);
+    var latestDecision = orderedRows.isEmpty() ? firstRow : orderedRows.get(0);
+    var previousStatuses = orderedRows.stream()
+        .skip(1).map(LearningCsvRow::getFkcoVStatusName).collect(toList());
 
     return AnalystDecision.builder()
         .status(latestDecision.getFkcoVStatusName())
         .comment(latestDecision.getFkcoVActionComment())
         .actionDateTime(getOffsetDateTime(latestDecision.getFkcoDActionDatetime()))
+        .previousStatuses(previousStatuses)
         .build();
   }
 
-  private Optional<LearningCsvRow> findLatestDecision(List<LearningCsvRow> rows) {
-    return rows.stream().max(comparing(r -> getOffsetDateTime(r.getFkcoDActionDatetime())));
+  private List<LearningCsvRow> orderByActionTime(List<LearningCsvRow> rows) {
+    return rows.stream()
+        .sorted(comparing(r -> getOffsetDateTime(r.getFkcoDActionDatetime())))
+        .collect(toList());
   }
 
   private List<LearningMatch> createMatches(List<LearningCsvRow> rows) {

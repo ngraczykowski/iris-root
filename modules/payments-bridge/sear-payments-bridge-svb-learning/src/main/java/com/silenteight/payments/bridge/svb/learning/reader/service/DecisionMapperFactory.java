@@ -2,6 +2,8 @@ package com.silenteight.payments.bridge.svb.learning.reader.service;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.svb.learning.reader.service.DecisionEntry.DecisionKey;
+
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.springframework.stereotype.Component;
@@ -24,25 +26,27 @@ class DecisionMapperFactory {
 
   @Nonnull
   private DecisionMapper doCreate(CSVReader csvReader) throws IOException, CsvValidationException {
-    var decisionMap = new HashMap<String, String>();
-    String defaultValue = null;
+    var decisionMap = new HashMap<DecisionKey, DecisionEntry>();
+    DecisionEntry decisionEntry = null;
 
     // NOTE(ahaczewski): Skip the header row.
     csvReader.readNext();
 
     String[] row;
     while ((row = csvReader.readNext()) != null) {
-      if ("*".equals(row[0])) {
-        defaultValue = row[1];
+      var entry = new DecisionEntry(row);
+
+      if (entry.isDefaultCase()) {
+        decisionEntry = entry;
       } else {
-        decisionMap.put(row[0], row[1]);
+        decisionMap.put(entry.getDecisionKey(), entry);
       }
     }
 
-    if (defaultValue == null) {
-      throw new IllegalArgumentException("No default value (*) in the decision mapper CSV.");
+    if (decisionEntry == null) {
+      throw new IllegalArgumentException("No default value (*,*) in the decision mapper CSV.");
     }
 
-    return new DecisionMapper(decisionMap, defaultValue);
+    return new DecisionMapper(decisionMap, decisionEntry);
   }
 }

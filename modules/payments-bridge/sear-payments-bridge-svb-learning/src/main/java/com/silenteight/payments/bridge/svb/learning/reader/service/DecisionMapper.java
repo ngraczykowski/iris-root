@@ -3,18 +3,30 @@ package com.silenteight.payments.bridge.svb.learning.reader.service;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.svb.learning.reader.service.DecisionEntry.DecisionKey;
+
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
 class DecisionMapper {
 
   @NonNull
-  private final Map<String, String> decisionMap;
+  private final Map<DecisionKey, DecisionEntry> decisionMap;
 
   @NonNull
-  private final String defaultValue;
+  private final DecisionEntry defaultValue;
 
-  public String map(String input) {
-    return decisionMap.getOrDefault(input, defaultValue);
+  public String map(List<String> previous, String current) {
+    return previous.stream()
+        .map(prev -> new DecisionKey(prev, current))
+        .filter(decisionMap::containsKey)
+        .map(decisionMap::get)
+        .findFirst()
+        .orElseGet(() ->
+          decisionMap.getOrDefault(
+              new DecisionKey("*", current), defaultValue))
+        .getDecision();
   }
+
 }

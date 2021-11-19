@@ -1,0 +1,6 @@
+prev,current,analyst_decision for RB scorer
+L2_L3_PEND,L3_PASS,compound
+L2_ESC_TO_L3,L3_PASS,compound
+*,L3_PASS,simple
+*,L2_CANCEL,simple
+*,*,default
