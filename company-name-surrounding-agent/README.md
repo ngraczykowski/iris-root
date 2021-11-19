@@ -7,9 +7,19 @@ and *solution* is created based on rules provided in config and returned as *sol
 
 Rules specified in application.yaml, are checked from top to bottom, if any range met - return its solution.
 If no range met, returns the 'default response' 
-Installing:
+
+## Installing:
+It's recommended to use separate venv (virtual environment). To get one and activate it, run:
+```
+python -m venv new_virtual_env_name 
+source new_virtual_env_name/bin/activate
+```
+### From source:
 
 ```pip install -e .```
+
+### From S8 PyPi:
+```pip install company-name-surrounding-agent```
 
 Running:
 ```
