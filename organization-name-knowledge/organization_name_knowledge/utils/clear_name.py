@@ -38,7 +38,7 @@ def clear_name(name: str) -> str:
 
 
 def clear_freetext(text: str) -> str:
-    text = clear_name(text)
+    text = remove_too_long_numbers(clear_name(text))
     text = text.replace(" is ", "")  # hacky trick to avoid 'is' as a legal
     return text
 

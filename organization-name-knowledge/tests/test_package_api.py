@@ -145,8 +145,8 @@ def test_parse_name_base(name, expected_base):
     ],
 )
 def test_parse_freetext(freetext, expected_names):
-    parsed_freetext = parse_freetext(freetext, tokens_limit=5)
-    #  assert len(parsed_freetext) == len(expected_names)
+    parsed_freetext = parse_freetext(freetext, base_tokens_limit=3)
+    assert len(parsed_freetext) == len(expected_names)
     for name_information, expected in zip(parsed_freetext, expected_names):
         assert name_information
         assert name_information.base.cleaned_name == expected["base"].lower()
