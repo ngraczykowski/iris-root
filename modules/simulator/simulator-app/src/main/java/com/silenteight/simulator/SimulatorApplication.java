@@ -11,6 +11,7 @@ import com.silenteight.simulator.common.web.WebModule;
 import com.silenteight.simulator.dataset.DatasetModule;
 import com.silenteight.simulator.grpc.GrpcModule;
 import com.silenteight.simulator.management.ManagementModule;
+import com.silenteight.simulator.model.ModelModule;
 import com.silenteight.simulator.processing.ProcessingModule;
 import com.silenteight.simulator.retention.RetentionModule;
 
@@ -31,6 +32,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     // Domain modules
     DatasetModule.class,
     ManagementModule.class,
+    ModelModule.class,
     ProcessingModule.class,
     RetentionModule.class,
     // Interface modules

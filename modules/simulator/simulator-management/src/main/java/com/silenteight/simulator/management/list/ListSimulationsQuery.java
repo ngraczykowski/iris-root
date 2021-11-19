@@ -13,5 +13,7 @@ public interface ListSimulationsQuery {
 
   List<SimulationDto> findByModel(@NonNull String modelName);
 
+  List<SimulationDto> findByModels(@NonNull Collection<String> modelNames);
+
   Collection<String> getAnalysisNames(@NonNull Collection<String> datasetNames);
 }

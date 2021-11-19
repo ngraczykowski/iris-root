@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.State;
 import com.silenteight.model.api.v1.SolvingModel;
+import com.silenteight.simulator.management.archive.ArchiveSimulationRequest;
 import com.silenteight.simulator.management.cancel.CancelSimulationRequest;
 import com.silenteight.simulator.management.create.CreateSimulationRequest;
 import com.silenteight.simulator.management.details.dto.SimulationDetailsDto;
@@ -61,6 +62,12 @@ public final class SimulationFixtures {
       CancelSimulationRequest.builder()
           .id(ID)
           .canceledBy(USERNAME)
+          .build();
+
+  public static final ArchiveSimulationRequest ARCHIVE_SIMULATION_REQUEST =
+      ArchiveSimulationRequest.builder()
+          .id(ID)
+          .archivedBy(USERNAME)
           .build();
 
   public static final SimulationDto SIMULATION_DTO =

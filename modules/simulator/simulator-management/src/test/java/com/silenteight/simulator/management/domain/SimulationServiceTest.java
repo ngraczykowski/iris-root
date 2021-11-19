@@ -13,10 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static com.silenteight.simulator.management.SimulationFixtures.*;
-import static com.silenteight.simulator.management.domain.SimulationState.CANCELED;
-import static com.silenteight.simulator.management.domain.SimulationState.DONE;
-import static com.silenteight.simulator.management.domain.SimulationState.PENDING;
-import static com.silenteight.simulator.management.domain.SimulationState.RUNNING;
+import static com.silenteight.simulator.management.domain.SimulationState.*;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional
@@ -94,6 +91,20 @@ class SimulationServiceTest extends BaseDataJpaTest {
   }
 
   @Test
+  void shouldNotFinishWhenArchived() {
+    // given
+    SimulationEntity simulation = persistSimulation(ARCHIVED);
+
+    // when
+    underTest.finish(ANALYSIS_NAME);
+
+    // then
+    SimulationEntity savedSimulation =
+        entityManager.find(SimulationEntity.class, simulation.getId());
+    assertThat(savedSimulation.getState()).isEqualTo(ARCHIVED);
+  }
+
+  @Test
   void shouldThrowIfFinishingAndSimulationNotFound() {
     assertThatThrownBy(() -> underTest.finish(ANALYSIS_NAME))
         .isInstanceOf(SimulationNotFoundException.class)
@@ -117,6 +128,27 @@ class SimulationServiceTest extends BaseDataJpaTest {
   @Test
   void shouldThrowIfCancelingAndSimulationNotFound() {
     assertThatThrownBy(() -> underTest.cancel(ID))
+        .isInstanceOf(SimulationNotFoundException.class)
+        .hasMessageContaining("simulationId=" + ID);
+  }
+
+  @Test
+  void shouldArchive() {
+    // given
+    SimulationEntity simulation = persistSimulation(DONE);
+
+    // when
+    underTest.archive(ID);
+
+    // then
+    SimulationEntity savedSimulation =
+        entityManager.find(SimulationEntity.class, simulation.getId());
+    assertThat(savedSimulation.getState()).isEqualTo(ARCHIVED);
+  }
+
+  @Test
+  void shouldThrowIfArchivingAndSimulationNotFound() {
+    assertThatThrownBy(() -> underTest.archive(ID))
         .isInstanceOf(SimulationNotFoundException.class)
         .hasMessageContaining("simulationId=" + ID);
   }

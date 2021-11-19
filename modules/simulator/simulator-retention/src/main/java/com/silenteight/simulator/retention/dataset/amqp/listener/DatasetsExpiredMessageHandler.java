@@ -7,5 +7,5 @@ import com.silenteight.dataretention.api.v1.DatasetsExpired;
 
 public interface DatasetsExpiredMessageHandler {
 
-  AnalysisExpired handle(@NonNull DatasetsExpired request);
+  AnalysisExpired handle(@NonNull DatasetsExpired message);
 }

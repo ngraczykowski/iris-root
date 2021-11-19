@@ -25,6 +25,10 @@ class BrokerProperties {
   @NestedConfigurationProperty
   private AmpqProperties datasetExpired;
 
+  @Valid
+  @NestedConfigurationProperty
+  private AmpqProperties modelsArchived;
+
   String recommendationsQueueName() {
     return recommendations.getQueueName();
   }
@@ -47,5 +51,13 @@ class BrokerProperties {
 
   String datasetExpiredRoutingKey() {
     return datasetExpired.getRoutingKey();
+  }
+
+  String modelsArchivedQueueName() {
+    return modelsArchived.getQueueName();
+  }
+
+  String modelsArchivedRoutingKey() {
+    return modelsArchived.getRoutingKey();
   }
 }

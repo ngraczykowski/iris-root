@@ -29,21 +29,6 @@ class SimulationEntityTest {
     assertThat(simulation.getState()).isEqualTo(ARCHIVED);
   }
 
-  @ParameterizedTest
-  @EnumSource(
-      value = SimulationState.class,
-      names = { "ARCHIVED", "PENDING", "RUNNING", "NEW", "CANCELED" })
-  void shouldThrowExceptionWhenNotInStateForArchive(SimulationState state) {
-    // given
-    SimulationEntity simulation = createSimulationEntity(state);
-
-    // then
-    assertThatThrownBy(
-        simulation::archive)
-        .isInstanceOf(SimulationNotInProperStateException.class)
-        .hasMessage(format("Simulation should be in state: [DONE]."));
-  }
-
   @Test
   void shouldRunSimulation() {
     // given

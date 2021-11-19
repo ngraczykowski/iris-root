@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 class DatasetExpiredConfiguration {
 
   @Bean
-  DatasetsExpiredUseCase expireDatasetUseCase(
+  DatasetsExpiredUseCase datasetsExpiredUseCase(
       DatasetMetadataService datasetMetadataService,
       DatasetQuery datasetQuery,
       ListSimulationsQuery listSimulationsQuery) {

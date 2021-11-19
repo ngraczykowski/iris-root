@@ -26,6 +26,7 @@ dependencies {
   implementation project(":simulator-dataset")
   implementation project(":simulator-db-changelog")
   implementation project(":simulator-management")
+  implementation project(":simulator-model")
   implementation project(":simulator-processing")
   implementation project(":simulator-retention")
 

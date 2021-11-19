@@ -15,6 +15,8 @@ interface SimulationRepository extends Repository<SimulationEntity, Long> {
 
   Collection<SimulationEntity> findAllByModelName(String modelName);
 
+  Collection<SimulationEntity> findAllByModelNameIn(Collection<String> modelNames);
+
   Optional<SimulationEntity> findByAnalysisName(String analysisName);
 
   Optional<SimulationEntity> findBySimulationId(UUID simulationId);

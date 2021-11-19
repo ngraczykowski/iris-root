@@ -59,6 +59,19 @@ class SimulationQueryTest extends BaseDataJpaTest {
   }
 
   @Test
+  void shouldFindSimulationsByModels() {
+    // given
+    persistSimulation(ID, PENDING_STATE);
+
+    // when
+    List<SimulationDto> result = underTest.findByModels(List.of(MODEL_NAME));
+
+    // then
+    assertThat(result).hasSize(1);
+    assertSimulation(result.get(0));
+  }
+
+  @Test
   void shouldThrowIfSimulationsNotFoundByModel() {
     assertThatThrownBy(() -> underTest.findByModel(MODEL_NAME))
         .isInstanceOf(InvalidModelNameException.class)

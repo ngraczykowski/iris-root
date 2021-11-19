@@ -31,8 +31,8 @@ public class GatewayConfiguration {
 
     return createOutputFlow(
         RECOMMENDATIONS_OUTBOUND_CHANNEL,
-        properties.getRecommendationsOutbound().getExchange(),
-        properties.getRecommendationsOutbound().getRoutingKey());
+        properties.recommendationsOutboundExchange(),
+        properties.recommendationsOutboundRoutingKey());
   }
 
   private IntegrationFlow createOutputFlow(String channel, String exchange, String routingKey) {

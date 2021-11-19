@@ -1,0 +1,33 @@
+plugins {
+  id "java"
+}
+
+description = "Simulator Model"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterSpringApp
+  implmenetation.extendsFrom starterJackson
+  implementation.extendsFrom starterMessaging
+
+  testImplementation.extendsFrom starterSpringTest
+}
+
+dependencies {
+  implementation project(":simulator-common-web")
+  implementation project(":simulator-management")
+
+  implementation libraries.silenteight_model_api
+
+  implementation libraries.silenteight_sep_base_common
+
+  implementation libraries.spring_boot_starter_web
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.commons_lang3
+
+  aspect libraries.silenteight_sep_base_aspects
+
+  testImplementation project(":simulator-common-web-testing")
+
+  testImplementation libraries.silenteight_sep_base_testing
+}
