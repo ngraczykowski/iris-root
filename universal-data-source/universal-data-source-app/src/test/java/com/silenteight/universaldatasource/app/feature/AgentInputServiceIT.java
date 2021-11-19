@@ -6,11 +6,8 @@ import com.silenteight.datasource.api.freetext.v1.BatchGetMatchFreeTextInputsReq
 import com.silenteight.datasource.api.freetext.v1.BatchGetMatchFreeTextInputsResponse;
 import com.silenteight.datasource.api.freetext.v1.FreeTextFeatureInput;
 import com.silenteight.datasource.api.freetext.v1.FreeTextInputServiceGrpc.FreeTextInputServiceBlockingStub;
-import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsRequest;
-import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsResponse;
-import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsResponse.Feature;
-import com.silenteight.datasource.api.ispep.v1.BatchGetMatchIsPepSolutionsResponse.FeatureSolution;
-import com.silenteight.datasource.api.ispep.v1.IsPepInputServiceGrpc.IsPepInputServiceBlockingStub;
+import com.silenteight.datasource.api.ispep.v2.*;
+import com.silenteight.datasource.api.ispep.v2.IsPepInputServiceGrpc.IsPepInputServiceBlockingStub;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsRequest;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsResponse;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
@@ -24,7 +21,6 @@ import com.silenteight.datasource.api.name.v1.WatchlistName;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.universaldatasource.app.UniversalDataSourceApplication;
 
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import io.grpc.StatusRuntimeException;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -43,7 +39,6 @@ import java.util.Map;
 
 import static com.silenteight.universaldatasource.app.feature.FeatureTestDataAccess.streamedFeaturesCount;
 import static com.silenteight.universaldatasource.app.feature.IntegrationFixture.getBatchCreateAgentInputsRequest;
-import static com.silenteight.universaldatasource.app.feature.IntegrationFixture.getIsPepReason;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -75,7 +70,7 @@ class AgentInputServiceIT {
   private JdbcTemplate jdbcTemplate;
 
   @BeforeEach
-  void setUp() throws InvalidProtocolBufferException {
+  void setUp() {
     Map<String, Map<String, Message>> mapOfFeatureRequestsOne = Map.of(
         "alerts/1/matches/0",
         Map.of(
@@ -133,13 +128,10 @@ class AgentInputServiceIT {
         "alerts/4/matches/4",
         Map.of(
             "features/isPep",
-            Feature.newBuilder()
+            IsPepFeatureInput.newBuilder()
                 .setFeature("pep")
-                .addFeatureSolutions(
-                    FeatureSolution.newBuilder()
-                        .setSolution("isPepSolution")
-                        .setReason(getIsPepReason())
-                        .build())
+                .setWatchlistItem(WatchlistItem.newBuilder().build())
+                .setAlertedPartyItem(AlertedPartyItem.newBuilder().setCountry("PL").build())
                 .build())
     );
 
@@ -246,8 +238,8 @@ class AgentInputServiceIT {
   void shouldGetIsPepFeature() {
 
     var batchGetMatchIsPepSolutionsResponseIterator =
-        isPepInputServiceBlockingStub.batchGetMatchIsPepSolutions(
-            BatchGetMatchIsPepSolutionsRequest.newBuilder()
+        isPepInputServiceBlockingStub.batchGetMatchIsPepInputs(
+            BatchGetMatchIsPepInputsRequest.newBuilder()
                 .addMatches("alerts/4/matches/4")
                 .addFeatures("features/isPep")
                 .build());
@@ -256,14 +248,14 @@ class AgentInputServiceIT {
   }
 
   private static void assertIsPepFeature(
-      Iterator<BatchGetMatchIsPepSolutionsResponse> batchGetMatchFreeTextInputs) {
+      Iterator<BatchGetMatchIsPepInputsResponse> batchGetMatchFreeTextInputs) {
 
     var matchFreeTextInputsResponse = batchGetMatchFreeTextInputs.next();
-    assertThat(matchFreeTextInputsResponse.getFeaturesCount()).isEqualTo(1);
+    assertThat(matchFreeTextInputsResponse.getIsPepInputsCount()).isEqualTo(1);
 
-    assertThat(matchFreeTextInputsResponse.getFeaturesList().get(0)
-        .getFeatureSolutionsList().stream()
-        .filter(f -> f.getSolution().equals("isPepSolution"))
+    assertThat(matchFreeTextInputsResponse.getIsPepInputsList().stream()
+        .filter(f -> f.getMatch().equals("alerts/4/matches/4"))
+        .filter(f -> f.getIsPepFeatureInput().getFeature().equals("pep"))
         .count()).isEqualTo(1);
   }
 
