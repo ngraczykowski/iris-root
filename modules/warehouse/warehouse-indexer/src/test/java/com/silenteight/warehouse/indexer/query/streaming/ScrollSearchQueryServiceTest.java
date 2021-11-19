@@ -104,8 +104,9 @@ class ScrollSearchQueryServiceTest {
     // then
     List<String> normalizedRows = normalizeRows(rows);
     assertThat(normalizedRows)
-        .hasSize(4)
-        .contains(RECOMMENDATION_FP, RECOMMENDATION_MI);
+        .hasSize(3)
+        .contains(RECOMMENDATION_FP)
+        .doesNotContain(RECOMMENDATION_MI);
   }
 
   @Test
@@ -144,6 +145,7 @@ class ScrollSearchQueryServiceTest {
     testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_8);
     testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_2, MAPPED_ALERT_9);
     testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_3, MAPPED_ALERT_10);
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID_4, MAPPED_ALERT_12);
     List<String> rows = new ArrayList<>();
     Consumer<Collection<String>> consumer = rows::addAll;
 

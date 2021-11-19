@@ -175,7 +175,7 @@ public class MappedAlertFixtures {
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
       MappedKeys.ANALYST_DECISION_KEY, Values.ANALYST_DECISION_FP,
-      AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP_4,
+      AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
   );
 
@@ -198,5 +198,14 @@ public class MappedAlertFixtures {
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK,
       MATCH_PREFIX + SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DECISION,
       MATCH_NAME, MATCH_NAME_1_1
+  );
+
+  public static final Map<String, Object> MAPPED_ALERT_12 = of(
+      DISCRIMINATOR, DISCRIMINATOR_7,
+      MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
+      MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
+      MappedKeys.ANALYST_DECISION_KEY, Values.ANALYST_DECISION_FP,
+      AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP_4,
+      RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
   );
 }

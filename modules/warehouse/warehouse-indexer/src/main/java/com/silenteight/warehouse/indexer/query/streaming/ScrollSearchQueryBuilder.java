@@ -32,6 +32,6 @@ class ScrollSearchQueryBuilder {
   }
 
   private static RangeQueryBuilder buildRangeQuery(FetchDataRequest request) {
-    return rangeQuery(request.getDateField()).gte(request.getFrom()).lte(request.getTo());
+    return rangeQuery(request.getDateField()).gte(request.getFrom()).lt(request.getTo());
   }
 }
