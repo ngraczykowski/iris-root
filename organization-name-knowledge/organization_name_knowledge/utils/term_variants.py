@@ -21,7 +21,7 @@ with open_text(resources, "eastern_female_names_mapping.json") as file:
 
 with open_text(resources, "name_delimiters.txt") as file:
     delimiter_words_from_file = [" " + word + " " for word in file.read().splitlines()]
-    NAME_DELIMITERS: List[str] = delimiter_words_from_file + [",", ":", "+", "-", "/"]
+    NAME_DELIMITERS: List[str] = delimiter_words_from_file + [",", ":", "+", "-", "/", "\n", "\r"]
 
 
 with open_text(resources, "titles.txt") as file:
