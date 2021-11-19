@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 install_require = [
     "agent-base==0.4.0",
@@ -9,7 +9,7 @@ install_require = [
     "grpcio==1.39.0",
     "grpcio-tools==1.39.0",
     "importlib_resources==5.2.2",
-    "organization-name-knowledge==0.3.0",
+    "organization-name-knowledge==0.4.0",
     "phonetics==1.0.5",
     "python-consul2==0.1.5",
     "pyyaml==5.4.1",

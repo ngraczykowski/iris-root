@@ -8,7 +8,6 @@
   - [Grpc service](#grpc-service)
 - [Configuration](#configuration)
   - [Config files](#config)
-  - [Resources](#resources)
 - [Implementation](#implementation)
   - [Parsing name](#parsing)
   - [Comparing](#comparing)
@@ -156,19 +155,6 @@ Default configuration directory is `./config/`. It can be changed by:
 
 Currently there is no way to use different configuration in one running agent.
 
-<a name="resources"/>
-
-## Resources
-
-Static data used for comparison is currently stored in company_name/resources directory. It contains:
-* joining_words.json - words such as "and"
-* weak_words.json - words ignored in creating abbreviation or extracting legal terms or common words
-* common_prefixes.json - commonly used at the begging of organization name, such as "group"
-* common_suffixes.json - commonly used at the end of organization name, such as "manufacturing", "sales" or "enterprise"
-* legal_terms.json - legal entity terms, with possible abbreviations and meaning
-* countries.json - different names and abbreviations for countries
-
-For now, there is no possibility to change this data for build / deployed agent.
 
 <a name="implementation"/>
 
