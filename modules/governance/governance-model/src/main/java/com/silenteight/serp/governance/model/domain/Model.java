@@ -46,12 +46,6 @@ class Model extends BaseAggregateRoot implements IdentifiableEntity {
     this.modelVersion = DigitsOnlyDateFormatter.INSTANCE.format(getCreatedAt());
   }
 
-  Model(UUID modelId, String policyName, String modelVersion) {
-    this.modelId = modelId;
-    this.policyName = policyName;
-    this.modelVersion = modelVersion;
-  }
-
   ModelDto toDto() {
     return ModelDto.builder()
         .name(toResourceName(getModelId()))

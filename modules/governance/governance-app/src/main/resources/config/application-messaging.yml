@@ -78,6 +78,8 @@ serp:
           routing-key: event.model-promoted.production
         model-in-use:
           routing-key: event.model-in-use.production
+        models-archived:
+          routing-key: event.models-archived
         qa-retention-personal-information-expired:
           queue-name: gov.retention.personal-information-expired
           routing-key: retention.personal-information-expired
@@ -110,6 +112,11 @@ serp:
           queue-name: ${serp.governance.messaging.broker.ingest.queue-name}
 
     model:
+      archived:
+        integration:
+          request:
+            exchange: ${serp.governance.messaging.exchange.model}
+            routingKey: ${serp.governance.messaging.broker.models-archived.routing-key}
       export:
         integration:
           request:

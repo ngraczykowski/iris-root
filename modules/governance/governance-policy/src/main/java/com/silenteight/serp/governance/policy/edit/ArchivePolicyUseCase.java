@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.serp.governance.policy.domain.PolicyService;
 import com.silenteight.serp.governance.policy.domain.dto.ArchivePolicyRequest;
+import com.silenteight.serp.governance.policy.domain.events.PolicyArchivedEvent;
+
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.UUID;
 
@@ -13,8 +16,17 @@ class ArchivePolicyUseCase {
 
   @NonNull
   private final PolicyService policyService;
+  @NonNull
+  private final ApplicationEventPublisher eventPublisher;
 
   void activate(UUID policyId, String userName) {
-    policyService.archivePolicy(ArchivePolicyRequest.of(policyId, userName));
+    ArchivePolicyRequest request = ArchivePolicyRequest.of(policyId, userName);
+    policyService.archivePolicy(request);
+    PolicyArchivedEvent event = PolicyArchivedEvent
+        .builder()
+        .policyId(policyId)
+        .correlationId(request.getCorrelationId())
+        .build();
+    eventPublisher.publishEvent(event);
   }
 }
