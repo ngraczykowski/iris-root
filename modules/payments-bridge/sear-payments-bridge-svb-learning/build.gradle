@@ -43,5 +43,8 @@ dependencies {
 
   implementation libraries.javax_mail
 
+  implementation libraries.shedlock_spring
+
   testImplementation libraries.silenteight_sep_base_testing
+  testImplementation project(":sear-payments-bridge-testing")
 }

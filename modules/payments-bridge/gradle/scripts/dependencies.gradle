@@ -241,6 +241,7 @@ libraries.querydsl_jpa = [group: 'com.querydsl', name: 'querydsl-jpa']
 libraries.reactor_grpc_stub = [group: 'com.salesforce.servicelibs', name: 'reactor-grpc-stub']
 libraries.shedlock_jdbc_provider = [group: 'net.javacrumbs.shedlock', name: 'shedlock-provider-jdbc-template', version: shedlockVersion]
 libraries.shedlock_spring = [group: 'net.javacrumbs.shedlock', name: 'shedlock-spring', version: shedlockVersion]
+libraries.shedlock_core = [group: 'net.javacrumbs.shedlock', name: 'shedlock-core', version: shedlockVersion]
 libraries.snakeyaml = [group: 'org.yaml', name: 'snakeyaml']
 libraries.tomcat_embed_el = [group: 'org.apache.tomcat.embed', name: 'tomcat-embed-el']
 
