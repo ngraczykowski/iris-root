@@ -1,13 +1,11 @@
 package com.silenteight.payments.bridge.ae.alertregistration.adapter.jdbc;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.SaveRegisteredAlertRequest;
-import com.silenteight.payments.bridge.testing.JdbcTestConfiguration;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -16,19 +14,16 @@ import java.util.UUID;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Sql
-@ContextConfiguration(classes = {
-    JdbcTestConfiguration.class,
+@Import({
     RegisteredAlertJdbcDataAccess.class,
     InsertRegisteredAlertQuery.class,
     SelectRegisteredAlertQuery.class,
-    InsertMatchQuery.class
+    InsertMatchQuery.class,
 })
 class RegisterMatchJdbcDataAccessIT extends BaseJdbcTest {
 
   @Autowired
   private RegisteredAlertJdbcDataAccess dataAccess;
-  @Autowired
-  private JdbcTemplate jdbcTemplate;
 
   @Test
   void shouldInsertAllMatches() {

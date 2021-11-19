@@ -1,0 +1,28 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          callback:
+            client-id: test-client-id
+        provider:
+          external:
+            token-uri: "https://example.com/token/uri"
+
+grpc:
+  server:
+    in-process-name: test
+    port: -1
+  client:
+    GLOBAL:
+      negotiation-type: PLAINTEXT
+    ae:
+      address: in-process:test
+    pb:
+      address: in-process:test
+    governance:
+      address: in-process:test
+    datasource:
+      address: in-process:test
+    companynamesurroundingagent:
+      address: in-process:test

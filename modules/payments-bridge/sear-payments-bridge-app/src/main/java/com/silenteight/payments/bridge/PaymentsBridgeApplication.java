@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.app;
+package com.silenteight.payments.bridge;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -6,22 +6,16 @@ import com.silenteight.commons.app.spring.ApplicationBuilderConfigurer;
 import com.silenteight.commons.app.spring.ConfigurableApplicationBuilder;
 import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallback;
 import com.silenteight.commons.app.spring.SpringApplicationTemplate;
-import com.silenteight.payments.bridge.PaymentsBridgeModule;
 
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.AdviceMode;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.integration.annotation.IntegrationComponentScan;
-import org.springframework.integration.config.EnableIntegration;
-import org.springframework.integration.http.config.EnableIntegrationGraphController;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -32,19 +26,14 @@ import java.security.Security;
 import static com.silenteight.payments.common.app.EnvironmentUtils.setPropertyFromEnvironment;
 import static java.lang.System.setProperty;
 
-@Configuration
-@EnableAutoConfiguration
-@ComponentScan(basePackageClasses = PaymentsBridgeModule.class)
-@EnableIntegration
-@EnableIntegrationGraphController
-@EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 @EnableAsync(mode = AdviceMode.ASPECTJ)
-@EnableJpaRepositories(basePackageClasses = PaymentsBridgeModule.class)
+@EnableJpaRepositories
+@EntityScan
+@EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 @EnableScheduling
 @EnableSchedulerLock(defaultLockAtMostFor = "5s")
-@EntityScan(basePackageClasses = PaymentsBridgeModule.class)
-@IntegrationComponentScan(basePackageClasses = PaymentsBridgeModule.class)
 @Slf4j
+@SpringBootApplication
 public class PaymentsBridgeApplication {
 
   public static void main(String[] args) {

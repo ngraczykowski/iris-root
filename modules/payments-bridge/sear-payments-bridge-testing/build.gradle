@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
   implementation libraries.spring_boot_starter_data_jpa
+  implementation libraries.spring_boot_test_autoconfigure
 
   runtimeOnly libraries.liquibase_core
   runtimeOnly libraries.postgresql

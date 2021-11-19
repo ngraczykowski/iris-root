@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.app.integration;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.app.TestApplicationConfiguration;
+import com.silenteight.payments.bridge.PaymentsBridgeApplication;
 import com.silenteight.payments.bridge.common.dto.input.RequestDto;
 import com.silenteight.payments.bridge.event.*;
 import com.silenteight.payments.bridge.event.RecommendationCompletedEvent.AdjudicationRecommendationCompletedEvent;
@@ -42,11 +42,11 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
 
-@SpringBootTest(classes = TestApplicationConfiguration.class)
+@SpringBootTest(classes = { PaymentsBridgeApplication.class })
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
 @Slf4j
-@ActiveProfiles({ "mockae", "mockdatasource", "mockgovernance", "test", "mockagents", "mockaws" })
-class PaymentsBridgeApplicationTests {
+@ActiveProfiles({ "mockae", "mockdatasource", "mockgovernance", "mockagents", "mockaws", "test" })
+class PaymentsBridgeApplicationIT {
 
   private static final String SAMPLE_REQUESTS_DIR = "requests";
   private static final List<String> VALID_REQUEST_FILES = List.of(
@@ -81,7 +81,7 @@ class PaymentsBridgeApplicationTests {
     await()
         .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
         .atMost(Duration.ofSeconds(1))
-        .until(PaymentsBridgeApplicationTests::createdAlerts);
+        .until(PaymentsBridgeApplicationIT::createdAlerts);
     assertThat(MockAlertUseCase.getCreatedAlertsCount()).isEqualTo(2);
     assertThat(MockAlertUseCase.getCreatedMatchesCount()).isEqualTo(2);
   }
@@ -101,7 +101,8 @@ class PaymentsBridgeApplicationTests {
     recorder.subscribe(AlertRegisteredEvent.class, eventChannels.alertRegistered());
     recorder.subscribe(AlertInputAcceptedEvent.class, eventChannels.alertInputAccepted());
     recorder.subscribe(RecommendationGeneratedEvent.class, eventChannels.recommendationGenerated());
-    recorder.subscribe(AdjudicationRecommendationCompletedEvent.class,
+    recorder.subscribe(
+        AdjudicationRecommendationCompletedEvent.class,
         eventChannels.recommendationCompleted());
     return recorder;
   }

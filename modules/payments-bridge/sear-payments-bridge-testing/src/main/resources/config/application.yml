@@ -2,6 +2,9 @@ spring:
   application:
     name: pb
 
+  profiles:
+    include: test
+
   #-------------------------------------------------------------------------------------------------
   # DATABASE
   #-------------------------------------------------------------------------------------------------
@@ -23,18 +26,20 @@ spring:
       isolate-internal-queries: true
       # NOTE(ahaczewski): Forces HikariCP to commit the transaction after opening fresh connection.
       #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
-      #  just before handing the new connection to the pool, HikariCP runs
-      #  `SET SESSION search_path TO '${ae.db.schema}'`, which automatically begins a transaction.
-      #  The `connection-init-sql` query forces a transaction commit.
+      #  just before HikariCP runs `SET SESSION spb.h_path TO '${ae.db.schema}'` which begins
+      #  transaction. Thus, with that query as workaround, we force the transaction commit.
       connection-init-sql: SELECT 1
       data-source-properties:
-        ApplicationName: Sear payments bridge
+        ApplicationName: SEAR Payments Bridge
+        reWriteBatchedInserts: true
 
   # Database migrations
   liquibase:
     change-log: classpath:db/changelog/db.changelog-test.xml
     default-schema: public
     contexts: default, test
+    database-change-log-table: pb_databasechangelog
+    database-change-log-lock-table: pb_databasechangeloglock
 
   # Spring Data JPA
   jpa:
@@ -49,24 +54,17 @@ spring:
 
     properties:
       hibernate.cache.use_query_cache: false
+      hibernate.connection.handling_mode: DELAYED_ACQUISITION_AND_HOLD
       hibernate.connection.provider_disables_autocommit: true
       hibernate.generate_statistics: false
+      hibernate.id.optimizer.pooled.preferred: pooled-lo
+      hibernate.jdbc.batch_size: 2048
       hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.jdbc.use_get_generated_keys: true
       hibernate.jdbc.time_zone: UTC
       hibernate.temp.use_jdbc_metadata_defaults: false
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      #org.hibernate.flushMode: COMMIT
       org.hibernate.envers.audit_table_suffix: _audit
       org.hibernate.envers.store_data_at_delete: true
-
-grpc:
-  server:
-    in-process-name: test
-    port: -1
-  client:
-    GLOBAL:
-      negotiation-type: PLAINTEXT
-    pb:
-      address: in-process:test
-    governance:
-      address: in-process:test
-    datasource:
-      address: in-process:test

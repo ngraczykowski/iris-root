@@ -1,11 +1,10 @@
 package com.silenteight.payments.bridge.ae.alertregistration.adapter.jdbc;
 
-import com.silenteight.payments.bridge.testing.JdbcTestConfiguration;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Collections;
@@ -14,10 +13,7 @@ import java.util.UUID;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Sql
-@ContextConfiguration(classes = {
-    JdbcTestConfiguration.class,
-    AlertRegisteredJdbcDataAccess.class
-})
+@Import(AlertRegisteredJdbcDataAccess.class)
 class AlertRegisteredJdbcDataAccessIT extends BaseJdbcTest {
 
   @Autowired

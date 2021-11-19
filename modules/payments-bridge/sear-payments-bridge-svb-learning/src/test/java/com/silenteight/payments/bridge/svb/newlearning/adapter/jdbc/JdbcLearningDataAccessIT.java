@@ -1,13 +1,11 @@
 package com.silenteight.payments.bridge.svb.newlearning.adapter.jdbc;
 
 import com.silenteight.payments.bridge.svb.newlearning.domain.ObjectPath;
-import com.silenteight.payments.bridge.testing.JdbcTestConfiguration;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
@@ -15,17 +13,11 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Sql
-@ContextConfiguration(classes = {
-    JdbcTestConfiguration.class,
-    JdbcLearningDataAccess.class,
-    InsertNonExistingFileNamesQuery.class
-})
+@Import({ JdbcLearningDataAccess.class, InsertNonExistingFileNamesQuery.class })
 class JdbcLearningDataAccessIT extends BaseJdbcTest {
 
   @Autowired
   private JdbcLearningDataAccess dataAccess;
-  @Autowired
-  private JdbcTemplate jdbcTemplate;
 
   @Test
   void shouldInsertOneName() {
