@@ -1,15 +1,13 @@
 from itertools import combinations
-from typing import Dict, Generator, Sequence, Set
+from typing import Dict, Set
 
 from organization_name_knowledge.knowledge_base import KnowledgeBase
-from organization_name_knowledge.knowledge_base.legal_terms import LegalTerm
 from organization_name_knowledge.knowledge_base.term_sources import TermSources
 from organization_name_knowledge.names.parse import create_tokens
-from organization_name_knowledge.names.tokens_sequence import TokensSequence
 
 
 def cut_name_to_leftmost_match(name: str, matches: Set[str]) -> str:
-    """This function goal is to cut organization name from the longer name string. The leftmost
+    """Cut organization name from the longer name string. The leftmost
     matching sequence is found (just one term or group of consecutive, i. e. 'Company Limited'),
     and the name is cut from start of name to the end of first found match(es) group.
     The cut name must contain more tokens than just a match. If no rules met, returns full name.
@@ -56,10 +54,10 @@ def cut_name_to_leftmost_match(name: str, matches: Set[str]) -> str:
 
 def get_all_contained_legal_terms(name: str) -> Set[str]:
     legal_term_sources = KnowledgeBase.legal_terms.legal_term_sources
-    return get_matching_tokens(name, legal_term_sources)
+    return _get_matching_tokens(name, legal_term_sources)
 
 
-def get_matching_tokens(name: str, term_sources: TermSources) -> Set[str]:
+def _get_matching_tokens(name: str, term_sources: TermSources) -> Set[str]:
     """For given name, produces all substrings, i. e.:
     "A B C" -> "A", "B", "C" ,"A B", "B C", "A B C"
     Then producing a set of all these that are present in given term_sources
@@ -85,13 +83,3 @@ def get_matching_tokens(name: str, term_sources: TermSources) -> Set[str]:
         if name_tokens_subset.cleaned_tuple in term_sources:
             found_tokens.add(name_tokens_subset.original_name)
     return found_tokens
-
-
-def generate_matching_legal_terms(
-    tokens: TokensSequence,
-) -> Generator[Sequence[LegalTerm], None, None]:
-    """For given TokensSequence, yielding LegalTerm sequences that match any of tokens"""
-    for token in tokens:
-        key = tuple(token.cleaned.split())
-        if key in KnowledgeBase.legal_terms.source_to_legal_terms:
-            yield KnowledgeBase.legal_terms.source_to_legal_terms[key]

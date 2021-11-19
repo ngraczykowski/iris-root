@@ -1,3 +1,6 @@
 # flake8: noqa
 from organization_name_knowledge.api import get_all_legal_terms, parse, parse_freetext
-from organization_name_knowledge.freetext.name_matching import generate_matching_legal_terms
+from organization_name_knowledge.knowledge_base import KnowledgeBase
+from organization_name_knowledge.knowledge_base.legal_terms import LegalTerm
+from organization_name_knowledge.names.token import Token
+from organization_name_knowledge.names.tokens_sequence import TokensSequence
