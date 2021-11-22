@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.INDEXES;
-import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.REPORT_FILENAME;
 import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.REPORT_RANGE;
 import static com.silenteight.warehouse.report.metrics.domain.ReportState.DONE;
 import static com.silenteight.warehouse.report.metrics.domain.ReportState.FAILED;
@@ -49,7 +48,7 @@ class AsyncMetricsReportGenerationServiceTest {
         PROPERTIES))
         .thenReturn(REPORT_CONTENT);
 
-    MetricsReport metricsReport = repository.save(MetricsReport.of(REPORT_FILENAME));
+    MetricsReport metricsReport = repository.save(MetricsReport.of(REPORT_RANGE));
     assertThat(metricsReport.getState()).isEqualTo(NEW);
 
     // when
@@ -64,7 +63,7 @@ class AsyncMetricsReportGenerationServiceTest {
   @Test
   void shouldFailReport() {
     // given
-    MetricsReport metricsReport = repository.save(MetricsReport.of(REPORT_FILENAME));
+    MetricsReport metricsReport = repository.save(MetricsReport.of(REPORT_RANGE));
     when(reportGenerationService.generateReport(
         REPORT_RANGE.getFrom(),
         REPORT_RANGE.getTo(),

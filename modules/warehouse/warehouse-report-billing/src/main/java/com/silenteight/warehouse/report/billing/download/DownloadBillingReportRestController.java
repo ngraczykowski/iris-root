@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.warehouse.report.billing.domain.dto.ReportDto;
+import com.silenteight.warehouse.report.billing.download.dto.DownloadBillingReportDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,10 +33,12 @@ class DownloadBillingReportRestController {
   @PreAuthorize("isAuthorized('DOWNLOAD_PRODUCTION_ON_DEMAND_REPORT')")
   public ResponseEntity<String> downloadReport(@PathVariable("id") Long id) {
     log.info("Download Billing report request received, reportId={}", id);
-    ReportDto reportDto = useCase.activate(id);
-    String filename = reportDto.getFilename();
+    DownloadBillingReportDto reportDto = useCase.activate(id);
+    String filename = reportDto.getName();
     String data = reportDto.getContent();
-    log.debug("Download Billingreport request processed, reportId={}, reportName={}", id, filename);
+    log.debug("Download Billing report request processed, reportId={}, reportName={}",
+        id, filename);
+
     return ok()
         .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))
         .header("Content-Type", "text/csv")

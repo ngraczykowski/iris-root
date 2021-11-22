@@ -9,7 +9,11 @@ import com.silenteight.warehouse.report.reasoning.match.download.AiReasoningMatc
 import com.silenteight.warehouse.report.reasoning.match.status.AiReasoningMatchLevelReportStatusQuery;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
+import java.time.OffsetDateTime;
+
 import static com.silenteight.warehouse.report.reporting.ReportRange.of;
+import static java.lang.String.valueOf;
+import static java.time.ZoneOffset.UTC;
 import static java.util.Optional.ofNullable;
 
 @RequiredArgsConstructor
@@ -32,11 +36,16 @@ class AiReasoningMatchLevelReportQuery
     return AiReasoningMatchLevelReportDto.builder()
         .fileStorageName(report.getFileStorageName())
         .range(toReportRange(report))
+        .timestamp(toTimestamp(report.getCreatedAt()))
         .build();
   }
 
   private static ReportRange toReportRange(AiReasoningMatchLevelReport report) {
     return of(report.getFrom(), report.getTo());
+  }
+
+  private static String toTimestamp(OffsetDateTime createdAt) {
+    return valueOf(createdAt.atZoneSameInstant(UTC).toEpochSecond());
   }
 
   @Override

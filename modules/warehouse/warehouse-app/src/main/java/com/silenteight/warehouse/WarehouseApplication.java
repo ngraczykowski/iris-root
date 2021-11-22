@@ -29,6 +29,7 @@ import com.silenteight.warehouse.report.billing.BillingReportModule;
 import com.silenteight.warehouse.report.billing.v1.DeprecatedBillingReportModule;
 import com.silenteight.warehouse.report.metrics.MetricsReportModule;
 import com.silenteight.warehouse.report.metrics.v1.DeprecatedMetricsReportModule;
+import com.silenteight.warehouse.report.name.ReportFileNameModule;
 import com.silenteight.warehouse.report.rbs.RbsReportModule;
 import com.silenteight.warehouse.report.rbs.v1.DeprecatedRbsReportModule;
 import com.silenteight.warehouse.report.reasoning.AiReasoningReportModule;
@@ -93,6 +94,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     EnvironmentModule.class,
     FileStorageMinioModule.class,
     OpendistroModule.class,
+    ReportFileNameModule.class,
     ReportingModule.class,
     ReportsRemovalModule.class,
     RetentionProductionModule.class,

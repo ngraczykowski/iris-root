@@ -7,7 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 import com.silenteight.warehouse.test.client.listener.IndexedEventIntegrationProperties;
 
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

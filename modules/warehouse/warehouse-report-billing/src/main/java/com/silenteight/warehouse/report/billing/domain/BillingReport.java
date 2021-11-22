@@ -4,9 +4,10 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
-import com.silenteight.warehouse.report.billing.domain.dto.ReportDto;
 import com.silenteight.warehouse.report.billing.domain.exception.WrongReportStateException;
+import com.silenteight.warehouse.report.reporting.ReportRange;
 
+import java.time.OffsetDateTime;
 import javax.persistence.*;
 
 import static com.silenteight.warehouse.report.billing.domain.ReportState.DONE;
@@ -45,14 +46,19 @@ class BillingReport extends BaseEntity implements IdentifiableEntity {
   private String data;
 
   @Basic(fetch = FetchType.LAZY)
-  @Column(name = "file_name")
-  private String fileName;
+  @Column(name = "from_range")
+  private OffsetDateTime from;
 
-  static BillingReport of(String fileName) {
-    BillingReport rbsReport = new BillingReport();
-    rbsReport.setFileName(fileName);
-    rbsReport.setState(NEW);
-    return rbsReport;
+  @Basic(fetch = FetchType.LAZY)
+  @Column(name = "to_range")
+  private OffsetDateTime to;
+
+  static BillingReport of(ReportRange range) {
+    BillingReport billingReport = new BillingReport();
+    billingReport.setState(NEW);
+    billingReport.setFrom(range.getFrom());
+    billingReport.setTo(range.getTo());
+    return billingReport;
   }
 
   void generating() {
@@ -81,9 +87,5 @@ class BillingReport extends BaseEntity implements IdentifiableEntity {
 
   void storeReport(String report) {
     setData(report);
-  }
-
-  ReportDto toDto() {
-    return ReportDto.of(getFileName(), getData());
   }
 }

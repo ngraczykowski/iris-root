@@ -1,5 +1,6 @@
 package com.silenteight.warehouse.report.accuracy.download;
 
+import com.silenteight.warehouse.report.name.ReportFileName;
 import com.silenteight.warehouse.report.storage.ReportStorage;
 
 import org.springframework.context.annotation.Bean;
@@ -11,16 +12,20 @@ class DownloadAccuracyReportConfiguration {
   @Bean
   DownloadProductionAccuracyReportUseCase downloadProductionAccuracyReportUseCase(
       AccuracyReportDataQuery query,
-      ReportStorage reportStorage) {
+      ReportStorage reportStorage,
+      ReportFileName productionReportFileNameService) {
 
-    return new DownloadProductionAccuracyReportUseCase(query, reportStorage);
+    return new DownloadProductionAccuracyReportUseCase(
+        query, reportStorage, productionReportFileNameService);
   }
 
   @Bean
   DownloadSimulationAccuracyReportUseCase downloadSimulationAccuracyReportUseCase(
       AccuracyReportDataQuery query,
-      ReportStorage reportStorage) {
+      ReportStorage reportStorage,
+      ReportFileName simulationReportFileNameService) {
 
-    return new DownloadSimulationAccuracyReportUseCase(query, reportStorage);
+    return new DownloadSimulationAccuracyReportUseCase(
+        query, reportStorage, simulationReportFileNameService);
   }
 }

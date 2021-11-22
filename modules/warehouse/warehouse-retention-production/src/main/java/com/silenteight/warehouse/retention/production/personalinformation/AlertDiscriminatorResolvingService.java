@@ -15,7 +15,8 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.*;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_NAME;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.DISCRIMINATOR;
 import static java.util.stream.Collectors.toList;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;

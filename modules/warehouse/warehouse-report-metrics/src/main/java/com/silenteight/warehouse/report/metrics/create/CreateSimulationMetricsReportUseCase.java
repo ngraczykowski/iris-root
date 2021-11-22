@@ -22,8 +22,6 @@ import static java.time.ZoneOffset.UTC;
 @RequiredArgsConstructor
 class CreateSimulationMetricsReportUseCase {
 
-  private static final String FILE_NAME = "simulation-metrics.csv";
-
   @NonNull
   private final MetricsReportService reportService;
   @NonNull
@@ -35,9 +33,9 @@ class CreateSimulationMetricsReportUseCase {
   private final TimeSource timeSource;
 
   ReportInstanceReferenceDto createReport(String analysisId) {
-    List<String> indexes = simulationIndexerQuery.getIndexesForAnalysis(analysisId);
     OffsetDateTime offsetDateNow = timeSource.offsetDateTime().withOffsetSameInstant(UTC);
     ReportRange range = of(ofInstant(EPOCH, UTC), offsetDateNow);
-    return reportService.createReportInstance(range, FILE_NAME, indexes, simulationProperties);
+    List<String> indexes = simulationIndexerQuery.getIndexesForAnalysis(analysisId);
+    return reportService.createReportInstance(range, indexes, simulationProperties);
   }
 }

@@ -14,4 +14,6 @@ public class AiReasoningReportDto {
   String fileStorageName;
   @NonNull
   ReportRange range;
+  @NonNull
+  String timestamp;
 }

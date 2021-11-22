@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.warehouse.report.rbs.domain.dto.ReportDto;
+import com.silenteight.warehouse.report.rbs.download.dto.DownloadRbsReportDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,14 +32,17 @@ class DownloadRbsReportRestController {
       "/v2/analysis/production/reports/RB_SCORER/{id}";
 
   @NonNull
-  private final DownloadRbsReportUseCase useCase;
+  private final DownloadProductionRbsReportUseCase productionUseCase;
+
+  @NonNull
+  private final DownloadSimulationRbsReportUseCase simulationUseCase;
 
   @GetMapping(DOWNLOAD_PRODUCTION_REPORT_URL)
   @PreAuthorize("isAuthorized('DOWNLOAD_PRODUCTION_ON_DEMAND_REPORT')")
   public ResponseEntity<String> downloadProductionReport(@PathVariable(ID_PARAM) long id) {
     log.info("Download production Rb Scorer report request received, reportId={}", id);
-    ReportDto reportDto = useCase.activate(id);
-    String filename = reportDto.getFilename();
+    DownloadRbsReportDto reportDto = productionUseCase.activate(id);
+    String filename = reportDto.getName();
     String data = reportDto.getContent();
     log.debug("Download production Rb Scorer report request processed, reportId={}, reportName={}",
         id, filename);
@@ -59,8 +62,8 @@ class DownloadRbsReportRestController {
     log.info("Download RB Scorer simulation report request received, analysisId={}, reportId={}",
         analysisId, id);
 
-    ReportDto reportDto = useCase.activate(id);
-    String filename = reportDto.getFilename();
+    DownloadRbsReportDto reportDto = simulationUseCase.activate(id, analysisId);
+    String filename = reportDto.getName();
     String data = reportDto.getContent();
 
     log.debug("Download simulation RB Scorer report request processed, reportId={}, reportName={}",

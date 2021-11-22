@@ -11,8 +11,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.INDEXES;
-import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.REPORT_FILENAME;
 import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.REPORT_RANGE;
+import static com.silenteight.warehouse.report.billing.domain.BillingReport.of;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -43,7 +43,7 @@ class AsyncBillingReportGenerationServiceTest {
         INDEXES))
         .thenReturn(REPORT_CONTENT);
 
-    BillingReport billingReport = billingReportRepository.save(BillingReport.of(REPORT_FILENAME));
+    BillingReport billingReport = billingReportRepository.save(of(REPORT_RANGE));
     assertThat(billingReport.getState()).isEqualTo(ReportState.NEW);
 
     underTest.generateReport(billingReport.getId(), REPORT_RANGE, INDEXES);
@@ -56,7 +56,7 @@ class AsyncBillingReportGenerationServiceTest {
   @Test
   void shouldFailReport() {
     //given
-    BillingReport billingReport = billingReportRepository.save(BillingReport.of(REPORT_FILENAME));
+    BillingReport billingReport = billingReportRepository.save(BillingReport.of(REPORT_RANGE));
 
     //when
     when(reportGenerationService.generateReport(

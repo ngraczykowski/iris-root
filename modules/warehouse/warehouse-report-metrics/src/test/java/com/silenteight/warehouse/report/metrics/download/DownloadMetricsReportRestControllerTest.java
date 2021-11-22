@@ -2,6 +2,7 @@ package com.silenteight.warehouse.report.metrics.download;
 
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.report.metrics.domain.MetricsReportService;
+import com.silenteight.warehouse.report.name.ReportFileName;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -41,11 +42,14 @@ class DownloadMetricsReportRestControllerTest extends BaseRestControllerTest {
   MetricsReportDataQuery query;
   @MockBean
   MetricsReportService reportService;
+  @MockBean
+  ReportFileName reportFileName;
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenInvokedDownloadSimulationReport() {
     given(query.getReport(REPORT_ID)).willReturn(REPORT_DTO);
+    when(reportFileName.getReportName(any())).thenReturn(REPORT_FILENAME);
 
     String expectedContentDisposition = format("attachment; filename=\"%s\"", REPORT_FILENAME);
     String response = get(DOWNLOAD_SIMULATION_REPORT_URL)
@@ -64,6 +68,7 @@ class DownloadMetricsReportRestControllerTest extends BaseRestControllerTest {
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenInvokedDownloadProductionReport() {
     given(query.getReport(REPORT_ID)).willReturn(REPORT_DTO);
+    when(reportFileName.getReportName(any())).thenReturn(REPORT_FILENAME);
 
     String expectedContentDisposition = format("attachment; filename=\"%s\"", REPORT_FILENAME);
     String response = get(DOWNLOAD_PRODUCTION_REPORT_URL)

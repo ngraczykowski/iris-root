@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Stream.*;
+import static java.util.stream.Stream.of;
 
 @Value
 public class CsvReportContentDto {

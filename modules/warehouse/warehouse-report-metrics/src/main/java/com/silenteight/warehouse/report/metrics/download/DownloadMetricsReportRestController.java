@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.warehouse.report.metrics.domain.dto.ReportDto;
+import com.silenteight.warehouse.report.metrics.download.dto.DownloadMetricsReportDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +31,9 @@ class DownloadMetricsReportRestController {
       "/v2/analysis/production/reports/METRICS/{id}";
 
   @NonNull
-  private final DownloadMetricsReportUseCase useCase;
+  private final DownloadProductionMetricsReportUseCase productionUseCase;
+  @NonNull
+  private final DownloadSimulationMetricsReportUseCase simulationUseCase;
 
   @GetMapping(DOWNLOAD_SIMULATION_REPORT_URL)
   @PreAuthorize("isAuthorized('DOWNLOAD_SIMULATION_REPORT')")
@@ -39,8 +41,8 @@ class DownloadMetricsReportRestController {
       @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
       @PathVariable(ID_PARAM) long id) {
 
-    ReportDto reportDto = useCase.activate(id);
-    String filename = reportDto.getFilename();
+    DownloadMetricsReportDto reportDto = simulationUseCase.activate(id, analysisId);
+    String filename = reportDto.getName();
     String data = reportDto.getContent();
     log.info("Download simulation metrics report request received, analysisId={}, reportId={}",
         analysisId, id);
@@ -54,8 +56,8 @@ class DownloadMetricsReportRestController {
   @GetMapping(DOWNLOAD_PRODUCTION_REPORT_URL)
   @PreAuthorize("isAuthorized('DOWNLOAD_PRODUCTION_ON_DEMAND_REPORT')")
   public ResponseEntity<String> downloadReport(@PathVariable(ID_PARAM) long id) {
-    ReportDto reportDto = useCase.activate(id);
-    String filename = reportDto.getFilename();
+    DownloadMetricsReportDto reportDto = productionUseCase.activate(id);
+    String filename = reportDto.getName();
     String data = reportDto.getContent();
     log.info("Download production metrics report request received, reportId={}", id);
     return ok()

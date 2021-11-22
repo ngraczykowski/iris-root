@@ -7,37 +7,52 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sep.filestorage.api.dto.FileDto;
 import com.silenteight.warehouse.report.accuracy.domain.dto.AccuracyReportDto;
 import com.silenteight.warehouse.report.accuracy.download.dto.DownloadAccuracyReportDto;
+import com.silenteight.warehouse.report.name.ReportFileName;
+import com.silenteight.warehouse.report.name.ReportFileNameDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 import com.silenteight.warehouse.report.storage.ReportStorage;
 
-import static java.lang.String.format;
-
 @Slf4j
 @RequiredArgsConstructor
-public class DownloadProductionAccuracyReportUseCase {
+class DownloadProductionAccuracyReportUseCase {
 
-  private static final String FILE_NAME = "Accuracy_%s_To_%s.csv";
+  private static final String REPORT_TYPE = "Accuracy";
 
   @NonNull
   private final AccuracyReportDataQuery reportDataQuery;
   @NonNull
   private final ReportStorage reportStorageService;
+  @NonNull
+  private final ReportFileName reportFileName;
 
   public DownloadAccuracyReportDto activate(long id) {
-    log.debug("Getting Accuracy report, reportId={}", id);
+    log.debug("Getting production Accuracy report, reportId={}", id);
     AccuracyReportDto dto = reportDataQuery.getAccuracyReportDto(id);
 
     String fileStorageName = dto.getFileStorageName();
-    log.debug("Getting Accuracy report from storage, fileStorageName={}", fileStorageName);
+    log.debug("Getting production Accuracy report from storage, fileStorageName={}",
+        fileStorageName);
+
     FileDto report = reportStorageService.getReport(fileStorageName);
 
     return DownloadAccuracyReportDto.builder()
-        .name(getFileName(dto.getRange()))
+        .name(getFileName(dto))
         .content(report.getContent())
         .build();
   }
 
-  private static String getFileName(ReportRange range) {
-    return format(FILE_NAME, range.getFromAsLocalDate(), range.getToAsLocalDate());
+  private String getFileName(AccuracyReportDto dto) {
+    ReportFileNameDto reportFileNameDto = toReportFileNameDto(dto);
+    return reportFileName.getReportName(reportFileNameDto);
+  }
+
+  private static ReportFileNameDto toReportFileNameDto(AccuracyReportDto dto) {
+    ReportRange range = dto.getRange();
+    return ReportFileNameDto.builder()
+        .reportType(REPORT_TYPE)
+        .from(range.getFromAsLocalDate().toString())
+        .to(range.getToAsLocalDate().toString())
+        .timestamp(dto.getTimestamp())
+        .build();
   }
 }

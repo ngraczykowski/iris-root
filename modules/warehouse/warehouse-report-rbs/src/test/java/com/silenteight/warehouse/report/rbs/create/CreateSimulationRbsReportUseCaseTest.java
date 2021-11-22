@@ -23,7 +23,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CreateSimulationRbsReportUseCaseTest {
 
-  private static final String FILE_NAME = "simulation-rbscorer.csv";
   private static final MockTimeSource TIME_SOURCE = MockTimeSource.ARBITRARY_INSTANCE;
 
   @Mock
@@ -34,8 +33,6 @@ class CreateSimulationRbsReportUseCaseTest {
   private RbsReportService reportService;
   @Captor
   private ArgumentCaptor<ReportRange> reportRangeCaptor;
-  @Captor
-  private ArgumentCaptor<String> fileNameCaptor;
 
   private CreateSimulationRbsReportUseCase underTest;
 
@@ -54,10 +51,7 @@ class CreateSimulationRbsReportUseCaseTest {
     underTest.createReport(ANALYSIS_ID);
 
     // then
-    verify(reportService).createReportInstance(
-        reportRangeCaptor.capture(), fileNameCaptor.capture(), any(), any());
-
-    assertThat(fileNameCaptor.getValue()).isEqualTo(FILE_NAME);
+    verify(reportService).createReportInstance(reportRangeCaptor.capture(), any(), any());
     assertThat(reportRangeCaptor.getValue().getFromAsLocalDate()).isEqualTo(from(EPOCH));
     assertThat(reportRangeCaptor.getValue().getToAsLocalDate()).isEqualTo(
         TIME_SOURCE.localDateTime().toLocalDate());

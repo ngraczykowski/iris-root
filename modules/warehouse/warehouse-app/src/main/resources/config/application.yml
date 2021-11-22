@@ -97,6 +97,11 @@ warehouse:
     removal:
       cron: "0 0 1 * * ?"
       duration-time: P1D
+    file-name:
+      # Available patterns: [reportType], [from], [to], [timestamp]
+      production-pattern: "[reportType]_Prod_[from]_To_[to].csv"
+      # Available patterns: [reportType], [analysisId], [timestamp]
+      simulation-pattern: "[reportType]_Sim_[analysisId].csv"
   es:
     production-query-index: ${warehouse.environment.prefix}_production_alert
     production-match-query-index: ${warehouse.environment.prefix}_production_match

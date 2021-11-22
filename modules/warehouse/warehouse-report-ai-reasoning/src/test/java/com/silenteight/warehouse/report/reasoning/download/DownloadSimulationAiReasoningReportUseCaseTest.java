@@ -3,6 +3,7 @@ package com.silenteight.warehouse.report.reasoning.download;
 import lombok.SneakyThrows;
 
 import com.silenteight.sep.filestorage.api.dto.FileDto;
+import com.silenteight.warehouse.report.name.ReportFileName;
 import com.silenteight.warehouse.report.reasoning.download.dto.DownloadAiReasoningReportDto;
 import com.silenteight.warehouse.report.storage.ReportStorage;
 
@@ -27,6 +28,9 @@ class DownloadSimulationAiReasoningReportUseCaseTest {
   private AiReasoningReportDataQuery reportDataQuery;
   @Mock
   private ReportStorage reportStorageService;
+  @Mock
+  private ReportFileName reportFileName;
+
   @InjectMocks
   private DownloadSimulationAiReasoningReportUseCase underTest;
 
@@ -36,6 +40,7 @@ class DownloadSimulationAiReasoningReportUseCaseTest {
     // given
     when(reportDataQuery.getAiReasoningReportDto(REPORT_ID)).thenReturn(AI_REASONING_REPORT_DTO);
     when(reportStorageService.getReport(FILE_STORAGE_NAME)).thenReturn(getFileDto());
+    when(reportFileName.getReportName(any())).thenReturn(SIMULATION_REPORT_FILENAME);
 
     // when
     DownloadAiReasoningReportDto dto = underTest.activate(REPORT_ID, ANALYSIS_ID);

@@ -18,10 +18,9 @@ public class BillingReportService {
 
   public ReportInstanceReferenceDto createReportInstance(
       @NonNull ReportRange range,
-      @NonNull String fileName,
       @NonNull List<String> indexes) {
 
-    BillingReport report = BillingReport.of(fileName);
+    BillingReport report = BillingReport.of(range);
     BillingReport savedReport = repository.save(report);
     //FIXME(kdzieciol): Here we should send a request to the queue (internally) to generate this
     // report. Due to the lack of time, we will generate it in the thread (WEB-1358)
