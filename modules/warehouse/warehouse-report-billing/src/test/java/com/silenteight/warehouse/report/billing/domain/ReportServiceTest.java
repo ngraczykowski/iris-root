@@ -1,6 +1,5 @@
 package com.silenteight.warehouse.report.billing.domain;
 
-import com.silenteight.warehouse.report.billing.domain.dto.ReportDto;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.INDEXES;
-import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.REPORT_FILENAME;
 import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.REPORT_RANGE;
 import static org.assertj.core.api.Assertions.*;
 
@@ -23,23 +21,18 @@ class ReportServiceTest {
   private BillingReportAsyncGenerationService asyncReportGenerationService;
 
   private BillingReportService service;
-  private BillingReportQuery query;
 
   @BeforeEach
   void setUp() {
     service = new BillingReportService(rbsReportRepository, asyncReportGenerationService);
-    query = new BillingReportConfiguration().billingReportQuery(rbsReportRepository);
   }
 
   @Test
   void generateReportAndReportAvailable() {
     // when
-    ReportInstanceReferenceDto reportInstance =
-        service.createReportInstance(REPORT_RANGE, REPORT_FILENAME, INDEXES);
+    ReportInstanceReferenceDto reportInstance = service.createReportInstance(REPORT_RANGE, INDEXES);
 
     // then
-    ReportDto report = query.getReport(reportInstance.getInstanceReferenceId());
-    assertThat(report.getFilename()).isEqualTo(REPORT_FILENAME);
     assertThat(rbsReportRepository.findById(reportInstance.getInstanceReferenceId()))
         .isPresent()
         .get()
@@ -50,11 +43,7 @@ class ReportServiceTest {
   @Test
   void removeReport() {
     // given
-    ReportInstanceReferenceDto reportInstance =
-        service.createReportInstance(REPORT_RANGE, REPORT_FILENAME, INDEXES);
-
-    ReportDto report = query.getReport(reportInstance.getInstanceReferenceId());
-    assertThat(report.getFilename()).isEqualTo(REPORT_FILENAME);
+    ReportInstanceReferenceDto reportInstance = service.createReportInstance(REPORT_RANGE, INDEXES);
 
     // when
     service.removeReport(reportInstance.getInstanceReferenceId());

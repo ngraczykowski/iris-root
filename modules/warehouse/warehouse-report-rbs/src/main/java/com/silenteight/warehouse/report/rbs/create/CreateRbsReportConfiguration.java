@@ -16,12 +16,9 @@ class CreateRbsReportConfiguration {
 
   @Bean
   CreateProductionRbsReportUseCase createProductionRbsReportUseCase(
-      RbsReportService service,
-      @Valid RbsReportProperties properties) {
+      RbsReportService service, @Valid RbsReportProperties properties) {
 
-    return new CreateProductionRbsReportUseCase(
-        service,
-        properties.getProduction());
+    return new CreateProductionRbsReportUseCase(service, properties.getProduction());
   }
 
   @Bean

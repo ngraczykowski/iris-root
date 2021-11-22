@@ -300,4 +300,36 @@
       <column name="to_range" type="TIMESTAMP"/>
     </addColumn>
   </changeSet>
+
+  <changeSet id="warehouse-1.9.0-18" author="plewandowski">
+    <dropColumn columnName="file_name"
+                tableName="warehouse_report_rbs">
+    </dropColumn>
+    <addColumn tableName="warehouse_report_rbs">
+      <column name="from_range" type="TIMESTAMP"/>
+    </addColumn>
+    <addColumn tableName="warehouse_report_rbs">
+      <column name="to_range" type="TIMESTAMP"/>
+    </addColumn>
+
+    <dropColumn columnName="file_name"
+                tableName="warehouse_report_billing">
+    </dropColumn>
+    <addColumn tableName="warehouse_report_billing">
+      <column name="from_range" type="TIMESTAMP"/>
+    </addColumn>
+    <addColumn tableName="warehouse_report_billing">
+      <column name="to_range" type="TIMESTAMP"/>
+    </addColumn>
+
+    <dropColumn columnName="file_name"
+                tableName="warehouse_report_metrics">
+    </dropColumn>
+    <addColumn tableName="warehouse_report_metrics">
+      <column name="from_range" type="TIMESTAMP"/>
+    </addColumn>
+    <addColumn tableName="warehouse_report_metrics">
+      <column name="to_range" type="TIMESTAMP"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

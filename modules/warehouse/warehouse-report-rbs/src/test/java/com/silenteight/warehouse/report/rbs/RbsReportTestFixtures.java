@@ -2,6 +2,7 @@ package com.silenteight.warehouse.report.rbs;
 
 import lombok.NoArgsConstructor;
 
+import com.silenteight.warehouse.report.rbs.domain.dto.RbsReportDto;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
@@ -35,9 +36,18 @@ public final class RbsReportTestFixtures {
   public static final String RECOMMENDATION_FIELD_LABEL = "alert_recommendation";
   public static final String TEST_INDEX = "test_index";
   public static final List<String> INDEXES = List.of(TEST_INDEX);
+  public static final String CREATION_TIMESTAMP = "1616574888888";
+  public static final String CONTENT = "report content";
   public static final String REPORT_FILENAME =
-      "RB_Scorer_" + QUERY_PARAM_FROM + "_To_" + QUERY_PARAM_TO + ".csv";
+      "RB_Scorer_Prod_" + QUERY_PARAM_FROM + "_To_" + QUERY_PARAM_TO + ".csv";
 
   public static final ReportInstanceReferenceDto REPORT_INSTANCE_REFERENCE_DTO =
       new ReportInstanceReferenceDto(REPORT_ID);
+
+  public static final RbsReportDto RB_SCORER_REPORT_DTO =
+      RbsReportDto.builder()
+          .range(REPORT_RANGE)
+          .content(CONTENT)
+          .timestamp(CREATION_TIMESTAMP)
+          .build();
 }

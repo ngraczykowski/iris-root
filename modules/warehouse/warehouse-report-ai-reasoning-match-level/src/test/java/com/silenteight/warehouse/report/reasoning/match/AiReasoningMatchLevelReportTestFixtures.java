@@ -37,20 +37,22 @@ public final class AiReasoningMatchLevelReportTestFixtures {
   public static final String ALERT_COMMENT_FIELD_NAME = "alert_comment";
   public static final String ALERT_COMMENT_FIELD_LABEL = "Alert Comment";
   public static final String FILE_STORAGE_NAME = "0931655c-6b3e-4e50-a27e-85226ab16ca2";
+  public static final String CREATION_TIMESTAMP = "161657411111";
   public static final List<String> INDEXES = of("index999");
   public static final long REPORT_ID = 109;
   public static final ReportInstanceReferenceDto REPORT_INSTANCE =
       new ReportInstanceReferenceDto(REPORT_ID);
 
   public static final String PRODUCTION_REPORT_FILENAME =
-      "AI_Reasoning_Match_Level_" + FROM_QUERY_PARAM + "_To_" + TO_QUERY_PARAM + ".csv";
+      "AI_Reasoning_Match_Level_Prod_" + FROM_QUERY_PARAM + "_To_" + TO_QUERY_PARAM + ".csv";
 
   public static final String SIMULATION_REPORT_FILENAME =
-      "simulation_" + ANALYSIS_ID + "_AI_Reasoning_Match_Level.csv";
+      "AI_Reasoning_Match_Level_Sim_" + ANALYSIS_ID + ".csv";
 
   public static final AiReasoningMatchLevelReportDto AI_REASONING_MATCH_LEVEL_REPORT_DTO =
       AiReasoningMatchLevelReportDto.builder()
           .fileStorageName(FILE_STORAGE_NAME)
           .range(REPORT_RANGE)
+          .timestamp(CREATION_TIMESTAMP)
           .build();
 }

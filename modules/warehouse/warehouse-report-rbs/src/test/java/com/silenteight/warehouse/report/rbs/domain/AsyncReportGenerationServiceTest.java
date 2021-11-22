@@ -11,8 +11,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.warehouse.report.rbs.RbsReportTestFixtures.INDEXES;
-import static com.silenteight.warehouse.report.rbs.RbsReportTestFixtures.REPORT_FILENAME;
 import static com.silenteight.warehouse.report.rbs.RbsReportTestFixtures.REPORT_RANGE;
+import static com.silenteight.warehouse.report.rbs.domain.RbsReport.of;
 import static com.silenteight.warehouse.report.rbs.domain.ReportState.DONE;
 import static com.silenteight.warehouse.report.rbs.domain.ReportState.FAILED;
 import static com.silenteight.warehouse.report.rbs.domain.ReportState.NEW;
@@ -49,7 +49,7 @@ class AsyncReportGenerationServiceTest {
         PROPERTIES))
         .thenReturn(REPORT_CONTENT);
 
-    RbsReport metricsReport = repository.save(RbsReport.of(REPORT_FILENAME));
+    RbsReport metricsReport = repository.save(of(REPORT_RANGE));
     assertThat(metricsReport.getState()).isEqualTo(NEW);
 
     // when
@@ -64,7 +64,7 @@ class AsyncReportGenerationServiceTest {
   @Test
   void shouldFailReport() {
     // given
-    RbsReport metricsReport = repository.save(RbsReport.of(REPORT_FILENAME));
+    RbsReport metricsReport = repository.save(of(REPORT_RANGE));
     when(reportGenerationService.generateReport(
         REPORT_RANGE.getFrom(),
         REPORT_RANGE.getTo(),

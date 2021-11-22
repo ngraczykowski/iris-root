@@ -28,4 +28,5 @@ dependencies {
   testImplementation project(":warehouse-common-testing")
   testImplementation testFixtures(project(':warehouse-common'))
   testImplementation testFixtures(project(':warehouse-indexer'))
+  testImplementation testFixtures(project(':warehouse-report'))
 }

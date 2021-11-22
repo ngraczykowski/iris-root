@@ -13,6 +13,8 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import javax.validation.Valid;
 
+import static com.silenteight.warehouse.report.rbs.domain.RbsReport.of;
+
 @RequiredArgsConstructor
 @Slf4j
 public class RbsReportService implements ReportsRemoval {
@@ -24,11 +26,10 @@ public class RbsReportService implements ReportsRemoval {
 
   public ReportInstanceReferenceDto createReportInstance(
       @NonNull ReportRange range,
-      @NonNull String fileName,
       @NonNull List<String> indexes,
       @NonNull @Valid RbsReportDefinition properties) {
 
-    RbsReport report = RbsReport.of(fileName);
+    RbsReport report = of(range);
     RbsReport savedReport = repository.save(report);
     //FIXME(kdzieciol): Here we should send a request to the queue (internally) to generate this
     // report. Due to the lack of time, we will generate it in the thread (WEB-1358)

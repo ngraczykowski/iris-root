@@ -15,7 +15,10 @@ import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import static java.util.List.of;

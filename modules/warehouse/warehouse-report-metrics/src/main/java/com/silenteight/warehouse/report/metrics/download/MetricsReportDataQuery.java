@@ -1,8 +1,8 @@
 package com.silenteight.warehouse.report.metrics.download;
 
-import com.silenteight.warehouse.report.metrics.domain.dto.ReportDto;
+import com.silenteight.warehouse.report.metrics.domain.dto.MetricsReportDto;
 
 public interface MetricsReportDataQuery {
 
-  ReportDto getReport(long id);
+  MetricsReportDto getReport(long id);
 }

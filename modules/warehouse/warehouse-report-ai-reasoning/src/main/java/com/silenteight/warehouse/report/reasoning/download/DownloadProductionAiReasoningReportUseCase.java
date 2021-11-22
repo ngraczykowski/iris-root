@@ -5,39 +5,54 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.filestorage.api.dto.FileDto;
+import com.silenteight.warehouse.report.name.ReportFileName;
+import com.silenteight.warehouse.report.name.ReportFileNameDto;
 import com.silenteight.warehouse.report.reasoning.domain.dto.AiReasoningReportDto;
 import com.silenteight.warehouse.report.reasoning.download.dto.DownloadAiReasoningReportDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 import com.silenteight.warehouse.report.storage.ReportStorage;
 
-import static java.lang.String.format;
-
 @Slf4j
 @RequiredArgsConstructor
 class DownloadProductionAiReasoningReportUseCase {
 
-  private static final String FILE_NAME = "AI_Reasoning_%s_To_%s.csv";
+  private static final String REPORT_TYPE = "AI_Reasoning";
 
   @NonNull
   private final AiReasoningReportDataQuery reportDataQuery;
   @NonNull
   private final ReportStorage reportStorageService;
+  @NonNull
+  private final ReportFileName reportFileName;
 
   public DownloadAiReasoningReportDto activate(long id) {
-    log.debug("Getting AI Reasoning report, reportId={}", id);
+    log.debug("Getting production AI Reasoning report, reportId={}", id);
     AiReasoningReportDto dto = reportDataQuery.getAiReasoningReportDto(id);
 
     String fileStorageName = dto.getFileStorageName();
-    log.debug("Getting AI Reasoning report from storage, fileStorageName={}", fileStorageName);
+    log.debug("Getting simulation AI Reasoning report from storage, fileStorageName={}",
+        fileStorageName);
+
     FileDto report = reportStorageService.getReport(fileStorageName);
 
     return DownloadAiReasoningReportDto.builder()
-        .name(getFileName(dto.getRange()))
+        .name(getFileName(dto))
         .content(report.getContent())
         .build();
   }
 
-  private static String getFileName(ReportRange range) {
-    return format(FILE_NAME, range.getFromAsLocalDate(), range.getToAsLocalDate());
+  private String getFileName(AiReasoningReportDto dto) {
+    ReportFileNameDto reportFileNameDto = toReportFileNameDto(dto);
+    return reportFileName.getReportName(reportFileNameDto);
+  }
+
+  private static ReportFileNameDto toReportFileNameDto(AiReasoningReportDto dto) {
+    ReportRange range = dto.getRange();
+    return ReportFileNameDto.builder()
+        .reportType(REPORT_TYPE)
+        .from(range.getFromAsLocalDate().toString())
+        .to(range.getToAsLocalDate().toString())
+        .timestamp(dto.getTimestamp())
+        .build();
   }
 }

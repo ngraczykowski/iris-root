@@ -1,8 +1,8 @@
 package com.silenteight.warehouse.report.billing.download;
 
-import com.silenteight.warehouse.report.billing.domain.dto.ReportDto;
+import com.silenteight.warehouse.report.billing.domain.dto.BillingReportDto;
 
 public interface ReportDataQuery {
 
-  ReportDto getReport(long id);
+  BillingReportDto getReport(long id);
 }

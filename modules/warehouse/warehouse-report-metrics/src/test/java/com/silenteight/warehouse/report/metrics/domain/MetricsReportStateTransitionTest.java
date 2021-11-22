@@ -4,7 +4,7 @@ import com.silenteight.warehouse.report.metrics.domain.exception.WrongReportStat
 
 import org.junit.jupiter.api.Test;
 
-import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.REPORT_FILENAME;
+import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.REPORT_RANGE;
 import static com.silenteight.warehouse.report.metrics.domain.ReportState.DONE;
 import static com.silenteight.warehouse.report.metrics.domain.ReportState.FAILED;
 import static com.silenteight.warehouse.report.metrics.domain.ReportState.GENERATING;
@@ -19,7 +19,7 @@ class MetricsReportStateTransitionTest {
 
   @Test
   void shouldChangeStateWhenValidFlow() {
-    MetricsReport metricsReport = MetricsReport.of(REPORT_FILENAME);
+    MetricsReport metricsReport = MetricsReport.of(REPORT_RANGE);
     assertThat(metricsReport).extracting(MetricsReport::getState).isEqualTo(NEW);
 
     metricsReport.generating();
@@ -31,7 +31,7 @@ class MetricsReportStateTransitionTest {
 
   @Test
   void shouldChangeStateWhenValidFlow2() {
-    MetricsReport metricsReport = MetricsReport.of(REPORT_FILENAME);
+    MetricsReport metricsReport = MetricsReport.of(REPORT_RANGE);
     assertThat(metricsReport).extracting(MetricsReport::getState).isEqualTo(NEW);
 
     metricsReport.generating();
@@ -43,7 +43,7 @@ class MetricsReportStateTransitionTest {
 
   @Test
   void shouldChangeStateWhenValidFlow3() {
-    MetricsReport metricsReport = MetricsReport.of(REPORT_FILENAME);
+    MetricsReport metricsReport = MetricsReport.of(REPORT_RANGE);
     assertThat(metricsReport).extracting(MetricsReport::getState).isEqualTo(NEW);
 
     metricsReport.failed();
@@ -52,7 +52,7 @@ class MetricsReportStateTransitionTest {
 
   @Test
   void shouldThrowWrongReportStateExceptionWhenInvalidFlow() {
-    MetricsReport metricsReport = MetricsReport.of(REPORT_FILENAME);
+    MetricsReport metricsReport = MetricsReport.of(REPORT_RANGE);
     assertThat(metricsReport).extracting(MetricsReport::getState).isEqualTo(NEW);
 
     assertThatThrownBy(metricsReport::done)
@@ -62,7 +62,7 @@ class MetricsReportStateTransitionTest {
 
   @Test
   void shouldThrowWrongReportStateExceptionWhenInvalidFlow2() {
-    MetricsReport metricsReport = MetricsReport.of(REPORT_FILENAME);
+    MetricsReport metricsReport = MetricsReport.of(REPORT_RANGE);
     assertThat(metricsReport).extracting(MetricsReport::getState).isEqualTo(NEW);
 
     metricsReport.generating();
@@ -75,7 +75,7 @@ class MetricsReportStateTransitionTest {
 
   @Test
   void shouldThrowWrongReportStateExceptionWhenInvalidFlow3() {
-    MetricsReport metricsReport = MetricsReport.of(REPORT_FILENAME);
+    MetricsReport metricsReport = MetricsReport.of(REPORT_RANGE);
     assertThat(metricsReport).extracting(MetricsReport::getState).isEqualTo(NEW);
 
     metricsReport.generating();
@@ -88,7 +88,7 @@ class MetricsReportStateTransitionTest {
 
   @Test
   void shouldThrowWrongReportStateExceptionWhenInvalidFlow4() {
-    MetricsReport metricsReport = MetricsReport.of(REPORT_FILENAME);
+    MetricsReport metricsReport = MetricsReport.of(REPORT_RANGE);
     assertThat(metricsReport).extracting(MetricsReport::getState).isEqualTo(NEW);
 
     metricsReport.generating();

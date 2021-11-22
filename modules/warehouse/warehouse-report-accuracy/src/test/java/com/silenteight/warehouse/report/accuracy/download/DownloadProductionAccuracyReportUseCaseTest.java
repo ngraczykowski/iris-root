@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 
 import com.silenteight.sep.filestorage.api.dto.FileDto;
 import com.silenteight.warehouse.report.accuracy.download.dto.DownloadAccuracyReportDto;
+import com.silenteight.warehouse.report.name.ReportFileName;
 import com.silenteight.warehouse.report.storage.ReportStorage;
 
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,9 @@ class DownloadProductionAccuracyReportUseCaseTest {
   private AccuracyReportDataQuery reportDataQuery;
   @Mock
   private ReportStorage reportStorageService;
+  @Mock
+  private ReportFileName reportFileName;
+
   @InjectMocks
   private DownloadProductionAccuracyReportUseCase underTest;
 
@@ -36,6 +40,7 @@ class DownloadProductionAccuracyReportUseCaseTest {
     // given
     when(reportDataQuery.getAccuracyReportDto(REPORT_ID)).thenReturn(ACCURACY_REPORT_DTO);
     when(reportStorageService.getReport(FILE_STORAGE_NAME)).thenReturn(getFileDto());
+    when(reportFileName.getReportName(any())).thenReturn(PRODUCTION_REPORT_FILENAME);
 
     // when
     DownloadAccuracyReportDto dto = underTest.activate(REPORT_ID);

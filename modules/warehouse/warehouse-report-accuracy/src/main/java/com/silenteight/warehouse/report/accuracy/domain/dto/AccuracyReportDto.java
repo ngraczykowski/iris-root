@@ -14,4 +14,6 @@ public class AccuracyReportDto {
   String fileStorageName;
   @NonNull
   ReportRange range;
+  @NonNull
+  String timestamp;
 }

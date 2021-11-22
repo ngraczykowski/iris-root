@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.warehouse.indexer.query.streaming.DataProvider;
 import com.silenteight.warehouse.indexer.query.streaming.FetchDataRequest;
-import com.silenteight.warehouse.report.storage.*;
+import com.silenteight.warehouse.report.storage.ReportStorage;
 import com.silenteight.warehouse.report.storage.temporary.FileStorage;
 import com.silenteight.warehouse.report.storage.temporary.TemporaryFileStorage;
 

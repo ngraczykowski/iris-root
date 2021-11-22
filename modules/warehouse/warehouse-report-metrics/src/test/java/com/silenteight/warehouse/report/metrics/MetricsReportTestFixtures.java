@@ -2,7 +2,7 @@ package com.silenteight.warehouse.report.metrics;
 
 import lombok.NoArgsConstructor;
 
-import com.silenteight.warehouse.report.metrics.domain.dto.ReportDto;
+import com.silenteight.warehouse.report.metrics.domain.dto.MetricsReportDto;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
@@ -24,13 +24,12 @@ public final class MetricsReportTestFixtures {
   public static final String QUERY_PARAM_FROM = "2021-08-15";
   public static final String QUERY_PARAM_TO = "2021-10-15";
   public static final String REPORT_FILENAME =
-      "Production_Metrics_" + QUERY_PARAM_FROM + "_To_" + QUERY_PARAM_TO + ".csv";
+      "Metrics_Prod_" + QUERY_PARAM_FROM + "_To_" + QUERY_PARAM_TO + ".csv";
 
   public static final String REPORT_CONTENT = "content";
   public static final long REPORT_ID = 4;
   public static final String DATE = "2021-07-31 23:59:59.999";
   public static final String DATE_2 = "2021-06-31 23:59:59.999";
-  public static final ReportDto REPORT_DTO = ReportDto.of(REPORT_FILENAME, REPORT_CONTENT);
   public static final ReportInstanceReferenceDto REPORT_INSTANCE_REFERENCE_DTO =
       new ReportInstanceReferenceDto(REPORT_ID);
 
@@ -64,4 +63,10 @@ public final class MetricsReportTestFixtures {
   public static final LocalDate LOCAL_DATE_TO = parse(QUERY_PARAM_TO);
   public static final OffsetDateTime OFFSET_DATE_TIME_TO = of(LOCAL_DATE_TO, MIDNIGHT, UTC);
   public static final ReportRange REPORT_RANGE = of(OFFSET_DATE_TIME_FROM, OFFSET_DATE_TIME_TO);
+  public static final String TIMESTAMP = "16220093052132";
+  public static final MetricsReportDto REPORT_DTO = MetricsReportDto.builder()
+      .content(REPORT_CONTENT)
+      .range(REPORT_RANGE)
+      .timestamp(TIMESTAMP)
+      .build();
 }

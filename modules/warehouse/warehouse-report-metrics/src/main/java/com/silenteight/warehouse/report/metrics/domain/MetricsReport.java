@@ -4,10 +4,11 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
-import com.silenteight.warehouse.report.metrics.domain.dto.ReportDto;
 import com.silenteight.warehouse.report.metrics.domain.exception.WrongReportStateException;
+import com.silenteight.warehouse.report.reporting.ReportRange;
 import com.silenteight.warehouse.report.reporting.ReportTypeListDto.ReportTypeDto;
 
+import java.time.OffsetDateTime;
 import javax.persistence.*;
 
 import static com.silenteight.warehouse.report.metrics.domain.ReportState.DONE;
@@ -48,13 +49,18 @@ class MetricsReport extends BaseEntity implements IdentifiableEntity {
   private String data;
 
   @Basic(fetch = FetchType.LAZY)
-  @Column(name = "file_name")
-  private String fileName;
+  @Column(name = "from_range")
+  private OffsetDateTime from;
 
-  static MetricsReport of(String fileName) {
+  @Basic(fetch = FetchType.LAZY)
+  @Column(name = "to_range")
+  private OffsetDateTime to;
+
+  static MetricsReport of(ReportRange range) {
     MetricsReport report = new MetricsReport();
     report.setState(NEW);
-    report.setFileName(fileName);
+    report.setFrom(range.getFrom());
+    report.setTo(range.getTo());
     return report;
   }
 
@@ -84,10 +90,6 @@ class MetricsReport extends BaseEntity implements IdentifiableEntity {
 
   void storeReport(String report) {
     setData(report);
-  }
-
-  ReportDto toDto() {
-    return ReportDto.of(getFileName(), getData());
   }
 
   static ReportTypeDto toSimulationReportTypeDto(String analysisId) {

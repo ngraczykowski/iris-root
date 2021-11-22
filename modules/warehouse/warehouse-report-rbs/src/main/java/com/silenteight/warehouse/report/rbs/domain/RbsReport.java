@@ -4,10 +4,11 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
-import com.silenteight.warehouse.report.rbs.domain.dto.ReportDto;
 import com.silenteight.warehouse.report.rbs.domain.exception.WrongReportStateException;
+import com.silenteight.warehouse.report.reporting.ReportRange;
 import com.silenteight.warehouse.report.reporting.ReportTypeListDto.ReportTypeDto;
 
+import java.time.OffsetDateTime;
 import javax.persistence.*;
 
 import static com.silenteight.warehouse.report.rbs.domain.ReportState.DONE;
@@ -48,13 +49,18 @@ class RbsReport extends BaseEntity implements IdentifiableEntity {
   private String data;
 
   @Basic(fetch = FetchType.LAZY)
-  @Column(name = "file_name")
-  private String fileName;
+  @Column(name = "from_range")
+  private OffsetDateTime from;
 
-  static RbsReport of(String fileName) {
+  @Basic(fetch = FetchType.LAZY)
+  @Column(name = "to_range")
+  private OffsetDateTime to;
+
+  static RbsReport of(ReportRange range) {
     RbsReport rbsReport = new RbsReport();
-    rbsReport.setFileName(fileName);
     rbsReport.setState(NEW);
+    rbsReport.setFrom(range.getFrom());
+    rbsReport.setTo(range.getTo());
     return rbsReport;
   }
 
@@ -84,10 +90,6 @@ class RbsReport extends BaseEntity implements IdentifiableEntity {
 
   void storeReport(String report) {
     setData(report);
-  }
-
-  ReportDto toDto() {
-    return ReportDto.of(getFileName(), getData());
   }
 
   static ReportTypeDto toSimulationReportTypeDto(String analysisId) {

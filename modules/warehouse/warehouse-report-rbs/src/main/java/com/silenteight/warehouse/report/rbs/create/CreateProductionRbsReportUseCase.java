@@ -14,12 +14,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import static com.silenteight.warehouse.report.reporting.ReportRange.of;
-import static java.lang.String.format;
 
 @RequiredArgsConstructor
 class CreateProductionRbsReportUseCase {
-
-  private static final String FILE_NAME = "RB_Scorer_%s_To_%s.csv";
 
   @NonNull
   private final RbsReportService reportService;
@@ -30,11 +27,6 @@ class CreateProductionRbsReportUseCase {
   ReportInstanceReferenceDto createReport(OffsetDateTime from, OffsetDateTime to) {
     ReportRange range = of(from, to);
     List<String> indexes = Collections.singletonList(productionProperties.getIndexName());
-    String fileName = getFileName(range);
-    return reportService.createReportInstance(range, fileName, indexes, productionProperties);
-  }
-
-  private static String getFileName(ReportRange range) {
-    return format(FILE_NAME, range.getFromAsLocalDate(), range.getToAsLocalDate());
+    return reportService.createReportInstance(range, indexes, productionProperties);
   }
 }

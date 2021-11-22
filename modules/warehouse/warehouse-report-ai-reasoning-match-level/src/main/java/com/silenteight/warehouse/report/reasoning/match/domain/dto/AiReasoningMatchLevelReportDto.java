@@ -14,4 +14,6 @@ public class AiReasoningMatchLevelReportDto {
   String fileStorageName;
   @NonNull
   ReportRange range;
+  @NonNull
+  String timestamp;
 }

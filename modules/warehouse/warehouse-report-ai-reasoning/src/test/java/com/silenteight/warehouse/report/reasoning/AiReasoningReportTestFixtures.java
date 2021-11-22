@@ -37,19 +37,21 @@ public final class AiReasoningReportTestFixtures {
   public static final String ALERT_COMMENT_FIELD_LABEL = "Alert Comment";
   public static final String FILE_STORAGE_NAME = "7758194f-6d25-4ae0-9080-68b123ba0637";
   public static final List<String> INDEXES = of("index444");
+  public static final String CREATION_TIMESTAMP = "555557411111";
   public static final long REPORT_ID = 1;
   public static final ReportInstanceReferenceDto REPORT_INSTANCE =
       new ReportInstanceReferenceDto(REPORT_ID);
 
   public static final String PRODUCTION_REPORT_FILENAME =
-      "AI_Reasoning_" + QUERY_PARAM_FROM + "_To_" + QUERY_PARAM_TO + ".csv";
+      "AI_Reasoning_Prod_" + QUERY_PARAM_FROM + "_To_" + QUERY_PARAM_TO + ".csv";
 
   public static final String SIMULATION_REPORT_FILENAME =
-      "simulation_" + ANALYSIS_ID + "_AI_Reasoning.csv";
+      "AI_Reasoning_Sim_" + ANALYSIS_ID + ".csv";
 
   public static final AiReasoningReportDto AI_REASONING_REPORT_DTO =
       AiReasoningReportDto.builder()
           .fileStorageName(FILE_STORAGE_NAME)
           .range(REPORT_RANGE)
+          .timestamp(CREATION_TIMESTAMP)
           .build();
 }
