@@ -4,7 +4,7 @@ from glob import glob
 from collections.abc import Iterable
 from typing import Union
 from pprint import pprint
-
+from pathlib import Path
 import os
 
 ROOT_DIR = str(Path(__file__).parent.parent.absolute())
@@ -66,8 +66,8 @@ if PLATFORM_SYSTEM == 'Windows':
 elif PLATFORM_SYSTEM == 'Darwin':
     config_file_path = 'config-mac.ini'
 else:
-    config_file_path = 'config.ini'
-    
+    config_file_path = f"{os.path.join(ROOT_DIR, 'config/config.ini')}"
+
 config.read(config_file_path)
 
 PYTHON_DATA_TOOLBOX_PATH = config['APP']['PYTHON_DATA_TOOLBOX_PATH']
@@ -90,6 +90,11 @@ SPARK_USE_OPTIMAL_CONFIG = config['SPARK'].getboolean('USE_OPTIMAL_CONFIG')
 SPARK_IVY2_DIR = config['SPARK']['IVY2_DIR']
 SPARK_DB_JARS = config['SPARK']['DB_JARS']
 SPARK_TMP_DIR = config['SPARK']['TMP_DIR']
-# SPARK_COMPILE_EGG = config['SPARK'].getboolean('IS_COMPILE_EGG')
+SERP_DIRECTORY = config['SERP']['SERP_DIRECTORY']
+SERP_HOME = os.path.join(ROOT_DIR, SERP_DIRECTORY)
+os.environ['SERP_HOME'] = SERP_HOME
+os.environ['ROOT_DIR'] = ROOT_DIR
+# SPARK_COMPILE_EGG = config['SPARK'].getboolean('IS_COMPILE_EGG')+
+SERP_HOME = config['SERP']['SERP_DIRECTORY']
 
 PYTHON_SKIP_PACKAGE_DEPENDENCY = config['PYTHON'].getboolean('SKIP_PACKAGE_DEPENDENCY')

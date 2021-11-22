@@ -1,11 +1,13 @@
 import contextlib
 import os
+import sys
 from pathlib import Path
 from typing import Sequence
 
 from serppythonclient.stub import YamlStubProviderPropertiesLoader
 from serppythonclient.yml import YamlLoader
-from config.config import CONFIG_PATH, PIPELINE_PATH, DEFAULT_PROCESSING_POOL_SIZE, WORKING_DIR, CONFIG_DIR
+from config.config import CONFIG_PATH, PIPELINE_PATH, DEFAULT_PROCESSING_POOL_SIZE, WORKING_DIR, CONFIG_DIR, ROOT_DIR
+sys.path.append(ROOT_DIR)
 
 
 with open(CONFIG_PATH) as file:
@@ -209,6 +211,7 @@ def get_agents_call():
 __tmp_dir = __get_config_dir("tmp_dir")
 
 
+ROOT_DIR = os.environ['ROOT_DIR']
 def load_steps(name) -> Sequence[str]:
     path = Path(ROOT_DIR).joinpath(f"conf/steps/{name}.yml")
     with open(str(path)) as f:

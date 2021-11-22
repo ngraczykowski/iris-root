@@ -1,12 +1,30 @@
+import os
+from config.config import SPARK_DB_JARS, SPARK_IVY2_DIR, SPARK_TMP_DIR, SPARK_USE_OPTIMAL_CONFIG
 import psutil
+from config.config import SPARK_APP_NAME, SPARK_DRIVER_MEMORY, SPARK_MASTER
 import utils.config_service as configservice
 import pyspark.sql.functions as F
+import pyspark
+import delta
+import logging
 from pyspark.sql import SparkSession, SQLContext
 # spark_conf.setAll([('spark.sql.parquet.enableVectorizedReader', 'false')])
 
+
+PYSPARK_SMALLEST_VERSION = '2.4.2'
+if pyspark.__version__ >= '3.1':
+    spark_jars_packages = 'io.delta:delta-core_2.12:1.0.0'
+elif pyspark.__version__ >= '3.0':
+    spark_jars_packages = 'io.delta:delta-core_2.12:0.8.0'
+elif pyspark.__version__ >= PYSPARK_SMALLEST_VERSION:
+    spark_jars_packages = 'io.delta:delta-core_2.11:0.6.1'
+else:
+    spark_jars_packages = ''
+    raise ValueError(f'Delta lake is supported from pySpark {PYSPARK_SMALLEST_VERSION} onwards only.')
+    
+
 # delta package can only be called after spark object created
-if pyspark.__version__ >= PYSPARK_SMALLEST_VERSION:
-    from delta.tables import *
+
 import helper.dbhelper as dbhelper
 
 # TODO: Integrate the spark configs to sparkservice
@@ -71,6 +89,24 @@ def set_spark_cpu_memory(spark_conf):
     
     print('Actual Spark Master: %s' % master)
     print('Actual Spark Driver Memory: %s' % memory)
+# Spark object needs to be created first before importing "delta" module, e.g. from delta.tables import *
+spark_conf = pyspark.SparkConf()
+
+# spark configuration
+spark_conf.setAll([('spark.master', SPARK_MASTER),
+                   ('spark.driver.memory', SPARK_DRIVER_MEMORY),
+                   ('spark.app.name', SPARK_APP_NAME),
+                   ('spark.jars', SPARK_DB_JARS),
+                   ('spark.jars.ivy', os.path.abspath(SPARK_IVY2_DIR)),
+                   ('spark.jars.packages', spark_jars_packages),
+#                    ('spark.submit.pyFiles', '%s,%s' % (EGG_PATH, SPARK_DELTA_JAR)),
+#                    ('spark.submit.pyFiles', SPARK_DELTA_JAR),
+                   ('spark.databricks.delta.retentionDurationCheck.enabled', 'false'),
+                   ('spark.driver.extraJavaOpions', '-Djava.io.tmpdir=' + SPARK_TMP_DIR),
+                   ('spark.local.dir', SPARK_TMP_DIR)])
+
+spark_conf.setAll([("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension"),
+                       ("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")])
 set_spark_cpu_memory(spark_conf)
 spark = SparkSession.builder.config(conf=spark_conf).appName(SPARK_APP_NAME).getOrCreate()
 # log level needs to be set for sparkContext first to allow the subsequent logger taking effect
@@ -107,3 +143,4 @@ except:
     pass
 
 print('Spark UI - %s' % spark.sparkContext.uiWebUrl)
+import pdb; pdb.set_trace()
