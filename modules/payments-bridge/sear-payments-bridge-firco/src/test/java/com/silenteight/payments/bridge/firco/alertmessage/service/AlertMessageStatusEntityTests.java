@@ -7,6 +7,7 @@ import java.time.Clock;
 import java.util.UUID;
 
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.RECOMMENDED;
+import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_DAMAGED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.REJECTED_OUTDATED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus.STORED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.DELIVERED;
@@ -17,21 +18,26 @@ import static com.silenteight.payments.bridge.firco.alertmessage.service.Transit
 import static com.silenteight.payments.bridge.firco.alertmessage.service.TransitionResult.IGNORED;
 import static com.silenteight.payments.bridge.firco.alertmessage.service.TransitionResult.SUCCESS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class AlertMessageStatusEntityTests {
 
   Clock clock = Clock.systemUTC();
 
   @Test
-  public void shouldTransferToRecommendedDelivered() {
+  void shouldTransferToRecommendedDelivered() {
     var status = new AlertMessageStatusEntity(UUID.randomUUID());
     assertEquals(SUCCESS, status.transitionStatus(STORED, NA, clock));
     assertEquals(SUCCESS, status.transitionStatus(RECOMMENDED, PENDING, clock));
+    var recommendedAt = status.getRecommendedAt();
     assertEquals(SUCCESS, status.transitionStatus(RECOMMENDED, DELIVERED, clock));
+    assertNotNull(status.getDeliveredAt());
+    assertEquals(recommendedAt, status.getRecommendedAt());
   }
 
   @Test
-  public void shouldIgnorePendingDelivery() {
+  void shouldIgnorePendingDelivery() {
     var status = new AlertMessageStatusEntity(UUID.randomUUID());
     assertEquals(SUCCESS, status.transitionStatus(STORED, NA, clock));
     assertEquals(SUCCESS, status.transitionStatus(RECOMMENDED, DELIVERED, clock));
@@ -39,7 +45,7 @@ class AlertMessageStatusEntityTests {
   }
 
   @Test
-  public void shouldFailedChangingFinalDeliveryStatus() {
+  void shouldFailedChangingFinalDeliveryStatus() {
     var status = new AlertMessageStatusEntity(UUID.randomUUID());
     assertEquals(SUCCESS, status.transitionStatus(STORED, NA, clock));
     assertEquals(SUCCESS, status.transitionStatus(RECOMMENDED, DELIVERED, clock));
@@ -47,7 +53,7 @@ class AlertMessageStatusEntityTests {
   }
 
   @Test
-  public void shouldFailedChangingFinalStatus() {
+  void shouldFailedChangingFinalStatus() {
     var status = new AlertMessageStatusEntity(UUID.randomUUID());
     assertEquals(SUCCESS, status.transitionStatus(STORED, NA, clock));
     assertEquals(SUCCESS, status.transitionStatus(RECOMMENDED, DELIVERED, clock));
@@ -55,11 +61,22 @@ class AlertMessageStatusEntityTests {
   }
 
   @Test
-  public void shouldFailedChangingFinalStatus2() {
+  void shouldFailedChangingFinalStatus2() {
     var status = new AlertMessageStatusEntity(UUID.randomUUID());
     assertEquals(SUCCESS, status.transitionStatus(STORED, NA, clock));
     assertEquals(SUCCESS, status.transitionStatus(RECOMMENDED, DELIVERED, clock));
     assertEquals(FAILED, status.transitionStatus(REJECTED_OUTDATED, PENDING, clock));
+  }
+
+  @Test
+  void shouldLeftDeliveryAtBlank() {
+    var status = new AlertMessageStatusEntity(UUID.randomUUID());
+    assertEquals(SUCCESS, status.transitionStatus(STORED, NA, clock));
+    assertEquals(SUCCESS, status.transitionStatus(REJECTED_DAMAGED, PENDING, clock));
+    var rejectedAt = status.getRejectedAt();
+    assertEquals(SUCCESS, status.transitionStatus(REJECTED_DAMAGED, UNDELIVERED, clock));
+    assertNull(status.getDeliveredAt());
+    assertEquals(rejectedAt, status.getRejectedAt());
   }
 
 }

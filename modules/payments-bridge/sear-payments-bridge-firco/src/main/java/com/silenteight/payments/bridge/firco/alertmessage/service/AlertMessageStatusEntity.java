@@ -9,11 +9,17 @@ import com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus;
 
 import java.time.Clock;
 import java.time.OffsetDateTime;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
 
+import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.DELIVERED;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.NA;
 import static com.silenteight.payments.bridge.firco.alertmessage.model.DeliveryStatus.PENDING;
+import static com.silenteight.payments.bridge.firco.alertmessage.service.TransitionResult.FAILED;
+import static com.silenteight.payments.bridge.firco.alertmessage.service.TransitionResult.IGNORED;
+import static com.silenteight.payments.bridge.firco.alertmessage.service.TransitionResult.SUCCESS;
 import static lombok.AccessLevel.NONE;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -40,6 +46,8 @@ class AlertMessageStatusEntity extends BaseVersionedEntity {
 
   private OffsetDateTime rejectedAt;
 
+  private OffsetDateTime deliveredAt;
+
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   @NonNull
@@ -56,35 +64,58 @@ class AlertMessageStatusEntity extends BaseVersionedEntity {
     this.deliveryStatus = DeliveryStatus.NA;
   }
 
-  TransitionResult transitionStatus(AlertMessageStatus destinationStatus,
-      DeliveryStatus deliveryStatus, Clock clock) {
+  TransitionResult transitionStatus(AlertMessageStatus targetStatus,
+      DeliveryStatus targetDeliveryStatus, Clock clock) {
 
-    if (this.status == destinationStatus && this.deliveryStatus == deliveryStatus) {
-      return TransitionResult.IGNORED;
+    var statusResult = verifyStatusUpdate(targetStatus);
+    var deliveryResult = verifyDeliveryUpdate(targetStatus, targetDeliveryStatus);
+
+    var result = Collections.max(List.of(statusResult, deliveryResult));
+    if (result == SUCCESS) {
+      updateStatus(targetStatus, clock);
+      updateDelivery(targetDeliveryStatus, clock);
+      setCurrentTimeForUpdatedAt();
     }
 
-    if (destinationStatus.isFinal() == deliveryStatus.equals(NA)) {
-      log.error("DeliveryStatus NA is only applicable to final state.");
-      return TransitionResult.FAILED;
+    return result;
+  }
+
+  private TransitionResult verifyStatusUpdate(AlertMessageStatus targetStatus) {
+    if (status == targetStatus) {
+      return IGNORED;
     }
 
-    if (this.status.isFinal() && this.status == destinationStatus
-        && this.deliveryStatus.isFinal()) {
-      return deliveryStatus == PENDING ?
-             TransitionResult.IGNORED : TransitionResult.FAILED;
+    if (!status.isTransitionAllowed(targetStatus)) {
+      log.debug("Unable to transition to status " + targetStatus + " from status " + status);
+      return FAILED;
     }
 
-    if (this.status != destinationStatus && !status.isTransitionAllowed(destinationStatus)) {
-      log.debug("Unable to transition to status " + destinationStatus + " from status " + status);
-      return TransitionResult.FAILED;
+    return SUCCESS;
+  }
+
+  private TransitionResult verifyDeliveryUpdate(AlertMessageStatus targetStatus,
+      DeliveryStatus targetDeliveryStatus) {
+    if (deliveryStatus == targetDeliveryStatus) {
+      return IGNORED;
     }
 
-    this.status = destinationStatus;
-    this.deliveryStatus = deliveryStatus;
+    if (targetStatus.isFinal() == targetDeliveryStatus.equals(NA)) {
+      log.error("DeliveryStatus NA is only applicable to the final state");
+      return FAILED;
+    }
 
-    updateChangeTime(OffsetDateTime.now(clock));
-    setCurrentTimeForUpdatedAt();
-    return TransitionResult.SUCCESS;
+    if (status.isFinal() && status == targetStatus
+        && deliveryStatus.isFinal()) {
+      return targetDeliveryStatus == PENDING ? IGNORED : FAILED;
+    }
+    return SUCCESS;
+  }
+
+  private void updateStatus(AlertMessageStatus targetStatus, Clock clock) {
+    if (status != targetStatus) {
+      status = targetStatus;
+      updateChangeTime(OffsetDateTime.now(clock));
+    }
   }
 
   private void updateChangeTime(OffsetDateTime dateTime) {
@@ -104,6 +135,15 @@ class AlertMessageStatusEntity extends BaseVersionedEntity {
         rejectedAt = dateTime;
         break;
       default:
+    }
+  }
+
+  private void updateDelivery(DeliveryStatus targetDeliveryStatus, Clock clock) {
+    if (deliveryStatus != targetDeliveryStatus) {
+      deliveryStatus = targetDeliveryStatus;
+      if (DELIVERED == targetDeliveryStatus) {
+        deliveredAt = OffsetDateTime.now(clock);
+      }
     }
   }
 
