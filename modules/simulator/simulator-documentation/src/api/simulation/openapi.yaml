@@ -15,7 +15,7 @@ servers:
 paths:
   /simulations:
     get:
-      description: Returns a list of active simulations (in state NEW, PENDING, RUNNING, DONE)
+      description: Returns a list of active simulations (in state NEW, PENDING, RUNNING, DONE, ARCHIVED)
       responses:
         200:
           description: List of active simulations
