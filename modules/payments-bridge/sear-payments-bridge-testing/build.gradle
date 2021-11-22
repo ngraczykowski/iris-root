@@ -5,6 +5,7 @@ plugins {
 dependencies {
   implementation libraries.spring_boot_starter_data_jpa
   implementation libraries.spring_boot_test_autoconfigure
+  implementation libraries.silenteight_sep_base_testing
 
   runtimeOnly libraries.liquibase_core
   runtimeOnly libraries.postgresql
