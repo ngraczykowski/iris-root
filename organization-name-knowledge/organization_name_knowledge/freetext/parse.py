@@ -17,10 +17,10 @@ NAME_TOKENS_UPPER_LIMIT = 7
 def parse_freetext_names(freetext: str, base_tokens_limit: int) -> List[NameInformation]:
     freetext = clear_freetext(freetext).lower()
     freetext_tokens = freetext.split()
-    freetext_tokens_number = len(freetext_tokens)
+
     substrings = [
         " ".join(freetext_tokens[first:last])
-        for first, last in combinations(range(freetext_tokens_number + 1), 2)
+        for first, last in combinations(range(len(freetext_tokens) + 1), 2)
         if NAME_TOKENS_LOWER_LIMIT <= last - first <= NAME_TOKENS_UPPER_LIMIT
     ]
     parsed_names = [parse_name(substring) for substring in substrings]
