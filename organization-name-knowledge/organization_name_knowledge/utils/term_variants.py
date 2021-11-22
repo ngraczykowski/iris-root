@@ -5,7 +5,7 @@ from importlib.resources import open_text
 from typing import Dict, List, Set
 
 from organization_name_knowledge import resources
-from organization_name_knowledge.utils.clear_name import (
+from organization_name_knowledge.utils.text import (
     remove_split_chars,
     remove_too_long_numbers,
     split_text_by_too_long_numbers,

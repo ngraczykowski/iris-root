@@ -2,7 +2,7 @@ import itertools
 from typing import Mapping
 
 from organization_name_knowledge.knowledge_base.term_sources import TermSources
-from organization_name_knowledge.utils.clear_name import divide
+from organization_name_knowledge.utils.text import divide
 
 
 class CommonTerms:

@@ -2,7 +2,7 @@ from typing import Tuple
 
 import pytest
 
-from organization_name_knowledge.utils.clear_name import divide, remove_split_chars
+from organization_name_knowledge.utils.text import divide, remove_split_chars
 
 
 @pytest.mark.parametrize(

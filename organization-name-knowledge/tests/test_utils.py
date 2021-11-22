@@ -2,14 +2,14 @@ import pytest
 
 from organization_name_knowledge.api import get_all_legal_terms
 from organization_name_knowledge.freetext.name_matching import cut_name_to_leftmost_match
-from organization_name_knowledge.utils.clear_name import (
+from organization_name_knowledge.utils.term_variants import get_term_variants
+from organization_name_knowledge.utils.text import (
     clear_name,
     divide,
     remove_split_chars,
     remove_too_long_numbers,
     split_text_by_too_long_numbers,
 )
-from organization_name_knowledge.utils.term_variants import get_term_variants
 
 
 @pytest.mark.parametrize(

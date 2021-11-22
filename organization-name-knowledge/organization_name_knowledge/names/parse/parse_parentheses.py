@@ -10,7 +10,7 @@ from organization_name_knowledge.names.parse.extract_information import (
 )
 from organization_name_knowledge.names.parse.extract_legal_terms import extract_legal_terms
 from organization_name_knowledge.names.tokens_sequence import TokensSequence
-from organization_name_knowledge.utils.clear_name import divide
+from organization_name_knowledge.utils.text import divide
 
 ParenthesisInformation = Union[str, TokensSequence]
 PARENTHESES_REGEX = r"[()\[\]]"
