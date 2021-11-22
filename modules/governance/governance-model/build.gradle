@@ -40,6 +40,7 @@ dependencies {
   implementation libraries.grpc_stub
 
   testImplementation(testFixtures(project(":governance-agent")))
+  testImplementation(testFixtures(project(":governance-change-request")))
   testImplementation(testFixtures(project(":governance-policy")))
   testImplementation libraries.rest_assured_spring_mock_mvc
   testImplementation libraries.spring_security_test

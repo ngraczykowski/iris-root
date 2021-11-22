@@ -3,15 +3,18 @@ serp:
     agent:
       agentConfigurationSource: classpath:test_agent_configs.json
       agentDetailsSource: classpath:test_agent_details.json
+
     model:
       categorySource: classpath:test_categories.json
       modelTransfer: LOCAL
 
-      archived:
+      archive:
         integration:
           request:
             exchange: gov.model
             routingKey: event.models-archived
+          receive:
+            queue-name: gov.models-archived
 
       export:
         integration:

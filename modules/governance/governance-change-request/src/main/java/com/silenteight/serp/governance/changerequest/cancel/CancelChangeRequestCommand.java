@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Value
 @Builder
-class CancelChangeRequestCommand {
+public class CancelChangeRequestCommand {
 
   @NonNull
   UUID id;

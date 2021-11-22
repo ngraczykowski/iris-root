@@ -32,7 +32,7 @@ class BrokerProperties {
 
   @Valid
   @NestedConfigurationProperty
-  private RoutingKeyProperties modelsArchived;
+  private AmpqProperties modelsArchived;
 
   @Valid
   @NestedConfigurationProperty
@@ -80,6 +80,10 @@ class BrokerProperties {
 
   String modelInUseRoutingKey() {
     return modelInUse.getRoutingKey();
+  }
+
+  String modelsArchivedQueueName() {
+    return modelsArchived.getQueueName();
   }
 
   String modelsArchivedRoutingKey() {

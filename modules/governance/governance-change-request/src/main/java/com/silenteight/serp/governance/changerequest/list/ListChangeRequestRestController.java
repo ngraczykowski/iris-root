@@ -32,6 +32,6 @@ class ListChangeRequestRestController {
   public ResponseEntity<Collection<ChangeRequestDto>> list(
       @RequestParam ChangeRequestState... state) {
 
-    return ok(changeRequestQuery.list(of(state)));
+    return ok(changeRequestQuery.listByStates(of(state)));
   }
 }

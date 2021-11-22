@@ -46,7 +46,7 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     persistChangeRequest(CHANGE_REQUEST_ID);
 
     // when
-    Collection<ChangeRequestDto> result = underTest.list(of(PENDING));
+    Collection<ChangeRequestDto> result = underTest.listByStates(of(PENDING));
 
     // then
     assertThat(result.size()).isEqualTo(1);
@@ -67,7 +67,7 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     changeRequest.reject(decider, deciderComment);
 
     // when
-    Collection<ChangeRequestDto> result = underTest.list(of(APPROVED, REJECTED));
+    Collection<ChangeRequestDto> result = underTest.listByStates(of(APPROVED, REJECTED));
 
     // then
     assertThat(result.size()).isEqualTo(1);
@@ -80,6 +80,24 @@ class ChangeRequestQueryTest extends BaseDataJpaTest {
     assertThat(closedChangeRequest.getDecidedAt()).isNotNull();
     assertThat(closedChangeRequest.getDeciderComment()).isEqualTo(deciderComment);
     assertThat(closedChangeRequest.getState()).isEqualTo(REJECTED);
+  }
+
+  @Test
+  void shouldListChangeRequestsByModelNames() {
+    // given
+    persistChangeRequest(CHANGE_REQUEST_ID);
+
+    // when
+    Collection<ChangeRequestDto> result = underTest.listByModelNames(of(MODEL_NAME));
+
+    // then
+    assertThat(result.size()).isEqualTo(1);
+    ChangeRequestDto changeRequest = result.iterator().next();
+    assertThat(changeRequest.getId()).isEqualTo(CHANGE_REQUEST_ID);
+    assertThat(changeRequest.getCreatedAt()).isNotNull();
+    assertThat(changeRequest.getCreatedBy()).isEqualTo(CREATED_BY);
+    assertThat(changeRequest.getCreatorComment()).isEqualTo(CREATOR_COMMENT);
+    assertThat(changeRequest.getState()).isEqualTo(PENDING);
   }
 
   @Test

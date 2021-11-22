@@ -33,9 +33,16 @@ class InMemoryChangeRequestRepository
   }
 
   @Override
-  public Collection<ChangeRequest> findByModelName(String modelName) {
+  public Collection<ChangeRequest> findAllByModelName(String modelName) {
     return stream()
         .filter(changeRequest -> changeRequest.hasModelName(modelName))
+        .collect(toList());
+  }
+
+  @Override
+  public Collection<ChangeRequest> findAllByModelNameIn(Set<String> modelNames) {
+    return stream()
+        .filter(changeRequest -> changeRequest.hasModelNameIn(modelNames))
         .collect(toList());
   }
 }

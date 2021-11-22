@@ -30,9 +30,18 @@ class ChangeRequestQuery implements
   private final ChangeRequestRepository repository;
 
   @Override
-  public Collection<ChangeRequestDto> list(Set<ChangeRequestState> states) {
+  public Collection<ChangeRequestDto> listByStates(Set<ChangeRequestState> states) {
     return repository
         .findAllByStateInOrderByDecidedAtDesc(states)
+        .stream()
+        .map(ChangeRequest::toDto)
+        .collect(toList());
+  }
+
+  @Override
+  public Collection<ChangeRequestDto> listByModelNames(Set<String> modelNames) {
+    return repository
+        .findAllByModelNameIn(modelNames)
         .stream()
         .map(ChangeRequest::toDto)
         .collect(toList());
@@ -55,7 +64,7 @@ class ChangeRequestQuery implements
   @Override
   public ModelApprovalDto getApproval(@NonNull String modelName) {
     return repository
-        .findByModelName(modelName)
+        .findAllByModelName(modelName)
         .stream()
         .filter(ChangeRequest::isApproved)
         .max(Comparator.comparing(ChangeRequest::getDecidedAt))

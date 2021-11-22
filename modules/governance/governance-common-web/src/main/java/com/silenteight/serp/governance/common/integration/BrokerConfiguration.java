@@ -119,9 +119,9 @@ class BrokerConfiguration {
   @Bean
   Declarables modelsArchivedBinding() {
     return new Declarables(
-        exchangeBinding(
+        queueBinding(
+            brokerProperties.modelsArchivedQueueName(),
             GOV_EVENT_EXCHANGE,
-            exchangeProperties.getModel(),
             brokerProperties.modelsArchivedRoutingKey()));
   }
 
@@ -161,6 +161,11 @@ class BrokerConfiguration {
   @Bean
   Queue notificationSendMailQueue() {
     return queue(brokerProperties.notificationSendMailQueueName());
+  }
+
+  @Bean
+  Queue modelsArchivedQueue() {
+    return queue(brokerProperties.modelsArchivedQueueName());
   }
 
   @Bean

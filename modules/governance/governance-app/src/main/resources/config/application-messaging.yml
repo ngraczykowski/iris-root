@@ -95,6 +95,9 @@ serp:
         solution-discrepancy:
           queue-name: governance.solution-discrepancy
           routing-key: learning.discrepancy-detected
+        models-archived:
+          queue-name: gov.models-archived
+          routing-key: event.models-archived
         to-remove:
           bindings: []
 
@@ -112,11 +115,14 @@ serp:
           queue-name: ${serp.governance.messaging.broker.ingest.queue-name}
 
     model:
-      archived:
+      archive:
+        request:
+          exchange: ${serp.governance.messaging.exchange.model}
+          routingKey: ${serp.governance.messaging.broker.models-archived.routing-key}
         integration:
-          request:
-            exchange: ${serp.governance.messaging.exchange.model}
-            routingKey: ${serp.governance.messaging.broker.models-archived.routing-key}
+          receive:
+            queue-name: ${serp.governance.messaging.broker.models-archived.queue-name}
+
       export:
         integration:
           request:
