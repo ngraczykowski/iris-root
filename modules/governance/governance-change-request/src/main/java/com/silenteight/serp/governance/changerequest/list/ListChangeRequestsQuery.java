@@ -8,5 +8,7 @@ import java.util.Set;
 
 public interface ListChangeRequestsQuery {
 
-  Collection<ChangeRequestDto> list(Set<ChangeRequestState> states);
+  Collection<ChangeRequestDto> listByStates(Set<ChangeRequestState> states);
+
+  Collection<ChangeRequestDto> listByModelNames(Set<String> modelNames);
 }

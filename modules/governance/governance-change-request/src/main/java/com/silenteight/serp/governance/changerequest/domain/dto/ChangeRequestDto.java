@@ -10,6 +10,8 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
+import static com.silenteight.serp.governance.changerequest.domain.ChangeRequestState.PENDING;
+
 @Value
 @Builder
 public class ChangeRequestDto {
@@ -32,4 +34,8 @@ public class ChangeRequestDto {
   String deciderComment;
   @NonNull
   String modelName;
+
+  public boolean isPending() {
+    return getState() == PENDING;
+  }
 }

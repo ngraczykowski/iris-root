@@ -32,6 +32,7 @@ class PolicyPromotedAmpqIntegrationConfiguration {
   @Bean
   IntegrationFlow sendModelPublishMessageIntegrationFlow(
       PolicyPromotedMessagingProperties properties) {
+
     return flow -> flow
         .channel(MODEL_PROMOTED_OUTBOUND_CHANNEL)
         .handle(outboundFactory

@@ -41,7 +41,7 @@ class ListChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR })
   void its200_whenNoPendingChangeRequest() {
-    given(changeRequestsQuery.list(Set.of(PENDING))).willReturn(emptyList());
+    given(changeRequestsQuery.listByStates(Set.of(PENDING))).willReturn(emptyList());
 
     get(PENDING_CHANGE_REQUESTS_URL)
         .contentType(anything())
@@ -51,7 +51,7 @@ class ListChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { APPROVER, MODEL_TUNER, AUDITOR })
   void its200WithCorrectBody_whenFound() {
-    given(changeRequestsQuery.list(Set.of(PENDING))).willReturn(
+    given(changeRequestsQuery.listByStates(Set.of(PENDING))).willReturn(
         List.of(fixtures.firstChangeRequest, fixtures.secondChangeRequest));
 
     get(PENDING_CHANGE_REQUESTS_URL)

@@ -6,12 +6,12 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.serp.governance.changerequest.domain.ChangeRequestService;
 
 @RequiredArgsConstructor
-class CancelChangeRequestUseCase {
+public class CancelChangeRequestUseCase {
 
   @NonNull
   private final ChangeRequestService changeRequestService;
 
-  void activate(@NonNull CancelChangeRequestCommand command) {
+  public void activate(@NonNull CancelChangeRequestCommand command) {
     changeRequestService.cancel(command.getId(), command.getCancellerUsername());
   }
 }

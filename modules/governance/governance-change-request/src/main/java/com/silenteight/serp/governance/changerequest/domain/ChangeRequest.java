@@ -10,6 +10,7 @@ import com.silenteight.serp.governance.changerequest.domain.exception.ChangeRequ
 import com.silenteight.serp.governance.changerequest.domain.exception.ChangeRequestOperationNotAllowedException;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.UUID;
 import javax.persistence.*;
 
@@ -83,6 +84,10 @@ class ChangeRequest extends BaseAggregateRoot implements IdentifiableEntity {
 
   boolean hasModelName(String modelName) {
     return getModelName().equals(modelName);
+  }
+
+  boolean hasModelNameIn(Collection<String> modelNames) {
+    return modelNames.contains(getModelName());
   }
 
   void approve(String username, String comment) {
