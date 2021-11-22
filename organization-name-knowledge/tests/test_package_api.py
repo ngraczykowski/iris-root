@@ -136,6 +136,7 @@ def test_parse_name_base(name, expected_base):
                 {"base": "First", "legal": "Company Limited"},
                 {"base": "Limited oraz", "legal": "Company Limited"},
                 {"base": "Limited oraz Second", "legal": "Company Limited"},
+                {"base": "Oraz Second", "legal": "Company"},
                 {"base": "Second", "legal": "Company"},
             ],
         ),

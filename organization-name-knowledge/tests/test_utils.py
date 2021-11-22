@@ -5,11 +5,47 @@ from organization_name_knowledge.freetext.name_matching import cut_name_to_leftm
 from organization_name_knowledge.utils.term_variants import get_term_variants
 from organization_name_knowledge.utils.text import (
     clear_name,
+    contains_conjunction,
     divide,
     remove_split_chars,
     remove_too_long_numbers,
     split_text_by_too_long_numbers,
+    starts_with_conjunction,
 )
+
+
+@pytest.mark.parametrize(
+    "name, result",
+    [
+        ("Silent Eight", False),
+        ("Hewlett and Packard", True),
+        ("Left or right side", True),
+        ("Cooperation for AML", True),
+        ("ABC and DEF or GHIJ for KLMN", True),
+        # and some conjunctions inside words - we DON'T want them to be treated as conjunctions
+        ("On demand", False),
+        ("Malo more", False),
+        ("Foreigners", False),
+    ],
+)
+def test_contains_conjunction(name, result):
+    assert contains_conjunction(name.split()) == result
+
+
+@pytest.mark.parametrize(
+    "name, result",
+    [
+        ("ABC Company", False),
+        ("And the Company", True),
+        ("Hewlett and Packard", False),
+        ("For you and your family", True),
+        ("Foreign country", False),
+        ("Organization Name Knowledge", False),
+        ("Or the other one", True),
+    ],
+)
+def test_starts_with_conjunction(name, result):
+    assert starts_with_conjunction(name.split()) == result
 
 
 @pytest.mark.parametrize(

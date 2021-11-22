@@ -29,9 +29,9 @@ def parse_freetext_names(freetext: str, base_tokens_limit: int) -> List[NameInfo
         name
         for name in parsed_names
         if name.legal
-        and base_tokens_limit
-        >= len(name.base)
-        != len(get_all_contained_legal_terms(name.base.original_name))
+        and len(get_all_contained_legal_terms(name.base.original_name))
+        != len(name.base)
+        <= base_tokens_limit
     ]
 
     return _get_names_with_unique_bases(parsed_names_valid)
@@ -43,7 +43,7 @@ def _get_names_with_unique_bases(names: List[NameInformation]) -> List[NameInfor
     for name in sorted(names, key=lambda name_inf: len(name_inf.legal), reverse=True):
         if (
             name.base.cleaned_name not in bases
-            and not starts_with_conjunction(name.base.cleaned_name)
+            and not starts_with_conjunction(name.base.cleaned_tuple)
             and not contains_conjunction(name.legal.cleaned_tuple)
         ):
             unique_base_names.append(name)

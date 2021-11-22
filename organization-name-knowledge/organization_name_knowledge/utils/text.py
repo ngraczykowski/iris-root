@@ -38,7 +38,7 @@ def clear_name(name: str) -> str:
 
 def contains_conjunction(tokens: Sequence[str]) -> bool:
     for conjunction in CONJUNCTIONS:
-        if conjunction in tokens:
+        if conjunction.lower() in tokens or conjunction.upper() in tokens:
             return True
     return False
 
@@ -60,8 +60,9 @@ def split_text_by_too_long_numbers(text: str) -> List[str]:
     return [name.strip() for name in TOO_LONG_NUMBER_REGEX.split(text)]
 
 
-def starts_with_conjunction(text: str) -> bool:
+def starts_with_conjunction(tokens: Sequence[str]) -> bool:
+    """Returns true if sole conjunction is first token in tokens (not a part of a first token)"""
     for conjunction in CONJUNCTIONS:
-        if text.startswith(conjunction):
+        if tokens and tokens[0].lower() == conjunction:
             return True
     return False
