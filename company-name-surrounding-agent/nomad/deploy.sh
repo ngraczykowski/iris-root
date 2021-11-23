@@ -21,13 +21,13 @@ IFS='-' read -r name version <<< "${artifact%.pyz}"
 config="${name}-config-${version}.tgz"
 
 
-export NOMAD_VAR_company_name_surrounding_artifact=${NOMAD_VAR_company_name_surrounding_artifact:-"${MINIO_ADDR}/artifacts/company-name-surrounding/${artifact}"}
-export NOMAD_VAR_company_name_surrounding_artifact_checksum=${NOMAD_VAR_company_name_surrounding_artifact_checksum:-"sha256:$(sha256sum "$artifact_path" | awk '{print $1}')"}
-export NOMAD_VAR_company_name_surrounding_version="$version"
-export NOMAD_VAR_company_name_surrounding_config=${NOMAD_VAR_company_name_surrounding_config:-"${MINIO_ADDR}/artifacts/company-name-surrounding/${config}"}
+export NOMAD_VAR_company_name_surrounding_agent_artifact=${NOMAD_VAR_company_name_surrounding_agent_artifact:-"${MINIO_ADDR}/artifacts/company-name-surrounding-agent/${artifact}"}
+export NOMAD_VAR_company_name_surrounding_agent_artifact_checksum=${NOMAD_VAR_company_name_surrounding_agent_artifact_checksum:-"sha256:$(sha256sum "$artifact_path" | awk '{print $1}')"}
+export NOMAD_VAR_company_name_surrounding_agent_version="$version"
+export NOMAD_VAR_company_name_surrounding_agent_config=${NOMAD_VAR_company_name_surrounding_agent_config:-"${MINIO_ADDR}/artifacts/company-name-surrounding-agent/${config}"}
 
 cd "$scriptdir"
 set -x
-mcli cp --recursive artifacts/ "$MINIO_ALIAS"/artifacts/company-name-surrounding
+mcli cp --recursive artifacts/ "$MINIO_ALIAS"/artifacts/company-name-surrounding-agent
 
-nomad job run "$@" company-name-surrounding.nomad
+nomad job run "$@" company-name-surrounding-agent.nomad
