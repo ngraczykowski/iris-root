@@ -84,6 +84,11 @@ pipeline {
                         }
                     }
                 }
+                stage('Prepare nomad artifact') {
+                    steps {
+                        sh './scripts/prepare_nomad_artifacts.sh'
+                    }
+                }
             }
             post {
                 always {
