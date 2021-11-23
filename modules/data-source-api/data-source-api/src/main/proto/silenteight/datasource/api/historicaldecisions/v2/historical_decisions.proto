@@ -25,7 +25,17 @@ message BatchGetMatchHistoricalDecisionsInputsRequest {
 }
 
 message BatchGetMatchHistoricalDecisionsInputsResponse {
-  repeated ModelKey model_keys = 1;
+  repeated HistoricalDecisionsInput historical_decisions_inputs = 1;
+}
+
+message HistoricalDecisionsInput {
+  string match = 1;
+  HistoricalDecisionsFeatureInput historical_decisions_feature_input = 2;
+}
+
+message HistoricalDecisionsFeatureInput {
+  string feature = 1;
+  ModelKey model_key = 2;
 }
 
 message ModelKey {
