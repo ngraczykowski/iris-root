@@ -49,3 +49,4 @@ pip_index_url
 env/*
 .env/*
 dependencies/*
+logs/*

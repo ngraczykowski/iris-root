@@ -6,7 +6,16 @@ from typing import Sequence
 
 from serppythonclient.stub import YamlStubProviderPropertiesLoader
 from serppythonclient.yml import YamlLoader
-from config.config import CONFIG_PATH, PIPELINE_PATH, DEFAULT_PROCESSING_POOL_SIZE, WORKING_DIR, CONFIG_DIR, ROOT_DIR
+
+from etl_pipeline.config.config import (
+    CONFIG_DIR,
+    CONFIG_PATH,
+    DEFAULT_PROCESSING_POOL_SIZE,
+    PIPELINE_PATH,
+    ROOT_DIR,
+    WORKING_DIR,
+)
+
 sys.path.append(ROOT_DIR)
 
 
@@ -109,9 +118,7 @@ def get_artifact_file_path(path_property: str):
 
 
 def get_crucial_artifact_file_path(path_property: str):
-    return __get_file_path(
-        "crucial_artifact_files_dir", "crucial_artifact_files", path_property
-    )
+    return __get_file_path("crucial_artifact_files_dir", "crucial_artifact_files", path_property)
 
 
 def get_pipeline_configuration():
@@ -164,19 +171,11 @@ def get_external_analyst_sentiments_paths():
 
 
 def get_analyst_resoning_config_file():
-    return str(
-        Path(CONFIG_DIR).joinpath(
-            customer_specific_config["analyst_resoning_config_file"]
-        )
-    )
+    return str(Path(CONFIG_DIR).joinpath(customer_specific_config["analyst_resoning_config_file"]))
 
 
 def get_coverage_score_config_file():
-    return str(
-        Path(CONFIG_DIR).joinpath(
-            customer_specific_config["coverage_score_config_file"]
-        )
-    )
+    return str(Path(CONFIG_DIR).joinpath(customer_specific_config["coverage_score_config_file"]))
 
 
 def get_exportable_configurations():
@@ -211,7 +210,9 @@ def get_agents_call():
 __tmp_dir = __get_config_dir("tmp_dir")
 
 
-ROOT_DIR = os.environ['ROOT_DIR']
+ROOT_DIR = os.environ["ROOT_DIR"]
+
+
 def load_steps(name) -> Sequence[str]:
     path = Path(ROOT_DIR).joinpath(f"conf/steps/{name}.yml")
     with open(str(path)) as f:
