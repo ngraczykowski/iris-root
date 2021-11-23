@@ -29,7 +29,7 @@ public class FeatureVectorSolvedAmqpIntegrationConfiguration {
   @Bean
   TopicExchange featureVectorExchange() {
     return ExchangeBuilder
-        .topicExchange(properties.getRequest().getExchangeName())
+        .topicExchange(properties.getRequest().getExchange())
         .build();
   }
 
@@ -55,7 +55,7 @@ public class FeatureVectorSolvedAmqpIntegrationConfiguration {
   IntegrationFlow featureVectorSolvedChannelToExchangeIntegrationFlow() {
     return createOutputFlow(
         FEATURE_VECTOR_SOLVED_OUTBOUND_CHANNEL,
-        properties.getRequest().getExchangeName(),
+        properties.getRequest().getExchange(),
         properties.getRequest().getRoutingKey());
   }
 
