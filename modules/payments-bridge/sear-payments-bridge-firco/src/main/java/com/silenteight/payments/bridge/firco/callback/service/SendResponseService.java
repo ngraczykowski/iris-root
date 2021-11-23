@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.dto.output.ClientRequestDto;
-import com.silenteight.payments.bridge.event.AlertDeliveredEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePayloadUseCase;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
@@ -67,8 +66,7 @@ class SendResponseService implements SendResponseUseCase {
       log.info("Executing the callback for alert [{}]. Recommendation: [{}]", alertId, action);
       callbackRequestFactory.create(requestDto).execute();
       log.info("The callback invoked successfully.");
-
-      alertDeliveredPublisherPort.send(new AlertDeliveredEvent(alertId, status.name()));
+      alertDeliveredPublisherPort.sendDelivered(alertId, status);
 
     } catch (NonRecoverableCallbackException exception) {
       log.error("The callback failed with non-recoverable exception.");

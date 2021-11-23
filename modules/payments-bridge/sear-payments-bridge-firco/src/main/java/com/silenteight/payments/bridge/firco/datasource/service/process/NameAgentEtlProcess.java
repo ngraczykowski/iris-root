@@ -13,7 +13,7 @@ import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
 import com.silenteight.datasource.api.name.v1.WatchlistName;
 import com.silenteight.datasource.api.name.v1.WatchlistName.NameType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
-import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
+import com.silenteight.payments.bridge.common.model.AeAlert;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
@@ -36,9 +36,9 @@ class NameAgentEtlProcess implements EtlProcess {
   private final Duration timeout;
 
   @Override
-  public void extractAndLoad(AlertRegisteredEvent data, AlertEtlResponse alertEtlResponse) {
+  public void extractAndLoad(AeAlert alert, AlertEtlResponse alertEtlResponse) {
     List<HitData> hitsData = alertEtlResponse.getHits();
-    data.getAeAlert().getMatches().entrySet()
+    alert.getMatches().entrySet()
         .forEach(matchItem -> handleMatches(hitsData, matchItem));
   }
 
@@ -111,10 +111,5 @@ class NameAgentEtlProcess implements EtlProcess {
       default:
         throw new UnsupportedOperationException();
     }
-  }
-
-  @Override
-  public boolean supports(AlertRegisteredEvent command) {
-    return true;
   }
 }

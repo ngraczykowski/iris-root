@@ -5,4 +5,5 @@ import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessag
 public interface CreateAlertMessageUseCase {
 
   void createAlertMessage(FircoAlertMessage alertModel);
+
 }

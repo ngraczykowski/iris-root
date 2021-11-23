@@ -1,6 +1,6 @@
 package com.silenteight.payments.bridge.warehouse.index.port;
 
-import com.silenteight.payments.bridge.event.WarehouseIndexRequestedEvent;
+import com.silenteight.payments.bridge.warehouse.index.model.WarehouseIndexRequestedEvent;
 
 public interface IndexAlertPort {
 

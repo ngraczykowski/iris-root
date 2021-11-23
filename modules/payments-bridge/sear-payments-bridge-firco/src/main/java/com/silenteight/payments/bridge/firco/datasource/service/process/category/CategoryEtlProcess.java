@@ -7,7 +7,7 @@ import com.silenteight.datasource.categories.api.v2.BatchCreateCategoryValuesReq
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.datasource.categories.api.v2.CreateCategoryValuesRequest;
 import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
-import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
+import com.silenteight.payments.bridge.common.model.AeAlert;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
@@ -31,9 +31,9 @@ class CategoryEtlProcess implements EtlProcess {
   private final CreateCategoryValuesClient createCategoryValuesClient;
 
   @Override
-  public void extractAndLoad(AlertRegisteredEvent data, AlertEtlResponse alertEtlResponse) {
+  public void extractAndLoad(AeAlert data, AlertEtlResponse alertEtlResponse) {
     List<HitData> hitsData = alertEtlResponse.getHits();
-    data.getAeAlert().getMatches()
+    data.getMatches()
         .entrySet()
         .forEach(
             matchItem -> handleMatches(hitsData, matchItem));
@@ -72,11 +72,5 @@ class CategoryEtlProcess implements EtlProcess {
                 .collect(
                     Collectors.toList()))
         .build();
-  }
-
-  @Override
-  public boolean supports(AlertRegisteredEvent data) {
-    // check whether etl-process should handle the received data
-    return true;
   }
 }

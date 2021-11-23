@@ -4,9 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.PaymentsBridgeApplication;
 import com.silenteight.payments.bridge.common.dto.input.RequestDto;
-import com.silenteight.payments.bridge.event.*;
-import com.silenteight.payments.bridge.event.RecommendationCompletedEvent.AdjudicationRecommendationCompletedEvent;
-import com.silenteight.payments.bridge.event.RecommendationCompletedEvent.BridgeRecommendationCompletedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
 import com.silenteight.payments.bridge.mock.ae.MockAlertUseCase;
@@ -22,12 +19,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.Ordered;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageHandler;
-import org.springframework.messaging.MessagingException;
-import org.springframework.messaging.SubscribableChannel;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -36,7 +28,8 @@ import java.io.IOException;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -55,22 +48,20 @@ class PaymentsBridgeApplicationIT {
   private static final String TOO_MANY_HITS_REQUEST_FILE =
       "2021-10-01_1837_osama_bin_laden.json";
 
-  @Autowired EventChannels eventChannels;
   @Autowired ObjectMapper objectMapper;
   @Autowired CreateAlertMessageUseCase createAlertMessageUseCase;
   @Autowired ResourceLoader resourceLoader;
   @Autowired HandleLearningAlertsUseCase handleLearningDataUseCase;
+  @Autowired PaymentsBridgeEventsListener paymentsBridgeEventsListener;
 
   @ParameterizedTest
   @MethodSource("filesFactory")
   void shouldRegisterAlertAndInputs(String fileName) {
-    var eventRecorder = createRegistrationEventRecorder();
-    createAlert(fileName);
+    var alertId = createAlert(fileName);
     await()
         .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
         .atMost(Duration.ofSeconds(10))
-        .until(eventRecorder::allCaught);
-    eventRecorder.unsubscribeAll();
+        .until(() -> paymentsBridgeEventsListener.containsRegisteredAlert(alertId));
   }
 
   @Test
@@ -94,22 +85,10 @@ class PaymentsBridgeApplicationIT {
     return VALID_REQUEST_FILES.stream();
   }
 
-  private DomainEventRecorder createRegistrationEventRecorder() {
-    var recorder = new DomainEventRecorder();
-    recorder.subscribe(AlertStoredEvent.class, eventChannels.alertStored());
-    recorder.subscribe(AlertInitializedEvent.class, eventChannels.alertInitialized());
-    recorder.subscribe(AlertRegisteredEvent.class, eventChannels.alertRegistered());
-    recorder.subscribe(AlertInputAcceptedEvent.class, eventChannels.alertInputAccepted());
-    recorder.subscribe(RecommendationGeneratedEvent.class, eventChannels.recommendationGenerated());
-    recorder.subscribe(
-        AdjudicationRecommendationCompletedEvent.class,
-        eventChannels.recommendationCompleted());
-    return recorder;
-  }
-
-  private void createAlert(String fileName) {
+  private UUID createAlert(String fileName) {
     var fircoAlertMessage = createFircoAlertMessage(readFile(fileName));
     createAlertMessageUseCase.createAlertMessage(fircoAlertMessage);
+    return fircoAlertMessage.getId();
   }
 
   private FircoAlertMessage createFircoAlertMessage(File srcFile) {
@@ -135,58 +114,11 @@ class PaymentsBridgeApplicationIT {
 
   @Test
   void shouldRejectAlertWithTooManyHits() {
-    var eventRecorder = createTooManyHitsEventRecorder();
-    createAlert(TOO_MANY_HITS_REQUEST_FILE);
+    var alertId = createAlert(TOO_MANY_HITS_REQUEST_FILE);
     await()
         .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
-        .atMost(Duration.ofSeconds(10))
-        .until(eventRecorder::allCaught);
-    eventRecorder.unsubscribeAll();
+        .atMost(Duration.ofSeconds(3))
+        .until(() -> !paymentsBridgeEventsListener.containsRegisteredAlert(alertId));
   }
-
-  private DomainEventRecorder createTooManyHitsEventRecorder() {
-    var recorder = new DomainEventRecorder();
-    recorder.subscribe(AlertStoredEvent.class, eventChannels.alertStored());
-    recorder.subscribe(
-        BridgeRecommendationCompletedEvent.class,
-        eventChannels.recommendationCompleted());
-    return recorder;
-  }
-
-  private static class DomainEventRecorder implements MessageHandler, Ordered {
-
-    private final Map<Class<? extends DomainEvent>, SubscribableChannel> recordingEvents =
-        new HashMap<>();
-    private final Set<Class<? extends DomainEvent>> caughtEvents = new HashSet<>();
-
-    public DomainEventRecorder subscribe(
-        Class<? extends DomainEvent> domainEventClass, SubscribableChannel subscribableChannel) {
-      recordingEvents.put(domainEventClass, subscribableChannel);
-      subscribableChannel.subscribe(this);
-      return this;
-    }
-
-    public void unsubscribeAll() {
-      recordingEvents.forEach((key, value) -> value.unsubscribe(this));
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void handleMessage(Message<?> message) throws MessagingException {
-      if (recordingEvents.containsKey(message.getPayload().getClass())) {
-        log.info("Caught domain-event: {}", message.getPayload().getClass());
-        caughtEvents.add((Class<? extends DomainEvent>) message.getPayload().getClass());
-      }
-    }
-
-    public boolean allCaught() {
-      return recordingEvents.size() == caughtEvents.size();
-    }
-
-    @Override
-    public int getOrder() {
-      return 1;
-    }
-  }
-
 }
+

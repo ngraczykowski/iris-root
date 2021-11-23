@@ -5,14 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.data.api.v2.Alert;
 import com.silenteight.data.api.v2.ProductionDataIndexRequest;
-import com.silenteight.payments.bridge.app.integration.ChannelFactory;
-import com.silenteight.payments.bridge.event.WarehouseIndexRequestedEvent;
+import com.silenteight.payments.bridge.warehouse.index.model.WarehouseIndexRequestedEvent;
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.amqp.dsl.AmqpBaseOutboundEndpointSpec;
+import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.StandardIntegrationFlow;
 import org.springframework.integration.handler.LoggingHandler.Level;
@@ -85,7 +85,7 @@ class WarehouseOutboundAmqpIntegrationConfiguration {
 
   @Bean(WAREHOUSE_UPDATE_OUTBOUND)
   MessageChannel warehouseOutbound() {
-    return ChannelFactory.createDirectChannel();
+    return new DirectChannel();
   }
 
 }

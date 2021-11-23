@@ -2,13 +2,13 @@ package com.silenteight.payments.bridge.app.integration.response;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.app.integration.ChannelFactory;
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.amqp.dsl.AmqpBaseOutboundEndpointSpec;
+import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.StandardIntegrationFlow;
 import org.springframework.integration.handler.LoggingHandler.Level;
@@ -22,7 +22,6 @@ import static org.springframework.integration.dsl.IntegrationFlows.from;
 @EnableConfigurationProperties(FircoOutboundAmqpIntegrationProperties.class)
 @RequiredArgsConstructor
 class FircoOutboundAmqpIntegrationConfiguration {
-
 
   static final String RESPONSE_COMPLETED_OUTBOUND = "responseCompletedOutboundChannel";
 
@@ -58,6 +57,6 @@ class FircoOutboundAmqpIntegrationConfiguration {
 
   @Bean(RESPONSE_COMPLETED_OUTBOUND)
   MessageChannel responseCompletedOutbound() {
-    return ChannelFactory.createDirectChannel();
+    return new DirectChannel();
   }
 }

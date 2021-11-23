@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.app.integration.warehouse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import com.silenteight.payments.bridge.event.WarehouseIndexRequestedEvent.IndexRequestOrigin;
+import com.silenteight.payments.bridge.warehouse.index.model.WarehouseIndexRequestedEvent.IndexRequestOrigin;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;

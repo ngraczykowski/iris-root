@@ -33,4 +33,5 @@ class AnalysisServiceGrpc extends AnalysisServiceImplBase {
         request.getAnalysisAlertsList()).build());
     responseObserver.onCompleted();
   }
+
 }

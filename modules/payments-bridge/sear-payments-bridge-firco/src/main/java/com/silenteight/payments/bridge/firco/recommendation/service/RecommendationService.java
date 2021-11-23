@@ -7,7 +7,6 @@ import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationId;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
-import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +24,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-class RecommendationService implements CreateRecommendationUseCase {
+class RecommendationService {
 
   private static final IdGenerator DEFAULT_ID_GENERATOR = new AlternativeJdkIdGenerator();
 
@@ -34,8 +33,7 @@ class RecommendationService implements CreateRecommendationUseCase {
   private final ObjectMapper objectMapper;
 
   @Transactional
-  @Override
-  public RecommendationId createAdjudicationRecommendation(UUID alertId,
+  RecommendationId createAdjudicationRecommendation(UUID alertId,
       RecommendationWithMetadata recommendation) {
     var id = DEFAULT_ID_GENERATOR.generateId();
     var entity = new RecommendationEntity(id, alertId, recommendation);
@@ -47,8 +45,7 @@ class RecommendationService implements CreateRecommendationUseCase {
   }
 
   @Transactional
-  @Override
-  public RecommendationId createBridgeRecommendation(UUID alertId, RecommendationReason reason) {
+  RecommendationId createBridgeRecommendation(UUID alertId, RecommendationReason reason) {
     var id = DEFAULT_ID_GENERATOR.generateId();
     var entity = new RecommendationEntity(id, alertId, reason);
     recommendationRepository.save(entity);

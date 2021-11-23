@@ -6,9 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.data.api.v2.Alert;
 import com.silenteight.data.api.v2.ProductionDataIndexRequest;
-import com.silenteight.payments.bridge.event.WarehouseIndexRequestedEvent;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexRequestId;
 import com.silenteight.payments.bridge.warehouse.index.model.RequestOrigin;
+import com.silenteight.payments.bridge.warehouse.index.model.WarehouseIndexRequestedEvent;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertPort;
 
 import com.google.common.base.Preconditions;

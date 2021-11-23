@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.model.api.v1.Feature;
 import com.silenteight.model.api.v1.SolvingModel;
-import com.silenteight.payments.bridge.event.ModelUpdatedEvent;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -14,10 +13,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.amqp.dsl.AmqpInboundChannelAdapterSMLCSpec;
 import org.springframework.integration.dsl.IntegrationFlow;
 
-import javax.annotation.Nonnull;
 import javax.validation.Valid;
 
-import static com.silenteight.payments.bridge.governance.solvingmodel.model.AnalysisModel.fromSolvingModel;
 import static org.springframework.integration.dsl.IntegrationFlows.from;
 
 @Configuration
@@ -29,24 +26,20 @@ class GovernanceInboundAmqpIntegrationConfiguration {
   @Valid
   private final GovernanceInboundAmqpIntegrationProperties properties;
   private final AmqpInboundFactory inboundFactory;
+  private final ModelUpdateIntegrationService modelUpdateIntegrationService;
 
   @Bean
   IntegrationFlow modelPromotedForProductionInbound() {
     return from(createInboundAdapter(properties.getInboundQueueNames()))
-        .transform(SolvingModel.class, this::buildModelEvent)
-        .channel(ModelUpdatedEvent.CHANNEL)
+        .handle(SolvingModel.class, (payload, headers) -> {
+          log.info(
+              "Received updated production solving model: policy={}, categories={}, features={}",
+              payload.getPolicyName(), payload.getCategoriesList(),
+              payload.getFeaturesList().stream().map(Feature::getName));
+          modelUpdateIntegrationService.analysisModelUpdated(payload);
+          return null;
+        })
         .get();
-  }
-
-  @Nonnull
-  private ModelUpdatedEvent buildModelEvent(SolvingModel model) {
-    log.info("Received updated production solving model: policy={}, categories={}, features={}",
-        model.getPolicyName(), model.getCategoriesList(),
-        model.getFeaturesList().stream().map(Feature::getName));
-
-    var event = new ModelUpdatedEvent();
-    event.registerCollector(SolvingModel.class, () -> fromSolvingModel(model));
-    return event;
   }
 
   private AmqpInboundChannelAdapterSMLCSpec createInboundAdapter(String... queueNames) {

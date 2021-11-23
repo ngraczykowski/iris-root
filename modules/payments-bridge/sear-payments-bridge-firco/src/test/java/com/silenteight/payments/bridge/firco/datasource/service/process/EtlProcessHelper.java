@@ -1,7 +1,6 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process;
 
 import com.silenteight.payments.bridge.common.model.AeAlert;
-import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
@@ -15,12 +14,11 @@ import static java.util.List.of;
 
 public class EtlProcessHelper {
 
-  public static AlertRegisteredEvent createAlertRegisteredEvent(int numberOfMatches) {
+  public static AeAlert createAeAlert(int numberOfMatches) {
     Map<String, String> matches = createMatches(numberOfMatches);
     var id = UUID.randomUUID();
-    return new AlertRegisteredEvent(
-        AeAlert.builder()
-            .alertId(id).alertName("alerts/" + id).matches(matches).build());
+    return AeAlert.builder()
+            .alertId(id).alertName("alerts/" + id).matches(matches).build();
   }
 
   @Nonnull

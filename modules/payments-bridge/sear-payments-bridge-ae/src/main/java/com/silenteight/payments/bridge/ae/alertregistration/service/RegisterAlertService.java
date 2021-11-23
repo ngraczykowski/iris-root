@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.*;
-import com.silenteight.payments.bridge.ae.alertregistration.domain.Label;
-import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
-import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
-import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterMatchResponse;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.*;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AlertClientPort;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
+import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.common.model.AlertData;
 
@@ -37,6 +35,7 @@ import static java.util.stream.Collectors.toMap;
 class RegisterAlertService implements RegisterAlertUseCase {
 
   private final AlertClientPort alertClient;
+  private final RegisteredAlertDataAccessPort registeredAlertDataAccessPort;
 
   @Override
   public RegisterAlertResponse register(AlertData alertData, AlertMessageDto alertDto) {
@@ -46,14 +45,28 @@ class RegisterAlertService implements RegisterAlertUseCase {
 
     var matchesNames =
         alertClient.createMatches(request.toCreateMatchesRequest(alertName));
-    return createRegisterAlertResponse(
+
+    var registerAlertResponse = createRegisterAlertResponse(
         request.getAlertId(), alertName, matchesNames.getMatchesList());
+
+    registeredAlertDataAccessPort.save(SaveRegisteredAlertRequest
+        .builder()
+        .alertId(alertData.getAlertId())
+        .alertName(registerAlertResponse.getAlertName())
+        .matchNames(registerAlertResponse
+            .getMatchResponses()
+            .stream()
+            .map(RegisterMatchResponse::getMatchName)
+            .collect(toList()))
+        .build());
+
+    return registerAlertResponse;
   }
 
   private RegisterAlertRequest createRequest(AlertData alertData, AlertMessageDto alertDto) {
 
     var matchIds = getMatchIds(alertDto);
-    var request = RegisterAlertRequest.builder()
+    return RegisterAlertRequest.builder()
         .alertId(alertDto.getSystemID())
         .alertTime(fromOffsetDateTime(alertDto.getFilteredAt(ZoneOffset.UTC)))
         .priority(alertData.getPriority())
@@ -61,7 +74,6 @@ class RegisterAlertService implements RegisterAlertUseCase {
         .label(Label.of("source", "CMAPI"))
         .label(Label.of("alertMessageId", alertData.getAlertId().toString()))
         .build();
-    return request;
   }
 
   @Nonnull

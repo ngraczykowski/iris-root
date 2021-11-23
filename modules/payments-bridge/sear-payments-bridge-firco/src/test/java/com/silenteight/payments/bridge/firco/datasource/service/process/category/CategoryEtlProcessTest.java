@@ -14,8 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 
+import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.createAeAlert;
 import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.createAlertEtlResponse;
-import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.createAlertRegisteredEvent;
 import static java.util.List.of;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -46,7 +46,7 @@ class CategoryEtlProcessTest {
   void testExtractAndLoad() {
     int numberOfMatches = 5;
     categoryEtlProcess.extractAndLoad(
-        createAlertRegisteredEvent(numberOfMatches), createAlertEtlResponse(numberOfMatches));
+        createAeAlert(numberOfMatches), createAlertEtlResponse(numberOfMatches));
     verify(createCategoryValuesClient, times(numberOfMatches)).createCategoriesValues(any());
   }
 }

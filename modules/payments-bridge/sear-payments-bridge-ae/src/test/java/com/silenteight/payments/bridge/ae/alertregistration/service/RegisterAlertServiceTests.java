@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.ae.alertregistration.service;
 import com.silenteight.adjudication.api.v1.*;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AlertClientPort;
+import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
 
 import com.google.protobuf.Timestamp;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,10 +28,12 @@ class RegisterAlertServiceTests {
 
   @Mock
   private AlertClientPort alertClient;
+  @Mock
+  private RegisteredAlertDataAccessPort registeredAlertDataAccessPort;
 
   @BeforeEach
   void setup() {
-    registerAlertService = new RegisterAlertService(alertClient);
+    registerAlertService = new RegisterAlertService(alertClient, registeredAlertDataAccessPort);
   }
 
   @Test

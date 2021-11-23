@@ -7,14 +7,14 @@ import com.silenteight.adjudication.api.v2.GetRecommendationRequest;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationServiceGrpc.RecommendationServiceImplBase;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
-import com.silenteight.payments.bridge.event.RecommendationGeneratedEvent;
+import com.silenteight.payments.bridge.common.event.RecommendationsGeneratedEvent;
 
 import com.google.protobuf.Timestamp;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
-import org.springframework.integration.annotation.ServiceActivator;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -65,12 +65,12 @@ class RecommendationServiceGrpc extends RecommendationServiceImplBase {
   };
 
   @Order(0)
-  @ServiceActivator(inputChannel = RecommendationGeneratedEvent.CHANNEL)
-  void cacheAlertId(RecommendationGeneratedEvent event) {
+  @EventListener
+  void cacheAlertId(RecommendationsGeneratedEvent event) {
     event.getRecommendationsGenerated()
-        .getRecommendationInfosList().forEach(info -> {
-          cache.put(info.getRecommendation(), info.getAlert());
-        });
+        .getRecommendationInfosList().forEach(info ->
+          cache.put(info.getRecommendation(), info.getAlert())
+        );
   }
 
 }

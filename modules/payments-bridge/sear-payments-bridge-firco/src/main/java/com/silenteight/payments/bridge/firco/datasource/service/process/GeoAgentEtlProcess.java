@@ -7,7 +7,7 @@ import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentI
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
-import com.silenteight.payments.bridge.event.AlertRegisteredEvent;
+import com.silenteight.payments.bridge.common.model.AeAlert;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
@@ -34,9 +34,9 @@ class GeoAgentEtlProcess implements EtlProcess {
   private final Duration timeout;
 
   @Override
-  public void extractAndLoad(AlertRegisteredEvent data, AlertEtlResponse alertEtlResponse) {
+  public void extractAndLoad(AeAlert alert, AlertEtlResponse alertEtlResponse) {
     List<HitData> hitsData = alertEtlResponse.getHits();
-    data.getAeAlert().getMatches().entrySet()
+    alert.getMatches().entrySet()
         .forEach(matchItem -> handleMatches(hitsData, matchItem));
   }
 
@@ -116,10 +116,5 @@ class GeoAgentEtlProcess implements EtlProcess {
         .stream()
         .findFirst()
         .orElse("");
-  }
-
-  @Override
-  public boolean supports(AlertRegisteredEvent data) {
-    return true;
   }
 }

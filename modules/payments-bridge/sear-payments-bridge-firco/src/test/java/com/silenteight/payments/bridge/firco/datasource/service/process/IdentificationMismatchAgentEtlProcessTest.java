@@ -11,8 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
 
+import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.createAeAlert;
 import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.createAlertEtlResponse;
-import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.createAlertRegisteredEvent;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -38,7 +38,7 @@ class IdentificationMismatchAgentEtlProcessTest {
   void testAgentInputServiceCalled() {
     int numberOfMatches = 5;
     identificationMismatchAgentEtlProcess.extractAndLoad(
-        createAlertRegisteredEvent(numberOfMatches), createAlertEtlResponse(numberOfMatches));
+        createAeAlert(numberOfMatches), createAlertEtlResponse(numberOfMatches));
     verify(stub, times(numberOfMatches)).batchCreateAgentInputs(any());
   }
 }

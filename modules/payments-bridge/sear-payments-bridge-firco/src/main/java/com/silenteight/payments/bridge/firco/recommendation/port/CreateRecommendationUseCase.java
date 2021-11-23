@@ -1,17 +1,12 @@
 package com.silenteight.payments.bridge.firco.recommendation.port;
 
-import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
-import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationId;
-import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
-
-import java.util.UUID;
+import com.silenteight.payments.bridge.firco.recommendation.model.AdjudicationEngineSourcedRecommendation;
+import com.silenteight.payments.bridge.firco.recommendation.model.BridgeSourcedRecommendation;
 
 public interface CreateRecommendationUseCase {
 
-  RecommendationId createAdjudicationRecommendation(UUID alertId,
-      RecommendationWithMetadata metadata);
+  void create(BridgeSourcedRecommendation source);
 
-  RecommendationId createBridgeRecommendation(UUID alertId,
-      RecommendationReason reason);
+  void create(AdjudicationEngineSourcedRecommendation source);
 
 }
