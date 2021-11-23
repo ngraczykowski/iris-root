@@ -25,7 +25,7 @@ public class ModelArchivingProperties {
   private AmqpOutboundProperties request;
 
   public String modelArchivingOutboundExchangeName() {
-    return request.getExchangeName();
+    return request.getExchange();
   }
 
   public String modelArchivingOutboundRoutingKey() {

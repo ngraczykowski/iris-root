@@ -102,7 +102,7 @@ serp:
     feature-vector:
       integration:
         request:
-          exchange-name: ${serp.governance.messaging.exchange.analytics}
+          exchange: ${serp.governance.messaging.exchange.analytics}
           routing-key: ${serp.governance.messaging.broker.analytics.routing-key}
         receive:
           queue-name: ${serp.governance.messaging.broker.analytics.queue-name}
@@ -114,10 +114,10 @@ serp:
 
     model:
       archive:
-        request:
-          exchange: ${serp.governance.messaging.exchange.model}
-          routingKey: ${serp.governance.messaging.broker.models-archived.routing-key}
         integration:
+          request:
+            exchange: ${serp.governance.messaging.exchange.model}
+            routingKey: ${serp.governance.messaging.broker.models-archived.routing-key}
           receive:
             queue-name: ${serp.governance.messaging.broker.models-archived.queue-name}
 

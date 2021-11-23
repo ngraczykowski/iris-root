@@ -8,7 +8,7 @@ import lombok.*;
 public class AmqpOutboundProperties {
 
   @NonNull
-  private String exchangeName;
+  private String exchange;
   @NonNull
   private String routingKey;
 }
