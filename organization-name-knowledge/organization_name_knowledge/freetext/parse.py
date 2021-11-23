@@ -1,7 +1,7 @@
 from itertools import combinations
 from typing import List
 
-from organization_name_knowledge.freetext.name_matching import get_all_contained_legal_terms
+from organization_name_knowledge.freetext.matching import get_all_contained_legal_terms
 from organization_name_knowledge.names.name_information import NameInformation
 from organization_name_knowledge.names.parse.parse import parse_name
 from organization_name_knowledge.utils.text import (
