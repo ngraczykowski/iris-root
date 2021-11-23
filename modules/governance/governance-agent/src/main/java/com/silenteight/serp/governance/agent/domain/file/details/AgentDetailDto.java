@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
-import com.silenteight.serp.governance.agent.details.dto.FeatureDto;
+import com.silenteight.serp.governance.agent.details.dto.FeatureDetailsDto;
 import com.silenteight.serp.governance.agent.domain.file.configuration.AgentDetailsConfigurationDto;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class AgentDetailDto {
   @NonNull
   List<String> features;
   @NonNull
-  List<FeatureDto> featuresList;
+  List<FeatureDetailsDto> featuresList;
   @NonNull
   List<String> responses;
   @NonNull

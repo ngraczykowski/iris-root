@@ -13,6 +13,7 @@ import java.util.List;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.serp.governance.agent.domain.file.details.AgentDetailsFixture.AGENT_FEATURE_GENDER;
+import static com.silenteight.serp.governance.agent.domain.file.details.AgentDetailsFixture.AGENT_FEATURE_GENDER_DISPLAY_NAME;
 import static java.util.List.of;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
@@ -46,6 +47,7 @@ class FeaturesRestControllerTest extends BaseRestControllerTest {
   private FeaturesListDto prepareMockData() {
     FeatureDto agent1 = FeatureDto.builder()
         .name(AGENT_FEATURE_GENDER)
+        .displayName(AGENT_FEATURE_GENDER_DISPLAY_NAME)
         .solutions(FEATURE_VALUE)
         .agentConfig(AGENT_CONFIG)
         .build();

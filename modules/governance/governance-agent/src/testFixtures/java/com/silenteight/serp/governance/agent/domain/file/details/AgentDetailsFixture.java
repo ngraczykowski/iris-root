@@ -1,6 +1,6 @@
 package com.silenteight.serp.governance.agent.domain.file.details;
 
-import com.silenteight.serp.governance.agent.details.dto.FeatureDto;
+import com.silenteight.serp.governance.agent.details.dto.FeatureDetailsDto;
 
 import static com.silenteight.serp.governance.agent.domain.file.config.AgentConfigFixture.DATE_AGENT_CONFIG_NAME;
 import static com.silenteight.serp.governance.agent.domain.file.config.AgentConfigFixture.NAME_AGENT_CONFIG_NAME;
@@ -27,10 +27,11 @@ public class AgentDetailsFixture {
   public static final String AGENT_FEATURE_DOCUMENT = "features/doc";
   public static final String AGENT_FEATURE_DOCUMENT_DISPLAY_NAME = "Other Document";
   public static final String AGENT_FEATURE_NATIONALITY = "features/nationalityCountry";
-  public static final String AGENT_FEATURE__DISPLAY_NAME = "Nationality Country";
+  public static final String AGENT_FEATURE_NATIONALITY_DISPLAY_NAME = "Nationality Country";
   public static final String AGENT_FEATURE_RESIDENCY = "features/residencyCountry";
   public static final String AGENT_FEATURE_RESIDENCY_DISPLAY_NAME = "Residency Country";
   public static final String AGENT_FEATURE_GENDER = "features/gender";
+  public static final String AGENT_FEATURE_GENDER_DISPLAY_NAME = "Gender";
   public static final String AGENT_RESPONSE_MATCH = "MATCH";
   public static final String AGENT_RESPONSE_WEAK_MATCH = "WEAK_MATCH";
   public static final String AGENT_RESPONSE_NO_MATCH = "NO_MATCH";
@@ -39,32 +40,32 @@ public class AgentDetailsFixture {
   public static final String AGENT_RESPONSE_DIGIT_MATCH = "DIGIT_MATCH";
   public static final String AGENT_RESPONSE_WEAK_DIGIT_MATCH = "WEAK_DIGIT_MATCH";
 
-  public static final FeatureDto AGENT_FEATURE_NAME_DTO = FeatureDto.builder()
+  public static final FeatureDetailsDto AGENT_FEATURE_NAME_DTO = FeatureDetailsDto.builder()
       .name(AGENT_FEATURE_NAME)
       .displayName(AGENT_FEATURE_NAME_DISPLAY_NAME)
       .build();
 
-  public static final FeatureDto AGENT_FEATURE_PEP_DTO = FeatureDto.builder()
+  public static final FeatureDetailsDto AGENT_FEATURE_PEP_DTO = FeatureDetailsDto.builder()
       .name(AGENT_FEATURE_PEP)
       .displayName(AGENT_FEATURE_PEP_DISPLAY_NAME)
       .build();
 
-  public static final FeatureDto AGENT_DOCUMENT_FEATURE_DTO = FeatureDto.builder()
+  public static final FeatureDetailsDto AGENT_DOCUMENT_FEATURE_DTO = FeatureDetailsDto.builder()
       .name(AGENT_FEATURE_DOCUMENT)
       .displayName(AGENT_FEATURE_DOCUMENT_DISPLAY_NAME)
       .build();
 
-  public static final FeatureDto AGENT_FEATURE_NATIONALITY_DTO = FeatureDto.builder()
+  public static final FeatureDetailsDto AGENT_FEATURE_NATIONALITY_DTO = FeatureDetailsDto.builder()
       .name(AGENT_FEATURE_NATIONALITY)
-      .displayName(AGENT_FEATURE__DISPLAY_NAME)
+      .displayName(AGENT_FEATURE_NATIONALITY_DISPLAY_NAME)
       .build();
 
-  public static final FeatureDto AGENT_FEATURE_RESIDENCY_DTO = FeatureDto.builder()
+  public static final FeatureDetailsDto AGENT_FEATURE_RESIDENCY_DTO = FeatureDetailsDto.builder()
       .name(AGENT_FEATURE_RESIDENCY)
       .displayName(AGENT_FEATURE_RESIDENCY_DISPLAY_NAME)
       .build();
 
-  public static final FeatureDto AGENT_FEATURE_DATE_DTO = FeatureDto.builder()
+  public static final FeatureDetailsDto AGENT_FEATURE_DATE_DTO = FeatureDetailsDto.builder()
       .name(AGENT_FEATURE_DATE)
       .displayName(AGENT_FEATURE_DATE_DISPLAY_NAME)
       .build();

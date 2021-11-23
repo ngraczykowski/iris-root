@@ -35,6 +35,10 @@ components:
       properties:
         name:
           type: string
+        displayName:
+          type: string
+        agentConfig:
+          type: string
         solutions:
           type: array
           items:
