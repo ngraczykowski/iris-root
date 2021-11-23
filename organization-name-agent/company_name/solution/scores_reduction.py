@@ -57,7 +57,7 @@ class ModelSolutionRule:
 class ModelRule(ReductionRule):
     solutions: Sequence[ModelSolutionRule]
     source: pathlib.Path
-    model: Any = None
+    model: Union[SklearnModel, Any] = None
 
     def __post_init__(self):
         self.solutions = [ModelSolutionRule(**v) for v in self.solutions]

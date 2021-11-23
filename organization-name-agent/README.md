@@ -9,10 +9,10 @@
 - [Configuration](#configuration)
   - [Config files](#config)
 - [Implementation](#implementation)
-  - [Parsing name](#parsing)
-  - [Comparing](#comparing)
-  - [Scores reduction](#scores-reduction)
   - [Pair solutions reduction](#pair-solutions-reduction)
+  - [Scores reduction](#scores-reduction)
+  - [Comparing](#comparing)
+
 - [Tests](#tests)
 
 <a name="usage"/>
@@ -27,9 +27,12 @@ Module needs python == 3.7. Tested only on python 3.7.
 
 
 * from PiPY (repo.silenteight.com/artifactory/api/pypi/pypi/simple):
-  ```
-  pip install company-name
-  ```
+
+  `pip install company-name`
+
+  *When installing using pip, please note that you will need to download or create a config, please check 
+  [Configuration](#configuration)*
+
 
 * from source:
 
@@ -43,11 +46,7 @@ Module needs python == 3.7. Tested only on python 3.7.
 
 To run agent installed in your environment, simply run
 ```
-python -m company_name.main -c {configuration_dir} --grpc --agent-exchange
-```
-
-```
-usage: main.py [-h] [-c CONFIGURATION_DIR] [--grpc] [--agent-exchange] [-v]
+python -m company_name.main [-h] [-c CONFIGURATION_DIR] [--grpc] [--agent-exchange] [-v]
 
 Company name agent
 
@@ -166,31 +165,68 @@ Given two sets of names, resolving it consists of few steps:
   * each pair is compared
   * each pair of comparison scores are reduced into single solution
   * pair solutions are reduced into one solution
+  
+For each pair, the _solution_probability_ values are based on scores computed by [Comparing](#comparing), and produced by: 
+- Logistic Regression model, that predicts a probabilities for solutions, based on corresponding _predict_proba_ values for features (scores)
+- Rules defined in _reduction-rules.yaml_ - i.e. if some feature's score is above threshold, return specified _solution_probability_
 
-<a name="parsing"/>
+Both model and rules have specified thresholds for score values, if any of them met, 
+returns corresponding _solution_ and _solution_probability_. 
 
-## Parsing name
+<a name="pair-solutions-reduction"/>
 
+## Pair solutions reduction
 
+List of pair solutions is sorted and the best solution is chosen.
+Sorting is done by comparing solution (in order defined in `company_name/solution/solution.py`),
+and if solution is the same, by comparing solution probability. Sample sorted pair solutions:
 ```python
->>> from company_name.compare import parse_name
->>> print(parse_name("THE SOME NAME MANUFACTURING (PRIVATE) LIMITED (FRANCE) FUNDED IN 1917 (SNM)"))
-THE SOME NAME MANUFACTURING (PRIVATE) LIMITED (FRANCE) FUNDED IN 1917 (SNM) (common_prefixes: THE, base: SOME NAME, common_suffixes: MANUFACTURING, legal: LIMITED PRIVATE, countries: FRANCE, parenthesis: SNM, other: FUNDED IN 1917)
-
+[
+    PairResult(solution=<Solution.MATCH: 'MATCH'>, solution_probability=1, names=('HP, INC', 'HP CO.')),
+    PairResult(solution=<Solution.MATCH: 'MATCH'>, solution_probability=0.8, names=('HP, INC', 'HEWLETT-PACKARD COMPANY')),
+    PairResult(solution=<Solution.NO_MATCH: 'NO_MATCH'>, solution_probability=0.9809527625612637, names=('HP, INC', 'GOOGLE')),
+]
 ```
 
-Divides name into parts:
-* common_prefixes
-* base
-* common_suffixes
-* legal - also found in parentheses (if parenthesis contains only legal terms, otherwise it is parsed as other name in parenthesis section)
-* countries - in parentheses only
-* parenthesis - information found in parentheses other than countries and legals
-* other - information found after legal terms
+<a name="scores-reduction"/>
 
-Assuming input is not empty, base shouldn't be empty either.
+## Scores reduction
 
-<a name="comparing"/>
+Reducing scores from comparison into single solution, for example MATCH / INCONCLUSIVE / NO_MATCH.
+
+### Setting minimal solution from names preconditions
+If any name from compared pair does not meet the conditions specified in [config file](#config),
+the pair will never end as NO_MATCH - the minimal possible solution will be INCONCLUSIVE. 
+
+### Reducing by rules
+
+Reducing algorithm is defined in [config file](#config), reduction-rules.yaml. There are two type of rules:
+  * basic feature rule
+    ```yaml
+    - feature: blacklisted
+      threshold: 1
+      solution: MATCH
+    ```
+    in which one score, if over defined threshold, determine solution.
+    Solution probability can also be defined in rule as _solution_probability_ value, default is 1.
+    
+
+  * model rule
+    ```yaml
+      - source: model/tsaas-logistic-regression-2021.07.12.bin
+        solutions:
+          - solution: NO_MATCH
+            label: NO_MATCH
+            threshold: 0.9
+          - solution: MATCH
+            label: MATCH
+            threshold: 0
+    ```
+    Source is always relative to config directory and contains a model - currently only sklearn models are supported.
+    Model can be binary or multi-class. Solution probability is taken from model probability.
+    
+  All solutions used must be defined in `company_name/solution/solution.py` - but not all defined there needs to be used.
+  If rules will not be comprehensive, the default solution is INCONCLUSIVE.
 
 ## Comparing
 
@@ -375,62 +411,6 @@ Most scores are computed on cleared names - lowercase and without national chara
   compared: first token of base
 
   algorithm: exactly the same after clearing
-
-
-
-<a name="scores-reduction"/>
-
-## Scores reduction
-
-Reducing scores from comparison into single solution, for example MATCH / INCONCLUSIVE / NO_MATCH.
-
-### Setting minimal solution from names preconditions
-If any name from compared pair does not meet the conditions specified in [config file](#config),
-the pair will never end as NO_MATCH - the minimal possible solution will be INCONCLUSIVE. 
-
-### Reducing by rules
-
-Reducing algorithm is defined in [config file](#config), reduction-rules.yaml. There are two type of rules:
-  * basic feature rule
-    ```yaml
-    - feature: blacklisted
-      threshold: 1
-      solution: MATCH
-    ```
-    in which one score, if over defined threshold, determine solution. Solution probability can also be defined in rule, default is 1.
-    
-
-  * model rule
-    ```yaml
-      - source: model/tsaas-logistic-regression-2021.07.12.bin
-        solutions:
-          - solution: NO_MATCH
-            label: NO_MATCH
-            threshold: 0.9
-          - solution: MATCH
-            label: MATCH
-            threshold: 0
-    ```
-    Source is always relative to config directory and contains a model - currently only sklearn models are supported.
-    Model can be binary or multi-class. Solution probability is taken from model probability.
-    
-  All solutions used must be defined in `company_name/solution/solution.py` - but not all defined there needs to be used.
-  If rules will not be comprehensive, the default solution is INCONCLUSIVE.
-
-<a name="pair-solutions-reduction"/>
-
-## Pair solutions reduction
-
-List of pair solutions is sorted and the best solution is chosen.
-Sorting is done by comparing solution (in order defined in `company_name/solution/solution.py`),
-and if solution is the same, by comparing solution probability. Sample sorted pair solutions:
-```python
-[
-    PairResult(solution=<Solution.MATCH: 'MATCH'>, solution_probability=1, names=('HP, INC', 'HP CO.')),
-    PairResult(solution=<Solution.MATCH: 'MATCH'>, solution_probability=0.8, names=('HP, INC', 'HEWLETT-PACKARD COMPANY')),
-    PairResult(solution=<Solution.NO_MATCH: 'NO_MATCH'>, solution_probability=0.9809527625612637, names=('HP, INC', 'GOOGLE')),
-]
-```
 
 <a name="tests"/>
 

@@ -22,7 +22,7 @@ class SklearnModel:
             + ")"
         )
 
-    def predict(self, scores: Mapping[str, Score]):
+    def predict(self, scores: Mapping[str, Score]) -> Mapping[str, float]:
         feature_vector = [
             v.value
             if v.status == Score.ScoreStatus.OK
