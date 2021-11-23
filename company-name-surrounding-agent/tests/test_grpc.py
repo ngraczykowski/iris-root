@@ -35,7 +35,7 @@ TEST_CASES = [
     },
 ]
 
-PORT = 9090
+PORT = 24806
 GRPC_ADDRESS = f"localhost:{PORT}"
 
 
