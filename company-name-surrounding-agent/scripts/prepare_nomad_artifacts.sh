@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set  -e -o pipefail
 scriptdir="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
-basedir="$(cd -- "$scriptdir"/.. && pwd -P)"
-cd "$basedir"
 
 IFS='-' read -r name version rest <<< $(basename -- "$(ls -tr ./dist/*.whl)")
 
