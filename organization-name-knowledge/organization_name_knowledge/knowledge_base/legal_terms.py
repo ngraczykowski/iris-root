@@ -2,8 +2,8 @@ import itertools
 from typing import Any, Dict, List, Mapping, NamedTuple, Sequence, Set, Tuple
 
 from organization_name_knowledge.knowledge_base.term_sources import TermSources
-from organization_name_knowledge.utils.clear_name import clear_name, divide
 from organization_name_knowledge.utils.term_variants import get_term_variants
+from organization_name_knowledge.utils.text import clear_name, divide
 
 
 class LegalTermJsonEntity(NamedTuple):

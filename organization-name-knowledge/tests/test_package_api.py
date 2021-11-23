@@ -44,21 +44,18 @@ def test_parse_name_base(name, expected_base):
             "Some Text about The Silent Eight PTE LTD founded years ago in Singapore",
             [
                 {"base": "Eight", "legal": "pte ltd"},
+                {"base": "ltd founded", "legal": "ltd"},
+                {"base": "ltd founded years", "legal": "ltd"},
+                {"base": "pte ltd founded", "legal": "pte ltd"},
                 {"base": "Silent Eight", "legal": "pte ltd"},
             ],
         ),
         (
-            "This is the best test case for Silent Eight Pte Ltd ever created",
-            [
-                {"base": "Eight", "legal": "pte ltd"},
-                {"base": "Silent Eight", "legal": "pte ltd"},
-            ],
-        ),
-        (
-            "First Company Limited, Second sp. z. o. o.",
+            "First Company Limited, Second Corp",
             [
                 {"base": "First", "legal": "company limited"},
-                {"base": "Second", "legal": "sp z o o"},
+                {"base": "limited second", "legal": "company limited"},
+                {"base": "Second", "legal": "corp"},
             ],
         ),
         (
@@ -73,17 +70,22 @@ def test_parse_name_base(name, expected_base):
             [
                 {"base": "Hewlett and Packard", "legal": "company"},
                 {"base": "Packard", "legal": "company"},
-                {"base": "The and Packard", "legal": "company"},
             ],
         ),
         (
             "ACME CO and Google Inc",
-            [{"base": "ACME", "legal": "CO"}, {"base": "Google", "legal": "Inc"}],
+            [
+                {"base": "ACME", "legal": "CO"},
+                {"base": "co and Google", "legal": "inc"},
+                {"base": "Google", "legal": "Inc"},
+            ],
         ),
         (
             "Paramount Pictures LLC or Walt Disney Company",
             [
                 {"base": "Disney", "legal": "Company"},
+                {"base": "LLC or", "legal": "LLC"},
+                {"base": "LLC or Walt", "legal": "LLC"},
                 {"base": "Paramount Pictures", "legal": "LLC"},
                 {"base": "Pictures", "legal": "LLC"},
                 {"base": "Walt Disney", "legal": "Company"},
@@ -95,12 +97,18 @@ def test_parse_name_base(name, expected_base):
             "Institute in Baltimore, Maryland, conducts Hubble science operations.",
             [
                 {"base": "ABC DEF", "legal": "company"},
+                {"base": "auras", "legal": "company"},
+                {"base": "auras space", "legal": "company"},
+                {"base": "auras space telescope", "legal": "company"},
                 {"base": "DEF", "legal": "company"},
             ],
         ),
         (
             "At World's End The Dutchman arrives to the XYZ Limited",
-            [{"base": "XYZ", "legal": "Limited"}],
+            [
+                {"base": "to the XYZ", "legal": "Limited"},
+                {"base": "XYZ", "legal": "Limited"},
+            ],
         ),
         (
             "KGHM Polska Miedź S A",
@@ -115,13 +123,21 @@ def test_parse_name_base(name, expected_base):
             [{"base": "ABC", "legal": "company"}],
         ),
         (
-            "Some long name with number 1234567 ABC Corporation",
-            [{"base": "ABC", "legal": "Corporation"}],
+            "Some long name for number 1234567 ABC Corporation",
+            [
+                {"base": "ABC", "legal": "Corporation"},
+                {"base": "number ABC", "legal": "Corporation"},
+            ],
         ),
         (
             "First Company Limited oraz Second Company",
+            # polish conjunction 'oraz' is treated as possible base part
             [
-                {"base": "First", "legal": "company limited"},
+                {"base": "First", "legal": "Company Limited"},
+                {"base": "Limited oraz", "legal": "Company Limited"},
+                {"base": "Limited oraz Second", "legal": "Company Limited"},
+                {"base": "Oraz Second", "legal": "Company"},
+                {"base": "Second", "legal": "Company"},
             ],
         ),
         (
@@ -129,7 +145,6 @@ def test_parse_name_base(name, expected_base):
             [
                 {"base": "1 OTHER", "legal": "COMPANY"},
                 {"base": "it 1 OTHER", "legal": "COMPANY"},
-                {"base": "OTHER", "legal": "COMPANY"},
             ],
         ),
         (
@@ -137,16 +152,24 @@ def test_parse_name_base(name, expected_base):
             [
                 {"base": base, "legal": legal}
                 for base, legal in zip(
-                    ["blackpoint", "o blackpoint", "pr retail", "retail"],
-                    ["llc", "llc", "llc", "llc"],
+                    [
+                        "blackpoint",
+                        "c o blackpoint",
+                        "llc 123",
+                        "llc 123 abc",
+                        "partners",
+                        "pr retail",
+                        "retail",
+                    ],
+                    ["llc c o", "c o", "llc", "llc", "llc", "llc c o", "llc c o"],
                 )
             ],
         ),
     ],
 )
 def test_parse_freetext(freetext, expected_names):
-    parsed_freetext = parse_freetext(freetext, tokens_limit=5)
-    #  assert len(parsed_freetext) == len(expected_names)
+    parsed_freetext = parse_freetext(freetext, base_tokens_limit=3)
+    assert len(parsed_freetext) == len(expected_names)
     for name_information, expected in zip(parsed_freetext, expected_names):
         assert name_information
         assert name_information.base.cleaned_name == expected["base"].lower()

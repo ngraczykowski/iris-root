@@ -3,7 +3,7 @@ from typing import List, Set
 
 from organization_name_knowledge.knowledge_base.term_sources import TermSources
 from organization_name_knowledge.names.tokens_sequence import TokensSequence
-from organization_name_knowledge.utils.clear_name import clear_name, divide
+from organization_name_knowledge.utils.text import clear_name, divide
 
 
 class Countries:

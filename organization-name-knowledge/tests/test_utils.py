@@ -1,15 +1,49 @@
 import pytest
 
-from organization_name_knowledge.api import get_all_legal_terms
-from organization_name_knowledge.freetext.name_matching import cut_name_to_leftmost_match
-from organization_name_knowledge.utils.clear_name import (
+from organization_name_knowledge.utils.term_variants import get_term_variants
+from organization_name_knowledge.utils.text import (
     clear_name,
+    contains_conjunction,
     divide,
     remove_split_chars,
     remove_too_long_numbers,
     split_text_by_too_long_numbers,
+    starts_with_conjunction,
 )
-from organization_name_knowledge.utils.term_variants import get_term_variants
+
+
+@pytest.mark.parametrize(
+    "name, result",
+    [
+        ("Silent Eight", False),
+        ("Hewlett and Packard", True),
+        ("Left or right side", True),
+        ("Cooperation for AML", True),
+        ("ABC and DEF or GHIJ for KLMN", True),
+        # and some conjunctions inside words - we DON'T want them to be treated as conjunctions
+        ("On demand", False),
+        ("Malo more", False),
+        ("Foreigners", False),
+    ],
+)
+def test_contains_conjunction(name, result):
+    assert contains_conjunction(name.split()) == result
+
+
+@pytest.mark.parametrize(
+    "name, result",
+    [
+        ("ABC Company", False),
+        ("And the Company", True),
+        ("Hewlett and Packard", False),
+        ("For you and your family", True),
+        ("Foreign country", False),
+        ("Organization Name Knowledge", False),
+        ("Or the other one", True),
+    ],
+)
+def test_starts_with_conjunction(name, result):
+    assert starts_with_conjunction(name.split()) == result
 
 
 @pytest.mark.parametrize(
@@ -69,18 +103,6 @@ def test_get_term_variants(term, expected_variants):
 )
 def test_remove_split_chars(name, expected):
     assert remove_split_chars(name) == expected
-
-
-@pytest.mark.parametrize(
-    "name, expected",
-    [
-        ("The ABCD company", "The ABCD company"),
-        ("KGHM SA - the biggest based in Poland company", "KGHM SA"),
-        ("Silent Eight Pte Ltd means our team", "Silent Eight Pte Ltd"),
-    ],
-)
-def test_cut_name_to_leftmost_legal(name, expected):
-    assert cut_name_to_leftmost_match(name, get_all_legal_terms(name)) == expected
 
 
 @pytest.mark.parametrize(

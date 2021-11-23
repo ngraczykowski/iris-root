@@ -1,6 +1,6 @@
 from typing import List, Set
 
-from organization_name_knowledge.freetext.name_matching import get_all_contained_legal_terms
+from organization_name_knowledge.freetext.matching import get_all_contained_legal_terms
 from organization_name_knowledge.freetext.parse import parse_freetext_names
 from organization_name_knowledge.names.name_information import NameInformation
 from organization_name_knowledge.names.parse import parse_name
@@ -26,15 +26,15 @@ def parse(name: str) -> NameInformation:
     return name_information
 
 
-def parse_freetext(freetext: str, tokens_limit: int = 5) -> List[NameInformation]:
+def parse_freetext(freetext: str, base_tokens_limit: int = 3) -> List[NameInformation]:
     """Parse freetext to find each organization name that is present within passed text
 
     Parameters
     ----------
     freetext : str
         Any string which contains or not, an organization name(s)
-    tokens_limit : int
-        The maximum number of tokens in parsed organization name(s)
+    base_tokens_limit : int
+        The maximum number of tokens in parsed organization name base
 
     Returns
     -------
@@ -42,7 +42,7 @@ def parse_freetext(freetext: str, tokens_limit: int = 5) -> List[NameInformation
         A list of found and parsed organization names, as NameInformation objects
     """
 
-    names: List[NameInformation] = parse_freetext_names(freetext, tokens_limit)
+    names: List[NameInformation] = parse_freetext_names(freetext, base_tokens_limit)
     return sorted(set(names), key=lambda name: name.base.cleaned_name)
 
 

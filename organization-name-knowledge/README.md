@@ -18,10 +18,11 @@ Parse a name string to NameInformation object, that contains information about:
 - common_prefixes (found in name string)
 - base (what is the base name of parsed organization name)
 - common_suffixes (found in name string)
-- legal (legal terms found withing name string)
-- countries (country names found within name string)
+- legal (legal terms found withing name string, also from parentheses 
+  (if parenthesis contains only legal terms, otherwise it is parsed as other name in parenthesis section)
+- countries (country names found within name string - from parentheses only)
 - parenthesis (information from parentheses found in string)
-- other (tokens not match any category above)
+- other (tokens not match any category above, after legal terms)
 
 i.e.
 ```python

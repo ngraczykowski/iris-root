@@ -1,7 +1,7 @@
 from organization_name_knowledge.knowledge_base import KnowledgeBase
 from organization_name_knowledge.names.token import Token
 from organization_name_knowledge.names.tokens_sequence import TokensSequence
-from organization_name_knowledge.utils.clear_name import clear_name, divide
+from organization_name_knowledge.utils.text import clear_name, divide
 
 
 def _create_token(original_word: str) -> Token:

@@ -18,7 +18,7 @@ from organization_name_knowledge.names.parse.parse_parentheses import (
     detect_parentheses_information,
     parse_base_from_parentheses,
 )
-from organization_name_knowledge.utils.clear_name import clear_name
+from organization_name_knowledge.utils.text import clear_name
 
 
 def _fix_expression_divided(information: Tuple[TokensSequence, ...]) -> Tuple[TokensSequence, ...]:
