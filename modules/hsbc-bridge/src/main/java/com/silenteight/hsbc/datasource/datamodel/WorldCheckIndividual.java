@@ -52,6 +52,8 @@ public interface WorldCheckIndividual extends ListRecordId {
 
   String getFurtherInformation();
 
+  String getLastUpdatedDate();
+
   String getLinkedTo();
 
   String getPrimaryName();

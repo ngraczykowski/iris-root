@@ -24,6 +24,8 @@ public interface WorldCheckEntity extends ListRecordId {
 
   String getFurtherInformation();
 
+  String getLastUpdatedDate();
+
   String getLinkedTo();
 
   String getPrimaryName();

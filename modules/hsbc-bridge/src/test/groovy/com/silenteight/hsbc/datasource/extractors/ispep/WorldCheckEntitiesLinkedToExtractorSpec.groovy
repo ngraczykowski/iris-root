@@ -18,12 +18,22 @@ class WorldCheckEntitiesLinkedToExtractorSpec extends Specification {
       getLinkedTo() >> '29999;399990;399991;399992;399993;399994'
     }
 
+    def thirdLinkedTo = Mock(WorldCheckEntity) {
+      getLinkedTo() >> ''
+    }
+
+    def fourthLinkedTo = Mock(WorldCheckEntity) {
+      getLinkedTo() >> null
+    }
+
     when:
-    def underTest = new WorldCheckEntitiesLinkedToExtractor([firstLinkedTo, secondLinkedTo])
+    def underTest = new WorldCheckEntitiesLinkedToExtractor(
+        [firstLinkedTo, secondLinkedTo, thirdLinkedTo, fourthLinkedTo])
     def actual = underTest.extract()
 
     then:
     assertThat(actual)
-        .containsExactly('28966;376830;376831;376832;448756;80217', '29999;399990;399991;399992;399993;399994')
+        .containsExactly(
+            '28966;376830;376831;376832;448756;80217', '29999;399990;399991;399992;399993;399994')
   }
 }

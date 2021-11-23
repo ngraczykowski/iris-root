@@ -32,7 +32,9 @@ public class IsPepFeature implements IsPepFeatureValuesRetriever<IsPepInputDto> 
         .map(md -> getIsPepInputForIndividual(md, matchName))
         .orElseGet(() -> getIsPepInputForEntities(matchData, matchName));
 
-    log.debug("Datasource response for feature: {} received.", result.getIsPepFeatureInput().getFeature());
+    log.debug(
+        "Datasource response for feature: {} received.",
+        result.getIsPepFeatureInput().getFeature());
 
     return result;
   }
@@ -90,7 +92,8 @@ public class IsPepFeature implements IsPepFeatureValuesRetriever<IsPepInputDto> 
   }
 
   private static WatchListItemDto createWatchListItem(
-      MatchData matchData, List<String> wlCountries, String furtherInformation, List<String> linkedTo) {
+      MatchData matchData, List<String> wlCountries, String furtherInformation,
+      List<String> linkedTo) {
     return getWatchListItemDtoBuilderWithType(matchData)
         .id(matchData.getWatchlistId().orElse(""))
         .furtherInformation(furtherInformation)
@@ -110,7 +113,9 @@ public class IsPepFeature implements IsPepFeatureValuesRetriever<IsPepInputDto> 
 
     matchData
         .getWatchlistType()
-        .ifPresentOrElse(e -> watchlistItemBuilder.type(e.getLabel()), () -> watchlistItemBuilder.type(""));
+        .ifPresentOrElse(
+            e -> watchlistItemBuilder.type(e.getLabel()),
+            () -> watchlistItemBuilder.type(""));
 
     return watchlistItemBuilder;
   }
