@@ -6,8 +6,7 @@ cd "$basedir"
 
 IFS='-' read -r name version rest <<< $(basename -- "$(ls -tr ./dist/*.whl)")
 
-artifact=$(basename -- "$(ls -tr ./dist/*.pyz)")
-artifact_path="$(ls "./dist/$artifact")"
+artifact_path="$(ls "$scriptdir"/../dist/*.pyz)"
 config="${name}-config-${version}.tgz"
 config_path="$(ls "./dist/${config}")"
 
