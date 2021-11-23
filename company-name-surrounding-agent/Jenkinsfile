@@ -136,6 +136,11 @@ pipeline {
                         )
                     }
                 }
+                stage('Deploy on nomad dev') {
+                    steps {
+                       sh './nomad/deploy.sh'
+                    }
+                }
             }
        }
     }

@@ -1,7 +1,7 @@
 agent:
   process: 2
   grpc:
-    port: 9090
+    port: 24806
 
 solution_rules:
   - solution: 0
