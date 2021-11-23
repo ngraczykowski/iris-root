@@ -1,19 +1,19 @@
-variable "company_name_surrounding_version" {
+variable "company_name_surrounding_agent_version" {
   type = string
   description = "Company name surrounding agent version"
 }
 
-variable "company_name_surrounding_artifact" {
+variable "company_name_surrounding_agent_artifact" {
   type = string
   description = "The name of file containing artifact"
 }
 
-variable "company_name_surrounding_artifact_checksum" {
+variable "company_name_surrounding_agent_artifact_checksum" {
   type = string
   description = "Checksum of file containing artifact"
 }
 
-variable "company_name_surrounding_config" {
+variable "company_name_surrounding_agent_config" {
   type = string
   description = "Configuration files"
 }
@@ -23,7 +23,7 @@ variable "namespace" {
   default = "dev"
 }
 
-job "company-name-surrounding" {
+job "company-name-surrounding-agent" {
   type = "service"
 
   datacenters = [
@@ -36,7 +36,7 @@ job "company-name-surrounding" {
     auto_revert = true
   }
 
-  group "company-name-surrounding" {
+  group "company-name-surrounding-agent" {
     count = 1
 
     network {
@@ -47,7 +47,7 @@ job "company-name-surrounding" {
     }
 
     service {
-      name = "${var.namespace}-company-name-surrounding"
+      name = "${var.namespace}-company-name-surrounding-agent"
       port = "grpc"
 
       check_restart {
@@ -65,7 +65,7 @@ job "company-name-surrounding" {
     }
 
     service {
-      name = "${var.namespace}-grpc-company-name-surrounding"
+      name = "${var.namespace}-grpc-company-name-surrounding-agent"
       port = "grpc"
       tags = [
         "grpc",
@@ -75,7 +75,7 @@ job "company-name-surrounding" {
     }
 
     service {
-      name = "${var.namespace}-company-name-surrounding-grpcui"
+      name = "${var.namespace}-company-name-surrounding-agent-grpcui"
       port = "grpcui"
       tags = concat([
         "grpcui",
@@ -118,24 +118,24 @@ job "company-name-surrounding" {
     }
 
 
-    task "company-name-surrounding" {
+    task "company-name-surrounding-agent" {
       driver = "docker"
 
 //      template {
-//        data = "{{ key \"${var.namespace}/company-name-surrounding/secrets\" }}"
-//        destination = "secrets/company-name-surrounding.env"
+//        data = "{{ key \"${var.namespace}/company-name-surrounding-agent/secrets\" }}"
+//        destination = "secrets/company-name-surrounding-agent.env"
 //        env = true
 //      }
 
       artifact {
-        source = var.company_name_surrounding_artifact
+        source = var.company_name_surrounding_agent_artifact
         options {
-          checksum = "${var.company_name_surrounding_artifact_checksum}"
+          checksum = "${var.company_name_surrounding_agent_artifact_checksum}"
         }
       }
 
       artifact {
-        source = var.company_name_surrounding_config
+        source = var.company_name_surrounding_agent_config
       }
 
       template {
@@ -147,7 +147,7 @@ job "company-name-surrounding" {
       config {
         image = "python:3.7"
         command = "python"
-        args = ["/app/company_name_surrounding-${var.company_name_surrounding_version}.pyz", "-c", "/app/config", "--grpc", "-v"]
+        args = ["/app/company_name_surrounding_agent-${var.company_name_surrounding_agent_version}.pyz", "-c", "/app/config", "--grpc", "-v"]
         network_mode = "host"
         volumes = ["local:/app"]
       }

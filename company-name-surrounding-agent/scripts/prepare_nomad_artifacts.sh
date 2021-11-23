@@ -1,24 +1,34 @@
 #!/usr/bin/env bash
 set  -e -o pipefail
 scriptdir="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
-basedir="$(cd -- "$scriptdir"/.. && pwd -P)"
-cd "$basedir"
 
-IFS='-' read -r name version rest <<< $(basename -- "$(ls -tr ./dist/*.whl)")
 
-artifact=$(basename -- "$(ls -tr ./dist/*.pyz)")
-artifact_path="$(ls "./dist/$artifact")"
-config="${name}-config-${version}.tgz"
-config_path="$(ls "./dist/${config}")"
+company_name_surrounding_agent_artifact_path="$(ls "$scriptdir"/../dist/company_name_surrounding_agent-*.pyz)"
+company_name_surrounding_agent_version=$(ls -al "$company_name_surrounding_agent_artifact_path" | awk -F'company_name_surrounding_agent-|.pyz' '{print $2}')
+company_name_surrounding_agent_config="company_name_config-${company_name_surrounding_agent_version}.tgz"
+company_name_surrounding_agent_config_path="$scriptdir/../dist/${company_name_surrounding_agent_config}"
 
 set -x
 
-rm -rf ./nomad/artifacts/
-mkdir -p ./nomad/artifacts/
 
-cp "$artifact_path" ./nomad/artifacts/
-cp "$config_path" ./nomad/artifacts/
+for d in nomad/*/; do
+  cd "$d"
+  name=$(basename -- "$d")
 
-cd nomad
-tar -cvjSf ../dist/"${name}-nomad-${version}.tar.bz2" -- *
-cd -
+  if [ -f "company-name-surrounding-agent.nomad" ]; then
+    echo "Processing $name"
+  else
+    echo "No nomad file in $name, ignoring"
+    cd -
+    continue
+  fi
+
+  rm -rf artifacts/
+  mkdir -p artifacts/
+
+  cp "$company_name_surrounding_agent_artifact_path" artifacts/
+  cp "$company_name_surrounding_agent_config_path" artifacts/
+
+  tar -cvjSf ../"company-name-surrounding-agent-nomad-${name}-${company_name_surrounding_agent_version}.tar.bz2" -- *
+  cd -
+done
