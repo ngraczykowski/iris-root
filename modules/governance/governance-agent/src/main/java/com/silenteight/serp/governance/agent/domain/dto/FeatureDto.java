@@ -13,6 +13,8 @@ public class FeatureDto {
   @NonNull
   String name;
   @NonNull
+  String displayName;
+  @NonNull
   String agentConfig;
   @NonNull
   List<String> solutions;

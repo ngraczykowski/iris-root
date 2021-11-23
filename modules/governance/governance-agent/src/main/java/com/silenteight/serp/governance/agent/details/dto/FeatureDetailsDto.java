@@ -6,7 +6,7 @@ import lombok.Value;
 
 @Builder
 @Value
-public class FeatureDto {
+public class FeatureDetailsDto {
 
   @NonNull
   String name;

@@ -21,18 +21,22 @@ import static org.mockito.Mockito.*;
 class FeatureSolverTest {
 
   private static final String FEATURE_NAME_NAME = "features/name";
+  private static final String FEATURE_NAME_NAME_DISPLAY_NAME = "Name";
   private static final String FEATURE_NAME_DOB = "features/dob";
+  private static final String FEATURE_NAME_DOB_DISPLAY_NAME = "Date of Birth";
   private static final String NAME_AGENT_CONFIG = "agents/name/versions/1.0.0/configs/1";
   private static final String DATE_AGENT_CONFIG = "agents/date/versions/1.0.0/configs/1";
   private static final List<String> SOLUTIONS = asList("MATCH", "NO_MATCH");
 
   private static final FeatureDto NAME_FEATURE = FeatureDto.builder()
       .name(FEATURE_NAME_NAME)
+      .displayName(FEATURE_NAME_NAME_DISPLAY_NAME)
       .agentConfig(NAME_AGENT_CONFIG)
       .solutions(SOLUTIONS)
       .build();
   private static final FeatureDto DATE_FEATURE = FeatureDto.builder()
       .name(FEATURE_NAME_DOB)
+      .displayName(FEATURE_NAME_DOB_DISPLAY_NAME)
       .agentConfig(DATE_AGENT_CONFIG)
       .solutions(SOLUTIONS)
       .build();
