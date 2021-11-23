@@ -1,5 +1,4 @@
 import math
-import os
 
 import psutil
 import pyspark
@@ -18,6 +17,7 @@ from etl_pipeline.spark.spark_config import spark_conf
 
 class SparkServer:
     logger = get_logger("Spark Launcher")
+
     def launch(self):
         self.set_spark_cpu_memory(spark_conf)
         spark = SparkSession.builder.config(conf=spark_conf).appName(SPARK_APP_NAME).getOrCreate()
@@ -26,7 +26,6 @@ class SparkServer:
         self.logger.info("Spark configs:")
         for i in spark_conf.getAll():
             self.logger.info(i)
-
 
         self.logger.info("Spark UI - %s" % spark.sparkContext.uiWebUrl)
 
@@ -65,7 +64,8 @@ class SparkServer:
 
         if available_bytes < min_available_memory:
             raise Exception(
-                f"Not enough available memory left: {available_bytes} bytes. Required at least: {min_available_memory} bytes"
+                f"Not enough available memory left: {available_bytes} bytes."
+                "Required at least: {min_available_memory} bytes"
             )
 
     def _get_optimal_ram(self):
@@ -92,6 +92,3 @@ class SparkServer:
         )
         self.logger.info("Actual Spark Master: %s" % master)
         self.logger.info("Actual Spark Driver Memory: %s" % memory)
-
-
-SparkServer().launch()

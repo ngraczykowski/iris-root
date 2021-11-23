@@ -1,15 +1,7 @@
-import logging
 import os
 import platform
-import sys
-from collections.abc import Iterable
 from configparser import ConfigParser
-from glob import glob
 from pathlib import Path
-from pprint import pprint
-from typing import Union
-
-import pyspark
 
 ROOT_DIR = str(Path(__file__).parent.parent.absolute())
 DEFAULT_CONFIG_DIR = str(Path(ROOT_DIR).joinpath("config").joinpath("default"))
@@ -95,7 +87,6 @@ SERP_DIRECTORY = config["SERP"]["SERP_DIRECTORY"]
 SERP_HOME = os.path.join(ROOT_DIR, SERP_DIRECTORY)
 os.environ["SERP_HOME"] = SERP_HOME
 os.environ["ROOT_DIR"] = ROOT_DIR
-# SPARK_COMPILE_EGG = config['SPARK'].getboolean('IS_COMPILE_EGG')+
 SERP_HOME = config["SERP"]["SERP_DIRECTORY"]
 
 PYTHON_SKIP_PACKAGE_DEPENDENCY = config["PYTHON"].getboolean("SKIP_PACKAGE_DEPENDENCY")
