@@ -139,7 +139,7 @@ job "company-name-surrounding-agent" {
       }
 
       template {
-        data = file("application.nomad.yaml")
+        data = file("application.yaml")
         destination = "local/config/application.yaml"
         change_mode = "restart"
       }
