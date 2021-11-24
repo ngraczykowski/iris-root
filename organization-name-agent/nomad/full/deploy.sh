@@ -10,6 +10,8 @@ if [[ -z "$MINIO_ADDR" ]]; then
     MINIO_ADDR="http://"${minio_discovery:-"localhost:9000"}
 fi
 
+MINIO_ADDR="s3::"${MINIO_ADDR}
+
 MINIO_ALIAS=${MINIO_ALIAS:-minio}
 
 export NOMAD_ADDR="${NOMAD_ADDR:-http://localhost:4646}"
