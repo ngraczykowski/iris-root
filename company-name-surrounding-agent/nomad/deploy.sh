@@ -8,7 +8,7 @@ if [[ -z "$MINIO_ADDR" ]]; then
         minio_discovery=$(consul watch -type=service -service=minio | jq --raw-output '.[0].Service | [ .Address, (.Port | tostring) ] | join(":")')
     fi
 
-    MINIO_ADDR="http://"${minio_discovery:-"localhost:9000"}
+    MINIO_ADDR="s3::https://"${minio_discovery:-"localhost:9000"}
 fi
 
 MINIO_ALIAS=${MINIO_ALIAS:-minio}
