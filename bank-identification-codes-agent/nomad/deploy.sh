@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set  -e -o pipefail
+
 scriptdir="$(cd -- "$(dirname -- "${0}")" && pwd -P)"
 
 if [[ -z "$MINIO_ADDR" ]]; then
