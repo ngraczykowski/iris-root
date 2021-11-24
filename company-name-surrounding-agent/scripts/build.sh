@@ -16,7 +16,7 @@ version=$(ls -al "./dist/$artifact" | awk -F'company_name_surrounding_agent-|-py
 
 # zipfile (executable, to run without installing)
 pip install shiv
-shiv -e company_name_surrounding_agent.__main__:main "$@" --compressed -o "./dist/company_name_surrounding_agent-$version.pyz" "dist/$artifact"
+shiv -e company_name_surrounding.__main__:main "$@" --compressed -o "./dist/company_name_surrounding_agent-$version.pyz" "dist/$artifact"
 
 # configuration example
 example_config_path="./config"
