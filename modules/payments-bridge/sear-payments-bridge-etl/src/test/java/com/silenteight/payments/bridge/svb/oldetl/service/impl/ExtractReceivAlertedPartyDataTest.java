@@ -10,14 +10,13 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.TAG_RECEIVBANK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class ExtractReceivAlertedPartyDataTest {
 
   ExtractReceivbankAlertedPartyData extractReceivbankAlertedPartyData;
-
-  private static final String TAG_RECEIVBANK = "RECEIVBANK";
 
   @ParameterizedTest
   @CsvFileSource(

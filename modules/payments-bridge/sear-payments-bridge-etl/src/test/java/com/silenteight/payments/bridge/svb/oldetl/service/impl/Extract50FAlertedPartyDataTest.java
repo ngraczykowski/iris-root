@@ -10,13 +10,12 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.TAG_50F;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Extract50FAlertedPartyDataTest {
 
   Extract50FAlertedPartyData extract50FAlertedPartyData;
-
-  private static final String TAG_50F = "50F";
 
   @ParameterizedTest
   @CsvFileSource(

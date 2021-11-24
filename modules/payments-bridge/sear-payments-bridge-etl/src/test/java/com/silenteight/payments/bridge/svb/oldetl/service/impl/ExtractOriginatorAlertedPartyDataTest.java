@@ -10,13 +10,12 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.TAG_ORIGINATOR;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ExtractOriginatorAlertedPartyDataTest {
 
   ExtractOriginatorAlertedPartyData extractOriginatorAlertedPartyData;
-
-  private static final String TAG_ORIGINATOR = "ORIGINATOR";
 
   @ParameterizedTest
   @CsvFileSource(
@@ -30,13 +29,15 @@ class ExtractOriginatorAlertedPartyDataTest {
       String address,
       String ctryTown,
       String nameAddress,
-      String accountNumber) {
+      String accountNumber,
+      String applicationCode) {
 
     extractOriginatorAlertedPartyData = new ExtractOriginatorAlertedPartyData(
         new MessageData(List.of(new MessageTag(TAG_ORIGINATOR, messageData.replace("\\n", "\n")))));
 
     var actual =
-        extractOriginatorAlertedPartyData.extract(MessageFieldStructure.UNSTRUCTURED, fkcoFormat);
+        extractOriginatorAlertedPartyData.extract(
+            MessageFieldStructure.UNSTRUCTURED, fkcoFormat, applicationCode);
     assertEquals(AlertedPartyData.builder()
         .accountNumber(accountNumber)
         .names(name != null ? List.of(name) : List.of(""))

@@ -5,8 +5,11 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
+import com.silenteight.payments.bridge.svb.oldetl.util.CommonUtils;
 
 import java.util.List;
+
+import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
 
 @RequiredArgsConstructor
 public class ExtractBeneOrgbankInsbankAlertedPartyData {
@@ -14,30 +17,26 @@ public class ExtractBeneOrgbankInsbankAlertedPartyData {
   private static final List<String> MESSAGE_FORMATS_FED_IAT_O_INT = List.of("FED", "IAT-O", "INT");
   private static final List<String> MESSAGE_FORMATS_IAT_I = List.of("IAT-I");
 
-  private static final int FIRST_LINE = 0;
-  private static final int SECOND_LINE = 1;
-  private static final int THIRD_LINE = 2;
-  private static final int FOURTH_LINE = 3;
-
   private final MessageData messageData;
   private final String hitTag;
   private final String messageFormat;
 
-  public AlertedPartyData extract(MessageFieldStructure messageFieldStructure) {
+  public AlertedPartyData extract(
+      MessageFieldStructure messageFieldStructure, String applicationCode) {
     List<String> tagValueLines = messageData.getLines(hitTag);
-    var lastLine = tagValueLines.size() - 1;
+    var lastLine = CommonUtils.getLastLineNotUsIndex(tagValueLines, applicationCode);
 
     if (tagValueLines.get(0).length() == 2) {
 
-      String accountNumber = tagValueLines.get(SECOND_LINE);
-      String name = tagValueLines.get(THIRD_LINE);
+      String accountNumber = tagValueLines.get(LINE_2);
+      String name = tagValueLines.get(LINE_3);
       String address = tagValueLines.size() > 3 ?
-                       String.join(" ", tagValueLines.subList(FOURTH_LINE, lastLine)) :
+                       String.join(" ", tagValueLines.subList(LINE_4, lastLine)) :
                        "";
       String ctryTown = tagValueLines.size() > 3 ?
                         tagValueLines.get(lastLine).trim() :
                         "";
-      String nameAddress = String.join(" ", tagValueLines.subList(THIRD_LINE, lastLine + 1));
+      String nameAddress = String.join(" ", tagValueLines.subList(LINE_3, lastLine + 1));
 
       return AlertedPartyData.builder()
           .accountNumber(accountNumber.trim().toUpperCase())
@@ -50,14 +49,14 @@ public class ExtractBeneOrgbankInsbankAlertedPartyData {
     } else if (tagValueLines.get(0).length() > 2) {
       if (MESSAGE_FORMATS_FED_IAT_O_INT.contains(messageFormat)) {
         String accountNumber = "";
-        String name = tagValueLines.get(FIRST_LINE);
+        String name = tagValueLines.get(LINE_1);
         String address = tagValueLines.size() > 1 ?
-                         String.join(" ", tagValueLines.subList(SECOND_LINE, lastLine)) :
+                         String.join(" ", tagValueLines.subList(LINE_2, lastLine)) :
                          "";
         String ctryTown = tagValueLines.size() > 3 ?
                           tagValueLines.get(lastLine) :
                           "";
-        String nameAddress = String.join(" ", tagValueLines.subList(FIRST_LINE, lastLine + 1));
+        String nameAddress = String.join(" ", tagValueLines.subList(LINE_1, lastLine + 1));
 
         return AlertedPartyData.builder()
             .accountNumber(accountNumber.trim().toUpperCase())
@@ -71,20 +70,20 @@ public class ExtractBeneOrgbankInsbankAlertedPartyData {
         if (tagValueLines.size() == 4) {
           return AlertedPartyData.builder()
               .accountNumber("")
-              .name(tagValueLines.get(FIRST_LINE).trim())
-              .address(String.join(" ", tagValueLines.subList(SECOND_LINE, lastLine)).trim())
+              .name(tagValueLines.get(LINE_1).trim())
+              .address(String.join(" ", tagValueLines.subList(LINE_2, lastLine)).trim())
               .ctryTown(tagValueLines.get(lastLine).trim())
-              .nameAddress(String.join(" ", tagValueLines.subList(FIRST_LINE, lastLine + 1)).trim())
+              .nameAddress(String.join(" ", tagValueLines.subList(LINE_1, lastLine + 1)).trim())
               .messageFieldStructure(messageFieldStructure)
               .build();
         } else if (tagValueLines.size() > 4) {
           return AlertedPartyData.builder()
-              .accountNumber(tagValueLines.get(FIRST_LINE).trim().toUpperCase())
-              .name(tagValueLines.get(SECOND_LINE).trim())
-              .address(String.join(" ", tagValueLines.subList(THIRD_LINE, lastLine)).trim())
+              .accountNumber(tagValueLines.get(LINE_1).trim().toUpperCase())
+              .name(tagValueLines.get(LINE_2).trim())
+              .address(String.join(" ", tagValueLines.subList(LINE_3, lastLine)).trim())
               .ctryTown(tagValueLines.get(lastLine).trim())
               .nameAddress(
-                  String.join(" ", tagValueLines.subList(SECOND_LINE, lastLine + 1)).trim())
+                  String.join(" ", tagValueLines.subList(LINE_2, lastLine + 1)).trim())
               .messageFieldStructure(messageFieldStructure)
               .build();
         }

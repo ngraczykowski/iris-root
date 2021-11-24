@@ -10,13 +10,12 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.TAG_BENE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ExtractBeneOrgbankInsbankAlertedPartyDataTest {
 
   ExtractBeneOrgbankInsbankAlertedPartyData extractBeneOrgbankInsbankAlertedPartyData;
-
-  private static final String TAG_BENE = "BENE";
 
   @ParameterizedTest
   @CsvFileSource(
@@ -30,14 +29,16 @@ class ExtractBeneOrgbankInsbankAlertedPartyDataTest {
       String address,
       String ctryTown,
       String nameAddress,
-      String accountNumber) {
+      String accountNumber,
+      String applicationCode) {
 
     extractBeneOrgbankInsbankAlertedPartyData = new ExtractBeneOrgbankInsbankAlertedPartyData(
         new MessageData(List.of(new MessageTag(TAG_BENE, messageData.replace("\\n", "\n")))),
         TAG_BENE, fkcoFormat);
 
     var actual =
-        extractBeneOrgbankInsbankAlertedPartyData.extract(MessageFieldStructure.UNSTRUCTURED);
+        extractBeneOrgbankInsbankAlertedPartyData.extract(
+            MessageFieldStructure.UNSTRUCTURED, applicationCode);
 
     assertEquals(AlertedPartyData.builder()
         .accountNumber(accountNumber)

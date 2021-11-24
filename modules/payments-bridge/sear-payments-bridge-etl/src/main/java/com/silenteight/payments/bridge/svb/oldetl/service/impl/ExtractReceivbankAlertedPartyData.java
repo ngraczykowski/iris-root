@@ -8,16 +8,15 @@ import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
+
 @RequiredArgsConstructor
 public class ExtractReceivbankAlertedPartyData {
 
-  private static final List<String> MESSAGE_FORMATS_INT_FED = List.of("FED", "INT");
-  private static final List<String> MESSAGE_FORMATS_IAT_I_IAT_O = List.of("IAT-I", "IAT-O");
-
-  private static final int LINE_1 = 0;
-  private static final int LINE_2 = 1;
-  private static final int LINE_3 = 2;
-  private static final int LINE_5 = 4;
+  private static final List<String> FIRCO_FORMATS_INT_FED =
+      List.of(FIRCO_FORMAT_FED, FIRCO_FORMAT_INT);
+  private static final List<String> FIRCO_FORMATS_IAT_I_IAT_O =
+      List.of(FIRCO_FORMAT_IAT_I, FIRCO_FORMAT_IAT_O);
 
   private final MessageData messageData;
   private final String hitTag;
@@ -28,13 +27,13 @@ public class ExtractReceivbankAlertedPartyData {
     List<String> tagValueLines = messageData.getLines(hitTag);
     var lastLine = tagValueLines.size() - 1;
 
-    if (MESSAGE_FORMATS_INT_FED.contains(messageFormat)) {
+    if (FIRCO_FORMATS_INT_FED.contains(messageFormat)) {
       return AlertedPartyData.builder()
           .name(tagValueLines.get(LINE_1).trim())
           .nameAddress(tagValueLines.get(LINE_1).trim())
           .messageFieldStructure(messageFieldStructure)
           .build();
-    } else if (MESSAGE_FORMATS_IAT_I_IAT_O.contains(messageFormat)) {
+    } else if (FIRCO_FORMATS_IAT_I_IAT_O.contains(messageFormat)) {
       return AlertedPartyData.builder()
           .accountNumber(tagValueLines.get(LINE_1).trim().toUpperCase())
           .name(tagValueLines.get(LINE_2).trim())

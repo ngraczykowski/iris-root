@@ -10,13 +10,12 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.TAG_ORIGINATOR;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ExtractOriginatorBeneFormatFAlertedPartyDataTest {
 
   ExtractOriginatorBeneFormatFAlertedPartyData extractOriginatorBeneFormatFAlertedPartyData;
-
-  private static final String TAG_ORIGINATOR = "ORIGINATOR";
 
   @ParameterizedTest
   @CsvFileSource(

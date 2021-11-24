@@ -9,16 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
+
 @RequiredArgsConstructor
 class ExtractFormatFData {
-
-  private static final String NAME_ROW_PREFIX = "1/";
-  private static final String ADDRESS_ROW_PREFIX = "2/";
-  private static final String COUNTRY_ROW_PREFIX = "3/";
-
-  private static final String COUNTRY_TOWN = "countryTwn";
-  private static final String ADDRESS = "address";
-  private static final String NAME = "name";
 
   private static final Map<String, String> PREFIX_NAME_MAPPING =
       Map.of(NAME_ROW_PREFIX, NAME, ADDRESS_ROW_PREFIX, ADDRESS, COUNTRY_ROW_PREFIX, COUNTRY_TOWN);

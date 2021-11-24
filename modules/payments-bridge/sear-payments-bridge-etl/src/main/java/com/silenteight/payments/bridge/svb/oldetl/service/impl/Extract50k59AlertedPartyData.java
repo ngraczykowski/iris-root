@@ -7,12 +7,10 @@ import com.silenteight.payments.bridge.svb.oldetl.model.UnsupportedMessageExcept
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
 
+import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
+
 @RequiredArgsConstructor
 public class Extract50k59AlertedPartyData {
-
-  private static final int LINE_1 = 0;
-  private static final int LINE_2 = 1;
-  private static final int LINE_3 = 2;
 
   private final MessageData messageData;
 

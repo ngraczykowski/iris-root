@@ -77,7 +77,7 @@ class EtlMatchService {
         row.getFkcoVContent());
     return AlertParserService.extractAlertedPartyData(
         messageData, row.getFkcoVMatchedTag(),
-        row.getFkcoVFormat());
+        row.getFkcoVFormat(), row.getFkcoVApplication());
   }
 
   private static List<String> createMatchingTexts(LearningCsvRow row) {

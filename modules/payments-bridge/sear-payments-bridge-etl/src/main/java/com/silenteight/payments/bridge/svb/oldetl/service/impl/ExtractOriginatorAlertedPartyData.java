@@ -5,27 +5,21 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
+import com.silenteight.payments.bridge.svb.oldetl.util.CommonUtils;
 
-import java.util.List;
+import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
 
 @RequiredArgsConstructor
 public class ExtractOriginatorAlertedPartyData {
 
-  private static final int LINE_1 = 0;
-  private static final int LINE_2 = 1;
-  private static final int LINE_3 = 2;
-  private static final int LINE_4 = 3;
-
-  private static final String ORIGINATOR_TAG = "ORIGINATOR";
-  private static final String FED_FIRCO_FORMAT = "FED";
 
   private final MessageData messageData;
 
   public AlertedPartyData extract(
-      MessageFieldStructure messageFieldStructure, String fircoFormat) {
+      MessageFieldStructure messageFieldStructure, String fircoFormat, String applicationCode) {
 
-    var lines = messageData.getLines(ORIGINATOR_TAG);
-    var lastLine = getLastLineNotUS(lines);
+    var lines = messageData.getLines(TAG_ORIGINATOR);
+    var lastLine = CommonUtils.getLastLineNotUsIndex(lines, applicationCode);
     var firstLineLength = lines.get(0).length();
 
     var alertedPartyDataBuilder = AlertedPartyData.builder()
@@ -46,7 +40,7 @@ public class ExtractOriginatorAlertedPartyData {
           .ctryTown(lines.get(lastLine).trim())
           .build();
 
-    if (FED_FIRCO_FORMAT.equals(fircoFormat))
+    if (FIRCO_FORMAT_FED.equals(fircoFormat))
       return alertedPartyDataBuilder
           .name(lines.get(LINE_1).trim())
           .address(String.join(" ", lines.subList(LINE_2, lastLine)).trim())
@@ -61,12 +55,5 @@ public class ExtractOriginatorAlertedPartyData {
         .nameAddress(String.join(" ", lines.subList(LINE_2, lastLine + 1)).trim())
         .ctryTown(lines.get(lastLine).trim())
         .build();
-  }
-
-  private static int getLastLineNotUS(List<String> lines) {
-    var lastIndex = lines.size() - 1;
-    if (lines.get(lastIndex).equals("US"))
-      return lastIndex - 1;
-    return lastIndex;
   }
 }

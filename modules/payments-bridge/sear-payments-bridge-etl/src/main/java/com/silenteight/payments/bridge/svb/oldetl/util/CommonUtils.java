@@ -6,6 +6,7 @@ import lombok.NonNull;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.APPLICATION_CODE_GFX;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
@@ -47,6 +48,14 @@ public class CommonUtils {
   private static boolean charOnWhiteList(char c) {
     final String whiteList = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ";
     return whiteList.indexOf(c) != -1;
+  }
+
+  public static int getLastLineNotUsIndex(List<String> lines, String applicationCode) {
+    var lastIndex = lines.size() - 1;
+    if ("US".equals(lines.get(lastIndex)) && APPLICATION_CODE_GFX.equals(applicationCode)) {
+      return lastIndex - 1;
+    }
+    return lastIndex;
   }
 
 }

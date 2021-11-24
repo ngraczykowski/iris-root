@@ -25,6 +25,7 @@ import java.util.List;
 
 import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure.NAMEADDRESS_FORMAT_F;
 import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure.UNSTRUCTURED;
+import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -32,7 +33,12 @@ import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldSt
 public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
   private static final List<String> SUPPORTED_FIRCO_FORMATS =
-      List.of("INT", "FED", "IAT-I", "IAT-O", "O-F");
+      List.of(
+          FIRCO_FORMAT_INT,
+          FIRCO_FORMAT_FED,
+          FIRCO_FORMAT_IAT_I,
+          FIRCO_FORMAT_IAT_O,
+          FIRCO_FORMAT_O_F);
 
   public AlertEtlResponse createAlertEtlResponse(AlertMessageDto alertMessageDto) {
     if (log.isDebugEnabled()) {
@@ -86,7 +92,8 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     var alertedPartyData =
         extractAlertedPartyData(
             messageData, hit.getTag(),
-            extractFircoFormat(applicationCode, messageData));
+            extractFircoFormat(applicationCode, messageData),
+            applicationCode);
 
     var hitAndWatchlistPartyData = extractHitAndWatchlistPartyData(
         new TransactionMessageImpl(messageData), hit);
@@ -96,38 +103,38 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
   public static AlertedPartyData extractAlertedPartyData(
       MessageData messageData, String hitTag,
-      String fircoFormat) {
+      String fircoFormat, String applicationCode) {
 
     boolean tagValueInFormatF = ifTagValueInFormatF(messageData.getLines(hitTag));
     switch (hitTag) {
-      case "ORIGINATOR":
+      case TAG_ORIGINATOR:
         if (tagValueInFormatF) {
           return new ExtractOriginatorBeneFormatFAlertedPartyData(messageData, hitTag).extract(
               NAMEADDRESS_FORMAT_F);
         } else {
           return new ExtractOriginatorAlertedPartyData(messageData).extract(
-              UNSTRUCTURED, fircoFormat);
+              UNSTRUCTURED, fircoFormat, applicationCode);
         }
-      case "BENE":
+      case TAG_BENE:
         if (tagValueInFormatF) {
           return new ExtractOriginatorBeneFormatFAlertedPartyData(messageData, hitTag).extract(
               NAMEADDRESS_FORMAT_F);
         } else {
           return new ExtractBeneOrgbankInsbankAlertedPartyData(
-              messageData, hitTag, fircoFormat).extract(UNSTRUCTURED);
+              messageData, hitTag, fircoFormat).extract(UNSTRUCTURED, applicationCode);
         }
-      case "ORGBANK":
-      case "INSBANK":
+      case TAG_ORGBANK:
+      case TAG_INSBANK:
         return new ExtractBeneOrgbankInsbankAlertedPartyData(
-            messageData, hitTag, fircoFormat).extract(UNSTRUCTURED);
-      case "50F":
+            messageData, hitTag, fircoFormat).extract(UNSTRUCTURED, applicationCode);
+      case TAG_50F:
         return new Extract50FAlertedPartyData(messageData, hitTag).extract(NAMEADDRESS_FORMAT_F);
-      case "RECEIVBANK":
+      case TAG_RECEIVBANK:
         return new ExtractReceivbankAlertedPartyData(
             messageData, hitTag, fircoFormat).extract(UNSTRUCTURED);
-      case "50K":
-      case "59":
-      case "50":
+      case TAG_50K:
+      case TAG_59:
+      case TAG_50:
         return new Extract50k59AlertedPartyData(messageData).extract(hitTag, UNSTRUCTURED);
       default:
         throw new UnsupportedMessageException("Tag not supported " + hitTag);
@@ -172,7 +179,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
   }
 
   private static boolean ifTagValueInFormatF(List<String> tagValueLines) {
-    var formatFPrefixes = List.of("2/", "3/");
+    var formatFPrefixes = List.of(ADDRESS_ROW_PREFIX, COUNTRY_ROW_PREFIX);
     var numberOfLinesContainsFormatFPrefixes = tagValueLines.stream()
         .filter(line -> line.length() > 1)
         .filter(line -> formatFPrefixes.contains(
@@ -183,8 +190,8 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
   }
 
   private static String extractFircoFormat(String applicationCode, MessageData messageData) {
-    if (applicationCode.equals("GTEX"))
-      return "SWF";
+    if (applicationCode.equals(APPLICATION_CODE_GTEX))
+      return FIRCO_FORMAT_SWF;
 
     var type = messageData.getValue("TYPE");
 
@@ -194,7 +201,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
     }
 
     if (type.contains("BOO"))
-      return "IAT-O";
+      return FIRCO_FORMAT_IAT_O;
 
     throw new UnsupportedMessageException(
         "Unable to map unknown TYPE " + type + " to FKCO_V_FORMAT");

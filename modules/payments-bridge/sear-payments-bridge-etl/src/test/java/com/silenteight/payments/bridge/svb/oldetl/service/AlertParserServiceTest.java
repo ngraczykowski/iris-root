@@ -28,11 +28,13 @@ class AlertParserServiceTest {
       String nameAddress,
       String accountNumber,
       String hitTag,
-      String messageFormat) {
+      String messageFormat,
+      String applicationCode) {
 
     var alertedMessageData =
         new MessageData(List.of(new MessageTag(hitTag, messageData.replace("\\n", "\n"))));
-    var actual = AlertParserService.extractAlertedPartyData(alertedMessageData, hitTag, fkcoFormat);
+    var actual = AlertParserService.extractAlertedPartyData(alertedMessageData, hitTag, fkcoFormat,
+        applicationCode);
     var expected = AlertedPartyData.builder()
         .accountNumber(accountNumber)
         .name(name)
