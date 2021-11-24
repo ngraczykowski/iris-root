@@ -11,6 +11,6 @@ rm -rf \
     "$basedir"/.tox \
     "$basedir"/*.egg-info \
     "$basedir"/.coverage \
-    "$basedir"/nomad/*/artifacts \
+    "$basedir"/nomad/artifacts \
     "$basedir"/nomad/*.tar.bz2 \
   &>/dev/null || true
