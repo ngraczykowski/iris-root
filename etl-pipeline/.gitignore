@@ -50,3 +50,4 @@ env/*
 .env/*
 dependencies/*
 logs/*
+installers/*
