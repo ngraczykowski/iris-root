@@ -13,8 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.silenteight.warehouse.report.accuracy.AccuracyReportTestFixtures.LOCAL_DATE_FROM;
-import static com.silenteight.warehouse.report.accuracy.AccuracyReportTestFixtures.LOCAL_DATE_TO;
 import static com.silenteight.warehouse.report.accuracy.AccuracyReportTestFixtures.OFFSET_DATE_TIME_FROM;
 import static com.silenteight.warehouse.report.accuracy.AccuracyReportTestFixtures.OFFSET_DATE_TIME_TO;
 import static org.assertj.core.api.Assertions.*;
@@ -43,7 +41,7 @@ class CreateProductionAccuracyReportUseCaseTest {
 
     // then
     verify(reportService).createReportInstance(reportRangeCaptor.capture(), any(), any());
-    assertThat(reportRangeCaptor.getValue().getFromAsLocalDate()).isEqualTo(LOCAL_DATE_FROM);
-    assertThat(reportRangeCaptor.getValue().getToAsLocalDate()).isEqualTo(LOCAL_DATE_TO);
+    assertThat(reportRangeCaptor.getValue().getFrom()).isEqualTo(OFFSET_DATE_TIME_FROM);
+    assertThat(reportRangeCaptor.getValue().getTo()).isEqualTo(OFFSET_DATE_TIME_TO);
   }
 }

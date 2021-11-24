@@ -7,9 +7,9 @@ import com.silenteight.warehouse.report.accuracy.download.dto.DownloadAccuracyRe
 import com.silenteight.warehouse.report.name.ReportFileName;
 import com.silenteight.warehouse.report.storage.ReportStorage;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -31,8 +31,13 @@ class DownloadSimulationAccuracyReportUseCaseTest {
   @Mock
   private ReportFileName reportFileName;
 
-  @InjectMocks
   private DownloadSimulationAccuracyReportUseCase underTest;
+
+  @BeforeEach
+  void setUp() {
+    underTest = new DownloadAccuracyReportConfiguration().downloadSimulationAccuracyReportUseCase(
+        reportDataQuery, reportStorageService, reportFileName);
+  }
 
   @SneakyThrows
   @Test

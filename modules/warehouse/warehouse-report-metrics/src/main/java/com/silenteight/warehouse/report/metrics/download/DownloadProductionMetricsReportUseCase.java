@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.base.common.time.DateFormatter;
 import com.silenteight.warehouse.report.metrics.domain.MetricsReportService;
 import com.silenteight.warehouse.report.metrics.domain.dto.MetricsReportDto;
 import com.silenteight.warehouse.report.metrics.download.dto.DownloadMetricsReportDto;
@@ -23,6 +24,8 @@ class DownloadProductionMetricsReportUseCase {
   private final MetricsReportService reportService;
   @NonNull
   private final ReportFileName reportFileName;
+  @NonNull
+  private final DateFormatter dateFormatter;
 
   DownloadMetricsReportDto activate(long id) {
     log.debug("Getting production Metrics report, reportId={}", id);
@@ -40,12 +43,12 @@ class DownloadProductionMetricsReportUseCase {
     return reportFileName.getReportName(reportFileNameDto);
   }
 
-  private static ReportFileNameDto toReportFileNameDto(MetricsReportDto dto) {
+  private ReportFileNameDto toReportFileNameDto(MetricsReportDto dto) {
     ReportRange range = dto.getRange();
     return ReportFileNameDto.builder()
         .reportType(REPORT_TYPE)
-        .from(range.getFromAsLocalDate().toString())
-        .to(range.getToAsLocalDate().toString())
+        .from(dateFormatter.format(range.getFrom()))
+        .to(dateFormatter.format(range.getTo()))
         .timestamp(dto.getTimestamp())
         .build();
   }

@@ -75,7 +75,7 @@ class CreateAccuracyReportRestControllerTest extends BaseRestControllerTest {
         .build()
         .toString();
 
-    given(productionUseCase.createReport(OFFSET_DATE_TIME_FROM, OFFSET_DATE_TIME_TO))
+    given(productionUseCase.createReport(OFFSET_DATE_TIME_TO, OFFSET_DATE_TIME_FROM))
         .willThrow(InvalidDateRangeParametersOrderException.class);
 
     post(invalidParametersUrl).statusCode(BAD_REQUEST.value());

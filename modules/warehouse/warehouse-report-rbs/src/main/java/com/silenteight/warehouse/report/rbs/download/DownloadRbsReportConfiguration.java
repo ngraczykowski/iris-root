@@ -1,5 +1,6 @@
 package com.silenteight.warehouse.report.rbs.download;
 
+import com.silenteight.sep.base.common.time.IsoUtcWithoutMillisDateFormatter;
 import com.silenteight.warehouse.report.name.ReportFileName;
 import com.silenteight.warehouse.report.rbs.domain.RbsReportService;
 
@@ -16,7 +17,10 @@ class DownloadRbsReportConfiguration {
       ReportFileName productionReportFileNameService) {
 
     return new DownloadProductionRbsReportUseCase(
-        query, reportService, productionReportFileNameService);
+        query,
+        reportService,
+        productionReportFileNameService,
+        IsoUtcWithoutMillisDateFormatter.INSTANCE);
   }
 
   @Bean
