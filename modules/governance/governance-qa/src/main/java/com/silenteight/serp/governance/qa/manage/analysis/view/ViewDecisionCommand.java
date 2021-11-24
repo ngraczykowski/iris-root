@@ -11,7 +11,7 @@ import com.silenteight.serp.governance.qa.manage.domain.DecisionLevel;
 public class ViewDecisionCommand {
 
   @NonNull
-  String discriminator;
+  String alertName;
   @NonNull
   DecisionLevel level;
 }

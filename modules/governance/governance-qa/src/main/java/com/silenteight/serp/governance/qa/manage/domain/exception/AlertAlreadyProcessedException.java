@@ -6,7 +6,7 @@ public class AlertAlreadyProcessedException extends RuntimeException {
 
   private static final long serialVersionUID = 440927469968218054L;
 
-  public AlertAlreadyProcessedException(String discriminator) {
-    super(format("Alert with with discriminator=%s already processed", discriminator));
+  public AlertAlreadyProcessedException(String alertName) {
+    super(format("Alert with with alertName=%s already processed", alertName));
   }
 }

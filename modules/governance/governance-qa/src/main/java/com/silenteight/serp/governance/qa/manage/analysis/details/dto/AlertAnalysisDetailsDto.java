@@ -6,7 +6,7 @@ import java.time.OffsetDateTime;
 
 public interface AlertAnalysisDetailsDto {
 
-  String getDiscriminator();
+  String getAlertName();
 
   DecisionState getState();
 

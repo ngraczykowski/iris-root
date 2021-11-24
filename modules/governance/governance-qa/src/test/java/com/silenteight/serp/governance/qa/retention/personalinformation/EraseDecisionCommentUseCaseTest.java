@@ -24,10 +24,10 @@ import static org.mockito.Mockito.*;
 class EraseDecisionCommentUseCaseTest {
 
   private static final long ALERT_ID_3 = 3L;
-  private static final String ALERT_DISCRIMINATOR_1 = "54673323-7df0-484a-92d2-4a9c4ec6c55a";
-  private static final String ALERT_DISCRIMINATOR_2 = "d6a0db14-03cd-4026-9967-9787106dc9be";
-  private static final String ALERT_DISCRIMINATOR_3 = "dd8103bc-787c-4e59-8065-cf6368659214";
-  private static final String ALERT_DISCRIMINATOR_EMPTY = "";
+  private static final String ALERT_NAME_1 = "alerts/54673323-7df0-484a-92d2-4a9c4ec6c55a";
+  private static final String ALERT_NAME_2 = "alerts/d6a0db14-03cd-4026-9967-9787106dc9be";
+  private static final String ALERT_NAME_3 = "alerts/dd8103bc-787c-4e59-8065-cf6368659214";
+  private static final String ALERT_NAME_EMPTY = "";
 
   private EraseDecisionCommentUseCase underTest;
 
@@ -46,14 +46,12 @@ class EraseDecisionCommentUseCaseTest {
   @Test
   void activateShouldEraseOneDecisionComment() {
     //given
-    List<String> alerts = of(ALERT_DISCRIMINATOR_1, ALERT_DISCRIMINATOR_2, ALERT_DISCRIMINATOR_3,
-        ALERT_DISCRIMINATOR_EMPTY);
-
+    List<String> alerts = of(ALERT_NAME_1, ALERT_NAME_2, ALERT_NAME_3, ALERT_NAME_EMPTY);
     ArgumentCaptor<EraseDecisionCommentRequest> eraseDecisionCommentRequestCaptor =
         ArgumentCaptor.forClass(EraseDecisionCommentRequest.class);
-    when(alertQuery.findIdsForDiscriminators(of(ALERT_DISCRIMINATOR_1, ALERT_DISCRIMINATOR_2)))
+    when(alertQuery.findIdsForAlertsNames(of(ALERT_NAME_1, ALERT_NAME_2)))
         .thenReturn(emptyList());
-    when(alertQuery.findIdsForDiscriminators(of(ALERT_DISCRIMINATOR_3, ALERT_DISCRIMINATOR_EMPTY)))
+    when(alertQuery.findIdsForAlertsNames(of(ALERT_NAME_3, ALERT_NAME_EMPTY)))
         .thenReturn(of(ALERT_ID_3));
 
     //when
@@ -73,8 +71,8 @@ class EraseDecisionCommentUseCaseTest {
   @Test
   void activateShouldNotEraseDecisionCommentWhenNoAlertsFound() {
     //given
-    List<String> alerts = of(ALERT_DISCRIMINATOR_1, ALERT_DISCRIMINATOR_2);
-    when(alertQuery.findIdsForDiscriminators(alerts)).thenReturn(emptyList());
+    List<String> alerts = of(ALERT_NAME_1, ALERT_NAME_2);
+    when(alertQuery.findIdsForAlertsNames(alerts)).thenReturn(emptyList());
     //when
     underTest.activate(alerts);
     //then

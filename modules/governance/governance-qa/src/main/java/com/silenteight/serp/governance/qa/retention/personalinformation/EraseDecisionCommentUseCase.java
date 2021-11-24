@@ -31,7 +31,7 @@ public class EraseDecisionCommentUseCase {
     log.info("Looking up for {} alerts.", alerts.size());
     partition(alerts, batchSize)
         .stream()
-        .map(alertQuery::findIdsForDiscriminators)
+        .map(alertQuery::findIdsForAlertsNames)
         .forEach(this::eraseComments);
   }
 

@@ -12,7 +12,7 @@ import com.silenteight.serp.governance.qa.manage.domain.DecisionState;
 public class AlertDto {
 
   @NonNull
-  private String discriminator;
+  private String alertName;
   @NonNull
   private DecisionLevel level;
   @NonNull

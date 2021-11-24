@@ -530,4 +530,24 @@
     <sqlFile path="sql/update_geo_agent_error_value.sql"
              relativeToChangelogFile="true"/>
   </changeSet>
+  <changeSet id="serp-governance-4.0.0-20" author="tbiedrzycki">
+    <dropUniqueConstraint
+        tableName="governance_qa_alert"
+        constraintName="uq_governance_qa_discriminator"/>
+    <dropIndex
+        tableName="governance_qa_alert"
+        indexName="ix_governance_qa_alert_discriminator" />
+    <renameColumn oldColumnName="discriminator"
+                  newColumnName="alert_name"
+                  tableName="governance_qa_alert"/>
+    <addUniqueConstraint
+        tableName="governance_qa_alert"
+        columnNames="alert_name"
+        constraintName="uq_governance_qa_alert_name"/>
+    <createIndex
+        tableName="governance_qa_alert"
+        indexName="ix_governance_qa_alert_alert_name">
+      <column name="alert_name"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>

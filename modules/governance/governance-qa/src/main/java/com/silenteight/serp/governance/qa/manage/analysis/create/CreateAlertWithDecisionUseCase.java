@@ -13,7 +13,7 @@ public class CreateAlertWithDecisionUseCase {
   private final DecisionService decisionService;
 
   public void activate(CreateDecisionRequest request) {
-    decisionService.addAlert(request.getDiscriminator());
+    decisionService.addAlert(request.getAlertName());
     decisionService.createDecision(request);
   }
 }

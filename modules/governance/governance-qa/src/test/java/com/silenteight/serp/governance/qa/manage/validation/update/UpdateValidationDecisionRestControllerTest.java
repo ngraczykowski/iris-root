@@ -6,7 +6,7 @@ import com.silenteight.serp.governance.common.web.exception.GenericExceptionCont
 import com.silenteight.serp.governance.qa.manage.analysis.details.DecisionAlreadyExistsException;
 import com.silenteight.serp.governance.qa.manage.common.AlertControllerAdvice;
 import com.silenteight.serp.governance.qa.manage.domain.dto.UpdateDecisionRequest;
-import com.silenteight.serp.governance.qa.manage.domain.exception.WrongDiscriminatorException;
+import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertNameException;
 import com.silenteight.serp.governance.qa.manage.validation.update.dto.UpdateValidationDecisionDto;
 
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
-import static com.silenteight.serp.governance.qa.AlertFixture.DISCRIMINATOR;
+import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_ID;
+import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_NAME;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.VALIDATION;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.FAILED;
 import static java.lang.String.format;
@@ -36,7 +37,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 })
 class UpdateValidationDecisionRestControllerTest extends BaseRestControllerTest {
 
-  private static final String UPDATE_DECISION_URL = format("/v1/qa/1/alerts/%s", DISCRIMINATOR);
+  private static final String UPDATE_DECISION_URL = format("/v1/qa/1/alerts/%s", ALERT_ID);
   private static final String DECISION_COMMENT_FAILED = "FAILED";
 
   @MockBean
@@ -45,7 +46,7 @@ class UpdateValidationDecisionRestControllerTest extends BaseRestControllerTest 
   @Test
   @WithMockUser(username = USERNAME, authorities = QA_ISSUE_MANAGER)
   void its404_whenAlertNotFound() {
-    WrongDiscriminatorException exception = new WrongDiscriminatorException(DISCRIMINATOR);
+    WrongAlertNameException exception = new WrongAlertNameException(ALERT_NAME);
 
     doThrow(exception).when(useCase).activate(any());
 
@@ -58,7 +59,7 @@ class UpdateValidationDecisionRestControllerTest extends BaseRestControllerTest 
   @WithMockUser(username = USERNAME, authorities = QA_ISSUE_MANAGER)
   void its400_whenDecisionAlreadyExists() {
     DecisionAlreadyExistsException exception = new DecisionAlreadyExistsException(
-        DISCRIMINATOR,
+        ALERT_NAME,
         VALIDATION);
 
     doThrow(exception).when(useCase).activate(any());
@@ -79,7 +80,7 @@ class UpdateValidationDecisionRestControllerTest extends BaseRestControllerTest 
     //then
     verify(useCase, times(1)).activate(commandCaptor.capture());
     UpdateDecisionRequest request = commandCaptor.getValue();
-    assertThat(request.getDiscriminator()).isEqualTo(DISCRIMINATOR);
+    assertThat(request.getAlertName()).isEqualTo(ALERT_NAME);
     assertThat(request.getState()).isEqualTo(FAILED);
     assertThat(request.getComment()).isEqualTo(DECISION_COMMENT_FAILED);
     assertThat(request.getLevel()).isEqualTo(VALIDATION);

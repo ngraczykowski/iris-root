@@ -20,16 +20,16 @@ class InMemoryAlertRepository
   }
 
   @Override
-  public Optional<Alert> findByDiscriminator(String discriminator) {
+  public Optional<Alert> findByAlertName(String alertName) {
     return stream()
-        .filter(alert -> alert.getDiscriminator().equals(discriminator))
+        .filter(alert -> alert.getAlertName().equals(alertName))
         .findFirst();
   }
 
   @Override
-  public List<Long> findIdByDiscriminatorIn(List<String> discriminators) {
+  public List<Long> findIdByAlertNameIn(List<String> alertNames) {
     return stream()
-        .filter(alert -> discriminators.contains(alert.getDiscriminator()))
+        .filter(alert -> alertNames.contains(alert.getAlertName()))
         .map(Alert::getId)
         .collect(toList());
   }

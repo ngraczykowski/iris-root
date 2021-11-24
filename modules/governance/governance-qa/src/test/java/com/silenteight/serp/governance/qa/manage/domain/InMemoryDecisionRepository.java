@@ -4,7 +4,7 @@ import com.silenteight.sep.base.common.support.persistence.BasicInMemoryReposito
 import com.silenteight.serp.governance.qa.manage.analysis.details.dto.AlertAnalysisDetailsDto;
 import com.silenteight.serp.governance.qa.manage.analysis.list.dto.AlertAnalysisDto;
 import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertIdException;
-import com.silenteight.serp.governance.qa.manage.domain.exception.WrongDiscriminatorException;
+import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertNameException;
 import com.silenteight.serp.governance.qa.manage.validation.details.dto.AlertValidationDetailsDto;
 import com.silenteight.serp.governance.qa.manage.validation.list.dto.AlertValidationDto;
 
@@ -27,7 +27,7 @@ class InMemoryDecisionRepository
   }
 
   @Override
-  public Optional<Decision> findByDiscriminatorAndLevel(String discriminator, Integer level) {
+  public Optional<Decision> findByAlertNameAndLevel(String alertName, Integer level) {
     return stream().filter(decision -> level.equals(decision.getLevel()))
         .findFirst();
   }
@@ -41,13 +41,13 @@ class InMemoryDecisionRepository
   }
 
   @Override
-  public AlertAnalysisDetailsDto findAnalysisDetails(String discriminator, Integer level) {
-    Alert alert = alertRepository.findByDiscriminator(discriminator)
-        .orElseThrow(() -> new WrongDiscriminatorException(discriminator));
-    Decision decision = findDecisionByDiscriminatorAndLevel(alert, level);
+  public AlertAnalysisDetailsDto findAnalysisDetails(String alertName, Integer level) {
+    Alert alert = alertRepository.findByAlertName(alertName)
+        .orElseThrow(() -> new WrongAlertNameException(alertName));
+    Decision decision = findDecisionByAlertNameAndLevel(alert, level);
 
     return DummyAlertAnalysisDetailsDto.builder()
-        .discriminator(alert.getDiscriminator())
+        .alertName(alert.getAlertName())
         .state(decision.getState())
         .decisionComment(decision.getComment())
         .decisionBy(decision.getDecidedBy())
@@ -56,10 +56,10 @@ class InMemoryDecisionRepository
         .build();
   }
 
-  private Decision findDecisionByDiscriminatorAndLevel(Alert alert, Integer level) {
+  private Decision findDecisionByAlertNameAndLevel(Alert alert, Integer level) {
     return stream().filter(current ->
         current.getAlertId().equals(alert.getId()) && current.getLevel().equals(level))
-        .findFirst().orElseThrow(() -> new WrongDiscriminatorException(alert.getDiscriminator()));
+        .findFirst().orElseThrow(() -> new WrongAlertNameException(alert.getAlertName()));
   }
 
   @Override
@@ -72,7 +72,7 @@ class InMemoryDecisionRepository
               .orElseThrow(() -> new WrongAlertIdException(decision.getAlertId()));
 
           return AlertAnalysisDtoBuilder.builder()
-              .discriminator(alert.getDiscriminator())
+              .alertName(alert.getAlertName())
               .addedAt(toInstant(alert.getCreatedAt()))
               .state(decision.getState())
               .decisionAt(toInstant(decision.getDecidedAt()))
@@ -101,7 +101,7 @@ class InMemoryDecisionRepository
               .orElseThrow(() -> new WrongAlertIdException(decision.getAlertId()));
 
           return AlertValidationDtoBuilder.builder()
-              .discriminator(alert.getDiscriminator())
+              .alertName(alert.getAlertName())
               .addedAt(toInstant(alert.getCreatedAt()))
               .state(decision.getState())
               .decisionAt(toInstant(decision.getDecidedAt()))
@@ -116,13 +116,13 @@ class InMemoryDecisionRepository
   }
 
   @Override
-  public AlertValidationDetailsDto findValidationDetails(String discriminator, Integer level) {
-    Alert alert = alertRepository.findByDiscriminator(discriminator)
-        .orElseThrow(() -> new WrongDiscriminatorException(discriminator));
-    Decision decision = findDecisionByDiscriminatorAndLevel(alert, level);
+  public AlertValidationDetailsDto findValidationDetails(String alertName, Integer level) {
+    Alert alert = alertRepository.findByAlertName(alertName)
+        .orElseThrow(() -> new WrongAlertNameException(alertName));
+    Decision decision = findDecisionByAlertNameAndLevel(alert, level);
 
     return AlertValidationDetailsDtoBuilder.builder()
-        .discriminator(alert.getDiscriminator())
+        .alertName(alert.getAlertName())
         .state(decision.getState())
         .decisionComment(decision.getComment())
         .decisionBy(decision.getDecidedBy())

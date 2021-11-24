@@ -6,7 +6,7 @@ import com.silenteight.serp.governance.qa.manage.domain.dto.CreateDecisionReques
 import com.silenteight.serp.governance.qa.manage.domain.dto.EraseDecisionCommentRequest;
 import com.silenteight.serp.governance.qa.manage.domain.dto.UpdateDecisionRequest;
 import com.silenteight.serp.governance.qa.manage.domain.exception.AlertAlreadyProcessedException;
-import com.silenteight.serp.governance.qa.manage.domain.exception.WrongDiscriminatorException;
+import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertNameException;
 import com.silenteight.serp.governance.qa.send.SendAlertMessageCommand;
 import com.silenteight.serp.governance.qa.send.SendAlertMessageUseCase;
 import com.silenteight.serp.governance.qa.send.dto.AlertDto;
@@ -21,8 +21,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 
-import static com.silenteight.serp.governance.qa.AlertFixture.DISCRIMINATOR;
-import static com.silenteight.serp.governance.qa.AlertFixture.generateDiscriminator;
+import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_NAME;
+import static com.silenteight.serp.governance.qa.AlertFixture.generateAlertName;
 import static com.silenteight.serp.governance.qa.DecisionFixture.*;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.VALIDATION;
@@ -65,9 +65,9 @@ class DecisionServiceTest {
 
   @Test
   void createDecisionWillSaveDecisionWithLevel() {
-    Alert alert = saveAlert(DISCRIMINATOR);
+    Alert alert = saveAlert(ALERT_NAME);
     underTest.createDecision(getCreateDecisionRequest(LEVEL_ANALYSIS));
-    Decision decision = getDecisionByDiscriminatorAndLevel(DISCRIMINATOR,LEVEL_ANALYSIS.getValue());
+    Decision decision = getDecisionByAlertNameAndLevel(ALERT_NAME,LEVEL_ANALYSIS.getValue());
     assertThat(decision.getAlertId()).isEqualTo(alert.getId());
     assertThat(decision.getState()).isEqualTo(STATE_NEW);
     assertThat(decision.getLevel()).isEqualTo(LEVEL_ANALYSIS.getValue());
@@ -79,36 +79,36 @@ class DecisionServiceTest {
 
   @Test
   void createDecisionWillThrownExceptionIfOtherOnSameLevelExists() {
-    saveAlert(DISCRIMINATOR);
+    saveAlert(ALERT_NAME);
     underTest.createDecision(getCreateDecisionRequest(LEVEL_ANALYSIS));
-    Decision decision = getDecisionByDiscriminatorAndLevel(DISCRIMINATOR,LEVEL_ANALYSIS.getValue());
+    Decision decision = getDecisionByAlertNameAndLevel(ALERT_NAME,LEVEL_ANALYSIS.getValue());
     assertThat(decision.getId()).isNotNull();
 
     CreateDecisionRequest request = getCreateDecisionRequest(LEVEL_ANALYSIS);
     assertThatThrownBy(() -> underTest.createDecision(request))
         .isInstanceOf(DecisionAlreadyExistsException.class)
         .hasMessageContaining(
-            format("Decision for alert discriminator=%s on level=%d already exists.",
-            DISCRIMINATOR, LEVEL_ANALYSIS.getValue()));
+            format("Decision for alert alertName=%s on level=%d already exists.",
+                ALERT_NAME, LEVEL_ANALYSIS.getValue()));
   }
 
-  private Decision getDecisionByDiscriminatorAndLevel(String discriminator, Integer level) {
+  private Decision getDecisionByAlertNameAndLevel(String alertName, Integer level) {
     return decisionRepository
-        .findByDiscriminatorAndLevel(discriminator, level)
-        .orElseThrow(() -> new WrongDiscriminatorException(discriminator));
+        .findByAlertNameAndLevel(alertName, level)
+        .orElseThrow(() -> new WrongAlertNameException(alertName));
   }
 
   @Test
   void createDecisionWillThrownExceptionIfAlertNotFound() {
     CreateDecisionRequest request = getCreateDecisionRequest(LEVEL_ANALYSIS);
     assertThatThrownBy(() -> underTest.createDecision(request))
-        .isInstanceOf(WrongDiscriminatorException.class)
-        .hasMessageContaining(format("Could not find alert with discriminator=%s", DISCRIMINATOR));
+        .isInstanceOf(WrongAlertNameException.class)
+        .hasMessageContaining(format("Could not find alert with alertName=%s", ALERT_NAME));
   }
 
   private CreateDecisionRequest getCreateDecisionRequest(DecisionLevel level) {
     return CreateDecisionRequest.of(
-        DISCRIMINATOR,
+        ALERT_NAME,
         STATE_NEW,
         level,
         DECIDED_BY,
@@ -117,7 +117,7 @@ class DecisionServiceTest {
 
   @Test
   void updateDecisionWillChangeDecisionState() {
-    saveAlert(DISCRIMINATOR);
+    saveAlert(ALERT_NAME);
     underTest.createDecision(getCreateDecisionRequest(LEVEL_ANALYSIS));
     UpdateDecisionRequest updateDecisionRequest = getUpdateDecisionRequestForFailed();
     Decision decision = underTest.updateDecision(updateDecisionRequest);
@@ -132,25 +132,27 @@ class DecisionServiceTest {
     verify(auditingLogger, times(4)).log(any());
   }
 
-  private Alert saveAlert(String discriminator) {
+  private Alert saveAlert(String alertName) {
     Alert alert = new Alert();
-    alert.setDiscriminator(discriminator);
+    alert.setAlertName(alertName);
     return alertRepository.save(alert);
   }
 
   @Test
   void viewDecisionWillChangeAnalysisDecisionsUpdatedAtAndState() {
-    saveAlert(DISCRIMINATOR);
+    saveAlert(ALERT_NAME);
     underTest.createDecision(getCreateDecisionRequest(LEVEL_ANALYSIS));
-    Decision createdAnalysis = getDecisionByDiscriminatorAndLevel(DISCRIMINATOR,
+    Decision createdAnalysis = getDecisionByAlertNameAndLevel(
+        ALERT_NAME,
         LEVEL_ANALYSIS.getValue());
     underTest.createDecision(getCreateDecisionRequest(LEVEL_VALIDATION));
-    Decision createdValidation = getDecisionByDiscriminatorAndLevel(DISCRIMINATOR,
+    Decision createdValidation = getDecisionByAlertNameAndLevel(
+        ALERT_NAME,
         LEVEL_VALIDATION.getValue());
     assertThat(createdAnalysis.getState()).isEqualTo(NEW);
     assertThat(createdAnalysis.getUpdatedAt()).isNull();
-    underTest.view(DISCRIMINATOR, LEVEL_ANALYSIS);
-    Decision updated = getDecisionByDiscriminatorAndLevel(DISCRIMINATOR, LEVEL_ANALYSIS.getValue());
+    underTest.view(ALERT_NAME, LEVEL_ANALYSIS);
+    Decision updated = getDecisionByAlertNameAndLevel(ALERT_NAME, LEVEL_ANALYSIS.getValue());
     assertThat(updated.getUpdatedAt()).isEqualToIgnoringSeconds(OffsetDateTime.now());
     assertThat(updated.getState()).isEqualTo(VIEWING);
     assertThat(createdValidation.getUpdatedAt()).isNull();
@@ -158,18 +160,18 @@ class DecisionServiceTest {
 
   @Test
   void viewDecisionAfterUpdateWillThrowException() {
-    saveAlert(DISCRIMINATOR);
+    saveAlert(ALERT_NAME);
     underTest.createDecision(getCreateDecisionRequest(LEVEL_ANALYSIS));
     underTest.updateDecision(getUpdateDecisionRequestForFailed());
-    assertThatThrownBy(() -> underTest.view(DISCRIMINATOR, LEVEL_ANALYSIS))
+    assertThatThrownBy(() -> underTest.view(ALERT_NAME, LEVEL_ANALYSIS))
         .isInstanceOf(AlertAlreadyProcessedException.class)
         .hasMessageContaining(
-            format("Alert with with discriminator=%s already processed", DISCRIMINATOR));
+            format("Alert with with alertName=%s already processed", ALERT_NAME));
   }
 
   private UpdateDecisionRequest getUpdateDecisionRequestForFailed() {
     return UpdateDecisionRequest.of(
-        DISCRIMINATOR,
+        ALERT_NAME,
         STATE_FAILED,
         LEVEL_ANALYSIS,
         COMMENT_FAILED,
@@ -213,7 +215,7 @@ class DecisionServiceTest {
 
   private Alert getGeneratedAlert() {
     Alert alert = new Alert();
-    alert.setDiscriminator(generateDiscriminator());
+    alert.setAlertName(generateAlertName());
     return alertRepository.save(alert);
   }
 
@@ -231,7 +233,7 @@ class DecisionServiceTest {
   @Test
   void createDecisionShouldSendAlertMessageCommandWithOneAlert() {
     //given
-    Alert alert = saveAlert(DISCRIMINATOR);
+    Alert alert = saveAlert(ALERT_NAME);
     //when
     underTest.createDecision(getCreateDecisionRequest(LEVEL_ANALYSIS));
     //then
@@ -240,7 +242,7 @@ class DecisionServiceTest {
     assertThat(messageCommandCaptor.getValue().getAlertDtos().size()).isEqualTo(1);
     assertThat(messageCommandCaptor.getValue().getAlertDtos().size()).isEqualTo(1);
     AlertDto alertDto = messageCommandCaptor.getValue().getAlertDtos().get(0);
-    assertThat(alertDto.getDiscriminator()).isEqualTo(alert.getDiscriminator());
+    assertThat(alertDto.getAlertName()).isEqualTo(alert.getAlertName());
     assertThat(alertDto.getLevel()).isEqualTo(ANALYSIS);
     assertThat(alertDto.getState()).isEqualTo(NEW);
     assertThat(alertDto.getComment()).isNull();
@@ -249,7 +251,7 @@ class DecisionServiceTest {
   @Test
   void updateDecisionShouldSendSendAlertMessageCommandWithOneAlert() {
     //given
-    Alert alert = saveAlert(DISCRIMINATOR);
+    Alert alert = saveAlert(ALERT_NAME);
     saveDecision(LEVEL_ANALYSIS.getValue(), NEW, now(), alert.getId());
     //when
     underTest.updateDecision(getUpdateDecisionRequestForFailed());
@@ -259,7 +261,7 @@ class DecisionServiceTest {
     assertThat(messageCommandCaptor.getValue().getAlertDtos().size()).isEqualTo(1);
     assertThat(messageCommandCaptor.getValue().getAlertDtos().size()).isEqualTo(1);
     AlertDto alertDto = messageCommandCaptor.getValue().getAlertDtos().get(0);
-    assertThat(alertDto.getDiscriminator()).isEqualTo(alert.getDiscriminator());
+    assertThat(alertDto.getAlertName()).isEqualTo(alert.getAlertName());
     assertThat(alertDto.getLevel()).isEqualTo(ANALYSIS);
     assertThat(alertDto.getState()).isEqualTo(FAILED);
     assertThat(alertDto.getComment()).isEqualTo(COMMENT_FAILED);
@@ -268,7 +270,7 @@ class DecisionServiceTest {
   @Test
   void eraseCommentShouldSetNullForDecisionComment() {
     //given
-    Alert alert = saveAlert(DISCRIMINATOR);
+    Alert alert = saveAlert(ALERT_NAME);
     Decision decision = saveDecision(LEVEL_ANALYSIS.getValue(), NEW, CREATED_AT, alert.getId());
     //when
     underTest.eraseComments(EraseDecisionCommentRequest.of(alert.getId(), LEVEL_ANALYSIS,

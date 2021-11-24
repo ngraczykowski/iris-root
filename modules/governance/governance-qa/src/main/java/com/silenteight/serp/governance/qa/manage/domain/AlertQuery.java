@@ -11,7 +11,7 @@ public class AlertQuery {
   @NonNull
   private final AlertRepository alertRepository;
 
-  public List<Long> findIdsForDiscriminators(List<String> discriminators) {
-    return alertRepository.findIdByDiscriminatorIn(discriminators);
+  public List<Long> findIdsForAlertsNames(List<String> alertNames) {
+    return alertRepository.findIdByAlertNameIn(alertNames);
   }
 }

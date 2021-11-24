@@ -13,7 +13,7 @@ import java.time.Instant;
 class AlertValidationDtoBuilder implements AlertValidationDto {
 
   @NonNull
-  String discriminator;
+  String alertName;
   @NonNull
   DecisionState state;
   Instant decisionAt;

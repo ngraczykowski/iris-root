@@ -6,7 +6,7 @@ import com.silenteight.serp.governance.qa.manage.domain.DecisionState;
 import java.time.OffsetDateTime;
 
 import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_CREATED_AT;
-import static com.silenteight.serp.governance.qa.AlertFixture.DISCRIMINATOR;
+import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_NAME;
 import static com.silenteight.serp.governance.qa.DecisionFixture.COMMENT_OK;
 import static com.silenteight.serp.governance.qa.DecisionFixture.DECIDED_AT;
 import static com.silenteight.serp.governance.qa.DecisionFixture.DECIDED_BY;
@@ -15,8 +15,8 @@ import static com.silenteight.serp.governance.qa.DecisionFixture.STATE_FAILED;
 public class DummyAlertAnalysisDetailsDto implements AlertAnalysisDetailsDto {
 
   @Override
-  public String getDiscriminator() {
-    return DISCRIMINATOR;
+  public String getAlertName() {
+    return ALERT_NAME;
   }
 
   @Override

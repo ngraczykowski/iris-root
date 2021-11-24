@@ -12,6 +12,6 @@ class ViewAlertValidationUseCase {
   private final DecisionService decisionService;
 
   void activate(@NonNull ViewDecisionCommand command) {
-    decisionService.view(command.getDiscriminator(), command.getLevel());
+    decisionService.view(command.getAlertName(), command.getLevel());
   }
 }

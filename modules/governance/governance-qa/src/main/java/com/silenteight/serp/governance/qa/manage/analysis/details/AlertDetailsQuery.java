@@ -4,5 +4,5 @@ import com.silenteight.serp.governance.qa.manage.analysis.details.dto.AlertAnaly
 
 public interface AlertDetailsQuery {
 
-  AlertAnalysisDetailsDto details(String discriminator);
+  AlertAnalysisDetailsDto details(String alertName);
 }

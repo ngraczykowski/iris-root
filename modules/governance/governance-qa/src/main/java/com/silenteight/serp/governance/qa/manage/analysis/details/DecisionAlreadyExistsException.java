@@ -8,8 +8,8 @@ public class DecisionAlreadyExistsException extends RuntimeException {
 
   private static final long serialVersionUID = -4053597311211083842L;
 
-  public DecisionAlreadyExistsException(String discriminator, DecisionLevel level) {
-    super(format("Decision for alert discriminator=%s on level=%d already exists.", discriminator,
+  public DecisionAlreadyExistsException(String alertName, DecisionLevel level) {
+    super(format("Decision for alert alertName=%s on level=%d already exists.", alertName,
         level.getValue()));
   }
 }

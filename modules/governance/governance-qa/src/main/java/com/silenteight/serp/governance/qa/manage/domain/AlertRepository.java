@@ -10,10 +10,10 @@ interface AlertRepository extends Repository<Alert, Long> {
 
   Optional<Alert> findById(Long id);
 
-  Optional<Alert> findByDiscriminator(String discriminator);
+  Optional<Alert> findByAlertName(String alertName);
 
-  @Query(value = "SELECT a.id FROM Alert a WHERE a.discriminator IN (:discriminators)")
-  List<Long> findIdByDiscriminatorIn(List<String> discriminators);
+  @Query(value = "SELECT a.id FROM Alert a WHERE a.alertName IN (:alertNames)")
+  List<Long> findIdByAlertNameIn(List<String> alertNames);
 
   Alert save(Alert alert);
 

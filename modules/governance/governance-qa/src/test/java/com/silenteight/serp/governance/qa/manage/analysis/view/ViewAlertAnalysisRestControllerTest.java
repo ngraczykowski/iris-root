@@ -6,13 +6,14 @@ import com.silenteight.serp.governance.common.web.exception.GenericExceptionCont
 import com.silenteight.serp.governance.qa.manage.common.AlertControllerAdvice;
 import com.silenteight.serp.governance.qa.manage.domain.DecisionService;
 import com.silenteight.serp.governance.qa.manage.domain.exception.AlertAlreadyProcessedException;
-import com.silenteight.serp.governance.qa.manage.domain.exception.WrongDiscriminatorException;
+import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertNameException;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
-import static com.silenteight.serp.governance.qa.AlertFixture.DISCRIMINATOR;
+import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_ID;
+import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_NAME;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
 import static java.lang.String.format;
 import static org.mockito.Mockito.*;
@@ -29,7 +30,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 })
 class ViewAlertAnalysisRestControllerTest extends BaseRestControllerTest {
 
-  private static final String ALERTS_VIEW_URL = format("/v1/qa/0/alerts/%s:viewing", DISCRIMINATOR);
+  private static final String ALERTS_VIEW_URL = format("/v1/qa/0/alerts/%s:viewing", ALERT_ID);
 
   @MockBean
   DecisionService decisionService;
@@ -38,24 +39,24 @@ class ViewAlertAnalysisRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { AUDITOR, QA, QA_ISSUE_MANAGER })
   void its404_whenAlertNotFound() {
-    doThrow(new WrongDiscriminatorException(DISCRIMINATOR)).when(decisionService)
-        .view(command.getDiscriminator(), command.getLevel());
+    doThrow(new WrongAlertNameException(ALERT_NAME)).when(decisionService)
+        .view(command.getAlertName(), command.getLevel());
 
     post(ALERTS_VIEW_URL).statusCode(NOT_FOUND.value());
 
     verify(decisionService, times(1))
-        .view(command.getDiscriminator(), command.getLevel());
+        .view(command.getAlertName(), command.getLevel());
   }
 
   @TestWithRole(roles = { AUDITOR, QA, QA_ISSUE_MANAGER })
   void its400_whenAlertAlreadyProcessed() {
-    doThrow(new AlertAlreadyProcessedException(DISCRIMINATOR)).when(decisionService)
-        .view(command.getDiscriminator(), command.getLevel());
+    doThrow(new AlertAlreadyProcessedException(ALERT_NAME)).when(decisionService)
+        .view(command.getAlertName(), command.getLevel());
 
     post(ALERTS_VIEW_URL).statusCode(BAD_REQUEST.value());
 
     verify(decisionService, times(1))
-        .view(command.getDiscriminator(), command.getLevel());
+        .view(command.getAlertName(), command.getLevel());
   }
 
   @TestWithRole(roles = { AUDITOR, QA, QA_ISSUE_MANAGER })
@@ -63,7 +64,7 @@ class ViewAlertAnalysisRestControllerTest extends BaseRestControllerTest {
     post(ALERTS_VIEW_URL).statusCode(ACCEPTED.value());
 
     verify(decisionService, times(1))
-        .view(command.getDiscriminator(), command.getLevel());
+        .view(command.getAlertName(), command.getLevel());
   }
 
   @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, MODEL_TUNER })
@@ -74,7 +75,7 @@ class ViewAlertAnalysisRestControllerTest extends BaseRestControllerTest {
   private ViewDecisionCommand getViewDecisionCommand() {
     return ViewDecisionCommand
         .builder()
-        .discriminator(DISCRIMINATOR)
+        .alertName(ALERT_NAME)
         .level(ANALYSIS)
         .build();
   }

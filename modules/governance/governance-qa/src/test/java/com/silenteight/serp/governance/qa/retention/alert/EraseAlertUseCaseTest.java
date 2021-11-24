@@ -22,10 +22,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class EraseAlertUseCaseTest {
 
-  private static final String ALERT_DISCRIMINATOR_1 = "54673323-7df0-484a-92d2-4a9c4ec6c55a";
-  private static final String ALERT_DISCRIMINATOR_2 = "ecc07f88-596f-4341-9310-8aaab179b1f6";
-  private static final String ALERT_DISCRIMINATOR_3 = "eb7c41ef-02e6-4583-86cb-c4d5b116207b";
-  private static final String ALERT_DISCRIMINATOR_4 = "9b118f20-a070-4195-b565-75fcb41b51dd";
+  private static final String ALERT_NAME_1 = "alerts/54673323-7df0-484a-92d2-4a9c4ec6c55a";
+  private static final String ALERT_NAME_2 = "alerts/ecc07f88-596f-4341-9310-8aaab179b1f6";
+  private static final String ALERT_NAME_3 = "alerts/eb7c41ef-02e6-4583-86cb-c4d5b116207b";
+  private static final String ALERT_NAME_4 = "alert/9b118f20-a070-4195-b565-75fcb41b51dd";
   private static final long ALERT_ID_3 = 3L;
 
   private EraseAlertUseCase underTest;
@@ -45,11 +45,10 @@ class EraseAlertUseCaseTest {
   @Test
   void activateShouldEraseOneAlert() {
     //given
-    List<String> alerts = of(ALERT_DISCRIMINATOR_1, ALERT_DISCRIMINATOR_2, ALERT_DISCRIMINATOR_3,
-        ALERT_DISCRIMINATOR_4);
+    List<String> alerts = of(ALERT_NAME_1, ALERT_NAME_2, ALERT_NAME_3, ALERT_NAME_4);
 
-    when(alertQuery.findIdsForDiscriminators(alerts.subList(0,2))).thenReturn(emptyList());
-    when(alertQuery.findIdsForDiscriminators(alerts.subList(2,4)))
+    when(alertQuery.findIdsForAlertsNames(alerts.subList(0,2))).thenReturn(emptyList());
+    when(alertQuery.findIdsForAlertsNames(alerts.subList(2,4)))
         .thenReturn(of(ALERT_ID_3));
 
     ArgumentCaptor<EraseAlertRequest> eraseAlertRequestCaptor =
