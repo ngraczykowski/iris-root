@@ -18,7 +18,7 @@ class GetCommentInputUseCaseSpec extends Specification {
   // TODO Struct checks
   def 'should get comment inputs'() {
     given:
-    def request = StreamCommentInputsRequestDto.builder()
+    def request = BatchGetAlertsCommentInputsRequestDto.builder()
         .alerts(['alerts/1'])
         .build()
 
@@ -29,6 +29,7 @@ class GetCommentInputUseCaseSpec extends Specification {
     def alertCommentInput = [caseId: "1", apId: "1", listName: "someWatchlistType", apType: "I", wlType: "someWatchlistValue", wlId: "someWlId"]
 
     def response = CommentInputDto.builder()
+        .name('comment-inputs/alerts/1')
         .alert('alerts/1')
         .alertCommentInput(alertCommentInput)
         .matchCommentInputsDto([matchCommentInputDto])
@@ -53,6 +54,7 @@ class GetCommentInputUseCaseSpec extends Specification {
 
     result.size() == 1
     with(result.first()) {
+      name == response.name
       alert == response.alert
       with(alertCommentInput as Map<String, String>) {
         def comments = response.alertCommentInput

@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Builder
 @Value
-class StreamCommentInputsRequestDto {
+class BatchGetAlertsCommentInputsRequestDto {
 
   @NotNull
   List<String> alerts;

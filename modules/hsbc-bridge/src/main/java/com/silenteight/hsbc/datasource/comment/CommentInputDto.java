@@ -10,6 +10,7 @@ import java.util.Map;
 @Value
 class CommentInputDto {
 
+  String name;
   String alert;
   Map<String, String> alertCommentInput;
   List<MatchCommentInputDto> matchCommentInputsDto;

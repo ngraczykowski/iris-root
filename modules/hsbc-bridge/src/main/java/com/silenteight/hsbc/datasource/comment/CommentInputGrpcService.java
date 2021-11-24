@@ -2,10 +2,11 @@ package com.silenteight.hsbc.datasource.comment;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.datasource.comments.api.v1.CommentInput;
-import com.silenteight.datasource.comments.api.v1.CommentInputServiceGrpc.CommentInputServiceImplBase;
-import com.silenteight.datasource.comments.api.v1.MatchCommentInput;
-import com.silenteight.datasource.comments.api.v1.StreamCommentInputsRequest;
+import com.silenteight.datasource.comments.api.v2.BatchGetAlertsCommentInputsRequest;
+import com.silenteight.datasource.comments.api.v2.BatchGetAlertsCommentInputsResponse;
+import com.silenteight.datasource.comments.api.v2.CommentInput;
+import com.silenteight.datasource.comments.api.v2.CommentInputServiceGrpc.CommentInputServiceImplBase;
+import com.silenteight.datasource.comments.api.v2.MatchCommentInput;
 
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
@@ -24,19 +25,25 @@ class CommentInputGrpcService extends CommentInputServiceImplBase {
   private final GetCommentInputUseCase getCommentInputUseCase;
 
   @Override
-  public void streamCommentInputs(
-      StreamCommentInputsRequest request,
-      StreamObserver<CommentInput> responseObserver) {
-
-    var response = mapToCommentInputs(
-        getCommentInputUseCase.getInputRequestsResponse(createInputRequest(request)));
-
-    response.forEach(responseObserver::onNext);
+  public void batchGetAlertsCommentInputs(
+      BatchGetAlertsCommentInputsRequest request,
+      StreamObserver<BatchGetAlertsCommentInputsResponse> responseObserver) {
+    responseObserver.onNext(createResponse(request));
     responseObserver.onCompleted();
   }
 
-  private StreamCommentInputsRequestDto createInputRequest(StreamCommentInputsRequest request) {
-    return StreamCommentInputsRequestDto.builder()
+  private BatchGetAlertsCommentInputsResponse createResponse(BatchGetAlertsCommentInputsRequest request) {
+    var commentInputs =
+        getCommentInputUseCase.getInputRequestsResponse(createInputRequest(request));
+
+    return BatchGetAlertsCommentInputsResponse.newBuilder()
+        .addAllCommentInputs(mapToCommentInputs(commentInputs))
+        .build();
+  }
+
+  private BatchGetAlertsCommentInputsRequestDto createInputRequest(
+      BatchGetAlertsCommentInputsRequest request) {
+    return BatchGetAlertsCommentInputsRequestDto.builder()
         .alerts(request.getAlertsList())
         .build();
   }
@@ -44,6 +51,7 @@ class CommentInputGrpcService extends CommentInputServiceImplBase {
   private List<CommentInput> mapToCommentInputs(List<CommentInputDto> commentInputsDto) {
     return commentInputsDto.stream()
         .map(commentInputDto -> CommentInput.newBuilder()
+            .setName(commentInputDto.getName())
             .setAlert(commentInputDto.getAlert())
             .setAlertCommentInput(toStruct(commentInputDto.getAlertCommentInput()))
             .addAllMatchCommentInputs(mapToMatchCommentInputs(commentInputDto))
@@ -53,7 +61,7 @@ class CommentInputGrpcService extends CommentInputServiceImplBase {
 
   private static Struct toStruct(Map<String, String> commentData) {
     var builder = Struct.newBuilder();
-    commentData.forEach((k,v) -> {
+    commentData.forEach((k, v) -> {
       if (Objects.nonNull(v)) {
         builder.putFields(k, Value.newBuilder().setStringValue(v).build());
       }

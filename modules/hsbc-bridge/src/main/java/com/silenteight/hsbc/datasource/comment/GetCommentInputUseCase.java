@@ -24,7 +24,8 @@ class GetCommentInputUseCase {
   private final Map<String, List<String>> wlTypesMap;
 
   @Transactional(readOnly = true)
-  public List<CommentInputDto> getInputRequestsResponse(StreamCommentInputsRequestDto request) {
+  public List<CommentInputDto> getInputRequestsResponse(
+      BatchGetAlertsCommentInputsRequestDto request) {
     log.info("Create comments request received.");
     var alertsSorted = new ArrayList<>(request.getAlerts());
     Collections.sort(alertsSorted);
@@ -43,6 +44,7 @@ class GetCommentInputUseCase {
         .zipWith(Stream.generate(index::getAndIncrement))
         .forKeyValue((match, idx) -> commentInputs.add(
             CommentInputDto.builder()
+                .name("comment-inputs/" + alertsName.get(idx))
                 .alert(alertsName.get(idx))
                 .alertCommentInput(toAlertCommentMap(match))
                 .matchCommentInputsDto(createMatchCommentInputs(match))
