@@ -21,7 +21,7 @@ class CompanyNameSurroundingAgentGrpcServicer(
         self, request: CheckCompanyNameSurroundingRequest, _context
     ) -> CheckCompanyNameSurroundingResponse:
 
-        names = request.names
+        names = list(request.names)
         result: Result = await self.create_resolve_task(names)
         return CheckCompanyNameSurroundingResponse(
             names=names,
