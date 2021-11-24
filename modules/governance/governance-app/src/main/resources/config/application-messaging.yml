@@ -67,6 +67,8 @@ serp:
         model: gov.model
         notification: notification
         solution-discrepancy: learning
+        gov-qa: gov.qa
+        gov-event: gov.event
       broker:
         analytics:
           queue-name: governance.analytics
@@ -81,6 +83,8 @@ serp:
         models-archived:
           queue-name: gov.models-archived
           routing-key: event.models-archived
+        gov-qa:
+          routing-key: event.qa-alert
         qa-retention-personal-information-expired:
           queue-name: gov.retention.personal-information-expired
           routing-key: retention.personal-information-expired

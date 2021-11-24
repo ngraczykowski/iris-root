@@ -23,4 +23,10 @@ class ExchangeProperties {
 
   @NotBlank
   String solutionDiscrepancy;
+
+  @NotBlank
+  String govQa;
+
+  @NotBlank
+  String govEvent;
 }
