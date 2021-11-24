@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
+import static com.silenteight.serp.governance.qa.manage.common.AlertResource.toResourceName;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -20,15 +23,15 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequiredArgsConstructor
 class GetAnalysisAlertDetailsRestController {
 
-  private static final String ALERT_DETAILS_URL = "/v1/qa/0/alerts/{discriminator}";
+  private static final String ALERT_DETAILS_URL = "/v1/qa/0/alerts/{alertId}";
 
   @NonNull
   private final AlertDetailsQuery detailsQuery;
 
   @GetMapping(ALERT_DETAILS_URL)
   @PreAuthorize("isAuthorized('ALERTS_ANALYSIS')")
-  public ResponseEntity<AlertAnalysisDetailsDto> details(@PathVariable String discriminator) {
-    return ok(detailsQuery.details(discriminator));
+  public ResponseEntity<AlertAnalysisDetailsDto> details(@PathVariable UUID alertId) {
+    return ok(detailsQuery.details(toResourceName(alertId)));
   }
 }
 

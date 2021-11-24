@@ -12,8 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.OffsetDateTime;
 import javax.persistence.EntityNotFoundException;
 
-import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_ID;
-import static com.silenteight.serp.governance.qa.AlertFixture.DISCRIMINATOR;
+import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_NAME;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionState.FAILED;
 import static java.lang.String.format;
@@ -26,6 +25,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AlertServiceTest {
 
+  private static final long ALERT_ID = 1L;
   private static final OffsetDateTime NOW = parse("2021-09-14T08:09:25.481564Z");
 
   private InMemoryAlertRepository alertRepository;
@@ -47,7 +47,7 @@ class AlertServiceTest {
   @Test
   void eraseAlertShouldDeleteAlert() {
     //given
-    Long alertId = saveAlert(DISCRIMINATOR).getId();
+    Long alertId = saveAlert(ALERT_NAME).getId();
     Decision decision = new Decision();
     decision.setAlertId(alertId);
     decision.setLevel(ANALYSIS.getValue());
@@ -75,9 +75,9 @@ class AlertServiceTest {
     verify(auditingLogger, never()).log(any());
   }
 
-  private Alert saveAlert(String discriminator) {
+  private Alert saveAlert(String alertName) {
     Alert alert = new Alert();
-    alert.setDiscriminator(discriminator);
+    alert.setAlertName(alertName);
     return alertRepository.save(alert);
   }
 }

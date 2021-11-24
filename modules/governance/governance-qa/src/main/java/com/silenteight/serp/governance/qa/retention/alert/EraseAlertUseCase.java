@@ -29,7 +29,7 @@ class EraseAlertUseCase {
     log.info("Looking up for alerts counts {}.", alerts.size());
     partition(alerts, batchSize)
         .stream()
-        .map(alertQuery::findIdsForDiscriminators)
+        .map(alertQuery::findIdsForAlertsNames)
         .forEach(this::eraseAlerts);
   }
 

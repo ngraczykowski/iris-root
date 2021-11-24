@@ -135,7 +135,7 @@ serp:
     qa:
       integration:
         request:
-          exchange: gov.event
+          exchange: gov.qa
           routingKey: event.qa-alert
       retention:
         personal-information-expired:

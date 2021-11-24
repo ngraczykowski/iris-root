@@ -6,7 +6,7 @@ import java.time.Instant;
 
 public interface AlertValidationDto {
 
-  String getDiscriminator();
+  String getAlertName();
 
   DecisionState getState();
 

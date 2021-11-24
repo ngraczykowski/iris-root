@@ -33,8 +33,8 @@ class AlertValidationQuery implements AlertDetailsQuery, ListAlertValidationQuer
   }
 
   @Override
-  public AlertValidationDetailsDto details(String discriminator) {
-    return decisionRepository.findValidationDetails(discriminator, VALIDATION_STATE);
+  public AlertValidationDetailsDto details(String alertName) {
+    return decisionRepository.findValidationDetails(alertName, VALIDATION_STATE);
   }
 
   @Override

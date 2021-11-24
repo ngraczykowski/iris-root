@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.OffsetDateTime;
 
 import static com.rabbitmq.client.ConnectionFactoryConfigurator.USERNAME;
-import static com.silenteight.serp.governance.qa.AlertFixture.DISCRIMINATOR;
+import static com.silenteight.serp.governance.qa.AlertFixture.ALERT_NAME;
 import static com.silenteight.serp.governance.qa.DecisionFixture.COMMENT_OK;
 import static com.silenteight.serp.governance.qa.DecisionFixture.LEVEL_VALIDATION;
 import static com.silenteight.serp.governance.qa.DecisionFixture.STATE_NEW;
@@ -40,7 +40,7 @@ class UpdateValidationDecisionUseCaseTest {
   void activateWillUpdateValidation() {
     //given
     UpdateDecisionRequest request = UpdateDecisionRequest.of(
-        DISCRIMINATOR,
+        ALERT_NAME,
         STATE_NEW,
         LEVEL_VALIDATION,
         COMMENT_OK,
@@ -54,7 +54,7 @@ class UpdateValidationDecisionUseCaseTest {
     verify(decisionService, times(1))
         .updateDecision(updateRequestCaptor.capture());
     UpdateDecisionRequest updateDecisionRequest = updateRequestCaptor.getValue();
-    assertThat(updateDecisionRequest.getDiscriminator()).isEqualTo(DISCRIMINATOR);
+    assertThat(updateDecisionRequest.getAlertName()).isEqualTo(ALERT_NAME);
     assertThat(updateDecisionRequest.getState()).isEqualTo(STATE_NEW);
     assertThat(updateDecisionRequest.getComment()).isEqualTo(COMMENT_OK);
     assertThat(updateDecisionRequest.getLevel()).isEqualTo(VALIDATION);

@@ -39,7 +39,7 @@ public class SendAlertMessageCommand {
 
   Alert toAlert(AlertDto alertDto) {
     return Alert.newBuilder()
-        .setDiscriminator(alertDto.getDiscriminator())
+        .setDiscriminator(alertDto.getAlertName())
         .setPayload(getPayload(alertDto))
         .build();
   }

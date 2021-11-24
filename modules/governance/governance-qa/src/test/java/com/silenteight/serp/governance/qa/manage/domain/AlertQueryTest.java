@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static com.silenteight.serp.governance.qa.AlertFixture.DISCRIMINATOR;
-import static com.silenteight.serp.governance.qa.AlertFixture.DISCRIMINATOR_2;
+import static com.silenteight.serp.governance.qa.AlertFixture.*;
 import static java.util.List.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -24,22 +23,22 @@ class AlertQueryTest {
   }
 
   @Test
-  void findByDiscriminatorsShouldReturnOneDiscriminator() {
+  void findByAlertNameShouldReturnOneAlertName() {
     //given
-    List<String> discriminators = of(DISCRIMINATOR);
-    alertRepository.save(getAlert(DISCRIMINATOR));
-    alertRepository.save(getAlert(DISCRIMINATOR_2));
-    Optional<Alert> savedAlert = alertRepository.findByDiscriminator(DISCRIMINATOR);
+    List<String> alertNames = of(ALERT_NAME);
+    alertRepository.save(getAlert(ALERT_NAME));
+    alertRepository.save(getAlert(ALERT_NAME_2));
+    Optional<Alert> savedAlert = alertRepository.findByAlertName(ALERT_NAME);
     //when
-    List<Long> alertIds = underTest.findIdsForDiscriminators(discriminators);
+    List<Long> alertIds = underTest.findIdsForAlertsNames(alertNames);
     //then
     assertTrue(savedAlert.isPresent());
     assertEquals(of(savedAlert.get().getId()), alertIds);
   }
 
-  private Alert getAlert(String discriminator) {
+  private Alert getAlert(String alertName) {
     Alert alert = new Alert();
-    alert.setDiscriminator(discriminator);
+    alert.setAlertName(alertName);
     return alert;
   }
 }

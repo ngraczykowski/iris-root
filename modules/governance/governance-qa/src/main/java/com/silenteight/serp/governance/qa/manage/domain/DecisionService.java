@@ -10,7 +10,7 @@ import com.silenteight.serp.governance.qa.manage.domain.dto.CreateDecisionReques
 import com.silenteight.serp.governance.qa.manage.domain.dto.EraseDecisionCommentRequest;
 import com.silenteight.serp.governance.qa.manage.domain.dto.UpdateDecisionRequest;
 import com.silenteight.serp.governance.qa.manage.domain.exception.AlertAlreadyProcessedException;
-import com.silenteight.serp.governance.qa.manage.domain.exception.WrongDiscriminatorException;
+import com.silenteight.serp.governance.qa.manage.domain.exception.WrongAlertNameException;
 import com.silenteight.serp.governance.qa.send.SendAlertMessageCommand;
 import com.silenteight.serp.governance.qa.send.SendAlertMessageUseCase;
 
@@ -35,17 +35,17 @@ public class DecisionService {
   private final SendAlertMessageUseCase sendAlertMessageUseCase;
 
   @Transactional
-  public Alert addAlert(String discriminator) {
+  public Alert addAlert(String alertName) {
     Alert alert = new Alert();
-    alert.setDiscriminator(discriminator);
+    alert.setAlertName(alertName);
     return alertRepository.save(alert);
   }
 
   public Decision updateDecision(UpdateDecisionRequest request) {
     request.preAudit(auditingLogger::log);
 
-    Decision decision = getDecisionByDiscriminatorAndLevel(
-        request.getDiscriminator(), request.getLevel());
+    Decision decision = getDecisionByAlertNameAndLevel(
+        request.getAlertName(), request.getLevel());
     decision.setComment(request.getComment());
     decision.setState(request.getState());
     decision.setDecidedAt(request.getCreatedAt());
@@ -68,27 +68,27 @@ public class DecisionService {
     request.postAudit(auditingLogger::log);
   }
 
-  private Decision getDecisionByDiscriminatorAndLevel(
-      String discriminator, DecisionLevel decisionLevel) {
+  private Decision getDecisionByAlertNameAndLevel(
+      String alertName, DecisionLevel decisionLevel) {
 
     return decisionRepository
-        .findByDiscriminatorAndLevel(discriminator, decisionLevel.getValue())
+        .findByAlertNameAndLevel(alertName, decisionLevel.getValue())
         .orElseThrow(() -> {
-          throw new WrongDiscriminatorException(discriminator);
+          throw new WrongAlertNameException(alertName);
         });
   }
 
-  private void assertDecisionNotExistsOnLevel(String discriminator, DecisionLevel level) {
-    if (decisionRepository.findByDiscriminatorAndLevel(discriminator, level.getValue())
+  private void assertDecisionNotExistsOnLevel(String alertName, DecisionLevel level) {
+    if (decisionRepository.findByAlertNameAndLevel(alertName, level.getValue())
         .isPresent())
-      throw new DecisionAlreadyExistsException(discriminator, level);
+      throw new DecisionAlreadyExistsException(alertName, level);
   }
 
   @Transactional
   public void createDecision(CreateDecisionRequest request) {
     request.preAudit(auditingLogger::log);
-    assertDecisionNotExistsOnLevel(request.getDiscriminator(), request.getLevel());
-    Alert alert = getAlert(request.getDiscriminator());
+    assertDecisionNotExistsOnLevel(request.getAlertName(), request.getLevel());
+    Alert alert = getAlert(request.getAlertName());
 
     Decision decision = new Decision();
     decision.setAlertId(alert.getId());
@@ -101,24 +101,24 @@ public class DecisionService {
     request.postAudit(auditingLogger::log);
   }
 
-  private Alert getAlert(String discriminator) {
-    return alertRepository.findByDiscriminator(discriminator)
-        .orElseThrow(() -> new WrongDiscriminatorException(discriminator));
+  private Alert getAlert(String alertName) {
+    return alertRepository.findByAlertName(alertName)
+        .orElseThrow(() -> new WrongAlertNameException(alertName));
   }
 
-  public void view(String discriminator, DecisionLevel level) {
+  public void view(String alertName, DecisionLevel level) {
     Decision decision = decisionRepository
-        .findByDiscriminatorAndLevel(discriminator, level.getValue())
-        .orElseThrow(() -> new WrongDiscriminatorException(discriminator));
-    assertCanBeProcessed(decision, discriminator);
+        .findByAlertNameAndLevel(alertName, level.getValue())
+        .orElseThrow(() -> new WrongAlertNameException(alertName));
+    assertCanBeProcessed(decision, alertName);
     decision.setUpdatedAt(OffsetDateTime.now());
     decision.setState(VIEWING);
     decisionRepository.save(decision);
   }
 
-  private static void assertCanBeProcessed(Decision decision, String discriminator) {
+  private static void assertCanBeProcessed(Decision decision, String alertName) {
     if (!decision.canBeProcessed())
-      throw new AlertAlreadyProcessedException(discriminator);
+      throw new AlertAlreadyProcessedException(alertName);
   }
 
   public void restartViewingDecisions(OffsetDateTime viewedBefore, Integer limit) {

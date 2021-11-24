@@ -4,5 +4,5 @@ import com.silenteight.serp.governance.qa.manage.validation.details.dto.AlertVal
 
 public interface AlertDetailsQuery {
 
-  AlertValidationDetailsDto details(String discriminator);
+  AlertValidationDetailsDto details(String alertName);
 }

@@ -38,7 +38,7 @@ public class AlertAnalysisQuery implements ListAlertQuery, AlertDetailsQuery {
   }
 
   @Override
-  public AlertAnalysisDetailsDto details(String discriminator) {
-    return decisionRepository.findAnalysisDetails(discriminator, ANALYSIS.getValue());
+  public AlertAnalysisDetailsDto details(String alertName) {
+    return decisionRepository.findAnalysisDetails(alertName, ANALYSIS.getValue());
   }
 }

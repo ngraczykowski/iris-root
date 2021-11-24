@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
+import static com.silenteight.serp.governance.qa.manage.common.AlertResource.toResourceName;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
 
 @RestController
@@ -18,17 +21,17 @@ import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANA
 @RequiredArgsConstructor
 class ViewAlertAnalysisRestController {
 
-  private static final String ALERT_VIEW_URL = "/v1/qa/0/alerts/{discriminator}:viewing";
+  private static final String ALERT_VIEW_URL = "/v1/qa/0/alerts/{alertId}:viewing";
 
   @NonNull
   private final ViewAlertAnalysisUseCase viewAlertUseCase;
 
   @PostMapping(ALERT_VIEW_URL)
   @PreAuthorize("isAuthorized('ALERTS_ANALYSIS')")
-  public ResponseEntity<Void> view(@PathVariable String discriminator) {
+  public ResponseEntity<Void> view(@PathVariable UUID alertId) {
     viewAlertUseCase.activate(
         ViewDecisionCommand.builder()
-            .discriminator(discriminator)
+            .alertName(toResourceName(alertId))
             .level(ANALYSIS)
             .build());
     return ResponseEntity.accepted().build();

@@ -27,7 +27,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static com.silenteight.serp.governance.qa.AlertFixture.generateDiscriminator;
+import static com.silenteight.serp.governance.qa.AlertFixture.generateAlertName;
 import static com.silenteight.serp.governance.qa.FilterFixture.FIELD_ALERT_RECOMMENDATION;
 import static com.silenteight.serp.governance.qa.FilterFixture.VALUES_ALERT_RECOMMENDATION;
 import static com.silenteight.serp.governance.qa.manage.domain.DecisionLevel.ANALYSIS;
@@ -167,8 +167,8 @@ class AlertsGeneratorServiceTest {
         = ArgumentCaptor.forClass(CreateDecisionRequest.class);
     final ArgumentCaptor<Long> alertSamplingId = ArgumentCaptor.forClass(Long.class);
     final ArgumentCaptor<Integer> alertsCount = ArgumentCaptor.forClass(Integer.class);
-    final String discriminatorFirst = generateDiscriminator();
-    final String discriminatorSecond = generateDiscriminator();
+    final String alertNameFirst = generateAlertName();
+    final String alertNameSecond = generateAlertName();
     final List<AlertDistribution> distributions = of(
         getAlertDistribution(1, RISK_TYPE, PEP),
         getAlertDistribution(1, RISK_TYPE, SANCTION));
@@ -179,18 +179,18 @@ class AlertsGeneratorServiceTest {
     when(distributionProvider.getDistribution(dateRangeDto, properties.getGroupingFields()))
         .thenReturn(distributions);
     when(alertProvider.getAlerts(getAlertsSampleRequest(PEP)))
-        .thenReturn(of(discriminatorFirst));
+        .thenReturn(of(alertNameFirst));
     when(alertProvider.getAlerts(getAlertsSampleRequest(SANCTION)))
-        .thenReturn(of(discriminatorSecond));
+        .thenReturn(of(alertNameSecond));
     //when
     underTest.generateAlerts(dateRangeDto, 1L);
     //then
     verify(createAlertWithDecisionUseCase, times(2))
         .activate(createDecisionRequestCaptor.capture());
-    assertThat(createDecisionRequestCaptor.getAllValues().get(0).getDiscriminator())
-        .isEqualTo(discriminatorFirst);
-    assertThat(createDecisionRequestCaptor.getAllValues().get(1).getDiscriminator())
-        .isEqualTo(discriminatorSecond);
+    assertThat(createDecisionRequestCaptor.getAllValues().get(0).getAlertName())
+        .isEqualTo(alertNameFirst);
+    assertThat(createDecisionRequestCaptor.getAllValues().get(1).getAlertName())
+        .isEqualTo(alertNameSecond);
     assertThat(createDecisionRequestCaptor.getValue().getCreatedBy())
         .isEqualTo(underTest.getClass().getSimpleName());
     assertThat(createDecisionRequestCaptor.getValue().getLevel())
@@ -233,12 +233,12 @@ class AlertsGeneratorServiceTest {
         .thenReturn(of(
             getAlertDistribution(1, RISK_TYPE, PEP),
             getAlertDistribution(1, RISK_TYPE, SANCTION)));
-    String discriminatorFirst = generateDiscriminator();
-    String discriminatorSecond = generateDiscriminator();
+    String alertNameFirst = generateAlertName();
+    String alertNameSecond = generateAlertName();
     when(alertProvider.getAlerts(getAlertsSampleRequest(PEP)))
-        .thenReturn(of(discriminatorFirst));
+        .thenReturn(of(alertNameFirst));
     when(alertProvider.getAlerts(getAlertsSampleRequest(SANCTION)))
-        .thenReturn(of(discriminatorSecond));
+        .thenReturn(of(alertNameSecond));
     //when
     underTest.generateAlerts(dateRangeDto, 1L);
     //then
@@ -246,12 +246,12 @@ class AlertsGeneratorServiceTest {
         .activate(messageCommandCaptor.capture());
     assertThat(messageCommandCaptor.getValue().getAlertDtos().size()).isEqualTo(2);
     assertThat(messageCommandCaptor.getValue().getAlertDtos())
-        .isEqualTo(of(getAlertDto(discriminatorFirst), getAlertDto(discriminatorSecond)));
+        .isEqualTo(of(getAlertDto(alertNameFirst), getAlertDto(alertNameSecond)));
   }
 
-  private AlertDto getAlertDto(String discriminator) {
+  private AlertDto getAlertDto(String alertName) {
     return AlertDto.builder()
-        .discriminator(discriminator)
+        .alertName(alertName)
         .level(ANALYSIS)
         .state(NEW)
         .build();

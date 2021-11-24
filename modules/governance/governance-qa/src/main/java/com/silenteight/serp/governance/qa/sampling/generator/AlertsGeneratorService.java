@@ -99,9 +99,9 @@ public class AlertsGeneratorService {
         dateRangeDto, alertDistribution.getGroupingFieldsList(), defaultFilters, requestedAmount);
   }
 
-  private CreateDecisionRequest getCreateDecisionRequest(String discriminator) {
+  private CreateDecisionRequest getCreateDecisionRequest(String alertName) {
     return CreateDecisionRequest.of(
-        discriminator, NEW, ANALYSIS, getClass().getSimpleName(), now());
+        alertName, NEW, ANALYSIS, getClass().getSimpleName(), now());
   }
 
   private static List<AlertDistributionDto> toAlertDistributionDtoList(
