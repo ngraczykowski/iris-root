@@ -1,8 +1,8 @@
 package com.silenteight.serp.governance.qa.send.amqp;
 
-import com.silenteight.data.api.v1.ProductionDataIndexRequest;
+import com.silenteight.data.api.v2.QaDataIndexRequest;
 
 public interface AlertMessageGateway {
 
-  void send(ProductionDataIndexRequest message);
+  void send(QaDataIndexRequest message);
 }
