@@ -12,6 +12,8 @@ artifact_path="$(ls "./dist/$artifact")"
 config="${name}-config-${version}.tgz"
 config_path="$(ls "./dist/${config}")"
 
+echo artifact_path
+
 set -x
 
 rm -rf ./nomad/artifacts/
