@@ -1,5 +1,6 @@
 package com.silenteight.warehouse.report.metrics.download;
 
+import com.silenteight.sep.base.common.time.IsoUtcWithoutMillisDateFormatter;
 import com.silenteight.warehouse.report.metrics.domain.MetricsReportService;
 import com.silenteight.warehouse.report.name.ReportFileName;
 
@@ -16,7 +17,10 @@ class DownloadMetricsReportConfiguration {
       ReportFileName productionReportFileNameService) {
 
     return new DownloadProductionMetricsReportUseCase(
-        query, reportService, productionReportFileNameService);
+        query,
+        reportService,
+        productionReportFileNameService,
+        IsoUtcWithoutMillisDateFormatter.INSTANCE);
   }
 
   @Bean

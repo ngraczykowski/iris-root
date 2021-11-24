@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.base.common.time.DateFormatter;
 import com.silenteight.warehouse.report.billing.domain.BillingReportService;
 import com.silenteight.warehouse.report.billing.domain.dto.BillingReportDto;
 import com.silenteight.warehouse.report.billing.download.dto.DownloadBillingReportDto;
@@ -23,6 +24,8 @@ class DownloadBillingReportUseCase {
   private final BillingReportService reportService;
   @NonNull
   private final ReportFileName reportFileName;
+  @NonNull
+  private final DateFormatter dateFormatter;
 
   DownloadBillingReportDto activate(long id) {
     log.debug("Getting Billing report, reportId={}", id);
@@ -41,12 +44,12 @@ class DownloadBillingReportUseCase {
     return reportFileName.getReportName(reportFileNameDto);
   }
 
-  private static ReportFileNameDto toReportFileNameDto(BillingReportDto dto) {
+  private ReportFileNameDto toReportFileNameDto(BillingReportDto dto) {
     ReportRange range = dto.getRange();
     return ReportFileNameDto.builder()
         .reportType(REPORT_TYPE)
-        .from(range.getFromAsLocalDate().toString())
-        .to(range.getToAsLocalDate().toString())
+        .from(dateFormatter.format(range.getFrom()))
+        .to(dateFormatter.format(range.getTo()))
         .timestamp(dto.getTimestamp())
         .build();
   }

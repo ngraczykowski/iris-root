@@ -7,9 +7,9 @@ import com.silenteight.warehouse.report.name.ReportFileName;
 import com.silenteight.warehouse.report.reasoning.match.download.dto.DownloadAiReasoningMatchLevelReportDto;
 import com.silenteight.warehouse.report.storage.ReportStorage;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -31,8 +31,14 @@ class DownloadProductionAiReasoningMatchLevelReportUseCaseTest {
   @Mock
   private ReportFileName reportFileName;
 
-  @InjectMocks
   private DownloadProductionAiReasoningMatchLevelReportUseCase underTest;
+
+  @BeforeEach
+  void setUp() {
+    underTest = new DownloadAiReasoningMatchLevelReportConfiguration()
+        .downloadProductionAiMatchLevelReportUseCase(
+            reportDataQuery, reportStorageService, reportFileName);
+  }
 
   @SneakyThrows
   @Test

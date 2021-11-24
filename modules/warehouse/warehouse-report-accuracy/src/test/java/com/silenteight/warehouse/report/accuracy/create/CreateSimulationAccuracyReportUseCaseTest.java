@@ -15,8 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.warehouse.report.accuracy.AccuracyReportTestFixtures.ANALYSIS_ID;
-import static java.time.LocalDate.EPOCH;
-import static java.time.LocalDate.from;
+import static java.time.Instant.EPOCH;
+import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -53,8 +53,7 @@ class CreateSimulationAccuracyReportUseCaseTest {
 
     // then
     verify(reportService).createReportInstance(reportRangeCaptor.capture(), any(), any());
-    assertThat(reportRangeCaptor.getValue().getFromAsLocalDate()).isEqualTo(from(EPOCH));
-    assertThat(reportRangeCaptor.getValue().getToAsLocalDate()).isEqualTo(
-        TIME_SOURCE.localDateTime().toLocalDate());
+    assertThat(reportRangeCaptor.getValue().getFrom()).isEqualTo(EPOCH.atOffset(UTC));
+    assertThat(reportRangeCaptor.getValue().getTo()).isEqualTo(TIME_SOURCE.offsetDateTime());
   }
 }

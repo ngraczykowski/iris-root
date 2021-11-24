@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 
 import static com.silenteight.sep.base.common.time.DefaultTimeSource.INSTANCE;
-import static com.silenteight.warehouse.report.ReportFixture.LOCAL_DATE_FROM;
-import static com.silenteight.warehouse.report.ReportFixture.LOCAL_DATE_TO;
 import static com.silenteight.warehouse.report.ReportFixture.OFFSET_DATE_TIME_FROM;
 import static com.silenteight.warehouse.report.ReportFixture.OFFSET_DATE_TIME_TO;
 import static com.silenteight.warehouse.report.reporting.ReportRange.of;
@@ -34,8 +32,8 @@ class ReportRangeTest {
     ReportRange reportRange = of(OFFSET_DATE_TIME_FROM, OFFSET_DATE_TIME_TO);
 
     // then
-    assertThat(reportRange.getFromAsLocalDate()).isEqualTo(LOCAL_DATE_FROM);
-    assertThat(reportRange.getToAsLocalDate()).isEqualTo(LOCAL_DATE_TO);
+    assertThat(reportRange.getFrom()).isEqualTo(OFFSET_DATE_TIME_FROM);
+    assertThat(reportRange.getTo()).isEqualTo(OFFSET_DATE_TIME_TO);
   }
 
   @Test

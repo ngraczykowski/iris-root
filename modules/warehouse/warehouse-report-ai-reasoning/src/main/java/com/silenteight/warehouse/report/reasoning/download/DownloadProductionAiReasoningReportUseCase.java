@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.base.common.time.DateFormatter;
 import com.silenteight.sep.filestorage.api.dto.FileDto;
 import com.silenteight.warehouse.report.name.ReportFileName;
 import com.silenteight.warehouse.report.name.ReportFileNameDto;
@@ -24,6 +25,8 @@ class DownloadProductionAiReasoningReportUseCase {
   private final ReportStorage reportStorageService;
   @NonNull
   private final ReportFileName reportFileName;
+  @NonNull
+  private final DateFormatter dateFormatter;
 
   public DownloadAiReasoningReportDto activate(long id) {
     log.debug("Getting production AI Reasoning report, reportId={}", id);
@@ -46,12 +49,12 @@ class DownloadProductionAiReasoningReportUseCase {
     return reportFileName.getReportName(reportFileNameDto);
   }
 
-  private static ReportFileNameDto toReportFileNameDto(AiReasoningReportDto dto) {
+  private ReportFileNameDto toReportFileNameDto(AiReasoningReportDto dto) {
     ReportRange range = dto.getRange();
     return ReportFileNameDto.builder()
         .reportType(REPORT_TYPE)
-        .from(range.getFromAsLocalDate().toString())
-        .to(range.getToAsLocalDate().toString())
+        .from(dateFormatter.format(range.getFrom()))
+        .to(dateFormatter.format(range.getTo()))
         .timestamp(dto.getTimestamp())
         .build();
   }
