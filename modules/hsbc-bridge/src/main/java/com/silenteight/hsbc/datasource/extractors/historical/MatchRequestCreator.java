@@ -11,6 +11,7 @@ import java.util.List;
 class MatchRequestCreator extends HistoricalDecisionsRequestCreator {
 
   private final MatchData matchData;
+  private final String alertedPartyId;
 
   @Override
   GetHistoricalDecisionsRequestDto createRequest() {
@@ -29,9 +30,8 @@ class MatchRequestCreator extends HistoricalDecisionsRequestCreator {
   }
 
   private MatchDto getMatch() {
-    var alertedPartyId = matchData.getCaseInformation().getExternalId();
     return MatchDto.builder()
-        .alertedParty(new AlertedPartyDto(alertedPartyId))
+        .alertedParty(AlertedPartyDto.builder().id(alertedPartyId).build())
         .watchlistParty(getWatchlist(matchData))
         .build();
   }

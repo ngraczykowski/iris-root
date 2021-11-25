@@ -3,8 +3,8 @@ package com.silenteight.hsbc.datasource.extractors.historical;
 import lombok.Builder;
 import lombok.Value;
 
-@Builder
 @Value
+@Builder
 public class ModelKeyDto {
 
   ModelKeyType modelKeyType;

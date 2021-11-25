@@ -35,7 +35,8 @@ class HistoricalDecisionsGrpcAdapter implements HistoricalDecisionsServiceClient
     var response = getBlockingStub().batchGetHistoricalDecisionsModelCounts(grpcRequest);
 
     log.debug(
-        "Datasource received HistoricalDecisions grpc response: modelCountsList={}.", response.getModelCountsList());
+        "Datasource received HistoricalDecisions grpc response: modelCountsList={}.",
+        response.getModelCountsList());
 
     return GetHistoricalDecisionsResponseDto.builder()
         .modelCounts(mapToModelCountsDto(response.getModelCountsList()))
@@ -108,7 +109,7 @@ class HistoricalDecisionsGrpcAdapter implements HistoricalDecisionsServiceClient
       case ALERTED_PARTY:
         return ModelKeyDto.builder()
             .modelKeyType(ModelKeyType.ALERTED_PARTY)
-            .modelKeyValue(new AlertedPartyDto(modelKey.getAlertedParty().getId()))
+            .modelKeyValue(AlertedPartyDto.builder().id(modelKey.getAlertedParty().getId()).build())
             .build();
       case WATCHLIST_PARTY:
         return ModelKeyDto.builder()
@@ -136,7 +137,7 @@ class HistoricalDecisionsGrpcAdapter implements HistoricalDecisionsServiceClient
 
   private MatchDto mapToAMatchDto(Match match) {
     return MatchDto.builder()
-        .alertedParty(new AlertedPartyDto(match.getAlertedParty().getId()))
+        .alertedParty(AlertedPartyDto.builder().id(match.getAlertedParty().getId()).build())
         .watchlistParty(mapToWatchlistPartyDto(match.getWatchlistParty()))
         .build();
   }

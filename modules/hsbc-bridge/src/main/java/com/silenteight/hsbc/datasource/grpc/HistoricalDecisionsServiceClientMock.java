@@ -34,7 +34,7 @@ class HistoricalDecisionsServiceClientMock implements HistoricalDecisionsService
       case ALERTED_PARTY:
         return ModelKeyDto.builder()
             .modelKeyType(ModelKeyType.ALERTED_PARTY)
-            .modelKeyValue(new AlertedPartyDto("alertedParty_id"))
+            .modelKeyValue(AlertedPartyDto.builder().id("alertedParty_id").build())
             .build();
       case WATCHLIST_PARTY:
         return ModelKeyDto.builder()
@@ -62,7 +62,7 @@ class HistoricalDecisionsServiceClientMock implements HistoricalDecisionsService
 
   private static MatchDto getMatch() {
     return MatchDto.builder()
-        .alertedParty(new AlertedPartyDto("alertedParty_id"))
+        .alertedParty(AlertedPartyDto.builder().id("alertedParty_id").build())
         .watchlistParty(getWatchlistParty())
         .build();
   }

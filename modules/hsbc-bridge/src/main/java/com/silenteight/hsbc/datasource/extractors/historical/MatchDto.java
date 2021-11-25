@@ -5,8 +5,8 @@ import lombok.Value;
 
 import com.silenteight.hsbc.datasource.extractors.historical.ModelKeyDto.ModelKeyValue;
 
-@Builder
 @Value
+@Builder
 public class MatchDto implements ModelKeyValue {
 
   AlertedPartyDto alertedParty;

@@ -19,7 +19,8 @@ class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
 
   @Override
   public List<ModelCountsDto> getIsApTpMarkedInput() {
-    return getExternalProfileIds().map(AlertedPartyRequestCreator::new)
+    return getExternalProfileIds()
+        .map(AlertedPartyRequestCreator::new)
         .map(AlertedPartyRequestCreator::createRequest)
         .map(serviceClient::getHistoricalDecisions)
         .map(GetHistoricalDecisionsResponseDto::getModelCounts)
@@ -37,10 +38,13 @@ class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
 
   @Override
   public List<ModelCountsDto> getCaseTpMarkedInput() {
-    var request =
-        new MatchRequestCreator(matchData).createRequest();
-
-    return serviceClient.getHistoricalDecisions(request).getModelCounts();
+    return getExternalProfileIds()
+        .map(id -> new MatchRequestCreator(matchData, id))
+        .map(MatchRequestCreator::createRequest)
+        .map(serviceClient::getHistoricalDecisions)
+        .map(GetHistoricalDecisionsResponseDto::getModelCounts)
+        .flatMap(Collection::stream)
+        .collect(Collectors.toList());
   }
 
   private Stream<String> getExternalProfileIds() {
@@ -48,7 +52,7 @@ class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
            Optional.of(matchData
                    .getCustomerIndividuals()
                    .stream()
-                   .flatMap(customerEntity -> Stream.of(customerEntity.getExternalProfileId()))
+                   .flatMap(customerIndividual -> Stream.of(customerIndividual.getExternalProfileId()))
                    .distinct())
                .orElse(Stream.empty()) :
            Optional.of(matchData
