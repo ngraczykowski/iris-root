@@ -4,15 +4,17 @@ import pathlib
 from typing import Optional, Sequence
 
 from agent_base.agent import Agent
-from organization_name_knowledge import parse
-from organization_name_knowledge.knowledge_base import KnowledgeBase
-from organization_name_knowledge.names.name_information import NameInformation
+from organization_name_knowledge import KnowledgeBase, NameInformation, parse
 
 from company_name.compare import compare_names
 from company_name.solution.name_preconditions import NamePreconditions
 from company_name.solution.scores_reduction import ScoresReduction
 from company_name.solution.solution import PairResult, Reason, Result, Solution
 from company_name.utils.names_abbreviations_filtering import remove_redundant_abbreviations
+
+logger = logging.getLogger(__name__)
+c_handler = logging.StreamHandler()
+c_handler.setLevel(logging.DEBUG)
 
 
 class CompanyNameAgent(Agent):
@@ -79,7 +81,10 @@ class CompanyNameAgent(Agent):
 
     def resolve(self, ap_names: Sequence[str], mp_names: Sequence[str]) -> Result:
         try:
-            return self._resolve(ap_names, mp_names)
+            logger.info(f"Checking {ap_names} vs {mp_names}")
+            result = self._resolve(ap_names, mp_names)
+            logger.info(result)
+            return result
         except Exception as err:  # noqa
-            logging.exception(f"for {ap_names} vs {mp_names}")
+            logger.exception(f"for {ap_names} vs {mp_names}")
             return Result(Solution.AGENT_ERROR)

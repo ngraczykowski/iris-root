@@ -1,5 +1,4 @@
-from organization_name_knowledge.knowledge_base import KnowledgeBase
-from organization_name_knowledge.names.name_information import TokensSequence
+from organization_name_knowledge import KnowledgeBase, TokensSequence
 
 from company_name.scores.score import Score
 

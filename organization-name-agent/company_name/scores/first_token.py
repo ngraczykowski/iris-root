@@ -1,7 +1,6 @@
 from typing import Optional, Tuple
 
-from organization_name_knowledge.names.name_information import NameInformation
-from organization_name_knowledge.names.token import Token
+from organization_name_knowledge import NameInformation, Token
 
 from company_name.scores.score import Score
 

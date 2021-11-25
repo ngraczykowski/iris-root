@@ -1,7 +1,6 @@
 from typing import Mapping
 
-from organization_name_knowledge import parse
-from organization_name_knowledge.names.name_information import NameInformation
+from organization_name_knowledge import NameInformation, parse
 
 from company_name.errors import ComparisonError
 from company_name.scores.abbreviation import get_abbreviation_score

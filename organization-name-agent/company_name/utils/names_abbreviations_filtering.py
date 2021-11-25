@@ -1,6 +1,6 @@
 from typing import List, Sequence
 
-from organization_name_knowledge.names.name_information import NameInformation
+from organization_name_knowledge import NameInformation
 
 from company_name.scores.abbreviation import get_abbreviation_score
 
