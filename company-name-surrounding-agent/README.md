@@ -26,6 +26,7 @@ To run, no matter which way installed - it is required to provide an _applicatio
 for agent and solution parsing. If any of them is not provided, _ConfigurationException_ raises.
 The _application.yaml_ file must be stored in a _config_ directory. If _config_ directory location is different 
 from default (the same as the script is run in), it is possible to specify it in _configuration-dir_ run argument.
+To run on nomad, must provide separate _nomad/application.nomad.yaml_ file, with specified port for nomad.
 ```
 python -m company_name_surrounding [-h] [-c CONFIGURATION_DIR] [--grpc] [-v]
 
