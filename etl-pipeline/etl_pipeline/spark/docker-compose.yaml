@@ -10,3 +10,4 @@ services:
     ports:
       - "8888:8888" # jupyter notebook forward
       - "6006:6006" # tensorboard forward
+      - "4040:4040"

@@ -12,9 +12,12 @@ RUN apt install zip -y
 ADD .env /.env
 ADD scripts /scripts
 ENV ROOT_DIR="/"
-# RUN scripts/download-and-upload.sh local
-ADD ds-installer-1.0.0.run /env/installer/
-RUN chmod +x /env/installer/ds-installer-1.0.0.run
-RUN /env/installer/ds-installer-1.0.0.run --target /env/ds
 
+RUN mkdir -p /opt/jdk/
+COPY datascience-installer/dependencies/bellsoft-jdk11.0.10+9-linux-amd64.tar.gz /opt/jdk/
+RUN tar xf /opt/jdk/bellsoft-jdk11.*-linux-amd64.tar.gz --strip-components 1 -C /opt/jdk
+EXPOSE 4040 7077
 CMD ["/bin/sh"]
+# export ROOT_DIR="$(cd -- "$(dirname -- "${0}")" && cd .. && pwd)"
+# export SERP_HOME="${SERP_HOME:-$ROOT_DIR/env/serp}"
+# export PATH="$ROOT_DIR/opt/jdk/bin:$SERP_HOME/bin:$ROOT_DIR/bin:$ROOT_DIR/opt/anaconda/bin:$PATH"

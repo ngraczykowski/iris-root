@@ -88,7 +88,7 @@ class SparkServer:
         master = "local[%d]" % cpu_count if SPARK_USE_OPTIMAL_CONFIG else SPARK_MASTER
         memory = self._get_optimal_ram() if SPARK_USE_OPTIMAL_CONFIG else SPARK_DRIVER_MEMORY
         spark_conf.setAll(
-            [("spark.master", "%s" % master), ("spark.driver.memory", "%s" % memory)]
+            [("spark.master", "%s" % master), ("spark.driver.memory", "%s" % memory), ("spark.driver.bindAddress", "localhost")]
         )
         self.logger.info("Actual Spark Master: %s" % master)
         self.logger.info("Actual Spark Driver Memory: %s" % memory)
