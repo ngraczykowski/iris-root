@@ -19,6 +19,7 @@ dependencies {
   implementation libraries.warehouse_data_api
 
   implementation libraries.spring_amqp
+  implementation libraries.spring_batch_starter
   implementation libraries.spring_boot
   implementation libraries.spring_context
   implementation libraries.spring_security_core
@@ -43,8 +44,10 @@ dependencies {
 
   implementation libraries.javax_mail
 
+  implementation libraries.shedlock_jdbc_provider
   implementation libraries.shedlock_spring
 
+  testImplementation libraries.spring_batch_test
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation project(":sear-payments-bridge-testing")
 }

@@ -93,6 +93,7 @@ libraries.spring_boot_test_autoconfigure = [group: 'org.springframework.boot', n
 
 libraries.spring_batch_core = [group: 'org.springframework.batch', name: 'spring-batch-core']
 libraries.spring_batch_infrastructure = [group: 'org.springframework.batch', name: 'spring-batch-infrastructure']
+libraries.spring_batch_starter = [group: 'org.springframework.boot', name: 'spring-boot-starter-batch']
 libraries.spring_batch_test = [group: 'org.springframework.batch', name: 'spring-batch-test']
 
 libraries.spring_cloud_consul_discovery = [group: 'org.springframework.cloud', name: 'spring-cloud-consul-discovery']

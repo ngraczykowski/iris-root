@@ -18,7 +18,7 @@ class MockFileListProvider implements FileListPort {
   @Override
   public List<ObjectPath> getFilesList() {
     log.debug("Using mocked file list provider");
-    var object = ObjectPath.builder().name("SVB_Jun_1_to_30_sorted.csv").bucket("bucket").build();
+    var object = ObjectPath.builder().name("analystdecison-2-hits.csv").bucket("bucket").build();
     return List.of(object);
   }
 }

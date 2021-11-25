@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+  <changeSet id="payments-bridge-batch-1.0.0-0" author="wkeska">
+    <createTable tableName="pb_batch_job_instance">
+      <column name="job_instance_id" type="BIGINT">
+        <constraints primaryKey="true" primaryKeyName="pk_pb_job_instance_id"/>
+      </column>
+      <column name="version" type="bigint"/>
+      <column name="job_name" type="varchar(100)"/>
+      <column name="job_key" type="varchar(32)"/>
+    </createTable>
+
+    <addUniqueConstraint
+        columnNames="job_name, job_key"
+        constraintName="job_inst_un"
+        tableName="pb_batch_job_instance"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-batch-1.0.0-1" author="wkeska">
+    <createTable tableName="pb_batch_job_execution">
+      <column name="job_execution_id" type="BIGINT">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="version" type="bigint"/>
+      <column name="job_instance_id" type="bigint">
+        <constraints nullable="false"
+                     foreignKeyName="job_inst_exec_fk"
+                     referencedTableName="pb_batch_job_instance"
+                     referencedColumnNames="job_instance_id"/>
+      </column>
+      <column name="create_time" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="start_time" type="timestamp"/>
+      <column name="end_time" type="timestamp"/>
+      <column name="status" type="varchar(10)"/>
+      <column name="exit_code" type="varchar(2500)"/>
+      <column name="exit_message" type="varchar(2500)"/>
+      <column name="last_updated" type="timestamp"/>
+      <column name="job_configuration_location" type="varchar(2500)">
+        <constraints nullable="true"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="payments-bridge-batch-1.0.0-2" author="wkeska">
+    <createTable tableName="pb_batch_job_execution_params">
+      <column name="job_execution_id" type="BIGINT">
+        <constraints nullable="false"
+                     foreignKeyName="job_exec_params_fk"
+                     referencedTableName="pb_batch_job_execution"
+                     referencedColumnNames="job_execution_id"/>
+      </column>
+      <column name="type_cd" type="varchar(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="key_name" type="varchar(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="string_val" type="varchar(250)"/>
+      <column name="date_val" type="timestamp"/>
+      <column name="long_val" type="bigint"/>
+      <column name="double_val" type="double"/>
+      <column name="identifying" type="char(1)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="payments-bridge-batch-1.0.0-3" author="wkeska">
+    <createTable tableName="pb_batch_step_execution">
+      <column name="step_execution_id" type="BIGINT">
+        <constraints primaryKey="true" primaryKeyName="pk_pb_step_execution_id"/>
+      </column>
+      <column name="version" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+      <column name="step_name" type="varchar(100)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="job_execution_id" type="BIGINT">
+        <constraints nullable="false"
+                     foreignKeyName="job_exec_step_fk"
+                     referencedTableName="pb_batch_job_execution"
+                     referencedColumnNames="job_execution_id"/>
+      </column>
+      <column name="start_time" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="end_time" type="timestamp"/>
+      <column name="status" type="varchar(10)"/>
+      <column name="commit_count" type="bigint"/>
+      <column name="read_count" type="bigint"/>
+      <column name="filter_count" type="bigint"/>
+      <column name="write_count" type="bigint"/>
+      <column name="read_skip_count" type="bigint"/>
+      <column name="write_skip_count" type="bigint"/>
+      <column name="process_skip_count" type="bigint"/>
+      <column name="rollback_skip_count" type="bigint"/>
+      <column name="exit_code" type="varchar(2500)"/>
+      <column name="exit_message" type="varchar(2500)"/>
+      <column name="last_updated" type="timestamp"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="payments-bridge-batch-1.0.0-4" author="wkeska">
+    <createTable tableName="pb_batch_step_execution_context">
+      <column name="step_execution_id" type="BIGINT">
+        <constraints nullable="false"
+                     foreignKeyName="step_exec_step_fk"
+                     referencedTableName="pb_batch_step_execution"
+                     referencedColumnNames="step_execution_id"/>
+      </column>
+      <column name="short_content" type="varchar(2500)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="serialized_context" type="text"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="payments-bridge-batch-1.0.0-5" author="wkeska">
+    <createTable tableName="pb_batch_job_execution_context">
+      <column name="job_execution_id" type="BIGINT">
+        <constraints nullable="false"
+                     foreignKeyName="job_exec_step_fk"
+                     referencedTableName="pb_batch_job_execution"
+                     referencedColumnNames="job_execution_id"/>
+      </column>
+      <column name="short_context" type="varchar(2500)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="serialized_context" type="text"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="payments-bridge-batch-1.0.0-6" author="wkeska">
+    <createSequence schemaName="public"
+                    sequenceName="pb_batch_step_execution_seq"
+                    cycle="false"/>
+    <createSequence schemaName="public"
+                    sequenceName="pb_batch_job_execution_seq"
+                    cycle="false"/>
+    <createSequence schemaName="public"
+                    sequenceName="pb_batch_job_seq"
+                    cycle="false"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-svb-learning-1.4.4" author="tbozek">
+    <addColumn tableName="pb_batch_step_execution">
+      <column name="rollback_count" type="bigint"></column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="payments-bridge-svb-learning-1.4.5" author="tbozek">
+    <renameColumn tableName="pb_batch_step_execution_context" oldColumnName="short_content"
+                  newColumnName="short_context"/>
+  </changeSet>
+  <changeSet id="payments-bridge-svb-learning-1.4.6" author="tbozek">
+    <createIndex tableName="pb_batch_job_instance"
+                 indexName="ix_pb_batch_job_instance_job_name_job_key">
+      <column name="job_name"/>
+      <column name="job_key"/>
+    </createIndex>
+
+    <createIndex tableName="pb_batch_job_execution"
+                 indexName="ix_pb_batch_job_execution_job_instance_id">
+      <column name="job_instance_id"/>
+    </createIndex>
+
+    <createIndex tableName="pb_batch_step_execution"
+                 indexName="ix_pb_batch_step_execution_version">
+      <column name="version"/>
+    </createIndex>
+
+    <createIndex tableName="pb_batch_step_execution"
+                 indexName="ix_pb_batch_step_execution_step_name_job_execution_id">
+      <column name="step_name"/>
+      <column name="job_execution_id"/>
+    </createIndex>
+
+  </changeSet>
+
+</databaseChangeLog>
