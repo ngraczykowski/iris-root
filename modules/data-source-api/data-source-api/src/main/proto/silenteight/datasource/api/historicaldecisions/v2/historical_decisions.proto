@@ -36,6 +36,7 @@ message HistoricalDecisionsInput {
 message HistoricalDecisionsFeatureInput {
   string feature = 1;
   ModelKey model_key = 2;
+  Discriminator discriminator = 3;
 }
 
 message ModelKey {
@@ -58,4 +59,8 @@ message WatchlistParty {
 message Match {
   AlertedParty alerted_party = 1;
   WatchlistParty watchlist_party = 2;
+}
+
+message Discriminator {
+  string value = 1;
 }
