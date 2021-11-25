@@ -26,23 +26,35 @@ def parse(name: str) -> NameInformation:
     return name_information
 
 
-def parse_freetext(freetext: str, base_tokens_limit: int = 3) -> List[NameInformation]:
-    """Parse freetext to find each organization name that is present within passed text
+def parse_freetext(
+    freetext: str,
+    base_tokens_upper_limit: int = 3,
+    name_tokens_lower_limit: int = 2,
+    name_tokens_upper_limit: int = 7,
+) -> List[NameInformation]:
+    """Parse freetext to find each organization name that is present within passed text.
+    There are tokens limits with default values provided. It is not recommended to change these values,
+    but in specific situation there is a possibility to apply another limits by changing them.
 
     Parameters
     ----------
     freetext : str
         Any string which contains or not, an organization name(s)
-    base_tokens_limit : int
+    base_tokens_upper_limit : int
         The maximum number of tokens in parsed organization name base
-
+    name_tokens_lower_limit : int
+        The minimum number of tokens in whole parsed organization name
+    name_tokens_upper_limit: int
+        The maximum number of tokens in whole parsed organization name
     Returns
     -------
     List[NameInformation]
         A list of found and parsed organization names, as NameInformation objects
     """
 
-    names: List[NameInformation] = parse_freetext_names(freetext, base_tokens_limit)
+    names: List[NameInformation] = parse_freetext_names(
+        freetext, base_tokens_upper_limit, name_tokens_lower_limit, name_tokens_upper_limit
+    )
     return sorted(set(names), key=lambda name: name.base.cleaned_name)
 
 

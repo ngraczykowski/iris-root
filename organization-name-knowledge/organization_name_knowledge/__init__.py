@@ -2,5 +2,6 @@
 from organization_name_knowledge.api import get_all_legal_terms, parse, parse_freetext
 from organization_name_knowledge.knowledge_base import KnowledgeBase
 from organization_name_knowledge.knowledge_base.legal_terms import LegalTerm
+from organization_name_knowledge.names.name_information import NameInformation
 from organization_name_knowledge.names.token import Token
 from organization_name_knowledge.names.tokens_sequence import TokensSequence

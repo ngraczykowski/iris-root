@@ -10,18 +10,21 @@ from organization_name_knowledge.utils.text import (
     starts_with_conjunction,
 )
 
-NAME_TOKENS_LOWER_LIMIT = 2
-NAME_TOKENS_UPPER_LIMIT = 7
 
+def parse_freetext_names(
+    freetext: str,
+    base_tokens_upper_limit: int = 3,
+    name_tokens_lower_limit: int = 2,
+    name_tokens_upper_limit: int = 7,
+) -> List[NameInformation]:
 
-def parse_freetext_names(freetext: str, base_tokens_limit: int) -> List[NameInformation]:
     freetext = clear_freetext(freetext).lower()
     freetext_tokens = freetext.split()
 
     substrings = [
         " ".join(freetext_tokens[first:last])
         for first, last in combinations(range(len(freetext_tokens) + 1), 2)
-        if NAME_TOKENS_LOWER_LIMIT <= last - first <= NAME_TOKENS_UPPER_LIMIT
+        if name_tokens_lower_limit <= last - first <= name_tokens_upper_limit
     ]
     parsed_names = [parse_name(substring) for substring in substrings]
 
@@ -31,7 +34,7 @@ def parse_freetext_names(freetext: str, base_tokens_limit: int) -> List[NameInfo
         if name.legal
         and len(get_all_contained_legal_terms(name.base.original_name))
         != len(name.base)
-        <= base_tokens_limit
+        <= base_tokens_upper_limit
     ]
 
     return _get_names_with_unique_bases(parsed_names_valid)
