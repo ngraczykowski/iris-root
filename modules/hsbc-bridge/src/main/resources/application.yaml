@@ -58,7 +58,7 @@ silenteight.bridge:
   ### LEARNING
 
   learning:
-    batch-size: 1000
+    batch-size: 100
 
   ### AWS
 
