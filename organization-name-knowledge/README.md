@@ -47,12 +47,12 @@ To get to know more about usage, check method docs
 Static data used for comparison is currently stored in organization_name_knowledge/resources directory. It contains:
 * common_prefixes.json - commonly used at the begging of organization name, such as "group"
 * common_suffixes.json - commonly used at the end of organization name, such as "manufacturing", "sales" or "enterprise"
+* conjunctions.txt - list of conjunctions, such as 'and', 'or'
 * countries.json - different names and abbreviations for countries
 * eastern_female_names.json - mappings of known variants of female names
 * eastern_male_names.json - mappings of known variants of male names
 * joining_words.json - words such as "and"
 * legal_terms.json - legal entity terms, with possible abbreviations and meaning
-* name_delimiters.txt - list of words used as freetext organization names delimiter, such as 'and', 'or'
 * titles.txt - list of titles, commonly related to persons, but sometimes used in org names, such as 'the', 'mr'
 * weak_words.json - words ignored in creating abbreviation or extracting legal terms or common words
 * words_mapping.json - mapping 

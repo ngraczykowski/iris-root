@@ -153,6 +153,7 @@ def test_parse_name_base(name, expected_base):
             [
                 {"base": "1 OTHER", "legal": "COMPANY"},
                 {"base": "it 1 OTHER", "legal": "COMPANY"},
+                {"base": "other", "legal": "company"},
             ],
         ),
         (
@@ -170,11 +171,12 @@ def test_parse_name_base(name, expected_base):
                     [
                         "blackpoint",
                         "c o blackpoint",
+                        "o blackpoint",
                         "partners",
                         "pr retail",
                         "retail",
                     ],
-                    ["llc c o", "llc", "llc", "llc c o", "llc c o"],
+                    ["llc c o", "llc", "llc", "llc", "llc c o", "llc c o"],
                 )
             ],
         ),
@@ -184,6 +186,9 @@ def test_parse_freetext(freetext, expected_names):
     parsed_freetext = parse_freetext(
         freetext, base_tokens_upper_limit=3, name_tokens_lower_limit=2, name_tokens_upper_limit=7
     )
+    print([x.source.original for x in parsed_freetext])
+    print([x.base.original_name for x in parsed_freetext])
+
     assert len(parsed_freetext) == len(expected_names)
     for name_information, expected in zip(parsed_freetext, expected_names):
         assert name_information
