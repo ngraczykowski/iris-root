@@ -20,7 +20,7 @@ def parse_freetext_names(
 ) -> List[NameInformation]:
 
     freetext = clear_freetext(freetext).lower()
-    freetext_names = []
+    found_valid_names = []
 
     for freetext_variant in get_text_variants(freetext):
         tokens = freetext_variant.split()
@@ -33,29 +33,57 @@ def parse_freetext_names(
         parsed_names = [parse_name(substring) for substring in substrings]
 
         parsed_names_valid = _get_valid_names(parsed_names, base_tokens_upper_limit)
-        freetext_names.extend(parsed_names_valid)
+        found_valid_names.extend(parsed_names_valid)
 
-    return _get_names_with_unique_bases(freetext_names)
+    names_to_remove = _get_names_to_remove(found_valid_names)
+    found_valid_names = [name for name in found_valid_names if name not in names_to_remove]
+    return _get_names_with_unique_bases(found_valid_names)
 
 
 def _get_valid_names(
-    parsed_names: List[NameInformation], base_tokens_upper_limit: int
+    names: List[NameInformation], base_tokens_upper_limit: int
 ) -> List[NameInformation]:
-    parsed_names_valid = [
+    valid_names = [
         name
-        for name in parsed_names
+        for name in names
         if name.legal
         and len(get_all_contained_legal_terms(name.base.original_name))
         != len(name.base)
         <= base_tokens_upper_limit
+        and not (
+            name.base.cleaned_name.startswith(name.legal.cleaned_name) and len(name.legal) >= 2
+        )  # to remove names with 2 or more legals at start
     ]
-    if len(parsed_names_valid) >= 2:
-        parsed_names_valid = [
-            name
-            for name in parsed_names_valid
-            if not name.base.cleaned_name.startswith(name.legal.cleaned_name)
-        ]
-    return parsed_names_valid
+
+    return valid_names
+
+
+def _get_names_to_remove(names: List[NameInformation]) -> List[NameInformation]:
+    names_with_start_legal = []
+    end_legals = set()
+    for name in names:
+        source, base, legal = name.source.cleaned, name.base.cleaned_name, name.legal.cleaned_name
+
+        if base.endswith(legal) or source.endswith(legal):
+            end_legals.add(legal)
+            end_legals.add(name.legal.cleaned_tuple[-1])  # to check last token only also
+
+        elif base.startswith(legal) or source.startswith(legal):
+            names_with_start_legal.append(name)
+
+    names_with_duplicated_legal = [
+        name
+        for name in names_with_start_legal
+        if name.legal.cleaned_name in end_legals
+        or name.legal.cleaned_tuple[0] in end_legals  # check if just first token in ends
+    ]
+    names_with_duplicated_legal_from_prefix = [
+        name
+        for name in names
+        if name.common_prefixes.cleaned_name in end_legals
+        or name.base.cleaned_tuple[0] in end_legals
+    ]
+    return names_with_duplicated_legal + names_with_duplicated_legal_from_prefix
 
 
 def _get_names_with_unique_bases(names: List[NameInformation]) -> List[NameInformation]:

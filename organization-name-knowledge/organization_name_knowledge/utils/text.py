@@ -6,7 +6,6 @@ import unidecode
 
 from organization_name_knowledge import resources
 
-
 with open_text(resources, "conjunctions.txt") as file:
     CONJUNCTIONS = file.read().splitlines()
 

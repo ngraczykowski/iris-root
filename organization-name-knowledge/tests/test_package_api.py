@@ -48,12 +48,6 @@ def test_parse_name_base(name, expected_base):
             ],
         ),
         (
-            "Corporation of Africa",
-            [
-                {"base": "Corporation of Africa", "legal": "Corporation of"},
-            ],
-        ),
-        (
             "Some Text about The Silent Eight PTE LTD founded years ago in Singapore",
             [
                 {"base": "Eight", "legal": "pte ltd"},
@@ -64,7 +58,6 @@ def test_parse_name_base(name, expected_base):
             "First Company Limited, Second Corp",
             [
                 {"base": "First", "legal": "company limited"},
-                {"base": "limited second", "legal": "company limited"},
                 {"base": "Second", "legal": "corp"},
             ],
         ),
@@ -86,7 +79,6 @@ def test_parse_name_base(name, expected_base):
             "ACME CO and Google Inc",
             [
                 {"base": "ACME", "legal": "CO"},
-                {"base": "co and Google", "legal": "inc"},
                 {"base": "Google", "legal": "Inc"},
             ],
         ),
@@ -105,9 +97,6 @@ def test_parse_name_base(name, expected_base):
             "Institute in Baltimore, Maryland, conducts Hubble science operations.",
             [
                 {"base": "ABC DEF", "legal": "company"},
-                {"base": "auras", "legal": "company"},
-                {"base": "auras space", "legal": "company"},
-                {"base": "auras space telescope", "legal": "company"},
                 {"base": "DEF", "legal": "company"},
             ],
         ),
@@ -142,8 +131,6 @@ def test_parse_name_base(name, expected_base):
             # polish conjunction 'oraz' is treated as possible base part
             [
                 {"base": "First", "legal": "Company Limited"},
-                {"base": "Limited oraz", "legal": "Company Limited"},
-                {"base": "Limited oraz Second", "legal": "Company Limited"},
                 {"base": "Oraz Second", "legal": "Company"},
                 {"base": "Second", "legal": "Company"},
             ],
@@ -176,7 +163,7 @@ def test_parse_name_base(name, expected_base):
                         "pr retail",
                         "retail",
                     ],
-                    ["llc c o", "llc", "llc", "llc", "llc c o", "llc c o"],
+                    ["llc c o", "c o", "llc", "llc", "llc c o", "llc c o"],
                 )
             ],
         ),
@@ -186,6 +173,7 @@ def test_parse_freetext(freetext, expected_names):
     parsed_freetext = parse_freetext(
         freetext, base_tokens_upper_limit=3, name_tokens_lower_limit=2, name_tokens_upper_limit=7
     )
+    print([x.source.original for x in parsed_freetext])
     assert len(parsed_freetext) == len(expected_names)
     for name_information, expected in zip(parsed_freetext, expected_names):
         assert name_information
