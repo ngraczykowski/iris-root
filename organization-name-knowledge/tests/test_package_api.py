@@ -163,7 +163,7 @@ def test_parse_name_base(name, expected_base):
                         "pr retail",
                         "retail",
                     ],
-                    ["llc c o", "c o", "llc", "llc", "llc c o", "llc c o"],
+                    ["llc", "c o", "llc", "llc", "llc c o", "llc c o"],
                 )
             ],
         ),
@@ -178,3 +178,6 @@ def test_parse_freetext(freetext, expected_names):
         assert name_information
         assert name_information.base.cleaned_name == expected["base"].lower()
         assert name_information.legal.cleaned_name == expected["legal"].lower()
+
+
+# TODO add sources comparison in each case !

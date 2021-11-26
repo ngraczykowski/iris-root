@@ -68,7 +68,11 @@ def _get_names_to_remove(names: List[NameInformation]) -> List[NameInformation]:
             end_legals.add(legal)
             end_legals.add(name.legal.cleaned_tuple[-1])  # to check last token only also
 
-        elif base.startswith(legal) or source.startswith(legal):
+        elif (
+            base.startswith(legal)
+            or source.startswith(legal)
+            or source.startswith(name.legal.cleaned_tuple[0])
+        ):
             names_with_start_legal.append(name)
 
     names_with_duplicated_legal = [
