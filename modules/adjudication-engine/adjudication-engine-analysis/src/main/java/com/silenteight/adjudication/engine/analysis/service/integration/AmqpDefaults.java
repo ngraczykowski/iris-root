@@ -48,4 +48,5 @@ class AmqpDefaults {
 
   static final String DATA_RETENTION_EXCHANGE_NAME = "bridge.retention";
   static final String ALERT_EXPIRED_QUEUE_NAME = PREFIX + "alert-expired";
+  static final String PII_EXPIRED_QUEUE_NAME = PREFIX + "pii-expired";
 }

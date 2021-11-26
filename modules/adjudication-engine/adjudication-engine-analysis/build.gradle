@@ -15,6 +15,7 @@ dependencies {
 
   implementation libraries.adjudication_engine_api
   implementation libraries.agents_api
+  implementation libraries.data_retention_api
   implementation libraries.data_source_categories_api
   implementation libraries.data_source_comments_api
   implementation libraries.governance_solving_api

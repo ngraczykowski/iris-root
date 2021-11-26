@@ -7,7 +7,6 @@ import com.silenteight.adjudication.engine.analysis.agentresponse.integration.Ag
 import com.silenteight.adjudication.engine.analysis.categoryrequest.integration.CategoryRequestChannels;
 import com.silenteight.adjudication.engine.analysis.commentinput.integration.CommentInputChannels;
 import com.silenteight.adjudication.engine.analysis.pendingrecommendation.integration.PendingRecommendationChannels;
-import com.silenteight.adjudication.engine.dataset.dataset.integration.DataRetentionChannels;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 
 import org.springframework.amqp.support.AmqpHeaders;
@@ -22,6 +21,8 @@ import org.springframework.integration.router.HeaderValueRouter;
 
 import javax.validation.Valid;
 
+import static com.silenteight.adjudication.engine.analysis.pii.integration.RemovePiiChannels.REMOVE_PII_INBOUND_CHANNEL;
+import static com.silenteight.adjudication.engine.dataset.dataset.integration.DataRetentionChannels.ALERTS_EXPIRED_INBOUND_CHANNEL;
 import static org.springframework.integration.dsl.IntegrationFlows.from;
 
 @Configuration
@@ -79,7 +80,15 @@ class AnalysisInboundAmqpIntegrationConfiguration {
   IntegrationFlow dataRetentionIntegrationFlow() {
     return from(createInboundAdapter(properties.getDataRetentionInboundQueueName()))
         .log(Level.TRACE, getClass().getName() + ".dataRetentionIntegrationFlow")
-        .channel(DataRetentionChannels.ALERTS_EXPIRED_INBOUND_CHANNEL)
+        .channel(ALERTS_EXPIRED_INBOUND_CHANNEL)
+        .get();
+  }
+
+  @Bean
+  IntegrationFlow piiExpiredIntegrationFlow() {
+    return from(createInboundAdapter(properties.getPiiExpiredInboundQueueName()))
+        .log(Level.TRACE, getClass().getName() + ".dataRetentionIntegrationFlow")
+        .channel(REMOVE_PII_INBOUND_CHANNEL)
         .get();
   }
 

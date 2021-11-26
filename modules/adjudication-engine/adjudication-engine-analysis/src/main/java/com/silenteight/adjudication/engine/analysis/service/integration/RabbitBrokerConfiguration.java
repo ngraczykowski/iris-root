@@ -68,9 +68,13 @@ class RabbitBrokerConfiguration {
     var agentResponse = queueDeadLetter(AGENT_RESPONSE_QUEUE_NAME).maxPriority(10).build();
     var agentResponseBinding = bind(agentResponse, agentResponseExchange, "#");
 
-    var dataRetention = queueDeadLetter(ALERT_EXPIRED_QUEUE_NAME).maxPriority(10).build();
-    var dataRetentionBinding =
-        bind(dataRetention, dataRetentionExchange, "retention.alerts-expired");
+    var alertExpired = queueDeadLetter(ALERT_EXPIRED_QUEUE_NAME).maxPriority(10).build();
+    var alertExpiredBinding =
+        bind(alertExpired, dataRetentionExchange, "retention.alerts-expired");
+
+    var piiExpired = queueDeadLetter(PII_EXPIRED_QUEUE_NAME).maxPriority(10).build();
+    var piiExpiredBinding =
+        bind(piiExpired, dataRetentionExchange, "retention.personal-information-expired");
 
     var tmpAgentRequest = queue(TMP_AGENT_REQUEST_QUEUE_NAME).maxPriority(10).build();
     var tmpAgentRequestBinding = bind(tmpAgentRequest, agentRequestExchange, "#");
@@ -87,7 +91,8 @@ class RabbitBrokerConfiguration {
         commentInput, commentInputBinding,
         agentResponse, agentResponseBinding,
         tmpAgentRequest, tmpAgentRequestBinding,
-        dataRetention, dataRetentionBinding);
+        alertExpired, alertExpiredBinding,
+        piiExpired, piiExpiredBinding);
   }
 
   private static QueueBuilder queue(String queueName) {

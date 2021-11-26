@@ -37,6 +37,11 @@ class AnalysisInboundAmqpIntegrationProperties {
   @NestedConfigurationProperty
   @Valid
   @NotNull
+  private PiiExpired piiExpired = new PiiExpired();
+
+  @NestedConfigurationProperty
+  @Valid
+  @NotNull
   private DeleteAgentExchange deleteAgentExchange = new DeleteAgentExchange();
 
   @NestedConfigurationProperty
@@ -69,6 +74,10 @@ class AnalysisInboundAmqpIntegrationProperties {
 
   String getDataRetentionInboundQueueName() {
     return alertExpired.getInboundQueueName();
+  }
+
+  String getPiiExpiredInboundQueueName() {
+    return piiExpired.getInboundQueueName();
   }
 
   @Data
@@ -106,6 +115,13 @@ class AnalysisInboundAmqpIntegrationProperties {
 
     @NotBlank
     private String inboundQueueName = ALERT_EXPIRED_QUEUE_NAME;
+  }
+
+  @Data
+  static class PiiExpired {
+
+    @NotBlank
+    private String inboundQueueName = PII_EXPIRED_QUEUE_NAME;
   }
 
   @Data
