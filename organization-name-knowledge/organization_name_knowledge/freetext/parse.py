@@ -36,6 +36,12 @@ def parse_freetext_names(
         != len(name.base)
         <= base_tokens_upper_limit
     ]
+    if len(parsed_names_valid) >= 2:
+        parsed_names_valid = [
+            name
+            for name in parsed_names_valid
+            if not name.base.cleaned_name.startswith(name.legal.cleaned_name)
+        ]
 
     return _get_names_with_unique_bases(parsed_names_valid)
 

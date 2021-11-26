@@ -41,12 +41,22 @@ def test_parse_name_base(name, expected_base):
     "freetext, expected_names",
     [
         (
+            "Silent Eight PTE LTD",
+            [
+                {"base": "Eight", "legal": "pte ltd"},
+                {"base": "Silent Eight", "legal": "pte ltd"},
+            ],
+        ),
+        (
+            "Corporation of Africa",
+            [
+                {"base": "Corporation of Africa", "legal": "Corporation of"},
+            ],
+        ),
+        (
             "Some Text about The Silent Eight PTE LTD founded years ago in Singapore",
             [
                 {"base": "Eight", "legal": "pte ltd"},
-                {"base": "ltd founded", "legal": "ltd"},
-                {"base": "ltd founded years", "legal": "ltd"},
-                {"base": "pte ltd founded", "legal": "pte ltd"},
                 {"base": "Silent Eight", "legal": "pte ltd"},
             ],
         ),
@@ -84,8 +94,6 @@ def test_parse_name_base(name, expected_base):
             "Paramount Pictures LLC or Walt Disney Company",
             [
                 {"base": "Disney", "legal": "Company"},
-                {"base": "LLC or", "legal": "LLC"},
-                {"base": "LLC or Walt", "legal": "LLC"},
                 {"base": "Paramount Pictures", "legal": "LLC"},
                 {"base": "Pictures", "legal": "LLC"},
                 {"base": "Walt Disney", "legal": "Company"},
@@ -148,6 +156,13 @@ def test_parse_name_base(name, expected_base):
             ],
         ),
         (
+            "[ORIGINATOR     ] IT36701908273410 AC 121140399 BANK OF TIANJIN CO LTD NO.15 YOU YI ROAD,HE XI DISTRICT",
+            [
+                {"base": "bank of tianjin", "legal": "co ltd"},
+                {"base": "tianjin", "legal": "co ltd"},
+            ],
+        ),
+        (
             "123456 PR RETAIL LLC C/O BLACKPOINT PARTNERS, LLC 123 ABC ST SUITE 88 US 12345",
             [
                 {"base": base, "legal": legal}
@@ -155,13 +170,11 @@ def test_parse_name_base(name, expected_base):
                     [
                         "blackpoint",
                         "c o blackpoint",
-                        "llc 123",
-                        "llc 123 abc",
                         "partners",
                         "pr retail",
                         "retail",
                     ],
-                    ["llc c o", "c o", "llc", "llc", "llc", "llc c o", "llc c o"],
+                    ["llc c o", "llc", "llc", "llc c o", "llc c o"],
                 )
             ],
         ),
