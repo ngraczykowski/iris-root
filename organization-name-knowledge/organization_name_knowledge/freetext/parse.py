@@ -51,7 +51,7 @@ def _get_valid_names(
         != len(name.base)
         <= base_tokens_upper_limit
         and not (
-            name.base.cleaned_name.startswith(name.legal.cleaned_name) and len(name.legal) >= 2
+            name.source.cleaned.startswith(name.legal.cleaned_name) and len(name.legal) >= 2
         )  # to remove names with 2 or more legals at start
     ]
 

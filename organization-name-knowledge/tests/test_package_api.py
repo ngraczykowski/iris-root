@@ -173,7 +173,6 @@ def test_parse_freetext(freetext, expected_names):
     parsed_freetext = parse_freetext(
         freetext, base_tokens_upper_limit=3, name_tokens_lower_limit=2, name_tokens_upper_limit=7
     )
-    print([x.source.original for x in parsed_freetext])
     assert len(parsed_freetext) == len(expected_names)
     for name_information, expected in zip(parsed_freetext, expected_names):
         assert name_information
