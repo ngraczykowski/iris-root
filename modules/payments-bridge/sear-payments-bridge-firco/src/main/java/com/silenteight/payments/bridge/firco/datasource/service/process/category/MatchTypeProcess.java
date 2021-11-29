@@ -2,26 +2,23 @@ package com.silenteight.payments.bridge.firco.datasource.service.process.categor
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
-@Qualifier("matchType")
 @RequiredArgsConstructor
-class MatchTypeProcess implements CategoryValueProcess {
+class MatchTypeProcess extends BaseCategoryValueProcess {
+
+  public static final String CATEGORY_MATCH_TYPE = "matchType";
 
   @Override
-  public CategoryValue extract(
-      HitData hitData, String matchName) {
-    return CategoryValue
-        .newBuilder()
-        .setName("categories/matchType")
-        .setMatch(matchName)
-        .setSingleValue(hitData.getHitAndWlPartyData().getSolutionType().name())
-        .build();
+  protected String getCategoryName() {
+    return CATEGORY_MATCH_TYPE;
   }
 
+  @Override
+  protected String getValue(HitData hitData) {
+    return hitData.getHitAndWlPartyData().getSolutionType().name();
+  }
 }

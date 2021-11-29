@@ -41,7 +41,8 @@ class NameAddressCrossmatchProcessTest {
   @Test
   void testExtract() {
     int id = 1;
-    nameAddressCrossmatchProcess.extract(createHitData(getMatchId(id)), getMatchValue(id));
+    nameAddressCrossmatchProcess.extract(
+        createHitData(getMatchId(id)), getMatchValue(id));
     verify(nameAddressCrossmatchUseCase, times(1)).call(any());
   }
 }

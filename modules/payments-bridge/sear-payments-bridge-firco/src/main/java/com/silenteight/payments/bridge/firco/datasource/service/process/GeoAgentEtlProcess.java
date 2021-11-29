@@ -1,56 +1,62 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process;
 
-import lombok.RequiredArgsConstructor;
-
-import com.silenteight.datasource.agentinput.api.v1.AgentInput;
 import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceBlockingStub;
-import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
-import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
-import com.silenteight.payments.bridge.common.model.AeAlert;
-import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
-import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
-import com.google.protobuf.Any;
-import io.grpc.Deadline;
-
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-import static com.silenteight.payments.bridge.firco.datasource.util.HitDataUtils.filterHitsData;
+class GeoAgentEtlProcess extends BaseAgentEtlProcess<LocationFeatureInput> {
 
-@RequiredArgsConstructor
-class GeoAgentEtlProcess implements EtlProcess {
+  private static final String GEO_FEATURE = "geo";
 
-  private final AgentInputServiceBlockingStub blockingStub;
-  private final Duration timeout;
+  GeoAgentEtlProcess(
+      AgentInputServiceBlockingStub blockingStub, Duration timeout) {
+    super(blockingStub, timeout);
+  }
 
   @Override
-  public void extractAndLoad(AeAlert alert, AlertEtlResponse alertEtlResponse) {
-    List<HitData> hitsData = alertEtlResponse.getHits();
-    alert.getMatches().entrySet()
-        .forEach(matchItem -> handleMatches(hitsData, matchItem));
+  protected String getFeatureName() {
+    return GEO_FEATURE;
   }
 
-  private void handleMatches(List<HitData> hitsData, Entry<String, String> matchItem) {
-    filterHitsData(hitsData, matchItem).stream()
-        .forEach(hitData -> callAgentService(matchItem, hitData));
+  @Override
+  protected LocationFeatureInput getFeatureInput(HitData hitData) {
+
+    var countryTown = getCountryTown(hitData);
+    var watchListLocation = getWatchListLocation(hitData);
+
+    return LocationFeatureInput.newBuilder()
+        .setFeature(getFullFeatureName())
+        .setAlertedPartyLocation(countryTown)
+        .setWatchlistLocation(watchListLocation)
+        .build();
   }
 
-  private void callAgentService(Entry<String, String> matchItem, HitData hitData) {
-    var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
-
-    String countryTown = getSpecifiedAlertedPartyLocation(
+  private static String getCountryTown(HitData hitData) {
+    return getSpecifiedAlertedPartyLocation(
         hitData.getAlertedPartyData(),
         AlertedPartyData::getCtryTowns);
+  }
+
+  private static String getSpecifiedAlertedPartyLocation(
+      AlertedPartyData alertedPartyData,
+      Function<AlertedPartyData, List<String>> getSpecifiedLocation) {
+    return Optional.of(alertedPartyData)
+        .map(getSpecifiedLocation)
+        .orElseGet(Collections::emptyList)
+        .stream()
+        .findFirst()
+        .orElse("");
+  }
+
+  private static String getWatchListLocation(HitData hitData) {
     String country = getSpecifiedWatchListLocation(
         hitData.getHitAndWlPartyData(),
         HitAndWatchlistPartyData::getCountries);
@@ -61,56 +67,13 @@ class GeoAgentEtlProcess implements EtlProcess {
         hitData.getHitAndWlPartyData(),
         HitAndWatchlistPartyData::getCities);
 
-    String watchListLocation = String.join(", ", country, state, city);
-
-    var batchInputRequest = createBatchInputRequest(
-        matchItem.getValue(),
-        countryTown,
-        watchListLocation
-    );
-
-    blockingStub
-        .withDeadline(deadline)
-        .batchCreateAgentInputs(batchInputRequest);
+    return String.join(", ", country, state, city);
   }
 
-  private BatchCreateAgentInputsRequest createBatchInputRequest(
-      String matchValue, String countryTown, String watchListLocation) {
-
-    var geoFeatureInput = FeatureInput.newBuilder()
-        .setFeature("features/geo")
-        .setAgentFeatureInput(Any.pack(
-            LocationFeatureInput.newBuilder()
-                .setFeature("features/geo")
-                .setAlertedPartyLocation(countryTown)
-                .setWatchlistLocation(watchListLocation)
-                .build()))
-        .build();
-
-    return BatchCreateAgentInputsRequest.newBuilder()
-        .addAgentInputs(AgentInput.newBuilder()
-            .setMatch(matchValue)
-            .addFeatureInputs(
-                geoFeatureInput)
-            .build())
-        .build();
-  }
-
-  private String getSpecifiedWatchListLocation(
+  private static String getSpecifiedWatchListLocation(
       HitAndWatchlistPartyData hitAndWatchlistPartyData,
       Function<HitAndWatchlistPartyData, List<String>> getSpecifiedLocation) {
     return Optional.of(hitAndWatchlistPartyData)
-        .map(getSpecifiedLocation)
-        .orElseGet(Collections::emptyList)
-        .stream()
-        .findFirst()
-        .orElse("");
-  }
-
-  private String getSpecifiedAlertedPartyLocation(
-      AlertedPartyData alertedPartyData,
-      Function<AlertedPartyData, List<String>> getSpecifiedLocation) {
-    return Optional.of(alertedPartyData)
         .map(getSpecifiedLocation)
         .orElseGet(Collections::emptyList)
         .stream()

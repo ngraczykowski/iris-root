@@ -41,7 +41,7 @@ class EtlService implements EtlUseCase {
 
     try {
       var alertEtlResponse = getAlertEtlResponse(alert);
-      processes.stream()
+      processes
           .forEach(process -> process.extractAndLoad(alert, alertEtlResponse));
 
     } catch (UnsupportedMessageException exception) {

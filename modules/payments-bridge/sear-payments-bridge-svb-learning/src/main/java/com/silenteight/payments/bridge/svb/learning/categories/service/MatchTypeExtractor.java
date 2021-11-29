@@ -2,24 +2,23 @@ package com.silenteight.payments.bridge.svb.learning.categories.service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
-@Qualifier("matchtype")
 @RequiredArgsConstructor
-class MatchTypeExtractor implements CategoryValueExtractor {
+class MatchTypeExtractor extends BaseCategoryValueExtractor {
+
+  public static final String CATEGORY_MATCH_TYPE = "matchType";
 
   @Override
-  public CategoryValue extract(LearningMatch learningMatch) {
-    return CategoryValue
-        .newBuilder()
-        .setName("categories/matchType")
-        .setMatch(learningMatch.getMatchName())
-        .setSingleValue(learningMatch.getSolutionType().name())
-        .build();
+  protected String getCategoryName() {
+    return CATEGORY_MATCH_TYPE;
+  }
+
+  @Override
+  protected String getValue(LearningMatch learningMatch) {
+    return learningMatch.getSolutionType().name();
   }
 }

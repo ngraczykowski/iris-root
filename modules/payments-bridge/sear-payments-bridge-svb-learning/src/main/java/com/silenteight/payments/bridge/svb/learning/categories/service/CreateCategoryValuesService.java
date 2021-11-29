@@ -30,38 +30,6 @@ class CreateCategoryValuesService implements CreateCategoryValuesUseCase {
   private final List<CategoryValueExtractor> categoryValueExtractors;
   private final CreateCategoryValuesClient createCategoryValuesClient;
 
-  public List<CategoryValue> createCategoryValues(LearningAlert learningAlert) {
-    var categoryValues = new ArrayList<CategoryValue>();
-
-    for (LearningMatch match : learningAlert.getMatches()) {
-      for (CategoryValueExtractor ce : categoryValueExtractors) {
-
-        if (log.isTraceEnabled()) {
-          log.trace("Extracting category value: {}", ce.getClass().getSimpleName());
-        }
-
-        var categoryValue = ce.extract(match);
-        categoryValues.add(categoryValue);
-      }
-    }
-
-    createCategoryValuesClient.createCategoriesValues(BatchCreateCategoryValuesRequest
-        .newBuilder()
-        .addAllRequests(
-            categoryValues
-                .stream()
-                .map(cv -> CreateCategoryValuesRequest
-                    .newBuilder()
-                    .setCategory(cv.getName())
-                    .addCategoryValues(cv)
-                    .build())
-                .collect(
-                    toList()))
-        .build());
-
-    return categoryValues;
-  }
-
   public void createCategoryValues(
       List<LearningAlert> learningAlerts, List<ReadAlertError> errors) {
     var categoryValueRequests = new ArrayList<CreateCategoryValuesRequest>();
@@ -99,7 +67,9 @@ class CreateCategoryValuesService implements CreateCategoryValuesUseCase {
   }
 
   @Nonnull
-  private Stream<CategoryValue> getCategoryValueStream(LearningMatch match) {
+  private Stream<CategoryValue> getCategoryValueStream(
+      LearningMatch learningMatch) {
+
     return categoryValueExtractors.stream()
         .map(extractor -> {
 
@@ -107,7 +77,7 @@ class CreateCategoryValuesService implements CreateCategoryValuesUseCase {
                 log.trace("Extracting category value: {}", extractor.getClass().getSimpleName());
               }
 
-              return extractor.extract(match);
+              return extractor.extract(learningMatch);
             }
         );
   }

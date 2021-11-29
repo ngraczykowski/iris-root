@@ -2,36 +2,34 @@ package com.silenteight.payments.bridge.firco.datasource.service.process.categor
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.agents.model.SpecificTermsRequest;
 import com.silenteight.payments.bridge.agents.port.SpecificTermsUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 
 @Service
-@Qualifier("specificTerms")
 @RequiredArgsConstructor
-class SpecificTermsProcess implements CategoryValueProcess {
+class SpecificTermsProcess extends BaseCategoryValueProcess {
+
+  public static final String CATEGORY_SPECIFIC_TERMS = "specificTerms";
 
   private final SpecificTermsUseCase specificTermsUseCase;
 
   @Override
-  public CategoryValue extract(HitData hitData, String matchValue) {
-    var value = specificTermsUseCase.invoke(createRequest(hitData));
-    return CategoryValue
-        .newBuilder()
-        .setName("categories/specificTerms")
-        .setMatch(matchValue)
-        .setSingleValue(value.toString())
-        .build();
+  protected String getCategoryName() {
+    return CATEGORY_SPECIFIC_TERMS;
+  }
+
+  @Override
+  protected String getValue(HitData hitData) {
+    return specificTermsUseCase.invoke(createRequest(hitData)).toString();
   }
 
   @Nonnull
-  private SpecificTermsRequest createRequest(HitData hitData) {
+  private static SpecificTermsRequest createRequest(HitData hitData) {
     return SpecificTermsRequest
         .builder()
         .allMatchFieldsValue(joinMatchingFieldValues(hitData))

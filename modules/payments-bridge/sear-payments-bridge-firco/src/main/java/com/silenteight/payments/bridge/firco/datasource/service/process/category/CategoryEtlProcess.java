@@ -17,10 +17,10 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
 import static com.silenteight.payments.bridge.firco.datasource.util.HitDataUtils.filterHitsData;
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
@@ -33,30 +33,39 @@ class CategoryEtlProcess implements EtlProcess {
   @Override
   public void extractAndLoad(AeAlert data, AlertEtlResponse alertEtlResponse) {
     List<HitData> hitsData = alertEtlResponse.getHits();
+
     data.getMatches()
         .entrySet()
         .forEach(
             matchItem -> handleMatches(hitsData, matchItem));
   }
 
-  private void handleMatches(List<HitData> hitsData, Entry<String, String> matchItem) {
+  private void handleMatches(
+      List<HitData> hitsData, Entry<String, String> matchItem) {
     var categoryValues = filterHitsData(hitsData, matchItem).stream()
-        .map(hitData -> categoryValueExtractors
-            .stream()
-            .map(ce -> {
-              if (log.isDebugEnabled()) {
-                log.debug("Processing category: {}", ce.getClass().getSimpleName());
-              }
-              return ce.extract(hitData, matchItem.getValue());
-            })
-            .collect(Collectors.toList())
-        ).flatMap(Collection::stream).collect(Collectors.toList());
+        .map(hitData -> extractCategoryValues(matchItem.getValue(), hitData))
+        .flatMap(Collection::stream)
+        .collect(toList());
 
     var request = createRequest(categoryValues);
     createCategoryValuesClient.createCategoriesValues(request);
   }
 
   @Nonnull
+  private List<CategoryValue> extractCategoryValues(
+      String matchName, HitData hitData) {
+    return categoryValueExtractors.stream()
+        .map(extractor -> {
+
+          if (log.isDebugEnabled()) {
+            log.debug("Processing category: {}", extractor.getClass().getSimpleName());
+          }
+
+          return extractor.extract(hitData, matchName);
+        })
+        .collect(toList());
+  }
+
   private static BatchCreateCategoryValuesRequest createRequest(
       List<CategoryValue> categoryValues) {
     return BatchCreateCategoryValuesRequest
@@ -70,7 +79,7 @@ class CategoryEtlProcess implements EtlProcess {
                     .addCategoryValues(cv)
                     .build())
                 .collect(
-                    Collectors.toList()))
+                    toList()))
         .build();
   }
 }

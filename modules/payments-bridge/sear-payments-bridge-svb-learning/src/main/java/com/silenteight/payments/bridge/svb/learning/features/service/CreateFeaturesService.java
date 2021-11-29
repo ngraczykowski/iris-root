@@ -70,11 +70,11 @@ class CreateFeaturesService implements CreateFeaturesUseCase {
   private Stream<AgentInput> createAgentInputs(LearningAlert learningAlert) {
     return learningAlert.getMatches().stream()
         .map(match ->
-          AgentInput
-              .newBuilder()
-              .setMatch(match.getMatchName())
-              .addAllFeatureInputs(toFeatureInput(match))
-              .build()
+            AgentInput
+                .newBuilder()
+                .setMatch(match.getMatchName())
+                .addAllFeatureInputs(toFeatureInput(match))
+                .build()
         );
   }
 

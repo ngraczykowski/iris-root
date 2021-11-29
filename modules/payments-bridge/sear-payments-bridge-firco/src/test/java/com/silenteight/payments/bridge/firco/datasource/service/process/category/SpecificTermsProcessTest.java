@@ -31,7 +31,8 @@ class SpecificTermsProcessTest {
   @Test
   void testExtract() {
     int id = 1;
-    specificTermsProcess.extract(createHitData(getMatchId(id)), getMatchValue(id));
+    specificTermsProcess.extract(
+        createHitData(getMatchId(id)), getMatchValue(id));
     verify(specificTermsUseCase, times(1)).invoke(any());
   }
 }

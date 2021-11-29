@@ -2,38 +2,36 @@ package com.silenteight.payments.bridge.svb.learning.categories.service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.agents.model.HistoricalRiskAssessmentAgentRequest;
 import com.silenteight.payments.bridge.agents.port.HistoricalRiskAssessmentUseCase;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Qualifier("historicalRisk")
-class HistoricalRiskExtractor implements CategoryValueExtractor {
+class HistoricalRiskExtractor extends BaseCategoryValueExtractor {
+
+  public static final String CATEGORY_HISTORICAL_RISK_ASSESSMENT = "historicalRiskAssessment";
 
   private final HistoricalRiskAssessmentUseCase historicalRiskAssessmentUseCase;
 
   @Override
-  public CategoryValue extract(LearningMatch learningMatch) {
+  protected String getCategoryName() {
+    return CATEGORY_HISTORICAL_RISK_ASSESSMENT;
+  }
+
+  @Override
+  protected String getValue(LearningMatch learningMatch) {
     var accountNumberOrFirstName = learningMatch.getAccountNumberOrFirstName()
         .filter(String::isBlank)
         .orElseGet(() -> learningMatch.getFirstAlertedPartyName().orElse(""));
 
-    var result = historicalRiskAssessmentUseCase.invoke(HistoricalRiskAssessmentAgentRequest
-        .builder()
-        .accountNumber(accountNumberOrFirstName)
-        .ofacID(learningMatch.getOfacId())
-        .build());
-
-    return CategoryValue
-        .newBuilder()
-        .setName("categories/historicalRiskAssessment")
-        .setMatch(learningMatch.getMatchName())
-        .setSingleValue(result.toString())
-        .build();
+    return historicalRiskAssessmentUseCase.invoke(HistoricalRiskAssessmentAgentRequest
+            .builder()
+            .accountNumber(accountNumberOrFirstName)
+            .ofacID(learningMatch.getOfacId())
+            .build())
+        .toString();
   }
 }
