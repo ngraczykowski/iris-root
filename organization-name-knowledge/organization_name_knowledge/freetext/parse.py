@@ -1,5 +1,5 @@
 from itertools import combinations
-from typing import List
+from typing import List, Set
 
 from organization_name_knowledge.freetext.matching import get_all_contained_legal_terms
 from organization_name_knowledge.names.name_information import NameInformation
@@ -60,36 +60,37 @@ def _get_valid_names(
     return valid_names
 
 
-def _get_names_to_remove(names: List[NameInformation]) -> List[NameInformation]:
+def _get_names_to_remove(names: List[NameInformation]) -> Set[NameInformation]:
     names_with_start_legal = []
     end_legals = set()
     for name in names:
         source, base, legal = name.source.cleaned, name.base.cleaned_name, name.legal.cleaned_name
+        if legal:
+            if base.endswith(legal) or source.endswith(legal):
+                end_legals.add(legal)
+                end_legals.add(name.legal.cleaned_tuple[-1])  # to check last token only also
 
-        if base.endswith(legal) or source.endswith(legal):
-            end_legals.add(legal)
-            end_legals.add(name.legal.cleaned_tuple[-1])  # to check last token only also
+            elif (
+                base.startswith(legal)
+                or source.startswith(legal)
+                or source.startswith(name.legal.cleaned_tuple[0])
+            ):
+                names_with_start_legal.append(name)
 
-        elif (
-            base.startswith(legal)
-            or source.startswith(legal)
-            or source.startswith(name.legal.cleaned_tuple[0])
-        ):
-            names_with_start_legal.append(name)
-
-    names_with_duplicated_legal = [
+    names_with_duplicated_legal = {
         name
         for name in names_with_start_legal
         if name.legal.cleaned_name in end_legals
         or name.legal.cleaned_tuple[0] in end_legals  # check if just first token in ends
-    ]
-    names_with_duplicated_legal_from_prefix = [
+    }
+    names_with_duplicated_legal_from_prefix = {
         name
         for name in names
         if name.common_prefixes.cleaned_name in end_legals
         or name.base.cleaned_tuple[0] in end_legals
-    ]
-    return names_with_duplicated_legal + names_with_duplicated_legal_from_prefix
+    }
+    names_with_duplicated_legal.update(names_with_duplicated_legal_from_prefix)
+    return names_with_duplicated_legal
 
 
 def _get_names_with_unique_bases(names: List[NameInformation]) -> List[NameInformation]:
