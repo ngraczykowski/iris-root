@@ -87,6 +87,27 @@ def test_parse_name_base(name, expected_base):
             ],
         ),
         (
+            "South Africa Organization",
+            [
+                {"base": "Africa", "legal": "Organization", "source": "Africa Organization"},
+                {
+                    "base": "South Africa",
+                    "legal": "Organization",
+                    "source": "South Africa Organization",
+                },
+            ],
+        ),
+        (
+            "Corporation of London",
+            [
+                {
+                    "base": "corporation of london",
+                    "legal": "corporation of",
+                    "source": "corporation of london",
+                },
+            ],
+        ),
+        (
             "Paramount Pictures LLC or Walt Disney Company",
             [
                 {"base": "Disney", "legal": "Company", "source": "disney company"},
