@@ -1,8 +1,7 @@
 import itertools
-import json
 import re
 from importlib.resources import open_text
-from typing import Dict, List, Set
+from typing import List, Set
 
 from organization_name_knowledge import resources
 from organization_name_knowledge.utils.text import (
@@ -10,14 +9,6 @@ from organization_name_knowledge.utils.text import (
     remove_too_long_numbers,
     split_text_by_too_long_numbers,
 )
-
-NAMES_SYNONYMS: Dict[str, List[str]]
-
-with open_text(resources, "eastern_male_names_mapping.json") as file:
-    NAMES_SYNONYMS = json.load(file)
-with open_text(resources, "eastern_female_names_mapping.json") as file:
-    NAMES_SYNONYMS.update(json.load(file))
-
 
 with open_text(resources, "conjunctions.txt") as file:
     conjunctions = [" " + word + " " for word in file.read().splitlines()]

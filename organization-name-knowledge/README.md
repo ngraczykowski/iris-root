@@ -49,8 +49,6 @@ Static data used for comparison is currently stored in organization_name_knowled
 * common_suffixes.json - commonly used at the end of organization name, such as "manufacturing", "sales" or "enterprise"
 * conjunctions.txt - i.e. "and", "or", "for"
 * countries.json - different names and abbreviations for countries
-* eastern_female_names.json - mappings of known variants of female names
-* eastern_male_names.json - mappings of known variants of male names
 * joining_words.json - words such as "and"
 * legal_terms.json - legal entity terms, with possible abbreviations and meaning
 * prepositions.txt - i.e. "from", "in", "of"
