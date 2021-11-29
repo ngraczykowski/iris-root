@@ -69,14 +69,14 @@ def split_text_by_too_long_numbers(text: str) -> List[str]:
 
 
 def starts_with_conjunction(tokens: Sequence[str]) -> bool:
-    """Returns true if sole conjunction is first token in tokens (not a part of a first token)"""
+    """Returns true if any of conjunctions is the first of tokens (not a part of the first token)"""
     if tokens and tokens[0].lower() in CONJUNCTIONS:
         return True
     return False
 
 
 def starts_with_preposition(tokens: Sequence[str]) -> bool:
-    """Returns true if sole conjunction is first token in tokens (not a part of a first token)"""
+    """Returns true if any of prepositions is the first of tokens (not a part of the first token)"""
     if tokens and tokens[0].lower() in PREPOSITIONS:
         return True
     return False
