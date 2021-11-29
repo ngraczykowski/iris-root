@@ -52,6 +52,5 @@ Static data used for comparison is currently stored in organization_name_knowled
 * joining_words.json - words such as "and"
 * legal_terms.json - legal entity terms, with possible abbreviations and meaning
 * prepositions.txt - i.e. "from", "in", "of"
-* titles.txt - list of titles, commonly related to persons, but sometimes used in org names, such as "the", "mr"
 * weak_words.json - words ignored in creating abbreviation or extracting legal terms or common words
 * words_mapping.json - mapping 

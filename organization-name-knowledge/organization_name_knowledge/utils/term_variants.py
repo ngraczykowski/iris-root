@@ -1,5 +1,4 @@
 import itertools
-import re
 from importlib.resources import open_text
 from typing import List, Set
 
@@ -12,15 +11,7 @@ from organization_name_knowledge.utils.text import (
 
 with open_text(resources, "conjunctions.txt") as file:
     conjunctions = [" " + word + " " for word in file.read().splitlines()]
-    NAME_DELIMITERS: List[str] = conjunctions + [",", ":", "+", "-", "/", "\n", "\r"]
-
-
-with open_text(resources, "titles.txt") as file:
-    lines: List[str] = file.read().splitlines()
-    TITLES_REGEXES: List[re.Pattern] = [re.compile(f"[^a-z]{title}\\s") for title in lines]
-
-    # to avoid i.e. "med" splitting "Mohammed XY"
-    TITLES_FOR_VARIANTS: List[str] = [f" {title} " for title in lines]
+    NAME_DELIMITERS: List[str] = conjunctions + [",", ":", "+", "-", "/", "\n", "\r", "the "]
 
 
 def get_term_variants(term: str) -> Set[str]:
@@ -45,7 +36,6 @@ def get_text_variants(text: str) -> Set[str]:
     variants = set()
     # assuming single level instead of a recursive split
     _add_variants(text, NAME_DELIMITERS, variants)
-    _add_variants(text, TITLES_FOR_VARIANTS, variants)
 
     for variant in split_text_by_too_long_numbers(text):
         variants.add(variant)
