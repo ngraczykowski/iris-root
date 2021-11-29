@@ -9,6 +9,7 @@ from organization_name_knowledge.utils.text import (
     remove_too_long_numbers,
     split_text_by_too_long_numbers,
     starts_with_conjunction,
+    starts_with_preposition,
 )
 
 
@@ -28,22 +29,6 @@ from organization_name_knowledge.utils.text import (
 )
 def test_contains_conjunction(name, result):
     assert contains_conjunction(name.split()) == result
-
-
-@pytest.mark.parametrize(
-    "name, result",
-    [
-        ("ABC Company", False),
-        ("And the Company", True),
-        ("Hewlett and Packard", False),
-        ("For you and your family", True),
-        ("Foreign country", False),
-        ("Organization Name Knowledge", False),
-        ("Or the other one", True),
-    ],
-)
-def test_starts_with_conjunction(name, result):
-    assert starts_with_conjunction(name.split()) == result
 
 
 @pytest.mark.parametrize(
@@ -108,6 +93,21 @@ def test_remove_split_chars(name, expected):
 @pytest.mark.parametrize(
     "name, expected",
     [
+        ("123", "123"),
+        ("123 456", "123 456"),
+        ("M1 Centrum Handlowe", "M1 Centrum Handlowe"),
+        ("1111 Aloha Hawai", " Aloha Hawai"),
+        ("Number between 12345 strings", "Number between  strings"),
+        ("123456 XD 5656778887665", " XD "),
+    ],
+)
+def test_remove_too_long_numbers(name, expected):
+    assert remove_too_long_numbers(name) == expected
+
+
+@pytest.mark.parametrize(
+    "name, expected",
+    [
         ("123", ["123"]),
         ("123 456", ["123 456"]),
         ("M1 Centrum Handlowe", ["M1 Centrum Handlowe"]),
@@ -121,15 +121,32 @@ def test_split_text_by_too_long_numbers(name, expected):
 
 
 @pytest.mark.parametrize(
-    "name, expected",
+    "name, result",
     [
-        ("123", "123"),
-        ("123 456", "123 456"),
-        ("M1 Centrum Handlowe", "M1 Centrum Handlowe"),
-        ("1111 Aloha Hawai", " Aloha Hawai"),
-        ("Number between 12345 strings", "Number between  strings"),
-        ("123456 XD 5656778887665", " XD "),
+        ("ABC Company", False),
+        ("And the Company", True),
+        ("Hewlett and Packard", False),
+        ("For you and your family", True),
+        ("Foreign country", False),
+        ("Organization Name Knowledge", False),
+        ("Or the other one", True),
     ],
 )
-def test_remove_too_long_numbers(name, expected):
-    assert remove_too_long_numbers(name) == expected
+def test_starts_with_conjunction(name, result):
+    assert starts_with_conjunction(name.split()) == result
+
+
+@pytest.mark.parametrize(
+    "name, result",
+    [
+        ("ABC Company", False),
+        ("And the company", False),
+        ("From the Santa Claus Inc", True),
+        ("To the Gates of Mordor", True),
+        ("of the ABC Company", True),
+        ("Focus on this company", False),
+        ("Wall of Fame", False),
+    ],
+)
+def test_starts_with_preposition(name, result):
+    assert starts_with_preposition(name.split()) == result
