@@ -62,13 +62,14 @@ class CreateCategoryValuesService implements CreateCategoryValuesUseCase {
   }
 
   private Stream<CategoryValue> extractCategoryValues(LearningAlert alert) {
+    var alertName = alert.getAlertName();
     return alert.getMatches().stream()
-        .flatMap(this::getCategoryValueStream);
+        .flatMap(learningMatch -> getCategoryValueStream(alertName, learningMatch));
   }
 
   @Nonnull
   private Stream<CategoryValue> getCategoryValueStream(
-      LearningMatch learningMatch) {
+      String alertName, LearningMatch learningMatch) {
 
     return categoryValueExtractors.stream()
         .map(extractor -> {
@@ -77,7 +78,7 @@ class CreateCategoryValuesService implements CreateCategoryValuesUseCase {
                 log.trace("Extracting category value: {}", extractor.getClass().getSimpleName());
               }
 
-              return extractor.extract(learningMatch);
+              return extractor.extract(alertName, learningMatch);
             }
         );
   }

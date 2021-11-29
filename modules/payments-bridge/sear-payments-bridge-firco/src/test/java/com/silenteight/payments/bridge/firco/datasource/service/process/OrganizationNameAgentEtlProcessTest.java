@@ -13,8 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
 
-import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.createAeAlert;
-import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.createAlertEtlResponse;
+import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessFixture.createAeAlert;
+import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessFixture.createAlertEtlResponse;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

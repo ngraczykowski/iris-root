@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process;
 
 import com.silenteight.payments.bridge.common.model.AeAlert;
+import com.silenteight.payments.bridge.firco.datasource.model.CategoryValueExtractModel;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
@@ -12,13 +13,13 @@ import javax.annotation.Nonnull;
 import static com.silenteight.payments.bridge.common.dto.common.WatchlistType.COMPANY;
 import static java.util.List.of;
 
-public class EtlProcessHelper {
+public class EtlProcessFixture {
 
   public static AeAlert createAeAlert(int numberOfMatches) {
     Map<String, String> matches = createMatches(numberOfMatches);
     var id = UUID.randomUUID();
     return AeAlert.builder()
-            .alertId(id).alertName("alerts/" + id).matches(matches).build();
+        .alertId(id).alertName("alerts/" + id).matches(matches).build();
   }
 
   @Nonnull
@@ -40,9 +41,22 @@ public class EtlProcessHelper {
     return "matches/" + id;
   }
 
+  @Nonnull
+  public static String getAlertName(int id) {
+    return "alerts/" + id;
+  }
+
   public static AlertEtlResponse createAlertEtlResponse(int numberOfHits) {
     List<HitData> hitDataList = createHitDataList(numberOfHits);
     return AlertEtlResponse.builder().hits(hitDataList).build();
+  }
+
+  public static CategoryValueExtractModel getCategoryValueExtractModel(int id) {
+    return CategoryValueExtractModel.builder()
+        .hitData(createHitData(getMatchId(id)))
+        .matchName(getMatchValue(id))
+        .alertName(getAlertName(id))
+        .build();
   }
 
   @Nonnull

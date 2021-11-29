@@ -2,7 +2,6 @@ package com.silenteight.payments.bridge.firco.datasource.service.process.categor
 
 import com.silenteight.payments.bridge.agents.model.HistoricalRiskAssessmentAgentResponse;
 import com.silenteight.payments.bridge.agents.port.HistoricalRiskAssessmentUseCase;
-import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,9 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.createHitData;
-import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.getMatchId;
-import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.getMatchValue;
+import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessFixture.getCategoryValueExtractModel;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -35,8 +32,8 @@ class HistoricalRiskAssasmentProcessTest {
   @Test
   void testExtract() {
     int id = 1;
-    HitData hitData = createHitData(getMatchId(id));
-    historicalRiskAssessmentProcess.extract(hitData, getMatchValue(id));
+    var categoryValueExtractModel = getCategoryValueExtractModel(id);
+    historicalRiskAssessmentProcess.extract(categoryValueExtractModel);
     verify(historicalRiskAssessmentUseCase, times(1)).invoke(any());
   }
 }

@@ -29,12 +29,14 @@ class CreateFeaturesService implements CreateFeaturesUseCase {
 
   public List<AgentInput> createMatchFeatures(LearningAlert learningAlert) {
     var agentInputs = new ArrayList<AgentInput>();
+    var alertName = learningAlert.getAlertName();
 
     learningAlert.getMatches().forEach(match -> {
       var features = new ArrayList<FeatureInput>();
       featureExtractors.forEach(fe -> features.add(fe.extract(match)));
       agentInputs.add(AgentInput
           .newBuilder()
+          .setAlert(alertName)
           .setMatch(match.getMatchName())
           .addAllFeatureInputs(features)
           .build());
@@ -68,10 +70,12 @@ class CreateFeaturesService implements CreateFeaturesUseCase {
   }
 
   private Stream<AgentInput> createAgentInputs(LearningAlert learningAlert) {
+    var alertName = learningAlert.getAlertName();
     return learningAlert.getMatches().stream()
         .map(match ->
             AgentInput
                 .newBuilder()
+                .setAlert(alertName)
                 .setMatch(match.getMatchName())
                 .addAllFeatureInputs(toFeatureInput(match))
                 .build()

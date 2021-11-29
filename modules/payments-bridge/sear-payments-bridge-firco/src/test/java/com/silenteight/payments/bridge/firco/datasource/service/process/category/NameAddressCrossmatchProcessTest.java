@@ -13,9 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 
-import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.createHitData;
-import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.getMatchId;
-import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.getMatchValue;
+import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessFixture.getCategoryValueExtractModel;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -41,8 +39,8 @@ class NameAddressCrossmatchProcessTest {
   @Test
   void testExtract() {
     int id = 1;
-    nameAddressCrossmatchProcess.extract(
-        createHitData(getMatchId(id)), getMatchValue(id));
+    var categoryValueExtractModel = getCategoryValueExtractModel(id);
+    nameAddressCrossmatchProcess.extract(categoryValueExtractModel);
     verify(nameAddressCrossmatchUseCase, times(1)).call(any());
   }
 }

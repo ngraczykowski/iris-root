@@ -14,8 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 
-import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.createAeAlert;
-import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.createAlertEtlResponse;
+import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessFixture.createAeAlert;
+import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessFixture.createAlertEtlResponse;
 import static java.util.List.of;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;

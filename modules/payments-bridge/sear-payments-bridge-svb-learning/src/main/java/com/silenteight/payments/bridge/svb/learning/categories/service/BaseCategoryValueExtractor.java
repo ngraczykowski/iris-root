@@ -8,10 +8,11 @@ abstract class BaseCategoryValueExtractor implements CategoryValueExtractor {
   private static final String CATEGORY_NAME_PREFIX = "categories/";
 
   @Override
-  public CategoryValue extract(LearningMatch learningMatch) {
+  public CategoryValue extract(String alertName, LearningMatch learningMatch) {
     return CategoryValue
         .newBuilder()
         .setName(getFullCategoryName())
+        .setAlert(alertName)
         .setMatch(learningMatch.getMatchName())
         .setSingleValue(getValue(learningMatch))
         .build();

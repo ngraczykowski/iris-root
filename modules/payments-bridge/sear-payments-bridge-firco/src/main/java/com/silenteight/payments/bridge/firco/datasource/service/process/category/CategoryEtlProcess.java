@@ -8,6 +8,7 @@ import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.datasource.categories.api.v2.CreateCategoryValuesRequest;
 import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
 import com.silenteight.payments.bridge.common.model.AeAlert;
+import com.silenteight.payments.bridge.firco.datasource.model.CategoryValueExtractModel;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
@@ -33,17 +34,23 @@ class CategoryEtlProcess implements EtlProcess {
   @Override
   public void extractAndLoad(AeAlert data, AlertEtlResponse alertEtlResponse) {
     List<HitData> hitsData = alertEtlResponse.getHits();
+    var alertName = data.getAlertName();
 
     data.getMatches()
         .entrySet()
         .forEach(
-            matchItem -> handleMatches(hitsData, matchItem));
+            matchItem -> handleMatches(hitsData, alertName, matchItem));
   }
 
   private void handleMatches(
-      List<HitData> hitsData, Entry<String, String> matchItem) {
+      List<HitData> hitsData, String alertName, Entry<String, String> matchItem) {
     var categoryValues = filterHitsData(hitsData, matchItem).stream()
-        .map(hitData -> extractCategoryValues(matchItem.getValue(), hitData))
+        .map(hitData -> CategoryValueExtractModel.builder()
+            .hitData(hitData)
+            .alertName(alertName)
+            .matchName(matchItem.getValue())
+            .build())
+        .map(this::extractCategoryValues)
         .flatMap(Collection::stream)
         .collect(toList());
 
@@ -53,7 +60,7 @@ class CategoryEtlProcess implements EtlProcess {
 
   @Nonnull
   private List<CategoryValue> extractCategoryValues(
-      String matchName, HitData hitData) {
+      CategoryValueExtractModel categoryValueExtractModel) {
     return categoryValueExtractors.stream()
         .map(extractor -> {
 
@@ -61,7 +68,7 @@ class CategoryEtlProcess implements EtlProcess {
             log.debug("Processing category: {}", extractor.getClass().getSimpleName());
           }
 
-          return extractor.extract(hitData, matchName);
+          return extractor.extract(categoryValueExtractModel);
         })
         .collect(toList());
   }

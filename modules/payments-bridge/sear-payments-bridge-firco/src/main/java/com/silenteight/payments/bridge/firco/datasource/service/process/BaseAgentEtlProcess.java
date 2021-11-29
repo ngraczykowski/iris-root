@@ -33,26 +33,27 @@ abstract class BaseAgentEtlProcess<T extends Message> implements EtlProcess {
   @Override
   public void extractAndLoad(AeAlert alert, AlertEtlResponse alertEtlResponse) {
     List<HitData> hitsData = alertEtlResponse.getHits();
+    var alertName = alert.getAlertName();
 
     alert.getMatches().entrySet()
-        .forEach(matchItem -> handleMatches(hitsData, matchItem));
+        .forEach(matchItem -> handleMatches(hitsData, alertName, matchItem));
   }
 
   private void handleMatches(
-      List<HitData> hitsData, Entry<String, String> matchItem) {
+      List<HitData> hitsData, String alertName, Entry<String, String> matchItem) {
 
     filterHitsData(hitsData, matchItem)
-        .forEach(hitData -> callAgentService(matchItem.getValue(), hitData));
+        .forEach(hitData -> callAgentService(alertName, matchItem.getValue(), hitData));
   }
 
   private void callAgentService(
-      String matchName, HitData hitData) {
+      String alertName, String matchName, HitData hitData) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 
     var featureInput = getFeatureInput(hitData);
 
     var batchInputRequest =
-        createBatchInputRequest(matchName, featureInput);
+        createBatchInputRequest(alertName, matchName, featureInput);
 
     var batchCreateAgentInputsResponse = blockingStub
         .withDeadline(deadline)
@@ -60,10 +61,11 @@ abstract class BaseAgentEtlProcess<T extends Message> implements EtlProcess {
   }
 
   private BatchCreateAgentInputsRequest createBatchInputRequest(
-      String matchName, T featureInput) {
+      String alertName, String matchName, T featureInput) {
     FeatureInput dataSourceFeatureInput = getDataSourceFeatureInput(featureInput);
 
     var agentInput = AgentInput.newBuilder()
+        .setAlert(alertName)
         .setMatch(matchName)
         .addFeatureInputs(dataSourceFeatureInput)
         .build();
@@ -80,7 +82,6 @@ abstract class BaseAgentEtlProcess<T extends Message> implements EtlProcess {
         .setAgentFeatureInput(Any.pack(featureInput))
         .build();
   }
-
 
   protected String getFullFeatureName() {
     return FEATURE_PREFIX + getFeatureName();

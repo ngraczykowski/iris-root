@@ -9,9 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.createHitData;
-import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.getMatchId;
-import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessHelper.getMatchValue;
+import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessFixture.getCategoryValueExtractModel;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -31,8 +29,8 @@ class SpecificTermsProcessTest {
   @Test
   void testExtract() {
     int id = 1;
-    specificTermsProcess.extract(
-        createHitData(getMatchId(id)), getMatchValue(id));
+    var categoryValueExtractModel = getCategoryValueExtractModel(id);
+    specificTermsProcess.extract(categoryValueExtractModel);
     verify(specificTermsUseCase, times(1)).invoke(any());
   }
 }
