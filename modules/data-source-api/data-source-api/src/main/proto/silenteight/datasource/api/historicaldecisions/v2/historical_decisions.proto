@@ -30,7 +30,7 @@ message BatchGetMatchHistoricalDecisionsInputsResponse {
 
 message HistoricalDecisionsInput {
   string match = 1;
-  HistoricalDecisionsFeatureInput historical_decisions_feature_input = 2;
+  repeated HistoricalDecisionsFeatureInput historical_decisions_feature_input = 2;
 }
 
 message HistoricalDecisionsFeatureInput {
