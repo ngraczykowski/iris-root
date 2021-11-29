@@ -29,4 +29,31 @@
     </createTable>
   </changeSet>
 
+
+  <changeSet id="payments-bridge-svb-learning-1.4.0" author="wkeska">
+    <dropTable tableName="pb_learning_file"/>
+
+    <createTable tableName="pb_learning_file">
+
+      <column name="learning_file_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false" unique="true"/>
+      </column>
+
+      <column name="file_name" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="bucket_name" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="status" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
 </databaseChangeLog>
