@@ -9,6 +9,7 @@ from organization_name_knowledge.utils.text import (
     clear_freetext,
     contains_conjunction,
     starts_with_conjunction,
+    starts_with_preposition,
 )
 
 
@@ -93,10 +94,16 @@ def _get_names_to_remove(names: List[NameInformation]) -> List[NameInformation]:
 def _get_names_with_unique_bases(names: List[NameInformation]) -> List[NameInformation]:
     unique_base_names = []
     bases = []
-    for name in sorted(names, key=lambda name_inf: len(name_inf.legal), reverse=True):
+    names_sorted_by_source_len = sorted(names, key=lambda name_inf: len(name_inf.source.cleaned))
+    for name in sorted(
+        names_sorted_by_source_len,
+        key=lambda name_inf: (len(name_inf.legal), len(name_inf.common_prefixes)),
+        reverse=True,
+    ):
         if (
             name.base.cleaned_name not in bases
             and not starts_with_conjunction(name.base.cleaned_tuple)
+            and not starts_with_preposition(name.base.cleaned_tuple)
             and not contains_conjunction(name.legal.cleaned_tuple)
         ):
             unique_base_names.append(name)

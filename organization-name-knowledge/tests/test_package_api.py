@@ -43,52 +43,56 @@ def test_parse_name_base(name, expected_base):
         (
             "Silent Eight PTE LTD",
             [
-                {"base": "Eight", "legal": "pte ltd"},
-                {"base": "Silent Eight", "legal": "pte ltd"},
+                {"base": "Eight", "legal": "pte ltd", "source": "eight pte ltd"},
+                {"base": "Silent Eight", "legal": "pte ltd", "source": "silent eight pte ltd"},
             ],
         ),
         (
             "Some Text about The Silent Eight PTE LTD founded years ago in Singapore",
             [
-                {"base": "Eight", "legal": "pte ltd"},
-                {"base": "Silent Eight", "legal": "pte ltd"},
+                {"base": "Eight", "legal": "pte ltd", "source": "eight pte ltd"},
+                {"base": "Silent Eight", "legal": "pte ltd", "source": "the silent eight pte ltd"},
             ],
         ),
         (
             "First Company Limited, Second Corp",
             [
-                {"base": "First", "legal": "company limited"},
-                {"base": "Second", "legal": "corp"},
+                {"base": "First", "legal": "company limited", "source": "first company limited"},
+                {"base": "Second", "legal": "corp", "source": "second corp"},
             ],
         ),
         (
             "Magic LTD and The Hogwarts Inc.",
             [
-                {"base": "Hogwarts", "legal": "inc"},
-                {"base": "Magic", "legal": "ltd"},
+                {"base": "Hogwarts", "legal": "inc", "source": "and the hogwarts inc"},
+                {"base": "Magic", "legal": "ltd", "source": "magic ltd"},
             ],
         ),
         (
             "The Hewlett and Packard Company",
             [
-                {"base": "Hewlett and Packard", "legal": "company"},
-                {"base": "Packard", "legal": "company"},
+                {
+                    "base": "Hewlett and Packard",
+                    "legal": "company",
+                    "source": "the hewlett and packard company",
+                },
+                {"base": "Packard", "legal": "company", "source": "packard company"},
             ],
         ),
         (
             "ACME CO and Google Inc",
             [
-                {"base": "ACME", "legal": "CO"},
-                {"base": "Google", "legal": "Inc"},
+                {"base": "ACME", "legal": "CO", "source": "acme co"},
+                {"base": "Google", "legal": "Inc", "source": "google inc"},
             ],
         ),
         (
             "Paramount Pictures LLC or Walt Disney Company",
             [
-                {"base": "Disney", "legal": "Company"},
-                {"base": "Paramount Pictures", "legal": "LLC"},
-                {"base": "Pictures", "legal": "LLC"},
-                {"base": "Walt Disney", "legal": "Company"},
+                {"base": "Disney", "legal": "Company", "source": "disney company"},
+                {"base": "Paramount Pictures", "legal": "LLC", "source": "paramount pictures llc"},
+                {"base": "Pictures", "legal": "LLC", "source": "pictures llc"},
+                {"base": "Walt Disney", "legal": "Company", "source": "walt disney company"},
             ],
         ),
         (
@@ -96,65 +100,68 @@ def test_parse_name_base(name, expected_base):
             "between NASA, ESA also conducted by the ABC DEF Company. AURA’s Space Telescope Science "
             "Institute in Baltimore, Maryland, conducts Hubble science operations.",
             [
-                {"base": "ABC DEF", "legal": "company"},
-                {"base": "DEF", "legal": "company"},
+                {"base": "ABC DEF", "legal": "company", "source": "the abc def company"},
+                {"base": "DEF", "legal": "company", "source": "def company"},
             ],
         ),
         (
             "At World's End The Dutchman arrives to the XYZ Limited",
             [
-                {"base": "to the XYZ", "legal": "Limited"},
-                {"base": "XYZ", "legal": "Limited"},
+                {"base": "XYZ", "legal": "Limited", "source": "the xyz limited"},
             ],
         ),
         (
             "KGHM Polska Miedź S A",
             [
-                {"base": "KGHM Polska Miedz", "legal": "s a"},
-                {"base": "Miedz", "legal": "s a"},
-                {"base": "Polska Miedz", "legal": "s a"},
+                {"base": "KGHM Polska Miedz", "legal": "s a", "source": "kghm polska miedz s a"},
+                {"base": "Miedz", "legal": "s a", "source": "miedz s a"},
+                {"base": "Polska Miedz", "legal": "s a", "source": "polska miedz s a"},
             ],
         ),
         (
             "12345 ABC Company",
-            [{"base": "ABC", "legal": "company"}],
+            [{"base": "ABC", "legal": "company", "source": "abc company"}],
         ),
         (
             "Some long name for number 1234567 ABC Corporation",
             [
-                {"base": "ABC", "legal": "Corporation"},
-                {"base": "number ABC", "legal": "Corporation"},
+                {"base": "ABC", "legal": "Corporation", "source": "abc corporation"},
+                {
+                    "base": "number ABC",
+                    "legal": "Corporation",
+                    "source": "for number abc corporation",
+                },
             ],
         ),
         (
             "First Company Limited oraz Second Company",
             # polish conjunction 'oraz' is treated as possible base part
             [
-                {"base": "First", "legal": "Company Limited"},
-                {"base": "Oraz Second", "legal": "Company"},
-                {"base": "Second", "legal": "Company"},
+                {"base": "First", "legal": "Company Limited", "source": "first company limited"},
+                {"base": "Oraz Second", "legal": "Company", "source": "oraz second company"},
+                {"base": "Second", "legal": "Company", "source": "second company"},
             ],
         ),
         (
             "IT36701908273410\r\n1/OTHER COMPANY",
             [
-                {"base": "1 OTHER", "legal": "COMPANY"},
-                {"base": "it 1 OTHER", "legal": "COMPANY"},
-                {"base": "other", "legal": "company"},
+                {"base": "1 OTHER", "legal": "COMPANY", "source": "1/other company"},
+                {"base": "it 1 OTHER", "legal": "COMPANY", "source": "it 1/other company"},
+                {"base": "other", "legal": "company", "source": "other company"},
             ],
         ),
         (
             "[ORIGINATOR     ] IT36701908273410 AC 121140399 BANK OF TIANJIN CO LTD NO.15 YOU YI ROAD,HE XI DISTRICT",
             [
-                {"base": "bank of tianjin", "legal": "co ltd"},
-                {"base": "tianjin", "legal": "co ltd"},
+                {"base": "bank of tianjin", "legal": "co ltd", "source": "bank of tianjin co ltd"},
+                {"base": "tianjin", "legal": "co ltd", "source": "of tianjin co ltd"},
             ],
         ),
         (
             "123456 PR RETAIL LLC C/O BLACKPOINT PARTNERS, LLC 123 ABC ST SUITE 88 US 12345",
             [
-                {"base": base, "legal": legal}
-                for base, legal in zip(
+                {"base": base, "legal": legal, "source": source}
+                for base, legal, source in zip(
                     [
                         "blackpoint",
                         "c o blackpoint",
@@ -164,6 +171,14 @@ def test_parse_name_base(name, expected_base):
                         "retail",
                     ],
                     ["llc", "c o", "llc", "llc", "llc c o", "llc c o"],
+                    [
+                        "blackpoint partners, llc",
+                        "c/o blackpoint",
+                        "o blackpoint partners, llc",
+                        "partners, llc",
+                        "pr retail llc c/o",
+                        "retail llc c/o",
+                    ],
                 )
             ],
         ),
@@ -178,6 +193,4 @@ def test_parse_freetext(freetext, expected_names):
         assert name_information
         assert name_information.base.cleaned_name == expected["base"].lower()
         assert name_information.legal.cleaned_name == expected["legal"].lower()
-
-
-# TODO add sources comparison in each case !
+        assert name_information.source.cleaned == expected["source"].lower()
