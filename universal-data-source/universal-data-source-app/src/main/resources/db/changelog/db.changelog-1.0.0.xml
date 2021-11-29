@@ -128,4 +128,18 @@
         newDataType="VARCHAR(150)"
         tableName="uds_feature_input"/>
   </changeSet>
+
+  <changeSet id="universal-datasource-1.0.0-6" author="jgajewski">
+    <addColumn tableName="uds_category_value">
+      <column name="alert_name" type="VARCHAR(150)" />
+    </addColumn>
+
+    <addColumn tableName="uds_feature_input">
+      <column name="alert_name" type="VARCHAR(150)" />
+    </addColumn>
+
+    <renameColumn tableName="uds_comment_input"
+                  oldColumnName="alert"
+                  newColumnName="alert_name"/>
+  </changeSet>
 </databaseChangeLog>

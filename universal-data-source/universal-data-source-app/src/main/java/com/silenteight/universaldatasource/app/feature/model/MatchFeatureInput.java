@@ -7,6 +7,8 @@ import lombok.Value;
 @Builder
 public class MatchFeatureInput {
 
+  String alert;
+
   String match;
 
   String feature;

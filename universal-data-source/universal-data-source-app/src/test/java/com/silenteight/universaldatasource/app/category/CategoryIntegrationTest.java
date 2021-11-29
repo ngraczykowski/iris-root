@@ -22,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.Duration;
 import java.util.List;
@@ -30,8 +31,6 @@ import static com.silenteight.universaldatasource.app.category.CategoryIntegrati
 import static com.silenteight.universaldatasource.app.category.CategoryIntegrationTestFixture.getBatchCategoryValueRequest;
 import static com.silenteight.universaldatasource.app.category.CategoryIntegrationTestFixture.getBatchCreateCategoryValuesRequest;
 import static com.silenteight.universaldatasource.app.category.CategoryIntegrationTestFixture.getCreateCategoryValuesRequest;
-import static com.silenteight.universaldatasource.app.category.CategoryTestDataAccess.streamedCategoriesCount;
-import static com.silenteight.universaldatasource.app.category.CategoryTestDataAccess.streamedCategoryValueCount;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -62,6 +61,8 @@ class CategoryIntegrationTest {
   }
 
   @Test
+  @Sql(scripts = "truncate_categories.sql",
+      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void testGettingCategories() {
     await()
         .atMost(Duration.ofSeconds(5))
@@ -79,6 +80,8 @@ class CategoryIntegrationTest {
   }
 
   @Test
+  @Sql(scripts = "truncate_categories.sql",
+      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void testCreateCategoryValues() {
 
     var categoryValues =
@@ -93,6 +96,8 @@ class CategoryIntegrationTest {
   }
 
   @Test
+  @Sql(scripts = "truncate_categories.sql",
+      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void testBatchCreateCategoryValues() {
 
     addBatchCategoryValues("categoryThree");
@@ -123,6 +128,8 @@ class CategoryIntegrationTest {
   }
 
   @Test
+  @Sql(scripts = "truncate_categories.sql",
+      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void testGettingCategoryValuesVersionOne() {
 
     addBatchCategoryValues("categoryOne");
@@ -153,7 +160,7 @@ class CategoryIntegrationTest {
   void testBatchCreateCategoryValuesToNonExistingCategories() {
     assertThrows(
         StatusRuntimeException.class,
-        () -> addBatchCategoryValues("Nonexisting category")
+        () -> addBatchCategoryValues("Nonexistent category")
     );
   }
 
@@ -178,5 +185,17 @@ class CategoryIntegrationTest {
                 .build()
         )
     );
+  }
+
+  static int streamedCategoriesCount(JdbcTemplate jdbcTemplate) {
+    return jdbcTemplate.queryForObject(
+        "SELECT COUNT(*)\n"
+            + "FROM uds_category;", Integer.class);
+  }
+
+  static int streamedCategoryValueCount(JdbcTemplate jdbcTemplate) {
+    return jdbcTemplate.queryForObject(
+        "SELECT COUNT(*)\n"
+            + "FROM uds_category_value;", Integer.class);
   }
 }

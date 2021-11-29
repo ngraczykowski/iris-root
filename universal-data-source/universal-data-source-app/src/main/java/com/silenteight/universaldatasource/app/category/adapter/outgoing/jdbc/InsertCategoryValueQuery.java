@@ -19,13 +19,14 @@ class InsertCategoryValueQuery {
 
   @Language("PostgreSQL")
   private static final String SQL =
-      "INSERT INTO uds_category_value(category_id, match_name, category_value)\n"
-          + " VALUES (:category_id, :match_name, :category_value)\n"
+      "INSERT INTO uds_category_value(category_id, alert_name, match_name, category_value)\n"
+          + " VALUES (:category_id, :alert_name, :match_name, :category_value)\n"
           + " ON CONFLICT DO NOTHING\n"
           + " RETURNING category_value_id, category_id, match_name";
 
   private static final String CATEGORY_VALUE_ID = "category_value_id";
   private static final String CATEGORY_ID = "category_id";
+  private static final String ALERT_NAME = "alert_name";
   private static final String MATCH_NAME = "match_name";
   private static final String CATEGORY_VALUE = "category_value";
 
@@ -38,6 +39,7 @@ class InsertCategoryValueQuery {
     batchSqlUpdate.setSql(SQL);
 
     batchSqlUpdate.declareParameter(new SqlParameter(CATEGORY_ID, Types.VARCHAR));
+    batchSqlUpdate.declareParameter(new SqlParameter(ALERT_NAME, Types.VARCHAR));
     batchSqlUpdate.declareParameter(new SqlParameter(MATCH_NAME, Types.VARCHAR));
     batchSqlUpdate.declareParameter(new SqlParameter(CATEGORY_VALUE, Types.VARCHAR));
     batchSqlUpdate.setReturnGeneratedKeys(true);
@@ -64,6 +66,7 @@ class InsertCategoryValueQuery {
       String category, CategoryValue categoryValue, GeneratedKeyHolder keyHolder) {
     var paramMap =
         Map.of(CATEGORY_ID, category,
+            ALERT_NAME, categoryValue.getAlert(),
             MATCH_NAME, categoryValue.getMatch(),
             CATEGORY_VALUE, categoryValue.getSingleValue());
     batchSqlUpdate.updateByNamedParam(paramMap, keyHolder);
@@ -75,7 +78,7 @@ class InsertCategoryValueQuery {
     for (Map<String, Object> it : keyList) {
       CreatedCategoryValue build = CreatedCategoryValue
           .newBuilder()
-          .setName(it.get(CATEGORY_ID).toString() + "/values/" + it.get("CATEGORY_VALUE_ID"))
+          .setName(it.get(CATEGORY_ID).toString() + "/values/" + it.get(CATEGORY_VALUE_ID))
           .setMatch(it.get(MATCH_NAME).toString())
           .build();
       categoryValueList.add(build);

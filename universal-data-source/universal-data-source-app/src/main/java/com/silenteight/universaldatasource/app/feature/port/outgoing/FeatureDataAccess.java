@@ -17,4 +17,6 @@ public interface FeatureDataAccess {
   int updateAgentInputType();
 
   int isAgentInputTypeUpdated();
+
+  int delete(List<String> alerts);
 }

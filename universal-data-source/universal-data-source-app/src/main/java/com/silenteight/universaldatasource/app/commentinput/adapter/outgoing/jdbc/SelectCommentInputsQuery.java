@@ -21,9 +21,9 @@ class SelectCommentInputsQuery {
 
   @Language("PostgreSQL")
   private static final String SQL =
-      "SELECT comment_input_id, alert, alert_comment_input, match_comment_inputs\n"
+      "SELECT comment_input_id, alert_name, alert_comment_input, match_comment_inputs\n"
           + " FROM uds_comment_input\n"
-          + " WHERE alert IN (:alerts)";
+          + " WHERE alert_name IN (:alerts)";
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 

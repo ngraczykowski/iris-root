@@ -20,12 +20,12 @@ class InsertCommentInputsQuery {
 
   @Language("PostgreSQL")
   private static final String SQL =
-      "INSERT INTO uds_comment_input(alert, alert_comment_input, match_comment_inputs)\n"
-          + " VALUES (:alert, :alert_comment_input, :match_comment_inputs)\n"
+      "INSERT INTO uds_comment_input(alert_name, alert_comment_input, match_comment_inputs)\n"
+          + " VALUES (:alert_name, :alert_comment_input, :match_comment_inputs)\n"
           + " ON CONFLICT DO NOTHING\n"
-          + "RETURNING comment_input_id, alert";
+          + "RETURNING comment_input_id, alert_name";
 
-  private static final String ALERT = "alert";
+  private static final String ALERT_NAME = "alert_name";
   private static final String ALERT_COMMENT_INPUT = "alert_comment_input";
   private static final String MATCH_COMMENT_INPUT = "match_comment_inputs";
 
@@ -36,7 +36,7 @@ class InsertCommentInputsQuery {
 
     batchSqlUpdate.setJdbcTemplate(jdbcTemplate);
     batchSqlUpdate.setSql(SQL);
-    batchSqlUpdate.declareParameter(new SqlParameter(ALERT, Types.VARCHAR));
+    batchSqlUpdate.declareParameter(new SqlParameter(ALERT_NAME, Types.VARCHAR));
     batchSqlUpdate.declareParameter(new SqlParameter(ALERT_COMMENT_INPUT, Types.OTHER));
     batchSqlUpdate.declareParameter(new SqlParameter(MATCH_COMMENT_INPUT, Types.OTHER));
     batchSqlUpdate.setReturnGeneratedKeys(true);
@@ -51,7 +51,7 @@ class InsertCommentInputsQuery {
         .map(it -> CreatedCommentInput
             .newBuilder()
             .setName("comment-inputs/" + it.get("comment_input_id").toString())
-            .setAlert(it.get(ALERT).toString())
+            .setAlert(it.get(ALERT_NAME).toString())
             .build()).collect(Collectors.toList());
   }
 
@@ -69,7 +69,7 @@ class InsertCommentInputsQuery {
 
   private void update(AlertCommentInput alertCommentInput, KeyHolder keyHolder) {
     var paramMap =
-        Map.of(ALERT, alertCommentInput.getAlert(),
+        Map.of(ALERT_NAME, alertCommentInput.getAlert(),
             ALERT_COMMENT_INPUT, alertCommentInput.getCommentInput(),
             MATCH_COMMENT_INPUT, alertCommentInput.getMatchCommentInputs()
         );

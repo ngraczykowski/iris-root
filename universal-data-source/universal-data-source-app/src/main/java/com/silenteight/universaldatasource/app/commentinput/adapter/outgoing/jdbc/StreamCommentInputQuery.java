@@ -20,9 +20,9 @@ class StreamCommentInputQuery {
 
   @Language("PostgreSQL")
   private static final String SQL =
-      "SELECT comment_input_id, alert, alert_comment_input, match_comment_inputs\n"
+      "SELECT comment_input_id, alert_name, alert_comment_input, match_comment_inputs\n"
           + " FROM uds_comment_input\n"
-          + " WHERE alert IN (:alertNames)";
+          + " WHERE alert_name IN (:alertNames)";
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 

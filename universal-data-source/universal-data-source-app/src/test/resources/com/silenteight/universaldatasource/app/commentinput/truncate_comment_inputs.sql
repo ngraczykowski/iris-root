@@ -1,0 +1,1 @@
+TRUNCATE TABLE uds_comment_input

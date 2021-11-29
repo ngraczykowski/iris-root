@@ -18,10 +18,9 @@ import java.util.function.Consumer;
 class JdbcCommentInputDataAccess implements CommentInputDataAccess {
 
   private final InsertCommentInputsQuery insertCommentInputsQuery;
-
   private final StreamCommentInputQuery streamCommentInputQuery;
-
   private final SelectCommentInputsQuery selectCommentInputsQuery;
+  private final DeleteCommentInputsQuery deleteCommentInputsQuery;
 
   @Override
   @Transactional
@@ -38,5 +37,11 @@ class JdbcCommentInputDataAccess implements CommentInputDataAccess {
   @Override
   public List<AlertCommentInput> batchGetCommentInputs(List<String> alerts) {
     return selectCommentInputsQuery.execute(alerts);
+  }
+
+  @Override
+  @Transactional
+  public int delete(List<String> alerts) {
+    return deleteCommentInputsQuery.execute(alerts);
   }
 }

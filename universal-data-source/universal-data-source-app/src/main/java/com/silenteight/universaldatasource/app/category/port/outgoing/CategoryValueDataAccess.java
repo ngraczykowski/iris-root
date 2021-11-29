@@ -14,4 +14,6 @@ public interface CategoryValueDataAccess {
       List<MatchCategoryRequest> matchValuesList);
 
   List<CreatedCategoryValue> saveAll(List<CreateCategoryValuesRequest> categoryValues);
+
+  int delete(List<String> alerts);
 }

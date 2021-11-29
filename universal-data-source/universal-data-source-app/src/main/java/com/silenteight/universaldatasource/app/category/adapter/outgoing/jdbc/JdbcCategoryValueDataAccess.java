@@ -9,10 +9,10 @@ import com.silenteight.universaldatasource.app.category.model.MatchCategoryReque
 import com.silenteight.universaldatasource.app.category.port.outgoing.CategoryValueDataAccess;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
-import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @Repository
@@ -20,6 +20,7 @@ class JdbcCategoryValueDataAccess implements CategoryValueDataAccess {
 
   private final SelectCategoryValueQuery selectCategoryValueQuery;
   private final InsertCategoryValueQuery insertCategoryValueQuery;
+  private final DeleteCategoryValueQuery deleteCategoryValueQuery;
 
   @Override
   @Transactional
@@ -32,5 +33,11 @@ class JdbcCategoryValueDataAccess implements CategoryValueDataAccess {
   @Transactional
   public List<CreatedCategoryValue> saveAll(List<CreateCategoryValuesRequest> categoryValues) {
     return insertCategoryValueQuery.execute(categoryValues);
+  }
+
+  @Override
+  @Transactional
+  public int delete(List<String> alerts) {
+    return deleteCategoryValueQuery.execute(alerts);
   }
 }

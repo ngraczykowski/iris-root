@@ -15,4 +15,6 @@ public interface CommentInputDataAccess {
 
   List<AlertCommentInput> batchGetCommentInputs(List<String> alerts);
 
+  int delete(List<String> alerts);
+
 }

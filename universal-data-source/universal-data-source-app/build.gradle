@@ -91,10 +91,8 @@ dependencies {
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.adjudication_engine_api
   testImplementation libraries.awaitility
-
   testImplementation libraries.hibernate_validator
   testImplementation libraries.tomcat_embed_el
-
 }
 
 jar {

@@ -6,13 +6,13 @@ import com.silenteight.datasource.categories.api.v2.Category;
 import com.silenteight.universaldatasource.app.category.port.outgoing.CategoryDataAccess;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @Repository
-public class JdbcCategoryDataAccess implements CategoryDataAccess {
+class JdbcCategoryDataAccess implements CategoryDataAccess {
 
   private final SelectCategoryQuery selectCategoryQuery;
   private final InsertCategoriesQuery insertCategoriesQuery;

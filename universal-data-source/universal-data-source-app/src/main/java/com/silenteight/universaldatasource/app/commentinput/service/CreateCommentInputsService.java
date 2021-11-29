@@ -11,7 +11,6 @@ import com.silenteight.universaldatasource.app.commentinput.port.incoming.Create
 import com.silenteight.universaldatasource.app.commentinput.port.outgoing.CommentInputDataAccess;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,7 +25,6 @@ class CreateCommentInputsService implements CreateCommentInputsUseCase {
 
   @Timed(value = "uds.comment-input.use_cases", extraTags = { "action", "addCommentInputs" })
   @Override
-  @Transactional
   public BatchCreateCommentInputResponse addCommentInputs(List<CommentInput> commentInputs) {
 
     List<AlertCommentInput> alertCommentInputs = alertCommentInputMapper.map(commentInputs);

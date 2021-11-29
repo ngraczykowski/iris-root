@@ -22,6 +22,7 @@ class JdbcFeatureDataAccess implements FeatureDataAccess {
   private final InsertFeatureQuery insertFeatureQuery;
   private final UpdateAgentInputTypeQuery updateAgentInputTypeQuery;
   private final SelectOldAgentInputTypeQuery selectOldAgentInputTypeQuery;
+  private final DeleteFeatureQuery deleteFeatureQuery;
 
   @Override
   @Transactional
@@ -44,5 +45,11 @@ class JdbcFeatureDataAccess implements FeatureDataAccess {
   @Override
   public int isAgentInputTypeUpdated() {
     return selectOldAgentInputTypeQuery.execute();
+  }
+
+  @Override
+  @Transactional
+  public int delete(List<String> alerts) {
+    return deleteFeatureQuery.execute(alerts);
   }
 }

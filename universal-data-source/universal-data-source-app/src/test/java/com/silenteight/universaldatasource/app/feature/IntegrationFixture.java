@@ -54,6 +54,7 @@ class IntegrationFixture {
         .collect(Collectors.toList());
 
     return AgentInput.newBuilder()
+        .setAlert(match.split("/matches")[0])
         .setMatch(match)
         .addAllFeatureInputs(featureInputs)
         .build();

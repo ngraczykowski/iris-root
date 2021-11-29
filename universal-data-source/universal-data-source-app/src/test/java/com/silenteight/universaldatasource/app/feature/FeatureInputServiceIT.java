@@ -32,6 +32,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.Duration;
 import java.util.Iterator;
@@ -49,7 +50,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
     properties = { "debug=true" })
 @ActiveProfiles({ "test" })
 @EnableConfigurationProperties
-class AgentInputServiceIT {
+class FeatureInputServiceIT {
 
   @GrpcClient("uds")
   private AgentInputServiceBlockingStub agentInputServiceBlockingStub;
@@ -143,6 +144,8 @@ class AgentInputServiceIT {
 
 
   @Test
+  @Sql(scripts = "truncate_feature_inputs.sql",
+      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetNameFeature() {
     await()
         .atMost(Duration.ofSeconds(5))
@@ -165,6 +168,8 @@ class AgentInputServiceIT {
   }
 
   @Test
+  @Sql(scripts = "truncate_feature_inputs.sql",
+      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetLocationFeature() {
     await()
         .atMost(Duration.ofSeconds(5))
@@ -200,6 +205,8 @@ class AgentInputServiceIT {
   }
 
   @Test
+  @Sql(scripts = "truncate_feature_inputs.sql",
+      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetFreeTextFeature() {
     await()
         .atMost(Duration.ofSeconds(5))
@@ -235,6 +242,8 @@ class AgentInputServiceIT {
   }
 
   @Test
+  @Sql(scripts = "truncate_feature_inputs.sql",
+      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetIsPepFeature() {
 
     var batchGetMatchIsPepSolutionsResponseIterator =

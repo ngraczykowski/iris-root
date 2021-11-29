@@ -53,16 +53,19 @@ class CategoryIntegrationTestFixture {
   static CreateCategoryValuesRequest getCreateCategoryValuesRequest(String category) {
 
     var categoryValueOne = CategoryValue.newBuilder()
+        .setAlert("alerts/1")
         .setMatch("alerts/1/matches/1")
         .setSingleValue("YES")
         .build();
 
     var categoryValueTwo = CategoryValue.newBuilder()
+        .setAlert("alerts/2")
         .setMatch("alerts/2/matches/2")
         .setSingleValue("NO")
         .build();
 
     var categoryValueThree = CategoryValue.newBuilder()
+        .setAlert("alerts/2")
         .setMatch("alerts/2/matches/3")
         .setSingleValue("YES")
         .build();

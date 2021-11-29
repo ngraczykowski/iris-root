@@ -86,6 +86,7 @@ class BatchCreateMatchFeaturesService implements BatchCreateMatchFeaturesUseCase
     var agentInputJson = messageRegistry.toJson(featureInputMessage);
 
     return MatchFeatureInput.builder()
+        .alert(agentInput.getAlert())
         .match(agentInput.getMatch())
         .feature(featureInput.getFeature())
         .agentInputType(getAgentInputType(agentFeatureInput.getTypeUrl()))

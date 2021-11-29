@@ -25,11 +25,14 @@ class InsertFeatureQuery {
 
   @Language("PostgreSQL")
   private static final String SQL =
-      "INSERT INTO uds_feature_input(match_name, feature, agent_input_type, agent_input)\n"
-          + " VALUES (:match_name, :feature, :agent_input_type, :agent_input)\n"
+      "INSERT INTO\n"
+          + " uds_feature_input(alert_name, match_name, feature, agent_input_type, agent_input)\n"
+          + " VALUES (:alert_name, :match_name, :feature, :agent_input_type, :agent_input)\n"
           + " ON CONFLICT DO NOTHING\n"
-          + "RETURNING agent_input_id, match_name, feature, agent_input_type, agent_input";
+          + " RETURNING agent_input_id, match_name";
 
+  private static final String AGENT_INPUT_ID = "agent_input_id";
+  private static final String ALERT_NAME = "alert_name";
   private static final String MATCH_NAME = "match_name";
   private static final String FEATURE = "feature";
   private static final String AGENT_INPUT_TYPE = "agent_input_type";
@@ -42,6 +45,7 @@ class InsertFeatureQuery {
 
     batchSqlUpdate.setJdbcTemplate(jdbcTemplate);
     batchSqlUpdate.setSql(SQL);
+    batchSqlUpdate.declareParameter(new SqlParameter(ALERT_NAME, Types.VARCHAR));
     batchSqlUpdate.declareParameter(new SqlParameter(MATCH_NAME, Types.VARCHAR));
     batchSqlUpdate.declareParameter(new SqlParameter(FEATURE, Types.VARCHAR));
     batchSqlUpdate.declareParameter(new SqlParameter(AGENT_INPUT_TYPE, Types.VARCHAR));
@@ -77,6 +81,7 @@ class InsertFeatureQuery {
   private void update(MatchFeatureInput matchFeatureInput, KeyHolder keyHolder) {
     var paramMap =
         Map.of(MATCH_NAME, matchFeatureInput.getMatch(),
+            ALERT_NAME, matchFeatureInput.getAlert(),
             FEATURE, matchFeatureInput.getFeature(),
             AGENT_INPUT_TYPE, matchFeatureInput.getAgentInputType(),
             AGENT_INPUT, matchFeatureInput.getAgentInput());
@@ -89,7 +94,7 @@ class InsertFeatureQuery {
         .stream()
         .map(it -> CreatedAgentInput
             .newBuilder()
-            .setName("agent-inputs/" + it.get("agent_input_id").toString())
+            .setName("agent-inputs/" + it.get(AGENT_INPUT_ID).toString())
             .setMatch(it.get(MATCH_NAME).toString())
             .build()).collect(Collectors.toList());
   }

@@ -28,6 +28,11 @@
 
   </bean>
   <bean class="CategoryValue">
+    <getter name="alert">
+      <constraint annotation="javax.validation.constraints.Pattern">
+        <element name="regexp">alerts/\d+</element>
+      </constraint>
+    </getter>
     <getter name="match">
       <constraint annotation="javax.validation.constraints.Pattern">
         <element name="regexp">alerts/\d+/matches/\d+</element>

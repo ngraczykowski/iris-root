@@ -50,11 +50,11 @@ class CreateCategoryValuesService implements CreateCategoryValuesUseCase {
 
   private List<CreatedCategoryValue> saveCategoryValues(
       List<CreateCategoryValuesRequest> categoryValues) {
-    validateCategoryValeBatch(categoryValues);
+    validateCategoryValueBatch(categoryValues);
     return categoryValueDataAccess.saveAll(categoryValues);
   }
 
-  private void validateCategoryValeBatch(
+  private void validateCategoryValueBatch(
       List<CreateCategoryValuesRequest> categoryValues) {
     validateCategoryValue.isValid(categoryValues);
   }

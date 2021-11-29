@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class InsertCategoriesQuery {
+class InsertCategoriesQuery {
 
   @Language("PostgreSQL")
   private static final String SQL =
