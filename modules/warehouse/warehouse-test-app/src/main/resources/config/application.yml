@@ -84,6 +84,9 @@ test:
       personal-information-expired-indexing-test-client-outbound:
         exchange-name: bridge.retention
         routing-key: retention.personal-information-expired
+      analysis-expired-indexing-test-client-outbound:
+        exchange-name: sim.command
+        routing-key: command.analysis-expired
       production-indexed-event-test-listener-inbound:
         queue-name: bridge.index-response.production
       simulation-indexed-event-test-listener-inbound:
