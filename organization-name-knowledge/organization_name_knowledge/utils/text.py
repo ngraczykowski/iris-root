@@ -1,9 +1,17 @@
 import re
+from importlib.resources import open_text
 from typing import List, Sequence, Tuple
 
 import unidecode
 
-CONJUNCTIONS = ["and", "for", "or"]
+from organization_name_knowledge import resources
+
+with open_text(resources, "conjunctions.txt") as file:
+    CONJUNCTIONS = file.read().splitlines()
+
+
+with open_text(resources, "prepositions.txt") as file:
+    PREPOSITIONS = file.read().splitlines()
 
 SEPARATE_BY_CHARS = [
     ",",
@@ -63,6 +71,14 @@ def split_text_by_too_long_numbers(text: str) -> List[str]:
 def starts_with_conjunction(tokens: Sequence[str]) -> bool:
     """Returns true if sole conjunction is first token in tokens (not a part of a first token)"""
     for conjunction in CONJUNCTIONS:
-        if tokens and tokens[0].lower() == conjunction:
+        if tokens and tokens[0].lower() == conjunction.lower():
+            return True
+    return False
+
+
+def starts_with_preposition(tokens: Sequence[str]) -> bool:
+    """Returns true if sole conjunction is first token in tokens (not a part of a first token)"""
+    for preposition in PREPOSITIONS:
+        if tokens and tokens[0].lower() == preposition.lower():
             return True
     return False

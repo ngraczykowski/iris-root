@@ -52,7 +52,7 @@ def parse_freetext(
         A list of found and parsed organization names, as NameInformation objects
     """
 
-    names: List[NameInformation] = parse_freetext_names(
+    names = parse_freetext_names(
         freetext, base_tokens_upper_limit, name_tokens_lower_limit, name_tokens_upper_limit
     )
     return sorted(set(names), key=lambda name: name.base.cleaned_name)

@@ -19,9 +19,9 @@ with open_text(resources, "eastern_female_names_mapping.json") as file:
     NAMES_SYNONYMS.update(json.load(file))
 
 
-with open_text(resources, "name_delimiters.txt") as file:
-    delimiter_words_from_file = [" " + word + " " for word in file.read().splitlines()]
-    NAME_DELIMITERS: List[str] = delimiter_words_from_file + [",", ":", "+", "-", "/", "\n", "\r"]
+with open_text(resources, "conjunctions.txt") as file:
+    conjunctions = [" " + word + " " for word in file.read().splitlines()]
+    NAME_DELIMITERS: List[str] = conjunctions + [",", ":", "+", "-", "/", "\n", "\r"]
 
 
 with open_text(resources, "titles.txt") as file:
@@ -50,15 +50,15 @@ def get_term_variants(term: str) -> Set[str]:
     }
 
 
-def get_name_variants(name: str) -> Set[str]:
+def get_text_variants(text: str) -> Set[str]:
     variants = set()
     # assuming single level instead of a recursive split
-    _add_variants(name, NAME_DELIMITERS, variants)
-    _add_variants(name, TITLES_FOR_VARIANTS, variants)
+    _add_variants(text, NAME_DELIMITERS, variants)
+    _add_variants(text, TITLES_FOR_VARIANTS, variants)
 
-    for name_variant in split_text_by_too_long_numbers(name):
-        variants.add(name_variant)
-    variants.add(name)
+    for variant in split_text_by_too_long_numbers(text):
+        variants.add(variant)
+    variants.add(text)
     return {remove_too_long_numbers(variant).strip() for variant in variants}
 
 
