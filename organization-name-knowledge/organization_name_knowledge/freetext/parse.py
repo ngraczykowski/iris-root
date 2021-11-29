@@ -6,6 +6,7 @@ from organization_name_knowledge.names.name_information import NameInformation
 from organization_name_knowledge.names.parse.parse import parse_name
 from organization_name_knowledge.utils.term_variants import get_text_variants
 from organization_name_knowledge.utils.text import (
+    PREPOSITIONS,
     clear_freetext,
     contains_conjunction,
     starts_with_conjunction,
@@ -35,7 +36,6 @@ def parse_freetext_names(
 
         parsed_names_valid = _get_valid_names(parsed_names, base_tokens_upper_limit)
         found_valid_names.extend(parsed_names_valid)
-
     names_to_remove = _get_names_to_remove(found_valid_names)
     found_valid_names = [name for name in found_valid_names if name not in names_to_remove]
     return _get_names_with_unique_bases(found_valid_names)
@@ -52,7 +52,8 @@ def _get_valid_names(
         != len(name.base)
         <= base_tokens_upper_limit
         and not (
-            name.source.cleaned.startswith(name.legal.cleaned_name) and len(name.legal) >= 2
+            name.source.cleaned.startswith(name.legal.cleaned_name)
+            and len([legal for legal in name.legal if legal not in PREPOSITIONS]) >= 2
         )  # to remove names with 2 or more legals at start
     ]
 
