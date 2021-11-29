@@ -1,17 +1,23 @@
 import itertools
-from importlib.resources import open_text
 from typing import List, Set
 
-from organization_name_knowledge import resources
 from organization_name_knowledge.utils.text import (
+    CONJUNCTIONS,
     remove_split_chars,
     remove_too_long_numbers,
     split_text_by_too_long_numbers,
 )
 
-with open_text(resources, "conjunctions.txt") as file:
-    conjunctions = [" " + word + " " for word in file.read().splitlines()]
-    NAME_DELIMITERS: List[str] = conjunctions + [",", ":", "+", "-", "/", "\n", "\r", "the "]
+NAME_DELIMITERS: List[str] = [" " + conj + " " for conj in CONJUNCTIONS] + [
+    ",",
+    ":",
+    "+",
+    "-",
+    "/",
+    "\n",
+    "\r",
+    "the ",
+]
 
 
 def get_term_variants(term: str) -> Set[str]:

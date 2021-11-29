@@ -5,3 +5,4 @@ from organization_name_knowledge.knowledge_base.legal_terms import LegalTerm
 from organization_name_knowledge.names.name_information import NameInformation
 from organization_name_knowledge.names.token import Token
 from organization_name_knowledge.names.tokens_sequence import TokensSequence
+from organization_name_knowledge.utils.text import CONJUNCTIONS, PREPOSITIONS
