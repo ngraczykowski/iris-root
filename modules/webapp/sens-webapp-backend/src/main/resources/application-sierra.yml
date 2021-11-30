@@ -5,3 +5,12 @@ keycloak:
     attribute-filter.attributes:
       - name: origin
         value: SENS
+
+logging:
+  config: file:/etc/logback.xml
+
+sens:
+  webapp:
+    roles:
+      country-groups-scope: elasticsearch-sso
+      default-country-group-role: business_user
