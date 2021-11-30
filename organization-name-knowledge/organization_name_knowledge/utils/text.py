@@ -35,7 +35,7 @@ TOO_LONG_NUMBER_REGEX = re.compile(r"\d{4,}")
 
 def clear_freetext(text: str) -> str:
     text = remove_too_long_numbers(clear_name(text))
-    text = text.replace(" is ", "")  # hacky trick to avoid 'is' as a legal
+    text = text.replace(" is ", " ")  # hacky trick to avoid 'is' as a legal
     return text
 
 
