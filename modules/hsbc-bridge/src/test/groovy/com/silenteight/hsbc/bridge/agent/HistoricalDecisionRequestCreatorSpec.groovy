@@ -25,6 +25,7 @@ class HistoricalDecisionRequestCreatorSpec extends Specification {
     def alert = result.alertsList.first()
     alert.alertId == "someKeyLabelProd"
     alert.matchId == "1"
+    alert.alertedParty.id == "someProfileId"
     alert.alertedParty.country == "someEdqLoBCountryCodeProd"
 
     def watchlist = alert.watchlist
@@ -47,6 +48,7 @@ class HistoricalDecisionRequestCreatorSpec extends Specification {
     def alert = result.alertsList.first()
     alert.alertId == "someKeyLabelTest"
     alert.matchId == "1"
+    alert.alertedParty.id == "someProfileId"
     alert.alertedParty.country == "someEdqLoBCountryCodeTest"
 
     def watchlist = alert.watchlist

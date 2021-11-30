@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.json.external.model.AlertData;
 import com.silenteight.hsbc.bridge.json.external.model.CaseHistory;
+import com.silenteight.hsbc.bridge.json.external.model.CustomerEntity;
+import com.silenteight.hsbc.bridge.json.external.model.CustomerIndividual;
 import com.silenteight.hsbc.datasource.datamodel.WatchlistType;
 import com.silenteight.proto.learningstore.historicaldecision.v1.api.*;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -111,13 +114,26 @@ class HistoricalDecisionRequestCreator {
   }
 
   private AlertedParty createAlertedParty(AlertData alert) {
-    var dnsCase = alert.getCaseInformation();
     var builder = AlertedParty.newBuilder();
-
+    findExternalProfileId(alert).ifPresent(builder::setId);
     findApCountry(alert).ifPresent(builder::setCountry);
-    return builder
-        .setId(dnsCase.getExternalId())
-        .build();
+    return builder.build();
+  }
+
+  private Optional<String> findExternalProfileId(AlertData alert) {
+    return (CollectionUtils.isNotEmpty(alert.getCustomerIndividuals())) ?
+           alert
+               .getCustomerIndividuals()
+               .stream()
+               .map(CustomerIndividual::getExternalProfileId)
+               .distinct()
+               .findFirst() :
+           alert
+               .getCustomerEntities()
+               .stream()
+               .map(CustomerEntity::getExternalProfileId)
+               .distinct()
+               .findFirst();
   }
 
   private Optional<String> findApCountry(AlertData alertData) {
