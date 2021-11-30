@@ -1,7 +1,10 @@
 package com.silenteight.payments.bridge.svb.newlearning.batch;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
 import com.silenteight.payments.bridge.svb.newlearning.batch.exceptions.NoCsvFileResourceFound;
+import com.silenteight.payments.bridge.svb.newlearning.domain.DeleteLearningFileRequest;
 import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
 
 import org.springframework.core.io.InputStreamResource;
@@ -14,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 @Service
+@Slf4j
 class DefaultCsvFileResourceProvider implements CsvFileResourceProvider {
 
   private static final String CLASSPATH_LEARNING_PROVIDER = "classpath:learning/provider/";
@@ -28,5 +32,11 @@ class DefaultCsvFileResourceProvider implements CsvFileResourceProvider {
       throw new NoCsvFileResourceFound(
           String.format("No csv file resource found %s", learningRequest.getObject()));
     }
+  }
+
+  @Override
+  public void deleteLearningFile(
+      DeleteLearningFileRequest deleteLearningFileRequest) {
+    log.info("Ignore file deletion with DefaultCsvFileResourceProvider implementation");
   }
 }

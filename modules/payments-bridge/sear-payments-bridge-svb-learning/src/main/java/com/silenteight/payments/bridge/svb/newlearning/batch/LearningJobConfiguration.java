@@ -3,8 +3,6 @@ package com.silenteight.payments.bridge.svb.newlearning.batch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
-
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -20,17 +18,15 @@ class LearningJobConfiguration {
 
   private final JobBuilderFactory jobBuilderFactory;
   private final Step storeCsvFileStep;
+  private final Step deleteFileStep;
 
   @Bean("svbCsvJob")
   Job svbLearningJob() {
     return this.jobBuilderFactory.get(JOB_NAME)
         .start(storeCsvFileStep)
+        .next(deleteFileStep)
         .build();
   }
 
-  @Bean
-  CsvFileResourceProvider csvFileResourceProvider() {
-    return new DefaultCsvFileResourceProvider();
-  }
 
 }

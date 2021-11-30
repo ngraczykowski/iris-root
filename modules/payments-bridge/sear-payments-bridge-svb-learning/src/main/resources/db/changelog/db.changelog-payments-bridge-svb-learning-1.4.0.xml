@@ -8,7 +8,7 @@
   <changeSet id="payments-bridge-svb-learning-1.3.0" author="wkeska">
     <createTable tableName="pb_learning_file">
       <column name="file_name_id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true" nullable="false"/>
+        <constraints primaryKey="true" nullable="false" />
       </column>
 
       <column name="file_name" type="VARCHAR(255)">
@@ -35,7 +35,7 @@
     <createTable tableName="pb_learning_file">
 
       <column name="learning_file_id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true" nullable="false" unique="true"/>
+        <constraints primaryKey="true" nullable="false" unique="true" />
       </column>
 
       <column name="file_name" type="VARCHAR(255)">

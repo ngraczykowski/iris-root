@@ -12,29 +12,27 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobParameters.FILE_ID_PARAMETER;
-import static com.silenteight.payments.bridge.svb.newlearning.batch.step.store.StoreCsvFileStepConfiguration.STORE_FILE_STEP;
+import static com.silenteight.payments.bridge.svb.newlearning.batch.step.delete.DeleteCsvFileTaskletConfiguration.DELETE_FILE_STEP;
 import static org.assertj.core.api.Assertions.*;
 
 @Import({ TestApplicationConfiguration.class })
 @Sql
-public class SvbLearningJobTest extends BaseBatchTest {
+public class DeleteFileStepTest extends BaseBatchTest {
 
   @Autowired
   private LearningCsvRowRepository repository;
 
   @Test
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
-  public void shouldExecuteLearningJobAndComplete() {
+  public void shouldExecuteDeleteFileStep() {
     var jobParameters = new JobParametersBuilder()
-        .addLong(FILE_ID_PARAMETER, 123L)
+        .addLong(FILE_ID_PARAMETER, 345L)
         .toJobParameters();
-    var jobExecution = jobLauncherTestUtils.launchStep(STORE_FILE_STEP, jobParameters);
+    var jobExecution = jobLauncherTestUtils.launchStep(DELETE_FILE_STEP, jobParameters);
     assertThat("COMPLETED").isEqualTo(jobExecution.getExitStatus().getExitCode());
     var firstStep = jobExecution
         .getStepExecutions()
-        .stream().filter(step -> STORE_FILE_STEP.equals(step.getStepName())).findFirst();
+        .stream().filter(step -> DELETE_FILE_STEP.equals(step.getStepName())).findFirst();
     assertThat(firstStep.isPresent()).isTrue();
-    assertThat(firstStep.get().getReadCount()).isEqualTo(4);
-    assertThat(repository.findAll().size()).isEqualTo(4);
   }
 }

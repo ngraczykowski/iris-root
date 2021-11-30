@@ -21,4 +21,6 @@ public class TestApplicationConfiguration {
     properties.setTablePrefix("pb_batch_");
     return properties;
   }
+
+
 }
