@@ -38,6 +38,7 @@ dependencies {
   implementation libraries.commons_collections
   implementation libraries.protobuf_java_util
 
+  // TODO: please remove this dependency when old learning package will be removed
   implementation libraries.aws_auth
   implementation libraries.aws_s3
   implementation libraries.aws_ses

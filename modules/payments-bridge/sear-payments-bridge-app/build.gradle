@@ -20,6 +20,10 @@ dependencies {
   implementation project(":proto-sear-payments-bridge-internal-protos")
   testImplementation project(":sear-payments-bridge-testing")
 
+  implementation libraries.aws_auth
+  implementation libraries.aws_s3
+  implementation libraries.aws_ses
+
   // Utilities
   implementation libraries.commons_lang3
   implementation libraries.commons_text

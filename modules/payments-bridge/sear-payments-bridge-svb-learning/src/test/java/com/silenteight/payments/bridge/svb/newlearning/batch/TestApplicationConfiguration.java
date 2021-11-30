@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableBatchProcessing
 @RequiredArgsConstructor
+// This is required to inject datasource beans for spring batch testing.
 @ComponentScan(basePackages = "com.silenteight.payments.bridge.svb.newlearning")
 public class TestApplicationConfiguration {
 

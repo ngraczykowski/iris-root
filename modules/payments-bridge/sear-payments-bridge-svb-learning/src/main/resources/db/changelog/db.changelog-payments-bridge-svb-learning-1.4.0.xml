@@ -29,7 +29,6 @@
     </createTable>
   </changeSet>
 
-
   <changeSet id="payments-bridge-svb-learning-1.4.0" author="wkeska">
     <dropTable tableName="pb_learning_file"/>
 
@@ -55,5 +54,116 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
+  </changeSet>
+
+  <changeSet id="payments-bridge-svb-learning-1.4.1" author="wkeska">
+    <createTable tableName="pb_learning_csv_row">
+      <column name="learning_csv_row_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+
+      <column name="job_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="learning_file_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+
+      <column name="fkco_id" type="VARCHAR(255)"/>
+      <column name="fkco_v_system_id" type="VARCHAR(64)"/>
+      <column name="fkco_v_format" type="VARCHAR(32)"/>
+      <column name="fkco_v_type" type="VARCHAR(32)"/>
+      <column name="fkco_v_transaction_ref" type="VARCHAR(64)"/>
+      <column name="fkco_v_related_ref" type="VARCHAR(38)"/>
+      <column name="fkco_v_sens" type="VARCHAR(32)"/>
+      <column name="fkco_v_business_unit" type="VARCHAR(300)"/>
+      <column name="fkco_v_application" type="VARCHAR(15)"/>
+      <column name="fkco_v_currency" type="VARCHAR(3)"/>
+      <column name="fkco_f_amount" type="VARCHAR(24)"/>
+      <column name="fkco_v_content" type="TEXT"/>
+      <column name="fkco_b_highlight_all" type="VARCHAR(24)"/>
+      <column name="fkco_v_value_date" type="VARCHAR(32)"/>
+      <column name="fkco_unit" type="VARCHAR(16)"/>
+      <column name="fkco_i_msg_fml_priority" type="VARCHAR(38)"/>
+      <column name="fkco_i_msg_fml_confidentiality" type="VARCHAR(38)"/>
+      <column name="fkco_d_app_deadline" type="VARCHAR(14)"/>
+      <column name="fkco_i_app_priority" type="VARCHAR(38)"/>
+      <column name="fkco_i_normamount" type="VARCHAR(24)"/>
+      <column name="fkco_v_messageid" type="VARCHAR(64)"/>
+      <column name="fkco_v_copy_service" type="VARCHAR(8)"/>
+      <column name="fkco_v_action_comment" type="VARCHAR(255)"/>
+      <column name="fkco_action_date" type="VARCHAR(32)"/>
+      <column name="fkco_d_filtered_datetime" type="VARCHAR(32)"/>
+      <column name="fkco_d_action_datetime" type="VARCHAR(32)"/>
+      <column name="fkco_operator" type="VARCHAR(64)"/>
+      <column name="fkco_status" type="VARCHAR(64)"/>
+      <column name="fkco_i_total_action" type="VARCHAR(38)"/>
+      <column name="fkco_messages" type="VARCHAR(38)"/>
+      <column name="fkco_b_highlight_hit" type="VARCHAR(38)"/>
+      <column name="fkco_v_name_matched_text" type="VARCHAR(255)"/>
+      <column name="fkco_v_address_matched_text" type="VARCHAR(255)"/>
+      <column name="fkco_v_city_matched_text" type="VARCHAR(255)"/>
+      <column name="fkco_v_state_matched_text" type="VARCHAR(255)"/>
+      <column name="fkco_v_country_matched_text" type="VARCHAR(255)"/>
+      <column name="fkco_v_list_matched_name" type="VARCHAR(255)"/>
+      <column name="fkco_v_fml_type" type="VARCHAR(64)"/>
+      <column name="fkco_i_fml_priority" type="VARCHAR(38)"/>
+      <column name="fkco_i_fml_confidentiality" type="VARCHAR(38)"/>
+      <column name="fkco_v_hit_match_level" type="VARCHAR(38)"/>
+      <column name="fkco_v_hit_type" type="VARCHAR(64)"/>
+      <column name="fkco_i_nonblocking" type="VARCHAR(38)"/>
+      <column name="fkco_i_blocking" type="VARCHAR(38)"/>
+      <column name="fkco_listed_record" type="VARCHAR(38)"/>
+      <column name="fkco_filtered_date" type="VARCHAR(38)"/>
+      <column name="fkco_d_filtered_datetime_1" type="VARCHAR(38)"/>
+      <column name="fkco_v_matched_tag" type="VARCHAR(64)"/>
+      <column name="fkco_v_matched_tag_content" type="TEXT"/>
+      <column name="fkco_i_sequence" type="VARCHAR(38)"/>
+      <column name="fkco_v_list_fmm_id" type="VARCHAR(38)"/>
+      <column name="fkco_v_list_official_ref" type="VARCHAR(255)"/>
+      <column name="fkco_v_list_type" type="VARCHAR(32)"/>
+      <column name="fkco_v_list_origin" type="VARCHAR(32)"/>
+      <column name="fkco_v_list_designation" type="VARCHAR(64)"/>
+      <column name="fkco_v_list_pep" type="VARCHAR(38)"/>
+      <column name="fkco_v_list_fep" type="VARCHAR(38)"/>
+      <column name="fkco_v_list_name" type="VARCHAR(255)"/>
+      <column name="fkco_v_list_city" type="VARCHAR(255)"/>
+      <column name="fkco_v_list_state" type="VARCHAR(255)"/>
+      <column name="fkco_v_list_country" type="VARCHAR(255)"/>
+      <column name="fkco_v_list_userdata1" type="VARCHAR(255)"/>
+      <column name="fkco_v_list_userdata2" type="VARCHAR(255)"/>
+      <column name="fkco_v_list_keyword" type="VARCHAR(64)"/>
+      <column name="fkco_v_list_add_info" type="TEXT"/>
+      <column name="fkco_v_status_name" type="VARCHAR(32)"/>
+      <column name="fkco_v_status_behavior" type="VARCHAR(32)"/>
+      <column name="fkco_i_blockinghits" type="VARCHAR(38)"/>
+
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="pb_learning_csv_row"
+        baseColumnNames="learning_file_id"
+        constraintName="fk_pb_learning_csv_row_learning_file_id"
+        referencedTableName="pb_learning_file"
+        deleteCascade="true"
+        referencedColumnNames="learning_file_id"/>
+
+  </changeSet>
+
+  <changeSet id="payments-bridge-svb-learning-1.4.2" author="tbozek">
+    <createIndex tableName="pb_learning_csv_row" indexName="ix_pb_learning_csv_row_learning_file_id">
+      <column name="learning_file_id"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="payments-bridge-svb-learning-1.4.3" author="tbozek">
+    <createIndex tableName="pb_learning_csv_row" indexName="ix_pb_learning_csv_row_job_id">
+      <column name="job_id"/>
+    </createIndex>
   </changeSet>
 </databaseChangeLog>
