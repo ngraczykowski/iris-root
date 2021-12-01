@@ -40,6 +40,10 @@ class BrokerProperties {
 
   @Valid
   @NestedConfigurationProperty
+  private AmpqProperties alertsExpiredIndexing;
+
+  @Valid
+  @NestedConfigurationProperty
   private AmpqProperties analysisExpiredIndexing;
 
   @Valid
@@ -132,5 +136,17 @@ class BrokerProperties {
 
   List<BindingProperties> bindingsToRemove() {
     return toRemove.getBindings();
+  }
+
+  String alertsExpiredIndexingQueueName() {
+    return alertsExpiredIndexing.getQueueName();
+  }
+
+  String alertsExpiredIndexingRoutingKey() {
+    return alertsExpiredIndexing.getRoutingKey();
+  }
+
+  Integer alertsExpiredIndexingMaxPriority() {
+    return alertsExpiredIndexing.getMaxPriority();
   }
 }

@@ -43,6 +43,9 @@ warehouse:
       personal-information-expired-indexing:
         queue-name: wh.retention.personal-information-expired
         routing-key: retention.personal-information-expired
+      alerts-expired-indexing:
+        queue-name: wh.retention.alerts-expired
+        routing-key: retention.alerts-expired
       to-remove:
         bindings: []
   indexer:
@@ -62,6 +65,8 @@ warehouse:
       routing-key: event.index-response.simulation
     personal-information-expired-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.analysis-expired-indexing.queue-name.queue-name}
+    alerts-expired-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.alerts-expired-indexing.queue-name}
   environment:
     prefix: itest
   report:

@@ -55,3 +55,6 @@ test:
         queue-name: testapp.index-response.production
       simulation-indexed-event-test-listener-inbound:
         queue-name: testapp.index-response.simulation
+      alerts-expired-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: retention.alerts-expired

@@ -66,6 +66,8 @@ warehouse:
       simulation-indexed-outbound:
         exchange-name: wh.event
         routing-key: event.index-response.simulation
+      alerts-expired-indexing-inbound:
+        queue-name: wh.retention.alerts-expired
   environment:
     prefix: dev
   db:
@@ -83,6 +85,8 @@ warehouse:
       fields-to-erase:
         - 'comment'
         - 'lastCaseComment'
+    alert:
+      batch-size: 200
     simulation:
       analysis-expired:
         fields-to-erase:

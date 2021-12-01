@@ -91,8 +91,15 @@ test:
         queue-name: bridge.index-response.production
       simulation-indexed-event-test-listener-inbound:
         queue-name: sim.index-response.simulation
+      alerts-expired-indexing-test-client-outbound:
+        exchange-name: bridge.retention
+        routing-key: retention.alerts-expired
+      analysis-expired-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: command.analysis-expired
   generator:
-    production-enabled: true
-    simulation-enabled: true
-    pii-expired-enabled: true
+    production-enabled: false
+    simulation-enabled: false
+    pii-expired-enabled: false
+    alerts-expired-enabled: false
     cron: "*/15 * * * * ?"

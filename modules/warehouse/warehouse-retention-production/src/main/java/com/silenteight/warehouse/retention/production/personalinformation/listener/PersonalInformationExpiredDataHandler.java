@@ -1,10 +1,11 @@
-package com.silenteight.warehouse.retention.production.personalinformation;
+package com.silenteight.warehouse.retention.production.personalinformation.listener;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.dataretention.api.v1.PersonalInformationExpired;
+import com.silenteight.warehouse.retention.production.personalinformation.ErasePersonalInformationUseCase;
 
 @Slf4j
 @RequiredArgsConstructor

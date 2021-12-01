@@ -36,6 +36,9 @@ warehouse:
       personal-information-expired-indexing:
         queue-name: wh.retention.personal-information-expired
         routing-key: retention.personal-information-expired
+      alerts-expired-indexing:
+        queue-name: wh.retention.alerts-expired
+        routing-key: retention.alerts-expired
       to-remove:
         bindings: []
   indexer:
@@ -57,6 +60,7 @@ warehouse:
     production-query-index: ${warehouse.environment.prefix}_production_alert
     production-match-query-index: ${warehouse.environment.prefix}_production_match
     update-request-batch-size: 1000
+    erase-request-batch-size: 1000
     retry-on-conflict-count: 2
     scroll:
       search:
@@ -81,3 +85,6 @@ test:
         queue-name: testapp.index-response.production
       simulation-indexed-event-test-listener-inbound:
         queue-name: testapp.index-response.simulation
+      alerts-expired-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: retention.alerts-expired

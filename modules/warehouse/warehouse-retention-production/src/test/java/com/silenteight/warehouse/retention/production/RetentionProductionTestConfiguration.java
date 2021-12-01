@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.retention.production.personalinformation;
+package com.silenteight.warehouse.retention.production;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,10 +61,9 @@ public class RetentionProductionTestConfiguration {
 
   public static final String PROCESSING_TIMESTAMP = "2021-04-15T12:17:37.098Z";
 
-  private final PersonalInformationIntegrationProperties properties;
   private final ProductionIndexerProperties productionProperties;
   private final IndexerClientIntegrationProperties testProperties;
-  
+
   @Bean
   Binding retentionPersonalInformationIndexingBinding(
       Exchange retentionCommandExchange,
@@ -96,6 +95,17 @@ public class RetentionProductionTestConfiguration {
         whEventExchange,
         productionProperties.getProductionIndexedOutbound().getRoutingKey(),
         productionIndexedQueue);
+  }
+
+  @Bean
+  Binding retentionAlertsIndexingBinding(
+      Exchange retentionCommandExchange,
+      Queue alertsExpiredIndexingQueue) {
+
+    return bind(
+        retentionCommandExchange,
+        testProperties.getAlertsExpiredIndexingTestClientOutbound().getRoutingKey(),
+        alertsExpiredIndexingQueue);
   }
 
   @Bean

@@ -3,6 +3,7 @@ package com.silenteight.warehouse.test.generator;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.data.api.v2.Alert;
+import com.silenteight.dataretention.api.v1.AlertsExpired;
 import com.silenteight.dataretention.api.v1.PersonalInformationExpired;
 
 import com.google.protobuf.Struct;
@@ -46,6 +47,13 @@ class AlertGenerator {
 
   PersonalInformationExpired generatePersonalInformationExpired(List<String> alertNames) {
     return PersonalInformationExpired
+        .newBuilder()
+        .addAllAlerts(alertNames)
+        .build();
+  }
+
+  AlertsExpired generateAlertsExpired(List<String> alertNames) {
+    return AlertsExpired
         .newBuilder()
         .addAllAlerts(alertNames)
         .build();

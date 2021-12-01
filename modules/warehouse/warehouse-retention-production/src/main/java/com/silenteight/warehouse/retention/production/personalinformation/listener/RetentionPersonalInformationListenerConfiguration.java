@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.retention.production.personalinformation;
+package com.silenteight.warehouse.retention.production.personalinformation.listener;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.dataretention.api.v1.PersonalInformationExpired;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 import com.silenteight.warehouse.common.integration.AmqpInboundProperties;
+import com.silenteight.warehouse.retention.production.personalinformation.ErasePersonalInformationUseCase;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +20,7 @@ import javax.validation.Valid;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
-@EnableConfigurationProperties({ PersonalInformationIntegrationProperties.class,
-    PersonalInformationProperties.class})
+@EnableConfigurationProperties(PersonalInformationIntegrationProperties.class)
 class RetentionPersonalInformationListenerConfiguration {
 
   private static final String RETENTION_PII_INBOUND_CHANNEL =
@@ -43,7 +43,8 @@ class RetentionPersonalInformationListenerConfiguration {
         handler);
   }
 
-  private IntegrationFlow createInputFlow(String channel,
+  private IntegrationFlow createInputFlow(
+      String channel,
       AmqpInboundProperties properties,
       PersonalInformationExpiredDataHandler handler) {
     return IntegrationFlows
