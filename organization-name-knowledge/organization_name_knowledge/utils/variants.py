@@ -1,4 +1,5 @@
 import itertools
+import re
 from typing import List, Set
 
 from organization_name_knowledge.utils.text import (
@@ -8,16 +9,11 @@ from organization_name_knowledge.utils.text import (
     split_text_by_too_long_numbers,
 )
 
-NAME_DELIMITERS: List[str] = [" " + conj + " " for conj in CONJUNCTIONS] + [
-    ",",
-    ":",
-    "+",
-    "-",
-    "/",
-    "\n",
-    "\r",
-    "the ",
-]
+ORG_NAME_DELIMITERS = [",", ":", "+", "-", "/", "\n", "\r", "the "]
+NUMERATORS = [str(num) + ")" for num in range(1, 9)] + [str(num) + "/" for num in range(1, 9)]
+DELIMITERS = [" " + conj + " " for conj in CONJUNCTIONS] + ORG_NAME_DELIMITERS + NUMERATORS
+
+PARENTHESES_REGEX = re.compile(r"\([^)]*\)")
 
 
 def get_term_variants(term: str) -> Set[str]:
@@ -41,11 +37,13 @@ def get_term_variants(term: str) -> Set[str]:
 def get_text_variants(text: str) -> Set[str]:
     variants = set()
     # assuming single level instead of a recursive split
-    _add_variants(text, NAME_DELIMITERS, variants)
+    _add_variants(text, DELIMITERS, variants)
 
     for variant in split_text_by_too_long_numbers(text):
         variants.add(variant)
+
     variants.add(text)
+    _add_parentheses_based_variants(text, variants)
     return {remove_too_long_numbers(variant).strip() for variant in variants}
 
 
@@ -54,3 +52,8 @@ def _add_variants(name: str, delimiters: List[str], variants: Set[str]):
         if delimiter in name:
             for name_variant in name.split(delimiter):
                 variants.add(name_variant.strip())
+
+
+def _add_parentheses_based_variants(text: str, variants: Set[str]):
+    variants.add(text.replace("(", " ").replace(")", " "))
+    variants.add(PARENTHESES_REGEX.sub("", text))

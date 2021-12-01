@@ -4,14 +4,15 @@ from typing import List, Set
 from organization_name_knowledge.freetext.matching import get_all_contained_legal_terms
 from organization_name_knowledge.names.name_information import NameInformation
 from organization_name_knowledge.names.parse.parse import parse_name
-from organization_name_knowledge.utils.term_variants import get_text_variants
 from organization_name_knowledge.utils.text import (
     PREPOSITIONS,
+    alpha_char_count,
     clear_freetext,
     contains_conjunction,
     starts_with_conjunction,
     starts_with_preposition,
 )
+from organization_name_knowledge.utils.variants import get_text_variants
 
 
 def parse_freetext_names(
@@ -21,10 +22,11 @@ def parse_freetext_names(
     name_tokens_upper_limit: int = 7,
 ) -> List[NameInformation]:
 
-    freetext = clear_freetext(freetext).lower()
     found_valid_names = []
 
     for freetext_variant in get_text_variants(freetext):
+
+        freetext_variant = clear_freetext(freetext_variant)
         tokens = freetext_variant.split()
 
         substrings = [
@@ -48,6 +50,7 @@ def _get_valid_names(
         name
         for name in names
         if name.legal
+        and alpha_char_count(name.base.cleaned_name) >= 2
         and len(get_all_contained_legal_terms(name.base.original_name))
         != len(name.base)
         <= base_tokens_upper_limit
