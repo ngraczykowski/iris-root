@@ -8,6 +8,8 @@ import com.silenteight.data.api.v2.Alert;
 import com.silenteight.data.api.v2.Match;
 import com.silenteight.data.api.v2.ProductionDataIndexRequest;
 import com.silenteight.warehouse.indexer.production.v2.ProductionAlertIndexV2UseCase;
+import com.silenteight.warehouse.retention.production.AlertDiscriminatorResolvingService;
+import com.silenteight.warehouse.retention.production.MatchDiscriminatorResolvingService;
 
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;

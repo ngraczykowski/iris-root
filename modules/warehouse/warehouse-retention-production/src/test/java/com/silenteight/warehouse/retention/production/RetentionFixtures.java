@@ -1,8 +1,9 @@
-package com.silenteight.warehouse.retention.production.personalinformation;
+package com.silenteight.warehouse.retention.production;
 
 import com.silenteight.data.api.v2.Alert;
 import com.silenteight.data.api.v2.Match;
 import com.silenteight.data.api.v2.ProductionDataIndexRequest;
+import com.silenteight.dataretention.api.v1.AlertsExpired;
 import com.silenteight.dataretention.api.v1.PersonalInformationExpired;
 
 import com.google.protobuf.Struct;
@@ -21,7 +22,7 @@ import static com.silenteight.warehouse.indexer.match.mapping.MatchMapperConstan
 import static java.util.List.of;
 import static java.util.UUID.randomUUID;
 
-public class PersonalInformationExpiredFixtures {
+public class RetentionFixtures {
 
   public static final String RECOMMENDATION_COMMENT = "recommendation_comment";
   public static final String RECOMMENDATION_COMMENT_PREFIXED = "alert_recommendation_comment";
@@ -40,7 +41,9 @@ public class PersonalInformationExpiredFixtures {
   public static final String MATCH_ELASTIC_TEMPLATE_NAME = "match_template";
 
   public static final String DISCRIMINATOR_1 = "457b1498-e348-4a81-8093-6079c1173010";
+  public static final String DISCRIMINATOR_2 = "df3dbd00-4800-4d59-b53e-5bb6c7eb4395";
   public static final String ALERT_NAME_1 = "alerts/457b1498-e348-4a81-8093-6079c1173010";
+  public static final String ALERT_NAME_2 = "alerts/168c0428-5b9d-4db7-8e11-86264356433f";
   public static final String MATCH_NAME_1 = "matches/d25641e9-71d6-4705-a90b-5bc3d5303425";
   public static final String MATCH_DISCRIMINATOR_1 = "de26c0cc-a6cc-49c0-a0fb-3f1999ca1e31";
   public static final String SOLUTION_KEY = "solution";
@@ -51,9 +54,21 @@ public class PersonalInformationExpiredFixtures {
           .addAllAlerts(of(ALERT_NAME_1))
           .build();
 
+  public static final AlertsExpired ALERTS_EXPIRED_REQUEST =
+      AlertsExpired.newBuilder()
+          .addAllAlerts(of(ALERT_NAME_1, ALERT_NAME_2))
+          .build();
+
   public static final Map<String, String> MAPPED_ALERT_1 = Map.of(
       DISCRIMINATOR, DISCRIMINATOR_1,
       ALERT_NAME, ALERT_NAME_1,
+      RECOMMENDATION_COMMENT, COMMENT_TP,
+      ANALYST_COMMENT, COMMENT_CORRECT
+  );
+
+  public static final Map<String, String> MAPPED_ALERT_2 = Map.of(
+      DISCRIMINATOR, DISCRIMINATOR_2,
+      ALERT_NAME, ALERT_NAME_2,
       RECOMMENDATION_COMMENT, COMMENT_TP,
       ANALYST_COMMENT, COMMENT_CORRECT
   );
@@ -80,10 +95,22 @@ public class PersonalInformationExpiredFixtures {
       .addAllMatches(of(MATCH_1))
       .build();
 
+  public static final Alert ALERT_2 = Alert.newBuilder()
+      .setDiscriminator(DISCRIMINATOR_2)
+      .setName(ALERT_NAME_2)
+      .setPayload(convertMapToPayload(MAPPED_ALERT_2))
+      .build();
+
   public static final ProductionDataIndexRequest PRODUCTION_DATA_INDEX_REQUEST_1 =
       ProductionDataIndexRequest.newBuilder()
           .setRequestId(randomUUID().toString())
           .addAllAlerts(of(ALERT_1))
+          .build();
+
+  public static final ProductionDataIndexRequest PRODUCTION_DATA_INDEX_REQUEST_2 =
+      ProductionDataIndexRequest.newBuilder()
+          .setRequestId(randomUUID().toString())
+          .addAllAlerts(of(ALERT_1, ALERT_2))
           .build();
 
   private static Builder convertMapToPayload(Map<String, String> payload) {

@@ -8,10 +8,11 @@ import com.silenteight.warehouse.test.client.gateway.PersonalInformationExpiredC
 
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static java.util.UUID.randomUUID;
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,11 +34,10 @@ public class PersonalInformationDataExpiredClient {
   }
 
   private static List<String> generateAlertNames() {
-    List<String> alertNames = new ArrayList<>();
-    int i;
-    for (i = 0; i < 6_000; i++) {
-      alertNames.add("alerts/" + i);
-    }
-    return alertNames;
+    return IntStream
+        .range(0, 6000)
+        .boxed()
+        .map(i -> "alerts/" + i)
+        .collect(toList());
   }
 }

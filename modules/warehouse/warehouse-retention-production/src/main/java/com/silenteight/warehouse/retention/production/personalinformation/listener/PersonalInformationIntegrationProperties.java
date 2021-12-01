@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.retention.production.personalinformation;
+package com.silenteight.warehouse.retention.production.personalinformation.listener;
 
 import lombok.Data;
 

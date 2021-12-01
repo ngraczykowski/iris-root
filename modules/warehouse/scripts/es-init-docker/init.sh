@@ -11,5 +11,7 @@ echo "Creating index alias"
 ./create-index-alias.sh
 echo "Creating index template"
 ./create-index-template.sh
+echo "Updating roles"
+./update-roles.sh
 
 echo "Done"

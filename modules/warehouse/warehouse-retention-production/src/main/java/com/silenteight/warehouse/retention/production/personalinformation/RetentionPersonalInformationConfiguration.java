@@ -4,6 +4,8 @@ import com.silenteight.warehouse.indexer.production.v2.ProductionAlertIndexV2Use
 import com.silenteight.warehouse.indexer.query.single.AlertSearchService;
 import com.silenteight.warehouse.indexer.query.single.ProductionSearchRequestBuilder;
 import com.silenteight.warehouse.indexer.query.single.SingleAlertQueryConfiguration;
+import com.silenteight.warehouse.retention.production.AlertDiscriminatorResolvingService;
+import com.silenteight.warehouse.retention.production.MatchDiscriminatorResolvingService;
 
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

@@ -1,22 +1,22 @@
 package com.silenteight.warehouse.indexer.production.indextracking;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import javax.validation.constraints.NotNull;
 
 import static java.util.stream.Collectors.toMap;
 
 @RequiredArgsConstructor
 public class ProductionMatchTrackingService {
 
-  @NotNull
+  @NonNull
   private final ProductionMatchRepository productionMatchRepository;
 
-  @NotNull
+  @NonNull
   private final ProductionMatchNamingStrategy productionMatchNamingStrategy;
 
   @Transactional

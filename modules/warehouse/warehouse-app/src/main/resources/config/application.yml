@@ -71,6 +71,9 @@ warehouse:
       analysis-expired-indexing:
         queue-name: wh.retention.analysis-expired
         routing-key: command.analysis-expired
+      alerts-expired-indexing:
+        queue-name: wh.retention.alerts-expired
+        routing-key: retention.alerts-expired
       to-remove:
         bindings: []
   indexer:
@@ -92,6 +95,8 @@ warehouse:
       queue-name: ${warehouse.messaging.broker.personal-information-expired-indexing.queue-name}
     analysis-expired-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.analysis-expired-indexing.queue-name}
+    alerts-expired-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.alerts-expired-indexing.queue-name}
   report:
     default-bucket: reports
     removal:
@@ -109,6 +114,7 @@ warehouse:
       - ${warehouse.environment.prefix}_production*
       - ${warehouse.environment.prefix}_simulation*
     update-request-batch-size: 1000
+    erase-request-batch-size: 1000
     retry-on-conflict-count: 2
     scroll:
       search:
@@ -121,6 +127,8 @@ warehouse:
     simulation:
       analysis-expired:
         fields-to-erase: []
+    alert:
+      batch-size: 200
   task:
     async:
       execution:

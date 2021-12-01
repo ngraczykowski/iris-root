@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.retention.production.personalinformation;
+package com.silenteight.warehouse.retention.production;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -15,43 +15,44 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import java.util.List;
 import java.util.Map;
 
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_NAME;
 import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.DISCRIMINATOR;
-import static com.silenteight.warehouse.indexer.match.mapping.MatchMapperConstants.MATCH_DISCRIMINATOR;
 import static java.util.stream.Collectors.toList;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 
 @RequiredArgsConstructor
-public class MatchDiscriminatorResolvingService {
+public class AlertDiscriminatorResolvingService {
 
-  private static final String[] FETCHED_FIELDS = new String[] { MATCH_DISCRIMINATOR };
+  private static final String[] FETCHED_FIELDS = new String[] { DISCRIMINATOR };
 
   @NonNull
   private final RestHighLevelClient restHighLevelAdminClient;
   @NonNull
-  private final ProductionSearchRequestBuilder productionMatchSearchRequestBuilder;
+  private final ProductionSearchRequestBuilder productionSearchRequestBuilder;
   @NonNull
   private final AlertSearchService alertSearchService;
 
-  public List<String> getDiscriminatorsForAlert(String discriminator) {
+  public List<String> getDiscriminatorsForAlertNames(List<String> alertNames) {
     List<Map<String, Object>> maps = alertSearchService.searchForDocuments(
-        restHighLevelAdminClient, getSearchRequest(discriminator));
+            restHighLevelAdminClient,
+            getSearchRequest(alertNames));
 
     return maps.stream()
-        .map(alert -> alert.get(MATCH_DISCRIMINATOR).toString())
+        .map(alert -> alert.get(DISCRIMINATOR).toString())
         .distinct()
         .collect(toList());
   }
 
-  private SearchRequest getSearchRequest(String discriminator) {
+  private SearchRequest getSearchRequest(List<String> alertNames) {
     SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
     sourceBuilder.fetchSource(FETCHED_FIELDS, null);
-    BoolQueryBuilder boolQueryBuilder = getExactMatches(discriminator);
+    BoolQueryBuilder boolQueryBuilder = getExactMatches(alertNames);
     sourceBuilder.query(boolQueryBuilder);
-    return productionMatchSearchRequestBuilder.buildProductionSearchRequest(sourceBuilder);
+    return productionSearchRequestBuilder.buildProductionSearchRequest(sourceBuilder);
   }
 
-  private static BoolQueryBuilder getExactMatches(String value) {
-    return boolQuery().should(termsQuery(OpendistroUtils.getRawField(DISCRIMINATOR), value));
+  private static BoolQueryBuilder getExactMatches(List<String> values) {
+    return boolQuery().should(termsQuery(OpendistroUtils.getRawField(ALERT_NAME), values));
   }
 }

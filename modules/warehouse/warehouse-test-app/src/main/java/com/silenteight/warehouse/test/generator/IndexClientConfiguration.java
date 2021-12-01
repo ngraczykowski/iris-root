@@ -2,6 +2,7 @@ package com.silenteight.warehouse.test.generator;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.warehouse.test.client.gateway.AlertsExpiredClientGateway;
 import com.silenteight.warehouse.test.client.gateway.PersonalInformationExpiredClientGateway;
 import com.silenteight.warehouse.test.client.gateway.ProductionIndexClientGateway;
 import com.silenteight.warehouse.test.client.gateway.SimulationIndexClientGateway;
@@ -48,6 +49,17 @@ class IndexClientConfiguration {
     log.info("PersonalInformationDataExpiredClient created");
     return new PersonalInformationDataExpiredClient(
         personalInformationExpiredClientGateway, alertGenerator);
+  }
+
+  @Bean
+  @Autowired
+  @ConditionalOnProperty(value = "test.generator.alerts-expired-enabled", havingValue = "true")
+  AlertsExpiredClient alertsExpiredClient(
+      AlertsExpiredClientGateway alertsExpiredClientGateway,
+      AlertGenerator alertGenerator) {
+
+    log.info("AlertsExpiredClient created");
+    return new AlertsExpiredClient(alertsExpiredClientGateway, alertGenerator);
   }
 
   @Bean

@@ -36,6 +36,9 @@ warehouse:
       analysis-expired-indexing:
         queue-name: wh.retention.analysis-expired
         routing-key: command.analysis-expired
+      alerts-expired-indexing:
+        queue-name: wh.retention.alerts-expired
+        routing-key: retention.alerts-expired
       to-remove:
         bindings: []
   indexer:
@@ -94,3 +97,6 @@ test:
         queue-name: testapp.index-response.production
       simulation-indexed-event-test-listener-inbound:
         queue-name: testapp.index-response.simulation
+      alerts-expired-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: retention.alerts-expired

@@ -85,6 +85,15 @@ class BrokerConfiguration {
             properties.personalInformationExpiredIndexingRoutingKey()));
   }
 
+  @Bean
+  Declarables alertsExpiredIndexingBinding() {
+    return new Declarables(
+        binding(
+            properties.alertsExpiredIndexingQueueName(),
+            BRIDGE_RETENTION_EXCHANGE,
+            properties.alertsExpiredIndexingRoutingKey()));
+  }
+
   private static Binding binding(String queueName, String exchange, String routingKey) {
     return new Binding(queueName, QUEUE, exchange, routingKey, emptyMap());
   }
@@ -141,12 +150,18 @@ class BrokerConfiguration {
   }
 
   @Bean
+  Queue alertsExpiredIndexingQueue() {
+    return queue(
+        properties.alertsExpiredIndexingQueueName(),
+        properties.alertsExpiredIndexingMaxPriority());
+  }
+
+  @Bean
   Queue analysisExpiredIndexingQueue() {
     return queue(
         properties.analysisExpiredQueueName(),
         properties.analysisExpiredIndexingMaxPriority());
   }
-
 
   private static Queue queue(String queueName, Integer maxPriority) {
     QueueBuilder builder = QueueBuilder.durable(queueName);

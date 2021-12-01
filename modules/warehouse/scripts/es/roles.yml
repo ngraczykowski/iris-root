@@ -52,6 +52,7 @@ technical_user:
         - 'indices:data/write/update'
         - 'indices:data/write/bulk'
         - 'indices:data/write/bulk*'
+        - 'indices:data/write/delete'
         - 'indices:monitor/settings/get'
         - 'indices:admin/create'
         - 'indices:admin/mapping/put'
