@@ -40,9 +40,9 @@ class StoreCsvFileStepReaderConfiguration {
   private final CsvFileResourceProvider csvFileResourceProvider;
 
   @SuppressWarnings("SpringElInspection")
-  @Bean("csvFileItemReaderStepItemReader")
+  @Bean
   @StepScope
-  FlatFileItemReader<LearningCsvRowEntity> itemReader(
+  FlatFileItemReader<LearningCsvRowEntity> storeCsvFileStepItemReader(
       @Value("#{stepExecution}") StepExecution stepExecution) {
     var fileId =
         stepExecution.getJobParameters().getLong(FILE_ID_PARAMETER);

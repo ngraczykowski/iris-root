@@ -11,7 +11,7 @@ import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.stereotype.Service;
 
-@Service("storeCsvFileStepListener")
+@Service
 @RequiredArgsConstructor
 @Slf4j
 class StoreCsvFileStepListener implements StepExecutionListener {
