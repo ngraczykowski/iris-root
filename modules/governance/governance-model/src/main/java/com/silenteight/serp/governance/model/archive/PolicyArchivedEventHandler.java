@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.model.archive;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.model.api.v1.ModelsArchived;
 import com.silenteight.serp.governance.model.archive.amqp.ModelsArchivedMessageGateway;
@@ -17,6 +18,7 @@ import java.util.UUID;
 import static com.silenteight.serp.governance.policy.common.PolicyResource.toResourceName;
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RequiredArgsConstructor
 class PolicyArchivedEventHandler {
 
@@ -27,10 +29,14 @@ class PolicyArchivedEventHandler {
 
   @EventListener
   public void handle(PolicyArchivedEvent event) {
-    List<String> modelNames = toModelNamesByPolicyId(event.getPolicyId());
+    UUID policyId = event.getPolicyId();
+    log.info("Sending models archived message: policyId={}", policyId);
+    List<String> modelNames = toModelNamesByPolicyId(policyId);
 
-    if (!modelNames.isEmpty())
+    if (!modelNames.isEmpty()) {
       messageGateway.send(toModelsArchivedMessage(modelNames));
+      log.info("Models archived message has been sent: modelNames={}", modelNames);
+    }
   }
 
   private List<String> toModelNamesByPolicyId(@NonNull UUID policyId) {
