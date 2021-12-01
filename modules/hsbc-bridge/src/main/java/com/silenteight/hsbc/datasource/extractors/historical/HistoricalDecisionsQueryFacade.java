@@ -3,48 +3,36 @@ package com.silenteight.hsbc.datasource.extractors.historical;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
+import com.silenteight.hsbc.datasource.dto.historical.ModelKeyDto;
 import com.silenteight.hsbc.datasource.feature.historical.HistoricalDecisionsQuery;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 class HistoricalDecisionsQueryFacade implements HistoricalDecisionsQuery {
 
   private final MatchData matchData;
-  private final HistoricalDecisionsServiceClient serviceClient;
 
   @Override
-  public List<ModelCountsDto> getIsApTpMarkedInput() {
+  public Optional<ModelKeyDto> getIsApTpMarkedInput() {
     return getExternalProfileIds()
-        .map(AlertedPartyRequestCreator::new)
-        .map(AlertedPartyRequestCreator::createRequest)
-        .map(serviceClient::getHistoricalDecisions)
-        .map(GetHistoricalDecisionsResponseDto::getModelCounts)
-        .flatMap(Collection::stream)
-        .collect(Collectors.toList());
+        .map(AlertedPartyCreator::new)
+        .map(AlertedPartyCreator::create)
+        .findFirst();
   }
 
   @Override
-  public List<ModelCountsDto> getIsTpMarkedInput() {
-    var request =
-        new WatchlistPartyRequestCreator(matchData).createRequest();
-
-    return serviceClient.getHistoricalDecisions(request).getModelCounts();
+  public Optional<ModelKeyDto> getIsTpMarkedInput() {
+    return Optional.of(new WatchlistPartyRequestCreator(matchData).create());
   }
 
   @Override
-  public List<ModelCountsDto> getCaseTpMarkedInput() {
+  public Optional<ModelKeyDto> getCaseTpMarkedInput() {
     return getExternalProfileIds()
         .map(id -> new MatchRequestCreator(matchData, id))
-        .map(MatchRequestCreator::createRequest)
-        .map(serviceClient::getHistoricalDecisions)
-        .map(GetHistoricalDecisionsResponseDto::getModelCounts)
-        .flatMap(Collection::stream)
-        .collect(Collectors.toList());
+        .map(MatchRequestCreator::create)
+        .findFirst();
   }
 
   private Stream<String> getExternalProfileIds() {

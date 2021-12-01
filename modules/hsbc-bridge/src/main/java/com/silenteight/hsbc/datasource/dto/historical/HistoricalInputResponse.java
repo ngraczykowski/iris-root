@@ -6,10 +6,10 @@ import lombok.Value;
 import java.util.Collections;
 import java.util.List;
 
-@Builder
 @Value
+@Builder
 public class HistoricalInputResponse {
 
   @Builder.Default
-  List<HistoricalSolutionInputDto> inputs = Collections.emptyList();
+  List<HistoricalDecisionsInputDto> inputs = Collections.emptyList();
 }

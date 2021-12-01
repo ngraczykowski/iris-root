@@ -27,6 +27,7 @@ class HistoricalDecisionRequestCreatorSpec extends Specification {
     alert.matchId == "1"
     alert.alertedParty.id == "someProfileId"
     alert.alertedParty.country == "someEdqLoBCountryCodeProd"
+    alert.discriminator.value == "hotel_true_positive"
 
     def watchlist = alert.watchlist
     watchlist.id == "1"
@@ -50,6 +51,7 @@ class HistoricalDecisionRequestCreatorSpec extends Specification {
     alert.matchId == "1"
     alert.alertedParty.id == "someProfileId"
     alert.alertedParty.country == "someEdqLoBCountryCodeTest"
+    alert.discriminator.value == "hotel_true_positive"
 
     def watchlist = alert.watchlist
     watchlist.id == "1"

@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.KnownServices;
 import com.silenteight.hsbc.bridge.grpc.GrpcProperties;
-import com.silenteight.hsbc.datasource.extractors.historical.HistoricalDecisionsServiceClient;
 import com.silenteight.hsbc.datasource.extractors.name.NameInformationServiceClient;
-import com.silenteight.proto.historicaldecisions.model.v1.api.HistoricalDecisionsModelServiceGrpc.HistoricalDecisionsModelServiceBlockingStub;
 import com.silenteight.proto.worldcheck.api.v1.NamesInformationServiceGrpc.NamesInformationServiceBlockingStub;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -26,26 +24,13 @@ class GrpcDataSourceServiceConfiguration {
   @GrpcClient(KnownServices.WORLDCHECK)
   private NamesInformationServiceBlockingStub namesInformationServiceBlockingStub;
 
-  @GrpcClient(KnownServices.HISTORICAL_DECISIONS_MODEL)
-  private HistoricalDecisionsModelServiceBlockingStub historicalDecisionsModelServiceBlockingStub;
-
   @Bean
   NameInformationServiceClient nameInformationServiceGrpcApi() {
     return new NameInformationGrpcAdapter(
         namesInformationServiceBlockingStub, getNameInformationDeadline());
   }
 
-  @Bean
-  HistoricalDecisionsServiceClient historicalDecisionsServiceGrpcApi() {
-    return new HistoricalDecisionsGrpcAdapter(
-        historicalDecisionsModelServiceBlockingStub, getHistoricalDecisionsDeadline());
-  }
-
   private long getNameInformationDeadline() {
     return grpcProperties.nameInformationDeadlineInSeconds();
-  }
-
-  private long getHistoricalDecisionsDeadline() {
-    return grpcProperties.historicalDecisionsDeadlineInSeconds();
   }
 }

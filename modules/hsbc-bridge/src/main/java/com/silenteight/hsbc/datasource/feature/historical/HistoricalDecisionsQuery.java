@@ -1,22 +1,22 @@
 package com.silenteight.hsbc.datasource.feature.historical;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
-import com.silenteight.hsbc.datasource.extractors.historical.HistoricalDecisionsServiceClient;
-import com.silenteight.hsbc.datasource.extractors.historical.ModelCountsDto;
+import com.silenteight.hsbc.datasource.dto.historical.ModelKeyDto;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface HistoricalDecisionsQuery {
 
-  List<ModelCountsDto> getIsApTpMarkedInput();
+  String DISCRIMINATOR = "hotel_true_positive";
 
-  List<ModelCountsDto> getIsTpMarkedInput();
+  Optional<ModelKeyDto> getIsApTpMarkedInput();
 
-  List<ModelCountsDto> getCaseTpMarkedInput();
+  Optional<ModelKeyDto> getIsTpMarkedInput();
 
+  Optional<ModelKeyDto> getCaseTpMarkedInput();
 
   interface Factory {
 
-    HistoricalDecisionsQuery create(MatchData matchData, HistoricalDecisionsServiceClient client);
+    HistoricalDecisionsQuery create(MatchData matchData);
   }
 }

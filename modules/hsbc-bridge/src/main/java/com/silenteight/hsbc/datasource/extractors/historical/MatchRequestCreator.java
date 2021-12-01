@@ -3,9 +3,10 @@ package com.silenteight.hsbc.datasource.extractors.historical;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
-import com.silenteight.hsbc.datasource.extractors.historical.ModelKeyDto.ModelKeyType;
-
-import java.util.List;
+import com.silenteight.hsbc.datasource.dto.historical.AlertedPartyDto;
+import com.silenteight.hsbc.datasource.dto.historical.MatchDto;
+import com.silenteight.hsbc.datasource.dto.historical.ModelKeyDto;
+import com.silenteight.hsbc.datasource.dto.historical.ModelKeyDto.ModelKeyType;
 
 @RequiredArgsConstructor
 class MatchRequestCreator extends HistoricalDecisionsRequestCreator {
@@ -14,19 +15,11 @@ class MatchRequestCreator extends HistoricalDecisionsRequestCreator {
   private final String alertedPartyId;
 
   @Override
-  GetHistoricalDecisionsRequestDto createRequest() {
-    return GetHistoricalDecisionsRequestDto.builder()
-        .modelKeys(getModelKeys())
+  ModelKeyDto create() {
+    return ModelKeyDto.builder()
+        .modelKeyType(ModelKeyType.MATCH)
+        .modelKeyValue(getMatch())
         .build();
-  }
-
-  private List<ModelKeyDto> getModelKeys() {
-    return List.of(
-        ModelKeyDto.builder()
-            .modelKeyType(ModelKeyType.MATCH)
-            .modelKeyValue(getMatch())
-            .build()
-    );
   }
 
   private MatchDto getMatch() {

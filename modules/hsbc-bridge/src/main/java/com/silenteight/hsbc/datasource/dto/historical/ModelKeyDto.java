@@ -1,4 +1,4 @@
-package com.silenteight.hsbc.datasource.extractors.historical;
+package com.silenteight.hsbc.datasource.dto.historical;
 
 import lombok.Builder;
 import lombok.Value;

@@ -6,11 +6,11 @@ import lombok.Value;
 import java.util.Collections;
 import java.util.List;
 
-@Builder
 @Value
-public class HistoricalSolutionInputDto {
+@Builder
+public class HistoricalDecisionsInputDto {
 
   String match;
   @Builder.Default
-  List<HistoricalFeatureInputDto> features = Collections.emptyList();
+  List<HistoricalDecisionsFeatureInputDto> features = Collections.emptyList();
 }

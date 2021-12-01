@@ -2,19 +2,12 @@ package com.silenteight.hsbc.datasource.grpc;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.datasource.api.historicaldecisions.v1.BatchGetMatchHistoricalDecisionsInputsRequest;
-import com.silenteight.datasource.api.historicaldecisions.v1.BatchGetMatchHistoricalDecisionsInputsResponse;
-import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisionsInput;
-import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisionsInput.HistoricalDecisionsFeatureInput;
-import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisionsInput.ModelType;
-import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisionsInputServiceGrpc.HistoricalDecisionsInputServiceImplBase;
+import com.silenteight.datasource.api.historicaldecisions.v2.*;
+import com.silenteight.datasource.api.historicaldecisions.v2.HistoricalDecisionsInputServiceGrpc.HistoricalDecisionsInputServiceImplBase;
 import com.silenteight.hsbc.datasource.common.DataSourceInputProvider;
 import com.silenteight.hsbc.datasource.common.dto.DataSourceInputRequest;
-import com.silenteight.hsbc.datasource.dto.historical.HistoricalFeatureInputDto;
-import com.silenteight.hsbc.datasource.dto.historical.HistoricalInputResponse;
-import com.silenteight.hsbc.datasource.dto.historical.HistoricalSolutionInputDto;
+import com.silenteight.hsbc.datasource.dto.historical.*;
 
-import com.google.protobuf.Struct;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
@@ -49,25 +42,67 @@ class HistoricalDecisionsGrpcService extends HistoricalDecisionsInputServiceImpl
         .build();
   }
 
-  private List<HistoricalDecisionsInput> mapInputs(
-      List<HistoricalSolutionInputDto> inputs) {
+  private List<HistoricalDecisionsInput> mapInputs(List<HistoricalDecisionsInputDto> inputs) {
     return inputs.stream()
         .map(input -> HistoricalDecisionsInput.newBuilder()
             .setMatch(input.getMatch())
-            .addAllFeatureInputs(mapFeatures(input.getFeatures()))
+            .addAllHistoricalDecisionsFeatureInput(mapFeatures(input.getFeatures()))
             .build())
         .collect(Collectors.toList());
   }
 
   private List<HistoricalDecisionsFeatureInput> mapFeatures(
-      List<HistoricalFeatureInputDto> inputs) {
-    return inputs.stream()
-        .map(input -> HistoricalDecisionsFeatureInput.newBuilder()
-            .setFeature(input.getFeature())
-            .setTruePositiveCount(input.getTruePositiveCount())
-            .setModelType(ModelType.valueOf(input.getModelKeyType().name()))
-            .setReason(Struct.newBuilder().build())
+      List<HistoricalDecisionsFeatureInputDto> features) {
+    return features.stream()
+        .map(feature -> HistoricalDecisionsFeatureInput.newBuilder()
+            .setFeature(feature.getFeature())
+            .setModelKey(mapToModelKey(feature.getModelKey()))
+            .setDiscriminator(mapToDiscriminator(feature.getDiscriminator()))
             .build())
         .collect(Collectors.toList());
+  }
+
+  private ModelKey mapToModelKey(ModelKeyDto modelKey) {
+    var type = modelKey.getModelKeyType();
+    switch (type) {
+      case ALERTED_PARTY:
+        return ModelKey.newBuilder()
+            .setAlertedParty(mapToAlertedParty((AlertedPartyDto) modelKey.getModelKeyValue()))
+            .build();
+      case WATCHLIST_PARTY:
+        return ModelKey.newBuilder()
+            .setWatchlistParty(mapToWatchlistParty((WatchlistPartyDto) modelKey.getModelKeyValue()))
+            .build();
+      case MATCH:
+        return ModelKey.newBuilder()
+            .setMatch(mapToAMatch((MatchDto) modelKey.getModelKeyValue()))
+            .build();
+      default:
+        return ModelKey.newBuilder().build();
+    }
+  }
+
+  private WatchlistParty mapToWatchlistParty(WatchlistPartyDto watchlistParty) {
+    return WatchlistParty.newBuilder()
+        .setId(watchlistParty.getId())
+        .setType(watchlistParty.getType())
+        .build();
+  }
+
+  private AlertedParty mapToAlertedParty(AlertedPartyDto alertedParty) {
+    return AlertedParty.newBuilder()
+        .setId(alertedParty.getId())
+        .build();
+  }
+
+  private Match mapToAMatch(MatchDto match) {
+    return Match.newBuilder()
+        .setAlertedParty(mapToAlertedParty(match.getAlertedParty()))
+        .setWatchlistParty(mapToWatchlistParty(match.getWatchlistParty()))
+        .build();
+  }
+
+  private Discriminator mapToDiscriminator(String discriminator) {
+    return Discriminator.newBuilder().setValue(discriminator).build();
   }
 }

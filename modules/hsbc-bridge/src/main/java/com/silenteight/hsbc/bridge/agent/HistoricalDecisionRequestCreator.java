@@ -7,6 +7,7 @@ import com.silenteight.hsbc.bridge.json.external.model.CaseHistory;
 import com.silenteight.hsbc.bridge.json.external.model.CustomerEntity;
 import com.silenteight.hsbc.bridge.json.external.model.CustomerIndividual;
 import com.silenteight.hsbc.datasource.datamodel.WatchlistType;
+import com.silenteight.hsbc.datasource.feature.historical.HistoricalDecisionsQuery;
 import com.silenteight.proto.learningstore.historicaldecision.v1.api.*;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -42,6 +43,8 @@ class HistoricalDecisionRequestCreator {
         .setAlertedParty(createAlertedParty(alert))
         .setWatchlist(createWatchlist(alert))
         .addAllDecisions(mapDecisions(alert.getCaseHistory()))
+        .setDiscriminator(
+            Discriminator.newBuilder().setValue(HistoricalDecisionsQuery.DISCRIMINATOR).build())
         .build();
   }
 

@@ -1,10 +1,12 @@
 package com.silenteight.hsbc.datasource.extractors.historical;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
+import com.silenteight.hsbc.datasource.dto.historical.ModelKeyDto;
+import com.silenteight.hsbc.datasource.dto.historical.WatchlistPartyDto;
 
 abstract class HistoricalDecisionsRequestCreator {
 
-  abstract GetHistoricalDecisionsRequestDto createRequest();
+  abstract ModelKeyDto create();
 
   protected static WatchlistPartyDto getWatchlist(MatchData matchData) {
     var build = WatchlistPartyDto.builder();

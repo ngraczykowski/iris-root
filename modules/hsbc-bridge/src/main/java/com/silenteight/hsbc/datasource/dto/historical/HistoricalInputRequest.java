@@ -6,8 +6,8 @@ import lombok.Value;
 import java.util.Collections;
 import java.util.List;
 
-@Builder
 @Value
+@Builder
 public class HistoricalInputRequest {
 
   @Builder.Default

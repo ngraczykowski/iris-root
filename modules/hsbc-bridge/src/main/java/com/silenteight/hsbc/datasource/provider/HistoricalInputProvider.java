@@ -8,23 +8,20 @@ import com.silenteight.hsbc.bridge.match.MatchFacade;
 import com.silenteight.hsbc.datasource.common.DataSourceInputCommand;
 import com.silenteight.hsbc.datasource.common.DataSourceInputProvider;
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
-import com.silenteight.hsbc.datasource.dto.historical.HistoricalFeatureInputDto;
+import com.silenteight.hsbc.datasource.dto.historical.HistoricalDecisionsFeatureInputDto;
+import com.silenteight.hsbc.datasource.dto.historical.HistoricalDecisionsInputDto;
 import com.silenteight.hsbc.datasource.dto.historical.HistoricalInputResponse;
-import com.silenteight.hsbc.datasource.dto.historical.HistoricalSolutionInputDto;
-import com.silenteight.hsbc.datasource.extractors.historical.HistoricalDecisionsServiceClient;
 import com.silenteight.hsbc.datasource.feature.Feature;
-import com.silenteight.hsbc.datasource.feature.HistoricalFeatureClientValuesRetriever;
+import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
-class HistoricalInputProvider
-    implements DataSourceInputProvider<HistoricalInputResponse> {
+class HistoricalInputProvider implements DataSourceInputProvider<HistoricalInputResponse> {
 
   @Getter
   private final MatchFacade matchFacade;
-  private final HistoricalDecisionsServiceClient serviceClient;
 
   @Override
   public HistoricalInputResponse toResponse(DataSourceInputCommand command) {
@@ -36,22 +33,21 @@ class HistoricalInputProvider
         .build();
   }
 
-  private List<HistoricalSolutionInputDto> getInputs(
+  private List<HistoricalDecisionsInputDto> getInputs(
       List<MatchComposite> matches, List<String> features) {
     return matches.stream()
-        .map(match -> HistoricalSolutionInputDto.builder()
+        .map(match -> HistoricalDecisionsInputDto.builder()
             .match(match.getName())
             .features(getFeatureInputs(features, match.getMatchData()))
             .build())
         .collect(Collectors.toList());
   }
 
-  private List<HistoricalFeatureInputDto> getFeatureInputs(
+  private List<HistoricalDecisionsFeatureInputDto> getFeatureInputs(
       List<String> features, MatchData matchData) {
     return features.stream()
-        .map(featureName -> (HistoricalFeatureInputDto)
-            ((HistoricalFeatureClientValuesRetriever) getFeatureRetriever(featureName))
-                .retrieve(matchData, serviceClient))
+        .map(featureName -> (HistoricalDecisionsFeatureInputDto)
+            ((FeatureValuesRetriever) getFeatureRetriever(featureName)).retrieve(matchData))
         .collect(Collectors.toList());
   }
 

@@ -6,8 +6,8 @@ ext {
   //***********************************
   adjudicationEngineApiVersion = "0.6.0"
   governanceModelApiVersion = "1.9.0"
-  silenteightLearningEngineApiVersion = "0.3.0"
-  silenteightDataSourceApiVersion = "0.16.0"
+  silenteightLearningEngineApiVersion = "0.5.0"
+  silenteightDataSourceApiVersion = "0.18.0"
   warehouseApiVersion = "1.6.0"
   worldCheckApiVersion = "0.4.0"
   historicalDecisionsApiVersion = "0.2.0"
@@ -86,6 +86,7 @@ libraries.classgraph = [group: 'io.github.classgraph', name: 'classgraph', versi
 libraries.commons_compress = [group: 'org.apache.commons', name: 'commons-compress', version: '1.20']
 libraries.commons_lang3 = [group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0']
 libraries.commons_validator = [group: 'commons-validator', name: 'commons-validator', version: '1.7']
+libraries.commons_collections = [group: 'org.apache.commons', name: 'commons-collections4', version: '4.4']
 libraries.io_utils = [group: 'commons-io', name: 'commons-io', version: '2.8.0']
 libraries.jetbrains_annotations = [group: 'org.jetbrains', name: 'annotations', version: '20.1.0']
 libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
@@ -148,6 +149,7 @@ dependencies {
   implementation libraries.commons_compress
   implementation libraries.commons_lang3
   implementation libraries.commons_validator
+  implementation libraries.commons_collections
   implementation libraries.data_source_api
   implementation libraries.data_source_categories_api
   implementation libraries.data_source_comments_api

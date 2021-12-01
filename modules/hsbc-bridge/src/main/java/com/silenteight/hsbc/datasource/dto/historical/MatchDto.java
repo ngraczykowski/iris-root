@@ -1,9 +1,9 @@
-package com.silenteight.hsbc.datasource.extractors.historical;
+package com.silenteight.hsbc.datasource.dto.historical;
 
 import lombok.Builder;
 import lombok.Value;
 
-import com.silenteight.hsbc.datasource.extractors.historical.ModelKeyDto.ModelKeyValue;
+import com.silenteight.hsbc.datasource.dto.historical.ModelKeyDto.ModelKeyValue;
 
 @Value
 @Builder

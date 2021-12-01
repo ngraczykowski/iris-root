@@ -4,40 +4,39 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.hsbc.datasource.datamodel.MatchData;
-import com.silenteight.hsbc.datasource.dto.historical.HistoricalFeatureInputDto;
-import com.silenteight.hsbc.datasource.extractors.historical.HistoricalDecisionsServiceClient;
+import com.silenteight.hsbc.datasource.dto.historical.HistoricalDecisionsFeatureInputDto;
 import com.silenteight.hsbc.datasource.feature.Feature;
-import com.silenteight.hsbc.datasource.feature.HistoricalFeatureClientValuesRetriever;
+import com.silenteight.hsbc.datasource.feature.FeatureValuesRetriever;
 
 @Slf4j
 @RequiredArgsConstructor
 public class HistoricalIsApTpMarkedFeature
-    implements HistoricalFeatureClientValuesRetriever<HistoricalFeatureInputDto> {
+    implements FeatureValuesRetriever<HistoricalDecisionsFeatureInputDto> {
 
   private final HistoricalDecisionsQuery.Factory queryFactory;
 
   @Override
-  public HistoricalFeatureInputDto retrieve(
-      MatchData matchData, HistoricalDecisionsServiceClient historicalDecisionsServiceClient) {
+  public HistoricalDecisionsFeatureInputDto retrieve(MatchData matchData) {
 
     log.debug("Datasource start retrieve data for {} feature.", getFeature());
 
-    var query = queryFactory.create(matchData, historicalDecisionsServiceClient);
-    var inputBuilder = HistoricalFeatureInputDto.builder();
+    var query = queryFactory.create(matchData);
+    var inputBuilder = HistoricalDecisionsFeatureInputDto.builder();
 
-    var response = query.getIsApTpMarkedInput().stream().findFirst();
+    var modelKeyDto = query.getIsApTpMarkedInput();
 
-    response.ifPresent(e -> inputBuilder
-        .truePositiveCount(e.getTruePositivesCount())
-        .modelKeyType(e.getModelKey().getModelKeyType())
+    modelKeyDto.ifPresent(modelKey -> inputBuilder
+        .modelKey(modelKey)
+        .discriminator(HistoricalDecisionsQuery.DISCRIMINATOR)
     );
 
     var result = inputBuilder.feature(getFeatureName()).build();
 
     log.debug(
-        "Datasource response for feature: {} with reason size {}.",
+        "Datasource response for feature: {} with modelKeyType {} and discriminator {}.",
         result.getFeature(),
-        result.getReason().size());
+        result.getModelKey().getModelKeyType(),
+        result.getDiscriminator());
 
     return result;
   }
