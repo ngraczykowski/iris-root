@@ -5,6 +5,7 @@ import com.silenteight.simulator.dataset.DatasetModule;
 import com.silenteight.simulator.management.ManagementModule;
 import com.silenteight.simulator.management.create.AnalysisService;
 import com.silenteight.simulator.management.create.TestAnalysisService;
+import com.silenteight.simulator.management.progress.IndexedAlertProvider;
 
 import io.grpc.Channel;
 import org.mockito.Mockito;
@@ -37,5 +38,10 @@ class SimulationTestConfiguration {
   @Bean
   AnalysisService analysisService() {
     return new TestAnalysisService();
+  }
+
+  @Bean
+  IndexedAlertProvider indexedAlertProvider() {
+    return Mockito.mock(IndexedAlertProvider.class);
   }
 }

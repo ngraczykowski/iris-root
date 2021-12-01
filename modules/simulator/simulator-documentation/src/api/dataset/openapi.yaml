@@ -14,16 +14,9 @@ servers:
 
 
 paths:
-  /datasets?state={state}:
+  /datasets:
     get:
       description: Returns a list of datasets
-      parameters:
-        - in: query
-          name: state
-          required: false
-          description: 'Dataset state'
-          schema:
-            $ref: '#/components/schemas/DatasetState'
       responses:
         200:
           description: List of datasets
@@ -33,8 +26,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Dataset'
-
-  /datasets:
     post:
       description: Create a new dataset
       requestBody:
@@ -46,6 +37,21 @@ paths:
         201:
           description: Created
 
+  /datasetets/{datasetId}:
+    get:
+      description: Dataset with specific id
+
+  /datasets/{id}:archive:
+    post:
+      description: Archive a dataset
+      parameters:
+        - in: query
+          name: id
+          required: true
+          description: 'Dataset id'
+      responses:
+        202:
+          description: Ok
 
 components:
   schemas:

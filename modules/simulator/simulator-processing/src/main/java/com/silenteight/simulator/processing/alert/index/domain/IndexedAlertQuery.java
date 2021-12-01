@@ -4,16 +4,19 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.simulator.management.progress.IndexedAlertProvider;
 import com.silenteight.simulator.processing.alert.index.domain.exception.IndexedAlertEntityNotFoundException;
 import com.silenteight.simulator.processing.alert.index.dto.IndexedAlertDto;
 
 import java.util.List;
 
+import static com.silenteight.simulator.processing.alert.index.domain.State.ACKED;
 import static java.util.stream.Collectors.toList;
+import static org.testcontainers.shaded.com.google.common.collect.ImmutableList.of;
 
 @Slf4j
 @RequiredArgsConstructor
-public class IndexedAlertQuery {
+public class IndexedAlertQuery implements IndexedAlertProvider {
 
   @NonNull
   private final IndexedAlertRepository repository;
@@ -51,9 +54,15 @@ public class IndexedAlertQuery {
     return repository.countAllByAnalysisNameAndStateIn(analysisName, states);
   }
 
-  public long sumAllAlertsCountWithAnalysisName(@NonNull String analysisName) {
-    log.debug("Summing all alerts with analysisName={}", analysisName);
+  @Override
+  public long getAllIndexedAlertsCount(@NonNull String analysisName) {
+    return sumAllAlertsCountWithAnalysisName(analysisName, of(ACKED));
+  }
 
-    return repository.sumAllAlertsCountWithAnalysisName(analysisName);
+  long sumAllAlertsCountWithAnalysisName(
+      @NonNull String analysisName, @NonNull List<State> states) {
+
+    log.debug("Summing all alerts with analysisName={} and states{}", analysisName, states);
+    return repository.sumAllAlertsCountWithAnalysisName(analysisName, states);
   }
 }

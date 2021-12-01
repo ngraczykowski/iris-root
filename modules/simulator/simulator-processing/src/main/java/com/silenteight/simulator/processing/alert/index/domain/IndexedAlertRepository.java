@@ -24,8 +24,9 @@ interface IndexedAlertRepository extends Repository<IndexedAlertEntity, Long> {
       + " WHERE s.request_id = :requestId", nativeQuery = true)
   Optional<String> findAnalysisNameUsingRequestId(String requestId);
 
-  @Query(value = "SELECT SUM(s.alert_count)"
-      + " FROM simulator_indexed_alert s"
-      + " WHERE s.analysis_name = :analysisName", nativeQuery = true)
-  long sumAllAlertsCountWithAnalysisName(String analysisName);
+  @Query(value = "SELECT SUM(s.alertCount)"
+      + " FROM IndexedAlertEntity s"
+      + " WHERE s.analysisName = :analysisName"
+      + " AND s.state IN :states")
+  long sumAllAlertsCountWithAnalysisName(String analysisName,Collection<State> states);
 }

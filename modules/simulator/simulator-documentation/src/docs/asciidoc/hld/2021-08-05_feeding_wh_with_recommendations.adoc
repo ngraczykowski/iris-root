@@ -1,4 +1,4 @@
-= HLD #26
+= HLD #3
 
 - Reference ticket: https://silent8.atlassian.net/browse/WEB-1317
 - Reason: Feed Warehouse with data: alerts recommendations (+ metadata) created during the simulation

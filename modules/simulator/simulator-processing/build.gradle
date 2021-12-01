@@ -31,6 +31,7 @@ dependencies {
 
   implementation libraries.spring_boot_starter_web
   implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_security_web
   implementation libraries.silenteight_sep_base_testing
   implementation libraries.commons_lang3
 
@@ -43,5 +44,6 @@ dependencies {
 
   testImplementation project(":simulator-common-web-testing")
 
+  testImplementation libraries.rest_assured_spring_mock_mvc
   testImplementation libraries.silenteight_sep_base_testing
 }
