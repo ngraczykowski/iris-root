@@ -33,8 +33,12 @@ SPLIT_AND_LEAVE_CHARS_REGEX = re.compile(r"((?<=\w{3})\.|\.(?=\w{3}))")
 TOO_LONG_NUMBER_REGEX = re.compile(r"\d{4,}")
 
 
+def alpha_char_count(text: str) -> int:
+    return sum([1 for char in text if char.isalpha()])
+
+
 def clear_freetext(text: str) -> str:
-    text = remove_too_long_numbers(clear_name(text))
+    text = remove_too_long_numbers(text)
     text = text.replace(" is ", " ")  # hacky trick to avoid 'is' as a legal
     return text
 

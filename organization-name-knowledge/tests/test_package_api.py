@@ -203,6 +203,54 @@ def test_parse_name_base(name, expected_base):
                 )
             ],
         ),
+        (
+            "ABC\nDEF Company",
+            [
+                {"base": "ABC DEF", "legal": "Company", "source": "ABC DEF Company"},
+                {"base": "DEF", "legal": "Company", "source": "DEF Company"},
+            ],
+        ),
+        (
+            "ABC\nCompany",
+            [
+                {"base": "ABC", "legal": "Company", "source": "ABC Company"},
+            ],
+        ),
+        (
+            "Allianz Global Corporation\n",
+            [
+                {
+                    "base": "Allianz",
+                    "legal": "Corporation",
+                    "source": "Allianz Global Corporation",
+                },
+                {"base": "Global", "legal": "Corporation", "source": "Global Corporation"},
+            ],
+        ),
+        (
+            "SIMECONDUCTOR MANUFACTURING\nINTERNATIONAL(SHANGHAI)CORPORATION\n19 ZHANGIJANG"
+            " ROAD,PUDONG NEW \nAREA,SHANGHAI,CHINA 123456",
+            [
+                {
+                    "base": "INTERNATIONAL SHANGHAI",
+                    "legal": "CORPORATION",
+                    "source": "INTERNATIONAL SHANGHAI CORPORATION",
+                },
+                {
+                    "base": "MANUFACTURING INTERNATIONAL SHANGHAI",
+                    "legal": "CORPORATION",
+                    "source": "MANUFACTURING INTERNATIONAL SHANGHAI CORPORATION",
+                },
+                {"base": "SHANGHAI", "legal": "CORPORATION", "source": "SHANGHAI CORPORATION"},
+            ],
+        ),
+        (
+            "/1234\r\n1/LLC VTB DC\r\n2/ABC BLDG, 12, ABC RD\r\n3/RU/MOSCOW\n",
+            [
+                {"base": "LLC VTB", "legal": "LLC", "source": "LLC VTB"},
+                {"base": "LLC VTB DC", "legal": "LLC", "source": "LLC VTB DC"},
+            ],
+        ),
     ],
 )
 def test_parse_freetext(freetext, expected_names):

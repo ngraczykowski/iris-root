@@ -1,6 +1,5 @@
 import pytest
 
-from organization_name_knowledge.utils.term_variants import get_term_variants
 from organization_name_knowledge.utils.text import (
     clear_name,
     contains_conjunction,
@@ -11,6 +10,7 @@ from organization_name_knowledge.utils.text import (
     starts_with_conjunction,
     starts_with_preposition,
 )
+from organization_name_knowledge.utils.variants import get_term_variants, get_text_variants
 
 
 @pytest.mark.parametrize(
@@ -74,6 +74,22 @@ def test_divide(name, expected):
 )
 def test_get_term_variants(term, expected_variants):
     assert get_term_variants(term) == expected_variants
+
+
+@pytest.mark.parametrize(
+    "text, expected_variants",
+    [
+        ("Silent Eight Pte Ltd", {"Silent Eight Pte Ltd"}),
+        ("ABC, CDE", {"ABC, CDE", "ABC", "CDE"}),
+        ("ABC\nCDE", {"ABC\nCDE", "ABC", "CDE"}),
+        (
+            "Barbakan (Poland) Limited",
+            {"Barbakan (Poland) Limited", "Barbakan  Poland  Limited", "Barbakan  Limited"},
+        ),
+    ],
+)
+def test_get_text_variants(text, expected_variants):
+    assert get_text_variants(text) == expected_variants
 
 
 @pytest.mark.parametrize(
