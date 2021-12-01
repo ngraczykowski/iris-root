@@ -1,5 +1,7 @@
 @Library('pipeline-shared-library@master') _
 
+def git = new com.silenteight.jenkins.ci.Git()
+
 gradleBuild(
   jdkVersion: 'jdk-11',
   sonarEnabled: true,
@@ -18,7 +20,7 @@ gradleBuild(
           stash includes: '**', name: 'helm'
         }
         // FIXME(ahaczewski): Use `when` if possible.
-        if (utils.getGitBranch() == 'master') {
+        if (git.getGitBranch() == 'master' || git.buildingReleaseBranch()) {
           def gradle = new com.silenteight.jenkins.ci.Gradle()
           gradle.gradle('jib')
         } else {
@@ -40,7 +42,7 @@ gradleBuild(
           unstash 'helm'
         }
         script {
-          if (utils.getGitBranch() == 'master') {
+          if (git.getGitBranch() == 'master' || git.buildingReleaseBranch()) {
             echo 'Helm Chart version'
             sh './scripts/helm-chart-build.sh'
           } else {
@@ -63,7 +65,7 @@ gradleBuild(
           unstash 'helm'
         }
         script {
-          if (utils.getGitBranch() == 'master') {
+          if (git.getGitBranch() == 'master' || git.buildingReleaseBranch()) {
             echo 'AWS image push'
             sh './scripts/aws-deploy.sh'
           } else {
