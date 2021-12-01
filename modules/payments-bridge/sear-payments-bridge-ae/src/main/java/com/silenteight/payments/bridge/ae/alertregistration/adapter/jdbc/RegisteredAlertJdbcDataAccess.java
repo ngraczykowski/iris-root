@@ -8,6 +8,9 @@ import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlert
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.UUID;
+
 @Repository
 @RequiredArgsConstructor
 class RegisteredAlertJdbcDataAccess implements RegisteredAlertDataAccessPort {
@@ -17,6 +20,8 @@ class RegisteredAlertJdbcDataAccess implements RegisteredAlertDataAccessPort {
   private final SelectRegisteredAlertQuery selectRegisteredAlertQuery;
 
   private final InsertMatchQuery insertMatchQuery;
+
+  private final DeleteRegisteredAlertQuery deleteRegisteredAlertQuery;
 
   @Override
   @Transactional
@@ -28,5 +33,11 @@ class RegisteredAlertJdbcDataAccess implements RegisteredAlertDataAccessPort {
   @Override
   public String getAlertId(String alertName) {
     return selectRegisteredAlertQuery.execute(alertName);
+  }
+
+  @Override
+  @Transactional
+  public List<UUID> delete(List<String> alertNames) {
+    return deleteRegisteredAlertQuery.execute(alertNames);
   }
 }

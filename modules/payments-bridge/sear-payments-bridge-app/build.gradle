@@ -109,6 +109,9 @@ dependencies {
   // Warehouse API
   implementation libraries.warehouse_data_api
 
+  //Retention
+  implementation libraries.data_retention_api
+
   //  Testing
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.adjudication_engine_api

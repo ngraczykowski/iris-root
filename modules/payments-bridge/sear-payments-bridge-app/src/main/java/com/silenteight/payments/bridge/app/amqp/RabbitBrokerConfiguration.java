@@ -42,6 +42,12 @@ class RabbitBrokerConfiguration {
     var bridgeModelPromotedProductionBinding = bind(
         bridgeModelPromotedProductionQueue, GOV_EVENT_EXCHANGE, "event.model-in-use.production");
 
+    var bridgeRetentionQueue =
+        queue(DATA_RETENTION_QUEUE_NAME).build();
+    var bridgeRetentionBinding = bind(
+        bridgeRetentionQueue, DATA_RETENTION_EXCHANGE_NAME,
+        DATA_RETENTION_ALERT_EXPIRED_ROUTING_KEY);
+
     var responseCompletedQueue = queue(FIRCO_RESPONSE_QUEUE_NAME)
         .withArgument("x-dead-letter-exchange", DEAD_LETTER_EXCHANGE)
         .maxPriority(10).build();
@@ -56,7 +62,8 @@ class RabbitBrokerConfiguration {
         deadLetterQueue, deadLetterBinding,
         bridgeRecommendationsQueue, bridgeRecommendationsBinding,
         bridgeModelPromotedProductionQueue, bridgeModelPromotedProductionBinding,
-        responseCompletedQueue, responseCompletedBinding);
+        responseCompletedQueue, responseCompletedBinding,
+        bridgeRetentionQueue, bridgeRetentionBinding);
   }
 
   private static QueueBuilder queue(String queueName) {

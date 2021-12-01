@@ -19,6 +19,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
     InsertRegisteredAlertQuery.class,
     SelectRegisteredAlertQuery.class,
     InsertMatchQuery.class,
+    DeleteRegisteredAlertQuery.class
 })
 class RegisterMatchJdbcDataAccessIT extends BaseJdbcTest {
 

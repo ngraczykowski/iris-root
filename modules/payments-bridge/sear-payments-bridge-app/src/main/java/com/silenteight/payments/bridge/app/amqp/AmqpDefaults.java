@@ -27,6 +27,8 @@ public class AmqpDefaults {
 
   public static final String DATA_RETENTION_EXCHANGE_NAME = "bridge.retention";
 
+  public static final String DATA_RETENTION_QUEUE_NAME = "bridge.retention.alert";
+
   public static final String DATA_RETENTION_PERSONAL_INFORMATION_EXPIRED_ROUTING_KEY =
       "retention.personal-information-expired";
 

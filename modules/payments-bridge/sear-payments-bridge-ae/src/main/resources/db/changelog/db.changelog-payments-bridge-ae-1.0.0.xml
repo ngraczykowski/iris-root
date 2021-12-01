@@ -99,4 +99,18 @@
                              referencedTableName="pb_registered_alert"
                              referencedColumnNames="alert_message_id"/>
   </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.0.0_12" author="jgajewski">
+
+    <dropForeignKeyConstraint baseTableName="pb_registered_match"
+                              constraintName="fk_pb_registered_match_alert_message_id"/>
+
+    <addForeignKeyConstraint baseTableName="pb_registered_match"
+                             baseColumnNames="alert_message_id"
+                             constraintName="fk_pb_registered_match_alert_message_id"
+                             referencedTableName="pb_registered_alert"
+                             referencedColumnNames="alert_message_id"
+                             onDelete="CASCADE"/>
+  </changeSet>
+
 </databaseChangeLog>

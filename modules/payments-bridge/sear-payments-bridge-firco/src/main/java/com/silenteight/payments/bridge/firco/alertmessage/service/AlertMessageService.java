@@ -1,15 +1,19 @@
 package com.silenteight.payments.bridge.firco.alertmessage.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
 import com.silenteight.sep.base.common.exception.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 class AlertMessageService implements AlertMessageUseCase {
@@ -34,6 +38,19 @@ class AlertMessageService implements AlertMessageUseCase {
         .userLogin(entity.getUserLogin())
         .userPassword(entity.getUserPassword())
         .build();
+  }
+
+  @Override
+  @Transactional
+  public void delete(List<UUID> alertMessageIds) {
+
+    log.info("Deleting alert message: alertsCount={}, alerts={}",
+        alertMessageIds.size(), alertMessageIds);
+
+    int alertMessagesDeletedCount = alertMessageRepository.deleteAllByIdIn(alertMessageIds);
+
+    log.info("Alert message removed, count={}", alertMessagesDeletedCount);
+
   }
 
 }
