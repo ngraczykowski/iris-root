@@ -1,0 +1,26 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.registration.internal.proto.v1;
+
+import "google/api/field_behavior.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "RegistrationMessageProto";
+option java_package = "com.silenteight.registration.internal.proto.v1";
+
+message MessageAlertMatchesFeatureInputFed {
+  string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string alert_id = 2 [(google.api.field_behavior) = REQUIRED];
+  repeated FedMatch fed_matches = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message FedMatch {
+  string match_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message MessageBatchCompleted {
+  string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string alert_ids = 2 [(google.api.field_behavior) = REQUIRED];
+}

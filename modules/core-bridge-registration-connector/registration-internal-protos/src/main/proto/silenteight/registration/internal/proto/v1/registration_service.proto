@@ -1,0 +1,82 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.registration.internal.proto.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+
+option java_package = "com.silenteight.registration.internal.proto.v1";
+option java_outer_classname = "RegistrationServiceProto";
+option java_multiple_files = true;
+
+service RegistrationService {
+
+  rpc RegisterBatch (RegisterBatchRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/registration:registerBatch"
+      body: "registerBatch"
+    };
+  }
+
+  rpc NotifyBatchError (NotifyBatchErrorRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/registration:notifyBatchError"
+      body: "notifyBatchError"
+    };
+  }
+
+  rpc RegisterAlertsAndMatches (RegisterAlertsAndMatchesRequest) returns (RegisterAlertsAndMatchesResponse) {
+    option (google.api.http) = {
+      post: "/v1/registration:registerAlertsAndMatches"
+      body: "registerAlertsAndMatches"
+    };
+  }
+}
+
+message RegisterBatchRequest {
+  string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
+  int64 alert_count = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message NotifyBatchErrorRequest {
+  string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RegisterAlertsAndMatchesRequest {
+  string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated AlertWithMatches alerts_with_matches = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message AlertWithMatches {
+  string alert_id = 1 [(google.api.field_behavior) = REQUIRED];
+  AlertStatus status = 2 [(google.api.field_behavior) = REQUIRED];
+  repeated Match matches = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+enum AlertStatus {
+  UNSPECIFIED = 0;
+  FAILURE = 1;
+  SUCCESS = 2;
+}
+
+message Match {
+  string match_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RegisterAlertsAndMatchesResponse {
+  repeated RegisteredAlertWithMatches registered_alerts_with_matches = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RegisteredAlertWithMatches {
+  string alert_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string alert_name = 2 [(google.api.field_behavior) = REQUIRED];
+  repeated RegisteredMatch registered_matches = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RegisteredMatch {
+  string match_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string match_name = 2 [(google.api.field_behavior) = REQUIRED];
+}

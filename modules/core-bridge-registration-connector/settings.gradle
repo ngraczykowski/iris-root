@@ -1,0 +1,4 @@
+rootProject.name = 'core-bridge-registration-connector'
+
+include('registration-lib')
+include('registration-internal-protos')
