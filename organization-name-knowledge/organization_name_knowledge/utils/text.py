@@ -25,11 +25,13 @@ SEPARATE_BY_CHARS = [
     "|",
     ":",
 ]
-REMOVE_CHARS = ".()\"'`;!?@$#^~*%[]{}<>"
 
+REMOVE_CHARS = ".()\"'`;!?@$#^~*%[]{}<>"
 REMOVE_CHARS_REGEX = re.compile(fr"[{re.escape(REMOVE_CHARS)}]")
+
 SPLIT_CHARS_REGEX = re.compile(r"|".join(fr"({re.escape(c)})" for c in SEPARATE_BY_CHARS))
 SPLIT_AND_LEAVE_CHARS_REGEX = re.compile(r"((?<=\w{3})\.|\.(?=\w{3}))")
+
 TOO_LONG_NUMBER_REGEX = re.compile(r"\d{4,}")
 
 
@@ -38,9 +40,8 @@ def alpha_char_count(text: str) -> int:
 
 
 def clear_freetext(text: str) -> str:
-    text = remove_too_long_numbers(text)
     text = text.replace(" is ", " ")  # hacky trick to avoid 'is' as a legal
-    return text
+    return text.lower()
 
 
 def clear_name(name: str) -> str:

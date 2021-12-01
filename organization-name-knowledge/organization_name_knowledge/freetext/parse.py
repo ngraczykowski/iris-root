@@ -26,7 +26,7 @@ def parse_freetext_names(
 
     for freetext_variant in get_text_variants(freetext):
 
-        freetext_variant = clear_freetext(freetext_variant).lower()
+        freetext_variant = clear_freetext(freetext_variant)
         tokens = freetext_variant.split()
 
         substrings = [
