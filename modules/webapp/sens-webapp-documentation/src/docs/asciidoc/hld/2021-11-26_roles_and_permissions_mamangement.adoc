@@ -1,0 +1,140 @@
+= HLD #27
+
+- Reference ticket: TBA
+- Reason: We want to allow clients to manipulate roles and permissions on their own.
+
+== Problem
+
+. We have many services, and we will have at least a few more with endpoints for the front end.
+. Clients have different roles defined in their organizations and want to map them to our roles.
+.. We want to allow users to manipulate roles and assign permissions on their own
+. Permission (eg. single page, or part of the screen with some values) may need to fetch data from multiple endpoints from multiple services.
+. During the implementation process we need to set up and connect endpoints with permissions, and then permissions with roles.
+.. Developers need to think about it and maintain this (react to business requests).
+
+== Roles and Permissions management
+[plantuml,roles-and-permissions-management,svg]
+-----
+@startuml
+header Roles and Permissions management
+
+actor "Client's User" as u
+actor "S8 User" as s8
+participant WebApp as wa
+queue RabbitMQ as r
+participant "SepAuth in Microservices" as ms
+participant Keycloak as k
+
+ms -> ms : Service starts
+ms -> r : Sends info about service name and \nall available endpoints (with descriptions)
+note over r, ms
+{
+  "service": "simulator",
+  "endpoints": [
+    {
+      "name": "VIEW_SIMULATION_PROGRESS",
+      "description": "Returns a progress of the simulation"
+    },
+    {
+      "name": "VIEW_SIMULATION",
+      "description": "..."
+    }
+  ]
+}
+end note
+r -> wa : Reads message
+wa -> wa : Compare endpoints from message \nwith the info already stored in database
+
+alt A new endpoint available
+wa -> wa : Store new endpoint in database
+wa -> r : Notification to present on a frontend for a user \nto add endpoint to any permission
+else An endpoint is missing
+wa -> wa : Remove endpoint from the database
+wa -> r : Notification to present on a frontend for a user \nto take a look at all permissions which contains this endpoint
+end
+
+r -> wa : Endpoints changed notification
+wa -> s8 : Take a look at the endpoints configuration
+s8 -> wa : Modify (CRUD) permissions based on endpoints
+note over s8, wa
+{
+  "permissions": [
+    {
+      "name": "MANAGE_SIMULATION",
+      "description": "This permission allows to Create, See and Archive Simulations",
+      "endpoints": [
+        {
+          "name": "VIEW_SIMULATION_PROGRESS"
+        },
+        {
+          "name": "VIEW_SIMULATION"
+        }
+      ]
+    }
+  ]
+}
+end note
+wa -> wa : Store permissions in database
+alt on-premise
+s8 -> wa : Export permissions (REST or gRPC)
+wa -> s8 : json file
+== Client's env ==
+s8 -> wa : Import json file during the installation process (migration)
+
+end
+wa -> r : Notification to present on a frontend
+
+...
+
+r -> wa : Permissions changed notification
+wa -> u : Take a look at the roles configuration
+u -> wa : Modify (CRUD) roles based on permissions
+note over u, wa
+{
+  "roles": [
+    {
+      "name": "BUSINESS OPERATOR",
+      "description": "This permission allows to Create, See and Archive Simulations",
+      "permissions": [
+        {
+          "name": "MANAGE_SIMULATION"
+        }
+      ]
+    }
+  ]
+}
+end note
+wa -> wa : Store roles in database
+wa -> k : Create/remove roles (remove role is available only when all users are disconnected from the role)
+note over wa, k
+We want to add the ability to connect AD Client's roles into the role client creates.
+We are checking the possibility right now, so we can't promise anything.
+end note
+wa -> r : Message with roles (which will be in user JWT token) \nand all endpoints to which role should have access
+
+r -> ms : Read the message with roles.
+ms -> ms : Store information how roles are mapped to endpoints.
+
+@enduml
+-----
+
+=== SepAuth
+
+Sep Auth is a library developed by the Bravo team to have a single lib to play with roles and permissions.
+You can find it here: https://gitlab.silenteight.com/sep/sep-auth
+
+=== WebApp
+
+This service keeps the configuration of roles and permissions.
+
+== Idea
+
+The idea is to move the responsibility from developers to clients and Product Owners.
+
+The developer needs to generate an endpoint and provide information for the SepAuth with the endpoint name and description (we will discuss later how to do this).
+Then the Product Owner can manipulate permissions: add/remove endpoints to have meaningful permissions which are in line with the frontend.
+Clients can manipulate roles: add/remove permissions to have roles in line with their organization's roles.
+Our SepAuth in each service will store the information on how endpoints and roles are connected, so when the user wants to fetch some data, the SepAuth will look at the user's roles and will authorize the request.
+
+As a side note to this, we want to try to allow users to connect their AD roles with the ones they create in our system directly on our front end.
+Same for roles as for geographic permissions.
