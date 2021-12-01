@@ -27,4 +27,9 @@ interface SimulationRepository extends Repository<SimulationEntity, Long> {
       + "   ON s.simulation_id = sdn.simulation_id"
       + " WHERE sdn.dataset_name IN :datasetNames", nativeQuery = true)
   Collection<String> findAllAnalysisNamesByDatasetNames(Collection<String> datasetNames);
+
+  @Query(value = "SELECT s.analysis_name"
+      + " FROM simulator_simulation s"
+      + " WHERE s.simulation_id = :simulationId", nativeQuery = true)
+  String findAnalysisNameBySimulationId(UUID simulationId);
 }

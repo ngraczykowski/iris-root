@@ -1,0 +1,28 @@
+= HLD #3
+
+- Reference ticket: https://silent8.atlassian.net/browse/WEB-1970
+- Reason: Feed frontend with progress during analysis running.
+
+Please take a look at xref:2021-08-05_feeding_wh_with_recommendations.adoc[Feedins WH with recommendations].
+
+== Feed frontend with progress data during analysis running
+[plantuml,feeding-wh,svg]
+-----
+@startuml
+header Feed WH with data created during the simulation
+
+participant "Frontend Client" as front
+participant Simulator as sim
+participant "Adjudication Engine" as ae
+database SimulatorDB as db
+autonumber
+
+front -> sim : Sends request for progress info
+sim -> ae : Fetch specific analysis data
+ae -> sim : AE sends analysis data
+sim -> db : Fetch an already indexed alerts count
+db -> sim : Alerts indexed count
+sim -> front : Sends data with progress info
+
+@enduml
+-----

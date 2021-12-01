@@ -82,6 +82,10 @@ public class SimulationService {
     log.debug("Saved as 'ARCHIVED' SimulationEntity={}", simulationEntity);
   }
 
+  public String getAnalysisNameBySimulationId(UUID simulationId) {
+    return repository.findAnalysisNameBySimulationId(simulationId);
+  }
+
   private SimulationEntity getBySimulationId(UUID simulationId) {
     return repository
         .findBySimulationId(simulationId)

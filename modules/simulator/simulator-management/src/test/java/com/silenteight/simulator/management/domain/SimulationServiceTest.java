@@ -153,6 +153,16 @@ class SimulationServiceTest extends BaseDataJpaTest {
         .hasMessageContaining("simulationId=" + ID);
   }
 
+  @Test
+  void shouldReturnAnalysisNameBySimulationId() {
+    //given
+    persistSimulation();
+
+    //when + then
+    String analysisNameBySimulationId = underTest.getAnalysisNameBySimulationId(ID);
+    assertThat(analysisNameBySimulationId).isEqualTo(ANALYSIS_NAME);
+  }
+
   private SimulationEntity persistSimulation() {
     return persistSimulation(PENDING_STATE);
   }
