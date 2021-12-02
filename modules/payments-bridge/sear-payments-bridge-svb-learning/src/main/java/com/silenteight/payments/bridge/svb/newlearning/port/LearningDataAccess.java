@@ -10,4 +10,6 @@ public interface LearningDataAccess {
   Optional<LearningFile> findLearningFileById(Long fileId);
 
   void updateFileStatus(Long fileId, CsvProcessingFileStatus status);
+
+  void removeDuplicates();
 }
