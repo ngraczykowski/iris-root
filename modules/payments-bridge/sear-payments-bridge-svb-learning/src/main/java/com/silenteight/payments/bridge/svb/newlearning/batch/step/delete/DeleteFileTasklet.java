@@ -28,6 +28,7 @@ public class DeleteFileTasklet implements Tasklet {
   public RepeatStatus execute(
       StepContribution contribution,
       ChunkContext chunkContext) {
+
     var fileId =
         contribution.getStepExecution().getJobParameters().getLong(FILE_ID_PARAMETER);
     log.info("Tasklet of deleting s3 file has been executed:{}", fileId);

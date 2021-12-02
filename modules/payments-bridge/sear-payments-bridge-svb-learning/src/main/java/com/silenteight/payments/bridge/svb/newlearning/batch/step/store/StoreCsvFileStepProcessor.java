@@ -10,7 +10,6 @@ import org.springframework.batch.item.ItemProcessor;
 class StoreCsvFileStepProcessor implements
     ItemProcessor<LearningCsvRowEntity, LearningCsvRowEntity> {
 
-  private final Long learningFileId;
   private final Long jobId;
 
   @Override
@@ -18,7 +17,6 @@ class StoreCsvFileStepProcessor implements
     if (log.isDebugEnabled()) {
       log.debug("Processing item id:{} systemId:{}", item.getFkcoId(), item.getFkcoVSystemId());
     }
-    item.setLearningfile(learningFileId);
     item.setJobId(jobId);
     return item;
   }

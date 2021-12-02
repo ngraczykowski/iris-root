@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobParameters.FILE_ID_PARAMETER;
 import static com.silenteight.payments.bridge.svb.newlearning.batch.step.delete.DeleteCsvFileTaskletConfiguration.DELETE_FILE_STEP;
 import static org.assertj.core.api.Assertions.*;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
 @Import({ TestApplicationConfiguration.class })
 @Sql
@@ -23,6 +24,8 @@ public class DeleteFileStepTest extends BaseBatchTest {
   private LearningCsvRowRepository repository;
 
   @Test
+  @Sql(scripts = "DeleteFileStepTest.sql")
+  @Sql(scripts = "TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public void shouldExecuteDeleteFileStep() {
     var jobParameters = new JobParametersBuilder()

@@ -28,11 +28,8 @@ public class LearningCsvRowEntity extends BaseEntity {
   @Column(name = "job_id")
   private Long jobId;
 
-  @Column(name = "learning_file_id")
-  private Long learningfile;
-
   @Column(name = "fkco_id")
-  private String fkcoId;
+  private Long fkcoId;
 
   @Column(name = "fkco_v_system_id")
   private String fkcoVSystemId;
@@ -119,7 +116,7 @@ public class LearningCsvRowEntity extends BaseEntity {
   private String fkcoITotalAction;
 
   @Column(name = "fkco_messages")
-  private String fkcoMessages;
+  private Long fkcoMessages;
 
   @Column(name = "fkco_b_highlight_hit")
   private String fkcoBHighlightHit;

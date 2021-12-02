@@ -3,6 +3,8 @@ package com.silenteight.payments.bridge.svb.newlearning.batch.step.store;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.svb.newlearning.batch.step.LoadCsvJobProperties;
+
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +16,7 @@ import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobP
 
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties(StoreCsvFileProperties.class)
+@EnableConfigurationProperties(LoadCsvJobProperties.class)
 @Slf4j
 class StoreCsvFileStepProcessorConfiguration {
 
@@ -26,6 +28,6 @@ class StoreCsvFileStepProcessorConfiguration {
         stepExecution.getJobParameters().getLong(FILE_ID_PARAMETER);
     var jobId = stepExecution.getJobExecution().getJobId();
     log.info("Executing step {} for file:{}", stepExecution.getStepName(), fileId);
-    return new StoreCsvFileStepProcessor(fileId, jobId);
+    return new StoreCsvFileStepProcessor(jobId);
   }
 }

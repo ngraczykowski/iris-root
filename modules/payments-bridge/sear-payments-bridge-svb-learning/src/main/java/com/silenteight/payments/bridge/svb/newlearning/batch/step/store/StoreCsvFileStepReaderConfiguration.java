@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
 import com.silenteight.payments.bridge.svb.newlearning.batch.exceptions.NoLearningFileFound;
+import com.silenteight.payments.bridge.svb.newlearning.batch.step.LoadCsvJobProperties;
 import com.silenteight.payments.bridge.svb.newlearning.domain.LearningFile;
 import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
 import com.silenteight.payments.bridge.svb.newlearning.port.LearningDataAccess;
@@ -31,11 +32,11 @@ import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobP
 
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties(StoreCsvFileProperties.class)
+@EnableConfigurationProperties(LoadCsvJobProperties.class)
 @Slf4j
 class StoreCsvFileStepReaderConfiguration {
 
-  private final StoreCsvFileProperties properties;
+  private final LoadCsvJobProperties properties;
   private final LearningDataAccess learningDataAccess;
   private final CsvFileResourceProvider csvFileResourceProvider;
 

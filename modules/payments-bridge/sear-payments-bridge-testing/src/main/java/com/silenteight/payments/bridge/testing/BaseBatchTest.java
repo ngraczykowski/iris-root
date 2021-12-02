@@ -7,6 +7,7 @@ import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBatchTest
 @Import(DefaultBatchConfigurerConfiguration.class)
@@ -15,4 +16,7 @@ public class BaseBatchTest extends PbBaseDataJpaTest {
 
   @Autowired
   protected JobLauncherTestUtils jobLauncherTestUtils;
+
+  @Autowired
+  protected JdbcTemplate jdbcTemplate;
 }

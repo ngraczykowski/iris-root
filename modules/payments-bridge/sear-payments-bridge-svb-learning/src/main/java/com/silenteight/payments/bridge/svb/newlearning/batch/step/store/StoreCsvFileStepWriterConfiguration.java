@@ -4,6 +4,8 @@ package com.silenteight.payments.bridge.svb.newlearning.batch.step.store;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.svb.newlearning.batch.step.LoadCsvJobProperties;
+
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +15,7 @@ import javax.persistence.EntityManagerFactory;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties(StoreCsvFileProperties.class)
+@EnableConfigurationProperties(LoadCsvJobProperties.class)
 @Slf4j
 class StoreCsvFileStepWriterConfiguration {
 
