@@ -346,4 +346,10 @@
       <column name="fkco_id"/>
     </createIndex>
   </changeSet>
+
+  <changeSet id="payments-bridge-svb-learning-1.4.8" author="wkeska">
+    <modifyDataType tableName="pb_learning_action"
+                    columnName="fkco_d_action_datetime"
+                    newDataType="TIMESTAMP"/>
+  </changeSet>
 </databaseChangeLog>

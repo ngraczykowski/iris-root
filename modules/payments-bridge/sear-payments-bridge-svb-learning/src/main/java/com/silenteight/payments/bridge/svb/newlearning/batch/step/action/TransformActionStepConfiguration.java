@@ -50,7 +50,8 @@ class TransformActionStepConfiguration {
       TransformReaderFactory readerFactory,
       @Value("#{stepExecution.jobExecution.jobId}") Long jobId) {
 
-    return readerFactory.createReader(LearningActionEntity.class, jobId, QUERY);
+    return readerFactory.createReader(
+        jobId, QUERY, new LearningActionRowMapper(properties.getTimeZone()));
   }
 
   @Bean
@@ -63,7 +64,6 @@ class TransformActionStepConfiguration {
         .writer(writerFactory.createJpaWriter())
         .build();
   }
-
 
 
 }

@@ -1,16 +1,15 @@
 package com.silenteight.payments.bridge.svb.newlearning.batch.step.action;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.time.OffsetDateTime;
 import javax.persistence.*;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PUBLIC;
 
 @Data
+@Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PUBLIC)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
@@ -32,7 +31,7 @@ public class LearningActionEntity {
   private String fkcoActionDate;
 
   @Column(name = "fkco_d_action_datetime")
-  private String fkcoDActionDatetime;
+  private OffsetDateTime fkcoDActionDatetime;
 
   @Column(name = "fkco_operator")
   private String fkcoOperator;
