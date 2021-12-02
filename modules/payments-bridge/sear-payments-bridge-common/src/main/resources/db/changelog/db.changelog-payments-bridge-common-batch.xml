@@ -150,13 +150,13 @@
                     cycle="false"/>
   </changeSet>
 
-  <changeSet id="payments-bridge-svb-learning-1.4.4" author="tbozek">
+  <changeSet id="payments-bridge-batch-1.0.0-7" author="tbozek">
     <addColumn tableName="pb_batch_step_execution">
       <column name="rollback_count" type="bigint"></column>
     </addColumn>
   </changeSet>
 
-  <changeSet id="payments-bridge-svb-learning-1.4.5" author="tbozek">
+  <changeSet id="payments-bridge-batch-1.0.0-8" author="tbozek">
     <renameColumn tableName="pb_batch_step_execution_context" oldColumnName="short_content"
                   newColumnName="short_context"/>
   </changeSet>
