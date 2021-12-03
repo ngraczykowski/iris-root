@@ -38,7 +38,9 @@ class AwsFileListProvider implements FileListPort {
     List<String> objectsNames;
     try {
       objectsNames = requestFilesNames(s3Client);
-      log.info("Received list of objects in s3 bucket = {}", objectsNames);
+      log.info(
+          "Received list of objects in s3 bucket: {},objects: {}", properties.getBucketName(),
+          objectsNames);
     } catch (Exception e) {
       log.error("There was a problem when receiving list of objects: ", e);
       throw new AwsS3Exception(e);
