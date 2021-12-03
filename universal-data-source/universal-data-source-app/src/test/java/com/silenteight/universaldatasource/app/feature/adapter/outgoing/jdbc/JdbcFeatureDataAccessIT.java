@@ -4,16 +4,16 @@ import com.silenteight.sep.base.testing.BaseJdbcTest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
-
-import java.util.List;
 
 import static com.silenteight.universaldatasource.common.resource.AlertName.getListOfAlerts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Sql("populate_feature_inputs.sql")
-@ContextConfiguration(classes = {
+@Sql(scripts = "truncate_feature_inputs.sql",
+    executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Import({
     JdbcFeatureDataAccess.class,
     StreamFeaturesQuery.class,
     FeatureDataAccessConfiguration.class,
@@ -29,7 +29,7 @@ class JdbcFeatureDataAccessIT extends BaseJdbcTest {
   @Test
   void shouldDeleteFeatureInputs() {
 
-    var alerts = getListOfAlerts(List.of(1, 2, 3, 4, 5));
+    var alerts = getListOfAlerts(1, 2, 3, 4, 5);
 
     assertEquals(5, featureDataAccess.delete(alerts));
     assertEquals(5, jdbcTemplate.queryForObject(

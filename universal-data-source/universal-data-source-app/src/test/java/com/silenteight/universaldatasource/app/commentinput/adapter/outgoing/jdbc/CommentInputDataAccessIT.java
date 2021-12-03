@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.List;
-
 import static com.silenteight.universaldatasource.common.resource.AlertName.getListOfAlerts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Sql({ "populate_comment_inputs.sql" })
+@Sql(scripts = "truncate_comment_inputs.sql",
+    executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @Import({
     JdbcCommentInputDataAccess.class,
     JdbcCommentInputConfiguration.class,
@@ -28,7 +28,7 @@ class CommentInputDataAccessIT extends BaseJdbcTest {
   @Test
   void shouldDeleteCommentInputs() {
 
-    var alerts = getListOfAlerts(List.of(1, 2, 3, 4, 5));
+    var alerts = getListOfAlerts(1, 2, 3, 4, 5);
 
     assertEquals(5, commentInputDataAccess.delete(alerts));
     assertEquals(5, jdbcTemplate.queryForObject(

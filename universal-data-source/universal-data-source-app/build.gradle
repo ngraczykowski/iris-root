@@ -67,6 +67,7 @@ dependencies {
   implementation libraries.spring_integration_amqp
   implementation libraries.spring_integration_core
   implementation libraries.spring_integration_http
+  implementation libraries.sear_rabbitmq_common_schema
 
   // GRPC
   implementation libraries.brave_instrumentation_grpc
@@ -86,6 +87,7 @@ dependencies {
   implementation libraries.data_source_agentinput_api
 
   implementation libraries.protobuf_java_util
+  implementation libraries.data_retention_api
 
   //  Testing
   testImplementation libraries.silenteight_sep_base_testing
@@ -125,6 +127,11 @@ jib {
         "UDS_DB_NAME"                  : "datasource",
         "UDS_DB_USERNAME"              : "datasource",
         "UDS_DB_PASSWORD"              : "datasource",
+        "SPRING_RABBITMQ_ADDRESSES"   : "rabbitmq",
+        "SPRING_RABBITMQ_PORT"        : "5672",
+        "SPRING_RABBITMQ_USERNAME"    : "dev",
+        "SPRING_RABBITMQ_PASSWORD"    : "dev",
+        "SPRING_RABBITMQ_VIRTUAL_HOST": "/",
         "SPRING_PROFILES_ACTIVE"      : "",
     ]
     jvmFlags = [

@@ -14,7 +14,6 @@ import com.silenteight.universaldatasource.app.UniversalDataSourceApplication;
 
 import io.grpc.StatusRuntimeException;
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -24,15 +23,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.time.Duration;
 import java.util.List;
 
-import static com.silenteight.universaldatasource.app.category.CategoryIntegrationTestFixture.getBatchCategories;
 import static com.silenteight.universaldatasource.app.category.CategoryIntegrationTestFixture.getBatchCategoryValueRequest;
 import static com.silenteight.universaldatasource.app.category.CategoryIntegrationTestFixture.getBatchCreateCategoryValuesRequest;
 import static com.silenteight.universaldatasource.app.category.CategoryIntegrationTestFixture.getCreateCategoryValuesRequest;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ContextConfiguration(initializers = { PostgresTestInitializer.class })
@@ -55,24 +51,16 @@ class CategoryIntegrationTest {
   @GrpcClient("uds")
   private CategoryValueServiceBlockingStub categoryValueServiceBlockingStub;
 
-  @BeforeEach
-  void setUp() {
-    categoryServiceBlockingStub.batchCreateCategories(getBatchCategories());
-  }
-
   @Test
-  @Sql(scripts = "truncate_categories.sql",
+  @Sql(scripts = "adapter/outgoing/jdbc/populate_categories.sql")
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_categories.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void testGettingCategories() {
-    await()
-        .atMost(Duration.ofSeconds(5))
-        .until(() -> streamedCategoriesCount(jdbcTemplate
-        ) > 0);
 
     var listCategoriesResponse =
         categoryServiceBlockingStub.listCategories(ListCategoriesRequest.getDefaultInstance());
 
-    assertThat(listCategoriesResponse.getCategoriesCount()).isEqualTo(3);
+    assertThat(listCategoriesResponse.getCategoriesCount()).isEqualTo(4);
     assertThat((int) listCategoriesResponse
         .getCategoriesList()
         .stream()
@@ -80,13 +68,14 @@ class CategoryIntegrationTest {
   }
 
   @Test
-  @Sql(scripts = "truncate_categories.sql",
+  @Sql(scripts = "adapter/outgoing/jdbc/populate_categories.sql")
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_categories.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void testCreateCategoryValues() {
 
     var categoryValues =
         categoryValueServiceBlockingStub.createCategoryValues(
-            getCreateCategoryValuesRequest("categoryOne"));
+            getCreateCategoryValuesRequest("categoryFour"));
 
     assertThat(categoryValues.getCreatedCategoryValuesCount()).isEqualTo(3);
     assertThat((int) categoryValues
@@ -96,44 +85,27 @@ class CategoryIntegrationTest {
   }
 
   @Test
-  @Sql(scripts = "truncate_categories.sql",
+  @Sql(scripts = { "adapter/outgoing/jdbc/populate_categories.sql", })
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_categories.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void testBatchCreateCategoryValues() {
-
-    addBatchCategoryValues("categoryThree");
-    addBatchCategoryValues("categoryThree");
 
     var batchGetMatchesCategoryValuesResponse =
         categoryValueServiceBlockingStub.batchGetMatchesCategoryValues(
             getBatchCategoryValueRequest());
 
-    assertThat(batchGetMatchesCategoryValuesResponse.getCategoryValuesCount()).isEqualTo(4);
+    assertThat(batchGetMatchesCategoryValuesResponse.getCategoryValuesCount()).isEqualTo(2);
     assertThat((int) batchGetMatchesCategoryValuesResponse
         .getCategoryValuesList()
         .stream()
-        .filter(c -> c.getMatch().equals("alerts/1/matches/1")).count()).isEqualTo(2);
-  }
-
-  private void addBatchCategoryValues(String category) {
-    var categoryValues =
-        categoryValueServiceBlockingStub.batchCreateCategoryValues(
-            getBatchCreateCategoryValuesRequest(category));
-
-    await()
-        .atMost(Duration.ofSeconds(5))
-        .until(() -> streamedCategoryValueCount(jdbcTemplate
-        ) > 0);
-
-    assertThat(categoryValues.getCreatedCategoryValuesCount()).isEqualTo(3);
+        .filter(c -> c.getMatch().equals("alerts/1/matches/1")).count()).isEqualTo(1);
   }
 
   @Test
-  @Sql(scripts = "truncate_categories.sql",
+  @Sql(scripts = "adapter/outgoing/jdbc/populate_categories.sql")
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_categories.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void testGettingCategoryValuesVersionOne() {
-
-    addBatchCategoryValues("categoryOne");
-    addBatchCategoryValues("categoryTwo");
 
     BatchGetMatchCategoryValuesResponse batchGetMatchCategoryValuesResponse =
         categoryServiceBlockingStubV1.batchGetMatchCategoryValues(
@@ -143,6 +115,7 @@ class CategoryIntegrationTest {
                     "categories/categoryTwo/alerts/2/matches/2"))
                 .build()
         );
+
     assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesCount()).isEqualTo(2);
 
     assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesList().stream()
@@ -160,11 +133,21 @@ class CategoryIntegrationTest {
   void testBatchCreateCategoryValuesToNonExistingCategories() {
     assertThrows(
         StatusRuntimeException.class,
-        () -> addBatchCategoryValues("Nonexistent category")
+        this::addInvalidCategoryValue
     );
   }
 
+  @SuppressWarnings("ResultOfMethodCallIgnored")
+  private void addInvalidCategoryValue() {
+    categoryValueServiceBlockingStub.batchCreateCategoryValues(
+        getBatchCreateCategoryValuesRequest("Nonexistent category"));
+  }
+
   @Test
+  @Sql(scripts = "adapter/outgoing/jdbc/populate_categories.sql")
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_categories.sql",
+      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @SuppressWarnings("ResultOfMethodCallIgnored")
   void testBatchCreateCategoryValuesWithNonExistingCategoryValue() {
 
     assertThrows(
@@ -185,17 +168,5 @@ class CategoryIntegrationTest {
                 .build()
         )
     );
-  }
-
-  static int streamedCategoriesCount(JdbcTemplate jdbcTemplate) {
-    return jdbcTemplate.queryForObject(
-        "SELECT COUNT(*)\n"
-            + "FROM uds_category;", Integer.class);
-  }
-
-  static int streamedCategoryValueCount(JdbcTemplate jdbcTemplate) {
-    return jdbcTemplate.queryForObject(
-        "SELECT COUNT(*)\n"
-            + "FROM uds_category_value;", Integer.class);
   }
 }

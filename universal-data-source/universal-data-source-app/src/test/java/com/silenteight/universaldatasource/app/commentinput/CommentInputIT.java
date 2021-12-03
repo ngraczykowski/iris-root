@@ -20,12 +20,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.time.Duration;
 import java.util.List;
 
 import static com.silenteight.universaldatasource.app.commentinput.CommentInputFixture.getBatchCommentInputRequest;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.awaitility.Awaitility.await;
 
 @ContextConfiguration(initializers = { PostgresTestInitializer.class })
 @SpringBootTest(
@@ -49,7 +47,7 @@ class CommentInputIT {
   private CommentInputServiceGrpc.CommentInputServiceBlockingStub commentInputServiceBlockingStubV1;
 
   @Test
-  @Sql(scripts = "truncate_comment_inputs.sql",
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_comment_inputs.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void testBatchCreateCommentInput() throws InvalidProtocolBufferException {
     var batchCreateCommentInputResponse =
@@ -64,14 +62,10 @@ class CommentInputIT {
   }
 
   @Test
-  @Sql(scripts = "truncate_comment_inputs.sql",
+  @Sql({ "adapter/outgoing/jdbc/populate_comment_inputs.sql" })
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_comment_inputs.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void testBatchGetCommentInputs() throws InvalidProtocolBufferException {
-    populateDbWithCommentInputs();
-
-    await()
-        .atMost(Duration.ofSeconds(5000))
-        .until(() -> generatedCommentInputsCount(jdbcTemplate) > 0);
 
     var request = BatchGetAlertsCommentInputsRequest.newBuilder()
         .addAllAlerts(List.of("alerts/1", "alerts/2", "alerts/3"))
@@ -95,15 +89,5 @@ class CommentInputIT {
         .filter(c -> c.getMatchCommentInputsCount() == 2)
         .filter(c -> c.getName().contains("comment-inputs/"))
         .count()).isEqualTo(1);
-  }
-
-  private void populateDbWithCommentInputs() throws InvalidProtocolBufferException {
-    commentInputServiceBlockingStub.batchCreateCommentInput(getBatchCommentInputRequest());
-  }
-
-  static int generatedCommentInputsCount(JdbcTemplate jdbcTemplate) {
-    return jdbcTemplate.queryForObject(
-        "SELECT COUNT(*)\n"
-            + "FROM uds_comment_input;", Integer.class);
   }
 }

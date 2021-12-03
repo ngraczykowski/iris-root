@@ -6,37 +6,6 @@ import java.util.List;
 
 class CategoryIntegrationTestFixture {
 
-  static BatchCreateCategoriesRequest getBatchCategories() {
-
-    var categoryOne = Category.newBuilder()
-        .setName("categories/categoryOne")
-        .setDisplayName("displayNameOne")
-        .setType(CategoryType.ANY_STRING)
-        .addAllAllowedValues(List.of("YES", "NO", "MAYBE"))
-        .setMultiValue(false)
-        .build();
-
-    var categoryTwo = Category.newBuilder()
-        .setName("categories/categoryTwo")
-        .setDisplayName("displayNameTwo")
-        .setType(CategoryType.ENUMERATED)
-        .addAllAllowedValues(List.of("YES", "NO"))
-        .setMultiValue(false)
-        .build();
-
-    var categoryThree = Category.newBuilder()
-        .setName("categories/categoryThree")
-        .setDisplayName("displayNameThree")
-        .setType(CategoryType.ENUMERATED)
-        .addAllAllowedValues(List.of("YES", "NO"))
-        .setMultiValue(false)
-        .build();
-
-    return BatchCreateCategoriesRequest.newBuilder()
-        .addAllCategories(List.of(categoryOne, categoryTwo, categoryThree))
-        .build();
-  }
-
   static BatchGetMatchesCategoryValuesRequest getBatchCategoryValueRequest() {
 
     var categoryMatch = CategoryMatches.newBuilder()

@@ -58,6 +58,17 @@ spring:
         max-size: 4
         queue-capacity: 1000
 
+
+  #-------------------------------------------------------------------------------------------------
+  # RABBITMQ
+  #-------------------------------------------------------------------------------------------------
+  rabbitmq:
+    host: localhost
+    port: 24160
+    username: dev
+    password: dev
+    virtual-host: /
+
 management:
   endpoint:
     health:

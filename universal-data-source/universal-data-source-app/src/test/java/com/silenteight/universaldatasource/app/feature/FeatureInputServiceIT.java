@@ -4,27 +4,21 @@ import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentI
 import com.silenteight.datasource.api.document.v1.DocumentInput;
 import com.silenteight.datasource.api.freetext.v1.BatchGetMatchFreeTextInputsRequest;
 import com.silenteight.datasource.api.freetext.v1.BatchGetMatchFreeTextInputsResponse;
-import com.silenteight.datasource.api.freetext.v1.FreeTextFeatureInput;
 import com.silenteight.datasource.api.freetext.v1.FreeTextInputServiceGrpc.FreeTextInputServiceBlockingStub;
-import com.silenteight.datasource.api.ispep.v2.*;
+import com.silenteight.datasource.api.ispep.v2.BatchGetMatchIsPepInputsRequest;
+import com.silenteight.datasource.api.ispep.v2.BatchGetMatchIsPepInputsResponse;
 import com.silenteight.datasource.api.ispep.v2.IsPepInputServiceGrpc.IsPepInputServiceBlockingStub;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsRequest;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsResponse;
-import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
 import com.silenteight.datasource.api.location.v1.LocationInputServiceGrpc.LocationInputServiceBlockingStub;
-import com.silenteight.datasource.api.name.v1.AlertedPartyName;
 import com.silenteight.datasource.api.name.v1.BatchGetMatchNameInputsRequest;
-import com.silenteight.datasource.api.name.v1.NameFeatureInput;
-import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
 import com.silenteight.datasource.api.name.v1.NameInputServiceGrpc.NameInputServiceBlockingStub;
-import com.silenteight.datasource.api.name.v1.WatchlistName;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.universaldatasource.app.UniversalDataSourceApplication;
 
 import com.google.protobuf.Message;
 import io.grpc.StatusRuntimeException;
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -34,14 +28,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.time.Duration;
 import java.util.Iterator;
 import java.util.Map;
 
-import static com.silenteight.universaldatasource.app.feature.FeatureTestDataAccess.streamedFeaturesCount;
 import static com.silenteight.universaldatasource.app.feature.IntegrationFixture.getBatchCreateAgentInputsRequest;
 import static org.assertj.core.api.Assertions.*;
-import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ContextConfiguration(initializers = { PostgresTestInitializer.class })
@@ -70,89 +61,11 @@ class FeatureInputServiceIT {
   @Autowired
   private JdbcTemplate jdbcTemplate;
 
-  @BeforeEach
-  void setUp() {
-    Map<String, Map<String, Message>> mapOfFeatureRequestsOne = Map.of(
-        "alerts/1/matches/0",
-        Map.of(
-            "features/name",
-            NameFeatureInput.newBuilder()
-                .setFeature("name")
-                .addAlertedPartyNames(AlertedPartyName.newBuilder().setName("JohnDoe").build())
-                .addWatchlistNames(WatchlistName.newBuilder().setName("Jane Doe").build())
-                .setAlertedPartyType(EntityType.INDIVIDUAL)
-                .addMatchingTexts("Doe")
-                .build()),
-        "alerts/1/matches/1",
-        Map.of(
-            "features/country",
-            LocationFeatureInput.newBuilder()
-                .setFeature("country")
-                .setAlertedPartyLocation("UK")
-                .setWatchlistLocation("United Kingdom")
-                .build(),
-            "features/address",
-            LocationFeatureInput.newBuilder()
-                .setFeature("address")
-                .setAlertedPartyLocation(
-                    "Jerozolimskie 2/50, 01-200 Warszawa, mazowieckie, Poland")
-                .setWatchlistLocation("Jerozolimskie Wawa, Poland")
-                .build(),
-            "features/state",
-            LocationFeatureInput.newBuilder()
-                .setFeature("state")
-                .setAlertedPartyLocation("Cambridge TerraceWellington 6011, New Zealand")
-                .setWatchlistLocation("Cambridge 6011, New Zealand")
-                .build()),
-
-        "alerts/2/matches/2",
-        Map.of(
-            "features/city",
-            LocationFeatureInput.newBuilder()
-                .setFeature("city")
-                .setAlertedPartyLocation("HongKong")
-                .setWatchlistLocation("Singapore")
-                .build()),
-
-        "alerts/3/matches/3",
-        Map.of(
-            "features/freetext",
-            FreeTextFeatureInput.newBuilder()
-                .setFeature("freetext")
-                .setMatchedName("Joanna")
-                .setMatchedNameSynonym("Joe")
-                .setMatchedType("name")
-                .addMatchingTexts("Joe")
-                .setFreetext("Joe")
-                .build()),
-
-        "alerts/4/matches/4",
-        Map.of(
-            "features/isPep",
-            IsPepFeatureInput.newBuilder()
-                .setFeature("pep")
-                .setWatchlistItem(WatchlistItem.newBuilder().build())
-                .setAlertedPartyItem(AlertedPartyItem.newBuilder().setCountry("PL").build())
-                .build())
-    );
-
-    var addMatchFeatureRequestsOne =
-        getBatchCreateAgentInputsRequest(mapOfFeatureRequestsOne);
-
-    agentInputServiceBlockingStub.batchCreateAgentInputs(addMatchFeatureRequestsOne);
-  }
-
-
   @Test
-  @Sql(scripts = "truncate_feature_inputs.sql",
+  @Sql(scripts = "adapter/outgoing/jdbc/populate_feature_inputs.sql")
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetNameFeature() {
-    await()
-        .atMost(Duration.ofSeconds(5))
-        .until(() ->
-            streamedFeaturesCount(jdbcTemplate,
-                "alerts/1/matches/0", "features/name"
-            ) > 0);
 
     var batchGetMatchNameInputsResponses =
         nameInputServiceBlockingStub.batchGetMatchNameInputs(
@@ -168,36 +81,34 @@ class FeatureInputServiceIT {
   }
 
   @Test
-  @Sql(scripts = "truncate_feature_inputs.sql",
+  @Sql(scripts = "adapter/outgoing/jdbc/populate_feature_inputs.sql")
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetLocationFeature() {
-    await()
-        .atMost(Duration.ofSeconds(5))
-        .until(() ->
-            streamedFeaturesCount(
-                jdbcTemplate, "alerts/1/matches/1", "features/state"
-            ) > 0);
 
     var batchGetMatchLocationInputs =
         locationInputServiceBlockingStub.batchGetMatchLocationInputs(
             BatchGetMatchLocationInputsRequest.newBuilder()
-                .addMatches("alerts/1/matches/1")
-                .addMatches("alerts/2/matches/2")
+                .addMatches("alerts/3/matches/3")
+                .addMatches("alerts/4/matches/4")
                 .addFeatures("features/state")
                 .addFeatures("features/city")
                 .build());
 
-    assertLocationFeature(batchGetMatchLocationInputs);
+    var matchLocationInputsResponse = batchGetMatchLocationInputs.next();
+    assertLocationFeature(matchLocationInputsResponse);
   }
 
   private static void assertLocationFeature(
-      Iterator<BatchGetMatchLocationInputsResponse> batchGetMatchLocationInputs) {
+      BatchGetMatchLocationInputsResponse response) {
 
-    var matchLocationInputsResponse = batchGetMatchLocationInputs.next();
-    assertThat(matchLocationInputsResponse.getLocationInputsCount()).isEqualTo(2);
-    assertThat(matchLocationInputsResponse.getLocationInputs(0).getMatch()).isEqualTo(
-        "alerts/1/matches/1");
-    assertThat(matchLocationInputsResponse
+    assertThat(response.getLocationInputsCount()).isEqualTo(2);
+    assertThat(response.getLocationInputsList().stream()
+        .filter(l -> l.getMatch().equals("alerts/3/matches/3"))
+        .count())
+        .isEqualTo(1);
+
+    assertThat(response
         .getLocationInputs(0)
         .getLocationFeatureInputsList()
         .get(0)
@@ -205,52 +116,48 @@ class FeatureInputServiceIT {
   }
 
   @Test
-  @Sql(scripts = "truncate_feature_inputs.sql",
+  @Sql(scripts = "adapter/outgoing/jdbc/populate_feature_inputs.sql")
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetFreeTextFeature() {
-    await()
-        .atMost(Duration.ofSeconds(5))
-        .until(() ->
-            streamedFeaturesCount(
-                jdbcTemplate, "alerts/3/matches/3", "features/freetext"
-            ) > 0);
 
     var batchGetMatchFreeTextInputs =
         freeTextInputServiceBlockingStub.batchGetMatchFreeTextInputs(
             BatchGetMatchFreeTextInputsRequest.newBuilder()
-                .addMatches("alerts/3/matches/3")
+                .addMatches("alerts/6/matches/6")
                 .addFeatures("features/freetext")
                 .build()
         );
 
-    assertFreeTextFeature(batchGetMatchFreeTextInputs);
+    var matchFreeTextInputsResponse = batchGetMatchFreeTextInputs.next();
+    assertFreeTextFeature(matchFreeTextInputsResponse);
   }
 
 
   private static void assertFreeTextFeature(
-      Iterator<BatchGetMatchFreeTextInputsResponse> batchGetMatchFreeTextInputs) {
+      BatchGetMatchFreeTextInputsResponse response) {
 
-    var matchFreeTextInputsResponse = batchGetMatchFreeTextInputs.next();
-    assertThat(matchFreeTextInputsResponse.getFreetextInputsCount()).isEqualTo(1);
+    assertThat(response.getFreetextInputsCount()).isEqualTo(1);
 
-    assertThat(matchFreeTextInputsResponse.getFreetextInputsList().get(0)
+    assertThat(response.getFreetextInputsList().get(0)
         .getFreetextFeatureInputsList().stream()
-        .filter(f -> f.getFeature().equals("freetext"))
+        .filter(f -> f.getFeature().equals("features/freetext"))
         .filter(f -> f.getMatchedType().equals("name"))
         .filter(f -> f.getFreetext().equals("Joe"))
         .count()).isEqualTo(1);
   }
 
   @Test
-  @Sql(scripts = "truncate_feature_inputs.sql",
+  @Sql(scripts = "adapter/outgoing/jdbc/populate_feature_inputs.sql")
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetIsPepFeature() {
 
     var batchGetMatchIsPepSolutionsResponseIterator =
         isPepInputServiceBlockingStub.batchGetMatchIsPepInputs(
             BatchGetMatchIsPepInputsRequest.newBuilder()
-                .addMatches("alerts/4/matches/4")
-                .addFeatures("features/isPep")
+                .addMatches("alerts/5/matches/5")
+                .addFeatures("features/pep")
                 .build());
 
     assertIsPepFeature(batchGetMatchIsPepSolutionsResponseIterator);
@@ -263,8 +170,8 @@ class FeatureInputServiceIT {
     assertThat(matchFreeTextInputsResponse.getIsPepInputsCount()).isEqualTo(1);
 
     assertThat(matchFreeTextInputsResponse.getIsPepInputsList().stream()
-        .filter(f -> f.getMatch().equals("alerts/4/matches/4"))
-        .filter(f -> f.getIsPepFeatureInput().getFeature().equals("pep"))
+        .filter(f -> f.getMatch().equals("alerts/5/matches/5"))
+        .filter(f -> f.getIsPepFeatureInput().getFeature().equals("features/pep"))
         .count()).isEqualTo(1);
   }
 

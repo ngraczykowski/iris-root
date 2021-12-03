@@ -33,22 +33,34 @@ spec:
             initialDelaySeconds: 30
             timeoutSeconds: 10
           env:
-            - name: "UDS_DB_HOST"
-              value: {{ .Values.udsDbHost }}
-            - name: "UDS_DB_PORT"
+            - name: UDS_DB_HOST
+              value: {{ .Values.udsDbHost | quote  }}
+            - name: UDS_DB_PORT
               value: {{ .Values.udsDbPort | quote }}
-            - name: "UDS_DB_NAME"
-              value: {{ .Values.udsDbName }}
-            - name: "UDS_DB_USERNAME"
-              value: {{ .Values.udsDbUsername }}
-            - name: "UDS_DB_PASSWORD"
+            - name: UDS_DB_NAME
+              value: {{ .Values.udsDbName | quote  }}
+            - name: UDS_DB_USERNAME
+              value: {{ .Values.udsDbUsername | quote }}
+            - name: UDS_DB_PASSWORD
               value: {{ .Values.udsDbPassword | quote }}
+            - name: SPRING_RABBITMQ_ADDRESSES
+              value: { { .Values.springRabbitmqAddresses | quote } }
+            - name: SPRING_RABBITMQ_PORT
+              value: { { .Values.springRabbitmqPort | quote } }
+            - name: SPRING_RABBITMQ_USERNAME
+              value: { { .Values.springRabbitmqUsername | quote } }
+            - name: SPRING_RABBITMQ_PASSWORD
+              value: { { .Values.springRabbitmqPassword | quote } }
+            - name: SPRING_RABBITMQ_VIRTUAL_HOST
+              value: { { .Values.springRabbitmqVirtualHost | quote } }
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
+          {{ if .Values.args }}
           args:
-            - --serp.show-env=true
-            - --spring.profiles.active={{ .Values.springProfilesActive }}
-            - --logging.config=file:/etc/logback/logback.xml
+          {{ range .Values.args }}
+          - {{ . }}
+          {{ end }}
+          {{ end }}
           resources:
             limits:
               memory: {{ .Values.memoryLimit | quote }}

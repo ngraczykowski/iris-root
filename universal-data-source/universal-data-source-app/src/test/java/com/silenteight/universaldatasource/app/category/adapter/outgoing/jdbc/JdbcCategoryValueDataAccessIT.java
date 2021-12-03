@@ -8,15 +8,12 @@ import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.List;
-
 import static com.silenteight.universaldatasource.common.resource.AlertName.getListOfAlerts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@Sql(scripts = {
-    "populate_categories.sql",
-    "populate_category_values.sql"
-})
+@Sql("populate_categories.sql")
+@Sql(scripts = "truncate_categories.sql",
+    executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @Import({
     JdbcCategoryValueDataAccess.class,
     JdbcCategoryDataAccess.class,
@@ -36,10 +33,10 @@ class JdbcCategoryValueDataAccessIT extends BaseJdbcTest {
   @Test
   void shouldDeleteCategoryValues() {
 
-    var alerts = getListOfAlerts(List.of(1, 2, 3, 4, 5));
+    var alerts = getListOfAlerts(5, 6, 7, 8, 9);
 
     assertEquals(5, categoryValueDataAccess.delete(alerts));
-    assertEquals(5, jdbcTemplate.queryForObject(
+    assertEquals(10, jdbcTemplate.queryForObject(
         "SELECT count(*) FROM uds_category_value", Integer.class));
   }
 }

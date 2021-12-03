@@ -1,6 +1,10 @@
 name: universal-data-source-app
 image_tag: dummy
 image_repo: dummy
+args:
+  - --logging.config=file:/etc/logback/logback.xml
+  - --serp.show-env=true
+  - --spring.profiles.active={{ .Values.springProfilesActive }}
 
 ports:
   http: 8080

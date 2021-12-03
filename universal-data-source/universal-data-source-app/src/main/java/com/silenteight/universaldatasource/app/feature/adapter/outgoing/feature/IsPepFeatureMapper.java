@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 @Component
 class IsPepFeatureMapper implements FeatureMapper {
 
-
   @Override
   public String getType() {
     return IsPepFeatureInput.class.getCanonicalName();
