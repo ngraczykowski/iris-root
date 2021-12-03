@@ -65,6 +65,11 @@ spec:
             - --spring.profiles.active={{ .Values.springProfilesActive }}
             - --logging.config=file:/etc/logback/logback.xml
             - --spring.config.additional-location=file:/etc/spring/
+          {{ if .Values.additionalArgs }}
+          {{ range .Values.additionalArgs }}
+            - {{ . }}
+          {{ end }}
+          {{ end }}
           volumeMounts:
             - name: logback-configmap
               mountPath: /etc/logback
