@@ -31,15 +31,25 @@ public class ExtractOriginatorAlertedPartyData {
           .nameAddress(lines.get(LINE_1).trim())
           .build();
 
-    if (firstLineLength == 2)
-      return alertedPartyDataBuilder
-          .accountNumber(lines.get(LINE_2).trim().toUpperCase())
-          .name(lines.get(LINE_3).trim())
-          .address(String.join(" ", lines.subList(LINE_4, lastLine)).trim())
-          .nameAddress(String.join(" ", lines.subList(LINE_3, lastLine + 1)).trim())
-          .ctryTown(lines.get(lastLine).trim())
-          .build();
-
+    if (firstLineLength == 2) {
+      if (lines.size() == 7 && !lines.get(LINE_5).contains(",")) {
+        return alertedPartyDataBuilder
+            .accountNumber(lines.get(LINE_2).trim().toUpperCase())
+            .name(String.join(" ", lines.subList(LINE_3, LINE_4 + 1)).trim())
+            .address(String.join(" ", lines.subList(LINE_5, lastLine)).trim())
+            .nameAddress(String.join(" ", lines.subList(LINE_3, lastLine + 1)).trim())
+            .ctryTown(lines.get(lastLine).trim())
+            .build();
+      } else {
+        return alertedPartyDataBuilder
+            .accountNumber(lines.get(LINE_2).trim().toUpperCase())
+            .name(lines.get(LINE_3).trim())
+            .address(String.join(" ", lines.subList(LINE_4, lastLine)).trim())
+            .nameAddress(String.join(" ", lines.subList(LINE_3, lastLine + 1)).trim())
+            .ctryTown(lines.get(lastLine).trim())
+            .build();
+      }
+    }
     if (FIRCO_FORMAT_FED.equals(fircoFormat))
       return alertedPartyDataBuilder
           .name(lines.get(LINE_1).trim())

@@ -26,47 +26,6 @@ class NameAddressCrossmatchAgentTest {
 
   NameAddressCrossmatchAgent agent;
 
-  @BeforeEach
-  void beforeEach() {
-    agent = new NameAddressCrossmatchAgent();
-  }
-
-  @Test
-  void assertThatCrossmatchAgentReturnNoDecisionWhenAlertedNameaddressSegmentKeyPresent() {
-    NameAddressCrossmatchAgentResponse nameAddressCrossmatchAgentResponse = agent.call(
-        NameAddressCrossmatchAgentRequest
-            .builder()
-            .alertPartyEntities(
-                Map.of(ALERTED_NAMEADDRESS_SEGMENT_KEY, "IND LLC EMIRATES NATIONAL FACTORY"))
-            .watchlistName("EMIRATES NATIONAL FACTORY FOR PLASTIC INDUSTRIES LLC")
-            .watchlistCountry("UAE")
-            .watchlistType("COMPANY")
-            .build());
-    assertThat(nameAddressCrossmatchAgentResponse)
-        .isEqualTo(NameAddressCrossmatchAgentResponse.of(
-            NO_DECISION,
-            Map.of(ALERTED_NAMEADDRESS_SEGMENT_KEY, "IND LLC EMIRATES NATIONAL FACTORY")));
-  }
-
-  @ParameterizedTest
-  @MethodSource("request")
-  void parametrizedTest(
-      List<String> matchingTexts, Map<AlertedPartyKey, String> apEntTypeData,
-      Map<AlertedPartyKey, String> matchedEntity, WlData wlData, Result output) {
-    NameAddressCrossmatchAgentResponse nameAddressCrossmatchAgentResponse = agent.call(
-        NameAddressCrossmatchAgentRequest
-            .builder()
-            .alertPartyEntities(apEntTypeData)
-            .watchlistName(wlData.getName())
-            .watchlistCountry(wlData.getCountry())
-            .watchlistType(wlData.getType())
-            .build()
-    );
-    assertEquals(
-        nameAddressCrossmatchAgentResponse,
-        NameAddressCrossmatchAgentResponse.of(output, matchedEntity));
-  }
-
   private static Stream<Arguments> request() {
     return Stream.of(
         Arguments.of(
@@ -133,6 +92,83 @@ class NameAddressCrossmatchAgentTest {
     );
   }
 
+  @BeforeEach
+  void beforeEach() {
+    agent = new NameAddressCrossmatchAgent();
+  }
+
+  @Test
+  void assertThatCrossmatchAgentReturnNoDecisionWhenAlertedNameaddressSegmentKeyPresent() {
+    NameAddressCrossmatchAgentResponse nameAddressCrossmatchAgentResponse = agent.call(
+        NameAddressCrossmatchAgentRequest
+            .builder()
+            .alertPartyEntities(
+                Map.of(ALERTED_NAMEADDRESS_SEGMENT_KEY, "IND LLC EMIRATES NATIONAL FACTORY"))
+            .watchlistName("EMIRATES NATIONAL FACTORY FOR PLASTIC INDUSTRIES LLC")
+            .watchlistCountry("UAE")
+            .watchlistType("COMPANY")
+            .build());
+    assertThat(nameAddressCrossmatchAgentResponse)
+        .isEqualTo(NameAddressCrossmatchAgentResponse.of(
+            NO_DECISION,
+            Map.of(ALERTED_NAMEADDRESS_SEGMENT_KEY, "IND LLC EMIRATES NATIONAL FACTORY")));
+  }
+
+  @Test
+  void assertThatCrossmatchAgentReturnNoDecisionWhenAlertedNameaddressAndNameKeysArePresent() {
+    NameAddressCrossmatchAgentResponse nameAddressCrossmatchAgentResponse = agent.call(
+        NameAddressCrossmatchAgentRequest
+            .builder()
+            .alertPartyEntities(
+                Map.of(
+                    ALERTED_NAME_KEY, "X Aviation Leasing Co LLC",
+                    ALERTED_NAMEADDRESS_SEGMENT_KEY, "X Aviation Leasing Co LLC"))
+            .watchlistName("Aviation Leasing")
+            .watchlistCountry("UAE")
+            .watchlistType("COMPANY")
+            .build());
+    assertThat(nameAddressCrossmatchAgentResponse)
+        .isEqualTo(NameAddressCrossmatchAgentResponse.of(
+            NO_DECISION,
+            Map.of(ALERTED_NAMEADDRESS_SEGMENT_KEY, "X Aviation Leasing Co LLC")));
+  }
+
+  @Test
+  void assertThatCrossmatchAgentReturnNoDecisionWhenAlertedNameSegmentKeyPresentAndNoAddress() {
+    NameAddressCrossmatchAgentResponse nameAddressCrossmatchAgentResponse = agent.call(
+        NameAddressCrossmatchAgentRequest
+            .builder()
+            .alertPartyEntities(
+                Map.of(
+                    ALERTED_NAME_KEY, "X Aviation Leasing Co LLC"))
+            .watchlistName("Aviation Leasing")
+            .watchlistCountry("UAE")
+            .watchlistType("COMPANY")
+            .build());
+    assertThat(nameAddressCrossmatchAgentResponse)
+        .isEqualTo(NameAddressCrossmatchAgentResponse.of(
+            NO_CROSSMATCH,
+            Map.of(ALERTED_NAME_KEY, "X Aviation Leasing Co LLC")));
+  }
+
+  @ParameterizedTest
+  @MethodSource("request")
+  void parametrizedTest(
+      List<String> matchingTexts, Map<AlertedPartyKey, String> apEntTypeData,
+      Map<AlertedPartyKey, String> matchedEntity, WlData wlData, Result output) {
+    NameAddressCrossmatchAgentResponse nameAddressCrossmatchAgentResponse = agent.call(
+        NameAddressCrossmatchAgentRequest
+            .builder()
+            .alertPartyEntities(apEntTypeData)
+            .watchlistName(wlData.getName())
+            .watchlistCountry(wlData.getCountry())
+            .watchlistType(wlData.getType())
+            .build()
+    );
+    assertEquals(
+        nameAddressCrossmatchAgentResponse,
+        NameAddressCrossmatchAgentResponse.of(output, matchedEntity));
+  }
 
   static class TestData {
 
