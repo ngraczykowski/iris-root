@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.common.dto.output;
 
 import lombok.Data;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 @Data

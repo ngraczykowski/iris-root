@@ -10,7 +10,7 @@ import com.silenteight.payments.bridge.common.dto.validator.CompleteAlertDefinit
 import com.silenteight.payments.bridge.common.dto.validator.MinimalAlertDefinition;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy.UpperCamelCaseStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
