@@ -11,10 +11,6 @@ import com.silenteight.payments.bridge.svb.newlearning.batch.step.hit.LearningHi
 import com.silenteight.payments.bridge.svb.newlearning.batch.step.hit.LearningHitRepository;
 import com.silenteight.payments.bridge.svb.newlearning.batch.step.listrecord.LearningListedRecordEntity;
 import com.silenteight.payments.bridge.svb.newlearning.batch.step.listrecord.LearningRecordRepository;
-import com.silenteight.payments.bridge.svb.newlearning.batch.step.message.LearningAlertedMessageEntity;
-import com.silenteight.payments.bridge.svb.newlearning.batch.step.message.LearningAlertedMessageRepository;
-import com.silenteight.payments.bridge.svb.newlearning.batch.step.status.LearningActionStatusEntity;
-import com.silenteight.payments.bridge.svb.newlearning.batch.step.status.LearningActionStatusRepository;
 import com.silenteight.payments.bridge.testing.BaseBatchTest;
 
 import org.assertj.core.api.Assertions;
@@ -32,7 +28,10 @@ import java.util.Collection;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 
-import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.*;
+import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.STEP_TRANSFORM_ALERT;
+import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.STEP_TRANSFORM_HIT;
+import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.STEP_TRANSFORM_RECORD;
+import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.TRANSFORM_ACTION_STEP;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
@@ -51,10 +50,6 @@ class TransformFlatCsvTest extends BaseBatchTest {
   private LearningHitRepository learningHitRepository;
   @Autowired
   private LearningRecordRepository learningRecordRepository;
-  @Autowired
-  private LearningActionStatusRepository learningActionStatusRepository;
-  @Autowired
-  private LearningAlertedMessageRepository learningAlertedMessageRepository;
 
 
   @Test
@@ -105,36 +100,6 @@ class TransformFlatCsvTest extends BaseBatchTest {
 
     var savedCount =
         ((Collection<LearningListedRecordEntity>) learningRecordRepository.findAll()).size();
-    assertThat(savedCount).isEqualTo(2);
-  }
-
-  @Test
-  @Sql(scripts = "TransformFlatCsvTest.sql")
-  @Sql(scripts = "TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
-  @Transactional(propagation = Propagation.NOT_SUPPORTED)
-  public void testTransformingStatus() {
-    var transformStatusStep = createStepExecution(STEP_TRANSFORM_STATUS);
-    assertThat(transformStatusStep.isPresent()).isTrue();
-    assertThat(transformStatusStep.get().getReadCount()).isEqualTo(2);
-
-    var savedCount =
-        ((Collection<LearningActionStatusEntity>) learningActionStatusRepository.findAll()).size();
-    assertThat(savedCount).isEqualTo(2);
-  }
-
-  @Test
-  @Sql(scripts = "TransformFlatCsvTest.sql")
-  @Sql(scripts = "TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
-  @Transactional(propagation = Propagation.NOT_SUPPORTED)
-  public void testTransformingAlertedMessage() {
-    var transformAlertedMessageStep = createStepExecution(STEP_TRANSFORM_ALERTED_MESSAGE);
-    assertThat(transformAlertedMessageStep.isPresent()).isTrue();
-    assertThat(transformAlertedMessageStep.get().getReadCount()).isEqualTo(2);
-
-    var savedCount =
-        ((Collection<LearningAlertedMessageEntity>)
-            learningAlertedMessageRepository.findAll()).size();
-
     assertThat(savedCount).isEqualTo(2);
   }
 

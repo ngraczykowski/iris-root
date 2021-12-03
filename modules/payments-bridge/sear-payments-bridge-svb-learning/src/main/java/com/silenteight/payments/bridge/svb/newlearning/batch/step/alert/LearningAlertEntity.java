@@ -1,16 +1,15 @@
 package com.silenteight.payments.bridge.svb.newlearning.batch.step.alert;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.time.OffsetDateTime;
 import javax.persistence.*;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PUBLIC;
 
 @Data
+@Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PUBLIC)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
@@ -87,4 +86,10 @@ public class LearningAlertEntity {
 
   @Column(name = "fkco_v_copy_service")
   private String fkcoVCopyService;
+
+  @Column(name = "fkco_d_filtered_datetime")
+  private OffsetDateTime fkcoDFilteredDateTime;
+
+  @Column(name = "fkco_i_blockinghits")
+  private String fkcoIBlockinghits;
 }

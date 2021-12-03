@@ -15,9 +15,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
     RemoveDuplicatedAlertsQuery.class,
     RemoveDuplicatedHitsQuery.class,
     RemoveDuplicatedActionsQuery.class,
-    RemoveDuplicatedListedRecordsQuery.class,
-    RemoveDuplicatedActionStatusQuery.class,
-    RemoveDuplicatedAlertedMessagesQuery.class})
+    RemoveDuplicatedListedRecordsQuery.class
+})
 class JdbcLearningDataAccessIT extends BaseJdbcTest {
 
   @Autowired
@@ -30,8 +29,6 @@ class JdbcLearningDataAccessIT extends BaseJdbcTest {
     assertRemovedHits();
     assertRemovedActions();
     assertRemovedListedRecords();
-    assertRemovedActionStatus();
-    assertRemovedAlertedMessages();
   }
 
   private void assertRemovedAlerts() {
@@ -55,18 +52,6 @@ class JdbcLearningDataAccessIT extends BaseJdbcTest {
   private void assertRemovedListedRecords() {
     var alertsCount = jdbcTemplate.queryForObject(
         "SELECT count(*) FROM pb_learning_listed_record WHERE fkco_id = 1", Integer.class);
-    assertThat(alertsCount).isEqualTo(1);
-  }
-
-  private void assertRemovedActionStatus() {
-    var alertsCount = jdbcTemplate.queryForObject(
-        "SELECT count(*) FROM pb_learning_action_status WHERE fkco_id = 1", Integer.class);
-    assertThat(alertsCount).isEqualTo(1);
-  }
-
-  private void assertRemovedAlertedMessages() {
-    var alertsCount = jdbcTemplate.queryForObject(
-        "SELECT count(*) FROM pb_learning_alerted_message WHERE fkco_messages = 1", Integer.class);
     assertThat(alertsCount).isEqualTo(1);
   }
 }

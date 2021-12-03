@@ -41,4 +41,10 @@ public class LearningActionEntity {
 
   @Column(name = "fkco_i_total_action")
   private String fkcoITotalAction;
+
+  @Column(name = "fkco_v_status_name")
+  private String fkcoVStatusName;
+
+  @Column(name = "fkco_v_status_behavior")
+  private String fkcoVStatusBehavior;
 }

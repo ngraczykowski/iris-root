@@ -352,4 +352,21 @@
                     columnName="fkco_d_action_datetime"
                     newDataType="TIMESTAMP"/>
   </changeSet>
+
+  <changeSet id="payments-bridge-svb-learning-1.4.9" author="wkeska">
+    <dropTable tableName="pb_learning_alerted_message"/>
+    <dropTable tableName="pb_learning_action_status"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-svb-learning-1.4.10" author="wkeska">
+    <addColumn tableName="pb_learning_alert">
+      <column name="fkco_d_filtered_datetime" type="TIMESTAMP"/>
+      <column name="fkco_i_blockinghits" type="VARCHAR(38)"/>
+    </addColumn>
+
+    <addColumn tableName="pb_learning_action">
+      <column name="fkco_v_status_name" type="VARCHAR(32)"/>
+      <column name="fkco_v_status_behavior" type="VARCHAR(32)"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

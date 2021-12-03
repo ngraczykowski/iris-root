@@ -24,9 +24,7 @@ class LearningJobConfiguration {
   private final Step transformActionStep;
   private final Step transformHitStep;
   private final Step transformListedRecordStep;
-  private final Step transformStatusStep;
   private final Step deleteFileStep;
-  private final Step transformAlertedMessageStep;
 
   @Bean
   Job learningJob() {
@@ -36,8 +34,6 @@ class LearningJobConfiguration {
         .next(transformActionStep)
         .next(transformHitStep)
         .next(transformListedRecordStep)
-        .next(transformStatusStep)
-        .next(transformAlertedMessageStep)
         .next(deleteFileStep)
         .build();
   }

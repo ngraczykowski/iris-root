@@ -117,7 +117,7 @@ Accept: application/json
 Content-Type: application/x-www-form-urlencoded
 Authorization: Bearer {{access_token}}
 
-bucket=s3-us-west-2-371608975349-decrypted-files&object=svb_learn_april_export_sorted.csv
+bucket=sierra-dev-decrypted-files&object=01-01-1999.csv
 
 ### UAT files - USE WITH EXTREME CARE!!!
 // bucket=workload-sierra-uat-371608975349-decrypted-files&object=XXX.csv

@@ -16,7 +16,8 @@ class RemoveDuplicatedAlertsQuery extends RemoveDuplicatedQuery {
       + "        USING pb_learning_alert lac\n"
       + "WHERE\n"
       + "    lao.learning_alert_id < lac.learning_alert_id\n"
-      + "    AND lao.fkco_id = lac.fkco_id;";
+      + "    AND lao.fkco_id = lac.fkco_id\n"
+      + "    AND lao.fkco_v_system_id = lac.fkco_v_system_id;";
 
   private final JdbcTemplate jdbcTemplate;
 
