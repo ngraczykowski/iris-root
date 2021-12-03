@@ -4,6 +4,7 @@ package com.silenteight.hsbc.bridge.metrics;
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer.Builder;
+import io.micrometer.core.instrument.config.MeterFilter;
 import net.devh.boot.grpc.client.metric.MetricCollectingClientInterceptor;
 import net.devh.boot.grpc.server.metric.MetricCollectingServerInterceptor;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +16,12 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 class MetricsConfiguration {
 
   @Bean
-  public TimedAspect timedAspect(MeterRegistry registry) {
+  MeterFilter filterMetricsTags() {
+    return MeterFilter.ignoreTags("class");
+  }
+
+  @Bean
+  TimedAspect timedAspect(MeterRegistry registry) {
     return new TimedAspect(registry);
   }
 
