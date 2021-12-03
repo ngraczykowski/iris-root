@@ -1,0 +1,20 @@
+plugins {
+  id "java-library"
+  id "groovy"
+}
+
+dependencies {
+
+  implementation libraries.silenteight_sep_base_common
+
+  implementation libraries.spring_boot
+  implementation libraries.spring_context
+
+  testImplementation project(":sear-payments-bridge-testing")
+
+  testImplementation libraries.spock_core
+  testImplementation libraries.spock_spring
+  testImplementation libraries.spring_boot_test
+  testImplementation libraries.silenteight_sep_base_testing
+
+}
