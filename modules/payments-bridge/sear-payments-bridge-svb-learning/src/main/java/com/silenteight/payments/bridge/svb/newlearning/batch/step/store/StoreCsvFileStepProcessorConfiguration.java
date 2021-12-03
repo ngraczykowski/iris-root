@@ -12,7 +12,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobParameters.FILE_ID_PARAMETER;
+import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.FILE_NAME_PARAMETER;
+
 
 @Configuration
 @RequiredArgsConstructor
@@ -24,10 +25,10 @@ class StoreCsvFileStepProcessorConfiguration {
   @StepScope
   StoreCsvFileStepProcessor storeScvFileStepProcessor(
       @Value("#{stepExecution}") StepExecution stepExecution) {
-    var fileId =
-        stepExecution.getJobParameters().getLong(FILE_ID_PARAMETER);
+    var fileName =
+        stepExecution.getJobParameters().getString(FILE_NAME_PARAMETER);
     var jobId = stepExecution.getJobExecution().getJobId();
-    log.info("Executing step {} for file:{}", stepExecution.getStepName(), fileId);
+    log.info("Executing step {} for file:{}", stepExecution.getStepName(), fileName);
     return new StoreCsvFileStepProcessor(jobId);
   }
 }

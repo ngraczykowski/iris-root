@@ -1,11 +1,16 @@
-package com.silenteight.payments.bridge.svb.newlearning.service;
+package com.silenteight.payments.bridge.app.batch;
 
 import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
 
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+
 import javax.persistence.*;
 
+import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.BUCKET_NAME_PARAMETER;
+import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.FILE_NAME_PARAMETER;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PUBLIC;
 
@@ -31,4 +36,11 @@ class LearningFileEntity extends BaseEntity {
 
   @Column(name = "status")
   private String status;
+
+  JobParameters toJobParameters() {
+    return new JobParametersBuilder()
+        .addString(FILE_NAME_PARAMETER, this.fileName)
+        .addString(BUCKET_NAME_PARAMETER, this.bucketName)
+        .toJobParameters();
+  }
 }

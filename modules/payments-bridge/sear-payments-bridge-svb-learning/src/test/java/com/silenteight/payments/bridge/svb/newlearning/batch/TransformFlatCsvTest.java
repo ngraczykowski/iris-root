@@ -32,7 +32,7 @@ import java.util.Collection;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 
-import static com.silenteight.payments.bridge.svb.newlearning.batch.step.LearningJobConstants.*;
+import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 

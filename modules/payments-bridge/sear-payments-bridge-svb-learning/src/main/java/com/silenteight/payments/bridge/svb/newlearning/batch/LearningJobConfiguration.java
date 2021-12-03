@@ -10,12 +10,12 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.LEARNING_JOB_NAME;
+
 @RequiredArgsConstructor
 @Configuration
 @Slf4j
 class LearningJobConfiguration {
-
-  static final String JOB_NAME = "learning-job";
 
   private final JobBuilderFactory jobBuilderFactory;
 
@@ -28,9 +28,9 @@ class LearningJobConfiguration {
   private final Step deleteFileStep;
   private final Step transformAlertedMessageStep;
 
-  @Bean("svbCsvJob")
-  Job svbLearningJob() {
-    return this.jobBuilderFactory.get(JOB_NAME)
+  @Bean
+  Job learningJob() {
+    return this.jobBuilderFactory.get(LEARNING_JOB_NAME)
         .start(storeCsvFileStep)
         .next(transformAlertStep)
         .next(transformActionStep)

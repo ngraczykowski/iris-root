@@ -5,11 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
-import com.silenteight.payments.bridge.svb.newlearning.batch.exceptions.NoLearningFileFound;
 import com.silenteight.payments.bridge.svb.newlearning.batch.step.LoadCsvJobProperties;
-import com.silenteight.payments.bridge.svb.newlearning.domain.LearningFile;
 import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
-import com.silenteight.payments.bridge.svb.newlearning.port.LearningDataAccess;
 
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -28,7 +25,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 
-import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobParameters.FILE_ID_PARAMETER;
+import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.BUCKET_NAME_PARAMETER;
+import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.FILE_NAME_PARAMETER;
+
 
 @Configuration
 @RequiredArgsConstructor
@@ -37,7 +36,6 @@ import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobP
 class StoreCsvFileStepReaderConfiguration {
 
   private final LoadCsvJobProperties properties;
-  private final LearningDataAccess learningDataAccess;
   private final CsvFileResourceProvider csvFileResourceProvider;
 
   @SuppressWarnings("SpringElInspection")
@@ -45,14 +43,16 @@ class StoreCsvFileStepReaderConfiguration {
   @StepScope
   FlatFileItemReader<LearningCsvRowEntity> storeCsvFileStepItemReader(
       @Value("#{stepExecution}") StepExecution stepExecution) {
-    var fileId =
-        stepExecution.getJobParameters().getLong(FILE_ID_PARAMETER);
-    log.info("Step:{} file:{}", stepExecution.getStepName(), fileId);
+    var fileName =
+        stepExecution.getJobParameters().getString(FILE_NAME_PARAMETER);
+    var bucketName =
+        stepExecution.getJobParameters().getString(BUCKET_NAME_PARAMETER);
+    log.info("Step:{} file:{}", stepExecution.getStepName(), fileName);
 
     return new FlatFileItemReaderBuilder<LearningCsvRowEntity>()
         .name("csvFileItemReader")
         .encoding(properties.getFileEncoding())
-        .resource(getFileResource(getLearningFile(fileId)))
+        .resource(getFileResource(fileName, bucketName))
         // Default policy helps to parse multiline CSV files.
         .recordSeparatorPolicy(new DefaultRecordSeparatorPolicy())
         // First line is a header.
@@ -61,18 +61,11 @@ class StoreCsvFileStepReaderConfiguration {
         .build();
   }
 
-  LearningFile getLearningFile(Long fileId) {
-    var learningFile = learningDataAccess.findLearningFileById(fileId);
-    if (learningFile.isEmpty()) {
-      throw new NoLearningFileFound(String.format("No learning file found:%s", fileId));
-    }
-    return learningFile.get();
-  }
 
-  private Resource getFileResource(LearningFile learningFile) {
+  private Resource getFileResource(String fileName, String bucketName) {
     return csvFileResourceProvider.getResource(
-        LearningRequest.builder().object(learningFile.getFileName())
-            .bucket(learningFile.getBucketName())
+        LearningRequest.builder().object(fileName)
+            .bucket(bucketName)
             .build());
   }
 

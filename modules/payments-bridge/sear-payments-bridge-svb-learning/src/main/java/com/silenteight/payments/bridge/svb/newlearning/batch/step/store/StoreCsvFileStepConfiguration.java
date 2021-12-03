@@ -12,13 +12,15 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.retry.backoff.FixedBackOffPolicy;
+import org.springframework.retry.policy.AlwaysRetryPolicy;
+
+import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.STORE_FILE_STEP;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(LoadCsvJobProperties.class)
 public class StoreCsvFileStepConfiguration {
-
-  public static final String STORE_FILE_STEP = "store-csv-file";
 
   private final StepBuilderFactory stepBuilderFactory;
   private final LoadCsvJobProperties properties;
@@ -32,10 +34,14 @@ public class StoreCsvFileStepConfiguration {
   Step storeCsvFileStep() {
     return this.stepBuilderFactory
         .get(STORE_FILE_STEP)
-        .chunk(properties.getChunkSize())
+        .<LearningCsvRowEntity, LearningCsvRowEntity>chunk(properties.getChunkSize())
         .reader(storeCsvFileStepItemReader)
         .processor(storeCsvFileStepProcessor)
         .writer(jpaWriterFactory.createJpaWriter())
+        .faultTolerant()
+        .retryPolicy(new AlwaysRetryPolicy())
+        .retry(UnsupportedOperationException.class)
+        .backOffPolicy(new FixedBackOffPolicy())
         .build();
   }
 }

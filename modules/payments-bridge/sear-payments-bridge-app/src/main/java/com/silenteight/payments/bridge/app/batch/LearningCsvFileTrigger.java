@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.newlearning.service;
+package com.silenteight.payments.bridge.app.batch;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,13 +16,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.LEARNING_JOB_NAME;
 import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-class TriggerCsvProcessingService {
+class LearningCsvFileTrigger {
 
+  private final JobMaintainer jobMaintainer;
   private final FileListPort fileListPort;
   private final LearningFileRepository learningFileRepository;
 
@@ -37,7 +39,12 @@ class TriggerCsvProcessingService {
 
     log.debug("Received non processed files = {}", savedNames);
 
-    // TODO Trigger batch job processing
+    newNames.stream().forEach(file -> {
+      jobMaintainer.runJobByName(
+          LEARNING_JOB_NAME, file.toJobParameters());
+      file.setStatus(CsvProcessingFileStatus.TRIGGERED.name());
+      learningFileRepository.save(file);
+    });
   }
 
   List<LearningFileEntity> getNonProcessedFiles(List<ObjectPath> files) {
@@ -66,4 +73,5 @@ class TriggerCsvProcessingService {
   List<LearningFileEntity> saveNonProcessedFiles(List<LearningFileEntity> files) {
     return files.stream().map(learningFileRepository::save).collect(toList());
   }
+
 }

@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.silenteight.payments.bridge.svb.newlearning.batch.step.LearningJobConstants.STEP_TRANSFORM_ALERT;
+import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.STEP_TRANSFORM_ALERT;
 
 @Configuration
 @RequiredArgsConstructor

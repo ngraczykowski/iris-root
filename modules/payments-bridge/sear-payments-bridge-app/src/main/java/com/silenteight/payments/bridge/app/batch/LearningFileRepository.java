@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.newlearning.service;
+package com.silenteight.payments.bridge.app.batch;
 
 import org.springframework.data.repository.Repository;
 
@@ -10,5 +10,4 @@ interface LearningFileRepository extends Repository<LearningFileEntity, Long> {
 
   List<LearningFileEntity> findAllByFileNameAndBucketName(String fileName, String bucketName);
 
-  List<LearningFileEntity> findAll();
 }

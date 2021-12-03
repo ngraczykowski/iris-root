@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.newlearning.service;
+package com.silenteight.payments.bridge.app.batch;
 
 import lombok.NonNull;
 
@@ -27,8 +27,4 @@ class InMemoryLearningFileRepository implements LearningFileRepository {
         .collect(Collectors.toList());
   }
 
-  @Override
-  public List<LearningFileEntity> findAll() {
-    return LEARNING_FILE_ENTITIES;
-  }
 }

@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.newlearning.service;
+package com.silenteight.payments.bridge.app.batch;
 
 import com.silenteight.payments.bridge.svb.newlearning.domain.ObjectPath;
 import com.silenteight.payments.bridge.svb.newlearning.port.FileListPort;
@@ -11,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -19,26 +19,29 @@ class TriggerCsvProcessingServiceTest {
 
   @Mock
   private FileListPort fileListPort;
+  @Mock
+  private JobMaintainer jobMaintainer;
   private LearningFileRepository learningFileRepository = new InMemoryLearningFileRepository();
-  private TriggerCsvProcessingService triggerCsvProcessingService;
+  private LearningCsvFileTrigger triggerCsvLearning;
+
 
   @BeforeEach
   void setUp() {
-    triggerCsvProcessingService =
-        new TriggerCsvProcessingService(fileListPort, learningFileRepository);
-
+    triggerCsvLearning =
+        new LearningCsvFileTrigger(jobMaintainer, fileListPort, learningFileRepository);
     var object = ObjectPath.builder().name("analystdecison-2-hits.csv").bucket("bucket").build();
-    var object2 = ObjectPath.builder().name("analystdecison-2-hits2.csv").bucket("bucket").build();
 
-    when(fileListPort.getFilesList()).thenReturn(List.of(object, object2));
+    when(fileListPort.getFilesList()).thenReturn(List.of(object));
   }
 
   @Test
   void shouldInsertTwoFiles() {
-    triggerCsvProcessingService.process();
-    triggerCsvProcessingService.process();
-    triggerCsvProcessingService.process();
+    triggerCsvLearning.process();
+    triggerCsvLearning.process();
+    triggerCsvLearning.process();
 
-    assertThat(learningFileRepository.findAll().size()).isEqualTo(2);
+    assertThat(learningFileRepository
+        .findAllByFileNameAndBucketName("analystdecison-2-hits.csv", "bucket")
+        .size()).isEqualTo(2);
   }
 }
