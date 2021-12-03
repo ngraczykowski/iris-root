@@ -1,0 +1,55 @@
+### Various ###
+.DS_Store
+*.bak
+*.orig
+
+### IntelliJ IDEA ###
+.idea
+/.idea/*/
+/.idea/*.xml
+out/
+*.iws
+*.iml
+*.ipr
+.attach_pid*
+
+### Excluded IntelliJ IDEA configuratiojn ###
+!/.idea/inspectionProfiles/
+!/.idea/runConfigurations/
+!/.idea/codeStyles/
+!/.idea/checkstyle-idea.xml
+!/.idea/sqldialects.xml
+!/.idea/misc.xml
+
+### VSCode
+.vscode/*
+
+### Build ###
+build/
+dist/
+
+### Docker ###
+/.env
+
+### Python ###
+__pycache__/
+*.egg-info/
+*.dist-info/
+.eggs/
+.pip-cache/
+.pytest_cache/
+.tox/
+venv/
+.coverage
+pip_index_url
+
+### Jupyter Notebooks ###
+.ipynb_checkpoints/
+
+env/*
+.env/*
+dependencies/*
+logs/*
+installers/*
+
+

@@ -1,0 +1,6 @@
+[submodule "datascience-installer"]
+	path = datascience-installer
+	url = https://gitlab.silenteight.com/ses/datascience-installer/
+[submodule "spark-manager"]
+	path = spark-manager
+	url = https://gitlab.silenteight.com/data-science/spark-manager
