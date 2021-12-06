@@ -70,9 +70,9 @@ public class DeprecatedMetricsReportGenerationService {
         properties.getCountry().getLabel(),
         properties.getRiskType().getLabel(),
         properties.getHitType().getLabel(),
-        "Efficiency",
-        "PTP Effectiveness",
-        "FP Effectiveness");
+        properties.getEfficiency().getLabel(),
+        properties.getPtpEffectiveness().getLabel(),
+        properties.getFpEffectiveness().getLabel());
   }
 
   private static List<String> transpose(

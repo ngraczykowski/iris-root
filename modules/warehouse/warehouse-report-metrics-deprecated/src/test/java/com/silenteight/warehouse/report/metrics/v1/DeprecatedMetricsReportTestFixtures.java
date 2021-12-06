@@ -51,4 +51,7 @@ public final class DeprecatedMetricsReportTestFixtures {
   public static final String HIT_TYPE_FIELD_LABEL = "List Type";
   public static final String ALERT_STATUS_FIELD = "alert_status";
   public static final String COMPLETED_VALUE = "COMPLETED";
+  public static final String EFFICIENCY_LABEL = "Efficiency";
+  public static final String PTP_EFFICIENCY_LABEL = "PTP Effectiveness";
+  public static final String FP_EFFICIENCY_LABEL = "FP Effectiveness";
 }

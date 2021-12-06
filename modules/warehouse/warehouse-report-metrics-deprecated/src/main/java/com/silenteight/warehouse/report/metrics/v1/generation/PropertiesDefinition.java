@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import javax.validation.Valid;
 
@@ -44,6 +45,15 @@ public class PropertiesDefinition {
   private ColumnProperties qaDecisionField;
   @Nullable
   private List<FilterProperties> filters;
+  @Valid
+  @NotNull
+  private LabelProperties efficiency;
+  @Valid
+  @NotNull
+  private LabelProperties ptpEffectiveness;
+  @Valid
+  @NotNull
+  private LabelProperties fpEffectiveness;
 
   List<String> getFields() {
     List<String> fields = getStaticFields();
@@ -55,8 +65,7 @@ public class PropertiesDefinition {
 
   @NotNull
   List<String> getStaticFields() {
-    return of(country, riskType, dateField, hitType)
-        .stream()
+    return Stream.of(country, riskType, dateField, hitType)
         .map(GroupingColumnProperties::getName)
         .collect(Collectors.toList());
   }
