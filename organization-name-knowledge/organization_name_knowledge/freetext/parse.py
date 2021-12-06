@@ -46,6 +46,14 @@ def parse_freetext_names(
 def _get_valid_names(
     names: List[NameInformation], base_tokens_upper_limit: int
 ) -> List[NameInformation]:
+    """Rules to met for name to be valid:
+    - must contain at least one legal term
+    - alpha characters number in base must be at least 2
+    - number of base tokens does not exceed the base_tokens_upper_limit
+    - base tokens must not be legal terms only
+    - if the number of legal terms is 2 or more, it can not appear at the start of the name
+    """
+
     valid_names = [
         name
         for name in names
@@ -64,6 +72,12 @@ def _get_valid_names(
 
 
 def _get_names_to_remove(names: List[NameInformation]) -> Set[NameInformation]:
+    """If 2 or more names with the same legal(s) appear, use the one with legal
+    at the end of a name, not at start - so the rest should go to the 'to remove' set.
+    If any of the legal terms becomes a prefix, a name with that prefix should be added
+    to 'to remove' set also.
+    """
+
     names_with_start_legal = []
     end_legals = set()
     for name in names:

@@ -14,7 +14,7 @@ def parse(name: str) -> NameInformation:
     Parameters
     ----------
     name : str
-        In most of use cases it is an organization name
+        In most use cases it is an organization name
 
     Returns
     -------
@@ -33,7 +33,7 @@ def parse_freetext(
     name_tokens_upper_limit: int = 7,
 ) -> List[NameInformation]:
     """Parse freetext to find each organization name that is present within passed text.
-    There are tokens limits with default values provided. It is not recommended to change these values,
+    There are tokens limits with default values provided. It is not recommended changing these values,
     but in specific situation there is a possibility to apply another limits by changing them.
 
     Parameters
@@ -61,12 +61,12 @@ def parse_freetext(
 def get_all_legal_terms(name: str) -> Set[str]:
     """Legal terms returned by this function are slightly different than those returned by main
     "parse" function - they may come from i.e. part of the name, or from inside the name string.
-    In other words, they are all of the substrings that match any of known legal terms.
+    In other words, they are all the substrings that match any of known legal terms.
 
     Parameters
     ----------
     name : str
-        In most of use cases it is an organization name
+        In most use cases it is an organization name
 
     Returns
     -------
