@@ -28,5 +28,5 @@ interface IndexedAlertRepository extends Repository<IndexedAlertEntity, Long> {
       + " FROM IndexedAlertEntity s"
       + " WHERE s.analysisName = :analysisName"
       + " AND s.state IN :states")
-  long sumAllAlertsCountWithAnalysisName(String analysisName,Collection<State> states);
+  Optional<Long> sumAllAlertsCountWithAnalysisName(String analysisName, Collection<State> states);
 }

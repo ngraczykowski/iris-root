@@ -29,7 +29,7 @@ class SimulationProgressService {
     long alertsCount = analysis.getAlertCount();
     long pendingAlerts = analysis.getPendingAlerts();
     long solvedAlerts = calculatedSolvedAlert(alertsCount, pendingAlerts);
-    long indexedAlerts = indexedAlertProvider.getAllIndexedAlertsCount(analysisName);
+    long indexedAlerts = indexedAlertProvider.getAllIndexedAlertsCount(analysisName).orElse(0L);
 
     return SimulationProgressDto.builder()
         .allAlerts(alertsCount)

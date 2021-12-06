@@ -9,6 +9,7 @@ import com.silenteight.simulator.processing.alert.index.domain.exception.Indexed
 import com.silenteight.simulator.processing.alert.index.dto.IndexedAlertDto;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.silenteight.simulator.processing.alert.index.domain.State.ACKED;
 import static java.util.stream.Collectors.toList;
@@ -55,11 +56,11 @@ public class IndexedAlertQuery implements IndexedAlertProvider {
   }
 
   @Override
-  public long getAllIndexedAlertsCount(@NonNull String analysisName) {
+  public Optional<Long> getAllIndexedAlertsCount(@NonNull String analysisName) {
     return sumAllAlertsCountWithAnalysisName(analysisName, of(ACKED));
   }
 
-  long sumAllAlertsCountWithAnalysisName(
+  Optional<Long> sumAllAlertsCountWithAnalysisName(
       @NonNull String analysisName, @NonNull List<State> states) {
 
     log.debug("Summing all alerts with analysisName={} and states{}", analysisName, states);
