@@ -55,13 +55,18 @@ def test_get_names_with_unique_bases(names, expected_names):
     [
         ([], []),
         (["abc"], []),
+        (["123 Company"], []),
+        (["M1 Limited"], []),
+        (["ABC DEF GHI JKL Limited"], []),
+        (["Company Limited"], []),
+        (["Company Limited ABC"], []),
+        (["ABC Company"], ["ABC Company"]),
         (["XY Pte Ltd", "XY Limited"], ["XY Pte Ltd", "XY Limited"]),
         (["ABC Company Limited", "Company Limited ABC"], ["ABC Company Limited"]),
         (["Corporation of XYZ"], ["Corporation of XYZ"]),
         (["XYZ Corporation"], ["XYZ Corporation"]),
         (["ABC", "ABC Company"], ["ABC Company"]),
         (["Silent Eight Pte Ltd", "Silent Eight"], ["Silent Eight Pte Ltd"]),
-        (["ABC Limited", "ABC DEF GHI JKL MNO Limited"], ["ABC Limited"]),
     ],
 )
 def test_get_valid_names(names, expected_names):
