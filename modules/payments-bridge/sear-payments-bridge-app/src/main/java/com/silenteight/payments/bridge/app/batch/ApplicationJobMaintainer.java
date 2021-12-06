@@ -44,7 +44,7 @@ class ApplicationJobMaintainer implements JobMaintainer {
   @Override
   public void restartUncompletedJobs() {
     log.info("Restarting all available jobs");
-    jobs.forEach(job -> checkAndRestartLastJobExecution(job.getName()));
+    jobs.forEach(job -> checkAndRestartLastJobExecutions(job.getName()));
   }
 
   @Override
@@ -72,21 +72,28 @@ class ApplicationJobMaintainer implements JobMaintainer {
     });
   }
 
-  private void checkAndRestartLastJobExecution(String jobName) {
-    var lastJobInstance = jobExplorer.getLastJobInstance(jobName);
-    if (lastJobInstance != null) {
-      var lastJobExecution = jobExplorer.getLastJobExecution(lastJobInstance);
-      if (BatchStatus.FAILED.equals(lastJobExecution.getStatus())) {
-        restartJobExecution(lastJobExecution);
+  private void checkAndRestartLastJobExecutions(String jobName) {
+    var jobInstanceSize = getJobInstanceCount(jobName);
+    var jobInstances =
+        jobExplorer.getJobInstances(jobName, 0, jobInstanceSize);
+    jobInstances.forEach(jobInstance -> {
+      var jobExecution = jobExplorer.getLastJobExecution(jobInstance);
+      if (BatchStatus.FAILED.equals(jobExecution.getStatus())) {
+        restartJobExecution(jobExecution);
       } else {
-        log.info("Last job {} execution status was:{} restart ignored", jobName,
-            lastJobExecution.getStatus());
+        log.info("Job:{} execution status was:{} with exitStatus: {} restart ignored",
+            jobName, jobExecution.getStatus(), jobExecution.getExitStatus());
       }
-    } else {
-      log.info(
-          "There is no job instance registered for jobName:{} ignore restarting execution",
-          jobName);
+    });
+  }
+
+  private int getJobInstanceCount(String jobName) {
+    try {
+      return jobExplorer.getJobInstanceCount(jobName);
+    } catch (NoSuchJobException e) {
+      log.warn("Request jobSize for jobName:{} could not be retrieved, no such job", jobName);
     }
+    return 0;
   }
 
   private void restartJobExecution(JobExecution lastJobExecution) {
@@ -98,11 +105,12 @@ class ApplicationJobMaintainer implements JobMaintainer {
     lastJobExecution.setStatus(BatchStatus.STOPPED);
     lastJobExecution.setEndTime(new Date());
     jobRepository.update(lastJobExecution);
-    log.info("Job:{} last execution marked as STOPPED", lastJobExecution.getJobId());
+    log.info("Last job:{} execution:{} marked as STOPPED", lastJobExecution.getJobId(),
+        lastJobExecution.getId());
     try {
       var restartId = jobOperator.restart(lastJobExecution.getId());
       log.info(
-          "Job restarted:{} with assigned executionId:{}", lastJobExecution.getJobId(), restartId);
+          "Job {} restarted with assigned executionId:{}", lastJobExecution.getJobId(), restartId);
     } catch (JobInstanceAlreadyCompleteException |
         NoSuchJobExecutionException |
         NoSuchJobException |
