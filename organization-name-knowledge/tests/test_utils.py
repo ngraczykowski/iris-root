@@ -21,7 +21,7 @@ from organization_name_knowledge.utils.variants import get_term_variants, get_te
         ("A10b20", 2),
         ("abc", 3),
         ("ABCD 55", 4),
-    ]
+    ],
 )
 def test_alpha_char_count(text, expected_num):
     assert alpha_char_count(text) == expected_num
