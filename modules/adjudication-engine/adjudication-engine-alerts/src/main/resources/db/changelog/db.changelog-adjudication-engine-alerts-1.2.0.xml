@@ -47,4 +47,43 @@
       <column name="priority" descending="true"/>
     </createIndex>
   </changeSet>
+
+  <changeSet id="adjudication-engine-alerts-1.2.0_8" author="jgajewski">
+    <dropForeignKeyConstraint
+        baseTableName="ae_alert_labels"
+        constraintName="fk_ae_alert_label_alert_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_alert_labels"
+        baseColumnNames="alert_id"
+        constraintName="fk_ae_alert_labels_alert_id"
+        referencedTableName="ae_alert"
+        referencedColumnNames="alert_id"
+        onDelete="CASCADE"/>
+
+    <dropForeignKeyConstraint
+        baseTableName="ae_match"
+        constraintName="fk_ae_match_alert_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_match"
+        baseColumnNames="alert_id"
+        constraintName="fk_ae_match_alert_id"
+        referencedTableName="ae_alert"
+        referencedColumnNames="alert_id"
+        onDelete="CASCADE"/>
+
+    <dropForeignKeyConstraint
+        baseTableName="ae_match_labels"
+        constraintName="fk_ae_match_label_match_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_match_labels"
+        baseColumnNames="match_id"
+        constraintName="fk_ae_match_labels_match_id"
+        referencedTableName="ae_match"
+        referencedColumnNames="match_id"
+        onDelete="CASCADE"/>
+  </changeSet>
+
 </databaseChangeLog>

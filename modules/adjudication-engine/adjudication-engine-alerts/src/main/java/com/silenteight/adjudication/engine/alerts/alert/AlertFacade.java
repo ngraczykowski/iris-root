@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.api.v1.Alert;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -24,9 +25,12 @@ public class AlertFacade {
   private final AddLabelsUseCase addLabelsUseCase;
   @Nonnull
   private final RemoveLabelUseCase removeLabelUseCase;
+  @Nonnull
+  private final DeleteAlertsUseCase deleteAlertsUseCase;
 
   @Nonnull
-  public List<Alert> createAlerts(@NonNull Iterable<Alert> alerts) {
+  @Transactional
+  public List<Alert> createAlerts(Iterable<Alert> alerts) {
     var newAlerts = createAlertsUseCase.createAlerts(alerts);
 
     log.info(
@@ -34,6 +38,17 @@ public class AlertFacade {
         newAlerts.stream().map(Alert::getName).collect(Collectors.joining(", ")));
 
     return newAlerts;
+  }
+
+  @Transactional
+  public void deleteAlerts(List<Long> alertIds) {
+
+    log.info("Deleting alerts: alertCount={}, alerts={}", alertIds.size(), alertIds);
+
+    var deletedAlertsCount = deleteAlertsUseCase.delete(alertIds);
+
+    log.info("Alerts removed, count={}", deletedAlertsCount);
+
   }
 
   public Map<String, String> addLabels(List<String> alertNames, Map<String, String> labels) {

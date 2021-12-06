@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.adjudication.engine.analysis.pii.PiiDataAccess;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ class JdbcPiiDataAccess implements PiiDataAccess {
   private final RemoveRecommendationMatchContextQuery removeRecommendationMatchContextQuery;
 
   @Override
+  @Transactional
   public void removePiiData(List<Long> alertsIds) {
     removeRecommendationMatchContextQuery.execute(alertsIds);
     removeAlertCommentInputValueQuery.execute(alertsIds);

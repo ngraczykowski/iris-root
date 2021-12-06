@@ -2,13 +2,11 @@ package com.silenteight.adjudication.engine.alerts.alert;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v1.Alert;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.StreamSupport;
@@ -18,7 +16,6 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 
 @RequiredArgsConstructor
 @Service
-@Slf4j
 class CreateAlertsUseCase {
 
   private static final int MAX_PRIORITY = 10;
@@ -29,16 +26,15 @@ class CreateAlertsUseCase {
   private final AlertRepository repository;
 
   @Timed(value = "ae.alerts.use_cases", extraTags = { "package", "alert" })
-  @Transactional
   List<Alert> createAlerts(Iterable<Alert> alerts) {
     return StreamSupport.stream(alerts.spliterator(), false)
-        .map(this::createEntity)
+        .map(CreateAlertsUseCase::createEntity)
         .map(repository::save)
         .map(AlertEntity::toAlert)
         .collect(toUnmodifiableList());
   }
 
-  private AlertEntity createEntity(Alert alert) {
+  private static AlertEntity createEntity(Alert alert) {
     var builder = AlertEntity.builder()
         .clientAlertIdentifier(alert.getAlertId())
         .priority(DEFAULT_PRIORITY);

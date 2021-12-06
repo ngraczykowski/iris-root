@@ -147,4 +147,44 @@
         relativeToChangelogFile="true"
         splitStatements="false"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-analysis-1.7.0_14" author="jgajewski">
+    <dropForeignKeyConstraint
+        baseTableName="ae_pending_recommendation"
+        constraintName="fk_ae_pending_recommendation_alert_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_pending_recommendation"
+        baseColumnNames="alert_id"
+        constraintName="fk_ae_pending_recommendation_alert_id"
+        referencedTableName="ae_alert"
+        referencedColumnNames="alert_id"
+        onDelete="CASCADE"/>
+
+    <dropForeignKeyConstraint
+        baseTableName="ae_recommendation"
+        constraintName="fk_ae_recommendation_alert_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_recommendation"
+        baseColumnNames="alert_id"
+        constraintName="fk_ae_recommendation_alert_id"
+        referencedTableName="ae_alert"
+        referencedColumnNames="alert_id"
+        onDelete="CASCADE"
+        onUpdate="NO ACTION"/>
+
+    <dropForeignKeyConstraint
+        baseTableName="ae_match_solution"
+        constraintName="fk_ae_match_solution_match_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_match_solution"
+        baseColumnNames="match_id"
+        constraintName="fk_ae_match_solution_match_id"
+        referencedTableName="ae_match"
+        referencedColumnNames="match_id"
+        onDelete="CASCADE"
+        onUpdate="NO ACTION"/>
+  </changeSet>
 </databaseChangeLog>

@@ -4,6 +4,9 @@ import com.silenteight.sep.base.common.support.persistence.BasicInMemoryReposito
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.Set;
+
 class InMemoryAlertRepository extends BasicInMemoryRepository<AlertEntity>
     implements AlertRepository {
 
@@ -12,5 +15,14 @@ class InMemoryAlertRepository extends BasicInMemoryRepository<AlertEntity>
   public AlertEntity save(AlertEntity entity) {
     entity.initialize();
     return super.save(entity);
+  }
+
+  @Override
+  public int deleteAllByIdIn(List<Long> alertIds) {
+    Set<Long> keySet = getInternalStore().keySet();
+    int initialSizeOfKeySet = keySet.size();
+
+    alertIds.forEach(keySet::remove);
+    return initialSizeOfKeySet - keySet.size();
   }
 }

@@ -27,7 +27,11 @@ class RemovePiiIntegrationFlow extends IntegrationFlowAdapter {
   }
 
   private int handleResponse(PersonalInformationExpired payload, MessageHeaders headers) {
-    log.debug("Received alerts with expired pii = {}", payload.getAlertsList());
+
+    if (log.isDebugEnabled()) {
+      log.debug("Received alerts with expired pii = {}", payload.getAlertsList());
+    }
+
     facade.removePii(payload.getAlertsList());
     return 0;
   }

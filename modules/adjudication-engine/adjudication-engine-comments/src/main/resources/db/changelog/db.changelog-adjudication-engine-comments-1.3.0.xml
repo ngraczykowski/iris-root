@@ -40,4 +40,18 @@
         constraintName="uq_ae_alert_comment_input_alert_id"/>
   </changeSet>
 
+  <changeSet id="adjudication-engine-comments-1.3.0_2" author="jgajewski">
+    <dropForeignKeyConstraint
+        baseTableName="ae_alert_comment_input"
+        constraintName="fk_ae_alert_comment_input_alert_id"/>
+
+    <addForeignKeyConstraint
+        baseTableName="ae_alert_comment_input"
+        baseColumnNames="alert_id"
+        constraintName="fk_ae_alert_comment_input_alert_id"
+        referencedTableName="ae_alert"
+        referencedColumnNames="alert_id"
+        onDelete="CASCADE"/>
+  </changeSet>
+
 </databaseChangeLog>

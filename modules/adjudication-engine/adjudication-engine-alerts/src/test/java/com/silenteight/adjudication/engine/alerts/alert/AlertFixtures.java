@@ -25,8 +25,9 @@ public class AlertFixtures {
     var createAlertsUseCase = new CreateAlertsUseCase(alertRepository);
     var addAlertLabels = new AddLabelsUseCase(alertLabelDataAccess);
     var removeAlertLabels = new RemoveLabelUseCase(alertLabelDataAccess);
+    var deleteAlerts = new DeleteAlertsUseCase(alertRepository);
 
-    return new AlertFacade(createAlertsUseCase, addAlertLabels, removeAlertLabels);
+    return new AlertFacade(createAlertsUseCase, addAlertLabels, removeAlertLabels, deleteAlerts);
   }
 
   static AlertEntity randomAlertEntity() {
