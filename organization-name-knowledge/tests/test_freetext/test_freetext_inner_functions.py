@@ -12,8 +12,12 @@ from organization_name_knowledge.names.parse import parse_name
     "names, expected_names_to_remove",
     [
         (["ABC Limited"], []),
-        (["ABC Limited", "Limited xyz"], ["Limited xyz"]),
+        (["Company ABC"], []),
+        (["ABC Ltd", "Company XYZ"], []),
+        (["ABC Company", "Company XYZ"], ["Company XYZ"]),
         (["Silent Eight Pte Ltd"], []),
+        (["Silent Eight Pte Ltd", "Ltd Silent Eight"], ["Ltd Silent Eight"]),
+        (["ABC Limited", "Limited xyz"], ["Limited xyz"]),
         (["Silent Eight Pte Ltd", "Ltd 123 456"], ["Ltd 123 456"]),
     ],
 )
@@ -30,9 +34,12 @@ def test_get_names_to_remove(names, expected_names_to_remove):
     [
         (["abc"], ["abc"]),
         (["abc", "abc", "abc", "abc"], ["abc"]),
-        (["Non duplicated name LTD"], ["Non duplicated name"]),
-        (["Silent Eight Pte Ltd", "Silent Eight Company"], ["Silent Eight"]),
-        (["ABC corp", "XYZ corp", "ABC Limited"], ["ABC", "XYZ"]),
+        (["abc", "xyz"], ["abc", "xyz"]),
+        (["abc xyz limited", "xyz abc limited"], ["abc xyz limited", "xyz abc limited"]),
+        (["Silent Eight Pte Ltd", "Silent Eight Company"], ["Silent Eight Pte Ltd"]),
+        (["ABC corp", "XYZ corp", "ABC Limited"], ["ABC corp", "XYZ corp"]),
+        (["The ABC Company", "ABC Company"], ["The ABC Company"]),
+        (["The Fun Company", "Fun Company Limited"], ["Fun Company Limited"]),
     ],
 )
 def test_get_names_with_unique_bases(names, expected_names):
@@ -40,7 +47,7 @@ def test_get_names_with_unique_bases(names, expected_names):
     names = _get_names_with_unique_bases(names)
     assert len(names) == len(expected_names)
     for name, expected in zip(names, expected_names):
-        assert name.base.original_name == expected
+        assert name.source.original == expected
 
 
 @pytest.mark.parametrize(
