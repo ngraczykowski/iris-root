@@ -44,15 +44,15 @@ spec:
             - name: UDS_DB_PASSWORD
               value: {{ .Values.udsDbPassword | quote }}
             - name: SPRING_RABBITMQ_ADDRESSES
-              value: { { .Values.springRabbitmqAddresses | quote } }
+              value: {{ .Values.springRabbitmqAddresses | quote }}
             - name: SPRING_RABBITMQ_PORT
-              value: { { .Values.springRabbitmqPort | quote } }
+              value: {{ .Values.springRabbitmqPort | quote }}
             - name: SPRING_RABBITMQ_USERNAME
-              value: { { .Values.springRabbitmqUsername | quote } }
+              value: {{ .Values.springRabbitmqUsername | quote }}
             - name: SPRING_RABBITMQ_PASSWORD
-              value: { { .Values.springRabbitmqPassword | quote } }
+              value: {{ .Values.springRabbitmqPassword | quote }}
             - name: SPRING_RABBITMQ_VIRTUAL_HOST
-              value: { { .Values.springRabbitmqVirtualHost | quote } }
+              value: {{ .Values.springRabbitmqVirtualHost | quote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           {{ if .Values.args }}
