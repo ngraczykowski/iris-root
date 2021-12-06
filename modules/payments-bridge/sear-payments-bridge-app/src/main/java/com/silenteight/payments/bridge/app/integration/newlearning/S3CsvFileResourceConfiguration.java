@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -14,8 +15,11 @@ import software.amazon.awssdk.services.s3.S3Client;
 @RequiredArgsConstructor
 @Configuration
 @Slf4j
+@EnableConfigurationProperties(S3CsvFileResourceProviderProperties.class)
 @Profile("!mockaws")
 public class S3CsvFileResourceConfiguration {
+
+  private final S3CsvFileResourceProviderProperties properties;
 
   @Bean
   S3Client s3Client() {
@@ -28,7 +32,7 @@ public class S3CsvFileResourceConfiguration {
   @Bean
   @Primary
   CsvFileResourceProvider awsCsvFileResourceProvider() {
-    return new S3CsvFileResourceProvider(s3Client());
+    return new S3CsvFileResourceProvider(s3Client(), properties.getBucketName());
   }
 
 }

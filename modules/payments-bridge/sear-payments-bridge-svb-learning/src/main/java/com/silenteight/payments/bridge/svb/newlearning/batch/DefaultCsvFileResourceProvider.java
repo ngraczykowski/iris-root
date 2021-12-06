@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
 import com.silenteight.payments.bridge.svb.newlearning.batch.exceptions.NoCsvFileResourceFound;
 import com.silenteight.payments.bridge.svb.newlearning.domain.DeleteLearningFileRequest;
+import com.silenteight.payments.bridge.svb.newlearning.domain.ObjectPath;
 import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
 
 import org.springframework.core.io.InputStreamResource;
@@ -15,6 +16,7 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -38,5 +40,10 @@ class DefaultCsvFileResourceProvider implements CsvFileResourceProvider {
   public void deleteLearningFile(
       DeleteLearningFileRequest deleteLearningFileRequest) {
     log.info("Ignore file deletion with DefaultCsvFileResourceProvider implementation");
+  }
+
+  @Override
+  public List<ObjectPath> getFilesList() {
+    return List.of(ObjectPath.builder().name("analystdecison-2-hits.csv").bucket("").build());
   }
 }

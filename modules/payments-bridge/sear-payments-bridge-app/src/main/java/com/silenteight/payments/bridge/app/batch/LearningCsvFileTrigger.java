@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.svb.newlearning.domain.CsvProcessingFileStatus;
 import com.silenteight.payments.bridge.svb.newlearning.domain.ObjectPath;
-import com.silenteight.payments.bridge.svb.newlearning.port.FileListPort;
+import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
 
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toList;
 class LearningCsvFileTrigger {
 
   private final JobMaintainer jobMaintainer;
-  private final FileListPort fileListPort;
+  private final CsvFileResourceProvider csvFileResourceProvider;
   private final LearningFileRepository learningFileRepository;
 
   @Scheduled(cron = "${pb.svb-learning.trigger-csv-processing.cron}")
@@ -33,7 +33,7 @@ class LearningCsvFileTrigger {
       lockAtMostFor = "${pb.svb-learning.trigger-csv-processing.lock-most}",
       lockAtLeastFor = "${pb.svb-learning.trigger-csv-processing.lock-least}")
   public void process() {
-    var repositoryFiles = fileListPort.getFilesList();
+    var repositoryFiles = csvFileResourceProvider.getFilesList();
     var newNames = getNonProcessedFiles(repositoryFiles);
     var savedNames = saveNonProcessedFiles(newNames);
 

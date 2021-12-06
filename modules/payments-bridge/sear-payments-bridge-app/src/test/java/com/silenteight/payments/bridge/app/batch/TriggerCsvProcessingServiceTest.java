@@ -1,7 +1,7 @@
 package com.silenteight.payments.bridge.app.batch;
 
 import com.silenteight.payments.bridge.svb.newlearning.domain.ObjectPath;
-import com.silenteight.payments.bridge.svb.newlearning.port.FileListPort;
+import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 class TriggerCsvProcessingServiceTest {
 
   @Mock
-  private FileListPort fileListPort;
+  private CsvFileResourceProvider csvFileResourceProvider;
   @Mock
   private JobMaintainer jobMaintainer;
   private LearningFileRepository learningFileRepository = new InMemoryLearningFileRepository();
@@ -28,10 +28,10 @@ class TriggerCsvProcessingServiceTest {
   @BeforeEach
   void setUp() {
     triggerCsvLearning =
-        new LearningCsvFileTrigger(jobMaintainer, fileListPort, learningFileRepository);
+        new LearningCsvFileTrigger(jobMaintainer, csvFileResourceProvider, learningFileRepository);
     var object = ObjectPath.builder().name("analystdecison-2-hits.csv").bucket("bucket").build();
 
-    when(fileListPort.getFilesList()).thenReturn(List.of(object));
+    when(csvFileResourceProvider.getFilesList()).thenReturn(List.of(object));
   }
 
   @Test
