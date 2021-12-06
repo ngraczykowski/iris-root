@@ -57,7 +57,7 @@ class FilterAlertMessageService implements FilterAlertMessageUseCase {
   }
 
   private boolean isRequiredResolutionTimeElapsed(AlertMessageStatusEntity alertMessageStatus) {
-    var isOverdue = alertMessageStatus.getLastModifyAt()
+    var isOverdue = alertMessageStatus.getCreatedAt()
         .plus(alertMessageProperties.getDecisionRequestedTime())
         .compareTo(OffsetDateTime.now(clock)) <= 0;
     if (isOverdue) {
