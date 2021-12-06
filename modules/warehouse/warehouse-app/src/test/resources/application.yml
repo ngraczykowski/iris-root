@@ -133,6 +133,13 @@ warehouse.report.metrics:
       name: alert_qa.level-0.state
       positive-value: qa_decision_PASSED
       negative-value: qa_decision_FAILED
+    efficiency:
+      label: Efficiency
+    ptp-effectiveness:
+      label: PTP Effectiveness
+    fp-effectiveness:
+      label: FP Effectiveness
+
   simulation:
     date-field:
       name: index_timestamp
@@ -160,6 +167,12 @@ warehouse.report.metrics:
       name: alert_qa.level-0.state
       positive-value: qa_decision_PASSED
       negative-value: qa_decision_FAILED
+    efficiency:
+      label: Efficiency
+    ptp-effectiveness:
+      label: PTP Effectiveness
+    fp-effectiveness:
+      label: FP Effectiveness
 
 warehouse.report.statistics:
   date-field-name: index_timestamp

@@ -69,4 +69,7 @@ public final class MetricsReportTestFixtures {
       .range(REPORT_RANGE)
       .timestamp(TIMESTAMP)
       .build();
+  public static final String EFFICIENCY_LABEL = "Efficiency";
+  public static final String PTP_EFFICIENCY_LABEL = "PTP Effectiveness";
+  public static final String FP_EFFICIENCY_LABEL = "FP Effectiveness";
 }

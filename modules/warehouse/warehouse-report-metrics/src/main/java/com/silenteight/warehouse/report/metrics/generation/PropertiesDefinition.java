@@ -45,6 +45,15 @@ public class PropertiesDefinition {
   @Valid
   @Nullable
   private List<FilterProperties> filters;
+  @Valid
+  @NotNull
+  private LabelProperties efficiency;
+  @Valid
+  @NotNull
+  private LabelProperties ptpEffectiveness;
+  @Valid
+  @NotNull
+  private LabelProperties fpEffectiveness;
 
   List<String> getFields() {
     List<String> fields = getStaticFields();

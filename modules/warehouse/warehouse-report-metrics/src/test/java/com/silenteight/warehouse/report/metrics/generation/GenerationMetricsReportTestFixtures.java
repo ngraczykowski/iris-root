@@ -28,7 +28,10 @@ public final class GenerationMetricsReportTestFixtures {
           QA_FIELD_POSITIVE_VALUE,
           QA_FIELD_NEGATIVE_VALUE
       ),
-      of(getFilter(ALERT_STATUS_FIELD, COMPLETED_VALUE)));
+      of(getFilter(ALERT_STATUS_FIELD, COMPLETED_VALUE)),
+      getLabel(EFFICIENCY_LABEL),
+      getLabel(PTP_EFFICIENCY_LABEL),
+      getLabel(FP_EFFICIENCY_LABEL));
 
   private static GroupingColumnProperties getGroupingColumn(
       String name, String label, String oldPattern, String newPattern) {
@@ -44,5 +47,9 @@ public final class GenerationMetricsReportTestFixtures {
 
   private static FilterProperties getFilter(String name, String... values) {
     return new FilterProperties(name, asList(values));
+  }
+
+  private static LabelProperties getLabel(String name) {
+    return new LabelProperties(name);
   }
 }
