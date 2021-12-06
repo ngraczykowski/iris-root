@@ -15,8 +15,7 @@ public final class LearningJobConstants {
   public static final String STEP_TRANSFORM_ALERT = "transform-alert";
   public static final String STEP_TRANSFORM_HIT = "transform-hit";
   public static final String STEP_TRANSFORM_RECORD = "transform-listed-record";
-  public static final String STEP_TRANSFORM_ALERTED_MESSAGE = "transform-alerted-message";
-  public static final String STEP_TRANSFORM_STATUS = "transform-status";
+  public static final String REMOVE_DUPLICATES_STEP = "remove-duplicates";
 
   // Params
   public static final String FILE_NAME_PARAMETER = "file-name";

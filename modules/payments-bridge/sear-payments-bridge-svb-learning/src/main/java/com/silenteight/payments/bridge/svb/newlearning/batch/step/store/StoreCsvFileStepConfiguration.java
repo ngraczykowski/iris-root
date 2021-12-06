@@ -7,7 +7,6 @@ import com.silenteight.payments.bridge.svb.newlearning.batch.step.LoadCsvJobProp
 
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -27,9 +26,8 @@ public class StoreCsvFileStepConfiguration {
 
   private final FlatFileItemReader<LearningCsvRowEntity> storeCsvFileStepItemReader;
   private final JpaWriterFactory jpaWriterFactory;
-  private final ItemProcessor storeCsvFileStepProcessor;
+  private final StoreCsvFileStepProcessor storeCsvFileStepProcessor;
 
-  @SuppressWarnings("unchecked")
   @Bean
   Step storeCsvFileStep() {
     return this.stepBuilderFactory

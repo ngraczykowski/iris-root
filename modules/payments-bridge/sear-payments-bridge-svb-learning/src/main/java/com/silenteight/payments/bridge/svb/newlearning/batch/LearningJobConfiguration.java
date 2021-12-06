@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.annotation.AfterJob;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +23,7 @@ class LearningJobConfiguration {
   private final Step transformActionStep;
   private final Step transformHitStep;
   private final Step transformListedRecordStep;
+  private final Step removeDuplicatesStep;
   private final Step deleteFileStep;
 
   @Bean
@@ -34,12 +34,8 @@ class LearningJobConfiguration {
         .next(transformActionStep)
         .next(transformHitStep)
         .next(transformListedRecordStep)
+        .next(removeDuplicatesStep)
         .next(deleteFileStep)
         .build();
-  }
-
-  @AfterJob
-  void clearDuplicates() {
-
   }
 }
