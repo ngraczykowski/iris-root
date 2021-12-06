@@ -14,6 +14,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.silenteight.simulator.processing.alert.index.domain.IndexedAlertFixtures.*;
@@ -119,10 +120,20 @@ class IndexedAlertQueryTest extends BaseDataJpaTest {
     repository.save(SENT_INDEXED_ALERT_ENTITY);
 
     // when
-    long result = underTest.sumAllAlertsCountWithAnalysisName(ANALYSIS_NAME, states);
+    Optional<Long> result = underTest.sumAllAlertsCountWithAnalysisName(ANALYSIS_NAME, states);
 
     // then
-    assertThat(result).isEqualTo(expectedResult);
+    assertThat(result)
+        .isPresent()
+        .contains(expectedResult);
+  }
+
+  @Test
+  void shouldReturnEmptyOptional() {
+    //when
+    Optional<Long> result = underTest.getAllIndexedAlertsCount(ANALYSIS_NAME);
+    //then
+    assertThat(result).isNotPresent();
   }
 
   private static Stream<Arguments> getAlertsCountCriteria() {
