@@ -1,10 +1,8 @@
 package com.silenteight.payments.bridge.svb.newlearning.batch;
 
-import com.silenteight.payments.bridge.svb.newlearning.batch.step.store.LearningCsvRowRepository;
 import com.silenteight.payments.bridge.testing.BaseBatchTest;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Propagation;
@@ -17,9 +15,6 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
 @Import({ TestApplicationConfiguration.class })
 @Sql
 public class DeleteFileStepTest extends BaseBatchTest {
-
-  @Autowired
-  private LearningCsvRowRepository repository;
 
   @Test
   @Sql(scripts = "DeleteFileStepTest.sql")

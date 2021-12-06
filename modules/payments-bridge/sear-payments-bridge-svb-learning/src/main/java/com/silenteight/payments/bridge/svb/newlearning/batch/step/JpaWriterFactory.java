@@ -24,5 +24,4 @@ public class JpaWriterFactory {
     writer.setUsePersist(true);
     return writer;
   }
-
 }
