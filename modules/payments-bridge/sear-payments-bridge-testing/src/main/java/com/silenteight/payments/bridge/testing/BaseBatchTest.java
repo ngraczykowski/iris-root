@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBatchTest
-@Import(DefaultBatchConfigurerConfiguration.class)
+@Import({DefaultBatchConfigurerConfiguration.class})
 @EnableBatchProcessing
 public class BaseBatchTest extends PbBaseDataJpaTest {
 

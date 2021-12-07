@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.LEARNING_JOB_NAME;
+import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.STORE_CSV_JOB_NAME;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -41,7 +41,7 @@ class LearningCsvFileTrigger {
 
     newNames.stream().forEach(file -> {
       jobMaintainer.runJobByName(
-          LEARNING_JOB_NAME, file.toJobParameters());
+          STORE_CSV_JOB_NAME, file.toJobParameters());
       file.setStatus(CsvProcessingFileStatus.TRIGGERED.name());
       learningFileRepository.save(file);
     });
