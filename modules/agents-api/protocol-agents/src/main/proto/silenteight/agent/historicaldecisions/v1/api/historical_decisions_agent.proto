@@ -8,7 +8,7 @@ option java_multiple_files = true;
 
 service HistoricalDecisionsAgent {
   rpc Verify (VerifyRequest) returns (VerifyResponse) {
-    }
+  }
 }
 
 message VerifyRequest {
@@ -25,4 +25,10 @@ enum ModelType {
 
 message VerifyResponse {
   string solution = 1;
+  HistoricalDecisionsReason reason = 2;
+}
+
+message HistoricalDecisionsReason {
+  uint32 true_positive_count = 1;
+  uint32 false_positive_count = 2;
 }
