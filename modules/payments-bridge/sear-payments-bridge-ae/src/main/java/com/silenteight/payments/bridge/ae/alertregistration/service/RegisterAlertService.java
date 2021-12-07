@@ -34,6 +34,8 @@ import static java.util.stream.Collectors.toMap;
 @Slf4j
 class RegisterAlertService implements RegisterAlertUseCase {
 
+  private static final String SOURCE_LABEL_FOR_CMAPI_ALERTS = "solving";
+
   private final AlertClientPort alertClient;
   private final RegisteredAlertDataAccessPort registeredAlertDataAccessPort;
 
@@ -71,7 +73,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
         .alertTime(fromOffsetDateTime(alertDto.getFilteredAt(ZoneOffset.UTC)))
         .priority(alertData.getPriority())
         .matchIds(matchIds)
-        .label(Label.of("source", "CMAPI"))
+        .label(Label.of("source", SOURCE_LABEL_FOR_CMAPI_ALERTS))
         .label(Label.of("alertMessageId", alertData.getAlertId().toString()))
         .build();
   }

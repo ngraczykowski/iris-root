@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.toList;
 public class LearningAlert {
 
   private static final int LEARNING_PRIORITY = 3;
+  private static final String SOURCE_LABEL_FOR_ALERTS_FROM_FILES = "learning";
 
   String alertId;
 
@@ -63,7 +64,7 @@ public class LearningAlert {
         .matchIds(matches.stream().map(LearningMatch::getMatchId).collect(toList()))
         .label(Label.of("learningBatch", batchStamp))
         .label(Label.of("fileName", fileName))
-        .label(Label.of("source", "CSV"))
+        .label(Label.of("source", SOURCE_LABEL_FOR_ALERTS_FROM_FILES))
         .build();
   }
 
