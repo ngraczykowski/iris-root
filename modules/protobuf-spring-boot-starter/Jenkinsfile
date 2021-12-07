@@ -2,7 +2,7 @@
 
 gradleBuild(
     jdkVersion: 'jdk-11',
-    sonarEnabled: true,
+    sonarEnabled: false,
     archiveArtifactsPattern: '**/build/libs/*.jar',
     includeBuildNumberInSnapshotVersion: true,
 )
