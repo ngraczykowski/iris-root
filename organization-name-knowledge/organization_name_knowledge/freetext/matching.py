@@ -12,7 +12,7 @@ def get_all_contained_legal_terms(text: str) -> Set[str]:
 
 
 def _get_matching_tokens(text: str, term_sources: TermSources) -> Set[str]:
-    """For given name, produces all substrings, i. e.:
+    """For given name, produces all substrings, i.e.:
     "A B C" -> "A", "B", "C" ,"A B", "B C", "A B C"
     Then producing a set of all these that are present in given term_sources
 
@@ -21,7 +21,7 @@ def _get_matching_tokens(text: str, term_sources: TermSources) -> Set[str]:
     text : str
         A string which may contain a terms from term sources
     term_sources : TermSources
-        TermSources object, containing set of known terms to check tokens matching in text
+        An object containing set of known terms to check tokens matching in text
 
     Returns
     -------

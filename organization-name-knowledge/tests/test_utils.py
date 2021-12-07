@@ -1,6 +1,7 @@
 import pytest
 
 from organization_name_knowledge.utils.text import (
+    alpha_char_count,
     clear_name,
     contains_conjunction,
     divide,
@@ -11,6 +12,19 @@ from organization_name_knowledge.utils.text import (
     starts_with_preposition,
 )
 from organization_name_knowledge.utils.variants import get_term_variants, get_text_variants
+
+
+@pytest.mark.parametrize(
+    "text, expected_num",
+    [
+        ("123", 0),
+        ("A10b20", 2),
+        ("abc", 3),
+        ("ABCD 55", 4),
+    ],
+)
+def test_alpha_char_count(text, expected_num):
+    assert alpha_char_count(text) == expected_num
 
 
 @pytest.mark.parametrize(
