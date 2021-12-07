@@ -2,13 +2,13 @@
 
 syntax = "proto3";
 
-package silenteight.registration.internal.proto.v1;
+package silenteight.proto.registration.api.v1;
 
 import "google/api/field_behavior.proto";
 
 option java_multiple_files = true;
 option java_outer_classname = "RegistrationMessageProto";
-option java_package = "com.silenteight.registration.internal.proto.v1";
+option java_package = "com.silenteight.proto.registration.api.v1";
 
 message MessageAlertMatchesFeatureInputFed {
   string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
@@ -22,5 +22,6 @@ message FedMatch {
 
 message MessageBatchCompleted {
   string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
-  repeated string alert_ids = 2 [(google.api.field_behavior) = REQUIRED];
+  string analysis_id = 2 [(google.api.field_behavior) = REQUIRED];
+  repeated string alert_ids = 3 [(google.api.field_behavior) = REQUIRED];
 }

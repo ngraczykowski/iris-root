@@ -2,13 +2,13 @@
 
 syntax = "proto3";
 
-package silenteight.registration.internal.proto.v1;
+package silenteight.proto.registration.api.v1;
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
 
-option java_package = "com.silenteight.registration.internal.proto.v1";
+option java_package = "com.silenteight.proto.registration.api.v1";
 option java_outer_classname = "RegistrationServiceProto";
 option java_multiple_files = true;
 

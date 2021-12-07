@@ -3,7 +3,7 @@ package com.silenteight.registration.api.library.v1;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.registration.internal.proto.v1.RegistrationServiceGrpc.RegistrationServiceBlockingStub;
+import com.silenteight.proto.registration.api.v1.RegistrationServiceGrpc.RegistrationServiceBlockingStub;
 
 import io.vavr.control.Try;
 

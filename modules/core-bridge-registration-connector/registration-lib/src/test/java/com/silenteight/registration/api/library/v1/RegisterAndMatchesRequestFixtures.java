@@ -1,10 +1,5 @@
 package com.silenteight.registration.api.library.v1;
 
-import com.silenteight.registration.api.library.v1.AlertStatusIn;
-import com.silenteight.registration.api.library.v1.AlertWithMatchesIn;
-import com.silenteight.registration.api.library.v1.MatchIn;
-import com.silenteight.registration.api.library.v1.RegisterAlertsAndMatchesIn;
-
 import java.util.List;
 
 class RegisterAndMatchesRequestFixtures {

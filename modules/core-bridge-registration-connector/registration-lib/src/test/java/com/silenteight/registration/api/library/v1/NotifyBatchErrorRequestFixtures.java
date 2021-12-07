@@ -1,7 +1,5 @@
 package com.silenteight.registration.api.library.v1;
 
-import com.silenteight.registration.api.library.v1.NotifyBatchErrorIn;
-
 class NotifyBatchErrorRequestFixtures {
 
   static final String BATCH_ID = "batch_id";

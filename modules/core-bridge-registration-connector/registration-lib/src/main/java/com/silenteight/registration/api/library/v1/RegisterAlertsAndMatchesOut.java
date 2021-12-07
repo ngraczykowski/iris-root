@@ -3,7 +3,7 @@ package com.silenteight.registration.api.library.v1;
 import lombok.Builder;
 import lombok.Value;
 
-import com.silenteight.registration.internal.proto.v1.RegisterAlertsAndMatchesResponse;
+import com.silenteight.proto.registration.api.v1.RegisterAlertsAndMatchesResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;

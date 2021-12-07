@@ -1,7 +1,7 @@
 package com.silenteight.registration.api.library.v1;
 
-import com.silenteight.registration.internal.proto.v1.*;
-import com.silenteight.registration.internal.proto.v1.RegistrationServiceGrpc.RegistrationServiceImplBase;
+import com.silenteight.proto.registration.api.v1.*;
+import com.silenteight.proto.registration.api.v1.RegistrationServiceGrpc.RegistrationServiceImplBase;
 
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
@@ -12,8 +12,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 class RegistrationServiceGrpcAdapterTest {
 
-  @RegisterExtension
-  GrpcServerExtension grpcServerExtension = new GrpcServerExtension();
+  @RegisterExtension GrpcServerExtension grpcServerExtension = new GrpcServerExtension();
 
   private RegistrationServiceGrpcAdapter underTest;
 

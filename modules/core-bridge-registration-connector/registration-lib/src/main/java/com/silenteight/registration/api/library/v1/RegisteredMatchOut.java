@@ -3,7 +3,7 @@ package com.silenteight.registration.api.library.v1;
 import lombok.Builder;
 import lombok.Value;
 
-import com.silenteight.registration.internal.proto.v1.RegisteredMatch;
+import com.silenteight.proto.registration.api.v1.RegisteredMatch;
 
 @Value
 @Builder
