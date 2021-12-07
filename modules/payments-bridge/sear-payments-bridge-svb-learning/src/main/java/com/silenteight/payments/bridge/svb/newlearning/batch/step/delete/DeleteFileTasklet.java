@@ -10,34 +10,36 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
-import org.springframework.stereotype.Component;
 
 import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.BUCKET_NAME_PARAMETER;
 import static com.silenteight.payments.bridge.svb.newlearning.batch.LearningJobConstants.FILE_NAME_PARAMETER;
 
-
-@Component
 @RequiredArgsConstructor
 @Slf4j
 public class DeleteFileTasklet implements Tasklet {
 
   private final CsvFileResourceProvider resourceProvider;
+  private final boolean skipDeletion;
 
   @Override
   public RepeatStatus execute(
       StepContribution contribution,
       ChunkContext chunkContext) {
-    var fileName =
-        contribution.getStepExecution().getJobParameters().getString(FILE_NAME_PARAMETER);
-    var bucketName =
-        contribution.getStepExecution().getJobParameters().getString(BUCKET_NAME_PARAMETER);
-    log.info("Tasklet of deleting s3 file has been executed:{}", fileName);
-    resourceProvider.deleteLearningFile(DeleteLearningFileRequest.builder()
-        .bucket(bucketName)
-        .object(fileName)
-        .build());
-
-    return RepeatStatus.FINISHED;
+    if (skipDeletion) {
+      log.info("File deletion tasklet will be skipped due to configuration setup.");
+      return RepeatStatus.FINISHED;
+    } else {
+      var fileName =
+          contribution.getStepExecution().getJobParameters().getString(FILE_NAME_PARAMETER);
+      var bucketName =
+          contribution.getStepExecution().getJobParameters().getString(BUCKET_NAME_PARAMETER);
+      log.info("Tasklet of deleting s3 file has been executed:{}", fileName);
+      resourceProvider.deleteLearningFile(DeleteLearningFileRequest.builder()
+          .bucket(bucketName)
+          .object(fileName)
+          .build());
+      return RepeatStatus.FINISHED;
+    }
   }
 
 }

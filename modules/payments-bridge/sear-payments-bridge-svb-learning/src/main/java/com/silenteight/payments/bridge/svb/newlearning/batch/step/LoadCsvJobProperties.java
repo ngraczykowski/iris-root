@@ -21,6 +21,7 @@ public class LoadCsvJobProperties {
   private int chunkSize = 10;
   private String fileEncoding = "CP1250";
   private long retryPeriodMilliseconds = 30 * 1000;
+  private boolean skipDeletion;
   @NotEmpty
   private String timeZone = "America/Chicago";
 
