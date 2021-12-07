@@ -13,7 +13,6 @@ import java.util.List;
 
 import static com.silenteight.adjudication.engine.alerts.alert.AlertFixtures.createLabelInsertRequest;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Sql
 @ContextConfiguration(classes = {
@@ -35,12 +34,6 @@ class JdbcAlertLabelDataAccessIT extends BaseJdbcTest {
     assertThat(jdbcTemplate.queryForObject(
         "SELECT count(*) FROM ae_alert_labels",
         Integer.class)).isEqualTo(1);
-  }
-
-  @Test
-  void shouldThrowException() {
-    var request = createLabelInsertRequest();
-    assertThrows(Exception.class, () -> dataAccess.insertLabels(List.of(request, request)));
   }
 
   @Test

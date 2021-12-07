@@ -86,4 +86,15 @@
         onDelete="CASCADE"/>
   </changeSet>
 
+  <changeSet id="adjudication-engine-alerts-1.2.0_9" author="jgajewski">
+    <dropUniqueConstraint
+        tableName="ae_alert_labels"
+        constraintName="uq_ae_alert_label_alert_id_name"/>
+
+  <addUniqueConstraint
+      columnNames="alert_id, name, value"
+      constraintName="uq_ae_alert_labels_alert_id_name_value"
+      tableName="ae_alert_labels"/>
+  </changeSet>
+
 </databaseChangeLog>

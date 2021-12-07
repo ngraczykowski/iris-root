@@ -27,21 +27,8 @@ class AddLabelsUseCase {
                 .labelName(key)
                 .labelValue(value)
                 .build())));
-    try {
-      alertLabelDataAccess.insertLabels(requests);
-    } catch (Exception e) {
-      throw new LabelAlreadyExistsException(e);
-    }
+    alertLabelDataAccess.insertLabels(requests);
 
     return labels;
-  }
-
-  protected static class LabelAlreadyExistsException extends RuntimeException {
-
-    private static final long serialVersionUID = 801998876476989473L;
-
-    LabelAlreadyExistsException(Exception e) {
-      super("There is already created label for alert", e);
-    }
   }
 }
