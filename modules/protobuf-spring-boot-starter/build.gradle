@@ -1,7 +1,8 @@
 plugins {
-  id 'io.spring.dependency-management' version '1.0.8.RELEASE'
   id 'java'
   id "maven-publish"
+  id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+  id "org.sonarqube" version "3.0"
   id "com.silenteight.gradle.release" version "1.4.0"
 }
 
