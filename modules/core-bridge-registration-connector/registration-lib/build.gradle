@@ -4,10 +4,12 @@ plugins {
   id "maven-publish"
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-
 ext {
   gradleScriptDir = "${rootProject.projectDir}/gradle/scripts"
 }
 
 apply from: "${gradleScriptDir}/dependencies.gradle"
+
+dependencies {
+  implementation project(":registration-internal-protos")
+}

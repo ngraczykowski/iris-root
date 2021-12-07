@@ -4,3 +4,7 @@ plugins {
   id "maven-publish"
   id "com.google.protobuf"
 }
+
+protobufSetup {
+  generateGrpc = true
+}
