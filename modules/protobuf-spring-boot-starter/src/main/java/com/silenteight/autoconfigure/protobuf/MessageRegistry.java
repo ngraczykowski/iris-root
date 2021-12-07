@@ -6,9 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.google.common.base.Preconditions;
-import com.google.protobuf.*;
+import com.google.protobuf.Any;
 import com.google.protobuf.Descriptors.Descriptor;
-import com.google.protobuf.util.JsonFormat;
+import com.google.protobuf.Message;
+import com.google.protobuf.Parser;
 import com.google.protobuf.util.JsonFormat.TypeRegistry;
 import org.springframework.amqp.support.converter.MessageConversionException;
 
@@ -40,8 +41,10 @@ class MessageRegistry {
   @SuppressWarnings("unchecked")
   private void registerMessageType(Class<? extends Message> type) {
 
-    Descriptor descriptor = (Descriptor) ReflectionUtils.invokeStaticGetter(type, "getDescriptor").orElse(null);
-    Parser<Message> parser = (Parser<Message>) ReflectionUtils.invokeStaticGetter(type, "parser").orElse(null);
+    Descriptor descriptor = (Descriptor) ReflectionUtils.invokeStaticGetter(type, "getDescriptor")
+        .orElse(null);
+    Parser<Message> parser = (Parser<Message>) ReflectionUtils.invokeStaticGetter(type, "parser")
+        .orElse(null);
 
     if (descriptor == null || parser == null) {
       if (log.isDebugEnabled())
@@ -125,23 +128,6 @@ class MessageRegistry {
 
   public Stream<Class<? extends Message>> streamMessageTypes() {
     return messageTypes.values().stream().map(MessageType::getType);
-  }
-
-  public Optional<String> maybeToJson(Message message) {
-    try {
-      return Optional.of(toJson(message));
-    } catch (InvalidProtocolBufferException e) {
-      log.error("Cannot convert message to JSON: message={}", TextFormat.shortDebugString(message), e);
-      return Optional.empty();
-    }
-  }
-
-  public String toJson(Message message) throws InvalidProtocolBufferException {
-    return JsonFormat
-        .printer()
-        .usingTypeRegistry(typeRegistry)
-        .sortingMapKeys()
-        .print(message);
   }
 
   @RequiredArgsConstructor
