@@ -1,0 +1,2 @@
+rootProject.name = 'universal-data-source-connector'
+include 'uds-lib'
