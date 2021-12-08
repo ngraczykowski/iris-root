@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import static com.silenteight.adjudication.api.v1.Analysis.State.DONE;
+import static com.silenteight.simulator.management.domain.SimulationState.ARCHIVED;
 import static com.silenteight.simulator.management.domain.SimulationState.CANCELED;
 import static com.silenteight.simulator.management.domain.SimulationState.PENDING;
 import static java.time.ZoneOffset.UTC;
@@ -42,6 +43,7 @@ public final class SimulationFixtures {
   public static final String USERNAME = "USERNAME";
   public static final SimulationState PENDING_STATE = PENDING;
   public static final SimulationState CANCELED_STATE = CANCELED;
+  public static final SimulationState ARCHIVED_STATE = ARCHIVED;
   public static final Instant NOW = Instant.ofEpochMilli(1566469674663L);
   public static final String POLICY_NAME = "policies/de1afe98-0b58-4941-9791-4e081f9b8139";
   public static final String STRATEGY_NAME = "UNSOLVED_ALERTS";

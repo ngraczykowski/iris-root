@@ -4,14 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 import com.silenteight.simulator.common.web.rest.RestConstants;
+import com.silenteight.simulator.management.domain.SimulationState;
 import com.silenteight.simulator.management.list.dto.SimulationDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static java.util.List.of;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
@@ -24,10 +29,10 @@ class ListSimulationRestController {
   @NonNull
   private final ListSimulationsQuery simulationQuery;
 
-  @GetMapping(value = SIMULATIONS_URL)
+  @GetMapping(value = SIMULATIONS_URL, params = "state")
   @PreAuthorize("isAuthorized('LIST_SIMULATIONS')")
-  public ResponseEntity<List<SimulationDto>> list() {
-    return ok(simulationQuery.list());
+  public ResponseEntity<List<SimulationDto>> listForStates(@RequestParam SimulationState... state) {
+    return ResponseEntity.ok(simulationQuery.list(of(state)));
   }
 
   @GetMapping(value = SIMULATIONS_URL, params = "model")

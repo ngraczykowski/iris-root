@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.silenteight.simulator.management.SimulationFixtures.*;
+import static java.util.List.of;
 import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
 
@@ -31,14 +32,14 @@ class SimulationQueryTest extends BaseDataJpaTest {
   SimulationRepository simulationRepository;
 
   @Test
-  void shouldListSimulations() {
+  void shouldListSimulationsByStates() {
     // given
     UUID canceledSimulationId = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
     persistSimulation(ID, PENDING_STATE);
     persistSimulation(canceledSimulationId, CANCELED_STATE);
 
     // when
-    List<SimulationDto> result = underTest.list();
+    List<SimulationDto> result = underTest.list(of(PENDING_STATE, ARCHIVED_STATE));
 
     // then
     assertThat(result).hasSize(1);
@@ -64,7 +65,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
     persistSimulation(ID, PENDING_STATE);
 
     // when
-    List<SimulationDto> result = underTest.findByModels(List.of(MODEL_NAME));
+    List<SimulationDto> result = underTest.findByModels(of(MODEL_NAME));
 
     // then
     assertThat(result).hasSize(1);

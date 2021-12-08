@@ -28,7 +28,8 @@ import static org.springframework.http.HttpStatus.OK;
 })
 class ListSimulationRestControllerTest extends BaseRestControllerTest {
 
-  private static final String SIMULATIONS_URL = "/v1/simulations";
+  private static final String SIMULATIONS_URL_BY_STATES =
+      format("/v1/simulations?state=%s", PENDING_STATE);
   private static final String SIMULATIONS_BY_MODEL_NAME_URL =
       format("/v1/simulations?model=%s", MODEL_NAME);
 
@@ -37,8 +38,8 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { MODEL_TUNER, AUDITOR, APPROVER, QA, QA_ISSUE_MANAGER })
   void its200_whenSimulationFound() {
-    given(simulationQuery.list()).willReturn(of(SIMULATION_DTO));
-    get(SIMULATIONS_URL)
+    given(simulationQuery.list(of(PENDING_STATE))).willReturn(of(SIMULATION_DTO));
+    get(SIMULATIONS_URL_BY_STATES)
         .statusCode(OK.value())
         .body("size()", is(1))
         .body("[0].id", is(ID.toString()))
@@ -53,7 +54,7 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { USER_ADMINISTRATOR })
   void its403_whenNotPermittedRoleForListing() {
-    get(SIMULATIONS_URL).statusCode(FORBIDDEN.value());
+    get(SIMULATIONS_URL_BY_STATES).statusCode(FORBIDDEN.value());
   }
 
   @TestWithRole(roles = { MODEL_TUNER, AUDITOR, APPROVER, QA, QA_ISSUE_MANAGER })
@@ -75,8 +76,7 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
   @TestWithRole(roles = { MODEL_TUNER, AUDITOR, APPROVER, QA, QA_ISSUE_MANAGER })
   void its404_whenSimulationByModelNameThrowsInvalidModelNameException() {
     given(simulationQuery.findByModel(MODEL_NAME)).willThrow(InvalidModelNameException.class);
-    get(SIMULATIONS_BY_MODEL_NAME_URL)
-        .statusCode(NOT_FOUND.value());
+    get(SIMULATIONS_BY_MODEL_NAME_URL).statusCode(NOT_FOUND.value());
   }
 
   @TestWithRole(roles = { USER_ADMINISTRATOR })
