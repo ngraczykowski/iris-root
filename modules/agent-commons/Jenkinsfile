@@ -4,5 +4,6 @@ gradleBuild(
     jdkVersion: 'jdk-11',
     sonarEnabled: true,
     failPipeline: true,
+    sonarDecorate: true,
     dependencyCheckEnabled: true,
     archiveArtifactsPattern: '**/build/libs/*.jar')
