@@ -24,6 +24,7 @@ public class StoreCsvJobProperties {
   private boolean skipDeletion;
   @NotEmpty
   private String timeZone = "America/Chicago";
+  private int retryLimit = 5;
 
   @PostConstruct
   void initialize() {

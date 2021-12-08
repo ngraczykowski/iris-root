@@ -44,6 +44,7 @@ public class StoreCsvFileStepConfiguration {
         .retryPolicy(new AlwaysRetryPolicy())
         .retry(S3Exception.class)
         .retry(IOException.class)
+        .retryLimit(properties.getRetryLimit())
         .backOffPolicy(backoffPolicy())
         .build();
   }
