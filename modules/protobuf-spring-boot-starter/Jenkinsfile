@@ -4,5 +4,5 @@ gradleBuild(
     jdkVersion: 'jdk-11',
     sonarEnabled: false,
     archiveArtifactsPattern: '**/build/libs/*.jar',
-    includeBuildNumberInSnapshotVersion: true,
+    includeBuildNumberInSnapshotVersion: false,
 )

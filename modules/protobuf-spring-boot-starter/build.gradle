@@ -26,9 +26,9 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter'
   implementation 'io.github.classgraph:classgraph:4.8.137'
 
+  implementation 'com.google.protobuf:protobuf-java-util:3.19.1'
   compileOnly 'org.springframework.amqp:spring-amqp:2.3.9'
   compileOnly 'org.springframework.amqp:spring-rabbit:2.3.9'
-  compileOnly 'com.google.protobuf:protobuf-java-util:3.19.1'
   compileOnly 'org.projectlombok:lombok:1.18.22'
   compileOnly 'org.apache.commons:commons-lang3:3.12.0'
 
