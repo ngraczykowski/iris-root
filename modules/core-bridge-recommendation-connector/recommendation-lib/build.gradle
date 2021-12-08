@@ -1,0 +1,15 @@
+plugins {
+  id "idea"
+  id 'java-library'
+  id "maven-publish"
+}
+
+ext {
+  gradleScriptDir = "${rootProject.projectDir}/gradle/scripts"
+}
+
+apply from: "${gradleScriptDir}/dependencies.gradle"
+
+dependencies {
+  implementation project(":recommendation-internal-protos")
+}

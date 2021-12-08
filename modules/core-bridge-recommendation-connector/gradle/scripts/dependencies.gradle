@@ -1,0 +1,30 @@
+ext {
+  libraries = [:]
+
+  //***********************************
+  // Silent Eight
+  //***********************************
+
+}
+
+// Silent Eight
+
+// APIs
+
+// GRPC
+
+// Others
+
+// Testing
+
+dependencies {
+
+}
+
+repositories {
+  mavenCentral()
+}
+
+test {
+  useJUnitPlatform()
+}

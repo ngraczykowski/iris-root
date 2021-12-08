@@ -1,0 +1,21 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.proto.recommendation.api.v1;
+
+import "google/api/field_behavior.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "RecommendationMessageProto";
+option java_package = "com.silenteight.proto.recommendation.api.v1";
+
+message RecommendationsDelivered {
+  string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string alert_ids = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RecommendationsReceived {
+  string analysis_id = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string alert_ids = 2 [(google.api.field_behavior) = REQUIRED];
+}

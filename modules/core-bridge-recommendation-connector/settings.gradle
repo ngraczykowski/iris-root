@@ -1,0 +1,4 @@
+rootProject.name = 'core-bridge-recommendation-connector'
+
+include('recommendation-lib')
+include('recommendation-internal-protos')

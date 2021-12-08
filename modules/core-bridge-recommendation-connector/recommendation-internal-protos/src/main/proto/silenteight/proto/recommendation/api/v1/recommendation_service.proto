@@ -1,0 +1,40 @@
+// Copyright 2021 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.proto.recommendation.api.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_package = "com.silenteight.proto.recommendation.api.v1";
+option java_outer_classname = "RecommendationServiceProto";
+option java_multiple_files = true;
+
+service RecommendationService {
+  rpc GetRecommendations (RecommendationsRequest) returns (RecommendationsResponse) {
+    option (google.api.http) = {
+      post: "/v1/recommendation:getRecommendations"
+      body: "getRecommendations"
+    };
+  }
+}
+
+message RecommendationsResponse {
+  repeated Recommendation recommendations = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message Recommendation {
+  string alert = 1 [(google.api.field_behavior) = REQUIRED];
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
+  string recommended_action = 3 [(google.api.field_behavior) = REQUIRED];
+  string recommendation_comment = 4;
+  google.protobuf.Timestamp recommended_at = 5 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RecommendationsRequest {
+  string analysis_id = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string alert_ids = 2 [(google.api.field_behavior) = REQUIRED];
+}
