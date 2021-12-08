@@ -369,4 +369,13 @@
       <column name="fkco_v_status_behavior" type="VARCHAR(32)"/>
     </addColumn>
   </changeSet>
+
+  <changeSet id="payments-bridge-svb-learning-1.4.11" author="wkeska">
+    <modifyDataType tableName="pb_learning_csv_row"
+                    columnName="fkco_v_action_comment"
+                    newDataType="TEXT"/>
+    <modifyDataType tableName="pb_learning_action"
+                    columnName="fkco_v_action_comment"
+                    newDataType="TEXT"/>
+  </changeSet>
 </databaseChangeLog>
