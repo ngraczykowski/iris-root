@@ -36,12 +36,6 @@ public class StoreCsvFileStepConfiguration {
         .reader(storeCsvFileStepItemReader)
         .processor(storeCsvFileStepProcessor)
         .writer(jpaWriterFactory.createJpaWriter())
-//        .faultTolerant()
-//        .retryPolicy(new AlwaysRetryPolicy())
-//        .retry(S3Exception.class)
-//        .retry(IOException.class)
-//        .retryLimit(properties.getRetryLimit())
-//        .backOffPolicy(backoffPolicy())
         .build();
   }
 
