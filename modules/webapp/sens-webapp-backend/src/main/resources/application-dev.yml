@@ -5,10 +5,24 @@ logging:
 
 
 keycloak:
-  frontend-client-id: dev-frontend
+  public-client: true
+  frontend-client-id: frontend
   client-id: ${keycloak.frontend-client-id}
   adapter:
-    resource: backend
+    auth-server-url: http://localhost:24491/auth
+    realm: sens-webapp
+    public-client: false
+    confidential-port: 0
+    principal-attribute: preferred_username
+    ssl-required: external
     credentials:
-      secret: check-in-bravo-consul
+      secret: <your-secret>
+    resource: backend
 
+sens:
+  webapp:
+    rabbitmq:
+      host: localhost
+      port: 24160
+      user: dev
+      password: dev
