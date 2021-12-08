@@ -174,7 +174,9 @@ def test_parse_name_base(name, expected_base):
         (
             "[ORIGINATOR     ] IT36701908273410 AC 121140399 BANK OF TIANJIN CO LTD NO.15 YOU YI ROAD,HE XI DISTRICT",
             [
+                {"base": "ac bank", "legal": "", "source": "ac bank"},
                 {"base": "bank of tianjin", "legal": "co ltd", "source": "bank of tianjin co ltd"},
+                {"base": "it ac bank", "legal": "", "source": "it ac bank"},
                 {"base": "tianjin", "legal": "co ltd", "source": "of tianjin co ltd"},
             ],
         ),
@@ -251,12 +253,18 @@ def test_parse_name_base(name, expected_base):
                 {"base": "LLC VTB DC", "legal": "LLC", "source": "LLC VTB DC"},
             ],
         ),
+        (
+            "A long history of SCB Bank starts about 100 b.c.",
+            [{"base": "scb bank", "legal": "", "source": "of scb bank"}],
+        ),
     ],
 )
 def test_parse_freetext(freetext, expected_names):
     parsed_freetext = parse_freetext(
         freetext, base_tokens_upper_limit=3, name_tokens_lower_limit=2, name_tokens_upper_limit=7
     )
+    print([x.source.original for x in parsed_freetext])
+    print([x.base.cleaned_name for x in parsed_freetext])
     assert len(parsed_freetext) == len(expected_names)
     for name_information, expected in zip(parsed_freetext, expected_names):
         assert name_information
