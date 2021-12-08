@@ -13,10 +13,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.backoff.BackOffPolicy;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
-import org.springframework.retry.policy.AlwaysRetryPolicy;
-import software.amazon.awssdk.services.s3.model.S3Exception;
-
-import java.io.IOException;
 
 import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.STORE_FILE_STEP;
 
@@ -40,12 +36,12 @@ public class StoreCsvFileStepConfiguration {
         .reader(storeCsvFileStepItemReader)
         .processor(storeCsvFileStepProcessor)
         .writer(jpaWriterFactory.createJpaWriter())
-        .faultTolerant()
-        .retryPolicy(new AlwaysRetryPolicy())
-        .retry(S3Exception.class)
-        .retry(IOException.class)
-        .retryLimit(properties.getRetryLimit())
-        .backOffPolicy(backoffPolicy())
+//        .faultTolerant()
+//        .retryPolicy(new AlwaysRetryPolicy())
+//        .retry(S3Exception.class)
+//        .retry(IOException.class)
+//        .retryLimit(properties.getRetryLimit())
+//        .backOffPolicy(backoffPolicy())
         .build();
   }
 
