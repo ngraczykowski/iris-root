@@ -8,6 +8,7 @@ import com.silenteight.payments.bridge.svb.newlearning.domain.DeleteLearningFile
 import com.silenteight.payments.bridge.svb.newlearning.domain.ObjectPath;
 import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -26,6 +27,7 @@ class S3CsvFileResourceProvider implements CsvFileResourceProvider {
 
   private final S3Client s3Client;
   private final String bucketName;
+  private final String prefix;
 
   @Override
   public Resource getResource(
@@ -74,14 +76,15 @@ class S3CsvFileResourceProvider implements CsvFileResourceProvider {
   }
 
   private List<String> requestFilesNames() {
-    var response = s3Client.listObjectsV2(
-        ListObjectsV2Request.builder()
-            .bucket(bucketName)
-            .build());
+    var requestBuilder = ListObjectsV2Request.builder().bucket(bucketName);
+    if (StringUtils.isNotBlank(prefix))
+      requestBuilder.prefix(prefix);
+
+    var response = s3Client.listObjectsV2(requestBuilder.build());
 
     return response.contents()
         .stream()
-        .filter(o -> o.size() > 0) // Need to filter folders cause aws treats them as file as well
+        .filter(o -> o.size() > 0) // Need to filter folders cause aws treats them as file as well.
         .map(S3Object::key)
         .collect(
             toList());

@@ -12,4 +12,5 @@ class S3CsvFileResourceProviderProperties {
 
   private String bucketName;
 
+  private String prefix;
 }

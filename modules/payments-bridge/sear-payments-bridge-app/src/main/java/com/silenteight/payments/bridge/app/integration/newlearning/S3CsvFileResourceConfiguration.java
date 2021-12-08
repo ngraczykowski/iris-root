@@ -32,7 +32,8 @@ public class S3CsvFileResourceConfiguration {
   @Bean
   @Primary
   CsvFileResourceProvider awsCsvFileResourceProvider() {
-    return new S3CsvFileResourceProvider(s3Client(), properties.getBucketName());
+    return new S3CsvFileResourceProvider(
+        s3Client(), properties.getBucketName(), properties.getPrefix());
   }
 
 }
