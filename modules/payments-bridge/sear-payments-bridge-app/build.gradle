@@ -18,6 +18,7 @@ dependencies {
   implementation project(":sear-payments-bridge-warehouse")
   implementation project(":sear-payments-bridge-etl")
   implementation project(":sear-payments-bridge-notification")
+  implementation project(":sear-payments-bridge-metrics")
   implementation project(":proto-sear-payments-bridge-internal-protos")
   testImplementation project(":sear-payments-bridge-testing")
 
