@@ -61,6 +61,12 @@ def divide(name: str) -> Tuple[str, ...]:
     return tuple(replaced.strip().split())
 
 
+def is_dependent_token(text: str) -> bool:
+    if text in CONJUNCTIONS or text in PREPOSITIONS:
+        return True
+    return False
+
+
 def remove_split_chars(name: str) -> str:
     return SPLIT_AND_LEAVE_CHARS_REGEX.sub("", SPLIT_CHARS_REGEX.sub("", name))
 

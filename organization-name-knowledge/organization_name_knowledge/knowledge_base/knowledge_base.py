@@ -58,6 +58,10 @@ class KnowledgeBase:
         return cls.get("joining_words", set)
 
     @classproperty
+    def markers(cls) -> Set:
+        return cls.get("markers", set)
+
+    @classproperty
     def weak_words(cls) -> Set:
         return cls.get("weak_words", set)
 

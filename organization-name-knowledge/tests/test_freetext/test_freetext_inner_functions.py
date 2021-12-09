@@ -1,11 +1,45 @@
 import pytest
 
+from organization_name_knowledge.freetext.matching import get_names_from_org_name_markers
 from organization_name_knowledge.freetext.parse import (
     _get_names_to_remove,
     _get_names_with_unique_bases,
     _get_valid_names,
 )
 from organization_name_knowledge.names.parse import parse_name
+
+
+@pytest.mark.parametrize(
+    "text, expected_names",
+    [
+        (
+            "Office of the ABC Bank",
+            [
+                {"base": "ABC Bank", "source": "the ABC Bank"},
+                {"base": "ABC Bank", "source": "ABC Bank"},
+            ],
+        ),
+        (
+            "There is some text about Bank of Scotland",
+            [{"base": "Bank of Scotland", "source": "Bank of Scotland"}],
+        ),
+        (
+            "The fall of the General Motors Group was just a part of crisis",
+            # group is also a suffix
+            [
+                {"base": "General Motors", "source": "General Motors Group"},
+                {"base": "Motors", "source": "Motors Group"},
+            ],
+        ),
+    ],
+)
+def test_get_names_from_org_name_markers(text, expected_names):
+    tokens = text.lower().split()
+    names = get_names_from_org_name_markers(tokens)
+    assert len(names) == len(expected_names)
+    for name, expected in zip(names, expected_names):
+        assert name.source.cleaned == expected["source"].lower()
+        assert name.base.cleaned_name == expected["base"].lower()
 
 
 @pytest.mark.parametrize(
