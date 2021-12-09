@@ -24,23 +24,16 @@ import com.silenteight.warehouse.indexer.simulation.SimulationMessageHandlerModu
 import com.silenteight.warehouse.indexer.simulation.analysis.AnalysisModule;
 import com.silenteight.warehouse.management.ManagementModule;
 import com.silenteight.warehouse.report.accuracy.AccuracyReportModule;
-import com.silenteight.warehouse.report.accuracy.v1.DeprecatedAccuracyReportModule;
 import com.silenteight.warehouse.report.billing.BillingReportModule;
-import com.silenteight.warehouse.report.billing.v1.DeprecatedBillingReportModule;
 import com.silenteight.warehouse.report.generation.GenerateReportModule;
 import com.silenteight.warehouse.report.metrics.MetricsReportModule;
-import com.silenteight.warehouse.report.metrics.v1.DeprecatedMetricsReportModule;
 import com.silenteight.warehouse.report.name.ReportFileNameModule;
 import com.silenteight.warehouse.report.rbs.RbsReportModule;
-import com.silenteight.warehouse.report.rbs.v1.DeprecatedRbsReportModule;
 import com.silenteight.warehouse.report.reasoning.AiReasoningReportModule;
 import com.silenteight.warehouse.report.reasoning.match.AiReasoningMatchLevelReportModule;
-import com.silenteight.warehouse.report.reasoning.match.v1.DeprecatedAiReasoningMatchLevelReportModule;
-import com.silenteight.warehouse.report.reasoning.v1.DeprecatedAiReasoningReportModule;
 import com.silenteight.warehouse.report.remove.ReportsRemovalModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
 import com.silenteight.warehouse.report.simulation.SimulationModule;
-import com.silenteight.warehouse.report.simulation.v1.DeprecatedSimulationModule;
 import com.silenteight.warehouse.report.sql.SqlExecutorModule;
 import com.silenteight.warehouse.report.statistics.ReportStatisticsModule;
 import com.silenteight.warehouse.report.storage.StorageModule;
@@ -71,12 +64,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AnalysisModule.class,
     BackupModule.class,
     BillingReportModule.class,
-    DeprecatedAccuracyReportModule.class,
-    DeprecatedAiReasoningMatchLevelReportModule.class,
-    DeprecatedAiReasoningReportModule.class,
-    DeprecatedBillingReportModule.class,
-    DeprecatedMetricsReportModule.class,
-    DeprecatedRbsReportModule.class,
     IndexTrackingModule.class,
     ManagementModule.class,
     MatchModule.class,
@@ -91,7 +78,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AmqpCommonModule.class,
     AuthenticationModule.class,
     AuthorizationModule.class,
-    DeprecatedSimulationModule.class,
     ElasticsearchRestClientModule.class,
     EnvironmentModule.class,
     FileStorageMinioModule.class,
