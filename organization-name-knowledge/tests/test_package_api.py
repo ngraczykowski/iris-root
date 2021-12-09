@@ -255,7 +255,11 @@ def test_parse_name_base(name, expected_base):
         ),
         (
             "A long history of SCB Bank starts about 100 b.c.",
-            [{"base": "scb bank", "legal": "", "source": "of scb bank"}],
+            [{"base": "SCB Bank", "legal": "", "source": "of SCB Bank"}],
+        ),
+        (
+            "There is a gift from Bank of Russia for James Bond",
+            [{"base": "Bank of Russia", "legal": "", "source": "Bank of Russia"}],
         ),
     ],
 )
@@ -263,8 +267,6 @@ def test_parse_freetext(freetext, expected_names):
     parsed_freetext = parse_freetext(
         freetext, base_tokens_upper_limit=3, name_tokens_lower_limit=2, name_tokens_upper_limit=7
     )
-    print([x.source.original for x in parsed_freetext])
-    print([x.base.cleaned_name for x in parsed_freetext])
     assert len(parsed_freetext) == len(expected_names)
     for name_information, expected in zip(parsed_freetext, expected_names):
         assert name_information
