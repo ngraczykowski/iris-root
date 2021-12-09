@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package silenteight.audit.bs.api.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+
+import "google/protobuf/timestamp.proto";
+
+import public "silenteight/protobuf/uuid.proto";
+
+option java_package = "com.silenteight.audit.bs.api.v1";
+option java_outer_classname = "AuditBsProto";
+option java_multiple_files = true;
+
+message AuditData {
+  // Unique event id unique.
+  protobuf.Uuid event_id = 1 [(google.api.field_behavior) = REQUIRED];
+  // Correlation id unique for all actions across a particular invocation chain.
+  protobuf.Uuid correlation_id = 2 [(google.api.field_behavior) = REQUIRED];
+  // Timestamp when operation was executed.
+  google.protobuf.Timestamp timestamp = 3 [(google.api.field_behavior) = REQUIRED];
+  // Type of operation.
+  string type = 4 [(google.api.field_behavior) = REQUIRED];
+  // Name of operation performer.
+  string principal = 5;
+  // Entity id of object being modified.
+  string entity_id = 6;
+  // Class type of object.
+  string entity_class = 7;
+  // Type of operation executed on object.
+  string entity_action = 8;
+  // Details of operation as JSON.
+  string details = 9;
+}

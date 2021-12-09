@@ -1,0 +1,3 @@
+rootProject.name = 'audit-bs-api-root'
+
+include 'audit-bs-api'
