@@ -42,10 +42,11 @@ def _get_matching_tokens(text: str, term_sources: TermSources) -> Set[str]:
 
 
 def get_names_from_org_name_markers(tokens: List[str]) -> List[NameInformation]:
-    """If in tokens is found a member of organization name markers, such as 'bank' or 'group',
-    get lefts (-1, -2) and rights (+2) tokens combined with marker, and then try to validate them
-    and parse it as a NameInformation.
-    ! Note that tokens must be lowercase!
+    """Check if in tokens is present a member of organization name markers, such as 'bank'
+    or 'group',which are not legal terms, but indicates an organization name. When a marker
+    is found, get lefts (-1, -2) and rights (+2) tokens combined with marker, and then check
+    if respective name is in a proper form and if yes, parse it as a NameInformation.
+    Note that tokens must be lowercase!
     """
 
     tokens_num = len(tokens)
