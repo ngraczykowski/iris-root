@@ -1,3 +1,0 @@
-{"commitInfo":{"timestamp":1639048971298,"operation":"WRITE","operationParameters":{"mode":"Overwrite","partitionBy":"[]"},"readVersion":14,"isBlindAppend":false,"operationMetrics":{"numFiles":"1","numOutputBytes":"84460","numOutputRows":"3"},"userMetadata":"Extracted AP and WL NRIC"}}
-{"add":{"path":"part-00000-f485461c-6c9f-4292-b274-65bd83f5a043-c000.snappy.parquet","partitionValues":{},"size":84460,"modificationTime":1639048971220,"dataChange":true}}
-{"remove":{"path":"part-00000-169e5911-b4d9-42e2-add1-429cd1dbaa00-c000.snappy.parquet","deletionTimestamp":1639048971297,"dataChange":true,"extendedFileMetadata":true,"partitionValues":{},"size":84460}}
