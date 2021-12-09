@@ -36,8 +36,13 @@ class CustomerAddressTransformer {
   }
 
   private String removeNames(String address) {
-    var allInOnePattern = Pattern.compile(names.stream().map(name -> String.format(WORD_PATTERN, name)).collect(
-        Collectors.joining("|")), Pattern.CASE_INSENSITIVE);
+    var allInOnePattern = Pattern
+        .compile(names
+            .stream()
+            .map(name -> String
+                .format(WORD_PATTERN, Pattern.quote(name)))
+            .collect(
+                Collectors.joining("|")), Pattern.CASE_INSENSITIVE);
     var allInOneMatcher = allInOnePattern.matcher(address);
 
     var sb = new StringBuilder();
@@ -56,7 +61,10 @@ class CustomerAddressTransformer {
   }
 
   private boolean containsCountry(String address, String country) {
-    return Pattern.compile(String.format(WORD_PATTERN, country), Pattern.CASE_INSENSITIVE).matcher(address).find();
+    return Pattern
+        .compile(String.format(WORD_PATTERN, country), Pattern.CASE_INSENSITIVE)
+        .matcher(address)
+        .find();
   }
 
 }
