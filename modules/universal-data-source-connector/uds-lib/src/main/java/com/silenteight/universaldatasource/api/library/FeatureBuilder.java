@@ -232,7 +232,7 @@ public class FeatureBuilder implements FeatureBuilderProvider {
                 .setAlertedPartyType(
                     NameFeatureInput.EntityType.valueOf(input.getAlertedPartyType().name()))
                 .addAllAlertedPartyNames(getAlertedPartyNames(input))
-                .addAllWatchlistNames(getWatchlistNames(input))
+                .addAllWatchlistNames(getNames(input))
                 .addAllMatchingTexts(input.getMatchingTexts())
                 .build()
         ));
@@ -261,14 +261,14 @@ public class FeatureBuilder implements FeatureBuilderProvider {
             TransactionFeatureInput.newBuilder()
                 .setFeature(input.getFeature())
                 .addAllTransactionMessages(input.getTransactionMessages())
-                .addAllWatchlistNames(getWatchlistNames(input))
+                .addAllWatchlistNames(getNames(input))
                 .setWatchlistType(WatchlistType.valueOf(input.getWatchlistType().name()))
                 .addAllMatchingTexts(input.getMatchingTexts())
                 .build()
         ));
   }
 
-  private static List<com.silenteight.datasource.api.transaction.v1.WatchlistName> getWatchlistNames(
+  private static List<com.silenteight.datasource.api.transaction.v1.WatchlistName> getNames(
       TransactionFeatureInputOut input) {
     return input.getWatchlistNames().stream()
         .map(watchlistName -> com.silenteight.datasource.api.transaction.v1.WatchlistName
@@ -280,7 +280,7 @@ public class FeatureBuilder implements FeatureBuilderProvider {
         .collect(Collectors.toList());
   }
 
-  private static List<WatchlistName> getWatchlistNames(NameFeatureInputOut input) {
+  private static List<WatchlistName> getNames(NameFeatureInputOut input) {
     return input.getWatchlistNames().stream()
         .map(watchlistName -> WatchlistName.newBuilder()
             .setName(watchlistName.getName())
