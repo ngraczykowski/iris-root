@@ -1,0 +1,50 @@
+solvers.date:
+  generation:
+    min-year: 1900
+  boundary:
+    min-year: 1902
+  delimiters: [' ', ',']
+  inconclusivePatterns:
+    - " to "
+    - "approx"
+    - "between"
+    - "circa"
+    - " - "
+  result-definitions:
+    - name: EXACT
+      dates:
+        - 0-0-0
+        - 0-0-B
+        - 0-B-B
+        - X-0-0
+    - name: NEAR
+      dates:
+        - 0-0-30
+        - 0-11-0
+        - 0-X-0
+        - 1-X-X
+        - 0-X-X
+    - name: OUT_OF_RANGE
+      dates: 2-X-X
+    - name: NEAR
+      period: P1Y
+    - name: OUT_OF_RANGE
+  result-priority:
+    - EXACT
+    - NEAR
+    - OUT_OF_RANGE
+  custom-formats:
+    - 'MMMM, yyyy'
+    - 'MMMM,yyyy'
+    - 'MMM, yyyy'
+    - 'MMM,yyyy'
+    - 'yyyyMMdd'
+    - 'yyyyddMM'
+    - 'ddMMyyyy'
+    - 'MMddyyyy'
+    - 'yyyyMM'
+    - 'MMyyyy'
+    - 'MMM dd, yyyy'
+    - 'MMM dd,yyyy'
+    - 'MMMM dd, yyyy'
+    - 'MMMM dd,yyyy'

@@ -4,3 +4,6 @@
 [submodule "spark-manager"]
 	path = spark-manager
 	url = https://gitlab.silenteight.com/data-science/spark-manager
+[submodule "anaconda"]
+	path = anaconda
+	url = https://gitlab.silenteight.com/data-science/anaconda

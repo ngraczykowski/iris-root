@@ -1,0 +1,176 @@
+dataset: learning_quality
+input_files_dir: inputs
+artifact_files_dir: artifacts
+crucial_artifact_files_dir: crucial_artifacts
+exportable_files_dir: exportable
+tmp_dir: tmp
+processing_pool_size: 10
+
+customer_specific:
+  agents:
+    name:
+      data_availability:
+        agent_input: agent-name-inputs.csv
+        fields:
+          alerted_party_field: ad_alerted_name
+          watchlist_field: ad_matched_name
+        crucial_artifact: agent-name-availability.csv
+      artifact_file: agent-name-results.csv
+      tuning_report_path: agent-name-tuning-report.csv
+    dob:
+      data_availability:
+        agent_input: agent-dob-inputs.csv
+        fields:
+          alerted_party_field: ad_alerted_dob
+          watchlist_field: ad_matched_dob
+        crucial_artifact: agent-dob-availability.csv
+      artifact_file: agent-dob-results.csv
+    nationality:
+      data_availability:
+        agent_input: agent-nationality-inputs.csv
+        fields:
+          alerted_party_field: ad_alerted_nationality
+          watchlist_field: ad_matched_nationality
+        crucial_artifact: agent-nationality-availability.csv
+      artifact_file: agent-nationality-results.csv
+    shoe-size:
+      data_availability:
+        agent_input: agent-shoe-size-inputs.csv
+        fields:
+          alerted_party_field: ad_alerted_shoe_size
+          watchlist_field: ad_matched_shoe_size
+        crucial_artifact: agent-shoe-size-availability.csv
+      artifact_file: agent-shoe-size-results.csv
+    eye-color:
+      data_availability:
+        agent_input: agent-eye-color-inputs.csv
+        assume_resolvable: True
+        mock_agent: True
+        crucial_artifact: eye-color-availability.csv
+      artifact_file: eye-color-results.csv
+  analyst_resoning_config_file: analyst-reasoning-config.ini
+  coverage_score_config_file: coverage-score-config.ini
+  external_analyst_sentiments_files:
+    - external_sample_sentiments.csv
+  sentiment_blacklists:
+    shoe-size:
+      - missing
+  csv_options:
+    quote: "'"
+    escape: "\\"
+    delimiter: ","
+  documented_business_questions:
+    - customer_type
+    - is_deny
+
+input_files:
+  filtered_customer_alerts_path: filtered-customer-alerts.csv
+  alert_comments_path: alert-comments.csv
+  hit_comments_path: hit-comments.csv
+  documented_business_questions_path: documented-business-questions.csv
+  documented_business_data_path: documented-business-data.csv
+  hit_level_analyst_solutions_path: hit-level-analyst-solutions.csv
+  hit_level_recommendations_path: hit-level-recommendations.csv
+
+artifact_files:
+  commented_business_questions_path: commented-business-questions.csv
+  commented_business_sentiments_path: commented-business-sentiments.csv
+  all_business_questions_path: all-business-questions.csv
+  resolvability_report_path: resolvability-report.csv
+  reasoning_branches_path: reasoning-branches.csv
+  analyst_results_path: analyst-results.csv
+  merged_results_and_solutions_path: merged-results-and-solutions.csv
+
+crucial_artifact_files:
+  agents_impact_path: agents-impact.csv
+  theoretical_ceiling_path: theoretical-ceiling.csv
+  agent_data_availability_path: agent-data-availability.csv
+  dad_report_path: dad-report.csv
+  current_ceiling_path: current-ceiling.csv
+  rb_scorer_report_path: rb-scorer-report.csv
+  efficiency_report_path: efficiency-report.csv
+  efficiency_history_report_path: efficiency-history-report.csv
+  accuracy_report_path: accuracy-report.csv
+  false_negative_report_path: false-negative-report.csv
+  ai_reasoning_report_path: ai-reasoning-report.csv
+  data_availability_analysis: data-availability-analysis.csv
+
+exportable_files:
+  dad_report:
+    source_dir_property: crucial_artifact_files_dir
+    file: dad-report.csv
+    without_columns:
+      - unique_key
+      - suspect_id
+      - comment
+  theoretical_ceiling:
+    source_dir_property: crucial_artifact_files_dir
+    file: theoretical-ceiling.csv
+  current_ceiling:
+    source_dir_property: crucial_artifact_files_dir
+    file: current-ceiling.csv
+  resolvability_report:
+    source_dir_property: artifact_files_dir
+    file: resolvability-report.csv
+    without_columns:
+      - unique_key
+      - suspect_id
+      - comment
+  merged_results_and_solutions:
+    source_dir_property: artifact_files_dir
+    file: merged-results-and-solutions.csv
+    without_columns:
+      - unique_key
+      - suspect_id
+      - comment
+spark:
+  master: ${S8_SPARK_MASTER:local[2]}
+  app-name: ${S8_SPARK_APP_NAME:main-pipeline}
+  config:
+    'spark.executor.memory': ${S8_SPARK_EXECUTOR_MEMORY:512m}
+    'spark.driver.memory': ${S8_SPARK_DRIVER_MEMORY:4g}
+#    'spark.local.dir': '/app/tmp'
+#    'spark.executor.extraJavaOptions': '-Djava.io.tmpdir=/app/tmp'
+#    'spark.driver.extraJavaOptions': '-Djava.io.tmpdir=/app/tmp'
+
+serp:
+  python_client:
+    cert:
+      user_chain: ${SERP_HOME}/cert/user/user-chain.pem
+      user_key: ${SERP_HOME}/cert/user/user-key.pem
+      ca_certs: ${SERP_HOME}/cert/ca-certs.pem
+    consul:
+      host: localhost
+      port: 24120
+
+pipeline:
+  name: simple
+  result_dir: notebooks-outputs/
+  notebooks_path: notebooks
+  steps:
+    - 1.0-CS-filter-customer-alerts
+    - 1.5-CS-ETL-hit-comments
+    - 1.9-columns-usability
+    - 2.0-G-CSC-extract-analyst-questions
+    - 2.5-CSC-agents-from-business
+    - 2.6-G-all-agents
+    - 2.7-G-agents-impact
+    - 3.0-data-availability
+    - 3.5.EDA-analysis-of-data-availability
+    - additional/3.6-CS-analysis-of-data-availability
+    - 6.1-solve-with-name-agent
+    - 6.2-solve-with-date-agent
+    - 6.3-solve-with-country-agent
+    - 6.4-solve-with-shoe-size-agent
+    - additional/6.98-mock-agents-solve
+    - 4.2-merge-agent-results-with-documented-business-data
+    - 7.1-merge-all-business-sentiments
+    - 7.2-merge-analyst-results-with-analyst-solutions
+    - 7.3-RB-scorer
+    - 8.0-agent-tuning-report
+    - 9.0-efficiency-report
+    - 9.1-accuracy-report
+    - 9.2-false-negative-report
+    - 9.3-ai-reasoning-report
+    - additional/10.0-crucial-artifacts-summary
+    - additional/10.1-exportable-files

@@ -1,0 +1,15 @@
+agent.document:
+  number:
+    name: 'default'
+
+    sieveTypes:
+      - CONSISTS_OF_THE_SAME_CHARS
+      - ANY_VALUE_CONTAINS_NOT_ALLOWED_CHAR
+      - PERFECT_MATCH
+      - PAN_NUMBER
+      - CLEANED_PARTIAL_MATCH
+      - MIN_RATIO_FOR_DIGIT_MATCH
+      - ONLY_DIGIT_MATCH
+      - TRAILING_ZEROS_DIGIT_MATCH
+      - SIMILARITY
+

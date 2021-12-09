@@ -1,0 +1,4 @@
+steps:
+  - 4.0-merge-agent-input-output
+  - 4.1-apply-policy-steps-generate-solutions
+  - 4.2-generate-match-alert-narratives

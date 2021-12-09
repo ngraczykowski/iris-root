@@ -1,0 +1,14 @@
+name.evaluator.chinese.mainland:
+
+  oneWordPinyinTokens: "region-classifier/oneWordPinyinTokens.txt"
+  oneWordPinyinPolyphonicTokens: "mainland-chinese/dictionaries/oneWordPinyinPolyphonicTokens.txt"
+  twoWordsPinyinPolyphonicTokens: "mainland-chinese/dictionaries/twoWordsPinyinPolyphonicTokens.txt"
+
+  transformers:
+    sanitize:
+      - transformationName: "Replace comma"
+        transformationType: REPLACE_CHARACTERS
+        patterns: [ "<[,]" ]
+
+      - transformationName: "To lower case"
+        transformationType: LOWER_CASE

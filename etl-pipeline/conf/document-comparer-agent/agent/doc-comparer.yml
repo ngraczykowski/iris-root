@@ -1,0 +1,24 @@
+agent.document:
+  number:
+    name: 'default'
+
+  comparer:
+    enabledDocumentTypes:
+      - CHINA_NATIONAL_ID
+      - SINGAPORE_NATIONAL_ID
+      - HONG_KONG_NATIONAL_ID
+      - TAIWAN_NATIONAL_ID
+      - PAKISTAN_NATIONAL_ID
+      - INDIA_NATIONAL_ID
+      - VIETNAM_NATIONAL_ID
+      - UAE_NATIONAL_ID
+      - MALAYSIA_NATIONAL_ID
+      - BANGLADESH_NATIONAL_ID
+      - KENYA_NATIONAL_ID
+      - BAHRAIN_NATIONAL_ID
+      - MEXICO_NATIONAL_ID
+
+  recognizer:
+    globalNumberCleanupRegex: "[-,.:;/\\\\]"
+    overrideNumberCleanupRegexPerDocumentType: {
+    }

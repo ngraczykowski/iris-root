@@ -1,0 +1,9 @@
+version: '2.3'
+
+services:
+  jupyter_playground:
+    image: anaconda_playground
+    volumes:
+      - ..:/app
+    ports:
+      - "4444:8888" # jupyter notebook forward

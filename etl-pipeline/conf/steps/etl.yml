@@ -1,0 +1,7 @@
+steps: 
+
+  - 1.0-raw-to-standardized
+  - 1.1-data-quality-check-on-standardized
+  - 2.0-standardized-to-cleansed
+  - 2.1-data-quality-check-on-cleansed
+  - 3.0-cleansed-to-application-agent-input
