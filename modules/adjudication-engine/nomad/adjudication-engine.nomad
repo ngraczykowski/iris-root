@@ -14,7 +14,7 @@ variable "namespace" {
 }
 
 variable "memory" {
-  default = 2000
+  default = 4096
 }
 
 variable "http_tags" {
