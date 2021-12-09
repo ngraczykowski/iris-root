@@ -6,7 +6,7 @@ from pipeline.spark import spark
 REFERENCE_DIR = 'tests/data'
 from delta.tables import *
 import helper.dbhelper as dbhelper
-
+ 
 oracle_db = dbhelper.DbHelper(spark, 'ORACLE')
 pg_db = dbhelper.DbHelper(spark, 'POSTGRES')
 ids_map = {
@@ -21,8 +21,9 @@ for dir in os.listdir(REFERENCE_DIR):
     for reference in glob(f"tests/data/{dir}/*delta"):
         
         rel_path = os.path.relpath(os.path.dirname(reference), 'tests')
-        reference_dataframe = spark.read.format('delta').load(reference)
-        tested_dataframe = spark.read.format('delta').load(reference)
+        read_delta = lambda x: spark.read.format('delta').load(x)
+        reference_dataframe = read_delta(os.path.join(rel_path, os.path.basename(reference)))
+        tested_dataframe = read_delta(reference)
         print(reference)
         id = ids_map[os.path.basename(reference)]
         reference_rows = reference_dataframe.sort(id, ascending=False).collect()

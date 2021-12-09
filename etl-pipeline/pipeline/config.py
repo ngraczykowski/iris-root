@@ -81,3 +81,41 @@ SPARK_TMP_DIR = config['SPARK']['TMP_DIR']
 # SPARK_COMPILE_EGG = config['SPARK'].getboolean('IS_COMPILE_EGG')
 
 PYTHON_SKIP_PACKAGE_DEPENDENCY = config['PYTHON'].getboolean('SKIP_PACKAGE_DEPENDENCY')
+
+in_source_data_dir = lambda filename: os.path.join(SOURCE_DATA_DIR, filename)
+
+in_raw_data_dir = lambda filename: os.path.join(RAW_DATA_DIR, filename)
+in_standardized_data_dir = lambda filename: os.path.join(STANDARDIZED_DATA_DIR, filename)
+in_cleansed_data_dir = lambda filename: os.path.join(CLEANSED_DATA_DIR, filename)
+in_application_data_dir = lambda filename: os.path.join(APPLICATION_DATA_DIR, filename)
+in_report_data_dir = lambda filename: os.path.join(REPORT_DATA_DIR, filename)
+in_sandbox_data_dir = lambda filename: os.path.join(SANDBOX_DATA_DIR, filename)
+
+in_conf_dir = lambda filename: os.path.join(APPLICATION_CONF_DIR, filename)
+
+
+
+# import utils.config_service as configservice
+# import utils.file_service as fileservice
+# import utils.data_frame_service as dataframeservice
+
+
+# agents_call = configservice.get_agents_call()
+# agents_call
+
+# if agents_call == 'standalone':
+#     import utils.agent_service_standalone as agentservice
+# else:
+#     import utils.agent_service_serp as agentservice
+
+
+    
+def write_read_uncompressed_parquet(spark, df, directory):
+
+    fileservice.save_df(df, directory + '.parq')
+    return dataframeservice.read_to_df(directory + '.parq')
+
+def store_and_read_df(spark, df, path):
+
+    fileservice.save_df(df, path)
+    return dataframeservice.read_to_df(path)

@@ -52,4 +52,5 @@ dependencies/*
 logs/*
 installers/*
 python-datatoolbox/*
-
+data/*
+!data/1.raw

@@ -12,6 +12,47 @@ class Spark:
     exists = False
     spark_instance = None
 
+    def spark_read_csv(self, file_path):
+        return self.spark_instance.read.format('csv') \
+                .option('header', True) \
+                .option('multiline', True) \
+                .option('escape', '"') \
+                .load(file_path)
+
+    def read_delta(self, file_path):
+        return self.spark_instance.read.format('delta').load(file_path)
+    
+    def write_and_get_delta_data(self, df, delta_path: str, user_metadata: str = ''):
+        """ Write the spark dataframe as delta lake format, read it and return the object.
+            Both schema revolution and write mode set to overwrite.
+
+        :param df: A spark dataframe.
+        :param delta_path: The path of the delta lake to write to.
+        :param user_metadata: User metadata for the delta transaction.
+        :return: A spark dataframe read from the delta_path.
+        """
+
+        df = self.cast_array_null_to_array_string(df)
+        df.write.format('delta') \
+            .option('overwriteSchema', 'true') \
+            .option('userMetadata', user_metadata) \
+            .mode('overwrite') \
+            .save(delta_path)
+
+        return self.read_delta(delta_path)
+
+    def show_dim(self, spark_df):
+        """ Display the dimension of spark dataframe in numbers of rows and columns.
+
+        :param spark_df: Passed in spark dataframe.
+        :return: On screen display.
+        """
+        print('Dimension', spark_df.count(), len(spark_df.columns))
+
+
+spark_instance = Spark()
+
+
 def to_bytes(value):
     if value.endswith('g'):
         return int(value.replace('g','')) * 1024 * 1024 * 1024
@@ -173,5 +214,5 @@ if Spark.spark_instance is None:
     print(f'pySpark version: {pyspark.__version__}')
 
     print('Spark UI - %s' % spark.sparkContext.uiWebUrl)
-    Spark.spark_instance = spark
+    spark_instance.spark_instance = spark
 
