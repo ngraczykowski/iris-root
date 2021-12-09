@@ -23,11 +23,37 @@ import java.util.stream.Stream;
 class MessageRegistry {
 
   private final Map<String, MessageType> messageTypes = new TreeMap<>();
-  private final TypeRegistry typeRegistry;
 
   MessageRegistry(Iterable<Class<? extends Message>> types) {
     types.forEach(this::tryToRegisterMessageType);
-    typeRegistry = createTypeRegistry();
+  }
+
+  public Message unpackAny(Any any) {
+    String typeUrl = any.getTypeUrl();
+    return maybeUnpackAny(any).orElseThrow(
+        () -> new MessageConversionException("Could not unpack message of type " + typeUrl));
+  }
+
+  @SuppressWarnings("unchecked")
+  public Optional<Message> maybeUnpackAny(Any any) {
+    String typeName = getTypeNameFromTypeUrl(any.getTypeUrl());
+
+    Preconditions.checkArgument(
+        !typeName.isBlank(), "Any message has invalid type URL %s", any.getTypeUrl());
+
+    return findMessageType(typeName)
+        .flatMap(messageType -> AnyUtils.maybeUnpack(any, (Class<Message>) messageType.getType()));
+  }
+
+  public Optional<Parser<Message>> findParser(String typeNameOrUrl) {
+    Preconditions.checkArgument(!typeNameOrUrl.isBlank(), "Must provide type name or URL.");
+
+    return findMessageType(getTypeName(typeNameOrUrl))
+        .map(MessageType::getParser);
+  }
+
+  public Stream<Class<? extends Message>> streamMessageTypes() {
+    return messageTypes.values().stream().map(MessageType::getType);
   }
 
   private void tryToRegisterMessageType(Class<? extends Message> type) {
@@ -83,23 +109,6 @@ class MessageRegistry {
     return typeRegistryBuilder.build();
   }
 
-  public Message unpackAny(Any any) {
-    String typeUrl = any.getTypeUrl();
-    return maybeUnpackAny(any).orElseThrow(
-        () -> new MessageConversionException("Could not unpack message of type " + typeUrl));
-  }
-
-  @SuppressWarnings("unchecked")
-  public Optional<Message> maybeUnpackAny(Any any) {
-    String typeName = getTypeNameFromTypeUrl(any.getTypeUrl());
-
-    Preconditions.checkArgument(
-        !typeName.isBlank(), "Any message has invalid type URL %s", any.getTypeUrl());
-
-    return findMessageType(typeName)
-        .flatMap(messageType -> AnyUtils.maybeUnpack(any, (Class<Message>) messageType.getType()));
-  }
-
   private Optional<MessageType> findMessageType(String typeName) {
     if (!messageTypes.containsKey(typeName))
       return Optional.empty();
@@ -112,22 +121,11 @@ class MessageRegistry {
     return pos == -1 ? "" : typeUrl.substring(pos + 1);
   }
 
-  public Optional<Parser<Message>> findParser(String typeNameOrUrl) {
-    Preconditions.checkArgument(!typeNameOrUrl.isBlank(), "Must provide type name or URL.");
-
-    return findMessageType(getTypeName(typeNameOrUrl))
-        .map(MessageType::getParser);
-  }
-
   private static String getTypeName(String typeNameOrUrl) {
     if (typeNameOrUrl.contains("/"))
       return getTypeNameFromTypeUrl(typeNameOrUrl);
 
     return typeNameOrUrl;
-  }
-
-  public Stream<Class<? extends Message>> streamMessageTypes() {
-    return messageTypes.values().stream().map(MessageType::getType);
   }
 
   @RequiredArgsConstructor
