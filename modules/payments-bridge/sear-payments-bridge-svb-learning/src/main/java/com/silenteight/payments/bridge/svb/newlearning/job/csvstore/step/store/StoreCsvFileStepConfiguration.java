@@ -7,12 +7,17 @@ import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.step.StoreCs
 
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.step.skip.AlwaysSkipItemSkipPolicy;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.backoff.BackOffPolicy;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
+import org.springframework.retry.policy.AlwaysRetryPolicy;
+import software.amazon.awssdk.services.s3.model.S3Exception;
+
+import java.io.IOException;
 
 import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.STORE_FILE_STEP;
 
@@ -36,6 +41,13 @@ public class StoreCsvFileStepConfiguration {
         .reader(storeCsvFileStepItemReader)
         .processor(storeCsvFileStepProcessor)
         .writer(jpaWriterFactory.createJpaWriter())
+        .faultTolerant()
+        .retryPolicy(new AlwaysRetryPolicy())
+        .retry(S3Exception.class)
+        .retry(IOException.class)
+        .retryLimit(properties.getRetryLimit())
+        .backOffPolicy(backoffPolicy())
+        .skipPolicy(new AlwaysSkipItemSkipPolicy())
         .build();
   }
 
