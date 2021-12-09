@@ -27,6 +27,7 @@ import com.silenteight.warehouse.report.accuracy.AccuracyReportModule;
 import com.silenteight.warehouse.report.accuracy.v1.DeprecatedAccuracyReportModule;
 import com.silenteight.warehouse.report.billing.BillingReportModule;
 import com.silenteight.warehouse.report.billing.v1.DeprecatedBillingReportModule;
+import com.silenteight.warehouse.report.generation.GenerateReportModule;
 import com.silenteight.warehouse.report.metrics.MetricsReportModule;
 import com.silenteight.warehouse.report.metrics.v1.DeprecatedMetricsReportModule;
 import com.silenteight.warehouse.report.name.ReportFileNameModule;
@@ -40,6 +41,7 @@ import com.silenteight.warehouse.report.remove.ReportsRemovalModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
 import com.silenteight.warehouse.report.simulation.SimulationModule;
 import com.silenteight.warehouse.report.simulation.v1.DeprecatedSimulationModule;
+import com.silenteight.warehouse.report.sql.SqlExecutorModule;
 import com.silenteight.warehouse.report.statistics.ReportStatisticsModule;
 import com.silenteight.warehouse.report.storage.StorageModule;
 import com.silenteight.warehouse.retention.production.RetentionProductionModule;
@@ -93,6 +95,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     ElasticsearchRestClientModule.class,
     EnvironmentModule.class,
     FileStorageMinioModule.class,
+    GenerateReportModule.class,
     OpendistroModule.class,
     ReportFileNameModule.class,
     ReportingModule.class,
@@ -100,6 +103,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     RetentionProductionModule.class,
     RetentionSimulationModule.class,
     SimulationModule.class,
+    SqlExecutorModule.class,
     StorageModule.class,
     TokenModule.class,
     TimeModule.class,
