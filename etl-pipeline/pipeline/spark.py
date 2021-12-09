@@ -134,42 +134,44 @@ def set_spark_cpu_memory(spark_conf):
 
 
 # spark_conf.setAll([('spark.sql.parquet.enableVectorizedReader', 'false')])
-set_spark_cpu_memory(spark_conf)
-spark = SparkSession.builder.config(conf=spark_conf).appName(SPARK_APP_NAME).getOrCreate()
-spark.sparkContext.addPyFile("/app/dependencies/ivy2/cache/io.delta/delta-core_2.12/jars/delta-core_2.12-1.0.0.jar")
-# delta package can only be called after spark object created
+if Spark.spark_instance is None:
+    set_spark_cpu_memory(spark_conf)
+    spark = SparkSession.builder.config(conf=spark_conf).appName(SPARK_APP_NAME).getOrCreate()
+    spark.sparkContext.addPyFile("/app/dependencies/ivy2/cache/io.delta/delta-core_2.12/jars/delta-core_2.12-1.0.0.jar")
+    # delta package can only be called after spark object created
 
 
 
 
-# Config logging
+    # Config logging
 
-# log level needs to be set for sparkContext first to allow the subsequent logger taking effect
-spark.sparkContext.setLogLevel('warn')
-log4jlogger = spark._jvm.org.apache.log4j
-logger = log4jlogger.LogManager.getLogger(SPARK_APP_NAME)
+    # log level needs to be set for sparkContext first to allow the subsequent logger taking effect
+    spark.sparkContext.setLogLevel('warn')
+    log4jlogger = spark._jvm.org.apache.log4j
+    logger = log4jlogger.LogManager.getLogger(SPARK_APP_NAME)
 
 
-# alternatively, create the logger object, then set the log level is also fine
-# DO NOTE there is no need to set sparkContext log level for this case
+    # alternatively, create the logger object, then set the log level is also fine
+    # DO NOTE there is no need to set sparkContext log level for this case
 
-# log4jlogger = spark._jvm.org.apache.log4j
-# logger = log4jlogger.LogManager.getLogger(SPARK_APP_NAME)
-# logger.setLevel(log4jlogger.Level.INFO)
+    # log4jlogger = spark._jvm.org.apache.log4j
+    # logger = log4jlogger.LogManager.getLogger(SPARK_APP_NAME)
+    # logger.setLevel(log4jlogger.Level.INFO)
 
-logger.debug('Test debug log')
-logger.info('Test info log')
-logger.warn('Test warn log')
+    logger.debug('Test debug log')
+    logger.info('Test info log')
+    logger.warn('Test warn log')
 
-logging.basicConfig(format='%(asctime)s - %(name)s %(levelname)s: %(message)s',
-                    datefmt='%Y/%m/%d %H:%M:%S',
-                    level=logging.INFO
-                )
-logging.debug('Test debug log, from logging')
-logging.info('Test info log, from logging')
-logging.warning('Test warn log, from logging')
+    logging.basicConfig(format='%(asctime)s - %(name)s %(levelname)s: %(message)s',
+                        datefmt='%Y/%m/%d %H:%M:%S',
+                        level=logging.INFO
+                    )
+    logging.debug('Test debug log, from logging')
+    logging.info('Test info log, from logging')
+    logging.warning('Test warn log, from logging')
 
-print(f'pySpark version: {pyspark.__version__}')
+    print(f'pySpark version: {pyspark.__version__}')
 
-print('Spark UI - %s' % spark.sparkContext.uiWebUrl)
+    print('Spark UI - %s' % spark.sparkContext.uiWebUrl)
+    Spark.spark_instance = spark
 
