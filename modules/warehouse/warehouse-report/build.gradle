@@ -15,6 +15,7 @@ configurations {
 }
 
 dependencies {
+
   implementation project(":warehouse-common")
   implementation project(":warehouse-db-changelog")
   implementation project(":warehouse-indexer")
@@ -31,6 +32,7 @@ dependencies {
   implementation libraries.jakarta_validation_api
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_file_storage_api
+  implementation libraries.postgresql
 
   testImplementation project(":warehouse-common-testing")
   testImplementation testFixtures(project(':warehouse-indexer'))
