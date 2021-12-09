@@ -1,13 +1,11 @@
 plugins {
   id "com.silenteight.gradle.wrapper" version "1.1.0"
   id "com.silenteight.gradle.release" version "1.4.0"
-  id "com.silenteight.gradle.convention" version "1.20.0"
-  id "com.gorylenko.gradle-git-properties" version "2.3.2"
+  id "com.silenteight.gradle.convention" version "1.21.0-SNAPSHOT"
 }
 
-projectSetup{
+projectSetup {
   javaVersion = JavaVersion.VERSION_17
-  jacocoVersion = "0.8.7"
 }
 
 configure(subprojects) {Project subproject ->
