@@ -4,12 +4,12 @@ plugins {
   id "org.sonarqube" version "3.0"
   id "com.silenteight.gradle.wrapper" version "1.1.0"
   id "com.silenteight.gradle.release" version "1.4.0"
-  id "com.silenteight.gradle.convention" version "1.20.0"
-  id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+  id "com.silenteight.gradle.convention" version "1.21.0-SNAPSHOT"
+  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
 projectSetup {
-  javaVersion = '11'
+  javaVersion = JavaVersion.VERSION_11
 }
 
 repositories {
@@ -18,23 +18,21 @@ repositories {
 
 dependencyManagement {
   imports {
-    mavenBom("org.springframework.boot:spring-boot-dependencies:2.1.7.RELEASE")
+    mavenBom("org.springframework.boot:spring-boot-dependencies:2.5.7")
   }
 }
 
 dependencies {
   implementation 'org.springframework.boot:spring-boot-starter'
   implementation 'io.github.classgraph:classgraph:4.8.137'
-
   implementation 'com.google.protobuf:protobuf-java-util:3.19.1'
-  compileOnly 'org.springframework.amqp:spring-amqp:2.3.9'
-  compileOnly 'org.springframework.amqp:spring-rabbit:2.3.9'
-  compileOnly 'org.projectlombok:lombok:1.18.22'
+
+  compileOnly 'org.springframework.amqp:spring-amqp:2.4.0'
+  compileOnly 'org.springframework.amqp:spring-rabbit:2.4.0'
   compileOnly 'org.apache.commons:commons-lang3:3.12.0'
 
   annotationProcessor 'org.springframework.boot:spring-boot-autoconfigure-processor'
   annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-  annotationProcessor 'org.projectlombok:lombok:1.18.22'
 
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
