@@ -42,6 +42,7 @@ def parse_freetext_names(
         parsed_names_valid = _get_valid_names(parsed_names, base_tokens_upper_limit)
         found_valid_names.extend(parsed_names_valid)
         found_valid_names.extend(get_names_from_org_name_markers(freetext_variant_tokens))
+
     names_to_remove = _get_names_to_remove(found_valid_names)
     found_valid_names = [name for name in found_valid_names if name not in names_to_remove]
     unique_base_names = _get_names_with_unique_bases(found_valid_names)

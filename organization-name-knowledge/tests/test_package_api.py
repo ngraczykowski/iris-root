@@ -3,6 +3,7 @@ import logging
 import pytest
 
 from organization_name_knowledge.api import get_all_legal_terms, parse, parse_freetext
+from tests.test_freetext.test_parse_freetext import _check_results
 
 LOGGER = logging.getLogger(__name__)
 
@@ -60,9 +61,4 @@ def test_parse_freetext(freetext, expected_names):
     parsed_freetext = parse_freetext(
         freetext, base_tokens_upper_limit=3, name_tokens_lower_limit=2, name_tokens_upper_limit=7
     )
-    assert len(parsed_freetext) == len(expected_names)
-    for name_information, expected in zip(parsed_freetext, expected_names):
-        assert name_information
-        assert name_information.base.cleaned_name == expected["base"].lower()
-        assert name_information.legal.cleaned_name == expected["legal"].lower()
-        assert name_information.source.cleaned == expected["source"].lower()
+    _check_results(parsed_freetext, expected_names)

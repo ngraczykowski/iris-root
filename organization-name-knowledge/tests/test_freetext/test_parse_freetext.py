@@ -51,34 +51,6 @@ from organization_name_knowledge.freetext.parse import parse_freetext_names
             ],
         ),
         (
-            "12345 ABC Company",
-            [{"base": "ABC", "legal": "company", "source": "abc company"}],
-        ),
-        (
-            "Some long name for number 1234567 ABC Corporation",
-            [
-                {"base": "ABC", "legal": "Corporation", "source": "abc corporation"},
-                {
-                    "base": "number ABC",
-                    "legal": "Corporation",
-                    "source": "for number abc corporation",
-                },
-            ],
-        ),
-        (
-            "ABC\nDEF Company",
-            [
-                {"base": "ABC DEF", "legal": "Company", "source": "ABC DEF Company"},
-                {"base": "DEF", "legal": "Company", "source": "DEF Company"},
-            ],
-        ),
-        (
-            "ABC\nCompany",
-            [
-                {"base": "ABC", "legal": "Company", "source": "ABC Company"},
-            ],
-        ),
-        (
             "A long history of SCB Bank starts about 100 b.c.",
             [{"base": "SCB Bank", "legal": "", "source": "of SCB Bank"}],
         ),
@@ -92,12 +64,7 @@ def test_parse_freetext_1_name(freetext, expected_names):
     parsed_freetext = parse_freetext_names(
         freetext, base_tokens_upper_limit=3, name_tokens_lower_limit=2, name_tokens_upper_limit=7
     )
-    assert len(parsed_freetext) == len(expected_names)
-    for name_information, expected in zip(parsed_freetext, expected_names):
-        assert name_information
-        assert name_information.base.cleaned_name == expected["base"].lower()
-        assert name_information.legal.cleaned_name == expected["legal"].lower()
-        assert name_information.source.cleaned == expected["source"].lower()
+    _check_results(parsed_freetext, expected_names)
 
 
 @pytest.mark.parametrize(
@@ -132,6 +99,50 @@ def test_parse_freetext_2_names(freetext, expected_names):
     parsed_freetext = parse_freetext_names(
         freetext, base_tokens_upper_limit=3, name_tokens_lower_limit=2, name_tokens_upper_limit=7
     )
+    _check_results(parsed_freetext, expected_names)
+
+
+@pytest.mark.parametrize(
+    "freetext, expected_names",
+    [
+        (
+            "12345 ABC Company",
+            [{"base": "ABC", "legal": "company", "source": "abc company"}],
+        ),
+        (
+            "Some long name for number 1234567 ABC Corporation",
+            [
+                {"base": "ABC", "legal": "Corporation", "source": "abc corporation"},
+                {
+                    "base": "number ABC",
+                    "legal": "Corporation",
+                    "source": "for number abc corporation",
+                },
+            ],
+        ),
+        (
+            "ABC\nDEF Company",
+            [
+                {"base": "ABC DEF", "legal": "Company", "source": "ABC DEF Company"},
+                {"base": "DEF", "legal": "Company", "source": "DEF Company"},
+            ],
+        ),
+        (
+            "ABC\nCompany",
+            [
+                {"base": "ABC", "legal": "Company", "source": "ABC Company"},
+            ],
+        ),
+    ],
+)
+def test_parse_freetext_invalid_tokens(freetext, expected_names):
+    parsed_freetext = parse_freetext_names(
+        freetext, base_tokens_upper_limit=3, name_tokens_lower_limit=2, name_tokens_upper_limit=7
+    )
+    _check_results(parsed_freetext, expected_names)
+
+
+def _check_results(parsed_freetext, expected_names):
     assert len(parsed_freetext) == len(expected_names)
     for name_information, expected in zip(parsed_freetext, expected_names):
         assert name_information
