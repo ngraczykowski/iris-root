@@ -55,7 +55,7 @@ def parse_freetext(
     names = parse_freetext_names(
         freetext, base_tokens_upper_limit, name_tokens_lower_limit, name_tokens_upper_limit
     )
-    return sorted(set(names), key=lambda name: name.base.cleaned_name)
+    return names
 
 
 def get_all_legal_terms(name: str) -> Set[str]:
