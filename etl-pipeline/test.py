@@ -23,12 +23,13 @@ for dir in os.listdir(REFERENCE_DIR):
         rel_path = os.path.relpath(os.path.dirname(reference), 'tests')
         read_delta = lambda x: spark.read.format('delta').load(x)
         reference_dataframe = read_delta(reference)
-        # if not os.path.exists(os.path.join(rel_path, os.path.basename(reference))):
-        #     raise ValueError
+        if not os.path.exists(os.path.join(rel_path, os.path.basename(reference))):
+            print(os.path.join(rel_path, os.path.basename(reference)))
+            continue
         tested_dataframe = read_delta(os.path.join(rel_path, os.path.basename(reference)))
         print(os.path.join(rel_path, os.path.basename(reference)))
-        # id = ids_map[os.path.basename(reference)]
-        # reference_rows = reference_dataframe.sort(id, ascending=False).collect()
-        # tested_rows = tested_dataframe.sort(id, ascending=False).collect()
-        # for tested_row, reference_row in zip(tested_rows, reference_rows):
-        #     assert tested_row == reference_row
+        id = ids_map[os.path.basename(reference)]
+        reference_rows = reference_dataframe.sort(id, ascending=False).collect()
+        tested_rows = tested_dataframe.sort(id, ascending=False).collect()
+        for tested_row, reference_row in zip(tested_rows, reference_rows):
+            assert tested_row == reference_row
