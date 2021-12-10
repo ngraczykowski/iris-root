@@ -7,3 +7,6 @@
 [submodule "anaconda"]
 	path = anaconda
 	url = https://gitlab.silenteight.com/data-science/anaconda
+[submodule "python-datatoolbox"]
+	path = python-datatoolbox
+	url = https://gitlab.silenteight.com/ses/python-datatoolbox
