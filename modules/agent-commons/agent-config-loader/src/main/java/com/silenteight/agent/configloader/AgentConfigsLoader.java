@@ -23,22 +23,15 @@ public class AgentConfigsLoader<T> {
   private final Class<T> propertiesType;
 
   public AgentConfigs<T> load() throws IOException {
-    return getConfigs(findDirectory(configDir));
-  }
+    Path configsRootPath = findDirectory(configDir);
 
-  public AgentConfigs<T> load(Path configsRootPath) throws IOException {
-    Path configsPath = configsRootPath.resolve(configDir);
-    return getConfigs(configsPath);
-  }
-
-  private AgentConfigs<T> getConfigs(Path configsPath) throws IOException {
     AgentConfigs<T> agentConfigs = new AgentConfigs<>();
 
-    try (var configFiles = walk(configsPath)) {
+    try (var configFiles = walk(configsRootPath)) {
       for (var iterator = configFiles.iterator(); iterator.hasNext(); ) {
         var configFile = iterator.next();
         if (isRegularFile(configFile) && !isHidden(configFile)) {
-          String agentName = getAgentName(configsPath, configFile);
+          String agentName = getAgentName(configsRootPath, configFile);
           parse(configFile, prefix, propertiesType)
               .ifPresent(properties -> {
                 log.info("Successfully loaded config {} [{}] from {}.",
