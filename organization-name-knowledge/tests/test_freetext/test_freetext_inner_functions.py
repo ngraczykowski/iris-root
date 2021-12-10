@@ -1,12 +1,34 @@
 import pytest
 
-from organization_name_knowledge.freetext.matching import get_names_from_org_name_markers
+from organization_name_knowledge.freetext.matching import (
+    _get_lefts_candidate,
+    get_names_from_org_name_markers,
+    _get_rights_candidate,
+)
 from organization_name_knowledge.freetext.parse import (
     _get_names_to_remove,
     _get_names_with_unique_bases,
     _get_valid_names,
 )
 from organization_name_knowledge.names.parse import parse_name
+
+
+@pytest.mark.parametrize(
+    "text, indexes, expected_candidate",
+    [
+        ("alpha beta gamma delta sigma", (1, 2), "beta gamma"),
+        ("alpha beta gamma delta sigma", (1, 2, 3), "beta gamma delta"),
+        ("alpha beta gamma delta sigma", (4, 5), None),
+    ]
+)
+def test_get_lefts_candidate(text, indexes, expected_candidate):
+    tokens = text.split()
+    tokens_num = len(tokens)
+    candidate = _get_lefts_candidate(indexes, tokens, tokens_num)
+    if candidate:
+        assert candidate.source.cleaned == expected_candidate
+    else:
+        assert candidate == expected_candidate
 
 
 @pytest.mark.parametrize(
@@ -25,7 +47,7 @@ from organization_name_knowledge.names.parse import parse_name
         ),
         (
             "The fall of the General Motors Group was just a part of crisis",
-            # group is also a suffix
+            # 'group' is a suffix also
             [
                 {"base": "General Motors", "source": "General Motors Group"},
                 {"base": "Motors", "source": "Motors Group"},
@@ -82,6 +104,24 @@ def test_get_names_with_unique_bases(names, expected_names):
     assert len(names) == len(expected_names)
     for name, expected in zip(names, expected_names):
         assert name.source.original == expected
+
+
+@pytest.mark.parametrize(
+    "text, indexes, expected_candidate",
+    [
+        ("alpha beta gamma delta sigma", (0, 1, 2), None),
+        ("alpha of beta gamma delta", (0, 1, 2), "alpha of beta"),
+        ("alpha of and beta", (0, 1, 2), None),
+    ]
+)
+def test_get_rights_candidate(text, indexes, expected_candidate):
+    tokens = text.split()
+    tokens_num = len(tokens)
+    candidate = _get_rights_candidate(indexes, tokens, tokens_num)
+    if candidate:
+        assert candidate.source.cleaned == expected_candidate
+    else:
+        assert candidate == expected_candidate
 
 
 @pytest.mark.parametrize(

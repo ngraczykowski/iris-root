@@ -121,6 +121,12 @@ def test_parse_freetext_2_names(freetext, expected_names):
             ],
         ),
         (
+            "XYZ 9999999 88888 Company Limited is here",
+            [
+                {"base": "XYZ", "legal": "Company Limited", "source": "XYZ Company Limited"}
+            ]
+        ),
+        (
             "ABC\nDEF Company",
             [
                 {"base": "ABC DEF", "legal": "Company", "source": "ABC DEF Company"},
