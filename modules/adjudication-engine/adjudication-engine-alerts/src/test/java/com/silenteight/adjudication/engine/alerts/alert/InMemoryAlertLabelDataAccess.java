@@ -31,4 +31,19 @@ class InMemoryAlertLabelDataAccess implements AlertLabelDataAccess {
       RemoveLabelsRequest request) {
 
   }
+
+  @Override
+  public long countByNameAndValue(String name, String value) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public long countAlertsLearningInSolvingSet() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public long countAlertsSolvingInLearningSet() {
+    throw new UnsupportedOperationException();
+  }
 }

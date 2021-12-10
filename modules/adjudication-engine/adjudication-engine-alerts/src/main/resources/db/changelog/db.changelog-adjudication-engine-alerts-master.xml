@@ -8,4 +8,5 @@
   <include file="db/changelog/db.changelog-adjudication-engine-alerts-1.0.0.xml"/>
   <include file="db/changelog/db.changelog-adjudication-engine-alerts-1.1.0.xml"/>
   <include file="db/changelog/db.changelog-adjudication-engine-alerts-1.2.0.xml"/>
+  <include file="db/changelog/db.changelog-adjudication-engine-alerts-1.12.0.xml"/>
 </databaseChangeLog>

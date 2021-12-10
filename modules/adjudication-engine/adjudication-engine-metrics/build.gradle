@@ -6,6 +6,7 @@ plugins {
 dependencies {
   // Application modules
   implementation project(":adjudication-engine-common")
+  implementation project(":adjudication-engine-alerts")
 
   // Utilities
   implementation libraries.commons_lang3

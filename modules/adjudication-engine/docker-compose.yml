@@ -19,6 +19,21 @@ services:
           memory: 1G
         reservations:
           memory: 1G
+  ae:
+    image: docker.repo.silenteight.com/ae/adjudication-engine-app:snapshot
+    restart: unless-stopped
+    environment:
+      AE_DB_HOST: "postgres"
+      AE_DB_NAME: "adjudication-engine"
+      AE_DB_USERNAME: "adjudication-engine"
+      AE_DB_PASSWORD: "adjudication-engine"
+
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
 
 volumes:
   postgres-storage:

@@ -10,4 +10,10 @@ public interface AlertLabelDataAccess {
   void insertLabels(List<InsertLabelRequest> requests);
 
   void removeLabels(RemoveLabelsRequest request);
+
+  long countByNameAndValue(String name, String value);
+
+  long countAlertsLearningInSolvingSet();
+
+  long countAlertsSolvingInLearningSet();
 }

@@ -18,6 +18,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @ContextConfiguration(classes = {
     JdbcAlertLabelDataAccess.class,
     InsertAlertLabelsQuery.class,
+    CountAlertLabelsByNameAndValueQuery.class,
+    CountAlertLabelsSubsetInSet.class,
     DeleteLabelsQuery.class
 })
 class JdbcAlertLabelDataAccessIT extends BaseJdbcTest {
@@ -32,8 +34,36 @@ class JdbcAlertLabelDataAccessIT extends BaseJdbcTest {
     var request = createLabelInsertRequest();
     dataAccess.insertLabels(List.of(request));
     assertThat(jdbcTemplate.queryForObject(
-        "SELECT count(*) FROM ae_alert_labels",
+        "SELECT COUNT(*) FROM ae_alert_labels WHERE alert_id=1 AND name LIKE 'labeleczka'",
         Integer.class)).isEqualTo(1);
+  }
+
+  @Test
+  void shouldCountLabels() {
+    long count = dataAccess.countByNameAndValue("any", "value");
+    assertThat(count).isEqualTo(1);
+  }
+
+  @Test
+  void shouldHaveSameLearingAndSolvingAlerts() {
+    long learning = dataAccess.countByNameAndValue("source", "learning");
+    long solving = dataAccess.countByNameAndValue("source", "solving");
+
+    assertThat(learning).isEqualTo(3);
+    assertThat(solving).isEqualTo(2);
+  }
+
+  @Test
+  void shouldHaveOneLearningInSolving() {
+    Long learningInSolving = dataAccess.countAlertsLearningInSolvingSet();
+
+    assertThat(learningInSolving).isEqualTo(1);
+  }
+
+  @Test
+  void shouldHaveOneSolvingInLearning() {
+    long solvingInLearning = dataAccess.countAlertsSolvingInLearningSet();
+    assertThat(solvingInLearning).isEqualTo(1);
   }
 
   @Test
@@ -48,7 +78,7 @@ class JdbcAlertLabelDataAccessIT extends BaseJdbcTest {
         .build());
 
     assertThat(jdbcTemplate.queryForObject(
-        "SELECT count(*) FROM ae_alert_labels",
-        Integer.class)).isEqualTo(0);
+        "SELECT COUNT(*) FROM ae_alert_labels WHERE name LIKE 'labeleczka'",
+        Integer.class)).isZero();
   }
 }
