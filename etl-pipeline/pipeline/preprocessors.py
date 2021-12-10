@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import re
+import copy
 import time
 from glob import glob
 import pyspark.sql.functions as F
@@ -259,7 +260,7 @@ def convert_standardized_to_cleansed():
     alert_statuses_df = spark_instance.read_delta(in_standardized_data_dir("ACM_MD_ALERT_STATUSES.delta"))
 
     # Implementation: Spark manager, Delta Converter
-
+    # Join statuses with alerts
     item_status_history_df = (
         item_status_history_df.join(
             alert_statuses_df.selectExpr("STATUS_IDENTIFIER", "STATUS_NAME as FROM_STATUS_NAME"),
@@ -282,7 +283,7 @@ def convert_standardized_to_cleansed():
         item_status_history_df, "TO_STATUS_IDENTIFIER", "TO_STATUS_NAME"
     )
     item_status_history_df.createOrReplaceTempView("status_df")
-
+    # Join statuses with alerts
     system_id = "22601"
     item_status_history_stage_df = spark_instance.spark_instance.sql(
         f"""
@@ -360,7 +361,7 @@ def transform_cleansed_to_application():
     cleansed_note_df = spark_instance.read_delta(in_cleansed_data_dir(note_file_name))
 
     # Note Preprocessor, Status Preprocessor
-
+    # Join alerts with notes and stages of last analysis
     cleansed_note_df = cleansed_note_df.where('analyst_note_stage like "%last%"').selectExpr(
         "ALERT_ID", "note as last_note"
     )
@@ -372,7 +373,7 @@ def transform_cleansed_to_application():
 
     # Agent input creator
 
-    import copy
+    
 
     input_template = {"ap": [], "ap_aliases": [], "wl": [], "wl_aliases": []}
 
