@@ -78,6 +78,5 @@ class DbHelper:
             return _read_from_oracle(table_name)
         else:
             raise ValueError(
-                "Please specify which db platform you want to access, possible values:"
-                ' "POSTGRES", "ORACLE"'
+                "Please specify which db platform you want to access, possible values:" ' "POSTGRES", "ORACLE"'
             )

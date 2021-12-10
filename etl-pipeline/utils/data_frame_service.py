@@ -2,7 +2,6 @@ import utils.config_service as configservice
 import utils.file_service as fileservice
 import utils.spark_service as sparkservice
 
-
 spark = sparkservice.load_spark()
 
 

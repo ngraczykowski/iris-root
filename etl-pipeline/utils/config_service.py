@@ -9,7 +9,7 @@ from serppythonclient.yml import YamlLoader
 ROOT_DIR = str(Path(__file__).parent.parent.absolute())
 DEFAULT_CONFIG_DIR = str(Path(ROOT_DIR).joinpath("config").joinpath("default"))
 DEFAULT_WORKING_DIR = str(Path(ROOT_DIR).joinpath("data/e2e"))
-CONFIG_DIR = './config/default/'
+CONFIG_DIR = "./config/default/"
 WORKING_DIR = os.getenv("MOAPOV_WORKING_DIR_PATH", DEFAULT_WORKING_DIR)
 
 config_locations = [
@@ -20,9 +20,7 @@ config_locations = [
 
 class MissingConfigurationFileException(Exception):
     def __init__(self):
-        super().__init__(
-            f"Missing configuration.yml file. Expected locations: {config_locations}"
-        )
+        super().__init__(f"Missing configuration.yml file. Expected locations: {config_locations}")
 
 
 CONFIG_PATH = None
@@ -136,9 +134,7 @@ def get_artifact_file_path(path_property: str):
 
 
 def get_crucial_artifact_file_path(path_property: str):
-    return __get_file_path(
-        "crucial_artifact_files_dir", "crucial_artifact_files", path_property
-    )
+    return __get_file_path("crucial_artifact_files_dir", "crucial_artifact_files", path_property)
 
 
 def get_pipeline_configuration():
@@ -185,25 +181,15 @@ def get_sentiment_blacklists():
 
 
 def get_external_analyst_sentiments_paths():
-    return __get_file_paths(
-        "input_files_dir", "customer_specific.external_analyst_sentiments_files"
-    )
+    return __get_file_paths("input_files_dir", "customer_specific.external_analyst_sentiments_files")
 
 
 def get_analyst_resoning_config_file():
-    return str(
-        Path(CONFIG_DIR).joinpath(
-            customer_specific_config["analyst_resoning_config_file"]
-        )
-    )
+    return str(Path(CONFIG_DIR).joinpath(customer_specific_config["analyst_resoning_config_file"]))
 
 
 def get_coverage_score_config_file():
-    return str(
-        Path(CONFIG_DIR).joinpath(
-            customer_specific_config["coverage_score_config_file"]
-        )
-    )
+    return str(Path(CONFIG_DIR).joinpath(customer_specific_config["coverage_score_config_file"]))
 
 
 def get_exportable_configurations():

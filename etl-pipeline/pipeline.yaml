@@ -1,0 +1,9 @@
+name: pipeline
+channels:
+ - defaults
+dependencies:
+ - python=3.7
+ - pip
+ - pip:
+    - -r requirements.txt
+    - -r pip-requirements.txt

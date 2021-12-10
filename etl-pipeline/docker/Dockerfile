@@ -1,13 +1,25 @@
 FROM anaconda_playground
-RUN conda create -n pipeline python=3.7
-RUN conda activate anaconda_playground
-RUN mkdir -p /opt/jdk/
 ARG PIP_INDEX_URL
 ENV PIP_INDEX_URL=$PIP_INDEX_URL
-RUN pip install -r requirements.txt 
-RUN pip install -r python-datatoolbox/pip-requirements.txt 
-RUN pip install pyspark==3.1.1
+ADD requirements.txt /requirements.txt
+ADD pipeline.yaml /pipeline.yaml
+ADD pip-requirements.txt  /pip-requirements.txt
+
+RUN conda env create  -f /pipeline.yaml python=3.7
+RUN export PIP
+# RUN which pip
+# RUN mkdir -p /opt/jdk/
+# ARG PIP_INDEX_URL
+# ENV PIP_INDEX_URL=$PIP_INDEX_URL
+# ADD requirements.txt /requirements.txt
+# RUN pip install -r /requirements.txt
+# ADD pip-requirements.txt  /pip-requirements.txt
+# RUN pip install -r /pip-requirements.txt
+# RUN pip install pyspark==3.1.1
+SHELL ["conda", "run", "-n", "pipeline", "/bin/bash", "-c"]
+
 RUN conda install jupyter
+SHELL ["exit"]
+
 WORKDIR /app
-ENV PYTHONPATH=.:python-datatoolbox
-ENTRYPOINT [ "python", "-m", "notebook", "--allow-root", "--ip",  "0.0.0.0' ]
+ENTRYPOINT [ "conda", "run", "-n", "pipeline", "jupyter", "notebook", "--allow-root", "--ip", "0.0.0.0", "--NotebookApp.token=''"]

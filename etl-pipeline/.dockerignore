@@ -1,2 +1,7 @@
 env/*
 dependencies/*
+data/*
+dependencies
+docker/*
+python-datatoolbox/*
+tests/*

@@ -1,27 +1,28 @@
 from typing import List
 
-
 from serppythonclient.local.stub import StubProviderFactory
-from silenteight.agent.country.v1.api.country_agent_pb2 import \
-    CompareCountriesRequest
-from silenteight.agent.country.v1.api.country_agent_pb2_grpc import \
-    CountryAgentStub
+from silenteight.agent.country.v1.api.country_agent_pb2 import CompareCountriesRequest
+from silenteight.agent.country.v1.api.country_agent_pb2_grpc import CountryAgentStub
 from silenteight.agent.date.v1.api.date_agent_pb2 import RecognizeDatesRequest
 from silenteight.agent.date.v1.api.date_agent_pb2_grpc import DateAgentStub
 from silenteight.agent.document.v1.api.document_numbers_comparer_agent_pb2 import (
-    CompareDocumentNumbersRequest)
-from silenteight.agent.document.v1.api.document_numbers_comparer_agent_pb2_grpc import \
-    DocumentNumbersComparerAgentStub
+    CompareDocumentNumbersRequest,
+)
+from silenteight.agent.document.v1.api.document_numbers_comparer_agent_pb2_grpc import (
+    DocumentNumbersComparerAgentStub,
+)
 from silenteight.agent.gender.v1.api.gender_agent_pb2 import SolveGenderRequest
-from silenteight.agent.gender.v1.api.gender_agent_pb2_grpc import \
-    GenderAgentStub
+from silenteight.agent.gender.v1.api.gender_agent_pb2_grpc import GenderAgentStub
 from silenteight.agent.geo.v1.api.geo_agent_pb2 import (
-    CompareLocationsRequest, CompareLocationsResponse)
-from silenteight.agent.geo.v1.api.geo_agent_pb2_grpc import \
-    GeoLocationAgentStub
-from silenteight.agent.name.v1.api.name_agent_pb2 import (CompareNamesInput,
-                                                          CompareNamesRequest,
-                                                          WatchlistName)
+    CompareLocationsRequest,
+    CompareLocationsResponse,
+)
+from silenteight.agent.geo.v1.api.geo_agent_pb2_grpc import GeoLocationAgentStub
+from silenteight.agent.name.v1.api.name_agent_pb2 import (
+    CompareNamesInput,
+    CompareNamesRequest,
+    WatchlistName,
+)
 from silenteight.agent.name.v1.api.name_agent_pb2_grpc import NameAgentStub
 
 import utils.config_service as configservice
@@ -36,26 +37,14 @@ date_configuration = configservice.get_agent_configuration("date")
 
 factory = StubProviderFactory.create()
 
-name_agent_stub = factory.get_stub(
-    NameAgentStub, "localhost", name_configuration["port"]
-)
+name_agent_stub = factory.get_stub(NameAgentStub, "localhost", name_configuration["port"])
 
-document_number_stub = factory.get_stub(
-    DocumentNumbersComparerAgentStub, "localhost", document_configuration["port"]
-)
+document_number_stub = factory.get_stub(DocumentNumbersComparerAgentStub, "localhost", document_configuration["port"])
 
-country_agent_stub = factory.get_stub(
-    CountryAgentStub, "localhost", country_configuration["port"]
-)
-date_agent_stub = factory.get_stub(
-    DateAgentStub, "localhost", date_configuration["port"]
-)
-gender_agent_stub = factory.get_stub(
-    GenderAgentStub, "localhost", gender_configuration["port"]
-)
-geo_agent_stub = factory.get_stub(
-    GeoLocationAgentStub, "localhost", geo_configuration["port"]
-)
+country_agent_stub = factory.get_stub(CountryAgentStub, "localhost", country_configuration["port"])
+date_agent_stub = factory.get_stub(DateAgentStub, "localhost", date_configuration["port"])
+gender_agent_stub = factory.get_stub(GenderAgentStub, "localhost", gender_configuration["port"])
+geo_agent_stub = factory.get_stub(GeoLocationAgentStub, "localhost", geo_configuration["port"])
 
 
 def call_name_agent(
@@ -71,10 +60,7 @@ def call_name_agent(
         inputs=[
             CompareNamesInput(
                 alerted_names=alerted_names,
-                watchlist_names=[
-                    WatchlistName(name=matched_name, type="NAME")
-                    for matched_name in matched_names
-                ],
+                watchlist_names=[WatchlistName(name=matched_name, type="NAME") for matched_name in matched_names],
             )
         ],
     )
@@ -120,9 +106,7 @@ def call_name_agent(
 #     return document_number_stub.CompareDocumentNumbers(request)
 
 
-def call_document_number_agent(
-    alerted_documents: List[str], matched_documents: List[str], standalone: bool = True
-):
+def call_document_number_agent(alerted_documents: List[str], matched_documents: List[str], standalone: bool = True):
     request = CompareDocumentNumbersRequest(
         alerted_values=alerted_documents,
         matched_values=matched_documents,
@@ -131,13 +115,9 @@ def call_document_number_agent(
     return document_number_stub.CompareDocumentNumbers(request)
 
 
-def call_country_agent(
-    alerted_values: List[str], matched_values: List[str], standalone: bool = True
-):
+def call_country_agent(alerted_values: List[str], matched_values: List[str], standalone: bool = True):
 
-    request = CompareCountriesRequest(
-        alerted_values=alerted_values, matched_values=matched_values
-    )
+    request = CompareCountriesRequest(alerted_values=alerted_values, matched_values=matched_values)
 
     compared_countries = country_agent_stub.CompareCountries(request)
     return compared_countries
@@ -160,13 +140,9 @@ def call_date_agent(
     return next(compared_dates)
 
 
-def call_gender_agent(
-    alerted_values: List[str], matched_values: List[str], standalone: bool = True
-):
+def call_gender_agent(alerted_values: List[str], matched_values: List[str], standalone: bool = True):
 
-    request = SolveGenderRequest(
-        alerted_values=alerted_values, matched_values=matched_values
-    )
+    request = SolveGenderRequest(alerted_values=alerted_values, matched_values=matched_values)
 
     compared_genders = gender_agent_stub.SolveGender(request)
     return next(compared_genders)

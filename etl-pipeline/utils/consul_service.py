@@ -20,15 +20,15 @@ default_select_service_policy = RandomSelectServicePolicy()
 
 
 def get_service_address_and_port(
-        service_name: str,
-        policy: SelectServicePolicy = default_select_service_policy) -> (str, int):
+    service_name: str, policy: SelectServicePolicy = default_select_service_policy
+) -> (str, int):
     services = _get_services(service_name)
 
     if len(services) == 0:
         raise Exception('Service "{}" is not registered in Consul.'.format(service_name))
 
     service = policy.apply(services)
-    return service['ServiceAddress'], service['ServicePort']
+    return service["ServiceAddress"], service["ServicePort"]
 
 
 def _get_services(service_name: str):
@@ -43,7 +43,7 @@ def _create_consul():
         port=int(config.consul_port),
         scheme="https",
         verify=config.ca_certs_path,
-        cert=(config.user_cert_chain_path, config.user_cert_key_path)
+        cert=(config.user_cert_chain_path, config.user_cert_key_path),
     )
 
 

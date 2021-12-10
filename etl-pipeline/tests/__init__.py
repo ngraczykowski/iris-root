@@ -1,11 +1,13 @@
 import hashlib
-from glob import glob
 import os
+from glob import glob
 
 from pipeline.spark import get_spark
+
 spark = get_spark()
 from pipeline.delta_initializer import *
-REFERENCE_DIR = 'tests/data'
+
+REFERENCE_DIR = "tests/data"
 
 ids_map = {
     "ALERTS.delta": "ALERT_ID",
@@ -18,9 +20,10 @@ ids_map = {
 for dir in os.listdir(REFERENCE_DIR):
     for reference in glob(f"tests/data/{dir}/*delta"):
         from delta.tables import *
-        rel_path = os.path.relpath(os.path.dirname(reference), 'tests')
-        reference_dataframe = spark.read.format('delta').load(reference)
-        tested_dataframe = spark.read.format('delta').load(reference)
+
+        rel_path = os.path.relpath(os.path.dirname(reference), "tests")
+        reference_dataframe = spark.read.format("delta").load(reference)
+        tested_dataframe = spark.read.format("delta").load(reference)
         print(reference)
         id = ids_map[os.path.basename(reference)]
         reference_rows = reference_dataframe.sort(id, ascending=False).collect()

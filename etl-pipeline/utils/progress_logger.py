@@ -66,9 +66,7 @@ class ProgressLogger:
         print(f"Elapsed: {elapsed}.")
 
     def _get_current_progress(self) -> str:
-        return str(self.last.tick) + (
-            "/" + str(self.size) if self.size is not None else ""
-        )
+        return str(self.last.tick) + ("/" + str(self.size) if self.size is not None else "")
 
     def _calculate_left_seconds(self, average_speed: float) -> float:
         left_records = self.size - self.last.tick

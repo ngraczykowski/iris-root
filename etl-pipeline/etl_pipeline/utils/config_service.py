@@ -165,9 +165,7 @@ def get_sentiment_blacklists():
 
 
 def get_external_analyst_sentiments_paths():
-    return __get_file_paths(
-        "input_files_dir", "customer_specific.external_analyst_sentiments_files"
-    )
+    return __get_file_paths("input_files_dir", "customer_specific.external_analyst_sentiments_files")
 
 
 def get_analyst_resoning_config_file():

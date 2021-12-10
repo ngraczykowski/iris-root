@@ -2,8 +2,15 @@ version: '2.3'
 
 services:
   jupyter_playground:
-    image: anaconda_playground
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        - PIP_INDEX_URL=$PIP_INDEX_URL
+    image: jupyter_playground
     volumes:
       - ..:/app
     ports:
       - "4444:8888" # jupyter notebook forward
+    environment:
+      - PYTHONPATH=.:python-datatoolbox
