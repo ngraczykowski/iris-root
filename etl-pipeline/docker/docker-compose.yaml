@@ -1,6 +1,22 @@
 version: '2.3'
 
 services:
+  java_playground:
+    image: java_playground
+    build:
+      context: ../spark-manager
+      dockerfile: ./docker/Dockerfile
+      args:
+        - PIP_INDEX_URL=$PIP_INDEX_URL
+  anaconda_playground:
+    build:
+      context: ../anaconda
+      dockerfile: Dockerfile
+      args:
+        - PIP_INDEX_URL=$PIP_INDEX_URL
+    depends_on:
+      - java_playground
+    image: anaconda_playground
   jupyter_playground:
     build:
       context: ..
@@ -8,6 +24,8 @@ services:
       args:
         - PIP_INDEX_URL=$PIP_INDEX_URL
     image: jupyter_playground
+    depends_on:
+      - anaconda_playground
     volumes:
       - ..:/app
     ports:
