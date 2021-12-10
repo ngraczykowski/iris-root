@@ -1,0 +1,5 @@
+audit-bs:
+  integration:
+    request:
+      exchange: audit.event
+      routingKey: event.audit-log

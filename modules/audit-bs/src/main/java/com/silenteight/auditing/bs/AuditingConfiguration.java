@@ -2,6 +2,8 @@ package com.silenteight.auditing.bs;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.auditing.bs.amqp.AuditDataMessageGateway;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -18,9 +20,9 @@ class AuditingConfiguration {
   private final Optional<PlatformTransactionManager> transactionManager;
 
   @Bean
-  AuditingLogger auditingLogger(DataSource dataSource) {
+  AuditingLogger auditingLogger(DataSource dataSource, AuditDataMessageGateway messageGateway) {
     NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    AuditingLogger auditingLogger = new AuditingLogger(jdbcTemplate);
+    AuditingLogger auditingLogger = new AuditingLogger(jdbcTemplate, messageGateway);
 
     if (transactionManager.isPresent()) {
       TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager.get());

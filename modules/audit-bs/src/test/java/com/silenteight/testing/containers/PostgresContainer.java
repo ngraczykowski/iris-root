@@ -1,5 +1,8 @@
 package com.silenteight.testing.containers;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -10,6 +13,7 @@ import java.util.Map;
 import static org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils.randomAlphabetic;
 import static org.testcontainers.shaded.org.apache.commons.lang.RandomStringUtils.randomAlphanumeric;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PostgresContainer {
 
   private static final PostgreSQLContainer<?> CONTAINER;
@@ -22,21 +26,6 @@ public final class PostgresContainer {
         .withTmpFs(Map.of("/var/lib/postgresql/data", "rw"));
 
     CONTAINER.start();
-  }
-
-  public static String getJdbcUrl() {
-    return CONTAINER.getJdbcUrl();
-  }
-
-  public static String getUsername() {
-    return CONTAINER.getUsername();
-  }
-
-  public static String getPassword() {
-    return CONTAINER.getPassword();
-  }
-
-  private PostgresContainer() {
   }
 
   public static class PostgresTestInitializer

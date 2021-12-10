@@ -64,8 +64,7 @@ public class AuditingFinder {
   }
 
   private static AuditDataDto createAuditData(ResultSet resultSet) throws SQLException {
-    return AuditDataDto
-        .builder()
+    return AuditDataDto.builder()
         .eventId(resultSet.getObject(EVENT_ID, UUID.class))
         .correlationId(resultSet.getObject(CORRELATION_ID, UUID.class))
         .timestamp(resultSet.getTimestamp(TIMESTAMP))

@@ -1,6 +1,7 @@
 package com.silenteight.auditing.bs;
 
 import com.silenteight.auditing.bs.AuditingBsRepositoryIT.AuditingBsRepositoryITConfiguration;
+import com.silenteight.auditing.bs.amqp.AuditDataMessageGateway;
 import com.silenteight.testing.containers.PostgresContainer.PostgresTestInitializer;
 
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -166,5 +168,8 @@ class AuditingBsRepositoryIT {
 
   @Configuration
   static class AuditingBsRepositoryITConfiguration {
+
+    @MockBean
+    private AuditDataMessageGateway messageGateway;
   }
 }

@@ -11,8 +11,7 @@ import static java.util.UUID.randomUUID;
 final class AuditDataDtoFixtures {
 
   static final AuditDataDto DECISION_TREE_ADD_AUDIT_DATA =
-      AuditDataDto
-          .builder()
+      AuditDataDto.builder()
           .eventId(randomUUID())
           .correlationId(randomUUID())
           .timestamp(Timestamp.valueOf("2020-04-15 12:14:32.456"))
@@ -25,8 +24,7 @@ final class AuditDataDtoFixtures {
           .build();
 
   static final AuditDataDto REASONING_BRANCH_CHANGE_AUDIT_DATA =
-      AuditDataDto
-          .builder()
+      AuditDataDto.builder()
           .eventId(randomUUID())
           .correlationId(randomUUID())
           .timestamp(Timestamp.valueOf("2020-04-25 15:47:12.834"))
