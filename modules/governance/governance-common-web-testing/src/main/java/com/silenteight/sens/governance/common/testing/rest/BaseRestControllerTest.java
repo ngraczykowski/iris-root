@@ -160,7 +160,7 @@ public abstract class BaseRestControllerTest {
   @EnableWebMvc
   @EnableWebSecurity
   @EnableSpringDataWebSupport
-  static class TestRestConfiguration extends WebSecurityConfigurerAdapter {
+  public static class TestRestConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
