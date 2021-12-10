@@ -136,10 +136,34 @@ paths:
         201:
           description: Created
 
+  /policies/{id}/policies/clone/{newId}:
+    post:
+      tags:
+        - policies
+      description: Clone policy
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 'Policy Id'
+          example: '511f8ceb-1ab2-4edd-80d3-de7d9f3074f4'
+        - name: newId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 'New policy Id'
+          example: '19a6435d-159f-485e-b256-212798b056a6'
+      responses:
+        202:
+          description: OK
+
   /policies/{id}/steps:
     get:
       tags:
-        - steps      
+        - steps
       parameters:
         - in: path
           name: id
@@ -327,6 +351,37 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Step'
+
+  /policies/{policyId}/steps/{stepId}/clone/steps/{newStepId}:
+    post:
+      tags:
+        - steps
+      description: Clone step
+      parameters:
+        - name: policyId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 'Policy Id'
+          example: '511f8ceb-1ab2-4edd-80d3-de7d9f3074f4'
+        - name: stepId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 'Step Id'
+          example: 'cb8d13ef-9b9e-4cf5-bc76-928d06847f34'
+        - name: newStepId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 'New step Id'
+          example: '18453962-8c97-4b94-8bbf-4a03482ce5d8'
+      responses:
+        202:
+          description: OK
 
   /steps/{id}/logic:
     get:
