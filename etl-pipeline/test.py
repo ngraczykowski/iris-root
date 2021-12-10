@@ -19,12 +19,15 @@ ids_map = {
 print('ok')
 for dir in os.listdir(REFERENCE_DIR):
     for reference in glob(f"tests/data/{dir}/*delta"):
+        print(reference)
+        # if not("3.cleansed" in reference and "ALERTS.delta" in reference):
+        #     continue
         
         rel_path = os.path.relpath(os.path.dirname(reference), 'tests')
         read_delta = lambda x: spark.read.format('delta').load(x)
         reference_dataframe = read_delta(reference)
         if not os.path.exists(os.path.join(rel_path, os.path.basename(reference))):
-            print(os.path.join(rel_path, os.path.basename(reference)))
+            print('not foound', os.path.join(rel_path, os.path.basename(reference)))
             continue
         tested_dataframe = read_delta(os.path.join(rel_path, os.path.basename(reference)))
         print(os.path.join(rel_path, os.path.basename(reference)))
@@ -32,4 +35,9 @@ for dir in os.listdir(REFERENCE_DIR):
         reference_rows = reference_dataframe.sort(id, ascending=False).collect()
         tested_rows = tested_dataframe.sort(id, ascending=False).collect()
         for tested_row, reference_row in zip(tested_rows, reference_rows):
-            assert tested_row == reference_row
+            try:
+                assert tested_row == reference_row
+                print('ok')
+            except AssertionError:
+                print("ERR")
+                continue

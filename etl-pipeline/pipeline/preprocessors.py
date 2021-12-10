@@ -23,11 +23,7 @@ def convert_to_standardized(raw_data_path=RAW_DATA_DIR, target_path=STANDARDIZED
         
         standardized_file_name = re.sub('.csv$', '.delta', file_name)
         standardized_file_path = in_standardized_data_dir(standardized_file_name)
-        print(spark_instance.spark_instance)
-        print(raw_data_path)
         df = spark_instance.spark_read_csv(raw_file_path)
-        print(raw_data_path)
-        
         df = preprocess.write_read_delta(spark_instance.spark_instance, df, standardized_file_path)
         
         logging.info(f'Data saved to {standardized_file_path}')
@@ -35,6 +31,10 @@ def convert_to_standardized(raw_data_path=RAW_DATA_DIR, target_path=STANDARDIZED
         
         print()
         time.sleep(1)
+
+
+
+
 
 
 def convert_standardized_to_cleansed():
@@ -152,6 +152,58 @@ def convert_standardized_to_cleansed():
                                             user_metadata = 'More processing on AP and WL names, pinpoint to the exact names from AP and WL which caused the hits'
                                            )
     # Implementation: NRIC handler (Customer specifics)
+    def extract_wl_nric_dob(custom_field):
+        def _extract_yob_from_st_nrics(nrics):
+            # Assuemd there is no data quality issue, e.g, 2 S or T NRICs
+            for nric in nrics:
+                nric_type = nric[0]
+                if nric_type.lower() in ['s', 't']:
+                    two_digit_year = nric[1:3]
+
+                    if nric_type.lower() == 's':
+                        if int(two_digit_year) >= 68:
+                            yob = '19' + two_digit_year
+                        else:
+                            yob = None
+                    else:
+                        yob = '20' + two_digit_year
+
+                    return yob
+        
+        nric_match = re.match('^NRIC:.*?([STGF]\d{7}[A-Z])', custom_field)
+        dob_match = re.match('.*DOB: (.+?\d{4})[,.]', custom_field)
+        possible_nric_match = re.findall('([STGF]\d{7}[A-Z])', custom_field)
+        
+        if nric_match:
+            nrics = nric_match.groups()
+        else:
+            nrics = None
+            
+        if dob_match:
+            dobs = dob_match.groups()
+        else:
+            # Try to use NRIC to extract YOB only when there is no DOB from the text data
+            if nrics:
+                dobs = _extract_yob_from_st_nrics(nrics)
+            else:
+                dobs = None
+                
+        if possible_nric_match:
+            possible_nrics = possible_nric_match
+        else:
+            possible_nrics = None 
+        
+        return {'nric': nrics, 'dob': dobs, 'possible_nric': possible_nrics}
+
+
+
+    def extract_ap_nric(ap_id_numbers):
+        ap_nrics = []
+        for id_number in set(ap_id_numbers):
+            if id_number and re.match('^[STGF]\d{7}[A-Z]$', id_number.upper()):
+                ap_nrics.append(id_number)
+        
+        return ap_nrics
 
     extract_wl_nric_dob('NRIC: S6959726J, DOB: 1955, Freque')
 
@@ -173,6 +225,7 @@ def convert_standardized_to_cleansed():
                                  user_metadata = 'Extracted AP and WL NRIC'
                                  )
 
+   
         # Implementation: Spark manager
     alert_notes_file_name = 'ACM_ALERT_NOTES.delta'
     item_status_file_name = 'ACM_ITEM_STATUS_HISTORY.delta'
@@ -180,45 +233,56 @@ def convert_standardized_to_cleansed():
     alert_notes_df = spark_instance.read_delta(in_standardized_data_dir(alert_notes_file_name))
     item_status_history_df = spark_instance.read_delta(in_standardized_data_dir(item_status_file_name))
     alert_statuses_df = spark_instance.read_delta(in_standardized_data_dir('ACM_MD_ALERT_STATUSES.delta'))
+
+
     # Implementation: Spark manager, Delta Converter
 
+    item_status_history_df = item_status_history_df.join(alert_statuses_df.selectExpr('STATUS_IDENTIFIER', 'STATUS_NAME as FROM_STATUS_NAME'),
+                                    F.col('FROM_STATUS_IDENTIFIER') == F.col('STATUS_IDENTIFIER'),
+                                    how='left') \
+                               .drop('STATUS_IDENTIFIER') \
+                               .join(alert_statuses_df.selectExpr('STATUS_IDENTIFIER', 'STATUS_NAME as TO_STATUS_NAME'),
+                                    F.col('TO_STATUS_IDENTIFIER') == F.col('STATUS_IDENTIFIER'),
+                                    how='left') \
+                               .drop('STATUS_IDENTIFIER')
+
+    item_status_history_df = spark_instance.reorder_cols(item_status_history_df, 'FROM_STATUS_IDENTIFIER', 'FROM_STATUS_NAME')
+    item_status_history_df = spark_instance.reorder_cols(item_status_history_df, 'TO_STATUS_IDENTIFIER', 'TO_STATUS_NAME')
     item_status_history_df.createOrReplaceTempView('status_df')
 
     system_id = "22601"
     item_status_history_stage_df = spark_instance.spark_instance.sql(f'''
-        with status_row_num as (
-            select *,
-                row_number() over (partition by item_id order by create_date asc) as row_num
-            from status_df),
-        first_last_analyst_row_num as (
-            select ITEM_ID,
-                min(row_num) as first_analyst_row_num,
-                max(row_num) as last_analyst_row_num
-            from status_row_num
-            where user_join_id != "{system_id}"
-            group by ITEM_ID
-            )
-        select a.*,
-            b.first_analyst_row_num,
-            b.last_analyst_row_num,
-            case 
-                when row_num = first_analyst_row_num and row_num = last_analyst_row_num then "first_last_analyst_status"
-                when row_num = first_analyst_row_num then "first_analyst_status"
-                when row_num = last_analyst_row_num then "last_analyst_status"
-                when row_num > first_analyst_row_num then "middle_analyst_status"
-                else "system_activity"
-            end as analyst_status_stage
-        from status_row_num a
-        join first_last_analyst_row_num b
-        on a.ITEM_ID = b.ITEM_ID
+    with status_row_num as (
+        select *,
+            row_number() over (partition by item_id order by create_date asc) as row_num
+        from status_df),
+    first_last_analyst_row_num as (
+        select ITEM_ID,
+            min(row_num) as first_analyst_row_num,
+            max(row_num) as last_analyst_row_num
+        from status_row_num
+        where user_join_id != "{system_id}"
+        group by ITEM_ID
+        )
+    select a.*,
+        b.first_analyst_row_num,
+        b.last_analyst_row_num,
+        case 
+            when row_num = first_analyst_row_num and row_num = last_analyst_row_num then "first_last_analyst_status"
+            when row_num = first_analyst_row_num then "first_analyst_status"
+            when row_num = last_analyst_row_num then "last_analyst_status"
+            when row_num > first_analyst_row_num then "middle_analyst_status"
+            else "system_activity"
+        end as analyst_status_stage
+    from status_row_num a
+    join first_last_analyst_row_num b
+    on a.ITEM_ID = b.ITEM_ID
     ''')
-
-    a = spark_instance.write_and_get_delta_data(
+    item_status_history_stage_df = spark_instance.write_and_get_delta_data(
                                                 item_status_history_stage_df,
                                                 delta_path=in_cleansed_data_dir(item_status_file_name),
                                                 user_metadata='Tagged the status stage'
                                                )
-
     alert_notes_df.createOrReplaceTempView('notes_df')
 
     alert_notes_stage_df = spark_instance.spark_instance.sql('''
@@ -241,53 +305,8 @@ def convert_standardized_to_cleansed():
         from first_last_analyst_row_num    
     ''')
 
-
-def extract_wl_nric_dob(custom_field):
-    def _extract_yob_from_st_nric(nric):
-        nric_type = nric[0]
-        two_digit_year = nric[1:3]
-
-        if nric_type.lower() == 's':
-            if int(two_digit_year) >= 68:
-                yob = '19' + two_digit_year
-            else:
-                yob = None
-        else:
-            yob = '20' + two_digit_year
-            
-        return yob
-    
-    nric_match = re.match('^NRIC:.*?([STGF]\d{7}[A-Z])', custom_field)
-    dob_match = re.match('.*DOB: (.+?\d{4})[,.]', custom_field)
-    possible_nric_match = re.findall('([STGF]\d{7}[A-Z])', custom_field)
-    
-    if nric_match:
-        nric = nric_match.groups()
-    else:
-        nric = None
-        
-    if dob_match:
-        dob = dob_match.groups()
-    else:
-        if nric and nric[0].lower() in ['s', 't']:
-            dob = _extract_yob_from_st_nric(nric)
-        else:
-            dob = None
-            
-    if possible_nric_match:
-        possible_nric = possible_nric_match
-    else:
-        possible_nric = None 
-    
-    return {'nric': nric, 'dob': dob, 'possible_nric': possible_nric}
-
-
-
-def extract_ap_nric(ap_id_numbers):
-    ap_nrics = []
-    for id_number in set(ap_id_numbers):
-        if id_number and re.match('^[STGF]\d{7}[A-Z]$', id_number.upper()):
-            ap_nrics.append(id_number)
-    
-    return ap_nrics
-
+    alert_notes_stage_df = spark_instance.write_and_get_delta_data(
+                                        alert_notes_stage_df,
+                                        delta_path=in_cleansed_data_dir(alert_notes_file_name),
+                                        user_metadata='Tagged the note stage'
+                                       )
