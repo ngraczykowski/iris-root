@@ -1,6 +1,8 @@
 ext {
   libraries = [:]
 
+  grpcVersion = "1.36.0"
+
   //***********************************
   // Silent Eight
   //***********************************
@@ -10,15 +12,22 @@ ext {
 // Silent Eight
 
 // APIs
+libraries.slf4j_api = [group: 'org.slf4j', name: 'slf4j-api', version: '1.7.32']
 
 // GRPC
+libraries.grpc_core = [group: 'io.grpc', name: 'grpc-core', version: grpcVersion]
+libraries.protobuf_util = [group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.15.6']
 
 // Others
+libraries.vavr = [group: 'io.vavr', name: 'vavr', version: '0.10.4']
 
 // Testing
 
 dependencies {
-
+  implementation libraries.grpc_core
+  implementation libraries.protobuf_util
+  implementation libraries.vavr
+  implementation libraries.slf4j_api
 }
 
 repositories {
