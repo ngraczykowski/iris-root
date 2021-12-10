@@ -1,9 +1,6 @@
 package com.silenteight.payments.bridge.svb.newlearning.job.csvstore.step.hit;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,6 +8,7 @@ import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PUBLIC;
 
 @Data
+@Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PUBLIC)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)

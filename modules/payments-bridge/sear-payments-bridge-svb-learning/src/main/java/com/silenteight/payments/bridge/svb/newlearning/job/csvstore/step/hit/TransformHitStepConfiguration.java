@@ -47,7 +47,7 @@ class TransformHitStepConfiguration {
           + "       fkco_i_blocking,\n"
           + "       fkco_listed_record,\n"
           + "       fkco_filtered_date,\n"
-          + "       fkco_d_filtered_datetime,\n"
+          + "       fkco_d_filtered_datetime_1,\n"
           + "       fkco_v_matched_tag,\n"
           + "       fkco_v_matched_tag_content,\n"
           + "       fkco_i_sequence"
@@ -63,7 +63,7 @@ class TransformHitStepConfiguration {
   public JdbcCursorItemReader<LearningHitEntity> hitReader(
       TransformReaderFactory readerFactory,
       @Value("#{stepExecution.jobExecution.jobId}") Long jobId) {
-    return readerFactory.createReader(LearningHitEntity.class, jobId, QUERY);
+    return readerFactory.createReader(jobId, QUERY, new LearningHitRowMapper());
   }
 
   @Bean

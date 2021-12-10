@@ -25,6 +25,8 @@ final class LearningActionRowMapper implements RowMapper<LearningActionEntity> {
         .fkcoOperator(rs.getString("fkco_operator"))
         .fkcoStatus(rs.getString("fkco_status"))
         .fkcoITotalAction(rs.getString("fkco_i_total_action"))
+        .fkcoVStatusName(rs.getString("fkco_v_status_name"))
+        .fkcoVStatusBehavior(rs.getString("fkco_v_status_behavior"))
         .build();
   }
 }

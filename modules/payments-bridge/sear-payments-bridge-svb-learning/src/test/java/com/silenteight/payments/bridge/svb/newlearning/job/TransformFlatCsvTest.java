@@ -84,10 +84,10 @@ class TransformFlatCsvTest extends BaseBatchTest {
   public void testTransformingHit() {
     var transformHitStep = createStepExecution(STEP_TRANSFORM_HIT);
     assertThat(transformHitStep.isPresent()).isTrue();
-    assertThat(transformHitStep.get().getReadCount()).isEqualTo(2);
+    assertThat(transformHitStep.get().getReadCount()).isEqualTo(1);
 
     var savedCount = ((Collection<LearningHitEntity>) learningHitRepository.findAll()).size();
-    assertThat(savedCount).isEqualTo(2);
+    assertThat(savedCount).isEqualTo(1);
   }
 
   @Test

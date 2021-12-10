@@ -37,12 +37,14 @@ class TransformActionStepConfiguration {
           + "       fkco_operator,\n"
           + "       fkco_status,\n"
           + "       fkco_i_total_action,\n"
-          + "       fkco_messages\n"
+          + "       fkco_messages,\n"
+          + "       fkco_v_status_name,\n"
+          + "       fkco_v_status_behavior\n"
           + "FROM pb_learning_csv_row\n"
           +
           "WHERE job_id"
           + " = ?\n"
-          + "GROUP BY 1, 2, 3, 4, 5, 6, 7";
+          + "GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9";
 
   @Bean
   @StepScope

@@ -51,19 +51,22 @@ class TransformAlertStepConfiguration {
           + "       fkco_i_app_priority,\n"
           + "       fkco_i_normamount,\n"
           + "       fkco_v_messageid,\n"
-          + "       fkco_v_copy_service"
-          + "\n"
-          + "FROM pb_learning_csv_row\n"
+          + "       fkco_v_copy_service,\n"
+          + "       fkco_d_filtered_datetime,\n"
+          + "       fkco_i_blockinghits\n"
+          +
+          "FROM pb_learning_csv_row\n"
           + "WHERE job_id = ?\n"
           + "GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,"
-          + " 22";
+          + " 22, 23, 24";
 
   @Bean
   @StepScope
   public JdbcCursorItemReader<LearningAlertEntity> alertReader(
       TransformReaderFactory readerFactory,
       @Value("#{stepExecution.jobExecution.jobId}") Long jobId) {
-    return readerFactory.createReader(LearningAlertEntity.class, jobId, QUERY);
+    return readerFactory.createReader(
+        jobId, QUERY, new LearningAlertRowMapper(properties.getTimeZone()));
   }
 
   @Bean
