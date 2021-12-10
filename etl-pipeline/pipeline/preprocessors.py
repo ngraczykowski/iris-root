@@ -3,9 +3,9 @@ import logging
 import os
 import re
 import time
-
+from glob import glob
 import pyspark.sql.functions as F
-from delta.tables import *
+
 from pyspark.sql.types import ArrayType, MapType, StringType, StructField, StructType
 from silenteight.aia.alerts import AlertHitDictFactory, AlertHitExtractor
 from silenteight.data.spark import preprocess
@@ -16,12 +16,13 @@ from pipeline.config import (
     RAW_DATA_DIR,
     STANDARDIZED_DATA_DIR,
     in_application_data_dir,
+    APPLICATION_DATA_DIR,
     in_cleansed_data_dir,
     in_raw_data_dir,
     in_standardized_data_dir,
 )
 from pipeline.spark import spark_instance
-
+from delta.tables import *
 
 # IMPLEMENTATION: DeltaConverter
 def convert_to_standardized(raw_data_path=RAW_DATA_DIR, target_path=STANDARDIZED_DATA_DIR):
@@ -681,3 +682,11 @@ def transform_cleansed_to_application():
         logging.info(
             f"Agent: {agent}, Input written to {agent_input_df_path}, elapsed time: {time.time() - start:.2f}s"
         )
+
+
+def get_pandas_dataframe(filename):
+    return spark_instance.read_delta(filename).toPandas()
+
+def show_files_in_directory(directory):
+    for i in glob(os.path.join(directory, "*")):
+        print(i)
