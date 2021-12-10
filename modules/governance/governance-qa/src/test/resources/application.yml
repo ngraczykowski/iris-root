@@ -1,10 +1,142 @@
-serp.governance.qa:
-  sampling:
-    generator:
-      sample-count: 454
-      grouping-fields:
-        - alert_extendedAttribute5
-      filters:
-        - field: alert_s8_recommendation
-          values:
-            - ACTION_FALSE_POSITIVE
+spring:
+  application:
+    name: governance
+  datasource:
+    # Hikari pool configuration
+    hikari:
+      pool-name: Database-Pool
+      minimum-idle: ${serp.db.connections.min}
+      maximum-pool-size: ${serp.db.connections.max}
+      auto-commit: false
+      schema: ${serp.db.schema}
+      isolate-internal-queries: true
+      # NOTE(ahaczewski): Forces HikariCP to commit the transaction after opening fresh connection.
+      #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
+      #  just before HikariCP runs `SET SESSION search_path TO '${serp.db.schema}'` which begins
+      #  transaction. Thus, with that query as workaround, we force the transaction commit.
+      connection-init-sql: SELECT 1
+      data-source-properties:
+        ApplicationName: SERP (${spring.application.name})
+  # Database migrations
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: ${serp.db.schema}
+    contexts: default,test
+  # Spring Data JPA
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    open-in-view: false
+    database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
+
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: true
+
+    properties:
+      hibernate.cache.use_query_cache: false
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.generate_statistics: false
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.jdbc.time_zone: UTC
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      hibernate.jdbc.batch_size: 1000
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      org.hibernate.envers.audit_table_suffix: _audit
+      org.hibernate.envers.store_data_at_delete: true
+
+serp.db:
+  schema: public
+  connections.min: 1
+  connections.max: 10
+
+serp.governance:
+  qa:
+    sampling:
+      schedule:
+        enabled: true
+        audit-cron: 0 0 2/6 * * ?
+        alert-generator-cron: 0 0 2 ? * MON-FRI *
+      generator:
+        sample-count: 454
+        grouping-fields:
+          - alert_extendedAttribute5
+        filters:
+          - field: alert_s8_recommendation
+            values:
+              - ACTION_FALSE_POSITIVE
+    integration:
+      request:
+        exchange: ${serp.governance.messaging.exchange.gov-qa}
+        routingKey: ${serp.governance.messaging.broker.gov-qa.routing-key}
+      receive:
+        queue-name: gov.event.queue.test
+    viewing:
+      max-state-reset-delay-ms: 45000
+    retention:
+      personal-information-expired:
+        integration:
+          receive:
+            queue-name: ${serp.governance.messaging.broker.qa-retention-personal-information-expired.queue-name}
+      alerts-expired:
+        integration:
+          receive:
+            queue-name: ${serp.governance.messaging.broker.qa-retention-alerts-expired.queue-name}
+  grpc:
+    client:
+      timeout: 10s
+
+  messaging:
+    exchange:
+      analytics: feature-vector
+      model: gov.model
+      notification: notification
+      solution-discrepancy: learning
+      gov-qa: gov.qa
+      gov-event: gov.event
+    broker:
+      analytics:
+        queue-name: governance.analytics
+        routing-key: feature-vector.solved
+      ingest:
+        queue-name: gov.feature-vector.ingest
+        routing-key: command.index-request.production
+      model-export:
+        routing-key: event.model-promoted.production
+      model-in-use:
+        routing-key: event.model-in-use.production
+      models-archived:
+        queue-name: gov.models-archived
+        routing-key: event.models-archived
+      gov-qa:
+        routing-key: event.qa-alert
+      qa-retention-personal-information-expired:
+        queue-name: gov.retention.personal-information-expired
+        routing-key: retention.personal-information-expired
+      qa-retention-alerts-expired:
+        queue-name: gov.retention.alerts-expired
+        routing-key: retention.personal-information-expired
+      notification:
+        queue-name: notifier.incoming-event
+        routing-key: notification.*
+      notification-send-mail:
+        queue-name: notifier.send-mail
+        routing-key: notifier.send-mail
+      solution-discrepancy:
+        queue-name: governance.solution-discrepancy
+        routing-key: learning.discrepancy-detected
+      to-remove:
+        bindings: [ ]
+  feature-vector:
+    integration:
+      request:
+        exchange: ${serp.governance.messaging.exchange.analytics}
+        routing-key: ${serp.governance.messaging.broker.analytics.routing-key}
+      receive:
+        queue-name: ${serp.governance.messaging.broker.analytics.queue-name}
+
+      ingest:
+        integration:
+          receive:
+            queue-name: ${serp.governance.messaging.broker.ingest.queue-name}
