@@ -36,21 +36,15 @@ public class CreateSimulationUseCase {
     request.preAudit(auditingLogger::log);
 
     SolvingModel model = modelService.getModel(request.getModel());
-    Analysis analysis = runAnalysis(model, request.getDatasets());
+    Analysis analysis = runAnalysis(model);
     storeSimulation(request, request.getDatasets(), analysis.getName());
+    addDatasetsToAnalysis(analysis.getName(), request.getDatasets());
 
     request.postAudit(auditingLogger::log);
   }
 
-  private Analysis runAnalysis(@NonNull SolvingModel model, @NonNull Set<String> datasets) {
+  private Analysis runAnalysis(@NonNull SolvingModel model) {
     Analysis analysis = analysisService.createAnalysis(model);
-    datasets
-        .stream()
-        .map(DatasetResource::fromResourceName)
-        .map(datasetQuery::getExternalResourceName)
-        .forEach(resourceName -> analysisService.addDatasetToAnalysis(
-            analysis.getName(), resourceName));
-
     log.debug("Run analysis={}", analysis);
     return analysis;
   }
@@ -59,5 +53,13 @@ public class CreateSimulationUseCase {
       CreateSimulationRequest request, Set<String> datasets, String analysis) {
 
     simulationService.createSimulation(request, datasets, analysis);
+  }
+
+  private void addDatasetsToAnalysis(@NonNull String analysis, @NonNull Set<String> datasets) {
+    datasets
+        .stream()
+        .map(DatasetResource::fromResourceName)
+        .map(datasetQuery::getExternalResourceName)
+        .forEach(resourceName -> analysisService.addDatasetToAnalysis(analysis, resourceName));
   }
 }
