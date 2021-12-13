@@ -54,10 +54,10 @@ class CreateSimulationUseCaseTest {
     underTest.activate(CREATE_SIMULATION_REQUEST);
 
     // then
-    verify(analysisService).addDatasetToAnalysis(ANALYSIS.getName(), DATASET_NAME_1);
-    verify(analysisService).addDatasetToAnalysis(ANALYSIS.getName(), DATASET_NAME_2);
     verify(simulationService).createSimulation(
         CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS.getName());
+    verify(analysisService).addDatasetToAnalysis(ANALYSIS.getName(), DATASET_NAME_1);
+    verify(analysisService).addDatasetToAnalysis(ANALYSIS.getName(), DATASET_NAME_2);
     var logCaptor = forClass(AuditDataDto.class);
     verify(auditingLogger, times(2)).log(logCaptor.capture());
     AuditDataDto preAudit = getPreAudit(logCaptor);
