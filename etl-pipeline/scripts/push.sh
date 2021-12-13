@@ -3,6 +3,5 @@ set -eu -o pipefail
 
 REMOTE_IMAGE_NAME='docker.repo.silenteight.com/etl-pipeline'
 
-echo "Tagging and pushing image for 'latest'"
-docker tag jupyter_playground "${REMOTE_IMAGE_NAME}:latest"
+echo "Pushing image for 'latest'"
 docker push "${REMOTE_IMAGE_NAME}:latest"
