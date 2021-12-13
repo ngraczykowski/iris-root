@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
+import com.silenteight.payments.bridge.firco.metrics.efficiency.EfficiencyMetricIncrementerPort;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationId;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
 
@@ -31,6 +32,7 @@ class RecommendationService {
   private final RecommendationRepository recommendationRepository;
   private final RecommendationMetadataRepository recommendationMetadataRepository;
   private final ObjectMapper objectMapper;
+  private final EfficiencyMetricIncrementerPort efficiencyMetricIncrementer;
 
   @Transactional
   RecommendationId createAdjudicationRecommendation(UUID alertId,
@@ -38,6 +40,7 @@ class RecommendationService {
     var id = DEFAULT_ID_GENERATOR.generateId();
     var entity = new RecommendationEntity(id, alertId, recommendation);
 
+    efficiencyMetricIncrementer.incrementRecommendedAction(entity.getAction());
     recommendationRepository.save(entity);
     createMetadata(id, recommendation.getMetadata())
         .ifPresent(recommendationMetadataRepository::save);
@@ -48,6 +51,8 @@ class RecommendationService {
   RecommendationId createBridgeRecommendation(UUID alertId, RecommendationReason reason) {
     var id = DEFAULT_ID_GENERATOR.generateId();
     var entity = new RecommendationEntity(id, alertId, reason);
+
+    efficiencyMetricIncrementer.incrementManualInvestigation();
     recommendationRepository.save(entity);
     return new RecommendationId(id);
   }
