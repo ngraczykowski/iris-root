@@ -4,3 +4,6 @@
 [submodule "spark-manager"]
 	path = spark-manager
 	url = ../spark-manager
+[submodule "anaconda"]
+	path = anaconda
+	url = ../anaconda
