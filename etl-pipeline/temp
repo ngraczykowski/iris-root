@@ -1,0 +1,12 @@
+[submodule "datascience-installer"]
+	path = datascience-installer
+	url = ../../ses/datascience-installer/
+[submodule "spark-manager"]
+	path = spark-manager
+	url = https://gitlab.silenteight.com/data-science/spark-manager
+[submodule "anaconda"]
+	path = anaconda
+	url = https://gitlab.silenteight.com/data-science/anaconda
+[submodule "python-datatoolbox"]
+	path = python-datatoolbox
+	url = https://gitlab.silenteight.com/ses/python-datatoolbox
