@@ -16,20 +16,17 @@ class AlertHitDictFactory:
         self.alert_header_config = ALERT_HEADER_CONFIG
         self.hit_config = HIT_CONFIG
 
-    def _invoke_xml_util(self, alert_or_hit_config, alert_or_hit):
+    def _invoke_xml_util(self, alert_or_hit):
         result = {}
-        for k, v in alert_or_hit_config.items():
-            field_name = k
-            xml_util_func_name = v[0]
-            xpath_arg = v[1]
-
+        for field_name, v in self.alert_or_hit_config.items():
+            xml_util_func_name, xpath_arg = v
             xml_util_func = getattr(self.xml_util, xml_util_func_name)
             result[field_name] = xml_util_func(alert_or_hit, xpath_arg)
 
         return result
 
     def parse_alert_header(self, alert_header):
-        return self._invoke_xml_util(self.alert_header_config, alert_header)
+        return self._invoke_xml_util(alert_header)
 
     def parse_hit(self, hit):
         return self._invoke_xml_util(self.hit_config, hit)

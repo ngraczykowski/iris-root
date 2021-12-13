@@ -26,7 +26,19 @@ from pipeline.spark import spark_instance
 from delta.tables import *
 
 # IMPLEMENTATION: DeltaConverter
-def convert_to_standardized(raw_data_path=RAW_DATA_DIR, target_path=STANDARDIZED_DATA_DIR):
+def convert_to_standardized(
+    raw_data_path: str = RAW_DATA_DIR, 
+    target_path: str = STANDARDIZED_DATA_DIR) -> None:
+    """Converts raw data to delta format.
+
+    Args:
+        raw_data_path (str, optional): Path to source directory. Defaults to RAW_DATA_DIR.
+        target_path (str, optional): Path to target directory. Defaults to STANDARDIZED_DATA_DIR.
+
+    Returns:
+        None
+    """   
+
     for file_name in os.listdir(raw_data_path):
         start = time.time()
         raw_file_path = in_raw_data_dir(file_name)
