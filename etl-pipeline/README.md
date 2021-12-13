@@ -5,6 +5,10 @@ Generic project that help Data Scientists in analyze of the Client's data as wel
 # MVP
 
 1. Load submodules: `git submodule update --init --recursive`
+2. Docker login:
+```
+docker login docker.repo.silenteight.com
+```
 2. Pull image
 ```
 docker pull docker.repo.silenteight.com/etl-pipeline

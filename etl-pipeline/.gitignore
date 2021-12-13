@@ -54,3 +54,5 @@ installers/*
 python-datatoolbox/*
 data/*
 !data/1.raw
+agents/*
+.coverage*

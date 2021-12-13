@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>etl_pipeline.xml_parser package &mdash; ETL pipeline 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="customized package" href="customized.html" />
+    <link rel="prev" title="Welcome to ETL pipeline’s documentation!" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ETL pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">etl_pipeline.xml_parser package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-etl_pipeline.xml_parser.config">etl_pipeline.xml_parser.config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-etl_pipeline.xml_parser.xml_extractor">etl_pipeline.xml_parser.xml_extractor module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-etl_pipeline.xml_parser.xml_pipeline">etl_pipeline.xml_parser.xml_pipeline module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-etl_pipeline.xml_parser">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="customized.html">customized package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ETL pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>etl_pipeline.xml_parser package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/etl_pipeline.xml_parser.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="etl-pipeline-xml-parser-package">
+<h1>etl_pipeline.xml_parser package<a class="headerlink" href="#etl-pipeline-xml-parser-package" title="Permalink to this headline"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-etl_pipeline.xml_parser.config">
+<span id="etl-pipeline-xml-parser-config-module"></span><h2>etl_pipeline.xml_parser.config module<a class="headerlink" href="#module-etl_pipeline.xml_parser.config" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-etl_pipeline.xml_parser.xml_extractor">
+<span id="etl-pipeline-xml-parser-xml-extractor-module"></span><h2>etl_pipeline.xml_parser.xml_extractor module<a class="headerlink" href="#module-etl_pipeline.xml_parser.xml_extractor" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_extractor.XMLExtractor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">etl_pipeline.xml_parser.xml_extractor.</span></span><span class="sig-name descname"><span class="pre">XMLExtractor</span></span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_extractor.html#XMLExtractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_extractor.XMLExtractor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Contains logic for extraction specific type values
+from xml document</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_extractor.XMLExtractor.__find_string_array">
+<span class="sig-name descname"><span class="pre">__find_string_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xpath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#etl_pipeline.xml_parser.xml_extractor.XMLExtractor.__find_string_array" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>doc</strong> (<em>lxml.etree._Element</em>) – [description]</p></li>
+<li><p><strong>xpath</strong> (<em>str</em>) – <p>Xpath that indicates the element.
+The xpath must not contain <cite>text()</cite></p>
+<p>because return None is a requirement.</p>
+<p>E.g. doc.xpath(“elem”) returns a list of 2
+elements,e lement_1 has a text, element_2 doesn’t.
+<cite>doc.xpath(“elem/text()”)`</cite> returns a list of
+text from element_1 only, but nothing additional information about
+element_2. In this case, <cite>None</cite> from element_2
+is required</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Optional[str]]</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If xpath contains <cite>text()</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_extractor.XMLExtractor.__map_to_texts">
+<span class="sig-name descname"><span class="pre">__map_to_texts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elements</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#etl_pipeline.xml_parser.xml_extractor.XMLExtractor.__map_to_texts" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_extractor.XMLExtractor._convert_text_to_boolean">
+<span class="sig-name descname"><span class="pre">_convert_text_to_boolean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_extractor.html#XMLExtractor._convert_text_to_boolean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_extractor.XMLExtractor._convert_text_to_boolean" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) – [description]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns boolean representation of the string. Or None as
+the field does not contain anything.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Optional[bool]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_extractor.XMLExtractor.extract_boolean_array">
+<span class="sig-name descname"><span class="pre">extract_boolean_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xpath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_extractor.html#XMLExtractor.extract_boolean_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_extractor.XMLExtractor.extract_boolean_array" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>doc</strong> (<em>lxml.etree._Element</em>) – </p></li>
+<li><p><strong>xpath</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of boolean or none values.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Optional[bool]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_extractor.XMLExtractor.extract_boolean_value">
+<span class="sig-name descname"><span class="pre">extract_boolean_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xpath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_extractor.html#XMLExtractor.extract_boolean_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_extractor.XMLExtractor.extract_boolean_value" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>doc</strong> (<em>lxml.etree._Element</em>) – </p></li>
+<li><p><strong>xpath</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns boolean representation of the string. Or None as
+the field does not contain anything.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Optional[bool]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_extractor.XMLExtractor.extract_string_elements_array">
+<span class="sig-name descname"><span class="pre">extract_string_elements_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xpath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_extractor.html#XMLExtractor.extract_string_elements_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_extractor.XMLExtractor.extract_string_elements_array" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>doc</strong> (<em>lxml.etree._Element</em>) – </p></li>
+<li><p><strong>xpath</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of values. If the xpath
+is valid but not text, then [None] or a list of None will be returned.
+If the xpath doesn’t not exist,
+then [] will be returned.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[Optional[str]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_extractor.XMLExtractor.extract_value">
+<span class="sig-name descname"><span class="pre">extract_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xpath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_extractor.html#XMLExtractor.extract_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_extractor.XMLExtractor.extract_value" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>doc</strong> (<em>lxml.etree._Element</em>) – </p></li>
+<li><p><strong>xpath</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns value from the doc. Or None as
+the field does not contain anything.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Optional[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_extractor.XMLFunction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">etl_pipeline.xml_parser.xml_extractor.</span></span><span class="sig-name descname"><span class="pre">XMLFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_extractor.html#XMLFunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_extractor.XMLFunction" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_extractor.XMLFunction.extract_boolean_array">
+<span class="sig-name descname"><span class="pre">extract_boolean_array</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'extract_boolean_array'</span></em><a class="headerlink" href="#etl_pipeline.xml_parser.xml_extractor.XMLFunction.extract_boolean_array" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_extractor.XMLFunction.extract_boolean_value">
+<span class="sig-name descname"><span class="pre">extract_boolean_value</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'extract_boolean_value'</span></em><a class="headerlink" href="#etl_pipeline.xml_parser.xml_extractor.XMLFunction.extract_boolean_value" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_extractor.XMLFunction.extract_string_elements_array">
+<span class="sig-name descname"><span class="pre">extract_string_elements_array</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'extract_string_elements_array'</span></em><a class="headerlink" href="#etl_pipeline.xml_parser.xml_extractor.XMLFunction.extract_string_elements_array" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_extractor.XMLFunction.extract_value">
+<span class="sig-name descname"><span class="pre">extract_value</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'extract_value'</span></em><a class="headerlink" href="#etl_pipeline.xml_parser.xml_extractor.XMLFunction.extract_value" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-etl_pipeline.xml_parser.xml_pipeline">
+<span id="etl-pipeline-xml-parser-xml-pipeline-module"></span><h2>etl_pipeline.xml_parser.xml_pipeline module<a class="headerlink" href="#module-etl_pipeline.xml_parser.xml_pipeline" title="Permalink to this headline"></a></h2>
+<p>Main pipeline that accounts for the XML mapping</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">etl_pipeline.xml_parser.xml_pipeline.</span></span><span class="sig-name descname"><span class="pre">AlertHitDictFactory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hit_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alert_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_pipeline.html#AlertHitDictFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Creates dictionary based on the customer scheme</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hit_config</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Tuple</em><em>[</em><em>Type</em><em>[</em><em>int</em><em>]</em><em>, </em><em>str</em><em>]</em><em>]</em>) – </p></li>
+<li><p><strong>alert_config</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Tuple</em><em>[</em><em>Type</em><em>[</em><em>int</em><em>]</em><em>, </em><em>str</em><em>]</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory._create_spark_schema">
+<span class="sig-name descname"><span class="pre">_create_spark_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_pipeline.html#AlertHitDictFactory._create_spark_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory._create_spark_schema" title="Permalink to this definition"></a></dt>
+<dd><p>Creates structtype that can be fed to the Spark executors from XMLExtractorConfig.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> (<em>XMLExtractorConfig</em>) – Config for which the spark schema is created.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>StructType that is a list of pairs:
+function name - xpath.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>SparkTypeConfig</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory._invoke_xml_util">
+<span class="sig-name descname"><span class="pre">_invoke_xml_util</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_pipeline.html#AlertHitDictFactory._invoke_xml_util"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory._invoke_xml_util" title="Permalink to this definition"></a></dt>
+<dd><p>Invokes xml function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> (<em>XMLExtractorConfig</em>) – Config that maps standardized column name to Tuple of Function and xpath.</p></li>
+<li><p><strong>row</strong> (<em>str</em>) – Alert in xml format.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dict in which key is the columns and result are values
+extracted from the xml string.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>FieldOutputType</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory.get_alert_spark_schema">
+<span class="sig-name descname"><span class="pre">get_alert_spark_schema</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_pipeline.html#AlertHitDictFactory.get_alert_spark_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory.get_alert_spark_schema" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Spark schema for alert config.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>SparkTypeConfig</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory.get_hit_spark_schema">
+<span class="sig-name descname"><span class="pre">get_hit_spark_schema</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_pipeline.html#AlertHitDictFactory.get_hit_spark_schema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory.get_hit_spark_schema" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Spark schema for hit config.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>SparkTypeConfig</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory.xml_util">
+<span class="sig-name descname"><span class="pre">xml_util</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;etl_pipeline.xml_parser.xml_extractor.XMLExtractor</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory.xml_util" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">etl_pipeline.xml_parser.xml_pipeline.</span></span><span class="sig-name descname"><span class="pre">WatchlistExtractor</span></span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_pipeline.html#WatchlistExtractor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor.extract_alert_and_hits_from_xml">
+<span class="sig-name descname"><span class="pre">extract_alert_and_hits_from_xml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_pipeline.html#WatchlistExtractor.extract_alert_and_hits_from_xml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor.extract_alert_and_hits_from_xml" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xml</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[FieldOutputType, FieldOutputType]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor.get_wl_hit_aliases_matched_name">
+<span class="sig-name descname"><span class="pre">get_wl_hit_aliases_matched_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hit_aliases_displayName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hit_aliases_matchedName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hit_inputExplanations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_pipeline.html#WatchlistExtractor.get_wl_hit_aliases_matched_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor.get_wl_hit_aliases_matched_name" title="Permalink to this definition"></a></dt>
+<dd><p>Gets list of names that contains aliases and other things.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hit_aliases_displayName</strong> (<em>str</em>) – </p></li>
+<li><p><strong>hit_aliases_matchedName</strong> (<em>str</em>) – </p></li>
+<li><p><strong>hit_inputExplanations</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor.parse_alert_header">
+<span class="sig-name descname"><span class="pre">parse_alert_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alert_header</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_pipeline.html#WatchlistExtractor.parse_alert_header"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor.parse_alert_header" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alert_header</strong> (<em>lxml.etree._Element</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>FieldOutputType</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor.parse_hit">
+<span class="sig-name descname"><span class="pre">parse_hit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_pipeline.html#WatchlistExtractor.parse_hit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor.parse_hit" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>hit</strong> (<em>lxml.etree._Element</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>FieldOutputType</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor.unwrap_alert_hits">
+<span class="sig-name descname"><span class="pre">unwrap_alert_hits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_pipeline.html#WatchlistExtractor.unwrap_alert_hits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor.unwrap_alert_hits" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pyspark.sql.DataFrame</em>) – </p></li>
+<li><p><strong>schema</strong> (<em>StructType</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pyspark.sql.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.XMLPipeline">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">etl_pipeline.xml_parser.xml_pipeline.</span></span><span class="sig-name descname"><span class="pre">XMLPipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spark_instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hit_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alert_config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">watchlist_cls</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_pipeline.html#XMLPipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.XMLPipeline" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spark_instance</strong> (<em>spark_manager.spark_client.SparkClient</em>) – </p></li>
+<li><p><strong>watchlist_cls</strong> (<a class="reference internal" href="#etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor" title="etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor"><em>etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.XMLPipeline.clear_empty_hits">
+<span class="sig-name descname"><span class="pre">clear_empty_hits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alert_ap_hit_names_df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_pipeline.html#XMLPipeline.clear_empty_hits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.XMLPipeline.clear_empty_hits" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>alert_ap_hit_names_df</strong> (<em>pyspark.sql.DataFrame</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pyspark.sql.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.XMLPipeline.pipeline">
+<span class="sig-name descname"><span class="pre">pipeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_pipeline.html#XMLPipeline.pipeline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.XMLPipeline.pipeline" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>source_path</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pyspark.sql.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="etl_pipeline.xml_parser.xml_pipeline.XMLPipeline.unwrap_xml">
+<span class="sig-name descname"><span class="pre">unwrap_xml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/etl_pipeline/xml_parser/xml_pipeline.html#XMLPipeline.unwrap_xml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#etl_pipeline.xml_parser.xml_pipeline.XMLPipeline.unwrap_xml" title="Permalink to this definition"></a></dt>
+<dd><p>Reads table and transforms <cite>xml</cite> alert to table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>source_path</strong> (<em>str</em>) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pyspark.sql.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-etl_pipeline.xml_parser">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-etl_pipeline.xml_parser" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to ETL pipeline’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="customized.html" class="btn btn-neutral float-right" title="customized package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Silent Eight.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

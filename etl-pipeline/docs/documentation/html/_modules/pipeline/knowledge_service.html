@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pipeline.knowledge_service &mdash; ETL pipeline 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ETL pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../source/etl_pipeline.xml_parser.html">etl_pipeline.xml_parser package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/customized.html">customized package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ETL pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>pipeline.knowledge_service</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pipeline.knowledge_service</h1><div class="highlight"><pre>
+<span></span><span class="c1"># put in the file</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+
+<div class="viewcode-block" id="Item"><a class="viewcode-back" href="../../source/pipeline.html#pipeline.knowledge_service.Item">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Item</span><span class="p">:</span>
+    <span class="n">child</span><span class="p">:</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">parsed_item</span><span class="p">:</span> <span class="nb">list</span></div>
+
+
+<span class="c1"># put in the file</span>
+
+
+<div class="viewcode-block" id="get_all_ancestors"><a class="viewcode-back" href="../../source/pipeline.html#pipeline.knowledge_service.get_all_ancestors">[docs]</a><span class="k">def</span> <span class="nf">get_all_ancestors</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">ancestors</span><span class="p">,</span> <span class="n">parent_map</span><span class="p">):</span>
+    <span class="n">ancestors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">parent_map</span><span class="p">[</span><span class="n">child</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">get_all_ancestors</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">ancestors</span><span class="p">,</span> <span class="n">parent_map</span><span class="p">)</span></div>
+
+
+<span class="c1"># put in the file</span>
+
+
+<div class="viewcode-block" id="present_ancestors"><a class="viewcode-back" href="../../source/pipeline.html#pipeline.knowledge_service.present_ancestors">[docs]</a><span class="k">def</span> <span class="nf">present_ancestors</span><span class="p">(</span><span class="n">ancestors</span><span class="p">):</span>
+    <span class="n">new_ancestors</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ancestor</span> <span class="ow">in</span> <span class="n">ancestors</span><span class="p">:</span>
+        <span class="n">keys_values_ancestors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">ancestor</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">keys_values_ancestors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">keys_values_ancestors</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keys_values_ancestors</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">keys_values_ancestors</span><span class="p">:</span>
+            <span class="n">new_ancestors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="n">ancestor</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">keys_values_ancestors</span><span class="si">}</span><span class="s2">&gt;&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_ancestors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="n">ancestor</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="s2">&gt;&quot;</span><span class="p">)</span>
+
+    <span class="n">ancestors</span> <span class="o">=</span> <span class="n">new_ancestors</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ancestors</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_features"><a class="viewcode-back" href="../../source/pipeline.html#pipeline.knowledge_service.get_features">[docs]</a><span class="k">def</span> <span class="nf">get_features</span><span class="p">(</span><span class="n">xml_tree</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">print_results</span><span class="p">):</span>
+    <span class="n">parent_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">xml_tree</span><span class="o">.</span><span class="n">iter</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">p</span><span class="p">}</span>
+    <span class="n">features</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">xml_tree</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+            <span class="n">parsed_value</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">parsed_value</span><span class="p">:</span>
+                <span class="n">ancestors</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">get_all_ancestors</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">ancestors</span><span class="p">,</span> <span class="n">parent_map</span><span class="p">)</span>
+                <span class="n">ancestors</span> <span class="o">=</span> <span class="n">present_ancestors</span><span class="p">(</span><span class="n">ancestors</span><span class="p">)</span>
+                <span class="n">features</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Item</span><span class="p">(</span><span class="n">ancestors</span><span class="p">,</span> <span class="n">child</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">parsed_value</span><span class="p">))</span>
+    <span class="n">print_results</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">features</span></div>
+
+
+<div class="viewcode-block" id="get_column_features"><a class="viewcode-back" href="../../source/pipeline.html#pipeline.knowledge_service.get_column_features">[docs]</a><span class="k">def</span> <span class="nf">get_column_features</span><span class="p">(</span><span class="n">column_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">print_results</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Item</span><span class="p">(</span><span class="n">child</span><span class="o">=</span><span class="n">column_name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">parsed_item</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">parsed_value</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">parsed_value</span><span class="p">:</span>
+        <span class="n">print_results</span><span class="p">(</span><span class="n">column_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">parsed_value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Item</span><span class="p">(</span><span class="n">child</span><span class="o">=</span><span class="n">column_name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">parsed_item</span><span class="o">=</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="print_org_results"><a class="viewcode-back" href="../../source/pipeline.html#pipeline.knowledge_service.print_org_results">[docs]</a><span class="k">def</span> <span class="nf">print_org_results</span><span class="p">(</span><span class="n">org_features</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">org_list</span> <span class="ow">in</span> <span class="n">org_features</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;tag name &quot;</span><span class="p">,</span> <span class="n">org_list</span><span class="o">.</span><span class="n">child</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">org_list</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">org</span> <span class="ow">in</span> <span class="n">org_list</span><span class="o">.</span><span class="n">parsed_item</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;base_names: &quot;</span><span class="p">,</span> <span class="n">org</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">cleaned_name</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;legal: &quot;</span><span class="p">,</span> <span class="n">org</span><span class="o">.</span><span class="n">legal</span><span class="o">.</span><span class="n">cleaned_name</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="print_column_results"><a class="viewcode-back" href="../../source/pipeline.html#pipeline.knowledge_service.print_column_results">[docs]</a><span class="k">def</span> <span class="nf">print_column_results</span><span class="p">(</span><span class="n">column_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">parsed_value</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;column </span><span class="si">{</span><span class="n">column_name</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;value </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">parsed_value</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;base_names: &quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">cleaned_name</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;legal: &quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">legal</span><span class="o">.</span><span class="n">cleaned_name</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">()</span></div>
+
+
+<span class="n">id_patterns</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;IBAN&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;\b[A-Z]</span><span class="si">{2}</span><span class="s2">[0-9]</span><span class="si">{2}</span><span class="s2">[A-Z0-9]{1,35}&quot;</span><span class="p">,</span> <span class="s2">&quot;PESEL&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;\b[0-9]</span><span class="si">{11}</span><span class="s2">&quot;</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="parse_id_features"><a class="viewcode-back" href="../../source/pipeline.html#pipeline.knowledge_service.parse_id_features">[docs]</a><span class="k">def</span> <span class="nf">parse_id_features</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+    <span class="n">id_features</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">pat_name</span><span class="p">,</span> <span class="n">pat</span> <span class="ow">in</span> <span class="n">id_patterns</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pat</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+            <span class="n">id_features</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">pat_name</span><span class="p">:</span> <span class="n">found</span><span class="o">.</span><span class="n">group</span><span class="p">()})</span>
+    <span class="k">return</span> <span class="n">id_features</span></div>
+
+
+<div class="viewcode-block" id="print_id_features"><a class="viewcode-back" href="../../source/pipeline.html#pipeline.knowledge_service.print_id_features">[docs]</a><span class="k">def</span> <span class="nf">print_id_features</span><span class="p">(</span><span class="n">id_features</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">id_features</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;tag name &quot;</span><span class="p">,</span> <span class="n">feature</span><span class="o">.</span><span class="n">child</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">featured</span> <span class="ow">in</span> <span class="n">feature</span><span class="o">.</span><span class="n">parsed_item</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">featured</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Silent Eight.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

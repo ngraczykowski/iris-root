@@ -1,0 +1,18 @@
+version: '2.3'
+
+services:
+  jupyter_playground:
+    build:
+      context: ../..
+      dockerfile: docker/prod/Dockerfile
+      args:
+        - PIP_INDEX_URL=$PIP_INDEX_URL
+    image: docker.repo.silenteight.com/etl-pipeline
+    volumes:
+      - ../..:/app:rw
+    ports:
+      - "4444:8888" # jupyter notebook forward
+      - "4445:1000"
+      - "4446:1001"
+    environment:
+      - PYTHONPATH=.:python-datatoolbox

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pipeline package &mdash; ETL pipeline 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> ETL pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="etl_pipeline.xml_parser.html">etl_pipeline.xml_parser package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customized.html">customized package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ETL pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>pipeline package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/source/pipeline.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pipeline-package">
+<h1>pipeline package<a class="headerlink" href="#pipeline-package" title="Permalink to this headline"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.field_extractor.html">pipeline.field_extractor package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.field_extractor.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.field_extractor.html#module-pipeline.field_extractor.config">pipeline.field_extractor.config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.field_extractor.html#module-pipeline.field_extractor">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-pipeline.agent_input_config">
+<span id="pipeline-agent-input-config-module"></span><h2>pipeline.agent_input_config module<a class="headerlink" href="#module-pipeline.agent_input_config" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.agent_input_config.prepend_agent_name_to_ap_or_wl_or_aliases_key">
+<span class="sig-prename descclassname"><span class="pre">pipeline.agent_input_config.</span></span><span class="sig-name descname"><span class="pre">prepend_agent_name_to_ap_or_wl_or_aliases_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agent_input_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/agent_input_config.html#prepend_agent_name_to_ap_or_wl_or_aliases_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.agent_input_config.prepend_agent_name_to_ap_or_wl_or_aliases_key" title="Permalink to this definition"></a></dt>
+<dd><p>Prepend the agent name (level 1 key) to level 2 key. So the new level 2 key will be</p>
+<p>Input:
+{ ‘name_agent’: {‘ap’: [‘record_name’],</p>
+<blockquote>
+<div><p>‘ap_aliases’: [],
+‘wl’: [‘name_hit’],
+‘wl_aliases’: []
+}</p>
+</div></blockquote>
+<p>}</p>
+<p>Output:
+{ ‘name_agent’: {‘name_agent_ap’: [‘record_name’],</p>
+<blockquote>
+<div><p>‘name_agent_ap_aliases’: [],
+‘name_agent_wl’: [‘name_hit’],
+‘name_agent_wl_aliases’: []
+}</p>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+</section>
+<section id="module-pipeline.config">
+<span id="pipeline-config-module"></span><h2>pipeline.config module<a class="headerlink" href="#module-pipeline.config" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.config.get_spark_config">
+<span class="sig-prename descclassname"><span class="pre">pipeline.config.</span></span><span class="sig-name descname"><span class="pre">get_spark_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/config.html#get_spark_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.config.get_spark_config" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pipeline.knowledge_service">
+<span id="pipeline-knowledge-service-module"></span><h2>pipeline.knowledge_service module<a class="headerlink" href="#module-pipeline.knowledge_service" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pipeline.knowledge_service.Item">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pipeline.knowledge_service.</span></span><span class="sig-name descname"><span class="pre">Item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">child</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">xml.etree.ElementTree.Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parsed_item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/knowledge_service.html#Item"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.knowledge_service.Item" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>child</strong> (<em>xml.etree.ElementTree.Element</em>) – </p></li>
+<li><p><strong>value</strong> (<em>str</em>) – </p></li>
+<li><p><strong>parsed_item</strong> (<em>list</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pipeline.knowledge_service.Item.child">
+<span class="sig-name descname"><span class="pre">child</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">xml.etree.ElementTree.Element</span></em><a class="headerlink" href="#pipeline.knowledge_service.Item.child" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pipeline.knowledge_service.Item.parsed_item">
+<span class="sig-name descname"><span class="pre">parsed_item</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#pipeline.knowledge_service.Item.parsed_item" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pipeline.knowledge_service.Item.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pipeline.knowledge_service.Item.value" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.knowledge_service.get_all_ancestors">
+<span class="sig-prename descclassname"><span class="pre">pipeline.knowledge_service.</span></span><span class="sig-name descname"><span class="pre">get_all_ancestors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">child</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ancestors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_map</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/knowledge_service.html#get_all_ancestors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.knowledge_service.get_all_ancestors" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.knowledge_service.get_column_features">
+<span class="sig-prename descclassname"><span class="pre">pipeline.knowledge_service.</span></span><span class="sig-name descname"><span class="pre">get_column_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/knowledge_service.html#get_column_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.knowledge_service.get_column_features" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.knowledge_service.get_features">
+<span class="sig-prename descclassname"><span class="pre">pipeline.knowledge_service.</span></span><span class="sig-name descname"><span class="pre">get_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml_tree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/knowledge_service.html#get_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.knowledge_service.get_features" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.knowledge_service.parse_id_features">
+<span class="sig-prename descclassname"><span class="pre">pipeline.knowledge_service.</span></span><span class="sig-name descname"><span class="pre">parse_id_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/knowledge_service.html#parse_id_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.knowledge_service.parse_id_features" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.knowledge_service.present_ancestors">
+<span class="sig-prename descclassname"><span class="pre">pipeline.knowledge_service.</span></span><span class="sig-name descname"><span class="pre">present_ancestors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ancestors</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/knowledge_service.html#present_ancestors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.knowledge_service.present_ancestors" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.knowledge_service.print_column_results">
+<span class="sig-prename descclassname"><span class="pre">pipeline.knowledge_service.</span></span><span class="sig-name descname"><span class="pre">print_column_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parsed_value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/knowledge_service.html#print_column_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.knowledge_service.print_column_results" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.knowledge_service.print_id_features">
+<span class="sig-prename descclassname"><span class="pre">pipeline.knowledge_service.</span></span><span class="sig-name descname"><span class="pre">print_id_features</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id_features</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/knowledge_service.html#print_id_features"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.knowledge_service.print_id_features" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.knowledge_service.print_org_results">
+<span class="sig-prename descclassname"><span class="pre">pipeline.knowledge_service.</span></span><span class="sig-name descname"><span class="pre">print_org_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_features</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/knowledge_service.html#print_org_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.knowledge_service.print_org_results" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pipeline.preprocessors">
+<span id="pipeline-preprocessors-module"></span><h2>pipeline.preprocessors module<a class="headerlink" href="#module-pipeline.preprocessors" title="Permalink to this headline"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.preprocessors.convert_standardized_to_cleansed">
+<span class="sig-prename descclassname"><span class="pre">pipeline.preprocessors.</span></span><span class="sig-name descname"><span class="pre">convert_standardized_to_cleansed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/preprocessors.html#convert_standardized_to_cleansed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.preprocessors.convert_standardized_to_cleansed" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.preprocessors.convert_to_standardized">
+<span class="sig-prename descclassname"><span class="pre">pipeline.preprocessors.</span></span><span class="sig-name descname"><span class="pre">convert_to_standardized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_data_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">spark_manager.config.config.RAW_DATA_DIR</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">spark_manager.config.config.STANDARDIZED_DATA_DIR</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/preprocessors.html#convert_to_standardized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.preprocessors.convert_to_standardized" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw_data_path</strong> (<em>str</em>) – </p></li>
+<li><p><strong>target_path</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.preprocessors.get_pandas_dataframe">
+<span class="sig-prename descclassname"><span class="pre">pipeline.preprocessors.</span></span><span class="sig-name descname"><span class="pre">get_pandas_dataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/preprocessors.html#get_pandas_dataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.preprocessors.get_pandas_dataframe" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.preprocessors.in_application_data_dir">
+<span class="sig-prename descclassname"><span class="pre">pipeline.preprocessors.</span></span><span class="sig-name descname"><span class="pre">in_application_data_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pipeline.preprocessors.in_application_data_dir" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.preprocessors.in_cleansed_data_dir">
+<span class="sig-prename descclassname"><span class="pre">pipeline.preprocessors.</span></span><span class="sig-name descname"><span class="pre">in_cleansed_data_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pipeline.preprocessors.in_cleansed_data_dir" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.preprocessors.in_raw_data_dir">
+<span class="sig-prename descclassname"><span class="pre">pipeline.preprocessors.</span></span><span class="sig-name descname"><span class="pre">in_raw_data_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pipeline.preprocessors.in_raw_data_dir" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.preprocessors.in_standardized_data_dir">
+<span class="sig-prename descclassname"><span class="pre">pipeline.preprocessors.</span></span><span class="sig-name descname"><span class="pre">in_standardized_data_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pipeline.preprocessors.in_standardized_data_dir" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.preprocessors.show_files_in_directory">
+<span class="sig-prename descclassname"><span class="pre">pipeline.preprocessors.</span></span><span class="sig-name descname"><span class="pre">show_files_in_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/preprocessors.html#show_files_in_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.preprocessors.show_files_in_directory" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pipeline.preprocessors.transform_cleansed_to_application">
+<span class="sig-prename descclassname"><span class="pre">pipeline.preprocessors.</span></span><span class="sig-name descname"><span class="pre">transform_cleansed_to_application</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pipeline/preprocessors.html#transform_cleansed_to_application"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pipeline.preprocessors.transform_cleansed_to_application" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pipeline.spark">
+<span id="pipeline-spark-module"></span><h2>pipeline.spark module<a class="headerlink" href="#module-pipeline.spark" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-pipeline">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pipeline" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Silent Eight.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

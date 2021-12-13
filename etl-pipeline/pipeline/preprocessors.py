@@ -2,42 +2,37 @@ import json
 import logging
 import os
 import re
-import copy
 import time
 from glob import glob
+
 import pyspark.sql.functions as F
+from delta.tables import *  # noqa: E402,F403,F401
+from pyspark.sql.types import ArrayType, MapType, StringType
+from spark_manager.config.config import RAW_DATA_DIR, STANDARDIZED_DATA_DIR
 
-from pyspark.sql.types import ArrayType, MapType, StringType, StructField, StructType
-from silenteight.aia.alerts import AlertHitDictFactory, AlertHitExtractor
-from silenteight.data.spark import preprocess
-
-import helper.dbhelper as dbhelper
-from pipeline.config import (
-    CLEANSED_DATA_DIR,
-    RAW_DATA_DIR,
-    STANDARDIZED_DATA_DIR,
-    in_application_data_dir,
-    APPLICATION_DATA_DIR,
-    in_cleansed_data_dir,
-    in_raw_data_dir,
-    in_standardized_data_dir,
-)
+from customized.xml_pipeline import AIAXMLPipeline
+from pipeline.agent_input_config import agent_input_prepended_agent_name_config
 from pipeline.spark import spark_instance
-from delta.tables import *
+
+in_application_data_dir = lambda x: os.path.join("data/4.application", x)
+in_cleansed_data_dir = lambda x: os.path.join("data/3.cleansed", x)
+in_raw_data_dir = lambda x: os.path.join("data/1.raw", x)
+in_standardized_data_dir = lambda x: os.path.join("data/2.standardized", x)
+
 
 # IMPLEMENTATION: DeltaConverter
 def convert_to_standardized(
-    raw_data_path: str = RAW_DATA_DIR, 
-    target_path: str = STANDARDIZED_DATA_DIR) -> None:
-    """Converts raw data to delta format.
+    raw_data_path: str = RAW_DATA_DIR, target_path: str = STANDARDIZED_DATA_DIR
+) -> None:
+    # """Converts raw data to delta format.
 
-    Args:
-        raw_data_path (str, optional): Path to source directory. Defaults to RAW_DATA_DIR.
-        target_path (str, optional): Path to target directory. Defaults to STANDARDIZED_DATA_DIR.
+    # Args:
+    #     raw_data_path (str, optional): Path to source directory. Defaults to RAW_DATA_DIR.
+    #     target_path (str, optional): Path to target directory. Defaults to STANDARDIZED_DATA_DIR.
 
-    Returns:
-        None
-    """   
+    # Returns:
+    #     None
+    # """
 
     for file_name in os.listdir(raw_data_path):
         start = time.time()
@@ -46,124 +41,39 @@ def convert_to_standardized(
 
         standardized_file_name = re.sub(".csv$", ".delta", file_name)
         standardized_file_path = in_standardized_data_dir(standardized_file_name)
-        df = spark_instance.spark_read_csv(raw_file_path)
-        df = preprocess.write_read_delta(spark_instance.spark_instance, df, standardized_file_path)
+        df = spark_instance.read_csv(raw_file_path)
+        df = spark_instance.safe_save_delta(df, standardized_file_path)
 
         logging.info(f"Data saved to {standardized_file_path}")
         logging.info(f"Time lapsed {time.time() - start:.2f} s")
-
-        print()
         time.sleep(1)
 
 
 def convert_standardized_to_cleansed():
 
-    # Implementation: XML Parser
-    alert_hit_dict_factory = AlertHitDictFactory()
-    alert_hit_extractor = AlertHitExtractor()
-
-    # Implementation: XML Parser
-    alert_schema = alert_hit_dict_factory.get_alert_spark_schema()
-    hit_schema = alert_hit_dict_factory.get_hit_spark_schema()
-
-    # Implementation: Spark manager
-    schema = StructType([StructField("alert_header", alert_schema), StructField("hits", ArrayType(hit_schema))])
-
     # file_name = 'RCMDB.ALERTS_SAMPLE.delta'
     # Implementation: Spark manager
+
+    pipeline = AIAXMLPipeline(spark_instance=spark_instance)
     file_name = "ALERTS.delta"
-    std_alert_df = spark_instance.read_delta("data/2.standardized/" + (file_name))
 
-    # Implementation: Spark manager
-    spark_instance.show_dim(std_alert_df)
-
-    # Implementation: Spark manager, XML Parser
-
-    ## Unwrap xmls
-    alert_df = std_alert_df.withColumn(
-        "alert_hits",
-        F.udf(alert_hit_extractor.extract_alert_hits_from_xml, schema)("html_file_key"),
-    )
-
-    # Implementation: Delta Converter
-
-    alert_df = spark_instance.write_and_get_delta_data(alert_df, in_cleansed_data_dir(file_name))
-
-    # Create columns from hits
-    # Implementation: Spark manager, XML Parser, Match/Hit Handler
-    alert_hits_df = (
-        alert_df.selectExpr("*", "alert_hits.*")
-        .selectExpr("*", "explode(hits) as hit")
-        .selectExpr("*", "alert_header.*")
-        .selectExpr("*", "hit.*")
-        .drop("alert_hits", "alert_header", "hits", "hit")
-    )
-
-    # Implementation: Delta Exporter
-    alert_hits_df = spark_instance.write_and_get_delta_data(
-        alert_hits_df, in_cleansed_data_dir(file_name), user_metadata="At hit level"
-    )
-
-    # Implementation: XML Parser, Match/Hit Handler
-    def get_wl_hit_aliases_matched_name(hit_aliases_displayName, hit_aliases_matchedName, hit_inputExplanations):
-        if hit_inputExplanations is None or len(hit_inputExplanations) == 0:
-            return []
-        else:
-            result = []
-            hit_inputExplanations = list(set(hit_inputExplanations))
-            for hit_inputExplanation in hit_inputExplanations:
-                if hit_inputExplanation in hit_aliases_matchedName:
-                    index_in_matchedName = hit_aliases_matchedName.index(hit_inputExplanation)
-                    result.append(hit_aliases_displayName[index_in_matchedName])
-                elif hit_inputExplanation in hit_aliases_displayName:
-                    result.append(hit_inputExplanation)
-                else:
-                    result.append(hit_inputExplanation)
-
-            return result
-
-    # Implementation: Match/Hit Handler, Spark manager
-
-    # Merge columns
-    ap_hit_names_sql = spark_instance.sql_merge_to_target_col_from_source_cols(
-        alert_hits_df,
-        "ap_hit_names",
-        "hit_inputExplanations_matchedName_inputExplanation",
-        "hit_inputExplanations_aliases_matchedName_inputExplanation",
-    )
-    alert_ap_hit_names_df = alert_hits_df.select("*", ap_hit_names_sql)
-
-    # Clear columns from empty hits
-    alert_ap_wl_hit_names_df = alert_ap_hit_names_df.withColumn(
-        "wl_hit_matched_name",
-        F.when(F.expr("size(hit_explanations_matchedName_Explanation) > 0"), F.col("hit_displayName")).otherwise(
-            F.lit(None)
-        ),
-    ).withColumn(
-        "wl_hit_aliases_matched_name",
-        F.udf(get_wl_hit_aliases_matched_name, ArrayType(StringType()))(
-            "hit_aliases_displayName",
-            "hit_aliases_matchedName",
-            "hit_explanations_aliases_matchedName_Explanation",
-        ),
-    )
+    alert_ap_wl_hit_names_df = pipeline.pipeline("data/2.standardized/" + (file_name))
     # Merge wl hits columns
-    wl_hit_names_sql = spark_instance.sql_merge_to_target_col_from_source_cols(
+    wl_hit_names_sql = spark_instance.merge_to_target_col_from_source_cols_sql_expression(
         alert_ap_wl_hit_names_df,
         "wl_hit_names",
-        "wl_hit_matched_name",
-        "wl_hit_aliases_matched_name",
+        ["wl_hit_matched_name", "wl_hit_aliases_matched_name"],
     )
     alert_ap_wl_hit_names_df = alert_ap_wl_hit_names_df.select("*", wl_hit_names_sql)
 
     # Implementation: Match/Hit Handler, Spark manager
 
     # Merge wl hits columns
-    merge_hit_and_aliases_displayName_sql = spark_instance.sql_merge_to_target_col_from_source_cols(
-        alert_ap_wl_hit_names_df, "wl_hit_names", "hit_displayName", "hit_aliases_displayName"
+    merge_hit_and_aliases_displayName_sql = spark_instance.merge_to_target_col_from_source_cols_sql_expression(
+        alert_ap_wl_hit_names_df, "wl_hit_names", ["hit_displayName", "hit_aliases_displayName"],
     )
-    merge_ap_names_sql = spark_instance.sql_merge_to_target_col_from_source_cols(
-        alert_ap_wl_hit_names_df, "ap_hit_names", "alert_ahData_partyName", return_array=True
+    merge_ap_names_sql = spark_instance.merge_to_target_col_from_source_cols_sql_expression(
+        alert_ap_wl_hit_names_df, "ap_hit_names", ["alert_ahData_partyName"], return_array=True
     )
 
     # Clear wl and ap hits columns
@@ -174,21 +84,25 @@ def convert_standardized_to_cleansed():
         ),
     ).withColumn(
         "ap_hit_names",
-        F.when(F.expr("size(ap_hit_names) > 0"), F.col("ap_hit_names")).otherwise(merge_ap_names_sql),
+        F.when(F.expr("size(ap_hit_names) > 0"), F.col("ap_hit_names")).otherwise(
+            merge_ap_names_sql
+        ),
     )
 
     alert_ap_wl_hit_names_df.toPandas()["ap_hit_names"]
 
     # Implementation: Match/Hit Handler, Spark manager
-    alert_statuses_df = spark_instance.read_delta(in_standardized_data_dir("ACM_MD_ALERT_STATUSES.delta")).select(
-        "STATUS_INTERNAL_ID", "STATUS_NAME"
+    alert_statuses_df = spark_instance.read_delta(
+        in_standardized_data_dir("ACM_MD_ALERT_STATUSES.delta")
+    ).select("STATUS_INTERNAL_ID", "STATUS_NAME")
+    alert_ap_wl_hit_names_df = alert_ap_wl_hit_names_df.join(
+        alert_statuses_df, "STATUS_INTERNAL_ID"
     )
-    alert_ap_wl_hit_names_df = alert_ap_wl_hit_names_df.join(alert_statuses_df, "STATUS_INTERNAL_ID")
-    alert_ap_wl_hit_names_df = spark_instance.reorder_cols(
-        alert_ap_wl_hit_names_df, "STATUS_INTERNAL_ID", "STATUS_NAME"
+    reordered_columns = spark_instance.reorder_columns(
+        alert_ap_wl_hit_names_df, "STATUS_INTERNAL_ID", ["STATUS_NAME"]
     )
-    alert_ap_wl_hit_names_df = spark_instance.write_and_get_delta_data(
-        alert_ap_wl_hit_names_df,
+    alert_ap_wl_hit_names_df = spark_instance.safe_save_delta(
+        alert_ap_wl_hit_names_df.select(reordered_columns),
         in_cleansed_data_dir(file_name),
         user_metadata="More processing on AP and WL names, pinpoint to the exact names from AP and WL which caused the hits",
     )
@@ -256,10 +170,8 @@ def convert_standardized_to_cleansed():
         "ap_nric", F.udf(extract_ap_nric, ArrayType(StringType()))("alert_partyIds_idNumber")
     )
 
-    spark_instance.group_count(alert_nric_df.selectExpr("size(ap_nric) as s", "ap_nric"), "s")
-
     alert_nric_df.selectExpr("size(ap_nric) as s", "ap_nric").where("s = 2").limit(2).toPandas()
-    alert_nric_df = spark_instance.write_and_get_delta_data(
+    alert_nric_df = spark_instance.safe_save_delta(
         alert_nric_df, in_cleansed_data_dir(file_name), user_metadata="Extracted AP and WL NRIC"
     )
 
@@ -268,8 +180,12 @@ def convert_standardized_to_cleansed():
     item_status_file_name = "ACM_ITEM_STATUS_HISTORY.delta"
 
     alert_notes_df = spark_instance.read_delta(in_standardized_data_dir(alert_notes_file_name))
-    item_status_history_df = spark_instance.read_delta(in_standardized_data_dir(item_status_file_name))
-    alert_statuses_df = spark_instance.read_delta(in_standardized_data_dir("ACM_MD_ALERT_STATUSES.delta"))
+    item_status_history_df = spark_instance.read_delta(
+        in_standardized_data_dir(item_status_file_name)
+    )
+    alert_statuses_df = spark_instance.read_delta(
+        in_standardized_data_dir("ACM_MD_ALERT_STATUSES.delta")
+    )
 
     # Implementation: Spark manager, Delta Converter
     # Join statuses with alerts
@@ -287,13 +203,15 @@ def convert_standardized_to_cleansed():
         )
         .drop("STATUS_IDENTIFIER")
     )
-
-    item_status_history_df = spark_instance.reorder_cols(
-        item_status_history_df, "FROM_STATUS_IDENTIFIER", "FROM_STATUS_NAME"
+    reordered_columns = spark_instance.reorder_columns(
+        item_status_history_df, "FROM_STATUS_IDENTIFIER", ["FROM_STATUS_NAME"]
     )
-    item_status_history_df = spark_instance.reorder_cols(
-        item_status_history_df, "TO_STATUS_IDENTIFIER", "TO_STATUS_NAME"
+    reordered_columns = spark_instance.reorder_columns(
+        item_status_history_df.select(reordered_columns),
+        "TO_STATUS_IDENTIFIER",
+        ["TO_STATUS_NAME"],
     )
+    item_status_history_df = item_status_history_df.select(reordered_columns)
     item_status_history_df.createOrReplaceTempView("status_df")
     # Join statuses with alerts
     system_id = "22601"
@@ -326,9 +244,9 @@ def convert_standardized_to_cleansed():
     on a.ITEM_ID = b.ITEM_ID
     """
     )
-    item_status_history_stage_df = spark_instance.write_and_get_delta_data(
+    item_status_history_stage_df = spark_instance.safe_save_delta(
         item_status_history_stage_df,
-        delta_path=in_cleansed_data_dir(item_status_file_name),
+        delta_target_path=in_cleansed_data_dir(item_status_file_name),
         user_metadata="Tagged the status stage",
     )
     alert_notes_df.createOrReplaceTempView("notes_df")
@@ -355,9 +273,9 @@ def convert_standardized_to_cleansed():
     """
     )
 
-    alert_notes_stage_df = spark_instance.write_and_get_delta_data(
+    alert_notes_stage_df = spark_instance.safe_save_delta(
         alert_notes_stage_df,
-        delta_path=in_cleansed_data_dir(alert_notes_file_name),
+        delta_target_path=in_cleansed_data_dir(alert_notes_file_name),
         user_metadata="Tagged the note stage",
     )
 
@@ -379,157 +297,13 @@ def transform_cleansed_to_application():
     )
     cleansed_alert_df = cleansed_alert_df.join(cleansed_note_df, "ALERT_ID", how="left")
 
-    # group_count(cleansed_alert_df, 'last_note', 5)
-
-    cleansed_alert_df.toPandas()
-
     # Agent input creator
-
-    input_template = {"ap": [], "ap_aliases": [], "wl": [], "wl_aliases": []}
-
-    agent_list = [
-        "party_type_agent",
-        "name_agent",
-        "dob_agent",
-        "pob_agent",
-        "gender_agent",
-        "national_id_agent",
-        #     'passport_agent',
-        "document_number_agent",
-        "nationality_agent",
-        "historical_decision_name_agent",
-        "pep_payment_agent",
-        "hit_is_san_agent",
-        "hit_is_deceased_agent",
-        "hit_has_dob_id_address_agent",
-        "rba_agent",
-    ]
-
-    agent_input_config = {}
-
-    for agent in agent_list:
-        new_input = copy.deepcopy(input_template)
-        agent_input_config[agent] = new_input
-
-    agent_input_config
-
-    # Agent input creator
-
-    # DO NOTE the fff_format use i-based index While, python list is 0-based index
-    agent_input_config["party_type_agent"]["ap"].extend(["alert_partyType"])
-    agent_input_config["party_type_agent"]["wl"].extend(["hit_entryType"])
-
-    agent_input_config["name_agent"]["ap"].extend(["ap_hit_names"])
-    agent_input_config["name_agent"]["wl"].extend(["wl_hit_names"])
-
-    # agent_input_config['dob_agent']['ap'].extend(['alert_partyDOB', 'alert_partyYOB'])
-    # agent_input_config['dob_agent']['wl'].extend(['hit_datesOfBirth_birthDate', 'hit_datesOfBirth_yearOfBirth'])
-
-    # The alert_partyDOB has value of '31/12/99' which is actually '9999-12-31' from P14
-    agent_input_config["dob_agent"]["ap"].extend(["P14"])
-    agent_input_config["dob_agent"]["wl"].extend(["hit_datesOfBirth_birthDate", "hit_cs_1_data_points.dob"])
-
-    agent_input_config["pob_agent"]["ap"].extend(["alert_partyBirthCountry"])
-    # It's weird hit_placesOfBirth_birthPlace has country data instead of hit_placesOfBirth_birthCountry
-    agent_input_config["pob_agent"]["wl"].extend(["hit_placesOfBirth_birthPlace"])
-
-    agent_input_config["gender_agent"]["ap"].extend(["alert_partyGender"])
-    agent_input_config["gender_agent"]["wl"].extend(["hit_gender"])
-
-    # The national ID is for SG NRIC only
-    agent_input_config["national_id_agent"]["ap"].extend(["ap_nric"])
-    agent_input_config["national_id_agent"]["wl"].extend(["hit_cs_1_data_points.nric"])
-
-    # agent_input_config['passport_agent']['ap'].extend(get_ap_screenable_attributes('PASSPORT'))
-    # agent_input_config['passport_agent']['wl'].extend(['passport'])
-    agent_input_config["document_number_agent"]["ap"].extend(["alert_partyIds_idNumber"])
-    # The 'hit_cs_1_data_points.nric' is a subset of 'hit_cs_1_data_points.possible_nric'. Hence, use 'hit_cs_1_data_points.possible_nric' only
-    agent_input_config["document_number_agent"]["wl"].extend(["hit_ids_idNumber", "hit_cs_1_data_points.possible_nric"])
-
-    # "alert_partyNatCountries_countryCd" is alwasy empty, "alert_partyNatCountries_countryCd" is actually part of address
-    # but it's used by screening engine and analyst to match with WL nationality country
-    agent_input_config["nationality_agent"]["ap"].extend(
-        ["alert_partyNatCountries_countryCd", "alert_partyAddresses_partyCountry"]
-    )
-    agent_input_config["nationality_agent"]["wl"].append("hit_nationalityCountries_country")
-
-    agent_input_config["historical_decision_name_agent"]["ap"].extend(
-        ["alert_ahData_numberOfHits", "STATUS_NAME", "alert_ahData_partyName", "ALERT_DATE"]
-    )
-    agent_input_config["historical_decision_name_agent"]["wl"].extend(["hit_entryId"])
-
-    # agent_input_config['historical_decision_entity_key_agent']['ap'].extend(['alert_ahData_numberOfHits', 'STATUS_NAME', 'alert_alertEntityKey', 'ALERT_DATE'])
-    # agent_input_config['historical_decision_entity_key_agent']['wl'].extend(['hit_entryId'])
-
-    agent_input_config["pep_payment_agent"]["ap"].extend(["P12"])
-    agent_input_config["pep_payment_agent"]["wl"].extend(["hit_listID"])
-
-    # The P36 and P38 are at alert level, use `hit_listId` and `hit_categories_category` which is at hit level
-    agent_input_config["hit_is_san_agent"]["wl"].extend(["hit_listId", "hit_categories_category"])
-
-    agent_input_config["hit_is_deceased_agent"]["wl"].extend(["hit_isDeceased"])
-
-    agent_input_config["hit_has_dob_id_address_agent"]["wl"].extend(
-        [
-            "hit_datesOfBirth_birthDate",
-            "hit_cs_1_data_points.dob",
-            "hit_ids_idNumber",
-            "hit_cs_1_data_points.possible_nric",
-            "hit_addresses_streetAddress1",
-        ]
-    )
-
-    agent_input_config["rba_agent"]["ap"].extend(
-        [
-            "alert_ahData_numberOfHits",
-            "STATUS_NAME",
-            "alert_ahData_partyName",
-            "ALERT_DATE",
-            "last_note",
-        ]
-    )
-    agent_input_config["rba_agent"]["wl"].extend(["hit_entryId"])
-
-    # Agent input creator
-
-    def prepend_agent_name_to_ap_or_wl_or_aliases_key(agent_input_config):
-        """Prepend the agent name (level 1 key) to level 2 key. So the new level 2 key will be
-
-        Input:
-        { 'name_agent': {'ap': ['record_name'],
-                        'ap_aliases': [],
-                        'wl': ['name_hit'],
-                        'wl_aliases': []
-                        }
-        }
-
-        Output:
-        { 'name_agent': {'name_agent_ap': ['record_name'],
-                        'name_agent_ap_aliases': [],
-                        'name_agent_wl': ['name_hit'],
-                        'name_agent_wl_aliases': []
-                        }
-        }
-        """
-        result = dict()
-        for agent_name, config in agent_input_config.items():
-            result[agent_name] = dict()
-
-            for ap_or_wl_or_aliases, source_cols in config.items():
-                prepended_key_name = "_".join([agent_name, ap_or_wl_or_aliases])
-                result[agent_name][prepended_key_name] = source_cols
-
-        return result
-
-    # Sanity check
-    agent_input_prepended_agent_name_config = prepend_agent_name_to_ap_or_wl_or_aliases_key(agent_input_config)
-    agent_input_prepended_agent_name_config
-
-    x = cleansed_alert_df.toPandas()
 
     # Spark manager / Agent input creator
 
-    def spark_sql_create_agent_primary_alias_input_cols(df, agent_input_prepended_agent_name_config):
+    def spark_sql_create_agent_primary_alias_input_cols(
+        df, agent_input_prepended_agent_name_config
+    ):
         """Merge the customer specific columns into standardized agent primary and alias input columns.
 
         Input:
@@ -549,7 +323,9 @@ def transform_cleansed_to_application():
         for agent_name, config in agent_input_prepended_agent_name_config.items():
             for target_col, source_cols in config.items():
 
-                sql_expr = spark_instance.sql_merge_to_target_col_from_source_cols(df, target_col, *source_cols)
+                sql_expr = spark_instance.merge_to_target_col_from_source_cols_sql_expression(
+                    df, target_col, source_cols, return_array=False
+                )
                 if sql_expr is not None:
                     sql_expr_list.append(sql_expr)
 
@@ -558,10 +334,12 @@ def transform_cleansed_to_application():
     # Agent input creator
     agent_input_raw_df = cleansed_alert_df.select(
         "*",
-        *spark_sql_create_agent_primary_alias_input_cols(cleansed_alert_df, agent_input_prepended_agent_name_config),
+        *spark_sql_create_agent_primary_alias_input_cols(
+            cleansed_alert_df, agent_input_prepended_agent_name_config
+        ),
     )
 
-    x = agent_input_raw_df.toPandas()
+    # x = agent_input_raw_df.toPandas()
 
     agent_input_refined_df = agent_input_raw_df
 
@@ -625,10 +403,9 @@ def transform_cleansed_to_application():
         return agent_input_agg_col_config
 
     # DO NOTE the input to the function is the config object after prepending agent name.
-    agent_input_agg_col_config = create_agent_input_agg_col_config(agent_input_prepended_agent_name_config)
-    agent_input_agg_col_config
-
-    # Agent input creator
+    agent_input_agg_col_config = create_agent_input_agg_col_config(
+        agent_input_prepended_agent_name_config
+    )
 
     # The agent_agg_cols_config will be needed later
     with open("agent_input_agg_col_config.json", "w") as outfile:
@@ -643,8 +420,8 @@ def transform_cleansed_to_application():
                 target_col = party_agg_col
                 source_cols = party_agg_source_cols
 
-                sql_expr = spark_instance.sql_merge_to_target_col_from_source_cols(
-                    df, target_col, *source_cols, return_array=True
+                sql_expr = spark_instance.merge_to_target_col_from_source_cols_sql_expression(
+                    df, target_col, source_cols, return_array=True
                 )
                 if sql_expr is not None:
                     sql_expr_list.append(sql_expr)
@@ -656,15 +433,13 @@ def transform_cleansed_to_application():
         "*", *spark_sql_create_agg_cols(agent_input_refined_df, agent_input_agg_col_config)
     ).withColumn("_index", F.monotonically_increasing_id())
 
-    agent_input_agg_df = spark_instance.write_and_get_delta_data(
+    agent_input_agg_df = spark_instance.safe_save_delta(
         agent_input_agg_df, in_application_data_dir("agent_input_agg_df.delta")
     )
 
     agent_input_agg_df.toPandas().head()
 
     spark_instance.read_delta(in_application_data_dir("agent_input_agg_df.delta")).count()
-
-    spark_instance.to_pandas(agent_input_agg_df)
     # Agent input creator
     key_cols = ["_index", "ALERT_INTERNAL_ID", "ALERT_ID", "hit_listId", "hit_entryId"]
     for agent_name, input_agg_col_config in agent_input_agg_col_config.items():
@@ -689,9 +464,9 @@ def transform_cleansed_to_application():
             )
 
         agent_input_df_path = in_application_data_dir(f"agent-input/{agent_name}_input.delta")
-        agent_input_df = spark_instance.write_and_get_delta_data(agent_input_df, agent_input_df_path)
+        agent_input_df = spark_instance.safe_save_delta(agent_input_df, agent_input_df_path)
         logging.info(
-            f"Agent: {agent}, Input written to {agent_input_df_path}, elapsed time: {time.time() - start:.2f}s"
+            f"Agent: {agent_name}, Input written to {agent_input_df_path}, elapsed time: {time.time() - start:.2f}s"
         )
 
 

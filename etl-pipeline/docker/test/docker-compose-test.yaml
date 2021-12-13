@@ -1,0 +1,16 @@
+version: '2.3'
+
+services:
+  test_jupyter_playground:
+    build:
+      context: ../..
+      dockerfile: docker/test/Dockerfile
+      args:
+        - PIP_INDEX_URL=$PIP_INDEX_URL
+    image: test_jupyter_playground
+    # volumes:
+    #   - ..:/app:rw
+    ports:
+      - "4444:8888" # jupyter notebook forward
+      - "4445:1000"
+      - "4446:1001"

@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pipeline.preprocessors &mdash; ETL pipeline 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ETL pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../source/etl_pipeline.xml_parser.html">etl_pipeline.xml_parser package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/customized.html">customized package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ETL pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>pipeline.preprocessors</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pipeline.preprocessors</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+
+<span class="kn">import</span> <span class="nn">pyspark.sql.functions</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="n">ArrayType</span><span class="p">,</span> <span class="n">MapType</span><span class="p">,</span> <span class="n">StringType</span>
+<span class="kn">from</span> <span class="nn">spark_manager.config.config</span> <span class="kn">import</span> <span class="n">RAW_DATA_DIR</span><span class="p">,</span> <span class="n">STANDARDIZED_DATA_DIR</span>
+
+<span class="kn">from</span> <span class="nn">customized.xml_pipeline</span> <span class="kn">import</span> <span class="n">AIAXMLPipeline</span>
+<span class="kn">from</span> <span class="nn">pipeline.agent_input_config</span> <span class="kn">import</span> <span class="n">agent_input_prepended_agent_name_config</span>
+<span class="kn">from</span> <span class="nn">pipeline.spark</span> <span class="kn">import</span> <span class="n">spark_instance</span>
+<span class="kn">from</span> <span class="nn">delta.tables</span> <span class="kn">import</span> <span class="o">*</span>  <span class="c1"># noqa: E402,F403,F401</span>
+
+<span class="n">in_application_data_dir</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data/4.application&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">in_cleansed_data_dir</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data/3.cleansed&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">in_raw_data_dir</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data/1.raw&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">in_standardized_data_dir</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data/2.standardized&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+
+<span class="c1"># IMPLEMENTATION: DeltaConverter</span>
+<div class="viewcode-block" id="convert_to_standardized"><a class="viewcode-back" href="../../source/pipeline.html#pipeline.preprocessors.convert_to_standardized">[docs]</a><span class="k">def</span> <span class="nf">convert_to_standardized</span><span class="p">(</span>
+    <span class="n">raw_data_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">RAW_DATA_DIR</span><span class="p">,</span> <span class="n">target_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">STANDARDIZED_DATA_DIR</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># &quot;&quot;&quot;Converts raw data to delta format.</span>
+
+    <span class="c1"># Args:</span>
+    <span class="c1">#     raw_data_path (str, optional): Path to source directory. Defaults to RAW_DATA_DIR.</span>
+    <span class="c1">#     target_path (str, optional): Path to target directory. Defaults to STANDARDIZED_DATA_DIR.</span>
+
+    <span class="c1"># Returns:</span>
+    <span class="c1">#     None</span>
+    <span class="c1"># &quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">raw_data_path</span><span class="p">):</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">raw_file_path</span> <span class="o">=</span> <span class="n">in_raw_data_dir</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start to process </span><span class="si">{</span><span class="n">raw_file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">standardized_file_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;.csv$&quot;</span><span class="p">,</span> <span class="s2">&quot;.delta&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+        <span class="n">standardized_file_path</span> <span class="o">=</span> <span class="n">in_standardized_data_dir</span><span class="p">(</span><span class="n">standardized_file_name</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">raw_file_path</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">safe_save_delta</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">standardized_file_path</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Data saved to </span><span class="si">{</span><span class="n">standardized_file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time lapsed </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> s&quot;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="convert_standardized_to_cleansed"><a class="viewcode-back" href="../../source/pipeline.html#pipeline.preprocessors.convert_standardized_to_cleansed">[docs]</a><span class="k">def</span> <span class="nf">convert_standardized_to_cleansed</span><span class="p">():</span>
+
+    <span class="c1"># file_name = &#39;RCMDB.ALERTS_SAMPLE.delta&#39;</span>
+    <span class="c1"># Implementation: Spark manager</span>
+
+    <span class="n">pipeline</span> <span class="o">=</span> <span class="n">AIAXMLPipeline</span><span class="p">(</span><span class="n">spark_instance</span><span class="o">=</span><span class="n">spark_instance</span><span class="p">)</span>
+    <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;ALERTS.delta&quot;</span>
+
+    <span class="n">alert_ap_wl_hit_names_df</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;data/2.standardized/&quot;</span> <span class="o">+</span> <span class="p">(</span><span class="n">file_name</span><span class="p">))</span>
+    <span class="c1"># Merge wl hits columns</span>
+    <span class="n">wl_hit_names_sql</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">merge_to_target_col_from_source_cols_sql_expression</span><span class="p">(</span>
+        <span class="n">alert_ap_wl_hit_names_df</span><span class="p">,</span>
+        <span class="s2">&quot;wl_hit_names&quot;</span><span class="p">,</span>
+        <span class="p">[</span><span class="s2">&quot;wl_hit_matched_name&quot;</span><span class="p">,</span> <span class="s2">&quot;wl_hit_aliases_matched_name&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">alert_ap_wl_hit_names_df</span> <span class="o">=</span> <span class="n">alert_ap_wl_hit_names_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">wl_hit_names_sql</span><span class="p">)</span>
+
+    <span class="c1"># Implementation: Match/Hit Handler, Spark manager</span>
+
+    <span class="c1"># Merge wl hits columns</span>
+    <span class="n">merge_hit_and_aliases_displayName_sql</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">spark_instance</span><span class="o">.</span><span class="n">merge_to_target_col_from_source_cols_sql_expression</span><span class="p">(</span>
+            <span class="n">alert_ap_wl_hit_names_df</span><span class="p">,</span>
+            <span class="s2">&quot;wl_hit_names&quot;</span><span class="p">,</span>
+            <span class="p">[</span><span class="s2">&quot;hit_displayName&quot;</span><span class="p">,</span> <span class="s2">&quot;hit_aliases_displayName&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">merge_ap_names_sql</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">merge_to_target_col_from_source_cols_sql_expression</span><span class="p">(</span>
+        <span class="n">alert_ap_wl_hit_names_df</span><span class="p">,</span> <span class="s2">&quot;ap_hit_names&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;alert_ahData_partyName&quot;</span><span class="p">],</span> <span class="n">return_array</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Clear wl and ap hits columns</span>
+    <span class="n">alert_ap_wl_hit_names_df</span> <span class="o">=</span> <span class="n">alert_ap_wl_hit_names_df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span>
+        <span class="s2">&quot;wl_hit_names&quot;</span><span class="p">,</span>
+        <span class="n">F</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">expr</span><span class="p">(</span><span class="s2">&quot;size(wl_hit_names) &gt; 0&quot;</span><span class="p">),</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;wl_hit_names&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">otherwise</span><span class="p">(</span>
+            <span class="n">merge_hit_and_aliases_displayName_sql</span>
+        <span class="p">),</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span>
+        <span class="s2">&quot;ap_hit_names&quot;</span><span class="p">,</span>
+        <span class="n">F</span><span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">expr</span><span class="p">(</span><span class="s2">&quot;size(ap_hit_names) &gt; 0&quot;</span><span class="p">),</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;ap_hit_names&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">otherwise</span><span class="p">(</span>
+            <span class="n">merge_ap_names_sql</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">alert_ap_wl_hit_names_df</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()[</span><span class="s2">&quot;ap_hit_names&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Implementation: Match/Hit Handler, Spark manager</span>
+    <span class="n">alert_statuses_df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">read_delta</span><span class="p">(</span>
+        <span class="n">in_standardized_data_dir</span><span class="p">(</span><span class="s2">&quot;ACM_MD_ALERT_STATUSES.delta&quot;</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;STATUS_INTERNAL_ID&quot;</span><span class="p">,</span> <span class="s2">&quot;STATUS_NAME&quot;</span><span class="p">)</span>
+    <span class="n">alert_ap_wl_hit_names_df</span> <span class="o">=</span> <span class="n">alert_ap_wl_hit_names_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="n">alert_statuses_df</span><span class="p">,</span> <span class="s2">&quot;STATUS_INTERNAL_ID&quot;</span>
+    <span class="p">)</span>
+    <span class="n">reordered_columns</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">reorder_columns</span><span class="p">(</span>
+        <span class="n">alert_ap_wl_hit_names_df</span><span class="p">,</span> <span class="s2">&quot;STATUS_INTERNAL_ID&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;STATUS_NAME&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">alert_ap_wl_hit_names_df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">safe_save_delta</span><span class="p">(</span>
+        <span class="n">alert_ap_wl_hit_names_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">reordered_columns</span><span class="p">),</span>
+        <span class="n">in_cleansed_data_dir</span><span class="p">(</span><span class="n">file_name</span><span class="p">),</span>
+        <span class="n">user_metadata</span><span class="o">=</span><span class="s2">&quot;More processing on AP and WL names, pinpoint to the exact names from AP and WL which caused the hits&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># Implementation: NRIC handler (Customer specifics)</span>
+    <span class="k">def</span> <span class="nf">extract_wl_nric_dob</span><span class="p">(</span><span class="n">custom_field</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_extract_yob_from_st_nrics</span><span class="p">(</span><span class="n">nrics</span><span class="p">):</span>
+            <span class="c1"># Assuemd there is no data quality issue, e.g, 2 S or T NRICs</span>
+            <span class="k">for</span> <span class="n">nric</span> <span class="ow">in</span> <span class="n">nrics</span><span class="p">:</span>
+                <span class="n">nric_type</span> <span class="o">=</span> <span class="n">nric</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">nric_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="p">]:</span>
+                    <span class="n">two_digit_year</span> <span class="o">=</span> <span class="n">nric</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+
+                    <span class="k">if</span> <span class="n">nric_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;s&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">two_digit_year</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">68</span><span class="p">:</span>
+                            <span class="n">yob</span> <span class="o">=</span> <span class="s2">&quot;19&quot;</span> <span class="o">+</span> <span class="n">two_digit_year</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">yob</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">yob</span> <span class="o">=</span> <span class="s2">&quot;20&quot;</span> <span class="o">+</span> <span class="n">two_digit_year</span>
+
+                    <span class="k">return</span> <span class="n">yob</span>
+
+        <span class="n">nric_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;^NRIC:.*?([STGF]\d</span><span class="si">{7}</span><span class="s2">[A-Z])&quot;</span><span class="p">,</span> <span class="n">custom_field</span><span class="p">)</span>
+        <span class="n">dob_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;.*DOB: (.+?\d</span><span class="si">{4}</span><span class="s2">)[,.]&quot;</span><span class="p">,</span> <span class="n">custom_field</span><span class="p">)</span>
+        <span class="n">possible_nric_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;([STGF]\d</span><span class="si">{7}</span><span class="s2">[A-Z])&quot;</span><span class="p">,</span> <span class="n">custom_field</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">nric_match</span><span class="p">:</span>
+            <span class="n">nrics</span> <span class="o">=</span> <span class="n">nric_match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nrics</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">dob_match</span><span class="p">:</span>
+            <span class="n">dobs</span> <span class="o">=</span> <span class="n">dob_match</span><span class="o">.</span><span class="n">groups</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Try to use NRIC to extract YOB only when there is no DOB from the text data</span>
+            <span class="k">if</span> <span class="n">nrics</span><span class="p">:</span>
+                <span class="n">dobs</span> <span class="o">=</span> <span class="n">_extract_yob_from_st_nrics</span><span class="p">(</span><span class="n">nrics</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dobs</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">possible_nric_match</span><span class="p">:</span>
+            <span class="n">possible_nrics</span> <span class="o">=</span> <span class="n">possible_nric_match</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">possible_nrics</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;nric&quot;</span><span class="p">:</span> <span class="n">nrics</span><span class="p">,</span> <span class="s2">&quot;dob&quot;</span><span class="p">:</span> <span class="n">dobs</span><span class="p">,</span> <span class="s2">&quot;possible_nric&quot;</span><span class="p">:</span> <span class="n">possible_nrics</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">extract_ap_nric</span><span class="p">(</span><span class="n">ap_id_numbers</span><span class="p">):</span>
+        <span class="n">ap_nrics</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">id_number</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">ap_id_numbers</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">id_number</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;^[STGF]\d</span><span class="si">{7}</span><span class="s2">[A-Z]$&quot;</span><span class="p">,</span> <span class="n">id_number</span><span class="o">.</span><span class="n">upper</span><span class="p">()):</span>
+                <span class="n">ap_nrics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">id_number</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ap_nrics</span>
+
+    <span class="n">extract_wl_nric_dob</span><span class="p">(</span><span class="s2">&quot;NRIC: S6959726J, DOB: 1955, Freque&quot;</span><span class="p">)</span>
+
+    <span class="n">alert_nric_df</span> <span class="o">=</span> <span class="n">alert_ap_wl_hit_names_df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span>
+        <span class="s2">&quot;hit_cs_1_data_points&quot;</span><span class="p">,</span>
+        <span class="n">F</span><span class="o">.</span><span class="n">udf</span><span class="p">(</span><span class="n">extract_wl_nric_dob</span><span class="p">,</span> <span class="n">MapType</span><span class="p">(</span><span class="n">StringType</span><span class="p">(),</span> <span class="n">ArrayType</span><span class="p">(</span><span class="n">StringType</span><span class="p">())))(</span><span class="s2">&quot;hit_cs_1&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">extract_ap_nric</span><span class="p">([</span><span class="s2">&quot;S7364776B&quot;</span><span class="p">,</span> <span class="s2">&quot;S7335736B&quot;</span><span class="p">])</span>
+
+    <span class="n">alert_nric_df</span> <span class="o">=</span> <span class="n">alert_nric_df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span>
+        <span class="s2">&quot;ap_nric&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">udf</span><span class="p">(</span><span class="n">extract_ap_nric</span><span class="p">,</span> <span class="n">ArrayType</span><span class="p">(</span><span class="n">StringType</span><span class="p">()))(</span><span class="s2">&quot;alert_partyIds_idNumber&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">alert_nric_df</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;size(ap_nric) as s&quot;</span><span class="p">,</span> <span class="s2">&quot;ap_nric&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;s = 2&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
+    <span class="n">alert_nric_df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">safe_save_delta</span><span class="p">(</span>
+        <span class="n">alert_nric_df</span><span class="p">,</span> <span class="n">in_cleansed_data_dir</span><span class="p">(</span><span class="n">file_name</span><span class="p">),</span> <span class="n">user_metadata</span><span class="o">=</span><span class="s2">&quot;Extracted AP and WL NRIC&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Implementation: Spark manager</span>
+    <span class="n">alert_notes_file_name</span> <span class="o">=</span> <span class="s2">&quot;ACM_ALERT_NOTES.delta&quot;</span>
+    <span class="n">item_status_file_name</span> <span class="o">=</span> <span class="s2">&quot;ACM_ITEM_STATUS_HISTORY.delta&quot;</span>
+
+    <span class="n">alert_notes_df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">read_delta</span><span class="p">(</span><span class="n">in_standardized_data_dir</span><span class="p">(</span><span class="n">alert_notes_file_name</span><span class="p">))</span>
+    <span class="n">item_status_history_df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">read_delta</span><span class="p">(</span>
+        <span class="n">in_standardized_data_dir</span><span class="p">(</span><span class="n">item_status_file_name</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">alert_statuses_df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">read_delta</span><span class="p">(</span>
+        <span class="n">in_standardized_data_dir</span><span class="p">(</span><span class="s2">&quot;ACM_MD_ALERT_STATUSES.delta&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Implementation: Spark manager, Delta Converter</span>
+    <span class="c1"># Join statuses with alerts</span>
+    <span class="n">item_status_history_df</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">item_status_history_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">alert_statuses_df</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;STATUS_IDENTIFIER&quot;</span><span class="p">,</span> <span class="s2">&quot;STATUS_NAME as FROM_STATUS_NAME&quot;</span><span class="p">),</span>
+            <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;FROM_STATUS_IDENTIFIER&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;STATUS_IDENTIFIER&quot;</span><span class="p">),</span>
+            <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;STATUS_IDENTIFIER&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">alert_statuses_df</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;STATUS_IDENTIFIER&quot;</span><span class="p">,</span> <span class="s2">&quot;STATUS_NAME as TO_STATUS_NAME&quot;</span><span class="p">),</span>
+            <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;TO_STATUS_IDENTIFIER&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;STATUS_IDENTIFIER&quot;</span><span class="p">),</span>
+            <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;STATUS_IDENTIFIER&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">reordered_columns</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">reorder_columns</span><span class="p">(</span>
+        <span class="n">item_status_history_df</span><span class="p">,</span> <span class="s2">&quot;FROM_STATUS_IDENTIFIER&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;FROM_STATUS_NAME&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">reordered_columns</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">reorder_columns</span><span class="p">(</span>
+        <span class="n">item_status_history_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">reordered_columns</span><span class="p">),</span>
+        <span class="s2">&quot;TO_STATUS_IDENTIFIER&quot;</span><span class="p">,</span>
+        <span class="p">[</span><span class="s2">&quot;TO_STATUS_NAME&quot;</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">item_status_history_df</span> <span class="o">=</span> <span class="n">item_status_history_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">reordered_columns</span><span class="p">)</span>
+    <span class="n">item_status_history_df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;status_df&quot;</span><span class="p">)</span>
+    <span class="c1"># Join statuses with alerts</span>
+    <span class="n">system_id</span> <span class="o">=</span> <span class="s2">&quot;22601&quot;</span>
+    <span class="n">item_status_history_stage_df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">spark_instance</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    with status_row_num as (</span>
+<span class="s2">        select *,</span>
+<span class="s2">            row_number() over (partition by item_id order by create_date asc) as row_num</span>
+<span class="s2">        from status_df),</span>
+<span class="s2">    first_last_analyst_row_num as (</span>
+<span class="s2">        select ITEM_ID,</span>
+<span class="s2">            min(row_num) as first_analyst_row_num,</span>
+<span class="s2">            max(row_num) as last_analyst_row_num</span>
+<span class="s2">        from status_row_num</span>
+<span class="s2">        where user_join_id != &quot;</span><span class="si">{</span><span class="n">system_id</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="s2">        group by ITEM_ID</span>
+<span class="s2">        )</span>
+<span class="s2">    select a.*,</span>
+<span class="s2">        b.first_analyst_row_num,</span>
+<span class="s2">        b.last_analyst_row_num,</span>
+<span class="s2">        case </span>
+<span class="s2">            when row_num = first_analyst_row_num and row_num = last_analyst_row_num then &quot;first_last_analyst_status&quot;</span>
+<span class="s2">            when row_num = first_analyst_row_num then &quot;first_analyst_status&quot;</span>
+<span class="s2">            when row_num = last_analyst_row_num then &quot;last_analyst_status&quot;</span>
+<span class="s2">            when row_num &gt; first_analyst_row_num then &quot;middle_analyst_status&quot;</span>
+<span class="s2">            else &quot;system_activity&quot;</span>
+<span class="s2">        end as analyst_status_stage</span>
+<span class="s2">    from status_row_num a</span>
+<span class="s2">    join first_last_analyst_row_num b</span>
+<span class="s2">    on a.ITEM_ID = b.ITEM_ID</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+    <span class="p">)</span>
+    <span class="n">item_status_history_stage_df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">safe_save_delta</span><span class="p">(</span>
+        <span class="n">item_status_history_stage_df</span><span class="p">,</span>
+        <span class="n">delta_target_path</span><span class="o">=</span><span class="n">in_cleansed_data_dir</span><span class="p">(</span><span class="n">item_status_file_name</span><span class="p">),</span>
+        <span class="n">user_metadata</span><span class="o">=</span><span class="s2">&quot;Tagged the status stage&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">alert_notes_df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;notes_df&quot;</span><span class="p">)</span>
+
+    <span class="n">alert_notes_stage_df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">spark_instance</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        with notes_row_num as (</span>
+<span class="sd">            select *,</span>
+<span class="sd">                row_number() over (partition by alert_id order by create_date asc) as row_num</span>
+<span class="sd">            from notes_df),</span>
+<span class="sd">        first_last_analyst_row_num as (</span>
+<span class="sd">            select *,</span>
+<span class="sd">                min(row_num) over (partition by alert_id) as first_analyst_row_num,</span>
+<span class="sd">                max(row_num) over (partition by alert_id) as last_analyst_row_num</span>
+<span class="sd">            from notes_row_num)</span>
+<span class="sd">        select *,</span>
+<span class="sd">            case </span>
+<span class="sd">                when row_num = first_analyst_row_num and row_num = last_analyst_row_num then &quot;first_last_analyst_note&quot;</span>
+<span class="sd">                when row_num = first_analyst_row_num then &quot;first_analyst_note&quot;</span>
+<span class="sd">                when row_num = last_analyst_row_num then &quot;last_analyst_note&quot;</span>
+<span class="sd">                else &quot;middle_analyst_note&quot;</span>
+<span class="sd">            end as analyst_note_stage</span>
+<span class="sd">        from first_last_analyst_row_num    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">alert_notes_stage_df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">safe_save_delta</span><span class="p">(</span>
+        <span class="n">alert_notes_stage_df</span><span class="p">,</span>
+        <span class="n">delta_target_path</span><span class="o">=</span><span class="n">in_cleansed_data_dir</span><span class="p">(</span><span class="n">alert_notes_file_name</span><span class="p">),</span>
+        <span class="n">user_metadata</span><span class="o">=</span><span class="s2">&quot;Tagged the note stage&quot;</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="transform_cleansed_to_application"><a class="viewcode-back" href="../../source/pipeline.html#pipeline.preprocessors.transform_cleansed_to_application">[docs]</a><span class="k">def</span> <span class="nf">transform_cleansed_to_application</span><span class="p">():</span>
+    <span class="c1"># file_name = &#39;RCMDB.ALERTS_SAMPLE.delta&#39;</span>
+    <span class="c1"># Spark manager</span>
+
+    <span class="n">alert_file_name</span> <span class="o">=</span> <span class="s2">&quot;ALERTS.delta&quot;</span>
+    <span class="n">cleansed_alert_df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">read_delta</span><span class="p">(</span><span class="n">in_cleansed_data_dir</span><span class="p">(</span><span class="n">alert_file_name</span><span class="p">))</span>
+
+    <span class="n">note_file_name</span> <span class="o">=</span> <span class="s2">&quot;ACM_ALERT_NOTES.delta&quot;</span>
+    <span class="n">cleansed_note_df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">read_delta</span><span class="p">(</span><span class="n">in_cleansed_data_dir</span><span class="p">(</span><span class="n">note_file_name</span><span class="p">))</span>
+
+    <span class="c1"># Note Preprocessor, Status Preprocessor</span>
+    <span class="c1"># Join alerts with notes and stages of last analysis</span>
+    <span class="n">cleansed_note_df</span> <span class="o">=</span> <span class="n">cleansed_note_df</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s1">&#39;analyst_note_stage like &quot;</span><span class="si">%la</span><span class="s1">st%&quot;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span>
+        <span class="s2">&quot;ALERT_ID&quot;</span><span class="p">,</span> <span class="s2">&quot;note as last_note&quot;</span>
+    <span class="p">)</span>
+    <span class="n">cleansed_alert_df</span> <span class="o">=</span> <span class="n">cleansed_alert_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cleansed_note_df</span><span class="p">,</span> <span class="s2">&quot;ALERT_ID&quot;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Agent input creator</span>
+
+    <span class="c1"># Spark manager / Agent input creator</span>
+
+    <span class="k">def</span> <span class="nf">spark_sql_create_agent_primary_alias_input_cols</span><span class="p">(</span>
+        <span class="n">df</span><span class="p">,</span> <span class="n">agent_input_prepended_agent_name_config</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Merge the customer specific columns into standardized agent primary and alias input columns.</span>
+
+<span class="sd">        Input:</span>
+<span class="sd">        { &#39;name_agent&#39;: {&#39;name_agent_ap&#39;: [&#39;record_name&#39;, &#39;whatever_other_name&#39;],</span>
+<span class="sd">                        &#39;name_agent_ap_aliases&#39;: [],</span>
+<span class="sd">                        &#39;name_agent_wl&#39;: [&#39;name_hit&#39;],</span>
+<span class="sd">                        &#39;name_agent_wl_aliases&#39;: []</span>
+<span class="sd">                        }</span>
+<span class="sd">        }</span>
+
+<span class="sd">        Output:</span>
+<span class="sd">        Take {&#39;name_agent_ap&#39;: [&#39;record_name&#39;, &#39;whatever_other_name&#39;]} as an example. The 2 columns</span>
+<span class="sd">        &#39;record_name&#39; and &#39;whatever_other_name&#39; will be merged to create a new column named &#39;name_agent_ap&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sql_expr_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">agent_name</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">agent_input_prepended_agent_name_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">target_col</span><span class="p">,</span> <span class="n">source_cols</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+                <span class="n">sql_expr</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">merge_to_target_col_from_source_cols_sql_expression</span><span class="p">(</span>
+                    <span class="n">df</span><span class="p">,</span> <span class="n">target_col</span><span class="p">,</span> <span class="n">source_cols</span><span class="p">,</span> <span class="n">return_array</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">sql_expr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">sql_expr_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sql_expr</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sql_expr_list</span>
+
+    <span class="c1"># Agent input creator</span>
+    <span class="n">agent_input_raw_df</span> <span class="o">=</span> <span class="n">cleansed_alert_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
+        <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">spark_sql_create_agent_primary_alias_input_cols</span><span class="p">(</span>
+            <span class="n">cleansed_alert_df</span><span class="p">,</span> <span class="n">agent_input_prepended_agent_name_config</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="c1"># x = agent_input_raw_df.toPandas()</span>
+
+    <span class="n">agent_input_refined_df</span> <span class="o">=</span> <span class="n">agent_input_raw_df</span>
+
+    <span class="c1"># Agent input creator</span>
+
+    <span class="k">def</span> <span class="nf">create_agent_input_agg_col_config</span><span class="p">(</span><span class="n">agent_input_prepended_agent_name_config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create the source and target columns based on the standardized agent input config.</span>
+
+<span class="sd">        Input:</span>
+<span class="sd">        { &#39;name_agent&#39;: {&#39;name_agent_ap&#39;: [&#39;record_name&#39;, &#39;whatever_other_name&#39;],</span>
+<span class="sd">                        &#39;name_agent_ap_aliases&#39;: [],</span>
+<span class="sd">                        &#39;name_agent_wl&#39;: [&#39;name_hit&#39;],</span>
+<span class="sd">                        &#39;name_agent_wl_aliases&#39;: []</span>
+<span class="sd">                        }</span>
+<span class="sd">        }</span>
+
+<span class="sd">        Output:</span>
+<span class="sd">        {&#39;name_agent&#39;: {&#39;ap_all_names_aggregated&#39;: [&#39;name_agent_ap&#39;, &#39;name_agent_ap_aliases&#39;],</span>
+<span class="sd">                        &#39;wl_all_names_aggregated&#39;: [&#39;name_agent_wl&#39;, &#39;name_agent_wl_aliases&#39;]</span>
+<span class="sd">                    }</span>
+<span class="sd">        }</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">_generate_simple_plural</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;es&quot;</span>
+            <span class="k">elif</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="s2">&quot;ay&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ey&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;iy&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;oy&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;uy&quot;</span><span class="p">,</span>
+            <span class="p">]:</span>
+                <span class="k">return</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;ies&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">word</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;s&quot;</span>
+
+        <span class="k">def</span> <span class="nf">_get_ap_or_wl_agg_source_cols</span><span class="p">(</span><span class="n">level_1_value</span><span class="p">,</span> <span class="n">party</span><span class="p">):</span>
+            <span class="n">source_cols</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">level_1_value</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">col</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">party</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">col</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">party</span><span class="si">}</span><span class="s2">_aliases&quot;</span><span class="p">):</span>
+                    <span class="n">source_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">source_cols</span>
+
+        <span class="n">agent_input_agg_col_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">agent_name</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">agent_input_prepended_agent_name_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">agent_type</span> <span class="o">=</span> <span class="n">agent_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_agent&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">agent_ap_agg_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;ap_all_</span><span class="si">{</span><span class="n">_generate_simple_plural</span><span class="p">(</span><span class="n">agent_type</span><span class="p">)</span><span class="si">}</span><span class="s2">_aggregated&quot;&quot;&quot;</span>
+            <span class="n">agent_wl_agg_col</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;wl_all_</span><span class="si">{</span><span class="n">_generate_simple_plural</span><span class="p">(</span><span class="n">agent_type</span><span class="p">)</span><span class="si">}</span><span class="s2">_aggregated&quot;&quot;&quot;</span>
+
+            <span class="n">agent_ap_agg_source_cols</span> <span class="o">=</span> <span class="n">_get_ap_or_wl_agg_source_cols</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s2">&quot;ap&quot;</span><span class="p">)</span>
+            <span class="n">agent_wl_agg_source_cols</span> <span class="o">=</span> <span class="n">_get_ap_or_wl_agg_source_cols</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s2">&quot;wl&quot;</span><span class="p">)</span>
+
+            <span class="n">agent_input_agg_col_config</span><span class="p">[</span><span class="n">agent_name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="n">agent_input_agg_col_config</span><span class="p">[</span><span class="n">agent_name</span><span class="p">][</span><span class="n">agent_ap_agg_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">agent_ap_agg_source_cols</span>
+            <span class="n">agent_input_agg_col_config</span><span class="p">[</span><span class="n">agent_name</span><span class="p">][</span><span class="n">agent_wl_agg_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">agent_wl_agg_source_cols</span>
+
+        <span class="k">return</span> <span class="n">agent_input_agg_col_config</span>
+
+    <span class="c1"># DO NOTE the input to the function is the config object after prepending agent name.</span>
+    <span class="n">agent_input_agg_col_config</span> <span class="o">=</span> <span class="n">create_agent_input_agg_col_config</span><span class="p">(</span>
+        <span class="n">agent_input_prepended_agent_name_config</span>
+    <span class="p">)</span>
+
+    <span class="c1"># The agent_agg_cols_config will be needed later</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;agent_input_agg_col_config.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+        <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">agent_input_agg_col_config</span><span class="p">,</span> <span class="n">outfile</span><span class="p">)</span>
+
+    <span class="c1"># Spark manager, Agent input creator</span>
+
+    <span class="k">def</span> <span class="nf">spark_sql_create_agg_cols</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">agent_input_agg_col_config</span><span class="p">):</span>
+        <span class="n">sql_expr_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">agent</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">agent_input_agg_col_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">party_agg_col</span><span class="p">,</span> <span class="n">party_agg_source_cols</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">target_col</span> <span class="o">=</span> <span class="n">party_agg_col</span>
+                <span class="n">source_cols</span> <span class="o">=</span> <span class="n">party_agg_source_cols</span>
+
+                <span class="n">sql_expr</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">merge_to_target_col_from_source_cols_sql_expression</span><span class="p">(</span>
+                    <span class="n">df</span><span class="p">,</span> <span class="n">target_col</span><span class="p">,</span> <span class="n">source_cols</span><span class="p">,</span> <span class="n">return_array</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">sql_expr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">sql_expr_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sql_expr</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sql_expr_list</span>
+
+    <span class="c1"># Agent input creator</span>
+    <span class="n">agent_input_agg_df</span> <span class="o">=</span> <span class="n">agent_input_refined_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
+        <span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">spark_sql_create_agg_cols</span><span class="p">(</span><span class="n">agent_input_refined_df</span><span class="p">,</span> <span class="n">agent_input_agg_col_config</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;_index&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">monotonically_increasing_id</span><span class="p">())</span>
+
+    <span class="n">agent_input_agg_df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">safe_save_delta</span><span class="p">(</span>
+        <span class="n">agent_input_agg_df</span><span class="p">,</span> <span class="n">in_application_data_dir</span><span class="p">(</span><span class="s2">&quot;agent_input_agg_df.delta&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">agent_input_agg_df</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+
+    <span class="n">spark_instance</span><span class="o">.</span><span class="n">read_delta</span><span class="p">(</span><span class="n">in_application_data_dir</span><span class="p">(</span><span class="s2">&quot;agent_input_agg_df.delta&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+    <span class="c1"># Agent input creator</span>
+    <span class="n">key_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;_index&quot;</span><span class="p">,</span> <span class="s2">&quot;ALERT_INTERNAL_ID&quot;</span><span class="p">,</span> <span class="s2">&quot;ALERT_ID&quot;</span><span class="p">,</span> <span class="s2">&quot;hit_listId&quot;</span><span class="p">,</span> <span class="s2">&quot;hit_entryId&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">agent_name</span><span class="p">,</span> <span class="n">input_agg_col_config</span> <span class="ow">in</span> <span class="n">agent_input_agg_col_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">agent_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;name_agent&quot;</span><span class="p">,</span> <span class="s2">&quot;dob_agent&quot;</span><span class="p">]:</span>
+            <span class="n">agent_input_df</span> <span class="o">=</span> <span class="n">agent_input_agg_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">key_cols</span><span class="p">,</span>
+                <span class="o">*</span><span class="n">input_agg_col_config</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
+                <span class="s2">&quot;party_type_agent_ap&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;party_type_agent_wl&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;pary_type&quot;</span> <span class="ow">in</span> <span class="n">agent_name</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">agent_input_df</span> <span class="o">=</span> <span class="n">agent_input_agg_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="n">key_cols</span><span class="p">,</span> <span class="o">*</span><span class="n">input_agg_col_config</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c1"># Our agent support the input list has None, hence, filter out None from all the agg columns (they will be the agent inputs)</span>
+        <span class="k">for</span> <span class="n">agg_col_name</span> <span class="ow">in</span> <span class="n">input_agg_col_config</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">agent_input_df</span> <span class="o">=</span> <span class="n">agent_input_df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span>
+                <span class="n">agg_col_name</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">expr</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;array_except(</span><span class="si">{</span><span class="n">agg_col_name</span><span class="si">}</span><span class="s2">, array(null))&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">agent_input_df_path</span> <span class="o">=</span> <span class="n">in_application_data_dir</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;agent-input/</span><span class="si">{</span><span class="n">agent_name</span><span class="si">}</span><span class="s2">_input.delta&quot;</span><span class="p">)</span>
+        <span class="n">agent_input_df</span> <span class="o">=</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">safe_save_delta</span><span class="p">(</span><span class="n">agent_input_df</span><span class="p">,</span> <span class="n">agent_input_df_path</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Agent: </span><span class="si">{</span><span class="n">agent_name</span><span class="si">}</span><span class="s2">, Input written to </span><span class="si">{</span><span class="n">agent_input_df_path</span><span class="si">}</span><span class="s2">, elapsed time: </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">s&quot;</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_pandas_dataframe"><a class="viewcode-back" href="../../source/pipeline.html#pipeline.preprocessors.get_pandas_dataframe">[docs]</a><span class="k">def</span> <span class="nf">get_pandas_dataframe</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">spark_instance</span><span class="o">.</span><span class="n">read_delta</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">toPandas</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="show_files_in_directory"><a class="viewcode-back" href="../../source/pipeline.html#pipeline.preprocessors.show_files_in_directory">[docs]</a><span class="k">def</span> <span class="nf">show_files_in_directory</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Silent Eight.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

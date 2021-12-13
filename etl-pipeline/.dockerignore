@@ -4,4 +4,6 @@ data/*
 dependencies
 docker/*
 python-datatoolbox/*
-tests/*
+agents/*
+.tox/*
+.git/*

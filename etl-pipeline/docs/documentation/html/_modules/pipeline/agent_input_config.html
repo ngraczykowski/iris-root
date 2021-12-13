@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pipeline.agent_input_config &mdash; ETL pipeline 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ETL pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../source/etl_pipeline.xml_parser.html">etl_pipeline.xml_parser package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/customized.html">customized package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ETL pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>pipeline.agent_input_config</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pipeline.agent_input_config</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">copy</span>
+
+
+<div class="viewcode-block" id="prepend_agent_name_to_ap_or_wl_or_aliases_key"><a class="viewcode-back" href="../../source/pipeline.html#pipeline.agent_input_config.prepend_agent_name_to_ap_or_wl_or_aliases_key">[docs]</a><span class="k">def</span> <span class="nf">prepend_agent_name_to_ap_or_wl_or_aliases_key</span><span class="p">(</span><span class="n">agent_input_config</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Prepend the agent name (level 1 key) to level 2 key. So the new level 2 key will be</span>
+
+<span class="sd">    Input:</span>
+<span class="sd">    { &#39;name_agent&#39;: {&#39;ap&#39;: [&#39;record_name&#39;],</span>
+<span class="sd">                    &#39;ap_aliases&#39;: [],</span>
+<span class="sd">                    &#39;wl&#39;: [&#39;name_hit&#39;],</span>
+<span class="sd">                    &#39;wl_aliases&#39;: []</span>
+<span class="sd">                    }</span>
+<span class="sd">    }</span>
+
+<span class="sd">    Output:</span>
+<span class="sd">    { &#39;name_agent&#39;: {&#39;name_agent_ap&#39;: [&#39;record_name&#39;],</span>
+<span class="sd">                    &#39;name_agent_ap_aliases&#39;: [],</span>
+<span class="sd">                    &#39;name_agent_wl&#39;: [&#39;name_hit&#39;],</span>
+<span class="sd">                    &#39;name_agent_wl_aliases&#39;: []</span>
+<span class="sd">                    }</span>
+<span class="sd">    }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">agent_name</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">agent_input_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">result</span><span class="p">[</span><span class="n">agent_name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">ap_or_wl_or_aliases</span><span class="p">,</span> <span class="n">source_cols</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">prepended_key_name</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">agent_name</span><span class="p">,</span> <span class="n">ap_or_wl_or_aliases</span><span class="p">])</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">agent_name</span><span class="p">][</span><span class="n">prepended_key_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">source_cols</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="c1"># Sanity check</span>
+
+
+<span class="n">input_template</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;ap&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;ap_aliases&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;wl&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;wl_aliases&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+
+<span class="n">agent_list</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;party_type_agent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;name_agent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dob_agent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pob_agent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;gender_agent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;national_id_agent&quot;</span><span class="p">,</span>
+    <span class="c1">#     &#39;passport_agent&#39;,</span>
+    <span class="s2">&quot;document_number_agent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;nationality_agent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;historical_decision_name_agent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pep_payment_agent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;hit_is_san_agent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;hit_is_deceased_agent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;hit_has_dob_id_address_agent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rba_agent&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">agent_input_config</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">agent_list</span><span class="p">:</span>
+    <span class="n">new_input</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">input_template</span><span class="p">)</span>
+    <span class="n">agent_input_config</span><span class="p">[</span><span class="n">agent</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_input</span>
+
+
+<span class="c1"># Agent input creator</span>
+
+<span class="c1"># DO NOTE the fff_format use i-based index While, python list is 0-based index</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;party_type_agent&quot;</span><span class="p">][</span><span class="s2">&quot;ap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;alert_partyType&quot;</span><span class="p">])</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;party_type_agent&quot;</span><span class="p">][</span><span class="s2">&quot;wl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;hit_entryType&quot;</span><span class="p">])</span>
+
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;name_agent&quot;</span><span class="p">][</span><span class="s2">&quot;ap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;ap_hit_names&quot;</span><span class="p">])</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;name_agent&quot;</span><span class="p">][</span><span class="s2">&quot;wl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;wl_hit_names&quot;</span><span class="p">])</span>
+
+<span class="c1"># agent_input_config[&#39;dob_agent&#39;][&#39;ap&#39;].extend([&#39;alert_partyDOB&#39;, &#39;alert_partyYOB&#39;])</span>
+<span class="c1"># agent_input_config[&#39;dob_agent&#39;][&#39;wl&#39;].extend([&#39;hit_datesOfBirth_birthDate&#39;, &#39;hit_datesOfBirth_yearOfBirth&#39;])</span>
+
+<span class="c1"># The alert_partyDOB has value of &#39;31/12/99&#39; which is actually &#39;9999-12-31&#39; from P14</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;dob_agent&quot;</span><span class="p">][</span><span class="s2">&quot;ap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;P14&quot;</span><span class="p">])</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;dob_agent&quot;</span><span class="p">][</span><span class="s2">&quot;wl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;hit_datesOfBirth_birthDate&quot;</span><span class="p">,</span> <span class="s2">&quot;hit_cs_1_data_points.dob&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;pob_agent&quot;</span><span class="p">][</span><span class="s2">&quot;ap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;alert_partyBirthCountry&quot;</span><span class="p">])</span>
+<span class="c1"># It&#39;s weird hit_placesOfBirth_birthPlace has country data instead of hit_placesOfBirth_birthCountry</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;pob_agent&quot;</span><span class="p">][</span><span class="s2">&quot;wl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;hit_placesOfBirth_birthPlace&quot;</span><span class="p">])</span>
+
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;gender_agent&quot;</span><span class="p">][</span><span class="s2">&quot;ap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;alert_partyGender&quot;</span><span class="p">])</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;gender_agent&quot;</span><span class="p">][</span><span class="s2">&quot;wl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;hit_gender&quot;</span><span class="p">])</span>
+
+<span class="c1"># The national ID is for SG NRIC only</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;national_id_agent&quot;</span><span class="p">][</span><span class="s2">&quot;ap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;ap_nric&quot;</span><span class="p">])</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;national_id_agent&quot;</span><span class="p">][</span><span class="s2">&quot;wl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;hit_cs_1_data_points.nric&quot;</span><span class="p">])</span>
+
+<span class="c1"># agent_input_config[&#39;passport_agent&#39;][&#39;ap&#39;].extend(get_ap_screenable_attributes(&#39;PASSPORT&#39;))</span>
+<span class="c1"># agent_input_config[&#39;passport_agent&#39;][&#39;wl&#39;].extend([&#39;passport&#39;])</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;document_number_agent&quot;</span><span class="p">][</span><span class="s2">&quot;ap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;alert_partyIds_idNumber&quot;</span><span class="p">])</span>
+<span class="c1"># The &#39;hit_cs_1_data_points.nric&#39; is a subset of &#39;hit_cs_1_data_points.possible_nric&#39;. Hence, use &#39;hit_cs_1_data_points.possible_nric&#39; only</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;document_number_agent&quot;</span><span class="p">][</span><span class="s2">&quot;wl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;hit_ids_idNumber&quot;</span><span class="p">,</span> <span class="s2">&quot;hit_cs_1_data_points.possible_nric&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># &quot;alert_partyNatCountries_countryCd&quot; is alwasy empty, &quot;alert_partyNatCountries_countryCd&quot; is actually part of address</span>
+<span class="c1"># but it&#39;s used by screening engine and analyst to match with WL nationality country</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;nationality_agent&quot;</span><span class="p">][</span><span class="s2">&quot;ap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;alert_partyNatCountries_countryCd&quot;</span><span class="p">,</span> <span class="s2">&quot;alert_partyAddresses_partyCountry&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;nationality_agent&quot;</span><span class="p">][</span><span class="s2">&quot;wl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;hit_nationalityCountries_country&quot;</span><span class="p">)</span>
+
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;historical_decision_name_agent&quot;</span><span class="p">][</span><span class="s2">&quot;ap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+    <span class="p">[</span><span class="s2">&quot;alert_ahData_numberOfHits&quot;</span><span class="p">,</span> <span class="s2">&quot;STATUS_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;alert_ahData_partyName&quot;</span><span class="p">,</span> <span class="s2">&quot;ALERT_DATE&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;historical_decision_name_agent&quot;</span><span class="p">][</span><span class="s2">&quot;wl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;hit_entryId&quot;</span><span class="p">])</span>
+
+<span class="c1"># agent_input_config[&#39;historical_decision_entity_key_agent&#39;][&#39;ap&#39;].extend([&#39;alert_ahData_numberOfHits&#39;, &#39;STATUS_NAME&#39;, &#39;alert_alertEntityKey&#39;, &#39;ALERT_DATE&#39;])</span>
+<span class="c1"># agent_input_config[&#39;historical_decision_entity_key_agent&#39;][&#39;wl&#39;].extend([&#39;hit_entryId&#39;])</span>
+
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;pep_payment_agent&quot;</span><span class="p">][</span><span class="s2">&quot;ap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;P12&quot;</span><span class="p">])</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;pep_payment_agent&quot;</span><span class="p">][</span><span class="s2">&quot;wl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;hit_listID&quot;</span><span class="p">])</span>
+
+<span class="c1"># The P36 and P38 are at alert level, use `hit_listId` and `hit_categories_category` which is at hit level</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;hit_is_san_agent&quot;</span><span class="p">][</span><span class="s2">&quot;wl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;hit_listId&quot;</span><span class="p">,</span> <span class="s2">&quot;hit_categories_category&quot;</span><span class="p">])</span>
+
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;hit_is_deceased_agent&quot;</span><span class="p">][</span><span class="s2">&quot;wl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;hit_isDeceased&quot;</span><span class="p">])</span>
+
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;hit_has_dob_id_address_agent&quot;</span><span class="p">][</span><span class="s2">&quot;wl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;hit_datesOfBirth_birthDate&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hit_cs_1_data_points.dob&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hit_ids_idNumber&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hit_cs_1_data_points.possible_nric&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hit_addresses_streetAddress1&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;rba_agent&quot;</span><span class="p">][</span><span class="s2">&quot;ap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;alert_ahData_numberOfHits&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;STATUS_NAME&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;alert_ahData_partyName&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ALERT_DATE&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;last_note&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">agent_input_config</span><span class="p">[</span><span class="s2">&quot;rba_agent&quot;</span><span class="p">][</span><span class="s2">&quot;wl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;hit_entryId&quot;</span><span class="p">])</span>
+<span class="n">agent_input_prepended_agent_name_config</span> <span class="o">=</span> <span class="n">prepend_agent_name_to_ap_or_wl_or_aliases_key</span><span class="p">(</span>
+    <span class="n">agent_input_config</span>
+<span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Silent Eight.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

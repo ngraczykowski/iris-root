@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>etl_pipeline.xml_parser.xml_pipeline &mdash; ETL pipeline 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> ETL pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/etl_pipeline.xml_parser.html">etl_pipeline.xml_parser package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/customized.html">customized package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ETL pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>etl_pipeline.xml_parser.xml_pipeline</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for etl_pipeline.xml_parser.xml_pipeline</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Main pipeline that accounts for the XML mapping&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">lxml</span>
+<span class="kn">import</span> <span class="nn">pyspark</span>
+<span class="kn">import</span> <span class="nn">pyspark.sql.functions</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="n">ArrayType</span><span class="p">,</span> <span class="n">BooleanType</span><span class="p">,</span> <span class="n">StringType</span><span class="p">,</span> <span class="n">StructField</span><span class="p">,</span> <span class="n">StructType</span>
+<span class="kn">from</span> <span class="nn">spark_manager.spark_client</span> <span class="kn">import</span> <span class="n">SparkClient</span>
+
+<span class="kn">from</span> <span class="nn">etl_pipeline.xml_parser.config</span> <span class="kn">import</span> <span class="n">XMLExtractorConfig</span>
+<span class="kn">from</span> <span class="nn">etl_pipeline.xml_parser.xml_extractor</span> <span class="kn">import</span> <span class="n">XMLExtractor</span><span class="p">,</span> <span class="n">XMLFunction</span>
+
+<span class="n">FieldOutputType</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]</span>
+<span class="n">SparkTypeConfig</span> <span class="o">=</span> <span class="n">StructType</span>
+
+
+<div class="viewcode-block" id="AlertHitDictFactory"><a class="viewcode-back" href="../../../source/etl_pipeline.xml_parser.html#etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory">[docs]</a><span class="k">class</span> <span class="nc">AlertHitDictFactory</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Creates dictionary based on the customer scheme&quot;&quot;&quot;</span>
+
+    <span class="n">xml_util</span> <span class="o">=</span> <span class="n">XMLExtractor</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">hit_config</span><span class="p">:</span> <span class="n">XMLExtractorConfig</span><span class="p">,</span>
+        <span class="n">alert_config</span><span class="p">:</span> <span class="n">XMLExtractorConfig</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alert_config</span><span class="p">:</span> <span class="n">XMLExtractorConfig</span> <span class="o">=</span> <span class="n">alert_config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hit_config</span><span class="p">:</span> <span class="n">XMLExtractorConfig</span> <span class="o">=</span> <span class="n">hit_config</span>
+
+<div class="viewcode-block" id="AlertHitDictFactory._invoke_xml_util"><a class="viewcode-back" href="../../../source/etl_pipeline.xml_parser.html#etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory._invoke_xml_util">[docs]</a>    <span class="k">def</span> <span class="nf">_invoke_xml_util</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">XMLExtractorConfig</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FieldOutputType</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Invokes xml function.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config : XMLExtractorConfig</span>
+<span class="sd">            Config that maps standardized column name to Tuple of Function and xpath.</span>
+<span class="sd">        row : str</span>
+<span class="sd">            Alert in xml format.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        FieldOutputType</span>
+<span class="sd">            Dict in which key is the columns and result are values</span>
+<span class="sd">            extracted from the xml string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="n">xml_util_func_name</span><span class="p">,</span> <span class="n">xpath_arg</span><span class="p">)</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">xml_util_func_name</span> <span class="o">=</span> <span class="n">xml_util_func_name</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">xml_util_func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xml_util</span><span class="p">,</span> <span class="n">xml_util_func_name</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">xml_util_func</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">xpath_arg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="AlertHitDictFactory._create_spark_schema"><a class="viewcode-back" href="../../../source/etl_pipeline.xml_parser.html#etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory._create_spark_schema">[docs]</a>    <span class="k">def</span> <span class="nf">_create_spark_schema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">XMLExtractorConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SparkTypeConfig</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Creates structtype that can be fed to the Spark executors from XMLExtractorConfig.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config : XMLExtractorConfig</span>
+<span class="sd">            Config for which the spark schema is created.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        SparkTypeConfig</span>
+<span class="sd">            StructType that is a list of pairs:</span>
+<span class="sd">            function name - xpath.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">struct_fields_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="p">(</span><span class="n">xml_util_func_name</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">xml_util_func_name</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="n">XMLFunction</span><span class="o">.</span><span class="n">extract_string_elements_array</span><span class="p">,</span>
+                <span class="n">XMLFunction</span><span class="o">.</span><span class="n">extract_value</span><span class="p">,</span>
+            <span class="p">]:</span>
+                <span class="n">field_type</span> <span class="o">=</span> <span class="n">StringType</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">field_type</span> <span class="o">=</span> <span class="n">BooleanType</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">xml_util_func_name</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="n">XMLFunction</span><span class="o">.</span><span class="n">extract_string_elements_array</span><span class="p">,</span>
+                <span class="n">XMLFunction</span><span class="o">.</span><span class="n">extract_boolean_array</span><span class="p">,</span>
+            <span class="p">]:</span>
+                <span class="n">field_type</span> <span class="o">=</span> <span class="n">ArrayType</span><span class="p">(</span><span class="n">field_type</span><span class="p">)</span>
+
+            <span class="n">struct_fields_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">StructField</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">field_type</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">StructType</span><span class="p">(</span><span class="n">struct_fields_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AlertHitDictFactory.get_alert_spark_schema"><a class="viewcode-back" href="../../../source/etl_pipeline.xml_parser.html#etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory.get_alert_spark_schema">[docs]</a>    <span class="k">def</span> <span class="nf">get_alert_spark_schema</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SparkTypeConfig</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        SparkTypeConfig</span>
+<span class="sd">            Spark schema for alert config.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_spark_schema</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alert_config</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AlertHitDictFactory.get_hit_spark_schema"><a class="viewcode-back" href="../../../source/etl_pipeline.xml_parser.html#etl_pipeline.xml_parser.xml_pipeline.AlertHitDictFactory.get_hit_spark_schema">[docs]</a>    <span class="k">def</span> <span class="nf">get_hit_spark_schema</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SparkTypeConfig</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        SparkTypeConfig</span>
+<span class="sd">            Spark schema for hit config.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_spark_schema</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hit_config</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="WatchlistExtractor"><a class="viewcode-back" href="../../../source/etl_pipeline.xml_parser.html#etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor">[docs]</a><span class="k">class</span> <span class="nc">WatchlistExtractor</span><span class="p">:</span>
+<div class="viewcode-block" id="WatchlistExtractor.get_wl_hit_aliases_matched_name"><a class="viewcode-back" href="../../../source/etl_pipeline.xml_parser.html#etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor.get_wl_hit_aliases_matched_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_wl_hit_aliases_matched_name</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">hit_aliases_displayName</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">hit_aliases_matchedName</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">hit_inputExplanations</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Gets list of names that contains aliases and other things.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        hit_aliases_displayName : str</span>
+<span class="sd">        hit_aliases_matchedName : str</span>
+<span class="sd">        hit_inputExplanations : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">hit_inputExplanations</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">hit_inputExplanations</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">hit_inputExplanations</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">hit_inputExplanations</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">hit_inputExplanation</span> <span class="ow">in</span> <span class="n">hit_inputExplanations</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">hit_inputExplanation</span> <span class="ow">in</span> <span class="n">hit_aliases_matchedName</span><span class="p">:</span>
+                    <span class="n">index_in_matchedName</span> <span class="o">=</span> <span class="n">hit_aliases_matchedName</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">hit_inputExplanation</span><span class="p">)</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hit_aliases_displayName</span><span class="p">[</span><span class="n">index_in_matchedName</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">hit_inputExplanation</span> <span class="ow">in</span> <span class="n">hit_aliases_displayName</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hit_inputExplanation</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hit_inputExplanation</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="WatchlistExtractor.unwrap_alert_hits"><a class="viewcode-back" href="../../../source/etl_pipeline.xml_parser.html#etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor.unwrap_alert_hits">[docs]</a>    <span class="k">def</span> <span class="nf">unwrap_alert_hits</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pyspark</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">StructType</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pyspark</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df : pyspark.sql.DataFrame</span>
+<span class="sd">        schema : StructType</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pyspark.sql.DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span>
+            <span class="s2">&quot;alert_hits&quot;</span><span class="p">,</span>
+            <span class="n">F</span><span class="o">.</span><span class="n">udf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extract_alert_and_hits_from_xml</span><span class="p">,</span> <span class="n">schema</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">xml_column_name</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="WatchlistExtractor.extract_alert_and_hits_from_xml"><a class="viewcode-back" href="../../../source/etl_pipeline.xml_parser.html#etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor.extract_alert_and_hits_from_xml">[docs]</a>    <span class="k">def</span> <span class="nf">extract_alert_and_hits_from_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">FieldOutputType</span><span class="p">,</span> <span class="n">FieldOutputType</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xml : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[FieldOutputType, FieldOutputType]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">alert</span><span class="p">,</span> <span class="n">hits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_alert_and_hits_string_from_xml</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
+        <span class="n">alert_header_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_alert_header</span><span class="p">(</span><span class="n">alert</span><span class="p">)</span>
+        <span class="n">hit_dict_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="n">hits</span><span class="p">:</span>
+            <span class="n">hit_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_hit</span><span class="p">(</span><span class="n">hit</span><span class="p">)</span>
+            <span class="n">hit_dict_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hit_dict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">alert_header_dict</span><span class="p">,</span> <span class="n">hit_dict_list</span></div>
+
+<div class="viewcode-block" id="WatchlistExtractor.parse_alert_header"><a class="viewcode-back" href="../../../source/etl_pipeline.xml_parser.html#etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor.parse_alert_header">[docs]</a>    <span class="k">def</span> <span class="nf">parse_alert_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alert_header</span><span class="p">:</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">_Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FieldOutputType</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        alert_header : lxml.etree._Element</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        FieldOutputType</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alert_hit_dict_factory</span><span class="o">.</span><span class="n">_invoke_xml_util</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alert_hit_dict_factory</span><span class="o">.</span><span class="n">alert_config</span><span class="p">,</span> <span class="n">alert_header</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="WatchlistExtractor.parse_hit"><a class="viewcode-back" href="../../../source/etl_pipeline.xml_parser.html#etl_pipeline.xml_parser.xml_pipeline.WatchlistExtractor.parse_hit">[docs]</a>    <span class="k">def</span> <span class="nf">parse_hit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hit</span><span class="p">:</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">_Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FieldOutputType</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        hit : lxml.etree._Element</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        FieldOutputType</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">alert_hit_dict_factory</span><span class="o">.</span><span class="n">_invoke_xml_util</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alert_hit_dict_factory</span><span class="o">.</span><span class="n">hit_config</span><span class="p">,</span> <span class="n">hit</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="XMLPipeline"><a class="viewcode-back" href="../../../source/etl_pipeline.xml_parser.html#etl_pipeline.xml_parser.xml_pipeline.XMLPipeline">[docs]</a><span class="k">class</span> <span class="nc">XMLPipeline</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">spark_instance</span><span class="p">:</span> <span class="n">SparkClient</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">hit_config</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">alert_config</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">watchlist_cls</span><span class="p">:</span> <span class="n">WatchlistExtractor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">watchlist</span> <span class="o">=</span> <span class="n">watchlist_cls</span><span class="p">(</span><span class="n">hit_config</span><span class="o">=</span><span class="n">hit_config</span><span class="p">,</span> <span class="n">alert_config</span><span class="o">=</span><span class="n">alert_config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spark_instance</span> <span class="o">=</span> <span class="n">spark_instance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="XMLPipeline.unwrap_xml"><a class="viewcode-back" href="../../../source/etl_pipeline.xml_parser.html#etl_pipeline.xml_parser.xml_pipeline.XMLPipeline.unwrap_xml">[docs]</a>    <span class="k">def</span> <span class="nf">unwrap_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pyspark</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Reads table and transforms `xml` alert to table.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        source_path : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pyspark.sql.DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">std_alert_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spark_instance</span><span class="o">.</span><span class="n">read_delta</span><span class="p">(</span><span class="n">source_path</span><span class="p">)</span>
+        <span class="n">alert_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchlist</span><span class="o">.</span><span class="n">unwrap_alert_hits</span><span class="p">(</span><span class="n">std_alert_df</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
+        <span class="n">alert_hits_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchlist</span><span class="o">.</span><span class="n">remove_unnecessary_columns</span><span class="p">(</span><span class="n">alert_df</span><span class="p">)</span>
+        <span class="n">ap_hit_names_sql</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spark_instance</span><span class="o">.</span><span class="n">merge_to_target_col_from_source_cols_sql_expression</span><span class="p">(</span>
+            <span class="n">alert_hits_df</span><span class="p">,</span>
+            <span class="s2">&quot;ap_hit_names&quot;</span><span class="p">,</span>
+            <span class="p">[</span>
+                <span class="s2">&quot;hit_inputExplanations_matchedName_inputExplanation&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;hit_inputExplanations_aliases_matchedName_inputExplanation&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">alert_ap_hit_names_df</span> <span class="o">=</span> <span class="n">alert_hits_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">ap_hit_names_sql</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">alert_ap_hit_names_df</span></div>
+
+<div class="viewcode-block" id="XMLPipeline.clear_empty_hits"><a class="viewcode-back" href="../../../source/etl_pipeline.xml_parser.html#etl_pipeline.xml_parser.xml_pipeline.XMLPipeline.clear_empty_hits">[docs]</a>    <span class="k">def</span> <span class="nf">clear_empty_hits</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">alert_ap_hit_names_df</span><span class="p">:</span> <span class="n">pyspark</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">DataFrame</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pyspark</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        alert_ap_hit_names_df : pyspark.sql.DataFrame</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pyspark.sql.DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">alert_ap_wl_hit_names_df</span> <span class="o">=</span> <span class="n">alert_ap_hit_names_df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span>
+            <span class="s2">&quot;wl_hit_matched_name&quot;</span><span class="p">,</span>
+            <span class="n">F</span><span class="o">.</span><span class="n">when</span><span class="p">(</span>
+                <span class="n">F</span><span class="o">.</span><span class="n">expr</span><span class="p">(</span><span class="s2">&quot;size(hit_explanations_matchedName_Explanation) &gt; 0&quot;</span><span class="p">),</span>
+                <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;hit_displayName&quot;</span><span class="p">),</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="kc">None</span><span class="p">)),</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span>
+            <span class="s2">&quot;wl_hit_aliases_matched_name&quot;</span><span class="p">,</span>
+            <span class="n">F</span><span class="o">.</span><span class="n">udf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">watchlist</span><span class="o">.</span><span class="n">get_wl_hit_aliases_matched_name</span><span class="p">,</span> <span class="n">ArrayType</span><span class="p">(</span><span class="n">StringType</span><span class="p">()))(</span>
+                <span class="s2">&quot;hit_aliases_displayName&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;hit_aliases_matchedName&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;hit_explanations_aliases_matchedName_Explanation&quot;</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">alert_ap_wl_hit_names_df</span></div>
+
+<div class="viewcode-block" id="XMLPipeline.pipeline"><a class="viewcode-back" href="../../../source/etl_pipeline.xml_parser.html#etl_pipeline.xml_parser.xml_pipeline.XMLPipeline.pipeline">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pyspark</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        source_path : str</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pyspark.sql.DataFrame</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">alert_ap_hit_names_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unwrap_xml</span><span class="p">(</span><span class="n">source_path</span><span class="p">)</span>
+        <span class="n">alert_ap_wl_hit_names_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clear_empty_hits</span><span class="p">(</span><span class="n">alert_ap_hit_names_df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">alert_ap_wl_hit_names_df</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Silent Eight.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

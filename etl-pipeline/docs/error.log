@@ -1,0 +1,12 @@
+/env/ds/anaconda/envs/pipeline/lib/python3.8/site-packages/traitlets/traitlets.py:2202: FutureWarning: Supporting extra quotes around strings is deprecated in traitlets 5.0. You can use '' instead of "''" if you require traitlets >=5.
+  warn(
+[I 09:00:46.305 NotebookApp] Authentication of /metrics is OFF, since other authentication is disabled.
+[W 09:00:46.438 NotebookApp] All authentication is disabled.  Anyone who can connect to this server will be able to run code.
+[I 09:00:46.439 NotebookApp] Serving notebooks from local directory: /app/docs
+[I 09:00:46.440 NotebookApp] Jupyter Notebook 6.4.6 is running at:
+[I 09:00:46.440 NotebookApp] http://16bffd587d5f:1000/
+[I 09:00:46.440 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[W 09:00:46.442 NotebookApp] No web browser found: could not locate runnable browser.
+[I 09:01:09.419 NotebookApp] Interrupted...
+[I 09:01:09.420 NotebookApp] Shutting down 0 kernels
+[I 09:01:09.420 NotebookApp] Shutting down 0 terminals

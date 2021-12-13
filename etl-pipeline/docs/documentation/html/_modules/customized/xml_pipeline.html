@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>customized.xml_pipeline &mdash; ETL pipeline 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> ETL pipeline
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../source/etl_pipeline.xml_parser.html">etl_pipeline.xml_parser package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../source/customized.html">customized package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ETL pipeline</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>customized.xml_pipeline</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for customized.xml_pipeline</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">lxml</span>
+<span class="kn">import</span> <span class="nn">pyspark</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="n">ArrayType</span><span class="p">,</span> <span class="n">StructField</span><span class="p">,</span> <span class="n">StructType</span>
+
+<span class="kn">from</span> <span class="nn">customized.config</span> <span class="kn">import</span> <span class="n">AIA_ALERT_HEADER_CONFIG</span><span class="p">,</span> <span class="n">AIA_HIT_CONFIG</span>
+<span class="kn">from</span> <span class="nn">etl_pipeline.xml_parser.config</span> <span class="kn">import</span> <span class="n">XMLExtractorConfig</span>
+<span class="kn">from</span> <span class="nn">etl_pipeline.xml_parser.xml_pipeline</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AlertHitDictFactory</span><span class="p">,</span>
+    <span class="n">FieldOutputType</span><span class="p">,</span>
+    <span class="n">WatchlistExtractor</span><span class="p">,</span>
+    <span class="n">XMLPipeline</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="AIAWatchlistExtractor"><a class="viewcode-back" href="../../source/customized.html#customized.xml_pipeline.AIAWatchlistExtractor">[docs]</a><span class="k">class</span> <span class="nc">AIAWatchlistExtractor</span><span class="p">(</span><span class="n">WatchlistExtractor</span><span class="p">):</span>
+    <span class="n">clean_xml_declaration_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&lt;\?xml[^&gt;]+&gt;&quot;</span><span class="p">)</span>
+    <span class="n">xml_column_name</span> <span class="o">=</span> <span class="s2">&quot;html_file_key&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hit_config</span><span class="p">:</span> <span class="n">XMLExtractorConfig</span><span class="p">,</span> <span class="n">alert_config</span><span class="p">:</span> <span class="n">XMLExtractorConfig</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alert_hit_dict_factory</span> <span class="o">=</span> <span class="n">AlertHitDictFactory</span><span class="p">(</span>
+            <span class="n">hit_config</span><span class="o">=</span><span class="n">hit_config</span><span class="p">,</span> <span class="n">alert_config</span><span class="o">=</span><span class="n">alert_config</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="AIAWatchlistExtractor.extract_alert_and_hits_string_from_xml"><a class="viewcode-back" href="../../source/customized.html#customized.xml_pipeline.AIAWatchlistExtractor.extract_alert_and_hits_string_from_xml">[docs]</a>    <span class="k">def</span> <span class="nf">extract_alert_and_hits_string_from_xml</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">xml_string</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">_Element</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">_Element</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;Extracts alert and hits from xml.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            xml_string (str): XML string that will be parsed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple[lxml.etree._Element, List[lxml.etree._Element]]: Alert and hits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xml_cleaned</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clean_xml_declaration_regex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">xml_string</span><span class="p">)</span>
+        <span class="n">alert</span> <span class="o">=</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">xml_cleaned</span><span class="p">)</span>
+        <span class="n">hits</span> <span class="o">=</span> <span class="n">alert</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;hits/elem[@name=&quot;hit&quot;]&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">alert</span><span class="p">,</span> <span class="n">hits</span></div>
+
+<div class="viewcode-block" id="AIAWatchlistExtractor.extract_alert_header"><a class="viewcode-back" href="../../source/customized.html#customized.xml_pipeline.AIAWatchlistExtractor.extract_alert_header">[docs]</a>    <span class="k">def</span> <span class="nf">extract_alert_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alert</span><span class="p">:</span> <span class="n">lxml</span><span class="o">.</span><span class="n">etree</span><span class="o">.</span><span class="n">_Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FieldOutputType</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        alert : lxml.etree._Element</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        FieldOutputType</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">alert_header</span> <span class="o">=</span> <span class="n">alert</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">&quot;alert-header&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">alert_header_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_alert_header</span><span class="p">(</span><span class="n">alert_header</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">alert_header_dict</span></div>
+
+<div class="viewcode-block" id="AIAWatchlistExtractor.remove_unnecessary_columns"><a class="viewcode-back" href="../../source/customized.html#customized.xml_pipeline.AIAWatchlistExtractor.remove_unnecessary_columns">[docs]</a>    <span class="k">def</span> <span class="nf">remove_unnecessary_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pyspark</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pyspark</span><span class="o">.</span><span class="n">sql</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;alert_hits.*&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;explode(hits) as hit&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;alert_header.*&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="s2">&quot;hit.*&quot;</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;alert_hits&quot;</span><span class="p">,</span> <span class="s2">&quot;alert_header&quot;</span><span class="p">,</span> <span class="s2">&quot;hits&quot;</span><span class="p">,</span> <span class="s2">&quot;hit&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="AIAXMLPipeline"><a class="viewcode-back" href="../../source/customized.html#customized.xml_pipeline.AIAXMLPipeline">[docs]</a><span class="k">class</span> <span class="nc">AIAXMLPipeline</span><span class="p">(</span><span class="n">XMLPipeline</span><span class="p">):</span>
+    <span class="n">_hit_config</span> <span class="o">=</span> <span class="n">AIA_HIT_CONFIG</span>
+    <span class="n">_alert_config</span> <span class="o">=</span> <span class="n">AIA_ALERT_HEADER_CONFIG</span>
+    <span class="n">_watchlist_cls</span> <span class="o">=</span> <span class="n">AIAWatchlistExtractor</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;hit_config&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hit_config</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;watchlist_cls&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_watchlist_cls</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;alert_config&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alert_config</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">hit_schema</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchlist</span><span class="o">.</span><span class="n">alert_hit_dict_factory</span><span class="o">.</span><span class="n">get_hit_spark_schema</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="o">=</span> <span class="n">StructType</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">StructField</span><span class="p">(</span>
+                    <span class="s2">&quot;alert_header&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">watchlist</span><span class="o">.</span><span class="n">alert_hit_dict_factory</span><span class="o">.</span><span class="n">get_alert_spark_schema</span><span class="p">()</span>
+                <span class="p">),</span>
+                <span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;hits&quot;</span><span class="p">,</span> <span class="n">ArrayType</span><span class="p">(</span><span class="n">hit_schema</span><span class="p">)),</span>
+            <span class="p">]</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Silent Eight.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
