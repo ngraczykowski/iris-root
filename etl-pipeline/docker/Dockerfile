@@ -1,4 +1,4 @@
-FROM anaconda_playground
+FROM docker.repo.silenteight.com/ds-anaconda
 ARG PIP_INDEX_URL
 ENV PIP_INDEX_URL=$PIP_INDEX_URL
 ADD requirements.txt /requirements.txt
