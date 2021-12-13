@@ -1,3 +1,6 @@
 [submodule "datascience-installer"]
 	path = datascience-installer
 	url = ../../ses/datascience-installer/
+[submodule "spark-manager"]
+	path = spark-manager
+	url = ../spark-manager
