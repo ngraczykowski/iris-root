@@ -1,0 +1,3 @@
+label,pattern_str,pattern_flags
+REF,\beye colo(u)?r\b,re.IGNORECASE
+NO_REF,,

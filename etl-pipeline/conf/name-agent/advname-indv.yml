@@ -1,0 +1,584 @@
+solvers.name.advanced:
+  information:
+    name: Individual Name Agent for Name Screening
+    description: Name Agent instance which is configured to compare individual names.
+
+  type: INDIVIDUAL
+
+  evaluationTimeout: PT1S
+  chineseScriptSolutionTakesPrecedence: true
+
+  decisions: &decisions
+    priority:
+      - EXACT_MATCH
+      - STRONG_MATCH
+      - MATCH
+      - INCONCLUSIVE
+      - WEAK_MATCH
+      - NO_MATCH
+      - HQ_NO_MATCH
+      - NO_DATA
+
+  # Invocation of preprocessors and extractors are mixed:
+  # 1) first we use preprocessor for original input,
+  # 2) then we try extract names from it
+  # 3) and finally we apply preprocessing once again for each extracted name
+
+  preprocessors:
+    - factoryType: REMOVE_MILITARY_RANKS
+    - factoryType: WORDS_TO_IGNORE
+      properties:
+        wordsToIgnorePatterns: [
+            'mrs\.?', 'mr\.?', 'ms\.?', 'prof[\.,]*', 'dr[\.,]*',
+            'sir', 'lady', 'lord', 'prince\:?', 'princess',
+            'inspector', 'professor', 'jr\.*', 'captain', 'capt\.*',
+            'doctor', 'herr', 'frau', 'fr\.*', 'hr\.*', 'madame',
+            'mme\.*', 'monsieur', 'junior', 'senior', 'sr\.*',
+            'miss', 'mister', 'senor', 'senora', 'sra\.*',
+            'senorita',
+          # engineer (but "ENG" might be asian token)
+            'eng\.', 'engr\.?', 'engineer',
+          # His/Her Majesty
+            'h\.? ?m\.?', 'his majesty king', 'her majesty queen', 'his majesty', 'her majesty',
+          # His/Her Excellency (but "HE" might be asian token)
+            'h\.e', 'h\.e\.', 'h\.? e\.?', 'his excellency', 'her excellency',
+          # His Highness
+            'h\.? ?h\.?', 'his highness', 'her highness',
+          # His/Her Royal Highness
+            'h\.? ?r\.? ?h\.?', 'his royal highness', 'her royal highness',
+          # Retired
+            '\(retired\)', '\(retd\.?\)', '\(rtd\.?\)',
+          # DECEASED
+            '\(deceased\)', '\(decd\)',
+          # DELETED
+            '\(deleted\)',
+          # One letter aliases
+            '\([a-zA-Z]\)',
+          # Arabic words to ignore during preprocessing
+            'molla', 'amir', 'dato paduka', 'dato', 'datuk', 'haj', 'haji',
+            'imam', 'mufti', 'mulla', 'shiekh'
+        ]
+    - factoryType: REMOVE_SPECIAL_CHARACTERS
+      properties:
+        patternsToIgnore: [
+          # hyphen at the end of name
+            '-$',
+          # digits at the beginning and the end of name
+            '^[0-9 ]*|[0-9 ]*$',
+          # 'N' character at the end of name
+            '\s+N$',
+          # regex for special characters to remove
+            '^[\p{P}\p{S} ]*$'
+        ]
+
+  extractor:
+    factoryType: COMPOSITE_NAME_EXTRACTOR
+    children:
+      - factoryType: PASS_ORIGINAL_NAME_IF_CHILDREN_ARE_EMPTY
+        children:
+          - factoryType: REGEX_EXTRACTOR
+            definitions:
+              # NAME also known as OTHERNAME
+              - regex: '^(?<name>.+?) also known as (?<aka>.+?)$'
+                caseInsensitive: true
+                groups: [ name, aka ]
+              # NAME AS OTHERNAME
+              - regex: '^(?<name>.+?) AS (?<aka>.+?)$'
+                groups: [ name, aka ]
+              # NAME (OTHERNAME)
+              - regex: '^(?<name>.+?)\((?<alias>.+?)\)?$'
+                groups: [ name, alias ]
+              #NAME @ OTHERNAME
+              - regex: '^(?<name1>.+?)\s*@\s*(?<name2>.+?)$'
+                groups: [ name1, name2 ]
+              # s/o = son of; d/o = daughter of; a/l = malaysian son of; a/p = malaysian daughter of
+              - regex: '^(?<name1>.+?)\s+(d\/o|s\/o|a\/l|a\/p)\s+(?<name2>.+?)$'
+                caseInsensitive: true
+                groups: [ name1, name2 ]
+              # SK MD ABDUR RASHID, MD ABDUR RASHID, SHEIKH ABDUR RASHID, HAJI SHEIKH ABDUR RASHID
+              - regex: '(?<name1>SK MD ABDUR RASHID), (?<name2>MD ABDUR RASHID), (?<name3>SHEIKH ABDUR RASHID), (?<name4>HAJI SHEIKH ABDUR RASHID)'
+                caseInsensitive: false
+                groups: [ name1, name2, name3, name4 ]
+
+      - factoryType: GROUP_FORMATTING_REGEX_EXTRACTOR
+        definitions:
+          # LASTNAME, FIRSTNAME -> FIRSTNAME LASTNAME
+          - regex: '^(?<part1>[^,]+),(?<part2>[^,]+)$'
+            formats:
+              - "{part2} {part1}"
+
+  unsupportedRegions:
+    - KOREAN_CHARACTERS
+    - THAI_CHARACTERS
+    - MYANMAR
+    - ARABIC_CHARACTERS
+
+  customLinguistics:
+    - name: ARABIC
+      linguisticApproachEnabled: false
+      configFile: "arabic-evaluator.yml"
+      regions: &arabicRegions
+        - ARABIC
+        - URDU
+        - MALAY
+    - name: VIETNAMESE
+      linguisticApproachEnabled: true
+      configFile: "vietnamese-evaluator.yml"
+      regions:
+        - VIETNAMESE
+      forceDecisions:
+        enabled: true
+        paths:
+          - "commons/model-optional/initial-names.csv"
+    - name: CHINESE_CHARACTERS
+      linguisticApproachEnabled: true
+      regions:
+        - CHINESE_CHARACTERS
+    - name: MAINLAND_CHINESE
+      linguisticApproachEnabled: false
+      configFile: "mainlandChinese-evaluator.yml"
+      regions:
+        - MAINLAND_CHINESE
+
+  hacks:
+    westernMatcher: &asianWesternMatcher
+      asianRegions: &asianRegions
+        - CHINESE
+        - KOREAN
+        - JAPANESE
+        - LANGUAGES_OF_SE_ASIA
+      asianUnicodeScripts: HIRAGANA, KATAKANA, HAN, KHMER, TAMIL, THAI
+      westernRegions: ENGLISH, GERMAN, SPANISH, PORTUGUESE, FRENCH, ROMANIAN, ITALIAN
+
+    allTokensMatch:
+      westernMatcher: *asianWesternMatcher
+      filterWesternTokensWhenApplyingMapping: true
+      allTokensMatchedDecisionMappings:
+        HQ_NO_MATCH: NO_MATCH
+
+    nonWesternTokensLimit:
+      westernMatcher: *asianWesternMatcher
+      nonWesternTokensRegions:
+        - CHINESE
+        - LANGUAGES_OF_SE_ASIA
+
+    multiLanguageTokens:
+      enabled: false
+      westernMatcher: *asianWesternMatcher
+
+    replacePatterns:
+      enabled: true
+      patterns:
+        - from: "(\\w)([iI]{2})(\\w)"
+          to: "$1I$3"
+          patternName: "Replace double I in the middle of the token"
+          maxDecision: STRONG_MATCH
+      decisions: *decisions
+
+    typosInAsianNames:
+      enabled: false
+
+    forceDecisions:
+      enabled: true
+      paths:
+        - "commons/model-a1/a1_1.csv"
+        - "commons/model-a1/a1_2.csv"
+
+    unsupportedNames:
+      enabled: true
+      names:
+        - YAN MING, RICHMOND TE
+        - PICHAI RAMALINGAM SARAVANAN
+        - TANG Y K TANG MICHAEL
+        - tan khim seng
+        - MAHA VAJIRALONGKORN BODINDRADEBAYAVARANGKUN
+
+    problematicTokens:
+      enabled: true
+      regions:
+        - CHINESE
+        - KOREAN
+      tokens: [ "KIM", "YOYO", "SABO", "TEO", "LIOW" ]
+      decisionFrom: HQ_NO_MATCH
+      decisionTo: MATCH
+
+  #
+  # DEFAULT
+  #
+  defaultEvaluator:
+    score:
+      generator:
+        diminutiveNameOneToOneScoreFactor: 0.85f
+    ranges: &defaultRanges
+      - decision: EXACT_MATCH
+        min: 0.99
+      - decision: STRONG_MATCH
+        max: 0.99
+        min: 0.95
+      - decision: MATCH
+        max: 0.95
+        min: 0.8
+      - decision: WEAK_MATCH
+        max: 0.8
+        min: 0.5
+      - decision: NO_MATCH
+        max: 0.5
+        min: 0.01
+      - decision: HQ_NO_MATCH
+        max: 0.01
+    rootNameGenerator:
+      factoryType: STANDARD
+      properties:
+        maxTokenCountToMerge: 2
+    screeningGeneratorNameNodes:
+      - factoryType: TRANSLITERATION
+        children:
+          - factoryType: REMOVE_ACCENTS
+      - factoryType: REMOVE_ACCENTS
+      - factoryType: SYNONYM
+      - factoryType: DIMINUTIVES
+    matchGeneratorNameNodes:
+      - factoryType: TRANSLITERATION
+        children:
+          - factoryType: REMOVE_ACCENTS
+      - factoryType: REMOVE_ACCENTS
+      - factoryType: DIMINUTIVES
+    matchers:
+      - factoryType: EXACT
+      - factoryType: EXACT_CLEANED
+      - factoryType: INITIAL
+      - factoryType: PHONETIC_DOUBLE_METAPHONE
+      - factoryType: PHONETIC_DAITCH_MOKOTOFF_SOUNDEX
+      - factoryType: PHONETIC_NYSIIS
+      - factoryType: FUZZY_TOKEN
+      - factoryType: FUZZY_NAME_PART
+    nodesFilters:
+      - factoryType: INITIAL_LAST_NAME
+      - factoryType: SHORT_INITIAL_MATCH
+    variantsFilters:
+      - factoryType: ADVANCED_MISMATCHED_NODES
+        properties: &advancedMismatchedNodesProperties
+          rules:
+            - type: AND
+              rules:
+                - type: BOTH_NAMES_HAS_MISMATCHED_NODES
+                - type: MISMATCHED_DETAILS
+                  count: 0
+                  nameType: ANY
+                  maxNameNodesCount: 3
+            - type: AND
+              rules:
+                - type: BOTH_NAMES_HAS_MISMATCHED_NODES
+                - type: MISMATCHED_DETAILS
+                  ratio: 0.25
+                  nameType: ANY
+                  minNameNodesCount: 4
+      - factoryType: MATCH_SPECIFIER_NODES
+
+  evaluators:
+
+    - name: ARABIC
+      regions: *arabicRegions
+      ranges:
+        - decision: EXACT_MATCH
+          min: 0.99
+        - decision: STRONG_MATCH
+          max: 0.99
+          min: 0.95
+        - decision: MATCH
+          max: 0.95
+          min: 0.8
+        - decision: WEAK_MATCH
+          max: 0.8
+          min: 0.5
+        - decision: NO_MATCH
+          max: 0.5
+      score:
+        matcher:
+          arabicScoreFactor: 0.8f
+          fuzzyTokenScoreFactor: 0.45f
+          fuzzyNamePartScoreFactor: 0.45f
+      rootNameGenerator:
+        factoryType: ARABIC
+      screeningGeneratorNameNodes:
+        - factoryType: TRANSLITERATION
+          children:
+            - factoryType: SKIP_ARABIC_ORNAMENTS
+              children:
+                - factoryType: ARABIC_SYNONYM
+            - factoryType: ARABIC_SYNONYM
+              children:
+                - factoryType: SKIP_ARABIC_ORNAMENTS
+            - factoryType: REMOVE_ACCENTS
+              children:
+                - factoryType: ARABIC_SYNONYM
+                  children:
+                    - factoryType: SKIP_ARABIC_ORNAMENTS
+        - factoryType: SKIP_ARABIC_ORNAMENTS
+          children:
+            - factoryType: ARABIC_SYNONYM
+        - factoryType: SPLIT_ARABIC
+          children:
+            - factoryType: ARABIC_SYNONYM
+              children:
+                - factoryType: SKIP_ARABIC_ORNAMENTS
+            - factoryType: SKIP_ARABIC_ORNAMENTS
+              children:
+                - factoryType: ARABIC_SYNONYM
+        - factoryType: SPLIT_NAME_WORDS
+          properties:
+            regions: *arabicRegions
+            wordCountLimit: 5
+            minTokenLength: 4
+          children:
+            - factoryType: ARABIC_SYNONYM
+        - factoryType: ARABIC_SYNONYM
+        - factoryType: SPLIT_ARABIC
+        - factoryType: SKIP_ARABIC_ORNAMENTS
+      matchGeneratorNameNodes:
+        - factoryType: TRANSLITERATION
+          children:
+            - factoryType: SKIP_ARABIC_ORNAMENTS
+              children:
+                - factoryType: ARABIC_SYNONYM
+            - factoryType: ARABIC_SYNONYM
+              children:
+                - factoryType: SKIP_ARABIC_ORNAMENTS
+            - factoryType: REMOVE_ACCENTS
+              children:
+                - factoryType: ARABIC_SYNONYM
+        - factoryType: SKIP_ARABIC_ORNAMENTS
+          children:
+            - factoryType: ARABIC_SYNONYM
+        - factoryType: SPLIT_ARABIC
+          children:
+            - factoryType: ARABIC_SYNONYM
+              children:
+                - factoryType: SKIP_ARABIC_ORNAMENTS
+            - factoryType: SKIP_ARABIC_ORNAMENTS
+              children:
+                - factoryType: ARABIC_SYNONYM
+        - factoryType: SPLIT_NAME_WORDS
+          properties:
+            regions: *arabicRegions
+            wordCountLimit: 5
+            minTokenLength: 4
+          children:
+            - factoryType: ARABIC_SYNONYM
+        - factoryType: ARABIC_SYNONYM
+        - factoryType: SPLIT_ARABIC
+        - factoryType: SKIP_ARABIC_ORNAMENTS
+      matchers:
+        - factoryType: EXACT
+        - factoryType: EXACT_CLEANED
+        - factoryType: ARABIC
+        - factoryType: INITIAL
+        - factoryType: FUZZY_TOKEN
+        - factoryType: FUZZY_NAME_PART
+      nodesFilters:
+        - factoryType: INITIAL_LAST_NAME
+        - factoryType: SHORT_INITIAL_MATCH
+      variantsFilters:
+        - factoryType: ADVANCED_MISMATCHED_NODES
+          properties: *advancedMismatchedNodesProperties
+        - factoryType: MATCH_SPECIFIER_NODES
+        - factoryType: MISMATCHED_RELATION_ARABIC
+
+    - name: ASIAN
+      regions:
+        - JAPANESE
+        - LANGUAGES_OF_SE_ASIA
+      skipJoinerTokens: &asianSkipJoinerTokens false
+      skipSeparatorTokens: &asianSkipSeparatorTokens true
+      score: &asianScore
+        algorithm:
+          type: MEAN_FROM_VARIANTS
+          skipTags:
+            - western
+        generator:
+          splitWordsOneToOneScoreFactor: 0.999f
+          asianPhoneticSynonymOneToOneScoreFactor: 0.745f
+      ranges: *defaultRanges
+      maxGeneratedChildrenSize: 50
+      rootNameGenerator: &asianRootGenerator
+        factoryType: ASIAN_OLD
+        properties:
+          westernMatcher: *asianWesternMatcher
+      screeningGeneratorNameNodes: &asianGeneratorNodes
+        - factoryType: TRANSLITERATION
+          children:
+            - factoryType: ASIAN_SYNONYM
+        - factoryType: ASIAN_SYNONYM
+        - factoryType: ASIAN_PHONETIC_SYNONYM
+        - factoryType: SKIP_JOINER
+          children:
+            - factoryType: ASIAN_SYNONYM
+        - factoryType: SPLIT_NAME_WORDS
+          properties:
+            regions: *asianRegions
+            wordCountLimit: 2
+            minTokenLength: 4
+          children:
+            - factoryType: ASIAN_SYNONYM
+      matchGeneratorNameNodes: *asianGeneratorNodes
+      matchers: &asianMatchers
+        - factoryType: EXACT
+        - factoryType: EXACT_CLEANED
+        - factoryType: ACCENTS_AWARE
+        - factoryType: INITIAL
+      nodesFilters: &asianNodesFilters
+        - factoryType: INITIAL_LAST_NAME
+        - factoryType: SHORT_INITIAL_MATCH
+      variantsFilters: &asianVariantsFilters
+        - factoryType: ADVANCED_MISMATCHED_NODES
+          properties:
+            rules:
+              - type: AND
+                rules:
+                  - type: ASIAN_MISMATCHED_DETAILS
+                    nameType: ANY
+        - factoryType: MATCH_SPECIFIER_NODES
+
+    - name: ASIAN_WITH_HQ_NO_MATCH
+      regions:
+        - CHINESE
+        - MAINLAND_CHINESE
+        - KOREAN
+      skipJoinerTokens: *asianSkipJoinerTokens
+      skipSeparatorTokens: *asianSkipSeparatorTokens
+      score: *asianScore
+      ranges:
+        - decision: EXACT_MATCH
+          min: 0.99
+        - decision: STRONG_MATCH
+          max: 0.99
+          min: 0.95
+        - decision: MATCH
+          max: 0.95
+          min: 0.8
+        - decision: WEAK_MATCH
+          max: 0.8
+          min: 0.5
+        - decision: HQ_NO_MATCH
+          max: 0.5
+      maxGeneratedChildrenSize: 50
+      rootNameGenerator: *asianRootGenerator
+      screeningGeneratorNameNodes: *asianGeneratorNodes
+      matchGeneratorNameNodes: *asianGeneratorNodes
+      matchers: *asianMatchers
+      nodesFilters: *asianNodesFilters
+      variantsFilters: *asianVariantsFilters
+
+    - name: LATINO
+      regions:
+        - SPANISH
+        - PORTUGUESE
+        - ITALIAN
+      ranges: *defaultRanges
+      rootNameGenerator:
+        factoryType: ORNAMENTABLE
+        properties:
+          ornaments: &latinoOrnaments del, y, de, la
+          maxTokenCountToMerge: 2
+          discardDuplicatedTokensFeatureProperties:
+            enabled: true
+      screeningGeneratorNameNodes:
+        - factoryType: REMOVE_ACCENTS
+        - factoryType: SYNONYM
+        - factoryType: SKIP_ORNAMENTS
+          properties:
+            ornaments: *latinoOrnaments
+      matchGeneratorNameNodes:
+        - factoryType: REMOVE_ACCENTS
+        - factoryType: SKIP_ORNAMENTS
+          properties:
+            ornaments: *latinoOrnaments
+      matchers:
+        - factoryType: EXACT
+        - factoryType: EXACT_CLEANED
+        - factoryType: INITIAL
+        - factoryType: FUZZY_TOKEN
+        - factoryType: FUZZY_NAME_PART
+      nodesFilters:
+        - factoryType: INITIAL_LAST_NAME
+        - factoryType: SHORT_INITIAL_MATCH
+      variantsFilters:
+        - factoryType: ADVANCED_MISMATCHED_NODES
+          properties: *advancedMismatchedNodesProperties
+        - factoryType: MATCH_SPECIFIER_NODES
+        - factoryType: MISMATCHED_RELATION_BASIC
+
+    - name: INDIAN
+      regions:
+        - LANGUAGES_OF_INDIA
+        - MALAY
+        - NEPALESE
+      score:
+        algorithm:
+          type: BEST_VARIANT
+        matcher:
+          initialScoreFactor: 0.8f
+      ranges:
+        - decision: EXACT_MATCH
+          min: 0.99
+        - decision: STRONG_MATCH
+          max: 0.99
+          min: 0.95
+        - decision: MATCH
+          max: 0.95
+          min: 0.80
+        - decision: WEAK_MATCH
+          max: 0.80
+          min: 0.5
+        - decision: NO_MATCH
+          max: 0.5
+          min: 0.10
+        - decision: HQ_NO_MATCH
+          max: 0.10
+      rootNameGenerator:
+        factoryType: STANDARD
+        properties:
+          maxTokenCountToMerge: 2
+      screeningGeneratorNameNodes:
+        - factoryType: TRANSLITERATION
+          children:
+            - factoryType: REMOVE_ACCENTS
+        - factoryType: REMOVE_ACCENTS
+        - factoryType: SYNONYM
+      matchGeneratorNameNodes:
+        - factoryType: TRANSLITERATION
+          children:
+            - factoryType: REMOVE_ACCENTS
+        - factoryType: REMOVE_ACCENTS
+      matchers:
+        - factoryType: EXACT
+        - factoryType: EXACT_CLEANED
+        - factoryType: INITIAL
+        - factoryType: FUZZY_TOKEN_WITH_IGNORE
+          properties:
+            ignoreFuzzyMatcherNamesCsvPath: 'commons/model-a1/a1_3.csv'
+        - factoryType: FUZZY_NAME_PART_WITH_IGNORE
+          properties:
+            ignoreFuzzyMatcherNamesCsvPath: 'commons/model-a1/a1_3.csv'
+      nodesFilters:
+        - factoryType: INITIAL_LAST_NAME
+        - factoryType: SHORT_INITIAL_MATCH
+      variantsFilters:
+        - factoryType: ADVANCED_MISMATCHED_NODES
+          properties:
+            rules:
+              - type: AND
+                rules:
+                  - type: BOTH_NAMES_HAS_MISMATCHED_NODES
+                  - type: MISMATCHED_DETAILS
+                    count: 0
+                    nameType: ANY
+                    maxNameNodesCount: 3
+              - type: AND
+                rules:
+                  - type: BOTH_NAMES_HAS_MISMATCHED_NODES
+                  - type: MISMATCHED_DETAILS
+                    ratio: 0.25
+                    nameType: ANY
+                    minNameNodesCount: 4
+        - factoryType: MATCH_SPECIFIER_NODES

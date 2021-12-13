@@ -1,0 +1,3 @@
+# any unrecognizable characters:
+.*[ª½↉⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅐⅛⅜⅝⅞⅑⅒⅟¤Ø£¬Ù†­©§„´æ]+.*;.+;INCONCLUSIVE
+.+;.*[ª½↉⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅐⅛⅜⅝⅞⅑⅒⅟¤Ø£¬Ù†­©§„´æ]+.*;INCONCLUSIVE

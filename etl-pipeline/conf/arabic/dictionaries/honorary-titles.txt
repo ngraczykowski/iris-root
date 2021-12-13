@@ -1,0 +1,51 @@
+# title will not have special characters already (removed in previous steps)
+
+#SHAIK and synonyms might be used as personal name as well
+ALLAMA
+BA
+DR
+H H SH
+H H SHEIKH
+HE SHAIKH
+HH SHA
+HH SHEIKH
+HHPRINCE
+HHSHAIKH
+HHSHEIKH
+HH\.SHEIKH
+HON\.?
+H\.? ?E SHEIKH?
+H\.? ?E\.? SHAIKH?
+H\.? ?E\.? SHEIKH?
+H\.? ?E\.? SH\.?
+H\.? ?H\.?
+H\.? ?H\.? SHEIKH?
+H\.? ?H\.? SHEIKH SAUD
+IMAM
+IMAMU
+MAG\.
+MOLANA
+MOLVI
+MUFTI
+MULA
+MULAH
+MULLAH
+PRINCE
+QADRI
+QARI
+SHA
+SHAIKH?
+SHAIKHA
+SHAYKH?
+SHA\.
+SHEIKH?
+SHIEKH?
+SHIKH
+SHKH
+SHK\.?
+SH\.?
+SOULTAN
+SUFI
+SUFIA
+SULTAN
+UFTI
