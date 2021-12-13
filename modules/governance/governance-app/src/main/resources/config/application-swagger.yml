@@ -1,9 +1,0 @@
-springdoc:
-  show-actuator: true
-  api-docs:
-    enabled: true
-    path: /openapi/api-docs
-  swagger-ui:
-    enabled: true
-    path: /openapi/
-    url: ${server.servlet.context-path}/openapi/api-docs/

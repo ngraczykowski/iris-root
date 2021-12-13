@@ -2,6 +2,17 @@
 # Solution Discrepancy AMQP Configuration
 ####################################################################################################
 serp:
+  db:
+    host: localhost
+    port: 24292
+    schema: public
+    name: governance
+    user: governance
+    password: governance
+    url: jdbc:postgresql://${serp.db.host}:${serp.db.port}/${serp.db.name}?currentSchema=${serp.db.schema}
+    connections:
+      min: 1
+      max: 10
   notifier:
     integration:
       inbound-queue-name: ${serp.governance.messaging.broker.notification.queue-name}
@@ -18,16 +29,127 @@ serp:
         inbound-queue-name: ${serp.governance.messaging.broker.solution-discrepancy.queue-name}
         outbound-exchange-name: ${serp.governance.messaging.exchange.notification}
         reasoning-branches-disabled-routing-key: notification.reasoning-branches-disabled
+    messaging:
+      exchange:
+        analytics: feature-vector
+        model: gov.model
+        notification: notification
+        solution-discrepancy: learning
+        gov-qa: gov.qa
+        gov-event: gov.event
+      broker:
+        analytics:
+          queue-name: governance.analytics
+          routing-key: feature-vector.solved
+        ingest:
+          queue-name: gov.feature-vector.ingest
+          routing-key: command.index-request.production
+        model-export:
+          routing-key: event.model-promoted.production
+        model-in-use:
+          routing-key: event.model-in-use.production
+        models-archived:
+          queue-name: gov.models-archived
+          routing-key: event.models-archived
+        gov-qa:
+          routing-key: event.qa-alert
+        qa-retention-personal-information-expired:
+          queue-name: gov.retention.personal-information-expired
+          routing-key: retention.personal-information-expired
+        qa-retention-alerts-expired:
+          queue-name: gov.retention.alerts-expired
+          routing-key: retention.personal-information-expired
+        notification:
+          queue-name: notifier.incoming-event
+          routing-key: notification.*
+        notification-send-mail:
+          queue-name: notifier.send-mail
+          routing-key: notifier.send-mail
+        solution-discrepancy:
+          queue-name: governance.solution-discrepancy
+          routing-key: learning.discrepancy-detected
+        to-remove:
+          bindings: []
+
+    feature-vector:
+      integration:
+        request:
+          exchange: ${serp.governance.messaging.exchange.analytics}
+          routing-key: ${serp.governance.messaging.broker.analytics.routing-key}
+        receive:
+          queue-name: ${serp.governance.messaging.broker.analytics.queue-name}
+
+    ingest:
+      integration:
+        receive:
+          queue-name: ${serp.governance.messaging.broker.ingest.queue-name}
+
+    qa:
+      integration:
+        request:
+          exchange: gov.qa
+          routingKey: event.qa-alert
+      retention:
+        personal-information-expired:
+          integration:
+            receive:
+              queue-name: ${serp.governance.messaging.broker.qa-retention-personal-information-expired.queue-name}
+        alerts-expired:
+          integration:
+            receive:
+              queue-name: ${serp.governance.messaging.broker.qa-retention-alerts-expired.queue-name}
+
     model:
       categorySource: classpath:categories.json
       modelTransfer: LOCAL
+      archive:
+        integration:
+          request:
+            exchange: ${serp.governance.messaging.exchange.model}
+            routingKey: ${serp.governance.messaging.broker.models-archived.routing-key}
+          receive:
+            queue-name: ${serp.governance.messaging.broker.models-archived.queue-name}
 
-  ####################################################################################################
-  # Error Queue Configuration
-  ####################################################################################################
+      export:
+        integration:
+          request:
+            exchange: ${serp.governance.messaging.exchange.model}
+            routingKey: ${serp.governance.messaging.broker.model-export.routing-key}
+      send-in-use:
+        integration:
+          request:
+            exchange: ${serp.governance.messaging.exchange.model}
+            routingKey: ${serp.governance.messaging.broker.model-export.routing-key}
+
+  rabbitmq:
+    host: localhost
+    port: 24130
+    user: governance
+    password: governance
+    vhost: /
+    encryption:
+      enabled: false
+      key.seed: change_me_please
+      key.salt: change_me_please
+      key.size: 256
+      mac.size: 112
+      nonce:
+        size: 96
+        header: encryption-nonce
+
   messaging:
     error-queue:
       enabled: true
+    concurrency: 4
+    prefetch: 25
+    encryption:
+      enabled: ${serp.rabbitmq.encryption.enabled}
+      key-seed: ${serp.rabbitmq.encryption.key.seed}
+      salt: ${serp.rabbitmq.encryption.key.salt}
+      key-size-in-bits: ${serp.rabbitmq.encryption.key.size}
+      mac-size-in-bits: ${serp.rabbitmq.encryption.mac.size}
+      nonce-size-in-bits: ${serp.rabbitmq.encryption.nonce.size}
+      nonce-header: ${serp.rabbitmq.encryption.nonce.header}
 ####################################################################################################
 # Defaults (overridden by environment variables or arguments)
 ####################################################################################################
@@ -123,6 +245,57 @@ spring:
   aop:
     auto: false
 
+  datasource:
+    # Postgres database
+    type: com.zaxxer.hikari.HikariDataSource
+    url: ${serp.db.url}
+    username: ${serp.db.user}
+    password: ${serp.db.password}
+    initialization-mode: never
+
+    # Hikari pool configuration
+    hikari:
+      pool-name: Database-Pool
+      minimum-idle: ${serp.db.connections.min}
+      maximum-pool-size: ${serp.db.connections.max}
+      auto-commit: false
+      schema: ${serp.db.schema}
+      isolate-internal-queries: true
+      # NOTE(ahaczewski): Forces HikariCP to commit the transaction after opening fresh connection.
+      #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
+      #  just before HikariCP runs `SET SESSION search_path TO '${serp.db.schema}'` which begins
+      #  transaction. Thus, with that query as workaround, we force the transaction commit.
+      connection-init-sql: SELECT 1
+      data-source-properties:
+        ApplicationName: SERP (${spring.application.name})
+
+  # Database migrations
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    default-schema: ${serp.db.schema}
+    contexts: default
+
+  # Spring Data JPA
+  jpa:
+    database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
+    database: POSTGRESQL
+    show-sql: false
+    open-in-view: false
+
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: true
+
+    properties:
+      hibernate.cache.use_query_cache: false
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.generate_statistics: false
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.jdbc.time_zone: UTC
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      org.hibernate.envers.audit_table_suffix: _audit
+      org.hibernate.envers.store_data_at_delete: true
+
   # Task execution and scheduling
   task:
     execution:
@@ -153,6 +326,26 @@ spring:
       enabled: false
       auto-registration:
         enabled: false
+
+  rabbitmq:
+    # virtual-host:
+    # addresses: ${serp.rabbitmq.addresses}
+    host: ${serp.rabbitmq.host}
+    port: ${serp.rabbitmq.port}
+    username: ${serp.rabbitmq.user}
+    password: ${serp.rabbitmq.password}
+    virtual-host: ${serp.rabbitmq.vhost}
+    ssl:
+      enabled: false
+    listener:
+      type: simple
+      direct:
+        consumers-per-queue: ${serp.messaging.concurrency}
+        prefetch: ${serp.messaging.prefetch}
+      simple:
+        concurrency: 1
+        max-concurrency: ${serp.messaging.concurrency}
+        prefetch: ${serp.messaging.prefetch}
 
   servlet:
     multipart.max-file-size: 20MB
@@ -387,3 +580,8 @@ sep.filestorage:
     private-key: admin123
     region: s3_region
 
+
+# Spring Integration
+integration:
+  start-delay-seconds: 15
+  poll-period-millis: 1000
