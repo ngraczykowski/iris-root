@@ -48,6 +48,8 @@ spring:
   jackson:
     serialization:
       indent-output: true
+  liquibase:
+    contexts: hsbc
 
 serp.governance.qa:
   sampling:
