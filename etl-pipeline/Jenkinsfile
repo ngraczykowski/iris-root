@@ -2,6 +2,9 @@
 
 pipeline {
     agent any
+    environment {
+        PIP_INDEX_URL = credentials('pypi-readonly-url')
+    }
     stages {
         stage('Build') {
             steps {
