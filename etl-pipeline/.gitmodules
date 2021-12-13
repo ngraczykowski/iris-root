@@ -1,0 +1,3 @@
+[submodule "datascience-installer"]
+	path = datascience-installer
+	url = ../../ses/datascience-installer/
