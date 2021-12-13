@@ -373,8 +373,6 @@ def transform_cleansed_to_application():
 
     # Agent input creator
 
-    
-
     input_template = {"ap": [], "ap_aliases": [], "wl": [], "wl_aliases": []}
 
     agent_list = [
@@ -687,6 +685,7 @@ def transform_cleansed_to_application():
 
 def get_pandas_dataframe(filename):
     return spark_instance.read_delta(filename).toPandas()
+
 
 def show_files_in_directory(directory):
     for i in glob(os.path.join(directory, "*")):

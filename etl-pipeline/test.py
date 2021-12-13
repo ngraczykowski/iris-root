@@ -53,5 +53,5 @@ for reference in glob(f"tests/data/4.application/agent-input/*delta"):
     tested_rows = tested_dataframe.sort(id, ascending=False).collect()
     for tested_row, reference_row in zip(tested_rows, reference_rows):
         assert tested_row == reference_row
-        
+
 print("PASSED")
