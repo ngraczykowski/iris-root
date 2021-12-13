@@ -550,4 +550,18 @@
       <column name="alert_name"/>
     </createIndex>
   </changeSet>
+  <changeSet id="serp-governance-4.0.0-21" author="tbiedrzycki" context="hsbc">
+    <preConditions onFail="MARK_RAN">
+      <tableExists tableName="hsbc_bridge_alert" />
+    </preConditions>
+    <comment>
+      Update values for alert_names in governance_qa_alert. Migration from the alert discriminator to alertName.
+    </comment>
+    <sql splitStatements="true" endDelimiter=";" stripComments="true">
+      UPDATE governance_qa_alert gqa
+      SET alert_name = hba.name
+      FROM hsbc_bridge_alert hba
+      WHERE hba.discriminator = gqa.alert_name;
+    </sql>
+  </changeSet>
 </databaseChangeLog>
