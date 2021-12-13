@@ -1,12 +1,12 @@
 [submodule "datascience-installer"]
 	path = datascience-installer
-	url = ses/datascience-installer/
+	url = ../../ses/datascience-installer/
 [submodule "spark-manager"]
 	path = spark-manager
-	url = data-science/spark-manager
+	url = ../spark-manager
 [submodule "anaconda"]
 	path = anaconda
-	url = data-science/anaconda
+	url = ../anaconda
 [submodule "python-datatoolbox"]
 	path = python-datatoolbox
-	url = ses/python-datatoolbox
+	url = ../../ses/python-datatoolbox
