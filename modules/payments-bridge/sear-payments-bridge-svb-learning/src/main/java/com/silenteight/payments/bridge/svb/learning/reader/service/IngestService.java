@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.svb.learning.reader.service;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
+import com.silenteight.payments.bridge.svb.learning.metrics.LearningMetricsIncrementerPort;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.ReadAlertError;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.RegisteredAlert;
@@ -31,6 +32,7 @@ class IngestService {
   private final CreateAlertRetentionPort createAlertRetentionPort;
   private final DecisionMapper decisionMapper;
   private final IndexLearningAlertPort indexLearningAlertPort;
+  private final LearningMetricsIncrementerPort learningMetricsIncrementerPort;
 
   void ingest(LearningAlertBatch batch) {
     var alerts = batch.getLearningAlerts().stream()
@@ -92,6 +94,8 @@ class IngestService {
         .collect(toList());
 
     var responses = registerAlertUseCase.batchRegistration(alerts);
+
+    learningMetricsIncrementerPort.increment(alerts.size());
 
     var learningAlertsMap = learningAlerts.stream()
         .collect(toMap(LearningAlert::getAlertId, Function.identity()));

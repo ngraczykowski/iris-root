@@ -8,6 +8,7 @@ import com.silenteight.payments.bridge.common.model.SimpleAlertId;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.FilterAlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.callback.port.SendResponseUseCase;
+import com.silenteight.payments.bridge.firco.metrics.learning.SolvingMetricsIncrementerPort;
 import com.silenteight.payments.bridge.firco.recommendation.model.BridgeSourcedRecommendation;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
@@ -48,6 +49,7 @@ class FircoInboundAmqpIntegrationConfiguration {
   private final AlertRegistrationInitialStep alertRegistrationInitialStep;
   private final CreateRecommendationUseCase createRecommendationUseCase;
   private final AlertDeliveredIntegrationService alertDeliveredIntegrationService;
+  private final SolvingMetricsIncrementerPort solvingMetricsIncrementer;
 
   @Bean
   IntegrationFlow messageStoredInbound() {
@@ -62,9 +64,11 @@ class FircoInboundAmqpIntegrationConfiguration {
         .filter(AlertId.class, alertId -> !filterAlertMessageUseCase.hasTooManyHits(alertId),
             spec -> spec.discardChannel(INT_DISCARD)
         )
-        .handle(AlertId.class,
+        .handle(
+            AlertId.class,
             (payload, headers) -> {
               alertRegistrationInitialStep.start(payload.getAlertId());
+              solvingMetricsIncrementer.increment(1.0);
               return null;
             }
         ).get();
