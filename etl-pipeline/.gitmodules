@@ -7,3 +7,6 @@
 [submodule "anaconda"]
 	path = anaconda
 	url = ../anaconda
+[submodule "python-datatoolbox"]
+	path = python-datatoolbox
+	url = ../../ses/python-datatoolbox
