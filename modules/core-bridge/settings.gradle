@@ -1,0 +1,3 @@
+rootProject.name = 'core-bridge'
+include 'bridge-app'
+

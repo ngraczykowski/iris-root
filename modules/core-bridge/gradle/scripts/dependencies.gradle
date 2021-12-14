@@ -1,0 +1,123 @@
+ext {
+  libraries = [:]
+
+  //***********************************
+  // Silent Eight
+  //***********************************
+  coreBridgeRegistrationApiVersion = "1.0.0-BUILD.4"
+  protobufSpringBootStarterVersion = "1.6.0"
+
+  //***********************************
+  // Dependency Versions
+  //***********************************
+  groovyVersion = '3.0.9'
+  testContainersVersion = '1.16.2'
+  junitJupiterVersion = "5.8.2"
+  mockitoVersion = "4.1.0"
+  spockVersion = '2.1-M2-groovy-3.0'
+  springBootVersion = "2.5.7"
+  springCloudVersion = "3.0.4"
+  springVersion = "5.3.13"
+}
+
+// Silent Eight
+libraries.protobuf_spring_boot_starter = [group: 'com.silenteight', name: 'protobuf-spring-boot-starter', version: protobufSpringBootStarterVersion]
+libraries.registration_api_library = [group: 'com.silenteight.registration.api.library', name: 'registration-lib', version: coreBridgeRegistrationApiVersion]
+libraries.registration_api_proto = [group: 'com.silenteight.registration.api.library', name: 'registration-internal-protos', version: coreBridgeRegistrationApiVersion]
+
+// Spring
+libraries.spring_aspects = [group: 'org.springframework', name: 'spring-aspects', version: springVersion]
+libraries.spring_boot = [group: 'org.springframework.boot', name: 'spring-boot', version: springBootVersion]
+libraries.spring_boot_actuator = [group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springBootVersion]
+libraries.spring_boot_configuration_processor = [group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: springBootVersion]
+libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow', version: springBootVersion]
+libraries.spring_boot_starter_validation = [group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springBootVersion]
+libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion]
+libraries.spring_data_jpa = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springBootVersion]
+libraries.spring_boot_starter_amqp = [group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: springBootVersion]
+libraries.spring_retry = [group: 'org.springframework.retry', name: 'spring-retry', version: '1.3.1']
+
+// Spring Cloud
+libraries.spring_cloud_starter_consul_config = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul-config', version: springCloudVersion]
+libraries.spring_cloud_starter_consul_discovery = [group: 'org.springframework.cloud', name: 'spring-cloud-consul-discovery', version: springCloudVersion]
+libraries.spring_cloud_starter_sleuth = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: springCloudVersion]
+
+// Database
+libraries.postgresql = [group: 'org.postgresql', name: 'postgresql', version: '42.2.18']
+libraries.liquibase = [group: 'org.liquibase', name: 'liquibase-core', version: '4.6.1']
+
+// GRPC
+libraries.grpc_spring_boot_starter = [group: 'net.devh', name: 'grpc-spring-boot-starter', version: '2.13.0.RELEASE']
+
+// Testing
+libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion]
+libraries.junit_jupiter_testcontainers = [group: 'org.testcontainers', name: 'junit-jupiter', version: testContainersVersion]
+libraries.localstack = [group: 'org.testcontainers', name: 'localstack', version: testContainersVersion]
+libraries.spock_core = [group: 'org.spockframework', name: 'spock-core', version: spockVersion]
+libraries.spock_spring = [group: 'org.spockframework', name: 'spock-spring', version: spockVersion]
+libraries.spring_starter_test = [group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion]
+libraries.spring_test = [group: 'org.springframework', name: 'spring-test', version: springVersion]
+libraries.testcontainers = [group: 'org.testcontainers', name: 'testcontainers', version: testContainersVersion]
+libraries.testcontainers_postgresql = [group: 'org.testcontainers', name: 'postgresql', version: '1.16.2']
+
+// Others
+libraries.commons_lang3 = [group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0']
+libraries.commons_collections = [group: 'org.apache.commons', name: 'commons-collections4', version: '4.4']
+libraries.commons_validator = [group: 'commons-validator', name: 'commons-validator', version: '1.7']
+libraries.io_utils = [group: 'commons-io', name: 'commons-io', version: '2.11.0']
+libraries.streamex = [group: 'one.util', name: 'streamex', version: '0.8.0']
+
+configurations.all {
+  exclude group: 'org.glassfish', module: 'javax.el'
+  exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+
+  resolutionStrategy {
+    failOnVersionConflict()
+    preferProjectModules()
+  }
+}
+
+dependencies {
+  annotationProcessor libraries.spring_boot_configuration_processor
+  implementation libraries.protobuf_spring_boot_starter
+  implementation libraries.grpc_spring_boot_starter
+  implementation libraries.registration_api_library
+  implementation libraries.registration_api_proto
+  implementation libraries.spring_aspects
+  implementation libraries.spring_boot
+  implementation libraries.spring_boot_actuator
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_validation
+  implementation libraries.spring_boot_starter_web
+  implementation libraries.spring_cloud_starter_consul_config
+  implementation libraries.spring_cloud_starter_consul_discovery
+  implementation libraries.spring_cloud_starter_sleuth
+  implementation libraries.spring_boot_starter_amqp
+  implementation libraries.spring_data_jpa
+  implementation libraries.spring_retry
+  implementation libraries.commons_lang3
+  implementation libraries.commons_collections
+  implementation libraries.commons_validator
+  implementation libraries.io_utils
+  implementation libraries.postgresql
+  implementation libraries.streamex
+  // implementation libraries.liquibase
+
+  testImplementation libraries.groovy_all
+  testImplementation libraries.spock_core
+  testImplementation libraries.junit_jupiter_testcontainers
+  testImplementation libraries.localstack
+  testImplementation libraries.spock_spring
+  testImplementation libraries.spring_starter_test
+  testImplementation libraries.spring_test
+  testImplementation libraries.testcontainers
+  testImplementation libraries.testcontainers_postgresql
+}
+
+repositories {
+  mavenCentral()
+}
+
+test {
+  useJUnitPlatform()
+}

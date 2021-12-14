@@ -1,0 +1,16 @@
+plugins {
+  id "idea"
+  id "java"
+  id "groovy"
+  id "maven-publish"
+}
+
+description = "bridge-app"
+
+apply from: "${rootProject.projectDir}/gradle/scripts/dependencies.gradle"
+
+jar {
+  manifest {
+    attributes "Main-Class": "com.silenteight.bridge.core.CoreBridgeApplication"
+  }
+}

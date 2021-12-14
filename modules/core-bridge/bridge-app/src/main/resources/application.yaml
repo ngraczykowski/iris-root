@@ -1,0 +1,63 @@
+silenteight:
+  bridge:
+    address: ${BRIDGE_ADDRESS:http://localhost:24805}
+
+    ### GRPC PROPERTIES
+    grpc:
+      port: 24806
+
+    ### HTTP PROPERTIES
+    http:
+      port: 24805
+
+### GRPC
+grpc:
+  server:
+    port: ${silenteight.bridge.grpc.port}
+  client:
+    GLOBAL:
+      negotiation-type: PLAINTEXT
+
+### HTTP
+server:
+  port: ${silenteight.bridge.http.port}
+  http2:
+    enabled: true
+
+### SPRING
+spring:
+  application:
+    name: core-bridge
+
+  ### RABBITMQ
+  rabbitmq:
+    port: 5680
+    username: dev
+    password: dev
+
+  ### CONSUL
+  cloud:
+    consul:
+      config:
+        enabled: false
+      enabled: true
+      host: localhost
+      port: 8500
+      discovery:
+        enabled: true
+        register: false
+        register-health-check: false
+      service-registry:
+        auto-registration:
+          enabled: false
+
+  ### DATABASE
+  datasource:
+    password: core
+    username: core
+    url: jdbc:postgresql://localhost:24882/core_bridge
+
+### LOGGING
+logging:
+  level:
+    liquibase: INFO
