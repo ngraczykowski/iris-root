@@ -1,5 +1,6 @@
-package com.silenteight.payments.bridge.app.batch;
+package com.silenteight.payments.bridge.app.learning;
 
+import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningAlertsUseCase;
 import com.silenteight.payments.bridge.svb.newlearning.domain.ObjectPath;
 import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
 
@@ -20,7 +21,7 @@ class TriggerCsvProcessingServiceTest {
   @Mock
   private CsvFileResourceProvider csvFileResourceProvider;
   @Mock
-  private JobMaintainer jobMaintainer;
+  private HandleLearningAlertsUseCase handleLearningAlertsUseCase;
   private LearningFileRepository learningFileRepository = new InMemoryLearningFileRepository();
   private LearningCsvFileTrigger triggerCsvLearning;
 
@@ -28,7 +29,8 @@ class TriggerCsvProcessingServiceTest {
   @BeforeEach
   void setUp() {
     triggerCsvLearning =
-        new LearningCsvFileTrigger(jobMaintainer, csvFileResourceProvider, learningFileRepository);
+        new LearningCsvFileTrigger(
+            handleLearningAlertsUseCase, csvFileResourceProvider, learningFileRepository);
     var object = ObjectPath.builder().name("analystdecison-2-hits.csv").bucket("bucket").build();
 
     when(csvFileResourceProvider.getFilesList()).thenReturn(List.of(object));

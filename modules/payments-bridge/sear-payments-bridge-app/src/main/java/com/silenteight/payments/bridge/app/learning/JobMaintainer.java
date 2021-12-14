@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.app.batch;
+package com.silenteight.payments.bridge.app.learning;
 
 import org.springframework.batch.core.JobParameters;
 

@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.app.batch;
+package com.silenteight.payments.bridge.app.learning;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

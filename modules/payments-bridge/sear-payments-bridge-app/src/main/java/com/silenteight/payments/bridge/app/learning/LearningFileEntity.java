@@ -1,7 +1,8 @@
-package com.silenteight.payments.bridge.app.batch;
+package com.silenteight.payments.bridge.app.learning;
 
 import lombok.*;
 
+import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 
 import org.springframework.batch.core.JobParameters;
@@ -42,5 +43,9 @@ class LearningFileEntity extends BaseEntity {
         .addString(FILE_NAME_PARAMETER, this.fileName)
         .addString(BUCKET_NAME_PARAMETER, this.bucketName)
         .toJobParameters();
+  }
+
+  LearningRequest toLearningRequest() {
+    return LearningRequest.builder().bucket(bucketName).object(fileName).build();
   }
 }

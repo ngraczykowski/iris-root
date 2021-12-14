@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.app.batch;
+package com.silenteight.payments.bridge.app.learning;
 
 import com.silenteight.payments.bridge.svb.newlearning.domain.CsvProcessingFileStatus;
 import com.silenteight.payments.bridge.svb.newlearning.domain.LearningFile;
