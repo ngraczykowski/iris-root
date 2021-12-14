@@ -11,7 +11,10 @@ import io.micrometer.core.instrument.binder.MeterBinder;
 @RequiredArgsConstructor
 class LearningMetricsMeter implements MeterBinder {
 
-  private static final String METRIC_NAME = "solving_and_learning_alerts";
+  static final String TYPE_SOLVING = "solving";
+  static final String TYPE_LEARNING = "learning-for-solving";
+  private static final String SOLVING_LEARNING_COUNTER = "solving_and_learning_alerts";
+
   private static final String TAG_TYPE = "type";
 
   private MeterRegistry meterRegistry;
@@ -19,9 +22,14 @@ class LearningMetricsMeter implements MeterBinder {
   @Override
   public void bindTo(MeterRegistry registry) {
     this.meterRegistry = registry;
+    fetchCounter(TYPE_SOLVING);
+    fetchCounter(TYPE_LEARNING);
   }
 
   Counter fetchCounter(String type) {
-    return Counter.builder(METRIC_NAME).tag(TAG_TYPE, type).register(this.meterRegistry);
+    return Counter
+        .builder(SOLVING_LEARNING_COUNTER)
+        .tag(TAG_TYPE, type)
+        .register(this.meterRegistry);
   }
 }

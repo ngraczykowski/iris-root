@@ -3,17 +3,19 @@ package com.silenteight.payments.bridge.app.metrics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.svb.learning.metrics.LearningMetricsIncrementerPort;
+import com.silenteight.payments.bridge.svb.learning.metrics.LearningForSolvingMetricsIncrementerPort;
 
 import org.springframework.stereotype.Service;
+
+import static com.silenteight.payments.bridge.app.metrics.LearningMetricsMeter.TYPE_LEARNING;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class LearningMetricsIncrementer implements LearningMetricsIncrementerPort {
+public class LearningForSolvingMetricsIncrementer implements
+    LearningForSolvingMetricsIncrementerPort {
 
   private final LearningMetricsMeter learningMetricsMeter;
-  private static final String TYPE_LEARNING = "learning";
 
   @Override
   public void increment(double value) {

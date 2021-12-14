@@ -7,6 +7,8 @@ import com.silenteight.payments.bridge.firco.metrics.learning.SolvingMetricsIncr
 
 import org.springframework.stereotype.Service;
 
+import static com.silenteight.payments.bridge.app.metrics.LearningMetricsMeter.TYPE_SOLVING;
+
 
 @Service
 @Slf4j
@@ -14,7 +16,7 @@ import org.springframework.stereotype.Service;
 class SolvingMetricsIncrementer implements SolvingMetricsIncrementerPort {
 
   private final LearningMetricsMeter learningMetricsMeter;
-  private static final String TYPE_SOLVING = "solving";
+
 
   @Override
   public void increment(double value) {
