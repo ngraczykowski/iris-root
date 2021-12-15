@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.annotation.Nonnull;
 
+import static com.silenteight.payments.bridge.common.app.AlertLabelUtils.ALERT_LABEL_SOLVING;
+import static com.silenteight.payments.bridge.common.app.AlertLabelUtils.ALERT_LABEL_SOLVING_CMAPI;
 import static com.silenteight.payments.bridge.common.protobuf.TimestampConverter.fromOffsetDateTime;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
@@ -33,8 +35,6 @@ import static java.util.stream.Collectors.toMap;
 @RequiredArgsConstructor
 @Slf4j
 class RegisterAlertService implements RegisterAlertUseCase {
-
-  private static final String SOURCE_LABEL_FOR_CMAPI_ALERTS = "solving";
 
   private final AlertClientPort alertClient;
   private final RegisteredAlertDataAccessPort registeredAlertDataAccessPort;
@@ -65,7 +65,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
     return registerAlertResponse;
   }
 
-  private RegisterAlertRequest createRequest(AlertData alertData, AlertMessageDto alertDto) {
+  private static RegisterAlertRequest createRequest(AlertData alertData, AlertMessageDto alertDto) {
 
     var matchIds = getMatchIds(alertDto);
     return RegisterAlertRequest.builder()
@@ -73,9 +73,13 @@ class RegisterAlertService implements RegisterAlertUseCase {
         .alertTime(fromOffsetDateTime(alertDto.getFilteredAt(ZoneOffset.UTC)))
         .priority(alertData.getPriority())
         .matchIds(matchIds)
-        .label(Label.of("source", SOURCE_LABEL_FOR_CMAPI_ALERTS))
+        .label(getAlertLabelSolvingCmapi())
         .label(Label.of("alertMessageId", alertData.getAlertId().toString()))
         .build();
+  }
+
+  private static Label getAlertLabelSolvingCmapi() {
+    return Label.of(ALERT_LABEL_SOLVING, ALERT_LABEL_SOLVING_CMAPI);
   }
 
   @Nonnull
@@ -95,7 +99,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
   }
 
 
-  private RegisterAlertResponse createRegisterAlertResponse(
+  private static RegisterAlertResponse createRegisterAlertResponse(
       String alertId, String alertName, List<Match> matches) {
     return RegisterAlertResponse
         .builder()
@@ -169,7 +173,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
     return found;
   }
 
-  private List<BatchCreateAlertMatchesRequest> createAlertMatchesRequests(
+  private static List<BatchCreateAlertMatchesRequest> createAlertMatchesRequests(
       List<RegisterAlertRequest> registerAlertRequests,
       BatchCreateAlertsResponse batchCreateAlertsResponse) {
     var alertRequestsMap = registerAlertRequests.stream()

@@ -13,6 +13,8 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlert
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import static com.silenteight.payments.bridge.common.app.AlertLabelUtils.ALERT_LABEL_LEARNING;
+import static com.silenteight.payments.bridge.common.app.AlertLabelUtils.ALERT_LABEL_LEARNING_CSV;
 import static com.silenteight.payments.bridge.common.protobuf.TimestampConverter.fromOffsetDateTime;
 import static java.util.stream.Collectors.toList;
 
@@ -21,7 +23,6 @@ import static java.util.stream.Collectors.toList;
 public class LearningAlert {
 
   private static final int LEARNING_PRIORITY = 3;
-  private static final String SOURCE_LABEL_FOR_ALERTS_FROM_FILES = "learning";
 
   String alertId;
 
@@ -64,21 +65,26 @@ public class LearningAlert {
         .matchIds(matches.stream().map(LearningMatch::getMatchId).collect(toList()))
         .label(Label.of("learningBatch", batchStamp))
         .label(Label.of("fileName", fileName))
-        .label(Label.of("source", SOURCE_LABEL_FOR_ALERTS_FROM_FILES))
+        .label(getAlertLabelLearningCsv())
         .build();
   }
 
   public void setAlertMatchNames(RegisterAlertResponse response) {
     setAlertName(response.getAlertName());
 
-    response.getMatchResponses().forEach(m -> {
-      var match = matches.stream().filter(ma -> ma.getMatchId().equals(m.getMatchId())).findFirst();
+    var matchResponses = response.getMatchResponses();
 
-      if (match.isEmpty())
-        return;
+    for (var matchResponse : matchResponses) {
 
-      match.get().setMatchName(m.getMatchName());
-    });
+      matches.stream()
+          .filter(match -> match.getMatchId().equals(matchResponse.getMatchId()))
+          .findFirst()
+          .ifPresent(match -> match.setMatchName(matchResponse.getMatchName()));
+    }
+  }
+
+  public static Label getAlertLabelLearningCsv() {
+    return Label.of(ALERT_LABEL_LEARNING, ALERT_LABEL_LEARNING_CSV);
   }
 
 }

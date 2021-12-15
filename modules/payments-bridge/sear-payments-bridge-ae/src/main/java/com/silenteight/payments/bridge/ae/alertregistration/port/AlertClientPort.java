@@ -11,4 +11,6 @@ public interface AlertClientPort {
   BatchCreateMatchesResponse batchCreateMatches(BatchCreateMatchesRequest request);
 
   BatchCreateAlertMatchesResponse createMatches(BatchCreateAlertMatchesRequest request);
+
+  BatchAddLabelsResponse batchAddLabels(BatchAddLabelsRequest request);
 }

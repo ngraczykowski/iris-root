@@ -42,6 +42,11 @@ class AlertClient implements AlertClientPort {
     return new CreateMatchesTemplate().execute(request);
   }
 
+  @Override
+  public BatchAddLabelsResponse batchAddLabels(BatchAddLabelsRequest request) {
+    return new AddLabelsTemplate().execute(request);
+  }
+
   private static class AlertClientException extends RuntimeException {
 
     private static final long serialVersionUID = 2056703374022172581L;
@@ -130,6 +135,21 @@ class AlertClient implements AlertClientPort {
     BatchCreateAlertMatchesResponse invoke(
         BatchCreateAlertMatchesRequest request, Deadline deadline) {
       return stub.withDeadline(deadline).batchCreateAlertMatches(request);
+    }
+  }
+
+  private class AddLabelsTemplate
+      extends RequestTemplate<BatchAddLabelsRequest, BatchAddLabelsResponse> {
+
+    @Override
+    String operationType() {
+      return "batch add labels";
+    }
+
+    @Override
+    BatchAddLabelsResponse invoke(
+        BatchAddLabelsRequest request, Deadline deadline) {
+      return stub.withDeadline(deadline).batchAddLabels(request);
     }
   }
 

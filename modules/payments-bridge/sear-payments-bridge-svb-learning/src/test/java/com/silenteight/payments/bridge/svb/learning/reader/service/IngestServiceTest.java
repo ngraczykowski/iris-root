@@ -1,5 +1,6 @@
 package com.silenteight.payments.bridge.svb.learning.reader.service;
 
+import com.silenteight.payments.bridge.ae.alertregistration.port.AddAlertLabelUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.svb.learning.metrics.LearningForSolvingMetricsIncrementerPort;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.RegisteredAlert;
@@ -25,6 +26,8 @@ class IngestServiceTest {
   @Mock
   private RegisterAlertUseCase registerAlertUseCase;
   @Mock
+  private AddAlertLabelUseCase addAlertLabelUseCase;
+  @Mock
   private DataSourceIngestService dataSourceIngestService;
   @Mock
   private FindRegisteredAlertPort findRegisteredAlertPort;
@@ -42,9 +45,10 @@ class IngestServiceTest {
   @BeforeEach
   void setUp() {
     ingestService =
-        new IngestService(registerAlertUseCase, dataSourceIngestService, findRegisteredAlertPort,
-            createAlertRetentionPort, decisionMapper, indexLearningAlertPort,
-            learningMetricsIncrementerPort);
+        new IngestService(registerAlertUseCase, addAlertLabelUseCase,
+            dataSourceIngestService, findRegisteredAlertPort,
+            createAlertRetentionPort, decisionMapper,
+            indexLearningAlertPort, learningMetricsIncrementerPort);
   }
 
   @Test
