@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.app.metrics;
+package com.silenteight.payments.bridge.app.metrics.learning;
 
 import lombok.RequiredArgsConstructor;
 

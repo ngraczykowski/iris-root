@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.app.metrics;
+package com.silenteight.payments.bridge.app.metrics.learning;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +7,7 @@ import com.silenteight.payments.bridge.firco.metrics.learning.SolvingMetricsIncr
 
 import org.springframework.stereotype.Service;
 
-import static com.silenteight.payments.bridge.app.metrics.LearningMetricsMeter.TYPE_SOLVING;
+import static com.silenteight.payments.bridge.app.metrics.learning.LearningMetricsMeter.TYPE_SOLVING;
 
 
 @Service
