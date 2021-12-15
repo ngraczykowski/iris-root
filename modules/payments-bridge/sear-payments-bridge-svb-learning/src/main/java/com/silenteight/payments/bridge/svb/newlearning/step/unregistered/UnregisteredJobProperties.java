@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "pb.svb-learning.unregistered")
 class UnregisteredJobProperties {
 
-  private int chunkSize = 10;
+  private int chunkSize = 1;
   private long retryPeriodMilliseconds = 30 * 1000;
   private int retryLimit = 5;
 }

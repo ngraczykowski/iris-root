@@ -29,7 +29,7 @@ class ProcessUnregisteredAlertsJobTest extends BaseBatchTest {
 
   @Test
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
-  public void testTransformingAlert() {
+  public void testProcessingUnregistered() {
     var transformAlertStep = createStepExecution(UNREGISTERED_STEP_NAME).get();
     assertThat(transformAlertStep.getReadCount()).isEqualTo(2);
   }
