@@ -23,3 +23,8 @@ VALUES (10, 1, 'fmm')
      , (30, 1, 'fmm');
 
 
+-- Insert non duplicated hits
+INSERT INTO pb_learning_hit(learning_hit_id, fkco_messages, fkco_v_matched_tag, fkco_i_sequence)
+VALUES (40, 2, 'tag', 'sequence1')
+     , (50, 2, 'tag', 'sequence2')
+     , (60, 2, 'tag', 'sequence3');

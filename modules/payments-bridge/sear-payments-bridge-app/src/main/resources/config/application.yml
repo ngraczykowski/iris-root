@@ -40,6 +40,11 @@ pb:
   # SVB Learning
   #-------------------------------------------------------------------------------------------------
   svb-learning:
+    aws:
+      file-list:
+        bucket-name: sierra-dev-decrypted-files
+    store:
+      skip-deletion: true
     etl:
       alert:
         time-zone: America/Los_Angeles
