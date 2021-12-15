@@ -11,5 +11,14 @@
       <column name="value"/>
     </createIndex>
   </changeSet>
+
+  <changeSet id="adjudication-engine-alerts-1.12.0_2" author="jgajewski">
+    <sqlFile
+        path="sql/update_ae_alert_labels_source_CMAPI_to_solving.sql"
+        relativeToChangelogFile="true"/>
+    <sqlFile
+        path="sql/update_ae_alert_labels_source_CSV_to_learning.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
 </databaseChangeLog>
 
