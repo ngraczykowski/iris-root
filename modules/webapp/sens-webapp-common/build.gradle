@@ -13,6 +13,8 @@ dependencies {
 
   // General dependencies
   implementation libraries.silenteight_commons_core
+  implementation libraries.silenteight_rabbit_mq_common_schema
+
   implementation libraries.vavr
   implementation libraries.spring_boot_actuator
   implementation libraries.spring_cloud_starter_sleuth

@@ -151,24 +151,11 @@ sens.webapp.external.apps:
   reportingUrl: ${sens.webapp.external.apps.reporting-ui.url}
 
 sens.webapp.messaging:
-  bulk-change:
-    exchange: bulk-change
-    route:
-      create: bulk-change.create
-      apply: bulk-change.apply
-      reject: bulk-change.reject
-  change-request:
-    exchange: change-request
-    route:
-      create: change-request.create
-      approve: change-request.approve
-      reject: change-request.reject
-      cancel: change-request.cancel
-    queue:
-      create: webapp.change-request.create
-      approve: webapp.change-request.approve
-      reject: webapp.change-request.reject
-      cancel: webapp.change-request.cancel
+  broker:
+    audit-log:
+      queue-name: webapp.audit-log
+      routing-key: event.audit-log
+
   circuit-breaker.discrepancy:
     exchange: discrepancy
     route:
@@ -310,6 +297,11 @@ sep.auth:
 
 # Notifications
 sens.webapp.notification.enabled: true
+
+# Audit log
+sens.webapp.audit-log:
+  inbound:
+    queue-name: ${sens.webapp.messaging.broker.audit-log.queue-name}
 
 # Keycloak
 keycloak:

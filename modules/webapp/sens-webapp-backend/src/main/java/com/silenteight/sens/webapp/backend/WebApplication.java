@@ -11,6 +11,7 @@ import com.silenteight.sens.webapp.backend.configuration.ConfigurationModule;
 import com.silenteight.sens.webapp.backend.external.apps.ExternalAppsModule;
 import com.silenteight.sens.webapp.backend.report.domain.ReportDomainModule;
 import com.silenteight.sens.webapp.backend.user.rest.UserRestModule;
+import com.silenteight.sens.webapp.common.integration.AmqpCommonModule;
 import com.silenteight.sens.webapp.grpc.GrpcModule;
 import com.silenteight.sens.webapp.notification.NotificationModule;
 import com.silenteight.sens.webapp.report.ReportModule;
@@ -31,6 +32,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @SpringBootApplication(
     scanBasePackageClasses = {
         ApplicationLoggingModule.class,
+        AmqpCommonModule.class,
         AuditModule.class,
         AuthenticationModule.class,
         AuthorizationModule.class,
