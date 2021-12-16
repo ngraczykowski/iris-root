@@ -8,17 +8,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-import static com.silenteight.agent.common.io.FileFormatConstants.DEFAULT_DICT_FORMAT_FILTERS;
-import static com.silenteight.agent.common.io.FileFormatConstants.DEFAULT_DICT_FORMAT_TRANSFORMERS;
-import static com.silenteight.agent.common.io.FileFormatConstants.VALUES_SEPARATOR;
+import static com.silenteight.agent.common.io.Common.*;
+import static com.silenteight.agent.common.io.FileFormatConstants.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 
 @SuppressWarnings("unused") //used in agents as helper
 @UtilityClass
@@ -39,6 +39,22 @@ public class ResourcesReader {
         .collect(toSet());
   }
 
+  /**
+   * <pre>
+   *   Load resource files from stream
+   *
+   *   Expected dict format: "key1=value1;value2"
+   *
+   *   Returns unique key and unique values, all UPPER CASE,
+   *   ignores # comments or empty lines
+   * </pre>
+   */
+
+  public static Map<String, Set<String>> readSingleKeyMultipleValues(@NonNull InputStream is) {
+    return readLinesAsStream(is, DEFAULT_DICT_FORMAT_FILTERS, DEFAULT_DICT_FORMAT_TRANSFORMERS)
+        .map(line -> line.split(KEY_VALUE_SEPARATOR))
+        .collect(toMap(extractSingleKey(), extractMultipleValues()));
+  }
 
   /**
    * <pre>

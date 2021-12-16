@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -20,8 +21,9 @@ class ResourcesReaderTest {
         requireNonNull(
             ResourcesReaderTest.class.getResourceAsStream("/resourcereader/single_values.txt")));
 
-    assertThat(lines).hasSize(3);
-    assertThat(lines).containsExactlyInAnyOrder("ALA", "MA", "KOTA");
+    assertThat(lines)
+        .hasSize(3)
+        .containsExactlyInAnyOrder("ALA", "MA", "KOTA");
   }
 
   @Test
@@ -30,11 +32,23 @@ class ResourcesReaderTest {
         requireNonNull(
             ResourcesReaderTest.class.getResourceAsStream("/resourcereader/multiple_values.txt")));
 
-    assertThat(lines).hasSize(3);
-    assertThat(lines).containsExactlyInAnyOrder(
-        Set.of("ALA", "OLA"),
-        Set.of("MA"),
-        Set.of("KOTA", "PSA", "KROWY"));
+    assertThat(lines)
+        .hasSize(3)
+        .containsExactlyInAnyOrder(
+            Set.of("ALA", "OLA"),
+            Set.of("MA"),
+            Set.of("KOTA", "PSA", "KROWY"));
+  }
+
+  @Test
+  void shouldReadSingleKeyMultipleValues() {
+    var lines = ResourcesReader.readSingleKeyMultipleValues(
+        requireNonNull(
+            ResourcesReaderTest.class.getResourceAsStream(
+                "/resourcereader/single_key_multiple_values.txt")));
+
+    assertThat(lines).containsExactlyEntriesOf(
+        Map.of("ALA", Set.of("MA", "KOTA")));
   }
 
   @Test
