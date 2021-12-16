@@ -77,7 +77,7 @@ def _get_rights_candidate(
     if (
         all(_range_met(idx, tokens_num) for idx in indexes)
         and tokens[indexes[1]] in PREPOSITIONS  # to find only names like: "Bank of Scotland"
-        and not is_dependent_token(tokens[indexes[2]])
+        and not is_dependent_token(tokens[indexes[2]])  # to avoid matches like "Bank of and"
     ):
         candidate = " ".join((tokens[index] for index in indexes))
         return parse_name(candidate)

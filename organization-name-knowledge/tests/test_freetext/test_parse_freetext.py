@@ -7,6 +7,10 @@ from organization_name_knowledge.freetext.parse import parse_freetext_names
     "freetext, expected_names",
     [
         (
+            "Information about the XYZ Company Limited",
+            [{"base": "XYZ", "legal": "Company Limited", "source": "the XYZ Company Limited"}],
+        ),
+        (
             "The Hewlett and Packard Company",
             [
                 {
@@ -93,6 +97,13 @@ def test_parse_freetext_1_name(freetext, expected_names):
                 {"base": "Walt Disney", "legal": "Company", "source": "walt disney company"},
             ],
         ),
+        (
+            "Whatsapp Company was bought by The Facebook Inc",
+            [
+                {"base": "Facebook", "legal": "Inc", "source": "The Facebook Inc"},
+                {"base": "Whatsapp", "legal": "Company", "source": "Whatsapp Company"},
+            ],
+        ),
     ],
 )
 def test_parse_freetext_2_names(freetext, expected_names):
@@ -121,6 +132,10 @@ def test_parse_freetext_2_names(freetext, expected_names):
             ],
         ),
         (
+            "XYZ 9999999 88888 Company Limited is here",
+            [{"base": "XYZ", "legal": "Company Limited", "source": "XYZ Company Limited"}],
+        ),
+        (
             "ABC\nDEF Company",
             [
                 {"base": "ABC DEF", "legal": "Company", "source": "ABC DEF Company"},
@@ -131,6 +146,12 @@ def test_parse_freetext_2_names(freetext, expected_names):
             "ABC\nCompany",
             [
                 {"base": "ABC", "legal": "Company", "source": "ABC Company"},
+            ],
+        ),
+        (
+            "\rWXYZ Limited",
+            [
+                {"base": "WXYZ", "legal": "Limited", "source": "WXYZ Limited"},
             ],
         ),
     ],
