@@ -31,6 +31,7 @@ class RbsReport extends BaseEntity implements IdentifiableEntity {
   private static final long serialVersionUID = -4592869339522050083L;
   private static final String PRODUCTION_ANALYSIS_NAME = "production";
   private static final String REPORT_TYPE = "RB_SCORER";
+  private static final String REPORT_TITLE = "RB Scorer";
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
@@ -97,6 +98,7 @@ class RbsReport extends BaseEntity implements IdentifiableEntity {
         .builder()
         .name(getReportName(analysisId))
         .type(REPORT_TYPE)
+        .title(REPORT_TITLE)
         .build();
   }
 

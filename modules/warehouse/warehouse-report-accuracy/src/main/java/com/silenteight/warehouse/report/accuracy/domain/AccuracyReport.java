@@ -30,6 +30,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 class AccuracyReport extends BaseEntity implements IdentifiableEntity {
 
   private static final String REPORT_TYPE = "ACCURACY";
+  private static final String REPORT_TITLE = "Accuracy";
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
@@ -98,6 +99,7 @@ class AccuracyReport extends BaseEntity implements IdentifiableEntity {
         .builder()
         .name(getReportName(analysisId))
         .type(REPORT_TYPE)
+        .title(REPORT_TITLE)
         .build();
   }
 

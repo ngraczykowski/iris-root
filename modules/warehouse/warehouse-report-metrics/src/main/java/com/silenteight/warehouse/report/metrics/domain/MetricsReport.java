@@ -31,6 +31,7 @@ class MetricsReport extends BaseEntity implements IdentifiableEntity {
   private static final long serialVersionUID = -3729478842682162958L;
   private static final String PRODUCTION_ANALYSIS_NAME = "production";
   private static final String REPORT_TYPE = "METRICS";
+  private static final String REPORT_TITLE = "Simulation Metrics";
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
@@ -97,6 +98,7 @@ class MetricsReport extends BaseEntity implements IdentifiableEntity {
         .builder()
         .name(getReportName(analysisId))
         .type(REPORT_TYPE)
+        .title(REPORT_TITLE)
         .build();
   }
 

@@ -38,9 +38,11 @@ paths:
                   $ref: '#/components/schemas/Report'
               example:
                 - name: '/analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/reports/ACCURACY'
-                  reportType: 'ACCURACY'
+                  type: 'ACCURACY'
+                  title: 'Accuracy'
                 - name: '/analysis/a9b45451-6fde-4832-8dc0-d17b4708d8ca/reports/METRICS'
-                  reportType: 'METRICS'
+                  type: 'METRICS'
+                  title: 'Simulation Metrics'
 
   /analysis/{analysisId}/reports/{type}:
     post:
