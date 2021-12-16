@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageStatusUseCase;
 import com.silenteight.payments.bridge.firco.alertmessage.port.FilterAlertMessageUseCase;
+import com.silenteight.payments.bridge.firco.events.ManualInvestigationReasonEvent;
 import com.silenteight.payments.bridge.firco.recommendation.model.AdjudicationEngineSourcedRecommendation;
 import com.silenteight.payments.bridge.firco.recommendation.model.BridgeSourcedRecommendation;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
@@ -50,6 +51,7 @@ class CreateRecommendationService implements CreateRecommendationUseCase {
     var reason = RecommendationReason.valueOf(source.getReason());
     var recommendationId = recommendationService
         .createBridgeRecommendation(alertId, reason);
+    applicationEventPublisher.publishEvent(new ManualInvestigationReasonEvent(reason.name()));
 
     var status = map(reason);
     if (alertMessageUseCase.isOutdated(source)) {

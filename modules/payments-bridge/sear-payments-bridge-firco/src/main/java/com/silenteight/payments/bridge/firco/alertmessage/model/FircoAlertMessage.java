@@ -5,7 +5,9 @@ import lombok.*;
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 
 import java.time.OffsetDateTime;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -27,5 +29,15 @@ public class FircoAlertMessage {
 
   @ToString.Exclude
   private String userPassword;
+
+  public Map<String, Long> countHitTagsByType() {
+    return this
+        .getAlertMessage()
+        .getHits()
+        .stream()
+        .collect(Collectors.groupingBy(
+            dto -> dto.getHit().getTag(),
+            Collectors.counting()));
+  }
 
 }
