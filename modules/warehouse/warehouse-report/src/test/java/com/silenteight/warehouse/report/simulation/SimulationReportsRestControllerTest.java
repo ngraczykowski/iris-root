@@ -20,6 +20,7 @@ import static com.silenteight.warehouse.report.simulation.SimulationReportsRestC
 import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.DEFINITIONS_COLLECTION_URL;
 import static com.silenteight.warehouse.report.simulation.SimulationTestConstants.REPORT_DEFINITION_DTO;
 import static com.silenteight.warehouse.report.simulation.SimulationTestConstants.REPORT_NAME;
+import static com.silenteight.warehouse.report.simulation.SimulationTestConstants.REPORT_TITLE;
 import static com.silenteight.warehouse.report.simulation.SimulationTestConstants.REPORT_TYPE;
 import static java.util.Map.of;
 import static org.hamcrest.CoreMatchers.is;
@@ -52,7 +53,8 @@ class SimulationReportsRestControllerTest extends BaseRestControllerTest {
 
     get(TEST_LIST_REPORT_DEFINITIONS_URL).statusCode(OK.value())
         .body("[0].name", is(REPORT_NAME))
-        .body("[0].type", is(REPORT_TYPE));
+        .body("[0].type", is(REPORT_TYPE))
+        .body("[0].title", is(REPORT_TITLE));
   }
 
   @Test

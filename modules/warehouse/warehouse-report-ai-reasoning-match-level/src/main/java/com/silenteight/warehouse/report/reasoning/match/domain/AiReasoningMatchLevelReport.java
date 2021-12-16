@@ -30,6 +30,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 class AiReasoningMatchLevelReport extends BaseEntity implements IdentifiableEntity {
 
   private static final String REPORT_TYPE = "AI_REASONING_MATCH_LEVEL";
+  private static final String REPORT_TITLE = "AI Reasoning Match Level";
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
@@ -98,6 +99,7 @@ class AiReasoningMatchLevelReport extends BaseEntity implements IdentifiableEnti
         .builder()
         .name(getReportName(analysisId))
         .type(REPORT_TYPE)
+        .title(REPORT_TITLE)
         .build();
   }
 
