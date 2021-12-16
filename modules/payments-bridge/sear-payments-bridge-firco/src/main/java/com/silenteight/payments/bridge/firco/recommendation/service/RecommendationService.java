@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
+import com.silenteight.payments.bridge.firco.metrics.alert.AlertResolutionEndEvent;
 import com.silenteight.payments.bridge.firco.metrics.efficiency.EfficiencyMetricIncrementerPort;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationId;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
@@ -14,11 +15,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.AlternativeJdkIdGenerator;
 import org.springframework.util.IdGenerator;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,6 +36,7 @@ class RecommendationService {
   private final RecommendationMetadataRepository recommendationMetadataRepository;
   private final ObjectMapper objectMapper;
   private final EfficiencyMetricIncrementerPort efficiencyMetricIncrementer;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   @Transactional
   RecommendationId createAdjudicationRecommendation(UUID alertId,
@@ -40,6 +44,8 @@ class RecommendationService {
     var id = DEFAULT_ID_GENERATOR.generateId();
     var entity = new RecommendationEntity(id, alertId, recommendation);
 
+    applicationEventPublisher.publishEvent(
+        new AlertResolutionEndEvent(alertId, Instant.from(entity.getGeneratedAt()).toEpochMilli()));
     efficiencyMetricIncrementer.incrementRecommendedAction(entity.getAction());
     recommendationRepository.save(entity);
     createMetadata(id, recommendation.getMetadata())
@@ -52,6 +58,9 @@ class RecommendationService {
     var id = DEFAULT_ID_GENERATOR.generateId();
     var entity = new RecommendationEntity(id, alertId, reason);
 
+    applicationEventPublisher.publishEvent(new AlertResolutionEndEvent(
+        alertId,
+        Instant.from(entity.getGeneratedAt()).toEpochMilli()));
     efficiencyMetricIncrementer.incrementManualInvestigation();
     recommendationRepository.save(entity);
     return new RecommendationId(id);
