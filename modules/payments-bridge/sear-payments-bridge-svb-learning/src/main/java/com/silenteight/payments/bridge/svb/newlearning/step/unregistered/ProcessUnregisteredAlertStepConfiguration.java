@@ -29,6 +29,7 @@ class ProcessUnregisteredAlertStepConfiguration {
 
   private final StepBuilderFactory stepBuilderFactory;
   private final UnregisteredJobProperties properties;
+  private final AlertCompositeFetcher alertCompositeFetcher;
 
   @Bean
   @StepScope
@@ -37,7 +38,7 @@ class ProcessUnregisteredAlertStepConfiguration {
     cursorReader.setSql(QUERY);
     cursorReader.setRowMapper((rs, rowNum) -> rs.getLong(1));
     cursorReader.setDataSource(dataSource);
-    return new AlertCompositeReader(cursorReader, properties.getChunkSize());
+    return new AlertCompositeReader(alertCompositeFetcher, cursorReader, properties.getChunkSize());
   }
 
   @Bean

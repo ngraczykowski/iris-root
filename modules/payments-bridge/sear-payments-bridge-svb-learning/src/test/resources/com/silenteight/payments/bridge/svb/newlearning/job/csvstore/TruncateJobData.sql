@@ -20,5 +20,7 @@ FROM pb_learning_csv_row;
 DELETE
 FROM pb_learning_alert;
 DELETE
+FROM pb_learning_hit;
+DELETE
 FROM pb_learning_file;
 

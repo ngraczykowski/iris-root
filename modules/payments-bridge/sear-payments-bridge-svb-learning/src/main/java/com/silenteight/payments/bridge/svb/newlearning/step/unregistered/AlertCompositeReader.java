@@ -14,19 +14,22 @@ import org.springframework.dao.QueryTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
 @Slf4j
 class AlertCompositeReader extends AbstractItemStreamItemReader<AlertComposite> implements
     InitializingBean {
 
+  private final AlertCompositeFetcher alertCompositeFetcher;
   private final BetterJdbcCursorItemReader<Long> alertIdsReader;
   private final int pageSize;
 
   private int currentAlertIndex = 0;
   private List<AlertComposite> alertComposites;
 
-  AlertCompositeReader(BetterJdbcCursorItemReader<Long> alertIdsReader, int pageSize) {
+  AlertCompositeReader(
+      AlertCompositeFetcher alertCompositeFetcher,
+      BetterJdbcCursorItemReader<Long> alertIdsReader,
+      int pageSize) {
+    this.alertCompositeFetcher = alertCompositeFetcher;
     this.alertIdsReader = alertIdsReader;
     this.pageSize = pageSize;
 
@@ -46,18 +49,19 @@ class AlertCompositeReader extends AbstractItemStreamItemReader<AlertComposite> 
   }
 
   private List<AlertComposite> readAlertComposites() throws Exception {
-    var ids = fetchAlertIds();
+    var ids = fetchFkcoIds();
 
     log.info("Fetched alert Ids: count = {}", ids.size());
 
+    if (ids.isEmpty()) {
+      return List.of();
+    }
+
     currentAlertIndex = 0;
-    return ids
-        .stream()
-        .map(id -> AlertComposite.builder().alertId(id).build())
-        .collect(toList()); // Temporary solution before introducing composite fetcher.
+    return alertCompositeFetcher.fetch(ids);
   }
 
-  private List<Long> fetchAlertIds() throws Exception {
+  private List<Long> fetchFkcoIds() throws Exception {
     log.trace("Fetching alert ids");
 
     List<Long> ids = new ArrayList<>(pageSize);
