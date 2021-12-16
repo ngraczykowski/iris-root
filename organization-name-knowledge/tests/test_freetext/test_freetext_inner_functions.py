@@ -18,7 +18,8 @@ from organization_name_knowledge.names.parse import parse_name
     [
         ("alpha beta gamma delta sigma", (1, 2), "beta gamma"),
         ("alpha beta gamma delta sigma", (1, 2, 3), "beta gamma delta"),
-        ("alpha beta gamma delta sigma", (4, 5), None),
+        ("alpha beta gamma delta sigma", (4, 5), None),  # out of range
+        ("Text about ABC Company", (0, 1, 2), None),  # dependent token in name
     ],
 )
 def test_get_lefts_candidate(text, indexes, expected_candidate):
@@ -51,6 +52,13 @@ def test_get_lefts_candidate(text, indexes, expected_candidate):
             [
                 {"base": "General Motors", "source": "General Motors Group"},
                 {"base": "Motors", "source": "Motors Group"},
+            ],
+        ),
+        (
+            "Facebook has changed its name to Meta Group",
+            [
+                {"base": "to Meta", "source": "to Meta Group"},
+                {"base": "Meta", "source": "Meta Group"},
             ],
         ),
     ],
@@ -109,9 +117,9 @@ def test_get_names_with_unique_bases(names, expected_names):
 @pytest.mark.parametrize(
     "text, indexes, expected_candidate",
     [
-        ("alpha beta gamma delta sigma", (0, 1, 2), None),
         ("alpha of beta gamma delta", (0, 1, 2), "alpha of beta"),
-        ("alpha of and beta", (0, 1, 2), None),
+        ("alpha beta gamma delta sigma", (0, 1, 2), None),  # without preposition at 2nd place
+        ("alpha of and beta", (0, 1, 2), None),  # prep on 2nd place, but endswith dependent token
     ],
 )
 def test_get_rights_candidate(text, indexes, expected_candidate):
