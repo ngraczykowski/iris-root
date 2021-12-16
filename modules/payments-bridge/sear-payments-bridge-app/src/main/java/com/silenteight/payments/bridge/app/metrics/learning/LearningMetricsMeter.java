@@ -3,17 +3,23 @@ package com.silenteight.payments.bridge.app.metrics.learning;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.common.event.AlertRegisteredEvent;
+import com.silenteight.payments.bridge.svb.learning.event.AlreadySolvedAlertEvent;
+
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.binder.MeterBinder;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 class LearningMetricsMeter implements MeterBinder {
 
-  static final String TYPE_SOLVING = "solving";
-  static final String TYPE_LEARNING = "learning-for-solving";
-  private static final String SOLVING_LEARNING_COUNTER = "solving_and_learning_alerts";
+  private static final String TYPE_SOLVING = "solving";
+  private static final String TYPE_LEARNING_ALREADY_SOLVED = "learning.already.solved";
+  private static final String SOLVING_LEARNING_COUNTER = "pb.solving.and.learning.alerts";
 
   private static final String TAG_TYPE = "type";
 
@@ -23,7 +29,7 @@ class LearningMetricsMeter implements MeterBinder {
   public void bindTo(MeterRegistry registry) {
     this.meterRegistry = registry;
     fetchCounter(TYPE_SOLVING);
-    fetchCounter(TYPE_LEARNING);
+    fetchCounter(TYPE_LEARNING_ALREADY_SOLVED);
   }
 
   Counter fetchCounter(String type) {
@@ -31,5 +37,19 @@ class LearningMetricsMeter implements MeterBinder {
         .builder(SOLVING_LEARNING_COUNTER)
         .tag(TAG_TYPE, type)
         .register(this.meterRegistry);
+  }
+
+  @EventListener
+  void onAlreadySolvedAlertEvent(AlreadySolvedAlertEvent event) {
+    log.debug("Increment metrics counter on already registered alerts by: {}", event.getCounter());
+    fetchCounter(TYPE_LEARNING_ALREADY_SOLVED).increment(event.getCounter());
+  }
+
+  @EventListener
+  void onSolvingEvent(AlertRegisteredEvent event) {
+    log.debug(
+        "Increment metrics counter solving value for alertId: {}",
+        event.getAeAlert().getAlertId());
+    fetchCounter(TYPE_SOLVING).increment();
   }
 }

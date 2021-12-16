@@ -2,7 +2,6 @@ package com.silenteight.payments.bridge.svb.learning.reader.service;
 
 import com.silenteight.payments.bridge.ae.alertregistration.port.AddAlertLabelUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
-import com.silenteight.payments.bridge.svb.learning.metrics.LearningForSolvingMetricsIncrementerPort;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.RegisteredAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CreateAlertRetentionPort;
 import com.silenteight.payments.bridge.svb.learning.reader.port.FindRegisteredAlertPort;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,9 +36,9 @@ class IngestServiceTest {
   @Mock
   private IndexLearningAlertPort indexLearningAlertPort;
   @Mock
-  private LearningForSolvingMetricsIncrementerPort learningMetricsIncrementerPort;
-  @Mock
   private DecisionMapper decisionMapper;
+  @Mock
+  private ApplicationEventPublisher eventPublisher;
 
   private IngestService ingestService;
 
@@ -48,7 +48,7 @@ class IngestServiceTest {
         new IngestService(registerAlertUseCase, addAlertLabelUseCase,
             dataSourceIngestService, findRegisteredAlertPort,
             createAlertRetentionPort, decisionMapper,
-            indexLearningAlertPort, learningMetricsIncrementerPort);
+            indexLearningAlertPort, eventPublisher);
   }
 
   @Test

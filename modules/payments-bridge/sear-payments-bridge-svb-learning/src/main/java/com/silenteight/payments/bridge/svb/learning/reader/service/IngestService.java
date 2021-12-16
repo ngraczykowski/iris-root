@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.ae.alertregistration.port.AddAlertLabelUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
-import com.silenteight.payments.bridge.svb.learning.metrics.LearningForSolvingMetricsIncrementerPort;
+import com.silenteight.payments.bridge.svb.learning.event.AlreadySolvedAlertEvent;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.ReadAlertError;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.RegisteredAlert;
@@ -12,6 +12,7 @@ import com.silenteight.payments.bridge.svb.learning.reader.port.CreateAlertReten
 import com.silenteight.payments.bridge.svb.learning.reader.port.FindRegisteredAlertPort;
 import com.silenteight.payments.bridge.svb.learning.reader.port.IndexLearningAlertPort;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,7 +35,7 @@ class IngestService {
   private final CreateAlertRetentionPort createAlertRetentionPort;
   private final DecisionMapper decisionMapper;
   private final IndexLearningAlertPort indexLearningAlertPort;
-  private final LearningForSolvingMetricsIncrementerPort learningForSolvingMetricsIncrementerPort;
+  private final ApplicationEventPublisher eventPublisher;
 
   void ingest(LearningAlertBatch batch) {
     var alerts = getLearningAlerts(batch);
@@ -46,7 +47,7 @@ class IngestService {
 
     // Only solving alerts are registered.
     var registeredAlertMap = buildRegisteredAlertMap(alerts);
-    learningForSolvingMetricsIncrementerPort.increment(registeredAlertMap.size());
+    eventPublisher.publishEvent(new AlreadySolvedAlertEvent(registeredAlertMap.size()));
 
     var unregisteredLearningAlerts = getUnregisteredAlerts(alerts, registeredAlertMap);
     processUnregistered(unregisteredLearningAlerts, batch.getErrors());
