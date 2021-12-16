@@ -8,6 +8,7 @@
   <include file="db/changelog/db.changelog-datatypes.xml"/>
   <include file="db/changelog/db.changelog-warehouse-1.0.0.xml"/>
   <include file="db/changelog/db.changelog-warehouse-1.9.0.xml"/>
+  <include file="db/changelog/db.changelog-warehouse-2.0.0.xml"/>
 
 </databaseChangeLog>
 

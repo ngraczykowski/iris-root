@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+  <changeSet id="warehouse-2.0.0-1" author="wfirlej">
+    <createTable tableName="warehouse_alert">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="discriminator" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(128)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="recommendation_date" type="TIMESTAMP">
+        <constraints nullable="true"/>
+      </column>
+      <column name="payload" type="jsonb">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="warehouse_alert"
+        indexName="ix_warehouse_alert_discriminator"
+        unique="true">
+      <column name="discriminator"/>
+    </createIndex>
+    <createIndex
+        tableName="warehouse_alert"
+        indexName="ix_warehouse_alert_alert_name"
+        unique="true">
+      <column name="name"/>
+    </createIndex>
+
+    <createTable tableName="warehouse_match">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="alert_id" type="BIGINT">
+        <constraints nullable="false" foreignKeyName="fk_alert_id"
+                     references="warehouse_alert(id)"/>
+      </column>
+      <column name="match_id" type="VARCHAR(128)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="name" type="VARCHAR(128)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="payload" type="jsonb">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addUniqueConstraint columnNames="alert_id, match_id"
+                         constraintName="uq_warehouse_match_alert_id_match_id"
+                         tableName="warehouse_match"
+                         validate="true"/>
+
+    <createTable tableName="warehouse_alert_label">
+      <column name="alert_id" type="BIGINT">
+        <constraints nullable="false" foreignKeyName="fk_alert_id"
+                     references="warehouse_alert(id)"/>
+      </column>
+      <column name="name" type="VARCHAR(128)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="value" type="VARCHAR(128)">
+        <constraints nullable="true"/>
+      </column>
+
+    </createTable>
+
+    <addUniqueConstraint columnNames="name, alert_id"
+                         constraintName="uq_warehouse_alert_label_alert_id_name"
+                         tableName="warehouse_alert_label"
+                         validate="true"/>
+  </changeSet>
+</databaseChangeLog>
