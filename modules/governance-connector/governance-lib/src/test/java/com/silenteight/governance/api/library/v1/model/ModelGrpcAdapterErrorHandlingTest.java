@@ -38,7 +38,8 @@ class ModelGrpcAdapterErrorHandlingTest {
         );
 
     //then
-    Assertions.assertEquals(ModelGrpcAdapter.COULD_NOT_GET_SOLVING_MODEL_ERROR_MSG, thrown.getMessage());
+    Assertions.assertEquals(
+        ModelGrpcAdapter.COULD_NOT_GET_SOLVING_MODEL_ERROR_MSG, thrown.getMessage());
   }
 
   @Test
@@ -74,7 +75,8 @@ class ModelGrpcAdapterErrorHandlingTest {
         );
 
     //then
-    Assertions.assertEquals(ModelGrpcAdapter.COULD_NOT_UPDATE_STATUS_ERROR_MSG, thrown.getMessage());
+    Assertions.assertEquals(
+        ModelGrpcAdapter.COULD_NOT_UPDATE_STATUS_ERROR_MSG, thrown.getMessage());
   }
 
   static class MockedErroneousSolvingModelServiceGrpcServer extends SolvingModelServiceImplBase {
