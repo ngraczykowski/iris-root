@@ -11,7 +11,6 @@ import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
-import com.google.protobuf.Any;
 import com.google.protobuf.Message;
 import io.grpc.Deadline;
 
@@ -19,6 +18,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.silenteight.payments.bridge.firco.datasource.util.HitDataUtils.filterHitsData;
 
@@ -50,44 +50,35 @@ abstract class BaseAgentEtlProcess<T extends Message> implements EtlProcess {
       String alertName, String matchName, HitData hitData) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 
-    var featureInput = getFeatureInput(hitData);
+    var dataSourceFeatureInput = createDataSourceFeatureInputs(hitData);
+
+    var agentInputs = dataSourceFeatureInput.stream()
+        .map(featureInput -> AgentInput.newBuilder()
+            .setAlert(alertName)
+            .setMatch(matchName)
+            .addFeatureInputs(featureInput)
+            .build())
+        .collect(Collectors.toList());
 
     var batchInputRequest =
-        createBatchInputRequest(alertName, matchName, featureInput);
+        createBatchInputRequest(agentInputs);
 
     var batchCreateAgentInputsResponse = blockingStub
         .withDeadline(deadline)
         .batchCreateAgentInputs(batchInputRequest);
   }
 
-  private BatchCreateAgentInputsRequest createBatchInputRequest(
-      String alertName, String matchName, T featureInput) {
-    FeatureInput dataSourceFeatureInput = getDataSourceFeatureInput(featureInput);
-
-    var agentInput = AgentInput.newBuilder()
-        .setAlert(alertName)
-        .setMatch(matchName)
-        .addFeatureInputs(dataSourceFeatureInput)
-        .build();
+  private static BatchCreateAgentInputsRequest createBatchInputRequest(
+      List<AgentInput> agentInputs) {
 
     return BatchCreateAgentInputsRequest.newBuilder()
-        .addAgentInputs(agentInput)
+        .addAllAgentInputs(agentInputs)
         .build();
   }
 
-  private FeatureInput getDataSourceFeatureInput(T featureInput) {
-    return FeatureInput
-        .newBuilder()
-        .setFeature(getFullFeatureName())
-        .setAgentFeatureInput(Any.pack(featureInput))
-        .build();
+  protected abstract List<FeatureInput> createDataSourceFeatureInputs(HitData hitData);
+
+  protected static String getFullFeatureName(String featureName) {
+    return FEATURE_PREFIX + featureName;
   }
-
-  protected String getFullFeatureName() {
-    return FEATURE_PREFIX + getFeatureName();
-  }
-
-  protected abstract String getFeatureName();
-
-  protected abstract T getFeatureInput(HitData hitData);
 }

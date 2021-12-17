@@ -1,10 +1,13 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceBlockingStub;
+import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
+
+import com.google.protobuf.Any;
 
 import java.time.Duration;
 import java.util.Collections;
@@ -22,18 +25,23 @@ class GeoAgentEtlProcess extends BaseAgentEtlProcess<LocationFeatureInput> {
   }
 
   @Override
-  protected String getFeatureName() {
-    return GEO_FEATURE;
+  protected List<FeatureInput> createDataSourceFeatureInputs(HitData hitData) {
+    var featureInput = FeatureInput
+        .newBuilder()
+        .setFeature(getFullFeatureName(GEO_FEATURE))
+        .setAgentFeatureInput(Any.pack(createLocationFeatureInput(hitData)))
+        .build();
+
+    return List.of(featureInput);
   }
 
-  @Override
-  protected LocationFeatureInput getFeatureInput(HitData hitData) {
+  private static LocationFeatureInput createLocationFeatureInput(HitData hitData) {
 
     var countryTown = getCountryTown(hitData);
     var watchListLocation = getWatchListLocation(hitData);
 
     return LocationFeatureInput.newBuilder()
-        .setFeature(getFullFeatureName())
+        .setFeature(getFullFeatureName(GEO_FEATURE))
         .setAlertedPartyLocation(countryTown)
         .setWatchlistLocation(watchListLocation)
         .build();
