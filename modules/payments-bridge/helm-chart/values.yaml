@@ -29,6 +29,11 @@ dataRetention:
   piiExpiration: "151d"
   piiCron: "30 15 1 * * *"
 
+emailNotification:
+  from: ""
+  to: ""
+  cron: "0 0/10 0 * * *"
+  amount: 10
 #Additional service metadata annotations
 service:
   metadata:

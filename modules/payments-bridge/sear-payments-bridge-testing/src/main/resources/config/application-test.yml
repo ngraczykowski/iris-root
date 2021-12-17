@@ -8,6 +8,31 @@ spring:
         provider:
           external:
             token-uri: "https://example.com/token/uri"
+  main:
+    web-application-type: none
+  mail:
+    host: localhost
+    port: 3025
+    username: user
+    password: password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        transport:
+          protocol: smtp
+
+greenmail:
+  startup:
+    timeout: 1000
+pb:
+  email-notification:
+    from: "email.example@silenteight.com"
+    to: "email.example2@silenteight.com"
+    cron: "* * * ? * *"
+    amount: 10
 
 grpc:
   server:

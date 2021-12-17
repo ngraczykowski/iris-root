@@ -19,7 +19,6 @@ class NotificationDataAccess implements NotificationAccessPort {
   private final FindNotification findNotification;
   private final UpdateNotification updateNotification;
 
-
   @Override
   public void insert(Notification notification) {
     insertNotificationRequest.insert(notification);

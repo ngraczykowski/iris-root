@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class NotificationEventListener {
+class NotificationEventListener {
 
   private final NotificationAccessPort notificationAccessPort;
 
@@ -21,5 +21,4 @@ public class NotificationEventListener {
     log.info("NotificationEvent has been received");
     notificationAccessPort.insert(notificationEvent.getNotification());
   }
-
 }

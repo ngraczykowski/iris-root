@@ -9,6 +9,8 @@ dependencies {
 
   implementation libraries.spring_boot
   implementation libraries.spring_context
+  implementation libraries.spring_boot_starter_mail
+  implementation libraries.hibernate_validator
 
   testImplementation project(":sear-payments-bridge-testing")
 
@@ -16,5 +18,7 @@ dependencies {
   testImplementation libraries.spock_spring
   testImplementation libraries.spring_boot_test
   testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libraries.test_greenmail
+  testImplementation libraries.awaitility
 
 }

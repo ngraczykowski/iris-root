@@ -1,6 +1,6 @@
 package com.silenteight.payments.bridge.notification.service;
 
-import com.silenteight.payments.bridge.NotificationModule;
+import com.silenteight.payments.bridge.notification.NotificationModule;
 import com.silenteight.payments.bridge.notification.model.NotificationStatus;
 import com.silenteight.payments.bridge.notification.port.FindNotificationsUseCase;
 import com.silenteight.sep.base.testing.BaseJdbcTest;

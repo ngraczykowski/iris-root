@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+  <changeSet id="payments-bridge-notification-1.5.0" author="msitarski">
+    <renameColumn tableName="pb_notification_type"
+                  oldColumnName="name"
+                  newColumnName="subject"/>
+
+    <modifyDataType
+        columnName="subject"
+        newDataType="VARCHAR(64)"
+        tableName="pb_notification_type"/>
+
+    <update tableName="pb_notification_type">
+      <column name="subject" value="Silent Eight - Learning data" />
+      <where>notification_type_id = 'CSV_PROCESSED'</where>
+    </update>
+
+    <update tableName="pb_notification_type">
+      <column name="subject" value="Silent Eight - CMAPI - alert's processing errors" />
+      <where>notification_type_id = 'CMAPI_PROCESSING_ERROR'</where>
+    </update>
+
+  </changeSet>
+</databaseChangeLog>

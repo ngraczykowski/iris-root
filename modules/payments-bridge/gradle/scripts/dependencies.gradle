@@ -246,6 +246,7 @@ libraries.test_containers = [group: 'org.testcontainers', name: 'testcontainers'
 libraries.test_containers_junit_jupiter = [group: 'org.testcontainers', name: 'junit-jupiter']
 libraries.test_containers_postgresql = [group: 'org.testcontainers', name: 'postgresql']
 libraries.test_containers_spock = [group: 'org.testcontainers', name: 'spock']
+libraries.test_greenmail = [group: 'com.icegreen', name: 'greenmail-junit5', version: '1.6.1']
 
 // @formatter:on
 
