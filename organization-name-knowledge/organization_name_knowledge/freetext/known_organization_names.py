@@ -4,7 +4,7 @@ from typing import List
 from organization_name_knowledge import resources
 from organization_name_knowledge.names.name_information import NameInformation
 from organization_name_knowledge.names.parse.parse import parse_name
-from organization_name_knowledge.utils.text import clear_freetext
+from organization_name_knowledge.utils.text import clear_freetext, remove_too_long_numbers
 from organization_name_knowledge.utils.variants import get_substrings_from_consecutive_tokens
 
 with open_text(resources, "sp_500.txt") as file:
@@ -12,7 +12,7 @@ with open_text(resources, "sp_500.txt") as file:
 
 
 def get_from_known_organization_names(text: str) -> List[NameInformation]:
-    tokens = clear_freetext(text).split()
+    tokens = clear_freetext(remove_too_long_numbers(text)).split()
     substrings = get_substrings_from_consecutive_tokens(
         tokens, min_tokens_number=1, max_tokens_number=5
     )
