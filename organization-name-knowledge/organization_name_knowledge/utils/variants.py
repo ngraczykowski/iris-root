@@ -1,5 +1,6 @@
 import itertools
 import re
+from itertools import combinations
 from typing import List, Set
 
 from organization_name_knowledge.utils.text import (
@@ -57,3 +58,14 @@ def _add_variants(name: str, delimiters: List[str], variants: Set[str]):
 def _add_parentheses_based_variants(text: str, variants: Set[str]):
     variants.add(text.replace("(", " ").replace(")", " "))
     variants.add(PARENTHESES_REGEX.sub("", text))
+
+
+def get_substrings_from_consecutive_tokens(
+    tokens: List[str], min_tokens_number: int, max_tokens_number: int
+) -> List[str]:
+    substrings = [
+        " ".join(tokens[first:last])
+        for first, last in combinations(range(len(tokens) + 1), 2)
+        if min_tokens_number <= last - first <= max_tokens_number
+    ]
+    return substrings

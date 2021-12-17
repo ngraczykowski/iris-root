@@ -54,14 +54,6 @@ from organization_name_knowledge.freetext.parse import parse_freetext_names
                 {"base": "Polska Miedz", "legal": "s a", "source": "polska miedz s a"},
             ],
         ),
-        (
-            "A long history of SCB Bank starts about 100 b.c.",
-            [{"base": "SCB Bank", "legal": "", "source": "of SCB Bank"}],
-        ),
-        (
-            "There is a gift from Bank of Russia for James Bond",
-            [{"base": "Bank of Russia", "legal": "", "source": "Bank of Russia"}],
-        ),
     ],
 )
 def test_parse_freetext_1_name(freetext, expected_names):
@@ -107,6 +99,67 @@ def test_parse_freetext_1_name(freetext, expected_names):
     ],
 )
 def test_parse_freetext_2_names(freetext, expected_names):
+    parsed_freetext = parse_freetext_names(
+        freetext, base_tokens_upper_limit=3, name_tokens_lower_limit=2, name_tokens_upper_limit=7
+    )
+    _check_results(parsed_freetext, expected_names)
+
+
+@pytest.mark.parametrize(
+    "freetext, expected_names",
+    [
+        (
+            "A long history of SCB Bank starts about 100 b.c.",
+            [{"base": "SCB Bank", "legal": "", "source": "of SCB Bank"}],
+        ),
+        (
+            "There is a gift from Bank of Russia for James Bond",
+            [{"base": "Bank of Russia", "legal": "", "source": "Bank of Russia"}],
+        ),
+        (
+            "Boss Protection Group",
+            [
+                {"base": "Boss Protection", "legal": "group", "source": "Boss Protection Group"},
+                {"base": "Protection", "legal": "group", "source": "Protection Group"},
+            ],
+        ),
+    ],
+)
+def test_parse_freetext_name_from_markers(freetext, expected_names):
+    parsed_freetext = parse_freetext_names(
+        freetext, base_tokens_upper_limit=3, name_tokens_lower_limit=2, name_tokens_upper_limit=7
+    )
+    _check_results(parsed_freetext, expected_names)
+
+
+@pytest.mark.parametrize(
+    "freetext, expected_names",
+    [
+        (
+            "There are gifts from Google",
+            [{"base": "Google", "legal": "", "source": "Google"}],
+        ),
+        (
+            "Berkshire Hathaway created by Warren Buffet",
+            [{"base": "Berkshire Hathaway", "legal": "", "source": "Berkshire Hathaway"}],
+        ),
+        (
+            "Procter & Gamble",
+            [{"base": "Procter & Gamble", "legal": "", "source": "Procter & Gamble"}],
+        ),
+        (
+            "American Electric Power",
+            [
+                {
+                    "base": "American Electric Power",
+                    "legal": "",
+                    "source": "American Electric Power",
+                }
+            ],
+        ),
+    ],
+)
+def test_parse_freetext_from_known_org_names(freetext, expected_names):
     parsed_freetext = parse_freetext_names(
         freetext, base_tokens_upper_limit=3, name_tokens_lower_limit=2, name_tokens_upper_limit=7
     )

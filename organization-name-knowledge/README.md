@@ -53,5 +53,6 @@ Static data used for comparison is currently stored in organization_name_knowled
 * legal_terms.json - legal entity terms, with possible abbreviations and meaning
 * markers.json - terms that indicates an organization name, but are not legal terms, such as 'bank'
 * prepositions.txt - i.e. "from", "in", "of"
+* sp_500.text - known huge organization names from SP 500 index
 * weak_words.json - words ignored in creating abbreviation or extracting legal terms or common words
 * words_mapping.json - mapping 

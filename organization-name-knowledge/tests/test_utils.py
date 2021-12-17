@@ -11,7 +11,11 @@ from organization_name_knowledge.utils.text import (
     starts_with_conjunction,
     starts_with_preposition,
 )
-from organization_name_knowledge.utils.variants import get_term_variants, get_text_variants
+from organization_name_knowledge.utils.variants import (
+    get_substrings_from_consecutive_tokens,
+    get_term_variants,
+    get_text_variants,
+)
 
 
 @pytest.mark.parametrize(
@@ -73,6 +77,51 @@ def test_clear_name(name, expected_clean_name):
 )
 def test_divide(name, expected):
     assert divide(name) == expected
+
+
+@pytest.mark.parametrize(
+    "text, min_tok, max_tok, expected",
+    [
+        (
+            "Alpha Beta Gamma",
+            1,
+            2,
+            ["Alpha", "Alpha Beta", "Beta", "Beta Gamma", "Gamma"],
+        ),
+        (
+            "History about Silent Eight Singapore",
+            3,
+            3,
+            [
+                "History about Silent",
+                "about Silent Eight",
+                "Silent Eight Singapore",
+            ],
+        ),
+        (
+            "At the end of the day",
+            2,
+            4,
+            [
+                "At the",
+                "At the end",
+                "At the end of",
+                "the end",
+                "the end of",
+                "the end of the",
+                "end of",
+                "end of the",
+                "end of the day",
+                "of the",
+                "of the day",
+                "the day",
+            ],
+        ),
+    ],
+)
+def test_get_substrings_from_consecutive_tokens(text, min_tok, max_tok, expected):
+    substrings = get_substrings_from_consecutive_tokens(text.split(), min_tok, max_tok)
+    assert substrings == expected
 
 
 @pytest.mark.parametrize(
