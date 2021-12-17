@@ -1,7 +1,9 @@
-package com.silenteight.payments.bridge.svb.newlearning.step.unregistered;
+package com.silenteight.payments.bridge.svb.newlearning.step.composite;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import com.silenteight.payments.bridge.svb.newlearning.step.composite.exception.FetchingComposeDataException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,7 +18,7 @@ abstract class BaseCompositeFetcher<I, O> {
 
   private final DataSource dataSource;
 
-  public O fetchWithConnection(I fkcoIds) {
+  public O fetch(I fkcoIds) {
     try {
       return fetchInTransaction(fkcoIds);
     } catch (SQLException e) {

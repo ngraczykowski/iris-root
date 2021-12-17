@@ -15,5 +15,5 @@ public class AlertComposite {
 
   List<HitComposite> hits;
 
-  List<ActionComposite> actionComposites;
+  List<ActionComposite> actions;
 }

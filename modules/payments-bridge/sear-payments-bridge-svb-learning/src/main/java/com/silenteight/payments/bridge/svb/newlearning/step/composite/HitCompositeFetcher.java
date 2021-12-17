@@ -1,6 +1,9 @@
-package com.silenteight.payments.bridge.svb.newlearning.step.unregistered;
+package com.silenteight.payments.bridge.svb.newlearning.step.composite;
+
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.svb.newlearning.domain.HitComposite;
+import com.silenteight.payments.bridge.svb.newlearning.step.composite.exception.FetchingComposeDataException;
 
 import org.intellij.lang.annotations.Language;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
 
+@Slf4j
 @Service
 class HitCompositeFetcher extends BaseCompositeFetcher<List<Long>, Map<Long, List<HitComposite>>> {
 
@@ -37,14 +41,15 @@ class HitCompositeFetcher extends BaseCompositeFetcher<List<Long>, Map<Long, Lis
         return createHits(resultSet);
       }
     } catch (SQLException e) {
-      throw new RuntimeException(e);
+      log.error("Failed do fetch hits details: {}", e.getMessage());
+      throw new FetchingComposeDataException(e);
     }
   }
 
   private static Map<Long, List<HitComposite>> createHits(ResultSet resultSet) throws SQLException {
     var result = new HashMap<Long, List<HitComposite>>();
     while (resultSet.next()) {
-      var hit = mapRow(resultSet);
+      var hit = HitCompositeRowMapper.mapRow(resultSet);
       var fkcoId = resultSet.getLong("fkco_messages");
 
       if (result.containsKey(fkcoId)) {
@@ -57,11 +62,5 @@ class HitCompositeFetcher extends BaseCompositeFetcher<List<Long>, Map<Long, Lis
       result.put(fkcoId, hits);
     }
     return result;
-  }
-
-  private static HitComposite mapRow(ResultSet resultSet) throws SQLException {
-    return HitComposite.builder()
-        .hitId(resultSet.getLong("learning_hit_id"))
-        .build();
   }
 }

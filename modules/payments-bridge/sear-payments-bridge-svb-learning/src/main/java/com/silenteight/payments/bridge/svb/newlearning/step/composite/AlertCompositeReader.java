@@ -1,8 +1,9 @@
-package com.silenteight.payments.bridge.svb.newlearning.step.unregistered;
+package com.silenteight.payments.bridge.svb.newlearning.step.composite;
 
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
+import com.silenteight.payments.bridge.svb.newlearning.step.composite.exception.CompositeReadingException;
 import com.silenteight.sep.base.common.batch.reader.BetterJdbcCursorItemReader;
 
 import org.springframework.batch.item.ExecutionContext;
@@ -39,17 +40,22 @@ class AlertCompositeReader extends AbstractItemStreamItemReader<AlertComposite> 
   }
 
   @Override
-  public AlertComposite read() throws Exception {
+  public AlertComposite read() {
 
-    if (currentAlertIndex >= alertComposites.size())
-      alertComposites = readAlertComposites();
+    if (currentAlertIndex >= alertComposites.size()) {
+      try {
+        alertComposites = readAlertComposites();
+      } catch (Exception e) {
+        throw new CompositeReadingException(e);
+      }
+    }
 
     return currentAlertIndex < alertComposites.size() ? alertComposites.get(currentAlertIndex++)
                                                       : null;
   }
 
   private List<AlertComposite> readAlertComposites() throws Exception {
-    var ids = fetchFkcoIds();
+    var ids = fetchAlertIds();
 
     log.info("Fetched alert Ids: count = {}", ids.size());
 
@@ -58,10 +64,10 @@ class AlertCompositeReader extends AbstractItemStreamItemReader<AlertComposite> 
     }
 
     currentAlertIndex = 0;
-    return alertCompositeFetcher.fetchWithConnection(ids);
+    return alertCompositeFetcher.fetch(ids);
   }
 
-  private List<Long> fetchFkcoIds() throws Exception {
+  private List<Long> fetchAlertIds() throws Exception {
     log.trace("Fetching alert ids");
 
     List<Long> ids = new ArrayList<>(pageSize);

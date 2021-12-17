@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.newlearning.step.unregistered;
+package com.silenteight.payments.bridge.svb.newlearning.step.composite.exception;
 
 public class FetchingComposeDataException extends RuntimeException {
 

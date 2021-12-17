@@ -1,6 +1,9 @@
-package com.silenteight.payments.bridge.svb.newlearning.step.unregistered;
+package com.silenteight.payments.bridge.svb.newlearning.step.composite;
+
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.svb.newlearning.domain.ActionComposite;
+import com.silenteight.payments.bridge.svb.newlearning.step.composite.exception.FetchingComposeDataException;
 
 import org.intellij.lang.annotations.Language;
 import org.springframework.stereotype.Service;
@@ -15,7 +18,10 @@ import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
 
+import static com.silenteight.payments.bridge.svb.newlearning.step.composite.ActionCompositeRowMapper.mapRow;
+
 @Service
+@Slf4j
 class ActionCompositeFetcher
     extends BaseCompositeFetcher<List<Long>, Map<Long, List<ActionComposite>>> {
 
@@ -39,7 +45,8 @@ class ActionCompositeFetcher
         return createActions(resultSet);
       }
     } catch (SQLException e) {
-      throw new FetchingComposeDataException("Failed to fetch action data.", e);
+      log.error("Failed do fetch action details: {}", e.getMessage());
+      throw new FetchingComposeDataException(e);
     }
   }
 
@@ -61,9 +68,4 @@ class ActionCompositeFetcher
     }
     return result;
   }
-
-  private static ActionComposite mapRow(ResultSet resultSet) throws SQLException {
-    return ActionComposite.builder().actionId(resultSet.getLong("learning_action_id")).build();
-  }
-
 }
