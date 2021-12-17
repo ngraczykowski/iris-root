@@ -16,6 +16,7 @@ dependencies {
   implementation libraries.data_source_api
   implementation libraries.data_source_categories_api
   implementation libraries.data_source_agentinput_api
+  implementation libraries.learning_engine_store_api
   implementation libraries.warehouse_data_api
 
   implementation libraries.spring_amqp

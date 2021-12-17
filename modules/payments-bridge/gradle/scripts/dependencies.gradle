@@ -9,6 +9,7 @@ ext {
   agentsProtocolVersion = "0.14.0"
   dataRetentionVersion = "0.3.0"
   governanceApiVersion = "1.7.0"
+  learingEngineStoreApiVersion = "0.5.0"
   sepDependenciesVersion = "2.3.0"
   silenteightCommonsVersion = "2.1.0"
   silenteightDataSourceApiVersion = "0.16.0"
@@ -34,6 +35,7 @@ libraries.data_source_agentinput_api = [group: 'com.silenteight.sens.date-source
 libraries.governance_api = [group: 'com.silenteight.governance.api', name: 'se-governance-api', version: governanceApiVersion]
 libraries.governance_model_api = [group: 'com.silenteight.governance.api', name: 'se-model-api', version: governanceApiVersion]
 libraries.governance_solving_api = [group: 'com.silenteight.governance.api', name: 'se-solving-api', version: governanceApiVersion]
+libraries.learning_engine_store_api = [group: 'com.silenteight.learningengine.api', name: 'learning-store-api', version: learingEngineStoreApiVersion]
 libraries.agents_api = [group: 'com.silenteight.agent.api', name: 'agents-api', version: agentsApiVersion]
 libraries.sear_rabbitmq_common_schema = [group: 'com.silenteight.rabbitmqcommonschema', name: 'sear-rabbitmq-common-schema-definitions', version: '1.2.0']
 libraries.silenteight_commons_app = [group: 'com.silenteight.commons', name: 'silenteight-commons-app', version: silenteightCommonsVersion]
