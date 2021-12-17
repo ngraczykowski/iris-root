@@ -58,7 +58,7 @@ class AlertCompositeReader extends AbstractItemStreamItemReader<AlertComposite> 
     }
 
     currentAlertIndex = 0;
-    return alertCompositeFetcher.fetch(ids);
+    return alertCompositeFetcher.fetchWithConnection(ids);
   }
 
   private List<Long> fetchFkcoIds() throws Exception {

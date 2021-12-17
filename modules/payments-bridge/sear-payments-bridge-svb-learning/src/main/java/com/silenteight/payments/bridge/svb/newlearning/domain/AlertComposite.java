@@ -14,4 +14,6 @@ public class AlertComposite {
   long fkcoId;
 
   List<HitComposite> hits;
+
+  List<ActionComposite> actionComposites;
 }

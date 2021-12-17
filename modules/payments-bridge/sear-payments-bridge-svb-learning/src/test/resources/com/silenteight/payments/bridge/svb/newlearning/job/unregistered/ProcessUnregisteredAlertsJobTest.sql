@@ -111,3 +111,11 @@ JOHN SMITH
 FLAT 1 4, 15AOSWALD STREET
 GLASGOW
 GB', '1');
+
+-- Actions
+
+INSERT INTO public.pb_learning_action (learning_action_id, fkco_messages, fkco_v_action_comment, fkco_action_date, fkco_d_action_datetime, fkco_operator, fkco_status, fkco_i_total_action, fkco_v_status_name, fkco_v_status_behavior) VALUES (1, 102925, 'Automation Comment - FR FAIL', '7059', '2019-04-29 13:54:16.000000', '9196', '23', '1', 'L3_BLOCK', 'PENDING');
+INSERT INTO public.pb_learning_action (learning_action_id, fkco_messages, fkco_v_action_comment, fkco_action_date, fkco_d_action_datetime, fkco_operator, fkco_status, fkco_i_total_action, fkco_v_status_name, fkco_v_status_behavior) VALUES (2, 102925, 'Automation Comment - FR FAIL', '7059', '2019-05-29 13:54:16.000000', '9196', '23', '1', 'L3_BLOCK', 'PENDING');
+INSERT INTO public.pb_learning_action (learning_action_id, fkco_messages, fkco_v_action_comment, fkco_action_date, fkco_d_action_datetime, fkco_operator, fkco_status, fkco_i_total_action, fkco_v_status_name, fkco_v_status_behavior) VALUES (3, 102925, 'Automation Comment - FR FAIL', '7059', '2019-06-29 13:54:16.000000', '9196', '23', '1', 'FR_FAIL', 'PENDING');
+INSERT INTO public.pb_learning_action (learning_action_id, fkco_messages, fkco_v_action_comment, fkco_action_date, fkco_d_action_datetime, fkco_operator, fkco_status, fkco_i_total_action, fkco_v_status_name, fkco_v_status_behavior) VALUES (4, 102925, 'Automation Comment - FR FAIL', '7059', '2019-07-29 13:54:16.000000', '9196', '23', '1', 'FR_FAIL', 'PENDING');
+
