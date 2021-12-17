@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1-create-batch-table
+      author: klipiec
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            - tableExists:
+                tableName: batches
+            - tableExists:
+                tableName: alerts
+      changes:
+        - createTable:
+            tableName: batches
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: batch_pkey
+              - column:
+                  name: external_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: analysis_name
+                  type: VARCHAR(2500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: alerts_count
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+

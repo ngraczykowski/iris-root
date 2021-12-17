@@ -60,4 +60,7 @@ spring:
 ### LOGGING
 logging:
   level:
+    org:
+      springframework:
+        jdbc: DEBUG
     liquibase: INFO
