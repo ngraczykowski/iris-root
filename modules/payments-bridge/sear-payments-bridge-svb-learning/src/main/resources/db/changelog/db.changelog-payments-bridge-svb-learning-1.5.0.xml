@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+  <changeSet id="payments-bridge-svb-learning-1.5.0" author="tbozek">
+    <createTable tableName="pb_learning_etl_reservation">
+
+      <column name="learning_alert_id" type="BIGINT">
+        <constraints nullable="false" unique="true"/>
+      </column>
+
+      <column name="job_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+    </createTable>
+
+    <createTable tableName="pb_learning_historical_reservation">
+
+      <column name="learning_alert_id" type="BIGINT">
+        <constraints nullable="false" unique="true"/>
+      </column>
+
+      <column name="job_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+    </createTable>
+
+    <createTable tableName="pb_learning_contextual_reservation">
+
+      <column name="learning_alert_id" type="BIGINT">
+        <constraints nullable="false" unique="true"/>
+      </column>
+
+      <column name="job_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+
+    </createTable>
+
+    <createIndex tableName="pb_learning_etl_reservation"
+                 indexName="idx_pb_learning_etl_reservation_job_id">
+      <column name="job_id"/>
+    </createIndex>
+    <createIndex tableName="pb_learning_historical_reservation"
+                 indexName="idx_pb_learning_historical_reservation_job_id">
+      <column name="job_id"/>
+    </createIndex>
+    <createIndex tableName="pb_learning_contextual_reservation"
+                 indexName="idx_pb_learning_contextual_reservation_job_id">
+      <column name="job_id"/>
+    </createIndex>
+
+    <addForeignKeyConstraint baseTableName="pb_learning_etl_reservation"
+                             baseColumnNames="learning_alert_id"
+                             constraintName="fk_pb_learning_etl_reservation_learning_alert_id"
+                             referencedTableName="pb_learning_alert"
+                             referencedColumnNames="learning_alert_id"/>
+    <addForeignKeyConstraint baseTableName="pb_learning_historical_reservation"
+                             baseColumnNames="learning_alert_id"
+                             constraintName="fk_pb_learning_historical_reservation_learning_alert_id"
+                             referencedTableName="pb_learning_alert"
+                             referencedColumnNames="learning_alert_id"/>
+    <addForeignKeyConstraint baseTableName="pb_learning_contextual_reservation"
+                             baseColumnNames="learning_alert_id"
+                             constraintName="fk_pb_learning_contextual_reservation_learning_alert_id"
+                             referencedTableName="pb_learning_alert"
+                             referencedColumnNames="learning_alert_id"/>
+  </changeSet>
+
+</databaseChangeLog>
