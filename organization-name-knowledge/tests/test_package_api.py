@@ -55,6 +55,18 @@ def test_parse_name_base(name, expected_base):
                 {"base": "Silent Eight", "legal": "pte ltd", "source": "the silent eight pte ltd"},
             ],
         ),
+        (
+            "XYZ Bank",  # no legal, but org name "marker" present
+            [
+                {"base": "XYZ Bank", "legal": "", "source": "XYZ Bank"},
+            ],
+        ),
+        (
+            "Microsoft",  # no legal nor marker, but known organization name
+            [
+                {"base": "Microsoft", "legal": "", "source": "Microsoft"},
+            ],
+        ),
     ],
 )
 def test_parse_freetext(freetext, expected_names):

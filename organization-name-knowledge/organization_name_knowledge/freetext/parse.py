@@ -1,6 +1,8 @@
-from itertools import combinations
 from typing import List, Set
 
+from organization_name_knowledge.freetext.known_organization_names import (
+    get_from_known_organization_names,
+)
 from organization_name_knowledge.freetext.matching import (
     get_all_contained_legal_terms,
     get_names_from_org_name_markers,
@@ -15,7 +17,10 @@ from organization_name_knowledge.utils.text import (
     starts_with_conjunction,
     starts_with_preposition,
 )
-from organization_name_knowledge.utils.variants import get_text_variants
+from organization_name_knowledge.utils.variants import (
+    get_substrings_from_consecutive_tokens,
+    get_text_variants,
+)
 
 
 def parse_freetext_names(
@@ -32,11 +37,9 @@ def parse_freetext_names(
         freetext_variant = clear_freetext(freetext_variant)
         freetext_variant_tokens = freetext_variant.split()
 
-        substrings = [
-            " ".join(freetext_variant_tokens[first:last])
-            for first, last in combinations(range(len(freetext_variant_tokens) + 1), 2)
-            if name_tokens_lower_limit <= last - first <= name_tokens_upper_limit
-        ]
+        substrings = get_substrings_from_consecutive_tokens(
+            freetext_variant_tokens, name_tokens_lower_limit, name_tokens_upper_limit
+        )
         parsed_names = [parse_name(substring) for substring in substrings]
 
         parsed_names_valid = _get_valid_names(parsed_names, base_tokens_upper_limit)
@@ -46,6 +49,9 @@ def parse_freetext_names(
     names_to_remove = _get_names_to_remove(found_valid_names)
     found_valid_names = [name for name in found_valid_names if name not in names_to_remove]
     unique_base_names = _get_names_with_unique_bases(found_valid_names)
+    if not unique_base_names:
+        unique_base_names = get_from_known_organization_names(freetext)
+
     return sorted(set(unique_base_names), key=lambda name: name.base.cleaned_name)
 
 
