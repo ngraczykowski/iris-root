@@ -4,7 +4,7 @@ package com.silenteight.payments.bridge.svb.newlearning.step.store;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.svb.newlearning.step.StoreCsvJobProperties;
+import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.StoreCsvJobProperties;
 
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

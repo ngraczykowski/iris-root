@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.newlearning.job.unregistered;
+package com.silenteight.payments.bridge.svb.newlearning.job.etl;
 
 import com.silenteight.payments.bridge.svb.newlearning.job.TestApplicationConfiguration;
 import com.silenteight.payments.bridge.testing.BaseBatchTest;
@@ -15,22 +15,22 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 
-import static com.silenteight.payments.bridge.svb.newlearning.step.unregistered.UnregisteredJobConstants.UNREGISTERED_STEP_NAME;
+import static com.silenteight.payments.bridge.svb.newlearning.job.etl.EtlJobConstants.ETL_STEP_NAME;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Sql
 @Import({ TestApplicationConfiguration.class })
 @ComponentScan(basePackages = {
-    "com.silenteight.payments.bridge.svb.newlearning.job.unregistered",
+    "com.silenteight.payments.bridge.svb.newlearning.job.etl",
     "com.silenteight.payments.bridge.svb.newlearning.step",
     "com.silenteight.payments.bridge.svb.newlearning.adapter"})
-class ProcessUnregisteredAlertsJobTest extends BaseBatchTest {
+class EtlAlertsJobTest extends BaseBatchTest {
 
 
   @Test
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public void testProcessingUnregistered() {
-    var transformAlertStep = createStepExecution(UNREGISTERED_STEP_NAME).get();
+    var transformAlertStep = createStepExecution(ETL_STEP_NAME).get();
     assertThat(transformAlertStep.getReadCount()).isEqualTo(2);
   }
 

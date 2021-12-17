@@ -1,9 +1,10 @@
-package com.silenteight.payments.bridge.svb.newlearning.step.unregistered;
+package com.silenteight.payments.bridge.svb.newlearning.step.etl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
+import com.silenteight.payments.bridge.svb.newlearning.job.etl.EtlJobProperties;
 import com.silenteight.payments.bridge.svb.newlearning.step.composite.AlertCompositeReaderFactory;
 
 import org.intellij.lang.annotations.Language;
@@ -16,19 +17,19 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.silenteight.payments.bridge.svb.newlearning.step.unregistered.UnregisteredJobConstants.UNREGISTERED_STEP_NAME;
+import static com.silenteight.payments.bridge.svb.newlearning.job.etl.EtlJobConstants.ETL_STEP_NAME;
 
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
-@EnableConfigurationProperties(UnregisteredJobProperties.class)
-class ProcessUnregisteredAlertStepConfiguration {
+@EnableConfigurationProperties(EtlJobProperties.class)
+class EtlAlertStepConfiguration {
 
   @Language("PostgreSQL")
-  private static final String QUERY = "SELECT fkco_id FROM pb_learning_alert;";
+  private static final String QUERY = "SELECT learning_alert_id FROM pb_learning_alert";
 
   private final StepBuilderFactory stepBuilderFactory;
-  private final UnregisteredJobProperties properties;
+  private final EtlJobProperties properties;
   private final AlertCompositeReaderFactory alertCompositeReaderFactory;
 
   @Bean
@@ -41,7 +42,7 @@ class ProcessUnregisteredAlertStepConfiguration {
   Step processUnregisterAlertStep(
       AbstractItemStreamItemReader<AlertComposite> compositeAlertReader) {
     return stepBuilderFactory
-        .get(UNREGISTERED_STEP_NAME)
+        .get(ETL_STEP_NAME)
         .listener(new JobParameterExecutionContextCopyListener())
         .chunk(properties.getChunkSize())
         .reader(compositeAlertReader)

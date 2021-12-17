@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.silenteight.payments.bridge.svb.newlearning.job.etl.historical;
+package com.silenteight.payments.bridge.svb.newlearning.job.historical;
 
 import javax.annotation.ParametersAreNonnullByDefault;

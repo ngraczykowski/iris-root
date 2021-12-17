@@ -3,8 +3,8 @@ package com.silenteight.payments.bridge.svb.newlearning.step.listrecord;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.StoreCsvJobProperties;
 import com.silenteight.payments.bridge.svb.newlearning.step.JpaWriterFactory;
-import com.silenteight.payments.bridge.svb.newlearning.step.StoreCsvJobProperties;
 import com.silenteight.payments.bridge.svb.newlearning.step.TransformReaderFactory;
 
 import org.intellij.lang.annotations.Language;

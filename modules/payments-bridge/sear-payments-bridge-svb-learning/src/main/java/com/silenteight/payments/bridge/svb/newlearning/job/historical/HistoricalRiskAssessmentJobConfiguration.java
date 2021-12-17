@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.newlearning.job.etl.historical;
+package com.silenteight.payments.bridge.svb.newlearning.job.historical;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

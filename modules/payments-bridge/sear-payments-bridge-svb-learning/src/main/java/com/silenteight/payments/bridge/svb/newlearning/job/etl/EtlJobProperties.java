@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.newlearning.step.unregistered;
+package com.silenteight.payments.bridge.svb.newlearning.job.etl;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 @Slf4j
 @Validated
 @ConfigurationProperties(prefix = "pb.svb-learning.unregistered")
-class UnregisteredJobProperties {
+public class EtlJobProperties {
 
   private int chunkSize = 1;
   private long retryPeriodMilliseconds = 30 * 1000;

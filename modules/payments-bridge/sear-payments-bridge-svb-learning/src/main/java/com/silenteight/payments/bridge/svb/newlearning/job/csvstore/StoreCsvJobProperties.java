@@ -1,5 +1,5 @@
 
-package com.silenteight.payments.bridge.svb.newlearning.step;
+package com.silenteight.payments.bridge.svb.newlearning.job.csvstore;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
