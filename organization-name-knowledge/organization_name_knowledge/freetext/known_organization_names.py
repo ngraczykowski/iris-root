@@ -16,6 +16,5 @@ def get_from_known_organization_names(text: str) -> List[NameInformation]:
     substrings = get_substrings_from_consecutive_tokens(
         tokens, min_tokens_number=1, max_tokens_number=5
     )
-    print(substrings)
     names = [parse_name(substring) for substring in substrings if substring in SP_500_COMPANIES]
     return names
