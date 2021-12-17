@@ -1,23 +1,17 @@
 package com.silenteight.agent.common.io;
 
-import lombok.NonNull;
-import lombok.experimental.UtilityClass;
+import lombok.*;
+import lombok.experimental.*;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
-import java.util.stream.Stream;
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 import static com.silenteight.agent.common.io.Common.*;
 import static com.silenteight.agent.common.io.FileFormatConstants.*;
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.Collections.emptyList;
+import static java.nio.charset.StandardCharsets.*;
+import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 
 @SuppressWarnings("unused") //used in agents as helper
@@ -52,8 +46,25 @@ public class ResourcesReader {
 
   public static Map<String, Set<String>> readSingleKeyMultipleValues(@NonNull InputStream is) {
     return readLinesAsStream(is, DEFAULT_DICT_FORMAT_FILTERS, DEFAULT_DICT_FORMAT_TRANSFORMERS)
-        .map(line -> line.split(KEY_VALUE_SEPARATOR))
+        .map(Common::splitKeyAndValue)
         .collect(toMap(extractSingleKey(), extractMultipleValues()));
+  }
+
+  /**
+   * <pre>
+   *   Load resource files from stream
+   *
+   *   Expected dict format: "key1=value1"
+   *
+   *   Returns unique key and unique value, all UPPER CASE,
+   *   ignores # comments or empty lines
+   * </pre>
+   */
+
+  public static Map<String, String> readSingleKeySingleValue(@NonNull InputStream is) {
+    return readLinesAsStream(is, DEFAULT_DICT_FORMAT_FILTERS, DEFAULT_DICT_FORMAT_TRANSFORMERS)
+        .map(Common::splitKeyAndValue)
+        .collect(toMap(extractSingleKey(), extractSingleValue()));
   }
 
   /**

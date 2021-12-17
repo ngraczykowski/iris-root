@@ -52,6 +52,17 @@ class ResourcesReaderTest {
   }
 
   @Test
+  void shouldReadSingleKeySingleValue() {
+    var lines = ResourcesReader.readSingleKeySingleValue(
+        requireNonNull(
+            ResourcesReaderTest.class.getResourceAsStream(
+                "/resourcereader/single_key_single_value.txt")));
+
+    assertThat(lines).containsExactlyEntriesOf(
+        Map.of("ALA", "KOT"));
+  }
+
+  @Test
   void shouldReadAllSingleValuesWithProvidedFiltersAndTransformers() {
 
     //given
@@ -80,5 +91,31 @@ class ResourcesReaderTest {
 
     //then
     assertThrows(NullPointerException.class, result);
+  }
+
+  @Test
+  void shouldThrowExceptionWhenLineHasInvalidFormatSingleKeySingleValueCase() {
+
+    //when
+    Executable result = () -> ResourcesReader.readSingleKeySingleValue(
+        requireNonNull(
+            ResourcesReaderTest.class.getResourceAsStream(
+                "/resourcereader/invalid_key_value_format.txt")));
+
+    //then
+    assertThrows(InvalidDictionaryFormatException.class, result);
+  }
+
+  @Test
+  void shouldThrowExceptionWhenLineHasInvalidFormatSingleKeyMultipleValuesCase() {
+
+    //when
+    Executable result = () -> ResourcesReader.readSingleKeyMultipleValues(
+        requireNonNull(
+            ResourcesReaderTest.class.getResourceAsStream(
+                "/resourcereader/invalid_key_value_format.txt")));
+
+    //then
+    assertThrows(InvalidDictionaryFormatException.class, result);
   }
 }
