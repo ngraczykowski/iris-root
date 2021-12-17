@@ -79,7 +79,7 @@ class SimulationServiceTest extends BaseDataJpaTest {
   @Test
   void shouldFinish() {
     // given
-    SimulationEntity simulation = persistSimulation(RUNNING);
+    SimulationEntity simulation = persistSimulation(STREAMING);
 
     // when
     underTest.finish(ANALYSIS_NAME);

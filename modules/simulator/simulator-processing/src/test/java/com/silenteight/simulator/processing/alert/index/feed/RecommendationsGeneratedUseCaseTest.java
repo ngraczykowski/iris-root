@@ -5,6 +5,7 @@ import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.data.api.v1.SimulationDataIndexRequest;
 import com.silenteight.simulator.management.create.AnalysisService;
 import com.silenteight.simulator.management.domain.SimulationService;
+import com.silenteight.simulator.management.domain.exception.SimulationNotInProperStateException;
 import com.silenteight.simulator.processing.alert.index.amqp.gateway.SimulationDataIndexRequestGateway;
 import com.silenteight.simulator.processing.alert.index.domain.IndexedAlertService;
 
@@ -45,8 +46,8 @@ class RecommendationsGeneratedUseCaseTest {
   @BeforeEach
   void setUp() {
     underTest = new RecommendationsGeneratedUseCase(
-        simulationService, recommendationService, indexedAlertService, requestIdGenerator,
-        analysisService, gateway, BATCH_SIZE);
+        simulationService, recommendationService, indexedAlertService,
+        requestIdGenerator, analysisService, gateway, BATCH_SIZE);
   }
 
   @Test
@@ -63,6 +64,24 @@ class RecommendationsGeneratedUseCaseTest {
     underTest.handle(REQUEST);
     //then
     verify(analysisService.getAnalysis(ANALYSIS_NAME)).getState();
+    verifyNoInteractions(recommendationService);
+    verifyNoInteractions(indexedAlertService);
+  }
+
+  @Test
+  void shouldHandleMessageWhenSimulationAlreadyStreaming() {
+    // given
+    Analysis analysis = mock(Analysis.class);
+    when(analysis.getState()).thenReturn(DONE);
+    when(analysisService.getAnalysis(ANALYSIS_NAME)).thenReturn(analysis);
+    when(simulationService.exists(ANALYSIS_NAME)).thenReturn(true);
+    doThrow(new SimulationNotInProperStateException())
+        .when(simulationService).streaming(ANALYSIS_NAME);
+
+    // when
+    underTest.handle(REQUEST);
+
+    // then
     verifyNoInteractions(recommendationService);
     verifyNoInteractions(indexedAlertService);
   }
@@ -117,6 +136,5 @@ class RecommendationsGeneratedUseCaseTest {
     assertThat(indexRequest.getAllValues().get(1).getRequestId()).isEqualTo(REQUEST_ID);
     assertThat(indexRequest.getAllValues().get(1).getAnalysisName()).isEqualTo(ANALYSIS_NAME);
     assertThat(indexRequest.getAllValues().get(1).getAlertsCount()).isEqualTo(BATCH_SIZE);
-
   }
 }

@@ -90,7 +90,7 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
   }
 
   void finish(OffsetDateTime finishedAt) {
-    assertInState(RUNNING);
+    assertInState(STREAMING);
     this.state = DONE;
     this.finishedAt = finishedAt;
   }
@@ -111,6 +111,15 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
 
   boolean isArchived() {
     return getState() == ARCHIVED;
+  }
+
+  boolean isStreaming() {
+    return state == STREAMING;
+  }
+
+  public void streaming() {
+    assertInState(RUNNING);
+    this.state = STREAMING;
   }
 
   SimulationDto toDto() {
@@ -141,5 +150,12 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
         .createdBy(getCreatedBy())
         .finishedAt(getFinishedAt())
         .build();
+  }
+
+  SimulationState getState() {
+    if (state == STREAMING)
+      return RUNNING;
+
+    return state;
   }
 }

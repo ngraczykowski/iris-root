@@ -69,6 +69,15 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
       log.debug("Analysis {} is not finished yet.", request.getAnalysis());
       return;
     }
+
+    try {
+      simulationService.streaming(request.getAnalysis());
+    } catch (RuntimeException e) {
+      log.warn("The analysis is not in the RUNNING state. "
+                   + "The other message could already trigger streaming.");
+      return;
+    }
+
     sendAsBatches(
         recommendationService.streamRecommendationsWithMetadata(request.getAnalysis()),
         request.getAnalysis());

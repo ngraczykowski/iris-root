@@ -91,4 +91,13 @@ public class SimulationService {
         .findBySimulationId(simulationId)
         .orElseThrow(() -> new SimulationNotFoundException(simulationId));
   }
+
+  @Transactional
+  public void streaming(@NonNull String analysis) {
+    SimulationEntity simulationEntity = repository
+        .findByAnalysisName(analysis)
+        .orElseThrow(() -> new SimulationNotFoundException(analysis));
+    simulationEntity.streaming();
+    log.debug("Saved as 'STREAMING' SimulationEntity={}", simulationEntity);
+  }
 }
