@@ -8,8 +8,9 @@ import com.silenteight.payments.bridge.notification.model.NotificationStatus;
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
+import java.util.HashMap;
 
 @Component
 @RequiredArgsConstructor
@@ -19,16 +20,21 @@ class InsertNotificationRequest {
   private static final String SQL =
       "INSERT INTO pb_notification(notification_type_id, message, attachment, attachment_name, "
           + "status)\n"
-          + " VALUES (?, ?, ?, ?, ?)";
+          + " VALUES (:notification_type_id, :message, :attachment, :attachment_name, :status)";
 
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+  @Transactional
   void insert(Notification notification) {
-    namedParameterJdbcTemplate.update(SQL, Map.of(
-        "notification_type_id", notification.getType(),
-        "message", notification.getMessage(),
-        "attachment", notification.getAttachment(),
-        "attachment_name", notification.getAttachmentName(),
-        "status", NotificationStatus.NEW.toString()));
+
+    var notificationParams = new HashMap<String, Object>();
+
+    notificationParams.put("notification_type_id", notification.getType());
+    notificationParams.put("message", notification.getMessage());
+    notificationParams.put("attachment", notification.getAttachment());
+    notificationParams.put("attachment_name", notification.getAttachmentName());
+    notificationParams.put("status", NotificationStatus.NEW.toString());
+
+    namedParameterJdbcTemplate.update(SQL, notificationParams);
   }
 }

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.notification.NotificationModule;
 import com.silenteight.payments.bridge.notification.model.NonRecoverableEmailSendingException;
+import com.silenteight.payments.bridge.notification.model.SendEmailRequest;
 import com.silenteight.payments.bridge.notification.port.EmailSenderUseCase;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
@@ -52,8 +53,16 @@ class EmailSenderServiceExceptionsTest extends BaseJdbcTest {
     String attachmentName = "fil3e.zip";
     byte[] attachment = new byte[0];
 
+    var sendEmailRequest = SendEmailRequest.builder()
+        .id(id)
+        .subject(subject)
+        .htmlText(htmlText)
+        .attachmentName(attachmentName)
+        .attachment(attachment)
+        .build();
+
     assertThatExceptionOfType(MailSendException.class).isThrownBy(() -> {
-      emailSenderUseCase.sendEmail(id, subject, htmlText, attachmentName, attachment);
+      emailSenderUseCase.sendEmail(sendEmailRequest);
     });
     verify(emailSender, times(5)).send(any(MimeMessagePreparator.class));
   }
@@ -67,23 +76,31 @@ class EmailSenderServiceExceptionsTest extends BaseJdbcTest {
     String attachmentName = "fil3e.zip";
     byte[] attachment = new byte[0];
 
+    var sendEmailRequest = SendEmailRequest.builder()
+        .id(id)
+        .subject(subject)
+        .htmlText(htmlText)
+        .attachmentName(attachmentName)
+        .attachment(attachment)
+        .build();
+
     doThrow(MailAuthenticationException.class)
         .when(emailSender)
         .send(any(MimeMessagePreparator.class));
     assertThrows(
         NonRecoverableEmailSendingException.class,
-        () -> emailSenderUseCase.sendEmail(id, subject, htmlText, attachmentName, attachment));
+        () -> emailSenderUseCase.sendEmail(sendEmailRequest));
 
     doThrow(MailParseException.class).when(emailSender).send(any(MimeMessagePreparator.class));
     assertThrows(
         NonRecoverableEmailSendingException.class,
-        () -> emailSenderUseCase.sendEmail(id, subject, htmlText, attachmentName, attachment));
+        () -> emailSenderUseCase.sendEmail(sendEmailRequest));
 
     doThrow(MailPreparationException.class)
         .when(emailSender)
         .send(any(MimeMessagePreparator.class));
     assertThrows(
         NonRecoverableEmailSendingException.class,
-        () -> emailSenderUseCase.sendEmail(id, subject, htmlText, attachmentName, attachment));
+        () -> emailSenderUseCase.sendEmail(sendEmailRequest));
   }
 }

@@ -40,7 +40,7 @@ class NotificationSchedulerTest extends BaseJdbcTest {
 
     doThrow(MailSendException.class)
         .when(emailSenderUseCase)
-        .sendEmail(any(), any(), any(), any(), any());
+        .sendEmail(any());
 
     processSendingEmails.processSendingEmails();
 
@@ -62,7 +62,7 @@ class NotificationSchedulerTest extends BaseJdbcTest {
   @Sql(scripts = "truncate_notifications.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
   public void processSendingEmails_sendEmailThrowsNoError_NotificationsHaveSentStatus() {
 
-    doNothing().when(emailSenderUseCase).sendEmail(any(), any(), any(), any(), any());
+    doNothing().when(emailSenderUseCase).sendEmail(any());
 
     processSendingEmails.processSendingEmails();
 

@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated;
 @Data
 public class EmailNotificationProperties {
 
-  private static final String DEFAULT_CRON = "0 0/10 0 * * *";
+  private static final String DEFAULT_CRON = "0 0/10 * * * *";
   private static final int DEFAULT_AMOUNT = 10;
 
   private String from;

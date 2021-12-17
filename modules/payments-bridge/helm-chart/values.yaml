@@ -32,7 +32,7 @@ dataRetention:
 emailNotification:
   from: ""
   to: ""
-  cron: "0 0/10 0 * * *"
+  cron: "0 0/10 * * * *"
   amount: 10
 #Additional service metadata annotations
 service:

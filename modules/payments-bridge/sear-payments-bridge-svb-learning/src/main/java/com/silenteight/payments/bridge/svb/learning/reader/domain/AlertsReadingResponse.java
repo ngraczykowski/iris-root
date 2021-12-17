@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.svb.learning.reader.domain;
 import lombok.Builder;
 import lombok.Setter;
 
-import com.silenteight.payments.bridge.svb.learning.notification.model.NotificationRequest;
+import com.silenteight.payments.bridge.notification.model.Notification;
 
 import java.util.List;
 
@@ -19,15 +19,29 @@ public class AlertsReadingResponse {
   @Setter
   private LearningCsv objectData;
 
-  public NotificationRequest toNotificationRequest() {
-    return NotificationRequest
-        .builder()
-        .successfullyRecords(successfulAlerts)
-        .failedRecord(failedAlerts)
-        .errorLogs(readAlertErrorList)
-        .fileName(objectData.getFileName())
-        .fileLength(objectData.getFileLength())
-        .hash(objectData.getHash())
+  public Notification toNotification() {
+    return Notification.builder()
+        .type("CSV_PROCESSED")
+        .message(getCsvAlertsProcessedMessage())
         .build();
+  }
+
+  private String getCsvAlertsProcessedMessage() {
+    return String.format(
+        "<html>\n"
+            + "<body>\n"
+            + "\n"
+            + "<p>This is to confirm Silent Eight has received a "
+            + "CSV file which has been processed by SEAR.</p>\n"
+            + "<p>File name: %s</p>\n"
+            + "<p>Number of successfully processed records: %d</p>\n"
+            + "<p>Number of unprocessed records: %d</p>\n"
+            + "<p>File size: %d</p>\n"
+            + "<p></p>"
+            + "<p>Thank you.</p>"
+            + "<p>Silent Eight</p>"
+            + "</body>\n"
+            + "</html>\n", objectData.getFileName(), successfulAlerts, failedAlerts,
+        objectData.getFileLength());
   }
 }

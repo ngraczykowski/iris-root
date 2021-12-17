@@ -7,6 +7,7 @@ import com.silenteight.payments.bridge.notification.model.NotificationStatus;
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ class UpdateNotification {
 
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+  @Transactional
   void update(List<Long> ids, NotificationStatus status) {
     namedParameterJdbcTemplate.update(
         UPDATE_NOTIFICATION_STATUS, Map.of("notification_ids", ids, "status", status.toString()));

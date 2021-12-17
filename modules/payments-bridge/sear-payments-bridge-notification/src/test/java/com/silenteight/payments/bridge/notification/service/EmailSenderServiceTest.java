@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.notification.service;
 
 import com.silenteight.payments.bridge.notification.NotificationModule;
+import com.silenteight.payments.bridge.notification.model.SendEmailRequest;
 import com.silenteight.payments.bridge.notification.port.EmailSenderUseCase;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
@@ -72,7 +73,15 @@ class EmailSenderServiceTest extends BaseJdbcTest {
     String attachmentName = "file.zip";
     byte[] attachment = createByteArrayFromFile();
 
-    emailSenderUseCase.sendEmail(id, subject, htmlText, attachmentName, attachment);
+    var sendEmailRequest = SendEmailRequest.builder()
+        .id(id)
+        .subject(subject)
+        .htmlText(htmlText)
+        .attachmentName(attachmentName)
+        .attachment(attachment)
+        .build();
+
+    emailSenderUseCase.sendEmail(sendEmailRequest);
 
     await().atMost(2, SECONDS).untilAsserted(() -> {
       MimeMessage[] receivedMessages = greenMail.getReceivedMessages();

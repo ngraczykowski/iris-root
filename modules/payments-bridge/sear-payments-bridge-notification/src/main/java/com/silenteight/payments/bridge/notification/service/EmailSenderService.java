@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.notification.model.NonRecoverableEmailSendingException;
+import com.silenteight.payments.bridge.notification.model.SendEmailRequest;
 import com.silenteight.payments.bridge.notification.port.EmailSenderUseCase;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -13,7 +14,6 @@ import org.springframework.mail.MailPreparationException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -31,32 +31,34 @@ class EmailSenderService implements EmailSenderUseCase {
   private final EmailNotificationProperties emailNotificationProperties;
   private final JavaMailSender emailSender;
 
-  @Async
-  public void sendEmail(
-      Long id, String subject, String htmlText, String attachmentName, byte[] attachment) {
+  public void sendEmail(SendEmailRequest sendEmailRequest) {
     MimeMessagePreparator messagePreparator = mimeMessage ->
-        prepareMessageHelper(subject, htmlText, attachmentName, attachment, mimeMessage);
+        prepareMessageHelper(sendEmailRequest, mimeMessage);
 
     try {
       emailSender.send(messagePreparator);
     } catch (MailAuthenticationException | MailParseException |
-        MailPreparationException exceptions) {
-      log.error("Mail cannot be sent due to authentication, parse or "
-          + "preparation exception. Notification id={}", id);
-      throw new NonRecoverableEmailSendingException("Mail could not be sent");
+        MailPreparationException exception) {
+      log.error(
+          "Mail cannot be sent due to authentication, parse or "
+              + "preparation exception. Message= {}, reason= {}. Notification id={}",
+          exception.getMessage(), exception.getCause(), sendEmailRequest.getId());
+      throw new NonRecoverableEmailSendingException("Mail could not be sent.");
     }
   }
 
   private void prepareMessageHelper(
-      String subject, String htmlText, String attachmentName, byte[] attachment,
-      MimeMessage mimeMessage) throws MessagingException {
+      SendEmailRequest sendEmailRequest, MimeMessage mimeMessage) throws MessagingException {
     MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
     messageHelper.setFrom(emailNotificationProperties.getFrom());
     messageHelper.setTo(emailNotificationProperties.getTo());
-    messageHelper.setSubject(subject);
-    messageHelper.setText(htmlText, true);
+    messageHelper.setSubject(sendEmailRequest.getSubject());
+    messageHelper.setText(sendEmailRequest.getHtmlText(), true);
 
-    messageHelper.addAttachment(
-        attachmentName, new ByteArrayDataSource(attachment, ATTACHMENT_TYPE_ZIP));
+    if (sendEmailRequest.getAttachmentName() != null && sendEmailRequest.getAttachment() != null) {
+      messageHelper.addAttachment(
+          sendEmailRequest.getAttachmentName(),
+          new ByteArrayDataSource(sendEmailRequest.getAttachment(), ATTACHMENT_TYPE_ZIP));
+    }
   }
 }
