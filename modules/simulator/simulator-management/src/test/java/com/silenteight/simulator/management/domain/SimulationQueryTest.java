@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.silenteight.simulator.management.SimulationFixtures.*;
+import static com.silenteight.simulator.management.domain.SimulationState.RUNNING;
+import static com.silenteight.simulator.management.domain.SimulationState.STREAMING;
 import static java.util.List.of;
 import static java.util.UUID.fromString;
 import static org.assertj.core.api.Assertions.*;
@@ -127,6 +129,18 @@ class SimulationQueryTest extends BaseDataJpaTest {
 
     // then
     assertThat(result).isEqualTo(List.of(ANALYSIS_NAME));
+  }
+
+  @Test
+  void shouldReturnRunningForStreamingStatus() {
+    // given
+    persistSimulation(ID, STREAMING);
+
+    // when
+    SimulationDetailsDto simulationDetailsDto = underTest.get(ID);
+
+    // then
+    assertThat(simulationDetailsDto.getState()).isEqualTo(RUNNING);
   }
 
   private static void assertSimulation(SimulationDto result) {

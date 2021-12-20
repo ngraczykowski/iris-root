@@ -59,7 +59,7 @@ class SimulationEntityTest {
   @Test
   void shouldFinishSimulation() {
     // given
-    SimulationEntity simulation = createSimulationEntity(RUNNING);
+    SimulationEntity simulation = createSimulationEntity(STREAMING);
     OffsetDateTime mockTime = ARBITRARY_INSTANCE.offsetDateTime();
 
     // when
@@ -73,7 +73,7 @@ class SimulationEntityTest {
   @ParameterizedTest
   @EnumSource(
       value = SimulationState.class,
-      names = { "PENDING", "DONE", "ARCHIVED", "NEW", "CANCELED" })
+      names = { "PENDING", "DONE", "ARCHIVED", "NEW", "CANCELED", "RUNNING" })
   void shouldThrowExceptionWhenNotInStateForFinish(SimulationState state) {
     // given
     SimulationEntity simulation = createSimulationEntity(state);
@@ -83,7 +83,7 @@ class SimulationEntityTest {
     assertThatThrownBy(
         () -> simulation.finish(currentTime))
         .isInstanceOf(SimulationNotInProperStateException.class)
-        .hasMessage(format("Simulation should be in state: [RUNNING]."));
+        .hasMessage(format("Simulation should be in state: [STREAMING]."));
   }
 
   @Test

@@ -18,7 +18,8 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
-class SimulationQuery implements ListSimulationsQuery, SimulationDetailsQuery {
+class SimulationQuery
+    implements ListSimulationsQuery, SimulationDetailsQuery, SimulationStateProvider {
 
   @NonNull
   private final SimulationRepository repository;
@@ -82,5 +83,13 @@ class SimulationQuery implements ListSimulationsQuery, SimulationDetailsQuery {
   @Override
   public Collection<String> getAnalysisNames(@NonNull Collection<String> datasetNames) {
     return repository.findAllAnalysisNamesByDatasetNames(datasetNames);
+  }
+
+  @Override
+  public boolean isStreaming(@NonNull String analysis) {
+    return repository
+        .findByAnalysisName(analysis)
+        .map(SimulationEntity::isStreaming)
+        .orElseThrow(() -> new SimulationNotFoundException(analysis));
   }
 }
