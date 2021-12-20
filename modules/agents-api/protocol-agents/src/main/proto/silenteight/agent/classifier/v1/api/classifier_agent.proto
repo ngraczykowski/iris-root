@@ -9,11 +9,14 @@ option java_package = "com.silenteight.proto.agent.classifier.v1.api";
 option java_outer_classname = "ClassifierAgentApiProto";
 option java_multiple_files = true;
 
+// ClassifierAgent is deprecated. Please use RegionAgent instead
 service ClassifierAgent {
     rpc ClassifyText (ClassifyTextRequest) returns (stream ClassifyTextResponse) {
+      option deprecated = true;
     }
 
     rpc GetClassifierAgentDescriptor (google.protobuf.Empty) returns (ClassifierAgentDescriptor) {
+      option deprecated = true;
     }
 }
 

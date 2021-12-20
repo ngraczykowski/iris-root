@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package silenteight.agent.region.v1.api;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+option java_package = "com.silenteight.proto.agent.region.v1.api";
+option java_outer_classname = "RegionAgentApiProto";
+option java_multiple_files = true;
+
+service RegionAgent {
+  rpc DetectLanguageRegions (DetectLanguageRegionsRequest)
+      returns (stream DetectLanguageRegionsResponse) {
+  }
+
+  rpc GetRegionAgentDescriptor (google.protobuf.Empty) returns (RegionAgentDescriptor) {
+  }
+}
+
+message DetectLanguageRegionsRequest {
+  repeated string names = 1;
+}
+
+message LanguageRegion {
+  string name = 1;
+}
+
+message LanguageRegionsPerName {
+  string name = 1;
+  repeated LanguageRegion language_regions = 2;
+}
+
+message DetectLanguageRegionsResponse {
+  repeated LanguageRegionsPerName language_regions_per_name = 1;
+  string error_message = 2;
+}
+
+message RegionAgentDescriptor {
+  repeated LanguageRegion supported_language_regions = 1;
+  string error_message = 2;
+}
