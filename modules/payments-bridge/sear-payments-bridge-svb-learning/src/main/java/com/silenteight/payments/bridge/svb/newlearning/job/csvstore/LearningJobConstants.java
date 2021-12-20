@@ -8,6 +8,7 @@ public final class LearningJobConstants {
 
   // Jobs
   public static final String STORE_CSV_JOB_NAME = "store-csv-job";
+  public static final String HISTORICAL_RISK_ASSESSMENT_JOB_NAME = "historical-risk-assessment-job";
 
   // Step
   public static final String STORE_FILE_STEP = "store-csv-file";
@@ -16,6 +17,8 @@ public final class LearningJobConstants {
   public static final String STEP_TRANSFORM_HIT = "transform-hit";
   public static final String STEP_TRANSFORM_RECORD = "transform-listed-record";
   public static final String REMOVE_DUPLICATES_STEP = "remove-duplicates";
+  public static final String HISTORICAL_ASSESSMENT_RESERVATION_STEP =
+      "historical-assessment-reservation";
 
   // Params
   public static final String FILE_NAME_PARAMETER = "file-name";
