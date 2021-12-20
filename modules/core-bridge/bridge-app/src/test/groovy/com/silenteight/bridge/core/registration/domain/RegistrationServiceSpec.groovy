@@ -30,7 +30,7 @@ class RegistrationServiceSpec extends Specification {
     batchIdDto.id() == batchId
 
     and:
-    1 * modelService.getForSolving() >> new DefaultModel()
+    1 * modelService.getForSolving() >> DefaultModel.builder().build()
     1 * analysisService.create(_ as DefaultModel) >> new Analysis(analysisName)
     1 * batchRepository.create(_ as Batch) >> Batch.newOne(batchId, analysisName, 123)
   }

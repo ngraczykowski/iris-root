@@ -5,6 +5,8 @@ ext {
   // Silent Eight
   //***********************************
   coreBridgeRegistrationApiVersion = "1.0.0-BUILD.4"
+  coreBridgeGovernanceApiVersion = "1.9.0"
+  coreBridgeGovernanceApiLibraryVersion = "1.0.0-BUILD.3"
   protobufSpringBootStarterVersion = "1.6.0"
 
   //***********************************
@@ -24,6 +26,8 @@ ext {
 libraries.protobuf_spring_boot_starter = [group: 'com.silenteight', name: 'protobuf-spring-boot-starter', version: protobufSpringBootStarterVersion]
 libraries.registration_api_library = [group: 'com.silenteight.registration.api.library', name: 'registration-lib', version: coreBridgeRegistrationApiVersion]
 libraries.registration_api_proto = [group: 'com.silenteight.registration.api.library', name: 'registration-internal-protos', version: coreBridgeRegistrationApiVersion]
+libraries.governance_model_api = [group: 'com.silenteight.governance.api', name: 'se-model-api', version: coreBridgeGovernanceApiVersion]
+libraries.governance_model_api_library = [group: 'com.silenteight.governance.api.library', name: 'governance-lib', version: coreBridgeGovernanceApiLibraryVersion]
 
 // Spring
 libraries.spring_aspects = [group: 'org.springframework', name: 'spring-aspects', version: springVersion]
@@ -85,6 +89,8 @@ dependencies {
   implementation libraries.grpc_spring_boot_starter
   implementation libraries.registration_api_library
   implementation libraries.registration_api_proto
+  implementation libraries.governance_model_api
+  implementation libraries.governance_model_api_library
   implementation libraries.spring_aspects
   implementation libraries.spring_boot
   implementation libraries.spring_boot_actuator

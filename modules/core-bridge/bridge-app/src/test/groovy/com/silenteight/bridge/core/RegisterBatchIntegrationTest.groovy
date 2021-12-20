@@ -7,12 +7,14 @@ import net.devh.boot.grpc.client.inject.GrpcClient
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.test.annotation.DirtiesContext
+import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE, properties = [
     "grpc.server.inProcessName=test",
     "grpc.server.port=-1",
     "grpc.client.inProcess.address=in-process:test"
 ])
+@ActiveProfiles("test")
 @DirtiesContext
 class RegisterBatchIntegrationTest extends BaseSpecificationIT {
 
