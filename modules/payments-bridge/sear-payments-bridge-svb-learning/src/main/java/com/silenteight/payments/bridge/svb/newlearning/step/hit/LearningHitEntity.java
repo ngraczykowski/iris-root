@@ -82,4 +82,49 @@ public class LearningHitEntity {
 
   @Column(name = "fkco_i_sequence")
   private String fkcoISequence;
+
+  @Column(name = "fkco_v_list_fmm_id")
+  private String fkcoVListFmmId;
+
+  @Column(name = "fkco_v_list_official_ref")
+  private String fkcoVListOfficialRef;
+
+  @Column(name = "fkco_v_list_type")
+  private String fkcoVListType;
+
+  @Column(name = "fkco_v_list_origin")
+  private String fkcoVListOrigin;
+
+  @Column(name = "fkco_v_list_designation")
+  private String fkcoVListDesignation;
+
+  @Column(name = "fkco_v_list_pep")
+  private String fkcoVListPep;
+
+  @Column(name = "fkco_v_list_fep")
+  private String fkcoVListFep;
+
+  @Column(name = "fkco_v_list_name")
+  private String fkcoVListName;
+
+  @Column(name = "fkco_v_list_city")
+  private String fkcoVListCity;
+
+  @Column(name = "fkco_v_list_state")
+  private String fkcoVListState;
+
+  @Column(name = "fkco_v_list_country")
+  private String fkcoVListCountry;
+
+  @Column(name = "fkco_v_list_userdata1")
+  private String fkcoVListUserdata1;
+
+  @Column(name = "fkco_v_list_userdata2")
+  private String fkcoVListUserdata2;
+
+  @Column(name = "fkco_v_list_keyword")
+  private String fkcoVListKeyword;
+
+  @Column(name = "fkco_v_list_add_info")
+  private String fkcoVListAddInfo;
 }

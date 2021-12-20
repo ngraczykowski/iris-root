@@ -14,8 +14,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
     JdbcLearningDataAccess.class,
     RemoveDuplicatedAlertsQuery.class,
     RemoveDuplicatedHitsQuery.class,
-    RemoveDuplicatedActionsQuery.class,
-    RemoveDuplicatedListedRecordsQuery.class,
+    RemoveDuplicatedActionsQuery.class
 })
 class JdbcLearningDataAccessIT extends BaseJdbcTest {
 
@@ -28,7 +27,6 @@ class JdbcLearningDataAccessIT extends BaseJdbcTest {
     assertRemovedAlerts();
     assertRemovedHits();
     assertRemovedActions();
-    assertRemovedListedRecords();
   }
 
   private void assertRemovedAlerts() {
@@ -46,12 +44,6 @@ class JdbcLearningDataAccessIT extends BaseJdbcTest {
   private void assertRemovedActions() {
     var alertsCount = jdbcTemplate.queryForObject(
         "SELECT count(*) FROM pb_learning_action WHERE fkco_messages = 1", Integer.class);
-    assertThat(alertsCount).isEqualTo(1);
-  }
-
-  private void assertRemovedListedRecords() {
-    var alertsCount = jdbcTemplate.queryForObject(
-        "SELECT count(*) FROM pb_learning_listed_record WHERE fkco_id = 1", Integer.class);
     assertThat(alertsCount).isEqualTo(1);
   }
 }

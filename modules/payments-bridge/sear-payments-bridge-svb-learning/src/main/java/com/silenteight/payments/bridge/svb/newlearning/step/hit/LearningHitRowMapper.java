@@ -35,6 +35,21 @@ final class LearningHitRowMapper implements RowMapper<LearningHitEntity> {
         .fkcoVMatchedTag(rs.getString("fkco_v_matched_tag"))
         .fkcoVMatchedTagContent(rs.getString("fkco_v_matched_tag_content"))
         .fkcoISequence(rs.getString("fkco_i_sequence"))
+        .fkcoVListFmmId(rs.getString("fkco_v_list_fmm_id"))
+        .fkcoVListOfficialRef(rs.getString("fkco_v_list_official_ref"))
+        .fkcoVListType(rs.getString("fkco_v_list_type"))
+        .fkcoVListOrigin(rs.getString("fkco_v_list_origin"))
+        .fkcoVListDesignation(rs.getString("fkco_v_list_designation"))
+        .fkcoVListPep(rs.getString("fkco_v_list_pep"))
+        .fkcoVListFep(rs.getString("fkco_v_list_fep"))
+        .fkcoVListName(rs.getString("fkco_v_list_name"))
+        .fkcoVListCity(rs.getString("fkco_v_list_city"))
+        .fkcoVListState(rs.getString("fkco_v_list_state"))
+        .fkcoVListCountry(rs.getString("fkco_v_list_country"))
+        .fkcoVListUserdata1(rs.getString("fkco_v_list_userdata1"))
+        .fkcoVListUserdata2(rs.getString("fkco_v_list_userdata2"))
+        .fkcoVListKeyword(rs.getString("fkco_v_list_keyword"))
+        .fkcoVListAddInfo(rs.getString("fkco_v_list_add_info"))
         .build();
   }
 }

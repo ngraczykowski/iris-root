@@ -50,13 +50,30 @@ class TransformHitStepConfiguration {
           + "       fkco_d_filtered_datetime_1,\n"
           + "       fkco_v_matched_tag,\n"
           + "       fkco_v_matched_tag_content,\n"
-          + "       fkco_i_sequence"
-          + "\n"
-          + "FROM pb_learning_csv_row"
-          + " \n"
-          + "WHERE job_id"
+          + "       fkco_i_sequence,\n"
+          + "       fkco_v_list_fmm_id,\n"
+          + "       fkco_v_list_official_ref,\n"
+          + "       fkco_v_list_type,\n"
+          + "       fkco_v_list_origin,\n"
+          + "       fkco_v_list_designation,\n"
+          + "       fkco_v_list_pep,\n"
+          + "       fkco_v_list_fep,\n"
+          + "       fkco_v_list_name,\n"
+          + "       fkco_v_list_city,\n"
+          + "       fkco_v_list_state,\n"
+          + "       fkco_v_list_country,\n"
+          + "       fkco_v_list_userdata1,\n"
+          + "       fkco_v_list_userdata2,\n"
+          + "       fkco_v_list_keyword,\n"
+          + "       fkco_v_list_add_info\n"
+          +
+          "FROM pb_learning_csv_row\n"
+          +
+          "WHERE job_id"
           + " = ?\n"
-          + "GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21";
+          + "GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, "
+          + "16, 17, 18, 19, 20, 21, 22, 23, 24, 25,\n"
+          + "         26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36";
 
   @Bean
   @StepScope

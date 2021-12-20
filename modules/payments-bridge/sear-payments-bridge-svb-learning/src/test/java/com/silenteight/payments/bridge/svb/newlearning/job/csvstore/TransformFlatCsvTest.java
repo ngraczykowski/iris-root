@@ -10,8 +10,6 @@ import com.silenteight.payments.bridge.svb.newlearning.step.alert.LearningAlertE
 import com.silenteight.payments.bridge.svb.newlearning.step.alert.LearningAlertRepository;
 import com.silenteight.payments.bridge.svb.newlearning.step.hit.LearningHitEntity;
 import com.silenteight.payments.bridge.svb.newlearning.step.hit.LearningHitRepository;
-import com.silenteight.payments.bridge.svb.newlearning.step.listrecord.LearningListedRecordEntity;
-import com.silenteight.payments.bridge.svb.newlearning.step.listrecord.LearningRecordRepository;
 import com.silenteight.payments.bridge.testing.BaseBatchTest;
 
 import org.assertj.core.api.Assertions;
@@ -33,7 +31,6 @@ import javax.annotation.Nonnull;
 
 import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.STEP_TRANSFORM_ALERT;
 import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.STEP_TRANSFORM_HIT;
-import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.STEP_TRANSFORM_RECORD;
 import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.TRANSFORM_ACTION_STEP;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
@@ -55,8 +52,6 @@ class TransformFlatCsvTest extends BaseBatchTest {
   private LearningActionRepository learningActionRepository;
   @Autowired
   private LearningHitRepository learningHitRepository;
-  @Autowired
-  private LearningRecordRepository learningRecordRepository;
 
   @Test
   @Sql(scripts = "TransformFlatCsvTest.sql")
@@ -89,23 +84,9 @@ class TransformFlatCsvTest extends BaseBatchTest {
   public void testTransformingHit() {
     var transformHitStep = createStepExecution(STEP_TRANSFORM_HIT);
     assertThat(transformHitStep.isPresent()).isTrue();
-    assertThat(transformHitStep.get().getReadCount()).isEqualTo(1);
+    assertThat(transformHitStep.get().getReadCount()).isEqualTo(2);
 
     var savedCount = ((Collection<LearningHitEntity>) learningHitRepository.findAll()).size();
-    assertThat(savedCount).isEqualTo(1);
-  }
-
-  @Test
-  @Sql(scripts = "TransformFlatCsvTest.sql")
-  @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
-  @Transactional(propagation = Propagation.NOT_SUPPORTED)
-  public void testTransformingListedRecord() {
-    var transformListedRecordStep = createStepExecution(STEP_TRANSFORM_RECORD);
-    assertThat(transformListedRecordStep.isPresent()).isTrue();
-    assertThat(transformListedRecordStep.get().getReadCount()).isEqualTo(2);
-
-    var savedCount =
-        ((Collection<LearningListedRecordEntity>) learningRecordRepository.findAll()).size();
     assertThat(savedCount).isEqualTo(2);
   }
 

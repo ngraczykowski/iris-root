@@ -22,7 +22,6 @@ class StoreCsvJobConfiguration {
   private final Step transformAlertStep;
   private final Step transformActionStep;
   private final Step transformHitStep;
-  private final Step transformListedRecordStep;
   private final Step removeDuplicatesStep;
   private final Step deleteFileStep;
 
@@ -33,7 +32,6 @@ class StoreCsvJobConfiguration {
         .next(transformAlertStep)
         .next(transformActionStep)
         .next(transformHitStep)
-        .next(transformListedRecordStep)
         .next(removeDuplicatesStep)
         .next(deleteFileStep)
         .build();

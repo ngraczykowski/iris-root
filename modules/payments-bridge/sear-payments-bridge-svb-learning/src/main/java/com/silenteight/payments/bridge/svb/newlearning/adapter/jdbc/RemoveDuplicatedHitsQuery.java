@@ -17,7 +17,8 @@ class RemoveDuplicatedHitsQuery extends RemoveDuplicatedQuery {
       + "WHERE\n"
       + "    lho.learning_hit_id < lhc.learning_hit_id\n"
       + "    AND lho.fkco_messages = lhc.fkco_messages\n"
-      + "    AND lho.fkco_i_sequence = lhc.fkco_i_sequence;";
+      + "    AND lho.fkco_i_sequence = lhc.fkco_i_sequence\n"
+      + "    AND lho.fkco_v_list_fmm_id = lho.fkco_v_list_fmm_id;";
 
   private final JdbcTemplate jdbcTemplate;
 

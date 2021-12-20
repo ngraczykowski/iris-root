@@ -72,4 +72,27 @@
                              referencedColumnNames="learning_alert_id"/>
   </changeSet>
 
+  <changeSet id="payments-bridge-svb-learning-1.5.1" author="wkeska">
+    <dropTable tableName="pb_learning_listed_record"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-svb-learning-1.5.2" author="wkeska">
+    <addColumn tableName="pb_learning_hit">
+      <column name="fkco_v_list_fmm_id" type="VARCHAR(38)"/>
+      <column name="fkco_v_list_official_ref" type="VARCHAR(255)"/>
+      <column name="fkco_v_list_type" type="VARCHAR(32)"/>
+      <column name="fkco_v_list_origin" type="VARCHAR(32)"/>
+      <column name="fkco_v_list_designation" type="VARCHAR(64)"/>
+      <column name="fkco_v_list_pep" type="VARCHAR(38)"/>
+      <column name="fkco_v_list_fep" type="VARCHAR(38)"/>
+      <column name="fkco_v_list_name" type="VARCHAR(255)"/>
+      <column name="fkco_v_list_city" type="VARCHAR(255)"/>
+      <column name="fkco_v_list_state" type="VARCHAR(255)"/>
+      <column name="fkco_v_list_country" type="VARCHAR(255)"/>
+      <column name="fkco_v_list_userdata1" type="VARCHAR(255)"/>
+      <column name="fkco_v_list_userdata2" type="VARCHAR(255)"/>
+      <column name="fkco_v_list_keyword" type="VARCHAR(64)"/>
+      <column name="fkco_v_list_add_info" type="TEXT"/>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>
