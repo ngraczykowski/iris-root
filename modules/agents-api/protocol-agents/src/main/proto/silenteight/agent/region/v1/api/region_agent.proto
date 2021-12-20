@@ -10,7 +10,7 @@ option java_outer_classname = "RegionAgentApiProto";
 option java_multiple_files = true;
 
 service RegionAgent {
-  rpc DetectLanguageRegions (DetectLanguageRegionsRequest)
+  rpc DetectLanguageRegions (stream DetectLanguageRegionsRequest)
       returns (stream DetectLanguageRegionsResponse) {
   }
 
