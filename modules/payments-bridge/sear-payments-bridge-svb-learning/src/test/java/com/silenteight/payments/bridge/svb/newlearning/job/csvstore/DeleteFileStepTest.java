@@ -29,7 +29,7 @@ public class DeleteFileStepTest extends BaseBatchTest {
 
   @Test
   @Sql(scripts = "DeleteFileStepTest.sql")
-  @Sql(scripts = "TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
+  @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public void shouldExecuteDeleteFileStep() {
     var jobParameters =

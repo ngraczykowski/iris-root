@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.HISTORICAL_ASSESSMENT_RESERVATION_STEP;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
 @Import({ TestApplicationConfiguration.class })
-@Sql
 @ComponentScan(basePackages = {
     "com.silenteight.payments.bridge.svb.newlearning.job.historical",
     "com.silenteight.payments.bridge.svb.newlearning.step",
@@ -22,6 +22,8 @@ import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.Learn
 class HistoricalAssessmentReservationStepTest extends BaseBatchTest {
 
   @Test
+  @Sql(scripts = "HistoricalAssessmentReservationStepTest.sql")
+  @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   void alertReservationStepTest() {
     var jobExecution =

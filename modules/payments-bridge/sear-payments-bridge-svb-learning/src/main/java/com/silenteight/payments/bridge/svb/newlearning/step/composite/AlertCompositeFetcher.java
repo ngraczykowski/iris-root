@@ -26,8 +26,9 @@ class AlertCompositeFetcher extends BaseCompositeFetcher<List<Long>, List<AlertC
 
   @Language("PostgreSQL")
   private static final String ALERTS_QUERY =
-      "SELECT learning_alert_id, fkco_id "
-          + "FROM pb_learning_alert WHERE learning_alert_id IN (%s)";
+      "SELECT learning_alert_id, fkco_id, fkco_v_messageid, fkco_v_system_id\n"
+          + "FROM pb_learning_alert\n"
+          + "WHERE learning_alert_id IN (%s)";
 
   private final HitCompositeFetcher hitCompositeFetcher;
   private final ActionCompositeFetcher actionCompositeFetcher;

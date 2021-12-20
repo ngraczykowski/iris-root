@@ -2,6 +2,8 @@ package com.silenteight.payments.bridge.svb.newlearning.job;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.svb.learning.reader.port.FindRegisteredAlertPort;
+
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.context.annotation.Bean;
@@ -19,5 +21,8 @@ public class TestApplicationConfiguration {
     return properties;
   }
 
-
+  @Bean
+  FindRegisteredAlertPort findRegisteredAlertPort() {
+    return new FindRegisteredAlertPortMock();
+  }
 }

@@ -17,17 +17,19 @@ import javax.annotation.Nonnull;
 
 import static com.silenteight.payments.bridge.svb.newlearning.job.etl.EtlJobConstants.ETL_STEP_NAME;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
-@Sql
 @Import({ TestApplicationConfiguration.class })
 @ComponentScan(basePackages = {
     "com.silenteight.payments.bridge.svb.newlearning.job.etl",
     "com.silenteight.payments.bridge.svb.newlearning.step",
-    "com.silenteight.payments.bridge.svb.newlearning.adapter"})
+    "com.silenteight.payments.bridge.svb.newlearning.adapter" })
 class EtlAlertsJobTest extends BaseBatchTest {
 
 
   @Test
+  @Sql(scripts = "EtlAlertsJobTest.sql")
+  @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public void testProcessingUnregistered() {
     var transformAlertStep = createStepExecution(ETL_STEP_NAME).get();

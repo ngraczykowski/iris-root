@@ -24,7 +24,7 @@ public class StoreFileStepTest extends BaseBatchTest {
 
   @Test
   @Sql(scripts = "StoreFileStepTest.sql")
-  @Sql(scripts = "TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
+  @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public void shouldExecuteStoreFileStep() {
     var jobParameters =

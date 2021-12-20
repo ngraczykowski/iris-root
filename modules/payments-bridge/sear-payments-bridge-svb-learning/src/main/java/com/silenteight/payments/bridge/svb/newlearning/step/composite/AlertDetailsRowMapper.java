@@ -11,6 +11,8 @@ class AlertDetailsRowMapper {
     return AlertDetails.builder()
         .alertId(resultSet.getLong("learning_alert_id"))
         .fkcoId(resultSet.getLong("fkco_id"))
+        .messageId(resultSet.getString("fkco_v_messageid"))
+        .systemId(resultSet.getString("fkco_v_system_id"))
         .build();
   }
 }

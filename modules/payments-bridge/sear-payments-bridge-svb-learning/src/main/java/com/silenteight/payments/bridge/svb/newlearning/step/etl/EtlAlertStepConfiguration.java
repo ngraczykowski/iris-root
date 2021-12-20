@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
+import com.silenteight.payments.bridge.svb.newlearning.domain.EtlAlert;
 import com.silenteight.payments.bridge.svb.newlearning.job.etl.EtlJobProperties;
 import com.silenteight.payments.bridge.svb.newlearning.step.composite.AlertCompositeReaderFactory;
 
@@ -12,10 +13,14 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.listener.JobParameterExecutionContextCopyListener;
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.support.AbstractItemStreamItemReader;
+import org.springframework.batch.item.support.CompositeItemProcessor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 import static com.silenteight.payments.bridge.svb.newlearning.job.etl.EtlJobConstants.ETL_STEP_NAME;
 
@@ -26,7 +31,7 @@ import static com.silenteight.payments.bridge.svb.newlearning.job.etl.EtlJobCons
 class EtlAlertStepConfiguration {
 
   @Language("PostgreSQL")
-  private static final String QUERY = "SELECT learning_alert_id FROM pb_learning_alert";
+  private static final String QUERY = "SELECT learning_alert_id FROM pb_learning_etl_reservation";
 
   private final StepBuilderFactory stepBuilderFactory;
   private final EtlJobProperties properties;
@@ -39,13 +44,24 @@ class EtlAlertStepConfiguration {
   }
 
   @Bean
+  @StepScope
+  public ItemProcessor<AlertComposite, EtlAlert> etlAlertsCompositeProcessor(
+      MarkAlertRegistrationStatusProcessor markAlertRegistrationstatusProcessor) {
+    var etlAlertsCompositeProcessor = new CompositeItemProcessor<AlertComposite, EtlAlert>();
+    etlAlertsCompositeProcessor.setDelegates(List.of(markAlertRegistrationstatusProcessor));
+    return etlAlertsCompositeProcessor;
+  }
+
+  @Bean
   Step processUnregisterAlertStep(
-      AbstractItemStreamItemReader<AlertComposite> compositeAlertReader) {
+      AbstractItemStreamItemReader<AlertComposite> compositeAlertReader,
+      ItemProcessor<AlertComposite, EtlAlert> etlAlertsCompositeProcessor) {
     return stepBuilderFactory
         .get(ETL_STEP_NAME)
         .listener(new JobParameterExecutionContextCopyListener())
-        .chunk(properties.getChunkSize())
+        .<AlertComposite, EtlAlert>chunk(properties.getChunkSize())
         .reader(compositeAlertReader)
+        .processor(etlAlertsCompositeProcessor)
         .writer(item -> log.debug("writing item: {}", item))
         .build();
   }

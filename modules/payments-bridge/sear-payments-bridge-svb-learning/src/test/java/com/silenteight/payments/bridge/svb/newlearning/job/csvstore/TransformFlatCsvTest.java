@@ -21,6 +21,8 @@ import org.springframework.batch.core.StepExecution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +45,8 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
 @ComponentScan(basePackages = {
     "com.silenteight.payments.bridge.svb.newlearning.job.csvstore",
     "com.silenteight.payments.bridge.svb.newlearning.step",
-    "com.silenteight.payments.bridge.svb.newlearning.adapter"})
+    "com.silenteight.payments.bridge.svb.newlearning.adapter" })
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 class TransformFlatCsvTest extends BaseBatchTest {
 
   @Autowired
@@ -57,7 +60,7 @@ class TransformFlatCsvTest extends BaseBatchTest {
 
   @Test
   @Sql(scripts = "TransformFlatCsvTest.sql")
-  @Sql(scripts = "TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
+  @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public void testTransformingAlert() {
     var transformAlertStep = createStepExecution(STEP_TRANSFORM_ALERT).get();
@@ -69,7 +72,7 @@ class TransformFlatCsvTest extends BaseBatchTest {
 
   @Test
   @Sql(scripts = "TransformFlatCsvTest.sql")
-  @Sql(scripts = "TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
+  @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public void testTransformingAction() {
     var transformActionStep = createStepExecution(TRANSFORM_ACTION_STEP).get();
@@ -81,7 +84,7 @@ class TransformFlatCsvTest extends BaseBatchTest {
 
   @Test
   @Sql(scripts = "TransformFlatCsvTest.sql")
-  @Sql(scripts = "TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
+  @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public void testTransformingHit() {
     var transformHitStep = createStepExecution(STEP_TRANSFORM_HIT);
@@ -94,7 +97,7 @@ class TransformFlatCsvTest extends BaseBatchTest {
 
   @Test
   @Sql(scripts = "TransformFlatCsvTest.sql")
-  @Sql(scripts = "TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
+  @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public void testTransformingListedRecord() {
     var transformListedRecordStep = createStepExecution(STEP_TRANSFORM_RECORD);

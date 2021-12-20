@@ -14,12 +14,18 @@ public class AlertDetails {
 
   long fkcoId;
 
+  String systemId;
+
+  String messageId;
+
   public AlertComposite toAlertComposite(
       Map<Long, List<HitComposite>> hits, Map<Long, List<ActionComposite>> actions) {
     return AlertComposite
         .builder()
         .alertId(alertId)
         .fkcoId(fkcoId)
+        .systemId(systemId)
+        .messageId(messageId)
         .hits(hits.get(fkcoId))
         .actions(actions.get(fkcoId))
         .build();
