@@ -2,7 +2,6 @@ package com.silenteight.warehouse.indexer.query.grouping;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.warehouse.common.opendistro.elastic.exception.OpendistroElasticClientException;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.indexer.query.common.QueryFilter;
@@ -10,11 +9,14 @@ import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.silenteight.warehouse.common.opendistro.roles.RolesMappedConstants.COUNTRY_KEY;
 import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_READ_ALIAS_NAME;
@@ -34,7 +36,6 @@ import static org.assertj.core.api.Assertions.*;
 @Slf4j
 @SpringBootTest(classes = GroupingQueryTestConfiguration.class)
 @ContextConfiguration(initializers = { OpendistroElasticContainerInitializer.class })
-@Disabled
 class GroupingQueryTest {
 
   private static final String NOT_EXISTING_KEY = "NOT_EXISTING_KEY";
@@ -97,7 +98,9 @@ class GroupingQueryTest {
     FetchGroupedDataResponse response = underTest.generate(request);
 
     Row row = response.getRows().get(0);
-    assertThat(row.getValue(MappedKeys.RISK_TYPE_KEY)).isEqualTo(EMPTY_VALUE_PLACEHOLDER);
+    assertThat(row
+        .getValueOrDefault(MappedKeys.RISK_TYPE_KEY, EMPTY_VALUE_PLACEHOLDER))
+        .isEqualTo(EMPTY_VALUE_PLACEHOLDER);
   }
 
   @Test
@@ -118,43 +121,6 @@ class GroupingQueryTest {
     Row row = response.getRows().get(0);
     String notExistingVey = row.getValueOrDefault(NOT_EXISTING_KEY, NOT_EXISTING_VALUE);
     assertThat(notExistingVey).isEqualTo(NOT_EXISTING_VALUE);
-  }
-
-  @Test
-  void shouldHandleEmptyGroupValue() {
-    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_3);
-
-    FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_READ_ALIAS_NAME))
-        .fields(of(NOT_EXISTING_KEY))
-        .dateField(INDEX_TIMESTAMP)
-        .from(parse(PROCESSING_TIMESTAMP))
-        .to(parse(PROCESSING_TIMESTAMP_4))
-        .build();
-
-    FetchGroupedDataResponse response = underTest.generate(request);
-
-    assertThat(response.getRows()).hasSize(1);
-    Row row = response.getRows().get(0);
-    assertThat(row.getCount()).isEqualTo(1);
-  }
-
-  @Test
-  void shouldHandleException() {
-    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_1);
-
-    FetchGroupedTimeRangedDataRequest invalidRequest = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of())
-        .fields(of())
-        .dateField(INDEX_TIMESTAMP)
-        .from(parse(PROCESSING_TIMESTAMP))
-        .to(parse(PROCESSING_TIMESTAMP))
-        .build();
-
-    assertThatThrownBy(() -> underTest.generate(invalidRequest))
-        .isInstanceOf(OpendistroElasticClientException.class)
-        .extracting("statusCode")
-        .isEqualTo(400);
   }
 
   @Test
@@ -214,6 +180,33 @@ class GroupingQueryTest {
     FetchGroupedDataResponse response = underTest.generate(request);
 
     assertThat(response.getRows()).isEmpty();
+  }
+
+  @Test
+  void shouldHandleNullOrMissingValuesConsistently() {
+    testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, MAPPED_ALERT_1);
+
+    Map<String, String> data = new HashMap<>();
+    data.put("alert_qa.level-0.state", null);
+    data.put("alert_analyst_decision", "existing value");
+
+    var resp = FetchGroupedDataResponse.builder()
+        .rows(List.of(
+            Row.builder()
+                .count(2)
+                .data(data)
+                .build()))
+        .build();
+
+    assertThat(resp.getRows().get(0)
+        .getValueOrDefault("alert_qa.level-0.state", NOT_EXISTING_VALUE))
+        .isEqualTo(NOT_EXISTING_VALUE);
+    assertThat(resp.getRows().get(0)
+        .getValueOrDefault(NOT_EXISTING_KEY, NOT_EXISTING_VALUE))
+        .isEqualTo(NOT_EXISTING_VALUE);
+    assertThat(resp.getRows().get(0)
+        .getValueOrDefault("alert_analyst_decision", NOT_EXISTING_VALUE))
+        .isEqualTo("existing value");
   }
 
   private void removeData() {
