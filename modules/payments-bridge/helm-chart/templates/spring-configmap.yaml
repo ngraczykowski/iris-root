@@ -50,3 +50,17 @@ data:
             provider:
               external:
                 token-uri: {{ .Values.oauthClientTokenUri | quote }}
+    
+      mail:
+        host: {{ .Values.mail.host | quote }}
+        port: {{ .Values.mail.port }}
+        username: {{ .Values.mail.username | quote }}
+        password: {{ .Values.mail.password | quote }}
+        properties:
+          mail:
+            smtp:
+              auth: true
+              starttls:
+                enable: true
+            transport:
+              protocol: smtp

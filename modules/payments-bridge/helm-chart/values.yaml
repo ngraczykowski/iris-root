@@ -38,3 +38,9 @@ emailNotification:
 service:
   metadata:
     annotations: { }
+
+mail:
+  host: ""
+  port:
+  username: ""
+  password: ""
