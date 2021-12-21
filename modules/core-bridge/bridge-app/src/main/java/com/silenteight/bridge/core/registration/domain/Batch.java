@@ -11,6 +11,10 @@ public record Batch(String id, String analysisName, Long alertsCount, BatchStatu
     return new Batch(id, analysisName, alertsCount, BatchStatus.STORED);
   }
 
+  public static Batch error(String id) {
+    return new Batch(id, "", 0L, BatchStatus.ERROR);
+  }
+
   public enum BatchStatus {
     STORED, ERROR, PROCESSING, COMPLETED, DELIVERED
   }

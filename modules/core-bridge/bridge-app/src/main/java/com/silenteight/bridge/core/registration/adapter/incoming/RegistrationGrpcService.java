@@ -35,7 +35,9 @@ class RegistrationGrpcService extends RegistrationServiceImplBase {
   @Override
   public void notifyBatchError(
       NotifyBatchErrorRequest request, StreamObserver<Empty> responseObserver) {
-    // TODO ALL-537
+    log.info("NotifyBatchError request received: {}", request);
+    registrationService.notifyBatchError(request.getBatchId());
+
     responseObserver.onNext(Empty.getDefaultInstance());
     responseObserver.onCompleted();
   }

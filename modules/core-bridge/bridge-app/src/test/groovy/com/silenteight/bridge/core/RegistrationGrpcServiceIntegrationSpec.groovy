@@ -1,5 +1,6 @@
 package com.silenteight.bridge.core
 
+import com.silenteight.proto.registration.api.v1.NotifyBatchErrorRequest
 import com.silenteight.proto.registration.api.v1.RegisterBatchRequest
 import com.silenteight.proto.registration.api.v1.RegistrationServiceGrpc.RegistrationServiceBlockingStub
 
@@ -16,7 +17,7 @@ import org.springframework.test.context.ActiveProfiles
 ])
 @ActiveProfiles("test")
 @DirtiesContext
-class RegisterBatchIntegrationTest extends BaseSpecificationIT {
+class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
 
   @GrpcClient("inProcess")
   private RegistrationServiceBlockingStub myService
@@ -36,5 +37,17 @@ class RegisterBatchIntegrationTest extends BaseSpecificationIT {
     noExceptionThrown()
   }
 
+  def "Should notify batch error"() {
+    given:
+    def batchId = UUID.randomUUID().toString()
+    def notifyBatchErrorRequest = NotifyBatchErrorRequest.newBuilder()
+        .setBatchId(batchId)
+        .build()
 
+    when:
+    myService.notifyBatchError(notifyBatchErrorRequest)
+
+    then:
+    noExceptionThrown()
+  }
 }

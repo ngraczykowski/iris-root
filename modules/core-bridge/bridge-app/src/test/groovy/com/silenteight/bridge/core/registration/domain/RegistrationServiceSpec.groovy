@@ -1,5 +1,6 @@
 package com.silenteight.bridge.core.registration.domain
 
+import com.silenteight.bridge.core.registration.domain.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.*
 
 import spock.lang.Specification
@@ -54,5 +55,36 @@ class RegistrationServiceSpec extends Specification {
     0 * modelService.getForSolving()
     0 * analysisService.create(_ as DefaultModel)
     0 * batchRepository.create(_ as Batch)
+  }
+
+  def "Should call updateStatus method with status error when batch exists"() {
+    given:
+    def batchId = UUID.randomUUID().toString()
+    def batch = new Batch(batchId, "SomeAnalysisName", 25L, BatchStatus.STORED)
+
+    and:
+    batchRepository.findById(batchId) >> Optional.of(batch)
+
+    when:
+    underTest.notifyBatchError(batchId)
+
+    then:
+    1 * batchRepository.updateStatus(batchId, BatchStatus.ERROR)
+    0 * batchRepository.create(_ as Batch)
+  }
+
+  def "Should create new batch as error when batch does not exist"() {
+    given:
+    def batchId = UUID.randomUUID().toString()
+
+    and:
+    batchRepository.findById(batchId) >> Optional.empty()
+
+    when:
+    underTest.notifyBatchError(batchId)
+
+    then:
+    1 * batchRepository.create(_ as Batch) >> Batch.error(batchId)
+    0 * batchRepository.updateStatus(batchId, BatchStatus.ERROR)
   }
 }

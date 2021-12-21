@@ -3,6 +3,7 @@ package com.silenteight.bridge.core.registration.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.bridge.core.registration.domain.Batch.BatchStatus;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DefaultModelService;
@@ -28,6 +29,18 @@ public class RegistrationService {
         .orElseThrow();
   }
 
+  public void notifyBatchError(String batchId) {
+    batchRepository.findById(batchId)
+        .ifPresentOrElse(
+            this::setStatusError,
+            () -> this.registerNewAsError(batchId));
+  }
+
+  private void setStatusError(Batch batch) {
+    log.info("Set batch status to ERROR with id: {}", batch.id());
+    batchRepository.updateStatus(batch.id(), BatchStatus.ERROR);
+  }
+
   private Batch logIfAlreadyExists(Batch batch) {
     log.info("Batch for the given id: {} already exists.", batch.id());
     return batch;
@@ -42,4 +55,9 @@ public class RegistrationService {
     return Optional.of(batchRepository.create(batch));
   }
 
+  private void registerNewAsError(String batchId) {
+    log.info("Registering new batch as error with id: {}", batchId);
+    batchRepository.create(Batch.error(batchId));
+    log.info("New batch registered as error with id: {}", batchId);
+  }
 }
