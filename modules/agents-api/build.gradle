@@ -2,10 +2,13 @@ plugins {
   id "idea"
   id "com.silenteight.gradle.wrapper" version "1.0.25"
   id "com.silenteight.gradle.release" version "1.4.0"
-  id "com.silenteight.gradle.convention" version "1.14.0"
+  id "com.silenteight.gradle.convention" version "1.21.3"
+  id "nebula.resolution-rules" version "9.0.0"
 }
 
 ext {
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
   protobufVersion = "3.11.4"
   protocVersion = protobufVersion
   grpcVersion = "1.27.2"
@@ -14,11 +17,8 @@ ext {
 }
 
 projectSetup {
-  protobufGenerateGrpc = true
   protobufProtocVersion = project.protocVersion
   protobufGrpcVersion = project.grpcVersion
-
-  protobufGenerateReactiveGrpc = true
   reactiveGrpcVersion = project.reactiveGrpcVersion
 }
 
@@ -227,4 +227,13 @@ def getPythonVersion() {
     return (version - '-SNAPSHOT') + ".${System.env['BUILD_NUMBER'] ?: '0'}"
   else
     return version
+}
+
+subprojects {
+  apply plugin: "nebula.resolution-rules"
+}
+
+dependencies {
+  resolutionRules "com.silenteight.sep.gradle:platform-resolution-rules:latest.release"
+  resolutionRules "com.netflix.nebula:gradle-resolution-rules:latest.release"
 }
