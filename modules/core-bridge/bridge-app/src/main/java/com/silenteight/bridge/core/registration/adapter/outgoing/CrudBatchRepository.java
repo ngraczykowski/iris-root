@@ -6,6 +6,6 @@ import java.util.Optional;
 
 interface CrudBatchRepository extends CrudRepository<BatchEntity, Long> {
 
-  Optional<BatchEntity> findByExternalId(String externalId);
+  Optional<BatchEntity> findByBatchId(String batchId);
 
 }

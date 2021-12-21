@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table("batches")
-record BatchEntity(@Id long id, String externalId, String analysisName, Long alertsCount,
+record BatchEntity(@Id long id, String batchId, String analysisName, Long alertsCount,
                    Status status) {
 
   @Builder

@@ -19,13 +19,13 @@ class JdbcBatchRepository implements BatchRepository {
 
   @Override
   public Optional<Batch> findById(String id) {
-    return crudBatchRepository.findByExternalId(id).map(this::mapToBatch);
+    return crudBatchRepository.findByBatchId(id).map(this::mapToBatch);
   }
 
   @Override
   public Batch create(Batch batch) {
     var batchEntity = BatchEntity.builder()
-        .externalId(batch.id())
+        .batchId(batch.id())
         .analysisName(batch.analysisName())
         .alertsCount(batch.alertsCount())
         .status(Status.valueOf(batch.status().name()))
@@ -37,7 +37,7 @@ class JdbcBatchRepository implements BatchRepository {
   private Batch mapToBatch(BatchEntity batchEntity) {
     return Batch.builder()
         .alertsCount(batchEntity.alertsCount())
-        .id(batchEntity.externalId())
+        .id(batchEntity.batchId())
         .analysisName(batchEntity.analysisName())
         .status(BatchStatus.valueOf(batchEntity.status().name()))
         .build();

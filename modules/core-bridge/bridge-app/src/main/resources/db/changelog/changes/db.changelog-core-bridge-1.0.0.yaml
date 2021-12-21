@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
-      id: 1-create-batch-table
-      author: klipiec
+      id: 1.0.0-1
+      author: pbrataniec
       preConditions:
         - onFail: MARK_RAN
           not:
@@ -22,9 +22,10 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: batch_pkey
               - column:
-                  name: external_id
+                  name: batch_id
                   type: VARCHAR(255)
                   constraints:
+                    unique: true
                     nullable: false
               - column:
                   name: analysis_name
