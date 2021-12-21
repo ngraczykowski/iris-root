@@ -27,7 +27,7 @@ class Common {
     return split -> Set.of(split[1].split(VALUES_SEPARATOR));
   }
 
-   String[] splitKeyAndValue(String line) {
+  String[] splitKeyAndValue(String line) {
     var splitKeyAndValue = line.split(KEY_VALUE_SEPARATOR);
     if (areKeyAndValueNotPresent(splitKeyAndValue)) {
       throw new InvalidDictionaryFormatException(line);
