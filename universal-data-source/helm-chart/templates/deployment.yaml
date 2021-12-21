@@ -79,7 +79,12 @@ spec:
           volumeMounts:
             - name: logback-config
               mountPath: /etc/logback
+            - name: spring-configmap
+              mountPath: /etc/spring
       volumes:
-        - name: "logback-config"
+        - name: logback-config
           configMap:
             name: {{ .Values.name }}-logback-configmap
+        - name: spring-configmap
+        configMap:
+          name: {{ .Values.name }}-spring
