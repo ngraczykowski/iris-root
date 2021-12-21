@@ -1,10 +1,10 @@
-package com.silenteight.warehouse.indexer.production;
+package com.silenteight.warehouse.production.handler;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.warehouse.indexer.production.v1.ProductionIndexRequestV1CommandHandler;
-import com.silenteight.warehouse.indexer.production.v2.ProductionIndexRequestV2CommandHandler;
+import com.silenteight.warehouse.production.handler.v1.ProductionRequestV1CommandHandler;
+import com.silenteight.warehouse.production.handler.v2.ProductionRequestV2CommandHandler;
 
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
@@ -13,10 +13,10 @@ import org.springframework.integration.dsl.IntegrationFlowDefinition;
 class ProductionRequestCommandIntegrationFlowAdapter extends IntegrationFlowAdapter {
 
   @NonNull
-  private final ProductionIndexRequestV1CommandHandler productionIndexRequestV1CommandHandler;
+  private final ProductionRequestV1CommandHandler productionRequestV1CommandHandler;
 
   @NonNull
-  private final ProductionIndexRequestV2CommandHandler productionIndexRequestV2CommandHandler;
+  private final ProductionRequestV2CommandHandler productionRequestV2CommandHandler;
 
   @NonNull
   private final String inboundChannel;
@@ -32,12 +32,12 @@ class ProductionRequestCommandIntegrationFlowAdapter extends IntegrationFlowAdap
                 com.silenteight.data.api.v1.ProductionDataIndexRequest.class,
                 sf -> sf.handle(
                     com.silenteight.data.api.v1.ProductionDataIndexRequest.class,
-                    (payload, headers) -> productionIndexRequestV1CommandHandler.handle(payload)))
+                    (payload, headers) -> productionRequestV1CommandHandler.handle(payload)))
             .subFlowMapping(
                 com.silenteight.data.api.v2.ProductionDataIndexRequest.class,
                 sf -> sf.handle(
                     com.silenteight.data.api.v2.ProductionDataIndexRequest.class,
-                    (payload, headers) -> productionIndexRequestV2CommandHandler.handle(payload))))
+                    (payload, headers) -> productionRequestV2CommandHandler.handle(payload))))
         .channel(outboundChannel);
   }
 }

@@ -21,6 +21,7 @@ import com.silenteight.warehouse.test.client.listener.sim.IndexedSimEventListene
 import org.elasticsearch.ElasticsearchException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
@@ -53,6 +54,7 @@ import static org.awaitility.Awaitility.await;
 })
 @AutoConfigureDataJpa
 @ActiveProfiles("jpa-test")
+@Disabled
 class IndexerIT {
 
   private static final int TIMEOUT = 5;

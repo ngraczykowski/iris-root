@@ -48,6 +48,11 @@ warehouse:
       - "\\d{1,}\\.WorldCheckEntities\\..*"
       - "\\d{1,}\\.WorldCheckIndividuals\\..*"
   match-mapping:
+  persistence:
+    alert:
+      labels:
+        - "s8_lobCountryCode"
+      recommendation-date-field: "recommendationDate"
   messaging:
     integration:
       analysis-expired-indexing-inbound:

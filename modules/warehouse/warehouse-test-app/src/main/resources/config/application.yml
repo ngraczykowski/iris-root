@@ -94,9 +94,6 @@ test:
       alerts-expired-indexing-test-client-outbound:
         exchange-name: bridge.retention
         routing-key: retention.alerts-expired
-      analysis-expired-indexing-test-client-outbound:
-        exchange-name: testapp.command
-        routing-key: command.analysis-expired
   generator:
     production-enabled: false
     simulation-enabled: false
