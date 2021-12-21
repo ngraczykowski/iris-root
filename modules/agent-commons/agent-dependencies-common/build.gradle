@@ -42,7 +42,7 @@ dependencies {
   // NOTE(ahaczewski): Do not change the order of platforms!
   api platform("org.tribuo:tribuo-all:4.1.0")
   api platform("org.junit:junit-bom:5.7.2")
-  api platform("org.testcontainers:testcontainers-bom:1.15.3")
+  api platform("org.testcontainers:testcontainers-bom:1.16.2")
   api platform("jakarta.platform:jakarta.jakartaee-bom:8.0.0")
   api platform("io.projectreactor:reactor-bom:2020.0.7")
   api platform("io.grpc:grpc-bom:1.38.0")
