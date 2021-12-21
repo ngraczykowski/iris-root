@@ -36,6 +36,11 @@ warehouse:
       - "\\d{1,}\\.WorldCheckEntities\\..*"
       - "\\d{1,}\\.WorldCheckIndividuals\\..*"
   match-mapping:
+  persistence:
+    alert:
+      labels:
+        - "lob_country"
+      recommendation-date-field: "recommendationDate"
   environment:
     prefix: local
   db:

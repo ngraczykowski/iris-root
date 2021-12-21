@@ -3,6 +3,10 @@ warehouse:
     country-source-key: access_permission_tag
     ignored-keys:
   match-mapping:
+  persistence:
+    alert:
+      labels:
+      recommendation-date-field: "alert_create_time"
   environment:
     prefix: sierra
   sampling:

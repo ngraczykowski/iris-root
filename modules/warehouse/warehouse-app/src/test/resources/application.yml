@@ -20,6 +20,10 @@ warehouse:
   alert-mapping:
     country-source-key: lob_country
   match-mapping:
+  persistence:
+    alert:
+      labels:
+      recommendation-date-field: "recommendationDate"
   messaging:
     broker:
       analysis-expired-indexing:

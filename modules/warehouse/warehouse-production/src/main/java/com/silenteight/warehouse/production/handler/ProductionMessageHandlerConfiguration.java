@@ -1,18 +1,20 @@
-package com.silenteight.warehouse.indexer.production;
+package com.silenteight.warehouse.production.handler;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
-import com.silenteight.warehouse.indexer.production.v1.ProductionIndexRequestV1CommandHandler;
-import com.silenteight.warehouse.indexer.production.v2.ProductionIndexRequestV2CommandHandler;
+import com.silenteight.warehouse.production.handler.v1.ProductionRequestV1CommandHandler;
+import com.silenteight.warehouse.production.handler.v2.ProductionRequestV2CommandHandler;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
+
+import javax.validation.Valid;
 
 @Configuration
 @EnableConfigurationProperties(ProductionIndexerProperties.class)
@@ -31,6 +33,7 @@ class ProductionMessageHandlerConfiguration {
   private final AmqpOutboundFactory outboundFactory;
 
   @NonNull
+  @Valid
   private final ProductionIndexerProperties properties;
 
   @Bean
@@ -51,12 +54,12 @@ class ProductionMessageHandlerConfiguration {
 
   @Bean
   ProductionRequestCommandIntegrationFlowAdapter productionRequestCommandIntegrationFlowAdapter(
-      ProductionIndexRequestV1CommandHandler productionIndexRequestV1CommandHandler,
-      ProductionIndexRequestV2CommandHandler productionIndexRequestV2CommandHandler) {
+      ProductionRequestV1CommandHandler productionRequestV1CommandHandler,
+      ProductionRequestV2CommandHandler productionRequestV2CommandHandler) {
 
     return new ProductionRequestCommandIntegrationFlowAdapter(
-        productionIndexRequestV1CommandHandler,
-        productionIndexRequestV2CommandHandler,
+        productionRequestV1CommandHandler,
+        productionRequestV2CommandHandler,
         PRODUCTION_INDEXING_INBOUND_CHANNEL,
         PRODUCTION_INDEXED_OUTBOUND_CHANNEL);
   }
