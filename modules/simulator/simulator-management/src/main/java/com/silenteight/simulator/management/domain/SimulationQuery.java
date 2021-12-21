@@ -14,6 +14,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+
+import static com.silenteight.simulator.management.domain.SimulationState.RUNNING;
+import static com.silenteight.simulator.management.domain.SimulationState.STREAMING;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
