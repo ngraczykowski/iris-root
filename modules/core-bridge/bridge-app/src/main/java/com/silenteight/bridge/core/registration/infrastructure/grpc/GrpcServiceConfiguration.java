@@ -1,5 +1,8 @@
 package com.silenteight.bridge.core.registration.infrastructure.grpc;
 
+import com.silenteight.adjudication.api.library.v1.analysis.AnalysisGrpcAdapter;
+import com.silenteight.adjudication.api.library.v1.analysis.AnalysisServiceClient;
+import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.bridge.core.registration.infrastructure.util.KnownServices;
 import com.silenteight.governance.api.library.v1.model.ModelGrpcAdapter;
 import com.silenteight.governance.api.library.v1.model.ModelServiceClient;
@@ -16,8 +19,11 @@ import org.springframework.context.annotation.Profile;
 @EnableConfigurationProperties({ GrpcConfigurationProperties.class })
 public class GrpcServiceConfiguration {
 
-  @GrpcClient(KnownServices.GOVERNANCE_CONNECTOR)
+  @GrpcClient(KnownServices.GOVERNANCE)
   SolvingModelServiceBlockingStub solvingModelServiceBlockingStub;
+
+  @GrpcClient(KnownServices.ADJUDICATION_ENGINE)
+  AnalysisServiceBlockingStub analysisServiceBlockingStub;
 
   @Bean
   @Profile({ "dev", "test" })
@@ -26,10 +32,24 @@ public class GrpcServiceConfiguration {
   }
 
   @Bean
+  @Profile({ "dev", "test" })
+  AnalysisServiceClient analysisServiceClientMock() {
+    return new AnalysisServiceClientMock();
+  }
+
+  @Bean
   @ConditionalOnMissingBean
   ModelServiceClient modelServiceClient(GrpcConfigurationProperties properties) {
     return new ModelGrpcAdapter(
         solvingModelServiceBlockingStub,
         properties.governanceDeadline().getSeconds());
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  AnalysisServiceClient analysisServiceClient(GrpcConfigurationProperties properties) {
+    return new AnalysisGrpcAdapter(
+        analysisServiceBlockingStub,
+        properties.adjudicationEngineDeadline().getSeconds());
   }
 }

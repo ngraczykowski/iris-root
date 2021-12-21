@@ -7,4 +7,5 @@ import java.time.Duration;
 
 @ConstructorBinding
 @ConfigurationProperties("silenteight.bridge.grpc")
-record GrpcConfigurationProperties(Duration governanceDeadline) {}
+record GrpcConfigurationProperties(Duration governanceDeadline,
+                                   Duration adjudicationEngineDeadline) {}

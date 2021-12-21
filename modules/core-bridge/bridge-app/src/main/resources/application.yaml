@@ -6,6 +6,7 @@ silenteight:
     grpc:
       port: 24806
       governance-deadline: 1m
+      adjudication-engine-deadline: 1m
 
     ### HTTP PROPERTIES
     http:
@@ -16,7 +17,8 @@ grpc:
   server:
     port: ${silenteight.bridge.grpc.port}
   client:
-    governance-connector.address: static://localhost:24806
+    governance.address: static://localhost:24205
+    adjudication-engine.address: static://localhost:24801
     GLOBAL:
       negotiation-type: PLAINTEXT
 
