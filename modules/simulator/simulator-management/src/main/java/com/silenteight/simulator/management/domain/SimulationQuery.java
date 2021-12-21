@@ -28,6 +28,9 @@ class SimulationQuery
   public List<SimulationDto> list(Collection<SimulationState> states) {
     log.debug("Listing all SimulationDto by states={}", states);
 
+    if (states.contains(RUNNING))
+      states.add(STREAMING);
+      
     return repository
         .findAllByStateIn(states)
         .stream()
