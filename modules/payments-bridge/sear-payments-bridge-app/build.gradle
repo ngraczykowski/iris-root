@@ -104,6 +104,9 @@ dependencies {
   // AE API
   implementation libraries.adjudication_engine_api
 
+  // Learning Engine API
+  implementation libraries.learning_engine_store_api
+
   // Governance
   implementation libraries.governance_model_api
 

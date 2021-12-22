@@ -34,4 +34,9 @@ public class AmqpDefaults {
 
   public static final String DATA_RETENTION_ALERT_EXPIRED_ROUTING_KEY =
       "retention.alerts-expired";
+
+  public static final String LEARNING_ENGINE_EXCHANGE_NAME = "bridge.historical";
+
+  public static final String LEARNING_ENGINE_HISTORICAL_DECISION_ROUTING_KEY =
+      "historical.historical-decisions-request.production";
 }
