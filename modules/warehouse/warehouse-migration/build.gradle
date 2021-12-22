@@ -1,0 +1,33 @@
+plugins {
+  id "java-library"
+  id "java-test-fixtures"
+}
+
+description = "Warehouse Migration"
+
+configurations {
+  implementation.extendsFrom starterCommon
+  implementation.extendsFrom starterMessaging
+  implementation.extendsFrom starterDatabase
+
+  testImplementation.extendsFrom starterSpringTest
+}
+
+dependencies {
+  implementation project(":warehouse-common")
+  implementation project(":warehouse-db-changelog")
+  implementation project(":warehouse-backup")
+  implementation project(":warehouse-production")
+
+  implementation libraries.silenteight_commons_core
+  implementation libraries.silenteight_data_api
+  implementation libraries.silenteight_sampling_alerts_api
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.spring_integration_jdbc
+  implementation libraries.postgresql
+
+  testImplementation project(":warehouse-common-testing")
+  testImplementation project(":warehouse-test-client")
+
+  testFixturesImplementation testFixtures(project(':warehouse-common'))
+}

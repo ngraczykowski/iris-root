@@ -5,4 +5,5 @@ dependencies {
   starterIntegration libraries.spring_integration_amqp
   starterIntegration libraries.spring_integration_core
   starterIntegration libraries.spring_integration_mail
+  starterIntegration libraries.spring_integration_jdbc
 }

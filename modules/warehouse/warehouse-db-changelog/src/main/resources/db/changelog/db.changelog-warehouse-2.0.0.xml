@@ -86,4 +86,26 @@
                          tableName="warehouse_alert_label"
                          validate="true"/>
   </changeSet>
+
+  <changeSet id="warehouse-2.0.0-2" author="skociuba">
+    <createTable tableName="warehouse_lock">
+      <column name="lock_key" type="CHAR(36)">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="int_lock_pk"/>
+      </column>
+      <column name="region" type="VARCHAR(100)">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="int_lock_pk"/>
+      </column>
+      <column name="client_id" type="CHAR(36)"/>
+      <column name="created_date" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="warehouse-2.0.0-3" author="skociuba">
+    <addColumn tableName="warehouse_message_backup">
+      <column name="migrated" type="boolean"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>
