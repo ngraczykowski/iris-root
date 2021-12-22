@@ -5,6 +5,8 @@ import lombok.Value;
 
 import com.silenteight.proto.registration.api.v1.NotifyBatchErrorRequest;
 
+import java.util.Optional;
+
 @Value
 @Builder
 public class NotifyBatchErrorIn {
@@ -15,7 +17,7 @@ public class NotifyBatchErrorIn {
   NotifyBatchErrorRequest toNotifyBatchErrorRequest() {
     return NotifyBatchErrorRequest.newBuilder()
         .setBatchId(batchId)
-        .setErrorDescription(errorDescription)
+        .setErrorDescription(Optional.ofNullable(errorDescription).orElse(""))
         .build();
   }
 }

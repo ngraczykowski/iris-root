@@ -7,6 +7,7 @@ import com.silenteight.proto.registration.api.v1.AlertStatus;
 import com.silenteight.proto.registration.api.v1.AlertWithMatches;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Value
@@ -24,7 +25,7 @@ public class AlertWithMatchesIn {
     return AlertWithMatches.newBuilder()
         .setAlertId(alertId)
         .setStatus(AlertStatus.valueOf(status.name().toUpperCase()))
-        .setErrorDescription(errorDescription)
+        .setErrorDescription(Optional.ofNullable(errorDescription).orElse(""))
         .addAllMatches(matches.stream()
             .map(MatchIn::toMatch)
             .collect(Collectors.toList()))
