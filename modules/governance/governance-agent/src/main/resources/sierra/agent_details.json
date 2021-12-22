@@ -53,6 +53,31 @@
     ],
     "configurations": []
   },
+  "agents/geo/versions/2.0.0/configs/1": {
+    "agentId": "fd46923f-f68f-4b79-9d63-1621f081cfd0",
+    "features": [
+      "features/geo2"
+    ],
+    "featuresList": [
+      {
+        "name": "features/geo2",
+        "displayName": "Geo v2"
+      }
+    ],
+    "responses": [
+      "CITY_MATCH",
+      "CITY_NO_MATCH",
+      "COUNTRY_MATCH",
+      "COUNTRY_NO_MATCH",
+      "COUNTRY_WEAK_MATCH",
+      "STATE_MATCH",
+      "STATE_NO_MATCH",
+      "NO_DATA",
+      "INCONCLUSIVE",
+      "AGENT_ERROR"
+    ],
+    "configurations": []
+  },
   "agents/companyName/versions/1.0.0/configs/1": {
     "agentId": "080101a1-ef44-4f4b-ab1d-cfdbc2acbe9e",
     "features": [
@@ -62,6 +87,26 @@
       {
         "name": "features/organizationName",
         "displayName": "Organization Name"
+      }
+    ],
+    "responses": [
+      "MATCH",
+      "INCONCLUSIVE",
+      "NO_MATCH",
+      "NO_DATA",
+      "AGENT_ERROR"
+    ],
+    "configurations": []
+  },
+  "agents/companyName/versions/2.0.0/configs/1": {
+    "agentId": "080101a1-ef44-4f4b-ab1d-cfdbc2acbe9e",
+    "features": [
+      "features/organizationName2"
+    ],
+    "featuresList": [
+      {
+        "name": "features/organizationName2",
+        "displayName": "Organization Name v2"
       }
     ],
     "responses": [
