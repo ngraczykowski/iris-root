@@ -4,11 +4,11 @@ ext {
   //***********************************
   // Silent Eight
   //***********************************
-  coreBridgeRegistrationApiVersion = "1.0.0-BUILD.4"
+  coreBridgeRegistrationApiVersion = "1.0.0"
   governanceApiVersion = "1.9.0"
-  governanceApiLibraryVersion = "1.0.0-BUILD.3"
+  governanceApiLibraryVersion = "1.0.0"
   adjudicationEngineApiVersion = "0.7.0"
-  adjudicationEngineApiLibraryVersion = "1.0.0-BUILD.2"
+  adjudicationEngineApiLibraryVersion = "1.0.0"
   protobufSpringBootStarterVersion = "1.6.0"
 
   //***********************************
