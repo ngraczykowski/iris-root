@@ -11,4 +11,6 @@ public class AlertLabelUtils {
 
   public static final String ALERT_LABEL_LEARNING = "learning";
   public static final String ALERT_LABEL_LEARNING_CSV = "CSV";
+
+  public static final String ALERT_LABEL_JOB_ID = "jobId";
 }
