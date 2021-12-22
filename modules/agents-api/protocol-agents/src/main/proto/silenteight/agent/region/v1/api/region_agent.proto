@@ -10,8 +10,8 @@ option java_outer_classname = "RegionAgentApiProto";
 option java_multiple_files = true;
 
 service RegionAgent {
-  rpc DetectLanguageRegions (stream DetectLanguageRegionsRequest)
-      returns (stream DetectLanguageRegionsResponse) {
+  rpc DetectLanguageRegions (DetectLanguageRegionsRequest)
+      returns (DetectLanguageRegionsResponse) {
   }
 
   rpc GetRegionAgentDescriptor (google.protobuf.Empty) returns (RegionAgentDescriptor) {
