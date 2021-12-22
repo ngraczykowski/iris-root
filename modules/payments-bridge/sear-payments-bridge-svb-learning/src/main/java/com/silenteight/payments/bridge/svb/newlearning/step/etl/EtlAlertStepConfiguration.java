@@ -16,6 +16,7 @@ import org.springframework.batch.core.listener.JobParameterExecutionContextCopyL
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.support.AbstractItemStreamItemReader;
 import org.springframework.batch.item.support.CompositeItemProcessor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +32,9 @@ import static com.silenteight.payments.bridge.svb.newlearning.job.etl.EtlJobCons
 class EtlAlertStepConfiguration {
 
   @Language("PostgreSQL")
-  private static final String QUERY = "SELECT learning_alert_id FROM pb_learning_etl_reservation";
+  private static final String QUERY = "SELECT learning_alert_id"
+      + " FROM pb_learning_etl_reservation"
+      + " WHERE job_id=?";
 
   private final StepBuilderFactory stepBuilderFactory;
   private final EtlJobProperties properties;
@@ -39,8 +42,10 @@ class EtlAlertStepConfiguration {
 
   @Bean
   @StepScope
-  public AbstractItemStreamItemReader<AlertComposite> compositeAlertReader() {
-    return alertCompositeReaderFactory.createAlertCompositeReader(QUERY, properties.getChunkSize());
+  public AbstractItemStreamItemReader<AlertComposite> compositeAlertReader(
+      @Value("#{stepExecution.jobExecution.jobId}") Long jobId) {
+    return alertCompositeReaderFactory.createAlertCompositeReader(
+        QUERY, jobId, properties.getChunkSize());
   }
 
   @Bean

@@ -15,9 +15,11 @@ public class AlertCompositeReaderFactory {
   private final AlertCompositeFetcher alertCompositeFetcher;
   private final DataSource dataSource;
 
-  public AlertCompositeReader createAlertCompositeReader(String alertsQuery, int chunkSize) {
+  public AlertCompositeReader createAlertCompositeReader(
+      String alertsQuery, long jobId, int chunkSize) {
     var cursorReader = new BetterJdbcCursorItemReader<Long>();
     cursorReader.setSql(alertsQuery);
+    cursorReader.setPreparedStatementSetter(ps -> ps.setLong(1, jobId));
     cursorReader.setRowMapper((rs, rowNum) -> rs.getLong(1));
     cursorReader.setDataSource(dataSource);
     return new AlertCompositeReader(alertCompositeFetcher, cursorReader, chunkSize);

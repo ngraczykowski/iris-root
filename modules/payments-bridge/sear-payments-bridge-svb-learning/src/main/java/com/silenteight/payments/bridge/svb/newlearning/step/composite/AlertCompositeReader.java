@@ -57,7 +57,7 @@ class AlertCompositeReader extends AbstractItemStreamItemReader<AlertComposite> 
   private List<AlertComposite> readAlertComposites() throws Exception {
     var ids = fetchAlertIds();
 
-    log.info("Fetched alert Ids: count = {}", ids.size());
+    log.debug("Fetched alert Ids: count = {}", ids.size());
 
     if (ids.isEmpty()) {
       return List.of();
