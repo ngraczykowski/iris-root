@@ -19,6 +19,7 @@ import java.util.Map;
 
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,13 +33,13 @@ class ConfigsTrackerTest {
 
   @BeforeEach
   void setUp() {
-    when(applicationContext.getEnvironment()).thenReturn(environment);
-    when(environment.getRequiredProperty("spring.application.name")).thenReturn("tracker");
+    given(applicationContext.getEnvironment()).willReturn(environment);
   }
 
   @Test
   void shouldPropagateConfigsToSpecificListeners() {
     //given
+    given(environment.getRequiredProperty("spring.application.name")).willReturn("tracker");
     var firstListener = spy(FirstConfigListener.builder()
         .expectedAgent("confs", "confs1")
         .expectedAgent("nested/confs", "nested-confs1")
@@ -56,7 +57,7 @@ class ConfigsTrackerTest {
   @Test
   void shouldPropagateNestedConfigsToSpecificListeners() {
     //given
-    when(environment.getProperty("application.config.dir")).thenReturn("tracker/nested");
+    given(environment.getProperty("application.config.dir")).willReturn("tracker/agent/nested");
     var firstListener = spy(FirstConfigListener.builder()
         .expectedAgent("confs", "nested-confs1")
         .build());

@@ -8,6 +8,7 @@ import com.silenteight.agent.configloader.AgentConfigs;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.env.Environment;
 
 import java.util.List;
 
@@ -38,7 +39,11 @@ class ContextRefreshedConfigsChangeTracker {
   private static String readConfigDir(ApplicationContext context) {
     var env = context.getEnvironment();
     return ofNullable(env.getProperty(APPLICATION_CONFIG_DIR))
-        .orElse(env.getRequiredProperty(APPLICATION_NAME));
+        .orElseGet(() -> getDefaultConfigDir(env));
+  }
+
+  private static String getDefaultConfigDir(Environment env) {
+    return env.getRequiredProperty(APPLICATION_NAME) + "/agent";
   }
 
   @SuppressWarnings({ "rawtypes", "unchecked" })
