@@ -13,11 +13,14 @@ import com.silenteight.simulator.management.list.dto.SimulationDto;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 
 import static com.silenteight.simulator.management.domain.SimulationState.RUNNING;
 import static com.silenteight.simulator.management.domain.SimulationState.STREAMING;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Stream.of;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,7 +35,7 @@ class SimulationQuery
     log.debug("Listing all SimulationDto by states={}", states);
 
     if (states.contains(RUNNING))
-      states.add(STREAMING);
+      states = Stream.concat(states.stream(), of(STREAMING)).collect(toSet());
       
     return repository
         .findAllByStateIn(states)

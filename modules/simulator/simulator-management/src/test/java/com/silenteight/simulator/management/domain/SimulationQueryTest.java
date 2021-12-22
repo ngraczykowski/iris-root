@@ -45,7 +45,22 @@ class SimulationQueryTest extends BaseDataJpaTest {
 
     // then
     assertThat(result).hasSize(1);
-    assertSimulation(result.get(0));
+    assertSimulation(result.get(0), PENDING_STATE);
+  }
+
+  @Test
+  void shouldListSimulationsByStatesStreamingCase() {
+    // given
+    UUID canceledSimulationId = fromString("b4708d8c-4832-6fde-8dc0-d17b4708d8ca");
+    persistSimulation(ID, STREAMING);
+    persistSimulation(canceledSimulationId, CANCELED_STATE);
+
+    // when
+    List<SimulationDto> result = underTest.list(of(RUNNING, ARCHIVED_STATE));
+
+    // then
+    assertThat(result).hasSize(1);
+    assertSimulation(result.get(0), RUNNING);
   }
 
   @Test
@@ -58,7 +73,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
 
     // then
     assertThat(result).hasSize(1);
-    assertSimulation(result.get(0));
+    assertSimulation(result.get(0), PENDING_STATE);
   }
 
   @Test
@@ -71,7 +86,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
 
     // then
     assertThat(result).hasSize(1);
-    assertSimulation(result.get(0));
+    assertSimulation(result.get(0), PENDING_STATE);
   }
 
   @Test
@@ -143,10 +158,10 @@ class SimulationQueryTest extends BaseDataJpaTest {
     assertThat(simulationDetailsDto.getState()).isEqualTo(RUNNING);
   }
 
-  private static void assertSimulation(SimulationDto result) {
+  private static void assertSimulation(SimulationDto result, SimulationState pendingState) {
     assertThat(result.getId()).isEqualTo(ID);
     assertThat(result.getSimulationName()).isEqualTo(SIMULATION_NAME);
-    assertThat(result.getState()).isEqualTo(PENDING_STATE);
+    assertThat(result.getState()).isEqualTo(pendingState);
     assertThat(result.getDatasets()).isEqualTo(DATASETS);
     assertThat(result.getModel()).isEqualTo(MODEL_NAME);
     assertThat(result.getCreatedBy()).isEqualTo(USERNAME);
