@@ -15,6 +15,6 @@ dependencies {
   implementation libraries.assertj_core
 
   api libraries.spring_cloud_starter_sleuth
-  api libraries.s8_spring_cloud_consul_discovery
+  api libraries.spring_cloud_consul_discovery
   api libraries.spring_cloud_starter_consul_config
 }

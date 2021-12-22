@@ -12,7 +12,6 @@ javaPlatform {
 // NOTE: it stems from com.silenteight.sep:sep-dependencies:2.2.0
 ext {
   // Silent Eight
-  s8consulDiscoveryVersion = "2.4.0"
   s8consulGrpcRegistrationVersion = "1.0.0"
   s8commonsVersion = "2.0.0"
 
@@ -33,7 +32,7 @@ ext {
   hibernateVersion = "5.4.32.Final"
   jakartaElVersion = "3.0.3"
   jakartaMailVersion = "1.6.5"
-  netDevhGrpcSpringBootStarterVersion = "2.12.0.RELEASE"
+  netDevhGrpcSpringBootStarterVersion = "2.13.0.RELEASE"
   queryDslVersion = "4.4.0"
   restAssuredVersion = "4.4.0"
 }
@@ -44,21 +43,21 @@ dependencies {
   api platform("org.junit:junit-bom:5.7.2")
   api platform("org.testcontainers:testcontainers-bom:1.16.2")
   api platform("jakarta.platform:jakarta.jakartaee-bom:8.0.0")
-  api platform("io.projectreactor:reactor-bom:2020.0.7")
+  api platform("io.projectreactor:reactor-bom:2020.0.13")
   api platform("io.grpc:grpc-bom:1.38.0")
   api platform("io.zipkin.brave:brave-bom:5.13.3")
   api platform("io.micrometer:micrometer-bom:1.6.7")
   api platform("com.google.protobuf:protobuf-bom:3.17.3")
   api platform("org.spockframework:spock-bom:2.0-groovy-3.0")
-  api platform("org.springframework.boot:spring-boot-dependencies:2.4.6")
-  api platform("org.springframework.cloud:spring-cloud-dependencies:2020.0.3")
+  api platform("org.springframework.boot:spring-boot-dependencies:2.5.7")
+  api platform("org.springframework.cloud:spring-cloud-dependencies:2020.0.5")
+  api platform("org.springframework.cloud:spring-cloud-consul-discovery:3.0.4")
 
   // Keep each group sorted alphabetically.
   constraints {
     // Silent Eight
     api "com.silenteight.commons:silenteight-commons-core:$s8commonsVersion"
     api "com.silenteight.commons:consul-grpc-registration:$s8consulGrpcRegistrationVersion"
-    api "com.silenteight.spring.cloud.consul.discovery:silenteight-spring-cloud-consul-discovery:$s8consulDiscoveryVersion"
 
     // Miscellaneous Dependencies
     api "co.elastic.logging:logback-ecs-encoder:$elasticLoggingVersion"
