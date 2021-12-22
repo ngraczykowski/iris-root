@@ -12,6 +12,6 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "pb.svb-learning.reservation")
 class AlertReservationProperties {
 
-  private int chunkSize = 1;
+  private int chunkSize = 1024;
 
 }

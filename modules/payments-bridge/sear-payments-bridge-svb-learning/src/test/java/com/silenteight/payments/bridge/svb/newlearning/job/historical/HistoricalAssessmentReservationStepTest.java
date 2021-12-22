@@ -25,16 +25,32 @@ class HistoricalAssessmentReservationStepTest extends BaseBatchTest {
   @Sql(scripts = "HistoricalAssessmentReservationStepTest.sql")
   @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
-  void alertReservationStepTest() {
+  void shouldRunReservationStepTwice() {
+    var jobId = runReservationStep();
+    var count = fetchReservedForJob(jobId);
+    Assertions.assertThat(count).isEqualTo(3);
+    // Second time on conflict do nothing should not put any data so result should be the same.
+    var secondJobId = runReservationStep();
+
+    var reservedFirstJob = fetchReservedForJob(jobId);
+    var reservedSecondJob = fetchReservedForJob(secondJobId);
+    // On second reservation execution it should already been assigned to first execution only.
+    Assertions.assertThat(reservedFirstJob).isEqualTo(3);
+    Assertions.assertThat(reservedSecondJob).isEqualTo(0);
+  }
+
+  private long fetchReservedForJob(long jobId) {
+    return jdbcTemplate.queryForObject(
+        "SELECT COUNT(*) FROM pb_learning_historical_reservation WHERE job_id=" + jobId,
+        Number.class).longValue();
+  }
+
+  private long runReservationStep() {
     var jobExecution =
         jobLauncherTestUtils.launchStep(
             HISTORICAL_ASSESSMENT_RESERVATION_STEP);
     Assertions.assertThat("COMPLETED").isEqualTo(jobExecution.getExitStatus().getExitCode());
-    var step = jobExecution
-        .getStepExecutions()
-        .stream()
-        .filter(s -> HISTORICAL_ASSESSMENT_RESERVATION_STEP.equals(s.getStepName()))
-        .findFirst();
-    Assertions.assertThat(step.get().getWriteCount()).isEqualTo(3);
+    return jobExecution.getJobId();
+
   }
 }
