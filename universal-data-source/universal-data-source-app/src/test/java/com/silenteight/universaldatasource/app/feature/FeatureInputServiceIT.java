@@ -99,6 +99,7 @@ class FeatureInputServiceIT {
     assertLocationFeature(matchLocationInputsResponse);
   }
 
+
   private static void assertLocationFeature(
       BatchGetMatchLocationInputsResponse response) {
 
@@ -114,6 +115,41 @@ class FeatureInputServiceIT {
         .get(0)
         .getAlertedPartyLocation()).isEqualTo("Cambridge TerraceWellington 6011, New Zealand");
   }
+
+  @Test
+  @Sql(scripts = "adapter/outgoing/jdbc/populate_feature_inputs.sql")
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
+      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  void shouldGetLocationFeatureAfterMappingFeatureState() {
+
+    var batchGetMatchLocationInputs =
+        locationInputServiceBlockingStub.batchGetMatchLocationInputs(
+            BatchGetMatchLocationInputsRequest.newBuilder()
+                .addMatches("alerts/3/matches/3")
+                .addFeatures("features/state2")
+                .build());
+
+    var matchLocationInputsResponse = batchGetMatchLocationInputs.next();
+    assertLocationFeatureState(matchLocationInputsResponse);
+  }
+
+
+  private static void assertLocationFeatureState(
+      BatchGetMatchLocationInputsResponse response) {
+
+    assertThat(response.getLocationInputsCount()).isEqualTo(1);
+    assertThat(response.getLocationInputsList().stream()
+        .filter(l -> l.getMatch().equals("alerts/3/matches/3"))
+        .count())
+        .isEqualTo(1);
+
+    assertThat(response
+        .getLocationInputs(0)
+        .getLocationFeatureInputsList()
+        .get(0)
+        .getAlertedPartyLocation()).isEqualTo("Cambridge TerraceWellington 6011, New Zealand");
+  }
+
 
   @Test
   @Sql(scripts = "adapter/outgoing/jdbc/populate_feature_inputs.sql")

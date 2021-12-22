@@ -4,3 +4,6 @@ metadata:
   name: {{ .Values.name }}-spring
 data:
   application.yml: |
+    uds:
+      features:
+        mapping: []

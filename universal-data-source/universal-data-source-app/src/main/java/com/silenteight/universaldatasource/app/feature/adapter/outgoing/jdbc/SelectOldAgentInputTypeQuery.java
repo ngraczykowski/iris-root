@@ -21,9 +21,7 @@ class SelectOldAgentInputTypeQuery {
   private final JdbcTemplate jdbcTemplate;
 
   Integer execute() {
-    if (log.isDebugEnabled()) {
-      log.debug("Updating agent input types");
-    }
+    log.debug("Updating agent input types");
 
     return jdbcTemplate.queryForObject(SQL, Integer.class);
   }

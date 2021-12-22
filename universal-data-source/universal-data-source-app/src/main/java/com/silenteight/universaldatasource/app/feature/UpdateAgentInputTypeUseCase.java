@@ -25,9 +25,7 @@ public class UpdateAgentInputTypeUseCase implements CommandLineRunner {
 
       int updatedAgentInputTypeCount = featureDataAccess.updateAgentInputType();
 
-      if (log.isDebugEnabled()) {
-        log.debug("Finished updating agent input types, count={}", updatedAgentInputTypeCount);
-      }
+      log.debug("Finished updating agent input types, count={}", updatedAgentInputTypeCount);
     } else {
       log.debug("Agent input types are up to date");
     }

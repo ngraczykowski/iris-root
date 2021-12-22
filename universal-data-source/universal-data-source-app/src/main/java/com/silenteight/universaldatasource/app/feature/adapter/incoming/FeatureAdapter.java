@@ -46,7 +46,6 @@ import com.silenteight.datasource.api.nationalid.v1.NationalIdFeatureInput;
 import com.silenteight.datasource.api.transaction.v1.BatchGetMatchTransactionInputsRequest;
 import com.silenteight.datasource.api.transaction.v1.BatchGetMatchTransactionInputsResponse;
 import com.silenteight.datasource.api.transaction.v1.TransactionFeatureInput;
-import com.silenteight.universaldatasource.app.feature.model.BatchFeatureRequest;
 import com.silenteight.universaldatasource.app.feature.port.incoming.BatchCreateMatchFeaturesUseCase;
 import com.silenteight.universaldatasource.app.feature.port.incoming.BatchGetFeatureInputUseCase;
 
@@ -79,6 +78,7 @@ class FeatureAdapter {
 
   private final BatchGetFeatureInputUseCase getUseCase;
   private final BatchCreateMatchFeaturesUseCase addUseCase;
+  private final BatchFeatureRequestFactory batchFeatureRequestFactory;
 
   BatchCreateAgentInputsResponse batchAgentInputs(
       @Valid BatchCreateAgentInputsRequest request) {
@@ -89,11 +89,8 @@ class FeatureAdapter {
       @Valid BatchGetMatchNameInputsRequest request,
       Consumer<BatchGetMatchNameInputsResponse> onNext) {
 
-    var featureRequest = BatchFeatureRequest.builder()
-        .agentInputType(NAME_FEATURE_INPUT)
-        .matches(request.getMatchesList())
-        .features(request.getFeaturesList())
-        .build();
+    var featureRequest = batchFeatureRequestFactory.create(NAME_FEATURE_INPUT,
+        request.getMatchesList(), request.getFeaturesList());
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
@@ -104,11 +101,8 @@ class FeatureAdapter {
       @Valid BatchGetMatchLocationInputsRequest request,
       Consumer<BatchGetMatchLocationInputsResponse> onNext) {
 
-    var featureRequest = BatchFeatureRequest.builder()
-        .agentInputType(LOCATION_FEATURE_INPUT)
-        .matches(request.getMatchesList())
-        .features(request.getFeaturesList())
-        .build();
+    var featureRequest = batchFeatureRequestFactory.create(LOCATION_FEATURE_INPUT,
+        request.getMatchesList(), request.getFeaturesList());
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
@@ -119,11 +113,8 @@ class FeatureAdapter {
       @Valid BatchGetMatchFreeTextInputsRequest request,
       Consumer<BatchGetMatchFreeTextInputsResponse> onNext) {
 
-    var featureRequest = BatchFeatureRequest.builder()
-        .agentInputType(FREE_TEXT_INPUT)
-        .matches(request.getMatchesList())
-        .features(request.getFeaturesList())
-        .build();
+    var featureRequest = batchFeatureRequestFactory.create(FREE_TEXT_INPUT,
+        request.getMatchesList(), request.getFeaturesList());
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
@@ -134,11 +125,8 @@ class FeatureAdapter {
       @Valid BatchGetMatchNationalIdInputsRequest request,
       Consumer<BatchGetMatchNationalIdInputsResponse> onNext) {
 
-    var featureRequest = BatchFeatureRequest.builder()
-        .agentInputType(NATIONAL_ID_INPUT)
-        .matches(request.getMatchesList())
-        .features(request.getFeaturesList())
-        .build();
+    var featureRequest = batchFeatureRequestFactory.create(NATIONAL_ID_INPUT,
+        request.getMatchesList(), request.getFeaturesList());
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
@@ -149,11 +137,8 @@ class FeatureAdapter {
       @Valid BatchGetMatchTransactionInputsRequest request,
       Consumer<BatchGetMatchTransactionInputsResponse> onNext) {
 
-    var featureRequest = BatchFeatureRequest.builder()
-        .agentInputType(TRANSACTION_INPUT)
-        .matches(request.getMatchesList())
-        .features(request.getFeaturesList())
-        .build();
+    var featureRequest = batchFeatureRequestFactory.create(TRANSACTION_INPUT,
+        request.getMatchesList(), request.getFeaturesList());
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
@@ -164,11 +149,8 @@ class FeatureAdapter {
       @Valid BatchGetMatchAllowListInputsRequest request,
       Consumer<BatchGetMatchAllowListInputsResponse> onNext) {
 
-    var featureRequest = BatchFeatureRequest.builder()
-        .agentInputType(ALLOW_LIST_INPUT)
-        .matches(request.getMatchesList())
-        .features(request.getFeaturesList())
-        .build();
+    var featureRequest = batchFeatureRequestFactory.create(ALLOW_LIST_INPUT,
+        request.getMatchesList(), request.getFeaturesList());
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
@@ -179,11 +161,8 @@ class FeatureAdapter {
       @Valid BatchGetMatchBankIdentificationCodesInputsRequest request,
       Consumer<BatchGetMatchBankIdentificationCodesInputsResponse> onNext) {
 
-    var featureRequest = BatchFeatureRequest.builder()
-        .agentInputType(BANK_IDENTIFICATION_CODES_INPUT)
-        .matches(request.getMatchesList())
-        .features(request.getFeaturesList())
-        .build();
+    var featureRequest = batchFeatureRequestFactory.create(BANK_IDENTIFICATION_CODES_INPUT,
+        request.getMatchesList(), request.getFeaturesList());
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
@@ -195,11 +174,8 @@ class FeatureAdapter {
       @Valid BatchGetMatchCountryInputsRequest request,
       Consumer<BatchGetMatchCountryInputsResponse> onNext) {
 
-    var featureRequest = BatchFeatureRequest.builder()
-        .agentInputType(COUNTRY_INPUT)
-        .matches(request.getMatchesList())
-        .features(request.getFeaturesList())
-        .build();
+    var featureRequest = batchFeatureRequestFactory.create(COUNTRY_INPUT,
+        request.getMatchesList(), request.getFeaturesList());
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
@@ -210,11 +186,8 @@ class FeatureAdapter {
       @Valid BatchGetMatchDateInputsRequest request,
       Consumer<BatchGetMatchDateInputsResponse> onNext) {
 
-    var featureRequest = BatchFeatureRequest.builder()
-        .agentInputType(DATE_INPUT)
-        .matches(request.getMatchesList())
-        .features(request.getFeaturesList())
-        .build();
+    var featureRequest = batchFeatureRequestFactory.create(DATE_INPUT,
+        request.getMatchesList(), request.getFeaturesList());
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
@@ -225,11 +198,8 @@ class FeatureAdapter {
       @Valid BatchGetMatchDocumentInputsRequest request,
       Consumer<BatchGetMatchDocumentInputsResponse> onNext) {
 
-    var featureRequest = BatchFeatureRequest.builder()
-        .agentInputType(DOCUMENT_INPUT)
-        .matches(request.getMatchesList())
-        .features(request.getFeaturesList())
-        .build();
+    var featureRequest = batchFeatureRequestFactory.create(DOCUMENT_INPUT,
+        request.getMatchesList(), request.getFeaturesList());
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
@@ -240,11 +210,8 @@ class FeatureAdapter {
       @Valid BatchGetMatchEventInputsRequest request,
       Consumer<BatchGetMatchEventInputsResponse> onNext) {
 
-    var featureRequest = BatchFeatureRequest.builder()
-        .agentInputType(EVENT_INPUT)
-        .matches(request.getMatchesList())
-        .features(request.getFeaturesList())
-        .build();
+    var featureRequest = batchFeatureRequestFactory.create(EVENT_INPUT,
+        request.getMatchesList(), request.getFeaturesList());
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
@@ -256,11 +223,8 @@ class FeatureAdapter {
       @Valid BatchGetMatchGenderInputsRequest request,
       Consumer<BatchGetMatchGenderInputsResponse> onNext) {
 
-    var featureRequest = BatchFeatureRequest.builder()
-        .agentInputType(GENDER_INPUT)
-        .matches(request.getMatchesList())
-        .features(request.getFeaturesList())
-        .build();
+    var featureRequest = batchFeatureRequestFactory.create(GENDER_INPUT,
+        request.getMatchesList(), request.getFeaturesList());
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
@@ -271,11 +235,8 @@ class FeatureAdapter {
       @Valid BatchGetMatchHistoricalDecisionsInputsRequest request,
       Consumer<BatchGetMatchHistoricalDecisionsInputsResponse> onNext) {
 
-    var featureRequest = BatchFeatureRequest.builder()
-        .agentInputType(HISTORICAL_DECISIONS_INPUT)
-        .matches(request.getMatchesList())
-        .features(request.getFeaturesList())
-        .build();
+    var featureRequest = batchFeatureRequestFactory.create(HISTORICAL_DECISIONS_INPUT,
+        request.getMatchesList(), request.getFeaturesList());
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
@@ -287,11 +248,8 @@ class FeatureAdapter {
       @Valid BatchGetMatchIsPepInputsRequest request,
       Consumer<BatchGetMatchIsPepInputsResponse> onNext) {
 
-    var featureRequest = BatchFeatureRequest.builder()
-        .agentInputType(IS_PEP_INPUT)
-        .matches(request.getMatchesList())
-        .features(request.getFeaturesList())
-        .build();
+    var featureRequest = batchFeatureRequestFactory.create(IS_PEP_INPUT,
+        request.getMatchesList(), request.getFeaturesList());
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
