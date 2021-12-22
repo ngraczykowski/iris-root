@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.universaldatasource.app.feature.model.BatchFeatureRequest;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +13,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 @EnableConfigurationProperties(FeaturesProperties.class)
@@ -38,8 +41,12 @@ class BatchFeatureRequestFactory {
   private String getFeature(String featureName) {
     var featureMapping = featuresProperties.getMapping();
     var featureId = getFeatureId(featureName);
+    //NOTE(jgajewski): Remove this one log below, after testing, that feature mapping works
+    log.debug("Checking if feature: {} needs to be mapped by: {}", featureName, featureMapping);
+
     if (featureMapping.containsKey(featureId)) {
       var mappedFeatureId = featureMapping.get(featureId);
+      log.debug("Mapping feature: {}, to: {}", featureId, mappedFeatureId);
       return getFeatureName(mappedFeatureId);
     }
     return featureName;
