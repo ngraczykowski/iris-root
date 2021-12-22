@@ -43,6 +43,7 @@ message RegisterBatchRequest {
 
 message NotifyBatchErrorRequest {
   string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
+  optional string error_description = 2;
 }
 
 message RegisterAlertsAndMatchesRequest {
@@ -53,7 +54,8 @@ message RegisterAlertsAndMatchesRequest {
 message AlertWithMatches {
   string alert_id = 1 [(google.api.field_behavior) = REQUIRED];
   AlertStatus status = 2 [(google.api.field_behavior) = REQUIRED];
-  repeated Match matches = 3 [(google.api.field_behavior) = REQUIRED];
+  optional string error_description = 3;
+  repeated Match matches = 4 [(google.api.field_behavior) = REQUIRED];
 }
 
 enum AlertStatus {

@@ -48,11 +48,11 @@ class RegistrationServiceGrpcAdapterTest {
   void registerAlertsAndMatches() {
     //when
     var response = underTest.registerAlertsAndMatches(
-        RegisterAndMatchesRequestFixtures.REGISTER_ALERTS_AND_MATCHES_IN);
+        RegisterAlertAndMatchesRequestFixtures.REGISTER_ALERTS_AND_MATCHES_IN);
 
     //then
     Assertions.assertEquals(response.getRegisteredAlertWithMatches().size(), 1);
-    Assertions.assertEquals(response, RegisterAndMatchesResponseFixtures.RESPONSE);
+    Assertions.assertEquals(response, RegisterAlertAndMatchesResponseFixtures.RESPONSE);
   }
 
   static class MockedRegistrationServiceGrpcServer extends RegistrationServiceImplBase {
@@ -75,7 +75,7 @@ class RegistrationServiceGrpcAdapterTest {
     public void registerAlertsAndMatches(
         RegisterAlertsAndMatchesRequest request,
         StreamObserver<RegisterAlertsAndMatchesResponse> responseObserver) {
-      responseObserver.onNext(RegisterAndMatchesResponseFixtures.GRPC_RESPONSE);
+      responseObserver.onNext(RegisterAlertAndMatchesResponseFixtures.GRPC_RESPONSE);
       responseObserver.onCompleted();
     }
   }

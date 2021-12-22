@@ -10,10 +10,12 @@ import com.silenteight.proto.registration.api.v1.NotifyBatchErrorRequest;
 public class NotifyBatchErrorIn {
 
   String batchId;
+  String errorDescription;
 
   NotifyBatchErrorRequest toNotifyBatchErrorRequest() {
     return NotifyBatchErrorRequest.newBuilder()
         .setBatchId(batchId)
+        .setErrorDescription(errorDescription)
         .build();
   }
 }

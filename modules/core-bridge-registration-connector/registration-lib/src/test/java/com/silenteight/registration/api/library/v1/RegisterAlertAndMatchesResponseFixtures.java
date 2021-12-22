@@ -6,7 +6,7 @@ import com.silenteight.proto.registration.api.v1.RegisteredMatch;
 
 import java.util.List;
 
-class RegisterAndMatchesResponseFixtures {
+class RegisterAlertAndMatchesResponseFixtures {
 
   static final String MATCH_ID = "match_id";
   static final String MATCH_NAME = "match_name";

@@ -2,7 +2,7 @@ package com.silenteight.registration.api.library.v1;
 
 import java.util.List;
 
-class RegisterAndMatchesRequestFixtures {
+class RegisterAlertAndMatchesRequestFixtures {
 
   static final String MATCH_ID = "match_id";
   static final String ALERT_ID = "alert_id";
@@ -16,6 +16,7 @@ class RegisterAndMatchesRequestFixtures {
       AlertWithMatchesIn.builder()
           .alertId(ALERT_ID)
           .status(AlertStatusIn.SUCCESS)
+          .errorDescription("failure cause")
           .matches(MATCH_INS)
           .build()
   );
