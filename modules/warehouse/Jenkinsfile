@@ -1,24 +1,28 @@
 @Library('pipeline-shared-library@master') _
 
+def gradle = new com.silenteight.jenkins.ci.Gradle()
+def git = new com.silenteight.jenkins.ci.Git()
+def jenkins = new com.silenteight.jenkins.ci.Jenkins()
+
 gradleBuild(
     jdkVersion: 'jdk-11',
     sonarEnabled: true,
     dependencyCheckEnabled: true,
     includeBuildNumberInSnapshotVersion: true,
-    additionalParams: [booleanParam(name: 'deployOnTest',
-    description: '''Deploy on test environment in Nomad.''', defaultValue: false)],
+    additionalParams: [
+      booleanParam(name: 'deployOnTest',
+      description: '''Deploy on test environment in Nomad.''',
+      defaultValue: false)],
     additionalStages: {
       stage('Build and deploy container image') {
         script {
-          def utils = new com.silenteight.jenkins.ci.Utils()
           dir( './scripts' ) {
             stash includes: '**', name: 'scripts'
           }
           dir( './helm-chart' ) {
             stash includes: '**', name: 'helm'
           }
-          if (utils.getGitBranch() == 'master') {
-            def gradle = new com.silenteight.jenkins.ci.Gradle()
+          if (git.getGitBranch() == 'master' || git.buildingReleaseBranch()) {
             gradle.gradle('jib')
           } else {
             echo 'This is not a release branch ignore docker image deployment'
@@ -36,8 +40,7 @@ gradleBuild(
       }
 
       stage('Helm Chart registry') {
-        def utils = new com.silenteight.jenkins.ci.Utils()
-        env.INSTALLER_VERSION = utils.getProjectVersion()
+        env.INSTALLER_VERSION = gradle.getGradleProjectVersion()
         echo 'Helm Chart building....'
         node("aws-worker") {
           // Stash is done in first stage
@@ -48,20 +51,19 @@ gradleBuild(
             unstash 'helm'
           }
           script {
-            if (utils.getGitBranch() == 'master' || utils.getGitBranch().startsWith('uat')) {
+            if (git.getGitBranch() == 'master' || git.buildingReleaseBranch()) {
               echo 'Helm Chart version'
               sh './scripts/helm-chart-build.sh'
             } else {
-              echo 'This is not a release branch ignore Helm Chart deployment'
+              echo 'This is not a master release or hotfix branch. Ignoring Helm Chart deployment.'
             }
           }
         }
       }
 
       stage('AWS ECR') {
-        def utils = new com.silenteight.jenkins.ci.Utils()
         //This is docker image tag version which will be used to copy from s8 repository
-        env.INSTALLER_VERSION = utils.getProjectVersion()
+        env.INSTALLER_VERSION = gradle.getGradleProjectVersion()
         node("aws-worker") {
           // Stash is done in first stage
           dir( './scripts' ) {
@@ -71,37 +73,34 @@ gradleBuild(
             unstash 'helm'
           }
           script {
-            if (utils.getGitBranch() == 'master' || utils.getGitBranch().startsWith('uat')) {
+            if (git.getGitBranch() == 'master' || git.buildingReleaseBranch()) {
               echo 'AWS image push'
               sh './scripts/aws-deploy.sh'
             } else {
-              echo 'This is not a release branch ignore AWS ECR push'
+              echo 'This is not a master release or hotfix branch. Ignoring AWS ECR push.'
             }
           }
         }
       }
 
-
       stage('Deploy On Nomad Dev') {
         script {
-          def utils = new com.silenteight.jenkins.ci.Utils()
           // FIXME(ahaczewski): Use `when` if possible.
-          if (utils.getGitBranch() == 'master') {
+          if (git.getGitBranch() == 'master') {
             sh './nomad/deploy.sh -var-file=dev.vars'
           } else {
-            echo 'This is not a release branch ignore Nomad deployment'
+            echo 'This is not a master release branch. Ignoring Nomad deployment.'
           }
         }
       }
 
       stage('Deploy On Nomad Test') {
         script {
-          def utils = new com.silenteight.jenkins.ci.Utils()
           // FIXME(ahaczewski): Use `when` if possible.
-          if (utils.getGitBranch() == 'master' && params.deployOnTest) {
+          if (git.getGitBranch() == 'master' && params.deployOnTest) {
             sh './nomad/deploy.sh -var-file=test.vars'
           } else {
-            echo 'This is not a release branch ignore Nomad deployment'
+            echo 'This is not a master release branch. Ignoring Nomad deployment.'
           }
         }
       }
