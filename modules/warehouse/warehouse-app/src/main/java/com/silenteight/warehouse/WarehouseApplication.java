@@ -22,6 +22,7 @@ import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 import com.silenteight.warehouse.indexer.simulation.SimulationMessageHandlerModule;
 import com.silenteight.warehouse.indexer.simulation.analysis.AnalysisModule;
 import com.silenteight.warehouse.management.ManagementModule;
+import com.silenteight.warehouse.migration.MigrationModule;
 import com.silenteight.warehouse.production.handler.ProductionMessageHandlerModule;
 import com.silenteight.warehouse.production.persistence.ProductionPersistenceModule;
 import com.silenteight.warehouse.report.accuracy.AccuracyReportModule;
@@ -69,6 +70,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     ManagementModule.class,
     MatchModule.class,
     MetricsReportModule.class,
+    MigrationModule.class,
     com.silenteight.warehouse.indexer.production.ProductionMessageHandlerModule.class,
     ProductionMessageHandlerModule.class,
     ProductionPersistenceModule.class,

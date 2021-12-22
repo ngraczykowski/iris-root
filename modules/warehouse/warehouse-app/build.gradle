@@ -24,6 +24,7 @@ dependencies {
   implementation project(":warehouse-db-changelog")
   implementation project(":warehouse-indexer")
   implementation project(":warehouse-management")
+  implementation project(":warehouse-migration")
   implementation project(":warehouse-production")
   implementation project(":warehouse-report")
   implementation project(":warehouse-report-accuracy")

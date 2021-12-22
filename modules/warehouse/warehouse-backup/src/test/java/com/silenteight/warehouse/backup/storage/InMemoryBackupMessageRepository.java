@@ -18,4 +18,5 @@ public class InMemoryBackupMessageRepository
         .findFirst()
         .orElse(null);
   }
+
 }

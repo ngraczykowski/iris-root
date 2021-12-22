@@ -48,4 +48,8 @@ class BackupMessage extends BaseEntity implements IdentifiableEntity {
   @Setter(AccessLevel.PUBLIC)
   @Type(type = "json")
   String diagnostic;
+
+  @ToString.Include
+  @Setter(AccessLevel.PUBLIC)
+  boolean migrated;
 }

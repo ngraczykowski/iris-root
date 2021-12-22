@@ -97,6 +97,7 @@ libraries.spring_integration_amqp = [group: 'org.springframework.integration', n
 libraries.spring_integration_core = [group: 'org.springframework.integration', name: 'spring-integration-core']
 libraries.spring_integration_mail = [group: 'org.springframework.integration', name: 'spring-integration-mail']
 libraries.spring_integration_test = [group: 'org.springframework.integration', name: 'spring-integration-test']
+libraries.spring_integration_jdbc = [group: 'org.springframework.integration', name: 'spring-integration-jdbc']
 
 libraries.spring_security_acl = [group: 'org.springframework.security', name: 'spring-security-acl']
 libraries.spring_security_cas = [group: 'org.springframework.security', name: 'spring-security-cas']

@@ -20,6 +20,12 @@ spring:
       password: technicaluser
       uris: http://localhost:9201,http://localhost:9200
 
+  jpa:
+    show-sql: true
+    hibernate:
+      properties:
+        format-sql: true
+
 warehouse:
   alert-mapping:
     country-source-key: lob_country

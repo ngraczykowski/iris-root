@@ -1,0 +1,95 @@
+keycloak:
+  adapter:
+    authServerUrl: fakeAuthHost:8000
+    realm: sens-webapp
+    publicClient: false
+    confidentialPort: 0
+    principalAttribute: preferred_username
+    resource: backend
+    sslRequired: external
+    credentials.secret: 55555555-4444-3333-2222-000111000111
+
+warehouse:
+  alert-mapping:
+    country-source-key: lob_country
+  persistence:
+    alert:
+      labels:
+      recommendation-date-field: "recommendationDate"
+  match-mapping:
+  messaging:
+    broker:
+      alert-backup-indexing:
+        queue-name: wh.index-request.backup
+        routing-key: command.index-request.production
+      qa-backup-indexing:
+        queue-name: wh.index-request.backup
+        routing-key: event.qa-alert
+      alert-production-indexing:
+        queue-name: wh.prioritized-index-request.production
+        routing-key: command.index-request.production
+      qa-indexing:
+        queue-name: wh.index-request.production
+        routing-key: event.qa-alert
+      alert-simulation-indexing:
+        queue-name: wh.index-request.simulation
+        routing-key: command.index-request.simulation
+      personal-information-expired-indexing:
+        queue-name: wh.retention.personal-information-expired
+        routing-key: retention.personal-information-expired
+      analysis-expired-indexing:
+        queue-name: wh.retention.analysis-expired
+        routing-key: command.analysis-expired
+      alerts-expired-indexing:
+        queue-name: wh.retention.alerts-expired
+        routing-key: retention.alerts-expired
+      to-remove:
+        bindings: [ ]
+  migration:
+    enabled: true
+    batch-size: 20
+  indexer:
+    diagnostic.enabled: true
+    production-batch-size: 200
+    simulation-batch-size: 200
+    backup-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.alert-backup-indexing.queue-name}
+    production-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.alert-production-indexing.queue-name}
+    production-indexed-outbound:
+      exchange-name: wh.event
+      routing-key: event.index-response.production
+    simulation-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.alert-simulation-indexing.queue-name}
+    simulation-indexed-outbound:
+      exchange-name: wh.event
+      routing-key: event.index-response.simulation
+
+  environment:
+    prefix: itest
+  es:
+    production-query-index: ${warehouse.environment.prefix}_production_alert
+    production-match-query-index: ${warehouse.environment.prefix}_production_match
+
+test:
+  messaging:
+    integration:
+      production-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: command.index-request.production
+      simulation-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: command.index-request.simulation
+      personal-information-expired-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: retention.personal-information-expired
+      analysis-expired-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: command.analysis-expired
+      production-indexed-event-test-listener-inbound:
+        queue-name: testapp.index-response.production
+      simulation-indexed-event-test-listener-inbound:
+        queue-name: testapp.index-response.simulation
+      alerts-expired-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: retention.alerts-expired

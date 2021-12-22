@@ -76,6 +76,9 @@ warehouse:
         routing-key: retention.alerts-expired
       to-remove:
         bindings: []
+  migration:
+    enabled: true
+    batch-size: 20
   indexer:
     production-batch-size: 200
     simulation-batch-size: 200
