@@ -4,7 +4,6 @@ import lombok.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 
@@ -37,7 +36,7 @@ public class FetchGroupedDataResponse {
     }
 
     public String getValueOrDefault(String fieldName, String defaultValue) {
-      return Optional.ofNullable(data.get(fieldName)).orElse(defaultValue);
+      return data.getOrDefault(fieldName, defaultValue);
     }
 
     public long getCount() {

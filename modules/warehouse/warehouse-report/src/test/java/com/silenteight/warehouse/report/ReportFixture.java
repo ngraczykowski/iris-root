@@ -10,6 +10,7 @@ import com.silenteight.warehouse.indexer.query.streaming.ReportFieldDefinitions;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.Collections;
 
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys.COUNTRY_KEY;
@@ -69,4 +70,23 @@ public final class ReportFixture {
       .to(OFFSET_DATE_TIME_TO)
       .name(FILE_NAME)
       .build();
+
+  public static final FetchDataRequest FETCH_DATA_REQUEST_SQL = FetchDataRequest.builder()
+      .fieldsDefinitions(REPORT_FIELDS_DEFINITION)
+      .indexes(of(PRODUCTION_ELASTIC_INDEX_NAME))
+      .queryFilters(of(QUERY_FILTER))
+      .dateField(INDEX_TIMESTAMP)
+      .from(OFFSET_DATE_TIME_FROM)
+      .to(OFFSET_DATE_TIME_TO)
+      .name(FILE_NAME)
+      .useSqlReports(true)
+      .selectSqlQuery("select count(*) from warehouse_alert")
+      .sqlTemplates(Collections.emptyList())
+      .build();
+
+  public static final String PAYLOAD_DATA = "{"
+      + "\"alert_id\": \"TEST[ANO][CUSTOMER][AAAGLOBAL186R1038]:ID:GG-ISCION-EX:20200212004\", "
+      + "\"alert_step\": \"\", "
+      + "\"s8_country\": \"MX\""
+      + "}";
 }

@@ -31,6 +31,10 @@ public class FetchDataRequest {
   List<QueryFilter> queryFilters = new LinkedList<>();
   @NonNull
   String name;
+  @Default
+  boolean useSqlReports = false;
+  List<String> sqlTemplates;
+  String selectSqlQuery;
 
   String[] getIndexesArray() {
     return indexes.toArray(String[]::new);

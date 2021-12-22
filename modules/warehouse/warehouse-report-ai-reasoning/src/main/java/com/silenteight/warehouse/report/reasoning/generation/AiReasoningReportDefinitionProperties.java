@@ -28,6 +28,12 @@ public class AiReasoningReportDefinitionProperties {
 
   @NotBlank
   private String dateFieldName;
+  @Default
+  private boolean useSqlReports = false;
+  @Nullable
+  private List<String> sqlTemplates;
+  @Nullable
+  private String selectSqlQuery;
   @Valid
   @NotNull
   @Default

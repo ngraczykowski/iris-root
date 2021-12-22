@@ -409,6 +409,24 @@ warehouse.report.accuracy:
 warehouse.report.ai-reasoning:
   production:
     date-field-name: alert_recommendationDate
+    selectSqlQuery: >
+      SELECT (payload ->> 'fvSignature') AS "Reasoning Branch ID",
+             (payload ->> 'policy') AS "Policy ID",
+             (payload ->> 'policy_title') AS "Policy Name",
+             (payload ->> 'step') AS "Step ID",
+             (payload ->> 'step_title') AS "Step Name",
+             (payload ->> 's8_recommendation') AS "S8 Alert Resolution",
+             (payload ->> 'recommendationDate') AS "S8 Alert Resolution Timestamp",
+             (payload ->> 'recommendation') AS "HSBC Alert Resolution",
+             (payload ->> 'comment') AS "Alert Comment",
+             (payload ->> 'lob_country') AS "Country LoB",
+             (payload ->> 'categories/hitType') AS "Risk Type",
+             (payload ->> 'DN_CASE.ExtendedAttribute5') AS "List Type",
+             (payload ->> 'id') AS "Alert Client ID",
+             (payload ->> 'status') AS "Alert Status",
+             discriminator AS "Alert S8 ID"
+      from warehouse_alert where recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+    useSqlReports: true
     columns:
       - name: alert_fvSignature
         label: Reasoning Branch ID
