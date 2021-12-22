@@ -13,9 +13,9 @@ import net.devh.boot.grpc.server.service.GrpcService;
 
 import static com.silenteight.proto.registration.api.v1.RegistrationServiceGrpc.*;
 
+@Slf4j
 @GrpcService
 @RequiredArgsConstructor
-@Slf4j
 class RegistrationGrpcService extends RegistrationServiceImplBase {
 
   private final RegistrationService registrationService;

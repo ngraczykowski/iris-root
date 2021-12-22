@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class RegistrationService {
 
-  private final DefaultModelService defaultModelService;
   private final AnalysisService analysisService;
   private final BatchRepository batchRepository;
+  private final DefaultModelService defaultModelService;
 
   public BatchId register(RegisterBatchCommand registerBatchCommand) {
     return batchRepository.findById(registerBatchCommand.id())

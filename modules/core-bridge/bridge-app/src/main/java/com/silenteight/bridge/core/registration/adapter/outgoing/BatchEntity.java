@@ -2,12 +2,21 @@ package com.silenteight.bridge.core.registration.adapter.outgoing;
 
 import lombok.Builder;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.Instant;
+
 @Table("batches")
-record BatchEntity(@Id long id, String batchId, String analysisName, Long alertsCount,
-                   Status status) {
+record BatchEntity(@Id long id,
+                   Status status,
+                   String batchId,
+                   Long alertsCount,
+                   String analysisName,
+                   @CreatedDate Instant createdAt,
+                   @LastModifiedDate Instant updatedAt) {
 
   @Builder
   BatchEntity {}

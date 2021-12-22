@@ -8,12 +8,12 @@ import spock.lang.Subject
 
 class RegistrationServiceSpec extends Specification {
 
-  def modelService = Mock(DefaultModelService)
   def analysisService = Mock(AnalysisService)
   def batchRepository = Mock(BatchRepository)
+  def modelService = Mock(DefaultModelService)
 
   @Subject
-  def underTest = new RegistrationService(modelService, analysisService, batchRepository)
+  def underTest = new RegistrationService(analysisService, batchRepository, modelService)
 
   def "Should register batch"() {
     given:
@@ -60,7 +60,7 @@ class RegistrationServiceSpec extends Specification {
   def "Should call updateStatus method with status error when batch exists"() {
     given:
     def batchId = UUID.randomUUID().toString()
-    def batch = new Batch(batchId, "SomeAnalysisName", 25L, BatchStatus.STORED)
+    def batch = new Batch(batchId, 25L, BatchStatus.STORED, "SomeAnalysisName")
 
     and:
     batchRepository.findById(batchId) >> Optional.of(batch)

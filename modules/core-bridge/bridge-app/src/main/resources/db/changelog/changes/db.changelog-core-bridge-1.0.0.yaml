@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 1.0.0-1
-      author: pbrataniec
+      author: awojcicki
       preConditions:
         - onFail: MARK_RAN
           not:
@@ -42,4 +42,11 @@ databaseChangeLog:
                   type: VARCHAR(30)
                   constraints:
                     nullable: false
-
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
