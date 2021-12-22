@@ -6,4 +6,5 @@ data:
   application.yml: |
     uds:
       features:
-        mapping: []
+        mapping:
+          {{ .Values.udsFeaturesMapping | indent 10 }}
