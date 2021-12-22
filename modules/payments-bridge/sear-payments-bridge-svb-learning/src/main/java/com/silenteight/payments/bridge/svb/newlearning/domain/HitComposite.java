@@ -8,4 +8,15 @@ import lombok.Value;
 public class HitComposite {
 
   long hitId;
+
+  String fkcoVMatchedTag;
+
+  String fkcoISequence;
+
+  String fkcoVListFmmId;
+
+  public String getMatchId() {
+    return fkcoVListFmmId + "(" + fkcoVMatchedTag + ", #" + fkcoISequence
+        + ")";
+  }
 }

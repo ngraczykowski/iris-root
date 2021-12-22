@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.svb.newlearning.step.etl;
 
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
+import com.silenteight.payments.bridge.svb.newlearning.domain.AlertDetails;
 import com.silenteight.payments.bridge.svb.newlearning.job.FindRegisteredAlertPortMock;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,9 @@ class MarkAlertRegistrationStatusProcessorTest {
 
   @Test
   void shouldMarkAlertAsUnregistered() {
-    var etlAlert = markAlertRegistrationStatusProcessor.process(AlertComposite.builder().build());
+    var etlAlert =
+        markAlertRegistrationStatusProcessor.process(AlertComposite.builder().alertDetails(
+            AlertDetails.builder().build()).build());
 
     assertThat(etlAlert).isNotNull();
     assertThat(etlAlert.getStatus()).isEqualTo(UNREGISTERED);
@@ -31,8 +34,11 @@ class MarkAlertRegistrationStatusProcessorTest {
   @Test
   void shouldMarkAlertAsRegistered() {
     var etlAlert = markAlertRegistrationStatusProcessor.process(
-        AlertComposite.builder().systemId("DIN20190429085242-00061-24304")
-            .messageId("87AB4899-BE5B-5E4F-E053-150A6C0A7A84").build());
+        AlertComposite
+            .builder()
+            .alertDetails(AlertDetails.builder().systemId("DIN20190429085242-00061-24304")
+                .messageId("87AB4899-BE5B-5E4F-E053-150A6C0A7A84").build())
+            .build());
 
     assertThat(etlAlert).isNotNull();
     assertThat(etlAlert.getStatus()).isEqualTo(REGISTERED);

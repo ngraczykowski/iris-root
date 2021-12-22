@@ -5,14 +5,18 @@ import com.silenteight.payments.bridge.svb.newlearning.domain.AlertDetails;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static com.silenteight.payments.common.app.OffsetTimeConverter.getOffsetDateTime;
+
 class AlertDetailsRowMapper {
 
-  static AlertDetails mapRow(ResultSet resultSet) throws SQLException {
+  static AlertDetails mapRow(ResultSet resultSet, String timeZone) throws SQLException {
     return AlertDetails.builder()
         .alertId(resultSet.getLong("learning_alert_id"))
         .fkcoId(resultSet.getLong("fkco_id"))
         .messageId(resultSet.getString("fkco_v_messageid"))
         .systemId(resultSet.getString("fkco_v_system_id"))
+        .fkcoDFilteredDateTime(
+            getOffsetDateTime(timeZone, resultSet.getTimestamp("fkco_d_filtered_datetime")))
         .build();
   }
 }

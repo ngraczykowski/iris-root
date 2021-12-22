@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertDetails;
+import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.StoreCsvJobProperties;
 import com.silenteight.payments.bridge.svb.newlearning.step.composite.exception.FetchingComposeDataException;
 
 import org.intellij.lang.annotations.Language;
@@ -26,19 +27,24 @@ class AlertCompositeFetcher extends BaseCompositeFetcher<List<Long>, List<AlertC
 
   @Language("PostgreSQL")
   private static final String ALERTS_QUERY =
-      "SELECT learning_alert_id, fkco_id, fkco_v_messageid, fkco_v_system_id\n"
+      "SELECT learning_alert_id, fkco_id, fkco_v_messageid, "
+          + "fkco_v_system_id, fkco_d_filtered_datetime\n"
           + "FROM pb_learning_alert\n"
           + "WHERE learning_alert_id IN (%s)";
 
   private final HitCompositeFetcher hitCompositeFetcher;
   private final ActionCompositeFetcher actionCompositeFetcher;
+  private final StoreCsvJobProperties properties;
+
 
   public AlertCompositeFetcher(
       DataSource dataSource, HitCompositeFetcher hitCompositeFetcher,
-      ActionCompositeFetcher actionCompositeFetcher) {
+      ActionCompositeFetcher actionCompositeFetcher,
+      StoreCsvJobProperties properties) {
     super(dataSource);
     this.hitCompositeFetcher = hitCompositeFetcher;
     this.actionCompositeFetcher = actionCompositeFetcher;
+    this.properties = properties;
   }
 
   @Override
@@ -47,10 +53,19 @@ class AlertCompositeFetcher extends BaseCompositeFetcher<List<Long>, List<AlertC
     var fkcoIds = alertsDetails.stream().map(AlertDetails::getFkcoId).collect(toList());
     var hits = hitCompositeFetcher.fetchWithConnection(connection, fkcoIds);
     var actions = actionCompositeFetcher.fetchWithConnection(connection, fkcoIds);
-    return alertsDetails.stream().map(ad -> ad.toAlertComposite(hits, actions)).collect(toList());
+
+    return alertsDetails
+        .stream()
+        .map(ad -> AlertComposite
+            .builder()
+            .alertDetails(ad)
+            .hits(hits.get(ad.getFkcoId()))
+            .actions(actions.get(ad.getFkcoId()))
+            .build())
+        .collect(toList());
   }
 
-  private static List<AlertDetails> fetchAlertsDetails(Connection connection, List<Long> alertIds) {
+  private List<AlertDetails> fetchAlertsDetails(Connection connection, List<Long> alertIds) {
     var preparedQuery = prepareQuery(ALERTS_QUERY, alertIds);
 
     try (PreparedStatement statement = connection.prepareStatement(preparedQuery)) {
@@ -64,12 +79,12 @@ class AlertCompositeFetcher extends BaseCompositeFetcher<List<Long>, List<AlertC
     }
   }
 
-  private static List<AlertDetails> createAlerts(ResultSet resultSet) throws
+  private List<AlertDetails> createAlerts(ResultSet resultSet) throws
       SQLException {
 
     var result = new ArrayList<AlertDetails>();
     while (resultSet.next()) {
-      var alert = mapRow(resultSet);
+      var alert = mapRow(resultSet, properties.getTimeZone());
       result.add(alert);
     }
     return result;

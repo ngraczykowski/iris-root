@@ -11,19 +11,13 @@ import java.util.List;
 @Builder
 public class AlertComposite {
 
-  long alertId;
-
-  long fkcoId;
-
-  String systemId;
-
-  String messageId;
+  AlertDetails alertDetails;
 
   List<HitComposite> hits;
 
   List<ActionComposite> actions;
 
   public FindRegisteredAlertRequest toFindRegisterAlertRequest() {
-    return FindRegisteredAlertRequest.builder().messageId(messageId).systemId(systemId).build();
+    return alertDetails.toFindRegisterAlertRequest();
   }
 }
