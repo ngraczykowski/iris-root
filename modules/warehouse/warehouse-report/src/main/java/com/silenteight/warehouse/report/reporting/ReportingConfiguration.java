@@ -1,6 +1,7 @@
 package com.silenteight.warehouse.report.reporting;
 
 import com.silenteight.warehouse.indexer.query.streaming.DataProvider;
+import com.silenteight.warehouse.report.sql.SqlExecutor;
 import com.silenteight.warehouse.report.storage.ReportStorage;
 import com.silenteight.warehouse.report.storage.temporary.TemporaryFileStorage;
 
@@ -14,8 +15,9 @@ class ReportingConfiguration {
   ReportGenerationService reportGenerationService(
       DataProvider provider,
       TemporaryFileStorage temporaryFileStorage,
-      ReportStorage reportStorage) {
+      ReportStorage reportStorage,
+      SqlExecutor sqlExecutor) {
 
-    return new ReportGenerationService(provider, temporaryFileStorage, reportStorage);
+    return new ReportGenerationService(provider, temporaryFileStorage, reportStorage, sqlExecutor);
   }
 }

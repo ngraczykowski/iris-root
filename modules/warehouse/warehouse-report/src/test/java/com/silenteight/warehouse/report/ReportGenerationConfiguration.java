@@ -9,6 +9,7 @@ import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
+import com.silenteight.warehouse.report.sql.SqlExecutorModule;
 import com.silenteight.warehouse.report.storage.StorageModule;
 
 import org.springframework.context.annotation.ComponentScan;
@@ -22,7 +23,8 @@ import org.springframework.context.annotation.ComponentScan;
     StorageModule.class,
     TestElasticSearchModule.class,
     TokenModule.class,
-    FileStorageMinioModule.class
+    FileStorageMinioModule.class,
+    SqlExecutorModule.class
 })
-class ReportGenerationConfiguration {
+class ReportGenerationConfiguration  {
 }

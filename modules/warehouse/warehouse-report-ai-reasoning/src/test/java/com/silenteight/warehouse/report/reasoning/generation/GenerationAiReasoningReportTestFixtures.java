@@ -12,6 +12,9 @@ public final class GenerationAiReasoningReportTestFixtures {
   public static final AiReasoningReportDefinitionProperties PROPERTIES =
       new AiReasoningReportDefinitionProperties(
           DATE_FIELD_NAME,
+          false,
+          null,
+          null,
           of(
               getColumn(ALERT_STATUS_FIELD_NAME, ALERT_STATUS_FIELD_LABEL),
               getColumn(ALERT_COMMENT_FIELD_NAME, ALERT_COMMENT_FIELD_LABEL)),
