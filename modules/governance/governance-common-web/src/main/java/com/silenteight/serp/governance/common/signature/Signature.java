@@ -24,4 +24,8 @@ public class Signature {
   public String asString() {
     return toBase64String(value);
   }
+
+  public boolean isEqualTo(ByteString byteString) {
+    return value.equals(byteString);
+  }
 }

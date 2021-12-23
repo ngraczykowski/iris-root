@@ -71,8 +71,7 @@ public class StoreFeatureVectorSolvedUseCase {
       Signature canonicalSignature,
       ByteString requestSignature) {
 
-    if (!canonicalSignature.asString().equals(requestSignature.toStringUtf8())) {
+    if (!canonicalSignature.isEqualTo(requestSignature))
       log.warn("Incompatible FV Signature={}", canonicalSignature);
-    }
   }
 }
