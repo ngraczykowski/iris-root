@@ -38,8 +38,8 @@ class RegisterAlertServiceTests {
 
   @Test
   void test() {
-    final String alertId1 = "123-123-123";
-    final String alertId2 = "321-321-312";
+    final String alertId1 = "87AB4899-BE5B-5E4F-E053-150A6C0A7A84";
+    final String alertId2 = "883252A2-C860-7D0A-E053-150A6C0A0D90";
     final String alertName1 = "alerts/123";
     final String alertName2 = "alerts/321";
 

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface RegisteredAlertDataAccessPort {
 
-  void save(SaveRegisteredAlertRequest request);
+  void save(List<SaveRegisteredAlertRequest>  request);
 
   String getAlertId(String alertName);
 

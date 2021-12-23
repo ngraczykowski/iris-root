@@ -51,7 +51,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
     var registerAlertResponse = createRegisterAlertResponse(
         request.getAlertId(), alertName, matchesNames.getMatchesList());
 
-    registeredAlertDataAccessPort.save(SaveRegisteredAlertRequest
+    registeredAlertDataAccessPort.save(List.of(SaveRegisteredAlertRequest
         .builder()
         .alertId(alertData.getAlertId())
         .alertName(registerAlertResponse.getAlertName())
@@ -60,7 +60,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
             .stream()
             .map(RegisterMatchResponse::toSaveRegisteredMatchRequest)
             .collect(toList()))
-        .build());
+        .build()));
 
     return registerAlertResponse;
   }
@@ -123,7 +123,16 @@ class RegisterAlertService implements RegisterAlertUseCase {
       return List.of();
     }
     var batchCreateAlertsResponse = batchCreateAlerts(registerAlertRequests);
-    return batchCreateMatches(registerAlertRequests, batchCreateAlertsResponse);
+    var registeredAlertMatches =
+        batchCreateMatches(registerAlertRequests, batchCreateAlertsResponse);
+    var saveRequest = registeredAlertMatches
+        .stream()
+        .map(RegisterAlertResponse::toSaveRegisterAlertRequest)
+        .collect(toList());
+
+    registeredAlertDataAccessPort.save(saveRequest);
+
+    return registeredAlertMatches;
   }
 
   private BatchCreateAlertsResponse batchCreateAlerts(

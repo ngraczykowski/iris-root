@@ -43,7 +43,7 @@ class RegisterMatchJdbcDataAccessIT extends BaseJdbcTest {
             .matchId("matchId")
             .build()))
         .build();
-    dataAccess.save(request);
+    dataAccess.save(List.of(request));
 
     assertThat(jdbcTemplate.queryForObject(
         "SELECT count(*) FROM pb_registered_alert",
