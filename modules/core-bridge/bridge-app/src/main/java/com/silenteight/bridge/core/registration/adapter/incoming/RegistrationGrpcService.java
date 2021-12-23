@@ -3,8 +3,9 @@ package com.silenteight.bridge.core.registration.adapter.incoming;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.bridge.core.registration.domain.NotifyBatchErrorCommand;
 import com.silenteight.bridge.core.registration.domain.RegisterBatchCommand;
-import com.silenteight.bridge.core.registration.domain.RegistrationService;
+import com.silenteight.bridge.core.registration.domain.RegistrationFacade;
 import com.silenteight.proto.registration.api.v1.*;
 
 import com.google.protobuf.Empty;
@@ -18,7 +19,7 @@ import static com.silenteight.proto.registration.api.v1.RegistrationServiceGrpc.
 @RequiredArgsConstructor
 class RegistrationGrpcService extends RegistrationServiceImplBase {
 
-  private final RegistrationService registrationService;
+  private final RegistrationFacade registrationFacade;
 
   @Override
   public void registerBatch(RegisterBatchRequest request, StreamObserver<Empty> responseObserver) {
@@ -26,7 +27,7 @@ class RegistrationGrpcService extends RegistrationServiceImplBase {
         new RegisterBatchCommand(request.getBatchId(), request.getAlertCount());
 
     log.info("Register batch request received: {}", request);
-    var batchId = registrationService.register(registerBatchCommand);
+    var batchId = registrationFacade.register(registerBatchCommand);
     log.info("New batch registered with id: {}", batchId);
     responseObserver.onNext(Empty.getDefaultInstance());
     responseObserver.onCompleted();
@@ -36,7 +37,9 @@ class RegistrationGrpcService extends RegistrationServiceImplBase {
   public void notifyBatchError(
       NotifyBatchErrorRequest request, StreamObserver<Empty> responseObserver) {
     log.info("NotifyBatchError request received: {}", request);
-    registrationService.notifyBatchError(request.getBatchId());
+    registrationFacade.notifyBatchError(new NotifyBatchErrorCommand(
+        request.getBatchId(),
+        request.getErrorDescription()));
 
     responseObserver.onNext(Empty.getDefaultInstance());
     responseObserver.onCompleted();

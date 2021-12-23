@@ -15,6 +15,7 @@ record BatchEntity(@Id long id,
                    String batchId,
                    Long alertsCount,
                    String analysisName,
+                   String errorDescription,
                    @CreatedDate Instant createdAt,
                    @LastModifiedDate Instant updatedAt) {
 

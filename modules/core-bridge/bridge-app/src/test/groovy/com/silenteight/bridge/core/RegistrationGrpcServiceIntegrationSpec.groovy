@@ -1,6 +1,6 @@
 package com.silenteight.bridge.core
 
-import com.silenteight.bridge.core.registration.domain.Batch.BatchStatus
+import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
 import com.silenteight.proto.registration.api.v1.NotifyBatchErrorRequest
 import com.silenteight.proto.registration.api.v1.RegisterBatchRequest
@@ -57,8 +57,11 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
   def "Should notify batch error"() {
     given:
     def batchId = UUID.randomUUID().toString()
+    def error = "error occurred"
+
     def notifyBatchErrorRequest = NotifyBatchErrorRequest.newBuilder()
         .setBatchId(batchId)
+        .setErrorDescription(error)
         .build()
 
     when:
@@ -73,6 +76,7 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
       with(get()) {
         analysisName().empty
         BatchStatus.ERROR == status()
+        errorDescription() == error
         alertsCount() == 0
       }
     }

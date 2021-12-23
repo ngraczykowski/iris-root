@@ -3,8 +3,8 @@ package com.silenteight.bridge.core.registration.adapter.outgoing;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.bridge.core.registration.adapter.outgoing.BatchEntity.Status;
-import com.silenteight.bridge.core.registration.domain.Batch;
-import com.silenteight.bridge.core.registration.domain.Batch.BatchStatus;
+import com.silenteight.bridge.core.registration.domain.model.Batch;
+import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
 
 import org.springframework.stereotype.Repository;
@@ -23,8 +23,10 @@ class JdbcBatchRepository implements BatchRepository {
   }
 
   @Override
-  public void updateStatus(String batchId, BatchStatus status) {
-    crudBatchRepository.updateStatus(batchId, Status.valueOf(status.name()));
+  public void updateStatusAndErrorDescription(
+      String batchId, BatchStatus status, String errorDescription) {
+    crudBatchRepository.updateStatusAndErrorDescription(
+        batchId, Status.valueOf(status.name()), errorDescription);
   }
 
   @Override
@@ -34,6 +36,7 @@ class JdbcBatchRepository implements BatchRepository {
         .analysisName(batch.analysisName())
         .alertsCount(batch.alertsCount())
         .status(Status.valueOf(batch.status().name()))
+        .errorDescription(batch.errorDescription())
         .build();
     crudBatchRepository.save(batchEntity);
     return batch;
@@ -45,6 +48,7 @@ class JdbcBatchRepository implements BatchRepository {
         .id(batchEntity.batchId())
         .analysisName(batchEntity.analysisName())
         .status(BatchStatus.valueOf(batchEntity.status().name()))
+        .errorDescription(batchEntity.errorDescription())
         .build();
   }
 }

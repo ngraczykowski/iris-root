@@ -50,3 +50,7 @@ databaseChangeLog:
               - column:
                   name: updated_at
                   type: timestamp
+              - column:
+                  name: error_description
+                  type: VARCHAR(300)
+

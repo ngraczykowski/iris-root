@@ -3,7 +3,9 @@ package com.silenteight.bridge.core.registration.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.bridge.core.registration.domain.Batch.BatchStatus;
+import com.silenteight.bridge.core.registration.domain.model.Batch;
+import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
+import com.silenteight.bridge.core.registration.domain.model.BatchId;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DefaultModelService;
@@ -15,7 +17,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RegistrationService {
+public class RegistrationFacade {
 
   private final AnalysisService analysisService;
   private final BatchRepository batchRepository;
@@ -29,16 +31,19 @@ public class RegistrationService {
         .orElseThrow();
   }
 
-  public void notifyBatchError(String batchId) {
-    batchRepository.findById(batchId)
+  public void notifyBatchError(NotifyBatchErrorCommand notifyBatchErrorCommand) {
+    batchRepository.findById(notifyBatchErrorCommand.id())
         .ifPresentOrElse(
-            this::setStatusError,
-            () -> this.registerNewAsError(batchId));
+            batch -> this.markBatchAsError(notifyBatchErrorCommand),
+            () -> this.registerNewAsError(notifyBatchErrorCommand));
   }
 
-  private void setStatusError(Batch batch) {
-    log.info("Set batch status to ERROR with id: {}", batch.id());
-    batchRepository.updateStatus(batch.id(), BatchStatus.ERROR);
+  private void markBatchAsError(NotifyBatchErrorCommand notifyBatchErrorCommand) {
+    log.info("Set batch status to ERROR with id: {} and set error description: {}",
+        notifyBatchErrorCommand.id(), notifyBatchErrorCommand.errorDescription());
+    batchRepository.updateStatusAndErrorDescription(
+        notifyBatchErrorCommand.id(), BatchStatus.ERROR,
+        notifyBatchErrorCommand.errorDescription());
   }
 
   private Batch logIfAlreadyExists(Batch batch) {
@@ -55,9 +60,12 @@ public class RegistrationService {
     return Optional.of(batchRepository.create(batch));
   }
 
-  private void registerNewAsError(String batchId) {
-    log.info("Registering new batch as error with id: {}", batchId);
-    batchRepository.create(Batch.error(batchId));
-    log.info("New batch registered as error with id: {}", batchId);
+  private void registerNewAsError(NotifyBatchErrorCommand notifyBatchErrorCommand) {
+    log.info("Registering new batch as ERROR with id: {} and error description: {}",
+        notifyBatchErrorCommand.id(), notifyBatchErrorCommand.errorDescription());
+    batchRepository.create(Batch.error(
+        notifyBatchErrorCommand.id(),
+        notifyBatchErrorCommand.errorDescription()));
+    log.info("New batch registered as error with id: {}", notifyBatchErrorCommand.id());
   }
 }
