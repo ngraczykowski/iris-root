@@ -55,10 +55,10 @@ class RegisterAlertService implements RegisterAlertUseCase {
         .builder()
         .alertId(alertData.getAlertId())
         .alertName(registerAlertResponse.getAlertName())
-        .matchNames(registerAlertResponse
+        .matches(registerAlertResponse
             .getMatchResponses()
             .stream()
-            .map(RegisterMatchResponse::getMatchName)
+            .map(RegisterMatchResponse::toSaveRegisteredMatchRequest)
             .collect(toList()))
         .build());
 

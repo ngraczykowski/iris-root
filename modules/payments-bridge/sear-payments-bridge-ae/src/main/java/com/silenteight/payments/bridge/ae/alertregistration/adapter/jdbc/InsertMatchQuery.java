@@ -2,6 +2,8 @@ package com.silenteight.payments.bridge.ae.alertregistration.adapter.jdbc;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.ae.alertregistration.domain.SaveRegisteredMatchRequest;
+
 import org.intellij.lang.annotations.Language;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlParameter;
@@ -20,11 +22,11 @@ class InsertMatchQuery {
 
   @Language("PostgreSQL")
   private static final String SQL =
-      "INSERT INTO pb_registered_match(alert_message_id, match_name) VALUES (?, ?)";
+      "INSERT INTO pb_registered_match(alert_message_id, match_name, match_id) VALUES (?, ?, ?)";
 
-  void execute(UUID alertId, List<String> matchNames) {
+  void execute(UUID alertId, List<SaveRegisteredMatchRequest> matchNames) {
     var sql = createQuery();
-    matchNames.forEach(m -> sql.update(alertId, m));
+    matchNames.forEach(m -> sql.update(alertId, m.getMatchName(), m.getMatchId()));
     sql.flush();
   }
 
@@ -35,6 +37,7 @@ class InsertMatchQuery {
     sql.setSql(SQL);
     sql.declareParameter(new SqlParameter("alert_message_id", Types.OTHER));
     sql.declareParameter(new SqlParameter("match_name", Types.VARCHAR));
+    sql.declareParameter(new SqlParameter("match_id", Types.VARCHAR));
 
     sql.compile();
     return sql;

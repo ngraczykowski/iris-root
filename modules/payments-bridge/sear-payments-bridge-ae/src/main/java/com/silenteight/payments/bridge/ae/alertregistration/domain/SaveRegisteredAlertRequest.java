@@ -14,5 +14,5 @@ public class SaveRegisteredAlertRequest {
 
   String alertName;
 
-  List<String> matchNames;
+  List<SaveRegisteredMatchRequest> matches;
 }

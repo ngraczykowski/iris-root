@@ -5,6 +5,9 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
 
-  <include file="db/changelog/db.changelog-payments-bridge-ae-1.0.0.xml"/>
-  <include file="db/changelog/db.changelog-payments-bridge-ae-1.5.0.xml"/>
+  <changeSet id="db.changelog-payments-bridge-app-1.5.0" author="wkeska">
+    <sqlFile
+        path="sql/update_registered_match_match_id_query.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
 </databaseChangeLog>

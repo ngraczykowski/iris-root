@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.ae.alertregistration.adapter.jdbc;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.SaveRegisteredAlertRequest;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.SaveRegisteredMatchRequest;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,15 @@ class RegisterMatchJdbcDataAccessIT extends BaseJdbcTest {
         .builder()
         .alertId(UUID.fromString("f07f327c-58c2-e2e5-b02d-b2bdeee79adc"))
         .alertName("alerts/1")
-        .matchNames(List.of("alerts/1/matches/1", "alerts/1/matches/2"))
+        .matches(List.of(SaveRegisteredMatchRequest
+            .builder()
+            .matchName("alerts/1/matches/1")
+            .matchId("matchId")
+            .build(), SaveRegisteredMatchRequest
+            .builder()
+            .matchName("alerts/1/matches/2")
+            .matchId("matchId")
+            .build()))
         .build();
     dataAccess.save(request);
 

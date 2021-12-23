@@ -10,4 +10,8 @@ public class RegisterMatchResponse {
   String matchId;
 
   String matchName;
+
+  public SaveRegisteredMatchRequest toSaveRegisteredMatchRequest() {
+    return SaveRegisteredMatchRequest.builder().matchId(matchId).matchName(matchName).build();
+  }
 }
