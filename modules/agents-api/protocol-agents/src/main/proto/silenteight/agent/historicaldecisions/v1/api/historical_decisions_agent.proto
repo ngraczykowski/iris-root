@@ -12,15 +12,34 @@ service HistoricalDecisionsAgent {
 }
 
 message VerifyRequest {
-  ModelType model_type = 1;
-  uint32 true_positive_count = 2;
+  ModelKey model_key = 1;
+  Discriminator discriminator = 2;
 }
 
-enum ModelType {
-  UNSPECIFIED = 0;
-  ALERTED_PARTY = 1;
-  WATCHLIST_PARTY = 2;
-  MATCH = 3;
+message ModelKey {
+  oneof type {
+    AlertedParty alerted_party = 1;
+    WatchlistParty watchlist_party = 2;
+    Match match = 3;
+  }
+}
+
+message AlertedParty {
+  string id = 1;
+}
+
+message WatchlistParty {
+  string id = 1;
+  string type = 2;
+}
+
+message Match {
+  AlertedParty alerted_party = 1;
+  WatchlistParty watchlist_party = 2;
+}
+
+message Discriminator {
+  string value = 1;
 }
 
 message VerifyResponse {
@@ -29,6 +48,11 @@ message VerifyResponse {
 }
 
 message HistoricalDecisionsReason {
-  uint32 true_positive_count = 1;
-  uint32 false_positive_count = 2;
+  repeated DecisionCount decision_counts = 1;
+  Discriminator discriminator = 2;
+}
+
+message DecisionCount {
+  string name = 1;
+  int32 count = 2;
 }
