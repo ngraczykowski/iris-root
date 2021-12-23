@@ -28,7 +28,7 @@ class LabelPersistenceService {
 
     MapSqlParameterSource[] parameters = mapToSqlParameters(persistedAlertId, labels);
     jdbcTemplate.batchUpdate(INSERT_ALERT_LABEL_SQL, parameters);
-    log.debug("Persisted label for persistedAlertId:{}, labels:{}", persistedAlertId, labels);
+    log.debug("Persisted {} labels for alertId:{}", labels.size(), persistedAlertId);
   }
 
   private MapSqlParameterSource[] mapToSqlParameters(

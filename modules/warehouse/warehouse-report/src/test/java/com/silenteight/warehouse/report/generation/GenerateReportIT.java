@@ -67,7 +67,7 @@ class GenerateReportIT extends BaseDataJpaTest {
 
     // then
     List<String> report = getReportContentFromMinio(REPORT_STORAGE_NAME);
-    assertThat(report).hasSize(5);
+    assertThat(report).hasSize(6);
   }
 
   @SneakyThrows

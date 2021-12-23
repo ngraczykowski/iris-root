@@ -29,10 +29,11 @@ public class PersistenceService {
   }
 
   private void doInsert(AlertDefinition alertDefinition) {
-    log.debug("Started process of persisting alert for alertDefinition:{}", alertDefinition);
+    log.debug("Started process of persisting alert for discriminator:{}",
+        alertDefinition.getDiscriminator());
 
     long persistedAlertId = alertPersistenceService.persist(jdbcTemplate, alertDefinition);
-    log.debug("Persisted persistedAlertId:{}", persistedAlertId);
+    log.debug("Persisted alertId:{}", persistedAlertId);
 
     labelPersistenceService.persist(jdbcTemplate, persistedAlertId, alertDefinition.getLabels());
 

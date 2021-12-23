@@ -75,7 +75,7 @@ warehouse:
     prefix: itest
   report:
     default-bucket: reports
-    copy-csv-pattern: "COPY ( %s ) TO STDOUT WITH (FORMAT CSV)"
+    copy-csv-pattern: "COPY ( %s ) TO STDOUT WITH (FORMAT CSV, HEADER)"
   es:
     production-query-index: ${warehouse.environment.prefix}_production_alert
     production-match-query-index: ${warehouse.environment.prefix}_production_match

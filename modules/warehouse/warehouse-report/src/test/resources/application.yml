@@ -14,7 +14,7 @@ spring:
 warehouse:
   report:
     default-bucket: report
-    copy-csv-pattern: "COPY ( %s ) TO STDOUT WITH (FORMAT CSV)"
+    copy-csv-pattern: "COPY ( %s ) TO STDOUT WITH (FORMAT CSV, HEADER)"
   environment:
     prefix: itest
   es:

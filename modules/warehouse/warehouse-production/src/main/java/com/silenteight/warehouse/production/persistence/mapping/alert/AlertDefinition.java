@@ -7,6 +7,8 @@ import lombok.NonNull;
 
 import com.silenteight.warehouse.production.persistence.mapping.match.MatchDefinition;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
@@ -19,11 +21,11 @@ public class AlertDefinition {
 
   @NonNull
   private String discriminator;
-  @NonNull
+  @Nullable
   private String name;
   @NonNull
   private String payload;
-
+  @Nullable
   private OffsetDateTime recommendationDate;
   @NonNull
   private Map<String, String> labels;

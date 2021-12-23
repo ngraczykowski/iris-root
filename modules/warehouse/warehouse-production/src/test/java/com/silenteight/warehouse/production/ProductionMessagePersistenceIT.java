@@ -135,7 +135,7 @@ class ProductionMessagePersistenceIT {
 
     // then
     List<String> alertNames = fetchAlertNames();
-    assertThat(alertNames).containsOnly(ALERT_NAME_4);
+    assertThat(alertNames).containsOnly(ALERT_NAME_1);
 
     List<Timestamp> recommendationDates = fetchRecommendationDates();
     Timestamp expectedTimestamp = getRecommendationDateAsTimestamp(RECOMMENDATION_DATE_VALUE_1);
@@ -144,7 +144,7 @@ class ProductionMessagePersistenceIT {
     List<String> matchNames = fetchMatchNames();
     assertThat(matchNames).containsOnly(MATCH_NAME_1);
 
-    int alertId = fetchAlertIdForName(ALERT_NAME_4);
+    int alertId = fetchAlertIdForName(ALERT_NAME_1);
 
     List<Integer> alertIdFromMatches = fetchAlertIdFromMatches();
     assertThat(alertIdFromMatches).containsOnly(alertId);
