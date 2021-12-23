@@ -7,4 +7,5 @@ data:
     uds:
       features:
         mapping:
-          {{ .Values.udsFeaturesMapping | indent 10 }}
+          geo2: {{ .Values.udsFeaturesMappingGeo2 }}
+          organizationName2: {{ .Values.udsFeaturesMappingOrganizationName2 }}

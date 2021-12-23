@@ -16,3 +16,6 @@ springProfilesActive: ""
 service:
   metadata:
     annotations: {}
+
+udsFeaturesMappingGeo2 : geo
+udsFeaturesMappingOrganizationName2: organizationName
