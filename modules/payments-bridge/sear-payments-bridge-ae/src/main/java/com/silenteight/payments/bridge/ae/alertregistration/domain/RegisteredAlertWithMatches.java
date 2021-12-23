@@ -10,6 +10,6 @@ public class RegisteredAlertWithMatches {
 
   UUID alertId;
   String alertName;
-  List<String> matches;
+  List<RegisteredMatch> matches;
 
 }

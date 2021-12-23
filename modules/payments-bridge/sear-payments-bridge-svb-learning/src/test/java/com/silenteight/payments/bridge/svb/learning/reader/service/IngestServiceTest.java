@@ -1,5 +1,6 @@
 package com.silenteight.payments.bridge.svb.learning.reader.service;
 
+import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredMatch;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AddAlertLabelUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.RegisteredAlert;
@@ -55,7 +56,8 @@ class IngestServiceTest {
   void shouldIndexRegisteredAlerts() {
     when(findRegisteredAlertPort.find(any())).thenReturn(List.of(
         new RegisteredAlert(UUID.randomUUID(), "systemId",
-            "messageId", "alerts/1", List.of("alerts/1/matches/1"))));
+            "messageId", "alerts/1", List.of(
+            RegisteredMatch.builder().matchName("alerts/1/matches/1").matchId("id").build()))));
     ingestService.ingest(createBatchAlertRequest());
     verify(indexLearningAlertPort).indexForLearning(anyList());
   }

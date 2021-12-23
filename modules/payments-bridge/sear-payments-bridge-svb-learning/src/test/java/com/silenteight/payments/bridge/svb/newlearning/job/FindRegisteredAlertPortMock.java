@@ -1,5 +1,6 @@
 package com.silenteight.payments.bridge.svb.newlearning.job;
 
+import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredMatch;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.FindRegisteredAlertRequest;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.RegisteredAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.port.FindRegisteredAlertPort;
@@ -24,7 +25,8 @@ public class FindRegisteredAlertPortMock implements FindRegisteredAlertPort {
         .filter(registered::contains)
         .map(a -> new RegisteredAlert(
             UUID.randomUUID(), a.getSystemId(),
-            a.getMessageId(), "alerts/1", List.of("alerts/1/matches/1")))
+            a.getMessageId(), "alerts/1", List.of(
+            RegisteredMatch.builder().matchId("matchId").matchName("alerts/1/matches/1").build())))
         .collect(
             toList());
   }

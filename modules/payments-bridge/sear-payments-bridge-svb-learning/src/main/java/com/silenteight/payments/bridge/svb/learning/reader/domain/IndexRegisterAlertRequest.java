@@ -3,8 +3,12 @@ package com.silenteight.payments.bridge.svb.learning.reader.domain;
 import lombok.Builder;
 import lombok.Value;
 
+import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredMatch;
+
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import static java.util.stream.Collectors.toList;
 
 @Value
 @Builder
@@ -29,7 +33,11 @@ public class IndexRegisterAlertRequest {
     return IndexRegisterAlertRequest
         .builder()
         .learningAlert(alert)
-        .matchNames(registeredAlert.getMatches())
+        .matchNames(registeredAlert
+            .getMatches()
+            .stream()
+            .map(RegisteredMatch::getMatchId)
+            .collect(toList()))
         .build();
   }
 }
