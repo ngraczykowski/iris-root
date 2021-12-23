@@ -184,6 +184,7 @@ warehouse.report.metrics:
       label: FP Effectiveness
 
   simulation:
+    visible: false
     date-field:
       name: index_timestamp
       label: Date
