@@ -20,7 +20,9 @@ uds:
   # Features mapping
   #------------------------------------------------------------------------------
   features:
-    mapping: []
+    mapping:
+      geo2: geo
+      organizationName2: organizationName
 
 #------------------------------------------------------------------------------
 # Ingress authorization
