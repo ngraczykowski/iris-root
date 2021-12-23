@@ -19,6 +19,8 @@ public final class LearningJobConstants {
   public static final String REMOVE_DUPLICATES_STEP = "remove-duplicates";
   public static final String HISTORICAL_ASSESSMENT_RESERVATION_STEP =
       "historical-assessment-reservation";
+  public static final String HISTORICAL_ASSESSMENT_STORE_STEP =
+      "historical-assessment-store";
 
   // Params
   public static final String FILE_NAME_PARAMETER = "file-name";

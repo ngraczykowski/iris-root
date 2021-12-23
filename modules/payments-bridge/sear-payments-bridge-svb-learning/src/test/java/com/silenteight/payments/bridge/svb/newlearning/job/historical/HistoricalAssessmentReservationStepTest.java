@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.HISTORICAL_ASSESSMENT_RESERVATION_STEP;
+import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.HISTORICAL_ASSESSMENT_STORE_STEP;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
 @Import({ TestApplicationConfiguration.class })
@@ -20,6 +21,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
     "com.silenteight.payments.bridge.svb.newlearning.step",
     "com.silenteight.payments.bridge.svb.newlearning.adapter" })
 class HistoricalAssessmentReservationStepTest extends BaseBatchTest {
+
 
   @Test
   @Sql(scripts = "HistoricalAssessmentReservationStepTest.sql")
@@ -49,6 +51,15 @@ class HistoricalAssessmentReservationStepTest extends BaseBatchTest {
     var jobExecution =
         jobLauncherTestUtils.launchStep(
             HISTORICAL_ASSESSMENT_RESERVATION_STEP);
+    Assertions.assertThat("COMPLETED").isEqualTo(jobExecution.getExitStatus().getExitCode());
+    return jobExecution.getJobId();
+
+  }
+
+  private long runStoreStep() {
+    var jobExecution =
+        jobLauncherTestUtils.launchStep(
+            HISTORICAL_ASSESSMENT_STORE_STEP);
     Assertions.assertThat("COMPLETED").isEqualTo(jobExecution.getExitStatus().getExitCode());
     return jobExecution.getJobId();
 
