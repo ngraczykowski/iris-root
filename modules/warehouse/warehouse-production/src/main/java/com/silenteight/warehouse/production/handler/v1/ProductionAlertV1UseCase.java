@@ -10,6 +10,8 @@ import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.production.persistence.insert.PersistenceService;
 import com.silenteight.warehouse.production.persistence.mapping.alert.AlertMapper;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Collection;
 
 import static com.silenteight.warehouse.common.time.Timestamps.toTimestamp;
@@ -29,6 +31,7 @@ class ProductionAlertV1UseCase implements ProductionRequestV1CommandHandler {
   private final int productionAlertsBatchSize;
 
   @Override
+  @Transactional
   public DataIndexResponse handle(ProductionDataIndexRequest request) {
     log.info("v1.ProductionDataIndexRequest received, requestId={}, alertCount={}",
         request.getRequestId(), request.getAlertsCount());
