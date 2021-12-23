@@ -2,6 +2,7 @@ package com.silenteight.warehouse.report.metrics.domain;
 
 import com.silenteight.warehouse.report.metrics.generation.MetricsReportGenerationService;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +35,9 @@ class MetricsReportConfiguration {
   }
 
   @Bean
+  @ConditionalOnProperty(
+      value = "warehouse.report.metrics.simulation.visible",
+      matchIfMissing = true)
   SimulationMetricsReportProvider simulationMetricsReportProvider() {
     return new SimulationMetricsReportProvider();
   }
