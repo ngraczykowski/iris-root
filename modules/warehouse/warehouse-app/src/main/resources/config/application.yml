@@ -110,7 +110,7 @@ warehouse:
       production-pattern: "[reportType]_Prod_[from]_To_[to].csv"
       # Available patterns: [reportType], [analysisId], [timestamp]
       simulation-pattern: "[reportType]_Sim_[analysisId].csv"
-    copy-csv-pattern: "COPY ( %s ) TO STDOUT WITH (FORMAT CSV)"
+    copy-csv-pattern: "COPY ( %s ) TO STDOUT WITH (FORMAT CSV, HEADER)"
   es:
     production-query-index: ${warehouse.environment.prefix}_production_alert
     production-match-query-index: ${warehouse.environment.prefix}_production_match

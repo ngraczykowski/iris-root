@@ -30,7 +30,7 @@ class AlertPersistenceService {
       "INSERT INTO warehouse_alert(discriminator, name, recommendation_date, payload)"
           + " VALUES (:discriminator,:name,:recommendationDate,TO_JSON(:payload::json))"
           + " ON CONFLICT (discriminator) "
-          + " DO UPDATE SET name = excluded.name,"
+          + " DO UPDATE SET name = coalesce(warehouse_alert.name, excluded.name),"
           + " payload = warehouse_alert.payload || excluded.payload,"
           + " recommendation_date ="
           + " coalesce(warehouse_alert.recommendation_date, excluded.recommendation_date)"

@@ -32,7 +32,7 @@ public class AlertMapper {
     Map<String, String> payload = payloadConverter.convertPayloadToMap(alert.getPayload());
     return AlertDefinition.builder()
         .discriminator(alert.getDiscriminator())
-        .name(alert.getName())
+        .name(parseName(alert.getName()))
         .payload(payloadConverter.convertPayloadToJson(payload))
         .recommendationDate(getRecommendationDate(payload))
         .labels(extractLabels(payload))
@@ -44,11 +44,15 @@ public class AlertMapper {
     Map<String, String> payload = payloadConverter.convertPayloadToMap(alert.getPayload());
     return AlertDefinition.builder()
         .discriminator(alert.getDiscriminator())
-        .name(alert.getName())
+        .name(parseName(alert.getName()))
         .payload(payloadConverter.convertPayloadToJson(payload))
         .recommendationDate(getRecommendationDate(payload))
         .labels(extractLabels(payload))
         .build();
+  }
+
+  private static String parseName(String name) {
+    return name.isBlank() ? null : name;
   }
 
   private OffsetDateTime getRecommendationDate(Map<String, String> payload) {
