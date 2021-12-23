@@ -85,7 +85,7 @@ libraries.byte_buddy_agent = [group: 'net.bytebuddy', name: 'byte-buddy-agent', 
 libraries.caffeine = [group: 'com.github.ben-manes.caffeine', name: 'caffeine']
 libraries.caffeine_jcache = [group: 'com.github.ben-manes.caffeine', name: 'jcache']
 libraries.classgraph = [group: 'io.github.classgraph', name: 'classgraph']
-libraries.commons_collections4 = [group: 'org.apache.commons', name: 'commons-collections4', version: '4.4']
+libraries.commons_collections4 = [group: 'org.apache.commons', name: 'commons-collections4']
 libraries.commons_lang3 = [group: 'org.apache.commons', name: 'commons-lang3']
 libraries.grpc_api = [group: 'io.grpc', name: 'grpc-api']
 libraries.grpc_auth = [group: 'io.grpc', name: 'grpc-auth']
@@ -117,8 +117,8 @@ libraries.jackson_module_parameter_names = [group: 'com.fasterxml.jackson.module
 libraries.jackson_module_paranamer = [group: 'com.fasterxml.jackson.module', name: 'jackson-module-paranamer']
 libraries.jakarta_annotation_api = [group: 'jakarta.annotation', name: 'jakarta.annotation-api']
 libraries.jakarta_inject = [group: 'jakarta.inject', name: 'jakarta.inject-api']
-libraries.jakarta_mail = [group: 'com.sun.mail', name: 'jakarta.mail', version: '1.6.5']
-libraries.jakarta_mail_api = [group: 'jakarta.mail', name: 'jakarta.mail-api', version: libraries.jakarta_mail.version]
+libraries.jakarta_mail = [group: 'com.sun.mail', name: 'jakarta.mail']
+libraries.jakarta_mail_api = [group: 'jakarta.mail', name: 'jakarta.mail-api']
 libraries.jakarta_persistence_api = [group: 'jakarta.persistence', name: 'jakarta.persistence-api']
 libraries.jakarta_servlet_api = [group: 'jakarta.servlet', name: 'jakarta.servlet-api']
 libraries.jakarta_transaction_api = [group: 'jakarta.transaction', name: 'jakarta.transaction-api']
@@ -188,6 +188,10 @@ configurations.all {
 dependencies {
   implementation platform("com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
   annotationProcessor platform("com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
+
+  implementation platform("io.projectreactor:reactor-bom:2020.0.14")
+  implementation platform("org.springframework.boot:spring-boot-dependencies:2.5.7")
+  annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:2.5.7")
 
   implementation libraries.slf4j_api
 }
