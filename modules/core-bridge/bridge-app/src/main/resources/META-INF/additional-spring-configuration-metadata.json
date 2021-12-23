@@ -1,0 +1,29 @@
+{
+  "properties": [
+    {
+      "name": "silenteight.bridge.address",
+      "type": "java.lang.String",
+      "description": "Bridge HTTP address."
+    },
+    {
+      "name": "silenteight.bridge.grpc.port",
+      "type": "java.lang.String",
+      "description": "Bridge GRPC port."
+    },
+    {
+      "name": "silenteight.bridge.grpc.governance-deadline",
+      "type": "java.time.Duration",
+      "description": "Governance gRPC adapter deadline time."
+    },
+    {
+      "name": "silenteight.bridge.grpc.adjudication-engine-deadline",
+      "type": "java.time.Duration",
+      "description": "Adjudication gRPC adapter deadline time."
+    },
+    {
+      "name": "silenteight.bridge.http.port",
+      "type": "java.lang.String",
+      "description": "Bridge HTTP port."
+    }
+  ]
+}
