@@ -69,6 +69,7 @@ class BackupMessageMigration {
         lockKey.unlock();
       }
       if (!processingError) {
+        log.debug("Finished warehouse_message_backup table migration");
         startRabbitListeners();
       }
     }
@@ -77,7 +78,7 @@ class BackupMessageMigration {
 
   private void process() {
     Long elementsToProcess = backupMessageQuery.count();
-    log.debug("warehouse_message_backup migration: elements to process: {}", elementsToProcess);
+    log.debug("warehouse_message_backup migration: elements to process - {}", elementsToProcess);
 
     List<Message> toMigrate =
         backupMessageQuery.findMigrationCandidates(migrationProperties.getBatchSize());
@@ -89,7 +90,7 @@ class BackupMessageMigration {
 
       elementsToProcess -= toMigrate.size();
       log.debug(
-          "warehouse_message_backup migration: elements left: {}",
+          "warehouse_message_backup migration: elements left - {}",
           Math.max(0, elementsToProcess));
 
       toMigrate = backupMessageQuery.findMigrationCandidates(migrationProperties.getBatchSize());
@@ -113,7 +114,7 @@ class BackupMessageMigration {
       } catch (Exception ex) {
         log.warn(
             "warehouse_message_backup migration: "
-                + "exception occurred during batch processing, transaction will be rollback : {}",
+                + "exception occurred during batch processing, transaction will be rollback - {}",
             ex.getMessage());
 
         status.setRollbackOnly();
@@ -142,8 +143,6 @@ class BackupMessageMigration {
   }
 
   private void startRabbitListeners() {
-    log.debug("Finished warehouse_message_backup table migration");
     rabbitMessageContainerLifecycle.startRabbitListeners();
   }
-
 }
