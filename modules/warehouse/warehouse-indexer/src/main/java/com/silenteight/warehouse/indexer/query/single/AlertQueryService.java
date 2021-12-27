@@ -20,7 +20,7 @@ import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 
 @RequiredArgsConstructor
-class AlertQueryService {
+class AlertQueryService implements AlertProvider {
 
   @NonNull
   private final RestHighLevelClient restHighLevelClient;
@@ -31,6 +31,7 @@ class AlertQueryService {
   @NonNull
   ProductionSearchRequestBuilder productionSearchRequestBuilder;
 
+  @Override
   public Collection<Map<String, String>> getMultipleAlertsAttributes(
       List<String> fields, List<String> discriminatorList) {
 
@@ -41,6 +42,7 @@ class AlertQueryService {
         .collect(toList());
   }
 
+  @Override
   public Map<String, String> getSingleAlertAttributes(List<String> fields, String discriminator) {
     return getAlert(fields, discriminator).orElseThrow(
         () -> new AlertNotFoundException(format("Alert with %s id not found.", discriminator)));

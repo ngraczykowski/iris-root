@@ -8,6 +8,7 @@ import com.silenteight.sep.base.common.database.HibernateCacheAutoConfiguration;
 import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
+import com.silenteight.warehouse.alert.rest.RestAlertModule;
 import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
@@ -32,7 +33,8 @@ import static org.mockito.Mockito.*;
     EnvironmentModule.class,
     ManagementModule.class,
     TestElasticSearchModule.class,
-    UserAwareTokenProvider.class
+    UserAwareTokenProvider.class,
+    RestAlertModule.class
 })
 @ImportAutoConfiguration({
     HibernateCacheAutoConfiguration.class,

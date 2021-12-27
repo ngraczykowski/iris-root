@@ -8,6 +8,7 @@ import com.silenteight.sep.auth.authentication.AuthenticationModule;
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
 import com.silenteight.sep.auth.token.TokenModule;
 import com.silenteight.sep.filestorage.minio.FileStorageMinioModule;
+import com.silenteight.warehouse.alert.rest.RestAlertModule;
 import com.silenteight.warehouse.backup.BackupModule;
 import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
@@ -82,6 +83,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     ProductionMessageHandlerModule.class,
     RbsReportModule.class,
     ReportStatisticsModule.class,
+    RestAlertModule.class,
     QueryAlertModule.class,
     SamplingModule.class,
     SimulationMessageHandlerModule.class,

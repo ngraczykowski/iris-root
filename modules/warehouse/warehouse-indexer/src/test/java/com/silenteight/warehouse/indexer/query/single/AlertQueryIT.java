@@ -60,7 +60,7 @@ class AlertQueryIT {
       MappedKeys.COUNTRY_KEY);
 
   @Autowired
-  private AlertQueryService queryUnderTest;
+  private AlertProvider queryUnderTest;
 
   @Autowired
   private SimpleElasticTestClient simpleElasticTestClient;

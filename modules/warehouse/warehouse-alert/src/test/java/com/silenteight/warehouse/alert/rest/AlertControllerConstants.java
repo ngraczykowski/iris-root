@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer.query.single;
+package com.silenteight.warehouse.alert.rest;
 
 import java.util.Collection;
 import java.util.Map;
