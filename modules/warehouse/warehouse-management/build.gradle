@@ -15,6 +15,7 @@ configurations {
 }
 
 dependencies {
+  implementation project(":warehouse-alert")
   implementation project(":warehouse-common")
   implementation project(":warehouse-db-changelog")
   implementation project(":warehouse-indexer")
