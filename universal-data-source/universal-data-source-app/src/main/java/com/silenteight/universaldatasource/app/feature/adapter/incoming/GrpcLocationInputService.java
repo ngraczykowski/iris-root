@@ -22,16 +22,6 @@ class GrpcLocationInputService extends LocationInputServiceImplBase {
       BatchGetMatchLocationInputsRequest request,
       StreamObserver<BatchGetMatchLocationInputsResponse> responseObserver) {
 
-    if (log.isDebugEnabled()) {
-      var matches = request.getMatchesList();
-
-      log.debug(
-          "Streaming feature inputs: agentInputType={}, features={}, matchCount={}"
-              + ", firstTenMatches={}",
-          "GEO", request.getFeaturesList(),
-          matches.size(), matches.subList(0, Math.min(10, matches.size())));
-    }
-
     featureAdapter.batchGetMatchLocationInputs(request, responseObserver::onNext);
     responseObserver.onCompleted();
   }

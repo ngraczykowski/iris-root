@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @Slf4j
 class FeatureExtractor implements ResultSetExtractor<Integer> {
 
+  private static final String AGENT_INPUT_FEATURE_KEY = "feature";
   private static final ObjectMapper OBJECT_MAPPER = JsonConversionHelper.INSTANCE.objectMapper();
   private static final MapType MAP_TYPE = JsonConversionHelper.INSTANCE
       .objectMapper()
@@ -68,9 +69,14 @@ class FeatureExtractor implements ResultSetExtractor<Integer> {
 
   private static List<AgentInput> getListOfAgentInputObjects(String agentInputAggregate) {
     var featureInputMap = agentInputAggregateToMap(agentInputAggregate);
+    editAgentInputFeatureName(featureInputMap);
     return featureInputMap.entrySet().stream()
         .map(a -> new AgentInput(a.getKey(), a.getValue().toString()))
         .collect(Collectors.toList());
+  }
+
+  private static void editAgentInputFeatureName(Map<String, ObjectNode> featureInputMap) {
+    featureInputMap.forEach((key, value) -> value.put(AGENT_INPUT_FEATURE_KEY, key));
   }
 
   private static Map<String, ObjectNode> agentInputAggregateToMap(String agentInputAggregate) {

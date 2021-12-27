@@ -22,11 +22,14 @@ class StreamFeaturesQuery {
   private static final int DEFAULT_BATCH_SIZE = 1024;
 
   @Language("PostgreSQL")
-  private static final String SQL = "SELECT match_name, agent_input_type,\n"
-      + "JSON_OBJECT_AGG(feature, agent_input)\n"
+  private static final String SQL = "SELECT match_name,\n"
+      + "       agent_input_type,\n"
+      + "       JSON_OBJECT_AGG(feature_name, agent_input)\n"
       + "FROM uds_feature_input\n"
-      + "WHERE agent_input_type = :agentInputType \n"
-      + "AND match_name IN (:matchNames) AND feature IN (:featureNames)\n"
+      + "         join uds_feature_mapper on mapped_feature_name = feature\n"
+      + "WHERE agent_input_type =  :agentInputType\n"
+      + "  AND match_name IN (:matchNames)\n"
+      + "  AND feature_name IN (:featureNames)\n"
       + "GROUP BY 1, 2";
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
