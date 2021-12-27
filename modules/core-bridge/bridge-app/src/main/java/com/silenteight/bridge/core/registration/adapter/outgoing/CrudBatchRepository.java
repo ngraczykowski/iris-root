@@ -14,6 +14,7 @@ interface CrudBatchRepository extends CrudRepository<BatchEntity, Long> {
 
   @Modifying
   @Query("UPDATE batches "
-      + "SET status = :status, error_description = :errorDescription WHERE batch_id = :batchId")
+      + "SET status = :status, error_description = :errorDescription, updated_at = NOW() "
+      + "WHERE batch_id = :batchId")
   void updateStatusAndErrorDescription(String batchId, Status status, String errorDescription);
 }
