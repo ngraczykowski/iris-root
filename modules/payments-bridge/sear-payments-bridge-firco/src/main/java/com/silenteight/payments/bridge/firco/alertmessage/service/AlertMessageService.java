@@ -53,4 +53,14 @@ class AlertMessageService implements AlertMessageUseCase {
 
   }
 
+  @Override
+  public long findReceivedAtTimeMilli(UUID alertMessageId) {
+    var entity = alertMessageRepository
+        .findAlertMessageEntitiesByIdProjected(alertMessageId)
+        .orElseThrow(() -> new EntityNotFoundException(
+            "Cannot find receivedAt for alertMessageId: " + alertMessageId));
+
+    return entity.getReceivedAt().getTime();
+  }
+
 }

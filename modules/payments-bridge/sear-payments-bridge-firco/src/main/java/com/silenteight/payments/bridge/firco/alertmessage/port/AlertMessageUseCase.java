@@ -10,4 +10,6 @@ public interface AlertMessageUseCase {
   AlertData findByAlertMessageId(UUID alertMessageId);
 
   void delete(List<UUID> alertMessageIds);
+
+  long findReceivedAtTimeMilli(UUID alertMessageId);
 }
