@@ -73,12 +73,16 @@ warehouse.report.rbs:
         label: Company Name Surrounding
       - name: match_feature_values_features/geo
         label: Geo
+      - name: match_feature_values_features/geo2
+        label: Geo v2
       - name: match_feature_values_features/name
         label: Name
       - name: match_feature_values_features/nameMatchedText
         label: Name Matched Text
       - name: match_feature_values_features/organizationName
         label: Organization Name
+      - name: match_feature_values_features/organizationName2
+        label: Organization Name v2
     grouping-columns: []
 #      - name: alert_analyst_decision
 #        grouping-values:
@@ -116,12 +120,16 @@ warehouse.report.rbs:
         label: Company Name Surrounding
       - name: alert_features/geo:solution
         label: Geo
+      - name: alert_features/geo2:solution
+        label: Geo v2
       - name: alert_features/name:solution
         label: Name
       - name: alert_features/nameMatchedText:solution
         label: Name Matched Text
       - name: alert_features/organizationName:solution
         label: Organization Name
+      - name: alert_features/organizationName2:solution
+        label: Organization Name v2
     grouping-columns: []
 #      - name: alert_analyst_decision
 #        grouping-values:
