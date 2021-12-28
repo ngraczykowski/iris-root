@@ -32,7 +32,7 @@ class AlertGenerator {
   Alert generateProduction() {
     return Alert.newBuilder()
         .setDiscriminator(getRandomDiscriminator())
-        .setName(getRandomValue(ALERT_NAMES))
+        .setName(getRandomAlertName())
         .setPayload(convertMapToPayload(generateRandomPayload()))
         .build();
   }
@@ -40,7 +40,7 @@ class AlertGenerator {
   com.silenteight.data.api.v1.Alert generateSimulation() {
     return com.silenteight.data.api.v1.Alert.newBuilder()
         .setDiscriminator(getRandomDiscriminator())
-        .setName(getRandomValue(ALERT_NAMES))
+        .setName(getRandomAlertName())
         .setPayload(convertMapToPayload(generateRandomPayload()))
         .build();
   }
@@ -84,6 +84,10 @@ class AlertGenerator {
 
   private String getRandomDiscriminator() {
     return randomUUID().toString();
+  }
+
+  private String getRandomAlertName() {
+    return "alerts/" + randomUUID().toString();
   }
 
   private String getRandomValue(String... allowedValues) {

@@ -1,7 +1,7 @@
 package com.silenteight.warehouse.migration.backupmessage;
 
-import com.silenteight.warehouse.production.handler.v1.ProductionRequestV1CommandHandler;
-import com.silenteight.warehouse.production.handler.v2.ProductionRequestV2CommandHandler;
+import com.silenteight.warehouse.production.handler.ProductionRequestV1CommandHandler;
+import com.silenteight.warehouse.production.handler.ProductionRequestV2CommandHandler;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

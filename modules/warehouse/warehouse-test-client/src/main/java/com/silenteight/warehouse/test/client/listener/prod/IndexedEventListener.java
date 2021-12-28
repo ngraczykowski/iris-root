@@ -4,8 +4,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.data.api.v2.DataIndexResponse;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -18,11 +16,11 @@ import static java.util.Optional.of;
 public class IndexedEventListener {
 
   @NonNull
-  private final List<DataIndexResponse> responses = new CopyOnWriteArrayList<>();
+  private final List<String> responses = new CopyOnWriteArrayList<>();
 
-  void onEvent(DataIndexResponse dataIndexResponse) {
-    log.info("DataIndexResponse received : {}", dataIndexResponse);
-    responses.add(dataIndexResponse);
+  void onEvent(String requestId) {
+    log.info("DataIndexResponse received : {}", requestId);
+    responses.add(requestId);
   }
 
   public void clear() {
@@ -37,13 +35,13 @@ public class IndexedEventListener {
     return responses.size() >= count;
   }
 
-  public Optional<DataIndexResponse> getLastEvent() {
+  public Optional<String> getLastEventId() {
     if (!hasAnyEvent()) {
       return empty();
     }
 
     int size = responses.size();
-    DataIndexResponse lastElement = responses.get(size - 1);
+    String lastElement = responses.get(size - 1);
     return of(lastElement);
   }
 }

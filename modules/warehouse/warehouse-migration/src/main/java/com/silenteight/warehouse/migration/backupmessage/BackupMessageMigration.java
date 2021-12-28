@@ -5,8 +5,8 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.data.api.v2.ProductionDataIndexRequest;
-import com.silenteight.warehouse.production.handler.v1.ProductionRequestV1CommandHandler;
-import com.silenteight.warehouse.production.handler.v2.ProductionRequestV2CommandHandler;
+import com.silenteight.warehouse.production.handler.ProductionRequestV1CommandHandler;
+import com.silenteight.warehouse.production.handler.ProductionRequestV2CommandHandler;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.springframework.boot.context.event.ApplicationStartedEvent;

@@ -13,8 +13,8 @@ import com.silenteight.warehouse.backup.indexing.IndexerProperties;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.migration.MigrationModule;
-import com.silenteight.warehouse.production.handler.ProductionIndexerProperties;
 import com.silenteight.warehouse.production.handler.ProductionMessageHandlerModule;
+import com.silenteight.warehouse.production.handler.ProductionMessageHandlerProperties;
 import com.silenteight.warehouse.production.persistence.ProductionPersistenceModule;
 import com.silenteight.warehouse.test.client.TestClientModule;
 import com.silenteight.warehouse.test.client.gateway.IndexerClientIntegrationProperties;
@@ -53,7 +53,7 @@ class MigrationTestConfiguration {
 
   private final IndexerProperties properties;
   private final IndexerClientIntegrationProperties testProperties;
-  private final ProductionIndexerProperties productionProperties;
+  private final ProductionMessageHandlerProperties productionProperties;
 
   @Bean
   Binding productionIndexExchangeToQueueBinding(

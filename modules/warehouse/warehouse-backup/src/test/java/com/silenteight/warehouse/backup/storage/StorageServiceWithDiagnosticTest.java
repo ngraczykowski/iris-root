@@ -2,13 +2,13 @@ package com.silenteight.warehouse.backup.storage;
 
 import lombok.SneakyThrows;
 
-import com.silenteight.data.api.v2.ProductionDataIndexRequest;
-
 import com.google.protobuf.util.JsonFormat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.silenteight.warehouse.backup.storage.ProductionDataIndexRequestFixtures.PRODUCTION_DATA_INDEX_REQUEST_1;
+import static com.silenteight.warehouse.backup.storage.ProductionDataIndexRequestFixtures.ANALYSIS_NAME;
+import static com.silenteight.warehouse.backup.storage.ProductionDataIndexRequestFixtures.PRODUCTION_REQUEST_V2;
+import static com.silenteight.warehouse.backup.storage.ProductionDataIndexRequestFixtures.REQUEST_ID;
 import static org.assertj.core.api.Assertions.*;
 
 class StorageServiceWithDiagnosticTest {
@@ -27,21 +27,21 @@ class StorageServiceWithDiagnosticTest {
   @Test
   void shouldSaveProductionDataIndexRequestAsMessage() {
     //given
-    ProductionDataIndexRequest productionDataIndexRequest = PRODUCTION_DATA_INDEX_REQUEST_1;
     assertThat(messageRepository.count()).isZero();
     //when
-    underTest.save(productionDataIndexRequest);
+    underTest.save(PRODUCTION_REQUEST_V2, REQUEST_ID, ANALYSIS_NAME);
     //then
     assertThat(messageRepository.count()).isEqualTo(1);
     BackupMessage savedBackupMessage = messageRepository.findOne();
     assertThat(savedBackupMessage).isNotNull();
-    assertThat(productionDataIndexRequest.toByteArray()).isEqualTo(savedBackupMessage.getData());
+    assertThat(PRODUCTION_REQUEST_V2.toByteArray()).isEqualTo(
+        savedBackupMessage.getData());
     assertThat(savedBackupMessage.getRequestId())
-        .isEqualTo(productionDataIndexRequest.getRequestId());
+        .isEqualTo(PRODUCTION_REQUEST_V2.getRequestId());
     assertThat(savedBackupMessage.getAnalysisName())
-        .isEqualTo(productionDataIndexRequest.getAnalysisName());
+        .isEqualTo(PRODUCTION_REQUEST_V2.getAnalysisName());
     assertThat(savedBackupMessage.getDiagnostic()).isEqualTo(
-        JsonFormat.printer().print(PRODUCTION_DATA_INDEX_REQUEST_1));
+        JsonFormat.printer().print(PRODUCTION_REQUEST_V2));
     assertThat(savedBackupMessage.getCreatedAt()).isNotNull();
   }
 }

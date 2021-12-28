@@ -3,7 +3,6 @@ package com.silenteight.warehouse.backup.indexing.listener;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.data.api.v2.ProductionDataIndexRequest;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 import com.silenteight.warehouse.backup.indexing.IndexerProperties;
 import com.silenteight.warehouse.backup.indexing.IndexingConfiguration;
@@ -29,7 +28,10 @@ class BackupIndexerListenerConfiguration {
   private final AmqpInboundFactory inboundFactory;
 
   @NonNull
-  private final ProductionIndexRequestCommandHandler productionIndexRequestCommandHandler;
+  private final ProductionIndexRequestV1BackupCommandHandler productionIndexRequestV1CommandHandler;
+
+  @NonNull
+  private final ProductionIndexRequestV2BackupCommandHandler productionIndexRequestV2CommandHandler;
 
   @Bean
   IntegrationFlow backupQueueToChannelIntegrationFlow() {
@@ -44,12 +46,23 @@ class BackupIndexerListenerConfiguration {
             .simpleAdapter()
             .configureContainer(c -> c.addQueueNames(queue)))
         .channel(channel)
-        .handle(
-            ProductionDataIndexRequest.class,
-            (payload, headers) -> {
-              productionIndexRequestCommandHandler.handle(payload);
-              return null;
-            })
+        .<Object, Class<?>>route(Object::getClass, m -> m
+            .subFlowMapping(
+                com.silenteight.data.api.v1.ProductionDataIndexRequest.class,
+                sf -> sf.handle(
+                    com.silenteight.data.api.v1.ProductionDataIndexRequest.class,
+                    (payload, headers) -> {
+                      productionIndexRequestV1CommandHandler.handle(payload);
+                      return null;
+                    }))
+            .subFlowMapping(
+                com.silenteight.data.api.v2.ProductionDataIndexRequest.class,
+                sf -> sf.handle(
+                    com.silenteight.data.api.v2.ProductionDataIndexRequest.class,
+                    (payload, headers) -> {
+                      productionIndexRequestV2CommandHandler.handle(payload);
+                      return null;
+                    })))
         .get();
   }
 }

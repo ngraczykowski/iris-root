@@ -17,11 +17,11 @@ import static java.util.List.of;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class ProductionMessagePersistenceTestFixtures {
 
-  static final String ALERT_NAME_1 = "alert name";
+  static final String ALERT_NAME_1 = "alert name 1";
   static final String ALERT_NAME_2 = "alert name 2";
   static final String ALERT_NAME_3 = "alert name 3";
   static final String ALERT_NAME_4 = "alert name 4";
-  static final String MATCH_NAME_1 = "match name";
+  static final String MATCH_NAME_1 = "match name 1";
   static final String MATCH_NAME_2 = "match name 2";
   static final String ANALYSIS_NAME = "analysis/120bb00c-8499-4a20-9f1e-e731ea67cbb4";
   static final String MATCH_DISCRIMINATOR_1 = "c09c957d-e4c5-4aab-a39e-fd9dd3c02f85";

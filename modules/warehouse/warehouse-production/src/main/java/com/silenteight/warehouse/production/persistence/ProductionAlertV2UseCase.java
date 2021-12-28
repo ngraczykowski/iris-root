@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.production.handler.v2;
+package com.silenteight.warehouse.production.persistence;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.data.api.v2.DataIndexResponse;
 import com.silenteight.data.api.v2.ProductionDataIndexRequest;
 import com.silenteight.sep.base.common.time.TimeSource;
+import com.silenteight.warehouse.production.handler.ProductionRequestV2CommandHandler;
 import com.silenteight.warehouse.production.persistence.insert.PersistenceService;
 import com.silenteight.warehouse.production.persistence.mapping.alert.AlertMapper;
 
@@ -33,8 +34,8 @@ class ProductionAlertV2UseCase implements ProductionRequestV2CommandHandler {
   @Override
   @Transactional
   public DataIndexResponse handle(ProductionDataIndexRequest request) {
-    log.info("v2.ProductionDataIndexRequest received, requestId={}, alertCount={}",
-        request.getRequestId(), request.getAlertsCount());
+    log.info("v2.ProductionDataIndexRequest received, requestId={}, alertCount={}, sizeInBytes={}",
+        request.getRequestId(), request.getAlertsCount(), request.getSerializedSize());
 
     partition(request.getAlertsList(), productionAlertsBatchSize)
         .stream()

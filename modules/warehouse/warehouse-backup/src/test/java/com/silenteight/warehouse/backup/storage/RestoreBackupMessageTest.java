@@ -11,7 +11,7 @@ import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 
-import static com.silenteight.warehouse.backup.storage.ProductionDataIndexRequestFixtures.PRODUCTION_DATA_INDEX_REQUEST_1;
+import static com.silenteight.warehouse.backup.storage.ProductionDataIndexRequestFixtures.PRODUCTION_REQUEST_V2;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.*;
 
@@ -37,7 +37,7 @@ class RestoreBackupMessageTest {
     assertThat(FILE_RESOURCE.exists()).isTrue();
     assertThat(fileContent).isNotNull();
     assertThat(JsonFormat.printer().print(productionDataIndexRequest))
-        .isEqualTo(JsonFormat.printer().print(PRODUCTION_DATA_INDEX_REQUEST_1));
+        .isEqualTo(JsonFormat.printer().print(PRODUCTION_REQUEST_V2));
   }
 
   private byte[] getFileAsBytes(Resource resource) {
