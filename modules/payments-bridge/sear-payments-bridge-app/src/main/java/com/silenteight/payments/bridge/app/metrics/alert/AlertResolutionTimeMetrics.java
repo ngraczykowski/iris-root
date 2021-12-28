@@ -8,6 +8,7 @@ import com.silenteight.payments.bridge.firco.metrics.alert.AlertResolutionEndEve
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.time.Duration;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@EnableConfigurationProperties(AlertResolutionTimeMetricsConfiguration.class)
 class AlertResolutionTimeMetrics {
 
   public static final String PB_ALERT_RESOLUTION_TIME = "pb.alert.resolution.time";
@@ -24,6 +26,7 @@ class AlertResolutionTimeMetrics {
 
   private final MeterRegistry meterRegistry;
   private final AlertMessageUseCase alertMessageUseCase;
+  private final AlertResolutionTimeMetricsConfiguration alertResolutionTimeMetricsConfiguration;
 
   @EventListener
   public void onAlertResolution(AlertResolutionEndEvent event) {
@@ -39,6 +42,8 @@ class AlertResolutionTimeMetrics {
     return Timer
         .builder(PB_ALERT_RESOLUTION_TIME)
         .tag(TAG_TIME_KEY, TAG_TIME_VALUE)
+        .publishPercentileHistogram(alertResolutionTimeMetricsConfiguration.isHistogram())
+        .publishPercentiles(alertResolutionTimeMetricsConfiguration.getPercentiles())
         .register(this.meterRegistry);
   }
 
