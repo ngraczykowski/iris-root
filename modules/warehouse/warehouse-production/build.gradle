@@ -24,6 +24,7 @@ dependencies {
 
   testImplementation project(":warehouse-common-testing")
   testImplementation project(":warehouse-test-client")
+  testImplementation libraries.awaitility
 
   testFixturesImplementation testFixtures(project(':warehouse-common'))
 }

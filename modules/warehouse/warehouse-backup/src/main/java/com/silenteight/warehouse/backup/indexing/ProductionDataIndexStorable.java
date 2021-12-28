@@ -1,8 +1,8 @@
 package com.silenteight.warehouse.backup.indexing;
 
-import com.silenteight.data.api.v2.ProductionDataIndexRequest;
+import com.google.protobuf.AbstractMessage;
 
 public interface ProductionDataIndexStorable {
 
-  void save(ProductionDataIndexRequest request);
+  void save(AbstractMessage message, String requestId, String analysisName);
 }

@@ -19,7 +19,6 @@ import com.silenteight.warehouse.indexer.alert.AlertModule;
 import com.silenteight.warehouse.indexer.match.MatchModule;
 import com.silenteight.warehouse.indexer.production.ProductionIndexerProperties;
 import com.silenteight.warehouse.indexer.production.ProductionMessageHandlerModule;
-import com.silenteight.warehouse.retention.production.RetentionProductionModule;
 import com.silenteight.warehouse.test.client.TestClientModule;
 import com.silenteight.warehouse.test.client.gateway.IndexerClientIntegrationProperties;
 

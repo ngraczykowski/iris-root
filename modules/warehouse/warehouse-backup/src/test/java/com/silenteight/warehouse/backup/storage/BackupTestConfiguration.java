@@ -9,7 +9,6 @@ import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
 import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration;
 import com.silenteight.warehouse.backup.BackupModule;
 import com.silenteight.warehouse.backup.indexing.IndexerProperties;
-import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.test.client.TestClientModule;
 import com.silenteight.warehouse.test.client.gateway.IndexerClientIntegrationProperties;
@@ -21,9 +20,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.config.EnableIntegrationManagement;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @ComponentScan(basePackageClasses = {
-    EnvironmentModule.class,
     BackupModule.class,
     AmqpCommonModule.class,
     TestClientModule.class
@@ -37,13 +36,14 @@ import org.springframework.integration.config.EnableIntegrationManagement;
 })
 @EnableIntegration
 @EnableIntegrationManagement
+@EnableTransactionManagement
 @RequiredArgsConstructor
 @Slf4j
 public class BackupTestConfiguration {
 
   private final IndexerProperties properties;
   private final IndexerClientIntegrationProperties testProperties;
-  
+
   @Bean
   Binding backupIndexExchangeToQueueBinding(
       Exchange productionCommandExchange,

@@ -5,20 +5,23 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
-import com.silenteight.warehouse.production.handler.v1.ProductionRequestV1CommandHandler;
-import com.silenteight.warehouse.production.handler.v2.ProductionRequestV2CommandHandler;
+import com.silenteight.warehouse.production.persistence.ProductionProcessingConfiguration;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.validation.Valid;
 
 @Configuration
-@EnableConfigurationProperties(ProductionIndexerProperties.class)
+@EnableConfigurationProperties(ProductionMessageHandlerProperties.class)
 @RequiredArgsConstructor
+@EnableTransactionManagement
+@Import(ProductionProcessingConfiguration.class)
 class ProductionMessageHandlerConfiguration {
 
   public static final String PRODUCTION_INDEXING_INBOUND_CHANNEL =
@@ -34,7 +37,7 @@ class ProductionMessageHandlerConfiguration {
 
   @NonNull
   @Valid
-  private final ProductionIndexerProperties properties;
+  private final ProductionMessageHandlerProperties properties;
 
   @Bean
   IntegrationFlow productionIndexingQueueToChannelIntegrationFlow() {

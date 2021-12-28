@@ -3,13 +3,11 @@ package com.silenteight.warehouse.production;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
-import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
-import com.silenteight.warehouse.production.handler.v2.ProductionRequestV2CommandHandler;
+import com.silenteight.warehouse.production.handler.ProductionRequestV2CommandHandler;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.integration.test.context.SpringIntegrationTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,11 +25,9 @@ import static java.util.Optional.ofNullable;
 import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
-@SpringBootTest(classes = ProductionMessageTestConfiguration.class)
-@SpringIntegrationTest
+@SpringBootTest(classes = ProductionMessagePersistenceTestConfiguration.class)
 @ContextConfiguration(initializers = {
-    PostgresTestInitializer.class,
-    RabbitTestInitializer.class
+    PostgresTestInitializer.class
 })
 @ActiveProfiles("jpa-test")
 @Transactional

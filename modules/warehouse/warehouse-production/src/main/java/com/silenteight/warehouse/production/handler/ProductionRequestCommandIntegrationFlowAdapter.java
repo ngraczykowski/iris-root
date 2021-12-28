@@ -3,9 +3,6 @@ package com.silenteight.warehouse.production.handler;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.warehouse.production.handler.v1.ProductionRequestV1CommandHandler;
-import com.silenteight.warehouse.production.handler.v2.ProductionRequestV2CommandHandler;
-
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
 

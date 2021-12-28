@@ -1,8 +1,5 @@
 package com.silenteight.warehouse.backup.storage;
 
-import com.silenteight.data.api.v2.Alert;
-import com.silenteight.data.api.v2.ProductionDataIndexRequest;
-
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
 
@@ -18,16 +15,31 @@ public class ProductionDataIndexRequestFixtures {
   static final Struct PAYLOAD_WITH_SANCTION = Struct.newBuilder()
       .putFields(RISK_TYPE, getValue(SANCTION))
       .build();
-  static final Alert ALERT = Alert.newBuilder()
-      .setDiscriminator(DISCRIMINATOR)
-      .setPayload(PAYLOAD_WITH_SANCTION)
-      .build();
 
-  static final ProductionDataIndexRequest PRODUCTION_DATA_INDEX_REQUEST_1 =
-      ProductionDataIndexRequest.newBuilder()
+  static final com.silenteight.data.api.v1.Alert ALERT_V1 =
+      com.silenteight.data.api.v1.Alert.newBuilder()
+          .setDiscriminator(DISCRIMINATOR)
+          .setPayload(PAYLOAD_WITH_SANCTION)
+          .build();
+
+  static final com.silenteight.data.api.v1.ProductionDataIndexRequest PRODUCTION_REQUEST_V1 =
+      com.silenteight.data.api.v1.ProductionDataIndexRequest.newBuilder()
           .setAnalysisName(ANALYSIS_NAME)
           .setRequestId(REQUEST_ID)
-          .addAllAlerts(of(ALERT))
+          .addAllAlerts(of(ALERT_V1))
+          .build();
+
+  static final com.silenteight.data.api.v2.Alert ALERT_V2 =
+      com.silenteight.data.api.v2.Alert.newBuilder()
+          .setDiscriminator(DISCRIMINATOR)
+          .setPayload(PAYLOAD_WITH_SANCTION)
+          .build();
+
+  static final com.silenteight.data.api.v2.ProductionDataIndexRequest PRODUCTION_REQUEST_V2 =
+      com.silenteight.data.api.v2.ProductionDataIndexRequest.newBuilder()
+          .setAnalysisName(ANALYSIS_NAME)
+          .setRequestId(REQUEST_ID)
+          .addAllAlerts(of(ALERT_V2))
           .build();
 
   static final String PRODUCTION_DATA_JSON_FORMAT = ""

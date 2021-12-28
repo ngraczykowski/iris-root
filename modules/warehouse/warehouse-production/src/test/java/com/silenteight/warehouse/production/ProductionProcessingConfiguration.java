@@ -4,34 +4,53 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.auth.token.UserAwareTokenProvider;
+import com.silenteight.sep.base.common.database.HibernateCacheAutoConfiguration;
+import com.silenteight.sep.base.common.messaging.IntegrationConfiguration;
+import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
+import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration;
 import com.silenteight.sep.base.common.time.TimeSource;
+import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
-import com.silenteight.warehouse.production.handler.ProductionIndexerProperties;
 import com.silenteight.warehouse.production.handler.ProductionMessageHandlerModule;
+import com.silenteight.warehouse.production.handler.ProductionMessageHandlerProperties;
 import com.silenteight.warehouse.production.persistence.ProductionPersistenceModule;
 import com.silenteight.warehouse.test.client.TestClientModule;
 import com.silenteight.warehouse.test.client.gateway.IndexerClientIntegrationProperties;
 
 import org.springframework.amqp.core.*;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.integration.config.EnableIntegration;
+import org.springframework.integration.config.EnableIntegrationManagement;
 
-import static com.silenteight.sep.base.testing.time.MockTimeSource.ARBITRARY_INSTANCE;
+import static com.silenteight.warehouse.production.ProductionProcessingTestFixtures.PROCESSING_TIMESTAMP;
+import static java.time.Instant.parse;
 import static org.mockito.Mockito.*;
 
 @ComponentScan(basePackageClasses = {
+    AmqpCommonModule.class,
     ProductionMessageHandlerModule.class,
     ProductionPersistenceModule.class,
-    AmqpCommonModule.class,
     TestClientModule.class
 })
+@ImportAutoConfiguration({
+    IntegrationConfiguration.class,
+    MessagingConfiguration.class,
+    RabbitAutoConfiguration.class,
+    HibernateCacheAutoConfiguration.class,
+    SilentEightNamingConventionConfiguration.class,
+})
 @EnableAutoConfiguration
+@EnableIntegration
+@EnableIntegrationManagement
 @RequiredArgsConstructor
 @Slf4j
-class ProductionMessageTestConfiguration {
+public class ProductionProcessingConfiguration {
 
-  private final ProductionIndexerProperties productionProperties;
+  private final ProductionMessageHandlerProperties productionProperties;
   private final IndexerClientIntegrationProperties testProperties;
 
   @Bean
@@ -72,7 +91,7 @@ class ProductionMessageTestConfiguration {
 
   @Bean
   TimeSource timeSource() {
-    return ARBITRARY_INSTANCE;
+    return new MockTimeSource(parse(PROCESSING_TIMESTAMP));
   }
 
   @Bean

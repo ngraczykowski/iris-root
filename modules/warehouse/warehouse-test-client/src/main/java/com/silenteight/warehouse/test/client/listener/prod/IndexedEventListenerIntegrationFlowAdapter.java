@@ -3,8 +3,6 @@ package com.silenteight.warehouse.test.client.listener.prod;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.data.api.v2.DataIndexResponse;
-
 import org.springframework.integration.dsl.IntegrationFlowAdapter;
 import org.springframework.integration.dsl.IntegrationFlowDefinition;
 
@@ -19,12 +17,22 @@ class IndexedEventListenerIntegrationFlowAdapter extends IntegrationFlowAdapter 
   @Override
   protected IntegrationFlowDefinition<?> buildFlow() {
     return from(ALERT_INDEXED_INBOUND_CHANNEL)
-        .handle(
-            DataIndexResponse.class,
-            (payload, headers) -> {
-              indexedEventListener.onEvent(payload);
-              return null;
-            }
-        );
+        .<Object, Class<?>>route(Object::getClass, m -> m
+            .subFlowMapping(
+                com.silenteight.data.api.v1.DataIndexResponse.class,
+                sf -> sf.handle(
+                    com.silenteight.data.api.v1.DataIndexResponse.class,
+                    (payload, headers) -> {
+                      indexedEventListener.onEvent(payload.getRequestId());
+                      return null;
+                    }))
+            .subFlowMapping(
+                com.silenteight.data.api.v2.DataIndexResponse.class,
+                sf -> sf.handle(
+                    com.silenteight.data.api.v2.DataIndexResponse.class,
+                    (payload, headers) -> {
+                      indexedEventListener.onEvent(payload.getRequestId());
+                      return null;
+                    })));
   }
 }

@@ -104,9 +104,7 @@ class IndexerIT {
     await()
         .atMost(TIMEOUT, SECONDS)
         .until(() -> indexedEventListener.hasAnyEvent());
-    assertThat(indexedEventListener.getLastEvent()).isPresent();
-    assertThat(indexedEventListener.getLastEvent().get().getRequestId())
-        .isEqualTo(request.getRequestId());
+    assertThat(indexedEventListener.getLastEventId()).hasValue(request.getRequestId());
 
     var source = simpleElasticTestClient.getSource(PRODUCTION_ELASTIC_READ_ALIAS_NAME, DOCUMENT_ID);
     assertThat(source).isEqualTo(MAPPED_ALERT_1);

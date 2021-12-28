@@ -18,13 +18,13 @@ import com.silenteight.warehouse.common.time.TimeModule;
 import com.silenteight.warehouse.common.web.WebModule;
 import com.silenteight.warehouse.indexer.alert.AlertModule;
 import com.silenteight.warehouse.indexer.match.MatchModule;
+import com.silenteight.warehouse.indexer.production.ProductionMessageHandlerModule;
 import com.silenteight.warehouse.indexer.production.indextracking.IndexTrackingModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 import com.silenteight.warehouse.indexer.simulation.SimulationMessageHandlerModule;
 import com.silenteight.warehouse.indexer.simulation.analysis.AnalysisModule;
 import com.silenteight.warehouse.management.ManagementModule;
 import com.silenteight.warehouse.migration.MigrationModule;
-import com.silenteight.warehouse.production.handler.ProductionMessageHandlerModule;
 import com.silenteight.warehouse.production.persistence.ProductionPersistenceModule;
 import com.silenteight.warehouse.report.accuracy.AccuracyReportModule;
 import com.silenteight.warehouse.report.billing.BillingReportModule;
@@ -72,8 +72,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     MatchModule.class,
     MetricsReportModule.class,
     MigrationModule.class,
-    com.silenteight.warehouse.indexer.production.ProductionMessageHandlerModule.class,
     ProductionMessageHandlerModule.class,
+    com.silenteight.warehouse.production.handler.ProductionMessageHandlerModule.class,
     ProductionPersistenceModule.class,
     RbsReportModule.class,
     ReportStatisticsModule.class,
