@@ -12,7 +12,7 @@ ext {
   learingEngineStoreApiVersion = "0.5.0"
   sepDependenciesVersion = "2.3.0"
   silenteightCommonsVersion = "2.1.0"
-  silenteightDataSourceApiVersion = "0.16.0"
+  silenteightDataSourceApiVersion = "0.18.0"
   silenteightSepBaseVersion = "1.12.2"
   warehouseProtocolVersion = "2.2.0"
   jacksonVersion = "2.13.0"

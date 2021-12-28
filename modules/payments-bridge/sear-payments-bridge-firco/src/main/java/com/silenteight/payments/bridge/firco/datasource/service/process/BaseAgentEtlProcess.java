@@ -50,9 +50,9 @@ abstract class BaseAgentEtlProcess<T extends Message> implements EtlProcess {
       String alertName, String matchName, HitData hitData) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 
-    var dataSourceFeatureInput = createDataSourceFeatureInputs(hitData);
+    var dataSourceFeatureInputs = createDataSourceFeatureInputs(hitData);
 
-    var agentInputs = dataSourceFeatureInput.stream()
+    var agentInputs = dataSourceFeatureInputs.stream()
         .map(featureInput -> AgentInput.newBuilder()
             .setAlert(alertName)
             .setMatch(matchName)

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc;
+import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceBlockingStub;
 
 import io.grpc.Channel;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -11,6 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
@@ -69,4 +71,20 @@ class AgentEtlConfiguration {
     return new NameMatchedTextAgentEtlProcess(stub, properties.getTimeout());
   }
 
+  @Bean
+  HistoricalRiskAssessmentAgentEtlProcess historicalRiskAssessmentAgentEtlProcess(
+      HistoricalRiskCustomerNameFeature historicalRiskCustomerNameFeature,
+      HistoricalRiskAccountNumberFeature historicalRiskAccountNumberFeature) {
+    var stub = getStub();
+
+    return new HistoricalRiskAssessmentAgentEtlProcess(
+        stub, properties.getTimeout(),
+        List.of(historicalRiskCustomerNameFeature, historicalRiskAccountNumberFeature));
+  }
+
+  private AgentInputServiceBlockingStub getStub() {
+    return AgentInputServiceGrpc
+        .newBlockingStub(dataSourceChannel)
+        .withWaitForReady();
+  }
 }
