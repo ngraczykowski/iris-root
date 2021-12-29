@@ -33,8 +33,8 @@ class AlertGrpcAdapterTest {
   void shouldCreateBatchAlerts() {
     //given
     var alerts = List.of(
-        AlertIn.builder().name("alert_1").alertId("1").build(),
-        AlertIn.builder().name("alert_2").alertId("2").build());
+        AlertIn.builder().alertId("1").build(),
+        AlertIn.builder().alertId("2").build());
 
     //when
     var response = underTest.batchCreateAlerts(alerts);
@@ -52,7 +52,7 @@ class AlertGrpcAdapterTest {
   void shouldCreateBatchAlertMatches() {
     //given
     var request = BatchCreateAlertMatchesIn.builder()
-        .alert("alert")
+        .alertId("alert")
         .matchIds(List.of("matchId_1", "matchId_2"))
         .build();
 
@@ -65,6 +65,44 @@ class AlertGrpcAdapterTest {
     assertThat(response.getAlertMatches().get(0).getMatchId()).isEqualTo("1");
     assertThat(response.getAlertMatches().get(1).getName()).isEqualTo("match_2");
     assertThat(response.getAlertMatches().get(1).getMatchId()).isEqualTo("2");
+  }
+
+  @Test
+  @DisplayName("should register alerts and matches")
+  void shouldRegisterAlertsAndMatches() {
+    //given
+    var alertsWithMatches = List.of(
+        BatchCreateAlertMatchesIn.builder()
+            .alertId("1")
+            .matchIds(List.of("1"))
+            .build(),
+        BatchCreateAlertMatchesIn.builder()
+            .alertId("2")
+            .matchIds(List.of("1", "2"))
+            .build());
+
+    var request = RegisterAlertsAndMatchesIn.builder()
+        .alertsWithMatches(alertsWithMatches)
+        .build();
+
+    //when
+    var response = underTest.registerAlertsAndMatches(request).getAlertWithMatches();
+
+    //then
+    assertThat(response.size()).isEqualTo(2);
+    assertThat(response.get(0).getAlertId()).isEqualTo("1");
+    assertThat(response.get(0).getAlertName()).isEqualTo("alert_1");
+    assertThat(response.get(0).getMatches().get(0).getMatchId()).isEqualTo("1");
+    assertThat(response.get(0).getMatches().get(0).getName()).isEqualTo("match_1");
+    assertThat(response.get(0).getMatches().get(1).getMatchId()).isEqualTo("2");
+    assertThat(response.get(0).getMatches().get(1).getName()).isEqualTo("match_2");
+
+    assertThat(response.get(1).getAlertId()).isEqualTo("2");
+    assertThat(response.get(1).getAlertName()).isEqualTo("alert_2");
+    assertThat(response.get(1).getMatches().get(0).getMatchId()).isEqualTo("1");
+    assertThat(response.get(1).getMatches().get(0).getName()).isEqualTo("match_1");
+    assertThat(response.get(1).getMatches().get(1).getMatchId()).isEqualTo("2");
+    assertThat(response.get(1).getMatches().get(1).getName()).isEqualTo("match_2");
   }
 
   static class MockedAlertServiceGrpcServer extends AlertServiceImplBase {

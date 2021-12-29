@@ -10,6 +10,6 @@ import java.util.Collection;
 @Value
 public class BatchCreateAlertMatchesIn {
 
-  @NonNull String alert;
+  @NonNull String alertId;
   @NonNull Collection<String> matchIds;
 }

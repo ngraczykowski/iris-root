@@ -7,6 +7,5 @@ import lombok.Value;
 @Value
 public class AlertIn {
 
-  String name;
   String alertId;
 }

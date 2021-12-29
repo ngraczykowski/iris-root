@@ -7,4 +7,6 @@ public interface AlertServiceClient {
   BatchCreateAlertsOut batchCreateAlerts(List<AlertIn> alerts);
 
   BatchCreateAlertMatchesOut batchCreateAlertMatches(BatchCreateAlertMatchesIn command);
+
+  RegisterAlertsAndMatchesOut registerAlertsAndMatches(RegisterAlertsAndMatchesIn command);
 }
