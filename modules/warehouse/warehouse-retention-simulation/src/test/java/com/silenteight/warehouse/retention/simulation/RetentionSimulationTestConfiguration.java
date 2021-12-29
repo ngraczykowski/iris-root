@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.auth.token.UserAwareTokenProvider;
-import com.silenteight.sep.base.common.database.HibernateCacheAutoConfiguration;
 import com.silenteight.sep.base.common.messaging.IntegrationConfiguration;
 import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
-import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
@@ -18,8 +16,7 @@ import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchM
 import com.silenteight.warehouse.indexer.alert.AlertModule;
 import com.silenteight.warehouse.indexer.match.MatchModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
-import com.silenteight.warehouse.indexer.simulation.SimulationIndexerProperties;
-import com.silenteight.warehouse.indexer.simulation.SimulationMessageHandlerModule;
+import com.silenteight.warehouse.indexer.simulation.analysis.AnalysisModule;
 import com.silenteight.warehouse.test.client.TestClientModule;
 import com.silenteight.warehouse.test.client.gateway.IndexerClientIntegrationProperties;
 
@@ -40,11 +37,11 @@ import static org.mockito.Mockito.*;
 @ComponentScan(basePackageClasses = {
     AlertModule.class,
     AmqpCommonModule.class,
+    AnalysisModule.class,
     ElasticsearchRestClientModule.class,
     EnvironmentModule.class,
     MatchModule.class,
     OpendistroModule.class,
-    SimulationMessageHandlerModule.class,
     QueryAlertModule.class,
     RetentionSimulationModule.class,
     TestElasticSearchModule.class,
@@ -53,9 +50,7 @@ import static org.mockito.Mockito.*;
 @ImportAutoConfiguration({
     IntegrationConfiguration.class,
     MessagingConfiguration.class,
-    RabbitAutoConfiguration.class,
-    HibernateCacheAutoConfiguration.class,
-    SilentEightNamingConventionConfiguration.class,
+    RabbitAutoConfiguration.class
 })
 @EnableIntegration
 @EnableIntegrationManagement
@@ -66,7 +61,6 @@ public class RetentionSimulationTestConfiguration {
   public static final String PROCESSING_TIMESTAMP = "2021-04-15T12:17:37.098Z";
 
   private final RetentionSimulationIntegrationProperties properties;
-  private final SimulationIndexerProperties simulationProperties;
   private final IndexerClientIntegrationProperties testProperties;
 
   @Bean

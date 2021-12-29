@@ -1,30 +1,23 @@
-package com.silenteight.warehouse.indexer;
+package com.silenteight.warehouse.simulation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.auth.token.UserAwareTokenProvider;
 import com.silenteight.sep.base.common.database.HibernateCacheAutoConfiguration;
 import com.silenteight.sep.base.common.messaging.IntegrationConfiguration;
 import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
 import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
-import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
-import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
-import com.silenteight.warehouse.common.opendistro.OpendistroModule;
-import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
-import com.silenteight.warehouse.indexer.alert.AlertModule;
-import com.silenteight.warehouse.indexer.match.MatchModule;
-import com.silenteight.warehouse.indexer.production.ProductionIndexerProperties;
-import com.silenteight.warehouse.indexer.production.ProductionMessageHandlerModule;
-import com.silenteight.warehouse.indexer.production.indextracking.IndexTrackingModule;
-import com.silenteight.warehouse.indexer.query.QueryAlertModule;
+import com.silenteight.warehouse.simulation.handler.SimulationHandlerProperties;
+import com.silenteight.warehouse.simulation.handler.SimulationMessageHandlerModule;
+import com.silenteight.warehouse.simulation.processing.SimulationProcessingModule;
 import com.silenteight.warehouse.test.client.TestClientModule;
 import com.silenteight.warehouse.test.client.gateway.IndexerClientIntegrationProperties;
 
 import org.springframework.amqp.core.*;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -34,19 +27,11 @@ import org.springframework.integration.config.EnableIntegrationManagement;
 
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP;
 import static java.time.Instant.parse;
-import static org.mockito.Mockito.*;
 
 @ComponentScan(basePackageClasses = {
-    AlertModule.class,
     AmqpCommonModule.class,
-    ElasticsearchRestClientModule.class,
-    EnvironmentModule.class,
-    IndexTrackingModule.class,
-    MatchModule.class,
-    OpendistroModule.class,
-    ProductionMessageHandlerModule.class,
-    QueryAlertModule.class,
-    TestElasticSearchModule.class,
+    SimulationMessageHandlerModule.class,
+    SimulationProcessingModule.class,
     TestClientModule.class
 })
 @ImportAutoConfiguration({
@@ -56,59 +41,55 @@ import static org.mockito.Mockito.*;
     HibernateCacheAutoConfiguration.class,
     SilentEightNamingConventionConfiguration.class,
 })
+@EnableAutoConfiguration
 @EnableIntegration
 @EnableIntegrationManagement
 @RequiredArgsConstructor
 @Slf4j
-public class IndexerTestConfiguration {
+public class SimulationTestConfiguration {
 
-  private final ProductionIndexerProperties productionProperties;
+  private final SimulationHandlerProperties simulationProperties;
   private final IndexerClientIntegrationProperties testProperties;
 
   @Bean
-  Binding productionIndexExchangeToQueueBinding(
-      Exchange productionCommandExchange,
-      Queue productionIndexingQueue) {
+  Binding simulationIndexExchangeToQueueBinding(
+      Exchange simulationCommandExchange,
+      Queue simulationIndexingQueue) {
 
     return bind(
-        productionCommandExchange,
-        testProperties.getProductionIndexingTestClientOutbound().getRoutingKey(),
-        productionIndexingQueue);
+        simulationCommandExchange,
+        testProperties.getSimulationIndexingTestClientOutbound().getRoutingKey(),
+        simulationIndexingQueue);
   }
 
   @Bean
-  Binding productionIndexedExchangeToQueueBinding(
+  Binding simulationIndexedExchangeToQueueBinding(
       Exchange whEventExchange,
-      Queue productionIndexedQueue) {
+      Queue simulationIndexedQueue) {
 
     return bind(
         whEventExchange,
-        productionProperties.getProductionIndexedOutbound().getRoutingKey(),
-        productionIndexedQueue);
+        simulationProperties.getSimulationIndexedOutbound().getRoutingKey(),
+        simulationIndexedQueue);
   }
 
   @Bean
-  Queue productionIndexingQueue() {
+  Queue simulationIndexingQueue() {
     return QueueBuilder
-        .durable(productionProperties.getProductionIndexingInbound().getQueueName())
+        .durable(simulationProperties.getSimulationIndexingInbound().getQueueName())
         .build();
   }
 
   @Bean
   TopicExchange whEventExchange() {
     return ExchangeBuilder
-        .topicExchange(productionProperties.getProductionIndexedOutbound().getExchangeName())
+        .topicExchange(simulationProperties.getSimulationIndexedOutbound().getExchangeName())
         .build();
   }
 
   @Bean
   TimeSource timeSource() {
     return new MockTimeSource(parse(PROCESSING_TIMESTAMP));
-  }
-
-  @Bean
-  UserAwareTokenProvider userAwareTokenProvider() {
-    return mock(UserAwareTokenProvider.class);
   }
 
   private Binding bind(Exchange exchange, String routingKey, Queue queue) {
