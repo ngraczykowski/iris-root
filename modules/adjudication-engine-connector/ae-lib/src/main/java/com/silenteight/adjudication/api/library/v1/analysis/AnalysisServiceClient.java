@@ -7,4 +7,6 @@ public interface AnalysisServiceClient {
   CreateAnalysisOut createAnalysis(CreateAnalysisIn request);
 
   GetAnalysisOut getAnalysis(String analysis);
+
+  AddAlertsToAnalysisOut addAlertsToAnalysis(AddAlertsToAnalysisIn request);
 }

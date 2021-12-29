@@ -5,6 +5,7 @@ import com.silenteight.adjudication.api.v1.*;
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceImplBase;
 
+import com.google.protobuf.Timestamp;
 import io.grpc.stub.StreamObserver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -83,6 +86,40 @@ class AnalysisGrpcAdapterTest {
     assertThat(response.getPendingAlerts()).isZero();
   }
 
+  @Test
+  @DisplayName("should add alerts to analysis")
+  void shouldAddAlertsToAnalysis() {
+    //given
+    var deadlineTime = Timestamp.newBuilder()
+        .setSeconds(1)
+        .setNanos(1)
+        .build();
+    var alerts = List.of(
+        AddAlertsToAnalysisIn.Alert.builder()
+            .name("alert1")
+            .deadlineTime(deadlineTime)
+            .build(),
+        AddAlertsToAnalysisIn.Alert.builder()
+            .name("alert2")
+            .deadlineTime(deadlineTime)
+            .build(),
+        AddAlertsToAnalysisIn.Alert.builder()
+            .name("alert3")
+            .deadlineTime(deadlineTime)
+            .build()
+    );
+    var request = AddAlertsToAnalysisIn.builder()
+        .analysisName("analysisName")
+        .alerts(alerts)
+        .build();
+
+    //when
+    var response = underTest.addAlertsToAnalysis(request);
+
+    //then
+    assertThat(response.getAddedAlerts().size()).isEqualTo(3);
+  }
+
   static class MockedAnalysisServiceGrpcServer extends AnalysisServiceImplBase {
 
     @Override
@@ -102,6 +139,27 @@ class AnalysisGrpcAdapterTest {
     @Override
     public void getAnalysis(GetAnalysisRequest request, StreamObserver<Analysis> responseObserver) {
       responseObserver.onNext(createAnalysis());
+      responseObserver.onCompleted();
+    }
+
+    @Override
+    public void batchAddAlerts(
+        BatchAddAlertsRequest request, StreamObserver<BatchAddAlertsResponse> responseObserver) {
+      var analysisAlerts = IntStream.rangeClosed(1, 3)
+          .mapToObj(i -> AnalysisAlert.newBuilder()
+              .setName("systemAlertName" + i)
+              .setCreateTime(Timestamp.newBuilder()
+                  .setSeconds(1)
+                  .setNanos(1)
+                  .build())
+              .build())
+          .collect(Collectors.toUnmodifiableList());
+
+      var response = BatchAddAlertsResponse.newBuilder()
+          .addAllAnalysisAlerts(analysisAlerts)
+          .build();
+
+      responseObserver.onNext(response);
       responseObserver.onCompleted();
     }
 

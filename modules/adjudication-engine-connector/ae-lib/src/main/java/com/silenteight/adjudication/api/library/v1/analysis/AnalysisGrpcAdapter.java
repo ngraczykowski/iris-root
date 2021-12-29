@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.library.v1.AdjudicationEngineLibraryRuntimeException;
-import com.silenteight.adjudication.api.v1.AddDatasetRequest;
-import com.silenteight.adjudication.api.v1.Analysis;
+import com.silenteight.adjudication.api.library.v1.analysis.AddAlertsToAnalysisOut.AddedAlert;
+import com.silenteight.adjudication.api.v1.*;
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
-import com.silenteight.adjudication.api.v1.CreateAnalysisRequest;
-import com.silenteight.adjudication.api.v1.GetAnalysisRequest;
 
 import io.grpc.StatusRuntimeException;
 
@@ -96,6 +94,47 @@ public class AnalysisGrpcAdapter implements AnalysisServiceClient {
       log.error("Cannot get analysis", e);
       throw new AdjudicationEngineLibraryRuntimeException("Cannot get analysis", e);
     }
+  }
+
+  @Override
+  public AddAlertsToAnalysisOut addAlertsToAnalysis(AddAlertsToAnalysisIn request) {
+    var analysisAlerts = request.getAlerts().stream()
+        .map(this::createAnalysisAlert)
+        .collect(Collectors.toUnmodifiableList());
+
+    var addAlertsRequest = BatchAddAlertsRequest.newBuilder()
+        .setAnalysis(request.getAnalysisName())
+        .addAllAnalysisAlerts(analysisAlerts)
+        .build();
+
+    try {
+      var result = getStub().batchAddAlerts(addAlertsRequest);
+
+      var addAlertResults = result.getAnalysisAlertsList().stream()
+          .map(this::createAddedAlert)
+          .collect(Collectors.toUnmodifiableList());
+
+      return AddAlertsToAnalysisOut.builder()
+          .addedAlerts(addAlertResults)
+          .build();
+    } catch (StatusRuntimeException e) {
+      log.error("Cannot add alerts to analysis " + request.getAnalysisName(), e);
+      throw new AdjudicationEngineLibraryRuntimeException("Cannot add alerts to analysis", e);
+    }
+  }
+
+  private AnalysisAlert createAnalysisAlert(AddAlertsToAnalysisIn.Alert alert) {
+    return AnalysisAlert.newBuilder()
+        .setAlert(alert.getName())
+        .setDeadlineTime(alert.getDeadlineTime())
+        .build();
+  }
+
+  private AddedAlert createAddedAlert(AnalysisAlert analysisAlert) {
+    return AddedAlert.builder()
+        .name(analysisAlert.getName())
+        .createdAt(analysisAlert.getCreateTime())
+        .build();
   }
 
   private AnalysisServiceBlockingStub getStub() {
