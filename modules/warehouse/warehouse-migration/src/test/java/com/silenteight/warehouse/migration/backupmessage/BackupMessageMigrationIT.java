@@ -4,11 +4,12 @@ import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTes
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.Lifecycle;
+import org.springframework.integration.dsl.IntegrationFlow;
+import org.springframework.integration.dsl.StandardIntegrationFlow;
 import org.springframework.integration.test.context.SpringIntegrationTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
@@ -18,6 +19,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -46,33 +48,48 @@ class BackupMessageMigrationIT {
   @Autowired
   private RabbitMessageContainerLifecycle rabbitMessageContainerLifecycle;
 
-  @Autowired
-  @Qualifier("backupQueueToChannelIntegrationFlow")
-  Lifecycle amqpInboundChannelAdapter;
-
   @Test
   void shouldMigrateExistingRecordsToNewDbStructureAndStartRabbit() {
     //given
+    assertThat(getPausedDuringInitialization()).isTrue();
     assertThat(fetchAlertNames()).isEmpty();
 
     //when
     cut.migration();
 
     //then
-    AtomicBoolean pausedDuringInitialization =
-        (AtomicBoolean) ReflectionTestUtils.getField(
-            rabbitMessageContainerLifecycle, "pausedDuringInitialization");
-
-    assertThat(pausedDuringInitialization).isTrue();
-    assertThat(amqpInboundChannelAdapter.isRunning()).isTrue();
     assertThat(query.notMigratedRecordExist()).isFalse();
+    assertThat(getQueues())
+        .extracting(SimpleMessageListenerContainer::isRunning)
+        .containsExactly(true, true, true, true);
     assertThat(fetchAlertNames()).isNotEmpty();
 
   }
 
-  private List<String> fetchAlertNames() {
+  List<String> fetchAlertNames() {
     return jdbcTemplate.query(
         "SELECT * FROM warehouse_alert",
         (rs, rowNum) -> rs.getString(NAME_COLUMN));
+  }
+
+  AtomicBoolean getPausedDuringInitialization() {
+    return (AtomicBoolean) ReflectionTestUtils.getField(
+        rabbitMessageContainerLifecycle, "pausedDuringInitialization");
+  }
+
+  @SuppressWarnings("unchecked")
+  List<SimpleMessageListenerContainer> getQueues() {
+    List<IntegrationFlow> queueBeans =
+        (List<IntegrationFlow>) ReflectionTestUtils.getField(
+            rabbitMessageContainerLifecycle, "queueBeans");
+
+    return queueBeans.stream()
+        .filter(StandardIntegrationFlow.class::isInstance)
+        .map(StandardIntegrationFlow.class::cast)
+        .map(StandardIntegrationFlow::getIntegrationComponents)
+        .flatMap(e -> e.keySet().stream())
+        .filter(SimpleMessageListenerContainer.class::isInstance)
+        .map(SimpleMessageListenerContainer.class::cast)
+        .collect(Collectors.toList());
   }
 }
