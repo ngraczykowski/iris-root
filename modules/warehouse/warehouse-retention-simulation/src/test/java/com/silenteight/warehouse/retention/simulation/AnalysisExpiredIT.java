@@ -3,7 +3,6 @@ package com.silenteight.warehouse.retention.simulation;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
@@ -16,10 +15,8 @@ import org.elasticsearch.ElasticsearchException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.integration.test.context.SpringIntegrationTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.concurrent.Callable;
@@ -34,11 +31,8 @@ import static org.awaitility.Awaitility.await;
 @SpringIntegrationTest
 @ContextConfiguration(initializers = {
     RabbitTestInitializer.class,
-    OpendistroElasticContainerInitializer.class,
-    PostgresTestInitializer.class
+    OpendistroElasticContainerInitializer.class
 })
-@AutoConfigureDataJpa
-@ActiveProfiles("jpa-test")
 class AnalysisExpiredIT {
 
   private static final String EMPTY_STRING = "";

@@ -21,7 +21,6 @@ import com.silenteight.warehouse.indexer.match.MatchModule;
 import com.silenteight.warehouse.indexer.production.ProductionMessageHandlerModule;
 import com.silenteight.warehouse.indexer.production.indextracking.IndexTrackingModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
-import com.silenteight.warehouse.indexer.simulation.SimulationMessageHandlerModule;
 import com.silenteight.warehouse.indexer.simulation.analysis.AnalysisModule;
 import com.silenteight.warehouse.management.ManagementModule;
 import com.silenteight.warehouse.migration.MigrationModule;
@@ -43,6 +42,8 @@ import com.silenteight.warehouse.report.storage.StorageModule;
 import com.silenteight.warehouse.retention.production.RetentionProductionModule;
 import com.silenteight.warehouse.retention.simulation.RetentionSimulationModule;
 import com.silenteight.warehouse.sampling.SamplingModule;
+import com.silenteight.warehouse.simulation.handler.SimulationMessageHandlerModule;
+import com.silenteight.warehouse.simulation.processing.SimulationProcessingModule;
 
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -81,6 +82,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     QueryAlertModule.class,
     SamplingModule.class,
     SimulationMessageHandlerModule.class,
+    SimulationProcessingModule.class,
     // Interface modules
     AmqpCommonModule.class,
     AuthenticationModule.class,

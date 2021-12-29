@@ -15,13 +15,9 @@ import static com.silenteight.warehouse.common.testing.rest.TestRoles.MODEL_TUNE
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.QA;
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.QA_ISSUE_MANAGER;
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
-import static com.silenteight.warehouse.indexer.simulation.analysis.NewAnalysisEventFixture.ANALYSIS_ID;
 import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.ANALYSIS_ID_PARAM;
 import static com.silenteight.warehouse.report.simulation.SimulationReportsRestController.DEFINITIONS_COLLECTION_URL;
-import static com.silenteight.warehouse.report.simulation.SimulationTestConstants.REPORT_DEFINITION_DTO;
-import static com.silenteight.warehouse.report.simulation.SimulationTestConstants.REPORT_NAME;
-import static com.silenteight.warehouse.report.simulation.SimulationTestConstants.REPORT_TITLE;
-import static com.silenteight.warehouse.report.simulation.SimulationTestConstants.REPORT_TYPE;
+import static com.silenteight.warehouse.report.simulation.SimulationTestConstants.*;
 import static java.util.Map.of;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;

@@ -4,7 +4,11 @@ import lombok.AllArgsConstructor;
 
 import static com.silenteight.warehouse.indexer.simulation.analysis.NameResource.getId;
 
+/**
+ * @deprecated Represents naming strategy for indices in ES.
+ */
 @AllArgsConstructor
+@Deprecated(since = "2.0.0", forRemoval = true)
 public class SimulationNamingStrategy {
 
   private final String environmentPrefix;

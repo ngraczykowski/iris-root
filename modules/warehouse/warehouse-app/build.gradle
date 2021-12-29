@@ -38,6 +38,7 @@ dependencies {
   implementation project(":warehouse-retention-production")
   implementation project(":warehouse-retention-simulation")
   implementation project(":warehouse-sampling")
+  implementation project(":warehouse-simulation")
 
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_commons_app
