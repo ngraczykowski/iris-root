@@ -65,6 +65,8 @@ spec:
             - --logging.config=file:/etc/logback/logback.xml
             - --grpc.client.GLOBAL.negotiation-type=PLAINTEXT
             - --ae.comments.template.cache.invalidation={{ .Values.templateCacheInvalidation }}
+            - --ae.analysis.agent-exchange.missing-match-feature-reader.chunk-size={{ .Values.agentExchangeMissingMatchFeatureReaderChuckSize }}
+            - --ae.analysis.agent-exchange.missing-match-feature-reader.max-rows={{ .Values.agentExchangeMissingMatchFeatureReaderMaxRows }}
             - --grpc.client.datasource.address={{ .Values.grpcClientDatasourceAddress }}
             - --grpc.client.governance.address={{ .Values.grpcClientGovernanceAddress }}
           volumeMounts:
