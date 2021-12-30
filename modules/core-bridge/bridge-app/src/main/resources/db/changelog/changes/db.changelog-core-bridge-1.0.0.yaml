@@ -29,7 +29,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: analysis_name
-                  type: VARCHAR(2500)
+                  type: VARCHAR(255)
                   constraints:
                     nullable: false
               - column:
@@ -53,4 +53,54 @@ databaseChangeLog:
               - column:
                   name: error_description
                   type: VARCHAR(300)
+
+        - createTable:
+            tableName: recommendations
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: recommendation_pkey
+              - column:
+                  name: alert_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: analysis_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recommended_action
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recommendation_comment
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recommended_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recommendation_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payload
+                  type: jsonb
+
+        - addUniqueConstraint:
+            columnNames: analysis_name, alert_name
+            constraintName: unique_recommendation_constraint
+            tableName: recommendations
 

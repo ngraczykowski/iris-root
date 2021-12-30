@@ -4,6 +4,7 @@ ext {
   //***********************************
   // Silent Eight
   //***********************************
+  coreBridgeRecommendationApiVersion = "1.0.0"
   coreBridgeRegistrationApiVersion = "1.1.0"
   governanceApiVersion = "1.9.0"
   governanceApiLibraryVersion = "1.0.0"
@@ -26,6 +27,9 @@ ext {
 
 // Silent Eight
 libraries.protobuf_spring_boot_starter = [group: 'com.silenteight', name: 'protobuf-spring-boot-starter', version: protobufSpringBootStarterVersion]
+
+libraries.recommendation_api_library = [group: 'com.silenteight.recommendation.api.library', name: 'recommendation-lib', version: coreBridgeRecommendationApiVersion]
+libraries.recommendation_api_proto = [group: 'com.silenteight.recommendation.api.library', name: 'recommendation-internal-protos', version: coreBridgeRecommendationApiVersion]
 libraries.registration_api_library = [group: 'com.silenteight.registration.api.library', name: 'registration-lib', version: coreBridgeRegistrationApiVersion]
 libraries.registration_api_proto = [group: 'com.silenteight.registration.api.library', name: 'registration-internal-protos', version: coreBridgeRegistrationApiVersion]
 libraries.governance_model_api = [group: 'com.silenteight.governance.api', name: 'se-model-api', version: governanceApiVersion]
@@ -76,6 +80,7 @@ libraries.commons_collections = [group: 'org.apache.commons', name: 'commons-col
 libraries.commons_validator = [group: 'commons-validator', name: 'commons-validator', version: '1.7']
 libraries.io_utils = [group: 'commons-io', name: 'commons-io', version: '2.11.0']
 libraries.streamex = [group: 'one.util', name: 'streamex', version: '0.8.0']
+libraries.vavr = [group: 'io.vavr', name: 'vavr', version: '0.10.4']
 
 configurations.all {
   exclude group: 'org.glassfish', module: 'javax.el'
@@ -91,6 +96,8 @@ dependencies {
   annotationProcessor libraries.spring_boot_configuration_processor
   implementation libraries.protobuf_spring_boot_starter
   implementation libraries.grpc_spring_boot_starter
+  implementation libraries.recommendation_api_library
+  implementation libraries.recommendation_api_proto
   implementation libraries.registration_api_library
   implementation libraries.registration_api_proto
   implementation libraries.governance_model_api
@@ -115,6 +122,7 @@ dependencies {
   implementation libraries.io_utils
   implementation libraries.postgresql
   implementation libraries.streamex
+  implementation libraries.vavr
   implementation libraries.liquibase
 
   testImplementation libraries.groovy_all

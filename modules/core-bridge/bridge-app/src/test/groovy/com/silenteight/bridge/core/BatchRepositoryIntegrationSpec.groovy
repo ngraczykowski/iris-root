@@ -6,7 +6,9 @@ import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchReposi
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
+import org.springframework.test.annotation.DirtiesContext
 
+@DirtiesContext
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 class BatchRepositoryIntegrationSpec extends BaseSpecificationIT {
 

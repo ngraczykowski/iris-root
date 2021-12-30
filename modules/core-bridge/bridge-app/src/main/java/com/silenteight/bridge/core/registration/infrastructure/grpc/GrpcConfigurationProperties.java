@@ -6,6 +6,6 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 import java.time.Duration;
 
 @ConstructorBinding
-@ConfigurationProperties("silenteight.bridge.grpc")
+@ConfigurationProperties("silenteight.bridge.grpc.registration")
 record GrpcConfigurationProperties(Duration governanceDeadline,
                                    Duration adjudicationEngineDeadline) {}

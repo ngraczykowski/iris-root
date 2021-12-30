@@ -5,8 +5,11 @@ silenteight:
     ### GRPC PROPERTIES
     grpc:
       port: 24806
-      governance-deadline: 1m
-      adjudication-engine-deadline: 1m
+      recommendation:
+        recommendation-deadline: 15m
+      registration:
+        governance-deadline: 1m
+        adjudication-engine-deadline: 1m
 
     ### HTTP PROPERTIES
     http:
@@ -27,6 +30,13 @@ server:
   port: ${silenteight.bridge.http.port}
   http2:
     enabled: true
+
+### AMQP
+amqp:
+  recommendation:
+    outgoing:
+      recommendation-received:
+        exchange-name: recommendation-received-exchange
 
 ### SPRING
 spring:
