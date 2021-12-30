@@ -18,7 +18,7 @@ class EfficiencyMetricsIncrementer implements EfficiencyMetricIncrementerPort {
 
   @Override
   public void incrementManualInvestigation() {
-    incrementCounter("MANUAL_INVESTIGATION");
+    incrementCounter("PB_MANUAL_INVESTIGATION");
   }
 
   @Override
