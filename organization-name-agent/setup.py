@@ -53,7 +53,4 @@ setup(
     entry_points={
         "console_scripts": [],
     },
-    package_data={
-        "": ["resources/*"],
-    },
 )
