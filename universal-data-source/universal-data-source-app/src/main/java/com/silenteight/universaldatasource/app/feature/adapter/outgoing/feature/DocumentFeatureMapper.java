@@ -29,8 +29,8 @@ class DocumentFeatureMapper extends BaseFeatureMapper<DocumentFeatureInput> {
   }
 
   @Override
-  protected DocumentFeatureInput getDefaultFeatureInput() {
-    return DocumentFeatureInput.getDefaultInstance();
+  protected Builder getDefaultFeatureInput() {
+    return DocumentFeatureInput.newBuilder();
   }
 
   @Override

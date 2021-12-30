@@ -29,8 +29,8 @@ class BankIdentificationCodesFeatureMapper
     return BankIdentificationCodesInput.newBuilder();
   }
 
-  protected BankIdentificationCodesFeatureInput getDefaultFeatureInput() {
-    return BankIdentificationCodesFeatureInput.getDefaultInstance();
+  protected Builder getDefaultFeatureInput() {
+    return BankIdentificationCodesFeatureInput.newBuilder();
   }
 
   @Override

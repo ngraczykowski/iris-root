@@ -33,7 +33,7 @@ class LocationFeatureMapper extends BaseFeatureMapper<LocationFeatureInput> {
     return LocationInput.newBuilder();
   }
 
-  protected LocationFeatureInput getDefaultFeatureInput() {
-    return LocationFeatureInput.getDefaultInstance();
+  protected Builder getDefaultFeatureInput() {
+    return LocationFeatureInput.newBuilder();
   }
 }

@@ -29,8 +29,8 @@ class HistoricalDecisionsFeatureMapper extends BaseFeatureMapper<HistoricalDecis
   }
 
   @Override
-  protected HistoricalDecisionsFeatureInput getDefaultFeatureInput() {
-    return HistoricalDecisionsFeatureInput.getDefaultInstance();
+  protected Builder getDefaultFeatureInput() {
+    return HistoricalDecisionsFeatureInput.newBuilder();
   }
 
   @Override

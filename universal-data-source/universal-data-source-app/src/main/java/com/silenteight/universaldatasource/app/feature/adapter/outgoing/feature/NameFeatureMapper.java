@@ -29,8 +29,8 @@ class NameFeatureMapper extends BaseFeatureMapper<NameFeatureInput> {
   }
 
   @Override
-  protected NameFeatureInput getDefaultFeatureInput() {
-    return NameFeatureInput.getDefaultInstance();
+  protected Builder getDefaultFeatureInput() {
+    return NameFeatureInput.newBuilder();
   }
 
   @Override

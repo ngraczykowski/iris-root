@@ -29,8 +29,8 @@ class FreeTextFeatureMapper extends BaseFeatureMapper<FreeTextFeatureInput> {
   }
 
   @Override
-  protected FreeTextFeatureInput getDefaultFeatureInput() {
-    return FreeTextFeatureInput.getDefaultInstance();
+  protected Builder getDefaultFeatureInput() {
+    return FreeTextFeatureInput.newBuilder();
   }
 
   @Override

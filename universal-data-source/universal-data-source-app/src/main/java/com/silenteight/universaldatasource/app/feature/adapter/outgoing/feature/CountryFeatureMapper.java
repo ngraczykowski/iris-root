@@ -28,8 +28,8 @@ class CountryFeatureMapper extends BaseFeatureMapper<CountryFeatureInput> {
     return CountryInput.newBuilder();
   }
 
-  protected CountryFeatureInput getDefaultFeatureInput() {
-    return CountryFeatureInput.getDefaultInstance();
+  protected Builder getDefaultFeatureInput() {
+    return CountryFeatureInput.newBuilder();
   }
 
   @Override

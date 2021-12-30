@@ -10,6 +10,7 @@ import com.silenteight.universaldatasource.common.protobuf.JsonToStructConverter
 import com.google.protobuf.Message;
 import com.google.protobuf.Message.Builder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,26 +29,6 @@ public abstract class BaseFeatureMapper<T extends Message> implements FeatureMap
 
   @Override
   public BatchFeatureInputResponse map(MatchFeatureOutput matchFeatureOutput) {
-
-    var batchFeatureRequest = matchFeatureOutput.getBatchFeatureRequest();
-
-    var matchInputs = matchFeatureOutput.getMatchInputs();
-
-    var collect = batchFeatureRequest.getMatches().stream()
-        .filter(m -> !contains(matchInputs, m))
-        .collect(Collectors.toList());
-
-    //TODO(jgajewski): Return for multiple features
-    var collect1 = collect.stream()
-        .map(m -> {
-          var inputBuilder = createInputBuilder();
-          var matchField = inputBuilder.getDescriptorForType().findFieldByNumber(1);
-          var inputField = inputBuilder.getDescriptorForType().findFieldByNumber(2);
-          inputBuilder.setField(matchField, m);
-          inputBuilder.addRepeatedField(inputField, getDefaultFeatureInput());
-          return inputBuilder.build();
-        })
-        .collect(Collectors.toList());
 
     var batchResponseBuilder = createBatchResponseBuilder();
     var nameInputField = batchResponseBuilder.getDescriptorForType().findFieldByNumber(1);
@@ -70,9 +51,42 @@ public abstract class BaseFeatureMapper<T extends Message> implements FeatureMap
       batchResponseBuilder.addRepeatedField(nameInputField, inputBuilder.build());
     }
 
-    collect1.forEach(c -> batchResponseBuilder.addRepeatedField(nameInputField, c));
+    var listOfMissingFeatures = createMissingFeaturesResponse(matchFeatureOutput);
+    listOfMissingFeatures.forEach(c -> batchResponseBuilder.addRepeatedField(nameInputField, c));
 
     return new BatchFeatureInputResponse(batchResponseBuilder.build());
+  }
+
+  private List<Message> createMissingFeaturesResponse(MatchFeatureOutput matchFeatureOutput) {
+    var batchFeatureRequest = matchFeatureOutput.getBatchFeatureRequest();
+
+    var matchInputs = matchFeatureOutput.getMatchInputs();
+
+    var missingMatches = batchFeatureRequest.getMatches().stream()
+        .filter(m -> !contains(matchInputs, m))
+        .collect(Collectors.toList());
+
+    var listOfMissingFeatures = new ArrayList<Message>();
+    for (var feature : batchFeatureRequest.getFeatures()) {
+      listOfMissingFeatures.addAll(createMissingFeatures(missingMatches, feature));
+    }
+    return listOfMissingFeatures;
+  }
+
+  private List<Message> createMissingFeatures(List<String> missingMatches, String feature) {
+    return missingMatches.stream()
+        .map(m -> {
+          var inputBuilder = createInputBuilder();
+          var matchField = inputBuilder.getDescriptorForType().findFieldByNumber(1);
+          var inputField = inputBuilder.getDescriptorForType().findFieldByNumber(2);
+          inputBuilder.setField(matchField, m);
+          var defaultFeatureInput = getDefaultFeatureInput();
+          var featureField = defaultFeatureInput.getDescriptorForType().findFieldByNumber(1);
+          defaultFeatureInput.setField(featureField, feature);
+          inputBuilder.addRepeatedField(inputField, defaultFeatureInput.build());
+          return inputBuilder.build();
+        })
+        .collect(Collectors.toList());
   }
 
   private boolean contains(List<MatchInput> matchInputs, String match) {
@@ -83,6 +97,6 @@ public abstract class BaseFeatureMapper<T extends Message> implements FeatureMap
 
   protected abstract Builder createInputBuilder();
 
-  protected abstract T getDefaultFeatureInput();
+  protected abstract Builder getDefaultFeatureInput();
 
 }

@@ -29,8 +29,8 @@ class DateFeatureMapper extends BaseFeatureMapper<DateFeatureInput> {
   }
 
   @Override
-  protected DateFeatureInput getDefaultFeatureInput() {
-    return DateFeatureInput.getDefaultInstance();
+  protected Builder getDefaultFeatureInput() {
+    return DateFeatureInput.newBuilder();
   }
 
   @Override

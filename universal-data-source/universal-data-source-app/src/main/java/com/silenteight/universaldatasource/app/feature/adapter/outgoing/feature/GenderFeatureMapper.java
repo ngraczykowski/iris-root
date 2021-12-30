@@ -29,8 +29,8 @@ class GenderFeatureMapper extends BaseFeatureMapper<GenderFeatureInput> {
   }
 
   @Override
-  protected GenderFeatureInput getDefaultFeatureInput() {
-    return GenderFeatureInput.getDefaultInstance();
+  protected Builder getDefaultFeatureInput() {
+    return GenderFeatureInput.newBuilder();
   }
 
   @Override

@@ -29,8 +29,8 @@ class AllowListFeatureMapper extends BaseFeatureMapper<AllowListFeatureInput> {
     return AllowListInput.newBuilder();
   }
 
-  protected AllowListFeatureInput getDefaultFeatureInput() {
-    return AllowListFeatureInput.getDefaultInstance();
+  protected Builder getDefaultFeatureInput() {
+    return AllowListFeatureInput.newBuilder();
   }
 
   @Override

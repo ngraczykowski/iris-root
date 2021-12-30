@@ -29,8 +29,8 @@ class EventFeatureMapper extends BaseFeatureMapper<EventFeatureInput> {
   }
 
   @Override
-  protected EventFeatureInput getDefaultFeatureInput() {
-    return EventFeatureInput.getDefaultInstance();
+  protected Builder getDefaultFeatureInput() {
+    return EventFeatureInput.newBuilder();
   }
 
   @Override

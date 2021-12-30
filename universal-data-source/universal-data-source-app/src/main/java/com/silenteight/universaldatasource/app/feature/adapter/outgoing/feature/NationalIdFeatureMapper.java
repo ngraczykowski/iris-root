@@ -29,8 +29,8 @@ class NationalIdFeatureMapper extends BaseFeatureMapper<NationalIdFeatureInput> 
   }
 
   @Override
-  protected NationalIdFeatureInput getDefaultFeatureInput() {
-    return NationalIdFeatureInput.getDefaultInstance();
+  protected Builder getDefaultFeatureInput() {
+    return NationalIdFeatureInput.newBuilder();
   }
 
   @Override

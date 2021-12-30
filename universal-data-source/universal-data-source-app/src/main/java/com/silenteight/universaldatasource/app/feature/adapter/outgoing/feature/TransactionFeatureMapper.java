@@ -30,8 +30,8 @@ class TransactionFeatureMapper extends BaseFeatureMapper<TransactionFeatureInput
   }
 
   @Override
-  protected TransactionFeatureInput getDefaultFeatureInput() {
-    return TransactionFeatureInput.getDefaultInstance();
+  protected Builder getDefaultFeatureInput() {
+    return TransactionFeatureInput.newBuilder();
   }
 
   @Override
