@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,10 +31,13 @@ class RegisterAlertServiceTests {
   private AlertClientPort alertClient;
   @Mock
   private RegisteredAlertDataAccessPort registeredAlertDataAccessPort;
+  @Mock
+  private ApplicationEventPublisher applicationEventPublisher;
 
   @BeforeEach
   void setup() {
-    registerAlertService = new RegisterAlertService(alertClient, registeredAlertDataAccessPort);
+    registerAlertService = new RegisterAlertService(alertClient, registeredAlertDataAccessPort,
+        applicationEventPublisher);
   }
 
   @Test

@@ -11,6 +11,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlert
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.common.model.AlertData;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -38,6 +39,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
 
   private final AlertClientPort alertClient;
   private final RegisteredAlertDataAccessPort registeredAlertDataAccessPort;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   @Override
   public RegisterAlertResponse register(AlertData alertData, AlertMessageDto alertDto) {
@@ -50,7 +52,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
 
     var registerAlertResponse = createRegisterAlertResponse(
         request.getAlertId(), alertName, matchesNames.getMatchesList());
-
+    applicationEventPublisher.publishEvent(registerAlertResponse);
     registeredAlertDataAccessPort.save(List.of(SaveRegisteredAlertRequest
         .builder()
         .alertId(alertData.getAlertId())
