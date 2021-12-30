@@ -165,8 +165,6 @@ class CmapiNotificationCreatorService implements CmapiNotificationCreatorUseCase
           "Error during creating zip file. Message= {}, reason= {}.",
           exception.getMessage(), exception.getCause());
       return rethrow(exception);
-    } finally {
-      deleteFile(zipFile);
     }
 
     return zipFile;

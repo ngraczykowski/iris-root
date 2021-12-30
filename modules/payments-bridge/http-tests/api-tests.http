@@ -119,6 +119,15 @@ Authorization: Bearer {{access_token}}
 
 bucket=sierra-dev-decrypted-files&object=01-01-1999.csv
 
+### Post broken alert
+// GTEX-246c7acb-6b30-2bb9-1293-1c1b5fdae089.json
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/hq-messages/GTEX-246c7acb-6b30-2bb9-1293-1c1b5fdae089.json
+
 ### UAT files - USE WITH EXTREME CARE!!!
 // bucket=workload-sierra-uat-371608975349-decrypted-files&object=XXX.csv
 // svb_learn_march_export_sorted.csv
