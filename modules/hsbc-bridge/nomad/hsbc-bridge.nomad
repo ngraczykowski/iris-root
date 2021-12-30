@@ -73,7 +73,8 @@ job "hsbc-bridge" {
       config {
         image   = "postgres:10"
         ports   = [
-          "tcp"]
+          "tcp"
+        ]
         volumes = [
           "${local.database_volume}:/var/lib/postgresql/data"
         ]
@@ -127,9 +128,9 @@ job "hsbc-bridge" {
       ], var.http_tags)
 
       check_restart {
-        limit           = 5
-        grace           = "300s"
-        ignore_warnings = true
+        limit           = 3
+        grace           = "90s"
+        ignore_warnings = false
       }
 
       check {
@@ -151,6 +152,12 @@ job "hsbc-bridge" {
         "gRPC.port=${NOMAD_PORT_grpc}",
         "gRPC_port=${NOMAD_PORT_grpc}",
       ]
+
+      check_restart {
+        limit           = 3
+        grace           = "90s"
+        ignore_warnings = false
+      }
 
       check {
         name     = "gRPC Port Alive Check"
@@ -186,10 +193,10 @@ job "hsbc-bridge" {
       driver = "raw_exec"
 
       lifecycle {
-        hook = "poststart"
+        hook    = "poststart"
         sidecar = true
       }
-      
+
       restart {
         interval = "1m"
         attempts = 5
@@ -206,7 +213,7 @@ job "hsbc-bridge" {
 
       config {
         command = "grpcui"
-        args = [
+        args    = [
           "-plaintext",
           "-bind=${NOMAD_IP_grpcui}",
           "-port=${NOMAD_PORT_grpcui}",
@@ -216,7 +223,7 @@ job "hsbc-bridge" {
       }
 
       resources {
-        cpu = 50
+        cpu    = 50
         memory = 100
       }
     }
@@ -246,7 +253,7 @@ job "hsbc-bridge" {
       }
 
       template {
-        data = file("./conf/logback.xml")
+        data        = file("./conf/logback.xml")
         destination = "secrets/conf/logback.xml"
         change_mode = "noop"
       }
@@ -291,31 +298,31 @@ job "hsbc-bridge" {
       driver = "docker"
 
       lifecycle {
-        hook = "prestart"
+        hook    = "prestart"
         sidecar = true
       }
 
       config {
-        image = "fluent/fluent-bit:1.7.7"
+        image        = "fluent/fluent-bit:1.7.7"
         network_mode = "host"
-        volumes = [
+        volumes      = [
           "secrets/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf",
           "local/fluent-parsers.conf:/fluent-bit/etc/fluent-parsers.conf",
         ]
       }
 
       resources {
-        cpu = 50
+        cpu    = 50
         memory = 100
       }
 
       template {
-        data = file("./conf/fluent-bit.conf")
+        data        = file("./conf/fluent-bit.conf")
         destination = "secrets/fluent-bit.conf"
       }
 
       template {
-        data = file("./conf/fluent-parsers.conf")
+        data        = file("./conf/fluent-parsers.conf")
         destination = "local/fluent-parsers.conf"
       }
     }
