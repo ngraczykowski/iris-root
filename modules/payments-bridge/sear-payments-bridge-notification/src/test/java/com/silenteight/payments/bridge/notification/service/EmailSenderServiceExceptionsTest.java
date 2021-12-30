@@ -23,6 +23,8 @@ import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -54,7 +56,7 @@ class EmailSenderServiceExceptionsTest extends BaseJdbcTest {
     byte[] attachment = new byte[0];
 
     var sendEmailRequest = SendEmailRequest.builder()
-        .id(id)
+        .ids(List.of(id))
         .subject(subject)
         .htmlText(htmlText)
         .attachmentName(attachmentName)
@@ -77,7 +79,7 @@ class EmailSenderServiceExceptionsTest extends BaseJdbcTest {
     byte[] attachment = new byte[0];
 
     var sendEmailRequest = SendEmailRequest.builder()
-        .id(id)
+        .ids(List.of(id))
         .subject(subject)
         .htmlText(htmlText)
         .attachmentName(attachmentName)

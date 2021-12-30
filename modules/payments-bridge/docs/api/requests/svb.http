@@ -19,10 +19,16 @@ Content-Type: application/json
 
 < ../svb-examples/2021-10-08-1754_uat_firco_alert.json
 
-
 ###
 // 2021-10-17-0201_saddam_hussain_two-2_hits.json
 POST http://localhost:24602/rest/pb/alert
 Content-Type: application/json
 
 < ../svb-examples/2021-10-17-0201_saddam_hussain_two-2_hits.json
+
+###
+// GTEX-246c7acb-6b30-2bb9-1293-1c1b5fdae089.json
+POST http://localhost:24602/rest/pb/alert
+Content-Type: application/json
+
+< ../hq-messages/GTEX-246c7acb-6b30-2bb9-1293-1c1b5fdae089.json

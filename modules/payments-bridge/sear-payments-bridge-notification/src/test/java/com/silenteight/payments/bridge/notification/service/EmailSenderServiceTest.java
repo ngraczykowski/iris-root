@@ -23,6 +23,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URL;
+import java.util.List;
 import javax.mail.internet.MimeMessage;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -74,7 +75,7 @@ class EmailSenderServiceTest extends BaseJdbcTest {
     byte[] attachment = createByteArrayFromFile();
 
     var sendEmailRequest = SendEmailRequest.builder()
-        .id(id)
+        .ids(List.of(id))
         .subject(subject)
         .htmlText(htmlText)
         .attachmentName(attachmentName)

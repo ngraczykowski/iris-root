@@ -41,8 +41,8 @@ class EmailSenderService implements EmailSenderUseCase {
         MailPreparationException exception) {
       log.error(
           "Mail cannot be sent due to authentication, parse or "
-              + "preparation exception. Message= {}, reason= {}. Notification id={}",
-          exception.getMessage(), exception.getCause(), sendEmailRequest.getId());
+              + "preparation exception. Message= {}, reason= {}. Notifications ids={}",
+          exception.getMessage(), exception.getCause(), sendEmailRequest.getIds());
       throw new NonRecoverableEmailSendingException("Mail could not be sent.");
     }
   }
