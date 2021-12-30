@@ -1,6 +1,7 @@
 package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature;
 
 import com.silenteight.datasource.api.bankidentificationcodes.v1.BankIdentificationCodesFeatureInput;
+import com.silenteight.datasource.api.bankidentificationcodes.v1.BankIdentificationCodesInput;
 import com.silenteight.datasource.api.bankidentificationcodes.v1.BatchGetMatchBankIdentificationCodesInputsResponse;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
@@ -21,6 +22,15 @@ class BankIdentificationCodesFeatureMapper
   @Override
   protected Builder createBatchResponseBuilder() {
     return BatchGetMatchBankIdentificationCodesInputsResponse.newBuilder();
+  }
+
+  @Override
+  protected Builder createInputBuilder() {
+    return BankIdentificationCodesInput.newBuilder();
+  }
+
+  protected BankIdentificationCodesFeatureInput getDefaultFeatureInput() {
+    return BankIdentificationCodesFeatureInput.getDefaultInstance();
   }
 
   @Override

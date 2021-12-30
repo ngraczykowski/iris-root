@@ -12,6 +12,8 @@ public class MatchFeatureOutput {
 
   List<MatchInput> matchInputs;
 
+  BatchFeatureRequest batchFeatureRequest;
+
   @Value
   @Builder
   public static class MatchInput {

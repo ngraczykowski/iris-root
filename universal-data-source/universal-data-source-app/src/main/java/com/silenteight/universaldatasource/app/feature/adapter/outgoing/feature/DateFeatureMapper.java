@@ -2,6 +2,7 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature
 
 import com.silenteight.datasource.api.date.v1.BatchGetMatchDateInputsResponse;
 import com.silenteight.datasource.api.date.v1.DateFeatureInput;
+import com.silenteight.datasource.api.date.v1.DateInput;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
 import com.google.protobuf.Any;
@@ -20,6 +21,16 @@ class DateFeatureMapper extends BaseFeatureMapper<DateFeatureInput> {
   @Override
   protected Builder createBatchResponseBuilder() {
     return BatchGetMatchDateInputsResponse.newBuilder();
+  }
+
+  @Override
+  protected Builder createInputBuilder() {
+    return DateInput.newBuilder();
+  }
+
+  @Override
+  protected DateFeatureInput getDefaultFeatureInput() {
+    return DateFeatureInput.getDefaultInstance();
   }
 
   @Override

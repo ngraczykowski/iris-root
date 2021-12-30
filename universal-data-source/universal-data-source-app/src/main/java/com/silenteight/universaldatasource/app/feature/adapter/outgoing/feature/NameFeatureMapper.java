@@ -2,6 +2,7 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature
 
 import com.silenteight.datasource.api.name.v1.BatchGetMatchNameInputsResponse;
 import com.silenteight.datasource.api.name.v1.NameFeatureInput;
+import com.silenteight.datasource.api.name.v1.NameInput;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
 import com.google.protobuf.Any;
@@ -20,6 +21,16 @@ class NameFeatureMapper extends BaseFeatureMapper<NameFeatureInput> {
   @Override
   protected Builder createBatchResponseBuilder() {
     return BatchGetMatchNameInputsResponse.newBuilder();
+  }
+
+  @Override
+  protected Builder createInputBuilder() {
+    return NameInput.newBuilder();
+  }
+
+  @Override
+  protected NameFeatureInput getDefaultFeatureInput() {
+    return NameFeatureInput.getDefaultInstance();
   }
 
   @Override

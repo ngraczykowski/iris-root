@@ -1,6 +1,7 @@
 package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature;
 
 import com.silenteight.datasource.api.allowlist.v1.AllowListFeatureInput;
+import com.silenteight.datasource.api.allowlist.v1.AllowListInput;
 import com.silenteight.datasource.api.allowlist.v1.BatchGetMatchAllowListInputsResponse;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
@@ -20,6 +21,16 @@ class AllowListFeatureMapper extends BaseFeatureMapper<AllowListFeatureInput> {
   @Override
   protected Builder createBatchResponseBuilder() {
     return BatchGetMatchAllowListInputsResponse.newBuilder();
+  }
+
+
+  @Override
+  protected Builder createInputBuilder() {
+    return AllowListInput.newBuilder();
+  }
+
+  protected AllowListFeatureInput getDefaultFeatureInput() {
+    return AllowListFeatureInput.getDefaultInstance();
   }
 
   @Override

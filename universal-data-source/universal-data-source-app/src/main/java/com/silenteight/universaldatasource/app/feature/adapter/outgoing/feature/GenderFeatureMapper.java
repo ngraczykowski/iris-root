@@ -2,6 +2,7 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature
 
 import com.silenteight.datasource.api.gender.v1.BatchGetMatchGenderInputsResponse;
 import com.silenteight.datasource.api.gender.v1.GenderFeatureInput;
+import com.silenteight.datasource.api.gender.v1.GenderInput;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
 import com.google.protobuf.Any;
@@ -20,6 +21,16 @@ class GenderFeatureMapper extends BaseFeatureMapper<GenderFeatureInput> {
   @Override
   protected Builder createBatchResponseBuilder() {
     return BatchGetMatchGenderInputsResponse.newBuilder();
+  }
+
+  @Override
+  protected Builder createInputBuilder() {
+    return GenderInput.newBuilder();
+  }
+
+  @Override
+  protected GenderFeatureInput getDefaultFeatureInput() {
+    return GenderFeatureInput.getDefaultInstance();
   }
 
   @Override

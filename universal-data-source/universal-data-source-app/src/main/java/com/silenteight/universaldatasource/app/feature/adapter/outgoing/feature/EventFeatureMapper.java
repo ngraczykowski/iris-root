@@ -2,6 +2,7 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature
 
 import com.silenteight.datasource.api.event.v1.BatchGetMatchEventInputsResponse;
 import com.silenteight.datasource.api.event.v1.EventFeatureInput;
+import com.silenteight.datasource.api.event.v1.EventInput;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
 import com.google.protobuf.Any;
@@ -20,6 +21,16 @@ class EventFeatureMapper extends BaseFeatureMapper<EventFeatureInput> {
   @Override
   protected Builder createBatchResponseBuilder() {
     return BatchGetMatchEventInputsResponse.newBuilder();
+  }
+
+  @Override
+  protected Builder createInputBuilder() {
+    return EventInput.newBuilder();
+  }
+
+  @Override
+  protected EventFeatureInput getDefaultFeatureInput() {
+    return EventFeatureInput.getDefaultInstance();
   }
 
   @Override

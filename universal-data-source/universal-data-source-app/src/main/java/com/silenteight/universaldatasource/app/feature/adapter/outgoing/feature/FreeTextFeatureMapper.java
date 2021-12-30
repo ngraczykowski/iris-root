@@ -2,6 +2,7 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature
 
 import com.silenteight.datasource.api.freetext.v1.BatchGetMatchFreeTextInputsResponse;
 import com.silenteight.datasource.api.freetext.v1.FreeTextFeatureInput;
+import com.silenteight.datasource.api.freetext.v1.FreeTextInput;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
 import com.google.protobuf.Any;
@@ -20,6 +21,16 @@ class FreeTextFeatureMapper extends BaseFeatureMapper<FreeTextFeatureInput> {
   @Override
   protected Builder createBatchResponseBuilder() {
     return BatchGetMatchFreeTextInputsResponse.newBuilder();
+  }
+
+  @Override
+  protected Builder createInputBuilder() {
+    return FreeTextInput.newBuilder();
+  }
+
+  @Override
+  protected FreeTextFeatureInput getDefaultFeatureInput() {
+    return FreeTextFeatureInput.getDefaultInstance();
   }
 
   @Override

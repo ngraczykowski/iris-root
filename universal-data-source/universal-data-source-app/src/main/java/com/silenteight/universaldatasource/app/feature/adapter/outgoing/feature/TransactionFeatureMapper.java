@@ -2,6 +2,7 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature
 
 import com.silenteight.datasource.api.transaction.v1.BatchGetMatchTransactionInputsResponse;
 import com.silenteight.datasource.api.transaction.v1.TransactionFeatureInput;
+import com.silenteight.datasource.api.transaction.v1.TransactionInput;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
 import com.google.protobuf.Any;
@@ -20,6 +21,17 @@ class TransactionFeatureMapper extends BaseFeatureMapper<TransactionFeatureInput
   @Override
   protected Builder createBatchResponseBuilder() {
     return BatchGetMatchTransactionInputsResponse.newBuilder();
+  }
+
+
+  @Override
+  protected Builder createInputBuilder() {
+    return TransactionInput.newBuilder();
+  }
+
+  @Override
+  protected TransactionFeatureInput getDefaultFeatureInput() {
+    return TransactionFeatureInput.getDefaultInstance();
   }
 
   @Override

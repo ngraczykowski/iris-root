@@ -2,6 +2,7 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature
 
 import com.silenteight.datasource.api.country.v1.BatchGetMatchCountryInputsResponse;
 import com.silenteight.datasource.api.country.v1.CountryFeatureInput;
+import com.silenteight.datasource.api.country.v1.CountryInput;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
 import com.google.protobuf.Any;
@@ -20,6 +21,15 @@ class CountryFeatureMapper extends BaseFeatureMapper<CountryFeatureInput> {
   @Override
   protected Builder createBatchResponseBuilder() {
     return BatchGetMatchCountryInputsResponse.newBuilder();
+  }
+
+  @Override
+  protected Builder createInputBuilder() {
+    return CountryInput.newBuilder();
+  }
+
+  protected CountryFeatureInput getDefaultFeatureInput() {
+    return CountryFeatureInput.getDefaultInstance();
   }
 
   @Override

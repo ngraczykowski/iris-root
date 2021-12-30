@@ -1,6 +1,7 @@
 package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature;
 
 import com.silenteight.datasource.api.historicaldecisions.v1.BatchGetMatchHistoricalDecisionsInputsResponse;
+import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisionsInput;
 import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisionsInput.HistoricalDecisionsFeatureInput;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
@@ -20,6 +21,16 @@ class HistoricalDecisionsFeatureMapper extends BaseFeatureMapper<HistoricalDecis
   @Override
   protected Builder createBatchResponseBuilder() {
     return BatchGetMatchHistoricalDecisionsInputsResponse.newBuilder();
+  }
+
+  @Override
+  protected Builder createInputBuilder() {
+    return HistoricalDecisionsInput.newBuilder();
+  }
+
+  @Override
+  protected HistoricalDecisionsFeatureInput getDefaultFeatureInput() {
+    return HistoricalDecisionsFeatureInput.getDefaultInstance();
   }
 
   @Override

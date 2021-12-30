@@ -43,7 +43,8 @@ class StreamFeaturesQuery {
     parameters.addValue("featureNames", batchFeatureRequest.getFeatures());
 
     var features = jdbcTemplate.query(SQL, parameters,
-        new FeatureExtractor(consumer, agentInputType, getChunkSize(agentInputType)));
+        new FeatureExtractor(
+            consumer, agentInputType, getChunkSize(agentInputType), batchFeatureRequest));
 
     return features != null ? features : 0;
   }

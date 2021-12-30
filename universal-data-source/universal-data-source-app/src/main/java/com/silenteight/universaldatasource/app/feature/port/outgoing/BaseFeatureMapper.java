@@ -10,6 +10,9 @@ import com.silenteight.universaldatasource.common.protobuf.JsonToStructConverter
 import com.google.protobuf.Message;
 import com.google.protobuf.Message.Builder;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public abstract class BaseFeatureMapper<T extends Message> implements FeatureMapper {
 
   private final String className;
@@ -25,6 +28,26 @@ public abstract class BaseFeatureMapper<T extends Message> implements FeatureMap
 
   @Override
   public BatchFeatureInputResponse map(MatchFeatureOutput matchFeatureOutput) {
+
+    var batchFeatureRequest = matchFeatureOutput.getBatchFeatureRequest();
+
+    var matchInputs = matchFeatureOutput.getMatchInputs();
+
+    var collect = batchFeatureRequest.getMatches().stream()
+        .filter(m -> !contains(matchInputs, m))
+        .collect(Collectors.toList());
+
+    //TODO(jgajewski): Return for multiple features
+    var collect1 = collect.stream()
+        .map(m -> {
+          var inputBuilder = createInputBuilder();
+          var matchField = inputBuilder.getDescriptorForType().findFieldByNumber(1);
+          var inputField = inputBuilder.getDescriptorForType().findFieldByNumber(2);
+          inputBuilder.setField(matchField, m);
+          inputBuilder.addRepeatedField(inputField, getDefaultFeatureInput());
+          return inputBuilder.build();
+        })
+        .collect(Collectors.toList());
 
     var batchResponseBuilder = createBatchResponseBuilder();
     var nameInputField = batchResponseBuilder.getDescriptorForType().findFieldByNumber(1);
@@ -47,9 +70,19 @@ public abstract class BaseFeatureMapper<T extends Message> implements FeatureMap
       batchResponseBuilder.addRepeatedField(nameInputField, inputBuilder.build());
     }
 
+    collect1.forEach(c -> batchResponseBuilder.addRepeatedField(nameInputField, c));
+
     return new BatchFeatureInputResponse(batchResponseBuilder.build());
   }
 
+  private boolean contains(List<MatchInput> matchInputs, String match) {
+    return matchInputs.stream().anyMatch(m -> m.getMatch().equals(match));
+  }
+
   protected abstract Builder createBatchResponseBuilder();
+
+  protected abstract Builder createInputBuilder();
+
+  protected abstract T getDefaultFeatureInput();
 
 }

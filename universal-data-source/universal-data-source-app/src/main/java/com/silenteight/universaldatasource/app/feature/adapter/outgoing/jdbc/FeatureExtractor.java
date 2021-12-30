@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
+import com.silenteight.universaldatasource.app.feature.model.BatchFeatureRequest;
 import com.silenteight.universaldatasource.app.feature.model.MatchFeatureOutput;
 import com.silenteight.universaldatasource.app.feature.model.MatchFeatureOutput.AgentInput;
 import com.silenteight.universaldatasource.app.feature.model.MatchFeatureOutput.MatchInput;
@@ -37,6 +38,7 @@ class FeatureExtractor implements ResultSetExtractor<Integer> {
   private final Consumer<MatchFeatureOutput> consumer;
   private final String agentInputType;
   private final int chunkSize;
+  private final BatchFeatureRequest batchFeatureRequest;
 
   @Override
   public Integer extractData(ResultSet rs) throws SQLException {
@@ -56,12 +58,14 @@ class FeatureExtractor implements ResultSetExtractor<Integer> {
           .build());
 
       if (chunkSize <= matchFeatureOutputs.size()) {
-        consumeFeatureResponse(new MatchFeatureOutput(agentInputType, matchFeatureOutputs));
+        consumeFeatureResponse(
+            new MatchFeatureOutput(agentInputType, matchFeatureOutputs, batchFeatureRequest));
       }
     }
 
     if (!matchFeatureOutputs.isEmpty()) {
-      consumeFeatureResponse(new MatchFeatureOutput(agentInputType, matchFeatureOutputs));
+      consumeFeatureResponse(
+          new MatchFeatureOutput(agentInputType, matchFeatureOutputs, batchFeatureRequest));
     }
 
     return rowNum;

@@ -2,6 +2,7 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature
 
 import com.silenteight.datasource.api.name.v1.BatchGetMatchNameInputsResponse;
 import com.silenteight.datasource.api.nationalid.v1.NationalIdFeatureInput;
+import com.silenteight.datasource.api.nationalid.v1.NationalIdInput;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
 import com.google.protobuf.Any;
@@ -20,6 +21,16 @@ class NationalIdFeatureMapper extends BaseFeatureMapper<NationalIdFeatureInput> 
   @Override
   protected Builder createBatchResponseBuilder() {
     return BatchGetMatchNameInputsResponse.newBuilder();
+  }
+
+  @Override
+  protected Builder createInputBuilder() {
+    return NationalIdInput.newBuilder();
+  }
+
+  @Override
+  protected NationalIdFeatureInput getDefaultFeatureInput() {
+    return NationalIdFeatureInput.getDefaultInstance();
   }
 
   @Override
