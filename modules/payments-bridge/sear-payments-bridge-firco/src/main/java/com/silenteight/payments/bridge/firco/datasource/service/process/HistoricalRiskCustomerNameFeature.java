@@ -14,7 +14,6 @@ class HistoricalRiskCustomerNameFeature extends HistoricalRiskAssessmentFeature 
     return HISTORICAL_RISK_CUSTOMER_NAME_FEATURE;
   }
 
-
   @Override
   protected String getAlertedPartyId(AlertedPartyData alertedPartyData) {
     return alertedPartyData.getNames().stream()

@@ -4,25 +4,33 @@ import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
-import com.google.protobuf.Any;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static com.silenteight.payments.bridge.svb.learning.features.service.AgentExtractorUtils.createFeatureInput;
+import static com.silenteight.payments.bridge.svb.learning.features.service.AgentExtractorUtils.getFullFeatureName;
 
 @Service
 @Qualifier("geo")
 class GeoFeatureExtractor implements FeatureExtractor {
 
+  private static final String GEO_FEATURE = "geo";
+
   @Override
-  public FeatureInput extract(LearningMatch learningMatch) {
-    return FeatureInput
+  public List<FeatureInput> createFeatureInputs(LearningMatch learningMatch) {
+    var locationFeatureInput = createLocationFeatureInput(learningMatch);
+    var featureInput = createFeatureInput(GEO_FEATURE, locationFeatureInput);
+    return List.of(featureInput);
+  }
+
+  private static LocationFeatureInput createLocationFeatureInput(LearningMatch learningMatch) {
+    return LocationFeatureInput
         .newBuilder()
-        .setFeature("features/geo")
-        .setAgentFeatureInput(Any.pack(LocationFeatureInput
-            .newBuilder()
-            .setFeature("features/geo")
-            .setWatchlistLocation(learningMatch.getWatchlistLocation())
-            .setAlertedPartyLocation(learningMatch.getAlertedPartyLocation())
-            .build()))
+        .setFeature(getFullFeatureName(GEO_FEATURE))
+        .setWatchlistLocation(learningMatch.getWatchlistLocation())
+        .setAlertedPartyLocation(learningMatch.getAlertedPartyLocation())
         .build();
   }
 }

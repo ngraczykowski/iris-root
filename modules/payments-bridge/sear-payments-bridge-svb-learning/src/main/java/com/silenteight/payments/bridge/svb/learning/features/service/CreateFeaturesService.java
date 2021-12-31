@@ -15,6 +15,7 @@ import com.silenteight.payments.bridge.svb.learning.reader.domain.ReadAlertError
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,7 +34,7 @@ class CreateFeaturesService implements CreateFeaturesUseCase {
 
     learningAlert.getMatches().forEach(match -> {
       var features = new ArrayList<FeatureInput>();
-      featureExtractors.forEach(fe -> features.add(fe.extract(match)));
+      featureExtractors.forEach(fe -> features.addAll(fe.createFeatureInputs(match)));
       agentInputs.add(AgentInput
           .newBuilder()
           .setAlert(alertName)
@@ -83,9 +84,9 @@ class CreateFeaturesService implements CreateFeaturesUseCase {
   }
 
   private List<FeatureInput> toFeatureInput(LearningMatch learningMatch) {
-    return featureExtractors.stream().map(fe -> fe.extract(learningMatch))
+    return featureExtractors.stream()
+        .map(fe -> fe.createFeatureInputs(learningMatch))
+        .flatMap(Collection::stream)
         .collect(Collectors.toList());
   }
-
-
 }

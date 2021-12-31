@@ -9,44 +9,67 @@ import com.silenteight.datasource.api.name.v1.WatchlistName.NameType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
-import com.google.protobuf.Any;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import javax.annotation.Nonnull;
 
+import static com.silenteight.payments.bridge.svb.learning.features.service.AgentExtractorUtils.createFeatureInput;
+import static com.silenteight.payments.bridge.svb.learning.features.service.AgentExtractorUtils.getFullFeatureName;
 import static java.util.stream.Collectors.toList;
 
 @Service
 @Qualifier("nameMatchedText")
 class NameMatchedTextFeatureExtractor implements FeatureExtractor {
 
+  private static final String NAME_TEXT_FEATURE = "nameMatchedText";
+
   @Override
-  public FeatureInput extract(LearningMatch learningMatch) {
-    var watchlistNames = learningMatch
+  public List<FeatureInput> createFeatureInputs(LearningMatch learningMatch) {
+    var nameFeatureInput = createNameFeatureInput(learningMatch);
+    var featureInput = createFeatureInput(NAME_TEXT_FEATURE, nameFeatureInput);
+    return List.of(featureInput);
+  }
+
+  private static NameFeatureInput createNameFeatureInput(LearningMatch learningMatch) {
+    return NameFeatureInput
+        .newBuilder()
+        .setFeature(getFullFeatureName(NAME_TEXT_FEATURE))
+        .setAlertedPartyType(learningMatch.getEntityType())
+        .addAllMatchingTexts(learningMatch.getMatchingTexts())
+        .addAllWatchlistNames(createWatchlistNames(learningMatch))
+        .addAllAlertedPartyNames(createAlertedPartyNames(learningMatch))
+        .setAlertedPartyType(mapWatchListTypeToEntityType(learningMatch.getWatchlistType()))
+        .build();
+  }
+
+  private static List<WatchlistName> createWatchlistNames(LearningMatch learningMatch) {
+    return learningMatch
         .getNameMatchedTexts()
         .stream()
-        .map(name -> WatchlistName.newBuilder().setName(name).setType(NameType.REGULAR).build())
+        .map(NameMatchedTextFeatureExtractor::createWatchlistName)
         .collect(toList());
+  }
 
-    var alertedPartyNames = learningMatch
+  private static WatchlistName createWatchlistName(String nameMatchedText) {
+    return WatchlistName.newBuilder()
+        .setName(nameMatchedText)
+        .setType(NameType.REGULAR)
+        .build();
+  }
+
+  private static List<AlertedPartyName> createAlertedPartyNames(LearningMatch learningMatch) {
+    return learningMatch
         .getMatchedNames()
         .stream()
-        .map(name -> AlertedPartyName.newBuilder().setName(name).build())
+        .map(NameMatchedTextFeatureExtractor::createAlertedPartyName)
         .collect(toList());
+  }
 
-    return FeatureInput
-        .newBuilder()
-        .setFeature("features/nameMatchedText")
-        .setAgentFeatureInput(Any.pack(NameFeatureInput
-            .newBuilder()
-            .setFeature("features/nameMatchedText")
-            .setAlertedPartyType(learningMatch.getEntityType())
-            .addAllMatchingTexts(learningMatch.getMatchingTexts())
-            .addAllWatchlistNames(watchlistNames)
-            .addAllAlertedPartyNames(alertedPartyNames)
-            .setAlertedPartyType(mapWatchListTypeToEntityType(learningMatch.getWatchlistType()))
-            .build()))
+  private static AlertedPartyName createAlertedPartyName(String matchedName) {
+    return AlertedPartyName.newBuilder()
+        .setName(matchedName)
         .build();
   }
 
