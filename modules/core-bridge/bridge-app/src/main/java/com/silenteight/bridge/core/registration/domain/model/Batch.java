@@ -2,7 +2,10 @@ package com.silenteight.bridge.core.registration.domain.model;
 
 import lombok.Builder;
 
-public record Batch(String id, String analysisName, Long alertsCount, BatchStatus status,
+public record Batch(String id,
+                    String analysisName,
+                    Long alertsCount,
+                    BatchStatus status,
                     String errorDescription) {
 
   @Builder

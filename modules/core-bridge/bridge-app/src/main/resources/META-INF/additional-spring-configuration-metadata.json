@@ -29,6 +29,11 @@
       "name": "silenteight.bridge.http.port",
       "type": "java.lang.String",
       "description": "Bridge HTTP port."
+    },
+    {
+      "name": "amqp.registration.outgoing.notify-batch-error.exchange-name",
+      "type": "java.lang.String",
+      "description": "Exchange name for notify batch error stored event."
     }
   ]
 }

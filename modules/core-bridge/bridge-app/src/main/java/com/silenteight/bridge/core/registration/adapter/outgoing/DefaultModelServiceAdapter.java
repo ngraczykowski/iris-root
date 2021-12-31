@@ -24,7 +24,7 @@ class DefaultModelServiceAdapter implements DefaultModelService {
   @Override
   @Retryable(GovernanceLibraryRuntimeException.class)
   public DefaultModel getForSolving() {
-    final SolvingModelOut solvingModel = modelServiceClient.getSolvingModel();
+    var solvingModel = modelServiceClient.getSolvingModel();
     return createDefaultModel(solvingModel);
   }
 

@@ -1,6 +1,6 @@
 package com.silenteight.bridge.core.registration.domain
 
-
+import com.silenteight.bridge.core.registration.domain.model.BatchError
 import com.silenteight.bridge.core.registration.domain.model.BatchId
 
 import spock.lang.Specification

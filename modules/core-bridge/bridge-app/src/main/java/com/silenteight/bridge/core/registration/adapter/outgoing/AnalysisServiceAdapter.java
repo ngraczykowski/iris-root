@@ -16,7 +16,6 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -28,8 +27,7 @@ class AnalysisServiceAdapter implements AnalysisService {
   @Override
   @Retryable(AdjudicationEngineLibraryRuntimeException.class)
   public Analysis create(DefaultModel defaultModel) {
-    var createAnalysisIn = CreateAnalysisIn
-        .builder()
+    var createAnalysisIn = CreateAnalysisIn.builder()
         .categories(defaultModel.categories())
         .policy(defaultModel.policyName())
         .strategy(defaultModel.strategyName())
@@ -47,6 +45,6 @@ class AnalysisServiceAdapter implements AnalysisService {
             .name(defaultModelFeature.name())
             .agentConfig(defaultModelFeature.agentConfig())
             .build())
-        .collect(Collectors.toList());
+        .toList();
   }
 }

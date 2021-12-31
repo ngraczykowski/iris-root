@@ -37,6 +37,10 @@ amqp:
     outgoing:
       recommendation-received:
         exchange-name: recommendation-received-exchange
+  registration:
+    outgoing:
+      notify-batch-error:
+        exchange-name: notify-batch-error-exchange
 
 ### SPRING
 spring:
@@ -48,6 +52,12 @@ spring:
     port: 5680
     username: dev
     password: dev
+    listener:
+      simple:
+        retry:
+          enabled: true
+          initial-interval: 1000ms
+          multiplier: 2
 
   ### CONSUL
   cloud:

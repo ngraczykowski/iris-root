@@ -6,13 +6,16 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.bridge.core.registration.domain.NotifyBatchErrorCommand;
 import com.silenteight.bridge.core.registration.domain.RegisterBatchCommand;
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade;
-import com.silenteight.proto.registration.api.v1.*;
+import com.silenteight.proto.registration.api.v1.NotifyBatchErrorRequest;
+import com.silenteight.proto.registration.api.v1.RegisterAlertsAndMatchesRequest;
+import com.silenteight.proto.registration.api.v1.RegisterAlertsAndMatchesResponse;
+import com.silenteight.proto.registration.api.v1.RegisterBatchRequest;
 
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
-import static com.silenteight.proto.registration.api.v1.RegistrationServiceGrpc.*;
+import static com.silenteight.proto.registration.api.v1.RegistrationServiceGrpc.RegistrationServiceImplBase;
 
 @Slf4j
 @GrpcService

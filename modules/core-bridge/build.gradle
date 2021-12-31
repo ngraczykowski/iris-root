@@ -15,4 +15,3 @@ configure(subprojects) {Project subproject ->
     archivesBaseName = "silenteight-" + subproject.name
   }
 }
-

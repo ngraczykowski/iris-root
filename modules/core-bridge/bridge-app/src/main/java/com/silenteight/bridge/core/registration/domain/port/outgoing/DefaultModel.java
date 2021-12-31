@@ -4,8 +4,11 @@ import lombok.Builder;
 
 import java.util.List;
 
-public record DefaultModel(String name, String policyName, String strategyName,
-                           List<DefaultModelFeature> features, List<String> categories) {
+public record DefaultModel(String name,
+                           String policyName,
+                           String strategyName,
+                           List<DefaultModelFeature> features,
+                           List<String> categories) {
 
   @Builder
   public DefaultModel {}

@@ -2,19 +2,22 @@ package com.silenteight.bridge.core.registration.domain
 
 import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
+import com.silenteight.bridge.core.registration.domain.model.BatchError
 import com.silenteight.bridge.core.registration.domain.port.outgoing.*
 
+import org.junit.jupiter.params.shadow.com.univocity.parsers.common.processor.BatchedColumnProcessor
 import spock.lang.Specification
 import spock.lang.Subject
 
 class BatchServiceSpec extends Specification {
 
+  def eventPublisher = Mock(EventPublisher)
   def analysisService = Mock(AnalysisService)
   def batchRepository = Mock(BatchRepository)
   def modelService = Mock(DefaultModelService)
 
   @Subject
-  def underTest = new BatchService(analysisService, batchRepository, modelService)
+  def underTest = new BatchService(eventPublisher, analysisService, batchRepository, modelService)
 
   def "Should register batch"() {
     given:
@@ -63,15 +66,18 @@ class BatchServiceSpec extends Specification {
     def batchId = UUID.randomUUID().toString()
     def batch = Batch.newOne(batchId, "SomeAnalysisName", 25L)
     def errorDescription = "error occurred"
+    def notifyBatchErrorCommand = new NotifyBatchErrorCommand(batchId, errorDescription)
+    def batchError = new BatchError(batchId, errorDescription) 
 
     and:
     batchRepository.findById(batchId) >> Optional.of(batch)
 
     when:
-    underTest.notifyBatchError(new NotifyBatchErrorCommand(batchId, errorDescription))
+    underTest.notifyBatchError(notifyBatchErrorCommand)
 
     then:
     1 * batchRepository.updateStatusAndErrorDescription(batchId, BatchStatus.ERROR, errorDescription)
+    1 * eventPublisher.publish(batchError)
     0 * batchRepository.create(_ as Batch)
   }
 
@@ -79,15 +85,18 @@ class BatchServiceSpec extends Specification {
     given:
     def batchId = UUID.randomUUID().toString()
     def errorDescription = "error occurred"
+    def notifyBatchErrorCommand = new NotifyBatchErrorCommand(batchId, errorDescription)
+    def batchError = new BatchError(batchId, errorDescription)
 
     and:
     batchRepository.findById(batchId) >> Optional.empty()
 
     when:
-    underTest.notifyBatchError(new NotifyBatchErrorCommand(batchId, errorDescription))
+    underTest.notifyBatchError(notifyBatchErrorCommand)
 
     then:
     1 * batchRepository.create(_ as Batch) >> Batch.error(batchId, errorDescription)
+    1 * eventPublisher.publish(batchError)
     0 * batchRepository.updateStatusAndErrorDescription(batchId, BatchStatus.ERROR)
   }
 }

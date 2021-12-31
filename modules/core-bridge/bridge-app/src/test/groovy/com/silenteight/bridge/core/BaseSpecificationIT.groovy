@@ -30,10 +30,11 @@ class BaseSpecificationIT extends Specification {
     registry.add("spring.datasource.username", postgresqlContainer::getUsername)
     registry.add("spring.datasource.password", postgresqlContainer::getPassword)
 
+    registry.add("spring.rabbitmq.host", rabbitMqContainer::getHost)
     registry.add("spring.rabbitmq.port", rabbitMqContainer::getAmqpPort)
     registry.add("spring.rabbitmq.username", rabbitMqContainer::getAdminUsername)
     registry.add("spring.rabbitmq.password", rabbitMqContainer::getAdminPassword)
+
     registry.add("silenteight.bridge.grpc.port", BaseSpecificationIT::getGrpcPortForTest)
   }
 }
-
