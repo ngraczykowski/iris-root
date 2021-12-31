@@ -31,9 +31,6 @@ import com.silenteight.datasource.api.gender.v1.GenderFeatureInput;
 import com.silenteight.datasource.api.historicaldecisions.v1.BatchGetMatchHistoricalDecisionsInputsRequest;
 import com.silenteight.datasource.api.historicaldecisions.v1.BatchGetMatchHistoricalDecisionsInputsResponse;
 import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisionsInput.HistoricalDecisionsFeatureInput;
-import com.silenteight.datasource.api.ispep.v2.BatchGetMatchIsPepInputsRequest;
-import com.silenteight.datasource.api.ispep.v2.BatchGetMatchIsPepInputsResponse;
-import com.silenteight.datasource.api.ispep.v2.IsPepFeatureInput;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsRequest;
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsResponse;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
@@ -71,7 +68,6 @@ class FeatureAdapter {
   private static final String GENDER_INPUT = GenderFeatureInput.class.getCanonicalName();
   private static final String HISTORICAL_DECISIONS_INPUT =
       HistoricalDecisionsFeatureInput.class.getCanonicalName();
-  private static final String IS_PEP_INPUT = IsPepFeatureInput.class.getCanonicalName();
   private static final String NATIONAL_ID_INPUT = NationalIdFeatureInput.class.getCanonicalName();
   private static final String TRANSACTION_INPUT = TransactionFeatureInput.class.getCanonicalName();
   private static final String BANK_IDENTIFICATION_CODES_INPUT =
@@ -281,20 +277,5 @@ class FeatureAdapter {
         featureRequest,
         batch -> onNext.accept(
             batch.castResponse(BatchGetMatchHistoricalDecisionsInputsResponse.class)));
-  }
-
-  public void batchGetMatchIsPepInputs(
-      @Valid BatchGetMatchIsPepInputsRequest request,
-      Consumer<BatchGetMatchIsPepInputsResponse> onNext) {
-
-    var featureRequest = BatchFeatureRequest.builder()
-        .agentInputType(IS_PEP_INPUT)
-        .matches(request.getMatchesList())
-        .features(request.getFeaturesList())
-        .build();
-
-    getUseCase.batchGetFeatureInput(
-        featureRequest,
-        batch -> onNext.accept(batch.castResponse(BatchGetMatchIsPepInputsResponse.class)));
   }
 }

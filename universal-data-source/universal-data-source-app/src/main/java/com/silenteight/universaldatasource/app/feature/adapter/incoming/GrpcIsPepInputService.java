@@ -13,7 +13,7 @@ import net.devh.boot.grpc.server.service.GrpcService;
 @RequiredArgsConstructor
 class GrpcIsPepInputService extends IsPepInputServiceImplBase {
 
-  private final FeatureAdapter featureAdapter;
+  private final FeatureAdapterV2 featureAdapter;
 
   @Override
   public void batchGetMatchIsPepInputs(

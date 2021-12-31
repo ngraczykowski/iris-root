@@ -5,6 +5,9 @@ import com.silenteight.datasource.api.document.v1.DocumentInput;
 import com.silenteight.datasource.api.freetext.v1.BatchGetMatchFreeTextInputsRequest;
 import com.silenteight.datasource.api.freetext.v1.BatchGetMatchFreeTextInputsResponse;
 import com.silenteight.datasource.api.freetext.v1.FreeTextInputServiceGrpc.FreeTextInputServiceBlockingStub;
+import com.silenteight.datasource.api.historicaldecisions.v2.BatchGetMatchHistoricalDecisionsInputsRequest;
+import com.silenteight.datasource.api.historicaldecisions.v2.BatchGetMatchHistoricalDecisionsInputsResponse;
+import com.silenteight.datasource.api.historicaldecisions.v2.HistoricalDecisionsInputServiceGrpc.HistoricalDecisionsInputServiceBlockingStub;
 import com.silenteight.datasource.api.ispep.v2.BatchGetMatchIsPepInputsRequest;
 import com.silenteight.datasource.api.ispep.v2.BatchGetMatchIsPepInputsResponse;
 import com.silenteight.datasource.api.ispep.v2.IsPepInputServiceGrpc.IsPepInputServiceBlockingStub;
@@ -57,6 +60,9 @@ class FeatureInputServiceIT {
 
   @GrpcClient("uds")
   private IsPepInputServiceBlockingStub isPepInputServiceBlockingStub;
+
+  @GrpcClient("uds")
+  private HistoricalDecisionsInputServiceBlockingStub historicalDecisionsInputServiceBlockingStub;
 
   @Autowired
   private JdbcTemplate jdbcTemplate;
@@ -218,6 +224,46 @@ class FeatureInputServiceIT {
     assertThat(matchFreeTextInputsResponse.getIsPepInputsList().stream()
         .filter(f -> f.getMatch().equals("alerts/5/matches/5"))
         .filter(f -> f.getIsPepFeatureInput().getFeature().equals("features/pep"))
+        .count()).isEqualTo(1);
+  }
+
+  @Test
+  @Sql(scripts = {
+      "adapter/outgoing/jdbc/populate_feature_inputs.sql",
+      "adapter/outgoing/jdbc/populate_feature_mapper_inputs.sql" })
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
+      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  void shouldGetHistoricalDecisionFeature() {
+
+    var response =
+        historicalDecisionsInputServiceBlockingStub.batchGetMatchHistoricalDecisionsInputs(
+            BatchGetMatchHistoricalDecisionsInputsRequest.newBuilder()
+                .addMatches("alerts/11/matches/11")
+                .addFeatures("features/historicalRiskAccountNumber")
+                .build());
+
+    assertHistoricalDecisionFeature(response);
+  }
+
+  private static void assertHistoricalDecisionFeature(
+      Iterator<BatchGetMatchHistoricalDecisionsInputsResponse> batchGetMatchFreeTextInputs) {
+
+    var historicalDecisionsInputsResponse = batchGetMatchFreeTextInputs.next();
+    assertThat(historicalDecisionsInputsResponse.getHistoricalDecisionsInputsCount()).isEqualTo(1);
+
+    assertThat(historicalDecisionsInputsResponse.getHistoricalDecisionsInputsList().stream()
+        .filter(f -> f.getMatch().equals("alerts/11/matches/11"))
+        .count()).isEqualTo(1);
+
+    var historicalDecisionsFeatureInputList =
+        historicalDecisionsInputsResponse
+            .getHistoricalDecisionsInputsList()
+            .get(0)
+            .getHistoricalDecisionsFeatureInputList();
+
+    assertThat(historicalDecisionsFeatureInputList.stream()
+        .filter(featureInput -> featureInput.getModelKey().getAlertedParty().getId().equals("123"))
+        .filter(featureInput -> featureInput.getDiscriminator().getValue().equals("1234"))
         .count()).isEqualTo(1);
   }
 

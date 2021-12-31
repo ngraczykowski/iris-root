@@ -34,6 +34,11 @@ VALUES ('alerts/1', 'alerts/1/matches/0', 'features/name', 'com.silenteight.data
        ('alerts/7', 'alerts/7/matches/7', 'features/name', 'NameFeatureInput', '{}'),
        ('alerts/8', 'alerts/8/matches/8', 'features/name', 'NameFeatureInput', '{}'),
        ('alerts/9', 'alerts/9/matches/9', 'features/name', 'NameFeatureInput', '{}'),
-       ('alerts/10', 'alerts/10/matches/10', 'features/name', 'NameFeatureInput', '{}');
+       ('alerts/10', 'alerts/10/matches/10', 'features/name', 'NameFeatureInput', '{}'),
+('alerts/11', 'alerts/11/matches/11', 'features/historicalRiskAccountNumber', 'com.silenteight.datasource.api.historicaldecisions.v2.HistoricalDecisionsFeatureInput', '{
+  "feature": "features/historicalRiskAccountNumber",
+  "model_key": {"alerted_party" : {"id": "123"}},
+  "discriminator": {"value": "1234"}
+}');
 
 

@@ -32,7 +32,7 @@ class JdbcFeatureDataAccessIT extends BaseJdbcTest {
     var alerts = getListOfAlerts(1, 2, 3, 4, 5);
 
     assertEquals(5, featureDataAccess.delete(alerts));
-    assertEquals(5, jdbcTemplate.queryForObject(
+    assertEquals(6, jdbcTemplate.queryForObject(
         "SELECT count(*) FROM uds_feature_input", Integer.class));
   }
 }

@@ -6,4 +6,5 @@ VALUES ('features/name', 'features/name'),
        ('features/city', 'features/city'),
        ('features/freetext', 'features/freetext'),
        ('features/pep', 'features/pep'),
-       ('features/freetext', 'features/freetext');
+       ('features/freetext', 'features/freetext'),
+       ('features/historicalRiskAccountNumber', 'features/historicalRiskAccountNumber');
