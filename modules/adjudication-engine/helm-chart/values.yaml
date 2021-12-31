@@ -14,8 +14,6 @@ readinessProbeHttpGetPath: "/rest/ae/management/health/readiness"
 grpcClientDatasourceAddress: dns:///universal-data-source-service.default.svc.cluster.local:9090
 grpcClientGovernanceAddress: dns:///governance-app-service.default.svc.cluster.local:9090
 templateCacheInvalidation: "*/15 * * * * *"
-agentExchangeMissingMatchFeatureReaderChuckSize: 1024
-agentExchangeMissingMatchFeatureReaderMaxRows: 8192
 
 memoryLimit: 2048Mi
 memoryRequest: 512Mi
