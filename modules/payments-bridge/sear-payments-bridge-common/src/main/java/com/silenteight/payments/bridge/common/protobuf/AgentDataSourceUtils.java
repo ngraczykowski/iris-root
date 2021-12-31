@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.learning.features.service;
+package com.silenteight.payments.bridge.common.protobuf;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -9,11 +9,12 @@ import com.google.protobuf.Any;
 import com.google.protobuf.Message;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class AgentExtractorUtils {
+public class AgentDataSourceUtils {
 
   private static final String FEATURE_PREFIX = "features/";
 
-  static <T extends Message> FeatureInput createFeatureInput(String feature, T featureInput) {
+  public static <T extends Message> FeatureInput createFeatureInput(
+      String feature, T featureInput) {
     return FeatureInput
         .newBuilder()
         .setFeature(getFullFeatureName(feature))
@@ -21,7 +22,7 @@ class AgentExtractorUtils {
         .build();
   }
 
-  static String getFullFeatureName(String feature) {
+  public static String getFullFeatureName(String feature) {
     return FEATURE_PREFIX + feature;
   }
 

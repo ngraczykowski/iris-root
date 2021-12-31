@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import javax.annotation.Nonnull;
 
-import static com.silenteight.payments.bridge.svb.learning.features.service.AgentExtractorUtils.createFeatureInput;
-import static com.silenteight.payments.bridge.svb.learning.features.service.AgentExtractorUtils.getFullFeatureName;
+import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
+import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.getFullFeatureName;
 import static java.util.stream.Collectors.toList;
 
 @Service

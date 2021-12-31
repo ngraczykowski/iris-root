@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.silenteight.payments.bridge.svb.learning.features.service.AgentExtractorUtils.createFeatureInput;
+import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
 
 @Service
 @Qualifier("identificationMismatch")

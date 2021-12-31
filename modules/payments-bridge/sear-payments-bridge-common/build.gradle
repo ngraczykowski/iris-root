@@ -22,4 +22,6 @@ dependencies {
 
   implementation libraries.warehouse_data_api
   implementation libraries.data_retention_api
+  implementation libraries.data_source_agentinput_api
+
 }
