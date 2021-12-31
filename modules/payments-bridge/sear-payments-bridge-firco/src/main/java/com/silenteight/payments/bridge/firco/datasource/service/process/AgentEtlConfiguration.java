@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc;
 import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceBlockingStub;
+import com.silenteight.payments.bridge.agents.port.HistoricalRiskAssessmentFeatureUseCase;
 
 import io.grpc.Channel;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -74,12 +75,14 @@ class AgentEtlConfiguration {
   @Bean
   HistoricalRiskAssessmentAgentEtlProcess historicalRiskAssessmentAgentEtlProcess(
       HistoricalRiskCustomerNameFeature historicalRiskCustomerNameFeature,
-      HistoricalRiskAccountNumberFeature historicalRiskAccountNumberFeature) {
+      HistoricalRiskAccountNumberFeature historicalRiskAccountNumberFeature,
+      HistoricalRiskAssessmentFeatureUseCase historicalRiskAssessmentFeatureAgent) {
     var stub = getStub();
 
     return new HistoricalRiskAssessmentAgentEtlProcess(
         stub, properties.getTimeout(),
-        List.of(historicalRiskCustomerNameFeature, historicalRiskAccountNumberFeature));
+        List.of(historicalRiskCustomerNameFeature, historicalRiskAccountNumberFeature),
+        historicalRiskAssessmentFeatureAgent);
   }
 
   private AgentInputServiceBlockingStub getStub() {
