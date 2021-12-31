@@ -80,7 +80,12 @@ class FeatureExtractor implements ResultSetExtractor<Integer> {
   }
 
   private static void editAgentInputFeatureName(Map<String, ObjectNode> featureInputMap) {
-    featureInputMap.forEach((key, value) -> value.put(AGENT_INPUT_FEATURE_KEY, key));
+    featureInputMap.forEach((key, value) -> {
+      if (log.isDebugEnabled()) {
+        log.debug("Map feature name: {}, to: {}", value.get(AGENT_INPUT_FEATURE_KEY), key);
+      }
+      value.put(AGENT_INPUT_FEATURE_KEY, key);
+    });
   }
 
   private static Map<String, ObjectNode> agentInputAggregateToMap(String agentInputAggregate) {

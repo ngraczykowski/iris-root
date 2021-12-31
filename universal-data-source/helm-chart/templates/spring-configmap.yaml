@@ -4,8 +4,3 @@ metadata:
   name: {{ .Values.name }}-spring
 data:
   application.yml: |
-    uds:
-      features:
-        mapping:
-          geo2: {{ .Values.udsFeaturesMappingGeo2 }}
-          organizationName2: {{ .Values.udsFeaturesMappingOrganizationName2 }}
