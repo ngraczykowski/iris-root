@@ -28,8 +28,7 @@ public class UpdateUserDto {
   private Set<String> countryGroups = emptySet();
 
   public UpdateUserCommand toCommand(String username) {
-    return UpdateUserCommand
-        .builder()
+    return UpdateUserCommand.builder()
         .username(username)
         .displayName(displayName)
         .roles(roles)
