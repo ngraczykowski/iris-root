@@ -5,4 +5,4 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
 @ConfigurationProperties(prefix = "amqp.registration.outgoing.notify-batch-error")
-public record RegistrationRabbitProperties(String exchangeName) {}
+public record AmqpRegistrationOutgoingNotifyBatchErrorProperties(String exchangeName) {}

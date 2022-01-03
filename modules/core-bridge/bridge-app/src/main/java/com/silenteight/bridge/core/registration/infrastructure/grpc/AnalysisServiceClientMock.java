@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.library.v1.analysis.*;
 
+import java.util.List;
+
 @Slf4j
 public class AnalysisServiceClientMock implements AnalysisServiceClient {
 
@@ -27,5 +29,13 @@ public class AnalysisServiceClientMock implements AnalysisServiceClient {
   public GetAnalysisOut getAnalysis(String analysis) {
     log.info("MOCK: Get analysis");
     return null;
+  }
+
+  @Override
+  public AddAlertsToAnalysisOut addAlertsToAnalysis(AddAlertsToAnalysisIn request) {
+    log.info("MOCK: Add alerts to analysis: " + request);
+    return AddAlertsToAnalysisOut.builder()
+        .addedAlerts(List.of())
+        .build();
   }
 }

@@ -12,4 +12,8 @@ public interface BatchRepository {
   Batch create(Batch batch);
 
   void updateStatusAndErrorDescription(String batchId, BatchStatus status, String errorDescription);
+
+  default void updateStatus(String batchId, BatchStatus status) {
+    updateStatusAndErrorDescription(batchId, status, null);
+  }
 }

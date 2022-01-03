@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.model.BatchError;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.EventPublisher;
-import com.silenteight.bridge.core.registration.infrastructure.amqp.RegistrationRabbitProperties;
+import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchErrorProperties;
 import com.silenteight.proto.registration.api.v1.MessageBatchError;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 class RabbitEventPublisher implements EventPublisher {
 
   private final RabbitTemplate rabbitTemplate;
-  private final RegistrationRabbitProperties registrationRabbitProperties;
+  private final AmqpRegistrationOutgoingNotifyBatchErrorProperties notifyBatchErrorProperties;
 
   @Override
   public void publish(BatchError event) {
@@ -28,6 +28,6 @@ class RabbitEventPublisher implements EventPublisher {
 
     log.info("Send error notification for batch with id: {}", event.id());
 
-    rabbitTemplate.convertAndSend(registrationRabbitProperties.exchangeName(), "", msg);
+    rabbitTemplate.convertAndSend(notifyBatchErrorProperties.exchangeName(), "", msg);
   }
 }

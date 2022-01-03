@@ -1,7 +1,7 @@
 package com.silenteight.bridge.core.registration.adapter.outgoing
 
 import com.silenteight.bridge.core.registration.domain.model.BatchError
-import com.silenteight.bridge.core.registration.infrastructure.amqp.RegistrationRabbitProperties
+import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchErrorProperties
 import com.silenteight.proto.registration.api.v1.MessageBatchError
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate
@@ -11,7 +11,7 @@ import spock.lang.Subject
 class RabbitEventPublisherSpec extends Specification {
 
   def rabbitTemplate = Mock(RabbitTemplate)
-  def properties = new RegistrationRabbitProperties('exchange')
+  def properties = new AmqpRegistrationOutgoingNotifyBatchErrorProperties('exchange')
 
   @Subject
   def underTest = new RabbitEventPublisher(rabbitTemplate, properties)

@@ -31,6 +31,11 @@
       "description": "Bridge HTTP port."
     },
     {
+      "name": "registration.analysis.alert-ttl",
+      "type": "java.lang.String",
+      "description": "The time the alert needs to have its recommendation generated. When the deadline is getting close, the recommendation might be generated without waiting for the agents to complete their work."
+    },
+    {
       "name": "amqp.registration.outgoing.notify-batch-error.exchange-name",
       "type": "java.lang.String",
       "description": "Exchange name for notify batch error stored event."
