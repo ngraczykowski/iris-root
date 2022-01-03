@@ -1,5 +1,6 @@
-package com.silenteight.bridge.core
+package com.silenteight.bridge.core.registration
 
+import com.silenteight.bridge.core.BaseSpecificationIT
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
 import com.silenteight.proto.registration.api.v1.NotifyBatchErrorRequest

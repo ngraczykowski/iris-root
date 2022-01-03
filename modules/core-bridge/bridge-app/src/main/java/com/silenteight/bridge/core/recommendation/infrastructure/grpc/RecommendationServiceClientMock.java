@@ -10,6 +10,7 @@ import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 class RecommendationServiceClientMock implements RecommendationServiceClient {
@@ -18,21 +19,25 @@ class RecommendationServiceClientMock implements RecommendationServiceClient {
   public Collection<RecommendationWithMetadataOut> getRecommendations(
       @NotNull String analysis) {
     log.info("MOCK: Get recommendations from AE");
-    return List.of(RecommendationWithMetadataOut.builder()
-        .alert("alert/mock")
-        .name("name/mock")
+    return List.of(createRecommendation(), createRecommendation());
+  }
+
+  private RecommendationWithMetadataOut createRecommendation() {
+    return RecommendationWithMetadataOut.builder()
+        .alert("alert/mock" + UUID.randomUUID())
+        .name("name/mock" + UUID.randomUUID())
         .recommendedAction("recommendationAction/mock")
         .recommendationComment("recommendationComment/mock")
         .s8recommendedAction("s8recommendationAction/mock")
         .date(OffsetDateTime.now())
         .metadata(createMockMetadata())
-        .build());
+        .build();
   }
 
   private RecommendationMetadataOut createMockMetadata() {
     var recommendationMetadata = new RecommendationMetadataOut();
     var metadata = new MatchMetadataOut();
-    metadata.setMatch("match/mock");
+    metadata.setMatch("match/mock" + UUID.randomUUID());
     metadata.setSolution("solution/mock");
     metadata.setReason(Map.of("mockReason", "someReason"));
     metadata.setCategories(Map.of("mockCategory", "someCategory"));

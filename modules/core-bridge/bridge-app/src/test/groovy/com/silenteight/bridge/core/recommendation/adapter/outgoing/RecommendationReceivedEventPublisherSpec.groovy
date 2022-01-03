@@ -1,7 +1,7 @@
 package com.silenteight.bridge.core.recommendation.adapter.outgoing
 
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsReceivedEvent
-import com.silenteight.bridge.core.recommendation.infrastructure.amqp.RecommendationRabbitProperties
+import com.silenteight.bridge.core.recommendation.infrastructure.amqp.RecommendationOutgoingRecommendationsReceivedConfigurationProperties
 import com.silenteight.proto.recommendation.api.v1.RecommendationsReceived
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate
@@ -11,7 +11,7 @@ import spock.lang.Subject
 class RecommendationReceivedEventPublisherSpec extends Specification {
 
   def rabbitTemplate = Mock(RabbitTemplate)
-  def properties = new RecommendationRabbitProperties("exchange")
+  def properties = new RecommendationOutgoingRecommendationsReceivedConfigurationProperties("exchange")
 
   @Subject
   def underTest = new RecommendationReceivedEventPublisher(rabbitTemplate, properties)

@@ -1,10 +1,10 @@
-package com.silenteight.bridge.core
+package com.silenteight.bridge.core.recommendation.domain.port.outgoing
 
+import com.silenteight.bridge.core.BaseSpecificationIT
 import com.silenteight.bridge.core.recommendation.domain.model.FeatureMetadata
 import com.silenteight.bridge.core.recommendation.domain.model.MatchMetadata
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationMetadata
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata
-import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationRepository
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

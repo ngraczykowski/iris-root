@@ -50,6 +50,14 @@ amqp:
     outgoing:
       recommendation-received:
         exchange-name: recommendation-received-exchange
+    incoming:
+      recommendations-generated:
+        queue-name: recommendations-generated-queue
+        dead-letter-queue-name: recommendations-generated.dlq
+        dead-letter-queue-time-to-live-in-milliseconds: 10000
+        dead-letter-exchange-name: recommendations-generated.dlx
+        exchange-name: ae.event
+        exchange-routing-key: ae.event.recommendations-generated
 
 ### SPRING
 spring:

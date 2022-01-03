@@ -5,5 +5,6 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
 @ConfigurationProperties(prefix = "amqp.recommendation.outgoing.recommendation-received")
-public record RecommendationRabbitProperties(String exchangeName) {
+public record RecommendationOutgoingRecommendationsReceivedConfigurationProperties(
+    String exchangeName) {
 }

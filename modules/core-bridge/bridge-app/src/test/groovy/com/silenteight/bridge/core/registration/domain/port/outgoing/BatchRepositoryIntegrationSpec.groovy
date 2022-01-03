@@ -1,7 +1,7 @@
-package com.silenteight.bridge.core
+package com.silenteight.bridge.core.registration.domain.port.outgoing
 
+import com.silenteight.bridge.core.BaseSpecificationIT
 import com.silenteight.bridge.core.registration.domain.model.Batch
-import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
