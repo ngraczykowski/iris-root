@@ -18,11 +18,13 @@ class EtlAlertsJobConfiguration {
 
   private final JobBuilderFactory jobBuilderFactory;
   private final Step processUnregisterAlertStep;
+  private final Step etlReservationStep;
 
   @Bean
   Job processUnregisteredAlertJob() {
     return jobBuilderFactory.get(ETL_JOB_NAME)
-        .start(processUnregisterAlertStep)
+        .start(etlReservationStep)
+        .next(processUnregisterAlertStep)
         .build();
   }
 }

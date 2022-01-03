@@ -10,4 +10,6 @@ public final class EtlJobConstants {
 
   // Steps
   public static final String ETL_STEP_NAME = "etl-step";
+  public static final String ETL_RESERVATION_STEP =
+      "etl-reservation";
 }
