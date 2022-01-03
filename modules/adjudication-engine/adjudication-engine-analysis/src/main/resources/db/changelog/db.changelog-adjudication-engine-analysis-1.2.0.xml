@@ -47,11 +47,9 @@
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.2.0_4" author="ahaczewski">
-    <sqlFile
-        path="sql/migrate_analysis_feature.sql"
-        relativeToChangelogFile="true"/>
+    <sqlFile path="db/changelog/sql/migrate_analysis_feature.sql"/>
     <rollback>
-      <sqlFile path="sql/revert_analysis_feature.sql" relativeToChangelogFile="true"/>
+      <sqlFile path="db/changelog/sql/revert_analysis_feature.sql"/>
     </rollback>
   </changeSet>
 
@@ -98,10 +96,9 @@
 
   <changeSet id="adjudication-engine-analysis-1.2.0_8" author="ahaczewski">
     <sqlFile
-        path="sql/migrate_analysis_category.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/migrate_analysis_category.sql"/>
     <rollback>
-      <sqlFile path="sql/revert_analysis_category.sql" relativeToChangelogFile="true"/>
+      <sqlFile path="db/changelog/sql/revert_analysis_category.sql"/>
     </rollback>
   </changeSet>
 
@@ -110,24 +107,24 @@
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.2.0_10" author="ahaczewski">
+    <validCheckSum>8:06436a0645041361b11508c1b6c5ba2b</validCheckSum>
     <createView
         viewName="ae_analysis_feature_query"
-        path="sql/view_ae_analysis_feature_query.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_analysis_feature_query.sql"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.2.0_11" author="ahaczewski">
+    <validCheckSum>8:42c3a27264ec4f339a0c31c2146ebcc8</validCheckSum>
     <createView
         viewName="ae_analysis_category_query"
-        path="sql/view_ae_analysis_category_query.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_analysis_category_query.sql"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.2.0_12" author="ahaczewski">
+    <validCheckSum>8:e855ea07f49cc868ca17c96898d3dfb6</validCheckSum>
     <createView
         viewName="ae_analysis_query"
-        path="sql/view_ae_analysis_query.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_analysis_query.sql"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.2.0_13" author="ahaczewski">
@@ -179,17 +176,17 @@
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.2.0_15" author="ahaczewski">
+    <validCheckSum>8:122b6c847eb8255ad855d4d63bbe00d4</validCheckSum>
     <createView
         viewName="ae_pending_match_feature_query"
-        path="sql/view_ae_pending_match_feature_query.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_pending_match_feature_query.sql"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.2.0_16" author="ahaczewski">
+    <validCheckSum>8:e89c062b534b39b801944bd894804078</validCheckSum>
     <createView
         viewName="ae_missing_match_feature_query"
-        path="sql/view_ae_missing_match_feature_query.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_missing_match_feature_query.sql"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.2.0_17" author="ahaczewski">
@@ -318,17 +315,17 @@
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.2.0_22" author="ahaczewski">
+    <validCheckSum>8:32123d03af484fd49ad08bf5951f2b06</validCheckSum>
     <createView
         viewName="ae_pending_match_feature_query"
-        path="sql/view_ae_pending_match_feature_query_v2.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_pending_match_feature_query_v2.sql"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.2.0_23" author="ahaczewski">
+    <validCheckSum>8:82f8cf32f1395697929087de239c60bf</validCheckSum>
     <createView
         viewName="ae_missing_match_feature_query"
-        path="sql/view_ae_missing_match_feature_query_v2.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_missing_match_feature_query_v2.sql"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.2.0_24" author="ahaczewski">

@@ -2,6 +2,7 @@ ext {
   libraries = [:]
 
   shedlockVersion = "4.27.0"
+  springBootVersion = "2.5.7"
 
   //***********************************
   // Silent Eight
@@ -9,6 +10,7 @@ ext {
   adjudicationEngineApiVersion = "0.7.0"
   governanceApiVersion = "1.7.0"
   agentsApiVersion = "0.4.0"
+  sepDependenciesVersion = "2.4.0"
   silenteightDataSourceApiVersion = "0.8.0"
   silenteightCommonsVersion = "2.1.0"
   silenteightSepBaseVersion = "1.12.2"
@@ -19,7 +21,6 @@ ext {
 
 // Silent Eight
 libraries.adjudication_engine_api = [group: 'com.silenteight.adjudication.api', name: 'adjudication-api', version: adjudicationEngineApiVersion]
-libraries.consul_grpc_registration = [group: 'com.silenteight.commons', name: 'consul-grpc-registration', version: '1.0.0']
 libraries.data_source_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-api', version: silenteightDataSourceApiVersion]
 libraries.data_source_categories_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-categories-api', version: silenteightDataSourceApiVersion]
 libraries.data_source_comments_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-comments-api', version: silenteightDataSourceApiVersion]
@@ -107,7 +108,6 @@ libraries.spring_security_web = [group: 'org.springframework.security', name: 's
 
 // Project Reactor
 libraries.reactor_adapter = [group: 'io.projectreactor.addons', name: 'reactor-adapter']
-libraries.reactor_bom = [group: 'io.projectreactor', name: 'reactor-bom']
 libraries.reactor_core = [group: 'io.projectreactor', name: 'reactor-core']
 libraries.reactor_extra = [group: 'io.projectreactor.addons', name: 'reactor-extra']
 libraries.reactor_rabbitmq = [group: 'io.projectreactor.rabbitmq', name: 'reactor-rabbitmq']
@@ -124,36 +124,26 @@ libraries.antlr4 = [group: 'org.antlr', name: 'antlr4']
 libraries.antlr4_runtime = [group: 'org.antlr', name: 'antlr4-runtime']
 libraries.aspectjrt = [group: 'org.aspectj', name: 'aspectjrt', version: '1.9.7']
 libraries.aspectjtools = [group: 'org.aspectj', name: 'aspectjtools', version: libraries.aspectjrt.version]
-libraries.aspectjweaver = [group: 'org.aspectj', name: 'aspectjweaver']
+libraries.aspectjweaver = [group: 'org.aspectj', name: 'aspectjweaver', version: libraries.aspectjrt.version]
 libraries.awaitility = [group: 'org.awaitility', name: 'awaitility']
-libraries.blaze_persistence_core_api = [group: 'com.blazebit', name: 'blaze-persistence-core-api']
-libraries.blaze_persistence_core_impl = [group: 'com.blazebit', name: 'blaze-persistence-core-impl']
-libraries.blaze_persistence_entity_view_api = [group: 'com.blazebit', name: 'blaze-persistence-entity-view-api']
-libraries.blaze_persistence_entity_view_impl = [group: 'com.blazebit', name: 'blaze-persistence-entity-view-impl']
-libraries.blaze_persistence_entity_view_processor = [group: 'com.blazebit', name: 'blaze-persistence-entity-view-processor']
-libraries.blaze_persistence_entity_view_spring = [group: 'com.blazebit', name: 'blaze-persistence-integration-entity-view-spring']
-libraries.blaze_persistence_integration_hibernate_5_4 = [group: 'com.blazebit', name: 'blaze-persistence-integration-hibernate-5.4']
-libraries.blaze_persistence_integration_spring_data_2_3 = [group: 'com.blazebit', name: 'blaze-persistence-integration-spring-data-2.3']
 libraries.bouncycastle_bcmail = [group: 'org.bouncycastle', name: 'bcmail-jdk15on']
 libraries.bouncycastle_bcpg = [group: 'org.bouncycastle', name: 'bcpg-jdk15on']
 libraries.bouncycastle_bcpkix = [group: 'org.bouncycastle', name: 'bcpkix-jdk15on']
 libraries.bouncycastle_bcprov = [group: 'org.bouncycastle', name: 'bcprov-jdk15on']
 libraries.bouncycastle_bcprov_ext = [group: 'org.bouncycastle', name: 'bcprov-ext-jdk15on']
 libraries.brave_instrumentation_grpc = [group: 'io.zipkin.brave', name: 'brave-instrumentation-grpc']
-libraries.byte_buddy = [group: 'net.bytebuddy', name: 'byte-buddy', version: '1.10.7']
-libraries.byte_buddy_agent = [group: 'net.bytebuddy', name: 'byte-buddy-agent', version: libraries.byte_buddy.version]
 libraries.caffeine = [group: 'com.github.ben-manes.caffeine', name: 'caffeine']
 libraries.caffeine_jcache = [group: 'com.github.ben-manes.caffeine', name: 'jcache']
 libraries.classgraph = [group: 'io.github.classgraph', name: 'classgraph']
 libraries.commons_codec = [group: 'commons-codec', name: 'commons-codec']
-libraries.commons_collections = [group: 'org.apache.commons', name: 'commons-collections4',version: '4.4']
+libraries.commons_collections = [group: 'org.apache.commons', name: 'commons-collections4']
 libraries.commons_lang3 = [group: 'org.apache.commons', name: 'commons-lang3']
 libraries.commons_text = [group: 'org.apache.commons', name: 'commons-text']
 libraries.consul_client = [group: "com.orbitz.consul", name: "consul-client"]
-libraries.ecs_logging_core = [group: 'co.elastic.logging', name: 'ecs-logging-core', version: '1.0.1']
+libraries.ecs_logging_core = [group: 'co.elastic.logging', name: 'ecs-logging-core']
 libraries.feign_slf4j = [group: "io.github.openfeign", name: "feign-slf4j"]
 libraries.fastutil = [group: 'it.unimi.dsi', name: 'fastutil']
-libraries.freemarker = [group: 'org.freemarker', name: 'freemarker', version: '2.3.31']
+libraries.freemarker = [group: 'org.freemarker', name: 'freemarker']
 libraries.grpc_api = [group: 'io.grpc', name: 'grpc-api']
 libraries.grpc_auth = [group: 'io.grpc', name: 'grpc-auth']
 libraries.grpc_context = [group: 'io.grpc', name: 'grpc-context']
@@ -166,7 +156,7 @@ libraries.grpc_server_spring_boot_starter = [group: 'net.devh', name: 'grpc-serv
 libraries.grpc_client_spring_boot_starter = [group: 'net.devh', name: 'grpc-client-spring-boot-starter']
 libraries.grpc_stub = [group: 'io.grpc', name: 'grpc-stub']
 libraries.grpc_testing = [group: 'io.grpc', name: 'grpc-testing']
-libraries.guava = [group: 'com.google.guava', name: 'guava', version: '30.1.1-jre']
+libraries.guava = [group: 'com.google.guava', name: 'guava']
 libraries.hibernate_core = [group: 'org.hibernate', name: 'hibernate-core']
 libraries.hibernate_envers = [group: 'org.hibernate', name: 'hibernate-envers']
 libraries.hibernate_jcache = [group: 'org.hibernate', name: 'hibernate-jcache']
@@ -183,8 +173,8 @@ libraries.jackson_module_parameter_names = [group: 'com.fasterxml.jackson.module
 libraries.jackson_module_paranamer = [group: 'com.fasterxml.jackson.module', name: 'jackson-module-paranamer']
 libraries.jakarta_annotation_api = [group: 'jakarta.annotation', name: 'jakarta.annotation-api']
 libraries.jakarta_inject = [group: 'jakarta.inject', name: 'jakarta.inject-api']
-libraries.jakarta_mail = [group: 'com.sun.mail', name: 'jakarta.mail', version: '1.6.5']
-libraries.jakarta_mail_api = [group: 'jakarta.mail', name: 'jakarta.mail-api', version: libraries.jakarta_mail.version]
+libraries.jakarta_mail = [group: 'com.sun.mail', name: 'jakarta.mail']
+libraries.jakarta_mail_api = [group: 'jakarta.mail', name: 'jakarta.mail-api']
 libraries.jakarta_persistence_api = [group: 'jakarta.persistence', name: 'jakarta.persistence-api']
 libraries.jakarta_servlet_api = [group: 'jakarta.servlet', name: 'jakarta.servlet-api']
 libraries.jakarta_transaction_api = [group: 'jakarta.transaction', name: 'jakarta.transaction-api']
@@ -193,12 +183,11 @@ libraries.javax_cache_api = [group: 'javax.cache', name: 'cache-api']
 libraries.jaxb_api = [group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api']
 libraries.jjwt = [group: 'io.jsonwebtoken', name: 'jjwt']
 libraries.kryo_shaded = [group: 'com.esotericsoftware', name: 'kryo-shaded']
-libraries.liquibase_core = [group: 'org.liquibase', name: 'liquibase-core', version: '3.10.3']
-libraries.liquibase_sessionlock = [group: 'com.github.blagerweij', name: 'liquibase-sessionlock', version: '1.4.0']
+libraries.liquibase_core = [group: 'org.liquibase', name: 'liquibase-core']
+libraries.liquibase_sessionlock = [group: 'com.github.blagerweij', name: 'liquibase-sessionlock']
 libraries.logback_access = [group: 'ch.qos.logback', name: 'logback-access']
 libraries.logback_classic = [group: 'ch.qos.logback', name: 'logback-classic']
-libraries.logback_ecs_encoder = [group: 'co.elastic.logging', name: 'logback-ecs-encoder', version: libraries.ecs_logging_core.version]
-libraries.logstash_logback_encoder = [group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.6']
+libraries.logback_ecs_encoder = [group: 'co.elastic.logging', name: 'logback-ecs-encoder']
 libraries.lz4_java = [group: 'org.lz4', name: 'lz4-java']
 libraries.micrometer_core = [group: 'io.micrometer', name: 'micrometer-core']
 libraries.micrometer_influx = [group: 'io.micrometer', name: 'micrometer-registry-influx']
@@ -210,18 +199,16 @@ libraries.picocli = [group: 'info.picocli', name: 'picocli']
 libraries.postgresql = [group: 'org.postgresql', name: 'postgresql']
 libraries.protobuf_java = [group: 'com.google.protobuf', name: 'protobuf-java']
 libraries.protobuf_java_util = [group: 'com.google.protobuf', name: 'protobuf-java-util']
-libraries.querydsl_apt_jpa = [group: 'com.querydsl', name: 'querydsl-apt', classifier: 'jpa']
-libraries.querydsl_jpa = [group: 'com.querydsl', name: 'querydsl-jpa']
 libraries.reactor_grpc_stub = [group: 'com.salesforce.servicelibs', name: 'reactor-grpc-stub']
-libraries.shedlock_core = [group: 'net.javacrumbs.shedlock', name: 'shedlock-core', version: shedlockVersion ]
-libraries.shedlock_provider_jdbc_template = [group: 'net.javacrumbs.shedlock', name: 'shedlock-provider-jdbc-template', version: shedlockVersion ]
-libraries.shedlock_spring = [group: 'net.javacrumbs.shedlock', name: 'shedlock-spring', version: shedlockVersion ]
+libraries.shedlock_core = [group: 'net.javacrumbs.shedlock', name: 'shedlock-core', version: shedlockVersion]
+libraries.shedlock_provider_jdbc_template = [group: 'net.javacrumbs.shedlock', name: 'shedlock-provider-jdbc-template', version: shedlockVersion]
+libraries.shedlock_spring = [group: 'net.javacrumbs.shedlock', name: 'shedlock-spring', version: shedlockVersion]
 libraries.snakeyaml = [group: 'org.yaml', name: 'snakeyaml']
 libraries.tomcat_embed_el = [group: 'org.apache.tomcat.embed', name: 'tomcat-embed-el']
 
 // Testing
 libraries.assertj_json = [group: 'com.revinate', name: 'assertj-json']
-libraries.awaitility = [group: 'org.awaitility', name: 'awaitility', version: '4.1.0']
+libraries.awaitility = [group: 'org.awaitility', name: 'awaitility']
 libraries.hamcrest = [group: 'org.hamcrest', name: 'hamcrest']
 libraries.json_path = [group: 'com.jayway.jsonpath', name: 'json-path']
 libraries.junit_jupiter_api = [group: 'org.junit.jupiter', name: 'junit-jupiter-api']
@@ -246,26 +233,17 @@ configurations.all {
     cacheChangingModulesFor 0, 'seconds'
     failOnVersionConflict()
     preferProjectModules()
-
-    force libraries.byte_buddy
-    force libraries.byte_buddy_agent
-    force libraries.guava
-    force libraries.aspectjrt
-    force libraries.aspectjtools
-    force libraries.liquibase_core
-    force libraries.ecs_logging_core
-    force libraries.logback_ecs_encoder
   }
 }
 
 dependencies {
-  implementation platform("com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
-  implementation platform("org.testcontainers:testcontainers-bom:1.15.2")
+  implementation platform("io.projectreactor:reactor-bom:2020.0.13")
+  implementation platform("com.silenteight.sep:sep-dependencies:$sepDependenciesVersion")
+  annotationProcessor platform("com.silenteight.sep:sep-dependencies:$sepDependenciesVersion")
+  implementation platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
   annotationProcessor platform(
-      "com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
-
-  implementation platform("com.blazebit:blaze-persistence-bom:1.6.0")
-  annotationProcessor platform("com.blazebit:blaze-persistence-bom:1.6.0")
+      "org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+  implementation platform("org.springframework.cloud:spring-cloud-dependencies:2020.0.4")
 
   implementation libraries.slf4j_api
 }

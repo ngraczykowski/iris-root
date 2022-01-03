@@ -7,45 +7,38 @@
 
   <changeSet id="adjudication-engine-analysis-1.7.0_1" author="ahaczewski">
     <sqlFile
-        path="sql/drop_function_unsolved_matches_query.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/drop_function_unsolved_matches_query.sql"/>
     <sqlFile
-        path="sql/create_function_unsolved_matches_query.sql"
-        relativeToChangelogFile="true"
+        path="db/changelog/sql/create_function_unsolved_matches_query.sql"
         splitStatements="false"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.7.0_2" author="ahaczewski">
+    <validCheckSum>8:bd43299e72d4f25de5f9444dfdaf383d</validCheckSum>
     <dropView viewName="ae_alert_recommendation_query"/>
     <dropView viewName="ae_comments_match_context"/>
     <dropView viewName="ae_comments_feature_context"/>
 
     <createView
         viewName="ae_comments_feature_context"
-        path="sql/view_ae_comments_feature_context_v3.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_comments_feature_context_v3.sql"/>
 
     <createView
         viewName="ae_comments_match_context"
-        path="sql/view_ae_comments_match_context_v4.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_comments_match_context_v4.sql"/>
 
     <createView
         viewName="ae_alert_recommendation_query"
-        path="sql/view_ae_alert_recommendation_query.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_alert_recommendation_query.sql"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.7.0_3" author="mwilkowski">
     <sqlFile
-        path="sql/drop_function_unsolved_matches_query.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/drop_function_unsolved_matches_query.sql"/>
     <sqlFile
-        path="sql/drop_function_ae_select_unsolved_matches.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/drop_function_ae_select_unsolved_matches.sql"/>
     <sqlFile
-        path="sql/create_function_ae_select_unsolved_matches.sql"
-        relativeToChangelogFile="true"
+        path="db/changelog/sql/create_function_ae_select_unsolved_matches.sql"
         splitStatements="false"/>
   </changeSet>
 
@@ -54,10 +47,10 @@
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.7.0_5" author="wkeska">
+    <validCheckSum>8:dad30e53f4073c53d4eb8aa6ba4c8ab2</validCheckSum>
     <createView
         viewName="ae_missing_match_category_values_query"
-        path="sql/view_ae_missing_match_category_values_query_v3.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_missing_match_category_values_query_v3.sql"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.7.0_6" author="iwnek">
@@ -65,12 +58,13 @@
       <column name="match_context" type="JSONB"/>
     </addColumn>
 
-    <sqlFile path="sql/insert_context_to_match_solution.sql" relativeToChangelogFile="true"/>
+    <sqlFile path="db/changelog/sql/insert_context_to_match_solution.sql"/>
 
     <addNotNullConstraint tableName="ae_match_solution" columnName="match_context"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.7.0_7" author="iwnek">
+    <validCheckSum>8:4f8740c471cc5f2f0badb4d3756a5a9b</validCheckSum>
     <dropView viewName="ae_alert_recommendation_query"/>
     <dropView viewName="ae_comments_match_context"/>
     <dropView viewName="ae_comments_feature_context"/>
@@ -78,22 +72,18 @@
 
     <createView
         viewName="ae_comments_match_context"
-        path="sql/view_ae_comments_match_context_v5.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_comments_match_context_v5.sql"/>
 
     <createView
         viewName="ae_alert_recommendation_query"
-        path="sql/view_ae_alert_recommendation_query.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_alert_recommendation_query.sql"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.7.0_8" author="iwnek">
     <sqlFile
-        path="sql/drop_function_ae_select_unsolved_matches.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/drop_function_ae_select_unsolved_matches.sql"/>
     <sqlFile
-        path="sql/create_function_ae_select_unsolved_matches_v2.sql"
-        relativeToChangelogFile="true"
+        path="db/changelog/sql/create_function_ae_select_unsolved_matches_v2.sql"
         splitStatements="false"/>
   </changeSet>
 
@@ -103,48 +93,45 @@
       <column name="match_contexts" type="JSONB"/>
     </addColumn>
 
-    <sqlFile path="sql/insert_matches_to_alert_recommendation.sql" relativeToChangelogFile="true"/>
+    <sqlFile path="db/changelog/sql/insert_matches_to_alert_recommendation.sql"/>
 
     <addNotNullConstraint tableName="ae_recommendation" columnName="match_ids"/>
     <addNotNullConstraint tableName="ae_recommendation" columnName="match_contexts"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.7.0_10" author="iwnek">
+    <validCheckSum>8:8cc72a236bbb97fe855d51fef7db7c5f</validCheckSum>
     <dropView viewName="ae_alert_recommendation_query"/>
     <dropView viewName="ae_comments_match_context"/>
 
     <createView
         viewName="ae_alert_recommendation_query"
-        path="sql/view_ae_alert_recommendation_query_v2.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_alert_recommendation_query_v2.sql"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.7.0_11" author="iwnek">
+    <validCheckSum>8:86a545d413bf08459d14047f3f848a2e</validCheckSum>
     <dropView viewName="ae_pending_alert_matches_query"/>
     <dropView viewName="ae_alert_match_solutions_query"/>
 
     <createView
         viewName="ae_alert_match_solutions_query"
-        path="sql/view_ae_alert_match_solutions_query_v4.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_alert_match_solutions_query_v4.sql"/>
 
     <createView
         viewName="ae_pending_alert_matches_query"
-        path="sql/view_ae_pending_alert_matches_query.sql"
-        relativeToChangelogFile="true"/>
+        path="db/changelog/sql/view_ae_pending_alert_matches_query.sql"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.7.0_12" author="iwnek">
     <sqlFile
-        path="sql/create_function_ae_select_unsolved_matches_v3.sql"
-        relativeToChangelogFile="true"
+        path="db/changelog/sql/create_function_ae_select_unsolved_matches_v3.sql"
         splitStatements="false"/>
   </changeSet>
 
   <changeSet id="adjudication-engine-analysis-1.7.0_13" author="iwnek">
     <sqlFile
-        path="sql/create_function_ae_select_unsolved_matches_v4.sql"
-        relativeToChangelogFile="true"
+        path="db/changelog/sql/create_function_ae_select_unsolved_matches_v4.sql"
         splitStatements="false"/>
   </changeSet>
 

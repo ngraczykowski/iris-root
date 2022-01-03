@@ -23,8 +23,8 @@ class AnalysisRepositoryIT extends BaseDataJpaTest {
         .strategy("strategies/BACK_TEST")
         .policy("policies/541e8bc6-922c-41a1-aee2-b9e08ea0d504")
         .build();
-    analysisRepository.save(analysis);
-    assertThat(analysisRepository.getStrategyById(1L).getStrategy())
+    var savedEntity = analysisRepository.save(analysis);
+    assertThat(analysisRepository.getStrategyById(savedEntity.getId()).getStrategy())
         .isEqualTo("strategies/BACK_TEST");
   }
 }
