@@ -6,6 +6,8 @@ from fastapi.testclient import TestClient
 
 from organization_name_knowledge.__main__ import app
 
+CLIENT = TestClient(app)
+
 
 @pytest.mark.parametrize(
     "name, expected",
@@ -18,8 +20,7 @@ from organization_name_knowledge.__main__ import app
     ],
 )
 def test_parse(name, expected):
-    client = TestClient(app)
-    response = client.request("GET", f"/organization_name_knowledge/parse/{name}")
+    response = CLIENT.request("GET", f"/organization_name_knowledge/parse/{name}")
     assert response.status_code == 200
     result = response.json()
     assert expected["source"] == result["source"]
@@ -39,8 +40,7 @@ def test_parse(name, expected):
     ],
 )
 def test_parse_freetext(freetext, expected_results):
-    client = TestClient(app)
-    response = client.request("GET", f"/organization_name_knowledge/parse_freetext/{freetext}")
+    response = CLIENT.request("GET", f"/organization_name_knowledge/parse_freetext/{freetext}")
     assert response.status_code == 200
     results = response.json()
     assert len(results) == len(expected_results)
@@ -59,8 +59,7 @@ def test_parse_freetext(freetext, expected_results):
     ],
 )
 def test_errors(endpoint_name, request_content, expected_status_code):
-    client = TestClient(app)
-    response = client.request(
+    response = CLIENT.request(
         "GET", f"/organization_name_knowledge/{endpoint_name}/{request_content}"
     )
     assert response.status_code == expected_status_code
