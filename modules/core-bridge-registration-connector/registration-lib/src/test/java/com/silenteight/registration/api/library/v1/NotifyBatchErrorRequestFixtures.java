@@ -7,5 +7,6 @@ class NotifyBatchErrorRequestFixtures {
   static final NotifyBatchErrorIn NOTIFY_BATCH_ERROR = NotifyBatchErrorIn.builder()
       .batchId(BATCH_ID)
       .errorDescription("error_cause")
+      .batchMetadata("batch_metadata")
       .build();
 }

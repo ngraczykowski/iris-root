@@ -6,5 +6,9 @@ class RegisterBatchInRequestFixtures {
   static final long ALERT_COUNT = 10;
 
   static final RegisterBatchIn REGISTER_BATCH_IN_REQUEST =
-      RegisterBatchIn.builder().batchId(BATCH_ID).alertCount(ALERT_COUNT).build();
+      RegisterBatchIn.builder()
+          .batchId(BATCH_ID)
+          .batchMetadata("batch_metadata")
+          .alertCount(ALERT_COUNT)
+          .build();
 }

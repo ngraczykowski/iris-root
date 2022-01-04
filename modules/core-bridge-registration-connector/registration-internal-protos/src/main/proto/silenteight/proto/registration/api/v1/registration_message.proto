@@ -24,9 +24,11 @@ message MessageBatchCompleted {
   string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
   string analysis_id = 2 [(google.api.field_behavior) = REQUIRED];
   repeated string alert_ids = 3 [(google.api.field_behavior) = REQUIRED];
+  optional string batch_metadata = 4;
 }
 
 message MessageBatchError {
   string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
   string error_description = 2 [(google.api.field_behavior) = REQUIRED];
+  optional string batch_metadata = 3;
 }
