@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.etl.firco.parser;
+package com.silenteight.payments.bridge.etl.parser.service;
 
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.etl.processing.model.MessageTag;

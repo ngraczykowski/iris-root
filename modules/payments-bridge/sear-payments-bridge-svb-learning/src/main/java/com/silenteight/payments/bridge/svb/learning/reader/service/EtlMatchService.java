@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
-import com.silenteight.payments.bridge.etl.firco.parser.MessageFormat;
-import com.silenteight.payments.bridge.etl.firco.parser.MessageParserFacade;
+import com.silenteight.payments.bridge.etl.parser.domain.MessageFormat;
+import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsvRow;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 import com.silenteight.payments.bridge.svb.oldetl.model.CreateAlertedPartyEntitiesRequest;
@@ -26,7 +26,7 @@ import static java.util.stream.Collectors.toList;
 class EtlMatchService {
 
   private final CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;
-  private final MessageParserFacade messageParserFacade;
+  private final MessageParserUseCase messageParserUseCase;
 
   LearningMatch fromLearningRows(LearningCsvRow row) {
     var matchingTexts = createMatchingTexts(row);
@@ -62,7 +62,7 @@ class EtlMatchService {
   }
 
   private List<String> createAllMatchFieldsValue(LearningCsvRow row) {
-    var messageData = messageParserFacade.parse(
+    var messageData = messageParserUseCase.parse(
         row.getFkcoVContent().startsWith("{") ? MessageFormat.SWIFT : MessageFormat.ALL,
         row.getFkcoVContent());
 
@@ -72,7 +72,7 @@ class EtlMatchService {
 
   private AlertedPartyData createAlertedPartyData(
       LearningCsvRow row) {
-    var messageData = messageParserFacade.parse(
+    var messageData = messageParserUseCase.parse(
         row.getFkcoVContent().startsWith("{") ? MessageFormat.SWIFT : MessageFormat.ALL,
         row.getFkcoVContent());
     return AlertParserService.extractAlertedPartyData(

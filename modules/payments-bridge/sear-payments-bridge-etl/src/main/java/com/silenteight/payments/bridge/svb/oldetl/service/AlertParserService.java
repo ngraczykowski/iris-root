@@ -7,8 +7,8 @@ import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.common.dto.input.HitDto;
-import com.silenteight.payments.bridge.etl.firco.parser.MessageFormat;
-import com.silenteight.payments.bridge.etl.firco.parser.MessageParserFacade;
+import com.silenteight.payments.bridge.etl.parser.domain.MessageFormat;
+import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.svb.oldetl.model.UnsupportedMessageException;
 import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertEtlResponseUseCase;
@@ -32,6 +32,7 @@ import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
 @Service
 public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
+  private final MessageParserUseCase messageParserUseCase;
   private static final List<String> SUPPORTED_FIRCO_FORMATS =
       List.of(
           FIRCO_FORMAT_INT,
@@ -47,7 +48,7 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
 
     var hitData = new ArrayList<HitData>();
     var skippedHits = new ArrayList<String>();
-    var messageData = new MessageParserFacade().parse(
+    var messageData = messageParserUseCase.parse(
         MessageFormat.valueOf(alertMessageDto.getMessageFormat()),
         alertMessageDto.getMessageData());
 

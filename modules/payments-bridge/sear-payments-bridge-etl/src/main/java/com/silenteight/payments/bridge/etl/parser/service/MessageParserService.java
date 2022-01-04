@@ -1,12 +1,15 @@
-package com.silenteight.payments.bridge.etl.firco.parser;
+package com.silenteight.payments.bridge.etl.parser.service;
 
+import com.silenteight.payments.bridge.etl.parser.domain.MessageFormat;
+import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 
 import org.springframework.stereotype.Component;
 
 @Component
-public class MessageParserFacade {
+class MessageParserService implements MessageParserUseCase {
 
+  @Override
   public MessageData parse(MessageFormat messageFormat, String message) {
     switch (messageFormat) {
       case ALL:

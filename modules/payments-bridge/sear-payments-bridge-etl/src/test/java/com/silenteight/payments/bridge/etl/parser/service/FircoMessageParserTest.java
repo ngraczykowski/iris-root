@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.etl.firco.parser;
+package com.silenteight.payments.bridge.etl.parser.service;
 
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;

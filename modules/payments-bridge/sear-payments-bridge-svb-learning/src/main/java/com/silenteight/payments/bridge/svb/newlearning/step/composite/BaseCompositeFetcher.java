@@ -46,6 +46,7 @@ abstract class BaseCompositeFetcher<I, O> {
 
   protected static void setQueryParameters(PreparedStatement stat, Collection<Long> alertIds) throws
       SQLException {
+
     int systemIdIdx = 1;
     for (var id : alertIds) {
       stat.setLong(systemIdIdx, id);
