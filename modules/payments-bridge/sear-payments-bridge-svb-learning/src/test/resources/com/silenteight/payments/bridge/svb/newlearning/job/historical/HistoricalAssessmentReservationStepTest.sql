@@ -8,7 +8,7 @@ DELETE
 FROM pb_learning_file;
 
 -- Insert duplicated alerts.
-INSERT INTO pb_learning_alert(learning_alert_id, fkco_id, fkco_v_system_id,fkco_d_filtered_datetime)
+INSERT INTO pb_learning_alert(learning_alert_id, fkco_id, fkco_v_system_id, fkco_d_filtered_datetime)
 VALUES (10, 1, 'systemid', now())
      , (20, 1, 'systemid', now())
      , (30, 1, 'systemid', now());

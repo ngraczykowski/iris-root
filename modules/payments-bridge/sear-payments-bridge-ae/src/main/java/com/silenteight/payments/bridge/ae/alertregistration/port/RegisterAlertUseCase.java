@@ -12,5 +12,5 @@ public interface RegisterAlertUseCase {
   RegisterAlertResponse register(AlertData alertData, AlertMessageDto alertMessageDto);
 
   List<RegisterAlertResponse> batchRegistration(List<RegisterAlertRequest> registerAlertRequest);
-
+  
 }

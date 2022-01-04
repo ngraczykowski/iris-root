@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
-import com.silenteight.payments.bridge.svb.newlearning.domain.EtlAlert;
 import com.silenteight.payments.bridge.svb.newlearning.job.etl.EtlJobProperties;
 import com.silenteight.payments.bridge.svb.newlearning.step.composite.AlertCompositeReaderFactory;
 
@@ -50,7 +49,7 @@ class EtlAlertStepConfiguration {
     return stepBuilderFactory
         .get(ETL_STEP_NAME)
         .listener(new JobParameterExecutionContextCopyListener())
-        .<AlertComposite, EtlAlert>chunk(properties.getChunkSize())
+        .chunk(properties.getChunkSize())
         .reader(compositeAlertReader)
         .writer(item -> log.debug("writing item: {}", item))
         .build();

@@ -5,9 +5,9 @@ import lombok.Value;
 
 @Value
 @Builder
-public class EtlAlert {
+public class RegisteredMatch {
 
-  AlertRegistrationStatus status;
+  String matchName;
 
-  AlertComposite alertComposite;
+  HitComposite hitComposite;
 }

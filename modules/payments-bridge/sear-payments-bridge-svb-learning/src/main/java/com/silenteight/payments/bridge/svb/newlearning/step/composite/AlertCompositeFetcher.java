@@ -36,7 +36,6 @@ class AlertCompositeFetcher extends BaseCompositeFetcher<List<Long>, List<AlertC
   private final ActionCompositeFetcher actionCompositeFetcher;
   private final StoreCsvJobProperties properties;
 
-
   public AlertCompositeFetcher(
       DataSource dataSource, HitCompositeFetcher hitCompositeFetcher,
       ActionCompositeFetcher actionCompositeFetcher,
@@ -53,7 +52,6 @@ class AlertCompositeFetcher extends BaseCompositeFetcher<List<Long>, List<AlertC
     var fkcoIds = alertsDetails.stream().map(AlertDetails::getFkcoId).collect(toList());
     var hits = hitCompositeFetcher.fetchWithConnection(connection, fkcoIds);
     var actions = actionCompositeFetcher.fetchWithConnection(connection, fkcoIds);
-
     return alertsDetails
         .stream()
         .map(ad -> AlertComposite

@@ -10,7 +10,8 @@ import javax.annotation.Nonnull;
 
 public class OffsetTimeConverter {
 
-  private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(
+  private static final DateTimeFormatter DATE_FORMAT =
+      DateTimeFormatter.ofPattern(
           "[dd/MM/yyyy HH:mm:ss][dd/MM/yyyy H:mm:ss][yyyy-MM-dd HH:mm:ss][yyyy-MM-dd H:mm:ss]");
 
   @Nonnull
@@ -20,7 +21,6 @@ public class OffsetTimeConverter {
         .atZone(ZoneId.of(timeZone))
         .toOffsetDateTime();
   }
-
 
   public static OffsetDateTime getOffsetDateTime(String timeZone, Timestamp timestamp) {
     return OffsetDateTime.ofInstant(Instant.ofEpochMilli(timestamp.getTime()), ZoneId.of(timeZone));
