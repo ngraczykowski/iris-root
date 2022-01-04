@@ -9,10 +9,7 @@ import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.StepConfiguration;
 import com.silenteight.serp.governance.policy.domain.events.PolicyImportedEvent;
-import com.silenteight.serp.governance.policy.domain.exception.EmptyFeatureConfiguration;
-import com.silenteight.serp.governance.policy.domain.exception.EmptyMatchConditionValueException;
-import com.silenteight.serp.governance.policy.domain.exception.WrongBasePolicyException;
-import com.silenteight.serp.governance.policy.domain.exception.WrongToFulfillValue;
+import com.silenteight.serp.governance.policy.domain.exception.*;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +23,6 @@ import java.util.UUID;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.IN_USE;
 import static java.util.Optional.ofNullable;
 import static java.util.Set.of;
-import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.IntStream.range;
 
@@ -68,36 +64,6 @@ public class PolicyService {
     return savedPolicy.getPolicyId();
   }
 
-  private void configureSteps(
-      Policy policy, List<StepConfiguration> configurations, String createdBy) {
-
-    range(0, configurations.size())
-        .boxed()
-        .forEach(i -> configureSteps(policy, configurations.get(i), i, createdBy));
-  }
-
-  private void configureSteps(
-      Policy policy,
-      StepConfiguration configuration,
-      int sortOrder,
-      String createdBy) {
-
-    addStep(
-        policy,
-        configuration.getSolution(),
-        configuration.getStepId(),
-        configuration.getStepName(),
-        configuration.getStepDescription(),
-        configuration.getStepType(),
-        sortOrder,
-        createdBy);
-    doConfigureStepLogic(
-        policy,
-        configuration.getStepId(),
-        configuration.getFeatureLogicConfigurations(),
-        createdBy);
-  }
-
   public UUID createPolicy(
       @NonNull UUID policyId,
       @NonNull String policyName,
@@ -137,23 +103,6 @@ public class PolicyService {
     createStepRequest.postAudit(auditingLogger::log);
   }
 
-  @NotNull
-  private Step addStep(
-      @NonNull Policy policy,
-      @NonNull FeatureVectorSolution solution,
-      @NonNull UUID stepId,
-      @NonNull String stepName,
-      String stepDescription,
-      @NonNull StepType stepType,
-      int sortOrder,
-      String createdBy) {
-
-    Step step = new Step(
-        solution, stepId, stepName, stepDescription, stepType, sortOrder, createdBy);
-    policy.addStep(step);
-    return step;
-  }
-
   @Transactional
   public void configureStepLogic(ConfigureStepLogicRequest configureStepLogicRequest) {
     configureStepLogicRequest.preAudit(auditingLogger::log);
@@ -164,71 +113,6 @@ public class PolicyService {
         configureStepLogicRequest.getFeatureLogicConfigurations(),
         configureStepLogicRequest.getEditedBy());
     configureStepLogicRequest.postAudit(auditingLogger::log);
-  }
-
-  private void doConfigureStepLogic(
-      @NonNull Policy policy,
-      @NonNull UUID stepId,
-      @NonNull Collection<FeatureLogicConfiguration> featureLogicConfigurations,
-      @NonNull String editedBy) {
-
-    policy.reconfigureStep(
-        stepId, mapToFeatureLogics(stepId, featureLogicConfigurations), editedBy);
-  }
-
-  private static Collection<FeatureLogic> mapToFeatureLogics(
-      @NonNull UUID stepId, Collection<FeatureLogicConfiguration> configurations) {
-
-    return configurations
-        .stream()
-        .map(configuration -> mapToFeatureLogic(stepId, configuration))
-        .collect(toList());
-  }
-
-  private static FeatureLogic mapToFeatureLogic(
-      @NonNull UUID stepId, FeatureLogicConfiguration configuration) {
-
-    assertFeatureConfigurationsNotEmpty(stepId, configuration.getFeatureConfigurations());
-    assertToFulfillValueIsCorrect(
-        stepId, configuration.getToFulfill(), configuration.getFeatureConfigurations().size());
-
-    return new FeatureLogic(
-        configuration.getToFulfill(), mapToFeatures(configuration.getFeatureConfigurations()));
-  }
-
-  private static void assertFeatureConfigurationsNotEmpty(
-      UUID stepId, Collection<FeatureConfiguration> featureConfigurations) {
-
-    if (featureConfigurations.isEmpty())
-      throw new EmptyFeatureConfiguration(stepId);
-  }
-
-  private static void assertToFulfillValueIsCorrect(UUID stepId, int toFulfill, int maxSize) {
-    if (toFulfill > maxSize || toFulfill < 1)
-      throw new WrongToFulfillValue(stepId, toFulfill, maxSize);
-  }
-
-  private static Collection<MatchCondition> mapToFeatures(
-      Collection<FeatureConfiguration> configurations) {
-
-    return configurations
-        .stream()
-        .map(PolicyService::mapToFeature)
-        .collect(toList());
-  }
-
-  private static MatchCondition mapToFeature(FeatureConfiguration configuration) {
-    assertValueListNotEmpty(configuration.getName(), configuration.getValues());
-
-    return new MatchCondition(
-        configuration.getName(), configuration.getCondition(), configuration.getValues());
-  }
-
-  private static void assertValueListNotEmpty(
-      @NonNull String featureName, @NonNull Collection<String> values) {
-
-    if (values.isEmpty())
-      throw new EmptyMatchConditionValueException(featureName);
   }
 
   @Transactional
@@ -323,64 +207,17 @@ public class PolicyService {
   public UUID clonePolicy(ClonePolicyRequest clonePolicyRequest) {
     clonePolicyRequest.preAudit(auditingLogger::log);
     Policy origin = validateAndReturnPolicy(clonePolicyRequest.getBasePolicyId());
-    Policy policy = new Policy(
-        clonePolicyRequest.getPolicyId(),
-        origin.getName(),
-        origin.getDescription(),
-        clonePolicyRequest.getCreatedBy());
-    policy.setSteps(cloneSteps(origin.getSteps()));
+    Policy policy =
+        origin.clonePolicy(clonePolicyRequest.getPolicyId(), clonePolicyRequest.getCreatedBy());
+
+    List<Step> clonedSteps = origin.getSteps().stream()
+        .map(Step::cloneStep)
+        .collect(toList());
+
+    policy.setSteps(clonedSteps);
     Policy savedPolicy = policyRepository.save(policy);
     clonePolicyRequest.postAudit(auditingLogger::log);
     return savedPolicy.getPolicyId();
-  }
-
-  public Policy validateAndReturnPolicy(UUID policyId) {
-    return policyRepository.findByPolicyId(policyId)
-        .orElseThrow(() -> new WrongBasePolicyException(policyId));
-  }
-
-  private static Collection<Step> cloneSteps(Collection<Step> steps) {
-    return steps
-        .stream()
-        .map(PolicyService::cloneStep)
-        .collect(toList());
-  }
-
-  private static Step cloneStep(Step origin) {
-    Step step = new Step(
-        origin.getSolution(),
-        randomUUID(),
-        origin.getName(),
-        origin.getDescription(),
-        origin.getType(),
-        origin.getSortOrder(),
-        origin.getCreatedBy());
-    step.setFeatureLogics(cloneFeatureLogics(origin.getFeatureLogics()));
-    return step;
-  }
-
-  private static Collection<FeatureLogic> cloneFeatureLogics(
-      Collection<FeatureLogic> featureLogics) {
-
-    return featureLogics
-        .stream()
-        .map(PolicyService::cloneFeatureLogic)
-        .collect(toList());
-  }
-
-  private static FeatureLogic cloneFeatureLogic(FeatureLogic origin) {
-    return new FeatureLogic(origin.getCount(), cloneFeatures(origin.getFeatures()));
-  }
-
-  private static Collection<MatchCondition> cloneFeatures(Collection<MatchCondition> features) {
-    return features
-        .stream()
-        .map(PolicyService::cloneFeature)
-        .collect(toList());
-  }
-
-  private static MatchCondition cloneFeature(MatchCondition origin) {
-    return new MatchCondition(origin.getName(), origin.getCondition(), origin.getValues());
   }
 
   @Transactional
@@ -410,5 +247,140 @@ public class PolicyService {
     Policy policy = policyRepository.getByPolicyId(request.getPolicyId());
     policy.use();
     request.postAudit(auditingLogger::log);
+  }
+
+  @Transactional
+  public UUID cloneStep(CloneStepRequest request) {
+    request.preAudit(auditingLogger::log);
+    Policy policy = validateAndReturnPolicy(request.getPolicyId());
+    UUID baseStepId = request.getBaseStepId();
+    Step originStep = policy
+        .getSteps()
+        .stream()
+        .filter(step -> step.hasStepId(baseStepId))
+        .findFirst()
+        .orElseThrow(() -> new StepNotFoundException(baseStepId));
+
+    Step clonedStep = originStep.cloneStep(request.getNewStepId());
+    policy.addStep(clonedStep);
+    request.postAudit(auditingLogger::log);
+    return clonedStep.getStepId();
+  }
+
+  private static void configureSteps(
+      Policy policy, List<StepConfiguration> configurations, String createdBy) {
+
+    range(0, configurations.size())
+        .boxed()
+        .forEach(i -> configureSteps(policy, configurations.get(i), i, createdBy));
+  }
+
+  private static void configureSteps(
+      Policy policy,
+      StepConfiguration configuration,
+      int sortOrder,
+      String createdBy) {
+
+    addStep(
+        policy,
+        configuration.getSolution(),
+        configuration.getStepId(),
+        configuration.getStepName(),
+        configuration.getStepDescription(),
+        configuration.getStepType(),
+        sortOrder,
+        createdBy);
+    doConfigureStepLogic(
+        policy,
+        configuration.getStepId(),
+        configuration.getFeatureLogicConfigurations(),
+        createdBy);
+  }
+
+  @NotNull
+  private static Step addStep(
+      @NonNull Policy policy,
+      @NonNull FeatureVectorSolution solution,
+      @NonNull UUID stepId,
+      @NonNull String stepName,
+      String stepDescription,
+      @NonNull StepType stepType,
+      int sortOrder,
+      String createdBy) {
+
+    Step step = new Step(
+        solution, stepId, stepName, stepDescription, stepType, sortOrder, createdBy);
+    policy.addStep(step);
+    return step;
+  }
+
+  private static void doConfigureStepLogic(
+      @NonNull Policy policy,
+      @NonNull UUID stepId,
+      @NonNull Collection<FeatureLogicConfiguration> featureLogicConfigurations,
+      @NonNull String editedBy) {
+
+    policy.reconfigureStep(
+        stepId, mapToFeatureLogics(stepId, featureLogicConfigurations), editedBy);
+  }
+
+  private static Collection<FeatureLogic> mapToFeatureLogics(
+      @NonNull UUID stepId, Collection<FeatureLogicConfiguration> configurations) {
+
+    return configurations
+        .stream()
+        .map(configuration -> mapToFeatureLogic(stepId, configuration))
+        .collect(toList());
+  }
+
+  private static FeatureLogic mapToFeatureLogic(
+      @NonNull UUID stepId, FeatureLogicConfiguration configuration) {
+
+    assertFeatureConfigurationsNotEmpty(stepId, configuration.getFeatureConfigurations());
+    assertToFulfillValueIsCorrect(
+        stepId, configuration.getToFulfill(), configuration.getFeatureConfigurations().size());
+
+    return new FeatureLogic(
+        configuration.getToFulfill(), mapToFeatures(configuration.getFeatureConfigurations()));
+  }
+
+  private static void assertFeatureConfigurationsNotEmpty(
+      UUID stepId, Collection<FeatureConfiguration> featureConfigurations) {
+
+    if (featureConfigurations.isEmpty())
+      throw new EmptyFeatureConfiguration(stepId);
+  }
+
+  private static void assertToFulfillValueIsCorrect(UUID stepId, int toFulfill, int maxSize) {
+    if (toFulfill > maxSize || toFulfill < 1)
+      throw new WrongToFulfillValue(stepId, toFulfill, maxSize);
+  }
+
+  private static Collection<MatchCondition> mapToFeatures(
+      Collection<FeatureConfiguration> configurations) {
+
+    return configurations
+        .stream()
+        .map(PolicyService::mapToFeature)
+        .collect(toList());
+  }
+
+  private static MatchCondition mapToFeature(FeatureConfiguration configuration) {
+    assertValueListNotEmpty(configuration.getName(), configuration.getValues());
+
+    return new MatchCondition(
+        configuration.getName(), configuration.getCondition(), configuration.getValues());
+  }
+
+  private static void assertValueListNotEmpty(
+      @NonNull String featureName, @NonNull Collection<String> values) {
+
+    if (values.isEmpty())
+      throw new EmptyMatchConditionValueException(featureName);
+  }
+
+  private Policy validateAndReturnPolicy(UUID policyId) {
+    return policyRepository.findByPolicyId(policyId)
+        .orElseThrow(() -> new WrongBasePolicyException(policyId));
   }
 }

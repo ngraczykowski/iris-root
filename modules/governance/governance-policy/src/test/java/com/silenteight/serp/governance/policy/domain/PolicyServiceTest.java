@@ -25,16 +25,17 @@ import org.springframework.context.ApplicationEventPublisher;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static com.silenteight.sens.governance.common.testing.rest.TestRoles.MODEL_TUNER;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.*;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static com.silenteight.serp.governance.policy.domain.StepType.NARROW;
+import static com.silenteight.serp.governance.policy.domain.TestFixtures.*;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 import static java.util.List.of;
-import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,23 +44,6 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PolicyServiceTest {
-
-  private static final UUID POLICY_ID = randomUUID();
-  private static final UUID POLICY_ID_CLONED = randomUUID();
-  private static final String POLICY_NAME = "policy_name";
-  private static final String USER = "username";
-  private static final String OTHER_USER = "username2";
-  private static final String NEW_POLICY_NAME = "new name";
-  private static final String NEW_DESCRIPTION = "new description name";
-
-  private static final UUID FIRST_STEP = randomUUID();
-  private static final UUID SECOND_STEP = randomUUID();
-  private static final UUID THIRD_STEP = randomUUID();
-  private static final UUID OTHER_STEP = randomUUID();
-  private static final String STEP_NAME = "step name";
-  private static final String STEP_DESCRIPTION = "step description";
-  private static final String OTHER_STEP_NAME = "other step name";
-  private static final String OTHER_STEP_DESCRIPTION = "other step description";
 
   private final PolicyRepository policyRepository = new InMemoryPolicyRepository();
   @Mock
@@ -98,7 +82,7 @@ class PolicyServiceTest {
         .builder()
         .solution(stepSolution)
         .stepName(stepName)
-        .stepId(FIRST_STEP)
+        .stepId(FIRST_STEP_ID)
         .stepDescription(stepDescription)
         .stepType(stepType)
         .featureLogicConfigurations(singletonList(featureLogicConfiguration))
@@ -131,7 +115,7 @@ class PolicyServiceTest {
     var step = policy.getSteps().iterator().next();
     assertThat(step.getSolution()).isEqualTo(stepSolution);
     assertThat(step.getName()).isEqualTo(stepName);
-    assertThat(step.getStepId()).isEqualTo(FIRST_STEP);
+    assertThat(step.getStepId()).isEqualTo(FIRST_STEP_ID);
     assertThat(step.getDescription()).isEqualTo(stepDescription);
     assertThat(step.getType()).isEqualTo(stepType);
     assertThat(step.getFeatureLogics()).hasSize(1);
@@ -227,55 +211,55 @@ class PolicyServiceTest {
 
   @Test
   void configureStepWithZeroFeatureConfigurationWillThrowException() {
-    Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP, 0)));
+    Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP_ID, 0)));
 
     ConfigureStepLogicRequest request = ConfigureStepLogicRequest
-        .of(policy.getId(), FIRST_STEP, getFeatureLogicConfiguration(0, of()), USER);
+        .of(policy.getId(), FIRST_STEP_ID, getFeatureLogicConfiguration(0, of()), USER);
     assertThatExceptionOfType(EmptyFeatureConfiguration.class)
         .isThrownBy(() -> underTest.configureStepLogic(request));
   }
 
   @Test
   void configureStepWithZeroFeaturesConfigurationIsValidRequest() {
-    Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP, 0)));
+    Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP_ID, 0)));
 
     ConfigureStepLogicRequest request = ConfigureStepLogicRequest
-        .of(policy.getId(), FIRST_STEP, of(), USER);
+        .of(policy.getId(), FIRST_STEP_ID, of(), USER);
     assertThatNoException().isThrownBy(() -> underTest.configureStepLogic(request));
   }
 
   @Test
   void configureStepWithZeroMatchConditionValuesWillThrowException() {
-    Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP, 0)));
+    Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP_ID, 0)));
     Collection<FeatureLogicConfiguration> featureLogicConfiguration = getFeatureLogicConfiguration(
         1, getFeatureConfiguration("name", of()));
 
     ConfigureStepLogicRequest request = ConfigureStepLogicRequest
-        .of(policy.getId(), FIRST_STEP, featureLogicConfiguration, USER);
+        .of(policy.getId(), FIRST_STEP_ID, featureLogicConfiguration, USER);
     assertThatExceptionOfType(EmptyMatchConditionValueException.class)
         .isThrownBy(() -> underTest.configureStepLogic(request));
   }
 
   @Test
   void configureStepWithZeroInToFulfillValueWillThrowException() {
-    Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP, 0)));
+    Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP_ID, 0)));
     Collection<FeatureLogicConfiguration> featureLogicConfiguration = getFeatureLogicConfiguration(
         0, getFeatureConfiguration("name", of("value")));
 
     ConfigureStepLogicRequest request = ConfigureStepLogicRequest
-        .of(policy.getId(), FIRST_STEP, featureLogicConfiguration, USER);
+        .of(policy.getId(), FIRST_STEP_ID, featureLogicConfiguration, USER);
     assertThatExceptionOfType(WrongToFulfillValue.class)
         .isThrownBy(() -> underTest.configureStepLogic(request));
   }
 
   @Test
   void configureStepWithTooBigInToFulfillValueWillThrowException() {
-    Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP, 2)));
+    Policy policy = createPolicyWithSteps(of(createStep(FIRST_STEP_ID, 2)));
     Collection<FeatureLogicConfiguration> featureLogicConfiguration = getFeatureLogicConfiguration(
         0, getFeatureConfiguration("name", of("value")));
 
     ConfigureStepLogicRequest request = ConfigureStepLogicRequest
-        .of(policy.getId(), FIRST_STEP, featureLogicConfiguration, USER);
+        .of(policy.getId(), FIRST_STEP_ID, featureLogicConfiguration, USER);
     assertThatExceptionOfType(WrongToFulfillValue.class)
         .isThrownBy(() -> underTest.configureStepLogic(request));
   }
@@ -447,20 +431,20 @@ class PolicyServiceTest {
   @Test
   void setStepsOrderOnDraftWillChangeOrder() {
     Policy policy = createPolicyWithSteps(of(
-        createStep(FIRST_STEP, 0),
-        createStep(SECOND_STEP, 1),
-        createStep(THIRD_STEP, 2)
+        createStep(FIRST_STEP_ID, 0),
+        createStep(SECOND_STEP_ID, 1),
+        createStep(THIRD_STEP_ID, 2)
     ));
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
     SetStepsOrderRequest request = SetStepsOrderRequest
-        .of(policy.getPolicyId(), of(THIRD_STEP, FIRST_STEP, SECOND_STEP), OTHER_USER);
+        .of(policy.getPolicyId(), of(THIRD_STEP_ID, FIRST_STEP_ID, SECOND_STEP_ID), OTHER_USER);
     underTest.setStepsOrder(request);
 
     policy = policyRepository.getByPolicyId(POLICY_ID);
-    assertStepOrder(policy, FIRST_STEP, 1);
-    assertStepOrder(policy, SECOND_STEP, 2);
-    assertStepOrder(policy, THIRD_STEP, 0);
+    assertStepOrder(policy, FIRST_STEP_ID, 1);
+    assertStepOrder(policy, SECOND_STEP_ID, 2);
+    assertStepOrder(policy, THIRD_STEP_ID, 0);
     assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
   }
 
@@ -480,7 +464,7 @@ class PolicyServiceTest {
     policy.setState(SAVED);
 
     SetStepsOrderRequest request = SetStepsOrderRequest
-        .of(policy.getPolicyId(), of(FIRST_STEP, SECOND_STEP, THIRD_STEP), OTHER_USER);
+        .of(policy.getPolicyId(), of(FIRST_STEP_ID, SECOND_STEP_ID, THIRD_STEP_ID), OTHER_USER);
     assertThatExceptionOfType(WrongPolicyStateException.class)
         .isThrownBy(() -> underTest.setStepsOrder(request));
   }
@@ -492,7 +476,7 @@ class PolicyServiceTest {
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
     SetStepsOrderRequest request = SetStepsOrderRequest
-        .of(policy.getPolicyId(), of(FIRST_STEP, SECOND_STEP, THIRD_STEP), OTHER_USER);
+        .of(policy.getPolicyId(), of(FIRST_STEP_ID, SECOND_STEP_ID, THIRD_STEP_ID), OTHER_USER);
     assertThatExceptionOfType(StepsOrderListsSizeMismatch.class)
         .isThrownBy(() -> underTest.setStepsOrder(request));
   }
@@ -500,14 +484,14 @@ class PolicyServiceTest {
   @Test
   void setStepsOrderOnDraftWithWrongStepsWillThrowException() {
     Policy policy = createPolicyWithSteps(of(
-        createStep(FIRST_STEP, 0),
-        createStep(SECOND_STEP, 1),
-        createStep(THIRD_STEP, 2)
+        createStep(FIRST_STEP_ID, 0),
+        createStep(SECOND_STEP_ID, 1),
+        createStep(THIRD_STEP_ID, 2)
     ));
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
     SetStepsOrderRequest request = SetStepsOrderRequest
-        .of(policy.getPolicyId(), of(FIRST_STEP, SECOND_STEP, OTHER_STEP), OTHER_USER);
+        .of(policy.getPolicyId(), of(FIRST_STEP_ID, SECOND_STEP_ID, OTHER_STEP_ID), OTHER_USER);
     assertThatExceptionOfType(WrongIdsListInSetStepsOrder.class)
         .isThrownBy(() -> underTest.setStepsOrder(request));
   }
@@ -538,14 +522,14 @@ class PolicyServiceTest {
   @Test
   void updatedStepOnNonDraftWillThrowException() {
     Policy policy = createPolicyWithSteps(of(
-        createStep(FIRST_STEP, 0),
-        createStep(SECOND_STEP, 1),
-        createStep(THIRD_STEP, 2)
+        createStep(FIRST_STEP_ID, 0),
+        createStep(SECOND_STEP_ID, 1),
+        createStep(THIRD_STEP_ID, 2)
     ));
     policy.setState(SAVED);
 
     UpdateStepRequest request = UpdateStepRequest.of(
-        policy.getId(), FIRST_STEP, STEP_NAME, null, SOLUTION_FALSE_POSITIVE, OTHER_USER);
+        policy.getId(), FIRST_STEP_ID, STEP_NAME, null, SOLUTION_FALSE_POSITIVE, OTHER_USER);
     assertThatExceptionOfType(WrongPolicyStateException.class)
         .isThrownBy(() -> underTest.updateStep(request));
   }
@@ -553,15 +537,15 @@ class PolicyServiceTest {
   @Test
   void updatedStepOnDraftWillUpdateStep() {
     Policy policy = createPolicyWithSteps(of(
-        createStep(FIRST_STEP, 0),
-        createStep(SECOND_STEP, 1),
-        createStep(THIRD_STEP, 2)
+        createStep(FIRST_STEP_ID, 0),
+        createStep(SECOND_STEP_ID, 1),
+        createStep(THIRD_STEP_ID, 2)
     ));
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
     UpdateStepRequest request = UpdateStepRequest.of(
         policy.getId(),
-        FIRST_STEP,
+        FIRST_STEP_ID,
         OTHER_STEP_NAME,
         OTHER_STEP_DESCRIPTION,
         SOLUTION_NO_DECISION,
@@ -570,7 +554,11 @@ class PolicyServiceTest {
 
     policy = policyRepository.getByPolicyId(policy.getPolicyId());
     Step updatedStep = policy
-        .getSteps().stream().filter(step -> step.hasStepId(FIRST_STEP)).findFirst().orElseThrow();
+        .getSteps()
+        .stream()
+        .filter(step -> step.hasStepId(FIRST_STEP_ID))
+        .findFirst()
+        .orElseThrow();
     assertThat(updatedStep.getName()).isEqualTo(OTHER_STEP_NAME);
     assertThat(updatedStep.getDescription()).isEqualTo(OTHER_STEP_DESCRIPTION);
     assertThat(updatedStep.getSortOrder()).isZero();
@@ -582,27 +570,27 @@ class PolicyServiceTest {
   @Test
   void deleteStepOnNonDraftWillThrowException() {
     Policy policy = createPolicyWithSteps(of(
-        createStep(FIRST_STEP, 0),
-        createStep(SECOND_STEP, 1),
-        createStep(THIRD_STEP, 2)
+        createStep(FIRST_STEP_ID, 0),
+        createStep(SECOND_STEP_ID, 1),
+        createStep(THIRD_STEP_ID, 2)
     ));
     policy.setState(SAVED);
 
     assertThatExceptionOfType(WrongPolicyStateException.class)
         .isThrownBy(() -> underTest.deleteStep(
-            DeleteStepRequest.of(policy.getId(), FIRST_STEP, OTHER_USER)));
+            DeleteStepRequest.of(policy.getId(), FIRST_STEP_ID, OTHER_USER)));
   }
 
   @Test
   void deleteStepOnDraftWillDeleteStep() {
     Policy policy = createPolicyWithSteps(of(
-        createStep(FIRST_STEP, 0),
-        createStep(SECOND_STEP, 1),
-        createStep(THIRD_STEP, 2)
+        createStep(FIRST_STEP_ID, 0),
+        createStep(SECOND_STEP_ID, 1),
+        createStep(THIRD_STEP_ID, 2)
     ));
     assertThat(policy.getState()).isEqualTo(DRAFT);
 
-    underTest.deleteStep(DeleteStepRequest.of(policy.getId(), SECOND_STEP, OTHER_USER));
+    underTest.deleteStep(DeleteStepRequest.of(policy.getId(), SECOND_STEP_ID, OTHER_USER));
 
     policy = policyRepository.getByPolicyId(policy.getPolicyId());
 
@@ -613,24 +601,26 @@ class PolicyServiceTest {
         .collect(toList());
     assertThat(sortedSteps)
         .extracting(Step::getStepId)
-        .containsExactly(FIRST_STEP, THIRD_STEP);
+        .containsExactly(FIRST_STEP_ID, THIRD_STEP_ID);
     assertThat(policy.getUpdatedBy()).isEqualTo(OTHER_USER);
   }
 
   @Test
   void clonePolicyWillMakeDeepCopy() {
-    MatchCondition matchCondition = new MatchCondition("IS", IS, of("TRUE"));
-    FeatureLogic featureLogic = new FeatureLogic(1, of(matchCondition));
-    Step firstStep = createStep(FIRST_STEP, 0);
+    //given
+    Step firstStep = createStep(FIRST_STEP_ID, 0);
     firstStep.setName(STEP_NAME);
-    firstStep.setFeatureLogics(of(featureLogic));
+    firstStep.setFeatureLogics(of(FEATURE_LOGIC));
     firstStep.setSolution(SOLUTION_NO_DECISION);
-
     Policy originPolicy = createPolicyWithSteps(of(firstStep));
+
+    //when
     UUID clonedPolicyId = underTest.clonePolicy(
         ClonePolicyRequest.of(POLICY_ID_CLONED, POLICY_ID, OTHER_USER));
+
     Policy clonedPolicy = policyRepository.getByPolicyId(clonedPolicyId);
 
+    //then
     assertThat(clonedPolicyId).isNotEqualTo(POLICY_ID);
     assertThat(clonedPolicy.getId()).isNotEqualTo(originPolicy.getId());
     assertThat(clonedPolicy.getName()).isEqualTo(POLICY_NAME);
@@ -638,6 +628,7 @@ class PolicyServiceTest {
     assertThat(clonedPolicy.getCreatedBy()).isEqualTo(OTHER_USER);
     assertThat(clonedPolicy.getState()).isEqualTo(DRAFT);
     assertThat(clonedPolicy.getSteps()).containsAll(originPolicy.getSteps());
+
     Step originStep = originPolicy.getSteps().stream().findFirst().orElseThrow();
     Step clonedStep = clonedPolicy.getSteps().stream().findFirst().orElseThrow();
 
@@ -647,14 +638,16 @@ class PolicyServiceTest {
     assertEquals(originStep.getSolution(), clonedStep.getSolution());
     assertEquals(originStep.getSortOrder(), clonedStep.getSortOrder());
     assertEquals(originStep.getType(), clonedStep.getType());
-    assertEquals(originStep.getFeatureLogics().size(),
+    assertEquals(
+        originStep.getFeatureLogics().size(),
         clonedStep.getFeatureLogics().size());
     assertEquals(1, originStep.getFeatureLogics().size());
 
     FeatureLogic originFeatureLogic = getFirstFeatureLogic(originStep);
     FeatureLogic clonedFeatureLogic = getFirstFeatureLogic(clonedStep);
     assertEquals(originFeatureLogic.getCount(), clonedFeatureLogic.getCount());
-    assertEquals(originFeatureLogic.getFeatures().size(),
+    assertEquals(
+        originFeatureLogic.getFeatures().size(),
         clonedFeatureLogic.getFeatures().size());
 
     MatchCondition originFeature = getFirstMatchCondition(originFeatureLogic);
@@ -662,6 +655,27 @@ class PolicyServiceTest {
     assertEquals(originFeature.getName(), clonedFeature.getName());
     assertEquals(originFeature.getCondition(), clonedFeature.getCondition());
     assertEquals(originFeature.getValues(), clonedFeature.getValues());
+  }
+
+  @Test
+  void shouldReturnClonedStepId() {
+    //given
+    CloneStepRequest request =
+        CloneStepRequest.of(OTHER_STEP_ID, FIRST_STEP_ID, POLICY_ID, MODEL_TUNER);
+
+    Step step = createStep(FIRST_STEP_ID, 0);
+    Policy policy = createPolicyWithSteps(of(step));
+    policyRepository.save(policy);
+    Step clonedStep = createStep(OTHER_STEP_ID, 0);
+
+    //when
+    UUID clonedStepId = underTest.cloneStep(request);
+    Policy policyWithClonedStep = policyRepository.getByPolicyId(POLICY_ID);
+
+    //then
+    assertThat(policyWithClonedStep.getSteps()).hasSize(2);
+    assertThat(policyWithClonedStep.getSteps()).contains(clonedStep);
+    assertThat(clonedStepId).isEqualTo(OTHER_STEP_ID);
   }
 
   private static FeatureLogic getFirstFeatureLogic(Step step) {
@@ -697,37 +711,37 @@ class PolicyServiceTest {
     return of(
         Arguments.of(
             of(
-                createStep(FIRST_STEP, 1, NARROW),
-                createStep(SECOND_STEP, 2, StepType.BUSINESS_LOGIC)
+                createStep(FIRST_STEP_ID, 1, NARROW),
+                createStep(SECOND_STEP_ID, 2, StepType.BUSINESS_LOGIC)
             ),
             of(
-                createStep(FIRST_STEP, 0, NARROW),
-                createStep(SECOND_STEP, 1, StepType.BUSINESS_LOGIC)
+                createStep(FIRST_STEP_ID, 0, NARROW),
+                createStep(SECOND_STEP_ID, 1, StepType.BUSINESS_LOGIC)
             )),
         Arguments.of(
             of(
-                createStep(FIRST_STEP, 1, NARROW)
+                createStep(FIRST_STEP_ID, 1, NARROW)
             ),
             of(
-                createStep(FIRST_STEP, 0, NARROW)
+                createStep(FIRST_STEP_ID, 0, NARROW)
             )),
         Arguments.of(
             of(
-                createStep(FIRST_STEP, 1, StepType.BUSINESS_LOGIC)
+                createStep(FIRST_STEP_ID, 1, StepType.BUSINESS_LOGIC)
             ),
             of(
-                createStep(FIRST_STEP, 0, StepType.BUSINESS_LOGIC)
+                createStep(FIRST_STEP_ID, 0, StepType.BUSINESS_LOGIC)
             )),
         Arguments.of(
             of(
-                createStep(FIRST_STEP, 0, NARROW),
-                createStep(SECOND_STEP, 1, NARROW),
-                createStep(THIRD_STEP, 2, StepType.BUSINESS_LOGIC)
+                createStep(FIRST_STEP_ID, 0, NARROW),
+                createStep(SECOND_STEP_ID, 1, NARROW),
+                createStep(THIRD_STEP_ID, 2, StepType.BUSINESS_LOGIC)
             ),
             of(
-                createStep(FIRST_STEP, 0, NARROW),
-                createStep(SECOND_STEP, 1, NARROW),
-                createStep(THIRD_STEP, 2, StepType.BUSINESS_LOGIC)
+                createStep(FIRST_STEP_ID, 0, NARROW),
+                createStep(SECOND_STEP_ID, 1, NARROW),
+                createStep(THIRD_STEP_ID, 2, StepType.BUSINESS_LOGIC)
             ))
 
     ).stream();
@@ -737,16 +751,16 @@ class PolicyServiceTest {
   void invalidNarrowStepOrderWillThrowException() {
     //given
     List<Step> steps = of(
-        createStep(FIRST_STEP, 0, NARROW),
-        createStep(SECOND_STEP, 1),
-        createStep(THIRD_STEP, 2)
+        createStep(FIRST_STEP_ID, 0, NARROW),
+        createStep(SECOND_STEP_ID, 1),
+        createStep(THIRD_STEP_ID, 2)
     );
     Policy policy = createPolicyWithSteps(steps);
 
     assertStepsOrder(policy.getSteps(), steps);
 
     SetStepsOrderRequest request = SetStepsOrderRequest
-        .of(policy.getPolicyId(), of(SECOND_STEP, THIRD_STEP, FIRST_STEP), USER);
+        .of(policy.getPolicyId(), of(SECOND_STEP_ID, THIRD_STEP_ID, FIRST_STEP_ID), USER);
     //when
     //then
     assertThatExceptionOfType(NarrowStepsOrderHierarchyMismatch.class)

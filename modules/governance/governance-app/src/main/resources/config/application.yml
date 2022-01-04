@@ -442,6 +442,7 @@ sep.auth:
       - "CREATE_STEP"
       - "EDIT_STEP"
       - "REMOVE_STEP"
+      - "CLONE_STEP"
     MANAGE_QA_ALERT:
       - "ALERTS_ANALYSIS"
       - "LIST_POLICIES"

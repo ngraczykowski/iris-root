@@ -105,7 +105,7 @@ public class ConfigurePolicyRequest implements AuditableRequest {
         .entityId(policyId.toString())
         .entityClass("Policy")
         .entityAction("CREATE")
-        .details(this.toString())
+        .details(toString())
         .principal(createdBy)
         .build();
   }

@@ -4,12 +4,7 @@ import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseModifiableEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
-import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
-import com.silenteight.serp.governance.policy.domain.dto.Solution;
-import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
-import com.silenteight.serp.governance.policy.domain.dto.StepDto;
-import com.silenteight.serp.governance.policy.domain.dto.TransferredFeatureLogicDto;
-import com.silenteight.serp.governance.policy.domain.dto.TransferredStepDto;
+import com.silenteight.serp.governance.policy.domain.dto.*;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +18,7 @@ import javax.persistence.*;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static com.silenteight.serp.governance.policy.domain.StepType.NARROW;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
+import static java.util.UUID.*;
 import static java.util.stream.Collectors.toList;
 import static javax.persistence.CascadeType.ALL;
 
@@ -159,8 +155,34 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity, Comparabl
         .collect(toList());
   }
 
+  public Step cloneStep() {
+    return cloneStep(randomUUID());
+  }
+
+  public Step cloneStep(UUID stepId) {
+    Step step = new Step(
+        getSolution(),
+        stepId,
+        getName(),
+        getDescription(),
+        getType(),
+        getSortOrder(),
+        getCreatedBy());
+
+    List<FeatureLogic> clonedFeatureLogic = cloneFeatureLogics(this.getFeatureLogics());
+    step.setFeatureLogics(clonedFeatureLogic);
+    return step;
+  }
+
   @Override
   public int compareTo(@NotNull Step step) {
     return this.getSortOrder().compareTo(step.getSortOrder());
+  }
+
+  List<FeatureLogic> cloneFeatureLogics(Collection<FeatureLogic> featureLogics) {
+    return featureLogics
+        .stream()
+        .map(FeatureLogic::cloneFeatureLogic)
+        .collect(toList());
   }
 }

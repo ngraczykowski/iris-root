@@ -43,11 +43,11 @@ public class EraseAlertRequest implements AuditableRequest {
         .correlationId(correlationId)
         .eventId(randomUUID())
         .timestamp(from(deletedAt.toInstant()))
-        .type(this.getClass().getSimpleName())
+        .type(getClass().getSimpleName())
         .entityId(valueOf(alertId))
         .entityClass(entityClass)
         .entityAction(actionType.toString())
-        .details(this.toString())
+        .details(toString())
         .principal(deletedBy)
         .build();
   }

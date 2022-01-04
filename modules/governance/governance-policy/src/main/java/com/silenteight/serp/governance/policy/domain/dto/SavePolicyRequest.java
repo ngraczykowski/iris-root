@@ -44,7 +44,7 @@ public class SavePolicyRequest {
         .entityId(policyId.toString())
         .entityClass("Policy")
         .entityAction("UPDATE")
-        .details(this.toString())
+        .details(toString())
         .principal(savedBy)
         .build();
   }

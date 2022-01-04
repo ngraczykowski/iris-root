@@ -50,7 +50,7 @@ public class ApproveChangeRequestRequest implements AuditableRequest {
         .entityId(changeRequestId.toString())
         .entityClass("ChangeRequest")
         .entityAction("UPDATE")
-        .details(this.toString())
+        .details(toString())
         .principal(approvedBy)
         .build();
   }

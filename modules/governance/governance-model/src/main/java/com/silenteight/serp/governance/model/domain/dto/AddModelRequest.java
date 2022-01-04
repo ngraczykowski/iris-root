@@ -50,7 +50,7 @@ public class AddModelRequest implements AuditableRequest {
         .entityId(id.toString())
         .entityClass("Model")
         .entityAction("CREATE")
-        .details(this.toString())
+        .details(toString())
         .principal(createdBy)
         .build();
   }
