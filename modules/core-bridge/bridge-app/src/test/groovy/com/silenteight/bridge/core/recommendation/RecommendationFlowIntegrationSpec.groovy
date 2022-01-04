@@ -17,7 +17,7 @@ import spock.util.concurrent.PollingConditions
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @Import(RecommendationFlowRabbitMqTestConfig.class)
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 @DirtiesContext
 class RecommendationFlowIntegrationSpec extends BaseSpecificationIT {
 
@@ -40,7 +40,8 @@ class RecommendationFlowIntegrationSpec extends BaseSpecificationIT {
     def conditions = new PollingConditions(timeout: 10, initialDelay: 0.2, factor: 1.25)
 
     when:
-    rabbitTemplate.convertAndSend(properties.exchangeName(), properties.exchangeRoutingKey(), recommendationsGenerated)
+    rabbitTemplate.convertAndSend(
+        properties.exchangeName(), properties.exchangeRoutingKey(), recommendationsGenerated)
 
     then:
     conditions.eventually {
@@ -52,6 +53,5 @@ class RecommendationFlowIntegrationSpec extends BaseSpecificationIT {
         analysisId == ANALYSIS_ID
       }
     }
-
   }
 }

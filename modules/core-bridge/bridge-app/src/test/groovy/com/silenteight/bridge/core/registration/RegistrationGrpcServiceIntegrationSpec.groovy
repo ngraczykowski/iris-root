@@ -3,14 +3,17 @@ package com.silenteight.bridge.core.registration
 import com.silenteight.bridge.core.BaseSpecificationIT
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
+import com.silenteight.proto.registration.api.v1.MessageBatchError
 import com.silenteight.proto.registration.api.v1.NotifyBatchErrorRequest
 import com.silenteight.proto.registration.api.v1.RegisterBatchRequest
 import com.silenteight.proto.registration.api.v1.RegistrationServiceGrpc.RegistrationServiceBlockingStub
 
 import net.devh.boot.grpc.client.inject.GrpcClient
+import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
+import org.springframework.context.annotation.Import
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 
@@ -19,15 +22,19 @@ import org.springframework.test.context.ActiveProfiles
     "grpc.server.port=-1",
     "grpc.client.inProcess.address=in-process:test"
 ])
+@Import(NotifyBatchErrorFlowRabbitMqTestConfig.class)
 @ActiveProfiles("test")
 @DirtiesContext
 class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
 
-  @GrpcClient("inProcess")
-  private RegistrationServiceBlockingStub myService
+  @Autowired
+  private RabbitTemplate rabbitTemplate
 
   @Autowired
   private BatchRepository batchRepository
+
+  @GrpcClient("inProcess")
+  private RegistrationServiceBlockingStub myService
 
   def "Should register batch"() {
     given:
@@ -57,11 +64,11 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
 
   def "Should notify batch error"() {
     given:
-    def batchId = UUID.randomUUID().toString()
+    def id = UUID.randomUUID().toString()
     def error = "error occurred"
 
     def notifyBatchErrorRequest = NotifyBatchErrorRequest.newBuilder()
-        .setBatchId(batchId)
+        .setBatchId(id)
         .setErrorDescription(error)
         .build()
 
@@ -71,7 +78,8 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
     then:
     noExceptionThrown()
 
-    def batch = batchRepository.findById(batchId)
+    def batch = batchRepository.findById(id)
+
     with(batch) {
       isPresent()
       with(get()) {
@@ -80,6 +88,16 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
         errorDescription() == error
         alertsCount() == 0
       }
+    }
+
+    and: "Batch Error event has been published"
+
+    def messageBatchError = (MessageBatchError) rabbitTemplate
+        .receiveAndConvert(NotifyBatchErrorFlowRabbitMqTestConfig.TEST_QUEUE_NAME, 10000L)
+
+    with(messageBatchError) {
+      batchId == id
+      errorDescription == error
     }
   }
 }
