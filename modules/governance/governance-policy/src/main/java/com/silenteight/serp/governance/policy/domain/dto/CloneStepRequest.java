@@ -1,36 +1,42 @@
-package com.silenteight.serp.governance.changerequest.domain;
+package com.silenteight.serp.governance.policy.domain.dto;
 
-import lombok.Builder;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.serp.governance.common.audit.AuditableRequest;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import static java.sql.Timestamp.from;
 import static java.util.UUID.randomUUID;
 
+@RequiredArgsConstructor(staticName = "of")
 @Value
-@Builder
-public class AddChangeRequestRequest implements AuditableRequest {
-
-  public static final String PRE_AUDIT_TYPE = "CreateChangeRequestRequested";
-  public static final String POST_AUDIT_TYPE = "ChangeRequestCreated";
+public class CloneStepRequest implements AuditableRequest {
 
   @NonNull
   UUID correlationId;
   @NonNull
-  UUID changeRequestId;
+  UUID newStepId;
   @NonNull
-  String modelName;
+  UUID baseStepId;
+  @NonNull
+  UUID policyId;
   @NonNull
   String createdBy;
-  @NonNull
-  String creatorComment;
+
+  public static final String PRE_AUDIT_TYPE = "CloneStepRequestRequested";
+  public static final String POST_AUDIT_TYPE = "CloneStepRequestCreated";
+
+  public static CloneStepRequest of(
+      UUID stepId, UUID baseStepId, UUID policyId, String createdBy) {
+
+    return CloneStepRequest.of(randomUUID(), stepId, baseStepId, policyId, createdBy);
+  }
 
   @Override
   public void preAudit(Consumer<AuditDataDto> logger) {
@@ -47,11 +53,11 @@ public class AddChangeRequestRequest implements AuditableRequest {
         .builder()
         .correlationId(correlationId)
         .eventId(randomUUID())
-        .timestamp(Timestamp.from(Instant.now()))
+        .timestamp(from(Instant.now()))
         .type(type)
-        .entityId(changeRequestId.toString())
-        .entityClass("ChangeRequest")
-        .entityAction("CREATE")
+        .entityId(newStepId.toString())
+        .entityClass("Step")
+        .entityAction("CLONE")
         .details(toString())
         .principal(createdBy)
         .build();

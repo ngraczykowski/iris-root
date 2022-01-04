@@ -53,11 +53,11 @@ public class UpdateDecisionRequest implements AuditableRequest {
         .correlationId(correlationId)
         .eventId(randomUUID())
         .timestamp(Timestamp.from(Instant.now()))
-        .type(this.getClass().getSimpleName())
+        .type(getClass().getSimpleName())
         .entityId(alertName)
         .entityClass(entityClass)
         .entityAction(actionType.toString())
-        .details(this.toString())
+        .details(toString())
         .principal(createdBy)
         .build();
   }

@@ -55,7 +55,7 @@ public class ClonePolicyRequest implements AuditableRequest {
         .entityId(policyId.toString())
         .entityClass("Policy")
         .entityAction("CLONE")
-        .details(this.toString())
+        .details(toString())
         .principal(createdBy)
         .build();
   }

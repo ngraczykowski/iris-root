@@ -75,4 +75,15 @@ class FeatureLogic extends BaseEntity {
         .map(MatchCondition::toTransferredDto)
         .collect(toList());
   }
+
+  FeatureLogic cloneFeatureLogic() {
+    return new FeatureLogic(getCount(), cloneFeatures(getFeatures()));
+  }
+
+  private Collection<MatchCondition> cloneFeatures(Collection<MatchCondition> features) {
+    return features
+        .stream()
+        .map(MatchCondition::cloneMatchCondition)
+        .collect(toList());
+  }
 }

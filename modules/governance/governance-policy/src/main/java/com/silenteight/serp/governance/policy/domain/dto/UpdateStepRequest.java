@@ -48,11 +48,11 @@ public class UpdateStepRequest implements AuditableRequest {
         .correlationId(correlationId)
         .eventId(randomUUID())
         .timestamp(Timestamp.from(Instant.now()))
-        .type(this.getClass().getSimpleName())
+        .type(getClass().getSimpleName())
         .entityId(stepId.toString())
         .entityClass("Step")
         .entityAction("UPDATE")
-        .details(this.toString())
+        .details(toString())
         .principal(updatedBy)
         .build();
   }

@@ -72,4 +72,8 @@ class MatchCondition extends BaseEntity {
     dto.setValues(new ArrayList<>(getValues()));
     return dto;
   }
+
+  MatchCondition cloneMatchCondition() {
+    return new MatchCondition(getName(), getCondition(), getValues());
+  }
 }

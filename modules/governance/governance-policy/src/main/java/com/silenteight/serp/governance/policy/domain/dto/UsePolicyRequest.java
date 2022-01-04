@@ -49,7 +49,7 @@ public class UsePolicyRequest {
         .entityId(policyId.toString())
         .entityClass("Policy")
         .entityAction("UPDATE")
-        .details(this.toString())
+        .details(toString())
         .principal(activatedBy)
         .build();
   }

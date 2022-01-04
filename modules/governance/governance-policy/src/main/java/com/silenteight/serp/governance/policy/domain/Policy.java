@@ -104,7 +104,7 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
       @NonNull String editedBy) {
 
     assertEditState();
-    
+
     Step step = steps
         .stream()
         .filter(s -> s.hasStepId(stepId))
@@ -202,6 +202,14 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
     setUpdatedBy(user);
   }
 
+  public Policy clonePolicy(UUID policyId, String createdBy) {
+    return new Policy(
+        policyId,
+        getName(),
+        getDescription(),
+        createdBy);
+  }
+
   private void assertSameSize(List<UUID> requestedOrder) {
     long dbStepsSize = getSteps().size();
     int requestStepsSize = requestedOrder.size();
@@ -236,13 +244,13 @@ class Policy extends BaseAggregateRoot implements IdentifiableEntity {
     int maxSortOrderNarrow = 0;
     for (Step step : steps) {
       if (step.isNarrowStep())
-        maxSortOrderNarrow =  max(step.getSortOrder(), maxSortOrderNarrow);
+        maxSortOrderNarrow = max(step.getSortOrder(), maxSortOrderNarrow);
       else
         minSortOrderRegular = min(step.getSortOrder(), minSortOrderRegular);
     }
 
     if (maxSortOrderNarrow > minSortOrderRegular)
-        throw new NarrowStepsOrderHierarchyMismatch(policyId);
+      throw new NarrowStepsOrderHierarchyMismatch(policyId);
   }
 
   TransferredPolicyRootDto toTransferablePolicyRootDto() {

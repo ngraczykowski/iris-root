@@ -9,7 +9,6 @@ import com.silenteight.serp.governance.policy.domain.exception.WrongBasePolicyEx
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -26,10 +25,11 @@ import static org.springframework.http.HttpStatus.ACCEPTED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
-@Import({ ClonePolicyRestController.class,
-          ClonePolicyConfiguration.class,
-          GenericExceptionControllerAdvice.class,
-          ClonePolicyControllerAdvice.class })
+@Import({
+    ClonePolicyRestController.class,
+    ClonePolicyConfiguration.class,
+    GenericExceptionControllerAdvice.class,
+    ClonePolicyControllerAdvice.class })
 class ClonePolicyRestControllerTest extends BaseRestControllerTest {
 
   private static final String CLONE_POLICY_URL = "/v1/policies/%s/clone/policies/%s";
@@ -64,9 +64,9 @@ class ClonePolicyRestControllerTest extends BaseRestControllerTest {
 
   @Test
   @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
-  void its422_whenPolicyIdAlreadyExists() {
+  void its422_whenBasePolicyNotExists() {
     WrongBasePolicyException exception = new WrongBasePolicyException(POLICY_ID);
-    Mockito.when(policyService.clonePolicy(any())).thenThrow(exception);
+    when(policyService.clonePolicy(any())).thenThrow(exception);
     post(String.format(CLONE_POLICY_URL, POLICY_ID, POLICY_ID_CLONED))
         .contentType(anything())
         .statusCode(UNPROCESSABLE_ENTITY.value())

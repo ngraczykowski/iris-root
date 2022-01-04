@@ -51,11 +51,11 @@ public class CreateDecisionRequest implements AuditableRequest {
         .correlationId(correlationId)
         .eventId(randomUUID())
         .timestamp(from(now()))
-        .type(this.getClass().getSimpleName())
+        .type(getClass().getSimpleName())
         .entityId(alertName)
         .entityClass(entityClass)
         .entityAction(actionType.toString())
-        .details(this.toString())
+        .details(toString())
         .principal(createdBy)
         .build();
   }
