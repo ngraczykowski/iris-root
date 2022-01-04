@@ -7,7 +7,9 @@ import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDataRequest;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
+import com.silenteight.warehouse.indexer.query.streaming.FetchDataRequest;
 import com.silenteight.warehouse.report.metrics.generation.dto.CsvReportContentDto;
+import com.silenteight.warehouse.report.reporting.ReportGenerationService;
 import com.silenteight.warehouse.report.reporting.ColumnPropertiesWithValues;
 import com.silenteight.warehouse.report.reporting.GroupingColumnPropertiesWithPatterns;
 import com.silenteight.warehouse.report.reporting.PropertiesDefinition;
@@ -37,6 +39,8 @@ public class MetricsReportGenerationService {
 
   @NonNull
   private final GroupingQueryService groupingQueryService;
+  @NonNull
+  private final ReportGenerationService reportGenerationService;
 
   public CsvReportContentDto generateReport(
       @NonNull OffsetDateTime from,
@@ -46,6 +50,25 @@ public class MetricsReportGenerationService {
 
     FetchGroupedDataResponse rawData = fetchRawData(from, to, indexes, properties);
     return CsvReportContentDto.of(getLabelsRow(properties), transpose(rawData, properties));
+  }
+
+  public void generateReport(
+      @NonNull OffsetDateTime from,
+      @NonNull OffsetDateTime to,
+      @NonNull @Valid PropertiesDefinition properties,
+      @NonNull String fileStorageName) {
+
+    FetchDataRequest request = FetchDataRequest
+        .builder()
+        .from(from)
+        .to(to)
+        .name(fileStorageName)
+        .useSqlReports(properties.isUseSqlReports())
+        .selectSqlQuery(properties.getSelectSqlQuery())
+        .sqlTemplates(properties.getSqlTemplates())
+        .build();
+
+    reportGenerationService.generate(request);
   }
 
   private FetchGroupedDataResponse fetchRawData(

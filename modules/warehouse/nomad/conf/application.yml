@@ -457,6 +457,53 @@ warehouse.report.billing:
 
 warehouse.report.metrics:
   production:
+    selectSqlQuery: >
+      WITH main AS (
+          SELECT payload ->> 'lob_country'                country,
+                 payload ->> 'categories/hitType'         hit_type,
+                 payload ->> 's8_recommendation'          recommendation,
+                 payload ->> 'analyst_decision'           analyst_decision,
+                 payload ->> 'qa.level-0.state'           qa_decision,
+                 payload ->> 'DN_CASE.ExtendedAttribute5' risk_type,
+                 recommendation_date date
+          FROM warehouse_alert
+          WHERE payload ->> 'status' = 'LEARNING_COMPLETED'
+                AND date BETWEEN DATE '${from}' AND DATE '${to}
+          GROUP BY payload ->> 'lob_country', payload ->> 'categories/hitType',
+                   payload ->> 's8_recommendation', payload ->> 'analyst_decision',
+                   payload ->> 'qa.level-0.state', payload ->> 'DN_CASE.ExtendedAttribute5',
+                   date
+      ),
+           grouped AS (
+               SELECT main.country                                          g_country,
+                      main.hit_type                                         g_hit_type,
+                      main.risk_type                                        g_risk_type,
+                      TO_CHAR(main.date, 'YYYY-MM')                         g_date,
+                      COUNT(*)                                              g_total,
+                      COUNT(*)
+                      FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE') g_total_true_positive,
+                      COUNT(*)
+                      FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE') g_total_false_positive,
+                      SUM(CASE 
+                              WHEN (recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE' AND analyst_decision = 'analyst_decision_unknown')
+                              THEN 1 ELSE 0 END) g_total_match_analyst,
+                      SUM(CASE 
+                              WHEN (recommendation = 'ACTION_FALSE_POSITIVE' AND qa_decision = 'qa_decision_FAILED')
+                              THEN 1 ELSE 0 END) g_total_match_qa
+               FROM main
+               GROUP BY 1, 2, 3, 4
+           )
+      
+      SELECT g_date,
+             g_country,
+             g_risk_type,
+             g_hit_type,
+             ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) / GREATEST(g_total, 1)) * 100,3) Efficiency,
+             ROUND((g_total_match_analyst::decimal / GREATEST(g_total_false_positive::decimal, 1)) * 100, 3) PTP Effectiveness,
+             ROUND((g_total_match_qa::decimal / GREATEST(g_total_false_positive::decimal, 1)) * 100, 3) FP Effectiveness
+      FROM grouped
+      ORDER BY g_date;
+    useSqlReports: true
     date-field:
       name: alert_recommendationDate
       label: Date
@@ -491,6 +538,53 @@ warehouse.report.metrics:
       label: FP Effectiveness
 
   simulation:
+    selectSqlQuery: >
+      WITH main AS (
+          SELECT payload ->> 'lob_country'                country,
+                 payload ->> 'categories/hitType'         hit_type,
+                 payload ->> 's8_recommendation'          recommendation,
+                 payload ->> 'analyst_decision'           analyst_decision,
+                 payload ->> 'qa.level-0.state'           qa_decision,
+                 payload ->> 'DN_CASE.ExtendedAttribute5' risk_type,
+                 created_at date
+          FROM warehouse_simulation_alert
+          WHERE payload ->> 'status' = 'LEARNING_COMPLETED'
+                AND date BETWEEN DATE '${from}' AND DATE '${to}
+          GROUP BY payload ->> 'lob_country', payload ->> 'categories/hitType',
+                   payload ->> 's8_recommendation', payload ->> 'analyst_decision',
+                   payload ->> 'qa.level-0.state', payload ->> 'DN_CASE.ExtendedAttribute5',
+                   date
+      ),
+           grouped AS (
+               SELECT main.country                                          g_country,
+                      main.hit_type                                         g_hit_type,
+                      main.risk_type                                        g_risk_type,
+                      TO_CHAR(main.date, 'YYYY-MM')                         g_date,
+                      COUNT(*)                                              g_total,
+                      COUNT(*)
+                      FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE') g_total_true_positive,
+                      COUNT(*)
+                      FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE') g_total_false_positive,
+                      SUM(CASE 
+                              WHEN (recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE' AND analyst_decision = 'analyst_decision_unknown')
+                              THEN 1 ELSE 0 END) g_total_match_analyst,
+                      SUM(CASE 
+                              WHEN (recommendation = 'ACTION_FALSE_POSITIVE' AND qa_decision = 'qa_decision_FAILED')
+                              THEN 1 ELSE 0 END) g_total_match_qa
+               FROM main
+               GROUP BY 1, 2, 3, 4
+           )
+      
+      SELECT g_date,
+             g_country,
+             g_risk_type,
+             g_hit_type,
+             ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) / GREATEST(g_total, 1)) * 100,3) Efficiency,
+             ROUND((g_total_match_analyst::decimal / GREATEST(g_total_false_positive::decimal, 1)) * 100, 3) PTP Effectiveness,
+             ROUND((g_total_match_qa::decimal / GREATEST(g_total_false_positive::decimal, 1)) * 100, 3) FP Effectiveness
+      FROM grouped
+      ORDER BY g_date;
+    useSqlReports: true
     date-field:
       name: index_timestamp
       label: Date

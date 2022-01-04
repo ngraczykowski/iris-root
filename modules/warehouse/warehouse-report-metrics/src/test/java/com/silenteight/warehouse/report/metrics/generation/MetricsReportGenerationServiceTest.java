@@ -4,6 +4,7 @@ import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 import com.silenteight.warehouse.report.metrics.generation.dto.CsvReportContentDto;
+import com.silenteight.warehouse.report.reporting.ReportGenerationService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,11 +30,14 @@ class MetricsReportGenerationServiceTest {
 
   @Mock
   private GroupingQueryService groupingQueryService;
+  @Mock
+  private ReportGenerationService reportGenerationService;
+
   private MetricsReportGenerationService underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new MetricsReportGenerationService(groupingQueryService);
+    underTest = new MetricsReportGenerationService(groupingQueryService, reportGenerationService);
   }
 
   @Test

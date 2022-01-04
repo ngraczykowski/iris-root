@@ -1,6 +1,7 @@
 package com.silenteight.warehouse.report.metrics.domain;
 
 import com.silenteight.warehouse.report.metrics.generation.MetricsReportGenerationService;
+import com.silenteight.warehouse.report.storage.ReportStorage;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -24,9 +25,13 @@ class MetricsReportConfiguration {
   @Bean
   AsyncMetricsReportGenerationService asyncMetricsReportGenerationService(
       MetricsReportRepository reportRepository,
-      MetricsReportGenerationService reportGenerationService) {
+      MetricsReportGenerationService reportGenerationService,
+      ReportStorage reportStorage) {
 
-    return new AsyncMetricsReportGenerationService(reportRepository, reportGenerationService);
+    return new AsyncMetricsReportGenerationService(
+        reportRepository,
+        reportGenerationService,
+        reportStorage);
   }
 
   @Bean

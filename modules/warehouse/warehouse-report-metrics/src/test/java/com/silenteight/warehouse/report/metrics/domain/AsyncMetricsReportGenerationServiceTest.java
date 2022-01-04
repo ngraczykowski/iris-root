@@ -3,6 +3,7 @@ package com.silenteight.warehouse.report.metrics.domain;
 import com.silenteight.warehouse.report.metrics.domain.exception.ReportGenerationException;
 import com.silenteight.warehouse.report.metrics.generation.MetricsReportGenerationService;
 import com.silenteight.warehouse.report.metrics.generation.dto.CsvReportContentDto;
+import com.silenteight.warehouse.report.storage.ReportStorage;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,11 +32,16 @@ class AsyncMetricsReportGenerationServiceTest {
 
   @Mock
   private MetricsReportGenerationService reportGenerationService;
+  @Mock
+  private ReportStorage reportStorage;
+
   private AsyncMetricsReportGenerationService underTest;
+
 
   @BeforeEach
   void setUp() {
-    underTest = new AsyncMetricsReportGenerationService(repository, reportGenerationService);
+    underTest =
+        new AsyncMetricsReportGenerationService(repository, reportGenerationService, reportStorage);
   }
 
   @Test
@@ -57,7 +63,6 @@ class AsyncMetricsReportGenerationServiceTest {
     // then
     metricsReport = repository.getById(metricsReport.getId());
     assertThat(metricsReport.getState()).isEqualTo(DONE);
-    assertThat(metricsReport.getData()).isEqualTo(REPORT_CONTENT.getReport());
   }
 
   @Test

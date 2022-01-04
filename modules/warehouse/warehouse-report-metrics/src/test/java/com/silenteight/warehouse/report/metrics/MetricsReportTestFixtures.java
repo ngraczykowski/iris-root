@@ -65,7 +65,7 @@ public final class MetricsReportTestFixtures {
   public static final ReportRange REPORT_RANGE = of(OFFSET_DATE_TIME_FROM, OFFSET_DATE_TIME_TO);
   public static final String TIMESTAMP = "16220093052132";
   public static final MetricsReportDto REPORT_DTO = MetricsReportDto.builder()
-      .content(REPORT_CONTENT)
+      .fileStorageName(REPORT_FILENAME)
       .range(REPORT_RANGE)
       .timestamp(TIMESTAMP)
       .build();

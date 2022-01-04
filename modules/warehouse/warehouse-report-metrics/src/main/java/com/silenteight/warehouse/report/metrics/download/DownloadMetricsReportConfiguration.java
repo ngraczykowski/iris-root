@@ -3,6 +3,7 @@ package com.silenteight.warehouse.report.metrics.download;
 import com.silenteight.sep.base.common.time.IsoUtcWithoutMillisDateFormatter;
 import com.silenteight.warehouse.report.metrics.domain.MetricsReportService;
 import com.silenteight.warehouse.report.name.ReportFileName;
+import com.silenteight.warehouse.report.storage.ReportStorage;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,22 +15,25 @@ class DownloadMetricsReportConfiguration {
   DownloadProductionMetricsReportUseCase downloadProductionMetricsReportUseCase(
       MetricsReportService reportService,
       MetricsReportDataQuery query,
-      ReportFileName productionReportFileNameService) {
+      ReportFileName productionReportFileNameService,
+      ReportStorage reportStorage) {
 
     return new DownloadProductionMetricsReportUseCase(
         query,
         reportService,
         productionReportFileNameService,
-        IsoUtcWithoutMillisDateFormatter.INSTANCE);
+        IsoUtcWithoutMillisDateFormatter.INSTANCE,
+        reportStorage);
   }
 
   @Bean
   DownloadSimulationMetricsReportUseCase downloadSimulationMetricsReportUseCase(
       MetricsReportService reportService,
       MetricsReportDataQuery query,
-      ReportFileName simulationReportFileNameService) {
+      ReportFileName simulationReportFileNameService,
+      ReportStorage reportStorage) {
 
     return new DownloadSimulationMetricsReportUseCase(
-        query, reportService, simulationReportFileNameService);
+        query, reportService, simulationReportFileNameService, reportStorage);
   }
 }

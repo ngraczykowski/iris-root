@@ -1,6 +1,7 @@
 package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder.Default;
 import lombok.Data;
 
 import com.silenteight.warehouse.indexer.query.common.QueryFilter;
@@ -54,6 +55,13 @@ public class PropertiesDefinition {
   @Valid
   @NotNull
   private LabelProperties fpEffectiveness;
+
+  @Default
+  private boolean useSqlReports = false;
+  @Nullable
+  private List<String> sqlTemplates;
+  @Nullable
+  private String selectSqlQuery;
 
   public List<String> getFields() {
     List<String> fields = getStaticFields();

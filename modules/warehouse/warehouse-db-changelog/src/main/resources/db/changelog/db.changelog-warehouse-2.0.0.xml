@@ -173,4 +173,12 @@
         constraintName="uq_warehouse_country_group_id_country"
         tableName="warehouse_country"/>
   </changeSet>
+
+  <changeSet id="warehouse-2.0.0-8" author="skociuba">
+    <addColumn tableName="warehouse_report_metrics">
+      <column name="file_storage_name" type="VARCHAR(64)"/>
+    </addColumn>
+    <dropColumn columnName="data" tableName="warehouse_report_metrics"/>
+  </changeSet>
+
 </databaseChangeLog>

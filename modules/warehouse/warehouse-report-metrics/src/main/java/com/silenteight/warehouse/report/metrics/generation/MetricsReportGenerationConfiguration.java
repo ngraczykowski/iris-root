@@ -1,6 +1,7 @@
 package com.silenteight.warehouse.report.metrics.generation;
 
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
+import com.silenteight.warehouse.report.reporting.ReportGenerationService;
 import com.silenteight.warehouse.report.reporting.ReportProperties;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -13,8 +14,9 @@ class MetricsReportGenerationConfiguration {
 
   @Bean
   MetricsReportGenerationService simulationMetricsReportGenerationService(
-      GroupingQueryService groupingQueryService) {
+      GroupingQueryService groupingQueryService,
+      ReportGenerationService reportGenerationService) {
 
-    return new MetricsReportGenerationService(groupingQueryService);
+    return new MetricsReportGenerationService(groupingQueryService, reportGenerationService);
   }
 }
