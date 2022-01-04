@@ -38,16 +38,22 @@ class AlertFacadeSpec extends Specification {
 
   def 'should get registered alerts'() {
     given:
+    def alertEntity = new AlertEntity("bulk-1")
+    alertEntity.setStatus(AlertStatus.LEARNING_COMPLETED)
     def alerts =
         Stream.of('AVIR126SCR5640LU259TEST0018:LU:GR-ESAN:2371395248263046 867ff30e589c42cfeb3c4997fd378a1a24826')
 
     when:
-    def result = underTest.getRegisteredAlerts(alerts)
+    def result = underTest.getRegisteredAlertsFromDb(alerts)
 
     then:
-    1 * repository.findByExternalIdInAndDiscriminatorInAndNameIsNotNull(_ as Collection) >>
-        Stream.of(new AlertEntity("bulk-1"))
-    result.size() == 1
+    1 * repository.findByNameIsNotNullAndStatusAndExternalIdInAndDiscriminatorIn(_ as Collection) >>
+        Stream.of(alertEntity)
+
+    with(result) {
+      size() == 1
+      first().status == AlertStatus.LEARNING_COMPLETED
+    }
   }
 
   def 'should re-process alerts'() {

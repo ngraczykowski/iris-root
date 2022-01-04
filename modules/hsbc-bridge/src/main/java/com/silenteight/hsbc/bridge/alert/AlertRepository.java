@@ -27,9 +27,10 @@ interface AlertRepository extends Repository<AlertEntity, Long> {
 
   @Modifying
   @Query("SELECT a FROM AlertEntity a\n"
-      + "WHERE (CONCAT(a.externalId, '_', a.discriminator)) IN (:idsWithDiscriminators)\n"
-      + "AND a.name IS NOT NULL")
-  Stream<AlertEntity> findByExternalIdInAndDiscriminatorInAndNameIsNotNull(
+      + "WHERE a.name IS NOT NULL "
+      + "AND a.status = 'LEARNING_COMPLETED' "
+      + "AND (CONCAT(a.externalId, '_', a.discriminator)) IN (:idsWithDiscriminators)\n")
+  Stream<AlertEntity> findByNameIsNotNullAndStatusAndExternalIdInAndDiscriminatorIn(
       Collection<String> idsWithDiscriminators);
 
   @Modifying

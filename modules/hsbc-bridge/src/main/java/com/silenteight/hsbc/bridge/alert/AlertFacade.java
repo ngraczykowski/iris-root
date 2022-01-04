@@ -42,20 +42,19 @@ public class AlertFacade implements Consumer<AlertDataComposite> {
   }
 
   @Transactional
-  public Collection<AlertEntity> getRegisteredAlerts(Stream<String> idsWithDiscriminators) {
+  public Collection<AlertEntity> getRegisteredAlertsFromDb(Stream<String> idsWithDiscriminators) {
     var registeredAlerts = new ArrayList<AlertEntity>();
     var counter = new AtomicInteger(0);
 
     StreamEx.of(idsWithDiscriminators)
         .groupRuns((prev, next) -> counter.incrementAndGet() % 1000 != 0)
-        .forEach(chunk ->
-            registeredAlerts.addAll(
-                repository.findByExternalIdInAndDiscriminatorInAndNameIsNotNull(chunk)
-                    .filter(
-                        StreamUtils.distinctBy(alert -> alert.getExternalId() + "_" + alert.getDiscriminator()))
-                    .collect(Collectors.toList())));
+        .forEach(chunk -> registeredAlerts.addAll(
+            repository.findByNameIsNotNullAndStatusAndExternalIdInAndDiscriminatorIn(chunk)
+                .collect(Collectors.toList())));
 
-    return registeredAlerts;
+    return registeredAlerts.stream()
+        .filter(StreamUtils.distinctBy(alert -> alert.getExternalId() + "_" + alert.getDiscriminator()))
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   @Override

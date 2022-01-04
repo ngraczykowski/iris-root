@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.hsbc.bridge.adjudication.AdjudicationFacade;
 import com.silenteight.hsbc.bridge.alert.AlertEntity;
 import com.silenteight.hsbc.bridge.alert.AlertFacade;
-import com.silenteight.hsbc.bridge.alert.AlertStatus;
 import com.silenteight.hsbc.bridge.alert.LearningAlertProcessor;
 import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 import com.silenteight.hsbc.bridge.match.MatchIdComposite;
@@ -15,7 +14,6 @@ import io.micrometer.core.annotation.Timed;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,31 +29,33 @@ class BulkProcessor {
   @Transactional
   @Timed(value = "bulk_processor_try_to_process_solving_bulk", histogram = true)
   public void tryToProcessSolvingBulk() {
-    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSING).ifPresent(bulk -> {
-      log.debug("Pre_Processing solving batch taken to process id: {}", bulk.getId());
-      try {
-        processSolvingBulk(bulk);
-      } catch (Exception exception) {
-        log.error("Solving batch processing failed!", exception);
-        bulk.error("Solving batch processing failed due to: " + exception.getMessage());
-      }
-      bulkRepository.save(bulk);
-    });
+    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSING)
+        .ifPresent(bulk -> {
+          log.debug("Pre_Processing solving batch taken to process id: {}", bulk.getId());
+          try {
+            processSolvingBulk(bulk);
+          } catch (Exception exception) {
+            log.error("Solving batch processing failed!", exception);
+            bulk.error("Solving batch processing failed due to: " + exception.getMessage());
+          }
+          bulkRepository.save(bulk);
+        });
   }
 
   @Transactional
   @Timed(value = "bulk_processor_try_to_process_learning_bulk", histogram = true)
   public void tryToProcessLearningBulk() {
-    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSING).ifPresent(bulk -> {
-      log.debug("Pre_Processing learning batch taken to process id: {}", bulk.getId());
-      try {
-        processLearningBulk(bulk);
-      } catch (Exception exception) {
-        log.error("Learning batch processing failed!", exception);
-        bulk.error("Learning batch processing failed due to: " + exception.getMessage());
-      }
-      bulkRepository.save(bulk);
-    });
+    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSING)
+        .ifPresent(bulk -> {
+          log.debug("Pre_Processing learning batch taken to process id: {}", bulk.getId());
+          try {
+            processLearningBulk(bulk);
+          } catch (Exception exception) {
+            log.error("Learning batch processing failed!", exception);
+            bulk.error("Learning batch processing failed due to: " + exception.getMessage());
+          }
+          bulkRepository.save(bulk);
+        });
   }
 
   private void processSolvingBulk(Bulk bulk) {
@@ -73,21 +73,29 @@ class BulkProcessor {
   private void processLearningBulk(Bulk bulk) {
     var alerts = bulk.getValidAlerts();
 
-    var registeredAlerts =
-        alertFacade.getRegisteredAlerts(toIdsWithDiscriminators(alerts));
+    var registeredAlertsFromDb =
+        alertFacade.getRegisteredAlertsFromDb(toIdsWithDiscriminators(alerts));
 
-    var unregisteredAlerts =
-        getUnregisteredAlerts(alerts, registeredAlerts);
+    var unregisteredAlertsFromBulk =
+        getUnregisteredAlerts(alerts, registeredAlertsFromDb);
+
+    var registeredAlertsFromBulk =
+        getRegisteredAlerts(alerts, unregisteredAlertsFromBulk);
 
     log.info(
-        "Picked up learning batch id: {}, with size of: {} registeredAlerts and {} unregisteredAlerts",
+        "Picked up learning batch id: {}, with size of: {} registeredAlerts in batch and {} unregisteredAlerts in batch and {} already registeredAlerts from DB",
         bulk.getId(),
-        registeredAlerts.size(),
-        unregisteredAlerts.size());
+        registeredAlertsFromBulk.size(),
+        unregisteredAlertsFromBulk.size(),
+        registeredAlertsFromDb.size()
+    );
 
-    register(unregisteredAlerts);
+    register(unregisteredAlertsFromBulk);
 
-    processLearningAlerts(alerts, unregisteredAlerts);
+    processLearningAlerts(
+        registeredAlertsFromBulk,
+        unregisteredAlertsFromBulk,
+        registeredAlertsFromDb);
 
     bulk.setStatus(BulkStatus.COMPLETED);
     log.info("Learning batch {} has been completed. Status set to COMPLETED", bulk.getId());
@@ -117,7 +125,7 @@ class BulkProcessor {
         .collect(Collectors.toList());
   }
 
-  private List<Long> getAlreadyRegisteredAlertIdsFromRequest(
+  private Collection<BulkAlertEntity> getRegisteredAlerts(
       Collection<BulkAlertEntity> alerts, Collection<BulkAlertEntity> unregisteredAlerts) {
     return alerts.stream()
         .filter(alert -> unregisteredAlerts.stream()
@@ -127,8 +135,6 @@ class BulkProcessor {
                     .equals(
                         concatIdWithDiscriminator(
                             alert.getExternalId(), alert.getDiscriminator()))))
-        .filter(alert -> alert.getStatus() != AlertStatus.ERROR)
-        .map(BulkAlertEntity::getId)
         .collect(Collectors.toList());
   }
 
@@ -151,16 +157,23 @@ class BulkProcessor {
   }
 
   private void processLearningAlerts(
-      Collection<BulkAlertEntity> alerts,
-      Collection<BulkAlertEntity> unregisteredAlerts) {
+      Collection<BulkAlertEntity> registeredAlertsFromBulk,
+      Collection<BulkAlertEntity> unregisteredAlertsFromBulk,
+      Collection<AlertEntity> registeredAlertsFromDb) {
 
-    var registeredIds =
-        getAlreadyRegisteredAlertIdsFromRequest(alerts, unregisteredAlerts);
+    var registeredAlertFromBulkIds =
+        registeredAlertsFromBulk.stream().map(BulkAlertEntity::getId).collect(Collectors.toList());
 
-    var unregisteredIds =
-        unregisteredAlerts.stream().map(BulkAlertEntity::getId).collect(Collectors.toList());
+    var unregisteredAlertFromBulkIds =
+        unregisteredAlertsFromBulk.stream().map(BulkAlertEntity::getId).collect(Collectors.toList());
 
-    learningAlertProcessor.process(registeredIds, unregisteredIds);
+    var registeredAlertFromDbIds =
+        registeredAlertsFromDb.stream().map(AlertEntity::getId).collect(Collectors.toList());
+
+    learningAlertProcessor.process(
+        registeredAlertFromBulkIds,
+        unregisteredAlertFromBulkIds,
+        registeredAlertFromDbIds);
   }
 
   private static Collection<MatchIdComposite> getMatchIds(

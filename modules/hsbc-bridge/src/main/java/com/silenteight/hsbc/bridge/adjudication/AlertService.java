@@ -42,9 +42,8 @@ class AlertService {
   }
 
   private List<AlertDto> registerAlerts(Collection<AlertMatchIdComposite> alertMatchIdComposites) {
-    List<Alert> alertsForCreation = alertMatchIdComposites.stream()
-        .map(a -> Alert
-            .newBuilder()
+    var alertsForCreation = alertMatchIdComposites.stream()
+        .map(a -> Alert.newBuilder()
             .setAlertId(a.getAlertExternalId())
             .setAlertTime(TimestampUtil.fromOffsetDateTime(a.getAlertTime()))
             .build())
@@ -80,8 +79,7 @@ class AlertService {
 
   private void publishUpdateAlertsWithNameEvent(
       List<AlertDto> alerts, Map<String, AlertMatchIdComposite> alertMatchIds) {
-    var alertIdsWithNames = alerts
-        .stream()
+    var alertIdsWithNames = alerts.stream()
         .map(a -> toAlertIdWithName(alertMatchIds, a))
         .collect(Collectors.toMap(AlertIdWithName::getAlertInternalId, AlertIdWithName::getName));
 
@@ -98,8 +96,7 @@ class AlertService {
   private void publishUpdateMatchesWithNameEvent(
       List<MatchWithAlert> registeredMatches,
       Map<String, AlertMatchIdComposite> alertIdsWithMatches) {
-    var matchIdsWithNames = registeredMatches
-        .stream()
+    var matchIdsWithNames = registeredMatches.stream()
         .map(a -> {
           var matchIds = alertIdsWithMatches.get(a.getAlertExternalId()).getMatchIds();
           return toMatchIdWithName(matchIds, a);
@@ -118,8 +115,7 @@ class AlertService {
 
   private long findMatchInternalIdByExternalId(
       Collection<MatchIdComposite> matchIds, String matchExternalId) {
-    return matchIds
-        .stream()
+    return matchIds.stream()
         .filter(m -> m.getExternalId().equals(matchExternalId))
         .map(MatchIdComposite::getInternalId)
         .findFirst()

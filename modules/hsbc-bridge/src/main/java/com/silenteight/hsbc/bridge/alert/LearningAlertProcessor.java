@@ -30,18 +30,18 @@ public class LearningAlertProcessor {
 
   @Transactional
   public void process(
-      @NonNull Collection<Long> registeredIds,
-      @NonNull Collection<Long> unregisteredIds) {
+      @NonNull Collection<Long> registeredAlertIds,
+      @NonNull Collection<Long> unregisteredAlertIds,
+      @NonNull Collection<Long> registeredAlertFromDbIds) {
     log.info(
-        "Processing learning alerts, registered size={}, unregistered size={}, all size={}",
-        registeredIds.size(), unregisteredIds.size(),
-        registeredIds.size() + unregisteredIds.size());
+        "Processing learning alerts, registered from batch size={}, unregistered from batch size={}, registered from DB size={}",
+        registeredAlertIds.size(), unregisteredAlertIds.size(), registeredAlertFromDbIds.size());
 
-    updateLearningAlertsAlreadyInDb(registeredIds);
-    updateLearningAlertsCompleted(unregisteredIds);
+    updateLearningAlertsAlreadyInDb(registeredAlertIds);
+    updateLearningAlertsCompleted(unregisteredAlertIds);
 
     var alertIds =
-        Stream.concat(registeredIds.stream(), unregisteredIds.stream()).collect(Collectors.toList());
+        concatAlertIds(registeredAlertIds, unregisteredAlertIds, registeredAlertFromDbIds);
 
     var updatedAlerts = repository.findByIdIn(alertIds);
 
@@ -62,6 +62,15 @@ public class LearningAlertProcessor {
           a.setStatus(AlertStatus.LEARNING_REGISTERED_IN_DB);
           repository.save(a);
         });
+  }
+
+  private List<Long> concatAlertIds(
+      Collection<Long> registeredAlertIds,
+      Collection<Long> unregisteredAlertIds,
+      Collection<Long> registeredAlertFromDbIds) {
+    return (!registeredAlertFromDbIds.isEmpty()) ?
+           Stream.concat(registeredAlertFromDbIds.stream(), unregisteredAlertIds.stream()).collect(Collectors.toList()) :
+           Stream.concat(registeredAlertIds.stream(), unregisteredAlertIds.stream()).collect(Collectors.toList());
   }
 
   private void sendAlertsChunked(Stream<AlertEntity> alertEntities) {

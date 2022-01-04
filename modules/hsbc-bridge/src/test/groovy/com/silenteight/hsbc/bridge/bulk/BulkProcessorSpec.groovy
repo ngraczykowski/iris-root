@@ -34,9 +34,9 @@ class BulkProcessorSpec extends Specification {
     then:
     1 * bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSING) >>
         Optional.of(fixtures.learningBulk)
-    1 * alertFacade.getRegisteredAlerts(_ as Stream<String>) >> []
+    1 * alertFacade.getRegisteredAlertsFromDb(_ as Stream<String>) >> []
     0 * adjudicationFacade.registerAlertWithMatches(_ as Map)
-    1 * learningAlertProcessor.process(_ as Collection, _ as Collection)
+    1 * learningAlertProcessor.process(_ as Collection, _ as Collection, _ as Collection)
   }
 
   def 'should process solving bulk'() {
