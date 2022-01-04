@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: User Management
   description: User Management API
-  version: 1.0.0
+  version: 1.1.0
 
 servers:
   - url: '{environment}/rest/webapp/api/{version}'
@@ -12,13 +12,9 @@ servers:
           - http://localhost:24204
           - https://localhost:24111
         default: http://localhost:24160
-      version:
-        enum:
-          - v1
-        default: v1
 
 paths:
-  /users:
+  /v1/users:
     get:
       description: Get list of users.
       parameters:
@@ -33,7 +29,7 @@ paths:
             items:
               type: string
               format: uuid
-            example: [c4f5577a-d3d3-4b94-9dee-736d7e97ac6e, c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b]
+            example: [ c4f5577a-d3d3-4b94-9dee-736d7e97ac6e, c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b ]
       responses:
         200:
           description: A list users
@@ -53,7 +49,7 @@ paths:
         201:
           description: Created.
 
-  /users/{username}:
+  /v1/users/{username}:
     parameters:
       - in: path
         name: username
@@ -89,7 +85,7 @@ paths:
         204:
           description: User removed.
 
-  /users/{username}/password/reset:
+  /v1/users/{username}/password/reset:
     patch:
       description: Reset user password.
       parameters:
@@ -112,8 +108,11 @@ paths:
                     type: string
                     example: TfP5ATaZRpYe2p
 
-  /roles:
+  /v1/roles:
     get:
+      deprecated: true
+      tags:
+        - roles
       description: List of available roles.
       responses:
         200:
@@ -124,30 +123,160 @@ paths:
                 type: object
                 items:
                   type: string
-                example: ["Administrator", "Analyst", "Approver", "Auditor", "Business Operator"]
+                example: [ "Administrator", "Analyst", "Approver", "Auditor", "Business Operator" ]
 
+  /v2/roles:
+    get:
+      tags:
+        - roles
+      description: List of available roles.
+      responses:
+        200:
+          description: List of available roles.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleDto'
+    post:
+      tags:
+        - roles
+      description: Create new role
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRoleRequest'
+      responses:
+        201:
+          description: Created
+    patch:
+      tags:
+        - roles
+      description: Edit role
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Role Id'
+          example: '1944820f-621d-4e2c-a6db-94c3e214df6b'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditRoleRequest'
+      responses:
+        200:
+          description: Saved
 
-  /users/pageable:
+  /v2/roles/{id}:
+    get:
+      tags:
+        - roles
+      description: Returns a role details
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Role id'
+          example: '2eb233aa-5434-468f-8dec-6dcdb0146c4c'
+      responses:
+        200:
+          description: Role details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleDto'
+    delete:
+      tags:
+        - roles
+      description: Remove role.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Role id'
+          example: '2dcb085b-2de7-4bce-b402-59cda2e007cc'
+      responses:
+        204:
+          description: Role removed.
+        422:
+          description: Role can't be removed because it has assigned users.
+
+  /v2/roles/{id}/premissions:
+    get:
+      tags:
+        - roles
+      description: Return list of permission assigned to role
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Role id'
+          example: '2dcb085b-2de7-4bce-b402-59cda2e007cc'
+      responses:
+        200:
+          description: List of permissions assigned to role
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PermissionDto'
+    put:
+      tags:
+        - roles
+      description: Update role with permissions.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: 'Role id'
+          example: '2dcb085b-2de7-4bce-b402-59cda2e007cc'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+            example: [ '1cc1e744-de09-4c5a-a5b5-35a02cc56381', 'b07e57c5-51b1-4650-9273-28e226866b10' ]
+      responses:
+        202:
+          description: OK
+
+  /v1/users/pageable:
     get:
       description: Deprecated yet used api.
       parameters:
-      - in: query
-        name: page
-        required: true
-        description: Page.
-        schema:
-          type: integer
-          minimum: 0
-        example: 0
-      - in: query
-        name: size
-        required: true
-        description: Page size
-        schema:
-          type: integer
-          minimum: 1
-          maximum: 10000
-        example: 9999
+        - in: query
+          name: page
+          required: true
+          description: Page.
+          schema:
+            type: integer
+            minimum: 0
+          example: 0
+        - in: query
+          name: size
+          required: true
+          description: Page size
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10000
+          example: 9999
       responses:
         '200':
           description: A list users
@@ -155,6 +284,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UsersPageable'
+
+  /permissions:
+    get:
+      tags:
+        - permissions
+      description: Return list of permission groups
+      responses:
+        200:
+          description: List of permission groups.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PermissionDto'
 
 components:
   schemas:
@@ -173,13 +317,13 @@ components:
             type: array
             items:
               type: string
-            example: ["Administrator", "Analyst", "Approver", "Auditor", "Business Operator"]
+            example: [ "Administrator", "Analyst", "Approver", "Auditor", "Business Operator" ]
           countryGroups:
             type: array
             items:
               type: string
               format: uuid
-            example: ["c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b"]
+            example: [ "c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b" ]
           lockedAt:
             type: string
             example: 2021-02-16T15:15:15.263Z
@@ -197,13 +341,13 @@ components:
           type: array
           items:
             type: string
-          example: ["Administrator", "Analyst", "Approver", "Auditor", "Business Operator"]
+          example: [ "Administrator", "Analyst", "Approver", "Auditor", "Business Operator" ]
         countryGroups:
           type: array
           items:
             type: string
             format: uuid
-          example: ["c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b"]
+          example: [ "c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b" ]
         lastLoginAt:
           type: string
           example: 2021-02-16T15:15:15.263Z
@@ -215,7 +359,6 @@ components:
           example: 2021-02-16T15:15:15.263Z
         origin:
           type: string
-
 
     CreateUser:
       type: object
@@ -239,7 +382,7 @@ components:
           items:
             type: string
             format: uuid
-          example: ["c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b"]
+          example: [ "c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b" ]
 
     EditUser:
       type: object
@@ -259,7 +402,7 @@ components:
           items:
             type: string
             format: uuid
-          example: ["c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b"]
+          example: [ "c4f5577a-d3d3-4b94-9dee-736d7e97ac6e", "c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b" ]
         locked:
           type: boolean
           example: false
@@ -312,3 +455,76 @@ components:
           "size": 2000,
           "empty": false
         }
+
+    CreateRoleRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        name: 'New role name'
+        description: 'New role description'
+
+    EditRoleRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        name: 'Role new name'
+        description: 'Role new description'
+
+    RoleDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        state:
+          $ref: '#/components/schemas/RoleState'
+        updatedAt:
+          type: string
+        createdAt:
+          type: string
+        createdBy:
+          type: string
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        name: 'Role name'
+        description: 'Role description'
+        updatedAt: '2004-02-13T09:19:21Z'
+        createdAt: '2004-02-12T15:09:21Z'
+        createdBy: 'UserName'
+
+    PermissionDto:
+      type: object
+      properties:
+        id:
+          type: string
+        group:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+      example:
+        id: 'ebfd0874-2816-4a4a-b361-43a7e7b2dbff'
+        group: 'Governance'
+        name: 'Import policy'
+        description: 'Permission that lets user to import policy'
+
+    RoleState:
+      type: string
+      enum: [ INACTIVE, IN_USE, ARCHIVED ]
+
