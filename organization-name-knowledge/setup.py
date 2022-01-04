@@ -26,7 +26,10 @@ setup(
     package_data={"organization_name_knowledge": ["resources/*"]},
     install_requires=[
         # Keep sorted alphabetically (case-insensitive)
+        "fastapi==0.70.0",
+        "requests==2.26.0",
         "unidecode==1.2.0",
+        "uvicorn==0.15.0"
     ],
     extras_require={
         "tests": tests_require,
