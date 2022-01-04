@@ -17,7 +17,7 @@ app.include_router(router, prefix="/organization_name_knowledge")
 def main():
     parser = argparse.ArgumentParser(description="Organization name knowledge agent")
     parser.add_argument(
-        "--port", type=int, default=9090, help="Port on which service is to be available"
+        "--port", type=int, default=5000, help="Port on which service is to be available"
     )
     args = parser.parse_args()
     uvicorn.run(app, host="0.0.0.0", port=args.port)
