@@ -32,6 +32,12 @@ public class AlertDetails {
 
   String messageId;
 
+  String fkcoVContent;
+
+  String fkcoVApplication;
+
+  String fkcoVFormat;
+
   public FindRegisteredAlertRequest toFindRegisterAlertRequest() {
     return FindRegisteredAlertRequest.builder().messageId(messageId).systemId(systemId).build();
   }

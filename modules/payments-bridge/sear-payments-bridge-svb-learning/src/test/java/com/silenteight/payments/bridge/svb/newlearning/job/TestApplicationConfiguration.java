@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.svb.newlearning.job;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
+import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
 import com.silenteight.payments.bridge.svb.learning.reader.port.FindRegisteredAlertPort;
 
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -30,5 +31,10 @@ public class TestApplicationConfiguration {
   @Bean
   RegisterAlertUseCase registerAlertUseCase() {
     return new RegisterAlertUseCaseMock();
+  }
+
+  @Bean
+  MessageParserUseCase messageParserUseCase() {
+    return new MessageParserMock();
   }
 }

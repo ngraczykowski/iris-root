@@ -24,8 +24,7 @@ class HitCompositeFetcher extends BaseCompositeFetcher<List<Long>, Map<Long, Lis
 
   @Language("PostgreSQL")
   private static final String HITS_QUERY =
-      "SELECT fkco_messages, learning_hit_id, fkco_v_matched_tag, "
-          + "fkco_i_sequence, fkco_v_list_fmm_id\n"
+      "SELECT *\n"
           + "FROM pb_learning_hit\n"
           + "WHERE fkco_messages IN (%s)";
 

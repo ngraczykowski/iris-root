@@ -7,7 +7,7 @@ import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import org.springframework.stereotype.Component;
 
 @Component
-class MessageParserService implements MessageParserUseCase {
+class MessageParserFacade implements MessageParserUseCase {
 
   @Override
   public MessageData parse(MessageFormat messageFormat, String message) {

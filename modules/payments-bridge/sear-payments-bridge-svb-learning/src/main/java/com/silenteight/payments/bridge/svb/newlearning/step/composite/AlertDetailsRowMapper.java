@@ -17,6 +17,9 @@ class AlertDetailsRowMapper {
         .systemId(resultSet.getString("fkco_v_system_id"))
         .fkcoDFilteredDateTime(
             getOffsetDateTime(timeZone, resultSet.getTimestamp("fkco_d_filtered_datetime")))
+        .fkcoVContent(resultSet.getString("fkco_v_content"))
+        .fkcoVFormat(resultSet.getString("fkco_v_format"))
+        .fkcoVApplication(resultSet.getString("fkco_v_application"))
         .build();
   }
 }
