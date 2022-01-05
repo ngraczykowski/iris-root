@@ -45,3 +45,6 @@ class Token:
 
     def __bool__(self) -> bool:
         return bool(self.cleaned)
+
+    def dict(self):
+        return self.__dict__

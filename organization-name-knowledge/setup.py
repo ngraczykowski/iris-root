@@ -29,7 +29,7 @@ setup(
         "fastapi==0.70.0",
         "requests==2.26.0",
         "unidecode==1.2.0",
-        "uvicorn==0.15.0"
+        "uvicorn==0.15.0",
     ],
     extras_require={
         "tests": tests_require,

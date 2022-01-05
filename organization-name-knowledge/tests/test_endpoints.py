@@ -23,9 +23,9 @@ def test_parse(name, expected):
     response = CLIENT.request("GET", f"/organization_name_knowledge/parse/{name}")
     assert response.status_code == 200
     result = response.json()
-    assert expected["source"] == result["source"]
-    assert expected["base"] == result["base"]
-    assert expected["legal"] == result["legal"]
+    assert result["source"]["original"] == expected["source"]
+    assert result["base"]["original_name"] == expected["base"]
+    assert result["legal"]["original_name"] == expected["legal"]
 
 
 @pytest.mark.parametrize(
@@ -45,8 +45,8 @@ def test_parse_freetext(freetext, expected_results):
     results = response.json()
     assert len(results) == len(expected_results)
     for expected, result in zip(expected_results, results):
-        assert result["base"] == expected["base"]
-        assert result["legal"] == expected["legal"]
+        assert result["base"]["original_name"] == expected["base"]
+        assert result["legal"]["original_name"] == expected["legal"]
 
 
 @pytest.mark.parametrize(

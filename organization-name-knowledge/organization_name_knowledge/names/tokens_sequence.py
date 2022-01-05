@@ -41,3 +41,11 @@ class TokensSequence(collections.UserList):
 
     def __bool__(self) -> bool:
         return any(self.data)
+
+    def dict(self):
+        return {
+            "cleaned_name": self.cleaned_name,
+            "original_name": self.original_name,
+            "cleaned_tuple": self.cleaned_tuple,
+            "original_tuple": self.original_tuple,
+        }

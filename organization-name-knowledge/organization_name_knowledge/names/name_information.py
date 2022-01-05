@@ -63,3 +63,7 @@ class NameInformation:
 
     def __hash__(self):
         return hash(self.source)
+
+    def dict(self):
+        d = {field: self.__getattribute__(field).dict() for field in vars(self)}
+        return d
