@@ -10,7 +10,7 @@ import com.silenteight.governance.api.library.v1.model.SolvingModelOut;
 import java.util.List;
 
 @Slf4j
-public class ModelServiceClientMock implements ModelServiceClient {
+class ModelServiceClientMock implements ModelServiceClient {
 
   @Override
   public SolvingModelOut getSolvingModel() {

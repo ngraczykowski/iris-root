@@ -1,11 +1,11 @@
 package com.silenteight.bridge.core.registration
 
 import com.silenteight.bridge.core.BaseSpecificationIT
+import com.silenteight.bridge.core.registration.domain.model.Alert.Status
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
+import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
-import com.silenteight.proto.registration.api.v1.MessageBatchError
-import com.silenteight.proto.registration.api.v1.NotifyBatchErrorRequest
-import com.silenteight.proto.registration.api.v1.RegisterBatchRequest
+import com.silenteight.proto.registration.api.v1.*
 import com.silenteight.proto.registration.api.v1.RegistrationServiceGrpc.RegistrationServiceBlockingStub
 
 import net.devh.boot.grpc.client.inject.GrpcClient
@@ -32,6 +32,9 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
 
   @Autowired
   private BatchRepository batchRepository
+
+  @Autowired
+  private AlertRepository alertRepository
 
   @GrpcClient("inProcess")
   private RegistrationServiceBlockingStub myService
@@ -110,6 +113,49 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
       batchId == id
       errorDescription == error
       batchMetadata == metadata
+    }
+  }
+
+  def "Should register alerts with matches"() {
+    given:
+    def batchIdInput = UUID.randomUUID().toString()
+    def alertIdInput = UUID.randomUUID().toString()
+    def matchIdInput = UUID.randomUUID().toString()
+
+    def matchesInput = [
+        Match.newBuilder()
+            .setMatchId(matchIdInput)
+            .build()
+    ]
+
+    def alertsWithMatches = [
+        AlertWithMatches.newBuilder()
+            .setAlertId(alertIdInput)
+            .setStatus(AlertStatus.SUCCESS)
+            .addAllMatches(matchesInput)
+            .build()
+    ]
+
+    def registerAlertsAndMatchesRequest = RegisterAlertsAndMatchesRequest.newBuilder()
+        .setBatchId(batchIdInput)
+        .addAllAlertsWithMatches(alertsWithMatches)
+        .build()
+
+    when:
+    myService.registerAlertsAndMatches(registerAlertsAndMatchesRequest)
+
+    then:
+    noExceptionThrown()
+
+    def alert = alertRepository.findByBatchIdAndAlertIdIn(batchIdInput, [alertIdInput])
+
+    with(alert.first()) {
+      !name().empty
+      status() == Status.REGISTERED
+      alertId() == alertIdInput
+      batchId() == batchIdInput
+      matches().first().matchId() == matchIdInput
+      !matches().first().name().empty
     }
   }
 }

@@ -1,14 +1,18 @@
 databaseChangeLog:
   - changeSet:
       id: 1.0.0-1
-      author: awojcicki
+      author: apozorski
       preConditions:
         - onFail: MARK_RAN
           not:
             - tableExists:
                 tableName: batches
             - tableExists:
+                tableName: recommendations
+            - tableExists:
                 tableName: alerts
+            - tableExists:
+                tableName: matches
       changes:
         - createTable:
             tableName: batches
@@ -107,3 +111,97 @@ databaseChangeLog:
             constraintName: unique_recommendation_constraint
             tableName: recommendations
 
+        - createTable:
+            tableName: alerts
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: alert_pkey
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+                    unique: true
+              - column:
+                  name: alert_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: batch_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: error_description
+                  type: VARCHAR(300)
+
+        - addUniqueConstraint:
+            columnNames: alert_id, batch_id
+            constraintName: alert_id_batch_id
+            tableName: alerts
+
+        - createTable:
+            tableName: matches
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: match_pkey
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+                    unique: true
+              - column:
+                  name: match_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: alert_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_alert_id
+                    references: alerts(id)
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: updated_at
+                  type: timestamp
+
+        - addUniqueConstraint:
+            columnNames: match_id, alert_id
+            constraintName: match_id_alert_id
+            tableName: matches

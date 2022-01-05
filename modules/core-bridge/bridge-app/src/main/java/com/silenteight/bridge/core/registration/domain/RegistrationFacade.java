@@ -13,6 +13,7 @@ import java.util.List;
 public class RegistrationFacade {
 
   private final BatchService batchService;
+  private final AlertService alertService;
   private final AlertAnalysisService alertAnalysisService;
 
   public BatchId register(RegisterBatchCommand registerBatchCommand) {
@@ -21,6 +22,10 @@ public class RegistrationFacade {
 
   public void notifyBatchError(NotifyBatchErrorCommand notifyBatchErrorCommand) {
     batchService.notifyBatchError(notifyBatchErrorCommand);
+  }
+
+  public void registerAlertsAndMatches(RegisterAlertsCommand registerAlertsCommand) {
+    alertService.registerAlertsAndMatches(registerAlertsCommand);
   }
 
   public void addAlertsToAnalysis(List<AddAlertToAnalysisCommand> addAlertToAnalysisCommands) {

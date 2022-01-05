@@ -2,8 +2,8 @@ package com.silenteight.bridge.core.registration.adapter.outgoing;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.bridge.core.registration.domain.port.outgoing.DefaultModel;
-import com.silenteight.bridge.core.registration.domain.port.outgoing.DefaultModelFeature;
+import com.silenteight.bridge.core.registration.domain.model.DefaultModel;
+import com.silenteight.bridge.core.registration.domain.model.DefaultModelFeature;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DefaultModelService;
 import com.silenteight.governance.api.library.v1.model.FeatureOut;
 import com.silenteight.governance.api.library.v1.model.GovernanceLibraryRuntimeException;

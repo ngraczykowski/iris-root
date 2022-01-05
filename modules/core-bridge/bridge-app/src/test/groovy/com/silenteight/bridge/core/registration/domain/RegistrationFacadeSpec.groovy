@@ -1,5 +1,6 @@
 package com.silenteight.bridge.core.registration.domain
 
+import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertWithMatches
 import com.silenteight.bridge.core.registration.domain.model.BatchId
 
 import spock.lang.Specification
@@ -8,10 +9,11 @@ import spock.lang.Subject
 class RegistrationFacadeSpec extends Specification {
 
   def batchService = Mock(BatchService)
+  def alertService = Mock(AlertService)
   def alertAnalysisService = Mock(AlertAnalysisService)
 
   @Subject
-  def underTest = new RegistrationFacade(batchService, alertAnalysisService)
+  def underTest = new RegistrationFacade(batchService, alertService, alertAnalysisService)
 
   def "should call register batch method"() {
     given:
@@ -39,6 +41,20 @@ class RegistrationFacadeSpec extends Specification {
 
     then:
     1 * batchService.notifyBatchError(notifyBatchErrorCommand)
+  }
+
+  def "should call register alerts and matches method"() {
+    given:
+    def registerAlertsCommand = new RegisterAlertsCommand(
+        'batch_id',
+        [AlertWithMatches.builder().build()]
+    )
+
+    when:
+    underTest.registerAlertsAndMatches(registerAlertsCommand)
+
+    then:
+    1 * alertService.registerAlertsAndMatches(registerAlertsCommand)
   }
 
   def "should call add alerts to analysis"() {

@@ -1,4 +1,4 @@
-package com.silenteight.bridge.core.registration.domain.port.outgoing;
+package com.silenteight.bridge.core.registration.domain.model;
 
 import lombok.Builder;
 

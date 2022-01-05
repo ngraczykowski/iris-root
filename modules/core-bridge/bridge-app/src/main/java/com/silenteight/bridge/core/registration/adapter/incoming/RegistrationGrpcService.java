@@ -6,22 +6,18 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.bridge.core.registration.domain.NotifyBatchErrorCommand;
 import com.silenteight.bridge.core.registration.domain.RegisterBatchCommand;
 import com.silenteight.bridge.core.registration.domain.RegistrationFacade;
-import com.silenteight.proto.registration.api.v1.NotifyBatchErrorRequest;
-import com.silenteight.proto.registration.api.v1.RegisterAlertsAndMatchesRequest;
-import com.silenteight.proto.registration.api.v1.RegisterAlertsAndMatchesResponse;
-import com.silenteight.proto.registration.api.v1.RegisterBatchRequest;
+import com.silenteight.proto.registration.api.v1.*;
 
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
-import static com.silenteight.proto.registration.api.v1.RegistrationServiceGrpc.RegistrationServiceImplBase;
-
 @Slf4j
 @GrpcService
 @RequiredArgsConstructor
-class RegistrationGrpcService extends RegistrationServiceImplBase {
+class RegistrationGrpcService extends RegistrationServiceGrpc.RegistrationServiceImplBase {
 
+  private final RegistrationGrpcMapper mapper;
   private final RegistrationFacade registrationFacade;
 
   @Override
@@ -54,7 +50,14 @@ class RegistrationGrpcService extends RegistrationServiceImplBase {
   public void registerAlertsAndMatches(
       RegisterAlertsAndMatchesRequest request,
       StreamObserver<RegisterAlertsAndMatchesResponse> responseObserver) {
-    // TODO ALL-501, ALL-499
+    var batchId = request.getBatchId();
+    var alertCount = request.getAlertsWithMatchesCount();
+    log.info("Register alerts and matches request received for batchId: {}, alertCount: {}",
+        batchId, alertCount);
+    var registerAlertsCommand = mapper.toRegisterAlertsCommand(request);
+    registrationFacade.registerAlertsAndMatches(registerAlertsCommand);
+    log.info("Register alerts and matches request completed for batchId: {}", batchId);
+
     responseObserver.onNext(RegisterAlertsAndMatchesResponse.getDefaultInstance());
     responseObserver.onCompleted();
   }

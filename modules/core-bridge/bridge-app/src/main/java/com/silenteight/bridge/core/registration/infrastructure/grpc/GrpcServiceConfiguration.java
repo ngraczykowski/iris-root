@@ -1,7 +1,10 @@
 package com.silenteight.bridge.core.registration.infrastructure.grpc;
 
+import com.silenteight.adjudication.api.library.v1.alert.AlertGrpcAdapter;
+import com.silenteight.adjudication.api.library.v1.alert.AlertServiceClient;
 import com.silenteight.adjudication.api.library.v1.analysis.AnalysisGrpcAdapter;
 import com.silenteight.adjudication.api.library.v1.analysis.AnalysisServiceClient;
+import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.bridge.core.registration.infrastructure.util.KnownServices;
 import com.silenteight.governance.api.library.v1.model.ModelGrpcAdapter;
@@ -25,6 +28,9 @@ public class GrpcServiceConfiguration {
   @GrpcClient(KnownServices.ADJUDICATION_ENGINE)
   AnalysisServiceBlockingStub analysisServiceBlockingStub;
 
+  @GrpcClient(KnownServices.ADJUDICATION_ENGINE)
+  AlertServiceBlockingStub alertServiceBlockingStub;
+
   @Bean
   @Profile({ "dev", "test" })
   ModelServiceClient modelServiceClientMock() {
@@ -35,6 +41,12 @@ public class GrpcServiceConfiguration {
   @Profile({ "dev", "test" })
   AnalysisServiceClient analysisServiceClientMock() {
     return new AnalysisServiceClientMock();
+  }
+
+  @Bean
+  @Profile({ "dev", "test" })
+  AlertServiceClient alertServiceClientMock() {
+    return new AlertServiceClientMock();
   }
 
   @Bean
@@ -50,6 +62,14 @@ public class GrpcServiceConfiguration {
   AnalysisServiceClient analysisServiceClient(GrpcConfigurationProperties properties) {
     return new AnalysisGrpcAdapter(
         analysisServiceBlockingStub,
+        properties.adjudicationEngineDeadline().getSeconds());
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  AlertServiceClient alertServiceClient(GrpcConfigurationProperties properties) {
+    return new AlertGrpcAdapter(
+        alertServiceBlockingStub,
         properties.adjudicationEngineDeadline().getSeconds());
   }
 }

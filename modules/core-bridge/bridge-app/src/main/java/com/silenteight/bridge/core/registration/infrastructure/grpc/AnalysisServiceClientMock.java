@@ -7,7 +7,7 @@ import com.silenteight.adjudication.api.library.v1.analysis.*;
 import java.util.List;
 
 @Slf4j
-public class AnalysisServiceClientMock implements AnalysisServiceClient {
+class AnalysisServiceClientMock implements AnalysisServiceClient {
 
   @Override
   public AnalysisDatasetOut addDataset(AddDatasetIn request) {

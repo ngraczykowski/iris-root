@@ -1,11 +1,15 @@
 package com.silenteight.bridge.core.registration.domain
 
+import com.silenteight.bridge.core.registration.domain.model.Analysis
 import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.model.BatchError
-import com.silenteight.bridge.core.registration.domain.port.outgoing.*
+import com.silenteight.bridge.core.registration.domain.model.DefaultModel
+import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService
+import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
+import com.silenteight.bridge.core.registration.domain.port.outgoing.DefaultModelService
+import com.silenteight.bridge.core.registration.domain.port.outgoing.EventPublisher
 
-import org.junit.jupiter.params.shadow.com.univocity.parsers.common.processor.BatchedColumnProcessor
 import spock.lang.Specification
 import spock.lang.Subject
 

@@ -3,8 +3,8 @@ package com.silenteight.bridge.core.registration.adapter.outgoing
 import com.silenteight.adjudication.api.library.v1.analysis.AnalysisServiceClient
 import com.silenteight.adjudication.api.library.v1.analysis.CreateAnalysisIn
 import com.silenteight.adjudication.api.library.v1.analysis.CreateAnalysisOut
-import com.silenteight.bridge.core.registration.domain.port.outgoing.DefaultModel
-import com.silenteight.bridge.core.registration.domain.port.outgoing.DefaultModelFeature
+import com.silenteight.bridge.core.registration.domain.model.DefaultModel
+import com.silenteight.bridge.core.registration.domain.model.DefaultModelFeature
 
 import spock.lang.Specification
 import spock.lang.Subject

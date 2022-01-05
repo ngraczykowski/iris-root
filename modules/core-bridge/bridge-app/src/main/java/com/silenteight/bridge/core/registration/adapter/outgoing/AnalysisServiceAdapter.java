@@ -10,10 +10,10 @@ import com.silenteight.adjudication.api.library.v1.analysis.AnalysisServiceClien
 import com.silenteight.adjudication.api.library.v1.analysis.CreateAnalysisIn;
 import com.silenteight.adjudication.api.library.v1.analysis.FeatureIn;
 import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand;
-import com.silenteight.bridge.core.registration.domain.port.outgoing.Analysis;
+import com.silenteight.bridge.core.registration.domain.model.Analysis;
+import com.silenteight.bridge.core.registration.domain.model.DefaultModel;
+import com.silenteight.bridge.core.registration.domain.model.DefaultModelFeature;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService;
-import com.silenteight.bridge.core.registration.domain.port.outgoing.DefaultModel;
-import com.silenteight.bridge.core.registration.domain.port.outgoing.DefaultModelFeature;
 
 import com.google.protobuf.Timestamp;
 import org.springframework.retry.annotation.Retryable;
