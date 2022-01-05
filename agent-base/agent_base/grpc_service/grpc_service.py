@@ -52,9 +52,7 @@ class GrpcService(AgentService):
 
     def _add_reflection(self):
         service_names = (s.name for s in self.servicers)
-        reflection.enable_server_reflection(
-            (reflection.SERVICE_NAME, *service_names), self.server
-        )
+        reflection.enable_server_reflection((reflection.SERVICE_NAME, *service_names), self.server)
 
     async def stop(self):
         self.logger.debug("Stopping grpc service")

@@ -36,9 +36,7 @@ class AgentDataSource:
         try:
             async for response in self.command(
                 self.prepare_request(request),
-                timeout=self.application_config["grpc"]["client"]["data-source"].get(
-                    "timeout"
-                ),
+                timeout=self.application_config["grpc"]["client"]["data-source"].get("timeout"),
             ):
                 # https://www.python.org/dev/peps/pep-0525/#asynchronous-yield-from
                 for parsed in self.parse_response(response):
@@ -50,9 +48,7 @@ class AgentDataSource:
     def prepare_request(self, request: AgentExchangeRequest) -> Any:
         raise NotImplementedError()
 
-    def parse_response(
-        self, response: Any
-    ) -> Generator[Tuple[str, str, Any], None, None]:
+    def parse_response(self, response: Any) -> Generator[Tuple[str, str, Any], None, None]:
         raise NotImplementedError()
 
     async def stop(self) -> None:

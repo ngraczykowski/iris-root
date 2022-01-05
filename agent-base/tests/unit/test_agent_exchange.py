@@ -32,9 +32,7 @@ def agent_exchange(local_config):
         yield AgentExchange(config=local_config, data_source=MockAgentDataSource())
 
 
-def create_message(
-    message: AgentExchangeRequest, routing_key="", timestamp=1, correlation_id=1
-):
+def create_message(message: AgentExchangeRequest, routing_key="", timestamp=1, correlation_id=1):
     return aio_pika.Message(
         lz4.frame.compress(message.SerializeToString()),
         content_encoding="lz4",
@@ -124,9 +122,7 @@ async def test_agent_exchange_on_agent_exception(agent, agent_exchange):
         raise Exception()
 
     agent.resolve = new_resolve
-    solution = await ask(
-        agent=agent, agent_exchange=agent_exchange, data_source_args=()
-    )
+    solution = await ask(agent=agent, agent_exchange=agent_exchange, data_source_args=())
 
     assert solution == ("AGENT_ERROR", {})
 
@@ -138,9 +134,7 @@ async def test_agent_exchange_on_data_source_exception(agent, agent_exchange):
         raise AgentDataSourceException()
 
     agent_exchange.data_source.request = new_request
-    solution = await ask(
-        agent=agent, agent_exchange=agent_exchange, data_source_args=()
-    )
+    solution = await ask(agent=agent, agent_exchange=agent_exchange, data_source_args=())
 
     assert solution == ("DATA_SOURCE_ERROR", {})
 
@@ -151,9 +145,7 @@ async def test_agent_exchange_on_no_data_from_data_source(agent, agent_exchange)
             yield x  # needed for this function to have aiter
 
     agent_exchange.data_source.request = new_request
-    solution = await ask(
-        agent=agent, agent_exchange=agent_exchange, data_source_args=()
-    )
+    solution = await ask(agent=agent, agent_exchange=agent_exchange, data_source_args=())
 
     assert solution == ("DATA_SOURCE_ERROR", {})
 
@@ -167,9 +159,7 @@ async def test_agent_exchange_on_no_data_from_data_source(agent, agent_exchange)
     ),
 )
 async def test_agent_exchange_use_data_source_result(agent, agent_exchange, args):
-    solution = await ask(
-        agent=agent, agent_exchange=agent_exchange, data_source_args=args
-    )
+    solution = await ask(agent=agent, agent_exchange=agent_exchange, data_source_args=args)
     assert solution == ("RESOLVED", {"args": list(args)})
 
 

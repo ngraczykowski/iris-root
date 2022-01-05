@@ -1,6 +1,7 @@
 # agent base package
 
-For ease of implementing functioning agents in python, this package should contain all common code for integration with other parts of the system.
+For ease of implementing functioning agents in python, 
+this package should contain all common code for integration with other parts of the system.
 
 
 ## Installing
@@ -24,12 +25,14 @@ or building wheel from source in dist directory
 
 ## Implementing your agent
 
-Sample dummy agent implementation can be found in `agent_base/example.py`. Sample agent implemented using this package is company name agent.
+Sample dummy agent implementation can be found in `agent_base/example.py`. 
+Sample agent implemented using this package is company name agent.
 
 ### Agent
 
 The main method in your Agent implementation is `resolve` method - it will be called for any other integration.
-Arguments for this method are up to you. Result is expected to have two parts - solution (string) and reason (preferably dict, but probably all json encodable objects will be alright).
+Arguments for this method are up to you. Result is expected to have two parts - 
+solution (string) and reason (preferably dict, but probably all json encodable objects will be alright).
 
 For any configuration file there is `config` property available - supporting multiple config locations and parsing yaml files.
 
@@ -70,7 +73,8 @@ Resolving specific request will be computed in the same process, or, if `agent.p
 Tests are run with `pytest`. 
 
 For gitlab runs, flag `--without-rabbitmq` is added - so tests with agent exchange
-are not run, as it needs running rabbitmq instance. Those tests should be run locally after starting rabbitmq (for example using [this](https://gitlab.silenteight.com/sens/common-docker-infrastructure)).
+are not run, as it needs running rabbitmq instance. Those tests should be run locally after starting rabbitmq 
+(for example using [this](https://gitlab.silenteight.com/sens/common-docker-infrastructure)).
 If you have time - please make this tests run in gitlab.
 
 ### Code quality
@@ -80,4 +84,3 @@ If you have time - please make this tests run in gitlab.
 * isort
 
 All code quality checks are included in tox (see `tox.ini`) and are checked in both gitlab pipeline.
-

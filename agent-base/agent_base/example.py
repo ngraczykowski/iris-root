@@ -36,12 +36,8 @@ class JohnnyAgentDataSource(AgentDataSource):
         stub = NameInputServiceStub(self.channel)
         self.command = stub.BatchGetMatchNameInputs
 
-    def prepare_request(
-        self, request: AgentExchangeRequest
-    ) -> BatchGetMatchNameInputsRequest:
-        return BatchGetMatchNameInputsRequest(
-            matches=request.matches, features=request.features
-        )
+    def prepare_request(self, request: AgentExchangeRequest) -> BatchGetMatchNameInputsRequest:
+        return BatchGetMatchNameInputsRequest(matches=request.matches, features=request.features)
 
     def parse_response(self, response: BatchGetMatchNameInputsResponse):
         for name_input in response.name_inputs:
@@ -58,9 +54,7 @@ class JohnnyAgentDataSource(AgentDataSource):
 class JohnnyAgentGrpcServicer(NameAgentServicer, AgentGrpcServicer):
     name = DESCRIPTOR.services_by_name["NameAgent"].full_name
 
-    async def CompareNames(
-        self, request: CompareNamesRequest, context
-    ) -> CompareNamesResponse:
+    async def CompareNames(self, request: CompareNamesRequest, context) -> CompareNamesResponse:
 
         tasks = [
             (i, self.create_resolve_task(list(inputs.alerted_names)))
@@ -68,9 +62,7 @@ class JohnnyAgentGrpcServicer(NameAgentServicer, AgentGrpcServicer):
         ]
         for i, task in tasks:
             result, reason = await task
-            yield CompareNamesResponse(
-                input_index=i, result=result, reason=NameAgentReason()
-            )
+            yield CompareNamesResponse(input_index=i, result=result, reason=NameAgentReason())
 
     async def GetNameAgentDescriptor(
         self, request: GetNameAgentDescriptorRequest, context
@@ -96,9 +88,7 @@ class JohnnyAgent(Agent):
         for name in names:
             if (
                 "johnny"
-                in name.lower()
-                .translate(str.maketrans("", "", string.punctuation))
-                .split()
+                in name.lower().translate(str.maketrans("", "", string.punctuation)).split()
             ):
                 return "MATCH", {}
 

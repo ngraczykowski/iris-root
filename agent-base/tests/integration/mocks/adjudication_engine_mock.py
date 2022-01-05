@@ -60,9 +60,7 @@ class AdjudicationEngineMock:
         if not correlation_id:
             correlation_id = str(uuid.uuid4())
         if routing_key is None:
-            routing_key = self.config["agent"]["agent-exchange"]["request"][
-                "routing-key"
-            ]
+            routing_key = self.config["agent"]["agent-exchange"]["request"]["routing-key"]
         assert correlation_id not in self._events
         self._events[correlation_id] = asyncio.Event()
 
@@ -105,9 +103,7 @@ class AdjudicationEngineMock:
 
     async def get(self, timeout: int = 10):
         correlation_id = await asyncio.wait_for(self._received.get(), timeout)
-        return correlation_id, AgentExchangeResponse.FromString(
-            self._responses[correlation_id]
-        )
+        return correlation_id, AgentExchangeResponse.FromString(self._responses[correlation_id])
 
     async def stop(self):
         if self._callback_queue:

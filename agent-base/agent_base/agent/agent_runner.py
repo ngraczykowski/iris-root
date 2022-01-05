@@ -13,9 +13,7 @@ def run(start_callback, end_callback):
         loop.run_until_complete(start_callback())
         loop.run_forever()
     finally:
-        logging.info(
-            f"Finishing, {len(asyncio.all_tasks(loop))} running tasks will be cancelled"
-        )
+        logging.info(f"Finishing, {len(asyncio.all_tasks(loop))} running tasks will be cancelled")
         tasks = asyncio.gather(*asyncio.all_tasks(loop))
         tasks.cancel()
         with contextlib.suppress(asyncio.CancelledError):

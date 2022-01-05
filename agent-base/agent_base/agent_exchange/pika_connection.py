@@ -51,9 +51,7 @@ class PikaConnection:
 
                 await self.request_queue.bind(
                     exchange=self.messaging_configuration["request"]["exchange"],
-                    routing_key=self.messaging_configuration["request"].get(
-                        "routing-key"
-                    ),
+                    routing_key=self.messaging_configuration["request"].get("routing-key"),
                 )
             else:
                 raise

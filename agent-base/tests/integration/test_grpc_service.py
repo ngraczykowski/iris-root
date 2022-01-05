@@ -74,9 +74,7 @@ async def test_descriptor(stub: NameAgentStub):
 
 
 async def test_no_data_query(stub: NameAgentStub):
-    async for result in stub.CompareNames(
-        CompareNamesRequest(inputs=[CompareNamesInput()])
-    ):
+    async for result in stub.CompareNames(CompareNamesRequest(inputs=[CompareNamesInput()])):
         assert result
         assert result.result == "NO_DATA"
         assert result.input_index == 0

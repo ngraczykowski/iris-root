@@ -20,9 +20,7 @@ class Config:
             *self._get_from_environment(env_configuration_dir_key),
             *configuration_dirs,
         )
-        self.application_config = self.load_yaml_config(
-            "application.yaml", required=required
-        )
+        self.application_config = self.load_yaml_config("application.yaml", required=required)
 
     @staticmethod
     def _get_from_environment(configuration_dir_key: str):
@@ -30,18 +28,14 @@ class Config:
         if path:
             yield pathlib.Path(path)
 
-    def get_config_path(
-        self, config_file_name: str, required=False
-    ) -> Optional[pathlib.Path]:
+    def get_config_path(self, config_file_name: str, required=False) -> Optional[pathlib.Path]:
         for configuration_dir in self.configuration_dirs:
             configuration_path = configuration_dir / config_file_name
             if configuration_path.exists():
                 return configuration_path
 
         if required:
-            raise ConfigurationException(
-                f"Configuration file {config_file_name} missing"
-            )
+            raise ConfigurationException(f"Configuration file {config_file_name} missing")
         else:
             return None
 

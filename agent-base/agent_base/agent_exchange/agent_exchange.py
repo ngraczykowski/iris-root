@@ -29,9 +29,7 @@ class MessageFormatException(AgentException):
 
 
 class AgentExchange(AgentService):
-    data_source_error_solution = AgentOutput.FeatureSolution(
-        solution="DATA_SOURCE_ERROR"
-    )
+    data_source_error_solution = AgentOutput.FeatureSolution(solution="DATA_SOURCE_ERROR")
     default_error_solution = AgentOutput.FeatureSolution(solution="AGENT_ERROR")
 
     def __init__(self, config: Config, data_source: AgentDataSource):
@@ -59,6 +57,8 @@ class AgentExchange(AgentService):
             try:
                 body = lz4.frame.decompress(body)
                 self.logger.debug(f"message body {body!r}")
+                correlation_id = message.headers.get("correlationId", "CorrelationId not found")
+                self.logger.debug(f"message headers {correlation_id}")
             except Exception:
                 raise MessageFormatException(body)
 
@@ -86,7 +86,11 @@ class AgentExchange(AgentService):
         )
 
     async def process(self, request: AgentExchangeRequest) -> AgentExchangeResponse:
-        agent_inputs = self.data_source.request(request)
+        try:
+            agent_inputs = self.data_source.request(request)
+        except (AgentDataSourceException, Exception):
+            return self._prepare_data_source_error_response(request)
+
         resolved = await self._resolve_all(request, agent_inputs)
         response = self._prepare_response(request, resolved)
 
@@ -137,16 +141,12 @@ class AgentExchange(AgentService):
         reason_struct.update(reason)
         return AgentOutput.Feature(
             feature=feature,
-            feature_solution=AgentOutput.FeatureSolution(
-                solution=solution, reason=reason_struct
-            ),
+            feature_solution=AgentOutput.FeatureSolution(solution=solution, reason=reason_struct),
         )
 
     async def _create_tasks(
         self,
-        request_inputs: AsyncGenerator[
-            Generator[Tuple[str, str, Any], None, None], None
-        ],
+        request_inputs: AsyncGenerator[Generator[Tuple[str, str, Any], None, None], None],
     ) -> AsyncGenerator[Tuple[str, str, Any], None]:
         async for match, feature, args in request_inputs:
             yield match, feature, self.create_resolve_task(*args)
@@ -158,6 +158,19 @@ class AgentExchange(AgentService):
                 resolved.get(match, {}).get(feature)
                 or AgentOutput.Feature(
                     feature=feature, feature_solution=self.default_error_solution
+                )
+                for feature in request.features
+            ]
+            response.agent_outputs.append(AgentOutput(match=match, features=features))
+
+        return response
+
+    def _prepare_data_source_error_response(self, request):
+        response = AgentExchangeResponse(agent_outputs=[])
+        for match in request.matches:
+            features = [
+                AgentOutput.Feature(
+                    feature=feature, feature_solution=self.data_source_error_solution
                 )
                 for feature in request.features
             ]
@@ -180,9 +193,7 @@ class AgentExchange(AgentService):
     async def _set_pika_connection(self):
         messaging_config = self.config.application_config["agent"]["agent-exchange"]
         for connection_config in self._prepare_connection_configurations():
-            connection = PikaConnection(
-                messaging_config, connection_config, self.on_request
-            )
+            connection = PikaConnection(messaging_config, connection_config, self.on_request)
 
             try:
                 await connection.start()
