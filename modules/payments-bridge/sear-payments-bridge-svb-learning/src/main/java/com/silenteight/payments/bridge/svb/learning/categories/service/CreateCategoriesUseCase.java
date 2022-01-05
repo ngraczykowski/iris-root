@@ -32,6 +32,7 @@ class CreateCategoriesUseCase {
     return List.of(
         crossmatchCategory(),
         specificTermsCategory(),
+        specificTerms2Category(),
         historicalRiskAssessmentCategory(),
         watchListTypeCategory(),
         matchTypeCategory(),
@@ -58,6 +59,17 @@ class CreateCategoriesUseCase {
         .setType(CategoryType.ENUMERATED)
         .setMultiValue(false)
         .addAllAllowedValues(List.of("YES", "NO"))
+        .build();
+  }
+
+  private static Category specificTerms2Category() {
+    return Category
+        .newBuilder()
+        .setName("categories/specificTerms2")
+        .setDisplayName("Specific Terms 2")
+        .setType(CategoryType.ENUMERATED)
+        .setMultiValue(false)
+        .addAllAllowedValues(List.of("YES", "YES_PTP", "NO"))
         .build();
   }
 
