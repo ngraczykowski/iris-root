@@ -21,6 +21,13 @@ class FeatureFixture {
                 .fkcoVListCountry("listCountry")
                 .fkcoVListState("state")
                 .fkcoVListCity("city")
+                .fkcoVMatchedTagContent("content")
+                .fkcoVCityMatchedText("city")
+                .fkcoVStateMatchedText("state")
+                .fkcoVCountryMatchedText("country")
+                .fkcoVAddressMatchedText("address")
+                .fkcoVListMatchedName("listmatchedname")
+                .fkcoVHitType("type")
                 .build())
         .build();
   }
