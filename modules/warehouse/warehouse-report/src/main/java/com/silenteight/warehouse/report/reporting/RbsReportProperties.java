@@ -1,0 +1,24 @@
+package com.silenteight.warehouse.report.reporting;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+@AllArgsConstructor
+@ConstructorBinding
+@Getter
+@Validated
+public class RbsReportProperties {
+
+  @Valid
+  RbsReportDefinition production;
+
+  @Valid
+  @NotNull
+  RbsReportDefinition simulation;
+}

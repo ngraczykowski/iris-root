@@ -1,25 +1,28 @@
 package com.silenteight.warehouse.report.reasoning.match.create;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static java.lang.String.format;
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.SEE_OTHER;
 import static org.springframework.http.ResponseEntity.status;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RequestMapping(ROOT)
 class CreateAiReasoningMatchLevelReportRestController {
 
@@ -29,9 +32,10 @@ class CreateAiReasoningMatchLevelReportRestController {
   private static final String CREATE_PRODUCTION_REPORT_URL =
       "/v2/analysis/production/reports/AI_REASONING_MATCH_LEVEL";
 
-  @NonNull
+  @Nullable
   private final CreateProductionAiReasoningMatchLevelReportUseCase createProductionReportUseCase;
-  @NonNull
+
+  @Nullable
   private final CreateSimulationAiReasoningMatchLevelReportUseCase createSimulationReportUseCase;
 
   @PostMapping(CREATE_SIMULATION_REPORT_URL)
@@ -40,6 +44,9 @@ class CreateAiReasoningMatchLevelReportRestController {
     log.info(
         "Create simulation AI Reasoning Match Level report request received, analysisId={}",
         analysisId);
+    if (Objects.isNull(createSimulationReportUseCase)) {
+      return status(NOT_FOUND).build();
+    }
     var reportInstance = createSimulationReportUseCase.createReport(analysisId);
 
     log.debug(
@@ -53,6 +60,7 @@ class CreateAiReasoningMatchLevelReportRestController {
 
   @PostMapping(CREATE_PRODUCTION_REPORT_URL)
   @PreAuthorize("isAuthorized('CREATE_PRODUCTION_ON_DEMAND_REPORT')")
+  @ConditionalOnBean(CreateProductionAiReasoningMatchLevelReportUseCase.class)
   public ResponseEntity<Void> createReport(
       @DateTimeFormat(iso = DATE_TIME)
       @RequestParam OffsetDateTime from,
@@ -62,6 +70,9 @@ class CreateAiReasoningMatchLevelReportRestController {
     log.info("Create production AI Reasoning Match Level report request received, "
         + "from={} - to={}", from, to);
 
+    if (Objects.isNull(createProductionReportUseCase)) {
+      return status(NOT_FOUND).build();
+    }
     var reportInstance = createProductionReportUseCase.createReport(from, to);
 
     log.debug(

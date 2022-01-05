@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.rbs.generation;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +13,7 @@ import static java.util.Collections.singletonList;
 @AllArgsConstructor
 @ConstructorBinding
 @Getter
-@Deprecated(since = "2.0.0")
-class ColumnProperties implements Column {
+public class ColumnProperties implements Column {
 
   @NonNull
   private final String name;
@@ -24,4 +23,5 @@ class ColumnProperties implements Column {
   public List<String> getLabels() {
     return singletonList(label);
   }
+
 }

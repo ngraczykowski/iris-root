@@ -1,13 +1,14 @@
 package com.silenteight.warehouse.report.reasoning.match.generation;
 
 import com.silenteight.warehouse.report.reporting.ReportGenerationService;
+import com.silenteight.warehouse.report.reporting.ReportProperties;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties(AiReasoningMatchLevelReportProperties.class)
+@EnableConfigurationProperties(ReportProperties.class)
 class AiReasoningMatchLevelReportGenerationConfiguration {
 
   @Bean

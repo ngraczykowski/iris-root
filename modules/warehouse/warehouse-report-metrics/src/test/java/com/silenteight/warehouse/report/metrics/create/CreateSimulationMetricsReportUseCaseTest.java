@@ -3,7 +3,7 @@ package com.silenteight.warehouse.report.metrics.create;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.report.metrics.domain.MetricsReportService;
-import com.silenteight.warehouse.report.metrics.generation.PropertiesDefinition;
+import com.silenteight.warehouse.report.reporting.PropertiesDefinition;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
 import org.junit.jupiter.api.BeforeEach;

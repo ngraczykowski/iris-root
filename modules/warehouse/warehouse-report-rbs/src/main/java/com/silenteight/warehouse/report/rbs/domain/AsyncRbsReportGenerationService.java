@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.rbs.domain.exception.ReportGenerationException;
-import com.silenteight.warehouse.report.rbs.generation.RbsReportDefinition;
 import com.silenteight.warehouse.report.rbs.generation.RbsReportGenerationService;
 import com.silenteight.warehouse.report.rbs.generation.dto.CsvReportContentDto;
+import com.silenteight.warehouse.report.reporting.RbsReportDefinition;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
 import org.springframework.scheduling.annotation.Async;

@@ -1,18 +1,18 @@
-package com.silenteight.warehouse.report.rbs.generation;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
 
 import org.springframework.boot.context.properties.ConstructorBinding;
+
+import javax.validation.constraints.NotNull;
 
 @ConstructorBinding
 @AllArgsConstructor
 @Getter
-public class GroupingValues {
+public class LabelProperties {
 
-  @NonNull
-  String value;
-  @NonNull
-  String label;
+  @NotNull
+  private final String label;
+
 }

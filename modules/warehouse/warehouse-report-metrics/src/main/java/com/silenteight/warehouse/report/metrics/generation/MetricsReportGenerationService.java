@@ -8,6 +8,9 @@ import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDataRequest;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 import com.silenteight.warehouse.report.metrics.generation.dto.CsvReportContentDto;
+import com.silenteight.warehouse.report.reporting.ColumnPropertiesWithValues;
+import com.silenteight.warehouse.report.reporting.GroupingColumnPropertiesWithPatterns;
+import com.silenteight.warehouse.report.reporting.PropertiesDefinition;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -92,9 +95,9 @@ public class MetricsReportGenerationService {
   }
 
   private static String getLine(List<Row> rows, PropertiesDefinition properties) {
-    ColumnProperties recommendationField = properties.getRecommendationField();
-    ColumnProperties analystDecisionField = properties.getAnalystDecisionField();
-    ColumnProperties qaDecisionField = properties.getQaDecisionField();
+    ColumnPropertiesWithValues recommendationField = properties.getRecommendationField();
+    ColumnPropertiesWithValues analystDecisionField = properties.getAnalystDecisionField();
+    ColumnPropertiesWithValues qaDecisionField = properties.getQaDecisionField();
 
     double efficiency = calculateEfficiency(rows, recommendationField);
     List<Row> potentialTruePositiveRows = getPotentialTruePositiveRows(rows, recommendationField);
@@ -119,21 +122,22 @@ public class MetricsReportGenerationService {
         DECIMAL_FORMAT.format(falsePositiveEffectiveness));
   }
 
-  private static List<Row> getPotentialTruePositiveRows(List<Row> rows, ColumnProperties column) {
+  private static List<Row> getPotentialTruePositiveRows(List<Row> rows,
+      ColumnPropertiesWithValues column) {
     return rows
         .stream()
         .filter(row -> isPositiveValue(row, column))
         .collect(toList());
   }
 
-  private static List<Row> getFalsePositiveRows(List<Row> rows, ColumnProperties column) {
+  private static List<Row> getFalsePositiveRows(List<Row> rows, ColumnPropertiesWithValues column) {
     return rows
         .stream()
         .filter(row -> isNegativeValue(row, column))
         .collect(toList());
   }
 
-  private static double calculateEffectiveness(List<Row> rows, ColumnProperties column) {
+  private static double calculateEffectiveness(List<Row> rows, ColumnPropertiesWithValues column) {
     long positiveCount = rows
         .stream()
         .filter(row -> isPositiveValue(row, column))
@@ -144,14 +148,14 @@ public class MetricsReportGenerationService {
     return divide(positiveCount, meaningfulDecisionCount);
   }
 
-  private static double calculateEfficiency(List<Row> rows, ColumnProperties column) {
+  private static double calculateEfficiency(List<Row> rows, ColumnPropertiesWithValues column) {
     long meaningfulDecisionCount = countMeaningfulDecision(rows, column);
     long allAlertsInGroupCount = rows.stream().mapToLong(Row::getCount).sum();
 
     return divide(meaningfulDecisionCount, allAlertsInGroupCount);
   }
 
-  private static long countMeaningfulDecision(List<Row> rows, ColumnProperties column) {
+  private static long countMeaningfulDecision(List<Row> rows, ColumnPropertiesWithValues column) {
     return rows
         .stream()
         .filter(row -> isMeaningfulDecision(row, column))
@@ -159,25 +163,26 @@ public class MetricsReportGenerationService {
         .sum();
   }
 
-  private static boolean isPositiveValue(Row row, ColumnProperties column) {
+  private static boolean isPositiveValue(Row row, ColumnPropertiesWithValues column) {
     return column
         .getPositiveValue()
         .equals(row.getValueOrDefault(column.getName(), EMPTY_STRING));
   }
 
-  private static boolean isNegativeValue(Row row, ColumnProperties column) {
+  private static boolean isNegativeValue(Row row, ColumnPropertiesWithValues column) {
     return column
         .getNegativeValue()
         .equals(row.getValueOrDefault(column.getName(), EMPTY_STRING));
   }
 
-  private static boolean isMeaningfulDecision(Row row, ColumnProperties column) {
+  private static boolean isMeaningfulDecision(Row row, ColumnPropertiesWithValues column) {
     return column
         .getDecisionValues()
         .contains(row.getValueOrDefault(column.getName(), EMPTY_STRING));
   }
 
-  private static String getStaticValue(List<Row> rows, GroupingColumnProperties column) {
+  private static String getStaticValue(List<Row> rows,
+      GroupingColumnPropertiesWithPatterns column) {
     return rows
         .stream()
         .findFirst()
@@ -185,14 +190,16 @@ public class MetricsReportGenerationService {
         .orElseThrow();
   }
 
-  private static String getGroupingValues(Row row, List<GroupingColumnProperties> columns) {
+  private static String getGroupingValues(Row row,
+      List<GroupingColumnPropertiesWithPatterns> columns) {
     return columns
         .stream()
         .map(column -> getFormattedValueOrDefault(row, column))
         .collect(joining(DELIMITER));
   }
 
-  private static String getFormattedValueOrDefault(Row row, GroupingColumnProperties column) {
+  private static String getFormattedValueOrDefault(Row row,
+      GroupingColumnPropertiesWithPatterns column) {
     String value = row.getValueOrDefault(column.getName(), EMPTY_STRING);
     if (column.isDateColumn() && isNotBlank(value))
       value = formatDate(value, column);
@@ -200,7 +207,7 @@ public class MetricsReportGenerationService {
     return value;
   }
 
-  private static String formatDate(String value, GroupingColumnProperties column) {
+  private static String formatDate(String value, GroupingColumnPropertiesWithPatterns column) {
     DateTimeFormatter sourceFormatter = ofPattern(column.getSourcePattern());
     LocalDate date = parse(value.substring(0, 19), sourceFormatter);
     DateTimeFormatter targetFormatter = ofPattern(column.getTargetPattern());

@@ -13,7 +13,8 @@ import static java.util.Collections.singletonList;
 @AllArgsConstructor
 @ConstructorBinding
 @Getter
-class ColumnProperties implements Column {
+@Deprecated(since = "2.0.0")
+class ColumnProperties {
 
   @NonNull
   private final String name;

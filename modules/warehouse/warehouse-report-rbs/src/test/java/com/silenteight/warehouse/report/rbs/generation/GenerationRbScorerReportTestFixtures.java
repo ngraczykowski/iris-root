@@ -2,6 +2,10 @@ package com.silenteight.warehouse.report.rbs.generation;
 
 import lombok.NoArgsConstructor;
 
+import com.silenteight.warehouse.report.reporting.*;
+import com.silenteight.warehouse.report.reporting.ColumnProperties;
+import com.silenteight.warehouse.report.reporting.FilterProperties;
+
 import java.util.List;
 
 import static com.silenteight.warehouse.report.rbs.RbsReportTestFixtures.*;

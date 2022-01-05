@@ -11,6 +11,9 @@ import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDataRequest;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
+import com.silenteight.warehouse.report.reporting.AiDecisionProperties;
+import com.silenteight.warehouse.report.reporting.AnalystDecisionProperties;
+import com.silenteight.warehouse.report.reporting.StatisticsProperties;
 import com.silenteight.warehouse.report.statistics.domain.dto.EffectivenessDto;
 import com.silenteight.warehouse.report.statistics.domain.dto.EfficiencyDto;
 import com.silenteight.warehouse.report.statistics.domain.dto.StatisticsDto;

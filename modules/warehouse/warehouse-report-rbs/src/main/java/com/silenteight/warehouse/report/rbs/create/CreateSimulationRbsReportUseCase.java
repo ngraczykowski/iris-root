@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.report.rbs.domain.RbsReportService;
-import com.silenteight.warehouse.report.rbs.generation.RbsReportDefinition;
+import com.silenteight.warehouse.report.reporting.RbsReportDefinition;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 

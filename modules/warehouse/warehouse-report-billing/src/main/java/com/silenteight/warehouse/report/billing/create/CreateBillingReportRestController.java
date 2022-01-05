@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +27,7 @@ import static org.springframework.http.ResponseEntity.status;
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
+@ConditionalOnProperty("warehouse.reports.billing")
 class CreateBillingReportRestController {
 
   private static final String CREATE_PRODUCTION_REPORT_URL =

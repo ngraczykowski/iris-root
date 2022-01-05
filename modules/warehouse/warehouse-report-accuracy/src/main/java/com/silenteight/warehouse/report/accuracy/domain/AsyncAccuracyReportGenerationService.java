@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.accuracy.domain.exception.ReportGenerationException;
-import com.silenteight.warehouse.report.accuracy.generation.AccuracyReportDefinitionProperties;
 import com.silenteight.warehouse.report.accuracy.generation.AccuracyReportGenerationService;
+import com.silenteight.warehouse.report.reporting.AccuracyReportDefinitionProperties;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
 import org.springframework.scheduling.annotation.Async;

@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.metrics.generation;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @ConstructorBinding
 @AllArgsConstructor
 @Getter
-class GroupingColumnProperties {
+public class GroupingColumnPropertiesWithPatterns {
 
   @NotNull
   private final String name;
@@ -19,7 +19,7 @@ class GroupingColumnProperties {
   private final String sourcePattern;
   private final String targetPattern;
 
-  boolean isDateColumn() {
+  public boolean isDateColumn() {
     return sourcePattern != null && targetPattern != null;
   }
 }

@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.reasoning.match.generation;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,10 +24,16 @@ import static java.util.stream.Collectors.toList;
 @AllArgsConstructor
 @Builder
 @Data
-public class AiReasoningMatchLevelReportDefinitionProperties {
+public class AiReasoningReportDefinitionProperties {
 
   @NotBlank
   private String dateFieldName;
+  @Default
+  private boolean useSqlReports = false;
+  @Nullable
+  private List<String> sqlTemplates;
+  @Nullable
+  private String selectSqlQuery;
   @Valid
   @NotNull
   @Default
@@ -36,7 +42,7 @@ public class AiReasoningMatchLevelReportDefinitionProperties {
   @Valid
   private List<FilterProperties> filters;
 
-  List<QueryFilter> getQueryFilters() {
+  public List<QueryFilter> getQueryFilters() {
     if (isNull(getFilters()))
       return emptyList();
 
@@ -55,7 +61,7 @@ public class AiReasoningMatchLevelReportDefinitionProperties {
   private List<FieldDefinition> getFieldDefinition() {
     return columns
         .stream()
-        .map(AiReasoningMatchLevelReportDefinitionProperties::convertToFieldDefinition)
+        .map(AiReasoningReportDefinitionProperties::convertToFieldDefinition)
         .collect(toList());
   }
 

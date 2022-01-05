@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.reasoning.generation;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,13 +6,13 @@ import lombok.NonNull;
 
 import org.springframework.boot.context.properties.ConstructorBinding;
 
-@AllArgsConstructor
 @ConstructorBinding
+@AllArgsConstructor
 @Getter
-class ColumnProperties {
+public class GroupingValues {
 
   @NonNull
-  private final String name;
+  String value;
   @NonNull
-  private final String label;
+  String label;
 }

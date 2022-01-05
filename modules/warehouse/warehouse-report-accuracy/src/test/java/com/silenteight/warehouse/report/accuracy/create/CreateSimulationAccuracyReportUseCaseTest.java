@@ -3,7 +3,7 @@ package com.silenteight.warehouse.report.accuracy.create;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.report.accuracy.domain.AccuracyReportService;
-import com.silenteight.warehouse.report.accuracy.generation.AccuracyReportDefinitionProperties;
+import com.silenteight.warehouse.report.reporting.AccuracyReportDefinitionProperties;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
 import org.junit.jupiter.api.BeforeEach;

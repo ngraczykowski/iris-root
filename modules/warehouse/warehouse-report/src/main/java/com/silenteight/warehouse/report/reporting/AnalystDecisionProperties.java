@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.statistics.domain;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

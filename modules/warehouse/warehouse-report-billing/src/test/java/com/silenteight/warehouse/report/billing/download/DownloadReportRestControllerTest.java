@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
 
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.MODEL_TUNER;
 import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.CONTENT;
@@ -21,6 +22,7 @@ import static org.springframework.http.HttpStatus.OK;
     DownloadBillingReportRestController.class,
     DownloadBillingReportConfiguration.class
 })
+@TestPropertySource(properties = "warehouse.reports.billing=true")
 class DownloadReportRestControllerTest extends BaseRestControllerTest {
 
   @MockBean

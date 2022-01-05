@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.billing.generation;
+package com.silenteight.warehouse.report.reporting;
 
 import java.util.Collection;
 

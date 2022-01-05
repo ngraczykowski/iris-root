@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.rbs.generation;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @ConstructorBinding
 @AllArgsConstructor
 @Getter
-class GroupingColumnProperties {
+public class GroupingColumnProperties {
 
   private static final String EMPTY_DELIMITER = "";
   private static final String COUNTER = "count";
