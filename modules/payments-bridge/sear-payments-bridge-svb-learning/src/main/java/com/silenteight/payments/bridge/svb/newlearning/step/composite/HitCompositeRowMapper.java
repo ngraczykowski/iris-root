@@ -24,6 +24,7 @@ class HitCompositeRowMapper {
         .fkcoVListMatchedName(rs.getString("fkco_v_list_matched_name"))
         .fkcoVHitType(rs.getString("fkco_v_hit_type"))
         .fkcoVListType(rs.getString("fkco_v_list_type"))
+        .fkcoVNameMatchedText(rs.getString("fkco_v_name_matched_text"))
         .build();
   }
 }

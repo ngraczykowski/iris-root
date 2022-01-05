@@ -52,6 +52,8 @@ public class HitComposite {
 
   String fkcoVListName;
 
+  String fkcoVNameMatchedText;
+
   public String getMatchId() {
     return fkcoVListFmmId + "(" + fkcoVMatchedTag + ", #" + fkcoISequence
         + ")";
@@ -100,5 +102,9 @@ public class HitComposite {
 
   public WatchlistType getWatchlistType() {
     return WatchlistType.ofCode(fkcoVListType);
+  }
+
+  public List<String> getMatchedNames() {
+    return new ArrayList<>(Arrays.asList(fkcoVListMatchedName.split(",")));
   }
 }

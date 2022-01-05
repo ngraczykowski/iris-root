@@ -56,4 +56,12 @@ public class EtlHit {
   public WatchlistType getWatchlistType() {
     return hitComposite.getWatchlistType();
   }
+
+  public String getNameMatchedTexts() {
+    return hitComposite.getFkcoVNameMatchedText();
+  }
+
+  public List<String> getMatchedNames() {
+    return hitComposite.getMatchedNames();
+  }
 }

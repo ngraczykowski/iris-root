@@ -30,6 +30,7 @@ class FeatureFixture {
                 .fkcoVHitType("type")
                 .fkcoVListType("INDIVIDUAL")
                 .fkcoVListName("name,name")
+                .fkcoVNameMatchedText("name matched text")
                 .build())
         .build();
   }

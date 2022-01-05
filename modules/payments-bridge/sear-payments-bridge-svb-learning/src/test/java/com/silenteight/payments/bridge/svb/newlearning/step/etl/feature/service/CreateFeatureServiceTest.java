@@ -18,13 +18,14 @@ class CreateFeatureServiceTest {
         List.of(
             new GeoFeatureExtractorService(),
             new IdentificationMismatchExtractor(),
-            new NameFeatureExtractorService()));
+            new NameFeatureExtractorService(),
+            new NameMatchedTextFeatureExtractorService()));
   }
 
   @Test
   void shouldExtractFeatures() {
     var hit = createEtlHit();
     var features = createFeatureService.createFeatureInputs(hit);
-    assertThat(features.get(hit.getMatchId()).size()).isEqualTo(3);
+    assertThat(features.get(hit.getMatchId()).size()).isEqualTo(4);
   }
 }
