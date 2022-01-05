@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @ConstructorBinding
 @AllArgsConstructor
 @Getter
+@Deprecated(since = "2.0.0")
 class FilterProperties {
 
   @NotNull

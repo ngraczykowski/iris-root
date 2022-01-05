@@ -3,6 +3,9 @@ package com.silenteight.warehouse.report.reasoning.match.generation;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import com.silenteight.warehouse.report.reporting.AiReasoningMatchLevelReportDefinitionProperties;
+import com.silenteight.warehouse.report.reporting.ColumnProperties;
+
 import static com.silenteight.warehouse.report.reasoning.match.AiReasoningMatchLevelReportTestFixtures.*;
 import static java.util.List.of;
 

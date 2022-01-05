@@ -1,11 +1,18 @@
 package com.silenteight.warehouse.report.billing.status;
 
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.warehouse.report.billing.generation.BillingReportGenerationService;
+import com.silenteight.warehouse.report.billing.status.StatusBillingReportRestControllerTest.StatusTestConfiguration;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.MODEL_TUNER;
 import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.REPORT_ID;
@@ -15,7 +22,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.OK;
 
-@Import(StatusBillingReportRestController.class)
+@Import({StatusBillingReportRestController.class})
+@ContextConfiguration(classes = StatusTestConfiguration.class)
+@TestPropertySource(properties = "warehouse.reports.billing=true")
 class StatusBillingReportRestControllerTest extends BaseRestControllerTest {
 
   private static final String GET_STATUS_URL =
@@ -24,10 +33,14 @@ class StatusBillingReportRestControllerTest extends BaseRestControllerTest {
   @MockBean
   ReportStatusQuery reportStatusQuery;
 
+  @Autowired
+  BillingReportGenerationService billingReportGenerationService;
+
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200WithGenerating_whenRequestingGeneratingReport() {
     when(reportStatusQuery.getReportGeneratingState(REPORT_ID)).thenReturn(GENERATING);
+
 
     get(GET_STATUS_URL)
         .statusCode(OK.value())
@@ -48,5 +61,14 @@ class StatusBillingReportRestControllerTest extends BaseRestControllerTest {
         .body(
             "reportName",
             is("analysis/production/reports/BILLING/" + REPORT_ID));
+  }
+
+  @Configuration
+  public static class StatusTestConfiguration {
+
+    @Bean
+    public BillingReportGenerationService billingReportGenerationService() {
+      return mock(BillingReportGenerationService.class);
+    }
   }
 }

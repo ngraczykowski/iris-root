@@ -2,6 +2,9 @@ package com.silenteight.warehouse.report.metrics.generation;
 
 import lombok.NoArgsConstructor;
 
+import com.silenteight.warehouse.report.reporting.*;
+import com.silenteight.warehouse.report.reporting.FilterProperties;
+
 import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.*;
 import static java.util.Arrays.asList;
 import static java.util.List.of;
@@ -33,16 +36,16 @@ public final class GenerationMetricsReportTestFixtures {
       getLabel(PTP_EFFICIENCY_LABEL),
       getLabel(FP_EFFICIENCY_LABEL));
 
-  private static GroupingColumnProperties getGroupingColumn(
+  private static GroupingColumnPropertiesWithPatterns getGroupingColumn(
       String name, String label, String oldPattern, String newPattern) {
 
-    return new GroupingColumnProperties(name, label, oldPattern, newPattern);
+    return new GroupingColumnPropertiesWithPatterns(name, label, oldPattern, newPattern);
   }
 
-  private static ColumnProperties getColumn(
+  private static ColumnPropertiesWithValues getColumn(
       String name, String positiveValue, String negativeValue) {
 
-    return new ColumnProperties(name, positiveValue, negativeValue);
+    return new ColumnPropertiesWithValues(name, positiveValue, negativeValue);
   }
 
   private static FilterProperties getFilter(String name, String... values) {

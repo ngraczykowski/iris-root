@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.metrics.generation;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,25 +23,25 @@ public class PropertiesDefinition {
 
   @Valid
   @NotNull
-  private GroupingColumnProperties dateField;
+  private GroupingColumnPropertiesWithPatterns dateField;
   @Valid
   @NotNull
-  private GroupingColumnProperties country;
+  private GroupingColumnPropertiesWithPatterns country;
   @Valid
   @NotNull
-  private GroupingColumnProperties riskType;
+  private GroupingColumnPropertiesWithPatterns riskType;
   @Valid
   @NotNull
-  private GroupingColumnProperties hitType;
+  private GroupingColumnPropertiesWithPatterns hitType;
   @Valid
   @NotNull
-  private ColumnProperties recommendationField;
+  private ColumnPropertiesWithValues recommendationField;
   @Valid
   @NotNull
-  private ColumnProperties analystDecisionField;
+  private ColumnPropertiesWithValues analystDecisionField;
   @Valid
   @NotNull
-  private ColumnProperties qaDecisionField;
+  private ColumnPropertiesWithValues qaDecisionField;
   @Valid
   @Nullable
   private List<FilterProperties> filters;
@@ -55,7 +55,7 @@ public class PropertiesDefinition {
   @NotNull
   private LabelProperties fpEffectiveness;
 
-  List<String> getFields() {
+  public List<String> getFields() {
     List<String> fields = getStaticFields();
     fields.add(recommendationField.getName());
     fields.add(analystDecisionField.getName());
@@ -64,17 +64,17 @@ public class PropertiesDefinition {
   }
 
   @NotNull
-  List<String> getStaticFields() {
+  public List<String> getStaticFields() {
     return Stream.of(country, riskType, dateField, hitType)
-        .map(GroupingColumnProperties::getName)
+        .map(GroupingColumnPropertiesWithPatterns::getName)
         .collect(toList());
   }
 
-  List<GroupingColumnProperties> getGroupingColumns() {
+  public List<GroupingColumnPropertiesWithPatterns> getGroupingColumns() {
     return of(country, riskType, dateField);
   }
 
-  List<QueryFilter> getQueryFilters() {
+  public List<QueryFilter> getQueryFilters() {
     if (isNull(getFilters()))
       return emptyList();
 

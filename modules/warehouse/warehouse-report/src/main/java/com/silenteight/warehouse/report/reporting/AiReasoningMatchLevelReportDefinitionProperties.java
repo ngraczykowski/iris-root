@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.accuracy.generation;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +24,7 @@ import static java.util.stream.Collectors.toList;
 @AllArgsConstructor
 @Builder
 @Data
-public class AccuracyReportDefinitionProperties {
+public class AiReasoningMatchLevelReportDefinitionProperties {
 
   @NotBlank
   private String dateFieldName;
@@ -36,11 +36,12 @@ public class AccuracyReportDefinitionProperties {
   @Valid
   private List<FilterProperties> filters;
 
-  List<QueryFilter> getQueryFilters() {
+  public List<QueryFilter> getQueryFilters() {
     if (isNull(getFilters()))
       return emptyList();
 
-    return getFilters().stream()
+    return getFilters()
+        .stream()
         .map(FilterProperties::toQueryFilter)
         .collect(toList());
   }
@@ -52,8 +53,9 @@ public class AccuracyReportDefinitionProperties {
   }
 
   private List<FieldDefinition> getFieldDefinition() {
-    return columns.stream()
-        .map(AccuracyReportDefinitionProperties::convertToFieldDefinition)
+    return columns
+        .stream()
+        .map(AiReasoningMatchLevelReportDefinitionProperties::convertToFieldDefinition)
         .collect(toList());
   }
 

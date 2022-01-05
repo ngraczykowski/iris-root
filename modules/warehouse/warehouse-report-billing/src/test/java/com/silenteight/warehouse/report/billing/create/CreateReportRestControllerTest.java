@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
 
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
 import static com.silenteight.warehouse.report.billing.BillingReportTestFixtures.OFFSET_DATE_TIME_FROM;
@@ -25,6 +26,7 @@ import static org.springframework.web.util.UriComponentsBuilder.fromUriString;
     GenericExceptionControllerAdvice.class,
     CreateBillingReportControllerAdvice.class,
 })
+@TestPropertySource(properties = "warehouse.reports.billing=true")
 class CreateReportRestControllerTest extends BaseRestControllerTest {
 
   private static final String CREATE_PRODUCTION_REPORT_URL =

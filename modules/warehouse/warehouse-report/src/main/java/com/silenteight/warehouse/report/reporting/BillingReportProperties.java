@@ -1,11 +1,10 @@
-package com.silenteight.warehouse.report.billing.generation;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import com.silenteight.warehouse.indexer.query.common.QueryFilter;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.validation.annotation.Validated;
 
@@ -25,7 +24,6 @@ import static java.util.stream.Collectors.toList;
 @ConstructorBinding
 @Getter
 @Validated
-@ConfigurationProperties(prefix = "warehouse.report.billing")
 public class BillingReportProperties {
 
   @NotBlank
@@ -43,23 +41,23 @@ public class BillingReportProperties {
   @Nullable
   private final List<FilterProperties> filters;
 
-  List<String> getDateColumnsLabel() {
+  public List<String> getDateColumnsLabel() {
     return of(yearFieldName, monthFieldName);
   }
 
-  List<String> getLabels() {
+  public List<String> getLabels() {
     List<String> labels = new ArrayList<>();
     labels.add(yearMonthLabel);
     labels.addAll(getTransposeColumn().getLabels());
     return labels;
   }
 
-  List<String> getListOfFields() {
+  public List<String> getListOfFields() {
     String name = transposeColumn.getName();
     return List.of(monthFieldName, yearFieldName, name);
   }
 
-  List<QueryFilter> getQueryFilters() {
+  public List<QueryFilter> getQueryFilters() {
     if (isNull(getFilters()))
       return emptyList();
 

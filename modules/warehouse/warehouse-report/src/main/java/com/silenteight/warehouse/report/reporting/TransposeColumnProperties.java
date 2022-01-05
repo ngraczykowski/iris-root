@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.billing.generation;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import static java.util.stream.Collectors.toList;
 @ConstructorBinding
 @AllArgsConstructor
 @Getter
-class TransposeColumnProperties implements Column {
+public class TransposeColumnProperties implements Column {
 
   private static final String DELIMITER = "_";
 

@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.statistics.domain;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,6 @@ import lombok.NonNull;
 
 import com.silenteight.warehouse.indexer.query.common.QueryFilter;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.validation.annotation.Validated;
 
@@ -24,8 +23,7 @@ import static java.util.stream.Collectors.toList;
 @ConstructorBinding
 @Getter
 @Validated
-@ConfigurationProperties(prefix = "warehouse.report.statistics")
-class StatisticsProperties {
+public class StatisticsProperties {
 
   @NotBlank
   private final String dateFieldName;
@@ -47,7 +45,7 @@ class StatisticsProperties {
         .collect(toList());
   }
 
-  List<QueryFilter> getQueryFilters() {
+  public List<QueryFilter> getQueryFilters() {
     if (isNull(getFilters()))
       return emptyList();
 

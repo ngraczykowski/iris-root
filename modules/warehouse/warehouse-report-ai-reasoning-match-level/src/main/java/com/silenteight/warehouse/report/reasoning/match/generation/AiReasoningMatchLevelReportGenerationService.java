@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.warehouse.indexer.query.streaming.FetchDataRequest;
+import com.silenteight.warehouse.report.reporting.AiReasoningMatchLevelReportDefinitionProperties;
 import com.silenteight.warehouse.report.reporting.ReportGenerationService;
 
 import java.time.OffsetDateTime;

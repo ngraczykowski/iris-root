@@ -8,6 +8,9 @@ import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDataRequest;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 import com.silenteight.warehouse.report.billing.generation.dto.CsvReportContentDto;
+import com.silenteight.warehouse.report.reporting.BillingReportProperties;
+import com.silenteight.warehouse.report.reporting.ColumnProperties;
+import com.silenteight.warehouse.report.reporting.TransposeColumnProperties;
 
 import org.jetbrains.annotations.NotNull;
 

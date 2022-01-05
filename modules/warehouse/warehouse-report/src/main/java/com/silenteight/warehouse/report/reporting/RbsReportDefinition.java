@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.rbs.generation;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,7 +39,7 @@ public class RbsReportDefinition {
   @Nullable
   private final String indexName;
 
-  List<String> getListOfFields() {
+  public List<String> getListOfFields() {
     List<String> fields = new ArrayList<>();
     fields.addAll(getColumnNames());
     fields.addAll(getGroupingColumnLabels());
@@ -58,11 +58,11 @@ public class RbsReportDefinition {
         .collect(toUnmodifiableList());
   }
 
-  List<String> getListOfStaticFields() {
+  public List<String> getListOfStaticFields() {
     return getStaticColumns().stream().map(Column::getName).collect(toUnmodifiableList());
   }
 
-  List<String> getListOfLabels() {
+  public List<String> getListOfLabels() {
     List<String> result = new ArrayList<>();
     getStaticColumns().forEach(column -> result.addAll(column.getLabels()));
     result.add(MATCHES_COUNT_LABEL);
@@ -77,7 +77,7 @@ public class RbsReportDefinition {
     return result;
   }
 
-  List<QueryFilter> getQueryFilters() {
+  public List<QueryFilter> getQueryFilters() {
     if (isNull(getFilters()))
       return emptyList();
 

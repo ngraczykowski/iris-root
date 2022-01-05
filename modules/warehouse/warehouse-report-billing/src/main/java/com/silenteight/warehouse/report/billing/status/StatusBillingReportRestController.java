@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.warehouse.report.billing.domain.ReportState;
 import com.silenteight.warehouse.report.reporting.ReportStatus;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT)
+@ConditionalOnProperty("warehouse.reports.billing")
 class StatusBillingReportRestController {
 
   private static final String STATUS_PRODUCTION_REPORT_URL =

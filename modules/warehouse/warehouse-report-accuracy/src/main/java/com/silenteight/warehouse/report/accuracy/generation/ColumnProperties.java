@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @AllArgsConstructor
 @ConstructorBinding
 @Getter
+@Deprecated(since = "2.0.0")
 class ColumnProperties {
 
   @NonNull

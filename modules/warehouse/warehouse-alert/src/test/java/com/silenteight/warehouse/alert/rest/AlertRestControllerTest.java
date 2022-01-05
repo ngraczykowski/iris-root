@@ -15,7 +15,6 @@ import static com.silenteight.warehouse.common.testing.rest.TestRoles.QA;
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.any;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;

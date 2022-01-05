@@ -1,6 +1,8 @@
 package com.silenteight.warehouse.production;
 
-import static com.silenteight.warehouse.production.ProductionMessagePersistenceTestFixtures.*;
+import static com.silenteight.warehouse.production.ProductionMessagePersistenceTestFixtures.ALERT_DISCRIMINATOR_1;
+import static com.silenteight.warehouse.production.ProductionMessagePersistenceTestFixtures.ALERT_NAME_1;
+import static com.silenteight.warehouse.production.ProductionMessagePersistenceTestFixtures.PAYLOAD_1;
 import static java.util.List.of;
 
 public class ProductionProcessingTestFixtures {

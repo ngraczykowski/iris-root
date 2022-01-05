@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.report.reasoning.domain.AiReasoningReportService;
-import com.silenteight.warehouse.report.reasoning.generation.AiReasoningReportDefinitionProperties;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
+import com.silenteight.warehouse.report.reporting.ReportProperties;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
 import java.time.OffsetDateTime;
@@ -24,13 +24,14 @@ class CreateProductionAiReasoningReportUseCase {
   private final AiReasoningReportService reportService;
   @Valid
   @NonNull
-  private final AiReasoningReportDefinitionProperties productionProperties;
+  private final ReportProperties productionProperties;
   @NonNull
   private final IndexesQuery productionIndexerQuery;
 
   ReportInstanceReferenceDto createReport(OffsetDateTime from, OffsetDateTime to) {
     ReportRange range = of(from, to);
     List<String> indexes = productionIndexerQuery.getIndexesForAnalysis(PRODUCTION_ANALYSIS_NAME);
-    return reportService.createReportInstance(range, indexes, productionProperties);
+    return reportService.createReportInstance(range, indexes,
+        productionProperties.getAiReasoning().getProduction());
   }
 }

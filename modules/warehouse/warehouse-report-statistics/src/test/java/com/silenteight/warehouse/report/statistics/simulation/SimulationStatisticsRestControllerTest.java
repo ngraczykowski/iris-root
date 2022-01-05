@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.TestPropertySource;
 
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
 import static com.silenteight.warehouse.report.statistics.StatisticsTestFixtures.STATISTICS_DTO;
@@ -18,6 +19,7 @@ import static org.springframework.http.HttpStatus.OK;
     SimulationStatisticsRestController.class,
     SimulationStatisticsConfiguration.class
 })
+@TestPropertySource(properties = "warehouse.report.statistics=true")
 class SimulationStatisticsRestControllerTest extends BaseRestControllerTest {
 
   private static final String ANALYSIS_NAME = "analysis";

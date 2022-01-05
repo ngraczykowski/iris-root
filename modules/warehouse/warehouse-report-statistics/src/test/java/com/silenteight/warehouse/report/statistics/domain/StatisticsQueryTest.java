@@ -4,6 +4,7 @@ import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
+import com.silenteight.warehouse.report.reporting.*;
 import com.silenteight.warehouse.report.statistics.domain.dto.EffectivenessDto;
 import com.silenteight.warehouse.report.statistics.domain.dto.EfficiencyDto;
 import com.silenteight.warehouse.report.statistics.domain.dto.StatisticsDto;
@@ -62,10 +63,19 @@ class StatisticsQueryTest {
             ),
             emptyList());
 
+    ReportProperties reportProperties = new ReportProperties(
+        mock(AiReasoningReportProperties.class),
+        mock(AccuracyReportProperties.class),
+        mock(AiReasoningMatchLevelReportProperties.class),
+        mock(BillingReportProperties.class),
+        mock(RbsReportProperties.class),
+        statisticsProperties,
+        mock(MetricsReportProperties.class));
+
     underTest = new StatisticsConfiguration().statisticsQuery(
         groupingQueryService,
         indexerQuery,
-        statisticsProperties);
+        reportProperties);
   }
 
   @Test

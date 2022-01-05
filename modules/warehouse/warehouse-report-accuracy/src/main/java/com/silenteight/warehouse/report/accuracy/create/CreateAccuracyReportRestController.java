@@ -1,27 +1,29 @@
 package com.silenteight.warehouse.report.accuracy.create;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static java.lang.String.format;
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.SEE_OTHER;
 import static org.springframework.http.ResponseEntity.status;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RequestMapping(ROOT)
 class CreateAccuracyReportRestController {
 
@@ -31,9 +33,9 @@ class CreateAccuracyReportRestController {
   private static final String CREATE_PRODUCTION_REPORT_URL =
       "/v2/analysis/production/reports/ACCURACY";
 
-  @NonNull
+  @Nullable
   private final CreateSimulationAccuracyReportUseCase createSimulationReportUseCase;
-  @NonNull
+  @Nullable
   private final CreateProductionAccuracyReportUseCase createProductionReportUseCase;
 
   @PostMapping(CREATE_SIMULATION_REPORT_URL)
@@ -42,6 +44,9 @@ class CreateAccuracyReportRestController {
 
     log.info("Create simulation Accuracy report request received, analysisId={}", analysisId);
 
+    if (Objects.isNull(createSimulationReportUseCase)) {
+      return status(NOT_FOUND).build();
+    }
     ReportInstanceReferenceDto reportInstance =
         createSimulationReportUseCase.createReport(analysisId);
 
@@ -63,6 +68,9 @@ class CreateAccuracyReportRestController {
 
     log.info("Create production Accuracy report request received, from={} - to={}", from, to);
 
+    if (Objects.isNull(createProductionReportUseCase)) {
+      return status(NOT_FOUND).build();
+    }
     ReportInstanceReferenceDto reportInstance =
         createProductionReportUseCase.createReport(from, to);
 

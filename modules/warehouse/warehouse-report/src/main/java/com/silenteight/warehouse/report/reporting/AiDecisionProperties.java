@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.statistics.domain;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.util.List;
 @ConstructorBinding
 @AllArgsConstructor
 @Getter
-class AiDecisionProperties implements Decision {
+public class AiDecisionProperties implements Decision {
 
   @NonNull
   private final String field;

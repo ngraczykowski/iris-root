@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.reasoning.generation;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @ConstructorBinding
 @AllArgsConstructor
 @Getter
-class FilterProperties {
+public class FilterProperties {
 
   @NotNull
   private final String name;

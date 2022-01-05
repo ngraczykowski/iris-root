@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.warehouse.report.rbs.generation.RbsReportDefinition;
 import com.silenteight.warehouse.report.remove.ReportsRemoval;
+import com.silenteight.warehouse.report.reporting.RbsReportDefinition;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 

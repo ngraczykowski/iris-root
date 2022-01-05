@@ -4,6 +4,9 @@ import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 import com.silenteight.warehouse.report.rbs.generation.dto.CsvReportContentDto;
+import com.silenteight.warehouse.report.reporting.*;
+import com.silenteight.warehouse.report.reporting.ColumnProperties;
+import com.silenteight.warehouse.report.reporting.FilterProperties;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;

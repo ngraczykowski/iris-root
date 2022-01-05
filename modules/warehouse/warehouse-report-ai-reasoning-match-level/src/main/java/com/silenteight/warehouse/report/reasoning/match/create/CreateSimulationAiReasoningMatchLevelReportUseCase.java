@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.indexer.query.IndexesQuery;
 import com.silenteight.warehouse.report.reasoning.match.domain.AiReasoningMatchLevelReportService;
-import com.silenteight.warehouse.report.reasoning.match.generation.AiReasoningMatchLevelReportDefinitionProperties;
+import com.silenteight.warehouse.report.reporting.AiReasoningMatchLevelReportDefinitionProperties;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 

@@ -4,6 +4,8 @@ import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 import com.silenteight.warehouse.report.billing.generation.dto.CsvReportContentDto;
+import com.silenteight.warehouse.report.reporting.*;
+import com.silenteight.warehouse.report.reporting.ColumnProperties;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,8 +47,17 @@ class ReportGenerationServiceTest {
         transposeColumnProperties, emptyList()
     );
 
+    ReportProperties reportProperties = new ReportProperties(
+        mock(AiReasoningReportProperties.class),
+        mock(AccuracyReportProperties.class),
+        mock(AiReasoningMatchLevelReportProperties.class),
+        billingReportProperties,
+        mock(RbsReportProperties.class),
+        mock(StatisticsProperties.class),
+        mock(MetricsReportProperties.class));
+
     underTest = new BillingReportGenerationConfiguration().billingReportGenerationService(
-        groupingQueryService, billingReportProperties);
+        groupingQueryService, reportProperties);
   }
 
   @Test

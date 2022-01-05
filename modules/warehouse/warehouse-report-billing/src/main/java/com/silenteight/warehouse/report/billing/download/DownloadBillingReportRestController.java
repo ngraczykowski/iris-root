@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.billing.download.dto.DownloadBillingReportDto;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(ROOT)
+@ConditionalOnProperty("warehouse.reports.billing")
 class DownloadBillingReportRestController {
 
   public static final String DOWNLOAD_PRODUCTION_REPORT_URL =

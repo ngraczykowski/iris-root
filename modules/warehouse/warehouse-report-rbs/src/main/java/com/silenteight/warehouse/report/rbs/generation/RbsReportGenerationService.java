@@ -9,6 +9,9 @@ import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDataRequest;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 import com.silenteight.warehouse.report.rbs.generation.dto.CsvReportContentDto;
+import com.silenteight.warehouse.report.reporting.GroupingColumnProperties;
+import com.silenteight.warehouse.report.reporting.GroupingValues;
+import com.silenteight.warehouse.report.reporting.RbsReportDefinition;
 
 import java.time.OffsetDateTime;
 import java.util.List;

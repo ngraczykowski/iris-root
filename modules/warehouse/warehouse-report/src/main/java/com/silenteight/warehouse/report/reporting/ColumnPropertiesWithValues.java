@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.report.metrics.generation;
+package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import static java.util.List.of;
 @ConstructorBinding
 @AllArgsConstructor
 @Getter
-class ColumnProperties {
+public class ColumnPropertiesWithValues {
 
   @NotNull
   private final String name;
@@ -22,7 +22,7 @@ class ColumnProperties {
   @NotNull
   private final String negativeValue;
 
-  List<String> getDecisionValues() {
+  public List<String> getDecisionValues() {
     return of(positiveValue, negativeValue);
   }
 }

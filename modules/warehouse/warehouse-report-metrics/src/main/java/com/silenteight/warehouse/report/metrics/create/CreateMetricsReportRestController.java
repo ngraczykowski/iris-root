@@ -1,26 +1,28 @@
 package com.silenteight.warehouse.report.metrics.create;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static java.lang.String.format;
 import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.SEE_OTHER;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RequestMapping(ROOT)
 class CreateMetricsReportRestController {
 
@@ -30,9 +32,10 @@ class CreateMetricsReportRestController {
   private static final String CREATE_PRODUCTION_REPORT_URL =
       "/v2/analysis/production/reports/METRICS";
 
-  @NonNull
+  @Nullable
   private final CreateProductionMetricsReportUseCase createProductionMetricsReportUseCase;
-  @NonNull
+
+  @Nullable
   private final CreateSimulationMetricsReportUseCase createSimulationMetricsReportUseCase;
 
   @PostMapping(CREATE_SIMULATION_REPORT_URL)
@@ -41,6 +44,10 @@ class CreateMetricsReportRestController {
       @PathVariable String analysisId) {
 
     log.info("Create simulation metrics report request received, analysisId={}", analysisId);
+
+    if (Objects.isNull(createSimulationMetricsReportUseCase)) {
+      return ResponseEntity.status(NOT_FOUND).build();
+    }
 
     ReportInstanceReferenceDto reportInstance = createSimulationMetricsReportUseCase
         .createReport(analysisId);
@@ -63,6 +70,10 @@ class CreateMetricsReportRestController {
       @RequestParam OffsetDateTime to) {
 
     log.info("Create production Metrics report request received, from={} - to={}", from, to);
+
+    if (Objects.isNull(createProductionMetricsReportUseCase)) {
+      return ResponseEntity.status(NOT_FOUND).build();
+    }
 
     ReportInstanceReferenceDto reportInstance =
         createProductionMetricsReportUseCase.createReport(from, to);
