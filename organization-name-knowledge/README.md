@@ -10,6 +10,23 @@ or completely freetext form.
 ### From PyPi:
 ```pip install organization-name-knowledge```
 
+### Docker
+#### Docker building 
+Using agent inside Docker, its requirements are downloaded from our S8 PyPi. 
+Thus, we need to do something like 'logging in' to be able to do so:
+Create in project level directory, a file named "pip_index_url"
+(this file is added to .gitignore and should never be copied anywhere !)
+and place here your credentials to PYPI in form:
+
+```https://user:password@repo.silenteight.com/artifactory/api/pypi/pypi/simple```
+
+And then run build :
+
+```DOCKER_BUILDKIT=1 docker build -t organization_name_knowledge --secret id=mysecret,src=../pip_index_url .```
+
+#### Docker running
+```docker run organization_name_knowledge ```
+
 ## Package API
 
 ### organization_name_knowledge.parse

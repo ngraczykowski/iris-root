@@ -39,11 +39,6 @@ def alpha_char_count(text: str) -> int:
     return sum([1 for char in text if char.isalpha()])
 
 
-def clear_freetext(text: str) -> str:
-    text = text.replace(" is ", " ")  # hacky trick to avoid 'is' as a legal
-    return text.lower()
-
-
 def clear_name(name: str) -> str:
     name = unidecode.unidecode(name.lower()).strip()
     return REMOVE_CHARS_REGEX.sub("", name)

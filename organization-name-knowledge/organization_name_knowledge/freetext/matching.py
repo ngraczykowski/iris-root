@@ -52,7 +52,7 @@ def get_names_from_org_name_markers(tokens: List[str]) -> List[NameInformation]:
     tokens_num = len(tokens)
     org_name_candidates = []
     for idx, token in enumerate(tokens):
-        if token in KnowledgeBase.markers:
+        if token.lower() in KnowledgeBase.markers:
             lefts_2, lefts_1 = (idx - 2, idx - 1, idx), (idx - 1, idx)
             org_name_candidates.append(_get_lefts_candidate(lefts_2, tokens, tokens_num))
             org_name_candidates.append(_get_lefts_candidate(lefts_1, tokens, tokens_num))

@@ -12,7 +12,6 @@ from organization_name_knowledge.names.parse.parse import parse_name
 from organization_name_knowledge.utils.text import (
     PREPOSITIONS,
     alpha_char_count,
-    clear_freetext,
     contains_conjunction,
     starts_with_conjunction,
     starts_with_preposition,
@@ -34,7 +33,6 @@ def parse_freetext_names(
 
     for freetext_variant in get_text_variants(freetext):
 
-        freetext_variant = clear_freetext(freetext_variant)
         freetext_variant_tokens = freetext_variant.split()
 
         substrings = get_substrings_from_consecutive_tokens(
