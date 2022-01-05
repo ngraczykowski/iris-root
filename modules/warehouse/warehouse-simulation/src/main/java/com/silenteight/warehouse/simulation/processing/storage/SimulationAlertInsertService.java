@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class SimulationAlertInsertService {
 
   private static final String INSERT_SQL = "INSERT into warehouse_simulation_alert "
-      + "(name, analysis_name, payload) VALUES (:name, :analysis_name, TO_JSON(:payload))";
+      + "(name, analysis_name, payload) VALUES (:name, :analysis_name, TO_JSON(:payload::json))";
 
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
