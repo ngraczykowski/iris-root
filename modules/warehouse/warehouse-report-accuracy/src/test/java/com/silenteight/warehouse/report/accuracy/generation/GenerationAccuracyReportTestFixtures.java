@@ -17,6 +17,9 @@ public final class GenerationAccuracyReportTestFixtures {
   public static final AccuracyReportDefinitionProperties
       PROPERTIES = new AccuracyReportDefinitionProperties(
       DATE_FIELD_NAME,
+      false,
+      null,
+      null,
       of(
           getColumn(HIT_TYPE_FIELD_NAME, HIT_TYPE_FIELD_LABEL),
           getColumn(COUNTRY_FIELD_NAME, COUNTRY_FIELD_LABEL)),
@@ -28,6 +31,9 @@ public final class GenerationAccuracyReportTestFixtures {
   public static final AccuracyReportDefinitionProperties NULL_QUERY_FILTERS_PROPERTIES =
       new AccuracyReportDefinitionProperties(
           DATE_FIELD_NAME,
+          false,
+          null,
+          null,
           of(
               getColumn(HIT_TYPE_FIELD_NAME, HIT_TYPE_FIELD_LABEL),
               getColumn(COUNTRY_FIELD_NAME, COUNTRY_FIELD_LABEL)),

@@ -33,6 +33,9 @@ public class AccuracyReportGenerationService {
         .queryFilters(properties.getQueryFilters())
         .indexes(indexes)
         .name(name)
+        .useSqlReports(properties.isUseSqlReports())
+        .selectSqlQuery(properties.getSelectSqlQuery())
+        .sqlTemplates(properties.getSqlTemplates())
         .build();
 
     generationStreamingService.generate(request);
