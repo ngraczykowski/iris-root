@@ -3,21 +3,20 @@ package com.silenteight.simulator.management.domain;
 import lombok.*;
 import lombok.Builder.Default;
 
-import com.silenteight.sep.base.common.entity.BaseEntity;
+import com.silenteight.sep.base.common.entity.BaseModifiableEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
-import com.silenteight.simulator.management.details.dto.SimulationDetailsDto;
+import com.silenteight.simulator.management.domain.dto.SimulationDto;
 import com.silenteight.simulator.management.domain.exception.SimulationNotInProperStateException;
-import com.silenteight.simulator.management.list.dto.SimulationDto;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 
 import static com.silenteight.simulator.management.common.SimulationResource.toResourceName;
 import static com.silenteight.simulator.management.domain.SimulationState.*;
+import static java.util.Arrays.stream;
 
 @Entity
 @Data
@@ -27,7 +26,7 @@ import static com.silenteight.simulator.management.domain.SimulationState.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
-class SimulationEntity extends BaseEntity implements IdentifiableEntity, Serializable {
+class SimulationEntity extends BaseModifiableEntity implements IdentifiableEntity, Serializable {
 
   private static final long serialVersionUID = 1696925601371419382L;
 
@@ -84,6 +83,9 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
   @Column(name = "finished_at")
   private OffsetDateTime finishedAt;
 
+  @Column(name = "solved_alerts")
+  private long solvedAlerts;
+
   void run() {
     assertInState(PENDING);
     this.state = RUNNING;
@@ -104,8 +106,18 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
     this.state = CANCELED;
   }
 
+  private void setErrorState(OffsetDateTime finishedAt) {
+    assertInState(RUNNING,STREAMING);
+    this.state = ERROR;
+    this.finishedAt = finishedAt;
+  }
+
+  void setSolvedAlerts(long solvedAlerts) {
+    this.solvedAlerts = solvedAlerts;
+  }
+
   private void assertInState(SimulationState... requiredStates) {
-    if (Arrays.stream(requiredStates).noneMatch(requiredState -> requiredState == this.state))
+    if (stream(requiredStates).noneMatch(requiredState -> requiredState == this.state))
       throw new SimulationNotInProperStateException(requiredStates);
   }
 
@@ -122,22 +134,12 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
     this.state = STREAMING;
   }
 
-  SimulationDto toDto() {
-    return SimulationDto.builder()
-        .id(getSimulationId())
-        .name(toResourceName(getSimulationId()))
-        .simulationName(getName())
-        .state(getState())
-        .datasets(getDatasetNames())
-        .model(getModelName())
-        .createdAt(getCreatedAt())
-        .createdBy(getCreatedBy())
-        .finishedAt(getFinishedAt())
-        .build();
+  void timeout(OffsetDateTime dateTime) {
+    setErrorState(dateTime);
   }
 
-  SimulationDetailsDto toDetailsDto() {
-    return SimulationDetailsDto.builder()
+  SimulationDto toDto() {
+    return SimulationDto.builder()
         .id(getSimulationId())
         .name(toResourceName(getSimulationId()))
         .description(getDescription())
@@ -146,8 +148,10 @@ class SimulationEntity extends BaseEntity implements IdentifiableEntity, Seriali
         .datasets(getDatasetNames())
         .analysis(getAnalysisName())
         .model(getModelName())
+        .solvedAlerts(solvedAlerts)
         .createdAt(getCreatedAt())
         .createdBy(getCreatedBy())
+        .updatedAt(getLastModifyAt())
         .finishedAt(getFinishedAt())
         .build();
   }

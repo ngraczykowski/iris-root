@@ -1,4 +1,4 @@
-package com.silenteight.simulator.management.details.dto;
+package com.silenteight.simulator.management.list.dto;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -13,14 +13,12 @@ import java.util.UUID;
 
 @Value
 @Builder
-public class SimulationDetailsDto {
+public class SimulationListDto {
 
   @NonNull
   UUID id;
   @NonNull
   String name;
-  @NonNull
-  String description;
   @NonNull
   String simulationName;
   @NonNull
@@ -30,26 +28,20 @@ public class SimulationDetailsDto {
   @NonNull
   String model;
   @NonNull
-  String analysis;
-  @NonNull
   String createdBy;
-  long solvedAlerts;
   @NonNull
   OffsetDateTime createdAt;
   OffsetDateTime updatedAt;
   OffsetDateTime finishedAt;
 
-  public static SimulationDetailsDto of(SimulationDto simulationDto) {
-    return SimulationDetailsDto.builder()
+  public static SimulationListDto toSimulationListDto(SimulationDto simulationDto) {
+    return SimulationListDto.builder()
         .id(simulationDto.getId())
         .name(simulationDto.getName())
-        .description(simulationDto.getDescription())
         .simulationName(simulationDto.getSimulationName())
         .state(simulationDto.getState())
         .datasets(simulationDto.getDatasets())
         .model(simulationDto.getModel())
-        .analysis(simulationDto.getAnalysis())
-        .solvedAlerts(simulationDto.getSolvedAlerts())
         .createdBy(simulationDto.getCreatedBy())
         .createdAt(simulationDto.getCreatedAt())
         .updatedAt(simulationDto.getUpdatedAt())

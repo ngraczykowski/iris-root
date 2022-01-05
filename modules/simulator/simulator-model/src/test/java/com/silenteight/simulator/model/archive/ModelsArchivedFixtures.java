@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import com.silenteight.model.api.v1.ModelsArchived;
-import com.silenteight.simulator.management.list.dto.SimulationDto;
+import com.silenteight.simulator.management.list.dto.SimulationListDto;
 
 import java.time.Instant;
 import java.util.List;
@@ -31,8 +31,8 @@ final class ModelsArchivedFixtures {
   private static final String MODEL_NAME_2 = "solvingModels/d17b4708-6fde-8dc0-4832-d17b4708d8ca";
   static final List<String> MODEL_NAMES = List.of(MODEL_NAME_1, MODEL_NAME_2);
 
-  public static final SimulationDto SIMULATION_DTO =
-      SimulationDto.builder()
+  public static final SimulationListDto SIMULATION_DTO =
+      SimulationListDto.builder()
           .id(SIMULATION_ID)
           .name(SIMULATION_RESOURCE_NAME)
           .simulationName(SIMULATION_NAME)

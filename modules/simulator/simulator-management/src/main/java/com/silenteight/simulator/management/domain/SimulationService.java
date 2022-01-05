@@ -39,7 +39,6 @@ public class SimulationService {
         .state(PENDING)
         .build();
     simulationEntity.run();
-
     try {
       repository.save(simulationEntity);
       log.debug("Saved SimulationEntity={}", simulationEntity);
@@ -82,13 +81,31 @@ public class SimulationService {
     log.debug("Saved as 'ARCHIVED' SimulationEntity={}", simulationEntity);
   }
 
-  public String getAnalysisNameBySimulationId(UUID simulationId) {
-    return repository.findAnalysisNameBySimulationId(simulationId);
+  public void updateNumberOfSolvedAlertsInSimulation(long solvedAlerts, UUID simulationId) {
+    log.info("Updating simulation with id={} with {} of solved alerts", simulationId, solvedAlerts);
+
+    SimulationEntity simulationEntity = repository
+        .findSimulationEntityBySimulationId(simulationId)
+        .orElseThrow(() -> new SimulationNotFoundException(simulationId));
+
+    simulationEntity.setSolvedAlerts(solvedAlerts);
+    simulationEntity.setCurrentTimeForUpdatedAt();
+  }
+
+  public void timeout(UUID id) {
+    setErrorStateOnSimulation(id);
+  }
+
+  private void setErrorStateOnSimulation(UUID simulationId) {
+    SimulationEntity simulationEntity = repository
+        .findSimulationEntityBySimulationId(simulationId)
+        .orElseThrow(() -> new SimulationNotFoundException(simulationId));
+    simulationEntity.timeout(timeSource.offsetDateTime());
   }
 
   private SimulationEntity getBySimulationId(UUID simulationId) {
     return repository
-        .findBySimulationId(simulationId)
+        .findSimulationEntityBySimulationId(simulationId)
         .orElseThrow(() -> new SimulationNotFoundException(simulationId));
   }
 

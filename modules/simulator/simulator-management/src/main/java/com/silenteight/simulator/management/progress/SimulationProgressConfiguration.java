@@ -1,7 +1,6 @@
 package com.silenteight.simulator.management.progress;
 
 import com.silenteight.simulator.management.create.AnalysisService;
-import com.silenteight.simulator.management.domain.SimulationService;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +18,8 @@ class SimulationProgressConfiguration {
   SimulationProgressService simulationProgressService(
       AnalysisService analysisService,
       IndexedAlertProvider indexedAlertProvider,
-      SimulationService simulationService
+      AnalysisNameQuery analysisNameQuery
   ) {
-    return new SimulationProgressService(analysisService, indexedAlertProvider, simulationService);
+    return new SimulationProgressService(analysisService, indexedAlertProvider, analysisNameQuery);
   }
 }

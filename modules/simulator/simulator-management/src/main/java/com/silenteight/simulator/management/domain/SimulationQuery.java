@@ -6,15 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.simulator.management.details.SimulationDetailsQuery;
 import com.silenteight.simulator.management.details.dto.SimulationDetailsDto;
+import com.silenteight.simulator.management.domain.dto.SimulationDto;
 import com.silenteight.simulator.management.domain.exception.SimulationNotFoundException;
 import com.silenteight.simulator.management.list.ListSimulationsQuery;
-import com.silenteight.simulator.management.list.dto.SimulationDto;
+import com.silenteight.simulator.management.progress.AnalysisNameQuery;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
-
 
 import static com.silenteight.simulator.management.domain.SimulationState.RUNNING;
 import static com.silenteight.simulator.management.domain.SimulationState.STREAMING;
@@ -25,18 +25,19 @@ import static java.util.stream.Stream.of;
 @Slf4j
 @RequiredArgsConstructor
 class SimulationQuery
-    implements ListSimulationsQuery, SimulationDetailsQuery, SimulationStateProvider {
+    implements AnalysisNameQuery, ListSimulationsQuery, SimulationDetailsQuery,
+    SimulationStateProvider {
 
   @NonNull
   private final SimulationRepository repository;
 
   @Override
-  public List<SimulationDto> list(Collection<SimulationState> states) {
+  public List<SimulationDto> listDomainDto(Collection<SimulationState> states) {
     log.debug("Listing all SimulationDto by states={}", states);
 
     if (states.contains(RUNNING))
       states = Stream.concat(states.stream(), of(STREAMING)).collect(toSet());
-      
+
     return repository
         .findAllByStateIn(states)
         .stream()
@@ -45,21 +46,7 @@ class SimulationQuery
   }
 
   @Override
-  public List<SimulationDto> findByModel(@NonNull String model) {
-    log.debug("Listing all SimulationDto by model={}", model);
-
-    Collection<SimulationEntity> simulationEntities = repository.findAllByModelName(model);
-    if (simulationEntities.isEmpty())
-      throw new InvalidModelNameException(model);
-
-    return simulationEntities
-        .stream()
-        .map(SimulationEntity::toDto)
-        .collect(toList());
-  }
-
-  @Override
-  public List<SimulationDto> findByModels(@NonNull Collection<String> models) {
+  public List<SimulationDto> findDomainDtoByModels(@NonNull Collection<String> models) {
     log.debug("Listing all SimulationDto by models={}", models);
 
     return repository
@@ -74,8 +61,9 @@ class SimulationQuery
     log.debug("Getting SimulationDetailsDto by simulationId={}", simulationId);
 
     return repository
-        .findBySimulationId(simulationId)
-        .map(SimulationEntity::toDetailsDto)
+        .findSimulationEntityBySimulationId(simulationId)
+        .map(SimulationEntity::toDto)
+        .map(SimulationDetailsDto::of)
         .orElseThrow(() -> new SimulationNotFoundException(simulationId));
   }
 
@@ -85,7 +73,8 @@ class SimulationQuery
 
     return repository
         .findByAnalysisName(analysisName)
-        .map(SimulationEntity::toDetailsDto)
+        .map(SimulationEntity::toDto)
+        .map(SimulationDetailsDto::of)
         .orElseThrow(() -> new SimulationNotFoundException(analysisName));
   }
 
@@ -100,5 +89,10 @@ class SimulationQuery
         .findByAnalysisName(analysis)
         .map(SimulationEntity::isStreaming)
         .orElseThrow(() -> new SimulationNotFoundException(analysis));
+  }
+
+  @Override
+  public String getAnalysisName(UUID simulationId) {
+    return repository.findAnalysisNameBySimulationId(simulationId);
   }
 }

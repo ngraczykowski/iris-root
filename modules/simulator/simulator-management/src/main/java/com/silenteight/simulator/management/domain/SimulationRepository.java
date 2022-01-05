@@ -13,13 +13,11 @@ interface SimulationRepository extends Repository<SimulationEntity, Long> {
 
   Collection<SimulationEntity> findAllByStateIn(Collection<SimulationState> states);
 
-  Collection<SimulationEntity> findAllByModelName(String modelName);
-
   Collection<SimulationEntity> findAllByModelNameIn(Collection<String> modelNames);
 
   Optional<SimulationEntity> findByAnalysisName(String analysisName);
 
-  Optional<SimulationEntity> findBySimulationId(UUID simulationId);
+  Optional<SimulationEntity> findSimulationEntityBySimulationId(UUID simulationId);
 
   @Query(value = "SELECT DISTINCT s.analysis_name"
       + " FROM simulator_simulation s"

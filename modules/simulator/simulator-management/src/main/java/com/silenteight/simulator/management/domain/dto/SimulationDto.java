@@ -1,4 +1,4 @@
-package com.silenteight.simulator.management.list.dto;
+package com.silenteight.simulator.management.domain.dto;
 
 import lombok.Builder;
 import lombok.NonNull;
@@ -19,6 +19,8 @@ public class SimulationDto {
   @NonNull
   String name;
   @NonNull
+  String description;
+  @NonNull
   String simulationName;
   @NonNull
   SimulationState state;
@@ -27,7 +29,10 @@ public class SimulationDto {
   @NonNull
   String model;
   @NonNull
+  String analysis;
+  @NonNull
   String createdBy;
+  long solvedAlerts;
   @NonNull
   OffsetDateTime createdAt;
   OffsetDateTime updatedAt;

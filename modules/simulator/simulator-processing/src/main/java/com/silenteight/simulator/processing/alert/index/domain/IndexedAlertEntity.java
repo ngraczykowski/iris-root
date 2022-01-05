@@ -2,7 +2,7 @@ package com.silenteight.simulator.processing.alert.index.domain;
 
 import lombok.*;
 
-import com.silenteight.sep.base.common.entity.BaseEntity;
+import com.silenteight.sep.base.common.entity.BaseModifiableEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 import com.silenteight.simulator.processing.alert.index.dto.IndexedAlertDto;
 
@@ -19,7 +19,7 @@ import static com.silenteight.simulator.processing.alert.index.domain.State.ACKE
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
-class IndexedAlertEntity extends BaseEntity implements IdentifiableEntity, Serializable {
+class IndexedAlertEntity extends BaseModifiableEntity implements IdentifiableEntity, Serializable {
 
   private static final long serialVersionUID = -8832059739436178153L;
 

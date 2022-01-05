@@ -11,5 +11,18 @@
         oldColumnName="countries"
         newColumnName="labels"/>
   </changeSet>
-
+  <changeSet id="simulator-1.5.0-2" author="rpajdak">
+    <addColumn tableName="simulator_simulation">
+      <column name="solved_alerts" type="BIGINT" defaultValue="0">
+      </column>
+    </addColumn>
+    <addColumn tableName="simulator_simulation">
+      <column name="updated_at" type="TIMESTAMP">
+      </column>
+    </addColumn>
+    <addColumn tableName="simulator_indexed_alert">
+      <column name="updated_at" type="TIMESTAMP">
+      </column>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

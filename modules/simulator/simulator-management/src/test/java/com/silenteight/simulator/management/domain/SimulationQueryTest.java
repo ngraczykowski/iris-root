@@ -3,7 +3,7 @@ package com.silenteight.simulator.management.domain;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 import com.silenteight.simulator.management.details.dto.SimulationDetailsDto;
 import com.silenteight.simulator.management.domain.exception.SimulationNotFoundException;
-import com.silenteight.simulator.management.list.dto.SimulationDto;
+import com.silenteight.simulator.management.list.dto.SimulationListDto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
     persistSimulation(canceledSimulationId, CANCELED_STATE);
 
     // when
-    List<SimulationDto> result = underTest.list(of(PENDING_STATE, ARCHIVED_STATE));
+    List<SimulationListDto> result = underTest.list(of(PENDING_STATE, ARCHIVED_STATE));
 
     // then
     assertThat(result).hasSize(1);
@@ -56,7 +56,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
     persistSimulation(canceledSimulationId, CANCELED_STATE);
 
     // when
-    List<SimulationDto> result = underTest.list(of(RUNNING, ARCHIVED_STATE));
+    List<SimulationListDto> result = underTest.list(of(RUNNING, ARCHIVED_STATE));
 
     // then
     assertThat(result).hasSize(1);
@@ -69,7 +69,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
     persistSimulation(ID, PENDING_STATE);
 
     // when
-    List<SimulationDto> result = underTest.findByModel(MODEL_NAME);
+    List<SimulationListDto> result = underTest.findByModels(of(MODEL_NAME));
 
     // then
     assertThat(result).hasSize(1);
@@ -82,18 +82,11 @@ class SimulationQueryTest extends BaseDataJpaTest {
     persistSimulation(ID, PENDING_STATE);
 
     // when
-    List<SimulationDto> result = underTest.findByModels(of(MODEL_NAME));
+    List<SimulationListDto> result = underTest.findByModels(of(MODEL_NAME));
 
     // then
     assertThat(result).hasSize(1);
     assertSimulation(result.get(0), PENDING_STATE);
-  }
-
-  @Test
-  void shouldThrowIfSimulationsNotFoundByModel() {
-    assertThatThrownBy(() -> underTest.findByModel(MODEL_NAME))
-        .isInstanceOf(InvalidModelNameException.class)
-        .hasMessageContaining("modelName=" + MODEL_NAME);
   }
 
   @Test
@@ -121,7 +114,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
     persistSimulation(ID, PENDING_STATE);
 
     // when
-    SimulationDetailsDto result = underTest.get(ANALYSIS_NAME);
+    SimulationDetailsDto result = underTest.get(ANALYSIS_NAME_1);
 
     // then
     assertSimulationDetails(result);
@@ -129,9 +122,9 @@ class SimulationQueryTest extends BaseDataJpaTest {
 
   @Test
   void shouldThrowIfSimulationNotFoundByAnalysisName() {
-    assertThatThrownBy(() -> underTest.get(ANALYSIS_NAME))
+    assertThatThrownBy(() -> underTest.get(ANALYSIS_NAME_1))
         .isInstanceOf(SimulationNotFoundException.class)
-        .hasMessageContaining("analysisName=" + ANALYSIS_NAME);
+        .hasMessageContaining("analysisName=" + ANALYSIS_NAME_1);
   }
 
   @Test
@@ -143,7 +136,19 @@ class SimulationQueryTest extends BaseDataJpaTest {
     Collection<String> result = underTest.getAnalysisNames(DATASETS);
 
     // then
-    assertThat(result).isEqualTo(List.of(ANALYSIS_NAME));
+    assertThat(result).isEqualTo(of(ANALYSIS_NAME_1));
+  }
+
+  @Test
+  void shouldGetAnalysisName() {
+    //given
+    persistSimulation(ID, PENDING_STATE);
+
+    //when
+    String analysisName = underTest.getAnalysisName(ID);
+
+    //them
+    assertThat(analysisName).isEqualTo(ANALYSIS_NAME_1);
   }
 
   @Test
@@ -158,7 +163,7 @@ class SimulationQueryTest extends BaseDataJpaTest {
     assertThat(simulationDetailsDto.getState()).isEqualTo(RUNNING);
   }
 
-  private static void assertSimulation(SimulationDto result, SimulationState pendingState) {
+  private static void assertSimulation(SimulationListDto result, SimulationState pendingState) {
     assertThat(result.getId()).isEqualTo(ID);
     assertThat(result.getSimulationName()).isEqualTo(SIMULATION_NAME);
     assertThat(result.getState()).isEqualTo(pendingState);
@@ -175,9 +180,10 @@ class SimulationQueryTest extends BaseDataJpaTest {
     assertThat(result.getState()).isEqualTo(PENDING_STATE);
     assertThat(result.getDatasets()).isEqualTo(DATASETS);
     assertThat(result.getModel()).isEqualTo(MODEL_NAME);
-    assertThat(result.getAnalysis()).isEqualTo(ANALYSIS_NAME);
+    assertThat(result.getAnalysis()).isEqualTo(ANALYSIS_NAME_1);
     assertThat(result.getCreatedBy()).isEqualTo(USERNAME);
     assertThat(result.getCreatedAt()).isNotNull();
+    assertThat(result.getSolvedAlerts()).isEqualTo(ALERTS_COUNT);
   }
 
   private void persistSimulation(UUID simulationId, SimulationState state) {
@@ -190,7 +196,8 @@ class SimulationQueryTest extends BaseDataJpaTest {
         .createdBy(USERNAME)
         .datasetNames(DATASETS)
         .modelName(MODEL_NAME)
-        .analysisName(ANALYSIS_NAME)
+        .analysisName(ANALYSIS_NAME_1)
+        .solvedAlerts(ALERTS_COUNT)
         .build();
 
     simulationRepository.save(simulationEntity);

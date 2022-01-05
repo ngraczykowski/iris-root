@@ -38,7 +38,7 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { MODEL_TUNER, AUDITOR, APPROVER, QA, QA_ISSUE_MANAGER })
   void its200_whenSimulationFound() {
-    given(simulationQuery.list(of(PENDING_STATE))).willReturn(of(SIMULATION_DTO));
+    given(simulationQuery.list(of(PENDING_STATE))).willReturn(of(SIMULATION_LIST_DTO));
     get(SIMULATIONS_URL_BY_STATES)
         .statusCode(OK.value())
         .body("size()", is(1))
@@ -59,7 +59,7 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { MODEL_TUNER, AUDITOR, APPROVER, QA, QA_ISSUE_MANAGER })
   void its200_whenSimulationByModelNameFound() {
-    given(simulationQuery.findByModel(MODEL_NAME)).willReturn(of(SIMULATION_DTO));
+    given(simulationQuery.findByModels(of(MODEL_NAME))).willReturn(of(SIMULATION_LIST_DTO));
     get(SIMULATIONS_BY_MODEL_NAME_URL)
         .statusCode(OK.value())
         .body("size()", is(1))
@@ -75,7 +75,7 @@ class ListSimulationRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { MODEL_TUNER, AUDITOR, APPROVER, QA, QA_ISSUE_MANAGER })
   void its404_whenSimulationByModelNameThrowsInvalidModelNameException() {
-    given(simulationQuery.findByModel(MODEL_NAME)).willThrow(InvalidModelNameException.class);
+    given(simulationQuery.findByModels(of(MODEL_NAME))).willThrow(InvalidModelNameException.class);
     get(SIMULATIONS_BY_MODEL_NAME_URL).statusCode(NOT_FOUND.value());
   }
 
