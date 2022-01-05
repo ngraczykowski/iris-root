@@ -28,6 +28,8 @@ class FeatureFixture {
                 .fkcoVAddressMatchedText("address")
                 .fkcoVListMatchedName("listmatchedname")
                 .fkcoVHitType("type")
+                .fkcoVListType("INDIVIDUAL")
+                .fkcoVListName("name,name")
                 .build())
         .build();
   }

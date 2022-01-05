@@ -23,6 +23,7 @@ class HitCompositeRowMapper {
         .fkcoVAddressMatchedText(rs.getString("fkco_v_address_matched_text"))
         .fkcoVListMatchedName(rs.getString("fkco_v_list_matched_name"))
         .fkcoVHitType(rs.getString("fkco_v_hit_type"))
+        .fkcoVListType(rs.getString("fkco_v_list_type"))
         .build();
   }
 }

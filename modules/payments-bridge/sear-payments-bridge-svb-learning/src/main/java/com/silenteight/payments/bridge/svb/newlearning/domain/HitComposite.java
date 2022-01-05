@@ -3,12 +3,16 @@ package com.silenteight.payments.bridge.svb.newlearning.domain;
 import lombok.Builder;
 import lombok.Value;
 
+import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
+import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
+
 import org.apache.commons.collections4.list.SetUniqueList;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
@@ -44,6 +48,10 @@ public class HitComposite {
 
   String fkcoVHitType;
 
+  String fkcoVListType;
+
+  String fkcoVListName;
+
   public String getMatchId() {
     return fkcoVListFmmId + "(" + fkcoVMatchedTag + ", #" + fkcoISequence
         + ")";
@@ -76,5 +84,21 @@ public class HitComposite {
     }
 
     return codes;
+  }
+
+  public EntityType getEntityType() {
+    var types = Map.of(
+        "INDIVIDUAL", EntityType.INDIVIDUAL,
+        "COMPANY", EntityType.ORGANIZATION);
+
+    return types.getOrDefault(fkcoVListType, EntityType.ENTITY_TYPE_UNSPECIFIED);
+  }
+
+  public List<String> getWatchlistNames() {
+    return List.of(getFkcoVListName().split(","));
+  }
+
+  public WatchlistType getWatchlistType() {
+    return WatchlistType.ofCode(fkcoVListType);
   }
 }
