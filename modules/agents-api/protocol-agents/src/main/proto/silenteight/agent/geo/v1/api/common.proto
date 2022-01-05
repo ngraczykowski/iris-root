@@ -3,6 +3,7 @@ syntax = "proto3";
 package silenteight.agent.geo.v1.api;
 
 import "google/protobuf/any.proto";
+import "google/api/field_behavior.proto";
 
 option java_package = "com.silenteight.proto.agent.geo.v1.api";
 option java_outer_classname = "GeoCommonProto";
@@ -18,6 +19,8 @@ message Location {
     google.protobuf.Any details = 6;
     // Whether location was derived from state or country
     bool derived = 7;
+    // Coordinates of the locality. Present only when type is city, otherwise empty.
+    Coordinates coordinates  = 8 [(google.api.field_behavior) = OPTIONAL];
 }
 
 enum LocationType {
@@ -61,6 +64,8 @@ message GeoComparerReason {
     MatchType match_type = 4;
 
     string error_message = 5;
+    // Distance in kilometers, present only when type is city, otherwise empty.
+    uint32 distance = 6 [(google.api.field_behavior) = OPTIONAL];
   }
 
   enum MatchType {
@@ -74,4 +79,9 @@ message IdentifiedLocation {
   string original_input = 1;
   // input identified as...
   Location location = 2;
+}
+
+message Coordinates {
+  double latitude = 1 [(google.api.field_behavior) = OPTIONAL];
+  double longitude = 2 [(google.api.field_behavior) = OPTIONAL];
 }
