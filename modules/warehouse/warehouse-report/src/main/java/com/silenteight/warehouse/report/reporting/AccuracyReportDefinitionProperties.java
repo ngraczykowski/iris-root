@@ -28,6 +28,11 @@ public class AccuracyReportDefinitionProperties {
 
   @NotBlank
   private String dateFieldName;
+  private boolean useSqlReports;
+  @Nullable
+  private List<String> sqlTemplates;
+  @Nullable
+  private String selectSqlQuery;
   @Valid
   @NotNull
   @Default
