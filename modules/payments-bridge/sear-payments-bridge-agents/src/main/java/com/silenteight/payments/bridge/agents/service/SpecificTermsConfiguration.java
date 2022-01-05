@@ -22,6 +22,6 @@ class SpecificTermsConfiguration {
   @Bean
   SpecificTermsUseCase specificTermsAgent() {
     return new SpecificTermsAgent(
-        List.of(COMPILE.split(properties.getSpecificTerms())));
+        List.of(COMPILE.split(properties.getRegularTerms())));
   }
 }

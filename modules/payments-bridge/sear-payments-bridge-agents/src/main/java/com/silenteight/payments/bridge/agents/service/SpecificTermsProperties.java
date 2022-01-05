@@ -10,8 +10,7 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "pb.agents.specific-terms")
 class SpecificTermsProperties {
 
-
-  private static final String DEFAULT_SPECIFIC_TERMS =
+  private static final String DEFAULT_REGULAR_TERMS =
       "([12]/|\\n|\\\\s)S(/|\\\\s)O([12]/|\\n|\\\\s),,([12]/|\\n|\\\\s)P.?O.?([12]/|\\n|\\\\s)?BOX"
           + "([12]/|\\n|\\\\s),,([12]/|\\n|\\\\s|,)P.?([12]/|\\n|\\\\s)?B.([12]/|\\n|\\\\s)?[0-9]"
           + "{3,9}([12]/|\\n|\\\\s|,),,([12]/|\\n|\\\\s|,)PO([12]/|\\n|\\\\s)?[0-9]{3,9}([12]/|\\"
@@ -24,5 +23,6 @@ class SpecificTermsProperties {
           + "s),,OFFICE([12]/|\\n|\\\\s)FROM([12]/|\\n|\\\\s),,MEMBER([12]/|\\n|\\\\s)OF([12]/|\\n"
           + "|\\\\s),,([12]/|\\n|\\\\s)T/A([12]/|\\n|\\\\s)";
 
-  private String specificTerms = DEFAULT_SPECIFIC_TERMS;
+  private String regularTerms = DEFAULT_REGULAR_TERMS;
+
 }

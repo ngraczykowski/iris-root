@@ -22,7 +22,7 @@ class SpecificTermsProcessTest {
 
   @BeforeEach
   void setup() {
-    when(specificTermsUseCase.invoke(any())).thenReturn(SpecificTermsAgentResponse.NO);
+    when(specificTermsUseCase.invoke(any())).thenReturn(new SpecificTermsAgentResponse("NO"));
     specificTermsProcess = new SpecificTermsProcess(specificTermsUseCase);
   }
 

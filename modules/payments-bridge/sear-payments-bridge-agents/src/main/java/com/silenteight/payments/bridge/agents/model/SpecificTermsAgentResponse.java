@@ -1,5 +1,9 @@
 package com.silenteight.payments.bridge.agents.model;
 
-public enum SpecificTermsAgentResponse {
-  YES, NO
+import lombok.Value;
+
+@Value
+public class SpecificTermsAgentResponse {
+
+  String value;
 }

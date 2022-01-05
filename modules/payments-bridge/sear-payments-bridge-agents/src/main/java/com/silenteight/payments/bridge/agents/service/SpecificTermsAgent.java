@@ -12,9 +12,6 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.silenteight.payments.bridge.agents.model.SpecificTermsAgentResponse.NO;
-import static com.silenteight.payments.bridge.agents.model.SpecificTermsAgentResponse.YES;
-
 @RequiredArgsConstructor
 class SpecificTermsAgent implements SpecificTermsUseCase {
 
@@ -28,6 +25,7 @@ class SpecificTermsAgent implements SpecificTermsUseCase {
   public SpecificTermsAgentResponse invoke(SpecificTermsRequest request) {
     Matcher matcher = pattern.matcher(request.getAllMatchFieldsValue().toUpperCase(Locale.ROOT));
 
-    return matcher.find() ? YES : NO;
+    return matcher.find() ? new SpecificTermsAgentResponse("YES")
+                          : new SpecificTermsAgentResponse("NO");
   }
 }
