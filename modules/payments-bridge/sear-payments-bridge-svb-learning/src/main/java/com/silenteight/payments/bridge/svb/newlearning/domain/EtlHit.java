@@ -13,6 +13,10 @@ public class EtlHit {
 
   HitComposite hitComposite;
 
+  public String getMatchId() {
+    return hitComposite.getMatchId();
+  }
+
   public String getWatchlistLocation() {
     return hitComposite.getWatchlistLocation();
   }

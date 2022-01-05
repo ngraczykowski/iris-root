@@ -15,7 +15,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CreateFeaturesServiceTest {
+class CreateFeatureServiceTest {
 
   private CreateFeaturesService createFeaturesService;
   @Mock
