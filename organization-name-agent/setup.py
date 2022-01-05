@@ -14,7 +14,7 @@ install_require = [
     "python-consul2==0.1.5",
     "pyyaml==5.4.1",
     "rapidfuzz==1.7.1",
-    "scikit-learn==0.22.1",
+    "scikit-learn==1.0.1",
     "unidecode==1.2.0",
 ]
 
