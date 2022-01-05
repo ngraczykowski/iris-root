@@ -1,5 +1,6 @@
 package com.silenteight.simulator.management.create;
 
+import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.auditing.bs.AuditDataDto;
 import com.silenteight.auditing.bs.AuditingLogger;
 import com.silenteight.simulator.dataset.domain.DatasetQuery;
@@ -45,8 +46,9 @@ class CreateSimulationUseCaseTest {
   @Test
   void createSimulation() {
     // given
+    Analysis analysis = createAnalysis(ANALYSIS_NAME_3,0);
     when(modelService.getModel(CREATE_SIMULATION_REQUEST.getModel())).thenReturn(SOLVING_MODEL);
-    when(analysisService.createAnalysis(SOLVING_MODEL)).thenReturn(ANALYSIS);
+    when(analysisService.createAnalysis(SOLVING_MODEL)).thenReturn(analysis);
     when(datasetQuery.getExternalResourceName(DATASET_ID_1)).thenReturn(DATASET_NAME_1);
     when(datasetQuery.getExternalResourceName(DATASET_ID_2)).thenReturn(DATASET_NAME_2);
 
@@ -54,10 +56,10 @@ class CreateSimulationUseCaseTest {
     underTest.activate(CREATE_SIMULATION_REQUEST);
 
     // then
+    verify(analysisService).addDatasetToAnalysis(analysis.getName(), DATASET_NAME_1);
+    verify(analysisService).addDatasetToAnalysis(analysis.getName(), DATASET_NAME_2);
     verify(simulationService).createSimulation(
-        CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS.getName());
-    verify(analysisService).addDatasetToAnalysis(ANALYSIS.getName(), DATASET_NAME_1);
-    verify(analysisService).addDatasetToAnalysis(ANALYSIS.getName(), DATASET_NAME_2);
+        CREATE_SIMULATION_REQUEST, DATASETS, analysis.getName());
     var logCaptor = forClass(AuditDataDto.class);
     verify(auditingLogger, times(2)).log(logCaptor.capture());
     AuditDataDto preAudit = getPreAudit(logCaptor);

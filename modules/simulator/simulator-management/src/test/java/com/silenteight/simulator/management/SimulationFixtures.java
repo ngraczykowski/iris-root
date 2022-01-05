@@ -11,17 +11,19 @@ import com.silenteight.simulator.management.cancel.CancelSimulationRequest;
 import com.silenteight.simulator.management.create.CreateSimulationRequest;
 import com.silenteight.simulator.management.details.dto.SimulationDetailsDto;
 import com.silenteight.simulator.management.domain.SimulationState;
-import com.silenteight.simulator.management.list.dto.SimulationDto;
+import com.silenteight.simulator.management.domain.dto.SimulationDto;
+import com.silenteight.simulator.management.list.dto.SimulationListDto;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.time.OffsetDateTime;
+import java.util.*;
 
 import static com.silenteight.adjudication.api.v1.Analysis.State.DONE;
 import static com.silenteight.simulator.management.domain.SimulationState.ARCHIVED;
 import static com.silenteight.simulator.management.domain.SimulationState.CANCELED;
 import static com.silenteight.simulator.management.domain.SimulationState.PENDING;
+import static com.silenteight.simulator.management.domain.SimulationState.RUNNING;
+import static java.time.OffsetDateTime.parse;
 import static java.time.ZoneOffset.UTC;
 import static java.util.Set.of;
 import static java.util.UUID.fromString;
@@ -48,8 +50,14 @@ public final class SimulationFixtures {
   public static final String POLICY_NAME = "policies/de1afe98-0b58-4941-9791-4e081f9b8139";
   public static final String STRATEGY_NAME = "UNSOLVED_ALERTS";
   public static final List<String> CATEGORIES = List.of("category-1", "category-2");
-  public static final String ANALYSIS_NAME = "analysis/01256804-1ce1-4d52-94d4-d1876910f272";
-
+  public static final String ANALYSIS_NAME_1 = "analysis/4001";
+  public static final String ANALYSIS_NAME_2 = "analysis/4002";
+  public static final String ANALYSIS_NAME_3 = "analysis/4003";
+  public static final long ALERTS_COUNT = 100L;
+  public static final long SOLVED_ALERTS = 0L;
+  public static final String PROCESSING_TIMESTAMP_1 = "2021-07-22T12:20:37.098Z";
+  public static final String PROCESSING_TIMESTAMP_2 = "2021-07-22T10:00:37.098Z";
+  public static final String PROCESSING_TIMESTAMP_3 = "2021-07-22T12:00:37.098Z";
   public static final CreateSimulationRequest CREATE_SIMULATION_REQUEST =
       CreateSimulationRequest.builder()
           .id(ID)
@@ -72,8 +80,8 @@ public final class SimulationFixtures {
           .archivedBy(USERNAME)
           .build();
 
-  public static final SimulationDto SIMULATION_DTO =
-      SimulationDto.builder()
+  public static final SimulationListDto SIMULATION_LIST_DTO =
+      SimulationListDto.builder()
           .id(ID)
           .name(NAME)
           .simulationName(SIMULATION_NAME)
@@ -84,18 +92,56 @@ public final class SimulationFixtures {
           .createdBy(USERNAME)
           .build();
 
+  public static final SimulationDto SIMULATION_DTO = SimulationDto.builder()
+      .id(ID)
+      .name(NAME)
+      .description(DESCRIPTION)
+      .simulationName(SIMULATION_NAME)
+      .state(RUNNING)
+      .datasets(DATASETS)
+      .model(MODEL_NAME)
+      .analysis(ANALYSIS_NAME_1)
+      .createdBy(USERNAME)
+      .solvedAlerts(0)
+      .createdAt(parse(PROCESSING_TIMESTAMP_2))
+      .updatedAt(parse(PROCESSING_TIMESTAMP_2))
+      .build();
+
+  public static final SimulationDto SIMULATION_DTO_2 = SimulationDto.builder()
+      .id(ID)
+      .name(NAME)
+      .description(DESCRIPTION)
+      .simulationName(SIMULATION_NAME)
+      .state(RUNNING)
+      .datasets(DATASETS)
+      .model(MODEL_NAME)
+      .analysis(ANALYSIS_NAME_2)
+      .createdBy(USERNAME)
+      .solvedAlerts(80)
+      .createdAt(parse(PROCESSING_TIMESTAMP_2))
+      .updatedAt(parse(PROCESSING_TIMESTAMP_2))
+      .build();
+
+  public static final SimulationDto SIMULATION_DTO_3 = SimulationDto.builder()
+      .id(ID)
+      .name(NAME)
+      .description(DESCRIPTION)
+      .simulationName(SIMULATION_NAME)
+      .state(RUNNING)
+      .datasets(DATASETS)
+      .model(MODEL_NAME)
+      .analysis(ANALYSIS_NAME_3)
+      .createdBy(USERNAME)
+      .createdAt(parse(PROCESSING_TIMESTAMP_3))
+      .updatedAt(parse(PROCESSING_TIMESTAMP_3))
+      .build();
+
   public static final SolvingModel SOLVING_MODEL =
       SolvingModel.newBuilder()
           .setName(MODEL_NAME)
           .setStrategyName(STRATEGY_NAME)
           .setPolicyName(POLICY_NAME)
           .addAllCategories(CATEGORIES)
-          .build();
-
-  public static final Analysis ANALYSIS =
-      Analysis.newBuilder()
-          .setName(ANALYSIS_NAME)
-          .setState(ANALYSIS_STATE)
           .build();
 
   public static final SimulationDetailsDto DETAILS_DTO =
@@ -106,9 +152,37 @@ public final class SimulationFixtures {
           .description(DESCRIPTION)
           .state(PENDING_STATE)
           .model(MODEL_NAME)
-          .analysis(ANALYSIS_NAME)
+          .analysis(ANALYSIS_NAME_1)
           .datasets(DATASETS)
           .createdAt(NOW.atOffset(UTC))
           .createdBy(USERNAME)
           .build();
+
+  public static final Map<String, Optional<OffsetDateTime>>
+      MAP_WITH_ANALYSIS_NAMES_AND_UPDATE_TIME_OPTIONALS =
+
+      Map.of(ANALYSIS_NAME_1, Optional.empty(),
+          ANALYSIS_NAME_2, Optional.of(parse("2021-07-22T11:00:37.098Z")),
+          ANALYSIS_NAME_3, Optional.of(parse("2021-07-22T12:10:37.098Z")));
+
+  public static final Map<String, Optional<OffsetDateTime>>
+      MAP_WITH_ANALYSIS_NAMES_AND_CREATE_TIME_OPTIONALS =
+
+      Map.of(ANALYSIS_NAME_1, Optional.empty(),
+          ANALYSIS_NAME_2, Optional.of(parse("2021-07-22T11:00:37.098Z")),
+          ANALYSIS_NAME_3, Optional.of(parse("2021-07-22T12:00:37.098Z")));
+
+  public static final Map<String, Analysis> MAP_OF_ANALYSIS_WITH_NAMES =
+      Map.of(ANALYSIS_NAME_1, createAnalysis(ANALYSIS_NAME_1, 15),
+          ANALYSIS_NAME_2, createAnalysis(ANALYSIS_NAME_2, 20),
+          ANALYSIS_NAME_3, createAnalysis(ANALYSIS_NAME_3, 0));
+
+  public static Analysis createAnalysis(String analysisName, long pendingAlerts) {
+    return Analysis.newBuilder()
+        .setName(analysisName)
+        .setState(ANALYSIS_STATE)
+        .setAlertCount(ALERTS_COUNT)
+        .setPendingAlerts(pendingAlerts)
+        .build();
+  }
 }

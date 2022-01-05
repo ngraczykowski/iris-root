@@ -33,11 +33,11 @@ class SimulationServiceTest extends BaseDataJpaTest {
   @Test
   void shouldCreateSimulation() {
     // when
-    underTest.createSimulation(CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS_NAME);
+    underTest.createSimulation(CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS_NAME_1);
 
     // then
     Optional<SimulationEntity> simulationOpt =
-        simulationRepository.findByAnalysisName(ANALYSIS_NAME);
+        simulationRepository.findByAnalysisName(ANALYSIS_NAME_1);
     assertThat(simulationOpt).isPresent();
     SimulationEntity simulation = simulationOpt.get();
     assertThat(simulation.getState()).isEqualTo(RUNNING);
@@ -46,11 +46,11 @@ class SimulationServiceTest extends BaseDataJpaTest {
   @Test
   void shouldThrowNonUniqueSimulationException() {
     // given
-    underTest.createSimulation(CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS_NAME);
+    underTest.createSimulation(CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS_NAME_1);
 
     // when + then
     assertThatThrownBy(
-        () -> underTest.createSimulation(CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS_NAME))
+        () -> underTest.createSimulation(CREATE_SIMULATION_REQUEST, DATASETS, ANALYSIS_NAME_1))
         .isInstanceOf(NonUniqueSimulationException.class)
         .hasMessageContaining("simulationId=" + CREATE_SIMULATION_REQUEST.getId());
   }
@@ -61,7 +61,7 @@ class SimulationServiceTest extends BaseDataJpaTest {
     persistSimulation();
 
     // when
-    boolean result = underTest.exists(ANALYSIS_NAME);
+    boolean result = underTest.exists(ANALYSIS_NAME_1);
 
     // then
     assertThat(result).isTrue();
@@ -70,7 +70,7 @@ class SimulationServiceTest extends BaseDataJpaTest {
   @Test
   void doesNotExist() {
     // when
-    boolean result = underTest.exists(ANALYSIS_NAME);
+    boolean result = underTest.exists(ANALYSIS_NAME_1);
 
     // then
     assertThat(result).isFalse();
@@ -79,10 +79,10 @@ class SimulationServiceTest extends BaseDataJpaTest {
   @Test
   void shouldFinish() {
     // given
-    SimulationEntity simulation = persistSimulation(STREAMING);
+    SimulationEntity simulation = persistSimulation(STREAMING, ANALYSIS_NAME_1, SOLVED_ALERTS);
 
     // when
-    underTest.finish(ANALYSIS_NAME);
+    underTest.finish(ANALYSIS_NAME_1);
 
     // then
     SimulationEntity savedSimulation =
@@ -93,10 +93,10 @@ class SimulationServiceTest extends BaseDataJpaTest {
   @Test
   void shouldNotFinishWhenArchived() {
     // given
-    SimulationEntity simulation = persistSimulation(ARCHIVED);
+    SimulationEntity simulation = persistSimulation(ARCHIVED, ANALYSIS_NAME_1, SOLVED_ALERTS);
 
     // when
-    underTest.finish(ANALYSIS_NAME);
+    underTest.finish(ANALYSIS_NAME_1);
 
     // then
     SimulationEntity savedSimulation =
@@ -106,15 +106,15 @@ class SimulationServiceTest extends BaseDataJpaTest {
 
   @Test
   void shouldThrowIfFinishingAndSimulationNotFound() {
-    assertThatThrownBy(() -> underTest.finish(ANALYSIS_NAME))
+    assertThatThrownBy(() -> underTest.finish(ANALYSIS_NAME_1))
         .isInstanceOf(SimulationNotFoundException.class)
-        .hasMessageContaining("analysisName=" + ANALYSIS_NAME);
+        .hasMessageContaining("analysisName=" + ANALYSIS_NAME_1);
   }
 
   @Test
   void shouldCancel() {
     // given
-    SimulationEntity simulation = persistSimulation(PENDING);
+    SimulationEntity simulation = persistSimulation(PENDING, ANALYSIS_NAME_1, SOLVED_ALERTS);
 
     // when
     underTest.cancel(ID);
@@ -135,7 +135,7 @@ class SimulationServiceTest extends BaseDataJpaTest {
   @Test
   void shouldArchive() {
     // given
-    SimulationEntity simulation = persistSimulation(DONE);
+    SimulationEntity simulation = persistSimulation(DONE, ANALYSIS_NAME_1, SOLVED_ALERTS);
 
     // when
     underTest.archive(ID);
@@ -154,20 +154,27 @@ class SimulationServiceTest extends BaseDataJpaTest {
   }
 
   @Test
-  void shouldReturnAnalysisNameBySimulationId() {
+  void shouldTimeoutSimulation() {
     //given
-    persistSimulation();
+    SimulationEntity simulationEntity = persistSimulation(RUNNING, ANALYSIS_NAME_1, 100L);
 
-    //when + then
-    String analysisNameBySimulationId = underTest.getAnalysisNameBySimulationId(ID);
-    assertThat(analysisNameBySimulationId).isEqualTo(ANALYSIS_NAME);
+    //when
+    underTest.timeout(ID);
+
+    //then
+    SimulationEntity simulation =
+        entityManager.find(SimulationEntity.class, simulationEntity.getId());
+
+    assertThat(simulation.getState()).isEqualTo(ERROR);
   }
 
   private SimulationEntity persistSimulation() {
-    return persistSimulation(PENDING_STATE);
+    return persistSimulation(PENDING_STATE, ANALYSIS_NAME_1, SOLVED_ALERTS);
   }
 
-  private SimulationEntity persistSimulation(SimulationState state) {
+  private SimulationEntity persistSimulation(
+      SimulationState state, String analysisName, long solvedAlerts) {
+
     SimulationEntity simulationEntity = SimulationEntity
         .builder()
         .simulationId(ID)
@@ -177,7 +184,8 @@ class SimulationServiceTest extends BaseDataJpaTest {
         .createdBy(USERNAME)
         .datasetNames(DATASETS)
         .modelName(MODEL_NAME)
-        .analysisName(ANALYSIS_NAME)
+        .analysisName(analysisName)
+        .solvedAlerts(solvedAlerts)
         .build();
 
     return simulationRepository.save(simulationEntity);

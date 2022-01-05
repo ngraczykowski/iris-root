@@ -17,6 +17,7 @@ import static com.silenteight.simulator.model.archive.ModelsArchivedFixtures.MOD
 import static com.silenteight.simulator.model.archive.ModelsArchivedFixtures.MODEL_NAMES;
 import static com.silenteight.simulator.model.archive.ModelsArchivedFixtures.SIMULATION_DTO;
 import static com.silenteight.simulator.model.archive.ModelsArchivedUseCase.ARCHIVED_BY;
+import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -34,8 +35,7 @@ class ModelsArchivedUseCaseTest {
   @Test
   void shouldArchiveSimulations() {
     // given
-    when(listSimulationsQuery.findByModels(MODEL_NAMES))
-        .thenReturn(List.of(SIMULATION_DTO));
+    when(listSimulationsQuery.findByModels(MODEL_NAMES)).thenReturn(of(SIMULATION_DTO));
 
     // when
     underTest.handle(MODELS_ARCHIVED_MESSAGE);

@@ -17,6 +17,13 @@ interface IndexedAlertRepository extends Repository<IndexedAlertEntity, Long> {
 
   Optional<IndexedAlertEntity> findByRequestId(String requestId);
 
+  Optional<IndexedAlertEntity> findTopByAnalysisNameAndStateInOrderByCreatedAtDesc(
+      String analysisName, Collection<State> states);
+
+  @Query(value = "SELECT count(*)"
+      + " FROM IndexedAlertEntity s"
+      + " WHERE s.analysisName = :analysisName"
+      + " AND s.state IN :states")
   long countAllByAnalysisNameAndStateIn(String analysisName, List<State> states);
 
   @Query(value = "SELECT s.analysis_name"

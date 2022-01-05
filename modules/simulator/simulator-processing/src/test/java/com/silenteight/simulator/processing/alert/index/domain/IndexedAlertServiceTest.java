@@ -8,16 +8,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
-import static com.silenteight.simulator.processing.alert.index.domain.IndexedAlertFixtures.ALERT_COUNT;
-import static com.silenteight.simulator.processing.alert.index.domain.IndexedAlertFixtures.ANALYSIS_NAME;
-import static com.silenteight.simulator.processing.alert.index.domain.IndexedAlertFixtures.REQUEST_ID;
+import static com.silenteight.simulator.processing.alert.index.domain.IndexedAlertFixtures.*;
+import static com.silenteight.simulator.processing.alert.index.domain.State.SENT;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional
 @TestPropertySource("classpath:/data-test.properties")
-@ContextConfiguration(classes = { IndexedAlertTestConfiguration.class})
+@ContextConfiguration(classes = { IndexedAlertTestConfiguration.class })
 class IndexedAlertServiceTest extends BaseDataJpaTest {
 
   @Autowired
@@ -39,5 +39,21 @@ class IndexedAlertServiceTest extends BaseDataJpaTest {
     assertThat(indexedAlert.getRequestId()).isEqualTo(REQUEST_ID);
     assertThat(indexedAlert.getAnalysisName()).isEqualTo(ANALYSIS_NAME);
     assertThat(indexedAlert.getAlertCount()).isEqualTo(ALERT_COUNT);
+  }
+
+  @Test
+  void shouldChangeUpdateAtTimeOnAck() {
+    //given
+    IndexedAlertEntity indexedAlertEntity = repository.save(createNewIndexAlertEntity(SENT));
+    String requestId = indexedAlertEntity.getRequestId();
+    OffsetDateTime updatedAt = repository.findByRequestId(requestId).get().getUpdatedAt();
+
+    //when
+    underTest.ack(requestId);
+
+    //then
+    OffsetDateTime updatedAtAfterAcked = repository.findByRequestId(requestId).get().getUpdatedAt();
+
+    assertThat(updatedAt).isNotEqualTo(updatedAtAfterAcked);
   }
 }

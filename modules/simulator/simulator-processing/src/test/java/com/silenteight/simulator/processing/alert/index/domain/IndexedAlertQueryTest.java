@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -39,8 +40,8 @@ class IndexedAlertQueryTest extends BaseDataJpaTest {
   @Test
   void shouldFindTwoByAnalysisName() {
     // given
-    repository.save(SENT_INDEXED_ALERT_ENTITY);
     repository.save(ACKED_INDEXED_ALERT_ENTITY);
+    repository.save(SENT_INDEXED_ALERT_ENTITY);
 
     // when
     List<IndexedAlertDto> indexedAlertDtos = underTest.findAllByAnalysisName(ANALYSIS_NAME);
@@ -120,20 +121,48 @@ class IndexedAlertQueryTest extends BaseDataJpaTest {
     repository.save(SENT_INDEXED_ALERT_ENTITY);
 
     // when
-    Optional<Long> result = underTest.sumAllAlertsCountWithAnalysisName(ANALYSIS_NAME, states);
+    long result = underTest.sumAllAlertsCountWithAnalysisName(ANALYSIS_NAME, states);
 
     // then
-    assertThat(result)
-        .isPresent()
-        .contains(expectedResult);
+    assertThat(result).isEqualTo(expectedResult);
+  }
+
+  @Test
+  void shouldReturnZeroIndexedAlerts() {
+    //when
+    long result = underTest.getAllIndexedAlertsCount(ANALYSIS_NAME);
+
+    //then
+    assertThat(result).isZero();
   }
 
   @Test
   void shouldReturnEmptyOptional() {
     //when
-    Optional<Long> result = underTest.getAllIndexedAlertsCount(ANALYSIS_NAME);
+    Optional<OffsetDateTime> lastUpdateOnIndexing =
+        underTest.getUpdateOnLastIndexingMessage(ANALYSIS_NAME);
+
     //then
-    assertThat(result).isNotPresent();
+    assertThat(lastUpdateOnIndexing).isNotPresent();
+  }
+
+  @Test
+  void shouldReturnOptionalWithValue() {
+    //given
+    IndexedAlertEntity ackedIndexedAlertEntity = repository.save(ACKED_INDEXED_ALERT_ENTITY_2);
+    //when
+    OffsetDateTime updatedAt =
+        entityManager
+            .find(IndexedAlertEntity.class, ackedIndexedAlertEntity.getId())
+            .getUpdatedAt();
+
+    Optional<OffsetDateTime> lastUpdateOnIndexing =
+        underTest.getUpdateOnLastIndexingMessage(ANALYSIS_NAME);
+
+    //then
+    assertThat(lastUpdateOnIndexing)
+        .isPresent()
+        .contains(updatedAt);
   }
 
   private static Stream<Arguments> getAlertsCountCriteria() {

@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.simulator.management.create.AnalysisService;
-import com.silenteight.simulator.management.domain.SimulationService;
 
 import java.util.UUID;
 
@@ -19,17 +18,17 @@ class SimulationProgressService {
   private final IndexedAlertProvider indexedAlertProvider;
 
   @NonNull
-  private final SimulationService simulationService;
+  private final AnalysisNameQuery analysisNameQuery;
 
   SimulationProgressDto getProgress(UUID simulationId) {
-    String analysisName = simulationService.getAnalysisNameBySimulationId(simulationId);
+    String analysisName = analysisNameQuery.getAnalysisName(simulationId);
 
     Analysis analysis = analysisService.getAnalysis(analysisName);
 
     long alertsCount = analysis.getAlertCount();
     long pendingAlerts = analysis.getPendingAlerts();
     long solvedAlerts = calculatedSolvedAlert(alertsCount, pendingAlerts);
-    long indexedAlerts = indexedAlertProvider.getAllIndexedAlertsCount(analysisName).orElse(0L);
+    long indexedAlerts = indexedAlertProvider.getAllIndexedAlertsCount(analysisName);
 
     return SimulationProgressDto.builder()
         .allAlerts(alertsCount)

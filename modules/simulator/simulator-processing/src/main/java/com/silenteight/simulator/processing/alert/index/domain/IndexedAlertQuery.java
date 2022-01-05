@@ -4,10 +4,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.base.common.entity.BaseModifiableEntity;
 import com.silenteight.simulator.management.progress.IndexedAlertProvider;
 import com.silenteight.simulator.processing.alert.index.domain.exception.IndexedAlertEntityNotFoundException;
 import com.silenteight.simulator.processing.alert.index.dto.IndexedAlertDto;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,14 +58,22 @@ public class IndexedAlertQuery implements IndexedAlertProvider {
   }
 
   @Override
-  public Optional<Long> getAllIndexedAlertsCount(@NonNull String analysisName) {
+  public long getAllIndexedAlertsCount(@NonNull String analysisName) {
     return sumAllAlertsCountWithAnalysisName(analysisName, of(ACKED));
   }
 
-  Optional<Long> sumAllAlertsCountWithAnalysisName(
+  @Override
+  public Optional<OffsetDateTime> getUpdateOnLastIndexingMessage(@NonNull String analysisName) {
+    log.debug("Getting last update on indexing for analysisName={}", analysisName);
+
+    return repository.findTopByAnalysisNameAndStateInOrderByCreatedAtDesc(analysisName, of(ACKED))
+        .map(BaseModifiableEntity::getLastModifyAt);
+  }
+
+  long sumAllAlertsCountWithAnalysisName(
       @NonNull String analysisName, @NonNull List<State> states) {
 
     log.debug("Summing all alerts with analysisName={} and states{}", analysisName, states);
-    return repository.sumAllAlertsCountWithAnalysisName(analysisName, states);
+    return repository.sumAllAlertsCountWithAnalysisName(analysisName, states).orElse(0L);
   }
 }

@@ -7,6 +7,7 @@ import com.silenteight.commons.app.spring.SpringApplicationTemplate;
 import com.silenteight.sep.auth.authentication.AuthenticationModule;
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
 import com.silenteight.simulator.common.integration.AmqpCommonModule;
+import com.silenteight.simulator.common.time.TimeModule;
 import com.silenteight.simulator.common.web.WebModule;
 import com.silenteight.simulator.dataset.DatasetModule;
 import com.silenteight.simulator.grpc.GrpcModule;
@@ -40,6 +41,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AuthenticationModule.class,
     AuthorizationModule.class,
     GrpcModule.class,
+    TimeModule.class,
     WebModule.class,
 })
 @EnableIntegration

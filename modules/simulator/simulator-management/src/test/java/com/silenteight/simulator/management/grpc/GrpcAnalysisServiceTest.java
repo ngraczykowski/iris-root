@@ -10,9 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.silenteight.simulator.management.SimulationFixtures.ANALYSIS;
-import static com.silenteight.simulator.management.SimulationFixtures.ANALYSIS_NAME;
+import static com.silenteight.simulator.management.SimulationFixtures.ANALYSIS_NAME_1;
 import static com.silenteight.simulator.management.SimulationFixtures.ANALYSIS_STATE;
+import static com.silenteight.simulator.management.SimulationFixtures.createAnalysis;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -28,13 +28,14 @@ class GrpcAnalysisServiceTest {
   @Test
   void shouldGetAnalysis() {
     // given
-    when(analysisStub.getAnalysis(makeGetAnalysisRequest(ANALYSIS_NAME))).thenReturn(ANALYSIS);
+    when(analysisStub.getAnalysis(makeGetAnalysisRequest(ANALYSIS_NAME_1)))
+        .thenReturn(createAnalysis(ANALYSIS_NAME_1, 0));
 
     // when
-    Analysis analysis = underTest.getAnalysis(ANALYSIS_NAME);
+    Analysis analysis = underTest.getAnalysis(ANALYSIS_NAME_1);
 
     // then
-    assertThat(analysis.getName()).isEqualTo(ANALYSIS_NAME);
+    assertThat(analysis.getName()).isEqualTo(ANALYSIS_NAME_1);
     assertThat(analysis.getState()).isEqualTo(ANALYSIS_STATE);
   }
 

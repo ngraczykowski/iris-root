@@ -31,6 +31,7 @@ public class IndexedAlertService {
   public void ack(@NonNull String requestId) {
     IndexedAlertEntity alertEntity = query.getIndexedAlertEntityByRequestId(requestId);
     alertEntity.ack();
+    alertEntity.setCurrentTimeForUpdatedAt();
     repository.save(alertEntity);
     log.debug("Acked IndexedAlertEntity={}", alertEntity);
   }

@@ -8,7 +8,7 @@ import com.silenteight.model.api.v1.ModelsArchived;
 import com.silenteight.simulator.management.archive.ArchiveSimulationRequest;
 import com.silenteight.simulator.management.archive.ArchiveSimulationUseCase;
 import com.silenteight.simulator.management.list.ListSimulationsQuery;
-import com.silenteight.simulator.management.list.dto.SimulationDto;
+import com.silenteight.simulator.management.list.dto.SimulationListDto;
 import com.silenteight.simulator.model.archive.amqp.listener.ModelsArchivedMessageHandler;
 
 import java.util.Collection;
@@ -30,7 +30,7 @@ class ModelsArchivedUseCase implements ModelsArchivedMessageHandler {
     Collection<String> modelNames = message.getModelsList();
     log.info("Archived models: modelNames={}" + modelNames);
 
-    List<SimulationDto> simulations = listSimulationsQuery.findByModels(modelNames);
+    List<SimulationListDto> simulations = listSimulationsQuery.findByModels(modelNames);
     log.debug("Simulations to be archived: simulations={}" + simulations);
 
     simulations
@@ -41,7 +41,7 @@ class ModelsArchivedUseCase implements ModelsArchivedMessageHandler {
     log.info("Simulations cancelled: simulations={}" + simulations);
   }
 
-  private static ArchiveSimulationRequest toArchiveSimulationRequest(SimulationDto simulation) {
+  private static ArchiveSimulationRequest toArchiveSimulationRequest(SimulationListDto simulation) {
     return ArchiveSimulationRequest.builder()
         .id(simulation.getId())
         .archivedBy(ARCHIVED_BY)
