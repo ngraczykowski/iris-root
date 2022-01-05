@@ -26,11 +26,12 @@ class RegistrationGrpcService extends RegistrationServiceImplBase {
 
   @Override
   public void registerBatch(RegisterBatchRequest request, StreamObserver<Empty> responseObserver) {
-    var registerBatchCommand =
-        new RegisterBatchCommand(request.getBatchId(), request.getAlertCount());
-
     log.info("Register batch request received: {}", request);
-    var batchId = registrationFacade.register(registerBatchCommand);
+    var batchId = registrationFacade.register(new RegisterBatchCommand(
+        request.getBatchId(),
+        request.getAlertCount(),
+        request.getBatchMetadata()
+    ));
     log.info("New batch registered with id: {}", batchId);
     responseObserver.onNext(Empty.getDefaultInstance());
     responseObserver.onCompleted();
@@ -42,7 +43,8 @@ class RegistrationGrpcService extends RegistrationServiceImplBase {
     log.info("NotifyBatchError request received: {}", request);
     registrationFacade.notifyBatchError(new NotifyBatchErrorCommand(
         request.getBatchId(),
-        request.getErrorDescription()));
+        request.getErrorDescription(),
+        request.getBatchMetadata()));
 
     responseObserver.onNext(Empty.getDefaultInstance());
     responseObserver.onCompleted();

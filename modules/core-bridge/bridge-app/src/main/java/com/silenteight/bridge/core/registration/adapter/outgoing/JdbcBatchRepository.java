@@ -37,6 +37,7 @@ class JdbcBatchRepository implements BatchRepository {
         .alertsCount(batch.alertsCount())
         .status(Status.valueOf(batch.status().name()))
         .errorDescription(batch.errorDescription())
+        .batchMetadata(batch.batchMetadata())
         .build();
     crudBatchRepository.save(batchEntity);
     return batch;
@@ -49,6 +50,7 @@ class JdbcBatchRepository implements BatchRepository {
         .analysisName(batchEntity.analysisName())
         .status(BatchStatus.valueOf(batchEntity.status().name()))
         .errorDescription(batchEntity.errorDescription())
+        .batchMetadata(batchEntity.batchMetadata())
         .build();
   }
 }

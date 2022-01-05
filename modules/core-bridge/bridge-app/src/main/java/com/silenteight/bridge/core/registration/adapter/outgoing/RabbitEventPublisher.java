@@ -11,6 +11,8 @@ import com.silenteight.proto.registration.api.v1.MessageBatchError;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ class RabbitEventPublisher implements EventPublisher {
     var msg = MessageBatchError.newBuilder()
         .setBatchId(event.id())
         .setErrorDescription(event.errorDescription())
+        .setBatchMetadata(Optional.ofNullable(event.batchMetadata()).orElse(""))
         .build();
 
     log.info("Send error notification for batch with id: {}", event.id());

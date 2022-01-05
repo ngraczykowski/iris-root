@@ -20,7 +20,7 @@ class BatchRepositoryIntegrationSpec extends BaseSpecificationIT {
     def batchId = UUID.randomUUID().toString()
 
     when:
-    batchRepository.create(Batch.newOne(batchId, UUID.randomUUID().toString(), 123))
+    batchRepository.create(Batch.newOne(batchId, UUID.randomUUID().toString(), 123, "batchMetadata"))
 
     then:
     def batch = batchRepository.findById(batchId)

@@ -23,7 +23,7 @@ class BatchServiceSpec extends Specification {
     given:
     def batchId = UUID.randomUUID().toString()
     def analysisName = "analysis_name"
-    def registerBatchCommand = new RegisterBatchCommand(batchId, 25)
+    def registerBatchCommand = new RegisterBatchCommand(batchId, 25, "batchMetadata")
 
     and:
     batchRepository.findById(batchId) >> Optional.empty()
@@ -37,17 +37,17 @@ class BatchServiceSpec extends Specification {
     and:
     1 * modelService.getForSolving() >> DefaultModel.builder().build()
     1 * analysisService.create(_ as DefaultModel) >> new Analysis(analysisName)
-    1 * batchRepository.create(_ as Batch) >> Batch.newOne(batchId, analysisName, 123)
+    1 * batchRepository.create(_ as Batch) >> Batch.newOne(batchId, analysisName, 123, "batchMetadata")
   }
 
   def "Should return batch if already exists"() {
     given:
     def batchId = UUID.randomUUID().toString()
     def analysisName = "analysis_name"
-    def registerBatchCommand = new RegisterBatchCommand(batchId, 25)
+    def registerBatchCommand = new RegisterBatchCommand(batchId, 25, "batchMetadata")
 
     and:
-    batchRepository.findById(batchId) >> Optional.of(Batch.newOne(batchId, analysisName, 123))
+    batchRepository.findById(batchId) >> Optional.of(Batch.newOne(batchId, analysisName, 123, "batchMetadata"))
 
     when:
     def batchIdDto = underTest.register(registerBatchCommand)
@@ -64,10 +64,10 @@ class BatchServiceSpec extends Specification {
   def "Should call updateStatusAndErrorDescription method with status error and error description when batch exists"() {
     given:
     def batchId = UUID.randomUUID().toString()
-    def batch = Batch.newOne(batchId, "SomeAnalysisName", 25L)
+    def batch = Batch.newOne(batchId, "SomeAnalysisName", 25L, "batchMetadata")
     def errorDescription = "error occurred"
-    def notifyBatchErrorCommand = new NotifyBatchErrorCommand(batchId, errorDescription)
-    def batchError = new BatchError(batchId, errorDescription) 
+    def notifyBatchErrorCommand = new NotifyBatchErrorCommand(batchId, errorDescription, "batchMetadata")
+    def batchError = new BatchError(batchId, errorDescription, "batchMetadata")
 
     and:
     batchRepository.findById(batchId) >> Optional.of(batch)
@@ -85,8 +85,8 @@ class BatchServiceSpec extends Specification {
     given:
     def batchId = UUID.randomUUID().toString()
     def errorDescription = "error occurred"
-    def notifyBatchErrorCommand = new NotifyBatchErrorCommand(batchId, errorDescription)
-    def batchError = new BatchError(batchId, errorDescription)
+    def notifyBatchErrorCommand = new NotifyBatchErrorCommand(batchId, errorDescription, "batchMetadata")
+    def batchError = new BatchError(batchId, errorDescription, "batchMetadata")
 
     and:
     batchRepository.findById(batchId) >> Optional.empty()
@@ -95,7 +95,7 @@ class BatchServiceSpec extends Specification {
     underTest.notifyBatchError(notifyBatchErrorCommand)
 
     then:
-    1 * batchRepository.create(_ as Batch) >> Batch.error(batchId, errorDescription)
+    1 * batchRepository.create(_ as Batch) >> Batch.error(batchId, errorDescription, "batchMetadata")
     1 * eventPublisher.publish(batchError)
     0 * batchRepository.updateStatusAndErrorDescription(batchId, BatchStatus.ERROR)
   }

@@ -1,3 +1,3 @@
 package com.silenteight.bridge.core.registration.domain;
 
-public record NotifyBatchErrorCommand(String id, String errorDescription) {}
+public record NotifyBatchErrorCommand(String id, String errorDescription, String batchMetadata) {}

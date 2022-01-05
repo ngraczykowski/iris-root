@@ -40,7 +40,10 @@ class BatchService {
             batch -> markBatchAsError(notifyBatchErrorCommand),
             () -> registerNewAsError(notifyBatchErrorCommand));
     eventPublisher.publish(
-        new BatchError(notifyBatchErrorCommand.id(), notifyBatchErrorCommand.errorDescription())
+        new BatchError(
+            notifyBatchErrorCommand.id(),
+            notifyBatchErrorCommand.errorDescription(),
+            notifyBatchErrorCommand.batchMetadata())
     );
   }
 
@@ -54,8 +57,11 @@ class BatchService {
 
     var defaultModel = defaultModelService.getForSolving();
     var analysis = analysisService.create(defaultModel);
-    var batch =
-        Batch.newOne(registerBatchCommand.id(), analysis.name(), registerBatchCommand.alertCount());
+    var batch = Batch.newOne(
+        registerBatchCommand.id(),
+        analysis.name(),
+        registerBatchCommand.alertCount(),
+        registerBatchCommand.batchMetadata());
     return Optional.of(batchRepository.create(batch));
   }
 
@@ -75,7 +81,8 @@ class BatchService {
 
     batchRepository.create(Batch.error(
         notifyBatchErrorCommand.id(),
-        notifyBatchErrorCommand.errorDescription()));
+        notifyBatchErrorCommand.errorDescription(),
+        notifyBatchErrorCommand.batchMetadata()));
 
     log.info("New batch registered as error with id: {}", notifyBatchErrorCommand.id());
   }

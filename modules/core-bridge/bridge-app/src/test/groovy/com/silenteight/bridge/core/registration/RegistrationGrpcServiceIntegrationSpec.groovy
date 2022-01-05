@@ -40,9 +40,16 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
     given:
     def batchId = UUID.randomUUID().toString()
     def alertsSize = 123
+    def metadata = """
+        { 
+          "someClientField": "123",
+          "someSpecialClientData": "Lorem ipsum" 
+        }
+        """
     def registerBatchRequest = RegisterBatchRequest.newBuilder()
         .setBatchId(batchId)
         .setAlertCount(alertsSize)
+        .setBatchMetadata(metadata)
         .build()
 
     when:
@@ -58,6 +65,7 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
         !analysisName().empty
         BatchStatus.STORED == status()
         alertsCount() == alertsSize
+        batchMetadata() == metadata
       }
     }
   }
@@ -66,10 +74,12 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
     given:
     def id = UUID.randomUUID().toString()
     def error = "error occurred"
+    def metadata = "batchMetadata"
 
     def notifyBatchErrorRequest = NotifyBatchErrorRequest.newBuilder()
         .setBatchId(id)
         .setErrorDescription(error)
+        .setBatchMetadata(metadata)
         .build()
 
     when:
@@ -87,6 +97,7 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
         BatchStatus.ERROR == status()
         errorDescription() == error
         alertsCount() == 0
+        batchMetadata() == metadata
       }
     }
 
@@ -98,6 +109,7 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
     with(messageBatchError) {
       batchId == id
       errorDescription == error
+      batchMetadata == metadata
     }
   }
 }

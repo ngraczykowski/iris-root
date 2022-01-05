@@ -16,7 +16,7 @@ class RegistrationFacadeSpec extends Specification {
   def "should call register batch method"() {
     given:
     def batchId = UUID.randomUUID().toString()
-    def registerBatchCommand = new RegisterBatchCommand(batchId, 25)
+    def registerBatchCommand = new RegisterBatchCommand(batchId, 25, "batchMetadata")
 
     and:
     batchService.register(registerBatchCommand) >> new BatchId(batchId)
@@ -32,7 +32,7 @@ class RegistrationFacadeSpec extends Specification {
     given:
     def batchId = UUID.randomUUID().toString()
     def errorDescription = "error occurred"
-    def notifyBatchErrorCommand = new NotifyBatchErrorCommand(batchId, errorDescription)
+    def notifyBatchErrorCommand = new NotifyBatchErrorCommand(batchId, errorDescription, "batchMetadata")
 
     when:
     underTest.notifyBatchError(notifyBatchErrorCommand)

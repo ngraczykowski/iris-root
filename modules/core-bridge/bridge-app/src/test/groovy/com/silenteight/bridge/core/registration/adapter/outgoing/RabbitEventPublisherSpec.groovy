@@ -21,11 +21,13 @@ class RabbitEventPublisherSpec extends Specification {
     def batchError = BatchError.builder()
         .id('batchId')
         .errorDescription('Failed to register batch in Core Bridge Registration')
+        .batchMetadata("batchMetadata")
         .build()
 
     def messageBatchError = MessageBatchError.newBuilder()
         .setBatchId('batchId')
         .setErrorDescription('Failed to register batch in Core Bridge Registration')
+        .setBatchMetadata("batchMetadata")
         .build()
 
     when:

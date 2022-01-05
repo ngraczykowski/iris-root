@@ -43,6 +43,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: error_description
+                  type: VARCHAR(300)
+              - column:
+                  name: batch_metadata
+                  type: TEXT
+              - column:
                   name: created_at
                   type: timestamp
                   constraints:
@@ -50,9 +56,6 @@ databaseChangeLog:
               - column:
                   name: updated_at
                   type: timestamp
-              - column:
-                  name: error_description
-                  type: VARCHAR(300)
 
         - createTable:
             tableName: recommendations
