@@ -147,7 +147,7 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
     then:
     noExceptionThrown()
 
-    def alert = alertRepository.findByBatchIdAndAlertIdIn(batchIdInput, [alertIdInput])
+    def alert = alertRepository.findAllByBatchId(batchIdInput)
 
     with(alert.first()) {
       !name().empty

@@ -52,7 +52,7 @@ class AlertService {
     var alertIds = command.alertWithMatches().stream()
         .map(AlertWithMatches::alertId).toList();
     var existingAlerts =
-        alertRepository.findByBatchIdAndAlertIdIn(command.batchId(), alertIds);
+        alertRepository.findAllAlertIdsByBatchIdAndAlertIdIn(command.batchId(), alertIds);
 
     var result = command.alertWithMatches();
     if (CollectionUtils.isNotEmpty(existingAlerts)) {

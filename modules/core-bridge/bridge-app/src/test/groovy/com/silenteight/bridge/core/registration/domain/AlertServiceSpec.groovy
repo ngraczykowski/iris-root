@@ -4,6 +4,7 @@ import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.Ale
 import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertWithMatches
 import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.Match
 import com.silenteight.bridge.core.registration.domain.model.Alert
+import com.silenteight.bridge.core.registration.domain.model.AlertId
 import com.silenteight.bridge.core.registration.domain.model.AlertsToRegister
 import com.silenteight.bridge.core.registration.domain.model.RegisteredAlerts
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRegistrationService
@@ -56,7 +57,7 @@ class AlertServiceSpec extends Specification {
     underTest.registerAlertsAndMatches(command)
 
     then:
-    1 * alertRepository.findByBatchIdAndAlertIdIn(_ as String, _ as List<String>) >> []
+    1 * alertRepository.findAllAlertIdsByBatchIdAndAlertIdIn(_ as String, _ as List<String>) >> []
     1 * mapper.toAlertsToRegister(_ as List<AlertWithMatches>) >> alertsToRegister
     1 * alertRegistrationService.registerAlerts(_ as AlertsToRegister) >> registeredAlerts
     1 * mapper.toAlerts(_ as RegisteredAlerts, 'batch_id_1') >> alerts
@@ -82,7 +83,7 @@ class AlertServiceSpec extends Specification {
 
     def command = new RegisterAlertsCommand('batch_id_1', [alert1, alert2])
 
-    def alertsExistingInDb = [Alert.builder().alertId(alertIdExistingInDb).build()]
+    def alertsExistingInDb = [new AlertId(alertIdExistingInDb)]
 
     def alertsToRegister = new AlertsToRegister(
         [new AlertsToRegister.AlertWithMatches(
@@ -102,7 +103,7 @@ class AlertServiceSpec extends Specification {
     underTest.registerAlertsAndMatches(command)
 
     then:
-    1 * alertRepository.findByBatchIdAndAlertIdIn(_ as String, _ as List<String>) >> alertsExistingInDb
+    1 * alertRepository.findAllAlertIdsByBatchIdAndAlertIdIn(_ as String, _ as List<String>) >> alertsExistingInDb
     1 * mapper.toAlertsToRegister([alert2]) >> alertsToRegister
     1 * alertRegistrationService.registerAlerts(_ as AlertsToRegister) >> registeredAlerts
     1 * mapper.toAlerts(_ as RegisteredAlerts, 'batch_id_1') >> alerts
@@ -142,7 +143,7 @@ class AlertServiceSpec extends Specification {
     underTest.registerAlertsAndMatches(command)
 
     then:
-    1 * alertRepository.findByBatchIdAndAlertIdIn(_ as String, _ as List<String>) >> []
+    1 * alertRepository.findAllAlertIdsByBatchIdAndAlertIdIn(_ as String, _ as List<String>) >> []
     1 * mapper.toAlertsToRegister(_ as List<AlertWithMatches>) >> alertsToRegister
     1 * alertRegistrationService.registerAlerts(_ as AlertsToRegister) >> registeredAlerts
     1 * mapper.toAlerts(_ as RegisteredAlerts, 'batch_id_1') >> [Alert.builder().build()]

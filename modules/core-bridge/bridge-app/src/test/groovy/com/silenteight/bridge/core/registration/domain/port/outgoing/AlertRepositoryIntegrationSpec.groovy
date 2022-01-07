@@ -4,7 +4,6 @@ import com.silenteight.bridge.core.BaseSpecificationIT
 import com.silenteight.bridge.core.registration.domain.model.Alert
 import com.silenteight.bridge.core.registration.domain.model.Alert.Status
 import com.silenteight.bridge.core.registration.domain.model.Match
-import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -18,7 +17,7 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
   @Autowired
   private AlertRepository alertRepository;
 
-  def 'should save alerts and then find alerts by given batchId and alertIds'() {
+  def 'should save alerts and then find alerts by given batchId'() {
     given:
     def batchIdIn = 'batch_id_1'
     def alertsToSave = [
@@ -38,13 +37,11 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
             .build()
     ]
 
-    def alertIds = [alertsToSave.first().alertId()]
-
     when:
     alertRepository.saveAlerts(alertsToSave)
 
     then:
-    def result = alertRepository.findByBatchIdAndAlertIdIn(batchIdIn, alertIds)
+    def result = alertRepository.findAllByBatchId(batchIdIn)
 
     with(result.first()) {
       name() == alertsToSave.first().name()
@@ -58,4 +55,5 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
       }
     }
   }
+
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.bridge.core.registration.adapter.outgoing.AlertEntity.Status;
 import com.silenteight.bridge.core.registration.domain.model.Alert;
+import com.silenteight.bridge.core.registration.domain.model.AlertId;
 import com.silenteight.bridge.core.registration.domain.model.Match;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 
@@ -28,10 +29,22 @@ class JdbcAlertRepository implements AlertRepository {
   }
 
   @Override
-  public List<Alert> findByBatchIdAndAlertIdIn(String batchId, List<String> alertIds) {
+  public List<AlertId> findAllAlertIdsByBatchIdAndAlertIdIn(String batchId, List<String> alertIds) {
     return alertRepository.findByBatchIdAndAlertIdIn(batchId, alertIds).stream()
+        .map(this::mapToAlertId)
+        .toList();
+  }
+
+  @Override
+  public List<Alert> findAllByBatchId(String batchId) {
+    return alertRepository.findAllByBatchId(batchId)
+        .stream()
         .map(this::mapToAlert)
         .toList();
+  }
+
+  private AlertId mapToAlertId(AlertIdProjection alertIdProjection) {
+    return new AlertId(alertIdProjection.alertId());
   }
 
   private AlertEntity mapToAlertEntity(Alert alert) {
