@@ -25,7 +25,7 @@ class SpecificTerms2Process extends BaseCategoryValueProcess {
 
   @Override
   protected String getValue(HitData hitData) {
-    return specificTerms2UseCase.invoke(createRequest(hitData)).toString();
+    return specificTerms2UseCase.invoke(createRequest(hitData)).getValue();
   }
 
   @Nonnull

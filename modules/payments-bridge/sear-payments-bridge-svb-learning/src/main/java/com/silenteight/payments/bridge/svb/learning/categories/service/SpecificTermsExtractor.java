@@ -22,6 +22,6 @@ class SpecificTermsExtractor extends BaseCategoryValueExtractor {
 
   @Override
   protected String getValue(LearningMatch learningMatch) {
-    return specificTermsUseCase.invoke(learningMatch.toSpecificTermsRequest()).toString();
+    return specificTermsUseCase.invoke(learningMatch.toSpecificTermsRequest()).getValue();
   }
 }
