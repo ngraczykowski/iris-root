@@ -2,10 +2,10 @@ package com.silenteight.warehouse.report.metrics.generation;
 
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 import com.silenteight.warehouse.report.reporting.*;
 import com.silenteight.warehouse.report.reporting.FilterProperties;
+
+import java.util.List;
 
 import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.*;
 import static java.util.Arrays.asList;
@@ -40,7 +40,7 @@ public final class GenerationMetricsReportTestFixtures {
       false,
       List.of(),
       ""
-      );
+  );
 
   private static GroupingColumnPropertiesWithPatterns getGroupingColumn(
       String name, String label, String oldPattern, String newPattern) {

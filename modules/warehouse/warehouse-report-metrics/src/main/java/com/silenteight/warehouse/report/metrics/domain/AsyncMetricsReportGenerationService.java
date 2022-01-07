@@ -8,8 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.warehouse.report.metrics.domain.exception.ReportGenerationException;
 import com.silenteight.warehouse.report.metrics.generation.MetricsReportGenerationService;
 import com.silenteight.warehouse.report.metrics.generation.dto.CsvReportContentDto;
-import com.silenteight.warehouse.report.reporting.Report;
 import com.silenteight.warehouse.report.reporting.PropertiesDefinition;
+import com.silenteight.warehouse.report.reporting.Report;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 import com.silenteight.warehouse.report.storage.ReportStorage;
 

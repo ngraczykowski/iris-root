@@ -179,8 +179,8 @@
       <column name="file_storage_name" type="VARCHAR(64)"/>
     </addColumn>
     <dropColumn columnName="data" tableName="warehouse_report_metrics"/>
-    <dropColumn columnName="report_type" tableName="warehouse_report_billing"/>
-    <dropColumn columnName="analysis" tableName="warehouse_report_billing"/>
+    <dropColumn columnName="report_type" tableName="warehouse_report_metrics"/>
+    <dropColumn columnName="analysis" tableName="warehouse_report_metrics"/>
   </changeSet>
 
 </databaseChangeLog>

@@ -9,10 +9,10 @@ import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDa
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 import com.silenteight.warehouse.indexer.query.streaming.FetchDataRequest;
 import com.silenteight.warehouse.report.metrics.generation.dto.CsvReportContentDto;
-import com.silenteight.warehouse.report.reporting.ReportGenerationService;
 import com.silenteight.warehouse.report.reporting.ColumnPropertiesWithValues;
 import com.silenteight.warehouse.report.reporting.GroupingColumnPropertiesWithPatterns;
 import com.silenteight.warehouse.report.reporting.PropertiesDefinition;
+import com.silenteight.warehouse.report.reporting.ReportGenerationService;
 
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -145,7 +145,8 @@ public class MetricsReportGenerationService {
         DECIMAL_FORMAT.format(falsePositiveEffectiveness));
   }
 
-  private static List<Row> getPotentialTruePositiveRows(List<Row> rows,
+  private static List<Row> getPotentialTruePositiveRows(
+      List<Row> rows,
       ColumnPropertiesWithValues column) {
     return rows
         .stream()
@@ -204,7 +205,8 @@ public class MetricsReportGenerationService {
         .contains(row.getValueOrDefault(column.getName(), EMPTY_STRING));
   }
 
-  private static String getStaticValue(List<Row> rows,
+  private static String getStaticValue(
+      List<Row> rows,
       GroupingColumnPropertiesWithPatterns column) {
     return rows
         .stream()
@@ -213,7 +215,8 @@ public class MetricsReportGenerationService {
         .orElseThrow();
   }
 
-  private static String getGroupingValues(Row row,
+  private static String getGroupingValues(
+      Row row,
       List<GroupingColumnPropertiesWithPatterns> columns) {
     return columns
         .stream()
@@ -221,7 +224,8 @@ public class MetricsReportGenerationService {
         .collect(joining(DELIMITER));
   }
 
-  private static String getFormattedValueOrDefault(Row row,
+  private static String getFormattedValueOrDefault(
+      Row row,
       GroupingColumnPropertiesWithPatterns column) {
     String value = row.getValueOrDefault(column.getName(), EMPTY_STRING);
     if (column.isDateColumn() && isNotBlank(value))
