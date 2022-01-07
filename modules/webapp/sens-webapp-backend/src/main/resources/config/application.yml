@@ -274,7 +274,12 @@ sep.auth:
       - "GENERATE_REPORT"
     REPORTING_UI:
       - "REDIRECT_TO_REPORTING"
-
+    MANAGE_ROLES:
+      - "CREATE_ROLE"
+      - "DELETE_ROLE"
+      - "LIST_ROLES"
+      - "EDIT_ROLE"
+      - "LIST_PERMISSIONS"
   rolePermissionsMappings:
     APPROVER:
       - "DOWNLOAD_SOLVING_REPORTS"
@@ -289,6 +294,7 @@ sep.auth:
       - "MANAGE_USERS"
       - "VIEW_USERS"
       - "SYNC_ANALYSTS"
+      - "MANAGE_ROLES"
     MODEL_TUNER:
       - "DOWNLOAD_SOLVING_REPORTS"
       - "REPORTING_UI"

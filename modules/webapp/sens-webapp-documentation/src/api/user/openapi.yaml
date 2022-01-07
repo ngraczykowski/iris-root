@@ -210,7 +210,7 @@ paths:
         422:
           description: Role can't be removed because it has assigned users.
 
-  /v2/roles/{id}/premissions:
+  /v2/roles/{id}/permissions:
     get:
       tags:
         - roles
@@ -503,6 +503,7 @@ components:
         id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
         name: 'Role name'
         description: 'Role description'
+        state: "IN_USE"
         updatedAt: '2004-02-13T09:19:21Z'
         createdAt: '2004-02-12T15:09:21Z'
         createdBy: 'UserName'
