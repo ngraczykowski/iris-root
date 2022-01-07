@@ -8,8 +8,6 @@ import com.silenteight.sep.filestorage.api.dto.FileDto;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import static java.lang.String.format;
@@ -33,14 +31,10 @@ public class MinioFileRetriever implements FileRetriever {
     }
   }
 
-  private FileDto convertToFileDto(InputStream inputStream, String fileName) throws IOException {
-    byte[] bytes = inputStream.readAllBytes();
-    inputStream.close();
-
+  private FileDto convertToFileDto(InputStream inputStream, String fileName) {
     return FileDto.builder()
         .name(fileName)
-        .content(new ByteArrayInputStream(bytes))
-        .sizeInBytes(bytes.length)
+        .content(inputStream)
         .build();
   }
 

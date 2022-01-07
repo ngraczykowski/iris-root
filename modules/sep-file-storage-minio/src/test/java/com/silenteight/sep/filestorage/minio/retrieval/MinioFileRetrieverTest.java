@@ -34,34 +34,19 @@ class MinioFileRetrieverTest {
   @Test
   @SneakyThrows
   void shouldGetSavedTxtFile() {
-    createBucket(BUCKET_NAME);
+    createBucket();
     saveFile(MOCK_MULTIPART_FILE_TXT);
 
     //when + then
     FileDto file = underTest.getFile(BUCKET_NAME, FULL_FILE_NAME);
     String fileContent = IOUtils.toString(file.getContent(), UTF_8);
-    assertThat(file.getSizeInBytes()).isEqualTo(MOCK_MULTIPART_FILE_TXT.getSize());
     assertThat(fileContent).isEqualTo("Test Content");
     cleanMinio(file.getName());
   }
 
-  @Test
   @SneakyThrows
-  void shouldGetSavedPdfFile() {
-    createBucket(BUCKET_NAME);
-    saveFile(MOCK_MULTIPART_FILE_PDF);
-
-    //when + then
-    FileDto file = underTest.getFile(BUCKET_NAME, FULL_FILE_NAME_2);
-    String fileContent = IOUtils.toString(file.getContent(), UTF_8);
-    assertThat(file.getSizeInBytes()).isEqualTo(MOCK_MULTIPART_FILE_PDF.getSize());
-    assertThat(fileContent).isEqualTo("<<pdf data>>");
-    cleanMinio(file.getName());
-  }
-
-  @SneakyThrows
-  private void createBucket(String bucketName) {
-    minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+  private void createBucket() {
+    minioClient.makeBucket(MakeBucketArgs.builder().bucket(BUCKET_NAME).build());
   }
 
   @SneakyThrows
@@ -80,5 +65,18 @@ class MinioFileRetrieverTest {
     minioClient.removeObject(
         RemoveObjectArgs.builder().object(fileName).bucket(BUCKET_NAME).build());
     minioClient.removeBucket(RemoveBucketArgs.builder().bucket(BUCKET_NAME).build());
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldGetSavedPdfFile() {
+    createBucket();
+    saveFile(MOCK_MULTIPART_FILE_PDF);
+
+    //when + then
+    FileDto file = underTest.getFile(BUCKET_NAME, FULL_FILE_NAME_2);
+    String fileContent = IOUtils.toString(file.getContent(), UTF_8);
+    assertThat(fileContent).isEqualTo("<<pdf data>>");
+    cleanMinio(file.getName());
   }
 }
