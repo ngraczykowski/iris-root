@@ -60,7 +60,7 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
       http.authorizeRequests().anyRequest().permitAll();
     } else {
       http.authorizeRequests()
-          .antMatchers("/management/health/**", "/status").permitAll()
+          .antMatchers("/management/health/**", "/management/prometheus/**", "/status").permitAll()
           .and()
           .authorizeRequests()
           .anyRequest().authenticated();

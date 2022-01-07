@@ -158,6 +158,8 @@ keycloak:
   bearer-only: true
 
 management:
+  server:
+    port: 24604
   health:
     probes:
       enabled: true
