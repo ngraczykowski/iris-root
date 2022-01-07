@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
-import com.silenteight.universaldatasource.app.feature.model.BatchFeatureRequest;
 import com.silenteight.universaldatasource.app.feature.model.MatchFeatureOutput;
 import com.silenteight.universaldatasource.app.feature.model.MatchFeatureOutput.AgentInput;
 import com.silenteight.universaldatasource.app.feature.model.MatchFeatureOutput.MatchInput;
@@ -38,11 +37,10 @@ class FeatureExtractor implements ResultSetExtractor<Integer> {
   private final Consumer<MatchFeatureOutput> consumer;
   private final String agentInputType;
   private final int chunkSize;
-  private final BatchFeatureRequest batchFeatureRequest;
+  private final List<String> requestedFeatures;
 
   @Override
   public Integer extractData(ResultSet rs) throws SQLException {
-
     var rowNum = 0;
 
     List<MatchFeatureOutput.MatchInput> matchFeatureOutputs = new ArrayList<>();
@@ -54,18 +52,20 @@ class FeatureExtractor implements ResultSetExtractor<Integer> {
 
       matchFeatureOutputs.add(MatchInput.builder()
           .match(match)
+          .requestedFeatures(requestedFeatures)
           .agentInputs(getListOfAgentInputObjects(agentInputAggregate))
           .build());
 
       if (chunkSize <= matchFeatureOutputs.size()) {
         consumeFeatureResponse(
-            new MatchFeatureOutput(agentInputType, matchFeatureOutputs, batchFeatureRequest));
+            new MatchFeatureOutput(agentInputType, matchFeatureOutputs));
+        matchFeatureOutputs.clear();
       }
     }
 
     if (!matchFeatureOutputs.isEmpty()) {
       consumeFeatureResponse(
-          new MatchFeatureOutput(agentInputType, matchFeatureOutputs, batchFeatureRequest));
+          new MatchFeatureOutput(agentInputType, matchFeatureOutputs));
     }
 
     return rowNum;
@@ -79,6 +79,8 @@ class FeatureExtractor implements ResultSetExtractor<Integer> {
         .collect(Collectors.toList());
   }
 
+  // FIXME(ahaczewski): This should be moved to BaseFeatureMapper, as there is a perfect spot
+  //  for setting different feature name
   private static void editAgentInputFeatureName(Map<String, ObjectNode> featureInputMap) {
     featureInputMap.forEach((key, value) -> {
       if (log.isDebugEnabled()) {

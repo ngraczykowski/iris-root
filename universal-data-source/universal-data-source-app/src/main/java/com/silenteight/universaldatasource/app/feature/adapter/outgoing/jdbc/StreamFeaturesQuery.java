@@ -42,9 +42,10 @@ class StreamFeaturesQuery {
     parameters.addValue("matchNames", batchFeatureRequest.getMatches());
     parameters.addValue("featureNames", batchFeatureRequest.getFeatures());
 
-    var features = jdbcTemplate.query(SQL, parameters,
-        new FeatureExtractor(
-            consumer, agentInputType, getChunkSize(agentInputType), batchFeatureRequest));
+    var featureExtractor = new FeatureExtractor(
+        consumer, agentInputType, getChunkSize(agentInputType), batchFeatureRequest.getFeatures());
+
+    var features = jdbcTemplate.query(SQL, parameters, featureExtractor);
 
     return features != null ? features : 0;
   }

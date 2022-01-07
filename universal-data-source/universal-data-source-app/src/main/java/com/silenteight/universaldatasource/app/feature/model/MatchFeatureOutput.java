@@ -1,6 +1,7 @@
 package com.silenteight.universaldatasource.app.feature.model;
 
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Value;
 
 import java.util.List;
@@ -12,13 +13,14 @@ public class MatchFeatureOutput {
 
   List<MatchInput> matchInputs;
 
-  BatchFeatureRequest batchFeatureRequest;
-
   @Value
   @Builder
   public static class MatchInput {
 
     String match;
+
+    @NonNull
+    List<String> requestedFeatures;
 
     List<AgentInput> agentInputs;
   }

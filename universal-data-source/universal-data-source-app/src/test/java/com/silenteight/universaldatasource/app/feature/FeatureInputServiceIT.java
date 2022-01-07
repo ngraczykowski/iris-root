@@ -245,6 +245,53 @@ class FeatureInputServiceIT {
     assertHistoricalDecisionFeature(response);
   }
 
+  @Test
+  @Sql(scripts = {
+      "adapter/outgoing/jdbc/populate_feature_inputs.sql",
+      "adapter/outgoing/jdbc/populate_feature_mapper_inputs.sql" })
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
+      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  void shouldGetFeatureForAllRequestedMatchesWhenOneExist() {
+
+    var batchGetMatchNameInputsResponses =
+        nameInputServiceBlockingStub.batchGetMatchNameInputs(
+            BatchGetMatchNameInputsRequest.newBuilder()
+                .addMatches("alerts/1/matches/0")
+                .addFeatures("features/name")
+                .build());
+
+    var matchNameInputsResponse = batchGetMatchNameInputsResponses.next();
+    assertThat(matchNameInputsResponse.getNameInputsCount()).isEqualTo(1);
+    assertThat(matchNameInputsResponse.getNameInputs(0).getMatch()).isEqualTo(
+        "alerts/1/matches/0");
+  }
+
+  @Test
+  @Sql(scripts = {
+      "adapter/outgoing/jdbc/populate_feature_inputs.sql",
+      "adapter/outgoing/jdbc/populate_feature_mapper_inputs.sql" })
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
+      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  void shouldGetFeatureForAllRequestedMatchesWhenNoneExist() {
+
+    var batchGetMatchNameInputsResponses =
+        nameInputServiceBlockingStub.batchGetMatchNameInputs(
+            BatchGetMatchNameInputsRequest.newBuilder()
+                .addMatches("alerts/1/matches/1000")
+                .addFeatures("features/name")
+                .addFeatures("features/geo")
+                .build());
+
+    assertThat(batchGetMatchNameInputsResponses.hasNext()).isTrue();
+    var matchNameInputsResponse = batchGetMatchNameInputsResponses.next();
+    assertThat(matchNameInputsResponse.getNameInputsCount()).isEqualTo(1);
+
+    var responseNameInputs = matchNameInputsResponse.getNameInputs(0);
+    assertThat(responseNameInputs.getMatch()).isEqualTo(
+        "alerts/1/matches/1000");
+    assertThat(responseNameInputs.getNameFeatureInputsCount()).isEqualTo(2);
+  }
+
   private static void assertHistoricalDecisionFeature(
       Iterator<BatchGetMatchHistoricalDecisionsInputsResponse> batchGetMatchFreeTextInputs) {
 

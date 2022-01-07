@@ -24,4 +24,6 @@ class FeatureMapperFactoryConfiguration {
     return new FeatureMapperFactory(featureMappers.stream().collect(
         Collectors.toMap(FeatureMapper::getType, identity())));
   }
+
+
 }

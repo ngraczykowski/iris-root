@@ -8,6 +8,9 @@ import com.google.protobuf.Any;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 
+import java.util.Collection;
+import java.util.List;
+
 public interface FeatureMapper {
 
   String getType();
@@ -16,4 +19,6 @@ public interface FeatureMapper {
 
   Message unpackAnyMessage(Any featureInput) throws InvalidProtocolBufferException;
 
+  BatchFeatureInputResponse createEmptyResponse(
+      Collection<String> matches, List<String> features);
 }
