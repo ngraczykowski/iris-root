@@ -5,6 +5,7 @@ image_repo: dummy
 ports:
   http: 8080
   grpc: 9090
+  management: 8081
 
 loggingLevelRoot: INFO
 grpcClientAeAddress: dns:///adjudication-engine-service.default.svc.cluster.local:9090

@@ -21,14 +21,14 @@ spec:
         - name: {{ .Values.name }}
           livenessProbe:
             httpGet:
-              path: "/rest/pb/management/health/liveness"
-              port: 8080
+              path: "/management/health/liveness"
+              port: {{ .Values.ports.management }}
             initialDelaySeconds: 30
             timeoutSeconds: 10
           readinessProbe:
             httpGet:
-              path: "/rest/pb/management/health/readiness"
-              port: 8080
+              path: "/management/health/readiness"
+              port: {{ .Values.ports.management }}
             failureThreshold: 30
             initialDelaySeconds: 30
             timeoutSeconds: 10
