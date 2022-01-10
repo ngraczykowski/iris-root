@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -70,9 +71,14 @@ public class ResourceDirectoryFilenamesFinder {
 
   private URI tryGettingDirectoryUri(String resourceDirectoryPath) throws IOException {
     try {
-      return ResourceDirectoryFilenamesFinder.class
-          .getResource(resourceDirectoryPath)
-          .toURI();
+      URL directoryUrl = ResourceDirectoryFilenamesFinder.class
+          .getResource(resourceDirectoryPath);
+
+      if (directoryUrl != null) {
+        return directoryUrl.toURI();
+      }
+
+      throw new IOException();
     } catch (URISyntaxException e) {
       throw new IOException(e);
     }

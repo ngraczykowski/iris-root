@@ -19,6 +19,7 @@ public class UnivocityCsvReader<T> implements RowsReader<T> {
   private final CsvParserSettings parserSettings;
   private final Class<T> rowClass;
 
+  @Override
   public Stream<T> stream() {
     return Streams.stream(iterator());
   }

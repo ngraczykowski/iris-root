@@ -70,7 +70,7 @@ public class GrpcServerExtension implements BeforeEachCallback, AfterEachCallbac
       serverBuilder.directExecutor();
 
     Optional.ofNullable(configurer)
-        .ifPresent(configurer -> configurer.accept(serverBuilder));
+        .ifPresent(conf -> conf.accept(serverBuilder));
 
     server = serverBuilder.build().start();
 

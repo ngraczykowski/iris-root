@@ -1,5 +1,8 @@
 package com.silenteight.agent.common.io;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
@@ -7,6 +10,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class FileFormatConstants {
 
   static final char COMMENT_MARKER = '#';
