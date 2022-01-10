@@ -16,7 +16,7 @@ consul:
   port: 8500
 
 agent:
-  processes: 10
+  processes: 1
 
   agent-exchange:
     request:

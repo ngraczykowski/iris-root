@@ -56,9 +56,7 @@ class AgentExchange(AgentService):
         if message.content_encoding == "lz4":
             try:
                 body = lz4.frame.decompress(body)
-                self.logger.debug(f"message body {body!r}")
-                correlation_id = message.headers.get("correlationId", "CorrelationId not found")
-                self.logger.debug(f"message headers {correlation_id}")
+                # self.logger.debug(f"message body {body!r}")
             except Exception:
                 raise MessageFormatException(body)
 
@@ -86,11 +84,7 @@ class AgentExchange(AgentService):
         )
 
     async def process(self, request: AgentExchangeRequest) -> AgentExchangeResponse:
-        try:
-            agent_inputs = self.data_source.request(request)
-        except (AgentDataSourceException, Exception):
-            return self._prepare_data_source_error_response(request)
-
+        agent_inputs = self.data_source.request(request)
         resolved = await self._resolve_all(request, agent_inputs)
         response = self._prepare_response(request, resolved)
 
@@ -158,19 +152,6 @@ class AgentExchange(AgentService):
                 resolved.get(match, {}).get(feature)
                 or AgentOutput.Feature(
                     feature=feature, feature_solution=self.default_error_solution
-                )
-                for feature in request.features
-            ]
-            response.agent_outputs.append(AgentOutput(match=match, features=features))
-
-        return response
-
-    def _prepare_data_source_error_response(self, request):
-        response = AgentExchangeResponse(agent_outputs=[])
-        for match in request.matches:
-            features = [
-                AgentOutput.Feature(
-                    feature=feature, feature_solution=self.data_source_error_solution
                 )
                 for feature in request.features
             ]

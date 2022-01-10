@@ -29,6 +29,7 @@ class PikaConnection:
             **self.connection_configuration
         )
         self.channel: aio_pika.Channel = await self.connection.channel()
+        await self.channel.set_qos(prefetch_count=1)
 
         try:
             self.request_queue = await self.channel.get_queue(
