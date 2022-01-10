@@ -24,6 +24,9 @@ data:
           to: {{ .Values.emailNotification.to | quote }}
           cron: {{ .Values.emailNotification.cron | quote }}
           amount: {{ .Values.emailNotification.amount }}
+      metrics:
+        alert-resolution:
+          percentiles: [ 0.5, 0.95 ]
     grpc:
       client:
         GLOBAL:
