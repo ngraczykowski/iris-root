@@ -8,11 +8,11 @@ ext {
   s8consulGrpcRegistrationVersion = "1.0.0"
 
   // TODO all of this should be specified in agent-dependencies-common (MI6-638)
-  aspectjVersion = "1.9.6" //TODO use version from platform (MI6-638)
+  aspectjVersion = "1.9.7" //TODO use version from platform (MI6-638)
   byteBuddyVersion = "1.11.1" //TODO use version from platform (MI6-638)
   guavaVersion = "30.1.1-jre" //TODO use version from platform (MI6-638)
   jbossXnioVersion = "3.5.9.Final"
-  springBootAutoconfigureVersion = "2.12.0.RELEASE" //TODO it probably should be aligned with the rest of the spring-boot deps ("2.4.6") (MI6-638)
+  springBootAutoconfigureVersion = "2.13.0.RELEASE" //TODO it probably should be aligned with the rest of the spring-boot deps ("2.4.6") (MI6-638)
 }
 
 // Silent Eight libraries

@@ -20,7 +20,7 @@ ext {
   apacheCommonsCollectionsVersion = "4.4"
   apacheCommonsCsvVersion = "1.8"
   archunitJunitVersion = "0.15.0"
-  aspectjVersion = "1.9.6"
+  aspectjVersion = "1.9.7"
   bouncyCastleExtVersion = "1.69"
   bouncyCastleVersion = "1.69"
   byteBuddyVersion = "1.11.1"
