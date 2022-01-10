@@ -57,6 +57,8 @@ class RegisterAlertService implements RegisterAlertUseCase {
         .builder()
         .alertId(alertData.getAlertId())
         .alertName(registerAlertResponse.getAlertName())
+        .fkcoMessageId(alertData.getMessageId())
+        .fkcoSystemId(alertData.getSystemId())
         .matches(registerAlertResponse
             .getMatchResponses()
             .stream()
@@ -71,7 +73,9 @@ class RegisterAlertService implements RegisterAlertUseCase {
 
     var matchIds = getMatchIds(alertDto);
     return RegisterAlertRequest.builder()
-        .alertId(alertDto.getSystemID())
+        .alertId(alertData.getAlertId().toString())
+        .fkcoSystemId(alertDto.getSystemID())
+        .fkcoMessageId(alertDto.getMessageID())
         .alertTime(fromOffsetDateTime(alertDto.getFilteredAt(ZoneOffset.UTC)))
         .priority(alertData.getPriority())
         .matchIds(matchIds)

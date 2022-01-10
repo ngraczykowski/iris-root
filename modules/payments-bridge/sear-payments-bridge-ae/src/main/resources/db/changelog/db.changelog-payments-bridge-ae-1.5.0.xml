@@ -11,4 +11,45 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="payments-bridge-ae-1.5.0_2" author="wkeska">
+    <addColumn tableName="pb_registered_alert">
+      <column name="fkco_message_id" type="VARCHAR(64)">
+      </column>
+      <column name="fkco_system_id" type="VARCHAR(64)">
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.5.0_3" author="wkeska">
+    <dropForeignKeyConstraint baseTableName="pb_registered_match"
+                              constraintName="fk_pb_registered_match_alert_message_id"/>
+    <dropPrimaryKey tableName="pb_registered_alert"/>
+    <addColumn tableName="pb_registered_alert">
+      <column name="registered_alert_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.5.0_4" author="wkeska">
+    <addColumn tableName="pb_registered_match">
+      <column name="registered_alert_id" type="BIGINT"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.5.0_5" author="wkeska">
+    <sqlFile path="sql/update_registered_match_id.sql"
+             relativeToChangelogFile="true"/>
+    <addForeignKeyConstraint baseTableName="pb_registered_match"
+                             constraintName="fk_pb_registered_match_registered_alert_id"
+                             baseColumnNames="registered_alert_id"
+                             referencedColumnNames="registered_alert_id"
+                             referencedTableName="pb_registered_alert"
+                             onDelete="CASCADE"/>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.5.0_6" author="wkeska">
+    <dropNotNullConstraint tableName="pb_registered_match"
+                           columnName="alert_message_id"/>
+  </changeSet>
 </databaseChangeLog>

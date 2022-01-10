@@ -59,7 +59,9 @@ public class LearningAlert {
   public RegisterAlertRequest toRegisterAlertRequest() {
     return RegisterAlertRequest
         .builder()
-        .alertId(alertId)
+        .alertId(messageId)
+        .fkcoMessageId(messageId)
+        .fkcoSystemId(systemId)
         .alertTime(fromOffsetDateTime(alertTime))
         .priority(LEARNING_PRIORITY)
         .matchIds(matches.stream().map(LearningMatch::getMatchId).collect(toList()))

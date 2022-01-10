@@ -10,4 +10,12 @@
         path="sql/update_registered_match_match_id_query.sql"
         relativeToChangelogFile="true"/>
   </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.5.0_1" author="wkeska">
+    <sqlFile path="sql/migrate_alert_message_id.sql"
+             relativeToChangelogFile="true"/>
+
+    <dropColumn tableName="pb_registered_match"
+                columnName="alert_message_id"/>
+  </changeSet>
 </databaseChangeLog>

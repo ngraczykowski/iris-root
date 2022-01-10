@@ -14,5 +14,9 @@ public class SaveRegisteredAlertRequest {
 
   String alertName;
 
+  String fkcoMessageId;
+
+  String fkcoSystemId;
+
   List<SaveRegisteredMatchRequest> matches;
 }

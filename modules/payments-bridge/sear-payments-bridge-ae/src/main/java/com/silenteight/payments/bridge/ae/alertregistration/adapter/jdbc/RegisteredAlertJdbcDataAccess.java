@@ -26,8 +26,10 @@ class RegisteredAlertJdbcDataAccess implements RegisteredAlertDataAccessPort {
   @Override
   @Transactional
   public void save(List<SaveRegisteredAlertRequest> request) {
-    insertRegisteredAlertQuery.execute(request);
-    insertMatchQuery.execute(request);
+    request.forEach(r -> {
+      var registeredAlertId = insertRegisteredAlertQuery.execute(r);
+      insertMatchQuery.execute(r, registeredAlertId);
+    });
   }
 
   @Override

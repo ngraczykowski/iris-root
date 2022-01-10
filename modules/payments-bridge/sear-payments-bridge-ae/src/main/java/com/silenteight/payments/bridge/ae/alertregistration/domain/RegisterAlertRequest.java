@@ -31,6 +31,10 @@ public class RegisterAlertRequest {
   @Default
   int priority = 5;
 
+  String fkcoMessageId;
+
+  String fkcoSystemId;
+
   @NonNull
   Timestamp alertTime;
 

@@ -11,7 +11,6 @@ import org.springframework.jdbc.object.BatchSqlUpdate;
 import org.springframework.stereotype.Component;
 
 import java.sql.Types;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -21,13 +20,13 @@ class InsertMatchQuery {
 
   @Language("PostgreSQL")
   private static final String SQL =
-      "INSERT INTO pb_registered_match(alert_message_id, match_name, match_id) VALUES (?, ?, ?)";
+      "INSERT INTO pb_registered_match(registered_alert_id, match_name, match_id) VALUES (?, ?, ?)";
 
-  void execute(List<SaveRegisteredAlertRequest> alerts) {
+  void execute(SaveRegisteredAlertRequest alert, long registeredAlertId) {
     var sql = createQuery();
-    alerts.forEach(alert -> alert
+    alert
         .getMatches()
-        .forEach(m -> sql.update(alert.getAlertId(), m.getMatchName(), m.getMatchId())));
+        .forEach(m -> sql.update(registeredAlertId, m.getMatchName(), m.getMatchId()));
     sql.flush();
   }
 
@@ -36,7 +35,7 @@ class InsertMatchQuery {
 
     sql.setJdbcTemplate(jdbcTemplate);
     sql.setSql(SQL);
-    sql.declareParameter(new SqlParameter("alert_message_id", Types.OTHER));
+    sql.declareParameter(new SqlParameter("registered_alert_id", Types.BIGINT));
     sql.declareParameter(new SqlParameter("match_name", Types.VARCHAR));
     sql.declareParameter(new SqlParameter("match_id", Types.VARCHAR));
 

@@ -32,6 +32,8 @@ class RegisterMatchJdbcDataAccessIT extends BaseJdbcTest {
     var request = SaveRegisteredAlertRequest
         .builder()
         .alertId(UUID.fromString("f07f327c-58c2-e2e5-b02d-b2bdeee79adc"))
+        .fkcoSystemId("systemId")
+        .fkcoMessageId("messageId")
         .alertName("alerts/1")
         .matches(List.of(SaveRegisteredMatchRequest
             .builder()
