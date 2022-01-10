@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
+import com.silenteight.payments.bridge.svb.learning.engine.HistoricalDecisionLearningEnginePort;
 import com.silenteight.payments.bridge.svb.learning.reader.port.FindRegisteredAlertPort;
 
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -36,5 +37,10 @@ public class TestApplicationConfiguration {
   @Bean
   MessageParserUseCase messageParserUseCase() {
     return new MessageParserMock();
+  }
+
+  @Bean
+  HistoricalDecisionLearningEnginePort historicalDecisionLearningEnginePort() {
+    return new HistoricalDecisionLearningEngineMock();
   }
 }

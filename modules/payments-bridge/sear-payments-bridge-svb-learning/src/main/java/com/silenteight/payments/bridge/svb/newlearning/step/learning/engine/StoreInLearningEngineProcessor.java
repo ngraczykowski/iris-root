@@ -21,7 +21,7 @@ class StoreInLearningEngineProcessor implements
           "Processing item alertId: {} systemId: {}", item.getAlertDetails().getAlertId(),
           item.getAlertDetails().getSystemId());
     }
-    // TODO: transform composite to learning engine request
-    return HistoricalDecisionLearningStoreExchangeRequest.newBuilder().build();
+
+    return item.toHistoricalDecisionRequest();
   }
 }

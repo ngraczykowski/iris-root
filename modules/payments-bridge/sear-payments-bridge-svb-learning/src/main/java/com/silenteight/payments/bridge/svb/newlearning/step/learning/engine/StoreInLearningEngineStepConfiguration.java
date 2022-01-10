@@ -35,6 +35,8 @@ class StoreInLearningEngineStepConfiguration {
   private final AlertCompositeReaderFactory alertCompositeReaderFactory;
   private final HistoricalRiskAssessmentJobProperties properties;
   private final StoreInLearningEngineProcessor storeInLearningEngineProcessor;
+  private final StoreInLearningEngineWriter storeInLearningEngineWriter;
+
 
   @Bean
   @StepScope
@@ -54,7 +56,7 @@ class StoreInLearningEngineStepConfiguration {
             properties.getChunkSize())
         .reader(historicalReservationCompositeReader)
         .processor(storeInLearningEngineProcessor)
-        .writer(item -> log.info("writing item: {}", item.size()))
+        .writer(storeInLearningEngineWriter)
         .build();
   }
 }

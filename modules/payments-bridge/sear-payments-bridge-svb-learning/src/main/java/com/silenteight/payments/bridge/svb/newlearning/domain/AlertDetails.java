@@ -26,6 +26,10 @@ public class AlertDetails {
 
   long fkcoId;
 
+  String fkcoVFormat;
+
+  String fkcoVApplication;
+
   OffsetDateTime fkcoDFilteredDateTime;
 
   String systemId;
@@ -33,10 +37,6 @@ public class AlertDetails {
   String messageId;
 
   String fkcoVContent;
-
-  String fkcoVApplication;
-
-  String fkcoVFormat;
 
   public FindRegisteredAlertRequest toFindRegisterAlertRequest() {
     return FindRegisteredAlertRequest.builder().messageId(messageId).systemId(systemId).build();

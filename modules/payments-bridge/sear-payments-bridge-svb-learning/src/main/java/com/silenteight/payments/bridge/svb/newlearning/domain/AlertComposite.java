@@ -6,10 +6,16 @@ import lombok.Value;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterMatchResponse;
+import com.silenteight.payments.bridge.etl.processing.model.MessageData;
+import com.silenteight.payments.bridge.etl.processing.model.MessageTag;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.FindRegisteredAlertRequest;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.RegisteredAlert;
+import com.silenteight.payments.bridge.svb.oldetl.service.AlertParserService;
+import com.silenteight.proto.learningstore.historicaldecision.v1.api.*;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
 import static java.util.stream.Collectors.toList;
@@ -17,6 +23,9 @@ import static java.util.stream.Collectors.toList;
 @Value
 @Builder
 public class AlertComposite {
+
+  // Learning engine is multi-tenant db so some discriminator is required.
+  private static final String DISCRIMINATOR = "";
 
   AlertDetails alertDetails;
 
@@ -26,6 +35,66 @@ public class AlertComposite {
 
   public FindRegisteredAlertRequest toFindRegisterAlertRequest() {
     return alertDetails.toFindRegisterAlertRequest();
+  }
+
+  public HistoricalDecisionLearningStoreExchangeRequest toHistoricalDecisionRequest() {
+    var alerts =
+        hits.stream()
+            .map(hit -> mapToAlert(alertDetails, hit,
+                ((LinkedList<ActionComposite>) actions).getLast())).collect(Collectors.toList());
+
+    return HistoricalDecisionLearningStoreExchangeRequest.newBuilder()
+        .addAllAlerts(alerts)
+        .build();
+  }
+
+  private Alert mapToAlert(
+      AlertDetails alertDetails, HitComposite hit, ActionComposite lastAction) {
+
+    return Alert.newBuilder()
+        .setAlertId(alertDetails.getSystemId())
+        .setAlertedParty(mapAlertedParty(hit))
+        .setMatchId(hit.getFkcoVListFmmId())
+        .setWatchlist(mapWatchlistType(hit))
+        .addDecisions(mapDecision(lastAction))
+        .setDiscriminator(mapDiscriminator())
+        .build();
+  }
+
+  private AlertedParty mapAlertedParty(HitComposite hit) {
+    var messageData = new MessageData(List.of(
+        new MessageTag(hit.getFkcoVMatchedTag(), hit.getFkcoVMatchedTagContent())));
+
+    var alertedPartyData = AlertParserService.extractAlertedPartyData(messageData,
+        hit.getFkcoVMatchedTag(),
+        alertDetails.getFkcoVFormat(), alertDetails.getFkcoVApplication());
+    var alertedPartyId = alertedPartyData.getAccountNumberOrFirstName().orElse("");
+    var country = hit.getFkcoVCountryMatchedText();
+    return AlertedParty.newBuilder()
+        .setId(alertedPartyId)
+        .setCountry(country)
+        .build();
+  }
+
+  private Discriminator mapDiscriminator() {
+    return Discriminator.newBuilder()
+        .setValue(DISCRIMINATOR)
+        .build();
+  }
+
+  private Watchlist mapWatchlistType(HitComposite hit) {
+    return Watchlist.newBuilder()
+        .setId(hit.getFkcoVListFmmId())
+        .setType(hit.getFkcoVListType())
+        .build();
+  }
+
+  private Decision mapDecision(ActionComposite lastAction) {
+    return Decision.newBuilder()
+        .setId(String.valueOf(lastAction.getActionId()))
+        .setCreatedAt(lastAction.getActionDatetime().toInstant().toEpochMilli())
+        .setValue(lastAction.getStatusBehaviour())
+        .build();
   }
 
   public RegisterAlertRequest toRegisterAlertRequest(Long jobId) {

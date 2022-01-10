@@ -13,6 +13,8 @@ class AlertDetailsRowMapper {
     return AlertDetails.builder()
         .alertId(resultSet.getLong("learning_alert_id"))
         .fkcoId(resultSet.getLong("fkco_id"))
+        .fkcoVFormat(resultSet.getString("fkco_v_format"))
+        .fkcoVApplication(resultSet.getString("fkco_v_application"))
         .messageId(resultSet.getString("fkco_v_messageid"))
         .systemId(resultSet.getString("fkco_v_system_id"))
         .fkcoDFilteredDateTime(
