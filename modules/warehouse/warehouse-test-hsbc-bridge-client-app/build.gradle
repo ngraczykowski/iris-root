@@ -18,11 +18,3 @@ dependencies {
 
   implementation libraries.spring_context_support
 }
-
-publishing {
-  publications {
-    bootJava(MavenPublication) {
-      artifact bootJar
-    }
-  }
-}
