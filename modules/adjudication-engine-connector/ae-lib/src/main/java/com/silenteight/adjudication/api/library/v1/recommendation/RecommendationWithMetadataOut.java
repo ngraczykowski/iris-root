@@ -16,5 +16,4 @@ public class RecommendationWithMetadataOut {
   @NonNull String recommendationComment;
   OffsetDateTime date;
   RecommendationMetadataOut metadata;
-  String s8recommendedAction;
 }
