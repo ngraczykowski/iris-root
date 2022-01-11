@@ -130,6 +130,40 @@ class CategoryIntegrationTest {
   }
 
   @Test
+  @Sql(scripts = "adapter/outgoing/jdbc/populate_categories.sql")
+  @Sql(scripts = "adapter/outgoing/jdbc/truncate_categories.sql",
+      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  void testGettingCategoryValuesVersionOneWhenRequestedCategoryValuesNotExist() {
+
+    BatchGetMatchCategoryValuesResponse batchGetMatchCategoryValuesResponse =
+        categoryServiceBlockingStubV1.batchGetMatchCategoryValues(
+            BatchGetMatchCategoryValuesRequest.newBuilder()
+                .addAllMatchValues(List.of(
+                    "categories/categoryOne/alerts/9999999/matches/1",
+                    "categories/categoryTwo/alerts/9999998/matches/2",
+                    "categories/categoryThree/alerts/2/matches/2"))
+                .build()
+        );
+
+    assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesCount()).isEqualTo(3);
+
+    assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesList().stream()
+        .filter(c -> c.getSingleValue().equals("NO_DATA"))
+        .filter(c -> c.getName().startsWith("categories/categoryTwo"))
+        .count()).isEqualTo(1);
+
+    assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesList().stream()
+        .filter(c -> c.getSingleValue().equals("NO_DATA"))
+        .filter(c -> c.getName().startsWith("categories/categoryOne"))
+        .count()).isEqualTo(1);
+
+    assertThat(batchGetMatchCategoryValuesResponse.getCategoryValuesList().stream()
+        .filter(c -> c.getSingleValue().equals("YES"))
+        .filter(c -> c.getName().startsWith("categories/categoryThree"))
+        .count()).isEqualTo(1);
+  }
+
+  @Test
   void testBatchCreateCategoryValuesToNonExistingCategories() {
     assertThrows(
         StatusRuntimeException.class,
