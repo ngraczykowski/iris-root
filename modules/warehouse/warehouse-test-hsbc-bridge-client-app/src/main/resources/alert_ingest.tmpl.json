@@ -1,0 +1,252 @@
+{
+  "id": "${discriminator}",
+  "status": "COMPLETED",
+  "errorMessage": "tst",
+  "recommendation": "Level 2 Review",
+  "comment": "NOTE: This is the default alert comment template!\n\nAlert ID: XXXXXXXXXXXXXXXXXXXXXXXX \nComment Input:\n    - apId: SEN-1014504\n    - wlId: 14196\n    - apType: C\n    - caseId: 1014503\n    - wlType: SAN\n    - listName: SAN\nRecommended Action: ACTION_INVESTIGATE\n\nMatches:\n\n-   Match ID: 1014503\n    Solution: SOLUTION_NO_DECISION\n    Reason:\n        - step: \n        - policy: policies/f680465e-f51f-4e9a-9ec7-1eb8af7867c0\n        - step_title: \n        - policy_title: PROD Policy for HSBC - v.2021-09-23\n        - feature_vector_signature: N7j1x6tBg3OZDuiN9QluxH12e3E=\n    Categories:\n    -   categories/hitType: SAN\n    -   categories/customerType: C\n    Features:\n        features/name:\n            Agent Config: agents/name/versions/1.0.0/configs/1\n            Agent Name: agents/name\n            Solution: MATCH\n            Reason:\n                - score: 0.8444443941116333\n                - alertedValue: *QWERTYUIOPOI U UYYTREWQEQWR VCXZXC\n                - alertedValues: [*QWERTYUIOPOI U UYYTREWQEQWR VCXZXC]\n                - executionDuration: 0.050914s\n                - matchedValueGroups: [{result=MATCH, watchlistNames=[{name=QWERTYUIOPOI U UYYTREWQEQWR VCXZXC UJHGFDR CIA LTDA, type=NAME}]}]\n        features/isPep:\n            Agent Config: agents/ispep/versions/1.0.0/configs/1\n            Agent Name: agents/ispep\n            Solution: DATA_SOURCE_ERROR\n            Reason:\n                - errorMessage: No feature solution found in Is PEP Agent\n        features/gender:\n            Agent Config: agents/gender/versions/1.0.0/configs/1\n            Agent Name: agents/gender\n            Solution: NO_DATA\n            Reason:\n        features/commonAp:\n            Agent Config: agents/allowList/versions/1.0.0/configs/1\n            Agent Name: agents/allowList\n            Solution: NO\n            Reason:\n                - configuration: {minRatio=100.0, allowListName=hsbc_common_alerted_party, minFalsePositiveCount=100.0}\n        features/commonMp:\n            Agent Config: agents/allowList/versions/1.0.0/configs/1\n            Agent Name: agents/allowList\n            Solution: NO\n            Reason:\n                - configuration: {minRatio=100.0, allowListName=hsbc_common_watchlist_party, minFalsePositiveCount=100.0}\n        features/isTpMarked:\n            Agent Config: agents/historicalDecisions/versions/1.0.0/configs/1\n            Agent Name: agents/historicalDecisions\n            Solution: NOT_TRUE_POSITIVE\n            Reason:\n        features/commonNames:\n            Agent Config: agents/allowList/versions/1.0.0/configs/1\n            Agent Name: agents/allowList\n            Solution: NO\n            Reason:\n                - configuration: {minRatio=100.0, allowListName=hsbc_common_name, minFalsePositiveCount=100.0}\n        features/dateOfBirth:\n            Agent Config: agents/date/versions/1.0.0/configs/1\n            Agent Name: agents/date\n            Solution: NO_DATA\n            Reason:\n        features/invalidAlert:\n            Agent Config: agents/invalidAlert/versions/1.0.0/configs/1\n            Agent Name: agents/invalidAlert\n            Solution: NO\n            Reason:\n                - configuration: {allowListName=hsbc_financial_institution}\n        features/isApTpMarked:\n            Agent Config: agents/historicalDecisions/versions/1.0.0/configs/1\n            Agent Name: agents/historicalDecisions\n            Solution: NOT_TRUE_POSITIVE\n            Reason:\n        features/otherCountry:\n            Agent Config: agents/country/versions/1.0.0/configs/1\n            Agent Name: agents/country\n            Solution: NO_MATCH\n            Reason:\n                - customerValue: MEXICO\n                - matchedValues: [CO]\n                - customerValues: [MEXICO, MX]\n                - watchlistValues: [CO, COLOMBIA]\n        features/otherDocument:\n            Agent Config: agents/document/versions/1.0.0/configs/1\n            Agent Name: agents/document\n            Solution: NO_DATA\n            Reason:\n        features/geoResidencies:\n            Agent Config: agents/geo/versions/1.0.0/configs/1\n            Agent Name: agents/geo\n            Solution: NO_DATA\n            Reason:\n        features/isCaseTpMarked:\n            Agent Config: agents/historicalDecisions/versions/1.0.0/configs/1\n            Agent Name: agents/historicalDecisions\n            Solution: NOT_TRUE_POSITIVE\n            Reason:\n        features/geoPlaceOfBirth:\n            Agent Config: agents/geo/versions/1.0.0/configs/1\n            Agent Name: agents/geo\n            Solution: NO_DATA\n            Reason:\n        features/residencyCountry:\n            Agent Config: agents/country/versions/1.0.0/configs/1\n            Agent Name: agents/country\n            Solution: NO_DATA\n            Reason:\n        features/nationalIdDocument:\n            Agent Config: agents/nationalId/versions/1.0.0/configs/1\n            Agent Name: agents/nationalId\n            Solution: NO_DATA\n            Reason:\n        features/nationalityCountry:\n            Agent Config: agents/country/versions/1.0.0/configs/1\n            Agent Name: agents/country\n            Solution: NO_DATA\n            Reason:\n        features/registrationCountry:\n            Agent Config: agents/country/versions/1.0.0/configs/1\n            Agent Name: agents/country\n            Solution: NO_DATA\n            Reason:\n        features/incorporationCountry:\n            Agent Config: agents/country/versions/1.0.0/configs/1\n            Agent Name: agents/country\n            Solution: NO_DATA\n            Reason:\n        features/logicalDiscountingDob:\n            Agent Config: agents/logicalDiscountingDob/versions/1.0.0/configs/1\n            Agent Name: agents/logicalDiscountingDob\n            Solution: INCONCLUSIVE\n            Reason:\n        features/passportNumberDocument:\n            Agent Config: agents/document/versions/1.0.0/configs/1\n            Agent Name: agents/document\n            Solution: NO_DATA\n            Reason:",
+  "policy_id": "policies/f680465e-f51f-4e9a-9ec7-1eb8af7867c0",
+  "step_id": "",
+  "fv_signature": "N7j1x6tBg3OZDuiN9QluxH12e3E=",
+  "alertMetadata": [
+    {
+      "key": "discriminator",
+      "value": "${discriminator}"
+    },
+    {
+      "key": "trackingId",
+      "value": "121aeddb4f1596c6af6f3788816b82AN"
+    },
+    {
+      "key": "s8_lobCountryCode",
+      "value": "MX"
+    },
+    {
+      "key": "extendedAttribute5",
+      "value": "SAN"
+    },
+    {
+      "key": "s8_recommendation",
+      "value": "ACTION_FALSE_POSITIVE"
+    },
+    {
+      "key": "recommendationYear",
+      "value": "${recommendationYear}"
+    },
+    {
+      "key": "recommendationMonth",
+      "value": "${recommendationMonth}"
+    },
+    {
+      "key": "recommendationDay",
+      "value": "${recommendationDay}"
+    },
+    {
+      "key": "recommendationDate",
+      "value": "${recommendationDate}"
+    },
+    {
+      "key": "categories/hitType",
+      "value": "SAN"
+    },
+    {
+      "key": "categories/customerType",
+      "value": "C"
+    },
+    {
+      "key": "step",
+      "value": ""
+    },
+    {
+      "key": "policy",
+      "value": "policies/f680465e-f51f-4e9a-9ec7-1eb8af7867c0"
+    },
+    {
+      "key": "step_title",
+      "value": ""
+    },
+    {
+      "key": "policy_title",
+      "value": "PROD Policy for HSBC - v.2021-09-23"
+    },
+    {
+      "key": "feature_vector_signature",
+      "value": "N7j1x6tBg3OZDuiN9QluxH12e3E="
+    },
+    {
+      "key": "features/name:config",
+      "value": "agents/name/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/name:solution",
+      "value": "MATCH"
+    },
+    {
+      "key": "features/isPep:config",
+      "value": "agents/ispep/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/isPep:solution",
+      "value": "DATA_SOURCE_ERROR"
+    },
+    {
+      "key": "features/gender:config",
+      "value": "agents/gender/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/gender:solution",
+      "value": "NO_DATA"
+    },
+    {
+      "key": "features/commonAp:config",
+      "value": "agents/allowList/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/commonAp:solution",
+      "value": "NO"
+    },
+    {
+      "key": "features/commonMp:config",
+      "value": "agents/allowList/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/commonMp:solution",
+      "value": "NO"
+    },
+    {
+      "key": "features/isTpMarked:config",
+      "value": "agents/historicalDecisions/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/isTpMarked:solution",
+      "value": "NOT_TRUE_POSITIVE"
+    },
+    {
+      "key": "features/commonNames:config",
+      "value": "agents/allowList/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/commonNames:solution",
+      "value": "NO"
+    },
+    {
+      "key": "features/dateOfBirth:config",
+      "value": "agents/date/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/dateOfBirth:solution",
+      "value": "NO_DATA"
+    },
+    {
+      "key": "features/invalidAlert:config",
+      "value": "agents/invalidAlert/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/invalidAlert:solution",
+      "value": "NO"
+    },
+    {
+      "key": "features/isApTpMarked:config",
+      "value": "agents/historicalDecisions/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/isApTpMarked:solution",
+      "value": "NOT_TRUE_POSITIVE"
+    },
+    {
+      "key": "features/otherCountry:config",
+      "value": "agents/country/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/otherCountry:solution",
+      "value": "NO_MATCH"
+    },
+    {
+      "key": "features/otherDocument:config",
+      "value": "agents/document/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/otherDocument:solution",
+      "value": "NO_DATA"
+    },
+    {
+      "key": "features/geoResidencies:config",
+      "value": "agents/geo/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/geoResidencies:solution",
+      "value": "NO_DATA"
+    },
+    {
+      "key": "features/isCaseTpMarked:config",
+      "value": "agents/historicalDecisions/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/isCaseTpMarked:solution",
+      "value": "NOT_TRUE_POSITIVE"
+    },
+    {
+      "key": "features/geoPlaceOfBirth:config",
+      "value": "agents/geo/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/geoPlaceOfBirth:solution",
+      "value": "NO_DATA"
+    },
+    {
+      "key": "features/residencyCountry:config",
+      "value": "agents/country/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/residencyCountry:solution",
+      "value": "NO_DATA"
+    },
+    {
+      "key": "features/nationalIdDocument:config",
+      "value": "agents/nationalId/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/nationalIdDocument:solution",
+      "value": "NO_DATA"
+    },
+    {
+      "key": "features/nationalityCountry:config",
+      "value": "agents/country/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/nationalityCountry:solution",
+      "value": "NO_DATA"
+    },
+    {
+      "key": "features/registrationCountry:config",
+      "value": "agents/country/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/registrationCountry:solution",
+      "value": "NO_DATA"
+    },
+    {
+      "key": "features/incorporationCountry:config",
+      "value": "agents/country/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/incorporationCountry:solution",
+      "value": "NO_DATA"
+    },
+    {
+      "key": "features/logicalDiscountingDob:config",
+      "value": "agents/logicalDiscountingDob/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/logicalDiscountingDob:solution",
+      "value": "INCONCLUSIVE"
+    },
+    {
+      "key": "features/passportNumberDocument:config",
+      "value": "agents/document/versions/1.0.0/configs/1"
+    },
+    {
+      "key": "features/passportNumberDocument:solution",
+      "value": "NO_DATA"
+    }
+  ]
+}
