@@ -3,6 +3,7 @@ package com.silenteight.warehouse.report.metrics.domain;
 import com.silenteight.sep.base.common.support.persistence.BasicInMemoryRepository;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 public class InMemoryMetricsRepository
     extends BasicInMemoryRepository<MetricsReport>
@@ -14,8 +15,13 @@ public class InMemoryMetricsRepository
   }
 
   @Override
-  public int removeAllByCreatedAtBefore(OffsetDateTime offsetDateTime) {
-    // TODO: (WEB-1435)
+  public void deleteAll(Iterable<MetricsReport> reports) {
+    throw new UnsupportedOperationException("Not implemented");
+  }
+
+  @Override
+  public List<MetricsReport> getAllByCreatedAtBefore(
+      OffsetDateTime offsetDateTime) {
     throw new UnsupportedOperationException("Not implemented");
   }
 }

@@ -17,9 +17,13 @@ class MetricsReportConfiguration {
   @Bean
   MetricsReportService metricsReportService(
       MetricsReportRepository reportRepository,
-      AsyncMetricsReportGenerationService asyncReportGenerationService) {
+      AsyncMetricsReportGenerationService asyncReportGenerationService,
+      ReportStorage reportStorage) {
 
-    return new MetricsReportService(reportRepository, asyncReportGenerationService);
+    return new MetricsReportService(
+        reportRepository,
+        asyncReportGenerationService,
+        reportStorage);
   }
 
   @Bean

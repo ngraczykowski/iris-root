@@ -105,11 +105,11 @@ warehouse.report.metrics:
     selectSqlQuery: >
       WITH main AS (
           SELECT payload ->> 'lob_country'                country,
-                 payload ->> 'categories/hitType'         hit_type,
+                 payload ->> 'categories/hitType'         risk_type,
                  payload ->> 's8_recommendation'          recommendation,
                  payload ->> 'analyst_decision'           analyst_decision,
                  payload ->> 'qa.level-0.state'           qa_decision,
-                 payload ->> 'DN_CASE.ExtendedAttribute5' risk_type,
+                 payload ->> 'DN_CASE.ExtendedAttribute5' list_type,
                  recommendation_date date
           FROM warehouse_alert
           WHERE payload ->> 'status' = 'LEARNING_COMPLETED'
@@ -185,25 +185,26 @@ warehouse.report.metrics:
   simulation:
     selectSqlQuery: >
       WITH main AS (
-          SELECT payload ->> 'lob_country'                country,
-                 payload ->> 'categories/hitType'         hit_type,
-                 payload ->> 's8_recommendation'          recommendation,
-                 payload ->> 'analyst_decision'           analyst_decision,
-                 payload ->> 'qa.level-0.state'           qa_decision,
-                 payload ->> 'DN_CASE.ExtendedAttribute5' risk_type,
-                 created_at date
-          FROM warehouse_simulation_alert
-          WHERE payload ->> 'status' = 'LEARNING_COMPLETED'
+          SELECT ws.payload ->> 'lob_country'                           country,
+                 ws.payload ->> 'categories/hitType'                    risk_type,
+                 ws.payload ->> 'DN_CASE.ExtendedAttribute5'            list_type,
+                 wsa.payload ->> 'recommendation_recommended_action'    recommendation,
+                 wsa.payload ->> 'analyst_decision'                     analyst_decision,
+                 wsa.payload ->> 'qa.level-0.state'                     qa_decision,
+                 wsa.created_at date
+          FROM warehouse_simulation_alert wsa
+            JOIN warehouse_alert wa ON wsa.name = wa.name
+          WHERE wsa.payload ->> 'status' = 'LEARNING_COMPLETED'
                 AND date BETWEEN DATE '${from}' AND DATE '${to}
-          GROUP BY payload ->> 'lob_country', payload ->> 'categories/hitType',
-                   payload ->> 's8_recommendation', payload ->> 'analyst_decision',
-                   payload ->> 'qa.level-0.state', payload ->> 'DN_CASE.ExtendedAttribute5',
+          GROUP BY wsa.payload ->> 'lob_country', wsa.payload ->> 'categories/hitType',
+                   wsa.payload ->> 's8_recommendation', wsa.payload ->> 'analyst_decision',
+                   wsa.payload ->> 'qa.level-0.state', wsa.payload ->> 'DN_CASE.ExtendedAttribute5',
                    date
       ),
            grouped AS (
                SELECT main.country                                          g_country,
-                      main.hit_type                                         g_hit_type,
                       main.risk_type                                        g_risk_type,
+                      main.list_type                                        g_list_type,
                       TO_CHAR(main.date, 'YYYY-MM')                         g_date,
                       COUNT(*)                                              g_total,
                       COUNT(*)
@@ -223,7 +224,7 @@ warehouse.report.metrics:
       SELECT g_date,
              g_country,
              g_risk_type,
-             g_hit_type,
+             g_list_type,
              ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) / GREATEST(g_total, 1)) * 100,3) Efficiency,
              ROUND((g_total_match_analyst::decimal / GREATEST(g_total_false_positive::decimal, 1)) * 100, 3) PTP Effectiveness,
              ROUND((g_total_match_qa::decimal / GREATEST(g_total_false_positive::decimal, 1)) * 100, 3) FP Effectiveness
