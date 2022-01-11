@@ -3,7 +3,6 @@ package com.silenteight.payments.bridge.ae.alertregistration.port;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.SaveRegisteredAlertRequest;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface RegisteredAlertDataAccessPort {
 
@@ -11,5 +10,5 @@ public interface RegisteredAlertDataAccessPort {
 
   String getAlertSystemId(String alertName);
 
-  List<UUID> delete(List<String> alertNames);
+  List<String> delete(List<String> alertNames);
 }

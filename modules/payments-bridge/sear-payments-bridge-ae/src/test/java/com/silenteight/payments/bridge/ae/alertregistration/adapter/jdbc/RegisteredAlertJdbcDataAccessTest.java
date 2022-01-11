@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
-import java.util.UUID;
 
 import static com.silenteight.payments.bridge.ae.alertregistration.AlertFixture.getListOfAlerts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +30,7 @@ class RegisteredAlertJdbcDataAccessTest extends BaseJdbcTest {
 
     var alerts = getListOfAlerts(1, 2, 3, 4, 5);
 
-    List<UUID> deletedAlertsMessageId = dataAccess.delete(alerts);
+    List<String> deletedAlertsMessageId = dataAccess.delete(alerts);
 
     assertEquals(5, deletedAlertsMessageId.size());
     assertEquals(5, jdbcTemplate.queryForObject(
@@ -39,7 +38,7 @@ class RegisteredAlertJdbcDataAccessTest extends BaseJdbcTest {
     assertEquals(6, jdbcTemplate.queryForObject(
         "SELECT count(*) FROM pb_registered_match", Integer.class));
     assertEquals(1, deletedAlertsMessageId.stream()
-        .filter(u -> u.equals(UUID.fromString("f07f327c-58c2-e2e5-b02d-b2bdeee79ad1")))
+        .filter(u -> u.equals("systemId1"))
         .count());
   }
 }

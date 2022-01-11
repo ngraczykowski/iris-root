@@ -9,7 +9,6 @@ import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlert
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -19,17 +18,17 @@ class DeleteRegisteredAlertService implements DeleteRegisteredAlertUseCase {
   private final RegisteredAlertDataAccessPort registeredAlertDataAccessPort;
 
   @Override
-  public List<UUID> delete(List<String> alertNames) {
+  public List<String> delete(List<String> alertNames) {
 
     log.info(
         "Deleting registered messages from mapping table: alertCount={}, alerts={}",
         alertNames.size(), alertNames);
 
-    List<UUID> registeredMessages = registeredAlertDataAccessPort.delete(alertNames);
+    var registeredAlerts = registeredAlertDataAccessPort.delete(alertNames);
 
-    log.info("Registered alerts mappings removed, count={}", registeredMessages.size());
+    log.info("Registered alerts mappings removed, count={}", registeredAlerts.size());
 
-    return registeredMessages;
+    return registeredAlerts;
   }
 
 

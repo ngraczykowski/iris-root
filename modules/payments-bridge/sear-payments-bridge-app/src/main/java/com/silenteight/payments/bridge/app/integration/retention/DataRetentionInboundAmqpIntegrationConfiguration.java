@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.dataretention.api.v1.AlertsExpired;
 import com.silenteight.payments.bridge.ae.alertregistration.port.DeleteRegisteredAlertUseCase;
+import com.silenteight.payments.bridge.firco.alertmessage.model.AlertIdSet;
+import com.silenteight.payments.bridge.firco.alertmessage.port.FindAlertIdSetAccessPort;
 import com.silenteight.payments.bridge.firco.retention.port.incoming.AlertRetentionUseCase;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 
@@ -14,10 +16,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.amqp.dsl.AmqpInboundChannelAdapterSMLCSpec;
 import org.springframework.integration.dsl.IntegrationFlow;
 
-import java.util.List;
-import java.util.UUID;
 import javax.validation.Valid;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.integration.dsl.IntegrationFlows.from;
 
 @Configuration
@@ -31,6 +32,7 @@ class DataRetentionInboundAmqpIntegrationConfiguration {
   private final AmqpInboundFactory inboundFactory;
   private final AlertRetentionUseCase alertRetentionUseCase;
   private final DeleteRegisteredAlertUseCase deleteRegisteredAlertUseCase;
+  private final FindAlertIdSetAccessPort findAlertIdSetAccessPort;
 
   @Bean
   IntegrationFlow alertDataRetentionInbound() {
@@ -49,9 +51,10 @@ class DataRetentionInboundAmqpIntegrationConfiguration {
   }
 
   private void removeExpiredAlerts(AlertsExpired alertsExpired) {
-    List<UUID> registeredMessages =
-        deleteRegisteredAlertUseCase.delete(alertsExpired.getAlertsList());
+    var systemIds = deleteRegisteredAlertUseCase.delete(alertsExpired.getAlertsList());
+    var alertIdSet = findAlertIdSetAccessPort.find(systemIds);
+    var alertMessageIds = alertIdSet.stream().map(AlertIdSet::getAlertId).collect(toList());
 
-    alertRetentionUseCase.invoke(registeredMessages);
+    alertRetentionUseCase.invoke(alertMessageIds);
   }
 }

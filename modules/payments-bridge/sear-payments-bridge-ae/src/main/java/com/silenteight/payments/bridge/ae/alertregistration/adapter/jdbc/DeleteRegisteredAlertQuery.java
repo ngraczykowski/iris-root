@@ -13,7 +13,6 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
@@ -25,14 +24,13 @@ class DeleteRegisteredAlertQuery {
   private static final String SQL =
       "DELETE FROM pb_registered_alert\n"
           + " WHERE alert_name IN (:alert_name)\n"
-          + " RETURNING alert_message_id";
+          + " RETURNING fkco_system_id";
 
   private static final String ALERT_NAME = "alert_name";
-  private static final String ALERT_MESSAGE_ID = "alert_message_id";
 
   private final JdbcTemplate jdbcTemplate;
 
-  List<UUID> execute(List<String> alertNames) {
+  List<String> execute(List<String> alertNames) {
     var batchSqlUpdate = createQuery();
 
     List<Map<String, Object>> keyList = new ArrayList<>();
@@ -50,11 +48,11 @@ class DeleteRegisteredAlertQuery {
     return getCreatedCommentInputs(keyList);
   }
 
-  private static List<UUID> getCreatedCommentInputs(
+  private static List<String> getCreatedCommentInputs(
       List<Map<String, Object>> keyList) {
     return keyList
         .stream()
-        .map(it -> UUID.fromString(it.get(ALERT_MESSAGE_ID).toString()))
+        .map(it -> it.get("fkco_system_id").toString())
         .collect(toList());
   }
 

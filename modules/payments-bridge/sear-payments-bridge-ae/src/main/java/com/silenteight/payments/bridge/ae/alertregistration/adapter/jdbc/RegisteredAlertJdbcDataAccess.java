@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -39,7 +38,7 @@ class RegisteredAlertJdbcDataAccess implements RegisteredAlertDataAccessPort {
 
   @Override
   @Transactional
-  public List<UUID> delete(List<String> alertNames) {
+  public List<String> delete(List<String> alertNames) {
     return deleteRegisteredAlertQuery.execute(alertNames);
   }
 }
