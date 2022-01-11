@@ -87,7 +87,7 @@ class BatchGetFeatureInputService implements BatchGetFeatureInputUseCase {
     }
 
     void mockUnseenMatchOutputs() {
-      log.info(
+      log.debug(
           "Sending mocked unseen matches - all features inputs are mocked (matches size: {}).",
           matches.size());
       var emptyResponse =

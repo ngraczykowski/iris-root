@@ -89,8 +89,8 @@ public abstract class BaseFeatureMapper<T extends Message> implements FeatureMap
         featureInputBuilder.clear();
       }
 
-      if (log.isDebugEnabled()) {
-        log.debug(
+      if (log.isTraceEnabled()) {
+        log.trace(
             "Match: {} is missing some of the feature inputs {} in UDS - default features inputs.",
             matchInput.getMatch(), missingFeatures);
       }
