@@ -39,6 +39,7 @@ class AgentDataSource:
                 timeout=self.application_config["grpc"]["client"]["data-source"].get("timeout"),
             ):
                 # https://www.python.org/dev/peps/pep-0525/#asynchronous-yield-from
+                self.logger.info(f"Response name input len: {len(response.name_inputs)}")
                 for parsed in self.parse_response(response):
                     yield parsed
         except grpc.RpcError as err:

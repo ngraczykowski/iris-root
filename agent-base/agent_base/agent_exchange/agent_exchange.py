@@ -56,12 +56,13 @@ class AgentExchange(AgentService):
         if message.content_encoding == "lz4":
             try:
                 body = lz4.frame.decompress(body)
-                # self.logger.debug(f"message body {body!r}")
             except Exception:
                 raise MessageFormatException(body)
 
         request: AgentExchangeRequest = AgentExchangeRequest.FromString(body)
+        self.logger.info(f"Before request {message.headers}")
         response: AgentExchangeResponse = await self.process(request)
+        self.logger.info(f"After request {message.headers}")
 
         response_body = lz4.frame.compress(
             response.SerializeToString(),
@@ -143,6 +144,7 @@ class AgentExchange(AgentService):
         request_inputs: AsyncGenerator[Generator[Tuple[str, str, Any], None, None], None],
     ) -> AsyncGenerator[Tuple[str, str, Any], None]:
         async for match, feature, args in request_inputs:
+            self.logger.info(f"Input arguments len {len(args)}")
             yield match, feature, self.create_resolve_task(*args)
 
     def _prepare_response(self, request, resolved):
