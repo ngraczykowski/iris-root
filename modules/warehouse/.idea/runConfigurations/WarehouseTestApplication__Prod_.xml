@@ -6,8 +6,7 @@
     <option name="ALTERNATIVE_JRE_PATH" />
     <envs>
       <env name="server.port" value="24901" />
-      <env name="test.generator.production-enabled" value="true" />
-      <env name="test.generator.simulation-enabled" value="false" />
+      <env name="test.flows.production.enabled" value="true" />
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />

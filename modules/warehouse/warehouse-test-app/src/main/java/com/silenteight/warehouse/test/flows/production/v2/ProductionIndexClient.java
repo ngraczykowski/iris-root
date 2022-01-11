@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.test.generator;
+package com.silenteight.warehouse.test.flows.production.v2;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

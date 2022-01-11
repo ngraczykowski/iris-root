@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.test.generator;
+package com.silenteight.warehouse.test.flows.piiexpired;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,14 +19,14 @@ import static java.util.stream.Collectors.toList;
 public class PersonalInformationDataExpiredClient {
 
   private final PersonalInformationExpiredClientGateway personalInformationExpiredClientGateway;
-  private final AlertGenerator alertGenerator;
+  private final MessageGenerator messageGenerator;
 
   @Scheduled(cron = "${test.generator.cron}")
   void send() {
     String requestId = randomUUID().toString();
 
     PersonalInformationExpired personalInformationExpired
-        = alertGenerator.generatePersonalInformationExpired(generateAlertNames());
+        = messageGenerator.generatePersonalInformationExpired(generateAlertNames());
 
     personalInformationExpiredClientGateway.indexRequest(personalInformationExpired);
     log.info("PersonalInformationExpired msg sent, requestId={} alerts count: {}", requestId,

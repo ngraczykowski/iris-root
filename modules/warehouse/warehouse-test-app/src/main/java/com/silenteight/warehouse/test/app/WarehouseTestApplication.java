@@ -5,7 +5,7 @@ import com.silenteight.commons.app.spring.ConfigurableApplicationBuilder;
 import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallback;
 import com.silenteight.commons.app.spring.SpringApplicationTemplate;
 import com.silenteight.warehouse.test.client.TestClientModule;
-import com.silenteight.warehouse.test.generator.TestGeneratorModule;
+import com.silenteight.warehouse.test.flows.TestGeneratorModule;
 import com.silenteight.warehouse.test.integration.TestAmqpCommonModule;
 
 import org.springframework.boot.Banner.Mode;

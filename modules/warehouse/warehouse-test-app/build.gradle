@@ -10,10 +10,13 @@ configurations {
   implementation.extendsFrom starterCommon
   implementation.extendsFrom starterMessaging
   implementation.extendsFrom starterIntegration
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
 }
 
 dependencies {
   implementation project(":warehouse-test-client")
+  implementation project(":warehouse-db-changelog")
 
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_commons_app

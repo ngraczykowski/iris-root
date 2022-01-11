@@ -1,8 +1,8 @@
 package com.silenteight.warehouse.test.generator;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 
 import java.io.BufferedReader;
@@ -14,14 +14,14 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
-class DataReader {
+@RequiredArgsConstructor
+public class DataReader {
 
   private static final String COMMENT_PREFIX = "#";
 
-  @Value("classpath:data/alertData.csv")
-  private Resource resourceFile;
+  private final Resource resourceFile;
 
-  List<String> getLines() {
+  public List<String> getLines() {
     try (
         BufferedReader reader = new BufferedReader(
             new InputStreamReader(resourceFile.getInputStream()))) {
