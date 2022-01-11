@@ -32,6 +32,6 @@ class MockAgentDataSource(MockService):
 
 
 class MockPikaConnection(MockService):
-    def __init__(self, _messaging_config, _connection_config, callback):
+    def __init__(self, _messaging_config, _connection_config, callback, max_requests_to_worker):
         super().__init__()
         self.callback = callback

@@ -175,8 +175,11 @@ class AgentExchange(AgentService):
 
     async def _set_pika_connection(self):
         messaging_config = self.config.application_config["agent"]["agent-exchange"]
+        max_requests_to_worker = self.config.application_config["agent"]["processes"]
         for connection_config in self._prepare_connection_configurations():
-            connection = PikaConnection(messaging_config, connection_config, self.on_request)
+            connection = PikaConnection(
+                messaging_config, connection_config, self.on_request, max_requests_to_worker
+            )
 
             try:
                 await connection.start()

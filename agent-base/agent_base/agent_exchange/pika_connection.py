@@ -12,6 +12,7 @@ class PikaConnection:
         messaging_configuration: Mapping,
         connection_configuration: Mapping,
         callback: Callable,
+        max_requests_to_worker: int,
     ):
         self.messaging_configuration = messaging_configuration
         self.connection_configuration = connection_configuration
@@ -23,13 +24,14 @@ class PikaConnection:
             self.request_queue_tag,
         ) = (None, None, None, None)
         self.logger = logging.getLogger("PikaConnection")
+        self.max_requests_to_worker = max_requests_to_worker
 
     async def start(self) -> None:
         self.connection: aio_pika.RobustConnection = await aio_pika.connect_robust(
             **self.connection_configuration
         )
         self.channel: aio_pika.Channel = await self.connection.channel()
-        await self.channel.set_qos(prefetch_count=1)
+        await self.channel.set_qos(prefetch_count=self.max_requests_to_worker)
 
         try:
             self.request_queue = await self.channel.get_queue(
