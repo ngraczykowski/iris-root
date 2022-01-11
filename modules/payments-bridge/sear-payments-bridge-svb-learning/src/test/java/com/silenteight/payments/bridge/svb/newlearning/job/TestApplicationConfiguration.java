@@ -2,10 +2,10 @@ package com.silenteight.payments.bridge.svb.newlearning.job;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
 import com.silenteight.payments.bridge.svb.learning.engine.HistoricalDecisionLearningEnginePort;
-import com.silenteight.payments.bridge.svb.learning.reader.port.FindRegisteredAlertPort;
 
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
@@ -25,7 +25,7 @@ public class TestApplicationConfiguration {
   }
 
   @Bean
-  FindRegisteredAlertPort findRegisteredAlertPort() {
+  FindRegisteredAlertUseCase findRegisteredAlertPort() {
     return new FindRegisteredAlertPortMock();
   }
 

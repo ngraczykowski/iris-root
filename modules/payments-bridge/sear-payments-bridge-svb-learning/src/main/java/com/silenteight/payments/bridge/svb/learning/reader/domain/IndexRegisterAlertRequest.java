@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.svb.learning.reader.domain;
 import lombok.Builder;
 import lombok.Value;
 
+import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAlert;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredMatch;
 
 import java.util.List;

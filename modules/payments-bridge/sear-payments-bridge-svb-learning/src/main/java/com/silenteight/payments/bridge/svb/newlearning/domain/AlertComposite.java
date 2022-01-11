@@ -3,13 +3,9 @@ package com.silenteight.payments.bridge.svb.newlearning.domain;
 import lombok.Builder;
 import lombok.Value;
 
-import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
-import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
-import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterMatchResponse;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.*;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.etl.processing.model.MessageTag;
-import com.silenteight.payments.bridge.svb.learning.reader.domain.FindRegisteredAlertRequest;
-import com.silenteight.payments.bridge.svb.learning.reader.domain.RegisteredAlert;
 import com.silenteight.payments.bridge.svb.oldetl.service.AlertParserService;
 import com.silenteight.proto.learningstore.historicaldecision.v1.api.*;
 
@@ -76,20 +72,20 @@ public class AlertComposite {
         .build();
   }
 
-  private Discriminator mapDiscriminator() {
+  private static Discriminator mapDiscriminator() {
     return Discriminator.newBuilder()
         .setValue(DISCRIMINATOR)
         .build();
   }
 
-  private Watchlist mapWatchlistType(HitComposite hit) {
+  private static Watchlist mapWatchlistType(HitComposite hit) {
     return Watchlist.newBuilder()
         .setId(hit.getFkcoVListFmmId())
         .setType(hit.getFkcoVListType())
         .build();
   }
 
-  private Decision mapDecision(ActionComposite lastAction) {
+  private static Decision mapDecision(ActionComposite lastAction) {
     return Decision.newBuilder()
         .setId(String.valueOf(lastAction.getActionId()))
         .setCreatedAt(lastAction.getActionDatetime().toInstant().toEpochMilli())

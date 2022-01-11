@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.svb.newlearning.step.etl;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.svb.learning.reader.port.FindRegisteredAlertPort;
+import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
 
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 class EtlAlertProcessorConfiguration {
 
-  private final FindRegisteredAlertPort findRegisteredAlertPort;
+  private final FindRegisteredAlertUseCase findRegisteredAlertUseCase;
   private final ProcessRegisteredService processRegisteredService;
   private final ProcessUnregisteredService processUnregisteredService;
 
@@ -23,7 +23,7 @@ class EtlAlertProcessorConfiguration {
   EtlAlertProcessor registerAlertProcessor(
       @Value("#{stepExecution}") StepExecution stepExecution) {
     return new EtlAlertProcessor(
-        findRegisteredAlertPort, processRegisteredService, processUnregisteredService,
+        findRegisteredAlertUseCase, processRegisteredService, processUnregisteredService,
         stepExecution.getJobExecutionId());
   }
 }

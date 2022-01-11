@@ -1,5 +1,6 @@
 package com.silenteight.payments.bridge.ae.alertregistration.adapter.jdbc;
 
+import com.silenteight.payments.bridge.ae.alertregistration.domain.FindRegisteredAlertRequest;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Collections;
-import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -22,7 +22,8 @@ class AlertRegisteredJdbcDataAccessIT extends BaseJdbcTest {
   @Test
   void shouldSelectAllRegisteredAlerts() {
     var response = dataAccess.findRegistered(
-        Collections.singletonList(UUID.fromString("f07f327c-58c2-e2e5-b02d-b2bdeee79adc")));
+        Collections.singletonList(
+            FindRegisteredAlertRequest.builder().messageId("1").systemId("1").build()));
     assertThat(response.get(0).getMatches().size()).isEqualTo(2);
   }
 }

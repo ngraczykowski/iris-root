@@ -5,6 +5,7 @@ import com.silenteight.payments.bridge.svb.learning.reader.domain.AnalystDecisio
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 class ReaderServiceFixture {
@@ -21,6 +22,7 @@ class ReaderServiceFixture {
         .alertId("alertId" + alertId)
         .systemId("systemId")
         .messageId("messageId")
+        .alertTime(OffsetDateTime.now())
         .matches(List.of(createLearningMatch()))
         .analystDecision(AnalystDecision.builder().comment("git").build())
         .build();

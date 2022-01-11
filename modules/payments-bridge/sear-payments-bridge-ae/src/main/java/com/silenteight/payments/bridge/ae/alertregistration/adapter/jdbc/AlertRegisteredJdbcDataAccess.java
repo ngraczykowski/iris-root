@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.ae.alertregistration.adapter.jdbc;
 
-import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAlertWithMatches;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.FindRegisteredAlertRequest;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAlert;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredMatch;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AlertRegisteredAccessPort;
 
@@ -16,21 +17,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 class AlertRegisteredJdbcDataAccess implements AlertRegisteredAccessPort {
 
   @Language("PostgreSQL")
   private static final String SQL =
-      "SELECT pra.alert_message_id,\n"
+      "SELECT pra.fkco_message_id,\n"
+          + "       pra.fkco_system_id,\n"
           + "       pra.alert_name,\n"
           + "       to_jsonb(json_agg(json_build_object('matchId', prm.match_id, 'matchName',\n"
           + "                                           prm.match_name))) AS matches\n"
           + "FROM pb_registered_alert pra\n"
-          + "         JOIN pb_registered_match prm ON pra.alert_message_id = prm.alert_message_id\n"
-          + "WHERE pra.alert_message_id IN (:ids)\n"
-          + "GROUP BY pra.alert_message_id, pra.alert_name;";
+          + "         JOIN pb_registered_match prm "
+          + "ON pra.registered_alert_id = prm.registered_alert_id\n"
+          + "WHERE (pra.fkco_message_id, pra.fkco_system_id )IN (:tuples)\n"
+          + "GROUP BY pra.fkco_message_id, pra.fkco_system_id, pra.alert_name;";
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
   private final ObjectMapper objectMapper;
@@ -44,11 +48,17 @@ class AlertRegisteredJdbcDataAccess implements AlertRegisteredAccessPort {
         .constructCollectionType(ArrayList.class, RegisteredMatch.class);
   }
 
-  public List<RegisteredAlertWithMatches> findRegistered(List<UUID> alertIds) {
-    return jdbcTemplate.query(SQL, Map.of("ids", alertIds),
-        (rs, rowNum) -> new RegisteredAlertWithMatches(
-            UUID.fromString(rs.getString(1)),
+  public List<RegisteredAlert> findRegistered(List<FindRegisteredAlertRequest> registeredAlert) {
+
+    var tuples = registeredAlert.stream()
+        .map(r -> new Object[] { r.getMessageId(), r.getSystemId() })
+        .collect(toList());
+
+    return jdbcTemplate.query(SQL, Map.of("tuples", tuples),
+        (rs, rowNum) -> new RegisteredAlert(
+            rs.getString(1),
             rs.getString(2),
+            rs.getString(3),
             deserializeRegisteredMatch(rs)));
   }
 

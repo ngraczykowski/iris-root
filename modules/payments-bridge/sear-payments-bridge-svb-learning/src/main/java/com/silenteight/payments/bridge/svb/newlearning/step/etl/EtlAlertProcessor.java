@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.svb.newlearning.step.etl;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.svb.learning.reader.port.FindRegisteredAlertPort;
+import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
 import com.silenteight.payments.bridge.svb.newlearning.domain.LearningRegisteredAlert;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 class EtlAlertProcessor implements ItemProcessor<AlertComposite, LearningRegisteredAlert> {
 
-  private final FindRegisteredAlertPort findRegisteredAlertPort;
+  private final FindRegisteredAlertUseCase findRegisteredAlertUseCase;
   private final ProcessRegisteredService processRegisteredService;
   private final ProcessUnregisteredService processUnregisteredService;
   private final Long jobId;
@@ -21,7 +21,7 @@ class EtlAlertProcessor implements ItemProcessor<AlertComposite, LearningRegiste
   @Override
   public LearningRegisteredAlert process(AlertComposite alertComposite) {
     var solvingRegistered =
-        findRegisteredAlertPort.find(List.of(alertComposite.toFindRegisterAlertRequest()));
+        findRegisteredAlertUseCase.find(List.of(alertComposite.toFindRegisterAlertRequest()));
 
     if (!solvingRegistered.isEmpty()) {
       return processRegisteredService.process(alertComposite, solvingRegistered.get(0));

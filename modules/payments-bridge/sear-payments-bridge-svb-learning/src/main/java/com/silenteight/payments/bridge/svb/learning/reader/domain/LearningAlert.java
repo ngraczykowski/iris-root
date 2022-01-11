@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.Value;
 import lombok.experimental.NonFinal;
 
+import com.silenteight.payments.bridge.ae.alertregistration.domain.FindRegisteredAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.Label;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
@@ -49,7 +50,7 @@ public class LearningAlert {
   String decision;
 
   public FindRegisteredAlertRequest toFindRegisterAlertRequest() {
-    return new FindRegisteredAlertRequest(systemId, messageId);
+    return FindRegisteredAlertRequest.builder().systemId(systemId).messageId(messageId).build();
   }
 
   public String getDiscriminator() {

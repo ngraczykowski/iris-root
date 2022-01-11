@@ -5,8 +5,8 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAle
 
 import java.util.List;
 
-public interface AlertRegisteredAccessPort {
+public interface FindRegisteredAlertUseCase {
 
-  List<RegisteredAlert> findRegistered(List<FindRegisteredAlertRequest> registeredAlert);
+  List<RegisteredAlert> find(List<FindRegisteredAlertRequest> registeredAlert);
 
 }

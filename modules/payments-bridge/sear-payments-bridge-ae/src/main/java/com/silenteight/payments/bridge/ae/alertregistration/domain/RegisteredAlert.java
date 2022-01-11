@@ -1,18 +1,14 @@
-package com.silenteight.payments.bridge.svb.learning.reader.domain;
+package com.silenteight.payments.bridge.ae.alertregistration.domain;
 
 import lombok.Value;
 
-import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredMatch;
-
 import java.util.List;
-import java.util.UUID;
 
 @Value
 public class RegisteredAlert {
 
-  UUID alertId;
-  String systemId;
   String messageId;
+  String systemId;
   String alertName;
   List<RegisteredMatch> matches;
 

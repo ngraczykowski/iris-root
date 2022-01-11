@@ -3,9 +3,9 @@ package com.silenteight.payments.bridge.svb.newlearning.domain;
 import lombok.Builder;
 import lombok.Value;
 
+import com.silenteight.payments.bridge.ae.alertregistration.domain.FindRegisteredAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.Label;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
-import com.silenteight.payments.bridge.svb.learning.reader.domain.FindRegisteredAlertRequest;
 
 import java.time.OffsetDateTime;
 import java.util.List;

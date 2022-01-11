@@ -1,11 +1,11 @@
 package com.silenteight.payments.bridge.svb.learning.reader.service;
 
+import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAlert;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredMatch;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AddAlertLabelUseCase;
+import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
-import com.silenteight.payments.bridge.svb.learning.reader.domain.RegisteredAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CreateAlertRetentionPort;
-import com.silenteight.payments.bridge.svb.learning.reader.port.FindRegisteredAlertPort;
 import com.silenteight.payments.bridge.svb.learning.reader.port.IndexLearningAlertPort;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
-import java.util.UUID;
 
 import static com.silenteight.payments.bridge.svb.learning.reader.service.ReaderServiceFixture.createBatchAlertRequest;
 import static org.mockito.Mockito.*;
@@ -31,7 +30,7 @@ class IngestServiceTest {
   @Mock
   private DataSourceIngestService dataSourceIngestService;
   @Mock
-  private FindRegisteredAlertPort findRegisteredAlertPort;
+  private FindRegisteredAlertUseCase findRegisteredAlertUseCase;
   @Mock
   private CreateAlertRetentionPort createAlertRetentionPort;
   @Mock
@@ -47,16 +46,16 @@ class IngestServiceTest {
   void setUp() {
     ingestService =
         new IngestService(registerAlertUseCase, addAlertLabelUseCase,
-            dataSourceIngestService, findRegisteredAlertPort,
+            dataSourceIngestService, findRegisteredAlertUseCase,
             createAlertRetentionPort, decisionMapper,
             indexLearningAlertPort, eventPublisher);
   }
 
   @Test
   void shouldIndexRegisteredAlerts() {
-    when(findRegisteredAlertPort.find(any())).thenReturn(List.of(
-        new RegisteredAlert(UUID.randomUUID(), "systemId",
-            "messageId", "alerts/1", List.of(
+    when(findRegisteredAlertUseCase.find(any())).thenReturn(List.of(
+        new RegisteredAlert("messageId",
+            "systemId", "alerts/1", List.of(
             RegisteredMatch.builder().matchName("alerts/1/matches/1").matchId("id").build()))));
     ingestService.ingest(createBatchAlertRequest());
     verify(indexLearningAlertPort).indexForLearning(anyList());

@@ -2,14 +2,14 @@ package com.silenteight.payments.bridge.svb.learning.reader.service;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAlert;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AddAlertLabelUseCase;
+import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.svb.learning.event.AlreadySolvedAlertEvent;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.ReadAlertError;
-import com.silenteight.payments.bridge.svb.learning.reader.domain.RegisteredAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CreateAlertRetentionPort;
-import com.silenteight.payments.bridge.svb.learning.reader.port.FindRegisteredAlertPort;
 import com.silenteight.payments.bridge.svb.learning.reader.port.IndexLearningAlertPort;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -31,7 +31,7 @@ class IngestService {
   private final RegisterAlertUseCase registerAlertUseCase;
   private final AddAlertLabelUseCase addAlertLabelUseCase;
   private final DataSourceIngestService dataSourceIngestService;
-  private final FindRegisteredAlertPort findRegisteredAlertPort;
+  private final FindRegisteredAlertUseCase findRegisteredAlertUseCase;
   private final CreateAlertRetentionPort createAlertRetentionPort;
   private final DecisionMapper decisionMapper;
   private final IndexLearningAlertPort indexLearningAlertPort;
@@ -117,7 +117,7 @@ class IngestService {
     var registeredAlertRequests = alerts.stream()
         .map(LearningAlert::toFindRegisterAlertRequest)
         .distinct().collect(toList());
-    return findRegisteredAlertPort.find(registeredAlertRequests).stream()
+    return findRegisteredAlertUseCase.find(registeredAlertRequests).stream()
         .collect(toMap(RegisteredAlert::getDiscriminator, Function.identity()));
   }
 

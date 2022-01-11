@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.learning.reader.domain;
+package com.silenteight.payments.bridge.ae.alertregistration.domain;
 
 import lombok.Builder;
 import lombok.Value;
