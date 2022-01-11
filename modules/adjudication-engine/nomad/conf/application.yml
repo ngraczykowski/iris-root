@@ -12,9 +12,6 @@ grpc:
       negotiation-type: PLAINTEXT
     governance:
       address: discovery:/{{ env "NOMAD_NAMESPACE" }}-governance
-    datasource:
-      address: discovery:/{{ env "NOMAD_NAMESPACE" }}-hsbc-bridge
-
 # @formatter:off
 
 ae:

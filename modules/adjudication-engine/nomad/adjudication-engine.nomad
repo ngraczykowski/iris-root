@@ -226,6 +226,8 @@ job "adjudication-engine" {
           "local/adjudication-engine-app.jar",
           "--spring.profiles.active=linux,database,rabbitmq,messaging,prod",
           "--spring.config.additional-location=file:local/conf/",
+          "--spring.rabbitmq.virtual-host=${var.namespace}",
+          "--grpc.client.datasource.address=discovery:/${var.namespace}-${var.ds_name}",
         ]
       }
 
