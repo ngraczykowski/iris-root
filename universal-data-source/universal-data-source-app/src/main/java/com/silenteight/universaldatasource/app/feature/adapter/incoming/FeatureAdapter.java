@@ -1,6 +1,7 @@
 package com.silenteight.universaldatasource.app.feature.adapter.incoming;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsResponse;
@@ -54,6 +55,7 @@ import javax.validation.Valid;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 class FeatureAdapter {
 
   private static final String LOCATION_FEATURE_INPUT =
@@ -93,7 +95,12 @@ class FeatureAdapter {
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
-        batch -> onNext.accept(batch.castResponse(BatchGetMatchNameInputsResponse.class)));
+        batch -> {
+          var response = batch.castResponse(BatchGetMatchNameInputsResponse.class);
+          log.debug("[onNext] sending response inputs for:{} with size:{}", NAME_FEATURE_INPUT,
+              response.getNameInputsCount());
+          onNext.accept(response);
+        });
   }
 
   void batchGetMatchLocationInputs(
