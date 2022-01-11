@@ -1,17 +1,15 @@
-package com.silenteight.warehouse.test.generator;
+package com.silenteight.warehouse.test.flows.production.v2;
 
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.data.api.v2.Alert;
-import com.silenteight.dataretention.api.v1.AlertsExpired;
-import com.silenteight.dataretention.api.v1.PersonalInformationExpired;
+import com.silenteight.warehouse.test.generator.DataReader;
 
 import com.google.protobuf.Struct;
 import com.google.protobuf.Struct.Builder;
 import com.google.protobuf.Value;
 
 import java.security.SecureRandom;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -36,28 +34,6 @@ class AlertGenerator {
         .build();
   }
 
-  com.silenteight.data.api.v1.Alert generateSimulation() {
-    return com.silenteight.data.api.v1.Alert.newBuilder()
-        .setDiscriminator(getRandomDiscriminator())
-        .setName(getRandomAlertName())
-        .setPayload(convertMapToPayload(generateRandomPayload()))
-        .build();
-  }
-
-  PersonalInformationExpired generatePersonalInformationExpired(List<String> alertNames) {
-    return PersonalInformationExpired
-        .newBuilder()
-        .addAllAlerts(alertNames)
-        .build();
-  }
-
-  AlertsExpired generateAlertsExpired(List<String> alertNames) {
-    return AlertsExpired
-        .newBuilder()
-        .addAllAlerts(alertNames)
-        .build();
-  }
-
   private Map<String, String> generateRandomPayload() {
     return dataReader.getLines()
         .stream()
@@ -77,7 +53,7 @@ class AlertGenerator {
     return Struct.newBuilder().putAllFields(convertedMap);
   }
 
-  private static Value asValue(Map.Entry<String, String> entry) {
+  private static Value asValue(Entry<String, String> entry) {
     return Value.newBuilder().setStringValue(entry.getValue()).build();
   }
 

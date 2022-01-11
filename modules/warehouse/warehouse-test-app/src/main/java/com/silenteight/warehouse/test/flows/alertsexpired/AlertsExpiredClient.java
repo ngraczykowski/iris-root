@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.test.generator;
+package com.silenteight.warehouse.test.flows.alertsexpired;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +19,13 @@ import static java.util.stream.Collectors.toList;
 public class AlertsExpiredClient {
 
   private final AlertsExpiredClientGateway alertsExpiredClientGateway;
-  private final AlertGenerator alertGenerator;
+  private final MessageGenerator messageGenerator;
 
   @Scheduled(cron = "${test.generator.cron}")
   void send() {
     String requestId = randomUUID().toString();
 
-    AlertsExpired alertsExpired = alertGenerator.generateAlertsExpired(generateAlertNames());
+    AlertsExpired alertsExpired = messageGenerator.generateAlertsExpired(generateAlertNames());
     alertsExpiredClientGateway.indexRequest(alertsExpired);
     log.info("AlertsExpired msg sent, requestId={} alerts count: {}", requestId,
         alertsExpired.getAlertsCount());

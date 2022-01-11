@@ -24,8 +24,9 @@ public class ReportGenerationService {
   private static final DateTimeFormatter ISO_LOCAL_DATE = DateTimeFormatter.ISO_LOCAL_DATE;
   private static final String PARAMETER_FROM = "from";
   private static final String PARAMETER_TO = "to";
+  private static final String PARAMETER_ANALYSIS_ID = "analysisId";
   private static final String MISSING_CONFIGURATION_EXCEPTION =
-      "Configuration parameter: selectSqlQuery cannot null while using SQL reports!";
+      "Configuration parameter: selectSqlQuery cannot be null while using SQL reports!";
 
   @NonNull
   private final DataProvider dataProvider;
@@ -62,6 +63,7 @@ public class ReportGenerationService {
     Map<String, String> parameters = new HashMap<>();
     parameters.put(PARAMETER_FROM, fetchDataRequest.getFrom().format(ISO_LOCAL_DATE));
     parameters.put(PARAMETER_TO, fetchDataRequest.getTo().format(ISO_LOCAL_DATE));
+    parameters.put(PARAMETER_ANALYSIS_ID, fetchDataRequest.getName());
 
     String sqlSelectQuery = Optional
         .ofNullable(StringSubstitutor.replace(fetchDataRequest.getSelectSqlQuery(), parameters))
