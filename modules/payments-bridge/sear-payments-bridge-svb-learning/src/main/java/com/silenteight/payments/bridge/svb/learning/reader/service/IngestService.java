@@ -101,7 +101,7 @@ class IngestService {
       Map<String, RegisteredAlert> registeredAlertMap) {
 
     return alerts.stream()
-        .filter(la -> !registeredAlertMap.containsKey(la.getDiscriminator()))
+        .filter(la -> !registeredAlertMap.containsKey(la.getSystemId()))
         .collect(toList());
   }
 
@@ -115,10 +115,10 @@ class IngestService {
 
   private Map<String, RegisteredAlert> buildRegisteredAlertMap(List<LearningAlert> alerts) {
     var registeredAlertRequests = alerts.stream()
-        .map(LearningAlert::toFindRegisterAlertRequest)
+        .map(LearningAlert::getSystemId)
         .distinct().collect(toList());
     return findRegisteredAlertUseCase.find(registeredAlertRequests).stream()
-        .collect(toMap(RegisteredAlert::getDiscriminator, Function.identity()));
+        .collect(toMap(RegisteredAlert::getSystemId, Function.identity()));
   }
 
   private void processUnregistered(

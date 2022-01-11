@@ -54,7 +54,7 @@ class IngestServiceTest {
   @Test
   void shouldIndexRegisteredAlerts() {
     when(findRegisteredAlertUseCase.find(any())).thenReturn(List.of(
-        new RegisteredAlert("messageId",
+        new RegisteredAlert(
             "systemId", "alerts/1", List.of(
             RegisteredMatch.builder().matchName("alerts/1/matches/1").matchId("id").build()))));
     ingestService.ingest(createBatchAlertRequest());

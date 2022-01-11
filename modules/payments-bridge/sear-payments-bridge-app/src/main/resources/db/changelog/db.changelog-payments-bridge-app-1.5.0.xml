@@ -18,4 +18,12 @@
     <dropColumn tableName="pb_registered_match"
                 columnName="alert_message_id"/>
   </changeSet>
+
+  <changeSet id="payments-bridge-app-1.5.0_3" author="wkeska">
+    <dropColumn tableName="pb_registered_alert"
+                columnName="alert_message_id"/>
+
+    <dropColumn tableName="pb_registered_alert"
+                columnName="fkco_message_id"/>
+  </changeSet>
 </databaseChangeLog>

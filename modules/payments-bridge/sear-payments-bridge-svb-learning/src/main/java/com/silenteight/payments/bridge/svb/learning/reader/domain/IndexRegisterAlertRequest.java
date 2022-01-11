@@ -20,10 +20,9 @@ public class IndexRegisterAlertRequest {
 
   public static IndexRegisterAlertRequest fromLearningAlerts(
       RegisteredAlert registeredAlert, List<LearningAlert> learningAlerts) {
-    var registeredDiscriminator = registeredAlert.getDiscriminator();
     var learningAlert = learningAlerts
         .stream()
-        .filter(la -> la.getDiscriminator().equals(registeredDiscriminator))
+        .filter(la -> la.getSystemId().equals(registeredAlert.getSystemId()))
         .findFirst();
 
     if (learningAlert.isEmpty())

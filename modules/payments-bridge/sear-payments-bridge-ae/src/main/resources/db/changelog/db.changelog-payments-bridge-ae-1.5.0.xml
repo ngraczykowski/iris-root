@@ -52,4 +52,9 @@
     <dropNotNullConstraint tableName="pb_registered_match"
                            columnName="alert_message_id"/>
   </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.5.0_7" author="wkeska">
+    <dropNotNullConstraint tableName="pb_registered_alert"
+                           columnName="alert_message_id"/>
+  </changeSet>
 </databaseChangeLog>

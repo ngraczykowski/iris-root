@@ -1,6 +1,5 @@
 package com.silenteight.payments.bridge.ae.alertregistration.adapter.jdbc;
 
-import com.silenteight.payments.bridge.ae.alertregistration.domain.FindRegisteredAlertRequest;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
 import org.junit.jupiter.api.Test;
@@ -22,8 +21,7 @@ class AlertRegisteredJdbcDataAccessIT extends BaseJdbcTest {
   @Test
   void shouldSelectAllRegisteredAlerts() {
     var response = dataAccess.findRegistered(
-        Collections.singletonList(
-            FindRegisteredAlertRequest.builder().messageId("1").systemId("1").build()));
+        Collections.singletonList("1"));
     assertThat(response.get(0).getMatches().size()).isEqualTo(2);
   }
 }
