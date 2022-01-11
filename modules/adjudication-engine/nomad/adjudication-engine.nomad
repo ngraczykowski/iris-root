@@ -13,6 +13,11 @@ variable "namespace" {
   default = "dev"
 }
 
+variable "ds_name" {
+  type = string
+  default = "hsbc-bridge"
+}
+
 variable "memory" {
   default = 4096
 }
