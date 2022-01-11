@@ -121,7 +121,7 @@ warehouse.report.metrics:
       ),
            grouped AS (
                SELECT main.country                                          g_country,
-                      main.hit_type                                         g_hit_type,
+                      main.list_type                                        g_list_type,
                       main.risk_type                                        g_risk_type,
                       TO_CHAR(main.date, 'YYYY-MM')                         g_date,
                       COUNT(*)                                              g_total,
@@ -130,7 +130,7 @@ warehouse.report.metrics:
                       COUNT(*)
                       FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE') g_total_false_positive,
                       SUM(CASE 
-                              WHEN (recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE' AND analyst_decision = 'analyst_decision_unknown')
+                              WHEN (recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE' AND analyst_decision = 'analyst_decision_true_positive')
                               THEN 1 ELSE 0 END) g_total_match_analyst,
                       SUM(CASE 
                               WHEN (recommendation = 'ACTION_FALSE_POSITIVE' AND qa_decision = 'qa_decision_FAILED')
@@ -142,9 +142,9 @@ warehouse.report.metrics:
       SELECT g_date,
              g_country,
              g_risk_type,
-             g_hit_type,
+             g_list_type,
              ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) / GREATEST(g_total, 1)) * 100,3) Efficiency,
-             ROUND((g_total_match_analyst::decimal / GREATEST(g_total_false_positive::decimal, 1)) * 100, 3) PTP Effectiveness,
+             ROUND((g_total_match_analyst::decimal / GREATEST(g_total_true_positive::decimal, 1)) * 100, 3) PTP Effectiveness,
              ROUND((g_total_match_qa::decimal / GREATEST(g_total_false_positive::decimal, 1)) * 100, 3) FP Effectiveness
       FROM grouped
       ORDER BY g_date;
@@ -196,6 +196,7 @@ warehouse.report.metrics:
             JOIN warehouse_alert wa ON wsa.name = wa.name
           WHERE wsa.payload ->> 'status' = 'LEARNING_COMPLETED'
                 AND date BETWEEN DATE '${from}' AND DATE '${to}
+                AND wsa.analysis_name = 'analysis/${analysisId}'
           GROUP BY wsa.payload ->> 'lob_country', wsa.payload ->> 'categories/hitType',
                    wsa.payload ->> 's8_recommendation', wsa.payload ->> 'analyst_decision',
                    wsa.payload ->> 'qa.level-0.state', wsa.payload ->> 'DN_CASE.ExtendedAttribute5',
@@ -212,7 +213,7 @@ warehouse.report.metrics:
                       COUNT(*)
                       FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE') g_total_false_positive,
                       SUM(CASE 
-                              WHEN (recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE' AND analyst_decision = 'analyst_decision_unknown')
+                              WHEN (recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE' AND analyst_decision = 'analyst_decision_true_positive')
                               THEN 1 ELSE 0 END) g_total_match_analyst,
                       SUM(CASE 
                               WHEN (recommendation = 'ACTION_FALSE_POSITIVE' AND qa_decision = 'qa_decision_FAILED')
@@ -226,7 +227,7 @@ warehouse.report.metrics:
              g_risk_type,
              g_list_type,
              ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) / GREATEST(g_total, 1)) * 100,3) Efficiency,
-             ROUND((g_total_match_analyst::decimal / GREATEST(g_total_false_positive::decimal, 1)) * 100, 3) PTP Effectiveness,
+             ROUND((g_total_match_analyst::decimal / GREATEST(g_total_true_positive::decimal, 1)) * 100, 3) PTP Effectiveness,
              ROUND((g_total_match_qa::decimal / GREATEST(g_total_false_positive::decimal, 1)) * 100, 3) FP Effectiveness
       FROM grouped
       ORDER BY g_date;
