@@ -3,6 +3,8 @@ package com.silenteight.warehouse.report.billing.domain;
 import com.silenteight.warehouse.report.billing.domain.exception.ReportGenerationException;
 import com.silenteight.warehouse.report.billing.generation.BillingReportGenerationService;
 import com.silenteight.warehouse.report.billing.generation.dto.CsvReportContentDto;
+import com.silenteight.warehouse.report.reporting.BillingReportProperties;
+import com.silenteight.warehouse.report.storage.ReportStorage;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,11 +30,18 @@ class AsyncBillingReportGenerationServiceTest {
   private BillingReportGenerationService reportGenerationService;
   @Mock
   private BillingReportAsyncGenerationService underTest;
+  @Mock
+  private BillingReportProperties properties;
+  @Mock
+  private ReportStorage reportStorage;
 
   @BeforeEach
   void setUp() {
     underTest = new BillingReportAsyncGenerationService(
-        billingReportRepository, reportGenerationService);
+        billingReportRepository,
+        reportGenerationService,
+        properties,
+        reportStorage);
   }
 
   @Test
@@ -43,6 +52,8 @@ class AsyncBillingReportGenerationServiceTest {
         INDEXES))
         .thenReturn(REPORT_CONTENT);
 
+    when(properties.isUseSqlReports()).thenReturn(false);
+
     BillingReport billingReport = billingReportRepository.save(of(REPORT_RANGE));
     assertThat(billingReport.getState()).isEqualTo(ReportState.NEW);
 
@@ -50,7 +61,6 @@ class AsyncBillingReportGenerationServiceTest {
 
     billingReport = billingReportRepository.getById(billingReport.getId());
     assertThat(billingReport.getState()).isEqualTo(ReportState.DONE);
-    assertThat(billingReport.getData()).isEqualTo(REPORT_CONTENT.getReport());
   }
 
   @Test

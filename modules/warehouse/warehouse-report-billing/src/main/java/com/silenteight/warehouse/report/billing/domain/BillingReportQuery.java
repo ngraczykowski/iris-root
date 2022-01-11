@@ -38,7 +38,7 @@ class BillingReportQuery implements ReportStatusQuery, ReportDataQuery {
 
   private static BillingReportDto toBillingReportDto(BillingReport report) {
     return BillingReportDto.builder()
-        .content(report.getData())
+        .fileStorageName(report.getFileStorageName())
         .range(toReportRange(report))
         .timestamp(toTimestamp(report.getCreatedAt()))
         .build();

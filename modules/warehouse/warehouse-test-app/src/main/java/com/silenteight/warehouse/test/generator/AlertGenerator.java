@@ -22,7 +22,6 @@ import static java.util.stream.Collectors.toMap;
 @RequiredArgsConstructor
 class AlertGenerator {
 
-  private static final String[] ALERT_NAMES = { "alerts/123", "alerts/234", "alerts/345" };
   private static final String SEMICOLON = ";";
   private static final String COMMA = ",";
 
@@ -87,7 +86,7 @@ class AlertGenerator {
   }
 
   private String getRandomAlertName() {
-    return "alerts/" + randomUUID().toString();
+    return "alerts/" + randomUUID();
   }
 
   private String getRandomValue(String... allowedValues) {
