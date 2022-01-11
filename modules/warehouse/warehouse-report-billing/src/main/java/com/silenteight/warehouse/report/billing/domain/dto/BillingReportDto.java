@@ -11,7 +11,7 @@ import com.silenteight.warehouse.report.reporting.ReportRange;
 public class BillingReportDto {
 
   @NonNull
-  String content;
+  String fileStorageName;
   @NonNull
   ReportRange range;
   @NonNull

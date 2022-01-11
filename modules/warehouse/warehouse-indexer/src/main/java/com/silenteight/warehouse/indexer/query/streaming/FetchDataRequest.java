@@ -17,11 +17,8 @@ import java.util.List;
 @Builder
 public class FetchDataRequest {
 
-  @NonNull
   ReportFieldDefinitions fieldsDefinitions;
-  @NonNull
   List<String> indexes;
-  @NonNull
   String dateField;
   @NonNull
   OffsetDateTime from;

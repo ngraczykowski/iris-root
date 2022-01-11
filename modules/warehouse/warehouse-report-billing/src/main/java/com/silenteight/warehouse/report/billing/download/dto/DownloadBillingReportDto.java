@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+import java.io.InputStream;
+
 @Value
 @Builder
 public class DownloadBillingReportDto {
@@ -11,5 +13,5 @@ public class DownloadBillingReportDto {
   @NonNull
   String name;
   @NonNull
-  String content;
+  InputStream content;
 }

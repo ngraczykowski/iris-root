@@ -1,6 +1,7 @@
 package com.silenteight.warehouse.report.billing.generation;
 
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
+import com.silenteight.warehouse.report.reporting.ReportGenerationService;
 import com.silenteight.warehouse.report.reporting.ReportProperties;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -17,12 +18,15 @@ class BillingReportGenerationConfiguration {
   @Bean
   BillingReportGenerationService billingReportGenerationService(
       GroupingQueryService groupingQueryService,
+      ReportGenerationService reportGenerationService,
       @Valid ReportProperties reportProperties) {
 
     if (Objects.isNull(reportProperties.getBilling())) {
       return null;
     } else {
-      return new BillingReportGenerationService(groupingQueryService,
+      return new BillingReportGenerationService(
+          groupingQueryService,
+          reportGenerationService,
           reportProperties.getBilling());
     }
   }

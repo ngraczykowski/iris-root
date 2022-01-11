@@ -1,6 +1,7 @@
 package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder.Default;
 import lombok.Getter;
 
 import com.silenteight.warehouse.indexer.query.common.QueryFilter;
@@ -40,6 +41,12 @@ public class BillingReportProperties {
   @Valid
   @Nullable
   private final List<FilterProperties> filters;
+  @Default
+  private boolean useSqlReports;
+  @Nullable
+  private List<String> sqlTemplates;
+  @Nullable
+  private String selectSqlQuery;
 
   public List<String> getDateColumnsLabel() {
     return of(yearFieldName, monthFieldName);

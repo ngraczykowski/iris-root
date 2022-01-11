@@ -2,7 +2,6 @@ package com.silenteight.warehouse.report.billing;
 
 import lombok.NoArgsConstructor;
 
-import com.silenteight.warehouse.report.billing.domain.dto.BillingReportDto;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
 
@@ -16,6 +15,7 @@ import static java.time.LocalTime.MIDNIGHT;
 import static java.time.OffsetDateTime.of;
 import static java.time.ZoneOffset.UTC;
 import static java.util.List.of;
+import static java.util.UUID.randomUUID;
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
@@ -44,18 +44,8 @@ public final class BillingReportTestFixtures {
   public static final String COUNT_SOLVED_FP = "count_solved_FP";
   public static final String COUNT_SOLVED_PTP = "count_solved_PTP";
   public static final String COUNT_SOLVED_MI = "count_solved_MI";
-  public static final String CREATION_TIMESTAMP = "1616574866666";
   public static final String CONTENT = "report content";
-  public static final String REPORT_FILENAME =
-      "Billing_Prod_" + LOCAL_DATE_FROM + "_To_" + QUERY_PARAM_TO + ".csv";
-
+  public static final String REPORT_FILENAME = randomUUID().toString();
   public static final ReportInstanceReferenceDto REPORT_INSTANCE_REFERENCE_DTO =
       new ReportInstanceReferenceDto(REPORT_ID);
-
-  public static final BillingReportDto BILLING_REPORT_DTO =
-      BillingReportDto.builder()
-          .range(REPORT_RANGE)
-          .content(CONTENT)
-          .timestamp(CREATION_TIMESTAMP)
-          .build();
 }

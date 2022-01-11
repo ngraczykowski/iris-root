@@ -27,6 +27,8 @@ class ReportGenerationServiceTest {
 
   @Mock
   private GroupingQueryService groupingQueryService;
+  @Mock
+  private ReportGenerationService reportGenerationService;
 
   private BillingReportGenerationService underTest;
 
@@ -44,7 +46,7 @@ class ReportGenerationServiceTest {
 
     BillingReportProperties billingReportProperties = new BillingReportProperties(DATE_LABEL,
         DATE_FIELD_NAME, ALERT_RECOMMENDATION_YEAR, ALERT_RECOMMENDATION_MONTH,
-        transposeColumnProperties, emptyList()
+        transposeColumnProperties, emptyList(), false, null, null
     );
 
     ReportProperties reportProperties = new ReportProperties(
@@ -57,7 +59,7 @@ class ReportGenerationServiceTest {
         mock(MetricsReportProperties.class));
 
     underTest = new BillingReportGenerationConfiguration().billingReportGenerationService(
-        groupingQueryService, reportProperties);
+        groupingQueryService, reportGenerationService, reportProperties);
   }
 
   @Test

@@ -7,10 +7,10 @@ import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDataRequest;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
+import com.silenteight.warehouse.indexer.query.streaming.FetchDataRequest;
 import com.silenteight.warehouse.report.billing.generation.dto.CsvReportContentDto;
-import com.silenteight.warehouse.report.reporting.BillingReportProperties;
+import com.silenteight.warehouse.report.reporting.*;
 import com.silenteight.warehouse.report.reporting.ColumnProperties;
-import com.silenteight.warehouse.report.reporting.TransposeColumnProperties;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,6 +40,8 @@ public class BillingReportGenerationService {
 
   @NonNull
   private final GroupingQueryService groupingQueryService;
+  @NonNull
+  private final ReportGenerationService reportGenerationService;
   @Valid
   @NonNull
   private final BillingReportProperties properties;
@@ -53,6 +55,21 @@ public class BillingReportGenerationService {
     List<String> reportData = transpose(rawData);
     String checksum = getChecksumLine(reportData);
     return new CsvReportContentDto(getLabelsRow(), reportData, checksum);
+  }
+
+  public void generateReport(@NonNull ReportRange range, @NonNull String fileStorageName) {
+
+    FetchDataRequest request = FetchDataRequest
+        .builder()
+        .from(range.getFrom())
+        .to(range.getTo())
+        .name(fileStorageName)
+        .useSqlReports(properties.isUseSqlReports())
+        .selectSqlQuery(properties.getSelectSqlQuery())
+        .sqlTemplates(properties.getSqlTemplates())
+        .build();
+
+    reportGenerationService.generate(request);
   }
 
   private FetchGroupedDataResponse fetchRawData(

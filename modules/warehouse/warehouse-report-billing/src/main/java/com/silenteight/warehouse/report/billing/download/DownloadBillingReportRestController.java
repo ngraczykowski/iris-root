@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.billing.download.dto.DownloadBillingReportDto;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,6 +20,7 @@ import java.util.Objects;
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static java.lang.String.format;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM;
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.http.ResponseEntity.status;
 
@@ -33,23 +36,23 @@ class DownloadBillingReportRestController {
   @Nullable
   private final DownloadBillingReportUseCase useCase;
 
-
   @GetMapping(DOWNLOAD_PRODUCTION_REPORT_URL)
   @PreAuthorize("isAuthorized('DOWNLOAD_PRODUCTION_ON_DEMAND_REPORT')")
-  public ResponseEntity<String> downloadReport(@PathVariable("id") Long id) {
+  public ResponseEntity<Resource> downloadReport(@PathVariable("id") Long id) {
     log.info("Download Billing report request received, reportId={}", id);
+
     if (Objects.isNull(useCase)) {
       return status(NOT_FOUND).build();
     }
+
     DownloadBillingReportDto reportDto = useCase.activate(id);
     String filename = reportDto.getName();
-    String data = reportDto.getContent();
     log.debug("Download Billing report request processed, reportId={}, reportName={}",
         id, filename);
 
     return ok()
         .header("Content-Disposition", format("attachment; filename=\"%s\"", filename))
-        .header("Content-Type", "text/csv")
-        .body(data);
+        .contentType(APPLICATION_OCTET_STREAM)
+        .body(new InputStreamResource(reportDto.getContent()));
   }
 }

@@ -121,4 +121,17 @@
     </sql>
   </changeSet>
 
+  <changeSet id="warehouse-2.0.0-5" author="plewandowski">
+    <renameColumn newColumnName="file_storage_name"
+                  oldColumnName="data"
+                  tableName="warehouse_report_billing"/>
+
+    <modifyDataType columnName="file_storage_name"
+                    newDataType="VARCHAR(64)"
+                    tableName="warehouse_report_billing"/>
+
+    <dropColumn columnName="report_type"
+                tableName="warehouse_report_billing">
+    </dropColumn>
+  </changeSet>
 </databaseChangeLog>

@@ -1,6 +1,7 @@
 package com.silenteight.warehouse.report.billing.domain;
 
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
+import com.silenteight.warehouse.report.storage.ReportStorage;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,12 +20,17 @@ class ReportServiceTest {
 
   @Mock
   private BillingReportAsyncGenerationService asyncReportGenerationService;
+  @Mock
+  private ReportStorage reportStorage;
 
   private BillingReportService service;
 
   @BeforeEach
   void setUp() {
-    service = new BillingReportService(rbsReportRepository, asyncReportGenerationService);
+    service = new BillingReportService(
+        rbsReportRepository,
+        asyncReportGenerationService,
+        reportStorage);
   }
 
   @Test
@@ -38,17 +44,5 @@ class ReportServiceTest {
         .get()
         .extracting(BillingReport::getState)
         .isEqualTo(ReportState.NEW);
-  }
-
-  @Test
-  void removeReport() {
-    // given
-    ReportInstanceReferenceDto reportInstance = service.createReportInstance(REPORT_RANGE, INDEXES);
-
-    // when
-    service.removeReport(reportInstance.getInstanceReferenceId());
-
-    // then
-    assertThat(rbsReportRepository.findById(reportInstance.getInstanceReferenceId())).isEmpty();
   }
 }

@@ -15,6 +15,7 @@ import static com.silenteight.warehouse.report.billing.domain.ReportState.FAILED
 import static com.silenteight.warehouse.report.billing.domain.ReportState.GENERATING;
 import static com.silenteight.warehouse.report.billing.domain.ReportState.NEW;
 import static java.util.Arrays.stream;
+import static java.util.UUID.randomUUID;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
@@ -42,8 +43,8 @@ class BillingReport extends BaseEntity implements IdentifiableEntity {
   private ReportState state;
 
   @Basic(fetch = FetchType.LAZY)
-  @Column(name = "data")
-  private String data;
+  @Column(name = "file_storage_name")
+  private String fileStorageName;
 
   @Basic(fetch = FetchType.LAZY)
   @Column(name = "from_range")
@@ -58,7 +59,12 @@ class BillingReport extends BaseEntity implements IdentifiableEntity {
     billingReport.setState(NEW);
     billingReport.setFrom(range.getFrom());
     billingReport.setTo(range.getTo());
+    billingReport.generateFileStorageName();
     return billingReport;
+  }
+
+  void generateFileStorageName() {
+    setFileStorageName(randomUUID().toString());
   }
 
   void generating() {
@@ -74,6 +80,7 @@ class BillingReport extends BaseEntity implements IdentifiableEntity {
   void failed() {
     assertAllowedStateChange(FAILED, NEW, GENERATING);
     setState(FAILED);
+    setFileStorageName(null);
   }
 
   private void assertAllowedStateChange(ReportState desirable, ReportState... state) {
@@ -83,9 +90,5 @@ class BillingReport extends BaseEntity implements IdentifiableEntity {
 
   private boolean notInState(ReportState... allowedStates) {
     return stream(allowedStates).noneMatch(allowedState -> allowedState == getState());
-  }
-
-  void storeReport(String report) {
-    setData(report);
   }
 }
