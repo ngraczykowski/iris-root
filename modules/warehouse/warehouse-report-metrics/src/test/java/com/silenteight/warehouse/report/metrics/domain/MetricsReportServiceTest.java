@@ -1,6 +1,7 @@
 package com.silenteight.warehouse.report.metrics.domain;
 
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
+import com.silenteight.warehouse.report.storage.ReportStorage;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,11 +21,13 @@ class MetricsReportServiceTest {
 
   @Mock
   private AsyncMetricsReportGenerationService asyncReportGenerationService;
+  @Mock
+  private ReportStorage reportStorage;
   private MetricsReportService underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new MetricsReportService(repository, asyncReportGenerationService);
+    underTest = new MetricsReportService(repository, asyncReportGenerationService, reportStorage);
   }
 
   @Test
