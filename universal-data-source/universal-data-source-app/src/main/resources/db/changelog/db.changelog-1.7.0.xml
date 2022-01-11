@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+  <changeSet id="universal-datasource-1.7.0-1" author="jgajewski">
+    <addColumn tableName="uds_feature_input">
+      <column name="created_at" type="TIMESTAMP" />
+    </addColumn>
+
+    <addColumn tableName="uds_category_value">
+      <column name="created_at" type="TIMESTAMP" />
+    </addColumn>
+
+    <addColumn tableName="uds_comment_input">
+      <column name="created_at" type="TIMESTAMP" />
+    </addColumn>
+  </changeSet>
+</databaseChangeLog>

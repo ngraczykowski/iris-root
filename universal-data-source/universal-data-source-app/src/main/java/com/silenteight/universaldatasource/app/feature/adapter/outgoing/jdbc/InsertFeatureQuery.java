@@ -25,9 +25,9 @@ class InsertFeatureQuery {
 
   @Language("PostgreSQL")
   private static final String SQL =
-      "INSERT INTO\n"
-          + " uds_feature_input(alert_name, match_name, feature, agent_input_type, agent_input)\n"
-          + " VALUES (:alert_name, :match_name, :feature, :agent_input_type, :agent_input)\n"
+      "INSERT INTO uds_feature_input("
+          + "alert_name, match_name, feature, agent_input_type, agent_input, created_at)\n"
+          + " VALUES (:alert_name, :match_name, :feature, :agent_input_type, :agent_input, now())\n"
           + " ON CONFLICT DO NOTHING\n"
           + " RETURNING agent_input_id, match_name";
 

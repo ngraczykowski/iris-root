@@ -19,8 +19,9 @@ class InsertCategoryValueQuery {
 
   @Language("PostgreSQL")
   private static final String SQL =
-      "INSERT INTO uds_category_value(category_id, alert_name, match_name, category_value)\n"
-          + " VALUES (:category_id, :alert_name, :match_name, :category_value)\n"
+      "INSERT INTO uds_category_value("
+          + "category_id, alert_name, match_name, category_value, created_at)\n"
+          + " VALUES (:category_id, :alert_name, :match_name, :category_value, now())\n"
           + " ON CONFLICT DO NOTHING\n"
           + " RETURNING category_value_id, category_id, match_name";
 

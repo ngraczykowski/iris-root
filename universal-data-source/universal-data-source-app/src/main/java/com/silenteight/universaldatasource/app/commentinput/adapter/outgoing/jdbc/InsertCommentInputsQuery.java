@@ -20,8 +20,9 @@ class InsertCommentInputsQuery {
 
   @Language("PostgreSQL")
   private static final String SQL =
-      "INSERT INTO uds_comment_input(alert_name, alert_comment_input, match_comment_inputs)\n"
-          + " VALUES (:alert_name, :alert_comment_input, :match_comment_inputs)\n"
+      "INSERT INTO uds_comment_input("
+          + "alert_name, alert_comment_input, match_comment_inputs, created_at)\n"
+          + " VALUES (:alert_name, :alert_comment_input, :match_comment_inputs, now())\n"
           + " ON CONFLICT DO NOTHING\n"
           + "RETURNING comment_input_id, alert_name";
 
