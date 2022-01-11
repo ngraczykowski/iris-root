@@ -1,10 +1,10 @@
 from setuptools import find_packages, setup
 
 install_require = [
-    "agent-base==0.5.0",
-    "agents-api==0.8.0.42",
+    "agent-base==0.8.0",
+    "agents-api==0.7.0.33",
     "aiohttp==3.7.4.post0",
-    "data-source-api==0.4.0.23",
+    "data-source-api==0.18.0",
     "googleapis-common-protos==1.53.0",
     "grpcio==1.39.0",
     "grpcio-tools==1.39.0",
