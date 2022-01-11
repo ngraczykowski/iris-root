@@ -9,7 +9,7 @@ public interface RegisteredAlertDataAccessPort {
 
   void save(List<SaveRegisteredAlertRequest>  request);
 
-  String getAlertId(String alertName);
+  String getAlertSystemId(String alertName);
 
   List<UUID> delete(List<String> alertNames);
 }

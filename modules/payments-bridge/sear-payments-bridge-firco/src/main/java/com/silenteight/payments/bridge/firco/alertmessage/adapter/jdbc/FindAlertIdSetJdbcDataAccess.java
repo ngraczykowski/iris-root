@@ -2,7 +2,6 @@ package com.silenteight.payments.bridge.firco.alertmessage.adapter.jdbc;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.firco.alertmessage.model.AlertFircoId;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertIdSet;
 import com.silenteight.payments.bridge.firco.alertmessage.port.FindAlertIdSetAccessPort;
 
@@ -14,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static java.util.stream.Collectors.toList;
-
 @Component
 @RequiredArgsConstructor
 class FindAlertIdSetJdbcDataAccess implements FindAlertIdSetAccessPort {
@@ -23,25 +20,19 @@ class FindAlertIdSetJdbcDataAccess implements FindAlertIdSetAccessPort {
   @Language("PostgreSQL")
   private static final String SQL =
       "SELECT pam.alert_message_id, pam.system_id, pam.message_id FROM pb_alert_message pam\n"
-          + "WHERE (pam.system_id, pam.message_id) IN (:tuples)\n";
+          + "WHERE pam.system_id IN (:systemIds)\n";
 
   private final NamedParameterJdbcTemplate jdbcTemplate;
 
-  public List<AlertIdSet> find(List<AlertFircoId> alertIds) {
-    if (alertIds.isEmpty()) {
+  public List<AlertIdSet> find(List<String> systemIds) {
+    if (systemIds.isEmpty()) {
       return List.of();
     }
 
-    var tuples = alertIds.stream()
-        .map(r -> new Object[] { r.getSystemId(), r.getMessageId() })
-        .collect(toList());
-
-    return jdbcTemplate.query(SQL, Map.of("tuples", tuples),
+    return jdbcTemplate.query(SQL, Map.of("messageIds", systemIds),
         (rs, rowNum) -> new AlertIdSet(
             UUID.fromString(rs.getString(1)),
             rs.getString(2),
             rs.getString(3)));
   }
-
-
 }

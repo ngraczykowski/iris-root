@@ -33,7 +33,7 @@ class RegisteredAlertJdbcDataAccess implements RegisteredAlertDataAccessPort {
   }
 
   @Override
-  public String getAlertId(String alertName) {
+  public String getAlertSystemId(String alertName) {
     return selectRegisteredAlertQuery.execute(alertName);
   }
 

@@ -2,7 +2,6 @@ package com.silenteight.payments.bridge.firco.alertmessage.service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.firco.alertmessage.model.AlertFircoId;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertIdSet;
 import com.silenteight.payments.bridge.firco.alertmessage.port.FindAlertIdSetAccessPort;
 import com.silenteight.payments.bridge.firco.alertmessage.port.FindAlertIdSetUseCase;
@@ -18,7 +17,7 @@ class FindAlertIdSetService implements FindAlertIdSetUseCase  {
   private final FindAlertIdSetAccessPort findAlertIdSetAccessPort;
 
   @Override
-  public List<AlertIdSet> find(List<AlertFircoId> ids) {
-    return findAlertIdSetAccessPort.find(ids);
+  public List<AlertIdSet> find(List<String> systemIds) {
+    return findAlertIdSetAccessPort.find(systemIds);
   }
 }

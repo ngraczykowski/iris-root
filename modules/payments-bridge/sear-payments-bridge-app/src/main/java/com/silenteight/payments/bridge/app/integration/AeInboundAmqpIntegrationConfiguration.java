@@ -7,9 +7,10 @@ import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.api.v2.GetRecommendationRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AnalysisDataAccessPort;
-import com.silenteight.payments.bridge.ae.alertregistration.port.GetRegisteredAlertIdUseCase;
+import com.silenteight.payments.bridge.ae.alertregistration.port.GetRegisteredAlertSystemIdUseCase;
 import com.silenteight.payments.bridge.ae.recommendation.port.RecommendationClientPort;
 import com.silenteight.payments.bridge.common.event.RecommendationsGeneratedEvent;
+import com.silenteight.payments.bridge.firco.alertmessage.port.FindAlertIdSetUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.model.AdjudicationEngineSourcedRecommendation;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
@@ -21,7 +22,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.integration.amqp.dsl.AmqpInboundChannelAdapterSMLCSpec;
 import org.springframework.integration.dsl.IntegrationFlow;
 
-import java.util.UUID;
+import java.util.List;
 import javax.validation.Valid;
 
 import static org.springframework.integration.dsl.IntegrationFlows.from;
@@ -38,12 +39,14 @@ class AeInboundAmqpIntegrationConfiguration {
   private final AnalysisDataAccessPort analysisDataAccessPort;
   private final CreateRecommendationUseCase createRecommendationUseCase;
   private final RecommendationClientPort recommendationClientPort;
-  private final GetRegisteredAlertIdUseCase getRegisteredAlertIdUseCase;
+  private final GetRegisteredAlertSystemIdUseCase getRegisteredAlertSystemIdUseCase;
+  private final FindAlertIdSetUseCase findAlertIdSetUseCase;
 
   @Bean
   IntegrationFlow recommendationGeneratedInbound() {
     return from(createInboundAdapter(properties.getInboundQueueNames()))
-        .filter(RecommendationsGenerated.class,
+        .filter(
+            RecommendationsGenerated.class,
             payload -> analysisDataAccessPort.existsAnalysis(payload.getAnalysis()))
         .split(RecommendationsGenerated.class, payload -> {
           if (log.isDebugEnabled()) {
@@ -73,10 +76,17 @@ class AeInboundAmqpIntegrationConfiguration {
                 .setRecommendation(recommendationInfo.getRecommendation()).build());
 
     var recommendation = recommendationWithMetadata.getRecommendation();
-    var alertId = getRegisteredAlertIdUseCase.getAlertId(recommendation.getAlert());
+    var systemId =
+        getRegisteredAlertSystemIdUseCase.getAlertSystemId(recommendation.getAlert());
+    var alertIds = findAlertIdSetUseCase.find(List.of(systemId));
+
+    if (alertIds.size() != 1) {
+      log.error("Received unexpected size of alertIds: {}", alertIds.size());
+      throw new HandleRecommendationException("Received unexpected size of alertIds");
+    }
 
     createRecommendationUseCase.create(new AdjudicationEngineSourcedRecommendation(
-        UUID.fromString(alertId), recommendationWithMetadata));
+        alertIds.get(0).getAlertId(), recommendationWithMetadata));
 
   }
 
@@ -94,4 +104,13 @@ class AeInboundAmqpIntegrationConfiguration {
         .configureContainer(c -> c.addQueueNames(queueNames));
   }
 
+  private static class HandleRecommendationException extends RuntimeException {
+
+    private static final long serialVersionUID = 5658232713698056290L;
+
+    public HandleRecommendationException(String message) {
+      super(message);
+    }
+
+  }
 }

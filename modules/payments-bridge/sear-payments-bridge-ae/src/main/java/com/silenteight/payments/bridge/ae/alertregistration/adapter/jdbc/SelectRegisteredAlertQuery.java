@@ -15,8 +15,9 @@ import java.sql.SQLException;
 class SelectRegisteredAlertQuery {
 
   @Language("PostgreSQL")
-  private static final String SQL = "SELECT alert_message_id, alert_name FROM pb_registered_alert\n"
-      + " WHERE alert_name = ?";
+  private static final String SQL =
+      "SELECT fkco_system_id FROM pb_registered_alert\n"
+          + " WHERE alert_name = ?";
 
   private static final RegisteredAlertRowMapper ROW_MAPPER = new RegisteredAlertRowMapper();
   private final JdbcTemplate jdbcTemplate;
@@ -29,7 +30,7 @@ class SelectRegisteredAlertQuery {
 
     @Override
     public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-      return rs.getString(1);
+      return rs.getString("fkco_system_id");
     }
   }
 }
