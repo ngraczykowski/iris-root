@@ -17,6 +17,7 @@ class RegisterAlertAndMatchesRequestFixtures {
           .alertId(ALERT_ID)
           .status(AlertStatusIn.SUCCESS)
           .errorDescription("failure cause")
+          .metadata("metadata")
           .matches(MATCH_INS)
           .build()
   );

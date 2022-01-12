@@ -17,6 +17,7 @@ public class AlertWithMatchesIn {
   String alertId;
   AlertStatusIn status;
   String errorDescription;
+  String metadata;
 
   @Builder.Default
   List<MatchIn> matches = List.of();
@@ -26,6 +27,7 @@ public class AlertWithMatchesIn {
         .setAlertId(alertId)
         .setStatus(AlertStatus.valueOf(status.name().toUpperCase()))
         .setErrorDescription(Optional.ofNullable(errorDescription).orElse(""))
+        .setAlertMetadata(Optional.ofNullable(metadata).orElse(""))
         .addAllMatches(matches.stream()
             .map(MatchIn::toMatch)
             .collect(Collectors.toList()))

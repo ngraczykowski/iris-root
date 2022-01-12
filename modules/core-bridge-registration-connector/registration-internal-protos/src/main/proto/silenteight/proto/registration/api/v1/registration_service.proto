@@ -57,7 +57,8 @@ message AlertWithMatches {
   string alert_id = 1 [(google.api.field_behavior) = REQUIRED];
   AlertStatus status = 2 [(google.api.field_behavior) = REQUIRED];
   optional string error_description = 3;
-  repeated Match matches = 4 [(google.api.field_behavior) = REQUIRED];
+  optional string alert_metadata = 4;
+  repeated Match matches = 5 [(google.api.field_behavior) = REQUIRED];
 }
 
 enum AlertStatus {
