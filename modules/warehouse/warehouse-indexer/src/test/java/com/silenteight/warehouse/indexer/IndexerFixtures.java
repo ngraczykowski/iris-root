@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_NAME_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_2;
@@ -47,7 +48,7 @@ public final class IndexerFixtures {
   public static final AlertDefinition ALERT_DEFINITION_1 = AlertDefinition
       .builder()
       .discriminator(DISCRIMINATOR_1)
-      .name(Values.ALERT_NAME)
+      .name(ALERT_NAME_1)
       .payload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES).build())
       .build();
 
@@ -56,7 +57,7 @@ public final class IndexerFixtures {
   public static final Alert ALERT_1 = Alert
       .newBuilder()
       .setDiscriminator(DISCRIMINATOR_1)
-      .setName(Values.ALERT_NAME)
+      .setName(ALERT_NAME_1)
       .setPayload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES))
       .addAllMatches(of(
           match(MATCH_NAME_1_1,

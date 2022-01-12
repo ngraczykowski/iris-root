@@ -77,7 +77,29 @@ paths:
             example: [ "alertName", "alertId", "riskType", "country", "policyName", "aiDecision", "aiComment"]
       responses:
         '200':
-          description: defauld response
+          description: default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertDetails'
+    post:
+      tags:
+        - single hit alert
+        - multi hit alert
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: 'UUID / alerts id'
+          example: 'c01e5d49-a72d-4e6a-b634-265165916c9a'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertDetailsRequest'
+      responses:
+        '200':
+          description: default response
           content:
             application/json:
               schema:
@@ -470,4 +492,14 @@ components:
           'feature': 'features/name',
           'match': 'matches/23dbd750-fbd4-4461-bd1a-85ce721760e4',
           'solution': 'MATCH'
+        }
+
+    AlertDetailsRequest:
+      type: object
+      properties:
+        fields:
+          type: array
+      example:
+        {
+          'fields': ['s8_alert_name', 'alert_recommendation'],
         }

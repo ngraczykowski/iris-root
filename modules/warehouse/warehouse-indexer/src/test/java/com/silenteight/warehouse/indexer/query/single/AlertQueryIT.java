@@ -51,8 +51,8 @@ class AlertQueryIT {
 
 
   static final List<String> LIST_OF_ID = of(
-      DISCRIMINATOR_1,
-      DISCRIMINATOR_2);
+      ALERT_NAME_1,
+      ALERT_NAME_2);
 
   static final List<String> ALERT_FIELDS = of(
       MappedKeys.RECOMMENDATION_KEY,
@@ -103,7 +103,7 @@ class AlertQueryIT {
     storeData();
 
     Map<String, String> singleAlertAttributes =
-        queryUnderTest.getSingleAlertAttributes(ALERT_FIELDS, DISCRIMINATOR_1);
+        queryUnderTest.getSingleAlertAttributes(ALERT_FIELDS, ALERT_NAME_1);
 
     assertThat(singleAlertAttributes)
         .containsEntry(MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK)
@@ -116,32 +116,32 @@ class AlertQueryIT {
     storeData();
 
     Map<String, String> singleAlertAttributes =
-        queryUnderTest.getSingleAlertAttributes(ALERT_FIELDS, DISCRIMINATOR_1);
+        queryUnderTest.getSingleAlertAttributes(ALERT_FIELDS, ALERT_NAME_1);
 
     assertThat(singleAlertAttributes.get(MappedKeys.RISK_TYPE_KEY)).isNull();
   }
 
   @ParameterizedTest
-  @MethodSource("getInvalidDiscriminators")
+  @MethodSource("getInvalidAlertNames")
   @WithElasticAccessCredentials
-  void shouldThrowExceptionWhenAlertIsNotFound(String discriminatorId) {
+  void shouldThrowExceptionWhenAlertIsNotFound(String alertName) {
     storeData();
 
     assertThrows(
         AlertNotFoundException.class,
         () -> queryUnderTest.getSingleAlertAttributes(
             ALERT_FIELDS,
-            discriminatorId));
+            alertName));
   }
 
   @Test
-  void shouldReturnDiscriminators() {
+  void shouldReturnAlertNames() {
     storeData();
 
     List<String> alertsIds =
-        randomAlertQueryService.getRandomDiscriminatorByCriteria(ALERT_SEARCH_CRITERIA);
+        randomAlertQueryService.getRandomAlertNameByCriteria(ALERT_SEARCH_CRITERIA);
 
-    assertThat(alertsIds).containsAnyElementsOf(of(DISCRIMINATOR_2, DISCRIMINATOR_3));
+    assertThat(alertsIds).containsAnyElementsOf(of(ALERT_NAME_2, ALERT_NAME_3));
   }
 
   private void storeData() {
@@ -169,11 +169,11 @@ class AlertQueryIT {
     }
   }
 
-  private static Stream<Arguments> getInvalidDiscriminators() {
+  private static Stream<Arguments> getInvalidAlertNames() {
     return Stream.of(
-        Arguments.of(DISCRIMINATOR_2.substring(0, 8)),
-        Arguments.of(DISCRIMINATOR_2 + "invalid"),
-        Arguments.of(DISCRIMINATOR_2.replaceFirst("f", "x"))
+        Arguments.of(ALERT_NAME_2.substring(0, 8)),
+        Arguments.of(ALERT_NAME_2 + "invalid"),
+        Arguments.of(ALERT_NAME_2.replaceFirst("f", "x"))
     );
   }
 }

@@ -12,8 +12,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import java.util.*;
 
-import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.DISCRIMINATOR;
-import static java.lang.String.format;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_NAME;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
@@ -29,27 +28,27 @@ class AlertQueryService implements AlertProvider {
   private final AlertSearchService alertSearchService;
 
   @NonNull
-  ProductionSearchRequestBuilder productionSearchRequestBuilder;
+  private final ProductionSearchRequestBuilder productionSearchRequestBuilder;
 
   @Override
   public Collection<Map<String, String>> getMultipleAlertsAttributes(
-      List<String> fields, List<String> discriminatorList) {
+      List<String> fields, List<String> alertList) {
 
-    return discriminatorList.stream()
-        .map(discriminator -> getAlert(fields, discriminator))
+    return alertList.stream()
+        .map(alertName -> getAlert(fields, alertName))
         .filter(Optional::isPresent)
         .map(Optional::get)
         .collect(toList());
   }
 
   @Override
-  public Map<String, String> getSingleAlertAttributes(List<String> fields, String discriminator) {
-    return getAlert(fields, discriminator).orElseThrow(
-        () -> new AlertNotFoundException(format("Alert with %s id not found.", discriminator)));
+  public Map<String, String> getSingleAlertAttributes(List<String> fields, String alertName) {
+    return getAlert(fields, alertName).orElseThrow(
+        () -> new AlertNotFoundException(alertName));
   }
 
-  private Optional<Map<String, String>> getAlert(List<String> fields, String discriminator) {
-    return searchForAlert(DISCRIMINATOR, discriminator).stream()
+  private Optional<Map<String, String>> getAlert(List<String> fields, String alertName) {
+    return searchForAlert(ALERT_NAME, alertName).stream()
         .findFirst()
         .map(singleAlert -> convertSingleAlertToAttributes(fields, singleAlert));
   }
@@ -74,8 +73,8 @@ class AlertQueryService implements AlertProvider {
     alertAttributes.put(requestedAttribute, attributeValue);
   }
 
-  private List<Map<String, Object>> searchForAlert(String requestedField, String discriminator) {
-    SearchRequest searchRequest = buildSearchRequestForSpecificField(requestedField, discriminator);
+  private List<Map<String, Object>> searchForAlert(String requestedField, String alertName) {
+    SearchRequest searchRequest = buildSearchRequestForSpecificField(requestedField, alertName);
     return alertSearchService.searchForDocuments(restHighLevelClient, searchRequest);
   }
 

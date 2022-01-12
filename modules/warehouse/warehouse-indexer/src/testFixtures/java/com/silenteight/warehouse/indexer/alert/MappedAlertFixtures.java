@@ -6,6 +6,7 @@ import com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants;
 import java.util.Map;
 
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_1;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_NAME;
 import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_PREFIX;
 import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.DISCRIMINATOR;
 import static com.silenteight.warehouse.indexer.match.mapping.MatchMapperConstants.MATCH_NAME;
@@ -34,6 +35,14 @@ public class MappedAlertFixtures {
   public static final String DOCUMENT_ID_5 = DISCRIMINATOR_5;
   public static final String DOCUMENT_ID_6 = DISCRIMINATOR_6;
   public static final String SIMULATION_ANALYSIS_ID = "9630b08f-682c-4565-bf4d-c07064c65615";
+
+  public static final String ALERT_NAME_1 = "alerts/457b1498-e348-4a81-8093-6079c1173010";
+  public static final String ALERT_NAME_2 = "alerts/80a8cfc0-86c3-4360-afed-7a1b9a326020";
+  public static final String ALERT_NAME_3 = "alerts/788edd98-af02-49a8-ab75-69cf63397b54";
+  public static final String ALERT_NAME_4 = "alerts/accb9508-3bad-4c5b-825a-8c023e03b7d6";
+  public static final String ALERT_NAME_5 = "alerts/48627744-d573-4edb-89fa-f88a8be4ac11";
+  public static final String ALERT_NAME_6 = "alerts/48627744-d573-4edb-89fa-f88a8be4ac43";
+  public static final String ALERT_NAME_7 = "alerts/8fe9c74e-6485-4045-b715-6bb7ec970d39";
 
   public static class SourceAlertKeys {
 
@@ -97,16 +106,17 @@ public class MappedAlertFixtures {
 
   public static final Map<String, Object> MAPPED_ALERT_1 = of(
       DISCRIMINATOR, DISCRIMINATOR_1,
+      ALERT_NAME, ALERT_NAME_1,
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
       MappedKeys.STATUS_KEY, Values.STATUS_COMPLETED,
       AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
-      AlertMapperConstants.ALERT_NAME, Values.ALERT_NAME,
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
   );
 
   public static final Map<String, Object> MAPPED_ALERT_2 = of(
       DISCRIMINATOR, DISCRIMINATOR_2,
+      ALERT_NAME, ALERT_NAME_2,
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
       AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
@@ -115,6 +125,7 @@ public class MappedAlertFixtures {
 
   public static final Map<String, Object> MAPPED_ALERT_3 = of(
       DISCRIMINATOR, DISCRIMINATOR_3,
+      ALERT_NAME, ALERT_NAME_3,
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
       MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
@@ -125,6 +136,7 @@ public class MappedAlertFixtures {
 
   public static final Map<String, Object> MAPPED_ALERT_4 = of(
       DISCRIMINATOR, DISCRIMINATOR_4,
+      ALERT_NAME, ALERT_NAME_4,
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
       MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
@@ -134,6 +146,7 @@ public class MappedAlertFixtures {
   );
   public static final Map<String, Object> MAPPED_ALERT_5 = of(
       DISCRIMINATOR, DISCRIMINATOR_5,
+      ALERT_NAME, ALERT_NAME_5,
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_MI,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_PL,
       MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
@@ -144,6 +157,7 @@ public class MappedAlertFixtures {
 
   public static final Map<String, Object> MAPPED_ALERT_6 = of(
       DISCRIMINATOR, DISCRIMINATOR_6,
+      ALERT_NAME, ALERT_NAME_6,
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_PL,
       MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
@@ -153,6 +167,7 @@ public class MappedAlertFixtures {
 
   public static final Map<String, Object> MAPPED_ALERT_7 = of(
       DISCRIMINATOR, DISCRIMINATOR_7,
+      ALERT_NAME, ALERT_NAME_7,
       MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
       MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
       MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.warehouse.common.web.request.AlertResource;
+import com.silenteight.warehouse.indexer.query.dto.AlertDetailsRequest;
 import com.silenteight.warehouse.indexer.query.single.AlertProvider;
 
 import org.springframework.http.ResponseEntity;
@@ -13,8 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import javax.validation.Valid;
 
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
+import static java.util.UUID.fromString;
 import static org.springframework.http.ResponseEntity.ok;
 
 @Slf4j
@@ -46,5 +50,19 @@ public class AlertRestController {
 
     log.debug("Getting single alert, alertId={}, fields={}", id,fields);
     return ok().body(alertProvider.getSingleAlertAttributes(fields, id));
+  }
+
+  @PostMapping(QA_ALERT_DETAIL_URL)
+  @PreAuthorize("isAuthorized('VIEW_ALERTS_DATA')")
+  public ResponseEntity<Map<String, String>> getSingleAlert(
+      @PathVariable("id") String id, @RequestBody @Valid AlertDetailsRequest alertDetailsRequest) {
+
+    log.debug("Getting single alert, alertId={}, fields={}", id, alertDetailsRequest.getFields());
+    return ok().body(alertProvider.getSingleAlertAttributes(alertDetailsRequest.getFields(),
+        toResourceName(id)));
+  }
+
+  private static String toResourceName(String value) {
+    return AlertResource.toResourceName(fromString(value));
   }
 }

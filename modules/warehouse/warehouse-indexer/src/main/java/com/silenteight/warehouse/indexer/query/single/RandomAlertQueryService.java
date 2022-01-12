@@ -16,18 +16,15 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import static com.silenteight.warehouse.common.opendistro.utils.OpendistroUtils.getRawField;
-import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.DISCRIMINATOR;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_NAME;
 import static java.util.stream.Collectors.toList;
-import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
-import static org.elasticsearch.index.query.QueryBuilders.functionScoreQuery;
-import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
-import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
+import static org.elasticsearch.index.query.QueryBuilders.*;
 import static org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders.randomFunction;
 
 @RequiredArgsConstructor
 public class RandomAlertQueryService {
 
-  private static final String[] ALERTS_IDS_LIST = new String[] { DISCRIMINATOR };
+  private static final String[] ALERTS_IDS_LIST = new String[] { ALERT_NAME };
 
   @NonNull
   private final AlertSearchService alertSearchService;
@@ -39,14 +36,14 @@ public class RandomAlertQueryService {
   @Valid
   private final ProductionSearchRequestBuilder productionSearchRequestBuilder;
 
-  public List<String> getRandomDiscriminatorByCriteria(AlertSearchCriteria criteria) {
+  public List<String> getRandomAlertNameByCriteria(AlertSearchCriteria criteria) {
     SearchRequest searchRequest = buildSearchRequestForRandomAlerts(criteria);
 
     List<Map<String, Object>> maps =
         alertSearchService.searchForDocuments(restHighLevelAdminClient, searchRequest);
 
     return maps.stream()
-        .map(alert -> alert.get(DISCRIMINATOR).toString())
+        .map(alert -> alert.get(ALERT_NAME).toString())
         .distinct()
         .collect(toList());
   }
