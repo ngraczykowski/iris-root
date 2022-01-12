@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface AddAlertLabelUseCase {
 
-  void invoke(List<String> alertIds, List<Label> labels);
+  void invoke(List<String> alertNames, List<Label> labels);
 }

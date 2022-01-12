@@ -79,12 +79,12 @@ class IngestService {
   }
 
   private void addLearningLabels(List<LearningAlert> registeredLearningAlerts) {
-    var alertIds =
+    var alertNames =
         registeredLearningAlerts.stream()
-            .map(LearningAlert::getAlertId)
+            .map(LearningAlert::getAlertName)
             .collect(toList());
 
-    addAlertLabelUseCase.invoke(alertIds, List.of(getAlertLabelLearningCsv()));
+    addAlertLabelUseCase.invoke(alertNames, List.of(getAlertLabelLearningCsv()));
   }
 
   private static List<LearningAlert> getRegisteredAlerts(

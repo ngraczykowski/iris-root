@@ -21,12 +21,12 @@ class AddAlertLabelService implements AddAlertLabelUseCase {
   private final AlertClientPort alertClient;
 
   @Override
-  public void invoke(List<String> alertIds, List<Label> labels) {
+  public void invoke(List<String> alertNames, List<Label> labels) {
 
-    var request = createRequest(alertIds, labels);
+    var request = createRequest(alertNames, labels);
 
     log.info(
-        "Adding new labels: labelsCount={}, labels={}", alertIds.size(),
+        "Adding new labels: labelsCount={}, labels={}", alertNames.size(),
         request.getLabelsMap());
 
     var response = alertClient.batchAddLabels(request);
@@ -35,13 +35,13 @@ class AddAlertLabelService implements AddAlertLabelUseCase {
         "New labels added, count={}, labels={}", response.getLabelsCount(), request.getLabelsMap());
   }
 
-  public static BatchAddLabelsRequest createRequest(List<String> alertIds, List<Label> labels) {
+  public static BatchAddLabelsRequest createRequest(List<String> alertNames, List<Label> labels) {
 
     var labelMap = labels.stream()
         .collect(Collectors.toMap(Label::getName, Label::getValue));
 
     return BatchAddLabelsRequest.newBuilder()
-        .addAllAlerts(alertIds)
+        .addAllAlerts(alertNames)
         .putAllLabels(labelMap)
         .build();
   }
