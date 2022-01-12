@@ -67,6 +67,7 @@ dependencies {
   api libraries.hibernate_envers
   api libraries.jakarta_persistence_api
   implementation libraries.spring_orm
+  annotationProcessor libraries.hibernate_jpamodelgen
 
   testImplementation project(":sep-base-testing")
   testImplementation libraries.commons_collections4
