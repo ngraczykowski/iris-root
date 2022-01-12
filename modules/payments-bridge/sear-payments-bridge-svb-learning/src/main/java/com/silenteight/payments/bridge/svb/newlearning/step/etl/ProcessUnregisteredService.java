@@ -15,14 +15,10 @@ import com.silenteight.payments.bridge.svb.oldetl.service.AlertParserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.silenteight.payments.bridge.etl.parser.domain.MessageFormat.ALL;
 import static com.silenteight.payments.bridge.etl.parser.domain.MessageFormat.SWIFT;
-import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
@@ -33,18 +29,16 @@ class ProcessUnregisteredService {
   private final CreateFeatureUseCase createFeatureUseCase;
 
   LearningRegisteredAlert process(AlertComposite alertComposite, long jobId) {
-    var etlHits = createEtlHits(alertComposite);
-    var hitsFeatures = etlHits
-        .stream()
-        .map(createFeatureUseCase::createFeatureInputs)
-        .map(Map::entrySet)
-        .flatMap(Set::stream)
-        .collect(toMap(Entry::getKey, Entry::getValue));
-
     var registeredAlerts = registerAlertUseCase.batchRegistration(
         List.of(alertComposite.toRegisterAlertRequest(jobId)));
+
     var registeredAlert = registeredAlerts.get(0);
-    return alertComposite.toLearningRegisteredAlert(registeredAlert);
+    var learningRegisteredAlert = alertComposite.toLearningRegisteredAlert(registeredAlert);
+
+    var etlHits = createEtlHits(alertComposite);
+    createFeatureUseCase.createFeatureInputs(etlHits, registeredAlert);
+
+    return learningRegisteredAlert;
   }
 
 

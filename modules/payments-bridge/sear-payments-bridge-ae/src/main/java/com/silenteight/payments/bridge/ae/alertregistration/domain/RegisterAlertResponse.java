@@ -5,6 +5,7 @@ import lombok.Value;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -34,5 +35,14 @@ public class RegisterAlertResponse {
             .map(RegisterMatchResponse::toSaveRegisteredMatchRequest)
             .collect(toList()))
         .build();
+  }
+
+  public String getMatchName(String hitId) {
+    return matchResponses
+        .stream()
+        .filter(m -> m.getMatchId().equals(hitId))
+        .findFirst()
+        .orElseThrow(() -> new NoSuchElementException("There is no corresponding match"))
+        .getMatchName();
   }
 }

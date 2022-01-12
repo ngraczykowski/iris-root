@@ -2,14 +2,18 @@ package com.silenteight.payments.bridge.svb.newlearning.step.etl.feature.service
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.datasource.agentinput.api.v1.AgentInput;
+import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
+import com.silenteight.payments.bridge.svb.learning.features.port.outgoing.CreateAgentInputsClient;
 import com.silenteight.payments.bridge.svb.newlearning.domain.EtlHit;
 import com.silenteight.payments.bridge.svb.newlearning.step.etl.feature.port.CreateFeatureUseCase;
 
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
+import javax.annotation.Nonnull;
 
 import static java.util.stream.Collectors.toList;
 
@@ -18,11 +22,29 @@ import static java.util.stream.Collectors.toList;
 class CreateFeatureService implements CreateFeatureUseCase {
 
   private final List<FeatureExtractor> featureExtractors;
+  private final CreateAgentInputsClient createAgentInputsClient;
 
   @Override
-  public Map<String, List<FeatureInput>> createFeatureInputs(EtlHit etlHit) {
-    var featureInputs =
-        featureExtractors.stream().map(fe -> fe.createFeatureInputs(etlHit)).collect(toList());
-    return Map.of(etlHit.getMatchId(), featureInputs);
+  public List<AgentInput> createFeatureInputs(
+      List<EtlHit> etlHits, RegisterAlertResponse registeredAlert) {
+    var alertName = registeredAlert.getAlertName();
+
+    var agentInputs = etlHits.stream().map(hit -> AgentInput
+        .newBuilder()
+        .setAlert(alertName)
+        .setMatch(registeredAlert.getMatchName(hit.getMatchId()))
+        .addAllFeatureInputs(createFeaturesInputs(hit))
+        .build())
+        .collect(toList());
+
+    createAgentInputsClient.createAgentInputs(
+        BatchCreateAgentInputsRequest.newBuilder().addAllAgentInputs(agentInputs).build());
+
+    return agentInputs;
+  }
+
+  @Nonnull
+  private List<FeatureInput> createFeaturesInputs(EtlHit hit) {
+    return featureExtractors.stream().map(fe -> fe.createFeatureInputs(hit)).collect(toList());
   }
 }
