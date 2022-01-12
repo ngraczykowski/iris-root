@@ -3,9 +3,12 @@ package com.silenteight.bridge.core.registration.adapter.outgoing;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.bridge.core.registration.domain.model.BatchCompleted;
 import com.silenteight.bridge.core.registration.domain.model.BatchError;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.EventPublisher;
+import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchCompletedProperties;
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchErrorProperties;
+import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
 import com.silenteight.proto.registration.api.v1.MessageBatchError;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -19,7 +22,8 @@ import java.util.Optional;
 class RabbitEventPublisher implements EventPublisher {
 
   private final RabbitTemplate rabbitTemplate;
-  private final AmqpRegistrationOutgoingNotifyBatchErrorProperties notifyBatchErrorProperties;
+  private final AmqpRegistrationOutgoingNotifyBatchErrorProperties batchErrorProperties;
+  private final AmqpRegistrationOutgoingNotifyBatchCompletedProperties batchCompletedProperties;
 
   @Override
   public void publish(BatchError event) {
@@ -31,6 +35,18 @@ class RabbitEventPublisher implements EventPublisher {
 
     log.info("Send error notification for batch with id: {}", event.id());
 
-    rabbitTemplate.convertAndSend(notifyBatchErrorProperties.exchangeName(), "", msg);
+    rabbitTemplate.convertAndSend(batchErrorProperties.exchangeName(), "", msg);
+  }
+
+  @Override
+  public void publish(BatchCompleted event) {
+    var message = MessageBatchCompleted.newBuilder()
+        .setBatchId(event.id())
+        .setAnalysisId(event.analysisId())
+        .addAllAlertIds(event.alertIds())
+        .setBatchMetadata(event.batchMetadata())
+        .build();
+
+    rabbitTemplate.convertAndSend(batchCompletedProperties.exchangeName(), "", message);
   }
 }

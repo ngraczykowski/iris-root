@@ -11,6 +11,6 @@ public record Match(String name,
   }
 
   public enum Status {
-    REGISTERED, PROCESSING, ERROR
+    REGISTERED, RECOMMENDED, PROCESSING, ERROR
   }
 }

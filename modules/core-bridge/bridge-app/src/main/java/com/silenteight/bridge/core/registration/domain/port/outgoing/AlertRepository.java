@@ -9,9 +9,11 @@ public interface AlertRepository {
 
   void saveAlerts(List<Alert> alert);
 
+  void updateStatusToRecommended(String batchId, List<String> alertNames);
+
   List<AlertId> findAllAlertIdsByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
 
   List<Alert> findAllByBatchId(String batchId);
 
-
+  long countAllPendingAlerts(String batchId);
 }

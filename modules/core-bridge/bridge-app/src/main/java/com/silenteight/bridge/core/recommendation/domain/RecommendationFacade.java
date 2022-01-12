@@ -14,7 +14,6 @@ import io.vavr.control.Try;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -26,10 +25,9 @@ public class RecommendationFacade {
   private final RecommendationRepository recommendationRepository;
 
   public void proceedReadyRecommendations(String analysisName) {
-    var alertNames = getAndStoreRecommendations(analysisName)
-        .stream()
+    var alertNames = getAndStoreRecommendations(analysisName).stream()
         .map(RecommendationWithMetadata::alertName)
-        .collect(Collectors.toList());
+        .toList();
 
     eventPublisher.publish(new RecommendationsReceivedEvent(analysisName, alertNames));
   }

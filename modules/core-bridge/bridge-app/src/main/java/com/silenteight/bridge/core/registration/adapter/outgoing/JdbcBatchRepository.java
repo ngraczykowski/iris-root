@@ -23,6 +23,16 @@ class JdbcBatchRepository implements BatchRepository {
   }
 
   @Override
+  public Optional<Batch> findByName(String analysisName) {
+    return crudBatchRepository.findByAnalysisName(analysisName).map(this::mapToBatch);
+  }
+
+  @Override
+  public void updateStatusToCompleted(String batchId) {
+    crudBatchRepository.updateStatusByBatchId(Status.COMPLETED.name(),batchId);
+  }
+
+  @Override
   public void updateStatusAndErrorDescription(
       String batchId, BatchStatus status, String errorDescription) {
     crudBatchRepository.updateStatusAndErrorDescription(
@@ -45,9 +55,9 @@ class JdbcBatchRepository implements BatchRepository {
 
   private Batch mapToBatch(BatchEntity batchEntity) {
     return Batch.builder()
-        .alertsCount(batchEntity.alertsCount())
         .id(batchEntity.batchId())
         .analysisName(batchEntity.analysisName())
+        .alertsCount(batchEntity.alertsCount())
         .status(BatchStatus.valueOf(batchEntity.status().name()))
         .errorDescription(batchEntity.errorDescription())
         .batchMetadata(batchEntity.batchMetadata())

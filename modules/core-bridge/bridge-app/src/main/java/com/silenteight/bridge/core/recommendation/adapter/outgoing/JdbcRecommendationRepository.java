@@ -23,15 +23,14 @@ class JdbcRecommendationRepository implements RecommendationRepository {
 
   @Override
   public List<RecommendationWithMetadata> findByAnalysisName(String analysisName) {
-    return crudRecommendationRepository.findByAnalysisName(analysisName)
-        .stream()
+    return crudRecommendationRepository.findByAnalysisName(analysisName).stream()
         .map(this::mapToRecommendationWithMetadata)
         .toList();
   }
 
   private RecommendationWithMetadata mapToRecommendationWithMetadata(RecommendationEntity entity) {
     return RecommendationWithMetadata.builder()
-        .recommendationName(entity.recommendationName())
+        .name(entity.name())
         .alertName(entity.alertName())
         .analysisName(entity.analysisName())
         .recommendedAt(entity.recommendedAt().atOffset(ZoneOffset.UTC))
@@ -45,7 +44,7 @@ class JdbcRecommendationRepository implements RecommendationRepository {
       List<RecommendationWithMetadata> recommendations) {
     return recommendations.stream()
         .map(e -> RecommendationEntity.builder()
-            .recommendationName(e.recommendationName())
+            .name(e.name())
             .alertName(e.alertName())
             .analysisName(e.analysisName())
             .recommendedAction(e.recommendedAction())

@@ -4,7 +4,7 @@ import lombok.Builder;
 
 import java.time.OffsetDateTime;
 
-public record RecommendationWithMetadata(String recommendationName,
+public record RecommendationWithMetadata(String name,
                                          String alertName,
                                          String analysisName,
                                          String recommendedAction,

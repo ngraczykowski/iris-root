@@ -12,11 +12,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class RecommendationReceivedEventPublisher implements RecommendationEventPublisher {
+class RecommendationsReceivedEventPublisher implements RecommendationEventPublisher {
 
   private final RabbitTemplate rabbitTemplate;
-  private final RecommendationOutgoingRecommendationsReceivedConfigurationProperties
-      recommendationOutgoingProperties;
+  private final RecommendationOutgoingRecommendationsReceivedConfigurationProperties properties;
 
   @Override
   public void publish(RecommendationsReceivedEvent event) {
@@ -25,6 +24,6 @@ class RecommendationReceivedEventPublisher implements RecommendationEventPublish
         .addAllAlertIds(event.alertNames())
         .build();
 
-    rabbitTemplate.convertAndSend(recommendationOutgoingProperties.exchangeName(), "", message);
+    rabbitTemplate.convertAndSend(properties.exchangeName(), "", message);
   }
 }

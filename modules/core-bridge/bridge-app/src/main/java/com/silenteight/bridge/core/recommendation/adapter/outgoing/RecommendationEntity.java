@@ -11,7 +11,7 @@ import java.time.Instant;
 
 @Table("recommendations")
 record RecommendationEntity(@Id long id,
-                            String recommendationName,
+                            String name,
                             String alertName,
                             String analysisName,
                             Instant recommendedAt,
@@ -22,4 +22,3 @@ record RecommendationEntity(@Id long id,
   @Builder
   RecommendationEntity {}
 }
-

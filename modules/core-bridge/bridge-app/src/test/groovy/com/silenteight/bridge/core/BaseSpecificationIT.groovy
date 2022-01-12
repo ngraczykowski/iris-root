@@ -1,5 +1,7 @@
 package com.silenteight.bridge.core
 
+
+import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
@@ -10,6 +12,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 
 @Testcontainers
+@Import(ExternalExchangesConfigurationIT.class)
 @ActiveProfiles("consuldisabled")
 class BaseSpecificationIT extends Specification {
 

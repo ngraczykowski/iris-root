@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
+import com.silenteight.bridge.core.registration.domain.model.BatchCompleted;
 import com.silenteight.bridge.core.registration.domain.model.BatchError;
 import com.silenteight.bridge.core.registration.domain.model.BatchId;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService;
@@ -14,6 +15,7 @@ import com.silenteight.bridge.core.registration.domain.port.outgoing.EventPublis
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -34,6 +36,12 @@ class BatchService {
         .orElseThrow();
   }
 
+  BatchId findBatch(String analysisName) {
+    return batchRepository.findByName(analysisName)
+        .map(BatchId::from)
+        .orElseThrow();
+  }
+
   void notifyBatchError(NotifyBatchErrorCommand notifyBatchErrorCommand) {
     batchRepository.findById(notifyBatchErrorCommand.id())
         .ifPresentOrElse(
@@ -45,6 +53,18 @@ class BatchService {
             notifyBatchErrorCommand.errorDescription(),
             notifyBatchErrorCommand.batchMetadata())
     );
+  }
+
+  void completeBatch(CompleteBatchCommand completeBatchCommand) {
+    batchRepository.findById(completeBatchCommand.id())
+        .ifPresentOrElse(
+            batch -> {
+              markBatchAsCompleted(batch.id());
+              publishBatchCompleted(batch, completeBatchCommand.alertNames());
+            },
+            () -> log.error(
+                "No batch found for batch id: {}",
+                completeBatchCommand.id()));
   }
 
   private Batch logIfAlreadyExists(Batch batch) {
@@ -85,5 +105,20 @@ class BatchService {
         notifyBatchErrorCommand.batchMetadata()));
 
     log.info("New batch registered as error with id: {}", notifyBatchErrorCommand.id());
+  }
+
+  private void markBatchAsCompleted(String batchId) {
+    log.info("Set batch status to COMPLETED with batch id: {}", batchId);
+    batchRepository.updateStatusToCompleted(batchId);
+  }
+
+  private void publishBatchCompleted(Batch batch, List<String> alertNames) {
+    eventPublisher.publish(
+        new BatchCompleted(
+            batch.id(),
+            batch.analysisName(),
+            alertNames,
+            batch.batchMetadata())
+    );
   }
 }

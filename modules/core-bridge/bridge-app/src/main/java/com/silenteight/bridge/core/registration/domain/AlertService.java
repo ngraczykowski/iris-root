@@ -28,18 +28,20 @@ class AlertService {
     var batchId = command.batchId();
     var newAlerts = filterOutExistingInDb(command);
     var successAlerts = getSucceededAlerts(newAlerts);
-
     var alertsToRegister = mapper.toAlertsToRegister(successAlerts);
     var registeredAlerts = register(alertsToRegister, batchId);
+
     log.info(
         "Alerts registered in AE for batchId: {}, alertCount: {}",
         batchId, registeredAlerts.size());
 
     alertRepository.saveAlerts(registeredAlerts);
+
     log.info("Registered alerts saved for batchId: {}, alertCount: {}",
         batchId, registeredAlerts.size());
 
     var failedAlerts = getFailedAlerts(newAlerts, batchId);
+
     if (CollectionUtils.isNotEmpty(failedAlerts)) {
       alertRepository.saveAlerts(failedAlerts);
       log.warn(
@@ -48,13 +50,25 @@ class AlertService {
     }
   }
 
+  void updateStatusToRecommended(String batchId, List<String> alertNames) {
+    log.info("Update alerts with names {} for batch id: {}", alertNames, batchId);
+    alertRepository.updateStatusToRecommended(batchId, alertNames);
+  }
+
+  boolean hasNoPendingAlerts(String batchId) {
+    var pendingAlerts = alertRepository.countAllPendingAlerts(batchId);
+    log.info("{} alerts left to be recommended for the batch id: {}", pendingAlerts, batchId);
+    return pendingAlerts == 0;
+  }
+
   private List<AlertWithMatches> filterOutExistingInDb(RegisterAlertsCommand command) {
     var alertIds = command.alertWithMatches().stream()
-        .map(AlertWithMatches::alertId).toList();
+        .map(AlertWithMatches::alertId)
+        .toList();
     var existingAlerts =
         alertRepository.findAllAlertIdsByBatchIdAndAlertIdIn(command.batchId(), alertIds);
-
     var result = command.alertWithMatches();
+
     if (CollectionUtils.isNotEmpty(existingAlerts)) {
       log.info("Alerts already exist in DB. alertCount: {}", existingAlerts.size());
       return result.stream()
@@ -65,15 +79,12 @@ class AlertService {
     return result;
   }
 
-  private List<AlertWithMatches> getSucceededAlerts(
-      List<AlertWithMatches> alertsWithMatches) {
-
+  private List<AlertWithMatches> getSucceededAlerts(List<AlertWithMatches> alertsWithMatches) {
     return filterAlertsByStatus(alertsWithMatches, AlertStatus.SUCCESS);
   }
 
   private List<AlertWithMatches> filterAlertsByStatus(
       List<AlertWithMatches> alertsWithMatches, AlertStatus status) {
-
     return alertsWithMatches.stream()
         .filter(alert -> status.equals(alert.alertStatus()))
         .toList();
@@ -84,11 +95,8 @@ class AlertService {
     return mapper.toAlerts(registeredAlerts, batchId);
   }
 
-  private List<Alert> getFailedAlerts(
-      List<AlertWithMatches> alertsWithMatches, String batchId) {
-    var failedAlerts =
-        filterAlertsByStatus(alertsWithMatches, AlertStatus.FAILURE);
-
+  private List<Alert> getFailedAlerts(List<AlertWithMatches> alertsWithMatches, String batchId) {
+    var failedAlerts = filterAlertsByStatus(alertsWithMatches, AlertStatus.FAILURE);
     return mapper.toErrorAlerts(failedAlerts, batchId);
   }
 }

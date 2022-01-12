@@ -151,4 +151,41 @@ class AlertServiceSpec extends Specification {
     1 * mapper.toErrorAlerts(_ as List<AlertWithMatches>, 'batch_id_1') >> [Alert.builder().build()]
     1 * alertRepository.saveAlerts(_ as List<Alert>)
   }
+
+  def 'should update alert status to RECOMMENDED'() {
+    given:
+    def batchId = 'batchId'
+    def alertNames = ['firstAlertName', 'secondAlertName']
+
+    when:
+    underTest.updateStatusToRecommended(batchId, alertNames)
+
+    then:
+    1 * alertRepository.updateStatusToRecommended(batchId, alertNames)
+  }
+
+  def 'should check that all alerts in batch have status RECOMMENDED'() {
+    given:
+    def batchId = 'batchId'
+
+    when:
+    def result = underTest.hasNoPendingAlerts(batchId)
+
+    then:
+    1 * alertRepository.countAllPendingAlerts(batchId) >> 0
+    result == true
+  }
+
+
+  def 'should check that not all alerts in batch have status RECOMMENDED'() {
+    given:
+    def batchId = 'batchId'
+
+    when:
+    def result = underTest.hasNoPendingAlerts(batchId)
+
+    then:
+    1 * alertRepository.countAllPendingAlerts(batchId) >> 1
+    result == false
+  }
 }

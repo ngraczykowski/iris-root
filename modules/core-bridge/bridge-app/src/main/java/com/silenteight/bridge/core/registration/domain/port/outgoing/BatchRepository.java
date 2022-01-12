@@ -9,7 +9,11 @@ public interface BatchRepository {
 
   Optional<Batch> findById(String id);
 
+  Optional<Batch> findByName(String analysisName);
+
   Batch create(Batch batch);
+
+  void updateStatusToCompleted(String batchId);
 
   void updateStatusAndErrorDescription(String batchId, BatchStatus status, String errorDescription);
 

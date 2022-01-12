@@ -24,9 +24,9 @@ class RecommendationFacadeSpec extends Specification {
       recommendationRepository
   )
 
-  def "Should proceed ready recommendations"() {
+  def 'Should proceed ready recommendations'() {
     given:
-    def analysis = "someAnalysis"
+    def analysis = 'someAnalysis'
 
     when:
     underTest.proceedReadyRecommendations(analysis)
@@ -38,12 +38,12 @@ class RecommendationFacadeSpec extends Specification {
   }
 
   private static RECOMMENDATION_WITH_METADATA = RecommendationWithMetadata.builder()
-      .recommendationName("someName")
-      .alertName("someAlert")
-      .analysisName("someAnalysis")
+      .name('someName')
+      .alertName('someAlert')
+      .analysisName('someAnalysis')
       .recommendedAt(OffsetDateTime.MAX)
-      .recommendationComment("someComment")
-      .recommendedAction("someAction")
+      .recommendationComment('someComment')
+      .recommendedAction('someAction')
       .metadata(null)
       .build()
 }

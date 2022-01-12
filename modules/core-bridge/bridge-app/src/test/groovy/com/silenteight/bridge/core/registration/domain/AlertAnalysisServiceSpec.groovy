@@ -20,11 +20,11 @@ class AlertAnalysisServiceSpec extends Specification {
   @Subject
   def underTest = new AlertAnalysisService(batchRepository, analysisService, analysisProperties)
 
-  def "should add alerts to analysis per batch"() {
+  def 'should add alerts to analysis per batch'() {
     given: 'create 3 processable batches'
     def batches = [
-        createBatchWithStatus("batch1", BatchStatus.STORED),
-        createBatchWithStatus("batch2", BatchStatus.PROCESSING)
+        createBatchWithStatus('batch1', BatchStatus.STORED),
+        createBatchWithStatus('batch2', BatchStatus.PROCESSING)
     ]
 
     and: 'create 3 commands per each batch'
@@ -48,7 +48,7 @@ class AlertAnalysisServiceSpec extends Specification {
     underTest.addAlertsToAnalysis(commands)
 
     then: 'should update batch with initial status STORED'
-    1 * batchRepository.updateStatus("batch1", BatchStatus.PROCESSING)
+    1 * batchRepository.updateStatus('batch1', BatchStatus.PROCESSING)
 
     and: 'should add alerts to analysis'
     batches.each {batch ->
@@ -56,12 +56,12 @@ class AlertAnalysisServiceSpec extends Specification {
     }
   }
 
-  def "should not process alerts due to their batch status"() {
+  def 'should not process alerts due to their batch status'() {
     given: 'create batches'
     def batches = [
-        createBatchWithStatus("batch1", BatchStatus.ERROR),
-        createBatchWithStatus("batch2", BatchStatus.COMPLETED),
-        createBatchWithStatus("batch3", BatchStatus.DELIVERED),
+        createBatchWithStatus('batch1', BatchStatus.ERROR),
+        createBatchWithStatus('batch2', BatchStatus.COMPLETED),
+        createBatchWithStatus('batch3', BatchStatus.DELIVERED),
     ]
 
     and: 'create commands per each batch'
@@ -87,8 +87,8 @@ class AlertAnalysisServiceSpec extends Specification {
   private static def createAddAlertToAnalysisCommand(def batchId) {
     new AddAlertToAnalysisCommand(
         batchId,
-        "alertId",
-        ["matchId"].toSet()
+        'alertId',
+        ['matchId'].toSet()
     )
   }
 

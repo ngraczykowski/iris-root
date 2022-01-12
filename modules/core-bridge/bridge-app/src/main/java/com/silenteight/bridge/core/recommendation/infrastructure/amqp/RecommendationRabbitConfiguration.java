@@ -11,14 +11,15 @@ import java.util.Optional;
 @Configuration
 @EnableConfigurationProperties({
     RecommendationIncomingRecommendationsGeneratedConfigurationProperties.class,
-    RecommendationOutgoingRecommendationsReceivedConfigurationProperties.class })
+    RecommendationOutgoingRecommendationsReceivedConfigurationProperties.class
+})
 class RecommendationRabbitConfiguration {
 
+  private static final String EMPTY_ROUTING_KEY = "";
+  private static final String X_MESSAGE_TTL = "x-message-ttl";
   private static final Integer DEFAULT_TTL_IN_MILLISECONDS = 2000;
   private static final String X_DEAD_LETTER_EXCHANGE = "x-dead-letter-exchange";
   private static final String X_DEAD_LETTER_ROUTING_KEY = "x-dead-letter-routing-key";
-  private static final String X_MESSAGE_TTL = "x-message-ttl";
-  private static final String EMPTY_ROUTING_KEY = "";
 
   @Bean
   Queue recommendationsGeneratedQueue(
@@ -56,7 +57,7 @@ class RecommendationRabbitConfiguration {
   }
 
   @Bean
-  Binding deadLetterBinding(
+  Binding recommendationsReadyDeadLetterBinding(
       @Qualifier("recommendationsReadyDeadLetterQueue") Queue queue,
       @Qualifier("recommendationsReadyDeadLetterExchange") DirectExchange exchange,
       RecommendationIncomingRecommendationsGeneratedConfigurationProperties properties) {
@@ -64,7 +65,7 @@ class RecommendationRabbitConfiguration {
   }
 
   @Bean
-  DirectExchange recommendationReceivedExchange(
+  DirectExchange recommendationsReceivedExchange(
       RecommendationOutgoingRecommendationsReceivedConfigurationProperties properties) {
     return new DirectExchange(properties.exchangeName());
   }

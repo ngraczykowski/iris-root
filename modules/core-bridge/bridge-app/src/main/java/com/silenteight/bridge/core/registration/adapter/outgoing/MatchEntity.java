@@ -17,6 +17,6 @@ record MatchEntity(String name,
   MatchEntity {}
 
   public enum Status {
-    REGISTERED, PROCESSING, ERROR
+    REGISTERED, RECOMMENDED, PROCESSING, ERROR
   }
 }

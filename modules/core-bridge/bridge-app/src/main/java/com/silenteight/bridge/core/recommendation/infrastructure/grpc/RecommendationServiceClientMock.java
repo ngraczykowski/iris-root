@@ -16,8 +16,7 @@ import java.util.UUID;
 class RecommendationServiceClientMock implements RecommendationServiceClient {
 
   @Override
-  public Collection<RecommendationWithMetadataOut> getRecommendations(
-      @NotNull String analysis) {
+  public Collection<RecommendationWithMetadataOut> getRecommendations(@NotNull String analysis) {
     log.info("MOCK: Get recommendations from AE");
     return List.of(createRecommendation(), createRecommendation());
   }

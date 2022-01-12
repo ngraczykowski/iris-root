@@ -31,7 +31,7 @@ class RecommendationRepositoryIntegrationSpec extends BaseSpecificationIT {
     def recommendation = recommendationRepository.findByAnalysisName(FIXTURES.ANALYSIS_NAME)
     recommendation.size() == 1
     with(recommendation.first()) {
-      recommendationName() == "someRecommendationName"
+      name() == "someRecommendationName"
       analysisName() == FIXTURES.ANALYSIS_NAME
       metadata() == FIXTURES.RECOMMENDATION_METADATA
     }
@@ -61,7 +61,7 @@ class RecommendationRepositoryIntegrationSpec extends BaseSpecificationIT {
     static RECOMMENDATION_WITH_METADATA = RecommendationWithMetadata.builder()
         .alertName("alert/1")
         .analysisName(ANALYSIS_NAME)
-        .recommendationName("someRecommendationName")
+        .name("someRecommendationName")
         .recommendedAt(OffsetDateTime.parse(RECOMMENDATION_DATE))
         .recommendationComment("someComment")
         .recommendedAction("someAction")

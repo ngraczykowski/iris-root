@@ -37,6 +37,8 @@ amqp:
     outgoing:
       notify-batch-error:
         exchange-name: notify-batch-error-exchange
+      notify-batch-completed:
+        exchange-name: notify-batch-completed-exchange
     incoming:
       match-feature-input-set-fed:
         exchange-name: match-feature-input-set-fed-queue
@@ -46,6 +48,11 @@ amqp:
         dead-letter-exchange-name: match-feature-input-set-fed.dlx
         batch-size: 10
         batch-receive-timeout: 3s
+      recommendation-received:
+        queue-name: recommendation-received-queue
+        dead-letter-queue-name: recommendation-received.dlq
+        dead-letter-queue-time-to-live-in-milliseconds: 10000
+        dead-letter-exchange-name: recommendation-received.dlx
   recommendation:
     outgoing:
       recommendation-received:

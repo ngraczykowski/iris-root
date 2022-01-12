@@ -41,16 +41,20 @@ class RecommendationFlowIntegrationSpec extends BaseSpecificationIT {
 
     when:
     rabbitTemplate.convertAndSend(
-        properties.exchangeName(), properties.exchangeRoutingKey(), recommendationsGenerated)
+        properties.exchangeName(),
+        properties.exchangeRoutingKey(),
+        recommendationsGenerated)
 
     then:
     conditions.eventually {
       def recommendations = recommendationRepository.findByAnalysisName(ANALYSIS_ID)
       assert recommendations.size() == 2
-      def recommendationsReceived = (RecommendationsReceived) rabbitTemplate
-          .receiveAndConvert(RecommendationFlowRabbitMqTestConfig.TEST_QUEUE_NAME, 10000L)
+
+      def recommendationsReceived = (RecommendationsReceived) rabbitTemplate.receiveAndConvert(
+          RecommendationFlowRabbitMqTestConfig.TEST_QUEUE_NAME, 10000L)
       with(recommendationsReceived) {
         analysisId == ANALYSIS_ID
+        alertIdsCount == 2
       }
     }
   }

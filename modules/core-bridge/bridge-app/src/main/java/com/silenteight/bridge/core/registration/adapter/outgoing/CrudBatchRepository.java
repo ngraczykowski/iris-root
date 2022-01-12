@@ -12,9 +12,19 @@ interface CrudBatchRepository extends CrudRepository<BatchEntity, Long> {
 
   Optional<BatchEntity> findByBatchId(String batchId);
 
+  Optional<BatchEntity> findByAnalysisName(String analysisName);
+
   @Modifying
-  @Query("UPDATE batches "
-      + "SET status = :status, error_description = :errorDescription, updated_at = NOW() "
-      + "WHERE batch_id = :batchId")
+  @Query("""
+      UPDATE batches 
+      SET status = :status, error_description = :errorDescription, updated_at = NOW() 
+      WHERE batch_id = :batchId""")
   void updateStatusAndErrorDescription(String batchId, Status status, String errorDescription);
+
+  @Modifying
+  @Query("""
+      UPDATE batches 
+      SET status = :status, updated_at = NOW() 
+      WHERE batch_id = :batchId""")
+  void updateStatusByBatchId(String status, String batchId);
 }

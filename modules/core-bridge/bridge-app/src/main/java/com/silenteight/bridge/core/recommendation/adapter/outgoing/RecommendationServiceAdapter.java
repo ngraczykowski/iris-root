@@ -29,16 +29,15 @@ class RecommendationServiceAdapter implements RecommendationService {
   @Override
   @Retryable(AdjudicationEngineLibraryRuntimeException.class)
   public List<RecommendationWithMetadata> getRecommendations(String analysisName) {
-    return recommendationServiceClient.getRecommendations(analysisName)
-        .stream()
+    return recommendationServiceClient.getRecommendations(analysisName).stream()
         .map(e -> mapToRecommendationWithMetadata(e, analysisName))
-        .collect(Collectors.toList());
+        .toList();
   }
 
   private RecommendationWithMetadata mapToRecommendationWithMetadata(
       RecommendationWithMetadataOut recommendation, String analysisName) {
     return RecommendationWithMetadata.builder()
-        .recommendationName(recommendation.getName())
+        .name(recommendation.getName())
         .alertName(recommendation.getAlert())
         .analysisName(analysisName)
         .recommendedAt(recommendation.getDate())
@@ -49,10 +48,9 @@ class RecommendationServiceAdapter implements RecommendationService {
   }
 
   private RecommendationMetadata mapToRecommendationMetadata(RecommendationMetadataOut metadata) {
-    var matchMetadata = metadata.getMatchesMetadata()
-        .stream()
+    var matchMetadata = metadata.getMatchesMetadata().stream()
         .map(this::mapToMatchMetadata)
-        .collect(Collectors.toList());
+        .toList();
 
     return new RecommendationMetadata(matchMetadata);
   }
@@ -70,8 +68,7 @@ class RecommendationServiceAdapter implements RecommendationService {
   private Map<String, FeatureMetadata> mapToFeatureMetadataMap(
       Map<String, FeatureMetadataOut> features) {
 
-    return features.entrySet()
-        .stream()
+    return features.entrySet().stream()
         .collect(Collectors.toMap(Entry::getKey, e -> this.mapToFeatureMetadata(e.getValue())));
   }
 

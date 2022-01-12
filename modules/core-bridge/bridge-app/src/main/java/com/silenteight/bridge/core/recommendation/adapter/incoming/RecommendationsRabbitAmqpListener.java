@@ -23,5 +23,4 @@ class RecommendationsRabbitAmqpListener {
         recommendation.getAnalysis());
     recommendationFacade.proceedReadyRecommendations(recommendation.getAnalysis());
   }
-
 }

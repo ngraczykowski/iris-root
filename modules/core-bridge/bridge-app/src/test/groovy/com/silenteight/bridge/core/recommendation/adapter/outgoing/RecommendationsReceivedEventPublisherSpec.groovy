@@ -8,13 +8,13 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate
 import spock.lang.Specification
 import spock.lang.Subject
 
-class RecommendationReceivedEventPublisherSpec extends Specification {
+class RecommendationsReceivedEventPublisherSpec extends Specification {
 
   def rabbitTemplate = Mock(RabbitTemplate)
   def properties = new RecommendationOutgoingRecommendationsReceivedConfigurationProperties("exchange")
 
   @Subject
-  def underTest = new RecommendationReceivedEventPublisher(rabbitTemplate, properties)
+  def underTest = new RecommendationsReceivedEventPublisher(rabbitTemplate, properties)
 
   def "should send message on exchange"() {
     given:

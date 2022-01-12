@@ -31,7 +31,6 @@ class RecommendationGrpcServiceConfiguration {
       RecommendationGrpcConfigurationProperties properties) {
     return new RecommendationGrpcAdapter(
         recommendationServiceBlockingStub,
-        properties.recommendationDeadline().getSeconds()
-    );
+        properties.recommendationDeadline().getSeconds());
   }
 }

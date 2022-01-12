@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 1.0.0-1
-      author: apozorski
+      author: awojcicki
       preConditions:
         - onFail: MARK_RAN
           not:
@@ -73,6 +73,11 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: recommendation_pkey
               - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
                   name: alert_name
                   type: varchar(255)
                   constraints:
@@ -98,11 +103,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: recommendation_name
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
                   name: payload
                   type: jsonb
 
@@ -123,12 +123,6 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: alert_pkey
               - column:
-                  name: name
-                  type: VARCHAR(255)
-                  constraints:
-                    nullable: true
-                    unique: true
-              - column:
                   name: alert_id
                   type: VARCHAR(255)
                   constraints:
@@ -138,6 +132,12 @@ databaseChangeLog:
                   type: VARCHAR(255)
                   constraints:
                     nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+                    unique: true
               - column:
                   name: status
                   type: VARCHAR(30)
@@ -172,19 +172,8 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: match_pkey
               - column:
-                  name: name
-                  type: VARCHAR(255)
-                  constraints:
-                    nullable: true
-                    unique: true
-              - column:
                   name: match_id
                   type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: status
-                  type: VARCHAR(30)
                   constraints:
                     nullable: false
               - column:
@@ -194,6 +183,17 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_alert_id
                     references: alerts(id)
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+                    unique: true
+              - column:
+                  name: status
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
               - column:
                   name: created_at
                   type: timestamp

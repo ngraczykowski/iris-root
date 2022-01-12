@@ -29,6 +29,12 @@ class JdbcAlertRepository implements AlertRepository {
   }
 
   @Override
+  public void updateStatusToRecommended(String batchId, List<String> alertNames) {
+    alertRepository.updateAlertsWithMatchesStatusByBatchIdAndNamesIn(
+        batchId, Status.RECOMMENDED.name(), alertNames);
+  }
+
+  @Override
   public List<AlertId> findAllAlertIdsByBatchIdAndAlertIdIn(String batchId, List<String> alertIds) {
     return alertRepository.findByBatchIdAndAlertIdIn(batchId, alertIds).stream()
         .map(this::mapToAlertId)
@@ -37,10 +43,14 @@ class JdbcAlertRepository implements AlertRepository {
 
   @Override
   public List<Alert> findAllByBatchId(String batchId) {
-    return alertRepository.findAllByBatchId(batchId)
-        .stream()
+    return alertRepository.findAllByBatchId(batchId).stream()
         .map(this::mapToAlert)
         .toList();
+  }
+
+  @Override
+  public long countAllPendingAlerts(String batchId) {
+    return alertRepository.countAllAlertsByBatchIdAndNotRecommendedAndNotErrorStatuses(batchId);
   }
 
   private AlertId mapToAlertId(AlertIdProjection alertIdProjection) {
