@@ -22,7 +22,10 @@ class CrossmatchExtractor extends BaseCategoryValueExtractor {
 
   @Override
   protected String getValue(LearningMatch learningMatch) {
-    return nameAddressCrossmatchUseCase.call(learningMatch.toCrossmatchRequest()).toString();
+    return nameAddressCrossmatchUseCase
+        .call(learningMatch.toCrossmatchRequest())
+        .getResult()
+        .toString();
   }
 
 }
