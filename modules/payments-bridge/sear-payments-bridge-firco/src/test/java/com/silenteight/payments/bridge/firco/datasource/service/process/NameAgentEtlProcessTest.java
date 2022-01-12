@@ -2,6 +2,8 @@ package com.silenteight.payments.bridge.firco.datasource.service.process;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceBlockingStub;
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsResponse;
+import com.silenteight.datasource.api.name.v1.NameFeatureInput;
+import com.silenteight.payments.bridge.agents.port.CreateNameFeatureInputUseCase;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,8 @@ class NameAgentEtlProcessTest {
   private NameAgentEtlProcess nameAgentEtlProcess;
   @Mock
   private AgentInputServiceBlockingStub stub;
+  @Mock
+  private CreateNameFeatureInputUseCase nameAgentUseCase;
 
 
   @BeforeEach
@@ -30,7 +34,8 @@ class NameAgentEtlProcessTest {
     when(stub.batchCreateAgentInputs(any())).thenReturn(
         BatchCreateAgentInputsResponse.newBuilder().build());
     when(stub.withDeadline(any())).thenReturn(stub);
-    nameAgentEtlProcess = new NameAgentEtlProcess(stub, timeout);
+    when(nameAgentUseCase.create(any())).thenReturn(NameFeatureInput.newBuilder().build());
+    nameAgentEtlProcess = new NameAgentEtlProcess(stub, timeout, nameAgentUseCase);
   }
 
   @Test

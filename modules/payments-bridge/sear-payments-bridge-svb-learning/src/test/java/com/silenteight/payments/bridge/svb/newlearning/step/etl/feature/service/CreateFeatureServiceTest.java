@@ -30,3 +30,4 @@ class CreateFeatureServiceTest {
     assertThat(features.get(hit.getMatchId()).size()).isEqualTo(5);
   }
 }
+

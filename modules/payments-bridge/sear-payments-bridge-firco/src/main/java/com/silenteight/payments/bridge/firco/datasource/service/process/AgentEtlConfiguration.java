@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc;
 import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceBlockingStub;
+import com.silenteight.payments.bridge.agents.port.CreateNameFeatureInputUseCase;
 import com.silenteight.payments.bridge.agents.port.HistoricalRiskAssessmentFeatureUseCase;
 
 import io.grpc.Channel;
@@ -28,12 +29,13 @@ class AgentEtlConfiguration {
   private Channel dataSourceChannel;
 
   @Bean
-  NameAgentEtlProcess nameAgentEtlProcess() {
+  NameAgentEtlProcess nameAgentEtlProcess(
+      CreateNameFeatureInputUseCase createNameFeatureInputUseCase) {
     var stub = AgentInputServiceGrpc
         .newBlockingStub(dataSourceChannel)
         .withWaitForReady();
 
-    return new NameAgentEtlProcess(stub, properties.getTimeout());
+    return new NameAgentEtlProcess(stub, properties.getTimeout(), createNameFeatureInputUseCase);
   }
 
   @Bean
@@ -64,12 +66,14 @@ class AgentEtlConfiguration {
   }
 
   @Bean
-  NameMatchedTextAgentEtlProcess nameMatchedTextAgentEtlProcess() {
+  NameMatchedTextAgentEtlProcess nameMatchedTextAgentEtlProcess(
+      CreateNameFeatureInputUseCase createNameFeatureInputUseCase) {
     var stub = AgentInputServiceGrpc
         .newBlockingStub(dataSourceChannel)
         .withWaitForReady();
 
-    return new NameMatchedTextAgentEtlProcess(stub, properties.getTimeout());
+    return new NameMatchedTextAgentEtlProcess(
+        stub, properties.getTimeout(), createNameFeatureInputUseCase);
   }
 
   @Bean

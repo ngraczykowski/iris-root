@@ -1,5 +1,7 @@
 package com.silenteight.payments.bridge.svb.learning.features.service;
 
+import com.silenteight.datasource.api.name.v1.NameFeatureInput;
+import com.silenteight.payments.bridge.agents.port.CreateNameFeatureInputUseCase;
 import com.silenteight.payments.bridge.svb.learning.features.port.outgoing.CreateAgentInputsClient;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,12 +22,19 @@ class CreateFeatureServiceTest {
   private CreateFeaturesService createFeaturesService;
   @Mock
   private CreateAgentInputsClient createAgentInputsClient;
+  @Mock
+  private CreateNameFeatureInputUseCase createNameFeatureInputUseCase;
 
   @BeforeEach
   void setUp() {
     createFeaturesService = new CreateFeaturesService(
         createAgentInputsClient,
-        List.of(new GeoFeatureExtractor(), new NameFeatureExtractor(), new GeoFeatureExtractor()));
+        List.of(
+            new GeoFeatureExtractor(),
+            new NameFeatureExtractor(createNameFeatureInputUseCase),
+            new GeoFeatureExtractor()));
+    when(createNameFeatureInputUseCase.create(any())).thenReturn(
+        NameFeatureInput.newBuilder().build());
   }
 
   @Test
