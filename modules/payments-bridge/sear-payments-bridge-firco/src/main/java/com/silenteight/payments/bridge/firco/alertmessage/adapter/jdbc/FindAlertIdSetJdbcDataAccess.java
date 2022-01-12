@@ -29,7 +29,7 @@ class FindAlertIdSetJdbcDataAccess implements FindAlertIdSetAccessPort {
       return List.of();
     }
 
-    return jdbcTemplate.query(SQL, Map.of("messageIds", systemIds),
+    return jdbcTemplate.query(SQL, Map.of("systemIds", systemIds),
         (rs, rowNum) -> new AlertIdSet(
             UUID.fromString(rs.getString(1)),
             rs.getString(2),
