@@ -1,6 +1,7 @@
 package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder.Default;
 import lombok.Data;
 
 import com.silenteight.warehouse.indexer.query.common.QueryFilter;
@@ -38,6 +39,12 @@ public class RbsReportDefinition {
   private final List<FilterProperties> filters;
   @Nullable
   private final String indexName;
+  @Default
+  private boolean useSqlReports = false;
+  @Nullable
+  private List<String> sqlTemplates;
+  @Nullable
+  private String selectSqlQuery;
 
   public List<String> getListOfFields() {
     List<String> fields = new ArrayList<>();

@@ -38,7 +38,7 @@ class RbsReportQuery implements RbsReportStatusQuery, RbsReportDataQuery {
 
   private static RbsReportDto toRbsReportDto(RbsReport report) {
     return RbsReportDto.builder()
-        .content(report.getData())
+        .fileName(report.getFileName())
         .range(toReportRange(report))
         .timestamp(toTimestamp(report.getCreatedAt()))
         .build();

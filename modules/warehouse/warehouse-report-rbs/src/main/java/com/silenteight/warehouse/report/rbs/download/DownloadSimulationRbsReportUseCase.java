@@ -10,6 +10,8 @@ import com.silenteight.warehouse.report.rbs.domain.RbsReportService;
 import com.silenteight.warehouse.report.rbs.domain.dto.RbsReportDto;
 import com.silenteight.warehouse.report.rbs.download.dto.DownloadRbsReportDto;
 
+import java.io.ByteArrayInputStream;
+
 @Slf4j
 @RequiredArgsConstructor
 class DownloadSimulationRbsReportUseCase {
@@ -30,7 +32,7 @@ class DownloadSimulationRbsReportUseCase {
     log.debug("Report removed, reportId={}", id);
     return DownloadRbsReportDto.builder()
         .name(getFileName(rbsReportDto, analysisId))
-        .content(rbsReportDto.getContent())
+        .content(new ByteArrayInputStream(rbsReportDto.getContent().getBytes()))
         .build();
   }
 

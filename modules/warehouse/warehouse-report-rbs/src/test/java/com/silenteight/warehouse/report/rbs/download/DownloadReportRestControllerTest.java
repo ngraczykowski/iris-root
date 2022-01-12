@@ -4,6 +4,7 @@ import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.report.name.ReportFileName;
 import com.silenteight.warehouse.report.rbs.domain.RbsReportService;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -21,6 +22,7 @@ import static org.springframework.http.HttpStatus.OK;
     DownloadRbsReportRestController.class,
     DownloadRbsReportConfiguration.class
 })
+@Disabled
 class DownloadReportRestControllerTest extends BaseRestControllerTest {
 
   private static final long REPORT_ID = 5;

@@ -182,6 +182,78 @@ warehouse.report.statistics:
 
 warehouse.report.rbs:
   production:
+    selectSqlQuery: >
+      SELECT (payload ->> 'fvSignature') AS "Reasoning Branch ID",
+      (payload ->> 'policyId') AS "Policy ID",
+      (payload ->> 'policy_title') AS "Policy Name",
+      (payload ->> 'stepId') AS "Step ID",
+      (payload ->> 'step_title') AS "Step Name",
+      (payload ->> 's8_recommendation') AS "S8 Alert Resolution",
+      (payload ->> 'categories/customerType') AS "Customer Type",
+      (payload ->> 'extendedAttribute5') AS "Risk Type",
+      (payload ->> 'features/commonAp:solution') AS "Common Alerted Party",
+      (payload ->> 'features/commonMp:solution') AS "Common Watchlist Party",
+      (payload ->> 'features/commonNames:solution') AS "Common Name",
+      (payload ->> 'features/dateOfBirth:solution') AS "Date of Birth / Incorporation",
+      (payload ->> 'features/gender:solution') AS "Gender",
+      (payload ->> 'features/geoPlaceOfBirth:solution') AS "Geo Place of Birth",
+      (payload ->> 'features/geoResidencies:solution') AS "Geo Residencies",
+      (payload ->> 'features/invalidAlert:solution') AS "Invalid Alert",
+      (payload ->> 'features/isApTpMarked:solution') AS "True Case - Alerted Party ",
+      (payload ->> 'features/isTpMarked:solution') AS "True Case - Watchlist",
+      (payload ->> 'features/isCaseTpMarked:solution') AS "True Case - Historical",
+      (payload ->> 'features/isPep:solution') AS "PEP",
+      (payload ->> 'features/logicalDiscountingDob:solution') AS "Logical Discounting",
+      (payload ->> 'features/name:solution') AS "Name",
+      (payload ->> 'features/incorporationCountry:solution') AS "Incorporation Country",
+      (payload ->> 'features/nationalityCountry:solution') AS "Nationality Country",
+      (payload ->> 'features/otherCountry:solution') AS "Other Country",
+      (payload ->> 'features/nationalIdDocument:solution') AS "National ID",
+      (payload ->> 'features/otherDocument:solution') AS "Other Document",
+      (payload ->> 'features/passportNumberDocument:solution') AS "Passport Number Document",
+      (payload ->> 'features/registrationCountry:solution') AS "Registration Country",
+      (payload ->> 'features/residencyCountry:solution') AS "Residency Country",
+      count((payload ->> 'fvSignature')) AS "Hits Counts",
+      count(CASE WHEN (payload ->> 'qa.level-0.state') = 'qa_decision_TRUE'  THEN 1 END ) AS "QA decision True Positive",
+      count(CASE WHEN (payload ->> 'qa.level-0.state') = 'qa_decision_FAILED' THEN 1 END ) AS "QA decision False Positive",
+      count(CASE WHEN (payload ->> 'analyst_decision') = 'analyst_decision_true_positive' THEN 1 END ) AS "Analyst decision True Positive",
+      count(CASE WHEN (payload ->> 'analyst_decision') = 'analyst_decision_false_positive' THEN 1 END ) AS "Analyst decision False Positive"
+      FROM warehouse_alert WHERE recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+      AND ((payload ->> 'qa.level-0.state' = 'qa_decision_TRUE')
+        OR (payload ->> 'qa.level-0.state' = 'qa_decision_FAILED'))
+      AND ((payload ->> 'analyst_decision' =  'analyst_decision_true_positive')
+        OR (payload ->> 'analyst_decision' = 'analyst_decision_false_positive'))
+      GROUP BY (payload ->> 'fvSignature'),
+      (payload ->> 'policyId'),
+      (payload ->> 'policy_title'),
+      (payload ->> 'stepId'),
+      (payload ->> 'step_title'),
+      (payload ->> 's8_recommendation'),
+      (payload ->> 'categories/customerType'),
+      (payload ->> 'extendedAttribute5'),
+      (payload ->> 'features/commonAp:solution'),
+      (payload ->> 'features/commonMp:solution'),
+      (payload ->> 'features/commonNames:solution'),
+      (payload ->> 'features/dateOfBirth:solution'),
+      (payload ->> 'features/gender:solution'),
+      (payload ->> 'features/geoPlaceOfBirth:solution'),
+      (payload ->> 'features/geoResidencies:solution'),
+      (payload ->> 'features/invalidAlert:solution'),
+      (payload ->> 'features/isApTpMarked:solution'),
+      (payload ->> 'features/isTpMarked:solution'),
+      (payload ->> 'features/isCaseTpMarked:solution'),
+      (payload ->> 'features/isPep:solution'),
+      (payload ->> 'features/logicalDiscountingDob:solution'),
+      (payload ->> 'features/name:solution'),
+      (payload ->> 'features/incorporationCountry:solution'),
+      (payload ->> 'features/nationalityCountry:solution'),
+      (payload ->> 'features/otherCountry:solution'),
+      (payload ->> 'features/nationalIdDocument:solution'),
+      (payload ->> 'features/otherDocument:solution'),
+      (payload ->> 'features/passportNumberDocument:solution'),
+      (payload ->> 'features/registrationCountry:solution'),
+      (payload ->> 'features/residencyCountry:solution')
+    useSqlReports: true
     date-field-name: alert_recommendationDate
     columns:
       - name: alert_fvSignature

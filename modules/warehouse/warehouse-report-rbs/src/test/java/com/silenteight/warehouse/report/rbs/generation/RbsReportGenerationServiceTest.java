@@ -162,7 +162,7 @@ class RbsReportGenerationServiceTest {
         getGroupingColumn(),
         asList(
             getFilter(GenerationRbScorerReportTestFixtures.ALERT_STATUS_FIELD, of(COMPLETED))),
-        TEST_INDEX);
+        TEST_INDEX, false, null, null);
 
   }
 

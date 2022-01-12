@@ -10,10 +10,11 @@ import com.silenteight.warehouse.report.reporting.ReportRange;
 @Builder
 public class RbsReportDto {
 
-  @NonNull
   String content;
   @NonNull
   ReportRange range;
   @NonNull
   String timestamp;
+  @NonNull
+  String fileName;
 }

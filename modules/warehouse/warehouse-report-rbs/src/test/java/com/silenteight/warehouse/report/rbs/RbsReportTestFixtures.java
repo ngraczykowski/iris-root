@@ -49,5 +49,6 @@ public final class RbsReportTestFixtures {
           .range(REPORT_RANGE)
           .content(CONTENT)
           .timestamp(CREATION_TIMESTAMP)
+          .fileName(REPORT_FILENAME)
           .build();
 }

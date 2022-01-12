@@ -1,6 +1,6 @@
 package com.silenteight.warehouse.report.rbs.domain;
 
-import com.silenteight.warehouse.report.rbs.generation.RbsReportGenerationService;
+import com.silenteight.warehouse.report.reporting.ReportGenerationService;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +23,7 @@ class RbsReportConfiguration {
   @Bean
   AsyncRbsReportGenerationService asyncRbsReportGenerationService(
       RbsReportRepository rbsReportRepository,
-      RbsReportGenerationService reportGenerationService) {
+      ReportGenerationService reportGenerationService) {
 
     return new AsyncRbsReportGenerationService(rbsReportRepository, reportGenerationService);
   }

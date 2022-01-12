@@ -5,12 +5,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.time.DateFormatter;
+import com.silenteight.sep.filestorage.api.dto.FileDto;
 import com.silenteight.warehouse.report.name.ReportFileName;
 import com.silenteight.warehouse.report.name.ReportFileNameDto;
 import com.silenteight.warehouse.report.rbs.domain.RbsReportService;
 import com.silenteight.warehouse.report.rbs.domain.dto.RbsReportDto;
 import com.silenteight.warehouse.report.rbs.download.dto.DownloadRbsReportDto;
 import com.silenteight.warehouse.report.reporting.ReportRange;
+import com.silenteight.warehouse.report.storage.ReportStorage;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,15 +28,18 @@ class DownloadProductionRbsReportUseCase {
   private final ReportFileName reportFileName;
   @NonNull
   private final DateFormatter dateFormatter;
+  @NonNull
+  private final ReportStorage reportStorage;
 
   public DownloadRbsReportDto activate(long id) {
     log.debug("Getting RB Scorer report, reportId={}", id);
     RbsReportDto rbsReportDto = reportDataQuery.getRbsReport(id);
     reportService.removeReport(id);
+    FileDto report = reportStorage.getReport(rbsReportDto.getFileName());
     log.debug("Report removed, reportId={}", id);
     return DownloadRbsReportDto.builder()
         .name(getFileName(rbsReportDto))
-        .content(rbsReportDto.getContent())
+        .content(report.getContent())
         .build();
   }
 
