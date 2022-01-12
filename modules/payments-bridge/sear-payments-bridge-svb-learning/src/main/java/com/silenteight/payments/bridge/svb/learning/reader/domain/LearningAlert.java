@@ -60,8 +60,6 @@ public class LearningAlert {
   public RegisterAlertRequest toRegisterAlertRequest() {
     return RegisterAlertRequest
         .builder()
-        .alertId(messageId)
-        .fkcoMessageId(messageId)
         .fkcoSystemId(systemId)
         .alertTime(fromOffsetDateTime(alertTime))
         .priority(LEARNING_PRIORITY)

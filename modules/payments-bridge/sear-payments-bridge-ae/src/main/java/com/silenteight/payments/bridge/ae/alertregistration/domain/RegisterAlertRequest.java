@@ -25,13 +25,8 @@ import static java.util.stream.Collectors.toList;
 @Builder
 public class RegisterAlertRequest {
 
-  @NonNull
-  String alertId;
-
   @Default
   int priority = 5;
-
-  String fkcoMessageId;
 
   String fkcoSystemId;
 
@@ -75,7 +70,7 @@ public class RegisterAlertRequest {
   public Alert toAlert() {
     var alert = Alert
         .newBuilder()
-        .setAlertId(getAlertId())
+        .setAlertId(getFkcoSystemId())
         .setPriority(getPriority())
         .setAlertTime(alertTime);
 

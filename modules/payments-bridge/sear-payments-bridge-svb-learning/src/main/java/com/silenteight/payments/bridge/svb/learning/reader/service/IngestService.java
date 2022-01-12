@@ -142,7 +142,7 @@ class IngestService {
     var learningAlertsMap = learningAlerts.stream()
         .collect(toMap(LearningAlert::getAlertId, Function.identity()));
     responses.forEach(alertResponse -> {
-      var alert = learningAlertsMap.get(alertResponse.getAlertId());
+      var alert = learningAlertsMap.get(alertResponse.getSystemId());
       alert.setAlertMatchNames(alertResponse);
     });
   }

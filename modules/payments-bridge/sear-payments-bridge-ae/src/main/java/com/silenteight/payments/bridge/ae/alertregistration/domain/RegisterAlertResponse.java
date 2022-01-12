@@ -5,7 +5,6 @@ import lombok.Value;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -14,7 +13,7 @@ import static java.util.stream.Collectors.toList;
 @Builder
 public class RegisterAlertResponse {
 
-  String alertId;
+  String systemId;
   String alertName;
 
   List<RegisterMatchResponse> matchResponses;
@@ -28,8 +27,8 @@ public class RegisterAlertResponse {
   public SaveRegisteredAlertRequest toSaveRegisterAlertRequest() {
     return SaveRegisteredAlertRequest
         .builder()
-        .alertId(UUID.fromString(alertId))
         .alertName(alertName)
+        .fkcoSystemId(systemId)
         .matches(matchResponses
             .stream()
             .map(RegisterMatchResponse::toSaveRegisteredMatchRequest)

@@ -45,7 +45,7 @@ public class AlertDetails {
   public RegisterAlertRequest toRegisterAlertRequest(Long jobId, List<HitComposite> hits) {
     return RegisterAlertRequest
         .builder()
-        .alertId(systemId)
+        .fkcoSystemId(systemId)
         .alertTime(fromOffsetDateTime(fkcoDFilteredDateTime))
         .priority(LEARNING_PRIORITY)
         .matchIds(hits.stream().map(HitComposite::getMatchId).collect(toList()))

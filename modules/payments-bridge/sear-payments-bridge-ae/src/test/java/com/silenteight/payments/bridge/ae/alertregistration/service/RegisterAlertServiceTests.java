@@ -50,13 +50,13 @@ class RegisterAlertServiceTests {
     List<RegisterAlertRequest> requests = new ArrayList<>();
     requests.add(
         RegisterAlertRequest.builder()
-            .alertId(alertId1)
+            .fkcoSystemId(alertId1)
             .matchIds(List.of("1:ONE", "1:TWO"))
             .alertTime(Timestamp.getDefaultInstance())
             .build());
     requests.add(
         RegisterAlertRequest.builder()
-            .alertId(alertId2)
+            .fkcoSystemId(alertId2)
             .matchIds(List.of("2:ONE", "2:TWO"))
             .alertTime(Timestamp.getDefaultInstance())
             .build());
