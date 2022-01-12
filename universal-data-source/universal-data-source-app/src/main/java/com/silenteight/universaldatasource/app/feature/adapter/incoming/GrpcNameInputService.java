@@ -25,14 +25,7 @@ class GrpcNameInputService extends NameInputServiceImplBase {
       BatchGetMatchNameInputsRequest request,
       StreamObserver<BatchGetMatchNameInputsResponse> responseObserver) {
     long requestId = idx.getAndIncrement();
-    log.debug(
-        "[Feature Input({})] gather and send data for {}", requestId, featureAdapter.getClass());
     featureAdapter.batchGetMatchNameInputs(request, responseObserver::onNext);
-    log.debug(
-        "[Feature Input({})] finished and send data for {}", requestId, featureAdapter.getClass());
-    log.debug("[Feature Input({})] before onComplete {}", requestId, featureAdapter.getClass());
     responseObserver.onCompleted();
-    log.debug(
-        "[Feature Input({})] after onComplete {} finished", requestId, featureAdapter.getClass());
   }
 }

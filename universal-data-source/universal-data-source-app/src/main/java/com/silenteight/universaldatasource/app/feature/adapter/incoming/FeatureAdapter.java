@@ -95,12 +95,7 @@ class FeatureAdapter {
 
     getUseCase.batchGetFeatureInput(
         featureRequest,
-        batch -> {
-          var response = batch.castResponse(BatchGetMatchNameInputsResponse.class);
-          log.debug("[onNext] sending response inputs for:{} with size:{}", NAME_FEATURE_INPUT,
-              response.getNameInputsCount());
-          onNext.accept(response);
-        });
+        batch -> onNext.accept(batch.castResponse(BatchGetMatchNameInputsResponse.class)));
   }
 
   void batchGetMatchLocationInputs(
