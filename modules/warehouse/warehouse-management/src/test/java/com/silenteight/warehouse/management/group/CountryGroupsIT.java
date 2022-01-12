@@ -33,6 +33,7 @@ import java.util.UUID;
 
 import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
 import static com.silenteight.warehouse.common.testing.rest.TestCredentials.ELASTIC_ALLOWED_ROLE;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_NAME_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
 import static java.util.List.of;
@@ -96,7 +97,7 @@ class CountryGroupsIT {
     updateCountriesController.update(ELASTIC_ALLOWED_ROLE, allowedCountries);
 
     Map<String, String> allowedAlert =
-        alertRestController.getSingleAlert(DISCRIMINATOR_1, of()).getBody();
+        alertRestController.getSingleAlert(ALERT_NAME_1, of()).getBody();
 
     assertThat(allowedAlert).isEmpty();
   }

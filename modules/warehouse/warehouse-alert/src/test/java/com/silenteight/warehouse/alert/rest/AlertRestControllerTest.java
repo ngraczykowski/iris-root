@@ -13,6 +13,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import static com.silenteight.warehouse.alert.rest.AlertControllerConstants.*;
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.QA;
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.RECOMMENDATION_FP;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -80,4 +81,24 @@ class AlertRestControllerTest extends BaseRestControllerTest {
   void its403_whenNotPermittedRoleForGetQaAlert() {
     get(QA_ALERT_LIST_URL).statusCode(FORBIDDEN.value());
   }
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = { QA })
+  void its200_whenInvokedPostQaAlert() {
+    when(alertProvider.getSingleAlertAttributes(any(), any()))
+        .thenReturn(ALERT_ATTRIBUTES);
+
+    post(QA_ALERT_URL, QA_ALERT_DETAILS_BODY)
+        .statusCode(OK.value())
+        .body("s8_discriminator", containsString(DISCRIMINATOR_ID))
+        .body("alert_recommendation", containsString(RECOMMENDATION_FP))
+        .body("s8_alert_name", containsString(ALERT_NAME_1));
+  }
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = USER_ADMINISTRATOR)
+  void its403_whenNotPermittedRoleForPostQaAlert() {
+    get(QA_ALERT_LIST_URL).statusCode(FORBIDDEN.value());
+  }
+
 }
