@@ -23,6 +23,7 @@ dependencies {
   implementation libraries.silenteight_sep_auth
   implementation libraries.spring_security_config
   implementation libraries.spring_security_web
+  implementation libraries.silenteight_file_storage_api
 
   testImplementation project(":warehouse-common-testing")
   testImplementation testFixtures(project(':warehouse-common'))

@@ -6,12 +6,16 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.report.rbs.download.dto.DownloadRbsReportDto;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.InputStream;
 
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 import static java.lang.String.format;
@@ -39,23 +43,23 @@ class DownloadRbsReportRestController {
 
   @GetMapping(DOWNLOAD_PRODUCTION_REPORT_URL)
   @PreAuthorize("isAuthorized('DOWNLOAD_PRODUCTION_ON_DEMAND_REPORT')")
-  public ResponseEntity<String> downloadProductionReport(@PathVariable(ID_PARAM) long id) {
+  public ResponseEntity<Resource> downloadProductionReport(@PathVariable(ID_PARAM) long id) {
     log.info("Download production Rb Scorer report request received, reportId={}", id);
     DownloadRbsReportDto reportDto = productionUseCase.activate(id);
     String filename = reportDto.getName();
-    String data = reportDto.getContent();
+    InputStream data = reportDto.getContent();
     log.debug("Download production Rb Scorer report request processed, reportId={}, reportName={}",
         id, filename);
 
     return ok()
         .header("Content-Disposition", getContentDisposition(filename))
         .header("Content-Type", "text/csv")
-        .body(data);
+        .body(new InputStreamResource(data));
   }
 
   @GetMapping(DOWNLOAD_SIMULATION_REPORT_URL)
   @PreAuthorize("isAuthorized('DOWNLOAD_SIMULATION_REPORT')")
-  public ResponseEntity<String> downloadSimulationReport(
+  public ResponseEntity<Resource> downloadSimulationReport(
       @PathVariable(ANALYSIS_ID_PARAM) String analysisId,
       @PathVariable(ID_PARAM) long id) {
 
@@ -64,7 +68,7 @@ class DownloadRbsReportRestController {
 
     DownloadRbsReportDto reportDto = simulationUseCase.activate(id, analysisId);
     String filename = reportDto.getName();
-    String data = reportDto.getContent();
+    InputStream data = reportDto.getContent();
 
     log.debug("Download simulation RB Scorer report request processed, reportId={}, reportName={}",
         id, filename);
@@ -72,7 +76,7 @@ class DownloadRbsReportRestController {
     return ok()
         .header("Content-Disposition", getContentDisposition(filename))
         .header("Content-Type", "text/csv")
-        .body(data);
+        .body(new InputStreamResource(data));
   }
 
   private static String getContentDisposition(String filename) {

@@ -134,4 +134,11 @@
                 tableName="warehouse_report_billing">
     </dropColumn>
   </changeSet>
+
+  <changeSet id="warehouse-2.0.0-6" author="wfirlej">
+    <renameColumn tableName="warehouse_report_rbs"
+                  oldColumnName="data"
+                  newColumnName="file_storage_name"/>
+  </changeSet>
+
 </databaseChangeLog>
