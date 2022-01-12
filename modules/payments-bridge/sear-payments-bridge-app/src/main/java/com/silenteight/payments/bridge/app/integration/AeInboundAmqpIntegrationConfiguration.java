@@ -78,11 +78,13 @@ class AeInboundAmqpIntegrationConfiguration {
     var recommendation = recommendationWithMetadata.getRecommendation();
     var systemId =
         getRegisteredAlertSystemIdUseCase.getAlertSystemId(recommendation.getAlert());
+
+    //TODO(wkeska): check which alerts don't have recommendation
     var alertIds = findAlertIdSetUseCase.find(List.of(systemId));
 
-    if (alertIds.size() != 1) {
-      log.error("Received unexpected size of alertIds: {}", alertIds.size());
-      throw new HandleRecommendationException("Received unexpected size of alertIds");
+    if (alertIds.isEmpty()) {
+      log.error("Received empty list of alert ids");
+      throw new HandleRecommendationException("Received empty list of alert ids");
     }
 
     createRecommendationUseCase.create(new AdjudicationEngineSourcedRecommendation(
