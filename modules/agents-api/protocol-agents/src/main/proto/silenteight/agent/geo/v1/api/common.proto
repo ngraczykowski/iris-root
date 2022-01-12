@@ -10,36 +10,38 @@ option java_outer_classname = "GeoCommonProto";
 option java_multiple_files = true;
 
 message Location {
-    string name = 1;
-    LocationType type = 2;
-    uint32 id = 3;
-    string code = 4;
-    // A reference id to the parent location.
-    uint32 parent_id = 5;
-    google.protobuf.Any details = 6;
-    // Whether location was derived from state or country
-    bool derived = 7;
-    // Coordinates of the locality. Present only when type is city, otherwise empty.
-    Coordinates coordinates  = 8 [(google.api.field_behavior) = OPTIONAL];
+  string name = 1;
+  LocationType type = 2;
+  uint32 id = 3;
+  string code = 4;
+  // A reference id to the parent location.
+  uint32 parent_id = 5;
+  google.protobuf.Any details = 6;
+  // Whether location was derived from state or city
+  bool derived = 7;
+  // Coordinates of the locality. Present only when type is city, otherwise empty.
+  Coordinates coordinates = 8 [(google.api.field_behavior) = OPTIONAL];
+  // The list of locations (cities or states) the location was derived from
+  repeated string derived_from = 9 [(google.api.field_behavior) = OPTIONAL];
 }
 
 enum LocationType {
-    // Default value if the type isn't specified.
-    LOCATION_TYPE_UNSPECIFIED = 0;
-    // A state or equivalent level location.
-    ADMINISTRATIVE_AREA = 1;
-    // A country level location.
-    COUNTRY = 2;
-    // A city or equivalent level location.
-    LOCALITY = 3;
-    // A postal code level location.
-    // POSTAL_CODE = 4;
-    // A street address level location.
-    // STREET_ADDRESS = 5;
-    // A county or equivalent level location.
-    // SUB_ADMINISTRATIVE_AREA = 6;
-    // A sublocality is a subdivision of a locality, f.e a city borough, ward, or arrondissement.
-    // SUB_LOCALITY = 7;
+  // Default value if the type isn't specified.
+  LOCATION_TYPE_UNSPECIFIED = 0;
+  // A state or equivalent level location.
+  ADMINISTRATIVE_AREA = 1;
+  // A country level location.
+  COUNTRY = 2;
+  // A city or equivalent level location.
+  LOCALITY = 3;
+  // A postal code level location.
+  // POSTAL_CODE = 4;
+  // A street address level location.
+  // STREET_ADDRESS = 5;
+  // A county or equivalent level location.
+  // SUB_ADMINISTRATIVE_AREA = 6;
+  // A sublocality is a subdivision of a locality, f.e a city borough, ward, or arrondissement.
+  // SUB_LOCALITY = 7;
 }
 
 // Solution per geo-hierarchy
