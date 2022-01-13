@@ -4,20 +4,25 @@ pipeline {
     agent any
     environment {
         PIP_INDEX_URL = credentials('pypi-readonly-url')
+        TWINE_REPOSITORY_URL = 'https://repo.silenteight.com/artifactory/api/pypi/pypi'
     }
+    options {
+        timeout(time: 1, unit: 'HOURS')   // just to be safe
+    }
+    parameters {
+        booleanParam(name: 'RELEASE', defaultValue: false, description: 'Release new version')
+    }
+
     stages {
         stage('Build') {
             steps {
                 sh './scripts/build.sh'
             }
         }
-        stage('Push') {
-            when {
-                branch 'master'
-            }
+        stage('Test') {
             steps {
-                sh './scripts/push.sh'
+                sh './scripts/test.sh'
             }
-        }
+        }    
     }
 }
