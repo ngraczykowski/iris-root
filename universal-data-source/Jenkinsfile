@@ -9,75 +9,26 @@ gradleBuild(
     sonarEnabled: true,
     dependencyCheckEnabled: true,
     includeBuildNumberInSnapshotVersion: true,
-    additionalParams: [booleanParam(
+    additionalParams: [
+      booleanParam(
         name: 'deployOnTest',
-        description: '''Deploy on test environment in Nomad.''', defaultValue: false)],
+        description: '''Deploy on test environment in Nomad.''', defaultValue: false),
+      extendedChoice(
+        name: 'environments',
+        value: 'dev,test,mike',
+        defaultValue: 'dev',
+        description: 'Environments to deploy to on Nomad',
+        multiSelectDelimiter: ',',
+        quoteValue: false,
+        saveJSONParameterToFile: false,
+        type: 'PT_MULTI_SELECT',
+        visibleItemCount: 10
+        )
+    ],
     additionalStages: {
-      stage('Build and deploy container image') {
-        script {
-          gradle.gradle('jib')
-        }
-        // Stash data to AWS nodes - scripts, helm etc.
-        stash includes: 'scripts/**, helm-chart/**', name: 'chart-scripts'
-      }
-      stage('Helm Chart registry') {
-        env.INSTALLER_VERSION = gradle.getGradleProjectVersion()
-        node("aws-worker") {
-          sh 'rm -rf ./scripts ./helm-chart'
-          unstash 'chart-scripts'
-          withCredentials(
-              [usernamePassword(
-                  credentialsId: 'artifactory-deployment-user', usernameVariable: 'USERNAME',
-                  passwordVariable: 'PASSWORD')]) {
-            script {
-              if (git.getGitBranch() == 'master' || git.buildingReleaseBranch()) {
-                echo 'Helm Chart registry'
-                sh './scripts/helm-chart-build.sh $USERNAME $PASSWORD'
-              } else {
-                echo 'This is not a release branch ignore Helm Chart deployment'
-              }
-            }
-          }
-        }
-      }
-
-      stage('AWS ECR') {
-        //This is docker image tag version which will be used to copy from s8 repository
-        env.INSTALLER_VERSION = gradle.getGradleProjectVersion()
-        node("aws-worker") {
-          sh 'rm -rf ./scripts ./helm-chart'
-          unstash 'chart-scripts'
-          script {
-            if (git.getGitBranch() == 'master' || git.buildingReleaseBranch()) {
-              echo 'AWS image push'
-              sh './scripts/aws-deploy.sh'
-            } else {
-              echo 'This is not a release branch ignore AWS ECR push'
-            }
-          }
-        }
-      }
-
-      stage('Deploy On Nomad Dev') {
-        script {
-          // FIXME(ahaczewski): Use `when` if possible.
-          if (git.getGitBranch() == 'master' || git.buildingReleaseBranch()) {
-            sh './nomad/deploy.sh -var-file=dev.vars'
-          } else {
-            echo 'This is not a release branch ignore Nomad deployment'
-          }
-        }
-      }
-
-      stage('Deploy On Nomad Test') {
-        script {
-          // FIXME(ahaczewski): Use `when` if possible.
-          if (git.getGitBranch() == 'master' && params.deployOnTest) {
-            sh './nomad/deploy.sh -var-file=test.vars'
-          } else {
-            echo 'This is not a release branch ignore Nomad deployment'
-          }
-        }
-      }
+      buildContainerImage()
+      awsECR()
+      helmChartRegistry()
+      deployOnNomad()
     }
 )
