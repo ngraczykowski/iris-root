@@ -6,7 +6,7 @@ import time
 from glob import glob
 
 import pyspark.sql.functions as F
-from delta.tables import *  # noqa: E402,F403,F401
+# from delta.tables import *  # noqa: E402,F403,F401
 from pyspark.sql.types import ArrayType, MapType, StringType
 from spark_manager.config.config import RAW_DATA_DIR, STANDARDIZED_DATA_DIR
 
@@ -21,7 +21,7 @@ in_standardized_data_dir = lambda x: os.path.join("data/2.standardized", x)
 
 
 # IMPLEMENTATION: DeltaConverter
-def convert_to_standardized(
+def convert_raw_to_standardized(
     raw_data_path: str = RAW_DATA_DIR, target_path: str = STANDARDIZED_DATA_DIR
 ) -> None:
     # """Converts raw data to delta format.
@@ -49,7 +49,7 @@ def convert_to_standardized(
         time.sleep(1)
 
 
-def convert_standardized_to_cleansed():
+def transform_standardized_to_cleansed():
 
     # file_name = 'RCMDB.ALERTS_SAMPLE.delta'
     # Implementation: Spark manager
