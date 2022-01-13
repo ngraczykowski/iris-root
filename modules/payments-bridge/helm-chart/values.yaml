@@ -35,6 +35,12 @@ emailNotification:
   to: ""
   cron: "0 0/10 * * * *"
   amount: 10
+
+serviceMonitor:
+  path: /management/prometheus
+  scrapeInterval: 30s
+  namespaceSelector: default
+
 #Additional service metadata annotations
 service:
   metadata:
