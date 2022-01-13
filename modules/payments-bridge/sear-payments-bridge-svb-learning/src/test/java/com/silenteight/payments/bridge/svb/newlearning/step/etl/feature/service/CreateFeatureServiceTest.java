@@ -12,8 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.silenteight.payments.bridge.svb.newlearning.step.etl.feature.service.FeatureFixture.createEtlHit;
-import static com.silenteight.payments.bridge.svb.newlearning.step.etl.feature.service.FeatureFixture.createRegisterAlert;
+import static com.silenteight.payments.bridge.svb.newlearning.step.etl.EtlFixture.createEtlHit;
+import static com.silenteight.payments.bridge.svb.newlearning.step.etl.EtlFixture.createRegisterAlert;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;

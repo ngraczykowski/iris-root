@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.newlearning.step.etl.feature.service;
+package com.silenteight.payments.bridge.svb.newlearning.step.etl;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterMatchResponse;
@@ -8,7 +8,7 @@ import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import java.util.List;
 
-class FeatureFixture {
+public class EtlFixture {
 
   public static EtlHit createEtlHit() {
     return EtlHit.builder().alertedPartyData(
@@ -42,7 +42,7 @@ class FeatureFixture {
         .build();
   }
 
-  static RegisterAlertResponse createRegisterAlert() {
+  public static RegisterAlertResponse createRegisterAlert() {
     return RegisterAlertResponse
         .builder()
         .alertName("alerts/1")

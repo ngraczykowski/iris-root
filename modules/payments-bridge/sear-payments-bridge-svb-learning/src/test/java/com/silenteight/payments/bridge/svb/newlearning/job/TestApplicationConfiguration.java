@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.agents.port.CreateNameFeatureInputUseCase;
+import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
 import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
 import com.silenteight.payments.bridge.svb.learning.engine.HistoricalDecisionLearningEnginePort;
 import com.silenteight.payments.bridge.svb.learning.features.port.outgoing.CreateAgentInputsClient;
@@ -24,6 +25,11 @@ public class TestApplicationConfiguration {
     BatchProperties properties = new BatchProperties();
     properties.setTablePrefix("pb_batch_");
     return properties;
+  }
+
+  @Bean
+  CreateCategoryValuesClient createCategoryValuesClient() {
+    return new CreateCategoriesValuesMock();
   }
 
   @Bean
