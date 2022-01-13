@@ -42,7 +42,7 @@ class CompanyNameAgent(Agent):
             solution_probability=probability,
         )
 
-    def _resolve_pairs(
+    def resolve_pairs(
         self, ap_names: Sequence[NameInformation], mp_names: Sequence[NameInformation]
     ) -> Sequence[PairResult]:
         min_solutions = {
@@ -75,7 +75,7 @@ class CompanyNameAgent(Agent):
         if not ap_names_parsed or not mp_names_parsed:
             return Result(Solution.NO_DATA)
 
-        pair_results = sorted(self._resolve_pairs(ap_names_parsed, mp_names_parsed), reverse=True)
+        pair_results = sorted(self.resolve_pairs(ap_names_parsed, mp_names_parsed), reverse=True)
 
         return Result(pair_results[0].solution, Reason(pair_results))
 

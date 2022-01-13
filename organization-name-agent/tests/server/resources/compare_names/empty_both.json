@@ -1,0 +1,138 @@
+{
+  "parenthesis_match": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "abbreviation": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "fuzzy_on_base": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "fuzzy_on_suffix": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "fuzzy": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "partial_fuzzy": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "sorted_fuzzy": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "legal_terms": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "tokenization": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "absolute_tokenization": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "blacklisted": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "country": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "phonetics_on_base": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "phonetics": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "potential_subsidiary": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "token_inclusion": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "first_token": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  }
+}

@@ -5,17 +5,21 @@ install_require = [
     "agents-api==0.7.0.33",
     "aiohttp==3.7.4.post0",
     "data-source-api==0.18.0",
+    "fastapi==0.70.0",
     "googleapis-common-protos==1.53.0",
     "grpcio==1.39.0",
     "grpcio-tools==1.39.0",
     "importlib_resources==5.2.2",
     "organization-name-knowledge==0.5.0",
     "phonetics==1.0.5",
+    "psutil==5.9.0",
+    "pydantic==1.9.0",
     "python-consul2==0.1.5",
     "pyyaml==5.4.1",
     "rapidfuzz==1.7.1",
     "scikit-learn==1.0.1",
     "unidecode==1.2.0",
+    "uvicorn==0.15.0",
 ]
 
 tests_require = [

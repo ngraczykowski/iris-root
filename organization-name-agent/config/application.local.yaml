@@ -28,4 +28,4 @@ agent:
       exchange: 'agent.response'
 
   grpc:
-    port: 24804
+    port: 9090

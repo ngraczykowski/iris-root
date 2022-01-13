@@ -1,0 +1,188 @@
+{
+  "parenthesis_match": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "abbreviation": {
+    "status": "OK",
+    "value": 0,
+    "compared": [
+      [
+        "Silent Eight"
+      ],
+      [
+        "Facebook"
+      ]
+    ]
+  },
+  "fuzzy_on_base": {
+    "status": "OK",
+    "value": 0,
+    "compared": [
+      [
+        "Silent Eight"
+      ],
+      [
+        "Facebook"
+      ]
+    ]
+  },
+  "fuzzy_on_suffix": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "fuzzy": {
+    "status": "OK",
+    "value": 0,
+    "compared": [
+      [
+        "Silent Eight"
+      ],
+      [
+        "Facebook"
+      ]
+    ]
+  },
+  "partial_fuzzy": {
+    "status": "OK",
+    "value": 0,
+    "compared": [
+      [
+        "Silent Eight"
+      ],
+      [
+        "Facebook"
+      ]
+    ]
+  },
+  "sorted_fuzzy": {
+    "status": "OK",
+    "value": 0,
+    "compared": [
+      [
+        "Silent Eight"
+      ],
+      [
+        "Facebook"
+      ]
+    ]
+  },
+  "legal_terms": {
+    "status": "NO_MATCHED_PARTY_DATA",
+    "value": 0,
+    "compared": [
+      [
+        "Pte",
+        "Ltd"
+      ],
+      []
+    ]
+  },
+  "tokenization": {
+    "status": "OK",
+    "value": 0,
+    "compared": [
+      [
+        "Silent",
+        "Eight"
+      ],
+      [
+        "Facebook"
+      ]
+    ]
+  },
+  "absolute_tokenization": {
+    "status": "OK",
+    "value": 0,
+    "compared": [
+      [
+        "Silent",
+        "Eight"
+      ],
+      [
+        "Facebook"
+      ]
+    ]
+  },
+  "blacklisted": {
+    "status": "OK",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "country": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "phonetics_on_base": {
+    "status": "OK",
+    "value": 0,
+    "compared": [
+      [
+        "SLNTT (Silent Eight)"
+      ],
+      [
+        "FSPK (Facebook)"
+      ]
+    ]
+  },
+  "phonetics": {
+    "status": "OK",
+    "value": 0,
+    "compared": [
+      [
+        "SLNTT (Silent Eight)"
+      ],
+      [
+        "FSPK (Facebook)"
+      ]
+    ]
+  },
+  "potential_subsidiary": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "token_inclusion": {
+    "status": "OK",
+    "value": 0,
+    "compared": [
+      [
+        "Silent",
+        "Eight"
+      ],
+      [
+        "Facebook"
+      ]
+    ]
+  },
+  "first_token": {
+    "status": "OK",
+    "value": 0,
+    "compared": [
+      [
+        "Silent"
+      ],
+      [
+        "Facebook"
+      ]
+    ]
+  }
+}

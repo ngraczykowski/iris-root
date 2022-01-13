@@ -1,0 +1,162 @@
+{
+  "parenthesis_match": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "abbreviation": {
+    "status": "NO_MATCHED_PARTY_DATA",
+    "value": 0,
+    "compared": [
+      [
+        "ABC"
+      ],
+      []
+    ]
+  },
+  "fuzzy_on_base": {
+    "status": "NO_MATCHED_PARTY_DATA",
+    "value": 0,
+    "compared": [
+      [
+        "ABC"
+      ],
+      []
+    ]
+  },
+  "fuzzy_on_suffix": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "fuzzy": {
+    "status": "NO_MATCHED_PARTY_DATA",
+    "value": 0,
+    "compared": [
+      [
+        "ABC"
+      ],
+      []
+    ]
+  },
+  "partial_fuzzy": {
+    "status": "NO_MATCHED_PARTY_DATA",
+    "value": 0,
+    "compared": [
+      [
+        "ABC"
+      ],
+      []
+    ]
+  },
+  "sorted_fuzzy": {
+    "status": "NO_MATCHED_PARTY_DATA",
+    "value": 0,
+    "compared": [
+      [
+        "ABC"
+      ],
+      []
+    ]
+  },
+  "legal_terms": {
+    "status": "NO_MATCHED_PARTY_DATA",
+    "value": 0,
+    "compared": [
+      [
+        "Company"
+      ],
+      []
+    ]
+  },
+  "tokenization": {
+    "status": "NO_MATCHED_PARTY_DATA",
+    "value": 0,
+    "compared": [
+      [
+        "ABC"
+      ],
+      []
+    ]
+  },
+  "absolute_tokenization": {
+    "status": "NO_MATCHED_PARTY_DATA",
+    "value": 0,
+    "compared": [
+      [
+        "ABC"
+      ],
+      []
+    ]
+  },
+  "blacklisted": {
+    "status": "OK",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "country": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "phonetics_on_base": {
+    "status": "NO_MATCHED_PARTY_DATA",
+    "value": 0,
+    "compared": [
+      [
+        "ABC"
+      ],
+      []
+    ]
+  },
+  "phonetics": {
+    "status": "NO_MATCHED_PARTY_DATA",
+    "value": 0,
+    "compared": [
+      [
+        "ABC"
+      ],
+      []
+    ]
+  },
+  "potential_subsidiary": {
+    "status": "NO_DATA",
+    "value": 0,
+    "compared": [
+      [],
+      []
+    ]
+  },
+  "token_inclusion": {
+    "status": "NO_MATCHED_PARTY_DATA",
+    "value": 0,
+    "compared": [
+      [
+        "ABC"
+      ],
+      []
+    ]
+  },
+  "first_token": {
+    "status": "NO_MATCHED_PARTY_DATA",
+    "value": 0,
+    "compared": [
+      [
+        "ABC"
+      ],
+      []
+    ]
+  }
+}

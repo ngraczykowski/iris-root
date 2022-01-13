@@ -433,6 +433,7 @@ Run tests with pytest:
 Some tests are skipped - those are examples that needs a little more care to work correctly
 
 For jenkins runs, flag `--without-rabbitmq` is added - so tests with agent exchange
-are not run, as it needs running rabbitmq instance.
+are not run, as it needs running rabbitmq instance. 
 
-
+To run locally tests that depends on rabbit, use in example this repo:
+https://gitlab.silenteight.com/sens/common-docker-infrastructure
