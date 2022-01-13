@@ -8,7 +8,6 @@ public record Alert(String name,
                     Status status,
                     String alertId,
                     String batchId,
-                    String metadata,
                     List<Match> matches,
                     String errorDescription) {
 

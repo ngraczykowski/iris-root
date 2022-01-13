@@ -28,7 +28,6 @@ class RegistrationGrpcMapper {
     return RegisterAlertsCommand.AlertWithMatches.builder()
         .alertId(alertWithMatches.getAlertId())
         .alertStatus(toRegisterAlertsCommandAlertStatus(alertWithMatches.getStatus()))
-        .alertMetadata(alertWithMatches.getAlertMetadata())
         .matches(alertWithMatches.getMatchesList().stream()
             .map(this::toRegisterAlertsCommandMatch)
             .toList())

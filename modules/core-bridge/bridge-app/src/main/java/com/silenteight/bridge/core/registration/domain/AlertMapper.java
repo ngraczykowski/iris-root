@@ -20,31 +20,18 @@ class AlertMapper {
         .toList());
   }
 
-  List<Alert> toAlerts(
-      RegisteredAlerts registeredAlerts,
-      List<RegisterAlertsCommand.AlertWithMatches> successAlerts,
-      String batchId) {
+  List<Alert> toAlerts(RegisteredAlerts registeredAlerts, String batchId) {
     return registeredAlerts.registeredAlertsWithMatches().stream()
         .map(registeredAlert -> Alert.builder()
             .name(registeredAlert.name())
             .status(Alert.Status.REGISTERED)
             .alertId(registeredAlert.alertId())
             .batchId(batchId)
-            .metadata(getAlertMetadata(successAlerts, registeredAlert.alertId()))
             .matches(registeredAlert.matches().stream()
                 .map(this::toMatch)
                 .toList())
             .build())
         .toList();
-  }
-
-  private String getAlertMetadata(
-      List<RegisterAlertsCommand.AlertWithMatches> successAlerts, String alertId) {
-    return successAlerts.stream()
-        .filter(alertWithMatches -> alertId.equals(alertWithMatches.alertId()))
-        .findAny()
-        .map(RegisterAlertsCommand.AlertWithMatches::alertMetadata)
-        .orElseThrow();
   }
 
   List<Alert> toErrorAlerts(
@@ -55,7 +42,6 @@ class AlertMapper {
             .alertId(alert.alertId())
             .batchId(batchId)
             .status(Alert.Status.ERROR)
-            .metadata(alert.alertMetadata())
             .errorDescription(alert.errorDescription())
             .matches(alert.matches().stream()
                 .map(this::toErrorMatch)

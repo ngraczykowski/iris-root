@@ -20,10 +20,10 @@ import org.springframework.test.context.ActiveProfiles
 @SpringBootTest(
     webEnvironment = WebEnvironment.NONE,
     properties = [
-        "grpc.server.inProcessName=test",
-        "grpc.server.port=-1",
-        "grpc.client.inProcess.address=in-process:test"
-    ])
+    "grpc.server.inProcessName=test",
+    "grpc.server.port=-1",
+    "grpc.client.inProcess.address=in-process:test"
+])
 @Import(NotifyBatchErrorFlowRabbitMqTestConfig.class)
 @ActiveProfiles("test")
 @DirtiesContext
@@ -122,12 +122,6 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
     given:
     def batchIdInput = UUID.randomUUID().toString()
     def alertIdInput = UUID.randomUUID().toString()
-    def alertMetadata = """
-        { 
-          "someClientField": "123",
-          "someSpecialClientData": "Lorem ipsum" 
-        }
-        """
     def matchIdInput = UUID.randomUUID().toString()
 
     def matchesInput = [
@@ -140,7 +134,6 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
         AlertWithMatches.newBuilder()
             .setAlertId(alertIdInput)
             .setStatus(AlertStatus.SUCCESS)
-            .setAlertMetadata(alertMetadata)
             .addAllMatches(matchesInput)
             .build()
     ]
@@ -163,7 +156,6 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
       status() == Status.REGISTERED
       alertId() == alertIdInput
       batchId() == batchIdInput
-      metadata() == alertMetadata
       matches().first().matchId() == matchIdInput
       !matches().first().name().empty
     }

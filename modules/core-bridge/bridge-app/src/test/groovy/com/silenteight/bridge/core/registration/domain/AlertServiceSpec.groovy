@@ -60,7 +60,7 @@ class AlertServiceSpec extends Specification {
     1 * alertRepository.findAllAlertIdsByBatchIdAndAlertIdIn(_ as String, _ as List<String>) >> []
     1 * mapper.toAlertsToRegister(_ as List<AlertWithMatches>) >> alertsToRegister
     1 * alertRegistrationService.registerAlerts(_ as AlertsToRegister) >> registeredAlerts
-    1 * mapper.toAlerts(_ as RegisteredAlerts, alertsWithMatches, 'batch_id_1') >> alerts
+    1 * mapper.toAlerts(_ as RegisteredAlerts, 'batch_id_1') >> alerts
     1 * alertRepository.saveAlerts(_ as List<Alert>)
     1 * mapper.toErrorAlerts([] as List<AlertWithMatches>, 'batch_id_1') >> []
   }
@@ -71,14 +71,12 @@ class AlertServiceSpec extends Specification {
 
     def alert1 = AlertWithMatches.builder()
         .alertId(alertIdExistingInDb)
-        .alertMetadata('alertMetadata')
         .matches([new Match('match_id_11')])
         .alertStatus(AlertStatus.SUCCESS)
         .build()
 
     def alert2 = AlertWithMatches.builder()
         .alertId('alert_id_2')
-        .alertMetadata('alertMetadata')
         .matches([new Match('match_id_21')])
         .alertStatus(AlertStatus.SUCCESS)
         .build()
@@ -108,7 +106,7 @@ class AlertServiceSpec extends Specification {
     1 * alertRepository.findAllAlertIdsByBatchIdAndAlertIdIn(_ as String, _ as List<String>) >> alertsExistingInDb
     1 * mapper.toAlertsToRegister([alert2]) >> alertsToRegister
     1 * alertRegistrationService.registerAlerts(_ as AlertsToRegister) >> registeredAlerts
-    1 * mapper.toAlerts(_ as RegisteredAlerts, [alert2], 'batch_id_1') >> alerts
+    1 * mapper.toAlerts(_ as RegisteredAlerts, 'batch_id_1') >> alerts
     1 * alertRepository.saveAlerts(_ as List<Alert>)
     1 * mapper.toErrorAlerts(_ as List<AlertWithMatches>, 'batch_id_1') >> []
   }
@@ -148,7 +146,7 @@ class AlertServiceSpec extends Specification {
     1 * alertRepository.findAllAlertIdsByBatchIdAndAlertIdIn(_ as String, _ as List<String>) >> []
     1 * mapper.toAlertsToRegister(_ as List<AlertWithMatches>) >> alertsToRegister
     1 * alertRegistrationService.registerAlerts(_ as AlertsToRegister) >> registeredAlerts
-    1 * mapper.toAlerts(_ as RegisteredAlerts, [succeededAlert], 'batch_id_1') >> [Alert.builder().build()]
+    1 * mapper.toAlerts(_ as RegisteredAlerts, 'batch_id_1') >> [Alert.builder().build()]
     1 * alertRepository.saveAlerts(_ as List<Alert>)
     1 * mapper.toErrorAlerts(_ as List<AlertWithMatches>, 'batch_id_1') >> [Alert.builder().build()]
     1 * alertRepository.saveAlerts(_ as List<Alert>)
