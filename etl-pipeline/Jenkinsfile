@@ -23,6 +23,14 @@ pipeline {
             steps {
                 sh './scripts/test.sh'
             }
+        }
+        stage('Publish docker image') {
+            when {
+                branch 'master'
+            }
+            steps {
+                sh './scripts/push.sh'
+            }
         }    
     }
 }
