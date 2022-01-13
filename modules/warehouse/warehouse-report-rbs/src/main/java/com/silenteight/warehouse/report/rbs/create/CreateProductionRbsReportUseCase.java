@@ -27,6 +27,6 @@ class CreateProductionRbsReportUseCase {
   ReportInstanceReferenceDto createReport(OffsetDateTime from, OffsetDateTime to) {
     ReportRange range = of(from, to);
     List<String> indexes = Collections.singletonList(productionProperties.getIndexName());
-    return reportService.createReportInstance(range, indexes, productionProperties);
+    return reportService.createReportInstance(range, indexes, productionProperties, null);
   }
 }

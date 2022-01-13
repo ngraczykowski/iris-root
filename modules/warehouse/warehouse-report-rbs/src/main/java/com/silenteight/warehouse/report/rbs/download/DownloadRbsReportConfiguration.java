@@ -31,9 +31,10 @@ class DownloadRbsReportConfiguration {
   DownloadSimulationRbsReportUseCase downloadSimulationRbsReportUseCase(
       RbsReportService reportService,
       RbsReportDataQuery query,
-      ReportFileName simulationReportFileNameService) {
+      ReportFileName simulationReportFileNameService,
+      ReportStorage reportStorage) {
 
     return new DownloadSimulationRbsReportUseCase(
-        query, reportService, simulationReportFileNameService);
+        query, reportService, simulationReportFileNameService, reportStorage);
   }
 }

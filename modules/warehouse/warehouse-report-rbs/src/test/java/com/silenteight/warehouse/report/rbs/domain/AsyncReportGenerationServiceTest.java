@@ -59,7 +59,7 @@ class AsyncReportGenerationServiceTest {
 
     // when
     underTest.generateReport(metricsReport.getId(), REPORT_RANGE, INDEXES, PROPERTIES,
-        metricsReport.getFileName());
+        metricsReport.getFileName(), null);
 
     // then
     metricsReport = repository.getById(metricsReport.getId());
@@ -80,7 +80,7 @@ class AsyncReportGenerationServiceTest {
     // when + then
     Long reportId = metricsReport.getId();
     assertThatThrownBy(() -> underTest.generateReport(reportId, REPORT_RANGE, INDEXES, PROPERTIES,
-        "test"))
+        "test", null))
         .isInstanceOf(ReportGenerationException.class)
         .hasMessageContaining(format("Cannot generate RB Scorer report with id=%d", reportId));
 

@@ -27,14 +27,15 @@ public class RbsReportService implements ReportsRemoval {
   public ReportInstanceReferenceDto createReportInstance(
       @NonNull ReportRange range,
       @NonNull List<String> indexes,
-      @NonNull @Valid RbsReportDefinition properties) {
+      @NonNull @Valid RbsReportDefinition properties,
+      String analysisId) {
 
     RbsReport report = of(range);
     RbsReport savedReport = repository.save(report);
     //FIXME(kdzieciol): Here we should send a request to the queue (internally) to generate this
     // report. Due to the lack of time, we will generate it in the thread (WEB-1358)
     asyncReportGenerationService.generateReport(savedReport.getId(), range, indexes, properties,
-        savedReport.getFileName());
+        savedReport.getFileName(), analysisId);
     return new ReportInstanceReferenceDto(savedReport.getId());
   }
 

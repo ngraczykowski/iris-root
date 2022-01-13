@@ -32,6 +32,7 @@ public class FetchDataRequest {
   boolean useSqlReports = false;
   List<String> sqlTemplates;
   String selectSqlQuery;
+  String analysisId;
 
   String[] getIndexesArray() {
     return indexes.toArray(String[]::new);
