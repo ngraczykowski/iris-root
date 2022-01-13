@@ -19,7 +19,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
 @ComponentScan(basePackages = {
     "com.silenteight.payments.bridge.svb.newlearning.job.csvstore",
     "com.silenteight.payments.bridge.svb.newlearning.step",
-    "com.silenteight.payments.bridge.svb.newlearning.adapter"})
+    "com.silenteight.payments.bridge.svb.newlearning.adapter" })
 public class StoreFileStepTest extends BaseBatchTest {
 
   @Test
