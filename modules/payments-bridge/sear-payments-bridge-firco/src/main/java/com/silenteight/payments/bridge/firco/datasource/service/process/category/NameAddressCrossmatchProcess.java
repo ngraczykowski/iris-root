@@ -32,7 +32,7 @@ class NameAddressCrossmatchProcess extends BaseCategoryValueProcess {
 
   @Override
   protected String getValue(HitData hitData) {
-    return nameAddressCrossmatchUseCase.call(createRequest(hitData)).getResult().toString();
+    return nameAddressCrossmatchUseCase.call(createRequest(hitData)).toString();
   }
 
   @Nonnull

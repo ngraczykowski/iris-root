@@ -24,7 +24,6 @@ class CrossmatchExtractor extends BaseCategoryValueExtractor {
   protected String getValue(LearningMatch learningMatch) {
     return nameAddressCrossmatchUseCase
         .call(learningMatch.toCrossmatchRequest())
-        .getResult()
         .toString();
   }
 

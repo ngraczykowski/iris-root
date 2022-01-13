@@ -1,17 +1,17 @@
 package com.silenteight.payments.bridge.agents.model;
 
-import lombok.NonNull;
-import lombok.Value;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import java.util.Map;
+public enum NameAddressCrossmatchAgentResponse {
+  NO_DECISION,
+  CROSSMATCH,
+  NO_CROSSMATCH;
 
-@Value(staticConstructor = "of")
-public class NameAddressCrossmatchAgentResponse {
-
-  @NonNull Result result;
-  @NonNull Map<AlertedPartyKey, String> apProperties;
-
-  public enum Result {
-    NO_DECISION, CROSSMATCH, NO_CROSSMATCH
+  public static List<String> getValues() {
+    return Stream.of(NameAddressCrossmatchAgentResponse.values())
+        .map(NameAddressCrossmatchAgentResponse::name)
+        .collect(Collectors.toList());
   }
 }

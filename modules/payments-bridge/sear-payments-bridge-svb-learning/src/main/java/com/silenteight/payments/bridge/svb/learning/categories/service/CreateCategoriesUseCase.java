@@ -6,6 +6,7 @@ import com.silenteight.datasource.categories.api.v2.BatchCreateCategoriesRequest
 import com.silenteight.datasource.categories.api.v2.Category;
 import com.silenteight.datasource.categories.api.v2.CategoryType;
 import com.silenteight.payments.bridge.agents.model.CompanyNameSurroundingAgentResponse;
+import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse;
 import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoriesClient;
 
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -47,7 +48,7 @@ class CreateCategoriesUseCase {
         .setDisplayName("Name Address Crossmatch")
         .setType(CategoryType.ENUMERATED)
         .setMultiValue(false)
-        .addAllAllowedValues(List.of("NO_DECISION", "CROSSMATCH", "NO_CROSSMATCH"))
+        .addAllAllowedValues(NameAddressCrossmatchAgentResponse.getValues())
         .build();
   }
 

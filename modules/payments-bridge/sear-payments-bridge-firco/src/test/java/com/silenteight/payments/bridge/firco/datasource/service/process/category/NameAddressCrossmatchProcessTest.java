@@ -1,7 +1,6 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process.category;
 
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse;
-import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.Result;
 import com.silenteight.payments.bridge.agents.port.NameAddressCrossmatchUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
 
@@ -29,7 +28,7 @@ class NameAddressCrossmatchProcessTest {
   @BeforeEach
   void setup() {
     when(nameAddressCrossmatchUseCase.call(any())).thenReturn(
-        NameAddressCrossmatchAgentResponse.of(Result.NO_CROSSMATCH, new HashMap<>()));
+        NameAddressCrossmatchAgentResponse.NO_CROSSMATCH);
     when(createAlertedPartyEntitiesUseCase.create(any())).thenReturn(new HashMap<>());
     nameAddressCrossmatchProcess = new NameAddressCrossmatchProcess(
         nameAddressCrossmatchUseCase,

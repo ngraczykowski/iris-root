@@ -1,7 +1,6 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process.category;
 
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse;
-import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.Result;
 import com.silenteight.payments.bridge.agents.port.NameAddressCrossmatchUseCase;
 import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
 import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
@@ -34,7 +33,7 @@ class CategoryEtlProcessTest {
   @BeforeEach
   void setup() {
     when(nameAddressCrossmatchUseCase.call(any())).thenReturn(
-        NameAddressCrossmatchAgentResponse.of(Result.NO_CROSSMATCH, new HashMap<>()));
+        NameAddressCrossmatchAgentResponse.NO_CROSSMATCH);
     when(createAlertedPartyEntitiesUseCase.create(any())).thenReturn(new HashMap<>());
     categoryEtlProcess = new CategoryEtlProcess(
         of(new NameAddressCrossmatchProcess(

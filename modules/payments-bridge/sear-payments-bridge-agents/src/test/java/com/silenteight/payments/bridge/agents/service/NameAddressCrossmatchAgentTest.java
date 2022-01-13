@@ -3,8 +3,8 @@ package com.silenteight.payments.bridge.agents.service;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse;
-import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.Result;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,11 +16,11 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.silenteight.payments.bridge.agents.model.AlertedPartyKey.*;
-import static com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.Result.CROSSMATCH;
-import static com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.Result.NO_CROSSMATCH;
-import static com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.Result.NO_DECISION;
+import static com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.CROSSMATCH;
+import static com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.NO_CROSSMATCH;
+import static com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.NO_DECISION;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.*;
 
 class NameAddressCrossmatchAgentTest {
 
@@ -109,9 +109,7 @@ class NameAddressCrossmatchAgentTest {
             .watchlistType("COMPANY")
             .build());
     assertThat(nameAddressCrossmatchAgentResponse)
-        .isEqualTo(NameAddressCrossmatchAgentResponse.of(
-            NO_DECISION,
-            Map.of(ALERTED_NAMEADDRESS_SEGMENT_KEY, "IND LLC EMIRATES NATIONAL FACTORY")));
+        .isEqualTo(NameAddressCrossmatchAgentResponse.NO_DECISION);
   }
 
   @Test
@@ -128,9 +126,7 @@ class NameAddressCrossmatchAgentTest {
             .watchlistType("COMPANY")
             .build());
     assertThat(nameAddressCrossmatchAgentResponse)
-        .isEqualTo(NameAddressCrossmatchAgentResponse.of(
-            NO_DECISION,
-            Map.of(ALERTED_NAMEADDRESS_SEGMENT_KEY, "X Aviation Leasing Co LLC")));
+        .isEqualTo(NameAddressCrossmatchAgentResponse.NO_DECISION);
   }
 
   @Test
@@ -146,16 +142,15 @@ class NameAddressCrossmatchAgentTest {
             .watchlistType("COMPANY")
             .build());
     assertThat(nameAddressCrossmatchAgentResponse)
-        .isEqualTo(NameAddressCrossmatchAgentResponse.of(
-            NO_CROSSMATCH,
-            Map.of(ALERTED_NAME_KEY, "X Aviation Leasing Co LLC")));
+        .isEqualTo(NameAddressCrossmatchAgentResponse.NO_CROSSMATCH);
   }
 
   @ParameterizedTest
   @MethodSource("request")
   void parametrizedTest(
       List<String> matchingTexts, Map<AlertedPartyKey, String> apEntTypeData,
-      Map<AlertedPartyKey, String> matchedEntity, WlData wlData, Result output) {
+      Map<AlertedPartyKey, String> matchedEntity, WlData wlData,
+      NameAddressCrossmatchAgentResponse output) {
     NameAddressCrossmatchAgentResponse nameAddressCrossmatchAgentResponse = agent.call(
         NameAddressCrossmatchAgentRequest
             .builder()
@@ -165,9 +160,7 @@ class NameAddressCrossmatchAgentTest {
             .watchlistType(wlData.getType())
             .build()
     );
-    assertEquals(
-        nameAddressCrossmatchAgentResponse,
-        NameAddressCrossmatchAgentResponse.of(output, matchedEntity));
+    Assertions.assertEquals(nameAddressCrossmatchAgentResponse, output);
   }
 
   static class TestData {

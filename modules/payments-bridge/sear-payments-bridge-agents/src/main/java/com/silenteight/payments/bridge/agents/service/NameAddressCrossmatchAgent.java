@@ -3,7 +3,6 @@ package com.silenteight.payments.bridge.agents.service;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse;
-import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.Result;
 import com.silenteight.payments.bridge.agents.port.NameAddressCrossmatchUseCase;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 
@@ -17,37 +16,27 @@ import static java.util.Arrays.asList;
 @Service
 class NameAddressCrossmatchAgent implements NameAddressCrossmatchUseCase {
 
-  public static final String EMPTY_ENTITY_VALUE = "";
-
   public NameAddressCrossmatchAgentResponse call(NameAddressCrossmatchAgentRequest request) {
 
     WatchlistType wlType = WatchlistType.ofCode(
         request.getWatchlistType());
 
     if (WatchlistType.ADDRESS == wlType && !isNameWildcard(request.getWatchlistName()))
-      return NameAddressCrossmatchAgentResponse.of(
-          Result.NO_DECISION, Map.of(WILDCARD_SYMBOL, EMPTY_ENTITY_VALUE));
+      return NameAddressCrossmatchAgentResponse.NO_DECISION;
 
     Map<AlertedPartyKey, String> apProperties = request.getAlertPartyEntities();
     if (apProperties == null || apProperties.isEmpty())
-      return NameAddressCrossmatchAgentResponse.of(
-          Result.NO_DECISION, Map.of(EMPTY_ENTITY_TYPE, EMPTY_ENTITY_VALUE));
+      return NameAddressCrossmatchAgentResponse.NO_DECISION;
 
-    if (apProperties.containsKey(ALERTED_NO_MATCH_KEY))
-      return NameAddressCrossmatchAgentResponse.of(
-          Result.NO_DECISION, Map.of(ALERTED_NO_MATCH_KEY, apProperties.get(ALERTED_NO_MATCH_KEY)));
-
-    if (apProperties.containsKey(ALERTED_NAMEADDRESS_SEGMENT_KEY))
-      return NameAddressCrossmatchAgentResponse.of(
-          Result.NO_DECISION,
-          Map.of(
-              ALERTED_NAMEADDRESS_SEGMENT_KEY,
-              apProperties.get(ALERTED_NAMEADDRESS_SEGMENT_KEY)));
+    if (apProperties.containsKey(ALERTED_NO_MATCH_KEY) ||
+        apProperties.containsKey(ALERTED_NAMEADDRESS_SEGMENT_KEY)) {
+      return NameAddressCrossmatchAgentResponse.NO_DECISION;
+    }
 
     if (checkNameAddressCrossmatch(apProperties, wlType))
-      return NameAddressCrossmatchAgentResponse.of(Result.CROSSMATCH, apProperties);
+      return NameAddressCrossmatchAgentResponse.CROSSMATCH;
     else
-      return NameAddressCrossmatchAgentResponse.of(Result.NO_CROSSMATCH, apProperties);
+      return NameAddressCrossmatchAgentResponse.NO_CROSSMATCH;
   }
 
   private static boolean checkNameAddressCrossmatch(
