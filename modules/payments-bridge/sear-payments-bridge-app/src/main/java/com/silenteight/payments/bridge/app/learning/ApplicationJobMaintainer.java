@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.PostConstruct;
 
 @Component
@@ -48,16 +49,17 @@ class ApplicationJobMaintainer implements JobMaintainer {
   }
 
   @Override
-  public void runJobByName(String jobName, JobParameters parameters) {
+  public Optional<JobExecution> runJobByName(String jobName, JobParameters parameters) {
     var registeredJob =
         jobs.stream()
             .filter(job -> jobName.equals(job.getName()))
             .findFirst();
     if (registeredJob.isPresent()) {
-      runJob(registeredJob.get(), parameters);
+      return runJob(registeredJob.get(), parameters);
     } else {
       log.warn("Job is not registered:{}", jobName);
     }
+    return Optional.empty();
   }
 
   // Required to be able to restart jobs which are searched by restart action inside registry.
@@ -120,9 +122,9 @@ class ApplicationJobMaintainer implements JobMaintainer {
     }
   }
 
-  private void runJob(Job job, JobParameters params) {
+  private Optional<JobExecution> runJob(Job job, JobParameters params) {
     try {
-      jobLauncher.run(job, params);
+      return Optional.of(jobLauncher.run(job, params));
     } catch (JobExecutionAlreadyRunningException e) {
       log.warn("Job execution failure already running {}", job.getName());
     } catch (JobRestartException e) {
@@ -132,6 +134,7 @@ class ApplicationJobMaintainer implements JobMaintainer {
     } catch (JobParametersInvalidException e) {
       log.warn("Job parameters exception", e);
     }
+    return Optional.empty();
   }
 }
 
