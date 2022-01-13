@@ -44,14 +44,6 @@ enum LocationType {
   // SUB_LOCALITY = 7;
 }
 
-// Solution per geo-hierarchy
-message GeoComparerSolution {
-  string geo_hierarchy = 1;
-  string country = 2;
-  string state = 3;
-  string city = 4;
-}
-
 message GeoComparerReason {
   repeated GeoComparerResult geo_compare_results = 1;
 
