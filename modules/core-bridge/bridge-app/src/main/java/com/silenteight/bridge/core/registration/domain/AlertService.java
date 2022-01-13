@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertStatus;
 import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertWithMatches;
 import com.silenteight.bridge.core.registration.domain.model.Alert;
-import com.silenteight.bridge.core.registration.domain.model.AlertsToRegister;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRegistrationService;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 
@@ -28,8 +27,7 @@ class AlertService {
     var batchId = command.batchId();
     var newAlerts = filterOutExistingInDb(command);
     var successAlerts = getSucceededAlerts(newAlerts);
-    var alertsToRegister = mapper.toAlertsToRegister(successAlerts);
-    var registeredAlerts = register(alertsToRegister, batchId);
+    var registeredAlerts = register(successAlerts, batchId);
 
     log.info(
         "Alerts registered in AE for batchId: {}, alertCount: {}",
@@ -90,9 +88,10 @@ class AlertService {
         .toList();
   }
 
-  private List<Alert> register(AlertsToRegister alertsToRegister, String batchId) {
+  private List<Alert> register(List<AlertWithMatches> successAlerts, String batchId) {
+    var alertsToRegister = mapper.toAlertsToRegister(successAlerts);
     var registeredAlerts = alertRegistrationService.registerAlerts(alertsToRegister);
-    return mapper.toAlerts(registeredAlerts, batchId);
+    return mapper.toAlerts(registeredAlerts, successAlerts, batchId);
   }
 
   private List<Alert> getFailedAlerts(List<AlertWithMatches> alertsWithMatches, String batchId) {

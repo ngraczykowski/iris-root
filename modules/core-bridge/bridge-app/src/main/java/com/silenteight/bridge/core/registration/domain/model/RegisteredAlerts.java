@@ -8,6 +8,7 @@ public record RegisteredAlerts(List<AlertWithMatches> registeredAlertsWithMatche
 
   public static record AlertWithMatches(String alertId,
                                         String name,
+                                        String metadata,
                                         List<Match> matches) {
 
     @Builder
