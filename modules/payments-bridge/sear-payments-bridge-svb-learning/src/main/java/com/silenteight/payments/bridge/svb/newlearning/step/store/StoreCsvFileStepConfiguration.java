@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.svb.newlearning.step.store;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.svb.newlearning.config.LearningProperties;
+import com.silenteight.payments.bridge.common.app.LearningProperties;
 import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.StoreCsvJobProperties;
 import com.silenteight.payments.bridge.svb.newlearning.step.JpaWriterFactory;
 

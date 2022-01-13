@@ -6,17 +6,22 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.datasource.api.historicaldecisions.v2.*;
 import com.silenteight.payments.bridge.agents.model.HistoricalRiskAssessmentAgentFeatureRequest;
 import com.silenteight.payments.bridge.agents.port.HistoricalRiskAssessmentFeatureUseCase;
+import com.silenteight.payments.bridge.common.app.LearningProperties;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@EnableConfigurationProperties(LearningProperties.class)
 //NOTE(jgajewski): Remove 'Feature' from class name 'HistoricalRiskAssessmentFeatureAgent',
 // when category use case is going to be deleted, after successful testing
 class HistoricalRiskAssessmentFeatureAgent implements HistoricalRiskAssessmentFeatureUseCase {
 
   private static final String FEATURE_PREFIX = "features/";
+
+  private final LearningProperties properties;
 
   @Override
   public HistoricalDecisionsFeatureInput invoke(
@@ -27,7 +32,7 @@ class HistoricalRiskAssessmentFeatureAgent implements HistoricalRiskAssessmentFe
     return HistoricalDecisionsFeatureInput.newBuilder()
         .setFeature(featureName)
         .setModelKey(createModelKey(request))
-        .setDiscriminator(createDiscriminator(request.getMatchId()))
+        .setDiscriminator(createDiscriminator())
         .build();
   }
 
@@ -68,9 +73,9 @@ class HistoricalRiskAssessmentFeatureAgent implements HistoricalRiskAssessmentFe
         .build();
   }
 
-  private static Discriminator createDiscriminator(String matchId) {
+  private Discriminator createDiscriminator() {
     return Discriminator.newBuilder()
-        .setValue(matchId)
+        .setValue(properties.getDiscriminator())
         .build();
   }
 

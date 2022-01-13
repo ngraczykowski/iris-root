@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.svb.newlearning.step.composite;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.svb.newlearning.config.LearningProperties;
+import com.silenteight.payments.bridge.common.app.LearningProperties;
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertDetails;
 import com.silenteight.payments.bridge.svb.newlearning.step.composite.exception.FetchingComposeDataException;
@@ -55,6 +55,7 @@ class AlertCompositeFetcher extends BaseCompositeFetcher<List<Long>, List<AlertC
         .stream()
         .map(ad -> AlertComposite
             .builder()
+            .discriminator(properties.getDiscriminator())
             .alertDetails(ad)
             .hits(hits.get(ad.getFkcoId()))
             .actions(actions.get(ad.getFkcoId()))

@@ -24,7 +24,7 @@ import static java.util.stream.Collectors.toList;
 public class AlertComposite {
 
   // Learning engine is multi-tenant db so some discriminator is required.
-  private static final String DISCRIMINATOR = "";
+  String discriminator;
 
   AlertDetails alertDetails;
 
@@ -75,9 +75,9 @@ public class AlertComposite {
         .build();
   }
 
-  private static Discriminator mapDiscriminator() {
+  private Discriminator mapDiscriminator() {
     return Discriminator.newBuilder()
-        .setValue(DISCRIMINATOR)
+        .setValue(discriminator)
         .build();
   }
 

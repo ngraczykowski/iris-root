@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.svb.newlearning.step.composite;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.svb.newlearning.config.LearningProperties;
+import com.silenteight.payments.bridge.common.app.LearningProperties;
 import com.silenteight.payments.bridge.svb.newlearning.domain.ActionComposite;
 import com.silenteight.payments.bridge.svb.newlearning.step.composite.exception.FetchingComposeDataException;
 
@@ -26,7 +26,7 @@ import static com.silenteight.payments.bridge.svb.newlearning.step.composite.Act
 class ActionCompositeFetcher
     extends BaseCompositeFetcher<List<Long>, Map<Long, List<ActionComposite>>> {
 
-  private LearningProperties properties;
+  private final LearningProperties properties;
 
   @Language("PostgreSQL")
   private static final String ACTIONS_QUERY =

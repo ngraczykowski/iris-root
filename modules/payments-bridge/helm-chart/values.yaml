@@ -45,3 +45,6 @@ mail:
   port:
   username: ""
   password: ""
+
+svbLearning:
+  discriminator: ""

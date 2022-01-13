@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.newlearning.config;
+package com.silenteight.payments.bridge.common.app;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,8 @@ public class LearningProperties {
   @NotEmpty
   private String timeZone = "America/Chicago";
   private String fileEncoding = "CP1250";
-  private int chunkSize = 10;
+  private String discriminator = "";
+  private int chunkSize = 128;
 
   @PostConstruct
   void initialize() {
