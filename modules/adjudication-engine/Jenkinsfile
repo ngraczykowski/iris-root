@@ -27,6 +27,6 @@ gradleBuild(
       buildContainerImage()
       awsECR()
       helmChartRegistry()
-      deployOnNomad(environments)
+      deployOnNomad()
     }
 )
