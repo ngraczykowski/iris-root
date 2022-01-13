@@ -26,22 +26,22 @@ message Location {
 }
 
 enum LocationType {
-  // Default value if the type isn't specified.
-  LOCATION_TYPE_UNSPECIFIED = 0;
-  // A state or equivalent level location.
-  ADMINISTRATIVE_AREA = 1;
-  // A country level location.
-  COUNTRY = 2;
-  // A city or equivalent level location.
-  LOCALITY = 3;
-  // A postal code level location.
-  // POSTAL_CODE = 4;
-  // A street address level location.
-  // STREET_ADDRESS = 5;
-  // A county or equivalent level location.
-  // SUB_ADMINISTRATIVE_AREA = 6;
-  // A sublocality is a subdivision of a locality, f.e a city borough, ward, or arrondissement.
-  // SUB_LOCALITY = 7;
+    // Default value if the type isn't specified.
+    LOCATION_TYPE_UNSPECIFIED = 0;
+    // A state or equivalent level location.
+    STATE = 1;
+    // A country level location.
+    COUNTRY = 2;
+    // A city or equivalent level location.
+    CITY = 3;
+    // A postal code level location.
+    // POSTAL_CODE = 4;
+    // A street address level location.
+    // STREET_ADDRESS = 5;
+    // A county or equivalent level location.
+    // SUB_ADMINISTRATIVE_AREA = 6;
+    // A sublocality is a subdivision of a locality, f.e a city borough, ward, or arrondissement.
+    // SUB_LOCALITY = 7;
 }
 
 message GeoComparerReason {
