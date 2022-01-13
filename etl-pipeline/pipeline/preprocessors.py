@@ -13,7 +13,7 @@ from spark_manager.config.config import RAW_DATA_DIR, STANDARDIZED_DATA_DIR
 from customized.xml_pipeline import AIAXMLPipeline
 from pipeline.agent_input_config import agent_input_prepended_agent_name_config
 from pipeline.spark import spark_instance
-
+from etl_pipeline.preprocessors import add_note_stage, add_status_stage
 in_application_data_dir = lambda x: os.path.join("data/4.application", x)
 in_cleansed_data_dir = lambda x: os.path.join("data/3.cleansed", x)
 in_raw_data_dir = lambda x: os.path.join("data/1.raw", x)
@@ -212,68 +212,14 @@ def transform_standardized_to_cleansed():
         ["TO_STATUS_NAME"],
     )
     item_status_history_df = item_status_history_df.select(reordered_columns)
-    item_status_history_df.createOrReplaceTempView("status_df")
-    # Join statuses with alerts
-    system_id = "22601"
-    item_status_history_stage_df = spark_instance.spark_instance.sql(
-        f"""
-    with status_row_num as (
-        select *,
-            row_number() over (partition by item_id order by create_date asc) as row_num
-        from status_df),
-    first_last_analyst_row_num as (
-        select ITEM_ID,
-            min(row_num) as first_analyst_row_num,
-            max(row_num) as last_analyst_row_num
-        from status_row_num
-        where user_join_id != "{system_id}"
-        group by ITEM_ID
-        )
-    select a.*,
-        b.first_analyst_row_num,
-        b.last_analyst_row_num,
-        case 
-            when row_num = first_analyst_row_num and row_num = last_analyst_row_num then "first_last_analyst_status"
-            when row_num = first_analyst_row_num then "first_analyst_status"
-            when row_num = last_analyst_row_num then "last_analyst_status"
-            when row_num > first_analyst_row_num then "middle_analyst_status"
-            else "system_activity"
-        end as analyst_status_stage
-    from status_row_num a
-    join first_last_analyst_row_num b
-    on a.ITEM_ID = b.ITEM_ID
-    """
-    )
-    item_status_history_stage_df = spark_instance.safe_save_delta(
+    item_status_history_stage_df = add_status_stage(item_status_history_df)
+    spark_instance.safe_save_delta(
         item_status_history_stage_df,
         delta_target_path=in_cleansed_data_dir(item_status_file_name),
         user_metadata="Tagged the status stage",
     )
-    alert_notes_df.createOrReplaceTempView("notes_df")
-
-    alert_notes_stage_df = spark_instance.spark_instance.sql(
-        """
-        with notes_row_num as (
-            select *,
-                row_number() over (partition by alert_id order by create_date asc) as row_num
-            from notes_df),
-        first_last_analyst_row_num as (
-            select *,
-                min(row_num) over (partition by alert_id) as first_analyst_row_num,
-                max(row_num) over (partition by alert_id) as last_analyst_row_num
-            from notes_row_num)
-        select *,
-            case 
-                when row_num = first_analyst_row_num and row_num = last_analyst_row_num then "first_last_analyst_note"
-                when row_num = first_analyst_row_num then "first_analyst_note"
-                when row_num = last_analyst_row_num then "last_analyst_note"
-                else "middle_analyst_note"
-            end as analyst_note_stage
-        from first_last_analyst_row_num    
-    """
-    )
-
-    alert_notes_stage_df = spark_instance.safe_save_delta(
+    alert_notes_stage_df = add_note_stage(alert_notes_df)
+    spark_instance.safe_save_delta(
         alert_notes_stage_df,
         delta_target_path=in_cleansed_data_dir(alert_notes_file_name),
         user_metadata="Tagged the note stage",

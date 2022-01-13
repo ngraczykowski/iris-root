@@ -1,0 +1,107 @@
+{
+    "STATUS_JOIN_ID": [
+        "5780701",
+        "5781004",
+        "5782825",
+        "6059345",
+        "6059387",
+        "6059825",
+        "5074477",
+        "5135431",
+        "5800865"
+    ],
+    "ITEM_JOIN_ID": [
+        "3541863",
+        "3541863",
+        "3541863",
+        "3658498",
+        "3658498",
+        "3658498",
+        "3292184",
+        "3292184",
+        "3292184"
+    ],
+    "ITEM_ID": [
+        "WLF101-939701-62908",
+        "WLF101-939701-62908",
+        "WLF101-939701-62908",
+        "WLF101-1363601-89626",
+        "WLF101-1363601-89626",
+        "WLF101-1363601-89626",
+        "WLF101-945401-62939",
+        "WLF101-945401-62939",
+        "WLF101-945401-62939"
+    ],
+    "FROM_STATUS_IDENTIFIER": [null, "2", "3", null, "2", "3", null, "2", "24"],
+    "FROM_STATE": [null, "Open", "Open", null, "Open", "Open", null, "Open", "Open"],
+    "FROM_FINDING": [
+        null,
+        "No_Determination",
+        "No_Determination",
+        null,
+        "No_Determination",
+        "No_Determination",
+        null,
+        "No_Determination",
+        "No_Determination"
+    ],
+    "TO_STATUS_IDENTIFIER": [
+        "2",
+        "3",
+        "IMPL_AML_FALSE_POSITIVE",
+        "2",
+        "3",
+        "IMPL_AML_FALSE_POSITIVE",
+        "2",
+        "24",
+        "IMPL_AML_FALSE_POSITIVE"
+    ],
+    "TO_STATE": ["Open", "Open", "Closed", "Open", "Open", "Closed", "Open", "Open", "Closed"],
+    "TO_FINDING": [
+        "No_Determination",
+        "No_Determination",
+        "Non_Issue",
+        "No_Determination",
+        "No_Determination",
+        "Non_Issue",
+        "No_Determination",
+        "No_Determination",
+        "Non_Issue"
+    ],
+    "CREATE_DATE": [
+        "2021-03-17 14:52:06",
+        "2021-03-17 15:00:55",
+        "2021-03-18 12:04:25",
+        "2021-08-16 17:54:06",
+        "2021-08-16 18:02:47",
+        "2021-08-17 09:03:03",
+        "2020-02-11 16:00:01",
+        "2020-03-17 15:22:11",
+        "2021-03-25 16:35:50"
+    ],
+    "USER_JOIN_ID": [
+        "22601",
+        "34001",
+        "30204",
+        "22601",
+        "34001",
+        "30203",
+        "22601",
+        "30202",
+        "18506"
+    ],
+    "row_num": [1, 2, 3, 1, 2, 3, 1, 2, 3],
+    "first_analyst_row_num": [2, 2, 2, 2, 2, 2, 2, 2, 2],
+    "last_analyst_row_num": [3, 3, 3, 3, 3, 3, 3, 3, 3],
+    "analyst_status_stage": [
+        "system_activity",
+        "first_analyst_status",
+        "last_analyst_status",
+        "system_activity",
+        "first_analyst_status",
+        "last_analyst_status",
+        "system_activity",
+        "first_analyst_status",
+        "last_analyst_status"
+    ]
+}

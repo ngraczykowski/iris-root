@@ -1,0 +1,26 @@
+{
+    "ALERT_ID": [
+        "WLF101-939701-62908",
+        "WLF101-1363601-89626",
+        "WLF101-1363601-89626",
+        "WLF101-945401-62939",
+        "WLF101-945401-62939"
+    ],
+    "CREATE_DATE": [
+        "2021-03-17 15:00:55",
+        "2021-08-16 18:02:47",
+        "2021-08-17 09:03:03",
+        "2020-03-17 15:22:06",
+        "2021-03-25 16:35:44"
+    ],
+    "row_num": [1, 1, 2, 1, 2],
+    "first_analyst_row_num": [1, 1, 1, 1, 1],
+    "last_analyst_row_num": [1, 2, 2, 2, 2],
+    "analyst_note_stage": [
+        "first_last_analyst_note",
+        "first_analyst_note",
+        "last_analyst_note",
+        "first_analyst_note",
+        "last_analyst_note"
+    ]
+}
