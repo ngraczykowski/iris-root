@@ -8,7 +8,7 @@ import com.silenteight.adjudication.api.v1.CreateDatasetRequest;
 import com.silenteight.adjudication.api.v1.DatasetServiceGrpc.DatasetServiceBlockingStub;
 import com.silenteight.adjudication.api.v1.NamedAlerts;
 
-import io.grpc.StatusRuntimeException;
+import io.vavr.control.Try;
 
 import java.util.Collection;
 
@@ -18,6 +18,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 @Slf4j
 public class DatasetGrpcAdapter implements DatasetServiceClient {
 
+  private static final String CANNOT_CREATE_DATASET = "Cannot create dataset";
   private final DatasetServiceBlockingStub datasetServiceBlockingStub;
   private final long deadlineInSeconds;
 
@@ -31,12 +32,11 @@ public class DatasetGrpcAdapter implements DatasetServiceClient {
 
     log.info("Create dataset with alerts={}", alerts);
 
-    try {
-      return getStub().createDataset(grpcRequest).getName();
-    } catch (StatusRuntimeException e) {
-      log.error("Cannot create dataset", e);
-      throw new AdjudicationEngineLibraryRuntimeException("Cannot create dataset", e);
-    }
+    return Try.of(() -> getStub().createDataset(grpcRequest).getName())
+        .onFailure(e -> log.error(CANNOT_CREATE_DATASET, e))
+        .onSuccess(result -> log.debug("Dataset was created successfully"))
+        .getOrElseThrow(
+            e -> new AdjudicationEngineLibraryRuntimeException(CANNOT_CREATE_DATASET, e));
   }
 
   private DatasetServiceBlockingStub getStub() {

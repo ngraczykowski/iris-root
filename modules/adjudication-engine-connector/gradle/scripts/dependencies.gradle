@@ -19,6 +19,7 @@ libraries.protobuf_util = [group: 'com.google.protobuf', name: 'protobuf-java-ut
 
 // Others
 libraries.lombok = [group: 'org.projectlombok', name: 'lombok', version: '1.18.18']
+libraries.vavr = [group: 'io.vavr', name: 'vavr', version: '0.10.4']
 
 // Testing
 libraries.assertj_core = [group: 'org.assertj', name: 'assertj-core', version: '3.20.2']
@@ -32,6 +33,7 @@ dependencies {
   implementation libraries.grpc_core
   implementation libraries.protobuf_util
   implementation libraries.slf4j_api
+  implementation libraries.vavr
 
   testAnnotationProcessor libraries.lombok
   testImplementation libraries.lombok

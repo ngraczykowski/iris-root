@@ -4,12 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.library.v1.AdjudicationEngineLibraryRuntimeException;
-import com.silenteight.adjudication.api.v1.*;
+import com.silenteight.adjudication.api.v1.Alert;
 import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlockingStub;
+import com.silenteight.adjudication.api.v1.BatchCreateAlertMatchesRequest;
+import com.silenteight.adjudication.api.v1.BatchCreateAlertMatchesResponse;
+import com.silenteight.adjudication.api.v1.BatchCreateAlertsRequest;
+import com.silenteight.adjudication.api.v1.BatchCreateAlertsResponse;
 
-import io.grpc.StatusRuntimeException;
+import io.vavr.control.Try;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -17,6 +22,9 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AlertGrpcAdapter implements AlertServiceClient {
 
+  private static final String CANNOT_CREATE_BATCH_ALERTS = "Cannot create batch alerts";
+  private static final String CANNOT_CREATE_BATCH_ALERT_MATCHES =
+      "Cannot create batch alert matches";
   private final AlertServiceBlockingStub alertServiceBlockingStub;
   private final long deadlineInSeconds;
 
@@ -25,53 +33,44 @@ public class AlertGrpcAdapter implements AlertServiceClient {
     log.info("batchCreateAlerts alerts={}", alerts.size());
 
     var grpcRequest = BatchCreateAlertsRequest.newBuilder()
-        .addAllAlerts(alerts.stream().map(alert -> Alert.newBuilder()
-                .setAlertId(alert.getAlertId())
-                .build())
+        .addAllAlerts(alerts.stream()
+            .map(alert -> AlertGrpcMapper.mapToAlert(alert.getAlertId()))
             .collect(Collectors.toList()))
         .build();
 
-    try {
-      var response = getStub().batchCreateAlerts(grpcRequest);
+    return Try.of(() -> getStub().batchCreateAlerts(grpcRequest))
+        .map(AlertGrpcMapper::mapToBatchCreateAlertsOut)
+        .onFailure(e -> log.error(CANNOT_CREATE_BATCH_ALERTS, e))
+        .onSuccess(result -> log.debug("Batch created alerts successfully"))
+        .getOrElseThrow(
+            e -> new AdjudicationEngineLibraryRuntimeException(CANNOT_CREATE_BATCH_ALERTS, e));
 
-      return BatchCreateAlertsOut.builder()
-          .alerts(mapAlerts(response.getAlertsList()))
-          .build();
-    } catch (StatusRuntimeException e) {
-      log.error("Cannot batch create alerts", e);
-      throw new AdjudicationEngineLibraryRuntimeException("Cannot batch create alerts", e);
-    }
   }
 
   @Override
   public BatchCreateAlertMatchesOut batchCreateAlertMatches(BatchCreateAlertMatchesIn request) {
     var matches = request.getMatchIds().stream()
-        .map(m -> Match.newBuilder().setMatchId(m).build())
+        .map(AlertGrpcMapper::mapToMatch)
         .collect(Collectors.toList());
     var grpcRequest = BatchCreateAlertMatchesRequest.newBuilder()
         .setAlert(request.getAlertId())
         .addAllMatches(matches)
         .build();
 
-    try {
-      var response = getStub().batchCreateAlertMatches(grpcRequest);
-
-      return BatchCreateAlertMatchesOut.builder()
-          .alertMatches(mapAlertMatches(response.getMatchesList()))
-          .build();
-    } catch (StatusRuntimeException e) {
-      log.error("Cannot batch create alert matches", e);
-      throw new AdjudicationEngineLibraryRuntimeException("Cannot batch create alert matches", e);
-    }
+    return Try.of(() -> getStub().batchCreateAlertMatches(grpcRequest))
+        .map(AlertGrpcMapper::mapToBatchCreateAlertMatchesOut)
+        .onFailure(e -> log.error(CANNOT_CREATE_BATCH_ALERT_MATCHES, e))
+        .onSuccess(result -> log.debug("Batch created alert matches successfully"))
+        .getOrElseThrow(
+            e -> new AdjudicationEngineLibraryRuntimeException(
+                CANNOT_CREATE_BATCH_ALERT_MATCHES, e));
   }
 
   @Override
   public RegisterAlertsAndMatchesOut registerAlertsAndMatches(RegisterAlertsAndMatchesIn command) {
     var registerAlertsRequest = BatchCreateAlertsRequest.newBuilder()
         .addAllAlerts(command.getAlertsWithMatches().stream()
-            .map(alert -> Alert.newBuilder()
-                .setAlertId(alert.getAlertId())
-                .build())
+            .map(alert -> AlertGrpcMapper.mapToAlert(alert.getAlertId()))
             .collect(Collectors.toList()))
         .build();
 
@@ -81,32 +80,28 @@ public class AlertGrpcAdapter implements AlertServiceClient {
 
     return RegisterAlertsAndMatchesOut.builder()
         .alertWithMatches(command.getAlertsWithMatches().stream()
-            .map(alert -> mapAlertWithMatches(alert, registeredAlerts.get(alert.getAlertId())))
+            .map(alert -> mergeAlertWithMatches(registeredAlerts, alert))
             .collect(Collectors.toList()))
         .build();
   }
 
-  private BatchCreateAlertsResponse registerAlerts(BatchCreateAlertsRequest grpcRequest) {
-    try {
-      return getStub().batchCreateAlerts(grpcRequest);
-    } catch (StatusRuntimeException e) {
-      log.error("Cannot batch create alert matches", e);
-      throw new AdjudicationEngineLibraryRuntimeException("Cannot batch create alert matches", e);
-    }
+  private AlertWithMatchesOut mergeAlertWithMatches(
+      Map<String, String> registeredAlerts, BatchCreateAlertMatchesIn alert) {
+    return AlertGrpcMapper.mapToAlertWithMatches(
+        alert, registeredAlerts.get(alert.getAlertId()), getMatches(alert));
   }
 
-  private AlertWithMatchesOut mapAlertWithMatches(
-      BatchCreateAlertMatchesIn alert, String alertName) {
-    return AlertWithMatchesOut.builder()
-        .alertId(alert.getAlertId())
-        .alertName(alertName)
-        .matches(getMatches(alert))
-        .build();
+  private BatchCreateAlertsResponse registerAlerts(BatchCreateAlertsRequest grpcRequest) {
+    return Try.of(() -> getStub().batchCreateAlerts(grpcRequest))
+        .onFailure(e -> log.error(CANNOT_CREATE_BATCH_ALERTS, e))
+        .onSuccess(result -> log.debug("Batch created alerts successfully"))
+        .getOrElseThrow(e -> new AdjudicationEngineLibraryRuntimeException(
+            CANNOT_CREATE_BATCH_ALERT_MATCHES, e));
   }
 
   private List<AlertMatchOut> getMatches(BatchCreateAlertMatchesIn alertWithMatches) {
     var matches = alertWithMatches.getMatchIds().stream()
-        .map(m -> Match.newBuilder().setMatchId(m).build())
+        .map(AlertGrpcMapper::mapToMatch)
         .collect(Collectors.toList());
 
     var grpcRequest = BatchCreateAlertMatchesRequest.newBuilder()
@@ -115,35 +110,16 @@ public class AlertGrpcAdapter implements AlertServiceClient {
         .build();
 
     var response = registerAlertMatches(grpcRequest);
-    return mapAlertMatches(response.getMatchesList());
+    return AlertGrpcMapper.mapToAlertMatches(response.getMatchesList());
   }
 
   private BatchCreateAlertMatchesResponse registerAlertMatches(
       BatchCreateAlertMatchesRequest grpcRequest) {
-    try {
-      return getStub().batchCreateAlertMatches(grpcRequest);
-    } catch (StatusRuntimeException e) {
-      log.error("Cannot batch create alert matches", e);
-      throw new AdjudicationEngineLibraryRuntimeException("Cannot batch create alert matches", e);
-    }
-  }
-
-  private List<AlertMatchOut> mapAlertMatches(List<Match> matchesList) {
-    return matchesList.stream()
-        .map(m -> AlertMatchOut.builder()
-            .matchId(m.getMatchId())
-            .name(m.getName())
-            .build())
-        .collect(Collectors.toList());
-  }
-
-  private List<AlertOut> mapAlerts(List<Alert> alertsList) {
-    return alertsList.stream()
-        .map(a -> AlertOut.builder()
-            .alertId(a.getAlertId())
-            .name(a.getName())
-            .build())
-        .collect(Collectors.toList());
+    return Try.of(() -> getStub().batchCreateAlertMatches(grpcRequest))
+        .onFailure(e -> log.error(CANNOT_CREATE_BATCH_ALERT_MATCHES, e))
+        .onSuccess(result -> log.debug("Batch created alert matches successfully"))
+        .getOrElseThrow(e -> new AdjudicationEngineLibraryRuntimeException(
+            CANNOT_CREATE_BATCH_ALERT_MATCHES, e));
   }
 
   private AlertServiceBlockingStub getStub() {

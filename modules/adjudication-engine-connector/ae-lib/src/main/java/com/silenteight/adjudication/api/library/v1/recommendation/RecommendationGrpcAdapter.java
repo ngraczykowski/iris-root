@@ -10,10 +10,11 @@ import com.silenteight.adjudication.api.v2.RecommendationServiceGrpc.Recommendat
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.adjudication.api.v2.StreamRecommendationsWithMetadataRequest;
 
-import io.grpc.StatusRuntimeException;
+import com.google.common.collect.Lists;
+import io.vavr.control.Try;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -25,25 +26,30 @@ import static com.silenteight.adjudication.api.library.v1.util.TimeStampUtil.toO
 @Slf4j
 public class RecommendationGrpcAdapter implements RecommendationServiceClient {
 
+  private static final String CANNOT_GET_RECOMMENDATIONS = "Cannot get recommendations";
   private final RecommendationServiceBlockingStub recommendationServiceBlockingStub;
   private final long deadlineInSeconds;
 
   @Override
   public Collection<RecommendationWithMetadataOut> getRecommendations(String analysis) {
-    var recommendations = new ArrayList<RecommendationWithMetadataOut>();
     var grpcRequest = StreamRecommendationsWithMetadataRequest.newBuilder()
         .setRecommendationSource(analysis)
         .build();
 
-    try {
-      getStub().streamRecommendationsWithMetadata(grpcRequest)
-          .forEachRemaining(item -> recommendations.add(mapRecommendation(item)));
-    } catch (StatusRuntimeException e) {
-      log.error("Cannot get recommendations", e);
-      throw new AdjudicationEngineLibraryRuntimeException("Cannot get recommendations", e);
-    }
+    return Try.of(() -> getStub().streamRecommendationsWithMetadata(grpcRequest))
+        .map(this::mapRecommendations)
+        .onFailure((e) -> log.error(CANNOT_GET_RECOMMENDATIONS, e))
+        .onSuccess(result -> log.debug("Recommendations were got successfully"))
+        .getOrElseThrow(
+            e -> new AdjudicationEngineLibraryRuntimeException(
+                CANNOT_GET_RECOMMENDATIONS, e));
+  }
 
-    return recommendations;
+  private Collection<RecommendationWithMetadataOut> mapRecommendations(
+      Iterator<RecommendationWithMetadata> recommendationsInfo) {
+    return Lists.newArrayList(recommendationsInfo).stream()
+        .map(this::mapRecommendation)
+        .collect(Collectors.toList());
   }
 
   private RecommendationWithMetadataOut mapRecommendation(
