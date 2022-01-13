@@ -79,7 +79,6 @@ class AeInboundAmqpIntegrationConfiguration {
     var systemId =
         getRegisteredAlertSystemIdUseCase.getAlertSystemId(recommendation.getAlert());
 
-    //TODO(wkeska): check which alerts don't have recommendation
     var alertIds = findAlertIdSetUseCase.find(List.of(systemId));
 
     if (alertIds.isEmpty()) {
