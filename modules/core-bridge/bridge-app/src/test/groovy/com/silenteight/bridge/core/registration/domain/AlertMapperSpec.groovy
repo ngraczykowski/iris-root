@@ -51,9 +51,14 @@ class AlertMapperSpec extends Specification {
             .build()
     ]
     def registeredAlerts = new RegisteredAlerts(registeredAlertsWithMatches)
+    def successAlerts = [
+        AlertWithMatches.builder()
+            .alertId('alertId')
+            .alertMetadata('alertMetadata')
+            .build()]
 
     when:
-    def result = underTest.toAlerts(registeredAlerts, batchIdIn)
+    def result = underTest.toAlerts(registeredAlerts, successAlerts, batchIdIn)
 
     then:
     with(result.first()) {
@@ -62,6 +67,7 @@ class AlertMapperSpec extends Specification {
       alertId() == 'alertId'
       batchId() == 'batchId'
       errorDescription() == null
+      metadata() == 'alertMetadata'
       with(matches().first()) {
         name() == 'matchName'
         status() == Match.Status.REGISTERED

@@ -139,6 +139,9 @@ databaseChangeLog:
                     nullable: true
                     unique: true
               - column:
+                  name: metadata
+                  type: TEXT
+              - column:
                   name: status
                   type: VARCHAR(30)
                   constraints:

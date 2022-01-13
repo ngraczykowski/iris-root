@@ -9,6 +9,7 @@ public record RegisterAlertsCommand(String batchId,
 
   public static record AlertWithMatches(String alertId,
                                         String errorDescription,
+                                        String alertMetadata,
                                         List<Match> matches,
                                         AlertStatus alertStatus) {
 
