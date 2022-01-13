@@ -5,6 +5,7 @@ import lombok.Value;
 
 import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import org.apache.commons.collections4.list.SetUniqueList;
 import org.apache.commons.lang3.ObjectUtils;
@@ -106,5 +107,13 @@ public class HitComposite {
 
   public List<String> getMatchedNames() {
     return new ArrayList<>(Arrays.asList(fkcoVListMatchedName.split(",")));
+  }
+
+  public EtlHit toEtlHit(AlertedPartyData alertedPartyData) {
+    return EtlHit
+        .builder()
+        .hitComposite(this)
+        .alertedPartyData(alertedPartyData)
+        .build();
   }
 }
