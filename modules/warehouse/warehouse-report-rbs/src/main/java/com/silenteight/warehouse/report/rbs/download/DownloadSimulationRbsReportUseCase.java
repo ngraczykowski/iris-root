@@ -4,13 +4,13 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.filestorage.api.dto.FileDto;
 import com.silenteight.warehouse.report.name.ReportFileName;
 import com.silenteight.warehouse.report.name.ReportFileNameDto;
 import com.silenteight.warehouse.report.rbs.domain.RbsReportService;
 import com.silenteight.warehouse.report.rbs.domain.dto.RbsReportDto;
 import com.silenteight.warehouse.report.rbs.download.dto.DownloadRbsReportDto;
-
-import java.io.ByteArrayInputStream;
+import com.silenteight.warehouse.report.storage.ReportStorage;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,15 +24,18 @@ class DownloadSimulationRbsReportUseCase {
   private final RbsReportService reportService;
   @NonNull
   private final ReportFileName reportFileName;
+  @NonNull
+  private final ReportStorage reportStorage;
 
   public DownloadRbsReportDto activate(long id, String analysisId) {
     log.debug("Getting RB Scorer report, reportId={}", id);
     RbsReportDto rbsReportDto = reportDataQuery.getRbsReport(id);
     reportService.removeReport(id);
     log.debug("Report removed, reportId={}", id);
+    FileDto report = reportStorage.getReport(rbsReportDto.getFileName());
     return DownloadRbsReportDto.builder()
         .name(getFileName(rbsReportDto, analysisId))
-        .content(new ByteArrayInputStream(rbsReportDto.getContent().getBytes()))
+        .content(report.getContent())
         .build();
   }
 

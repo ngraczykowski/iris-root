@@ -32,7 +32,7 @@ class ReportServiceTest {
   @Test
   void generateReportAndReportAvailable() {
     ReportInstanceReferenceDto reportInstance =
-        service.createReportInstance(REPORT_RANGE, INDEXES, PROPERTIES);
+        service.createReportInstance(REPORT_RANGE, INDEXES, PROPERTIES, null);
 
     assertThat(rbsReportRepository.findById(reportInstance.getInstanceReferenceId()))
         .isPresent()
@@ -44,7 +44,7 @@ class ReportServiceTest {
   @Test
   void removeReport() {
     ReportInstanceReferenceDto reportInstance =
-        service.createReportInstance(REPORT_RANGE, INDEXES, PROPERTIES);
+        service.createReportInstance(REPORT_RANGE, INDEXES, PROPERTIES, null);
 
     service.removeReport(reportInstance.getInstanceReferenceId());
 

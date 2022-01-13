@@ -36,7 +36,7 @@ class CreateProductionRbsReportUseCaseTest {
     underTest.createReport(OFFSET_DATE_TIME_FROM, OFFSET_DATE_TIME_TO);
 
     // then
-    verify(reportService).createReportInstance(reportRangeCaptor.capture(), any(), any());
+    verify(reportService).createReportInstance(reportRangeCaptor.capture(), any(), any(), any());
     assertThat(reportRangeCaptor.getValue().getFrom()).isEqualTo(OFFSET_DATE_TIME_FROM);
     assertThat(reportRangeCaptor.getValue().getTo()).isEqualTo(OFFSET_DATE_TIME_TO);
   }

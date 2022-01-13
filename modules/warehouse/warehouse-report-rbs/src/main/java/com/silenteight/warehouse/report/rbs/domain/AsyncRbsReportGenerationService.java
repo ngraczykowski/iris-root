@@ -14,7 +14,6 @@ import org.springframework.scheduling.annotation.Async;
 
 import java.util.List;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -22,7 +21,7 @@ class AsyncRbsReportGenerationService {
 
   @NonNull
   private final RbsReportRepository repository;
-  @NotNull
+  @NonNull
   private final ReportGenerationService reportGenerationService;
 
   @Async
@@ -31,10 +30,11 @@ class AsyncRbsReportGenerationService {
       @NonNull ReportRange range,
       @NonNull List<String> indexes,
       @NonNull @Valid RbsReportDefinition properties,
-      String fileName) {
+      String fileName,
+      String analysisId) {
 
     try {
-      doGenerateReport(id, range, indexes, properties, fileName);
+      doGenerateReport(id, range, indexes, properties, fileName, analysisId);
     } catch (RuntimeException e) {
       doFailReport(id);
       throw new ReportGenerationException(id, e);
@@ -45,7 +45,7 @@ class AsyncRbsReportGenerationService {
       long id,
       ReportRange range,
       List<String> indexes,
-      @Valid RbsReportDefinition properties, String fileName) {
+      @Valid RbsReportDefinition properties, String fileName, String analysisId) {
 
     RbsReport report = repository.getById(id);
     report.generating();
@@ -57,7 +57,8 @@ class AsyncRbsReportGenerationService {
         .selectSqlQuery(properties.getSelectSqlQuery())
         .from(range.getFrom())
         .name(fileName)
-        .to(range.getTo()).build();
+        .to(range.getTo())
+        .analysisId(analysisId).build();
     reportGenerationService.generate(dataRequest);
 
     report.done();
