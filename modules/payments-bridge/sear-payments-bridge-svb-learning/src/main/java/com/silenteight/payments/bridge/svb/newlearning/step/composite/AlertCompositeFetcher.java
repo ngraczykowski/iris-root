@@ -2,9 +2,9 @@ package com.silenteight.payments.bridge.svb.newlearning.step.composite;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.svb.newlearning.config.LearningProperties;
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertDetails;
-import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.StoreCsvJobProperties;
 import com.silenteight.payments.bridge.svb.newlearning.step.composite.exception.FetchingComposeDataException;
 
 import org.intellij.lang.annotations.Language;
@@ -33,12 +33,12 @@ class AlertCompositeFetcher extends BaseCompositeFetcher<List<Long>, List<AlertC
 
   private final HitCompositeFetcher hitCompositeFetcher;
   private final ActionCompositeFetcher actionCompositeFetcher;
-  private final StoreCsvJobProperties properties;
+  private final LearningProperties properties;
 
   public AlertCompositeFetcher(
       DataSource dataSource, HitCompositeFetcher hitCompositeFetcher,
       ActionCompositeFetcher actionCompositeFetcher,
-      StoreCsvJobProperties properties) {
+      LearningProperties properties) {
     super(dataSource);
     this.hitCompositeFetcher = hitCompositeFetcher;
     this.actionCompositeFetcher = actionCompositeFetcher;

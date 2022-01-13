@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.svb.newlearning.step.action;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.StoreCsvJobProperties;
+import com.silenteight.payments.bridge.svb.newlearning.config.LearningProperties;
 import com.silenteight.payments.bridge.svb.newlearning.step.JpaWriterFactory;
 import com.silenteight.payments.bridge.svb.newlearning.step.TransformReaderFactory;
 
@@ -26,7 +26,7 @@ class TransformActionStepConfiguration {
 
   private final StepBuilderFactory stepBuilderFactory;
   private final JpaWriterFactory writerFactory;
-  private final StoreCsvJobProperties properties;
+  private final LearningProperties properties;
 
   @Language("PostgreSQL")
   private static final String QUERY =

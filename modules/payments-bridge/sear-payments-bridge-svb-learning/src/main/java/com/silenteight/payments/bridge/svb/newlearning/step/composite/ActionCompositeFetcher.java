@@ -2,8 +2,8 @@ package com.silenteight.payments.bridge.svb.newlearning.step.composite;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.svb.newlearning.config.LearningProperties;
 import com.silenteight.payments.bridge.svb.newlearning.domain.ActionComposite;
-import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.StoreCsvJobProperties;
 import com.silenteight.payments.bridge.svb.newlearning.step.composite.exception.FetchingComposeDataException;
 
 import org.intellij.lang.annotations.Language;
@@ -26,7 +26,7 @@ import static com.silenteight.payments.bridge.svb.newlearning.step.composite.Act
 class ActionCompositeFetcher
     extends BaseCompositeFetcher<List<Long>, Map<Long, List<ActionComposite>>> {
 
-  private StoreCsvJobProperties properties;
+  private LearningProperties properties;
 
   @Language("PostgreSQL")
   private static final String ACTIONS_QUERY =
@@ -35,7 +35,7 @@ class ActionCompositeFetcher
           + " FROM pb_learning_action WHERE fkco_messages IN (%s)"
           + " ORDER BY fkco_d_action_datetime ASC";
 
-  public ActionCompositeFetcher(DataSource dataSource, StoreCsvJobProperties properties) {
+  public ActionCompositeFetcher(DataSource dataSource, LearningProperties properties) {
     super(dataSource);
     this.properties = properties;
   }

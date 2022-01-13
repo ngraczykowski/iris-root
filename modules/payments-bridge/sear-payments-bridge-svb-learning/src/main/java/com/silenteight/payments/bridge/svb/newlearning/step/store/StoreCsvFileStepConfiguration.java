@@ -2,6 +2,7 @@ package com.silenteight.payments.bridge.svb.newlearning.step.store;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.svb.newlearning.config.LearningProperties;
 import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.StoreCsvJobProperties;
 import com.silenteight.payments.bridge.svb.newlearning.step.JpaWriterFactory;
 
@@ -27,7 +28,8 @@ import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.Learn
 public class StoreCsvFileStepConfiguration {
 
   private final StepBuilderFactory stepBuilderFactory;
-  private final StoreCsvJobProperties properties;
+  private final StoreCsvJobProperties storeCsvJobProperties;
+  private final LearningProperties learningProperties;
 
   private final FlatFileItemReader<LearningCsvRowEntity> storeCsvFileStepItemReader;
   private final JpaWriterFactory jpaWriterFactory;
@@ -37,7 +39,7 @@ public class StoreCsvFileStepConfiguration {
   Step storeCsvFileStep() {
     return this.stepBuilderFactory
         .get(STORE_FILE_STEP)
-        .<LearningCsvRowEntity, LearningCsvRowEntity>chunk(properties.getChunkSize())
+        .<LearningCsvRowEntity, LearningCsvRowEntity>chunk(learningProperties.getChunkSize())
         .reader(storeCsvFileStepItemReader)
         .processor(storeCsvFileStepProcessor)
         .writer(jpaWriterFactory.createJpaWriter())
@@ -45,7 +47,7 @@ public class StoreCsvFileStepConfiguration {
         .retryPolicy(new AlwaysRetryPolicy())
         .retry(S3Exception.class)
         .retry(IOException.class)
-        .retryLimit(properties.getRetryLimit())
+        .retryLimit(storeCsvJobProperties.getRetryLimit())
         .backOffPolicy(backoffPolicy())
         .skipPolicy(new AlwaysSkipItemSkipPolicy())
         .build();
@@ -53,7 +55,7 @@ public class StoreCsvFileStepConfiguration {
 
   private BackOffPolicy backoffPolicy() {
     FixedBackOffPolicy policy = new FixedBackOffPolicy();
-    policy.setBackOffPeriod(properties.getRetryPeriodMilliseconds());
+    policy.setBackOffPeriod(storeCsvJobProperties.getRetryPeriodMilliseconds());
     return policy;
   }
 }

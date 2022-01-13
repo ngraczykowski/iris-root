@@ -23,7 +23,8 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
 @ComponentScan(basePackages = {
     "com.silenteight.payments.bridge.svb.newlearning.job.etl",
     "com.silenteight.payments.bridge.svb.newlearning.step",
-    "com.silenteight.payments.bridge.svb.newlearning.adapter" })
+    "com.silenteight.payments.bridge.svb.newlearning.adapter",
+    "com.silenteight.payments.bridge.svb.newlearning.config" })
 class EtlAlertsJobTest extends BaseBatchTest {
 
 

@@ -26,7 +26,8 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
 @ComponentScan(basePackages = {
     "com.silenteight.payments.bridge.svb.newlearning.job.historical",
     "com.silenteight.payments.bridge.svb.newlearning.step",
-    "com.silenteight.payments.bridge.svb.newlearning.adapter"})
+    "com.silenteight.payments.bridge.svb.newlearning.adapter",
+    "com.silenteight.payments.bridge.svb.newlearning.config"})
 class HistoricalAssessmentJobTest extends BaseBatchTest {
 
   @Autowired

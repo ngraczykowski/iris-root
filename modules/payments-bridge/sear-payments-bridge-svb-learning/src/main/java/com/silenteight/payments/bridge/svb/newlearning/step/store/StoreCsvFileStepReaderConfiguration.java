@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
+import com.silenteight.payments.bridge.svb.newlearning.config.LearningProperties;
 import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.StoreCsvJobProperties;
 import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
 
@@ -35,7 +36,7 @@ import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.Learn
 @Slf4j
 class StoreCsvFileStepReaderConfiguration {
 
-  private final StoreCsvJobProperties properties;
+  private final LearningProperties properties;
   private final CsvFileResourceProvider csvFileResourceProvider;
 
   @SuppressWarnings("SpringElInspection")
