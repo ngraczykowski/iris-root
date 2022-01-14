@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.name }}
   {{ if .Values.service.metadata.annotations }}
   annotations:
-    {{- toYaml .Values.service.metadata.annotations | indent 4 }}
+    {{- toYaml .Values.service.metadata.annotations | nindent 4 }}
   {{ end }}
 spec:
   endpoints:
