@@ -11,16 +11,6 @@ if [ -z "${INSTALLER_VERSION}" ]; then
     exit 1;
 fi
 
-if [ -z "${1}" ]; then
-    echo "Repository username is not set as first parameter"
-    exit 1;
-fi
-
-if [ -z "${2}" ]; then
-    echo "Repository password is not set as second parameter"
-    exit 1;
-fi
-
 mkdir -p build/chart/
 helm package --app-version $version --destination build/chart helm-chart
 webapp_app_artifact=$(basename -- "$(ls "$scriptdir"/../build/chart/webapp-app-*.tgz)")
