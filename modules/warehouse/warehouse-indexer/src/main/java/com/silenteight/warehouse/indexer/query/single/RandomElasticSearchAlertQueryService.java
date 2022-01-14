@@ -36,6 +36,7 @@ public class RandomElasticSearchAlertQueryService implements RandomAlertService 
   @Valid
   private final ProductionSearchRequestBuilder productionSearchRequestBuilder;
 
+  @Override
   public List<String> getRandomDiscriminatorByCriteria(AlertSearchCriteria criteria) {
     SearchRequest searchRequest = buildSearchRequestForRandomAlerts(criteria);
 

@@ -40,8 +40,8 @@ class SamplingAlertService {
           alertSearchCriteria = SamplingAlertService.buildAlertSearchCriteria(
           alertsSampleRequest, samplingProperties);
 
-    List<String> alertsIds =
-        randomAlertQueryService.getRandomDiscriminatorByCriteria(alertSearchCriteria);
+      List<String> alertsIds =
+          randomAlertQueryService.getRandomDiscriminatorByCriteria(alertSearchCriteria);
 
       return AlertsSampleResponse.newBuilder()
           .addAllAlerts(SamplingAlertService.convertIdsToAlertsList(alertsIds))
