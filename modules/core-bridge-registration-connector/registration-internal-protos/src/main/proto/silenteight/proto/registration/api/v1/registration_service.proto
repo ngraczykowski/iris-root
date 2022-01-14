@@ -62,8 +62,9 @@ message AlertWithMatches {
 }
 
 enum AlertStatus {
-  FAILURE = 0;
-  SUCCESS = 1;
+  UNSPECIFIED = 0;
+  FAILURE = 1;
+  SUCCESS = 2;
 }
 
 message Match {
