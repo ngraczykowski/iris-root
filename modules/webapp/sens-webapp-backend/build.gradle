@@ -27,7 +27,9 @@ dependencies {
   implementation project(":sens-webapp-db-changelog")
   implementation project(":sens-webapp-logging")
   implementation project(":sens-webapp-notification")
+  implementation project(":sens-webapp-permission")
   implementation project(":sens-webapp-report")
+  implementation project(":sens-webapp-role")
   implementation project(":sens-webapp-user")
 
   implementation libraries.silenteight_commons_app

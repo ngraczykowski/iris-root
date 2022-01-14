@@ -3,7 +3,7 @@ plugins {
   id "maven-publish"
 }
 
-description = "SENS WebApp User"
+description = "SENS WebApp Permission"
 
 configurations {
   implementation.extendsFrom starterSpring
@@ -21,9 +21,6 @@ dependencies {
   implementation project(":sens-webapp-report")
 
   implementation libraries.silenteight_audit_bs
-  implementation libraries.silenteight_sep_usermanagement_api
-
-  implementation libraries.vavr
 
   testImplementation project(":sens-webapp-db-changelog")
   testImplementation libraries.rest_assured_spring_mock_mvc
