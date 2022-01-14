@@ -180,7 +180,8 @@ job "simulator" {
           "-jar",
           "local/simulator-app.jar",
           "--spring.profiles.active=linux,simulator,messaging,debug",
-          "--spring.config.additional-location=file:local/conf/"
+          "--spring.config.additional-location=file:local/conf/",
+          "--spring.rabbitmq.virtual-host=/${var.namespace}",
         ]
       }
 
