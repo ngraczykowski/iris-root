@@ -7,7 +7,6 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
 import javax.validation.Valid;
@@ -50,8 +49,8 @@ public class SingleAlertQueryConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(value="isSqlSupported", havingValue = "false", matchIfMissing = true)
-  // TODO(tdrozdz): Add isSqlSupported to properties
+  @ConditionalOnProperty(value = "isSqlSupported", havingValue = "false", matchIfMissing = true)
+    // TODO(tdrozdz): Add isSqlSupported to properties
   RandomAlertService randomElasticAlertQueryService(
       AlertSearchService alertSearchService, RestHighLevelClient restHighLevelAdminClient,
       ProductionSearchRequestBuilder productionSearchRequestBuilder) {
@@ -61,7 +60,7 @@ public class SingleAlertQueryConfiguration {
   }
 
   @Bean
-  @ConditionalOnProperty(value="isSqlSupported", havingValue = "true")
+  @ConditionalOnProperty(value = "isSqlSupported", havingValue = "true")
     // TODO(tdrozdz): Add isSqlSupported to properties
   RandomAlertService randomPostgresAlertQueryService() {
     return new RandomPostgresSearchAlertQueryService();
