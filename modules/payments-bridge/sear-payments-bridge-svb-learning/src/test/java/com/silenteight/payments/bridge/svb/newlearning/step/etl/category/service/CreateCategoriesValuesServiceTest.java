@@ -25,7 +25,8 @@ class CreateCategoriesValuesServiceTest {
         List.of(new WatchlistTypeCategoryExtractor(),
             new CrossmatchCategoryExtractor(new NameAddressCrossmatchUseCaseMock()),
             new SpecificTermsCategoryExtractor(new SpecificTermsUseCaseMock()),
-            new SpecificTerms2CategoryExtractor(new SpecificTerms2UseCaseMock()))
+            new SpecificTerms2CategoryExtractor(new SpecificTerms2UseCaseMock()),
+            new MatchTypeCategoryExtractor())
     );
   }
 
@@ -34,6 +35,6 @@ class CreateCategoriesValuesServiceTest {
     var hit = createEtlHit();
     var categoryValues =
         createCategoryValuesService.createCategoryValues(List.of(hit), createRegisterAlert());
-    assertThat(categoryValues.size()).isEqualTo(4);
+    assertThat(categoryValues.size()).isEqualTo(5);
   }
 }
