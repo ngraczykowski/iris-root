@@ -117,5 +117,29 @@
       "AGENT_ERROR"
     ],
     "configurations": []
+  },
+  "agents/historicaldecisions/versions/1.0.0/configs/1": {
+    "agentId": "de21c7f8-9cb9-4414-ae4a-d3ed605613c2",
+    "features": [
+      "features/historicalRiskCustomerName",
+      "features/historicalRiskAccountNumber"
+    ],
+    "featuresList": [
+      {
+        "name": "features/historicalRiskCustomerName",
+        "displayName": "Historical Risk - Customer Name"
+      },
+      {
+        "name": "features/historicalRiskAccountNumber",
+        "displayName": "Historical Risk - Account Number"
+      }
+    ],
+    "responses": [
+      "TRUE_POSITIVE",
+      "NOT_TRUE_POSITIVE",
+      "NO_DATA",
+      "DATA_SOURCE_ERROR"
+    ],
+    "configurations": []
   }
 }
