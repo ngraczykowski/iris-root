@@ -201,6 +201,7 @@ job "webapp" {
           "--spring.cloud.consul.discovery.register=false",
           "--spring.cloud.consul.config.enabled=false",
           "--spring.cloud.consul.port=8500",
+          "--spring.rabbitmq.virtual-host=/${var.namespace}",
         ]
       }
 
