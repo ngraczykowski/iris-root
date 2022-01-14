@@ -22,7 +22,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 import static org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders.randomFunction;
 
 @RequiredArgsConstructor
-public class RandomAlertQueryService {
+public class RandomElasticSearchAlertQueryService implements RandomAlertService {
 
   private static final String[] ALERTS_IDS_LIST = new String[] { ALERT_NAME };
 
@@ -36,7 +36,7 @@ public class RandomAlertQueryService {
   @Valid
   private final ProductionSearchRequestBuilder productionSearchRequestBuilder;
 
-  public List<String> getRandomAlertNameByCriteria(AlertSearchCriteria criteria) {
+  public List<String> getRandomDiscriminatorByCriteria(AlertSearchCriteria criteria) {
     SearchRequest searchRequest = buildSearchRequestForRandomAlerts(criteria);
 
     List<Map<String, Object>> maps =
