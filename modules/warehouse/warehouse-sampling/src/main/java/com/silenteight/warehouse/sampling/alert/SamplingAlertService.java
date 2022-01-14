@@ -36,16 +36,16 @@ class SamplingAlertService {
 
   public AlertsSampleResponse generateSamplingAlerts(
       AlertsSampleRequest alertsSampleRequest) {
-      AlertSearchCriteria
-          alertSearchCriteria = SamplingAlertService.buildAlertSearchCriteria(
-          alertsSampleRequest, samplingProperties);
+    AlertSearchCriteria
+        alertSearchCriteria = SamplingAlertService.buildAlertSearchCriteria(
+        alertsSampleRequest, samplingProperties);
 
-      List<String> alertsIds =
-          randomAlertQueryService.getRandomDiscriminatorByCriteria(alertSearchCriteria);
+    List<String> alertsIds =
+        randomAlertQueryService.getRandomDiscriminatorByCriteria(alertSearchCriteria);
 
-      return AlertsSampleResponse.newBuilder()
-          .addAllAlerts(SamplingAlertService.convertIdsToAlertsList(alertsIds))
-          .build();
+    return AlertsSampleResponse.newBuilder()
+        .addAllAlerts(SamplingAlertService.convertIdsToAlertsList(alertsIds))
+        .build();
   }
 
   private static List<Alert> convertIdsToAlertsList(List<String> uniqueIds) {
