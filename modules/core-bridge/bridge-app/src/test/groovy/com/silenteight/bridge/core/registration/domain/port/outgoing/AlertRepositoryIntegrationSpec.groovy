@@ -19,23 +19,8 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
 
   def 'should save alerts and then find alerts by given batchId'() {
     given:
-    def batchIdIn = 'batch_id_1'
-    def alertsToSave = [
-        Alert.builder()
-            .name('alert_1_name')
-            .status(Status.REGISTERED)
-            .alertId('alert_1_id')
-            .batchId(batchIdIn)
-            .matches(
-                [
-                    Match.builder()
-                        .matchId('match_1_id')
-                        .name('match_1_name')
-                        .status(Match.Status.REGISTERED)
-                        .build()
-                ])
-            .build()
-    ]
+    def batchIdIn = 'batch_id_' + UUID.randomUUID()
+    def alertsToSave = [dummyAlert(batchIdIn, 'alert_id_' + UUID.randomUUID())]
 
     when:
     alertRepository.saveAlerts(alertsToSave)
@@ -54,5 +39,44 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
         status() == alertsToSave.first().matches().first().status()
       }
     }
+  }
+
+  def 'should update status of given alert ids'() {
+    given:
+    def newStatus = Status.PROCESSING
+    def batchId = 'batch_id_' + UUID.randomUUID()
+    def alert1 = dummyAlert(batchId, 'alert_id_' + UUID.randomUUID())
+    def alert2 = dummyAlert(batchId, 'alert_id_' + UUID.randomUUID())
+    alertRepository.saveAlerts([alert1, alert2])
+
+    when:
+    alertRepository.updateStatusByBatchIdAndAlertIdIn(newStatus, batchId, [alert1.alertId()])
+
+    then: 'alert1 should have updated status'
+    with(alertRepository.findAllByBatchIdAndAlertIdIn(batchId, [alert1.alertId()]).first()) {
+      status() == newStatus
+    }
+
+    and: 'alert2 should not have updated status'
+    with(alertRepository.findAllByBatchIdAndAlertIdIn(batchId, [alert2.alertId()]).first()) {
+      status() == alert2.status()
+    }
+  }
+
+  private static def dummyAlert(String batchId, String alertId) {
+    Alert.builder()
+        .name("{$alertId}_name")
+        .status(Status.REGISTERED)
+        .alertId(alertId)
+        .batchId(batchId)
+        .matches(
+            [
+                Match.builder()
+                    .matchId("{$alertId}_match_1_id")
+                    .name("{$alertId}_match_1_name")
+                    .status(Match.Status.REGISTERED)
+                    .build()
+            ])
+        .build()
   }
 }

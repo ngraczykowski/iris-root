@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class RegistrationRabbitAmqpListener {
+class AlertMatchesFeatureInputFedReceivedListener {
 
   private final RegistrationFacade registrationFacade;
 

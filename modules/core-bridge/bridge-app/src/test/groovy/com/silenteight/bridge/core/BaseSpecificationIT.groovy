@@ -22,7 +22,7 @@ class BaseSpecificationIT extends Specification {
   static String getGrpcPortForTest() {return "21234"}
 
   @Shared
-  public PostgreSQLContainer POSTGRE_SQL_CONTAINER = postgresqlContainer
+  public PostgreSQLContainer POSTGRES_SQL_CONTAINER = postgresqlContainer
 
   @Shared
   public RabbitMQContainer RABBITMQ_CONTAINER = rabbitMqContainer

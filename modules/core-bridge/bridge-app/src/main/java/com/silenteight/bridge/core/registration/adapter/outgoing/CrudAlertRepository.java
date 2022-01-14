@@ -1,5 +1,8 @@
 package com.silenteight.bridge.core.registration.adapter.outgoing;
 
+
+import com.silenteight.bridge.core.registration.adapter.outgoing.AlertEntity.Status;
+
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -30,4 +33,13 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
   List<AlertIdProjection> findByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
 
   List<AlertEntity> findAllByBatchId(String batchId);
+
+  List<AlertEntity> findAllByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
+
+  @Modifying
+  @Query("""
+      UPDATE alerts
+      SET status = :status, updated_at = NOW()
+      WHERE batch_id = :batchId AND alert_id IN(:alertIds)""")
+  void updateStatusByBatchIdAndAlertIdIn(Status status, String batchId, List<String> alertIds);
 }

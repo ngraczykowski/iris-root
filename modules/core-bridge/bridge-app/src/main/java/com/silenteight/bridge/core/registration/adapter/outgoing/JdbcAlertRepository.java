@@ -53,6 +53,20 @@ class JdbcAlertRepository implements AlertRepository {
     return alertRepository.countAllAlertsByBatchIdAndNotRecommendedAndNotErrorStatuses(batchId);
   }
 
+  @Override
+  public List<Alert> findAllByBatchIdAndAlertIdIn(String batchId, List<String> alertIds) {
+    return alertRepository.findAllByBatchIdAndAlertIdIn(batchId, alertIds).stream()
+        .map(this::mapToAlert)
+        .toList();
+  }
+
+  @Override
+  public void updateStatusByBatchIdAndAlertIdIn(
+      Alert.Status status, String batchId, List<String> alertIds) {
+    alertRepository.updateStatusByBatchIdAndAlertIdIn(
+        Status.valueOf(status.name()), batchId, alertIds);
+  }
+
   private AlertId mapToAlertId(AlertIdProjection alertIdProjection) {
     return new AlertId(alertIdProjection.alertId());
   }

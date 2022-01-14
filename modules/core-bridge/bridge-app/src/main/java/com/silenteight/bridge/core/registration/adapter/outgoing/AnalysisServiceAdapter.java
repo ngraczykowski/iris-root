@@ -9,7 +9,6 @@ import com.silenteight.adjudication.api.library.v1.analysis.AddAlertsToAnalysisI
 import com.silenteight.adjudication.api.library.v1.analysis.AnalysisServiceClient;
 import com.silenteight.adjudication.api.library.v1.analysis.CreateAnalysisIn;
 import com.silenteight.adjudication.api.library.v1.analysis.FeatureIn;
-import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand;
 import com.silenteight.bridge.core.registration.domain.model.Analysis;
 import com.silenteight.bridge.core.registration.domain.model.DefaultModel;
 import com.silenteight.bridge.core.registration.domain.model.DefaultModelFeature;
@@ -46,11 +45,11 @@ class AnalysisServiceAdapter implements AnalysisService {
   @Override
   @Retryable(AdjudicationEngineLibraryRuntimeException.class)
   public void addAlertsToAnalysis(
-      String analysisName, List<AddAlertToAnalysisCommand> alerts, Timestamp alertDeadlineTime) {
-    log.info("Adding {} alerts to analysis {}", alerts.size(), analysisName);
+      String analysisName, List<String> alertNames, Timestamp alertDeadlineTime) {
+    log.info("Adding {} alerts to analysis {}", alertNames.size(), analysisName);
     var addAlertsToAnalysisIn = AddAlertsToAnalysisIn.builder()
         .analysisName(analysisName)
-        .alerts(createAlerts(alerts, alertDeadlineTime))
+        .alerts(createAlerts(alertNames, alertDeadlineTime))
         .build();
     analysisServiceClient.addAlertsToAnalysis(addAlertsToAnalysisIn);
   }
@@ -64,11 +63,10 @@ class AnalysisServiceAdapter implements AnalysisService {
         .toList();
   }
 
-  private List<Alert> createAlerts(
-      List<AddAlertToAnalysisCommand> alerts, Timestamp alertDeadlineTime) {
-    return alerts.stream()
-        .map(alert -> Alert.builder()
-            .name(alert.alertId())
+  private List<Alert> createAlerts(List<String> alertNames, Timestamp alertDeadlineTime) {
+    return alertNames.stream()
+        .map(alertName -> Alert.builder()
+            .name(alertName)
             .deadlineTime(alertDeadlineTime)
             .build())
         .toList();

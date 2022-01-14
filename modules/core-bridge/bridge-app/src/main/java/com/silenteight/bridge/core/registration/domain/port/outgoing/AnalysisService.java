@@ -1,6 +1,5 @@
 package com.silenteight.bridge.core.registration.domain.port.outgoing;
 
-import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand;
 import com.silenteight.bridge.core.registration.domain.model.Analysis;
 import com.silenteight.bridge.core.registration.domain.model.DefaultModel;
 
@@ -13,5 +12,5 @@ public interface AnalysisService {
   Analysis create(DefaultModel defaultModel);
 
   void addAlertsToAnalysis(
-      String analysisName, List<AddAlertToAnalysisCommand> alerts, Timestamp alertDeadlineTime);
+      String analysisName, List<String> alertNames, Timestamp alertDeadlineTime);
 }

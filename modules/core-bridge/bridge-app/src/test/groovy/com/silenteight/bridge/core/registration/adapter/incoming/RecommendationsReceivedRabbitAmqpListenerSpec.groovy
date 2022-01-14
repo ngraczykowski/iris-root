@@ -26,10 +26,10 @@ class RecommendationsReceivedRabbitAmqpListenerSpec extends Specification {
 
     then:
     1 * registrationFacade.markAlertsAsRecommended(_) >> {MarkAlertsAsRecommendedCommand command ->
-      command.analysisName == message.analysisId
-      command.alertNames.size() == message.getAlertIdsCount()
-      command.alertNames[0] == message.getAlertIds(0)
-      command.alertNames[1] == message.getAlertIds(1)
+      assert command.analysisName == message.analysisId
+      assert command.alertNames.size() == message.getAlertIdsCount()
+      assert command.alertNames[0] == message.getAlertIds(0)
+      assert command.alertNames[1] == message.getAlertIds(1)
     }
   }
 }

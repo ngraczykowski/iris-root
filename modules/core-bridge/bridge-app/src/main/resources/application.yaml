@@ -41,7 +41,7 @@ amqp:
         exchange-name: notify-batch-completed-exchange
     incoming:
       match-feature-input-set-fed:
-        exchange-name: match-feature-input-set-fed-queue
+        exchange-name: match-feature-input-set-fed-exchange
         queue-name: match-feature-input-set-fed-queue
         dead-letter-queue-name: match-feature-input-set-fed.dlq
         dead-letter-queue-time-to-live-in-milliseconds: 10000
