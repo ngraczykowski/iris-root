@@ -99,12 +99,14 @@ public class HitComposite {
   }
 
   public EtlHit toEtlHit(
-      AlertedPartyData alertedPartyData, Map<AlertedPartyKey, String> alertedPartyEntities) {
+      AlertedPartyData alertedPartyData, Map<AlertedPartyKey, String> alertedPartyEntities,
+      List<String> allMatchingFields) {
     return EtlHit
         .builder()
         .hitComposite(this)
         .alertedPartyData(alertedPartyData)
         .alertedPartyEntities(alertedPartyEntities)
+        .allMatchingFields(allMatchingFields)
         .build();
   }
 

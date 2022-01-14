@@ -6,6 +6,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredA
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.agents.port.CreateNameFeatureInputUseCase;
 import com.silenteight.payments.bridge.agents.port.NameAddressCrossmatchUseCase;
+import com.silenteight.payments.bridge.agents.port.SpecificTermsUseCase;
 import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
 import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
 import com.silenteight.payments.bridge.svb.learning.engine.HistoricalDecisionLearningEnginePort;
@@ -27,6 +28,11 @@ public class TestApplicationConfiguration {
     BatchProperties properties = new BatchProperties();
     properties.setTablePrefix("pb_batch_");
     return properties;
+  }
+
+  @Bean
+  SpecificTermsUseCase specificTermsUseCase() {
+    return new SpecificTermsUseCaseMock();
   }
 
   @Bean

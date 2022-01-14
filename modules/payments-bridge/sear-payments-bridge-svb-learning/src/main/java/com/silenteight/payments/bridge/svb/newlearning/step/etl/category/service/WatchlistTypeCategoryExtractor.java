@@ -11,7 +11,7 @@ class WatchlistTypeCategoryExtractor extends BaseCategoryValueExtractor {
 
   @Override
   protected String getCategoryName() {
-    return "watchlistType";
+    return CATEGORY_WATCHLIST_TYPE;
   }
 
   @Override

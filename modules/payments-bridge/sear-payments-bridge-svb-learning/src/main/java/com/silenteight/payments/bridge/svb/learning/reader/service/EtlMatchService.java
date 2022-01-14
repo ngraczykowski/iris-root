@@ -67,7 +67,6 @@ class EtlMatchService {
         row.getFkcoVContent());
 
     return messageData.findAllValues(row.getFkcoVMatchedTag()).collect(toList());
-
   }
 
   private AlertedPartyData createAlertedPartyData(

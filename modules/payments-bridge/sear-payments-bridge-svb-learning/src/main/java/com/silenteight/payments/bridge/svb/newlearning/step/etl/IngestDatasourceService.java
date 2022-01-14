@@ -56,7 +56,8 @@ class IngestDatasourceService {
         messageData, hit.getFkcoVMatchedTag(),
         alert.getFkcoVFormat(), alert.getFkcoVApplication());
     var alertedPartyEntities = createAlertedPartyEntities(alertedParty, hit.getMatchingTexts());
-    return hit.toEtlHit(alertedParty, alertedPartyEntities);
+    var allMatchingFields = createAllMatchFieldsValue(messageData, hit.getFkcoVMatchedTag());
+    return hit.toEtlHit(alertedParty, alertedPartyEntities, allMatchingFields);
   }
 
   private MessageData createMessageData(AlertDetails alert) {
@@ -73,5 +74,10 @@ class IngestDatasourceService {
         .alertedPartyData(alertedPartyData)
         .allMatchingText(matchingTexts)
         .build());
+  }
+
+  private static List<String> createAllMatchFieldsValue(
+      MessageData messageData, String matchedTag) {
+    return messageData.findAllValues(matchedTag).collect(toList());
   }
 }
