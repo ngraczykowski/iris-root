@@ -1,0 +1,33 @@
+[plantuml,importing-steps,svg]
+-----
+@startuml
+title Use of Core Bridge
+
+participant "Client" as cl
+participant "Customer Bridge" as cu
+participant "Core Bridge" as co
+participant "Adjudication Engine" as ae
+participant "Universal Data Source" as uds
+
+cl-> cu: Push Alets
+
+cu-> co: Registration of the Batch
+co -> ae:
+cu-> co: Registration of the Alert and Matches
+co -> ae:
+cu -> uds: Feed UDS
+cu-> co: Notification of feed UDS with data for previous registred Alerts
+
+...
+note across: "Solving Alerts"
+...
+
+ae -> co:
+co-> cu: Notification 'Batch completed'
+ae -> co:
+co-> cu: Get Recommendations
+cl <- cu: Push Recommendations
+cu-> co: Recommendations delivered
+ae <- co:
+@enduml
+-----
