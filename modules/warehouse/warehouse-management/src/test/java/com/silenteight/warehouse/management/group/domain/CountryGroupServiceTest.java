@@ -1,6 +1,8 @@
 package com.silenteight.warehouse.management.group.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
+import com.silenteight.warehouse.common.domain.group.CountryGroupEntity;
+import com.silenteight.warehouse.common.domain.group.CountryGroupRepository;
 import com.silenteight.warehouse.management.group.domain.exception.CountryGroupAlreadyExistsException;
 import com.silenteight.warehouse.management.group.domain.exception.CountryGroupDoesNotExistException;
 

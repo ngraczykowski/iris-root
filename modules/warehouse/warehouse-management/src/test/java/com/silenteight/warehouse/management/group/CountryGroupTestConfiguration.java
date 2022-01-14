@@ -9,6 +9,7 @@ import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConven
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.warehouse.alert.rest.RestAlertModule;
+import com.silenteight.warehouse.common.domain.DomainModule;
 import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
@@ -34,7 +35,8 @@ import static org.mockito.Mockito.*;
     ManagementModule.class,
     TestElasticSearchModule.class,
     UserAwareTokenProvider.class,
-    RestAlertModule.class
+    RestAlertModule.class,
+    DomainModule.class
 })
 @ImportAutoConfiguration({
     HibernateCacheAutoConfiguration.class,
@@ -42,7 +44,7 @@ import static org.mockito.Mockito.*;
 })
 @RequiredArgsConstructor
 @Slf4j
-class CountryGroupsConfiguration {
+class CountryGroupTestConfiguration {
 
   @Bean
   TimeSource timeSource() {

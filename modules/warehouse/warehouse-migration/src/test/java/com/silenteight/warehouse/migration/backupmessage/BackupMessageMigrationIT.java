@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.*;
 
 @Sql
-@SpringBootTest(classes = MigrationTestConfiguration.class)
+@SpringBootTest(classes = MessageMigrationTestConfiguration.class)
 @SpringIntegrationTest
 @ContextConfiguration(initializers = {
     RabbitTestInitializer.class,

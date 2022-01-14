@@ -10,6 +10,7 @@ import com.silenteight.sep.auth.token.TokenModule;
 import com.silenteight.sep.filestorage.minio.FileStorageMinioModule;
 import com.silenteight.warehouse.alert.rest.RestAlertModule;
 import com.silenteight.warehouse.backup.BackupModule;
+import com.silenteight.warehouse.common.domain.DomainModule;
 import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
@@ -23,7 +24,8 @@ import com.silenteight.warehouse.indexer.production.indextracking.IndexTrackingM
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 import com.silenteight.warehouse.indexer.simulation.analysis.AnalysisModule;
 import com.silenteight.warehouse.management.ManagementModule;
-import com.silenteight.warehouse.migration.MigrationModule;
+import com.silenteight.warehouse.migration.backupmessage.BackupMigrationModule;
+import com.silenteight.warehouse.migration.country.CountryMigrationModule;
 import com.silenteight.warehouse.production.persistence.ProductionPersistenceModule;
 import com.silenteight.warehouse.report.accuracy.AccuracyReportModule;
 import com.silenteight.warehouse.report.billing.BillingReportModule;
@@ -67,13 +69,15 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AiReasoningReportModule.class,
     AlertModule.class,
     AnalysisModule.class,
+    BackupMigrationModule.class,
     BackupModule.class,
     BillingReportModule.class,
+    CountryMigrationModule.class,
+    DomainModule.class,
     IndexTrackingModule.class,
     ManagementModule.class,
     MatchModule.class,
     MetricsReportModule.class,
-    MigrationModule.class,
     ProductionMessageHandlerModule.class,
     com.silenteight.warehouse.production.handler.ProductionMessageHandlerModule.class,
     ProductionPersistenceModule.class,

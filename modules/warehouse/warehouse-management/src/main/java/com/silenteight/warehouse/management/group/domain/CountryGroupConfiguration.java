@@ -1,16 +1,17 @@
 package com.silenteight.warehouse.management.group.domain;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import com.silenteight.warehouse.common.domain.DomainConfiguration;
+import com.silenteight.warehouse.common.domain.group.CountryGroupRepository;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EntityScan
-@EnableJpaRepositories
+@Import(DomainConfiguration.class)
 @EnableTransactionManagement
-class CountryGroupDomainConfiguration {
+class CountryGroupConfiguration {
 
   @Bean
   CountryGroupService countryGroupService(CountryGroupRepository countryGroupRepository) {

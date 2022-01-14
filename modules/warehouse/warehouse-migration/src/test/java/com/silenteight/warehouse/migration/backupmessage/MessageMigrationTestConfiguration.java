@@ -12,7 +12,6 @@ import com.silenteight.warehouse.backup.BackupModule;
 import com.silenteight.warehouse.backup.indexing.IndexerProperties;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
-import com.silenteight.warehouse.migration.MigrationModule;
 import com.silenteight.warehouse.production.handler.ProductionMessageHandlerModule;
 import com.silenteight.warehouse.production.handler.ProductionMessageHandlerProperties;
 import com.silenteight.warehouse.production.persistence.ProductionPersistenceModule;
@@ -35,7 +34,7 @@ import static org.mockito.Mockito.*;
     BackupModule.class,
     AmqpCommonModule.class,
     TestClientModule.class,
-    MigrationModule.class,
+    BackupMigrationModule.class,
     ProductionMessageHandlerModule.class,
     ProductionPersistenceModule.class
 })
@@ -49,7 +48,7 @@ import static org.mockito.Mockito.*;
 @EnableIntegrationManagement
 @RequiredArgsConstructor
 @Slf4j
-class MigrationTestConfiguration {
+class MessageMigrationTestConfiguration {
 
   private final IndexerProperties properties;
   private final IndexerClientIntegrationProperties testProperties;
