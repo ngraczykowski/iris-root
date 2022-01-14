@@ -1,8 +1,8 @@
-package com.silenteight.warehouse.management.group.domain;
+package com.silenteight.warehouse.common.domain.country;
 
 import lombok.*;
 
-import com.silenteight.sep.base.common.entity.BaseModifiableEntity;
+import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
 
 import java.util.UUID;
@@ -18,10 +18,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 @EqualsAndHashCode(callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "warehouse_country_group")
-class CountryGroupEntity extends BaseModifiableEntity implements IdentifiableEntity {
+@Table(name = "warehouse_country")
+public class CountryEntity extends BaseEntity implements IdentifiableEntity {
 
-  private static final long serialVersionUID = -4592869339522050083L;
+  private static final long serialVersionUID = -7733833790757656679L;
 
   @Id
   @GeneratedValue(strategy = IDENTITY)
@@ -35,10 +35,6 @@ class CountryGroupEntity extends BaseModifiableEntity implements IdentifiableEnt
   private UUID countryGroupId;
 
   @ToString.Include
-  @Column(name = "country_group_name", nullable = false)
-  private String name;
-
-  void updateName(String name) {
-    this.name = name;
-  }
+  @Column(name = "country", nullable = false)
+  private String country;
 }

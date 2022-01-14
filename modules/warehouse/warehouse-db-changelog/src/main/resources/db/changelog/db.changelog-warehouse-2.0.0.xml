@@ -141,4 +141,36 @@
                   newColumnName="file_storage_name"/>
   </changeSet>
 
+  <changeSet id="warehouse-2.0.0-7" author="plewandowski">
+    <addColumn tableName="warehouse_country_group">
+      <column name="migrated" type="boolean" defaultValueBoolean="false"/>
+    </addColumn>
+
+    <createTable tableName="warehouse_country">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="country_group_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="country" type="VARCHAR(32)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="warehouse_country"
+        baseColumnNames="country_group_id"
+        constraintName="fk_warehouse_country_group_id"
+        referencedTableName="warehouse_country_group"
+        referencedColumnNames="country_group_id"/>
+
+    <addUniqueConstraint
+        columnNames="country_group_id, country"
+        constraintName="uq_warehouse_country_group_id_country"
+        tableName="warehouse_country"/>
+  </changeSet>
 </databaseChangeLog>

@@ -6,6 +6,7 @@ plugins {
 description = "Warehouse Common"
 
 configurations {
+  implementation.extendsFrom starterDatabase
   testImplementation.extendsFrom starterSpringTest
 }
 

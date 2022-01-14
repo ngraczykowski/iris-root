@@ -3,6 +3,8 @@ package com.silenteight.warehouse.management.group.domain;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.warehouse.common.domain.group.CountryGroupEntity;
+import com.silenteight.warehouse.common.domain.group.CountryGroupRepository;
 import com.silenteight.warehouse.management.group.domain.dto.CountryGroupDto;
 import com.silenteight.warehouse.management.group.domain.exception.CountryGroupAlreadyExistsException;
 import com.silenteight.warehouse.management.group.domain.exception.CountryGroupDoesNotExistException;

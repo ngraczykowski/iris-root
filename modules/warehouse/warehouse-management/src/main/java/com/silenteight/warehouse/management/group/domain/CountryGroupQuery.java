@@ -3,6 +3,8 @@ package com.silenteight.warehouse.management.group.domain;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.warehouse.common.domain.group.CountryGroupEntity;
+import com.silenteight.warehouse.common.domain.group.CountryGroupRepository;
 import com.silenteight.warehouse.management.group.domain.dto.CountryGroupDto;
 import com.silenteight.warehouse.management.group.domain.exception.CountryGroupDoesNotExistException;
 import com.silenteight.warehouse.management.group.get.GetCountryGroupQuery;
@@ -19,6 +21,7 @@ class CountryGroupQuery implements ListCountryGroupQuery, GetCountryGroupQuery {
   @NonNull
   private final CountryGroupRepository countryGroupRepository;
 
+  @Override
   public List<CountryGroupDto> listAll() {
     return countryGroupRepository.findAll()
         .stream()
@@ -26,6 +29,7 @@ class CountryGroupQuery implements ListCountryGroupQuery, GetCountryGroupQuery {
         .collect(toList());
   }
 
+  @Override
   public CountryGroupDto get(UUID id) {
     return countryGroupRepository
         .findByCountryGroupId(id)

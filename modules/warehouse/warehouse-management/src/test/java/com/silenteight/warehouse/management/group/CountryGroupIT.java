@@ -42,7 +42,7 @@ import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
-@SpringBootTest(classes = CountryGroupsConfiguration.class)
+@SpringBootTest(classes = CountryGroupTestConfiguration.class)
 @ContextConfiguration(initializers = {
     OpendistroElasticContainerInitializer.class,
     PostgresTestInitializer.class
@@ -50,7 +50,7 @@ import static org.assertj.core.api.Assertions.*;
 @AutoConfigureDataJpa
 @ActiveProfiles("jpa-test")
 @Transactional
-class CountryGroupsIT {
+class CountryGroupIT {
 
   @Autowired
   private CreateCountryGroupRestController createCountryGroupRestController;
