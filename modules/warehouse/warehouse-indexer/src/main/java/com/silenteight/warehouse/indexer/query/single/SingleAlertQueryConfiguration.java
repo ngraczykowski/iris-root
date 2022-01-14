@@ -49,8 +49,8 @@ public class SingleAlertQueryConfiguration {
   }
 
   @Bean
+  // TODO(tdrozdz): Add isSqlSupported to properties
   @ConditionalOnProperty(value = "isSqlSupported", havingValue = "false", matchIfMissing = true)
-    // TODO(tdrozdz): Add isSqlSupported to properties
   RandomAlertService randomElasticAlertQueryService(
       AlertSearchService alertSearchService, RestHighLevelClient restHighLevelAdminClient,
       ProductionSearchRequestBuilder productionSearchRequestBuilder) {
@@ -60,8 +60,8 @@ public class SingleAlertQueryConfiguration {
   }
 
   @Bean
+  // TODO(tdrozdz): Add isSqlSupported to properties
   @ConditionalOnProperty(value = "isSqlSupported", havingValue = "true")
-    // TODO(tdrozdz): Add isSqlSupported to properties
   RandomAlertService randomPostgresAlertQueryService() {
     return new RandomPostgresSearchAlertQueryService();
   }

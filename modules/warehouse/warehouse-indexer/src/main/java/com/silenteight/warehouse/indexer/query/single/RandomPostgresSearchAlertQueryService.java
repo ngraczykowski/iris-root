@@ -11,7 +11,8 @@ public class RandomPostgresSearchAlertQueryService implements RandomAlertService
 
   @Override
   public List<String> getRandomDiscriminatorByCriteria(AlertSearchCriteria alertsSampleRequest) {
-    // TODO(tdrozdz): Add proper implementation to fetch random alerts based on request from postgres
+    // TODO(tdrozdz): Add proper implementation to fetch random alerts based on request from
+    // postgres
     return ImmutableList.of();
   }
 }
