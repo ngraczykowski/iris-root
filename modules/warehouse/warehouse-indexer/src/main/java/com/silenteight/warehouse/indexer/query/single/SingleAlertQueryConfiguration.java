@@ -4,8 +4,10 @@ import com.silenteight.warehouse.indexer.alert.indexing.ElasticsearchProperties;
 import com.silenteight.warehouse.indexer.alert.mapping.AlertMappingProperties;
 
 import org.elasticsearch.client.RestHighLevelClient;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
 import javax.validation.Valid;
@@ -48,11 +50,20 @@ public class SingleAlertQueryConfiguration {
   }
 
   @Bean
-  RandomAlertQueryService randomAlertQueryService(
+  @ConditionalOnProperty(value="isSqlSupported", havingValue = "false", matchIfMissing = true)
+  // TODO(tdrozdz): Add isSqlSupported to properties
+  RandomAlertService randomElasticAlertQueryService(
       AlertSearchService alertSearchService, RestHighLevelClient restHighLevelAdminClient,
       ProductionSearchRequestBuilder productionSearchRequestBuilder) {
 
-    return new RandomAlertQueryService(alertSearchService, restHighLevelAdminClient,
+    return new RandomElasticSearchAlertQueryService(alertSearchService, restHighLevelAdminClient,
         productionSearchRequestBuilder);
+  }
+
+  @Bean
+  @ConditionalOnProperty(value="isSqlSupported", havingValue = "true")
+    // TODO(tdrozdz): Add isSqlSupported to properties
+  RandomAlertService randomPostgresAlertQueryService() {
+    return new RandomPostgresSearchAlertQueryService();
   }
 }

@@ -25,7 +25,7 @@ import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 import static org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders.randomFunction;
 
 @RequiredArgsConstructor
-public class RandomAlertQueryService {
+public class RandomElasticSearchAlertQueryService implements RandomAlertService {
 
   private static final String[] ALERTS_IDS_LIST = new String[] { DISCRIMINATOR };
 
@@ -39,6 +39,7 @@ public class RandomAlertQueryService {
   @Valid
   private final ProductionSearchRequestBuilder productionSearchRequestBuilder;
 
+  @Override
   public List<String> getRandomDiscriminatorByCriteria(AlertSearchCriteria criteria) {
     SearchRequest searchRequest = buildSearchRequestForRandomAlerts(criteria);
 

@@ -69,7 +69,7 @@ class AlertQueryIT {
   AlertSearchService underSearchService;
 
   @Autowired
-  RandomAlertQueryService randomAlertQueryService;
+  RandomAlertService randomAlertQueryService;
 
   @BeforeEach
   void init() {
