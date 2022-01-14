@@ -298,7 +298,8 @@ job "governance" {
           "-jar",
           "local/governance-app.jar",
           "--spring.profiles.active=linux,governance,database,rabbitmq,messaging",
-          "--spring.config.additional-location=file:local/conf/"
+          "--spring.config.additional-location=file:local/conf/",
+          "--spring.rabbitmq.virtual-host=/${var.namespace}",
         ]
       }
 
