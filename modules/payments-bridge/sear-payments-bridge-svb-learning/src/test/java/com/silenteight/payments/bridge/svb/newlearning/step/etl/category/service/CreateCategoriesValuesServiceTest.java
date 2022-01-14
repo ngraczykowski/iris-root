@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.svb.newlearning.step.etl.category.service;
 
 import com.silenteight.payments.bridge.svb.newlearning.job.CreateCategoriesValuesMock;
+import com.silenteight.payments.bridge.svb.newlearning.job.NameAddressCrossmatchUseCaseMock;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,8 @@ class CreateCategoriesValuesServiceTest {
   void setUp() {
     createCategoryValuesService = new CreateCategoriesValuesService(
         new CreateCategoriesValuesMock(),
-        List.of(new WatchlistTypeExtractor())
+        List.of(new WatchlistTypeCategoryExtractor(),
+            new CrossmatchCategoryExtractor(new NameAddressCrossmatchUseCaseMock()))
     );
   }
 
@@ -28,6 +30,6 @@ class CreateCategoriesValuesServiceTest {
     var hit = createEtlHit();
     var categoryValues =
         createCategoryValuesService.createCategoryValues(List.of(hit), createRegisterAlert());
-    assertThat(categoryValues.get(0).getCategoryValuesCount()).isEqualTo(1);
+    assertThat(categoryValues.size()).isEqualTo(2);
   }
 }

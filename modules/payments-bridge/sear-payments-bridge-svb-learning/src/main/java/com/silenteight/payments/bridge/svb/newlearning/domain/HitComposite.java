@@ -3,17 +3,14 @@ package com.silenteight.payments.bridge.svb.newlearning.domain;
 import lombok.Builder;
 import lombok.Value;
 
-import com.silenteight.datasource.api.name.v1.NameFeatureInput.EntityType;
+import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import org.apache.commons.collections4.list.SetUniqueList;
 import org.apache.commons.lang3.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -89,14 +86,6 @@ public class HitComposite {
     return codes;
   }
 
-  public EntityType getEntityType() {
-    var types = Map.of(
-        "INDIVIDUAL", EntityType.INDIVIDUAL,
-        "COMPANY", EntityType.ORGANIZATION);
-
-    return types.getOrDefault(fkcoVListType, EntityType.ENTITY_TYPE_UNSPECIFIED);
-  }
-
   public List<String> getWatchlistNames() {
     return List.of(getFkcoVListName().split(","));
   }
@@ -109,11 +98,17 @@ public class HitComposite {
     return new ArrayList<>(Arrays.asList(fkcoVListMatchedName.split(",")));
   }
 
-  public EtlHit toEtlHit(AlertedPartyData alertedPartyData) {
+  public EtlHit toEtlHit(
+      AlertedPartyData alertedPartyData, Map<AlertedPartyKey, String> alertedPartyEntities) {
     return EtlHit
         .builder()
         .hitComposite(this)
         .alertedPartyData(alertedPartyData)
+        .alertedPartyEntities(alertedPartyEntities)
         .build();
+  }
+
+  Optional<String> getFirstWatchlistName() {
+    return getWatchlistNames().stream().findFirst();
   }
 }
