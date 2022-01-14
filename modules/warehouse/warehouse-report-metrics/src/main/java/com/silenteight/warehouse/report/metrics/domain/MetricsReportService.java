@@ -32,12 +32,13 @@ public class MetricsReportService implements ReportsRemoval {
   public ReportInstanceReferenceDto createReportInstance(
       @NonNull ReportRange range,
       @NonNull List<String> indexesForAnalysis,
-      @NonNull @Valid PropertiesDefinition properties) {
+      @NonNull @Valid PropertiesDefinition properties,
+      String analysisId) {
 
     MetricsReport report = of(range);
     MetricsReport savedReport = repository.save(report);
     asyncReportGenerationService.generateReport(
-        savedReport.getId(), range, indexesForAnalysis, properties);
+        savedReport.getId(), range, indexesForAnalysis, properties, analysisId);
 
     return new ReportInstanceReferenceDto(savedReport.getId());
   }

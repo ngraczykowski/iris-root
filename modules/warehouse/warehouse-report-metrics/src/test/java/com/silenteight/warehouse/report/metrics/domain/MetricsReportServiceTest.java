@@ -3,12 +3,14 @@ package com.silenteight.warehouse.report.metrics.domain;
 import com.silenteight.warehouse.report.reporting.ReportInstanceReferenceDto;
 import com.silenteight.warehouse.report.storage.ReportStorage;
 
+import liquibase.pro.packaged.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.ANALYSIS_ID;
 import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.INDEXES;
 import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.REPORT_RANGE;
 import static com.silenteight.warehouse.report.metrics.generation.GenerationMetricsReportTestFixtures.PROPERTIES;
@@ -34,7 +36,7 @@ class MetricsReportServiceTest {
   void shouldGenerateReport() {
     // when
     ReportInstanceReferenceDto reportInstance =
-        underTest.createReportInstance(REPORT_RANGE, INDEXES, PROPERTIES);
+        underTest.createReportInstance(REPORT_RANGE, INDEXES, PROPERTIES, ANALYSIS_ID);
 
     // then
     assertThat(repository.findById(reportInstance.getInstanceReferenceId()))
@@ -48,7 +50,7 @@ class MetricsReportServiceTest {
   void removeReport() {
     // given
     ReportInstanceReferenceDto reportInstance =
-        underTest.createReportInstance(REPORT_RANGE, INDEXES, PROPERTIES);
+        underTest.createReportInstance(REPORT_RANGE, INDEXES, PROPERTIES, ANALYSIS_ID);
 
     // when
     underTest.removeReport(reportInstance.getInstanceReferenceId());

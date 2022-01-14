@@ -52,7 +52,7 @@ class CreateSimulationMetricsReportUseCaseTest {
     underTest.createReport(ANALYSIS_ID);
 
     // then
-    verify(reportService).createReportInstance(reportRangeCaptor.capture(), any(), any());
+    verify(reportService).createReportInstance(reportRangeCaptor.capture(), any(), any(), any());
     assertThat(reportRangeCaptor.getValue().getFrom()).isEqualTo(EPOCH.atOffset(UTC));
     assertThat(reportRangeCaptor.getValue().getTo()).isEqualTo(TIME_SOURCE.offsetDateTime());
   }

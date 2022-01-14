@@ -31,6 +31,6 @@ class CreateProductionMetricsReportUseCase {
   ReportInstanceReferenceDto createReport(OffsetDateTime from, OffsetDateTime to) {
     ReportRange range = of(from, to);
     List<String> indexes = productionIndexerQuery.getIndexesForAnalysis(PRODUCTION_ANALYSIS_NAME);
-    return reportService.createReportInstance(range, indexes, productionProperties);
+    return reportService.createReportInstance(range, indexes, productionProperties, null);
   }
 }

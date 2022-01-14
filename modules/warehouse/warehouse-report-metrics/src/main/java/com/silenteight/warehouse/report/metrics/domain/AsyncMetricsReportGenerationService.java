@@ -38,10 +38,11 @@ class AsyncMetricsReportGenerationService {
       long id,
       @NonNull ReportRange range,
       @NonNull List<String> indexes,
-      @Valid PropertiesDefinition properties) {
+      @Valid PropertiesDefinition properties,
+      String analysisId) {
 
     try {
-      doGenerateReport(id, range, indexes, properties);
+      doGenerateReport(id, range, indexes, properties, analysisId);
     } catch (RuntimeException e) {
       doFailReport(id);
       throw new ReportGenerationException(id, e);
@@ -52,7 +53,8 @@ class AsyncMetricsReportGenerationService {
       long id,
       ReportRange range,
       List<String> indexes,
-      PropertiesDefinition properties) {
+      PropertiesDefinition properties,
+      String analysisId) {
 
     MetricsReport report = repository.getById(id);
     report.generating();
@@ -62,7 +64,7 @@ class AsyncMetricsReportGenerationService {
     log.debug("Generating report with id={}", id);
 
     if (properties.isUseSqlReports()) {
-      generatePsql(range, properties, fileStorageName);
+      generatePsql(range, properties, fileStorageName, analysisId);
     } else {
       generateEs(range, properties, indexes, fileStorageName);
     }
@@ -75,12 +77,14 @@ class AsyncMetricsReportGenerationService {
   private void generatePsql(
       ReportRange range,
       PropertiesDefinition properties,
-      String fileStorageName) {
+      String fileStorageName,
+      String analysisId) {
     reportGenerationService.generateReport(
         range.getFrom(),
         range.getTo(),
         properties,
-        fileStorageName);
+        fileStorageName,
+        analysisId);
   }
 
   private void generateEs(

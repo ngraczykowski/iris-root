@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.ANALYSIS_ID;
 import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.INDEXES;
 import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.REPORT_RANGE;
 import static com.silenteight.warehouse.report.metrics.domain.ReportState.DONE;
@@ -58,7 +59,7 @@ class AsyncMetricsReportGenerationServiceTest {
     assertThat(metricsReport.getState()).isEqualTo(NEW);
 
     // when
-    underTest.generateReport(metricsReport.getId(), REPORT_RANGE, INDEXES, PROPERTIES);
+    underTest.generateReport(metricsReport.getId(), REPORT_RANGE, INDEXES, PROPERTIES, ANALYSIS_ID);
 
     // then
     metricsReport = repository.getById(metricsReport.getId());
@@ -78,7 +79,8 @@ class AsyncMetricsReportGenerationServiceTest {
 
     // when + then
     Long reportId = metricsReport.getId();
-    assertThatThrownBy(() -> underTest.generateReport(reportId, REPORT_RANGE, INDEXES, PROPERTIES))
+    assertThatThrownBy(
+        () -> underTest.generateReport(reportId, REPORT_RANGE, INDEXES, PROPERTIES, ANALYSIS_ID))
         .isInstanceOf(ReportGenerationException.class)
         .hasMessageContaining(format("Cannot generate Metrics report with id=%d", reportId));
 

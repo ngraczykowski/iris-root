@@ -56,7 +56,8 @@ public class MetricsReportGenerationService {
       @NonNull OffsetDateTime from,
       @NonNull OffsetDateTime to,
       @NonNull @Valid PropertiesDefinition properties,
-      @NonNull String fileStorageName) {
+      @NonNull String fileStorageName,
+      String analysisId) {
 
     FetchDataRequest request = FetchDataRequest
         .builder()
@@ -66,6 +67,7 @@ public class MetricsReportGenerationService {
         .useSqlReports(properties.isUseSqlReports())
         .selectSqlQuery(properties.getSelectSqlQuery())
         .sqlTemplates(properties.getSqlTemplates())
+        .analysisId(analysisId)
         .build();
 
     reportGenerationService.generate(request);
