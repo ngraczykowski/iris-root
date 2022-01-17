@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Value
 @Builder
@@ -44,6 +45,10 @@ public class EtlHit {
 
   public String getMatchedTagContent() {
     return hitComposite.getFkcoVMatchedTagContent();
+  }
+
+  public String getFkcoVListFmmId() {
+    return hitComposite.getFkcoVListFmmId();
   }
 
   public List<String> getMatchingTexts() {
@@ -98,5 +103,13 @@ public class EtlHit {
       return SolutionType.UNKNOWN;
     }
     return SolutionType.valueOf(hitType);
+  }
+
+  public Optional<String> getAccountNumberOrFirstName() {
+    return alertedPartyData.getAccountNumberOrFirstName();
+  }
+
+  public Optional<String> getFirstAlertedPartyName() {
+    return getAlertedPartyNames().stream().map(String::trim).findFirst();
   }
 }
