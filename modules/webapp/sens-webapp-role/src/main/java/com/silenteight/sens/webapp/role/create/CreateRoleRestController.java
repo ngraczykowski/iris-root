@@ -1,10 +1,10 @@
-package com.silenteight.sens.webapp.user.roles.create;
+package com.silenteight.sens.webapp.role.create;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sens.webapp.user.roles.create.dto.CreateRoleDto;
+import com.silenteight.sens.webapp.role.create.dto.CreateRoleDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,19 +33,20 @@ class CreateRoleRestController {
   @PostMapping("/v2/roles")
   @PreAuthorize("isAuthorized('CREATE_ROLE')")
   public ResponseEntity<Void> create(
-      @Valid @RequestBody CreateRoleDto dto, Authentication authentication) {
+      @RequestBody @Valid CreateRoleDto dto, Authentication authentication) {
+
     log.info(ROLE_MANAGEMENT, "Creating new role. dto={}", dto);
 
-    String userName = authentication.getName();
-
-    CreateRoleCommand command = CreateRoleCommand.builder()
+    CreateRoleRequest command = CreateRoleRequest.builder()
         .id(dto.getId())
         .name(dto.getName())
         .description(dto.getDescription())
-        .createdBy(userName)
+        .permissions(dto.getPermissions())
+        .createdBy(authentication.getName())
         .build();
 
     createRoleUseCase.activate(command);
+    log.info(ROLE_MANAGEMENT, "Role created.");
     return status(CREATED).build();
   }
 }

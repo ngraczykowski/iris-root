@@ -1,7 +1,8 @@
-package com.silenteight.sens.webapp.user.roles.create.dto;
+package com.silenteight.sens.webapp.role.create.dto;
 
 import lombok.*;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Builder
@@ -12,10 +13,10 @@ public class CreateRoleDto {
 
   @NonNull
   UUID id;
-
   @NonNull
   String name;
-
   @NonNull
   String description;
+  @NonNull
+  Set<UUID> permissions;
 }

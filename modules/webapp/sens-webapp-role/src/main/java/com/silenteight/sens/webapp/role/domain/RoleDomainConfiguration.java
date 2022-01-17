@@ -13,6 +13,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 class RoleDomainConfiguration {
 
   @Bean
+  RoleService roleService(@NonNull RoleRepository repository) {
+    return new RoleService(repository);
+  }
+
+  @Bean
   RoleQuery roleQuery(@NonNull RoleRepository repository) {
     return new RoleQuery(repository);
   }

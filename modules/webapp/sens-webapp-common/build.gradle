@@ -12,6 +12,7 @@ dependencies {
   api libraries.silenteight_serp_protocol
 
   // General dependencies
+  implementation libraries.silenteight_audit_bs
   implementation libraries.silenteight_commons_core
   implementation libraries.silenteight_rabbit_mq_common_schema
 

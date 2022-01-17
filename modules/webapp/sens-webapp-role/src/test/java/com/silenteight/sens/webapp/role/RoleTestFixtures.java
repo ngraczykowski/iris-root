@@ -3,6 +3,8 @@ package com.silenteight.sens.webapp.role;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import com.silenteight.sens.webapp.role.create.CreateRoleRequest;
+import com.silenteight.sens.webapp.role.create.dto.CreateRoleDto;
 import com.silenteight.sens.webapp.role.details.dto.RoleDetailsDto;
 import com.silenteight.sens.webapp.role.list.dto.RoleDto;
 
@@ -60,5 +62,20 @@ public final class RoleTestFixtures {
       .id(ROLE_ID_1)
       .name(ROLE_NAME_1)
       .description(ROLE_DESCRIPTION_1)
+      .build();
+
+  public static final CreateRoleDto CREATE_ROLE_DTO = CreateRoleDto.builder()
+      .id(ROLE_ID_1)
+      .name(ROLE_NAME_1)
+      .description(ROLE_DESCRIPTION_1)
+      .permissions(PERMISSION_IDS)
+      .build();
+
+  public static final CreateRoleRequest CREATE_ROLE_REQUEST = CreateRoleRequest.builder()
+      .id(ROLE_ID_1)
+      .name(ROLE_NAME_1)
+      .description(ROLE_DESCRIPTION_1)
+      .permissions(PERMISSION_IDS)
+      .createdBy(USERNAME_1)
       .build();
 }

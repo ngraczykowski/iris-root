@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.user.roles.create;
+package com.silenteight.sens.webapp.role.create;
 
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
-import static com.silenteight.sens.webapp.user.roles.RolesTestFixtures.CREATE_ROLE_DTO;
+import static com.silenteight.sens.webapp.role.RoleTestFixtures.CREATE_ROLE_DTO;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
