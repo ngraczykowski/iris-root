@@ -23,15 +23,20 @@ spec:
             httpGet:
               path: "/rest/uds/management/health/liveness"
               port: 8080
-            initialDelaySeconds: 30
-            timeoutSeconds: 10
+            timeoutSeconds: 5
           readinessProbe:
             httpGet:
               path: "/rest/uds/management/health/readiness"
               port: 8080
             failureThreshold: 30
-            initialDelaySeconds: 30
             timeoutSeconds: 10
+          startupProbe:
+            httpGet:
+              path: "/rest/uds/management/health/liveness"
+              port: 8080
+            failureThreshold: 30
+            timeoutSeconds: 5
+            periodSeconds: 10
           env:
             - name: UDS_DB_HOST
               value: {{ .Values.udsDbHost | quote  }}
