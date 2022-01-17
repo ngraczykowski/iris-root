@@ -23,15 +23,22 @@ spec:
             httpGet:
               path: {{ .Values.livenessProbeHttpGetPath }}
               port: {{ .Values.ports.http }}
-            initialDelaySeconds: 30
+            periodSeconds: 10
             timeoutSeconds: 10
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbeHttpGetPath }}
               port: {{ .Values.ports.http }}
             failureThreshold: 30
-            initialDelaySeconds: 30
+            periodSeconds: 10
             timeoutSeconds: 10
+          startupProbe:
+            httpGet:
+              path: {{ .Values.livenessProbeHttpGetPath }}
+              port: {{ .Values.ports.http }}
+            failureThreshold: 30
+            timeoutSeconds: 5
+            periodSeconds: 10
           env:
             - name: AE_DB_HOST
               value: {{ .Values.aeDbHost | quote }}
