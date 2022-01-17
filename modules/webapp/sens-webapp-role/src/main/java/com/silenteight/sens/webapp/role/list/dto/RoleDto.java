@@ -4,8 +4,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
-import java.time.OffsetDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -18,14 +16,4 @@ public class RoleDto {
   String name;
   @NonNull
   String description;
-  @NonNull
-  Set<UUID> permissions;
-  @NonNull
-  OffsetDateTime updatedAt;
-  @NonNull
-  OffsetDateTime createdAt;
-  @NonNull
-  String createdBy;
-  @NonNull
-  String updatedBy;
 }

@@ -1,5 +1,7 @@
 package com.silenteight.sens.webapp.role.domain;
 
+import com.silenteight.sens.webapp.role.details.dto.RoleDetailsDto;
+import com.silenteight.sens.webapp.role.domain.exception.RoleNotFoundException;
 import com.silenteight.sens.webapp.role.list.dto.RoleDto;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 
@@ -35,9 +37,32 @@ class RoleQueryIT extends BaseDataJpaTest {
     assertThat(role.getId()).isEqualTo(ROLE_ID_1);
     assertThat(role.getName()).isEqualTo(ROLE_NAME_1);
     assertThat(role.getDescription()).isEqualTo(ROLE_DESCRIPTION_1);
-    assertThat(role.getPermissions()).isEqualTo(PERMISSION_IDS);
-    assertThat(role.getCreatedBy()).isEqualTo(USERNAME_1);
-    assertThat(role.getUpdatedBy()).isEqualTo(USERNAME_1);
+  }
+
+  @Test
+  void shouldGetRoleDetails() {
+    // given
+    persistRole(ROLE_ID_1);
+
+    // when
+    RoleDetailsDto details = underTest.details(ROLE_ID_1);
+
+    // then
+    assertThat(details.getId()).isEqualTo(ROLE_ID_1);
+    assertThat(details.getName()).isEqualTo(ROLE_NAME_1);
+    assertThat(details.getDescription()).isEqualTo(ROLE_DESCRIPTION_1);
+    assertThat(details.getPermissions()).isEqualTo(PERMISSION_IDS);
+    assertThat(details.getCreatedAt()).isNotNull();
+    assertThat(details.getCreatedBy()).isEqualTo(USERNAME_1);
+    assertThat(details.getUpdatedAt()).isNotNull();
+    assertThat(details.getUpdatedBy()).isEqualTo(USERNAME_1);
+  }
+
+  @Test
+  void shouldThrowIfRoleNotFoundById() {
+    assertThatThrownBy(() -> underTest.details(ROLE_ID_1))
+        .isInstanceOf(RoleNotFoundException.class)
+        .hasMessageContaining("roleId=" + ROLE_ID_1);
   }
 
   private void persistRole(UUID roleId) {

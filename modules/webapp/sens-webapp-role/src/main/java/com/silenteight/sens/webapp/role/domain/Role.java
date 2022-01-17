@@ -2,6 +2,7 @@ package com.silenteight.sens.webapp.role.domain;
 
 import lombok.*;
 
+import com.silenteight.sens.webapp.role.details.dto.RoleDetailsDto;
 import com.silenteight.sens.webapp.role.list.dto.RoleDto;
 import com.silenteight.sep.base.common.entity.BaseModifiableEntity;
 
@@ -50,6 +51,14 @@ class Role extends BaseModifiableEntity {
 
   RoleDto toDto() {
     return RoleDto.builder()
+        .id(getRoleId())
+        .name(getName())
+        .description(getDescription())
+        .build();
+  }
+
+  RoleDetailsDto toDetailsDto() {
+    return RoleDetailsDto.builder()
         .id(getRoleId())
         .name(getName())
         .description(getDescription())

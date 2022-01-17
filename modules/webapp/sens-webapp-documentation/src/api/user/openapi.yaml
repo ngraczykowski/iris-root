@@ -191,7 +191,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RoleDto'
+                $ref: '#/components/schemas/RoleDetailsDto'
     delete:
       tags:
         - roles
@@ -210,28 +210,6 @@ paths:
         422:
           description: Role can't be removed because it has assigned users.
 
-  /v2/roles/{id}/permissions:
-    get:
-      tags:
-        - roles
-      description: Return list of permission assigned to role
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-          description: 'Role id'
-          example: '2dcb085b-2de7-4bce-b402-59cda2e007cc'
-      responses:
-        200:
-          description: List of permissions assigned to role
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PermissionDto'
     put:
       tags:
         - roles
@@ -491,22 +469,42 @@ components:
           type: string
         description:
           type: string
-        state:
-          $ref: '#/components/schemas/RoleState'
-        updatedAt:
+      example:
+        id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
+        name: 'Role name'
+        description: 'Role description'
+
+    RoleDetailsDto:
+      type: object
+      properties:
+        id:
           type: string
+        name:
+          type: string
+        description:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: [ c4f5577a-d3d3-4b94-9dee-736d7e97ac6e, c0c2b1c4-7faf-4255-bf95-f9f8bbcb674b ]
         createdAt:
           type: string
         createdBy:
+          type: string
+        updatedAt:
+          type: string
+        updatedBy:
           type: string
       example:
         id: 'a9b45451-6fde-4832-8dc0-d17b4708d8ca'
         name: 'Role name'
         description: 'Role description'
-        state: "IN_USE"
-        updatedAt: '2004-02-13T09:19:21Z'
         createdAt: '2004-02-12T15:09:21Z'
         createdBy: 'UserName'
+        updatedAt: '2004-02-13T09:19:21Z'
+        updatedBy: 'UserName'
 
     PermissionDto:
       type: object
@@ -524,8 +522,3 @@ components:
         group: 'Governance'
         name: 'Import policy'
         description: 'Permission that lets user to import policy'
-
-    RoleState:
-      type: string
-      enum: [ INACTIVE, IN_USE, ARCHIVED ]
-

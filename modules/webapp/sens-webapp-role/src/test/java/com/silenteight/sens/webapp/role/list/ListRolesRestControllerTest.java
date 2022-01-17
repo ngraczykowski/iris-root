@@ -33,13 +33,9 @@ class ListRolesRestControllerTest extends BaseRestControllerTest {
         .body("[0].id", is(ROLE_ID_1.toString()))
         .body("[0].name", is(ROLE_NAME_1))
         .body("[0].description", is(ROLE_DESCRIPTION_1))
-        .body("[0].createdBy", is(USERNAME_1))
-        .body("[0].updatedBy", is(USERNAME_1))
         .body("[1].id", is(ROLE_ID_2.toString()))
         .body("[1].name", is(ROLE_NAME_2))
-        .body("[1].description", is(ROLE_DESCRIPTION_2))
-        .body("[1].createdBy", is(USERNAME_2))
-        .body("[1].updatedBy", is(USERNAME_2));
+        .body("[1].description", is(ROLE_DESCRIPTION_2));
   }
 
   @Test

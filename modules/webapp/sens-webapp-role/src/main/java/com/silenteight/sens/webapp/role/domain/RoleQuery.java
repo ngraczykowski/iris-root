@@ -2,9 +2,11 @@ package com.silenteight.sens.webapp.role.domain;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.role.details.RoleDetailsQuery;
 import com.silenteight.sens.webapp.role.details.dto.RoleDetailsDto;
+import com.silenteight.sens.webapp.role.domain.exception.RoleNotFoundException;
 import com.silenteight.sens.webapp.role.list.ListRolesQuery;
 import com.silenteight.sens.webapp.role.list.dto.RoleDto;
 
@@ -15,6 +17,7 @@ import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 class RoleQuery implements ListRolesQuery, RoleDetailsQuery {
@@ -24,6 +27,7 @@ class RoleQuery implements ListRolesQuery, RoleDetailsQuery {
 
   @Override
   public Collection<RoleDto> listAll() {
+    log.debug("Listing all RoleDto");
     return repository
         .findAll()
         .stream()
@@ -32,8 +36,11 @@ class RoleQuery implements ListRolesQuery, RoleDetailsQuery {
   }
 
   @Override
-  public RoleDetailsDto details(UUID id) {
-    return RoleDetailsDto.builder()
-        .build();
+  public RoleDetailsDto details(UUID roleId) {
+    log.debug("Getting RoleDetailsDto by roleId={}", roleId);
+    return repository
+        .findByRoleId(roleId)
+        .map(Role::toDetailsDto)
+        .orElseThrow(() -> new RoleNotFoundException(roleId));
   }
 }
