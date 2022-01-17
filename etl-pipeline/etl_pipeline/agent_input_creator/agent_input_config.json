@@ -1,0 +1,106 @@
+{
+    "dob_agent": {
+        "dob_agent_ap": ["P14"],
+        "dob_agent_ap_aliases": [],
+        "dob_agent_wl": ["hit_datesOfBirth_birthDate", "hit_cs_1_data_points.dob"],
+        "dob_agent_wl_aliases": []
+    },
+    "document_number_agent": {
+        "document_number_agent_ap": ["alert_partyIds_idNumber"],
+        "document_number_agent_ap_aliases": [],
+        "document_number_agent_wl": ["hit_ids_idNumber", "hit_cs_1_data_points.possible_nric"],
+        "document_number_agent_wl_aliases": []
+    },
+    "gender_agent": {
+        "gender_agent_ap": ["alert_partyGender"],
+        "gender_agent_ap_aliases": [],
+        "gender_agent_wl": ["hit_gender"],
+        "gender_agent_wl_aliases": []
+    },
+    "historical_decision_name_agent": {
+        "historical_decision_name_agent_ap": [
+            "alert_ahData_numberOfHits",
+            "STATUS_NAME",
+            "alert_ahData_partyName",
+            "ALERT_DATE"
+        ],
+        "historical_decision_name_agent_ap_aliases": [],
+        "historical_decision_name_agent_wl": ["hit_entryId"],
+        "historical_decision_name_agent_wl_aliases": []
+    },
+    "hit_has_dob_id_address_agent": {
+        "hit_has_dob_id_address_agent_ap": [],
+        "hit_has_dob_id_address_agent_ap_aliases": [],
+        "hit_has_dob_id_address_agent_wl": [
+            "hit_datesOfBirth_birthDate",
+            "hit_cs_1_data_points.dob",
+            "hit_ids_idNumber",
+            "hit_cs_1_data_points.possible_nric",
+            "hit_addresses_streetAddress1"
+        ],
+        "hit_has_dob_id_address_agent_wl_aliases": []
+    },
+    "hit_is_deceased_agent": {
+        "hit_is_deceased_agent_ap": [],
+        "hit_is_deceased_agent_ap_aliases": [],
+        "hit_is_deceased_agent_wl": ["hit_isDeceased"],
+        "hit_is_deceased_agent_wl_aliases": []
+    },
+    "hit_is_san_agent": {
+        "hit_is_san_agent_ap": [],
+        "hit_is_san_agent_ap_aliases": [],
+        "hit_is_san_agent_wl": ["hit_listId", "hit_categories_category"],
+        "hit_is_san_agent_wl_aliases": []
+    },
+    "name_agent": {
+        "name_agent_ap": ["ap_hit_names"],
+        "name_agent_ap_aliases": [],
+        "name_agent_wl": ["wl_hit_names"],
+        "name_agent_wl_aliases": []
+    },
+    "national_id_agent": {
+        "national_id_agent_ap": ["ap_nric"],
+        "national_id_agent_ap_aliases": [],
+        "national_id_agent_wl": ["hit_cs_1_data_points.nric"],
+        "national_id_agent_wl_aliases": []
+    },
+    "nationality_agent": {
+        "nationality_agent_ap": [
+            "alert_partyNatCountries_countryCd",
+            "alert_partyAddresses_partyCountry"
+        ],
+        "nationality_agent_ap_aliases": [],
+        "nationality_agent_wl": ["hit_nationalityCountries_country"],
+        "nationality_agent_wl_aliases": []
+    },
+    "party_type_agent": {
+        "party_type_agent_ap": ["alert_partyType"],
+        "party_type_agent_ap_aliases": [],
+        "party_type_agent_wl": ["hit_entryType"],
+        "party_type_agent_wl_aliases": []
+    },
+    "pep_payment_agent": {
+        "pep_payment_agent_ap": ["P12"],
+        "pep_payment_agent_ap_aliases": [],
+        "pep_payment_agent_wl": ["hit_listID"],
+        "pep_payment_agent_wl_aliases": []
+    },
+    "pob_agent": {
+        "pob_agent_ap": ["alert_partyBirthCountry"],
+        "pob_agent_ap_aliases": [],
+        "pob_agent_wl": ["hit_placesOfBirth_birthPlace"],
+        "pob_agent_wl_aliases": []
+    },
+    "rba_agent": {
+        "rba_agent_ap": [
+            "alert_ahData_numberOfHits",
+            "STATUS_NAME",
+            "alert_ahData_partyName",
+            "ALERT_DATE",
+            "last_note"
+        ],
+        "rba_agent_ap_aliases": [],
+        "rba_agent_wl": ["hit_entryId"],
+        "rba_agent_wl_aliases": []
+    }
+}

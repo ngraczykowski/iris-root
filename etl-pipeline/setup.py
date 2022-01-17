@@ -75,10 +75,16 @@ setup(
     author_email="support@silenteight.com",
     url="https://silenteight.com",
     license="Proprietary",
-    classifiers=["License :: Other/Proprietary License",],
+    classifiers=[
+        "License :: Other/Proprietary License",
+    ],
     packages=find_packages(exclude=("tests",)),
     install_requires=tests_require,
-    extras_require={"tests": tests_require,},
-    setup_requires=["pytest-runner>=5.1",],
+    extras_require={
+        "tests": tests_require,
+    },
+    setup_requires=[
+        "pytest-runner>=5.1",
+    ],
     tests_require=tests_require,
 )
