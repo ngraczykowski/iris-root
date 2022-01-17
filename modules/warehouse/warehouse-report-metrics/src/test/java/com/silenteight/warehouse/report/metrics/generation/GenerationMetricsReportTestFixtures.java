@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import com.silenteight.warehouse.report.reporting.*;
 import com.silenteight.warehouse.report.reporting.FilterProperties;
 
+import java.util.List;
+
 import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.*;
 import static java.util.Arrays.asList;
 import static java.util.List.of;
@@ -34,7 +36,11 @@ public final class GenerationMetricsReportTestFixtures {
       of(getFilter(ALERT_STATUS_FIELD, COMPLETED_VALUE)),
       getLabel(EFFICIENCY_LABEL),
       getLabel(PTP_EFFICIENCY_LABEL),
-      getLabel(FP_EFFICIENCY_LABEL));
+      getLabel(FP_EFFICIENCY_LABEL),
+      false,
+      List.of(),
+      ""
+  );
 
   private static GroupingColumnPropertiesWithPatterns getGroupingColumn(
       String name, String label, String oldPattern, String newPattern) {

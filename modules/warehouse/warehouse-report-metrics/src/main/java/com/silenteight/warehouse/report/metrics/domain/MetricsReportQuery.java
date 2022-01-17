@@ -31,7 +31,7 @@ class MetricsReportQuery implements MetricsReportDataQuery, MetricsReportStatusQ
 
   private static MetricsReportDto toMetricsReportDto(MetricsReport report) {
     return MetricsReportDto.builder()
-        .content(report.getData())
+        .fileStorageName(report.getFileStorageName())
         .range(toReportRange(report))
         .timestamp(toTimestamp(report.getCreatedAt()))
         .build();

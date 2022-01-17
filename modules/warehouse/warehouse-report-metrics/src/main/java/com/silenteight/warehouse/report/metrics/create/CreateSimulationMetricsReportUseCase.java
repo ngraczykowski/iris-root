@@ -36,6 +36,6 @@ class CreateSimulationMetricsReportUseCase {
     OffsetDateTime offsetDateNow = timeSource.offsetDateTime().withOffsetSameInstant(UTC);
     ReportRange range = of(ofInstant(EPOCH, UTC), offsetDateNow);
     List<String> indexes = simulationIndexerQuery.getIndexesForAnalysis(analysisId);
-    return reportService.createReportInstance(range, indexes, simulationProperties);
+    return reportService.createReportInstance(range, indexes, simulationProperties, analysisId);
   }
 }

@@ -1,20 +1,26 @@
 package com.silenteight.warehouse.report.metrics.download;
 
+import lombok.SneakyThrows;
+
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
-import com.silenteight.warehouse.report.metrics.domain.MetricsReportService;
-import com.silenteight.warehouse.report.name.ReportFileName;
+import com.silenteight.warehouse.report.metrics.download.dto.DownloadMetricsReportDto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import java.io.InputStream;
+
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
-import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.*;
+import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.ANALYSIS_ID;
+import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.REPORT_CONTENT;
+import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.REPORT_FILENAME;
+import static com.silenteight.warehouse.report.metrics.MetricsReportTestFixtures.REPORT_ID;
 import static java.lang.String.format;
 import static java.util.Map.of;
+import static org.apache.commons.io.IOUtils.toInputStream;
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
@@ -39,48 +45,54 @@ class DownloadMetricsReportRestControllerTest extends BaseRestControllerTest {
           .toString();
 
   @MockBean
-  MetricsReportDataQuery query;
+  DownloadSimulationMetricsReportUseCase simulationMetricsReportUseCase;
+
   @MockBean
-  MetricsReportService reportService;
-  @MockBean
-  ReportFileName reportFileName;
+  DownloadProductionMetricsReportUseCase downloadProductionMetricsReportUseCase;
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
+  @SneakyThrows
   void its200_whenInvokedDownloadSimulationReport() {
-    given(query.getReport(REPORT_ID)).willReturn(REPORT_DTO);
-    when(reportFileName.getReportName(any())).thenReturn(REPORT_FILENAME);
+    when(simulationMetricsReportUseCase.activate(REPORT_ID, ANALYSIS_ID))
+        .thenReturn(
+            DownloadMetricsReportDto.builder()
+                .content(toInputStream(REPORT_CONTENT))
+                .name(REPORT_FILENAME)
+                .build());
 
     String expectedContentDisposition = format("attachment; filename=\"%s\"", REPORT_FILENAME);
-    String response = get(DOWNLOAD_SIMULATION_REPORT_URL)
+    InputStream response = get(DOWNLOAD_SIMULATION_REPORT_URL)
         .statusCode(OK.value())
-        .contentType("text/csv")
+        .contentType("application/octet-stream")
         .header("Content-Disposition", expectedContentDisposition)
         .extract()
         .body()
-        .asString();
+        .asInputStream();
 
-    assertThat(response).isEqualTo(REPORT_CONTENT);
-    verify(reportService).removeReport(REPORT_ID);
+    assertThat(response).hasSameContentAs(toInputStream(REPORT_CONTENT));
   }
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER })
   void its200_whenInvokedDownloadProductionReport() {
-    given(query.getReport(REPORT_ID)).willReturn(REPORT_DTO);
-    when(reportFileName.getReportName(any())).thenReturn(REPORT_FILENAME);
+    when(downloadProductionMetricsReportUseCase.activate(REPORT_ID))
+        .thenReturn(
+            DownloadMetricsReportDto.builder()
+                .content(toInputStream(REPORT_CONTENT))
+                .name(REPORT_FILENAME)
+                .build());
 
     String expectedContentDisposition = format("attachment; filename=\"%s\"", REPORT_FILENAME);
-    String response = get(DOWNLOAD_PRODUCTION_REPORT_URL)
+    InputStream response = get(DOWNLOAD_PRODUCTION_REPORT_URL)
         .statusCode(OK.value())
-        .contentType("text/csv")
+        .contentType("application/octet-stream")
         .header("Content-Disposition", expectedContentDisposition)
         .extract()
         .body()
-        .asString();
+        .asInputStream();
 
-    assertThat(response).isEqualTo(REPORT_CONTENT);
-    verify(reportService).removeReport(REPORT_ID);
+    assertThat(response).hasSameContentAs(toInputStream(REPORT_CONTENT));
   }
 
   @Test

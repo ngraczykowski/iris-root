@@ -13,7 +13,7 @@ public class MetricsReportDto {
   @NonNull
   ReportRange range;
   @NonNull
-  String content;
+  String fileStorageName;
   @NonNull
   String timestamp;
 }
