@@ -31,8 +31,7 @@ class AlertValidationQueryTest {
 
   @BeforeEach
   void setUp() {
-    underTest = new DomainConfiguration()
-        .alertValidationQuery(alertRepository, decisionRepository);
+    underTest = new DomainConfiguration().alertValidationQuery(decisionRepository);
   }
 
   @Test

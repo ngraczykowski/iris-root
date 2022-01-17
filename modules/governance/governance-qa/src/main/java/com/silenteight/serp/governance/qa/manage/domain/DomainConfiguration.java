@@ -23,10 +23,9 @@ class DomainConfiguration {
   }
 
   @Bean
-  AlertValidationQuery alertValidationQuery(AlertRepository alertRepository,
-      DecisionRepository decisionRepository) {
+  AlertValidationQuery alertValidationQuery(DecisionRepository decisionRepository) {
 
-    return new AlertValidationQuery(alertRepository, decisionRepository);
+    return new AlertValidationQuery(decisionRepository);
   }
 
   @Bean
