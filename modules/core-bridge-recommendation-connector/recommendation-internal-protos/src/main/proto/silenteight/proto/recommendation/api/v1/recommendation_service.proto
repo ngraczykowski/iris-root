@@ -8,6 +8,7 @@ import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
 
 option java_package = "com.silenteight.proto.recommendation.api.v1";
 option java_outer_classname = "RecommendationServiceProto";
@@ -22,19 +23,44 @@ service RecommendationService {
   }
 }
 
+message RecommendationsRequest {
+  string analysis_id = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string alert_ids = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
 message RecommendationsResponse {
   repeated Recommendation recommendations = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 message Recommendation {
-  string alert = 1 [(google.api.field_behavior) = REQUIRED];
-  string name = 2 [(google.api.field_behavior) = REQUIRED];
-  string recommended_action = 3 [(google.api.field_behavior) = REQUIRED];
-  string recommendation_comment = 4;
-  google.protobuf.Timestamp recommended_at = 5 [(google.api.field_behavior) = REQUIRED];
+  Alert alert = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated Match matches = 2 [(google.api.field_behavior) = REQUIRED];
+  string batch_id = 3 [(google.api.field_behavior) = REQUIRED];
+  string name = 4 [(google.api.field_behavior) = REQUIRED];
+  string recommended_action = 5 [(google.api.field_behavior) = REQUIRED];
+  string recommendation_comment = 6;
+  string policy_id  = 7 [(google.api.field_behavior) = REQUIRED];
+  google.protobuf.Timestamp recommended_at = 8 [(google.api.field_behavior) = REQUIRED];
 }
 
-message RecommendationsRequest {
-  string analysis_id = 1 [(google.api.field_behavior) = REQUIRED];
-  repeated string alert_ids = 2 [(google.api.field_behavior) = REQUIRED];
+message Alert {
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
+  AlertStatus status = 2 [(google.api.field_behavior) = REQUIRED];
+  string metadata = 3 [(google.api.field_behavior) = REQUIRED];
+  string error_message = 4;
+
+  enum AlertStatus {
+    UNKNOWN = 0;
+    FAILURE = 1;
+    SUCCESS = 2;
+  }
+}
+
+message Match {
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
+  string recommended_action = 2 [(google.api.field_behavior) = REQUIRED];
+  string recommendation_comment = 3 [(google.api.field_behavior) = REQUIRED];
+  string stepId = 4 [(google.api.field_behavior) = REQUIRED];
+  string fvSignature = 5 [(google.api.field_behavior) = REQUIRED];
+  google.protobuf.Struct features = 6 [(google.api.field_behavior) = REQUIRED];
 }
