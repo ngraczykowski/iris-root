@@ -29,6 +29,11 @@ public class TestApplicationConfiguration {
   }
 
   @Bean
+  HistoricalRiskAssessmentFeatureUseCase historicalRiskAssessmentFeatureUseCase() {
+    return new HistoricalRiskAssessmentFeatureUseCaseMock();
+  }
+
+  @Bean
   HistoricalRiskAssessmentUseCase historicalRiskAssessmentUseCase() {
     return new HistoricalRiskAssessmentUseCaseMock();
   }

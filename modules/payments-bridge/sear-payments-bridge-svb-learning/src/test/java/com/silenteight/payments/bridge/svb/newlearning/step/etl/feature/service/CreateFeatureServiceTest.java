@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.svb.newlearning.step.etl.feature.service
 import com.silenteight.datasource.api.name.v1.NameFeatureInput;
 import com.silenteight.payments.bridge.agents.port.CreateNameFeatureInputUseCase;
 import com.silenteight.payments.bridge.svb.learning.features.port.outgoing.CreateAgentInputsClient;
+import com.silenteight.payments.bridge.svb.newlearning.job.HistoricalRiskAssessmentFeatureUseCaseMock;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,13 +32,16 @@ class CreateFeatureServiceTest {
 
   @BeforeEach
   void setUp() {
+    var historicalRiskAssessmentFeature = new HistoricalRiskAssessmentFeatureUseCaseMock();
     createFeatureService = new CreateFeatureService(
         List.of(
             new GeoFeatureExtractorService(),
             new IdentificationMismatchExtractor(),
             new NameFeatureExtractorService(createNameFeatureInputUseCase),
             new NameMatchedTextFeatureExtractorService(createNameFeatureInputUseCase),
-            new OrganizationNameAgentExtractorService()),
+            new OrganizationNameAgentExtractorService(),
+            new HistoricalRiskAccountNumberExtractor(historicalRiskAssessmentFeature),
+            new HistoricalRiskCustomerNameExtractor(historicalRiskAssessmentFeature)),
         createAgentInputsClient);
 
     when(createNameFeatureInputUseCase.create(any())).thenReturn(
@@ -48,7 +52,7 @@ class CreateFeatureServiceTest {
   void shouldExtractFeatures() {
     var hit = createEtlHit();
     var agentInput = createFeatureService.createFeatureInputs(List.of(hit), createRegisterAlert());
-    assertThat(agentInput.get(0).getFeatureInputsCount()).isEqualTo(5);
+    assertThat(agentInput.get(0).getFeatureInputsCount()).isEqualTo(7);
   }
 }
 
