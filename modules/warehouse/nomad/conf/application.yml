@@ -717,7 +717,7 @@ warehouse.report.accuracy:
       FROM warehouse_simulation_alert wsa
       JOIN warehouse_alert wa ON wsa.name = wa.name
       WHERE analysis_name = 'analysis/${analysisId}'
-          AND (wa.payload ->> 'analyst_decision') IN ('analyst_decision_false_positive', 'analyst_decision_true_positive');
+          AND (wa.payload ->> 'analyst_decision') IN ('analyst_decision_false_positive', 'analyst_decision_true_positive')
     useSqlReports: true
     date-field-name: index_timestamp
     columns:
