@@ -23,15 +23,22 @@ spec:
             httpGet:
               path: "/management/health/liveness"
               port: {{ .Values.ports.management }}
-            initialDelaySeconds: 30
+            periodSeconds: 10
             timeoutSeconds: 10
           readinessProbe:
             httpGet:
               path: "/management/health/readiness"
               port: {{ .Values.ports.management }}
             failureThreshold: 30
-            initialDelaySeconds: 30
+            periodSeconds: 10
             timeoutSeconds: 10
+          startupProbe:
+            httpGet:
+              path: "/management/health/liveness"
+              port: {{ .Values.ports.management }}
+            failureThreshold: 30
+            timeoutSeconds: 5
+            periodSeconds: 10
           env:
             - name: PB_DB_HOST
               value: {{ .Values.pbDbHost | quote }}
