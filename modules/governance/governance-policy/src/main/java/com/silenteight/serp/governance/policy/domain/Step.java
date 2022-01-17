@@ -18,7 +18,7 @@ import javax.persistence.*;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static com.silenteight.serp.governance.policy.domain.StepType.NARROW;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
-import static java.util.UUID.*;
+import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 import static javax.persistence.CascadeType.ALL;
 
@@ -28,7 +28,8 @@ import static javax.persistence.CascadeType.ALL;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
-class Step extends BaseModifiableEntity implements IdentifiableEntity, Comparable<Step> {
+class Step extends BaseModifiableEntity
+    implements IdentifiableEntity, StepSearchCriteriaMatcher, Comparable<Step> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -184,5 +185,10 @@ class Step extends BaseModifiableEntity implements IdentifiableEntity, Comparabl
         .stream()
         .map(FeatureLogic::cloneFeatureLogic)
         .collect(toList());
+  }
+
+  @Override
+  public boolean match(StepSearchCriteriaDto criteria) {
+    return featureLogics.stream().anyMatch(fl -> fl.match(criteria));
   }
 }

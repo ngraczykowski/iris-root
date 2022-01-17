@@ -5,19 +5,24 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.serp.governance.policy.details.PolicyStepsCountQuery;
 import com.silenteight.serp.governance.policy.domain.dto.StepConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
+import com.silenteight.serp.governance.policy.domain.dto.StepSearchCriteriaDto;
+import com.silenteight.serp.governance.policy.domain.dto.StepSearchCriteriaDto.ConditionSearchCriteriaDto;
 import com.silenteight.serp.governance.policy.step.PolicyStepsConfigurationQuery;
 import com.silenteight.serp.governance.policy.step.details.StepRequestQuery;
 import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
 import com.silenteight.serp.governance.policy.step.order.list.PolicyStepsOrderRequestQuery;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @RequiredArgsConstructor
 class StepQuery implements
@@ -45,6 +50,28 @@ class StepQuery implements
     return getStepsAsStream(policyId)
         .map(Step::toDto)
         .collect(toList());
+  }
+
+  @Override
+  @Transactional
+  public Collection<StepDto> listFilteredSteps(UUID policyId, StepSearchCriteriaDto criteria) {
+    Collection<Long> stepIds = stepRepository.findByPolicyUuidAndConditionName(policyId.toString(),
+        getSearchCriteriaNames(criteria));
+    return stepRepository
+        .findAllById(stepIds)
+        .stream()
+        .filter(s -> s.match(criteria))
+        .map(Step::toDto)
+        .collect(toList());
+  }
+
+  @NotNull
+  private static Set<String> getSearchCriteriaNames(StepSearchCriteriaDto criteria) {
+    return criteria
+        .getConditions()
+        .stream()
+        .map(ConditionSearchCriteriaDto::getName)
+        .collect(toSet());
   }
 
   @Override

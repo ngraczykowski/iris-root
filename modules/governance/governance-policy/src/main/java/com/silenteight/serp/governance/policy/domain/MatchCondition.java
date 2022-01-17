@@ -5,7 +5,10 @@ import lombok.*;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 import com.silenteight.serp.governance.policy.domain.dto.MatchConditionConfigurationDto;
 import com.silenteight.serp.governance.policy.domain.dto.MatchConditionDto;
+import com.silenteight.serp.governance.policy.domain.dto.StepSearchCriteriaDto;
 import com.silenteight.serp.governance.policy.domain.dto.TransferredMatchConditionDto;
+
+import org.testcontainers.shaded.com.google.common.base.Objects;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +20,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
-class MatchCondition extends BaseEntity {
+class MatchCondition extends BaseEntity implements StepSearchCriteriaMatcher {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,5 +78,13 @@ class MatchCondition extends BaseEntity {
 
   MatchCondition cloneMatchCondition() {
     return new MatchCondition(getName(), getCondition(), getValues());
+  }
+
+  @Override
+  public boolean match(StepSearchCriteriaDto criteria) {
+    return criteria
+        .getConditions()
+        .stream()
+        .anyMatch(c -> Objects.equal(c.getName(), name) && values.containsAll(c.getValues()));
   }
 }

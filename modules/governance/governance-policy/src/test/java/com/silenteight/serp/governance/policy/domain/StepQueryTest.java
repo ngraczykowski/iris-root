@@ -4,6 +4,7 @@ import com.silenteight.sep.base.testing.BaseDataJpaTest;
 import com.silenteight.serp.governance.policy.domain.dto.*;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
+import com.silenteight.serp.governance.policy.domain.dto.StepSearchCriteriaDto.ConditionSearchCriteriaDto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,8 @@ import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LO
 import static com.silenteight.serp.governance.policy.domain.StepType.NARROW;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static java.util.List.of;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.*;
@@ -98,6 +101,51 @@ class StepQueryTest extends BaseDataJpaTest {
     Collection<StepDto> result = underTest.listSteps(POLICY_UID);
 
     assertThat(result).extracting(StepDto::getId).contains(FIRST_STEP_ID, SECOND_STEP_ID);
+  }
+
+  @Test
+  void listFilteredStepsShouldReturnEmpty_whenStepsInPolicyNotMatchNameCriteria() {
+    createConfiguredPolicy();
+    Collection<StepDto> result = underTest.listFilteredSteps(POLICY_UID, new StepSearchCriteriaDto(
+        of(new ConditionSearchCriteriaDto("nonMatched", asList("NEAR_MATCH", "MATCH")))));
+
+    assertThat(result).isEmpty();
+  }
+
+  @Test
+  void listFilteredStepsShouldReturnEmpty_whenStepsInPolicyNotMatchValuesCriteria() {
+    createConfiguredPolicy();
+    Collection<StepDto> result = underTest.listFilteredSteps(POLICY_UID, new StepSearchCriteriaDto(
+        of(new ConditionSearchCriteriaDto("nameAgent", singletonList("NO_DATA")))));
+
+    assertThat(result).isEmpty();
+  }
+
+  @Test
+  void listFilteredStepsShouldReturnEmpty_whenStepsInPolicyPartiallyMatchValuesCriteria() {
+    createConfiguredPolicy();
+    Collection<StepDto> result = underTest.listFilteredSteps(POLICY_UID, new StepSearchCriteriaDto(
+        of(new ConditionSearchCriteriaDto("nameAgent", asList("NO_DATA", "MATCH")))));
+
+    assertThat(result).isEmpty();
+  }
+
+  @Test
+  void listFilteredStepsShouldReturnEmpty_whenStepsInPolicyMatchByContainsCriteria() {
+    createConfiguredPolicy();
+    Collection<StepDto> result = underTest.listFilteredSteps(POLICY_UID, new StepSearchCriteriaDto(
+        of(new ConditionSearchCriteriaDto("nameAgent", singletonList("MATCH")))));
+
+    assertThat(result).extracting(StepDto::getId).contains(FIRST_STEP_ID);
+  }
+
+  @Test
+  void listFilteredStepsShouldReturnSteps_whenStepsInPolicyMatchByEqualCriteria() {
+    createConfiguredPolicy();
+    Collection<StepDto> result = underTest.listFilteredSteps(POLICY_UID, new StepSearchCriteriaDto(
+        of(new ConditionSearchCriteriaDto("nameAgent", asList("MATCH", "NEAR_MATCH")))));
+
+    assertThat(result).extracting(StepDto::getId).contains(FIRST_STEP_ID);
   }
 
   @Test

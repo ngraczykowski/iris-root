@@ -3,12 +3,7 @@ package com.silenteight.serp.governance.policy.domain;
 import lombok.*;
 
 import com.silenteight.sep.base.common.entity.BaseEntity;
-import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicConfigurationDto;
-import com.silenteight.serp.governance.policy.domain.dto.FeatureLogicDto;
-import com.silenteight.serp.governance.policy.domain.dto.MatchConditionConfigurationDto;
-import com.silenteight.serp.governance.policy.domain.dto.MatchConditionDto;
-import com.silenteight.serp.governance.policy.domain.dto.TransferredFeatureLogicDto;
-import com.silenteight.serp.governance.policy.domain.dto.TransferredMatchConditionDto;
+import com.silenteight.serp.governance.policy.domain.dto.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +19,7 @@ import static javax.persistence.CascadeType.ALL;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @ToString(onlyExplicitlyIncluded = true)
-class FeatureLogic extends BaseEntity {
+class FeatureLogic extends BaseEntity implements StepSearchCriteriaMatcher {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,5 +80,10 @@ class FeatureLogic extends BaseEntity {
         .stream()
         .map(MatchCondition::cloneMatchCondition)
         .collect(toList());
+  }
+
+  @Override
+  public boolean match(StepSearchCriteriaDto criteria) {
+    return features.stream().anyMatch(mc -> mc.match(criteria));
   }
 }
