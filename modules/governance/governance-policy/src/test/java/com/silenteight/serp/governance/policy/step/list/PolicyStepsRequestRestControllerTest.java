@@ -5,8 +5,11 @@ import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWith
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.serp.governance.policy.domain.StepType;
 import com.silenteight.serp.governance.policy.domain.dto.StepDto;
+import com.silenteight.serp.governance.policy.domain.dto.StepSearchCriteriaDto;
 import com.silenteight.solving.api.v1.FeatureVectorSolution;
 
+import io.restassured.module.mockmvc.response.ValidatableMockMvcResponse;
+import org.mockito.Mock;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
@@ -23,6 +26,8 @@ import static java.util.Collections.emptyList;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
@@ -31,7 +36,9 @@ import static org.springframework.http.HttpStatus.OK;
 class PolicyStepsRequestRestControllerTest extends BaseRestControllerTest {
 
   private static final UUID POLICY_ID = UUID.randomUUID();
-  private static final String POLICY_STEPS_ORDER_URL = "/v1/policies/" + POLICY_ID + "/steps";
+  private static final String POLICY_STEPS_URL = "/v1/policies/" + POLICY_ID + "/steps";
+  private static final String POLICY_STEPS_SEARCH_URL =
+      "/v1/policies/" + POLICY_ID + "/steps/search";
   private static final String FIRST_STEP_NAME = "FIRST_STEP";
   private static final StepType FIRST_STEP_TYPE = BUSINESS_LOGIC;
   private static final String FIRST_STEP_DESCRIPTION = "FIRST_STEP_DESCRIPTION";
@@ -68,27 +75,50 @@ class PolicyStepsRequestRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private PolicyStepsRequestQuery policyStepsRequestQuery;
 
+  @Mock
+  private StepSearchCriteriaDto stepSearchCriteria;
+
   @TestWithRole(roles = { APPROVER, AUDITOR, QA, MODEL_TUNER, QA_ISSUE_MANAGER })
-  void its200_whenNoLogic() {
+  void steps_WillReturn200_whenNoLogic() {
     given(policyStepsRequestQuery.listSteps(POLICY_ID)).willReturn(emptyList());
 
-    get(POLICY_STEPS_ORDER_URL)
+    get(POLICY_STEPS_URL)
         .contentType(anything())
         .statusCode(OK.value())
         .body("size()", is(0));
   }
 
   @TestWithRole(roles = { USER_ADMINISTRATOR })
-  void its403_whenNotPermittedRole() {
-    get(POLICY_STEPS_ORDER_URL).statusCode(FORBIDDEN.value());
+  void steps_WillReturn403_whenNotPermittedRole() {
+    get(POLICY_STEPS_URL).statusCode(FORBIDDEN.value());
   }
 
-  @TestWithRole(roles = { APPROVER, AUDITOR, QA, MODEL_TUNER })
-  void its200_whenPoliciesFound() {
-    given(policyStepsRequestQuery.listSteps(POLICY_ID)).willReturn(asList(FIRST_STEP, SECOND_STEP));
+  @TestWithRole(roles = { APPROVER, AUDITOR, QA, MODEL_TUNER, QA_ISSUE_MANAGER })
+  void steps_WillReturn200_whenPoliciesFound() {
+    given(policyStepsRequestQuery.listSteps(POLICY_ID)).willReturn(
+        asList(FIRST_STEP, SECOND_STEP));
 
-    get(POLICY_STEPS_ORDER_URL)
-        .statusCode(OK.value())
+    ValidatableMockMvcResponse response = get(POLICY_STEPS_URL).statusCode(OK.value());
+    assertResponseBody(response);
+  }
+
+  @TestWithRole(roles = { APPROVER, AUDITOR, QA, MODEL_TUNER, QA_ISSUE_MANAGER })
+  void stepsSearch_WillReturn200_whenPoliciesFoundAndCriteriaProvided() {
+    given(policyStepsRequestQuery.listFilteredSteps(eq(POLICY_ID), isNotNull())).willReturn(
+        asList(FIRST_STEP, SECOND_STEP));
+
+    ValidatableMockMvcResponse response =
+        get(POLICY_STEPS_SEARCH_URL, stepSearchCriteria).statusCode(OK.value());
+    assertResponseBody(response);
+  }
+
+  @TestWithRole(roles = { USER_ADMINISTRATOR })
+  void stepsSearch_WillReturn403_whenNotPermittedRole() {
+    get(POLICY_STEPS_SEARCH_URL, stepSearchCriteria).statusCode(FORBIDDEN.value());
+  }
+
+  private void assertResponseBody(ValidatableMockMvcResponse response) {
+    response
         .body("[0].id", is(FIRST_STEP_ID.toString()))
         .body("[0].name", is(FIRST_STEP_NAME))
         .body("[0].type", is(FIRST_STEP_TYPE.toString()))
@@ -98,10 +128,12 @@ class PolicyStepsRequestRestControllerTest extends BaseRestControllerTest {
         .body("[0].createdBy", is(USER))
         .body("[1].id", is(SECOND_STEP_ID.toString()))
         .body("[1].name", is(SECOND_STEP_NAME))
-        .body("[0].type", is(SECOND_STEP_TYPE.toString()))
+        .body("[1].type", is(SECOND_STEP_TYPE.toString()))
         .body("[1].description", is(SECOND_STEP_DESCRIPTION))
         .body("[1].solution", is(of(SECOND_SOLUTION).toString()))
         .body("[1].createdAt", notNullValue())
         .body("[1].createdBy", is(USER));
   }
+
+
 }
