@@ -13,11 +13,25 @@ option java_package = "com.silenteight.proto.registration.api.v1";
 message MessageAlertMatchesFeatureInputFed {
   string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
   string alert_id = 2 [(google.api.field_behavior) = REQUIRED];
-  repeated FedMatch fed_matches = 3 [(google.api.field_behavior) = REQUIRED];
+  FeedingStatus feeding_status = 3 [(google.api.field_behavior) = REQUIRED];
+  repeated FedMatch fed_matches = 4 [(google.api.field_behavior) = REQUIRED];
+
+  enum FeedingStatus {
+    UNKNOWN = 0;
+    FAILURE = 1;
+    SUCCESS = 2;
+  }
 }
 
 message FedMatch {
   string match_id = 1 [(google.api.field_behavior) = REQUIRED];
+  FeedingStatus feeding_status = 2 [(google.api.field_behavior) = REQUIRED];
+
+  enum FeedingStatus {
+    UNKNOWN = 0;
+    FAILURE = 1;
+    SUCCESS = 2;
+  }
 }
 
 message MessageBatchCompleted {
