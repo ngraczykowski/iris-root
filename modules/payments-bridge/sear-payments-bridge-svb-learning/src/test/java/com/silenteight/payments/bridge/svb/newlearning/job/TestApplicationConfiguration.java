@@ -29,6 +29,11 @@ public class TestApplicationConfiguration {
   }
 
   @Bean
+  CompanyNameSurroundingUseCase companyNameSurroundingUseCase() {
+    return new CompanyNameSurroundingUseCaseMock();
+  }
+
+  @Bean
   HistoricalRiskAssessmentFeatureUseCase historicalRiskAssessmentFeatureUseCase() {
     return new HistoricalRiskAssessmentFeatureUseCaseMock();
   }

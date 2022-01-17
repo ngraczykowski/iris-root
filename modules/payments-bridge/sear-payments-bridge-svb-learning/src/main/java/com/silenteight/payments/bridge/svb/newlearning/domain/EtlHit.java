@@ -5,6 +5,7 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
+import com.silenteight.payments.bridge.agents.model.CompanyNameSurroundingRequest;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
 import com.silenteight.payments.bridge.agents.model.SpecificTermsRequest;
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
@@ -111,5 +112,12 @@ public class EtlHit {
 
   public Optional<String> getFirstAlertedPartyName() {
     return getAlertedPartyNames().stream().map(String::trim).findFirst();
+  }
+
+  public CompanyNameSurroundingRequest toCompanyNameSurroundingRequest() {
+    return CompanyNameSurroundingRequest
+        .builder()
+        .allNames(getAlertedPartyNames())
+        .build();
   }
 }
