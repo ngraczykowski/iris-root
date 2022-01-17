@@ -1,11 +1,11 @@
 package com.silenteight.sep.usermanagement.keycloak.config;
 
+import com.silenteight.sep.usermanagement.api.IdentityProviderRepository;
+import com.silenteight.sep.usermanagement.keycloak.query.IdentityProviderQuery;
+
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
-import org.keycloak.admin.client.resource.ClientsResource;
-import org.keycloak.admin.client.resource.RealmResource;
-import org.keycloak.admin.client.resource.RolesResource;
-import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.admin.client.resource.*;
 import org.keycloak.representations.adapters.config.AdapterConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -53,5 +53,16 @@ public class KeycloakConfiguration {
   @Bean
   RolesResource rolesResource(RealmResource realmResource) {
     return realmResource.roles();
+  }
+
+  @Bean
+  IdentityProvidersResource identityProvidersResource(RealmResource realmResource) {
+    return realmResource.identityProviders();
+  }
+
+  @Bean
+  IdentityProviderRepository identityProviderRepository(
+      IdentityProvidersResource identityProvidersResource) {
+    return new IdentityProviderQuery(identityProvidersResource);
   }
 }
