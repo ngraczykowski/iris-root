@@ -39,7 +39,7 @@ def compare_created_data_with_reference_data(reference, unique_column="ALERT_INT
     if not os.path.exists(os.path.join(rel_path, os.path.basename(reference))):
         raise FileNotFoundError(os.path.join(rel_path, os.path.basename(reference)))
     tested_dataframe = spark.read_delta(os.path.join(rel_path, os.path.basename(reference)))
-    assert compare_dataframe(tested_dataframe, reference_dataframe, unique_column)
+    compare_dataframe(tested_dataframe, reference_dataframe, unique_column)
 
 
 def test_integration():
@@ -47,11 +47,10 @@ def test_integration():
     convert_raw_to_standardized(RAW_DATA_DIR, STANDARDIZED_DATA_DIR)
     transform_standardized_to_cleansed()
     transform_cleansed_to_application()
-    for dir in os.listdir(REFERENCE_DIR):
-        print(os.path.join(f"{REFERENCE_DIR}", f"{dir}", "*delta"))
-        for reference in glob(os.path.join(f"{REFERENCE_DIR}", f"{dir}", "*delta")):
-            if "4.application/" in dir:
-                continue
+    for directory in os.listdir(REFERENCE_DIR):
+        if "4.application" in directory:
+            continue
+        for reference in glob(os.path.join(f"{REFERENCE_DIR}", f"{directory}", "*delta")):
             compare_created_data_with_reference_data(
                 reference, unique_column=ID_MAP[os.path.basename(reference)]
             )

@@ -8,9 +8,8 @@ def compare_dataframe(dataframe_1, dataframe_2, unique_column="ALERT_INTERNAL_ID
     if len(dataframe_1_rows) == len(dataframe_2_rows):
         for tested_row, reference_row in zip(dataframe_1_rows, dataframe_2_rows):
             if tested_row != reference_row:
-                return False
-        return True
-    return False
+                raise AssertionError(f"Tested row: {tested_row}\nShould be: {reference_row}")
+    return True
 
 
 def load_pickle(filename):
