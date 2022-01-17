@@ -5,6 +5,6 @@
     { "name": "agents/geo/versions/2.0.0/configs/1" },
     { "name": "agents/companyName/versions/1.0.0/configs/1" },
     { "name": "agents/companyName/versions/2.0.0/configs/1" },
-    { "name": "agents/historicalDecisions/versions/1.0.0/configs/1" }
+    { "name": "agents/historicaldecisions/versions/1.0.0/configs/1" }
   ]
 }
