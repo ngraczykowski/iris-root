@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.qa.manage.validation.list;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.qa.manage.domain.DecisionState;
 import com.silenteight.serp.governance.qa.manage.validation.list.dto.AlertValidationDto;
@@ -24,6 +25,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
+@Slf4j
 class ListAlertValidationRestController {
 
   private static final String ALERTS_LIST_URL = "/v1/qa/1/alerts";
@@ -40,10 +42,12 @@ class ListAlertValidationRestController {
       @RequestParam int pageSize,
       @RequestParam(required = false, defaultValue = MIN_DATE) String pageToken) {
 
-    List<AlertValidationDto> list = listAlertValidationQuery.list(state, parse(pageToken),
-        pageSize);
+    List<AlertValidationDto> list = listAlertValidationQuery
+        .list(state, parse(pageToken), pageSize);
+    int count = listAlertValidationQuery.count(state);
+    log.debug("Returning a list of QA Alerts (listSize={}, all={}", list.size(), count);
     return ok()
-        .header(HEADER_TOTAL_ITEMS, valueOf(listAlertValidationQuery.count(state)))
+        .header(HEADER_TOTAL_ITEMS, valueOf(count))
         .header(HEADER_NEXT_ITEM, valueOf(getHeaderNextItem(list)))
         .body(list);
   }

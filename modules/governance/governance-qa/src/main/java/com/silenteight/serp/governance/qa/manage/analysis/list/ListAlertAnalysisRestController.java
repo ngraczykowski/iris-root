@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.qa.manage.analysis.list;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.qa.manage.analysis.list.dto.AlertAnalysisDto;
 import com.silenteight.serp.governance.qa.manage.domain.DecisionState;
@@ -24,6 +25,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
+@Slf4j
 class ListAlertAnalysisRestController {
 
   private static final String ALERTS_LIST_URL = "/v1/qa/0/alerts";
@@ -42,6 +44,7 @@ class ListAlertAnalysisRestController {
 
     List<AlertAnalysisDto> list = listAlertQuery.list(state, parse(pageToken), pageSize);
     int count = listAlertQuery.count(state);
+    log.debug("Returning a list of QA Alerts (listSize={}, all={}", list.size(), count);
     return ok()
         .header(HEADER_TOTAL_ITEMS, valueOf(count))
         .header(HEADER_NEXT_ITEM, valueOf(getHeaderNextItem(list)))
