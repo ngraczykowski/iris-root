@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.audit.report;
 
-import com.silenteight.auditing.bs.AuditingFinder;
+import com.silenteight.sens.webapp.audit.api.list.ListAuditLogsQuery;
 import com.silenteight.sens.webapp.report.Report;
 import com.silenteight.sens.webapp.report.exception.IllegalParameterException;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
@@ -15,12 +15,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Map;
 
 import static com.silenteight.sens.webapp.audit.report.AuditDataDtoFixtures.DECISION_TREE_ADD_AUDIT_DATA;
 import static com.silenteight.sens.webapp.audit.report.AuditDataDtoFixtures.REASONING_BRANCH_CHANGE_AUDIT_DATA;
+import static java.time.Instant.parse;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyMap;
 import static java.util.stream.Collectors.joining;
@@ -31,16 +31,16 @@ import static org.mockito.Mockito.*;
 class AuditReportGeneratorTest {
 
   @Mock
-  private AuditingFinder auditingFinder;
+  private ListAuditLogsQuery listAuditLogsQuery;
 
   private AuditReportGenerator underTest;
 
   @BeforeEach
   void setUp() {
     underTest = new AuditReportGenerator(
-        new MockTimeSource(Instant.parse("2020-04-22T15:15:30Z")),
+        new MockTimeSource(parse("2020-04-22T15:15:30Z")),
         new TestDateFormatter(),
-        auditingFinder);
+        listAuditLogsQuery);
   }
 
   @Test
@@ -86,11 +86,11 @@ class AuditReportGeneratorTest {
     // given
     String from = "2020-04-05T10:15:30Z";
     String to = "2020-04-28T10:15:30Z";
-    when(auditingFinder.find(OffsetDateTime.parse(from), OffsetDateTime.parse(to))).thenReturn(
-        asList(DECISION_TREE_ADD_AUDIT_DATA, REASONING_BRANCH_CHANGE_AUDIT_DATA));
     Map<String, String> parameters = ImmutableMap.of(
         "from", from,
         "to", to);
+    when(listAuditLogsQuery.list(OffsetDateTime.parse(from), OffsetDateTime.parse(to))).thenReturn(
+        asList(DECISION_TREE_ADD_AUDIT_DATA, REASONING_BRANCH_CHANGE_AUDIT_DATA));
 
     // when
     Report report = underTest.generateReport(parameters);

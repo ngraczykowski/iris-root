@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.auditing.bs.AuditDataDto;
-import com.silenteight.auditing.bs.AuditingFinder;
+import com.silenteight.sens.webapp.audit.api.dto.AuditLogDto;
+import com.silenteight.sens.webapp.audit.api.list.ListAuditLogsQuery;
 import com.silenteight.sens.webapp.common.support.csv.CsvBuilder;
 import com.silenteight.sens.webapp.report.Report;
 import com.silenteight.sens.webapp.report.ReportGenerator;
@@ -15,18 +15,24 @@ import com.silenteight.sep.base.common.time.DateFormatter;
 import com.silenteight.sep.base.common.time.TimeSource;
 
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static com.silenteight.sep.base.common.time.ApplicationTimeZone.TIME_ZONE;
 import static java.time.OffsetDateTime.parse;
+import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
 
 @Slf4j
 @RequiredArgsConstructor
 class AuditReportGenerator implements ReportGenerator {
+
+  private static final DateTimeFormatter TIMESTAMP_FORMATTER =
+      ofPattern("yyyy-MM-dd HH:mm:ss.SSS").withZone(TIME_ZONE.toZoneId());
 
   private static final String REPORT_NAME = "audit-report";
   private static final String FROM_PARAMETER_NAME = "from";
@@ -47,7 +53,7 @@ class AuditReportGenerator implements ReportGenerator {
   @NonNull
   private final DateFormatter dateFormatter;
   @NonNull
-  private final AuditingFinder auditingFinder;
+  private final ListAuditLogsQuery listAuditLogsQuery;
 
   @Override
   public String getName() {
@@ -90,21 +96,25 @@ class AuditReportGenerator implements ReportGenerator {
   }
 
   private List<String> getReportData(OffsetDateTime from, OffsetDateTime to) {
-    Collection<AuditDataDto> auditData = auditingFinder.find(from, to);
-    return buildReportData(auditData).collect(toList());
+    Collection<AuditLogDto> auditLogs = listAuditLogsQuery.list(from, to);
+    return buildReportData(auditLogs).collect(toList());
   }
 
-  private static Stream<String> buildReportData(Collection<AuditDataDto> auditData) {
-    return of(new CsvBuilder<>(auditData.stream())
+  private static Stream<String> buildReportData(Collection<AuditLogDto> auditLogs) {
+    return of(new CsvBuilder<>(auditLogs.stream())
         .cell(EVENT_ID_COLUMN_HEADER, a -> a.getEventId().toString())
         .cell(CORRELATION_ID_COLUMN_HEADER, a -> a.getCorrelationId().toString())
-        .cell(TIMESTAMP_COLUMN_HEADER, a -> a.getTimestamp().toString())
-        .cell(TYPE_COLUMN_HEADER, AuditDataDto::getType)
-        .cell(PRINCIPAL_COLUMN_HEADER, AuditDataDto::getPrincipal)
-        .cell(ENTITY_ID_COLUMN_HEADER, AuditDataDto::getEntityId)
-        .cell(ENTITY_CLASS_COLUMN_HEADER, AuditDataDto::getEntityClass)
-        .cell(ENTITY_ACTION_COLUMN_HEADER, AuditDataDto::getEntityAction)
-        .cell(DETAILS_COLUMN_HEADER, AuditDataDto::getDetails)
+        .cell(TIMESTAMP_COLUMN_HEADER, a -> formatDate(a.getTimestamp()))
+        .cell(TYPE_COLUMN_HEADER, AuditLogDto::getType)
+        .cell(PRINCIPAL_COLUMN_HEADER, AuditLogDto::getPrincipal)
+        .cell(ENTITY_ID_COLUMN_HEADER, AuditLogDto::getEntityId)
+        .cell(ENTITY_CLASS_COLUMN_HEADER, AuditLogDto::getEntityClass)
+        .cell(ENTITY_ACTION_COLUMN_HEADER, AuditLogDto::getEntityAction)
+        .cell(DETAILS_COLUMN_HEADER, AuditLogDto::getDetails)
         .build());
+  }
+
+  private static String formatDate(OffsetDateTime timestamp) {
+    return TIMESTAMP_FORMATTER.format(timestamp);
   }
 }

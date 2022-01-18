@@ -1,6 +1,8 @@
 package com.silenteight.sens.webapp.audit.report;
 
-import com.silenteight.auditing.bs.AuditingFinder;
+import lombok.NonNull;
+
+import com.silenteight.sens.webapp.audit.api.list.ListAuditLogsQuery;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.base.common.time.DigitsOnlyDateFormatter;
 
@@ -11,8 +13,8 @@ import org.springframework.context.annotation.Configuration;
 class AuditReportConfiguration {
 
   @Bean
-  AuditReportGenerator auditReportGenerator(AuditingFinder auditingFinder) {
+  AuditReportGenerator auditReportGenerator(@NonNull ListAuditLogsQuery listAuditLogsQuery) {
     return new AuditReportGenerator(
-        DefaultTimeSource.INSTANCE, DigitsOnlyDateFormatter.INSTANCE, auditingFinder);
+        DefaultTimeSource.INSTANCE, DigitsOnlyDateFormatter.INSTANCE, listAuditLogsQuery);
   }
 }

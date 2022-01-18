@@ -2,6 +2,8 @@ package com.silenteight.sens.webapp.audit.domain;
 
 import lombok.*;
 
+import com.silenteight.sens.webapp.audit.api.dto.AuditLogDto;
+
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -40,22 +42,36 @@ class AuditLog implements Serializable {
   private String type;
 
   @ToString.Include
-  @Column(nullable = false, length = 64)
+  @Column(length = 64)
   private String principal;
 
   @ToString.Include
-  @Column(nullable = false)
+  @Column
   private String entityId;
 
   @ToString.Include
-  @Column(nullable = false)
+  @Column
   private String entityClass;
 
   @ToString.Include
-  @Column(nullable = false, length = 64)
+  @Column(length = 64)
   private String entityAction;
 
   @ToString.Include
-  @Column(nullable = false)
+  @Column
   private String details;
+
+  AuditLogDto toDto() {
+    return AuditLogDto.builder()
+        .eventId(getEventId())
+        .correlationId(getCorrelationId())
+        .timestamp(getTimestamp())
+        .type(getType())
+        .principal(getPrincipal())
+        .entityId(getEntityId())
+        .entityClass(getEntityClass())
+        .entityAction(getEntityAction())
+        .details(getDetails())
+        .build();
+  }
 }

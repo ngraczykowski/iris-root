@@ -16,4 +16,9 @@ class AuditDomainConfiguration {
   AuditLogService auditLogService(@NonNull AuditLogRepository repository) {
     return new AuditLogService(repository);
   }
+
+  @Bean
+  AuditLogQuery auditLogQuery(@NonNull AuditLogRepository repository) {
+    return new AuditLogQuery(repository);
+  }
 }
