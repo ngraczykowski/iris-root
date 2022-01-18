@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 
 import static java.util.Comparator.comparing;
@@ -39,6 +40,7 @@ class EtlAlertService {
     var firstRow = rows.get(0);
 
     return LearningAlert.builder()
+        .alertMessageId(UUID.randomUUID())
         .alertId(firstRow.getFkcoVSystemId())
         .alertTime(getOffsetDateTime(firstRow.getFkcoDFilteredDatetime()))
         .systemId(firstRow.getFkcoVSystemId())

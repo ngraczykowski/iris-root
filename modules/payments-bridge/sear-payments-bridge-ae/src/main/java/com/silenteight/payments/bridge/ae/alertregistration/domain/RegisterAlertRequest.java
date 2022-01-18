@@ -17,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 
 import static java.util.stream.Collectors.toList;
@@ -27,6 +28,8 @@ public class RegisterAlertRequest {
 
   @Default
   int priority = 5;
+
+  UUID alertMessageId;
 
   String fkcoSystemId;
 

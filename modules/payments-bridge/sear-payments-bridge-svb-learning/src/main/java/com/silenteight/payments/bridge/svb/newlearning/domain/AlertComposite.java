@@ -14,6 +14,7 @@ import com.silenteight.proto.learningstore.historicaldecision.v1.api.*;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
@@ -22,6 +23,8 @@ import static java.util.stream.Collectors.toList;
 @Value
 @Builder
 public class AlertComposite {
+
+  UUID alertMessageId;
 
   // Learning engine is multi-tenant db so some discriminator is required.
   String discriminator;

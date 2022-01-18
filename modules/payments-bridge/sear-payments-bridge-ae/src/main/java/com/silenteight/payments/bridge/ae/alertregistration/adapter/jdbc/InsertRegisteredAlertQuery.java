@@ -22,8 +22,8 @@ class InsertRegisteredAlertQuery {
   @Language("PostgreSQL")
   private static final String SQL =
       "INSERT INTO "
-          + "pb_registered_alert(alert_name, fkco_system_id) "
-          + "VALUES (:alert_name, :fkco_system_id)\n"
+          + "pb_registered_alert(alert_name, fkco_system_id, alert_message_id) "
+          + "VALUES (:alert_name, :fkco_system_id, :alert_message_id)\n"
           + "RETURNING registered_alert_id";
 
   private final JdbcTemplate jdbcTemplate;
@@ -33,7 +33,8 @@ class InsertRegisteredAlertQuery {
     var keyHolder = new GeneratedKeyHolder();
     var paramMap =
         Map.of("alert_name", alert.getAlertName(),
-            "fkco_system_id", alert.getFkcoSystemId());
+            "fkco_system_id", alert.getFkcoSystemId(),
+            "alert_message_id", alert.getAlertMessageId());
     sql.updateByNamedParam(paramMap, keyHolder);
     sql.flush();
     return Objects.requireNonNull(keyHolder.getKey()).longValue();
@@ -47,6 +48,7 @@ class InsertRegisteredAlertQuery {
     sql.setReturnGeneratedKeys(true);
     sql.declareParameter(new SqlParameter("alert_name", Types.VARCHAR));
     sql.declareParameter(new SqlParameter("fkco_system_id", Types.VARCHAR));
+    sql.declareParameter(new SqlParameter("alert_message_id", Types.OTHER));
 
     sql.compile();
     return sql;

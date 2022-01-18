@@ -7,7 +7,7 @@ import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.api.v2.GetRecommendationRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.AnalysisDataAccessPort;
-import com.silenteight.payments.bridge.ae.alertregistration.port.GetRegisteredAlertSystemIdUseCase;
+import com.silenteight.payments.bridge.ae.alertregistration.port.GetRegisteredAlertMessageIdUseCase;
 import com.silenteight.payments.bridge.ae.recommendation.port.RecommendationClientPort;
 import com.silenteight.payments.bridge.common.event.RecommendationsGeneratedEvent;
 import com.silenteight.payments.bridge.firco.alertmessage.port.FindAlertIdSetUseCase;
@@ -22,7 +22,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.integration.amqp.dsl.AmqpInboundChannelAdapterSMLCSpec;
 import org.springframework.integration.dsl.IntegrationFlow;
 
-import java.util.List;
 import javax.validation.Valid;
 
 import static org.springframework.integration.dsl.IntegrationFlows.from;
@@ -39,7 +38,7 @@ class AeInboundAmqpIntegrationConfiguration {
   private final AnalysisDataAccessPort analysisDataAccessPort;
   private final CreateRecommendationUseCase createRecommendationUseCase;
   private final RecommendationClientPort recommendationClientPort;
-  private final GetRegisteredAlertSystemIdUseCase getRegisteredAlertSystemIdUseCase;
+  private final GetRegisteredAlertMessageIdUseCase getRegisteredAlertMessageIdUseCase;
   private final FindAlertIdSetUseCase findAlertIdSetUseCase;
 
   @Bean
@@ -76,18 +75,11 @@ class AeInboundAmqpIntegrationConfiguration {
                 .setRecommendation(recommendationInfo.getRecommendation()).build());
 
     var recommendation = recommendationWithMetadata.getRecommendation();
-    var systemId =
-        getRegisteredAlertSystemIdUseCase.getAlertSystemId(recommendation.getAlert());
-
-    var alertIds = findAlertIdSetUseCase.find(List.of(systemId));
-
-    if (alertIds.isEmpty()) {
-      log.error("Received empty list of alert ids");
-      throw new HandleRecommendationException("Received empty list of alert ids");
-    }
+    var alertId =
+        getRegisteredAlertMessageIdUseCase.getAlertMessageId(recommendation.getAlert());
 
     createRecommendationUseCase.create(new AdjudicationEngineSourcedRecommendation(
-        alertIds.get(0).getAlertId(), recommendationWithMetadata));
+        alertId, recommendationWithMetadata));
 
   }
 
@@ -103,15 +95,5 @@ class AeInboundAmqpIntegrationConfiguration {
     return inboundFactory
         .simpleAdapter()
         .configureContainer(c -> c.addQueueNames(queueNames));
-  }
-
-  private static class HandleRecommendationException extends RuntimeException {
-
-    private static final long serialVersionUID = 5658232713698056290L;
-
-    public HandleRecommendationException(String message) {
-      super(message);
-    }
-
   }
 }

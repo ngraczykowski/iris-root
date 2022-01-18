@@ -2,19 +2,21 @@ package com.silenteight.payments.bridge.ae.alertregistration.service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.ae.alertregistration.port.GetRegisteredAlertSystemIdUseCase;
+import com.silenteight.payments.bridge.ae.alertregistration.port.GetRegisteredAlertMessageIdUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
 
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
-class GetRegisteredAlertSystemIdService implements GetRegisteredAlertSystemIdUseCase {
+class GetRegisteredAlertMessageIdService implements GetRegisteredAlertMessageIdUseCase {
 
   private final RegisteredAlertDataAccessPort registeredAlertDataAccessPort;
 
   @Override
-  public String getAlertSystemId(String alertName) {
-    return registeredAlertDataAccessPort.getAlertSystemId(alertName);
+  public UUID getAlertMessageId(String alertName) {
+    return registeredAlertDataAccessPort.getAlertMessageId(alertName);
   }
 }

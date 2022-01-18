@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -30,6 +31,7 @@ class RegisterMatchJdbcDataAccessIT extends BaseJdbcTest {
   void shouldInsertAllMatches() {
     var request = SaveRegisteredAlertRequest
         .builder()
+        .alertMessageId(UUID.randomUUID())
         .fkcoSystemId("systemId")
         .alertName("alerts/1")
         .matches(List.of(SaveRegisteredMatchRequest

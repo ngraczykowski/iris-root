@@ -27,7 +27,6 @@ class ProcessUnregisteredService {
 
     ingestDatasourceService.ingest(alertComposite, registeredAlert);
 
-
     return learningRegisteredAlert;
   }
 }

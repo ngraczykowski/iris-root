@@ -49,6 +49,7 @@ class AlertRegistrationInitialStep {
 
     var matchIds = getMatchIds(alertDto);
     return RegisterAlertRequest.builder()
+        .alertMessageId(alertData.getAlertId())
         .fkcoSystemId(alertDto.getSystemID())
         .alertTime(fromOffsetDateTime(alertDto.getFilteredAt(ZoneOffset.UTC)))
         .priority(alertData.getPriority())

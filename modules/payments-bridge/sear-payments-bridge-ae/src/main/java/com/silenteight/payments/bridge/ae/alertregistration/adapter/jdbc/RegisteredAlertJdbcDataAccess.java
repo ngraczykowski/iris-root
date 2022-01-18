@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -32,7 +33,7 @@ class RegisteredAlertJdbcDataAccess implements RegisteredAlertDataAccessPort {
   }
 
   @Override
-  public String getAlertSystemId(String alertName) {
+  public UUID getAlertMessageId(String alertName) {
     return selectRegisteredAlertQuery.execute(alertName);
   }
 

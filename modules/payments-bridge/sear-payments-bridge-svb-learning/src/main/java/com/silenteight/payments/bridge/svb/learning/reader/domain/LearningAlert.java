@@ -13,6 +13,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlert
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static com.silenteight.payments.bridge.common.app.AlertLabelUtils.ALERT_LABEL_LEARNING;
 import static com.silenteight.payments.bridge.common.app.AlertLabelUtils.ALERT_LABEL_LEARNING_CSV;
@@ -24,6 +25,8 @@ import static java.util.stream.Collectors.toList;
 public class LearningAlert {
 
   private static final int LEARNING_PRIORITY = 3;
+
+  UUID alertMessageId;
 
   String alertId;
 
@@ -60,6 +63,7 @@ public class LearningAlert {
   public RegisterAlertRequest toRegisterAlertRequest() {
     return RegisterAlertRequest
         .builder()
+        .alertMessageId(alertMessageId)
         .fkcoSystemId(systemId)
         .alertTime(fromOffsetDateTime(alertTime))
         .priority(LEARNING_PRIORITY)

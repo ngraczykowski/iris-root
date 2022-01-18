@@ -47,6 +47,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
     applicationEventPublisher.publishEvent(registerAlertResponse);
     registeredAlertDataAccessPort.save(List.of(SaveRegisteredAlertRequest
         .builder()
+        .alertMessageId(request.getAlertMessageId())
         .alertName(registerAlertResponse.getAlertName())
         .fkcoSystemId(request.getFkcoSystemId())
         .matches(registerAlertResponse
