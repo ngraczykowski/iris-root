@@ -57,4 +57,22 @@
     <dropNotNullConstraint tableName="pb_registered_alert"
                            columnName="alert_message_id"/>
   </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.5.0_8" author="wkeska">
+    <preConditions onFail="MARK_RAN">
+      <not>
+        <columnExists tableName="pb_registered_alert" columnName="alert_message_id"/>
+      </not>
+    </preConditions>
+
+    <addColumn tableName="pb_registered_alert">
+      <column name="alert_message_id" type="uuid"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="payments-bridge-ae-1.5.0_9" author="wkeska">
+    <createIndex tableName="pb_registered_alert" indexName="pb_registered_alert_message_id">
+      <column name="alert_message_id"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>
