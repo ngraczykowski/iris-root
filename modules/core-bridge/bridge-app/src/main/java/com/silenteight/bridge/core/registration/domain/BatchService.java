@@ -27,6 +27,7 @@ class BatchService {
   private final AnalysisService analysisService;
   private final BatchRepository batchRepository;
   private final DefaultModelService defaultModelService;
+  private final BatchStatisticsService batchStatisticsService;
 
   BatchId register(RegisterBatchCommand registerBatchCommand) {
     return batchRepository.findById(registerBatchCommand.id())
@@ -36,22 +37,24 @@ class BatchService {
         .orElseThrow();
   }
 
-  BatchId findBatch(String analysisName) {
-    return batchRepository.findByName(analysisName)
-        .map(BatchId::from)
+  BatchId findBatchId(String analysisName) {
+    return batchRepository.findBatchIdByAnalysisName(analysisName)
         .orElseThrow();
   }
 
   void notifyBatchError(NotifyBatchErrorCommand notifyBatchErrorCommand) {
+    var batchErrorStatistics = batchStatisticsService.createBatchErrorStatistics();
     batchRepository.findById(notifyBatchErrorCommand.id())
         .ifPresentOrElse(
             batch -> markBatchAsError(notifyBatchErrorCommand),
             () -> registerNewAsError(notifyBatchErrorCommand));
     eventPublisher.publish(
-        new BatchError(
-            notifyBatchErrorCommand.id(),
-            notifyBatchErrorCommand.errorDescription(),
-            notifyBatchErrorCommand.batchMetadata())
+        BatchError.builder()
+            .id(notifyBatchErrorCommand.id())
+            .batchMetadata(notifyBatchErrorCommand.batchMetadata())
+            .errorDescription(notifyBatchErrorCommand.errorDescription())
+            .statistics(batchErrorStatistics)
+            .build()
     );
   }
 
@@ -113,12 +116,17 @@ class BatchService {
   }
 
   private void publishBatchCompleted(Batch batch, List<String> alertNames) {
+    var batchCompletedStatistics =
+        batchStatisticsService.createBatchCompletedStatistics(batch.id(), batch.analysisName());
+
     eventPublisher.publish(
-        new BatchCompleted(
-            batch.id(),
-            batch.analysisName(),
-            alertNames,
-            batch.batchMetadata())
+        BatchCompleted.builder()
+            .id(batch.id())
+            .analysisId(batch.analysisName())
+            .batchMetadata(batch.batchMetadata())
+            .alertIds(alertNames)
+            .statistics(batchCompletedStatistics)
+            .build()
     );
   }
 }

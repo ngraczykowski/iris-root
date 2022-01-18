@@ -16,15 +16,17 @@ class RecommendationFacadeSpec extends Specification {
   def recommendationService = Mock(RecommendationService)
   def recommendationRepository = Mock(RecommendationRepository)
   def recommendationPublisher = Mock(RecommendationEventPublisher)
+  def recommendationsStatisticsService = Mock(RecommendationsStatisticsService)
 
   @Subject
   def underTest = new RecommendationFacade(
       recommendationService,
       recommendationPublisher,
-      recommendationRepository
+      recommendationRepository,
+      recommendationsStatisticsService
   )
 
-  def 'Should proceed ready recommendations'() {
+  def 'should proceed ready recommendations'() {
     given:
     def analysis = 'someAnalysis'
 
@@ -35,6 +37,17 @@ class RecommendationFacadeSpec extends Specification {
     1 * recommendationService.getRecommendations(analysis) >> [RECOMMENDATION_WITH_METADATA]
     1 * recommendationRepository.saveAll(_ as List<RecommendationWithMetadata>)
     1 * recommendationPublisher.publish(_ as RecommendationsReceivedEvent)
+  }
+
+  def 'should get recommendations statistics'() {
+    given:
+    def analysisName = 'analysisName'
+
+    when:
+    underTest.getRecommendationsStatistics(analysisName)
+
+    then:
+    1 * recommendationsStatisticsService.createRecommendationsStatistics(analysisName)
   }
 
   private static RECOMMENDATION_WITH_METADATA = RecommendationWithMetadata.builder()

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class JdbcMatchRepository implements MatchRepository {
+class JdbcMatchRepository implements MatchRepository {
 
   private final CrudMatchRepository crudMatchRepository;
 

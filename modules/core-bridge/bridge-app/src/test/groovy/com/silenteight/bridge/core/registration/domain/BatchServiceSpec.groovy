@@ -2,6 +2,7 @@ package com.silenteight.bridge.core.registration.domain
 
 import com.silenteight.bridge.core.registration.domain.model.*
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
+import com.silenteight.bridge.core.registration.domain.model.BatchStatistics.RecommendationsStats
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DefaultModelService
@@ -16,9 +17,11 @@ class BatchServiceSpec extends Specification {
   def analysisService = Mock(AnalysisService)
   def batchRepository = Mock(BatchRepository)
   def modelService = Mock(DefaultModelService)
+  def batchStatisticsService = Mock(BatchStatisticsService)
 
   @Subject
-  def underTest = new BatchService(eventPublisher, analysisService, batchRepository, modelService)
+  def underTest = new BatchService(
+      eventPublisher, analysisService, batchRepository, modelService, batchStatisticsService)
 
   def 'should register batch'() {
     given:
@@ -67,8 +70,17 @@ class BatchServiceSpec extends Specification {
     def batchId = UUID.randomUUID().toString()
     def batch = Batch.newOne(batchId, 'analysisName', 25L, 'batchMetadata')
     def errorDescription = 'error occurred'
+    def batchMetadata = 'batchMetadata'
     def notifyBatchErrorCommand = new NotifyBatchErrorCommand(batchId, errorDescription, 'batchMetadata')
-    def batchError = new BatchError(batchId, errorDescription, 'batchMetadata')
+    def recommendationsStats = new RecommendationsStats(1, 2, 3, 4)
+    def batchStatistics = new BatchStatistics(1, 2, 3, recommendationsStats)
+
+    def batchError = BatchError.builder()
+        .id(batchId)
+        .errorDescription(errorDescription)
+        .batchMetadata(batchMetadata)
+        .statistics(batchStatistics)
+        .build()
 
     and:
     batchRepository.findById(batchId) >> Optional.of(batch)
@@ -77,6 +89,7 @@ class BatchServiceSpec extends Specification {
     underTest.notifyBatchError(notifyBatchErrorCommand)
 
     then:
+    1 * batchStatisticsService.createBatchErrorStatistics() >> batchStatistics
     1 * batchRepository.updateStatusAndErrorDescription(batchId, BatchStatus.ERROR, errorDescription)
     1 * eventPublisher.publish(batchError)
     0 * batchRepository.create(_ as Batch)
@@ -86,8 +99,16 @@ class BatchServiceSpec extends Specification {
     given:
     def batchId = UUID.randomUUID().toString()
     def errorDescription = 'error occurred'
+    def batchMetadata = 'batchMetadata'
     def notifyBatchErrorCommand = new NotifyBatchErrorCommand(batchId, errorDescription, 'batchMetadata')
-    def batchError = new BatchError(batchId, errorDescription, 'batchMetadata')
+    def recommendationsStats = new RecommendationsStats(1, 2, 3, 4)
+    def batchStatistics = new BatchStatistics(1, 2, 3, recommendationsStats)
+    def batchError = BatchError.builder()
+        .id(batchId)
+        .errorDescription(errorDescription)
+        .batchMetadata(batchMetadata)
+        .statistics(batchStatistics)
+        .build()
 
     and:
     batchRepository.findById(batchId) >> Optional.empty()
@@ -96,6 +117,7 @@ class BatchServiceSpec extends Specification {
     underTest.notifyBatchError(notifyBatchErrorCommand)
 
     then:
+    1 * batchStatisticsService.createBatchErrorStatistics() >> batchStatistics
     1 * batchRepository.create(_ as Batch) >> Batch.error(batchId, errorDescription, 'batchMetadata')
     1 * eventPublisher.publish(batchError)
     0 * batchRepository.updateStatusAndErrorDescription(batchId, BatchStatus.ERROR)
@@ -104,13 +126,13 @@ class BatchServiceSpec extends Specification {
   def 'should find batch by analysis name'() {
     given:
     def analysisName = 'analysisName'
-    def batch = Batch.builder().id('batchId').build()
+    def batchId = new BatchId('batchId')
 
     when:
-    def result = underTest.findBatch(analysisName)
+    def result = underTest.findBatchId(analysisName)
 
     then:
-    1 * batchRepository.findByName(analysisName) >> Optional.of(batch)
+    1 * batchRepository.findBatchIdByAnalysisName(analysisName) >> Optional.of(batchId)
     result.id() == 'batchId'
   }
 
@@ -119,10 +141,10 @@ class BatchServiceSpec extends Specification {
     def analysisName = 'notExistingAnalysisName'
 
     when:
-    underTest.findBatch(analysisName)
+    underTest.findBatchId(analysisName)
 
     then:
-    1 * batchRepository.findByName(analysisName) >> Optional.empty()
+    1 * batchRepository.findBatchIdByAnalysisName(analysisName) >> Optional.empty()
     thrown(NoSuchElementException.class)
   }
 
@@ -134,7 +156,15 @@ class BatchServiceSpec extends Specification {
     def batchMetadata = 'batchMetadata'
     def batch = Batch.newOne(batchId, analysisName, 2L, batchMetadata)
     def command = new CompleteBatchCommand(batchId, alertNames)
-    def batchCompleted = new BatchCompleted(batchId, analysisName, alertNames, batchMetadata)
+    def recommendationsStats = new RecommendationsStats(1, 2, 3, 4)
+    def batchStatistics = new BatchStatistics(1, 2, 3, recommendationsStats)
+    def batchCompleted = BatchCompleted.builder()
+        .id(batchId)
+        .analysisId(analysisName)
+        .alertIds(alertNames)
+        .batchMetadata(batchMetadata)
+        .statistics(batchStatistics)
+        .build()
 
     and:
     batchRepository.findById(batchId) >> Optional.of(batch)
@@ -144,6 +174,7 @@ class BatchServiceSpec extends Specification {
 
     then:
     1 * batchRepository.updateStatusToCompleted(command.id())
+    1 * batchStatisticsService.createBatchCompletedStatistics(batchId, analysisName) >> batchStatistics
     1 * eventPublisher.publish(batchCompleted)
   }
 
@@ -160,6 +191,7 @@ class BatchServiceSpec extends Specification {
 
     then:
     0 * batchRepository.updateStatusToCompleted(_ as CompleteBatchCommand)
+    0 * batchStatisticsService.createBatchCompletedStatistics(_ as String, _ as String)
     0 * eventPublisher.publish(_ as BatchCompleted)
   }
 }

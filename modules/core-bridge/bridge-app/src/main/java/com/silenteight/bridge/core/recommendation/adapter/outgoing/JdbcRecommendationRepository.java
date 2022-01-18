@@ -3,12 +3,14 @@ package com.silenteight.bridge.core.recommendation.adapter.outgoing;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata;
+import com.silenteight.bridge.core.recommendation.domain.model.RecommendedActionStatistics;
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationRepository;
 
 import org.springframework.stereotype.Repository;
 
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -26,6 +28,14 @@ class JdbcRecommendationRepository implements RecommendationRepository {
     return crudRecommendationRepository.findByAnalysisName(analysisName).stream()
         .map(this::mapToRecommendationWithMetadata)
         .toList();
+  }
+
+  @Override
+  public RecommendedActionStatistics countRecommendationsByActionForAnalysisName(
+      String analysisName) {
+
+    return mapToRecommendedActionStatistics(
+        crudRecommendationRepository.countRecommendationsByActionForAnalysisName(analysisName));
   }
 
   private RecommendationWithMetadata mapToRecommendationWithMetadata(RecommendationEntity entity) {
@@ -53,5 +63,14 @@ class JdbcRecommendationRepository implements RecommendationRepository {
             .payload(e.metadata())
             .build())
         .toList();
+  }
+
+  private RecommendedActionStatistics mapToRecommendedActionStatistics(
+      List<RecommendedActionStatisticsProjection> projections) {
+
+    return new RecommendedActionStatistics(projections.stream()
+        .collect(Collectors.toMap(
+            RecommendedActionStatisticsProjection::recommendedAction,
+            RecommendedActionStatisticsProjection::count)));
   }
 }

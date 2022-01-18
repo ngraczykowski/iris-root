@@ -13,6 +13,8 @@ import spock.lang.Subject
 
 class RabbitEventPublisherSpec extends Specification {
 
+  def mapper = Mock(RabbitEventMapper)
+
   def rabbitTemplate = Mock(RabbitTemplate)
 
   def batchErrorProperties =
@@ -22,7 +24,8 @@ class RabbitEventPublisherSpec extends Specification {
       new AmqpRegistrationOutgoingNotifyBatchCompletedProperties('completed-exchange')
 
   @Subject
-  def underTest = new RabbitEventPublisher(rabbitTemplate, batchErrorProperties, batchCompletedProperties)
+  def underTest = new RabbitEventPublisher(
+      mapper, rabbitTemplate, batchErrorProperties, batchCompletedProperties)
 
   def 'notify error for batch'() {
     given:
@@ -42,6 +45,7 @@ class RabbitEventPublisherSpec extends Specification {
     underTest.publish(batchError)
 
     then:
+    1 * mapper.toMessageBatchError(batchError) >> messageBatchError
     1 * rabbitTemplate.convertAndSend(batchErrorProperties.exchangeName(), "", messageBatchError)
   }
 
@@ -65,6 +69,7 @@ class RabbitEventPublisherSpec extends Specification {
     underTest.publish(batchCompleted)
 
     then:
+    1 * mapper.toMessageBatchCompleted(batchCompleted) >> messageBatchCompleted
     1 * rabbitTemplate
         .convertAndSend(batchCompletedProperties.exchangeName(), "", messageBatchCompleted)
   }

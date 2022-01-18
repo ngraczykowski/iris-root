@@ -2,6 +2,7 @@ package com.silenteight.bridge.core.registration.domain.port.outgoing;
 
 import com.silenteight.bridge.core.registration.domain.model.Alert;
 import com.silenteight.bridge.core.registration.domain.model.AlertId;
+import com.silenteight.bridge.core.registration.domain.model.AlertStatusStatistics;
 
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface AlertRepository {
       Alert.Status status, String batchId, List<String> alertIds);
 
   long countAllPendingAlerts(String batchId);
+
+  AlertStatusStatistics countAlertsByStatusForBatchId(String batchId);
 }

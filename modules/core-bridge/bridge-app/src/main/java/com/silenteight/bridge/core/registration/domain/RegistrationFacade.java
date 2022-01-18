@@ -26,20 +26,17 @@ public class RegistrationFacade {
     batchService.notifyBatchError(notifyBatchErrorCommand);
   }
 
-  public void markAlertsAsRecommended(
-      MarkAlertsAsRecommendedCommand markAlertsAsRecommendedCommand) {
-    var batchId = batchService.findBatch(markAlertsAsRecommendedCommand.analysisName());
+  public void markAlertsAsRecommended(MarkAlertsAsRecommendedCommand command) {
+    var batchId = batchService.findBatchId(command.analysisName()).id();
 
     log.info(
         "Batch for given analysis name {}, has batch id: {}.",
-        markAlertsAsRecommendedCommand.analysisName(), batchId.id());
+        command.analysisName(), batchId);
 
-    alertService.updateStatusToRecommended(
-        batchId.id(), markAlertsAsRecommendedCommand.alertNames());
+    alertService.updateStatusToRecommended(batchId, command.alertNames());
 
-    if (alertService.hasNoPendingAlerts(batchId.id())) {
-      batchService.completeBatch(
-          new CompleteBatchCommand(batchId.id(), markAlertsAsRecommendedCommand.alertNames()));
+    if (alertService.hasNoPendingAlerts(batchId)) {
+      batchService.completeBatch(new CompleteBatchCommand(batchId, command.alertNames()));
     }
   }
 

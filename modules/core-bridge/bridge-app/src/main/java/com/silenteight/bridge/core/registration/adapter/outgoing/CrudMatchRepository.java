@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface CrudMatchRepository extends CrudRepository<MatchEntity, Long> {
+interface CrudMatchRepository extends CrudRepository<MatchEntity, Long> {
 
   @Modifying
   @Query("UPDATE matches "

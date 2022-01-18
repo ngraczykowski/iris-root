@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.bridge.core.recommendation.domain.exceptions.CannotGetRecommendationsException;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsReceivedEvent;
+import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsStatistics;
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationEventPublisher;
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationRepository;
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationService;
@@ -23,6 +24,7 @@ public class RecommendationFacade {
   private final RecommendationService recommendationService;
   private final RecommendationEventPublisher eventPublisher;
   private final RecommendationRepository recommendationRepository;
+  private final RecommendationsStatisticsService recommendationsStatisticsService;
 
   public void proceedReadyRecommendations(String analysisName) {
     var alertNames = getAndStoreRecommendations(analysisName).stream()
@@ -30,6 +32,10 @@ public class RecommendationFacade {
         .toList();
 
     eventPublisher.publish(new RecommendationsReceivedEvent(analysisName, alertNames));
+  }
+
+  public RecommendationsStatistics getRecommendationsStatistics(String analysisName) {
+    return recommendationsStatisticsService.createRecommendationsStatistics(analysisName);
   }
 
   private List<RecommendationWithMetadata> getAndStoreRecommendations(String analysisName) {

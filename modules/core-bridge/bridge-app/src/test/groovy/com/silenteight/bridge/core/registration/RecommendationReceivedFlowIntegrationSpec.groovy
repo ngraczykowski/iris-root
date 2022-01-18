@@ -104,6 +104,7 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
         analysisId == ANALYSIS_NAME
         alertIdsCount == 1
         batchMetadata == METADATA
+        statistics.totalProcessedCount == 1
       }
     }
   }
@@ -140,10 +141,10 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
         .build()
   }
 
-  private static RecommendationsReceived createRecommendationsReceived(List<String> alertNAmes) {
+  private static RecommendationsReceived createRecommendationsReceived(List<String> alertNames) {
     RecommendationsReceived.newBuilder()
         .setAnalysisId(ANALYSIS_NAME)
-        .addAllAlertIds(alertNAmes)
+        .addAllAlertIds(alertNames)
         .build()
   }
 }

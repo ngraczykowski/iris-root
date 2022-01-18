@@ -6,8 +6,9 @@ import java.util.List;
 
 public record BatchCompleted(String id,
                              String analysisId,
+                             String batchMetadata,
                              List<String> alertIds,
-                             String batchMetadata) {
+                             BatchStatistics statistics) {
 
   @Builder
   public BatchCompleted {}

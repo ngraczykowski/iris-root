@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.bridge.core.registration.adapter.outgoing.BatchEntity.Status;
 import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
+import com.silenteight.bridge.core.registration.domain.model.BatchId;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
 
 import org.springframework.stereotype.Repository;
@@ -23,13 +24,14 @@ class JdbcBatchRepository implements BatchRepository {
   }
 
   @Override
-  public Optional<Batch> findByName(String analysisName) {
-    return crudBatchRepository.findByAnalysisName(analysisName).map(this::mapToBatch);
+  public Optional<BatchId> findBatchIdByAnalysisName(String analysisName) {
+    return crudBatchRepository.findByAnalysisName(analysisName)
+        .map(batchIdProjection -> new BatchId(batchIdProjection.batchId()));
   }
 
   @Override
   public void updateStatusToCompleted(String batchId) {
-    crudBatchRepository.updateStatusByBatchId(Status.COMPLETED.name(),batchId);
+    crudBatchRepository.updateStatusByBatchId(Status.COMPLETED.name(), batchId);
   }
 
   @Override

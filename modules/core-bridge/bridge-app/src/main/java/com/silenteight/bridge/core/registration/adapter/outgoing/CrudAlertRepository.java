@@ -42,4 +42,11 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
       SET status = :status, updated_at = NOW()
       WHERE batch_id = :batchId AND alert_id IN(:alertIds)""")
   void updateStatusByBatchIdAndAlertIdIn(Status status, String batchId, List<String> alertIds);
+
+  @Query("""
+      SELECT status, COUNT(*) 
+      FROM alerts
+      WHERE batch_id = :batchId
+      GROUP BY status""")
+  List<AlertStatusStatisticsProjection> countAlertsByStatusForBatchId(String batchId);
 }

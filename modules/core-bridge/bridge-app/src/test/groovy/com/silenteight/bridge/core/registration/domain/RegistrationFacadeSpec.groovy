@@ -85,7 +85,7 @@ class RegistrationFacadeSpec extends Specification {
     underTest.markAlertsAsRecommended(markAlertsAsRecommendedCommand)
 
     then:
-    1 * batchService.findBatch(analysisName) >> batch
+    1 * batchService.findBatchId(analysisName) >> batch
     1 * alertService.updateStatusToRecommended(batch.id(), alertNames)
     1 * alertService.hasNoPendingAlerts(batch.id()) >> true
     1 * batchService.completeBatch(completeBatchCommand)
@@ -103,7 +103,7 @@ class RegistrationFacadeSpec extends Specification {
     underTest.markAlertsAsRecommended(markAlertsAsRecommendedCommand)
 
     then:
-    1 * batchService.findBatch(analysisName) >> batch
+    1 * batchService.findBatchId(analysisName) >> batch
     1 * alertService.updateStatusToRecommended(batch.id(), alertNames)
     1 * alertService.hasNoPendingAlerts(batch.id()) >> false
     0 * batchService.completeBatch(completeBatchCommand)
@@ -118,7 +118,7 @@ class RegistrationFacadeSpec extends Specification {
     underTest.markAlertsAsRecommended(command)
 
     then:
-    1 * batchService.findBatch(notExistingAnalysisName) >> {throw new NoSuchElementException()}
+    1 * batchService.findBatchId(notExistingAnalysisName) >> {throw new NoSuchElementException()}
     0 * alertService.updateStatusToRecommended(_ as String, _ as List<String>)
     0 * alertService.hasNoPendingAlerts(_ as String)
     0 * batchService.completeBatch(_ as CompleteBatchCommand)
