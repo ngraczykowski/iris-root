@@ -61,10 +61,10 @@ class RegisterAlertService implements RegisterAlertUseCase {
   }
 
   private static RegisterAlertResponse createRegisterAlertResponse(
-      String alertId, String alertName, List<Match> matches) {
+      String systemId, String alertName, List<Match> matches) {
     return RegisterAlertResponse
         .builder()
-        .systemId(alertId)
+        .systemId(systemId)
         .alertName(alertName)
         .matchResponses(matches
             .stream()
@@ -88,7 +88,7 @@ class RegisterAlertService implements RegisterAlertUseCase {
         batchCreateMatches(registerAlertRequests, batchCreateAlertsResponse);
     var saveRequest = registeredAlertMatches
         .stream()
-        .map(RegisterAlertResponse::toSaveRegisterAlertRequest)
+        .map(am -> am.toSaveRegisterAlertRequest(registerAlertRequests))
         .collect(toList());
 
     registeredAlertDataAccessPort.save(saveRequest);

@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.ae.alertregistration.domain;
 
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Value;
 
 import java.util.List;
@@ -25,9 +26,20 @@ public class RegisterAlertResponse {
         RegisterMatchResponse::getMatchName));
   }
 
-  public SaveRegisteredAlertRequest toSaveRegisterAlertRequest() {
+  @NonNull
+  public SaveRegisteredAlertRequest toSaveRegisterAlertRequest(
+      List<RegisterAlertRequest> registerAlertRequests) {
+    var alertMessageId = registerAlertRequests
+        .stream()
+        .filter(rar -> rar.getFkcoSystemId().equals(systemId))
+        .findFirst()
+        .orElseThrow(() -> new NoSuchElementException(
+            "There is no corresponding alert in registerAlertRequest for RegisterAlertResponse"))
+        .getAlertMessageId();
+
     return SaveRegisteredAlertRequest
         .builder()
+        .alertMessageId(alertMessageId)
         .alertName(alertName)
         .fkcoSystemId(systemId)
         .matches(matchResponses
