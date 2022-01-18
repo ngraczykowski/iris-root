@@ -181,14 +181,13 @@ public class PolicyService {
   @Transactional
   public void updateStep(UpdateStepRequest updateStepRequest) {
     updateStepRequest.preAudit(auditingLogger::log);
-    Policy policy = policyRepository.getById(updateStepRequest.getId());
+    Policy policy = policyRepository.getById(updateStepRequest.getPolicyId());
     policy.updateStep(
         updateStepRequest.getStepId(),
         updateStepRequest.getName(),
         updateStepRequest.getDescription(),
         updateStepRequest.getSolution(),
         updateStepRequest.getUpdatedBy());
-    policy.setUpdatedBy(updateStepRequest.getUpdatedBy());
     policyRepository.save(policy);
     updateStepRequest.postAudit(auditingLogger::log);
   }

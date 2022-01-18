@@ -18,9 +18,12 @@ import java.util.UUID;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.serp.governance.policy.domain.StepType.NARROW;
+import static com.silenteight.serp.governance.policy.domain.TestFixtures.STEP_NAME_THAT_EXCEEDED_MAX_LENGTH;
+import static com.silenteight.serp.governance.policy.domain.TestFixtures.STEP_NAME_WITH_MAX_LENGTH;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
@@ -59,10 +62,35 @@ class CreateStepRequestRestControllerTest extends BaseRestControllerTest {
     assertThat(captor.getValue().getCreatedBy()).isEqualTo(USERNAME);
   }
 
+  @Test
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its202_whenStepAddedWithMaxAllowedNameLength() {
+    post(
+        CREATE_STEP_URL,
+        new CreateStepDto(STEP_ID, STEP_NAME_WITH_MAX_LENGTH, DESCRIPTION, SOLUTION, NARROW))
+        .contentType(anything())
+        .statusCode(NO_CONTENT.value());
+
+    ArgumentCaptor<CreateStepRequest> captor = ArgumentCaptor.forClass(CreateStepRequest.class);
+    verify(policyService).addStepToPolicy(captor.capture());
+    assertThat(captor.getValue().getStepName()).isEqualTo(STEP_NAME_WITH_MAX_LENGTH);
+  }
+
   @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, QA, AUDITOR })
   void its403_whenNotPermittedRole() {
     post(CREATE_STEP_URL, new CreateStepDto(STEP_ID, NAME, DESCRIPTION, SOLUTION, NARROW))
         .contentType(anything())
         .statusCode(FORBIDDEN.value());
+  }
+
+  @Test
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its400_whenStepNameLengthGreaterThanAllowed() {
+    post(
+        CREATE_STEP_URL,
+        new CreateStepDto(STEP_ID, STEP_NAME_THAT_EXCEEDED_MAX_LENGTH, DESCRIPTION, SOLUTION,
+            NARROW))
+        .contentType(anything())
+        .statusCode(BAD_REQUEST.value());
   }
 }

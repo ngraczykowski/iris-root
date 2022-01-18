@@ -564,4 +564,12 @@
       WHERE hba.discriminator = gqa.alert_name;
     </sql>
   </changeSet>
+  <changeSet id="serp-governance-4.0.0-22" author="dsniezek">
+    <comment>
+      Extends length of governance_policy_step.name to 150
+    </comment>
+    <modifyDataType tableName="governance_policy_step"
+                    columnName="name"
+                    newDataType="VARCHAR(150)"/>
+  </changeSet>
 </databaseChangeLog>

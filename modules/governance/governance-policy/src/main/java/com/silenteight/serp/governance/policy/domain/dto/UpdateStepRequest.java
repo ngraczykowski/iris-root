@@ -22,7 +22,7 @@ public class UpdateStepRequest implements AuditableRequest {
 
   UUID correlationId = UUID.randomUUID();
 
-  long id;
+  long policyId;
   @NonNull
   UUID stepId;
   @Nullable
