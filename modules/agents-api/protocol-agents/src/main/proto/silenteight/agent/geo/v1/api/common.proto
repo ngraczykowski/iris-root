@@ -34,8 +34,8 @@ enum LocationType {
     COUNTRY = 2;
     // A city or equivalent level location.
     CITY = 3;
-    // A postal code level location.
-    // POSTAL_CODE = 4;
+    // A ZIP code level location.
+    ZIP_CODE = 4;
     // A street address level location.
     // STREET_ADDRESS = 5;
     // A county or equivalent level location.
