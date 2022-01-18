@@ -24,7 +24,7 @@ class RoleQueryIT extends BaseDataJpaTest {
   private RoleQuery underTest;
 
   @Test
-  void shouldListRoles() {
+  void shouldListAllRoles() {
     // given
     persistRole(ROLE_ID_1);
 

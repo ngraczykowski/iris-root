@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
-import static com.silenteight.sens.webapp.permission.PermissionsTestFixtures.*;
+import static com.silenteight.sens.webapp.permission.PermissionTestFixtures.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.*;
@@ -20,11 +20,9 @@ import static org.springframework.http.HttpStatus.OK;
 class ListPermissionsRestControllerTest extends BaseRestControllerTest {
 
   private static final String LIST_PERMISSIONS_URL = "/permissions";
-  private static final String LIST_PERMISSIONS_ASSIGNED_ROLE_URL =
-      String.format("/v2/roles/%s/permissions", ROLE_ID);
 
   @MockBean
-  ListPermissionQuery listPermissionQuery;
+  private ListPermissionQuery listPermissionQuery;
 
   @Test
   @WithMockUser(username = USERNAME, authorities = USER_ADMINISTRATOR)
@@ -59,13 +57,5 @@ class ListPermissionsRestControllerTest extends BaseRestControllerTest {
         .body("[1].id", is(PERMISSION_ID_2.toString()))
         .body("[1].name", is(PERMISSION_NAME_2))
         .body("[1].description", is(PERMISSION_DESCRIPTION_2));
-  }
-
-  @Test
-  @TestWithRole(roles = { APPROVER, AUDITOR, MODEL_TUNER, QA, QA_ISSUE_MANAGER })
-  void its403_whenNotPermittedRoleOnListingPermissionAssignedToRole() {
-    get(LIST_PERMISSIONS_ASSIGNED_ROLE_URL)
-        .contentType(anything())
-        .statusCode(FORBIDDEN.value());
   }
 }
