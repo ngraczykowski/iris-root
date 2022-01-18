@@ -81,6 +81,10 @@ warehouse.report.rbs:
         label: Name
       - name: match_feature_values_features/nameMatchedText
         label: Name Matched Text
+      - name: match_feature_values_features/historicalRiskCustomerName
+        label: Historical Risk - Customer Name
+      - name: match_feature_values_features/historicalRiskAccountNumber
+        label: Historical Risk - Account Number
       - name: match_feature_values_features/organizationName
         label: Organization Name
       - name: match_feature_values_features/organizationName2
@@ -130,6 +134,10 @@ warehouse.report.rbs:
         label: Name
       - name: alert_features/nameMatchedText:solution
         label: Name Matched Text
+      - name: alert_features/historicalRiskCustomerName:solution
+        label: Historical Risk - Customer Name
+      - name: alert_features/historicalRiskAccountNumber:solution
+        label: Historical Risk - Account Number
       - name: alert_features/organizationName:solution
         label: Organization Name
       - name: alert_features/organizationName2:solution
