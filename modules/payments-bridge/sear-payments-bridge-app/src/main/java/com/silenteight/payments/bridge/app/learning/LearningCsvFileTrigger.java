@@ -3,7 +3,6 @@ package com.silenteight.payments.bridge.app.learning;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningAlertsUseCase;
 import com.silenteight.payments.bridge.svb.newlearning.domain.CsvProcessingFileStatus;
 import com.silenteight.payments.bridge.svb.newlearning.domain.ObjectPath;
 import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
@@ -24,7 +23,7 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 class LearningCsvFileTrigger {
 
-  private final HandleLearningAlertsUseCase handleLearningAlertsUseCase;
+  private final LearningRunnerService learningRunnerService;
   private final CsvFileResourceProvider csvFileResourceProvider;
   private final LearningFileRepository learningFileRepository;
 
@@ -40,7 +39,7 @@ class LearningCsvFileTrigger {
     log.debug("Received non processed files = {}", savedNames);
 
     newNames.forEach(file -> {
-      handleLearningAlertsUseCase.readAlerts(file.toLearningRequest());
+      learningRunnerService.trigger(file);
       file.setStatus(CsvProcessingFileStatus.TRIGGERED.name());
       learningFileRepository.save(file);
     });

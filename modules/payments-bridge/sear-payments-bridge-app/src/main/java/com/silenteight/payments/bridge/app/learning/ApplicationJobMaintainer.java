@@ -64,7 +64,7 @@ class ApplicationJobMaintainer implements JobMaintainer {
 
   // Required to be able to restart jobs which are searched by restart action inside registry.
   private void createJobRegistry() {
-    jobs.stream().forEach(job -> {
+    jobs.forEach(job -> {
       try {
         log.info("Registering job:{}", job.getName());
         jobRegistry.register(new ReferenceJobFactory(job));

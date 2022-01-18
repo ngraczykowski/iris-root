@@ -186,7 +186,7 @@ libraries.hibernate_types = [group: 'com.vladmihalcea', name: 'hibernate-types-5
 libraries.hibernate_validator = [group: 'org.hibernate.validator', name: 'hibernate-validator']
 libraries.hikari_cp = [group: 'com.zaxxer', name: 'HikariCP']
 libraries.jackson_annotations = [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jacksonVersion]
-libraries.jackson_databind = [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.0']
+libraries.jackson_databind = [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion]
 libraries.jackson_dataformat_csv = [group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: jacksonVersion]
 libraries.jackson_dataformat_xml = [group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: jacksonVersion]
 libraries.jackson_datatype_jdk8 = [group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8']
@@ -255,8 +255,10 @@ configurations.all {
 
   resolutionStrategy {
     dependencySubstitution {
-      substitute module("org.glassfish:javax.el") using module("org.apache.tomcat.embed:tomcat-embed-el:9.0.55") because "Tomcat is a kitty"
-      substitute module("org.glassfish:jakarta.el") using module("org.apache.tomcat.embed:tomcat-embed-el:9.0.55") because "Tomcat is a kitty"
+      substitute module("org.glassfish:javax.el") using module(
+          "org.apache.tomcat.embed:tomcat-embed-el:9.0.55") because "Tomcat is a kitty"
+      substitute module("org.glassfish:jakarta.el") using module(
+          "org.apache.tomcat.embed:tomcat-embed-el:9.0.55") because "Tomcat is a kitty"
     }
 
     cacheChangingModulesFor 0, 'seconds'
