@@ -24,6 +24,8 @@ sep.auth:
       - "LIST_ROLES"
       - "EDIT_ROLE"
       - "LIST_PERMISSIONS"
+    MANAGE_SSO_MAPPING:
+      - "LIST_IDENTITY_PROVIDERS"
   rolePermissionsMappings:
     APPROVER:
       - "DOWNLOAD_SOLVING_REPORTS"
@@ -39,6 +41,7 @@ sep.auth:
       - "VIEW_USERS"
       - "SYNC_ANALYSTS"
       - "MANAGE_ROLES"
+      - "MANAGE_SSO_MAPPING"
     MODEL_TUNER:
       - "DOWNLOAD_SOLVING_REPORTS"
       - "REPORTING_UI"
