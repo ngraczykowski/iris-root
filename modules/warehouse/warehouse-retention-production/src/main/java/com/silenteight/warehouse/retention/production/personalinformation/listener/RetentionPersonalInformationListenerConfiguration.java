@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.dataretention.api.v1.PersonalInformationExpired;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
 import com.silenteight.warehouse.common.integration.AmqpInboundProperties;
-import com.silenteight.warehouse.retention.production.personalinformation.ErasePersonalInformationUseCase;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -62,9 +61,7 @@ class RetentionPersonalInformationListenerConfiguration {
   }
 
   @Bean
-  PersonalInformationExpiredDataHandler personalInformationExpiredDataHandler(
-      ErasePersonalInformationUseCase erasePersonalInformationUseCase) {
-
-    return new PersonalInformationExpiredDataHandler(erasePersonalInformationUseCase);
+  PersonalInformationExpiredDataHandler personalInformationExpiredDataHandler() {
+    return new PersonalInformationExpiredDataHandler();
   }
 }

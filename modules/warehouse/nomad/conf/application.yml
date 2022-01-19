@@ -85,13 +85,8 @@ warehouse:
   minio:
     url: https://minio.silenteight.com
   retention:
-    personal-information:
-      batch-size: 200
-      fields-to-erase:
-        - 'comment'
-        - 'lastCaseComment'
     alert:
-      batch-size: 200
+      batch-size: 1000
     simulation:
       analysis-expired:
         fields-to-erase:

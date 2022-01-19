@@ -13,6 +13,11 @@ warehouse:
   alert-mapping:
     country-source-key: lob_country
   match-mapping:
+  persistence:
+    alert:
+      labels:
+        - "alertAnalystDecision"
+      recommendation-date-field: "recommendationDate"
   messaging:
     broker:
       alert-backup-indexing:
@@ -71,13 +76,8 @@ warehouse:
     update-request-batch-size: 1000
     erase-request-batch-size: 1000
   retention:
-    personal-information:
-      batch-size: 200
-      fields-to-erase:
-        - 'recommendation_comment'
-        - 'analyst_comment'
     alert:
-      batch-size: 200
+      batch-size: 1000
 
 test:
   messaging:

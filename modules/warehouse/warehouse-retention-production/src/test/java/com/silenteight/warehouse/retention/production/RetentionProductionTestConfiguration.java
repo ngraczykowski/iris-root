@@ -10,19 +10,15 @@ import com.silenteight.sep.base.common.messaging.MessagingConfiguration;
 import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration;
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
-import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
-import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
-import com.silenteight.warehouse.common.opendistro.OpendistroModule;
-import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
-import com.silenteight.warehouse.indexer.alert.AlertModule;
-import com.silenteight.warehouse.indexer.match.MatchModule;
-import com.silenteight.warehouse.indexer.production.ProductionIndexerProperties;
-import com.silenteight.warehouse.indexer.production.ProductionMessageHandlerModule;
+import com.silenteight.warehouse.production.handler.ProductionMessageHandlerModule;
+import com.silenteight.warehouse.production.handler.ProductionMessageHandlerProperties;
+import com.silenteight.warehouse.production.persistence.ProductionPersistenceModule;
 import com.silenteight.warehouse.test.client.TestClientModule;
 import com.silenteight.warehouse.test.client.gateway.IndexerClientIntegrationProperties;
 
 import org.springframework.amqp.core.*;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -34,15 +30,10 @@ import static java.time.Instant.parse;
 import static org.mockito.Mockito.*;
 
 @ComponentScan(basePackageClasses = {
-    AlertModule.class,
     AmqpCommonModule.class,
-    ElasticsearchRestClientModule.class,
-    EnvironmentModule.class,
-    MatchModule.class,
-    OpendistroModule.class,
     ProductionMessageHandlerModule.class,
+    ProductionPersistenceModule.class,
     RetentionProductionModule.class,
-    TestElasticSearchModule.class,
     TestClientModule.class
 })
 @ImportAutoConfiguration({
@@ -52,6 +43,7 @@ import static org.mockito.Mockito.*;
     HibernateCacheAutoConfiguration.class,
     SilentEightNamingConventionConfiguration.class,
 })
+@EnableAutoConfiguration
 @EnableIntegration
 @EnableIntegrationManagement
 @RequiredArgsConstructor
@@ -60,19 +52,8 @@ public class RetentionProductionTestConfiguration {
 
   public static final String PROCESSING_TIMESTAMP = "2021-04-15T12:17:37.098Z";
 
-  private final ProductionIndexerProperties productionProperties;
+  private final ProductionMessageHandlerProperties productionProperties;
   private final IndexerClientIntegrationProperties testProperties;
-
-  @Bean
-  Binding retentionPersonalInformationIndexingBinding(
-      Exchange retentionCommandExchange,
-      Queue personalInformationExpiredIndexingQueue) {
-
-    return bind(
-        retentionCommandExchange,
-        testProperties.getPersonalInformationExpiredIndexingTestClientOutbound().getRoutingKey(),
-        personalInformationExpiredIndexingQueue);
-  }
 
   @Bean
   Binding productionIndexExchangeToQueueBinding(
