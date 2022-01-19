@@ -36,12 +36,14 @@ enum LocationType {
     CITY = 3;
     // A ZIP code level location.
     ZIP_CODE = 4;
+    // A widely known region or administrative area
+    REGION = 5;
     // A street address level location.
-    // STREET_ADDRESS = 5;
+    // STREET_ADDRESS = 6;
     // A county or equivalent level location.
-    // SUB_ADMINISTRATIVE_AREA = 6;
+    // SUB_ADMINISTRATIVE_AREA = 7;
     // A sublocality is a subdivision of a locality, f.e a city borough, ward, or arrondissement.
-    // SUB_LOCALITY = 7;
+    // SUB_LOCALITY = 8;
 }
 
 message GeoComparerReason {
