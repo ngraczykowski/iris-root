@@ -56,7 +56,11 @@ class IngestServiceTest {
     when(findRegisteredAlertUseCase.find(any())).thenReturn(List.of(
         new RegisteredAlert(
             "systemId", "alerts/1", List.of(
-            RegisteredMatch.builder().matchName("alerts/1/matches/1").matchId("id").build()))));
+            RegisteredMatch
+                .builder()
+                .matchName("alerts/1/matches/1")
+                .matchId("matchId")
+                .build()))));
     ingestService.ingest(createBatchAlertRequest());
     verify(indexLearningAlertPort).indexForLearning(anyList());
   }

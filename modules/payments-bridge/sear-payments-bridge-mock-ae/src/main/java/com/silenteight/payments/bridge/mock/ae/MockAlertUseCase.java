@@ -57,6 +57,10 @@ public class MockAlertUseCase {
     return response;
   }
 
+  static BatchAddLabelsResponse batchAddAlertsResponse(BatchAddLabelsRequest request) {
+    return BatchAddLabelsResponse.newBuilder().putAllLabels(request.getLabelsMap()).build();
+  }
+
   public static long getCreatedAlertsCount() {
     return ALERTS.size();
   }

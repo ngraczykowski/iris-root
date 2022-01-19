@@ -66,6 +66,7 @@ class IngestService {
       List<LearningAlert> registeredLearningAlerts,
       Map<String, RegisteredAlert> registeredAlertMap) {
 
+    registeredLearningAlerts.forEach(a -> a.setAlertMatchNames(registeredAlertMap));
     var indexAlertsRequest =
         registeredAlertMap.values().stream()
             .map(ra -> fromLearningAlerts(ra, registeredLearningAlerts))
