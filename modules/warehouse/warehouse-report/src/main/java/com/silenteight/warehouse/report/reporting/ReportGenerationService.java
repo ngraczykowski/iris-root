@@ -2,7 +2,10 @@ package com.silenteight.warehouse.report.reporting;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.auth.token.UserAwareTokenProvider;
+import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
 import com.silenteight.warehouse.indexer.query.streaming.DataProvider;
 import com.silenteight.warehouse.indexer.query.streaming.FetchDataRequest;
 import com.silenteight.warehouse.report.sql.SqlExecutor;
@@ -19,14 +22,17 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Slf4j
 public class ReportGenerationService {
 
   private static final DateTimeFormatter ISO_LOCAL_DATE = DateTimeFormatter.ISO_LOCAL_DATE;
   private static final String PARAMETER_FROM = "from";
   private static final String PARAMETER_TO = "to";
   private static final String PARAMETER_ANALYSIS_ID = "analysisId";
+  private static final String PARAMETER_COUNTRIES = "countries";
   private static final String MISSING_CONFIGURATION_EXCEPTION =
       "Configuration parameter: selectSqlQuery cannot be null while using SQL reports!";
+  public static final String GROUP_NAME = "kibana-sso";
 
   @NonNull
   private final DataProvider dataProvider;
@@ -36,6 +42,10 @@ public class ReportGenerationService {
   private final ReportStorage reportStorage;
   @NonNull
   private final SqlExecutor sqlExecutor;
+  @NonNull
+  private final UserAwareTokenProvider userAwareTokenProvider;
+  @NonNull
+  private final CountryPermissionService countryPermissionService;
 
   public void generate(FetchDataRequest request) {
     if (request.isUseSqlReports()) {
@@ -64,6 +74,7 @@ public class ReportGenerationService {
     parameters.put(PARAMETER_FROM, fetchDataRequest.getFrom().format(ISO_LOCAL_DATE));
     parameters.put(PARAMETER_TO, fetchDataRequest.getTo().format(ISO_LOCAL_DATE));
     parameters.put(PARAMETER_ANALYSIS_ID, fetchDataRequest.getName());
+    parameters.put(PARAMETER_COUNTRIES, getSecurityParameters());
 
     String sqlSelectQuery = Optional
         .ofNullable(StringSubstitutor.replace(fetchDataRequest.getSelectSqlQuery(), parameters))
@@ -79,5 +90,12 @@ public class ReportGenerationService {
         .prepareDataSqlStatements(sqlTemplates)
         .selectSqlStatement(sqlSelectQuery)
         .build();
+  }
+
+  String getSecurityParameters() {
+    Set<String> roles = userAwareTokenProvider.getRolesForGroup(GROUP_NAME);
+    log.info("Current roles: {}", String.join(", ", roles));
+    return countryPermissionService.getCountries(roles).stream()
+        .collect(Collectors.joining("', '", "'", "'"));
   }
 }

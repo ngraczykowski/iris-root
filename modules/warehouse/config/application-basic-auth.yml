@@ -15,3 +15,4 @@ sep.auth.basic.users:
       - MODEL_TUNER
       - QA
       - USER_ADMINISTRATOR
+      - d87be316-eb23-43c1-8c5c-dc2285339783
