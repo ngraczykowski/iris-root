@@ -1,5 +1,8 @@
 package com.silenteight.warehouse.report.reporting;
 
+import com.silenteight.sep.auth.token.UserAwareTokenProvider;
+import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
+import com.silenteight.warehouse.common.domain.country.CountryRepository;
 import com.silenteight.warehouse.indexer.query.streaming.DataProvider;
 import com.silenteight.warehouse.report.sql.SqlExecutor;
 import com.silenteight.warehouse.report.storage.ReportStorage;
@@ -16,8 +19,16 @@ class ReportingConfiguration {
       DataProvider provider,
       TemporaryFileStorage temporaryFileStorage,
       ReportStorage reportStorage,
-      SqlExecutor sqlExecutor) {
+      SqlExecutor sqlExecutor,
+      UserAwareTokenProvider userAwareTokenProvider,
+      CountryPermissionService countryPermissionService) {
 
-    return new ReportGenerationService(provider, temporaryFileStorage, reportStorage, sqlExecutor);
+    return new ReportGenerationService(provider, temporaryFileStorage,
+        reportStorage, sqlExecutor, userAwareTokenProvider, countryPermissionService);
+  }
+
+  @Bean
+  CountryPermissionService countryPermissionService(CountryRepository countryRepository) {
+    return new CountryPermissionService(countryRepository);
   }
 }

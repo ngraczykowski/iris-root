@@ -3,6 +3,7 @@ package com.silenteight.warehouse.report;
 
 import com.silenteight.sep.auth.token.TokenModule;
 import com.silenteight.sep.filestorage.minio.FileStorageMinioModule;
+import com.silenteight.warehouse.common.domain.DomainModule;
 import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
@@ -24,7 +25,8 @@ import org.springframework.context.annotation.ComponentScan;
     TestElasticSearchModule.class,
     TokenModule.class,
     FileStorageMinioModule.class,
-    SqlExecutorModule.class
+    SqlExecutorModule.class,
+    DomainModule.class
 })
 class ReportGenerationConfiguration  {
 }

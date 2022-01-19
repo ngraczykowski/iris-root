@@ -644,6 +644,7 @@ warehouse.report.accuracy:
              discriminator AS "S8 Alert ID"
       FROM warehouse_alert
       WHERE (recommendation_date BETWEEN DATE '${from}' AND DATE '${to}')
+      AND (payload ->> 's8_lobCountryCode') IN (${countries})
       AND (payload ->> 'analyst_decision') IN ('analyst_decision_false_positive', 'analyst_decision_true_positive')
     useSqlReports: true
 
@@ -781,6 +782,7 @@ warehouse.report.ai-reasoning:
         (payload ->> 'status') AS "Alert Status",
         discriminator AS "Alert S8 ID"
       from warehouse_alert where recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+      AND (payload ->> 's8_lobCountryCode') IN (${countries})
     useSqlReports: true
     columns:
       - name: alert_fvSignature
