@@ -14,13 +14,8 @@ warehouse:
 
   indexer.diagnostic.enabled: true
   retention:
-    personal-information:
-      batch-size: 200
-      fields-to-erase:
-        - 'recommendation_comment'
-        - 'firco_analyst_comment'
     alert:
-      batch-size: 200
+      batch-size: 1000
     simulation:
       analysis-expired:
         fields-to-erase:

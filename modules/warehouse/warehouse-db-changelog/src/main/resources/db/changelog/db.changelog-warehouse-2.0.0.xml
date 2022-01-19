@@ -183,4 +183,17 @@
     <dropColumn columnName="analysis" tableName="warehouse_report_metrics"/>
   </changeSet>
 
+  <changeSet id="warehouse-2.0.0-9" author="plewandowski">
+    <dropForeignKeyConstraint baseTableName="warehouse_alert_label" constraintName="fk_alert_id"/>
+    <addForeignKeyConstraint baseTableName="warehouse_alert_label" baseColumnNames="alert_id"
+                             constraintName="fk_alert_id"
+                             referencedTableName="warehouse_alert" referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+
+    <dropForeignKeyConstraint baseTableName="warehouse_match" constraintName="fk_alert_id"/>
+    <addForeignKeyConstraint baseTableName="warehouse_match" baseColumnNames="alert_id"
+                             constraintName="fk_alert_id"
+                             referencedTableName="warehouse_alert" referencedColumnNames="id"
+                             onDelete="CASCADE"/>
+  </changeSet>
 </databaseChangeLog>
