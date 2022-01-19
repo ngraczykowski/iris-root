@@ -1,6 +1,6 @@
 package com.silenteight.warehouse.sampling.alert;
 
-import com.silenteight.warehouse.indexer.query.single.RandomAlertQueryService;
+import com.silenteight.warehouse.indexer.query.single.RandomAlertService;
 import com.silenteight.warehouse.sampling.configuration.SamplingProperties;
 
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -14,15 +14,15 @@ public class SamplingConfiguration {
 
   @Bean
   SamplingAlertService samplingAlertService(
-      RandomAlertQueryService randomAlertQueryService,
+      RandomAlertService randomAlertQueryService,
       SamplingProperties samplingProperties) {
-
     return new SamplingAlertService(randomAlertQueryService, samplingProperties);
   }
 
   @Bean
   @GrpcService
-  SamplingAlertGrpcService samplingAlertGrpcService(SamplingAlertService samplingAlertService) {
+  SamplingAlertGrpcService samplingAlertGrpcService(
+      SamplingAlertService samplingAlertService) {
     return new SamplingAlertGrpcService(samplingAlertService);
   }
 }

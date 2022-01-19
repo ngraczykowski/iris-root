@@ -9,7 +9,7 @@ import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleResponse
 import com.silenteight.model.api.v1.SampleAlertServiceProto.RequestedAlertsFilter;
 import com.silenteight.warehouse.indexer.query.MultiValueEntry;
 import com.silenteight.warehouse.indexer.query.single.AlertSearchCriteria;
-import com.silenteight.warehouse.indexer.query.single.RandomAlertQueryService;
+import com.silenteight.warehouse.indexer.query.single.RandomAlertService;
 import com.silenteight.warehouse.sampling.configuration.FilterProperties;
 import com.silenteight.warehouse.sampling.configuration.SamplingProperties;
 
@@ -29,20 +29,22 @@ import static java.util.stream.Collectors.toList;
 class SamplingAlertService {
 
   @NonNull
-  private final RandomAlertQueryService randomAlertQueryService;
+  private final RandomAlertService randomAlertQueryService;
 
   @NonNull
   private final SamplingProperties samplingProperties;
 
-  public AlertsSampleResponse generateSamplingAlerts(AlertsSampleRequest alertsSampleRequest) {
-    AlertSearchCriteria alertSearchCriteria = buildAlertSearchCriteria(
+  public AlertsSampleResponse generateSamplingAlerts(
+      AlertsSampleRequest alertsSampleRequest) {
+    AlertSearchCriteria
+        alertSearchCriteria = SamplingAlertService.buildAlertSearchCriteria(
         alertsSampleRequest, samplingProperties);
 
     List<String> alertsIds =
-        randomAlertQueryService.getRandomAlertNameByCriteria(alertSearchCriteria);
+        randomAlertQueryService.getRandomDiscriminatorByCriteria(alertSearchCriteria);
 
     return AlertsSampleResponse.newBuilder()
-        .addAllAlerts(convertIdsToAlertsList(alertsIds))
+        .addAllAlerts(SamplingAlertService.convertIdsToAlertsList(alertsIds))
         .build();
   }
 
