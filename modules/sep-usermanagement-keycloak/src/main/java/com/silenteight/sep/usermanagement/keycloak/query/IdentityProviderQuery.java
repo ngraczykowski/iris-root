@@ -11,6 +11,7 @@ import org.keycloak.representations.idm.IdentityProviderRepresentation;
 
 import java.util.Collection;
 
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 
 @AllArgsConstructor
@@ -29,9 +30,12 @@ public class IdentityProviderQuery implements IdentityProviderRepository {
   private static IdentityProviderDto toIdentityProviderDto(
       IdentityProviderRepresentation identityProviderRepresentation) {
 
+    String displayName = ofNullable(identityProviderRepresentation.getDisplayName())
+        .orElse(identityProviderRepresentation.getAlias());
+
     return IdentityProviderDto.builder()
         .alias(identityProviderRepresentation.getAlias())
-        .displayName(identityProviderRepresentation.getDisplayName())
+        .displayName(displayName)
         .internalId(identityProviderRepresentation.getInternalId())
         .enabled(identityProviderRepresentation.isEnabled())
         .build();

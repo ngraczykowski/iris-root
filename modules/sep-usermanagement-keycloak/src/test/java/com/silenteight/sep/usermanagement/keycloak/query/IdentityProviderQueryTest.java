@@ -46,11 +46,12 @@ class IdentityProviderQueryTest {
 
     //then
     assertThat(identityProviderDtosList).hasSize(2);
-    List<IdentityProviderDto> collect = new ArrayList<>(identityProviderDtosList);
-    assertThat(collect.get(0).getAlias()).isEqualTo(IDP_ALIAS_1);
-    assertThat(collect.get(1).getAlias()).isEqualTo(IDP_ALIAS_2);
-    assertThat(collect.get(0).isEnabled()).isTrue();
-    assertThat(collect.get(1).isEnabled()).isFalse();
+    List<IdentityProviderDto> identityProviderDtoList = new ArrayList<>(identityProviderDtosList);
+    assertThat(identityProviderDtoList.get(0).getAlias()).isEqualTo(IDP_ALIAS_1);
+    assertThat(identityProviderDtoList.get(1).getAlias()).isEqualTo(IDP_ALIAS_2);
+    assertThat(identityProviderDtoList.get(0).isEnabled()).isTrue();
+    assertThat(identityProviderDtoList.get(1).isEnabled()).isFalse();
+    assertThat(identityProviderDtoList.get(1).getDisplayName()).isEqualTo(IDP_ALIAS_2);
   }
 
   private static IdentityProviderRepresentation createIdentityProviderRepresentation(
@@ -66,15 +67,28 @@ class IdentityProviderQueryTest {
     return identityProviderRepresentation;
   }
 
+  private static IdentityProviderRepresentation createIdProviderRepresentationWithOutDisplayName(
+      List<String> idpFields, boolean isEnabled) {
+
+    IdentityProviderRepresentation identityProviderRepresentation =
+        new IdentityProviderRepresentation();
+
+    identityProviderRepresentation.setAlias(idpFields.get(0));
+    identityProviderRepresentation.setInternalId(idpFields.get(1));
+    identityProviderRepresentation.setEnabled(isEnabled);
+    return identityProviderRepresentation;
+  }
+
   private static List<IdentityProviderRepresentation> createIdentityProviderRepresentationList() {
     List<IdentityProviderRepresentation> identityProviderRepresentationList = new ArrayList<>();
     IdentityProviderRepresentation idpRepresentation1 = createIdentityProviderRepresentation(
         of(IDP_ALIAS_1, IDP_DISPLAY_NAME_1, IDP_INTERNAL_ID_1),
         true);
 
-    IdentityProviderRepresentation idpRepresentation2 = createIdentityProviderRepresentation(
-        of(IDP_ALIAS_2, IDP_DISPLAY_NAME_2, IDP_INTERNAL_ID_2),
-        false);
+    IdentityProviderRepresentation idpRepresentation2 =
+        createIdProviderRepresentationWithOutDisplayName(
+            of(IDP_ALIAS_2, IDP_INTERNAL_ID_2),
+            false);
 
     identityProviderRepresentationList.add(idpRepresentation1);
     identityProviderRepresentationList.add(idpRepresentation2);
