@@ -7,7 +7,7 @@ import com.silenteight.proto.recommendation.api.v1.Alert;
 
 @Value
 @Builder
-class AlertOut {
+public class AlertOut {
 
   String id;
   String metadata;

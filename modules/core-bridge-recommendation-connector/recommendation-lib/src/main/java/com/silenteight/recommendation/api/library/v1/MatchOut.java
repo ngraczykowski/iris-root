@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Value
 @Builder
-class MatchOut {
+public class MatchOut {
 
   String id;
   String recommendedAction;
