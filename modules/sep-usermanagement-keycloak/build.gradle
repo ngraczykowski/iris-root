@@ -19,8 +19,10 @@ ext {
   libraries = [:]
   springBootVersion = "2.4.9"
   silenteightSepBaseVersion = "1.12.2"
-  silenteightSepUsermanagementApiVersion = "1.11.0"
+  silenteightSepUsermanagementApiVersion = "1.13.0"
   keycloakVersion = "15.0.2"
+  testContainerKeycloakVersion = "1.9.0"
+  testContainerJupiterVersion = "1.16.2"
 }
 
 repositories {
@@ -42,6 +44,9 @@ libraries.assertj_core = [group: 'org.assertj', name: 'assertj-core']
 libraries.caffeine = [group: 'com.github.ben-manes.caffeine', name: 'caffeine']
 libraries.streamex = [group: "one.util", name: "streamex", version: "0.7.2"]
 
+libraries.test_container_keycloak = [group: 'com.github.dasniko', name: 'testcontainers-keycloak', version: testContainerKeycloakVersion]
+libraries.test_container_jupiter =  [group: 'org.testcontainers', name: 'junit-jupiter', version: testContainerJupiterVersion]
+
 dependencies {
   api(libraries.silenteight_sep_base_common) {
     exclude group: 'org.springframework.amqp', module: '*'
@@ -58,12 +63,14 @@ dependencies {
   implementation libraries.keycloak_admin_client
   implementation libraries.caffeine
   implementation libraries.streamex
+  testImplementation libraries.test_container_keycloak
 
   testImplementation(libraries.silenteight_sep_base_testing) {
     exclude group: 'org.testcontainers', module: '*'
     exclude group: 'io.grpc', module: '*'
   }
   testImplementation libraries.assertj_core
+  testImplementation libraries.test_container_jupiter
 
   api libraries.spring_context
 }
