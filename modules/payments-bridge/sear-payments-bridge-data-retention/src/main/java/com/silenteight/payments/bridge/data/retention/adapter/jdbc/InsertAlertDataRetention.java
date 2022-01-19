@@ -22,7 +22,8 @@ class InsertAlertDataRetention {
   @Language("PostgreSQL")
   private static final String SQL =
       "INSERT INTO pb_alert_data_retention(alert_name, alert_time, created_at)\n"
-          + " VALUES (?, ?, ?)";
+          + " VALUES (?, ?, ?)\n"
+          + " ON CONFLICT (alert_name) DO UPDATE SET alert_time = excluded.alert_time";
 
   private final JdbcTemplate jdbcTemplate;
 
