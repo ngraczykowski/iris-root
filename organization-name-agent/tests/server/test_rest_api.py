@@ -61,6 +61,11 @@ def test_compare(ap_name, wl_name, expected_result):
             [{"solution": "NO_MATCH", "proba": 0.97}],
         ),
         (
+            ["Standard Chartered Bank"],
+            ["SCB"],
+            [{"solution": "MATCH", "proba": 0.8}],
+        ),
+        (
             ["ABC", "DEF"],
             ["ABCDE"],
             [{"solution": "MATCH", "proba": 1.0}, {"solution": "NO_MATCH", "proba": 0.94}],

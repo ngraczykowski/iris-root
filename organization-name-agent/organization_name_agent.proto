@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package silenteight.agent.organizationname.v1.api;
+
+option java_package = "com.silenteight.proto.agent.organizationname.v1.api";
+option java_outer_classname = "OrganizationNameAgentApiProto";
+option java_multiple_files = true;
+
+service OrganizationNameAgent {
+
+  rpc CompareOrganizationNames (CompareOrganizationNamesRequest) returns (CompareOrganizationNamesResponse) {
+  }
+}
+
+message CompareOrganizationNamesRequest {
+  repeated string alerted_party_names = 1;
+  repeated string watchlist_party_names = 2;
+}
+
+message CompareOrganizationNamesResponse {
+  string solution = 1;
+  CompareOrganizationNamesReason reason = 2;
+}
+
+message CompareOrganizationNamesReason {
+  repeated CompareOrganizationNamesResult results = 1;
+
+  message CompareOrganizationNamesResult {
+    string solution = 1;
+    double solution_probability = 2;
+    string alerted_party_name = 3;
+    string watchlist_party_name = 4;
+    repeated Score scores = 5;
+  }
+}
+
+message Score {
+  string name = 1;
+  string status = 2;
+  double value = 3;
+  ComparisonItems compared = 4;
+
+  message ComparisonItems {
+    repeated string alerted_party_items = 1;
+    repeated string watchlist_party_items = 2;
+  }
+}

@@ -1,16 +1,19 @@
+from typing import List
+
 from agent_base.grpc_service.servicer import AgentGrpcServicer
-from silenteight.agent.organizationname.v1.api.organization_name_agent_pb2 import (
+
+from company_name.organization_name_agent_pb2 import (
     DESCRIPTOR,
     CompareOrganizationNamesReason,
     CompareOrganizationNamesRequest,
     CompareOrganizationNamesResponse,
+    Score,
 )
-from silenteight.agent.organizationname.v1.api.organization_name_agent_pb2_grpc import (
+from company_name.organization_name_agent_pb2_grpc import (
     OrganizationNameAgentServicer,
     add_OrganizationNameAgentServicer_to_server,
 )
-
-from company_name import Result
+from company_name.solution.solution import PairResult, Result
 from company_name.utils import simplify
 
 
@@ -28,7 +31,11 @@ class CompanyNameAgentGrpcServicer(OrganizationNameAgentServicer, AgentGrpcServi
             reason=CompareOrganizationNamesReason(
                 results=[
                     CompareOrganizationNamesReason.CompareOrganizationNamesResult(
-                        **simplify(pair_result)
+                        alerted_party_name=pair_result.alerted_party_name,
+                        watchlist_party_name=pair_result.watchlist_party_name,
+                        solution=simplify(pair_result.solution),
+                        solution_probability=pair_result.solution_probability,
+                        scores=get_scores(pair_result),
                     )
                     for pair_result in result.reason.results
                 ]
@@ -37,3 +44,18 @@ class CompanyNameAgentGrpcServicer(OrganizationNameAgentServicer, AgentGrpcServi
 
     def add_to_server(self, server):
         add_OrganizationNameAgentServicer_to_server(self, server)
+
+
+def get_scores(pair_result: PairResult) -> List[Score]:
+    return [
+        Score(
+            name=name,
+            value=score.value,
+            status=simplify(score.status),
+            compared=Score.ComparisonItems(
+                alerted_party_items=score.compared[0],
+                watchlist_party_items=score.compared[1],
+            ),
+        )
+        for name, score in pair_result.scores.items()
+    ]

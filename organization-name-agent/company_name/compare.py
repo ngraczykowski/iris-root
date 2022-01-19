@@ -49,7 +49,6 @@ def compare_names(
         "token_inclusion": get_token_inclusion_score(alerted_name, watchlist_name),
         "first_token": get_first_token_score(alerted_name, watchlist_name),
     }
-
     return scores
 
 

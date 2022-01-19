@@ -40,6 +40,7 @@ class CompanyNameAgent(Agent):
             watchlist_party_name=mp_name.source.original,
             solution=solution,
             solution_probability=probability,
+            scores=scores,
         )
 
     def resolve_pairs(
@@ -83,7 +84,7 @@ class CompanyNameAgent(Agent):
         try:
             logger.info(f"Checking {ap_names} vs {mp_names}")
             result = self._resolve(ap_names, mp_names)
-            logger.info(result)
+            logger.info(f"For {ap_names} vs {mp_names} solution: {result.solution}")
             return result
         except Exception as err:  # noqa
             logger.exception(f"for {ap_names} vs {mp_names}")

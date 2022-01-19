@@ -14,9 +14,10 @@ class Abbreviation:
     abbreviated: TokensSequence
 
     def compared(self) -> Tuple[Tuple[str, ...], Tuple[str, ...]]:
-        return (self.source.original_name,) if self.source else (), (
-            "".join(self.abbreviated.original_tuple),
-        ) if self.abbreviated else ()
+        return (
+            (self.source.original_name,) if self.source else (),
+            ("".join(self.abbreviated.original_tuple),) if self.abbreviated else (),
+        )
 
 
 def _check_abbreviation_for_next_word(
