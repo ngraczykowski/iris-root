@@ -27,8 +27,8 @@ class AddLabelsUseCase {
                 .labelName(key)
                 .labelValue(value)
                 .build())));
-    alertLabelDataAccess.insertLabels(requests);
 
+    alertLabelDataAccess.insertLabels(requests);
     return labels;
   }
 }

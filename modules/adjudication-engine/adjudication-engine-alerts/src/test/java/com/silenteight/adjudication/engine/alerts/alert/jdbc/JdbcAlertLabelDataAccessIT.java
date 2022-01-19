@@ -39,6 +39,16 @@ class JdbcAlertLabelDataAccessIT extends BaseJdbcTest {
   }
 
   @Test
+  void shouldInsertDuplicatedLabels() {
+    var request = createLabelInsertRequest();
+    dataAccess.insertLabels(List.of(request));
+    dataAccess.insertLabels(List.of(request));
+    assertThat(jdbcTemplate.queryForObject(
+        "SELECT COUNT(*) FROM ae_alert_labels WHERE alert_id=1 AND name LIKE 'labeleczka'",
+        Integer.class)).isEqualTo(1);
+  }
+
+  @Test
   void shouldCountLabels() {
     long count = dataAccess.countByNameAndValue("any", "value");
     assertThat(count).isEqualTo(1);
