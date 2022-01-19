@@ -47,12 +47,15 @@ class ListAlertAnalysisRestController {
     log.debug("Returning a list of QA Alerts (listSize={}, all={}", list.size(), count);
     return ok()
         .header(HEADER_TOTAL_ITEMS, valueOf(count))
-        .header(HEADER_NEXT_ITEM, valueOf(getHeaderNextItem(list)))
+        .header(HEADER_NEXT_ITEM, valueOf(getHeaderNextItem(list, pageSize)))
         .body(list);
   }
 
-  private static Instant getHeaderNextItem(List<AlertAnalysisDto> list) {
-    return !list.isEmpty() ? list.get(list.size() - 1).getAddedAt() : null;
+  private static Instant getHeaderNextItem(List<AlertAnalysisDto> list, Integer pageSize) {
+    if (list.size() < pageSize)
+      return null;
+
+    return list.get(list.size() - 1).getAddedAt();
   }
 }
 

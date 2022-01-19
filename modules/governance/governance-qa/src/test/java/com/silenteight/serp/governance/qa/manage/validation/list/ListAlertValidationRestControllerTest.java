@@ -5,7 +5,7 @@ import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWith
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 import com.silenteight.serp.governance.qa.manage.common.AlertControllerAdvice;
 import com.silenteight.serp.governance.qa.manage.domain.DecisionState;
-import com.silenteight.serp.governance.qa.manage.validation.DummyAlertValidationDto;
+import com.silenteight.serp.governance.qa.manage.validation.GenericNewAlertValidationDto;
 import com.silenteight.serp.governance.qa.manage.validation.list.dto.AlertValidationDto;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,7 +35,7 @@ import static org.springframework.http.HttpStatus.OK;
 class ListAlertValidationRestControllerTest extends BaseRestControllerTest {
 
   private static final List<DecisionState> ALERT_STATES = of(STATE_NEW);
-  private static final Integer LIMIT = 10;
+  private static final Integer LIMIT = 1;
   private static final String CREATED_AT = "2021-05-27T18:37:25.654894+02:00";
   private static final String ALERTS_LIST_URL =
       format("/v1/qa/1/alerts?state=%s&pageSize=%d", STATE_NEW, LIMIT);
@@ -77,9 +77,10 @@ class ListAlertValidationRestControllerTest extends BaseRestControllerTest {
   @TestWithRole(roles = { AUDITOR, QA_ISSUE_MANAGER })
   void its200_andAlertDetailsReturnedWithNextToken_whenAlertsFound() {
     //given
-    AlertValidationDto alertValidationDto = new DummyAlertValidationDto();
+    AlertValidationDto firstValidation = new GenericNewAlertValidationDto();
+    AlertValidationDto secondValidation = new GenericNewAlertValidationDto();
     given(alertValidationQuery.list(ALERT_STATES, MIN_DATE, LIMIT))
-        .willReturn(of(alertValidationDto));
+        .willReturn(of(firstValidation, secondValidation));
     given(alertValidationQuery.count(ALERT_STATES)).willReturn(1);
     //when
     //then
@@ -87,12 +88,12 @@ class ListAlertValidationRestControllerTest extends BaseRestControllerTest {
         .contentType(JSON)
         .statusCode(OK.value())
         .header(HEADER_TOTAL_ITEMS, is("1"))
-        .header(HEADER_NEXT_ITEM, is(alertValidationDto.getAddedAt().toString()))
-        .body("[0].alertName", is(alertValidationDto.getAlertName()))
-        .body("[0].state", is(alertValidationDto.getState().toString()))
-        .body("[0].decisionComment", is(alertValidationDto.getDecisionComment()))
+        .header(HEADER_NEXT_ITEM, is(secondValidation.getAddedAt().toString()))
+        .body("[0].alertName", is(firstValidation.getAlertName()))
+        .body("[0].state", is(firstValidation.getState().toString()))
+        .body("[0].decisionComment", is(firstValidation.getDecisionComment()))
         .body("[0].decisionAt", notNullValue())
-        .body("[0].decisionBy", is(alertValidationDto.getDecisionBy()))
+        .body("[0].decisionBy", is(firstValidation.getDecisionBy()))
         .body("[0].addedAt", notNullValue());
   }
 
