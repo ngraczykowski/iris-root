@@ -33,6 +33,8 @@ pb:
     to: "email.example2@silenteight.com"
     cron: "* * * ? * *"
     amount: 10
+    cmapi-enabled: true
+    learning-enabled: true
 
 grpc:
   server:

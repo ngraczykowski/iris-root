@@ -8,6 +8,7 @@ import com.silenteight.payments.bridge.notification.model.NotificationStatus;
 import com.silenteight.payments.bridge.notification.model.SendEmailRequest;
 import com.silenteight.payments.bridge.notification.port.*;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import javax.annotation.Nullable;
 @RequiredArgsConstructor
 @Slf4j
 @Component
+@EnableConfigurationProperties(EmailNotificationProperties.class)
 class ProcessSendingEmails implements ProcessSendingEmailsUseCase {
 
   private final FindNotificationsUseCase findNotificationsUseCase;
@@ -27,8 +29,10 @@ class ProcessSendingEmails implements ProcessSendingEmailsUseCase {
   private final EmailSenderUseCase emailSenderUseCase;
   private final FindNotificationTypesUseCase findNotificationTypesUseCase;
   private final CmapiNotificationCreatorService cmapiNotificationCreatorService;
+  private final EmailNotificationProperties emailNotificationProperties;
 
   private static final String CMAPI_PROCESSING_ERROR = "CMAPI_PROCESSING_ERROR";
+  private static final String CSV_PROCESSED = "CSV_PROCESSED";
   private static final String CMAPI_PROCESSING_ERROR_ATTACHMENT_NAME = "CMAPI_ERRORS.zip";
 
   public void processSendingEmails() {
@@ -47,7 +51,7 @@ class ProcessSendingEmails implements ProcessSendingEmailsUseCase {
     if (CMAPI_PROCESSING_ERROR.equals(typeId)) {
       handleSendingCmapiProcessingNotifications(notifications, subject);
     } else {
-      handleSendingDefaultNotifications(notifications, subject);
+      handleSendingDefaultNotifications(notifications, subject, typeId);
     }
   }
 
@@ -56,24 +60,29 @@ class ProcessSendingEmails implements ProcessSendingEmailsUseCase {
 
     var ids = extractIds(notifications);
 
-    var attachments = extractAttachments(notifications);
+    if (emailNotificationProperties.isCmapiEnabled()) {
 
-    var message = extractMessage(notifications);
+      var attachments = extractAttachments(notifications);
 
-    var mergedAttachment = createMergedAttachment(attachments);
+      var message = extractMessage(notifications);
 
-    var attachmentName = mergedAttachment == null ? null : CMAPI_PROCESSING_ERROR_ATTACHMENT_NAME;
+      var mergedAttachment = createMergedAttachment(attachments);
 
-    var sendEmailRequest = SendEmailRequest
-        .builder()
-        .ids(ids)
-        .subject(subject)
-        .htmlText(message)
-        .attachmentName(attachmentName)
-        .attachment(mergedAttachment)
-        .build();
+      var attachmentName = mergedAttachment == null ? null : CMAPI_PROCESSING_ERROR_ATTACHMENT_NAME;
 
-    send(sendEmailRequest, ids);
+      var sendEmailRequest = SendEmailRequest
+          .builder()
+          .ids(ids)
+          .subject(subject)
+          .htmlText(message)
+          .attachmentName(attachmentName)
+          .attachment(mergedAttachment)
+          .build();
+
+      send(sendEmailRequest, ids);
+    } else {
+      updateNotificationsAsDisabled(ids);
+    }
   }
 
   @Nullable
@@ -109,19 +118,25 @@ class ProcessSendingEmails implements ProcessSendingEmailsUseCase {
         .collect(Collectors.toList());
   }
 
-  private void handleSendingDefaultNotifications(List<Notification> notifications, String subject) {
-    notifications.forEach(notification -> {
-      var ids = List.of(notification.getId());
-      var sendEmailRequest = SendEmailRequest
-          .builder()
-          .ids(ids)
-          .subject(subject)
-          .htmlText(notification.getMessage())
-          .attachmentName(notification.getAttachmentName())
-          .attachment(notification.getAttachment())
-          .build();
-      send(sendEmailRequest, ids);
-    });
+  private void handleSendingDefaultNotifications(
+      List<Notification> notifications, String subject, String typeId) {
+    if (CSV_PROCESSED.equals(typeId) && emailNotificationProperties.isLearningEnabled()) {
+      notifications.forEach(notification -> {
+        var ids = List.of(notification.getId());
+        var sendEmailRequest = SendEmailRequest
+            .builder()
+            .ids(ids)
+            .subject(subject)
+            .htmlText(notification.getMessage())
+            .attachmentName(notification.getAttachmentName())
+            .attachment(notification.getAttachment())
+            .build();
+        send(sendEmailRequest, ids);
+      });
+    } else {
+      var ids = extractIds(notifications);
+      updateNotificationsAsDisabled(ids);
+    }
   }
 
   private void send(SendEmailRequest sendEmailRequest, List<Long> ids) {
@@ -134,5 +149,10 @@ class ProcessSendingEmails implements ProcessSendingEmailsUseCase {
           ex.getMessage(), ex.getCause());
       updateNotificationsUseCase.update(ids, NotificationStatus.ERROR);
     }
+  }
+
+  private void updateNotificationsAsDisabled(List<Long> ids) {
+    updateNotificationsUseCase.update(ids, NotificationStatus.DISABLED);
+    log.info("Notifications ids={} have been set as disabled", ids);
   }
 }

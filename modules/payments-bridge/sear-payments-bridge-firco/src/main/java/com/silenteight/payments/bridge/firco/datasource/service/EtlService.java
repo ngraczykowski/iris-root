@@ -49,28 +49,28 @@ class EtlService implements EtlUseCase {
 
     try {
       var alertEtlResponse = extractAlertEtlResponseUseCase.createAlertEtlResponse(alertMessageDto);
-      processes
-          .forEach(process -> process.extractAndLoad(alert, alertEtlResponse));
+      processes.forEach(process -> process.extractAndLoad(alert, alertEtlResponse));
 
     } catch (UnsupportedMessageException exception) {
       log.error("Failed to process a message payload associated with the alert: {}. "
           + "Reject the message as DAMAGED", alertId, exception);
-      var cmapiNotificationRequest = CmapiNotificationRequest.builder()
+      var cmapiNotificationRequest = CmapiNotificationRequest
+          .builder()
           .alertId(alertId.toString())
           .alertName(alertName)
           .messageId(alertMessageDto.getMessageID())
           .systemId(alertMessageDto.getSystemID())
           .message(exception.getMessage())
           .build();
+
       var notificationEvent = new NotificationEvent(
           cmapiNotificationCreatorUseCase.createCmapiNotification(cmapiNotificationRequest));
 
       applicationEventPublisher.publishEvent(notificationEvent);
 
-      createRecommendationUseCase.create(new BridgeSourcedRecommendation(
-          alertId,
-          AlertMessageStatus.REJECTED_DAMAGED.name(),
-          RecommendationReason.DAMAGED.name()));
+      createRecommendationUseCase.create(
+          new BridgeSourcedRecommendation(alertId, AlertMessageStatus.REJECTED_DAMAGED.name(),
+              RecommendationReason.DAMAGED.name()));
       throw exception;
     }
   }

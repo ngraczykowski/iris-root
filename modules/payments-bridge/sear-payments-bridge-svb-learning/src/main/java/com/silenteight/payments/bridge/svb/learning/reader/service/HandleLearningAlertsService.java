@@ -28,6 +28,7 @@ class HandleLearningAlertsService implements HandleLearningAlertsUseCase {
 
     var notificationEvent = new NotificationEvent(alertsRead.toNotification());
     applicationEventPublisher.publishEvent(notificationEvent);
+
     log.info("Processing of learn request {} finished", learningRequest);
   }
 }

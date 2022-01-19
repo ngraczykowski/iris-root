@@ -35,6 +35,8 @@ emailNotification:
   to: ""
   cron: "0 0/10 * * * *"
   amount: 10
+  cmapiEnabled: "false"
+  learningEnabled: "false"
 
 serviceMonitor:
   path: /management/prometheus

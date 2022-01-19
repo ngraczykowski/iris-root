@@ -82,6 +82,8 @@ pb:
     to: "to@s8.com"
     cron: "0 * * * * *"
     amount: 10
+    cmapi-enabled: false
+    learning-enabled: false
 
   #-------------------------------------------------------------------------------------------------
   # SVB Learning
