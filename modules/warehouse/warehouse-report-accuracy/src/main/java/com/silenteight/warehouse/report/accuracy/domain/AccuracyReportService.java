@@ -34,9 +34,19 @@ public class AccuracyReportService implements ReportsRemoval {
       @NonNull List<String> indexes,
       @NonNull @Valid AccuracyReportDefinitionProperties properties) {
 
+    return createReportInstance(range, indexes, properties, null);
+  }
+
+  public ReportInstanceReferenceDto createReportInstance(
+      @NonNull ReportRange range,
+      @NonNull List<String> indexes,
+      @NonNull @Valid AccuracyReportDefinitionProperties properties,
+      String analysisId) {
+
     AccuracyReport report = of(range);
     AccuracyReport savedReport = repository.save(report);
-    asyncReportGenerationService.generateReport(savedReport.getId(), range, indexes, properties);
+    asyncReportGenerationService.generateReport(savedReport.getId(), range, indexes, properties,
+        analysisId);
     return new ReportInstanceReferenceDto(savedReport.getId());
   }
 

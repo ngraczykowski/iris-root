@@ -36,6 +36,6 @@ class CreateSimulationAiReasoningReportUseCase {
     List<String> indexes = simulationIndexerQuery.getIndexesForAnalysis(analysisId);
     OffsetDateTime offsetDateNow = timeSource.offsetDateTime().withOffsetSameInstant(UTC);
     ReportRange range = of(ofInstant(EPOCH, UTC), offsetDateNow);
-    return reportService.createReportInstance(range, indexes, simulationProperties);
+    return reportService.createReportInstance(range, indexes, simulationProperties, analysisId);
   }
 }

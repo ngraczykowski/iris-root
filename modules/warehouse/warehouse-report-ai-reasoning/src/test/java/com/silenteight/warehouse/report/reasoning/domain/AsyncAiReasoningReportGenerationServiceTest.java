@@ -43,7 +43,7 @@ class AsyncAiReasoningReportGenerationServiceTest {
 
     // when
     Long id = aiReasoningReport.getId();
-    underTest.generateReport(id, REPORT_RANGE, INDEXES, PROPERTIES);
+    underTest.generateReport(id, REPORT_RANGE, INDEXES, PROPERTIES, null);
 
     // then
     aiReasoningReport = repository.getById(id);
@@ -62,11 +62,12 @@ class AsyncAiReasoningReportGenerationServiceTest {
             REPORT_RANGE.getTo(),
             INDEXES,
             PROPERTIES,
-            PRODUCTION_REPORT_FILENAME);
+            PRODUCTION_REPORT_FILENAME,
+            null);
 
     // when + then
     Long id = aiReasoningReport.getId();
-    assertThatThrownBy(() -> underTest.generateReport(id, REPORT_RANGE, INDEXES, PROPERTIES))
+    assertThatThrownBy(() -> underTest.generateReport(id, REPORT_RANGE, INDEXES, PROPERTIES, null))
         .isInstanceOf(ReportGenerationException.class)
         .hasMessageContaining(format("Cannot generate AI Reasoning report with id=%d", id));
 

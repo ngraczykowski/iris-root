@@ -43,7 +43,7 @@ class AsyncAccuracyReportGenerationServiceTest {
 
     // when
     Long id = accuracyReport.getId();
-    underTest.generateReport(id, REPORT_RANGE, INDEXES, PROPERTIES);
+    underTest.generateReport(id, REPORT_RANGE, INDEXES, PROPERTIES, null);
 
     // then
     accuracyReport = repository.getById(id);
@@ -61,11 +61,12 @@ class AsyncAccuracyReportGenerationServiceTest {
             REPORT_RANGE.getTo(),
             INDEXES,
             PROPERTIES,
-            PRODUCTION_REPORT_FILENAME);
+            PRODUCTION_REPORT_FILENAME,
+            null);
 
     // when + then
     Long id = accuracyReport.getId();
-    assertThatThrownBy(() -> underTest.generateReport(id, REPORT_RANGE, INDEXES, PROPERTIES))
+    assertThatThrownBy(() -> underTest.generateReport(id, REPORT_RANGE, INDEXES, PROPERTIES, null))
         .isInstanceOf(ReportGenerationException.class)
         .hasMessageContaining(format("Cannot generate Accuracy report with id=%d", id));
 

@@ -28,10 +28,11 @@ class AsyncAccuracyReportGenerationService {
       long id,
       @NonNull ReportRange range,
       @NonNull List<String> indexes,
-      @NonNull @Valid AccuracyReportDefinitionProperties properties) {
+      @NonNull @Valid AccuracyReportDefinitionProperties properties,
+      String analysisId) {
 
     try {
-      doGenerateReport(id, range, indexes, properties);
+      doGenerateReport(id, range, indexes, properties, analysisId);
     } catch (RuntimeException e) {
       doFailReport(id);
       throw new ReportGenerationException(id, e);
@@ -42,7 +43,8 @@ class AsyncAccuracyReportGenerationService {
       long id,
       ReportRange range,
       List<String> indexes,
-      AccuracyReportDefinitionProperties properties) {
+      AccuracyReportDefinitionProperties properties,
+      String analysisId) {
 
     AccuracyReport report = repository.getById(id);
     report.generating();
@@ -55,7 +57,8 @@ class AsyncAccuracyReportGenerationService {
         range.getTo(),
         indexes,
         properties,
-        fileStorageName);
+        fileStorageName,
+        analysisId);
 
     report.done();
     repository.save(report);

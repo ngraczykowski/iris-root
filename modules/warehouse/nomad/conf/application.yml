@@ -762,9 +762,6 @@ warehouse.report.accuracy:
 warehouse.report.ai-reasoning:
   production:
     date-field-name: alert_recommendationDate
-    sqlTemplates:
-      - select count(*) from warehouse_alert;
-      - select count(*) from warehouse_alert;
     selectSqlQuery: >
       SELECT (payload ->> 'fvSignature') AS "Reasoning Branch ID",
         (payload ->> 'policy') AS "Policy ID",
@@ -816,6 +813,25 @@ warehouse.report.ai-reasoning:
       - name: s8_discriminator
         label: Alert S8 ID
   simulation:
+    selectSqlQuery: >
+      SELECT (wsa.payload ->> 'match_reason:feature_vector_signature') AS "Reasoning Branch ID",
+             (wsa.payload ->> 'match_reason:policy') AS "Policy ID",
+             (wsa.payload ->> 'match_reason:policy_title') AS "Policy Name",
+             (wsa.payload ->> 'match_reason:step') AS "Step ID",
+             (wsa.payload ->> 'match_reason:step_title') AS "Step Name",
+             (wsa.payload ->> 'recommendation_recommended_action') AS "S8 Alert Resolution",
+             (wsa.payload ->> 'recommendation_create_time') AS "S8 Alert Resolution Timestamp",
+             (wsa.payload ->> 'recommendation_comment') AS "Alert Comment",
+             (wa.payload ->> 's8_lobCountryCode') AS "Country LoB",
+             (wa.payload ->> 'categories/hitType') AS "Risk Type",
+             (wa.payload ->> 'DN_CASE.ExtendedAttribute5') AS "List Type",
+             (wa.payload ->> 'DN_CASE.ID') AS "Customer Alert ID",
+             (wa.payload ->> 'status') AS "Alert Status",
+             wa.discriminator AS "S8 Alert ID"
+      FROM warehouse_simulation_alert wsa
+               JOIN warehouse_alert wa ON wsa.name = wa.name
+      WHERE analysis_name = 'analysis/${analysisId}'
+    useSqlReports: true
     date-field-name: index_timestamp
     columns:
       - name: alert_fvSignature
