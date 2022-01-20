@@ -12,6 +12,8 @@ import java.util.List;
 @Builder
 public class RecommendationOut {
 
+  String batchId;
+  String policyId;
   String name;
   String recommendedAction;
   String recommendationComment;
@@ -21,6 +23,8 @@ public class RecommendationOut {
 
   static RecommendationOut createFrom(Recommendation recommendation) {
     return RecommendationOut.builder()
+        .batchId(recommendation.getBatchId())
+        .policyId(recommendation.getPolicyId())
         .name(recommendation.getName())
         .recommendedAction(recommendation.getRecommendedAction())
         .recommendationComment(recommendation.getRecommendationComment())
