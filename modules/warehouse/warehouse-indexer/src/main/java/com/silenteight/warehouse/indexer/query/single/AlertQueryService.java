@@ -19,7 +19,7 @@ import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 
 @RequiredArgsConstructor
-class AlertQueryService implements AlertProvider {
+public class AlertQueryService implements AlertProvider {
 
   @NonNull
   private final RestHighLevelClient restHighLevelClient;

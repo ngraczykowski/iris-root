@@ -41,15 +41,6 @@ class BrokerConfiguration {
   }
 
   @Bean
-  Declarables qaBackupIndexingBinding() {
-    return new Declarables(
-        binding(
-            properties.qaBackupIndexingQueueName(),
-            GOV_EVENT_EXCHANGE,
-            properties.qaBackupIndexingRoutingKey()));
-  }
-
-  @Bean
   Declarables alertProductionIndexingBinding() {
     return new Declarables(
         binding(
@@ -112,13 +103,6 @@ class BrokerConfiguration {
     return queue(
         properties.alertBackupIndexingQueueName(),
         properties.alertBackupIndexingMaxPriority());
-  }
-
-  @Bean
-  Queue qaBackupIndexingQueue() {
-    return queue(
-        properties.qaBackupIndexingQueueName(),
-        properties.qaBackupIndexingMaxPriority());
   }
 
   @Bean

@@ -20,6 +20,7 @@ import com.silenteight.warehouse.indexer.match.MatchModule;
 import com.silenteight.warehouse.indexer.production.ProductionIndexerProperties;
 import com.silenteight.warehouse.indexer.production.ProductionMessageHandlerModule;
 import com.silenteight.warehouse.indexer.production.indextracking.IndexTrackingModule;
+import com.silenteight.warehouse.indexer.production.qa.QaIndexerProperties;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 import com.silenteight.warehouse.test.client.TestClientModule;
 import com.silenteight.warehouse.test.client.gateway.IndexerClientIntegrationProperties;
@@ -64,6 +65,7 @@ public class IndexerTestConfiguration {
 
   private final ProductionIndexerProperties productionProperties;
   private final IndexerClientIntegrationProperties testProperties;
+  private final QaIndexerProperties qaProperties;
 
   @Bean
   Binding productionIndexExchangeToQueueBinding(
@@ -85,6 +87,17 @@ public class IndexerTestConfiguration {
         whEventExchange,
         productionProperties.getProductionIndexedOutbound().getRoutingKey(),
         productionIndexedQueue);
+  }
+
+  @Bean
+  Binding qaIndexExchangeToQueueBinding(
+      Exchange govQaExchange,
+      Queue qaIndexingQueue) {
+
+    return bind(
+        govQaExchange,
+        testProperties.getQaIndexingTestClientOutbound().getRoutingKey(),
+        qaIndexingQueue);
   }
 
   @Bean

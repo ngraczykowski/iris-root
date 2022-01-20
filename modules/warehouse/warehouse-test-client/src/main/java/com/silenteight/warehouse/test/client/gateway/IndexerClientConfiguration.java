@@ -5,8 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.ExchangeBuilder;
+import org.springframework.amqp.core.*;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +28,8 @@ public class IndexerClientConfiguration {
       "analysisExpiredIndexingOutboundChannel";
   public static final String ALERTS_EXPIRED_INDEXING_OUTBOUND_CHANNEL =
       "alertsExpiredIndexingOutboundChannel";
+  public static final String QA_INDEXING_OUTBOUND_CHANNEL =
+      "qaIndexingOutboundChannel";
 
   @NonNull
   private final AmqpOutboundFactory outboundFactory;
@@ -55,6 +56,15 @@ public class IndexerClientConfiguration {
         new GatewayProxyFactoryBean(SimulationIndexClientGateway.class);
     factoryBean.setDefaultRequestChannel(new DirectChannel());
     factoryBean.setDefaultRequestChannelName(SIMULATION_INDEXING_OUTBOUND_CHANNEL);
+    return factoryBean;
+  }
+
+  @Bean
+  GatewayProxyFactoryBean qaIndexClientGateway() {
+    GatewayProxyFactoryBean factoryBean =
+        new GatewayProxyFactoryBean(QaIndexClientGateway.class);
+    factoryBean.setDefaultRequestChannel(new DirectChannel());
+    factoryBean.setDefaultRequestChannelName(QA_INDEXING_OUTBOUND_CHANNEL);
     return factoryBean;
   }
 
@@ -108,6 +118,13 @@ public class IndexerClientConfiguration {
   }
 
   @Bean
+  TopicExchange govEventExchange() {
+    return ExchangeBuilder
+        .topicExchange(properties.getQaIndexingTestClientOutbound().getExchangeName())
+        .build();
+  }
+
+  @Bean
   IntegrationFlow productionIndexChannelToExchangeIntegrationFlow() {
     return createOutputFlow(
         PRODUCTION_INDEXING_OUTBOUND_CHANNEL,
@@ -121,6 +138,14 @@ public class IndexerClientConfiguration {
         SIMULATION_INDEXING_OUTBOUND_CHANNEL,
         properties.getSimulationIndexingTestClientOutbound().getExchangeName(),
         properties.getSimulationIndexingTestClientOutbound().getRoutingKey());
+  }
+
+  @Bean
+  IntegrationFlow qaIndexChannelToExchangeIntegrationFlow() {
+    return createOutputFlow(
+        QA_INDEXING_OUTBOUND_CHANNEL,
+        properties.getQaIndexingTestClientOutbound().getExchangeName(),
+        properties.getQaIndexingTestClientOutbound().getRoutingKey());
   }
 
   @Bean

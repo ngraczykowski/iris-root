@@ -150,6 +150,12 @@ test:
       analysis-expired-indexing-test-client-outbound:
         exchange-name: sim.command
         routing-key: command.analysis-expired
+      qa-indexing-test-client-outbound:
+        exchange-name: gov.command
+        routing-key: event.qa-alert
+      qa-indexing-internal-test-client-outbound:
+        exchange-name: gov.command
+        routing-key: event.qa-alert
       production-indexed-event-test-listener-inbound:
         queue-name: bridge.index-response.production
       simulation-indexed-event-test-listener-inbound:
