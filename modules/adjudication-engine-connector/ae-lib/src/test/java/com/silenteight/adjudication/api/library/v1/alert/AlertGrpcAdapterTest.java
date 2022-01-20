@@ -52,7 +52,7 @@ class AlertGrpcAdapterTest {
   void shouldCreateBatchAlertMatches() {
     //given
     var request = BatchCreateAlertMatchesIn.builder()
-        .alertId("alert")
+        .alertName("alert")
         .matchIds(List.of("matchId_1", "matchId_2"))
         .build();
 
@@ -72,11 +72,11 @@ class AlertGrpcAdapterTest {
   void shouldRegisterAlertsAndMatches() {
     //given
     var alertsWithMatches = List.of(
-        BatchCreateAlertMatchesIn.builder()
+        BatchRegisterAlertMatchesIn.builder()
             .alertId("1")
             .matchIds(List.of("1"))
             .build(),
-        BatchCreateAlertMatchesIn.builder()
+        BatchRegisterAlertMatchesIn.builder()
             .alertId("2")
             .matchIds(List.of("1", "2"))
             .build());

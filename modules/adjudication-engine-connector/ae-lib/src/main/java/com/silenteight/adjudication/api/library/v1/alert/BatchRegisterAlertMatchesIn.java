@@ -8,8 +8,8 @@ import java.util.Collection;
 
 @Builder
 @Value
-public class BatchCreateAlertMatchesIn {
+public class BatchRegisterAlertMatchesIn {
 
-  @NonNull String alertName;
+  @NonNull String alertId;
   @NonNull Collection<String> matchIds;
 }

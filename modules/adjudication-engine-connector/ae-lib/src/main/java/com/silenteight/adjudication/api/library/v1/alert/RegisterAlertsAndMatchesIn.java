@@ -11,5 +11,5 @@ import java.util.List;
 public class RegisterAlertsAndMatchesIn {
 
   @Builder.Default
-  List<BatchCreateAlertMatchesIn> alertsWithMatches = Collections.emptyList();
+  List<BatchRegisterAlertMatchesIn> alertsWithMatches = Collections.emptyList();
 }
