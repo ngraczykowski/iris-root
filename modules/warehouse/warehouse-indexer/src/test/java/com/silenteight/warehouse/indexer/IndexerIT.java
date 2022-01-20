@@ -3,11 +3,13 @@ package com.silenteight.warehouse.indexer;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.data.api.v2.ProductionDataIndexRequest;
+import com.silenteight.data.api.v2.QaDataIndexRequest;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.test.client.gateway.ProductionIndexClientGateway;
+import com.silenteight.warehouse.test.client.gateway.QaIndexClientGateway;
 import com.silenteight.warehouse.test.client.listener.prod.IndexedEventListener;
 
 import org.elasticsearch.ElasticsearchException;
@@ -23,12 +25,14 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
-import static com.silenteight.warehouse.indexer.IndexerFixtures.ALERT_1;
-import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_READ_ALIAS_NAME;
-import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_WRITE_INDEX_NAME;
-import static com.silenteight.warehouse.indexer.IndexerFixtures.SIMULATION_ELASTIC_INDEX_NAME;
+import java.util.Map;
+
+import static com.silenteight.warehouse.indexer.IndexerFixtures.*;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DOCUMENT_ID;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_QA_ALERT_1;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.DISCRIMINATOR;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.QA_LEVEL_0_STATE;
 import static java.util.List.of;
 import static java.util.UUID.randomUUID;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -60,6 +64,9 @@ class IndexerIT {
   @Autowired
   private SimpleElasticTestClient simpleElasticTestClient;
 
+  @Autowired
+  private QaIndexClientGateway qaIndexClientGateway;
+
   @BeforeEach
   void init() {
     simpleElasticTestClient.createDefaultIndexTemplate(
@@ -90,6 +97,30 @@ class IndexerIT {
 
     var source = simpleElasticTestClient.getSource(PRODUCTION_ELASTIC_READ_ALIAS_NAME, DOCUMENT_ID);
     assertThat(source).isEqualTo(MAPPED_ALERT_1);
+  }
+
+  @Test
+  void shouldReturnConfirmationWhenQaDataIndexRequested() {
+    final String documentId = MAPPED_ALERT_1.get(DISCRIMINATOR).toString();
+    simpleElasticTestClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, documentId,
+        MAPPED_ALERT_1);
+
+    QaDataIndexRequest request = QaDataIndexRequest.newBuilder()
+        .addAllAlerts(of(QA_ALERT_1))
+        .setRequestId(randomUUID().toString())
+        .build();
+
+    qaIndexClientGateway.indexRequest(request);
+
+    await()
+        .atMost(5, SECONDS)
+        .until(() -> getDocumentSource(documentId).containsKey(QA_LEVEL_0_STATE));
+
+    assertThat(getDocumentSource(documentId)).isEqualTo(MAPPED_QA_ALERT_1);
+  }
+
+  private Map<String, Object> getDocumentSource(String documentId) {
+    return simpleElasticTestClient.getSource(PRODUCTION_ELASTIC_READ_ALIAS_NAME, documentId);
   }
 
   private void removeData() {

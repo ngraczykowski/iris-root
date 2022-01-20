@@ -4,6 +4,8 @@ import lombok.NoArgsConstructor;
 
 import com.silenteight.data.api.v2.Alert;
 import com.silenteight.data.api.v2.Match;
+import com.silenteight.data.api.v2.QaAlert;
+import com.silenteight.data.api.v2.QaAlert.State;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKeys;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceMatchKeys;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values;
@@ -21,6 +23,8 @@ import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_2;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.QA_COMMENT;
+import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.QA_LEVEL_FIRST;
 import static java.util.Collections.emptyMap;
 import static java.util.List.of;
 
@@ -41,6 +45,12 @@ public final class IndexerFixtures {
       SourceAlertKeys.COUNTRY_KEY, Values.COUNTRY_UK
   );
 
+  public static final QaAlert QA_ALERT_1 = QaAlert.newBuilder()
+      .setName(Values.ALERT_NAME)
+      .setLevel(QA_LEVEL_FIRST)
+      .setState(State.PASSED)
+      .setComment(QA_COMMENT)
+      .build();
   public static final Map<String, String> MATCH_PAYLOAD = Map.of(
       SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DECISION
   );

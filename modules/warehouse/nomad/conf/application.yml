@@ -71,6 +71,8 @@ warehouse:
       simulation-indexed-outbound:
         exchange-name: wh.event
         routing-key: event.index-response.simulation
+      qa-indexing-inbound:
+        queue-name: wh.qa-index-request
       alerts-expired-indexing-inbound:
         queue-name: wh.retention.alerts-expired
   environment:
@@ -477,16 +479,16 @@ warehouse.report.metrics:
                       COUNT(*)                           g_total,
                       COUNT(*) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE') g_total_true_positive,
                       COUNT(*) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE') g_total_false_positive,
-                      SUM(CASE 
+                      SUM(CASE
                               WHEN (recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE' AND analyst_decision = 'analyst_decision_true_positive')
                               THEN 1 ELSE 0 END) g_total_match_analyst,
-                      SUM(CASE 
+                      SUM(CASE
                               WHEN (recommendation = 'ACTION_FALSE_POSITIVE' AND qa_decision = 'qa_decision_FAILED')
                               THEN 1 ELSE 0 END) g_total_match_qa
                FROM main
                GROUP BY 1, 2, 3, 4
            )
-      
+
       SELECT g_date as "Date",
              g_country as "Country LoB",
              g_risk_type as "Risk Type",
@@ -558,10 +560,10 @@ warehouse.report.metrics:
                       COUNT(*)                             g_total,
                       COUNT(*) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE') g_total_true_positive,
                       COUNT(*) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE') g_total_false_positive,
-                      SUM(CASE 
+                      SUM(CASE
                               WHEN (recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE' AND analyst_decision = 'analyst_decision_true_positive')
                               THEN 1 ELSE 0 END) g_total_match_analyst,
-                      SUM(CASE 
+                      SUM(CASE
                               WHEN (recommendation = 'ACTION_FALSE_POSITIVE' AND qa_decision = 'qa_decision_FAILED')
                               THEN 1 ELSE 0 END) g_total_match_qa
                FROM main

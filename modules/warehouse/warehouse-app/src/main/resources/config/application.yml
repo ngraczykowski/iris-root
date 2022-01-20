@@ -53,9 +53,6 @@ warehouse:
       alert-backup-indexing:
         queue-name: wh.index-request.backup
         routing-key: command.index-request.production
-      qa-backup-indexing:
-        queue-name: wh.qa-index-request.backup
-        routing-key: event.qa-alert
       alert-production-indexing:
         queue-name: wh.index-request.production
         routing-key: command.index-request.production
@@ -82,6 +79,7 @@ warehouse:
   indexer:
     production-batch-size: 200
     simulation-batch-size: 200
+    qa-batch-size: 200
     backup-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.alert-backup-indexing.queue-name}
     production-indexing-inbound:
@@ -100,6 +98,8 @@ warehouse:
       queue-name: ${warehouse.messaging.broker.analysis-expired-indexing.queue-name}
     alerts-expired-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.alerts-expired-indexing.queue-name}
+    qa-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.qa-indexing.queue-name}
   report:
     default-bucket: reports
     removal:

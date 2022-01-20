@@ -20,10 +20,6 @@ class BrokerProperties {
 
   @Valid
   @NestedConfigurationProperty
-  private AmpqProperties qaBackupIndexing;
-
-  @Valid
-  @NestedConfigurationProperty
   private AmpqProperties alertProductionIndexing;
 
   @Valid
@@ -59,18 +55,6 @@ class BrokerProperties {
   }
 
   Integer alertBackupIndexingMaxPriority() {
-    return alertBackupIndexing.getMaxPriority();
-  }
-
-  String qaBackupIndexingQueueName() {
-    return qaBackupIndexing.getQueueName();
-  }
-
-  String qaBackupIndexingRoutingKey() {
-    return qaBackupIndexing.getRoutingKey();
-  }
-
-  Integer qaBackupIndexingMaxPriority() {
     return alertBackupIndexing.getMaxPriority();
   }
 

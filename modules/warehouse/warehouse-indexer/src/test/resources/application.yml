@@ -18,9 +18,6 @@ warehouse:
       alert-backup-indexing:
         queue-name: wh.index-request.backup
         routing-key: command.index-request.production
-      qa-backup-indexing:
-        queue-name: wh.qa-index-request.backup
-        routing-key: event.qa-alert
       alert-production-indexing:
         queue-name: wh.prioritized-index-request.production
         routing-key: command.index-request.production
@@ -44,6 +41,7 @@ warehouse:
   indexer:
     production-batch-size: 200
     simulation-batch-size: 200
+    qa-batch-size: 200
     production-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.alert-production-indexing.queue-name}
     production-indexed-outbound:
@@ -54,6 +52,8 @@ warehouse:
     simulation-indexed-outbound:
       exchange-name: wh.event
       routing-key: event.index-response.simulation
+    qa-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.qa-indexing.queue-name}
   environment:
     prefix: itest
   es:
@@ -81,6 +81,12 @@ test:
       analysis-expired-indexing-test-client-outbound:
         exchange-name: testapp.command
         routing-key: command.analysis-expired
+      qa-indexing-test-client-outbound:
+        exchange-name: testapp.command.qa
+        routing-key: command.qa-index-request
+      qa-indexing-internal-test-client-outbound:
+        exchange-name: testapp.command.qa.internal
+        routing-key: command.qa-index-request
       production-indexed-event-test-listener-inbound:
         queue-name: testapp.index-response.production
       simulation-indexed-event-test-listener-inbound:
