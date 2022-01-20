@@ -117,3 +117,4 @@ logging:
 registration:
   analysis:
     alert-ttl: 10m
+    mock-recommendations-generation: true

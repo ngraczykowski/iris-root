@@ -11,6 +11,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 @Configuration
 @EnableConfigurationProperties({ RecommendationGrpcConfigurationProperties.class })
@@ -21,8 +22,8 @@ class RecommendationGrpcServiceConfiguration {
 
   @Bean
   @Profile({ "dev", "test" })
-  RecommendationServiceClient recommendationServiceMock() {
-    return new RecommendationServiceClientMock();
+  RecommendationServiceClient recommendationServiceMock(NamedParameterJdbcTemplate jdbcTemplate) {
+    return new RecommendationServiceClientMock(jdbcTemplate);
   }
 
   @Bean

@@ -20,7 +20,7 @@ class AlertAnalysisServiceSpec extends Specification {
 
   def batchRepository = Mock(BatchRepository)
   def analysisService = Mock(AnalysisService)
-  def analysisProperties = new RegistrationAnalysisProperties(Duration.ofMinutes(10))
+  def analysisProperties = new RegistrationAnalysisProperties(Duration.ofMinutes(10), false)
   def alertRepository = Mock(AlertRepository)
   def matchRepository = Mock(MatchRepository)
 

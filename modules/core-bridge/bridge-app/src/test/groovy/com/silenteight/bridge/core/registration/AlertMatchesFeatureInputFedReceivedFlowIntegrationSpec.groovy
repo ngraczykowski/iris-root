@@ -24,7 +24,8 @@ import spock.util.concurrent.PollingConditions
     properties = [
         "grpc.server.inProcessName=test",
         "grpc.server.port=-1",
-        "grpc.client.inProcess.address=in-process:test"
+        "grpc.client.inProcess.address=in-process:test",
+        "registration.analysis.mock-recommendations-generation=false"
     ])
 @ActiveProfiles("test")
 @DirtiesContext
@@ -71,7 +72,7 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
 
     when:
     messages.each {message ->
-      rabbitTemplate.convertAndSend(matchFeatureInputSetFedProperties.queueName(), message)
+      rabbitTemplate.convertAndSend(matchFeatureInputSetFedProperties.exchangeName(), "", message)
     }
 
     then:

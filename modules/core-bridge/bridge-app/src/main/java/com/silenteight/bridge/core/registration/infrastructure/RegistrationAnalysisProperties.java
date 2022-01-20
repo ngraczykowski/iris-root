@@ -7,4 +7,5 @@ import java.time.Duration;
 
 @ConstructorBinding
 @ConfigurationProperties("registration.analysis")
-public record RegistrationAnalysisProperties(Duration alertTtl) {}
+public record RegistrationAnalysisProperties(Duration alertTtl,
+                                             Boolean mockRecommendationsGeneration) {}

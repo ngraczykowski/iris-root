@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 
 @TestConfiguration
-class RecommendationFlowRabbitMqTestConfig {
+class RecommendationsGeneratedFlowRabbitMqTestConfig {
 
   static final String TEST_QUEUE_NAME = "test-recommendations-queue"
 

@@ -36,6 +36,11 @@
       "description": "The time the alert needs to have its recommendation generated. When the deadline is getting close, the recommendation might be generated without waiting for the agents to complete their work."
     },
     {
+      "name": "registration.analysis.mock-recommendations-generation",
+      "type": "java.lang.Boolean",
+      "description": "Feature switch to specify whether recommendations generation should be mocked when alerts have been added to the analysis."
+    },
+    {
       "name": "amqp.registration.outgoing.notify-batch-error.exchange-name",
       "type": "java.lang.String",
       "description": "Exchange name for notify batch error stored event."

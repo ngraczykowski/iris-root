@@ -26,10 +26,10 @@ class AlertRegistrationMapper {
             .toList());
   }
 
-  private BatchCreateAlertMatchesIn toBatchCreateAlertMatchesIn(
+  private BatchRegisterAlertMatchesIn toBatchCreateAlertMatchesIn(
       AlertsToRegister.AlertWithMatches alertWithMatches) {
 
-    return BatchCreateAlertMatchesIn.builder()
+    return BatchRegisterAlertMatchesIn.builder()
         .alertId(alertWithMatches.alertId())
         .matchIds(alertWithMatches.matches().stream()
             .map(AlertsToRegister.Match::matchId)

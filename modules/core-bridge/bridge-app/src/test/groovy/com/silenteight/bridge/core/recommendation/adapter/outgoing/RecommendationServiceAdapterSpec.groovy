@@ -75,7 +75,6 @@ class RecommendationServiceAdapterSpec extends Specification {
       .name("someRecommendationName")
       .recommendedAction("someRecommendationAction")
       .recommendationComment("someRecommendationComment")
-      .s8recommendedAction("someS8recommendationAction")
       .date(OffsetDateTime.MAX)
       .metadata(RECOMMENDATION_METADATA_OUT)
       .build()

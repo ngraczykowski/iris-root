@@ -63,7 +63,7 @@ class AlertServiceClientMock implements AlertServiceClient {
         .build();
   }
 
-  private AlertWithMatchesOut getAlertWithMatches(BatchCreateAlertMatchesIn alert) {
+  private AlertWithMatchesOut getAlertWithMatches(BatchRegisterAlertMatchesIn alert) {
     return AlertWithMatchesOut.builder()
         .alertId(alert.getAlertId())
         .alertName(UUID.randomUUID().toString())

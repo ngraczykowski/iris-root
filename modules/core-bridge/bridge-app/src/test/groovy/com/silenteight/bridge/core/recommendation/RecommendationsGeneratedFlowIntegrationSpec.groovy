@@ -16,10 +16,10 @@ import org.springframework.test.context.ActiveProfiles
 import spock.util.concurrent.PollingConditions
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
-@Import(RecommendationFlowRabbitMqTestConfig.class)
+@Import(RecommendationsGeneratedFlowRabbitMqTestConfig.class)
 @ActiveProfiles("test")
 @DirtiesContext
-class RecommendationFlowIntegrationSpec extends BaseSpecificationIT {
+class RecommendationsGeneratedFlowIntegrationSpec extends BaseSpecificationIT {
 
   private static final String ANALYSIS_ID = "ANALYSIS_ID"
 
@@ -51,7 +51,7 @@ class RecommendationFlowIntegrationSpec extends BaseSpecificationIT {
       assert recommendations.size() == 2
 
       def recommendationsReceived = (RecommendationsReceived) rabbitTemplate.receiveAndConvert(
-          RecommendationFlowRabbitMqTestConfig.TEST_QUEUE_NAME, 10000L)
+          RecommendationsGeneratedFlowRabbitMqTestConfig.TEST_QUEUE_NAME, 10000L)
       with(recommendationsReceived) {
         analysisId == ANALYSIS_ID
         alertIdsCount == 2

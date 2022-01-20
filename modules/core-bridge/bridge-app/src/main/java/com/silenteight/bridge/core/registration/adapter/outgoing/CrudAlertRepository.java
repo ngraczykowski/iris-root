@@ -13,7 +13,7 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
 
   @Modifying
   @Query("""
-      WITH a AS (
+      WITH updated_alerts AS (
           UPDATE alerts
               SET status = :status, updated_at = NOW()
               WHERE batch_id = :batchId AND name IN(:alertNames)
@@ -21,7 +21,7 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
       )
       UPDATE matches
           SET status = :status
-          WHERE alert_id = (SELECT id FROM a)""")
+          WHERE alert_id IN (SELECT id FROM updated_alerts)""")
   void updateAlertsWithMatchesStatusByBatchIdAndNamesIn(
       String batchId, String status, List<String> alertNames);
 

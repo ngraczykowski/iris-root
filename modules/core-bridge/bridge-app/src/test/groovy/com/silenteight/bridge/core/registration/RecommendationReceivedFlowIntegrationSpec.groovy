@@ -24,7 +24,8 @@ import spock.util.concurrent.PollingConditions
     properties = [
         "grpc.server.inProcessName=test",
         "grpc.server.port=-1",
-        "grpc.client.inProcess.address=in-process:test"
+        "grpc.client.inProcess.address=in-process:test",
+        "registration.analysis.mock-recommendations-generation=false"
     ])
 @Import(RecommendationReceivedFlowRabbitMqTestConfig.class)
 @ActiveProfiles("test")
@@ -47,7 +48,6 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
   private RegistrationServiceBlockingStub myService
 
   private static final BATCH_ID_INPUT = UUID.randomUUID().toString()
-  private static final ANALYSIS_NAME = 'analysis_name'
   private static final METADATA = '''
         { 
           "someClientField": "123",
@@ -75,7 +75,8 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
         .map(alert -> alert.name())
         .toList()
 
-    def recommendationsReceived = createRecommendationsReceived(alertNames)
+    def analysisName = batchRepository.findById(BATCH_ID_INPUT).get().analysisName()
+    def recommendationsReceived = createRecommendationsReceived(analysisName, alertNames)
 
     def conditions = new PollingConditions(timeout: 10, initialDelay: 0.2, factor: 1.25)
 
@@ -101,7 +102,7 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
 
       with(messageBatchCompleted) {
         batchId == BATCH_ID_INPUT
-        analysisId == ANALYSIS_NAME
+        analysisId == analysisName
         alertIdsCount == 1
         batchMetadata == METADATA
         statistics.totalProcessedCount == 1
@@ -141,9 +142,10 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
         .build()
   }
 
-  private static RecommendationsReceived createRecommendationsReceived(List<String> alertNames) {
+  private static RecommendationsReceived createRecommendationsReceived(
+      String analysisName, List<String> alertNames) {
     RecommendationsReceived.newBuilder()
-        .setAnalysisId(ANALYSIS_NAME)
+        .setAnalysisId(analysisName)
         .addAllAlertIds(alertNames)
         .build()
   }
