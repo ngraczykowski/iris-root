@@ -120,4 +120,8 @@ public class EtlHit {
         .allNames(getAlertedPartyNames())
         .build();
   }
+
+  public String getTag() {
+    return hitComposite.getFkcoVMatchedTag();
+  }
 }

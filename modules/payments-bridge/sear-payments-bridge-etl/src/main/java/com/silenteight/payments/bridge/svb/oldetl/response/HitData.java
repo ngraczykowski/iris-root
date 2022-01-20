@@ -14,4 +14,8 @@ public class HitData {
   public Optional<String> getAlertedPartyAccountNumberOrFirstName() {
     return alertedPartyData.getAccountNumberOrFirstName();
   }
+
+  public String getTag() {
+    return hitAndWlPartyData.getTag();
+  }
 }

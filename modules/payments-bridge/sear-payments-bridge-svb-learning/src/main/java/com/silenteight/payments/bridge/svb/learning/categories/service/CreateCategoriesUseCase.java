@@ -8,12 +8,16 @@ import com.silenteight.datasource.categories.api.v2.CategoryType;
 import com.silenteight.payments.bridge.agents.model.CompanyNameSurroundingAgentResponse;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse;
 import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoriesClient;
+import com.silenteight.payments.bridge.common.dto.common.MessageStructure;
 
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_MESSAGE_STRUCTURE_DISPLAY_NAME;
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_NAME_MESSAGE_STRUCTURE;
 
 @Component
 @RequiredArgsConstructor
@@ -37,7 +41,8 @@ class CreateCategoriesUseCase {
         historicalRiskAssessmentCategory(),
         watchListTypeCategory(),
         matchTypeCategory(),
-        companyNameSurroundingCategory()
+        companyNameSurroundingCategory(),
+        messageStructureCategory()
     );
   }
 
@@ -116,6 +121,17 @@ class CreateCategoriesUseCase {
         .setDisplayName("Company Name Surrounding")
         .setType(CategoryType.ENUMERATED)
         .addAllAllowedValues(CompanyNameSurroundingAgentResponse.getValues())
+        .setMultiValue(false)
+        .build();
+  }
+
+  private static Category messageStructureCategory() {
+    return Category
+        .newBuilder()
+        .setName(CATEGORY_NAME_MESSAGE_STRUCTURE)
+        .setDisplayName(CATEGORY_MESSAGE_STRUCTURE_DISPLAY_NAME)
+        .setType(CategoryType.ENUMERATED)
+        .addAllAllowedValues(MessageStructure.getValues())
         .setMultiValue(false)
         .build();
   }
