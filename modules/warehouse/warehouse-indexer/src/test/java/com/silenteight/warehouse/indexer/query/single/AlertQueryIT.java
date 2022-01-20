@@ -139,7 +139,7 @@ class AlertQueryIT {
     storeData();
 
     List<String> alertsIds =
-        randomAlertQueryService.getRandomDiscriminatorByCriteria(ALERT_SEARCH_CRITERIA);
+        randomAlertQueryService.getRandomAlertNameByCriteria(ALERT_SEARCH_CRITERIA);
 
     assertThat(alertsIds).containsAnyElementsOf(of(ALERT_NAME_2, ALERT_NAME_3));
   }

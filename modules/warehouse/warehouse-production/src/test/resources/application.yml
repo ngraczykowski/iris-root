@@ -86,12 +86,6 @@ test:
       analysis-expired-indexing-test-client-outbound:
         exchange-name: testapp.command
         routing-key: command.analysis-expired
-      qa-indexing-test-client-outbound:
-        exchange-name: testapp.command.qa
-        routing-key: command.qa-index-request
-      qa-indexing-internal-test-client-outbound:
-        exchange-name: testapp.command.qa.internal
-        routing-key: command.qa-index-request
       production-indexed-event-test-listener-inbound:
         queue-name: testapp.index-response.production
       simulation-indexed-event-test-listener-inbound:
@@ -99,3 +93,9 @@ test:
       alerts-expired-indexing-test-client-outbound:
         exchange-name: testapp.command
         routing-key: retention.alerts-expired
+      qa-indexing-test-client-outbound:
+        exchange-name: testapp.command.qa
+        routing-key: command.qa-index-request
+      qa-indexing-internal-test-client-outbound:
+        exchange-name: testapp.command.qa.internal
+        routing-key: command.qa-index-request

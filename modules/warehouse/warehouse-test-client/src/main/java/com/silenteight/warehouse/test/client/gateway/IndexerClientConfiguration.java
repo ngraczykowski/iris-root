@@ -24,12 +24,12 @@ public class IndexerClientConfiguration {
       "simulationIndexingOutboundChannel";
   public static final String PII_EXPIRED_INDEXING_OUTBOUND_CHANNEL =
       "personalInformationExpiredIndexingOutboundChannel";
+  public static final String QA_INDEXING_OUTBOUND_CHANNEL =
+      "qaIndexingOutboundChannel";
   public static final String ANALYSIS_EXPIRED_INDEXING_OUTBOUND_CHANNEL =
       "analysisExpiredIndexingOutboundChannel";
   public static final String ALERTS_EXPIRED_INDEXING_OUTBOUND_CHANNEL =
       "alertsExpiredIndexingOutboundChannel";
-  public static final String QA_INDEXING_OUTBOUND_CHANNEL =
-      "qaIndexingOutboundChannel";
 
   @NonNull
   private final AmqpOutboundFactory outboundFactory;
@@ -60,15 +60,6 @@ public class IndexerClientConfiguration {
   }
 
   @Bean
-  GatewayProxyFactoryBean qaIndexClientGateway() {
-    GatewayProxyFactoryBean factoryBean =
-        new GatewayProxyFactoryBean(QaIndexClientGateway.class);
-    factoryBean.setDefaultRequestChannel(new DirectChannel());
-    factoryBean.setDefaultRequestChannelName(QA_INDEXING_OUTBOUND_CHANNEL);
-    return factoryBean;
-  }
-
-  @Bean
   GatewayProxyFactoryBean personalInformationExpiredClientGateway() {
     GatewayProxyFactoryBean factoryBean =
         new GatewayProxyFactoryBean(PersonalInformationExpiredClientGateway.class);
@@ -92,6 +83,15 @@ public class IndexerClientConfiguration {
         new GatewayProxyFactoryBean(AlertsExpiredClientGateway.class);
     factoryBean.setDefaultRequestChannel(new DirectChannel());
     factoryBean.setDefaultRequestChannelName(ALERTS_EXPIRED_INDEXING_OUTBOUND_CHANNEL);
+    return factoryBean;
+  }
+
+  @Bean
+  GatewayProxyFactoryBean qaIndexClientGateway() {
+    GatewayProxyFactoryBean factoryBean =
+        new GatewayProxyFactoryBean(QaIndexClientGateway.class);
+    factoryBean.setDefaultRequestChannel(new DirectChannel());
+    factoryBean.setDefaultRequestChannelName(QA_INDEXING_OUTBOUND_CHANNEL);
     return factoryBean;
   }
 
@@ -141,14 +141,6 @@ public class IndexerClientConfiguration {
   }
 
   @Bean
-  IntegrationFlow qaIndexChannelToExchangeIntegrationFlow() {
-    return createOutputFlow(
-        QA_INDEXING_OUTBOUND_CHANNEL,
-        properties.getQaIndexingTestClientOutbound().getExchangeName(),
-        properties.getQaIndexingTestClientOutbound().getRoutingKey());
-  }
-
-  @Bean
   IntegrationFlow piiDataExpiredChannelToExchangeIntegrationFlow() {
     return createOutputFlow(
         PII_EXPIRED_INDEXING_OUTBOUND_CHANNEL,
@@ -170,6 +162,14 @@ public class IndexerClientConfiguration {
         ALERTS_EXPIRED_INDEXING_OUTBOUND_CHANNEL,
         properties.getAlertsExpiredIndexingTestClientOutbound().getExchangeName(),
         properties.getAlertsExpiredIndexingTestClientOutbound().getRoutingKey());
+  }
+
+  @Bean
+  IntegrationFlow qaIndexChannelToExchangeIntegrationFlow() {
+    return createOutputFlow(
+        QA_INDEXING_OUTBOUND_CHANNEL,
+        properties.getQaIndexingTestClientOutbound().getExchangeName(),
+        properties.getQaIndexingTestClientOutbound().getRoutingKey());
   }
 
   private IntegrationFlow createOutputFlow(String channel, String exchange, String routingKey) {

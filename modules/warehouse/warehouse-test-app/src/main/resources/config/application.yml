@@ -147,12 +147,12 @@ test:
       personal-information-expired-indexing-test-client-outbound:
         exchange-name: bridge.retention
         routing-key: retention.personal-information-expired
+      qa-indexing-test-client-outbound:
+        exchange-name: gov.event
+        routing-key: event.qa-alert
       analysis-expired-indexing-test-client-outbound:
         exchange-name: sim.command
         routing-key: command.analysis-expired
-      qa-indexing-test-client-outbound:
-        exchange-name: gov.command
-        routing-key: event.qa-alert
       qa-indexing-internal-test-client-outbound:
         exchange-name: gov.command
         routing-key: event.qa-alert
