@@ -12,7 +12,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class TimestampUtil {
+public class TimestampUtil {
 
   public static OffsetDateTime toOffsetDateTime(@NonNull TimestampOrBuilder timestamp) {
     Instant instant = toInstant(timestamp);

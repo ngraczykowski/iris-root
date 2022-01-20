@@ -14,7 +14,7 @@ public class AlertOut {
   AlertStatus status;
   String errorMessage;
 
-  enum AlertStatus {
+  public enum AlertStatus {
     UNKNOWN, FAILURE, SUCCESS
   }
 
