@@ -19,26 +19,29 @@ public class EtlFixture {
                 .nameAddress("nameAddress")
                 .ctryTown("ctryTown")
                 .build())
-        .hitComposite(
-            HitComposite
-                .builder()
-                .fkcoVListFmmId("fmmId")
-                .fkcoVMatchedTag("tag")
-                .fkcoISequence("1")
-                .fkcoVListCountry("listCountry")
-                .fkcoVListState("state")
-                .fkcoVListCity("city")
-                .fkcoVMatchedTagContent("content")
-                .fkcoVCityMatchedText("city")
-                .fkcoVStateMatchedText("state")
-                .fkcoVCountryMatchedText("country")
-                .fkcoVAddressMatchedText("address")
-                .fkcoVListMatchedName("listmatchedname")
-                .fkcoVHitType("type")
-                .fkcoVListType("INDIVIDUAL")
-                .fkcoVListName("name,name")
-                .fkcoVNameMatchedText("name matched text")
-                .build())
+        .hitComposite(createHitComposite())
+        .build();
+  }
+
+  public static HitComposite createHitComposite() {
+    return HitComposite
+        .builder()
+        .fkcoVListFmmId("fmmId")
+        .fkcoVMatchedTag("tag")
+        .fkcoISequence("1")
+        .fkcoVListCountry("listCountry")
+        .fkcoVListState("state")
+        .fkcoVListCity("city")
+        .fkcoVMatchedTagContent("content")
+        .fkcoVCityMatchedText("city")
+        .fkcoVStateMatchedText("state")
+        .fkcoVCountryMatchedText("country")
+        .fkcoVAddressMatchedText("address")
+        .fkcoVListMatchedName("listmatchedname")
+        .fkcoVHitType("type")
+        .fkcoVListType("INDIVIDUAL")
+        .fkcoVListName("name,name")
+        .fkcoVNameMatchedText("name matched text")
         .build();
   }
 

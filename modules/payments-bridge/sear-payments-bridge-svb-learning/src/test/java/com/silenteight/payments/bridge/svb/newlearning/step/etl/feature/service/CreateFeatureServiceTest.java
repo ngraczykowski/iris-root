@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static com.silenteight.payments.bridge.svb.newlearning.step.etl.EtlFixture.createEtlHit;
+import static com.silenteight.payments.bridge.svb.newlearning.step.etl.EtlFixture.createHitComposite;
 import static com.silenteight.payments.bridge.svb.newlearning.step.etl.EtlFixture.createRegisterAlert;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,10 +39,10 @@ class CreateFeatureServiceTest {
             new GeoFeatureExtractorService(),
             new IdentificationMismatchExtractor(),
             new NameFeatureExtractorService(createNameFeatureInputUseCase),
-            new NameMatchedTextFeatureExtractorService(createNameFeatureInputUseCase),
             new OrganizationNameAgentExtractorService(),
             new HistoricalRiskAccountNumberExtractor(historicalRiskAssessmentFeature),
             new HistoricalRiskCustomerNameExtractor(historicalRiskAssessmentFeature)),
+        List.of(new NameMatchedTextFeatureExtractorService(createNameFeatureInputUseCase)),
         createAgentInputsClient);
 
     when(createNameFeatureInputUseCase.create(any())).thenReturn(
@@ -52,7 +53,12 @@ class CreateFeatureServiceTest {
   void shouldExtractFeatures() {
     var hit = createEtlHit();
     var agentInput = createFeatureService.createFeatureInputs(List.of(hit), createRegisterAlert());
-    assertThat(agentInput.get(0).getFeatureInputsCount()).isEqualTo(7);
+    assertThat(agentInput.get(0).getFeatureInputsCount()).isEqualTo(6);
+
+    var unstructuredAgentInput =
+        createFeatureService.createUnstructuredFeatureInputs(
+            List.of(createHitComposite()), createRegisterAlert());
+    assertThat(unstructuredAgentInput.get(0).getFeatureInputsCount()).isEqualTo(1);
   }
 }
 

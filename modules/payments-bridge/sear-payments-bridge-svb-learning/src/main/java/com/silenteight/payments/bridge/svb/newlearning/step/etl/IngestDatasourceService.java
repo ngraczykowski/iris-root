@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.svb.newlearning.step.etl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
@@ -28,6 +29,7 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 class IngestDatasourceService {
 
   private final CreateFeatureUseCase createFeatureUseCase;
@@ -36,9 +38,24 @@ class IngestDatasourceService {
   private final CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;
 
   void ingest(AlertComposite alertComposite, RegisterAlertResponse registeredAlert) {
-    var etlHits = createEtlHits(alertComposite);
-    createFeatureUseCase.createFeatureInputs(etlHits, registeredAlert);
-    createCategoriesUseCase.createCategoryValues(etlHits, registeredAlert);
+    processForUnstructuredTags(alertComposite, registeredAlert);
+    processForStructuredTags(alertComposite, registeredAlert);
+  }
+
+  private void processForUnstructuredTags(
+      AlertComposite alertComposite, RegisterAlertResponse registeredAlert) {
+    createFeatureUseCase.createUnstructuredFeatureInputs(alertComposite.getHits(), registeredAlert);
+  }
+
+  private void processForStructuredTags(
+      AlertComposite alertComposite, RegisterAlertResponse registeredAlert) {
+    try {
+      var etlHits = createEtlHits(alertComposite);
+      createFeatureUseCase.createFeatureInputs(etlHits, registeredAlert);
+      createCategoriesUseCase.createCategoryValues(etlHits, registeredAlert);
+    } catch (Exception e) {
+      log.warn("Failed to process alert = {} for structured tags", alertComposite.getSystemId());
+    }
   }
 
   private List<EtlHit> createEtlHits(AlertComposite alertComposite) {

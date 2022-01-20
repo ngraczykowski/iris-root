@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.payments.bridge.agents.model.NameAgentRequest;
 import com.silenteight.payments.bridge.agents.port.CreateNameFeatureInputUseCase;
-import com.silenteight.payments.bridge.svb.newlearning.domain.EtlHit;
+import com.silenteight.payments.bridge.svb.newlearning.domain.HitComposite;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -17,26 +17,26 @@ import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUti
 @Service
 @Qualifier("nameMatchedText")
 @RequiredArgsConstructor
-class NameMatchedTextFeatureExtractorService implements FeatureExtractor {
+class NameMatchedTextFeatureExtractorService implements UnstructuredFeatureExtractor {
 
   private static final String NAME_TEXT_FEATURE = "nameMatchedText";
 
   private final CreateNameFeatureInputUseCase createNameFeatureInputUseCase;
 
   @Override
-  public FeatureInput createFeatureInputs(EtlHit etlHit) {
-    var nameAgentUseCaseRequest = createNameAgentUseCaseRequest(etlHit);
+  public FeatureInput createFeatureInputs(HitComposite hitComposite) {
+    var nameAgentUseCaseRequest = createNameAgentUseCaseRequest(hitComposite);
     var nameFeatureInput = createNameFeatureInputUseCase.create(nameAgentUseCaseRequest);
     return createFeatureInput(NAME_TEXT_FEATURE, nameFeatureInput);
   }
 
-  private static NameAgentRequest createNameAgentUseCaseRequest(EtlHit etlHit) {
+  private static NameAgentRequest createNameAgentUseCaseRequest(HitComposite hitComposite) {
     return NameAgentRequest.builder()
         .feature(NAME_TEXT_FEATURE)
-        .watchlistNames(List.of(etlHit.getNameMatchedTexts()))
-        .alertedPartyNames(etlHit.getMatchedNames())
-        .watchlistType(etlHit.getWatchlistType())
-        .matchingTexts(etlHit.getMatchingTexts())
+        .watchlistNames(List.of(hitComposite.getFkcoVNameMatchedText()))
+        .alertedPartyNames(hitComposite.getMatchedNames())
+        .watchlistType(hitComposite.getWatchlistType())
+        .matchingTexts(hitComposite.getMatchingTexts())
         .build();
   }
 }

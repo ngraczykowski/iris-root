@@ -35,6 +35,10 @@ public class AlertComposite {
 
   List<ActionComposite> actions;
 
+  public String getSystemId() {
+    return alertDetails.getSystemId();
+  }
+
   public String toFindRegisterAlertRequest() {
     return alertDetails.getSystemId();
   }
