@@ -16,7 +16,7 @@ pipeline {
     }
 
     stages {
-        stage('Build and publish') {
+        stage('Build and publish package') {
             agent {
                 docker {
                     image 'docker.repo.silenteight.com/python-build-image:3.7-bullseye'
@@ -30,19 +30,19 @@ pipeline {
                         sh 'pip install --index-url "${PYPI_URL}" --requirement requirements.txt'
                     }
                 }
-                stage('Build') {
+                stage('Build package') {
                     steps {
                         sh './scripts/clean.sh'
                         sh './scripts/build.sh --index-url "${PYPI_URL}"'
                     }
                 }
-                stage('Test') {
+                stage('Test package') {
                     steps {
                         sh 'pip install --index-url "${PYPI_URL}" tox'
                         sh './scripts/test.sh --index-url "${PYPI_URL}"'
                     }
                 }
-                stage('Publish') {
+                stage('Publish package') {
                     when {
                         anyOf {
                             branch 'master'
@@ -59,7 +59,7 @@ pipeline {
                         }
                     }
                 }
-                stage('Release') {
+                stage('Release package') {
                     when {
                         allOf {
                             anyOf {
@@ -103,7 +103,24 @@ pipeline {
                 }
             }
         }
-
+        stage('Build and publish docker image') {
+            agent any
+            stages {
+                stage('Build image') {
+                    steps {
+                        sh './scripts/build_image.sh'
+                    }
+                }
+                stage('Push image') {
+                    when {
+                        branch 'master'
+                    }
+                    steps {
+                        sh './scripts/push.sh'
+                    }
+                }
+            }
+        }
         stage('Deployment') {
             agent {
                 label 'nomad'
