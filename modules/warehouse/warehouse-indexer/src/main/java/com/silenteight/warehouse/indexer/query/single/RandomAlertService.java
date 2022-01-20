@@ -12,5 +12,5 @@ public interface RandomAlertService {
    * @param alertsSampleRequest requested used to get limited scope of alerts
    * @return list of alert id
    */
-  List<String> getRandomDiscriminatorByCriteria(AlertSearchCriteria alertsSampleRequest);
+  List<String> getRandomAlertNameByCriteria(AlertSearchCriteria alertsSampleRequest);
 }
