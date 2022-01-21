@@ -1,7 +1,5 @@
 package com.silenteight.warehouse.management.group.create;
 
-import com.silenteight.warehouse.common.opendistro.roles.RolesMappingService;
-import com.silenteight.warehouse.management.country.update.UpdateCountriesUseCase;
 import com.silenteight.warehouse.management.group.domain.CountryGroupService;
 
 import org.springframework.context.annotation.Bean;
@@ -12,11 +10,9 @@ class CreateCountryGroupConfiguration {
 
   @Bean
   CreateCountryGroupUseCase createCountryGroupUseCase(
-      CountryGroupService countryGroupService,
-      UpdateCountriesUseCase updateCountriesUseCase,
-      RolesMappingService rolesMappingService) {
+      CountryGroupService countryGroupService) {
 
     return new CreateCountryGroupUseCase(
-        countryGroupService, updateCountriesUseCase, rolesMappingService);
+        countryGroupService);
   }
 }

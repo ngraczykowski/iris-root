@@ -1,6 +1,6 @@
 package com.silenteight.warehouse.management.country.get;
 
-import com.silenteight.warehouse.common.opendistro.roles.RoleService;
+import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
 import com.silenteight.warehouse.management.group.get.GetCountryGroupQuery;
 
 import org.springframework.context.annotation.Bean;
@@ -11,8 +11,9 @@ class GetCountriesConfiguration {
 
   @Bean
   GetCountriesQuery getCountriesQuery(
-      RoleService roleService, GetCountryGroupQuery getCountryGroupQuery) {
+      CountryPermissionService countryPermissionService,
+      GetCountryGroupQuery getCountryGroupQuery) {
 
-    return new GetCountriesQuery(roleService, getCountryGroupQuery);
+    return new GetCountriesQuery(countryPermissionService, getCountryGroupQuery);
   }
 }
