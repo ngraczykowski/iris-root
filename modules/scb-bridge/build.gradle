@@ -14,10 +14,6 @@ plugins {
   id 'io.freefair.aspectj' version '5.0.1'
 }
 
-group = 'com.silenteight.serp'
-version = '0.0.1-SNAPSHOT'
-description = 'SERP Universal Bridge'
-
 projectSetup {
   javaVersion = JavaVersion.VERSION_11
 }
