@@ -10,6 +10,7 @@ import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.warehouse.alert.rest.RestAlertModule;
 import com.silenteight.warehouse.common.domain.DomainModule;
+import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
 import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
 import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
@@ -58,5 +59,10 @@ class CountryGroupTestConfiguration {
   @Bean
   RolesMappingService rolesMappingServiceMock() {
     return mock(RolesMappingService.class);
+  }
+
+  @Bean
+  CountryPermissionService countryPermissionService() {
+    return mock(CountryPermissionService.class);
   }
 }

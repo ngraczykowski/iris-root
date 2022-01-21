@@ -44,6 +44,7 @@ public class CountryGroupService {
     CountryGroupEntity entity = CountryGroupEntity.builder()
         .countryGroupId(dto.getId())
         .name(dto.getName())
+        .migrated(true)
         .build();
 
     repository.save(entity);
