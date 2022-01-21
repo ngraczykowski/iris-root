@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static com.silenteight.payments.bridge.svb.newlearning.step.etl.EtlFixture.createEtlHit;
+import static com.silenteight.payments.bridge.svb.newlearning.step.etl.EtlFixture.createHitComposite;
 import static com.silenteight.payments.bridge.svb.newlearning.step.etl.EtlFixture.createRegisterAlert;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -19,12 +20,14 @@ class CreateCategoriesValuesServiceTest {
   void setUp() {
     createCategoryValuesService = new CreateCategoriesValuesService(
         new CreateCategoriesValuesMock(),
-        List.of(new WatchlistTypeCategoryExtractor(),
+        List.of(
+            new WatchlistTypeCategoryExtractor(),
             new CrossmatchCategoryExtractor(new NameAddressCrossmatchUseCaseMock()),
-            new SpecificTermsCategoryExtractor(new SpecificTermsUseCaseMock()),
-            new SpecificTerms2CategoryExtractor(new SpecificTerms2UseCaseMock()),
             new MatchTypeCategoryExtractor(),
-            new HistoricalRiskCategoryExtractor(new HistoricalRiskAssessmentUseCaseMock()))
+            new HistoricalRiskCategoryExtractor(new HistoricalRiskAssessmentUseCaseMock())),
+        List.of(
+            new SpecificTermsCategoryExtractor(new SpecificTermsUseCaseMock()),
+            new SpecificTerms2CategoryExtractor(new SpecificTerms2UseCaseMock()))
     );
   }
 
@@ -33,6 +36,12 @@ class CreateCategoriesValuesServiceTest {
     var hit = createEtlHit();
     var categoryValues =
         createCategoryValuesService.createCategoryValues(List.of(hit), createRegisterAlert());
-    assertThat(categoryValues.size()).isEqualTo(6);
+    assertThat(categoryValues.size()).isEqualTo(4);
+
+    var hitComposite = createHitComposite();
+    var unstructuredCategoryValues =
+        createCategoryValuesService.createUnstructuredCategoryValues(
+            List.of(hitComposite), createRegisterAlert());
+    assertThat(unstructuredCategoryValues.size()).isEqualTo(2);
   }
 }

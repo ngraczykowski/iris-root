@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.svb.newlearning.step.etl.category.servic
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.agents.port.SpecificTerms2UseCase;
-import com.silenteight.payments.bridge.svb.newlearning.domain.EtlHit;
+import com.silenteight.payments.bridge.svb.newlearning.domain.HitComposite;
 
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGOR
 
 @Service
 @RequiredArgsConstructor
-class SpecificTerms2CategoryExtractor extends BaseCategoryValueExtractor {
+class SpecificTerms2CategoryExtractor extends BaseUnstructuredCategoryValueExtractor {
 
   private final SpecificTerms2UseCase specificTerms2UseCase;
 
@@ -21,7 +21,7 @@ class SpecificTerms2CategoryExtractor extends BaseCategoryValueExtractor {
   }
 
   @Override
-  protected String getValue(EtlHit etlHit) {
-    return specificTerms2UseCase.invoke(etlHit.toSpecificTermsRequest()).getValue();
+  protected String getValue(HitComposite hitComposite) {
+    return specificTerms2UseCase.invoke(hitComposite.toSpecificTermsRequest()).getValue();
   }
 }

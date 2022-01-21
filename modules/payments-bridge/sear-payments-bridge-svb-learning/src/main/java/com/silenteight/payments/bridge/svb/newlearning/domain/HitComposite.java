@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Value;
 
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
+import com.silenteight.payments.bridge.agents.model.SpecificTermsRequest;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
@@ -57,6 +58,13 @@ public class HitComposite {
         + ")";
   }
 
+  public SpecificTermsRequest toSpecificTermsRequest() {
+    return SpecificTermsRequest
+        .builder()
+        .allMatchFieldsValue(fkcoVMatchedTagContent)
+        .build();
+  }
+
   public String getWatchlistLocation() {
     return String.join(", ", List.of(fkcoVListCountry, fkcoVListState, fkcoVListCity));
   }
@@ -99,14 +107,12 @@ public class HitComposite {
   }
 
   public EtlHit toEtlHit(
-      AlertedPartyData alertedPartyData, Map<AlertedPartyKey, String> alertedPartyEntities,
-      List<String> allMatchingFields) {
+      AlertedPartyData alertedPartyData, Map<AlertedPartyKey, String> alertedPartyEntities) {
     return EtlHit
         .builder()
         .hitComposite(this)
         .alertedPartyData(alertedPartyData)
         .alertedPartyEntities(alertedPartyEntities)
-        .allMatchingFields(allMatchingFields)
         .build();
   }
 

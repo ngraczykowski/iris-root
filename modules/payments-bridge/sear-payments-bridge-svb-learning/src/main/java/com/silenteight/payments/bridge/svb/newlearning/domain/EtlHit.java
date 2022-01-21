@@ -7,13 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.agents.model.CompanyNameSurroundingRequest;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
-import com.silenteight.payments.bridge.agents.model.SpecificTermsRequest;
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import org.apache.commons.lang3.EnumUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -27,8 +25,6 @@ public class EtlHit {
   AlertedPartyData alertedPartyData;
 
   Map<AlertedPartyKey, String> alertedPartyEntities;
-
-  List<String> allMatchingFields;
 
   HitComposite hitComposite;
 
@@ -72,26 +68,11 @@ public class EtlHit {
     return hitComposite.getWatchlistType();
   }
 
-  public String getNameMatchedTexts() {
-    return hitComposite.getFkcoVNameMatchedText();
-  }
-
-  public List<String> getMatchedNames() {
-    return hitComposite.getMatchedNames();
-  }
-
   public NameAddressCrossmatchAgentRequest toNameAddressCrossmatchAgentRequest() {
     return NameAddressCrossmatchAgentRequest.builder().alertPartyEntities(alertedPartyEntities)
         .watchlistName(hitComposite.getFirstWatchlistName().orElse(""))
         .watchlistCountry(hitComposite.getFkcoVListCountry())
         .watchlistType(hitComposite.getFkcoVListType())
-        .build();
-  }
-
-  public SpecificTermsRequest toSpecificTermsRequest() {
-    return SpecificTermsRequest
-        .builder()
-        .allMatchFieldsValue(StringUtils.join(allMatchingFields, ", "))
         .build();
   }
 

@@ -45,6 +45,8 @@ class IngestDatasourceService {
   private void processForUnstructuredTags(
       AlertComposite alertComposite, RegisterAlertResponse registeredAlert) {
     createFeatureUseCase.createUnstructuredFeatureInputs(alertComposite.getHits(), registeredAlert);
+    createCategoriesUseCase.createUnstructuredCategoryValues(
+        alertComposite.getHits(), registeredAlert);
   }
 
   private void processForStructuredTags(
@@ -73,8 +75,7 @@ class IngestDatasourceService {
         messageData, hit.getFkcoVMatchedTag(),
         alert.getFkcoVFormat(), alert.getFkcoVApplication());
     var alertedPartyEntities = createAlertedPartyEntities(alertedParty, hit.getMatchingTexts());
-    var allMatchingFields = createAllMatchFieldsValue(messageData, hit.getFkcoVMatchedTag());
-    return hit.toEtlHit(alertedParty, alertedPartyEntities, allMatchingFields);
+    return hit.toEtlHit(alertedParty, alertedPartyEntities);
   }
 
   private MessageData createMessageData(AlertDetails alert) {
@@ -91,10 +92,5 @@ class IngestDatasourceService {
         .alertedPartyData(alertedPartyData)
         .allMatchingText(matchingTexts)
         .build());
-  }
-
-  private static List<String> createAllMatchFieldsValue(
-      MessageData messageData, String matchedTag) {
-    return messageData.findAllValues(matchedTag).collect(toList());
   }
 }
