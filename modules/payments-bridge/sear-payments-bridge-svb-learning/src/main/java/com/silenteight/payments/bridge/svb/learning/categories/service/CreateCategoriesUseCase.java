@@ -16,8 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_MESSAGE_STRUCTURE_DISPLAY_NAME;
-import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_NAME_MESSAGE_STRUCTURE;
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.*;
 
 @Component
 @RequiredArgsConstructor
@@ -49,7 +48,7 @@ class CreateCategoriesUseCase {
   private static Category crossmatchCategory() {
     return Category
         .newBuilder()
-        .setName("categories/crossmatch")
+        .setName(CATEGORY_NAME_CROSSMATCH)
         .setDisplayName("Name Address Crossmatch")
         .setType(CategoryType.ENUMERATED)
         .setMultiValue(false)
@@ -60,8 +59,8 @@ class CreateCategoriesUseCase {
   private static Category specificTermsCategory() {
     return Category
         .newBuilder()
-        .setName("categories/specificTerms")
-        .setDisplayName("Specific Terms")
+        .setName(CATEGORY_NAME_SPECIFIC_TERMS)
+        .setDisplayName(CATEGORY_SPECIFIC_TERMS_DISPLAY_NAME)
         .setType(CategoryType.ENUMERATED)
         .setMultiValue(false)
         .addAllAllowedValues(List.of("YES", "NO"))
@@ -71,8 +70,8 @@ class CreateCategoriesUseCase {
   private static Category specificTerms2Category() {
     return Category
         .newBuilder()
-        .setName("categories/specificTerms2")
-        .setDisplayName("Specific Terms 2")
+        .setName(CATEGORY_NAME_SPECIFIC_TERMS_2)
+        .setDisplayName(CATEGORY_SPECIFIC_TERMS_2_DISPLAY_NAME)
         .setType(CategoryType.ENUMERATED)
         .setMultiValue(false)
         .addAllAllowedValues(List.of("YES", "YES_PTP", "NO"))
@@ -82,8 +81,8 @@ class CreateCategoriesUseCase {
   private static Category historicalRiskAssessmentCategory() {
     return Category
         .newBuilder()
-        .setName("categories/historicalRiskAssessment")
-        .setDisplayName("Historical Risk Assessment")
+        .setName(CATEGORY_NAME_HISTORICAL_RISK_ASSESSMENT)
+        .setDisplayName(CATEGORY_HISTORICAL_RISK_ASSESSMENT_DISPLAY_NAME)
         .setType(CategoryType.ENUMERATED)
         .setMultiValue(false)
         .addAllAllowedValues(List.of("YES", "NO"))
@@ -93,8 +92,8 @@ class CreateCategoriesUseCase {
   private static Category watchListTypeCategory() {
     return Category
         .newBuilder()
-        .setName("categories/watchlistType")
-        .setDisplayName("Watchlist Type")
+        .setName(CATEGORY_NAME_WATCHLIST_TYPE)
+        .setDisplayName(CATEGORY_WATCHLIST_TYPE_DISPLAY_NAME)
         .setType(CategoryType.ENUMERATED)
         .addAllAllowedValues(List.of("ADDRESS", "COMPANY", "INDIVIDUAL", "VESSEL"))
         .setMultiValue(false)
@@ -104,8 +103,8 @@ class CreateCategoriesUseCase {
   private static Category matchTypeCategory() {
     return Category
         .newBuilder()
-        .setName("categories/matchType")
-        .setDisplayName("Match Type")
+        .setName(CATEGORY_NAME_MATCH_TYPE)
+        .setDisplayName(CATEGORY_MATCH_TYPE_DISPLAY_NAME)
         .setType(CategoryType.ENUMERATED)
         .addAllAllowedValues(
             List.of("ERROR", "UNKNOWN", "NAME", "SEARCH_CODE", "PASSPORT", "NATIONAL_ID", "BIC",
@@ -117,8 +116,8 @@ class CreateCategoriesUseCase {
   private static Category companyNameSurroundingCategory() {
     return Category
         .newBuilder()
-        .setName("categories/companyNameSurrounding")
-        .setDisplayName("Company Name Surrounding")
+        .setName(CATEGORY_NAME_COMPANY_NAME_SURROUNDING)
+        .setDisplayName(CATEGORY_COMPANY_NAME_SURROUNDING_DISPLAY_NAME)
         .setType(CategoryType.ENUMERATED)
         .addAllAllowedValues(CompanyNameSurroundingAgentResponse.getValues())
         .setMultiValue(false)

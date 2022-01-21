@@ -11,6 +11,8 @@ import com.silenteight.payments.bridge.etl.processing.port.CategoryEtlProcess;
 
 import java.util.stream.Stream;
 
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_NAME_SPECIFIC_TERMS;
+
 //@Service
 @RequiredArgsConstructor
 class SpecificTermsCategory extends CategoryEtlProcess {
@@ -36,7 +38,7 @@ class SpecificTermsCategory extends CategoryEtlProcess {
 
     return CategoryValue
         .newBuilder()
-        .setName("categories/specificTerms")
+        .setName(CATEGORY_NAME_SPECIFIC_TERMS)
         .setMatch(matchName)
         .setSingleValue(response.toString())
         .build();

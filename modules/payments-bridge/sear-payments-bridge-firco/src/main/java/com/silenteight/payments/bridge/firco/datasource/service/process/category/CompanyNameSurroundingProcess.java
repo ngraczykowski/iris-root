@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.Optional;
 
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_COMPANY_NAME_SURROUNDING;
+
 @Service
 @RequiredArgsConstructor
 class CompanyNameSurroundingProcess extends BaseCategoryValueProcess {
-
-  public static final String CATEGORY_COMPANY_NAME_SURROUNDING = "companyNameSurrounding";
 
   private final CompanyNameSurroundingUseCase companyNameSurroundingUseCase;
 

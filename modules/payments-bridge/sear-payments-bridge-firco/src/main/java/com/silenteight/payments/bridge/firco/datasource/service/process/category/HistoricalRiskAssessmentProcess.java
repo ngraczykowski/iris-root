@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_HISTORICAL_RISK_ASSESSMENT;
+
 @Service
 @RequiredArgsConstructor
 class HistoricalRiskAssessmentProcess extends BaseCategoryValueProcess {
-
-  public static final String CATEGORY_HISTORICAL_RISK_ASSESSMENT = "historicalRiskAssessment";
 
   private final HistoricalRiskAssessmentUseCase historicalRiskAssessmentUseCase;
 

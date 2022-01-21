@@ -7,11 +7,11 @@ import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
 import org.springframework.stereotype.Service;
 
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_CROSSMATCH;
+
 @Service
 @RequiredArgsConstructor
 class CrossmatchExtractor extends BaseCategoryValueExtractor {
-
-  public static final String CATEGORY_CROSSMATCH = "crossmatch";
 
   private final NameAddressCrossmatchUseCase nameAddressCrossmatchUseCase;
 

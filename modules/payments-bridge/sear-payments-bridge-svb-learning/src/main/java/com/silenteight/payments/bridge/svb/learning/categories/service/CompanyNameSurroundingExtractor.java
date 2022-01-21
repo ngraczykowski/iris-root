@@ -7,11 +7,11 @@ import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
 import org.springframework.stereotype.Service;
 
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_COMPANY_NAME_SURROUNDING;
+
 @Service
 @RequiredArgsConstructor
 class CompanyNameSurroundingExtractor extends BaseCategoryValueExtractor {
-
-  public static final String CATEGORY_COMPANY_NAME_SURROUNDING = "companyNameSurrounding";
 
   private final CompanyNameSurroundingUseCase companyNameSurroundingUseCase;
 

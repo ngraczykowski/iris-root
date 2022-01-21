@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_SPECIFIC_TERMS;
+
 @Service
 @RequiredArgsConstructor
 class SpecificTermsProcess extends BaseCategoryValueProcess {
-
-  public static final String CATEGORY_SPECIFIC_TERMS = "specificTerms";
 
   private final SpecificTermsUseCase specificTermsUseCase;
 

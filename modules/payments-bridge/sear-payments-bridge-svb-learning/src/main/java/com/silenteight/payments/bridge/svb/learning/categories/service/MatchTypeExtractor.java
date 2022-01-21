@@ -6,11 +6,11 @@ import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
 import org.springframework.stereotype.Service;
 
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_MATCH_TYPE;
+
 @Service
 @RequiredArgsConstructor
 class MatchTypeExtractor extends BaseCategoryValueExtractor {
-
-  public static final String CATEGORY_MATCH_TYPE = "matchType";
 
   @Override
   protected String getCategoryName() {

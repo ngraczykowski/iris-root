@@ -16,11 +16,11 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_CROSSMATCH;
+
 @Service
 @RequiredArgsConstructor
 class NameAddressCrossmatchProcess extends BaseCategoryValueProcess {
-
-  public static final String CATEGORY_CROSSMATCH = "crossmatch";
 
   private final NameAddressCrossmatchUseCase nameAddressCrossmatchUseCase;
   private final CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;

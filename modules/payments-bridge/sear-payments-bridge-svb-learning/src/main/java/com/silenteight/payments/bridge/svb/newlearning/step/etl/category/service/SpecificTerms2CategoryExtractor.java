@@ -7,11 +7,11 @@ import com.silenteight.payments.bridge.svb.newlearning.domain.EtlHit;
 
 import org.springframework.stereotype.Service;
 
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_SPECIFIC_TERMS_2;
+
 @Service
 @RequiredArgsConstructor
 class SpecificTerms2CategoryExtractor extends BaseCategoryValueExtractor {
-
-  public static final String CATEGORY_SPECIFIC_TERMS_2 = "specificTerms2";
 
   private final SpecificTerms2UseCase specificTerms2UseCase;
 

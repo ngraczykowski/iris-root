@@ -6,11 +6,11 @@ import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 
 import org.springframework.stereotype.Service;
 
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_WATCHLIST_TYPE;
+
 @Service
 @RequiredArgsConstructor
 class WatchlistTypeExtractor extends BaseCategoryValueExtractor {
-
-  public static final String CATEGORY_WATCHLIST_TYPE = "watchlistType";
 
   @Override
   protected String getCategoryName() {

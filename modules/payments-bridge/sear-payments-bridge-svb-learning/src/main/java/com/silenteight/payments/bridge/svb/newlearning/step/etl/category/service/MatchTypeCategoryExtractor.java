@@ -4,10 +4,10 @@ import com.silenteight.payments.bridge.svb.newlearning.domain.EtlHit;
 
 import org.springframework.stereotype.Service;
 
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_MATCH_TYPE;
+
 @Service
 class MatchTypeCategoryExtractor extends BaseCategoryValueExtractor {
-
-  public static final String CATEGORY_MATCH_TYPE = "matchType";
 
   @Override
   protected String getCategoryName() {

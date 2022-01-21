@@ -8,11 +8,11 @@ import com.silenteight.payments.bridge.svb.newlearning.domain.EtlHit;
 
 import org.springframework.stereotype.Service;
 
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_HISTORICAL_RISK_ASSESSMENT;
+
 @Service
 @RequiredArgsConstructor
 class HistoricalRiskCategoryExtractor extends BaseCategoryValueExtractor {
-
-  public static final String CATEGORY_HISTORICAL_RISK_ASSESSMENT = "historicalRiskAssessment";
 
   private final HistoricalRiskAssessmentUseCase historicalRiskAssessmentUseCase;
 
