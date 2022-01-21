@@ -96,6 +96,4 @@ test:
       qa-indexing-test-client-outbound:
         exchange-name: testapp.command.qa
         routing-key: command.qa-index-request
-      qa-indexing-internal-test-client-outbound:
-        exchange-name: testapp.command.qa.internal
-        routing-key: command.qa-index-request
+
