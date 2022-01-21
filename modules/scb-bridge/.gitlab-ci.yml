@@ -9,10 +9,12 @@ cache:
 
 build:
   stage: build
+  when: manual
   script:
     - ./gradlew assemble
 
 test:
   stage: test
+  when: manual  
   script:
     - ./gradlew check
