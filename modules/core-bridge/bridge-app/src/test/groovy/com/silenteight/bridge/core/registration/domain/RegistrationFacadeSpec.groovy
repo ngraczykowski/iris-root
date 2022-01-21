@@ -1,5 +1,7 @@
 package com.silenteight.bridge.core.registration.domain
 
+import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FedMatch
+import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FeedingStatus
 import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertWithMatches
 import com.silenteight.bridge.core.registration.domain.model.BatchId
 
@@ -60,11 +62,14 @@ class RegistrationFacadeSpec extends Specification {
 
   def 'should call add alerts to analysis'() {
     given:
-    def commands = [new AddAlertToAnalysisCommand(
-        'batchId',
-        'alertId',
-        ['matchId'].toSet()
-    )]
+    def commands = [
+        AddAlertToAnalysisCommand.builder()
+            .batchId('batchId')
+            .alertId('alertId')
+            .feedingStatus(FeedingStatus.SUCCESS)
+            .fedMatches([new FedMatch('matchId', FeedingStatus.SUCCESS)])
+            .build()
+    ]
 
     when:
     underTest.addAlertsToAnalysis(commands)
@@ -78,7 +83,8 @@ class RegistrationFacadeSpec extends Specification {
     def batch = new BatchId('batchId')
     def analysisName = 'analysisName'
     def alertNames = ['firstAlertName', 'secondAlertName']
-    def markAlertsAsRecommendedCommand = new MarkAlertsAsRecommendedCommand(analysisName, alertNames)
+    def markAlertsAsRecommendedCommand = new MarkAlertsAsRecommendedCommand(
+        analysisName, alertNames)
     def completeBatchCommand = new CompleteBatchCommand(batch.id(), alertNames)
 
     when:
@@ -96,7 +102,8 @@ class RegistrationFacadeSpec extends Specification {
     def batch = new BatchId('batchId')
     def analysisName = 'analysisName'
     def alertNames = ['firstAlertName', 'secondAlertName']
-    def markAlertsAsRecommendedCommand = new MarkAlertsAsRecommendedCommand(analysisName, alertNames)
+    def markAlertsAsRecommendedCommand = new MarkAlertsAsRecommendedCommand(
+        analysisName, alertNames)
     def completeBatchCommand = new CompleteBatchCommand(batch.id(), alertNames)
 
     when:

@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface MatchRepository {
 
-  void updateStatusByNameIn(Match.Status status, List<String> names);
+  void updateStatusByBatchIdAndMatchIdInAndExternalAlertIdIn(
+      Match.Status status, String batchId, List<String> matchIds, List<String> externalAlertIds);
 }

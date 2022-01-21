@@ -53,13 +53,24 @@ class JdbcAlertMapperSpec extends Specification {
 
   def 'should map to alert id'() {
     given:
-    def alertIdProjection = new AlertIdProjection('alertId', 'batchId')
+    def alertIdProjection = new AlertIdNameProjection('alertId', 'batchId', 'alertName')
 
     when:
     def result = underTest.toAlertId(alertIdProjection)
 
     then:
     result.alertId() == 'alertId'
+  }
+
+  def 'should map to alert name'() {
+    given:
+    def alertIdProjection = new AlertIdNameProjection('alertId', 'batchId', 'alertName')
+
+    when:
+    def result = underTest.toAlertName(alertIdProjection)
+
+    then:
+    result.alertName() == 'alertName'
   }
 
   def 'should map to alert'() {

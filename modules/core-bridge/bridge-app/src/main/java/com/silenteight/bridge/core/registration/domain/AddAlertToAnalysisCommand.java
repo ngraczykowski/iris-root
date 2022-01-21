@@ -1,5 +1,25 @@
 package com.silenteight.bridge.core.registration.domain;
 
-import java.util.Set;
+import lombok.Builder;
 
-public record AddAlertToAnalysisCommand(String batchId, String alertId, Set<String> matchIds) {}
+import java.util.List;
+
+public record AddAlertToAnalysisCommand(
+    String batchId,
+    String alertId,
+    FeedingStatus feedingStatus,
+    List<FedMatch> fedMatches
+) {
+
+  @Builder
+  public AddAlertToAnalysisCommand {}
+
+  public enum FeedingStatus {
+    SUCCESS, FAILURE
+  }
+
+  public record FedMatch(
+      String id,
+      FeedingStatus feedingStatus
+  ) {}
+}

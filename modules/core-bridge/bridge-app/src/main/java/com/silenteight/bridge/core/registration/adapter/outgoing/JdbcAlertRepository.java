@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.bridge.core.registration.adapter.outgoing.AlertEntity.Status;
 import com.silenteight.bridge.core.registration.domain.model.Alert;
 import com.silenteight.bridge.core.registration.domain.model.AlertId;
+import com.silenteight.bridge.core.registration.domain.model.AlertName;
 import com.silenteight.bridge.core.registration.domain.model.AlertStatusStatistics;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 
@@ -34,9 +35,29 @@ class JdbcAlertRepository implements AlertRepository {
   }
 
   @Override
+  public void updateStatusToProcessing(String batchId, List<String> alertIds) {
+    alertRepository.updateAlertsWithMatchesStatusByBatchIdAndIdsIn(
+        batchId, Status.PROCESSING.name(), alertIds);
+  }
+
+  @Override
+  public void updateStatusToError(String batchId, List<String> alertIds) {
+    alertRepository.updateAlertsWithMatchesStatusByBatchIdAndIdsIn(
+        batchId, Status.ERROR.name(), alertIds);
+  }
+
+  @Override
   public List<AlertId> findAllAlertIdsByBatchIdAndAlertIdIn(String batchId, List<String> alertIds) {
     return alertRepository.findByBatchIdAndAlertIdIn(batchId, alertIds).stream()
         .map(mapper::toAlertId)
+        .toList();
+  }
+
+  @Override
+  public List<AlertName> findAllAlertNamesByBatchIdAndAlertIdIn(
+      String batchId, List<String> alertIds) {
+    return alertRepository.findByBatchIdAndAlertIdIn(batchId, alertIds).stream()
+        .map(mapper::toAlertName)
         .toList();
   }
 

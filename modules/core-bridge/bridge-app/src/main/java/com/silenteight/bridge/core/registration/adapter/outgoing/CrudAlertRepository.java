@@ -30,7 +30,7 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
       WHERE batch_id = :batchId AND NOT status = 'RECOMMENDED' AND NOT status = 'ERROR'""")
   long countAllAlertsByBatchIdAndNotRecommendedAndNotErrorStatuses(String batchId);
 
-  List<AlertIdProjection> findByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
+  List<AlertIdNameProjection> findByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
 
   List<AlertEntity> findAllByBatchId(String batchId);
 
@@ -49,4 +49,18 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
       WHERE batch_id = :batchId
       GROUP BY status""")
   List<AlertStatusStatisticsProjection> countAlertsByStatusForBatchId(String batchId);
+
+  @Modifying
+  @Query("""
+      WITH updated_alerts AS (
+          UPDATE alerts
+              SET status = :status, updated_at = NOW()
+              WHERE batch_id = :batchId AND alert_id IN(:alertIds)
+              RETURNING id
+      )
+      UPDATE matches
+          SET status = :status
+          WHERE alert_id IN (SELECT id FROM updated_alerts)""")
+  void updateAlertsWithMatchesStatusByBatchIdAndIdsIn(
+      String batchId, String status, List<String> alertIds);
 }

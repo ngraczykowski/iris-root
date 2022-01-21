@@ -1,10 +1,7 @@
 package com.silenteight.bridge.core.registration.adapter.outgoing;
 
 import com.silenteight.bridge.core.registration.adapter.outgoing.AlertEntity.Status;
-import com.silenteight.bridge.core.registration.domain.model.Alert;
-import com.silenteight.bridge.core.registration.domain.model.AlertId;
-import com.silenteight.bridge.core.registration.domain.model.AlertStatusStatistics;
-import com.silenteight.bridge.core.registration.domain.model.Match;
+import com.silenteight.bridge.core.registration.domain.model.*;
 
 import org.springframework.stereotype.Component;
 
@@ -29,8 +26,8 @@ class JdbcAlertMapper {
         .build();
   }
 
-  AlertId toAlertId(AlertIdProjection alertIdProjection) {
-    return new AlertId(alertIdProjection.alertId());
+  AlertId toAlertId(AlertIdNameProjection projection) {
+    return new AlertId(projection.alertId());
   }
 
   Alert toAlert(AlertEntity alert) {
@@ -45,6 +42,10 @@ class JdbcAlertMapper {
             .toList())
         .errorDescription(alert.errorDescription())
         .build();
+  }
+
+  AlertName toAlertName(AlertIdNameProjection projection) {
+    return new AlertName(projection.alertName());
   }
 
   AlertStatusStatistics toAlertsStatistics(List<AlertStatusStatisticsProjection> projection) {
