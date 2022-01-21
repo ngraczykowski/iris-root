@@ -13,6 +13,7 @@ class RegisterAlertAndMatchesResponseFixtures {
 
   static final String ALERT_ID = "alert_id";
   static final String ALERT_NAME = "alert_name";
+  static final String ALERT_STATUS = "SUCCESS";
 
   static final List<RegisteredMatch> GRPC_REGISTERED_MATCHES =
       List.of(RegisteredMatch.newBuilder().setMatchId(MATCH_ID).setMatchName(MATCH_NAME).build());
@@ -22,6 +23,7 @@ class RegisterAlertAndMatchesResponseFixtures {
           .newBuilder()
           .setAlertId(ALERT_ID)
           .setAlertName(ALERT_NAME)
+          .setAlertStatus(ALERT_STATUS)
           .addAllRegisteredMatches(GRPC_REGISTERED_MATCHES)
           .build());
 
