@@ -1,0 +1,18 @@
+plugins {
+  id "java-library"
+  id "groovy"
+}
+
+dependencies {
+  // Application modules
+  implementation project(":sear-payments-bridge-common")
+
+  // Datasource
+  implementation libraries.data_source_api
+  implementation libraries.data_source_categories_api
+  implementation libraries.data_source_agentinput_api
+
+  implementation libraries.grpc_client_spring_boot_starter
+
+  implementation libraries.hibernate_validator
+}

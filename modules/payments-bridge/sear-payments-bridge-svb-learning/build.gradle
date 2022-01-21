@@ -4,14 +4,15 @@ plugins {
 }
 
 dependencies {
-  implementation project(":sear-payments-common")
-  implementation project(":sear-payments-bridge-common")
+  implementation project(":proto-sear-payments-bridge-internal-protos")
   implementation project(":sear-payments-bridge-ae")
   implementation project(":sear-payments-bridge-agents")
+  implementation project(":sear-payments-bridge-common")
+  implementation project(":sear-payments-bridge-datasource")
   implementation project(":sear-payments-bridge-etl")
   implementation project(":sear-payments-bridge-mock-datasource")
-  implementation project(":proto-sear-payments-bridge-internal-protos")
   implementation project(":sear-payments-bridge-notification")
+  implementation project(":sear-payments-common")
 
   implementation libraries.silenteight_sep_base_common
   implementation libraries.data_source_api

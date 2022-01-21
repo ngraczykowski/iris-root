@@ -1,10 +1,10 @@
-package com.silenteight.payments.bridge.svb.learning.features.adapter;
+package com.silenteight.payments.bridge.datasource.adapter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc;
-import com.silenteight.payments.bridge.svb.learning.features.port.outgoing.CreateAgentInputsClient;
+import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
 
 import io.grpc.Channel;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -14,8 +14,8 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.validation.Valid;
 
-@RequiredArgsConstructor
 @Configuration
+@RequiredArgsConstructor
 @EnableConfigurationProperties(CreateAgentInputsClientProperties.class)
 class CreateAgentInputsClientConfiguration {
 

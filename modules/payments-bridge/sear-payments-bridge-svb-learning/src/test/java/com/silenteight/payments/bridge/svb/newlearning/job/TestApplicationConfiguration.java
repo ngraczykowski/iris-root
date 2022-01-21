@@ -6,9 +6,9 @@ import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredA
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.agents.port.*;
 import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
+import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
 import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
 import com.silenteight.payments.bridge.svb.learning.engine.HistoricalDecisionLearningEnginePort;
-import com.silenteight.payments.bridge.svb.learning.features.port.outgoing.CreateAgentInputsClient;
 import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
 
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;

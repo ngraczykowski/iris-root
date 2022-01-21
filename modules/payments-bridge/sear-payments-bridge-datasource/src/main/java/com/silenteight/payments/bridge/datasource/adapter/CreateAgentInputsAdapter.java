@@ -1,11 +1,11 @@
-package com.silenteight.payments.bridge.svb.learning.features.adapter;
+package com.silenteight.payments.bridge.datasource.adapter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceBlockingStub;
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
-import com.silenteight.payments.bridge.svb.learning.features.port.outgoing.CreateAgentInputsClient;
+import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
 
 import io.grpc.Deadline;
 import io.grpc.StatusRuntimeException;

@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.learning.features.adapter;
+package com.silenteight.payments.bridge.datasource.adapter;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
 
-@ConfigurationProperties(prefix = "ae.grpc.client.create-agent-inputs")
+@ConfigurationProperties(prefix = "pb.grpc.client.create-agent-inputs")
 @Validated
 @Data
 class CreateAgentInputsClientProperties {
