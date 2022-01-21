@@ -73,7 +73,7 @@ public class ReportGenerationService {
     Map<String, String> parameters = new HashMap<>();
     parameters.put(PARAMETER_FROM, fetchDataRequest.getFrom().format(ISO_LOCAL_DATE));
     parameters.put(PARAMETER_TO, fetchDataRequest.getTo().format(ISO_LOCAL_DATE));
-    parameters.put(PARAMETER_ANALYSIS_ID, fetchDataRequest.getName());
+    parameters.put(PARAMETER_ANALYSIS_ID, fetchDataRequest.getAnalysisId());
     parameters.put(PARAMETER_COUNTRIES, getSecurityParameters());
 
     String sqlSelectQuery = Optional

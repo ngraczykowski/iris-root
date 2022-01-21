@@ -34,9 +34,19 @@ public class AiReasoningReportService implements ReportsRemoval {
       @NonNull List<String> indexes,
       @NonNull @Valid AiReasoningReportDefinitionProperties properties) {
 
+    return createReportInstance(range, indexes, properties, null);
+  }
+
+  public ReportInstanceReferenceDto createReportInstance(
+      @NonNull ReportRange range,
+      @NonNull List<String> indexes,
+      @NonNull @Valid AiReasoningReportDefinitionProperties properties,
+      String analysisId) {
+
     AiReasoningReport report = of(range);
     AiReasoningReport savedReport = repository.save(report);
-    asyncReportGenerationService.generateReport(savedReport.getId(), range, indexes, properties);
+    asyncReportGenerationService.generateReport(savedReport.getId(), range, indexes, properties,
+        analysisId);
     return new ReportInstanceReferenceDto(savedReport.getId());
   }
 

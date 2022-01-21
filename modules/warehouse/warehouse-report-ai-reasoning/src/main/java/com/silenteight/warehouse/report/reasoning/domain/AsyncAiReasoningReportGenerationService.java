@@ -28,10 +28,11 @@ class AsyncAiReasoningReportGenerationService {
       long id,
       @NonNull ReportRange range,
       @NonNull List<String> indexes,
-      @NonNull @Valid AiReasoningReportDefinitionProperties properties) {
+      @NonNull @Valid AiReasoningReportDefinitionProperties properties,
+      String analysisId) {
 
     try {
-      doGenerateReport(id, range, indexes, properties);
+      doGenerateReport(id, range, indexes, properties, analysisId);
     } catch (RuntimeException e) {
       doFailReport(id);
       throw new ReportGenerationException(id, e);
@@ -42,7 +43,8 @@ class AsyncAiReasoningReportGenerationService {
       long id,
       ReportRange range,
       List<String> indexes,
-      AiReasoningReportDefinitionProperties properties) {
+      AiReasoningReportDefinitionProperties properties,
+      String analysisId) {
 
     AiReasoningReport report = repository.getById(id);
     report.generating();
@@ -55,7 +57,8 @@ class AsyncAiReasoningReportGenerationService {
         range.getTo(),
         indexes,
         properties,
-        fileStorageName);
+        fileStorageName,
+        analysisId);
 
     report.done();
     repository.save(report);

@@ -22,7 +22,8 @@ public class AiReasoningReportGenerationService {
       OffsetDateTime to,
       List<String> indexes,
       @Valid AiReasoningReportDefinitionProperties properties,
-      String name) {
+      String name,
+      String analysisId) {
 
     FetchDataRequest request = FetchDataRequest
         .builder()
@@ -36,6 +37,7 @@ public class AiReasoningReportGenerationService {
         .useSqlReports(properties.isUseSqlReports())
         .selectSqlQuery(properties.getSelectSqlQuery())
         .sqlTemplates(properties.getSqlTemplates())
+        .analysisId(analysisId)
         .build();
 
     generationStreamingService.generate(request);

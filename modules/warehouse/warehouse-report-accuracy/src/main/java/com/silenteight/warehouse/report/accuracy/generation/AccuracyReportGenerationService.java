@@ -22,7 +22,8 @@ public class AccuracyReportGenerationService {
       @NonNull OffsetDateTime to,
       @NonNull List<String> indexes,
       @NonNull @Valid AccuracyReportDefinitionProperties properties,
-      @NonNull String name) {
+      @NonNull String name,
+      String analysisId) {
 
     FetchDataRequest request = FetchDataRequest
         .builder()
@@ -36,6 +37,7 @@ public class AccuracyReportGenerationService {
         .useSqlReports(properties.isUseSqlReports())
         .selectSqlQuery(properties.getSelectSqlQuery())
         .sqlTemplates(properties.getSqlTemplates())
+        .analysisId(analysisId)
         .build();
 
     generationStreamingService.generate(request);
