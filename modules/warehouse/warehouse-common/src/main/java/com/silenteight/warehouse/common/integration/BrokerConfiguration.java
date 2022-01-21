@@ -15,10 +15,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.validation.Valid;
 
-import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.BRIDGE_COMMAND_EXCHANGE;
-import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.BRIDGE_RETENTION_EXCHANGE;
-import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.GOV_EVENT_EXCHANGE;
-import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.SIM_COMMAND_EXCHANGE;
+import static com.silenteight.rabbitcommonschema.definitions.RabbitConstants.*;
 import static java.util.Collections.emptyMap;
 import static org.springframework.amqp.core.Binding.DestinationType.QUEUE;
 
@@ -54,7 +51,7 @@ class BrokerConfiguration {
     return new Declarables(
         binding(
             properties.qaIndexingQueueName(),
-            GOV_EVENT_EXCHANGE,
+            GOV_QA_EXCHANGE,
             properties.qaIndexingRoutingKey()));
   }
 

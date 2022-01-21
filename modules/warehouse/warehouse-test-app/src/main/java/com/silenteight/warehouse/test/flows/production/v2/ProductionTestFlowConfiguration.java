@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.warehouse.test.client.gateway.ProductionIndexClientGateway;
 import com.silenteight.warehouse.test.generator.DataReader;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +19,6 @@ class ProductionTestFlowConfiguration {
   private Resource productionResourceFile;
 
   @Bean
-  @Autowired
   @ConditionalOnProperty(value = "test.flows.production.enabled", havingValue = "true")
   ProductionIndexClient productionIndexClient(
       ProductionIndexClientGateway productionIndexClientGateway) {
