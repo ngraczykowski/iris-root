@@ -1,0 +1,20 @@
+dependencies {
+  // Commons
+  starterCommon libraries.silenteight_commons_core
+  starterCommon libraries.commons_lang3
+  starterCommon libraries.commons_text
+  starterCommon libraries.guava
+  starterCommon libraries.reactor_core
+
+  // APIs
+  starterCommon libraries.jakarta_persistence_api
+  starterCommon libraries.jakarta_transaction_api
+
+  // Validator
+  starterCommon libraries.tomcat_embed_el
+  starterCommon libraries.hibernate_validator
+
+  // Jackson Annotations and Databind
+  starterCommon libraries.jackson_annotations
+  starterCommon libraries.jackson_databind
+}

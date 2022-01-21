@@ -1,0 +1,8 @@
+dependencies {
+  starterIntegration libraries.amqp_client
+  starterIntegration libraries.lz4_java
+  starterIntegration libraries.spring_boot_starter_integration
+  starterIntegration libraries.spring_integration_amqp
+  starterIntegration libraries.spring_integration_core
+  starterIntegration libraries.spring_integration_mail
+}

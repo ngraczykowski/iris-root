@@ -1,0 +1,10 @@
+allprojects {
+  apply plugin: "idea"
+
+  idea {
+    module {
+      outputDir file("${buildDir}/idea/production/${delegate.name}")
+      testOutputDir file("${buildDir}/idea/test/${delegate.name}")
+    }
+  }
+}

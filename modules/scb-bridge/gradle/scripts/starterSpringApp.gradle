@@ -1,0 +1,10 @@
+dependencies {
+  starterSpringApp libraries.spring_boot_starter_logging
+
+  starterSpringApp libraries.spring_boot_starter_actuator
+  starterSpringApp libraries.spring_boot_starter_undertow
+  starterSpringApp libraries.spring_boot_starter_web
+  starterSpringApp libraries.spring_cloud_starter_sleuth
+
+  starterSpringApp libraries.micrometer_prometheus
+}
