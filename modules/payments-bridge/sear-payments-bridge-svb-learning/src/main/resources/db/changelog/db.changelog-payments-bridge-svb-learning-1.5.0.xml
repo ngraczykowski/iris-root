@@ -95,4 +95,22 @@
       <column name="fkco_v_list_add_info" type="TEXT"/>
     </addColumn>
   </changeSet>
+
+  <changeSet id="payments-bridge-svb-learning-1.5.3" author="wkeska">
+    <createTable tableName="pb_learning_processed_alert">
+      <column name="learning_alert_id" type="BIGINT"/>
+      <column name="job_id" type="BIGINT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="result" type="VARCHAR(32)"/>
+      <column name="error_message" type="TEXT"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="pb_learning_processed_alert"
+                             baseColumnNames="learning_alert_id"
+                             constraintName="pb_learning_processed_alert_learning_alert_id"
+                             referencedTableName="pb_learning_alert"
+                             referencedColumnNames="learning_alert_id"/>
+  </changeSet>
+
 </databaseChangeLog>
