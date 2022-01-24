@@ -15,7 +15,7 @@ import org.springframework.test.annotation.DirtiesContext
 class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
 
   @Autowired
-  private AlertRepository alertRepository;
+  private AlertRepository alertRepository
 
   def 'should save alerts and then find alerts by given batchId'() {
     given:
@@ -61,6 +61,22 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
     with(alertRepository.findAllByBatchIdAndAlertIdIn(batchId, [alert2.alertId()]).first()) {
       status() == alert2.status()
     }
+  }
+
+  def 'should return alerts and matches by batch id'() {
+    given:
+    def batchId = 'batch_id_' + UUID.randomUUID()
+    def alertsToSave = [
+        dummyAlert(batchId, 'alert_id_' + UUID.randomUUID()),
+        dummyAlert(batchId, 'alert_id_' + UUID.randomUUID())
+    ]
+    alertRepository.saveAlerts(alertsToSave)
+
+    when:
+    def results = alertRepository.findAllWithMatchesByBatchId(batchId)
+
+    then:
+    results.size() == 2
   }
 
   private static def dummyAlert(String batchId, String alertId) {

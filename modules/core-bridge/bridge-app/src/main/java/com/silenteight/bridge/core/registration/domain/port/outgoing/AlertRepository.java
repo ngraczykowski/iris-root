@@ -4,6 +4,7 @@ import com.silenteight.bridge.core.registration.domain.model.Alert;
 import com.silenteight.bridge.core.registration.domain.model.AlertId;
 import com.silenteight.bridge.core.registration.domain.model.AlertName;
 import com.silenteight.bridge.core.registration.domain.model.AlertStatusStatistics;
+import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
 
 import java.util.List;
 
@@ -22,6 +23,8 @@ public interface AlertRepository {
   List<AlertName> findAllAlertNamesByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
 
   List<Alert> findAllByBatchId(String batchId);
+
+  List<AlertWithMatches> findAllWithMatchesByBatchId(String batchId);
 
   List<Alert> findAllByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
 

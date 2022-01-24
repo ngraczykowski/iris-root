@@ -55,6 +55,15 @@ class JdbcAlertMapper {
             AlertStatusStatisticsProjection::count)));
   }
 
+  List<AlertWithMatches> toAlertWithMatches(List<AlertWithMatchNamesProjection> projections) {
+    return projections
+        .stream()
+        .collect(Collectors.groupingBy(this::toAlertKey, Collectors.toList()))
+        .entrySet().stream()
+        .map(entry -> toAlertWithMatches(entry.getKey(), entry.getValue()))
+        .toList();
+  }
+
   private MatchEntity toMatchEntity(Match match) {
     return MatchEntity.builder()
         .name(match.name())
@@ -72,4 +81,40 @@ class JdbcAlertMapper {
         .matchId(match.matchId())
         .build();
   }
+
+  private AlertWithMatches toAlertWithMatches(
+      AlertKey alert, List<AlertWithMatchNamesProjection> projections) {
+    return AlertWithMatches.builder()
+        .id(alert.alertId)
+        .name(alert.name)
+        .metadata(alert.metadata)
+        .errorDescription(alert.errorDescription)
+        .status(Alert.Status.valueOf(alert.status))
+        .matches(projections.stream()
+            .map(this::toMatch)
+            .toList()
+        ).build();
+  }
+
+  private AlertKey toAlertKey(AlertWithMatchNamesProjection projection) {
+    return new AlertKey(
+        projection.alertName(),
+        projection.alertId(),
+        projection.alertStatus(),
+        projection.alertMetadata(),
+        projection.alertErrorDescription()
+    );
+  }
+
+  private AlertWithMatches.Match toMatch(AlertWithMatchNamesProjection projection) {
+    return new AlertWithMatches.Match(projection.matchId(), projection.matchName());
+  }
+
+  private record AlertKey(
+      String name,
+      String alertId,
+      String status,
+      String metadata,
+      String errorDescription
+  ) {}
 }

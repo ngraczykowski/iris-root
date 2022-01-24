@@ -14,6 +14,12 @@ interface CrudBatchRepository extends CrudRepository<BatchEntity, Long> {
 
   Optional<BatchIdProjection> findByAnalysisName(String analysisName);
 
+  @Query("""
+      SELECT batch_id, policy_name
+      FROM batches
+      WHERE analysis_name = :analysisName""")
+  Optional<BatchIdWithPolicyProjection> findBatchIdWithPolicyByAnalysisName(String analysisName);
+
   @Modifying
   @Query("""
       UPDATE batches 

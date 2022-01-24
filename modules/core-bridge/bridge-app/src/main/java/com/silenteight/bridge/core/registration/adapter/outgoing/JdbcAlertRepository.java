@@ -7,6 +7,7 @@ import com.silenteight.bridge.core.registration.domain.model.Alert;
 import com.silenteight.bridge.core.registration.domain.model.AlertId;
 import com.silenteight.bridge.core.registration.domain.model.AlertName;
 import com.silenteight.bridge.core.registration.domain.model.AlertStatusStatistics;
+import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 
 import org.springframework.stereotype.Repository;
@@ -66,6 +67,11 @@ class JdbcAlertRepository implements AlertRepository {
     return alertRepository.findAllByBatchId(batchId).stream()
         .map(mapper::toAlert)
         .toList();
+  }
+
+  @Override
+  public List<AlertWithMatches> findAllWithMatchesByBatchId(String batchId) {
+    return mapper.toAlertWithMatches(alertRepository.findAllWithMatchesByBatchId(batchId));
   }
 
   @Override

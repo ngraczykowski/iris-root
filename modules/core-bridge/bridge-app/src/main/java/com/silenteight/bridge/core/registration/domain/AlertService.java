@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertStatus;
-import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertWithMatches;
 import com.silenteight.bridge.core.registration.domain.model.Alert;
+import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRegistrationService;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 
@@ -22,6 +22,10 @@ class AlertService {
   private final AlertMapper mapper;
   private final AlertRepository alertRepository;
   private final AlertRegistrationService alertRegistrationService;
+
+  List<AlertWithMatches> getAlertsAndMatches(String batchId) {
+    return alertRepository.findAllWithMatchesByBatchId(batchId);
+  }
 
   void registerAlertsAndMatches(RegisterAlertsCommand command) {
     var batchId = command.batchId();
@@ -59,9 +63,10 @@ class AlertService {
     return pendingAlerts == 0;
   }
 
-  private List<AlertWithMatches> filterOutExistingInDb(RegisterAlertsCommand command) {
+  private List<RegisterAlertsCommand.AlertWithMatches> filterOutExistingInDb(
+      RegisterAlertsCommand command) {
     var alertIds = command.alertWithMatches().stream()
-        .map(AlertWithMatches::alertId)
+        .map(RegisterAlertsCommand.AlertWithMatches::alertId)
         .toList();
     var existingAlerts =
         alertRepository.findAllAlertIdsByBatchIdAndAlertIdIn(command.batchId(), alertIds);
@@ -77,24 +82,27 @@ class AlertService {
     return result;
   }
 
-  private List<AlertWithMatches> getSucceededAlerts(List<AlertWithMatches> alertsWithMatches) {
+  private List<RegisterAlertsCommand.AlertWithMatches> getSucceededAlerts(
+      List<RegisterAlertsCommand.AlertWithMatches> alertsWithMatches) {
     return filterAlertsByStatus(alertsWithMatches, AlertStatus.SUCCESS);
   }
 
-  private List<AlertWithMatches> filterAlertsByStatus(
-      List<AlertWithMatches> alertsWithMatches, AlertStatus status) {
+  private List<RegisterAlertsCommand.AlertWithMatches> filterAlertsByStatus(
+      List<RegisterAlertsCommand.AlertWithMatches> alertsWithMatches, AlertStatus status) {
     return alertsWithMatches.stream()
         .filter(alert -> status.equals(alert.alertStatus()))
         .toList();
   }
 
-  private List<Alert> register(List<AlertWithMatches> successAlerts, String batchId) {
+  private List<Alert> register(
+      List<RegisterAlertsCommand.AlertWithMatches> successAlerts, String batchId) {
     var alertsToRegister = mapper.toAlertsToRegister(successAlerts);
     var registeredAlerts = alertRegistrationService.registerAlerts(alertsToRegister);
     return mapper.toAlerts(registeredAlerts, successAlerts, batchId);
   }
 
-  private List<Alert> getFailedAlerts(List<AlertWithMatches> alertsWithMatches, String batchId) {
+  private List<Alert> getFailedAlerts(
+      List<RegisterAlertsCommand.AlertWithMatches> alertsWithMatches, String batchId) {
     var failedAlerts = filterAlertsByStatus(alertsWithMatches, AlertStatus.FAILURE);
     return mapper.toErrorAlerts(failedAlerts, batchId);
   }

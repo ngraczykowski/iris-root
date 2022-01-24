@@ -4,6 +4,7 @@ import lombok.Builder;
 
 public record Batch(String id,
                     String analysisName,
+                    String policyName,
                     Long alertsCount,
                     BatchStatus status,
                     String errorDescription,
@@ -12,13 +13,8 @@ public record Batch(String id,
   @Builder
   public Batch {}
 
-  public static Batch newOne(
-      String id, String analysisName, Long alertsCount, String batchMetadata) {
-    return new Batch(id, analysisName, alertsCount, BatchStatus.STORED, "", batchMetadata);
-  }
-
   public static Batch error(String id, String errorDescription, String batchMetadata) {
-    return new Batch(id, "", 0L, BatchStatus.ERROR, errorDescription, batchMetadata);
+    return new Batch(id, "", "", 0L, BatchStatus.ERROR, errorDescription, batchMetadata);
   }
 
   public enum BatchStatus {

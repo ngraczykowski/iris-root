@@ -3,7 +3,9 @@ package com.silenteight.bridge.core.registration.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.bridge.core.registration.domain.command.GetBatchWithAlertsCommand;
 import com.silenteight.bridge.core.registration.domain.model.BatchId;
+import com.silenteight.bridge.core.registration.domain.model.BatchWithAlerts;
 
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,18 @@ public class RegistrationFacade {
 
   public BatchId register(RegisterBatchCommand registerBatchCommand) {
     return batchService.register(registerBatchCommand);
+  }
+
+  public BatchWithAlerts getBatchWithAlerts(GetBatchWithAlertsCommand command) {
+    var batchIdWithPolicy =
+        batchService.findBatchIdWithPolicyByAnalysisName(command.analysisName());
+    var alerts = alertService.getAlertsAndMatches(batchIdWithPolicy.id());
+
+    return BatchWithAlerts.builder()
+        .batchId(batchIdWithPolicy.id())
+        .policyId(batchIdWithPolicy.policyId())
+        .alerts(alerts)
+        .build();
   }
 
   public void notifyBatchError(NotifyBatchErrorCommand notifyBatchErrorCommand) {

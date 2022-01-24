@@ -1,4 +1,4 @@
-package com.silenteight.bridge.core.recommendation.domain.exceptions;
+package com.silenteight.bridge.core.recommendation.domain.exception;
 
 import java.io.Serial;
 

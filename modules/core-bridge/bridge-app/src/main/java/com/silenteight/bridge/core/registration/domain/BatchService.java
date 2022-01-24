@@ -3,11 +3,8 @@ package com.silenteight.bridge.core.registration.domain;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.bridge.core.registration.domain.model.Batch;
+import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
-import com.silenteight.bridge.core.registration.domain.model.BatchCompleted;
-import com.silenteight.bridge.core.registration.domain.model.BatchError;
-import com.silenteight.bridge.core.registration.domain.model.BatchId;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DefaultModelService;
@@ -40,6 +37,11 @@ class BatchService {
 
   BatchId findBatchId(String analysisName) {
     return batchRepository.findBatchIdByAnalysisName(analysisName)
+        .orElseThrow();
+  }
+
+  BatchIdWithPolicy findBatchIdWithPolicyByAnalysisName(String analysisName) {
+    return batchRepository.findBatchIdWithPolicyByAnalysisName(analysisName)
         .orElseThrow();
   }
 
@@ -109,11 +111,14 @@ class BatchService {
 
     var defaultModel = defaultModelService.getForSolving();
     var analysis = analysisService.create(defaultModel);
-    var batch = Batch.newOne(
-        registerBatchCommand.id(),
-        analysis.name(),
-        registerBatchCommand.alertCount(),
-        registerBatchCommand.batchMetadata());
+    var batch = Batch.builder()
+        .id(registerBatchCommand.id())
+        .analysisName(analysis.name())
+        .policyName(defaultModel.policyName())
+        .alertsCount(registerBatchCommand.alertCount())
+        .batchMetadata(registerBatchCommand.batchMetadata())
+        .status(BatchStatus.STORED)
+        .build();
     return Optional.of(batchRepository.create(batch));
   }
 

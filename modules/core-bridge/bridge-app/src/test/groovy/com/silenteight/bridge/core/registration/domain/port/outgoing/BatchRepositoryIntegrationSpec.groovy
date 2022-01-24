@@ -2,6 +2,7 @@ package com.silenteight.bridge.core.registration.domain.port.outgoing
 
 import com.silenteight.bridge.core.BaseSpecificationIT
 import com.silenteight.bridge.core.registration.domain.model.Batch
+import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -13,18 +14,32 @@ import org.springframework.test.annotation.DirtiesContext
 class BatchRepositoryIntegrationSpec extends BaseSpecificationIT {
 
   @Autowired
-  private BatchRepository batchRepository;
+  private BatchRepository batchRepository
 
-  def "Should save and get batch from database"() {
+  def "should save and get batch from database"() {
     given:
     def batchId = UUID.randomUUID().toString()
+    def analysisName = UUID.randomUUID().toString()
+    def policyName = UUID.randomUUID().toString()
+    def batch = Batch.builder()
+        .id(batchId)
+        .analysisName(analysisName)
+        .policyName(policyName)
+        .alertsCount(123)
+        .batchMetadata("batchMetadata")
+        .status(BatchStatus.STORED)
+        .build()
 
     when:
-    batchRepository.create(Batch.newOne(batchId, UUID.randomUUID().toString(), 123, "batchMetadata"))
+    batchRepository.create(batch)
 
     then:
-    def batch = batchRepository.findById(batchId)
-    batch.isPresent()
-    batch.get().id() == batchId
+    def result = batchRepository.findById(batchId)
+    with(result) {
+      isPresent()
+      with(result.get()) {
+        it == batch
+      }
+    }
   }
 }

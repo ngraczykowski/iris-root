@@ -32,6 +32,23 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
 
   List<AlertIdNameProjection> findByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
 
+  @Query(
+      rowMapperClass = AlertWithMatchNamesProjectionRowMapper.class,
+      value = """
+          SELECT 
+            A.alert_id AS alert_alert_id,
+            A.name AS alert_name, 
+            A.status AS alert_status, 
+            A.metadata AS alert_metadata, 
+            A.error_description AS alert_error_description,
+            M.match_id AS match_match_id,
+            M.name AS match_name
+          FROM ALERTS A
+          JOIN MATCHES M ON m.alert_id = A.id
+          WHERE a.batch_id = :batchId
+          """)
+  List<AlertWithMatchNamesProjection> findAllWithMatchesByBatchId(String batchId);
+
   List<AlertEntity> findAllByBatchId(String batchId);
 
   List<AlertEntity> findAllByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);

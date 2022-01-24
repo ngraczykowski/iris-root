@@ -1,9 +1,7 @@
 package com.silenteight.bridge.core.registration.domain
 
-import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FedMatch
-import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FeedingStatus
-import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertWithMatches
-import com.silenteight.bridge.core.registration.domain.model.BatchId
+import com.silenteight.bridge.core.Fixtures
+import com.silenteight.bridge.core.recommendation.domain.RecommendationFixtures
 
 import spock.lang.Specification
 import spock.lang.Subject
@@ -19,11 +17,11 @@ class RegistrationFacadeSpec extends Specification {
 
   def 'should call register batch method'() {
     given:
-    def batchId = UUID.randomUUID().toString()
-    def registerBatchCommand = new RegisterBatchCommand(batchId, 25, 'batchMetadata')
+    def batchId = Fixtures.BATCH_ID
+    def registerBatchCommand = RegistrationFixtures.REGISTER_BATCH_COMMAND
 
     and:
-    batchService.register(registerBatchCommand) >> new BatchId(batchId)
+    batchService.register(registerBatchCommand) >> RegistrationFixtures.BATCH_ID_PROJECTION
 
     when:
     def batchIdDto = underTest.register(registerBatchCommand)
@@ -34,10 +32,7 @@ class RegistrationFacadeSpec extends Specification {
 
   def 'should call notify batch error method'() {
     given:
-    def batchId = UUID.randomUUID().toString()
-    def errorDescription = 'error occurred'
-    def notifyBatchErrorCommand = new NotifyBatchErrorCommand(
-        batchId, errorDescription, 'batchMetadata')
+    def notifyBatchErrorCommand = RegistrationFixtures.NOTIFY_BATCH_ERROR_COMMAND
 
     when:
     underTest.notifyBatchError(notifyBatchErrorCommand)
@@ -48,10 +43,7 @@ class RegistrationFacadeSpec extends Specification {
 
   def 'should call register alerts and matches method'() {
     given:
-    def registerAlertsCommand = new RegisterAlertsCommand(
-        'batch_id',
-        [AlertWithMatches.builder().build()]
-    )
+    def registerAlertsCommand = RegistrationFixtures.REGISTER_ALERTS_COMMAND
 
     when:
     underTest.registerAlertsAndMatches(registerAlertsCommand)
@@ -62,14 +54,7 @@ class RegistrationFacadeSpec extends Specification {
 
   def 'should call add alerts to analysis'() {
     given:
-    def commands = [
-        AddAlertToAnalysisCommand.builder()
-            .batchId('batchId')
-            .alertId('alertId')
-            .feedingStatus(FeedingStatus.SUCCESS)
-            .fedMatches([new FedMatch('matchId', FeedingStatus.SUCCESS)])
-            .build()
-    ]
+    def commands = [RegistrationFixtures.ADD_ALERT_TO_ANALYSIS_COMMAND]
 
     when:
     underTest.addAlertsToAnalysis(commands)
@@ -80,18 +65,17 @@ class RegistrationFacadeSpec extends Specification {
 
   def 'should complete batch if there is no pending alerts for the given batch'() {
     given:
-    def batch = new BatchId('batchId')
-    def analysisName = 'analysisName'
+    def batch = RegistrationFixtures.BATCH_ID_PROJECTION
     def alertNames = ['firstAlertName', 'secondAlertName']
     def markAlertsAsRecommendedCommand = new MarkAlertsAsRecommendedCommand(
-        analysisName, alertNames)
+        RegistrationFixtures.ANALYSIS_NAME, alertNames)
     def completeBatchCommand = new CompleteBatchCommand(batch.id(), alertNames)
 
     when:
     underTest.markAlertsAsRecommended(markAlertsAsRecommendedCommand)
 
     then:
-    1 * batchService.findBatchId(analysisName) >> batch
+    1 * batchService.findBatchId(RegistrationFixtures.ANALYSIS_NAME) >> batch
     1 * alertService.updateStatusToRecommended(batch.id(), alertNames)
     1 * alertService.hasNoPendingAlerts(batch.id()) >> true
     1 * batchService.completeBatch(completeBatchCommand)
@@ -99,18 +83,17 @@ class RegistrationFacadeSpec extends Specification {
 
   def 'should not complete batch if there are pending alerts for the given batch'() {
     given:
-    def batch = new BatchId('batchId')
-    def analysisName = 'analysisName'
+    def batch = RegistrationFixtures.BATCH_ID_PROJECTION
     def alertNames = ['firstAlertName', 'secondAlertName']
     def markAlertsAsRecommendedCommand = new MarkAlertsAsRecommendedCommand(
-        analysisName, alertNames)
+        RegistrationFixtures.ANALYSIS_NAME, alertNames)
     def completeBatchCommand = new CompleteBatchCommand(batch.id(), alertNames)
 
     when:
     underTest.markAlertsAsRecommended(markAlertsAsRecommendedCommand)
 
     then:
-    1 * batchService.findBatchId(analysisName) >> batch
+    1 * batchService.findBatchId(RegistrationFixtures.ANALYSIS_NAME) >> batch
     1 * alertService.updateStatusToRecommended(batch.id(), alertNames)
     1 * alertService.hasNoPendingAlerts(batch.id()) >> false
     0 * batchService.completeBatch(completeBatchCommand)
@@ -132,9 +115,23 @@ class RegistrationFacadeSpec extends Specification {
     thrown(NoSuchElementException.class)
   }
 
+  def 'should retrieve batch data with alerts by analysis name'(){
+    given:
+    def command = RegistrationFixtures.GET_BATCH_WITH_ALERTS_COMMAND
+
+    when:
+    def result = underTest.getBatchWithAlerts(command)
+
+    then:
+    1 * batchService.findBatchIdWithPolicyByAnalysisName(RegistrationFixtures.ANALYSIS_NAME) >> RegistrationFixtures.BATCH_ID_WITH_POLICY_PROJECTION
+    1 * alertService.getAlertsAndMatches(Fixtures.BATCH_ID) >> RecommendationFixtures.ALERTS
+
+    result == RecommendationFixtures.BATCH_WITH_ALERTS
+  }
+
   def 'should call the markBatchAsDelivered method'() {
     given:
-    def batchId = UUID.randomUUID().toString()
+    def batchId = Fixtures.BATCH_ID
     def markAlertsAsDeliveredCommand = new MarkBatchAsDeliveredCommand(batchId)
 
     when:
