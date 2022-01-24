@@ -35,6 +35,8 @@ class EtlAlertsJobTest extends BaseBatchTest {
   public void testProcessingUnregistered() {
     var transformAlertStep = createStepExecution(ETL_STEP_NAME).get();
     assertThat(transformAlertStep.getReadCount()).isEqualTo(2);
+    assertThat(jdbcTemplate.queryForObject("SELECT count(*) FROM pb_learning_processed_alert",
+        Integer.class)).isEqualTo(2);
   }
 
   @Nonnull

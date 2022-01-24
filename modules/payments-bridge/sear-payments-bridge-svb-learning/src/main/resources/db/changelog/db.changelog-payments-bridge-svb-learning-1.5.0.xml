@@ -131,4 +131,15 @@
   <changeSet id="payments-bridge-svb-learning-1.5.6" author="wkeska">
     <dropColumn tableName="pb_learning_processed_alert" columnName="learning_alert_id"/>
   </changeSet>
+
+  <changeSet id="payments-bridge-svb-learning-1.5.7" author="wkeska">
+    <addColumn tableName="pb_learning_processed_alert">
+      <column name="created_at" type="timestamp"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="payments-bridge-svb-learning-1.5.8" author="wkeska">
+    <addAutoIncrement tableName="pb_learning_processed_alert"
+                      columnName="learning_processed_alert_id"/>
+  </changeSet>
 </databaseChangeLog>
