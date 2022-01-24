@@ -1,4 +1,4 @@
-package com.silenteight.serp.universalbridge;
+package com.silenteight.serp.customerbridge;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,10 +15,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @Configuration
 @Slf4j
 @ComponentScan
-public class UniversalBridgeApplication {
+public class CustomerBridgeApplication {
 
   public static void main(String[] args) {
-    new SerpApplicationTemplate("universal-bridge", args, UniversalBridgeApplication.class)
+    new SerpApplicationTemplate("customer-bridge", args, CustomerBridgeApplication.class)
         .profiles("database", "rabbitmq")
         .contextCallback(new SerpApplicationContextCallback())
         .runAndExit();

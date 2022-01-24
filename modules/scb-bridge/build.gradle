@@ -73,7 +73,7 @@ dependencies {
 
 jar {
   manifest {
-    attributes "Main-Class": "com.silenteight.serp.universalbridge.UniversalBridgeApplication"
+    attributes "Main-Class": "com.silenteight.serp.universalbridge.CustomerBridgeApplication"
   }
 }
 
