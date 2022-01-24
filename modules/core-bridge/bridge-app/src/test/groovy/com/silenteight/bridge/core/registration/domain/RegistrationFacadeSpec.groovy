@@ -131,4 +131,17 @@ class RegistrationFacadeSpec extends Specification {
     0 * batchService.completeBatch(_ as CompleteBatchCommand)
     thrown(NoSuchElementException.class)
   }
+
+  def 'should call the markBatchAsDelivered method'() {
+    given:
+    def batchId = UUID.randomUUID().toString()
+    def markAlertsAsDeliveredCommand = new MarkBatchAsDeliveredCommand(batchId)
+
+    when:
+    underTest.markBatchAsDelivered(markAlertsAsDeliveredCommand)
+
+    then:
+    1 * batchService.markBatchAsDelivered(batchId)
+  }
+
 }

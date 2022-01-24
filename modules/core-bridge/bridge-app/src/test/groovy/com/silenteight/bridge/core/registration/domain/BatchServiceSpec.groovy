@@ -194,4 +194,47 @@ class BatchServiceSpec extends Specification {
     0 * batchStatisticsService.createBatchCompletedStatistics(_ as String, _ as String)
     0 * eventPublisher.publish(_ as BatchCompleted)
   }
+
+  def 'should update batch status as DELIVERED'() {
+    given:
+    def batchId = UUID.randomUUID().toString()
+    def batch = new Batch(batchId, 'analysisName', 1, BatchStatus.COMPLETED, '', 'batchMetadata')
+    and:
+    batchRepository.findById(batchId) >> Optional.of(batch)
+
+    when:
+    underTest.markBatchAsDelivered(batchId)
+
+    then:
+    1 * batchRepository.updateStatusToDelivered(batchId)
+  }
+
+  def 'should not update batch status as DELIVERED when batch status is other than COMPLETED or DELIVERED'() {
+    given:
+    def batchId = UUID.randomUUID().toString()
+    def batch = new Batch(batchId, 'analysisName', 1, BatchStatus.STORED, '', 'batchMetadata')
+    and:
+    batchRepository.findById(batchId) >> Optional.of(batch)
+
+    when:
+    underTest.markBatchAsDelivered(batchId)
+
+    then:
+    0 * batchRepository.updateStatusToDelivered(batchId)
+    thrown(IllegalStateException.class)
+  }
+
+  def 'should not update batch status as DELIVERED when batch not found by batch id'() {
+    given:
+    def batchId = UUID.randomUUID().toString()
+    and:
+    batchRepository.findById(batchId) >> Optional.empty()
+
+    when:
+    underTest.markBatchAsDelivered(batchId)
+
+    then:
+    0 * batchRepository.updateStatusToDelivered(batchId)
+    thrown(NoSuchElementException.class)
+  }
 }

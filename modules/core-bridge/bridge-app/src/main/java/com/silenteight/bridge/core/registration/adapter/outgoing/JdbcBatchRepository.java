@@ -42,6 +42,11 @@ class JdbcBatchRepository implements BatchRepository {
   }
 
   @Override
+  public void updateStatusToDelivered(String batchId) {
+    crudBatchRepository.updateStatusByBatchId(Status.DELIVERED.name(), batchId);
+  }
+
+  @Override
   public Batch create(Batch batch) {
     var batchEntity = BatchEntity.builder()
         .batchId(batch.id())

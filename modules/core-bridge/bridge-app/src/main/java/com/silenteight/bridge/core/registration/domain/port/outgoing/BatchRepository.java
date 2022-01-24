@@ -18,6 +18,8 @@ public interface BatchRepository {
 
   void updateStatusAndErrorDescription(String batchId, BatchStatus status, String errorDescription);
 
+  void updateStatusToDelivered(String batchId);
+
   default void updateStatus(String batchId, BatchStatus status) {
     updateStatusAndErrorDescription(batchId, status, null);
   }

@@ -53,6 +53,12 @@ amqp:
         dead-letter-queue-name: recommendation-received.dlq
         dead-letter-queue-time-to-live-in-milliseconds: 10000
         dead-letter-exchange-name: recommendation-received.dlx
+      recommendation-delivered:
+        exchange-name: recommendation-delivered-exchange
+        queue-name: recommendation-delivered-queue
+        dead-letter-queue-name: recommendation-delivered.dlq
+        dead-letter-queue-time-to-live-in-milliseconds: 10000
+        dead-letter-exchange-name: recommendation-delivered.dlx
   recommendation:
     outgoing:
       recommendation-received:

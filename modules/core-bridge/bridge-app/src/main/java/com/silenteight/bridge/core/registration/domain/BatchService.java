@@ -16,6 +16,7 @@ import com.silenteight.bridge.core.registration.domain.port.outgoing.EventPublis
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -68,6 +69,34 @@ class BatchService {
             () -> log.error(
                 "No batch found for batch id: {}",
                 completeBatchCommand.id()));
+  }
+
+  void markBatchAsDelivered(String batchId) {
+    validateBatchStatus(batchId);
+
+    log.info("Set batch status to DELIVERED with batch id: {}", batchId);
+    batchRepository.updateStatusToDelivered(batchId);
+  }
+
+  private void validateBatchStatus(String batchId) {
+    var batch = findBatch(batchId);
+
+    if (BatchStatus.DELIVERED != batch.status() && BatchStatus.COMPLETED != batch.status()) {
+      var message = String.format("Marking Batch with batchId: %s as %s failed. "
+              + "%s status is invalid, %s or %s expected", batchId, BatchStatus.DELIVERED.name(),
+          batch.status(), BatchStatus.DELIVERED.name(), BatchStatus.COMPLETED.name());
+      log.error(message);
+      throw new IllegalStateException(message);
+    }
+  }
+
+  private Batch findBatch(String batchId) {
+    return batchRepository.findById(batchId)
+        .orElseThrow(() -> {
+          var message = String.format("No batch found for batch id: %s", batchId);
+          log.error(message);
+          return new NoSuchElementException(message);
+        });
   }
 
   private Batch logIfAlreadyExists(Batch batch) {

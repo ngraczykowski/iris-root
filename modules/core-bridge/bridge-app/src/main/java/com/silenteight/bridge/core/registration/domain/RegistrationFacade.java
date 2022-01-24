@@ -40,6 +40,10 @@ public class RegistrationFacade {
     }
   }
 
+  public void markBatchAsDelivered(MarkBatchAsDeliveredCommand markBatchAsDeliveredCommand) {
+    batchService.markBatchAsDelivered(markBatchAsDeliveredCommand.batchId());
+  }
+
   public void registerAlertsAndMatches(RegisterAlertsCommand registerAlertsCommand) {
     alertService.registerAlertsAndMatches(registerAlertsCommand);
   }
