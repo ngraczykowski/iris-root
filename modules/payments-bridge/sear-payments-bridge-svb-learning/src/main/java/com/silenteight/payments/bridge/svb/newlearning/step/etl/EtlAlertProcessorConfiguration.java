@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.FILE_NAME_PARAMETER;
+
 @Configuration
 @RequiredArgsConstructor
 class EtlAlertProcessorConfiguration {
@@ -22,8 +24,10 @@ class EtlAlertProcessorConfiguration {
   @StepScope
   EtlAlertProcessor registerAlertProcessor(
       @Value("#{stepExecution}") StepExecution stepExecution) {
+    var fileName =
+        stepExecution.getJobParameters().getString(FILE_NAME_PARAMETER);
     return new EtlAlertProcessor(
         findRegisteredAlertUseCase, processRegisteredService, processUnregisteredService,
-        stepExecution.getJobExecutionId());
+        stepExecution.getJobExecutionId(), fileName);
   }
 }

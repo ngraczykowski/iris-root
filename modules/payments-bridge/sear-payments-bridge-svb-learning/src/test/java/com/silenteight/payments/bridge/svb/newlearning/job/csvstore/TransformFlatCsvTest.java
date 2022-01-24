@@ -14,7 +14,6 @@ import com.silenteight.payments.bridge.testing.BaseBatchTest;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -93,9 +92,8 @@ class TransformFlatCsvTest extends BaseBatchTest {
 
   @Nonnull
   private Optional<StepExecution> createStepExecution(String stepName) {
-    var jobParameters = new JobParametersBuilder()
-        .addLong("fileId", 1L)
-        .toJobParameters();
+    var jobParameters =
+        StoreStepFixture.toParams("analystdecison-2-hits.csv", "bucket");
     var jobExecution = jobLauncherTestUtils.launchStep(stepName, jobParameters);
     Assertions.assertThat("COMPLETED").isEqualTo(jobExecution.getExitStatus().getExitCode());
     var stepExecution = jobExecution

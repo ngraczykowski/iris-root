@@ -34,6 +34,8 @@ class EtlAlertStepConfiguration {
   private final StepBuilderFactory stepBuilderFactory;
   private final EtlJobProperties properties;
   private final AlertCompositeReaderFactory alertCompositeReaderFactory;
+  private final EtlAlertProcessor etlAlertProcessor;
+  private final EtlAlertWriter etlAlertWriter;
 
   @Bean
   @StepScope
@@ -49,9 +51,10 @@ class EtlAlertStepConfiguration {
     return stepBuilderFactory
         .get(ETL_STEP_NAME)
         .listener(new JobParameterExecutionContextCopyListener())
-        .chunk(properties.getChunkSize())
+        .<AlertComposite, LearningProcessedAlert>chunk(properties.getChunkSize())
         .reader(compositeAlertReader)
-        .writer(item -> log.debug("writing item: {}", item))
+        .processor(etlAlertProcessor)
+        .writer(etlAlertWriter)
         .build();
   }
 }

@@ -5,6 +5,7 @@ import com.silenteight.payments.bridge.testing.BaseBatchTest;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -27,7 +28,6 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
     "com.silenteight.payments.bridge.svb.newlearning.config" })
 class EtlAlertsJobTest extends BaseBatchTest {
 
-
   @Test
   @Sql(scripts = "EtlAlertsJobTest.sql")
   @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
@@ -39,7 +39,10 @@ class EtlAlertsJobTest extends BaseBatchTest {
 
   @Nonnull
   private Optional<StepExecution> createStepExecution(String stepName) {
-    var jobExecution = jobLauncherTestUtils.launchStep(stepName);
+    var jobParameters = new JobParametersBuilder()
+        .addString("file-name", "fileName")
+        .toJobParameters();
+    var jobExecution = jobLauncherTestUtils.launchStep(stepName, jobParameters);
     Assertions.assertThat("COMPLETED").isEqualTo(jobExecution.getExitStatus().getExitCode());
     var stepExecution = jobExecution
         .getStepExecutions()
