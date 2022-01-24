@@ -57,9 +57,6 @@ test:
       simulation-indexing-test-client-outbound:
         exchange-name: testapp.command
         routing-key: command.index-request.simulation
-      personal-information-expired-indexing-test-client-outbound:
-        exchange-name: testapp.command
-        routing-key: retention.personal-information-expired
       analysis-expired-indexing-test-client-outbound:
         exchange-name: testapp.command
         routing-key: command.analysis-expired

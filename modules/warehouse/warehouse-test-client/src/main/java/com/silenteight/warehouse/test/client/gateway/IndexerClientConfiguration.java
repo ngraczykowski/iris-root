@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.ExchangeBuilder;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,8 +24,6 @@ public class IndexerClientConfiguration {
       "productionIndexingOutboundChannel";
   public static final String SIMULATION_INDEXING_OUTBOUND_CHANNEL =
       "simulationIndexingOutboundChannel";
-  public static final String PII_EXPIRED_INDEXING_OUTBOUND_CHANNEL =
-      "personalInformationExpiredIndexingOutboundChannel";
   public static final String QA_INDEXING_OUTBOUND_CHANNEL =
       "qaIndexingOutboundChannel";
   public static final String ANALYSIS_EXPIRED_INDEXING_OUTBOUND_CHANNEL =
@@ -56,15 +56,6 @@ public class IndexerClientConfiguration {
         new GatewayProxyFactoryBean(SimulationIndexClientGateway.class);
     factoryBean.setDefaultRequestChannel(new DirectChannel());
     factoryBean.setDefaultRequestChannelName(SIMULATION_INDEXING_OUTBOUND_CHANNEL);
-    return factoryBean;
-  }
-
-  @Bean
-  GatewayProxyFactoryBean personalInformationExpiredClientGateway() {
-    GatewayProxyFactoryBean factoryBean =
-        new GatewayProxyFactoryBean(PersonalInformationExpiredClientGateway.class);
-    factoryBean.setDefaultRequestChannel(new DirectChannel());
-    factoryBean.setDefaultRequestChannelName(PII_EXPIRED_INDEXING_OUTBOUND_CHANNEL);
     return factoryBean;
   }
 
@@ -112,7 +103,7 @@ public class IndexerClientConfiguration {
   @Bean
   DirectExchange retentionCommandExchange() {
     return ExchangeBuilder
-        .directExchange(properties.getPersonalInformationExpiredIndexingTestClientOutbound()
+        .directExchange(properties.getAnalysisExpiredIndexingTestClientOutbound()
             .getExchangeName())
         .build();
   }
@@ -138,14 +129,6 @@ public class IndexerClientConfiguration {
         SIMULATION_INDEXING_OUTBOUND_CHANNEL,
         properties.getSimulationIndexingTestClientOutbound().getExchangeName(),
         properties.getSimulationIndexingTestClientOutbound().getRoutingKey());
-  }
-
-  @Bean
-  IntegrationFlow piiDataExpiredChannelToExchangeIntegrationFlow() {
-    return createOutputFlow(
-        PII_EXPIRED_INDEXING_OUTBOUND_CHANNEL,
-        properties.getPersonalInformationExpiredIndexingTestClientOutbound().getExchangeName(),
-        properties.getPersonalInformationExpiredIndexingTestClientOutbound().getRoutingKey());
   }
 
   @Bean

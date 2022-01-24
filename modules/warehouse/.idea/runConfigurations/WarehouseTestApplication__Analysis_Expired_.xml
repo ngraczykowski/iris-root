@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="WarehouseTestApplication (PII Expired)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+  <configuration default="false" name="WarehouseTestApplication (Analysis Expired)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="warehouse.warehouse-test-app.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.silenteight.warehouse.test.app.WarehouseTestApplication" />
     <option name="ACTIVE_PROFILES" value="local" />
@@ -7,7 +7,7 @@
     <option name="SHORTEN_COMMAND_LINE" value="NONE" />
     <envs>
       <env name="server.port" value="24901" />
-      <env name="test.flows.pii-expired.enabled" value="true" />
+      <env name="test.flows.analysis-expired.enabled" value="true" />
     </envs>
     <method v="2">
       <option name="Make" enabled="true" />
