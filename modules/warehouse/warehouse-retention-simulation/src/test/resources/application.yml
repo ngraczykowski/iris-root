@@ -13,6 +13,11 @@ warehouse:
   alert-mapping:
     country-source-key: lob_country
   match-mapping:
+  persistence:
+    alert:
+      labels:
+        - "alertAnalystDecision"
+      recommendation-date-field: "recommendationDate"
   messaging:
     broker:
       alert-backup-indexing:
@@ -84,9 +89,6 @@ test:
       simulation-indexing-test-client-outbound:
         exchange-name: testapp.command
         routing-key: command.index-request.simulation
-      personal-information-expired-indexing-test-client-outbound:
-        exchange-name: testapp.command
-        routing-key: retention.personal-information-expired
       analysis-expired-indexing-test-client-outbound:
         exchange-name: testapp.command
         routing-key: command.analysis-expired

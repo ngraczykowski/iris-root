@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.retention.simulation;
+package com.silenteight.warehouse.retention.simulation.listener;
 
 import lombok.Data;
 
@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @Validated
 @ConfigurationProperties(prefix = "warehouse.indexer")
 @ConstructorBinding
-public class RetentionSimulationIntegrationProperties {
+class RetentionSimulationIntegrationProperties {
 
   @Valid
   @NestedConfigurationProperty

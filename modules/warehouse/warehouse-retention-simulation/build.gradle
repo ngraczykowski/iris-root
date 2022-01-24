@@ -16,10 +16,11 @@ configurations {
 
 dependencies {
   implementation project(":warehouse-common")
-  implementation project(":warehouse-indexer")
+  implementation project(":warehouse-simulation")
 
   implementation libraries.silenteight_commons_core
   implementation libraries.silenteight_data_retention_api
+  implementation libraries.silenteight_data_api
   implementation libraries.jakarta_validation_api
   implementation libraries.silenteight_sep_base_common
   implementation libraries.protobuf_java_util
@@ -29,7 +30,6 @@ dependencies {
 
   testImplementation project(":warehouse-common-testing")
   testImplementation project(":warehouse-test-client")
-  testImplementation testFixtures(project(':warehouse-indexer'))
 
   testImplementation libraries.awaitility
 }

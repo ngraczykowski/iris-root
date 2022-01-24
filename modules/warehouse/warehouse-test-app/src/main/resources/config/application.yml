@@ -144,9 +144,6 @@ test:
       simulation-indexing-test-client-outbound:
         exchange-name: sim.command
         routing-key: command.index-request.simulation
-      personal-information-expired-indexing-test-client-outbound:
-        exchange-name: bridge.retention
-        routing-key: retention.personal-information-expired
       analysis-expired-indexing-test-client-outbound:
         exchange-name: sim.command
         routing-key: command.analysis-expired
@@ -173,11 +170,13 @@ test:
       alert-count-in-analysis: 1000
       data-source: classpath:data/simulation.csv
 
-    pii-expired:
+    analysis-expired:
       enabled: false
+      alert-count-in-analysis: 100
 
     alerts-expired:
       enabled: false
+      alert-count: 1000
 
     qa:
       enabled: false
