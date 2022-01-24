@@ -1,15 +1,14 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process;
 
-import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceBlockingStub;
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.datasource.api.bankidentificationcodes.v1.BankIdentificationCodesFeatureInput;
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
+import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import com.google.protobuf.Any;
 
-import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -19,9 +18,8 @@ class IdentificationMismatchAgentEtlProcess
 
   private static final String BANK_IDENTIFICATION_CODES_FEATURE = "bankIdentificationCodes";
 
-  IdentificationMismatchAgentEtlProcess(
-      AgentInputServiceBlockingStub blockingStub, Duration timeout) {
-    super(blockingStub, timeout);
+  IdentificationMismatchAgentEtlProcess(CreateAgentInputsClient createAgentInputsClient) {
+    super(createAgentInputsClient);
   }
 
   @Override

@@ -1,13 +1,12 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process;
 
-import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceBlockingStub;
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.datasource.api.name.v1.NameFeatureInput;
 import com.silenteight.payments.bridge.agents.model.NameAgentRequest;
 import com.silenteight.payments.bridge.agents.port.CreateNameFeatureInputUseCase;
+import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
-import java.time.Duration;
 import java.util.List;
 
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
@@ -19,9 +18,9 @@ class NameMatchedTextAgentEtlProcess extends BaseAgentEtlProcess<NameFeatureInpu
   private final CreateNameFeatureInputUseCase createNameFeatureInputUseCase;
 
   NameMatchedTextAgentEtlProcess(
-      AgentInputServiceBlockingStub blockingStub, Duration timeout,
+      CreateAgentInputsClient createAgentInputsClient,
       CreateNameFeatureInputUseCase createNameFeatureInputUseCase) {
-    super(blockingStub, timeout);
+    super(createAgentInputsClient);
     this.createNameFeatureInputUseCase = createNameFeatureInputUseCase;
   }
 

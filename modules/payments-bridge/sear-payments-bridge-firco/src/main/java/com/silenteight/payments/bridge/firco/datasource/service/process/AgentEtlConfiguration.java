@@ -1,79 +1,48 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
-import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc;
-import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceBlockingStub;
 import com.silenteight.payments.bridge.agents.port.CreateNameFeatureInputUseCase;
 import com.silenteight.payments.bridge.agents.port.HistoricalRiskAssessmentFeatureUseCase;
+import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
 
-import io.grpc.Channel;
-import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
-import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @Configuration
-@EnableConfigurationProperties(AgentEtlProperties.class)
 class AgentEtlConfiguration {
 
-  @Valid
-  private final AgentEtlProperties properties;
-
-  @Setter(onMethod_ = @GrpcClient("datasource"))
-  private Channel dataSourceChannel;
-
+  private final CreateAgentInputsClient createAgentInputsClient;
+  
   @Bean
   NameAgentEtlProcess nameAgentEtlProcess(
       CreateNameFeatureInputUseCase createNameFeatureInputUseCase) {
-    var stub = AgentInputServiceGrpc
-        .newBlockingStub(dataSourceChannel)
-        .withWaitForReady();
-
-    return new NameAgentEtlProcess(stub, properties.getTimeout(), createNameFeatureInputUseCase);
+    return new NameAgentEtlProcess(createAgentInputsClient, createNameFeatureInputUseCase);
   }
 
   @Bean
   GeoAgentEtlProcess geoAgentEtlProcess() {
-    var stub = AgentInputServiceGrpc
-        .newBlockingStub(dataSourceChannel)
-        .withWaitForReady();
-
-    return new GeoAgentEtlProcess(stub, properties.getTimeout());
+    return new GeoAgentEtlProcess(createAgentInputsClient);
   }
 
   @Bean
   OrganizationNameAgentEtlProcess organizationNameAgentEtlProcess() {
-    var stub = AgentInputServiceGrpc
-        .newBlockingStub(dataSourceChannel)
-        .withWaitForReady();
-
-    return new OrganizationNameAgentEtlProcess(stub, properties.getTimeout());
+    return new OrganizationNameAgentEtlProcess(createAgentInputsClient);
   }
 
   @Bean
   IdentificationMismatchAgentEtlProcess identificationMismatchAgentEtlProcess() {
-    var stub = AgentInputServiceGrpc
-        .newBlockingStub(dataSourceChannel)
-        .withWaitForReady();
-
-    return new IdentificationMismatchAgentEtlProcess(stub, properties.getTimeout());
+    return new IdentificationMismatchAgentEtlProcess(createAgentInputsClient);
   }
 
   @Bean
   NameMatchedTextAgentEtlProcess nameMatchedTextAgentEtlProcess(
       CreateNameFeatureInputUseCase createNameFeatureInputUseCase) {
-    var stub = AgentInputServiceGrpc
-        .newBlockingStub(dataSourceChannel)
-        .withWaitForReady();
-
     return new NameMatchedTextAgentEtlProcess(
-        stub, properties.getTimeout(), createNameFeatureInputUseCase);
+        createAgentInputsClient, createNameFeatureInputUseCase);
   }
 
   @Bean
@@ -81,17 +50,9 @@ class AgentEtlConfiguration {
       HistoricalRiskCustomerNameFeature historicalRiskCustomerNameFeature,
       HistoricalRiskAccountNumberFeature historicalRiskAccountNumberFeature,
       HistoricalRiskAssessmentFeatureUseCase historicalRiskAssessmentFeatureAgent) {
-    var stub = getStub();
-
     return new HistoricalRiskAssessmentAgentEtlProcess(
-        stub, properties.getTimeout(),
+        createAgentInputsClient,
         List.of(historicalRiskCustomerNameFeature, historicalRiskAccountNumberFeature),
         historicalRiskAssessmentFeatureAgent);
-  }
-
-  private AgentInputServiceBlockingStub getStub() {
-    return AgentInputServiceGrpc
-        .newBlockingStub(dataSourceChannel)
-        .withWaitForReady();
   }
 }

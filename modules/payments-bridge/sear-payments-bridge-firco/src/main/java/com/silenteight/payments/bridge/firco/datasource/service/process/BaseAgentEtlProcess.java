@@ -3,21 +3,18 @@ package com.silenteight.payments.bridge.firco.datasource.service.process;
 import lombok.AllArgsConstructor;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInput;
-import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceBlockingStub;
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.payments.bridge.common.model.AeAlert;
+import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
 import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import com.google.protobuf.Message;
-import io.grpc.Deadline;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.silenteight.payments.bridge.firco.datasource.util.HitDataUtils.filterHitsData;
@@ -27,8 +24,7 @@ abstract class BaseAgentEtlProcess<T extends Message> implements EtlProcess {
 
   private static final String FEATURE_PREFIX = "features/";
 
-  private AgentInputServiceBlockingStub blockingStub;
-  private Duration timeout;
+  private CreateAgentInputsClient createAgentInputsClient;
 
   @Override
   public void extractAndLoad(AeAlert alert, AlertEtlResponse alertEtlResponse) {
@@ -48,7 +44,6 @@ abstract class BaseAgentEtlProcess<T extends Message> implements EtlProcess {
 
   private void callAgentService(
       String alertName, String matchName, HitData hitData) {
-    var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 
     var dataSourceFeatureInputs = createDataSourceFeatureInputs(hitData);
 
@@ -63,9 +58,7 @@ abstract class BaseAgentEtlProcess<T extends Message> implements EtlProcess {
     var batchInputRequest =
         createBatchInputRequest(agentInputs);
 
-    var batchCreateAgentInputsResponse = blockingStub
-        .withDeadline(deadline)
-        .batchCreateAgentInputs(batchInputRequest);
+    createAgentInputsClient.createAgentInputs(batchInputRequest);
   }
 
   private static BatchCreateAgentInputsRequest createBatchInputRequest(

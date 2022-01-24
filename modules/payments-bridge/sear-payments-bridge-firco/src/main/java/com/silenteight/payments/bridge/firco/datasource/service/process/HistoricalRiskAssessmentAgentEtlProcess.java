@@ -1,14 +1,13 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process;
 
-import com.silenteight.datasource.agentinput.api.v1.AgentInputServiceGrpc.AgentInputServiceBlockingStub;
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.datasource.api.historicaldecisions.v2.HistoricalDecisionsFeatureInput;
 import com.silenteight.payments.bridge.agents.model.HistoricalRiskAssessmentAgentFeatureRequest;
 import com.silenteight.payments.bridge.agents.port.HistoricalRiskAssessmentFeatureUseCase;
 import com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils;
+import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
-import java.time.Duration;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -20,10 +19,10 @@ class HistoricalRiskAssessmentAgentEtlProcess
   private final HistoricalRiskAssessmentFeatureUseCase historicalRiskAssessmentFeatureAgent;
 
   HistoricalRiskAssessmentAgentEtlProcess(
-      AgentInputServiceBlockingStub blockingStub, Duration timeout,
+      CreateAgentInputsClient createAgentInputsClient,
       List<HistoricalRiskAssessmentFeature> features,
       HistoricalRiskAssessmentFeatureUseCase historicalRiskAssessmentFeatureAgent) {
-    super(blockingStub, timeout);
+    super(createAgentInputsClient);
     this.features = features;
     this.historicalRiskAssessmentFeatureAgent = historicalRiskAssessmentFeatureAgent;
   }

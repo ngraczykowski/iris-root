@@ -1,5 +1,6 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process;
 
+import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.model.AeAlert;
 import com.silenteight.payments.bridge.firco.datasource.model.CategoryValueExtractModel;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
@@ -86,13 +87,17 @@ public class EtlProcessFixture {
   private static HitAndWatchlistPartyData createHitAndWlPartyData(String id) {
     return HitAndWatchlistPartyData
         .builder()
+        .solutionType(SolutionType.SEARCH_CODE)
         .id(id)
         .tag(id)
         .name("WP_name_" + id)
         .watchlistType(COMPANY)
+        .matchingText("matchingText")
         .allMatchingTexts(of("matchingText_" + id))
+        .fieldValue("fieldValue")
         .allMatchingFieldValues(of("matchingFieldValue_" + id))
         .countries(of("country_" + id))
+        .searchCodes(List.of("searchCodeOne", "searchCodeTwo"))
         .build();
   }
 }
