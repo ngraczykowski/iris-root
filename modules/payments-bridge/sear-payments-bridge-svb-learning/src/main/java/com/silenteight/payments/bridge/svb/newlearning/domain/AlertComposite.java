@@ -7,6 +7,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlert
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterMatchResponse;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAlert;
+import com.silenteight.payments.bridge.data.retention.model.AlertDataRetention;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.etl.processing.model.MessageTag;
 import com.silenteight.payments.bridge.svb.oldetl.service.AlertParserService;
@@ -151,6 +152,11 @@ public class AlertComposite {
         }).collect(toList());
   }
 
+  public AlertDataRetention alertDataRetention(RegisterAlertResponse registeredAlert) {
+    return new AlertDataRetention(
+        registeredAlert.getAlertName(),
+        alertDetails.getFkcoDFilteredDateTime());
+  }
 
   private RegisteredMatch getRegisteredMatch(RegisterMatchResponse match) {
     var hit = hits.stream().filter(h -> h.getMatchId().equals(match.getMatchId())).findFirst();

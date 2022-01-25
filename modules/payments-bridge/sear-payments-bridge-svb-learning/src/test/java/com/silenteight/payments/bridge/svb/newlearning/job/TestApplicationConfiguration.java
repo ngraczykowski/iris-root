@@ -6,6 +6,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredA
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.agents.port.*;
 import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
+import com.silenteight.payments.bridge.data.retention.port.CreateAlertDataRetentionUseCase;
 import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
 import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
 import com.silenteight.payments.bridge.svb.learning.engine.HistoricalDecisionLearningEnginePort;
@@ -91,6 +92,13 @@ public class TestApplicationConfiguration {
   @Bean
   HistoricalDecisionLearningEnginePort historicalDecisionLearningEnginePort() {
     return new HistoricalDecisionLearningEngineMock();
+  }
+
+  @Bean
+  CreateAlertDataRetentionUseCase createAlertDataRetentionUseCase() {
+    return alerts -> {
+
+    };
   }
 
   @Bean
