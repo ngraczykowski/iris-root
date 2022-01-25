@@ -14,7 +14,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
     JdbcLearningDataAccess.class,
     RemoveDuplicatedAlertsQuery.class,
     RemoveDuplicatedHitsQuery.class,
-    RemoveDuplicatedActionsQuery.class
+    RemoveDuplicatedActionsQuery.class,
+    SelectProcessedAlertsStatusQuery.class
 })
 class JdbcLearningDataAccessIT extends BaseJdbcTest {
 
@@ -45,5 +46,12 @@ class JdbcLearningDataAccessIT extends BaseJdbcTest {
     var alertsCount = jdbcTemplate.queryForObject(
         "SELECT count(*) FROM pb_learning_action WHERE fkco_messages = 1", Integer.class);
     assertThat(alertsCount).isEqualTo(1);
+  }
+
+  @Test
+  void shouldSelectAlertProcessingResult() {
+    var result = dataAccess.select(1, "fileName");
+    assertThat(result.getFailedAlerts()).isEqualTo(1);
+    assertThat(result.getSuccessfulAlerts()).isEqualTo(2);
   }
 }
