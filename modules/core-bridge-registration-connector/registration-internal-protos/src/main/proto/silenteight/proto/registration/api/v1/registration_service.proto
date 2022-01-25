@@ -78,7 +78,7 @@ message RegisterAlertsAndMatchesResponse {
 message RegisteredAlertWithMatches {
   string alert_id = 1 [(google.api.field_behavior) = REQUIRED];
   string alert_name = 2 [(google.api.field_behavior) = REQUIRED];
-  string alert_status = 3 [(google.api.field_behavior) = REQUIRED];
+  AlertStatus alert_status = 3 [(google.api.field_behavior) = REQUIRED];
   repeated RegisteredMatch registered_matches = 4 [(google.api.field_behavior) = REQUIRED];
 }
 

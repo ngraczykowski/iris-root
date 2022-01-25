@@ -14,7 +14,7 @@ public class RegisteredAlertWithMatchesOut {
 
   String alertId;
   String alertName;
-  String alertStatus;
+  AlertStatusOut alertStatus;
 
   @Builder.Default
   List<RegisteredMatchOut> registeredMatches = List.of();
@@ -23,7 +23,7 @@ public class RegisteredAlertWithMatchesOut {
     return RegisteredAlertWithMatchesOut.builder()
         .alertId(input.getAlertId())
         .alertName(input.getAlertName())
-        .alertStatus(input.getAlertStatus())
+        .alertStatus(AlertStatusOut.valueOf(input.getAlertStatus().name()))
         .registeredMatches(input.getRegisteredMatchesList().stream()
             .map(RegisteredMatchOut::createFrom)
             .collect(Collectors.toList()))
