@@ -3,6 +3,7 @@ syntax = "proto3";
 package silenteight.data.api.v2;
 
 import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
 
 option java_package = "com.silenteight.data.api.v2";
 option java_outer_classname = "QaDataProto";
@@ -17,17 +18,19 @@ message QaDataIndexRequest {
 }
 
 message QaAlert {
-  //Name of the alert. This field should be unique across the whole system.
+  // Name of the alert. This field should be unique across the whole system.
   string name = 1 [(google.api.field_behavior) = REQUIRED];
-  //Level of decision in QA process for alert. Set in governance
+  // Level of decision in QA process for alert. Set in governance
   int32 level = 2 [(google.api.field_behavior) = REQUIRED];
-  //State of decision in QA process for alert. Set in governance
+  // State of decision in QA process for alert. Set in governance
   enum State {
     NEW = 0;
     PASSED = 1;
     FAILED = 2;
   }
   State state = 3 [(google.api.field_behavior) = REQUIRED];
-  //Decision comment for alert in QA process. Set in governance
+  // Decision comment for alert in QA process. Set in governance
   string comment = 4 [(google.api.field_behavior) = OPTIONAL];
+  // Timestamp that represents point in time when the state change occurred
+  google.protobuf.Timestamp timestamp = 5 [(google.api.field_behavior) = OPTIONAL];
 }
