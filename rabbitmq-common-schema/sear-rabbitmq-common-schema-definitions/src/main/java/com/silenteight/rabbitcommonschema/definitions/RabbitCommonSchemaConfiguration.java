@@ -28,7 +28,8 @@ public class RabbitCommonSchemaConfiguration {
       topicExchange(GOV_EVENT_EXCHANGE).durable(true).internal().build(),
       directExchange(SIM_COMMAND_EXCHANGE).durable(true).build(),
       topicExchange(WH_EVENT_EXCHANGE).durable(true).build(),
-      topicExchange(GOV_QA_EXCHANGE).durable(true).build()
+      topicExchange(GOV_QA_EXCHANGE).durable(true).build(),
+      topicExchange(GOV_EVENTS_EXCHANGE).durable(true).build()
   };
 
   @Bean
