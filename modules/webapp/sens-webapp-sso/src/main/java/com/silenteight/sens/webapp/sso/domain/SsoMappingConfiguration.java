@@ -13,4 +13,9 @@ class SsoMappingConfiguration {
       IdentityProviderRoleMapper identityProviderRoleMapper) {
     return new SsoMappingService(identityProviderRoleMapper);
   }
+
+  @Bean
+  SsoMappingsDetailsQuery ssoMappingQuery(IdentityProviderRoleMapper identityProviderRoleMapper) {
+    return new SsoMappingsDetailsQuery(identityProviderRoleMapper);
+  }
 }

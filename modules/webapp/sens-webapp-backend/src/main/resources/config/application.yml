@@ -283,6 +283,7 @@ sep.auth:
     MANAGE_SSO_MAPPING:
       - "LIST_IDENTITY_PROVIDERS"
       - "DELETE_SSO_MAPPING"
+      - "LIST_SSO_MAPPINGS"
   rolePermissionsMappings:
     APPROVER:
       - "DOWNLOAD_SOLVING_REPORTS"
