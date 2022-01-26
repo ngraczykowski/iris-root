@@ -23,6 +23,7 @@ ext {
   keycloakVersion = "15.0.2"
   testContainerKeycloakVersion = "1.9.0"
   testContainerJupiterVersion = "1.16.2"
+  jacksonDataTypeJsr310Version = "2.11.4"
 }
 
 repositories {
@@ -46,6 +47,7 @@ libraries.streamex = [group: "one.util", name: "streamex", version: "0.7.2"]
 
 libraries.test_container_keycloak = [group: 'com.github.dasniko', name: 'testcontainers-keycloak', version: testContainerKeycloakVersion]
 libraries.test_container_jupiter =  [group: 'org.testcontainers', name: 'junit-jupiter', version: testContainerJupiterVersion]
+libraries.jackson_datatype_jsr310 = [group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jacksonDataTypeJsr310Version]
 
 dependencies {
   api(libraries.silenteight_sep_base_common) {
@@ -63,6 +65,7 @@ dependencies {
   implementation libraries.keycloak_admin_client
   implementation libraries.caffeine
   implementation libraries.streamex
+  implementation libraries.jackson_datatype_jsr310
   testImplementation libraries.test_container_keycloak
 
   testImplementation(libraries.silenteight_sep_base_testing) {

@@ -39,7 +39,7 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
   private final IdentityProvidersResource identityProvidersResource;
 
   @NonNull
-  private ObjectMapper objectMapper;
+  private ObjectMapper sepUserManagementKeycloakObjectMapper;
 
   @Override
   public List<RoleMappingDto> listDefaultIdpMappings() {
@@ -169,7 +169,7 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
 
   private String attrsToString(Set<SsoAttributeDto> ssoAttributes) {
     try {
-      return objectMapper.writeValueAsString(ssoAttributes);
+      return sepUserManagementKeycloakObjectMapper.writeValueAsString(ssoAttributes);
     } catch (JsonProcessingException e) {
       log.error("Could not convert saml SSO attributes to keycloak representation.", e);
       return "[]";
@@ -178,7 +178,8 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
 
   private Set<SsoAttributeDto> attrsFromString(String attributes) {
     try {
-      return objectMapper.readValue(attributes, new TypeReference<Set<SsoAttributeDto>>(){});
+      return sepUserManagementKeycloakObjectMapper
+          .readValue(attributes, new TypeReference<Set<SsoAttributeDto>>(){});
     } catch (JsonProcessingException e) {
       log.error("Could not convert keycloak SSO attributes to SsoAttribute collection.", e);
       return emptySet();

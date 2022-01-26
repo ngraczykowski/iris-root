@@ -4,6 +4,7 @@ import com.silenteight.sep.usermanagement.api.IdentityProviderRepository;
 import com.silenteight.sep.usermanagement.keycloak.query.IdentityProviderQuery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.*;
@@ -68,7 +69,7 @@ public class KeycloakConfiguration {
   }
 
   @Bean
-  ObjectMapper objectMapper() {
-    return new ObjectMapper();
+  ObjectMapper sepUserManagementKeycloakObjectMapper() {
+    return new ObjectMapper().registerModule(new JavaTimeModule());
   }
 }
