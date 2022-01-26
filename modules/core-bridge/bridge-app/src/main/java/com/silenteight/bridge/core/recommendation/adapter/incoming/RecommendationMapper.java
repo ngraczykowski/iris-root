@@ -5,7 +5,6 @@ import lombok.experimental.UtilityClass;
 import com.silenteight.adjudication.api.library.v1.util.TimeStampUtil;
 import com.silenteight.bridge.core.recommendation.domain.model.MatchMetadata;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata;
-import com.silenteight.bridge.core.registration.domain.model.Alert.Status;
 import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
 import com.silenteight.bridge.core.registration.domain.model.BatchWithAlerts;
 import com.silenteight.proto.recommendation.api.v1.Alert;
@@ -23,6 +22,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static com.silenteight.bridge.core.registration.domain.model.AlertStatus.ERROR;
+import static com.silenteight.bridge.core.registration.domain.model.AlertStatus.RECOMMENDED;
 
 @UtilityClass
 class RecommendationMapper {
@@ -90,9 +92,9 @@ class RecommendationMapper {
   }
 
   private AlertStatus toStatus(AlertWithMatches alert) {
-    if (Status.RECOMMENDED == alert.status()) {
+    if (RECOMMENDED == alert.status()) {
       return AlertStatus.SUCCESS;
-    } else if (Status.ERROR == alert.status()) {
+    } else if (ERROR == alert.status()) {
       return AlertStatus.FAILURE;
     }
     throw new IllegalStateException("Alert status should be ERROR/RECOMMENDED at this point");

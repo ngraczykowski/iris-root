@@ -2,7 +2,7 @@ package com.silenteight.bridge.core.registration.domain.port.outgoing
 
 import com.silenteight.bridge.core.BaseSpecificationIT
 import com.silenteight.bridge.core.registration.domain.model.Alert
-import com.silenteight.bridge.core.registration.domain.model.Alert.Status
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus
 import com.silenteight.bridge.core.registration.domain.model.Match
 
 import org.springframework.beans.factory.annotation.Autowired
@@ -58,7 +58,7 @@ class MatchRepositoryIntegrationSpec extends BaseSpecificationIT {
   private static def dummyAlert(String batchId, String alertId) {
     Alert.builder()
         .name("{$alertId}_name")
-        .status(Status.REGISTERED)
+        .status(AlertStatus.REGISTERED)
         .alertId(alertId)
         .batchId(batchId)
         .matches(

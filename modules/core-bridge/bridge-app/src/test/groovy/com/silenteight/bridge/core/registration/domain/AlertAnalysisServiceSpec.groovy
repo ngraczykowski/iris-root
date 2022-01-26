@@ -4,6 +4,7 @@ import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand
 import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FeedingStatus
 import com.silenteight.bridge.core.registration.domain.model.Alert
 import com.silenteight.bridge.core.registration.domain.model.AlertName
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus
 import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.model.Match
@@ -71,7 +72,7 @@ class AlertAnalysisServiceSpec extends Specification {
     1 * analysisService.addAlertsToAnalysis(batch.analysisName(), [succeededAlert.name()], _)
     with(alertRepository) {
       1 * updateStatusByBatchIdAndAlertIdIn(
-          Alert.Status.PROCESSING, batch.id(), [succeededAlert.alertId()])
+          AlertStatus.PROCESSING, batch.id(), [succeededAlert.alertId()])
       1 * updateStatusToError(batch.id(), [failedAlert.alertId()])
       1 * findAllAlertNamesByBatchIdAndAlertIdIn(batch.id(), [succeededAlert.alertId()]) >>
           [new AlertName(succeededAlert.name())]

@@ -1,6 +1,7 @@
 package com.silenteight.bridge.core.registration.adapter.outgoing
 
 import com.silenteight.bridge.core.registration.domain.model.Alert
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus
 import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches
 import com.silenteight.bridge.core.registration.domain.model.Match
 import com.silenteight.bridge.core.registration.domain.model.Match.Status
@@ -26,7 +27,7 @@ class JdbcAlertMapperSpec extends Specification {
 
     def alertIn = Alert.builder()
         .name('alertName')
-        .status(Alert.Status.REGISTERED)
+        .status(AlertStatus.REGISTERED)
         .alertId('alertId')
         .batchId('batchId')
         .metadata('metadata')
@@ -101,7 +102,7 @@ class JdbcAlertMapperSpec extends Specification {
     then:
     with(result) {
       name() == 'alertName'
-      status() == Alert.Status.REGISTERED
+      status() == AlertStatus.REGISTERED
       alertId() == 'alertId'
       batchId() == 'batchId'
       metadata() == 'metadata'
@@ -125,8 +126,8 @@ class JdbcAlertMapperSpec extends Specification {
     def result = underTest.toAlertsStatistics(alertStatusCountProjections)
 
     then:
-    result.getAlertCountByStatus(Alert.Status.RECOMMENDED) == 1
-    result.getAlertCountByStatus(Alert.Status.ERROR) == 2
+    result.getAlertCountByStatus(AlertStatus.RECOMMENDED) == 1
+    result.getAlertCountByStatus(AlertStatus.ERROR) == 2
   }
 
   def 'should map projections to alerts with matches'() {
@@ -199,7 +200,7 @@ class JdbcAlertMapperSpec extends Specification {
     static def FIRST_ALERT_WITH_MATCHES = AlertWithMatches.builder()
         .id(FIRST_ALERT_ID)
         .name(FIRST_ALERT_NAME)
-        .status(Alert.Status.RECOMMENDED)
+        .status(AlertStatus.RECOMMENDED)
         .metadata(FIRST_ALERT_METADATA)
         .errorDescription(FIRST_ALERT_ERROR_DESCRIPTION)
         .matches(
@@ -212,7 +213,7 @@ class JdbcAlertMapperSpec extends Specification {
     static def SECOND_ALERT_WITH_MATCHES = AlertWithMatches.builder()
         .id(SECOND_ALERT_ID)
         .name(SECOND_ALERT_NAME)
-        .status(Alert.Status.RECOMMENDED)
+        .status(AlertStatus.RECOMMENDED)
         .metadata(SECOND_ALERT_METADATA)
         .errorDescription(SECOND_ALERT_ERROR_DESCRIPTION)
         .matches(

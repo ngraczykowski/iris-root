@@ -2,14 +2,12 @@ package com.silenteight.bridge.core.registration.domain.model;
 
 import lombok.Builder;
 
-import com.silenteight.bridge.core.registration.domain.model.Alert.Status;
-
 import java.util.List;
 
 public record AlertWithMatches(
     String id,
     String name,
-    Status status,
+    AlertStatus status,
     String metadata,
     String errorDescription,
     List<Match> matches
@@ -18,8 +16,12 @@ public record AlertWithMatches(
   @Builder
   public AlertWithMatches {}
 
-  public record Match(
+  public static record Match(
       String id,
       String name
-  ) {}
+  ) {
+
+    @Builder
+    public Match {}
+  }
 }

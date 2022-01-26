@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.bridge.core.recommendation.domain.RecommendationFacade;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsStatistics;
-import com.silenteight.bridge.core.registration.domain.model.Alert.Status;
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus;
 import com.silenteight.bridge.core.registration.domain.model.BatchStatistics;
 import com.silenteight.bridge.core.registration.domain.model.BatchStatistics.RecommendationsStats;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
@@ -20,8 +20,9 @@ class BatchStatisticsService {
 
   BatchStatistics createBatchCompletedStatistics(String batchId, String analysisName) {
     var alertStatusStatistics = alertRepository.countAlertsByStatusForBatchId(batchId);
-    var recommendedAlertsCount = alertStatusStatistics.getAlertCountByStatus(Status.RECOMMENDED);
-    var errorAlertsCount = alertStatusStatistics.getAlertCountByStatus(Status.ERROR);
+    var recommendedAlertsCount =
+        alertStatusStatistics.getAlertCountByStatus(AlertStatus.RECOMMENDED);
+    var errorAlertsCount = alertStatusStatistics.getAlertCountByStatus(AlertStatus.ERROR);
 
     return BatchStatistics.builder()
         .recommendedAlertsCount(recommendedAlertsCount)

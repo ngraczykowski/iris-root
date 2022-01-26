@@ -6,30 +6,40 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertStatus;
 import com.silenteight.bridge.core.registration.domain.model.Alert;
 import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
+import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRegistrationService;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 class AlertService {
 
-  private final AlertMapper mapper;
+  private final AlertMapper alertMapper;
   private final AlertRepository alertRepository;
   private final AlertRegistrationService alertRegistrationService;
+  private final RegistrationAlertResponseMapper registrationAlertResponseMapper;
 
   List<AlertWithMatches> getAlertsAndMatches(String batchId) {
     return alertRepository.findAllWithMatchesByBatchId(batchId);
   }
 
-  void registerAlertsAndMatches(RegisterAlertsCommand command) {
+  List<RegistrationAlert> registerAlertsAndMatches(RegisterAlertsCommand command) {
     var batchId = command.batchId();
-    var newAlerts = filterOutExistingInDb(command);
+    var alertIds = command.alertWithMatches().stream()
+        .map(RegisterAlertsCommand.AlertWithMatches::alertId)
+        .toList();
+    var alreadyRegisteredAlerts =
+        alertRepository.findAllWithMatchesByBatchIdAndAlertIdsIn(command.batchId(), alertIds);
+    var newAlerts = filterOutExistingInDb(
+        command.alertWithMatches(), alreadyRegisteredAlerts);
     var successAlerts = getSucceededAlerts(newAlerts);
     var registeredAlerts = register(successAlerts, batchId);
 
@@ -46,10 +56,25 @@ class AlertService {
 
     if (CollectionUtils.isNotEmpty(failedAlerts)) {
       alertRepository.saveAlerts(failedAlerts);
-      log.warn(
+      log.info(
           "Failed alerts saved for batchId: {}, alertCount: {}",
           batchId, failedAlerts.size());
     }
+
+    if (CollectionUtils.isNotEmpty(alreadyRegisteredAlerts)) {
+      log.info(
+          "Alerts already registered in db for batchId: {}, alertCount: {}",
+          batchId, alreadyRegisteredAlerts.size());
+    }
+
+    return Stream.of(
+            registrationAlertResponseMapper.fromAlertsToRegistrationAlerts(failedAlerts),
+            registrationAlertResponseMapper.fromAlertsToRegistrationAlerts(registeredAlerts),
+            registrationAlertResponseMapper.fromAlertsWithMatchesToRegistrationAlerts(
+                alreadyRegisteredAlerts)
+        )
+        .flatMap(Collection::stream)
+        .toList();
   }
 
   void updateStatusToRecommended(String batchId, List<String> alertNames) {
@@ -64,22 +89,16 @@ class AlertService {
   }
 
   private List<RegisterAlertsCommand.AlertWithMatches> filterOutExistingInDb(
-      RegisterAlertsCommand command) {
-    var alertIds = command.alertWithMatches().stream()
-        .map(RegisterAlertsCommand.AlertWithMatches::alertId)
-        .toList();
-    var existingAlerts =
-        alertRepository.findAllAlertIdsByBatchIdAndAlertIdIn(command.batchId(), alertIds);
-    var result = command.alertWithMatches();
+      List<RegisterAlertsCommand.AlertWithMatches> alertWithMatches,
+      List<AlertWithMatches> existingAlerts) {
 
     if (CollectionUtils.isNotEmpty(existingAlerts)) {
-      log.info("Alerts already exist in DB. alertCount: {}", existingAlerts.size());
-      return result.stream()
+      return alertWithMatches.stream()
           .filter(alert -> existingAlerts.stream()
-              .noneMatch(existing -> alert.alertId().equals(existing.alertId())))
+              .noneMatch(existing -> alert.alertId().equals(existing.id())))
           .toList();
     }
-    return result;
+    return alertWithMatches;
   }
 
   private List<RegisterAlertsCommand.AlertWithMatches> getSucceededAlerts(
@@ -96,14 +115,14 @@ class AlertService {
 
   private List<Alert> register(
       List<RegisterAlertsCommand.AlertWithMatches> successAlerts, String batchId) {
-    var alertsToRegister = mapper.toAlertsToRegister(successAlerts);
+    var alertsToRegister = alertMapper.toAlertsToRegister(successAlerts);
     var registeredAlerts = alertRegistrationService.registerAlerts(alertsToRegister);
-    return mapper.toAlerts(registeredAlerts, successAlerts, batchId);
+    return alertMapper.toAlerts(registeredAlerts, successAlerts, batchId);
   }
 
   private List<Alert> getFailedAlerts(
       List<RegisterAlertsCommand.AlertWithMatches> alertsWithMatches, String batchId) {
     var failedAlerts = filterAlertsByStatus(alertsWithMatches, AlertStatus.FAILURE);
-    return mapper.toErrorAlerts(failedAlerts, batchId);
+    return alertMapper.toErrorAlerts(failedAlerts, batchId);
   }
 }

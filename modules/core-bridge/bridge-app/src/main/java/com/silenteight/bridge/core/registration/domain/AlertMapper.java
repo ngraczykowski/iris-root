@@ -1,11 +1,8 @@
 package com.silenteight.bridge.core.registration.domain;
 
-import com.silenteight.bridge.core.registration.domain.model.Alert;
-import com.silenteight.bridge.core.registration.domain.model.AlertsToRegister;
+import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.model.AlertsToRegister.AlertWithMatches;
-import com.silenteight.bridge.core.registration.domain.model.Match;
 import com.silenteight.bridge.core.registration.domain.model.Match.Status;
-import com.silenteight.bridge.core.registration.domain.model.RegisteredAlerts;
 
 import org.springframework.stereotype.Component;
 
@@ -27,7 +24,7 @@ class AlertMapper {
     return registeredAlerts.registeredAlertsWithMatches().stream()
         .map(registeredAlert -> Alert.builder()
             .name(registeredAlert.name())
-            .status(Alert.Status.REGISTERED)
+            .status(AlertStatus.REGISTERED)
             .alertId(registeredAlert.alertId())
             .batchId(batchId)
             .metadata(getAlertMetadata(successAlerts, registeredAlert.alertId()))
@@ -54,7 +51,7 @@ class AlertMapper {
         .map(alert -> Alert.builder()
             .alertId(alert.alertId())
             .batchId(batchId)
-            .status(Alert.Status.ERROR)
+            .status(AlertStatus.ERROR)
             .metadata(alert.alertMetadata())
             .errorDescription(alert.errorDescription())
             .matches(alert.matches().stream()

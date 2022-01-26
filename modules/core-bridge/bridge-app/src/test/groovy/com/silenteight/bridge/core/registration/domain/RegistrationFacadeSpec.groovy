@@ -2,6 +2,7 @@ package com.silenteight.bridge.core.registration.domain
 
 import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.recommendation.domain.RecommendationFixtures
+import com.silenteight.bridge.core.registration.domain.model.Alert
 
 import spock.lang.Specification
 import spock.lang.Subject
@@ -45,11 +46,14 @@ class RegistrationFacadeSpec extends Specification {
     given:
     def registerAlertsCommand = RegistrationFixtures.REGISTER_ALERTS_COMMAND
 
+    def alert = Alert.builder().batchId('batch_id').build()
+
     when:
-    underTest.registerAlertsAndMatches(registerAlertsCommand)
+    def response = underTest.registerAlertsAndMatches(registerAlertsCommand)
 
     then:
-    1 * alertService.registerAlertsAndMatches(registerAlertsCommand)
+    1 * alertService.registerAlertsAndMatches(registerAlertsCommand) >> [alert]
+    response.size() == 1
   }
 
   def 'should call add alerts to analysis'() {
@@ -115,7 +119,7 @@ class RegistrationFacadeSpec extends Specification {
     thrown(NoSuchElementException.class)
   }
 
-  def 'should retrieve batch data with alerts by analysis name'(){
+  def 'should retrieve batch data with alerts by analysis name'() {
     given:
     def command = RegistrationFixtures.GET_BATCH_WITH_ALERTS_COMMAND
 
@@ -123,7 +127,8 @@ class RegistrationFacadeSpec extends Specification {
     def result = underTest.getBatchWithAlerts(command)
 
     then:
-    1 * batchService.findBatchIdWithPolicyByAnalysisName(RegistrationFixtures.ANALYSIS_NAME) >> RegistrationFixtures.BATCH_ID_WITH_POLICY_PROJECTION
+    1 * batchService.findBatchIdWithPolicyByAnalysisName(RegistrationFixtures.ANALYSIS_NAME) >>
+        RegistrationFixtures.BATCH_ID_WITH_POLICY_PROJECTION
     1 * alertService.getAlertsAndMatches(Fixtures.BATCH_ID) >> RecommendationFixtures.ALERTS
 
     result == RecommendationFixtures.BATCH_WITH_ALERTS
@@ -140,5 +145,4 @@ class RegistrationFacadeSpec extends Specification {
     then:
     1 * batchService.markBatchAsDelivered(batchId)
   }
-
 }

@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FeedingStatus;
-import com.silenteight.bridge.core.registration.domain.model.Alert.Status;
 import com.silenteight.bridge.core.registration.domain.model.AlertName;
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus;
 import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
 import com.silenteight.bridge.core.registration.domain.model.Match;
@@ -115,7 +115,7 @@ class AlertAnalysisService {
   private void handleCommandsWithAllSucceededAlertsAndMixedMatches(
       Batch batch, List<AddAlertToAnalysisCommand> commands) {
     final var alertIds = extractAlertIdsFromCommands(commands);
-    alertRepository.updateStatusByBatchIdAndAlertIdIn(Status.PROCESSING, batch.id(), alertIds);
+    alertRepository.updateStatusByBatchIdAndAlertIdIn(AlertStatus.PROCESSING, batch.id(), alertIds);
     updateMatchesStatuses(batch, commands);
     addAlertsToAnalysis(batch, alertIds);
   }

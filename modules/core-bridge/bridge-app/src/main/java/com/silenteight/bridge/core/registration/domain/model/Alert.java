@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.util.List;
 
 public record Alert(String name,
-                    Status status,
+                    AlertStatus status,
                     String alertId,
                     String batchId,
                     String metadata,
@@ -14,9 +14,5 @@ public record Alert(String name,
 
   @Builder
   public Alert {
-  }
-
-  public enum Status {
-    REGISTERED, PROCESSING, RECOMMENDED, ERROR
   }
 }

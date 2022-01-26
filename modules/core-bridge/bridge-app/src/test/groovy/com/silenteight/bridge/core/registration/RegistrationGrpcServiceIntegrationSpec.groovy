@@ -1,7 +1,7 @@
 package com.silenteight.bridge.core.registration
 
 import com.silenteight.bridge.core.BaseSpecificationIT
-import com.silenteight.bridge.core.registration.domain.model.Alert.Status
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
@@ -23,7 +23,8 @@ import org.springframework.test.context.ActiveProfiles
         "grpc.server.inProcessName=test",
         "grpc.server.port=-1",
         "grpc.client.inProcess.address=in-process:test"
-    ])
+    ]
+)
 @Import(NotifyBatchErrorFlowRabbitMqTestConfig.class)
 @ActiveProfiles("test")
 @DirtiesContext
@@ -139,7 +140,7 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
     def alertsWithMatches = [
         AlertWithMatches.newBuilder()
             .setAlertId(alertIdInput)
-            .setStatus(AlertStatus.SUCCESS)
+            .setStatus(com.silenteight.proto.registration.api.v1.AlertStatus.SUCCESS)
             .setAlertMetadata(alertMetadata)
             .addAllMatches(matchesInput)
             .build()
@@ -160,7 +161,7 @@ class RegistrationGrpcServiceIntegrationSpec extends BaseSpecificationIT {
 
     with(alert.first()) {
       !name().empty
-      status() == Status.REGISTERED
+      status() == AlertStatus.REGISTERED
       alertId() == alertIdInput
       batchId() == batchIdInput
       metadata() == alertMetadata

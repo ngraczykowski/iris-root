@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.bridge.core.registration.domain.command.GetBatchWithAlertsCommand;
 import com.silenteight.bridge.core.registration.domain.model.BatchId;
 import com.silenteight.bridge.core.registration.domain.model.BatchWithAlerts;
+import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert;
 
 import org.springframework.stereotype.Service;
 
@@ -54,12 +55,12 @@ public class RegistrationFacade {
     }
   }
 
-  public void markBatchAsDelivered(MarkBatchAsDeliveredCommand markBatchAsDeliveredCommand) {
-    batchService.markBatchAsDelivered(markBatchAsDeliveredCommand.batchId());
+  public List<RegistrationAlert> registerAlertsAndMatches(RegisterAlertsCommand command) {
+    return alertService.registerAlertsAndMatches(command);
   }
 
-  public void registerAlertsAndMatches(RegisterAlertsCommand registerAlertsCommand) {
-    alertService.registerAlertsAndMatches(registerAlertsCommand);
+  public void markBatchAsDelivered(MarkBatchAsDeliveredCommand markBatchAsDeliveredCommand) {
+    batchService.markBatchAsDelivered(markBatchAsDeliveredCommand.batchId());
   }
 
   public void addAlertsToAnalysis(List<AddAlertToAnalysisCommand> addAlertToAnalysisCommands) {

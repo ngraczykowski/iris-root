@@ -3,12 +3,13 @@ package com.silenteight.bridge.core.registration.adapter.incoming;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand;
-import com.silenteight.proto.registration.api.v1.AlertStatus;
-import com.silenteight.proto.registration.api.v1.AlertWithMatches;
-import com.silenteight.proto.registration.api.v1.Match;
-import com.silenteight.proto.registration.api.v1.RegisterAlertsAndMatchesRequest;
+import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert;
+import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert.RegistrationMatch;
+import com.silenteight.proto.registration.api.v1.*;
 
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Slf4j
 @Component
@@ -22,9 +23,45 @@ class RegistrationGrpcMapper {
             .toList());
   }
 
+  RegisterAlertsAndMatchesResponse toRegisterAlertsAndMatchesResponse(
+      List<RegistrationAlert> alerts) {
+    return RegisterAlertsAndMatchesResponse.newBuilder()
+        .addAllRegisteredAlertsWithMatches(toRegisteredAlertWithMatches(alerts))
+        .build();
+  }
+
+  private List<RegisteredAlertWithMatches> toRegisteredAlertWithMatches(
+      List<RegistrationAlert> alerts) {
+    return alerts.stream()
+        .map(this::createRegisteredAlertWithMatches)
+        .toList();
+  }
+
+  private RegisteredAlertWithMatches createRegisteredAlertWithMatches(
+      RegistrationAlert alert) {
+    return RegisteredAlertWithMatches.newBuilder()
+        .setAlertId(alert.id())
+        .setAlertName(alert.name())
+        .setAlertStatus(AlertStatus.valueOf(alert.status().name()))
+        .addAllRegisteredMatches(createRegisteredMatches(alert))
+        .build();
+  }
+
+  private List<RegisteredMatch> createRegisteredMatches(RegistrationAlert alert) {
+    return alert.matches().stream()
+        .map(this::createMatch)
+        .toList();
+  }
+
+  private RegisteredMatch createMatch(RegistrationMatch match) {
+    return RegisteredMatch.newBuilder()
+        .setMatchId(match.id())
+        .setMatchName(match.name())
+        .build();
+  }
+
   private RegisterAlertsCommand.AlertWithMatches toRegisterAlertsCommandAlertWithMatches(
       AlertWithMatches alertWithMatches) {
-
     return RegisterAlertsCommand.AlertWithMatches.builder()
         .alertId(alertWithMatches.getAlertId())
         .alertStatus(toRegisterAlertsCommandAlertStatus(alertWithMatches.getStatus()))
@@ -40,20 +77,12 @@ class RegistrationGrpcMapper {
     return new RegisterAlertsCommand.Match(match.getMatchId());
   }
 
-  private RegisterAlertsCommand.AlertStatus toRegisterAlertsCommandAlertStatus(
-      AlertStatus alertStatus) {
-
-    switch (alertStatus) {
-      case SUCCESS -> {
-        return RegisterAlertsCommand.AlertStatus.SUCCESS;
-      }
-      case FAILURE -> {
-        return RegisterAlertsCommand.AlertStatus.FAILURE;
-      }
-      default -> {
-        log.warn("Unknown alert status in mapping from gRPC response: {}", alertStatus);
-        return RegisterAlertsCommand.AlertStatus.FAILURE;
-      }
-    }
+  private RegisterAlertsCommand.AlertStatus toRegisterAlertsCommandAlertStatus(AlertStatus status) {
+    return switch (status) {
+      case SUCCESS -> RegisterAlertsCommand.AlertStatus.SUCCESS;
+      case FAILURE -> RegisterAlertsCommand.AlertStatus.FAILURE;
+      case UNSPECIFIED -> RegisterAlertsCommand.AlertStatus.FAILURE;
+      case UNRECOGNIZED -> RegisterAlertsCommand.AlertStatus.FAILURE;
+    };
   }
 }

@@ -4,7 +4,6 @@ import com.silenteight.adjudication.api.library.v1.util.TimeStampUtil
 import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationMetadata
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata
-import com.silenteight.bridge.core.registration.domain.model.Alert.Status
 import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches
 import com.silenteight.bridge.core.registration.domain.model.BatchWithAlerts
 import com.silenteight.proto.recommendation.api.v1.Alert
@@ -33,7 +32,7 @@ class RecommendationFixtures {
   static def ERROR_ALERT = AlertWithMatches.builder()
       .id(Fixtures.ALERT_ID)
       .name('')
-      .status(Status.ERROR)
+      .status(com.silenteight.bridge.core.registration.domain.model.AlertStatus.ERROR)
       .metadata(METADATA)
       .errorDescription(ERROR_DESCRIPTION)
       .matches([])
@@ -43,7 +42,7 @@ class RecommendationFixtures {
       AlertWithMatches.builder()
           .id(Fixtures.ALERT_ID)
           .name(ALERT_NAME)
-          .status(Status.RECOMMENDED)
+          .status(com.silenteight.bridge.core.registration.domain.model.AlertStatus.RECOMMENDED)
           .metadata(METADATA)
           .matches(
               [

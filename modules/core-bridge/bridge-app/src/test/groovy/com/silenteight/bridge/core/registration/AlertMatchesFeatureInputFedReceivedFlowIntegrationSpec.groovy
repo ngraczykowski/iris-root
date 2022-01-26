@@ -1,7 +1,7 @@
 package com.silenteight.bridge.core.registration
 
 import com.silenteight.bridge.core.BaseSpecificationIT
-import com.silenteight.bridge.core.registration.domain.model.Alert.Status
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.model.Match
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
@@ -112,7 +112,7 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
     def alertsWithMatches = ALERT_IDS.collect {alertId ->
       AlertWithMatches.newBuilder()
           .setAlertId(alertId)
-          .setStatus(AlertStatus.SUCCESS)
+          .setStatus(com.silenteight.proto.registration.api.v1.AlertStatus.SUCCESS)
           .addAllMatches(createMatches(batchId, alertId))
           .build()
     }
@@ -169,8 +169,8 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
 
   private static def getExpectedAlertStatus(def alertId) {
     if (alertId == ID_OF_ALERT_CONTAINING_FAILURE_FEEDING_STATUS) {
-      return Status.ERROR
+      return AlertStatus.ERROR
     }
-    Status.PROCESSING
+    AlertStatus.PROCESSING
   }
 }

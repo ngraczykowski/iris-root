@@ -2,7 +2,7 @@ package com.silenteight.bridge.core.registration.domain
 
 import com.silenteight.bridge.core.recommendation.domain.RecommendationFacade
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsStatistics
-import com.silenteight.bridge.core.registration.domain.model.Alert.Status
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus
 import com.silenteight.bridge.core.registration.domain.model.AlertStatusStatistics
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 
@@ -23,8 +23,8 @@ class BatchStatisticsServiceSpec extends Specification {
     def analysisName = 'analysisName'
     def alertStatusStatistics = new AlertStatusStatistics(
         Map.of(
-            Status.RECOMMENDED, 1,
-            Status.ERROR, 2))
+            AlertStatus.RECOMMENDED, 1,
+            AlertStatus.ERROR, 2))
 
     def recommendationsStatistics = RecommendationsStatistics.builder()
         .truePositiveCount(3)

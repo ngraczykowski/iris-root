@@ -3,11 +3,7 @@ package com.silenteight.bridge.core.registration.adapter.outgoing;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.bridge.core.registration.adapter.outgoing.AlertEntity.Status;
-import com.silenteight.bridge.core.registration.domain.model.Alert;
-import com.silenteight.bridge.core.registration.domain.model.AlertId;
-import com.silenteight.bridge.core.registration.domain.model.AlertName;
-import com.silenteight.bridge.core.registration.domain.model.AlertStatusStatistics;
-import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
+import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 
 import org.springframework.stereotype.Repository;
@@ -48,13 +44,6 @@ class JdbcAlertRepository implements AlertRepository {
   }
 
   @Override
-  public List<AlertId> findAllAlertIdsByBatchIdAndAlertIdIn(String batchId, List<String> alertIds) {
-    return alertRepository.findByBatchIdAndAlertIdIn(batchId, alertIds).stream()
-        .map(mapper::toAlertId)
-        .toList();
-  }
-
-  @Override
   public List<AlertName> findAllAlertNamesByBatchIdAndAlertIdIn(
       String batchId, List<String> alertIds) {
     return alertRepository.findByBatchIdAndAlertIdIn(batchId, alertIds).stream()
@@ -75,6 +64,13 @@ class JdbcAlertRepository implements AlertRepository {
   }
 
   @Override
+  public List<AlertWithMatches> findAllWithMatchesByBatchIdAndAlertIdsIn(
+      String batchId, List<String> alertIds) {
+    return mapper.toAlertWithMatches(
+        alertRepository.findAllWithMatchesByBatchIdAndAlertIdsIn(batchId, alertIds));
+  }
+
+  @Override
   public long countAllPendingAlerts(String batchId) {
     return alertRepository.countAllAlertsByBatchIdAndNotRecommendedAndNotErrorStatuses(batchId);
   }
@@ -88,7 +84,7 @@ class JdbcAlertRepository implements AlertRepository {
 
   @Override
   public void updateStatusByBatchIdAndAlertIdIn(
-      Alert.Status status, String batchId, List<String> alertIds) {
+      AlertStatus status, String batchId, List<String> alertIds) {
     alertRepository.updateStatusByBatchIdAndAlertIdIn(
         Status.valueOf(status.name()), batchId, alertIds);
   }

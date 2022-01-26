@@ -55,10 +55,12 @@ class RegistrationGrpcService extends RegistrationServiceGrpc.RegistrationServic
     log.info("Register alerts and matches request received for batchId: {}, alertCount: {}",
         batchId, alertCount);
     var registerAlertsCommand = mapper.toRegisterAlertsCommand(request);
-    registrationFacade.registerAlertsAndMatches(registerAlertsCommand);
+    var alerts = registrationFacade.registerAlertsAndMatches(registerAlertsCommand);
     log.info("Register alerts and matches request completed for batchId: {}", batchId);
 
-    responseObserver.onNext(RegisterAlertsAndMatchesResponse.getDefaultInstance());
+    var registerAlertsAndMatchesResponse = mapper.toRegisterAlertsAndMatchesResponse(alerts);
+
+    responseObserver.onNext(registerAlertsAndMatchesResponse);
     responseObserver.onCompleted();
   }
 }

@@ -1,11 +1,11 @@
 package com.silenteight.bridge.core.registration.domain.port.outgoing;
 
-import com.silenteight.bridge.core.registration.domain.model.Match;
+import com.silenteight.bridge.core.registration.domain.model.Match.Status;
 
 import java.util.List;
 
 public interface MatchRepository {
 
   void updateStatusByBatchIdAndMatchIdInAndExternalAlertIdIn(
-      Match.Status status, String batchId, List<String> matchIds, List<String> externalAlertIds);
+      Status status, String batchId, List<String> matchIds, List<String> externalAlertIds);
 }

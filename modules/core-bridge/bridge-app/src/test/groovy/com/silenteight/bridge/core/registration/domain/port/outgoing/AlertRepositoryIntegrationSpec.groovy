@@ -2,7 +2,7 @@ package com.silenteight.bridge.core.registration.domain.port.outgoing
 
 import com.silenteight.bridge.core.BaseSpecificationIT
 import com.silenteight.bridge.core.registration.domain.model.Alert
-import com.silenteight.bridge.core.registration.domain.model.Alert.Status
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus
 import com.silenteight.bridge.core.registration.domain.model.Match
 
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,7 +43,7 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
 
   def 'should update status of given alert ids'() {
     given:
-    def newStatus = Status.PROCESSING
+    def newStatus = AlertStatus.PROCESSING
     def batchId = 'batch_id_' + UUID.randomUUID()
     def alert1 = dummyAlert(batchId, 'alert_id_' + UUID.randomUUID())
     def alert2 = dummyAlert(batchId, 'alert_id_' + UUID.randomUUID())
@@ -82,7 +82,7 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
   private static def dummyAlert(String batchId, String alertId) {
     Alert.builder()
         .name("{$alertId}_name")
-        .status(Status.REGISTERED)
+        .status(AlertStatus.REGISTERED)
         .alertId(alertId)
         .batchId(batchId)
         .matches(

@@ -1,6 +1,9 @@
 package com.silenteight.bridge.core.registration.adapter.incoming
 
 import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand
+import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert
+import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert.RegistrationMatch
+import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert.Status
 import com.silenteight.proto.registration.api.v1.AlertStatus
 import com.silenteight.proto.registration.api.v1.AlertWithMatches
 import com.silenteight.proto.registration.api.v1.Match
@@ -47,6 +50,39 @@ class RegistrationGrpcMapperSpec extends Specification {
         alertStatus() == RegisterAlertsCommand.AlertStatus.SUCCESS
         errorDescription().isEmpty()
         matches().first().id() == 'matchId'
+      }
+    }
+  }
+
+  void 'should map alerts to register alerts and matches response'() {
+    given:
+    def alerts = [
+        RegistrationAlert.builder()
+            .id('alertId')
+            .name('alertName')
+            .status(Status.SUCCESS)
+            .matches(
+                [
+                    RegistrationMatch.builder()
+                        .id('matchId')
+                        .name('matchName')
+                        .build()
+                ]
+            )
+            .build()
+    ]
+
+    when:
+    def result = underTest.toRegisterAlertsAndMatchesResponse(alerts)
+
+    then:
+    with(result.registeredAlertsWithMatches_.first()) {
+      alertId == 'alertId'
+      alertName == 'alertName'
+      alertStatus == AlertStatus.SUCCESS
+      with(registeredMatches_.first()) {
+        matchId == 'matchId'
+        matchName == 'matchName'
       }
     }
   }

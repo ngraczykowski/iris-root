@@ -33,7 +33,7 @@ class JdbcAlertMapper {
   Alert toAlert(AlertEntity alert) {
     return Alert.builder()
         .name(alert.name())
-        .status(Alert.Status.valueOf(alert.status().name()))
+        .status(AlertStatus.valueOf(alert.status().name()))
         .alertId(alert.alertId())
         .batchId(alert.batchId())
         .metadata(alert.metadata())
@@ -51,7 +51,7 @@ class JdbcAlertMapper {
   AlertStatusStatistics toAlertsStatistics(List<AlertStatusStatisticsProjection> projection) {
     return new AlertStatusStatistics(projection.stream()
         .collect(Collectors.toMap(
-            alert -> Alert.Status.valueOf(alert.status()),
+            alert -> AlertStatus.valueOf(alert.status()),
             AlertStatusStatisticsProjection::count)));
   }
 
@@ -89,7 +89,7 @@ class JdbcAlertMapper {
         .name(alert.name)
         .metadata(alert.metadata)
         .errorDescription(alert.errorDescription)
-        .status(Alert.Status.valueOf(alert.status))
+        .status(AlertStatus.valueOf(alert.status))
         .matches(projections.stream()
             .map(this::toMatch)
             .toList()

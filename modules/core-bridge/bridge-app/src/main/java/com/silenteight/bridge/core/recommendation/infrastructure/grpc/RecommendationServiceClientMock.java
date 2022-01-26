@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.library.v1.recommendation.*;
-import com.silenteight.bridge.core.registration.domain.model.Alert.Status;
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -31,7 +31,7 @@ class RecommendationServiceClientMock implements RecommendationServiceClient {
   private List<AlertIdName> getAlertNames(String analysis) {
     var namedParameters = new MapSqlParameterSource()
         .addValue("analysisName", analysis)
-        .addValue("status", Status.ERROR.name());
+        .addValue("status", AlertStatus.ERROR.name());
     var alertNamesFromDb = jdbcTemplate.query(
         """
             SELECT name, alert_id 
