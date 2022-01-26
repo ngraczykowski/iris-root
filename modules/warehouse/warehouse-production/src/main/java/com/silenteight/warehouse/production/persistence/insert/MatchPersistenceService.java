@@ -21,7 +21,7 @@ class MatchPersistenceService {
 
   private static final String INSERT_MATCH_SQL =
       " INSERT INTO warehouse_match (alert_id, match_id, name, payload)"
-          + " VALUES (:alertId,:matchId,:name,TO_JSON(:payload::json))"
+          + " VALUES (:alertId,:matchId,:name,TO_JSONB(:payload::jsonb))"
           + " ON CONFLICT (alert_id, match_id) DO UPDATE SET"
           + " payload = warehouse_match.payload || excluded.payload";
 

@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer.production.qa;
+package com.silenteight.warehouse.qa.handler;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.integration.dsl.IntegrationFlowDefinition;
 class QaRequestCommandIntegrationFlowAdapter extends IntegrationFlowAdapter {
 
   @NonNull
-  private final QaIndexRequestCommandHandler qaIndexRequestCommandHandler;
+  private final QaRequestCommandHandler qaRequestCommandHandler;
 
   @NonNull
   private final String inboundChannel;
@@ -23,9 +23,8 @@ class QaRequestCommandIntegrationFlowAdapter extends IntegrationFlowAdapter {
         .handle(
             QaDataIndexRequest.class,
             (payload, headers) -> {
-              qaIndexRequestCommandHandler.handle(payload);
+              qaRequestCommandHandler.handle(payload);
               return null;
-            }
-        );
+            });
   }
 }

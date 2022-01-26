@@ -60,6 +60,7 @@ warehouse:
     filters:
       - name: alert_s8_recommendation
         values: ACTION_FALSE_POSITIVE
+
 sep.filestorage:
   minio:
     url: http://localhost:9000

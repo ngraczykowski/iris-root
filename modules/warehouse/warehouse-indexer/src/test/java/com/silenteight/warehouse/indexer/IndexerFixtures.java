@@ -4,8 +4,6 @@ import lombok.NoArgsConstructor;
 
 import com.silenteight.data.api.v2.Alert;
 import com.silenteight.data.api.v2.Match;
-import com.silenteight.data.api.v2.QaAlert;
-import com.silenteight.data.api.v2.QaAlert.State;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceAlertKeys;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.SourceMatchKeys;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values;
@@ -23,8 +21,6 @@ import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_2;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.QA_COMMENT;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.QA_LEVEL_FIRST;
 import static java.util.Collections.emptyMap;
 import static java.util.List.of;
 
@@ -45,16 +41,6 @@ public final class IndexerFixtures {
       SourceAlertKeys.COUNTRY_KEY, Values.COUNTRY_UK
   );
 
-  public static final QaAlert QA_ALERT_1 = QaAlert.newBuilder()
-      .setName(Values.ALERT_NAME)
-      .setLevel(QA_LEVEL_FIRST)
-      .setState(State.PASSED)
-      .setComment(QA_COMMENT)
-      .build();
-  public static final Map<String, String> MATCH_PAYLOAD = Map.of(
-      SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DECISION
-  );
-
   public static final AlertDefinition ALERT_DEFINITION_1 = AlertDefinition
       .builder()
       .discriminator(DISCRIMINATOR_1)
@@ -71,25 +57,14 @@ public final class IndexerFixtures {
       .setPayload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES))
       .addAllMatches(of(
           match(MATCH_NAME_1_1,
-                SourceMatchKeys.SOLUTION_KEY,
-                Values.SOLUTION_NO_DECISION,
-                FEATURES_PAYLOAD),
+              SourceMatchKeys.SOLUTION_KEY,
+              Values.SOLUTION_NO_DECISION,
+              FEATURES_PAYLOAD),
           match(MATCH_NAME_1_2,
-                SourceMatchKeys.SOLUTION_KEY,
-                Values.SOLUTION_NO_DATA,
-                FEATURES_PAYLOAD)))
+              SourceMatchKeys.SOLUTION_KEY,
+              Values.SOLUTION_NO_DATA,
+              FEATURES_PAYLOAD)))
       .build();
-
-  public static final com.silenteight.data.api.v1.Alert ALERT_SIM_1 =
-      com.silenteight.data.api.v1.Alert
-          .newBuilder()
-          .setDiscriminator(DISCRIMINATOR_1)
-          .setName(Values.ALERT_NAME)
-          .setPayload(convertMapToPayload(ALERT_PAYLOAD_WITH_TWO_VALUES))
-          .addAllMatches(of(
-              simMatch(MATCH_NAME_1_1, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DECISION),
-              simMatch(MATCH_NAME_1_2, SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DATA)))
-          .build();
 
   private static Match match(
       String matchName, String payloadName, String payloadSolution, Map<String, Value> features) {

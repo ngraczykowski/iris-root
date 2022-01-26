@@ -30,7 +30,4 @@ public class IndexerClientIntegrationProperties {
   @Valid
   @NestedConfigurationProperty
   private AmqpOutboundProperties alertsExpiredIndexingTestClientOutbound;
-  @Valid
-  @NestedConfigurationProperty
-  private AmqpOutboundProperties qaIndexingInternalTestClientOutbound;
 }

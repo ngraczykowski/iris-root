@@ -91,10 +91,6 @@ public class MappedAlertFixtures {
     public static final String ANALYST_DECISION_FP = "analyst_decision_false_positive";
     public static final String ANALYST_DECISION_TP = "analyst_decision_true_positive";
     public static final String ANALYST_DECISION_UNKNOWN = "analyst_decision_unknown";
-    public static final String QA_COMMENT = "QA passed";
-
-    public static final int QA_LEVEL_FIRST = 0;
-    public static final int QA_STATE = 1;
   }
 
   public static class ResourceName {
@@ -225,18 +221,6 @@ public class MappedAlertFixtures {
       MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
       MappedKeys.ANALYST_DECISION_KEY, Values.ANALYST_DECISION_FP,
       AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP_4,
-      RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
-  );
-
-  public static final Map<String, Object> MAPPED_QA_ALERT_1 = of(
-      DISCRIMINATOR, DISCRIMINATOR_1,
-      MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
-      MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
-      MappedKeys.STATUS_KEY, Values.STATUS_COMPLETED,
-      AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
-      AlertMapperConstants.QA_LEVEL_0_STATE, Values.QA_STATE,
-      AlertMapperConstants.QA_LEVEL_0_COMMENT, Values.QA_COMMENT,
-      AlertMapperConstants.ALERT_NAME, Values.ALERT_NAME,
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
   );
 }

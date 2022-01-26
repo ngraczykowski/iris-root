@@ -53,28 +53,7 @@ warehouse:
       labels:
         - "s8_lobCountryCode"
       recommendation-date-field: "recommendationDate"
-  messaging:
-    integration:
-      analysis-expired-indexing-inbound:
-        queue-name: wh.retention.analysis-expired
-      backup-indexing-inbound:
-        queue-name: wh.index-request.backup
-      personal-information-expired-indexing-inbound:
-        queue-name: wh.retention.personal-information-expired
-      production-indexing-inbound:
-        queue-name: wh.index-request.production
-      production-indexed-outbound:
-        exchange-name: wh.event
-        routing-key: event.index-response.production
-      simulation-indexing-inbound:
-        queue-name: wh.index-request.simulation
-      simulation-indexed-outbound:
-        exchange-name: wh.event
-        routing-key: event.index-response.simulation
-      qa-indexing-inbound:
-        queue-name: wh.qa-index-request
-      alerts-expired-indexing-inbound:
-        queue-name: wh.retention.alerts-expired
+
   environment:
     prefix: dev
   db:
