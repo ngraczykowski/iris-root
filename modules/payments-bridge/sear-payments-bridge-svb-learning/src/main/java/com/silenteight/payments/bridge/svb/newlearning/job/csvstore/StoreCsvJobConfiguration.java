@@ -24,6 +24,7 @@ class StoreCsvJobConfiguration {
   private final Step transformHitStep;
   private final Step removeDuplicatesStep;
   private final Step deleteFileStep;
+  private final StoreCsvJobListener storeCsvJobListener;
 
   @Bean
   Job storeCsvJob() {
@@ -34,6 +35,7 @@ class StoreCsvJobConfiguration {
         .next(transformHitStep)
         .next(removeDuplicatesStep)
         .next(deleteFileStep)
+        .listener(storeCsvJobListener)
         .build();
   }
 }

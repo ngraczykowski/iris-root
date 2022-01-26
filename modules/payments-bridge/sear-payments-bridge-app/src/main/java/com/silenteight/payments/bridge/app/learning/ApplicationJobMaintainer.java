@@ -3,6 +3,8 @@ package com.silenteight.payments.bridge.app.learning;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.common.event.TriggerBatchJobEvent;
+
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.DuplicateJobException;
 import org.springframework.batch.core.configuration.JobRegistry;
@@ -16,6 +18,7 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -40,6 +43,12 @@ class ApplicationJobMaintainer implements JobMaintainer {
   void init() {
     log.info("Initialize job maintainer");
     createJobRegistry();
+  }
+
+  @EventListener
+  public void triggerBatchProcessingListener(TriggerBatchJobEvent triggerBatchJobEvent) {
+    
+    runJobByName(triggerBatchJobEvent.getJobName(), triggerBatchJobEvent.getParameters());
   }
 
   @Override
