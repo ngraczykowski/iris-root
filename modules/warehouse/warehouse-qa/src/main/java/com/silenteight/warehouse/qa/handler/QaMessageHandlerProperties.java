@@ -1,4 +1,4 @@
-package com.silenteight.warehouse.indexer.production.qa;
+package com.silenteight.warehouse.qa.handler;
 
 import lombok.Data;
 
@@ -9,15 +9,11 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @Data
 @Validated
 @ConfigurationProperties(prefix = "warehouse.indexer")
-public class QaIndexerProperties {
-
-  @NotNull
-  private Integer qaBatchSize;
+public class QaMessageHandlerProperties {
 
   @Valid
   @NestedConfigurationProperty

@@ -109,7 +109,7 @@ public class IndexerClientConfiguration {
   }
 
   @Bean
-  TopicExchange govEventExchange() {
+  TopicExchange qaEventExchange() {
     return ExchangeBuilder
         .topicExchange(properties.getQaIndexingTestClientOutbound().getExchangeName())
         .build();

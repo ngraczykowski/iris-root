@@ -13,18 +13,6 @@ warehouse:
   alert-mapping:
     country-source-key: lob_country
   match-mapping:
-  messaging:
-    integration:
-      production-indexing-inbound:
-        queue-name: wh.index-request.production
-      production-indexed-outbound:
-        exchange-name: wh.event
-        routing-key: event.index-response.production
-      simulation-indexing-inbound:
-        queue-name: wh.index-request.simulation
-      simulation-indexed-outbound:
-        exchange-name: wh.event
-        routing-key: event.index-response.simulation
   environment:
     prefix: itest
   es:

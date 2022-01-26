@@ -26,7 +26,7 @@ warehouse:
         queue-name: wh.prioritized-index-request.production
         routing-key: command.index-request.production
       qa-indexing:
-        queue-name: wh.index-request.production
+        queue-name: wh.qa-index-request
         routing-key: event.qa-alert
       alert-simulation-indexing:
         queue-name: wh.index-request.simulation

@@ -13,6 +13,13 @@ warehouse:
   alert-mapping:
     country-source-key: lob_country
   match-mapping:
+  persistence:
+    alert:
+      labels:
+        - "riskType"
+        - "lobCountry"
+        - "alertAnalystDecision"
+      recommendation-date-field: "recommendationDate"
   messaging:
     broker:
       alert-backup-indexing:
@@ -41,6 +48,7 @@ warehouse:
   indexer:
     production-batch-size: 200
     simulation-batch-size: 200
+    qa-batch-size: 200
     production-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.alert-production-indexing.queue-name}
     production-indexed-outbound:
@@ -51,6 +59,8 @@ warehouse:
     simulation-indexed-outbound:
       exchange-name: wh.event
       routing-key: event.index-response.simulation
+    qa-indexing-inbound:
+      queue-name: ${warehouse.messaging.broker.qa-indexing.queue-name}
   environment:
     prefix: itest
   es:
@@ -63,6 +73,7 @@ warehouse:
       search:
         batch-size: 1
         keep-alive-seconds: 10
+
 test:
   messaging:
     integration:
@@ -72,6 +83,9 @@ test:
       simulation-indexing-test-client-outbound:
         exchange-name: testapp.command
         routing-key: command.index-request.simulation
+      personal-information-expired-indexing-test-client-outbound:
+        exchange-name: testapp.command
+        routing-key: retention.personal-information-expired
       analysis-expired-indexing-test-client-outbound:
         exchange-name: testapp.command
         routing-key: command.analysis-expired

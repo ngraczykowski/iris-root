@@ -110,7 +110,7 @@ class BrokerConfiguration {
   }
 
   @Bean
-  Queue qaIndexingQueue() {
+  Queue alertQaIndexingQueue() {
     return queue(
         properties.qaIndexingQueueName(),
         properties.qaIndexingMaxPriority());

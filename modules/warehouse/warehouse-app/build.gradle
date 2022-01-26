@@ -27,6 +27,7 @@ dependencies {
   implementation project(":warehouse-management")
   implementation project(":warehouse-migration")
   implementation project(":warehouse-production")
+  implementation project(":warehouse-qa")
   implementation project(":warehouse-report")
   implementation project(":warehouse-report-accuracy")
   implementation project(":warehouse-report-ai-reasoning")

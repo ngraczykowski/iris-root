@@ -28,7 +28,7 @@ class AlertPersistenceService {
 
   private static final String INSERT_ALERT_SQL =
       "INSERT INTO warehouse_alert(discriminator, name, recommendation_date, payload)"
-          + " VALUES (:discriminator,:name,:recommendationDate,TO_JSON(:payload::json))"
+          + " VALUES (:discriminator,:name,:recommendationDate,TO_JSONB(:payload::jsonb))"
           + " ON CONFLICT (discriminator) "
           + " DO UPDATE SET name = coalesce(warehouse_alert.name, excluded.name),"
           + " payload = warehouse_alert.payload || excluded.payload,"
