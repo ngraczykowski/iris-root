@@ -21,6 +21,7 @@ public class ProductionIndexClient {
 
   private final ProductionIndexClientGateway productionIndexClientGateway;
   private final AlertGenerator alertGenerator;
+  private final Integer alertCount;
 
   @Scheduled(cron = "${test.generator.cron}")
   void send() {
@@ -36,7 +37,7 @@ public class ProductionIndexClient {
 
   private List<Alert> getAlerts() {
     return IntStream
-        .range(0, 1000)
+        .range(0, alertCount)
         .boxed()
         .map(i -> alertGenerator.generateProduction())
         .collect(toList());

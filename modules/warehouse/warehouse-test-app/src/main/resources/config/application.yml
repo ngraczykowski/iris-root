@@ -163,6 +163,7 @@ test:
   flows:
     production:
       enabled: false
+      alert-count: 10
       data-source: classpath:data/production.csv
 
     simulation:

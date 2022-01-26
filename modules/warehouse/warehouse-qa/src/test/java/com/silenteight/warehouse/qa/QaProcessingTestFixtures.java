@@ -9,6 +9,8 @@ import com.google.protobuf.Value;
 
 import java.util.Map;
 
+import static com.silenteight.warehouse.common.time.Timestamps.toTimestamp;
+import static java.time.OffsetDateTime.parse;
 import static java.util.List.of;
 
 public class QaProcessingTestFixtures {
@@ -45,6 +47,7 @@ public class QaProcessingTestFixtures {
       .setLevel(0)
       .setState(State.NEW)
       .setComment(QA_COMMENT)
+      .setTimestamp(toTimestamp(parse(PROCESSING_TIMESTAMP)))
       .build();
 
   static final QaDataIndexRequest QA_REQUEST = QaDataIndexRequest.newBuilder()
