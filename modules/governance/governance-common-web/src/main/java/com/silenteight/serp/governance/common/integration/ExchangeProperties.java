@@ -25,7 +25,7 @@ class ExchangeProperties {
   String solutionDiscrepancy;
 
   @NotBlank
-  String govQa;
+  String govEvents;
 
   @NotBlank
   String govEvent;

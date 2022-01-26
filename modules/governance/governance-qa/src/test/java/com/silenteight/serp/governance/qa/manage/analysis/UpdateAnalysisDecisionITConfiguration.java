@@ -59,7 +59,7 @@ class UpdateAnalysisDecisionITConfiguration {
   AuditingLogger auditingLogger;
 
   @Bean
-  Binding govQaToQueueBinding(@Valid QaIntegrationProperties properties) {
+  Binding govEventsToQueueBinding(@Valid QaIntegrationProperties properties) {
     return bindQueue(
         properties.getReceive().getQueueName(),
         properties.getRequest().getExchange(),
@@ -67,7 +67,7 @@ class UpdateAnalysisDecisionITConfiguration {
   }
 
   @Bean
-  Declarables govQaDeclarables(@Valid QaIntegrationProperties properties) {
+  Declarables govEventsDeclarables(@Valid QaIntegrationProperties properties) {
     return new Declarables(
         topicExchange(properties.getRequest().getExchange()),
         queue(properties.getReceive().getQueueName())

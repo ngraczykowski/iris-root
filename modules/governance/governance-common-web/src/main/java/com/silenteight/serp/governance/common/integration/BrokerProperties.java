@@ -36,7 +36,7 @@ class BrokerProperties {
 
   @Valid
   @NestedConfigurationProperty
-  private RoutingKeyProperties govQa;
+  private RoutingKeyProperties govEvents;
 
   @Valid
   @NestedConfigurationProperty
@@ -94,8 +94,8 @@ class BrokerProperties {
     return modelsArchived.getRoutingKey();
   }
 
-  String govQaRoutingKey() {
-    return govQa.getRoutingKey();
+  String govEventsRoutingKey() {
+    return govEvents.getRoutingKey();
   }
 
   String qaRetentionPersonalInformationExpiredQueueName() {
@@ -140,5 +140,9 @@ class BrokerProperties {
 
   List<BindingProperties> bindingsToRemove() {
     return toRemove.getBindings();
+  }
+
+  List<String> exchangesToRemove() {
+    return toRemove.getExchanges();
   }
 }

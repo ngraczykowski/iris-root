@@ -27,7 +27,8 @@ class ExchangeConfiguration {
         topicExchange(properties.getAnalytics()),
         topicExchange(properties.getModel()),
         topicExchange(properties.getNotification()),
-        topicExchange(properties.getSolutionDiscrepancy()));
+        topicExchange(properties.getSolutionDiscrepancy()),
+        topicExchange(properties.getGovEvents()));
   }
 
   private static TopicExchange topicExchange(String topicName) {
