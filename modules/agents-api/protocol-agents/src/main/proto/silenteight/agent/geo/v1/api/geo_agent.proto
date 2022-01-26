@@ -12,6 +12,17 @@ service GeoLocationAgent {
 
   rpc CompareLocations (CompareLocationsRequest) returns (CompareLocationsResponse) {
   }
+
+  rpc BatchCompareLocations (BatchCompareLocationsRequest) returns (BatchCompareLocationsResponse) {
+  }
+}
+
+message BatchCompareLocationsRequest {
+  repeated CompareLocationsRequest requests = 1;
+}
+
+message BatchCompareLocationsResponse {
+  repeated CompareLocationsResponse responses = 1;
 }
 
 message CompareLocationsRequest {
