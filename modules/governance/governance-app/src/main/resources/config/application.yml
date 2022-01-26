@@ -35,7 +35,7 @@ serp:
         model: gov.model
         notification: notification
         solution-discrepancy: learning
-        gov-qa: gov.qa
+        gov-events: gov.events
         gov-event: gov.event
       broker:
         analytics:
@@ -51,7 +51,7 @@ serp:
         models-archived:
           queue-name: gov.models-archived
           routing-key: event.models-archived
-        gov-qa:
+        gov-events:
           routing-key: event.qa-alert
         qa-retention-personal-information-expired:
           queue-name: gov.retention.personal-information-expired
@@ -70,6 +70,8 @@ serp:
           routing-key: learning.discrepancy-detected
         to-remove:
           bindings: []
+          exchanges:
+            - gov.qa
 
     feature-vector:
       integration:
@@ -87,7 +89,7 @@ serp:
     qa:
       integration:
         request:
-          exchange: gov.qa
+          exchange: gov.events
           routingKey: event.qa-alert
       retention:
         personal-information-expired:

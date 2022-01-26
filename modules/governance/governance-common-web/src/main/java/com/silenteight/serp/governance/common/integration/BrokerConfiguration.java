@@ -139,8 +139,8 @@ class BrokerConfiguration {
     return new Declarables(
         exchangeBinding(
             GOV_EVENT_EXCHANGE,
-            exchangeProperties.getGovQa(),
-            brokerProperties.govQaRoutingKey()));
+            exchangeProperties.getGovEvents(),
+            brokerProperties.govEventsRoutingKey()));
   }
 
   private static Binding queueBinding(String queueName, String exchange, String routingKey) {
@@ -205,5 +205,10 @@ class BrokerConfiguration {
   @Bean
   BindingRemover bindingRemover(RabbitAdmin rabbitAdmin) {
     return new BindingRemover(rabbitAdmin, brokerProperties.bindingsToRemove());
+  }
+
+  @Bean
+  ExchangeRemover exchangeRemover(RabbitAdmin rabbitAdmin) {
+    return new ExchangeRemover(rabbitAdmin, brokerProperties.exchangesToRemove());
   }
 }

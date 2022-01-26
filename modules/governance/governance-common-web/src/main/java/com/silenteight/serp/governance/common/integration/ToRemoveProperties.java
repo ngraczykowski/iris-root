@@ -14,4 +14,7 @@ class ToRemoveProperties {
 
   @NonNull
   private List<BindingProperties> bindings = emptyList();
+
+  @NonNull
+  private List<String> exchanges = emptyList();
 }

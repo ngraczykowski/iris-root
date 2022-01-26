@@ -68,8 +68,8 @@ serp.governance:
               - ACTION_FALSE_POSITIVE
     integration:
       request:
-        exchange: ${serp.governance.messaging.exchange.gov-qa}
-        routingKey: ${serp.governance.messaging.broker.gov-qa.routing-key}
+        exchange: ${serp.governance.messaging.exchange.gov-events}
+        routingKey: ${serp.governance.messaging.broker.gov-events.routing-key}
       receive:
         queue-name: gov.event.queue.test
     viewing:
@@ -93,7 +93,7 @@ serp.governance:
       model: gov.model
       notification: notification
       solution-discrepancy: learning
-      gov-qa: gov.qa
+      gov-events: gov.events
       gov-event: gov.event
     broker:
       analytics:
@@ -109,7 +109,7 @@ serp.governance:
       models-archived:
         queue-name: gov.models-archived
         routing-key: event.models-archived
-      gov-qa:
+      gov-events:
         routing-key: event.qa-alert
       qa-retention-personal-information-expired:
         queue-name: gov.retention.personal-information-expired
