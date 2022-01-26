@@ -22,7 +22,9 @@ message Location {
   // Coordinates of the locality. Present only when type is city, otherwise empty.
   Coordinates coordinates = 8 [(google.api.field_behavior) = OPTIONAL];
   // The list of locations (cities or states) the location was derived from
-  repeated string derived_from = 9 [(google.api.field_behavior) = OPTIONAL];
+  repeated uint32 derived_from = 10 [(google.api.field_behavior) = OPTIONAL];
+
+  reserved 9;
 }
 
 enum LocationType {
