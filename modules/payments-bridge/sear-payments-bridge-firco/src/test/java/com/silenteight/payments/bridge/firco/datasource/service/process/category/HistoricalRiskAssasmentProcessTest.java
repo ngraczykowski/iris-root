@@ -33,7 +33,7 @@ class HistoricalRiskAssasmentProcessTest {
   void testExtract() {
     int id = 1;
     var categoryValueExtractModel = getCategoryValueExtractModel(id);
-    historicalRiskAssessmentProcess.extract(categoryValueExtractModel);
+    historicalRiskAssessmentProcess.createCategoryValue(categoryValueExtractModel);
     verify(historicalRiskAssessmentUseCase, times(1)).invoke(any());
   }
 }

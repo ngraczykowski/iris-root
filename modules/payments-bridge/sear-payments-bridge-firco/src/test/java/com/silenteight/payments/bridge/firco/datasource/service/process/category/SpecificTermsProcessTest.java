@@ -30,7 +30,10 @@ class SpecificTermsProcessTest {
   void testExtract() {
     int id = 1;
     var categoryValueExtractModel = getCategoryValueExtractModel(id);
-    specificTermsProcess.extract(categoryValueExtractModel);
+    specificTermsProcess.createCategoryValue(
+        categoryValueExtractModel.getAlertName(), categoryValueExtractModel.getMatchName(),
+        categoryValueExtractModel.getHitData()
+            .getHitAndWlPartyData());
     verify(specificTermsUseCase, times(1)).invoke(any());
   }
 }

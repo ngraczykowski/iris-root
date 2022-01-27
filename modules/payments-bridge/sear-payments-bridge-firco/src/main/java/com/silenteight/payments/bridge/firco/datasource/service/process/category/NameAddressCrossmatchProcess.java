@@ -2,9 +2,11 @@ package com.silenteight.payments.bridge.firco.datasource.service.process.categor
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
 import com.silenteight.payments.bridge.agents.port.NameAddressCrossmatchUseCase;
+import com.silenteight.payments.bridge.firco.datasource.model.CategoryValueExtractModel;
 import com.silenteight.payments.bridge.svb.oldetl.model.CreateAlertedPartyEntitiesRequest;
 import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
@@ -16,22 +18,27 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
-import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_CROSSMATCH;
+import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGORY_NAME_CROSSMATCH;
 
 @Service
 @RequiredArgsConstructor
-class NameAddressCrossmatchProcess extends BaseCategoryValueProcess {
+class NameAddressCrossmatchProcess implements CategoryValueProcess {
 
   private final NameAddressCrossmatchUseCase nameAddressCrossmatchUseCase;
   private final CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;
 
   @Override
-  protected String getCategoryName() {
-    return CATEGORY_CROSSMATCH;
+  public CategoryValue createCategoryValue(CategoryValueExtractModel categoryValueExtractModel) {
+    return CategoryValue
+        .newBuilder()
+        .setName(CATEGORY_NAME_CROSSMATCH)
+        .setAlert(categoryValueExtractModel.getAlertName())
+        .setMatch(categoryValueExtractModel.getMatchName())
+        .setSingleValue(getValue(categoryValueExtractModel.getHitData()))
+        .build();
   }
 
-  @Override
-  protected String getValue(HitData hitData) {
+  private String getValue(HitData hitData) {
     return nameAddressCrossmatchUseCase.call(createRequest(hitData)).toString();
   }
 

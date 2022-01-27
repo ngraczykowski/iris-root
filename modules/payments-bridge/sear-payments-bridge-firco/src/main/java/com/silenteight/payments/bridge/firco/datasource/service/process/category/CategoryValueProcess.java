@@ -3,7 +3,8 @@ package com.silenteight.payments.bridge.firco.datasource.service.process.categor
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.firco.datasource.model.CategoryValueExtractModel;
 
-interface CategoryValueProcess {
+public interface CategoryValueProcess {
 
-  CategoryValue extract(CategoryValueExtractModel categoryValueExtractModel);
+  CategoryValue createCategoryValue(CategoryValueExtractModel categoryValueExtractModel);
+
 }

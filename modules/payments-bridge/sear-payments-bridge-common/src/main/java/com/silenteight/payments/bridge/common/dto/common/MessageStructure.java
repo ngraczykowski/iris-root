@@ -1,5 +1,7 @@
 package com.silenteight.payments.bridge.common.dto.common;
 
+import lombok.Getter;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -11,6 +13,7 @@ public enum MessageStructure {
   UNSUPPORTED("70", "INSMN"),
   UNSTRUCTURED();
 
+  @Getter
   private final List<String> tags;
 
   MessageStructure(String... tags) {
@@ -23,7 +26,6 @@ public enum MessageStructure {
         .findFirst()
         .orElse(UNSTRUCTURED);
   }
-
 
   public static List<String> getValues() {
     return Stream.of(MessageStructure.values())

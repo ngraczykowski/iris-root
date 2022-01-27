@@ -39,7 +39,7 @@ class NameAddressCrossmatchProcessTest {
   void testExtract() {
     int id = 1;
     var categoryValueExtractModel = getCategoryValueExtractModel(id);
-    nameAddressCrossmatchProcess.extract(categoryValueExtractModel);
+    nameAddressCrossmatchProcess.createCategoryValue(categoryValueExtractModel);
     verify(nameAddressCrossmatchUseCase, times(1)).call(any());
   }
 }
