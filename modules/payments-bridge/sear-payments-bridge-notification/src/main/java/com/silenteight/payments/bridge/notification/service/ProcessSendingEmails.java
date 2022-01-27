@@ -41,22 +41,21 @@ class ProcessSendingEmails implements ProcessSendingEmailsUseCase {
           type.getId(),
           NotificationStatus.NEW);
       if (!notifications.isEmpty()) {
-        sendEmails(notifications, type.getSubject(), type.getId());
+        sendEmails(notifications, type.getId());
       }
     });
   }
 
-  private void sendEmails(List<Notification> notifications, String subject, String typeId) {
+  private void sendEmails(List<Notification> notifications, String typeId) {
 
     if (CMAPI_PROCESSING_ERROR.equals(typeId)) {
-      handleSendingCmapiProcessingNotifications(notifications, subject);
+      handleSendingCmapiProcessingNotifications(notifications);
     } else {
-      handleSendingDefaultNotifications(notifications, subject, typeId);
+      handleSendingDefaultNotifications(notifications, typeId);
     }
   }
 
-  private void handleSendingCmapiProcessingNotifications(
-      List<Notification> notifications, String subject) {
+  private void handleSendingCmapiProcessingNotifications(List<Notification> notifications) {
 
     var ids = extractIds(notifications);
 
@@ -69,6 +68,8 @@ class ProcessSendingEmails implements ProcessSendingEmailsUseCase {
       var mergedAttachment = createMergedAttachment(attachments);
 
       var attachmentName = mergedAttachment == null ? null : CMAPI_PROCESSING_ERROR_ATTACHMENT_NAME;
+
+      var subject = createSubject(notifications);
 
       var sendEmailRequest = SendEmailRequest
           .builder()
@@ -119,14 +120,14 @@ class ProcessSendingEmails implements ProcessSendingEmailsUseCase {
   }
 
   private void handleSendingDefaultNotifications(
-      List<Notification> notifications, String subject, String typeId) {
+      List<Notification> notifications, String typeId) {
     if (CSV_PROCESSED.equals(typeId) && emailNotificationProperties.isLearningEnabled()) {
       notifications.forEach(notification -> {
         var ids = List.of(notification.getId());
         var sendEmailRequest = SendEmailRequest
             .builder()
             .ids(ids)
-            .subject(subject)
+            .subject(notification.getSubject())
             .htmlText(notification.getMessage())
             .attachmentName(notification.getAttachmentName())
             .attachment(notification.getAttachment())
@@ -137,6 +138,14 @@ class ProcessSendingEmails implements ProcessSendingEmailsUseCase {
       var ids = extractIds(notifications);
       updateNotificationsAsDisabled(ids);
     }
+  }
+
+  @Nonnull
+  private String createSubject(List<Notification> notifications) {
+    return notifications.stream()
+        .map(Notification::getSubject)
+        .findFirst()
+        .orElse("");
   }
 
   private void send(SendEmailRequest sendEmailRequest, List<Long> ids) {

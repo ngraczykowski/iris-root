@@ -25,8 +25,8 @@ class FindNotification {
   @Language("PostgreSQL")
   private static final String FIND_NOTIFICATIONS_BY_TYPE =
       "SELECT pn.notification_id, pn.created_at, pn.modified_at, pnt.notification_type_id, "
-          + "pn.message, pn.attachment, pn.attachment_name,"
-          + " status FROM pb_notification pn\n"
+          + "pn.message, pn.attachment, pn.attachment_name, "
+          + "pn.status, pn.subject FROM pb_notification pn\n"
           + " LEFT JOIN pb_notification_type pnt\n"
           + " ON pn.notification_type_id = pnt.notification_type_id\n"
           + " WHERE pn.notification_type_id = ?\n"
@@ -51,6 +51,7 @@ class FindNotification {
         .attachment(rs.getBytes("attachment"))
         .attachmentName(rs.getString("attachment_name"))
         .status(NotificationStatus.valueOf(rs.getString("status")))
+        .subject(rs.getString("subject"))
         .build();
   }
 }

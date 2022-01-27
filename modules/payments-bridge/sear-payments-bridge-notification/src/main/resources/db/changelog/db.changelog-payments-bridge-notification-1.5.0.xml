@@ -26,4 +26,16 @@
     </update>
 
   </changeSet>
+
+  <changeSet id="payments-bridge-notification-1.5.1" author="msitarski">
+
+    <addColumn tableName="pb_notification">
+      <column name="subject" type="VARCHAR(128)"/>
+    </addColumn>
+
+    <dropColumn tableName="pb_notification_type"
+                columnName="subject"/>
+
+  </changeSet>
+
 </databaseChangeLog>

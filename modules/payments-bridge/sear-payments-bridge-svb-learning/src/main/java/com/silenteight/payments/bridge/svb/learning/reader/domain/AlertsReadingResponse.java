@@ -22,6 +22,7 @@ public class AlertsReadingResponse {
   public Notification toNotification() {
     return Notification.builder()
         .type("CSV_PROCESSED")
+        .subject("Silent Eight - CMAPI - alert's processing errors")
         .message(getCsvAlertsProcessedMessage())
         .build();
   }

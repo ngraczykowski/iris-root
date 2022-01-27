@@ -8,6 +8,5 @@ import lombok.Data;
 public class NotificationType {
 
   String id;
-  String subject;
 
 }

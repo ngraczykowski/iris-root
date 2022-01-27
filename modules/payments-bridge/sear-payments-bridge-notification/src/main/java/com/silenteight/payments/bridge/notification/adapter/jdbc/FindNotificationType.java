@@ -18,7 +18,7 @@ class FindNotificationType {
 
   @Language("PostgreSQL")
   private static final String FIND_NOTIFICATION_TYPES =
-      "SELECT pnt.notification_type_id, pnt.subject"
+      "SELECT pnt.notification_type_id"
           + " FROM pb_notification_type pnt";
 
   private final JdbcTemplate jdbcTemplate;
@@ -31,7 +31,6 @@ class FindNotificationType {
     return NotificationType
         .builder()
         .id(rs.getString(1))
-        .subject(rs.getString(2))
         .build();
   }
 }

@@ -31,5 +31,8 @@ class AlertsReadingResponseTest {
         + "</html>\n";
 
     assertEquals(expectedMessage, alertsReadingResponse.toNotification().getMessage());
+    assertEquals(
+        "Silent Eight - CMAPI - alert's processing errors",
+        alertsReadingResponse.toNotification().getSubject());
   }
 }

@@ -19,8 +19,9 @@ class InsertNotificationRequest {
   @Language("PostgreSQL")
   private static final String SQL =
       "INSERT INTO pb_notification(notification_type_id, message, attachment, attachment_name, "
-          + "status)\n"
-          + " VALUES (:notification_type_id, :message, :attachment, :attachment_name, :status)";
+          + "status, subject)\n"
+          + " VALUES (:notification_type_id, :message, :attachment, "
+          + ":attachment_name, :status, :subject)";
 
   private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -34,6 +35,7 @@ class InsertNotificationRequest {
     notificationParams.put("attachment", notification.getAttachment());
     notificationParams.put("attachment_name", notification.getAttachmentName());
     notificationParams.put("status", NotificationStatus.NEW.toString());
+    notificationParams.put("subject", notification.getSubject());
 
     namedParameterJdbcTemplate.update(SQL, notificationParams);
   }

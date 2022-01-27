@@ -32,6 +32,8 @@ class CmapiNotificationCreatorService implements CmapiNotificationCreatorUseCase
       { "Alert Id", "Alert Name", "Message Id", "System Id", "Message" };
 
   private static final String CMAPI_PROCESSING_ERROR = "CMAPI_PROCESSING_ERROR";
+  private static final String CMAPI_PROCESSING_ERROR_SUBJECT =
+      "Silent Eight - CMAPI - alert's processing errors";
   private static final String TEMP_FILE_NAME = "CMAPI_ERRORS";
   private static final String CSV_EXTENSION = ".csv";
 
@@ -39,6 +41,7 @@ class CmapiNotificationCreatorService implements CmapiNotificationCreatorUseCase
   public Notification createCmapiNotification(CmapiNotificationRequest cmapiNotificationRequest) {
     return Notification.builder()
         .type(CMAPI_PROCESSING_ERROR)
+        .subject(CMAPI_PROCESSING_ERROR_SUBJECT)
         .message(createMessage())
         .attachment(createAttachment(cmapiNotificationRequest))
         .attachmentName(TEMP_FILE_NAME + CSV_EXTENSION)

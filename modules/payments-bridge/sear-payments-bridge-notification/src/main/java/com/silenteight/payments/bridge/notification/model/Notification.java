@@ -9,6 +9,7 @@ public class Notification {
 
   private Long id;
   private String type;
+  private String subject;
   private String message;
   private byte[] attachment;
   private String attachmentName;
