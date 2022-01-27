@@ -1,7 +1,6 @@
-package com.silenteight.payments.bridge.firco.datasource.service.process;
+package com.silenteight.payments.bridge.firco.datasource.service.process.agent;
 
 import com.silenteight.datasource.api.name.v1.NameFeatureInput;
-import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
 import com.silenteight.sep.base.testing.grpc.GrpcServerExtension;
 
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessFixture.createHitData;
@@ -24,12 +22,9 @@ class OrganizationNameAgentEtlProcessTest {
 
   private OrganizationNameAgentEtlProcess organizationNameAgentEtlProcess;
 
-  @Mock
-  private CreateAgentInputsClient createAgentInputsClient;
-
   @BeforeEach
   void setup() {
-    organizationNameAgentEtlProcess = new OrganizationNameAgentEtlProcess(createAgentInputsClient);
+    organizationNameAgentEtlProcess = new OrganizationNameAgentEtlProcess();
   }
 
   @Test

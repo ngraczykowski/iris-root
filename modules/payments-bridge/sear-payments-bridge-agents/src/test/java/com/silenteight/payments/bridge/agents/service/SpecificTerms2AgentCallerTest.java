@@ -32,7 +32,7 @@ class SpecificTerms2AgentCallerTest {
       delimiter = ',',
       numLinesToSkip = 1)
   void parametrizedTest(String fieldValue, SpecificTermsAgentResponse expected) {
-    SpecificTermsAgentResponse actual = specificTerms2Agent.invoke(
+    var actual = specificTerms2Agent.invoke(
         SpecificTermsRequest
             .builder()
             .allMatchFieldsValue(fieldValue.replace("\\n", "\n"))

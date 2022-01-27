@@ -1,10 +1,9 @@
-package com.silenteight.payments.bridge.firco.datasource.service.process;
+package com.silenteight.payments.bridge.firco.datasource.service.process.agent;
 
 import com.silenteight.datasource.api.name.v1.AlertedPartyName;
 import com.silenteight.datasource.api.name.v1.NameFeatureInput;
 import com.silenteight.datasource.api.name.v1.WatchlistName;
 import com.silenteight.payments.bridge.agents.port.CreateNameFeatureInputUseCase;
-import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,9 +26,6 @@ class NameAgentEtlProcessTest {
   @Mock
   private CreateNameFeatureInputUseCase nameAgentUseCase;
 
-  @Mock
-  private CreateAgentInputsClient createAgentInputsClient;
-
   @BeforeEach
   void setup() {
     when(nameAgentUseCase.create(any())).thenReturn(NameFeatureInput.newBuilder()
@@ -42,7 +38,7 @@ class NameAgentEtlProcessTest {
             .setName("watchlistPartyNames")
             .build())
         .build());
-    nameAgentEtlProcess = new NameAgentEtlProcess(createAgentInputsClient, nameAgentUseCase);
+    nameAgentEtlProcess = new NameAgentEtlProcess(nameAgentUseCase);
   }
 
   @Test

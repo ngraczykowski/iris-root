@@ -7,7 +7,7 @@ import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.common.model.AeAlert;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePayloadUseCase;
-import com.silenteight.payments.bridge.firco.datasource.model.EtlProcess;
+import com.silenteight.payments.bridge.firco.datasource.port.CreateDatasourceInputsUseCase;
 import com.silenteight.payments.bridge.firco.datasource.port.EtlUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.model.BridgeSourcedRecommendation;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
@@ -23,19 +23,17 @@ import org.slf4j.MDC;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Service
 @Slf4j
 class EtlService implements EtlUseCase {
 
-  private final List<EtlProcess> processes;
   private final ExtractAlertEtlResponseUseCase extractAlertEtlResponseUseCase;
   private final AlertMessagePayloadUseCase alertMessagePayloadUseCase;
   private final CreateRecommendationUseCase createRecommendationUseCase;
   private final CmapiNotificationCreatorUseCase cmapiNotificationCreatorUseCase;
   private final ApplicationEventPublisher applicationEventPublisher;
+  private final CreateDatasourceInputsUseCase createDatasourceInputs;
 
   @LogContext
   @Override
@@ -49,7 +47,11 @@ class EtlService implements EtlUseCase {
 
     try {
       var alertEtlResponse = extractAlertEtlResponseUseCase.createAlertEtlResponse(alertMessageDto);
-      processes.forEach(process -> process.extractAndLoad(alert, alertEtlResponse));
+      createDatasourceInputs.processStructured(alert, alertEtlResponse.getHits());
+
+      var hitAndWatchlistPartyData =
+          extractAlertEtlResponseUseCase.getWatchlistDataForMatch(alertMessageDto);
+      createDatasourceInputs.processUnstructured(alert.getAlertName(), hitAndWatchlistPartyData);
 
     } catch (UnsupportedMessageException exception) {
       log.error("Failed to process a message payload associated with the alert: {}. "
@@ -74,7 +76,6 @@ class EtlService implements EtlUseCase {
       throw exception;
     }
   }
-
 
   private AlertMessageDto getAlertMessageDto(AeAlert alert) {
     var alertId = alert.getAlertId();

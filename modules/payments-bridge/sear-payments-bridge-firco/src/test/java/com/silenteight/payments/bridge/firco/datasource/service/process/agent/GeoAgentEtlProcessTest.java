@@ -1,13 +1,11 @@
-package com.silenteight.payments.bridge.firco.datasource.service.process;
+package com.silenteight.payments.bridge.firco.datasource.service.process.agent;
 
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
-import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessFixture.createHitData;
@@ -19,12 +17,9 @@ class GeoAgentEtlProcessTest {
 
   private GeoAgentEtlProcess geoAgentEtlProcess;
 
-  @Mock
-  private CreateAgentInputsClient createAgentInputsClient;
-
   @BeforeEach
   void setup() {
-    geoAgentEtlProcess = new GeoAgentEtlProcess(createAgentInputsClient);
+    geoAgentEtlProcess = new GeoAgentEtlProcess();
   }
 
   @Test

@@ -3,7 +3,6 @@ package com.silenteight.payments.bridge.firco.datasource.service.process;
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.model.AeAlert;
 import com.silenteight.payments.bridge.firco.datasource.model.CategoryValueExtractModel;
-import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
@@ -47,9 +46,8 @@ public class EtlProcessFixture {
     return "alerts/" + id;
   }
 
-  public static AlertEtlResponse createAlertEtlResponse(int numberOfHits) {
-    List<HitData> hitDataList = createHitDataList(numberOfHits);
-    return AlertEtlResponse.builder().hits(hitDataList).build();
+  public static List<HitData> createListOfHitData(int numberOfHits) {
+    return createHitDataList(numberOfHits);
   }
 
   public static CategoryValueExtractModel getCategoryValueExtractModel(int id) {

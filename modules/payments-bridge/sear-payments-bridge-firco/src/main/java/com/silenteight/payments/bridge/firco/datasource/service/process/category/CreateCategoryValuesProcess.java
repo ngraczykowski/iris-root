@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 class CreateCategoryValuesProcess implements CreateCategoryValue {
 
-  private final List<CreateCategoryValueStructured> createCategoryValueStructured;
+  private final List<CategoryValueProcess> createCategoryValueStructured;
   private final List<CreateCategoryValueUnstructured> createCategoryValueUnstructured;
 
   @Override

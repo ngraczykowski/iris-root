@@ -1,13 +1,13 @@
-package com.silenteight.payments.bridge.firco.datasource.service.process;
+package com.silenteight.payments.bridge.firco.datasource.service.process.agent;
 
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
-import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import com.google.protobuf.Any;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,11 +16,8 @@ import java.util.function.Function;
 
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.GEO_FEATURE;
 
+@Component
 class GeoAgentEtlProcess extends BaseAgentEtlProcess<LocationFeatureInput> {
-
-  GeoAgentEtlProcess(CreateAgentInputsClient createAgentInputsClient) {
-    super(createAgentInputsClient);
-  }
 
   @Override
   protected List<FeatureInput> createDataSourceFeatureInputs(HitData hitData) {

@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.firco.datasource.service.process;
+package com.silenteight.payments.bridge.firco.datasource.service.process.agent;
 
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 

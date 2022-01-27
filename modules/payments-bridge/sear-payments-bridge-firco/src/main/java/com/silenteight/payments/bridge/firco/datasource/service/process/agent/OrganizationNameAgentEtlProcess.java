@@ -1,14 +1,14 @@
-package com.silenteight.payments.bridge.firco.datasource.service.process;
+package com.silenteight.payments.bridge.firco.datasource.service.process.agent;
 
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.datasource.api.name.v1.AlertedPartyName;
 import com.silenteight.datasource.api.name.v1.NameFeatureInput;
 import com.silenteight.datasource.api.name.v1.WatchlistName;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
-import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import com.google.protobuf.Any;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,11 +18,8 @@ import java.util.stream.Collectors;
 
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.ORGANIZATION_NAME_FEATURE;
 
+@Component
 class OrganizationNameAgentEtlProcess extends BaseAgentEtlProcess<NameFeatureInput> {
-
-  OrganizationNameAgentEtlProcess(CreateAgentInputsClient createAgentInputsClient) {
-    super(createAgentInputsClient);
-  }
 
   @Override
   protected List<FeatureInput> createDataSourceFeatureInputs(HitData hitData) {
