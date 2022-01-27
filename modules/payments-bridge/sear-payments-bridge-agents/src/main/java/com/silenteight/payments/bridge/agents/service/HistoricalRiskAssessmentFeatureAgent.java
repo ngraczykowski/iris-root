@@ -32,7 +32,7 @@ class HistoricalRiskAssessmentFeatureAgent implements HistoricalRiskAssessmentFe
     return HistoricalDecisionsFeatureInput.newBuilder()
         .setFeature(featureName)
         .setModelKey(createModelKey(request))
-        .setDiscriminator(createDiscriminator())
+        .setDiscriminator(createDiscriminator(request.getFeature()))
         .build();
   }
 
@@ -73,10 +73,14 @@ class HistoricalRiskAssessmentFeatureAgent implements HistoricalRiskAssessmentFe
         .build();
   }
 
-  private Discriminator createDiscriminator() {
+  private Discriminator createDiscriminator(String feature) {
     return Discriminator.newBuilder()
-        .setValue(properties.getDiscriminator())
+        .setValue(getDiscriminatorValue(feature))
         .build();
+  }
+
+  private String getDiscriminatorValue(String feature) {
+    return properties.getDiscriminatorPrefix() + "_" + feature;
   }
 
   private static String getFeatureName(String featureName) {

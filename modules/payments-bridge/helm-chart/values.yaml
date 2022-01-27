@@ -55,4 +55,4 @@ mail:
   password: ""
 
 svbLearning:
-  discriminator: ""
+  discriminatorPrefix: ""

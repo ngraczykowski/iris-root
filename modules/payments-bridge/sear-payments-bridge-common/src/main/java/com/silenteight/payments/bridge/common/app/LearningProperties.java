@@ -20,7 +20,7 @@ public class LearningProperties {
   @NotEmpty
   private String timeZone = "America/Chicago";
   private String fileEncoding = "CP1250";
-  private String discriminator = "";
+  private String discriminatorPrefix = "";
   private int chunkSize = 128;
 
   @PostConstruct

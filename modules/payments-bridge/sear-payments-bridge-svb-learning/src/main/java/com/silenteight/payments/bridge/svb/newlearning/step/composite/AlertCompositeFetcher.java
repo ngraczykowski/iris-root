@@ -57,7 +57,7 @@ class AlertCompositeFetcher extends BaseCompositeFetcher<List<Long>, List<AlertC
         .map(ad -> AlertComposite
             .builder()
             .alertMessageId(UUID.randomUUID())
-            .discriminator(properties.getDiscriminator())
+            .discriminator(properties.getDiscriminatorPrefix())
             .alertDetails(ad)
             .hits(hits.get(ad.getFkcoId()))
             .actions(actions.get(ad.getFkcoId()))
