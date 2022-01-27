@@ -9,6 +9,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlert
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static com.silenteight.payments.bridge.common.app.AlertLabelUtils.ALERT_LABEL_JOB_ID;
 import static com.silenteight.payments.bridge.common.app.AlertLabelUtils.ALERT_LABEL_LEARNING;
@@ -45,6 +46,7 @@ public class AlertDetails {
   public RegisterAlertRequest toRegisterAlertRequest(Long jobId, List<HitComposite> hits) {
     return RegisterAlertRequest
         .builder()
+        .alertMessageId(UUID.randomUUID())
         .fkcoSystemId(systemId)
         .alertTime(fromOffsetDateTime(fkcoDFilteredDateTime))
         .priority(LEARNING_PRIORITY)
