@@ -9,6 +9,7 @@ import com.silenteight.adjudication.engine.analysis.recommendation.domain.Pendin
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.RecommendationResponse;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -26,7 +27,7 @@ class JdbcRecommendationDataAccess implements RecommendationDataAccess {
   private final InsertAlertRecommendationsQuery insertAlertRecommendationsQuery;
 
   @Override
-  @Transactional(readOnly = true)
+  @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
   public PendingAlerts selectPendingAlerts(long analysisId) {
     return selectPendingAlertsQuery.execute(analysisId);
   }
