@@ -14,6 +14,14 @@ spring:
 warehouse:
   report:
     default-bucket: report
+    removal:
+      cron: "0 0 1 * * ?"
+      duration-time: P1D
+    file-name:
+      # Available patterns: [reportType], [from], [to], [timestamp]
+      production-pattern: "[reportType]_Prod_[from]_To_[to].csv"
+      # Available patterns: [reportType], [analysisId], [timestamp]
+      simulation-pattern: "[reportType]_Sim_[analysisId].csv"
     copy-csv-pattern: "COPY ( %s ) TO STDOUT WITH (FORMAT CSV, HEADER)"
   environment:
     prefix: itest
@@ -27,6 +35,19 @@ warehouse:
   alert-mapping:
     country-source-key: lob_country
   match-mapping:
+
+warehouse.reports.v2:
+  reports:
+    - name: TEST_REPORT
+      type: production
+      description: Test report
+      selectSqlQuery: >
+        SELECT (payload ->> 'fvSignature') AS "Reasoning Branch ID",
+               discriminator AS "Alert S8 ID",
+               name AS "Alert S8 Name",
+               recommendation_date
+        FROM warehouse_alert
+#        WHERE recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
 
 logging:
   level:

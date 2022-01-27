@@ -1,32 +1,29 @@
 package com.silenteight.warehouse.report;
 
-
-import com.silenteight.sep.auth.token.TokenModule;
 import com.silenteight.sep.filestorage.minio.FileStorageMinioModule;
 import com.silenteight.warehouse.common.domain.DomainModule;
-import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
-import com.silenteight.warehouse.common.environment.EnvironmentModule;
-import com.silenteight.warehouse.common.opendistro.OpendistroModule;
-import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
-import com.silenteight.warehouse.indexer.query.QueryAlertModule;
-import com.silenteight.warehouse.report.reporting.ReportingModule;
+import com.silenteight.warehouse.report.create.ReportCreateModule;
+import com.silenteight.warehouse.report.download.ReportDownloadModule;
+import com.silenteight.warehouse.report.generation.ReportGenerationModule;
+import com.silenteight.warehouse.report.name.ReportFileNameModule;
+import com.silenteight.warehouse.report.persistence.ReportPersistenceModule;
 import com.silenteight.warehouse.report.sql.SqlExecutorModule;
+import com.silenteight.warehouse.report.status.ReportStatusModule;
 import com.silenteight.warehouse.report.storage.StorageModule;
 
 import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackageClasses = {
-    ElasticsearchRestClientModule.class,
-    EnvironmentModule.class,
-    OpendistroModule.class,
-    ReportingModule.class,
-    QueryAlertModule.class,
-    StorageModule.class,
-    TestElasticSearchModule.class,
-    TokenModule.class,
+    DomainModule.class,
     FileStorageMinioModule.class,
-    SqlExecutorModule.class,
-    DomainModule.class
+    ReportCreateModule.class,
+    ReportDownloadModule.class,
+    ReportFileNameModule.class,
+    ReportGenerationModule.class,
+    ReportPersistenceModule.class,
+    ReportStatusModule.class,
+    StorageModule.class,
+    SqlExecutorModule.class
 })
-class ReportGenerationConfiguration  {
+class ReportGenerationConfiguration {
 }

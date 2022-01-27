@@ -35,7 +35,7 @@ public class ReportStatus {
         .build();
   }
 
-  private enum Status {
+  public enum Status {
     OK,
     GENERATING,
     FAILED
