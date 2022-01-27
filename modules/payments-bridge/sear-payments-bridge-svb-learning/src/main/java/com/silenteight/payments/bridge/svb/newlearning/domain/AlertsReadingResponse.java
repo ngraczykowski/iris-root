@@ -17,7 +17,7 @@ public class AlertsReadingResponse {
 
   List<String> errors;
 
-  private String fileName;
+  String fileName;
 
   public Notification toNotification() {
     return Notification.builder()

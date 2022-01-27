@@ -15,15 +15,8 @@ import java.util.List;
 @RequiredArgsConstructor
 class JdbcLearningDataAccess implements LearningDataAccess {
 
-  private final List<RemoveDuplicatedQuery> removeDuplicatedQueries;
   private final SelectProcessedAlertsStatusQuery selectProcessedAlertsStatusQuery;
   private final InsertAlertResultQuery insertAlertResultQuery;
-
-  @Override
-  @Transactional
-  public void removeDuplicates() {
-    removeDuplicatedQueries.forEach(RemoveDuplicatedQuery::remove);
-  }
 
   @Override
   public AlertsReadingResponse select(long jobId, String fileName) {

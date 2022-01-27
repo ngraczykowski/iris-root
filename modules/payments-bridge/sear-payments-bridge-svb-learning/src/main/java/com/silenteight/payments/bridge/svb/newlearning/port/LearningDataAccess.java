@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface LearningDataAccess {
 
-  void removeDuplicates();
-
   AlertsReadingResponse select(long jobId, String fileName);
 
   void saveResult(List<LearningProcessedAlert> alerts);
