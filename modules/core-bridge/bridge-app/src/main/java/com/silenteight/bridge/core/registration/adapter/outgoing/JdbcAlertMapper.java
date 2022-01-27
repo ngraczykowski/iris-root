@@ -47,7 +47,7 @@ class JdbcAlertMapper {
   }
 
   AlertName toAlertName(AlertIdNameProjection projection) {
-    return new AlertName(projection.alertName());
+    return new AlertName(projection.name());
   }
 
   AlertStatusStatistics toAlertsStatistics(List<AlertStatusStatisticsProjection> projection) {

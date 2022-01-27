@@ -33,7 +33,7 @@ class JdbcBatchRepository implements BatchRepository {
   @Override
   public Optional<BatchIdWithPolicy> findBatchIdWithPolicyByAnalysisName(String analysisName) {
     return crudBatchRepository.findBatchIdWithPolicyByAnalysisName(analysisName)
-        .map(projection -> new BatchIdWithPolicy(projection.id(), projection.policyId()));
+        .map(projection -> new BatchIdWithPolicy(projection.batchId(), projection.policyName()));
   }
 
   @Override

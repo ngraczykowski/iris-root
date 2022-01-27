@@ -28,52 +28,72 @@ class RecommendationServiceClientMock implements RecommendationServiceClient {
         .toList();
   }
 
-  private List<AlertIdName> getAlertNames(String analysis) {
+  private List<AlertDto> getAlertNames(String analysis) {
     var namedParameters = new MapSqlParameterSource()
         .addValue("analysisName", analysis)
         .addValue("status", AlertStatus.ERROR.name());
     var alertNamesFromDb = jdbcTemplate.query(
         """
-            SELECT name, alert_id 
+            SELECT a.id, name, alert_id 
             FROM alerts a
             LEFT JOIN batches b ON a.batch_id = b.batch_id
             WHERE analysis_name = :analysisName
             AND a.status != :status
             """,
         namedParameters,
-        (rs, rowNum) -> new AlertIdName(rs.getString("ALERT_ID"), rs.getString("NAME")));
+        (rs, rowNum) -> new AlertDto(
+            rs.getInt("ID"),
+            rs.getString("ALERT_ID"),
+            rs.getString("NAME")));
     if (alertNamesFromDb.isEmpty()) {
       return List.of(getRandomAlertIdName(), getRandomAlertIdName());
     }
     return alertNamesFromDb;
   }
 
-  private AlertIdName getRandomAlertIdName() {
-    return new AlertIdName(UUID.randomUUID().toString(), UUID.randomUUID().toString());
+  private AlertDto getRandomAlertIdName() {
+    return new AlertDto(1, UUID.randomUUID().toString(), UUID.randomUUID().toString());
   }
 
-  private RecommendationWithMetadataOut getRecommendation(AlertIdName alertIdName) {
+  private RecommendationWithMetadataOut getRecommendation(AlertDto alertIdName) {
     return RecommendationWithMetadataOut.builder()
         .name(UUID.randomUUID().toString())
         .alert(alertIdName.alertName())
         .recommendedAction(RecommendedAction.getRandom())
         .recommendationComment("recommendationComment/mock")
         .date(OffsetDateTime.now())
-        .metadata(createMockMetadata(alertIdName.alertId()))
+        .metadata(createMockMetadata(alertIdName.id()))
         .build();
   }
 
-  private RecommendationMetadataOut createMockMetadata(String alertId) {
+  private RecommendationMetadataOut createMockMetadata(Integer alertId) {
     var recommendationMetadata = new RecommendationMetadataOut();
-    var metadata = new MatchMetadataOut();
-    metadata.setMatch("alerts/" + alertId + "/matches/" + UUID.randomUUID());
-    metadata.setSolution("solution/mock");
-    metadata.setReason(getReason());
-    metadata.setCategories(Map.of("mockCategory", "someCategory"));
-    metadata.setFeatures(Map.of("mockFeature", createMockFeatureMetadata()));
-
-    recommendationMetadata.setMatchesMetadata(List.of(metadata));
+    var matchesMetadata = getMatchMetadataOuts(alertId);
+    recommendationMetadata.setMatchesMetadata(matchesMetadata);
     return recommendationMetadata;
+  }
+
+  private List<MatchMetadataOut> getMatchMetadataOuts(Integer alertId) {
+    var namedParameters = new MapSqlParameterSource()
+        .addValue("alertId", alertId);
+    var matchesFromDb = jdbcTemplate.queryForList(
+        """
+            SELECT name 
+            FROM matches m
+            WHERE alert_id = :alertId
+            """,
+        namedParameters, String.class);
+
+    return matchesFromDb.stream()
+        .map(matchName -> {
+          var metadata = new MatchMetadataOut();
+          metadata.setMatch(matchName);
+          metadata.setSolution("EXACT_MATCH");
+          metadata.setReason(getReason());
+          metadata.setCategories(Map.of("mockCategory", "someCategory"));
+          metadata.setFeatures(Map.of("mockFeature", createMockFeatureMetadata()));
+          return metadata;
+        }).toList();
   }
 
   private Map<String, String> getReason() {
@@ -111,5 +131,5 @@ class RecommendationServiceClientMock implements RecommendationServiceClient {
   }
 
 
-  private record AlertIdName(String alertId, String alertName) {}
+  private record AlertDto(Integer id, String alertId, String alertName) {}
 }

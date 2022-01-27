@@ -67,15 +67,15 @@ class AlertServiceClientMock implements AlertServiceClient {
     return AlertWithMatchesOut.builder()
         .alertId(alert.getAlertId())
         .alertName(UUID.randomUUID().toString())
-        .matches(getAlertMatches(alert.getMatchIds()))
+        .matches(getAlertMatches(alert.getMatchIds(), alert.getAlertId()))
         .build();
   }
 
-  private List<AlertMatchOut> getAlertMatches(Collection<String> matches) {
+  private List<AlertMatchOut> getAlertMatches(Collection<String> matches, String alertId) {
     return matches.stream()
         .map(matchId -> AlertMatchOut.builder()
             .matchId(matchId)
-            .name(UUID.randomUUID().toString())
+            .name("alerts/" + alertId + "/matches/" + matchId)
             .build())
         .toList();
   }
