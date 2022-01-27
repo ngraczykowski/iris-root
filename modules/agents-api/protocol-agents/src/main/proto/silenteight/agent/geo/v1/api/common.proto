@@ -17,8 +17,8 @@ message Location {
   // A reference id to the parent location.
   uint32 parent_id = 5;
   google.protobuf.Any details = 6;
-  // Whether location was derived from state or city
-  bool derived = 7;
+  // Whether location was provided explicitly, not derived
+  bool explicitly_provided = 7;
   // Coordinates of the locality. Present only when type is city, otherwise empty.
   Coordinates coordinates = 8 [(google.api.field_behavior) = OPTIONAL];
   // The list of locations (cities or states) the location was derived from
