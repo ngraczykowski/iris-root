@@ -57,6 +57,8 @@ warehouse.report.rbs:
         label: Specific Terms
       - name: match_category_values_categories/specificTerms2
         label: Specific Terms v2
+      - name: match_category_values_categories/messageStructure
+        label: Message Structure
       - name: match_category_values_categories/historicalRiskAssessment
         label: Historical Risk Assessment
       - name: match_category_values_categories/watchlistType
@@ -110,6 +112,8 @@ warehouse.report.rbs:
         label: Specific Terms
       - name: alert_categories/specificTerms2:value
         label: Specific Terms v2
+      - name: alert_categories/messageStructure:value
+        label: Message Structure
       - name: alert_categories/historicalRiskAssessment:value
         label: Historical Risk Assessment
       - name: alert_categories/watchlistType:value
