@@ -25,5 +25,6 @@ gradleBuild(
     awsECR()
     helmChartRegistry()
     deployOnNomad()
+    redeploySierraDev()
   }
 )
