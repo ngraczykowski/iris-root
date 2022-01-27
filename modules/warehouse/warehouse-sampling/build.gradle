@@ -8,7 +8,11 @@ description = "Warehouse Sampling"
 configurations {
   implementation.extendsFrom starterCommon
   implementation.extendsFrom starterGrpc
-  implementation.extendsFrom starterMessaging
+
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+
+  testImplementation.extendsFrom starterSpringTest
 }
 
 dependencies {
@@ -22,7 +26,10 @@ dependencies {
 
   implementation libraries.grpc_api
   implementation libraries.grpc_stub
+  
+  implementation libraries.test_containers_junit_jupiter
 
   testImplementation project(":warehouse-common-testing")
   testImplementation libraries.awaitility
+  testImplementation libraries.spring_cloud_starter_sleuth
 }

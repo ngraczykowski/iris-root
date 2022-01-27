@@ -23,6 +23,8 @@ warehouse:
     filters:
       - name: alert_status
         values: COMPLETED, LEARNING_COMPLETED
+  alert-provider:
+    is-sql-support-enabled: true
 
 test:
   messaging:

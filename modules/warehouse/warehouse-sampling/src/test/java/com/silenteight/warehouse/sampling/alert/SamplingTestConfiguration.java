@@ -5,10 +5,9 @@ import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchM
 import com.silenteight.warehouse.common.time.TimeModule;
 import com.silenteight.warehouse.indexer.query.single.SingleAlertQueryConfiguration;
 
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
 @ComponentScan(basePackageClasses = {
     SamplingConfiguration.class,
     SingleAlertQueryConfiguration.class,
@@ -16,5 +15,6 @@ import org.springframework.context.annotation.Configuration;
     TimeModule.class,
     TokenModule.class
 })
+@JdbcTest
 public class SamplingTestConfiguration {
 }

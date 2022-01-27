@@ -1,5 +1,7 @@
 package com.silenteight.warehouse.indexer.query.single;
 
+import com.silenteight.warehouse.indexer.alert.AlertPostgresRepository;
+import com.silenteight.warehouse.indexer.alert.AlertRepository;
 import com.silenteight.warehouse.indexer.alert.indexing.ElasticsearchProperties;
 import com.silenteight.warehouse.indexer.alert.mapping.AlertMappingProperties;
 
@@ -8,13 +10,15 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.validation.Valid;
 
 @Configuration
 @EnableConfigurationProperties({
     ElasticsearchProperties.class,
-    AlertMappingProperties.class
+    AlertMappingProperties.class,
+    AlertProviderProperties.class
 })
 public class SingleAlertQueryConfiguration {
 
@@ -49,8 +53,13 @@ public class SingleAlertQueryConfiguration {
   }
 
   @Bean
-  // TODO(tdrozdz): Add isSqlSupported to properties
-  @ConditionalOnProperty(value = "isSqlSupported", havingValue = "false", matchIfMissing = true)
+  AlertRepository createAlertRepository(JdbcTemplate jdbcTemplate) {
+    return new AlertPostgresRepository(jdbcTemplate);
+  }
+
+  @Bean
+  @ConditionalOnProperty(value = "warehouse.alert-provider.is-sql-support-enabled",
+      havingValue = "false", matchIfMissing = true)
   RandomAlertService randomElasticAlertQueryService(
       AlertSearchService alertSearchService, RestHighLevelClient restHighLevelAdminClient,
       ProductionSearchRequestBuilder productionSearchRequestBuilder) {
@@ -60,9 +69,9 @@ public class SingleAlertQueryConfiguration {
   }
 
   @Bean
-  // TODO(tdrozdz): Add isSqlSupported to properties
-  @ConditionalOnProperty(value = "isSqlSupported", havingValue = "true")
-  RandomAlertService randomPostgresAlertQueryService() {
-    return new RandomPostgresSearchAlertQueryService();
+  @ConditionalOnProperty(value = "warehouse.alert-provider.is-sql-support-enabled",
+      havingValue = "true")
+  RandomAlertService randomPostgresAlertQueryService(AlertRepository alertRepository) {
+    return new RandomPostgresSearchAlertQueryService(alertRepository);
   }
 }

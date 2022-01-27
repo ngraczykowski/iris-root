@@ -33,6 +33,8 @@ spring:
           enabled: false
 
 warehouse:
+  alert-provider:
+    isSqlSupportEnabled: false
   alert-mapping:
     country-source-key: s8_lobCountryCode
     ignored-keys:

@@ -2,6 +2,7 @@ package com.silenteight.warehouse.indexer.alert.indexing;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
@@ -27,8 +29,8 @@ import static org.awaitility.Awaitility.await;
 
 @SpringBootTest(classes = AlertTestConfiguration.class)
 @ContextConfiguration(initializers = {
-    OpendistroElasticContainerInitializer.class
-})
+    OpendistroElasticContainerInitializer.class, PostgresTestInitializer.class })
+@ActiveProfiles({ "jpa-test" })
 @Slf4j
 class AlertIT {
 
@@ -50,6 +52,14 @@ class AlertIT {
     safeDeleteIndex(PRODUCTION_ELASTIC_WRITE_INDEX_NAME);
   }
 
+  private void safeDeleteIndex(String index) {
+    try {
+      simpleElasticTestClient.removeIndex(index);
+    } catch (ElasticsearchException e) {
+      log.debug("index not present index={}", index);
+    }
+  }
+
   @Test
   void shouldStoreAlerts() {
     MapWithIndex mapWithIndex = new MapWithIndex(
@@ -67,13 +77,5 @@ class AlertIT {
     long documentCount =
         simpleElasticTestClient.getDocumentCount(PRODUCTION_ELASTIC_READ_ALIAS_NAME);
     assertThat(documentCount).isEqualTo(1);
-  }
-
-  private void safeDeleteIndex(String index) {
-    try {
-      simpleElasticTestClient.removeIndex(index);
-    } catch (ElasticsearchException e) {
-      log.debug("index not present index={}", index);
-    }
   }
 }

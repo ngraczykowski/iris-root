@@ -1,5 +1,6 @@
 package com.silenteight.warehouse.indexer.query.index;
 
+import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
@@ -20,7 +22,9 @@ import static java.util.Map.of;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest(classes = QueryIndexServiceTestConfiguration.class)
-@ContextConfiguration(initializers = { OpendistroElasticContainerInitializer.class })
+@ContextConfiguration(initializers = {
+    OpendistroElasticContainerInitializer.class, PostgresTestInitializer.class })
+@ActiveProfiles({ "jpa-test" })
 class FieldsQueryIndexServiceTest {
 
   @Autowired
@@ -41,6 +45,10 @@ class FieldsQueryIndexServiceTest {
     removeData();
   }
 
+  private void removeData() {
+    testClient.removeIndex(PRODUCTION_ELASTIC_WRITE_INDEX_NAME);
+  }
+
   @Test
   void shouldReturnListOfFields() {
     testClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, DOCUMENT_ID, of(
@@ -50,9 +58,5 @@ class FieldsQueryIndexServiceTest {
     List<String> fields = underTest.getFieldsList(PRODUCTION_ELASTIC_READ_ALIAS_NAME);
 
     assertThat(fields).containsExactlyInAnyOrder(DISCRIMINATOR);
-  }
-
-  private void removeData() {
-    testClient.removeIndex(PRODUCTION_ELASTIC_WRITE_INDEX_NAME);
   }
 }

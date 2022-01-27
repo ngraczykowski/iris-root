@@ -28,6 +28,9 @@ dependencies {
 
   implementation 'org.jooq:jooq:3.13.4'
 
+  implementation libraries.test_containers_postgresql
+  implementation libraries.test_containers_junit_jupiter
+
   testImplementation project(":warehouse-common-testing")
   testImplementation project(":warehouse-test-client")
   testImplementation libraries.awaitility

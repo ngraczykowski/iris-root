@@ -76,6 +76,8 @@ class SamplingAlertService {
 
     return AlertSearchCriteria.builder()
         .timeFieldName(samplingProperties.getTimeFieldName())
+        // TODO: conversion will be not needed after switching to postgres as we are storing it as
+        // timestamp
         .timeRangeFrom(convertTimeToDate(alertsSampleRequest.getTimeRangeFrom()))
         .timeRangeTo(convertTimeToDate(alertsSampleRequest.getTimeRangeTo()))
         .alertLimit(alertsSampleRequest.getAlertCount())

@@ -8,6 +8,7 @@ import java.util.List;
 
 @Value
 @AllArgsConstructor
+// TODO: probably shouldn't have MultiValueEntry as we could use directly ListMultimap
 public class MultiValueEntry {
 
   @NonNull

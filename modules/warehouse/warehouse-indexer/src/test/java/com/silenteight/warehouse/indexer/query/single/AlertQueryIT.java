@@ -2,6 +2,7 @@ package com.silenteight.warehouse.indexer.query.single;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.common.testing.rest.WithElasticAccessCredentials;
@@ -16,6 +17,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Collection;
@@ -36,9 +38,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(classes = AlertQueryTestConfiguration.class)
 @ContextConfiguration(initializers = {
-    OpendistroElasticContainerInitializer.class
+    OpendistroElasticContainerInitializer.class,
+    PostgresTestInitializer.class
+
 })
 @Slf4j
+@ActiveProfiles({ "jpa-test" })
 class AlertQueryIT {
 
   static final AlertSearchCriteria ALERT_SEARCH_CRITERIA = AlertSearchCriteria.builder()
@@ -58,18 +63,22 @@ class AlertQueryIT {
       MappedKeys.RECOMMENDATION_KEY,
       MappedKeys.RISK_TYPE_KEY,
       MappedKeys.COUNTRY_KEY);
-
+  @Autowired
+  AlertSearchService underSearchService;
+  @Autowired
+  RandomAlertService randomAlertQueryService;
   @Autowired
   private AlertProvider queryUnderTest;
-
   @Autowired
   private SimpleElasticTestClient simpleElasticTestClient;
 
-  @Autowired
-  AlertSearchService underSearchService;
-
-  @Autowired
-  RandomAlertService randomAlertQueryService;
+  private static Stream<Arguments> getInvalidAlertNames() {
+    return Stream.of(
+        Arguments.of(ALERT_NAME_2.substring(0, 8)),
+        Arguments.of(ALERT_NAME_2 + "invalid"),
+        Arguments.of(ALERT_NAME_2.replaceFirst("f", "x"))
+    );
+  }
 
   @BeforeEach
   void init() {
@@ -81,6 +90,18 @@ class AlertQueryIT {
   void cleanup() {
     simpleElasticTestClient.removeDefaultIndexTemplate();
     cleanData();
+  }
+
+  private void cleanData() {
+    safeDeleteIndex(PRODUCTION_ELASTIC_WRITE_INDEX_NAME);
+  }
+
+  private void safeDeleteIndex(String index) {
+    try {
+      simpleElasticTestClient.removeIndex(index);
+    } catch (ElasticsearchException e) {
+      log.debug("index not present index={}", index);
+    }
   }
 
   @Test
@@ -95,6 +116,19 @@ class AlertQueryIT {
     Map<String, String> alert = alertAttributes.iterator().next();
     assertThat(alert)
         .containsEntry(MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK);
+  }
+
+  private void storeData() {
+    saveAlert(DOCUMENT_ID, MAPPED_ALERT_1);
+    saveAlert(DOCUMENT_ID_2, MAPPED_ALERT_2);
+    saveAlert(DOCUMENT_ID_3, MAPPED_ALERT_3);
+    saveAlert(DOCUMENT_ID_4, MAPPED_ALERT_4);
+    saveAlert(DOCUMENT_ID_5, MAPPED_ALERT_5);
+    saveAlert(DOCUMENT_ID_6, MAPPED_ALERT_6);
+  }
+
+  private void saveAlert(String discriminator, Map<String, Object> alert) {
+    simpleElasticTestClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, discriminator, alert);
   }
 
   @Test
@@ -142,38 +176,5 @@ class AlertQueryIT {
         randomAlertQueryService.getRandomAlertNameByCriteria(ALERT_SEARCH_CRITERIA);
 
     assertThat(alertsIds).containsAnyElementsOf(of(ALERT_NAME_2, ALERT_NAME_3));
-  }
-
-  private void storeData() {
-    saveAlert(DOCUMENT_ID, MAPPED_ALERT_1);
-    saveAlert(DOCUMENT_ID_2, MAPPED_ALERT_2);
-    saveAlert(DOCUMENT_ID_3, MAPPED_ALERT_3);
-    saveAlert(DOCUMENT_ID_4, MAPPED_ALERT_4);
-    saveAlert(DOCUMENT_ID_5, MAPPED_ALERT_5);
-    saveAlert(DOCUMENT_ID_6, MAPPED_ALERT_6);
-  }
-
-  private void saveAlert(String discriminator, Map<String, Object> alert) {
-    simpleElasticTestClient.storeData(PRODUCTION_ELASTIC_WRITE_INDEX_NAME, discriminator, alert);
-  }
-
-  private void cleanData() {
-    safeDeleteIndex(PRODUCTION_ELASTIC_WRITE_INDEX_NAME);
-  }
-
-  private void safeDeleteIndex(String index) {
-    try {
-      simpleElasticTestClient.removeIndex(index);
-    } catch (ElasticsearchException e) {
-      log.debug("index not present index={}", index);
-    }
-  }
-
-  private static Stream<Arguments> getInvalidAlertNames() {
-    return Stream.of(
-        Arguments.of(ALERT_NAME_2.substring(0, 8)),
-        Arguments.of(ALERT_NAME_2 + "invalid"),
-        Arguments.of(ALERT_NAME_2.replaceFirst("f", "x"))
-    );
   }
 }

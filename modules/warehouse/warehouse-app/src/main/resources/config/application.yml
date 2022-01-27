@@ -124,6 +124,8 @@ warehouse:
       search:
         batch-size: 10000
         keep-alive-seconds: 30
+  alert-provider:
+    isSqlSupportEnabled: false
   retention:
     simulation:
       analysis-expired:
