@@ -2,6 +2,7 @@ package com.silenteight.warehouse.indexer.query.grouping;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
 import com.silenteight.warehouse.indexer.query.common.QueryFilter;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.HashMap;
@@ -35,7 +37,9 @@ import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest(classes = GroupingQueryTestConfiguration.class)
-@ContextConfiguration(initializers = { OpendistroElasticContainerInitializer.class })
+@ContextConfiguration(initializers = {
+    OpendistroElasticContainerInitializer.class, PostgresTestInitializer.class })
+@ActiveProfiles({ "jpa-test" })
 class GroupingQueryTest {
 
   private static final String NOT_EXISTING_KEY = "NOT_EXISTING_KEY";
@@ -57,6 +61,10 @@ class GroupingQueryTest {
   void cleanup() {
     testClient.removeDefaultIndexTemplate();
     removeData();
+  }
+
+  private void removeData() {
+    testClient.removeIndex(PRODUCTION_ELASTIC_WRITE_INDEX_NAME);
   }
 
   @Test
@@ -207,9 +215,5 @@ class GroupingQueryTest {
     assertThat(resp.getRows().get(0)
         .getValueOrDefault("alert_analyst_decision", NOT_EXISTING_VALUE))
         .isEqualTo("existing value");
-  }
-
-  private void removeData() {
-    testClient.removeIndex(PRODUCTION_ELASTIC_WRITE_INDEX_NAME);
   }
 }

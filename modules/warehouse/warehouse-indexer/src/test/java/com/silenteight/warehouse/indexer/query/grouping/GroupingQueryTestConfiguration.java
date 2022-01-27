@@ -7,6 +7,7 @@ import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
 
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -19,6 +20,7 @@ import static org.mockito.Mockito.*;
     OpendistroModule.class,
     TestElasticSearchModule.class,
 })
+@JdbcTest
 class GroupingQueryTestConfiguration {
 
   @Bean

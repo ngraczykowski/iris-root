@@ -8,6 +8,7 @@ import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 import com.silenteight.warehouse.indexer.query.single.SingleAlertQueryConfiguration;
 
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -20,6 +21,7 @@ import static java.time.Instant.parse;
     TestElasticSearchModule.class,
     TokenModule.class
 })
+@JdbcTest
 @RequiredArgsConstructor
 class AlertTestConfiguration {
 
