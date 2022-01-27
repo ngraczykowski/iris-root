@@ -8,10 +8,10 @@ import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.google.protobuf.Any;
 import com.google.protobuf.Message;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.FEATURE_PREFIX;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AgentDataSourceUtils {
-
-  private static final String FEATURE_PREFIX = "features/";
 
   public static <T extends Message> FeatureInput createFeatureInput(
       String feature, T featureInput) {

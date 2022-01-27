@@ -9,11 +9,10 @@ import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.NAME_TEXT_FEATURE;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
 
 class NameMatchedTextAgentEtlProcess extends BaseAgentEtlProcess<NameFeatureInput> {
-
-  private static final String NAME_MATCH_TEXT_FEATURE = "nameMatchedText";
 
   private final CreateNameFeatureInputUseCase createNameFeatureInputUseCase;
 
@@ -28,13 +27,13 @@ class NameMatchedTextAgentEtlProcess extends BaseAgentEtlProcess<NameFeatureInpu
   protected List<FeatureInput> createDataSourceFeatureInputs(HitData hitData) {
     var nameAgentUseCaseRequest = createNameAgentUseCaseRequest(hitData);
     var nameFeatureInput = createNameFeatureInputUseCase.create(nameAgentUseCaseRequest);
-    var featureInput = createFeatureInput(NAME_MATCH_TEXT_FEATURE, nameFeatureInput);
+    var featureInput = createFeatureInput(NAME_TEXT_FEATURE, nameFeatureInput);
     return List.of(featureInput);
   }
 
   private static NameAgentRequest createNameAgentUseCaseRequest(HitData hitData) {
     return NameAgentRequest.builder()
-        .feature(NAME_MATCH_TEXT_FEATURE)
+        .feature(NAME_TEXT_FEATURE)
         .watchlistNames(List.of(hitData.getHitAndWlPartyData().getName()))
         .alertedPartyNames(List.of(hitData.getHitAndWlPartyData().getMatchingText()))
         .watchlistType(hitData.getHitAndWlPartyData().getWatchlistType())

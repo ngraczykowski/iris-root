@@ -9,11 +9,10 @@ import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.NAME_FEATURE;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
 
 class NameAgentEtlProcess extends BaseAgentEtlProcess<NameFeatureInput> {
-
-  private static final String NAME_FEATURE = "name";
 
   private final CreateNameFeatureInputUseCase createNameFeatureInputUseCase;
 

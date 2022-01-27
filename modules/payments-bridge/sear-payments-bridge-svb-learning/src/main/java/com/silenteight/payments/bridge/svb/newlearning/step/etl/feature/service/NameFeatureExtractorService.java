@@ -10,14 +10,13 @@ import com.silenteight.payments.bridge.svb.newlearning.domain.EtlHit;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.NAME_FEATURE;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
 
 @Service
 @Qualifier("name")
 @RequiredArgsConstructor
 class NameFeatureExtractorService implements FeatureExtractor {
-
-  private static final String NAME_FEATURE = "name";
 
   private final CreateNameFeatureInputUseCase createNameFeatureInputUseCase;
 

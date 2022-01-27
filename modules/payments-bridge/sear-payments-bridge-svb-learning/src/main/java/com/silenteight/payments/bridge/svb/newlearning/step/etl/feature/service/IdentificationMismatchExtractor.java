@@ -8,13 +8,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.BANK_IDENTIFICATION_CODES_FEATURE;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
 
 @Service
 @Qualifier("identificationMismatch")
 class IdentificationMismatchExtractor implements FeatureExtractor {
-
-  private static final String BANK_IDENTIFICATION_CODES_FEATURE = "bankIdentificationCodes";
 
   @Override
   public FeatureInput createFeatureInputs(EtlHit etlHit) {

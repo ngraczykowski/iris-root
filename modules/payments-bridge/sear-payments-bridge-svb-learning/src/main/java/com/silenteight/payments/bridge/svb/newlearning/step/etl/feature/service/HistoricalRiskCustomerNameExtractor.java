@@ -7,11 +7,12 @@ import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import org.springframework.stereotype.Service;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_CUSTOMER_NAME_FEATURE;
+
 @Service
 @RequiredArgsConstructor
 class HistoricalRiskCustomerNameExtractor extends HistoricalRiskAssessmentExtractorBase {
 
-  private static final String HISTORICAL_RISK_CUSTOMER_NAME_FEATURE = "historicalRiskCustomerName";
   private final HistoricalRiskAssessmentFeatureUseCase historicalRiskAssessmentFeatureUseCase;
 
   @Override

@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-class GeoAgentEtlProcess extends BaseAgentEtlProcess<LocationFeatureInput> {
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.GEO_FEATURE;
 
-  private static final String GEO_FEATURE = "geo";
+class GeoAgentEtlProcess extends BaseAgentEtlProcess<LocationFeatureInput> {
 
   GeoAgentEtlProcess(CreateAgentInputsClient createAgentInputsClient) {
     super(createAgentInputsClient);

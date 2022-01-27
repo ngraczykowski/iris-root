@@ -7,14 +7,13 @@ import com.silenteight.payments.bridge.svb.newlearning.domain.EtlHit;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.GEO_FEATURE;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.getFullFeatureName;
 
 @Service
 @Qualifier("geo")
 class GeoFeatureExtractorService implements FeatureExtractor {
-
-  private static final String GEO_FEATURE = "geo";
 
   @Override
   public FeatureInput createFeatureInputs(EtlHit etlHit) {

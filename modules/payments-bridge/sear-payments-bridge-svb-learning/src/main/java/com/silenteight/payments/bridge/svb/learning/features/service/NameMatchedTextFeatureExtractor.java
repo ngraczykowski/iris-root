@@ -12,14 +12,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.NAME_TEXT_FEATURE;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
 
 @Service
 @Qualifier("nameMatchedText")
 @RequiredArgsConstructor
 class NameMatchedTextFeatureExtractor implements FeatureExtractor {
-
-  private static final String NAME_TEXT_FEATURE = "nameMatchedText";
 
   private final CreateNameFeatureInputUseCase createNameFeatureInputUseCase;
 

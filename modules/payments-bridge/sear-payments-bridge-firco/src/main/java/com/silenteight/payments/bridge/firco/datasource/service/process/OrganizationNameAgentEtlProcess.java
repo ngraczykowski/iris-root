@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-class OrganizationNameAgentEtlProcess extends BaseAgentEtlProcess<NameFeatureInput> {
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.ORGANIZATION_NAME_FEATURE;
 
-  private static final String ORGANIZATION_NAME_AGENT_FEATURE = "organizationName";
+class OrganizationNameAgentEtlProcess extends BaseAgentEtlProcess<NameFeatureInput> {
 
   OrganizationNameAgentEtlProcess(CreateAgentInputsClient createAgentInputsClient) {
     super(createAgentInputsClient);
@@ -28,7 +28,7 @@ class OrganizationNameAgentEtlProcess extends BaseAgentEtlProcess<NameFeatureInp
   protected List<FeatureInput> createDataSourceFeatureInputs(HitData hitData) {
     var featureInput = FeatureInput
         .newBuilder()
-        .setFeature(getFullFeatureName(ORGANIZATION_NAME_AGENT_FEATURE))
+        .setFeature(getFullFeatureName(ORGANIZATION_NAME_FEATURE))
         .setAgentFeatureInput(Any.pack(createNameFeatureInput(hitData)))
         .build();
 
@@ -43,7 +43,7 @@ class OrganizationNameAgentEtlProcess extends BaseAgentEtlProcess<NameFeatureInp
 
     if (watchlistType == WatchlistType.COMPANY) {
       return NameFeatureInput.newBuilder()
-          .setFeature(getFullFeatureName(ORGANIZATION_NAME_AGENT_FEATURE))
+          .setFeature(getFullFeatureName(ORGANIZATION_NAME_FEATURE))
           .addAllAlertedPartyNames(alertedPartyNames
               .stream()
               .map(alertedPartyName -> AlertedPartyName
@@ -57,7 +57,7 @@ class OrganizationNameAgentEtlProcess extends BaseAgentEtlProcess<NameFeatureInp
           .build();
     } else {
       return NameFeatureInput.newBuilder()
-          .setFeature(getFullFeatureName(ORGANIZATION_NAME_AGENT_FEATURE))
+          .setFeature(getFullFeatureName(ORGANIZATION_NAME_FEATURE))
           .addAllAlertedPartyNames(new ArrayList<>())
           .addWatchlistNames(WatchlistName.newBuilder()
               .setName(watchlistPartyNames)

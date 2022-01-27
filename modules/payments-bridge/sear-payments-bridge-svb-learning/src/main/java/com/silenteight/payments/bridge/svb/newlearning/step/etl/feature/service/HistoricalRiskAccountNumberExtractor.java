@@ -8,13 +8,13 @@ import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_FEATURE;
+
 @Service
 @RequiredArgsConstructor
 class HistoricalRiskAccountNumberExtractor
     extends HistoricalRiskAssessmentExtractorBase {
 
-  private static final String HISTORICAL_RISK_ACCOUNT_NUMBER_FEATURE =
-      "historicalRiskAccountNumber";
   private final HistoricalRiskAssessmentFeatureUseCase historicalRiskAssessmentFeatureUseCase;
 
   @Override

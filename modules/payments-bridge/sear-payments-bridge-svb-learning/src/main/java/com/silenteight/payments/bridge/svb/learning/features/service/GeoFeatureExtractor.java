@@ -9,14 +9,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.GEO_FEATURE;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.getFullFeatureName;
 
 @Service
 @Qualifier("geo")
 class GeoFeatureExtractor implements FeatureExtractor {
-
-  private static final String GEO_FEATURE = "geo";
 
   @Override
   public List<FeatureInput> createFeatureInputs(LearningMatch learningMatch) {

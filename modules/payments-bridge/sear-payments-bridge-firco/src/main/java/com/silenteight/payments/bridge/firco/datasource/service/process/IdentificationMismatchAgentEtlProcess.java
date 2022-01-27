@@ -13,10 +13,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.BANK_IDENTIFICATION_CODES_FEATURE;
+
 class IdentificationMismatchAgentEtlProcess
     extends BaseAgentEtlProcess<BankIdentificationCodesFeatureInput> {
-
-  private static final String BANK_IDENTIFICATION_CODES_FEATURE = "bankIdentificationCodes";
 
   IdentificationMismatchAgentEtlProcess(CreateAgentInputsClient createAgentInputsClient) {
     super(createAgentInputsClient);

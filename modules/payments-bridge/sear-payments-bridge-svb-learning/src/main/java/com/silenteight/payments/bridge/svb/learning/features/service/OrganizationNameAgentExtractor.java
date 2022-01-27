@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.ORGANIZATION_NAME_FEATURE;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.getFullFeatureName;
 import static java.util.stream.Collectors.toList;
@@ -23,7 +24,6 @@ import static java.util.stream.Collectors.toList;
 @Qualifier("organizationNameAgent")
 class OrganizationNameAgentExtractor implements FeatureExtractor {
 
-  private static final String ORGANIZATION_NAME_FEATURE = "organizationName";
 
   @Override
   public List<FeatureInput> createFeatureInputs(LearningMatch learningMatch) {

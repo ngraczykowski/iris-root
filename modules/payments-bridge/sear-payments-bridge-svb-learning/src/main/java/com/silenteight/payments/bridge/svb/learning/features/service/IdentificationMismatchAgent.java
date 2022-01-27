@@ -10,13 +10,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.BANK_IDENTIFICATION_CODES_FEATURE;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
 
 @Service
 @Qualifier("identificationMismatch")
 class IdentificationMismatchAgent implements FeatureExtractor {
-
-  private static final String BANK_IDENTIFICATION_CODES_FEATURE = "bankIdentificationCodes";
 
   @Override
   public List<FeatureInput> createFeatureInputs(LearningMatch learningMatch) {

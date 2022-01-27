@@ -4,10 +4,10 @@ import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import org.springframework.stereotype.Component;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_CUSTOMER_NAME_FEATURE;
+
 @Component
 class HistoricalRiskCustomerNameFeature extends HistoricalRiskAssessmentFeature {
-
-  private static final String HISTORICAL_RISK_CUSTOMER_NAME_FEATURE = "historicalRiskCustomerName";
 
   @Override
   protected String getFeatureName() {

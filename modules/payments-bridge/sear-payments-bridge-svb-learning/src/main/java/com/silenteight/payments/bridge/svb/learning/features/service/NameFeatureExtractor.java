@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.NAME_FEATURE;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
 
 @Service
@@ -19,7 +20,6 @@ import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUti
 @RequiredArgsConstructor
 class NameFeatureExtractor implements FeatureExtractor {
 
-  private static final String NAME_FEATURE = "name";
 
   private final CreateNameFeatureInputUseCase createNameFeatureInputUseCase;
 
