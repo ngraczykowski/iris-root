@@ -6,39 +6,37 @@ import com.silenteight.sep.base.common.database.HibernateCacheAutoConfiguration;
 import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConventionConfiguration;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.filestorage.api.StorageManager;
-import com.silenteight.sep.filestorage.api.dto.FileDto;
 import com.silenteight.sep.filestorage.minio.container.MinioContainer.MinioContainerInitializer;
-import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
-import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
-import com.silenteight.warehouse.common.testing.rest.WithElasticAccessCredentials;
-import com.silenteight.warehouse.report.reporting.ReportGenerationService;
-import com.silenteight.warehouse.report.storage.ReportStorage;
+import com.silenteight.warehouse.report.create.CreateReportRestController;
+import com.silenteight.warehouse.report.download.DownloadReportRestController;
+import com.silenteight.warehouse.report.persistence.ReportStatus.Status;
+import com.silenteight.warehouse.report.status.ReportStatusRestController;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_5;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_5;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.COUNTRY_PL;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.COUNTRY_UK;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.RECOMMENDATION_FP;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.RECOMMENDATION_MI;
-import static com.silenteight.warehouse.report.ReportFixture.*;
-import static java.nio.charset.StandardCharsets.UTF_8;
+import java.time.OffsetDateTime;
+import java.util.Map;
+
+import static com.silenteight.warehouse.report.ReportFixture.DISCRIMINATOR;
+import static com.silenteight.warehouse.report.ReportFixture.NAME;
+import static com.silenteight.warehouse.report.ReportFixture.PAYLOAD;
+import static com.silenteight.warehouse.report.ReportFixture.RECOMMENDATION_DATE;
+import static java.lang.Long.valueOf;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
+import static org.awaitility.Awaitility.await;
+import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
 
 @ContextConfiguration(initializers = {
-    OpendistroElasticContainerInitializer.class,
     MinioContainerInitializer.class,
     PostgresTestInitializer.class
 }, classes = ReportGenerationConfiguration.class)
@@ -48,101 +46,91 @@ import static org.assertj.core.api.Assertions.*;
 })
 @DataJpaTest
 @EnableAutoConfiguration
+@Transactional(propagation = NOT_SUPPORTED)
 class ReportGenerationIT {
 
   private static final String TEST_BUCKET = "report";
+  private static final String TIMESTAMP_FROM = "2020-01-12T10:00:37.098Z";
+  private static final String TIMESTAMP_TO = "2022-01-12T10:00:37.098Z";
+  private static final String REPORT_NAME = "TEST_REPORT";
+  private static final String REPORT_TYPE = "production";
 
   @Autowired
-  private SimpleElasticTestClient simpleElasticTestClient;
+  private CreateReportRestController createReportRestController;
+
+  @Autowired
+  private ReportStatusRestController reportStatusRestController;
+
+  @Autowired
+  private DownloadReportRestController downloadReportRestController;
 
   @Autowired
   private StorageManager storageManager;
 
   @Autowired
-  private ReportGenerationService generationService;
-
-  @Autowired
-  private ReportStorage reportStorage;
-
-  @Autowired
-  private TestEntityManager entityManager;
+  private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
   @BeforeEach
   public void init() {
-    // given
-    storeData();
     createMinioBucket();
   }
 
-  @AfterEach
-  public void cleanup() {
-    clearMinioBucket();
-    removeData();
-  }
-
   @Test
-  @SneakyThrows
-  @WithElasticAccessCredentials
-  void shouldStoreNewReportsInMinio() {
-    // when
-    generationService.generate(FETCH_DATA_REQUEST);
+  void shouldGenerateReport() {
+    storeData();
 
-    // then
-    String reportContent = getReportContentFromMinio(FILE_NAME);
+    Long instanceId = createReport();
+    await()
+        .atMost(5, SECONDS)
+        .until(() -> isReportCreated(instanceId));
+    String reportContent = getReportContent(instanceId);
+
     assertThat(reportContent)
-        .contains(COUNTRY_UK, RECOMMENDATION_FP, DISCRIMINATOR_1)
-        .doesNotContain(COUNTRY_PL, RECOMMENDATION_MI, DISCRIMINATOR_5);
+        .hasLineCount(2)
+        .contains("9HzsNs1bv,TEST[AAAGLOBAL186R1038]_81596ace,alerts/123,2021-01-12 10:00:37");
   }
 
-  @Test
-  @SneakyThrows
-  @WithElasticAccessCredentials
-  void shouldStoreSqlReportsInMinio() {
-    // when
-    generationService.generate(FETCH_DATA_REQUEST_SQL);
+  private Long createReport() {
+    ResponseEntity<Void> report = createReportRestController.createReport(
+        OffsetDateTime.parse(TIMESTAMP_FROM),
+        OffsetDateTime.parse(TIMESTAMP_TO),
+        REPORT_TYPE,
+        REPORT_NAME);
 
-    // then
-    String reportContent = getReportContentFromMinio(FILE_NAME);
-    assertThat(reportContent).isNotEmpty();
+    String location = report.getHeaders().get("Location").get(0);
+    return valueOf(location.replaceAll("[^0-9]", ""));
+  }
+
+  private boolean isReportCreated(Long reportId) {
+    return Status.OK == reportStatusRestController.checkReportStatus(
+        REPORT_TYPE, REPORT_NAME, reportId).getBody()
+        .getStatus();
+  }
+
+  @SneakyThrows
+  private String getReportContent(Long instanceId) {
+    return new String(downloadReportRestController
+        .downloadReport(REPORT_TYPE, REPORT_NAME, instanceId)
+        .getBody()
+        .getInputStream()
+        .readAllBytes());
   }
 
   @SneakyThrows
   private void storeData() {
-    simpleElasticTestClient.storeData(
-        PRODUCTION_ELASTIC_INDEX_NAME, DISCRIMINATOR_1, MAPPED_ALERT_1);
-
-    simpleElasticTestClient.storeData(
-        PRODUCTION_ELASTIC_INDEX_NAME, DISCRIMINATOR_5, MAPPED_ALERT_5);
-
-    entityManager.getEntityManager()
-        .createNativeQuery("INSERT INTO "
+    namedParameterJdbcTemplate.update(
+        "INSERT INTO "
             + "warehouse_alert(discriminator, name, recommendation_date, payload) "
-            + "VALUES (?, ?, ?, TO_JSON( ? ))")
-        .setParameter(1, "81596ace4ed087762f74962450bf1b57")
-        .setParameter(2, "TEST[ANO][CUSTOMER][AAAGLOBAL186R1038]")
-        .setParameter(3, LOCAL_DATE_TO)
-        .setParameter(4, PAYLOAD_DATA)
-        .executeUpdate();
+            + "VALUES (:discriminator, :name, :recommendation_date, TO_JSON(:payload::jsonb))",
+        Map.of(
+            "discriminator", DISCRIMINATOR,
+            "name", NAME,
+            "recommendation_date", RECOMMENDATION_DATE,
+            "payload", PAYLOAD));
   }
 
   @SneakyThrows
   private void createMinioBucket() {
     storageManager.create(TEST_BUCKET);
-  }
-
-  @SneakyThrows
-  private String getReportContentFromMinio(String reportName) {
-    FileDto report = reportStorage.getReport(reportName);
-    byte[] responseBytes = report.getContent().readAllBytes();
-    return new String(responseBytes, UTF_8);
-  }
-
-  private void clearMinioBucket() {
-    reportStorage.removeReport(FILE_NAME);
-    storageManager.remove(TEST_BUCKET);
-  }
-
-  private void removeData() {
-    simpleElasticTestClient.removeIndex(PRODUCTION_ELASTIC_INDEX_NAME);
   }
 }
