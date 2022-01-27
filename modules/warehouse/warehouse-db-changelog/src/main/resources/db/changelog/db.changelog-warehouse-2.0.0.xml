@@ -196,4 +196,25 @@
                              referencedTableName="warehouse_alert" referencedColumnNames="id"
                              onDelete="CASCADE"/>
   </changeSet>
+
+  <changeSet id="warehouse-2.0.0-10" author="skociuba">
+    <createTable tableName="warehouse_report">
+      <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="type" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="state" type="VARCHAR(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="analysis" type="VARCHAR(64)"/>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="from_range" type="TIMESTAMP"/>
+      <column name="to_range" type="TIMESTAMP"/>
+      <column name="file_storage_name" type="VARCHAR(64)"/>
+    </createTable>
+  </changeSet>
 </databaseChangeLog>

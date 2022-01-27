@@ -847,3 +847,334 @@ warehouse.report.ai-reasoning:
         label: Alert Status
       - name: s8_discriminator
         label: Alert S8 ID
+
+warehouse.reports.v2:
+  reports:
+    - name: AI_REASONING
+      type: production
+      description: Ai reasoning
+      selectSqlQuery: >
+        SELECT (payload ->> 'fvSignature') AS "Reasoning Branch ID",
+               (payload ->> 'policy') AS "Policy ID",
+               (payload ->> 'policy_title') AS "Policy Name",
+               (payload ->> 'step') AS "Step ID",
+               (payload ->> 'step_title') AS "Step Name",
+               (payload ->> 's8_recommendation') AS "S8 Alert Resolution",
+               (payload ->> 'recommendationDate') AS "S8 Alert Resolution Timestamp",
+               (payload ->> 'recommendation') AS "HSBC Alert Resolution",
+               (payload ->> 'comment') AS "Alert Comment",
+               (payload ->> 's8_lobCountryCode') AS "Country LoB",
+               (payload ->> 'categories/hitType') AS "Risk Type",
+               (payload ->> 'DN_CASE.ExtendedAttribute5') AS "List Type",
+               (payload ->> 'id') AS "Alert Client ID",
+               (payload ->> 'status') AS "Alert Status",
+               discriminator AS "Alert S8 ID"
+        FROM warehouse_alert WHERE recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+    - name: ACCURACY
+      type: production
+      description: Accuracy
+      selectSqlQuery: >
+        SELECT (payload ->> 'fvSignature') AS "Reasoning Branch ID",
+               (payload ->> 'policy') AS "Policy ID",
+               (payload ->> 'policy_title') AS "Policy Name",
+               (payload ->> 'step') AS "Step ID",
+               (payload ->> 'step_title') AS "Step Name",
+               (payload ->> 's8_recommendation') AS "S8 Alert Resolution",
+               (payload ->> 'recommendationDate') AS "S8 Alert Resolution Timestamp",
+               (payload ->> 'recommendation') AS "HSBC Alert Resolution",
+               (payload ->> 'comment') AS "Alert Comment",
+               (payload ->> 's8_lobCountryCode') AS "Country LoB",
+               (payload ->> 'categories/hitType') AS "Risk Type",
+               (payload ->> 'DN_CASE.ExtendedAttribute5') AS "List Type",
+               (payload ->> 'analyst_decision') AS "Analyst Decision",
+               (payload ->> 'DN_CASE.modifiedDateTime') AS "Analyst Decision Timestamp",
+               (payload ->> 'lastCaseComment') AS "Analyst Comment",
+               (payload ->> 'DN_CASE.ID') AS "Customer Alert ID",
+               (payload ->> 'status') AS "Alert Status",
+               discriminator AS "S8 Alert ID"
+        FROM warehouse_alert
+        WHERE (recommendation_date BETWEEN DATE '${from}' AND DATE '${to}')
+        AND (payload ->> 'analyst_decision') IN ('analyst_decision_false_positive', 'analyst_decision_true_positive')
+    - name: ACCURACY
+      type: simulation
+      description: Accuracy
+      selectSqlQuery: >
+        SELECT (wsa.payload ->> 'match_reason:feature_vector_signature') AS "Reasoning Branch ID",
+             (wsa.payload ->> 'match_reason:policy') AS "Policy ID",
+             (wsa.payload ->> 'match_reason:policy_title') AS "Policy Name",
+             (wsa.payload ->> 'match_reason:step') AS "Step ID",
+             (wsa.payload ->> 'match_reason:step_title') AS "Step Name",
+             (wsa.payload ->> 'recommendation_recommended_action') AS "S8 Alert Resolution",
+             (wsa.payload ->> 'recommendation_create_time') AS "S8 Alert Resolution Timestamp",
+             (wsa.payload ->> 'recommendation_comment') AS "Alert Comment",
+             (wa.payload ->> 's8_lobCountryCode') AS "Country LoB",
+             (wa.payload ->> 'categories/hitType') AS "Risk Type",
+             (wa.payload ->> 'DN_CASE.ExtendedAttribute5') AS "List Type",
+             (wa.payload ->> 'analyst_decision') AS "Analyst Decision",
+             (wa.payload ->> 'DN_CASE.modifiedDateTime') AS "Analyst Decision Timestamp",
+             (wa.payload ->> 'lastCaseComment') AS "Analyst Comment",
+             (wa.payload ->> 'DN_CASE.ID') AS "Customer Alert ID",
+             (wa.payload ->> 'status') AS "Alert Status",
+             wa.discriminator AS "S8 Alert ID"
+        FROM warehouse_simulation_alert wsa
+            JOIN warehouse_alert wa ON wsa.name = wa.name
+        WHERE analysis_name = 'analysis/${analysisId}'
+        AND (wa.payload ->> 'analyst_decision') IN ('analyst_decision_false_positive', 'analyst_decision_true_positive')
+    - name: RBS
+      type: production
+      description: Rbs
+      selectSqlQuery: >
+        SELECT (payload ->> 'fvSignature') AS "Reasoning Branch ID",
+               (payload ->> 'policyId') AS "Policy ID",
+               (payload ->> 'policy_title') AS "Policy Name",
+               (payload ->> 'stepId') AS "Step ID",
+               (payload ->> 'step_title') AS "Step Name",
+               (payload ->> 's8_recommendation') AS "S8 Alert Resolution",
+               (payload ->> 'categories/customerType') AS "Customer Type",
+               (payload ->> 'extendedAttribute5') AS "Risk Type",
+               (payload ->> 'features/commonAp:solution') AS "Common Alerted Party",
+               (payload ->> 'features/commonMp:solution') AS "Common Watchlist Party",
+               (payload ->> 'features/commonNames:solution') AS "Common Name",
+               (payload ->> 'features/dateOfBirth:solution') AS "Date of Birth / Incorporation",
+               (payload ->> 'features/gender:solution') AS "Gender",
+               (payload ->> 'features/geoPlaceOfBirth:solution') AS "Geo Place of Birth",
+               (payload ->> 'features/geoResidencies:solution') AS "Geo Residencies",
+               (payload ->> 'features/invalidAlert:solution') AS "Invalid Alert",
+               (payload ->> 'features/isApTpMarked:solution') AS "True Case - Alerted Party ",
+               (payload ->> 'features/isTpMarked:solution') AS "True Case - Watchlist",
+               (payload ->> 'features/isCaseTpMarked:solution') AS "True Case - Historical",
+               (payload ->> 'features/isPep:solution') AS "PEP",
+               (payload ->> 'features/logicalDiscountingDob:solution') AS "Logical Discounting",
+               (payload ->> 'features/name:solution') AS "Name",
+               (payload ->> 'features/incorporationCountry:solution') AS "Incorporation Country",
+               (payload ->> 'features/nationalityCountry:solution') AS "Nationality Country",
+               (payload ->> 'features/otherCountry:solution') AS "Other Country",
+               (payload ->> 'features/nationalIdDocument:solution') AS "National ID",
+               (payload ->> 'features/otherDocument:solution') AS "Other Document",
+               (payload ->> 'features/passportNumberDocument:solution') AS "Passport Number Document",
+               (payload ->> 'features/registrationCountry:solution') AS "Registration Country",
+               (payload ->> 'features/residencyCountry:solution') AS "Residency Country",
+               count((payload ->> 'fvSignature')) AS "Hits Counts",
+               count(CASE WHEN (payload ->> 'qa.level-0.state') = 'qa_decision_TRUE'  THEN 1 END ) AS "QA decision True Positive",
+               count(CASE WHEN (payload ->> 'qa.level-0.state') = 'qa_decision_FAILED' THEN 1 END ) AS "QA decision False Positive",
+               count(CASE WHEN (payload ->> 'analyst_decision') = 'analyst_decision_true_positive' THEN 1 END ) AS "Analyst decision True Positive",
+               count(CASE WHEN (payload ->> 'analyst_decision') = 'analyst_decision_false_positive' THEN 1 END ) AS "Analyst decision False Positive"
+        FROM warehouse_alert WHERE recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+        AND ((payload ->> 'qa.level-0.state' = 'qa_decision_TRUE')
+          OR (payload ->> 'qa.level-0.state' = 'qa_decision_FAILED'))
+        AND ((payload ->> 'analyst_decision' =  'analyst_decision_true_positive')
+          OR (payload ->> 'analyst_decision' = 'analyst_decision_false_positive'))
+        GROUP BY (payload ->> 'fvSignature'),
+               (payload ->> 'policyId'),
+               (payload ->> 'policy_title'),
+               (payload ->> 'stepId'),
+               (payload ->> 'step_title'),
+               (payload ->> 's8_recommendation'),
+               (payload ->> 'categories/customerType'),
+               (payload ->> 'extendedAttribute5'),
+               (payload ->> 'features/commonAp:solution'),
+               (payload ->> 'features/commonMp:solution'),
+               (payload ->> 'features/commonNames:solution'),
+               (payload ->> 'features/dateOfBirth:solution'),
+               (payload ->> 'features/gender:solution'),
+               (payload ->> 'features/geoPlaceOfBirth:solution'),
+               (payload ->> 'features/geoResidencies:solution'),
+               (payload ->> 'features/invalidAlert:solution'),
+               (payload ->> 'features/isApTpMarked:solution'),
+               (payload ->> 'features/isTpMarked:solution'),
+               (payload ->> 'features/isCaseTpMarked:solution'),
+               (payload ->> 'features/isPep:solution'),
+               (payload ->> 'features/logicalDiscountingDob:solution'),
+               (payload ->> 'features/name:solution'),
+               (payload ->> 'features/incorporationCountry:solution'),
+               (payload ->> 'features/nationalityCountry:solution'),
+               (payload ->> 'features/otherCountry:solution'),
+               (payload ->> 'features/nationalIdDocument:solution'),
+               (payload ->> 'features/otherDocument:solution'),
+               (payload ->> 'features/passportNumberDocument:solution'),
+               (payload ->> 'features/registrationCountry:solution'),
+               (payload ->> 'features/residencyCountry:solution')
+    - name: RBS
+      type: simulation
+      description: Rbs
+      selectSqlQuery: >
+        SELECT (wsa.payload ->> 'match_reason:feature_vector_signature') AS "Reasoning Branch ID",
+               (wsa.payload ->> 'match_reason:policy') AS "Policy ID",
+               (wsa.payload ->> 'match_reason:policy_title') AS "Policy Name",
+               (wsa.payload ->> 'match_reason:step') AS "Step ID",
+               (wsa.payload ->> 'match_reason:step_title') AS "Step Name",
+               (wsa.payload ->> 'recommendation_recommended_action') AS "S8 Alert Resolution",
+               (wsa.payload ->> 'categories/customerType') AS "Customer Type",
+               (wsa.payload ->> 'categories/hitType') AS "Risk Type",
+               (wsa.payload ->> 'features/commonAp:solution') AS "Common Alerted Party",
+               (wsa.payload ->> 'features/commonMp:solution') AS "Common Watchlist Party",
+               (wsa.payload ->> 'features/commonNames:solution') AS "Common Name",
+               (wsa.payload ->> 'features/dateOfBirth:solution') AS "Date of Birth / Incorporation",
+               (wsa.payload ->> 'features/gender:solution') AS "Gender",
+               (wsa.payload ->> 'features/geoPlaceOfBirth:solution') AS "Geo Place of Birth",
+               (wsa.payload ->> 'features/geoResidencies:solution') AS "Geo Residencies",
+               (wsa.payload ->> 'features/invalidAlert:solution') AS "Invalid Alert",
+               (wsa.payload ->> 'features/isApTpMarked:solution') AS "True Case - Alerted Party ",
+               (wsa.payload ->> 'features/isTpMarked:solution') AS "True Case - Watchlist",
+               (wsa.payload ->> 'features/isCaseTpMarked:solution') AS "True Case - Historical",
+               (wsa.payload ->> 'features/isPep:solution') AS "PEP",
+               (wsa.payload ->> 'features/logicalDiscountingDob:solution') AS "Logical Discounting",
+               (wsa.payload ->> 'features/name:solution') AS "Name",
+               (wsa.payload ->> 'features/incorporationCountry:solution') AS "Incorporation Country",
+               (wsa.payload ->> 'features/nationalityCountry:solution') AS "Nationality Country",
+               (wsa.payload ->> 'features/otherCountry:solution') AS "Other Country",
+               (wsa.payload ->> 'features/nationalIdDocument:solution') AS "National ID",
+               (wsa.payload ->> 'features/otherDocument:solution') AS "Other Document",
+               (wsa.payload ->> 'features/passportNumberDocument:solution') AS "Passport Number Document",
+               (wsa.payload ->> 'features/registrationCountry:solution') AS "Registration Country",
+               (wsa.payload ->> 'features/residencyCountry:solution') AS "Residency Country",
+               count((wsa.payload ->> 'fvSignature')) AS "Hits Counts",
+               count(CASE WHEN (wa.payload ->> 'qa.level-0.state') = 'qa_decision_TRUE'  THEN 1 END ) AS "QA decision True Positive",
+               count(CASE WHEN (wa.payload ->> 'qa.level-0.state') = 'qa_decision_FAILED' THEN 1 END ) AS "QA decision False Positive",
+               count(CASE WHEN (wa.payload ->> 'analyst_decision') = 'analyst_decision_true_positive' THEN 1 END ) AS "Analyst decision True Positive",
+               count(CASE WHEN (wa.payload ->> 'analyst_decision') = 'analyst_decision_false_positive' THEN 1 END ) AS "Analyst decision False Positive"
+        FROM warehouse_simulation_alert wsa JOIN warehouse_alert wa ON wsa.name = wa.name
+        WHERE wsa.analysis_name = 'analysis/${analysisId}'
+                               AND ((wa.payload ->> 'qa.level-0.state' = 'qa_decision_TRUE')
+                OR (wa.payload ->> 'qa.level-0.state' = 'qa_decision_FAILED'))
+                               AND ((wa.payload ->> 'analyst_decision' =  'analyst_decision_true_positive')
+                OR (wa.payload ->> 'analyst_decision' = 'analyst_decision_false_positive'))
+        GROUP BY (wsa.payload ->> 'match_reason:feature_vector_signature'),
+                 (wsa.payload ->> 'match_reason:policy'),
+                 (wsa.payload ->> 'match_reason:policy_title'),
+                 (wsa.payload ->> 'match_reason:step'),
+                 (wsa.payload ->> 'match_reason:step_title'),
+                 (wsa.payload ->> 'recommendation_recommended_action'),
+                 (wsa.payload ->> 'categories/customerType'),
+                 (wsa.payload ->> 'categories/hitType'),
+                 (wsa.payload ->> 'features/commonAp:solution'),
+                 (wsa.payload ->> 'features/commonMp:solution'),
+                 (wsa.payload ->> 'features/commonNames:solution'),
+                 (wsa.payload ->> 'features/dateOfBirth:solution'),
+                 (wsa.payload ->> 'features/gender:solution'),
+                 (wsa.payload ->> 'features/geoPlaceOfBirth:solution'),
+                 (wsa.payload ->> 'features/geoResidencies:solution'),
+                 (wsa.payload ->> 'features/invalidAlert:solution'),
+                 (wsa.payload ->> 'features/isApTpMarked:solution'),
+                 (wsa.payload ->> 'features/isTpMarked:solution'),
+                 (wsa.payload ->> 'features/isCaseTpMarked:solution'),
+                 (wsa.payload ->> 'features/isPep:solution'),
+                 (wsa.payload ->> 'features/logicalDiscountingDob:solution'),
+                 (wsa.payload ->> 'features/name:solution'),
+                 (wsa.payload ->> 'features/incorporationCountry:solution'),
+                 (wsa.payload ->> 'features/nationalityCountry:solution'),
+                 (wsa.payload ->> 'features/otherCountry:solution'),
+                 (wsa.payload ->> 'features/nationalIdDocument:solution'),
+                 (wsa.payload ->> 'features/otherDocument:solution'),
+                 (wsa.payload ->> 'features/passportNumberDocument:solution'),
+                 (wsa.payload ->> 'features/registrationCountry:solution'),
+                 (wsa.payload ->> 'features/residencyCountry:solution')
+    - name: METRICS
+      type: production
+      description: Metrics
+      selectSqlQuery: >
+        WITH main AS (
+            SELECT payload ->> 'lob_country'                country,
+                   payload ->> 'categories/hitType'         risk_type,
+                   payload ->> 's8_recommendation'          recommendation,
+                   payload ->> 'analyst_decision'           analyst_decision,
+                   payload ->> 'qa.level-0.state'           qa_decision,
+                   payload ->> 'DN_CASE.ExtendedAttribute5' list_type,
+                   recommendation_date date
+            FROM warehouse_alert
+            WHERE payload ->> 'status' = 'LEARNING_COMPLETED'
+                  AND date BETWEEN DATE '${from}' AND DATE '${to}
+            GROUP BY payload ->> 'lob_country', payload ->> 'categories/hitType',
+                     payload ->> 's8_recommendation', payload ->> 'analyst_decision',
+                     payload ->> 'qa.level-0.state', payload ->> 'DN_CASE.ExtendedAttribute5',
+                     date
+        ),
+             grouped AS (
+                 SELECT main.country                     g_country,
+                        main.list_type                   g_list_type,
+                        main.risk_type                   g_risk_type,
+                        TO_CHAR(main.date, 'YYYY-MM')    g_date,
+                        COUNT(*)                         g_total,
+                        COUNT(*) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE') g_total_true_positive,
+                        COUNT(*) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE') g_total_false_positive,
+                        SUM(CASE 
+                                WHEN (recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE' AND analyst_decision = 'analyst_decision_true_positive')
+                                THEN 1 ELSE 0 END) g_total_match_analyst,
+                        SUM(CASE 
+                                WHEN (recommendation = 'ACTION_FALSE_POSITIVE' AND qa_decision = 'qa_decision_FAILED')
+                                THEN 1 ELSE 0 END) g_total_match_qa
+                 FROM main
+                 GROUP BY 1, 2, 3, 4
+             )
+        
+        SELECT g_date as "Date",
+               g_country as "Country LoB",
+               g_risk_type as "Risk Type",
+               g_list_type as "List Type",
+               ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) / GREATEST(g_total, 1)) * 100,3) as "Efficiency",
+               ROUND((g_total_match_analyst::decimal / GREATEST(g_total_true_positive::decimal, 1)) * 100, 3) as "PTP Effectiveness",
+               ROUND((g_total_match_qa::decimal / GREATEST(g_total_false_positive::decimal, 1)) * 100, 3) as "FP Effectiveness"
+        FROM grouped
+        ORDER BY g_date
+    - name: METRICS
+      type: simulation
+      description: Metrics
+      selectSqlQuery: >
+        WITH main AS (
+            SELECT wa.payload ->> 'lob_country'                           country,
+                   wa.payload ->> 'categories/hitType'                    risk_type,
+                   wa.payload ->> 'DN_CASE.ExtendedAttribute5'            list_type,
+                   wsa.payload ->> 'recommendation_recommended_action'    recommendation,
+                   wsa.payload ->> 'analyst_decision'                     analyst_decision,
+                   wsa.payload ->> 'qa.level-0.state'                     qa_decision,
+                   wsa.created_at date
+            FROM warehouse_simulation_alert wsa
+              JOIN warehouse_alert wa ON wsa.name = wa.name
+            WHERE wsa.payload ->> 'status' = 'LEARNING_COMPLETED'
+                  AND date BETWEEN DATE '${from}' AND DATE '${to}
+                  AND wsa.analysis_name = 'analysis/${analysisId}'
+            GROUP BY wsa.payload ->> 'recommendation_recommended_action',
+                     wa.payload ->> 'categories/hitType', wa.payload ->> 'DN_CASE.ExtendedAttribute5',
+                     wa.payload ->> 'lob_country', wsa.payload ->> 'analyst_decision',
+                     wsa.payload ->> 'qa.level-0.state', wsa.created_at, date
+        ),
+             grouped AS (
+                 SELECT main.country                        g_country,
+                        main.risk_type                      g_risk_type,
+                        main.list_type                      g_list_type,
+                        TO_CHAR(main.date, 'YYYY-MM')       g_date,
+                        COUNT(*)                            g_total,
+                        COUNT(*) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE') g_total_true_positive,
+                        COUNT(*) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE') g_total_false_positive,
+                        SUM(CASE 
+                                WHEN (recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE' AND analyst_decision = 'analyst_decision_true_positive')
+                                THEN 1 ELSE 0 END) g_total_match_analyst,
+                        SUM(CASE 
+                                WHEN (recommendation = 'ACTION_FALSE_POSITIVE' AND qa_decision = 'qa_decision_FAILED')
+                                THEN 1 ELSE 0 END) g_total_match_qa
+                 FROM main
+                 GROUP BY 1, 2, 3, 4
+             )
+        SELECT g_date as "Date",
+               g_country as "Country LoB",
+               g_risk_type as "Risk Type",
+               g_list_type as "List Type",
+               ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) / GREATEST(g_total, 1)) * 100,3) as "Efficiency",
+               ROUND((g_total_match_analyst::decimal / GREATEST(g_total_true_positive::decimal, 1)) * 100, 3) as "PTP Effectiveness",
+               ROUND((g_total_match_qa::decimal / GREATEST(g_total_false_positive::decimal, 1)) * 100, 3) as "FP Effectiveness"
+        FROM grouped
+        ORDER BY g_date
+    - name: BILLING
+      type: production
+      description: Billing
+      selectSqlQuery:
+        SELECT  to_char(recommendation_date, 'YYYY-MM') AS date,
+        SUM(CASE WHEN payload ->> 's8_recommendation' = 'ACTION_FALSE_POSITIVE' THEN 1 END) AS count_solved_FP,
+        SUM(CASE WHEN payload ->> 's8_recommendation' = 'ACTION_POTENTIAL_TRUE_POSITIVE' THEN 1 END) AS count_solved_PTP,
+        SUM(CASE WHEN payload ->> 's8_recommendation' = 'ACTION_MANUAL_INVESTIGATION' THEN 1 END) AS count_solved_MI,
+        SUM(CASE WHEN payload ->> 's8_recommendation' IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE') THEN 1 END) AS count_alerts_solved,
+        SUM(CASE WHEN payload ->> 's8_recommendation' IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE', 'ACTION_MANUAL_INVESTIGATION') THEN 1 END) AS count_alerts_received
+        FROM warehouse_alert
+        WHERE recommendation_date BETWEEN DATE '${from}' AND DATE '${to}' AND payload ->> 's8_recommendation'
+        IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE', 'ACTION_MANUAL_INVESTIGATION')
+        GROUP BY date
