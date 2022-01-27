@@ -42,6 +42,7 @@ pb:
   svb-learning:
     aws:
       file-list:
+        prefix: learning
         bucket-name: sierra-dev-decrypted-files
     store:
       skip-deletion: true

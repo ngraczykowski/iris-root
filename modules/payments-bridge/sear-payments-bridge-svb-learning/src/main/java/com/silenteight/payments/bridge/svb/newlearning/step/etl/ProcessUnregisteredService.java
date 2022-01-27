@@ -8,6 +8,8 @@ import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
 import com.silenteight.payments.bridge.svb.newlearning.domain.LearningRegisteredAlert;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ class ProcessUnregisteredService {
   private final IngestDatasourceService ingestDatasourceService;
   private final CreateAlertDataRetentionUseCase createAlertDataRetentionUseCase;
 
-
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   LearningRegisteredAlert process(AlertComposite alertComposite, long jobId) {
     var registeredAlerts = registerAlertUseCase.batchRegistration(
         List.of(alertComposite.toRegisterAlertRequest(jobId)));

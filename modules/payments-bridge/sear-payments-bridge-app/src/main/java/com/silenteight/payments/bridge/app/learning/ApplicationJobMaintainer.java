@@ -47,7 +47,6 @@ class ApplicationJobMaintainer implements JobMaintainer {
 
   @EventListener
   public void triggerBatchProcessingListener(TriggerBatchJobEvent triggerBatchJobEvent) {
-    
     runJobByName(triggerBatchJobEvent.getJobName(), triggerBatchJobEvent.getParameters());
   }
 

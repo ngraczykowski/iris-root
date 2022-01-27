@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertsReadingResponse;
 import com.silenteight.payments.bridge.svb.newlearning.port.LearningDataAccess;
+import com.silenteight.payments.bridge.svb.newlearning.step.etl.LearningProcessedAlert;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ class JdbcLearningDataAccess implements LearningDataAccess {
 
   private final List<RemoveDuplicatedQuery> removeDuplicatedQueries;
   private final SelectProcessedAlertsStatusQuery selectProcessedAlertsStatusQuery;
+  private final InsertAlertResultQuery insertAlertResultQuery;
 
   @Override
   @Transactional
@@ -26,5 +28,11 @@ class JdbcLearningDataAccess implements LearningDataAccess {
   @Override
   public AlertsReadingResponse select(long jobId, String fileName) {
     return selectProcessedAlertsStatusQuery.select(jobId, fileName);
+  }
+
+  @Override
+  @Transactional
+  public void saveResult(List<LearningProcessedAlert> alerts) {
+    insertAlertResultQuery.update(alerts);
   }
 }

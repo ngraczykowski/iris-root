@@ -13,8 +13,6 @@ public class LearningProcessedAlert {
 
   String errorMessage;
 
-  Long learningProcessedAlertId;
-
   String fkcoVSystemId;
 
   String fileName;

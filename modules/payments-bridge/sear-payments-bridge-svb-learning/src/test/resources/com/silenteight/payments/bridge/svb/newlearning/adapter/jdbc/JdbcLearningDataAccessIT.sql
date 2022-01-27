@@ -23,15 +23,15 @@ VALUES (40, 2, 'tag', 'sequence1')
      , (50, 2, 'tag', 'sequence2')
      , (60, 2, 'tag', 'sequence3');
 
-INSERT INTO public.pb_learning_processed_alert (learning_processed_alert_id, job_id, result,
+INSERT INTO public.pb_learning_processed_alert (job_id, result,
                                                 error_message, fkco_v_system_id, file_name,
                                                 created_at)
-VALUES (1, 1, 'SUCCESSFUL', NULL, 'systemId', 'fileName', '2022-01-25 10:17:46.000000');
-INSERT INTO public.pb_learning_processed_alert (learning_processed_alert_id, job_id, result,
+VALUES (1, 'SUCCESSFUL', NULL, 'systemId', 'fileName', '2022-01-25 10:17:46.000000');
+INSERT INTO public.pb_learning_processed_alert (job_id, result,
                                                 error_message, fkco_v_system_id, file_name,
                                                 created_at)
-VALUES (2, 1, 'SUCCESSFUL', NULL, 'systemId', 'fileName', '2022-01-25 10:17:46.000000');
-INSERT INTO public.pb_learning_processed_alert (learning_processed_alert_id, job_id, result,
+VALUES (1, 'SUCCESSFUL', NULL, 'systemId', 'fileName', '2022-01-25 10:17:46.000000');
+INSERT INTO public.pb_learning_processed_alert (job_id, result,
                                                 error_message, fkco_v_system_id, file_name,
                                                 created_at)
-VALUES (3, 1, 'FAILED', 'Bug in program', 'systemId', 'fileName', '2022-01-25 10:17:46.000000');
+VALUES (1, 'FAILED', 'Bug in program', 'systemId', 'fileName', '2022-01-25 10:17:46.000000');
