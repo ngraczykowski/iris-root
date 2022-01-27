@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.silenteight.adjudication.engine.common.protobuf.TimestampConverter.toOffsetDateTime;
+
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -73,11 +75,16 @@ class CreateDatasetUseCase {
 
   private void createFilteredDatasetAlerts(
       long datasetId, Map<String, LabelValues> labels, AlertTimeRange alertTimeRange) {
+    var startDate = toOffsetDateTime(alertTimeRange.getStartTime());
+    var endDate = toOffsetDateTime(alertTimeRange.getEndTime());
+    var labelsValues = toLabelValueList(labels);
+    log.info("Create filtered dataset alerts - DataSetId: {}, Labels: {} datetime "
+            + "range from {} to {}", datasetId, labels, startDate, endDate);
     datasetAlertRepository.createFilteredDataset(
         datasetId,
-        toLabelValueList(labels),
-        TimestampConverter.toOffsetDateTime(alertTimeRange.getStartTime()),
-        TimestampConverter.toOffsetDateTime(alertTimeRange.getEndTime()));
+        labelsValues,
+        startDate,
+        endDate);
   }
 
   private static List<String> toLabelValueList(Map<String, LabelValues> labels) {

@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -73,8 +74,8 @@ public class DatasetAlertRepositoryIT extends BaseDataJpaTest {
     DatasetEntity dataset = createDatasetEntity();
     datasetAlertRepository.createFilteredDataset(
         dataset.getId(), List.of(), OffsetDateTime.parse("2007-12-03T10:15:30+01:00"),
-        OffsetDateTime.now());
-    assertThat(datasetAlertRepository.countByIdDatasetId(dataset.getId())).isEqualTo(11);
+        OffsetDateTime.now(ZoneOffset.UTC));
+    assertThat(datasetAlertRepository.countByIdDatasetId(dataset.getId())).isEqualTo(10);
   }
 
   @Test
@@ -82,7 +83,7 @@ public class DatasetAlertRepositoryIT extends BaseDataJpaTest {
     DatasetEntity dataset = createDatasetEntity();
     datasetAlertRepository.createFilteredDataset(
         dataset.getId(), List.of("labelvalue"), OffsetDateTime.parse("2007-12-03T10:15:30+01:00"),
-        OffsetDateTime.now());
+        OffsetDateTime.now(ZoneOffset.UTC));
     assertThat(datasetAlertRepository.countByIdDatasetId(dataset.getId())).isEqualTo(2);
   }
 
