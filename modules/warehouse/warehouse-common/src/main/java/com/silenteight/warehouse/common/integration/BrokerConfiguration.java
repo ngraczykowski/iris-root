@@ -51,7 +51,7 @@ class BrokerConfiguration {
     return new Declarables(
         binding(
             properties.qaIndexingQueueName(),
-            GOV_QA_EXCHANGE,
+            GOV_EVENTS_EXCHANGE,
             properties.qaIndexingRoutingKey()));
   }
 
