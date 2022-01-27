@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -92,6 +94,7 @@ class JdbcAlertMapper {
         .status(AlertStatus.valueOf(alert.status))
         .matches(projections.stream()
             .map(this::toMatch)
+            .filter(Objects::nonNull)
             .toList()
         ).build();
   }
@@ -107,7 +110,9 @@ class JdbcAlertMapper {
   }
 
   private AlertWithMatches.Match toMatch(AlertWithMatchNamesProjection projection) {
-    return new AlertWithMatches.Match(projection.matchId(), projection.matchName());
+    return Optional.ofNullable(projection.matchId())
+        .map(matchId -> new AlertWithMatches.Match(matchId, projection.matchName()))
+        .orElse(null);
   }
 
   private record AlertKey(

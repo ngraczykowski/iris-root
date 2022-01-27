@@ -78,7 +78,6 @@ class AlertServiceSpec extends Specification {
     1 * alertMapper.toAlerts(_ as RegisteredAlerts, alertsWithMatches, 'batch_id_1') >> alerts
     1 * alertRepository.saveAlerts(_ as List<Alert>)
     1 * alertMapper.toErrorAlerts([] as List<AlertWithMatches>, 'batch_id_1') >> []
-    1 * registrationAlertResponseMapper.fromAlertsToRegistrationAlerts(_ as List<Alert>) >> []
     1 * registrationAlertResponseMapper.fromAlertsToRegistrationAlerts(_ as List<Alert>) >> alerts
     1 * registrationAlertResponseMapper.fromAlertsWithMatchesToRegistrationAlerts(
         _ as List<com.silenteight.bridge.core.registration.domain.model.AlertWithMatches>) >> []
@@ -166,7 +165,6 @@ class AlertServiceSpec extends Specification {
     1 * alertMapper.toAlerts(_ as RegisteredAlerts, [alert2], 'batch_id_1') >> newAlerts
     1 * alertRepository.saveAlerts(_ as List<Alert>)
     1 * alertMapper.toErrorAlerts(_ as List<AlertWithMatches>, 'batch_id_1') >> []
-    1 * registrationAlertResponseMapper.fromAlertsToRegistrationAlerts(_ as List<Alert>) >> []
     1 * registrationAlertResponseMapper.fromAlertsToRegistrationAlerts(_ as List<Alert>) >> newAlerts
     1 * registrationAlertResponseMapper.fromAlertsWithMatchesToRegistrationAlerts(alreadyRegisteredAlerts) >> alreadyExistingAlerts
     response.size() == 2

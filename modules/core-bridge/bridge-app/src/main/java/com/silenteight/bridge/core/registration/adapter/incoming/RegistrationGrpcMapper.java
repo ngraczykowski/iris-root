@@ -10,6 +10,7 @@ import com.silenteight.proto.registration.api.v1.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -41,7 +42,7 @@ class RegistrationGrpcMapper {
       RegistrationAlert alert) {
     return RegisteredAlertWithMatches.newBuilder()
         .setAlertId(alert.id())
-        .setAlertName(alert.name())
+        .setAlertName(Optional.ofNullable(alert.name()).orElse(""))
         .setAlertStatus(AlertStatus.valueOf(alert.status().name()))
         .addAllRegisteredMatches(createRegisteredMatches(alert))
         .build();
