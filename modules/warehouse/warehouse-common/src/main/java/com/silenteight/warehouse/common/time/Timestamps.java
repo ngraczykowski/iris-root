@@ -12,6 +12,9 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 
+import static java.time.ZoneOffset.UTC;
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+
 @UtilityClass
 public class Timestamps {
 
@@ -31,7 +34,7 @@ public class Timestamps {
 
   @NotNull
   public Instant toInstant(@NonNull TimestampOrBuilder timestamp) {
-    return Instant.ofEpochSecond(timestamp.getSeconds(),timestamp.getNanos());
+    return Instant.ofEpochSecond(timestamp.getSeconds(), timestamp.getNanos());
   }
 
   @NotNull
@@ -49,5 +52,13 @@ public class Timestamps {
       return defaultTimestamp;
 
     return toTimestamp(instant);
+  }
+
+  @NonNull
+  public static String toStringFormatIsoLocalDate(@NonNull OffsetDateTime from) {
+    return from
+        .toLocalDateTime()
+        .atZone(UTC)
+        .format(ISO_LOCAL_DATE);
   }
 }

@@ -31,9 +31,12 @@ import com.silenteight.warehouse.qa.handler.QaMessageHandlerModule;
 import com.silenteight.warehouse.qa.processing.QaProcessingModule;
 import com.silenteight.warehouse.report.accuracy.AccuracyReportModule;
 import com.silenteight.warehouse.report.billing.BillingReportModule;
-import com.silenteight.warehouse.report.generation.GenerateReportModule;
+import com.silenteight.warehouse.report.create.ReportCreateModule;
+import com.silenteight.warehouse.report.download.ReportDownloadModule;
+import com.silenteight.warehouse.report.generation.ReportGenerationModule;
 import com.silenteight.warehouse.report.metrics.MetricsReportModule;
 import com.silenteight.warehouse.report.name.ReportFileNameModule;
+import com.silenteight.warehouse.report.persistence.ReportPersistenceModule;
 import com.silenteight.warehouse.report.production.ProductionReportsModule;
 import com.silenteight.warehouse.report.rbs.RbsReportModule;
 import com.silenteight.warehouse.report.reasoning.AiReasoningReportModule;
@@ -43,6 +46,7 @@ import com.silenteight.warehouse.report.reporting.ReportingModule;
 import com.silenteight.warehouse.report.simulation.SimulationModule;
 import com.silenteight.warehouse.report.sql.SqlExecutorModule;
 import com.silenteight.warehouse.report.statistics.ReportStatisticsModule;
+import com.silenteight.warehouse.report.status.ReportStatusModule;
 import com.silenteight.warehouse.report.storage.StorageModule;
 import com.silenteight.warehouse.retention.production.RetentionProductionModule;
 import com.silenteight.warehouse.retention.simulation.RetentionSimulationModule;
@@ -76,6 +80,11 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     BillingReportModule.class,
     CountryMigrationModule.class,
     DomainModule.class,
+    ReportCreateModule.class,
+    ReportDownloadModule.class,
+    ReportGenerationModule.class,
+    ReportPersistenceModule.class,
+    ReportStatusModule.class,
     IndexTrackingModule.class,
     ManagementModule.class,
     MatchModule.class,
@@ -97,7 +106,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     ElasticsearchRestClientModule.class,
     EnvironmentModule.class,
     FileStorageMinioModule.class,
-    GenerateReportModule.class,
     OpendistroModule.class,
     ProductionReportsModule.class,
     QaMessageHandlerModule.class,

@@ -3,6 +3,8 @@ package com.silenteight.warehouse.report.name;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.warehouse.common.domain.ReportConstants;
+
 @RequiredArgsConstructor
 class SimulationReportFileNameService implements ReportFileName {
 
@@ -19,5 +21,10 @@ class SimulationReportFileNameService implements ReportFileName {
         .replace(REPORT_TYPE_PLACEHOLDER, fileNameDto.getReportType())
         .replace(ANALYSIS_ID_PLACEHOLDER, fileNameDto.getAnalysisId())
         .replace(TIMESTAMP_PLACEHOLDER, fileNameDto.getTimestamp());
+  }
+
+  @Override
+  public String type() {
+    return ReportConstants.SIMULATION;
   }
 }
