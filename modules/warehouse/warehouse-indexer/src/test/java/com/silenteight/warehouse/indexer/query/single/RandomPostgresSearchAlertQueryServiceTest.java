@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.silenteight.warehouse.indexer.alert.AlertColumnName.CREATE_AT;
+import static com.silenteight.warehouse.indexer.alert.AlertColumnName.CREATED_AT;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -117,7 +117,7 @@ class RandomPostgresSearchAlertQueryServiceTest {
     assertThat(alerts.size()).isEqualTo(1);
     assertThat(alerts.get(0)).isEqualTo("alertName");
     verify(alertRepository).fetchRandomAlerts(
-        CREATE_AT, "timeFrom", "timeTo", 2,
+        CREATED_AT, "timeFrom", "timeTo", 2,
         expectedFilters, expectedAlertNames);
   }
 }

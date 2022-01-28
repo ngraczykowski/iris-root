@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.Timestamp;
 import java.util.List;
 
-import static com.silenteight.warehouse.indexer.alert.AlertColumnName.CREATE_AT;
+import static com.silenteight.warehouse.indexer.alert.AlertColumnName.CREATED_AT;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,7 +48,7 @@ class AlertPostgresRepositoryTest {
   void fetchWithoutFilters_sqlWithoutAlertNaneAndWithoutAdditionalClauses() {
     // When
     repository.fetchRandomAlerts(
-        CREATE_AT, TIME_FROM_STRING, TIME_TO_STRING, LIMIT,
+        CREATED_AT, TIME_FROM_STRING, TIME_TO_STRING, LIMIT,
         ImmutableListMultimap.of(),
         List.of());
 
@@ -63,7 +63,7 @@ class AlertPostgresRepositoryTest {
   void fetchWithoutFilters_sqlWithAlertNameAndWithoutAdditionalClauses() {
     // When
     repository.fetchRandomAlerts(
-        CREATE_AT, TIME_FROM_STRING, TIME_TO_STRING, LIMIT,
+        CREATED_AT, TIME_FROM_STRING, TIME_TO_STRING, LIMIT,
         ImmutableListMultimap.of(), List.of("alertName", "alertName2"));
 
     // Then
@@ -77,7 +77,7 @@ class AlertPostgresRepositoryTest {
   void fetchWithFilters_sqlContainsAdditionalClauses() {
     // When
     repository.fetchRandomAlerts(
-        CREATE_AT, TIME_FROM_STRING, TIME_TO_STRING, LIMIT,
+        CREATED_AT, TIME_FROM_STRING, TIME_TO_STRING, LIMIT,
         ImmutableListMultimap.of(
             "propertyName", List.of("value1"), "propertyName2",
             List.of("value1", "value2")), List.of());
@@ -94,7 +94,7 @@ class AlertPostgresRepositoryTest {
   void fetchWithFilters_sqlContainsAlertNameAndAdditionalClauses() {
     // When
     repository.fetchRandomAlerts(
-        CREATE_AT, TIME_FROM_STRING, TIME_TO_STRING, LIMIT,
+        CREATED_AT, TIME_FROM_STRING, TIME_TO_STRING, LIMIT,
         ImmutableListMultimap.of(
             "propertyName", List.of("value1"), "propertyName2",
             List.of("value1", "value2")), List.of("alertName", "alertName2"));

@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum AlertColumnName {
-  CREATE_AT("created_at"),
+  CREATED_AT("created_at"),
   RECOMMENDATION_DATE("recommendation_date");
 
   private final String name;
