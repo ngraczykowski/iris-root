@@ -22,6 +22,7 @@ data:
       email-notification:
           from: {{ .Values.emailNotification.from | quote }}
           to: {{ .Values.emailNotification.to | quote }}
+          cc: {{ .Values.emailNotification.cc | quote }}
           cron: {{ .Values.emailNotification.cron | quote }}
           amount: {{ .Values.emailNotification.amount }}
           cmapiEnabled: {{ .Values.emailNotification.cmapiEnabled }}
@@ -43,8 +44,8 @@ data:
           address: {{ .Values.grpcClientGovernanceAddress | quote }}
         companynamesurroundingagent:
           address: {{ .Values.grpcClientCompanyNameSurroundingAgentAddress | quote }}
-
-
+    environment:
+      name: {{ .Values.environment.name | quote }}
     spring:
       security:
         oauth2:

@@ -80,6 +80,7 @@ pb:
   email-notification:
     from: "from@s8.com"
     to: "to@s8.com"
+    cc: "cc@s8.com"
     cron: "0 * * * * *"
     amount: 10
     cmapi-enabled: false
@@ -153,6 +154,12 @@ spring:
             enable: true
         transport:
           protocol: smtp
+
+#------------------------------------------------------------------------------
+# Environment
+#------------------------------------------------------------------------------
+environment:
+  name: "LOCALHOST"
 
 #------------------------------------------------------------------------------
 # Ingress authorization

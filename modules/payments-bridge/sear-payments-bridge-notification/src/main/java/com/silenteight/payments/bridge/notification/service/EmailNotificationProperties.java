@@ -16,6 +16,7 @@ public class EmailNotificationProperties {
 
   private String from;
   private String to;
+  private String cc;
   private String cron = DEFAULT_CRON;
   private int amount = DEFAULT_AMOUNT;
   private boolean cmapiEnabled;

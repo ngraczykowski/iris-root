@@ -46,7 +46,8 @@ class CmapiNotificationCreatorServiceTest {
     assertEquals("CMAPI_ERRORS.csv", expectedNotification.getAttachmentName());
     assertEquals("CMAPI_PROCESSING_ERROR", expectedNotification.getType());
     assertEquals(
-        "Silent Eight - CMAPI - alert's processing errors", expectedNotification.getSubject());
+        "Silent Eight - CMAPI - alert's processing errors",
+        expectedNotification.getSubject());
     assertNull(expectedNotification.getStatus());
 
   }

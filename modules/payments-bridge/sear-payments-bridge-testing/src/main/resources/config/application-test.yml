@@ -31,10 +31,14 @@ pb:
   email-notification:
     from: "email.example@silenteight.com"
     to: "email.example2@silenteight.com"
+    cc: ""
     cron: "* * * ? * *"
     amount: 10
     cmapi-enabled: true
     learning-enabled: true
+
+environment:
+  name: "TEST"
 
 grpc:
   server:

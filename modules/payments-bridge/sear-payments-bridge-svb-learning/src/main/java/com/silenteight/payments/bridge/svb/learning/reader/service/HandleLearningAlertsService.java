@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.notification.model.NotificationEvent;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
 import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningAlertsUseCase;
+import com.silenteight.payments.bridge.svb.learning.reader.port.LearningCsvNotificationCreatorUseCase;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
@@ -20,13 +21,16 @@ class HandleLearningAlertsService implements HandleLearningAlertsUseCase {
 
   private final ProcessAlertService processAlertService;
   private final ApplicationEventPublisher applicationEventPublisher;
+  private final LearningCsvNotificationCreatorUseCase learningCsvNotificationCreatorUseCase;
 
   @Async(LEARNING_THREAD_POOL_EXECUTOR)
   public void readAlerts(LearningRequest learningRequest) {
     log.info("Started processing learn request: {}", learningRequest);
     var alertsRead = processAlertService.read(learningRequest);
 
-    var notificationEvent = new NotificationEvent(alertsRead.toNotification());
+    var notification = learningCsvNotificationCreatorUseCase.createLearningCsvNotification(
+        alertsRead.toLearningCsvNotificationRequest());
+    var notificationEvent = new NotificationEvent(notification);
     applicationEventPublisher.publishEvent(notificationEvent);
 
     log.info("Processing of learn request {} finished", learningRequest);

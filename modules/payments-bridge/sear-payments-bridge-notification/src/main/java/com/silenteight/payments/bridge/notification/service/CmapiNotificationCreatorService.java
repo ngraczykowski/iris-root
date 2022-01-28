@@ -39,6 +39,7 @@ class CmapiNotificationCreatorService implements CmapiNotificationCreatorUseCase
 
   @Override
   public Notification createCmapiNotification(CmapiNotificationRequest cmapiNotificationRequest) {
+
     return Notification.builder()
         .type(CMAPI_PROCESSING_ERROR)
         .subject(CMAPI_PROCESSING_ERROR_SUBJECT)

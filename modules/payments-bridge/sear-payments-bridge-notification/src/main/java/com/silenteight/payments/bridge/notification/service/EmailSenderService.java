@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.notification.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.common.environment.EnvironmentProperties;
 import com.silenteight.payments.bridge.notification.model.NonRecoverableEmailSendingException;
 import com.silenteight.payments.bridge.notification.model.SendEmailRequest;
 import com.silenteight.payments.bridge.notification.port.EmailSenderUseCase;
@@ -23,12 +24,13 @@ import javax.mail.util.ByteArrayDataSource;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@EnableConfigurationProperties(EmailNotificationProperties.class)
+@EnableConfigurationProperties({ EmailNotificationProperties.class, EnvironmentProperties.class })
 class EmailSenderService implements EmailSenderUseCase {
 
   private static final String ATTACHMENT_TYPE_ZIP = "application/zip";
 
   private final EmailNotificationProperties emailNotificationProperties;
+  private final EnvironmentProperties environmentProperties;
   private final JavaMailSender emailSender;
 
   public void sendEmail(SendEmailRequest sendEmailRequest) {
@@ -49,9 +51,15 @@ class EmailSenderService implements EmailSenderUseCase {
 
   private void prepareMessageHelper(
       SendEmailRequest sendEmailRequest, MimeMessage mimeMessage) throws MessagingException {
+
     MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
     messageHelper.setFrom(emailNotificationProperties.getFrom());
     messageHelper.setTo(emailNotificationProperties.getTo());
+
+    if (!"".equals(emailNotificationProperties.getCc())) {
+      messageHelper.setCc(emailNotificationProperties.getCc());
+    }
+
     messageHelper.setSubject(sendEmailRequest.getSubject());
     messageHelper.setText(sendEmailRequest.getHtmlText(), true);
 
@@ -60,5 +68,6 @@ class EmailSenderService implements EmailSenderUseCase {
           sendEmailRequest.getAttachmentName(),
           new ByteArrayDataSource(sendEmailRequest.getAttachment(), ATTACHMENT_TYPE_ZIP));
     }
+
   }
 }
