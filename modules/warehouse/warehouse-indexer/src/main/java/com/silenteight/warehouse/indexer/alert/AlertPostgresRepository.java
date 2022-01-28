@@ -3,6 +3,7 @@ package com.silenteight.warehouse.indexer.alert;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.warehouse.indexer.alert.dto.AlertDto;
 
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
+@Slf4j
 public final class AlertPostgresRepository implements AlertRepository {
 
   @Language("PostgreSQL")
@@ -50,6 +52,7 @@ public final class AlertPostgresRepository implements AlertRepository {
     List<Object> jdbcParameters =
         createJdbcParameters(timeFrom, timeTo, limit, filters, alertNames);
 
+    log.debug("Querying jdbctemplate with sql {} with parameters {}", sql, jdbcParameters);
     return jdbcTemplate.query(sql, (rs, rowNum) -> getAlertDto(rs),
         jdbcParameters.toArray(new Object[0]));
   }
@@ -119,7 +122,7 @@ public final class AlertPostgresRepository implements AlertRepository {
         .name(rs.getString("name"))
         .discriminator(rs.getString("discriminator"))
         .recommendationDate(rs.getTimestamp("recommendation_date"))
-        .createdAt(rs.getTimestamp("created_at"))
+        .createdAt(rs.getTimestamp(AlertColumnName.CREATED_AT.getName()))
         .payload(rs.getString("payload"))
         .build();
   }
