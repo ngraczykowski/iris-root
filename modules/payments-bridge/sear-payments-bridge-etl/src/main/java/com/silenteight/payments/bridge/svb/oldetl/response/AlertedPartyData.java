@@ -38,6 +38,10 @@ public class AlertedPartyData {
       return names.stream().map(String::trim).findFirst();
   }
 
+  public String getAccountNumberOrEmpty() {
+    return accountNumber != null ? accountNumber : "";
+  }
+
   public Optional<String> getFirstAlertedPartyName() {
     return names.stream().findFirst();
   }

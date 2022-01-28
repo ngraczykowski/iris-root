@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
 import com.silenteight.payments.bridge.svb.newlearning.job.historical.HistoricalRiskAssessmentJobProperties;
 import com.silenteight.payments.bridge.svb.newlearning.step.composite.AlertCompositeReaderFactory;
-import com.silenteight.proto.learningstore.historicaldecision.v1.api.HistoricalDecisionLearningStoreExchangeRequest;
 
 import org.intellij.lang.annotations.Language;
 import org.springframework.batch.core.Step;
@@ -52,7 +51,7 @@ class StoreInLearningEngineStepConfiguration {
     return stepBuilderFactory
         .get(HISTORICAL_ASSESSMENT_STORE_STEP)
         .listener(new JobParameterExecutionContextCopyListener())
-        .<AlertComposite, HistoricalDecisionLearningStoreExchangeRequest>chunk(
+        .<AlertComposite, HistoricalDecisionLearningAggregate>chunk(
             properties.getChunkSize())
         .reader(historicalReservationCompositeReader)
         .processor(storeInLearningEngineProcessor)

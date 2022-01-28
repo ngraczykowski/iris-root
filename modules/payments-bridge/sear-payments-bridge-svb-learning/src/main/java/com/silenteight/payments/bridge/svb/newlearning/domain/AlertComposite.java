@@ -2,14 +2,17 @@ package com.silenteight.payments.bridge.svb.newlearning.domain;
 
 import lombok.Builder;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterMatchResponse;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAlert;
+import com.silenteight.payments.bridge.common.app.AgentsUtils;
 import com.silenteight.payments.bridge.data.retention.model.AlertDataRetention;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.etl.processing.model.MessageTag;
+import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.service.AlertParserService;
 import com.silenteight.proto.learningstore.historicaldecision.v1.api.*;
 
@@ -23,6 +26,7 @@ import static java.util.stream.Collectors.toList;
 
 @Value
 @Builder
+@Slf4j
 public class AlertComposite {
 
   UUID alertMessageId;
@@ -44,38 +48,46 @@ public class AlertComposite {
     return alertDetails.getSystemId();
   }
 
-  public HistoricalDecisionLearningStoreExchangeRequest toHistoricalDecisionRequest() {
+  public HistoricalDecisionLearningStoreExchangeRequest toHistoricalDecisionRequest(
+      String featureTypeDiscriminator) {
     var alerts =
         hits.stream()
-            .map(hit -> mapToAlert(alertDetails, hit,
-                ((LinkedList<ActionComposite>) actions).getLast())).collect(Collectors.toList());
+            .map(hit -> {
+              var lastAction = ((LinkedList<ActionComposite>) actions).getLast();
+              return Alert.newBuilder()
+                  .setAlertId(alertDetails.getSystemId())
+                  .setAlertedParty(mapAlertedParty(featureTypeDiscriminator, hit))
+                  .setMatchId(hit.getFkcoVListFmmId())
+                  .setWatchlist(mapWatchlistType(hit))
+                  .addDecisions(mapDecision(lastAction))
+                  .setDiscriminator(mapDiscriminator(featureTypeDiscriminator))
+                  .build();
+            }).peek(alert -> {
+              if (log.isTraceEnabled()) {
+                log.trace(
+                    "Mapped for featureDiscriminator:{} alert details alertedId:{}"
+                        + " featureDiscriminatorValue:{}",
+                    featureTypeDiscriminator, alert.getAlertId(),
+                    alert.getDiscriminator().getValue());
+              }
+            })
+            .collect(Collectors.toList());
 
     return HistoricalDecisionLearningStoreExchangeRequest.newBuilder()
         .addAllAlerts(alerts)
         .build();
   }
 
-  private Alert mapToAlert(
-      AlertDetails alertDetails, HitComposite hit, ActionComposite lastAction) {
-
-    return Alert.newBuilder()
-        .setAlertId(alertDetails.getSystemId())
-        .setAlertedParty(mapAlertedParty(hit))
-        .setMatchId(hit.getFkcoVListFmmId())
-        .setWatchlist(mapWatchlistType(hit))
-        .addDecisions(mapDecision(lastAction))
-        .setDiscriminator(mapDiscriminator())
-        .build();
-  }
-
-  private AlertedParty mapAlertedParty(HitComposite hit) {
+  private AlertedParty mapAlertedParty(String featureTypeDiscriminator, HitComposite hit) {
     var messageData = new MessageData(List.of(
         new MessageTag(hit.getFkcoVMatchedTag(), hit.getFkcoVMatchedTagContent())));
 
     var alertedPartyData = AlertParserService.extractAlertedPartyData(messageData,
         hit.getFkcoVMatchedTag(),
         alertDetails.getFkcoVFormat(), alertDetails.getFkcoVApplication());
-    var alertedPartyId = alertedPartyData.getAccountNumberOrFirstName().orElse("");
+
+    var alertedPartyId =
+        mapAlertedPartyIdByFeatureDiscriminator(featureTypeDiscriminator, alertedPartyData);
     var country = hit.getFkcoVCountryMatchedText();
     return AlertedParty.newBuilder()
         .setId(alertedPartyId)
@@ -83,9 +95,24 @@ public class AlertComposite {
         .build();
   }
 
-  private Discriminator mapDiscriminator() {
+  private String mapAlertedPartyIdByFeatureDiscriminator(
+      String featureTypeDiscriminator, AlertedPartyData alertedPartyData) {
+    switch (featureTypeDiscriminator) {
+      case AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC:
+        return alertedPartyData.getAccountNumberOrEmpty();
+      case AgentsUtils.HISTORICAL_RISK_CUSTOMER_NAME_LEARNING_DISC:
+        return alertedPartyData.getFirstAlertedPartyName().orElse("");
+      default:
+        throw new UnsupportedHistoricalDecisionAgentFeature(
+            String.format(
+                "This historical decision feature discriminator is not supported: %s",
+                featureTypeDiscriminator));
+    }
+  }
+
+  private Discriminator mapDiscriminator(String featureTypeDiscriminator) {
     return Discriminator.newBuilder()
-        .setValue(discriminator)
+        .setValue(buildDiscriminatorValue(featureTypeDiscriminator))
         .build();
   }
 
@@ -166,5 +193,9 @@ public class AlertComposite {
         .hitComposite(hit.get())
         .matchName(match.getMatchName())
         .build();
+  }
+
+  private String buildDiscriminatorValue(String feature) {
+    return discriminator + "_" + feature;
   }
 }
