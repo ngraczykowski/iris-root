@@ -1,15 +1,15 @@
-package com.silenteight.payments.bridge.svb.learning.reader.service;
+package com.silenteight.payments.bridge.svb.migration;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.svb.learning.reader.service.DecisionEntry.DecisionKey;
+import com.silenteight.payments.bridge.svb.migration.DecisionEntry.DecisionKey;
 
 import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-class DecisionMapper {
+public class DecisionMapper {
 
   @NonNull
   private final Map<DecisionKey, DecisionEntry> decisionMap;

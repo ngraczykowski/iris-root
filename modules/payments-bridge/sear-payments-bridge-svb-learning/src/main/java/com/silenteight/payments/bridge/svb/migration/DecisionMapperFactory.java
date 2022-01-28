@@ -1,8 +1,8 @@
-package com.silenteight.payments.bridge.svb.learning.reader.service;
+package com.silenteight.payments.bridge.svb.migration;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.svb.learning.reader.service.DecisionEntry.DecisionKey;
+import com.silenteight.payments.bridge.svb.migration.DecisionEntry.DecisionKey;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -16,7 +16,7 @@ import javax.annotation.Nonnull;
 
 @RequiredArgsConstructor
 @Component
-class DecisionMapperFactory {
+public class DecisionMapperFactory {
 
   public DecisionMapper create(InputStream inputStream) throws IOException, CsvValidationException {
     try (var csvReader = new CSVReader(new InputStreamReader(inputStream))) {

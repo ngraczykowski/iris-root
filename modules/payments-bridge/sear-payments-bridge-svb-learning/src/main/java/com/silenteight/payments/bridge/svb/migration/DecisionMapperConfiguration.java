@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.learning.reader.service;
+package com.silenteight.payments.bridge.svb.migration;
 
 import lombok.RequiredArgsConstructor;
 
@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @Configuration
 @RequiredArgsConstructor
-class DecisionMapperConfiguration {
+public class DecisionMapperConfiguration {
 
   private static final String DECISION_MAPPING_CSV =
       "classpath:analyst-decision-mapping/analyst-decision-mapping.csv";

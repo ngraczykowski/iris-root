@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.learning.reader.service;
+package com.silenteight.payments.bridge.svb.migration;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

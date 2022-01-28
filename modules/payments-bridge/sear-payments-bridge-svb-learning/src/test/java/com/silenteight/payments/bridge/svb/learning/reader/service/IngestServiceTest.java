@@ -7,6 +7,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredA
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CreateAlertRetentionPort;
 import com.silenteight.payments.bridge.svb.learning.reader.port.IndexLearningAlertPort;
+import com.silenteight.payments.bridge.svb.migration.DecisionMapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

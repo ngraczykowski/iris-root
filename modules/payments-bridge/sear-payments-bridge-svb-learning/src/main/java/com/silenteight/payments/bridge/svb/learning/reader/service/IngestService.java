@@ -11,6 +11,7 @@ import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.ReadAlertError;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CreateAlertRetentionPort;
 import com.silenteight.payments.bridge.svb.learning.reader.port.IndexLearningAlertPort;
+import com.silenteight.payments.bridge.svb.migration.DecisionMapper;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
