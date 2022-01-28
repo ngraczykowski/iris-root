@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.warehouse.alert.rest.service.AlertNotFoundException;
+import com.silenteight.warehouse.alert.rest.service.AlertProvider;
 import com.silenteight.warehouse.common.web.request.AlertResource;
 import com.silenteight.warehouse.indexer.query.dto.AlertDetailsRequest;
-import com.silenteight.warehouse.indexer.query.single.AlertProvider;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,7 +47,8 @@ public class AlertRestController {
   @GetMapping(QA_ALERT_DETAIL_URL)
   @PreAuthorize("isAuthorized('VIEW_ALERTS_DATA')")
   public ResponseEntity<Map<String, String>> getSingleAlert(
-      @PathVariable("id") String id, @RequestParam(name = "fields") List<String> fields) {
+      @PathVariable("id") String id, @RequestParam(name = "fields") List<String> fields)
+      throws AlertNotFoundException {
 
     log.debug("Getting single alert, alertId={}, fields={}", id,fields);
     return ok().body(alertProvider.getSingleAlertAttributes(fields, id));
@@ -55,7 +57,8 @@ public class AlertRestController {
   @PostMapping(QA_ALERT_DETAIL_URL)
   @PreAuthorize("isAuthorized('VIEW_ALERTS_DATA')")
   public ResponseEntity<Map<String, String>> getSingleAlert(
-      @PathVariable("id") String id, @RequestBody @Valid AlertDetailsRequest alertDetailsRequest) {
+      @PathVariable("id") String id, @RequestBody @Valid AlertDetailsRequest alertDetailsRequest)
+      throws AlertNotFoundException {
 
     log.debug("Getting single alert, alertId={}, fields={}", id, alertDetailsRequest.getFields());
     return ok().body(alertProvider.getSingleAlertAttributes(alertDetailsRequest.getFields(),

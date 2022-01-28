@@ -1,9 +1,9 @@
 package com.silenteight.warehouse.alert.rest;
 
+import com.silenteight.warehouse.alert.rest.service.AlertNotFoundException;
+import com.silenteight.warehouse.alert.rest.service.AlertProvider;
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.warehouse.common.web.exception.GenericExceptionControllerAdvice;
-import com.silenteight.warehouse.indexer.query.single.AlertNotFoundException;
-import com.silenteight.warehouse.indexer.query.single.AlertProvider;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -42,15 +42,6 @@ class AlertRestControllerTest extends BaseRestControllerTest {
   }
 
   @Test
-  @WithMockUser(username = USERNAME, authorities = { QA })
-  void its404_whenAtLeastOneDiscriminatorNotExists() {
-    when(alertProvider.getMultipleAlertsAttributes(any(), any()))
-        .thenThrow(AlertNotFoundException.class);
-
-    get(QA_ALERT_LIST_URL).statusCode(NOT_FOUND.value());
-  }
-
-  @Test
   @WithMockUser(username = USERNAME, authorities = USER_ADMINISTRATOR)
   void its403_whenNotPermittedRoleForGetQaAlertsList() {
     get(QA_ALERT_LIST_URL).statusCode(FORBIDDEN.value());
@@ -58,7 +49,7 @@ class AlertRestControllerTest extends BaseRestControllerTest {
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { QA })
-  void its200_whenInvokedGetQaAlert() {
+  void its200_whenInvokedGetQaAlert() throws Exception {
     when(alertProvider.getSingleAlertAttributes(any(), any()))
         .thenReturn(ALERT_ATTRIBUTES);
 
@@ -69,7 +60,7 @@ class AlertRestControllerTest extends BaseRestControllerTest {
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { QA })
-  void its404_whenAlertNotExists() {
+  void its404_whenAlertNotExists() throws Exception {
     when(alertProvider.getSingleAlertAttributes(any(), any()))
         .thenThrow(AlertNotFoundException.class);
 
@@ -84,7 +75,7 @@ class AlertRestControllerTest extends BaseRestControllerTest {
 
   @Test
   @WithMockUser(username = USERNAME, authorities = { QA })
-  void its200_whenInvokedPostQaAlert() {
+  void its200_whenInvokedPostQaAlert() throws Exception {
     when(alertProvider.getSingleAlertAttributes(any(), any()))
         .thenReturn(ALERT_ATTRIBUTES);
 

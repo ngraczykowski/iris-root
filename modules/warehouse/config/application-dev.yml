@@ -42,6 +42,8 @@ warehouse:
       - "\\d{1,}\\.WorldCheckEntities\\..*"
       - "\\d{1,}\\.WorldCheckIndividuals\\..*"
   match-mapping:
+  alert-level-security:
+    enabled: true
   persistence:
     alert:
       labels:
