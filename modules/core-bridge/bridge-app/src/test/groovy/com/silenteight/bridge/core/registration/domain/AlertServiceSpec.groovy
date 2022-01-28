@@ -111,10 +111,8 @@ class AlertServiceSpec extends Specification {
             .metadata('alertMetadata')
             .matches(
                 [
-                    com.silenteight.bridge.core.registration.domain.model.AlertWithMatches.Match.builder()
-                        .id('match_id_11')
-                        .name('match_name')
-                        .build()
+                    new com.silenteight.bridge.core.registration.domain.model.AlertWithMatches.Match(
+                        'match_id_11', 'match_name')
                 ]
             )
             .status(com.silenteight.bridge.core.registration.domain.model.AlertStatus.REGISTERED)
@@ -159,14 +157,16 @@ class AlertServiceSpec extends Specification {
     def response = underTest.registerAlertsAndMatches(command)
 
     then:
-    1 * alertRepository.findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >> alreadyRegisteredAlerts
+    1 * alertRepository.findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >>
+        alreadyRegisteredAlerts
     1 * alertMapper.toAlertsToRegister([alert2]) >> alertsToRegister
     1 * alertRegistrationService.registerAlerts(_ as AlertsToRegister) >> registeredAlerts
     1 * alertMapper.toAlerts(_ as RegisteredAlerts, [alert2], 'batch_id_1') >> newAlerts
     1 * alertRepository.saveAlerts(_ as List<Alert>)
     1 * alertMapper.toErrorAlerts(_ as List<AlertWithMatches>, 'batch_id_1') >> []
     1 * registrationAlertResponseMapper.fromAlertsToRegistrationAlerts(_ as List<Alert>) >> newAlerts
-    1 * registrationAlertResponseMapper.fromAlertsWithMatchesToRegistrationAlerts(alreadyRegisteredAlerts) >> alreadyExistingAlerts
+    1 * registrationAlertResponseMapper.fromAlertsWithMatchesToRegistrationAlerts(alreadyRegisteredAlerts) >>
+        alreadyExistingAlerts
     response.size() == 2
   }
 

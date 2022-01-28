@@ -5,14 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FeedingStatus;
 import com.silenteight.bridge.core.registration.domain.model.AlertName;
-import com.silenteight.bridge.core.registration.domain.model.AlertStatus;
 import com.silenteight.bridge.core.registration.domain.model.Batch;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
-import com.silenteight.bridge.core.registration.domain.model.Match;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
-import com.silenteight.bridge.core.registration.domain.port.outgoing.MatchRepository;
 import com.silenteight.bridge.core.registration.infrastructure.RegistrationAnalysisProperties;
 
 import com.google.protobuf.Timestamp;
@@ -21,7 +18,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus.PROCESSING;
@@ -39,9 +39,8 @@ class AlertAnalysisService {
   private final AnalysisService analysisService;
   private final RegistrationAnalysisProperties analysisProperties;
   private final AlertRepository alertRepository;
-  private final MatchRepository matchRepository;
 
-  public void addAlertsToAnalysis(List<AddAlertToAnalysisCommand> commands) {
+  void addAlertsToAnalysis(List<AddAlertToAnalysisCommand> commands) {
     groupByBatchId(commands).forEach(this::processBatchAlerts);
   }
 
@@ -82,46 +81,6 @@ class AlertAnalysisService {
   }
 
   private void addBatchAlertsToAnalysis(Batch batch, List<AddAlertToAnalysisCommand> commands) {
-    if (containsAllSucceededAlerts(commands)) {
-      if (containsAllSucceededMatches(commands)) {
-        handleCommandsWithAllSucceededAlertsAndMatches(batch, commands);
-      } else {
-        handleCommandsWithAllSucceededAlertsAndMixedMatches(batch, commands);
-      }
-    } else {
-      handleCommandsWithMixedAlerts(batch, commands);
-    }
-  }
-
-  private boolean containsAllSucceededAlerts(List<AddAlertToAnalysisCommand> commands) {
-    return commands.stream()
-        .allMatch(alert -> FeedingStatus.SUCCESS.equals(alert.feedingStatus()));
-  }
-
-  private boolean containsAllSucceededMatches(
-      List<AddAlertToAnalysisCommand> commands) {
-    return commands.stream()
-        .flatMap(command -> command.fedMatches().stream())
-        .allMatch(fedMatch -> FeedingStatus.SUCCESS.equals(fedMatch.feedingStatus()));
-  }
-
-  private void handleCommandsWithAllSucceededAlertsAndMatches(
-      Batch batch, List<AddAlertToAnalysisCommand> commands) {
-    final var alertIds = extractAlertIdsFromCommands(commands);
-    alertRepository.updateStatusToProcessing(batch.id(), alertIds);
-    addAlertsToAnalysis(batch, alertIds);
-  }
-
-  private void handleCommandsWithAllSucceededAlertsAndMixedMatches(
-      Batch batch, List<AddAlertToAnalysisCommand> commands) {
-    final var alertIds = extractAlertIdsFromCommands(commands);
-    alertRepository.updateStatusByBatchIdAndAlertIdIn(AlertStatus.PROCESSING, batch.id(), alertIds);
-    updateMatchesStatuses(batch, commands);
-    addAlertsToAnalysis(batch, alertIds);
-  }
-
-  private void handleCommandsWithMixedAlerts(
-      Batch batch, List<AddAlertToAnalysisCommand> commands) {
     final var failedAlerts = getFailedCommands(commands);
     if (CollectionUtils.isNotEmpty(failedAlerts)) {
       handleCommandsWithFailedAlerts(batch, failedAlerts);
@@ -129,8 +88,15 @@ class AlertAnalysisService {
 
     final var succeededAlerts = getSucceededCommands(commands);
     if (CollectionUtils.isNotEmpty(succeededAlerts)) {
-      handleCommandsWithAllSucceededAlertsAndMixedMatches(batch, succeededAlerts);
+      handleCommandsWithSucceededAlerts(batch, succeededAlerts);
     }
+  }
+
+  private void handleCommandsWithSucceededAlerts(
+      Batch batch, List<AddAlertToAnalysisCommand> commands) {
+    final var alertIds = extractAlertIdsFromCommands(commands);
+    alertRepository.updateStatusToProcessing(batch.id(), alertIds);
+    addAlertsToAnalysis(batch, alertIds);
   }
 
   private void handleCommandsWithFailedAlerts(
@@ -163,32 +129,6 @@ class AlertAnalysisService {
     return commands.stream()
         .filter(command -> FeedingStatus.FAILURE.equals(command.feedingStatus()))
         .toList();
-  }
-
-  private void updateMatchesStatuses(Batch batch, List<AddAlertToAnalysisCommand> commands) {
-    final Map<Match.Status, List<String>> matchStatusNamesMap = Map.of(
-        Match.Status.PROCESSING, new ArrayList<>(),
-        Match.Status.ERROR, new ArrayList<>()
-    );
-    final var alertIds = new ArrayList<String>();
-
-    commands.forEach(command -> {
-      alertIds.add(command.alertId());
-      command.fedMatches().forEach(fedMatch -> {
-        if (FeedingStatus.SUCCESS.equals(fedMatch.feedingStatus())) {
-          matchStatusNamesMap.get(Match.Status.PROCESSING).add(fedMatch.id());
-        } else {
-          matchStatusNamesMap.get(Match.Status.ERROR).add(fedMatch.id());
-        }
-      });
-    });
-
-    matchStatusNamesMap.forEach((status, matchIds) -> {
-      if (CollectionUtils.isNotEmpty(matchIds)) {
-        matchRepository.updateStatusByBatchIdAndMatchIdInAndExternalAlertIdIn(
-            status, batch.id(), matchIds, alertIds);
-      }
-    });
   }
 
   private void logBatchError(String batchId) {

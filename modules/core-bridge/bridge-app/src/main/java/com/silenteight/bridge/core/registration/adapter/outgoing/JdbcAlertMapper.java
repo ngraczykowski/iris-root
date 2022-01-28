@@ -69,7 +69,6 @@ class JdbcAlertMapper {
   private MatchEntity toMatchEntity(Match match) {
     return MatchEntity.builder()
         .name(match.name())
-        .status(MatchEntity.Status.valueOf(match.status().name()))
         .matchId(match.matchId())
         .createdAt(Instant.now())
         .updatedAt(Instant.now())
@@ -77,11 +76,7 @@ class JdbcAlertMapper {
   }
 
   private Match toMatch(MatchEntity match) {
-    return Match.builder()
-        .name(match.name())
-        .status(Match.Status.valueOf(match.status().name()))
-        .matchId(match.matchId())
-        .build();
+    return new Match(match.name(), match.matchId());
   }
 
   private AlertWithMatches toAlertWithMatches(

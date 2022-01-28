@@ -39,10 +39,7 @@ class AlertMatchesFeatureInputFedReceivedListener {
         .alertId(message.getAlertId())
         .feedingStatus(FeedingStatus.valueOf(message.getFeedingStatus().name()))
         .fedMatches(message.getFedMatchesList().stream()
-            .map(fedMatch -> new FedMatch(
-                fedMatch.getMatchId(),
-                FeedingStatus.valueOf(fedMatch.getFeedingStatus().name())
-            ))
+            .map(fedMatch -> new FedMatch(fedMatch.getMatchId()))
             .toList())
         .build();
   }

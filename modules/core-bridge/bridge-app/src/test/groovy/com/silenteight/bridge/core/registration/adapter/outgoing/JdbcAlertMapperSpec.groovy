@@ -4,7 +4,6 @@ import com.silenteight.bridge.core.registration.domain.model.Alert
 import com.silenteight.bridge.core.registration.domain.model.AlertStatus
 import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches
 import com.silenteight.bridge.core.registration.domain.model.Match
-import com.silenteight.bridge.core.registration.domain.model.Match.Status
 
 import org.assertj.core.api.Assertions
 import spock.lang.Specification
@@ -18,11 +17,7 @@ class JdbcAlertMapperSpec extends Specification {
   def 'should map to alert entity'() {
     given:
     def matchesIn = [
-        Match.builder()
-            .name('matchName')
-            .status(Status.REGISTERED)
-            .matchId('matchId')
-            .build()
+        new Match('matchName', 'matchId')
     ]
 
     def alertIn = Alert.builder()
@@ -46,10 +41,10 @@ class JdbcAlertMapperSpec extends Specification {
       batchId() == 'batchId'
       metadata() == 'metadata'
       errorDescription() == 'errorDescription'
+
       with(result.matches().first()) {
         name() == 'matchName'
         matchId() == 'matchId'
-        status() == MatchEntity.Status.REGISTERED
       }
     }
   }
@@ -81,7 +76,6 @@ class JdbcAlertMapperSpec extends Specification {
     def matchEntities = [
         MatchEntity.builder()
             .name('matchName')
-            .status(MatchEntity.Status.REGISTERED)
             .matchId('matchId')
             .build()
     ] as Set
@@ -107,6 +101,7 @@ class JdbcAlertMapperSpec extends Specification {
       batchId() == 'batchId'
       metadata() == 'metadata'
       errorDescription() == 'errorDescription'
+
       with(result.matches().first()) {
         name() == 'matchName'
         matchId() == 'matchId'

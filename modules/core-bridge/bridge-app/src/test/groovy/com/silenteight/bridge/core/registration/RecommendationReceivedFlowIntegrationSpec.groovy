@@ -55,7 +55,7 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
         }
         '''
 
-  def 'should send recommendationsReceived message and after it check that all alerts and matches have status RECOMMENDED, batch has status COMPLETED and message MessageBatchCompleted is published'() {
+  def 'should send recommendationsReceived message and after it check that all alerts have status RECOMMENDED, batch has status COMPLETED and message MessageBatchCompleted is published'() {
     given:
     def registerBatchRequest = createRegisterBatchRequest()
 
@@ -90,7 +90,6 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
 
       assert alerts.every {
         it.status().name() == 'RECOMMENDED'
-        it.matches().every {it.status().name() == 'RECOMMENDED'}
       }
 
       def batch = batchRepository.findById(BATCH_ID_INPUT)

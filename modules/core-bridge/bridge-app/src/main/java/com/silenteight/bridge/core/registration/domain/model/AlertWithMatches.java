@@ -16,12 +16,8 @@ public record AlertWithMatches(
   @Builder
   public AlertWithMatches {}
 
-  public static record Match(
+  public record Match(
       String id,
       String name
-  ) {
-
-    @Builder
-    public Match {}
-  }
+  ) {}
 }

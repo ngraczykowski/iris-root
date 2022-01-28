@@ -1,8 +1,6 @@
 package com.silenteight.bridge.core.registration.adapter.outgoing;
 
 
-import com.silenteight.bridge.core.registration.adapter.outgoing.AlertEntity.Status;
-
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -13,16 +11,10 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
 
   @Modifying
   @Query("""
-      WITH updated_alerts AS (
-          UPDATE alerts
-              SET status = :status, updated_at = NOW()
-              WHERE batch_id = :batchId AND name IN(:alertNames)
-              RETURNING id
-      )
-      UPDATE matches
-          SET status = :status
-          WHERE alert_id IN (SELECT id FROM updated_alerts)""")
-  void updateAlertsWithMatchesStatusByBatchIdAndNamesIn(
+      UPDATE alerts
+      SET status = :status, updated_at = NOW()
+      WHERE batch_id = :batchId AND name IN(:alertNames)""")
+  void updateAlertsStatusByBatchIdAndNamesIn(
       String batchId, String status, List<String> alertNames);
 
   @Query("""
@@ -69,13 +61,6 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
 
   List<AlertEntity> findAllByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
 
-  @Modifying
-  @Query("""
-      UPDATE alerts
-      SET status = :status, updated_at = NOW()
-      WHERE batch_id = :batchId AND alert_id IN(:alertIds)""")
-  void updateStatusByBatchIdAndAlertIdIn(Status status, String batchId, List<String> alertIds);
-
   @Query("""
       SELECT status, COUNT(*) 
       FROM alerts
@@ -85,15 +70,8 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
 
   @Modifying
   @Query("""
-      WITH updated_alerts AS (
-          UPDATE alerts
-              SET status = :status, updated_at = NOW()
-              WHERE batch_id = :batchId AND alert_id IN(:alertIds)
-              RETURNING id
-      )
-      UPDATE matches
-          SET status = :status
-          WHERE alert_id IN (SELECT id FROM updated_alerts)""")
-  void updateAlertsWithMatchesStatusByBatchIdAndIdsIn(
-      String batchId, String status, List<String> alertIds);
+      UPDATE alerts
+      SET status = :status, updated_at = NOW()
+      WHERE batch_id = :batchId AND alert_id IN(:alertIds)""")
+  void updateAlertsStatusByBatchIdAndIdsIn(String batchId, String status, List<String> alertIds);
 }

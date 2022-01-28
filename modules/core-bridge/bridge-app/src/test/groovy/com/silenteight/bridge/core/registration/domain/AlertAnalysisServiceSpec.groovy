@@ -4,15 +4,12 @@ import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand
 import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FeedingStatus
 import com.silenteight.bridge.core.registration.domain.model.Alert
 import com.silenteight.bridge.core.registration.domain.model.AlertName
-import com.silenteight.bridge.core.registration.domain.model.AlertStatus
 import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.model.Match
-import com.silenteight.bridge.core.registration.domain.model.Match.Status
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
-import com.silenteight.bridge.core.registration.domain.port.outgoing.MatchRepository
 import com.silenteight.bridge.core.registration.infrastructure.RegistrationAnalysisProperties
 
 import spock.lang.Specification
@@ -27,37 +24,30 @@ class AlertAnalysisServiceSpec extends Specification {
   def analysisService = Mock(AnalysisService)
   def analysisProperties = new RegistrationAnalysisProperties(Duration.ofMinutes(10), false)
   def alertRepository = Mock(AlertRepository)
-  def matchRepository = Mock(MatchRepository)
 
   @Subject
-  def underTest = new AlertAnalysisService(
-      batchRepository, analysisService, analysisProperties, alertRepository, matchRepository)
+  def underTest = new AlertAnalysisService(batchRepository, analysisService, analysisProperties, alertRepository)
 
   def 'should process 1 success alert and 1 failed alert'() {
     given:
     def batch = createBatchWithStatus('batch1', BatchStatus.STORED)
     def succeededAlert = createAlert(
-        batch.id(), 'alert1',
-        ['succeededAlertSucceededMatch', 'succeededAlertFailedMatch']
+        batch.id(), 'alert1', ['succeededAlertMatch1', 'succeededAlertMatch2']
     )
-    def failedAlert = createAlert(batch.id(), 'alert2', ['failedAlertFailedMatch'])
+    def failedAlert = createAlert(batch.id(), 'alert2', ['failedAlertMatch'])
 
     def commands = [
         AddAlertToAnalysisCommand.builder()
             .batchId(batch.id())
             .alertId(succeededAlert.alertId())
             .feedingStatus(FeedingStatus.SUCCESS)
-            .fedMatches(
-                [
-                    new FedMatch('succeededAlertSucceededMatch', FeedingStatus.SUCCESS),
-                    new FedMatch('succeededAlertFailedMatch', FeedingStatus.FAILURE)
-                ])
+            .fedMatches([new FedMatch('succeededAlertMatch1',)])
             .build(),
         AddAlertToAnalysisCommand.builder()
             .batchId(batch.id())
             .alertId(failedAlert.alertId())
             .feedingStatus(FeedingStatus.FAILURE)
-            .fedMatches([new FedMatch('failedAlertFailedMatch', FeedingStatus.FAILURE)])
+            .fedMatches([new FedMatch('failedAlertMatch')])
             .build()
     ]
 
@@ -71,18 +61,10 @@ class AlertAnalysisServiceSpec extends Specification {
     }
     1 * analysisService.addAlertsToAnalysis(batch.analysisName(), [succeededAlert.name()], _)
     with(alertRepository) {
-      1 * updateStatusByBatchIdAndAlertIdIn(
-          AlertStatus.PROCESSING, batch.id(), [succeededAlert.alertId()])
+      1 * updateStatusToProcessing(batch.id(), [succeededAlert.alertId()])
       1 * updateStatusToError(batch.id(), [failedAlert.alertId()])
       1 * findAllAlertNamesByBatchIdAndAlertIdIn(batch.id(), [succeededAlert.alertId()]) >>
           [new AlertName(succeededAlert.name())]
-    }
-    with(matchRepository) {
-      1 * updateStatusByBatchIdAndMatchIdInAndExternalAlertIdIn(
-          Status.PROCESSING, batch.id(), ['succeededAlertSucceededMatch'],
-          [succeededAlert.alertId()])
-      1 * updateStatusByBatchIdAndMatchIdInAndExternalAlertIdIn(
-          Status.ERROR, batch.id(), ['succeededAlertFailedMatch'], [succeededAlert.alertId()])
     }
     0 * _
   }
@@ -120,12 +102,8 @@ class AlertAnalysisServiceSpec extends Specification {
 
   private static def createAlert(String batchId, String alertId, Collection<String> matchIds) {
     def matches = matchIds.collect(
-        matchId ->
-            Match.builder()
-                .matchId(matchId)
-                .name(matchId)
-                .build()
-    )
+        matchId -> new Match(matchId, matchId))
+
     Alert.builder()
         .batchId(batchId)
         .alertId(alertId)

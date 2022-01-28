@@ -27,19 +27,19 @@ class JdbcAlertRepository implements AlertRepository {
 
   @Override
   public void updateStatusToRecommended(String batchId, List<String> alertNames) {
-    alertRepository.updateAlertsWithMatchesStatusByBatchIdAndNamesIn(
+    alertRepository.updateAlertsStatusByBatchIdAndNamesIn(
         batchId, Status.RECOMMENDED.name(), alertNames);
   }
 
   @Override
   public void updateStatusToProcessing(String batchId, List<String> alertIds) {
-    alertRepository.updateAlertsWithMatchesStatusByBatchIdAndIdsIn(
+    alertRepository.updateAlertsStatusByBatchIdAndIdsIn(
         batchId, Status.PROCESSING.name(), alertIds);
   }
 
   @Override
   public void updateStatusToError(String batchId, List<String> alertIds) {
-    alertRepository.updateAlertsWithMatchesStatusByBatchIdAndIdsIn(
+    alertRepository.updateAlertsStatusByBatchIdAndIdsIn(
         batchId, Status.ERROR.name(), alertIds);
   }
 
@@ -80,13 +80,6 @@ class JdbcAlertRepository implements AlertRepository {
     return alertRepository.findAllByBatchIdAndAlertIdIn(batchId, alertIds).stream()
         .map(mapper::toAlert)
         .toList();
-  }
-
-  @Override
-  public void updateStatusByBatchIdAndAlertIdIn(
-      AlertStatus status, String batchId, List<String> alertIds) {
-    alertRepository.updateStatusByBatchIdAndAlertIdIn(
-        Status.valueOf(status.name()), batchId, alertIds);
   }
 
   @Override

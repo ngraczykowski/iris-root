@@ -44,7 +44,7 @@ class RegistrationFixtures {
       .batchId(Fixtures.BATCH_ID)
       .alertId(Fixtures.ALERT_ID)
       .feedingStatus(FeedingStatus.SUCCESS)
-      .fedMatches([new FedMatch('matchId', FeedingStatus.SUCCESS)])
+      .fedMatches([new FedMatch('matchId')])
       .build()
   static def NOTIFY_BATCH_ERROR_COMMAND = new NotifyBatchErrorCommand(Fixtures.BATCH_ID, ERROR_DESCRIPTION, METADATA)
   static def GET_BATCH_WITH_ALERTS_COMMAND = new GetBatchWithAlertsCommand(ANALYSIS_NAME)

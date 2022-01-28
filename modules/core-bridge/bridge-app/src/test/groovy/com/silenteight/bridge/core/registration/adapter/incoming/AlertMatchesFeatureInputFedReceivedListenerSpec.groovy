@@ -40,9 +40,7 @@ class AlertMatchesFeatureInputFedReceivedListenerSpec extends Specification {
         .fedMatches(
             [
                 new AddAlertToAnalysisCommand.FedMatch(
-                    messages.first().getFedMatchesList().first().matchId,
-                    FeedingStatus.SUCCESS
-                )
+                    messages.first().getFedMatchesList().first().matchId)
             ])
         .build()
 

@@ -208,3 +208,32 @@ databaseChangeLog:
             columnNames: match_id, alert_id
             constraintName: match_id_alert_id
             tableName: matches
+
+  - changeSet:
+      id: 1.0.0-2
+      author: askubicha
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            - columnExists:
+                tableName: batches
+                columnName: policy_name
+      changes:
+        - addColumn:
+            tableName: batches
+            columns:
+              - column:
+                  name: policy_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 1.0.0-3
+      author: apozorski
+      changes:
+        - dropColumn:
+            columns:
+              - column:
+                  name: status
+            tableName: matches

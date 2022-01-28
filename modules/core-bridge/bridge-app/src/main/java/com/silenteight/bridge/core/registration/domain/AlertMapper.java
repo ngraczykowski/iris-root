@@ -2,7 +2,6 @@ package com.silenteight.bridge.core.registration.domain;
 
 import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.model.AlertsToRegister.AlertWithMatches;
-import com.silenteight.bridge.core.registration.domain.model.Match.Status;
 
 import org.springframework.stereotype.Component;
 
@@ -35,15 +34,6 @@ class AlertMapper {
         .toList();
   }
 
-  private String getAlertMetadata(
-      List<RegisterAlertsCommand.AlertWithMatches> successAlerts, String alertId) {
-    return successAlerts.stream()
-        .filter(alertWithMatches -> alertId.equals(alertWithMatches.alertId()))
-        .findAny()
-        .map(RegisterAlertsCommand.AlertWithMatches::alertMetadata)
-        .orElseThrow();
-  }
-
   List<Alert> toErrorAlerts(
       List<RegisterAlertsCommand.AlertWithMatches> failedAlerts, String batchId) {
 
@@ -55,10 +45,19 @@ class AlertMapper {
             .metadata(alert.alertMetadata())
             .errorDescription(alert.errorDescription())
             .matches(alert.matches().stream()
-                .map(this::toErrorMatch)
+                .map(this::toMatch)
                 .toList())
             .build())
         .toList();
+  }
+
+  private String getAlertMetadata(
+      List<RegisterAlertsCommand.AlertWithMatches> successAlerts, String alertId) {
+    return successAlerts.stream()
+        .filter(alertWithMatches -> alertId.equals(alertWithMatches.alertId()))
+        .findAny()
+        .map(RegisterAlertsCommand.AlertWithMatches::alertMetadata)
+        .orElseThrow();
   }
 
   private AlertWithMatches toAlertWithMatches(RegisterAlertsCommand.AlertWithMatches alert) {
@@ -70,17 +69,10 @@ class AlertMapper {
   }
 
   private Match toMatch(RegisteredAlerts.Match match) {
-    return Match.builder()
-        .name(match.name())
-        .status(Status.REGISTERED)
-        .matchId(match.matchId())
-        .build();
+    return new Match(match.name(), match.matchId());
   }
 
-  private Match toErrorMatch(RegisterAlertsCommand.Match match) {
-    return Match.builder()
-        .status(Status.ERROR)
-        .matchId(match.id())
-        .build();
+  private Match toMatch(RegisterAlertsCommand.Match match) {
+    return new Match(null, match.id());
   }
 }

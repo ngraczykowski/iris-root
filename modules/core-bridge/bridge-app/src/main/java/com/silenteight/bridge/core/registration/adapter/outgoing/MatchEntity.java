@@ -7,16 +7,13 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.Instant;
 
 @Table("matches")
-record MatchEntity(String name,
-                   String matchId,
-                   Status status,
-                   Instant createdAt,
-                   Instant updatedAt) {
+record MatchEntity(
+    String name,
+    String matchId,
+    Instant createdAt,
+    Instant updatedAt
+) {
 
   @Builder
   MatchEntity {}
-
-  public enum Status {
-    REGISTERED, RECOMMENDED, PROCESSING, ERROR
-  }
 }

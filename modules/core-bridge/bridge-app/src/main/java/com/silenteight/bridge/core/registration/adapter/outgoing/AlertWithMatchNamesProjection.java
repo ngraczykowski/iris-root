@@ -2,7 +2,7 @@ package com.silenteight.bridge.core.registration.adapter.outgoing;
 
 import lombok.Builder;
 
-public record AlertWithMatchNamesProjection(
+record AlertWithMatchNamesProjection(
     String alertId,
     String alertName,
     String alertStatus,

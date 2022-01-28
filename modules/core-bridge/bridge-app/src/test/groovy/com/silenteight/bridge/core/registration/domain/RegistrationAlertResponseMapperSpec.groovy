@@ -25,11 +25,7 @@ class RegistrationAlertResponseMapperSpec extends Specification {
             .metadata('metadata')
             .matches(
                 [
-                    Match.builder()
-                        .name('matchName')
-                        .status(Match.Status.REGISTERED)
-                        .matchId('matchId')
-                        .build()
+                    new Match('matchName', 'matchId')
                 ]
             )
             .errorDescription('errorDescription')
@@ -69,10 +65,7 @@ class RegistrationAlertResponseMapperSpec extends Specification {
             .errorDescription('errorDescription')
             .matches(
                 [
-                    AlertWithMatches.Match.builder()
-                        .id('matchId')
-                        .name('matchName')
-                        .build()
+                    new AlertWithMatches.Match('matchId', 'matchName')
                 ]
             )
             .build()

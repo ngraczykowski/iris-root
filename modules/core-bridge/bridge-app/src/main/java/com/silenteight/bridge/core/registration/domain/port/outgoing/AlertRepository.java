@@ -25,9 +25,6 @@ public interface AlertRepository {
 
   List<Alert> findAllByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
 
-  void updateStatusByBatchIdAndAlertIdIn(
-      AlertStatus status, String batchId, List<String> alertIds);
-
   long countAllPendingAlerts(String batchId);
 
   AlertStatusStatistics countAlertsByStatusForBatchId(String batchId);

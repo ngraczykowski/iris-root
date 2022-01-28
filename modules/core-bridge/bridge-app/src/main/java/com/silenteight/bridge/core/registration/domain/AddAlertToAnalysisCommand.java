@@ -19,7 +19,6 @@ public record AddAlertToAnalysisCommand(
   }
 
   public record FedMatch(
-      String id,
-      FeedingStatus feedingStatus
+      String id
   ) {}
 }

@@ -36,25 +36,23 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
       with(matches().first()) {
         matchId() == alertsToSave.first().matches().first().matchId()
         name() == alertsToSave.first().matches().first().name()
-        status() == alertsToSave.first().matches().first().status()
       }
     }
   }
 
-  def 'should update status of given alert ids'() {
+  def 'should update status of given alert ids to PROCESSING'() {
     given:
-    def newStatus = AlertStatus.PROCESSING
     def batchId = 'batch_id_' + UUID.randomUUID()
     def alert1 = dummyAlert(batchId, 'alert_id_' + UUID.randomUUID())
     def alert2 = dummyAlert(batchId, 'alert_id_' + UUID.randomUUID())
     alertRepository.saveAlerts([alert1, alert2])
 
     when:
-    alertRepository.updateStatusByBatchIdAndAlertIdIn(newStatus, batchId, [alert1.alertId()])
+    alertRepository.updateStatusToProcessing(batchId, [alert1.alertId()])
 
     then: 'alert1 should have updated status'
     with(alertRepository.findAllByBatchIdAndAlertIdIn(batchId, [alert1.alertId()]).first()) {
-      status() == newStatus
+      status() == Status.PROCESSING
     }
 
     and: 'alert2 should not have updated status'
@@ -87,12 +85,9 @@ class AlertRepositoryIntegrationSpec extends BaseSpecificationIT {
         .batchId(batchId)
         .matches(
             [
-                Match.builder()
-                    .matchId("{$alertId}_match_1_id")
-                    .name("{$alertId}_match_1_name")
-                    .status(Match.Status.REGISTERED)
-                    .build()
-            ])
+                new Match("{$alertId}_match_1_name", "{$alertId}_match_1_id")
+            ]
+        )
         .build()
   }
 }

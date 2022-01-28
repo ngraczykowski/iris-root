@@ -3,7 +3,6 @@ package com.silenteight.bridge.core.registration
 import com.silenteight.bridge.core.BaseSpecificationIT
 import com.silenteight.bridge.core.registration.domain.model.AlertStatus
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
-import com.silenteight.bridge.core.registration.domain.model.Match
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationIncomingMatchFeatureInputSetFedProperties
@@ -52,7 +51,7 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
   @GrpcClient("inProcess")
   private RegistrationServiceBlockingStub registrationService
 
-  def "should receive a list of MatchFeatureInputSetFed messages, add alerts to analysis and update statuses"() {
+  def "should receive a list of MatchFeatureInputSetFed messages, add alerts to analysis and update alert status"() {
     given: 'create 2 batches'
     def batches = BATCH_IDS.collect {batchId ->
       def request = createRegisterBatchRequest(batchId)
@@ -91,9 +90,6 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
           def alerts = alertRepository.findAllByBatchIdAndAlertIdIn(batchId, batchAlertIds[batchId])
           alerts.each {alert ->
             assert alert.status() == getExpectedAlertStatus(alert.alertId())
-            alert.matches().each {match ->
-              assert match.status() == getExpectedMatchStatus(alert.alertId())
-            }
           }
         }
       }
@@ -125,7 +121,7 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
 
   private static def createMatches(def batchId, def alertId) {
     (1..3).collect {
-      com.silenteight.proto.registration.api.v1.Match.newBuilder()
+      Match.newBuilder()
           .setMatchId("match $it of alert $alertId of batch $batchId")
           .build()
     }
@@ -157,14 +153,6 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
         .setFeedingStatus(feedingStatus)
         .addAllFedMatches(fedMatches)
         .build()
-  }
-
-  private static def getExpectedMatchStatus(def alertId) {
-    if (alertId == ID_OF_ALERT_CONTAINING_FAILURE_FEEDING_STATUS || alertId ==
-        ID_OF_ALERT_CONTAINING_ALL_FAILED_MATCHES) {
-      return Match.Status.ERROR
-    }
-    Match.Status.PROCESSING
   }
 
   private static def getExpectedAlertStatus(def alertId) {

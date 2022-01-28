@@ -1,8 +1,9 @@
 package com.silenteight.bridge.core.registration.domain
 
-import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertStatus
+import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand
 import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertWithMatches
-import com.silenteight.bridge.core.registration.domain.model.Match
+import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.Match
+import com.silenteight.bridge.core.registration.domain.model.AlertStatus
 import com.silenteight.bridge.core.registration.domain.model.RegisteredAlerts
 
 import spock.lang.Specification
@@ -15,13 +16,15 @@ class AlertMapperSpec extends Specification {
 
   def 'should map command alerts to register alerts'() {
     given:
-    def matchesIn = [new RegisterAlertsCommand.Match('matchId')]
+    def matchesIn = [
+        new Match('matchId')
+    ]
     def alerts = [
         AlertWithMatches.builder()
             .alertId('alertId')
             .errorDescription('')
             .matches(matchesIn)
-            .alertStatus(AlertStatus.SUCCESS)
+            .alertStatus(RegisterAlertsCommand.AlertStatus.SUCCESS)
             .build()
     ]
 
@@ -54,7 +57,8 @@ class AlertMapperSpec extends Specification {
         AlertWithMatches.builder()
             .alertId('alertId')
             .alertMetadata('alertMetadata')
-            .build()]
+            .build()
+    ]
 
     when:
     def result = underTest.toAlerts(registeredAlerts, successAlerts, batchIdIn)
@@ -69,7 +73,6 @@ class AlertMapperSpec extends Specification {
       metadata() == 'alertMetadata'
       with(matches().first()) {
         name() == 'matchName'
-        status() == Match.Status.REGISTERED
         matchId() == 'matchId'
       }
     }
@@ -78,13 +81,15 @@ class AlertMapperSpec extends Specification {
   def 'should map command alerts to error alerts'() {
     given:
     def batchIdIn = 'batchId'
-    def commandMatches = [new RegisterAlertsCommand.Match('matchId')]
+    def commandMatches = [
+        new Match('matchId')
+    ]
     def failedAlerts = [
         AlertWithMatches.builder()
             .alertId('alertId')
             .errorDescription('someErrorDescription')
             .matches(commandMatches)
-            .alertStatus(AlertStatus.FAILURE)
+            .alertStatus(RegisterAlertsCommand.AlertStatus.FAILURE)
             .build()
     ]
 
@@ -94,13 +99,12 @@ class AlertMapperSpec extends Specification {
     then:
     with(result.first()) {
       name() == null
-      status() == Status.ERROR
+      status() == AlertStatus.ERROR
       alertId() == 'alertId'
       batchId() == 'batchId'
       errorDescription() == 'someErrorDescription'
       with(matches().first()) {
         name() == null
-        status() == Match.Status.ERROR
         matchId() == 'matchId'
       }
     }
