@@ -8,9 +8,9 @@ import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsReques
 import com.silenteight.datasource.categories.api.v2.BatchCreateCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.datasource.categories.api.v2.CreateCategoryValuesRequest;
-import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
 import com.silenteight.payments.bridge.common.model.AeAlert;
-import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
+import com.silenteight.payments.bridge.datasource.agent.port.CreateAgentInputsClient;
+import com.silenteight.payments.bridge.datasource.category.port.CreateCategoryValuesClient;
 import com.silenteight.payments.bridge.firco.datasource.model.FeatureInputUnstructuredModel;
 import com.silenteight.payments.bridge.firco.datasource.port.CreateDatasourceInputsUseCase;
 import com.silenteight.payments.bridge.firco.datasource.service.process.agent.CreateFeatureInput;

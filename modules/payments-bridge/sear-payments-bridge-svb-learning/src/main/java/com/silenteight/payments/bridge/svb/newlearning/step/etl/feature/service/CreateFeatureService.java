@@ -6,7 +6,7 @@ import com.silenteight.datasource.agentinput.api.v1.AgentInput;
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
-import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
+import com.silenteight.payments.bridge.datasource.agent.port.CreateAgentInputsClient;
 import com.silenteight.payments.bridge.svb.newlearning.domain.EtlHit;
 import com.silenteight.payments.bridge.svb.newlearning.domain.HitComposite;
 import com.silenteight.payments.bridge.svb.newlearning.step.etl.feature.port.CreateFeatureUseCase;

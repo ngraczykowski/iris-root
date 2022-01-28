@@ -7,8 +7,8 @@ import com.silenteight.datasource.categories.api.v2.Category;
 import com.silenteight.datasource.categories.api.v2.CategoryType;
 import com.silenteight.payments.bridge.agents.model.CompanyNameSurroundingAgentResponse;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse;
-import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoriesClient;
 import com.silenteight.payments.bridge.common.dto.common.MessageStructure;
+import com.silenteight.payments.bridge.datasource.category.port.CreateCategoriesClient;
 
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;

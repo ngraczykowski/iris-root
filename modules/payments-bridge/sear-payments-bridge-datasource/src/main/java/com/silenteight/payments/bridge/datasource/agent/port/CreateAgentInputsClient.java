@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.datasource.port;
+package com.silenteight.payments.bridge.datasource.agent.port;
 
 import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsRequest;
 

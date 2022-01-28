@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.datasource.adapter;
+package com.silenteight.payments.bridge.datasource.agent.adapter;
 
 import lombok.Data;
 

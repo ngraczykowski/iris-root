@@ -1,10 +1,10 @@
-package com.silenteight.payments.bridge.categories.adapter;
+package com.silenteight.payments.bridge.datasource.category.adapter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import com.silenteight.datasource.categories.api.v2.CategoryValueServiceGrpc;
-import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
+import com.silenteight.datasource.categories.api.v2.CategoryServiceGrpc;
+import com.silenteight.payments.bridge.datasource.category.port.CreateCategoriesClient;
 
 import io.grpc.Channel;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -16,21 +16,21 @@ import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @Configuration
-@EnableConfigurationProperties(CreateCategoriesValuesProperties.class)
-class CreateCategoriesValuesConfiguration {
+@EnableConfigurationProperties(CreateCategoriesClientProperties.class)
+class CreateCategoriesClientConfiguration {
 
   @Valid
-  private final CreateCategoriesValuesProperties properties;
+  private final CreateCategoriesClientProperties properties;
 
   @Setter(onMethod_ = @GrpcClient("datasource"))
   private Channel categoriesDataChannel;
 
   @Bean
-  CreateCategoryValuesClient createCategoriesValuesClient() {
-    var stub = CategoryValueServiceGrpc
+  CreateCategoriesClient createCategoriesClient() {
+    var stub = CategoryServiceGrpc
         .newBlockingStub(categoriesDataChannel)
         .withWaitForReady();
 
-    return new CreateCategoriesValuesAdapter(stub, properties.getTimeout());
+    return new CreateCategoriesClientAdapter(stub, properties.getTimeout());
   }
 }

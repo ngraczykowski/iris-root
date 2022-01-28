@@ -6,7 +6,7 @@ import com.silenteight.datasource.categories.api.v2.BatchCreateCategoryValuesReq
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.datasource.categories.api.v2.CreateCategoryValuesRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
-import com.silenteight.payments.bridge.categories.port.outgoing.CreateCategoryValuesClient;
+import com.silenteight.payments.bridge.datasource.category.port.CreateCategoryValuesClient;
 import com.silenteight.payments.bridge.svb.newlearning.domain.EtlHit;
 import com.silenteight.payments.bridge.svb.newlearning.domain.HitComposite;
 import com.silenteight.payments.bridge.svb.newlearning.step.etl.category.port.CreateCategoriesUseCase;

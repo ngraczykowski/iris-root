@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.categories.port.outgoing;
+package com.silenteight.payments.bridge.datasource.category.port;
 
 import com.silenteight.datasource.categories.api.v2.BatchCreateCategoryValuesRequest;
 

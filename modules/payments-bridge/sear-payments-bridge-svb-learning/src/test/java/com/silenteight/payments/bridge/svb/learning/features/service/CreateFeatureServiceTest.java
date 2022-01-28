@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.svb.learning.features.service;
 
 import com.silenteight.datasource.api.name.v1.NameFeatureInput;
 import com.silenteight.payments.bridge.agents.port.CreateNameFeatureInputUseCase;
-import com.silenteight.payments.bridge.datasource.port.CreateAgentInputsClient;
+import com.silenteight.payments.bridge.datasource.agent.port.CreateAgentInputsClient;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
