@@ -63,6 +63,7 @@ class HistoricalRiskAssessmentAgentEtlProcess
         .alertedPartyId(alertedPartyId)
         .ofacId(ofacId)
         .watchlistType(watchlistType)
+        .discriminator(feature.getDiscriminator())
         .build();
   }
 }

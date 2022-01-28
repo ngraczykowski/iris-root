@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_FEATURE;
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC;
 
 @Component
 class HistoricalRiskAccountNumberFeature extends HistoricalRiskAssessmentFeature {
@@ -22,5 +23,10 @@ class HistoricalRiskAccountNumberFeature extends HistoricalRiskAssessmentFeature
       return "";
     }
     return accountNumber.toUpperCase().trim();
+  }
+
+  @Override
+  protected String getDiscriminator() {
+    return HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC;
   }
 }

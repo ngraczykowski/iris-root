@@ -18,4 +18,6 @@ public class HistoricalRiskAssessmentAgentFeatureRequest {
   String ofacId;
 
   String watchlistType;
+
+  String discriminator;
 }

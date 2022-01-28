@@ -14,12 +14,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import javax.annotation.Nonnull;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.FEATURE_PREFIX;
 import static java.util.stream.Collectors.toList;
 
 @Component
 class CreateNameFeatureInput implements CreateNameFeatureInputUseCase {
-
-  private static final String FEATURE_PREFIX = "features/";
 
   @Override
   public NameFeatureInput create(NameAgentRequest nameAgentRequest) {

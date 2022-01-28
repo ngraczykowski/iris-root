@@ -7,4 +7,6 @@ abstract class HistoricalRiskAssessmentFeature {
   protected abstract String getFeatureName();
 
   protected abstract String getAlertedPartyId(AlertedPartyData alertedPartyData);
+
+  protected abstract String getDiscriminator();
 }

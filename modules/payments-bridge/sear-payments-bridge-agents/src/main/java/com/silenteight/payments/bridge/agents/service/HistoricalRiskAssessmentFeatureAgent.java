@@ -11,6 +11,8 @@ import com.silenteight.payments.bridge.common.app.LearningProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.FEATURE_PREFIX;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -18,8 +20,6 @@ import org.springframework.stereotype.Component;
 //NOTE(jgajewski): Remove 'Feature' from class name 'HistoricalRiskAssessmentFeatureAgent',
 // when category use case is going to be deleted, after successful testing
 class HistoricalRiskAssessmentFeatureAgent implements HistoricalRiskAssessmentFeatureUseCase {
-
-  private static final String FEATURE_PREFIX = "features/";
 
   private final LearningProperties properties;
 
@@ -32,7 +32,7 @@ class HistoricalRiskAssessmentFeatureAgent implements HistoricalRiskAssessmentFe
     return HistoricalDecisionsFeatureInput.newBuilder()
         .setFeature(featureName)
         .setModelKey(createModelKey(request))
-        .setDiscriminator(createDiscriminator(request.getFeature()))
+        .setDiscriminator(createDiscriminator(request.getDiscriminator()))
         .build();
   }
 
@@ -73,14 +73,14 @@ class HistoricalRiskAssessmentFeatureAgent implements HistoricalRiskAssessmentFe
         .build();
   }
 
-  private Discriminator createDiscriminator(String feature) {
+  private Discriminator createDiscriminator(String discriminator) {
     return Discriminator.newBuilder()
-        .setValue(getDiscriminatorValue(feature))
+        .setValue(getDiscriminatorValue(discriminator))
         .build();
   }
 
-  private String getDiscriminatorValue(String feature) {
-    return properties.getDiscriminatorPrefix() + "_" + feature;
+  private String getDiscriminatorValue(String discriminator) {
+    return properties.getDiscriminatorPrefix() + "_" + discriminator;
   }
 
   private static String getFeatureName(String featureName) {
