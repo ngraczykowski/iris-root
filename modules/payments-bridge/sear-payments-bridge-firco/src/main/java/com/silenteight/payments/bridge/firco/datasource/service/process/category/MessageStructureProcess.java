@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.common.dto.common.MessageStructure;
-import com.silenteight.payments.bridge.firco.datasource.model.CategoryValueExtractModel;
-import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 
 import org.springframework.stereotype.Service;
 
@@ -13,21 +12,21 @@ import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGOR
 
 @Service
 @RequiredArgsConstructor
-class MessageStructureProcess implements CategoryValueProcess {
+class MessageStructureProcess implements CreateCategoryValueUnstructured {
 
   @Override
-  public CategoryValue createCategoryValue(CategoryValueExtractModel categoryValueExtractModel) {
+  public CategoryValue createCategoryValue(
+      String alertName, String matchName, HitAndWatchlistPartyData hitAndWatchlistPartyData) {
     return CategoryValue
         .newBuilder()
         .setName(CATEGORY_NAME_MESSAGE_STRUCTURE)
-        .setAlert(categoryValueExtractModel.getAlertName())
-        .setMatch(categoryValueExtractModel.getMatchName())
-        .setSingleValue(getValue(categoryValueExtractModel.getHitData()))
+        .setAlert(alertName)
+        .setMatch(matchName)
+        .setSingleValue(getValue(hitAndWatchlistPartyData.getTag()))
         .build();
   }
 
-  private static String getValue(HitData hitData) {
-    var tag = hitData.getTag();
+  private static String getValue(String tag) {
     return MessageStructure.ofTag(tag).name();
   }
 }
