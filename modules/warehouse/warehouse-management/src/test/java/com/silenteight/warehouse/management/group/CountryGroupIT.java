@@ -1,14 +1,11 @@
 package com.silenteight.warehouse.management.group;
 
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.warehouse.alert.rest.AlertRestController;
-import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
-import com.silenteight.warehouse.common.testing.elasticsearch.SimpleElasticTestClient;
-import com.silenteight.warehouse.common.testing.rest.WithElasticAccessCredentials;
-import com.silenteight.warehouse.indexer.query.single.AlertNotFoundException;
+import com.silenteight.warehouse.alert.rest.service.AlertNotFoundException;
+import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values;
 import com.silenteight.warehouse.management.country.get.GetCountriesRestController;
 import com.silenteight.warehouse.management.country.update.UpdateCountriesRestController;
 import com.silenteight.warehouse.management.group.create.CreateCountryGroupRestController;
@@ -16,12 +13,12 @@ import com.silenteight.warehouse.management.group.delete.DeleteCountryGroupRestC
 import com.silenteight.warehouse.management.group.domain.dto.CountryGroupDto;
 import com.silenteight.warehouse.management.group.domain.exception.CountryGroupDoesNotExistException;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,11 +28,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.silenteight.warehouse.common.testing.elasticsearch.ElasticSearchTestConstants.PRODUCTION_ELASTIC_INDEX_NAME;
-import static com.silenteight.warehouse.common.testing.rest.TestCredentials.ELASTIC_ALLOWED_ROLE;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_NAME_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MAPPED_ALERT_1;
 import static java.util.List.of;
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
@@ -44,7 +38,6 @@ import static org.assertj.core.api.Assertions.*;
 @Slf4j
 @SpringBootTest(classes = CountryGroupTestConfiguration.class)
 @ContextConfiguration(initializers = {
-    OpendistroElasticContainerInitializer.class,
     PostgresTestInitializer.class
 })
 @AutoConfigureDataJpa
@@ -62,13 +55,13 @@ class CountryGroupIT {
   private GetCountriesRestController getCountriesRestController;
 
   @Autowired
-  private SimpleElasticTestClient simpleElasticTestClient;
-
-  @Autowired
   private DeleteCountryGroupRestController deleteCountryGroupRestController;
 
   @Autowired
   private AlertRestController alertRestController;
+
+  @Autowired
+  private JdbcTemplate jdbcTemplate;
 
   private static final String COUNTRY = "UK";
   private static final String OTHER_COUNTRY = "PL";
@@ -80,33 +73,32 @@ class CountryGroupIT {
       .name("new country group")
       .build();
 
-  @BeforeEach
-  void init() {
-    storeData();
-  }
-
-  @AfterEach
-  void cleanup() {
-    removeData();
-  }
-
   @Test
-  @WithElasticAccessCredentials
-  void shouldAccessAlert() {
+  @WithMockUser(username = "USERNAME", authorities = "e11f9680-fb3b-4776-8044-571026290a65")
+  void shouldAccessAlert() throws Exception {
     Collection<String> allowedCountries = of(COUNTRY);
-    updateCountriesController.update(ELASTIC_ALLOWED_ROLE, allowedCountries);
+    saveCountryGroup(COUNTRY_GROUP);
+    updateCountriesController.update(NEW_COUNTRY_GROUP_ID, allowedCountries);
+
+    jdbcTemplate.execute(
+        "insert INTO warehouse_alert(discriminator, name, recommendation_date, payload) "
+            + "VALUES ('" + DISCRIMINATOR_1 + "','" + ALERT_NAME_1 + "','"
+            + Values.PROCESSING_TIMESTAMP
+            + "','{\"id\": \"12345\", \"s8_lobCountryCode\": \"UK\"}'::jsonb)");
 
     Map<String, String> allowedAlert =
         alertRestController.getSingleAlert(ALERT_NAME_1, of()).getBody();
 
     assertThat(allowedAlert).isEmpty();
+
   }
 
   @Test
-  @WithElasticAccessCredentials
+  @WithMockUser(username = "USERNAME", authorities = "e11f9680-fb3b-4776-8044-571026290a63")
   void shouldNotAccessAlert() {
     Collection<String> allowedCountries = of(OTHER_COUNTRY);
-    updateCountriesController.update(ELASTIC_ALLOWED_ROLE, allowedCountries);
+    saveCountryGroup(COUNTRY_GROUP);
+    updateCountriesController.update(NEW_COUNTRY_GROUP_ID, allowedCountries);
 
     assertThatThrownBy(
         () -> alertRestController.getSingleAlert(DISCRIMINATOR_1, of()))
@@ -145,14 +137,5 @@ class CountryGroupIT {
     createCountryGroupRestController.create(countryGroupDto);
   }
 
-  @SneakyThrows
-  private void storeData() {
-    simpleElasticTestClient.storeData(
-        PRODUCTION_ELASTIC_INDEX_NAME, DISCRIMINATOR_1, MAPPED_ALERT_1);
-  }
-
-  private void removeData() {
-    simpleElasticTestClient.removeIndex(PRODUCTION_ELASTIC_INDEX_NAME);
-  }
 }
 
