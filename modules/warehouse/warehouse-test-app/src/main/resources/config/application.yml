@@ -155,7 +155,7 @@ test:
         exchange-name: bridge.retention
         routing-key: retention.alerts-expired
       qa-indexing-test-client-outbound:
-        exchange-name: gov.qa
+        exchange-name: gov.events
         routing-key: event.qa-alert
   generator:
     cron: "*/15 * * * * ?"
