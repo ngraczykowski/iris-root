@@ -113,6 +113,7 @@ class RecommendationsGeneratedUseCase implements RecommendationsGeneratedMessage
 
     String requestId = requestIdGenerator.generate();
     log.debug("Recommendations generated: "
+        + " analysisName=" + analysisName
         + " requestId=" + requestId
         + " count=" + recommendationsWithMetadata.size());
 
