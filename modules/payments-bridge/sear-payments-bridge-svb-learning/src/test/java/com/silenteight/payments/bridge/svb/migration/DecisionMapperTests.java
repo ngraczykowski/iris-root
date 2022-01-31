@@ -12,36 +12,44 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @ExtendWith(SpringExtension.class)
-@Import({DecisionMapperConfiguration.class, DecisionMapperFactory.class})
+@Import({ DecisionMapperConfiguration.class, DecisionMapperFactory.class })
 class DecisionMapperTests {
 
   @Autowired private DecisionMapper decisionMapper;
 
   @Test
   void shouldTriggerCompoundPath() {
-    assertEquals("compound",
+    assertEquals(
+        "analyst_decision_potential_true_positive",
         decisionMapper.map(List.of("L2_L3_PEND"), "L3_PASS"));
-    assertEquals("compound",
+    assertEquals(
+        "analyst_decision_potential_true_positive",
         decisionMapper.map(List.of("L2_ESC_TO_L3", "OTHER"), "L3_PASS"));
-    assertEquals("compound",
+    assertEquals(
+        "analyst_decision_potential_true_positive",
         decisionMapper.map(List.of("OTHER", "L2_ESC_TO_L3", "L2_L3_PEND"), "L3_PASS"));
-    assertNotEquals("compound",
+    assertNotEquals(
+        "analyst_decision_potential_true_positive",
         decisionMapper.map(List.of("EXTERNAL"), "L3_PASS"));
   }
 
   @Test
   void shouldExecuteSimplePath() {
-    assertEquals("simple",
+    assertEquals(
+        "analyst_decision_false_positive",
         decisionMapper.map(List.of("FAKE_STATE"), "L3_PASS"));
-    assertEquals("simple",
+    assertEquals(
+        "analyst_decision_true_positive",
         decisionMapper.map(List.of(), "L2_CANCEL"));
-    assertNotEquals("simple",
+    assertNotEquals(
+        "analyst_decision_false_positive",
         decisionMapper.map(List.of(), "UNKNOWN"));
   }
 
   @Test
   void shouldExecuteDefaultPath() {
-    assertEquals("default",
+    assertEquals(
+        "analyst_decision_unknown",
         decisionMapper.map(List.of("UNKNOWN_PREV_DECISION"), "UNKNOWN_DECISION"));
   }
 }

@@ -25,7 +25,8 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
     "com.silenteight.payments.bridge.svb.newlearning.job.etl",
     "com.silenteight.payments.bridge.svb.newlearning.step",
     "com.silenteight.payments.bridge.svb.newlearning.adapter",
-    "com.silenteight.payments.bridge.svb.newlearning.config" })
+    "com.silenteight.payments.bridge.svb.newlearning.config",
+    "com.silenteight.payments.bridge.svb.migration" })
 class EtlAlertsJobTest extends BaseBatchTest {
 
   @Test
@@ -35,7 +36,8 @@ class EtlAlertsJobTest extends BaseBatchTest {
   public void testProcessingUnregistered() {
     var transformAlertStep = createStepExecution(ETL_STEP_NAME).get();
     assertThat(transformAlertStep.getReadCount()).isEqualTo(2);
-    assertThat(jdbcTemplate.queryForObject("SELECT count(*) FROM pb_learning_processed_alert",
+    assertThat(jdbcTemplate.queryForObject(
+        "SELECT count(*) FROM pb_learning_processed_alert",
         Integer.class)).isEqualTo(2);
   }
 

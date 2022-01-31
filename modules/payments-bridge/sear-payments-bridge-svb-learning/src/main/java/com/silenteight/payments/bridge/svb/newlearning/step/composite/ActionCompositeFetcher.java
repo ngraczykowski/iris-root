@@ -31,9 +31,9 @@ class ActionCompositeFetcher
   @Language("PostgreSQL")
   private static final String ACTIONS_QUERY =
       "SELECT fkco_messages, learning_action_id, fkco_d_action_datetime, fkco_v_status_name"
-          + " ,fkco_v_status_behavior "
+          + " ,fkco_v_status_behavior, fkco_v_action_comment "
           + " FROM pb_learning_action WHERE fkco_messages IN (%s)"
-          + " ORDER BY fkco_d_action_datetime ASC";
+          + " ORDER BY fkco_d_action_datetime";
 
   public ActionCompositeFetcher(DataSource dataSource, LearningProperties properties) {
     super(dataSource);

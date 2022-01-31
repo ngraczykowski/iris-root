@@ -42,7 +42,8 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
     "com.silenteight.payments.bridge.svb.newlearning.job.csvstore",
     "com.silenteight.payments.bridge.svb.newlearning.step",
     "com.silenteight.payments.bridge.svb.newlearning.adapter",
-    "com.silenteight.payments.bridge.svb.newlearning.config" })
+    "com.silenteight.payments.bridge.svb.newlearning.config",
+    "com.silenteight.payments.bridge.svb.migration" })
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 class TransformFlatCsvTest extends BaseBatchTest {
 

@@ -16,6 +16,7 @@ class ActionCompositeRowMapper {
             timeZone,
             resultSet.getTimestamp("fkco_d_action_datetime")))
         .statusName(resultSet.getString("fkco_v_status_name"))
+        .actionComment(resultSet.getString("fkco_v_action_comment"))
         .statusBehaviour(resultSet.getString("fkco_v_status_behavior"))
         .build();
   }

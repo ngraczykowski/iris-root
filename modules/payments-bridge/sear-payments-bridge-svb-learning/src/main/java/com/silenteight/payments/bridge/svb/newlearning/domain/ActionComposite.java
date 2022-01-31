@@ -13,4 +13,5 @@ public class ActionComposite {
   OffsetDateTime actionDatetime;
   String statusName;
   String statusBehaviour;
+  String actionComment;
 }

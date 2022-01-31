@@ -2,16 +2,24 @@ package com.silenteight.payments.bridge.svb.newlearning.step.etl;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.data.retention.port.CreateAlertDataRetentionUseCase;
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
+import com.silenteight.payments.bridge.svb.newlearning.domain.HitComposite;
 import com.silenteight.payments.bridge.svb.newlearning.domain.LearningRegisteredAlert;
+import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexAlert;
+import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexAlertIdSet;
+import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexMatch;
+import com.silenteight.payments.bridge.warehouse.index.port.IndexLearningUseCase;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +28,9 @@ class ProcessUnregisteredService {
   private final RegisterAlertUseCase registerAlertUseCase;
   private final IngestDatasourceService ingestDatasourceService;
   private final CreateAlertDataRetentionUseCase createAlertDataRetentionUseCase;
+
+  private final IndexLearningUseCase indexLearningUseCase;
+  private final IndexAnalystDecisionHelper indexAnalystDecisionHelper;
 
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   LearningRegisteredAlert process(AlertComposite alertComposite, long jobId) {
@@ -31,7 +42,46 @@ class ProcessUnregisteredService {
     ingestDatasourceService.ingest(alertComposite, registeredAlert);
     createAlertDataRetentionUseCase.create(
         List.of(alertComposite.alertDataRetention(registeredAlert)));
-
+    indexLearningUseCase.index(createIndexAlerts(alertComposite, registeredAlert));
     return learningRegisteredAlert;
+  }
+
+  private List<IndexAlert> createIndexAlerts(
+      AlertComposite alertComposite,
+      RegisterAlertResponse registeredAlert) {
+    return List.of(
+        new IndexAlert(
+            new IndexAlertIdSet(
+                String.valueOf(alertComposite.getAlertDetails().getAlertId()),
+                registeredAlert.getAlertName(),
+                alertComposite.getSystemId(),
+                alertComposite.getAlertDetails().getMessageId()),
+            registeredMatches(alertComposite, registeredAlert),
+            indexAnalystDecisionHelper.getDecision(alertComposite.getActions()
+            )
+        ));
+  }
+
+  private static List<IndexMatch> registeredMatches(
+      AlertComposite alertComposite, RegisterAlertResponse registeredAlert) {
+    return registeredAlert
+        .getMatchResponses()
+        .stream()
+        .map(registerMatchResponse ->
+            new IndexMatch(
+                registerMatchResponse.getMatchId(),
+                registerMatchResponse.getMatchName(),
+                matchingText(alertComposite).get(registerMatchResponse.getMatchId())
+            ))
+        .collect(Collectors.toList());
+  }
+
+  private static Map<String, String> matchingText(AlertComposite alertComposite) {
+    return alertComposite
+        .getHits()
+        .stream()
+        .collect(Collectors.toMap(
+            HitComposite::getMatchId,
+            st -> String.join(", ", st.getMatchingTexts())));
   }
 }

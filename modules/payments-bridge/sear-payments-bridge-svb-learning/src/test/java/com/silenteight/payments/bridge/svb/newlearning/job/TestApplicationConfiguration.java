@@ -11,6 +11,7 @@ import com.silenteight.payments.bridge.datasource.category.port.CreateCategoryVa
 import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
 import com.silenteight.payments.bridge.svb.learning.engine.HistoricalDecisionLearningEnginePort;
 import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
+import com.silenteight.payments.bridge.warehouse.index.port.IndexLearningUseCase;
 
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
@@ -99,6 +100,11 @@ public class TestApplicationConfiguration {
     return alerts -> {
 
     };
+  }
+
+  @Bean
+  IndexLearningUseCase indexLearningUseCase() {
+    return new IndexLearningUseCaseMock();
   }
 
   @Bean
