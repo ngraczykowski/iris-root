@@ -1,6 +1,5 @@
 package com.silenteight.universaldatasource.api.library.gender.v1;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Value;
 
@@ -12,7 +11,7 @@ import com.silenteight.universaldatasource.api.library.FeatureBuilderProvider;
 import java.util.List;
 
 @Value
-@Builder(access = AccessLevel.PACKAGE)
+@Builder
 public class GenderFeatureInputOut implements Feature {
 
   String feature;
