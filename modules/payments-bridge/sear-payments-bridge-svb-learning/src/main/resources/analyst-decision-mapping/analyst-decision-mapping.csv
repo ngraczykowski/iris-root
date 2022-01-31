@@ -4,8 +4,8 @@ prev,current,analyst_decision for RB scorer
 *,GFX_45_DAY,analyst_decision_false_positive
 *,L1_PASS,analyst_decision_false_positive
 *,L2_PASS,analyst_decision_false_positive
-L2_L3_PEND,L3_PASS,analyst_decision_potential_true_positive
-L2_ESC_TO_L3,L3_PASS,analyst_decision_potential_true_positive
+L2_L3_PEND,L3_PASS,analyst_decision_true_positive
+L2_ESC_TO_L3,L3_PASS,analyst_decision_true_positive
 *,L3_PASS,analyst_decision_false_positive
 *,MANUAL_PASS,analyst_decision_false_positive
 *,PASS,analyst_decision_false_positive
