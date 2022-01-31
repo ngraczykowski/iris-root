@@ -5,10 +5,9 @@ import lombok.*;
 import com.silenteight.sens.webapp.permission.list.dto.PermissionDto;
 import com.silenteight.sep.base.common.entity.BaseModifiableEntity;
 
+import java.util.Set;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -40,6 +39,14 @@ class Permission extends BaseModifiableEntity {
   @ToString.Include
   @Column(name = "updated_by", nullable = false)
   private String updatedBy;
+
+  @NonNull
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(
+      name = "webapp_permission_endpoint_id",
+      joinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "permission_id"))
+  @Column(name = "endpoint_id", nullable = false)
+  private Set<UUID> endpointIds;
 
   PermissionDto toDto() {
     return PermissionDto.builder()

@@ -15,6 +15,7 @@ import static com.silenteight.sens.webapp.permission.PermissionTestFixtures.PERM
 import static com.silenteight.sens.webapp.permission.PermissionTestFixtures.PERMISSION_ID_1;
 import static com.silenteight.sens.webapp.permission.PermissionTestFixtures.PERMISSION_NAME_1;
 import static com.silenteight.sens.webapp.permission.PermissionTestFixtures.USERNAME_1;
+import static java.util.Collections.emptySet;
 import static org.assertj.core.api.Assertions.*;
 
 @TestPropertySource("classpath:data-test.properties")
@@ -47,6 +48,7 @@ class PermissionQueryIT extends BaseDataJpaTest {
         .description(PERMISSION_DESCRIPTION_1)
         .createdBy(USERNAME_1)
         .updatedBy(USERNAME_1)
+        .endpointIds(emptySet())
         .build();
 
     entityManager.persistAndFlush(permission);

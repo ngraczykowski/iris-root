@@ -27,4 +27,37 @@
     </createTable>
   </changeSet>
 
+  <changeSet id="permissions-1.36.0-2" author="mmastylo">
+    <createTable tableName="webapp_permission_endpoint_id">
+      <column name="permission_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="endpoint_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="webapp_permission_endpoint_id"
+        baseColumnNames="permission_id"
+        constraintName="fk_webapp_permission_permission_id"
+        referencedTableName="webapp_permission"
+        referencedColumnNames="permission_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"
+        deferrable="true"
+        initiallyDeferred="true"/>
+
+    <addForeignKeyConstraint
+        baseTableName="webapp_permission_endpoint_id"
+        baseColumnNames="endpoint_id"
+        constraintName="fk_webapp_endpoint_endpoint_id"
+        referencedTableName="webapp_endpoint"
+        referencedColumnNames="endpoint_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"
+        deferrable="true"
+        initiallyDeferred="true"/>
+  </changeSet>
+
 </databaseChangeLog>

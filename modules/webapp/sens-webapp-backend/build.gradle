@@ -25,6 +25,7 @@ dependencies {
   implementation project(":sens-webapp-audit-api")
   implementation project(":sens-webapp-common")
   implementation project(":sens-webapp-db-changelog")
+  implementation project(":sens-webapp-endpoint")
   implementation project(":sens-webapp-logging")
   implementation project(":sens-webapp-notification")
   implementation project(":sens-webapp-permission")
