@@ -13,6 +13,7 @@ ext {
   guavaVersion = "30.1.1-jre" //TODO use version from platform (MI6-638)
   jbossXnioVersion = "3.5.9.Final"
   springBootAutoconfigureVersion = "2.13.0.RELEASE" //TODO it probably should be aligned with the rest of the spring-boot deps ("2.4.6") (MI6-638)
+  objenesisVersion = "3.2"
 }
 
 // Silent Eight libraries
@@ -95,7 +96,7 @@ libraries.univocity_parsers = "com.univocity:univocity-parsers"
 libraries.groovy_all = "org.codehaus.groovy:groovy-all"
 libraries.hamcrest = "org.hamcrest:hamcrest"
 libraries.json_path = "com.jayway.jsonpath:json-path"
-libraries.objenesis = "org.objenesis:objenesis"
+libraries.objenesis = "org.objenesis:objenesis:$objenesisVersion"
 libraries.spock_core = "org.spockframework:spock-core"
 
 configurations.all {

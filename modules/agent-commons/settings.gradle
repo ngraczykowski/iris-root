@@ -7,4 +7,5 @@ include 'agent-starter'
 include 'agent-starter-test'
 include 'file-reading-commons'
 include 'agent-dictionaries'
+include 'agent-monitoring'
 
