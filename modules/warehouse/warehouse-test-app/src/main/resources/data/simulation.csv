@@ -12,5 +12,5 @@ recommendation_create_time;2022-01-05T12:05:42.437298Z
 features/dateOfBirth:config;agents/date/versions/1.0.0/configs/1
 features/dateOfBirth:reason;fields {\n  key: \"customerValues\"\n  value {\n    list_value {\n      values {\n        string_value: \"29-May-1968\"\n      }\n      values {\n        string_value: \"05/29/1968\"\n      }\n    }\n  }\n}\nfields {\n  key: \"watchlistValues\"\n  value {\n    list_value {\n      values {\n        string_value: \"1968-05-29\"\n      }\n    }\n  }\n}\n
 features/dateOfBirth:solution;EXACT
-recommendation_recommended_action;ACTION_POTENTIAL_TRUE_POSITIVE
+recommendation_recommended_action;ACTION_POTENTIAL_TRUE_POSITIVE,ACTION_FALSE_POSITIVE,ACTION_MI
 match_reason:feature_vector_signature;EL3eiK4lSLmvvWznIxUXqND059w=

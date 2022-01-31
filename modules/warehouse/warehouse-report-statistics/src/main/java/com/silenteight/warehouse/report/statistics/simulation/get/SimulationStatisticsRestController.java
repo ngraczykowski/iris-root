@@ -1,10 +1,10 @@
-package com.silenteight.warehouse.report.statistics.simulation;
+package com.silenteight.warehouse.report.statistics.simulation.get;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.warehouse.report.statistics.domain.dto.StatisticsDto;
+import com.silenteight.warehouse.report.statistics.simulation.dto.SimulationStatisticsDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,10 +31,10 @@ class SimulationStatisticsRestController {
 
   @GetMapping(GET_SIMULATION_STATISTICS_URL)
   @PreAuthorize("isAuthorized('LIST_SIMULATION_REPORTS')")
-  public ResponseEntity<StatisticsDto> getSimulationStatistics(
+  public ResponseEntity<SimulationStatisticsDto> getSimulationStatistics(
       @PathVariable(ANALYSIS_ID_PARAM) String analysisId) {
 
-    StatisticsDto statisticsDto = useCase.activate(analysisId);
+    SimulationStatisticsDto statisticsDto = useCase.activate(analysisId);
     return ok().body(statisticsDto);
   }
 }

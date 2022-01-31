@@ -262,15 +262,30 @@ warehouse.report.metrics:
       label: FP Effectiveness
 
 warehouse.report.statistics:
-  date-field-name: index_timestamp
-  ai-decision:
-    field: alert_recommendation_recommended_action
-    significant-values: [ ACTION_FALSE_POSITIVE, ACTION_POTENTIAL_TRUE_POSITIVE ]
-    false-positive-value: ACTION_FALSE_POSITIVE
-  analyst-decision:
-    field: alert_DN_CASE.currentState
-    analyst-significant-values: [Level 2 Review, Level 1 Review]
-    false-positive-value: Level 1 Review
+  all-alerts-query:
+    SELECT count(*) 
+    FROM warehouse_simulation_alert 
+    WHERE analysis_name = ?
+  solved-alerts-query:
+    SELECT count(*) 
+    FROM warehouse_simulation_alert 
+    WHERE analysis_name = ? 
+    AND (payload ->> 'recommendation_recommended_action') 
+    IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE')
+  ai-false-positive-query:
+    SELECT count(*) 
+    FROM warehouse_simulation_alert wsa 
+    JOIN warehouse_alert wa ON wsa.name = wa.name 
+    WHERE wsa.analysis_name = ? 
+    AND (wa.payload ->> 'DN_CASE.currentState') IN ('Level 1 Review', 'Level 2 Review') 
+    AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
+  analyst-false-positive-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert wsa 
+    JOIN warehouse_alert wa ON wsa.name = wa.name
+    WHERE wsa.analysis_name = ? 
+    AND (wa.payload ->> 'DN_CASE.currentState') = 'Level 1 Review' 
+    AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
 
 warehouse.report.rbs:
   production:

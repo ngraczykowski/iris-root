@@ -2,22 +2,11 @@ package com.silenteight.warehouse.report.reporting;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
-
-import com.silenteight.warehouse.indexer.query.common.QueryFilter;
 
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
-import javax.annotation.Nullable;
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-
-import static java.util.Collections.emptyList;
-import static java.util.List.of;
-import static java.util.Objects.isNull;
-import static java.util.stream.Collectors.toList;
 
 @AllArgsConstructor
 @ConstructorBinding
@@ -26,31 +15,12 @@ import static java.util.stream.Collectors.toList;
 public class StatisticsProperties {
 
   @NotBlank
-  private final String dateFieldName;
-  @Valid
-  @NonNull
-  private final AiDecisionProperties aiDecision;
-  @Valid
-  @NonNull
-  private final AnalystDecisionProperties analystDecision;
+  private final String allAlertsQuery;
+  @NotBlank
+  private final String solvedAlertsQuery;
+  @NotBlank
+  private final String aiFalsePositiveQuery;
+  @NotBlank
+  private final String analystFalsePositiveQuery;
 
-  @Valid
-  @Nullable
-  private final List<FilterProperties> filters;
-
-  public List<String> getFields() {
-    return of(aiDecision, analystDecision)
-        .stream()
-        .map(Decision::getField)
-        .collect(toList());
-  }
-
-  public List<QueryFilter> getQueryFilters() {
-    if (isNull(getFilters()))
-      return emptyList();
-
-    return getFilters().stream()
-        .map(FilterProperties::toQueryFilter)
-        .collect(toList());
-  }
 }
