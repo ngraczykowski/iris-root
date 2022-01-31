@@ -2,19 +2,23 @@ package com.silenteight.payments.bridge.svb.newlearning.domain;
 
 import lombok.Builder;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.agents.model.SpecificTermsRequest;
+import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import org.apache.commons.collections4.list.SetUniqueList;
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @Value
 @Builder
 public class HitComposite {
@@ -118,5 +122,16 @@ public class HitComposite {
 
   Optional<String> getFirstWatchlistName() {
     return getWatchlistNames().stream().findFirst();
+  }
+
+  public SolutionType getSolutionType() {
+    var hitType = getFkcoVHitType();
+    var solutionType = hitType.replace(" ", "_");
+
+    if (!EnumUtils.isValidEnum(SolutionType.class, solutionType)) {
+      log.warn("Solution type: {} is not valid", solutionType);
+      return SolutionType.UNKNOWN;
+    }
+    return SolutionType.valueOf(hitType);
   }
 }

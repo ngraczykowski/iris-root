@@ -18,17 +18,19 @@ class CreateCategoriesValuesServiceTest {
 
   @BeforeEach
   void setUp() {
-    createCategoryValuesService = new CreateCategoriesValuesService(
-        new CreateCategoriesValuesMock(),
-        List.of(
-            new WatchlistTypeCategoryExtractor(),
-            new CrossmatchCategoryExtractor(new NameAddressCrossmatchUseCaseMock()),
-            new MatchTypeCategoryExtractor(),
-            new HistoricalRiskCategoryExtractor(new HistoricalRiskAssessmentUseCaseMock())),
-        List.of(
-            new SpecificTermsCategoryExtractor(new SpecificTermsUseCaseMock()),
-            new SpecificTerms2CategoryExtractor(new SpecificTerms2UseCaseMock()))
-    );
+    createCategoryValuesService =
+        new CreateCategoriesValuesService(
+            new CreateCategoriesValuesMock(),
+            List.of(
+                new CrossmatchCategoryExtractor(new NameAddressCrossmatchUseCaseMock()),
+                new HistoricalRiskCategoryExtractor(new HistoricalRiskAssessmentUseCaseMock())),
+            List.of(
+                new MessageStructureCategoryExtractor(),
+                new MatchTypeCategoryExtractor(),
+                new WatchlistTypeCategoryExtractor(),
+                new SpecificTermsCategoryExtractor(new SpecificTermsUseCaseMock()),
+                new SpecificTerms2CategoryExtractor(new SpecificTerms2UseCaseMock()))
+        );
   }
 
   @Test
@@ -36,12 +38,12 @@ class CreateCategoriesValuesServiceTest {
     var hit = createEtlHit();
     var categoryValues =
         createCategoryValuesService.createCategoryValues(List.of(hit), createRegisterAlert());
-    assertThat(categoryValues.size()).isEqualTo(4);
+    assertThat(categoryValues.size()).isEqualTo(2);
 
     var hitComposite = createHitComposite();
     var unstructuredCategoryValues =
         createCategoryValuesService.createUnstructuredCategoryValues(
             List.of(hitComposite), createRegisterAlert());
-    assertThat(unstructuredCategoryValues.size()).isEqualTo(2);
+    assertThat(unstructuredCategoryValues.size()).isEqualTo(5);
   }
 }

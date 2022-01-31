@@ -7,11 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.agents.model.CompanyNameSurroundingRequest;
 import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRequest;
-import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
-
-import org.apache.commons.lang3.EnumUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -74,17 +71,6 @@ public class EtlHit {
         .watchlistCountry(hitComposite.getFkcoVListCountry())
         .watchlistType(hitComposite.getFkcoVListType())
         .build();
-  }
-
-  public SolutionType getSolutionType() {
-    var hitType = hitComposite.getFkcoVHitType();
-    var solutionType = hitType.replace(" ", "_");
-
-    if (!EnumUtils.isValidEnum(SolutionType.class, solutionType)) {
-      log.warn("Solution type: {} is not valid", solutionType);
-      return SolutionType.UNKNOWN;
-    }
-    return SolutionType.valueOf(hitType);
   }
 
   public Optional<String> getAccountNumberOrFirstName() {
