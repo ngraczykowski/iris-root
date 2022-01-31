@@ -15,7 +15,11 @@ springProfilesActive: ""
 #Additional service metadata annotations
 service:
   metadata:
-    annotations: {}
+    annotations: { }
 
-udsFeaturesMappingGeo2 : geo
+udsFeaturesMappingGeo2: geo
 udsFeaturesMappingOrganizationName2: organizationName
+
+sentry:
+  dsn: https://da12c318c5d3498591da5b6416751038@o1129201.ingest.sentry.io/6176679
+  environment: unknown

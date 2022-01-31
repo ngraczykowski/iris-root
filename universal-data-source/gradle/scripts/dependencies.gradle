@@ -224,6 +224,9 @@ libraries.protobuf_java_util = [group: 'com.google.protobuf', name: 'protobuf-ja
 libraries.querydsl_apt_jpa = [group: 'com.querydsl', name: 'querydsl-apt', classifier: 'jpa']
 libraries.querydsl_jpa = [group: 'com.querydsl', name: 'querydsl-jpa']
 libraries.reactor_grpc_stub = [group: 'com.salesforce.servicelibs', name: 'reactor-grpc-stub']
+libraries.sentry = [group: 'io.sentry', name: 'sentry']
+libraries.sentry_logback = [group: 'io.sentry', name: 'sentry-logback']
+libraries.sentry_spring_boot_starter = [group: 'io.sentry', name: 'sentry-spring-boot-starter']
 libraries.snakeyaml = [group: 'org.yaml', name: 'snakeyaml']
 libraries.tomcat_embed_el = [group: 'org.apache.tomcat.embed', name: 'tomcat-embed-el']
 
@@ -276,6 +279,7 @@ dependencies {
   annotationProcessor platform(
       "com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
   implementation platform("org.keycloak.bom:keycloak-adapter-bom:15.0.2")
+  implementation platform("io.sentry:sentry-bom:5.6.0")
 
   implementation platform("com.blazebit:blaze-persistence-bom:1.6.0")
   annotationProcessor platform("com.blazebit:blaze-persistence-bom:1.6.0")

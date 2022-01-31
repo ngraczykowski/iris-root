@@ -64,6 +64,8 @@ spec:
             - --serp.show-env=true
             - --spring.profiles.active={{ .Values.springProfilesActive }}
             - --logging.config=file:/etc/logback/logback.xml
+            - --sentry.dsn={{ .Values.sentry.dsn }}
+            - --sentry.environment={{ .Values.sentry.environment }}
           {{ if .Values.additionalArgs }}
           {{ range .Values.additionalArgs }}
             - {{ . }}

@@ -30,7 +30,11 @@ dependencies {
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.micrometer_prometheus
 
-  // Security
+  // Sentry
+  runtimeOnly libraries.sentry_spring_boot_starter
+  runtimeOnly libraries.sentry_logback
+
+// Security
   implementation libraries.spring_security_config
   implementation libraries.spring_security_core
   implementation libraries.spring_security_web
@@ -39,6 +43,7 @@ dependencies {
   implementation libraries.spring_cloud_consul_discovery
   implementation libraries.spring_cloud_starter_consul_config
   implementation libraries.spring_cloud_starter_sleuth
+
   // Validator
   implementation libraries.tomcat_embed_el
   implementation libraries.hibernate_validator
