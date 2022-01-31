@@ -30,7 +30,7 @@ import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.STATUS_COMPLETED;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.STATUS_ERROR;
 import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.INDEX_TIMESTAMP;
-import static com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService.EMPTY_VALUE_PLACEHOLDER;
+import static com.silenteight.warehouse.indexer.query.grouping.GroupingQueryElasticSearchService.EMPTY_VALUE_PLACEHOLDER;
 import static java.time.OffsetDateTime.parse;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.*;
 @ContextConfiguration(initializers = {
     OpendistroElasticContainerInitializer.class, PostgresTestInitializer.class })
 @ActiveProfiles({ "jpa-test" })
-class GroupingQueryTest {
+class GroupingQueryElasticSearchServiceTest {
 
   private static final String NOT_EXISTING_KEY = "NOT_EXISTING_KEY";
   private static final String NOT_EXISTING_VALUE = "NOT_EXISTING_VALUE";
