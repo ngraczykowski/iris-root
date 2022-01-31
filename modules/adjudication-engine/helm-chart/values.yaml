@@ -15,9 +15,13 @@ grpcClientDatasourceAddress: dns:///universal-data-source-service.default.svc.cl
 grpcClientGovernanceAddress: dns:///governance-app-service.default.svc.cluster.local:9090
 templateCacheInvalidation: "*/15 * * * * *"
 
+sentry:
+  dsn: https://682103483bd9486c988199daa868752e@o1129201.ingest.sentry.io/6172971
+  environment: unknown
+
 memoryLimit: 2048Mi
 memoryRequest: 512Mi
 
 service:
   metadata:
-    annotations: {}
+    annotations: { }

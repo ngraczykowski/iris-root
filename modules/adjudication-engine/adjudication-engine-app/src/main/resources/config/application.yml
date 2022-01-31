@@ -252,3 +252,7 @@ grpc:
       negotiation-type: PLAINTEXT
       max-inbound-message-size: 8MB
       enable-keep-alive: false
+
+sentry:
+  environment: unknown
+  traces-sample-rate: 1.0

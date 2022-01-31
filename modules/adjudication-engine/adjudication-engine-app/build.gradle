@@ -42,6 +42,10 @@ dependencies {
   implementation libraries.spring_boot_starter_webflux
   implementation libraries.micrometer_prometheus
 
+  // Sentry
+  runtimeOnly libraries.sentry_spring_boot_starter
+  runtimeOnly libraries.sentry_logback
+
   // Spring Sleuth
   implementation libraries.spring_cloud_starter_sleuth
 
