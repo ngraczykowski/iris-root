@@ -21,3 +21,7 @@ serp:
 
     model:
       modelTransfer: LOCAL
+
+sentry:
+  environment: sierra
+  traces-sample-rate: 0

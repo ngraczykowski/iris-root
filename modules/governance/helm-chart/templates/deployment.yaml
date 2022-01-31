@@ -71,7 +71,11 @@ spec:
               value: {{ .Values.grpc.client.warehouse.address | quote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          args: ["--logging.config=file:/etc/logback.xml"]
+          args:
+            - --logging.config=file:/etc/logback/logback.xml
+            - --sentry.dsn={{ .Values.sentry.dsn }}
+            - --sentry.environment={{ .Values.sentry.environment }}
+            - --sentry.traces-sample-rate={{ .Values.sentry.tracesSampleRate }}
           volumeMounts:
             - mountPath: /etc/logback.xml
               name: logback-config
