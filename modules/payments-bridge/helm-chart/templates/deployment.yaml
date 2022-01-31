@@ -72,6 +72,8 @@ spec:
             - --spring.profiles.active={{ .Values.springProfilesActive }}
             - --logging.config=file:/etc/logback/logback.xml
             - --spring.config.additional-location=file:/etc/spring/
+            - --sentry.dsn={{ .Values.sentry.dsn }}
+            - --sentry.environment={{ .Values.sentry.environment }}
           {{ if .Values.additionalArgs }}
           {{ range .Values.additionalArgs }}
             - {{ . }}

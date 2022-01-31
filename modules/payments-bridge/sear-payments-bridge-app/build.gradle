@@ -34,6 +34,10 @@ dependencies {
   runtimeOnly libraries.ecs_logging_core
   runtimeOnly libraries.logback_ecs_encoder
 
+  // Sentry
+  runtimeOnly libraries.sentry_spring_boot_starter
+  runtimeOnly libraries.sentry_logback
+
   // Base Libraries
   implementation libraries.silenteight_sep_base_common
   implementation libraries.silenteight_commons_app
