@@ -55,12 +55,13 @@ spec:
             - name: 'SPRING_PROFILES_ACTIVE'
               value: {{ .Values.springProfilesActive | squote }}
           image: {{ .Values.image_repo }}:{{ .Values.image_tag }}
-          {{ if .Values.args }}
           args:
           {{ range .Values.args }}
             - {{ . }}
           {{ end }}
-          {{ end }}
+            - --sentry.dsn={{ .Values.sentry.dsn }}
+            - --sentry.environment={{ .Values.sentry.environment }}
+            - --sentry.traces-sample-rate={{ .Values.sentry.tracesSampleRate }}
           resources:
             limits:
               memory: {{ .Values.memoryLimit | quote }}

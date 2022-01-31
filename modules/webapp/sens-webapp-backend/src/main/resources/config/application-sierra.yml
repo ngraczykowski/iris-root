@@ -14,3 +14,7 @@ sens:
     roles:
       country-groups-scope: elasticsearch-sso
       default-country-group-role: business_user
+
+sentry:
+  environment: sierra
+  traces-sample-rate: 0

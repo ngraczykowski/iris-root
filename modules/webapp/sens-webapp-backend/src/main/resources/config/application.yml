@@ -328,3 +328,7 @@ keycloak:
     confidentialPort: 0
     principalAttribute: preferred_username
     sslRequired: external
+
+sentry:
+  environment: unknown
+  traces-sample-rate: 0
