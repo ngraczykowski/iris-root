@@ -60,4 +60,12 @@
         initiallyDeferred="true"/>
   </changeSet>
 
+  <changeSet id="permissions-1.36.0-3" author="mmastylo">
+    <addColumn tableName="webapp_permission">
+      <column name="disabled" type="BOOLEAN" defaultValueBoolean="false">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.*;
 
+import static java.lang.Boolean.FALSE;
+
 @Entity
 @Data
 @Setter(AccessLevel.PRIVATE)
@@ -31,6 +33,11 @@ class Permission extends BaseModifiableEntity {
 
   @ToString.Include
   private String description;
+
+  @ToString.Include
+  @Builder.Default
+  @Column(nullable = false)
+  private Boolean disabled = FALSE;
 
   @ToString.Include
   @Column(name = "created_by", nullable = false)
