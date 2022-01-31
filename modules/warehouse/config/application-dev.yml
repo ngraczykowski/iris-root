@@ -1190,5 +1190,18 @@ warehouse.reports.v2:
         WHERE
                recommendation_date BETWEEN DATE '${from}' AND DATE '${to}' AND
                wa.payload ->> 'qa.level-0.NEW.timestamp' IS NOT NULL
-
+    - name: QA_SAMPLE
+      type: production
+      description: QA Sample
+      selectSqlQuery: >
+        SELECT wa.payload ->> 'DN_CASE.ID'               AS "Customer Alert ID",
+               wa.recommendation_date                    AS "S8 Alert Resolution Timestamp",
+               wa.payload ->> 'qa.level-0.NEW.timestamp' AS "Alert Selected for QA Timestamp",
+               wa.payload ->> 'extendedAttribute5'       AS "Risk Type",
+               wa.payload ->> 'categories/hitType'       AS "List Type",
+               wa.payload ->> 's8_lobCountryCode'        AS "Country LoB"
+        FROM warehouse_alert wa
+        WHERE
+               recommendation_date BETWEEN DATE '${from}' AND DATE '${to}' AND
+               wa.payload ->> 'qa.level-0.NEW.timestamp' IS NOT NULL
 
