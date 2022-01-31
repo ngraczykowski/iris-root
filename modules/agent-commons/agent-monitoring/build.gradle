@@ -25,7 +25,9 @@ dependencies {
   implementation libraries.spring_boot_starter_logging
 
   // Sentry
-  implementation 'io.sentry:sentry-spring-boot-starter:5.6.0'
+  api libraries.sentry
+  api libraries.sentry_logback
+  api libraries.sentry_spring_boot_starter
 }
 
 publishing {
