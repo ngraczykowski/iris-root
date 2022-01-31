@@ -16,6 +16,15 @@ silenteight.bridge:
     worldcheck-address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-hsbc-worldcheck
     historical-decisions-model-address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-historical-decisions-model
 
+  data.retention:
+    ### Enable one of retention type below
+    personal-information-expired:
+      enabled: false
+      duration: 155d
+    alerts-expired:
+      enabled: false
+      duration: 2d
+
 {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
 {{- with service (print $nomad_namespace "-hsbc-bridge-db") }}
 spring.datasource.url: jdbc:postgresql://{{ (index . 0).Address }}:{{ (index . 0).Port }}/{{ env "NOMAD_NAMESPACE" }}-hsbc-bridge

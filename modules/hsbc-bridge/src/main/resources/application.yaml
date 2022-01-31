@@ -74,12 +74,12 @@ silenteight.bridge:
   ### DATA RETENTION
 
   data.retention:
-    chunk: 500
+    chunk: 50
     rate: 1d
     ### Enable one of retention type below
     personal-information-expired:
       enabled: false
-      duration: ${RETENTION_PERIOD:151d}
+      duration: ${RETENTION_PERIOD:155d}
     alerts-expired:
       enabled: false
       duration: ${RETENTION_PERIOD:2d}
