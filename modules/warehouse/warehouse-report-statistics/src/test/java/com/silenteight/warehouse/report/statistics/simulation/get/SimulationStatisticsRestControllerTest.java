@@ -1,6 +1,7 @@
-package com.silenteight.warehouse.report.statistics.simulation;
+package com.silenteight.warehouse.report.statistics.simulation.get;
 
 import com.silenteight.warehouse.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.warehouse.report.statistics.simulation.query.StatisticsQuery;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -9,7 +10,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 
 import static com.silenteight.warehouse.common.testing.rest.TestRoles.*;
-import static com.silenteight.warehouse.report.statistics.StatisticsTestFixtures.STATISTICS_DTO;
+import static com.silenteight.warehouse.report.statistics.simulation.SimulationStatisticsTestFixtures.STATISTICS_DTO;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
@@ -28,7 +29,7 @@ class SimulationStatisticsRestControllerTest extends BaseRestControllerTest {
   private static final String JSON_CONTENT_TYPE = "application/json";
 
   @MockBean
-  SimulationStatisticsQuery query;
+  private StatisticsQuery query;
 
   @Test
   @WithMockUser(
