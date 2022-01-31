@@ -55,7 +55,6 @@ class SimulationStorageTest {
     underTest.insert(List.of(definition));
 
     List<SimulationAlertEntity> allEntries = getAllEntries();
-    System.out.println(getAllEntries());
     assertThat(allEntries.size()).isEqualTo(1);
 
     SimulationAlertEntity firstResult = allEntries.get(0);

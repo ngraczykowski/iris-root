@@ -25,10 +25,7 @@ import org.springframework.test.context.ContextConfiguration;
 import java.sql.ResultSet;
 import java.util.Map;
 
-import static com.silenteight.warehouse.qa.QaProcessingTestFixtures.ALERT_NAME;
-import static com.silenteight.warehouse.qa.QaProcessingTestFixtures.PRODUCTION_REQUEST_V1;
-import static com.silenteight.warehouse.qa.QaProcessingTestFixtures.QA_COMMENT;
-import static com.silenteight.warehouse.qa.QaProcessingTestFixtures.QA_REQUEST;
+import static com.silenteight.warehouse.qa.QaProcessingTestFixtures.*;
 import static java.util.Collections.emptyMap;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
@@ -49,6 +46,7 @@ class QaProcessingIT {
       = new TypeReference<>() {};
   private static final String QA_LEVEL_0_STATE = "qa.level-0.state";
   private static final String QA_LEVEL_0_COMMENT = "qa.level-0.comment";
+  private static final String QA_LEVEL_0_TIMESTAMP = "qa.level-0.NEW.timestamp";
   private static final int TIMEOUT = 5;
 
   @Autowired
@@ -86,7 +84,8 @@ class QaProcessingIT {
     assertThat(payload)
         .containsEntry("name", ALERT_NAME)
         .containsEntry(QA_LEVEL_0_STATE, State.NEW.toString())
-        .containsEntry(QA_LEVEL_0_COMMENT, QA_COMMENT);
+        .containsEntry(QA_LEVEL_0_COMMENT, QA_COMMENT)
+        .containsEntry(QA_LEVEL_0_TIMESTAMP, PROCESSING_TIMESTAMP);
   }
 
   private boolean alertHasQaFields(String alertName) {
