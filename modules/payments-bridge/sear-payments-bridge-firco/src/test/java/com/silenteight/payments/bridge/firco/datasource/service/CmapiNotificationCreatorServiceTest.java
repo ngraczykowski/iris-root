@@ -1,7 +1,7 @@
-package com.silenteight.payments.bridge.notification.service;
+package com.silenteight.payments.bridge.firco.datasource.service;
 
-import com.silenteight.payments.bridge.notification.model.CmapiNotificationRequest;
-import com.silenteight.payments.bridge.notification.port.CmapiNotificationCreatorUseCase;
+import com.silenteight.payments.bridge.firco.datasource.model.CmapiNotificationRequest;
+import com.silenteight.payments.bridge.firco.datasource.port.CmapiNotificationCreatorUseCase;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

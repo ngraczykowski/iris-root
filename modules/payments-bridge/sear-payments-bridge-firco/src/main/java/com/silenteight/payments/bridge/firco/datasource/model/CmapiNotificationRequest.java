@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.notification.model;
+package com.silenteight.payments.bridge.firco.datasource.model;
 
 import lombok.Builder;
 import lombok.Data;

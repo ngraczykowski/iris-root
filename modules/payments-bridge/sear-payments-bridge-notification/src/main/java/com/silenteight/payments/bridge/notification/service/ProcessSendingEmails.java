@@ -28,7 +28,7 @@ class ProcessSendingEmails implements ProcessSendingEmailsUseCase {
   private final UpdateNotificationsUseCase updateNotificationsUseCase;
   private final EmailSenderUseCase emailSenderUseCase;
   private final FindNotificationTypesUseCase findNotificationTypesUseCase;
-  private final CmapiNotificationCreatorService cmapiNotificationCreatorService;
+  private final NotificationAttachmentUseCase notificationAttachmentUseCase;
   private final EmailNotificationProperties emailNotificationProperties;
 
   private static final String CMAPI_PROCESSING_ERROR = "CMAPI_PROCESSING_ERROR";
@@ -91,7 +91,7 @@ class ProcessSendingEmails implements ProcessSendingEmailsUseCase {
     return Optional
         .of(attachments)
         .filter(a -> !a.isEmpty())
-        .map(cmapiNotificationCreatorService::mergeCsvAttachments)
+        .map(notificationAttachmentUseCase::mergeCsvAttachments)
         .orElse(null);
   }
 
