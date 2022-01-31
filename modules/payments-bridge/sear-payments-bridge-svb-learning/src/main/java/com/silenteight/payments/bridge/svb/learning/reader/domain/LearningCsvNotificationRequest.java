@@ -3,6 +3,8 @@ package com.silenteight.payments.bridge.svb.learning.reader.domain;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class LearningCsvNotificationRequest {
@@ -11,4 +13,5 @@ public class LearningCsvNotificationRequest {
   int numberOfSuccessfulAlerts;
   int numberOfFailedAlerts;
   long fileLength;
+  List<ReadAlertError> readAlertErrors;
 }

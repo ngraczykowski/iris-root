@@ -23,6 +23,7 @@ public class AlertsReadingResponse {
         .numberOfSuccessfulAlerts(successfulAlerts)
         .numberOfFailedAlerts(failedAlerts)
         .fileLength(objectData.getFileLength())
+        .readAlertErrors(readAlertErrorList)
         .build();
   }
 }
