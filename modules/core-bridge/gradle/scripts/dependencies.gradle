@@ -23,11 +23,11 @@ ext {
   springBootVersion = "2.5.7"
   springCloudVersion = "3.0.4"
   springVersion = "5.3.13"
+  springRabbitVersion = "2.3.6"
 }
 
 // Silent Eight
 libraries.protobuf_spring_boot_starter = [group: 'com.silenteight', name: 'protobuf-spring-boot-starter', version: protobufSpringBootStarterVersion]
-
 libraries.recommendation_api_library = [group: 'com.silenteight.recommendation.api.library', name: 'recommendation-lib', version: coreBridgeRecommendationApiVersion]
 libraries.recommendation_api_proto = [group: 'com.silenteight.recommendation.api.library', name: 'recommendation-internal-protos', version: coreBridgeRecommendationApiVersion]
 libraries.registration_api_library = [group: 'com.silenteight.registration.api.library', name: 'registration-lib', version: coreBridgeRegistrationApiVersion]
@@ -53,6 +53,8 @@ libraries.spring_retry = [group: 'org.springframework.retry', name: 'spring-retr
 libraries.spring_cloud_starter_consul_config = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-consul-config', version: springCloudVersion]
 libraries.spring_cloud_starter_consul_discovery = [group: 'org.springframework.cloud', name: 'spring-cloud-consul-discovery', version: springCloudVersion]
 libraries.spring_cloud_starter_sleuth = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: springCloudVersion]
+libraries.spring_amqp = [group: 'org.springframework.amqp', name: 'spring-amqp', version: springRabbitVersion]
+libraries.spring_rabbit = [group: 'org.springframework.amqp', name: 'spring-rabbit', version: springRabbitVersion]
 
 // Database
 libraries.postgresql = [group: 'org.postgresql', name: 'postgresql', version: '42.2.18']
@@ -73,6 +75,8 @@ libraries.testcontainers = [group: 'org.testcontainers', name: 'testcontainers',
 libraries.testcontainers_spock = [group: 'org.testcontainers', name: 'spock', version: testContainersVersion]
 libraries.testcontainers_postgresql = [group: 'org.testcontainers', name: 'postgresql', version: testContainersVersion]
 libraries.testcontainers_rabbitmq = [group: 'org.testcontainers', name: 'rabbitmq', version: testContainersVersion]
+libraries.ecs_logging_core = [group: 'co.elastic.logging', name: 'ecs-logging-core', version: '1.0.1']
+libraries.logback_ecs_encoder = [group: 'co.elastic.logging', name: 'logback-ecs-encoder', version: libraries.ecs_logging_core.version]
 
 // Others
 libraries.commons_lang3 = [group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0']
@@ -124,7 +128,10 @@ dependencies {
   implementation libraries.streamex
   implementation libraries.vavr
   implementation libraries.liquibase
-
+  runtimeOnly libraries.ecs_logging_core
+  runtimeOnly libraries.logback_ecs_encoder
+  implementation libraries.spring_rabbit
+  
   testImplementation libraries.groovy_all
   testImplementation libraries.spock_core
   testImplementation libraries.junit_jupiter_testcontainers

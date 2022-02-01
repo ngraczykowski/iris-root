@@ -1,0 +1,39 @@
+silenteight:
+  bridge:
+    ### GRPC PROPERTIES
+    grpc:
+      port: {{ env "NOMAD_PORT_grpc" }}
+
+    ### HTTP PROPERTIES
+    http:
+      port: {{ env "NOMAD_PORT_http" }}
+
+grpc:
+  client:
+    governance.address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-governance
+    adjudication-engine.address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-adjudication-engine
+
+{{ $nomad_namespace := env "NOMAD_NAMESPACE" }}
+{{ with service (print $nomad_namespace "-core-bridge-db") }}
+spring.datasource.url: jdbc:postgresql://{{ (index . 0).Address }}:{{ (index . 0).Port }}/{{ env "NOMAD_NAMESPACE" }}-core-bridge
+{{ end -}}
+
+spring:
+  rabbitmq:
+    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+{{- end }}
+# NOTE(ahaczewski): Intentionally left empty.
+    host:
+    virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+
+management:
+  endpoint:
+    health.show-details: always
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: ["health", "info", "liquibase", "metrics", "prometheus", "loggers"]
+
