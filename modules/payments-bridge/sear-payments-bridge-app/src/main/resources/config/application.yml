@@ -305,4 +305,4 @@ grpc:
 
 sentry:
   environment: unknown
-  traces-sample-rate: 1.0
+  traces-sample-rate: 0
