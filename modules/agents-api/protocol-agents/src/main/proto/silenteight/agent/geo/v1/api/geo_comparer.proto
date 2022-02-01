@@ -15,11 +15,18 @@ service GeoLocationComparer {
 }
 
 message CompareGeoLocationsRequest {
-  repeated Location alerted_party_locations = 1;
-  repeated Location watchlist_party_locations = 2;
+  reserved 1, 2;
+
+  repeated ExactLocation alerted_party_locations = 3;
+  repeated ExactLocation watchlist_party_locations = 4;
 }
 
 message CompareGeoLocationsResponse {
   string solution = 1;
   GeoComparerReason reason = 2;
+}
+
+message ExactLocation {
+  Location location = 1;
+  Coordinates coordinates = 2;
 }

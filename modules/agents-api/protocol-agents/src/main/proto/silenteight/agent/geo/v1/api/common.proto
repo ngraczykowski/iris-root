@@ -19,12 +19,10 @@ message Location {
   google.protobuf.Any details = 6;
   // Whether location was provided explicitly, not derived
   bool explicitly_provided = 7;
-  // Coordinates of the locality. Present only when type is city, otherwise empty.
-  Coordinates coordinates = 8 [(google.api.field_behavior) = OPTIONAL];
   // The list of locations (cities or states) the location was derived from
   repeated uint32 derived_from = 10 [(google.api.field_behavior) = OPTIONAL];
 
-  reserved 9;
+  reserved 8, 9;
 }
 
 enum LocationType {
