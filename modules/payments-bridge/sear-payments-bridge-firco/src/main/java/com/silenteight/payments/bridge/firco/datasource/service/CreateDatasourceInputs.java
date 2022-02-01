@@ -8,10 +8,11 @@ import com.silenteight.datasource.agentinput.api.v1.BatchCreateAgentInputsReques
 import com.silenteight.datasource.categories.api.v2.BatchCreateCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.datasource.categories.api.v2.CreateCategoryValuesRequest;
+import com.silenteight.payments.bridge.common.exception.MatchNotFoundException;
 import com.silenteight.payments.bridge.common.model.AeAlert;
 import com.silenteight.payments.bridge.datasource.agent.port.CreateAgentInputsClient;
 import com.silenteight.payments.bridge.datasource.category.port.CreateCategoryValuesClient;
-import com.silenteight.payments.bridge.firco.datasource.model.FeatureInputUnstructuredModel;
+import com.silenteight.payments.bridge.firco.datasource.model.DatasourceUnstructuredModel;
 import com.silenteight.payments.bridge.firco.datasource.port.CreateDatasourceInputsUseCase;
 import com.silenteight.payments.bridge.firco.datasource.service.process.agent.CreateFeatureInput;
 import com.silenteight.payments.bridge.firco.datasource.service.process.category.CreateCategoryValue;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import static java.util.stream.Collectors.toList;
 
@@ -57,22 +59,21 @@ class CreateDatasourceInputs implements CreateDatasourceInputsUseCase {
 
   @Override
   public void processUnstructured(
-      String alertName, Map<String, HitAndWatchlistPartyData> hitAndWatchlistPartyData) {
-    var agentInputs = createUnstructuredFeatureInputs(alertName, hitAndWatchlistPartyData);
+      AeAlert alert, Map<String, HitAndWatchlistPartyData> hitAndWatchlistPartyData) {
+    var agentInputs = createUnstructuredFeatureInputs(alert, hitAndWatchlistPartyData);
     createAgentInputsInDatasource(agentInputs);
 
     var categoryValuesRequests =
-        createUnstructuredCategoryValues(alertName, hitAndWatchlistPartyData);
+        createUnstructuredCategoryValues(alert, hitAndWatchlistPartyData);
     createCategoryValuesInDatasource(categoryValuesRequests);
-
   }
 
   private List<CreateCategoryValuesRequest> createUnstructuredCategoryValues(
-      String alertName, Map<String, HitAndWatchlistPartyData> hitAndWatchlistPartyData) {
+      AeAlert alert, Map<String, HitAndWatchlistPartyData> hitAndWatchlistPartyData) {
 
     return hitAndWatchlistPartyData.entrySet().stream()
-        .map(e -> createCategoryValue.createUnstructuredCategoryValues(alertName, e.getKey(),
-            e.getValue()))
+        .map(entry -> createCategoryValue.createUnstructuredCategoryValues(
+            createUnstructuredModel(alert, entry)))
         .flatMap(Collection::stream)
         .map(CreateDatasourceInputs::createCategoryValuesRequest)
         .collect(toList());
@@ -89,20 +90,34 @@ class CreateDatasourceInputs implements CreateDatasourceInputsUseCase {
   }
 
   private List<AgentInput> createUnstructuredFeatureInputs(
-      String alertName, Map<String, HitAndWatchlistPartyData> hitAndWatchlistPartyData) {
+      AeAlert alert, Map<String, HitAndWatchlistPartyData> hitAndWatchlistPartyData) {
 
     return hitAndWatchlistPartyData.entrySet().stream()
-        .map(e -> getAgentInputsForUnstructured(FeatureInputUnstructuredModel.builder()
-            .alertName(alertName)
-            .matchName(e.getKey())
-            .hitAndWatchlistPartyData(e.getValue())
-            .build()))
+        .map(entry -> getAgentInputsForUnstructured(createUnstructuredModel(alert, entry)))
         .flatMap(List::stream)
         .collect(toList());
   }
 
+  private static DatasourceUnstructuredModel createUnstructuredModel(
+      AeAlert alert, Entry<String, HitAndWatchlistPartyData> hitAndWatchlistEntry) {
+    return DatasourceUnstructuredModel.builder()
+        .alertName(alert.getAlertName())
+        .matchName(getMatchNameFromMathId(alert.getMatches(), hitAndWatchlistEntry.getKey()))
+        .hitAndWatchlistPartyData(hitAndWatchlistEntry.getValue())
+        .build();
+  }
+
+  private static String getMatchNameFromMathId(Map<String, String> matches, String matchId) {
+    return matches.entrySet().stream()
+        .filter(entry -> entry.getKey().equals(matchId))
+        .map(Entry::getValue)
+        .findFirst()
+        .orElseThrow(
+            () -> new MatchNotFoundException("No match name found for matchId: " + matchId));
+  }
+
   private List<AgentInput> getAgentInputsForUnstructured(
-      FeatureInputUnstructuredModel featureInputModel) {
+      DatasourceUnstructuredModel featureInputModel) {
     return createFeatureInput.createUnstructuredFeatureInputs(featureInputModel);
   }
 

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.agents.model.SpecificTermsRequest;
 import com.silenteight.payments.bridge.agents.port.SpecificTermsUseCase;
+import com.silenteight.payments.bridge.firco.datasource.model.DatasourceUnstructuredModel;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 
 import org.springframework.stereotype.Service;
@@ -20,14 +21,15 @@ class SpecificTermsProcess implements CreateCategoryValueUnstructured {
   private final SpecificTermsUseCase specificTermsUseCase;
 
   @Override
-  public CategoryValue createCategoryValue(
-      String alertName, String matchName, HitAndWatchlistPartyData hitAndWatchlistPartyData) {
-    var value = specificTermsUseCase.invoke(createRequest(hitAndWatchlistPartyData)).getValue();
+  public CategoryValue createCategoryValue(DatasourceUnstructuredModel unstructuredModel) {
+    var value = specificTermsUseCase
+        .invoke(createRequest(unstructuredModel.getHitAndWatchlistPartyData()))
+        .getValue();
     return CategoryValue
         .newBuilder()
         .setName(CATEGORY_NAME_SPECIFIC_TERMS)
-        .setAlert(alertName)
-        .setMatch(matchName)
+        .setAlert(unstructuredModel.getAlertName())
+        .setMatch(unstructuredModel.getMatchName())
         .setSingleValue(value)
         .build();
   }

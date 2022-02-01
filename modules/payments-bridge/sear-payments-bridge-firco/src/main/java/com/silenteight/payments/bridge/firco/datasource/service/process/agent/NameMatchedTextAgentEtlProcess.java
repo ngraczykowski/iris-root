@@ -6,7 +6,7 @@ import com.silenteight.datasource.agentinput.api.v1.AgentInput;
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.payments.bridge.agents.model.NameAgentRequest;
 import com.silenteight.payments.bridge.agents.port.CreateNameFeatureInputUseCase;
-import com.silenteight.payments.bridge.firco.datasource.model.FeatureInputUnstructuredModel;
+import com.silenteight.payments.bridge.firco.datasource.model.DatasourceUnstructuredModel;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ class NameMatchedTextAgentEtlProcess implements CreateFeatureInputUnstructured {
 
   @Override
   public List<AgentInput> createFeatureInputs(
-      FeatureInputUnstructuredModel inputModel) {
+      DatasourceUnstructuredModel inputModel) {
     var dataSourceFeatureInputs =
         createDataSourceFeatureInputs(inputModel.getHitAndWatchlistPartyData());
     return dataSourceFeatureInputs.stream()
@@ -38,7 +38,7 @@ class NameMatchedTextAgentEtlProcess implements CreateFeatureInputUnstructured {
         .collect(Collectors.toList());
   }
 
-  protected List<FeatureInput> createDataSourceFeatureInputs(
+  private List<FeatureInput> createDataSourceFeatureInputs(
       HitAndWatchlistPartyData hitAndWatchlistPartyData) {
     var nameAgentUseCaseRequest = createNameAgentUseCaseRequest(hitAndWatchlistPartyData);
     var nameFeatureInput = createNameFeatureInputUseCase.create(nameAgentUseCaseRequest);

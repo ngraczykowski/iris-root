@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInput;
 import com.silenteight.payments.bridge.common.model.AeAlert;
-import com.silenteight.payments.bridge.firco.datasource.model.FeatureInputUnstructuredModel;
+import com.silenteight.payments.bridge.firco.datasource.model.DatasourceUnstructuredModel;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ class CreateFeatureInputProcess implements CreateFeatureInput {
 
   @Override
   public List<AgentInput> createUnstructuredFeatureInputs(
-      FeatureInputUnstructuredModel featureInputModel) {
+      DatasourceUnstructuredModel featureInputModel) {
     return createFeatureInputUnstructured.stream()
         .map(process -> process.createFeatureInputs(featureInputModel))
         .flatMap(List::stream)

@@ -12,6 +12,6 @@ public interface CreateDatasourceInputsUseCase {
   void processStructured(AeAlert alert, List<HitData> hitsData);
 
   void processUnstructured(
-      String alertName, Map<String, HitAndWatchlistPartyData> hitAndWatchlistPartyData);
+      AeAlert alert, Map<String, HitAndWatchlistPartyData> hitAndWatchlistPartyData);
 
 }

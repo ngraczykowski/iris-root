@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.common.model.AeAlert;
 import com.silenteight.payments.bridge.firco.datasource.model.CategoryValueExtractModel;
-import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
+import com.silenteight.payments.bridge.firco.datasource.model.DatasourceUnstructuredModel;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import org.springframework.stereotype.Service;
@@ -41,9 +41,9 @@ class CreateCategoryValuesProcess implements CreateCategoryValue {
 
   @Override
   public List<CategoryValue> createUnstructuredCategoryValues(
-      String alertName, String matchName, HitAndWatchlistPartyData hitAndWatchlistPartyData) {
+      DatasourceUnstructuredModel unstructuredModel) {
     return createCategoryValueUnstructured.stream()
-        .map(process -> process.createCategoryValue(alertName, matchName, hitAndWatchlistPartyData))
+        .map(process -> process.createCategoryValue(unstructuredModel))
         .collect(toList());
   }
 

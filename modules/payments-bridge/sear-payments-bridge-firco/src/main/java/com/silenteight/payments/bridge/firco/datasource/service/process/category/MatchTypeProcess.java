@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.firco.datasource.service.process.categor
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
+import com.silenteight.payments.bridge.firco.datasource.model.DatasourceUnstructuredModel;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 
 import org.springframework.stereotype.Service;
@@ -14,14 +15,13 @@ import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGOR
 class MatchTypeProcess implements CreateCategoryValueUnstructured {
 
   @Override
-  public CategoryValue createCategoryValue(
-      String alertName, String matchName, HitAndWatchlistPartyData hitAndWatchlistPartyData) {
+  public CategoryValue createCategoryValue(DatasourceUnstructuredModel unstructuredModel) {
     return CategoryValue
         .newBuilder()
         .setName(CATEGORY_NAME_MATCH_TYPE)
-        .setAlert(alertName)
-        .setMatch(matchName)
-        .setSingleValue(getValue(hitAndWatchlistPartyData))
+        .setAlert(unstructuredModel.getAlertName())
+        .setMatch(unstructuredModel.getMatchName())
+        .setSingleValue(getValue(unstructuredModel.getHitAndWatchlistPartyData()))
         .build();
   }
 

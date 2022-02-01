@@ -51,7 +51,7 @@ class EtlService implements EtlUseCase {
 
       var hitAndWatchlistPartyData =
           extractAlertEtlResponseUseCase.getWatchlistDataForMatch(alertMessageDto);
-      createDatasourceInputs.processUnstructured(alert.getAlertName(), hitAndWatchlistPartyData);
+      createDatasourceInputs.processUnstructured(alert, hitAndWatchlistPartyData);
 
     } catch (UnsupportedMessageException exception) {
       log.error("Failed to process a message payload associated with the alert: {}. "

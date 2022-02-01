@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.firco.datasource.service.process.categor
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.categories.api.v2.CategoryValue;
-import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
+import com.silenteight.payments.bridge.firco.datasource.model.DatasourceUnstructuredModel;
 
 import org.springframework.stereotype.Service;
 
@@ -14,18 +14,13 @@ import static com.silenteight.payments.bridge.common.app.CategoriesUtils.CATEGOR
 class WatchlistTypeProcess implements CreateCategoryValueUnstructured {
 
   @Override
-  public CategoryValue createCategoryValue(
-      String alertName, String matchName, HitAndWatchlistPartyData hitAndWatchlistPartyData) {
+  public CategoryValue createCategoryValue(DatasourceUnstructuredModel unstructuredModel) {
     return CategoryValue
         .newBuilder()
         .setName(CATEGORY_NAME_WATCHLIST_TYPE)
-        .setAlert(alertName)
-        .setMatch(matchName)
-        .setSingleValue(getValue(hitAndWatchlistPartyData))
+        .setAlert(unstructuredModel.getAlertName())
+        .setMatch(unstructuredModel.getMatchName())
+        .setSingleValue(unstructuredModel.getWatchlistType().toString())
         .build();
-  }
-
-  private static String getValue(HitAndWatchlistPartyData hitAndWatchlistPartyData) {
-    return hitAndWatchlistPartyData.getWatchlistType().toString();
   }
 }
