@@ -30,6 +30,7 @@ import com.silenteight.warehouse.production.persistence.ProductionPersistenceMod
 import com.silenteight.warehouse.qa.handler.QaMessageHandlerModule;
 import com.silenteight.warehouse.qa.processing.QaProcessingModule;
 import com.silenteight.warehouse.report.accuracy.AccuracyReportModule;
+import com.silenteight.warehouse.report.availablereports.AvailableReportsModule;
 import com.silenteight.warehouse.report.billing.BillingReportModule;
 import com.silenteight.warehouse.report.create.ReportCreateModule;
 import com.silenteight.warehouse.report.download.ReportDownloadModule;
@@ -75,6 +76,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AiReasoningReportModule.class,
     AlertModule.class,
     AnalysisModule.class,
+    AvailableReportsModule.class,
     BackupMigrationModule.class,
     BackupModule.class,
     BillingReportModule.class,

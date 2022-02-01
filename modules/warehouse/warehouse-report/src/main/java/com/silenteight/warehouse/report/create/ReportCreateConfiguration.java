@@ -30,7 +30,8 @@ public class ReportCreateConfiguration {
         reportProvider);
   }
 
-  private ReportPropertiesMatcher reportPropertiesMatcher() {
+  @Bean
+  ReportPropertiesMatcher reportPropertiesMatcher() {
     return new ReportPropertiesMatcher(reportsDefinition.getReports());
   }
 }
