@@ -63,6 +63,11 @@ dependencies {
 
   implementation libraries.protobuf_java_util
 
+  //Sentry
+  runtimeOnly libraries.sentry_spring_boot_starter
+  //having this at runtime ensure sending all ERROR level logs to Sentry
+  runtimeOnly libraries.sentry_logback
+
   testImplementation project(":simulator-common-web-testing")
 
   testImplementation libraries.spock_spring

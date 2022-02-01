@@ -291,3 +291,7 @@ sep.auth:
       - "DASHBOARD"
     QA_ISSUE_MANAGER:
       - "DASHBOARD"
+
+sentry:
+  environment: unknown
+  traces-sample-rate: 0
