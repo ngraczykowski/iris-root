@@ -36,7 +36,7 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
             m.match_id AS match_match_id,
             m.name AS match_name
           FROM alerts a
-          JOIN matches m ON m.alert_id = a.id
+          LEFT JOIN matches m ON m.alert_id = a.id
           WHERE a.batch_id = :batchId""")
   List<AlertWithMatchNamesProjection> findAllWithMatchesByBatchId(String batchId);
 
