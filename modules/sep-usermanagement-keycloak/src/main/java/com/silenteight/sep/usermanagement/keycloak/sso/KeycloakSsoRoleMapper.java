@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.usermanagement.api.IdentityProviderRoleMapper;
+import com.silenteight.sep.usermanagement.api.dto.CreateRoleMappingDto;
 import com.silenteight.sep.usermanagement.api.dto.RoleMappingDto;
 import com.silenteight.sep.usermanagement.api.dto.SsoAttributeDto;
 import com.silenteight.sep.usermanagement.keycloak.KeycloakException;
@@ -18,22 +19,31 @@ import org.keycloak.representations.idm.IdentityProviderMapperRepresentation;
 import org.keycloak.representations.idm.IdentityProviderRepresentation;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import javax.ws.rs.NotFoundException;
 
 import static com.silenteight.sep.usermanagement.keycloak.logging.LogMarkers.USER_MANAGEMENT;
 import static com.silenteight.sep.usermanagement.keycloak.sso.KeycloakRoleMapperTypes.SAML_ADVANCED_ROLE_IDP_MAPPER;
+import static com.silenteight.sep.usermanagement.keycloak.sso.SsoMappingNameResolver.build;
+import static com.silenteight.sep.usermanagement.keycloak.sso.SsoMappingNameResolver.extractId;
+import static com.silenteight.sep.usermanagement.keycloak.sso.SsoMappingNameResolver.extractSharedName;
+import static com.silenteight.sep.usermanagement.keycloak.sso.SsoMappingNameResolver.isLegacyName;
 import static java.util.Collections.emptySet;
+import static java.util.Comparator.comparing;
+import static java.util.List.of;
 import static java.util.Optional.ofNullable;
+import static java.util.UUID.fromString;
+import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 @Slf4j
 @RequiredArgsConstructor
 public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
 
   private static final String DEFAULT_SYNC_MODE = "FORCE";
-  private static final String UUID_SEPARATOR = "_UUID_";
 
   @NonNull
   private final IdentityProvidersResource identityProvidersResource;
@@ -43,85 +53,78 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
 
   @Override
   public List<RoleMappingDto> listDefaultIdpMappings() {
-    return listMappings(getDefaultProviderAlias());
+    return collectMappers(getDefaultProvider().getMappers());
   }
 
   @Override
   public List<RoleMappingDto> listMappings(String providerAlias) {
+    return collectMappers(getProviderByName(providerAlias).getMappers());
+  }
 
-    return getProvider(providerAlias)
-        .getMappers()
-        .stream()
-        .collect(groupingBy(r -> trimUuidPostfix(r.getName())))
+  @Override
+  public void addMapping(CreateRoleMappingDto dto) throws KeycloakException {
+    log.info(USER_MANAGEMENT, "Adding SSO role mapping for identity provider={}, mapping name={}",
+        dto.getName());
+
+    final IdentityProviderResource idpResource = getDefaultProvider();
+    findMappingByName(idpResource, dto.getName()).ifPresentOrElse(m -> {
+      throw new SsoRoleMapperAlreadyExistException(dto.getName());
+    }, () -> addKeycloakMappings(idpResource, dto));
+  }
+
+  @Override
+  public void deleteMapping(UUID mappingId) {
+    log.info(USER_MANAGEMENT,
+        "Deleting SSO role mapping with aggregate id={}", mappingId);
+
+    IdentityProviderResource idpResource = getDefaultProvider();
+    List<IdentityProviderMapperRepresentation> mappers =
+        findKeycloakMappersBySharedId(idpResource, mappingId);
+
+    if (mappers.isEmpty()) {
+      deleteLegacyMapper(idpResource, mappingId);
+    } else {
+      mappers.forEach(m -> idpResource.delete(m.getId()));
+    }
+  }
+
+  @Override
+  public RoleMappingDto getMapping(UUID mappingId) throws KeycloakException {
+    log.info(USER_MANAGEMENT, "Retrieving SSO role mapping with aggregate id={}", mappingId);
+
+    IdentityProviderResource idpResource = getDefaultProvider();
+    List<IdentityProviderMapperRepresentation> keycloakMappers =
+        findKeycloakMappersBySharedId(idpResource, mappingId);
+
+    if (keycloakMappers.isEmpty()) {
+      keycloakMappers = of(findLegacyMapper(idpResource, mappingId)
+          .orElseThrow(() -> new SsoRoleMapperNotFoundException(mappingId.toString())));
+    }
+    return buildRoleMappingDto(keycloakMappers);
+  }
+
+  private List<RoleMappingDto> collectMappers(
+      List<IdentityProviderMapperRepresentation> keycloakMappers) {
+
+    return keycloakMappers.stream()
+        .collect(groupingBy(r -> extractSharedName(r.getName())))
         .entrySet()
         .stream()
-        .map(e -> buildAggregateMappingDto(providerAlias, e.getKey(), e.getValue()))
+        .map(e -> buildRoleMappingDto(e.getValue()))
+        .sorted(comparing(RoleMappingDto::getName))
         .collect(toList());
   }
 
-  @Override
-  public void addMapping(RoleMappingDto dto) throws KeycloakException {
-    log.info(USER_MANAGEMENT, "Adding SSO role mapping for identity provider={}, mapping name={}",
-        dto.getProviderAlias(), dto.getName());
-
-    String providerAlias = resolveAlias(dto.getProviderAlias());
-    if (mappingExists(providerAlias, dto.getName())) {
-      throw new SsoRoleMapperAlreadyExistException(dto.getName());
-    }
-
-    addKeycloakMappings(providerAlias, dto);
-  }
-
-  @Override
-  public void deleteMapping(String mappingName) {
-    log.info(USER_MANAGEMENT, "Deleting SSO role mapping with name={}", mappingName);
-
-    final String defaultProviderAlias = getDefaultProviderAlias();
-    final IdentityProviderResource idpResource = getProvider(defaultProviderAlias);
-    findKeycloakMappersByPrefix(defaultProviderAlias, mappingName)
-        .forEach(m -> idpResource.delete(m.getId()));
-  }
-
-  @Override
-  public RoleMappingDto getMapping(String mappingName) throws KeycloakException {
-    log.info(USER_MANAGEMENT, "Retrieving SSO role mapping with name={}", mappingName);
-
-    final String defaultProviderAlias = getDefaultProviderAlias();
-    List<IdentityProviderMapperRepresentation> keycloakMappers = findKeycloakMappersByPrefix(
-        defaultProviderAlias, mappingName);
-
-    if (keycloakMappers.isEmpty()) {
-      throw new SsoRoleMapperNotFoundException(mappingName);
-    }
-
-    return buildAggregateMappingDto(defaultProviderAlias, mappingName, keycloakMappers);
-  }
-
-  private IdentityProviderResource getProvider(String providerName) {
-    return ofNullable(identityProvidersResource.get(providerName))
-            .orElseThrow(() -> new IdentityProviderNotFoundException(providerName));
-  }
-
-  private String resolveAlias(String provided) {
-    return isBlank(provided) ? getDefaultProviderAlias() : provided;
-  }
-
-  private String getDefaultProviderAlias() {
-    IdentityProviderRepresentation idp = identityProvidersResource.findAll()
-        .stream()
-        .sorted(Comparator.comparing(IdentityProviderRepresentation::getAlias))
-        .findFirst()
-        .orElseThrow(IdentityProviderNotFoundException::new);
-
-    return idp.getAlias();
-  }
-
-  private RoleMappingDto buildAggregateMappingDto(String providerAlias, String mappingName,
+  private RoleMappingDto buildRoleMappingDto(
        List<IdentityProviderMapperRepresentation> keycloakMappers) {
 
-    RoleMappingDto dto  = RoleMappingDto.builder()
-        .providerAlias(providerAlias)
-        .name(mappingName).build();
+    IdentityProviderMapperRepresentation mapper = keycloakMappers.stream().findAny().get();
+    final String keycloakMapperName = mapper.getName();
+    boolean legacy = isLegacyName(keycloakMapperName);
+    RoleMappingDto dto = RoleMappingDto.builder()
+        .providerAlias(mapper.getIdentityProviderAlias())
+        .id(fromString(legacy ? mapper.getId() : extractId(keycloakMapperName)))
+        .name(extractSharedName(keycloakMapperName)).build();
 
     keycloakMappers.stream()
         .map(IdentityProviderMapperRepresentation::getConfig)
@@ -133,24 +136,26 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
     return dto;
   }
 
-  private void addKeycloakMappings(String providerAlias, RoleMappingDto dto) {
-    final IdentityProviderResource identityProvider = getProvider(providerAlias);
-    dto.getRolesDto()
+  private void addKeycloakMappings(IdentityProviderResource idpResource, CreateRoleMappingDto dto) {
+    UUID aggregateMappingId = randomUUID();
+    dto.getRoles()
         .getRoles()
-        .forEach(role -> {
-          identityProvider.addMapper(
-              createKeycloakRoleMapper(
-                  providerAlias, dto.getName(), dto.getSsoAttributes(), role));
-        });
+        .forEach(withCounter((mappingIndex, role) -> {
+          idpResource.addMapper(
+              createKeycloakRoleMapper(mappingIndex,
+                  idpResource.toRepresentation().getAlias(), dto.getName(),
+                  aggregateMappingId, dto.getSsoAttributes(), role));
+        }));
   }
 
-  private IdentityProviderMapperRepresentation createKeycloakRoleMapper(String providerAlias,
-      String name, Set<SsoAttributeDto> ssoAttributes, String targetRole) {
+  private IdentityProviderMapperRepresentation createKeycloakRoleMapper(Integer subMappingIndex,
+      String providerAlias, String name, UUID sharedMappingId,
+      Set<SsoAttributeDto> ssoAttributes, String targetRole) {
 
     IdentityProviderMapperRepresentation mapper = new IdentityProviderMapperRepresentation();
     mapper.setIdentityProviderAlias(providerAlias);
     mapper.setIdentityProviderMapper(SAML_ADVANCED_ROLE_IDP_MAPPER);
-    mapper.setName(appendUuidPostfix(name));
+    mapper.setName(build(name, sharedMappingId, subMappingIndex));
     mapper.setConfig(Map.of(
           "syncMode", DEFAULT_SYNC_MODE,
           "are.attribute.values.regex", "",
@@ -159,19 +164,27 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
     return mapper;
   }
 
-  private String trimUuidPostfix(String keycloakMapperUniqueName) {
-    return substringBefore(keycloakMapperUniqueName, UUID_SEPARATOR);
+  private IdentityProviderResource getProviderByName(String providerName) {
+    return ofNullable(identityProvidersResource.get(providerName))
+        .orElseThrow(() -> new IdentityProviderNotFoundException(providerName));
   }
 
-  private String appendUuidPostfix(String mapperName) {
-    return mapperName + UUID_SEPARATOR + UUID.randomUUID();
+  private IdentityProviderResource getDefaultProvider() {
+    IdentityProviderRepresentation idp = identityProvidersResource.findAll()
+        .stream()
+        .sorted(comparing(IdentityProviderRepresentation::getAlias))
+        .findFirst()
+        .orElseThrow(IdentityProviderNotFoundException::new);
+
+    return getProviderByName(idp.getAlias());
   }
 
   private String attrsToString(Set<SsoAttributeDto> ssoAttributes) {
     try {
       return sepUserManagementKeycloakObjectMapper.writeValueAsString(ssoAttributes);
     } catch (JsonProcessingException e) {
-      log.error("Could not convert saml SSO attributes to keycloak representation.", e);
+      log.error(USER_MANAGEMENT,
+          "Could not convert saml SSO attributes to keycloak representation.", e);
       return "[]";
     }
   }
@@ -181,23 +194,49 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
       return sepUserManagementKeycloakObjectMapper
           .readValue(attributes, new TypeReference<Set<SsoAttributeDto>>(){});
     } catch (JsonProcessingException e) {
-      log.error("Could not convert keycloak SSO attributes to SsoAttribute collection.", e);
+      log.error(USER_MANAGEMENT,
+          "Could not convert keycloak SSO attributes to SsoAttribute collection.", e);
       return emptySet();
     }
   }
 
-  private boolean mappingExists(String providerAlias, String mappingName) {
-    return getProvider(providerAlias).getMappers().stream().anyMatch(m ->
-        mappingName.equals(trimUuidPostfix(m.getName())));
+  private Optional<IdentityProviderMapperRepresentation> findMappingByName(
+      IdentityProviderResource idpResource, String mappingName) {
+
+    return idpResource.getMappers().stream()
+        .filter(m -> mappingName.equals(extractSharedName(m.getName())))
+        .findFirst();
   }
 
-  private List<IdentityProviderMapperRepresentation> findKeycloakMappersByPrefix(
-      String providerAlias, String prefix) {
+  private List<IdentityProviderMapperRepresentation> findKeycloakMappersBySharedId(
+      IdentityProviderResource idpResource, UUID aggregateId) {
 
-    return getProvider(providerAlias)
+    return idpResource
         .getMappers()
         .stream()
-        .filter(m -> prefix.equals(trimUuidPostfix(m.getName())))
-        .collect(toList());
+        .filter(m -> aggregateId.toString().equals(extractId(m.getName()))).collect(toList());
+  }
+
+  private Optional<IdentityProviderMapperRepresentation> findLegacyMapper(
+      IdentityProviderResource idpResource, UUID mappingId) {
+
+    try {
+      return Optional.of(idpResource.getMapperById(mappingId.toString()));
+    } catch (NotFoundException e) {
+      return Optional.empty();
+    }
+  }
+
+  private void deleteLegacyMapper(IdentityProviderResource idpResource, UUID mappingId) {
+    try {
+      idpResource.delete(mappingId.toString());
+    } catch (NotFoundException e) {
+      log.info(USER_MANAGEMENT, "Cannot delete mapping id={} because it is not found.", mappingId);
+    }
+  }
+
+  private <T> Consumer<T> withCounter(BiConsumer<Integer, T> consumer) {
+    AtomicInteger counter = new AtomicInteger(0);
+    return item -> consumer.accept(counter.getAndIncrement(), item);
   }
 }

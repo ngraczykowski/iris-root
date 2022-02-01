@@ -13,7 +13,7 @@ public class SsoRoleMapperNotFoundException extends KeycloakException {
 
   private static final long serialVersionUID = 2057341227115615230L;
 
-  public SsoRoleMapperNotFoundException(String mapperName) {
-    super(format("Role mapper with name=%s not fund.", mapperName));
+  public SsoRoleMapperNotFoundException(String mappingAggregateId) {
+    super(format("Role mapper with id=%s not fund.", mappingAggregateId));
   }
 }

@@ -1,5 +1,6 @@
 package com.silenteight.sep.usermanagement.keycloak.sso;
 
+import com.silenteight.sep.usermanagement.api.dto.CreateRoleMappingDto;
 import com.silenteight.sep.usermanagement.api.dto.RoleMappingDto;
 import com.silenteight.sep.usermanagement.api.dto.RolesDto;
 import com.silenteight.sep.usermanagement.api.dto.SsoAttributeDto;
@@ -11,6 +12,8 @@ import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.keycloak.admin.client.resource.IdentityProviderResource;
+import org.keycloak.representations.idm.IdentityProviderMapperRepresentation;
 import org.keycloak.representations.idm.IdentityProviderRepresentation;
 
 import java.io.File;
@@ -18,9 +21,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static com.silenteight.sep.usermanagement.keycloak.sso.KeycloakRoleMapperTypes.SAML_ADVANCED_ROLE_IDP_MAPPER;
 import static java.util.Set.copyOf;
 import static java.util.Set.of;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -45,7 +50,7 @@ public class KeycloakSsoRoleMapperIntegrationTest extends BaseKeycloakIntegratio
   @Test
   void shouldCreateListAndDeleteSsoRoleMappings() {
     //given
-    Map<String, RoleMappingDto> ssoMappings = Map.of(
+    final Map<String, CreateRoleMappingDto> ssoMappings = Map.of(
         "mapping 01", createRoleMappingDto("mapping 01"),
         "mappingToRemove", createRoleMappingDto("mappingToRemove"),
         "mapping 03", createRoleMappingDto("mapping 03"),
@@ -62,19 +67,15 @@ public class KeycloakSsoRoleMapperIntegrationTest extends BaseKeycloakIntegratio
       assertThat(m.getProviderAlias()).isEqualTo(IDENTITY_PROVIDER_NAME);
       assertThat(m.getSsoAttributes()).isEqualTo(ssoMappings.get(m.getName()).getSsoAttributes());
       assertThat(copyOf(m.getRolesDto().getRoles()))
-          .isEqualTo(copyOf(ssoMappings.get(m.getName()).getRolesDto().getRoles()));
-
+          .isEqualTo(copyOf(ssoMappings.get(m.getName()).getRoles().getRoles()));
     });
 
-    //when
-    assertNotNull(underTest.getMapping("mapping 01"));
-    assertNotNull(underTest.getMapping("mappingToRemove"));
-    assertNotNull(underTest.getMapping("mapping 03"));
-    assertNotNull(underTest.getMapping("mapping 04"));
-    //then
+    //expect
+    actualMappings.forEach(m -> assertNotNull(underTest.getMapping(m.getId())));
 
     //when
-    underTest.deleteMapping("mappingToRemove");
+    underTest.deleteMapping(actualMappings.stream()
+        .filter(m -> m.getName().equals("mappingToRemove")).findFirst().get().getId());
     //and
     actualMappings = underTest.listDefaultIdpMappings();
 
@@ -84,9 +85,39 @@ public class KeycloakSsoRoleMapperIntegrationTest extends BaseKeycloakIntegratio
   }
 
   @Test
+  void shouldReturnLegacyRoleMappings() {
+    //given
+    IdentityProviderResource idpResource =
+        getRealm().identityProviders().get(IDENTITY_PROVIDER_NAME);
+    //and
+    IdentityProviderMapperRepresentation mapper = new IdentityProviderMapperRepresentation();
+    mapper.setIdentityProviderAlias(IDENTITY_PROVIDER_NAME);
+    mapper.setIdentityProviderMapper(SAML_ADVANCED_ROLE_IDP_MAPPER);
+    mapper.setName("Legacy mapper name");
+    mapper.setConfig(Map.of(
+        "syncMode", "FORCE",
+        "are.attribute.values.regex", "",
+        "attributes", "[{\"key\":\"saml_attr_01\",\"value\":\"saml_attr_val_01\"}]",
+        "role", "administrator"));
+    //and
+    idpResource.addMapper(mapper);
+
+    //when
+    RoleMappingDto dto = underTest.listDefaultIdpMappings().get(0);
+
+    //then
+    assertNotNull(dto.getId());
+    assertEquals(mapper.getName(), dto.getName());
+    assertEquals(mapper.getIdentityProviderAlias(), dto.getProviderAlias());
+    assertThat(dto.getSsoAttributes())
+            .contains(new SsoAttributeDto("saml_attr_01","saml_attr_val_01"));
+    assertEquals(mapper.getConfig().get("role"), dto.getRolesDto().getRoles().get(0));
+  }
+
+  @Test
   void shouldNotCreateMappingWhenAlreadyExists() {
     //given
-    Map<String, RoleMappingDto> ssoMappings = Map.of(
+    Map<String, CreateRoleMappingDto> ssoMappings = Map.of(
         "mapping 01", createRoleMappingDto("mapping 01"),
         "existingMapping", createRoleMappingDto("existingMapping"),
         "mapping 03", createRoleMappingDto("mapping 03"),
@@ -100,13 +131,12 @@ public class KeycloakSsoRoleMapperIntegrationTest extends BaseKeycloakIntegratio
   }
 
   @Test
-  void shouldReturnMappingsForTheFirstIdentityProviders() throws IOException {
+  void shouldReturnMappingsForTheFirstIdentityProvider() throws IOException {
     //given
     String expectedProviderName = "first-saml";
     createIdentityProvider(expectedProviderName,"keycloak-first-saml-idp-config.json");
     //and
-    RoleMappingDto dto = createRoleMappingDto("test mapping");
-    dto.setProviderAlias(expectedProviderName);
+    CreateRoleMappingDto dto = createRoleMappingDto("test mapping");
     //and
     underTest.addMapping(dto);
 
@@ -119,14 +149,15 @@ public class KeycloakSsoRoleMapperIntegrationTest extends BaseKeycloakIntegratio
     assertThat(mappings.get(0).getName()).isEqualTo("test mapping");
   }
 
-  private RoleMappingDto createRoleMappingDto(String mappingName) {
-    return RoleMappingDto.builder()
+  private CreateRoleMappingDto createRoleMappingDto(String mappingName) {
+    return CreateRoleMappingDto.builder()
         .name(mappingName)
         .ssoAttributes(of(
             SsoAttributeDto.builder().key("saml_attr_01").value("saml_attr_val_01").build(),
-            SsoAttributeDto.builder().key("saml_attr_02").value("saml_attr_val_02").build()
+            SsoAttributeDto.builder().key("saml_attr_02").value("saml_attr_val_02").build(),
+            SsoAttributeDto.builder().key("saml_attr_01").value("saml_attr_val_03").build()
         ))
-        .rolesDto(new RolesDto(ImmutableList.of("create policy", "governance.uma_protection")))
+        .roles(new RolesDto(ImmutableList.of("create policy", "governance.uma_protection")))
         .build();
   }
 
