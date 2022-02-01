@@ -74,6 +74,11 @@ dependencies {
   implementation libraries.querydsl_jpa
   implementation libraries.ecs_logging_core
 
+  //Sentry
+  runtimeOnly libraries.sentry_spring_boot_starter
+  //having this at runtime ensure sending all ERROR level logs to Sentry
+  runtimeOnly libraries.sentry_logback
+
   annotationProcessor libraries.querydsl_apt_jpa
   annotationProcessor libraries.jakarta_persistence_api
   annotationProcessor libraries.jakarta_annotation_api

@@ -15,3 +15,8 @@ grpc:
   client:
     warehouse:
       address: "static://warehouse-app-service.default.svc.cluster.local:8081"
+
+sentry:
+  dsn: "https://46e79636591a45c0af9d7050a51fe1b1@o1129201.ingest.sentry.io/6173143"
+  environment: unknown
+  tracesSampleRate: 0

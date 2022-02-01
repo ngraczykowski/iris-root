@@ -583,8 +583,11 @@ sep.filestorage:
     private-key: admin123
     region: s3_region
 
-
 # Spring Integration
 integration:
   start-delay-seconds: 15
   poll-period-millis: 1000
+
+sentry:
+  environment: unknown
+  traces-sample-rate: 0
