@@ -19,7 +19,7 @@ import static org.springframework.http.HttpStatus.OK;
 @Import({ ListSsoMappingsRestController.class })
 class ListSsoMappingsRestControllerTest extends BaseRestControllerTest {
 
-  private static final String LIST_SSO_MAPPING_URL = "/sso-mappings";
+  private static final String LIST_SSO_MAPPING_URL = "/sso/mappings";
 
   @MockBean
   ListSsoMappingsQuery listSsoMappingsQuery;

@@ -15,6 +15,6 @@ public class SsoMappingService {
   private final IdentityProviderRoleMapper identityProviderRoleMapper;
 
   public void deleteSsoMapping(DeleteSsoMappingRequest request) {
-    identityProviderRoleMapper.deleteMapping(request.getSsoMappingName());
+    identityProviderRoleMapper.deleteMapping(request.getSsoMappingId());
   }
 }

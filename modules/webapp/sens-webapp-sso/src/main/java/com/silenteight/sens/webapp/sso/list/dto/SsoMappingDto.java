@@ -6,10 +6,14 @@ import lombok.Value;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Builder
 @Value
 public class SsoMappingDto {
+
+  @NonNull
+  UUID id;
 
   @NonNull
   String name;

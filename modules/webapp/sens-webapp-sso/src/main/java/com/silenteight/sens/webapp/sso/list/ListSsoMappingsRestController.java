@@ -26,7 +26,7 @@ class ListSsoMappingsRestController {
   @NonNull
   ListSsoMappingsQuery listSsoMappingsQuery;
 
-  @GetMapping("/sso-mappings")
+  @GetMapping("/sso/mappings")
   @PreAuthorize("isAuthorized('LIST_SSO_MAPPINGS')")
   public ResponseEntity<Collection<SsoMappingDto>> list() {
     log.info(SSO_MANAGEMENT, "Listing sso mappings");

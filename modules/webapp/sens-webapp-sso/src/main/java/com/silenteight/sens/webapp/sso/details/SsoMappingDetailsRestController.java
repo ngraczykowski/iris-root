@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.SSO_MANAGEMENT;
 import static org.springframework.http.ResponseEntity.*;
@@ -26,10 +28,10 @@ class SsoMappingDetailsRestController {
   @NonNull
   SsoMappingDetailsQuery ssoMappingDetailsQuery;
 
-  @GetMapping("/sso-mappings/{name}")
+  @GetMapping("/sso/mappings/{id}")
   @PreAuthorize("isAuthorized('LIST_SSO_MAPPINGS')")
-  public ResponseEntity<SsoMappingDto> details(@PathVariable String name) {
-    log.info(SSO_MANAGEMENT, "Getting details sso mapping name={}", name);
-    return ok(ssoMappingDetailsQuery.details(name));
+  public ResponseEntity<SsoMappingDto> details(@PathVariable UUID id) {
+    log.info(SSO_MANAGEMENT, "Getting details for sso mapping id={}", id);
+    return ok(ssoMappingDetailsQuery.details(id));
   }
 }

@@ -15,6 +15,7 @@ import com.silenteight.sep.usermanagement.api.dto.SsoAttributeDto;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -34,13 +35,13 @@ class SsoMappingsDetailsQuery implements ListSsoMappingsQuery, SsoMappingDetails
   }
 
   @Override
-  public SsoMappingDto details(String name) {
-    RoleMappingDto roleMappingDto = identityProviderRoleMapper.getMapping(name);
-    return toSsoMappingDto(roleMappingDto);
+  public SsoMappingDto details(UUID ssoMappingId) {
+    return toSsoMappingDto(identityProviderRoleMapper.getMapping(ssoMappingId));
   }
 
   private static SsoMappingDto toSsoMappingDto(RoleMappingDto roleMappingDto) {
     return SsoMappingDto.builder()
+        .id(roleMappingDto.getId())
         .name(roleMappingDto.getName())
         .attributeToRoleDtoSet(toAttributeToRoleDtoSet(roleMappingDto.getSsoAttributes()))
         .roles(getRolesAsString(roleMappingDto.getRolesDto()))

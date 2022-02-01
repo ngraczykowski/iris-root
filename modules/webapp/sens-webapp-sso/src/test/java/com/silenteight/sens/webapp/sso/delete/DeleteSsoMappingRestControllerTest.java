@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
-import static com.silenteight.sens.webapp.sso.SsoMappingTestFixtures.SS0_NAME;
+import static com.silenteight.sens.webapp.sso.SsoMappingTestFixtures.SSO_ID_1;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
@@ -21,7 +21,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @Import({ DeleteSsoMappingRestController.class })
 class DeleteSsoMappingRestControllerTest extends BaseRestControllerTest {
 
-  private static final String DELETE_SSO_MAPPING_URL = format("/sso-mappings/%s", SS0_NAME);
+  private static final String DELETE_SSO_MAPPING_URL = format("/sso/mappings/%s", SSO_ID_1);
 
   @MockBean
   DeleteSsoMappingUseCase deleteSsoMappingUseCase;
@@ -36,7 +36,7 @@ class DeleteSsoMappingRestControllerTest extends BaseRestControllerTest {
 
     verify(deleteSsoMappingUseCase, times(1)).activate((captor.capture()));
     DeleteSsoMappingRequest command = captor.getValue();
-    assertThat(command.getSsoMappingName()).isEqualTo(SS0_NAME);
+    assertThat(command.getSsoMappingId()).isEqualTo(SSO_ID_1);
   }
 
   @Test

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.SSO_MANAGEMENT;
 import static org.springframework.http.ResponseEntity.accepted;
@@ -24,12 +26,12 @@ class DeleteSsoMappingRestController {
   @NonNull
   private final DeleteSsoMappingUseCase deleteSsoMappingUseCase;
 
-  @DeleteMapping("/sso-mappings/{name}")
+  @DeleteMapping("/sso/mappings/{id}")
   @PreAuthorize("isAuthorized('DELETE_SSO_MAPPING')")
-  public ResponseEntity<Void> delete(@PathVariable String name) {
-    log.info(SSO_MANAGEMENT, "Deleting sso mapping name={}", name);
+  public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    log.info(SSO_MANAGEMENT, "Deleting sso mapping id={}", id);
     DeleteSsoMappingRequest request = DeleteSsoMappingRequest.builder()
-        .ssoMappingName(name)
+        .ssoMappingId(id)
         .build();
 
     deleteSsoMappingUseCase.activate(request);

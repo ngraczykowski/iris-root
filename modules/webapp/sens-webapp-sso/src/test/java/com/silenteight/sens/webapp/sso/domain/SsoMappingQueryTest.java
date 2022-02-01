@@ -43,10 +43,10 @@ class SsoMappingQueryTest {
   @Test
   void shouldReturnSingleSsoMappingDto() {
     //given
-    when(identityProviderRoleMapper.getMapping(SS0_NAME)).thenReturn(ROLE_MAPPING_DTO_1);
+    when(identityProviderRoleMapper.getMapping(SSO_ID_1)).thenReturn(ROLE_MAPPING_DTO_1);
 
     //when
-    SsoMappingDto ssoMappingDto = underTest.details(SS0_NAME);
+    SsoMappingDto ssoMappingDto = underTest.details(SSO_ID_1);
 
     //then
     assertThat(ssoMappingDto.getName()).isEqualTo(SS0_NAME);
