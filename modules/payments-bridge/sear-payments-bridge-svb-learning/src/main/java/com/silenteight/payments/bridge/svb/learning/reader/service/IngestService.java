@@ -6,10 +6,12 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAle
 import com.silenteight.payments.bridge.ae.alertregistration.port.AddAlertLabelUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
+import com.silenteight.payments.bridge.data.retention.model.AlertDataRetention;
+import com.silenteight.payments.bridge.data.retention.port.CreateAlertDataRetentionUseCase;
 import com.silenteight.payments.bridge.svb.learning.event.AlreadySolvedAlertEvent;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.ReadAlertError;
-import com.silenteight.payments.bridge.svb.learning.reader.port.CreateAlertRetentionPort;
+import com.silenteight.payments.bridge.svb.learning.reader.domain.exception.NoCorrespondingAlertException;
 import com.silenteight.payments.bridge.svb.learning.reader.port.IndexLearningAlertPort;
 import com.silenteight.payments.bridge.svb.migration.DecisionMapper;
 
@@ -17,8 +19,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
+import javax.annotation.Nonnull;
 
 import static com.silenteight.payments.bridge.svb.learning.reader.domain.IndexRegisterAlertRequest.fromLearningAlerts;
 import static com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert.getAlertLabelLearningCsv;
@@ -33,7 +35,7 @@ class IngestService {
   private final AddAlertLabelUseCase addAlertLabelUseCase;
   private final DataSourceIngestService dataSourceIngestService;
   private final FindRegisteredAlertUseCase findRegisteredAlertUseCase;
-  private final CreateAlertRetentionPort createAlertRetentionPort;
+  private final CreateAlertDataRetentionUseCase createAlertDataRetentionUseCase;
   private final DecisionMapper decisionMapper;
   private final IndexLearningAlertPort indexLearningAlertPort;
   private final ApplicationEventPublisher eventPublisher;
@@ -47,14 +49,14 @@ class IngestService {
     fillUpAnalystDecision(alerts);
 
     // Only solving alerts are registered.
-    var registeredAlertMap = buildRegisteredAlertMap(alerts);
-    eventPublisher.publishEvent(new AlreadySolvedAlertEvent(registeredAlertMap.size()));
+    var registeredAlerts = buildRegisteredAlerts(alerts);
+    eventPublisher.publishEvent(new AlreadySolvedAlertEvent(registeredAlerts.size()));
 
-    var unregisteredLearningAlerts = getUnregisteredAlerts(alerts, registeredAlertMap);
+    var unregisteredLearningAlerts = getUnregisteredAlerts(alerts, registeredAlerts);
     processUnregistered(unregisteredLearningAlerts, batch.getErrors());
 
     var registeredLearningAlerts = getRegisteredAlerts(alerts, unregisteredLearningAlerts);
-    processRegistered(registeredLearningAlerts, registeredAlertMap);
+    processRegistered(registeredLearningAlerts, registeredAlerts);
   }
 
   private static List<LearningAlert> getLearningAlerts(LearningAlertBatch batch) {
@@ -65,25 +67,44 @@ class IngestService {
 
   private void processRegistered(
       List<LearningAlert> registeredLearningAlerts,
-      Map<String, RegisteredAlert> registeredAlertMap) {
+      List<RegisteredAlert> registeredAlerts) {
 
-    registeredLearningAlerts.forEach(a -> a.setAlertMatchNames(registeredAlertMap));
     var indexAlertsRequest =
-        registeredAlertMap.values().stream()
+        registeredAlerts.stream()
             .map(ra -> fromLearningAlerts(ra, registeredLearningAlerts))
+            .flatMap(List::stream)
             .collect(toList());
 
     if (!registeredLearningAlerts.isEmpty()) {
-      addLearningLabels(registeredLearningAlerts);
+      addLearningLabels(registeredAlerts);
       indexLearningAlertPort.indexForLearning(indexAlertsRequest);
-      createAlertRetentionPort.create(registeredLearningAlerts);
+      createAlertDataRetentionUseCase.create(
+          registeredAlerts
+              .stream()
+              .map(a -> getAlertDataRetention(registeredLearningAlerts, a))
+              .collect(toList()));
     }
   }
 
-  private void addLearningLabels(List<LearningAlert> registeredLearningAlerts) {
+  @Nonnull
+  private static AlertDataRetention getAlertDataRetention(
+      List<LearningAlert> registeredLearningAlerts, RegisteredAlert a) {
+    return new AlertDataRetention(
+        a.getAlertName(),
+        registeredLearningAlerts
+            .stream()
+            .filter(r -> r.getSystemId().equals(a.getSystemId()))
+            .findFirst()
+            .orElseThrow(
+                () -> new NoCorrespondingAlertException(
+                    "There is no corresponding learning alert for registered alert"))
+            .getAlertTime());
+  }
+
+  private void addLearningLabels(List<RegisteredAlert> registeredAlerts) {
     var alertNames =
-        registeredLearningAlerts.stream()
-            .map(LearningAlert::getAlertName)
+        registeredAlerts.stream()
+            .map(RegisteredAlert::getAlertName)
             .collect(toList());
 
     addAlertLabelUseCase.invoke(alertNames, List.of(getAlertLabelLearningCsv()));
@@ -100,10 +121,14 @@ class IngestService {
 
   private static List<LearningAlert> getUnregisteredAlerts(
       List<LearningAlert> alerts,
-      Map<String, RegisteredAlert> registeredAlertMap) {
+      List<RegisteredAlert> registeredAlerts) {
 
     return alerts.stream()
-        .filter(la -> !registeredAlertMap.containsKey(la.getSystemId()))
+        .filter(la -> !registeredAlerts
+            .stream()
+            .map(RegisteredAlert::getSystemId)
+            .collect(toList())
+            .contains(la.getSystemId()))
         .collect(toList());
   }
 
@@ -115,12 +140,11 @@ class IngestService {
     });
   }
 
-  private Map<String, RegisteredAlert> buildRegisteredAlertMap(List<LearningAlert> alerts) {
+  private List<RegisteredAlert> buildRegisteredAlerts(List<LearningAlert> alerts) {
     var registeredAlertRequests = alerts.stream()
         .map(LearningAlert::getSystemId)
         .distinct().collect(toList());
-    return findRegisteredAlertUseCase.find(registeredAlertRequests).stream()
-        .collect(toMap(RegisteredAlert::getSystemId, Function.identity()));
+    return findRegisteredAlertUseCase.find(registeredAlertRequests);
   }
 
   private void processUnregistered(
@@ -130,7 +154,10 @@ class IngestService {
       register(unregisteredLearningAlerts);
       dataSourceIngestService.createValues(unregisteredLearningAlerts, errors);
       indexLearningAlertPort.index(unregisteredLearningAlerts);
-      createAlertRetentionPort.create(unregisteredLearningAlerts);
+      createAlertDataRetentionUseCase.create(unregisteredLearningAlerts
+          .stream()
+          .map(a -> new AlertDataRetention(a.getAlertName(), a.getAlertTime()))
+          .collect(toList()));
     }
   }
 

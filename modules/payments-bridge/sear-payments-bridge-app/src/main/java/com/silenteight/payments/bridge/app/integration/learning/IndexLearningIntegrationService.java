@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.svb.learning.reader.domain.IndexRegisterAlertRequest;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
-import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningMatch;
 import com.silenteight.payments.bridge.svb.learning.reader.port.IndexLearningAlertPort;
 import com.silenteight.payments.bridge.warehouse.index.model.learning.*;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexLearningUseCase;
@@ -17,7 +16,7 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
-class IndexLearningIntegrationService implements IndexLearningAlertPort  {
+class IndexLearningIntegrationService implements IndexLearningAlertPort {
 
   private final IndexLearningUseCase indexLearningUseCase;
 
@@ -28,19 +27,17 @@ class IndexLearningIntegrationService implements IndexLearningAlertPort  {
   }
 
   private IndexRegisteredAlert buildIndexRegisteredAlert(IndexRegisterAlertRequest alert) {
-    var learningAlert = alert.getLearningAlert();
     var alertIdSet = new IndexAlertIdSet(
-        learningAlert.getAlertId(), learningAlert.getAlertName(),
-        learningAlert.getSystemId(), learningAlert.getMessageId());
-    var matches = learningAlert.getMatches().stream()
-        .map(LearningMatch::getMatchName).collect(toList());
-    return new IndexRegisteredAlert(alertIdSet, matches, buildIndexAnalystDecision(learningAlert));
+        alert.getAlertId(), alert.getAlertName(),
+        alert.getSystemId(), alert.getMessageId());
+    return new IndexRegisteredAlert(
+        alertIdSet, alert.getMatchNames(), buildIndexAnalystDecision(alert));
   }
 
-  private IndexAnalystDecision buildIndexAnalystDecision(LearningAlert learningAlert) {
-    var learningAnalystDecision = learningAlert.getAnalystDecision();
+  private static IndexAnalystDecision buildIndexAnalystDecision(IndexRegisterAlertRequest alert) {
+    var learningAnalystDecision = alert.getAnalystDecision();
     return new IndexAnalystDecision(learningAnalystDecision.getStatus(),
-        learningAlert.getDecision(), learningAnalystDecision.getComment(),
+        alert.getDecision(), learningAnalystDecision.getComment(),
         learningAnalystDecision.getActionDateTimeAsString());
   }
 
@@ -60,6 +57,13 @@ class IndexLearningIntegrationService implements IndexLearningAlertPort  {
             String.join(", ", match.getMatchingTexts())))
         .collect(toList());
     return new IndexAlert(alertIdSet, matches, buildIndexAnalystDecision(learningAlert));
+  }
+
+  private static IndexAnalystDecision buildIndexAnalystDecision(LearningAlert alert) {
+    var learningAnalystDecision = alert.getAnalystDecision();
+    return new IndexAnalystDecision(learningAnalystDecision.getStatus(),
+        alert.getDecision(), learningAnalystDecision.getComment(),
+        learningAnalystDecision.getActionDateTimeAsString());
   }
 
 }

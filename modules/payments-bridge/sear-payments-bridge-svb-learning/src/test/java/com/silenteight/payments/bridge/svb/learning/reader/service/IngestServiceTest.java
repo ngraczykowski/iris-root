@@ -5,7 +5,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredMat
 import com.silenteight.payments.bridge.ae.alertregistration.port.AddAlertLabelUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
-import com.silenteight.payments.bridge.svb.learning.reader.port.CreateAlertRetentionPort;
+import com.silenteight.payments.bridge.data.retention.port.CreateAlertDataRetentionUseCase;
 import com.silenteight.payments.bridge.svb.learning.reader.port.IndexLearningAlertPort;
 import com.silenteight.payments.bridge.svb.migration.DecisionMapper;
 
@@ -33,7 +33,7 @@ class IngestServiceTest {
   @Mock
   private FindRegisteredAlertUseCase findRegisteredAlertUseCase;
   @Mock
-  private CreateAlertRetentionPort createAlertRetentionPort;
+  private CreateAlertDataRetentionUseCase createAlertRetentionUseCase;
   @Mock
   private IndexLearningAlertPort indexLearningAlertPort;
   @Mock
@@ -48,7 +48,7 @@ class IngestServiceTest {
     ingestService =
         new IngestService(registerAlertUseCase, addAlertLabelUseCase,
             dataSourceIngestService, findRegisteredAlertUseCase,
-            createAlertRetentionPort, decisionMapper,
+            createAlertRetentionUseCase, decisionMapper,
             indexLearningAlertPort, eventPublisher);
   }
 
@@ -64,5 +64,12 @@ class IngestServiceTest {
                 .build()))));
     ingestService.ingest(createBatchAlertRequest());
     verify(indexLearningAlertPort).indexForLearning(anyList());
+  }
+
+  @Test
+  void shouldIndexUnRegisteredAlerts() {
+    when(findRegisteredAlertUseCase.find(any())).thenReturn(List.of());
+    ingestService.ingest(createBatchAlertRequest());
+    verify(indexLearningAlertPort).index(anyList());
   }
 }

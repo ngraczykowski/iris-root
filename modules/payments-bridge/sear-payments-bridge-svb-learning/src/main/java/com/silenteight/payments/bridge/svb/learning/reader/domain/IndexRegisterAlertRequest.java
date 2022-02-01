@@ -7,7 +7,6 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAle
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredMatch;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static java.util.stream.Collectors.toList;
 
@@ -15,29 +14,33 @@ import static java.util.stream.Collectors.toList;
 @Builder
 public class IndexRegisterAlertRequest {
 
-  LearningAlert learningAlert;
+  String alertId;
+  String alertName;
+  String systemId;
+  String messageId;
+  AnalystDecision analystDecision;
+  String decision;
   List<String> matchNames;
 
-  public static IndexRegisterAlertRequest fromLearningAlerts(
+  public static List<IndexRegisterAlertRequest> fromLearningAlerts(
       RegisteredAlert registeredAlert, List<LearningAlert> learningAlerts) {
-    var learningAlert = learningAlerts
+    return learningAlerts
         .stream()
         .filter(la -> la.getSystemId().equals(registeredAlert.getSystemId()))
-        .findFirst();
-
-    if (learningAlert.isEmpty())
-      throw new NoSuchElementException("There is no corresponding alert");
-
-    var alert = learningAlert.get();
-    alert.setAlertName(registeredAlert.getAlertName());
-    return IndexRegisterAlertRequest
-        .builder()
-        .learningAlert(alert)
-        .matchNames(registeredAlert
-            .getMatches()
-            .stream()
-            .map(RegisteredMatch::getMatchId)
-            .collect(toList()))
-        .build();
+        .map(alert -> IndexRegisterAlertRequest
+            .builder()
+            .alertId(alert.getAlertId())
+            .alertName(registeredAlert.getAlertName())
+            .systemId(alert.getSystemId())
+            .messageId(alert.getMessageId())
+            .analystDecision(alert.getAnalystDecision())
+            .decision(alert.getDecision())
+            .matchNames(registeredAlert
+                .getMatches()
+                .stream()
+                .map(RegisteredMatch::getMatchName)
+                .collect(toList()))
+            .build())
+        .collect(toList());
   }
 }

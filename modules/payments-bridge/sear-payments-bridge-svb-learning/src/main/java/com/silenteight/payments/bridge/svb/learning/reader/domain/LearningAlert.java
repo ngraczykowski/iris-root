@@ -6,11 +6,13 @@ import lombok.Setter;
 import lombok.Value;
 import lombok.experimental.NonFinal;
 
-import com.silenteight.payments.bridge.ae.alertregistration.domain.*;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.FindRegisteredAlertRequest;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.Label;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertRequest;
+import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import static com.silenteight.payments.bridge.common.app.AlertLabelUtils.ALERT_LABEL_LEARNING;
@@ -76,21 +78,6 @@ public class LearningAlert {
     setAlertName(response.getAlertName());
 
     var matchResponses = response.getMatchResponses();
-
-    for (var matchResponse : matchResponses) {
-
-      matches.stream()
-          .filter(match -> match.getMatchId().equals(matchResponse.getMatchId()))
-          .findFirst()
-          .ifPresent(match -> match.setMatchName(matchResponse.getMatchName()));
-    }
-  }
-
-  public void setAlertMatchNames(Map<String, RegisteredAlert> registeredAlertMap) {
-    var registeredAlert = registeredAlertMap.get(systemId);
-    setAlertName(registeredAlert.getAlertName());
-
-    var matchResponses = registeredAlert.getMatches();
 
     for (var matchResponse : matchResponses) {
 
