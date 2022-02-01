@@ -2,6 +2,10 @@
 serp:
   show-env: true
 
+sentry:
+  environment: unknown
+  traces-sample-rate: 0
+
 spring:
   jackson:
     serialization:

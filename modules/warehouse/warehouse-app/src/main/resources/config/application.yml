@@ -320,3 +320,6 @@ sep:
         - "MANAGE_QA_VERIFICATION"
         - "DASHBOARD"
 
+sentry:
+  environment: unknown
+  traces-sample-rate: 0

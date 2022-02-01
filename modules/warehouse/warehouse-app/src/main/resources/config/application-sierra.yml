@@ -162,3 +162,7 @@ warehouse.reports.v2:
                         wa.name AS "S8 Alert ID"
         FROM warehouse_alert wa JOIN warehouse_match wm ON wa.id = wm.alert_id 
         WHERE wa.recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+
+sentry:
+  traces-sample-rate: 0
+  environment: unknown

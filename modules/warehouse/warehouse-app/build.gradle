@@ -57,6 +57,9 @@ dependencies {
   implementation libraries.logback_ecs_encoder
   implementation libraries.ecs_logging_core
 
+  runtimeOnly libraries.sentry_spring_boot_starter
+  runtimeOnly libraries.sentry_logback
+
   testImplementation project(":warehouse-common-testing")
 
   testImplementation libraries.spock_spring
