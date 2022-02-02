@@ -1,12 +1,13 @@
-package com.silenteight.bridge.core.recommendation.adapter.incoming;
+package com.silenteight.bridge.core.recommendation.domain;
 
 import lombok.experimental.UtilityClass;
 
 import com.silenteight.adjudication.api.library.v1.util.TimeStampUtil;
+import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto;
+import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertWithMatchesDto;
+import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertWithMatchesDto.MatchDto;
 import com.silenteight.bridge.core.recommendation.domain.model.MatchMetadata;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata;
-import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
-import com.silenteight.bridge.core.registration.domain.model.BatchWithAlerts;
 import com.silenteight.proto.recommendation.api.v1.Alert;
 import com.silenteight.proto.recommendation.api.v1.Alert.AlertStatus;
 import com.silenteight.proto.recommendation.api.v1.Match;
@@ -23,8 +24,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.silenteight.bridge.core.registration.domain.model.AlertStatus.ERROR;
-import static com.silenteight.bridge.core.registration.domain.model.AlertStatus.RECOMMENDED;
+import static com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertStatus.ERROR;
+import static com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertStatus.RECOMMENDED;
 
 @UtilityClass
 class RecommendationMapper {
@@ -38,7 +39,8 @@ class RecommendationMapper {
   private static final String FEATURE_PREFIX = "features/";
 
   RecommendationsResponse toRecommendationsResponse(
-      BatchWithAlerts batchWithAlerts, List<RecommendationWithMetadata> recommendations,
+      BatchWithAlertsDto batchWithAlerts,
+      List<RecommendationWithMetadata> recommendations,
       OffsetDateTime recommendedAtForErrorAlerts) {
     var alertToRecommendation = recommendations.stream()
         .collect(Collectors.toMap(RecommendationWithMetadata::alertName, Function.identity()));
@@ -56,7 +58,8 @@ class RecommendationMapper {
   }
 
   private Recommendation.Builder toRecommendationBuilder(
-      AlertWithMatches alert, RecommendationWithMetadata recommendationWithMetadata,
+      AlertWithMatchesDto alert,
+      RecommendationWithMetadata recommendationWithMetadata,
       OffsetDateTime recommendedAtForErrorAlerts) {
 
     return Optional.ofNullable(recommendationWithMetadata)
@@ -65,14 +68,14 @@ class RecommendationMapper {
   }
 
   private Recommendation.Builder createErrorRecommendation(
-      AlertWithMatches alert, OffsetDateTime recommendedAtForErrorAlerts) {
+      AlertWithMatchesDto alert, OffsetDateTime recommendedAtForErrorAlerts) {
     return Recommendation.newBuilder()
         .setRecommendedAt(TimeStampUtil.fromOffsetDateTime(recommendedAtForErrorAlerts))
         .setAlert(getProtoAlert(alert));
   }
 
   private Recommendation.Builder createSuccessfulRecommendation(
-      AlertWithMatches alert, RecommendationWithMetadata recommendation) {
+      AlertWithMatchesDto alert, RecommendationWithMetadata recommendation) {
     return Recommendation.newBuilder()
         .setName(recommendation.name())
         .setRecommendedAction(recommendation.recommendedAction())
@@ -82,7 +85,7 @@ class RecommendationMapper {
         .addAllMatches(getProtoMatches(recommendation, alert));
   }
 
-  private Alert getProtoAlert(AlertWithMatches alert) {
+  private Alert getProtoAlert(AlertWithMatchesDto alert) {
     return Alert.newBuilder()
         .setId(alert.id())
         .setStatus(toStatus(alert))
@@ -91,27 +94,28 @@ class RecommendationMapper {
         .build();
   }
 
-  private AlertStatus toStatus(AlertWithMatches alert) {
+  private AlertStatus toStatus(AlertWithMatchesDto alert) {
     if (RECOMMENDED == alert.status()) {
       return AlertStatus.SUCCESS;
     } else if (ERROR == alert.status()) {
       return AlertStatus.FAILURE;
+    } else {
+      throw new IllegalStateException("Alert status should be ERROR/RECOMMENDED at this point");
     }
-    throw new IllegalStateException("Alert status should be ERROR/RECOMMENDED at this point");
   }
 
   private List<Match> getProtoMatches(
-      RecommendationWithMetadata recommendation, AlertWithMatches matchingAlert) {
+      RecommendationWithMetadata recommendation, AlertWithMatchesDto matchingAlert) {
     return recommendation.metadata().matchMetadata().stream()
         .map(matchMetadata -> toProtoMatch(matchMetadata, matchingAlert))
         .toList();
   }
 
-  private Match toProtoMatch(MatchMetadata matchMetadata, AlertWithMatches alert) {
+  private Match toProtoMatch(MatchMetadata matchMetadata, AlertWithMatchesDto alert) {
     return Match.newBuilder()
         .setId(alert.matches().stream()
             .filter(match -> match.name().equals(matchMetadata.match()))
-            .map(AlertWithMatches.Match::id)
+            .map(MatchDto::id)
             .findAny()
             .orElseThrow()
         )
@@ -130,7 +134,6 @@ class RecommendationMapper {
         builder.putFields(
             key.replace(FEATURE_PREFIX, ""),
             Value.newBuilder().setStringValue(value.solution()).build()));
-    return builder
-        .build();
+    return builder.build();
   }
 }

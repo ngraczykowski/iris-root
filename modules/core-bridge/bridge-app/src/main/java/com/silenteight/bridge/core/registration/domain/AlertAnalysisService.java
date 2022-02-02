@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 import static com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus.PROCESSING;
 import static com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus.STORED;
 
-@Service
 @Slf4j
+@Service
 @EnableConfigurationProperties(RegistrationAnalysisProperties.class)
 @RequiredArgsConstructor
 class AlertAnalysisService {

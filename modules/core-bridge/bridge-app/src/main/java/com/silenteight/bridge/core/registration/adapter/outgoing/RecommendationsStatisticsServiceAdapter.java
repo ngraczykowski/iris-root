@@ -1,10 +1,11 @@
-package com.silenteight.bridge.core.recommendation.domain;
+package com.silenteight.bridge.core.registration.adapter.outgoing;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsStatistics;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendedActionStatistics;
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationRepository;
+import com.silenteight.bridge.core.registration.domain.model.RecommendationsStatistics;
+import com.silenteight.bridge.core.registration.domain.port.outgoing.RecommendationsStatisticsService;
 
 import org.springframework.stereotype.Service;
 
@@ -12,13 +13,18 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-class RecommendationsStatisticsService {
+class RecommendationsStatisticsServiceAdapter implements RecommendationsStatisticsService {
 
-  private final RecommendationRepository recommendationRepository;
+  /* TODO
+  Because of circular bean dependency involved with
+  RecommendationFacade -> BatchStatisticsService we need to do
+  https://silent8.atlassian.net/browse/ALL-600 task.
+  */
+  private final RecommendationRepository repository;
 
-  RecommendationsStatistics createRecommendationsStatistics(String analysisName) {
+  public RecommendationsStatistics createRecommendationsStatistics(String analysisName) {
     var recommendedActionStatistics =
-        recommendationRepository.countRecommendationsByActionForAnalysisName(analysisName);
+        repository.countRecommendationsByActionForAnalysisName(analysisName);
 
     return RecommendationsStatistics.builder()
         .truePositiveCount(recommendedActionStatistics.getRecommendedActionCount(

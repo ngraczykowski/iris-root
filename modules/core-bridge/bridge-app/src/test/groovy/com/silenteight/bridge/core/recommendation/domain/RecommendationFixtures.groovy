@@ -2,6 +2,9 @@ package com.silenteight.bridge.core.recommendation.domain
 
 import com.silenteight.adjudication.api.library.v1.util.TimeStampUtil
 import com.silenteight.bridge.core.Fixtures
+import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto
+import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertWithMatchesDto
+import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertWithMatchesDto.MatchDto
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationMetadata
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata
 import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches
@@ -29,10 +32,10 @@ class RecommendationFixtures {
   static def RECOMMENDATION_COMMENT = 'recommendation_comment'
   static def ERROR_DESCRIPTION = 'error occurred'
 
-  static def ERROR_ALERT = AlertWithMatches.builder()
+  static def ERROR_ALERT_DTO = AlertWithMatchesDto.builder()
       .id(Fixtures.ALERT_ID)
       .name('')
-      .status(com.silenteight.bridge.core.registration.domain.model.AlertStatus.ERROR)
+      .status(BatchWithAlertsDto.AlertStatus.ERROR)
       .metadata(METADATA)
       .errorDescription(ERROR_DESCRIPTION)
       .matches([])
@@ -56,9 +59,27 @@ class RecommendationFixtures {
           .build()
   ]
 
+  static def ALERTS_DTO = [
+      AlertWithMatchesDto.builder()
+          .id(Fixtures.ALERT_ID)
+          .name(ALERT_NAME)
+          .status(BatchWithAlertsDto.AlertStatus.RECOMMENDED)
+          .metadata(METADATA)
+          .matches(
+              [
+                  new MatchDto(
+                      FixturesMatchMetaData.FIRST_METADATA_MATCH_ID,
+                      FixturesMatchMetaData.FIRST_METADATA_MATCH_NAME),
+                  new MatchDto(
+                      FixturesMatchMetaData.SECOND_METADATA_MATCH_ID,
+                      FixturesMatchMetaData.SECOND_METADATA_MATCH_NAME)
+              ])
+          .build()
+  ]
+
   static def BATCH_WITH_ALERTS = new BatchWithAlerts(Fixtures.BATCH_ID, POLICY_NAME, ALERTS)
-  static def BATCH_WITH_ERROR_ALERT = new BatchWithAlerts(
-      Fixtures.BATCH_ID, POLICY_NAME, [ERROR_ALERT])
+  static def BATCH_WITH_ALERTS_DTO = new BatchWithAlertsDto(Fixtures.BATCH_ID, POLICY_NAME, ALERTS_DTO)
+  static def BATCH_WITH_ERROR_ALERT_DTO = new BatchWithAlertsDto(Fixtures.BATCH_ID, POLICY_NAME, [ERROR_ALERT_DTO])
 
   static def RECOMMENDATION_RECOMMENDED_AT = OffsetDateTime
       .of(2022, 1, 18, 14, 30, 30, 0, ZoneOffset.UTC)

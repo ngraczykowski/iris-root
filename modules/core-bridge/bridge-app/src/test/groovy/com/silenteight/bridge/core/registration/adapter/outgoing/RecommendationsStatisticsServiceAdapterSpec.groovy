@@ -1,4 +1,4 @@
-package com.silenteight.bridge.core.recommendation.domain
+package com.silenteight.bridge.core.registration.adapter.outgoing
 
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendedActionStatistics
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationRepository
@@ -6,12 +6,12 @@ import com.silenteight.bridge.core.recommendation.domain.port.outgoing.Recommend
 import spock.lang.Specification
 import spock.lang.Subject
 
-class RecommendationsStatisticsServiceSpec extends Specification {
+class RecommendationsStatisticsServiceAdapterSpec extends Specification {
 
-  def recommendationRepository = Mock(RecommendationRepository)
+  def repository = Mock(RecommendationRepository)
 
   @Subject
-  def underTest = new RecommendationsStatisticsService(recommendationRepository)
+  def underTest = new RecommendationsStatisticsServiceAdapter(repository)
 
   def 'should create recommendations statistics'() {
     given:
@@ -26,8 +26,7 @@ class RecommendationsStatisticsServiceSpec extends Specification {
             "ACTION_POTENTIAL_TRUE_POSITIVE", 6))
 
     and:
-    1 * recommendationRepository.countRecommendationsByActionForAnalysisName(analysisName) >>
-        recommendedActionStatistics
+    1 * repository.countRecommendationsByActionForAnalysisName(analysisName) >> recommendedActionStatistics
 
     when:
     def result = underTest.createRecommendationsStatistics(analysisName)

@@ -1,12 +1,12 @@
 package com.silenteight.bridge.core.recommendation.domain
 
-import com.silenteight.bridge.core.recommendation.domain.command.GetRecommendationsCommand
+import com.silenteight.bridge.core.recommendation.domain.command.GetRecommendationCommand
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationsReceivedEvent
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationEventPublisher
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationRepository
 import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RecommendationService
-import com.silenteight.bridge.core.registration.domain.command.GetBatchWithAlertsCommand
+import com.silenteight.bridge.core.recommendation.domain.port.outgoing.RegistrationService
 
 import spock.lang.Specification
 import spock.lang.Subject
@@ -15,17 +15,17 @@ import java.time.OffsetDateTime
 
 class RecommendationFacadeSpec extends Specification {
 
+  def registrationService = Mock(RegistrationService)
   def recommendationService = Mock(RecommendationService)
   def recommendationRepository = Mock(RecommendationRepository)
   def recommendationPublisher = Mock(RecommendationEventPublisher)
-  def recommendationsStatisticsService = Mock(RecommendationsStatisticsService)
 
   @Subject
   def underTest = new RecommendationFacade(
+      registrationService,
       recommendationService,
       recommendationPublisher,
-      recommendationRepository,
-      recommendationsStatisticsService
+      recommendationRepository
   )
 
   def 'should proceed ready recommendations'() {
@@ -36,32 +36,21 @@ class RecommendationFacadeSpec extends Specification {
     underTest.proceedReadyRecommendations(analysis)
 
     then:
-    1 * recommendationService.getRecommendations(analysis) >>
-        [Fixtures.RECOMMENDATION_WITH_METADATA]
+    1 * recommendationService.getRecommendations(analysis) >> [Fixtures.RECOMMENDATION_WITH_METADATA]
     1 * recommendationRepository.saveAll(_ as List<RecommendationWithMetadata>)
     1 * recommendationPublisher.publish(_ as RecommendationsReceivedEvent)
   }
 
-  def 'should get recommendations statistics'() {
-    given:
-    def analysisName = Fixtures.ANALYSIS_NAME
-
-    when:
-    underTest.getRecommendationsStatistics(analysisName)
-
-    then:
-    1 * recommendationsStatisticsService.createRecommendationsStatistics(analysisName)
-  }
-
   def 'should get recommendations by analysis name'() {
     given:
-    def command = Fixtures.GET_RECOMMENDATIONS_COMMAND
+    def command = Fixtures.GET_RECOMMENDATIONS_RESPONSE_COMMAND
 
     when:
-    underTest.getRecommendations(command)
+    underTest.getRecommendationsResponse(command)
 
     then:
-    1 * recommendationRepository.findByAnalysisName(Fixtures.ANALYSIS_NAME)
+    1 * registrationService.getBatchWithAlerts(Fixtures.ANALYSIS_NAME) >> RecommendationFixtures.BATCH_WITH_ALERTS_DTO
+    1 * recommendationRepository.findByAnalysisName(Fixtures.ANALYSIS_NAME) >> [RecommendationFixtures.RECOMMENDATION_WITH_METADATA]
   }
 
   static class Fixtures {
@@ -82,7 +71,6 @@ class RecommendationFacadeSpec extends Specification {
         .metadata(null)
         .build()
 
-    static def GET_RECOMMENDATIONS_COMMAND = new GetRecommendationsCommand(ANALYSIS_NAME)
-    static def GET_BATCH_WITH_ALERTS_COMMAND = new GetBatchWithAlertsCommand(ANALYSIS_NAME)
+    static def GET_RECOMMENDATIONS_RESPONSE_COMMAND = new GetRecommendationCommand(ANALYSIS_NAME)
   }
 }

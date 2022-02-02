@@ -1,4 +1,4 @@
-package com.silenteight.bridge.core.recommendation.domain.model;
+package com.silenteight.bridge.core.registration.domain.model;
 
 import lombok.Builder;
 
