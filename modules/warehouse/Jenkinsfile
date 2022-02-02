@@ -83,16 +83,7 @@ gradleBuild(
         }
       }
 
-      stage('Deploy On Nomad Dev') {
-        script {
-          // FIXME(ahaczewski): Use `when` if possible.
-          if (git.getGitBranch() == 'master') {
-            sh './nomad/deploy.sh -var-file=dev.vars'
-          } else {
-            echo 'This is not a master release branch. Ignoring Nomad deployment.'
-          }
-        }
-      }
+      deployOnNomad()
 
       stage('Deploy On Nomad Test') {
         script {
