@@ -28,6 +28,6 @@ class EtlAlertProcessorConfiguration {
         stepExecution.getJobParameters().getString(FILE_NAME_PARAMETER);
     return new EtlAlertProcessor(
         findRegisteredAlertUseCase, processRegisteredService, processUnregisteredService,
-        stepExecution.getJobExecutionId(), fileName);
+        stepExecution.getJobExecution().getJobId(), fileName);
   }
 }
