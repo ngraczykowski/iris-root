@@ -201,7 +201,7 @@ class BatchServiceSpec extends Specification {
     1 * batchRepository.updateStatusToDelivered(batchId)
   }
 
-  def 'should not update batch status as DELIVERED when batch status is other than COMPLETED or DELIVERED'() {
+  def 'should not update batch status as DELIVERED when batch status is other than COMPLETED, ERROR or DELIVERED'() {
     given:
     def batchId = Fixtures.BATCH_ID
     def batch = RegistrationFixtures.batch(BatchStatus.STORED)

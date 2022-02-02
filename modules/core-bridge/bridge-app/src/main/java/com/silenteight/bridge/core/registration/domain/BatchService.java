@@ -12,6 +12,7 @@ import com.silenteight.bridge.core.registration.domain.port.outgoing.EventPublis
 
 import org.springframework.stereotype.Service;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -20,6 +21,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 class BatchService {
+
+  private static final EnumSet<BatchStatus> ALLOWED_BATCH_STATUSES_FOR_MARKING_AS_DELIVERED =
+      EnumSet.of(BatchStatus.COMPLETED, BatchStatus.DELIVERED, BatchStatus.ERROR);
 
   private final EventPublisher eventPublisher;
   private final AnalysisService analysisService;
@@ -83,10 +87,10 @@ class BatchService {
   private void validateBatchStatus(String batchId) {
     var batch = findBatch(batchId);
 
-    if (BatchStatus.DELIVERED != batch.status() && BatchStatus.COMPLETED != batch.status()) {
+    if (!ALLOWED_BATCH_STATUSES_FOR_MARKING_AS_DELIVERED.contains(batch.status())) {
       var message = String.format("Marking Batch with batchId: %s as %s failed. "
-              + "%s status is invalid, %s or %s expected", batchId, BatchStatus.DELIVERED.name(),
-          batch.status(), BatchStatus.DELIVERED.name(), BatchStatus.COMPLETED.name());
+              + "%s status is invalid, one of %s expected", batchId, BatchStatus.DELIVERED,
+          batch.status(), ALLOWED_BATCH_STATUSES_FOR_MARKING_AS_DELIVERED);
       log.error(message);
       throw new IllegalStateException(message);
     }
