@@ -14,6 +14,16 @@ variable "namespace" {
   default = "default"
 }
 
+variable "database_node_destination" {
+  type    = string
+  default = "eu4"
+}
+
+variable "node_destination" {
+  type    = string
+  default = "eu4"
+}
+
 variable "memory" {
   default = 1500
 }
@@ -31,9 +41,8 @@ variable "grpcui_tags" {
 locals {
   jvm_memory                = ceil(var.memory * 0.7)
   perm_memory               = ceil(var.memory * 0.2)
-    node_destination = "eu4"
-    database_node_destination = "eu4"
     database_volume           = "/srv/sep-cluster/postgres/${var.namespace}-universal-data-source"
+
 }
 
 job "universal-data-source" {
@@ -54,7 +63,7 @@ job "universal-data-source" {
 
       constraint {
         attribute = "${node.unique.name}"
-        value     = "${local.database_node_destination}"
+        value     = "${var.database_node_destination}"
       }
 
       network {
@@ -108,7 +117,7 @@ job "universal-data-source" {
 
     constraint {
       attribute = "${node.unique.name}"
-      value     = "${local.node_destination}"
+      value     = "${var.node_destination}"
     }
 
     network {
