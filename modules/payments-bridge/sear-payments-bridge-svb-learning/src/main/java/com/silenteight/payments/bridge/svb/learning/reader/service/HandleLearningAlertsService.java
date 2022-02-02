@@ -30,8 +30,7 @@ class HandleLearningAlertsService implements HandleLearningAlertsUseCase {
 
     var notification = learningCsvNotificationCreatorUseCase.createLearningCsvNotification(
         alertsRead.toLearningCsvNotificationRequest());
-    var notificationEvent = new NotificationEvent(notification);
-    applicationEventPublisher.publishEvent(notificationEvent);
+    applicationEventPublisher.publishEvent(new NotificationEvent(notification));
 
     log.info("Processing of learn request {} finished", learningRequest);
   }

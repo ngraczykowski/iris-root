@@ -26,6 +26,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
     "com.silenteight.payments.bridge.svb.newlearning.step",
     "com.silenteight.payments.bridge.svb.newlearning.adapter",
     "com.silenteight.payments.bridge.svb.newlearning.config",
+    "com.silenteight.payments.bridge.svb.newlearning.service",
     "com.silenteight.payments.bridge.svb.migration" })
 class EtlAlertsJobTest extends BaseBatchTest {
 

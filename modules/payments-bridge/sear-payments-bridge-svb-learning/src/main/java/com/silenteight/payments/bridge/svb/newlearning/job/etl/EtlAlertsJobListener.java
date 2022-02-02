@@ -3,6 +3,8 @@ package com.silenteight.payments.bridge.svb.newlearning.job.etl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.notification.model.NotificationEvent;
+import com.silenteight.payments.bridge.svb.newlearning.port.LearningCsvNotificationCreatorUseCase;
 import com.silenteight.payments.bridge.svb.newlearning.port.LearningDataAccess;
 
 import org.springframework.batch.core.JobExecution;
@@ -19,6 +21,7 @@ class EtlAlertsJobListener implements JobExecutionListener {
 
   private final LearningDataAccess learningDataAccess;
   private final ApplicationEventPublisher applicationEventPublisher;
+  private final LearningCsvNotificationCreatorUseCase learningCsvNotificationCreatorUseCase;
 
   @Override
   public void beforeJob(JobExecution jobExecution) {
@@ -39,6 +42,8 @@ class EtlAlertsJobListener implements JobExecutionListener {
         result.getSuccessfulAlerts(),
         result.getFailedAlerts());
 
-    applicationEventPublisher.publishEvent(result.toNotification());
+    var notification = learningCsvNotificationCreatorUseCase.createLearningCsvNotification(
+        result.toLearningCsvNotificationRequest());
+    applicationEventPublisher.publishEvent(new NotificationEvent(notification));
   }
 }

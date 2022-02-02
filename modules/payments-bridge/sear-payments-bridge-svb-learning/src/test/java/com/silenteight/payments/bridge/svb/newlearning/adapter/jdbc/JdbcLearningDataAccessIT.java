@@ -26,7 +26,7 @@ class JdbcLearningDataAccessIT extends BaseJdbcTest {
   @Test
   void shouldSelectAlertProcessingResult() {
     var result = dataAccess.select(1, "fileName");
-    assertThat(result.getFailedAlerts()).isEqualTo(1);
+    assertThat(result.getFailedAlerts()).isEqualTo(2);
     assertThat(result.getSuccessfulAlerts()).isEqualTo(2);
   }
 

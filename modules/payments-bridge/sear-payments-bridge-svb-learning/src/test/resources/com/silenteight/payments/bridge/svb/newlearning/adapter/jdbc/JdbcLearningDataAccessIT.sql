@@ -35,3 +35,7 @@ INSERT INTO public.pb_learning_processed_alert (job_id, result,
                                                 error_message, fkco_v_system_id, file_name,
                                                 created_at)
 VALUES (1, 'FAILED', 'Bug in program', 'systemId', 'fileName', '2022-01-25 10:17:46.000000');
+INSERT INTO public.pb_learning_processed_alert (job_id, result,
+                                                error_message, fkco_v_system_id, file_name,
+                                                created_at)
+VALUES (1, 'FAILED', 'Bug in program2', 'systemId2', 'fileName', '2022-01-25 10:17:42.000000');
