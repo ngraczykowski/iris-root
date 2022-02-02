@@ -10,7 +10,6 @@ import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
-import org.apache.commons.collections4.list.SetUniqueList;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -74,13 +73,22 @@ public class HitComposite {
   }
 
   public List<String> getMatchingTexts() {
-    var matchingText = SetUniqueList.setUniqueList(new ArrayList<String>());
+    var matchingText = newHashSet(
+        fkcoVCityMatchedText,
+        fkcoVAddressMatchedText,
+        fkcoVStateMatchedText,
+        fkcoVCountryMatchedText,
+        fkcoVNameMatchedText);
+    return filterEmptyFields(matchingText);
+  }
 
-    matchingText.add(fkcoVCityMatchedText);
-    matchingText.add(fkcoVAddressMatchedText);
-    matchingText.add(fkcoVStateMatchedText);
-    matchingText.add(fkcoVCountryMatchedText);
+  private static Set<String> newHashSet(String... objs) {
+    Set<String> set = new HashSet<>();
+    Collections.addAll(set, objs);
+    return set;
+  }
 
+  private static List<String> filterEmptyFields(Set<String> matchingText) {
     return matchingText
         .stream()
         .filter(s -> !s.equalsIgnoreCase("N/A"))
