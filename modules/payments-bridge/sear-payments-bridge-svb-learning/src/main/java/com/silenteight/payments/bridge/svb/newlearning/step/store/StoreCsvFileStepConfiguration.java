@@ -8,7 +8,6 @@ import com.silenteight.payments.bridge.svb.newlearning.step.JpaWriterFactory;
 
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.step.skip.AlwaysSkipItemSkipPolicy;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +33,7 @@ public class StoreCsvFileStepConfiguration {
   private final FlatFileItemReader<LearningCsvRowEntity> storeCsvFileStepItemReader;
   private final JpaWriterFactory jpaWriterFactory;
   private final StoreCsvFileStepProcessor storeCsvFileStepProcessor;
+  private final StoreSkipPolicy storeSkipPolicy;
 
   @Bean
   Step storeCsvFileStep() {
@@ -49,7 +49,7 @@ public class StoreCsvFileStepConfiguration {
         .retry(IOException.class)
         .retryLimit(storeCsvJobProperties.getRetryLimit())
         .backOffPolicy(backoffPolicy())
-        .skipPolicy(new AlwaysSkipItemSkipPolicy())
+        .skipPolicy(storeSkipPolicy)
         .build();
   }
 
