@@ -21,6 +21,8 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -30,7 +32,6 @@ class EmailSenderService implements EmailSenderUseCase {
   private static final String ATTACHMENT_TYPE_ZIP = "application/zip";
 
   private final EmailNotificationProperties emailNotificationProperties;
-  private final EnvironmentProperties environmentProperties;
   private final JavaMailSender emailSender;
 
   public void sendEmail(SendEmailRequest sendEmailRequest) {
@@ -55,19 +56,27 @@ class EmailSenderService implements EmailSenderUseCase {
     MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
     messageHelper.setFrom(emailNotificationProperties.getFrom());
     messageHelper.setTo(emailNotificationProperties.getTo());
-
-    if (!"".equals(emailNotificationProperties.getCc())) {
-      messageHelper.setCc(emailNotificationProperties.getCc());
-    }
-
+    setCc(messageHelper);
     messageHelper.setSubject(sendEmailRequest.getSubject());
     messageHelper.setText(sendEmailRequest.getHtmlText(), true);
+    setAttachment(sendEmailRequest, messageHelper);
 
+  }
+
+  private static void setAttachment(
+      SendEmailRequest sendEmailRequest, MimeMessageHelper messageHelper) throws
+      MessagingException {
     if (sendEmailRequest.getAttachmentName() != null && sendEmailRequest.getAttachment() != null) {
       messageHelper.addAttachment(
           sendEmailRequest.getAttachmentName(),
           new ByteArrayDataSource(sendEmailRequest.getAttachment(), ATTACHMENT_TYPE_ZIP));
     }
+  }
 
+  private void setCc(MimeMessageHelper messageHelper) throws MessagingException {
+    String cc = emailNotificationProperties.getCc();
+    if (isNotBlank(cc)) {
+      messageHelper.setCc(cc);
+    }
   }
 }

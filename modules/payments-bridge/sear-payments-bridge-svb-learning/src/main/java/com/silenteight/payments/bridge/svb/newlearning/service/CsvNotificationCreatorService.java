@@ -44,13 +44,18 @@ class CsvNotificationCreatorService implements LearningCsvNotificationCreatorUse
     String message = getCsvAlertsProcessedMessage(learningCsvNotificationRequest);
     byte[] attachment = createAttachment(learningCsvNotificationRequest);
 
-    return Notification.builder()
+    var notificationBuilder = Notification.builder()
         .type(CSV_PROCESSED)
         .subject(subject)
-        .message(message)
-        .attachmentName(CSV_PROCESSED_ERRORS_FILE_NAME + ZIP_EXTENSION)
-        .attachment(attachment)
-        .build();
+        .message(message);
+
+    if (learningCsvNotificationRequest.getNumberOfFailedAlerts() > 0) {
+      notificationBuilder
+          .attachmentName(CSV_PROCESSED_ERRORS_FILE_NAME + ZIP_EXTENSION)
+          .attachment(attachment);
+    }
+
+    return notificationBuilder.build();
 
   }
 

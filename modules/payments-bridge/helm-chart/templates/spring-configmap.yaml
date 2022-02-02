@@ -25,8 +25,8 @@ data:
           cc: {{ .Values.emailNotification.cc | quote }}
           cron: {{ .Values.emailNotification.cron | quote }}
           amount: {{ .Values.emailNotification.amount }}
-          cmapiEnabled: {{ .Values.emailNotification.cmapiEnabled }}
-          learningEnabled: {{ .Values.emailNotification.learningEnabled }}
+          cmapi-enabled: {{ .Values.emailNotification.cmapiEnabled }}
+          learning-enabled: {{ .Values.emailNotification.learningEnabled }}
       metrics:
         alert-resolution:
           percentiles: [ 0.5, 0.95 ]
