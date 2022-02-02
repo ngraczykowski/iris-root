@@ -61,7 +61,7 @@ message GeoComparerReason {
 
     string error_message = 5;
     // Distance in kilometers, present only when type is city, otherwise empty.
-    uint32 distance = 6 [(google.api.field_behavior) = OPTIONAL];
+    int32 distance = 6 [(google.api.field_behavior) = OPTIONAL];
   }
 
   enum MatchType {
