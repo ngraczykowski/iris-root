@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+package silenteight.agent.date.v2.api;
+
+option java_package = "com.silenteight.proto.agent.date.v2.api";
+option java_outer_classname = "DateAgentApiProto";
+option java_multiple_files = true;
+
+service DateAgent {
+  rpc ExtractFacts (stream ExtractFactsRequest) returns (stream ExtractFactsResponse) {
+  }
+
+  rpc Measure (stream MeasureRequest) returns (stream MeasureResponse) {
+  }
+
+  rpc ExtractAndMeasure (stream ExtractAndMeasureRequest) returns (stream ExtractAndMeasureResponse) {
+  }
+}
+
+message ExtractFactsRequest {
+  string id = 1;
+  string freetext = 2;
+}
+
+message Range {
+  string from = 1;
+  string to = 2;
+}
+
+message ExtractFactsResponse {
+  string id = 1;
+  ExtractStatus overall_status = 2;
+  string error_message = 3;
+  repeated Result results = 4;
+
+  message Result {
+    enum ResultStatus {
+        FOUND_RANGES = 0;
+        FOUND_DATES = 1;
+        INCONCLUSIVE = 2;
+    }
+
+    message RecognizedValue {
+      oneof kind {
+        Range range = 1;
+        string date = 2;
+      }
+    }
+
+    ResultStatus result_status = 1;
+    string original_input = 2;
+    repeated RecognizedValue recognized_values = 3;
+    string reason = 4;
+  }
+
+  enum ExtractStatus {
+    OK = 0;
+    ERROR = 1;
+    NO_FACTS_EXTRACTED = 2;
+  }
+}
+
+message MeasureRequest {
+  string id = 1;
+  repeated MeasurementInput first_inputs = 2;
+  repeated MeasurementInput second_inputs = 3;
+}
+
+message MeasurementResult {
+  Inputs inputs = 1;
+  Measurements measurements = 2;
+
+  message Inputs {
+    MeasurementInput first = 1;
+    MeasurementInput second = 2;
+  }
+
+  message Measurements {
+    DayDistance day_distance = 1;
+
+    message DayDistance {
+      int32 min = 1;
+      int32 max = 2;
+    }
+  }
+}
+
+message MeasurementInput {
+  oneof kind {
+    string date = 1;
+    Range range = 2;
+  }
+}
+
+message MeasureResponse {
+  string id = 1;
+  MeasureStatus overall_status = 2;
+  string error_message = 3;
+  repeated MeasurementResult results = 4;
+
+  enum MeasureStatus {
+    OK = 0;
+    ERROR = 1;
+    INVALID_INPUT = 2;
+  }
+}
+
+message ExtractAndMeasureRequest {
+  string id = 1;
+  string first_freetext = 2;
+  string second_freetext = 3;
+}
+
+message ExtractAndMeasureResponse {
+  string id = 1;
+  ExtractAndMeasureStatus overall_status = 2;
+  string error_message = 3;
+  string reason = 4;
+  repeated MeasurementResult results = 5;
+
+  enum ExtractAndMeasureStatus {
+    OK = 0;
+    INSUFFICIENT_FACTS_EXTRACTED = 1;
+    INCONCLUSIVE = 2;
+    NO_DATA = 3;
+    ERROR = 4;
+  }
+}
