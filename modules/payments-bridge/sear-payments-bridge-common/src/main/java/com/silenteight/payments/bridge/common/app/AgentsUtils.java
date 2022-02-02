@@ -9,6 +9,7 @@ public class AgentsUtils {
   public static final String FEATURE_PREFIX = "features/";
 
   public static final String HISTORICAL_RISK_CUSTOMER_NAME_FEATURE = "historicalRiskCustomerName";
+  // TODO: remove when decide that customer name will not be used
   public static final String HISTORICAL_RISK_CUSTOMER_NAME_LEARNING_DISC = "hist_customer_name";
   public static final String HISTORICAL_RISK_ACCOUNT_NUMBER_FEATURE =
       "historicalRiskAccountNumber";

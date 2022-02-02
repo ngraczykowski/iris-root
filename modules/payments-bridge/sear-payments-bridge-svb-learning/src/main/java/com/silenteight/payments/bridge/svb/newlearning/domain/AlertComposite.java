@@ -12,6 +12,7 @@ import com.silenteight.payments.bridge.common.app.AgentsUtils;
 import com.silenteight.payments.bridge.data.retention.model.AlertDataRetention;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.etl.processing.model.MessageTag;
+import com.silenteight.payments.bridge.svb.migration.DecisionMapper;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.service.AlertParserService;
 import com.silenteight.proto.learningstore.historicaldecision.v1.api.*;
@@ -48,21 +49,13 @@ public class AlertComposite {
     return alertDetails.getSystemId();
   }
 
+
   public HistoricalDecisionLearningStoreExchangeRequest toHistoricalDecisionRequest(
-      String featureTypeDiscriminator) {
+      DecisionMapper decisionMapper, String featureTypeDiscriminator) {
     var alerts =
         hits.stream()
-            .map(hit -> {
-              var lastAction = ((LinkedList<ActionComposite>) actions).getLast();
-              return Alert.newBuilder()
-                  .setAlertId(alertDetails.getSystemId())
-                  .setAlertedParty(mapAlertedParty(featureTypeDiscriminator, hit))
-                  .setMatchId(hit.getFkcoVListFmmId())
-                  .setWatchlist(mapWatchlistType(hit))
-                  .addDecisions(mapDecision(lastAction))
-                  .setDiscriminator(mapDiscriminator(featureTypeDiscriminator))
-                  .build();
-            }).peek(alert -> {
+            .map(hit -> mapToAlert(decisionMapper, featureTypeDiscriminator, hit))
+            .peek(alert -> {
               if (log.isTraceEnabled()) {
                 log.trace(
                     "Mapped for featureDiscriminator:{} alert details alertedId:{}"
@@ -76,6 +69,46 @@ public class AlertComposite {
     return HistoricalDecisionLearningStoreExchangeRequest.newBuilder()
         .addAllAlerts(alerts)
         .build();
+  }
+
+  @Nonnull
+  private Alert mapToAlert(
+      DecisionMapper decisionMapper, String featureTypeDiscriminator, HitComposite hit) {
+    return Alert.newBuilder()
+        .setAlertId(alertDetails.getSystemId())
+        .setAlertedParty(mapAlertedParty(featureTypeDiscriminator, hit))
+        .setMatchId(hit.getFkcoVListFmmId())
+        .setWatchlist(mapWatchlistType(hit))
+        .addDecisions(getDecision(decisionMapper))
+        .setDiscriminator(mapDiscriminator(featureTypeDiscriminator))
+        .build();
+  }
+
+  private Decision getDecision(DecisionMapper decisionMapper) {
+    List<ActionComposite> previousActions = createPreviousActions(actions);
+
+    var lastAction = ((LinkedList<ActionComposite>) actions).getLast();
+    var previousDecisions =
+        previousActions.stream()
+            .map(a -> a.getStatusName())
+            .collect(Collectors.toList());
+    var decisionMade = decisionMapper.map(previousDecisions, lastAction.getStatusName());
+    log.debug("Final decision mapped -> {} actionId: {}", decisionMade, lastAction.getActionId());
+
+    return Decision.newBuilder()
+        .setId(String.valueOf(lastAction.getActionId()))
+        .setCreatedAt(lastAction.getActionDatetime().toInstant().toEpochMilli())
+        .setValue(decisionMade)
+        .build();
+
+  }
+
+  private List<ActionComposite> createPreviousActions(List<ActionComposite> actions) {
+    if (actions.size() > 1) {
+      return actions.subList(0, actions.size() - 1);
+    } else {
+      return List.copyOf(actions);
+    }
   }
 
   private AlertedParty mapAlertedParty(String featureTypeDiscriminator, HitComposite hit) {
@@ -120,14 +153,6 @@ public class AlertComposite {
     return Watchlist.newBuilder()
         .setId(hit.getFkcoVListFmmId())
         .setType(hit.getFkcoVListType())
-        .build();
-  }
-
-  private static Decision mapDecision(ActionComposite lastAction) {
-    return Decision.newBuilder()
-        .setId(String.valueOf(lastAction.getActionId()))
-        .setCreatedAt(lastAction.getActionDatetime().toInstant().toEpochMilli())
-        .setValue(lastAction.getStatusBehaviour())
         .build();
   }
 

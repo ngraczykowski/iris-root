@@ -24,6 +24,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
 
 @Import({ TestApplicationConfiguration.class })
 @ComponentScan(basePackages = {
+    "com.silenteight.payments.bridge.svb.migration",
     "com.silenteight.payments.bridge.svb.newlearning.job.historical",
     "com.silenteight.payments.bridge.svb.newlearning.step",
     "com.silenteight.payments.bridge.svb.newlearning.adapter",
@@ -52,6 +53,7 @@ class HistoricalAssessmentJobTest extends BaseBatchTest {
     Assertions.assertThat(step.isPresent()).isEqualTo(true);
     Assertions.assertThat(step.get().getReadCount()).isEqualTo(3);
     Assertions.assertThat(step.get().getWriteCount()).isEqualTo(3);
+
   }
 
 

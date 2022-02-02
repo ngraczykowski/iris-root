@@ -36,9 +36,9 @@ GRIFFIN P', 'sequence', 'INDIVIDUAL', 'shrek', 'GB');
 -- Insert duplicated actions.
 INSERT INTO pb_learning_action(learning_action_id, fkco_messages, fkco_d_action_datetime,
                                fkco_v_status_name, fkco_v_status_behavior)
-VALUES (10, 1, CURRENT_TIMESTAMP + (3 || ' minutes')::interval, 'PASS', 'PASSED')
-     , (20, 1, CURRENT_TIMESTAMP + (2 || ' minutes')::interval, 'FR_PASS', 'PENDING')
-     , (30, 1, CURRENT_TIMESTAMP, 'PASS', 'PASSED');
+VALUES (10, 1, CURRENT_TIMESTAMP + (3 || ' minutes')::interval, 'L3_PASS', 'L3_PASS')
+     , (20, 1, CURRENT_TIMESTAMP + (2 || ' minutes')::interval, 'L3_PASS', 'L3_PASS')
+     , (30, 1, CURRENT_TIMESTAMP, 'L2_L3_PEND', 'L3_PASS');
 
 
 -- Insert non duplicated hits
