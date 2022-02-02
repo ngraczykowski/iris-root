@@ -28,6 +28,9 @@ public class LearningCsvRowEntity extends BaseEntity {
   @Column(name = "job_id")
   private Long jobId;
 
+  @Column(name = "file_name")
+  private String fileName;
+
   @Column(name = "fkco_id")
   private Long fkcoId;
 

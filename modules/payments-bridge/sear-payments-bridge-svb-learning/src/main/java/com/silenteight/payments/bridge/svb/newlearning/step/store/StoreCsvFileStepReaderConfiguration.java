@@ -15,7 +15,6 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.LineMapper;
 import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
-import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.separator.DefaultRecordSeparatorPolicy;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
@@ -58,7 +57,7 @@ class StoreCsvFileStepReaderConfiguration {
         .recordSeparatorPolicy(new DefaultRecordSeparatorPolicy())
         // First line is a header.
         .linesToSkip(1)
-        .lineMapper(lineMapper())
+        .lineMapper(lineMapper(fileName))
         .build();
   }
 
@@ -70,11 +69,8 @@ class StoreCsvFileStepReaderConfiguration {
             .build());
   }
 
-  private static LineMapper<LearningCsvRowEntity> lineMapper() {
-    DefaultLineMapper<LearningCsvRowEntity> lineMapper = new DefaultLineMapper<>();
-    lineMapper.setLineTokenizer(lineTokenizer());
-    lineMapper.setFieldSetMapper(informationMapper());
-    return lineMapper;
+  private static LineMapper<LearningCsvRowEntity> lineMapper(String fileName) {
+    return new LineMapperWithFileName(fileName, lineTokenizer(), informationMapper());
   }
 
   private static FieldSetMapper<LearningCsvRowEntity> informationMapper() {
