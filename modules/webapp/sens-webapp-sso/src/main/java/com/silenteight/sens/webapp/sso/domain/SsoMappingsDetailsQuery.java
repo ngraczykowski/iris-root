@@ -62,8 +62,8 @@ class SsoMappingsDetailsQuery implements ListSsoMappingsQuery, SsoMappingDetails
 
   private static AttributeToRoleDto toAttributeToRoleDto(SsoAttributeDto ssoAttributeDto) {
     return AttributeToRoleDto.builder()
-        .key(ssoAttributeDto.getKey())
-        .value(ssoAttributeDto.getValue())
+        .attribute(ssoAttributeDto.getKey())
+        .role(ssoAttributeDto.getValue())
         .build();
   }
 }

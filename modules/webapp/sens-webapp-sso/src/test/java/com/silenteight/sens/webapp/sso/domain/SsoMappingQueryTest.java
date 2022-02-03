@@ -12,7 +12,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.silenteight.sens.webapp.sso.SsoMappingTestFixtures.*;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
+import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
+import static com.silenteight.sens.webapp.sso.SsoMappingTestFixtures.ROLE_MAPPING_DTO_1;
+import static com.silenteight.sens.webapp.sso.SsoMappingTestFixtures.ROLE_MAPPING_DTO_LIST;
+import static com.silenteight.sens.webapp.sso.SsoMappingTestFixtures.SS0_NAME;
+import static com.silenteight.sens.webapp.sso.SsoMappingTestFixtures.SSO_ID_1;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -37,7 +42,7 @@ class SsoMappingQueryTest {
     assertThat(ssoMappingDtoList).hasSize(3);
     SsoMappingDto ssoMappingDto = ssoMappingDtoList.get(0);
     assertThat(ssoMappingDto.getName()).isEqualTo(SS0_NAME);
-    assertThat(ssoMappingDto.getRoles()).contains(ROLE_NAME_1, ROLE_NAME_2);
+    assertThat(ssoMappingDto.getRoles()).contains(USER_ADMINISTRATOR, AUDITOR);
   }
 
   @Test
@@ -51,6 +56,6 @@ class SsoMappingQueryTest {
     //then
     assertThat(ssoMappingDto.getName()).isEqualTo(SS0_NAME);
     assertThat(ssoMappingDto.getRoles()).hasSize(2);
-    assertThat(ssoMappingDto.getRoles()).contains(ROLE_NAME_1, ROLE_NAME_2);
+    assertThat(ssoMappingDto.getRoles()).contains(USER_ADMINISTRATOR, AUDITOR);
   }
 }

@@ -4,13 +4,13 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
-@Builder
 @Value
+@Builder
 public class AttributeToRoleDto {
 
   @NonNull
-  String key;
+  String attribute;
 
   @NonNull
-  String value;
+  String role;
 }
