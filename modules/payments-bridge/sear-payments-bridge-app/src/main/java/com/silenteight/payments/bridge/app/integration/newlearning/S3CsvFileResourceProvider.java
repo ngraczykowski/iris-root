@@ -59,8 +59,10 @@ class S3CsvFileResourceProvider implements CsvFileResourceProvider {
   public List<ObjectPath> getFilesList() {
     try {
       var objectsNames = requestFilesNames();
-      log.info(
-          "Received list of objects in s3 bucket: {},objects: {}", bucketName, objectsNames);
+      if (log.isTraceEnabled()) {
+        log.trace(
+            "Received list of objects in s3 bucket: {},objects: {}", bucketName, objectsNames);
+      }
       return objectsNames
           .stream()
           .map(ob -> ObjectPath

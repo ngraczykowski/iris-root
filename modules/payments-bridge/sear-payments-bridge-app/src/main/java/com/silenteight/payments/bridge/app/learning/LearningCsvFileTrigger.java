@@ -36,7 +36,9 @@ class LearningCsvFileTrigger {
     var newNames = getNonProcessedFiles(repositoryFiles);
     var savedNames = saveNonProcessedFiles(newNames);
 
-    log.debug("Received non processed files = {}", savedNames);
+    if (log.isDebugEnabled()) {
+      log.debug("Trigger non processed files count = {}", savedNames.size());
+    }
 
     newNames.forEach(file -> {
       learningRunnerService.trigger(file);
