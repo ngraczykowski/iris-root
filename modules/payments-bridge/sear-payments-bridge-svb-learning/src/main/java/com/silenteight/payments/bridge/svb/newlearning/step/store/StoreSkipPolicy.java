@@ -12,7 +12,7 @@ class StoreSkipPolicy implements SkipPolicy {
 
   @Override
   public boolean shouldSkip(Throwable t, int skipCount) throws SkipLimitExceededException {
-    log.error("SkipPolicyException skipped due to item: ", t.getMessage());
+    log.error("SkipPolicyException skipped due to item: {}", t.getMessage());
     return true;
   }
 }
