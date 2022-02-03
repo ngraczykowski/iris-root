@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.app.learning;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.app.batch.JobMaintainer;
 import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningAlertsUseCase;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

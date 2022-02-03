@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.app.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.app.learning.JobMaintainer;
+import com.silenteight.payments.bridge.app.batch.JobMaintainer;
 
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.http.ResponseEntity;

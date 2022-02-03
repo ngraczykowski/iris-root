@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.app.learning;
+package com.silenteight.payments.bridge.app.batch;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -147,7 +147,7 @@ class ApplicationJobMaintainer implements JobMaintainer {
     } catch (JobRestartException e) {
       log.warn("Job restart failure", e);
     } catch (JobInstanceAlreadyCompleteException e) {
-      log.warn("Job already completed with params:{}", job.getName(), params);
+      log.warn("Job {} already completed with params:{}", job.getName(), params);
     } catch (JobParametersInvalidException e) {
       log.warn("Job parameters exception", e);
     }

@@ -1,5 +1,6 @@
 package com.silenteight.payments.bridge.app.learning;
 
+import com.silenteight.payments.bridge.app.batch.JobMaintainer;
 import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningAlertsUseCase;
 
 import org.junit.jupiter.api.Test;

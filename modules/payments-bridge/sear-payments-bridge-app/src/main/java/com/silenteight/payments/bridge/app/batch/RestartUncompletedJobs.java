@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.app.learning;
+package com.silenteight.payments.bridge.app.batch;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ class RestartUncompletedJobs {
   private final JobMaintainer jobMaintainer;
 
   @EventListener(classes = { ApplicationStartedEvent.class })
-  void onApplicationStartup() {
+  public void onApplicationStartup() {
     log.info("Uncompleted job restart procedure has been started.");
     jobMaintainer.restartUncompletedJobs();
   }
