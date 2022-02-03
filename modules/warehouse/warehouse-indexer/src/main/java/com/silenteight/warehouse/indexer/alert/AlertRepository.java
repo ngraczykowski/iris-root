@@ -1,9 +1,11 @@
 package com.silenteight.warehouse.indexer.alert;
 
 import com.silenteight.warehouse.indexer.alert.dto.AlertDto;
+import com.silenteight.warehouse.indexer.alert.dto.AlertGroupingDto;
 
 import com.google.common.collect.ListMultimap;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 /**
@@ -38,4 +40,23 @@ public interface AlertRepository {
   List<AlertDto> fetchRandomAlerts(
       AlertColumnName alertColumnName, String timeFrom, String timeTo, int limit,
       ListMultimap<String, List<String>> filters, List<String> alertNames);
+
+  /**
+   * Fetches alerts grouped by provided {@code groupByFields}. Additionally, alerts are filter out
+   * by time range and {@code filters}
+   *
+   * @param alertColumnName
+   *     name of the alertDateColumns which will be used as property name
+   * @param timeFrom
+   *     time from
+   * @param timeTo
+   *     time to
+   * @param filters
+   *     filter which will be used to filer out {@link AlertGroupingDto}
+   * @param groupByFields
+   *     list of fields to group by {@link AlertGroupingDto}
+   */
+  List<AlertGroupingDto> fetchGroupedAlerts(
+      AlertColumnName alertColumnName, OffsetDateTime timeFrom, OffsetDateTime timeTo,
+      ListMultimap<String, List<String>> filters, List<String> groupByFields);
 }

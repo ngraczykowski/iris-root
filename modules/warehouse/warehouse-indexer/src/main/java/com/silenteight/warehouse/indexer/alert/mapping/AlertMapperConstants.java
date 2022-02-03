@@ -1,10 +1,8 @@
 package com.silenteight.warehouse.indexer.alert.mapping;
 
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
-import static lombok.AccessLevel.PRIVATE;
-
-@NoArgsConstructor(access = PRIVATE)
+@UtilityClass
 public class AlertMapperConstants {
 
   public static final String ALERT_PREFIX = "alert_";
@@ -13,4 +11,11 @@ public class AlertMapperConstants {
   public static final String INDEX_TIMESTAMP = "index_timestamp";
   public static final String QA_LEVEL_0_STATE = "qa.level-0.state";
   public static final String QA_LEVEL_0_COMMENT = "qa.level-0.comment";
+
+  public static String removeAlertPrefix(String propertyName) {
+    if (propertyName.startsWith(ALERT_PREFIX)) {
+      return propertyName.replace(ALERT_PREFIX, "");
+    }
+    return propertyName;
+  }
 }

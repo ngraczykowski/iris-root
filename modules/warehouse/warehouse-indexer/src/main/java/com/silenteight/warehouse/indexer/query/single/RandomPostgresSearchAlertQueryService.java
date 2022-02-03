@@ -18,7 +18,7 @@ import java.util.Map.Entry;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.collect.ImmutableListMultimap.toImmutableListMultimap;
 import static com.silenteight.warehouse.indexer.alert.AlertColumnName.CREATED_AT;
-import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_PREFIX;
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.removeAlertPrefix;
 
 @RequiredArgsConstructor
 public class RandomPostgresSearchAlertQueryService implements RandomAlertService {
@@ -76,12 +76,5 @@ public class RandomPostgresSearchAlertQueryService implements RandomAlertService
 
   private static String replacePayloadPropertyName(String propertyName) {
     return MAPPING_PAYLOAD_PROPERTY_NAME.getOrDefault(propertyName, propertyName);
-  }
-
-  private static String removeAlertPrefix(String propertyName) {
-    if (propertyName.startsWith(ALERT_PREFIX)) {
-      return propertyName.replace(ALERT_PREFIX, "");
-    }
-    return propertyName;
   }
 }
