@@ -31,6 +31,7 @@ class TransformAlertStepConfiguration {
   private static final String QUERY =
       "SELECT \n"
           + "       fkco_id,\n"
+          + "       file_name,\n"
           + "       fkco_v_system_id,\n"
           + "       fkco_v_format,\n"
           + "       fkco_v_type,\n"
@@ -58,7 +59,7 @@ class TransformAlertStepConfiguration {
           "FROM pb_learning_csv_row\n"
           + "WHERE job_id = ?\n"
           + "GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,"
-          + " 22, 23, 24";
+          + " 22, 23, 24, 25";
 
   @Bean
   @StepScope

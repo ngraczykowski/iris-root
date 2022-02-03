@@ -147,5 +147,11 @@
       <column name="file_name" type="varchar(255)"/>
     </addColumn>
   </changeSet>
+  <changeSet id="payments-bridge-svb-learning-1.5.10" author="ppietrucha">
+    <addColumn tableName="pb_learning_alert">
+      <column name="file_name" type="varchar(255)"/>
+    </addColumn>
+  </changeSet>
+
 
 </databaseChangeLog>

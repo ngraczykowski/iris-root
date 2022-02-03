@@ -18,6 +18,7 @@ final class LearningAlertRowMapper implements RowMapper<LearningAlertEntity> {
   public LearningAlertEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
     return LearningAlertEntity
         .builder()
+        .fileName(rs.getString("file_name"))
         .fkcoId(rs.getLong("fkco_id"))
         .fkcoVSystemId(rs.getString("fkco_v_system_id"))
         .fkcoVFormat(rs.getString("fkco_v_format"))

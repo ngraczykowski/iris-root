@@ -1,10 +1,12 @@
 package com.silenteight.payments.bridge.svb.newlearning.job.csvstore;
 
 import com.silenteight.payments.bridge.svb.newlearning.job.TestApplicationConfiguration;
+import com.silenteight.payments.bridge.svb.newlearning.step.alert.LearningAlertEntity;
 import com.silenteight.payments.bridge.svb.newlearning.step.store.LearningCsvRowEntity;
 import com.silenteight.payments.bridge.testing.BaseBatchTest;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
-import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.STORE_FILE_STEP;
-import static org.assertj.core.api.Assertions.*;
+import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
 @Import({ TestApplicationConfiguration.class })
@@ -71,5 +73,37 @@ public class StoreFileStepTest extends BaseBatchTest {
         .findFirst();
     assertThat(firstStep.isPresent()).isTrue();
     assertThat(firstStep.get().getReadCount()).isEqualTo(expectedRead);
+  }
+
+  @Test
+  @Transactional(propagation = Propagation.SUPPORTS)
+  void end2EndStoreCsvJobWithTwoHits() throws Exception {
+    var expectedFileName = "analystdecison-2-hits.csv";
+    var jobExecution = jobLauncherTestUtils.launchJob(new JobParametersBuilder()
+        .addString(FILE_NAME_PARAMETER, "analystdecison-2-hits.csv")
+        .addString(BUCKET_NAME_PARAMETER, "bucket")
+        .toJobParameters());
+    assertThat(jobExecution.getExitStatus().getExitCode()).isEqualTo("COMPLETED");
+
+    var csvRows = testEntityManager.getEntityManager()
+        .createQuery("FROM LearningCsvRow", LearningCsvRowEntity.class)
+        .getResultList();
+
+    assertThat(
+        csvRows.stream()
+            .map(LearningCsvRowEntity::getFileName)
+            .collect(Collectors.toList()))
+        .containsOnly(expectedFileName);
+
+    var alerts = testEntityManager
+        .getEntityManager()
+        .createQuery("FROM LearningAlert", LearningAlertEntity.class)
+        .getResultList();
+    assertThat(alerts.size()).isEqualTo(2);
+    assertThat(
+        alerts.stream()
+            .map(LearningAlertEntity::getFileName)
+            .collect(Collectors.toList()))
+        .containsOnly(expectedFileName);
   }
 }
