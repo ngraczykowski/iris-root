@@ -15,8 +15,8 @@ gradleBuild(
         description: '''Deploy on test environment in Nomad.''', defaultValue: false),
       extendedChoice(
         name: 'environments',
-        value: 'dev,test,mike,lima',
-        defaultValue: 'dev,mike,lima',
+        value: 'test,mike,lima',
+        defaultValue: 'mike,lima',
         description: 'Environments to deploy to on Nomad',
         multiSelectDelimiter: ',',
         quoteValue: false,
