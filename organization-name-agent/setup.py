@@ -23,7 +23,7 @@ install_require = [
 ]
 
 tests_require = [
-    "black>=20.8b1",
+    "black>=22.1.0",
     "flake8-bugbear>=20.11.1",
     "flake8-comprehensions>=3.3.0",
     "flake8-import-order",

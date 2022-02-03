@@ -36,7 +36,7 @@ class InclusionRule(BasicPreconditionRule):
     rules_checks = {
         "without_part": lambda name, value: not any(v in name.source.cleaned for v in value),
         "without_token": lambda name, value: not any(
-            re.search(fr"\b{v}\b", name.source.cleaned) or v in name.tokens() for v in value
+            re.search(rf"\b{v}\b", name.source.cleaned) or v in name.tokens() for v in value
         ),
     }
 
