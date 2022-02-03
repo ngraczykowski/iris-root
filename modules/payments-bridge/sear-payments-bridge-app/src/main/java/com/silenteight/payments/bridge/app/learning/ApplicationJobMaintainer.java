@@ -21,6 +21,7 @@ import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -58,16 +59,24 @@ class ApplicationJobMaintainer implements JobMaintainer {
 
   @Override
   public Optional<JobExecution> runJobByName(String jobName, JobParameters parameters) {
+
     var registeredJob =
         jobs.stream()
             .filter(job -> jobName.equals(job.getName()))
             .findFirst();
     if (registeredJob.isPresent()) {
-      return runJob(registeredJob.get(), parameters);
+      return runJob(registeredJob.get(), createJobParametersWithTime(parameters));
     } else {
       log.warn("Job is not registered:{}", jobName);
     }
     return Optional.empty();
+  }
+
+  private static JobParameters createJobParametersWithTime(JobParameters parameters) {
+    return new JobParametersBuilder()
+        .addDate("time", Calendar.getInstance().getTime())
+        .addJobParameters(parameters)
+        .toJobParameters();
   }
 
   // Required to be able to restart jobs which are searched by restart action inside registry.
