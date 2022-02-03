@@ -13,6 +13,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import static com.silenteight.warehouse.indexer.alert.AlertColumnName.CREATED_AT;
@@ -37,6 +40,9 @@ class AlertPostgresRepositoryTest {
   private static final String TEST_4 =
       "SELECT * FROM warehouse_alert WHERE created_at BETWEEN ? AND ?AND name IN (?,?)AND"
           + " payload->>? = ? AND payload->>? in (?,?) ORDER BY RANDOM() LIMIT ?";
+  private static final String TEST_5 =
+      "SELECT * FROM warehouse_alert WHERE created_at BETWEEN ? AND ?AND payload->>? = ? AND"
+          + " payload->>? in (?,?)";
 
   @Mock
   JdbcTemplate jdbcTemplateMock;
@@ -106,5 +112,24 @@ class AlertPostgresRepositoryTest {
         eq(TIME_TO), eq("alertName"), eq("alertName2"), eq("propertyName"),
         eq("value1"), eq("propertyName2"), eq("value1"), eq("value2"),
         eq(LIMIT));
+  }
+
+  @Test
+  void fetchGroupedByWithFilters_sqlContainsFiltersAndGroupByFields() {
+    // When
+    repository.fetchGroupedAlerts(
+        CREATED_AT,
+        OffsetDateTime.ofInstant(Instant.ofEpochMilli(TIME_FROM.getTime()), ZoneId.of("UTC")),
+        OffsetDateTime.ofInstant(Instant.ofEpochMilli(TIME_TO.getTime()), ZoneId.of("UTC")),
+        ImmutableListMultimap.of(
+            "propertyName", List.of("value1"), "propertyName2",
+            List.of("value1", "value2")), List.of("group1", "group2"));
+
+    // Then
+    verify(jdbcTemplateMock).query(
+        eq(TEST_5),
+        ArgumentMatchers.<RowMapper<AlertDto>>any(), any(),
+        any(), eq("propertyName"),
+        eq("value1"), eq("propertyName2"), eq("value1"), eq("value2"));
   }
 }

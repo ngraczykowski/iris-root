@@ -1,6 +1,7 @@
 package com.silenteight.warehouse.indexer.query.grouping;
 
 import com.silenteight.warehouse.common.opendistro.elastic.OpendistroElasticClient;
+import com.silenteight.warehouse.indexer.alert.AlertRepository;
 import com.silenteight.warehouse.indexer.alert.indexing.ElasticsearchProperties;
 import com.silenteight.warehouse.indexer.query.index.FieldsQueryIndexService;
 import com.silenteight.warehouse.indexer.query.sql.SqlBuilder;
@@ -27,7 +28,7 @@ class GroupingQueryConfiguration {
 
   @Bean
   @Qualifier("postgres")
-  GroupingQueryService customPostgresReportingService() {
-    return new GroupingQueryPostgresService(null);
+  GroupingQueryService customPostgresReportingService(AlertRepository alertRepository) {
+    return new GroupingQueryPostgresService(alertRepository);
   }
 }

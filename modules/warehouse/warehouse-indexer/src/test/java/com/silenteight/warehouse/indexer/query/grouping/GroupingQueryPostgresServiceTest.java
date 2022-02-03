@@ -1,44 +1,62 @@
 package com.silenteight.warehouse.indexer.query.grouping;
 
-import lombok.extern.slf4j.Slf4j;
-
-import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
-import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
-import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys;
-
-import org.junit.jupiter.api.Test;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.intellij.lang.annotations.Language;
+import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_READ_ALIAS_NAME;
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.PROCESSING_TIMESTAMP;
-import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.INDEX_TIMESTAMP;
-import static java.time.OffsetDateTime.parse;
-import static java.util.List.of;
-import static org.assertj.core.api.Assertions.*;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
-@Slf4j
-@SpringBootTest(classes = GroupingQueryTestConfiguration.class)
-@ContextConfiguration(initializers = {
-    OpendistroElasticContainerInitializer.class, PostgresTestInitializer.class })
-@ActiveProfiles({ "jpa-test" })
-class GroupingQueryPostgresServiceTest {
+import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.removeAlertPrefix;
+
+class GroupingQueryPostgresServiceTest extends GroupingQueryServiceTest {
+
+  public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+  @Language("PostgreSQL")
+  private static final String DELETE_ALERTS_SQL = "DELETE FROM warehouse_alert;";
+  @Language("PostgreSQL")
+  private static final String INSERT_TEMPLATE =
+      "INSERT INTO warehouse_alert(id, discriminator, name, created_at, recommendation_date,"
+          + " payload) VALUES(%s, '%s', '%s', '%s', '%s', '%s')";
 
   @Autowired
   @Qualifier("postgres")
   GroupingQueryService service;
 
-  @Test
-  public void dummyTest() {
-    assertThat(service.generate(FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_READ_ALIAS_NAME))
-        .fields(of(MappedKeys.RISK_TYPE_KEY))
-        .dateField(INDEX_TIMESTAMP)
-        .from(parse(PROCESSING_TIMESTAMP))
-        .to(parse(PROCESSING_TIMESTAMP).plusSeconds(1))
-        .build())).isNull();
+  @Autowired
+  JdbcTemplate jdbcTemplate;
+
+  @AfterEach
+  void cleanup() {
+    jdbcTemplate.execute(DELETE_ALERTS_SQL);
+  }
+
+  @Override
+  protected GroupingQueryService provideServiceForTest() {
+    return service;
+  }
+
+  @Override
+  protected void insertRow(
+      String id, Map<String, Object> alertMapping, String processingTimeStamp, String alertName) {
+    jdbcTemplate.execute(
+        prepareInsertString(ThreadLocalRandom.current().nextInt(1, 10000), id, alertName,
+            processingTimeStamp, createJsonFromMap(alertMapping)));
+  }
+
+  private String prepareInsertString(
+      int id, String name, String discriminator, String timestamp, ObjectNode payload) {
+    return String.format(
+        INSERT_TEMPLATE, id, name, discriminator, timestamp, timestamp, payload.toString());
+  }
+
+  private ObjectNode createJsonFromMap(Map<String, Object> map) {
+    ObjectNode json = OBJECT_MAPPER.createObjectNode();
+    map.forEach((key, value) -> json.put(removeAlertPrefix(key), value.toString()));
+    return json;
   }
 }

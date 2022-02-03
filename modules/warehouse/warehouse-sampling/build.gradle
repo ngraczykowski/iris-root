@@ -26,7 +26,7 @@ dependencies {
 
   implementation libraries.grpc_api
   implementation libraries.grpc_stub
-  
+
   implementation libraries.test_containers_junit_jupiter
 
   testImplementation project(":warehouse-common-testing")
