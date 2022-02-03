@@ -135,7 +135,6 @@ class StoreCsvFileStepReaderConfiguration {
       "FKCO_I_BLOCKING",
       "FKCO_LISTED_RECORD",
       "FKCO_FILTERED_DATE",
-      "FKCO_D_FILTERED_DATETIME_1",
       "FKCO_V_MATCHED_TAG",
       "FKCO_V_MATCHED_TAG_CONTENT",
       "FKCO_I_SEQUENCE",
