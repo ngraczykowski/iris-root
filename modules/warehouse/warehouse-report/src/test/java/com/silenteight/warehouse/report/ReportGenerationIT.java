@@ -7,11 +7,14 @@ import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConven
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.filestorage.api.StorageManager;
 import com.silenteight.sep.filestorage.minio.container.MinioContainer.MinioContainerInitializer;
+import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
+import com.silenteight.warehouse.common.testing.e2e.CleanDatabase;
 import com.silenteight.warehouse.report.create.CreateReportRestController;
 import com.silenteight.warehouse.report.download.DownloadReportRestController;
 import com.silenteight.warehouse.report.persistence.ReportStatus.Status;
 import com.silenteight.warehouse.report.status.ReportStatusRestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +23,21 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Map;
 
-import static com.silenteight.warehouse.report.ReportFixture.DISCRIMINATOR;
-import static com.silenteight.warehouse.report.ReportFixture.NAME;
-import static com.silenteight.warehouse.report.ReportFixture.PAYLOAD;
-import static com.silenteight.warehouse.report.ReportFixture.RECOMMENDATION_DATE;
-import static java.lang.Long.valueOf;
+import static com.silenteight.warehouse.report.ReportFixture.*;
+import static java.sql.Timestamp.valueOf;
+import static java.util.Set.of;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
+import static org.mockito.Mockito.*;
 import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED;
 
 @ContextConfiguration(initializers = {
@@ -47,6 +51,7 @@ import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORT
 @DataJpaTest
 @EnableAutoConfiguration
 @Transactional(propagation = NOT_SUPPORTED)
+@CleanDatabase
 class ReportGenerationIT {
 
   private static final String TEST_BUCKET = "report";
@@ -68,7 +73,12 @@ class ReportGenerationIT {
   private StorageManager storageManager;
 
   @Autowired
+  private CountryPermissionService countryPermissionService;
+
+  @Autowired
   private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @BeforeEach
   public void init() {
@@ -76,8 +86,16 @@ class ReportGenerationIT {
   }
 
   @Test
+  @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
   void shouldGenerateReport() {
-    storeData();
+    storeData(DISCRIMINATOR_1, NAME_1, RECOMMENDATION_DATE, Map.of(
+        PAYLOAD_KEY_SIGNATURE, PAYLOAD_VALUE_SIGNATURE,
+        PAYLOAD_KEY_COUNTRY, COUNTRY_PL));
+    storeData(DISCRIMINATOR_2, NAME_2, RECOMMENDATION_DATE, Map.of(
+        PAYLOAD_KEY_SIGNATURE, PAYLOAD_VALUE_SIGNATURE,
+        PAYLOAD_KEY_COUNTRY, COUNTRY_US));
+    when(countryPermissionService.getCountries(of(COUNTRY_GROUP)))
+        .thenReturn(of(COUNTRY_PL));
 
     Long instanceId = createReport();
     await()
@@ -87,7 +105,7 @@ class ReportGenerationIT {
 
     assertThat(reportContent)
         .hasLineCount(2)
-        .contains("9HzsNs1bv,TEST[AAAGLOBAL186R1038]_81596ace,alerts/123,2021-01-12 10:00:37");
+        .contains("9HzsNs1bv,PL,TEST[AAAGLOBAL186R1038]_81596ace,alerts/123,2021-01-12 10:00:37");
   }
 
   private Long createReport() {
@@ -98,7 +116,7 @@ class ReportGenerationIT {
         REPORT_NAME);
 
     String location = report.getHeaders().get("Location").get(0);
-    return valueOf(location.replaceAll("[^0-9]", ""));
+    return Long.valueOf(location.replaceAll("[^0-9]", ""));
   }
 
   private boolean isReportCreated(Long reportId) {
@@ -117,16 +135,21 @@ class ReportGenerationIT {
   }
 
   @SneakyThrows
-  private void storeData() {
+  private void storeData(
+      String discriminator, String alertName,
+      LocalDateTime utcRecommendationDate, Map<String, String> payload) {
+
+    String serializedPayload = objectMapper.writeValueAsString(payload);
+
     namedParameterJdbcTemplate.update(
         "INSERT INTO "
             + "warehouse_alert(discriminator, name, recommendation_date, payload) "
             + "VALUES (:discriminator, :name, :recommendation_date, TO_JSON(:payload::jsonb))",
         Map.of(
-            "discriminator", DISCRIMINATOR,
-            "name", NAME,
-            "recommendation_date", RECOMMENDATION_DATE,
-            "payload", PAYLOAD));
+            "discriminator", discriminator,
+            "name", alertName,
+            "recommendation_date", valueOf(utcRecommendationDate),
+            "payload", serializedPayload));
   }
 
   @SneakyThrows

@@ -888,6 +888,29 @@ warehouse.reports.v2:
                (payload ->> 'status') AS "Alert Status",
                discriminator AS "Alert S8 ID"
         FROM warehouse_alert WHERE recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+        AND (payload ->> 's8_lobCountryCode') IN (${countries})
+    - name: AI_REASONING
+      type: simulation
+      description: Ai reasoning
+      selectSqlQuery: >
+        SELECT (wsa.payload ->> 'match_reason:feature_vector_signature') AS "Reasoning Branch ID",
+               (wsa.payload ->> 'match_reason:policy') AS "Policy ID",
+               (wsa.payload ->> 'match_reason:policy_title') AS "Policy Name",
+               (wsa.payload ->> 'match_reason:step') AS "Step ID",
+               (wsa.payload ->> 'match_reason:step_title') AS "Step Name",
+               (wsa.payload ->> 'recommendation_recommended_action') AS "S8 Alert Resolution",
+               (wsa.payload ->> 'recommendation_create_time') AS "S8 Alert Resolution Timestamp",
+               (wsa.payload ->> 'recommendation_comment') AS "Alert Comment",
+               (wa.payload ->> 's8_lobCountryCode') AS "Country LoB",
+               (wa.payload ->> 'categories/hitType') AS "Risk Type",
+               (wa.payload ->> 'DN_CASE.ExtendedAttribute5') AS "List Type",
+               (wa.payload ->> 'DN_CASE.ID') AS "Customer Alert ID",
+               (wa.payload ->> 'status') AS "Alert Status",
+               wa.discriminator AS "S8 Alert ID"
+        FROM warehouse_simulation_alert wsa
+                 JOIN warehouse_alert wa ON wsa.name = wa.name
+        WHERE analysis_name = 'analysis/${analysisId}'
+        AND (wa.payload ->> 's8_lobCountryCode') IN (${countries})
     - name: ACCURACY
       type: production
       description: Accuracy
@@ -912,6 +935,7 @@ warehouse.reports.v2:
                discriminator AS "S8 Alert ID"
         FROM warehouse_alert
         WHERE (recommendation_date BETWEEN DATE '${from}' AND DATE '${to}')
+        AND (payload ->> 's8_lobCountryCode') IN (${countries})
         AND (payload ->> 'analyst_decision') IN ('analyst_decision_false_positive', 'analyst_decision_true_positive')
     - name: ACCURACY
       type: simulation
@@ -937,6 +961,7 @@ warehouse.reports.v2:
         FROM warehouse_simulation_alert wsa
             JOIN warehouse_alert wa ON wsa.name = wa.name
         WHERE analysis_name = 'analysis/${analysisId}'
+        AND (payload ->> 's8_lobCountryCode') IN (${countries})
         AND (wa.payload ->> 'analyst_decision') IN ('analyst_decision_false_positive', 'analyst_decision_true_positive')
     - name: RBS
       type: production

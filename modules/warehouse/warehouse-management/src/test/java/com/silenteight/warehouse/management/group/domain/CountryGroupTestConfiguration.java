@@ -8,6 +8,7 @@ import com.silenteight.warehouse.management.ManagementModule;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Primary;
 
 import static org.mockito.Mockito.*;
 
@@ -23,7 +24,8 @@ class CountryGroupTestConfiguration {
   }
 
   @Bean
-  CountryPermissionService countryPermissionService() {
+  @Primary
+  CountryPermissionService countryPermissionServiceMock() {
     return mock(CountryPermissionService.class);
   }
 

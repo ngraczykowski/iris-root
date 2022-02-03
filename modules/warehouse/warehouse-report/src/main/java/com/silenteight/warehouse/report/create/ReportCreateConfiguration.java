@@ -2,6 +2,7 @@ package com.silenteight.warehouse.report.create;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
 import com.silenteight.warehouse.report.generation.ReportGenerationService;
 import com.silenteight.warehouse.report.persistence.ReportPersistenceService;
 
@@ -22,12 +23,14 @@ public class ReportCreateConfiguration {
   @Bean
   ReportRequestService reportRequestService(
       ReportPersistenceService reportPersistenceService,
-      ReportGenerationService reportProvider
+      ReportGenerationService reportProvider,
+      CountryPermissionService countryPermissionService
   ) {
     return new ReportRequestService(
         reportPersistenceService,
         reportPropertiesMatcher(),
-        reportProvider);
+        reportProvider,
+        countryPermissionService);
   }
 
   @Bean
