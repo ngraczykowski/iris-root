@@ -7,7 +7,6 @@ import com.silenteight.sep.auth.token.UserAwareTokenProvider;
 import com.silenteight.warehouse.alert.rest.RestAlertModule;
 import com.silenteight.warehouse.common.domain.DomainModule;
 import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
-import com.silenteight.warehouse.common.domain.country.CountryRepository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
@@ -22,11 +21,6 @@ import org.springframework.context.annotation.ComponentScan;
 @RequiredArgsConstructor
 @Slf4j
 public class AlertProviderTestConfiguration {
-
-  @Bean
-  public CountryPermissionService countryPermissionService(CountryRepository countryRepository) {
-    return new CountryPermissionService(countryRepository);
-  }
 
   @Bean
   public ObjectMapper objectMapper() {

@@ -1,7 +1,8 @@
 package com.silenteight.warehouse.report;
 
+import com.silenteight.sep.auth.token.TokenModule;
 import com.silenteight.sep.filestorage.minio.FileStorageMinioModule;
-import com.silenteight.warehouse.common.domain.DomainModule;
+import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
 import com.silenteight.warehouse.report.create.ReportCreateModule;
 import com.silenteight.warehouse.report.download.ReportDownloadModule;
 import com.silenteight.warehouse.report.generation.ReportGenerationModule;
@@ -11,10 +12,13 @@ import com.silenteight.warehouse.report.sql.SqlExecutorModule;
 import com.silenteight.warehouse.report.status.ReportStatusModule;
 import com.silenteight.warehouse.report.storage.StorageModule;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Primary;
+
+import static org.mockito.Mockito.*;
 
 @ComponentScan(basePackageClasses = {
-    DomainModule.class,
     FileStorageMinioModule.class,
     ReportCreateModule.class,
     ReportDownloadModule.class,
@@ -23,7 +27,14 @@ import org.springframework.context.annotation.ComponentScan;
     ReportPersistenceModule.class,
     ReportStatusModule.class,
     StorageModule.class,
-    SqlExecutorModule.class
+    SqlExecutorModule.class,
+    TokenModule.class
 })
 class ReportGenerationConfiguration {
+
+  @Bean
+  @Primary
+  CountryPermissionService countryPermissionServiceMock() {
+    return mock(CountryPermissionService.class);
+  }
 }

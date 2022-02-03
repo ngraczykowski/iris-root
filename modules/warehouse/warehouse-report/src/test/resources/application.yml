@@ -43,11 +43,13 @@ warehouse.reports.v2:
       description: Test report
       selectSqlQuery: >
         SELECT (payload ->> 'fvSignature') AS "Reasoning Branch ID",
+               (payload ->> 'country') AS "Country",
                discriminator AS "Alert S8 ID",
                name AS "Alert S8 Name",
                recommendation_date
         FROM warehouse_alert
-#        WHERE recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+        WHERE recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+        AND (payload ->> 'country') IN (${countries})
 
 logging:
   level:

@@ -4,11 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.sep.auth.token.UserAwareTokenProvider;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
+import java.util.Set;
 
 import static com.silenteight.warehouse.common.domain.ReportConstants.IS_PRODUCTION;
 import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
@@ -23,9 +26,13 @@ import static org.springframework.http.HttpStatus.SEE_OTHER;
 public class CreateReportRestController {
 
   private static final String COMMON_URL = "/v3/analysis/{type}/reports/{name}";
+  private static final String GROUP_NAME = "kibana-sso";
 
   @NonNull
   private final ReportRequestService reportRequestService;
+
+  @NonNull
+  private final UserAwareTokenProvider userAwareTokenProvider;
 
   @PostMapping(COMMON_URL)
   public ResponseEntity<Void> createReport(
@@ -39,14 +46,17 @@ public class CreateReportRestController {
     if (IS_PRODUCTION.test(type))
       validate(from, to);
 
-    log.info("Create report request received, {} - from={} - to={}", name, from, to);
+    Set<String> dataAccessRoles = userAwareTokenProvider.getRolesForGroup(GROUP_NAME);
+
+    log.info("Create report request received, "
+        + "reportName={}, from={}, to={}, dataAccessRoles={}", name, from, to, dataAccessRoles);
 
     ReportInstanceReferenceDto reportInstanceReference
-        = reportRequestService.request(from, to, type, name);
+        = reportRequestService.request(from, to, type, name, dataAccessRoles);
 
-    log.debug(
-        "Create report request processed, from={} - to={}, reportId={}",
-        from, to, reportInstanceReference.getReferenceId());
+    log.debug("Create report request processed, "
+            + "reportName={}, from={}, to={}, dataAccessRoles={}, reportId={}",
+        name, from, to, dataAccessRoles, reportInstanceReference.getReferenceId());
 
     return ResponseEntity.status(SEE_OTHER)
         .header(

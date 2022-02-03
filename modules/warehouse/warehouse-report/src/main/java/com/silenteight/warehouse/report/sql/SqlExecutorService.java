@@ -41,10 +41,9 @@ class SqlExecutorService implements SqlExecutor {
         Connection connection = dataSource.getConnection();
         Statement statement = connection.createStatement()) {
 
-      log.debug("Started processing sql");
       InputStream inputStream = doExecute(connection, statement, sqlDto);
       consumer.accept(inputStream);
-      log.debug("Processing Sql Executor ended");
+      log.trace("Sql Executor completed. The query itself may still be running.");
     } catch (SQLException e) {
       throw new SqlExecutorException(e);
     }
@@ -53,10 +52,10 @@ class SqlExecutorService implements SqlExecutor {
   private InputStream doExecute(Connection connection, Statement statement, SqlExecutorDto sqlDto)
       throws SQLException {
 
-    log.debug("PrepareDataSqlStatements {}", sqlDto.getPrepareDataSqlStatements());
+    log.debug("Executing sql, prepareDataSqlStatements={}", sqlDto.getPrepareDataSqlStatements());
     prepareData(statement, sqlDto.getPrepareDataSqlStatements());
     String copyOutSql = prepareCopyOutSql(sqlDto.getSelectSqlStatement());
-    log.debug("copyOutSql {}", copyOutSql);
+    log.debug("Executing sql, copyOutSql={}", copyOutSql);
     return copyOutToInputStream(connection, copyOutSql);
   }
 

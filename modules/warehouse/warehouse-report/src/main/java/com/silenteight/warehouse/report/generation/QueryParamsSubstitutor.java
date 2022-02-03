@@ -4,49 +4,53 @@ import lombok.experimental.UtilityClass;
 
 import com.silenteight.warehouse.report.sql.dto.SqlExecutorDto;
 
-import org.apache.commons.text.StringSubstitutor;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.silenteight.warehouse.common.time.Timestamps.toStringFormatIsoLocalDate;
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+import static org.apache.commons.text.StringSubstitutor.replace;
 
 @UtilityClass
 class QueryParamsSubstitutor {
 
-  private static final String PARAMETER_FROM = "from";
-  private static final String PARAMETER_TO = "to";
-  private static final String PARAMETER_ANALYSIS_ID = "analysisId";
-  private static final String MISSING_CONFIGURATION_EXCEPTION =
+  static final String PARAMETER_FROM = "from";
+  static final String PARAMETER_TO = "to";
+  static final String PARAMETER_ANALYSIS_ID = "analysisId";
+  static final String PARAMETER_COUNTRIES = "countries";
+  static final String MISSING_CONFIGURATION_EXCEPTION =
       "Configuration parameter: selectSqlQuery cannot be null while using SQL reports!";
 
   SqlExecutorDto substitute(ReportRequestData fetchDataRequest) {
     Map<String, String> parameters = new HashMap<>();
 
-    fetchDataRequest
-        .getFrom()
+    fetchDataRequest.getFrom()
         .ifPresent(from -> parameters.put(PARAMETER_FROM, toStringFormatIsoLocalDate(from)));
-    fetchDataRequest
-        .getTo()
+    fetchDataRequest.getTo()
         .ifPresent(to -> parameters.put(PARAMETER_TO, toStringFormatIsoLocalDate(to)));
     parameters.put(PARAMETER_ANALYSIS_ID, fetchDataRequest.getAnalysisId());
+    parameters.put(PARAMETER_COUNTRIES, toSqlList(fetchDataRequest.getDataAccessPermissions()));
 
     String sqlSelectQuery =
-        Optional
-            .ofNullable(StringSubstitutor.replace(fetchDataRequest.getSelectSqlQuery(), parameters))
+        ofNullable(replace(fetchDataRequest.getSelectSqlQuery(), parameters))
             .orElseThrow(() -> new IllegalArgumentException(MISSING_CONFIGURATION_EXCEPTION));
 
     List<String> sqlTemplates =
-        Optional.ofNullable(fetchDataRequest.getSqlTemplates())
+        ofNullable(fetchDataRequest.getSqlTemplates())
             .orElse(Collections.emptyList())
             .stream()
-            .map(s -> StringSubstitutor.replace(s, parameters))
-            .collect(Collectors.toList());
+            .map(s -> replace(s, parameters))
+            .collect(toList());
 
     return SqlExecutorDto
         .builder()
         .prepareDataSqlStatements(sqlTemplates)
         .selectSqlStatement(sqlSelectQuery)
         .build();
+  }
+
+  private String toSqlList(Set<String> elements) {
+    return elements.stream().collect(joining("', '", "'", "'"));
   }
 }
