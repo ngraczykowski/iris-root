@@ -12,7 +12,19 @@ gradleBuild(
     additionalParams: [
       booleanParam(name: 'deployOnTest',
       description: '''Deploy on test environment in Nomad.''',
-      defaultValue: false)],
+      defaultValue: false),
+      extendedChoice(
+            name: 'environments',
+            value: 'dev',
+            defaultValue: '',
+            description: 'Environments to deploy to on Nomad',
+            multiSelectDelimiter: ',',
+            quoteValue: false,
+            saveJSONParameterToFile: false,
+            type: 'PT_MULTI_SELECT',
+            visibleItemCount: 10
+            ),
+      ],
     additionalStages: {
       stage('Build and deploy container image') {
         script {
