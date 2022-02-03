@@ -11,9 +11,16 @@ public class AgentsUtils {
   public static final String HISTORICAL_RISK_CUSTOMER_NAME_FEATURE = "historicalRiskCustomerName";
   // TODO: remove when decide that customer name will not be used
   public static final String HISTORICAL_RISK_CUSTOMER_NAME_LEARNING_DISC = "hist_customer_name";
+
   public static final String HISTORICAL_RISK_ACCOUNT_NUMBER_FEATURE =
       "historicalRiskAccountNumber";
   public static final String HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC = "hist_account_number";
+
+  public static final String CONTEXTUAL_LEARNING_FEATURE =
+      "contextualLearning";
+  public static final String CONTEXTUAL_LEARNING_FEATURE_NAME =
+      FEATURE_PREFIX + CONTEXTUAL_LEARNING_FEATURE;
+  public static final String CONTEXTUAL_LEARNING_DISC = "contextual_learning";
 
   public static final String GEO_FEATURE = "geo";
 
