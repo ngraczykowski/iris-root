@@ -5,31 +5,19 @@ gradleBuild(
     sonarEnabled: true,
     archiveArtifactsPattern: '**/build/libs/*.jar, plugins/**/*.jar',
     includeBuildNumberInSnapshotVersion: true,
-    additionalParams: [booleanParam(name: 'deployOnTest',
-    description: '''Deploy on test environment in Nomad.''', defaultValue: false)],
+    additionalParams: [
+      extendedChoice(
+        name: 'environments',
+        value: 'dev,test',
+        defaultValue: '',
+        description: 'Environments to deploy to on Nomad',
+        multiSelectDelimiter: ',',
+        quoteValue: false,
+        saveJSONParameterToFile: false,
+        type: 'PT_MULTI_SELECT',
+        visibleItemCount: 10)
+    ],
     additionalStages: {
-          stage('Deploy On Nomad Dev') {
-            script {
-              def utils = new com.silenteight.jenkins.ci.Utils()
-              // FIXME(ahaczewski): Use `when` if possible.
-              if (utils.getGitBranch() == 'master') {
-                sh './nomad/deploy.sh -var-file=dev.vars'
-              } else {
-                echo 'This is not a release branch ignore Nomad deployment'
-              }
-            }
-          }
-
-          stage('Deploy On Nomad Test') {
-            script {
-              def utils = new com.silenteight.jenkins.ci.Utils()
-              // FIXME(ahaczewski): Use `when` if possible.
-              if (utils.getGitBranch() == 'master' && params.deployOnTest) {
-                sh './nomad/deploy.sh -var-file=test.vars'
-              } else {
-                echo 'This is not a release branch ignore Nomad deployment'
-              }
-            }
-          }
+      deployOnNomad()
     }
 )
