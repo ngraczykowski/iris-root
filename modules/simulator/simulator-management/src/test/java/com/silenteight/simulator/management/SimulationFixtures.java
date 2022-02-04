@@ -9,6 +9,7 @@ import com.silenteight.model.api.v1.SolvingModel;
 import com.silenteight.simulator.management.archive.ArchiveSimulationRequest;
 import com.silenteight.simulator.management.cancel.CancelSimulationRequest;
 import com.silenteight.simulator.management.create.CreateSimulationRequest;
+import com.silenteight.simulator.management.create.CreateSimulationRequest.CreateSimulationRequestBuilder;
 import com.silenteight.simulator.management.details.dto.SimulationDetailsDto;
 import com.silenteight.simulator.management.domain.SimulationState;
 import com.silenteight.simulator.management.domain.dto.SimulationDto;
@@ -19,6 +20,8 @@ import java.time.OffsetDateTime;
 import java.util.*;
 
 import static com.silenteight.adjudication.api.v1.Analysis.State.DONE;
+import static com.silenteight.simulator.management.domain.SimulationDomainConstants.MAX_MODEL_NAME_LENGTH;
+import static com.silenteight.simulator.management.domain.SimulationDomainConstants.MIN_MODEL_NAME_LENGTH;
 import static com.silenteight.simulator.management.domain.SimulationState.ARCHIVED;
 import static com.silenteight.simulator.management.domain.SimulationState.CANCELED;
 import static com.silenteight.simulator.management.domain.SimulationState.PENDING;
@@ -58,14 +61,20 @@ public final class SimulationFixtures {
   public static final String PROCESSING_TIMESTAMP_1 = "2021-07-22T12:20:37.098Z";
   public static final String PROCESSING_TIMESTAMP_2 = "2021-07-22T10:00:37.098Z";
   public static final String PROCESSING_TIMESTAMP_3 = "2021-07-22T12:00:37.098Z";
+
   public static final CreateSimulationRequest CREATE_SIMULATION_REQUEST =
-      CreateSimulationRequest.builder()
-          .id(ID)
-          .simulationName(SIMULATION_NAME)
-          .description(DESCRIPTION)
-          .model(MODEL_NAME)
-          .datasets(DATASETS)
-          .createdBy(USERNAME)
+      createSimulationRequestBuilder().build();
+
+  public static final CreateSimulationRequest
+      CREATE_SIMULATION_REQUEST_WITH_MODEL_NAME_THAT_EXCEEDED_MAX_LENGTH =
+      createSimulationRequestBuilder()
+          .model("a".repeat(MAX_MODEL_NAME_LENGTH + 1))
+          .build();
+
+  public static final CreateSimulationRequest
+      CREATE_SIMULATION_REQUEST_WITH_MODEL_NAME_THAT_NOT_EXCEEDED_MIN_LENGTH =
+      createSimulationRequestBuilder()
+          .model("a".repeat(MIN_MODEL_NAME_LENGTH - 1))
           .build();
 
   public static final CancelSimulationRequest CANCEL_SIMULATION_REQUEST =
@@ -184,5 +193,15 @@ public final class SimulationFixtures {
         .setAlertCount(ALERTS_COUNT)
         .setPendingAlerts(pendingAlerts)
         .build();
+  }
+
+  private static CreateSimulationRequestBuilder createSimulationRequestBuilder() {
+    return CreateSimulationRequest.builder()
+        .id(ID)
+        .simulationName(SIMULATION_NAME)
+        .description(DESCRIPTION)
+        .model(MODEL_NAME)
+        .datasets(DATASETS)
+        .createdBy(USERNAME);
   }
 }

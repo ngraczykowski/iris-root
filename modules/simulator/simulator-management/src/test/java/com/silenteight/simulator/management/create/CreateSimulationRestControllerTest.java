@@ -5,12 +5,16 @@ import com.silenteight.simulator.common.web.exception.GenericExceptionController
 import com.silenteight.simulator.management.domain.NonUniqueSimulationException;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import java.util.stream.Stream;
+
 import static com.silenteight.simulator.common.testing.rest.TestRoles.*;
-import static com.silenteight.simulator.management.SimulationFixtures.CREATE_SIMULATION_REQUEST;
+import static com.silenteight.simulator.management.SimulationFixtures.*;
 import static com.silenteight.simulator.management.create.CreateSimulationRestController.SIMULATIONS_URL;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -54,5 +58,19 @@ class CreateSimulationRestControllerTest extends BaseRestControllerTest {
   void its403_whenNotPermittedRoleForCreating() {
     post(SIMULATIONS_URL, CREATE_SIMULATION_REQUEST)
         .statusCode(FORBIDDEN.value());
+  }
+
+  private static Stream<CreateSimulationRequest> invalidCreateSimulationRequestProvider() {
+    return Stream.of(
+        CREATE_SIMULATION_REQUEST_WITH_MODEL_NAME_THAT_EXCEEDED_MAX_LENGTH,
+        CREATE_SIMULATION_REQUEST_WITH_MODEL_NAME_THAT_NOT_EXCEEDED_MIN_LENGTH);
+  }
+
+  @WithMockUser(username = USERNAME, authorities = { MODEL_TUNER, AUDITOR })
+  @ParameterizedTest
+  @MethodSource("invalidCreateSimulationRequestProvider")
+  void its400_whenCreateSimulationRequestIsInvalid(CreateSimulationRequest request) {
+    post(SIMULATIONS_URL, request)
+        .statusCode(BAD_REQUEST.value());
   }
 }
