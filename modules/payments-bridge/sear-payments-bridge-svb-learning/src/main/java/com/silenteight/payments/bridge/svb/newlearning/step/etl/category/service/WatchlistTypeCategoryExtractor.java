@@ -11,7 +11,7 @@ class WatchlistTypeCategoryExtractor extends BaseUnstructuredCategoryValueExtrac
 
   @Override
   protected String getValue(HitComposite hitComposite) {
-    return hitComposite.getWatchlistType().getName();
+    return hitComposite.getWatchlistType().toString();
   }
 
   @Override
