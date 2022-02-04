@@ -332,5 +332,3 @@ sep:
         - "MANAGE_QA_VERIFICATION"
         - "DASHBOARD"
 
-warehouse.report.rbs.production:
-  index-name: ${warehouse.es.production-query-index}
