@@ -17,19 +17,32 @@ import java.util.UUID;
 
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.AUDITOR;
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
+import static com.silenteight.sens.webapp.sso.domain.DomainConstants.SSO_MAPPING_FIELD_MAX_LENGTH;
 import static java.util.Collections.emptyList;
-import static java.util.List.*;
-import static java.util.UUID.*;
+import static java.util.List.of;
+import static java.util.UUID.fromString;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SsoMappingTestFixtures {
 
   public static final String SS0_NAME = "Sso name 1";
   public static final String SS0_NAME_2 = "Sso name 2";
+  public static final String SS0_NAME_WITH_LESS_CHARS_THEN_REQUIRED = "TN";
+  public static final String SS0_NAME_WITH_MORE_CHARS_THEN_PERMITTED =
+      "s".repeat(SSO_MAPPING_FIELD_MAX_LENGTH + 1);
+
   public static final String SSO_ATTRIBUTE_1 = "Attribute #1";
   public static final String SSO_ATTRIBUTE_2 = "Attribute #2";
+  public static final String SSO_ATTRIBUTE_NAME_TOO_SHORT = "At";
+  public static final String SSO_ATTRIBUTE_NAME_TOO_LONG =
+      "s".repeat(SSO_MAPPING_FIELD_MAX_LENGTH + 20);
+
   public static final String SSO_ROLE_1 = "Role #1";
   public static final String SSO_ROLE_2 = "Role #2";
+  public static final String SSO_ROLE_NAME_TOO_SHORT = "Ro";
+  public static final String SSO_ROLE_NAME_TOO_LONG =
+      "s".repeat(SSO_MAPPING_FIELD_MAX_LENGTH + 1);
+
   public static final List<String> ROLES_NAMES_LIST = of(USER_ADMINISTRATOR, AUDITOR);
   public static final RolesDto ROLES_DTO = new RolesDto(ROLES_NAMES_LIST);
   public static final UUID SSO_ID_1 = fromString("e0c46896-6448-4b23-8473-1be5a40f08fb");
@@ -85,6 +98,30 @@ public final class SsoMappingTestFixtures {
       .role(SSO_ROLE_2)
       .build();
 
+  public static final AttributeToRoleDto ATTRIBUTE_TO_ROLE_DTO_WITH_ATTRIBUTE_NAME_TOO_LONG =
+      AttributeToRoleDto.builder()
+          .attribute(SSO_ATTRIBUTE_NAME_TOO_LONG)
+          .role(SSO_ROLE_2)
+          .build();
+
+  public static final AttributeToRoleDto ATTRIBUTE_TO_ROLE_DTO_WITH_ATTRIBUTE_NAME_TOO_SHORT =
+      AttributeToRoleDto.builder()
+          .attribute(SSO_ATTRIBUTE_NAME_TOO_SHORT)
+          .role(SSO_ROLE_2)
+          .build();
+
+  public static final AttributeToRoleDto ATTRIBUTE_TO_ROLE_DTO_WITH_ROLE_NAME_TOO_LONG =
+      AttributeToRoleDto.builder()
+          .attribute(SSO_ATTRIBUTE_2)
+          .role(SSO_ROLE_NAME_TOO_LONG)
+          .build();
+
+  public static final AttributeToRoleDto ATTRIBUTE_TO_ROLE_DTO_WITH_ROLE_NAME_TOO_SHORT =
+      AttributeToRoleDto.builder()
+          .attribute(SSO_ATTRIBUTE_2)
+          .role(SSO_ROLE_NAME_TOO_SHORT)
+          .build();
+
   public static final SsoMappingDto SSO_MAPPING_DTO_1 = SsoMappingDto.builder()
       .id(SSO_ID_1)
       .name(SS0_NAME)
@@ -111,4 +148,33 @@ public final class SsoMappingTestFixtures {
 
   public static final CreateSsoMappingDto CREATE_SSO_MAPPING_DTO =
       new CreateSsoMappingDto(SS0_NAME, of(), of(USER_ADMINISTRATOR, AUDITOR));
+
+  public static final CreateSsoMappingDto CREATE_SSO_MAPPING_DTO_WITH_TOO_LONG_NAME =
+      new CreateSsoMappingDto(
+          SS0_NAME_WITH_MORE_CHARS_THEN_PERMITTED, of(), of(USER_ADMINISTRATOR, AUDITOR));
+
+  public static final CreateSsoMappingDto CREATE_SSO_MAPPING_DTO_WITH_TOO_SHORT_NAME =
+      new CreateSsoMappingDto(
+          SS0_NAME_WITH_LESS_CHARS_THEN_REQUIRED, of(), of(USER_ADMINISTRATOR, AUDITOR));
+
+  public static final CreateSsoMappingDto CREATE_SSO_MAPPING_DTO_WITH_ATTRIBUTE_NAME_TOO_LONG =
+      new CreateSsoMappingDto(
+          SS0_NAME, of(ATTRIBUTE_TO_ROLE_DTO_WITH_ATTRIBUTE_NAME_TOO_LONG),
+          of(USER_ADMINISTRATOR, AUDITOR));
+
+  public static final CreateSsoMappingDto CREATE_SSO_MAPPING_DTO_WITH_ATTRIBUTE_NAME_TOO_SHORT =
+      new CreateSsoMappingDto(
+          SS0_NAME, of(ATTRIBUTE_TO_ROLE_DTO_WITH_ATTRIBUTE_NAME_TOO_SHORT),
+          of(USER_ADMINISTRATOR, AUDITOR));
+
+  public static final CreateSsoMappingDto CREATE_SSO_MAPPING_DTO_WITH_ROLE_NAME_TOO_LONG =
+      new CreateSsoMappingDto(
+          SS0_NAME, of(ATTRIBUTE_TO_ROLE_DTO_WITH_ROLE_NAME_TOO_LONG),
+          of(USER_ADMINISTRATOR, AUDITOR));
+
+  public static final CreateSsoMappingDto CREATE_SSO_MAPPING_DTO_WITH_ROLE_NAME_TOO_SHORT =
+      new CreateSsoMappingDto(
+          SS0_NAME, of(ATTRIBUTE_TO_ROLE_DTO_WITH_ROLE_NAME_TOO_SHORT),
+          of(USER_ADMINISTRATOR, AUDITOR));
+
 }

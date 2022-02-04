@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.silenteight.sens.webapp.role.domain.DomainConstants.ROLE_FIELD_MAX_LENGTH;
 import static java.time.OffsetDateTime.parse;
 import static java.util.Set.of;
 import static java.util.UUID.fromString;
@@ -25,9 +26,15 @@ public final class RoleTestFixtures {
   public static final OffsetDateTime CREATED_AT = parse("2021-07-22T12:20:37.098Z");
   public static final OffsetDateTime UPDATED_AT = parse("2021-07-22T12:20:37.098Z");
   public static final String ROLE_NAME_1 = "First role name";
-  public static final String ROLE_NAME_2 = "Second role name ";
+  public static final String ROLE_NAME_2 = "Second role name";
+  public static final String ROLE_NAME_TOO_LONG = "a".repeat(ROLE_FIELD_MAX_LENGTH + 1);
+  public static final String ROLE_NAME_WITH_LESS_THAN_MIN_NUMBER_OF_CHAR = "TR";
   public static final String ROLE_DESCRIPTION_1 = "First tole description";
   public static final String ROLE_DESCRIPTION_2 = "Second tole description";
+  public static final String ROLE_DESCRIPTION_WITH_LESS_CHARS_THEN_REQUIRED = "Rd";
+  public static final String ROLE_DESCRIPTION_WITH_MORE_CHARS_THEN_PERMITTED =
+      "a".repeat(ROLE_FIELD_MAX_LENGTH + 1);
+
   public static final String USERNAME_1 = "John Doe";
   public static final UUID PERMISSION_ID_1 = fromString("ec75b706-43e9-49ae-b328-0ef372f07058");
   public static final UUID PERMISSION_ID_2 = fromString("a6e9de43-6041-49eb-8eb6-b9ecaa99bf50");
@@ -64,6 +71,36 @@ public final class RoleTestFixtures {
       .description(ROLE_DESCRIPTION_1)
       .permissions(PERMISSION_IDS)
       .build();
+
+  public static final CreateRoleDto CREATE_ROLE_DTO_WITH_TOO_LONG_NAME = CreateRoleDto.builder()
+      .id(ROLE_ID_1)
+      .name(ROLE_NAME_TOO_LONG)
+      .description(ROLE_DESCRIPTION_1)
+      .permissions(PERMISSION_IDS)
+      .build();
+
+  public static final CreateRoleDto CREATE_ROLE_DTO_WITH_TOO_SHORT_NAME = CreateRoleDto.builder()
+      .id(ROLE_ID_1)
+      .name(ROLE_NAME_WITH_LESS_THAN_MIN_NUMBER_OF_CHAR)
+      .description(ROLE_DESCRIPTION_1)
+      .permissions(PERMISSION_IDS)
+      .build();
+
+  public static final CreateRoleDto CREATE_ROLE_DTO_WITH_DESCRIPTION_TOO_SHORT =
+      CreateRoleDto.builder()
+          .id(ROLE_ID_1)
+          .name(ROLE_NAME_1)
+          .description(ROLE_DESCRIPTION_WITH_LESS_CHARS_THEN_REQUIRED)
+          .permissions(PERMISSION_IDS)
+          .build();
+
+  public static final CreateRoleDto CREATE_ROLE_DTO_WITH_DESCRIPTION_TOO_LONG =
+      CreateRoleDto.builder()
+          .id(ROLE_ID_1)
+          .name(ROLE_NAME_1)
+          .description(ROLE_DESCRIPTION_WITH_MORE_CHARS_THEN_PERMITTED)
+          .permissions(PERMISSION_IDS)
+          .build();
 
   public static final CreateRoleRequest CREATE_ROLE_REQUEST = CreateRoleRequest.builder()
       .id(ROLE_ID_1)
