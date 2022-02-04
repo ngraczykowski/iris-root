@@ -5,7 +5,8 @@ import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWith
 import com.silenteight.serp.governance.changerequest.create.dto.CreateChangeRequestDto;
 import com.silenteight.serp.governance.common.web.exception.GenericExceptionControllerAdvice;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -17,6 +18,7 @@ import static com.silenteight.serp.governance.changerequest.fixture.ChangeReques
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.ACCEPTED;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @Import({
@@ -30,10 +32,13 @@ class CreateChangeRequestRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private CreateChangeRequestUseCase createChangeRequestUseCase;
 
-  @Test
+  @ParameterizedTest
+  @MethodSource(
+      "com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures#getModelNames"
+  )
   @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
-  void its202_whenChangeRequestCreated() {
-    post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDto())
+  void its202_whenChangeRequestCreated(String modelName) {
+    post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDto(modelName))
         .contentType(anything())
         .statusCode(ACCEPTED.value());
 
@@ -41,7 +46,7 @@ class CreateChangeRequestRestControllerTest extends BaseRestControllerTest {
         CreateChangeRequestCommand
             .builder()
             .id(CHANGE_REQUEST_ID)
-            .modelName(MODEL_NAME)
+            .modelName(modelName)
             .createdBy(USERNAME)
             .creatorComment(CREATOR_COMMENT)
             .build());
@@ -49,12 +54,24 @@ class CreateChangeRequestRestControllerTest extends BaseRestControllerTest {
 
   @TestWithRole(roles = { USER_ADMINISTRATOR, APPROVER, AUDITOR, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
-    post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDto())
+    post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDto(MODEL_NAME))
         .contentType(anything())
         .statusCode(FORBIDDEN.value());
   }
 
-  private static CreateChangeRequestDto makeCreateChangeRequestDto() {
-    return new CreateChangeRequestDto(CHANGE_REQUEST_ID, MODEL_NAME, CREATOR_COMMENT);
+  @ParameterizedTest
+  @MethodSource(
+      "com.silenteight.serp.governance.changerequest.fixture.ChangeRequestFixtures#"
+          + "getIncorrectModelNames"
+  )
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its400_whenFeatureNameLengthIsWrong(String modelName) {
+    post(CREATE_CHANGE_REQUEST_URL, makeCreateChangeRequestDto(modelName))
+        .contentType(anything())
+        .statusCode(BAD_REQUEST.value());
+  }
+
+  private static CreateChangeRequestDto makeCreateChangeRequestDto(String modelName) {
+    return new CreateChangeRequestDto(CHANGE_REQUEST_ID, modelName, CREATOR_COMMENT);
   }
 }

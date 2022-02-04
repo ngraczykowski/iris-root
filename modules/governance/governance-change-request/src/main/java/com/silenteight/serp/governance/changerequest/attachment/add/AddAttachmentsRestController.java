@@ -23,6 +23,7 @@ class AddAttachmentsRestController {
   @NonNull
   private final AddAttachmentsUseCase addAttachmentsUseCase;
 
+  //TODO move FileResource.isNameValid here and validate regexp files/uuid
   @PostMapping("/v1/changeRequests/{changeRequestId}/attachments")
   @PreAuthorize("isAuthorized('UPLOAD_ATTACHMENTS')")
   public ResponseEntity<Void> addAttachments(

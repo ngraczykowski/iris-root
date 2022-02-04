@@ -9,7 +9,8 @@ import com.silenteight.serp.governance.policy.domain.dto.UpdateStepRequest;
 import com.silenteight.serp.governance.policy.step.edit.dto.EditStepDto;
 import com.silenteight.serp.governance.policy.step.list.PolicyStepsRequestQuery;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -18,8 +19,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.util.UUID;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
-import static com.silenteight.serp.governance.policy.domain.TestFixtures.STEP_NAME_THAT_EXCEEDED_MAX_LENGTH;
-import static com.silenteight.serp.governance.policy.domain.TestFixtures.STEP_NAME_WITH_MAX_LENGTH;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
@@ -46,11 +45,12 @@ class EditStepRequestRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private PolicyStepsRequestQuery policyStepsRequestQuery;
 
-  @Test
+  @ParameterizedTest
+  @MethodSource("com.silenteight.serp.governance.policy.domain.TestFixtures#getStepNames")
   @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
-  void its202_whenStepUpdated() {
+  void its202_whenStepUpdated(String stepName) {
     when(policyStepsRequestQuery.getPolicyIdForStep(STEP_ID)).thenReturn(POLICY_ID);
-    patch(STEP_URL, new EditStepDto(NAME, null, SOLUTION))
+    patch(STEP_URL, new EditStepDto(stepName, null, SOLUTION))
         .contentType(anything())
         .statusCode(NO_CONTENT.value());
 
@@ -58,23 +58,10 @@ class EditStepRequestRestControllerTest extends BaseRestControllerTest {
     verify(policyService).updateStep(captor.capture());
     assertThat(captor.getValue().getPolicyId()).isEqualTo(POLICY_ID);
     assertThat(captor.getValue().getStepId()).isEqualTo(STEP_ID);
-    assertThat(captor.getValue().getName()).isEqualTo(NAME);
+    assertThat(captor.getValue().getName()).isEqualTo(stepName);
     assertThat(captor.getValue().getDescription()).isNull();
     assertThat(captor.getValue().getSolution()).isEqualTo(SOLUTION.getFeatureVectorSolution());
     assertThat(captor.getValue().getUpdatedBy()).isEqualTo(USERNAME);
-  }
-
-  @Test
-  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
-  void its202_whenStepUpdatedWithMaxAllowedNameLength() {
-    when(policyStepsRequestQuery.getPolicyIdForStep(STEP_ID)).thenReturn(POLICY_ID);
-    patch(STEP_URL, new EditStepDto(STEP_NAME_WITH_MAX_LENGTH, null, SOLUTION))
-        .contentType(anything())
-        .statusCode(NO_CONTENT.value());
-
-    ArgumentCaptor<UpdateStepRequest> captor = ArgumentCaptor.forClass(UpdateStepRequest.class);
-    verify(policyService).updateStep(captor.capture());
-    assertThat(captor.getValue().getName()).isEqualTo(STEP_NAME_WITH_MAX_LENGTH);
   }
 
   @TestWithRole(roles = { APPROVER, USER_ADMINISTRATOR, QA, AUDITOR })
@@ -84,10 +71,11 @@ class EditStepRequestRestControllerTest extends BaseRestControllerTest {
         .statusCode(FORBIDDEN.value());
   }
 
-  @Test
+  @ParameterizedTest
+  @MethodSource("com.silenteight.serp.governance.policy.domain.TestFixtures#getIncorrectStepNames")
   @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
-  void its400_whenStepNameLengthGreaterThanAllowed() {
-    patch(STEP_URL, new EditStepDto(STEP_NAME_THAT_EXCEEDED_MAX_LENGTH, null, SOLUTION))
+  void its400_whenStepNameLengthIsWrong(String stepName) {
+    patch(STEP_URL, new EditStepDto(stepName, null, SOLUTION))
         .contentType(anything())
         .statusCode(BAD_REQUEST.value());
   }

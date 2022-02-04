@@ -27,6 +27,7 @@ public class ImportPolicyUseCase {
   private final PolicyService policyService;
 
   public UUID apply(@NonNull ImportPolicyCommand command) {
+    //TODO validate policy name length
     TransferredPolicyRootDto root = transferredPolicyRootParser.parse(command.getInputStream());
     return policyService.doImport(
         createRequest(root.getPolicy(), command.getCreatedBy(), command.getUpdatedBy()));

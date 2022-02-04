@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.Builder.Default;
 
 import java.util.Collection;
+import javax.validation.Valid;
 
 import static java.util.List.of;
 
@@ -15,5 +16,6 @@ public class EditStepLogicDto {
 
   @NonNull
   @Default
+  @Valid
   private Collection<FeatureLogicDto> featuresLogic = of();
 }

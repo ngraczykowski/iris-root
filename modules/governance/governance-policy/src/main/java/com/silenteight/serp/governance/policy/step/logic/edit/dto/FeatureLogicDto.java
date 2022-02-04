@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.Builder.Default;
 
 import java.util.Collection;
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 import static java.util.List.of;
@@ -19,5 +20,6 @@ public class FeatureLogicDto {
 
   @NonNull
   @Default
+  @Valid
   private Collection<MatchConditionDto> features = of();
 }
