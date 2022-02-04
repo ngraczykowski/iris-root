@@ -5,5 +5,5 @@ import com.silenteight.payments.bridge.agents.model.ContextualLearningAgentReque
 
 public interface CreateContextualLearningFeatureInputUseCase {
 
-  HistoricalDecisionsFeatureInput create(ContextualLearningAgentRequest nameAgentRequest);
+  HistoricalDecisionsFeatureInput create(ContextualLearningAgentRequest request);
 }

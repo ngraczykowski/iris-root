@@ -111,4 +111,9 @@ public class TestApplicationConfiguration {
   CreateNameFeatureInputUseCase createNameFeatureInputUseCase() {
     return new CreateNameFeatureInputUseCaseMock();
   }
+
+  @Bean
+  CreateContextualLearningFeatureInputUseCase createContextualLearningFeatureInputUseCase() {
+    return new CreateContextualLearningFeatureInputUseCaseMock();
+  }
 }
