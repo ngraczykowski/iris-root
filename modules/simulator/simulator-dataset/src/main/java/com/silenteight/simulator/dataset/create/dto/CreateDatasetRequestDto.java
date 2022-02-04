@@ -1,14 +1,12 @@
 package com.silenteight.simulator.dataset.create.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 import com.silenteight.simulator.dataset.dto.AlertSelectionCriteriaDto;
 
 import java.util.UUID;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

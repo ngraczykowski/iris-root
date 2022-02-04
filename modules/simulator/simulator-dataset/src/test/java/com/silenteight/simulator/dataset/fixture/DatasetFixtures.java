@@ -11,6 +11,7 @@ import com.silenteight.adjudication.api.v1.FilteredAlerts.LabelsFilter;
 import com.silenteight.simulator.dataset.archive.ArchiveDatasetRequest;
 import com.silenteight.simulator.dataset.create.DatasetLabel;
 import com.silenteight.simulator.dataset.create.dto.CreateDatasetRequestDto;
+import com.silenteight.simulator.dataset.create.dto.CreateDatasetRequestDto.CreateDatasetRequestDtoBuilder;
 import com.silenteight.simulator.dataset.domain.DatasetState;
 import com.silenteight.simulator.dataset.dto.AlertSelectionCriteriaDto;
 import com.silenteight.simulator.dataset.dto.DatasetDto;
@@ -59,9 +60,14 @@ public final class DatasetFixtures {
       new DatasetLabel(COUNTRY_LABEL, COUNTRIES),
       new DatasetLabel(MATCH_QUANTITY_LABEL, MATCH_QUANTITIES));
 
-  public static final CreateDatasetRequestDto CREATE_DATASET_REQUEST_DTO =
-      new CreateDatasetRequestDto(
-          ID_1, DATASET_NAME, DESCRIPTION, selectionCriteria(FROM, TO, COUNTRIES));
+  public static final CreateDatasetRequestDto CREATE_DATASET_REQUEST_DTO = createDatasetRequestDto()
+      .build();
+
+  public static final CreateDatasetRequestDto
+      CREATE_DATASET_REQUEST_WITH_NULL_DESCRIPTION =
+      createDatasetRequestDto()
+          .description(null)
+          .build();
 
   public static final DatasetDto DATASET_DTO = DatasetDto.builder()
       .id(ID_1)
@@ -140,4 +146,12 @@ public final class DatasetFixtures {
           .id(ID_1)
           .archivedBy(ARCHIVED_BY)
           .build();
+
+  private static CreateDatasetRequestDtoBuilder createDatasetRequestDto() {
+    return CreateDatasetRequestDto.builder()
+        .id(ID_1)
+        .datasetName(DATASET_NAME)
+        .description(DESCRIPTION)
+        .query(selectionCriteria(FROM, TO, COUNTRIES));
+  }
 }

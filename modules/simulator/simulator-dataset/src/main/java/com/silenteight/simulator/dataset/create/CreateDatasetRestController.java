@@ -28,10 +28,12 @@ import static org.springframework.http.ResponseEntity.status;
 @AllArgsConstructor
 class CreateDatasetRestController {
 
+  static final String DATASET_URL = "/v1/datasets";
+
   @NonNull
   private final CreateDatasetUseCase useCase;
 
-  @PostMapping("/v1/datasets")
+  @PostMapping(DATASET_URL)
   @PreAuthorize("isAuthorized('CREATE_DATASET')")
   public ResponseEntity<Void> create(
       @RequestBody @Valid CreateDatasetRequestDto dto, Authentication authentication) {
