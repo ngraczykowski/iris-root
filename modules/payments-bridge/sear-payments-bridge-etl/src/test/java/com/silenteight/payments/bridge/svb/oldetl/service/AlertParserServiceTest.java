@@ -5,6 +5,10 @@ import com.silenteight.payments.bridge.etl.processing.model.MessageTag;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
 
+import org.assertj.core.api.Assertions;
+import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
@@ -44,5 +48,23 @@ class AlertParserServiceTest {
         .messageFieldStructure(MessageFieldStructure.valueOf(messageFormat))
         .build();
     assertEquals(expected, actual);
+  }
+
+  @Test
+  @Disabled
+  void historicalRiskInputRequestTest() {
+    String hitTag = "ORIGINATOR";
+    String messageData = "AC\n"
+        + "Admincheck Limited eeerrdxxddrdddddddfdedsadfaxxxbcdexxfghij";
+    String fkcoFormat = "FED";
+    String applicationCode = "GFX";
+
+    var alertedMessageData =
+        new MessageData(List.of(new MessageTag(hitTag, messageData.replace("\\n", "\n"))));
+    var actual = AlertParserService.extractAlertedPartyData(alertedMessageData, hitTag, fkcoFormat,
+        applicationCode);
+
+    Assertions.assertThat(actual.getAccountNumber()).isNotBlank();
+
   }
 }
