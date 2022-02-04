@@ -12,7 +12,8 @@ import com.silenteight.serp.governance.policy.step.logic.edit.dto.EditStepLogicD
 import com.silenteight.serp.governance.policy.step.logic.edit.dto.FeatureLogicDto;
 import com.silenteight.serp.governance.policy.step.logic.edit.dto.MatchConditionDto;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -29,6 +30,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.ACCEPTED;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @Import({ EditStepLogicRequestRestController.class,
@@ -37,8 +39,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 class EditStepLogicRequestRestControllerTest extends BaseRestControllerTest {
 
   private static final UUID STEP_ID = UUID.randomUUID();
-  private static final String EDIT_LOGIC_URL = "/v1/steps/" + STEP_ID.toString() + "/logic";
-  private static final String FEATURE_NAME = "name";
+  private static final String EDIT_LOGIC_URL = "/v1/steps/" + STEP_ID + "/logic";
   private static final String FEATURE_VALUE = "MATCH";
   private static final Long POLICY_ID = 1L;
   private static final int TO_FULFILL = 1;
@@ -49,12 +50,13 @@ class EditStepLogicRequestRestControllerTest extends BaseRestControllerTest {
   @MockBean
   private PolicyStepsRequestQuery policyStepsRequestQuery;
 
-  @Test
+  @ParameterizedTest
+  @MethodSource("com.silenteight.serp.governance.policy.domain.TestFixtures#getFeatureNames")
   @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
-  void its202_whenLogicSaved() {
+  void its202_whenLogicSaved(String featureName) {
     when(policyStepsRequestQuery.getPolicyIdForStep(STEP_ID)).thenReturn(POLICY_ID);
 
-    put(EDIT_LOGIC_URL, new EditStepLogicDto(getFeatureLogicDto()))
+    put(EDIT_LOGIC_URL, new EditStepLogicDto(getFeatureLogicDto(featureName)))
         .contentType(anything())
         .statusCode(ACCEPTED.value());
 
@@ -64,20 +66,24 @@ class EditStepLogicRequestRestControllerTest extends BaseRestControllerTest {
     assertThat(captor.getValue().getPolicyId()).isEqualTo(POLICY_ID);
     assertThat(captor.getValue().getStepId()).isEqualTo(STEP_ID);
     assertThat(captor.getValue().getFeatureLogicConfigurations())
-        .isEqualTo(getFeatureLogicConfiguration());
+        .isEqualTo(getFeatureLogicConfiguration(featureName));
     assertThat(captor.getValue().getEditedBy()).isEqualTo(USERNAME);
   }
 
-  private Collection<FeatureLogicDto> getFeatureLogicDto() {
+  private Collection<FeatureLogicDto> getFeatureLogicDto(String featureName) {
     return of(
-        FeatureLogicDto.builder().toFulfill(TO_FULFILL).features(getMatchConditionDto()).build()
+        FeatureLogicDto
+            .builder()
+            .toFulfill(TO_FULFILL)
+            .features(getMatchConditionDto(featureName))
+            .build()
     );
   }
 
-  private Collection<MatchConditionDto> getMatchConditionDto() {
+  private Collection<MatchConditionDto> getMatchConditionDto(String featureName) {
     MatchConditionDto matchConditionDto = MatchConditionDto
         .builder()
-        .name(FEATURE_NAME)
+        .name(featureName)
         .condition(IS)
         .values(of(FEATURE_VALUE))
         .build();
@@ -85,20 +91,21 @@ class EditStepLogicRequestRestControllerTest extends BaseRestControllerTest {
     return of(matchConditionDto);
   }
 
-  private Collection<FeatureLogicConfiguration> getFeatureLogicConfiguration() {
+  private Collection<FeatureLogicConfiguration> getFeatureLogicConfiguration(
+      String featureName) {
     FeatureLogicConfiguration featureLogicConfiguration = FeatureLogicConfiguration
         .builder()
         .toFulfill(TO_FULFILL)
-        .featureConfigurations(getFeatureConfiguration())
+        .featureConfigurations(getFeatureConfiguration(featureName))
         .build();
 
     return of(featureLogicConfiguration);
   }
 
-  private Collection<FeatureConfiguration> getFeatureConfiguration() {
+  private Collection<FeatureConfiguration> getFeatureConfiguration(String featureName) {
     FeatureConfiguration featureConfiguration = FeatureConfiguration
         .builder()
-        .name(FEATURE_NAME)
+        .name(featureName)
         .condition(IS)
         .values(of(FEATURE_VALUE))
         .build();
@@ -113,4 +120,14 @@ class EditStepLogicRequestRestControllerTest extends BaseRestControllerTest {
         .statusCode(FORBIDDEN.value());
   }
 
+  @ParameterizedTest
+  @MethodSource(
+      "com.silenteight.serp.governance.policy.domain.TestFixtures#getIncorrectFeatureNames"
+  )
+  @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
+  void its400_whenFeatureNameLengthIsWrong(String featureName) {
+    put(EDIT_LOGIC_URL, new EditStepLogicDto(getFeatureLogicDto(featureName)))
+        .contentType(anything())
+        .statusCode(BAD_REQUEST.value());
+  }
 }
