@@ -29,19 +29,13 @@ import com.silenteight.warehouse.migration.country.CountryMigrationModule;
 import com.silenteight.warehouse.production.persistence.ProductionPersistenceModule;
 import com.silenteight.warehouse.qa.handler.QaMessageHandlerModule;
 import com.silenteight.warehouse.qa.processing.QaProcessingModule;
-import com.silenteight.warehouse.report.accuracy.AccuracyReportModule;
 import com.silenteight.warehouse.report.availablereports.AvailableReportsModule;
-import com.silenteight.warehouse.report.billing.BillingReportModule;
 import com.silenteight.warehouse.report.create.ReportCreateModule;
 import com.silenteight.warehouse.report.download.ReportDownloadModule;
 import com.silenteight.warehouse.report.generation.ReportGenerationModule;
-import com.silenteight.warehouse.report.metrics.MetricsReportModule;
 import com.silenteight.warehouse.report.name.ReportFileNameModule;
 import com.silenteight.warehouse.report.persistence.ReportPersistenceModule;
 import com.silenteight.warehouse.report.production.ProductionReportsModule;
-import com.silenteight.warehouse.report.rbs.RbsReportModule;
-import com.silenteight.warehouse.report.reasoning.AiReasoningReportModule;
-import com.silenteight.warehouse.report.reasoning.match.AiReasoningMatchLevelReportModule;
 import com.silenteight.warehouse.report.remove.ReportsRemovalModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
 import com.silenteight.warehouse.report.simulation.SimulationModule;
@@ -71,15 +65,11 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @ComponentScan(basePackageClasses = {
     // NOTE(ahaczewski): Keep list of modules alphabetically sorted within section.
     // Domain modules
-    AccuracyReportModule.class,
-    AiReasoningMatchLevelReportModule.class,
-    AiReasoningReportModule.class,
     AlertModule.class,
     AnalysisModule.class,
     AvailableReportsModule.class,
     BackupMigrationModule.class,
     BackupModule.class,
-    BillingReportModule.class,
     CountryMigrationModule.class,
     DomainModule.class,
     ReportCreateModule.class,
@@ -90,11 +80,9 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     IndexTrackingModule.class,
     ManagementModule.class,
     MatchModule.class,
-    MetricsReportModule.class,
     ProductionMessageHandlerModule.class,
     com.silenteight.warehouse.production.handler.ProductionMessageHandlerModule.class,
     ProductionPersistenceModule.class,
-    RbsReportModule.class,
     ReportStatisticsModule.class,
     RestAlertModule.class,
     QueryAlertModule.class,
