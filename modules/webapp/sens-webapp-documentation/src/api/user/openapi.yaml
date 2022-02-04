@@ -142,7 +142,7 @@ paths:
     post:
       tags:
         - roles
-      description: Create new role
+      description: Create new role.
       requestBody:
         content:
           application/json:
@@ -150,18 +150,18 @@ paths:
               $ref: '#/components/schemas/CreateRoleRequest'
       responses:
         201:
-          description: Created
+          description: Created.
     patch:
       tags:
         - roles
-      description: Edit role
+      description: Edit role.
       parameters:
         - in: path
           name: id
           required: true
           schema:
             type: string
-          description: 'Role Id'
+          description: Role id.
           example: '1944820f-621d-4e2c-a6db-94c3e214df6b'
       requestBody:
         content:
@@ -170,24 +170,24 @@ paths:
               $ref: '#/components/schemas/EditRoleRequest'
       responses:
         200:
-          description: Saved
+          description: Saved.
 
   /v2/roles/{id}:
     get:
       tags:
         - roles
-      description: Returns a role details
+      description: Returns a role details.
       parameters:
         - in: path
           name: id
           required: true
           schema:
             type: string
-          description: 'Role id'
+          description: Role id.
           example: '2eb233aa-5434-468f-8dec-6dcdb0146c4c'
       responses:
         200:
-          description: Role details
+          description: Role details.
           content:
             application/json:
               schema:
@@ -202,7 +202,7 @@ paths:
           required: true
           schema:
             type: string
-          description: 'Role id'
+          description: Role id.
           example: '2dcb085b-2de7-4bce-b402-59cda2e007cc'
       responses:
         204:
@@ -220,7 +220,7 @@ paths:
           required: true
           schema:
             type: string
-          description: 'Role id'
+          description: Role id.
           example: '2dcb085b-2de7-4bce-b402-59cda2e007cc'
       requestBody:
         content:
@@ -232,7 +232,7 @@ paths:
             example: [ '1cc1e744-de09-4c5a-a5b5-35a02cc56381', 'b07e57c5-51b1-4650-9273-28e226866b10' ]
       responses:
         202:
-          description: OK
+          description: OK.
 
   /v1/users/pageable:
     get:
@@ -277,6 +277,84 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/PermissionDto'
+
+  /identityProviders:
+    get:
+      tags:
+        - mapping
+      description: Return list of identity providers.
+      responses:
+        200:
+          description: List of identity providers.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IdentityProviderDto'
+
+  /sso/mappings:
+    get:
+      tags:
+        - mapping
+      description: Return list of SSO's mapping.
+      responses:
+        200:
+          description: List of SSO's mapping.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SsoMappingDto'
+    post:
+      tags:
+        - mapping
+      description: Create new sso mapping.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSsoMappingDto'
+      responses:
+        201:
+          description: Created
+
+  /sso/mappings/{id}:
+    get:
+      tags:
+        - mapping
+      description: Return details of sso mapping.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: SSO Mapping name.
+          example: 'Sso name'
+      responses:
+        200:
+          description: Details of SSO Mapping.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SsoMappingDto'
+    delete:
+      tags:
+        - mapping
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: SSO Mapping name.
+          example: '2dcb085b-2de7-4bce-b402-59cda2e007cc'
+      description: Delete SSO Mapping
+      responses:
+        204:
+          description: SSO Mapping removed.
 
 components:
   schemas:
@@ -522,3 +600,74 @@ components:
         group: 'Governance'
         name: 'Import policy'
         description: 'Permission that lets user to import policy'
+
+    IdentityProviderDto:
+      type: object
+      properties:
+        alias:
+          type: string
+        displayName:
+          type: string
+        internalId:
+          type: string
+        enabled:
+          type: boolean
+      example:
+        alias: 'saml'
+        displayName: 'Saml idp'
+        internalId: '8bd5f27f-adc6-4664-a047-f19e6e29288e'
+        enabled: 'true'
+
+    SsoMappingDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+        attributeToRoleDtoSet:
+          $ref: '#/components/schemas/AttributeToRoleDto'
+      example:
+        id: 'f90222c9-80c9-499a-8a2b-8aa793434f00'
+        name: 'SSO mapping name'
+        roles: [ 'Administrator', 'Analyst', 'Approver', 'Auditor', 'Business Operator' ]
+        attributeToRole: {
+          key: 'Logic key',
+          value: 'Logic value'
+        }
+
+    AttributeToRoleDto:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+      example:
+        key: 'Logic key'
+        value: 'Logic value'
+
+    CreateSsoMappingDto:
+      type: object
+      properties:
+        name:
+          type: string
+        attributeToRoleDtoList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeToRoleDto'
+        roles:
+          type: array
+          items:
+            type: string
+      example:
+        name: 'SSO mapping name'
+        roles: [ 'Administrator', 'Analyst', 'Approver', 'Auditor', 'Business Operator' ]
+        attributeToRole: {
+          key: 'Logic key',
+          value: 'Logic value'
+        }
