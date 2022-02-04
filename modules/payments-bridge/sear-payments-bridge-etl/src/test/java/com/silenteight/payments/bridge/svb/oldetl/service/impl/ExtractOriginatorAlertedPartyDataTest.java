@@ -4,6 +4,7 @@ import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.etl.processing.model.MessageTag;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
+import com.silenteight.payments.bridge.svb.oldetl.service.ExtractDisposition;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -32,12 +33,14 @@ class ExtractOriginatorAlertedPartyDataTest {
       String accountNumber,
       String applicationCode) {
 
-    extractOriginatorAlertedPartyData = new ExtractOriginatorAlertedPartyData(
-        new MessageData(List.of(new MessageTag(TAG_ORIGINATOR, messageData.replace("\\n", "\n")))));
+    MessageData preparedMessageData =
+        new MessageData(List.of(new MessageTag(TAG_ORIGINATOR, messageData.replace("\\n", "\n"))));
+    extractOriginatorAlertedPartyData = new ExtractOriginatorAlertedPartyData();
 
     var actual =
         extractOriginatorAlertedPartyData.extract(
-            MessageFieldStructure.UNSTRUCTURED, fkcoFormat, applicationCode);
+            new ExtractDisposition(
+                applicationCode, fkcoFormat, preparedMessageData, TAG_ORIGINATOR));
     assertEquals(AlertedPartyData.builder()
         .accountNumber(accountNumber)
         .names(name != null ? List.of(name) : List.of(""))

@@ -1,22 +1,27 @@
 package com.silenteight.payments.bridge.svb.oldetl.service.impl;
 
 import lombok.RequiredArgsConstructor;
-
-import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
+import com.silenteight.payments.bridge.svb.oldetl.service.AlertedPartyDataFactory;
+import com.silenteight.payments.bridge.svb.oldetl.service.ExtractDisposition;
 import com.silenteight.payments.bridge.svb.oldetl.util.CommonUtils;
 
+
+import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure.UNSTRUCTURED;
 import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
 
 @RequiredArgsConstructor
-public class ExtractOriginatorAlertedPartyData {
+public class ExtractOriginatorAlertedPartyData implements AlertedPartyDataFactory {
 
+  @Override
+  public AlertedPartyData extract(final ExtractDisposition extractDisposition) {
+    var hitTag = extractDisposition.getHitTag();
+    var applicationCode = extractDisposition.getApplicationCode();
+    var messageFormat = extractDisposition.getMessageFormat();
+    var messageData = extractDisposition.getMessageData();
 
-  private final MessageData messageData;
-
-  public AlertedPartyData extract(
-      MessageFieldStructure messageFieldStructure, String fircoFormat, String applicationCode) {
+    final MessageFieldStructure messageFieldStructure = UNSTRUCTURED;
 
     var lines = messageData.getLines(TAG_ORIGINATOR);
     var lastLine = CommonUtils.getLastLineNotUsIndex(lines, applicationCode);
@@ -50,7 +55,7 @@ public class ExtractOriginatorAlertedPartyData {
             .build();
       }
     }
-    if (FIRCO_FORMAT_FED.equals(fircoFormat))
+    if (FIRCO_FORMAT_FED.equals(messageFormat))
       return alertedPartyDataBuilder
           .name(lines.get(LINE_1).trim())
           .address(String.join(" ", lines.subList(LINE_2, lastLine)).trim())

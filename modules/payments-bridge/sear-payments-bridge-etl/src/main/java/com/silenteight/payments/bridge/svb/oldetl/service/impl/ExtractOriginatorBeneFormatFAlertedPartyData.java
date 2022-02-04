@@ -1,22 +1,24 @@
 package com.silenteight.payments.bridge.svb.oldetl.service.impl;
 
-import lombok.RequiredArgsConstructor;
-
-import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
-import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
-import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
+import com.silenteight.payments.bridge.svb.oldetl.service.AlertedPartyDataFactory;
+import com.silenteight.payments.bridge.svb.oldetl.service.ExtractDisposition;
 
-@RequiredArgsConstructor
-public class ExtractOriginatorBeneFormatFAlertedPartyData {
+import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure.NAMEADDRESS_FORMAT_F;
+import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.LINE_2;
+import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.LINE_3;
 
-  private final MessageData messageData;
-  private final String hitTag;
 
-  public AlertedPartyData extract(MessageFieldStructure messageFieldStructure) {
+public class ExtractOriginatorBeneFormatFAlertedPartyData implements AlertedPartyDataFactory {
+
+  @Override
+  public AlertedPartyData extract(final ExtractDisposition extractDisposition) {
+
+    var hitTag = extractDisposition.getHitTag();
+    var messageData = extractDisposition.getMessageData();
     var tagValueLines = messageData.getLines(hitTag);
 
-    return new ExtractFormatFData(messageFieldStructure).extract(
+    return new ExtractFormatFData(NAMEADDRESS_FORMAT_F).extract(
         tagValueLines, LINE_2, LINE_3);
   }
 }

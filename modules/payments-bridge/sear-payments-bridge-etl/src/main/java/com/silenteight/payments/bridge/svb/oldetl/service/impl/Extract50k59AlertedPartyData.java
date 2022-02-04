@@ -1,20 +1,20 @@
 package com.silenteight.payments.bridge.svb.oldetl.service.impl;
 
-import lombok.RequiredArgsConstructor;
-
-import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.svb.oldetl.model.UnsupportedMessageException;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
-import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
+import com.silenteight.payments.bridge.svb.oldetl.service.AlertedPartyDataFactory;
+import com.silenteight.payments.bridge.svb.oldetl.service.ExtractDisposition;
 
+import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure.UNSTRUCTURED;
 import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
 
-@RequiredArgsConstructor
-public class Extract50k59AlertedPartyData {
+public class Extract50k59AlertedPartyData implements AlertedPartyDataFactory {
 
-  private final MessageData messageData;
 
-  public AlertedPartyData extract(String hitTag, MessageFieldStructure messageFieldStructure) {
+  @Override
+  public AlertedPartyData extract(final ExtractDisposition extractDisposition) {
+    var hitTag = extractDisposition.getHitTag();
+    var messageData = extractDisposition.getMessageData();
     var lines = messageData.getLines(hitTag);
     var lastLine = lines.size() - 1;
 
@@ -29,12 +29,13 @@ public class Extract50k59AlertedPartyData {
                       "";
 
     return AlertedPartyData.builder()
-        .messageFieldStructure(messageFieldStructure)
+        .messageFieldStructure(UNSTRUCTURED)
         .accountNumber(lines.get(LINE_1).substring(1).trim().toUpperCase())
         .name(lines.get(LINE_2).trim())
         .address(address.trim())
         .nameAddress(String.join(" ", lines.subList(LINE_2, lastLine + 1)).trim())
         .ctryTown(ctryTown.trim())
         .build();
+
   }
 }

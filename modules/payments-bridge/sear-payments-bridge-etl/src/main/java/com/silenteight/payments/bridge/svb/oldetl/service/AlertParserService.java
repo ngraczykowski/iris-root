@@ -2,7 +2,6 @@ package com.silenteight.payments.bridge.svb.oldetl.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
@@ -16,7 +15,9 @@ import com.silenteight.payments.bridge.svb.oldetl.response.AlertEtlResponse;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
-import com.silenteight.payments.bridge.svb.oldetl.service.impl.*;
+import com.silenteight.payments.bridge.svb.oldetl.service.impl.TransactionMessage;
+import com.silenteight.payments.bridge.svb.oldetl.service.impl.TransactionMessageImpl;
+
 
 import org.springframework.stereotype.Service;
 
@@ -27,8 +28,6 @@ import java.util.Map;
 
 import static com.silenteight.payments.bridge.common.dto.common.MessageStructure.STRUCTURED;
 import static com.silenteight.payments.bridge.common.dto.common.MessageStructure.ofTag;
-import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure.NAMEADDRESS_FORMAT_F;
-import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure.UNSTRUCTURED;
 import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
 
 @RequiredArgsConstructor
@@ -146,43 +145,14 @@ public class AlertParserService implements ExtractAlertEtlResponseUseCase {
   }
 
   public static AlertedPartyData extractAlertedPartyData(
-      MessageData messageData, String hitTag,
-      String fircoFormat, String applicationCode) {
+      final MessageData messageData, final String hitTag,
+      final String fircoFormat, final String applicationCode) {
 
-    boolean tagValueInFormatF = ifTagValueInFormatF(messageData.getLines(hitTag));
-    switch (hitTag) {
-      case TAG_ORIGINATOR:
-        if (tagValueInFormatF) {
-          return new ExtractOriginatorBeneFormatFAlertedPartyData(messageData, hitTag).extract(
-              NAMEADDRESS_FORMAT_F);
-        } else {
-          return new ExtractOriginatorAlertedPartyData(messageData).extract(
-              UNSTRUCTURED, fircoFormat, applicationCode);
-        }
-      case TAG_BENE:
-        if (tagValueInFormatF) {
-          return new ExtractOriginatorBeneFormatFAlertedPartyData(messageData, hitTag).extract(
-              NAMEADDRESS_FORMAT_F);
-        } else {
-          return new ExtractBeneOrgbankInsbankAlertedPartyData(
-              messageData, hitTag, fircoFormat).extract(UNSTRUCTURED, applicationCode);
-        }
-      case TAG_ORGBANK:
-      case TAG_INSBANK:
-        return new ExtractBeneOrgbankInsbankAlertedPartyData(
-            messageData, hitTag, fircoFormat).extract(UNSTRUCTURED, applicationCode);
-      case TAG_50F:
-        return new Extract50FAlertedPartyData(messageData, hitTag).extract(NAMEADDRESS_FORMAT_F);
-      case TAG_RECEIVBANK:
-        return new ExtractReceivbankAlertedPartyData(
-            messageData, hitTag, fircoFormat).extract(UNSTRUCTURED);
-      case TAG_50K:
-      case TAG_59:
-      case TAG_50:
-        return new Extract50k59AlertedPartyData(messageData).extract(hitTag, UNSTRUCTURED);
-      default:
-        throw new UnsupportedMessageException("Tag not supported " + hitTag);
-    }
+    final boolean tagValueInFormatF = ifTagValueInFormatF(messageData.getLines(hitTag));
+
+    return ExtractOriginatorStrategy
+        .choose(hitTag, tagValueInFormatF)
+        .extract(new ExtractDisposition(applicationCode, fircoFormat, messageData, hitTag));
   }
 
   private static HitAndWatchlistPartyData extractHitAndWatchlistPartyData(

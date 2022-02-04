@@ -1,28 +1,29 @@
 package com.silenteight.payments.bridge.svb.oldetl.service.impl;
 
-import lombok.RequiredArgsConstructor;
-
-import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
+import com.silenteight.payments.bridge.svb.oldetl.service.AlertedPartyDataFactory;
+import com.silenteight.payments.bridge.svb.oldetl.service.ExtractDisposition;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure.UNSTRUCTURED;
 import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
 
-@RequiredArgsConstructor
-public class ExtractReceivbankAlertedPartyData {
+public class ExtractReceivbankAlertedPartyData implements AlertedPartyDataFactory {
 
   private static final List<String> FIRCO_FORMATS_INT_FED =
       List.of(FIRCO_FORMAT_FED, FIRCO_FORMAT_INT);
   private static final List<String> FIRCO_FORMATS_IAT_I_IAT_O =
       List.of(FIRCO_FORMAT_IAT_I, FIRCO_FORMAT_IAT_O);
 
-  private final MessageData messageData;
-  private final String hitTag;
-  private final String messageFormat;
 
-  public AlertedPartyData extract(MessageFieldStructure messageFieldStructure) {
+  @Override
+  public AlertedPartyData extract(final ExtractDisposition extractDisposition) {
+    final MessageFieldStructure messageFieldStructure = UNSTRUCTURED;
+    var hitTag = extractDisposition.getHitTag();
+    var messageData = extractDisposition.getMessageData();
+    var messageFormat = extractDisposition.getMessageFormat();
 
     List<String> tagValueLines = messageData.getLines(hitTag);
     var lastLine = tagValueLines.size() - 1;
