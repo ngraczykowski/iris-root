@@ -59,7 +59,7 @@ mail:
   password: ""
 
 svbLearning:
-  discriminatorPrefix: ""
+  discriminatorPrefix: "default"
 
 sentry:
   dsn: https://f987e72807104183830dcd11bcee6f49@o1129201.ingest.sentry.io/6172973

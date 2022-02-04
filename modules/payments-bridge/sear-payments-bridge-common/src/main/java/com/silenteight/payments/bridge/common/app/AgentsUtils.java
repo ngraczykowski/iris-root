@@ -17,10 +17,10 @@ public class AgentsUtils {
   public static final String HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC = "hist_account_number";
 
   public static final String CONTEXTUAL_LEARNING_FEATURE =
-      "contextualLearning";
+      "contextualLearningName";
   public static final String CONTEXTUAL_LEARNING_FEATURE_NAME =
       FEATURE_PREFIX + CONTEXTUAL_LEARNING_FEATURE;
-  public static final String CONTEXTUAL_LEARNING_DISC = "contextual_learning";
+  public static final String CONTEXTUAL_LEARNING_DISC = "contextual_learning_name";
 
   public static final String GEO_FEATURE = "geo";
 

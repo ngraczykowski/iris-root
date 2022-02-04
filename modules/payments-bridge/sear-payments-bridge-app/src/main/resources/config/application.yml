@@ -56,7 +56,7 @@ pb:
       lock-least: "PT5s"
     timeZone: America/Chicago
     fileEncoding: CP1250
-    discriminator-prefix: ""
+    discriminator-prefix: "default"
     chunkSize: 128
   #-------------------------------------------------------------------------------------------------
   # Data retention
@@ -84,7 +84,7 @@ pb:
       number-of-tokens-left: 1
       number-of-tokens-right: 1
       min-tokens: 1
-      line-breaks: true
+      line-breaks: false
 #---------------------------------------------------------------------------------------------------
 # Warehouse
 #---------------------------------------------------------------------------------------------------

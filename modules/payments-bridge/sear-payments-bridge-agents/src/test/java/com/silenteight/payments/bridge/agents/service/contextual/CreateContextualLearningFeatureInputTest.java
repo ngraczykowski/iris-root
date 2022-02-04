@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.silenteight.payments.bridge.agents.service.contextual.ContextualLearningFixture.DISCRIMINATOR_PREFIX;
 import static com.silenteight.payments.bridge.agents.service.contextual.ContextualLearningFixture.getDiscriminator;
 import static com.silenteight.payments.bridge.agents.service.contextual.ContextualLearningFixture.getModelKey;
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_FEATURE_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -62,7 +63,7 @@ class CreateContextualLearningFeatureInputTest {
             .build());
 
     assertEquals(HistoricalDecisionsFeatureInput.newBuilder()
-        .setFeature("features/contextualLearning")
+        .setFeature(CONTEXTUAL_LEARNING_FEATURE_NAME)
         .setModelKey(getModelKey(ofacId, watchlistType, alertedPartyId))
         .setDiscriminator(getDiscriminator())
         .build(), actual);

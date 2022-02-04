@@ -13,6 +13,6 @@ class ContextualLearningProperties {
   private int numberOfTokensLeft = 1;
   private int numberOfTokensRight = 1;
   private int minTokens = 1;
-  private boolean lineBreaks = true;
+  private boolean lineBreaks = false;
 
 }
