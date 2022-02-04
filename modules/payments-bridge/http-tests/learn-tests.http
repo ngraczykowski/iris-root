@@ -1,0 +1,33 @@
+### Get OAuth2 authorization token using client credentials flow
+// @no-log
+// @no-cookie-jar
+POST {{authurl}}/protocol/openid-connect/token
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded; charset=utf-8
+
+client_id={{client-id}}&client_secret={{client-secret}}&grant_type=client_credentials
+
+> {%
+  client.test("Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+
+  client.global.set("access_token", response.body["access_token"]);
+%}
+
+### Trigger batch job etl
+POST {{baseurl}}/rest/pb/batch/trigger
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{"JobName" : "etl-job", "FileName" :  "learning/mocked_learning.csv"}
+
+### Trigger batch historical risk job
+POST {{baseurl}}/rest/pb/batch/trigger
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{"JobName" : "historical-risk-assessment-job", "FileName" :  "learning/mocked_learning.csv"}
+

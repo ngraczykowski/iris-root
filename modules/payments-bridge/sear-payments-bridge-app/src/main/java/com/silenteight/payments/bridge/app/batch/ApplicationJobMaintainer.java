@@ -64,12 +64,11 @@ class ApplicationJobMaintainer implements JobMaintainer {
         jobs.stream()
             .filter(job -> jobName.equals(job.getName()))
             .findFirst();
-    if (registeredJob.isPresent()) {
-      return runJob(registeredJob.get(), createJobParametersWithTime(parameters));
-    } else {
-      log.warn("Job is not registered:{}", jobName);
+    if (registeredJob.isEmpty()) {
+      throw new JobNameNotFoundException(String.format("Could not find %s job name", jobName));
     }
-    return Optional.empty();
+
+    return runJob(registeredJob.get(), createJobParametersWithTime(parameters));
   }
 
   private static JobParameters createJobParametersWithTime(JobParameters parameters) {
