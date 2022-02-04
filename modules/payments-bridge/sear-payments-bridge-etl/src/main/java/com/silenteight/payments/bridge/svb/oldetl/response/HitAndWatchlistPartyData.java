@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.svb.oldetl.response;
 import lombok.Builder;
 import lombok.Value;
 
+import com.silenteight.payments.bridge.agents.model.ContextualLearningAgentRequest;
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 
@@ -34,4 +35,17 @@ public class HitAndWatchlistPartyData {
   List<String> passports;
   List<String> natIds;
   List<String> bics;
+
+  public ContextualLearningAgentRequest contextualLearningAgentRequest() {
+    return ContextualLearningAgentRequest.builder()
+        .ofacId(id.toUpperCase().trim())
+        .watchlistType(watchlistType.toString())
+        .matchingField(getMatchingField())
+        .matchText(matchingText)
+        .build();
+  }
+
+  private String getMatchingField() {
+    return allMatchingFieldValues.stream().findFirst().orElse("");
+  }
 }
