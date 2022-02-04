@@ -57,7 +57,7 @@ public class AlertComposite {
             .map(hit -> mapToAlert(decisionMapper, featureTypeDiscriminator, hit))
             .peek(alert -> {
               if (log.isTraceEnabled()) {
-                log.trace(
+                log.debug(
                     "Mapped for featureDiscriminator:{} alert details alertedId:{}"
                         + " featureDiscriminatorValue:{}",
                     featureTypeDiscriminator, alert.getAlertId(),
@@ -115,6 +115,13 @@ public class AlertComposite {
     var messageData = new MessageData(List.of(
         new MessageTag(hit.getFkcoVMatchedTag(), hit.getFkcoVMatchedTagContent())));
 
+    log.debug(
+        "[Historical debug] messageData tag: {}",
+        messageData.getTagLineCount(hit.getFkcoVMatchedTag()));
+    log.debug(
+        "[Historical debug] messageData lines: {}",
+        messageData.getLines(hit.getFkcoVMatchedTag()));
+
     var alertedPartyData = AlertParserService.extractAlertedPartyData(messageData,
         hit.getFkcoVMatchedTag(),
         alertDetails.getFkcoVFormat(), alertDetails.getFkcoVApplication());
@@ -122,6 +129,8 @@ public class AlertComposite {
     var alertedPartyId =
         mapAlertedPartyIdByFeatureDiscriminator(featureTypeDiscriminator, alertedPartyData);
     var country = hit.getFkcoVCountryMatchedText();
+    log.debug("[Historical debug] alertedPartyId:{} country:{}", alertedPartyId, country);
+
     return AlertedParty.newBuilder()
         .setId(alertedPartyId)
         .setCountry(country)
