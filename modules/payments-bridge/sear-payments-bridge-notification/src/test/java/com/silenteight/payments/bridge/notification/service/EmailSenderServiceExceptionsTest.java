@@ -25,10 +25,12 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @Slf4j
 @JdbcTest
@@ -63,9 +65,8 @@ class EmailSenderServiceExceptionsTest extends BaseJdbcTest {
         .attachment(attachment)
         .build();
 
-    assertThatExceptionOfType(MailSendException.class).isThrownBy(() -> {
-      emailSenderUseCase.sendEmail(sendEmailRequest);
-    });
+    assertThatExceptionOfType(MailSendException.class).isThrownBy(
+        () -> emailSenderUseCase.sendEmail(sendEmailRequest));
     verify(emailSender, times(5)).send(any(MimeMessagePreparator.class));
   }
 

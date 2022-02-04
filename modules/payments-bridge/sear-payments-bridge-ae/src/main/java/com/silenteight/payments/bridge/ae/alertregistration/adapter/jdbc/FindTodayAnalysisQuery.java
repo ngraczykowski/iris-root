@@ -1,5 +1,6 @@
 package com.silenteight.payments.bridge.ae.alertregistration.adapter.jdbc;
 
+
 import lombok.RequiredArgsConstructor;
 
 import org.intellij.lang.annotations.Language;
@@ -13,18 +14,20 @@ import java.util.Optional;
 @RequiredArgsConstructor
 class FindTodayAnalysisQuery {
 
-  // FIXME(ahaczewski): Make the 15 minutes configurable please.
   @Language("PostgreSQL")
   private static final String SQL = "SELECT analysis_name\n"
       + "FROM pb_analysis\n"
-      + "WHERE created_at > now() - interval '15 min'\n"
+      + "WHERE created_at > now() - interval '%s min'\n"
       + "ORDER BY created_at DESC\n"
       + "LIMIT 1";
 
   private final JdbcTemplate jdbcTemplate;
+  private final CurrentAnalysisQueryProperties currentAnalysisQueryProperties;
 
   Optional<String> execute() {
-    var result = DataAccessUtils.singleResult(jdbcTemplate.queryForList(SQL));
+    final String format =
+        String.format(SQL, currentAnalysisQueryProperties.getNewAnalysisInterval().toMinutes());
+    var result = DataAccessUtils.singleResult(jdbcTemplate.queryForList(format));
     return result == null ? Optional.empty() : Optional.of((String) result.get("analysis_name"));
   }
 }

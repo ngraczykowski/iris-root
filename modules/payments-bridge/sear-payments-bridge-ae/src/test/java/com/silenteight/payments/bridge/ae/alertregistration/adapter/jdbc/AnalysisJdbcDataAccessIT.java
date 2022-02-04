@@ -4,6 +4,7 @@ import com.silenteight.sep.base.testing.BaseJdbcTest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     InsertAnalysisQuery.class,
     ExistsAnalysisQuery.class
 })
+@EnableConfigurationProperties(CurrentAnalysisQueryProperties.class)
 class AnalysisJdbcDataAccessIT extends BaseJdbcTest {
 
   @Autowired

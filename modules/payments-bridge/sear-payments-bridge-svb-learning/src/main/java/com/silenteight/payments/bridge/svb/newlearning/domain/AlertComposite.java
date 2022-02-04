@@ -90,7 +90,7 @@ public class AlertComposite {
     var lastAction = ((LinkedList<ActionComposite>) actions).getLast();
     var previousDecisions =
         previousActions.stream()
-            .map(a -> a.getStatusName())
+            .map(ActionComposite::getStatusName)
             .collect(Collectors.toList());
     var decisionMade = decisionMapper.map(previousDecisions, lastAction.getStatusName());
     log.debug("Final decision mapped -> {} actionId: {}", decisionMade, lastAction.getActionId());

@@ -16,7 +16,7 @@ import static com.silenteight.payments.bridge.firco.datasource.service.process.E
 import static com.silenteight.payments.bridge.firco.datasource.service.process.EtlProcessFixture.getMatchId;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class NameAgentEtlProcessTest {

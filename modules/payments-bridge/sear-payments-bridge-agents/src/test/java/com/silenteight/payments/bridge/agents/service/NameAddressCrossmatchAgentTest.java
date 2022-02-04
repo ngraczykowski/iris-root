@@ -15,12 +15,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static com.silenteight.payments.bridge.agents.model.AlertedPartyKey.*;
+import static com.silenteight.payments.bridge.agents.model.AlertedPartyKey.ALERTED_ADDRESS_KEY;
+import static com.silenteight.payments.bridge.agents.model.AlertedPartyKey.ALERTED_COMPANY_NAME_KEY;
+import static com.silenteight.payments.bridge.agents.model.AlertedPartyKey.ALERTED_COUNTRY_TOWN_KEY;
+import static com.silenteight.payments.bridge.agents.model.AlertedPartyKey.ALERTED_NAMEADDRESS_SEGMENT_KEY;
+import static com.silenteight.payments.bridge.agents.model.AlertedPartyKey.ALERTED_NAME_KEY;
+import static com.silenteight.payments.bridge.agents.model.AlertedPartyKey.WILDCARD_SYMBOL;
 import static com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.CROSSMATCH;
 import static com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.NO_CROSSMATCH;
 import static com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.NO_DECISION;
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class NameAddressCrossmatchAgentTest {
 
