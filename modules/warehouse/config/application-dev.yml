@@ -266,28 +266,28 @@ warehouse.report.metrics:
 
 warehouse.report.statistics:
   all-alerts-query:
-    SELECT count(*) 
-    FROM warehouse_simulation_alert 
+    SELECT count(*)
+    FROM warehouse_simulation_alert
     WHERE analysis_name = ?
   solved-alerts-query:
-    SELECT count(*) 
-    FROM warehouse_simulation_alert 
-    WHERE analysis_name = ? 
-    AND (payload ->> 'recommendation_recommended_action') 
+    SELECT count(*)
+    FROM warehouse_simulation_alert
+    WHERE analysis_name = ?
+    AND (payload ->> 'recommendation_recommended_action')
     IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE')
   ai-false-positive-query:
-    SELECT count(*) 
-    FROM warehouse_simulation_alert wsa 
-    JOIN warehouse_alert wa ON wsa.name = wa.name 
-    WHERE wsa.analysis_name = ? 
-    AND (wa.payload ->> 'DN_CASE.currentState') IN ('Level 1 Review', 'Level 2 Review') 
+    SELECT count(*)
+    FROM warehouse_simulation_alert wsa
+    JOIN warehouse_alert wa ON wsa.name = wa.name
+    WHERE wsa.analysis_name = ?
+    AND (wa.payload ->> 'DN_CASE.currentState') IN ('Level 1 Review', 'Level 2 Review')
     AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
   analyst-false-positive-query:
     SELECT count(*)
-    FROM warehouse_simulation_alert wsa 
+    FROM warehouse_simulation_alert wsa
     JOIN warehouse_alert wa ON wsa.name = wa.name
-    WHERE wsa.analysis_name = ? 
-    AND (wa.payload ->> 'DN_CASE.currentState') = 'Level 1 Review' 
+    WHERE wsa.analysis_name = ?
+    AND (wa.payload ->> 'DN_CASE.currentState') = 'Level 1 Review'
     AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
 
 warehouse.report.rbs:
@@ -1083,96 +1083,97 @@ warehouse.reports.v2:
       description: Metrics
       selectSqlQuery: >
         WITH main AS (
-            SELECT payload ->> 'lob_country'                country,
-                   payload ->> 'categories/hitType'         risk_type,
-                   payload ->> 's8_recommendation'          recommendation,
-                   payload ->> 'analyst_decision'           analyst_decision,
-                   payload ->> 'qa.level-0.state'           qa_decision,
-                   payload ->> 'DN_CASE.ExtendedAttribute5' list_type,
-                   recommendation_date date
-            FROM warehouse_alert
-            WHERE payload ->> 'status' = 'LEARNING_COMPLETED'
-                  AND date BETWEEN DATE '${from}' AND DATE '${to}
-            GROUP BY payload ->> 'lob_country', payload ->> 'categories/hitType',
-                     payload ->> 's8_recommendation', payload ->> 'analyst_decision',
-                     payload ->> 'qa.level-0.state', payload ->> 'DN_CASE.ExtendedAttribute5',
-                     date
+          SELECT payload ->> 's8_lobCountryCode'          country,
+                 payload ->> 'categories/hitType'         risk_type,
+                 payload ->> 's8_recommendation'          recommendation,
+                 payload ->> 'analyst_decision'           analyst_decision,
+                 payload ->> 'qa.level-0.state'           qa_decision,
+                 payload ->> 'DN_CASE.ExtendedAttribute5' list_type,
+                 recommendation_date
+          FROM warehouse_alert
+          WHERE payload ->> 'status' = 'LEARNING_COMPLETED'
+                AND recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+          GROUP BY payload ->> 's8_lobCountryCode',
+                   payload ->> 'categories/hitType',
+                   payload ->> 's8_recommendation',
+                   payload ->> 'analyst_decision',
+                   payload ->> 'qa.level-0.state',
+                   payload ->> 'DN_CASE.ExtendedAttribute5',
+                   recommendation_date
         ),
-             grouped AS (
-                 SELECT main.country                     g_country,
-                        main.list_type                   g_list_type,
-                        main.risk_type                   g_risk_type,
-                        TO_CHAR(main.date, 'YYYY-MM')    g_date,
-                        COUNT(*)                         g_total,
-                        COUNT(*) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE') g_total_true_positive,
-                        COUNT(*) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE') g_total_false_positive,
-                        SUM(CASE 
-                                WHEN (recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE' AND analyst_decision = 'analyst_decision_true_positive')
-                                THEN 1 ELSE 0 END) g_total_match_analyst,
-                        SUM(CASE 
-                                WHEN (recommendation = 'ACTION_FALSE_POSITIVE' AND qa_decision = 'qa_decision_FAILED')
-                                THEN 1 ELSE 0 END) g_total_match_qa
-                 FROM main
-                 GROUP BY 1, 2, 3, 4
-             )
-        
-        SELECT g_date as "Date",
-               g_country as "Country LoB",
-               g_risk_type as "Risk Type",
-               g_list_type as "List Type",
-               ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) / GREATEST(g_total, 1)) * 100,3) as "Efficiency",
-               ROUND((g_total_match_analyst::decimal / GREATEST(g_total_true_positive::decimal, 1)) * 100, 3) as "PTP Effectiveness",
-               ROUND((g_total_match_qa::decimal / GREATEST(g_total_false_positive::decimal, 1)) * 100, 3) as "FP Effectiveness"
+          grouped AS (
+               SELECT main.country                                  g_country,
+                      main.list_type                                g_list_type,
+                      main.risk_type                                g_risk_type,
+                      COUNT(*)                                      g_total,
+                      COUNT(*) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE') g_total_true_positive,
+                      COUNT(*) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE') g_total_false_positive,
+                      SUM(CASE
+                              WHEN (recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE' AND analyst_decision = 'analyst_decision_true_positive')
+                              THEN 1 ELSE 0 END) g_total_match_analyst,
+                      SUM(CASE
+                              WHEN (recommendation = 'ACTION_FALSE_POSITIVE' AND qa_decision = 'qa_decision_FAILED')
+                              THEN 1 ELSE 0 END) g_total_match_qa
+               FROM main
+               GROUP BY 1, 2, 3
+           )
+
+        SELECT g_country as "Country LoB",
+        g_risk_type as "Risk Type",
+        g_list_type as "List Type",
+        ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) / GREATEST(g_total, 1)) * 100,3) as "Efficiency",
+        ROUND((g_total_match_analyst::decimal / GREATEST(g_total_true_positive::decimal, 1)) * 100, 3) as "PTP Effectiveness",
+        ROUND((g_total_match_qa::decimal / GREATEST(g_total_false_positive::decimal, 1)) * 100, 3) as "FP Effectiveness"
         FROM grouped
-        ORDER BY g_date
+        ORDER BY g_country
     - name: METRICS
       type: simulation
       description: Metrics
       selectSqlQuery: >
         WITH main AS (
-            SELECT wa.payload ->> 'lob_country'                           country,
-                   wa.payload ->> 'categories/hitType'                    risk_type,
-                   wa.payload ->> 'DN_CASE.ExtendedAttribute5'            list_type,
-                   wsa.payload ->> 'recommendation_recommended_action'    recommendation,
-                   wsa.payload ->> 'analyst_decision'                     analyst_decision,
-                   wsa.payload ->> 'qa.level-0.state'                     qa_decision,
-                   wsa.created_at date
-            FROM warehouse_simulation_alert wsa
-              JOIN warehouse_alert wa ON wsa.name = wa.name
-            WHERE wsa.payload ->> 'status' = 'LEARNING_COMPLETED'
-                  AND date BETWEEN DATE '${from}' AND DATE '${to}
-                  AND wsa.analysis_name = 'analysis/${analysisId}'
-            GROUP BY wsa.payload ->> 'recommendation_recommended_action',
-                     wa.payload ->> 'categories/hitType', wa.payload ->> 'DN_CASE.ExtendedAttribute5',
-                     wa.payload ->> 'lob_country', wsa.payload ->> 'analyst_decision',
-                     wsa.payload ->> 'qa.level-0.state', wsa.created_at, date
+          SELECT wa.payload ->> 's8_lobCountryCode'                     country,
+                 wa.payload ->> 'categories/hitType'                    risk_type,
+                 wa.payload ->> 'DN_CASE.ExtendedAttribute5'            list_type,
+                 wsa.payload ->> 'recommendation_recommended_action'    recommendation,
+                 wsa.payload ->> 'analyst_decision'                     analyst_decision,
+                 wsa.payload ->> 'qa.level-0.state'                     qa_decision,
+                 wsa.created_at created_date
+          FROM warehouse_simulation_alert wsa
+            JOIN warehouse_alert wa ON wsa.name = wa.name
+          WHERE wsa.payload ->> 'status' = 'LEARNING_COMPLETED'
+                AND wsa.analysis_name = 'analysis/${analysisId}'
+          GROUP BY wa.payload ->> 's8_country',
+                   wa.payload ->> 'categories/hitType',
+                   wa.payload ->> 'DN_CASE.ExtendedAttribute5',
+                   wsa.payload ->> 'recommendation_recommended_action',
+                   wsa.payload ->> 'analyst_decision',
+                   wsa.payload ->> 'qa.level-0.state',
+                   wsa.created_at
         ),
              grouped AS (
-                 SELECT main.country                        g_country,
-                        main.risk_type                      g_risk_type,
-                        main.list_type                      g_list_type,
-                        TO_CHAR(main.date, 'YYYY-MM')       g_date,
-                        COUNT(*)                            g_total,
+                 SELECT main.country                                 g_country,
+                        main.risk_type                               g_risk_type,
+                        main.list_type                               g_list_type,
+                        COUNT(*)                                     g_total,
                         COUNT(*) FILTER ( WHERE recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE') g_total_true_positive,
                         COUNT(*) FILTER ( WHERE recommendation = 'ACTION_FALSE_POSITIVE') g_total_false_positive,
-                        SUM(CASE 
+                        SUM(CASE
                                 WHEN (recommendation = 'ACTION_POTENTIAL_TRUE_POSITIVE' AND analyst_decision = 'analyst_decision_true_positive')
                                 THEN 1 ELSE 0 END) g_total_match_analyst,
-                        SUM(CASE 
+                        SUM(CASE
                                 WHEN (recommendation = 'ACTION_FALSE_POSITIVE' AND qa_decision = 'qa_decision_FAILED')
                                 THEN 1 ELSE 0 END) g_total_match_qa
                  FROM main
-                 GROUP BY 1, 2, 3, 4
+                 GROUP BY 1, 2, 3
              )
-        SELECT g_date as "Date",
-               g_country as "Country LoB",
+        SELECT g_country as "Country LoB",
                g_risk_type as "Risk Type",
                g_list_type as "List Type",
                ROUND(((g_total_true_positive::decimal + g_total_false_positive::decimal) / GREATEST(g_total, 1)) * 100,3) as "Efficiency",
                ROUND((g_total_match_analyst::decimal / GREATEST(g_total_true_positive::decimal, 1)) * 100, 3) as "PTP Effectiveness",
                ROUND((g_total_match_qa::decimal / GREATEST(g_total_false_positive::decimal, 1)) * 100, 3) as "FP Effectiveness"
         FROM grouped
-        ORDER BY g_date
+        ORDER BY g_country
     - name: BILLING
       type: production
       description: Billing
