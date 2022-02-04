@@ -1,4 +1,20 @@
 rootProject.name = "agents-api"
 
-include "protocol-agents"
 include "agents-api"
+include 'allowlist-agent-api'
+include 'bankidentificationcodes-agent-api'
+include 'classifier-agent-api'
+include 'companynamesurrounding-agent-api'
+include 'country-agent-api'
+include 'date-agent-api'
+include 'document-agent-api'
+include 'dummy-agent-api'
+include 'freetext-agent-api'
+include 'gender-agent-api'
+include 'geo-agent-api'
+include 'historical-decisions-agent-api'
+include 'is-pep-agent-api'
+include 'name-agent-api'
+include 'organizationname-agent-api'
+include 'region-agent-api'
+include 'strict-name-agent'
