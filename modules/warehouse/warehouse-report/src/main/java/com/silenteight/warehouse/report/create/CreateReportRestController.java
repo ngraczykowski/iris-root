@@ -25,7 +25,7 @@ import static org.springframework.http.HttpStatus.SEE_OTHER;
 @Slf4j
 public class CreateReportRestController {
 
-  private static final String COMMON_URL = "/v3/analysis/{type}/reports/{name}";
+  private static final String COMMON_URL = "/v2/analysis/{type}/reports/{name}";
   private static final String GROUP_NAME = "kibana-sso";
 
   @NonNull

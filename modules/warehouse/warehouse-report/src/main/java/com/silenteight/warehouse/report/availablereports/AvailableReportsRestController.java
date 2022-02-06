@@ -22,7 +22,7 @@ import static com.silenteight.warehouse.common.web.rest.RestConstants.ROOT;
 @RequestMapping(ROOT)
 public class AvailableReportsRestController {
 
-  private static final String COMMON_URL = "/v3/analysis/{type}/reports";
+  private static final String COMMON_URL = "/v2/analysis/{type}/reports";
 
   @NonNull
   private final ReportListService reportListService;

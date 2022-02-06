@@ -24,7 +24,7 @@ import static java.lang.String.format;
 @RequestMapping(ROOT)
 public class ReportStatusRestController {
 
-  private static final String COMMON_REPORT_URL = "v3/analysis/{type}/reports/{name}/{id}/status";
+  private static final String COMMON_REPORT_URL = "/v2/analysis/{type}/reports/{name}/{id}/status";
 
   @NonNull
   private final ReportPersistenceService reportPersistenceService;
