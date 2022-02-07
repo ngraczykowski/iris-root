@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.svb.newlearning.job.historical;
 
 import com.silenteight.payments.bridge.svb.newlearning.job.TestApplicationConfiguration;
+import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.StoreStepFixture;
 import com.silenteight.payments.bridge.testing.BaseBatchTest;
 
 import org.assertj.core.api.Assertions;
@@ -30,17 +31,17 @@ class HistoricalAssessmentReservationStepTest extends BaseBatchTest {
   @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   void shouldRunReservationStepTwice() {
-    var jobId = runReservationStep();
+    var jobId = runReservationStep("bucket");
     var count = fetchReservedForJob(jobId);
     Assertions.assertThat(count).isEqualTo(3);
     // Second time on conflict do nothing should not put any data so result should be the same.
-    var secondJobId = runReservationStep();
+    var secondJobId = runReservationStep("bucket1");
 
     var reservedFirstJob = fetchReservedForJob(jobId);
     var reservedSecondJob = fetchReservedForJob(secondJobId);
     // On second reservation execution it should already been assigned to first execution only.
     Assertions.assertThat(reservedFirstJob).isEqualTo(3);
-    Assertions.assertThat(reservedSecondJob).isEqualTo(0);
+    Assertions.assertThat(reservedSecondJob).isEqualTo(3);
   }
 
   private long fetchReservedForJob(long jobId) {
@@ -49,11 +50,12 @@ class HistoricalAssessmentReservationStepTest extends BaseBatchTest {
         Number.class).longValue();
   }
 
-  private long runReservationStep() {
+  private long runReservationStep(String bucket) {
     var jobExecution =
         jobLauncherTestUtils.launchStep(
-            HISTORICAL_ASSESSMENT_RESERVATION_STEP);
-    Assertions.assertThat("COMPLETED").isEqualTo(jobExecution.getExitStatus().getExitCode());
+            HISTORICAL_ASSESSMENT_RESERVATION_STEP, StoreStepFixture.toParams("file_name.csv",
+                bucket));
+    Assertions.assertThat(jobExecution.getExitStatus().getExitCode()).isEqualTo("COMPLETED");
     return jobExecution.getJobId();
 
   }
@@ -62,7 +64,7 @@ class HistoricalAssessmentReservationStepTest extends BaseBatchTest {
     var jobExecution =
         jobLauncherTestUtils.launchStep(
             HISTORICAL_ASSESSMENT_STORE_STEP);
-    Assertions.assertThat("COMPLETED").isEqualTo(jobExecution.getExitStatus().getExitCode());
+    Assertions.assertThat(jobExecution.getExitStatus().getExitCode()).isEqualTo("COMPLETED");
     return jobExecution.getJobId();
 
   }

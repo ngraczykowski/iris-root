@@ -153,5 +153,22 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="payments-bridge-svb-learning-1.5.11" author="ppietrucha">
+    <dropUniqueConstraint tableName="pb_learning_etl_reservation"
+                          constraintName="pb_learning_etl_reservation_learning_alert_id_key"
+                          uniqueColumns="learning_alert_id"/>
+    <addUniqueConstraint tableName="pb_learning_etl_reservation"
+                         columnNames="learning_alert_id,job_id"/>
+    <dropUniqueConstraint tableName="pb_learning_historical_reservation"
+                          constraintName="pb_learning_historical_reservation_learning_alert_id_key"
+                          uniqueColumns="learning_alert_id"/>
+    <addUniqueConstraint tableName="pb_learning_historical_reservation"
+                         columnNames="learning_alert_id,job_id"/>
+    <dropUniqueConstraint tableName="pb_learning_contextual_reservation"
+                          constraintName="pb_learning_contextual_reservation_learning_alert_id_key"
+                          uniqueColumns="learning_alert_id"/>
+    <addUniqueConstraint tableName="pb_learning_contextual_reservation"
+                         columnNames="learning_alert_id,job_id"/>
+  </changeSet>
 
 </databaseChangeLog>

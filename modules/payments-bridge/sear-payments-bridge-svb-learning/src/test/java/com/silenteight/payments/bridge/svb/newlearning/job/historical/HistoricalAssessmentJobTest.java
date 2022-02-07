@@ -1,13 +1,13 @@
 package com.silenteight.payments.bridge.svb.newlearning.job.historical;
 
 import com.silenteight.payments.bridge.svb.newlearning.job.TestApplicationConfiguration;
+import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.StoreStepFixture;
 import com.silenteight.payments.bridge.testing.BaseBatchTest;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
@@ -44,13 +44,13 @@ class HistoricalAssessmentJobTest extends BaseBatchTest {
 
     var jobExecution = jobLauncherTestUtils
         .getJobLauncher()
-        .run(historicalRiskAssessmentJob, new JobParametersBuilder().toJobParameters());
+        .run(historicalRiskAssessmentJob, StoreStepFixture.toParams("file_name.csv", "bucket"));
     var step = jobExecution
         .getStepExecutions()
         .stream()
         .filter(s -> HISTORICAL_ASSESSMENT_STORE_STEP.equals(s.getStepName())).findFirst();
     Assertions.assertThat(jobExecution.getExitStatus()).isEqualTo(ExitStatus.COMPLETED);
-    Assertions.assertThat(step.isPresent()).isEqualTo(true);
+    Assertions.assertThat(step.isPresent()).isTrue();
     Assertions.assertThat(step.get().getReadCount()).isEqualTo(3);
     Assertions.assertThat(step.get().getWriteCount()).isEqualTo(3);
 

@@ -8,10 +8,10 @@ DELETE
 FROM pb_learning_file;
 
 -- Insert duplicated alerts.
-INSERT INTO pb_learning_alert(learning_alert_id, fkco_id, fkco_v_system_id,fkco_d_filtered_datetime)
-VALUES (10, 1, 'systemid', now())
-     , (20, 1, 'systemid', now())
-     , (30, 1, 'systemid', now());
+INSERT INTO pb_learning_alert(learning_alert_id, fkco_id, fkco_v_system_id,fkco_d_filtered_datetime, file_name)
+VALUES (10, 1, 'systemid', now(), 'analystdecison-2-hits.csv')
+     , (20, 1, 'systemid', now(), 'analystdecison-2-hits.csv')
+     , (30, 1, 'systemid', now(), 'analystdecison-2-hits.csv');
 
 -- Insert duplicated hits.
 INSERT INTO pb_learning_hit(learning_hit_id, fkco_messages, fkco_v_matched_tag, fkco_i_sequence)

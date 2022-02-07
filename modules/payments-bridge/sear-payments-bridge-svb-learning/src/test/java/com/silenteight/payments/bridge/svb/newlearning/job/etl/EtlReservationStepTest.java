@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.svb.newlearning.job.etl;
 
 import com.silenteight.payments.bridge.svb.newlearning.job.TestApplicationConfiguration;
+import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.StoreStepFixture;
 import com.silenteight.payments.bridge.testing.BaseBatchTest;
 
 import org.assertj.core.api.Assertions;
@@ -31,17 +32,17 @@ class EtlReservationStepTest extends BaseBatchTest {
   @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   void shouldRunReservationStepTwice() {
-    var jobId = runReservationStep();
+    var jobId = runReservationStep("bucket");
     var count = fetchReservedForJob(jobId);
     Assertions.assertThat(count).isEqualTo(3);
     // Second time on conflict do nothing should not put any data so result should be the same.
-    var secondJobId = runReservationStep();
+    var secondJobId = runReservationStep("bucket1");
 
     var reservedFirstJob = fetchReservedForJob(jobId);
     var reservedSecondJob = fetchReservedForJob(secondJobId);
     // On second reservation execution it should already been assigned to first execution only.
     Assertions.assertThat(reservedFirstJob).isEqualTo(3);
-    Assertions.assertThat(reservedSecondJob).isEqualTo(0);
+    Assertions.assertThat(reservedSecondJob).isEqualTo(3);
   }
 
   private long fetchReservedForJob(long jobId) {
@@ -50,11 +51,11 @@ class EtlReservationStepTest extends BaseBatchTest {
         Number.class).longValue();
   }
 
-  private long runReservationStep() {
+  private long runReservationStep(String bucket) {
     var jobExecution =
         jobLauncherTestUtils.launchStep(
-            ETL_RESERVATION_STEP);
-    Assertions.assertThat("COMPLETED").isEqualTo(jobExecution.getExitStatus().getExitCode());
+            ETL_RESERVATION_STEP, StoreStepFixture.toParams("analystdecison-2-hits.csv", bucket));
+    Assertions.assertThat(jobExecution.getExitStatus().getExitCode()).isEqualTo("COMPLETED");
     return jobExecution.getJobId();
 
   }
@@ -63,7 +64,7 @@ class EtlReservationStepTest extends BaseBatchTest {
     var jobExecution =
         jobLauncherTestUtils.launchStep(
             ETL_STEP_NAME);
-    Assertions.assertThat("COMPLETED").isEqualTo(jobExecution.getExitStatus().getExitCode());
+    Assertions.assertThat(jobExecution.getExitStatus().getExitCode()).isEqualTo("COMPLETED");
     return jobExecution.getJobId();
 
   }

@@ -10,10 +10,10 @@ FROM pb_learning_file;
 -- Insert duplicated alerts.
 INSERT INTO pb_learning_alert(learning_alert_id, fkco_id, fkco_v_format, fkco_v_system_id,
                               fkco_v_messageid,
-                              fkco_d_filtered_datetime, fkco_v_application)
-VALUES (10, 1, 'FED', 'systemid', '87AB4899-BE5B-5E4F-E053-150A6C0A7A84', NOW(), 'GFX')
-     , (20, 1, 'FED', 'systemid', '87AB4899-BE5B-5E4F-E053-150A6C0A7A85', NOW(), 'GFX')
-     , (30, 1, 'FED', 'systemid', '87AB4899-BE5B-5E4F-E053-150A6C0A7A86', NOW(), 'GFX');
+                              fkco_d_filtered_datetime, fkco_v_application, file_name)
+VALUES (10, 1, 'FED', 'systemid', '87AB4899-BE5B-5E4F-E053-150A6C0A7A84', NOW(), 'GFX', 'file_name.csv')
+     , (20, 1, 'FED', 'systemid', '87AB4899-BE5B-5E4F-E053-150A6C0A7A85', NOW(), 'GFX', 'file_name.csv')
+     , (30, 1, 'FED', 'systemid', '87AB4899-BE5B-5E4F-E053-150A6C0A7A86', NOW(), 'GFX', 'file_name.csv');
 
 -- Insert duplicated hits.
 INSERT INTO pb_learning_hit(learning_hit_id, fkco_messages, fkco_v_matched_tag,

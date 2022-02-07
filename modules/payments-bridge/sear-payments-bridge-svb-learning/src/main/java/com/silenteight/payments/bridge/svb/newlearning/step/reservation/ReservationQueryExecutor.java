@@ -12,11 +12,13 @@ class ReservationQueryExecutor {
   private final JdbcTemplate jdbcTemplate;
   private final String query;
   private final Long jobId;
+  private final String fileName;
 
   int reserve() {
-    var result = jdbcTemplate.update(query, jobId);
-    log.info("Reservation has been accomplished with alerts count: {} for jobId: {}", result,
-        jobId);
+    var result = jdbcTemplate.update(query, jobId, jobId, fileName, jobId);
+    log.info(
+        "Reservation has been accomplished with alerts count: {} for jobId: {}, fileName: {}",
+        result, jobId, fileName);
     return result;
   }
 }
