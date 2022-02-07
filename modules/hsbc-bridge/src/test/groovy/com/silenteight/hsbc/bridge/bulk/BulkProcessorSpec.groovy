@@ -29,10 +29,10 @@ class BulkProcessorSpec extends Specification {
     LockAssert.TestHelper.makeAllAssertsPass(true)
 
     when:
-    underTest.tryToProcessLearningBulk()
+    underTest.tryToProcessLearningBulk(fixtures.learningBulk.id)
 
     then:
-    1 * bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSING) >>
+    1 * bulkRepository.findById(fixtures.learningBulk.id) >>
         Optional.of(fixtures.learningBulk)
     1 * alertFacade.getRegisteredAlertsFromDb(_ as Stream<String>) >> []
     0 * adjudicationFacade.registerAlertWithMatches(_ as Map)
@@ -44,10 +44,10 @@ class BulkProcessorSpec extends Specification {
     LockAssert.TestHelper.makeAllAssertsPass(true)
 
     when:
-    underTest.tryToProcessSolvingBulk()
+    underTest.tryToProcessSolvingBulk(fixtures.solvingBulk.id)
 
     then:
-    1 * bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSING) >>
+    1 * bulkRepository.findById(fixtures.solvingBulk.id) >>
         Optional.of(fixtures.solvingBulk)
     1 * adjudicationFacade.registerAlertWithMatchesAndAnalysis(_ as Map) >> 1L
     0 * learningAlertProcessor.process(_ as Collection, _ as Collection)

@@ -16,22 +16,31 @@ class BulkProcessorScheduler {
   private final BulkUpdater bulkUpdater;
 
   @Scheduled(fixedDelay = 2 * 1000, initialDelay = 2000)
-  @SchedulerLock(name = "processPreProcessedBulks", lockAtLeastFor = "PT1S", lockAtMostFor = "PT2M")
+  @SchedulerLock(name = "processPreProcessedBulks", lockAtLeastFor = "PT1S", lockAtMostFor = "PT8S")
   public void processPreProcessedBulks() {
     LockAssert.assertLocked();
 
     log.trace("Scheduler has been triggered...");
 
-    bulkRepository.findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSED).ifPresent(bulk -> {
-      log.info(
-          "Try to pre process bulk from status PRE_PROCESSED to PRE_PROCESSING with id: {}",
-          bulk.getId());
-      bulkUpdater.updateWithPreProcessingStatus(bulk.getId());
-      if (bulk.isLearning()) {
-        bulkProcessor.tryToProcessLearningBulk();
-      } else {
-        bulkProcessor.tryToProcessSolvingBulk();
-      }
-    });
+    bulkRepository
+        .findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSED)
+        .ifPresent(bulk -> {
+          log.info(
+              "Try to pre process bulk from status PRE_PROCESSED to PRE_PROCESSING with id: {}",
+              bulk.getId());
+          bulkUpdater.updateWithPreProcessingStatus(bulk.getId());
+        });
+
+    bulkRepository
+        .findFirstByStatusOrderByCreatedAtAsc(BulkStatus.PRE_PROCESSING)
+        .ifPresent(bulk -> {
+          log.info(
+              "Processing bulk with id: {}, learning: {}", bulk.getId(), bulk.isLearning());
+          if (bulk.isLearning()) {
+            bulkProcessor.tryToProcessLearningBulk(bulk.getId());
+          } else {
+            bulkProcessor.tryToProcessSolvingBulk(bulk.getId());
+          }
+        });
   }
 }
