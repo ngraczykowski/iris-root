@@ -14,18 +14,5 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "warehouse.report")
 public class ReportProperties {
 
-  AiReasoningReportProperties aiReasoning;
-
-  AccuracyReportProperties accuracy;
-
-  AiReasoningMatchLevelReportProperties aiReasoningMatchLevel;
-
-  BillingReportProperties billing;
-
-  RbsReportProperties rbs;
-
   StatisticsProperties statistics;
-
-  MetricsReportProperties metrics;
-
 }

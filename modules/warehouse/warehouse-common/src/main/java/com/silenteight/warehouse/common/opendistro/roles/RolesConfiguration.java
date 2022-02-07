@@ -13,9 +13,4 @@ class RolesConfiguration {
   RoleService roleService(OpendistroElasticClient opendistroElasticClient) {
     return new RoleService(opendistroElasticClient, new DlsQueryProcessor());
   }
-
-  @Bean
-  RolesMappingService rolesMappingService(OpendistroElasticClient opendistroElasticClient) {
-    return new RolesMappingService(opendistroElasticClient);
-  }
 }

@@ -1,7 +1,5 @@
 package com.silenteight.warehouse.common.elastic;
 
-import com.silenteight.sep.auth.token.UserAwareTokenProvider;
-
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -34,12 +32,9 @@ public class ElasticsearchClientConfiguration extends
 
   @Bean
   RestHighLevelElasticClientFactory restHighLevelElasticClientFactory(
-      RestClientBuilder restClientBuilder,
-      ElasticsearchRestClientProperties properties,
-      UserAwareTokenProvider userAwareTokenProvider) {
+      RestClientBuilder restClientBuilder) {
 
-    return new RestHighLevelElasticClientFactory(
-        restClientBuilder, properties, userAwareTokenProvider);
+    return new RestHighLevelElasticClientFactory(restClientBuilder);
   }
 
   @Bean
@@ -47,13 +42,6 @@ public class ElasticsearchClientConfiguration extends
       RestHighLevelElasticClientFactory restHighLevelElasticClientFactory) {
 
     return restHighLevelElasticClientFactory.getAdminClient();
-  }
-
-  @Bean
-  RestHighLevelClient restHighLevelUserAwareClient(
-      RestHighLevelElasticClientFactory restHighLevelElasticClientFactory) {
-
-    return restHighLevelElasticClientFactory.getUserAwareClient();
   }
 
   @ConditionalOnEnabledHealthIndicator(value = "elasticsearch")

@@ -10,7 +10,6 @@ import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
 import com.silenteight.warehouse.alert.rest.RestAlertModule;
 import com.silenteight.warehouse.common.domain.DomainModule;
-import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.management.ManagementModule;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +21,6 @@ import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values
 import static java.time.Instant.parse;
 
 @ComponentScan(basePackageClasses = {
-    EnvironmentModule.class,
     ManagementModule.class,
     UserAwareTokenProvider.class,
     RestAlertModule.class,

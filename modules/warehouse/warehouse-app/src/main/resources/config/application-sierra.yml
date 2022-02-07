@@ -1,14 +1,8 @@
 warehouse:
-  alert-mapping:
-    country-source-key: access_permission_tag
-    ignored-keys:
-  match-mapping:
   persistence:
     alert:
       labels:
       recommendation-date-field: "alert_create_time"
-  environment:
-    prefix: sierra
   sampling:
     time-field-name: alert_create_time
 

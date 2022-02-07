@@ -4,7 +4,6 @@ import com.silenteight.model.api.v1.SampleAlertServiceProto.Alert;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleRequest;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleResponse;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
-import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.common.testing.rest.WithElasticAccessCredentials;
 import com.silenteight.warehouse.sampling.configuration.SamplingProperties;
 
@@ -29,8 +28,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest(classes = SamplingTestConfiguration.class)
 @ContextConfiguration(initializers = {
-    PostgresTestInitializer.class,
-    OpendistroElasticContainerInitializer.class
+    PostgresTestInitializer.class
 })
 @ActiveProfiles({ "jpa-test" })
 @Transactional

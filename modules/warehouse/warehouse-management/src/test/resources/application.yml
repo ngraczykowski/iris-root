@@ -1,22 +1,6 @@
 spring:
   application:
     name: warehouse
-warehouse:
-  alert-mapping:
-    country-source-key: lob_country
-  match-mapping:
-  environment:
-    prefix: itest
-  es:
-    production-query-index: ${warehouse.environment.prefix}_production_alert
-    production-match-query-index: ${warehouse.environment.prefix}_production_match
-    country-roles-indexes:
-      - ${warehouse.es.production-query-index}
-      - ${warehouse.environment.prefix}_simulation*
-    scroll:
-      search:
-        batch-size: 1
-        keep-alive-seconds: 10
 logging:
   level:
     com.silenteight.warehouse.report: DEBUG

@@ -12,17 +12,13 @@ import com.silenteight.warehouse.alert.rest.RestAlertModule;
 import com.silenteight.warehouse.backup.BackupModule;
 import com.silenteight.warehouse.common.domain.DomainModule;
 import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
-import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
 import com.silenteight.warehouse.common.time.TimeModule;
 import com.silenteight.warehouse.common.web.WebModule;
 import com.silenteight.warehouse.indexer.alert.AlertModule;
 import com.silenteight.warehouse.indexer.match.MatchModule;
-import com.silenteight.warehouse.indexer.production.ProductionMessageHandlerModule;
-import com.silenteight.warehouse.indexer.production.indextracking.IndexTrackingModule;
 import com.silenteight.warehouse.indexer.query.QueryAlertModule;
-import com.silenteight.warehouse.indexer.simulation.analysis.AnalysisModule;
 import com.silenteight.warehouse.management.ManagementModule;
 import com.silenteight.warehouse.migration.backupmessage.BackupMigrationModule;
 import com.silenteight.warehouse.migration.country.CountryMigrationModule;
@@ -35,10 +31,8 @@ import com.silenteight.warehouse.report.download.ReportDownloadModule;
 import com.silenteight.warehouse.report.generation.ReportGenerationModule;
 import com.silenteight.warehouse.report.name.ReportFileNameModule;
 import com.silenteight.warehouse.report.persistence.ReportPersistenceModule;
-import com.silenteight.warehouse.report.production.ProductionReportsModule;
 import com.silenteight.warehouse.report.remove.ReportsRemovalModule;
 import com.silenteight.warehouse.report.reporting.ReportingModule;
-import com.silenteight.warehouse.report.simulation.SimulationModule;
 import com.silenteight.warehouse.report.sql.SqlExecutorModule;
 import com.silenteight.warehouse.report.statistics.ReportStatisticsModule;
 import com.silenteight.warehouse.report.status.ReportStatusModule;
@@ -66,7 +60,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     // NOTE(ahaczewski): Keep list of modules alphabetically sorted within section.
     // Domain modules
     AlertModule.class,
-    AnalysisModule.class,
     AvailableReportsModule.class,
     BackupMigrationModule.class,
     BackupModule.class,
@@ -77,10 +70,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     ReportGenerationModule.class,
     ReportPersistenceModule.class,
     ReportStatusModule.class,
-    IndexTrackingModule.class,
     ManagementModule.class,
     MatchModule.class,
-    ProductionMessageHandlerModule.class,
     com.silenteight.warehouse.production.handler.ProductionMessageHandlerModule.class,
     ProductionPersistenceModule.class,
     ReportStatisticsModule.class,
@@ -94,10 +85,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     AuthenticationModule.class,
     AuthorizationModule.class,
     ElasticsearchRestClientModule.class,
-    EnvironmentModule.class,
     FileStorageMinioModule.class,
     OpendistroModule.class,
-    ProductionReportsModule.class,
     QaMessageHandlerModule.class,
     QaProcessingModule.class,
     ReportFileNameModule.class,
@@ -105,7 +94,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
     ReportsRemovalModule.class,
     RetentionProductionModule.class,
     RetentionSimulationModule.class,
-    SimulationModule.class,
     SqlExecutorModule.class,
     StorageModule.class,
     TokenModule.class,

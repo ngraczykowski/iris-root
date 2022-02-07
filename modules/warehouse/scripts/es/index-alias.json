@@ -1,9 +1,0 @@
-{
-  "actions": [
-    {
-      "add": {"index": "local_production_alert*", "alias": "local_production_alert"}
-    }, {
-      "add": {"index": "local_production_match*", "alias": "local_production_match"}
-    }
-  ]
-}

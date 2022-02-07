@@ -10,7 +10,6 @@ import com.silenteight.sep.base.common.support.hibernate.SilentEightNamingConven
 import com.silenteight.sep.base.common.time.TimeSource;
 import com.silenteight.warehouse.backup.BackupModule;
 import com.silenteight.warehouse.backup.indexing.IndexerProperties;
-import com.silenteight.warehouse.common.environment.EnvironmentModule;
 import com.silenteight.warehouse.common.integration.AmqpCommonModule;
 import com.silenteight.warehouse.production.handler.ProductionMessageHandlerModule;
 import com.silenteight.warehouse.production.handler.ProductionMessageHandlerProperties;
@@ -30,7 +29,6 @@ import static com.silenteight.sep.base.testing.time.MockTimeSource.ARBITRARY_INS
 import static org.mockito.Mockito.*;
 
 @ComponentScan(basePackageClasses = {
-    EnvironmentModule.class,
     BackupModule.class,
     AmqpCommonModule.class,
     TestClientModule.class,

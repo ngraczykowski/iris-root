@@ -16,7 +16,6 @@ import com.silenteight.warehouse.sampling.configuration.SamplingProperties;
 import java.util.List;
 
 import static com.silenteight.warehouse.common.time.Timestamps.toOffsetDateTime;
-import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
@@ -24,9 +23,6 @@ class DistributionAlertsService {
 
   @NonNull
   private final GroupingQueryService groupingQueryService;
-
-  @NonNull
-  private final String productionQueryIndex;
 
   @NonNull
   private final SamplingProperties samplingProperties;
@@ -84,7 +80,6 @@ class DistributionAlertsService {
         .from(toOffsetDateTime(request.getTimeRangeFrom()))
         .to(toOffsetDateTime(request.getTimeRangeTo()))
         .dateField(samplingProperties.getTimeFieldName())
-        .indexes(of(productionQueryIndex))
         .fields(request.getGroupingFieldsList())
         .queryFilters(samplingProperties.getQueryFilters())
         .build();
