@@ -7,10 +7,10 @@ import pyspark.sql.functions as F
 
 from etl_pipeline.agent_input_creator.config import AGENT_INPUT_AGG_COL_CONFIG, AGENT_INPUT_CONFIG
 from etl_pipeline.agent_input_creator.sql import sql_to_merge_specific_columns_to_standardized
-from pipeline.spark import spark_instance
+from etl_pipeline.data_processor_engine.spark import spark_instance
 
 
-def create_input(cleansed_alert_df: pyspark.sql.DataFrame, destination: str):
+def create_input_for_agents(cleansed_alert_df: pyspark.sql.DataFrame, destination: str):
     """Parameters
     ----------
     cleansed_alert_df : pyspark.sql.DataFrame
