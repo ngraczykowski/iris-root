@@ -1,10 +1,8 @@
-package com.silenteight.payments.common.resource;
+package com.silenteight.payments.bridge.common.resource;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.UUID;
-
-import static com.silenteight.payments.common.resource.ResourceName.create;
+import static com.silenteight.payments.bridge.common.resource.ResourceName.create;
 import static org.assertj.core.api.Assertions.*;
 
 class ResourceNameTest {
@@ -63,12 +61,5 @@ class ResourceNameTest {
     var resource = create(NAME);
     assertThat(resource.contains("datasets")).isTrue();
     assertThat(resource.contains("dummy")).isFalse();
-  }
-
-  @Test
-  void shouldParseUuid() {
-    var uuid = UUID.randomUUID();
-    var resource = create("id/" + uuid);
-    assertThat(resource.getUuid("id")).isEqualTo(uuid);
   }
 }

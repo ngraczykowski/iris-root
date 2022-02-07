@@ -4,7 +4,6 @@ plugins {
 }
 
 dependencies {
-  implementation project(":sear-payments-common")
   implementation project(":sear-payments-bridge-common")
 
   implementation libraries.spring_boot

@@ -14,7 +14,6 @@ dependencies {
   implementation project(":sear-payments-bridge-mock-datasource")
   implementation project(":sear-payments-bridge-notification")
   implementation project(":sear-payments-bridge-warehouse")
-  implementation project(":sear-payments-common")
 
   implementation libraries.silenteight_sep_base_common
   implementation libraries.data_source_api

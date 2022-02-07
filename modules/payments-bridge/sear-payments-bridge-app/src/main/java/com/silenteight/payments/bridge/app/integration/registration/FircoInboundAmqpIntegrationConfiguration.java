@@ -5,13 +5,13 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.payments.bridge.app.integration.callback.AlertDeliveredIntegrationService;
 import com.silenteight.payments.bridge.common.model.AlertId;
 import com.silenteight.payments.bridge.common.model.SimpleAlertId;
+import com.silenteight.payments.bridge.common.resource.ResourceName;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.FilterAlertMessageUseCase;
 import com.silenteight.payments.bridge.firco.callback.port.SendResponseUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.model.BridgeSourcedRecommendation;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
-import com.silenteight.payments.common.resource.ResourceName;
 import com.silenteight.proto.payments.bridge.internal.v1.event.MessageStored;
 import com.silenteight.proto.payments.bridge.internal.v1.event.ResponseCompleted;
 import com.silenteight.sep.base.common.messaging.AmqpInboundFactory;
@@ -56,7 +56,7 @@ class FircoInboundAmqpIntegrationConfiguration {
             "Initialized alert registration process for: " + mapToAlertId(
                 (MessageStored) msg.getPayload()))
         .transform(MessageStored.class, source ->
-          new SimpleAlertId(ResourceName.create(source.getAlert()).getUuid("alert-messages"))
+            new SimpleAlertId(ResourceName.create(source.getAlert()).getUuid("alert-messages"))
         )
         .filter(AlertId.class, alertId -> !filterAlertMessageUseCase.isResolvedOrOutdated(alertId))
         .filter(AlertId.class, alertId -> !filterAlertMessageUseCase.hasTooManyHits(alertId),
@@ -100,7 +100,8 @@ class FircoInboundAmqpIntegrationConfiguration {
         .log(INFO, FircoInboundAmqpIntegrationConfiguration.class.toString(), msg ->
             "Received response-completed msg for: " + buildAlertId(
                 (ResponseCompleted) msg.getPayload()).getAlertId())
-        .filter(ResponseCompleted.class,
+        .filter(
+            ResponseCompleted.class,
             source -> !filterAlertMessageUseCase.isOutdated(buildAlertId(source)),
             spec -> spec.discardChannel(RESPONSE_COMPLETED_INT_DISCARD))
         .handle(ResponseCompleted.class, (payload, headers) -> {

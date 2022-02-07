@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import reactor.core.scheduler.Schedulers;
 
-import static com.silenteight.payments.common.app.EnvironmentUtils.setPropertyFromEnvironment;
+import static com.silenteight.payments.bridge.common.app.EnvironmentUtils.setPropertyFromEnvironment;
 import static java.lang.System.setProperty;
 
 @Configuration

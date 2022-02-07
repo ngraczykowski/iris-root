@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.dto.output.ClientRequestDto;
+import com.silenteight.payments.bridge.common.resource.ResourceName;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePayloadUseCase;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageUseCase;
@@ -14,7 +15,6 @@ import com.silenteight.payments.bridge.firco.callback.port.AlertDeliveredPublish
 import com.silenteight.payments.bridge.firco.callback.port.SendResponseUseCase;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationId;
 import com.silenteight.payments.bridge.firco.recommendation.port.GetRecommendationUseCase;
-import com.silenteight.payments.common.resource.ResourceName;
 import com.silenteight.proto.payments.bridge.internal.v1.event.ResponseCompleted;
 import com.silenteight.sep.base.aspects.logging.LogContext;
 import com.silenteight.sep.base.aspects.metrics.Timed;

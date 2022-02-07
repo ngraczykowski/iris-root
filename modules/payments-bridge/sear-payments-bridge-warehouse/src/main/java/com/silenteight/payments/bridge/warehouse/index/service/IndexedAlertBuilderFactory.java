@@ -7,8 +7,8 @@ import lombok.Setter;
 
 import com.silenteight.data.api.v2.Alert;
 import com.silenteight.data.api.v2.Match;
+import com.silenteight.payments.bridge.common.protobuf.ObjectMapperStructBuilder;
 import com.silenteight.payments.bridge.warehouse.index.model.payload.IndexPayload;
-import com.silenteight.payments.common.protobuf.ObjectMapperStructBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.Struct;

@@ -1,4 +1,4 @@
-package com.silenteight.payments.common.protobuf;
+package com.silenteight.payments.bridge.common.protobuf;
 
 import lombok.Getter;
 import lombok.NonNull;

@@ -24,7 +24,7 @@ import reactor.core.scheduler.Schedulers;
 
 import java.security.Security;
 
-import static com.silenteight.payments.common.app.EnvironmentUtils.setPropertyFromEnvironment;
+import static com.silenteight.payments.bridge.common.app.EnvironmentUtils.setPropertyFromEnvironment;
 import static java.lang.System.setProperty;
 
 @EnableAsync(mode = AdviceMode.ASPECTJ)

@@ -1,7 +1,7 @@
 package com.silenteight.payments.bridge.svb.newlearning.step.composite;
 
+import com.silenteight.payments.bridge.common.app.OffsetTimeConverter;
 import com.silenteight.payments.bridge.svb.newlearning.domain.ActionComposite;
-import com.silenteight.payments.common.app.OffsetTimeConverter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

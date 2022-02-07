@@ -1,4 +1,4 @@
-package com.silenteight.payments.common.app;
+package com.silenteight.payments.bridge.common.app;
 
 import java.sql.Timestamp;
 import java.time.Instant;

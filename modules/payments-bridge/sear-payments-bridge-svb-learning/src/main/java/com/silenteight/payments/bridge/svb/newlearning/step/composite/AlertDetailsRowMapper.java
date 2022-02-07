@@ -5,7 +5,7 @@ import com.silenteight.payments.bridge.svb.newlearning.domain.AlertDetails;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.silenteight.payments.common.app.OffsetTimeConverter.getOffsetDateTime;
+import static com.silenteight.payments.bridge.common.app.OffsetTimeConverter.getOffsetDateTime;
 
 class AlertDetailsRowMapper {
 

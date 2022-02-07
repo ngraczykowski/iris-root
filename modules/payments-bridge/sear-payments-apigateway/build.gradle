@@ -7,7 +7,7 @@ plugins {
 
 dependencies {
   // Project modules
-  implementation project(":sear-payments-common")
+  implementation project(":sear-payments-bridge-common")
 
   // Utilities
   implementation libraries.commons_lang3

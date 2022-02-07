@@ -10,6 +10,8 @@ import com.google.common.base.Splitter;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
+import javax.annotation.Nonnull;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
@@ -83,6 +85,14 @@ public class ResourceName {
   public long getLong(@NonNull String name) {
     if (pathTokens.containsKey(name)) {
       return Long.parseLong(pathTokens.get(name));
+    }
+    throw partNotExists(name);
+  }
+
+  @Nonnull
+  public UUID getUuid(@NonNull String name) {
+    if (pathTokens.containsKey(name)) {
+      return UUID.fromString(pathTokens.get(name));
     }
     throw partNotExists(name);
   }

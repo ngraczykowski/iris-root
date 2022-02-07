@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.firco.recommendation.model;
 
 import lombok.Value;
 
-import com.silenteight.payments.common.resource.ResourceName;
+import com.silenteight.payments.bridge.common.resource.ResourceName;
 
 import java.util.UUID;
 

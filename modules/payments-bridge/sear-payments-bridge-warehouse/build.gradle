@@ -4,7 +4,6 @@ plugins {
 }
 
 dependencies {
-  implementation project(":sear-payments-common")
   implementation project(":sear-payments-bridge-common")
   implementation project(":proto-sear-payments-bridge-internal-protos")
   testImplementation project(":sear-payments-bridge-testing")
