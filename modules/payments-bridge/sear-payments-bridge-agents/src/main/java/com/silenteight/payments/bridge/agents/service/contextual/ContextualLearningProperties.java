@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 
 @Data
 @Validated
-@ConfigurationProperties(prefix = "pb.agent.contextual")
+@ConfigurationProperties(prefix = "pb.agents.contextual")
 class ContextualLearningProperties {
 
   private int numberOfTokensLeft = 1;

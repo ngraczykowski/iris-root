@@ -1,21 +1,23 @@
 package com.silenteight.payments.bridge.agents.service;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @Validated
-@ConfigurationProperties(prefix = "pb.agents.specific-terms2")
+@ConfigurationProperties(prefix = "pb.agent.specific-terms2")
 class SpecificTerms2Properties {
 
-  private static final List<String> REGULAR_TERMS = List.of(
+  private String bucket = "sierra-dev-decrypted-files";
+  private String regularTermsKey = "category/regularTerms.csv";
+  private String specificTermsKey = "category/specificTerms.csv";
+  private String region = "eu-central-1";
+
+  public static final List<String> REGULAR_TERMS = List.of(
       "([12]/|\n|\\s)(D|S|W|Y)(/|\\s|-)?O([12]/|\n|\\s|\\b)",
       "(?i)([12]/|\n|\\s|,)P.?O.?([12]/|\n|\\s)?BOX([12]/|\n|\\s)",
       "([12]/|\n|\\s|,)P.?([12]/|\n|\\s)?B.([12]/|\n|\\s)?[0-9]{3,9}([12]/|\n|\\s|,)",
@@ -34,7 +36,7 @@ class SpecificTerms2Properties {
       "([12]/|\n|\\s)(T/AS?|O/B|EN/OF)([12]/|\n|\\s)"
   );
 
-  private static final List<String> SPECIFIC_TERMS = List.of(
+  public static final List<String> SPECIFIC_TERMS = List.of(
       ".?TREASURY.?OF.?RUSSIA",
       "ADVANCED.?MICRO-FABRICATION.?EQUIPMENT.?INC.?CHINA.?TELECOM",
       "AKBBBY2X",
@@ -87,28 +89,7 @@ class SpecificTerms2Properties {
       "Venezuela",
       "YOMAMMMY");
 
-  private static final List<Mapping> DEFAULT_MAPPINGS = List.of(
-      new Mapping(
-          SPECIFIC_TERMS.stream().map(String::toUpperCase).collect(Collectors.toList()), "YES_PTP"),
-      new Mapping(
-          REGULAR_TERMS, "YES"));
+  private List<String> specificTerms = SPECIFIC_TERMS;
+  private List<String> regularTerms = REGULAR_TERMS;
 
-  private List<Mapping> mappings = new ArrayList<>(DEFAULT_MAPPINGS);
-
-  List<SpecificTerms2Agent.Mapping> buildAgentMappings() {
-    return mappings
-        .stream()
-        .map(mapping -> new SpecificTerms2Agent.Mapping(
-            mapping.getPatterns(),
-            mapping.getResponse()))
-        .collect(Collectors.toList());
-  }
-
-  @Data
-  @AllArgsConstructor
-  static class Mapping {
-
-    List<String> patterns;
-    String response;
-  }
 }

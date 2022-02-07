@@ -39,6 +39,11 @@ emailNotification:
   cmapiEnabled: "false"
   learningEnabled: "false"
 
+agents:
+  specificTerms2:
+    bucket: ""
+    region: ""
+
 serviceMonitor:
   path: /management/prometheus
   scrapeInterval: 30s

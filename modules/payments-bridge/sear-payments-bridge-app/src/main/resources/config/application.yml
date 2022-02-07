@@ -77,14 +77,17 @@ pb:
       histogram: false
 
   #-------------------------------------------------------------------------------------------------
-  # Contextual Learning Agent
+  # Agents
   #-------------------------------------------------------------------------------------------------
-  agent:
+  agents:
     contextual:
       number-of-tokens-left: 1
       number-of-tokens-right: 1
       min-tokens: 1
       line-breaks: false
+    specific-terms2:
+      regular-terms-key: "category/regularTerms.csv"
+      specific-terms-key: "category/specificTerms.csv"
 #---------------------------------------------------------------------------------------------------
 # Warehouse
 #---------------------------------------------------------------------------------------------------

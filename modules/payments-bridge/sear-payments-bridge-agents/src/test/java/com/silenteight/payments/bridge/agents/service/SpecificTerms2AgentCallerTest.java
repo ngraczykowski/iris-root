@@ -18,7 +18,9 @@ class SpecificTerms2AgentCallerTest {
   @BeforeEach
   void beforeEach() {
     specificTerms2Agent =
-        new SpecificTerms2Configuration(new SpecificTerms2Properties()).specificTerms2Agent();
+        new SpecificTerms2Configuration(
+            new SpecificTerms2AwsFileProvider(),
+            new SpecificTerms2Properties()).specificTerms2DefaultAgent();
   }
 
   @Test

@@ -21,6 +21,10 @@ dependencies {
 
   implementation libraries.spring_context
 
+  implementation libraries.aws_auth
+  implementation libraries.aws_s3
+  implementation libraries.aws_ses
+
   //  Testing
   testImplementation libraries.silenteight_sep_base_testing
 
