@@ -56,3 +56,4 @@ data/*
 !data/1.raw
 agents/*
 .coverage*
+dependencies/*

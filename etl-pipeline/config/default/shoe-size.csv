@@ -1,4 +1,0 @@
-label,pattern_str,pattern_flags
-MISSING,\bMissing shoe size\b,re.IGNORECASE
-REF,\bShoe size\b,re.IGNORECASE
-NO_REF,,
