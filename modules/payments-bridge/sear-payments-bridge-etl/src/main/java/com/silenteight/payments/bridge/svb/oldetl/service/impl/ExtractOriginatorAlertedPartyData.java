@@ -1,15 +1,15 @@
 package com.silenteight.payments.bridge.svb.oldetl.service.impl;
 
 import lombok.RequiredArgsConstructor;
+
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure;
 import com.silenteight.payments.bridge.svb.oldetl.service.AlertedPartyDataFactory;
 import com.silenteight.payments.bridge.svb.oldetl.service.ExtractDisposition;
 import com.silenteight.payments.bridge.svb.oldetl.util.CommonUtils;
 
-
+import static com.silenteight.payments.bridge.common.dto.common.CommonTerms.*;
 import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure.UNSTRUCTURED;
-import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
 
 @RequiredArgsConstructor
 public class ExtractOriginatorAlertedPartyData implements AlertedPartyDataFactory {

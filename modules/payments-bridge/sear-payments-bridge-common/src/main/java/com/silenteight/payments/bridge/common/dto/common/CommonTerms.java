@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.oldetl.util;
+package com.silenteight.payments.bridge.common.dto.common;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -15,6 +15,8 @@ public class CommonTerms {
   public static final String TAG_50K = "50K";
   public static final String TAG_59 = "59";
   public static final String TAG_50 = "50";
+  public static final String TAG_70 = "70";
+  public static final String TAG_INSMN = "INSMN";
 
   public static final String APPLICATION_CODE_GTEX = "GTEX";
   public static final String APPLICATION_CODE_GFX = "GFX";

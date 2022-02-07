@@ -5,8 +5,10 @@ import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.service.AlertedPartyDataFactory;
 import com.silenteight.payments.bridge.svb.oldetl.service.ExtractDisposition;
 
+import static com.silenteight.payments.bridge.common.dto.common.CommonTerms.LINE_1;
+import static com.silenteight.payments.bridge.common.dto.common.CommonTerms.LINE_2;
+import static com.silenteight.payments.bridge.common.dto.common.CommonTerms.LINE_3;
 import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure.UNSTRUCTURED;
-import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
 
 public class Extract50k59AlertedPartyData implements AlertedPartyDataFactory {
 

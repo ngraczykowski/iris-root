@@ -2,6 +2,7 @@ package com.silenteight.payments.bridge.svb.oldetl.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
@@ -18,7 +19,6 @@ import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 import com.silenteight.payments.bridge.svb.oldetl.service.impl.TransactionMessage;
 import com.silenteight.payments.bridge.svb.oldetl.service.impl.TransactionMessageImpl;
 
-
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,9 +26,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.silenteight.payments.bridge.common.dto.common.CommonTerms.*;
 import static com.silenteight.payments.bridge.common.dto.common.MessageStructure.STRUCTURED;
 import static com.silenteight.payments.bridge.common.dto.common.MessageStructure.ofTag;
-import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
 
 @RequiredArgsConstructor
 @Slf4j

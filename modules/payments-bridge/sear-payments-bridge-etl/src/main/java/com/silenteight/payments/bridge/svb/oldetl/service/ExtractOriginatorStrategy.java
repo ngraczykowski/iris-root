@@ -5,7 +5,7 @@ import com.silenteight.payments.bridge.svb.oldetl.service.impl.*;
 
 import javax.annotation.Nonnull;
 
-import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
+import static com.silenteight.payments.bridge.common.dto.common.CommonTerms.*;
 
 public final class ExtractOriginatorStrategy {
 

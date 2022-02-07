@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 
 import java.util.List;
 
-import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.TAG_50F;
+import static com.silenteight.payments.bridge.common.dto.common.CommonTerms.TAG_50F;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Extract50FAlertedPartyDataTest {

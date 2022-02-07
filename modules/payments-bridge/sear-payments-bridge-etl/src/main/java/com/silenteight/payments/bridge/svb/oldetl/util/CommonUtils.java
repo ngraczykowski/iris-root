@@ -6,7 +6,7 @@ import lombok.NonNull;
 
 import java.util.List;
 
-import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.APPLICATION_CODE_GFX;
+import static com.silenteight.payments.bridge.common.dto.common.CommonTerms.APPLICATION_CODE_GFX;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 

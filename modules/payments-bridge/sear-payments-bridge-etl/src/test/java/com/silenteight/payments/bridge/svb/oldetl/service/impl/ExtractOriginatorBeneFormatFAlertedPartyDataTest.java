@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 
 import java.util.List;
 
-import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.TAG_ORIGINATOR;
+import static com.silenteight.payments.bridge.common.dto.common.CommonTerms.TAG_ORIGINATOR;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ExtractOriginatorBeneFormatFAlertedPartyDataTest {

@@ -7,8 +7,8 @@ import com.silenteight.payments.bridge.svb.oldetl.service.ExtractDisposition;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.common.dto.common.CommonTerms.*;
 import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure.UNSTRUCTURED;
-import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
 
 public class ExtractReceivbankAlertedPartyData implements AlertedPartyDataFactory {
 

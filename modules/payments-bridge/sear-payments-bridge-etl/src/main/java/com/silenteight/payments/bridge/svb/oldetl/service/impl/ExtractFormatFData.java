@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.*;
+import static com.silenteight.payments.bridge.common.dto.common.CommonTerms.*;
 
 @RequiredArgsConstructor
 class ExtractFormatFData {

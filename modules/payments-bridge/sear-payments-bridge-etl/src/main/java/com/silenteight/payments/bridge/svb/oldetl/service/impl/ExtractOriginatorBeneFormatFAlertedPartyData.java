@@ -4,9 +4,9 @@ import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.service.AlertedPartyDataFactory;
 import com.silenteight.payments.bridge.svb.oldetl.service.ExtractDisposition;
 
+import static com.silenteight.payments.bridge.common.dto.common.CommonTerms.LINE_2;
+import static com.silenteight.payments.bridge.common.dto.common.CommonTerms.LINE_3;
 import static com.silenteight.payments.bridge.svb.oldetl.response.MessageFieldStructure.NAMEADDRESS_FORMAT_F;
-import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.LINE_2;
-import static com.silenteight.payments.bridge.svb.oldetl.util.CommonTerms.LINE_3;
 
 
 public class ExtractOriginatorBeneFormatFAlertedPartyData implements AlertedPartyDataFactory {
