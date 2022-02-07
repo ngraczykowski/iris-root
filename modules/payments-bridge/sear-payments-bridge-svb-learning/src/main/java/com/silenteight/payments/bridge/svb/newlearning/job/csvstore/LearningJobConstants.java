@@ -9,6 +9,7 @@ public final class LearningJobConstants {
   // Jobs
   public static final String STORE_CSV_JOB_NAME = "store-csv-job";
   public static final String HISTORICAL_RISK_ASSESSMENT_JOB_NAME = "historical-risk-assessment-job";
+  public static final String CONTEXTUAL_LEARNING_JOB_NAME = "contextual-learning-job";
 
   // Step
   public static final String STORE_FILE_STEP = "store-csv-file";
@@ -21,6 +22,10 @@ public final class LearningJobConstants {
       "historical-assessment-reservation";
   public static final String HISTORICAL_ASSESSMENT_STORE_STEP =
       "historical-assessment-store";
+  public static final String CONTEXTUAL_LEARNING_RESERVATION_STEP =
+      "contextual-learning-reservation";
+  public static final String CONTEXTUAL_LEARNING_STORE_STEP =
+      "contextual-learning-store";
 
   // Params
   public static final String FILE_NAME_PARAMETER = "file-name";
