@@ -17,6 +17,8 @@ import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.service.AlertParserService;
 import com.silenteight.proto.learningstore.historicaldecision.v1.api.*;
 
+import com.google.common.base.Strings;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -115,13 +117,6 @@ public class AlertComposite {
     var messageData = new MessageData(List.of(
         new MessageTag(hit.getFkcoVMatchedTag(), hit.getFkcoVMatchedTagContent())));
 
-    log.debug(
-        "[Historical debug] messageData tag: {}",
-        messageData.getTagLineCount(hit.getFkcoVMatchedTag()));
-    log.debug(
-        "[Historical debug] messageData lines: {}",
-        messageData.getLines(hit.getFkcoVMatchedTag()));
-
     var alertedPartyData = AlertParserService.extractAlertedPartyData(messageData,
         hit.getFkcoVMatchedTag(),
         alertDetails.getFkcoVFormat(), alertDetails.getFkcoVApplication());
@@ -129,8 +124,11 @@ public class AlertComposite {
     var alertedPartyId =
         mapAlertedPartyIdByFeatureDiscriminator(featureTypeDiscriminator, alertedPartyData);
     var country = hit.getFkcoVCountryMatchedText();
-    log.debug("[Historical debug] alertedPartyId:{} country:{}", alertedPartyId, country);
 
+    if (log.isDebugEnabled()) {
+      log.debug("Mapped alertedPartyId is blankOrEmpty: {} and country blankOrEmpty: {}",
+          Strings.isNullOrEmpty(alertedPartyId), Strings.isNullOrEmpty(country));
+    }
     return AlertedParty.newBuilder()
         .setId(alertedPartyId)
         .setCountry(country)
