@@ -1,3 +1,0 @@
-# any Arabic characters
-.*[\u0621-\u064A\u0660-\u0669]+.*;.+;INCONCLUSIVE
-.+;.*[\u0621-\u064A\u0660-\u0669]+.*;INCONCLUSIVE
