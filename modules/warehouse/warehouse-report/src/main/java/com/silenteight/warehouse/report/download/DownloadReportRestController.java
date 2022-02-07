@@ -25,7 +25,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping(ROOT)
 public class DownloadReportRestController {
 
-  private static final String COMMON_REPORT_URL = "v3/analysis/{type}/reports/{name}/{id}";
+  private static final String COMMON_REPORT_URL = "/v2/analysis/{type}/reports/{name}/{id}";
 
   @NonNull
   private final DownloadService downloadService;
@@ -35,18 +35,14 @@ public class DownloadReportRestController {
   public ResponseEntity<Resource> downloadReport(
       @PathVariable String type,
       @PathVariable String name,
-      @PathVariable long id
-  ) {
+      @PathVariable long id) {
 
     log.info("Download {} report on demand request received, reportId={}", name, id);
 
     DownloadReportDto dto = downloadService.getFor(type, id);
 
-    log.debug(
-        "Download {} report request processed, reportId={}, reportName={}",
-        name,
-        id,
-        dto.getName());
+    log.debug("Download {} report request processed, reportId={}, reportName={}",
+        name, id, dto.getName());
 
     return ok()
         .header(CONTENT_DISPOSITION, getContentDisposition(dto.getName()))
@@ -57,5 +53,4 @@ public class DownloadReportRestController {
   private static String getContentDisposition(String filename) {
     return format("attachment; filename=\"%s\"", filename);
   }
-
 }
