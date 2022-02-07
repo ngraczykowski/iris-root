@@ -99,7 +99,8 @@ public class AlertComposite {
 
     return Decision.newBuilder()
         .setId(String.valueOf(lastAction.getActionId()))
-        .setCreatedAt(lastAction.getActionDatetime().toInstant().toEpochMilli())
+        // LE is using seconds not milliseconds (HSBC requirement).
+        .setCreatedAt(lastAction.getActionDatetime().toEpochSecond())
         .setValue(decisionMade)
         .build();
 
