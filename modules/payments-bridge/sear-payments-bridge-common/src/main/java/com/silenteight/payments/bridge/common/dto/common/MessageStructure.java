@@ -32,4 +32,9 @@ public enum MessageStructure {
         .map(MessageStructure::name)
         .collect(Collectors.toList());
   }
+
+  public static boolean isMessageStructured(String tag) {
+    return MessageStructure.STRUCTURED.equals(MessageStructure.ofTag(tag));
+  }
+
 }
