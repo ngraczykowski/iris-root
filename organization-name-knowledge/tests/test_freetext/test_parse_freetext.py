@@ -157,6 +157,16 @@ def test_parse_freetext_name_from_markers(freetext, expected_names):
                 }
             ],
         ),
+        (
+            "Sberbank of Russia",
+            [
+                {
+                    "base": "Sberbank",
+                    "legal": "",
+                    "source": "Sberbank",
+                }
+            ],
+        ),
     ],
 )
 def test_parse_freetext_from_known_org_names(freetext, expected_names):

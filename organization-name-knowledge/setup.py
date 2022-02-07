@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 tests_require = [
-    "black>=21.8b0",
+    "black>=22.1.0",
     "cattrs==1.0.0",  # to be compatible with old attrs from ts-agent-toolkit
     "flake8>=3.8.3",
     "flake8-bugbear>=20.1.4",
