@@ -111,21 +111,6 @@ warehouse:
       # Available patterns: [reportType], [analysisId], [timestamp]
       simulation-pattern: "[reportType]_Sim_[analysisId].csv"
     copy-csv-pattern: "COPY ( %s ) TO STDOUT WITH (FORMAT CSV, HEADER)"
-  es:
-    production-query-index: ${warehouse.environment.prefix}_production_alert
-    production-match-query-index: ${warehouse.environment.prefix}_production_match
-    country-roles-indexes:
-      - ${warehouse.environment.prefix}_production*
-      - ${warehouse.environment.prefix}_simulation*
-    update-request-batch-size: 1000
-    erase-request-batch-size: 1000
-    retry-on-conflict-count: 2
-    scroll:
-      search:
-        batch-size: 10000
-        keep-alive-seconds: 30
-  alert-provider:
-    isSqlSupportEnabled: false
   retention:
     simulation:
       analysis-expired:

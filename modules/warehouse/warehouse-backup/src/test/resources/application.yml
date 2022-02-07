@@ -42,11 +42,6 @@ warehouse:
     backup-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.alert-backup-indexing.queue-name}
     diagnostic.enabled: true
-  environment:
-    prefix: itest
-  es:
-    production-query-index: ${warehouse.environment.prefix}_production_alert
-    production-match-query-index: ${warehouse.environment.prefix}_production_match
 
 test:
   messaging:

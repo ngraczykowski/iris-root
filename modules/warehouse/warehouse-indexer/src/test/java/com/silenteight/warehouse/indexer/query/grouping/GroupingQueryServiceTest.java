@@ -3,7 +3,6 @@ package com.silenteight.warehouse.indexer.query.grouping;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
-import com.silenteight.warehouse.common.testing.elasticsearch.OpendistroElasticContainer.OpendistroElasticContainerInitializer;
 import com.silenteight.warehouse.indexer.query.common.QueryFilter;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 
@@ -18,12 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 import static com.silenteight.warehouse.common.opendistro.roles.RolesMappedConstants.COUNTRY_KEY;
-import static com.silenteight.warehouse.indexer.IndexerFixtures.PRODUCTION_ELASTIC_READ_ALIAS_NAME;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.*;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.MappedKeys.STATUS_KEY;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values.*;
 import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.INDEX_TIMESTAMP;
-import static com.silenteight.warehouse.indexer.query.grouping.GroupingQueryElasticSearchService.EMPTY_VALUE_PLACEHOLDER;
 import static java.time.OffsetDateTime.parse;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
@@ -31,13 +28,14 @@ import static org.assertj.core.api.Assertions.*;
 @Slf4j
 @SpringBootTest(classes = GroupingQueryTestConfiguration.class)
 @ContextConfiguration(initializers = {
-    OpendistroElasticContainerInitializer.class, PostgresTestInitializer.class })
+    PostgresTestInitializer.class })
 @ActiveProfiles({ "jpa-test" })
 @Transactional
 abstract class GroupingQueryServiceTest {
 
   private static final String NOT_EXISTING_KEY = "NOT_EXISTING_KEY";
   private static final String NOT_EXISTING_VALUE = "NOT_EXISTING_VALUE";
+  private static final String EMPTY_VALUE_PLACEHOLDER = "";
 
   @Test
   void shouldReturnGroupingByResult() {
@@ -46,7 +44,6 @@ abstract class GroupingQueryServiceTest {
     insertRow(DOCUMENT_ID_3, MAPPED_ALERT_5, PROCESSING_TIMESTAMP_3, ALERT_NAME_5);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_READ_ALIAS_NAME))
         .fields(of(COUNTRY_KEY, MappedKeys.RISK_TYPE_KEY))
         .dateField(INDEX_TIMESTAMP)
         .from(parse(PROCESSING_TIMESTAMP))
@@ -80,7 +77,6 @@ abstract class GroupingQueryServiceTest {
     insertRow(DOCUMENT_ID_3, MAPPED_ALERT_3, PROCESSING_TIMESTAMP, ALERT_NAME_3);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_READ_ALIAS_NAME))
         .fields(of(MappedKeys.RISK_TYPE_KEY))
         .dateField(INDEX_TIMESTAMP)
         .from(parse(PROCESSING_TIMESTAMP))
@@ -100,7 +96,6 @@ abstract class GroupingQueryServiceTest {
     insertRow(DOCUMENT_ID, MAPPED_ALERT_3, PROCESSING_TIMESTAMP, ALERT_NAME_3);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_READ_ALIAS_NAME))
         .fields(of(MappedKeys.RISK_TYPE_KEY, NOT_EXISTING_KEY))
         .dateField(INDEX_TIMESTAMP)
         .from(parse(PROCESSING_TIMESTAMP))
@@ -121,7 +116,6 @@ abstract class GroupingQueryServiceTest {
     insertRow(DOCUMENT_ID_2, MAPPED_ALERT_7, PROCESSING_TIMESTAMP, ALERT_NAME_7);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_READ_ALIAS_NAME))
         .fields(of(STATUS_KEY))
         .dateField(INDEX_TIMESTAMP)
         .from(parse(PROCESSING_TIMESTAMP))
@@ -143,7 +137,6 @@ abstract class GroupingQueryServiceTest {
     insertRow(DOCUMENT_ID_3, MAPPED_ALERT_7, PROCESSING_TIMESTAMP, ALERT_NAME_7);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_READ_ALIAS_NAME))
         .fields(of(STATUS_KEY))
         .dateField(INDEX_TIMESTAMP)
         .from(parse(PROCESSING_TIMESTAMP))
@@ -161,7 +154,6 @@ abstract class GroupingQueryServiceTest {
     insertRow(DOCUMENT_ID_2, MAPPED_ALERT_6, PROCESSING_TIMESTAMP_4, ALERT_NAME_6);
 
     FetchGroupedTimeRangedDataRequest request = FetchGroupedTimeRangedDataRequest.builder()
-        .indexes(of(PRODUCTION_ELASTIC_READ_ALIAS_NAME))
         .fields(of(STATUS_KEY))
         .dateField(INDEX_TIMESTAMP)
         .from(parse(PROCESSING_TIMESTAMP))

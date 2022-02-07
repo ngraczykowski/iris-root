@@ -5,15 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.auth.token.UserAwareTokenProvider;
 import com.silenteight.warehouse.common.domain.DomainModule;
+import com.silenteight.warehouse.common.elastic.ElasticsearchRestClientModule;
 import com.silenteight.warehouse.common.opendistro.OpendistroModule;
-import com.silenteight.warehouse.common.testing.elasticsearch.TestElasticSearchModule;
 
 import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackageClasses = {
     CountryMigrationModule.class,
     OpendistroModule.class,
-    TestElasticSearchModule.class,
+    ElasticsearchRestClientModule.class,
     UserAwareTokenProvider.class,
     DomainModule.class
 })

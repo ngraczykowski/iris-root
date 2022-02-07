@@ -5,12 +5,9 @@ import com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants;
 
 import java.util.Map;
 
-import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ResourceName.MATCH_NAME_1_1;
 import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_NAME;
 import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.ALERT_PREFIX;
 import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.DISCRIMINATOR;
-import static com.silenteight.warehouse.indexer.match.mapping.MatchMapperConstants.MATCH_NAME;
-import static com.silenteight.warehouse.indexer.match.mapping.MatchMapperConstants.MATCH_PREFIX;
 import static java.util.Map.of;
 
 public class MappedAlertFixtures {
@@ -173,54 +170,6 @@ public class MappedAlertFixtures {
       MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
       MappedKeys.STATUS_KEY, Values.STATUS_ERROR,
       AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
-      RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
-  );
-
-  public static final Map<String, Object> MAPPED_ALERT_8 = of(
-      DISCRIMINATOR, DISCRIMINATOR_7,
-      MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
-      MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
-      MappedKeys.ANALYST_DECISION_KEY, Values.ANALYST_DECISION_TP,
-      AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
-      RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
-  );
-
-  public static final Map<String, Object> MAPPED_ALERT_9 = of(
-      DISCRIMINATOR, DISCRIMINATOR_7,
-      MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
-      MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
-      MappedKeys.ANALYST_DECISION_KEY, Values.ANALYST_DECISION_FP,
-      AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
-      RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
-  );
-
-  public static final Map<String, Object> MAPPED_ALERT_10 = of(
-      DISCRIMINATOR, DISCRIMINATOR_7,
-      MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
-      MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
-      MappedKeys.ANALYST_DECISION_KEY, Values.ANALYST_DECISION_UNKNOWN,
-      AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
-      RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
-  );
-
-  public static final Map<String, Object> MAPPED_ALERT_11 = of(
-      DISCRIMINATOR, DISCRIMINATOR_1,
-      MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
-      MappedKeys.COUNTRY_KEY, Values.COUNTRY_UK,
-      MappedKeys.STATUS_KEY, Values.STATUS_COMPLETED,
-      AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP,
-      AlertMapperConstants.ALERT_NAME, Values.ALERT_NAME,
-      RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK,
-      MATCH_PREFIX + SourceMatchKeys.SOLUTION_KEY, Values.SOLUTION_NO_DECISION,
-      MATCH_NAME, MATCH_NAME_1_1
-  );
-
-  public static final Map<String, Object> MAPPED_ALERT_12 = of(
-      DISCRIMINATOR, DISCRIMINATOR_7,
-      MappedKeys.RECOMMENDATION_KEY, Values.RECOMMENDATION_FP,
-      MappedKeys.RISK_TYPE_KEY, Values.RISK_TYPE_PEP,
-      MappedKeys.ANALYST_DECISION_KEY, Values.ANALYST_DECISION_FP,
-      AlertMapperConstants.INDEX_TIMESTAMP, Values.PROCESSING_TIMESTAMP_4,
       RolesMappedConstants.COUNTRY_KEY, Values.COUNTRY_UK
   );
 }

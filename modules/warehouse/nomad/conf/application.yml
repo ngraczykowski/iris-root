@@ -33,23 +33,6 @@ spring:
           enabled: false
 
 warehouse:
-  alert-provider:
-    isSqlSupportEnabled: false
-  alert-mapping:
-    country-source-key: s8_lobCountryCode
-    ignored-keys:
-      - "\\d{1,}\\.CustomerEntities\\..*"
-      - "\\d{1,}\\.CustomerIndividuals\\..*"
-      - "\\d{1,}\\.PrivateListEntities\\..*"
-      - "\\d{1,}\\.PrivateListIndividuals\\..*"
-      - "\\d{1,}\\.CTRPPRHBListEntities\\..*"
-      - "\\d{1,}\\.CTRPPRHBListIndividuals\\..*"
-      - "\\d{1,}\\.DN_CASECOMMENT\\..*"
-      - "\\d{1,}\\.DN_CASEHISTORY\\..*"
-      - "\\d{1,}\\.Relationships\\..*"
-      - "\\d{1,}\\.WorldCheckEntities\\..*"
-      - "\\d{1,}\\.WorldCheckIndividuals\\..*"
-  match-mapping:
   alert-level-security:
     enabled: true
   persistence:
@@ -58,8 +41,6 @@ warehouse:
         - "s8_lobCountryCode"
       recommendation-date-field: "recommendationDate"
 
-  environment:
-    prefix: dev
   db:
     name: {{ env "NOMAD_NAMESPACE" }}-warehouse
 {{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}

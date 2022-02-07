@@ -17,9 +17,6 @@ keycloak:
     credentials.secret: 55555555-4444-3333-2222-000111000111
 
 warehouse:
-  alert-mapping:
-    country-source-key: lob_country
-  match-mapping:
   persistence:
     alert:
       labels:
@@ -68,18 +65,9 @@ warehouse:
       queue-name: ${warehouse.messaging.broker.analysis-expired-indexing.queue-name.queue-name}
     alerts-expired-indexing-inbound:
       queue-name: ${warehouse.messaging.broker.alerts-expired-indexing.queue-name}
-  environment:
-    prefix: itest
   report:
     default-bucket: reports
     copy-csv-pattern: "COPY ( %s ) TO STDOUT WITH (FORMAT CSV, HEADER)"
-  es:
-    production-query-index: ${warehouse.environment.prefix}_production_alert
-    production-match-query-index: ${warehouse.environment.prefix}_production_match
-    scroll:
-      search:
-        batch-size: 1
-        keep-alive-seconds: 10
   db:
     host: localhost
     port: 24910

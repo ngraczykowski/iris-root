@@ -2,7 +2,6 @@ package com.silenteight.warehouse.sampling.distribution;
 
 import com.silenteight.model.api.v1.AlertsDistributionServiceProto.AlertDistribution;
 import com.silenteight.model.api.v1.AlertsDistributionServiceProto.AlertsDistributionResponse;
-import com.silenteight.warehouse.indexer.alert.indexing.ElasticsearchProperties;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDataRequest;
 import com.silenteight.warehouse.indexer.query.grouping.GroupingQueryService;
 import com.silenteight.warehouse.sampling.configuration.SamplingProperties;
@@ -33,13 +32,10 @@ class DistributionAlertsServiceTest {
 
   @BeforeEach
   void setUp() {
-    ElasticsearchProperties elasticsearchProperties = new ElasticsearchProperties();
-    elasticsearchProperties.setProductionQueryIndex("itest-production");
-
     SamplingProperties samplingProperties = new SamplingProperties(of(), INDEX_TIMESTAMP);
 
     underTestService = new DistributionConfiguration().distributionAlertsService(
-        groupingQueryService, elasticsearchProperties, samplingProperties);
+        groupingQueryService, samplingProperties);
   }
 
   @Test

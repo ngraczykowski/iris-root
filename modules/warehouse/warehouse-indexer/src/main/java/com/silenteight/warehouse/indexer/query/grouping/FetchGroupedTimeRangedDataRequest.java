@@ -22,8 +22,6 @@ public class FetchGroupedTimeRangedDataRequest {
   @NonNull
   List<String> fields;
   @NonNull
-  List<String> indexes;
-  @NonNull
   String dateField;
   @NonNull
   OffsetDateTime from;

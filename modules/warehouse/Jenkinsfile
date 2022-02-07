@@ -44,7 +44,7 @@ gradleBuild(
 
       stage('Build and deploy ES Init Docker Image') {
         script {
-          env.WAREHOUSE_ES_INIT_VERSION = "1.0.0"
+          env.WAREHOUSE_ES_INIT_VERSION = "2.0.0"
           sh "cd scripts/es-init-docker && docker build . --tag docker.repo.silenteight.com/warehouse/warehouse-es-init:${env.WAREHOUSE_ES_INIT_VERSION} --tag docker.repo.silenteight.com/warehouse/warehouse-es-init:latest"
           sh "docker image push docker.repo.silenteight.com/warehouse/warehouse-es-init:${env.WAREHOUSE_ES_INIT_VERSION}"
           sh "docker image push docker.repo.silenteight.com/warehouse/warehouse-es-init:latest"
