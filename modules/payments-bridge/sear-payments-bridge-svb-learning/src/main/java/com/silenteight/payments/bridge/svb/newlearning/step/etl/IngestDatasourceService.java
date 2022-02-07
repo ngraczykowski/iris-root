@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
+import com.silenteight.payments.bridge.common.dto.common.MessageStructure;
 import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
@@ -51,21 +52,23 @@ class IngestDatasourceService {
 
   private void processForStructuredTags(
       AlertComposite alertComposite, RegisterAlertResponse registeredAlert) {
-    try {
-      var etlHits = createEtlHits(alertComposite);
-      createFeatureUseCase.createFeatureInputs(etlHits, registeredAlert);
-      createCategoriesUseCase.createCategoryValues(etlHits, registeredAlert);
-    } catch (Exception e) {
-      log.warn("Failed to process alert = {} for structured tags", alertComposite.getSystemId());
-    }
+    var etlHits = createEtlHits(alertComposite);
+    createFeatureUseCase.createFeatureInputs(etlHits, registeredAlert);
+    createCategoriesUseCase.createCategoryValues(etlHits, registeredAlert);
   }
 
   private List<EtlHit> createEtlHits(AlertComposite alertComposite) {
     return alertComposite
         .getHits()
         .stream()
+        .filter(hitComposite -> isMessageStructured(hitComposite))
         .map(hit -> createEtlHit(hit, alertComposite))
         .collect(toList());
+  }
+
+  private boolean isMessageStructured(HitComposite hitComposite) {
+    return MessageStructure.STRUCTURED.equals(
+        MessageStructure.ofTag(hitComposite.getFkcoVMatchedTag()));
   }
 
   private EtlHit createEtlHit(HitComposite hit, AlertComposite alertComposite) {
