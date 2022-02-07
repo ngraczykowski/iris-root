@@ -25,6 +25,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
+import static com.silenteight.payments.bridge.common.dto.common.MessageStructure.isMessageStructured;
 import static java.util.stream.Collectors.toList;
 
 @Value
@@ -56,6 +57,7 @@ public class AlertComposite {
       DecisionMapper decisionMapper, String featureTypeDiscriminator) {
     var alerts =
         hits.stream()
+            .filter(hit -> isMessageStructured(hit.getFkcoVMatchedTag()))
             .map(hit -> mapToAlert(decisionMapper, featureTypeDiscriminator, hit))
             .peek(alert -> {
               if (log.isTraceEnabled()) {

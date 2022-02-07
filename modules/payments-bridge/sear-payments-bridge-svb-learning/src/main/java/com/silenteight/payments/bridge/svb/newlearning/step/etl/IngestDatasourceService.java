@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
-import com.silenteight.payments.bridge.common.dto.common.MessageStructure;
 import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
@@ -23,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
+import static com.silenteight.payments.bridge.common.dto.common.MessageStructure.isMessageStructured;
 import static com.silenteight.payments.bridge.etl.parser.domain.MessageFormat.ALL;
 import static com.silenteight.payments.bridge.etl.parser.domain.MessageFormat.SWIFT;
 import static com.silenteight.payments.bridge.svb.oldetl.service.AlertParserService.extractAlertedPartyData;
@@ -61,14 +61,9 @@ class IngestDatasourceService {
     return alertComposite
         .getHits()
         .stream()
-        .filter(hitComposite -> isMessageStructured(hitComposite))
+        .filter(hitComposite -> isMessageStructured(hitComposite.getFkcoVMatchedTag()))
         .map(hit -> createEtlHit(hit, alertComposite))
         .collect(toList());
-  }
-
-  private boolean isMessageStructured(HitComposite hitComposite) {
-    return MessageStructure.STRUCTURED.equals(
-        MessageStructure.ofTag(hitComposite.getFkcoVMatchedTag()));
   }
 
   private EtlHit createEtlHit(HitComposite hit, AlertComposite alertComposite) {
