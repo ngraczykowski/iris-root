@@ -14,4 +14,4 @@ management:
     web:
       base-path: /management
       exposure:
-        include: ["health", "info", "liquibase", "metrics", "prometheus", "loggers"]
+        include: ["health", "info", "metrics", "prometheus"]
