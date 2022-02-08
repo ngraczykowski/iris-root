@@ -17,18 +17,31 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
     JdbcLearningDataAccess.class,
     SelectProcessedAlertsStatusQuery.class,
     InsertAlertResultQuery.class,
-    CheckIsFileStoredQuery.class
-})
+    CheckIsFileStoredQuery.class,
+    RemoveDuplicatedHitsQuery.class,
+    RemoveDuplicatedActionsQuery.class})
 class JdbcLearningDataAccessIT extends BaseJdbcTest {
 
   @Autowired
   private JdbcLearningDataAccess dataAccess;
 
   @Test
-  void shouldSelectAlertProcessingResult() {
-    var result = dataAccess.select(1, "fileName");
-    assertThat(result.getFailedAlerts()).isEqualTo(2);
-    assertThat(result.getSuccessfulAlerts()).isEqualTo(2);
+  void shouldRemoveDuplicatedValues() {
+    dataAccess.removeDuplicates();
+    assertRemovedHits();
+    assertRemovedActions();
+  }
+
+  private void assertRemovedHits() {
+    var alertsCount = jdbcTemplate.queryForObject(
+        "SELECT count(*) FROM pb_learning_hit WHERE fkco_messages = 1", Integer.class);
+    assertThat(alertsCount).isEqualTo(1);
+  }
+
+  private void assertRemovedActions() {
+    var alertsCount = jdbcTemplate.queryForObject(
+        "SELECT count(*) FROM pb_learning_action WHERE fkco_messages = 1", Integer.class);
+    assertThat(alertsCount).isEqualTo(1);
   }
 
   @Test

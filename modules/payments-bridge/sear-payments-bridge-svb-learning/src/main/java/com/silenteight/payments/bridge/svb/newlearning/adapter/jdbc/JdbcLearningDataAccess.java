@@ -19,6 +19,8 @@ class JdbcLearningDataAccess implements LearningDataAccess {
   private final InsertAlertResultQuery insertAlertResultQuery;
   private final CheckIsFileStoredQuery checkIsFileStoredQuery;
 
+  private final List<RemoveDuplicatedQuery> removeDuplicatedQueries;
+
   @Override
   public AlertsReadingResponse select(long jobId, String fileName) {
     return selectProcessedAlertsStatusQuery.select(jobId, fileName);
@@ -33,5 +35,11 @@ class JdbcLearningDataAccess implements LearningDataAccess {
   @Override
   public boolean isFileStored(String fileName) {
     return checkIsFileStoredQuery.execute(fileName);
+  }
+
+  @Override
+  @Transactional
+  public void removeDuplicates() {
+    removeDuplicatedQueries.forEach(RemoveDuplicatedQuery::remove);
   }
 }

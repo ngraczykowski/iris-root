@@ -24,6 +24,7 @@ public final class LearningJobConstants {
       "contextual-learning-reservation";
   public static final String CONTEXTUAL_LEARNING_STORE_STEP =
       "contextual-learning-store";
+  public static final String REMOVE_DUPLICATES_STEP = "remove-duplicates-step";
 
   // Params
   public static final String FILE_NAME_PARAMETER = "file-name";

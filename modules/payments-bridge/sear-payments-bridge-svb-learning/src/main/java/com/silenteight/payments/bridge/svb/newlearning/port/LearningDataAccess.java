@@ -12,4 +12,6 @@ public interface LearningDataAccess {
   void saveResult(List<LearningProcessedAlert> alerts);
 
   boolean isFileStored(String fileName);
+
+  void removeDuplicates();
 }
