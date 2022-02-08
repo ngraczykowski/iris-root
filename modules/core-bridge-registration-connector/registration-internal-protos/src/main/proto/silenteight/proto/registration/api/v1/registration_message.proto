@@ -32,26 +32,10 @@ message MessageBatchCompleted {
   string analysis_id = 2 [(google.api.field_behavior) = REQUIRED];
   repeated string alert_ids = 3 [(google.api.field_behavior) = REQUIRED];
   optional string batch_metadata = 4;
-  Statistics statistics = 5 [(google.api.field_behavior) = REQUIRED];
 }
 
 message MessageBatchError {
   string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
   string error_description = 2 [(google.api.field_behavior) = REQUIRED];
   optional string batch_metadata = 3;
-  Statistics statistics = 4 [(google.api.field_behavior) = REQUIRED];
-}
-
-message Statistics {
-  int32 total_processed_count = 1 [(google.api.field_behavior) = REQUIRED];
-  int32 total_unable_to_process_count = 2 [(google.api.field_behavior) = REQUIRED];
-  int32 recommended_alerts_count = 3 [(google.api.field_behavior) = REQUIRED];
-  RecommendationsStatistics recommendations_statistics = 4 [(google.api.field_behavior) = REQUIRED];
-}
-
-message RecommendationsStatistics {
-  int32 true_positive_count = 1 [(google.api.field_behavior) = REQUIRED];
-  int32 false_positive_count = 2 [(google.api.field_behavior) = REQUIRED];
-  int32 manual_investigation_count = 3 [(google.api.field_behavior) = REQUIRED];
-  int32 error_count = 4 [(google.api.field_behavior) = REQUIRED];
 }
