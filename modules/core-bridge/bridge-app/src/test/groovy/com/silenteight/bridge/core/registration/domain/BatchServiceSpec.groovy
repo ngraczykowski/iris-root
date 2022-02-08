@@ -13,6 +13,7 @@ import com.silenteight.bridge.core.registration.domain.port.outgoing.EventPublis
 
 import spock.lang.Specification
 import spock.lang.Subject
+import spock.lang.Unroll
 
 class BatchServiceSpec extends Specification {
 
@@ -51,9 +52,10 @@ class BatchServiceSpec extends Specification {
     given:
     def batchId = Fixtures.BATCH_ID
     def registerBatchCommand = RegistrationFixtures.REGISTER_BATCH_COMMAND
+    def existedBatch = RegistrationFixtures.batch(BatchStatus.STORED)
 
     and:
-    batchRepository.findById(batchId) >> Optional.of(RegistrationFixtures.BATCH)
+    batchRepository.findById(batchId) >> Optional.of(existedBatch)
 
     when:
     def batchIdDto = underTest.register(registerBatchCommand)
@@ -65,6 +67,26 @@ class BatchServiceSpec extends Specification {
     0 * modelService.getForSolving()
     0 * analysisService.create(_ as DefaultModel)
     0 * batchRepository.create(_ as Batch)
+  }
+
+  @Unroll
+  def 'should not register batch if already exists and has not allowed status: `#status`'() {
+    given:
+    def batchId = Fixtures.BATCH_ID
+    def registerBatchCommand = RegistrationFixtures.REGISTER_BATCH_COMMAND
+    def registeredBatch = RegistrationFixtures.batch(status)
+
+    and:
+    batchRepository.findById(batchId) >> Optional.of(registeredBatch)
+
+    when:
+    underTest.register(registerBatchCommand)
+
+    then:
+    thrown(IllegalStateException.class)
+
+    where:
+    status << [null, BatchStatus.ERROR, BatchStatus.DELIVERED, BatchStatus.COMPLETED]
   }
 
   def 'should call updateStatusAndErrorDescription method with status error and error description when batch exists'() {

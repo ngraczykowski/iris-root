@@ -24,6 +24,8 @@ class BatchService {
 
   private static final EnumSet<BatchStatus> ALLOWED_BATCH_STATUSES_FOR_MARKING_AS_DELIVERED =
       EnumSet.of(BatchStatus.COMPLETED, BatchStatus.DELIVERED, BatchStatus.ERROR);
+  private static final EnumSet<BatchStatus> ALLOWED_BATCH_STATUSES_FOR_REGISTRATION =
+      EnumSet.of(BatchStatus.STORED, BatchStatus.PROCESSING);
 
   private final EventPublisher eventPublisher;
   private final AnalysisService analysisService;
@@ -34,6 +36,7 @@ class BatchService {
   BatchId register(RegisterBatchCommand registerBatchCommand) {
     return batchRepository.findById(registerBatchCommand.id())
         .map(this::logIfAlreadyExists)
+        .map(batch -> validateBatchStatus(batch, ALLOWED_BATCH_STATUSES_FOR_REGISTRATION))
         .or(() -> registerNew(registerBatchCommand))
         .map(BatchId::from)
         .orElseThrow();
@@ -78,22 +81,22 @@ class BatchService {
   }
 
   void markBatchAsDelivered(String batchId) {
-    validateBatchStatus(batchId);
+    var batch = findBatch(batchId);
+    validateBatchStatus(batch, ALLOWED_BATCH_STATUSES_FOR_MARKING_AS_DELIVERED);
 
     log.info("Set batch status to DELIVERED with batch id: {}", batchId);
     batchRepository.updateStatusToDelivered(batchId);
   }
 
-  private void validateBatchStatus(String batchId) {
-    var batch = findBatch(batchId);
-
-    if (!ALLOWED_BATCH_STATUSES_FOR_MARKING_AS_DELIVERED.contains(batch.status())) {
-      var message = String.format("Marking Batch with batchId: %s as %s failed. "
-              + "%s status is invalid, one of %s expected", batchId, BatchStatus.DELIVERED,
-          batch.status(), ALLOWED_BATCH_STATUSES_FOR_MARKING_AS_DELIVERED);
+  private Batch validateBatchStatus(Batch batch, EnumSet<BatchStatus> allowedStatuses) {
+    if (!allowedStatuses.contains(batch.status())) {
+      var message = String.format("Batch with batchId: %s failed due to status validation. "
+              + "%s status is invalid, one of %s expected.",
+          batch.id(), batch.status(), allowedStatuses);
       log.error(message);
       throw new IllegalStateException(message);
     }
+    return batch;
   }
 
   private Batch findBatch(String batchId) {
