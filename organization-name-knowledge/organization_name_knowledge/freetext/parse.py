@@ -1,6 +1,7 @@
 from typing import List, Set
 
 from organization_name_knowledge.freetext.known_organization_names import (
+    find_blacklisted_names,
     find_known_organization_names,
 )
 from organization_name_knowledge.freetext.matching import (
@@ -50,6 +51,7 @@ def parse_freetext_names(
 
     if not unique_base_names:
         unique_base_names = find_known_organization_names(freetext)
+    unique_base_names = unique_base_names + find_blacklisted_names(freetext)
 
     return sorted(set(unique_base_names), key=lambda name: name.base.cleaned_name)
 

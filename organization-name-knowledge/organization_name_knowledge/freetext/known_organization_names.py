@@ -21,7 +21,7 @@ def find_known_organization_names(text: str) -> List[NameInformation]:
     names = [
         parse_name(substring) for substring in substrings if substring.lower() in SP_500_COMPANIES
     ]
-    return names + find_blacklisted_names(text)
+    return names
 
 
 def find_blacklisted_names(text: str) -> List[NameInformation]:
