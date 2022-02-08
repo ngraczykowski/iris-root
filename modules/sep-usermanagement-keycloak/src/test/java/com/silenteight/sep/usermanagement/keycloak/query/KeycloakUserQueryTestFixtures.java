@@ -3,7 +3,7 @@ package com.silenteight.sep.usermanagement.keycloak.query;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sep.usermanagement.api.UserRoles;
+import com.silenteight.sep.usermanagement.api.role.UserRoles;
 import com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames;
 
 import org.keycloak.representations.idm.UserRepresentation;

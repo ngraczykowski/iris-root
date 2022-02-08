@@ -3,8 +3,8 @@ package com.silenteight.sep.usermanagement.keycloak.query;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sep.usermanagement.api.RolesQuery;
-import com.silenteight.sep.usermanagement.api.dto.RolesDto;
+import com.silenteight.sep.usermanagement.api.role.RolesQuery;
+import com.silenteight.sep.usermanagement.api.role.dto.RolesDto;
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 
 import org.keycloak.admin.client.resource.ClientsResource;

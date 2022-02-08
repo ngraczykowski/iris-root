@@ -3,7 +3,7 @@ package com.silenteight.sep.usermanagement.keycloak.registration;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import com.silenteight.sep.usermanagement.api.RolesValidator.RolesDontExistError;
+import com.silenteight.sep.usermanagement.api.role.RoleValidator.RolesDontExistError;
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 
 import org.junit.jupiter.api.BeforeEach;

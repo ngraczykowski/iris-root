@@ -3,7 +3,7 @@ package com.silenteight.sep.usermanagement.keycloak.query.role;
 import lombok.Value;
 import lombok.experimental.UtilityClass;
 
-import com.silenteight.sep.usermanagement.api.UserRoles;
+import com.silenteight.sep.usermanagement.api.role.UserRoles;
 
 import java.util.Map;
 import java.util.Set;

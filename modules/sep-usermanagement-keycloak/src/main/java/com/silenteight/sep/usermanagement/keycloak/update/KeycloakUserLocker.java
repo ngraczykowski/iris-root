@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.usermanagement.api.UserLocker;
+import com.silenteight.sep.usermanagement.api.user.UserLocker;
 import com.silenteight.sep.usermanagement.keycloak.retrieval.KeycloakUserRetriever;
 
 import org.keycloak.admin.client.resource.UserResource;

@@ -1,9 +1,9 @@
 package com.silenteight.sep.usermanagement.keycloak.sso;
 
-import com.silenteight.sep.usermanagement.api.dto.CreateRoleMappingDto;
-import com.silenteight.sep.usermanagement.api.dto.RoleMappingDto;
-import com.silenteight.sep.usermanagement.api.dto.RolesDto;
-import com.silenteight.sep.usermanagement.api.dto.SsoAttributeDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.CreateRoleMappingDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.RoleMappingDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.SsoAttributeDto;
+import com.silenteight.sep.usermanagement.api.role.dto.RolesDto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
@@ -131,7 +131,7 @@ class KeycloakSsoRoleMapperTest {
           String mapperName = mapper.getName();
           assertThat(mapperName).matches("Mapping name.*_ID_.*_SUB_\\d+");
           assertThat(mapperName.length()).isEqualTo((roleMappingDto.getName() +
-                  "_ID_" + UUID.randomUUID() + "_SUB_0").length());
+              "_ID_" + UUID.randomUUID() + "_SUB_0").length());
           assertThat(mapper.getIdentityProviderMapper()).isEqualTo("saml-advanced-role-idp-mapper");
           assertThat(mapper.getConfig().get("syncMode")).isEqualTo("FORCE");
           assertThat(mapper.getConfig().get("role"))
@@ -162,7 +162,7 @@ class KeycloakSsoRoleMapperTest {
   @Test
   void addMapping_mapperWithSameNameExists_throwsException() {
     //given
-    String mapperName =  "Existing-Mapper";
+    String mapperName = "Existing-Mapper";
     UUID existingMappingID = fromString(EXISTING_MAPPER_ID);
     IdentityProviderMapperRepresentation mapper = new IdentityProviderMapperRepresentation();
     mapper.setName(mapperName + "_ID_" + existingMappingID + "_SUB_20");
@@ -234,7 +234,7 @@ class KeycloakSsoRoleMapperTest {
         .willThrow(NotFoundException.class);
 
     //when
-    Executable when = () ->  underTest.getMapping(notExistingMapperID);
+    Executable when = () -> underTest.getMapping(notExistingMapperID);
 
     //then
     assertThrows(SsoRoleMapperNotFoundException.class, when);
@@ -315,9 +315,9 @@ class KeycloakSsoRoleMapperTest {
     legacyMapper.setName("legacy mapper 01");
     legacyMapper.setIdentityProviderAlias(ID_PROVIDER_NAME);
     legacyMapper.setConfig(ImmutableMap.of(
-            "syncMode", "FORCE",
-            "attributes", "[{\"key\":\"k1\",\"value\":\"v1\"}]",
-            "role", "governance.uma_protection"));
+        "syncMode", "FORCE",
+        "attributes", "[{\"key\":\"k1\",\"value\":\"v1\"}]",
+        "role", "governance.uma_protection"));
 
     return of(legacyMapper);
   }

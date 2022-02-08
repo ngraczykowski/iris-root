@@ -1,6 +1,6 @@
 package com.silenteight.sep.usermanagement.keycloak.remove;
 
-import com.silenteight.sep.usermanagement.api.UserRemover;
+import com.silenteight.sep.usermanagement.api.user.UserRemover;
 import com.silenteight.sep.usermanagement.keycloak.retrieval.KeycloakUserRetriever;
 
 import org.springframework.context.annotation.Bean;

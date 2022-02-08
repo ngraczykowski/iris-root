@@ -1,11 +1,12 @@
 package com.silenteight.sep.usermanagement.keycloak.registration;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.usermanagement.api.CompletedUserRegistration;
-import com.silenteight.sep.usermanagement.api.NewUserDetails.Credentials;
-import com.silenteight.sep.usermanagement.api.RegisteredUserRepository;
+import com.silenteight.sep.usermanagement.api.user.UserCreator;
+import com.silenteight.sep.usermanagement.api.user.dto.CreateUserCommand;
+import com.silenteight.sep.usermanagement.api.user.dto.NewUserDetails.Credentials;
 import com.silenteight.sep.usermanagement.keycloak.KeycloakUserAttributeNames;
 import com.silenteight.sep.usermanagement.keycloak.KeycloakUserId;
 import com.silenteight.sep.usermanagement.keycloak.assignrole.KeycloakUserRoleAssigner;
@@ -19,32 +20,32 @@ import static org.keycloak.representations.idm.CredentialRepresentation.PASSWORD
 
 @Slf4j
 @RequiredArgsConstructor
-class KeycloakRegisteredUserRepository implements RegisteredUserRepository {
+class KeycloakRegisteredUserRepository implements UserCreator {
 
   private final KeycloakUserCreator keycloakUserCreator;
   private final KeycloakUserRoleAssigner roleAssigner;
 
   @Override
-  public void save(CompletedUserRegistration userRegistration) {
-    log.info("Registering User. userRegistration={}", userRegistration);
-    UserRepresentation userRepresentation = toUserRepresentation(userRegistration);
+  public void create(@NonNull CreateUserCommand command) {
+    log.info("Registering User. userRegistration={}", command);
+    UserRepresentation userRepresentation = toUserRepresentation(command);
     KeycloakUserId newlyCreatedUserId = keycloakUserCreator.create(userRepresentation);
 
-    roleAssigner.assignRoles(newlyCreatedUserId, userRegistration.getRoles());
+    roleAssigner.assignRoles(newlyCreatedUserId, command.getRoles());
   }
 
-  private static UserRepresentation toUserRepresentation(CompletedUserRegistration registration) {
+  private static UserRepresentation toUserRepresentation(CreateUserCommand command) {
     UserRepresentation userRepresentation = new UserRepresentation();
-    userRepresentation.setUsername(registration.getUsername());
+    userRepresentation.setUsername(command.getUsername());
     userRepresentation.setEnabled(TRUE);
-    userRepresentation.setCreatedTimestamp(registration.getRegistrationDate().toEpochSecond());
-    userRepresentation.setFirstName(registration.getDisplayName());
+    userRepresentation.setCreatedTimestamp(command.getRegistrationDate().toEpochSecond());
+    userRepresentation.setFirstName(command.getDisplayName());
     userRepresentation.singleAttribute(
-        KeycloakUserAttributeNames.USER_ORIGIN, registration.getOrigin());
+        KeycloakUserAttributeNames.USER_ORIGIN, command.getOrigin());
 
-    if (registration.getCredentials() != null) {
+    if (command.getCredentials() != null) {
       userRepresentation.setCredentials(
-          singletonList(createPasswordCredential(registration.getCredentials())));
+          singletonList(createPasswordCredential(command.getCredentials())));
     }
 
     return userRepresentation;

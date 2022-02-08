@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.sep.usermanagement.api.UpdatedUser;
-import com.silenteight.sep.usermanagement.api.UserRoles;
+import com.silenteight.sep.usermanagement.api.role.UserRoles;
+import com.silenteight.sep.usermanagement.api.user.dto.UpdateUserCommand;
 import com.silenteight.sep.usermanagement.keycloak.KeycloakUserId;
 import com.silenteight.sep.usermanagement.keycloak.assignrole.KeycloakUserRoleAssigner;
 import com.silenteight.sep.usermanagement.keycloak.retrieval.KeycloakUserRetriever;
@@ -30,7 +30,7 @@ class KeycloakUserUpdater {
   @NonNull
   private final TimeSource timeSource;
 
-  public void update(UpdatedUser updatedUser) {
+  public void update(UpdateUserCommand updatedUser) {
     log.info(USER_MANAGEMENT, "Updating user. updatedUser={}", updatedUser);
 
     UserResource userResource = keycloakUserRetriever.retrieve(updatedUser.getUsername());

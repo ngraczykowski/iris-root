@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.common.time.TimeConverter;
-import com.silenteight.sep.usermanagement.api.UserQuery;
-import com.silenteight.sep.usermanagement.api.dto.UserDto;
+import com.silenteight.sep.usermanagement.api.user.UserQuery;
+import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 import com.silenteight.sep.usermanagement.keycloak.query.lastlogintime.LastLoginTimeProvider;
 import com.silenteight.sep.usermanagement.keycloak.query.role.RolesProvider;

@@ -1,6 +1,6 @@
 package com.silenteight.sep.usermanagement.keycloak.password;
 
-import com.silenteight.sep.usermanagement.api.TemporaryPassword;
+import com.silenteight.sep.usermanagement.api.credentials.dto.TemporaryPassword;
 import com.silenteight.sep.usermanagement.keycloak.id.KeycloakUserIdProvider;
 
 import org.junit.jupiter.api.Test;
@@ -47,7 +47,7 @@ class KeycloakUserCredentialsRepositoryTest {
   void userDoesNotExist_returnsEmpty() {
     given(keycloakUserIdProvider.findId(USERNAME)).willReturn(empty());
 
-    var actual = underTest.findUserCredentials(USERNAME);
+    var actual = underTest.findByUsername(USERNAME);
 
     assertThat(actual).isEmpty();
   }
@@ -58,7 +58,7 @@ class KeycloakUserCredentialsRepositoryTest {
     given(keycloakUserIdProvider.findId(USERNAME)).willReturn(of(USER_ID));
     given(usersResource.get(USER_ID)).willReturn(externalUser);
 
-    var actual = underTest.findUserCredentials(USERNAME);
+    var actual = underTest.findByUsername(USERNAME);
 
     assertThat(actual).isNotEmpty();
     assertThat(actual.get().ownerIsNotInternal()).isTrue();
@@ -86,7 +86,7 @@ class KeycloakUserCredentialsRepositoryTest {
     given(keycloakUserIdProvider.findId(USERNAME)).willReturn(of(USER_ID));
     given(usersResource.get(USER_ID)).willReturn(internalUser);
 
-    var actual = underTest.findUserCredentials(USERNAME);
+    var actual = underTest.findByUsername(USERNAME);
 
     assertThat(actual).isNotEmpty();
     assertThat(actual.get().ownerIsInternal()).isTrue();
@@ -102,7 +102,7 @@ class KeycloakUserCredentialsRepositoryTest {
     given(keycloakUserIdProvider.findId(USERNAME)).willReturn(of(USER_ID));
     given(usersResource.get(USER_ID)).willReturn(internalUser);
 
-    var actual = underTest.findUserCredentials(USERNAME).orElseThrow();
+    var actual = underTest.findByUsername(USERNAME).orElseThrow();
 
     actual.ownerIsInternal();
     then(internalUser).should().toRepresentation();

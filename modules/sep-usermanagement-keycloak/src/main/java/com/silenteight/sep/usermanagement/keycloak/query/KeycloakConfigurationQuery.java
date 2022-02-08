@@ -4,8 +4,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.usermanagement.api.ConfigurationQuery;
-import com.silenteight.sep.usermanagement.api.dto.AuthConfigurationDto;
+
+import com.silenteight.sep.usermanagement.api.configuration.ConfigurationQuery;
+import com.silenteight.sep.usermanagement.api.configuration.dto.AuthConfigurationDto;
 import com.silenteight.sep.usermanagement.keycloak.config.KeycloakConfigurationProperties;
 import com.silenteight.sep.usermanagement.keycloak.query.dto.KeycloakAuthConfigurationDto;
 import com.silenteight.sep.usermanagement.keycloak.query.dto.KeycloakDto;

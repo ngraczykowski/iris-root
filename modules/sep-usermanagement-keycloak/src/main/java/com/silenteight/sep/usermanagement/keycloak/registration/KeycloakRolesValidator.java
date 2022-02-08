@@ -4,7 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.usermanagement.api.RolesValidator;
+import com.silenteight.sep.usermanagement.api.role.RoleValidator;
+import com.silenteight.sep.usermanagement.api.role.RoleValidator.RolesDontExistError;
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 
 import org.keycloak.admin.client.resource.ClientsResource;
@@ -18,7 +19,7 @@ import static java.util.stream.Collectors.toSet;
 
 @Slf4j
 @RequiredArgsConstructor
-class KeycloakRolesValidator implements RolesValidator {
+class KeycloakRolesValidator implements RoleValidator {
 
   @NonNull
   private final ClientQuery clientQuery;

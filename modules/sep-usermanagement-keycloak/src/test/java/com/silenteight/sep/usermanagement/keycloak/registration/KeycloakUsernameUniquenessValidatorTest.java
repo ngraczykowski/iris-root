@@ -1,6 +1,7 @@
 package com.silenteight.sep.usermanagement.keycloak.registration;
 
-import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator.UsernameNotUniqueError;
+
+import com.silenteight.sep.usermanagement.api.user.UsernameUniquenessValidator.UsernameNotUniqueError;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;

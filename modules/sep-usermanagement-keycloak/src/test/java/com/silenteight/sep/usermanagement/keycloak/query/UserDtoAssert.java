@@ -1,7 +1,9 @@
 package com.silenteight.sep.usermanagement.keycloak.query;
 
-import com.silenteight.sep.usermanagement.api.UserRoles;
-import com.silenteight.sep.usermanagement.api.dto.UserDto;
+
+
+import com.silenteight.sep.usermanagement.api.role.UserRoles;
+import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
 
 import org.assertj.core.api.AbstractAssert;
 

@@ -4,10 +4,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.usermanagement.api.IdentityProviderRoleMapper;
-import com.silenteight.sep.usermanagement.api.dto.CreateRoleMappingDto;
-import com.silenteight.sep.usermanagement.api.dto.RoleMappingDto;
-import com.silenteight.sep.usermanagement.api.dto.SsoAttributeDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.IdentityProviderRoleMapper;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.CreateRoleMappingDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.RoleMappingDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.SsoAttributeDto;
 import com.silenteight.sep.usermanagement.keycloak.KeycloakException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -116,7 +116,7 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
   }
 
   private RoleMappingDto buildRoleMappingDto(
-       List<IdentityProviderMapperRepresentation> keycloakMappers) {
+      List<IdentityProviderMapperRepresentation> keycloakMappers) {
 
     IdentityProviderMapperRepresentation mapper = keycloakMappers.stream().findAny().get();
     final String keycloakMapperName = mapper.getName();
@@ -148,7 +148,8 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
         }));
   }
 
-  private IdentityProviderMapperRepresentation createKeycloakRoleMapper(Integer subMappingIndex,
+  private IdentityProviderMapperRepresentation createKeycloakRoleMapper(
+      Integer subMappingIndex,
       String providerAlias, String name, UUID sharedMappingId,
       Set<SsoAttributeDto> ssoAttributes, String targetRole) {
 
@@ -157,10 +158,10 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
     mapper.setIdentityProviderMapper(SAML_ADVANCED_ROLE_IDP_MAPPER);
     mapper.setName(build(name, sharedMappingId, subMappingIndex));
     mapper.setConfig(Map.of(
-          "syncMode", DEFAULT_SYNC_MODE,
-          "are.attribute.values.regex", "",
-          "attributes", attrsToString(ssoAttributes),
-          "role", targetRole));
+        "syncMode", DEFAULT_SYNC_MODE,
+        "are.attribute.values.regex", "",
+        "attributes", attrsToString(ssoAttributes),
+        "role", targetRole));
     return mapper;
   }
 
@@ -192,7 +193,7 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
   private Set<SsoAttributeDto> attrsFromString(String attributes) {
     try {
       return sepUserManagementKeycloakObjectMapper
-          .readValue(attributes, new TypeReference<Set<SsoAttributeDto>>(){});
+          .readValue(attributes, new TypeReference<Set<SsoAttributeDto>>() {});
     } catch (JsonProcessingException e) {
       log.error(USER_MANAGEMENT,
           "Could not convert keycloak SSO attributes to SsoAttribute collection.", e);

@@ -2,9 +2,9 @@ package com.silenteight.sep.usermanagement.keycloak.query;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sep.usermanagement.api.EventQuery;
-import com.silenteight.sep.usermanagement.api.dto.EventDto;
+import com.silenteight.sep.usermanagement.api.event.EventQuery;
 import com.silenteight.sep.usermanagement.api.event.EventType;
+import com.silenteight.sep.usermanagement.api.event.dto.EventDto;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +44,7 @@ class KeycloakEventQuery implements EventQuery {
   private final RealmResource realmResource;
 
   @Override
-  public List<EventDto> getEvents(OffsetDateTime from, Collection<EventType> types) {
+  public List<EventDto> list(OffsetDateTime from, Collection<EventType> types) {
     List<EventRepresentation> events = getEvents(
         mapToKeycloakEventTypes(types), createDateFromFilterValue(from));
 

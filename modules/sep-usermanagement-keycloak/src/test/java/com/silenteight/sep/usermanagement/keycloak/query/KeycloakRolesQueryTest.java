@@ -1,6 +1,6 @@
 package com.silenteight.sep.usermanagement.keycloak.query;
 
-import com.silenteight.sep.usermanagement.api.dto.RolesDto;
+import com.silenteight.sep.usermanagement.api.role.dto.RolesDto;
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 
 import org.junit.jupiter.api.BeforeEach;

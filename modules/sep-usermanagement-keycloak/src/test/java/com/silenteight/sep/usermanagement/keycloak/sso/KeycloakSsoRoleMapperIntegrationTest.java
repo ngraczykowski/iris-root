@@ -1,9 +1,9 @@
 package com.silenteight.sep.usermanagement.keycloak.sso;
 
-import com.silenteight.sep.usermanagement.api.dto.CreateRoleMappingDto;
-import com.silenteight.sep.usermanagement.api.dto.RoleMappingDto;
-import com.silenteight.sep.usermanagement.api.dto.RolesDto;
-import com.silenteight.sep.usermanagement.api.dto.SsoAttributeDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.CreateRoleMappingDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.RoleMappingDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.SsoAttributeDto;
+import com.silenteight.sep.usermanagement.api.role.dto.RolesDto;
 import com.silenteight.sep.usermanagement.keycloak.BaseKeycloakIntegrationTest;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -110,7 +110,7 @@ public class KeycloakSsoRoleMapperIntegrationTest extends BaseKeycloakIntegratio
     assertEquals(mapper.getName(), dto.getName());
     assertEquals(mapper.getIdentityProviderAlias(), dto.getProviderAlias());
     assertThat(dto.getSsoAttributes())
-            .contains(new SsoAttributeDto("saml_attr_01","saml_attr_val_01"));
+        .contains(new SsoAttributeDto("saml_attr_01", "saml_attr_val_01"));
     assertEquals(mapper.getConfig().get("role"), dto.getRolesDto().getRoles().get(0));
   }
 
@@ -134,7 +134,7 @@ public class KeycloakSsoRoleMapperIntegrationTest extends BaseKeycloakIntegratio
   void shouldReturnMappingsForTheFirstIdentityProvider() throws IOException {
     //given
     String expectedProviderName = "first-saml";
-    createIdentityProvider(expectedProviderName,"keycloak-first-saml-idp-config.json");
+    createIdentityProvider(expectedProviderName, "keycloak-first-saml-idp-config.json");
     //and
     CreateRoleMappingDto dto = createRoleMappingDto("test mapping");
     //and

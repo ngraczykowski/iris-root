@@ -1,7 +1,6 @@
 package com.silenteight.sep.usermanagement.keycloak.config;
 
-import com.silenteight.sep.usermanagement.api.IdentityProviderRepository;
-import com.silenteight.sep.usermanagement.keycloak.query.IdentityProviderQuery;
+import com.silenteight.sep.usermanagement.keycloak.query.KeycloakIdentityProviderQuery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -63,9 +62,9 @@ public class KeycloakConfiguration {
   }
 
   @Bean
-  IdentityProviderRepository identityProviderRepository(
+  KeycloakIdentityProviderQuery identityProviderQuery(
       IdentityProvidersResource identityProvidersResource) {
-    return new IdentityProviderQuery(identityProvidersResource);
+    return new KeycloakIdentityProviderQuery(identityProvidersResource);
   }
 
   @Bean

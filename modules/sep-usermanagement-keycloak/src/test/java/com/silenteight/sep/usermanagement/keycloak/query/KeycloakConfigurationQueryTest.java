@@ -1,6 +1,6 @@
 package com.silenteight.sep.usermanagement.keycloak.query;
 
-import com.silenteight.sep.usermanagement.api.dto.AuthConfigurationDto;
+import com.silenteight.sep.usermanagement.api.configuration.dto.AuthConfigurationDto;
 import com.silenteight.sep.usermanagement.keycloak.config.KeycloakConfigurationProperties;
 import com.silenteight.sep.usermanagement.keycloak.query.dto.KeycloakAuthConfigurationDto;
 import com.silenteight.sep.usermanagement.keycloak.query.dto.KeycloakDto;

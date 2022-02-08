@@ -3,8 +3,9 @@ package com.silenteight.sep.usermanagement.keycloak.password;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.usermanagement.api.ResettableUserCredentials;
-import com.silenteight.sep.usermanagement.api.TemporaryPassword;
+
+import com.silenteight.sep.usermanagement.api.credentials.UserCredentialsResetter;
+import com.silenteight.sep.usermanagement.api.credentials.dto.TemporaryPassword;
 
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
@@ -15,7 +16,7 @@ import static java.util.Optional.ofNullable;
 
 @Slf4j
 @RequiredArgsConstructor
-class KeycloakResettableUserCredentials implements ResettableUserCredentials {
+class KeycloakResettableUserCredentials implements UserCredentialsResetter {
 
   private final UserResource userResource;
 

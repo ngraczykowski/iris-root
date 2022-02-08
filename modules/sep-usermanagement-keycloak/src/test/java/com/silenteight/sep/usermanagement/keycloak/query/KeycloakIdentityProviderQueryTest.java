@@ -1,7 +1,7 @@
 package com.silenteight.sep.usermanagement.keycloak.query;
 
 
-import com.silenteight.sep.usermanagement.api.dto.IdentityProviderDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.IdentityProviderDto;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class IdentityProviderQueryTest {
+class KeycloakIdentityProviderQueryTest {
 
   private static final String IDP_ALIAS_1 = "Idp alias #1";
   private static final String IDP_ALIAS_2 = "Idp alias #2";
@@ -30,7 +30,7 @@ class IdentityProviderQueryTest {
   private static final String IDP_INTERNAL_ID_2 = "eb80fb52-dadd-455a-af6f-916e88e7cfac";
 
   @InjectMocks
-  private IdentityProviderQuery underTest;
+  private KeycloakIdentityProviderQuery underTest;
 
   @Mock
   IdentityProvidersResource identityProvidersResource;
@@ -42,7 +42,7 @@ class IdentityProviderQueryTest {
         .thenReturn(createIdentityProviderRepresentationList());
 
     //when
-    Collection<IdentityProviderDto> identityProviderDtosList = underTest.findAll();
+    Collection<IdentityProviderDto> identityProviderDtosList = underTest.listAll();
 
     //then
     assertThat(identityProviderDtosList).hasSize(2);

@@ -2,7 +2,7 @@ package com.silenteight.sep.usermanagement.keycloak.query;
 
 import com.silenteight.sep.base.common.time.TimeConverter;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
-import com.silenteight.sep.usermanagement.api.dto.UserDto;
+import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
 import com.silenteight.sep.usermanagement.keycloak.query.KeycloakUserQueryTestFixtures.KeycloakUser;
 import com.silenteight.sep.usermanagement.keycloak.query.client.ClientQuery;
 import com.silenteight.sep.usermanagement.keycloak.query.role.InMemoryTestRoleProvider;

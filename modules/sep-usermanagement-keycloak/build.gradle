@@ -19,7 +19,7 @@ ext {
   libraries = [:]
   springBootVersion = "2.4.9"
   silenteightSepBaseVersion = "1.12.2"
-  silenteightSepUsermanagementApiVersion = "1.14.0"
+  silenteightSepUsermanagementApiVersion = "1.15.0"
   keycloakVersion = "15.0.2"
   testContainerKeycloakVersion = "1.9.0"
   testContainerJupiterVersion = "1.16.2"

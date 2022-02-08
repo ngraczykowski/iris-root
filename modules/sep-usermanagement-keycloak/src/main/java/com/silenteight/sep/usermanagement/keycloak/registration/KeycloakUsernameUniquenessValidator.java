@@ -3,7 +3,7 @@ package com.silenteight.sep.usermanagement.keycloak.registration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator;
+import com.silenteight.sep.usermanagement.api.user.UsernameUniquenessValidator;
 import com.silenteight.sep.usermanagement.keycloak.logging.LogMarkers;
 
 import org.keycloak.admin.client.resource.UsersResource;

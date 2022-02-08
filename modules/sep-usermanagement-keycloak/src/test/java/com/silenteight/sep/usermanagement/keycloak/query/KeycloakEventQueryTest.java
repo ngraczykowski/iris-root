@@ -1,7 +1,7 @@
 package com.silenteight.sep.usermanagement.keycloak.query;
 
-import com.silenteight.sep.usermanagement.api.dto.EventDto;
 import com.silenteight.sep.usermanagement.api.event.EventType;
+import com.silenteight.sep.usermanagement.api.event.dto.EventDto;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -96,7 +96,7 @@ class KeycloakEventQueryTest {
                     Map.of("code_id", frontendEventCodeId))));
 
     // when
-    List<EventDto> events = underTest.getEvents(
+    List<EventDto> events = underTest.list(
         from, List.of(LOGIN, LOGIN_ERROR, LOGOUT, EXTEND_SESSION));
 
     // then

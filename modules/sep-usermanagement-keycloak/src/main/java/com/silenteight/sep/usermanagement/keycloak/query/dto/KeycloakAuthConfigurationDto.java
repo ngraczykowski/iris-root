@@ -2,7 +2,8 @@ package com.silenteight.sep.usermanagement.keycloak.query.dto;
 
 import lombok.*;
 
-import com.silenteight.sep.usermanagement.api.dto.AuthConfigurationDto;
+import com.silenteight.sep.usermanagement.api.configuration.dto.AuthConfigurationDto;
+
 
 @EqualsAndHashCode(callSuper = true)
 @Data

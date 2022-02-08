@@ -1,8 +1,8 @@
 package com.silenteight.sep.usermanagement.keycloak.update;
 
 import com.silenteight.sep.base.testing.time.MockTimeSource;
-import com.silenteight.sep.usermanagement.api.UpdatedUser;
-import com.silenteight.sep.usermanagement.api.UpdatedUser.UpdatedUserBuilder;
+import com.silenteight.sep.usermanagement.api.user.dto.UpdateUserCommand;
+import com.silenteight.sep.usermanagement.api.user.dto.UpdateUserCommand.UpdateUserCommandBuilder;
 import com.silenteight.sep.usermanagement.keycloak.assignrole.KeycloakUserRoleAssigner;
 import com.silenteight.sep.usermanagement.keycloak.retrieval.KeycloakUserRetriever;
 
@@ -51,8 +51,10 @@ class KeycloakUserUpdaterTest {
     when(keycloakUserRetriever.retrieve(USERNAME)).thenReturn(userResource);
     when(userResource.toRepresentation()).thenReturn(userRepresentation);
 
-    UpdatedUser updatedUser = updatedUserWithDefaults().username(USERNAME).locked(TRUE).build();
-    underTest.update(updatedUser);
+    UpdateUserCommand updateUserCommand =
+        updatedUserWithDefaults().username(USERNAME).locked(TRUE).build();
+
+    underTest.update(updateUserCommand);
 
     verify(userResource).update(userRepresentationCaptor.capture());
     UserRepresentation captured = userRepresentationCaptor.getValue();
@@ -71,8 +73,10 @@ class KeycloakUserUpdaterTest {
     when(keycloakUserRetriever.retrieve(USERNAME)).thenReturn(userResource);
     when(userResource.toRepresentation()).thenReturn(userRepresentation);
 
-    UpdatedUser updatedUser = updatedUserWithDefaults().username(USERNAME).locked(FALSE).build();
-    underTest.update(updatedUser);
+    UpdateUserCommand updateUserCommand =
+        updatedUserWithDefaults().username(USERNAME).locked(FALSE).build();
+
+    underTest.update(updateUserCommand);
 
     verify(userResource).update(userRepresentationCaptor.capture());
     UserRepresentation captured = userRepresentationCaptor.getValue();
@@ -81,8 +85,8 @@ class KeycloakUserUpdaterTest {
     assertThat(captured.getAttributes()).doesNotContainKeys(LOCKED_AT);
   }
 
-  private UpdatedUserBuilder updatedUserWithDefaults() {
-    return UpdatedUser.builder().updateDate(now());
+  private UpdateUserCommandBuilder updatedUserWithDefaults() {
+    return UpdateUserCommand.builder().updateDate(now());
   }
 
   private static UserRepresentation userRepresentationWithEnabled(Boolean enabled) {

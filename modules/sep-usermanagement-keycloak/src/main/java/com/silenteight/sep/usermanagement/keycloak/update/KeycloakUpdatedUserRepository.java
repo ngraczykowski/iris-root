@@ -3,22 +3,23 @@ package com.silenteight.sep.usermanagement.keycloak.update;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sep.usermanagement.api.UpdatedUser;
-import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
+import com.silenteight.sep.usermanagement.api.user.UserUpdater;
+import com.silenteight.sep.usermanagement.api.user.dto.UpdateUserCommand;
+
 
 @RequiredArgsConstructor
-class KeycloakUpdatedUserRepository implements UpdatedUserRepository {
+class KeycloakUpdatedUserRepository implements UserUpdater {
 
   @NonNull
   private final KeycloakUserUpdater keycloakUserUpdater;
 
 
   @Override
-  public void save(UpdatedUser updatedUser) {
+  public void update(@NonNull UpdateUserCommand command) {
     try {
-      keycloakUserUpdater.update(updatedUser);
+      keycloakUserUpdater.update(command);
     } catch (Exception e) {
-      throw UserUpdateException.of(updatedUser.getUsername(), e);
+      throw UserUpdateException.of(command.getUsername(), e);
     }
   }
 }
