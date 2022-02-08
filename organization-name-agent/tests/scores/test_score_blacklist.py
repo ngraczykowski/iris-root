@@ -46,16 +46,21 @@ def test_simple_blacklist(first, second, blacklisted):
 
 
 @pytest.mark.parametrize(
-    ("first", "second"), (("amazing company", "company-rtsadvtbafsadsad-ooo"),)
+    "first, second, score_value, blacklisted",
+    [
+        ("ABCvtbDEF", "another company", 1.0, (("vtb",), ())),
+        ("Russian-Gazprom-Federation", "Nord Stream", 1.0, (("gazprom",), ())),
+        ("amazing company", "company-rtsadvtbafsadsad-ooo", 0.0, ((), ())),  # in wl - not find
+    ],
 )
-def test_blacklist_as_part_of_other_word(first, second):
+def test_blacklist_as_part_of_other_word(first, second, score_value, blacklisted):
     print(repr(first), repr(second))
     score = compare(first, second)
     print(score)
 
     assert score["blacklisted"].status.name == "OK"
-    assert score["blacklisted"].value == 0
-    assert score["blacklisted"].compared == ((), ())
+    assert score["blacklisted"].value == score_value
+    assert score["blacklisted"].compared == blacklisted
 
 
 @pytest.mark.parametrize(
