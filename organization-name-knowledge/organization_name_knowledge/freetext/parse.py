@@ -47,11 +47,12 @@ def parse_freetext_names(
 
     names_to_remove = _get_names_to_remove(found_valid_names)
     found_valid_names = [name for name in found_valid_names if name not in names_to_remove]
+
+    found_valid_names = found_valid_names + find_blacklisted_names(freetext)
     unique_base_names = _get_names_with_unique_bases(found_valid_names)
 
     if not unique_base_names:
         unique_base_names = find_known_organization_names(freetext)
-    unique_base_names = unique_base_names + find_blacklisted_names(freetext)
 
     return sorted(set(unique_base_names), key=lambda name: name.base.cleaned_name)
 
