@@ -41,9 +41,9 @@ warehouse.report.statistics:
 
 warehouse.reports.v2:
   reports:
-    - name: RBS
+    - name: RB_SCORER
       type: production
-      description: Rbs
+      description: Reasoning Branch Scorer (Match Level)
       selectSqlQuery: >
         SELECT (wm.payload ->> 'feature_vector_signature') AS "Reasoning Branch ID",
                (wm.payload ->> 'policy_title') AS "Policy Name",
@@ -67,7 +67,7 @@ warehouse.reports.v2:
                (wm.payload ->> 'feature_values_features/organizationName') AS "Organization Name",
                (wm.payload ->> 'feature_values_features/organizationName2') AS "Organization Name v2",
                (wm.payload ->> 'category_values_categories/companyNameSurrounding') AS "Company Name Surrounding",
-               count(wm.payload ->> 'feature_vector_signature')
+               count(wm.payload ->> 'feature_vector_signature') AS "Hits Count"
         FROM warehouse_alert wa JOIN warehouse_match wm ON wa.id = wm.alert_id where wa.recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
         GROUP BY (wm.payload ->> 'feature_vector_signature'),
                (wm.payload ->> 'policy_title'),
@@ -91,3 +91,55 @@ warehouse.reports.v2:
                (wm.payload ->> 'feature_values_features/organizationName'),
                (wm.payload ->> 'feature_values_features/organizationName2'),
                (wm.payload ->> 'category_values_categories/companyNameSurrounding')
+    - name: AI_REASONING
+      type: production
+      description: AI Reasoning (Alert Level)
+      selectSqlQuery: >
+        SELECT DISTINCT (wm.payload ->> 'policy') AS "Policy ID",
+               (wm.payload ->> 'policy_title') AS "Policy Name",
+               (wa.payload ->> 'recommended_action') AS "S8 Alert Resolution",
+               recommendation_date AS "S8 Alert Resolution Timestamp (UTC)",
+               (wa.payload ->> 'recommendation_comment') AS "S8 Alert Comment",
+               (wa.payload ->> 'firco_system_id') AS "Client Alert ID",
+               (wa.payload ->> 'status') AS "Alert Status",
+               (wa.payload ->> 'firco_analyst_decision') AS "Analyst Decision",
+               wa.name AS "S8 Alert ID"
+        from warehouse_alert wa JOIN warehouse_match wm ON wa.id = wm.alert_id 
+        WHERE wa.recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+    - name: AI_REASONING_MATCH_LEVEL
+      type: production
+      description: AI Reasoning (Match Level)
+      selectSqlQuery: >
+        SELECT (wm.payload ->> 'feature_vector_signature') AS "Reasoning Branch ID",
+                        (wm.payload ->> 'policy') AS "Policy ID",
+                        (wm.payload ->> 'policy_title') AS "Policy Name",
+                        (wm.payload ->> 'step') AS "Step ID",
+                        (wm.payload ->> 'step_title') AS "Step Name",
+                        (wm.payload ->> 'solution') AS "S8 Match Resolution",
+                        (wa.payload ->> 'recommended_action') AS "S8 Alert Resolution",
+                        recommendation_date AS "S8 Alert Resolution Timestamp (UTC)",
+                        (wa.payload ->> 'recommendation_comment') AS "S8 Alert Comment",
+                        (wa.payload ->> 'firco_system_id') AS "Client Alert ID",
+                        (wa.payload ->> 'firco_analyst_decision') AS "Analyst Decision",
+                        (wa.payload ->> 'status') AS "Alert Status",
+                        (wa.payload ->> 'delivery_status') AS "Alert Delivery Status",
+                        wm.name AS "S8 Match ID"
+        FROM warehouse_alert wa JOIN warehouse_match wm ON wa.id = wm.alert_id 
+        WHERE wa.recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
+    - name: ACCURACY
+      type: production
+      description: Accuracy (Alert Level)
+      selectSqlQuery: >
+        SELECT DISTINCT (wm.payload ->> 'policy') AS "Policy ID",
+                        (wm.payload ->> 'policy_title') AS "Policy Name",
+                        (wa.payload ->> 'recommended_action') AS "S8 Alert Resolution",
+                        recommendation_date AS "S8 Alert Resolution Timestamp (UTC)",
+                        (wa.payload ->> 'recommendation_comment') AS "S8 Alert Comment",
+                        (wa.payload ->> 'firco_analyst_decision') AS "Analyst Decision",
+                        (wa.payload ->> 'firco_analyst_decision_time') AS "Analyst Decision Timestamp",
+                        (wa.payload ->> 'firco_analyst_comment') AS "Analyst Comment",
+                        (wa.payload ->> 'firco_system_id') AS "Client Alert ID",
+                        (wa.payload ->> 'status') AS "Alert Status",
+                        wa.name AS "S8 Alert ID"
+        FROM warehouse_alert wa JOIN warehouse_match wm ON wa.id = wm.alert_id 
+        WHERE wa.recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
