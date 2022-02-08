@@ -9,6 +9,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlert
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterMatchResponse;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAlert;
 import com.silenteight.payments.bridge.common.app.AgentsUtils;
+import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.data.retention.model.AlertDataRetention;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.etl.processing.model.MessageTag;
@@ -162,7 +163,7 @@ public class AlertComposite {
   private static Watchlist mapWatchlistType(HitComposite hit) {
     return Watchlist.newBuilder()
         .setId(hit.getFkcoVListFmmId())
-        .setType(hit.getFkcoVListType())
+        .setType(WatchlistType.ofCode(hit.getFkcoVListType()).toString())
         .build();
   }
 
