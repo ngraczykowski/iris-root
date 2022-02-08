@@ -1,7 +1,8 @@
 from typing import List, Set
 
 from organization_name_knowledge.freetext.known_organization_names import (
-    get_from_known_organization_names,
+    find_blacklisted_names,
+    find_known_organization_names,
 )
 from organization_name_knowledge.freetext.matching import (
     get_all_contained_legal_terms,
@@ -46,10 +47,12 @@ def parse_freetext_names(
 
     names_to_remove = _get_names_to_remove(found_valid_names)
     found_valid_names = [name for name in found_valid_names if name not in names_to_remove]
+
+    found_valid_names = found_valid_names + find_blacklisted_names(freetext)
     unique_base_names = _get_names_with_unique_bases(found_valid_names)
 
     if not unique_base_names:
-        unique_base_names = get_from_known_organization_names(freetext)
+        unique_base_names = find_known_organization_names(freetext)
 
     return sorted(set(unique_base_names), key=lambda name: name.base.cleaned_name)
 
