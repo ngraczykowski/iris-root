@@ -17,6 +17,7 @@ class JdbcLearningDataAccess implements LearningDataAccess {
 
   private final SelectProcessedAlertsStatusQuery selectProcessedAlertsStatusQuery;
   private final InsertAlertResultQuery insertAlertResultQuery;
+  private final CheckIsFileStoredQuery checkIsFileStoredQuery;
 
   @Override
   public AlertsReadingResponse select(long jobId, String fileName) {
@@ -27,5 +28,10 @@ class JdbcLearningDataAccess implements LearningDataAccess {
   @Transactional
   public void saveResult(List<LearningProcessedAlert> alerts) {
     insertAlertResultQuery.update(alerts);
+  }
+
+  @Override
+  public boolean isFileStored(String fileName) {
+    return checkIsFileStoredQuery.execute(fileName);
   }
 }
