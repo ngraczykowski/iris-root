@@ -167,6 +167,16 @@ def test_parse_freetext_name_from_markers(freetext, expected_names):
                 }
             ],
         ),
+        (
+            "XYZvtb some text",
+            [
+                {
+                    "base": "vtb",
+                    "legal": "",
+                    "source": "vtb",
+                }
+            ],
+        ),
     ],
 )
 def test_parse_freetext_from_known_org_names(freetext, expected_names):
