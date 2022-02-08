@@ -39,7 +39,7 @@ from organization_name_knowledge.freetext.parse import parse_freetext_names
             [
                 {"base": "LLC VTB", "legal": "LLC", "source": "LLC VTB"},
                 {"base": "LLC VTB DC", "legal": "LLC", "source": "LLC VTB DC"},
-                {"base": "vtb", "legal": "", "source": "vtb"},
+                {"base": "VTB", "legal": "", "source": "VTB"},
             ],
         ),
         (

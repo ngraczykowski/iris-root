@@ -1,3 +1,4 @@
+import re
 from importlib.resources import open_text
 from typing import List
 
@@ -8,6 +9,7 @@ from organization_name_knowledge.utils.text import remove_too_long_numbers
 from organization_name_knowledge.utils.variants import get_substrings_from_consecutive_tokens
 
 BLACKLISTED = {"gazprom", "sberbank", "vtb"}
+BLACKLIST_REGEX = re.compile(r"|".join(BLACKLISTED), re.IGNORECASE)
 
 with open_text(resources, "sp_500.txt") as file:
     SP_500_COMPANIES = {name.lower() for name in file.read().splitlines()}
@@ -25,8 +27,8 @@ def find_known_organization_names(text: str) -> List[NameInformation]:
 
 
 def find_blacklisted_names(text: str) -> List[NameInformation]:
-    return [
-        parse_name(blacklisted_name)
-        for blacklisted_name in BLACKLISTED
-        if blacklisted_name in text.lower()
-    ]
+    blacklisted = BLACKLIST_REGEX.findall(text)
+    if blacklisted:
+        return [parse_name(name) for name in blacklisted]
+    else:
+        return []
