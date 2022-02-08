@@ -15,10 +15,10 @@ service GeoLocationComparer {
 }
 
 message CompareGeoLocationsRequest {
-  reserved 1, 2;
+  reserved 1, 2, 3, 4;
 
-  repeated ExactLocation alerted_party_locations = 3;
-  repeated ExactLocation watchlist_party_locations = 4;
+  repeated CompareGeoLocationsInput alerted_party_inputs = 5;
+  repeated CompareGeoLocationsInput watchlist_party_inputs = 6;
 }
 
 message CompareGeoLocationsResponse {
@@ -26,7 +26,13 @@ message CompareGeoLocationsResponse {
   GeoComparerReason reason = 2;
 }
 
-message ExactLocation {
-  Location location = 1;
+message CompareGeoLocationsInput {
+  reserved 1;
+
   Coordinates coordinates = 2;
+  string name = 3;
+  LocationType type = 4;
+  uint32 id = 5;
+  string code = 6;
+  uint32 parent_id = 7;
 }
