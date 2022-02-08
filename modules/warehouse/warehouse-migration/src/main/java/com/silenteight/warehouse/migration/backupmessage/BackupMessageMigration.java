@@ -124,14 +124,14 @@ class BackupMessageMigration {
     @SneakyThrows
     private void persist(Message message) {
       try {
-        com.silenteight.data.api.v1.ProductionDataIndexRequest dataIndexRequestV1 =
-            com.silenteight.data.api.v1.ProductionDataIndexRequest.parseFrom(message.getData());
-        productionRequestV1CommandHandler.handle(dataIndexRequestV1);
+        ProductionDataIndexRequest dataIndexRequestV2 =
+            ProductionDataIndexRequest.parseFrom(message.getData());
+        productionRequestV2CommandHandler.handle(dataIndexRequestV2);
       } catch (InvalidProtocolBufferException ex) {
         try {
-          ProductionDataIndexRequest dataIndexRequestV2 =
-              ProductionDataIndexRequest.parseFrom(message.getData());
-          productionRequestV2CommandHandler.handle(dataIndexRequestV2);
+          com.silenteight.data.api.v1.ProductionDataIndexRequest dataIndexRequestV1 =
+              com.silenteight.data.api.v1.ProductionDataIndexRequest.parseFrom(message.getData());
+          productionRequestV1CommandHandler.handle(dataIndexRequestV1);
         } catch (InvalidProtocolBufferException e) {
           throw new TypeNotPresentException(
               "warehouse_message_backup migration: unexpected backup message data, "
