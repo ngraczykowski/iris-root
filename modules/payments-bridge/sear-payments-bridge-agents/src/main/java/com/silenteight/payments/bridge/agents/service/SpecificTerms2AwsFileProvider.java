@@ -1,9 +1,11 @@
 package com.silenteight.payments.bridge.agents.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import org.springframework.stereotype.Service;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
@@ -18,8 +20,10 @@ import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 
 @Slf4j
-//@RequiredArgsConstructor
-//@Service
+@RequiredArgsConstructor
+@Service
+// TODO: @marek
+@Deprecated(forRemoval = true, since = "please use CsvFileResourceProvider interface instead of custom impl")
 class SpecificTerms2AwsFileProvider {
 
   private static final String COLUMN_NAME = "terms";
