@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+  <changeSet id="universal-datasource-1.8.0-1" author="jgajewski">
+    <sqlFile
+        path="sql/insert_contextual_learning_to_mapper.sql"
+        relativeToChangelogFile="true"/>
+
+    <sqlFile
+        path="sql/insert_historical_risk_account_number_to_mapper.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
+</databaseChangeLog>
