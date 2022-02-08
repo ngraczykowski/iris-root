@@ -24,4 +24,4 @@ def load_xml(filename):
 
 def load_json(filename):
     with open(filename, "r") as f:
-        return json.loads(f.read())
+        return json.load(f)

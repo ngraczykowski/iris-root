@@ -14,5 +14,3 @@ services:
       - "4444:8888" # jupyter notebook forward
       - "4445:1000"
       - "4446:1001"
-    environment:
-      - PYTHONPATH=.:python-datatoolbox

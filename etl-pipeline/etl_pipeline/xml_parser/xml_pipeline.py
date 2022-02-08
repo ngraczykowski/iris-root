@@ -6,8 +6,8 @@ import lxml
 import pyspark
 import pyspark.sql.functions as F
 from pyspark.sql.types import ArrayType, BooleanType, StringType, StructField, StructType
-from spark_manager.spark_client import SparkClient
 
+from etl_pipeline.data_processor_engine.engine import Engine
 from etl_pipeline.xml_parser.config import XMLExtractorConfig
 from etl_pipeline.xml_parser.xml_extractor import XMLExtractor, XMLFunction
 
@@ -192,13 +192,13 @@ class WatchlistExtractor:
 class XMLPipeline:
     def __init__(
         self,
-        spark_instance: SparkClient = None,
+        engine: Engine = None,
         hit_config=None,
         alert_config=None,
         watchlist_cls: WatchlistExtractor = None,
     ):
         self.watchlist = watchlist_cls(hit_config=hit_config, alert_config=alert_config)
-        self.spark_instance = spark_instance
+        self.engine = engine
         self.schema = None
 
     def unwrap_xml(self, source_path: str) -> pyspark.sql.DataFrame:
@@ -212,10 +212,10 @@ class XMLPipeline:
         -------
         pyspark.sql.DataFrame
         """
-        std_alert_df = self.spark_instance.read_delta(source_path)
+        std_alert_df = self.engine.load_data(source_path)
         alert_df = self.watchlist.unwrap_alert_hits(std_alert_df, self.schema)
         alert_hits_df = self.watchlist.remove_unnecessary_columns(alert_df)
-        ap_hit_names_sql = self.spark_instance.merge_to_target_col_from_source_cols_sql_expression(
+        ap_hit_names_sql = self.engine.merge_to_target_col_from_source_cols(
             alert_hits_df,
             "ap_hit_names",
             [

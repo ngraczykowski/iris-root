@@ -1,7 +1,0 @@
-steps: 
-
-  - 3.2.0-run-name-agent
-  - 3.2.1-run-dob-agent
-  - 3.2.2-run-gender-agent
-  - 3.2.3-run-national-id-agent
-  - 3.2.4-run-nationality-country-agent

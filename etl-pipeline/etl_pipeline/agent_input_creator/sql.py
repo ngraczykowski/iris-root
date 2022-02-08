@@ -2,7 +2,7 @@ from typing import Dict, List
 
 import pyspark.sql
 
-from pipeline.spark import spark_instance
+from etl_pipeline.data_processor_engine.spark import spark_instance
 
 
 def sql_to_merge_specific_columns_to_standardized(

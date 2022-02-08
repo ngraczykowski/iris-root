@@ -1,4 +1,4 @@
-FROM docker.repo.silenteight.com/ds-anaconda
+FROM docker.repo.silenteight.com/ds-anaconda:0.0.3-dev
 
 ARG PIP_INDEX_URL
 ENV PIP_INDEX_URL=$PIP_INDEX_URL
@@ -6,14 +6,15 @@ ENV PIP_INDEX_URL=$PIP_INDEX_URL
 ADD requirements.txt /requirements.txt
 ADD pipeline.yaml /pipeline.yaml
 
-RUN conda env create  -f /pipeline.yaml python=3.7
+RUN conda env create  -f /pipeline.yaml
 
 SHELL ["conda", "run", "-n", "pipeline", "/bin/bash", "-c"]
-RUN conda install jupyter
 RUN mkdir /server_entrypoint
-ADD start.sh /server_entrypoint/start.sh
+ADD scripts/start.sh /server_entrypoint/start.sh
 RUN chmod +x /server_entrypoint/start.sh
+RUN conda clean --all --force-pkgs-dirs -y
+RUN rm /requirements.txt /pipeline.yaml
 WORKDIR /app
-SHELL ["exit"]
 
+SHELL ["exit"]
 ENTRYPOINT ["/server_entrypoint/start.sh"]
