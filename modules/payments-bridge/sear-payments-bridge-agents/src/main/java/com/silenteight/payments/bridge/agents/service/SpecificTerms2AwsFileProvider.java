@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 @RequiredArgsConstructor
 @Service
 // TODO: @marek
-@Deprecated(forRemoval = true, since = "please use CsvFileResourceProvider interface instead of custom impl")
+@Deprecated(forRemoval = true, since = "CsvFileResourceProvider interface instead of custom impl")
 class SpecificTerms2AwsFileProvider {
 
   private static final String COLUMN_NAME = "terms";
