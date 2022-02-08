@@ -168,12 +168,12 @@ def test_parse_freetext_name_from_markers(freetext, expected_names):
             ],
         ),
         (
-            "XYZvtb some text",
+            "XYZVtb some text",
             [
                 {
-                    "base": "vtb",
+                    "base": "Vtb",
                     "legal": "",
-                    "source": "vtb",
+                    "source": "Vtb",
                 }
             ],
         ),
