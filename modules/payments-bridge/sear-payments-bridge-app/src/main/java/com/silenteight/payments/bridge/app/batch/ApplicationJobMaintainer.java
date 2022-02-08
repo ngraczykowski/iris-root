@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.app.batch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.common.event.StopBatchJobEvent;
 import com.silenteight.payments.bridge.common.event.TriggerBatchJobEvent;
 
 import org.springframework.batch.core.*;
@@ -10,10 +11,7 @@ import org.springframework.batch.core.configuration.DuplicateJobException;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.support.ReferenceJobFactory;
 import org.springframework.batch.core.explore.JobExplorer;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.JobOperator;
-import org.springframework.batch.core.launch.NoSuchJobException;
-import org.springframework.batch.core.launch.NoSuchJobExecutionException;
+import org.springframework.batch.core.launch.*;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRepository;
@@ -51,6 +49,11 @@ class ApplicationJobMaintainer implements JobMaintainer {
     runJobByName(triggerBatchJobEvent.getJobName(), triggerBatchJobEvent.getParameters());
   }
 
+  @EventListener
+  public void stopBatchJobListener(StopBatchJobEvent stopBatchJobEvent) {
+    stopJobByJobId(stopBatchJobEvent.getJobExecutionId());
+  }
+
   @Override
   public void restartUncompletedJobs() {
     log.info("Restarting all available jobs");
@@ -69,6 +72,14 @@ class ApplicationJobMaintainer implements JobMaintainer {
     }
 
     return runJob(registeredJob.get(), createJobParametersWithTime(parameters));
+  }
+
+  private void stopJobByJobId(Long jobId) {
+    try {
+      jobOperator.stop(jobId);
+    } catch (NoSuchJobExecutionException | JobExecutionNotRunningException e) {
+      log.warn("Couldn't abandon job {} cause {}", jobId, e.getMessage());
+    }
   }
 
   private static JobParameters createJobParametersWithTime(JobParameters parameters) {

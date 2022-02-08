@@ -16,7 +16,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @Import({
     JdbcLearningDataAccess.class,
     SelectProcessedAlertsStatusQuery.class,
-    InsertAlertResultQuery.class
+    InsertAlertResultQuery.class,
+    CheckIsFileStoredQuery.class
 })
 class JdbcLearningDataAccessIT extends BaseJdbcTest {
 
@@ -43,5 +44,17 @@ class JdbcLearningDataAccessIT extends BaseJdbcTest {
     assertThat(jdbcTemplate.queryForObject(
         "SELECT count(*) FROM pb_learning_processed_alert WHERE file_name = 'someFile'",
         Integer.class)).isEqualTo(1);
+  }
+
+  @Test
+  void shouldCheckThatFileIsStored() {
+    var isStored = dataAccess.isFileStored("someFile");
+    assertThat(isStored).isEqualTo(true);
+  }
+
+  @Test
+  void shouldCheckThatFileIsNotStored() {
+    var isStored = dataAccess.isFileStored("fileName");
+    assertThat(isStored).isEqualTo(false);
   }
 }

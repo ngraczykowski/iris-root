@@ -3,7 +3,9 @@ package com.silenteight.payments.bridge.svb.newlearning.job.csvstore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.common.event.StopBatchJobEvent;
 import com.silenteight.payments.bridge.common.event.TriggerBatchJobEvent;
+import com.silenteight.payments.bridge.svb.newlearning.port.LearningDataAccess;
 
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;
@@ -20,11 +22,20 @@ import static com.silenteight.payments.bridge.svb.newlearning.job.etl.EtlJobCons
 class StoreCsvJobListener implements JobExecutionListener {
 
   private final ApplicationEventPublisher applicationEventPublisher;
+  private final LearningDataAccess learningDataAccess;
 
   @Override
   public void beforeJob(JobExecution jobExecution) {
     var fileName = jobExecution.getJobParameters().getString(FILE_NAME_PARAMETER);
-    log.info("Starting batch store csv job for file = {}", fileName);
+
+    if (!learningDataAccess.isFileStored(fileName)) {
+      log.info("Starting batch store csv job for file = {}", fileName);
+      return;
+    }
+
+    log.warn("Skipping store job for file that is already stored = {}", fileName);
+    applicationEventPublisher.publishEvent(
+        StopBatchJobEvent.builder().jobExecutionId(jobExecution.getId()).build());
   }
 
   @Override

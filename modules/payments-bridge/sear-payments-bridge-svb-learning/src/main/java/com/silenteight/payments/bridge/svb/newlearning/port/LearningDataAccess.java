@@ -10,4 +10,6 @@ public interface LearningDataAccess {
   AlertsReadingResponse select(long jobId, String fileName);
 
   void saveResult(List<LearningProcessedAlert> alerts);
+
+  boolean isFileStored(String fileName);
 }
