@@ -29,16 +29,16 @@ class SpecificTerms2Configuration {
   private final SpecificTerms2Properties properties;
 
   @Bean
-  @Profile("mockaws")
+//  @Profile("mockaws")
   SpecificTerms2Agent specificTerms2DefaultAgent() {
     return new SpecificTerms2Agent(buildAgentMappings(getDefaultMappings()));
   }
 
-  @Bean
-  @Profile("!mockaws")
-  SpecificTerms2Agent specificTerms2Agent() {
-    return new SpecificTerms2Agent(buildAgentMappings(getAwsMappings()));
-  }
+//  @Bean
+//  @Profile("!mockaws")
+//  SpecificTerms2Agent specificTerms2Agent() {
+//    return new SpecificTerms2Agent(buildAgentMappings(getAwsMappings()));
+//  }
 
   private List<SpecificTerms2Agent.Mapping> buildAgentMappings(List<Mapping> mappings) {
     return mappings

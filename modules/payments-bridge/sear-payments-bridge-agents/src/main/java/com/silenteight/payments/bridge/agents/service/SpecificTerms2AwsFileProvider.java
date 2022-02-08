@@ -20,8 +20,8 @@ import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 
 @Slf4j
-@RequiredArgsConstructor
-@Service
+//@RequiredArgsConstructor
+//@Service
 class SpecificTerms2AwsFileProvider {
 
   private static final String COLUMN_NAME = "terms";
