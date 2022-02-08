@@ -62,8 +62,16 @@ class BackupMessageMigrationIT {
     assertThat(getQueues())
         .extracting(SimpleMessageListenerContainer::isRunning)
         .containsExactly(true, true, true, true);
-    assertThat(fetchAlertNames()).isNotEmpty();
-
+    assertThat(fetchAlertNames()).contains("alerts/9bd8404f-939f-4804-bc5a-fa9543898543",
+        "alerts/d1e22e2a-415a-4600-a42c-c65d8ed21ea9",
+        "alerts/aa59b3d0-5414-42fe-94d9-60c607720781",
+        "alerts/a5fb880f-d0ff-44ce-bccf-8edd278fa64f",
+        "alerts/296ffd3e-dca7-4094-9fc7-f65355038867",
+        "alerts/18a93aaf-dc62-4957-9052-5aaab869ea66",
+        "alerts/4ecdc38a-58ac-454d-bed7-baf04bfa61bd",
+        "alerts/58485906-bdbc-4cce-8a7f-9aeb4213b2cb",
+        "alerts/eeb7f088-1c42-494a-945f-bd5e484e8f90",
+        "alerts/30d1fef2-c011-4a38-acd5-3b7102f85793");
   }
 
   List<String> fetchAlertNames() {
