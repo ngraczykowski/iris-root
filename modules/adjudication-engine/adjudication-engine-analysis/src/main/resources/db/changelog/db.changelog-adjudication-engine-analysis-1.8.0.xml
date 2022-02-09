@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+  <changeSet id="adjudication-engine-analysis-1.8.0" author="kzybala">
+    <addColumn tableName="ae_analysis">
+      <column name="attach_metadata" type="boolean" defaultValueBoolean="false"/>
+      <column name="attach_recommendation" type="boolean" defaultValueBoolean="false"/>
+    </addColumn>
+    <dropView viewName="ae_analysis_query"/>
+    <createView
+        viewName="ae_analysis_query"
+        path="db/changelog/sql/view_ae_analysis_query_v4.sql"/>
+  </changeSet>
+</databaseChangeLog>
