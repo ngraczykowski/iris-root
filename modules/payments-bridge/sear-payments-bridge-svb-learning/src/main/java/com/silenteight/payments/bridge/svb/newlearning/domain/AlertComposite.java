@@ -142,7 +142,8 @@ public class AlertComposite {
   private String mapAlertedPartyIdByFeatureDiscriminator(
       String featureTypeDiscriminator, AlertedPartyData alertedPartyData) {
     switch (featureTypeDiscriminator) {
-      case AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC:
+      case AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_FP:
+      case AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_TP:
         return alertedPartyData.getAccountNumberOrEmpty();
       case AgentsUtils.HISTORICAL_RISK_CUSTOMER_NAME_LEARNING_DISC:
         return alertedPartyData.getFirstAlertedPartyName().orElse("");

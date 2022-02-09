@@ -6,13 +6,9 @@ import com.silenteight.payments.bridge.agents.port.HistoricalRiskAssessmentFeatu
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
 
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_FEATURE;
-
-@Service
 @RequiredArgsConstructor
-class HistoricalRiskAccountNumberExtractor
+abstract class HistoricalRiskAccountNumberExtractor
     extends HistoricalRiskAssessmentExtractorBase {
 
   private final HistoricalRiskAssessmentFeatureUseCase historicalRiskAssessmentFeatureUseCase;
@@ -22,10 +18,6 @@ class HistoricalRiskAccountNumberExtractor
     return historicalRiskAssessmentFeatureUseCase;
   }
 
-  @Override
-  protected String getFeature() {
-    return HISTORICAL_RISK_ACCOUNT_NUMBER_FEATURE;
-  }
 
   @Override
   protected String getAlertedPartyId(AlertedPartyData alertedPartyData) {

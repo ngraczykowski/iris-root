@@ -3,18 +3,8 @@ package com.silenteight.payments.bridge.firco.datasource.service.process.agent;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_FEATURE;
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC;
-
-@Component
-class HistoricalRiskAccountNumberFeature extends HistoricalRiskAssessmentFeature {
-
-  @Override
-  protected String getFeatureName() {
-    return HISTORICAL_RISK_ACCOUNT_NUMBER_FEATURE;
-  }
+abstract class HistoricalRiskAccountNumberFeature extends HistoricalRiskAssessmentFeature {
 
   @Override
   protected String getAlertedPartyId(AlertedPartyData alertedPartyData) {
@@ -25,8 +15,4 @@ class HistoricalRiskAccountNumberFeature extends HistoricalRiskAssessmentFeature
     return accountNumber.toUpperCase().trim();
   }
 
-  @Override
-  protected String getDiscriminator() {
-    return HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC;
-  }
 }

@@ -18,7 +18,7 @@ import static com.silenteight.payments.bridge.svb.newlearning.step.etl.EtlFixtur
 import static com.silenteight.payments.bridge.svb.newlearning.step.etl.EtlFixture.createRegisterAlert;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CreateFeatureServiceTest {
@@ -40,7 +40,8 @@ class CreateFeatureServiceTest {
             new IdentificationMismatchExtractor(),
             new NameFeatureExtractorService(createNameFeatureInputUseCase),
             new OrganizationNameAgentExtractorService(),
-            new HistoricalRiskAccountNumberExtractor(historicalRiskAssessmentFeature),
+            new HistoricalRiskAccountNumberTruePositiveExtractor(historicalRiskAssessmentFeature),
+            new HistoricalRiskAccountNumberFalsePositiveExtractor(historicalRiskAssessmentFeature),
             new HistoricalRiskCustomerNameExtractor(historicalRiskAssessmentFeature)),
         List.of(new NameMatchedTextFeatureExtractorService(createNameFeatureInputUseCase)),
         createAgentInputsClient);
@@ -53,7 +54,7 @@ class CreateFeatureServiceTest {
   void shouldExtractFeatures() {
     var hit = createEtlHit();
     var agentInput = createFeatureService.createFeatureInputs(List.of(hit), createRegisterAlert());
-    assertThat(agentInput.get(0).getFeatureInputsCount()).isEqualTo(6);
+    assertThat(agentInput.get(0).getFeatureInputsCount()).isEqualTo(7);
 
     var unstructuredAgentInput =
         createFeatureService.createUnstructuredFeatureInputs(
