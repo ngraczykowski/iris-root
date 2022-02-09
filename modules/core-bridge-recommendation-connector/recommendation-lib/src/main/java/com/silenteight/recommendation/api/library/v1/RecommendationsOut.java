@@ -13,6 +13,7 @@ public class RecommendationsOut {
 
   @Builder.Default
   List<RecommendationOut> recommendations = List.of();
+  StatisticsOut statistics;
 
   static RecommendationsOut createFrom(RecommendationsResponse response) {
     return RecommendationsOut.builder()
@@ -20,6 +21,7 @@ public class RecommendationsOut {
             .stream()
             .map(RecommendationOut::createFrom)
             .toList())
+        .statistics(StatisticsOut.createFrom(response.getStatistics()))
         .build();
   }
 }
