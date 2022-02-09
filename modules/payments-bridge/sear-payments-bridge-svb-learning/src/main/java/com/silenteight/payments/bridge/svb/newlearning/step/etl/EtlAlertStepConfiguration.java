@@ -52,7 +52,7 @@ class EtlAlertStepConfiguration {
   }
 
   @Bean
-  Step processUnregisterAlertStep(
+  Step etlAlertStep(
       AbstractItemStreamItemReader<AlertComposite> compositeAlertReader) {
     return stepBuilderFactory
         .get(ETL_STEP_NAME)

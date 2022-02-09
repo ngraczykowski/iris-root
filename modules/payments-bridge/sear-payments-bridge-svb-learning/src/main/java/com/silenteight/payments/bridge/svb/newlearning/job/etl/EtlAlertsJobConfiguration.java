@@ -17,14 +17,14 @@ import static com.silenteight.payments.bridge.svb.newlearning.job.etl.EtlJobCons
 class EtlAlertsJobConfiguration {
 
   private final JobBuilderFactory jobBuilderFactory;
-  private final Step processUnregisterAlertStep;
+  private final Step etlAlertStep;
   private final Step etlReservationStep;
 
   @Bean
-  Job processUnregisteredAlertJob() {
+  Job etlAlertJob() {
     return jobBuilderFactory.get(ETL_JOB_NAME)
         .start(etlReservationStep)
-        .next(processUnregisterAlertStep)
+        .next(etlAlertStep)
         .build();
   }
 }
