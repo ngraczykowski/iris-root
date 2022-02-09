@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.app.learning;
 
 import lombok.*;
 
-import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.FileRequest;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 
 import org.springframework.batch.core.JobParameters;
@@ -45,7 +45,7 @@ class LearningFileEntity extends BaseEntity {
         .toJobParameters();
   }
 
-  LearningRequest toLearningRequest() {
-    return LearningRequest.builder().bucket(bucketName).object(fileName).build();
+  FileRequest toLearningRequest() {
+    return FileRequest.builder().bucket(bucketName).object(fileName).build();
   }
 }

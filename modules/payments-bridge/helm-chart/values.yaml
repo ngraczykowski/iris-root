@@ -42,7 +42,6 @@ emailNotification:
 agents:
   specificTerms2:
     bucket: ""
-    region: ""
 
 serviceMonitor:
   path: /management/prometheus

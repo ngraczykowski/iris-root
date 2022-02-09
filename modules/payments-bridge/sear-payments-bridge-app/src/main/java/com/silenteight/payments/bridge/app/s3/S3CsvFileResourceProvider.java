@@ -1,12 +1,12 @@
-package com.silenteight.payments.bridge.app.integration.newlearning;
+package com.silenteight.payments.bridge.app.s3;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
-import com.silenteight.payments.bridge.svb.newlearning.domain.DeleteLearningFileRequest;
-import com.silenteight.payments.bridge.svb.newlearning.domain.ObjectPath;
-import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.DeleteLearningFileRequest;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.FileRequest;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.ObjectPath;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.port.CsvFileResourceProvider;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.InputStreamResource;
@@ -23,20 +23,21 @@ import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Slf4j
-class S3CsvFileResourceProvider implements CsvFileResourceProvider {
+public class S3CsvFileResourceProvider implements CsvFileResourceProvider {
 
   private final S3Client s3Client;
   private final String bucketName;
   private final String prefix;
 
+
   @Override
   public Resource getResource(
-      LearningRequest learningRequest) {
+      FileRequest fileRequest) {
     var responseInputStream = s3Client.getObject(
         GetObjectRequest
             .builder()
-            .bucket(learningRequest.getBucket())
-            .key(learningRequest.getObject())
+            .bucket(fileRequest.getBucket())
+            .key(fileRequest.getObject())
             .build());
     if (log.isDebugEnabled()) {
       log.debug(

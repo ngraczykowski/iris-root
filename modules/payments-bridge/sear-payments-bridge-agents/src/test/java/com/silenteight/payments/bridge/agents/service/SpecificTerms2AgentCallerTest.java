@@ -19,7 +19,7 @@ class SpecificTerms2AgentCallerTest {
   void beforeEach() {
     specificTerms2Agent =
         new SpecificTerms2Configuration(
-            new SpecificTerms2AwsFileProvider(),
+            new SpecificTerms2TermsProvider(null),
             new SpecificTerms2Properties()).specificTerms2DefaultAgent();
   }
 

@@ -3,13 +3,12 @@ package com.silenteight.payments.bridge.agents.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.FileRequest;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.port.CsvFileResourceProvider;
+
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,22 +18,27 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 
+import static org.apache.commons.lang3.exception.ExceptionUtils.rethrow;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
-// TODO: @marek
-@Deprecated(forRemoval = true, since = "CsvFileResourceProvider interface instead of custom impl")
-class SpecificTerms2AwsFileProvider {
+class SpecificTerms2TermsProvider {
 
   private static final String COLUMN_NAME = "terms";
+  private final CsvFileResourceProvider csvFileResourceProvider;
 
-  public @NotNull List<String> proceedCsvFile(String termsKey, String bucket, String region) {
-    log.info("Sending request to S3");
+  public @NotNull List<String> getTermsFromProceededCsvFile(String termsKey, String bucket) {
+    var fileRequest = FileRequest.builder()
+        .object(termsKey)
+        .bucket(bucket)
+        .build();
 
     try (
-        var s3Client = S3Client.builder().region(Region.of(region)).build();
-        InputStreamReader inputStreamReader = getInputStreamReaderFromAws(
-            termsKey, bucket, s3Client)) {
+        var inputStreamReader = new InputStreamReader(
+            csvFileResourceProvider.getResource(fileRequest).getInputStream(),
+            Charset.forName("CP1250"));
+    ) {
 
       List<String> output = genreateCsvFile(inputStreamReader);
 
@@ -42,12 +46,12 @@ class SpecificTerms2AwsFileProvider {
 
       return output;
 
-    } catch (S3Exception | CsvValidationException | IOException e) {
+    } catch (CsvValidationException | IOException e) {
       log.error(
           "There was a problem when receiving or proceeding s3 object - Message: {}, Reason: {}",
           e.getMessage(),
           e.getCause());
-      throw new AwsS3Exception(e);
+      return rethrow(e);
     }
   }
 
@@ -68,32 +72,9 @@ class SpecificTerms2AwsFileProvider {
     return output;
   }
 
-  @Nonnull
-  private InputStreamReader getInputStreamReaderFromAws(
-      String termsKey, String bucket, S3Client s3Client) {
-    log.info("Received S3 CSV object");
-    var responseInputStream = s3Client.getObject(
-        GetObjectRequest
-            .builder()
-            .bucket(bucket)
-            .key(termsKey)
-            .build());
-    log.info("Object get from s3");
-    return new InputStreamReader(responseInputStream, Charset.forName("CP1250"));
-  }
-
   private void validateCsv(@NotNull String header) {
     if (!header.equals(COLUMN_NAME)) {
       throw new CsvTermsValidationException(header);
-    }
-  }
-
-  private static final class AwsS3Exception extends RuntimeException {
-
-    private static final long serialVersionUID = 3289330223618728867L;
-
-    AwsS3Exception(Exception e) {
-      super("There was a problem when receiving s3 object = " + e.getMessage());
     }
   }
 

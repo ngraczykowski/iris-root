@@ -29,7 +29,8 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
     "com.silenteight.payments.bridge.svb.newlearning.step",
     "com.silenteight.payments.bridge.svb.newlearning.adapter",
     "com.silenteight.payments.bridge.svb.newlearning.config",
-    "com.silenteight.payments.bridge.svb.migration" })
+    "com.silenteight.payments.bridge.svb.migration",
+    "com.silenteight.payments.bridge.common.resource.csv.file.provider.service.def"})
 class HistoricalAssessmentJobTest extends BaseBatchTest {
 
   @Autowired

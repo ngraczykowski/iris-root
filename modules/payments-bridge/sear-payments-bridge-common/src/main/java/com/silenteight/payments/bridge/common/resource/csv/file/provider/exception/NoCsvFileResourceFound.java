@@ -1,5 +1,5 @@
 
-package com.silenteight.payments.bridge.svb.newlearning.job.csvstore.exceptions;
+package com.silenteight.payments.bridge.common.resource.csv.file.provider.exception;
 
 public class NoCsvFileResourceFound extends RuntimeException {
 

@@ -2,9 +2,9 @@ package com.silenteight.payments.bridge.svb.learning.reader.adapter;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.FileRequest;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.AlertsReadingResponse;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsv;
-import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CsvFileProvider;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +23,7 @@ class AwsCsvProvider implements CsvFileProvider {
 
   @Override
   public AlertsReadingResponse getLearningCsv(
-      LearningRequest learningRequest, Function<LearningCsv, AlertsReadingResponse> csvConsumer) {
+      FileRequest learningRequest, Function<LearningCsv, AlertsReadingResponse> csvConsumer) {
 
     log.info("Sending request to S3");
 

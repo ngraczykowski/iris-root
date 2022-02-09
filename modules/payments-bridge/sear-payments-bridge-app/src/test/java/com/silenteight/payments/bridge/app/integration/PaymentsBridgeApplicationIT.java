@@ -4,10 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.PaymentsBridgeApplication;
 import com.silenteight.payments.bridge.common.dto.input.RequestDto;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.FileRequest;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
 import com.silenteight.payments.bridge.mock.ae.MockAlertUseCase;
-import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
 import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningAlertsUseCase;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
@@ -69,7 +69,7 @@ class PaymentsBridgeApplicationIT {
   @Disabled
   void shouldProcessLearningCsv() {
     var request =
-        LearningRequest.builder().bucket("bucket").object("analystdecison-2-hits.csv").build();
+        FileRequest.builder().bucket("bucket").object("analystdecison-2-hits.csv").build();
     handleLearningDataUseCase.readAlerts(request);
     await()
         .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))

@@ -1,7 +1,7 @@
 package com.silenteight.payments.bridge.app.learning;
 
-import com.silenteight.payments.bridge.svb.newlearning.domain.ObjectPath;
-import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.ObjectPath;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.port.CsvFileResourceProvider;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

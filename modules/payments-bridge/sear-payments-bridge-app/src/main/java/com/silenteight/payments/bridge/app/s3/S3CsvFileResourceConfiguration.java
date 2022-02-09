@@ -1,9 +1,9 @@
-package com.silenteight.payments.bridge.app.integration.newlearning;
+package com.silenteight.payments.bridge.app.s3;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.port.CsvFileResourceProvider;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

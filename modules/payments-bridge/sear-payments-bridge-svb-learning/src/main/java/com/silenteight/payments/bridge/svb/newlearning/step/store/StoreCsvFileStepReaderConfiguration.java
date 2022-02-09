@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.app.LearningProperties;
-import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.FileRequest;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.port.CsvFileResourceProvider;
 import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.StoreCsvJobProperties;
-import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
 
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -64,7 +64,7 @@ class StoreCsvFileStepReaderConfiguration {
 
   private Resource getFileResource(String fileName, String bucketName) {
     return csvFileResourceProvider.getResource(
-        LearningRequest.builder().object(fileName)
+        FileRequest.builder().object(fileName)
             .bucket(bucketName)
             .build());
   }

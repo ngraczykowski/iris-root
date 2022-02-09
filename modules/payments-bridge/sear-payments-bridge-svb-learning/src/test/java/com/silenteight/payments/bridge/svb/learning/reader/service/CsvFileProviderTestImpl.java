@@ -1,8 +1,8 @@
 package com.silenteight.payments.bridge.svb.learning.reader.service;
 
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.FileRequest;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.AlertsReadingResponse;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsv;
-import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CsvFileProvider;
 
 import org.springframework.core.io.ClassPathResource;
@@ -16,7 +16,7 @@ class CsvFileProviderTestImpl implements CsvFileProvider {
 
   @Override
   public AlertsReadingResponse getLearningCsv(
-      LearningRequest learningRequest,
+      FileRequest learningRequest,
       Function<LearningCsv, AlertsReadingResponse> csvConsumer) {
     Resource resource = new ClassPathResource("/learning/SVB_Learn_Jun_1_to_30.csv");
     try {

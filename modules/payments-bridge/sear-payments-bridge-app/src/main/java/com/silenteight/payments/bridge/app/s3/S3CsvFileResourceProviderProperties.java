@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.app.integration.newlearning;
+package com.silenteight.payments.bridge.app.s3;
 
 import lombok.Data;
 

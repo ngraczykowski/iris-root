@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.newlearning.domain;
+package com.silenteight.payments.bridge.common.resource.csv.file.provider.model;
 
 import lombok.*;
 import lombok.Builder.Default;

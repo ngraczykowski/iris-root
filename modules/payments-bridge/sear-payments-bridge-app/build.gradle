@@ -20,9 +20,6 @@ dependencies {
   implementation project(":proto-sear-payments-bridge-internal-protos")
   testImplementation project(":sear-payments-bridge-testing")
 
-  implementation libraries.aws_auth
-  implementation libraries.aws_s3
-  implementation libraries.aws_ses
 
   // Utilities
   implementation libraries.commons_lang3
@@ -81,6 +78,11 @@ dependencies {
   implementation libraries.hikari_cp
   runtimeOnly libraries.postgresql
   runtimeOnly libraries.liquibase_sessionlock
+
+  // s3
+  implementation libraries.aws_auth
+  implementation libraries.aws_s3
+  implementation libraries.aws_ses
 
   // Messaging
   implementation libraries.amqp_client

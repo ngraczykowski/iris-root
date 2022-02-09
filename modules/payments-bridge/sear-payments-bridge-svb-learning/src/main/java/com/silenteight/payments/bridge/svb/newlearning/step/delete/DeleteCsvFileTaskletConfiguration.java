@@ -2,8 +2,8 @@ package com.silenteight.payments.bridge.svb.newlearning.step.delete;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.port.CsvFileResourceProvider;
 import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.StoreCsvJobProperties;
-import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
 
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;

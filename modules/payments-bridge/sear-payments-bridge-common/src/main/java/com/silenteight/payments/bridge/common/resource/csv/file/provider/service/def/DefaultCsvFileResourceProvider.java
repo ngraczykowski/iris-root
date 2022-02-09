@@ -1,12 +1,12 @@
-package com.silenteight.payments.bridge.svb.newlearning.step;
+package com.silenteight.payments.bridge.common.resource.csv.file.provider.service.def;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningRequest;
-import com.silenteight.payments.bridge.svb.newlearning.domain.DeleteLearningFileRequest;
-import com.silenteight.payments.bridge.svb.newlearning.domain.ObjectPath;
-import com.silenteight.payments.bridge.svb.newlearning.job.csvstore.exceptions.NoCsvFileResourceFound;
-import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.exception.NoCsvFileResourceFound;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.DeleteLearningFileRequest;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.FileRequest;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.ObjectPath;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.port.CsvFileResourceProvider;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -25,14 +25,14 @@ class DefaultCsvFileResourceProvider implements CsvFileResourceProvider {
   private static final String CLASSPATH_LEARNING_PROVIDER = "classpath:learning/provider/";
 
   @Override
-  public Resource getResource(LearningRequest learningRequest) {
+  public Resource getResource(FileRequest fileRequest) {
     try {
       File file =
-          ResourceUtils.getFile(CLASSPATH_LEARNING_PROVIDER + learningRequest.getObject());
+          ResourceUtils.getFile(CLASSPATH_LEARNING_PROVIDER + fileRequest.getObject());
       return new InputStreamResource(new FileInputStream(file));
     } catch (IOException e) {
       throw new NoCsvFileResourceFound(
-          String.format("No csv file resource found %s", learningRequest.getObject()));
+          String.format("No csv file resource found %s", fileRequest.getObject()));
     }
   }
 

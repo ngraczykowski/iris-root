@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.svb.newlearning.adapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.svb.newlearning.domain.ObjectPath;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.ObjectPath;
 import com.silenteight.payments.bridge.svb.newlearning.port.FileListPort;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

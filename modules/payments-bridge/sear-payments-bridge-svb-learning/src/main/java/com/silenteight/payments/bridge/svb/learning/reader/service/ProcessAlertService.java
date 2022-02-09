@@ -3,7 +3,11 @@ package com.silenteight.payments.bridge.svb.learning.reader.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.svb.learning.reader.domain.*;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.FileRequest;
+import com.silenteight.payments.bridge.svb.learning.reader.domain.AlertMetaData;
+import com.silenteight.payments.bridge.svb.learning.reader.domain.AlertsReadingResponse;
+import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningCsvRow;
+import com.silenteight.payments.bridge.svb.learning.reader.domain.ReadAlertError;
 import com.silenteight.payments.bridge.svb.learning.reader.port.CsvFileProvider;
 
 import com.fasterxml.jackson.databind.MappingIterator;
@@ -30,7 +34,7 @@ class ProcessAlertService {
   private final CsvFileProvider csvFileProvider;
   private final LearningAlertBatchService learningAlertBatchService;
 
-  public AlertsReadingResponse read(LearningRequest learningRequest) {
+  public AlertsReadingResponse read(FileRequest fileRequest) {
 
     var mapper = new CsvMapper();
     var schema = CsvSchema.emptySchema()
@@ -38,7 +42,7 @@ class ProcessAlertService {
         .withEscapeChar('"')
         .withColumnSeparator(',');
 
-    return csvFileProvider.getLearningCsv(learningRequest, learningCsv -> {
+    return csvFileProvider.getLearningCsv(fileRequest, learningCsv -> {
       AlertsReadingResponse alertsReadingResponse = null;
       try (
           var inputStream =
@@ -47,7 +51,7 @@ class ProcessAlertService {
             .readerFor(LearningCsvRow.class)
             .with(schema)
             .readValues(inputStream);
-        alertsReadingResponse = readByAlerts(it, learningRequest.getObject());
+        alertsReadingResponse = readByAlerts(it, fileRequest.getObject());
         alertsReadingResponse.setObjectData(learningCsv);
 
         return alertsReadingResponse;

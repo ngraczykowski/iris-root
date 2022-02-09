@@ -3,8 +3,8 @@ package com.silenteight.payments.bridge.svb.newlearning.step.delete;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.svb.newlearning.domain.DeleteLearningFileRequest;
-import com.silenteight.payments.bridge.svb.newlearning.port.CsvFileResourceProvider;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.DeleteLearningFileRequest;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.port.CsvFileResourceProvider;
 
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;

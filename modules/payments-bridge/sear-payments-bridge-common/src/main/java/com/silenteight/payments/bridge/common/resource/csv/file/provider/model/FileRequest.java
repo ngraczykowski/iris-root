@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.learning.reader.domain;
+package com.silenteight.payments.bridge.common.resource.csv.file.provider.model;
 
 import lombok.*;
 import lombok.Builder.Default;
@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 @Value
 @Builder
 @AllArgsConstructor
-public class LearningRequest {
+public class FileRequest {
 
   @NonNull
   @Default

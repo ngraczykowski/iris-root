@@ -1,6 +1,6 @@
 package com.silenteight.payments.bridge.svb.newlearning.port;
 
-import com.silenteight.payments.bridge.svb.newlearning.domain.ObjectPath;
+import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.ObjectPath;
 
 import java.util.List;
 

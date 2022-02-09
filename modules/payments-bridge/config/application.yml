@@ -97,7 +97,6 @@ pb:
       bucket: "sierra-dev-decrypted-files"
       regular-terms-key: "category/regularTerms.csv"
       specific-terms-key: "category/specificTerms.csv"
-      region: "eu-central-1"
 
 spring:
   #-------------------------------------------------------------------------------------------------

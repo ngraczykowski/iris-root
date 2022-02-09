@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import java.util.List;
 import java.util.function.Function;
@@ -22,14 +23,21 @@ class SpecificTerms2Configuration {
   private static final String RESPONSE_YES_PTP = "YES_PTP";
   private static final String RESPONSE_YES = "YES";
 
-  private final SpecificTerms2AwsFileProvider specificTerms2AwsFileProvider;
+  private final SpecificTerms2TermsProvider specificTerms2TermsProvider;
 
   @Valid
   private final SpecificTerms2Properties properties;
 
   @Bean
+  @Profile("mockaws")
   SpecificTerms2Agent specificTerms2DefaultAgent() {
     return new SpecificTerms2Agent(buildAgentMappings(getDefaultMappings()));
+  }
+
+  @Bean
+  @Profile("!mockaws")
+  SpecificTerms2Agent specificTerms2Agent() {
+    return new SpecificTerms2Agent(buildAgentMappings(getAwsMappings()));
   }
 
   private List<SpecificTerms2Agent.Mapping> buildAgentMappings(List<Mapping> mappings) {
@@ -60,15 +68,13 @@ class SpecificTerms2Configuration {
   private List<Mapping> getAwsMappings() {
     return List.of(
         new Mapping(
-            specificTerms2AwsFileProvider.proceedCsvFile(
+            specificTerms2TermsProvider.getTermsFromProceededCsvFile(
                 properties.getSpecificTermsKey(),
-                properties.getBucket(),
-                properties.getRegion()), RESPONSE_YES_PTP),
+                properties.getBucket()), RESPONSE_YES_PTP),
         new Mapping(
-            specificTerms2AwsFileProvider.proceedCsvFile(
+            specificTerms2TermsProvider.getTermsFromProceededCsvFile(
                 properties.getRegularTermsKey(),
-                properties.getBucket(),
-                properties.getRegion()), RESPONSE_YES)
+                properties.getBucket()), RESPONSE_YES)
     );
   }
 
