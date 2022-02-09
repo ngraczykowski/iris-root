@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.agents.service.contextual;
+package com.silenteight.payments.bridge.agents.service;
 
 import lombok.RequiredArgsConstructor;
 
@@ -7,6 +7,9 @@ import com.silenteight.datasource.api.historicaldecisions.v2.HistoricalDecisions
 import com.silenteight.datasource.api.historicaldecisions.v2.ModelKey;
 import com.silenteight.payments.bridge.agents.model.ContextualLearningAgentRequest;
 import com.silenteight.payments.bridge.agents.port.CreateContextualLearningFeatureInputUseCase;
+import com.silenteight.payments.bridge.common.agents.AlertedPartyIdContextAdapter;
+import com.silenteight.payments.bridge.common.agents.ContextualAlertedPartyIdModel;
+import com.silenteight.payments.bridge.common.agents.ContextualLearningProperties;
 import com.silenteight.payments.bridge.common.app.LearningProperties;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -17,11 +20,11 @@ import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_
 
 @Component
 @RequiredArgsConstructor
-@EnableConfigurationProperties(LearningProperties.class)
+@EnableConfigurationProperties({ LearningProperties.class, ContextualLearningProperties.class })
 class CreateContextualLearningFeatureInput implements CreateContextualLearningFeatureInputUseCase {
 
-  private final AlertedPartyIdContextAdapter alertedPartyIdAdapter;
-  private final LearningProperties properties;
+  private final LearningProperties learningProperties;
+  private final ContextualLearningProperties contextualLearningProperties;
 
   @Override
   public HistoricalDecisionsFeatureInput create(ContextualLearningAgentRequest request) {
@@ -38,9 +41,18 @@ class CreateContextualLearningFeatureInput implements CreateContextualLearningFe
   }
 
   private String getAlertedPartyId(ContextualLearningAgentRequest request) {
-    var matchingField = request.getMatchingField();
-    var matchText = request.getMatchText();
-    return alertedPartyIdAdapter.generateAlertedPartyId(matchingField, matchText);
+    var contextualModel = createContextualModel(request);
+    return AlertedPartyIdContextAdapter.generateAlertedPartyId(contextualModel);
+  }
+
+  private ContextualAlertedPartyIdModel createContextualModel(
+      ContextualLearningAgentRequest request) {
+    var contextualModelBuilder
+        = contextualLearningProperties.getModelBuilder();
+    return contextualModelBuilder
+        .matchingField(request.getMatchingField())
+        .matchText(request.getMatchText())
+        .build();
   }
 
   private Discriminator createDiscriminator() {
@@ -50,6 +62,6 @@ class CreateContextualLearningFeatureInput implements CreateContextualLearningFe
   }
 
   private String getDiscriminatorValue() {
-    return properties.getDiscriminatorPrefix() + "_" + CONTEXTUAL_LEARNING_DISC;
+    return learningProperties.getDiscriminatorPrefix() + "_" + CONTEXTUAL_LEARNING_DISC;
   }
 }

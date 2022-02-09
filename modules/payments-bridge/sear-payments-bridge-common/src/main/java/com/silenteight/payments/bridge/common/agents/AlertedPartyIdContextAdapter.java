@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.agents.service.contextual;
+package com.silenteight.payments.bridge.common.agents;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,14 +16,9 @@ import static org.apache.commons.lang3.StringUtils.SPACE;
 import static org.apache.commons.lang3.StringUtils.normalizeSpace;
 
 @RequiredArgsConstructor
-class AlertedPartyIdContextAdapter {
+public class AlertedPartyIdContextAdapter {
 
   private static final Map<String, String> LINE_BREAK_MAP = new LinkedHashMap<>();
-
-  private final int numberOfTokensLeft;
-  private final int numberOfTokensRight;
-  private final int minTokens;
-  private final boolean lineBreaks;
 
   static {
     LINE_BREAK_MAP.put("\r\n", " mixed_linebreak_string ");
@@ -31,22 +26,19 @@ class AlertedPartyIdContextAdapter {
     LINE_BREAK_MAP.put("\r", " linebreak_raw_string ");
   }
 
-  String generateAlertedPartyId(String matchingField, String matchText) {
-
-    var preprocessedMatchingField = lineBreaks ? removeLineBreaks(matchingField) : matchingField;
-    var preprocessedMatchText = lineBreaks ? removeLineBreaks(matchText) : matchText;
-
-    var context = prepareContext(preprocessedMatchingField, preprocessedMatchText,
-        numberOfTokensLeft,
-        numberOfTokensRight,
-        minTokens);
-
-    return lineBreaks ? addLineBreaks(context) : context;
+  public static String generateAlertedPartyId(ContextualAlertedPartyIdModel contextualModel) {
+    var context = prepareContext(contextualModel);
+    return contextualModel.isLineBreaks() ? addLineBreaks(context) : context;
   }
 
-  private static String prepareContext(
-      String matchingField, String matchText,
-      int numberOfTokensLeft, int numberOfTokensRight, int minTokens) {
+  private static String prepareContext(ContextualAlertedPartyIdModel contextualModel) {
+
+    boolean lineBreaks = contextualModel.isLineBreaks();
+    var matchingField = getMatchingField(contextualModel.getMatchingField(), lineBreaks);
+    var matchText = getMatchText(contextualModel.getMatchText(), lineBreaks);
+    int numberOfTokensLeft = contextualModel.getNumberOfTokensLeft();
+    int numberOfTokensRight = contextualModel.getNumberOfTokensRight();
+    int minTokens = contextualModel.getMinTokens();
 
     var matchingFieldSides = matchingField.split(matchText, -1);
     if (matchingFieldSides.length < 2) {
@@ -60,6 +52,14 @@ class AlertedPartyIdContextAdapter {
       return joinNonBlanks(SPACE, joinTokens(leftTokens), matchText, joinTokens(rightTokens));
     }
     return EMPTY;
+  }
+
+  private static String getMatchingField(String matchingField, boolean lineBreaks) {
+    return lineBreaks ? removeLineBreaks(matchingField) : matchingField;
+  }
+
+  private static String getMatchText(String matchText, boolean lineBreaks) {
+    return lineBreaks ? removeLineBreaks(matchText) : matchText;
   }
 
   private static String joinNonBlanks(String... tokens) {

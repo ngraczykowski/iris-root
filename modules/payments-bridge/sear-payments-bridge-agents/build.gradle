@@ -27,7 +27,4 @@ dependencies {
 
   //  Testing
   testImplementation libraries.silenteight_sep_base_testing
-
-  testImplementation libraries.spock_core
-  testImplementation libraries.spock_spring
 }

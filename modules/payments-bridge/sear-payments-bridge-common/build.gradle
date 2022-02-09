@@ -27,4 +27,7 @@ dependencies {
   implementation libraries.data_source_agentinput_api
 
   implementation libraries.spring_batch_core
+
+  testImplementation libraries.spock_core
+  testImplementation libraries.spock_spring
 }

@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.agents.service.contextual;
+package com.silenteight.payments.bridge.agents.service;
 
 import com.silenteight.datasource.api.historicaldecisions.v2.*;
 

@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.agents.service.contextual
+package com.silenteight.payments.bridge.common.agents
 
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -8,10 +8,17 @@ class AlertedPartyIdContextAdapterTest extends Specification {
   @Unroll
   def 'generates `#expectedResult` based on `#matchingField` and `#matchText` using generateAlertedPartyId'() {
     given:
-    def adapter = new AlertedPartyIdContextAdapter(numberOfTokensLeft, numberOfTokensRight, minTokens, lineBreaks)
+    def request = ContextualAlertedPartyIdModel.builder()
+        .matchingField(matchingField)
+        .matchText(matchText)
+        .numberOfTokensLeft(numberOfTokensLeft)
+        .numberOfTokensRight(numberOfTokensRight)
+        .minTokens(minTokens)
+        .lineBreaks(lineBreaks)
+        .build()
 
     when:
-    def result = adapter.generateAlertedPartyId(matchingField, matchText)
+    def result = AlertedPartyIdContextAdapter.generateAlertedPartyId(request)
 
     then:
     result == expectedResult
