@@ -58,4 +58,8 @@ public final class ChangeRequestFixtures {
   public static Stream<String> getIncorrectModelNames() {
     return Stream.of(MODEL_NAME_SHORTER_THAN_MIN_LENGTH, MODEL_NAME_THAT_EXCEEDED_MAX_LENGTH);
   }
+
+  private static Stream<String> getIncorrectAttachments() {
+    return Stream.of("files/this-is-no-uuid", "name/d293a102-85be-11ec-8c53-5f27abcfa50c");
+  }
 }
