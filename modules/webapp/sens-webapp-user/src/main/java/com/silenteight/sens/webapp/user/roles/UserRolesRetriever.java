@@ -3,9 +3,9 @@ package com.silenteight.sens.webapp.user.roles;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sep.usermanagement.api.UserQuery;
-import com.silenteight.sep.usermanagement.api.UserRoles;
-import com.silenteight.sep.usermanagement.api.dto.UserDto;
+import com.silenteight.sep.usermanagement.api.role.UserRoles;
+import com.silenteight.sep.usermanagement.api.user.UserQuery;
+import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
 
 import static java.util.Set.of;
 

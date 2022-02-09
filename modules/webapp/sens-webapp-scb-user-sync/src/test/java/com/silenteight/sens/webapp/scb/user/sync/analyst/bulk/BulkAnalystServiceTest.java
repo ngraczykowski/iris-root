@@ -10,7 +10,7 @@ import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase;
 import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase.RemoveUserCommand;
 import com.silenteight.sens.webapp.user.update.AddRolesToUserUseCase;
 import com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCase;
-import com.silenteight.sep.usermanagement.api.UserDomainError;
+import com.silenteight.sep.usermanagement.api.error.UserDomainError;
 
 import io.vavr.control.Either;
 import org.junit.jupiter.api.Test;

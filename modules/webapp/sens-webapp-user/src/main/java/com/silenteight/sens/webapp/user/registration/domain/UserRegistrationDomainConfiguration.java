@@ -4,8 +4,8 @@ import com.silenteight.sens.webapp.user.config.RolesProperties;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator;
 import com.silenteight.sens.webapp.user.domain.validator.RegexValidator;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
-import com.silenteight.sep.usermanagement.api.RolesValidator;
-import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator;
+import com.silenteight.sep.usermanagement.api.role.RoleValidator;
+import com.silenteight.sep.usermanagement.api.user.UsernameUniquenessValidator;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +19,7 @@ class UserRegistrationDomainConfiguration {
       @Qualifier("usernameLengthValidator") NameLengthValidator usernameLengthValidator,
       @Qualifier("usernameCharsValidator") RegexValidator usernameCharsValidator,
       @Qualifier("displayNameLengthValidator") NameLengthValidator displayNameLengthValidator,
-      RolesValidator rolesValidator,
+      RoleValidator roleValidator,
       UsernameUniquenessValidator usernameUniquenessValidator,
       @Qualifier("passwordCharsValidator") RegexValidator passwordCharsValidator,
       RolesProperties rolesProperties) {
@@ -29,7 +29,7 @@ class UserRegistrationDomainConfiguration {
         usernameLengthValidator,
         usernameCharsValidator,
         displayNameLengthValidator,
-        rolesValidator,
+        roleValidator,
         usernameUniquenessValidator,
         passwordCharsValidator,
         rolesProperties.getRolesScope());

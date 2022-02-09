@@ -3,8 +3,8 @@ package com.silenteight.sens.webapp.user.remove;
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.config.RolesProperties;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
-import com.silenteight.sep.usermanagement.api.UserQuery;
-import com.silenteight.sep.usermanagement.api.UserRemover;
+import com.silenteight.sep.usermanagement.api.user.UserQuery;
+import com.silenteight.sep.usermanagement.api.user.UserRemover;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,7 @@ class UserRemoveUseCaseConfiguration {
 
   @Bean
   RemoveUserUseCase removeUserUseCase(
-      UserQuery userQuery, 
+      UserQuery userQuery,
       UserRemover userRemover,
       AuditTracer auditTracer,
       UserRolesRetriever userRolesRetriever,

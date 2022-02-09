@@ -7,9 +7,9 @@ import com.silenteight.sens.webapp.sso.create.CreateSsoMappingCommand;
 import com.silenteight.sens.webapp.sso.create.dto.CreateSsoMappingDto;
 import com.silenteight.sens.webapp.sso.list.dto.AttributeToRoleDto;
 import com.silenteight.sens.webapp.sso.list.dto.SsoMappingDto;
-import com.silenteight.sep.usermanagement.api.dto.RoleMappingDto;
-import com.silenteight.sep.usermanagement.api.dto.RolesDto;
-import com.silenteight.sep.usermanagement.api.dto.SsoAttributeDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.RoleMappingDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.SsoAttributeDto;
+import com.silenteight.sep.usermanagement.api.role.dto.RolesDto;
 
 import java.util.List;
 import java.util.Set;

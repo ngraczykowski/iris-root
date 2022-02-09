@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
 import com.silenteight.sens.webapp.user.update.AddRolesToUserUseCase.AddRolesToUserCommand;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
-import com.silenteight.sep.usermanagement.api.dto.UserDto;
+import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
 
 import java.time.OffsetDateTime;
 import java.util.Map;

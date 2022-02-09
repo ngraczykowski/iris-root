@@ -7,10 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.sso.create.CreateSsoMappingCommand;
 import com.silenteight.sens.webapp.sso.delete.DeleteSsoMappingRequest;
 import com.silenteight.sens.webapp.sso.list.dto.AttributeToRoleDto;
-import com.silenteight.sep.usermanagement.api.IdentityProviderRoleMapper;
-import com.silenteight.sep.usermanagement.api.dto.CreateRoleMappingDto;
-import com.silenteight.sep.usermanagement.api.dto.RolesDto;
-import com.silenteight.sep.usermanagement.api.dto.SsoAttributeDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.IdentityProviderRoleMapper;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.CreateRoleMappingDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.SsoAttributeDto;
+import com.silenteight.sep.usermanagement.api.role.dto.RolesDto;
 
 import java.util.Set;
 

@@ -3,7 +3,7 @@ package com.silenteight.sens.webapp.sso.identityproviders;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import com.silenteight.sep.usermanagement.api.dto.IdentityProviderDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.IdentityProviderDto;
 
 import java.util.List;
 

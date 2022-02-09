@@ -6,10 +6,11 @@ import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase.RemoveUserCommand;
 import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
-import com.silenteight.sep.usermanagement.api.UserQuery;
-import com.silenteight.sep.usermanagement.api.UserRemover;
-import com.silenteight.sep.usermanagement.api.UserRoles;
-import com.silenteight.sep.usermanagement.api.dto.UserDto;
+import com.silenteight.sep.usermanagement.api.role.UserRoles;
+import com.silenteight.sep.usermanagement.api.user.UserQuery;
+import com.silenteight.sep.usermanagement.api.user.UserRemover;
+import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
+
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;

@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.backend.user.rest.dto;
 
 import lombok.*;
 
-import com.silenteight.sens.webapp.user.update.UpdateUserUseCase.UpdateUserCommand;
+import com.silenteight.sens.webapp.user.update.UpdateUserUseCase.UpdateUserRequest;
 
 import java.util.Set;
 import javax.annotation.Nullable;
@@ -27,8 +27,8 @@ public class UpdateUserDto {
   @Builder.Default
   private Set<String> countryGroups = emptySet();
 
-  public UpdateUserCommand toCommand(String username) {
-    return UpdateUserCommand.builder()
+  public UpdateUserRequest toCommand(String username) {
+    return UpdateUserRequest.builder()
         .username(username)
         .displayName(displayName)
         .roles(roles)

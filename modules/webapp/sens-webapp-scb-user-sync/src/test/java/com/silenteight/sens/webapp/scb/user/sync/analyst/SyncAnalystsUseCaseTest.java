@@ -11,7 +11,7 @@ import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.BulkCreateAnal
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.BulkUpdateDisplayNameRequest.UpdatedDisplayName;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.dto.SyncAnalystStatsDto;
 import com.silenteight.sens.webapp.user.config.RolesProperties;
-import com.silenteight.sep.usermanagement.api.UserQuery;
+import com.silenteight.sep.usermanagement.api.user.UserQuery;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 import com.silenteight.sens.webapp.sso.identityproviders.list.ListIdentityProvidersQuery;
-import com.silenteight.sep.usermanagement.api.IdentityProviderRepository;
-import com.silenteight.sep.usermanagement.api.dto.IdentityProviderDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.IdentityProviderQuery;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.IdentityProviderDto;
+
 
 import java.util.Collection;
 
@@ -13,10 +14,10 @@ import java.util.Collection;
 class IdentityProvidersQuery implements ListIdentityProvidersQuery {
 
   @NonNull
-  private final IdentityProviderRepository identityProviderRepository;
+  private final IdentityProviderQuery identityProviderQuery;
 
   @Override
   public Collection<IdentityProviderDto> listAll() {
-    return identityProviderRepository.findAll();
+    return identityProviderQuery.listAll();
   }
 }

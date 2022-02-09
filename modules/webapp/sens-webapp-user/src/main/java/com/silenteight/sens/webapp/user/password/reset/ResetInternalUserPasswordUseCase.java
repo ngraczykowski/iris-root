@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
-import com.silenteight.sep.usermanagement.api.ResettableUserCredentials;
-import com.silenteight.sep.usermanagement.api.TemporaryPassword;
-import com.silenteight.sep.usermanagement.api.TemporaryPasswordGenerator;
-import com.silenteight.sep.usermanagement.api.UserCredentialsRepository;
+import com.silenteight.sep.usermanagement.api.credentials.TemporaryPasswordGenerator;
+import com.silenteight.sep.usermanagement.api.credentials.UserCredentialsQuery;
+import com.silenteight.sep.usermanagement.api.credentials.UserCredentialsResetter;
+import com.silenteight.sep.usermanagement.api.credentials.dto.TemporaryPassword;
 
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 
@@ -17,7 +17,7 @@ import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANA
 public class ResetInternalUserPasswordUseCase {
 
   @NonNull
-  private final UserCredentialsRepository credentialsRepository;
+  private final UserCredentialsQuery userCredentialsQuery;
   @NonNull
   private final TemporaryPasswordGenerator temporaryPasswordGenerator;
   @NonNull
@@ -28,8 +28,8 @@ public class ResetInternalUserPasswordUseCase {
 
     auditTracer.save(new PasswordResetRequestedEvent(username, TemporaryPassword.class.getName()));
 
-    ResettableUserCredentials userCredentials = credentialsRepository
-        .findUserCredentials(username)
+    UserCredentialsResetter userCredentials = userCredentialsQuery
+        .findByUsername(username)
         .orElseThrow(() -> new UserNotFoundException(username));
 
     if (userCredentials.ownerIsNotInternal())
@@ -43,7 +43,7 @@ public class ResetInternalUserPasswordUseCase {
     return temporaryPassword;
   }
 
-  private TemporaryPassword resetPassword(ResettableUserCredentials credentials) {
+  private TemporaryPassword resetPassword(UserCredentialsResetter credentials) {
     TemporaryPassword password = temporaryPasswordGenerator.generate();
     credentials.reset(password);
 

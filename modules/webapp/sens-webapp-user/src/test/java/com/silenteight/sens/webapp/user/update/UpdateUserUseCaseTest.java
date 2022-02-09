@@ -6,9 +6,9 @@ import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.config.RolesProperties;
 import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
-import com.silenteight.sep.usermanagement.api.RolesValidator;
-import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
-import com.silenteight.sep.usermanagement.api.UserRoles;
+import com.silenteight.sep.usermanagement.api.role.RoleValidator;
+import com.silenteight.sep.usermanagement.api.role.UserRoles;
+import com.silenteight.sep.usermanagement.api.user.UserUpdater;
 
 import io.vavr.control.Option;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +37,7 @@ import static org.mockito.Mockito.*;
 class UpdateUserUseCaseTest {
 
   @Mock
-  private UpdatedUserRepository updatedUserRepository;
+  private UserUpdater userUpdater;
   @Mock
   private AuditTracer auditTracer;
   @Mock
@@ -54,7 +54,7 @@ class UpdateUserUseCaseTest {
     given(rolesProperties.getDefaultCountryGroupRole()).willReturn(COUNTRY_GROUP_ROLE);
 
     underTest = new UserUpdateUseCaseConfiguration().updateUserUseCase(
-        updatedUserRepository,
+        userUpdater,
         new DummyRolesValidator(),
         displayName -> Option.none(),
         auditTracer,
@@ -75,7 +75,7 @@ class UpdateUserUseCaseTest {
     underTest.apply(UPDATE_USER_COMMAND);
 
     // then
-    verify(updatedUserRepository).save(UPDATED_USER);
+    verify(userUpdater).update(UPDATED_USER);
   }
 
   @Test
@@ -113,7 +113,7 @@ class UpdateUserUseCaseTest {
     return new UpdatedUserDetails(UPDATED_USER, newRoles, currentRoles);
   }
 
-  private static class DummyRolesValidator implements RolesValidator {
+  private static class DummyRolesValidator implements RoleValidator {
 
     @Override
     public Optional<RolesDontExistError> validate(String scope, Set<String> roles) {

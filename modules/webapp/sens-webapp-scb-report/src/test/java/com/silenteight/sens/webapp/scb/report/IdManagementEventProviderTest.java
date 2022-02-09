@@ -10,7 +10,7 @@ import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase.RemoveUserComma
 import com.silenteight.sens.webapp.user.remove.RemovedUserDetails;
 import com.silenteight.sens.webapp.user.update.UpdatedUserDetails;
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
-import com.silenteight.sep.usermanagement.api.UpdatedUser;
+import com.silenteight.sep.usermanagement.api.user.dto.UpdateUserCommand;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -116,7 +116,7 @@ class IdManagementEventProviderTest {
 
     OffsetDateTime from = now().minusHours(7);
     OffsetDateTime to = now();
-    Set<String> roles =  Set.of(role);
+    Set<String> roles = Set.of(role);
 
     when(auditingFinder.find(from, to, USER_MANAGEMENT_EVENT_TYPES))
         .thenReturn(List.of(
@@ -233,7 +233,7 @@ class IdManagementEventProviderTest {
 
   private UpdatedUserDetails updatedUserDetailsWith(Set<String> roles) {
     return new UpdatedUserDetails(
-        UpdatedUser.builder()
+        UpdateUserCommand.builder()
             .username("not_used")
             .updateDate(now())
             .build(),

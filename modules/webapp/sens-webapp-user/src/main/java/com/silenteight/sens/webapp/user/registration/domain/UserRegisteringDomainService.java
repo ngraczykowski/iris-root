@@ -9,13 +9,14 @@ import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator.Inv
 import com.silenteight.sens.webapp.user.domain.validator.RegexValidator;
 import com.silenteight.sens.webapp.user.domain.validator.RegexValidator.RegexError;
 import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.sep.usermanagement.api.CompletedUserRegistration;
-import com.silenteight.sep.usermanagement.api.NewUserDetails.Credentials;
-import com.silenteight.sep.usermanagement.api.RolesValidator;
-import com.silenteight.sep.usermanagement.api.RolesValidator.RolesDontExistError;
-import com.silenteight.sep.usermanagement.api.UserDomainError;
-import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator;
-import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator.UsernameNotUniqueError;
+import com.silenteight.sep.usermanagement.api.error.UserDomainError;
+import com.silenteight.sep.usermanagement.api.role.RoleValidator;
+import com.silenteight.sep.usermanagement.api.role.RoleValidator.RolesDontExistError;
+import com.silenteight.sep.usermanagement.api.user.UsernameUniquenessValidator;
+import com.silenteight.sep.usermanagement.api.user.UsernameUniquenessValidator.UsernameNotUniqueError;
+import com.silenteight.sep.usermanagement.api.user.dto.CreateUserCommand;
+import com.silenteight.sep.usermanagement.api.user.dto.NewUserDetails.Credentials;
+
 
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -39,7 +40,7 @@ public class UserRegisteringDomainService {
   @NonNull
   private final NameLengthValidator displayNameLengthValidator;
   @NonNull
-  private final RolesValidator rolesValidator;
+  private final RoleValidator roleValidator;
   @NonNull
   private final UsernameUniquenessValidator usernameUniquenessValidator;
   @NonNull
@@ -47,7 +48,7 @@ public class UserRegisteringDomainService {
   @NonNull
   private final String rolesScope;
 
-  public Either<UserDomainError, CompletedUserRegistration> register(
+  public Either<UserDomainError, CreateUserCommand> register(
       NewUserRegistration registration) {
 
     log.info(USER_MANAGEMENT, "Registering User. registration={}", registration);
@@ -73,7 +74,7 @@ public class UserRegisteringDomainService {
 
     if (registration.hasRoles(rolesScope)) {
       Optional<RolesDontExistError> rolesDontExistError =
-          rolesValidator.validate(rolesScope, registration.getRoles(rolesScope));
+          roleValidator.validate(rolesScope, registration.getRoles(rolesScope));
 
       if (rolesDontExistError.isPresent())
         return left(rolesDontExistError.get());
@@ -89,7 +90,7 @@ public class UserRegisteringDomainService {
     }
 
     return right(
-        new CompletedUserRegistration(
+        new CreateUserCommand(
             registration.getUserDetails(),
             registration.getOrigin(),
             timeSource.offsetDateTime()));

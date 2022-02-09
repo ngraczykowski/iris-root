@@ -3,8 +3,8 @@ package com.silenteight.sens.webapp.user.roles;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sep.usermanagement.api.RolesQuery;
-import com.silenteight.sep.usermanagement.api.dto.RolesDto;
+import com.silenteight.sep.usermanagement.api.role.RolesQuery;
+import com.silenteight.sep.usermanagement.api.role.dto.RolesDto;
 
 @RequiredArgsConstructor
 public class ListRolesUseCase {

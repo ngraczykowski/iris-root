@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
-import com.silenteight.sep.usermanagement.api.UserLocker;
+import com.silenteight.sep.usermanagement.api.user.UserLocker;
 
 @RequiredArgsConstructor
 public class UnlockUserUseCase {

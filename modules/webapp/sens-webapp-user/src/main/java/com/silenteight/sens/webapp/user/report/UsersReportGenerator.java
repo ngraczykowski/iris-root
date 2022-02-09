@@ -10,9 +10,10 @@ import com.silenteight.sens.webapp.report.ReportGenerator;
 import com.silenteight.sens.webapp.report.SimpleReport;
 import com.silenteight.sep.base.common.time.DateFormatter;
 import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.sep.usermanagement.api.UserQuery;
-import com.silenteight.sep.usermanagement.api.UserRoles;
-import com.silenteight.sep.usermanagement.api.dto.UserDto;
+import com.silenteight.sep.usermanagement.api.role.UserRoles;
+import com.silenteight.sep.usermanagement.api.user.UserQuery;
+import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
+
 
 import io.vavr.control.Option;
 

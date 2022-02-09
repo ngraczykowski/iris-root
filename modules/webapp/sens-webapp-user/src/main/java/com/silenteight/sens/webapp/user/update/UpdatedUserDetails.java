@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import com.silenteight.sep.usermanagement.api.UpdatedUser;
+import com.silenteight.sep.usermanagement.api.user.dto.UpdateUserCommand;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
@@ -23,7 +23,7 @@ public class UpdatedUserDetails {
   private Collection<String> currentRoles;
 
   public UpdatedUserDetails(
-      UpdatedUser updatedUser, Set<String> newRoles, Collection<String> currentRoles) {
+      UpdateUserCommand updatedUser, Set<String> newRoles, Collection<String> currentRoles) {
 
     this.username = updatedUser.getUsername();
     this.displayName = updatedUser.getDisplayName();

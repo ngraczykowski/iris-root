@@ -7,9 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.sens.webapp.backend.report.domain.ReportMetadataService;
 import com.silenteight.sens.webapp.user.roles.UserNotFoundException;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
-import com.silenteight.sep.usermanagement.api.ConfigurationQuery;
-import com.silenteight.sep.usermanagement.api.EventQuery;
-import com.silenteight.sep.usermanagement.api.dto.EventDto;
+import com.silenteight.sep.usermanagement.api.configuration.ConfigurationQuery;
+import com.silenteight.sep.usermanagement.api.event.EventQuery;
+import com.silenteight.sep.usermanagement.api.event.dto.EventDto;
 
 import java.io.Serializable;
 import java.time.OffsetDateTime;
@@ -85,7 +85,7 @@ class UserAuthActivityEventProvider {
     OffsetDateTime reportFrom = getFromFilterValue(from);
     long reportFromMillis = reportFrom.toInstant().toEpochMilli();
 
-    return eventQuery.getEvents(reportFrom, List.of(LOGIN, LOGOUT, EXTEND_SESSION))
+    return eventQuery.list(reportFrom, List.of(LOGIN, LOGOUT, EXTEND_SESSION))
         .stream()
         .filter(e -> e.getTimestamp() >= reportFromMillis)
         .sorted(comparingLong(EventDto::getTimestamp))

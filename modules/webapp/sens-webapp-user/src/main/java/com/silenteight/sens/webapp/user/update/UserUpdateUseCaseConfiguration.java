@@ -4,9 +4,9 @@ import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.config.RolesProperties;
 import com.silenteight.sens.webapp.user.domain.validator.NameLengthValidator;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
-import com.silenteight.sep.usermanagement.api.RolesValidator;
-import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
-import com.silenteight.sep.usermanagement.api.UserQuery;
+import com.silenteight.sep.usermanagement.api.role.RoleValidator;
+import com.silenteight.sep.usermanagement.api.user.UserQuery;
+import com.silenteight.sep.usermanagement.api.user.UserUpdater;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -17,24 +17,24 @@ class UserUpdateUseCaseConfiguration {
 
   @Bean
   UpdateUserDisplayNameUseCase updateUserDisplayNameUseCase(
-      UpdatedUserRepository updatedUserRepository,
+      UserUpdater userUpdater,
       AuditTracer auditTracer,
       UserRolesRetriever userRolesRetriever,
       RolesProperties rolesProperties) {
 
     return new UpdateUserDisplayNameUseCase(
-        updatedUserRepository, auditTracer, userRolesRetriever, rolesProperties.getRolesScope());
+        userUpdater, auditTracer, userRolesRetriever, rolesProperties.getRolesScope());
   }
 
   @Bean
   AddRolesToUserUseCase addRolesToUserUseCase(
-      UpdatedUserRepository updatedUserRepository,
+      UserUpdater userUpdater,
       UserQuery userQuery,
       AuditTracer auditTracer,
       RolesProperties rolesProperties) {
 
     return new AddRolesToUserUseCase(
-        updatedUserRepository,
+        userUpdater,
         userQuery,
         auditTracer,
         rolesProperties.getRolesScope(),
@@ -43,18 +43,18 @@ class UserUpdateUseCaseConfiguration {
 
   @Bean
   UpdateUserUseCase updateUserUseCase(
-      UpdatedUserRepository updatedUserRepository,
-      RolesValidator rolesValidator,
+      UserUpdater userUpdater,
+      RoleValidator roleValidator,
       @Qualifier("displayNameLengthValidator") NameLengthValidator displayNameLengthValidator,
       AuditTracer auditTracer,
       UserRolesRetriever userRolesRetriever,
       RolesProperties rolesProperties) {
 
     return new UpdateUserUseCase(
-        updatedUserRepository, 
-        displayNameLengthValidator, 
-        rolesValidator, 
-        auditTracer, 
+        userUpdater,
+        displayNameLengthValidator,
+        roleValidator,
+        auditTracer,
         userRolesRetriever,
         rolesProperties.getRolesScope(),
         rolesProperties.getCountryGroupsScope(),

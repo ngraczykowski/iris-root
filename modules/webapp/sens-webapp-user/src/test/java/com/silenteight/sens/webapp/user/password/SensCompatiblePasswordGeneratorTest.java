@@ -2,7 +2,7 @@ package com.silenteight.sens.webapp.user.password;
 
 import com.silenteight.sens.webapp.user.password.SensCompatiblePasswordGenerator.SensPasswordGeneratorConfig;
 import com.silenteight.sens.webapp.user.password.SensCompatiblePasswordGenerator.StringGenerator;
-import com.silenteight.sep.usermanagement.api.TemporaryPassword;
+import com.silenteight.sep.usermanagement.api.credentials.dto.TemporaryPassword;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

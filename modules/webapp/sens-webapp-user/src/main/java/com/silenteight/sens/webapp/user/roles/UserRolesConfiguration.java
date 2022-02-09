@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.user.roles;
 
 import com.silenteight.sens.webapp.user.config.RolesProperties;
-import com.silenteight.sep.usermanagement.api.RolesQuery;
-import com.silenteight.sep.usermanagement.api.UserQuery;
+import com.silenteight.sep.usermanagement.api.role.RolesQuery;
+import com.silenteight.sep.usermanagement.api.user.UserQuery;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

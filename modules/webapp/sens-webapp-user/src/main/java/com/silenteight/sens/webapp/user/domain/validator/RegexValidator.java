@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.user.domain.validator;
 
-import com.silenteight.sep.usermanagement.api.SimpleUserDomainError;
+import com.silenteight.sep.usermanagement.api.error.SimpleUserDomainError;
 
 import io.vavr.control.Option;
 

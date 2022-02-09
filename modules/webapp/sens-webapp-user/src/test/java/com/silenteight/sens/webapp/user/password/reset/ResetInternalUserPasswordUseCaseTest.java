@@ -10,9 +10,10 @@ import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.password.SensCompatiblePasswordGenerator;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserIsNotInternalException;
 import com.silenteight.sens.webapp.user.password.reset.ResetInternalUserPasswordUseCase.UserNotFoundException;
-import com.silenteight.sep.usermanagement.api.ResettableUserCredentials;
-import com.silenteight.sep.usermanagement.api.TemporaryPassword;
-import com.silenteight.sep.usermanagement.api.UserCredentialsRepository;
+import com.silenteight.sep.usermanagement.api.credentials.UserCredentialsQuery;
+import com.silenteight.sep.usermanagement.api.credentials.UserCredentialsResetter;
+import com.silenteight.sep.usermanagement.api.credentials.dto.TemporaryPassword;
+
 
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
@@ -45,7 +46,7 @@ class ResetInternalUserPasswordUseCaseTest {
   private ResetInternalUserPasswordUseCase underTest;
 
   @Mock
-  private UserCredentialsRepository credentialsRepo;
+  private UserCredentialsQuery credentialsRepo;
   @Mock
   private SensCompatiblePasswordGenerator passwordGenerator;
   @Mock
@@ -53,7 +54,7 @@ class ResetInternalUserPasswordUseCaseTest {
 
   @Test
   void userDoesntExist_throwsException() {
-    given(credentialsRepo.findUserCredentials(USERNAME)).willReturn(empty());
+    given(credentialsRepo.findByUsername(USERNAME)).willReturn(empty());
 
     ThrowingCallable when = () -> underTest.execute(USERNAME);
 
@@ -63,7 +64,7 @@ class ResetInternalUserPasswordUseCaseTest {
   @Test
   void userExistAndIsInternal_generatesPasswordResetsAndReturnsGenerated() {
     UUID correlationId = RequestCorrelation.id();
-    given(credentialsRepo.findUserCredentials(USERNAME)).willReturn(of(INTERNAL_CREDENTIALS));
+    given(credentialsRepo.findByUsername(USERNAME)).willReturn(of(INTERNAL_CREDENTIALS));
     given(passwordGenerator.generate()).willReturn(TemporaryPassword.of(GENERATED_PASSWORD));
 
     TemporaryPassword actual = underTest.execute(USERNAME);
@@ -89,7 +90,7 @@ class ResetInternalUserPasswordUseCaseTest {
 
   @Test
   void userExistsAndIsNotInternal_throwsException() {
-    given(credentialsRepo.findUserCredentials(USERNAME)).willReturn(of(NON_INTERNAL_CREDENTIALS));
+    given(credentialsRepo.findByUsername(USERNAME)).willReturn(of(NON_INTERNAL_CREDENTIALS));
 
     ThrowingCallable when = () -> underTest.execute(USERNAME);
 
@@ -108,7 +109,7 @@ class ResetInternalUserPasswordUseCaseTest {
   }
 
   @RequiredArgsConstructor
-  static class SimpleUserCredentials implements ResettableUserCredentials {
+  static class SimpleUserCredentials implements UserCredentialsResetter {
 
     private final boolean isInternal;
 

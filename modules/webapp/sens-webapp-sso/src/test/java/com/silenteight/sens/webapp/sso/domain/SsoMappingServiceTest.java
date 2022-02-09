@@ -1,8 +1,8 @@
 package com.silenteight.sens.webapp.sso.domain;
 
 import com.silenteight.sens.webapp.sso.delete.DeleteSsoMappingRequest;
-import com.silenteight.sep.usermanagement.api.IdentityProviderRoleMapper;
-import com.silenteight.sep.usermanagement.api.dto.CreateRoleMappingDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.IdentityProviderRoleMapper;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.CreateRoleMappingDto;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

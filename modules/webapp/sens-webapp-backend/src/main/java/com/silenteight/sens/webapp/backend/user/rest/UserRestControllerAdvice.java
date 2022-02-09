@@ -5,8 +5,8 @@ import com.silenteight.sens.webapp.common.rest.exception.AbstractErrorController
 import com.silenteight.sens.webapp.common.rest.exception.ControllerAdviceOrder;
 import com.silenteight.sens.webapp.user.remove.OriginNotMatchingException;
 import com.silenteight.sens.webapp.user.remove.UserNotFoundException;
-import com.silenteight.sep.usermanagement.api.UserDomainError;
-import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator.UsernameNotUniqueError;
+import com.silenteight.sep.usermanagement.api.error.UserDomainError;
+import com.silenteight.sep.usermanagement.api.user.UsernameUniquenessValidator.UsernameNotUniqueError;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;

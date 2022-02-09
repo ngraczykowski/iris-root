@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sep.usermanagement.api.UserRoles;
+import com.silenteight.sep.usermanagement.api.role.UserRoles;
 
 import java.util.HashSet;
 import java.util.List;

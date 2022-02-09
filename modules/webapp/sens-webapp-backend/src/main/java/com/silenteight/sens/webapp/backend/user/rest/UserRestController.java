@@ -20,11 +20,12 @@ import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase.RemoveUserComma
 import com.silenteight.sens.webapp.user.roles.ListRolesUseCase;
 import com.silenteight.sens.webapp.user.update.UpdateUserUseCase;
 import com.silenteight.sens.webapp.user.update.exception.DisplayNameValidationException;
-import com.silenteight.sep.usermanagement.api.RolesValidationException;
-import com.silenteight.sep.usermanagement.api.TemporaryPassword;
-import com.silenteight.sep.usermanagement.api.UpdatedUserRepository.UserUpdateException;
-import com.silenteight.sep.usermanagement.api.UserDomainError;
-import com.silenteight.sep.usermanagement.api.dto.RolesDto;
+import com.silenteight.sep.usermanagement.api.credentials.dto.TemporaryPassword;
+import com.silenteight.sep.usermanagement.api.error.UserDomainError;
+import com.silenteight.sep.usermanagement.api.role.RoleValidationException;
+import com.silenteight.sep.usermanagement.api.role.dto.RolesDto;
+import com.silenteight.sep.usermanagement.api.user.UserUpdater.UserUpdateException;
+
 
 import io.vavr.control.Either;
 import io.vavr.control.Try;
@@ -136,7 +137,7 @@ class UserRestController {
         .mapTry(ignore -> new ResponseEntity<Void>(NO_CONTENT))
         .recover(UserUpdateException.class, e -> status(INSUFFICIENT_STORAGE).build())
         .recover(DisplayNameValidationException.class, e -> status(UNPROCESSABLE_ENTITY).build())
-        .recover(RolesValidationException.class, e -> status(UNPROCESSABLE_ENTITY).build())
+        .recover(RoleValidationException.class, e -> status(UNPROCESSABLE_ENTITY).build())
         .getOrElse(status(INTERNAL_SERVER_ERROR).build());
   }
 

@@ -3,7 +3,7 @@ package com.silenteight.sens.webapp.user.lock;
 import com.silenteight.sens.webapp.audit.api.correlation.RequestCorrelation;
 import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
-import com.silenteight.sep.usermanagement.api.UserLocker;
+import com.silenteight.sep.usermanagement.api.user.UserLocker;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

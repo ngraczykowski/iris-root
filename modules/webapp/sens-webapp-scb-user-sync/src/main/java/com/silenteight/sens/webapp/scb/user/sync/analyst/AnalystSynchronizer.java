@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.scb.user.sync.analyst.domain.GnsOrigin;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.dto.Analyst;
-import com.silenteight.sep.usermanagement.api.dto.UserDto;
+import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
 
 import org.apache.commons.lang3.StringUtils;
 

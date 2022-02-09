@@ -10,11 +10,11 @@ import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserRegistration;
 import com.silenteight.sens.webapp.user.registration.domain.UserRegisteringDomainService;
 import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
-import com.silenteight.sep.usermanagement.api.NewUserDetails;
-import com.silenteight.sep.usermanagement.api.NewUserDetails.Credentials;
-import com.silenteight.sep.usermanagement.api.RegisteredUserRepository;
-import com.silenteight.sep.usermanagement.api.UserDomainError;
-import com.silenteight.sep.usermanagement.api.UserRoles;
+import com.silenteight.sep.usermanagement.api.error.UserDomainError;
+import com.silenteight.sep.usermanagement.api.role.UserRoles;
+import com.silenteight.sep.usermanagement.api.user.UserCreator;
+import com.silenteight.sep.usermanagement.api.user.dto.NewUserDetails;
+import com.silenteight.sep.usermanagement.api.user.dto.NewUserDetails.Credentials;
 
 import io.vavr.control.Either;
 
@@ -33,13 +33,14 @@ public class RegisterInternalUserUseCase extends BaseRegisterUserUseCase {
 
   public RegisterInternalUserUseCase(
       UserRegisteringDomainService userRegisteringDomainService,
-      RegisteredUserRepository registeredUserRepository,
+      UserCreator userCreator,
       AuditTracer auditTracer,
       String rolesScope,
       String countryGroupsScope) {
 
-    super(userRegisteringDomainService,
-        registeredUserRepository,
+    super(
+        userRegisteringDomainService,
+        userCreator,
         auditTracer,
         rolesScope,
         countryGroupsScope);
@@ -95,7 +96,7 @@ public class RegisterInternalUserUseCase extends BaseRegisterUserUseCase {
       return new ScopeUserRoles(
           Map.of(
               rolesClientId, new ArrayList<>(roles),
-              countryGroupsClientId,  new ArrayList<>(countryGroups)));
+              countryGroupsClientId, new ArrayList<>(countryGroups)));
     }
   }
 }

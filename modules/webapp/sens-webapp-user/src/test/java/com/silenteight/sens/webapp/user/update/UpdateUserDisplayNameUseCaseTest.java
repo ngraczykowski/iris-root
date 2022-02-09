@@ -5,9 +5,9 @@ import com.silenteight.sens.webapp.audit.api.trace.AuditEvent;
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
-import com.silenteight.sep.usermanagement.api.UpdatedUser;
-import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
-import com.silenteight.sep.usermanagement.api.UserRoles;
+import com.silenteight.sep.usermanagement.api.role.UserRoles;
+import com.silenteight.sep.usermanagement.api.user.UserUpdater;
+import com.silenteight.sep.usermanagement.api.user.dto.UpdateUserCommand;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class UpdateUserDisplayNameUseCaseTest {
   private static final String ROLES_SCOPE = "frontend";
 
   @Mock
-  private UpdatedUserRepository updatedUserRepository;
+  private UserUpdater userUpdater;
   @Mock
   private AuditTracer auditTracer;
   @Mock
@@ -44,7 +44,7 @@ class UpdateUserDisplayNameUseCaseTest {
   @BeforeEach
   void setUp() {
     underTest = new UpdateUserDisplayNameUseCase(
-        updatedUserRepository, auditTracer, userRolesRetriever, ROLES_SCOPE);
+        userUpdater, auditTracer, userRolesRetriever, ROLES_SCOPE);
   }
 
   @Test
@@ -59,9 +59,9 @@ class UpdateUserDisplayNameUseCaseTest {
     underTest.apply(NEW_DISPLAY_NAME_COMMAND);
 
     // then
-    UpdatedUser updatedUser = updatedUser(
+    UpdateUserCommand updatedUser = updatedUser(
         NEW_DISPLAY_NAME_COMMAND.getUsername(), NEW_DISPLAY_NAME_COMMAND.getDisplayName());
-    verify(updatedUserRepository).save(updatedUser);
+    verify(userUpdater).update(updatedUser);
   }
 
   @Test
@@ -95,8 +95,8 @@ class UpdateUserDisplayNameUseCaseTest {
             new HashSet<>(roles)));
   }
 
-  private static UpdatedUser updatedUser(String username, String displayName) {
-    return UpdatedUser
+  private static UpdateUserCommand updatedUser(String username, String displayName) {
+    return UpdateUserCommand
         .builder()
         .username(username)
         .displayName(displayName)

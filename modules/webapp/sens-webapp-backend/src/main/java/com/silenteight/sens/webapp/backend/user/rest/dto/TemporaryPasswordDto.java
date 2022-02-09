@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
-import com.silenteight.sep.usermanagement.api.TemporaryPassword;
+import com.silenteight.sep.usermanagement.api.credentials.dto.TemporaryPassword;
 
 @Value
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

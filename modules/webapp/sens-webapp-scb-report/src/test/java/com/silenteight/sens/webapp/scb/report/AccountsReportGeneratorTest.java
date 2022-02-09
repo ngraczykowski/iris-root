@@ -2,8 +2,8 @@ package com.silenteight.sens.webapp.scb.report;
 
 import com.silenteight.sens.webapp.report.Report;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
-import com.silenteight.sep.usermanagement.api.UserQuery;
-import com.silenteight.sep.usermanagement.api.dto.UserDto;
+import com.silenteight.sep.usermanagement.api.user.UserQuery;
+import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;

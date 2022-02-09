@@ -1,6 +1,6 @@
 package com.silenteight.sens.webapp.sso.domain;
 
-import com.silenteight.sep.usermanagement.api.IdentityProviderRoleMapper;
+import com.silenteight.sep.usermanagement.api.identityprovider.IdentityProviderRoleMapper;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

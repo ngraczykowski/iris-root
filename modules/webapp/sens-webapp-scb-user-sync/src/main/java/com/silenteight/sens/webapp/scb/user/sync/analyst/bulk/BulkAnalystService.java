@@ -14,7 +14,7 @@ import com.silenteight.sens.webapp.user.update.AddRolesToUserUseCase;
 import com.silenteight.sens.webapp.user.update.AddRolesToUserUseCase.AddRolesToUserCommand;
 import com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCase;
 import com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCase.UpdateUserDisplayNameCommand;
-import com.silenteight.sep.usermanagement.api.UserDomainError;
+import com.silenteight.sep.usermanagement.api.error.UserDomainError;
 
 import io.vavr.control.Either;
 

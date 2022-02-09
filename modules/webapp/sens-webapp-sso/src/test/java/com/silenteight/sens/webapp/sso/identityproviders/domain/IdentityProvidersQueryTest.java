@@ -1,7 +1,8 @@
 package com.silenteight.sens.webapp.sso.identityproviders.domain;
 
-import com.silenteight.sep.usermanagement.api.IdentityProviderRepository;
-import com.silenteight.sep.usermanagement.api.dto.IdentityProviderDto;
+
+import com.silenteight.sep.usermanagement.api.identityprovider.IdentityProviderQuery;
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.IdentityProviderDto;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,12 +27,12 @@ class IdentityProvidersQueryTest {
   IdentityProvidersQuery underTest;
 
   @Mock
-  IdentityProviderRepository identityProviderRepository;
+  IdentityProviderQuery identityProviderQuery;
 
   @Test
   void shouldReturnIdentityProvidersDtoList() {
     //given + when
-    when(identityProviderRepository.findAll()).thenReturn(IDENTITY_PROVIDER_LIST);
+    when(identityProviderQuery.listAll()).thenReturn(IDENTITY_PROVIDER_LIST);
 
     //then
     List<IdentityProviderDto> identityProviderDtosList = new ArrayList<>(underTest.listAll());

@@ -4,7 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.sep.usermanagement.api.dto.IdentityProviderDto;
+
+import com.silenteight.sep.usermanagement.api.identityprovider.dto.IdentityProviderDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

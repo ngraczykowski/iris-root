@@ -2,8 +2,8 @@ package com.silenteight.sens.webapp.backend.user.rest;
 
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
 import com.silenteight.sens.webapp.user.update.exception.DisplayNameValidationException;
-import com.silenteight.sep.usermanagement.api.RolesValidationException;
-import com.silenteight.sep.usermanagement.api.UpdatedUserRepository.UserUpdateException;
+import com.silenteight.sep.usermanagement.api.role.RoleValidationException;
+import com.silenteight.sep.usermanagement.api.user.UserUpdater.UserUpdateException;
 
 import org.springframework.context.annotation.Import;
 
@@ -40,7 +40,7 @@ class UpdateUserUseCaseRestControllerTest extends UserRestControllerTest {
 
   @TestWithRole(role = USER_ADMINISTRATOR)
   void its422_whenRolesValidationException() {
-    doThrow(RolesValidationException.class).when(updateUserUseCase).apply(any());
+    doThrow(RoleValidationException.class).when(updateUserUseCase).apply(any());
 
     patch("/users/" + USERNAME, VALID_UPDATE_REQUEST).statusCode(UNPROCESSABLE_ENTITY.value());
   }

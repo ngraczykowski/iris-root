@@ -4,10 +4,10 @@ import com.silenteight.sens.webapp.backend.report.domain.ReportMetadataService;
 import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.sep.usermanagement.api.ConfigurationQuery;
-import com.silenteight.sep.usermanagement.api.EventQuery;
-import com.silenteight.sep.usermanagement.api.UserRoles;
-import com.silenteight.sep.usermanagement.api.dto.EventDto;
+import com.silenteight.sep.usermanagement.api.configuration.ConfigurationQuery;
+import com.silenteight.sep.usermanagement.api.event.EventQuery;
+import com.silenteight.sep.usermanagement.api.event.dto.EventDto;
+import com.silenteight.sep.usermanagement.api.role.UserRoles;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -80,7 +80,7 @@ class UserAuthActivityEventProviderTest {
     OffsetDateTime to = TIME_SOURCE.offsetDateTime();
     OffsetDateTime from = to.minusMinutes(REPORT_PERIOD_IN_MINUTES);
     when(reportMetadataService.getStartTime(REPORT_NAME)).thenReturn(null);
-    when(eventQuery.getEvents(any(), any())).thenReturn(emptyList());
+    when(eventQuery.list(any(), any())).thenReturn(emptyList());
 
     // when
     List<UserAuthActivityEventDto> data = underTest.provide(from, to);
@@ -100,7 +100,7 @@ class UserAuthActivityEventProviderTest {
     long loginTimestamp = createPastTimestamp(to, 40);
     long logoutTimestamp = createPastTimestamp(to, 20);
     when(reportMetadataService.getStartTime(REPORT_NAME)).thenReturn(null);
-    when(eventQuery.getEvents(any(), any())).thenReturn(
+    when(eventQuery.list(any(), any())).thenReturn(
         List.of(
             makeLoginEventDto(codeId, userId, userName, loginTimestamp),
             makeLogoutEventDto(userId, logoutTimestamp)));
@@ -128,7 +128,7 @@ class UserAuthActivityEventProviderTest {
     long logoutTimestamp1 = createPastTimestamp(to, 70);
     long logoutTimestamp2 = createPastTimestamp(to, 20);
     when(reportMetadataService.getStartTime(REPORT_NAME)).thenReturn(null);
-    when(eventQuery.getEvents(any(), any())).thenReturn(
+    when(eventQuery.list(any(), any())).thenReturn(
         List.of(
             makeLoginEventDto(codeId, userId, userName, loginTimestamp1),
             makeLoginEventDto(codeId, userId, userName, loginTimestamp2),
@@ -155,7 +155,7 @@ class UserAuthActivityEventProviderTest {
     OffsetDateTime from = to.minusMinutes(REPORT_PERIOD_IN_MINUTES);
     long loginTimestamp = createPastTimestamp(to, 40);
     when(reportMetadataService.getStartTime(REPORT_NAME)).thenReturn(null);
-    when(eventQuery.getEvents(any(), any())).thenReturn(
+    when(eventQuery.list(any(), any())).thenReturn(
         List.of(makeLoginEventDto(codeId, userId, userName, loginTimestamp)));
     when(userRolesRetriever.rolesOf(anyString())).thenReturn(USER_ROLES);
 
@@ -179,7 +179,7 @@ class UserAuthActivityEventProviderTest {
     OffsetDateTime from = to.minusMinutes(REPORT_PERIOD_IN_MINUTES);
     long loginTimestamp = createPastTimestamp(to, 20);
     when(reportMetadataService.getStartTime(REPORT_NAME)).thenReturn(null);
-    when(eventQuery.getEvents(any(), any())).thenReturn(
+    when(eventQuery.list(any(), any())).thenReturn(
         List.of(makeLoginEventDto(codeId, userId, userName, loginTimestamp)));
     when(userRolesRetriever.rolesOf(anyString())).thenReturn(USER_ROLES);
 
@@ -206,7 +206,7 @@ class UserAuthActivityEventProviderTest {
     long extendSessionTimestamp3 = createPastTimestamp(to, 10);
     OffsetDateTime startTime = to.minusMinutes(70);
     when(reportMetadataService.getStartTime(REPORT_NAME)).thenReturn(startTime);
-    when(eventQuery.getEvents(any(), any())).thenReturn(
+    when(eventQuery.list(any(), any())).thenReturn(
         List.of(
             makeLoginEventDto(codeId, userId, userName, loginTimestamp),
             makeExtendSessionEventDto(codeId, userId, extendSessionTimestamp1),
@@ -236,7 +236,7 @@ class UserAuthActivityEventProviderTest {
     long logoutTimestamp1 = createPastTimestamp(to, 35);
     long logoutTimestamp2 = createPastTimestamp(to, 38);
     when(reportMetadataService.getStartTime(REPORT_NAME)).thenReturn(null);
-    when(eventQuery.getEvents(any(), any())).thenReturn(
+    when(eventQuery.list(any(), any())).thenReturn(
         List.of(
             makeLoginEventDto(codeId1, userId1, userName1, loginTimestamp1),
             makeLoginEventDto(codeId2, userId2, userName2, loginTimestamp2),
@@ -265,7 +265,7 @@ class UserAuthActivityEventProviderTest {
     long loginTimestamp1 = createPastTimestamp(to, 50);
     long loginTimestamp2 = createPastTimestamp(to, 40);
     when(reportMetadataService.getStartTime(REPORT_NAME)).thenReturn(null);
-    when(eventQuery.getEvents(any(), any())).thenReturn(
+    when(eventQuery.list(any(), any())).thenReturn(
         List.of(
             makeLoginEventDto(codeId, userId, userName, loginTimestamp1),
             makeLoginEventDto(codeId, loginTimestamp2)));
@@ -292,7 +292,7 @@ class UserAuthActivityEventProviderTest {
     long loginTimestamp1 = createPastTimestamp(to, 50);
     long loginTimestamp2 = createPastTimestamp(to, 25);
     when(reportMetadataService.getStartTime(REPORT_NAME)).thenReturn(null);
-    when(eventQuery.getEvents(any(), any())).thenReturn(
+    when(eventQuery.list(any(), any())).thenReturn(
         List.of(
             makeLoginEventDto(codeId, userId, userName, loginTimestamp1),
             makeLoginEventDto(codeId, loginTimestamp2)));
@@ -318,7 +318,7 @@ class UserAuthActivityEventProviderTest {
     long loginTimestamp = createPastTimestamp(to, 50);
     long extendSessionTimestamp = createPastTimestamp(to, 40);
     when(reportMetadataService.getStartTime(REPORT_NAME)).thenReturn(null);
-    when(eventQuery.getEvents(any(), any())).thenReturn(
+    when(eventQuery.list(any(), any())).thenReturn(
         List.of(
             makeLoginEventDto(codeId, userId, userName, loginTimestamp),
             makeExtendSessionEventDto(codeId, userId, extendSessionTimestamp)));
@@ -345,7 +345,7 @@ class UserAuthActivityEventProviderTest {
     long loginTimestamp = createPastTimestamp(to, 50);
     long extendSessionTimestamp = createPastTimestamp(to, 25);
     when(reportMetadataService.getStartTime(REPORT_NAME)).thenReturn(null);
-    when(eventQuery.getEvents(any(), any())).thenReturn(
+    when(eventQuery.list(any(), any())).thenReturn(
         List.of(
             makeLoginEventDto(codeId, userId, userName, loginTimestamp),
             makeExtendSessionEventDto(codeId, userId, extendSessionTimestamp)));
@@ -382,7 +382,7 @@ class UserAuthActivityEventProviderTest {
     long extendSessionTimestamp2 = createPastTimestamp(to, 38);
     long extendSessionTimestamp3 = createPastTimestamp(to, 35);
     when(reportMetadataService.getStartTime(REPORT_NAME)).thenReturn(null);
-    when(eventQuery.getEvents(any(), any())).thenReturn(
+    when(eventQuery.list(any(), any())).thenReturn(
         List.of(
             makeLoginEventDto(codeId1, userId1, userName1, loginTimestamp1),
             makeLoginEventDto(codeId2, userId2, userName2, loginTimestamp2),
@@ -438,7 +438,7 @@ class UserAuthActivityEventProviderTest {
     OffsetDateTime startTime = to.minusMinutes(100);
     when(reportMetadataService.getStartTime(REPORT_NAME)).thenReturn(startTime);
 
-    when(eventQuery.getEvents(any(), any())).thenReturn(
+    when(eventQuery.list(any(), any())).thenReturn(
         List.of(
             makeLoginEventDto(codeId1, userId1, userName1, loginTimestamp1),
             makeLoginEventDto(codeId2, userId2, userName2, loginTimestamp2),

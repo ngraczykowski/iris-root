@@ -8,7 +8,7 @@ import com.silenteight.sens.webapp.user.registration.RegisterExternalUserUseCase
 import com.silenteight.sens.webapp.user.remove.RemoveUserUseCase;
 import com.silenteight.sens.webapp.user.update.AddRolesToUserUseCase;
 import com.silenteight.sens.webapp.user.update.UpdateUserDisplayNameUseCase;
-import com.silenteight.sep.usermanagement.api.UserQuery;
+import com.silenteight.sep.usermanagement.api.user.UserQuery;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;

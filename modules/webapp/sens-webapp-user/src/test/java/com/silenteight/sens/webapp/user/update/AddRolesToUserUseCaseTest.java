@@ -3,9 +3,9 @@ package com.silenteight.sens.webapp.user.update;
 import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.config.RolesProperties;
 import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
-import com.silenteight.sep.usermanagement.api.UpdatedUser;
-import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
-import com.silenteight.sep.usermanagement.api.UserQuery;
+import com.silenteight.sep.usermanagement.api.user.UserQuery;
+import com.silenteight.sep.usermanagement.api.user.UserUpdater;
+import com.silenteight.sep.usermanagement.api.user.dto.UpdateUserCommand;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 class AddRolesToUserUseCaseTest {
 
   @Mock
-  private UpdatedUserRepository updatedUserRepository;
+  private UserUpdater userUpdater;
   @Mock
   private UserQuery userQuery;
   @Mock
@@ -42,7 +42,7 @@ class AddRolesToUserUseCaseTest {
     given(rolesProperties.getCountryGroupsScope()).willReturn(COUNTRY_GROUPS_SCOPE);
 
     underTest = new UserUpdateUseCaseConfiguration()
-        .addRolesToUserUseCase(updatedUserRepository, userQuery, auditTracer, rolesProperties);
+        .addRolesToUserUseCase(userUpdater, userQuery, auditTracer, rolesProperties);
 
     when(userQuery.find(
         ADD_ANALYST_ROLE_COMMAND.getUsername(), Set.of(ROLES_SCOPE, COUNTRY_GROUPS_SCOPE)))
@@ -55,13 +55,13 @@ class AddRolesToUserUseCaseTest {
     underTest.apply(ADD_ANALYST_ROLE_COMMAND);
 
     // then
-    verify(updatedUserRepository).save(
+    verify(userUpdater).update(
         updatedUser(
             ADD_ANALYST_ROLE_COMMAND.getUsername(), ADD_ANALYST_ROLE_COMMAND.getRolesToAdd()));
   }
 
-  private static UpdatedUser updatedUser(String username, Set<String> roles) {
-    return UpdatedUser.builder()
+  private static UpdateUserCommand updatedUser(String username, Set<String> roles) {
+    return UpdateUserCommand.builder()
         .username(username)
         .roles(new ScopeUserRoles(Map.of(ROLES_SCOPE, new ArrayList<>(roles))))
         .updateDate(OFFSET_DATE_TIME)

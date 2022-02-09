@@ -9,12 +9,12 @@ import com.silenteight.sens.webapp.user.domain.validator.RegexValidator.RegexErr
 import com.silenteight.sens.webapp.user.registration.RegisterInternalUserUseCase.RegisterInternalUserCommand;
 import com.silenteight.sens.webapp.user.registration.domain.UserRegisteringDomainService;
 import com.silenteight.sens.webapp.user.registration.domain.UserRegistrationDomainTestConfiguration;
-import com.silenteight.sep.usermanagement.api.RegisteredUserRepository;
-import com.silenteight.sep.usermanagement.api.RolesValidator;
-import com.silenteight.sep.usermanagement.api.RolesValidator.RolesDontExistError;
-import com.silenteight.sep.usermanagement.api.UserDomainError;
-import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator;
-import com.silenteight.sep.usermanagement.api.UsernameUniquenessValidator.UsernameNotUniqueError;
+import com.silenteight.sep.usermanagement.api.error.UserDomainError;
+import com.silenteight.sep.usermanagement.api.role.RoleValidator;
+import com.silenteight.sep.usermanagement.api.role.RoleValidator.RolesDontExistError;
+import com.silenteight.sep.usermanagement.api.user.UserCreator;
+import com.silenteight.sep.usermanagement.api.user.UsernameUniquenessValidator;
+import com.silenteight.sep.usermanagement.api.user.UsernameUniquenessValidator.UsernameNotUniqueError;
 
 import io.vavr.control.Either;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,9 +49,9 @@ class RegisterInternalUserUseCaseTest {
   @Mock
   private UsernameUniquenessValidator usernameUniquenessValidator;
   @Mock
-  private RolesValidator rolesValidator;
+  private RoleValidator roleValidator;
   @Mock
-  private RegisteredUserRepository registeredUserRepository;
+  private UserCreator userCreator;
   @Mock
   private AuditTracer auditTracer;
   @Mock
@@ -69,11 +69,11 @@ class RegisterInternalUserUseCaseTest {
     UserRegisteringDomainService userRegisteringDomainService =
         new UserRegistrationDomainTestConfiguration()
             .userRegisteringDomainService(
-                usernameUniquenessValidator, rolesValidator, rolesProperties);
+                usernameUniquenessValidator, roleValidator, rolesProperties);
 
     underTest =
         configuration.registerInternalUserUseCase(
-            userRegisteringDomainService, registeredUserRepository, auditTracer, rolesProperties);
+            userRegisteringDomainService, userCreator, auditTracer, rolesProperties);
   }
 
   @Test
@@ -194,7 +194,7 @@ class RegisterInternalUserUseCaseTest {
     void whenNoRoles_savesToRepo() {
       underTest.apply(NO_ROLES_REGISTRATION_REQUEST);
 
-      verify(registeredUserRepository).save(any());
+      verify(userCreator).create(any());
     }
   }
 
@@ -204,7 +204,7 @@ class RegisterInternalUserUseCaseTest {
     @BeforeEach
     void setUp() {
       given(usernameUniquenessValidator.validate(any())).willReturn(Optional.empty());
-      given(rolesValidator.validate(any(), any())).willReturn(Optional.empty());
+      given(roleValidator.validate(any(), any())).willReturn(Optional.empty());
     }
 
     @Test
@@ -220,7 +220,7 @@ class RegisterInternalUserUseCaseTest {
     void registerWithRoles_savesToRepo() {
       underTest.apply(ONE_ROLE_REGISTRATION_REQUEST);
 
-      verify(registeredUserRepository).save(any());
+      verify(userCreator).create(any());
     }
 
     @Test
@@ -271,7 +271,7 @@ class RegisterInternalUserUseCaseTest {
     void whenNoRoles_doesNotSaveToRepo() {
       underTest.apply(NO_ROLES_REGISTRATION_REQUEST);
 
-      verifyNoMoreInteractions(registeredUserRepository);
+      verifyNoMoreInteractions(userCreator);
       verifyAuditLog(NO_ROLES_REGISTRATION_REQUEST);
     }
   }
@@ -282,7 +282,7 @@ class RegisterInternalUserUseCaseTest {
     @BeforeEach
     void setUp() {
       given(usernameUniquenessValidator.validate(any())).willReturn(Optional.empty());
-      given(rolesValidator.validate(any(), any())).willReturn(Optional.of(
+      given(roleValidator.validate(any(), any())).willReturn(Optional.of(
           UserRegistrationUseCaseFixtures.ROLES_DONT_EXIST));
     }
 
@@ -299,7 +299,7 @@ class RegisterInternalUserUseCaseTest {
     void registerWithRoles_doesNotSaveToRepo() {
       underTest.apply(ONE_ROLE_REGISTRATION_REQUEST);
 
-      verifyNoInteractions(registeredUserRepository);
+      verifyNoInteractions(userCreator);
       verifyAuditLog(ONE_ROLE_REGISTRATION_REQUEST);
     }
   }
@@ -310,7 +310,7 @@ class RegisterInternalUserUseCaseTest {
     @BeforeEach
     void setUp() {
       given(usernameUniquenessValidator.validate(any())).willReturn(Optional.empty());
-      given(rolesValidator.validate(any(), any())).willReturn(Optional.empty());
+      given(roleValidator.validate(any(), any())).willReturn(Optional.empty());
     }
 
     @Test

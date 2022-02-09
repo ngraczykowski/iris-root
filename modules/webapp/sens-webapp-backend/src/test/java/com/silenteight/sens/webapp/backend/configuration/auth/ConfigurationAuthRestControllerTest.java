@@ -4,8 +4,8 @@ import lombok.*;
 
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
-import com.silenteight.sep.usermanagement.api.ConfigurationQuery;
-import com.silenteight.sep.usermanagement.api.dto.AuthConfigurationDto;
+import com.silenteight.sep.usermanagement.api.configuration.ConfigurationQuery;
+import com.silenteight.sep.usermanagement.api.configuration.dto.AuthConfigurationDto;
 
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;

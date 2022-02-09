@@ -6,9 +6,9 @@ import com.silenteight.sens.webapp.common.support.file.FileLineWriter;
 import com.silenteight.sens.webapp.user.config.RolesProperties;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
-import com.silenteight.sep.usermanagement.api.ConfigurationQuery;
-import com.silenteight.sep.usermanagement.api.EventQuery;
-import com.silenteight.sep.usermanagement.api.UserQuery;
+import com.silenteight.sep.usermanagement.api.configuration.ConfigurationQuery;
+import com.silenteight.sep.usermanagement.api.event.EventQuery;
+import com.silenteight.sep.usermanagement.api.user.UserQuery;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

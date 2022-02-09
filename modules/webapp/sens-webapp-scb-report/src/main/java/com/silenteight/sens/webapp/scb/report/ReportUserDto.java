@@ -3,7 +3,7 @@ package com.silenteight.sens.webapp.scb.report;
 import lombok.Data;
 
 import com.silenteight.sep.base.common.time.DateFormatter;
-import com.silenteight.sep.usermanagement.api.dto.UserDto;
+import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
 
 import static java.util.Optional.ofNullable;
 

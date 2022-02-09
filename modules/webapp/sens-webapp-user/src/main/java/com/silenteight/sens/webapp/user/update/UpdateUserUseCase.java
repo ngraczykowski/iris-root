@@ -11,12 +11,12 @@ import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.sep.usermanagement.api.RolesValidator;
-import com.silenteight.sep.usermanagement.api.RolesValidator.RolesDontExistError;
-import com.silenteight.sep.usermanagement.api.UpdatedUser;
-import com.silenteight.sep.usermanagement.api.UpdatedUser.UpdatedUserBuilder;
-import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
-import com.silenteight.sep.usermanagement.api.UserRoles;
+import com.silenteight.sep.usermanagement.api.role.RoleValidator;
+import com.silenteight.sep.usermanagement.api.role.RoleValidator.RolesDontExistError;
+import com.silenteight.sep.usermanagement.api.role.UserRoles;
+import com.silenteight.sep.usermanagement.api.user.UserUpdater;
+import com.silenteight.sep.usermanagement.api.user.dto.UpdateUserCommand;
+import com.silenteight.sep.usermanagement.api.user.dto.UpdateUserCommand.UpdateUserCommandBuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -33,11 +33,11 @@ import static java.util.Optional.ofNullable;
 public class UpdateUserUseCase {
 
   @NonNull
-  private final UpdatedUserRepository updatedUserRepository;
+  private final UserUpdater userUpdater;
   @NonNull
   private final NameLengthValidator displayNameLengthValidator;
   @NonNull
-  private final RolesValidator rolesValidator;
+  private final RoleValidator roleValidator;
   @NonNull
   private final AuditTracer auditTracer;
   @NonNull
@@ -49,11 +49,11 @@ public class UpdateUserUseCase {
   @NonNull
   private final String defaultCountryGroupRole;
 
-  public void apply(UpdateUserCommand command) {
+  public void apply(UpdateUserRequest command) {
     log.info(USER_MANAGEMENT, "Updating user. command={}", command);
 
     auditTracer.save(new UserUpdateRequestedEvent(
-        command.getUsername(), UpdateUserCommand.class.getName(), command));
+        command.getUsername(), UpdateUserRequest.class.getName(), command));
 
     command.getDisplayName().ifPresent(this::validateDisplayName);
     command.getRoles().ifPresent(roles -> this.validateRoles(rolesScope, roles));
@@ -64,7 +64,7 @@ public class UpdateUserUseCase {
     if (roles.isEmpty())
       return;
 
-    Optional<RolesDontExistError> validationError = rolesValidator.validate(roleScope, roles);
+    Optional<RolesDontExistError> validationError = roleValidator.validate(roleScope, roles);
     if (validationError.isPresent())
       throw validationError.get().toException();
   }
@@ -77,24 +77,24 @@ public class UpdateUserUseCase {
       throw validationError.get().toException();
   }
 
-  private void update(UpdateUserCommand command) {
+  private void update(UpdateUserRequest command) {
     Set<String> currentRoles = userRolesRetriever
         .rolesOf(command.getUsername())
         .getRoles(rolesScope);
-    UpdatedUser updatedUser = command.toUpdatedUser(
+    UpdateUserCommand updatedUser = command.toUpdatedUser(
         rolesScope, countryGroupsScope, defaultCountryGroupRole);
-    updatedUserRepository.save(updatedUser);
+    userUpdater.update(updatedUser);
     auditTracer.save(
         new UserUpdatedEvent(
             updatedUser.getUsername(),
-            UpdatedUser.class.getName(),
+            UpdateUserCommand.class.getName(),
             new UpdatedUserDetails(updatedUser, command.getRoles().orElse(null), currentRoles)));
   }
 
   @Data
   @Builder
   @EqualsAndHashCode(doNotUseGetters = true)
-  public static class UpdateUserCommand {
+  public static class UpdateUserRequest {
 
     @NonNull
     private String username;
@@ -134,9 +134,10 @@ public class UpdateUserUseCase {
       return ofNullable(countryGroups);
     }
 
-    UpdatedUser toUpdatedUser(
+    UpdateUserCommand toUpdatedUser(
         String rolesClientId, String countryGroupsClientId, String defaultCountryGroupRole) {
-      UpdatedUserBuilder result = UpdatedUser.builder()
+
+      UpdateUserCommandBuilder result = UpdateUserCommand.builder()
           .username(username)
           .updateDate(timeSource.offsetDateTime());
 

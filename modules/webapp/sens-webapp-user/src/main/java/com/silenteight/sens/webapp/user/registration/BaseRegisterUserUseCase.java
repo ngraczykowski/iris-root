@@ -9,9 +9,9 @@ import com.silenteight.sens.webapp.user.registration.CreatedUserDetails.Obfuscat
 import com.silenteight.sens.webapp.user.registration.CreatedUserDetails.UserDetails;
 import com.silenteight.sens.webapp.user.registration.domain.NewUserRegistration;
 import com.silenteight.sens.webapp.user.registration.domain.UserRegisteringDomainService;
-import com.silenteight.sep.usermanagement.api.CompletedUserRegistration;
-import com.silenteight.sep.usermanagement.api.RegisteredUserRepository;
-import com.silenteight.sep.usermanagement.api.UserDomainError;
+import com.silenteight.sep.usermanagement.api.error.UserDomainError;
+import com.silenteight.sep.usermanagement.api.user.UserCreator;
+import com.silenteight.sep.usermanagement.api.user.dto.CreateUserCommand;
 
 import io.vavr.control.Either;
 
@@ -24,7 +24,7 @@ abstract class BaseRegisterUserUseCase {
   @NonNull
   private final UserRegisteringDomainService userRegisteringDomainService;
   @NonNull
-  private final RegisteredUserRepository registeredUserRepository;
+  private final UserCreator userCreator;
   @NonNull
   protected final AuditTracer auditTracer;
   @NonNull
@@ -33,22 +33,22 @@ abstract class BaseRegisterUserUseCase {
   protected final String countryGroupsScope;
 
   Either<UserDomainError, Success> register(NewUserRegistration registration) {
-    Either<UserDomainError, CompletedUserRegistration> result =
+    Either<UserDomainError, CreateUserCommand> result =
         userRegisteringDomainService.register(registration);
 
     result.forEach(userRegistration -> {
       auditTracer.save(
           new UserCreatedEvent(
               userRegistration.getUsername(),
-              CompletedUserRegistration.class.getName(),
+              CreateUserCommand.class.getName(),
               toCreatedUserDetails(userRegistration)));
 
-      registeredUserRepository.save(userRegistration);
+      userCreator.create(userRegistration);
 
       auditTracer.save(
           new RolesAssignedEvent(
               userRegistration.getUsername(),
-              CompletedUserRegistration.class.getName(),
+              CreateUserCommand.class.getName(),
               userRegistration.getRoles()));
     });
     log.info(USER_MANAGEMENT, "User registration result={}", result);
@@ -56,7 +56,7 @@ abstract class BaseRegisterUserUseCase {
     return result.map(completedRegistration -> completedRegistration::getUsername);
   }
 
-  private CreatedUserDetails toCreatedUserDetails(CompletedUserRegistration registration) {
+  private CreatedUserDetails toCreatedUserDetails(CreateUserCommand registration) {
     return new CreatedUserDetails(
         new UserDetails(
             registration.getUsername(),

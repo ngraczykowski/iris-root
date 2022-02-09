@@ -4,7 +4,7 @@ import com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystSynchronizer.Syn
 import com.silenteight.sens.webapp.scb.user.sync.analyst.AnalystSynchronizer.UpdatedAnalyst;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.dto.Analyst;
 import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
-import com.silenteight.sep.usermanagement.api.dto.UserDto;
+import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

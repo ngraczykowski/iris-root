@@ -11,11 +11,12 @@ import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.sep.usermanagement.api.UpdatedUser;
-import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
-import com.silenteight.sep.usermanagement.api.UserQuery;
-import com.silenteight.sep.usermanagement.api.UserRoles;
-import com.silenteight.sep.usermanagement.api.dto.UserDto;
+import com.silenteight.sep.usermanagement.api.role.UserRoles;
+import com.silenteight.sep.usermanagement.api.user.UserQuery;
+import com.silenteight.sep.usermanagement.api.user.UserUpdater;
+import com.silenteight.sep.usermanagement.api.user.dto.UpdateUserCommand;
+import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +33,7 @@ import static java.util.stream.Stream.concat;
 public class AddRolesToUserUseCase {
 
   @NonNull
-  private final UpdatedUserRepository updatedUserRepository;
+  private final UserUpdater userUpdater;
   @NonNull
   private final UserQuery userQuery;
   @NonNull
@@ -55,9 +56,9 @@ public class AddRolesToUserUseCase {
             () -> log.warn("Could not find user. username={}", command.getUsername()));
   }
 
-  private void saveUser(UpdatedUser user) {
-    updatedUserRepository.save(user);
-    auditTracer.save(new UserUpdatedEvent(user.getUsername(), UpdatedUser.class.getName(),
+  private void saveUser(UpdateUserCommand user) {
+    userUpdater.update(user);
+    auditTracer.save(new UserUpdatedEvent(user.getUsername(), UpdateUserCommand.class.getName(),
         new UpdatedUserDetails(
             user, user.getRoles().getRoles(rolesScope), emptyList())));
   }
@@ -74,12 +75,12 @@ public class AddRolesToUserUseCase {
     @Default
     private final TimeSource timeSource = DefaultTimeSource.INSTANCE;
 
-    UpdatedUser toUpdatedUser(String rolesScope, UserRoles roles) {
+    UpdateUserCommand toUpdatedUser(String rolesScope, UserRoles roles) {
       Map<String, List<String>> rolesByScope = toRolesByScope(roles);
       rolesByScope.put(rolesScope, toNewRoles(rolesScope, roles));
       UserRoles newUserRoles = new ScopeUserRoles(rolesByScope);
 
-      return UpdatedUser.builder()
+      return UpdateUserCommand.builder()
           .username(username)
           .roles(newUserRoles)
           .updateDate(timeSource.offsetDateTime())

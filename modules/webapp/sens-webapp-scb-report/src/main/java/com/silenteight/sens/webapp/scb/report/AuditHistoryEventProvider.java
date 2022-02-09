@@ -3,9 +3,9 @@ package com.silenteight.sens.webapp.scb.report;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.sep.usermanagement.api.EventQuery;
-import com.silenteight.sep.usermanagement.api.dto.EventDto;
+import com.silenteight.sep.usermanagement.api.event.EventQuery;
 import com.silenteight.sep.usermanagement.api.event.EventType;
+import com.silenteight.sep.usermanagement.api.event.dto.EventDto;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -32,7 +32,7 @@ class AuditHistoryEventProvider {
 
   List<AuditHistoryEventDto> provide(@NonNull OffsetDateTime from, @NonNull OffsetDateTime to) {
     long reportFromMillis = from.toInstant().toEpochMilli();
-    return eventQuery.getEvents(from, List.of(LOGIN, LOGIN_ERROR))
+    return eventQuery.list(from, List.of(LOGIN, LOGIN_ERROR))
         .stream()
         .filter(event -> isCorrectEvent(event, reportFromMillis))
         .sorted(comparingLong(EventDto::getTimestamp))

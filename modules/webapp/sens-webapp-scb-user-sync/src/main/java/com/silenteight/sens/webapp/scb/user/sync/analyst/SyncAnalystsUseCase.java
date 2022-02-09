@@ -14,8 +14,8 @@ import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.BulkCreateAnal
 import com.silenteight.sens.webapp.scb.user.sync.analyst.bulk.dto.BulkUpdateDisplayNameRequest.UpdatedDisplayName;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.dto.Analyst;
 import com.silenteight.sens.webapp.scb.user.sync.analyst.dto.SyncAnalystStatsDto;
-import com.silenteight.sep.usermanagement.api.UserQuery;
-import com.silenteight.sep.usermanagement.api.dto.UserDto;
+import com.silenteight.sep.usermanagement.api.user.UserQuery;
+import com.silenteight.sep.usermanagement.api.user.dto.UserDto;
 
 import java.util.Collection;
 import java.util.List;

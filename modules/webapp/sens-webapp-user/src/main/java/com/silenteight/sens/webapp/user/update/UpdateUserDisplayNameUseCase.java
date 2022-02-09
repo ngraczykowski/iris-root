@@ -11,8 +11,9 @@ import com.silenteight.sens.webapp.audit.api.trace.AuditTracer;
 import com.silenteight.sens.webapp.user.roles.UserRolesRetriever;
 import com.silenteight.sep.base.common.time.DefaultTimeSource;
 import com.silenteight.sep.base.common.time.TimeSource;
-import com.silenteight.sep.usermanagement.api.UpdatedUser;
-import com.silenteight.sep.usermanagement.api.UpdatedUserRepository;
+import com.silenteight.sep.usermanagement.api.user.UserUpdater;
+import com.silenteight.sep.usermanagement.api.user.dto.UpdateUserCommand;
+
 
 import static java.util.Optional.ofNullable;
 
@@ -21,7 +22,7 @@ import static java.util.Optional.ofNullable;
 public class UpdateUserDisplayNameUseCase {
 
   @NonNull
-  private final UpdatedUserRepository updatedUserRepository;
+  private final UserUpdater userUpdater;
   @NonNull
   private final AuditTracer auditTracer;
   @NonNull
@@ -32,19 +33,19 @@ public class UpdateUserDisplayNameUseCase {
   public void apply(UpdateUserDisplayNameCommand command) {
     auditTracer.save(new UserUpdateRequestedEvent(
         command.getUsername(), UpdateUserDisplayNameCommand.class.getName(), command));
-    UpdatedUser updatedUser = command.toUpdatedUser();
+    UpdateUserCommand updateUserCommand = command.toUpdatedUser();
 
-    updatedUserRepository.save(updatedUser);
+    userUpdater.update(updateUserCommand);
 
     auditTracer.save(new UserUpdatedEvent(
-        updatedUser.getUsername(),
-        UpdatedUser.class.getName(),
+        updateUserCommand.getUsername(),
+        UpdateUserCommand.class.getName(),
         new UpdatedUserDetails(
-            updatedUser,
-            ofNullable(updatedUser.getRoles())
+            updateUserCommand,
+            ofNullable(updateUserCommand.getRoles())
                 .map(userRoles -> userRoles.getRoles(rolesScope))
                 .orElse(null),
-            userRolesRetriever.rolesOf(updatedUser.getUsername()).getRoles(rolesScope))));
+            userRolesRetriever.rolesOf(updateUserCommand.getUsername()).getRoles(rolesScope))));
   }
 
   @Data
@@ -59,8 +60,8 @@ public class UpdateUserDisplayNameUseCase {
     @NonNull
     private final TimeSource timeSource = DefaultTimeSource.INSTANCE;
 
-    UpdatedUser toUpdatedUser() {
-      return UpdatedUser.builder()
+    UpdateUserCommand toUpdatedUser() {
+      return UpdateUserCommand.builder()
           .username(username)
           .displayName(displayName)
           .updateDate(timeSource.offsetDateTime())

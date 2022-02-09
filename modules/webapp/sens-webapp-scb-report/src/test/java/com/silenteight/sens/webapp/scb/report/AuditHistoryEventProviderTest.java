@@ -1,8 +1,9 @@
 package com.silenteight.sens.webapp.scb.report;
 
-import com.silenteight.sep.usermanagement.api.EventQuery;
-import com.silenteight.sep.usermanagement.api.dto.EventDto;
+
+import com.silenteight.sep.usermanagement.api.event.EventQuery;
 import com.silenteight.sep.usermanagement.api.event.EventType;
+import com.silenteight.sep.usermanagement.api.event.dto.EventDto;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +42,7 @@ class AuditHistoryEventProviderTest {
     long loginTimestamp = createPastTimestamp(to, 38);
     long extendSessionTimestamp = createPastTimestamp(to, 30);
 
-    when(eventQuery.getEvents(from, List.of(LOGIN, LOGIN_ERROR)))
+    when(eventQuery.list(from, List.of(LOGIN, LOGIN_ERROR)))
         .thenReturn(
             List.of(
                 makeLoginErrorEventDto(userName, loginErrorTimestamp),

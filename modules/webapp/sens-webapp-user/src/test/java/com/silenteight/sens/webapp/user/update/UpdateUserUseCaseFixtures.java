@@ -4,9 +4,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import com.silenteight.sens.webapp.user.roles.ScopeUserRoles;
-import com.silenteight.sens.webapp.user.update.UpdateUserUseCase.UpdateUserCommand;
+import com.silenteight.sens.webapp.user.update.UpdateUserUseCase.UpdateUserRequest;
 import com.silenteight.sep.base.testing.time.MockTimeSource;
-import com.silenteight.sep.usermanagement.api.UpdatedUser;
+import com.silenteight.sep.usermanagement.api.user.dto.UpdateUserCommand;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -33,8 +33,8 @@ class UpdateUserUseCaseFixtures {
   private static final String COUNTRY_GROUP_SCOPE = "kibana";
   private static final Boolean LOCKED = FALSE;
 
-  static final UpdateUserCommand UPDATE_USER_COMMAND =
-      UpdateUserCommand.builder()
+  static final UpdateUserRequest UPDATE_USER_COMMAND =
+      UpdateUserRequest.builder()
           .username(USERNAME)
           .displayName(DISPLAY_NAME)
           .roles(ROLES)
@@ -43,8 +43,8 @@ class UpdateUserUseCaseFixtures {
           .timeSource(MOCK_TIME_SOURCE)
           .build();
 
-  static final UpdatedUser UPDATED_USER =
-      UpdatedUser.builder()
+  static final UpdateUserCommand UPDATED_USER =
+      UpdateUserCommand.builder()
           .username(USERNAME)
           .displayName(DISPLAY_NAME)
           .roles(new ScopeUserRoles(Map.of(
