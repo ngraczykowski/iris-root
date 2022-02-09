@@ -52,7 +52,7 @@ serp:
           queue-name: gov.models-archived
           routing-key: event.models-archived
         gov-events:
-          routing-key: event.qa-alert
+          routing-key: '#'
         qa-retention-personal-information-expired:
           queue-name: gov.retention.personal-information-expired
           routing-key: retention.personal-information-expired
