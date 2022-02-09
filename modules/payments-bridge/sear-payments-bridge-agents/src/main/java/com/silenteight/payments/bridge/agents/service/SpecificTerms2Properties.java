@@ -9,13 +9,12 @@ import java.util.List;
 
 @Data
 @Validated
-@ConfigurationProperties(prefix = "pb.agent.specific-terms2")
+@ConfigurationProperties(prefix = "pb.agents.specific-terms2")
 class SpecificTerms2Properties {
 
-  private String bucket = "sierra-dev-decrypted-files";
+  private String bucket = "";
   private String regularTermsKey = "category/regularTerms.csv";
   private String specificTermsKey = "category/specificTerms.csv";
-  private String region = "eu-central-1";
 
   public static final List<String> REGULAR_TERMS = List.of(
       "([12]/|\n|\\s)(D|S|W|Y)(/|\\s|-)?O([12]/|\n|\\s|\\b)",
