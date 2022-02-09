@@ -44,6 +44,10 @@ class ListDatasetRestControllerTest extends BaseRestControllerTest {
         .body("[0].state", is(STATE.toString()))
         .body("[0].alertsCount", is((int) ALERTS_COUNT))
         .body("[0].query", notNullValue())
+        .body("[0].query.alertGenerationDate.from", is(FROM_AS_STRING))
+        .body("[0].query.alertGenerationDate.to", is(TO_AS_STRING))
+        .body("[0].query.displayRangeFrom", is(DISPLAY_RANGE_FROM))
+        .body("[0].query.displayRangeTo", is(DISPLAY_RANGE_TO))
         .body("[0].createdAt", notNullValue())
         .body("[0].createdBy", is(CREATED_BY));
   }

@@ -2,8 +2,13 @@ package com.silenteight.simulator.common.testing.rest;
 
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
 import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest.TestRestConfiguration;
+import com.silenteight.simulator.common.testing.rest.BaseRestControllerTest.WebConfig;
 import com.silenteight.simulator.common.testing.rest.testwithrole.TestWithRoleExtension;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
 import io.restassured.module.mockmvc.response.ValidatableMockMvcResponse;
@@ -17,6 +22,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -26,7 +33,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.silenteight.simulator.common.web.rest.RestConstants.ROOT;
@@ -35,7 +44,7 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @WebAppConfiguration
-@SpringBootTest(classes = { TestRestConfiguration.class })
+@SpringBootTest(classes = { TestRestConfiguration.class, WebConfig.class })
 @ExtendWith({ SpringExtension.class })
 @TestPropertySource(properties = { "spring.config.location = classpath:application-test.yml" })
 public abstract class BaseRestControllerTest {
@@ -165,6 +174,24 @@ public abstract class BaseRestControllerTest {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
       http.csrf().disable();
+    }
+  }
+
+  /**
+   * Workaround: do not serialize dates as floats
+   * see: https://github.com/rest-assured/rest-assured/issues/1116
+   */
+  @Configuration
+  static class WebConfig implements WebMvcConfigurer {
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> messageConverters) {
+      ObjectMapper mapper = new ObjectMapper()
+          .registerModule(new JavaTimeModule())
+          .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+          .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+      messageConverters.add(new MappingJackson2HttpMessageConverter(mapper));
     }
   }
 }
