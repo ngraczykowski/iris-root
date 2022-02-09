@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.svb.learning.engine.HistoricalDecisionLearningEnginePort;
+import com.silenteight.proto.learningstore.historicaldecision.v1.api.HistoricalDecisionLearningStoreExchangeRequest;
 
 import org.springframework.batch.item.ItemWriter;
 
@@ -18,16 +19,16 @@ class StoreInLearningEngineWriter implements ItemWriter<HistoricalDecisionLearni
   @Override
   public void write(
       List<? extends HistoricalDecisionLearningAggregate> items) {
-    log.debug(
-        "Sending data with historical decisions to learning engine chunk size:{}",
-        items.size());
-    items.forEach(aggregate -> {
-      if (log.isDebugEnabled()) {
-        log.debug(
-            "Sending historical decision to learning engine with aggregate size: {}",
-            aggregate.getHistoricalFeatureRequests().size());
-      }
-      aggregate.getHistoricalFeatureRequests().forEach(learningEngineBridge::send);
-    });
+    if (log.isDebugEnabled()) {
+      log.debug(
+          "Sending data with historical decisions to learning engine chunk size:{}",
+          items.size());
+    }
+
+    items.forEach(aggregate -> sendToLearningBridge(aggregate.getHistoricalFeatureRequests()));
+  }
+
+  private void sendToLearningBridge(List<HistoricalDecisionLearningStoreExchangeRequest> requests) {
+    requests.forEach(learningEngineBridge::send);
   }
 }

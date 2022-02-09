@@ -15,6 +15,6 @@ import java.util.List;
 class HistoricalDecisionLearningAggregate {
 
   @Singular
-  private List<HistoricalDecisionLearningStoreExchangeRequest> historicalFeatureRequests;
+  List<HistoricalDecisionLearningStoreExchangeRequest> historicalFeatureRequests;
 
 }
