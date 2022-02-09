@@ -21,19 +21,19 @@ spec:
         - name: {{ .Values.name }}
           livenessProbe:
             httpGet:
-              path: "/rest/uds/management/health/liveness"
-              port: 8080
+              path: "/management/health/liveness"
+              port: {{ .Values.ports.management }}
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
-              path: "/rest/uds/management/health/readiness"
-              port: 8080
+              path: "/management/health/readiness"
+              port: {{ .Values.ports.management }}
             failureThreshold: 30
             timeoutSeconds: 10
           startupProbe:
             httpGet:
-              path: "/rest/uds/management/health/liveness"
-              port: 8080
+              path: "/management/health/liveness"
+              port: {{ .Values.ports.management }}
             failureThreshold: 30
             timeoutSeconds: 5
             periodSeconds: 10
@@ -63,6 +63,7 @@ spec:
           args:
             - --serp.show-env=true
             - --spring.profiles.active={{ .Values.springProfilesActive }}
+            - --spring.config.additional-location=file:/etc/spring/
             - --logging.config=file:/etc/logback/logback.xml
             - --sentry.dsn={{ .Values.sentry.dsn }}
             - --sentry.environment={{ .Values.sentry.environment }}

@@ -4,3 +4,6 @@ metadata:
   name: {{ .Values.name }}-spring
 data:
   application.yml: |
+    management:
+      server:
+        port: {{ .Values.ports.management }}
