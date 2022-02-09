@@ -13,7 +13,10 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.FILE_NAME_PARAMETER;
+import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.HISTORICAL_RISK_ASSESSMENT_JOB_NAME;
 import static com.silenteight.payments.bridge.svb.newlearning.job.etl.EtlJobConstants.ETL_JOB_NAME;
 
 @Service
@@ -47,10 +50,15 @@ class StoreCsvJobListener implements JobExecutionListener {
       return;
     }
 
-    log.info("Triggering batch process csv job for file = {}", fileName);
+    var jobsToTrigger = List.of(ETL_JOB_NAME, HISTORICAL_RISK_ASSESSMENT_JOB_NAME);
+    jobsToTrigger.forEach(job -> triggerJob(job, fileName));
+  }
+
+  private void triggerJob(String jobName, String fileName) {
+    log.info("Triggering {} job for file = {}", jobName, fileName);
 
     applicationEventPublisher.publishEvent(
-        TriggerBatchJobEvent.builder().jobName(ETL_JOB_NAME).parameters(new JobParametersBuilder()
+        TriggerBatchJobEvent.builder().jobName(jobName).parameters(new JobParametersBuilder()
             .addString(FILE_NAME_PARAMETER, fileName)
             .toJobParameters()).build());
   }
