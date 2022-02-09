@@ -6,6 +6,8 @@ import lombok.NonNull;
 import lombok.Value;
 
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static java.util.List.of;
@@ -26,5 +28,16 @@ public class AlertSelectionCriteriaDto {
 
   public OffsetDateTime getRangeTo() {
     return alertGenerationDate.getTo();
+  }
+
+  public String getDisplayRangeFrom() {
+    return alertGenerationDate.getFrom()
+        .format(DateTimeFormatter.ISO_LOCAL_DATE);
+  }
+
+  public String getDisplayRangeTo() {
+    return alertGenerationDate.getTo()
+        .minus(1, ChronoUnit.SECONDS)
+        .format(DateTimeFormatter.ISO_LOCAL_DATE);
   }
 }

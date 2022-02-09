@@ -47,7 +47,11 @@ public final class DatasetFixtures {
   public static final long SECOND_ALERTS_COUNT = 4L;
   public static final long NO_ALERTS_COUNT = 0;
   public static final OffsetDateTime FROM = OffsetDateTime.of(2019, 1, 1, 0, 0, 0, 0, UTC);
+  public static final String FROM_AS_STRING = "2019-01-01T00:00:00Z";
+  public static final String DISPLAY_RANGE_FROM = "2019-01-01";
   public static final OffsetDateTime TO = OffsetDateTime.of(2020, 10, 10, 23, 59, 59, 0, UTC);
+  public static final String TO_AS_STRING = "2020-10-10T23:59:59Z";
+  public static final String DISPLAY_RANGE_TO = "2020-10-10";
   public static final OffsetDateTime CREATED_AT =
       OffsetDateTime.of(2021, 3, 12, 11, 25, 10, 0, UTC);
   public static final String CREATED_BY = "asmith";
