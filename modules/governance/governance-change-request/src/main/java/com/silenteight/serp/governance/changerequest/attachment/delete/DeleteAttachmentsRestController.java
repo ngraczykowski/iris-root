@@ -6,16 +6,22 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 
+import static com.silenteight.serp.governance.changerequest.domain.DomainConstants.ATTACHMENTS_REGEXP;
+import static com.silenteight.serp.governance.changerequest.domain.DomainConstants.INVALID_ATTACHMENT_UUID_MSG;
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
 import static org.springframework.http.ResponseEntity.accepted;
 
 @Slf4j
 @RestController
 @RequestMapping(ROOT)
+@Validated
 @RequiredArgsConstructor
 class DeleteAttachmentsRestController {
 
@@ -26,7 +32,8 @@ class DeleteAttachmentsRestController {
   @PreAuthorize("isAuthorized('REMOVE_ATTACHMENTS')")
   public ResponseEntity<Void> deleteAttachment(
       @PathVariable UUID changeRequestId,
-      @RequestParam(name = "file") String file) {
+      @RequestParam(name = "file") @Valid
+      @Pattern(message = INVALID_ATTACHMENT_UUID_MSG, regexp = ATTACHMENTS_REGEXP) String file) {
 
     log.debug("Delete attachment for changeRequest {} received, attachmentId {}",
               changeRequestId, file);

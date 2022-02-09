@@ -1,5 +1,6 @@
 package com.silenteight.sens.governance.common.testing.rest;
 
+import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest.MethodValidationPostProcessorConfigurer;
 import com.silenteight.sens.governance.common.testing.rest.BaseRestControllerTest.TestRestConfiguration;
 import com.silenteight.sens.governance.common.testing.rest.testwithrole.TestWithRoleExtension;
 import com.silenteight.sep.auth.authorization.AuthorizationModule;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
@@ -24,8 +26,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Map;
 
@@ -35,7 +39,8 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @WebAppConfiguration
-@SpringBootTest(classes = { TestRestConfiguration.class })
+@SpringBootTest(classes = {
+    MethodValidationPostProcessorConfigurer.class, TestRestConfiguration.class })
 @ExtendWith({ SpringExtension.class })
 @TestPropertySource(properties = { "spring.config.location = classpath:application-test.yml" })
 public abstract class BaseRestControllerTest {
@@ -169,6 +174,15 @@ public abstract class BaseRestControllerTest {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
       http.csrf().disable();
+    }
+  }
+
+  @Configuration
+  public static class MethodValidationPostProcessorConfigurer implements WebMvcConfigurer {
+
+    @Bean
+    public MethodValidationPostProcessor methodValidationPostProcessor() {
+      return new MethodValidationPostProcessor();
     }
   }
 }

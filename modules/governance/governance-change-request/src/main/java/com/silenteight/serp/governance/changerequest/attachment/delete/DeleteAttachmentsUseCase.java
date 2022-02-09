@@ -9,8 +9,6 @@ import com.silenteight.serp.governance.file.storage.FileService;
 
 import java.util.UUID;
 
-import static com.silenteight.serp.governance.file.common.FileResource.validateFileResourceName;
-
 @RequiredArgsConstructor
 class DeleteAttachmentsUseCase {
 
@@ -24,7 +22,6 @@ class DeleteAttachmentsUseCase {
   FileReferenceService fileReferenceService;
 
   void deleteAttachments(UUID changeRequestId, String fileName) {
-    validateFileResourceName(fileName);
     changeRequestAttachmentsService.deleteAttachments(changeRequestId, fileName);
     fileReferenceService.deleteFileReference(fileName);
     fileService.deleteFile(fileName);

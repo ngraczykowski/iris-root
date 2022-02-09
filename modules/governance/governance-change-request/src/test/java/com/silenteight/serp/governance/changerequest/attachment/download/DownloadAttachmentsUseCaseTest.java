@@ -5,7 +5,6 @@ import lombok.SneakyThrows;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 import com.silenteight.sep.filestorage.api.StorageManager;
 import com.silenteight.sep.filestorage.minio.container.MinioContainer.MinioContainerInitializer;
-import com.silenteight.serp.governance.file.common.exception.WrongFilesResourceFormatException;
 import com.silenteight.serp.governance.file.domain.dto.FileReferenceDto;
 import com.silenteight.serp.governance.file.storage.FileWrapper;
 import com.silenteight.serp.governance.file.upload.UploadFileUseCase;
@@ -23,7 +22,6 @@ import java.nio.file.Path;
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
 @Transactional
@@ -67,12 +65,6 @@ class DownloadAttachmentsUseCaseTest extends BaseDataJpaTest {
     assertThat(fileWrapper.getFileName()).isEqualTo(FILE_NAME);
     assertThat(fileWrapper.getMimeType()).isEqualTo("application/x-tika-msoffice");
     assertThat(fileWrapper.getContent()).isEqualTo(testFileAsBytes);
-  }
-
-  @Test
-  void shouldThrowExceptionWhenWrongFileResourceNameProvided() {
-    assertThrows(
-        WrongFilesResourceFormatException.class, () -> underTest.activate(NEW_FILE_NAME));
   }
 
   @SneakyThrows
