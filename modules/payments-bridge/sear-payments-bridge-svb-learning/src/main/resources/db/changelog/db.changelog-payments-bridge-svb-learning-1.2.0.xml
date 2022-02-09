@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
-    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+                        dbchangelog-3.10.xsd">
   <changeSet id="payments-bridge-svb-learning-1.2.0" author="zruchala">
     <createTable tableName="pb_learning_error">
       <column name="error_id" type="BIGINT" autoIncrement="true">
