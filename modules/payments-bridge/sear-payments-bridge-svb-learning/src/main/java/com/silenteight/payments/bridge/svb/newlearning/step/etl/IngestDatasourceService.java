@@ -53,6 +53,11 @@ class IngestDatasourceService {
   private void processForStructuredTags(
       AlertComposite alertComposite, RegisterAlertResponse registeredAlert) {
     var etlHits = createEtlHits(alertComposite);
+
+    if (etlHits.isEmpty()) {
+      return;
+    }
+
     createFeatureUseCase.createFeatureInputs(etlHits, registeredAlert);
     createCategoriesUseCase.createCategoryValues(etlHits, registeredAlert);
   }
