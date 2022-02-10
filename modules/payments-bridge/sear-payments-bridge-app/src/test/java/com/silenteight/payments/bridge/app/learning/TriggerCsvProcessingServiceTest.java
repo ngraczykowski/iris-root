@@ -31,7 +31,7 @@ class TriggerCsvProcessingServiceTest {
     triggerCsvLearning =
         new LearningCsvFileTrigger(
             learningRunnerService, csvFileResourceProvider, learningFileRepository);
-    var object = ObjectPath.builder().name("analystdecison-2-hits.csv").bucket("bucket").build();
+    var object = ObjectPath.builder().name("test_one_alert.csv").bucket("bucket").build();
 
     when(csvFileResourceProvider.getFilesList()).thenReturn(List.of(object));
   }
@@ -43,7 +43,7 @@ class TriggerCsvProcessingServiceTest {
     triggerCsvLearning.process();
 
     assertThat(learningFileRepository
-        .findAllByFileNameAndBucketName("analystdecison-2-hits.csv", "bucket")
+        .findAllByFileNameAndBucketName("test_one_alert.csv", "bucket")
         .size()).isEqualTo(2);
   }
 }

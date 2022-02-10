@@ -15,8 +15,13 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @Slf4j
@@ -44,6 +49,18 @@ class DefaultCsvFileResourceProvider implements CsvFileResourceProvider {
 
   @Override
   public List<ObjectPath> getFilesList() {
-    return List.of(ObjectPath.builder().name("analystdecison-2-hits.csv").bucket("").build());
+    try {
+      return Stream.of(
+              Objects.requireNonNull(
+                  ResourceUtils.getFile(CLASSPATH_LEARNING_PROVIDER).listFiles()))
+          .filter(file -> !file.isDirectory())
+          .map(File::getName)
+          .map(name -> ObjectPath.builder().name(name).bucket("").build())
+          .collect(toList());
+    } catch (FileNotFoundException e) {
+      log.error("Couldn't find any files in following path = {}", CLASSPATH_LEARNING_PROVIDER);
+    }
+
+    return List.of();
   }
 }

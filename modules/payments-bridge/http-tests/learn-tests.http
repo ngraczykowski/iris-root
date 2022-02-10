@@ -21,7 +21,7 @@ Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
-{"JobName" : "etl-job", "FileName" :  "learning/mocked_learning.csv"}
+{"JobName" : "etl-job", "FileName" :  "learning/learningMockSystemId.csv"}
 
 ### Trigger batch historical risk job
 POST {{baseurl}}/rest/pb/batch/trigger

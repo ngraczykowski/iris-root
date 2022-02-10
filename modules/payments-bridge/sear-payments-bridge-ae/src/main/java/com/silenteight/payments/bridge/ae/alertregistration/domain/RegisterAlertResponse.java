@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+import com.silenteight.payments.bridge.common.event.LearningAlertRegisteredEvent;
+
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -24,6 +26,14 @@ public class RegisterAlertResponse {
     return matchResponses.stream().collect(Collectors.toMap(
         RegisterMatchResponse::getMatchId,
         RegisterMatchResponse::getMatchName));
+  }
+
+  public LearningAlertRegisteredEvent toLearningAlertRegisteredEvent() {
+    return LearningAlertRegisteredEvent
+        .builder()
+        .alertName(alertName)
+        .systemId(systemId)
+        .build();
   }
 
   @NonNull

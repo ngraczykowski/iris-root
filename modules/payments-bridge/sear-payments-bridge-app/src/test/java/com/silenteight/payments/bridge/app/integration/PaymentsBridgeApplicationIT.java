@@ -4,17 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.PaymentsBridgeApplication;
 import com.silenteight.payments.bridge.common.dto.input.RequestDto;
-import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.FileRequest;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
-import com.silenteight.payments.bridge.mock.ae.MockAlertUseCase;
 import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningAlertsUseCase;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.awaitility.core.ConditionEvaluationLogger;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -33,7 +30,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @SpringBootTest(classes = { PaymentsBridgeApplication.class })
@@ -66,21 +62,11 @@ class PaymentsBridgeApplicationIT {
   }
 
   @Test
-  @Disabled
-  void shouldProcessLearningCsv() {
-    var request =
-        FileRequest.builder().bucket("bucket").object("analystdecison-2-hits.csv").build();
-    handleLearningDataUseCase.readAlerts(request);
+  void shouldProcessLearningFileWithUnregisteredAlert() {
     await()
-        .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
-        .atMost(Duration.ofSeconds(1))
-        .until(PaymentsBridgeApplicationIT::createdAlerts);
-    assertThat(MockAlertUseCase.getCreatedAlertsCount()).isEqualTo(2);
-    assertThat(MockAlertUseCase.getCreatedMatchesCount()).isEqualTo(2);
-  }
-
-  public static boolean createdAlerts() {
-    return MockAlertUseCase.getCreatedAlertsCount() >= 2;
+        .atMost(Duration.ofSeconds(20))
+        .until(() -> paymentsBridgeEventsListener.containsLearningRegisteredSystemId(
+            "alert_system_id"));
   }
 
   static Stream<String> filesFactory() {

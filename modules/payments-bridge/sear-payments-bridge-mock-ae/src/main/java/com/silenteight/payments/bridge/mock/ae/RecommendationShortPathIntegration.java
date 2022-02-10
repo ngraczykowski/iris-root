@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
-import com.silenteight.payments.bridge.common.event.AlertRegisteredEvent;
 import com.silenteight.payments.bridge.common.event.RecommendationsGeneratedEvent;
+import com.silenteight.payments.bridge.common.event.SolvingAlertRegisteredEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
@@ -33,7 +33,7 @@ class RecommendationShortPathIntegration {
    * Simulate issuing recommendation just after universal-data-source has accepted input values.
    */
   @EventListener
-  public void onAlertRegisteredEvent(AlertRegisteredEvent event) {
+  public void onAlertRegisteredEvent(SolvingAlertRegisteredEvent event) {
     var analysisName = getAnalysisName();
     var recommendationId = ThreadLocalRandom.current().nextInt(10000) + 1;
     var recommendationsGenerated = RecommendationsGenerated.newBuilder()

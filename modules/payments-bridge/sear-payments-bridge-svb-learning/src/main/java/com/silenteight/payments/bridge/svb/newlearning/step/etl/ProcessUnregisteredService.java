@@ -13,6 +13,7 @@ import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexAlert
 import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexMatch;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexLearningUseCase;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,12 +33,16 @@ class ProcessUnregisteredService {
   private final IndexLearningUseCase indexLearningUseCase;
   private final IndexAnalystDecisionHelper indexAnalystDecisionHelper;
 
+  private final ApplicationEventPublisher applicationEventPublisher;
+
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   LearningRegisteredAlert process(AlertComposite alertComposite, long jobId) {
     var registeredAlerts = registerAlertUseCase.batchRegistration(
         List.of(alertComposite.toRegisterAlertRequest(jobId)));
 
     var registeredAlert = registeredAlerts.get(0);
+    applicationEventPublisher.publishEvent(registeredAlert.toLearningAlertRegisteredEvent());
+
     var learningRegisteredAlert = alertComposite.toLearningRegisteredAlert(registeredAlert);
     ingestDatasourceService.ingest(alertComposite, registeredAlert);
     createAlertDataRetentionUseCase.create(

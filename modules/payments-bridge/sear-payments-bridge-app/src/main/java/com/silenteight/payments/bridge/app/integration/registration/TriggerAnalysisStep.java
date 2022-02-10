@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.TriggerAlertRequest;
 import com.silenteight.payments.bridge.ae.alertregistration.port.TriggerAlertAnalysisUseCase;
-import com.silenteight.payments.bridge.common.event.AlertRegisteredEvent;
+import com.silenteight.payments.bridge.common.event.SolvingAlertRegisteredEvent;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -32,7 +32,7 @@ class TriggerAnalysisStep {
     triggerAlertAnalysisUseCase.triggerAlertAnalysis(request);
     alertRetentionStep.invoke(ctx);
     indexAlertRegisteredStep.invoke(ctx);
-    applicationEventPublisher.publishEvent(new AlertRegisteredEvent(ctx.getAeAlert()));
+    applicationEventPublisher.publishEvent(new SolvingAlertRegisteredEvent(ctx.getAeAlert()));
   }
 
 }
