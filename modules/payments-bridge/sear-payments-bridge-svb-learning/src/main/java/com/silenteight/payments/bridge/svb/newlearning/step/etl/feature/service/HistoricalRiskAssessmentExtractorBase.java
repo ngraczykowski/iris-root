@@ -14,6 +14,8 @@ abstract class HistoricalRiskAssessmentExtractorBase implements FeatureExtractor
 
   protected abstract String getFeature();
 
+  protected abstract String getDiscriminator();
+
   protected abstract String getAlertedPartyId(AlertedPartyData alertedPartyData);
 
   @Override
@@ -48,6 +50,7 @@ abstract class HistoricalRiskAssessmentExtractorBase implements FeatureExtractor
         .alertedPartyId(alertedPartyId)
         .ofacId(ofacId)
         .watchlistType(watchlistType)
+        .discriminator(getDiscriminator())
         .build();
   }
 }
