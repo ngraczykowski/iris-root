@@ -76,9 +76,9 @@ message MeasurementResult {
   }
 
   message Measurements {
-    DayDistance day_distance = 1;
+    DistanceInDays distance_in_days = 1;
 
-    message DayDistance {
+    message DistanceInDays {
       int32 min = 1;
       int32 max = 2;
     }
