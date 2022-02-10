@@ -7,10 +7,16 @@ import com.silenteight.sep.base.common.logging.LogMarkers;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.boot.context.event.SpringApplicationEvent;
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.boot.info.GitProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.*;
 
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static java.util.Optional.ofNullable;
@@ -34,29 +40,29 @@ public class EnvironmentLoggingApplicationListener
   public void onApplicationEvent(SpringApplicationEvent event) {
     if (event instanceof ApplicationStartedEvent) {
       ApplicationStartedEvent startedEvent = (ApplicationStartedEvent) event;
-      onEnvironmentPrepared(startedEvent.getApplicationContext().getEnvironment());
+      onEnvironmentPrepared(startedEvent.getApplicationContext());
     }
 
     if (event instanceof ApplicationFailedEvent) {
       ApplicationFailedEvent failedEvent = (ApplicationFailedEvent) event;
-      onEnvironmentPrepared(failedEvent.getApplicationContext().getEnvironment());
+      onEnvironmentPrepared(failedEvent.getApplicationContext());
     }
   }
 
-  private void onEnvironmentPrepared(ConfigurableEnvironment configurableEnvironment) {
+  private void onEnvironmentPrepared(ConfigurableApplicationContext context) {
     synchronized (syncRoot) {
       // NOTE(ahaczewski): Log once only.
       if (environment != null)
         return;
 
-      environment = configurableEnvironment;
+      environment = context.getEnvironment();
 
       // NOTE(ahaczewski): Do not log in bootstrap environment.
-      if (configurableEnvironment.getPropertySources().contains("bootstrap"))
+      if (context.getEnvironment().getPropertySources().contains("bootstrap"))
         return;
 
       if (isDebugEnabled())
-        logEnvironment();
+        logEnvironment(context);
     }
   }
 
@@ -71,15 +77,31 @@ public class EnvironmentLoggingApplicationListener
     return showEnv;
   }
 
-  private void logEnvironment() {
+  private void logEnvironment(ApplicationContext context) {
     log.info(LogMarkers.INTERNAL, "======== Environment and configuration ========");
-
+    logVersion(context);
     logActiveProfiles();
 
     if (environment instanceof AbstractEnvironment) {
       MutablePropertySources sources = ((AbstractEnvironment) environment).getPropertySources();
       logDetails(sources);
     }
+  }
+
+  private void logVersion(ApplicationContext context) {
+    getBean(context, BuildProperties.class).ifPresent(
+        bean -> log.info(LogMarkers.INTERNAL, "Application version: {}", bean.getVersion()));
+    getBean(context, GitProperties.class).ifPresent(bean -> {
+      log.info(LogMarkers.INTERNAL, "Git commit: {}", bean.getCommitId());
+      log.info(LogMarkers.INTERNAL, "Git commit time: {}", bean.getCommitTime());
+    });
+  }
+
+  private static <T> Optional<T> getBean(ApplicationContext context, Class<T> clazz) {
+    return Stream
+        .of(context.getBeanNamesForType(clazz))
+        .findFirst()
+        .map(name -> context.getBean(name, clazz));
   }
 
   private void logActiveProfiles() {
@@ -144,7 +166,7 @@ public class EnvironmentLoggingApplicationListener
     String sanitized = value;
 
     if (shouldTruncate() && valueLength > MAX_VALUE_LENGTH)
-      sanitized = value.substring(0, Math.min(valueLength, MAX_VALUE_LENGTH)) + "<...>";
+      sanitized = value.substring(0, MAX_VALUE_LENGTH) + "<...>";
 
     return sanitized.replace("\n", "<LF>").replace("\r", "<CR>");
   }
