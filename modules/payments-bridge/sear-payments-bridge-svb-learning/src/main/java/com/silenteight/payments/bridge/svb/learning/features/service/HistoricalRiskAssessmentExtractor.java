@@ -55,6 +55,7 @@ class HistoricalRiskAssessmentExtractor implements FeatureExtractor {
     var alertedPartyId = feature.getAlertedPartyId(learningMatch.getAlertedPartyData());
     var ofacId = learningMatch.getOfacId();
     var watchlistType = learningMatch.getWatchlistType().toString();
+    var discriminator = feature.getDiscriminator();
 
     return HistoricalRiskAssessmentAgentFeatureRequest.builder()
         .feature(featureName)
@@ -62,6 +63,7 @@ class HistoricalRiskAssessmentExtractor implements FeatureExtractor {
         .alertedPartyId(alertedPartyId)
         .ofacId(ofacId)
         .watchlistType(watchlistType)
+        .discriminator(discriminator)
         .build();
   }
 }
