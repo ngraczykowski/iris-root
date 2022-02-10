@@ -19,12 +19,14 @@ class EtlAlertsJobConfiguration {
   private final JobBuilderFactory jobBuilderFactory;
   private final Step etlAlertStep;
   private final Step etlReservationStep;
+  private final EtlAlertsJobListener etlAlertsJobListener;
 
   @Bean
   Job etlAlertJob() {
     return jobBuilderFactory.get(ETL_JOB_NAME)
         .start(etlReservationStep)
         .next(etlAlertStep)
+        .listener(etlAlertsJobListener)
         .build();
   }
 }
