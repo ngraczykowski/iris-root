@@ -26,3 +26,6 @@ build/
 ### Docker ###
 /.env
 /.idea/
+
+### DATA ###
+docs/api/sierra-prod-examples/*

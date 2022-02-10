@@ -1,0 +1,97 @@
+### Get OAuth2 authorization token using client credentials flow
+// @no-log
+// @no-cookie-jar
+POST {{authurl}}/protocol/openid-connect/token
+Accept: application/json
+Content-Type: application/x-www-form-urlencoded; charset=utf-8
+
+client_id={{client-id}}&client_secret={{client-secret}}&grant_type=client_credentials
+
+> {%
+  client.test("Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+
+  client.global.set("access_token", response.body["access_token"]);
+%}
+
+### Post the SVB alert DIN20220103070716-46631-31678
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/sierra-prod-examples/DIN20220103070716-46631-31678.json
+
+### Post the SVB alert DIN20220201144950-27041-2604.json
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/sierra-prod-examples/DIN20220201144950-27041-2604.json
+
+### Post the SVB alert DIN20220201150155-27715-2601.json
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/sierra-prod-examples/DIN20220201150155-27715-2601.json
+
+### Post the SVB alert DIN20220128012827-15302-320
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/sierra-prod-examples/DIN20220128012827-15302-320.json
+
+### Post the SVB alert DIN20220201160123-16626-323.json
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/sierra-prod-examples/DIN20220201160123-16626-323.json
+
+
+### Post the SVB alert DIN20220201162748-11235-2609.json
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/sierra-prod-examples/DIN20220201162748-11235-2609.json
+
+### Post the SVB alert DIN20220201160606-28992-317
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/sierra-prod-examples/DIN20220201160606-28992-317
+
+### Post the SVB alert DIN20220201164114-31155-314.json
+// @no-log
+// @no-cookie-jar
+POST {{baseurl}}/rest/pb/alert
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+< ../docs/api/sierra-prod-examples/DIN20220201164114-31155-314.json
