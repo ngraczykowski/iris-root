@@ -171,4 +171,10 @@
                          columnNames="learning_alert_id,job_id"/>
   </changeSet>
 
+  <changeSet id="payments-bridge-svb-learning-1.5.12" author="ppietrucha">
+    <sql>DELETE FROM pb_learning_file
+      <comment>Day 0 - learning data for already received production data</comment>
+    </sql>
+  </changeSet>
+
 </databaseChangeLog>
