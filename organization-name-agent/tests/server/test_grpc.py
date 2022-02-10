@@ -6,29 +6,29 @@ import unittest
 import grpc
 import psutil
 from agent_base.utils import Config
-
-from company_name.organization_name_agent_pb2 import CompareOrganizationNamesRequest
-from company_name.organization_name_agent_pb2_grpc import OrganizationNameAgentStub
+from silenteight.agent.organizationname.v1.api.organization_name_agent_pb2 import (
+    CompareOrganizationNamesRequest,
+)
+from silenteight.agent.organizationname.v1.api.organization_name_agent_pb2_grpc import (
+    OrganizationNameAgentStub,
+)
 
 PORT = Config().load_yaml_config("application.grpc.yaml")["agent"]["grpc"]["port"]
 GRPC_ADDRESS = f"localhost:{PORT}"
 TIMEOUT_SEC = 5
 
-SCORES_NUMBER = 17
 TEST_CASES = [
     {
         "data": {"alerted_party_names": ["ABC"], "watchlist_party_names": ["ABCDE"]},
         "solution": "MATCH",
         "probability": 1,
         "results_number": 1,
-        "score": {"name": "partial_fuzzy", "value": 1},
     },
     {
         "data": {"alerted_party_names": ["ABC"], "watchlist_party_names": ["DEF"]},
         "solution": "NO_MATCH",
         "probability": 0.98,
         "results_number": 1,
-        "score": {"name": "partial_fuzzy", "value": 0},
     },
     {
         "data": {
@@ -38,7 +38,6 @@ TEST_CASES = [
         "solution": "MATCH",
         "probability": 0.8,
         "results_number": 6,
-        "score": {"name": "abbreviation", "value": 1},
     },
     {
         "data": {"alerted_party_names": [], "watchlist_party_names": []},
@@ -113,10 +112,3 @@ class TestServer(unittest.TestCase):
                 first_result = resp.reason.results[0]
                 probability = first_result.solution_probability
                 self.assertAlmostEqual(test_case["probability"], probability, places=2)
-                self.assertEqual(len(first_result.scores), SCORES_NUMBER)
-                score_to_check = next(
-                    score
-                    for score in first_result.scores
-                    if score.name == test_case["score"]["name"]
-                )
-                self.assertEqual(test_case["score"]["value"], score_to_check.value)

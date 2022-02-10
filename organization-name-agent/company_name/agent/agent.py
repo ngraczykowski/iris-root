@@ -40,7 +40,6 @@ class CompanyNameAgent(Agent):
             watchlist_party_name=mp_name.source.original,
             solution=solution,
             solution_probability=probability,
-            scores=scores,
         )
 
     def resolve_pairs(

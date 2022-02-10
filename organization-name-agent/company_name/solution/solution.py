@@ -1,8 +1,6 @@
 import dataclasses
 import enum
-from typing import Mapping, Optional, Sequence
-
-from company_name.scores.score import Score
+from typing import Optional, Sequence
 
 
 class Solution(enum.Enum):
@@ -28,7 +26,6 @@ class Solution(enum.Enum):
 class PairResult:
     solution: Solution
     solution_probability: Optional[float]
-    scores: Mapping[str, Score]
     alerted_party_name: str
     watchlist_party_name: str
 
