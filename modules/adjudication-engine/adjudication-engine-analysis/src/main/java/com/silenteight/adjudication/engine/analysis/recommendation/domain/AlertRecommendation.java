@@ -9,6 +9,8 @@ import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata.FeatureMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata.MatchMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
+import com.silenteight.adjudication.engine.analysis.recommendation.transform.AlertMetaDataTransformer;
+import com.silenteight.adjudication.engine.analysis.recommendation.transform.dto.AnalysisRecommendationContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.FeatureContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
@@ -56,16 +58,9 @@ public class AlertRecommendation {
 
   public RecommendationMetadata toMetadata() {
     var matches = alertContext.getMatches();
-
-    var builder = RecommendationMetadata.newBuilder()
-        .setName("analysis/" + analysisId + "/recommendations/" + recommendationId + "/metadata")
-        .setAlert("alerts/" + alertId);
-
-    for (int i = 0; i < matches.size(); i++) {
-      builder.addMatches(convertMatchMetadata(matches.get(i), matchIds[i], alertId));
-    }
-
-    return builder.build();
+    return AlertMetaDataTransformer.transferToRecommendationMetaData(
+        new AnalysisRecommendationContext(
+            matches, analysisId, recommendationId, alertId, matchIds));
   }
 
   public RecommendationWithMetadata toRecommendationWithMetadata(String comment) {

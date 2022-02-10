@@ -65,6 +65,12 @@ class AnalysisEntity extends BaseEntity implements IdentifiableEntity {
   @Singular
   private List<AnalysisFeature> features;
 
+  @Column(updatable = false, nullable = false)
+  private boolean attachMetadata;
+
+  @Column(updatable = false, nullable = false)
+  private boolean attachRecommendation;
+
   @Transient
   String getName() {
     return "analysis/" + getId();
@@ -76,6 +82,9 @@ class AnalysisEntity extends BaseEntity implements IdentifiableEntity {
         .setPolicy(getPolicy())
         .setStrategy(getStrategy())
         .setCreateTime(fromOffsetDateTime(getCreatedAt()))
-        .putAllLabels(getLabels());
+        .putAllLabels(getLabels())
+        .setNotificationFlags(Analysis.NotificationFlags.newBuilder()
+            .setAttachMetadata(this.attachMetadata)
+            .setAttachRecommendation(this.attachRecommendation).build());
   }
 }

@@ -1,13 +1,17 @@
 package com.silenteight.adjudication.engine.analysis.analysis;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.State;
+
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
+@Slf4j
 class CreateAndGetAnalysisUseCaseTest {
 
   private static final String[] IGNORED_PROTO_FIELDS =
@@ -29,7 +33,6 @@ class CreateAndGetAnalysisUseCaseTest {
     var analysis = AnalysisFixtures.randomAnalysisWithoutLabelsCategoriesAndFeatures();
 
     var created = useCase.createAndGetAnalysis(analysis);
-
     assertAnalysisEqualsIgnoringStateAndName(analysis, created);
   }
 
@@ -37,7 +40,6 @@ class CreateAndGetAnalysisUseCaseTest {
   void createMultipleAnalysis() {
     for (var analysis : AnalysisFixtures.randomAnalysisList()) {
       var created = useCase.createAndGetAnalysis(analysis);
-
       assertAnalysisEqualsIgnoringStateAndName(analysis, created);
     }
   }

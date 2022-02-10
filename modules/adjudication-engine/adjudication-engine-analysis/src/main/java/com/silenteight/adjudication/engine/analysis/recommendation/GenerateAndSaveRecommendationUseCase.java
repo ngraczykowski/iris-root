@@ -37,7 +37,8 @@ class GenerateAndSaveRecommendationUseCase {
 
   private List<RecommendationInfo> createRecommendation(SaveRecommendationRequest request) {
     return createRecommendationsUseCase.createRecommendations(
-        request.getAnalysisId(), request.getAlertSolutions());
+        request.getAnalysisId(), request.getAlertSolutions(),
+        request.isShouldRecommendationAttach());
   }
 
   private RecommendationsGenerated createRecommendationGenerated(

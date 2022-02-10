@@ -15,6 +15,7 @@ public class IntegrationTestFixture {
     return analysisService.createAnalysis(
         CreateAnalysisRequest.newBuilder()
             .setAnalysis(analysisFixture)
+
             .build());
   }
 
@@ -88,6 +89,11 @@ public class IntegrationTestFixture {
             .setAgentConfig("agents/date/versions/1.0.0/configs/1")
             .build())
         .putLabels("SIMULATION", "2021-03")
+        .setNotificationFlags(Analysis.NotificationFlags
+            .newBuilder()
+            .setAttachRecommendation(true)
+            .setAttachMetadata(true)
+            .build())
         .build();
   }
 

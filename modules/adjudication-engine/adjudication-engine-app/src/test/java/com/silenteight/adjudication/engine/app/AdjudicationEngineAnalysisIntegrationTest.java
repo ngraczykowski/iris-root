@@ -25,7 +25,7 @@ import java.util.List;
 import static com.silenteight.adjudication.engine.app.IntegrationTestFixture.*;
 import static com.silenteight.adjudication.engine.app.MatchSolutionTestDataAccess.solvedMatchesCount;
 import static com.silenteight.adjudication.engine.app.RecommendationTestDataAccess.generatedRecommendationCount;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
@@ -171,7 +171,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
   private void assertSolvedAlerts(long analysisId, int solvedCount) {
     await()
-        .atMost(Duration.ofSeconds(10))
+        .atMost(Duration.ofSeconds(60))
         .until(() -> solvedMatchesCount(jdbcTemplate, analysisId) >= solvedCount);
 
     assertThat(solvedMatchesCount(jdbcTemplate, analysisId))
@@ -180,7 +180,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
 
   private void assertGeneratedRecommendation(long analysisId, int recommendationCount) {
     await()
-        .atMost(Duration.ofSeconds(10))
+        .atMost(Duration.ofSeconds(60))
         .until(() -> generatedRecommendationCount(jdbcTemplate, analysisId) > 0);
 
     assertThat(generatedRecommendationCount(jdbcTemplate, analysisId))
@@ -190,7 +190,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
   private void assertGeneratedRecommendation(String analysisName) {
     var analysisId = ResourceName.create(analysisName).getLong("analysis");
     await()
-        .atMost(Duration.ofSeconds(10))
+        .atMost(Duration.ofSeconds(60))
         .until(() -> generatedRecommendationCount(
             jdbcTemplate,
             analysisId) > 0);

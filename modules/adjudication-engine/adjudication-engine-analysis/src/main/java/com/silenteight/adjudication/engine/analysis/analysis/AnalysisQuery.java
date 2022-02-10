@@ -2,16 +2,23 @@ package com.silenteight.adjudication.engine.analysis.analysis;
 
 import lombok.*;
 import lombok.EqualsAndHashCode.Include;
-
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.State;
 import com.silenteight.sep.base.common.entity.IdentifiableEntity;
+
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.Immutable;
 
 import java.util.List;
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
 
 import static java.util.stream.Collectors.toUnmodifiableList;
 import static lombok.AccessLevel.*;
@@ -61,6 +68,12 @@ class AnalysisQuery implements IdentifiableEntity {
   @Singular
   private List<AnalysisFeatureQuery> featureQueries;
 
+  @Column(updatable = false, nullable = false)
+  private boolean attachMetadata;
+
+  @Column(updatable = false, nullable = false)
+  private boolean attachRecommendation;
+
   long getPendingAlerts() {
     return pendingAlerts;
   }
@@ -79,12 +92,20 @@ class AnalysisQuery implements IdentifiableEntity {
         .setPendingAlerts(pendingAlerts)
         .setState(determineState());
 
+    builder.setNotificationFlags(buildNotificationFlags(builder));
+
     builder.addAllCategories(
         categoryQueries.stream().map(AnalysisCategoryQuery::getName).collect(toUnmodifiableList()));
     builder.addAllFeatures(
         featureQueries.stream().map(AnalysisFeatureQuery::toFeature).collect(toUnmodifiableList()));
 
     return builder.build();
+  }
+
+  private Analysis.NotificationFlags.Builder buildNotificationFlags(Analysis.Builder builder) {
+    return builder.getNotificationFlagsBuilder()
+        .setAttachMetadata(this.attachMetadata)
+        .setAttachRecommendation(this.attachRecommendation);
   }
 
   private State determineState() {

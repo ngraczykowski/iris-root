@@ -36,6 +36,12 @@ class CreateAnalysisUseCase {
     builder.policy(analysis.getPolicy());
     builder.strategy(analysis.getStrategy());
 
+    var notificationFlags = analysis.getNotificationFlags();
+
+    builder.attachMetadata(notificationFlags.getAttachMetadata());
+
+    builder.attachRecommendation(notificationFlags.getAttachRecommendation());
+
     if (analysis.getLabelsCount() > 0) {
       builder.labels(analysis.getLabelsMap());
     }

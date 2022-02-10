@@ -1,5 +1,7 @@
 package com.silenteight.adjudication.engine.analysis.recommendation;
 
+import com.silenteight.adjudication.api.v1.Analysis;
+import com.silenteight.adjudication.api.v1.Analysis.NotificationFlags;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.engine.analysis.analysis.AnalysisFacade;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertSolution;
@@ -56,17 +58,25 @@ class GenerateAndSaveRecommendationUseCaseTest {
 
     when(createRecommendationsUseCase.createRecommendations(
         1L,
-        List.of(
-            AlertSolution.builder()
-                .alertId(1)
-                .recommendedAction("solved")
-                .matchIds(new long[] { 11 })
-                .matchContexts(new ObjectNode[] {})
-                .build()))).thenReturn(List.of(
-        RecommendationInfo.newBuilder().build()));
+        List.of(AlertSolution.builder()
+            .alertId(1)
+            .recommendedAction("solved")
+            .matchIds(new long[] { 11 })
+            .matchContexts(new ObjectNode[] {})
+            .build()),
+        true))
+        .thenReturn(List.of(
+            RecommendationInfo.newBuilder().build()));
 
+    String analysisName = "analysis/1";
+    when(analysisFacade.getAnalysis(analysisName)).thenReturn(Analysis.newBuilder()
+        .setNotificationFlags(NotificationFlags.newBuilder()
+            .setAttachMetadata(true)
+            .setAttachRecommendation(true)
+            .build())
+        .build());
     var generated =
-        generateAndSaveRecommendationUseCase.generateAndSaveRecommendations("analysis/1");
+        generateAndSaveRecommendationUseCase.generateAndSaveRecommendations(analysisName);
     assertThat(generated)
         .isNotEmpty()
         .hasValueSatisfying(r -> assertThat(r.getRecommendationInfosCount()).isEqualTo(5));

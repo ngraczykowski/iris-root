@@ -1,5 +1,7 @@
 package com.silenteight.adjudication.engine.analysis.recommendation;
 
+import com.silenteight.adjudication.api.v1.Analysis;
+import com.silenteight.adjudication.api.v1.Analysis.NotificationFlags;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.engine.analysis.analysis.AnalysisFacade;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRecommendationRequest;
@@ -47,9 +49,13 @@ class GenerateRecommendationsUseCaseTest {
                 .build())).build());
 
     when(analysisFacade.getAnalysisStrategy(1)).thenReturn("strategies");
+    final String analysisName = "analysis/1";
+    when(analysisFacade.getAnalysis(analysisName)).thenReturn(Analysis.newBuilder()
+        .setNotificationFlags(NotificationFlags.newBuilder()
+            .setAttachRecommendation(true).setAttachMetadata(true).build()).build());
 
     var solution = generateRecommendationsUseCase
-        .generateRecommendations("analysis/1", this::handleRecommendation)
+        .generateRecommendations(analysisName, this::handleRecommendation)
         .get(0);
     assertThat(solution.getAlert()).isEqualTo("alerts/1");
     assertThat(solution.getRecommendation()).isEqualTo("solved");

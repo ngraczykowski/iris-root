@@ -9,5 +9,7 @@ public class SaveRecommendationRequest {
 
   long analysisId;
 
+  boolean shouldRecommendationAttach;
+
   List<AlertSolution> alertSolutions;
 }
