@@ -54,5 +54,8 @@ dependencies {
 
   testImplementation libraries.spring_batch_test
   testImplementation libraries.silenteight_sep_base_testing
+  testImplementation libraries.spock_core
+  testImplementation libraries.spock_spring
+
   testImplementation project(":sear-payments-bridge-testing")
 }

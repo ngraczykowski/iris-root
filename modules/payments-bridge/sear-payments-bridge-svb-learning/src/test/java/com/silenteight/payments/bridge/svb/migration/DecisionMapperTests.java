@@ -20,13 +20,13 @@ class DecisionMapperTests {
   @Test
   void shouldTriggerCompoundPath() {
     assertEquals(
-        "analyst_decision_potential_true_positive",
+        "analyst_decision_true_positive",
         decisionMapper.map(List.of("L2_L3_PEND"), "L3_PASS"));
     assertEquals(
-        "analyst_decision_potential_true_positive",
+        "analyst_decision_true_positive",
         decisionMapper.map(List.of("L2_ESC_TO_L3", "OTHER"), "L3_PASS"));
     assertEquals(
-        "analyst_decision_potential_true_positive",
+        "analyst_decision_true_positive",
         decisionMapper.map(List.of("OTHER", "L2_ESC_TO_L3", "L2_L3_PEND"), "L3_PASS"));
     assertNotEquals(
         "analyst_decision_potential_true_positive",
