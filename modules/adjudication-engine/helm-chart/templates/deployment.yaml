@@ -22,20 +22,20 @@ spec:
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbeHttpGetPath }}
-              port: {{ .Values.ports.http }}
+              port: {{ .Values.ports.management }}
             periodSeconds: 10
             timeoutSeconds: 10
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbeHttpGetPath }}
-              port: {{ .Values.ports.http }}
+              port: {{ .Values.ports.management }}
             failureThreshold: 30
             periodSeconds: 10
             timeoutSeconds: 10
           startupProbe:
             httpGet:
               path: {{ .Values.livenessProbeHttpGetPath }}
-              port: {{ .Values.ports.http }}
+              port: {{ .Values.ports.management }}
             failureThreshold: 30
             timeoutSeconds: 5
             periodSeconds: 10
@@ -69,6 +69,7 @@ spec:
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args:
             - --spring.profiles.active={{ .Values.springProfilesActive }}
+            - --spring.config.additional-location=file:/etc/spring/
             - --logging.config=file:/etc/logback/logback.xml
             - --grpc.client.GLOBAL.negotiation-type=PLAINTEXT
             - --ae.comments.template.cache.invalidation={{ .Values.templateCacheInvalidation }}
@@ -79,12 +80,17 @@ spec:
           volumeMounts:
             - name: logback-config
               mountPath: /etc/logback
+            - name: spring-configmap
+              mountPath: /etc/spring
           ports:
             - containerPort: 8080
               name: http
             - containerPort: 9090
               name: grpc
       volumes:
-        - name: "logback-config"
+        - name: logback-config
           configMap:
             name: "adjudication-engine-logback-configmap"
+        - name: spring-configmap
+          configMap:
+            name: {{ .Values.name }}-spring

@@ -5,12 +5,13 @@ image_repo: dummy
 ports:
   http: 8080
   grpc: 9090
+  management: 8081
 
 springProfilesActive: "mockaws,mockdatasource,mockae"
 replicaCount: 1
 imagePullPolicy: Always
-livenessProbeHttpGetPath: "/rest/ae/management/health/liveness"
-readinessProbeHttpGetPath: "/rest/ae/management/health/readiness"
+livenessProbeHttpGetPath: "/management/health/liveness"
+readinessProbeHttpGetPath: "/management/health/readiness"
 grpcClientDatasourceAddress: dns:///universal-data-source-service.default.svc.cluster.local:9090
 grpcClientGovernanceAddress: dns:///governance-app-service.default.svc.cluster.local:9090
 templateCacheInvalidation: "*/15 * * * * *"
