@@ -37,3 +37,8 @@ management:
       exposure:
         include: ["health", "info", "liquibase", "metrics", "prometheus", "loggers"]
 
+### REGISTRATION
+registration:
+  analysis:
+    mock-recommendations-generation: false
+
