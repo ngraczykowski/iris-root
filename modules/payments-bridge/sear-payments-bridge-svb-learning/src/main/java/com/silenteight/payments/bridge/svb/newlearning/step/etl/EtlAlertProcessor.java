@@ -32,11 +32,11 @@ class EtlAlertProcessor implements ItemProcessor<AlertComposite, LearningProcess
       return processUnregistered(alertComposite);
     }
 
-    return processRegistered(alertComposite, solvingRegistered.get(0));
+    return processRegistered(alertComposite, solvingRegistered);
   }
 
   LearningProcessedAlert processRegistered(
-      AlertComposite alertComposite, RegisteredAlert solvingRegistered) {
+      AlertComposite alertComposite, List<RegisteredAlert> solvingRegistered) {
     var resultBuilder = createBuilder(alertComposite);
 
     try {
