@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Builder
 public class AgentInputIn<T extends Feature> {
 
-  String name;
   String alert;
   String match;
 
@@ -24,7 +23,6 @@ public class AgentInputIn<T extends Feature> {
 
   AgentInput createFrom() {
     return AgentInput.newBuilder()
-        .setName(name)
         .setAlert(alert)
         .setMatch(match)
         .addAllFeatureInputs(featureInputs

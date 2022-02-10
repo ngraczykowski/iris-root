@@ -73,7 +73,6 @@ class AgentInputServiceAdapterTest {
 
     static final List<AgentInputIn<CountryFeatureInputOut>> AGENT_INPUT_INS = List.of(
         AgentInputIn.<CountryFeatureInputOut>builder()
-            .name(NAME)
             .alert(ALERT)
             .match(MATCH)
             .featureInputs(COUNTRY_FEATURE_INPUT_OUT)
