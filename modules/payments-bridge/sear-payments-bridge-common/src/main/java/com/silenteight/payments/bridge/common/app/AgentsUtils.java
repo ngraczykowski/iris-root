@@ -25,7 +25,9 @@ public class AgentsUtils {
       "contextualLearningName";
   public static final String CONTEXTUAL_LEARNING_FEATURE_NAME =
       FEATURE_PREFIX + CONTEXTUAL_LEARNING_FEATURE;
-  public static final String CONTEXTUAL_LEARNING_DISC = "contextual_learning_name";
+  // TODO(jgajewski): Rename to hist_contextual_learning_name
+  //  when learning engine is going to change it's discriminator
+  public static final String CONTEXTUAL_LEARNING_DISC = "hist_contextual_learning";
 
   public static final String GEO_FEATURE = "geo";
 

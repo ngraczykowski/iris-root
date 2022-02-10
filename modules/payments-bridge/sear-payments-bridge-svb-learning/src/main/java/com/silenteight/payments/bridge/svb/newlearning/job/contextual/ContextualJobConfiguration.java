@@ -8,7 +8,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.HISTORICAL_RISK_ASSESSMENT_JOB_NAME;
+import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.CONTEXTUAL_LEARNING_JOB_NAME;
 
 @RequiredArgsConstructor
 @Configuration
@@ -20,7 +20,7 @@ class ContextualJobConfiguration {
 
   @Bean
   Job contextualLearningJob() {
-    return jobBuilderFactory.get(HISTORICAL_RISK_ASSESSMENT_JOB_NAME)
+    return jobBuilderFactory.get(CONTEXTUAL_LEARNING_JOB_NAME)
         .start(contextualReservationStep)
         .next(storeContextualLearningInLearningEngineStep)
         .build();

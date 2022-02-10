@@ -23,7 +23,7 @@ import org.springframework.retry.policy.AlwaysRetryPolicy;
 
 import java.io.IOException;
 
-import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.HISTORICAL_ASSESSMENT_STORE_STEP;
+import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.CONTEXTUAL_LEARNING_STORE_STEP;
 
 @Configuration
 @RequiredArgsConstructor
@@ -53,7 +53,7 @@ class StoreInLearningEngineContextualStepConfiguration {
   Step storeContextualLearningInLearningEngineStep(
       AbstractItemStreamItemReader<AlertComposite> contextualReservationCompositeReader) {
     return stepBuilderFactory
-        .get(HISTORICAL_ASSESSMENT_STORE_STEP)
+        .get(CONTEXTUAL_LEARNING_STORE_STEP)
         .listener(new JobParameterExecutionContextCopyListener())
         .<AlertComposite, HistoricalDecisionLearningAggregate>chunk(properties.getChunkSize())
         .reader(contextualReservationCompositeReader)

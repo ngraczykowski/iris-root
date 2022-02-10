@@ -8,13 +8,13 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlert
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterAlertResponse;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisterMatchResponse;
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAlert;
-import com.silenteight.payments.bridge.common.app.AgentsUtils;
+import com.silenteight.payments.bridge.common.agents.AlertedPartyIdContextAdapter;
+import com.silenteight.payments.bridge.common.agents.ContextualAlertedPartyIdModel;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.data.retention.model.AlertDataRetention;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 import com.silenteight.payments.bridge.etl.processing.model.MessageTag;
 import com.silenteight.payments.bridge.svb.migration.DecisionMapper;
-import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.service.AlertParserService;
 import com.silenteight.proto.learningstore.historicaldecision.v1.api.*;
 
@@ -26,7 +26,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
-import static com.silenteight.payments.bridge.common.dto.common.MessageStructure.isMessageStructured;
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_DISC;
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_FP;
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_TP;
+import static com.silenteight.payments.bridge.common.dto.common.MessageStructure.*;
 import static java.util.stream.Collectors.toList;
 
 @Value
@@ -45,6 +48,8 @@ public class AlertComposite {
 
   List<ActionComposite> actions;
 
+  ContextualAlertedPartyIdModel.ContextualAlertedPartyIdModelBuilder contextualModelBuilder;
+
   public String getSystemId() {
     return alertDetails.getSystemId();
   }
@@ -58,7 +63,8 @@ public class AlertComposite {
       DecisionMapper decisionMapper, String featureTypeDiscriminator) {
     var alerts =
         hits.stream()
-            .filter(hit -> isMessageStructured(hit.getFkcoVMatchedTag()))
+            .filter(
+                hit -> shouldBeAddedToRequest(hit.getFkcoVMatchedTag(), featureTypeDiscriminator))
             .map(hit -> mapToAlert(decisionMapper, featureTypeDiscriminator, hit))
             .peek(alert -> {
               if (log.isTraceEnabled()) {
@@ -76,12 +82,28 @@ public class AlertComposite {
         .build();
   }
 
+  private static boolean shouldBeAddedToRequest(String tag, String featureTypeDiscriminator) {
+    switch (featureTypeDiscriminator) {
+      case HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_FP:
+      case HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_TP:
+        return isMessageStructured(tag);
+      case CONTEXTUAL_LEARNING_DISC:
+        return true;
+      default:
+        throw new UnsupportedHistoricalDecisionAgentFeature(
+            String.format(
+                "This historical decision feature discriminator is not supported: %s",
+                featureTypeDiscriminator));
+    }
+  }
+
+
   @Nonnull
   private Alert mapToAlert(
       DecisionMapper decisionMapper, String featureTypeDiscriminator, HitComposite hit) {
     return Alert.newBuilder()
         .setAlertId(alertDetails.getSystemId())
-        .setAlertedParty(mapAlertedParty(featureTypeDiscriminator, hit))
+        .setAlertedParty(createContextualAlertedParty(featureTypeDiscriminator, hit))
         .setMatchId(hit.getFkcoVListFmmId())
         .setWatchlist(mapWatchlistType(hit))
         .addDecisions(getDecision(decisionMapper))
@@ -109,7 +131,23 @@ public class AlertComposite {
 
   }
 
-  private List<ActionComposite> createPreviousActions(List<ActionComposite> actions) {
+  private AlertedParty createContextualAlertedParty(
+      String featureTypeDiscriminator, HitComposite hit) {
+    switch (featureTypeDiscriminator) {
+      case HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_FP:
+      case HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_TP:
+        return createAlertedPartyData(hit);
+      case CONTEXTUAL_LEARNING_DISC:
+        return createContextualAlertedParty(hit);
+      default:
+        throw new UnsupportedHistoricalDecisionAgentFeature(
+            String.format(
+                "This historical decision feature discriminator is not supported: %s",
+                featureTypeDiscriminator));
+    }
+  }
+
+  private static List<ActionComposite> createPreviousActions(List<ActionComposite> actions) {
     if (actions.size() > 1) {
       return actions.subList(0, actions.size() - 1);
     } else {
@@ -117,7 +155,7 @@ public class AlertComposite {
     }
   }
 
-  private AlertedParty mapAlertedParty(String featureTypeDiscriminator, HitComposite hit) {
+  private AlertedParty createAlertedPartyData(HitComposite hit) {
     var messageData = new MessageData(List.of(
         new MessageTag(hit.getFkcoVMatchedTag(), hit.getFkcoVMatchedTagContent())));
 
@@ -125,8 +163,7 @@ public class AlertComposite {
         hit.getFkcoVMatchedTag(),
         alertDetails.getFkcoVFormat(), alertDetails.getFkcoVApplication());
 
-    var alertedPartyId =
-        mapAlertedPartyIdByFeatureDiscriminator(featureTypeDiscriminator, alertedPartyData);
+    var alertedPartyId = alertedPartyData.getAccountNumberOrEmpty();
     var country = hit.getFkcoVCountryMatchedText();
 
     if (log.isDebugEnabled()) {
@@ -139,20 +176,25 @@ public class AlertComposite {
         .build();
   }
 
-  private String mapAlertedPartyIdByFeatureDiscriminator(
-      String featureTypeDiscriminator, AlertedPartyData alertedPartyData) {
-    switch (featureTypeDiscriminator) {
-      case AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_FP:
-      case AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_TP:
-        return alertedPartyData.getAccountNumberOrEmpty();
-      case AgentsUtils.HISTORICAL_RISK_CUSTOMER_NAME_LEARNING_DISC:
-        return alertedPartyData.getFirstAlertedPartyName().orElse("");
-      default:
-        throw new UnsupportedHistoricalDecisionAgentFeature(
-            String.format(
-                "This historical decision feature discriminator is not supported: %s",
-                featureTypeDiscriminator));
-    }
+  private AlertedParty createContextualAlertedParty(HitComposite hit) {
+
+    String matchingField = hit.getFkcoVMatchedTagContent();
+    String matchedText = hit.getFkcoVNameMatchedText();
+
+    var request =
+        contextualModelBuilder
+            .matchingField(matchingField)
+            .matchText(matchedText)
+            .build();
+
+    var alertedPartyId = AlertedPartyIdContextAdapter.generateAlertedPartyId(request);
+
+    var country = hit.getFkcoVCountryMatchedText();
+
+    return AlertedParty.newBuilder()
+        .setId(alertedPartyId)
+        .setCountry(country)
+        .build();
   }
 
   private Discriminator mapDiscriminator(String featureTypeDiscriminator) {

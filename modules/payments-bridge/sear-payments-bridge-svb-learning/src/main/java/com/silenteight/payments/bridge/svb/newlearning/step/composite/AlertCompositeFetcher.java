@@ -2,12 +2,14 @@ package com.silenteight.payments.bridge.svb.newlearning.step.composite;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.common.agents.ContextualLearningProperties;
 import com.silenteight.payments.bridge.common.app.LearningProperties;
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertDetails;
 import com.silenteight.payments.bridge.svb.newlearning.step.composite.exception.FetchingComposeDataException;
 
 import org.intellij.lang.annotations.Language;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
@@ -24,6 +26,7 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Service
+@EnableConfigurationProperties(ContextualLearningProperties.class)
 class AlertCompositeFetcher extends BaseCompositeFetcher<List<Long>, List<AlertComposite>> {
 
   @Language("PostgreSQL")
@@ -35,15 +38,18 @@ class AlertCompositeFetcher extends BaseCompositeFetcher<List<Long>, List<AlertC
   private final HitCompositeFetcher hitCompositeFetcher;
   private final ActionCompositeFetcher actionCompositeFetcher;
   private final LearningProperties properties;
+  private final ContextualLearningProperties contextualLearningProperties;
 
   public AlertCompositeFetcher(
       DataSource dataSource, HitCompositeFetcher hitCompositeFetcher,
       ActionCompositeFetcher actionCompositeFetcher,
-      LearningProperties properties) {
+      LearningProperties properties,
+      ContextualLearningProperties contextualLearningProperties) {
     super(dataSource);
     this.hitCompositeFetcher = hitCompositeFetcher;
     this.actionCompositeFetcher = actionCompositeFetcher;
     this.properties = properties;
+    this.contextualLearningProperties = contextualLearningProperties;
   }
 
   @Override
@@ -61,9 +67,12 @@ class AlertCompositeFetcher extends BaseCompositeFetcher<List<Long>, List<AlertC
             .alertDetails(ad)
             .hits(hits.get(ad.getFkcoId()))
             .actions(actions.get(ad.getFkcoId()))
+            .contextualModelBuilder(contextualLearningProperties.getModelBuilder())
             .build())
         .collect(toList());
   }
+
+
 
   private List<AlertDetails> fetchAlertsDetails(Connection connection, List<Long> alertIds) {
     var preparedQuery = prepareQuery(ALERTS_QUERY, alertIds);
