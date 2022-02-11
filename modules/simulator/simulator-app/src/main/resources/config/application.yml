@@ -36,18 +36,22 @@ management:
   health:
     mail:
       enabled: false
+  info:
+    git:
+      mode: simple
   endpoint:
-    health.show-details: always
-
+    health:
+      show-details: always
+      probes:
+        enabled: true
   endpoints:
     web:
       base-path: /management
       exposure:
-        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers" ]
-    # loggers endpoint is secured with mTLS
-    loggers:
-      sensitive: false
-
+        include: [ "health", "info", "metrics", "prometheus", "loggers" ]
+    jmx:
+      exposure:
+        exclude: "*"
   metrics:
     tags:
       application: ${spring.application.name}
