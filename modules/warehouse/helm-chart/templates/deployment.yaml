@@ -22,14 +22,14 @@ spec:
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbeHttpGetPath }}
-              port: {{ .Values.ports.http }}
+              port: {{ .Values.ports.management }}
             failureThreshold: 30
             initialDelaySeconds: 10
             timeoutSeconds: 10
           readinessProbe:
             httpGet:
               path: {{ .Values.readinessProbeHttpGetPath }}
-              port: {{ .Values.ports.http }}
+              port: {{ .Values.ports.management }}
             failureThreshold: 30
             initialDelaySeconds: 30
             timeoutSeconds: 10
@@ -91,10 +91,11 @@ spec:
             requests:
               memory: {{ .Values.memoryRequest | quote }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
-          {{ if .Values.args }}
           args:
+            - --management.server.port={{ .Values.ports.management }}
+          {{ if .Values.args }}
           {{ range .Values.args }}
-          - {{ . }}
+            - {{ . }}
           {{ end }}
           {{ end }}
           volumeMounts:
@@ -106,6 +107,8 @@ spec:
               name: http
             - containerPort: {{ .Values.ports.grpc }}
               name: grpc
+            - containerPort: {{ .Values.ports.management } }
+              name: management
       initContainers:
         - name: warehouse-es-init
           image: {{ .Values.esInitDockerImage }}

@@ -7,6 +7,7 @@ config:
 ports:
   http: 8080
   grpc: 8081
+  management: 8082
 
 replicaCount: 1
 imagePullPolicy: Always
