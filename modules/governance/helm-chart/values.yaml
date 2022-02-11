@@ -4,6 +4,7 @@ image_repo: governance-app
 ports:
   http: 8080
   grpc: 9090
+  management: 8081
 
 replicaCount: 1
 imagePullPolicy: Always

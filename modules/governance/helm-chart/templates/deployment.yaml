@@ -73,6 +73,7 @@ spec:
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args:
             - --logging.config=file:/etc/logback.xml
+            - --management.server.port={{ .Values.ports.management }}
             - --sentry.dsn={{ .Values.sentry.dsn }}
             - --sentry.environment={{ .Values.sentry.environment }}
             - --sentry.traces-sample-rate={{ .Values.sentry.tracesSampleRate }}
@@ -90,6 +91,8 @@ spec:
               name: http
             - containerPort: {{ .Values.ports.grpc }}
               name: grpc
+            - containerPort: {{ .Values.ports.management }}
+              name: management
       volumes:
         - name: "logback-config"
           configMap:
