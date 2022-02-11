@@ -59,6 +59,7 @@ spec:
           {{ range .Values.args }}
             - {{ . }}
           {{ end }}
+            - --management.server.port={{ .Values.ports.management }}
             - --sentry.dsn={{ .Values.sentry.dsn }}
             - --sentry.environment={{ .Values.sentry.environment }}
             - --sentry.traces-sample-rate={{ .Values.sentry.tracesSampleRate }}
@@ -75,6 +76,8 @@ spec:
           ports:
             - containerPort: {{ .Values.ports.http }}
               name: http
+            - containerPort: {{ .Values.ports.management } }
+              name: management
       volumes:
         - name: "logback-config"
           configMap:

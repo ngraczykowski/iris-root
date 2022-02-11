@@ -9,3 +9,5 @@ spec:
     - protocol: TCP
       port: {{ .Values.ports.http }}
       targetPort: http
+    - protocol: TCP
+      port: {{ .Values.ports.management }}

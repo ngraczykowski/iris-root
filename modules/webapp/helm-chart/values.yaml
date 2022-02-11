@@ -4,6 +4,7 @@ image_repo: webapp-app
 args: ["--logging.config=file:/etc/logback.xml"]
 ports:
   http: 24410
+  management: 8081
 config:
   name: webapp
   data:
