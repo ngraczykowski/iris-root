@@ -7,6 +7,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAle
 import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
 import com.silenteight.payments.bridge.svb.newlearning.step.etl.LearningProcessedAlert.LearningProcessedAlertBuilder;
+import com.silenteight.payments.bridge.svb.oldetl.model.UnsupportedMessageException;
 
 import org.springframework.batch.item.ItemProcessor;
 
@@ -44,12 +45,12 @@ class EtlAlertProcessor implements ItemProcessor<AlertComposite, LearningProcess
     try {
       processRegisteredService.process(alertComposite, solvingRegistered);
       return resultBuilder.result(SUCCESSFUL.toString()).build();
-    } catch (Exception e) {
+    } catch (UnsupportedMessageException e) {
       log.warn("Failed to process alert = {}", alertComposite.getSystemId(), e);
-      return resultBuilder
-          .result(FAILED.toString())
-          .errorMessage(e.getMessage())
-          .build();
+      return createFailedResponse(resultBuilder, e);
+    } catch (Exception e) {
+      log.error("Failed to process alert = {}", alertComposite.getSystemId(), e);
+      return createFailedResponse(resultBuilder, e);
     }
   }
 
@@ -59,12 +60,12 @@ class EtlAlertProcessor implements ItemProcessor<AlertComposite, LearningProcess
     try {
       processUnregisteredService.process(alertComposite, jobId);
       return resultBuilder.result(SUCCESSFUL.toString()).build();
-    } catch (Exception e) {
+    } catch (UnsupportedMessageException e) {
       log.warn("Failed to process alert = {}", alertComposite.getSystemId(), e);
-      return resultBuilder
-          .result(FAILED.toString())
-          .errorMessage(e.getMessage())
-          .build();
+      return createFailedResponse(resultBuilder, e);
+    } catch (Exception e) {
+      log.error("Failed to process alert = {}", alertComposite.getSystemId(), e);
+      return createFailedResponse(resultBuilder, e);
     }
   }
 
@@ -74,5 +75,13 @@ class EtlAlertProcessor implements ItemProcessor<AlertComposite, LearningProcess
         .fileName(fileName)
         .jobId(jobId)
         .fkcoVSystemId(alertComposite.getSystemId());
+  }
+
+  private static LearningProcessedAlert createFailedResponse(
+      LearningProcessedAlertBuilder resultBuilder, Exception e) {
+    return resultBuilder
+        .result(FAILED.toString())
+        .errorMessage(e.getMessage())
+        .build();
   }
 }
