@@ -47,8 +47,8 @@ warehouse:
       allow-credentials: true
       max-age: 1800
   messaging:
-    concurrency: 4
-    prefetch: 25
+    concurrency: 1
+    prefetch: 1
     broker:
       alert-backup-indexing:
         queue-name: wh.index-request.backup
