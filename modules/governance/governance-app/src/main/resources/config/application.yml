@@ -234,9 +234,6 @@ management:
     jmx:
       exposure:
         exclude: "*"
-    # loggers endpoint is secured with mTLS
-    loggers:
-      sensitive: false
 
   metrics:
     tags:
