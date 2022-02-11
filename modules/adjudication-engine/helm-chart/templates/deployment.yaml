@@ -69,6 +69,9 @@ spec:
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           args:
             - --spring.profiles.active={{ .Values.springProfilesActive }}
+            - --server.port={{ .Values.ports.http }}
+            - --grpc.server.port={{ .Values.ports.grpc }}
+            - --management.server.port={{ .Values.ports.management }}
             - --spring.config.additional-location=file:/etc/spring/
             - --logging.config=file:/etc/logback/logback.xml
             - --grpc.client.GLOBAL.negotiation-type=PLAINTEXT
@@ -83,10 +86,12 @@ spec:
             - name: spring-configmap
               mountPath: /etc/spring
           ports:
-            - containerPort: 8080
+            - containerPort: {{ .Values.ports.http }}
               name: http
-            - containerPort: 9090
+            - containerPort: {{ .Values.ports.grpc }}
               name: grpc
+            - containerPort: {{ .Values.ports.management }}
+              name: management
       volumes:
         - name: logback-config
           configMap:

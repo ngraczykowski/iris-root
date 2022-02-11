@@ -16,6 +16,6 @@ spec:
     - port: {{ .Values.ports.grpc }}
       name: grpc
       targetPort: grpc
-
-
-
+    - protocol: TCP
+      name: management
+      port: {{ .Values.ports.management }}
