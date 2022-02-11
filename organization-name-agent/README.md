@@ -359,7 +359,7 @@ Most scores are computed on cleared names - lowercase and without national chara
   
   compared: cleared input on alerted party side
   
-  algorithm: search for defined words (needs exact word, for example "gazprom" blacklist won't work for "gazprombank")
+  algorithm: search for defined words (does not need exact word, for example "gazprom" works for "gazprombank")
 
 
 * **country**
