@@ -22,7 +22,7 @@ class SelectRegisteredAlertQueryIT extends BaseJdbcTest {
 
   @Test
   public void shouldSelectAlert() {
-    var alertId = selectRegisteredAlertQuery.execute("alerts/1");
+    var alertId = selectRegisteredAlertQuery.execute("alerts/420");
     assertThat(alertId).isEqualTo(UUID.fromString("4111b67f-b4fa-4d88-9074-a0c54022383c"));
   }
 }

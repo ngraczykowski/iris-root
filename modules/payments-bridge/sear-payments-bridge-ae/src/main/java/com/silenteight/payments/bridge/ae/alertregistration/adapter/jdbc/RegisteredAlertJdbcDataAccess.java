@@ -6,6 +6,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.SaveRegistere
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisteredAlertDataAccessPort;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -24,7 +25,7 @@ class RegisteredAlertJdbcDataAccess implements RegisteredAlertDataAccessPort {
   private final DeleteRegisteredAlertQuery deleteRegisteredAlertQuery;
 
   @Override
-  @Transactional
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void save(List<SaveRegisteredAlertRequest> request) {
     request.forEach(r -> {
       var registeredAlertId = insertRegisteredAlertQuery.execute(r);

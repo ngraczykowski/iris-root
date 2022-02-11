@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.svb.newlearning.step.etl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAlert;
 import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
@@ -15,6 +16,7 @@ import static com.silenteight.payments.bridge.svb.newlearning.domain.AlertProces
 import static com.silenteight.payments.bridge.svb.newlearning.domain.AlertProcessingResult.SUCCESSFUL;
 
 @RequiredArgsConstructor
+@Slf4j
 class EtlAlertProcessor implements ItemProcessor<AlertComposite, LearningProcessedAlert> {
 
   private final FindRegisteredAlertUseCase findRegisteredAlertUseCase;
@@ -43,6 +45,7 @@ class EtlAlertProcessor implements ItemProcessor<AlertComposite, LearningProcess
       processRegisteredService.process(alertComposite, solvingRegistered);
       return resultBuilder.result(SUCCESSFUL.toString()).build();
     } catch (Exception e) {
+      log.warn("Failed to process alert = {}", alertComposite.getSystemId(), e);
       return resultBuilder
           .result(FAILED.toString())
           .errorMessage(e.getMessage())
@@ -57,6 +60,7 @@ class EtlAlertProcessor implements ItemProcessor<AlertComposite, LearningProcess
       processUnregisteredService.process(alertComposite, jobId);
       return resultBuilder.result(SUCCESSFUL.toString()).build();
     } catch (Exception e) {
+      log.warn("Failed to process alert = {}", alertComposite.getSystemId(), e);
       return resultBuilder
           .result(FAILED.toString())
           .errorMessage(e.getMessage())
