@@ -217,6 +217,9 @@ management:
   health:
     mail:
       enabled: false
+  info:
+    git:
+      mode: simple
   endpoint:
     health:
       show-details: always
@@ -227,7 +230,10 @@ management:
     web:
       base-path: /management
       exposure:
-        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers" ]
+        include: [ "health", "info", "metrics", "prometheus", "loggers" ]
+    jmx:
+      exposure:
+        exclude: "*"
     # loggers endpoint is secured with mTLS
     loggers:
       sensitive: false

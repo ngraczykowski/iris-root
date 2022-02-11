@@ -19,18 +19,6 @@ logging:
     io.grpc.netty: INFO
     org.quartz.core.JobRunShell: DEBUG
 
-management:
-  info:
-    git:
-      mode: full
-
-  endpoints:
-    enabled-by-default: true
-
-    web:
-      exposure:
-        include: "*"
-
 server:
   error:
     include-stacktrace: on_trace_param
