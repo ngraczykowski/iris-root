@@ -129,7 +129,7 @@ public class LearningMatch {
       log.warn("Solution type: {} is not valid", solutionType);
       return SolutionType.UNKNOWN;
     }
-    return SolutionType.valueOf(hitType);
+    return SolutionType.valueOf(solutionType);
   }
 
   public Optional<String> getFirstAlertedPartyName() {
