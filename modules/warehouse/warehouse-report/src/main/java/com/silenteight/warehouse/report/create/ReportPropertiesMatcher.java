@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import com.silenteight.warehouse.common.domain.ReportConstants;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -14,14 +12,17 @@ public class ReportPropertiesMatcher {
 
   private final List<ReportProperties> reportProperties;
 
-  public ReportProperties getFor(String name, String type) {
-    Map<String, ReportProperties> reports = reportProperties.stream()
-        .filter(report -> report.getName().equalsIgnoreCase(name))
-        .collect(Collectors.toMap(ReportProperties::getType, Function.identity()));
+  public ReportProperties getFor(String name, String type)
+      throws ReportNotAvailableException {
+    String reportType = ReportConstants.PRODUCTION.equals(type) ?
+                        ReportConstants.PRODUCTION : ReportConstants.SIMULATION;
 
-    return ReportConstants.PRODUCTION.equals(type)
-           ? reports.get(ReportConstants.PRODUCTION)
-           : reports.get(ReportConstants.SIMULATION);
+    return reportProperties.stream()
+        .filter(report -> reportType.equalsIgnoreCase(report.getType()))
+        .filter(report -> report.getName().equals(name))
+        .findFirst()
+        .orElseThrow(() -> new ReportNotAvailableException(
+            String.format("Report name: %s not found for type: %s", name, reportType)));
   }
 
   public List<ReportProperties> getFor(String type) {

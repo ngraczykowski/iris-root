@@ -41,7 +41,7 @@ public class CreateReportRestController {
       @DateTimeFormat(iso = DATE_TIME)
       @RequestParam(required = false) OffsetDateTime to,
       @PathVariable String type,
-      @PathVariable String name) {
+      @PathVariable String name) throws ReportNotAvailableException {
 
     if (IS_PRODUCTION.test(type))
       validate(from, to);
