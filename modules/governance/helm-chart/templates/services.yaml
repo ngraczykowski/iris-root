@@ -10,8 +10,10 @@ spec:
       port: {{ .Values.ports.http }}
       name: http
       targetPort: http
-
     - protocol: TCP
       port: {{ .Values.ports.grpc }}
       name: grpc
       targetPort: grpc
+    - protocol: TCP
+      port: {{ .Values.ports.management }}
+      name: management
