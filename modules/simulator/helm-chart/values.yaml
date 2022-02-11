@@ -3,6 +3,7 @@ image_tag: simulator-app
 image_repo: simulator-app
 ports:
   http: 8080
+  management: 8081
 config:
   name: simulator-app
   data:
