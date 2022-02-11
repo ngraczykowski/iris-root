@@ -27,7 +27,6 @@ class AlertMatchesFeatureInputFedReceivedListenerSpec extends Specification {
                 [
                     FedMatch.newBuilder()
                         .setMatchId('3')
-                        .setFeedingStatus(FedMatch.FeedingStatus.SUCCESS)
                         .build()
                 ])
             .build()

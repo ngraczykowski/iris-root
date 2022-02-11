@@ -21,11 +21,10 @@ class BatchServiceSpec extends Specification {
   def analysisService = Mock(AnalysisService)
   def batchRepository = Mock(BatchRepository)
   def modelService = Mock(DefaultModelService)
-  def batchStatisticsService = Mock(BatchStatisticsService)
 
   @Subject
   def underTest = new BatchService(
-      eventPublisher, analysisService, batchRepository, modelService, batchStatisticsService)
+      eventPublisher, analysisService, batchRepository, modelService)
 
   def 'should register batch'() {
     given:
@@ -100,7 +99,6 @@ class BatchServiceSpec extends Specification {
     underTest.notifyBatchError(RegistrationFixtures.NOTIFY_BATCH_ERROR_COMMAND)
 
     then:
-    1 * batchStatisticsService.createBatchErrorStatistics() >> RegistrationFixtures.BATCH_STATISTICS
     1 * batchRepository.updateStatusAndErrorDescription(
         batchId, BatchStatus.ERROR, RegistrationFixtures.ERROR_DESCRIPTION)
     1 * eventPublisher.publish(RegistrationFixtures.BATCH_ERROR)
@@ -120,7 +118,6 @@ class BatchServiceSpec extends Specification {
     underTest.notifyBatchError(RegistrationFixtures.NOTIFY_BATCH_ERROR_COMMAND)
 
     then:
-    1 * batchStatisticsService.createBatchErrorStatistics() >> RegistrationFixtures.BATCH_STATISTICS
     1 * batchRepository.create(_ as Batch) >> Batch.error(batchId, errorDescription, metadata)
     1 * eventPublisher.publish(RegistrationFixtures.BATCH_ERROR)
     0 * batchRepository.updateStatusAndErrorDescription(batchId, BatchStatus.ERROR)
@@ -173,8 +170,7 @@ class BatchServiceSpec extends Specification {
         Fixtures.BATCH_ID,
         RegistrationFixtures.ANALYSIS_NAME,
         RegistrationFixtures.METADATA,
-        alertNames,
-        RegistrationFixtures.BATCH_STATISTICS
+        alertNames
     )
 
     and:
@@ -185,9 +181,6 @@ class BatchServiceSpec extends Specification {
 
     then:
     1 * batchRepository.updateStatusToCompleted(command.id())
-    1 * batchStatisticsService
-        .createBatchCompletedStatistics(Fixtures.BATCH_ID, RegistrationFixtures.ANALYSIS_NAME) >>
-        RegistrationFixtures.BATCH_STATISTICS
     1 * eventPublisher.publish(batchCompleted)
   }
 
@@ -204,7 +197,6 @@ class BatchServiceSpec extends Specification {
 
     then:
     0 * batchRepository.updateStatusToCompleted(_ as CompleteBatchCommand)
-    0 * batchStatisticsService.createBatchCompletedStatistics(_ as String, _ as String)
     0 * eventPublisher.publish(_ as BatchCompleted)
   }
 

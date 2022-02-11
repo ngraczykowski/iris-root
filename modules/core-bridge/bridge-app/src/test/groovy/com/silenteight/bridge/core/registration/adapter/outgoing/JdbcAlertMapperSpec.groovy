@@ -110,21 +110,6 @@ class JdbcAlertMapperSpec extends Specification {
     }
   }
 
-  def 'should map to alerts statistics'() {
-    given:
-    def alertStatusCountProjections = [
-        new AlertStatusStatisticsProjection('RECOMMENDED', 1),
-        new AlertStatusStatisticsProjection('ERROR', 2)
-    ]
-
-    when:
-    def result = underTest.toAlertsStatistics(alertStatusCountProjections)
-
-    then:
-    result.getAlertCountByStatus(AlertStatus.RECOMMENDED) == 1
-    result.getAlertCountByStatus(AlertStatus.ERROR) == 2
-  }
-
   def 'should map projections to alerts with matches'() {
     given:
     def projections = [

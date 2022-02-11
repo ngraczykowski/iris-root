@@ -104,7 +104,6 @@ class RecommendationReceivedFlowIntegrationSpec extends BaseSpecificationIT {
         analysisId == analysisName
         alertIdsCount == 1
         batchMetadata == METADATA
-        statistics.totalProcessedCount == 1
       }
     }
   }

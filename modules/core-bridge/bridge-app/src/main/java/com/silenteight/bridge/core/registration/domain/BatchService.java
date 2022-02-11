@@ -31,7 +31,6 @@ class BatchService {
   private final AnalysisService analysisService;
   private final BatchRepository batchRepository;
   private final DefaultModelService defaultModelService;
-  private final BatchStatisticsService batchStatisticsService;
 
   BatchId register(RegisterBatchCommand registerBatchCommand) {
     return batchRepository.findById(registerBatchCommand.id())
@@ -53,7 +52,6 @@ class BatchService {
   }
 
   void notifyBatchError(NotifyBatchErrorCommand notifyBatchErrorCommand) {
-    var batchErrorStatistics = batchStatisticsService.createBatchErrorStatistics();
     batchRepository.findById(notifyBatchErrorCommand.id())
         .ifPresentOrElse(
             batch -> markBatchAsError(notifyBatchErrorCommand),
@@ -63,7 +61,6 @@ class BatchService {
             .id(notifyBatchErrorCommand.id())
             .batchMetadata(notifyBatchErrorCommand.batchMetadata())
             .errorDescription(notifyBatchErrorCommand.errorDescription())
-            .statistics(batchErrorStatistics)
             .build()
     );
   }
@@ -157,16 +154,12 @@ class BatchService {
   }
 
   private void publishBatchCompleted(Batch batch, List<String> alertNames) {
-    var batchCompletedStatistics =
-        batchStatisticsService.createBatchCompletedStatistics(batch.id(), batch.analysisName());
-
     eventPublisher.publish(
         BatchCompleted.builder()
             .id(batch.id())
             .analysisId(batch.analysisName())
             .batchMetadata(batch.batchMetadata())
             .alertIds(alertNames)
-            .statistics(batchCompletedStatistics)
             .build()
     );
   }

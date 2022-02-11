@@ -3,16 +3,15 @@ package com.silenteight.bridge.core.recommendation.domain;
 import lombok.experimental.UtilityClass;
 
 import com.silenteight.adjudication.api.library.v1.util.TimeStampUtil;
+import com.silenteight.bridge.core.recommendation.domain.model.BatchStatistics;
+import com.silenteight.bridge.core.recommendation.domain.model.BatchStatistics.RecommendationsStats;
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto;
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertWithMatchesDto;
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertWithMatchesDto.MatchDto;
 import com.silenteight.bridge.core.recommendation.domain.model.MatchMetadata;
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata;
-import com.silenteight.proto.recommendation.api.v1.Alert;
+import com.silenteight.proto.recommendation.api.v1.*;
 import com.silenteight.proto.recommendation.api.v1.Alert.AlertStatus;
-import com.silenteight.proto.recommendation.api.v1.Match;
-import com.silenteight.proto.recommendation.api.v1.Recommendation;
-import com.silenteight.proto.recommendation.api.v1.RecommendationsResponse;
 
 import com.google.protobuf.Struct;
 import com.google.protobuf.Struct.Builder;
@@ -41,7 +40,8 @@ class RecommendationMapper {
   RecommendationsResponse toRecommendationsResponse(
       BatchWithAlertsDto batchWithAlerts,
       List<RecommendationWithMetadata> recommendations,
-      OffsetDateTime recommendedAtForErrorAlerts) {
+      OffsetDateTime recommendedAtForErrorAlerts,
+      BatchStatistics batchStatistics) {
     var alertToRecommendation = recommendations.stream()
         .collect(Collectors.toMap(RecommendationWithMetadata::alertName, Function.identity()));
 
@@ -54,6 +54,7 @@ class RecommendationMapper {
                 .setPolicyId(batchWithAlerts.policyId())
                 .build())
             .toList())
+        .setStatistics(toStatistics(batchStatistics))
         .build();
   }
 
@@ -135,5 +136,24 @@ class RecommendationMapper {
             key.replace(FEATURE_PREFIX, ""),
             Value.newBuilder().setStringValue(value.solution()).build()));
     return builder.build();
+  }
+
+  private Statistics toStatistics(BatchStatistics batchStatistics) {
+    return Statistics.newBuilder()
+        .setTotalProcessedCount(batchStatistics.totalProcessedCount())
+        .setRecommendedAlertsCount(batchStatistics.recommendedAlertsCount())
+        .setTotalUnableToProcessCount(batchStatistics.totalUnableToProcessCount())
+        .setRecommendationsStatistics(
+            toRecommendationsStatistics(batchStatistics.recommendationsStats()))
+        .build();
+  }
+
+  private RecommendationsStatistics toRecommendationsStatistics(RecommendationsStats stats) {
+    return RecommendationsStatistics.newBuilder()
+        .setTruePositiveCount(stats.truePositiveCount())
+        .setFalsePositiveCount(stats.falsePositiveCount())
+        .setManualInvestigationCount(stats.manualInvestigationCount())
+        .setErrorCount(stats.errorCount())
+        .build();
   }
 }

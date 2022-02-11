@@ -2,6 +2,8 @@ package com.silenteight.bridge.core.recommendation.domain
 
 import com.silenteight.adjudication.api.library.v1.util.TimeStampUtil
 import com.silenteight.bridge.core.Fixtures
+import com.silenteight.bridge.core.recommendation.domain.model.BatchStatistics
+import com.silenteight.bridge.core.recommendation.domain.model.BatchStatistics.RecommendationsStats
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertWithMatchesDto
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto.AlertWithMatchesDto.MatchDto
@@ -9,11 +11,8 @@ import com.silenteight.bridge.core.recommendation.domain.model.RecommendationMet
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata
 import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches
 import com.silenteight.bridge.core.registration.domain.model.BatchWithAlerts
-import com.silenteight.proto.recommendation.api.v1.Alert
+import com.silenteight.proto.recommendation.api.v1.*
 import com.silenteight.proto.recommendation.api.v1.Alert.AlertStatus
-import com.silenteight.proto.recommendation.api.v1.Match
-import com.silenteight.proto.recommendation.api.v1.Recommendation
-import com.silenteight.proto.recommendation.api.v1.RecommendationsResponse
 
 import com.google.protobuf.Struct
 import com.google.protobuf.Value
@@ -78,8 +77,10 @@ class RecommendationFixtures {
   ]
 
   static def BATCH_WITH_ALERTS = new BatchWithAlerts(Fixtures.BATCH_ID, POLICY_NAME, ALERTS)
-  static def BATCH_WITH_ALERTS_DTO = new BatchWithAlertsDto(Fixtures.BATCH_ID, POLICY_NAME, ALERTS_DTO)
-  static def BATCH_WITH_ERROR_ALERT_DTO = new BatchWithAlertsDto(Fixtures.BATCH_ID, POLICY_NAME, [ERROR_ALERT_DTO])
+  static def BATCH_WITH_ALERTS_DTO = new BatchWithAlertsDto(
+      Fixtures.BATCH_ID, POLICY_NAME, ALERTS_DTO)
+  static def BATCH_WITH_ERROR_ALERT_DTO = new BatchWithAlertsDto(
+      Fixtures.BATCH_ID, POLICY_NAME, [ERROR_ALERT_DTO])
 
   static def RECOMMENDATION_RECOMMENDED_AT = OffsetDateTime
       .of(2022, 1, 18, 14, 30, 30, 0, ZoneOffset.UTC)
@@ -172,11 +173,29 @@ class RecommendationFixtures {
       .addAllMatches([])
       .build()
 
+  static def RECOMMENDATION_STATS = new RecommendationsStats(1, 2, 3, 4)
+  static def BATCH_STATISTICS = new BatchStatistics(1, 2, 3, RECOMMENDATION_STATS)
+
+  static def STATISTICS = Statistics.newBuilder()
+      .setTotalProcessedCount(BATCH_STATISTICS.totalProcessedCount())
+      .setRecommendedAlertsCount(BATCH_STATISTICS.recommendedAlertsCount())
+      .setTotalUnableToProcessCount(BATCH_STATISTICS.totalUnableToProcessCount())
+      .setRecommendationsStatistics(
+          RecommendationsStatistics.newBuilder()
+              .setTruePositiveCount(RECOMMENDATION_STATS.truePositiveCount())
+              .setFalsePositiveCount(RECOMMENDATION_STATS.falsePositiveCount())
+              .setManualInvestigationCount(RECOMMENDATION_STATS.manualInvestigationCount())
+              .setErrorCount(RECOMMENDATION_STATS.errorCount())
+              .build())
+      .build()
+
   static def RECOMMENDATION_RESPONSE = RecommendationsResponse.newBuilder()
       .addAllRecommendations(List.of(RECOMMENDATION))
+      .setStatistics(STATISTICS)
       .build()
 
   static def ERRONEOUS_RECOMMENDATION_RESPONSE = RecommendationsResponse.newBuilder()
       .addAllRecommendations(List.of(ERRONEOUS_RECOMMENDATION))
+      .setStatistics(STATISTICS)
       .build()
 }

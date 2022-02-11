@@ -61,13 +61,6 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
 
   List<AlertEntity> findAllByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
 
-  @Query("""
-      SELECT status, COUNT(*) 
-      FROM alerts
-      WHERE batch_id = :batchId
-      GROUP BY status""")
-  List<AlertStatusStatisticsProjection> countAlertsByStatusForBatchId(String batchId);
-
   @Modifying
   @Query("""
       UPDATE alerts

@@ -28,6 +28,7 @@ public class RecommendationFacade {
   private final RecommendationService recommendationService;
   private final RecommendationEventPublisher eventPublisher;
   private final RecommendationRepository recommendationRepository;
+  private final BatchStatisticsService batchStatisticsService;
 
   public void proceedReadyRecommendations(String analysisName) {
     var alertNames = getAndStoreRecommendations(analysisName).stream()
@@ -40,10 +41,15 @@ public class RecommendationFacade {
   public RecommendationsResponse getRecommendationsResponse(GetRecommendationCommand command) {
     var batchWithAlerts = registrationService.getBatchWithAlerts(command.analysisName());
     var recommendations = recommendationRepository.findByAnalysisName(command.analysisName());
+    var batchStatistics = batchStatisticsService.createBatchStatistics(
+        batchWithAlerts.alerts(),
+        recommendations);
+
     return RecommendationMapper.toRecommendationsResponse(
         batchWithAlerts,
         recommendations,
-        OffsetDateTime.now());
+        OffsetDateTime.now(),
+        batchStatistics);
   }
 
   private List<RecommendationWithMetadata> getAndStoreRecommendations(String analysisName) {

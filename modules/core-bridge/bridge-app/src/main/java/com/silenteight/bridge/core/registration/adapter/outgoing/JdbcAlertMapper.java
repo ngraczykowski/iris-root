@@ -50,13 +50,6 @@ class JdbcAlertMapper {
     return new AlertName(projection.name());
   }
 
-  AlertStatusStatistics toAlertsStatistics(List<AlertStatusStatisticsProjection> projection) {
-    return new AlertStatusStatistics(projection.stream()
-        .collect(Collectors.toMap(
-            alert -> AlertStatus.valueOf(alert.status()),
-            AlertStatusStatisticsProjection::count)));
-  }
-
   List<AlertWithMatches> toAlertWithMatches(List<AlertWithMatchNamesProjection> projections) {
     return projections
         .stream()

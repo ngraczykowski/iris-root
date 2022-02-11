@@ -1,7 +1,5 @@
 package com.silenteight.bridge.core.recommendation.domain
 
-import com.silenteight.bridge.core.recommendation.domain.RecommendationFixtures
-
 import spock.lang.Specification
 
 class RecommendationMapperSpec extends Specification {
@@ -11,10 +9,11 @@ class RecommendationMapperSpec extends Specification {
     def batchWithAlerts = RecommendationFixtures.BATCH_WITH_ALERTS_DTO
     def recommendationWithMetadata = [RecommendationFixtures.RECOMMENDATION_WITH_METADATA]
     def recommendedAtForErrorAlerts = RecommendationFixtures.RECOMMENDATION_RECOMMENDED_AT
+    def batchStatistics = RecommendationFixtures.BATCH_STATISTICS
 
     when:
     def recommendation = RecommendationMapper.toRecommendationsResponse(
-        batchWithAlerts, recommendationWithMetadata, recommendedAtForErrorAlerts)
+        batchWithAlerts, recommendationWithMetadata, recommendedAtForErrorAlerts, batchStatistics)
 
     then:
     recommendation == RecommendationFixtures.RECOMMENDATION_RESPONSE
@@ -25,10 +24,11 @@ class RecommendationMapperSpec extends Specification {
     def batchWithAlerts = RecommendationFixtures.BATCH_WITH_ERROR_ALERT_DTO
     def recommendationWithMetadata = []
     def recommendedAtForErrorAlerts = RecommendationFixtures.RECOMMENDATION_RECOMMENDED_AT
+    def batchStatistics = RecommendationFixtures.BATCH_STATISTICS
 
     when:
     def recommendation = RecommendationMapper.toRecommendationsResponse(
-        batchWithAlerts, recommendationWithMetadata, recommendedAtForErrorAlerts)
+        batchWithAlerts, recommendationWithMetadata, recommendedAtForErrorAlerts, batchStatistics)
 
     then:
     recommendation == RecommendationFixtures.ERRONEOUS_RECOMMENDATION_RESPONSE

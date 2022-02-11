@@ -81,9 +81,7 @@ class RegistrationGrpcMapper {
   private RegisterAlertsCommand.AlertStatus toRegisterAlertsCommandAlertStatus(AlertStatus status) {
     return switch (status) {
       case SUCCESS -> RegisterAlertsCommand.AlertStatus.SUCCESS;
-      case FAILURE -> RegisterAlertsCommand.AlertStatus.FAILURE;
-      case UNSPECIFIED -> RegisterAlertsCommand.AlertStatus.FAILURE;
-      case UNRECOGNIZED -> RegisterAlertsCommand.AlertStatus.FAILURE;
+      case FAILURE, UNSPECIFIED, UNRECOGNIZED -> RegisterAlertsCommand.AlertStatus.FAILURE;
     };
   }
 }

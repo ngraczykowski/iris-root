@@ -7,8 +7,7 @@ import java.util.List;
 public record BatchCompleted(String id,
                              String analysisId,
                              String batchMetadata,
-                             List<String> alertIds,
-                             BatchStatistics statistics) {
+                             List<String> alertIds) {
 
   @Builder
   public BatchCompleted {}

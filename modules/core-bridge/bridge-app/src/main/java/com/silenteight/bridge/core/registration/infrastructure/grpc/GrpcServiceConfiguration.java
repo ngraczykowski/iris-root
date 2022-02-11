@@ -8,7 +8,6 @@ import com.silenteight.adjudication.api.v1.AlertServiceGrpc.AlertServiceBlocking
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
 import com.silenteight.bridge.core.recommendation.infrastructure.amqp.RecommendationIncomingRecommendationsGeneratedConfigurationProperties;
 import com.silenteight.bridge.core.registration.infrastructure.RegistrationAnalysisProperties;
-import com.silenteight.bridge.core.registration.infrastructure.util.KnownServices;
 import com.silenteight.governance.api.library.v1.model.ModelGrpcAdapter;
 import com.silenteight.governance.api.library.v1.model.ModelServiceClient;
 import com.silenteight.model.api.v1.SolvingModelServiceGrpc.SolvingModelServiceBlockingStub;
@@ -25,13 +24,13 @@ import org.springframework.context.annotation.Profile;
 @EnableConfigurationProperties({ GrpcConfigurationProperties.class })
 public class GrpcServiceConfiguration {
 
-  @GrpcClient(KnownServices.GOVERNANCE)
+  @GrpcClient(RegistrationKnownServices.GOVERNANCE)
   SolvingModelServiceBlockingStub solvingModelServiceBlockingStub;
 
-  @GrpcClient(KnownServices.ADJUDICATION_ENGINE)
+  @GrpcClient(RegistrationKnownServices.ADJUDICATION_ENGINE)
   AnalysisServiceBlockingStub analysisServiceBlockingStub;
 
-  @GrpcClient(KnownServices.ADJUDICATION_ENGINE)
+  @GrpcClient(RegistrationKnownServices.ADJUDICATION_ENGINE)
   AlertServiceBlockingStub alertServiceBlockingStub;
 
   @Bean

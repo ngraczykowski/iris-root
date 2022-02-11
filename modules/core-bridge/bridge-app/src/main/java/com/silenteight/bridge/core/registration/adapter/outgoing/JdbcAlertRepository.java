@@ -81,9 +81,4 @@ class JdbcAlertRepository implements AlertRepository {
         .map(mapper::toAlert)
         .toList();
   }
-
-  @Override
-  public AlertStatusStatistics countAlertsByStatusForBatchId(String batchId) {
-    return mapper.toAlertsStatistics(alertRepository.countAlertsByStatusForBatchId(batchId));
-  }
 }

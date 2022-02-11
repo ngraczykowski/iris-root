@@ -34,7 +34,6 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
   static def BATCH_IDS = ['batch1', 'batch2']
   static def ALERT_IDS = ['alert1', 'alert2', 'alert3']
   static def ID_OF_ALERT_CONTAINING_FAILURE_FEEDING_STATUS = 'alert2'
-  static def ID_OF_ALERT_CONTAINING_ALL_FAILED_MATCHES = 'alert3'
 
   @Autowired
   private RabbitTemplate rabbitTemplate
@@ -137,11 +136,8 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
 
   private static def createMessage(String batchId, String alertId, List<String> matchIds) {
     def fedMatches = matchIds.collect {matchId ->
-      def feedingStatus = alertId == ID_OF_ALERT_CONTAINING_ALL_FAILED_MATCHES ?
-                          FedMatch.FeedingStatus.FAILURE : FedMatch.FeedingStatus.SUCCESS
       FedMatch.newBuilder()
           .setMatchId(matchId)
-          .setFeedingStatus(feedingStatus)
           .build()
     }
     def feedingStatus = alertId == ID_OF_ALERT_CONTAINING_FAILURE_FEEDING_STATUS ?

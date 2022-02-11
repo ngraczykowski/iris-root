@@ -6,9 +6,11 @@ import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand
 import com.silenteight.bridge.core.registration.domain.AddAlertToAnalysisCommand.FeedingStatus
 import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertWithMatches
 import com.silenteight.bridge.core.registration.domain.command.GetBatchWithAlertsCommand
-import com.silenteight.bridge.core.registration.domain.model.*
+import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
-import com.silenteight.bridge.core.registration.domain.model.BatchStatistics.RecommendationsStats
+import com.silenteight.bridge.core.registration.domain.model.BatchError
+import com.silenteight.bridge.core.registration.domain.model.BatchId
+import com.silenteight.bridge.core.registration.domain.model.BatchIdWithPolicy
 
 class RegistrationFixtures {
 
@@ -38,19 +40,19 @@ class RegistrationFixtures {
   static def BATCH_ID_PROJECTION = BatchId.from(BATCH)
   static def BATCH_ID_WITH_POLICY_PROJECTION = new BatchIdWithPolicy(Fixtures.BATCH_ID, POLICY_NAME)
 
-  static def REGISTER_BATCH_COMMAND = new RegisterBatchCommand(Fixtures.BATCH_ID, ALERTS_COUNT, METADATA)
-  static def REGISTER_ALERTS_COMMAND = new RegisterAlertsCommand(Fixtures.BATCH_ID, ALERT_WITH_MATCHES)
+  static def REGISTER_BATCH_COMMAND = new RegisterBatchCommand(
+      Fixtures.BATCH_ID, ALERTS_COUNT, METADATA)
+  static def REGISTER_ALERTS_COMMAND = new RegisterAlertsCommand(
+      Fixtures.BATCH_ID, ALERT_WITH_MATCHES)
   static def ADD_ALERT_TO_ANALYSIS_COMMAND = AddAlertToAnalysisCommand.builder()
       .batchId(Fixtures.BATCH_ID)
       .alertId(Fixtures.ALERT_ID)
       .feedingStatus(FeedingStatus.SUCCESS)
       .fedMatches([new FedMatch('matchId')])
       .build()
-  static def NOTIFY_BATCH_ERROR_COMMAND = new NotifyBatchErrorCommand(Fixtures.BATCH_ID, ERROR_DESCRIPTION, METADATA)
+  static def NOTIFY_BATCH_ERROR_COMMAND = new NotifyBatchErrorCommand(
+      Fixtures.BATCH_ID, ERROR_DESCRIPTION, METADATA)
   static def GET_BATCH_WITH_ALERTS_COMMAND = new GetBatchWithAlertsCommand(ANALYSIS_NAME)
 
-  static def RECOMMENDATION_STATS = new RecommendationsStats(1, 2, 3, 4)
-  static def BATCH_STATISTICS = new BatchStatistics(1, 2, 3, RECOMMENDATION_STATS)
-  static def BATCH_ERROR = new BatchError(Fixtures.BATCH_ID, METADATA, ERROR_DESCRIPTION, BATCH_STATISTICS)
-
+  static def BATCH_ERROR = new BatchError(Fixtures.BATCH_ID, METADATA, ERROR_DESCRIPTION)
 }

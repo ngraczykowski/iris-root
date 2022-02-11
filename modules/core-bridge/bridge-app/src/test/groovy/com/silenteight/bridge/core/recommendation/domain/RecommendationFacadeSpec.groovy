@@ -19,13 +19,15 @@ class RecommendationFacadeSpec extends Specification {
   def recommendationService = Mock(RecommendationService)
   def recommendationRepository = Mock(RecommendationRepository)
   def recommendationPublisher = Mock(RecommendationEventPublisher)
+  def batchStatisticsService = Mock(BatchStatisticsService)
 
   @Subject
   def underTest = new RecommendationFacade(
       registrationService,
       recommendationService,
       recommendationPublisher,
-      recommendationRepository
+      recommendationRepository,
+      batchStatisticsService
   )
 
   def 'should proceed ready recommendations'() {
@@ -36,21 +38,28 @@ class RecommendationFacadeSpec extends Specification {
     underTest.proceedReadyRecommendations(analysis)
 
     then:
-    1 * recommendationService.getRecommendations(analysis) >> [Fixtures.RECOMMENDATION_WITH_METADATA]
+    1 * recommendationService.getRecommendations(analysis) >>
+        [Fixtures.RECOMMENDATION_WITH_METADATA]
     1 * recommendationRepository.saveAll(_ as List<RecommendationWithMetadata>)
     1 * recommendationPublisher.publish(_ as RecommendationsReceivedEvent)
   }
 
+
   def 'should get recommendations by analysis name'() {
     given:
     def command = Fixtures.GET_RECOMMENDATIONS_RESPONSE_COMMAND
+    def recommendations = [RecommendationFixtures.RECOMMENDATION_WITH_METADATA]
 
     when:
     underTest.getRecommendationsResponse(command)
 
     then:
-    1 * registrationService.getBatchWithAlerts(Fixtures.ANALYSIS_NAME) >> RecommendationFixtures.BATCH_WITH_ALERTS_DTO
-    1 * recommendationRepository.findByAnalysisName(Fixtures.ANALYSIS_NAME) >> [RecommendationFixtures.RECOMMENDATION_WITH_METADATA]
+    1 * registrationService.getBatchWithAlerts(Fixtures.ANALYSIS_NAME) >>
+        RecommendationFixtures.BATCH_WITH_ALERTS_DTO
+    1 * recommendationRepository.findByAnalysisName(Fixtures.ANALYSIS_NAME) >> recommendations
+    1 * batchStatisticsService.createBatchStatistics(
+        RecommendationFixtures.BATCH_WITH_ALERTS_DTO.alerts(), recommendations) >>
+        RecommendationFixtures.BATCH_STATISTICS
   }
 
   static class Fixtures {
