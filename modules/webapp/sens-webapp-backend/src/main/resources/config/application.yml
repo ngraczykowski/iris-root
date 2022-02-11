@@ -175,21 +175,29 @@ server:
 
 # Management HTTP server
 management:
+  health:
+    mail:
+      enabled: false
+  info:
+    git:
+      mode: simple
   endpoint:
-    health.show-details: always
-
-  info.git.mode: full
+    health:
+      show-details: always
+      probes:
+        enabled: true
 
   endpoints:
     web:
       base-path: /management
       exposure:
-        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers" ]
-
+        include: [ "health", "info", "metrics", "prometheus", "loggers" ]
+    jmx:
+      exposure:
+        exclude: "*"
   metrics:
     tags:
       application: ${spring.application.name}
-
 security.basic:
   enabled: false
 
@@ -197,7 +205,6 @@ serp:
   messaging:
     error-queue:
       enabled: true
-
 ####################################################################################################
 sens.web:
   cors:
