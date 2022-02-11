@@ -13,8 +13,9 @@ option java_package = "com.silenteight.proto.registration.api.v1";
 message MessageAlertMatchesFeatureInputFed {
   string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
   string alert_id = 2 [(google.api.field_behavior) = REQUIRED];
-  FeedingStatus feeding_status = 3 [(google.api.field_behavior) = REQUIRED];
-  repeated FedMatch fed_matches = 4 [(google.api.field_behavior) = REQUIRED];
+  string alert_error_description = 3 [(google.api.field_behavior) = OPTIONAL];
+  FeedingStatus feeding_status = 4 [(google.api.field_behavior) = REQUIRED];
+  repeated FedMatch fed_matches = 5 [(google.api.field_behavior) = REQUIRED];
 
   enum FeedingStatus {
     UNKNOWN = 0;
