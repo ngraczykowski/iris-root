@@ -22,13 +22,13 @@ spec:
           livenessProbe:
             httpGet:
               path: "/rest/governance/management/health/liveness"
-              port: 8080
+              port: {{ .Values.ports.management }}
             initialDelaySeconds: 30
             timeoutSeconds: 10
           readinessProbe:
             httpGet:
               path: "/rest/governance/management/health/readiness"
-              port: 8080
+              port: {{ .Values.ports.management }}
             failureThreshold: 30
             initialDelaySeconds: 30
             timeoutSeconds: 10
@@ -77,10 +77,21 @@ spec:
             - --sentry.dsn={{ .Values.sentry.dsn }}
             - --sentry.environment={{ .Values.sentry.environment }}
             - --sentry.traces-sample-rate={{ .Values.sentry.tracesSampleRate }}
+          {{ if .Values.additionalArgs }}
+          {{ range .Values.additionalArgs }}
+            - {{ . }}
+          {{ end }}
+          {{ end }}
           volumeMounts:
             - mountPath: /etc/logback.xml
               name: logback-config
               subPath: logback-config-file
+            - mountPath: /etc/config/agent/agent_configs.json
+              name: agent-configs
+              subPath: agent_configs.json
+            - mountPath: /etc/config/agent/agent_details.json
+              name: agent-configs
+              subPath: agent_details.json
           resources:
             limits:
               memory: {{ .Values.memoryLimit | quote }}
@@ -97,3 +108,6 @@ spec:
         - name: "logback-config"
           configMap:
             name: "governance-logback-configmap"
+        - name: "agent-configs"
+          configMap:
+            name: "governance-agent-configmap"
