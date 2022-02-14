@@ -32,8 +32,6 @@ class MatchPersistenceService {
 
     MapSqlParameterSource[] parameters = mapToSqlParameters(persistedAlertId, matchDefinitions);
     jdbcTemplate.batchUpdate(INSERT_MATCH_SQL, parameters);
-    log.debug("Persisted {} matches for alertId:{}",
-        matchDefinitions.size(), persistedAlertId);
   }
 
   private MapSqlParameterSource[] mapToSqlParameters(

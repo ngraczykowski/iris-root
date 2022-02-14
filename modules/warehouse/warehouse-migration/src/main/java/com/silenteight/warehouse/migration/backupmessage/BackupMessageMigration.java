@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
+import java.util.function.Predicate;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -104,21 +105,24 @@ class BackupMessageMigration {
 
     @Override
     protected void doInTransactionWithoutResult(TransactionStatus status) {
-      try {
-        messages.stream()
-            .map(Message::markMigrated)
-            .forEach(message -> {
-              backupMessageQuery.update(message);
+      messages.stream()
+          .filter(Predicate.not(Message::isMigrated))
+          .forEach(message -> {
+            try {
               persist(message);
-            });
-      } catch (Exception ex) {
-        log.warn(
-            "warehouse_message_backup migration: "
-                + "exception occurred during batch processing, transaction will be rollback - {}",
-            ex.getMessage());
+              message.markMigrated();
+              backupMessageQuery.update(message);
+            } catch (Exception ex) {
+              log.warn(
+                  "warehouse_message_backup migration: "
+                      + "exception occurred during batch processing, "
+                      + "transaction will be rollback - {} "
+                      + "message_id - {}", ex.getMessage(), message.getId());
 
-        status.setRollbackOnly();
-      }
+              message.markFailed();
+              backupMessageQuery.update(message);
+            }
+          });
     }
 
     @SneakyThrows

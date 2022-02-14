@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.util.List;
 
+import static com.silenteight.warehouse.common.time.Timestamps.toSqlTimestamp;
+
 @RequiredArgsConstructor
 class BackupMessageQuery {
 
@@ -16,7 +18,8 @@ class BackupMessageQuery {
           new Message(
               rs.getLong("id"),
               rs.getBytes("data"),
-              rs.getBoolean("migrated")
+              rs.getBoolean("migrated"),
+              null
           );
 
   private final JdbcTemplate jdbcTemplate;
@@ -38,7 +41,7 @@ class BackupMessageQuery {
 
   @Language("PostgreSQL")
   private static final String UPDATE_MIGRATED_FLAG_QUERY =
-      "UPDATE warehouse_message_backup wmb SET migrated = ? WHERE wmb.id = ?";
+      "UPDATE warehouse_message_backup wmb SET migrated = ?, migrated_at = ? WHERE wmb.id = ?";
 
   Boolean notMigratedRecordExist() {
     return jdbcTemplate.queryForObject(NOT_MIGRATED_RECORD_EXIST_QUERY, Boolean.class);
@@ -60,7 +63,8 @@ class BackupMessageQuery {
         UPDATE_MIGRATED_FLAG_QUERY,
         ps -> {
           ps.setBoolean(1, message.isMigrated());
-          ps.setLong(2, message.getId());
+          ps.setTimestamp(2, toSqlTimestamp(message.migratedAt));
+          ps.setLong(3, message.getId());
         }
     );
   }

@@ -61,6 +61,11 @@ public class Timestamps {
   }
 
   @NotNull
+  public OffsetDateTime toOffsetDateTime(@NonNull java.sql.Timestamp timestamp) {
+    return OffsetDateTime.ofInstant(timestamp.toInstant(), ZoneId.of("UTC"));
+  }
+
+  @NotNull
   public Timestamp toTimestampOrDefault(
       @Nullable Instant instant,
       @NonNull Timestamp defaultTimestamp) {

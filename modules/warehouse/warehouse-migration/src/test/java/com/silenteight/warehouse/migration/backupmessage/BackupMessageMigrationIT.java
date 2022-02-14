@@ -18,12 +18,13 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import static com.silenteight.warehouse.common.time.Timestamps.toOffsetDateTime;
 import static org.assertj.core.api.Assertions.*;
 
-@Sql
 @SpringBootTest(classes = MessageMigrationTestConfiguration.class)
 @SpringIntegrationTest
 @ContextConfiguration(initializers = {
@@ -49,6 +50,7 @@ class BackupMessageMigrationIT {
   private RabbitMessageContainerLifecycle rabbitMessageContainerLifecycle;
 
   @Test
+  @Sql(scripts = "BackupMessageMigrationIT.sql")
   void shouldMigrateExistingRecordsToNewDbStructureAndStartRabbit() {
     //given
     assertThat(getPausedDuringInitialization()).isTrue();
@@ -62,7 +64,8 @@ class BackupMessageMigrationIT {
     assertThat(getQueues())
         .extracting(SimpleMessageListenerContainer::isRunning)
         .containsExactly(true, true, true, true);
-    assertThat(fetchAlertNames()).contains("alerts/9bd8404f-939f-4804-bc5a-fa9543898543",
+    assertThat(fetchAlertNames()).contains(
+        "alerts/9bd8404f-939f-4804-bc5a-fa9543898543",
         "alerts/d1e22e2a-415a-4600-a42c-c65d8ed21ea9",
         "alerts/aa59b3d0-5414-42fe-94d9-60c607720781",
         "alerts/a5fb880f-d0ff-44ce-bccf-8edd278fa64f",
@@ -72,12 +75,32 @@ class BackupMessageMigrationIT {
         "alerts/58485906-bdbc-4cce-8a7f-9aeb4213b2cb",
         "alerts/eeb7f088-1c42-494a-945f-bd5e484e8f90",
         "alerts/30d1fef2-c011-4a38-acd5-3b7102f85793");
+
+    List<Message> messages = fetchMessages();
+    assertThat(messages)
+        .extracting(Message::isMigrated)
+        .containsOnlyOnce(false);
+    assertThat(messages)
+        .extracting(Message::getMigratedAt)
+        .isNotNull();
   }
 
   List<String> fetchAlertNames() {
     return jdbcTemplate.query(
         "SELECT * FROM warehouse_alert",
         (rs, rowNum) -> rs.getString(NAME_COLUMN));
+  }
+
+  List<Message> fetchMessages() {
+    return jdbcTemplate.query(
+        "SELECT id, migrated, migrated_at FROM warehouse_message_backup",
+        (rs, rowNum) ->
+            new Message(
+                rs.getLong("id"),
+                null,
+                rs.getBoolean("migrated"),
+                toOffsetDateTime(rs.getTimestamp("migrated_at"))
+            ));
   }
 
   AtomicBoolean getPausedDuringInitialization() {
@@ -91,7 +114,7 @@ class BackupMessageMigrationIT {
         (List<IntegrationFlow>) ReflectionTestUtils.getField(
             rabbitMessageContainerLifecycle, "queueBeans");
 
-    return queueBeans.stream()
+    return Objects.requireNonNull(queueBeans).stream()
         .filter(StandardIntegrationFlow.class::isInstance)
         .map(StandardIntegrationFlow.class::cast)
         .map(StandardIntegrationFlow::getIntegrationComponents)

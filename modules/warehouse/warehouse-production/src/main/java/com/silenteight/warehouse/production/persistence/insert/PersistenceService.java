@@ -29,17 +29,15 @@ public class PersistenceService {
   }
 
   private void doInsert(AlertDefinition alertDefinition) {
-    log.debug("Started process of persisting alert for discriminator:{}",
+    log.debug(
+        "Started process of persisting alert, discriminator={}",
         alertDefinition.getDiscriminator());
 
     long persistedAlertId = alertPersistenceService.persist(jdbcTemplate, alertDefinition);
-    log.debug("Persisted alertId:{}", persistedAlertId);
 
     labelPersistenceService.persist(jdbcTemplate, persistedAlertId, alertDefinition.getLabels());
 
     List<MatchDefinition> matchDefinitions = alertDefinition.getMatchDefinitions();
     matchPersistenceService.persist(jdbcTemplate, persistedAlertId, matchDefinitions);
-
-    log.debug("Alert with labels and matches is successfully persisted");
   }
 }

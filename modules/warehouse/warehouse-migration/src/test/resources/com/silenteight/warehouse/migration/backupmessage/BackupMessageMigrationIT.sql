@@ -239,4 +239,15 @@ VALUES (22,
         NOW(),
         NULL,
         NULL);
+-- FAIL WHEN PARSING
+INSERT INTO warehouse_message_backup
+VALUES (23,
+        'asdf9d6-b300-4c9f-9b98-d08f2d92781e',
+        '',
+        DECODE(
+                '0AAA',
+                'hex'),
+        NOW(),
+        NULL,
+        NULL);
 
