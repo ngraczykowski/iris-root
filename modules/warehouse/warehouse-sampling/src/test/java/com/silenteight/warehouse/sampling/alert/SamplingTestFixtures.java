@@ -20,6 +20,7 @@ public class SamplingTestFixtures {
   public static final String DISCRIMINATOR_4 = "accb9508-3bad-4c5b-825a-8c023e03b7d6";
   public static final String DISCRIMINATOR_5 = "48627744-d573-4edb-89fa-f88a8be4ac11";
   public static final String DISCRIMINATOR_6 = "e75ae6a7-f0c8-4bc4-b09e-1a48b401e6e5";
+  public static final String DISCRIMINATOR_7 = "e75ae6a7-f0c8-4edb-b09e-1a48b401e6e5";
   public static final String ALERT_NAME_1 = "457b1498-e348-4a81-8093-6079c1173010";
   public static final String ALERT_NAME_2 = "80a8cfc0-86c3-4360-afed-7a1b9a326020";
   public static final String ALERT_NAME_3 = "788edd98-af02-49a8-ab75-69cf63397b54";

@@ -30,16 +30,17 @@ class AlertPostgresRepositoryTest {
   private static final String TIME_TO_STRING = "2021-06-30T00:00:01Z";
   private static final int LIMIT = 2;
   private static final String TEST_1 =
-      "SELECT * FROM warehouse_alert WHERE created_at BETWEEN ? AND ?AND name IN (?,?) ORDER BY"
-          + " RANDOM() LIMIT ?";
+      "SELECT * FROM warehouse_alert WHERE name is NOT NULL AND created_at BETWEEN ? AND ?AND name"
+          + " IN (?,?) ORDER BY RANDOM() LIMIT ?";
   private static final String TEST_2 =
-      "SELECT * FROM warehouse_alert WHERE created_at BETWEEN ? AND ? ORDER BY RANDOM() LIMIT ?";
+      "SELECT * FROM warehouse_alert WHERE name is NOT NULL AND created_at BETWEEN ? AND ? ORDER BY"
+          + " RANDOM() LIMIT ?";
   private static final String TEST_3 =
-      "SELECT * FROM warehouse_alert WHERE created_at BETWEEN ? AND ?AND payload->>? = ?"
-          + " AND payload->>? in (?,?) ORDER BY RANDOM() LIMIT ?";
-  private static final String TEST_4 =
-      "SELECT * FROM warehouse_alert WHERE created_at BETWEEN ? AND ?AND name IN (?,?)AND"
+      "SELECT * FROM warehouse_alert WHERE name is NOT NULL AND created_at BETWEEN ? AND ?AND"
           + " payload->>? = ? AND payload->>? in (?,?) ORDER BY RANDOM() LIMIT ?";
+  private static final String TEST_4 =
+      "SELECT * FROM warehouse_alert WHERE name is NOT NULL AND created_at BETWEEN ? AND ?AND name"
+          + " IN (?,?)AND payload->>? = ? AND payload->>? in (?,?) ORDER BY RANDOM() LIMIT ?";
   private static final String TEST_5 =
       "SELECT * FROM warehouse_alert WHERE created_at BETWEEN ? AND ?AND payload->>? = ? AND"
           + " payload->>? in (?,?)";
