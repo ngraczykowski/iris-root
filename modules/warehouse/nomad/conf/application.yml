@@ -208,7 +208,7 @@ warehouse.reports.v2:
         FROM warehouse_simulation_alert wsa
             JOIN warehouse_alert wa ON wsa.name = wa.name
         WHERE analysis_name = 'analysis/${analysisId}'
-        AND (payload ->> 's8_lobCountryCode') IN (${countries})
+        AND (wa.payload ->> 's8_lobCountryCode') IN (${countries})
         AND (wa.payload ->> 'analyst_decision') IN ('analyst_decision_false_positive', 'analyst_decision_true_positive')
     - name: RB_SCORER
       type: production
@@ -405,23 +405,23 @@ warehouse.reports.v2:
       selectSqlQuery: >
         WITH main AS (
           SELECT wa.payload ->> 's8_lobCountryCode'                     country,
-                 wa.payload ->> 'categories/hitType'                    risk_type,
-                 wa.payload ->> 'DN_CASE.ExtendedAttribute5'            list_type,
-                 wsa.payload ->> 'recommendation_recommended_action'    recommendation,
-                 wsa.payload ->> 'analyst_decision'                     analyst_decision,
-                 wsa.payload ->> 'qa.level-0.state'                     qa_decision,
-                 wsa.created_at created_date
-          FROM warehouse_simulation_alert wsa
-            JOIN warehouse_alert wa ON wsa.name = wa.name
-          WHERE wsa.payload ->> 'status' = 'LEARNING_COMPLETED'
+                     wa.payload ->> 'categories/hitType'                    risk_type,
+                     wa.payload ->> 'DN_CASE.ExtendedAttribute5'            list_type,
+                     wsa.payload ->> 'recommendation_recommended_action'    recommendation,
+                     wa.payload ->> 'analyst_decision'                     analyst_decision,
+                     wsa.payload ->> 'qa.level-0.state'                     qa_decision,
+                     wsa.created_at created_date
+              FROM warehouse_simulation_alert wsa
+                       JOIN warehouse_alert wa ON wsa.name = wa.name
+              WHERE wa.payload ->> 'analyst_decision' in ('analyst_decision_true_positive', 'analyst_decision_false_positive')
                 AND wsa.analysis_name = 'analysis/${analysisId}'
-          GROUP BY wa.payload ->> 's8_country',
-                   wa.payload ->> 'categories/hitType',
-                   wa.payload ->> 'DN_CASE.ExtendedAttribute5',
-                   wsa.payload ->> 'recommendation_recommended_action',
-                   wsa.payload ->> 'analyst_decision',
-                   wsa.payload ->> 'qa.level-0.state',
-                   wsa.created_at
+              GROUP BY wa.payload ->> 's8_lobCountryCode',
+                       wa.payload ->> 'categories/hitType',
+                       wa.payload ->> 'DN_CASE.ExtendedAttribute5',
+                       wsa.payload ->> 'recommendation_recommended_action',
+                       wa.payload ->> 'analyst_decision',
+                       wsa.payload ->> 'qa.level-0.state',
+                       wsa.created_at
         ),
              grouped AS (
                  SELECT main.country                                 g_country,
