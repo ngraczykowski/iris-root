@@ -76,7 +76,7 @@ spec:
           ports:
             - containerPort: {{ .Values.ports.http }}
               name: http
-            - containerPort: {{ .Values.ports.management } }
+            - containerPort: {{ .Values.ports.management }}
               name: management
       volumes:
         - name: "logback-config"
