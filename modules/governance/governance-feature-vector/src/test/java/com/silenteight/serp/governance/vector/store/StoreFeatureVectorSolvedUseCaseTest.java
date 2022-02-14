@@ -21,6 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -35,6 +39,7 @@ class StoreFeatureVectorSolvedUseCaseTest extends BaseDataJpaTest {
 
   private static final String FEATURE_NAME = "nameAgent";
   private static final String FEATURE_VALUE = "EXACT_MATCH";
+  private static final String FEATURE_VALUE_NO_DATA = "NO_DATA";
 
   @Autowired
   StoreFeatureVectorSolvedUseCase underTest;
@@ -53,7 +58,7 @@ class StoreFeatureVectorSolvedUseCaseTest extends BaseDataJpaTest {
 
   @Test
   void shouldStoreFeatureVector() {
-    FeatureVectorSolvedEvent event = getFeatureVectorSolvedEvent();
+    FeatureVectorSolvedEvent event = getFeatureVectorSolvedEvent(FEATURE_VALUE);
 
     underTest.activate(singletonList(event));
 
@@ -75,7 +80,7 @@ class StoreFeatureVectorSolvedUseCaseTest extends BaseDataJpaTest {
 
   @Test
   void shouldCountFeatureVectorMatches() {
-    FeatureVectorSolvedEvent event = getFeatureVectorSolvedEvent();
+    FeatureVectorSolvedEvent event = getFeatureVectorSolvedEvent(FEATURE_VALUE);
 
     underTest.activate(singletonList(event));
     underTest.activate(singletonList(event));
@@ -87,7 +92,7 @@ class StoreFeatureVectorSolvedUseCaseTest extends BaseDataJpaTest {
 
   @Test
   void shouldCountFeatureVectorMatchesInBatch() {
-    FeatureVectorSolvedEvent event = getFeatureVectorSolvedEvent();
+    FeatureVectorSolvedEvent event = getFeatureVectorSolvedEvent(FEATURE_VALUE);
 
     underTest.activate(asList(event, event));
 
@@ -96,11 +101,22 @@ class StoreFeatureVectorSolvedUseCaseTest extends BaseDataJpaTest {
     assertThat(usageService.getUsageCount(canonicalFeatureVector)).isEqualTo(2);
   }
 
-  private static FeatureVectorSolvedEvent getFeatureVectorSolvedEvent() {
+  @Test
+  void shouldBeThreadSafe() {
+    FeatureVectorSolvedEvent event = getFeatureVectorSolvedEvent(FEATURE_VALUE_NO_DATA);
+
+    callInParallel(() -> underTest.activate(singletonList(event)));
+
+    CanonicalFeatureVector canonicalFeatureVector = canonicalFeatureVectorFactory
+        .fromNamesAndValues(of(FEATURE_NAME), of(FEATURE_VALUE_NO_DATA));
+    assertThat(usageService.getUsageCount(canonicalFeatureVector)).isEqualTo(2);
+  }
+
+  private static FeatureVectorSolvedEvent getFeatureVectorSolvedEvent(String featureValue) {
     return FeatureVectorSolvedEvent
         .newBuilder()
         .setFeatureCollection(featureCollection(FEATURE_NAME))
-        .setFeatureVector(featureVector(FEATURE_VALUE))
+        .setFeatureVector(featureVector(featureValue))
         .build();
   }
 
@@ -121,5 +137,26 @@ class StoreFeatureVectorSolvedUseCaseTest extends BaseDataJpaTest {
         .newBuilder()
         .addAllFeatureValue(asList(featureValues))
         .build();
+  }
+
+  private void callInParallel(Runnable runnable) {
+    int numberOfParallelThreads = 2;
+    ExecutorService executorService = Executors.newFixedThreadPool(numberOfParallelThreads);
+
+    try {
+      IntStream.range(0, numberOfParallelThreads)
+          .parallel()
+          .boxed()
+          .map(threadNo -> executorService.submit(runnable))
+          .forEach(future -> {
+            try {
+              future.get(1, TimeUnit.SECONDS);
+            } catch (Exception e) {
+              throw new RuntimeException(e);
+            }
+          });
+    } finally {
+      executorService.shutdown();
+    }
   }
 }

@@ -1,9 +1,14 @@
 package com.silenteight.serp.governance.common.signature;
 
+import org.springframework.stereotype.Component;
+
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
 import static com.silenteight.sep.base.common.protocol.ByteStringUtils.toBase64String;
 
+@Converter
+@Component
 public class SignatureConverter implements AttributeConverter<Signature, String> {
 
   @Override

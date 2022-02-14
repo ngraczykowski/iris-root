@@ -74,6 +74,12 @@ public class InMemoryAnalyticsFeatureVectorRepository
         .collect(joining(","));
   }
 
+  @Override
+  public void saveIfNotExist(FeatureVector featureVector) {
+    findByVectorSignature(featureVector.getVectorSignature())
+        .orElseGet(() -> save(featureVector));
+  }
+
   @Value
   @Builder
   private static class TestFeatureVectorWithUsageDto implements FeatureVectorWithUsage {

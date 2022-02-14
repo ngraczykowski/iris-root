@@ -14,9 +14,8 @@ import javax.persistence.QueryHint;
 import static org.hibernate.jpa.QueryHints.HINT_FETCH_SIZE;
 import static org.hibernate.jpa.QueryHints.HINT_READONLY;
 
-interface FeatureVectorRepository extends Repository<FeatureVector, Long> {
-
-  FeatureVector save(FeatureVector featureVector);
+interface FeatureVectorRepository extends Repository<FeatureVector, Long>,
+    FeatureVectorCustomRepository {
 
   Optional<FeatureVector> findByVectorSignature(Signature vectorSignature);
 
