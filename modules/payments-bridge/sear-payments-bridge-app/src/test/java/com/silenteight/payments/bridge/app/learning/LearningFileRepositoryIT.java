@@ -21,7 +21,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @SpringBootTest(classes = { PaymentsBridgeApplication.class })
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
 @Slf4j
-@ActiveProfiles({ "mockae", "mockdatasource", "mockgovernance", "mockagents", "mockaws", "test" })
+@ActiveProfiles({
+    "mockae", "mockdatasource", "mockgovernance", "mockagents", "mockaws", "test",
+    "mockwarehouse" })
 class LearningFileRepositoryIT {
 
   @Autowired

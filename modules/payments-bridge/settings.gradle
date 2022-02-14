@@ -19,3 +19,5 @@ include 'sear-payments-bridge-notification'
 include 'sear-payments-bridge-svb-learning'
 include 'sear-payments-bridge-testing'
 include 'sear-payments-bridge-warehouse'
+include 'sear-payments-birdge-mock-warehouse'
+

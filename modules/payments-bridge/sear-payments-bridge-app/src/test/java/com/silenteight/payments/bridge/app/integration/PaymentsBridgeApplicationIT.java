@@ -8,6 +8,7 @@ import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessag
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
 import com.silenteight.payments.bridge.mock.ae.MockAlertUseCase;
 import com.silenteight.payments.bridge.mock.datasource.MockDatasourceService;
+import com.silenteight.payments.bridge.mock.warehouse.MockWarehouseService;
 import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningAlertsUseCase;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
@@ -39,7 +40,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest(classes = { PaymentsBridgeApplication.class })
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
 @Slf4j
-@ActiveProfiles({ "mockae", "mockdatasource", "mockgovernance", "mockagents", "mockaws", "test" })
+@ActiveProfiles({
+    "mockae", "mockdatasource", "mockgovernance", "mockagents", "mockaws", "test",
+    "mockwarehouse" })
 class PaymentsBridgeApplicationIT {
 
   private static final String SAMPLE_REQUESTS_DIR = "requests";
@@ -63,6 +66,8 @@ class PaymentsBridgeApplicationIT {
   MockAlertUseCase mockAlertUseCase;
   @Autowired
   MockDatasourceService mockDatasourceService;
+  @Autowired
+  MockWarehouseService mockWarehouseService;
 
   @ParameterizedTest
   @MethodSource("filesFactory")
@@ -83,7 +88,7 @@ class PaymentsBridgeApplicationIT {
     assertTrue(MockAlertUseCase.containsAlertId("alert_system_id"));
     await()
         .atMost(Duration.ofSeconds(20))
-        .until(() -> paymentsBridgeEventsListener.containsIndexedDiscriminator(
+        .until(() -> mockWarehouseService.containsIndexedDiscriminator(
             "alert_system_id|87AB4899-BE5B-5E4F-E053-150A6C0A7A84"));
     var alertName = MockAlertUseCase.getAlertName("alert_system_id");
     assertThat(mockDatasourceService.getCreatedFeatureInputsCount(alertName)).isEqualTo(10);

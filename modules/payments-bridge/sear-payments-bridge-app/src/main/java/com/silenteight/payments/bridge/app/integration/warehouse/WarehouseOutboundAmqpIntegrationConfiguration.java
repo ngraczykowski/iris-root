@@ -11,6 +11,7 @@ import com.silenteight.sep.base.common.messaging.AmqpOutboundFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.integration.amqp.dsl.AmqpBaseOutboundEndpointSpec;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.dsl.IntegrationFlow;
@@ -29,6 +30,7 @@ import static org.springframework.integration.dsl.IntegrationFlows.from;
 @EnableConfigurationProperties(WarehouseOutboundAmqpIntegrationProperties.class)
 @RequiredArgsConstructor
 @Slf4j
+@Profile("!mockwarehouse")
 class WarehouseOutboundAmqpIntegrationConfiguration {
 
   static final String WAREHOUSE_UPDATE_OUTBOUND = "warehouseOutboundChannel";

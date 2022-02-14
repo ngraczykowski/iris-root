@@ -11,6 +11,7 @@ dependencies {
   implementation project(":sear-payments-bridge-ae")
   implementation project(":sear-payments-bridge-mock-ae")
   implementation project(":sear-payments-bridge-mock-datasource")
+  implementation project(":sear-payments-birdge-mock-warehouse")
   implementation project(":sear-payments-bridge-firco")
   implementation project(":sear-payments-bridge-governance")
   implementation project(":sear-payments-bridge-svb-learning")
