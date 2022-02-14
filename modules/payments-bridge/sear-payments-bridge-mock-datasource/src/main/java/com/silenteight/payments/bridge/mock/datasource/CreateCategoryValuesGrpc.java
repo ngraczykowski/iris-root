@@ -15,11 +15,13 @@ import org.springframework.context.annotation.Profile;
 @RequiredArgsConstructor
 class CreateCategoryValuesGrpc extends CategoryValueServiceGrpc.CategoryValueServiceImplBase {
 
+  private final MockDatasourceService mockDatasourceService;
+
   @Override
   public void batchCreateCategoryValues(
       BatchCreateCategoryValuesRequest request,
       StreamObserver<BatchCreateCategoryValuesResponse> responseObserver) {
-    responseObserver.onNext(BatchCreateCategoryValuesResponse.newBuilder().build());
+    responseObserver.onNext(mockDatasourceService.createCategoryValuesResponse(request));
     responseObserver.onCompleted();
   }
 }

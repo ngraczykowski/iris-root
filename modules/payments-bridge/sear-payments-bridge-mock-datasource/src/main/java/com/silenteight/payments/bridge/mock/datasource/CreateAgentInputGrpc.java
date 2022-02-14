@@ -15,11 +15,13 @@ import org.springframework.context.annotation.Profile;
 @RequiredArgsConstructor
 class CreateAgentInputGrpc extends AgentInputServiceImplBase {
 
+  private final MockDatasourceService mockDatasourceService;
+
   @Override
   public void batchCreateAgentInputs(
       BatchCreateAgentInputsRequest request,
       StreamObserver<BatchCreateAgentInputsResponse> responseObserver) {
-    responseObserver.onNext(BatchCreateAgentInputsResponse.newBuilder().build());
+    responseObserver.onNext(mockDatasourceService.createAgentInputsResponse(request));
     responseObserver.onCompleted();
   }
 }

@@ -64,4 +64,8 @@ public class MockAlertUseCase {
   public static boolean containsAlertId(String alertId) {
     return ALERTS.stream().anyMatch(a -> a.getAlertId().equals(alertId));
   }
+
+  public static String getAlertName(String alertId) {
+    return ALERTS.stream().filter(a -> a.getAlertId().equals(alertId)).findFirst().get().getName();
+  }
 }

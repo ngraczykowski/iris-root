@@ -7,6 +7,7 @@ import com.silenteight.payments.bridge.common.dto.input.RequestDto;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
 import com.silenteight.payments.bridge.mock.ae.MockAlertUseCase;
+import com.silenteight.payments.bridge.mock.datasource.MockDatasourceService;
 import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningAlertsUseCase;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -47,12 +49,20 @@ class PaymentsBridgeApplicationIT {
   private static final String TOO_MANY_HITS_REQUEST_FILE =
       "2021-10-01_1837_osama_bin_laden.json";
 
-  @Autowired ObjectMapper objectMapper;
-  @Autowired CreateAlertMessageUseCase createAlertMessageUseCase;
-  @Autowired ResourceLoader resourceLoader;
-  @Autowired HandleLearningAlertsUseCase handleLearningDataUseCase;
-  @Autowired PaymentsBridgeEventsListener paymentsBridgeEventsListener;
-  @Autowired MockAlertUseCase mockAlertUseCase;
+  @Autowired
+  ObjectMapper objectMapper;
+  @Autowired
+  CreateAlertMessageUseCase createAlertMessageUseCase;
+  @Autowired
+  ResourceLoader resourceLoader;
+  @Autowired
+  HandleLearningAlertsUseCase handleLearningDataUseCase;
+  @Autowired
+  PaymentsBridgeEventsListener paymentsBridgeEventsListener;
+  @Autowired
+  MockAlertUseCase mockAlertUseCase;
+  @Autowired
+  MockDatasourceService mockDatasourceService;
 
   @ParameterizedTest
   @MethodSource("filesFactory")
@@ -75,6 +85,9 @@ class PaymentsBridgeApplicationIT {
         .atMost(Duration.ofSeconds(20))
         .until(() -> paymentsBridgeEventsListener.containsIndexedDiscriminator(
             "alert_system_id|87AB4899-BE5B-5E4F-E053-150A6C0A7A84"));
+    var alertName = MockAlertUseCase.getAlertName("alert_system_id");
+    assertThat(mockDatasourceService.getCreatedFeatureInputsCount(alertName)).isEqualTo(10);
+    assertThat(mockDatasourceService.getCreatedCategoryValuesCount(alertName)).isEqualTo(8);
   }
 
   static Stream<String> filesFactory() {
