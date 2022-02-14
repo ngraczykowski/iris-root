@@ -62,14 +62,14 @@ class Report extends BaseEntity implements IdentifiableEntity {
   @Column(name = "file_storage_name")
   private String fileStorageName;
 
-  static Report of(ReportRange range, String type, String id) {
+  static Report of(ReportRange range, String analysisType, String reportType) {
     Report report = new Report();
-    report.setType(type);
+    report.setType(reportType);
     report.setState(NEW);
     report.setFrom(range.getFrom());
     report.setTo(range.getTo());
     report.generateFileStorageName();
-    report.setAnalysis(id);
+    report.setAnalysis(analysisType);
     return report;
   }
 
@@ -110,7 +110,7 @@ class Report extends BaseEntity implements IdentifiableEntity {
         .id(this.id)
         .name(this.type)
         .fileStorageName(this.fileStorageName)
-        .range(ReportRange.of(this.from, this.to, this.type))
+        .range(ReportRange.of(this.from, this.to, this.analysis))
         .createdAt(this.createdAt)
         .state(this.state)
         .build();
