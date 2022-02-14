@@ -103,7 +103,7 @@ public class AlertComposite {
       DecisionMapper decisionMapper, String featureTypeDiscriminator, HitComposite hit) {
     return Alert.newBuilder()
         .setAlertId(alertDetails.getSystemId())
-        .setAlertedParty(createContextualAlertedParty(featureTypeDiscriminator, hit))
+        .setAlertedParty(createAlertedParty(featureTypeDiscriminator, hit))
         .setMatchId(hit.getFkcoVListFmmId())
         .setWatchlist(mapWatchlistType(hit))
         .addDecisions(getDecision(decisionMapper))
@@ -131,7 +131,7 @@ public class AlertComposite {
 
   }
 
-  private AlertedParty createContextualAlertedParty(
+  private AlertedParty createAlertedParty(
       String featureTypeDiscriminator, HitComposite hit) {
     switch (featureTypeDiscriminator) {
       case HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_FP:

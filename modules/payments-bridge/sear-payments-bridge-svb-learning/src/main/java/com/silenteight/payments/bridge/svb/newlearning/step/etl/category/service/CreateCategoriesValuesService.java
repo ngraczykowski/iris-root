@@ -35,14 +35,7 @@ class CreateCategoriesValuesService implements CreateCategoriesUseCase {
         .flatMap(List::stream)
         .collect(toList());
 
-    var request =
-        BatchCreateCategoryValuesRequest
-            .newBuilder()
-            .addAllRequests(categoryValuesRequests)
-            .build();
-
-    createCategoryValuesClient.createCategoriesValues(request);
-
+    sendToDatasource(categoryValuesRequests);
     return categoryValuesRequests;
   }
 
@@ -56,14 +49,7 @@ class CreateCategoriesValuesService implements CreateCategoriesUseCase {
         .flatMap(List::stream)
         .collect(toList());
 
-    var request =
-        BatchCreateCategoryValuesRequest
-            .newBuilder()
-            .addAllRequests(categoryValuesRequests)
-            .build();
-
-    createCategoryValuesClient.createCategoriesValues(request);
-
+    sendToDatasource(categoryValuesRequests);
     return categoryValuesRequests;
   }
 
@@ -106,5 +92,15 @@ class CreateCategoriesValuesService implements CreateCategoriesUseCase {
         .stream()
         .map(fe -> fe.extract(hit, registeredAlert))
         .collect(toList());
+  }
+
+  private void sendToDatasource(List<CreateCategoryValuesRequest> categoryValuesRequests) {
+    var request =
+        BatchCreateCategoryValuesRequest
+            .newBuilder()
+            .addAllRequests(categoryValuesRequests)
+            .build();
+    createCategoryValuesClient.createCategoriesValues(request);
+
   }
 }

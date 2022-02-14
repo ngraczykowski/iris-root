@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.categories.api.v2.BatchCreateCategoryValuesRequest;
+import com.silenteight.datasource.categories.api.v2.BatchCreateCategoryValuesResponse;
 import com.silenteight.datasource.categories.api.v2.CategoryValueServiceGrpc.CategoryValueServiceBlockingStub;
+import com.silenteight.datasource.categories.api.v2.CreatedCategoryValue;
 import com.silenteight.payments.bridge.datasource.category.port.CreateCategoryValuesClient;
 
 import io.grpc.Deadline;
@@ -12,6 +14,8 @@ import io.grpc.StatusRuntimeException;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,19 +26,45 @@ class CreateCategoriesValuesAdapter implements CreateCategoryValuesClient {
   private final Duration timeout;
 
   public void createCategoriesValues(BatchCreateCategoryValuesRequest createCategoryValuesRequest) {
+
+    if (createCategoryValuesRequest.getRequestsCount() == 0) {
+      log.debug(
+          "Batch category value request is empty. Data won't be send to datasource service");
+    } else {
+      sendToDatasource(createCategoryValuesRequest);
+    }
+  }
+
+  private void sendToDatasource(BatchCreateCategoryValuesRequest createCategoryValuesRequest) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 
-    if (log.isTraceEnabled()) {
-      log.trace("Sending create categories values request");
-    }
+    log.debug("Sending create categories values request");
 
     try {
       var response = blockingStub
           .withDeadline(deadline)
           .batchCreateCategoryValues(createCategoryValuesRequest);
-      log.trace("Created Categories values");
+
+      logResponse(response);
+
     } catch (StatusRuntimeException e) {
-      log.error("Request to the datasource service failed", e);
+      log.error("Request with category values to the datasource service failed", e);
+    }
+  }
+
+  private static void logResponse(BatchCreateCategoryValuesResponse response) {
+    if (log.isDebugEnabled()) {
+
+      var matchesSaved = response.getCreatedCategoryValuesList().stream()
+          .map(CreatedCategoryValue::getName)
+          .distinct()
+          .collect(toList());
+
+      log.debug(
+          "Category values saved for matches, matchCount={}, firstTenMatches={}",
+          matchesSaved.size(),
+          matchesSaved.subList(0, Math.min(10, matchesSaved.size())));
     }
   }
 }
+
