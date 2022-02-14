@@ -250,10 +250,6 @@ warehouse.reports.v2:
                count(CASE WHEN (payload ->> 'analyst_decision') = 'analyst_decision_true_positive' THEN 1 END ) AS "Analyst decision True Positive",
                count(CASE WHEN (payload ->> 'analyst_decision') = 'analyst_decision_false_positive' THEN 1 END ) AS "Analyst decision False Positive"
         FROM warehouse_alert WHERE recommendation_date BETWEEN DATE '${from}' AND DATE '${to}'
-        AND ((payload ->> 'qa.level-0.state' = 'qa_decision_TRUE')
-          OR (payload ->> 'qa.level-0.state' = 'qa_decision_FAILED'))
-        AND ((payload ->> 'analyst_decision' =  'analyst_decision_true_positive')
-          OR (payload ->> 'analyst_decision' = 'analyst_decision_false_positive'))
         GROUP BY (payload ->> 'fvSignature'),
                (payload ->> 'policyId'),
                (payload ->> 'policy_title'),
@@ -318,17 +314,13 @@ warehouse.reports.v2:
                (wsa.payload ->> 'features/passportNumberDocument:solution') AS "Passport Number Document",
                (wsa.payload ->> 'features/registrationCountry:solution') AS "Registration Country",
                (wsa.payload ->> 'features/residencyCountry:solution') AS "Residency Country",
-               count((wsa.payload ->> 'fvSignature')) AS "Hits Counts",
+               count((wsa.payload ->> 'match_reason:feature_vector_signature')) AS "Hits Counts",
                count(CASE WHEN (wa.payload ->> 'qa.level-0.state') = 'qa_decision_TRUE'  THEN 1 END ) AS "QA decision True Positive",
                count(CASE WHEN (wa.payload ->> 'qa.level-0.state') = 'qa_decision_FAILED' THEN 1 END ) AS "QA decision False Positive",
                count(CASE WHEN (wa.payload ->> 'analyst_decision') = 'analyst_decision_true_positive' THEN 1 END ) AS "Analyst decision True Positive",
                count(CASE WHEN (wa.payload ->> 'analyst_decision') = 'analyst_decision_false_positive' THEN 1 END ) AS "Analyst decision False Positive"
         FROM warehouse_simulation_alert wsa JOIN warehouse_alert wa ON wsa.name = wa.name
         WHERE wsa.analysis_name = 'analysis/${analysisId}'
-                               AND ((wa.payload ->> 'qa.level-0.state' = 'qa_decision_TRUE')
-                OR (wa.payload ->> 'qa.level-0.state' = 'qa_decision_FAILED'))
-                               AND ((wa.payload ->> 'analyst_decision' =  'analyst_decision_true_positive')
-                OR (wa.payload ->> 'analyst_decision' = 'analyst_decision_false_positive'))
         GROUP BY (wsa.payload ->> 'match_reason:feature_vector_signature'),
                  (wsa.payload ->> 'match_reason:policy'),
                  (wsa.payload ->> 'match_reason:policy_title'),
