@@ -101,8 +101,8 @@ class AlertAnalysisService {
 
   private void handleCommandsWithFailedAlerts(
       Batch batch, List<AddAlertToAnalysisCommand> commands) {
-    final var alertIds = extractAlertIdsFromCommands(commands);
-    alertRepository.updateStatusToError(batch.id(), alertIds);
+    var errorDescriptionsWithAlertIds = extractErrorDescriptionsWithAlertIdsFromCommands(commands);
+    alertRepository.updateStatusToError(batch.id(), errorDescriptionsWithAlertIds);
   }
 
   private void addAlertsToAnalysis(Batch batch, List<String> alertIds) {
@@ -148,5 +148,15 @@ class AlertAnalysisService {
     return commands.stream()
         .map(AddAlertToAnalysisCommand::alertId)
         .toList();
+  }
+
+  private Map<String, Set<String>> extractErrorDescriptionsWithAlertIdsFromCommands(
+      List<AddAlertToAnalysisCommand> commands) {
+    return commands.stream()
+        .collect(Collectors.groupingBy(
+                AddAlertToAnalysisCommand::errorDescription,
+                Collectors.mapping(AddAlertToAnalysisCommand::alertId, Collectors.toSet())
+            )
+        );
   }
 }

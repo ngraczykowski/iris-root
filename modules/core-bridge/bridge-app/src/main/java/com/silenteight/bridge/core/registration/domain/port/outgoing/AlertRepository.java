@@ -1,8 +1,12 @@
 package com.silenteight.bridge.core.registration.domain.port.outgoing;
 
-import com.silenteight.bridge.core.registration.domain.model.*;
+import com.silenteight.bridge.core.registration.domain.model.Alert;
+import com.silenteight.bridge.core.registration.domain.model.AlertName;
+import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface AlertRepository {
 
@@ -12,7 +16,8 @@ public interface AlertRepository {
 
   void updateStatusToProcessing(String batchId, List<String> alertIds);
 
-  void updateStatusToError(String batchId, List<String> alertIds);
+  void updateStatusToError(
+      String batchId, Map<String, Set<String>> errorDescriptionsWithAlertIds);
 
   List<AlertName> findAllAlertNamesByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
 

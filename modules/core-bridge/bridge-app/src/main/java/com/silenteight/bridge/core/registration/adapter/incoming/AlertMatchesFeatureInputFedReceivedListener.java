@@ -37,6 +37,7 @@ class AlertMatchesFeatureInputFedReceivedListener {
     return AddAlertToAnalysisCommand.builder()
         .batchId(message.getBatchId())
         .alertId(message.getAlertId())
+        .errorDescription(message.getAlertErrorDescription())
         .feedingStatus(FeedingStatus.valueOf(message.getFeedingStatus().name()))
         .fedMatches(message.getFedMatchesList().stream()
             .map(fedMatch -> new FedMatch(fedMatch.getMatchId()))

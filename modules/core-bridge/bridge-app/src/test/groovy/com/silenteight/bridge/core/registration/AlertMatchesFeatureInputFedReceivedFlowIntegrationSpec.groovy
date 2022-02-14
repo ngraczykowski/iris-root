@@ -34,6 +34,7 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
   static def BATCH_IDS = ['batch1', 'batch2']
   static def ALERT_IDS = ['alert1', 'alert2', 'alert3']
   static def ID_OF_ALERT_CONTAINING_FAILURE_FEEDING_STATUS = 'alert2'
+  static def ALERT_ERROR_DESCRIPTION = 'Failed to flatten alert payload.'
 
   @Autowired
   private RabbitTemplate rabbitTemplate
@@ -89,6 +90,7 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
           def alerts = alertRepository.findAllByBatchIdAndAlertIdIn(batchId, batchAlertIds[batchId])
           alerts.each {alert ->
             assert alert.status() == getExpectedAlertStatus(alert.alertId())
+            assert alert.errorDescription() == getExpectedAlertErrorDescription(alert.alertId())
           }
         }
       }
@@ -108,6 +110,7 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
       AlertWithMatches.newBuilder()
           .setAlertId(alertId)
           .setStatus(com.silenteight.proto.registration.api.v1.AlertStatus.SUCCESS)
+          .setErrorDescription('')
           .addAllMatches(createMatches(batchId, alertId))
           .build()
     }
@@ -143,9 +146,13 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
     def feedingStatus = alertId == ID_OF_ALERT_CONTAINING_FAILURE_FEEDING_STATUS ?
                         FeedingStatus.FAILURE :
                         FeedingStatus.SUCCESS
+    def errorDescription = (feedingStatus == FeedingStatus.FAILURE) ?
+                           ALERT_ERROR_DESCRIPTION :
+                           ''
     MessageAlertMatchesFeatureInputFed.newBuilder()
         .setBatchId(batchId)
         .setAlertId(alertId)
+        .setAlertErrorDescription(errorDescription)
         .setFeedingStatus(feedingStatus)
         .addAllFedMatches(fedMatches)
         .build()
@@ -156,5 +163,11 @@ class AlertMatchesFeatureInputFedReceivedFlowIntegrationSpec extends BaseSpecifi
       return AlertStatus.ERROR
     }
     AlertStatus.PROCESSING
+  }
+
+  private static def getExpectedAlertErrorDescription(def alertId) {
+    return getExpectedAlertStatus(alertId) == AlertStatus.ERROR ?
+           ALERT_ERROR_DESCRIPTION :
+           null
   }
 }

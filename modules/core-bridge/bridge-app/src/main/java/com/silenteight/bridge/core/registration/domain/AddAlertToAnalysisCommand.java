@@ -7,6 +7,7 @@ import java.util.List;
 public record AddAlertToAnalysisCommand(
     String batchId,
     String alertId,
+    String errorDescription,
     FeedingStatus feedingStatus,
     List<FedMatch> fedMatches
 ) {

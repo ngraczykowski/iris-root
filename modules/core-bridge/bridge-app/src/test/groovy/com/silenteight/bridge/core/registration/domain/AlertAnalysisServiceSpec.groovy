@@ -26,26 +26,32 @@ class AlertAnalysisServiceSpec extends Specification {
   def alertRepository = Mock(AlertRepository)
 
   @Subject
-  def underTest = new AlertAnalysisService(batchRepository, analysisService, analysisProperties, alertRepository)
+  def underTest = new AlertAnalysisService(
+      batchRepository,
+      analysisService,
+      analysisProperties,
+      alertRepository)
 
   def 'should process 1 success alert and 1 failed alert'() {
     given:
     def batch = createBatchWithStatus('batch1', BatchStatus.STORED)
     def succeededAlert = createAlert(
-        batch.id(), 'alert1', ['succeededAlertMatch1', 'succeededAlertMatch2']
-    )
-    def failedAlert = createAlert(batch.id(), 'alert2', ['failedAlertMatch'])
+        batch.id(), 'alert1', ['succeededAlertMatch1', 'succeededAlertMatch2'], '')
+    def failedAlert = createAlert(
+        batch.id(), 'alert2', ['failedAlertMatch'], 'Failed to flatten alert payload.')
 
     def commands = [
         AddAlertToAnalysisCommand.builder()
             .batchId(batch.id())
             .alertId(succeededAlert.alertId())
+            .errorDescription(succeededAlert.errorDescription())
             .feedingStatus(FeedingStatus.SUCCESS)
             .fedMatches([new FedMatch('succeededAlertMatch1',)])
             .build(),
         AddAlertToAnalysisCommand.builder()
             .batchId(batch.id())
             .alertId(failedAlert.alertId())
+            .errorDescription(failedAlert.errorDescription())
             .feedingStatus(FeedingStatus.FAILURE)
             .fedMatches([new FedMatch('failedAlertMatch')])
             .build()
@@ -62,9 +68,8 @@ class AlertAnalysisServiceSpec extends Specification {
     1 * analysisService.addAlertsToAnalysis(batch.analysisName(), [succeededAlert.name()], _)
     with(alertRepository) {
       1 * updateStatusToProcessing(batch.id(), [succeededAlert.alertId()])
-      1 * updateStatusToError(batch.id(), [failedAlert.alertId()])
-      1 * findAllAlertNamesByBatchIdAndAlertIdIn(batch.id(), [succeededAlert.alertId()]) >>
-          [new AlertName(succeededAlert.name())]
+      1 * updateStatusToError(batch.id(), Map.of('Failed to flatten alert payload.', [failedAlert.alertId()] as Set<String>))
+      1 * findAllAlertNamesByBatchIdAndAlertIdIn(batch.id(), [succeededAlert.alertId()]) >> [new AlertName(succeededAlert.name())]
     }
     0 * _
   }
@@ -77,6 +82,7 @@ class AlertAnalysisServiceSpec extends Specification {
         AddAlertToAnalysisCommand.builder()
             .batchId(batch.id())
             .alertId('alert1')
+            .errorDescription('')
             .feedingStatus(FeedingStatus.SUCCESS)
             .build()
     ]
@@ -100,13 +106,16 @@ class AlertAnalysisServiceSpec extends Specification {
         .build()
   }
 
-  private static def createAlert(String batchId, String alertId, Collection<String> matchIds) {
+  private static def createAlert(
+      String batchId, String alertId, Collection<String> matchIds, String errorDescription) {
     def matches = matchIds.collect(
-        matchId -> new Match(matchId, matchId))
+        matchId -> new Match(matchId, matchId)
+    )
 
     Alert.builder()
         .batchId(batchId)
         .alertId(alertId)
+        .errorDescription(errorDescription)
         .name("alert/$alertId")
         .matches(matches)
         .build()

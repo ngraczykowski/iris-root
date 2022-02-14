@@ -22,6 +22,7 @@ class AlertMatchesFeatureInputFedReceivedListenerSpec extends Specification {
         MessageAlertMatchesFeatureInputFed.newBuilder()
             .setBatchId('1')
             .setAlertId('2')
+            .setAlertErrorDescription('')
             .setFeedingStatus(MessageAlertMatchesFeatureInputFed.FeedingStatus.SUCCESS)
             .addAllFedMatches(
                 [
@@ -35,6 +36,7 @@ class AlertMatchesFeatureInputFedReceivedListenerSpec extends Specification {
     def expectedCommand = AddAlertToAnalysisCommand.builder()
         .batchId(messages.first().batchId)
         .alertId(messages.first().alertId)
+        .errorDescription('')
         .feedingStatus(FeedingStatus.SUCCESS)
         .fedMatches(
             [

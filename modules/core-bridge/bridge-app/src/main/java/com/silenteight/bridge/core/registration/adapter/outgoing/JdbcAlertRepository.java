@@ -3,12 +3,16 @@ package com.silenteight.bridge.core.registration.adapter.outgoing;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.bridge.core.registration.adapter.outgoing.AlertEntity.Status;
-import com.silenteight.bridge.core.registration.domain.model.*;
+import com.silenteight.bridge.core.registration.domain.model.Alert;
+import com.silenteight.bridge.core.registration.domain.model.AlertName;
+import com.silenteight.bridge.core.registration.domain.model.AlertWithMatches;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository;
 
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Repository
 @RequiredArgsConstructor
@@ -38,9 +42,12 @@ class JdbcAlertRepository implements AlertRepository {
   }
 
   @Override
-  public void updateStatusToError(String batchId, List<String> alertIds) {
-    alertRepository.updateAlertsStatusByBatchIdAndIdsIn(
-        batchId, Status.ERROR.name(), alertIds);
+  public void updateStatusToError(
+      String batchId, Map<String, Set<String>> errorDescriptionsWithAlertIds) {
+    errorDescriptionsWithAlertIds.forEach((errorDescription, alertIds) ->
+        alertRepository.updateAlertsStatusWithErrorDescriptionByBatchIdAndAlertIds(
+            batchId, alertIds, Status.ERROR.name(), errorDescription)
+    );
   }
 
   @Override

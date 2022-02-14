@@ -6,6 +6,7 @@ import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Set;
 
 interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
 
@@ -67,4 +68,12 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
       SET status = :status, updated_at = NOW()
       WHERE batch_id = :batchId AND alert_id IN(:alertIds)""")
   void updateAlertsStatusByBatchIdAndIdsIn(String batchId, String status, List<String> alertIds);
+
+  @Modifying
+  @Query("""
+      UPDATE alerts
+      SET status = :status, error_description = :errorDescription, updated_at = NOW()
+      WHERE batch_id = :batchId AND alert_id IN(:alertIds)""")
+  void updateAlertsStatusWithErrorDescriptionByBatchIdAndAlertIds(
+      String batchId, Set<String> alertIds, String status, String errorDescription);
 }
