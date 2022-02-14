@@ -1,13 +1,18 @@
 package com.silenteight.serp.governance.vector.domain;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
 import static com.google.common.base.Splitter.on;
 import static java.lang.String.join;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
 
+@Converter
+@Component
 public class CommaSeparatedListConverter implements AttributeConverter<List<String>, String> {
 
   @Override
