@@ -31,7 +31,7 @@ class ReportRequestService {
       OffsetDateTime to,
       String type,
       String name,
-      Set<String> dataAccessRoles) {
+      Set<String> dataAccessRoles) throws ReportNotAvailableException {
 
     ReportProperties properties = reportPropertiesMatcher.getFor(name, type);
     ReportDto report = reportPersistenceService.save(ReportRange.of(from, to, type), type, name);

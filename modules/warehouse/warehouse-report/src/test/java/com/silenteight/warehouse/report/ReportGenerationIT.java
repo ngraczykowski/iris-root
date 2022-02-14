@@ -10,12 +10,12 @@ import com.silenteight.sep.filestorage.minio.container.MinioContainer.MinioConta
 import com.silenteight.warehouse.common.domain.country.CountryPermissionService;
 import com.silenteight.warehouse.common.testing.e2e.CleanDatabase;
 import com.silenteight.warehouse.report.create.CreateReportRestController;
+import com.silenteight.warehouse.report.create.ReportNotAvailableException;
 import com.silenteight.warehouse.report.download.DownloadReportRestController;
 import com.silenteight.warehouse.report.persistence.ReportStatus.Status;
 import com.silenteight.warehouse.report.status.ReportStatusRestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -58,6 +58,7 @@ class ReportGenerationIT {
   private static final String TIMESTAMP_FROM = "2020-01-12T10:00:37.098Z";
   private static final String TIMESTAMP_TO = "2022-01-12T10:00:37.098Z";
   private static final String REPORT_NAME = "TEST_REPORT";
+  private static final String REPORT_NAME_NOT_CONF = "TEST_REPORT_NOT_CONF";
   private static final String REPORT_TYPE = "production";
 
   @Autowired
@@ -80,14 +81,10 @@ class ReportGenerationIT {
 
   private final ObjectMapper objectMapper = new ObjectMapper();
 
-  @BeforeEach
-  public void init() {
-    createMinioBucket();
-  }
-
   @Test
   @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
   void shouldGenerateReport() {
+    createMinioBucket();
     storeData(DISCRIMINATOR_1, NAME_1, RECOMMENDATION_DATE, Map.of(
         PAYLOAD_KEY_SIGNATURE, PAYLOAD_VALUE_SIGNATURE,
         PAYLOAD_KEY_COUNTRY, COUNTRY_PL));
@@ -108,6 +105,22 @@ class ReportGenerationIT {
         .contains("9HzsNs1bv,PL,TEST[AAAGLOBAL186R1038]_81596ace,alerts/123,2021-01-12 10:00:37");
   }
 
+  @Test
+  @SneakyThrows
+  @WithMockUser(username = "user", authorities = COUNTRY_GROUP)
+  void shouldNotGenerateReportWhenNotConfigured() {
+    when(countryPermissionService.getCountries(of(COUNTRY_GROUP)))
+        .thenReturn(of(COUNTRY_PL));
+
+    assertThatThrownBy(() -> createReportRestController.createReport(
+        OffsetDateTime.parse(TIMESTAMP_FROM),
+        OffsetDateTime.parse(TIMESTAMP_TO),
+        REPORT_TYPE,
+        REPORT_NAME_NOT_CONF))
+        .isInstanceOf(ReportNotAvailableException.class);
+  }
+
+  @SneakyThrows
   private Long createReport() {
     ResponseEntity<Void> report = createReportRestController.createReport(
         OffsetDateTime.parse(TIMESTAMP_FROM),
@@ -154,6 +167,11 @@ class ReportGenerationIT {
 
   @SneakyThrows
   private void createMinioBucket() {
+    storageManager.create(TEST_BUCKET);
+  }
+
+  @SneakyThrows
+  private void removeMinioBucket() {
     storageManager.create(TEST_BUCKET);
   }
 }

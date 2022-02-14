@@ -179,9 +179,9 @@ warehouse.reports.v2:
         WHERE analysis_name = 'analysis/${analysisId}'
         AND (payload ->> 's8_lobCountryCode') IN (${countries})
         AND (wa.payload ->> 'analyst_decision') IN ('analyst_decision_false_positive', 'analyst_decision_true_positive')
-    - name: RBS
+    - name: RB_SCORER
       type: production
-      description: Rbs
+      description: Reasoning Branch Scorer
       selectSqlQuery: >
         SELECT (payload ->> 'fvSignature') AS "Reasoning Branch ID",
                (payload ->> 'policyId') AS "Policy ID",
@@ -253,9 +253,9 @@ warehouse.reports.v2:
                (payload ->> 'features/passportNumberDocument:solution'),
                (payload ->> 'features/registrationCountry:solution'),
                (payload ->> 'features/residencyCountry:solution')
-    - name: RBS
+    - name: RB_SCORER
       type: simulation
-      description: Rbs
+      description: Reasoning Branch Scorer
       selectSqlQuery: >
         SELECT (wsa.payload ->> 'match_reason:feature_vector_signature') AS "Reasoning Branch ID",
                (wsa.payload ->> 'match_reason:policy') AS "Policy ID",
