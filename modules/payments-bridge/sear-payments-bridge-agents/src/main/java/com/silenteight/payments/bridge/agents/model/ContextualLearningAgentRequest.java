@@ -3,10 +3,7 @@ package com.silenteight.payments.bridge.agents.model;
 import lombok.Builder;
 import lombok.Value;
 
-import com.silenteight.datasource.api.historicaldecisions.v2.AlertedParty;
-import com.silenteight.datasource.api.historicaldecisions.v2.Match;
-import com.silenteight.datasource.api.historicaldecisions.v2.ModelKey;
-import com.silenteight.datasource.api.historicaldecisions.v2.WatchlistParty;
+import com.silenteight.datasource.api.historicaldecisions.v2.*;
 
 @Value
 @Builder
@@ -20,9 +17,19 @@ public class ContextualLearningAgentRequest {
 
   String matchText;
 
+  String feature;
+
+  String discriminator;
+
   public ModelKey createModelKey(String alertedPartyId) {
     return ModelKey.newBuilder()
         .setMatch(createMatch(alertedPartyId))
+        .build();
+  }
+
+  public Discriminator createDiscriminator(String discriminatorPrefix) {
+    return Discriminator.newBuilder()
+        .setValue(getDiscriminatorValue(discriminatorPrefix))
         .build();
   }
 
@@ -44,6 +51,10 @@ public class ContextualLearningAgentRequest {
         .setId(ofacId)
         .setType(watchlistType)
         .build();
+  }
+
+  private String getDiscriminatorValue(String discriminatorPrefix) {
+    return discriminatorPrefix + "_" + discriminator;
   }
 
 }

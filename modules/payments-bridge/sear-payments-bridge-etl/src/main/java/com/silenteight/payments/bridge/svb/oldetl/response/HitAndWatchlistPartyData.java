@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Value;
 
 import com.silenteight.payments.bridge.agents.model.ContextualLearningAgentRequest;
+import com.silenteight.payments.bridge.agents.model.ContextualLearningAgentRequest.ContextualLearningAgentRequestBuilder;
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 
@@ -36,13 +37,12 @@ public class HitAndWatchlistPartyData {
   List<String> natIds;
   List<String> bics;
 
-  public ContextualLearningAgentRequest contextualLearningAgentRequest() {
+  public ContextualLearningAgentRequestBuilder contextualLearningAgentRequestBuilder() {
     return ContextualLearningAgentRequest.builder()
         .ofacId(id.toUpperCase().trim())
         .watchlistType(watchlistType.toString())
         .matchingField(getMatchingField())
-        .matchText(matchingText)
-        .build();
+        .matchText(matchingText);
   }
 
   private String getMatchingField() {

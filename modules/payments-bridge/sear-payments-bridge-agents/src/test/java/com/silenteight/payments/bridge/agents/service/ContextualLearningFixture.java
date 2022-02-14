@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.agents.service;
 
 import com.silenteight.datasource.api.historicaldecisions.v2.*;
 
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_DISC;
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_DISC_TP;
 
 class ContextualLearningFixture {
 
@@ -30,7 +30,7 @@ class ContextualLearningFixture {
 
   static Discriminator getDiscriminator() {
     return Discriminator.newBuilder()
-        .setValue(DISCRIMINATOR_PREFIX + "_" + CONTEXTUAL_LEARNING_DISC)
+        .setValue(DISCRIMINATOR_PREFIX + "_" + CONTEXTUAL_LEARNING_DISC_TP)
         .build();
   }
 }

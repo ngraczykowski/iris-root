@@ -8,21 +8,24 @@ import com.silenteight.payments.bridge.agents.model.ContextualLearningAgentReque
 import com.silenteight.payments.bridge.agents.port.CreateContextualLearningFeatureInputUseCase;
 import com.silenteight.payments.bridge.svb.newlearning.domain.HitComposite;
 
-import org.springframework.stereotype.Service;
-
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_FEATURE;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
 
-@Service
 @RequiredArgsConstructor
-class ContextualLearningFeatureExtractorService implements UnstructuredFeatureExtractor {
+abstract class ContextualLearningFeatureExtractorService implements UnstructuredFeatureExtractor {
 
   private final CreateContextualLearningFeatureInputUseCase createFeatureInput;
+
+  //TODO(jgajewski): Remove soon while refactoring
+  protected abstract String getFeature();
+
+  protected abstract String getFeatureName();
+
+  protected abstract String getDiscriminator();
 
   @Override
   public FeatureInput createFeatureInputs(HitComposite hit) {
     HistoricalDecisionsFeatureInput featureInput = getHistoricalDecisionsFeatureInput(hit);
-    return createFeatureInput(CONTEXTUAL_LEARNING_FEATURE, featureInput);
+    return createFeatureInput(getFeature(), featureInput);
   }
 
   private HistoricalDecisionsFeatureInput getHistoricalDecisionsFeatureInput(HitComposite hit) {
@@ -30,7 +33,10 @@ class ContextualLearningFeatureExtractorService implements UnstructuredFeatureEx
     return createFeatureInput.create(request);
   }
 
-  private static ContextualLearningAgentRequest getRequest(HitComposite hit) {
-    return hit.createContextualLearningAgentRequest();
+  private ContextualLearningAgentRequest getRequest(HitComposite hit) {
+    return hit.createContextualAgentRequestBuilder()
+        .feature(getFeatureName())
+        .discriminator(getDiscriminator())
+        .build();
   }
 }

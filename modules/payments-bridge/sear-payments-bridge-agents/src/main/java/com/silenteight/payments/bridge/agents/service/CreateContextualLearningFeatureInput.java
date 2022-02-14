@@ -2,7 +2,6 @@ package com.silenteight.payments.bridge.agents.service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.datasource.api.historicaldecisions.v2.Discriminator;
 import com.silenteight.datasource.api.historicaldecisions.v2.HistoricalDecisionsFeatureInput;
 import com.silenteight.datasource.api.historicaldecisions.v2.ModelKey;
 import com.silenteight.payments.bridge.agents.model.ContextualLearningAgentRequest;
@@ -15,9 +14,6 @@ import com.silenteight.payments.bridge.common.app.LearningProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_DISC;
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_FEATURE_NAME;
-
 @Component
 @RequiredArgsConstructor
 @EnableConfigurationProperties({ LearningProperties.class, ContextualLearningProperties.class })
@@ -29,9 +25,9 @@ class CreateContextualLearningFeatureInput implements CreateContextualLearningFe
   @Override
   public HistoricalDecisionsFeatureInput create(ContextualLearningAgentRequest request) {
     return HistoricalDecisionsFeatureInput.newBuilder()
-        .setFeature(CONTEXTUAL_LEARNING_FEATURE_NAME)
+        .setFeature(request.getFeature())
         .setModelKey(createModelKey(request))
-        .setDiscriminator(createDiscriminator())
+        .setDiscriminator(request.createDiscriminator(learningProperties.getDiscriminatorPrefix()))
         .build();
   }
 
@@ -53,15 +49,5 @@ class CreateContextualLearningFeatureInput implements CreateContextualLearningFe
         .matchingField(request.getMatchingField())
         .matchText(request.getMatchText())
         .build();
-  }
-
-  private Discriminator createDiscriminator() {
-    return Discriminator.newBuilder()
-        .setValue(getDiscriminatorValue())
-        .build();
-  }
-
-  private String getDiscriminatorValue() {
-    return learningProperties.getDiscriminatorPrefix() + "_" + CONTEXTUAL_LEARNING_DISC;
   }
 }

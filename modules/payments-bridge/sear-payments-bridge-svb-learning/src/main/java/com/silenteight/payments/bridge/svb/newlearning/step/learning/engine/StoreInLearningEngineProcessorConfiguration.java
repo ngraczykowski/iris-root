@@ -10,9 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_DISC;
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_FP;
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_TP;
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.*;
 
 @Configuration
 @RequiredArgsConstructor
@@ -32,6 +30,7 @@ class StoreInLearningEngineProcessorConfiguration {
   @StepScope
   StoreInLearningEngineProcessor storeInLearningEngineContextualProcessor(
       final DecisionMapper decisionMapper) {
-    return new StoreInLearningEngineProcessor(decisionMapper, List.of(CONTEXTUAL_LEARNING_DISC));
+    return new StoreInLearningEngineProcessor(
+        decisionMapper, List.of(CONTEXTUAL_LEARNING_DISC_FP, CONTEXTUAL_LEARNING_DISC_TP));
   }
 }

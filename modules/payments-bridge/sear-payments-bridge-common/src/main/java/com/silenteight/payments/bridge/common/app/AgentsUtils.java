@@ -21,13 +21,16 @@ public class AgentsUtils {
   public static final String HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_TP =
       "hist_account_number_tp";
 
-  public static final String CONTEXTUAL_LEARNING_FEATURE =
-      "contextualLearningName";
-  public static final String CONTEXTUAL_LEARNING_FEATURE_NAME =
-      FEATURE_PREFIX + CONTEXTUAL_LEARNING_FEATURE;
-  // TODO(jgajewski): Rename to hist_contextual_learning_name
-  //  when learning engine is going to change it's discriminator
-  public static final String CONTEXTUAL_LEARNING_DISC = "hist_contextual_learning";
+  public static final String CONTEXTUAL_LEARNING_FEATURE_TP =
+      "contextualLearningNameTP";
+  public static final String CONTEXTUAL_LEARNING_FEATURE_FP =
+      "contextualLearningNameFP";
+  public static final String CONTEXTUAL_LEARNING_FEATURE_NAME_TP =
+      FEATURE_PREFIX + CONTEXTUAL_LEARNING_FEATURE_TP;
+  public static final String CONTEXTUAL_LEARNING_FEATURE_NAME_FP =
+      FEATURE_PREFIX + CONTEXTUAL_LEARNING_FEATURE_FP;
+  public static final String CONTEXTUAL_LEARNING_DISC_TP = "hist_contextual_learning_name_tp";
+  public static final String CONTEXTUAL_LEARNING_DISC_FP = "hist_contextual_learning_name_fp";
 
   public static final String GEO_FEATURE = "geo";
 

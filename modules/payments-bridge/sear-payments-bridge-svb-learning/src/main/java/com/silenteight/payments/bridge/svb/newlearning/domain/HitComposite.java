@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.agents.model.AlertedPartyKey;
 import com.silenteight.payments.bridge.agents.model.ContextualLearningAgentRequest;
+import com.silenteight.payments.bridge.agents.model.ContextualLearningAgentRequest.ContextualLearningAgentRequestBuilder;
 import com.silenteight.payments.bridge.agents.model.SpecificTermsRequest;
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
@@ -144,12 +145,11 @@ public class HitComposite {
     return SolutionType.valueOf(solutionType);
   }
 
-  public ContextualLearningAgentRequest createContextualLearningAgentRequest() {
+  public ContextualLearningAgentRequestBuilder createContextualAgentRequestBuilder() {
     return ContextualLearningAgentRequest.builder()
         .ofacId(fkcoVListFmmId)
         .watchlistType(fkcoVListType)
         .matchingField(fkcoVMatchedTagContent)
-        .matchText(fkcoVNameMatchedText)
-        .build();
+        .matchText(fkcoVNameMatchedText);
   }
 }

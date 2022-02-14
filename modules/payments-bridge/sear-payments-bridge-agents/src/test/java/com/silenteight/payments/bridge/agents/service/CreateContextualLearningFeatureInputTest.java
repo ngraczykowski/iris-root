@@ -18,7 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static com.silenteight.payments.bridge.agents.service.ContextualLearningFixture.DISCRIMINATOR_PREFIX;
 import static com.silenteight.payments.bridge.agents.service.ContextualLearningFixture.getDiscriminator;
 import static com.silenteight.payments.bridge.agents.service.ContextualLearningFixture.getModelKey;
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_FEATURE_NAME;
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_DISC_TP;
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_FEATURE_NAME_TP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -70,10 +71,12 @@ class CreateContextualLearningFeatureInputTest {
             .watchlistType(watchlistType)
             .matchingField(replaceSpecialCharacters(matchingField))
             .matchText(matchText)
+            .feature(CONTEXTUAL_LEARNING_FEATURE_NAME_TP)
+            .discriminator(CONTEXTUAL_LEARNING_DISC_TP)
             .build());
 
     assertEquals(HistoricalDecisionsFeatureInput.newBuilder()
-        .setFeature(CONTEXTUAL_LEARNING_FEATURE_NAME)
+        .setFeature(CONTEXTUAL_LEARNING_FEATURE_NAME_TP)
         .setModelKey(getModelKey(ofacId, watchlistType, replaceSpecialCharacters(alertedPartyId)))
         .setDiscriminator(getDiscriminator())
         .build(), actual);

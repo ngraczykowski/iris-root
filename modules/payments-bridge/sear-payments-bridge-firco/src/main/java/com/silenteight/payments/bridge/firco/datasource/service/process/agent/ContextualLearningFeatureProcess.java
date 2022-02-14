@@ -9,24 +9,25 @@ import com.silenteight.payments.bridge.agents.port.CreateContextualLearningFeatu
 import com.silenteight.payments.bridge.firco.datasource.model.DatasourceUnstructuredModel;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_FEATURE;
 import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.createFeatureInput;
 
-@Component
 @RequiredArgsConstructor
-class ContextualLearningFeatureProcess implements CreateFeatureInputUnstructured {
+abstract class ContextualLearningFeatureProcess implements CreateFeatureInputUnstructured {
 
   private final CreateContextualLearningFeatureInputUseCase createFeatureInput;
 
+  //TODO(jgajewski): Remove when refactoring soon
+  protected abstract String getFeature();
+
+  protected abstract String getFeatureName();
+
+  protected abstract String getDiscriminator();
+
   @Override
   public List<AgentInput> createFeatureInputs(DatasourceUnstructuredModel inputModel) {
-    var dataSourceFeatureInputs =
-        createDataSourceFeatureInputs(inputModel.getHitAndWatchlistPartyData());
-
+    var dataSourceFeatureInputs = getFeatureInput(inputModel);
     var agentInput = AgentInput.newBuilder()
         .setAlert(inputModel.getAlertName())
         .setMatch(inputModel.getMatchName())
@@ -35,15 +36,18 @@ class ContextualLearningFeatureProcess implements CreateFeatureInputUnstructured
     return List.of(agentInput);
   }
 
-  private FeatureInput createDataSourceFeatureInputs(
-      HitAndWatchlistPartyData hitAndWatchlistPartyData) {
-    var request = creteRequest(hitAndWatchlistPartyData);
+  private FeatureInput getFeatureInput(
+      DatasourceUnstructuredModel inputModel) {
+    var request = createRequest(inputModel.getHitAndWatchlistPartyData());
     var historicalDecisionsFeatureInput = createFeatureInput.create(request);
-    return createFeatureInput(CONTEXTUAL_LEARNING_FEATURE, historicalDecisionsFeatureInput);
+    return createFeatureInput(getFeature(), historicalDecisionsFeatureInput);
   }
 
-  protected static ContextualLearningAgentRequest creteRequest(
+  private ContextualLearningAgentRequest createRequest(
       HitAndWatchlistPartyData hitAndWatchlistPartyData) {
-    return hitAndWatchlistPartyData.contextualLearningAgentRequest();
+    return hitAndWatchlistPartyData.contextualLearningAgentRequestBuilder()
+        .feature(getFeatureName())
+        .discriminator(getDiscriminator())
+        .build();
   }
 }

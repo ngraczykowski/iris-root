@@ -26,10 +26,11 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
-import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_DISC;
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_DISC_FP;
+import static com.silenteight.payments.bridge.common.app.AgentsUtils.CONTEXTUAL_LEARNING_DISC_TP;
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_FP;
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_TP;
-import static com.silenteight.payments.bridge.common.dto.common.MessageStructure.*;
+import static com.silenteight.payments.bridge.common.dto.common.MessageStructure.isMessageStructured;
 import static java.util.stream.Collectors.toList;
 
 @Value
@@ -87,7 +88,8 @@ public class AlertComposite {
       case HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_FP:
       case HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_TP:
         return isMessageStructured(tag);
-      case CONTEXTUAL_LEARNING_DISC:
+      case CONTEXTUAL_LEARNING_DISC_FP:
+      case CONTEXTUAL_LEARNING_DISC_TP:
         return true;
       default:
         throw new UnsupportedHistoricalDecisionAgentFeature(
@@ -137,7 +139,8 @@ public class AlertComposite {
       case HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_FP:
       case HISTORICAL_RISK_ACCOUNT_NUMBER_LEARNING_DISC_TP:
         return createAlertedPartyData(hit);
-      case CONTEXTUAL_LEARNING_DISC:
+      case CONTEXTUAL_LEARNING_DISC_FP:
+      case CONTEXTUAL_LEARNING_DISC_TP:
         return createContextualAlertedParty(hit);
       default:
         throw new UnsupportedHistoricalDecisionAgentFeature(
