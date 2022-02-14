@@ -21,6 +21,9 @@ class SamplingPostgresAlertIndexServiceTest extends SamplingAlertIndexService {
   private static final String INSERT_TEMPLATE =
       "INSERT INTO warehouse_alert(id, discriminator, name, created_at, recommendation_date,"
           + " payload) VALUES(%s, '%s', '%s', '%s', '%s', '%s')";
+  private static final String INSERT_TEMPLATE_WITH_NULL_NAME =
+      "INSERT INTO warehouse_alert(id, discriminator, created_at, recommendation_date,"
+          + " payload) VALUES(%s, '%s', '%s', '%s', '%s')";
 
   @Autowired
   private JdbcTemplate jdbcTemplate;
@@ -49,7 +52,11 @@ class SamplingPostgresAlertIndexServiceTest extends SamplingAlertIndexService {
             createJsonFromMap(ALERT_5_MAP_WITHOUT_PREFIX)),
         prepareInsertString(
             6, DISCRIMINATOR_6, ALERT_NAME_6, PROCESSING_TIMESTAMP_4,
-            createJsonFromMap(ALERT_6_MAP_WITHOUT_PREFIX))
+            createJsonFromMap(ALERT_6_MAP_WITHOUT_PREFIX)),
+        prepareInsertWithNullName(
+            7, DISCRIMINATOR_7, PROCESSING_TIMESTAMP_4,
+            createJsonFromMap(ALERT_4_MAP_WITHOUT_PREFIX)
+        )
     );
     sqls.forEach(jdbcTemplate::update);
   }
@@ -79,5 +86,12 @@ class SamplingPostgresAlertIndexServiceTest extends SamplingAlertIndexService {
             createJsonFromMap(ALERT_6_MAP_WITHOUT_PREFIX))
     );
     sqls.forEach(jdbcTemplate::update);
+  }
+
+  private String prepareInsertWithNullName(
+      int id, String discriminator, String timestamp, ObjectNode payload) {
+    return String.format(
+        INSERT_TEMPLATE_WITH_NULL_NAME, id, discriminator, timestamp, timestamp,
+        payload.toString());
   }
 }

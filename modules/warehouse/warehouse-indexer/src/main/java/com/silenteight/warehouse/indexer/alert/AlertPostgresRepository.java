@@ -41,7 +41,8 @@ public final class AlertPostgresRepository implements AlertRepository {
   public static final String PAYLOAD_COLUMN_NAME = "payload";
   @Language("PostgreSQL")
   private static final String FETCH =
-      "SELECT * FROM warehouse_alert WHERE %s BETWEEN ? AND ?%s%s ORDER BY RANDOM() LIMIT ?";
+      "SELECT * FROM warehouse_alert WHERE name is NOT NULL AND %s BETWEEN ? AND ?%s%s ORDER BY"
+          + " RANDOM() LIMIT ?";
   @Language("PostgreSQL")
   private static final String GROUP_BY =
       "SELECT * FROM warehouse_alert WHERE %s BETWEEN ? AND ?%s";
