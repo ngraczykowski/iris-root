@@ -61,11 +61,7 @@ public class MockAlertUseCase {
     return BatchAddLabelsResponse.newBuilder().putAllLabels(request.getLabelsMap()).build();
   }
 
-  public static long getCreatedAlertsCount() {
-    return ALERTS.size();
-  }
-
-  public static int getCreatedMatchesCount() {
-    return matchId - 1;
+  public static boolean containsAlertId(String alertId) {
+    return ALERTS.stream().anyMatch(a -> a.getAlertId().equals(alertId));
   }
 }

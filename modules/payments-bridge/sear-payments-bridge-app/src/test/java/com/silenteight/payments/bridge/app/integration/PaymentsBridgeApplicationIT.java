@@ -6,6 +6,7 @@ import com.silenteight.payments.bridge.PaymentsBridgeApplication;
 import com.silenteight.payments.bridge.common.dto.input.RequestDto;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
+import com.silenteight.payments.bridge.mock.ae.MockAlertUseCase;
 import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningAlertsUseCase;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
@@ -31,6 +32,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(classes = { PaymentsBridgeApplication.class })
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
@@ -50,6 +52,7 @@ class PaymentsBridgeApplicationIT {
   @Autowired ResourceLoader resourceLoader;
   @Autowired HandleLearningAlertsUseCase handleLearningDataUseCase;
   @Autowired PaymentsBridgeEventsListener paymentsBridgeEventsListener;
+  @Autowired MockAlertUseCase mockAlertUseCase;
 
   @ParameterizedTest
   @MethodSource("filesFactory")
@@ -67,6 +70,11 @@ class PaymentsBridgeApplicationIT {
         .atMost(Duration.ofSeconds(20))
         .until(() -> paymentsBridgeEventsListener.containsLearningRegisteredSystemId(
             "alert_system_id"));
+    assertTrue(MockAlertUseCase.containsAlertId("alert_system_id"));
+    await()
+        .atMost(Duration.ofSeconds(20))
+        .until(() -> paymentsBridgeEventsListener.containsIndexedDiscriminator(
+            "alert_system_id|87AB4899-BE5B-5E4F-E053-150A6C0A7A84"));
   }
 
   static Stream<String> filesFactory() {
