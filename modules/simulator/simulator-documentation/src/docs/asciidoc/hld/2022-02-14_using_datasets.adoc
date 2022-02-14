@@ -1,0 +1,78 @@
+= HLD #4
+
+- Reference ticket:
+- Reason: Creation of Datasets - the current state
+
+== Creating Datasets
+[plantuml,creating_datasets,svg]
+-----
+@startuml
+header Creating datasets
+
+actor User as u
+participant Frontend as f
+participant Simulator as s
+database SimulatorDB as db
+participant "Adjudication Engine" as ae
+
+autonumber
+
+u -> f : Create Dataset
+f -> s : Create Dataset request
+s -> ae : Create Dataset
+ae -> s : Dataset created
+s -> db : Store dataset metadata
+s -> f : Ok
+f -> u : Ok
+
+@enduml
+-----
+
+== Fetching Datasets
+[plantuml,fetching_datasets,svg]
+-----
+@startuml
+header Fetching datasets
+
+actor User as u
+participant Frontend as f
+participant Simulator as s
+database SimulatorDB as db
+participant "Adjudication Engine" as ae
+
+autonumber
+
+u -> f : Get Dataset
+f -> s : Get Dataset request
+s -> db : Get dataset metadata
+s -> f : Dataset
+f -> u : Dataset
+
+@enduml
+-----
+
+== Using Datasets
+[plantuml,using_datasets,svg]
+-----
+@startuml
+header Using datasets
+
+actor User as u
+participant Frontend as f
+participant Simulator as s
+database SimulatorDB as db
+participant "Adjudication Engine" as ae
+
+autonumber
+
+u -> f : Create a Simulation
+f -> s : Create a Simulation request
+s -> ae : Create an Analysis
+s -> db : Store simulation with analysis info
+s -> ae : Add datasets to analysis
+ae -> s : Dataset added
+s -> f : Ok
+f -> u : Ok
+
+@enduml
+-----
