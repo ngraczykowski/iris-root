@@ -74,5 +74,4 @@ class BackupMessageMigrationConfiguration {
   TransactionTemplate transactionTemplate(PlatformTransactionManager transactionManager) {
     return new TransactionTemplate(transactionManager);
   }
-
 }

@@ -9,6 +9,7 @@ import com.vladmihalcea.hibernate.type.json.JsonType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
+import java.time.OffsetDateTime;
 import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -52,4 +53,8 @@ class BackupMessage extends BaseEntity implements IdentifiableEntity {
   @ToString.Include
   @Setter(AccessLevel.PUBLIC)
   boolean migrated;
+
+  @ToString.Include
+  @Setter(AccessLevel.PUBLIC)
+  OffsetDateTime migratedAt;
 }

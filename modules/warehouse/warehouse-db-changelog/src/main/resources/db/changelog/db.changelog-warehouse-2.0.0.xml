@@ -217,4 +217,11 @@
       <column name="file_storage_name" type="VARCHAR(64)"/>
     </createTable>
   </changeSet>
+
+  <changeSet id="warehouse-2.0.0-11" author="skociuba">
+    <addColumn tableName="warehouse_message_backup">
+      <column name="migrated_at" type="TIMESTAMP"/>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>
