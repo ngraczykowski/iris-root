@@ -16,7 +16,7 @@ public final class AlertResource extends AbstractResourceExtractor {
     return fromResourceName(resourceName, RESOURCE_NAME_PREFIX);
   }
 
-  public static String toResourceName(UUID id) {
+  public static String toResourceName(String id) {
     return toResourceName(id, RESOURCE_NAME_PREFIX);
   }
 }

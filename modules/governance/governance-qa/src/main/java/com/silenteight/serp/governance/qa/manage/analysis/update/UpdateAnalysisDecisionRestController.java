@@ -11,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
 import javax.validation.Valid;
 
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
@@ -32,7 +31,7 @@ class UpdateAnalysisDecisionRestController {
   @PatchMapping(UPDATE_DECISION_URL)
   @PreAuthorize("isAuthorized('ALERTS_ANALYSIS_DECISION')")
   @ResponseStatus
-  public ResponseEntity<Void> update(@PathVariable UUID alertId,
+  public ResponseEntity<Void> update(@PathVariable String alertId,
       @RequestBody @Valid UpdateAnalysisDecisionDto updateAnalysisDecisionDto,
       Authentication authentication) {
 

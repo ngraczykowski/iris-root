@@ -12,6 +12,10 @@ public abstract class AbstractResourceExtractor {
   }
 
   public static String toResourceName(UUID id, String prefix) {
-    return prefix + id.toString();
+    return toResourceName(id.toString(), prefix);
+  }
+
+  public static String toResourceName(String id, String prefix) {
+    return prefix + id;
   }
 }
