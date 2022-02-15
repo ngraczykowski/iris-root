@@ -124,3 +124,8 @@ registration:
   analysis:
     alert-ttl: 10m
     mock-recommendations-generation: true
+
+### SENTRY
+sentry:
+  environment: unknown
+  traces-sample-rate: 0

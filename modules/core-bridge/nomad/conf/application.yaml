@@ -2,31 +2,31 @@ silenteight:
   bridge:
     ### GRPC PROPERTIES
     grpc:
-      port: {{ env "NOMAD_PORT_grpc" }}
+      port: { { env "NOMAD_PORT_grpc" } }
 
     ### HTTP PROPERTIES
     http:
-      port: {{ env "NOMAD_PORT_http" }}
+      port: { { env "NOMAD_PORT_http" } }
 
 grpc:
   client:
     governance.address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-governance
     adjudication-engine.address: discovery:///{{ env "NOMAD_NAMESPACE" }}-grpc-adjudication-engine
 
-{{ $nomad_namespace := env "NOMAD_NAMESPACE" }}
-{{ with service (print $nomad_namespace "-core-bridge-db") }}
+  { { $nomad_namespace := env "NOMAD_NAMESPACE" } }
+  { { with service (print $nomad_namespace "-core-bridge-db") } }
 spring.datasource.url: jdbc:postgresql://{{ (index . 0).Address }}:{{ (index . 0).Port }}/{{ env "NOMAD_NAMESPACE" }}-core-bridge
-{{ end -}}
+  { { end - } }
 
 spring:
   rabbitmq:
-    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
-      {{ if $index }},{{ end -}}
-      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
-{{- end }}
+    addresses: { { range $index, $rabbit := service "amqp.rabbitmq" - } }
+      { { if $index } },{ { end - } }
+      { { $rabbit.Address } }:{{ $rabbit.Port -}}
+  { { - end } }
 # NOTE(ahaczewski): Intentionally left empty.
-    host:
-    virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+host:
+virtual-host: /{{ env "NOMAD_NAMESPACE" }}
 
 management:
   endpoint:
@@ -35,10 +35,15 @@ management:
     web:
       base-path: /management
       exposure:
-        include: ["health", "info", "liquibase", "metrics", "prometheus", "loggers"]
+        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers" ]
 
 ### REGISTRATION
 registration:
   analysis:
     mock-recommendations-generation: false
 
+### SENTRY
+sentry:
+  dsn: https://5991989c7325495fbdeff0bd32ddbb1d@o1129201.ingest.sentry.io/6204134
+  environment: mike-dev
+  tracesSampleRate: 0

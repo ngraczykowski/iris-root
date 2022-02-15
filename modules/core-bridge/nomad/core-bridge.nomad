@@ -71,8 +71,8 @@ job "core-bridge" {
       }
 
       config {
-        image   = "postgres:10"
-        ports   = [
+        image = "postgres:10"
+        ports = [
           "tcp"
         ]
         volumes = [
@@ -232,7 +232,7 @@ job "core-bridge" {
       driver = "raw_exec"
 
       artifact {
-        source      = var.core_bridge_artifact
+        source = var.core_bridge_artifact
         options {
           checksum = "${var.core_bridge_artifact_checksum}"
         }

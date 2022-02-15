@@ -4,26 +4,27 @@ ext {
   //***********************************
   // Silent Eight
   //***********************************
-  coreBridgeRecommendationApiVersion = "1.5.0"
-  coreBridgeRegistrationApiVersion = "1.12.0"
-  governanceApiVersion = "1.10.0"
-  governanceApiLibraryVersion = "1.0.0"
-  adjudicationEngineApiVersion = "0.7.0"
-  adjudicationEngineApiLibraryVersion = "1.2.0"
-  protobufSpringBootStarterVersion = "1.6.0"
+  coreBridgeRecommendationApiVersion = '1.5.0'
+  coreBridgeRegistrationApiVersion = '1.12.0'
+  governanceApiVersion = '1.10.0'
+  governanceApiLibraryVersion = '1.0.0'
+  adjudicationEngineApiVersion = '0.7.0'
+  adjudicationEngineApiLibraryVersion = '1.2.0'
+  protobufSpringBootStarterVersion = '1.6.0'
 
   //***********************************
   // Dependency Versions
   //***********************************
   groovyVersion = '3.0.9'
   testContainersVersion = '1.16.2'
-  junitJupiterVersion = "5.8.2"
-  mockitoVersion = "4.1.0"
+  junitJupiterVersion = '5.8.2'
+  mockitoVersion = '4.1.0'
   spockVersion = '2.1-M2-groovy-3.0'
-  springBootVersion = "2.5.7"
-  springCloudVersion = "3.0.4"
-  springVersion = "5.3.13"
-  springRabbitVersion = "2.3.6"
+  springBootVersion = '2.5.7'
+  springCloudVersion = '3.0.4'
+  springVersion = '5.3.13'
+  springRabbitVersion = '2.3.6'
+  sentryVersion = '5.6.1'
 }
 
 // Silent Eight
@@ -84,6 +85,9 @@ libraries.commons_collections = [group: 'org.apache.commons', name: 'commons-col
 libraries.commons_validator = [group: 'commons-validator', name: 'commons-validator', version: '1.7']
 libraries.io_utils = [group: 'commons-io', name: 'commons-io', version: '2.11.0']
 libraries.streamex = [group: 'one.util', name: 'streamex', version: '0.8.0']
+libraries.sentry = [group: 'io.sentry', name: 'sentry', version: sentryVersion]
+libraries.sentry_logback = [group: 'io.sentry', name: 'sentry-logback', version: sentryVersion]
+libraries.sentry_spring_boot_starter = [group: 'io.sentry', name: 'sentry-spring-boot-starter', version: sentryVersion]
 libraries.vavr = [group: 'io.vavr', name: 'vavr', version: '0.10.4']
 
 configurations.all {
@@ -130,8 +134,10 @@ dependencies {
   implementation libraries.liquibase
   runtimeOnly libraries.ecs_logging_core
   runtimeOnly libraries.logback_ecs_encoder
+  runtimeOnly libraries.sentry_logback
+  runtimeOnly libraries.sentry_spring_boot_starter
   implementation libraries.spring_rabbit
-  
+
   testImplementation libraries.groovy_all
   testImplementation libraries.spock_core
   testImplementation libraries.junit_jupiter_testcontainers
