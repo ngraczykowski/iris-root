@@ -45,5 +45,5 @@ registration:
 ### SENTRY
 sentry:
   dsn: https://5991989c7325495fbdeff0bd32ddbb1d@o1129201.ingest.sentry.io/6204134
-  environment: mike-dev
+  environment: unknown
   tracesSampleRate: 0
