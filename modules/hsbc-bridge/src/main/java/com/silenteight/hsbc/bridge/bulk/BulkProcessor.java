@@ -11,7 +11,6 @@ import com.silenteight.hsbc.bridge.domain.AlertMatchIdComposite;
 import com.silenteight.hsbc.bridge.match.MatchIdComposite;
 
 import io.micrometer.core.annotation.Timed;
-import org.joda.time.DateTime;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -36,8 +35,8 @@ class BulkProcessor {
           try {
             processSolvingBulk(bulk);
           } catch (Exception exception) {
-            log.error("Solving batch processing failed!", exception);
-            bulk.error("Solving batch processing failed due to: " + exception.getMessage());
+            log.error("Solving batch processing failed, batchId: {}", bulkId, exception);
+            bulk.error("Solving batch processing failed, due to: " + exception.getMessage());
           }
           bulkRepository.save(bulk);
         });
@@ -52,8 +51,8 @@ class BulkProcessor {
           try {
             processLearningBulk(bulk);
           } catch (Exception exception) {
-            log.error("Learning batch processing failed!", exception);
-            bulk.error("Learning batch processing failed due to: " + exception.getMessage());
+            log.error("Learning batch processing failed, batchId: {}", bulkId, exception);
+            bulk.error("Learning batch processing failed, due to: " + exception.getMessage());
           }
           bulkRepository.save(bulk);
         });

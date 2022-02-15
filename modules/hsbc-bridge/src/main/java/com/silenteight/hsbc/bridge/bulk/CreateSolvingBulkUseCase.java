@@ -41,7 +41,7 @@ class CreateSolvingBulkUseCase {
       alertFacade.reProcessAlerts(bulkId, alerts);
       eventPublisher.publishEvent(new BulkStoredEvent(bulkId, IS_LEARNING_BULK));
     } catch (Exception e) {
-      log.error("Cannot create alerts, batchId = {}", bulkId, e);
+      log.error("Unable to create alerts, batchId = {}", bulkId, e);
       repository.findById(bulkId).ifPresent(bulk -> {
         bulk.error("Unable to create alerts, due to: " + e.getMessage());
         repository.save(bulk);

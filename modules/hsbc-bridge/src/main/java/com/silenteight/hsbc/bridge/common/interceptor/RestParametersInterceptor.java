@@ -30,17 +30,30 @@ public class RestParametersInterceptor implements HandlerInterceptor {
       @NotNull HttpServletResponse response,
       @NotNull Object handler) {
 
-    if (isHttpRequestPolluted(request) && !SPRING_ERROR_ENDPOINT.equals(request.getRequestURI())) {
-      log.warn(
-          "Received polluted parameters for url: {} with trace id: {}", request.getRequestURI(),
-          extractTraceId(request));
+    var requestURI = request.getRequestURI();
+    var traceId = extractTraceId(request);
+    log.info("REST request received for url: {}, with trace id: {}", requestURI, traceId);
 
+    if (isHttpRequestPolluted(request) && !SPRING_ERROR_ENDPOINT.equals(requestURI)) {
+      log.warn("Received polluted parameters for url: {} with trace id: {}", requestURI, traceId);
       checkPathAndSetStatus(request, response);
-
       return false;
     } else {
-      return !SPRING_ERROR_ENDPOINT.equals(request.getRequestURI());
+      return !SPRING_ERROR_ENDPOINT.equals(requestURI);
     }
+  }
+
+  @Override
+  public void afterCompletion(
+      @NotNull HttpServletRequest request,
+      @NotNull HttpServletResponse response,
+      @NotNull Object handler,
+      Exception ex) {
+
+    log.info(
+        "REST response sent for url: {}, with trace id: {}",
+        request.getRequestURI(),
+        extractTraceId(request));
   }
 
   private String extractTraceId(HttpServletRequest request) {

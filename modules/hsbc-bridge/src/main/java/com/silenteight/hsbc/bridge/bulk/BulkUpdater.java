@@ -18,7 +18,7 @@ class BulkUpdater {
         .ifPresent(bulk -> {
           bulk.error("Analysis timeout exception");
           bulkRepository.save(bulk);
-          log.error("Set batch with id:{} status ERROR", bulk.getId());
+          log.error("Analysis timeout exception. Set batch with id:{} status ERROR", bulk.getId());
         });
   }
 

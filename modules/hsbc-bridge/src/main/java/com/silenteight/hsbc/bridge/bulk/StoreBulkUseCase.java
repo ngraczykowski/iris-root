@@ -62,7 +62,7 @@ class StoreBulkUseCase {
   }
 
   private void setBulkError(String bulkId, Throwable e) {
-    log.error("Cannot create alert data json, batchId = {}", bulkId, e);
+    log.error("Unable to create alerts, batchId = {}", bulkId, e);
     bulkRepository.findById(bulkId).ifPresent(bulk -> {
       bulk.error("Unable to create alerts, due to: " + e.getMessage());
       bulkRepository.save(bulk);
