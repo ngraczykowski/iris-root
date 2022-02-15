@@ -10,12 +10,9 @@ gradleBuild(
     dependencyCheckEnabled: true,
     includeBuildNumberInSnapshotVersion: true,
     additionalParams: [
-      booleanParam(name: 'deployOnTest',
-      description: '''Deploy on test environment in Nomad.''',
-      defaultValue: false),
       extendedChoice(
             name: 'environments',
-            value: 'dev',
+            value: 'dev,lima,test',
             defaultValue: '',
             description: 'Environments to deploy to on Nomad',
             multiSelectDelimiter: ',',
@@ -96,17 +93,6 @@ gradleBuild(
       }
 
       deployOnNomad()
-
-      stage('Deploy On Nomad Test') {
-        script {
-          // FIXME(ahaczewski): Use `when` if possible.
-          if (git.getGitBranch() == 'master' && params.deployOnTest) {
-            sh './nomad/deploy.sh -var-file=test.vars'
-          } else {
-            echo 'This is not a master release branch. Ignoring Nomad deployment.'
-          }
-        }
-      }
 
     }
 )
