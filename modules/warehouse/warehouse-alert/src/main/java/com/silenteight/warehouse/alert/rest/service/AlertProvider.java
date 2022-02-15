@@ -63,6 +63,7 @@ public class AlertProvider {
         filteredPayload.put(field, payloadMap.get(field));
       }
     }
+    filteredPayload.put("name", rs.getString("name"));
     return filteredPayload;
   }
 
