@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.warehouse.alert.rest.AlertRestController;
-import com.silenteight.warehouse.alert.rest.service.AlertNotFoundException;
 import com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.Values;
 import com.silenteight.warehouse.management.country.get.GetCountriesRestController;
 import com.silenteight.warehouse.management.country.update.UpdateCountriesRestController;
@@ -30,6 +29,7 @@ import java.util.UUID;
 
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.ALERT_NAME_1;
 import static com.silenteight.warehouse.indexer.alert.MappedAlertFixtures.DISCRIMINATOR_1;
+import static java.util.Collections.emptyMap;
 import static java.util.List.of;
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
@@ -75,22 +75,17 @@ class CountryGroupIT {
 
   @Test
   @WithMockUser(username = "USERNAME", authorities = "e11f9680-fb3b-4776-8044-571026290a65")
-  void shouldAccessAlert() throws Exception {
+  void shouldAccessAlert() {
     Collection<String> allowedCountries = of(COUNTRY);
     saveCountryGroup(COUNTRY_GROUP);
     updateCountriesController.update(NEW_COUNTRY_GROUP_ID, allowedCountries);
 
-    jdbcTemplate.execute(
-        "insert INTO warehouse_alert(discriminator, name, recommendation_date, payload) "
-            + "VALUES ('" + DISCRIMINATOR_1 + "','" + ALERT_NAME_1 + "','"
-            + Values.PROCESSING_TIMESTAMP
-            + "','{\"id\": \"12345\", \"s8_lobCountryCode\": \"UK\"}'::jsonb)");
+    insertData();
 
-    Map<String, String> allowedAlert =
-        alertRestController.getSingleAlert(ALERT_NAME_1, of()).getBody();
-
-    assertThat(allowedAlert).isEmpty();
-
+    assertThat(getData()).containsAllEntriesOf(Map.of(
+        "id", "12345",
+        "s8_lobCountryCode", "UK"
+    ));
   }
 
   @Test
@@ -100,9 +95,9 @@ class CountryGroupIT {
     saveCountryGroup(COUNTRY_GROUP);
     updateCountriesController.update(NEW_COUNTRY_GROUP_ID, allowedCountries);
 
-    assertThatThrownBy(
-        () -> alertRestController.getSingleAlert(DISCRIMINATOR_1, of()))
-        .isInstanceOf(AlertNotFoundException.class);
+    insertData();
+
+    assertThat(getData()).isEmpty();
   }
 
   @Test
@@ -137,5 +132,18 @@ class CountryGroupIT {
     createCountryGroupRestController.create(countryGroupDto);
   }
 
+  private void insertData() {
+    jdbcTemplate.execute(
+        "insert INTO warehouse_alert(discriminator, name, recommendation_date, payload) "
+            + "VALUES ('" + DISCRIMINATOR_1 + "','" + ALERT_NAME_1 + "','"
+            + Values.PROCESSING_TIMESTAMP
+            + "','{\"id\": \"12345\", \"s8_lobCountryCode\": \"UK\"}'::jsonb)");
+  }
+
+  private Map<String, String> getData() {
+    return alertRestController.getAlertDetails(
+        of("id", "s8_lobCountryCode"), of(ALERT_NAME_1))
+        .getBody().stream().findFirst().orElse(emptyMap());
+  }
 }
 
