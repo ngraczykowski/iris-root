@@ -116,6 +116,7 @@ libraries.spring_rabbit_test = [group: 'org.springframework.amqp', name: 'spring
 libraries.spring_starter_test = [group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion]
 libraries.spring_test = [group: 'org.springframework', name: 'spring-test', version: springVersion]
 libraries.testcontainers = [group: 'org.testcontainers', name: 'testcontainers', version: testContainersVersion]
+libraries.testcontainers_postgresql = [group: 'org.testcontainers', name: 'postgresql', version: testContainersVersion]
 
 libraries.ecs_logging_core = [group: 'co.elastic.logging', name: 'ecs-logging-core', version: '1.0.1']
 libraries.logback_ecs_encoder = [group: 'co.elastic.logging', name: 'logback-ecs-encoder', version: libraries.ecs_logging_core.version]
@@ -213,6 +214,7 @@ dependencies {
   testImplementation libraries.spring_starter_test
   testImplementation libraries.spring_test
   testImplementation libraries.testcontainers
+  testImplementation libraries.testcontainers_postgresql
   testRuntimeOnly libraries.junit_jupiter_engine
 }
 

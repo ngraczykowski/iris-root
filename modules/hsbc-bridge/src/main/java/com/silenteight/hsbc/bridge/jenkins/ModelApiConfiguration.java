@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import com.silenteight.hsbc.bridge.model.transfer.ModelClient;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +33,7 @@ class ModelApiConfiguration {
   }
 
   private ObjectMapper objectMapper() {
-    return new ObjectMapper();
+    return new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
   }
 
   private HttpClient httpClient() {

@@ -156,6 +156,9 @@ spring:
     max-request-size: 3GB
   config:
     import: application-mappers.yaml
+  jackson:
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: true
 
   ### CONSUL
 

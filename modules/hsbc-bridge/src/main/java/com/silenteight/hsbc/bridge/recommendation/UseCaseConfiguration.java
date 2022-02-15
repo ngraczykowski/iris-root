@@ -14,7 +14,7 @@ class UseCaseConfiguration {
 
   private final RecommendationProperties recommendationProperties;
   private final RecommendationRepository repository;
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper;
 
   @Bean
   GetRecommendationUseCase getRecommendationUseCase() {

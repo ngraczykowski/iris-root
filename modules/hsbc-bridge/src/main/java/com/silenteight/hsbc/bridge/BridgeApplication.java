@@ -7,6 +7,8 @@ import com.silenteight.hsbc.bridge.amqp.AmqpModule;
 import com.silenteight.hsbc.bridge.analysis.AnalysisModule;
 import com.silenteight.hsbc.bridge.aws.AwsModule;
 import com.silenteight.hsbc.bridge.bulk.BulkModule;
+import com.silenteight.hsbc.bridge.common.configuration.HttpConfigurer;
+import com.silenteight.hsbc.bridge.common.configuration.ObjectMapperConfiguration;
 import com.silenteight.hsbc.bridge.grpc.GrpcModule;
 import com.silenteight.hsbc.bridge.jenkins.JenkinsModule;
 import com.silenteight.hsbc.bridge.json.JsonModule;
@@ -69,6 +71,9 @@ import javax.sql.DataSource;
     DataSourceCategoryModule.class,
     DataSourceCommentModule.class,
     DataSourceProviderModule.class,
+
+    HttpConfigurer.class,
+    ObjectMapperConfiguration.class
 })
 @EnableAsync
 @EnableAutoConfiguration
