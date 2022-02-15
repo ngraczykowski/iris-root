@@ -1,6 +1,5 @@
 package com.silenteight.warehouse.alert.rest.service;
 
-
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,14 +31,6 @@ public class AlertProvider {
 
   private final TypeReference<HashMap<String, String>> typeRef = new TypeReference<>() {};
 
-  public Map<String, String> getSingleAlertAttributes(List<String> fields, String alertName)
-      throws AlertNotFoundException {
-    return getMultipleAlertsAttributes(fields, List.of(alertName))
-        .stream()
-        .findFirst()
-        .orElseThrow(() -> new AlertNotFoundException(alertName));
-  }
-
   public Collection<Map<String, String>> getMultipleAlertsAttributes(
       List<String> fields, List<String> alertNameList) {
     List<String> countryList = getSecurityParametersList();
@@ -48,7 +39,8 @@ public class AlertProvider {
     String sqlToExecute = "SELECT * FROM warehouse_alert WHERE name IN (:names)";
     if (alertSecurityProperties.isEnabled()) {
       sqlToExecute += " AND (payload ->> 's8_lobCountryCode')  IN (:countries)";
-      parameterSource.addValue("countries",
+      parameterSource.addValue(
+          "countries",
           countryList.isEmpty() ? List.of("") : countryList);
     }
     return namedParameterJdbcTemplate.query(sqlToExecute, parameterSource,
@@ -66,7 +58,7 @@ public class AlertProvider {
     }
     payloadMap.put("discriminator", rs.getString("discriminator"));
     Map<String, String> filteredPayload = new HashMap<>();
-    for (String field: fields) {
+    for (String field : fields) {
       if (payloadMap.containsKey(field)) {
         filteredPayload.put(field, payloadMap.get(field));
       }

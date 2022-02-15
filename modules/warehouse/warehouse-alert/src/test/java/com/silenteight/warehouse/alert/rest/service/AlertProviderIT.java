@@ -57,18 +57,7 @@ class AlertProviderIT {
 
   @Test
   @WithMockUser(username = "USERNAME", authorities = "d87be316-eb23-43c1-8c5c-dc2285339783")
-  public void shouldReturnMapForAlert() throws Exception {
-
-    Map<String, String> result = alertProvider.getSingleAlertAttributes(
-        List.of("discriminator", "step"), "21dd1cd2-42b9-43c0-9d97-8ac379b364d1");
-
-    assertThat(result).containsEntry("step", "steps/5ca9d972-695b-4550-a383-b09311ff42e1");
-    assertThat(result).containsEntry("discriminator", "1ed644fd-3b38-4626-8977-a5bf41ade2a5");
-  }
-
-  @Test
-  @WithMockUser(username = "USERNAME", authorities = "d87be316-eb23-43c1-8c5c-dc2285339783")
-  public void shouldReturnListOfMapsForAlerts() {
+  void shouldReturnListOfMapsForAlerts() {
 
     Collection<Map<String, String>>
         result = alertProvider.getMultipleAlertsAttributes(List.of("discriminator", "step"),
@@ -79,22 +68,11 @@ class AlertProviderIT {
 
   @Test
   @WithMockUser(username = "USERNAME", authorities = "d87be316-eb23-43c1-8c5c-dc2285339782")
-  public void shouldReturnEmptyMapWhenUserDoesNotHaveGroup() {
-
+  void shouldReturnEmptyMapWhenUserDoesNotHaveGroup() {
     Collection<Map<String, String>>
         result = alertProvider.getMultipleAlertsAttributes(List.of("discriminator", "step"),
         List.of("21dd1cd2-42b9-43c0-9d97-8ac379b364d1", "21dd1cd2-42b9-43c0-9d97-8ac379b364d2"));
 
     assertThat(result).isEmpty();
   }
-
-  @Test
-  @WithMockUser(username = "USERNAME", authorities = "d87be316-eb23-43c1-8c5c-dc2285339782")
-  public void shouldThrowExceptionMapWhenUserDoesNotHaveGroup() {
-
-    assertThatExceptionOfType(AlertNotFoundException.class)
-        .isThrownBy(() -> alertProvider.getSingleAlertAttributes(List.of("discriminator", "step"),
-        "21dd1cd2-42b9-43c0-9d97-8ac379b364d2"));
-  }
-
 }
