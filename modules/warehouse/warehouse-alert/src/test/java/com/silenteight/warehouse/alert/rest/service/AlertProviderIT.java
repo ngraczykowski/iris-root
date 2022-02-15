@@ -15,10 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -64,6 +61,8 @@ class AlertProviderIT {
         List.of("21dd1cd2-42b9-43c0-9d97-8ac379b364d1", "21dd1cd2-42b9-43c0-9d97-8ac379b364d2"));
 
     assertThat(result).hasSize(2);
+    assertThat(result)
+        .allSatisfy(p -> p.keySet().equals(Set.of("name", "discriminator", "step")));
   }
 
   @Test
