@@ -177,7 +177,7 @@ warehouse.reports.v2:
         FROM warehouse_simulation_alert wsa
             JOIN warehouse_alert wa ON wsa.name = wa.name
         WHERE analysis_name = 'analysis/${analysisId}'
-        AND (payload ->> 's8_lobCountryCode') IN (${countries})
+        AND (wa.payload ->> 's8_lobCountryCode') IN (${countries})
         AND (wa.payload ->> 'analyst_decision') IN ('analyst_decision_false_positive', 'analyst_decision_true_positive')
     - name: RB_SCORER
       type: production
@@ -190,7 +190,7 @@ warehouse.reports.v2:
                (payload ->> 'step_title') AS "Step Name",
                (payload ->> 's8_recommendation') AS "S8 Alert Resolution",
                (payload ->> 'categories/customerType') AS "Customer Type",
-               (payload ->> 'extendedAttribute5') AS "Risk Type",
+               (payload ->> 'categories/hitType') AS "Risk Type",
                (payload ->> 'features/commonAp:solution') AS "Common Alerted Party",
                (payload ->> 'features/commonMp:solution') AS "Common Watchlist Party",
                (payload ->> 'features/commonNames:solution') AS "Common Name",
@@ -226,7 +226,7 @@ warehouse.reports.v2:
                (payload ->> 'step_title'),
                (payload ->> 's8_recommendation'),
                (payload ->> 'categories/customerType'),
-               (payload ->> 'extendedAttribute5'),
+               (payload ->> 'categories/hitType'),
                (payload ->> 'features/commonAp:solution'),
                (payload ->> 'features/commonMp:solution'),
                (payload ->> 'features/commonNames:solution'),
@@ -259,8 +259,8 @@ warehouse.reports.v2:
                (wsa.payload ->> 'match_reason:step') AS "Step ID",
                (wsa.payload ->> 'match_reason:step_title') AS "Step Name",
                (wsa.payload ->> 'recommendation_recommended_action') AS "S8 Alert Resolution",
-               (wsa.payload ->> 'categories/customerType') AS "Customer Type",
-               (wsa.payload ->> 'categories/hitType') AS "Risk Type",
+               (wsa.payload ->> 'categories/customerType:value') AS "Customer Type",
+               (wsa.payload ->> 'categories/hitType:value') AS "Risk Type",
                (wsa.payload ->> 'features/commonAp:solution') AS "Common Alerted Party",
                (wsa.payload ->> 'features/commonMp:solution') AS "Common Watchlist Party",
                (wsa.payload ->> 'features/commonNames:solution') AS "Common Name",
@@ -296,8 +296,8 @@ warehouse.reports.v2:
                  (wsa.payload ->> 'match_reason:step'),
                  (wsa.payload ->> 'match_reason:step_title'),
                  (wsa.payload ->> 'recommendation_recommended_action'),
-                 (wsa.payload ->> 'categories/customerType'),
-                 (wsa.payload ->> 'categories/hitType'),
+                 (wsa.payload ->> 'categories/customerType:value'),
+                 (wsa.payload ->> 'categories/hitType:value'),
                  (wsa.payload ->> 'features/commonAp:solution'),
                  (wsa.payload ->> 'features/commonMp:solution'),
                  (wsa.payload ->> 'features/commonNames:solution'),
@@ -374,23 +374,23 @@ warehouse.reports.v2:
       selectSqlQuery: >
         WITH main AS (
           SELECT wa.payload ->> 's8_lobCountryCode'                     country,
-                 wa.payload ->> 'categories/hitType'                    risk_type,
-                 wa.payload ->> 'DN_CASE.ExtendedAttribute5'            list_type,
-                 wsa.payload ->> 'recommendation_recommended_action'    recommendation,
-                 wsa.payload ->> 'analyst_decision'                     analyst_decision,
-                 wsa.payload ->> 'qa.level-0.state'                     qa_decision,
-                 wsa.created_at created_date
-          FROM warehouse_simulation_alert wsa
-            JOIN warehouse_alert wa ON wsa.name = wa.name
-          WHERE wsa.payload ->> 'status' = 'LEARNING_COMPLETED'
+                     wa.payload ->> 'categories/hitType'                    risk_type,
+                     wa.payload ->> 'DN_CASE.ExtendedAttribute5'            list_type,
+                     wsa.payload ->> 'recommendation_recommended_action'    recommendation,
+                     wa.payload ->> 'analyst_decision'                     analyst_decision,
+                     wsa.payload ->> 'qa.level-0.state'                     qa_decision,
+                     wsa.created_at created_date
+              FROM warehouse_simulation_alert wsa
+                       JOIN warehouse_alert wa ON wsa.name = wa.name
+              WHERE wa.payload ->> 'analyst_decision' in ('analyst_decision_true_positive', 'analyst_decision_false_positive')
                 AND wsa.analysis_name = 'analysis/${analysisId}'
-          GROUP BY wa.payload ->> 's8_country',
-                   wa.payload ->> 'categories/hitType',
-                   wa.payload ->> 'DN_CASE.ExtendedAttribute5',
-                   wsa.payload ->> 'recommendation_recommended_action',
-                   wsa.payload ->> 'analyst_decision',
-                   wsa.payload ->> 'qa.level-0.state',
-                   wsa.created_at
+              GROUP BY wa.payload ->> 's8_lobCountryCode',
+                       wa.payload ->> 'categories/hitType',
+                       wa.payload ->> 'DN_CASE.ExtendedAttribute5',
+                       wsa.payload ->> 'recommendation_recommended_action',
+                       wa.payload ->> 'analyst_decision',
+                       wsa.payload ->> 'qa.level-0.state',
+                       wsa.created_at
         ),
              grouped AS (
                  SELECT main.country                                 g_country,
@@ -434,26 +434,26 @@ warehouse.reports.v2:
       type: production
       description: QA Outcome
       selectSqlQuery: >
-        SELECT wa.payload ->> 'DN_CASE.ID'               AS "Customer Alert ID",
-               wa.payload ->> 'fvSignature'              AS "Reasoning Branch ID",
-               wa.payload ->> 'policyId'                 AS "Policy ID",
-               wa.payload ->> 'policy_title'             AS "Policy Name",
-               wa.payload ->> 's8_recommendation'        AS "S8 Alert Resolution",
-               wa.recommendation_date                    AS "S8 Alert Resolution Timestamp",
-               wa.payload ->> 'qa.level-0.NEW.timestamp' AS "Alert Selected for QA Timestamp",
-               wa.payload ->> 'qa.level-0.state'         AS "QA Review Resolution",
+        SELECT wa.payload ->> 'DN_CASE.ID'                  AS "Customer Alert ID",
+               wa.payload ->> 'fvSignature'                 AS "Reasoning Branch ID",
+               wa.payload ->> 'policyId'                    AS "Policy ID",
+               wa.payload ->> 'policy_title'                AS "Policy Name",
+               wa.payload ->> 's8_recommendation'           AS "S8 Alert Resolution",
+               wa.recommendation_date                       AS "S8 Alert Resolution Timestamp",
+               wa.payload ->> 'qa.level-0.NEW.timestamp'    AS "Alert Selected for QA Timestamp",
+               wa.payload ->> 'qa.level-0.state'            AS "QA Review Resolution",
                coalesce(
                        wa.payload ->> 'qa.level-0.PASSED.timestamp',
                        wa.payload ->> 'qa.level-0.FAILED.timestamp')
-                                                         AS "Alert QA Review Timestamp",
-               wa.payload ->> 'qa.level-1.state'         AS "QA Validation Resolution",
+                                                            AS "Alert QA Review Timestamp",
+               wa.payload ->> 'qa.level-1.state'            AS "QA Validation Resolution",
                coalesce(
                        wa.payload ->> 'qa.level-1.PASSED.timestamp',
                        wa.payload ->> 'qa.level-1.FAILED.timestamp')
-                                                         AS "Alert QA Validation Timestamp",
-               wa.payload ->> 'extendedAttribute5'       AS "Risk Type",
-               wa.payload ->> 'categories/hitType'       AS "List Type",
-               wa.payload ->> 's8_lobCountryCode'        AS "Country LoB"
+                                                            AS "Alert QA Validation Timestamp",
+               wa.payload ->> 'categories/hitType'          AS "Risk Type",
+               wa.payload ->> 'DN_CASE.ExtendedAttribute5'  AS "List Type",
+               wa.payload ->> 's8_lobCountryCode'           AS "Country LoB"
         FROM warehouse_alert wa
         WHERE
                recommendation_date BETWEEN DATE '${from}' AND DATE '${to}' AND
@@ -462,12 +462,12 @@ warehouse.reports.v2:
       type: production
       description: QA Sample
       selectSqlQuery: >
-        SELECT wa.payload ->> 'DN_CASE.ID'               AS "Customer Alert ID",
-               wa.recommendation_date                    AS "S8 Alert Resolution Timestamp",
-               wa.payload ->> 'qa.level-0.NEW.timestamp' AS "Alert Selected for QA Timestamp",
-               wa.payload ->> 'extendedAttribute5'       AS "Risk Type",
-               wa.payload ->> 'categories/hitType'       AS "List Type",
-               wa.payload ->> 's8_lobCountryCode'        AS "Country LoB"
+        SELECT wa.payload ->> 'DN_CASE.ID'                  AS "Customer Alert ID",
+               wa.recommendation_date                       AS "S8 Alert Resolution Timestamp",
+               wa.payload ->> 'qa.level-0.NEW.timestamp'    AS "Alert Selected for QA Timestamp",
+               wa.payload ->> 'categories/hitType'          AS "Risk Type",
+               wa.payload ->> 'DN_CASE.ExtendedAttribute5'  AS "List Type",
+               wa.payload ->> 's8_lobCountryCode'           AS "Country LoB"
         FROM warehouse_alert wa
         WHERE
                recommendation_date BETWEEN DATE '${from}' AND DATE '${to}' AND
