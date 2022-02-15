@@ -14,8 +14,12 @@ import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTes
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icegreen.greenmail.configuration.GreenMailConfiguration;
+import com.icegreen.greenmail.junit5.GreenMailExtension;
+import com.icegreen.greenmail.util.ServerSetupTest;
 import org.awaitility.core.ConditionEvaluationLogger;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,9 +37,12 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
+import javax.mail.internet.MimeMessage;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(classes = { PaymentsBridgeApplication.class })
@@ -51,6 +59,13 @@ class PaymentsBridgeApplicationIT {
 
   private static final String TOO_MANY_HITS_REQUEST_FILE =
       "2021-10-01_1837_osama_bin_laden.json";
+
+  @RegisterExtension
+  static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP)
+      .withConfiguration(GreenMailConfiguration
+          .aConfig()
+          .withUser("user", "password"))
+      .withPerMethodLifecycle(false);
 
   @Autowired
   ObjectMapper objectMapper;
@@ -80,19 +95,49 @@ class PaymentsBridgeApplicationIT {
   }
 
   @Test
-  void shouldProcessLearningFileWithUnregisteredAlert() {
+  void shouldProcessLearningFilesUnregisteredAlert() {
+    assertAlertRegistered();
+    assertAlertIndexed("alert_system_id|87AB4899-BE5B-5E4F-E053-150A6C0A7A84");
+    var alertName = MockAlertUseCase.getAlertName("alert_system_id");
+    assertUdsValuesCreated(alertName);
+    assertMailSent();
+
+    assertAlertIndexed("system_id_2|87AB4899-BE5B-5E4F-E053-150A6C0A7A84");
+  }
+
+  @Test
+  @Sql(scripts = "shouldProcessLearningFileWithRegisteredAlert.sql")
+  void shouldProcessLearningFilesRegisteredAlert() {
+    assertAlertIndexed("system_id_2|87AB4899-BE5B-5E4F-E053-150A6C0A7A84");
+    assertMailSent();
+  }
+
+  private static void assertMailSent() {
+    await().atMost(2, SECONDS).untilAsserted(() -> {
+      MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
+      assertThat(receivedMessages.length).isGreaterThanOrEqualTo(2);
+      MimeMessage receivedMessage = receivedMessages[0];
+      assertEquals(1, receivedMessage.getAllRecipients().length);
+    });
+  }
+
+  private void assertUdsValuesCreated(String alertName) {
+    assertThat(mockDatasourceService.getCreatedFeatureInputsCount(alertName)).isEqualTo(10);
+    assertThat(mockDatasourceService.getCreatedCategoryValuesCount(alertName)).isEqualTo(8);
+  }
+
+  private void assertAlertIndexed(String discriminator) {
+    await()
+        .atMost(Duration.ofSeconds(20))
+        .until(() -> mockWarehouseService.containsIndexedDiscriminator(discriminator));
+  }
+
+  private void assertAlertRegistered() {
     await()
         .atMost(Duration.ofSeconds(20))
         .until(() -> paymentsBridgeEventsListener.containsLearningRegisteredSystemId(
             "alert_system_id"));
     assertTrue(MockAlertUseCase.containsAlertId("alert_system_id"));
-    await()
-        .atMost(Duration.ofSeconds(20))
-        .until(() -> mockWarehouseService.containsIndexedDiscriminator(
-            "alert_system_id|87AB4899-BE5B-5E4F-E053-150A6C0A7A84"));
-    var alertName = MockAlertUseCase.getAlertName("alert_system_id");
-    assertThat(mockDatasourceService.getCreatedFeatureInputsCount(alertName)).isEqualTo(10);
-    assertThat(mockDatasourceService.getCreatedCategoryValuesCount(alertName)).isEqualTo(8);
   }
 
   static Stream<String> filesFactory() {

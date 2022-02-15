@@ -127,6 +127,7 @@ dependencies {
   testImplementation libraries.silenteight_sep_base_testing
   testImplementation libraries.adjudication_engine_api
   testImplementation libraries.awaitility
+  testImplementation libraries.test_greenmail
 
   // Keycloak
   implementation libraries.keycloak_spring_boot_starter

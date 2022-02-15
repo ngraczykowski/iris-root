@@ -31,9 +31,13 @@ class TriggerCsvProcessingServiceTest {
     triggerCsvLearning =
         new LearningCsvFileTrigger(
             learningRunnerService, csvFileResourceProvider, learningFileRepository);
-    var object = ObjectPath.builder().name("test_one_alert.csv").bucket("bucket").build();
+    var unregisteredAlert =
+        ObjectPath.builder().name("test_one_alert.csv").bucket("bucket").build();
+    var registeredAlert =
+        ObjectPath.builder().name("test_one_alert_registered.csv").bucket("bucket").build();
 
-    when(csvFileResourceProvider.getFilesList()).thenReturn(List.of(object));
+    when(csvFileResourceProvider.getFilesList()).thenReturn(
+        List.of(unregisteredAlert, registeredAlert));
   }
 
   @Test
