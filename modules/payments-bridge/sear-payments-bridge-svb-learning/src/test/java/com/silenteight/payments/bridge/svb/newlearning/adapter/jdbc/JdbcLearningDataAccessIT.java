@@ -70,4 +70,25 @@ class JdbcLearningDataAccessIT extends BaseJdbcTest {
     var isStored = dataAccess.isFileStored("fileName");
     assertThat(isStored).isEqualTo(false);
   }
+
+  @Test
+  void shouldSelectProcessResult() {
+    var result = dataAccess.select(1L, "fileName");
+    assertThat(result.getSuccessfulAlerts()).isEqualTo(2);
+    assertThat(result.getFailedAlerts()).isEqualTo(2);
+  }
+
+  @Test
+  void shouldSelectProcessResultWhenOnlyFailed() {
+    var result = dataAccess.select(2L, "fileName");
+    assertThat(result.getSuccessfulAlerts()).isEqualTo(0);
+    assertThat(result.getFailedAlerts()).isEqualTo(1);
+  }
+
+  @Test
+  void shouldSelectProcessResultWhenOnlySuccessful() {
+    var result = dataAccess.select(3L, "fileName");
+    assertThat(result.getSuccessfulAlerts()).isEqualTo(1);
+    assertThat(result.getFailedAlerts()).isEqualTo(0);
+  }
 }
