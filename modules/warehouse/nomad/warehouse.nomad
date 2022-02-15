@@ -100,7 +100,7 @@ job "warehouse" {
   }
 
   group "warehouse" {
-    count = 2
+    count = 1
 
     network {
       port "http" {
@@ -242,7 +242,7 @@ job "warehouse" {
       }
 
       template {
-        data = file("./conf/application.yml")
+        data = file("./conf/${var.namespace}.yml")
         destination = "local/conf/application.yml"
         change_mode = "restart"
       }

@@ -1,0 +1,280 @@
+server:
+  port: {{ env "NOMAD_PORT_http" }}
+
+management:
+  health:
+    elasticsearch:
+      enabled: false
+
+spring:
+  rabbitmq:
+    addresses: {{ range $index, $rabbit := service "amqp.rabbitmq" -}}
+      {{ if $index }},{{ end -}}
+      {{ $rabbit.Address }}:{{ $rabbit.Port -}}
+{{- end }}
+    # NOTE(ahaczewski): Intentionally left empty.
+    host:
+    virtual-host: /{{ env "NOMAD_NAMESPACE" }}
+  cloud:
+    consul:
+      enabled: true
+      host: localhost
+      port: 8500
+      scheme: http
+      discovery:
+        enabled: true
+        register: false
+        register-health-check: false
+        catalog-services-watch:
+          enabled: true
+      service-registry:
+        auto-registration:
+          enabled: false
+
+warehouse:
+  migration:
+    enabled: false
+  alert-level-security:
+    enabled: false
+  persistence:
+    alert:
+      labels:
+        - "s8_lobCountryCode"
+      recommendation-date-field: "recommendationDate"
+
+  db:
+    name: {{ env "NOMAD_NAMESPACE" }}-warehouse
+{{- $nomad_namespace := env "NOMAD_NAMESPACE" -}}
+{{- with service (print $nomad_namespace "-warehouse-db") }}
+    host: {{ (index . 0).Address }}
+    port: {{ (index . 0).Port }}
+  {{ end -}}
+  minio:
+    url: https://minio.silenteight.com
+  retention:
+    alert:
+      batch-size: 1000
+    simulation:
+      analysis-expired:
+        fields-to-erase:
+          - 'alert_comment'
+          - 'alert_lastCaseComment'
+  sampling:
+    time-field-name: alert_recommendationDate
+    filters:
+      - name: alert_s8_recommendation
+        values: ACTION_FALSE_POSITIVE
+  task:
+    async:
+      execution:
+        pool:
+          core-size: 4
+          max-size: 16
+          queue-capacity: 50
+          thread-name-prefix: async-auth-aware-
+keycloak:
+  client-id: {{ env "NOMAD_NAMESPACE" }}-frontend
+  adapter:
+    auth-server-url: https://auth.silenteight.com
+    realm: sens-webapp
+    public-client: false
+    confidential-port: 0
+    principal-attribute: preferred_username
+    ssl-required: external
+
+grpc:
+  logging:
+    enabled: true
+  server:
+    port: {{ env "NOMAD_PORT_grpc" }}
+
+warehouse.report.statistics:
+  all-alerts-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert
+    WHERE analysis_name = ?
+  solved-alerts-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert
+    WHERE analysis_name = ?
+    AND (payload ->> 'recommendation_recommended_action')
+    IN ('ACTION_FALSE_POSITIVE', 'ACTION_POTENTIAL_TRUE_POSITIVE')
+  ai-false-positive-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert wsa
+    JOIN warehouse_alert wa ON wsa.name = wa.name
+    WHERE wsa.analysis_name = ?
+    AND (wa.payload ->> 'DN_CASE.currentState') IN ('Level 1 Review', 'Level 2 Review')
+    AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
+  analyst-false-positive-query:
+    SELECT count(*)
+    FROM warehouse_simulation_alert wsa
+    JOIN warehouse_alert wa ON wsa.name = wa.name
+    WHERE wsa.analysis_name = ?
+    AND (wa.payload ->> 'DN_CASE.currentState') = 'Level 1 Review'
+    AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
+
+warehouse.reports.v2:
+  reports:
+    - name: RB_SCORER_MATCH_LEVEL
+      type: simulation
+      description: RB Scorer Match Level
+      selectSqlQuery: >
+        SELECT sim.payload ->> 'match_reason:policy'                      AS "Policy ID",
+               sim.payload ->> 'match_reason:policy_title'                AS "Policy Name",
+               sim.payload ->> 'match_reason:step'                        AS "Step ID",
+               sim.payload ->> 'match_reason:step_title'                  AS "Step Name",
+               sim.payload ->> 'match_reason:feature_vector_signature'    AS "Reasoning Branch ID",
+               sim.payload ->> 'recommendation_recommended_action'        AS "S8 Hit Resolution",
+               match.payload ->> 'totalHitsCount'                         AS "Total Hits Count",
+               match.payload ->> 'singleHitsCount'                        AS "Single Hits Count",
+               match.payload ->> 'categories/customerType'                AS "Customer Type",
+               match.payload ->> 'categories/isDeny'                      AS "Sanctions",
+               sim.payload ->> 'features/name:solution'                   AS "Name",
+               sim.payload ->> 'features/dateOfBirth:solution'            AS "Date of Birth / Incorporation",
+               sim.payload ->> 'features/nationalIdDocument:solution'     AS "National ID",
+               sim.payload ->> 'features/passportNumberDocument:solution' AS "Passport Number Document",
+               sim.payload ->> 'features/otherDocument:solution'          AS "Other Document",
+               sim.payload ->> 'features/gender:solution'                 AS "Gender",
+               sim.payload ->> 'features/nationalityCountry:solution'     AS "Nationality Country",
+               sim.payload ->> 'features/residencyCountry:solution'       AS "Residency Country"
+        FROM warehouse_simulation_alert sim
+                 JOIN warehouse_match match ON sim.id = match.alert_id
+        WHERE sim.analysis_name = 'analysis/${analysisId}'
+
+    - name: AI_REASONING_ALERT_LEVEL
+      type: simulation
+      description: AI Reasoning ALERT Level
+      selectSqlQuery: >
+        SELECT prod.discriminator                                                        AS "S8 Alert ID",
+               STRING_AGG(match.payload ->> 'watchListId', ',')                          AS "Watchlist Hit IDs",
+               sim.payload ->> 'match_reason:policyId'                                   AS "Policy ID",
+               sim.payload ->> 'match_reason:policyTitle'                                AS "Policy Name",
+               sim.payload ->> 'match_reason:stepId'                                     AS "Step ID",
+               sim.payload ->> 'match_reason:stepTitle'                                  AS "Step Name",
+               STRING_AGG(sim.payload ->> 'match_reason:feature_vector_signature', ',')  AS "Reasoning Branch IDs",
+               prod.payload ->> 'trackingId'                                             AS "Tracking ID",
+               prod.payload ->> 'batchType'                                              AS "Batch Type",
+               prod.payload ->> 'batchCountry'                                           AS "Origin Country",
+               prod.payload ->> 'batchWatchList'                                         AS "Watchlist Type",
+               prod.payload ->> 'sourceSystemIdentifier'                                 AS "Source System ID",
+               sim.payload ->> 'recommendation_recommended_action'                       AS "S8 Alert Resolution",
+               prod.payload ->> 's8_readTimestamp'                                       AS "S8 Read Timestamp",
+               sim.payload ->> 'recommendation_create_time'                              AS "S8 Resolution Timestamp",
+               sim.payload ->> 'recommendation_comment'                                  AS "S8 Alert Reason"
+        FROM warehouse_simulation_alert sim
+                 JOIN warehouse_alert prod ON sim.name = prod.name
+                 JOIN warehouse_match match ON prod.id = match.alert_id
+        WHERE sim.analysis_name = 'analysis/${analysisId}'
+        GROUP BY prod.discriminator,
+                 sim.payload ->> 'match_reason:policyId',
+                 sim.payload ->> 'match_reason:policyTitle',
+                 sim.payload ->> 'match_reason:stepId',
+                 sim.payload ->> 'match_reason:stepTitle',
+                 prod.payload ->> 'trackingId',
+                 prod.payload ->> 'batchType',
+                 prod.payload ->> 'batchCountry',
+                 prod.payload ->> 'batchWatchList',
+                 prod.payload ->> 'sourceSystemIdentifier',
+                 sim.payload ->> 'recommendation_recommended_action',
+                 match.payload ->> 'recommendation_create_time',
+                 sim.payload ->> 'recommendation_create_time',
+                 sim.payload ->> 'recommendation_comment';
+
+    - name: AI_REASONING_MATCH_LEVEL
+      type: simulation
+      description: AI Reasoning Match Level
+      selectSqlQuery: >
+        SELECT prod.discriminator                                      AS "S8 Alert ID",
+               match.payload ->> 'watchListId'                         AS "Watchlist Hit ID",
+               sim.payload ->> 'match_reason:policyId'                 AS "Policy ID",
+               sim.payload ->> 'match_reason:policyTitle'              AS "Policy Name",
+               sim.payload ->> 'match_reason:stepI'                    AS "Step ID",
+               sim.payload ->> 'match_reason:stepTitle'                AS "Step Name",
+               sim.payload ->> 'match_reason:feature_vector_signature' AS "Reasoning Branch ID",
+               prod.payload ->> 'batchId'                              AS "Batch ID",
+               prod.payload ->> 'batchType'                            AS "Batch Type",
+               prod.payload ->> 'batchCountry'                         AS "Origin Country",
+               prod.payload ->> 'batchWatchList'                       AS "Watchlist Type",
+               prod.payload ->> 'sourceSystemIdentifier'               AS "Source System ID",
+               sim.payload ->> 'recommendation_recommended_action'     AS "S8 Hit Resolution",
+               prod.payload ->> 's8_readTimestamp'                     AS "S8 Read Timestamp",
+               sim.payload ->> 'recommendation_create_time'            AS "S8 Resolution Timestamp",
+               sim.payload ->> 'recommendation_comment'                AS "S8 Hit Reason",
+               sim.payload ->> 'recommendation_recommended_action'     AS "S8 Alert Resolution"
+        FROM warehouse_simulation_alert sim
+                 JOIN warehouse_alert prod ON sim.name = prod.name
+                 JOIN warehouse_match match ON sim.id = match.alert_id
+        WHERE sim.analysis_name = 'analysis/${analysisId}'
+
+    - name: ACCURACY_ALERT_LEVEL
+      type: simulation
+      description: Accuracy Alert Level
+      selectSqlQuery: >
+        SELECT prod.discriminator                                  AS "S8 Alert ID",
+               STRING_AGG(match.payload ->> 'watchListId', ',')    AS "Watchlist Hit IDs",
+               sim.payload ->> 'match_reason:policy'               AS "Policy ID",
+               sim.payload ->> 'match_reason:policy_title'         AS "Policy Name",
+               sim.payload ->> 'match_reason:step'                 AS "Step ID",
+               sim.payload ->> 'match_reason:step_title'           AS "Step Name",
+               STRING_AGG(sim.payload ->> 'match_reason:feature_vector_signature',
+                          ',')                                     AS "Reasoning Branch IDs",
+               prod.payload ->> 'batchId'                          AS "Batch Id",
+               prod.payload ->> 'batchType'                        AS "Batch Type",
+               prod.payload ->> 'batchCountry'                     AS "Origin Country",
+               prod.payload ->> 'batchWatchList'                   AS "Watchlist Type",
+               sim.payload ->> 'recommendation_recommended_action' AS "S8 Alert Resolution",
+               sim.payload ->> 'recommendation_create_time'        AS "S8 Resolution Timestamp",
+               sim.payload ->> 'recommendation_comment'            AS "S8 Alert Reason",
+               prod.payload ->> 'analyst_decision'                 AS "Analyst Decision",
+               prod.payload ->> 'DN_CASE.modifiedDateTime'         AS "Analyst Decision Timestamp",
+               prod.payload ->> 'lastCaseComment'                  AS "Analyst Reason"
+        FROM warehouse_simulation_alert sim
+                 JOIN warehouse_alert prod ON sim.name = prod.name
+                 JOIN warehouse_match match ON sim.id = match.alert_id
+        WHERE (prod.recommendation_date BETWEEN DATE '${from}' AND DATE '${to}')
+        AND prod.payload ->> 'analyst_decision' IN
+              ('analyst_decision_false_positive', 'analyst_decision_true_positive')
+        GROUP BY prod.discriminator,
+                 sim.payload ->> 'match_reason:policy',
+                 sim.payload ->> 'match_reason:policy_title',
+                 sim.payload ->> 'match_reason:step',
+                 sim.payload ->> 'match_reason:step_title',
+                 prod.payload ->> 'batchId',
+                 prod.payload ->> 'batchType',
+                 prod.payload ->> 'batchCountry',
+                 prod.payload ->> 'batchWatchList',
+                 sim.payload ->> 'recommendation_recommended_action',
+                 sim.payload ->> 'recommendation_create_time',
+                 sim.payload ->> 'recommendation_comment',
+                 prod.payload ->> 'analyst_decision',
+                 prod.payload ->> 'DN_CASE.modifiedDateTime',
+                 prod.payload ->> 'lastCaseComment';
+
+    - name: ACCURACY_MATCH_LEVEL
+      type: simulation
+      description: Accuracy Match Level
+      selectSqlQuery: >
+        SELECT prod.discriminator                                      AS "S8 Alert ID",
+               match.payload ->> 'watchListId'                         AS "Watchlist Hit ID",
+               sim.payload ->> 'match_reason:policy'                   AS "Policy ID",
+               sim.payload ->> 'match_reason:policy_title'             AS "Policy Name",
+               sim.payload ->> 'match_reason:step'                     AS "Step ID",
+               sim.payload ->> 'match_reason:step_title'               AS "Step Name",
+               sim.payload ->> 'match_reason:feature_vector_signature' AS "Reasoning Branch ID",
+               prod.payload ->> 'batchId'                              AS "Batch Id",
+               prod.payload ->> 'batchType'                            AS "Batch Type",
+               prod.payload ->> 'batchCountry'                         AS "Origin Country",
+               prod.payload ->> 'batchWatchList'                       AS "Watchlist Type",
+               sim.payload ->> 'recommendation_recommended_action'     AS "S8 Hit Resolution",
+               sim.payload ->> 'recommendation_create_time'            AS "S8 Resolution Timestamp",
+               sim.payload ->> 'recommendation_comment'                AS "S8 Hit Reason",
+               prod.payload ->> 'analyst_decision'                     AS "Analyst Decision",
+               prod.payload ->> 'DN_CASE.modifiedDateTime'             AS "Analyst Decision Timestamp",
+               prod.payload ->> 'lastCaseComment'                      AS "Analyst Reason"
+        FROM warehouse_simulation_alert sim
+                 JOIN warehouse_alert prod ON sim.name = prod.name
+                 JOIN warehouse_match match ON sim.id = match.alert_id
+        WHERE (prod.recommendation_date BETWEEN DATE '${from}' AND DATE '${to}')
+          AND prod.payload ->> 'analyst_decision' IN
+              ('analyst_decision_false_positive', 'analyst_decision_true_positive');
