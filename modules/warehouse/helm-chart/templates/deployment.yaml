@@ -98,6 +98,9 @@ spec:
             - {{ . }}
           {{ end }}
           {{ end }}
+            - --sentry.dsn={{ .Values.sentry.dsn }}
+            - --sentry.environment={{ .Values.sentry.environment }}
+            - --sentry.traces-sample-rate={{ .Values.sentry.tracesSampleRate }}
           volumeMounts:
             - mountPath: /etc/logback.xml
               name: logback-config
@@ -107,7 +110,7 @@ spec:
               name: http
             - containerPort: {{ .Values.ports.grpc }}
               name: grpc
-            - containerPort: {{ .Values.ports.management } }
+            - containerPort: {{ .Values.ports.management }}
               name: management
       initContainers:
         - name: warehouse-es-init
