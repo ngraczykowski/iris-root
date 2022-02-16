@@ -8,8 +8,5 @@ test:
     batch-prefix: datagen
     batch-size: 1000
     base-url: https://bravo.dev.silenteight.com/rest/hsbc-bridge/
-    ingest:
-      alert-template: classpath:alert_ingest.tmpl.json
-      batch-template: classpath:batch_ingest.tmpl.json
-    learning:
-      alert-template: classpath:alert_learning.tmpl.json
+    datagen:
+      alert-templates: classpath:alert_payload_1.tmpl.json, classpath:alert_payload_2.tmpl.json, classpath:alert_payload_3.tmpl.json

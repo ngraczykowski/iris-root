@@ -4,11 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 @Slf4j
@@ -17,19 +16,19 @@ public class LearningGateway {
 
   private final WebClient webClient;
 
-  private final ObjectMapper objectMapper;
-
   @SneakyThrows
-  public Mono<String> send(JsonNode jsonNode, String batchId) {
-    byte[] payload = objectMapper.writeValueAsBytes(jsonNode);
-
+  public Mono<String> send(byte[] payload, String batchId) {
     log.info("LearningGateway: sending payload: size={}", payload.length);
 
     return webClient.post()
-        .uri("async/batch/v1/{batchId}/learning", Map.of("batchId", batchId))
-        .bodyValue(payload)
+        .uri("async/batch/v1/{batchId}-learning/learning", Map.of("batchId", batchId))
+        .bodyValue(new String(payload, StandardCharsets.UTF_8))
         .exchangeToMono(clientResponse -> {
-          log.info("LearningGateway: headers={}", clientResponse.headers());
+          if (clientResponse.statusCode().isError()) {
+            return clientResponse.createException().flatMap(Mono::error);
+          }
+
+          log.info("LearningGateway: headers={}", clientResponse.headers().asHttpHeaders());
           log.info("LearningGateway: statusCode={}", clientResponse.statusCode());
           return clientResponse.bodyToMono(String.class);
         })
