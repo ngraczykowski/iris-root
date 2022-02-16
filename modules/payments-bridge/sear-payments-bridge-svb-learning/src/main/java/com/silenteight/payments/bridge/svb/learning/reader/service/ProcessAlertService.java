@@ -47,6 +47,7 @@ class ProcessAlertService {
       try (
           var inputStream =
               new InputStreamReader(learningCsv.getContent(), Charset.forName("CP1250"))) {
+
         MappingIterator<LearningCsvRow> it = mapper
             .readerFor(LearningCsvRow.class)
             .with(schema)
@@ -55,8 +56,10 @@ class ProcessAlertService {
         alertsReadingResponse.setObjectData(learningCsv);
 
         return alertsReadingResponse;
-      } catch (Exception e) {
-        log.error("There was a problem when reading learning file: ", e);
+      } catch (Exception exception) {
+        log.error(
+            "There was a problem when reading learning file: {} ", learningCsv.getFileName(),
+            exception);
       }
       return alertsReadingResponse;
     });

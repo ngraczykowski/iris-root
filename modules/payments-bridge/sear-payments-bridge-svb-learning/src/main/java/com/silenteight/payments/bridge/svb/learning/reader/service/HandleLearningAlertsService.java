@@ -2,7 +2,6 @@ package com.silenteight.payments.bridge.svb.learning.reader.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.FileRequest;
 import com.silenteight.payments.bridge.notification.model.NotificationEvent;
 import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningAlertsUseCase;
@@ -28,10 +27,12 @@ class HandleLearningAlertsService implements HandleLearningAlertsUseCase {
     log.info("Started processing learn request: {}", fileRequest);
     var alertsRead = processAlertService.read(fileRequest);
 
-    var notification = learningCsvNotificationCreatorUseCase.createLearningCsvNotification(
-        alertsRead.toLearningCsvNotificationRequest());
-    applicationEventPublisher.publishEvent(new NotificationEvent(notification));
+    if (alertsRead != null) {
+      var notification = learningCsvNotificationCreatorUseCase.createLearningCsvNotification(
+          alertsRead.toLearningCsvNotificationRequest());
+      applicationEventPublisher.publishEvent(new NotificationEvent(notification));
 
-    log.info("Processing of learn request {} finished", fileRequest);
+      log.info("Processing of learn request {} finished", fileRequest);
+    }
   }
 }
