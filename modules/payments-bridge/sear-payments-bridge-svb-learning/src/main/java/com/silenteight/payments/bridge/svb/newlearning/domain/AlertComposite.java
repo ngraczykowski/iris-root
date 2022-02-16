@@ -244,6 +244,15 @@ public class AlertComposite {
         .build();
   }
 
+  public HitComposite getHitById(String matchId) {
+    return hits
+        .stream()
+        .filter(hit -> hit.getMatchId().equals(matchId))
+        .findFirst()
+        .orElseThrow(() -> new NoCorrespondingHitException(
+            String.format("There is no corresponding hit for = %s", matchId)));
+  }
+
   @Nonnull
   private List<RegisteredMatch> getRegisteredMatches(RegisteredAlert registeredAlert) {
     var matches = registeredAlert.getMatches();

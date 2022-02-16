@@ -139,4 +139,5 @@ public class LearningMatch {
   private Optional<String> getFirstWatchlistName() {
     return getWatchlistNames().stream().findFirst();
   }
+
 }

@@ -3,9 +3,8 @@ package com.silenteight.payments.bridge.warehouse.index.service;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.payments.bridge.warehouse.index.model.RequestOrigin;
-import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexAlert;
+import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexAlertRequest;
 import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexAnalystDecision;
-import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexRegisteredAlert;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexLearningUseCase;
 import com.silenteight.payments.bridge.warehouse.index.service.IndexedAlertBuilderFactory.AlertBuilder;
 
@@ -24,26 +23,7 @@ class IndexLearningService implements IndexLearningUseCase {
   private final LearningWarehouseMapper warehouseMapper;
 
   @Override
-  public void indexForLearning(List<IndexRegisteredAlert> indexRegisterAlertRequest) {
-    var alerts = indexRegisterAlertRequest.stream()
-        .map(indexAlert -> {
-          var alertIds = indexAlert.getAlertIdSet();
-          var alertBuilder = createIndexAlertBuilder(
-              alertIds.getDiscriminator(),
-              alertIds.getAlertName(), indexAlert.getDecision());
-          indexAlert.getMatchNames().forEach(matchName -> alertBuilder
-              .newMatch()
-              .setName(matchName)
-              .setDiscriminator(matchName)
-              .finish());
-          return alertBuilder.build();
-        })
-        .collect(toList());
-    indexAlertUseCase.index(alerts, RequestOrigin.LEARNING);
-  }
-
-  @Override
-  public void index(List<IndexAlert> learningAlerts) {
+  public void index(List<IndexAlertRequest> learningAlerts) {
     var alerts = learningAlerts.stream()
         .map(learningAlert -> {
           var alertIdSet = learningAlert.getAlertIdSet();

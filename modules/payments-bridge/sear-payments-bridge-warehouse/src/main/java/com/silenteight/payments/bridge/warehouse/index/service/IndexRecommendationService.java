@@ -4,8 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.v2.RecommendationMetadata.FeatureMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata.MatchMetadata;
-import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
-import com.silenteight.payments.bridge.common.model.AlertData;
+import com.silenteight.payments.bridge.warehouse.index.model.IndexRecommendationRequest;
 import com.silenteight.payments.bridge.warehouse.index.model.RequestOrigin;
 import com.silenteight.payments.bridge.warehouse.index.model.payload.WarehouseMatchRecommendation;
 import com.silenteight.payments.bridge.warehouse.index.model.payload.WarehouseRecommendation;
@@ -54,14 +53,14 @@ class IndexRecommendationService implements IndexRecommendationUseCase {
   }
 
   @Override
-  public void index(AlertData alertData, RecommendationWithMetadata recommendationWithMetadata) {
+  public void index(IndexRecommendationRequest request) {
     var alertBuilder = alertBuilderFactory
         .newBuilder()
-        .setDiscriminator(alertData.getDiscriminator());
+        .setDiscriminator(request.getDiscriminator());
 
-    var recommendation = recommendationWithMetadata.getRecommendation();
+    var recommendation = request.getRecommendation();
     var indexRecommendation = WarehouseRecommendation.builder()
-        .fircoSystemId(alertData.getSystemId())
+        .fircoSystemId(request.getSystemId())
         .recommendationName(recommendation.getName())
         .recommendationComment(mapComment(recommendation.getRecommendationComment()))
         .recommendedAction(mapAction(recommendation.getRecommendedAction()))
@@ -74,7 +73,7 @@ class IndexRecommendationService implements IndexRecommendationUseCase {
         .setName(recommendation.getAlert())
         .addPayload(indexRecommendation);
 
-    var metadata = recommendationWithMetadata.getMetadata();
+    var metadata = request.getMetadata();
     metadata.getMatchesList().forEach(matchMetadata -> alertBuilder.newMatch()
         .setName(matchMetadata.getMatch())
         .setDiscriminator(matchMetadata.getMatch())

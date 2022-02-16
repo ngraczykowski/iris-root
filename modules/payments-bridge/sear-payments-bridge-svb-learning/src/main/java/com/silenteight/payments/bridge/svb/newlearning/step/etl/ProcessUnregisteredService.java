@@ -8,8 +8,8 @@ import com.silenteight.payments.bridge.data.retention.port.CreateAlertDataRetent
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
 import com.silenteight.payments.bridge.svb.newlearning.domain.HitComposite;
 import com.silenteight.payments.bridge.svb.newlearning.domain.LearningRegisteredAlert;
-import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexAlert;
 import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexAlertIdSet;
+import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexAlertRequest;
 import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexMatch;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexLearningUseCase;
 
@@ -51,11 +51,11 @@ class ProcessUnregisteredService {
     return learningRegisteredAlert;
   }
 
-  private List<IndexAlert> createIndexAlerts(
+  private List<IndexAlertRequest> createIndexAlerts(
       AlertComposite alertComposite,
       RegisterAlertResponse registeredAlert) {
     return List.of(
-        new IndexAlert(
+        new IndexAlertRequest(
             new IndexAlertIdSet(
                 String.valueOf(alertComposite.getAlertDetails().getAlertId()),
                 registeredAlert.getAlertName(),

@@ -5,7 +5,10 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.IndexRegisterAlertRequest;
 import com.silenteight.payments.bridge.svb.learning.reader.domain.LearningAlert;
 import com.silenteight.payments.bridge.svb.learning.reader.port.IndexLearningAlertPort;
-import com.silenteight.payments.bridge.warehouse.index.model.learning.*;
+import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexAlertIdSet;
+import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexAlertRequest;
+import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexAnalystDecision;
+import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexMatch;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexLearningUseCase;
 
 import org.springframework.stereotype.Service;
@@ -22,16 +25,16 @@ class IndexLearningIntegrationService implements IndexLearningAlertPort {
 
   public void indexForLearning(List<IndexRegisterAlertRequest> indexRegisterAlertRequest) {
     var alerts = indexRegisterAlertRequest.stream()
-        .map(this::buildIndexRegisteredAlert).collect(toList());
-    indexLearningUseCase.indexForLearning(alerts);
+        .map(IndexLearningIntegrationService::buildIndexRegisteredAlert).collect(toList());
+    indexLearningUseCase.index(alerts);
   }
 
-  private IndexRegisteredAlert buildIndexRegisteredAlert(IndexRegisterAlertRequest alert) {
+  private static IndexAlertRequest buildIndexRegisteredAlert(IndexRegisterAlertRequest alert) {
     var alertIdSet = new IndexAlertIdSet(
         alert.getAlertId(), alert.getAlertName(),
         alert.getSystemId(), alert.getMessageId());
-    return new IndexRegisteredAlert(
-        alertIdSet, alert.getMatchNames(), buildIndexAnalystDecision(alert));
+    return new IndexAlertRequest(
+        alertIdSet, alert.getMatches(), buildIndexAnalystDecision(alert));
   }
 
   private static IndexAnalystDecision buildIndexAnalystDecision(IndexRegisterAlertRequest alert) {
@@ -42,12 +45,13 @@ class IndexLearningIntegrationService implements IndexLearningAlertPort {
   }
 
   public void index(List<LearningAlert> indexRegisterAlertRequest) {
-    var alerts = indexRegisterAlertRequest.stream().map(this::buildIndexAlert)
-        .collect(toList());
+    var alerts =
+        indexRegisterAlertRequest.stream().map(IndexLearningIntegrationService::buildIndexAlert)
+            .collect(toList());
     indexLearningUseCase.index(alerts);
   }
 
-  private IndexAlert buildIndexAlert(LearningAlert learningAlert) {
+  private static IndexAlertRequest buildIndexAlert(LearningAlert learningAlert) {
     var alertIdSet = new IndexAlertIdSet(
         learningAlert.getAlertId(), learningAlert.getAlertName(),
         learningAlert.getSystemId(), learningAlert.getMessageId());
@@ -56,7 +60,7 @@ class IndexLearningIntegrationService implements IndexLearningAlertPort {
             match.getMatchId(), match.getMatchName(),
             String.join(", ", match.getMatchingTexts())))
         .collect(toList());
-    return new IndexAlert(alertIdSet, matches, buildIndexAnalystDecision(learningAlert));
+    return new IndexAlertRequest(alertIdSet, matches, buildIndexAnalystDecision(learningAlert));
   }
 
   private static IndexAnalystDecision buildIndexAnalystDecision(LearningAlert alert) {

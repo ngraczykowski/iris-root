@@ -1,9 +1,9 @@
 package com.silenteight.payments.bridge.warehouse.index.port;
 
-import com.silenteight.payments.bridge.common.model.AlertData;
+import com.silenteight.payments.bridge.warehouse.index.model.IndexBridgeRecommendationRequest;
 
 public interface IndexBridgeRecommendationUseCase {
 
-  void index(AlertData alertData, String status, String reason);
+  void index(IndexBridgeRecommendationRequest request);
 
 }

@@ -5,7 +5,7 @@ import lombok.Value;
 import java.util.List;
 
 @Value
-public class IndexAlert {
+public class IndexAlertRequest {
 
   IndexAlertIdSet alertIdSet;
   List<IndexMatch> matches;

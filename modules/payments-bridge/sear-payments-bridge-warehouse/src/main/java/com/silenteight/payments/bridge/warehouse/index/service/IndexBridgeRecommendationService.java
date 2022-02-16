@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.warehouse.index.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.common.model.AlertData;
+import com.silenteight.payments.bridge.warehouse.index.model.IndexBridgeRecommendationRequest;
 import com.silenteight.payments.bridge.warehouse.index.model.RequestOrigin;
 import com.silenteight.payments.bridge.warehouse.index.model.payload.WarehouseRecommendation;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexBridgeRecommendationUseCase;
@@ -24,18 +24,18 @@ class IndexBridgeRecommendationService implements IndexBridgeRecommendationUseCa
   private final IndexAlertUseCase indexAlertUseCase;
 
   @Override
-  public void index(AlertData alertData, String status, String reason) {
+  public void index(IndexBridgeRecommendationRequest request) {
     var alertBuilder = alertBuilderFactory
         .newBuilder()
-        .setDiscriminator(alertData.getDiscriminator());
+        .setDiscriminator(request.getDiscriminator());
 
     var bridgeRecommendation = WarehouseRecommendation.builder()
-        .fircoSystemId(alertData.getSystemId())
+        .fircoSystemId(request.getSystemId())
         .recommendationComment(mapComment(null))
         .recommendedAction(mapAction(null))
         .createTime(Instant.now().toString())
-        .status(status)
-        .reason(reason)
+        .status(request.getStatus())
+        .reason(request.getReason())
         .deliveryStatus("PENDING")
         .build();
 

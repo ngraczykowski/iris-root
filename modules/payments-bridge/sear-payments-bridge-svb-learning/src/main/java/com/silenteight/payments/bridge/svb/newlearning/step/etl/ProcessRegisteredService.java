@@ -6,7 +6,8 @@ import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAle
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredMatch;
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
 import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexAlertIdSet;
-import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexRegisteredAlert;
+import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexAlertRequest;
+import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexMatch;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexLearningUseCase;
 
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import javax.annotation.Nonnull;
 
 import static java.util.stream.Collectors.toList;
 
@@ -27,11 +29,11 @@ class ProcessRegisteredService {
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   void process(
       AlertComposite alertComposite, List<RegisteredAlert> registeredAlert) {
-    indexLearningUseCase.indexForLearning(
+    indexLearningUseCase.index(
         createIndexRegisteredAlerts(alertComposite, registeredAlert));
   }
 
-  private List<IndexRegisteredAlert> createIndexRegisteredAlerts(
+  private List<IndexAlertRequest> createIndexRegisteredAlerts(
       AlertComposite alertComposite, List<RegisteredAlert> registeredAlerts) {
     return registeredAlerts
         .stream()
@@ -39,19 +41,41 @@ class ProcessRegisteredService {
         .collect(toList());
   }
 
-  private IndexRegisteredAlert createIndexRegisteredAlert(
+  private IndexAlertRequest createIndexRegisteredAlert(
       AlertComposite alertComposite, RegisteredAlert registeredAlert) {
-    return new IndexRegisteredAlert(
+    return new IndexAlertRequest(
         new IndexAlertIdSet(
             String.valueOf(alertComposite.getAlertDetails().getAlertId()),
             registeredAlert.getAlertName(),
             alertComposite.getSystemId(),
             alertComposite.getAlertDetails().getMessageId()),
-        registeredAlert.getMatches()
-            .stream()
-            .map(RegisteredMatch::getMatchName)
-            .collect(toList()),
+        createIndexMatches(alertComposite, registeredAlert),
         indexAnalystDecisionHelper.getDecision(alertComposite.getActions()));
+  }
+
+  @Nonnull
+  private static List<IndexMatch> createIndexMatches(
+      AlertComposite alertComposite, RegisteredAlert registeredAlert) {
+    return registeredAlert.getMatches()
+        .stream()
+        .map(match -> createIndexMatch(alertComposite, match))
+        .collect(toList());
+  }
+
+  private static IndexMatch createIndexMatch(AlertComposite alertComposite, RegisteredMatch match) {
+    return IndexMatch
+        .builder()
+        .matchId(match.getMatchId())
+        .matchName(match.getMatchName())
+        .matchingTexts(getMatchingTexts(alertComposite, match))
+        .build();
+  }
+
+  @Nonnull
+  private static String getMatchingTexts(AlertComposite alertComposite, RegisteredMatch match) {
+    return String.join(
+        ", ",
+        alertComposite.getHitById(match.getMatchId()).getMatchingTexts());
   }
 
 }

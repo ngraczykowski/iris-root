@@ -29,6 +29,10 @@ class ReaderServiceFixture {
   }
 
   public static LearningMatch createLearningMatch() {
-    return LearningMatch.builder().matchId("matchId").build();
+    return LearningMatch
+        .builder()
+        .matchId("matchId")
+        .matchingTexts(List.of("matching", "match"))
+        .build();
   }
 }

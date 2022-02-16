@@ -1,10 +1,9 @@
 package com.silenteight.payments.bridge.warehouse.index.port;
 
-import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
-import com.silenteight.payments.bridge.common.model.AlertData;
+import com.silenteight.payments.bridge.warehouse.index.model.IndexRecommendationRequest;
 
 public interface IndexRecommendationUseCase {
 
-  void index(AlertData alertData, RecommendationWithMetadata recommendationWithMetadata);
+  void index(IndexRecommendationRequest request);
 
 }
