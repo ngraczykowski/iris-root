@@ -31,6 +31,7 @@ rapidfuzz==1.7.1
 requests==2.26.0
 scikit-learn==1.0.1
 scipy==1.7.1
+sentry_sdk==1.5.4
 six==1.16.0
 threadpoolctl==2.2.0
 typing-extensions==3.10.0.0

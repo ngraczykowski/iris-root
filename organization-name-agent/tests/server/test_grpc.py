@@ -99,6 +99,7 @@ class TestServer(unittest.TestCase):
     def tearDown(self):
         kill_recursive(self.server_process.pid)
         self.config_path.unlink()
+        time.sleep(TIMEOUT_SEC)
 
     def test_check_grpc_response(self):
         channel = grpc.insecure_channel(GRPC_ADDRESS)

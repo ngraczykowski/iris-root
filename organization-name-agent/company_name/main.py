@@ -2,6 +2,7 @@ import argparse
 import logging
 import pathlib
 
+import sentry_sdk
 from agent_base.agent import AgentRunner
 from agent_base.grpc_service import GrpcService
 from agent_base.utils import Config
@@ -19,6 +20,16 @@ def run(
     additional_knowledge_dir,
 ):
     config = Config(configuration_dirs=configuration_dirs, required=True)
+
+    sentry_config = config.application_config["sentry"]
+    if sentry_config["turn_on"]:
+        sentry_sdk.init(
+            traces_sample_rate=0.0,  # hard set to 0 to not increase usage cost
+            release=f"organization-name-agent@{sentry_config['release']}",
+            environment=sentry_config["environment"],
+            sample_rate=sentry_config["sample_rate"],
+        )
+
     services = []
     if start_agent_exchange:
         services.append(
@@ -69,8 +80,8 @@ def main():
         help="Increase verbosity for debug purpose",
     )
     args = parser.parse_args()
-    if not args.grpc and not args.agent_exchange:
-        parser.error("No services to run")
+    # if not args.grpc and not args.agent_exchange:
+    #     parser.error("No services to run")
 
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,

@@ -29,3 +29,9 @@ agent:
 
   grpc:
     port: 9090
+
+sentry:
+  turn_on: false
+  environment: unknown
+  release: unknown
+  sample_rate: 1.0

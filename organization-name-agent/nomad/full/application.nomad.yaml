@@ -30,3 +30,9 @@ agent:
 
   grpc:
     port: {{ env "NOMAD_PORT_grpc" }}
+
+sentry:
+  turn_on: false
+  environment: unknown
+  release: unknown
+  sample_rate: 1.0

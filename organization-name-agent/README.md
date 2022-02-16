@@ -140,7 +140,10 @@ Basic application configuration for running agent. Example configuration is stor
 
 ### Files
 
-* application.yaml - configuration for external integrations, such as agent exchange or data source
+* application.yaml - configuration for external integrations, such as agent exchange or data source; 
+  and for Sentry - to monitor running on remote. Before remote launch, modify 'sentry' config section: 
+  set 'turn_on' to _true_, and 'environment' and 'release' to appropriate values.
+
 
 * reduction-rules.yaml - configuration for [scores reduction](#scores-reduction)
 

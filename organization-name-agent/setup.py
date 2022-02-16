@@ -18,6 +18,7 @@ install_require = [
     "pyyaml==5.4.1",
     "rapidfuzz==1.7.1",
     "scikit-learn==1.0.1",
+    "sentry_sdk==1.5.4",
     "unidecode==1.2.0",
     "uvicorn==0.15.0",
 ]

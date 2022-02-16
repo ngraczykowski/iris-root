@@ -78,6 +78,7 @@ def test_resolve_pairs(ap_names, wl_names, expected_results):
     )
     assert response.status_code == 200
     results = [ResolvePairsOutput(**resp) for resp in response.json()]
+    assert len(results) == len(expected_results)
     for result, expected in zip(results, expected_results):
         assert result.solution == expected["solution"]
         assert round(result.solution_probability, 2) == expected["proba"]
