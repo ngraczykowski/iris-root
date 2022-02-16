@@ -11,10 +11,9 @@ public class AlertDataSource {
 
   String alertId;
   String flagKey;
-  String recommendationDate;
-  String recommendationYear;
-  String recommendationMonth;
-  String recommendationDay;
+  String alertDate;
+  String caseId;
+  String currentState;
 
   @JsonGetter
   String getDiscriminator() {

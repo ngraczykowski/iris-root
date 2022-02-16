@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -15,19 +15,18 @@ public class IngestGateway {
 
   private final WebClient webClient;
 
-  private final ObjectMapper objectMapper;
-
   @SneakyThrows
-  public Mono<String> send(JsonNode jsonNode) {
-    byte[] payload = objectMapper.writeValueAsBytes(jsonNode);
-
-    log.info("IngestGateway: sending payload: size={}, {}", payload.length);
+  public Mono<String> send(byte[] payload) {
+    log.info("IngestGateway: sending payload: size={}", payload.length);
 
     return webClient.post()
         .uri("async/batch/v1/ingestRecommendations")
-        .bodyValue(payload)
+        .bodyValue(new String(payload, StandardCharsets.UTF_8))
         .exchangeToMono(clientResponse -> {
-          log.info("IngestGateway: headers={}", clientResponse.headers());
+          if (clientResponse.statusCode().isError()) {
+            return clientResponse.createException().flatMap(Mono::error);
+          }
+          log.info("IngestGateway: headers={}", clientResponse.headers().asHttpHeaders());
           log.info("IngestGateway: statusCode={}", clientResponse.statusCode());
           return clientResponse.bodyToMono(String.class);
         })
