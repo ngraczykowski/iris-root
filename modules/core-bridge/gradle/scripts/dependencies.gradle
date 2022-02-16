@@ -89,6 +89,7 @@ libraries.sentry = [group: 'io.sentry', name: 'sentry', version: sentryVersion]
 libraries.sentry_logback = [group: 'io.sentry', name: 'sentry-logback', version: sentryVersion]
 libraries.sentry_spring_boot_starter = [group: 'io.sentry', name: 'sentry-spring-boot-starter', version: sentryVersion]
 libraries.vavr = [group: 'io.vavr', name: 'vavr', version: '0.10.4']
+libraries.lz4_java = [group: 'org.lz4', name: 'lz4-java', version: '1.7.1']
 
 configurations.all {
   exclude group: 'org.glassfish', module: 'javax.el'
@@ -137,6 +138,7 @@ dependencies {
   runtimeOnly libraries.sentry_logback
   runtimeOnly libraries.sentry_spring_boot_starter
   implementation libraries.spring_rabbit
+  implementation libraries.lz4_java
 
   testImplementation libraries.groovy_all
   testImplementation libraries.spock_core
