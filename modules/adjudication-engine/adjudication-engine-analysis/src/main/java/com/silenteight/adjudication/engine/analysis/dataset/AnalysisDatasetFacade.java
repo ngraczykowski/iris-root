@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.analysis.analysis;
+package com.silenteight.adjudication.engine.analysis.dataset;
 
 import lombok.RequiredArgsConstructor;
 
@@ -11,14 +11,14 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-class AddAndListDatasetInAnalysisUseCase {
+public class AnalysisDatasetFacade {
 
   private final AddDatasetAlertsToAnalysisUseCase addDatasetAlertsToAnalysisUseCase;
   private final AddDatasetToAnalysisUseCase addDatasetToAnalysisUseCase;
   private final ListAnalysisDatasetUseCase listAnalysisDatasetUseCase;
 
   @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "analysis" })
-  List<AnalysisDataset> batchAddAndListDataset(String analysis, List<String> datasets) {
+  public List<AnalysisDataset> batchAddAndListDataset(String analysis, List<String> datasets) {
     datasets.forEach(
         dataset -> addDatasetAlertsToAnalysisUseCase.addDatasetAlerts(analysis, dataset));
 

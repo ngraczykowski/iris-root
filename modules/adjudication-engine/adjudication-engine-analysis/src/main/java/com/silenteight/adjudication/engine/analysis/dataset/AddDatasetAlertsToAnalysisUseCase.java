@@ -1,8 +1,10 @@
-package com.silenteight.adjudication.engine.analysis.analysis;
+package com.silenteight.adjudication.engine.analysis.dataset;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.engine.analysis.analysis.AnalysisAlertsAddedGateway;
+import com.silenteight.adjudication.engine.analysis.analysis.DatasetAlertsAdder;
 import com.silenteight.adjudication.engine.analysis.analysis.DatasetAlertsAdder.ChunkHandler;
 import com.silenteight.adjudication.engine.analysis.analysis.domain.AnalysisAlertChunk;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;

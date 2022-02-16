@@ -1,7 +1,11 @@
-package com.silenteight.adjudication.engine.analysis.analysis;
+package com.silenteight.adjudication.engine.analysis.dataset;
 
 import com.silenteight.adjudication.api.v1.AnalysisDataset;
 import com.silenteight.adjudication.api.v1.Dataset;
+import com.silenteight.adjudication.engine.analysis.analysis.AnalysisAlertsAddedGateway;
+import com.silenteight.adjudication.engine.analysis.analysis.DataSetRepository;
+import com.silenteight.adjudication.engine.analysis.analysis.DatasetAlertsAdderMock;
+import com.silenteight.adjudication.engine.analysis.analysis.DummyAnalysisAlertsAddedGateway;
 
 import org.junit.jupiter.api.Test;
 
@@ -29,8 +33,8 @@ class AddAndListDatasetsToAnalysisUseCaseTest {
   private final ListAnalysisDatasetUseCase listAnalysisDatasetUseCase =
       new ListAnalysisDatasetUseCase(analysisDatasetQueryRepository);
 
-  private final AddAndListDatasetInAnalysisUseCase useCase =
-      new AddAndListDatasetInAnalysisUseCase(addDatasetAlertsToAnalysisUseCase,
+  private final AnalysisDatasetFacade useCase =
+      new AnalysisDatasetFacade(addDatasetAlertsToAnalysisUseCase,
           addDatasetToAnalysisUseCase, listAnalysisDatasetUseCase);
 
   @Test

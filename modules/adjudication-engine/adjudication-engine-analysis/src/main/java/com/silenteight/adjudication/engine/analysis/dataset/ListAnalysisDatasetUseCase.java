@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.analysis.analysis;
+package com.silenteight.adjudication.engine.analysis.dataset;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,8 @@ class ListAnalysisDatasetUseCase {
   private final AnalysisDatasetQueryRepository analysisDatasetQueryRepository;
 
   @Transactional(readOnly = true)
-  List<AnalysisDataset> listAnalysisDatasets(List<AnalysisDatasetKey> ids) {
+  List<AnalysisDataset> listAnalysisDatasets(
+      List<AnalysisDatasetKey> ids) {
     return analysisDatasetQueryRepository.findAllByIdIn(ids)
         .map(AnalysisDatasetQueryEntity::toAnalysisDataset)
         .collect(Collectors.toList());

@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.analysis.analysis;
+package com.silenteight.adjudication.engine.analysis.dataset;
 
 import org.springframework.data.repository.Repository;
 

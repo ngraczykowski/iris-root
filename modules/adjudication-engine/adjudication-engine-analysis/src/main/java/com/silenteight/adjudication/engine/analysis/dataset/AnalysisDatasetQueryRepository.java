@@ -1,4 +1,4 @@
-package com.silenteight.adjudication.engine.analysis.analysis;
+package com.silenteight.adjudication.engine.analysis.dataset;
 
 import org.springframework.data.repository.Repository;
 
@@ -8,5 +8,6 @@ import java.util.stream.Stream;
 interface AnalysisDatasetQueryRepository
     extends Repository<AnalysisDatasetQueryEntity, AnalysisDatasetKey> {
 
-  Stream<AnalysisDatasetQueryEntity> findAllByIdIn(Collection<AnalysisDatasetKey> ids);
+  Stream<AnalysisDatasetQueryEntity> findAllByIdIn(
+      Collection<AnalysisDatasetKey> ids);
 }

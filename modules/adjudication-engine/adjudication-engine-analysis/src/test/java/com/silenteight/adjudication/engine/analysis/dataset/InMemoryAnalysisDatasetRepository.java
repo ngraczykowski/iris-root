@@ -1,9 +1,10 @@
-package com.silenteight.adjudication.engine.analysis.analysis;
+package com.silenteight.adjudication.engine.analysis.dataset;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.adjudication.api.v1.Dataset;
+import com.silenteight.adjudication.engine.analysis.analysis.DataSetRepository;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 
 import java.util.Collection;
@@ -67,7 +68,8 @@ class InMemoryAnalysisDatasetRepository implements AnalysisDatasetRepository {
   private class QueryRepository implements AnalysisDatasetQueryRepository {
 
     @Override
-    public Stream<AnalysisDatasetQueryEntity> findAllByIdIn(Collection<AnalysisDatasetKey> ids) {
+    public Stream<AnalysisDatasetQueryEntity> findAllByIdIn(
+        Collection<AnalysisDatasetKey> ids) {
       return ids.stream()
           .filter(store::containsKey)
           .map(store::get)

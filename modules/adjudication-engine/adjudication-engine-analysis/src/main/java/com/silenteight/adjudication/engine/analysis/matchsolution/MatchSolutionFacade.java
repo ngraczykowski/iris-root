@@ -16,17 +16,11 @@ import java.util.Optional;
 @Service
 public class MatchSolutionFacade {
 
-  private final SolveAnalysisMatchesUseCase solveAnalysisMatchesUseCase;
-
   private final HandleMatchFeaturesUpdatedUseCase handleMatchFeaturesUpdatedUseCase;
 
   private final HandleMatchCategoriesUpdatedUseCase handleMatchCategoriesUpdatedUseCase;
 
   private final GetMatchSolutionUseCase getMatchSolutionUseCase;
-
-  public void solveAnalysisMatches(String analysisName) {
-    solveAnalysisMatchesUseCase.solveAnalysisMatches(analysisName);
-  }
 
   public List<MatchesSolved> handleMatchFeaturesUpdated(
       MatchFeaturesUpdated matchFeaturesUpdated) {
