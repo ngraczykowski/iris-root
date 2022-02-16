@@ -1,9 +1,13 @@
 <#import "match-utils.ftl" as matchUtils>
 <#import "name-agent.ftl" as nameTemplate>
 <#import "organization-name-agent.ftl" as organizationNameTemplate>
+<#import "organization-name-agent.ftl" as organizationName2Template>
 <#import "geo-agent.ftl" as geoTemplate>
+<#import "geo-agent.ftl" as geo2Template>
 <#import "missing-agent.ftl" as missingAgentTemplate>
 <#import "name-matched-text-agent.ftl" as nameMatchedTextTemplate>
+<#import "historical-agent-tp.ftl" as historicalRiskAccountNumberTPTemplate>
+<#import "historical-agent-fp.ftl" as historicalRiskAccountNumberFPTemplate>
 
 <#-- If the given feature is not listed here, then the comment for this feature will be added just
 after features that are included (in unchanged order).
