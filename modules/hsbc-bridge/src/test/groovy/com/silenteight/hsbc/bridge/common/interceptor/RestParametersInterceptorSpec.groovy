@@ -10,9 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus
-import org.springframework.test.annotation.DirtiesContext
 
-@DirtiesContext
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = BridgeApplication)
 class RestParametersInterceptorSpec extends BaseSpecificationIT {
 
@@ -35,6 +33,15 @@ class RestParametersInterceptorSpec extends BaseSpecificationIT {
 
     then:
     result.getStatusCode() == HttpStatus.NOT_FOUND
+  }
+
+  def "should fail on http parameter pollution check - bad request for duplicated query parameters"() {
+    when:
+    def result = restTemplate
+        .getForEntity("/model?test=value1&test=value2", SimpleModelResponse.class)
+
+    then:
+    result.getStatusCode() == HttpStatus.BAD_REQUEST
   }
 
 
