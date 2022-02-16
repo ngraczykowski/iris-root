@@ -3,24 +3,12 @@
 # pylint: disable=missing-function-docstring
 import json
 import os
-import pathlib
 
 import pytest
-from agent_base.utils import Config
 from fastapi.testclient import TestClient
 
 from company_name.rest_api.__main__ import app
 from company_name.rest_api.data_models import CompareOutput, ResolvePairsOutput
-
-
-@pytest.fixture(autouse=True, scope="module")
-def config():
-    configuration_path = pathlib.Path("./config/application.yaml")
-    configuration_path.symlink_to("./config/application.local.yaml")
-    try:
-        yield Config()
-    finally:
-        configuration_path.unlink()
 
 
 def _read_json_resource(file_name: str) -> CompareOutput:

@@ -34,6 +34,7 @@ pipeline {
                     steps {
                         sh './scripts/clean.sh'
                         sh './scripts/build.sh --index-url "${PYPI_URL}"'
+                        stash includes: "PACKAGE_VERSION", name: "PACKAGE_VERSION"
                     }
                 }
                 stage('Test package') {
@@ -116,7 +117,8 @@ pipeline {
                         branch 'master'
                     }
                     steps {
-                        sh './scripts/push.sh'
+                        unstash "PACKAGE_VERSION"
+                        sh './scripts/push_image.sh'
                     }
                 }
             }

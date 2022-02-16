@@ -13,7 +13,7 @@ from silenteight.agent.organizationname.v1.api.organization_name_agent_pb2_grpc 
     OrganizationNameAgentStub,
 )
 
-PORT = Config().load_yaml_config("application.grpc.yaml")["agent"]["grpc"]["port"]
+PORT = Config().load_yaml_config("application.local.yaml")["agent"]["grpc"]["port"]
 GRPC_ADDRESS = f"localhost:{PORT}"
 TIMEOUT_SEC = 5
 
@@ -91,7 +91,7 @@ def kill_process_on_the_port():
 class TestServer(unittest.TestCase):
     def setUp(self):
         self.config_path = pathlib.Path("./config/application.yaml")
-        self.config_path.symlink_to("application.grpc.yaml")  # link to file from the same dir
+        self.config_path.symlink_to("application.local.yaml")  # link to file from the same dir
         kill_process_on_the_port()
         self.server_process = subprocess.Popen("python -m company_name.main -v --grpc".split())
         wait_for_server()

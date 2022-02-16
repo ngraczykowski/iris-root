@@ -1,5 +1,0 @@
-agent:
-  processes: 1
-
-  grpc:
-    port: 9090
