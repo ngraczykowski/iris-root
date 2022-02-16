@@ -5,6 +5,7 @@ import com.silenteight.data.api.v2.QaDataIndexRequest;
 import com.silenteight.serp.governance.qa.send.amqp.AlertMessageGateway;
 import com.silenteight.serp.governance.qa.send.dto.AlertDto;
 
+import com.google.protobuf.Timestamp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,6 +52,7 @@ class SendAlertMessageUseCaseTest {
     assertThat(capturedAlert.getLevel()).isEqualTo(alertDto.getLevel().getValue());
     assertThat(capturedAlert.getState().name()).isEqualTo(alertDto.getState().name());
     assertThat(capturedAlert.getComment()).isEqualTo(alertDto.getComment());
+    assertThat(capturedAlert.getTimestamp()).isNotEqualTo(Timestamp.getDefaultInstance());
   }
 
   private AlertDto getAlertDto() {

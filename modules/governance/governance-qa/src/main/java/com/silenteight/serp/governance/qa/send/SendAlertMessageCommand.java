@@ -12,6 +12,8 @@ import com.silenteight.serp.governance.qa.send.dto.AlertDto;
 import java.util.List;
 import java.util.Objects;
 
+import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
+import static java.time.Instant.now;
 import static java.util.stream.Collectors.toList;
 
 @Value(staticConstructor = "of")
@@ -41,6 +43,7 @@ public class SendAlertMessageCommand {
         .setLevel(alertDto.getLevel().getValue())
         .setState(parseState(alertDto.getState()))
         .setComment(parseComment(alertDto.getComment()))
+        .setTimestamp(toTimestamp(now()))
         .build();
   }
 
