@@ -76,6 +76,7 @@ pipeline {
                         sshagent([env.JENKINS_SSH_NAME]) {
                             sh './scripts/release.sh --index-url ${PYPI_URL}'
                         }
+                        stash includes: "PACKAGE_VERSION", name: "PACKAGE_VERSION"
                         withCredentials([usernamePassword(
                             credentialsId: 'pypi-deployment-user',
                             usernameVariable: 'TWINE_USERNAME',
