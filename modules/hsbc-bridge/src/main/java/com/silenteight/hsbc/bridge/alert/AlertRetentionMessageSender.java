@@ -1,6 +1,7 @@
 package com.silenteight.hsbc.bridge.alert;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.dataretention.api.v1.AlertsExpired;
 import com.silenteight.dataretention.api.v1.PersonalInformationExpired;
@@ -15,6 +16,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Slf4j
 @RequiredArgsConstructor
 class AlertRetentionMessageSender implements AlertRetentionSender {
 
@@ -35,6 +37,7 @@ class AlertRetentionMessageSender implements AlertRetentionSender {
   }
 
   private void sendMessageByType(DataRetentionType type, List<String> chunk) {
+    log.debug("Sending message of type: {} with alerts count: {}", type, chunk.size());
     if (type == DataRetentionType.PERSONAL_INFO_EXPIRED) {
       var message = PersonalInformationExpired.newBuilder().addAllAlerts(chunk).build();
       messageSender.send(message);

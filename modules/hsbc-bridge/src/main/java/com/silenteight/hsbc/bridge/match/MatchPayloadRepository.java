@@ -13,6 +13,6 @@ interface MatchPayloadRepository extends Repository<MatchPayloadEntity, Long> {
   @Query(value = "UPDATE hsbc_bridge_match_payload p\n"
       + "SET payload = NULL\n"
       + "FROM hsbc_bridge_alert a, hsbc_bridge_match m\n"
-      + "WHERE p.id = m.match_payload_id AND m.alert_id = a.id AND a.alert_time < :expireDate", nativeQuery = true)
-  void deletePayloadByAlertTimeBefore(@Param("expireDate") OffsetDateTime expireDate);
+      + "WHERE p.id = m.match_payload_id AND m.alert_id = a.id AND p.payload IS NOT NULL AND a.alert_time < :expireDate", nativeQuery = true)
+  int deletePayloadByAlertTimeBefore(@Param("expireDate") OffsetDateTime expireDate);
 }

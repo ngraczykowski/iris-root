@@ -13,6 +13,6 @@ interface AlertPayloadRepository extends Repository<AlertDataPayloadEntity, Long
   @Query(value = "UPDATE hsbc_bridge_alert_payload p\n"
       + "SET payload = NULL\n"
       + "FROM hsbc_bridge_alert a\n"
-      + "WHERE p.id = a.alert_payload_id AND a.alert_time < :expireDate", nativeQuery = true)
-  void deletePayloadByAlertTimeBefore(@Param("expireDate") OffsetDateTime expireDate);
+      + "WHERE p.id = a.alert_payload_id AND p.payload IS NOT NULL AND a.alert_time < :expireDate", nativeQuery = true)
+  int deletePayloadByAlertTimeBefore(@Param("expireDate") OffsetDateTime expireDate);
 }

@@ -33,8 +33,9 @@ interface AlertRepository extends Repository<AlertEntity, Long> {
   Stream<AlertEntity> findByNameIsNotNullAndStatusAndExternalIdInAndDiscriminatorIn(
       Collection<String> idsWithDiscriminators);
 
-  @Modifying
-  @Query("SELECT a.name FROM AlertEntity a WHERE a.alertTime < :expireDate")
+  @Query(value = "SELECT a.name\n"
+      + "FROM hsbc_bridge_alert a, hsbc_bridge_alert_payload p\n"
+      + "WHERE p.id = a.alert_payload_id AND a.name IS NOT NULL AND p.payload IS NOT NULL AND a.alert_time < :expireDate", nativeQuery = true)
   Stream<String> findAlertEntityNamesByAlertTimeBefore(
       @Param("expireDate") OffsetDateTime expireDate);
 
