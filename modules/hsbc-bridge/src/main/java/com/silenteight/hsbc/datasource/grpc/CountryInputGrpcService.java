@@ -1,6 +1,5 @@
 package com.silenteight.hsbc.datasource.grpc;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.datasource.api.country.v1.BatchGetMatchCountryInputsRequest;
@@ -13,6 +12,7 @@ import com.silenteight.hsbc.datasource.common.dto.DataSourceInputRequest;
 import com.silenteight.hsbc.datasource.dto.country.CountryFeatureInputDto;
 import com.silenteight.hsbc.datasource.dto.country.CountryInputDto;
 import com.silenteight.hsbc.datasource.dto.country.CountryInputResponse;
+import com.silenteight.hsbc.datasource.feature.country.ValidCountriesProvider;
 
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -22,10 +22,15 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @GrpcService(interceptors = DatasourceGrpcInterceptor.class)
-@RequiredArgsConstructor
 class CountryInputGrpcService extends CountryInputServiceImplBase {
 
   private final DataSourceInputProvider<CountryInputResponse> countryInputProvider;
+  private final ValidCountriesProvider countriesProvider;
+
+  CountryInputGrpcService(DataSourceInputProvider<CountryInputResponse> countryInputProvider) {
+    this.countryInputProvider = countryInputProvider;
+    this.countriesProvider = new ValidCountriesProvider();
+  }
 
   @Override
   public void batchGetMatchCountryInputs(
@@ -63,7 +68,8 @@ class CountryInputGrpcService extends CountryInputServiceImplBase {
         .map(i -> CountryFeatureInput.newBuilder()
             .setFeature(i.getFeature())
             .addAllAlertedPartyCountries(i.getAlertedPartyCountries())
-            .addAllWatchlistCountries(i.getWatchlistCountries())
+            .addAllWatchlistCountries(
+                countriesProvider.validateAndMapCountries((i.getWatchlistCountries())))
             .build())
         .collect(Collectors.toList());
   }
