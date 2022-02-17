@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.CONTEXTUAL_LEARNING_JOB_NAME;
 import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.FILE_NAME_PARAMETER;
 import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.HISTORICAL_RISK_ASSESSMENT_JOB_NAME;
 import static com.silenteight.payments.bridge.svb.newlearning.job.etl.EtlJobConstants.ETL_JOB_NAME;
@@ -50,7 +51,8 @@ class StoreCsvJobListener implements JobExecutionListener {
       return;
     }
 
-    var jobsToTrigger = List.of(ETL_JOB_NAME, HISTORICAL_RISK_ASSESSMENT_JOB_NAME);
+    var jobsToTrigger =
+        List.of(ETL_JOB_NAME, HISTORICAL_RISK_ASSESSMENT_JOB_NAME, CONTEXTUAL_LEARNING_JOB_NAME);
     jobsToTrigger.forEach(job -> triggerJob(job, fileName));
   }
 
