@@ -33,7 +33,7 @@ class CreateFeatureServiceTest {
             new GeoFeatureExtractor(),
             new NameFeatureExtractor(createNameFeatureInputUseCase),
             new GeoFeatureExtractor()));
-    when(createNameFeatureInputUseCase.create(any())).thenReturn(
+    when(createNameFeatureInputUseCase.createDefault(any())).thenReturn(
         NameFeatureInput.newBuilder().build());
   }
 

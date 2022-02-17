@@ -1,7 +1,11 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process.agent;
 
+import lombok.RequiredArgsConstructor;
+
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
+import com.silenteight.payments.bridge.agents.model.GeoAgentRequest;
+import com.silenteight.payments.bridge.agents.port.CreateLocationFeatureInputUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
@@ -17,29 +21,32 @@ import java.util.function.Function;
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.GEO_FEATURE;
 
 @Component
+@RequiredArgsConstructor
 class GeoAgentEtlProcess extends BaseAgentEtlProcess<LocationFeatureInput> {
+
+  private final CreateLocationFeatureInputUseCase createLocationFeatureInputUseCase;
 
   @Override
   protected List<FeatureInput> createDataSourceFeatureInputs(HitData hitData) {
-    var featureInput = FeatureInput
-        .newBuilder()
-        .setFeature(getFullFeatureName(GEO_FEATURE))
-        .setAgentFeatureInput(Any.pack(createLocationFeatureInput(hitData)))
-        .build();
-
-    return List.of(featureInput);
-  }
-
-  private static LocationFeatureInput createLocationFeatureInput(HitData hitData) {
 
     var countryTown = getCountryTown(hitData);
     var watchListLocation = getWatchListLocation(hitData);
 
-    return LocationFeatureInput.newBuilder()
-        .setFeature(getFullFeatureName(GEO_FEATURE))
-        .setAlertedPartyLocation(countryTown)
-        .setWatchlistLocation(watchListLocation)
+    var geoAgentRequest = GeoAgentRequest.builder()
+        .feature(GEO_FEATURE)
+        .alertedPartyLocation(countryTown)
+        .watchlistLocation(watchListLocation)
         .build();
+
+    var locationFeatureInput = createLocationFeatureInputUseCase.create(geoAgentRequest);
+
+    var featureInput = FeatureInput
+        .newBuilder()
+        .setFeature(getFullFeatureName(GEO_FEATURE))
+        .setAgentFeatureInput(Any.pack(locationFeatureInput))
+        .build();
+
+    return List.of(featureInput);
   }
 
   private static String getCountryTown(HitData hitData) {

@@ -28,7 +28,7 @@ class NameAgentEtlProcessTest {
 
   @BeforeEach
   void setup() {
-    when(nameAgentUseCase.create(any())).thenReturn(NameFeatureInput.newBuilder()
+    when(nameAgentUseCase.createDefault(any())).thenReturn(NameFeatureInput.newBuilder()
         .setFeature("features/name")
         .addAlertedPartyNames(AlertedPartyName
             .newBuilder()

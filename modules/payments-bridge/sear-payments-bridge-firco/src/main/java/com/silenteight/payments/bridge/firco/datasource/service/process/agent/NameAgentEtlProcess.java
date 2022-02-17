@@ -24,7 +24,7 @@ class NameAgentEtlProcess extends BaseAgentEtlProcess<NameFeatureInput> {
   @Override
   protected List<FeatureInput> createDataSourceFeatureInputs(HitData hitData) {
     var nameAgentUseCaseRequest = createNameAgentUseCaseRequest(hitData);
-    var nameFeatureInput = createNameFeatureInputUseCase.create(nameAgentUseCaseRequest);
+    var nameFeatureInput = createNameFeatureInputUseCase.createDefault(nameAgentUseCaseRequest);
     var featureInput = createFeatureInput(NAME_FEATURE, nameFeatureInput);
     return List.of(featureInput);
   }

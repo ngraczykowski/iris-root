@@ -7,7 +7,12 @@ import com.silenteight.payments.bridge.agents.port.CreateNameFeatureInputUseCase
 class CreateNameFeatureInputUseCaseMock implements CreateNameFeatureInputUseCase {
 
   @Override
-  public NameFeatureInput create(NameAgentRequest nameAgentRequest) {
+  public NameFeatureInput createDefault(NameAgentRequest nameAgentRequest) {
+    return NameFeatureInput.getDefaultInstance();
+  }
+
+  @Override
+  public NameFeatureInput createForOrganizationNameAgent(NameAgentRequest nameAgentRequest) {
     return NameFeatureInput.getDefaultInstance();
   }
 }

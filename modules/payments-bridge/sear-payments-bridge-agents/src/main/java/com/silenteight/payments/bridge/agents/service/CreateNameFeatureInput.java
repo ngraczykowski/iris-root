@@ -11,19 +11,28 @@ import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.FEATURE_PREFIX;
+import static com.silenteight.payments.bridge.common.protobuf.AgentDataSourceUtils.getFullFeatureName;
 import static java.util.stream.Collectors.toList;
 
 @Component
 class CreateNameFeatureInput implements CreateNameFeatureInputUseCase {
 
   @Override
-  public NameFeatureInput create(NameAgentRequest nameAgentRequest) {
+  public NameFeatureInput createDefault(NameAgentRequest nameAgentRequest) {
     return createNameFeatureInput(nameAgentRequest);
   }
+
+  @Override
+  public NameFeatureInput createForOrganizationNameAgent(NameAgentRequest nameAgentRequest) {
+    return createNameFeatureInputForOrganizationNameAgent(nameAgentRequest);
+  }
+
 
   private static NameFeatureInput createNameFeatureInput(NameAgentRequest request) {
     return NameFeatureInput
@@ -34,6 +43,45 @@ class CreateNameFeatureInput implements CreateNameFeatureInputUseCase {
         .addAllAlertedPartyNames(createAlertedPartyNames(request))
         .setAlertedPartyType(mapWatchListTypeToEntityType(request.getWatchlistType()))
         .build();
+  }
+
+  private static NameFeatureInput createNameFeatureInputForOrganizationNameAgent(
+      NameAgentRequest nameAgentRequest) {
+    var watchlistType = nameAgentRequest.getWatchlistType();
+    var alertedPartyNames = nameAgentRequest.getAlertedPartyNames();
+    var watchlistPartyNames = nameAgentRequest.getWatchlistNames().stream()
+        .findFirst()
+        .orElse("");
+
+    if (watchlistType == WatchlistType.COMPANY) {
+      return getNameFeatureInput(nameAgentRequest, alertedPartyNames, watchlistPartyNames);
+    } else {
+      return getNameFeatureInput(nameAgentRequest, new ArrayList<>(), watchlistPartyNames);
+    }
+  }
+
+  @Nonnull
+  private static NameFeatureInput getNameFeatureInput(
+      NameAgentRequest nameAgentRequest, List<String> alertedPartyNames,
+      String watchlistPartyNames) {
+    return NameFeatureInput.newBuilder()
+        .setFeature(getFullFeatureName(nameAgentRequest.getFeature()))
+        .addAllAlertedPartyNames(getAlertedPartyNames(alertedPartyNames))
+        .addWatchlistNames(WatchlistName.newBuilder()
+            .setName(watchlistPartyNames)
+            .build())
+        .build();
+  }
+
+  @Nonnull
+  private static List<AlertedPartyName> getAlertedPartyNames(List<String> alertedPartyNames) {
+    return alertedPartyNames
+        .stream()
+        .map(alertedPartyName -> AlertedPartyName
+            .newBuilder()
+            .setName(alertedPartyName)
+            .build())
+        .collect(Collectors.toList());
   }
 
   private static List<WatchlistName> createWatchlistNames(NameAgentRequest request) {

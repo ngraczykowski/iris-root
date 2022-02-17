@@ -180,4 +180,3 @@ class PaymentsBridgeApplicationIT {
         .until(() -> !paymentsBridgeEventsListener.containsRegisteredAlert(alertId));
   }
 }
-

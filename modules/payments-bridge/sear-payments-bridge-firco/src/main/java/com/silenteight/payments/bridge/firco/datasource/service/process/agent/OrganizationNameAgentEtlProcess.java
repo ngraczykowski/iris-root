@@ -1,66 +1,53 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process.agent;
 
+import lombok.RequiredArgsConstructor;
+
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
-import com.silenteight.datasource.api.name.v1.AlertedPartyName;
 import com.silenteight.datasource.api.name.v1.NameFeatureInput;
-import com.silenteight.datasource.api.name.v1.WatchlistName;
-import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
+import com.silenteight.payments.bridge.agents.model.NameAgentRequest;
+import com.silenteight.payments.bridge.agents.port.CreateNameFeatureInputUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import com.google.protobuf.Any;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.ORGANIZATION_NAME_FEATURE;
 
 @Component
+@RequiredArgsConstructor
 class OrganizationNameAgentEtlProcess extends BaseAgentEtlProcess<NameFeatureInput> {
+
+  private final CreateNameFeatureInputUseCase createNameFeatureInputUseCase;
 
   @Override
   protected List<FeatureInput> createDataSourceFeatureInputs(HitData hitData) {
     var featureInput = FeatureInput
         .newBuilder()
         .setFeature(getFullFeatureName(ORGANIZATION_NAME_FEATURE))
-        .setAgentFeatureInput(Any.pack(createNameFeatureInput(hitData)))
+        .setAgentFeatureInput(Any.pack(generateNameFeatureInput(hitData)))
         .build();
 
     return List.of(featureInput);
   }
 
-  private static NameFeatureInput createNameFeatureInput(HitData hitData) {
+  private NameFeatureInput generateNameFeatureInput(HitData hitData) {
 
     var watchlistType = hitData.getHitAndWlPartyData().getWatchlistType();
     var alertedPartyNames = getAlertedPartyNames(hitData);
     var watchlistPartyNames = getWatchlistPartyNames(hitData);
 
-    if (watchlistType == WatchlistType.COMPANY) {
-      return NameFeatureInput.newBuilder()
-          .setFeature(getFullFeatureName(ORGANIZATION_NAME_FEATURE))
-          .addAllAlertedPartyNames(alertedPartyNames
-              .stream()
-              .map(alertedPartyName -> AlertedPartyName
-                  .newBuilder()
-                  .setName(alertedPartyName)
-                  .build())
-              .collect(Collectors.toList()))
-          .addWatchlistNames(WatchlistName.newBuilder()
-              .setName(watchlistPartyNames)
-              .build())
-          .build();
-    } else {
-      return NameFeatureInput.newBuilder()
-          .setFeature(getFullFeatureName(ORGANIZATION_NAME_FEATURE))
-          .addAllAlertedPartyNames(new ArrayList<>())
-          .addWatchlistNames(WatchlistName.newBuilder()
-              .setName(watchlistPartyNames)
-              .build())
-          .build();
-    }
+    var nameAgentRequest = NameAgentRequest.builder()
+        .feature(ORGANIZATION_NAME_FEATURE)
+        .alertedPartyNames(alertedPartyNames)
+        .watchlistNames(List.of(watchlistPartyNames))
+        .watchlistType(watchlistType)
+        .build();
+
+    return createNameFeatureInputUseCase.createForOrganizationNameAgent(nameAgentRequest);
   }
 
   private static String getWatchlistPartyNames(HitData hitData) {

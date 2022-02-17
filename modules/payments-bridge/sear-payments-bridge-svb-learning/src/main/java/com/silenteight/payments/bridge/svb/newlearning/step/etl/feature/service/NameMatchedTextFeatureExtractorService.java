@@ -25,7 +25,7 @@ class NameMatchedTextFeatureExtractorService implements UnstructuredFeatureExtra
   @Override
   public FeatureInput createFeatureInputs(HitComposite hitComposite) {
     var nameAgentUseCaseRequest = createNameAgentUseCaseRequest(hitComposite);
-    var nameFeatureInput = createNameFeatureInputUseCase.create(nameAgentUseCaseRequest);
+    var nameFeatureInput = createNameFeatureInputUseCase.createDefault(nameAgentUseCaseRequest);
     return createFeatureInput(NAME_TEXT_FEATURE, nameFeatureInput);
   }
 

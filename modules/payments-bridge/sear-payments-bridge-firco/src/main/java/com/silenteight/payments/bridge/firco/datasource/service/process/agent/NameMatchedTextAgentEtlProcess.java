@@ -41,7 +41,7 @@ class NameMatchedTextAgentEtlProcess implements CreateFeatureInputUnstructured {
   private List<FeatureInput> createDataSourceFeatureInputs(
       HitAndWatchlistPartyData hitAndWatchlistPartyData) {
     var nameAgentUseCaseRequest = createNameAgentUseCaseRequest(hitAndWatchlistPartyData);
-    var nameFeatureInput = createNameFeatureInputUseCase.create(nameAgentUseCaseRequest);
+    var nameFeatureInput = createNameFeatureInputUseCase.createDefault(nameAgentUseCaseRequest);
     var featureInput = createFeatureInput(NAME_MATCH_TEXT_FEATURE, nameFeatureInput);
     return List.of(featureInput);
   }

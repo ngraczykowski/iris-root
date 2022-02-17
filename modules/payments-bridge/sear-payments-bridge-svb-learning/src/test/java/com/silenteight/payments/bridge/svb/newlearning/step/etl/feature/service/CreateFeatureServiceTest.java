@@ -46,7 +46,7 @@ class CreateFeatureServiceTest {
         List.of(new NameMatchedTextFeatureExtractorService(createNameFeatureInputUseCase)),
         createAgentInputsClient);
 
-    when(createNameFeatureInputUseCase.create(any())).thenReturn(
+    when(createNameFeatureInputUseCase.createDefault(any())).thenReturn(
         NameFeatureInput.newBuilder().build());
   }
 

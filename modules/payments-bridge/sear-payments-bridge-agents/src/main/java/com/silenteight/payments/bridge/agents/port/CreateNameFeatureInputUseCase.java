@@ -5,5 +5,7 @@ import com.silenteight.payments.bridge.agents.model.NameAgentRequest;
 
 public interface CreateNameFeatureInputUseCase {
 
-  NameFeatureInput create(NameAgentRequest nameAgentRequest);
+  NameFeatureInput createDefault(NameAgentRequest nameAgentRequest);
+
+  NameFeatureInput createForOrganizationNameAgent(NameAgentRequest nameAgentRequest);
 }

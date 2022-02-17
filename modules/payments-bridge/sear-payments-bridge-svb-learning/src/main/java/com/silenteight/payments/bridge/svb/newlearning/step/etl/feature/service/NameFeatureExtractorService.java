@@ -23,7 +23,7 @@ class NameFeatureExtractorService implements FeatureExtractor {
   @Override
   public FeatureInput createFeatureInputs(EtlHit etlHit) {
     var nameAgentUseCaseRequest = createNameAgentUseCaseRequest(etlHit);
-    var nameFeatureInput = createNameFeatureInputUseCase.create(nameAgentUseCaseRequest);
+    var nameFeatureInput = createNameFeatureInputUseCase.createDefault(nameAgentUseCaseRequest);
     return createFeatureInput(NAME_FEATURE, nameFeatureInput);
   }
 
