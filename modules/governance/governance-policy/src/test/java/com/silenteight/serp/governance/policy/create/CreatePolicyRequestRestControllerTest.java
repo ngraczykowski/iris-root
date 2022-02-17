@@ -16,7 +16,7 @@ import java.util.UUID;
 
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.*;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.DRAFT;
-import static com.silenteight.serp.governance.policy.domain.TestFixtures.POLICY_NAME;
+import static com.silenteight.serp.governance.policy.domain.SharedTestFixtures.POLICY_NAME;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.ACCEPTED;
@@ -38,7 +38,7 @@ class CreatePolicyRequestRestControllerTest extends BaseRestControllerTest {
 
   @ParameterizedTest
   @MethodSource(
-      "com.silenteight.serp.governance.policy.domain.TestFixtures#getPolicyNames"
+      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getPolicyNames"
   )
   @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its202_whenPolicyAdded(String policyName) {
@@ -58,7 +58,7 @@ class CreatePolicyRequestRestControllerTest extends BaseRestControllerTest {
 
   @ParameterizedTest
   @MethodSource(
-      "com.silenteight.serp.governance.policy.domain.TestFixtures#getIncorrectPolicyNames"
+      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getIncorrectPolicyNames"
   )
   @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its400_whenPolicyNameLengthIsWrong(String policyName) {

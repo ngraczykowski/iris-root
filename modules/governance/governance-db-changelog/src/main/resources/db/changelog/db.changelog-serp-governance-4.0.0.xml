@@ -572,4 +572,12 @@
                     columnName="name"
                     newDataType="VARCHAR(150)"/>
   </changeSet>
+  <changeSet id="serp-governance-4.0.0-23" author="dsniezek">
+    <comment>
+      Extends length of governance_model.policy_name to 80(align with governance_policy.name)
+    </comment>
+    <modifyDataType tableName="governance_model"
+                    columnName="policy_name"
+                    newDataType="VARCHAR(80)"/>
+  </changeSet>
 </databaseChangeLog>

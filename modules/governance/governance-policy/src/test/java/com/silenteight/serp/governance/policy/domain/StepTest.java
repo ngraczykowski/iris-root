@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.UUID;
 
+import static com.silenteight.serp.governance.policy.domain.SharedTestFixtures.USER;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static com.silenteight.serp.governance.policy.domain.StepType.NARROW;
 import static com.silenteight.serp.governance.policy.domain.TestFixtures.*;
-import static com.silenteight.serp.governance.policy.domain.TestFixtures.USER;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_FALSE_POSITIVE;
 import static java.util.List.of;
 import static java.util.UUID.fromString;
