@@ -20,4 +20,10 @@
         path="sql/update_historical_risk_account_number_feature_mapper.sql"
         relativeToChangelogFile="true"/>
   </changeSet>
+
+  <changeSet id="universal-datasource-1.8.0-3" author="jgajewski">
+    <sqlFile
+        path="sql/insert_contextual_learning_number_feature_mapper.sql"
+        relativeToChangelogFile="true"/>
+  </changeSet>
 </databaseChangeLog>
