@@ -16,7 +16,6 @@ import com.silenteight.payments.bridge.firco.recommendation.model.Recommendation
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;
 import com.silenteight.payments.bridge.notification.model.NotificationEvent;
 import com.silenteight.payments.bridge.svb.oldetl.model.UnsupportedMessageException;
-import com.silenteight.payments.bridge.svb.oldetl.port.ExtractAlertEtlResponseUseCase;
 import com.silenteight.sep.base.aspects.logging.LogContext;
 
 import org.slf4j.MDC;
@@ -28,12 +27,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 class EtlService implements EtlUseCase {
 
-  private final ExtractAlertEtlResponseUseCase extractAlertEtlResponseUseCase;
-  private final AlertMessagePayloadUseCase alertMessagePayloadUseCase;
   private final CreateRecommendationUseCase createRecommendationUseCase;
   private final CmapiNotificationCreatorUseCase cmapiNotificationCreatorUseCase;
   private final ApplicationEventPublisher applicationEventPublisher;
   private final CreateDatasourceInputsUseCase createDatasourceInputs;
+  private final CreateAlertEtlResponseUseCase createAlertEtlResponseuseCase;
+  private final CreateMatchWatchlistDataUseCase createMatchWatchlistDataUseCase;
+  private final AlertMessagePayloadUseCase alertMessagePayloadUseCase;
 
   @LogContext
   @Override
@@ -46,11 +46,11 @@ class EtlService implements EtlUseCase {
     var alertMessageDto = getAlertMessageDto(alert);
 
     try {
-      var alertEtlResponse = extractAlertEtlResponseUseCase.createAlertEtlResponse(alertMessageDto);
+      var alertEtlResponse = createAlertEtlResponseuseCase.createAlertEtlResponse(alertMessageDto);
       createDatasourceInputs.processStructured(alert, alertEtlResponse.getHits());
 
       var hitAndWatchlistPartyData =
-          extractAlertEtlResponseUseCase.getWatchlistDataForMatch(alertMessageDto);
+          createMatchWatchlistDataUseCase.getWatchlistDataForMatch(alertMessageDto);
       createDatasourceInputs.processUnstructured(alert, hitAndWatchlistPartyData);
 
     } catch (UnsupportedMessageException exception) {

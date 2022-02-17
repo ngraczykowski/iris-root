@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
+import static java.util.stream.Collectors.toList;
+
 public class MessageData {
 
   private final List<MessageTag> tags;
@@ -29,6 +31,10 @@ public class MessageData {
   @Nonnull
   public Stream<String> findAllValues(String tagName) {
     return findAll(tagName).map(MessageTag::getValue);
+  }
+
+  public List<String> getAllMatchingTagValues(String tag, String matchingText) {
+    return findAllValues(tag).filter(s -> s.contains(matchingText)).collect(toList());
   }
 
   @Nonnull

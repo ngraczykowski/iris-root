@@ -1,9 +1,10 @@
-package com.silenteight.payments.bridge.svb.oldetl.response;
+package com.silenteight.payments.bridge.firco.datasource.model;
 
 import lombok.Builder;
 import lombok.Value;
 
 import com.silenteight.payments.bridge.common.dto.common.StatusInfoDto;
+import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import java.util.List;
 

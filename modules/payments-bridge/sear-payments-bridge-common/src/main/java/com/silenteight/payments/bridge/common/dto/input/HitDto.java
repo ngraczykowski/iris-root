@@ -76,6 +76,10 @@ public class HitDto implements Serializable {
     return getRulesContext().getType().equals("1");
   }
 
+  public boolean isNotBlocking() {
+    return !isBlocking();
+  }
+
   public String getMatchId(int sequenceIndex) {
     var sequenceNumber = sequenceIndex + 1;
     return hittedEntity.getId() + "(" + getTag() + ", #" + sequenceNumber + ")";

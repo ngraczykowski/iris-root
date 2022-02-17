@@ -10,22 +10,20 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.silenteight.payments.bridge.svb.oldetl.service.impl.TransactionMessage.getAllMatchingTexts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class TransactionMessageImplTest {
+class TransactionMessageTest {
 
   private static final String EXAMPLE_TAG = "TAG";
-
-  TransactionMessage transactionMessage;
 
   @ParameterizedTest
   @MethodSource("testDataProvider")
   void getAllMatchingTextsFunctionTests(
       String tagValue, String matchingTextString, List<String> allMatchingTexts) {
 
-    transactionMessage =
-        new TransactionMessageImpl(new MessageData(List.of(new MessageTag(EXAMPLE_TAG, tagValue))));
-    List<String> actual = transactionMessage.getAllMatchingTexts(EXAMPLE_TAG, matchingTextString);
+    var messageData = new MessageData(List.of(new MessageTag(EXAMPLE_TAG, tagValue)));
+    List<String> actual = getAllMatchingTexts(messageData, EXAMPLE_TAG, matchingTextString);
     assertEquals(allMatchingTexts, actual);
   }
 
