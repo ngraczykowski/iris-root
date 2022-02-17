@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package silenteight.agent.historicaldecisions.v1.api;
+
+import "google/api/field_behavior.proto";
+import public "silenteight/agent/historicaldecisions/v1/api/common.proto";
+
+option java_package = "com.silenteight.proto.agent.histdecisions.v1.api";
+option java_outer_classname = "ContextualLearningAgentApiProto";
+option java_multiple_files = true;
+
+service ContextualLearningAgent {
+
+  rpc VerifyContext (VerifyContextRequest) returns (VerifyContextResponse) {
+  }
+}
+
+message VerifyContextRequest {
+  string match_text = 1 [(google.api.field_behavior) = REQUIRED];
+  string matching_field = 2 [(google.api.field_behavior) = REQUIRED];
+  WatchlistParty watchlist_party = 3 [(google.api.field_behavior) = REQUIRED];
+  Discriminator discriminator = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+message VerifyContextResponse {
+  string solution = 1 [(google.api.field_behavior) = REQUIRED];
+  HistoricalDecisionsReason reason = 2 [(google.api.field_behavior) = REQUIRED];
+}
