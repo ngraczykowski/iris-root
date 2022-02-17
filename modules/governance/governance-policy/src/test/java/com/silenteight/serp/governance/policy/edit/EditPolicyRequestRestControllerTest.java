@@ -28,7 +28,7 @@ import static com.silenteight.sens.governance.common.testing.rest.TestRoles.APPR
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.MODEL_TUNER;
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.QA;
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.USER_ADMINISTRATOR;
-import static com.silenteight.serp.governance.policy.domain.TestFixtures.POLICY_NAME;
+import static com.silenteight.serp.governance.policy.domain.SharedTestFixtures.POLICY_NAME;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
@@ -54,7 +54,7 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
 
   @ParameterizedTest
   @MethodSource(
-      "com.silenteight.serp.governance.policy.domain.TestFixtures#getPolicyNames"
+      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getPolicyNames"
   )
   @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its200_whenPolicyEdited(String policyName) {
@@ -140,7 +140,7 @@ class EditPolicyRequestRestControllerTest extends BaseRestControllerTest {
 
   @ParameterizedTest
   @MethodSource(
-      "com.silenteight.serp.governance.policy.domain.TestFixtures#getIncorrectPolicyNames"
+      "com.silenteight.serp.governance.policy.domain.SharedTestFixtures#getIncorrectPolicyNames"
   )
   @WithMockUser(username = USERNAME, authorities = MODEL_TUNER)
   void its400_whenPolicyNameLengthIsWrong(String policyName) {

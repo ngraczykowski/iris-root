@@ -13,6 +13,8 @@ import java.util.UUID;
 import javax.persistence.PersistenceException;
 
 import static com.silenteight.serp.governance.policy.domain.DomainConstants.MAX_STEP_NAME_LENGTH;
+import static com.silenteight.serp.governance.policy.domain.SharedTestFixtures.POLICY_NAME;
+import static com.silenteight.serp.governance.policy.domain.SharedTestFixtures.USER;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static com.silenteight.serp.governance.policy.domain.TestFixtures.*;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;

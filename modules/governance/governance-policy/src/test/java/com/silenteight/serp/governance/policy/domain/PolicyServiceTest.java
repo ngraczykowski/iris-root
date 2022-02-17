@@ -28,6 +28,8 @@ import java.util.stream.Stream;
 import static com.silenteight.sens.governance.common.testing.rest.TestRoles.MODEL_TUNER;
 import static com.silenteight.serp.governance.policy.domain.Condition.IS;
 import static com.silenteight.serp.governance.policy.domain.PolicyState.*;
+import static com.silenteight.serp.governance.policy.domain.SharedTestFixtures.POLICY_NAME;
+import static com.silenteight.serp.governance.policy.domain.SharedTestFixtures.USER;
 import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LOGIC;
 import static com.silenteight.serp.governance.policy.domain.StepType.NARROW;
 import static com.silenteight.serp.governance.policy.domain.TestFixtures.*;
