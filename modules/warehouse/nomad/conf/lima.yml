@@ -179,7 +179,7 @@ warehouse.reports.v2:
                  sim.payload ->> 'recommendation_recommended_action',
                  match.payload ->> 'recommendation_create_time',
                  sim.payload ->> 'recommendation_create_time',
-                 sim.payload ->> 'recommendation_comment';
+                 sim.payload ->> 'recommendation_comment'
 
     - name: AI_REASONING_MATCH_LEVEL
       type: simulation
@@ -249,7 +249,7 @@ warehouse.reports.v2:
                  sim.payload ->> 'recommendation_comment',
                  prod.payload ->> 'analyst_decision',
                  prod.payload ->> 'DN_CASE.modifiedDateTime',
-                 prod.payload ->> 'lastCaseComment';
+                 prod.payload ->> 'lastCaseComment'
 
     - name: ACCURACY_MATCH_LEVEL
       type: simulation
@@ -277,4 +277,4 @@ warehouse.reports.v2:
                  JOIN warehouse_match match ON sim.id = match.alert_id
         WHERE (prod.recommendation_date BETWEEN DATE '${from}' AND DATE '${to}')
           AND prod.payload ->> 'analyst_decision' IN
-              ('analyst_decision_false_positive', 'analyst_decision_true_positive');
+              ('analyst_decision_false_positive', 'analyst_decision_true_positive')
