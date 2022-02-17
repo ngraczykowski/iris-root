@@ -63,6 +63,7 @@ libraries.liquibase = [group: 'org.liquibase', name: 'liquibase-core', version: 
 
 // GRPC
 libraries.grpc_spring_boot_starter = [group: 'net.devh', name: 'grpc-spring-boot-starter', version: '2.13.0.RELEASE']
+libraries.grpc_brave_instrumentation = [group: 'io.zipkin.brave', name: 'brave-instrumentation-grpc', version: '5.13.2']
 
 // Testing
 libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion]
@@ -139,6 +140,7 @@ dependencies {
   runtimeOnly libraries.sentry_spring_boot_starter
   implementation libraries.spring_rabbit
   implementation libraries.lz4_java
+  implementation libraries.grpc_brave_instrumentation
 
   testImplementation libraries.groovy_all
   testImplementation libraries.spock_core
