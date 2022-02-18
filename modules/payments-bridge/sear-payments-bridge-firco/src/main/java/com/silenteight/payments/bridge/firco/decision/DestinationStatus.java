@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.firco.decision;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
-import com.silenteight.payments.bridge.common.dto.common.StatusInfoDto;
+import com.silenteight.payments.bridge.firco.dto.input.StatusInfoDto;
 
 import static lombok.AccessLevel.PRIVATE;
 

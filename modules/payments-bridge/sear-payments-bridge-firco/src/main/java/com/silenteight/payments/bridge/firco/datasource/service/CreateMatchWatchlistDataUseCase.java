@@ -3,10 +3,10 @@ package com.silenteight.payments.bridge.firco.datasource.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.etl.parser.domain.MessageFormat;
 import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
+import com.silenteight.payments.bridge.firco.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
 
 import org.springframework.stereotype.Service;

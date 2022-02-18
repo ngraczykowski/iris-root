@@ -3,7 +3,6 @@ package com.silenteight.payments.bridge.firco.callback.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.common.dto.output.ClientRequestDto;
 import com.silenteight.payments.bridge.common.resource.ResourceName;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePayloadUseCase;
@@ -13,6 +12,7 @@ import com.silenteight.payments.bridge.firco.callback.model.NonRecoverableCallba
 import com.silenteight.payments.bridge.firco.callback.model.RecoverableCallbackException;
 import com.silenteight.payments.bridge.firco.callback.port.AlertDeliveredPublisherPort;
 import com.silenteight.payments.bridge.firco.callback.port.SendResponseUseCase;
+import com.silenteight.payments.bridge.firco.dto.output.ClientRequestDto;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationId;
 import com.silenteight.payments.bridge.firco.recommendation.port.GetRecommendationUseCase;
 import com.silenteight.proto.payments.bridge.internal.v1.event.ResponseCompleted;

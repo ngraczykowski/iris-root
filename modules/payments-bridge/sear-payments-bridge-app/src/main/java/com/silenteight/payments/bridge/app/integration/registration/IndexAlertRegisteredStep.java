@@ -3,11 +3,11 @@ package com.silenteight.payments.bridge.app.integration.registration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
-import com.silenteight.payments.bridge.common.dto.input.RequestHitDto;
 import com.silenteight.payments.bridge.common.model.AeAlert;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessageStatusUseCase;
+import com.silenteight.payments.bridge.firco.dto.input.AlertMessageDto;
+import com.silenteight.payments.bridge.firco.dto.input.RequestHitDto;
 import com.silenteight.payments.bridge.warehouse.index.model.IndexAlertRegisteredRequest;
 import com.silenteight.payments.bridge.warehouse.index.model.learning.IndexMatch;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexAlertRegisteredUseCase;

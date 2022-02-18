@@ -3,7 +3,6 @@ package com.silenteight.payments.bridge.firco.datasource.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.common.model.AeAlert;
 import com.silenteight.payments.bridge.firco.alertmessage.model.AlertMessageStatus;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePayloadUseCase;
@@ -11,6 +10,7 @@ import com.silenteight.payments.bridge.firco.datasource.model.CmapiNotificationR
 import com.silenteight.payments.bridge.firco.datasource.port.CmapiNotificationCreatorUseCase;
 import com.silenteight.payments.bridge.firco.datasource.port.CreateDatasourceInputsUseCase;
 import com.silenteight.payments.bridge.firco.datasource.port.EtlUseCase;
+import com.silenteight.payments.bridge.firco.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.firco.recommendation.model.BridgeSourcedRecommendation;
 import com.silenteight.payments.bridge.firco.recommendation.model.RecommendationReason;
 import com.silenteight.payments.bridge.firco.recommendation.port.CreateRecommendationUseCase;

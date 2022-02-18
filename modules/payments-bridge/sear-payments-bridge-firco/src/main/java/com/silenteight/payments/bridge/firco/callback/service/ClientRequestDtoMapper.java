@@ -2,12 +2,12 @@ package com.silenteight.payments.bridge.firco.callback.service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
-import com.silenteight.payments.bridge.common.dto.input.NextStatusDto;
-import com.silenteight.payments.bridge.common.dto.output.*;
 import com.silenteight.payments.bridge.common.model.AlertData;
 import com.silenteight.payments.bridge.firco.decision.MapStatusRequest;
 import com.silenteight.payments.bridge.firco.decision.MapStatusUseCase;
+import com.silenteight.payments.bridge.firco.dto.input.AlertMessageDto;
+import com.silenteight.payments.bridge.firco.dto.input.NextStatusDto;
+import com.silenteight.payments.bridge.firco.dto.output.*;
 import com.silenteight.payments.bridge.firco.recommendation.model.Recommendation;
 import com.silenteight.payments.bridge.svb.oldetl.util.StringUtil;
 

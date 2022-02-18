@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
-import com.silenteight.payments.bridge.common.dto.input.CaseManagerAuthenticationDto;
-import com.silenteight.payments.bridge.common.dto.input.RequestDto;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
+import com.silenteight.payments.bridge.firco.dto.input.AlertMessageDto;
+import com.silenteight.payments.bridge.firco.dto.input.CaseManagerAuthenticationDto;
+import com.silenteight.payments.bridge.firco.dto.input.RequestDto;
 
 import org.springframework.util.AlternativeJdkIdGenerator;
 import org.springframework.util.IdGenerator;

@@ -1,6 +1,6 @@
 package com.silenteight.payments.bridge.firco.alertmessage.port;
 
-import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
+import com.silenteight.payments.bridge.firco.dto.input.AlertMessageDto;
 
 import java.util.UUID;
 

@@ -3,10 +3,10 @@ package com.silenteight.payments.bridge.firco.callback.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.common.dto.common.AckDto;
-import com.silenteight.payments.bridge.common.dto.output.ClientRequestDto;
 import com.silenteight.payments.bridge.firco.callback.model.NonRecoverableCallbackException;
 import com.silenteight.payments.bridge.firco.callback.model.RecoverableCallbackException;
+import com.silenteight.payments.bridge.firco.dto.output.AckDto;
+import com.silenteight.payments.bridge.firco.dto.output.ClientRequestDto;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.http.ResponseEntity;

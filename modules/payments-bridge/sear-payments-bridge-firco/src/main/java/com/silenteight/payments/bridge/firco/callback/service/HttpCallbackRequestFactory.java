@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.firco.callback.service;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.common.dto.output.ClientRequestDto;
+import com.silenteight.payments.bridge.firco.dto.output.ClientRequestDto;
 
 import org.springframework.web.client.RestTemplate;
 

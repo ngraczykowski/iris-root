@@ -2,8 +2,8 @@ package com.silenteight.payments.bridge.firco.alertmessage.service;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
 import com.silenteight.payments.bridge.firco.alertmessage.port.AlertMessagePayloadUseCase;
+import com.silenteight.payments.bridge.firco.dto.input.AlertMessageDto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;

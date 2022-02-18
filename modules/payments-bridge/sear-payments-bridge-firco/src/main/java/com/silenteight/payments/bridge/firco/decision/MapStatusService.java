@@ -3,11 +3,11 @@ package com.silenteight.payments.bridge.firco.decision;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.common.dto.common.StatusInfoDto;
 import com.silenteight.payments.bridge.firco.decision.decisionmapping.StateMappingStrategySelector;
 import com.silenteight.payments.bridge.firco.decision.statemapping.StateMappingStrategy;
 import com.silenteight.payments.bridge.firco.decision.statemapping.StateMappingStrategy.MapStateInput;
 import com.silenteight.payments.bridge.firco.decision.statemapping.StateMappingStrategy.MapStateOutput;
+import com.silenteight.payments.bridge.firco.dto.input.StatusInfoDto;
 
 import org.springframework.stereotype.Service;
 

@@ -3,9 +3,9 @@ package com.silenteight.payments.bridge.app.integration;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.PaymentsBridgeApplication;
-import com.silenteight.payments.bridge.common.dto.input.RequestDto;
 import com.silenteight.payments.bridge.firco.alertmessage.model.FircoAlertMessage;
 import com.silenteight.payments.bridge.firco.alertmessage.port.CreateAlertMessageUseCase;
+import com.silenteight.payments.bridge.firco.dto.input.RequestDto;
 import com.silenteight.payments.bridge.mock.ae.MockAlertUseCase;
 import com.silenteight.payments.bridge.mock.datasource.MockDatasourceService;
 import com.silenteight.payments.bridge.mock.warehouse.MockWarehouseService;

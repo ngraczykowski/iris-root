@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.firco.alertmessage.model;
 
 import lombok.*;
 
-import com.silenteight.payments.bridge.common.dto.input.AlertMessageDto;
+import com.silenteight.payments.bridge.firco.dto.input.AlertMessageDto;
 
 import java.time.OffsetDateTime;
 import java.util.Map;

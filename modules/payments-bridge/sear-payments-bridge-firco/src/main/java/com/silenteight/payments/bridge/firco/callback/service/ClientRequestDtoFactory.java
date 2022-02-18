@@ -1,9 +1,9 @@
 package com.silenteight.payments.bridge.firco.callback.service;
 
-import com.silenteight.payments.bridge.common.dto.output.AlertDecisionMessageDto;
-import com.silenteight.payments.bridge.common.dto.output.ClientRequestDto;
-import com.silenteight.payments.bridge.common.dto.output.ReceiveDecisionDto;
-import com.silenteight.payments.bridge.common.dto.output.ReceiveDecisionMessageDto;
+import com.silenteight.payments.bridge.firco.dto.output.AlertDecisionMessageDto;
+import com.silenteight.payments.bridge.firco.dto.output.ClientRequestDto;
+import com.silenteight.payments.bridge.firco.dto.output.ReceiveDecisionDto;
+import com.silenteight.payments.bridge.firco.dto.output.ReceiveDecisionMessageDto;
 
 import org.springframework.stereotype.Component;
 
