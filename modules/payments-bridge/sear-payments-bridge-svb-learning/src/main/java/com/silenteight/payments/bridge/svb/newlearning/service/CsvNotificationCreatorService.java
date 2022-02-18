@@ -70,7 +70,6 @@ class CsvNotificationCreatorService implements LearningCsvNotificationCreatorUse
             + "<p>File name: %s</p>\n"
             + "<p>Number of successfully processed records: %d</p>\n"
             + "<p>Number of unprocessed records: %d</p>\n"
-            + "<p>File size: %d</p>\n"
             + "<p></p>"
             + "<p>Thank you.</p>"
             + "<p>Silent Eight</p>"
@@ -78,8 +77,7 @@ class CsvNotificationCreatorService implements LearningCsvNotificationCreatorUse
             + "</html>\n",
         learningCsvNotificationRequest.getFileName(),
         learningCsvNotificationRequest.getNumberOfSuccessfulAlerts(),
-        learningCsvNotificationRequest.getNumberOfFailedAlerts(),
-        learningCsvNotificationRequest.getFileLength());
+        learningCsvNotificationRequest.getNumberOfFailedAlerts());
   }
 
   private static String getSubject(int numberOfFailedAlerts) {
