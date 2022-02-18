@@ -47,10 +47,10 @@ class CreateSsoMappingRestControllerTest extends BaseRestControllerTest {
 
   @ParameterizedTest
   @MethodSource("getDtosWithInvalidFieldsLength")
-  void its400WhenFieldLengthIsNotValid(CreateSsoMappingDto createRoleDto) {
+  void its400WhenFieldLengthIsNotValid(CreateSsoMappingDto createSsoMappingDto) {
     doNothing().when(createSsoMappingUseCase).activate(any());
 
-    post(CREATE_SSO_MAPPING_URL, createRoleDto)
+    post(CREATE_SSO_MAPPING_URL, createSsoMappingDto)
         .statusCode(BAD_REQUEST.value());
   }
 
