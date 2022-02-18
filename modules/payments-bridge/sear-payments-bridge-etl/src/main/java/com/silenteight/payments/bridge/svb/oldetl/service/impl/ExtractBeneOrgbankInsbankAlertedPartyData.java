@@ -37,10 +37,10 @@ public class ExtractBeneOrgbankInsbankAlertedPartyData implements AlertedPartyDa
 
       String accountNumber = tagValueLines.get(LINE_2);
       String name = tagValueLines.get(LINE_3);
-      String address = tagValueLines.size() > 3 ?
+      String address = lastLine + 1 > 3 ?
                        String.join(" ", tagValueLines.subList(LINE_4, lastLine)) :
                        "";
-      String ctryTown = tagValueLines.size() > 3 ?
+      String ctryTown = lastLine + 1 > 3 ?
                         tagValueLines.get(lastLine).trim() :
                         "";
       String nameAddress = String.join(" ", tagValueLines.subList(LINE_3, lastLine + 1));
