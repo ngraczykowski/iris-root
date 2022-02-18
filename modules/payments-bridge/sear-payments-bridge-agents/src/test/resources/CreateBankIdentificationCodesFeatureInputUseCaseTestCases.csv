@@ -1,0 +1,5 @@
+feature,fieldValue,matchingText,solutionType,searchCodes,passports,natIds,bics,expectedFeature,expectedAlertedPartyMatchingField,expectedWatchlistMatchingText,expectedWatchlistSearchCodes
+bankIdentificationCodes,3302306795\n,3302306795,SEARCH_CODE,3302306795,ARX53324354,"","",features/bankIdentificationCodes,3302306795\n,3302306795,3302306795
+bankIdentificationCodes,3302306795\n,3302306795,SEARCH_CODE,3302306795,"",AH34234546,"",features/bankIdentificationCodes,3302306795\n,3302306795,3302306795
+bankIdentificationCodes,"3300354583\nHARA COMPANY\nFLAT 1 4, 15AOSWALD \nGLASGOW\nUS\n",HARA COMPANY,NAME,"","","","",features/bankIdentificationCodes,"3300354583\nHARA COMPANY\nFLAT 1 4, 15AOSWALD \nGLASGOW\nUS\n",HARA COMPANY,""
+bankIdentificationCodes,AC\n3301503787\nADDR LINE 1 063301503787\nDBA RIPPLING\n55 2ND STREET\nSUITE 1500\nUS\n,5137746065001,NATIONAL_ID,231231,"",5137746065001,"",features/bankIdentificationCodes,AC\n3301503787\nADDR LINE 1 063301503787\nDBA RIPPLING\n55 2ND STREET\nSUITE 1500\nUS\n,5137746065001,5137746065001

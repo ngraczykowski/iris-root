@@ -1,23 +1,27 @@
 package com.silenteight.payments.bridge.firco.datasource.service.process.agent;
 
+import lombok.RequiredArgsConstructor;
+
 import com.silenteight.datasource.agentinput.api.v1.FeatureInput;
 import com.silenteight.datasource.api.bankidentificationcodes.v1.BankIdentificationCodesFeatureInput;
-import com.silenteight.payments.bridge.common.dto.common.SolutionType;
-import com.silenteight.payments.bridge.svb.oldetl.response.HitAndWatchlistPartyData;
+import com.silenteight.payments.bridge.agents.model.BankIdentificationCodesAgentsRequest;
+import com.silenteight.payments.bridge.agents.port.CreateBankIdentificationCodesFeatureInputUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.HitData;
 
 import com.google.protobuf.Any;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static com.silenteight.payments.bridge.common.app.AgentsUtils.BANK_IDENTIFICATION_CODES_FEATURE;
 
 @Component
+@RequiredArgsConstructor
 class IdentificationMismatchAgentEtlProcess
     extends BaseAgentEtlProcess<BankIdentificationCodesFeatureInput> {
+
+  private final CreateBankIdentificationCodesFeatureInputUseCase
+      createBankIdentificationCodesFeatureInputUseCase;
 
   @Override
   protected List<FeatureInput> createDataSourceFeatureInputs(HitData hitData) {
@@ -30,60 +34,21 @@ class IdentificationMismatchAgentEtlProcess
     return List.of(featureInput);
   }
 
-  private static BankIdentificationCodesFeatureInput createBankIdentificationFeatureInput(
+  private BankIdentificationCodesFeatureInput createBankIdentificationFeatureInput(
       HitData hitData) {
 
-    var fieldValue = Optional.of(hitData)
-        .map(HitData::getHitAndWlPartyData)
-        .map(HitAndWatchlistPartyData::getFieldValue)
-        .orElse("");
-    var matchingText = Optional.of(hitData)
-        .map(HitData::getHitAndWlPartyData)
-        .map(HitAndWatchlistPartyData::getMatchingText)
-        .orElse("");
-
-    return BankIdentificationCodesFeatureInput
-        .newBuilder()
-        .setAlertedPartyMatchingField(fieldValue)
-        .setWatchlistMatchingText(matchingText)
-        .setFeature(getFullFeatureName(BANK_IDENTIFICATION_CODES_FEATURE))
-        .addAllWatchlistSearchCodes(setWatchlistSearchCodes(hitData))
+    var bankIdentificationCodesAgentsRequest = BankIdentificationCodesAgentsRequest.builder()
+        .feature(BANK_IDENTIFICATION_CODES_FEATURE)
+        .fieldValue(hitData.getFieldValue())
+        .matchingText(hitData.getMatchingText())
+        .solutionType(hitData.getSolutionType())
+        .searchCodes(hitData.getSearchCodes())
+        .passports(hitData.getPassports())
+        .natIds(hitData.getNatIds())
+        .bics(hitData.getBics())
         .build();
-  }
 
-  private static List<String> setWatchlistSearchCodes(HitData hitData) {
-    var solutionType = Optional.of(hitData)
-        .map(HitData::getHitAndWlPartyData)
-        .map(HitAndWatchlistPartyData::getSolutionType)
-        .orElse(null);
-
-    var searchCodes = Optional.of(hitData)
-        .map(HitData::getHitAndWlPartyData)
-        .map(HitAndWatchlistPartyData::getSearchCodes)
-        .orElseGet(Collections::emptyList);
-    var passports = Optional.of(hitData)
-        .map(HitData::getHitAndWlPartyData)
-        .map(HitAndWatchlistPartyData::getPassports)
-        .orElseGet(Collections::emptyList);
-    var natIds = Optional.of(hitData)
-        .map(HitData::getHitAndWlPartyData)
-        .map(HitAndWatchlistPartyData::getNatIds)
-        .orElseGet(Collections::emptyList);
-    var bics = Optional.of(hitData)
-        .map(HitData::getHitAndWlPartyData)
-        .map(HitAndWatchlistPartyData::getBics)
-        .orElseGet(Collections::emptyList);
-
-    if (SolutionType.SEARCH_CODE == solutionType) {
-      return searchCodes;
-    } else if (SolutionType.PASSPORT == solutionType) {
-      return passports;
-    } else if (SolutionType.NATIONAL_ID == solutionType) {
-      return natIds;
-    } else if (SolutionType.BIC == solutionType) {
-      return bics;
-    }
-
-    return Collections.emptyList();
+    return createBankIdentificationCodesFeatureInputUseCase.create(
+        bankIdentificationCodesAgentsRequest);
   }
 }
