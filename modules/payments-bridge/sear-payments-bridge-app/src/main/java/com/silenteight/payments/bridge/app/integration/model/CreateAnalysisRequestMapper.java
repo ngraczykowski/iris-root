@@ -2,6 +2,7 @@ package com.silenteight.payments.bridge.app.integration.model;
 
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
+import com.silenteight.adjudication.api.v1.Analysis.NotificationFlags;
 import com.silenteight.adjudication.api.v1.CreateAnalysisRequest;
 import com.silenteight.payments.bridge.governance.solvingmodel.model.AnalysisModel;
 
@@ -33,7 +34,17 @@ public class CreateAnalysisRequestMapper {
                     toList()))
             .setPolicy(model.getPolicyName())
             .setStrategy(model.getStrategyName())
+            .setNotificationFlags(notificationFlags())
             .build())
+        .build();
+  }
+
+  @Nonnull
+  private NotificationFlags notificationFlags() {
+    return NotificationFlags
+        .newBuilder()
+        .setAttachMetadata(true)
+        .setAttachRecommendation(true)
         .build();
   }
 
