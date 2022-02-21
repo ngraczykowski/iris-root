@@ -2,6 +2,7 @@ package com.silenteight.adjudication.engine.analysis.commentinput.jdbc;
 
 import lombok.RequiredArgsConstructor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,5 +24,10 @@ class CommentInputConfiguration {
   SelectMissingAlertCommentInputQuery selectMissingAlertCommentInputQuery() {
     return new SelectMissingAlertCommentInputQuery(
         jdbcTemplate, properties.getMissingBatchSizeSelect());
+  }
+
+  @Bean
+  SelectCommentInputByAlertIdQuery selectCommentInputByAlertIdQuery(ObjectMapper objectMapper) {
+    return new SelectCommentInputByAlertIdQuery(jdbcTemplate, objectMapper);
   }
 }

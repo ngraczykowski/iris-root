@@ -45,7 +45,9 @@ public class AlertRecommendation {
 
   long[] matchIds;
 
-  public Recommendation toRecommendation(String comment) {
+  String comment;
+
+  public Recommendation toRecommendation() {
     return Recommendation
         .newBuilder()
         .setAlert("alerts/" + getAlertId())
@@ -63,10 +65,10 @@ public class AlertRecommendation {
             matches, analysisId, recommendationId, alertId, matchIds));
   }
 
-  public RecommendationWithMetadata toRecommendationWithMetadata(String comment) {
+  public RecommendationWithMetadata toRecommendationWithMetadata() {
     return RecommendationWithMetadata
         .newBuilder()
-        .setRecommendation(toRecommendation(comment))
+        .setRecommendation(toRecommendation())
         .setMetadata(toMetadata())
         .build();
   }

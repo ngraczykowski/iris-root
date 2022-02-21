@@ -15,4 +15,14 @@
         viewName="ae_analysis_query"
         path="db/changelog/sql/view_ae_analysis_query_v4.sql"/>
   </changeSet>
+  <changeSet id="adjudication-engine-analysis-1.8.0_2" author="msitarski">
+    <addColumn tableName="ae_recommendation">
+      <column name="comment" type="TEXT"/>
+    </addColumn>
+
+    <dropView viewName="ae_alert_recommendation_query"/>
+    <createView
+        viewName="ae_alert_recommendation_query"
+        path="db/changelog/sql/view_ae_alert_recommendation_query_v3.sql"/>
+  </changeSet>
 </databaseChangeLog>

@@ -18,6 +18,7 @@ import java.util.Optional;
 class GenerateAndSaveRecommendationUseCase {
 
   private final GenerateRecommendationsUseCase generateRecommendationsUseCase;
+
   private final CreateRecommendationsUseCase createRecommendationsUseCase;
 
   Optional<RecommendationsGenerated> generateAndSaveRecommendations(String analysisName) {

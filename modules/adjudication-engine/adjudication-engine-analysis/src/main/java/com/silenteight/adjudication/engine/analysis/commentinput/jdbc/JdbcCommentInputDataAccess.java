@@ -9,6 +9,7 @@ import com.silenteight.adjudication.engine.analysis.commentinput.domain.MissingC
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -17,10 +18,17 @@ import java.util.Optional;
 class JdbcCommentInputDataAccess implements CommentInputDataAccess {
 
   private final SelectMissingAlertCommentInputQuery selectMissingAlertCommentInputQuery;
+  private final SelectCommentInputByAlertIdQuery selectCommentInputByAlertIdQuery;
 
   @Override
   @Transactional(readOnly = true)
   public Optional<MissingCommentInputsResult> getMissingCommentInputs(long analysisId) {
     return selectMissingAlertCommentInputQuery.execute(analysisId);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<Map<String, Object>> getCommentInputByAlertId(long alertId) {
+    return selectCommentInputByAlertIdQuery.execute(alertId);
   }
 }

@@ -35,6 +35,7 @@ class InsertAlertRecommendationsQuery {
   public static final String RECOMMENDED_ACTION_COLUMN = "recommended_action";
   public static final String ANALYSIS_ID_COLUMN = "analysis_id";
   public static final String ALERT_ID_COLUMN = "alert_id";
+  public static final String COMMENT = "comment";
 
   private final SqlUpdate sql;
 
@@ -44,9 +45,12 @@ class InsertAlertRecommendationsQuery {
     sql.setJdbcTemplate(jdbcTemplate);
     sql.setSql(
         "INSERT INTO ae_recommendation ("
-            + "analysis_id, alert_id, created_at, recommended_action, match_ids, match_contexts)\n"
+            + "analysis_id, alert_id, created_at, recommended_action, match_ids, "
+            + "match_contexts, comment"
+            + ")\n"
             + "VALUES ("
-            + ":analysis_id, :alert_id, NOW(), :recommended_action, :match_ids, :match_contexts)\n"
+            + ":analysis_id, :alert_id, now(), :recommended_action, :match_ids, :match_contexts, "
+            + ":comment)\n"
             + "ON CONFLICT DO NOTHING\n"
             + "RETURNING recommendation_id, analysis_id, alert_id;");
     sql.declareParameter(new SqlParameter(ALERT_ID_COLUMN, Types.BIGINT));
@@ -54,6 +58,7 @@ class InsertAlertRecommendationsQuery {
     sql.declareParameter(new SqlParameter(RECOMMENDED_ACTION_COLUMN, Types.VARCHAR));
     sql.declareParameter(new SqlParameter(MATCH_IDS_COLUMN, Types.ARRAY));
     sql.declareParameter(new SqlParameter(MATCH_CONTEXTS_COLUMN, Types.OTHER));
+    sql.declareParameter(new SqlParameter(COMMENT, Types.VARCHAR));
     sql.setReturnGeneratedKeys(true);
 
     sql.compile();
@@ -76,7 +81,8 @@ class InsertAlertRecommendationsQuery {
             ANALYSIS_ID_COLUMN, alertRecommendation.getAnalysisId(),
             RECOMMENDED_ACTION_COLUMN, alertRecommendation.getRecommendedAction(),
             MATCH_IDS_COLUMN, alertRecommendation.getMatchIds(),
-            MATCH_CONTEXTS_COLUMN, writeMatchContexts(alertRecommendation.getMatchContexts()));
+            MATCH_CONTEXTS_COLUMN, writeMatchContexts(alertRecommendation.getMatchContexts()),
+            COMMENT, alertRecommendation.getComment());
 
     sql.updateByNamedParam(paramMap, keyHolder);
 

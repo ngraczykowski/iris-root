@@ -2,30 +2,32 @@ package com.silenteight.adjudication.engine.analysis.recommendation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.engine.analysis.analysis.AnalysisFacade;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertSolution;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlert;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.PendingAlerts;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRecommendationRequest;
+import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputDataAccess;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.*;
+import com.silenteight.adjudication.engine.comments.comment.domain.AlertContext;
+import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 import com.silenteight.solving.api.v1.BatchSolveAlertsRequest;
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
 import com.silenteight.solving.api.v1.SolveAlertSolutionResponse;
 
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
+import javax.annotation.Nonnull;
 
 import static java.util.stream.Collectors.toList;
 
+@SuppressWarnings("FeatureEnvy")
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -34,6 +36,8 @@ class GenerateRecommendationsUseCase {
   private final AlertSolvingClient client;
   private final RecommendationDataAccess recommendationDataAccess;
   private final AnalysisFacade analysisFacade;
+  private final GenerateCommentsUseCase generateCommentsUseCase;
+  private final CommentInputDataAccess commentInputDataAccess;
 
   @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "recommendation" })
   List<RecommendationInfo> generateRecommendations(
@@ -86,17 +90,17 @@ class GenerateRecommendationsUseCase {
     return recommendationInfos;
   }
 
-  private boolean isShouldMetadataAttached(Analysis analysis) {
+  private static boolean isShouldMetadataAttached(Analysis analysis) {
     return analysis != null && analysis.getNotificationFlags().getAttachMetadata();
   }
 
-  private boolean shouldRecommendationBeAttached(Analysis analysis) {
+  private static boolean shouldRecommendationBeAttached(Analysis analysis) {
     return analysis != null && analysis.getNotificationFlags().getAttachRecommendation();
   }
 
 
   @NotNull
-  private static List<AlertSolution> createAlertSolutions(
+  private List<AlertSolution> createAlertSolutions(
       PendingAlerts alerts, BatchSolveAlertsResponse response) {
 
     return response
@@ -121,23 +125,54 @@ class GenerateRecommendationsUseCase {
     return Optional.of(pendingAlerts.toBatchSolveAlertsRequest(strategy));
   }
 
-  private static AlertSolution createAlertSolution(
+  private AlertSolution createAlertSolution(
       PendingAlerts alerts, SolveAlertSolutionResponse response) {
 
     var alertId = ResourceName.create(response.getAlertName()).getLong("alerts");
     var pendingAlert = getPendingAlert(alerts, alertId);
+    var comment =
+        generateComment(response.getAlertSolution(), alertId, pendingAlert.getMatchContexts());
     return AlertSolution.builder()
         .alertId(alertId)
         .recommendedAction(response.getAlertSolution())
         .matchIds(pendingAlert.getMatchIds())
         .matchContexts(pendingAlert.getMatchContexts())
+        .comment(comment)
         .build();
   }
 
-  private void debug(final String message, final Object... parameters) {
+  private static void debug(final String message, final Object... parameters) {
     if (log.isDebugEnabled()) {
       log.debug(message, parameters);
     }
+  }
+
+  private String generateComment(
+      String alertSolution, long alertId, ObjectNode[] matchContexts) {
+
+    var commentInput =
+        commentInputDataAccess.getCommentInputByAlertId(alertId).orElse(Collections.emptyMap());
+
+    var generateCommentsRequest = new GenerateCommentsRequest(AlertContext.builder()
+        .alertId(String.valueOf(alertId))
+        .commentInput(commentInput)
+        .recommendedAction(alertSolution)
+        .matches(generateMatchContexts(matchContexts))
+        .build());
+
+    return generateCommentsUseCase
+        .generateComments(generateCommentsRequest)
+        .getComment();
+  }
+
+  @Nonnull
+  private static List<MatchContext> generateMatchContexts(ObjectNode[] matchContextsObjectNodes) {
+
+    ObjectMapper mapper = new ObjectMapper();
+
+    return Arrays.stream(matchContextsObjectNodes)
+        .map(mc -> mapper.convertValue(mc, MatchContext.class))
+        .collect(toList());
   }
 
   private static PendingAlert getPendingAlert(PendingAlerts alerts, long alertId) {

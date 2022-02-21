@@ -55,6 +55,7 @@ class AlertRecommendationMapper implements RowMapper<AlertRecommendation> {
         .createdTime(rs.getTimestamp(4))
         .alertContext(alertContext)
         .matchIds((long[]) ArrayUtils.toPrimitive(rs.getArray(9).getArray()))
+        .comment(rs.getString("comment"))
         .build();
   }
 }

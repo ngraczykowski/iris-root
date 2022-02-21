@@ -29,6 +29,7 @@ public class RecommendationFixture {
         .createdTime(Timestamp.valueOf("1983-05-24 12:34:56.0000"))
         .alertContext(createAlertContext())
         .matchIds(LongStream.range(1, 5).toArray())
+        .comment("")
         .build();
   }
 
@@ -46,6 +47,7 @@ public class RecommendationFixture {
         .matchContexts(new ObjectNode[] {
             MAPPER.convertValue(createMatchContext(), ObjectNode.class)
         })
+        .comment("")
         .build();
   }
 

@@ -4,6 +4,8 @@ import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.NotificationFlags;
 import com.silenteight.adjudication.api.v1.RecommendationsGenerated.RecommendationInfo;
 import com.silenteight.adjudication.engine.analysis.analysis.AnalysisFacade;
+import com.silenteight.adjudication.engine.analysis.commentinput.CommentInputDataAccess;
+import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsResponse;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.SaveRecommendationRequest;
 import com.silenteight.solving.api.v1.BatchSolveAlertsResponse;
 import com.silenteight.solving.api.v1.SolveAlertSolutionResponse;
@@ -14,7 +16,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,6 +32,11 @@ class GenerateRecommendationsUseCaseTest {
   private AlertSolvingClient client;
   @Mock
   private AnalysisFacade analysisFacade;
+  @Mock
+  private GenerateCommentsUseCase generateCommentsUseCase;
+  @Mock
+  private CommentInputDataAccess commentInputDataAccess;
+
   private int handledRecommendation;
 
   @BeforeEach
@@ -35,7 +44,8 @@ class GenerateRecommendationsUseCaseTest {
     handledRecommendation = 0;
     generateRecommendationsUseCase =
         new GenerateRecommendationsUseCase(
-            client, new InMemoryRecommendationDataAccess(), analysisFacade);
+            client, new InMemoryRecommendationDataAccess(), analysisFacade, generateCommentsUseCase,
+            commentInputDataAccess);
   }
 
   @Test
@@ -49,6 +59,10 @@ class GenerateRecommendationsUseCaseTest {
                 .build())).build());
 
     when(analysisFacade.getAnalysisStrategy(1)).thenReturn("strategies");
+    when(generateCommentsUseCase.generateComments(any())).thenReturn(
+        new GenerateCommentsResponse(null));
+    when(commentInputDataAccess.getCommentInputByAlertId(1)).thenReturn(
+        Optional.of(new HashMap<String, Object>()));
     final String analysisName = "analysis/1";
     when(analysisFacade.getAnalysis(analysisName)).thenReturn(Analysis.newBuilder()
         .setNotificationFlags(NotificationFlags.newBuilder()

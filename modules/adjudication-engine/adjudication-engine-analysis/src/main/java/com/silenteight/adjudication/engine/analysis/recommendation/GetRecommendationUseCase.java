@@ -7,7 +7,6 @@ import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v2.RecommendationMetadata;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertRecommendation;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsRequest;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 class GetRecommendationUseCase {
 
-  private final GenerateCommentsUseCase generateCommentsUseCase;
   private final RecommendationDataAccess recommendationDataAccess;
 
   @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "recommendation" })
@@ -27,7 +25,7 @@ class GetRecommendationUseCase {
 
     AlertRecommendation alertRecommendation = getAlertRecommendation(recommendationName);
 
-    return alertRecommendation.toRecommendation(generateComment(alertRecommendation));
+    return alertRecommendation.toRecommendation();
   }
 
   @Timed(value = "ae.analysis.use_cases", extraTags = { "package", "recommendation" })
@@ -45,7 +43,7 @@ class GetRecommendationUseCase {
 
     AlertRecommendation alertRecommendation = getAlertRecommendation(recommendationName);
 
-    return alertRecommendation.toRecommendationWithMetadata(generateComment(alertRecommendation));
+    return alertRecommendation.toRecommendationWithMetadata();
   }
 
   private AlertRecommendation getAlertRecommendation(String metadataName) {
@@ -53,10 +51,4 @@ class GetRecommendationUseCase {
     return recommendationDataAccess.getAlertRecommendation(recommendationId);
   }
 
-  private String generateComment(AlertRecommendation alertRecommendation) {
-    var commentsResponse = generateCommentsUseCase.generateComments(
-        new GenerateCommentsRequest(alertRecommendation.getAlertContext()));
-
-    return commentsResponse.getComment();
-  }
 }

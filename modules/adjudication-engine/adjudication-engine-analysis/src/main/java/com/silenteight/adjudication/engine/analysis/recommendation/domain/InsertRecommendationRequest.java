@@ -21,6 +21,8 @@ public class InsertRecommendationRequest {
 
   ObjectNode[] matchContexts;
 
+  String comment;
+
   public static InsertRecommendationRequest fromAlertSolution(
       long analysisId, AlertSolution alertSolution) {
     return InsertRecommendationRequest
@@ -30,6 +32,7 @@ public class InsertRecommendationRequest {
         .analysisId(analysisId)
         .matchContexts(alertSolution.getMatchContexts())
         .matchIds(alertSolution.getMatchIds())
+        .comment(alertSolution.getComment())
         .build();
   }
 }

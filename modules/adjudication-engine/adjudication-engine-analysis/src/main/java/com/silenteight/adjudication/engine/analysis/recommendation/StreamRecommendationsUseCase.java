@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.api.v2.RecommendationWithMetadata;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.AlertRecommendation;
-import com.silenteight.adjudication.engine.analysis.recommendation.domain.GenerateCommentsRequest;
 import com.silenteight.adjudication.engine.common.resource.ResourceName;
 
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import javax.annotation.Nonnull;
 @Slf4j
 class StreamRecommendationsUseCase {
 
-  private final GenerateCommentsUseCase generateCommentsUseCase;
   private final RecommendationDataAccess recommendationDataAccess;
 
   @Transactional(readOnly = true)
@@ -28,7 +26,7 @@ class StreamRecommendationsUseCase {
     log.debug("Streaming recommendations: resource={}", analysisOrDataset);
 
     var recommendationCount = readAlertRecommendations(
-        analysisOrDataset, ar -> consumer.accept(generateRecommendation(ar)));
+        analysisOrDataset, ar -> consumer.accept(ar.toRecommendation()));
 
     log.info("Finished streaming recommendations: resource={}, recommendationCount={}",
         analysisOrDataset, recommendationCount);
@@ -65,7 +63,7 @@ class StreamRecommendationsUseCase {
 
   @Nonnull
   private RecommendationWithMetadata generateRecommendationWithMetadata(AlertRecommendation ar) {
-    var recommendation = generateRecommendation(ar);
+    var recommendation = ar.toRecommendation();
     var metadata = ar.toMetadata();
 
     return RecommendationWithMetadata
@@ -73,13 +71,5 @@ class StreamRecommendationsUseCase {
         .setRecommendation(recommendation)
         .setMetadata(metadata)
         .build();
-  }
-
-  private Recommendation generateRecommendation(AlertRecommendation ar) {
-    var comment = generateCommentsUseCase
-        .generateComments(new GenerateCommentsRequest(ar.getAlertContext()))
-        .getComment();
-
-    return ar.toRecommendation(comment);
   }
 }
