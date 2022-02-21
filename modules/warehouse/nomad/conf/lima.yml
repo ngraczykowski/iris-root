@@ -120,24 +120,24 @@ warehouse.reports.v2:
       type: simulation
       description: RB Scorer Match Level
       selectSqlQuery: >
-        SELECT sim.payload ->> 'match_reason:policy'                      AS "Policy ID",
-               sim.payload ->> 'match_reason:policy_title'                AS "Policy Name",
-               sim.payload ->> 'match_reason:step'                        AS "Step ID",
-               sim.payload ->> 'match_reason:step_title'                  AS "Step Name",
-               sim.payload ->> 'match_reason:feature_vector_signature'    AS "Reasoning Branch ID",
-               sim.payload ->> 'recommendation_recommended_action'        AS "S8 Hit Resolution",
-               match.payload ->> 'totalHitsCount'                         AS "Total Hits Count",
-               match.payload ->> 'singleHitsCount'                        AS "Single Hits Count",
-               match.payload ->> 'categories/customerType'                AS "Customer Type",
-               match.payload ->> 'categories/isDeny'                      AS "Sanctions",
-               sim.payload ->> 'features/name:solution'                   AS "Name",
-               sim.payload ->> 'features/dateOfBirth:solution'            AS "Date of Birth / Incorporation",
-               sim.payload ->> 'features/nationalIdDocument:solution'     AS "National ID",
-               sim.payload ->> 'features/passportNumberDocument:solution' AS "Passport Number Document",
-               sim.payload ->> 'features/otherDocument:solution'          AS "Other Document",
-               sim.payload ->> 'features/gender:solution'                 AS "Gender",
-               sim.payload ->> 'features/nationalityCountry:solution'     AS "Nationality Country",
-               sim.payload ->> 'features/residencyCountry:solution'       AS "Residency Country"
+        SELECT sim.payload ->> 'match_reason:policy'                              AS "Policy ID",
+               sim.payload ->> 'match_reason:policy_title'                        AS "Policy Name",
+               sim.payload ->> 'match_reason:step'                                AS "Step ID",
+               sim.payload ->> 'match_reason:step_title'                          AS "Step Name",
+               sim.payload ->> 'match_reason:feature_vector_signature'            AS "Reasoning Branch ID",
+               sim.payload ->> 'recommendation_recommended_action'                AS "S8 Hit Resolution",
+               COUNT((sim.payload ->> 'match_reason:feature_vector_signature'))   AS "Total Hits Count",
+               COUNT((sim.payload ->> 'match_reason:feature_vector_signature'))   AS "Single Hits Count",
+               match.payload ->> 'categories/customerType'                        AS "Customer Type",
+               match.payload ->> 'categories/isDeny'                              AS "Sanctions",
+               sim.payload ->> 'features/name:solution'                           AS "Name",
+               sim.payload ->> 'features/dateOfBirth:solution'                    AS "Date of Birth / Incorporation",
+               sim.payload ->> 'features/nationalIdDocument:solution'             AS "National ID",
+               sim.payload ->> 'features/passportNumberDocument:solution'         AS "Passport Number Document",
+               sim.payload ->> 'features/otherDocument:solution'                  AS "Other Document",
+               sim.payload ->> 'features/gender:solution'                         AS "Gender",
+               sim.payload ->> 'features/nationalityCountry:solution'             AS "Nationality Country",
+               sim.payload ->> 'features/residencyCountry:solution'               AS "Residency Country"
         FROM warehouse_simulation_alert sim
                  JOIN warehouse_match match ON sim.id = match.alert_id
         WHERE sim.analysis_name = 'analysis/${analysisId}'
@@ -177,7 +177,6 @@ warehouse.reports.v2:
                  prod.payload ->> 'batchWatchList',
                  prod.payload ->> 'sourceSystemIdentifier',
                  sim.payload ->> 'recommendation_recommended_action',
-                 match.payload ->> 'recommendation_create_time',
                  sim.payload ->> 'recommendation_create_time',
                  sim.payload ->> 'recommendation_comment',
                  prod.payload ->> 's8_readTimestamp'
