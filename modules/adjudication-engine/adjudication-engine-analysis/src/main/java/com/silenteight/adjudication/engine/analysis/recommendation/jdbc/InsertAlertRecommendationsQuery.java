@@ -2,6 +2,7 @@ package com.silenteight.adjudication.engine.analysis.recommendation.jdbc;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.InsertRecommendationRequest;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.RecommendationResponse;
 import com.silenteight.adjudication.engine.analysis.recommendation.jdbc.SelectPendingAlertsQuery.MatchContextsJsonNodeReadException;
@@ -18,11 +19,13 @@ import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.SqlUpdate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.*;
 import java.util.function.Consumer;
 
 import static com.silenteight.adjudication.engine.analysis.recommendation.transform.AlertMetaDataTransformer.transferToRecommendationMetaData;
+import static com.silenteight.adjudication.engine.common.protobuf.TimestampConverter.fromSqlTimestamp;
 import static java.util.Optional.ofNullable;
 
 //TODO (iwnek) Use SQL Bulk update
@@ -35,7 +38,8 @@ class InsertAlertRecommendationsQuery {
   public static final String RECOMMENDED_ACTION_COLUMN = "recommended_action";
   public static final String ANALYSIS_ID_COLUMN = "analysis_id";
   public static final String ALERT_ID_COLUMN = "alert_id";
-  public static final String COMMENT = "comment";
+  public static final String CREATED_AT_COLUMN = "created_at";
+  public static final String COMMENT_COLUMN = "comment";
 
   private final SqlUpdate sql;
 
@@ -52,13 +56,14 @@ class InsertAlertRecommendationsQuery {
             + ":analysis_id, :alert_id, now(), :recommended_action, :match_ids, :match_contexts, "
             + ":comment)\n"
             + "ON CONFLICT DO NOTHING\n"
-            + "RETURNING recommendation_id, analysis_id, alert_id;");
+            + "RETURNING recommendation_id, analysis_id, alert_id, created_at, "
+            + "recommended_action, comment;");
     sql.declareParameter(new SqlParameter(ALERT_ID_COLUMN, Types.BIGINT));
     sql.declareParameter(new SqlParameter(ANALYSIS_ID_COLUMN, Types.BIGINT));
     sql.declareParameter(new SqlParameter(RECOMMENDED_ACTION_COLUMN, Types.VARCHAR));
     sql.declareParameter(new SqlParameter(MATCH_IDS_COLUMN, Types.ARRAY));
     sql.declareParameter(new SqlParameter(MATCH_CONTEXTS_COLUMN, Types.OTHER));
-    sql.declareParameter(new SqlParameter(COMMENT, Types.VARCHAR));
+    sql.declareParameter(new SqlParameter(COMMENT_COLUMN, Types.VARCHAR));
     sql.setReturnGeneratedKeys(true);
 
     sql.compile();
@@ -82,7 +87,7 @@ class InsertAlertRecommendationsQuery {
             RECOMMENDED_ACTION_COLUMN, alertRecommendation.getRecommendedAction(),
             MATCH_IDS_COLUMN, alertRecommendation.getMatchIds(),
             MATCH_CONTEXTS_COLUMN, writeMatchContexts(alertRecommendation.getMatchContexts()),
-            COMMENT, alertRecommendation.getComment());
+            COMMENT_COLUMN, alertRecommendation.getComment());
 
     sql.updateByNamedParam(paramMap, keyHolder);
 
@@ -118,11 +123,22 @@ class InsertAlertRecommendationsQuery {
     var matchIds = ((long[]) it.get(MATCH_IDS_COLUMN));
     var matchContexts = (String) it.get(MATCH_CONTEXTS_COLUMN);
     var objectNodes = readMatchContext(matchContexts);
+    var createdAt = (Timestamp) it.get(CREATED_AT_COLUMN);
+    var recommendedAction = (String) it.get(RECOMMENDED_ACTION_COLUMN);
+    var comment = (String) it.get(COMMENT_COLUMN);
     var recommendationMetadata =
         transferToRecommendationMetaData(
             new AnalysisRecommendationContext(Arrays.asList(objectNodes), analysisId,
                 recommendationId,
                 alertId, matchIds));
+    var recommendation = Recommendation
+        .newBuilder()
+        .setAlert("alerts/" + alertId)
+        .setName("analysis/" + alertId + "/recommendations/" + recommendationId)
+        .setCreateTime(fromSqlTimestamp(createdAt))
+        .setRecommendedAction(recommendedAction)
+        .setRecommendationComment(comment)
+        .build();
 
     return RecommendationResponse
         .builder()
@@ -130,6 +146,7 @@ class InsertAlertRecommendationsQuery {
         .analysisId(analysisId)
         .alertId(alertId)
         .metaData(recommendationMetadata)
+        .recommendation(recommendation)
         .build();
   }
 

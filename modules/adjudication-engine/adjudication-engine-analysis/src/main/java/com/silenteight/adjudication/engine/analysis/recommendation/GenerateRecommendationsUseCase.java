@@ -80,12 +80,13 @@ class GenerateRecommendationsUseCase {
       recommendationInfos.addAll(
           saveRecommendation.apply(
               new SaveRecommendationRequest(analysisId, shouldMetadataAttached,
+                  shouldRecommendationBeAttached,
                   alertSolutions)));
 
       if (alertSolutions.isEmpty()) {
         log.info("No recommendations generated: analysis={}", analysisName);
       }
-    } while (shouldRecommendationBeAttached);
+    } while (true);
 
     return recommendationInfos;
   }

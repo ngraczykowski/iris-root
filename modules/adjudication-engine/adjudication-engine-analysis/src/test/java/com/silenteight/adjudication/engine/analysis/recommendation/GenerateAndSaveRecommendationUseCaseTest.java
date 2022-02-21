@@ -73,7 +73,7 @@ class GenerateAndSaveRecommendationUseCaseTest {
             .matchIds(new long[] { 11 })
             .matchContexts(new ObjectNode[] {})
             .build()),
-        true))
+        true, true))
         .thenReturn(List.of(
             RecommendationInfo.newBuilder().build()));
 

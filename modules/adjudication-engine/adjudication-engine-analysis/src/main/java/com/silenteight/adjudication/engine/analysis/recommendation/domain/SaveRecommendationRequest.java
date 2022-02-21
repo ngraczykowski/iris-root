@@ -9,6 +9,8 @@ public class SaveRecommendationRequest {
 
   long analysisId;
 
+  boolean shouldMetadataAttach;
+
   boolean shouldRecommendationAttach;
 
   List<AlertSolution> alertSolutions;

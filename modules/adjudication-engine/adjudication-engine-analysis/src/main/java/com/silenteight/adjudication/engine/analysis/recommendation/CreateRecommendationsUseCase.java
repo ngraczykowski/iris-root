@@ -29,6 +29,7 @@ class CreateRecommendationsUseCase {
   @Transactional
   List<RecommendationInfo> createRecommendations(
       long analysisId, List<AlertSolution> alertSolutions,
+      final boolean shouldAttachMetaData,
       final boolean shouldAttachRecommendation) {
 
     var recommendations = createInsertRequests(analysisId, alertSolutions);
@@ -42,7 +43,7 @@ class CreateRecommendationsUseCase {
     return savedRecommendations
         .stream()
         .map(recommendationResponse -> recommendationResponse.toRecommendationInfo(
-            shouldAttachRecommendation))
+            shouldAttachMetaData, shouldAttachRecommendation))
         .collect(toList());
   }
 
