@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.payments.bridge.common.dto.common.SolutionType;
 import com.silenteight.payments.bridge.etl.processing.model.MessageData;
 
-import java.util.Optional;
 import javax.annotation.Nonnull;
 
 @Value
@@ -24,28 +23,6 @@ public class FircoHit {
   RulesContext rulesContext;
   String entityText;
   FircoWatchlistParty watchlistParty;
-
-  public Optional<String> getMatchedPartyName() {
-    if (solutionType != SolutionType.NAME) {
-      log.debug(
-          "SolutionType [{}] indicates not a hit on NAME, watchlist party name is empty",
-          getSolutionType());
-      return Optional.empty();
-    }
-
-    if (synonymIndex < 0) {
-      log.warn("Cannot determine matched party name, synonym index is less than zero.");
-      return Optional.empty();
-    }
-
-    if (synonymIndex >= watchlistParty.getNames().size()) {
-      log.warn("Synonym index {} points at non-existing watchlist party name (max index {}).",
-          synonymIndex, watchlistParty.getNames().size() - 1);
-      return Optional.empty();
-    }
-
-    return Optional.of(watchlistParty.getNames().get(synonymIndex));
-  }
 
   @Nonnull
   public String getHitTagValue(MessageData messageData) {

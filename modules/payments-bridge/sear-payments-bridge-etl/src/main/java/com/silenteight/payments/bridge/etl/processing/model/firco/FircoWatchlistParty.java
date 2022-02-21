@@ -6,7 +6,6 @@ import lombok.Value;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @Value
 @Builder
@@ -32,21 +31,6 @@ public class FircoWatchlistParty {
   boolean isPep;
   boolean isFep;
 
-  Stream<String> findAllNationalIdCodes() {
-    return codes.stream().filter(code -> "NationalID".equals(code.getType())).map(Code::getName);
-  }
-
-  Stream<String> findAllPassportCodes() {
-    return codes.stream().filter(code -> "Passport".equals(code.getType())).map(Code::getName);
-  }
-
-  Stream<String> findAllSearchCodeCodes() {
-    return codes.stream().filter(code -> "SearchCode".equals(code.getType())).map(Code::getName);
-  }
-
-  Stream<String> findAllBicCodes() {
-    return codes.stream().filter(code -> "Bic".equals(code.getType())).map(Code::getName);
-  }
 
   @Value
   @Builder
