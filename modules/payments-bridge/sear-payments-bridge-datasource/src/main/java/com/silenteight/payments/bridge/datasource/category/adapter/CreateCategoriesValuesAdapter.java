@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.datasource.categories.api.v2.BatchCreateCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v2.BatchCreateCategoryValuesResponse;
 import com.silenteight.datasource.categories.api.v2.CategoryValueServiceGrpc.CategoryValueServiceBlockingStub;
+import com.silenteight.datasource.categories.api.v2.CreateCategoryValuesRequest;
 import com.silenteight.datasource.categories.api.v2.CreatedCategoryValue;
 import com.silenteight.payments.bridge.datasource.category.port.CreateCategoryValuesClient;
 
@@ -26,19 +27,18 @@ class CreateCategoriesValuesAdapter implements CreateCategoryValuesClient {
   private final Duration timeout;
 
   public void createCategoriesValues(BatchCreateCategoryValuesRequest createCategoryValuesRequest) {
-
-    if (createCategoryValuesRequest.getRequestsCount() == 0) {
+    if (!createCategoryValuesRequest.getRequestsList().isEmpty()) {
+      sendToDatasource(createCategoryValuesRequest);
+    } else {
       log.debug(
           "Batch category value request is empty. Data won't be send to datasource service");
-    } else {
-      sendToDatasource(createCategoryValuesRequest);
     }
   }
 
   private void sendToDatasource(BatchCreateCategoryValuesRequest createCategoryValuesRequest) {
     var deadline = Deadline.after(timeout.toMillis(), TimeUnit.MILLISECONDS);
 
-    log.debug("Sending create categories values request");
+    logRequest(createCategoryValuesRequest);
 
     try {
       var response = blockingStub
@@ -52,11 +52,24 @@ class CreateCategoriesValuesAdapter implements CreateCategoryValuesClient {
     }
   }
 
+  private static void logRequest(BatchCreateCategoryValuesRequest createCategoryValuesRequest) {
+    if (log.isDebugEnabled()) {
+      var categoryValues = createCategoryValuesRequest.getRequestsList();
+      var categoryNames = categoryValues.stream()
+          .map(CreateCategoryValuesRequest::getCategory)
+          .distinct()
+          .collect(toList());
+
+      log.debug("Sending category values request: count={}, categories={}",
+          categoryValues.size(), categoryNames);
+    }
+  }
+
   private static void logResponse(BatchCreateCategoryValuesResponse response) {
     if (log.isDebugEnabled()) {
 
       var matchesSaved = response.getCreatedCategoryValuesList().stream()
-          .map(CreatedCategoryValue::getName)
+          .map(CreatedCategoryValue::getMatch)
           .distinct()
           .collect(toList());
 
