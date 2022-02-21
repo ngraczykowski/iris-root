@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-//TODO(jgajewski): add new codes to avoid SolutionType.valueOf()
 public enum SolutionType {
   ERROR("-1"),
   UNKNOWN("0"),
