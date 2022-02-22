@@ -35,6 +35,8 @@ dependencies {
   implementation libraries.grpc_api
   implementation libraries.grpc_stub
 
+  implementation libraries.commons_csv
+
   testImplementation libraries.rest_assured_spring_mock_mvc
   testImplementation libraries.spring_security_test
 }

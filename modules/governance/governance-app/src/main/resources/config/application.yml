@@ -436,6 +436,7 @@ sep.auth:
       - "STEP_DETAILS"
     IMPORT_POLICY:
       - "IMPORT_POLICY"
+      - "IMPORT_POLICY_FROM_RBS"
     MANAGE_POLICY:
       - "EDIT_POLICY"
       - "CLONE_POLICY"
@@ -578,6 +579,14 @@ serp.governance.files:
       - text/plain
     allowed-characters-for-file-name: ^[.a-zA-Z0-9-()#_\s]*$
   default-bucket: attachments
+
+serp.governance.rbs.import:
+  solutions:
+    - "FALSE_POSITIVE"
+    - "HINTED_FALSE_POSITIVE"
+    - "POTENTIAL_TRUE_POSITIVE"
+    - "HINTED_POTENTIAL_TRUE_POSITIVE"
+
 sep.filestorage:
   minio:
     url: http://localhost:9000
