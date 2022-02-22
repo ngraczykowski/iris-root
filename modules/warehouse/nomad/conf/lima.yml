@@ -141,6 +141,22 @@ warehouse.reports.v2:
         FROM warehouse_simulation_alert sim
                  JOIN warehouse_match match ON sim.id = match.alert_id
         WHERE sim.analysis_name = 'analysis/${analysisId}'
+        GROUP BY sim.payload ->> 'match_reason:policy',
+                 sim.payload ->> 'match_reason:policy_title',
+                 sim.payload ->> 'match_reason:step',
+                 sim.payload ->> 'match_reason:step_title',
+                 sim.payload ->> 'match_reason:feature_vector_signature',
+                 sim.payload ->> 'recommendation_recommended_action',
+                 match.payload ->> 'categories/customerType',
+                 match.payload ->> 'categories/isDeny',
+                 sim.payload ->> 'features/name:solution',
+                 sim.payload ->> 'features/dateOfBirth:solution',
+                 sim.payload ->> 'features/nationalIdDocument:solution',
+                 sim.payload ->> 'features/passportNumberDocument:solution',
+                 sim.payload ->> 'features/otherDocument:solution',
+                 sim.payload ->> 'features/gender:solution',
+                 sim.payload ->> 'features/nationalityCountry:solution',
+                 sim.payload ->> 'features/residencyCountry:solution'
 
     - name: AI_REASONING_ALERT_LEVEL
       type: simulation
