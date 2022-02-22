@@ -138,4 +138,10 @@
   <changeSet id="adjudication-engine-comments-1.15.0_14" author="tbozek">
     <sqlFile path="db/changelog/sql/update_template_match_v2.sql"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_15" author="jgajewski">
+    <sqlFile path="db/changelog/sql/create_template_contextual_agent_fp.sql"/>
+    <sqlFile path="db/changelog/sql/create_template_contextual_agent_tp.sql"/>
+    <sqlFile path="db/changelog/sql/update_template_match_v3.sql"/>
+  </changeSet>
 </databaseChangeLog>
