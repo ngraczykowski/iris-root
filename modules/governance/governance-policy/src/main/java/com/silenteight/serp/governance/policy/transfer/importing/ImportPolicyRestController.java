@@ -2,7 +2,8 @@ package com.silenteight.serp.governance.policy.transfer.importing;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
+
+import com.silenteight.serp.governance.policy.common.PolicyImportedResponse;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,10 +40,5 @@ class ImportPolicyRestController {
     UUID policyId = importPolicyUseCase.apply(command);
 
     return ok(new PolicyImportedResponse(policyId));
-  }
-
-  @Value
-  static class PolicyImportedResponse {
-    UUID policyId;
   }
 }

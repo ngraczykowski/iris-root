@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -31,6 +32,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.io.File;
 import java.util.Map;
 
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
@@ -44,6 +46,8 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @ExtendWith({ SpringExtension.class })
 @TestPropertySource(properties = { "spring.config.location = classpath:application-test.yml" })
 public abstract class BaseRestControllerTest {
+
+  private static final String FILE_PARAMETER = "file";
 
   @Autowired
   private WebApplicationContext context;
@@ -114,6 +118,14 @@ public abstract class BaseRestControllerTest {
     return toValidatableResponse(asyncSender(body, headers).post(withRoot(mapping)));
   }
 
+  public static ValidatableMockMvcResponse post(String mapping, File file) {
+    return toValidatableResponse(asyncSender(file).post(withRoot(mapping)));
+  }
+
+  public static ValidatableMockMvcResponse postAsync(String mapping, File file) {
+    return toValidatableResponse(asyncSender(file).async().post(withRoot(mapping)));
+  }
+
   public static <T> ValidatableMockMvcResponse put(String mapping, T body) {
     return toValidatableResponse(asyncSender(body).put(withRoot(mapping)));
   }
@@ -157,6 +169,18 @@ public abstract class BaseRestControllerTest {
         .contentType(JSON)
         .body(body)
         .headers(headers)
+        .when();
+  }
+
+  private static MockMvcRequestAsyncSender asyncSender(File file) {
+    return given()
+        .config(RestAssuredMockMvc.config()
+            .encoderConfig(RestAssuredMockMvc.config()
+                .getEncoderConfig()
+                .appendDefaultContentCharsetToContentTypeIfUndefined(false)))
+        .accept(JSON)
+        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+        .multiPart(FILE_PARAMETER, file)
         .when();
   }
 

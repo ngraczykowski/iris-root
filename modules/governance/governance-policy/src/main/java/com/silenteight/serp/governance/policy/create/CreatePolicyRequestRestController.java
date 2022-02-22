@@ -40,6 +40,7 @@ class CreatePolicyRequestRestController {
         .createdBy(authentication.getName())
         .build();
     createPolicyUseCase.activate(command);
+    //TODO https://silent8.atlassian.net/browse/WEB-2231
     return accepted().build();
   }
 }

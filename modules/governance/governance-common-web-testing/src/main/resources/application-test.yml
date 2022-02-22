@@ -32,6 +32,7 @@ sep.auth:
       - "STEP_DETAILS"
     IMPORT_POLICY:
       - "IMPORT_POLICY"
+      - "IMPORT_POLICY_FROM_RBS"
     MANAGE_POLICY:
       - "EDIT_POLICY"
       - "CLONE_POLICY"

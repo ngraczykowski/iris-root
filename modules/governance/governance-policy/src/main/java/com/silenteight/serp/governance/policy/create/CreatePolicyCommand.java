@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Data
 @Builder
-class CreatePolicyCommand {
+public class CreatePolicyCommand {
 
   @NonNull
   private final UUID id;
