@@ -74,8 +74,6 @@ warehouse:
     name: warehouse
     username: warehouse
     password: warehouse
-  sampling:
-    time-field-name: alert_recommendationDate
 sep.filestorage:
   minio:
     url: http://localhost:9000

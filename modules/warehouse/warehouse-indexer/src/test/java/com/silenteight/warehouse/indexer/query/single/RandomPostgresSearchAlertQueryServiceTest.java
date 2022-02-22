@@ -1,5 +1,6 @@
 package com.silenteight.warehouse.indexer.query.single;
 
+import com.silenteight.warehouse.indexer.alert.AlertColumnName;
 import com.silenteight.warehouse.indexer.alert.AlertRepository;
 import com.silenteight.warehouse.indexer.alert.dto.AlertDto;
 import com.silenteight.warehouse.indexer.query.MultiValueEntry;
@@ -20,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.silenteight.warehouse.indexer.alert.AlertColumnName.CREATED_AT;
+import static com.silenteight.warehouse.indexer.alert.AlertColumnName.RECOMMENDATION_DATE;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -42,7 +43,7 @@ class RandomPostgresSearchAlertQueryServiceTest {
   private static final AlertSearchCriteria.AlertSearchCriteriaBuilder BUILDER = AlertSearchCriteria
       .builder()
       .alertLimit(2)
-      .timeFieldName("timeFieldName")
+      .timeFieldName(AlertColumnName.RECOMMENDATION_DATE)
       .timeRangeTo("timeTo")
       .timeRangeFrom("timeFrom");
 
@@ -117,7 +118,7 @@ class RandomPostgresSearchAlertQueryServiceTest {
     assertThat(alerts.size()).isEqualTo(1);
     assertThat(alerts.get(0)).isEqualTo("alertName");
     verify(alertRepository).fetchRandomAlerts(
-        CREATED_AT, "timeFrom", "timeTo", 2,
+        RECOMMENDATION_DATE, "timeFrom", "timeTo", 2,
         expectedFilters, expectedAlertNames);
   }
 }
