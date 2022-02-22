@@ -13,4 +13,6 @@ interface RoleRepository extends Repository<Role, UUID> {
   Collection<Role> findAll();
 
   Optional<Role> findByRoleId(UUID roleId);
+
+  void delete(Role role);
 }

@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.user.roles.delete;
+package com.silenteight.sens.webapp.role.remove;
 
 import com.silenteight.sens.webapp.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.sens.webapp.common.testing.rest.testwithrole.TestWithRole;
@@ -9,32 +9,33 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static com.silenteight.sens.webapp.common.testing.rest.TestRoles.*;
+import static com.silenteight.sens.webapp.role.RoleTestFixtures.ROLE_ID_1;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpStatus.ACCEPTED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
-@Import({ DeleteRoleRestController.class })
-class DeleteRoleRestControllerTest extends BaseRestControllerTest {
+@Import({ RemoveRoleRestController.class })
+class RemoveRoleRestControllerTest extends BaseRestControllerTest {
 
-  private static final String DELETE_ROLE_URL = "/v2/roles/629c5176-413d-43ef-8c94-ad0417bd89b9";
+  private static final String REMOVE_ROLE_URL = "/v2/roles/" + ROLE_ID_1;
 
   @MockBean
-  DeleteRoleUseCase deleteRoleUseCase;
+  private RemoveRoleUseCase removeRoleUseCase;
 
   @Test
   @WithMockUser(username = USERNAME, authorities = USER_ADMINISTRATOR)
-  void its200WhenRoleCreated() {
-    doNothing().when(deleteRoleUseCase).activate(any());
+  void its204WhenRoleRemoved() {
+    doNothing().when(removeRoleUseCase).activate(any());
 
-    delete(DELETE_ROLE_URL).statusCode(ACCEPTED.value());
+    delete(REMOVE_ROLE_URL).statusCode(NO_CONTENT.value());
   }
 
   @Test
   @TestWithRole(roles = { APPROVER, AUDITOR, MODEL_TUNER, QA, QA_ISSUE_MANAGER })
   void its403_whenNotPermittedRole() {
-    delete(DELETE_ROLE_URL)
+    delete(REMOVE_ROLE_URL)
         .contentType(anything())
         .statusCode(FORBIDDEN.value());
   }

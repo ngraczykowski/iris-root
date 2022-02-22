@@ -1,4 +1,4 @@
-package com.silenteight.sens.webapp.user.roles.delete;
+package com.silenteight.sens.webapp.role.remove;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -16,28 +16,29 @@ import java.util.UUID;
 
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.ROLE_MANAGEMENT;
-import static org.springframework.http.ResponseEntity.accepted;
+import static org.springframework.http.ResponseEntity.noContent;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(ROOT)
-class DeleteRoleRestController {
+class RemoveRoleRestController {
 
   @NonNull
-  private final DeleteRoleUseCase deleteRoleUseCase;
+  private final RemoveRoleUseCase removeRoleUseCase;
 
   @DeleteMapping(value = "/v2/roles/{id}")
   @PreAuthorize("isAuthorized('DELETE_ROLE')")
   public ResponseEntity<Void> delete(@PathVariable UUID id, Authentication authentication) {
-    log.info(ROLE_MANAGEMENT, "Deleting role roleId={}", id);
-    String userName = authentication.getName();
-    DeleteRoleCommand command = DeleteRoleCommand.builder()
+    log.info(ROLE_MANAGEMENT, "Removing role. roleId={}", id);
+
+    RemoveRoleRequest command = RemoveRoleRequest.builder()
         .id(id)
-        .deletedBy(userName)
+        .deletedBy(authentication.getName())
         .build();
 
-    deleteRoleUseCase.activate(command);
-    return accepted().build();
+    removeRoleUseCase.activate(command);
+    log.info(ROLE_MANAGEMENT, "Role removed.");
+    return noContent().build();
   }
 }

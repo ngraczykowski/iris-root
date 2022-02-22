@@ -3,10 +3,12 @@ package com.silenteight.sens.webapp.role.domain;
 import com.silenteight.sens.webapp.role.details.dto.RoleDetailsDto;
 import com.silenteight.sens.webapp.role.domain.exception.RoleNotFoundException;
 import com.silenteight.sens.webapp.role.list.dto.RoleDto;
+import com.silenteight.sens.webapp.role.validate.RoleAssignmentValidator;
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
@@ -22,6 +24,9 @@ class RoleQueryIT extends BaseDataJpaTest {
 
   @Autowired
   private RoleQuery underTest;
+
+  @MockBean
+  private RoleAssignmentValidator roleAssignmentValidator;
 
   @Test
   void shouldListAllRoles() {

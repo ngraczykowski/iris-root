@@ -7,6 +7,7 @@ import com.silenteight.sens.webapp.role.create.CreateRoleRequest;
 import com.silenteight.sens.webapp.role.create.dto.CreateRoleDto;
 import com.silenteight.sens.webapp.role.details.dto.RoleDetailsDto;
 import com.silenteight.sens.webapp.role.list.dto.RoleDto;
+import com.silenteight.sens.webapp.role.remove.RemoveRoleRequest;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -63,6 +64,11 @@ public final class RoleTestFixtures {
       .createdBy(USERNAME_1)
       .updatedAt(UPDATED_AT)
       .updatedBy(USERNAME_1)
+      .build();
+
+  public static final RemoveRoleRequest REMOVE_ROLE_REQUEST = RemoveRoleRequest.builder()
+      .id(ROLE_ID_1)
+      .deletedBy(USERNAME_1)
       .build();
 
   public static final CreateRoleDto CREATE_ROLE_DTO = CreateRoleDto.builder()
