@@ -15,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.silenteight.warehouse.indexer.alert.mapping.AlertMapperConstants.INDEX_TIMESTAMP;
 import static com.silenteight.warehouse.sampling.distribution.DistributionTestFixtures.*;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.*;
@@ -32,7 +31,7 @@ class DistributionAlertsServiceTest {
 
   @BeforeEach
   void setUp() {
-    SamplingProperties samplingProperties = new SamplingProperties(of(), INDEX_TIMESTAMP);
+    SamplingProperties samplingProperties = new SamplingProperties(of());
 
     underTestService = new DistributionConfiguration().distributionAlertsService(
         groupingQueryService, samplingProperties);

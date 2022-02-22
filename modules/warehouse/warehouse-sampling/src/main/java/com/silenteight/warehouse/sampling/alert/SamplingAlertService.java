@@ -7,6 +7,7 @@ import com.silenteight.model.api.v1.SampleAlertServiceProto.Alert;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleRequest;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.AlertsSampleResponse;
 import com.silenteight.model.api.v1.SampleAlertServiceProto.RequestedAlertsFilter;
+import com.silenteight.warehouse.indexer.alert.AlertColumnName;
 import com.silenteight.warehouse.indexer.query.MultiValueEntry;
 import com.silenteight.warehouse.indexer.query.single.AlertSearchCriteria;
 import com.silenteight.warehouse.indexer.query.single.RandomAlertService;
@@ -38,7 +39,7 @@ class SamplingAlertService {
       AlertsSampleRequest alertsSampleRequest) {
     AlertSearchCriteria
         alertSearchCriteria = SamplingAlertService.buildAlertSearchCriteria(
-        alertsSampleRequest, samplingProperties);
+        alertsSampleRequest, samplingProperties, AlertColumnName.RECOMMENDATION_DATE);
 
     List<String> alertsIds =
         randomAlertQueryService.getRandomAlertNameByCriteria(alertSearchCriteria);
@@ -61,7 +62,8 @@ class SamplingAlertService {
   }
 
   private static AlertSearchCriteria buildAlertSearchCriteria(
-      AlertsSampleRequest alertsSampleRequest, SamplingProperties samplingProperties) {
+      AlertsSampleRequest alertsSampleRequest, SamplingProperties samplingProperties,
+      AlertColumnName timeFieldName) {
 
     Stream<MultiValueEntry> externalFilters = alertsSampleRequest.getRequestedAlertsFilterList()
         .stream()
@@ -75,7 +77,7 @@ class SamplingAlertService {
         .collect(toList());
 
     return AlertSearchCriteria.builder()
-        .timeFieldName(samplingProperties.getTimeFieldName())
+        .timeFieldName(timeFieldName)
         // TODO: conversion will be not needed after switching to postgres as we are storing it as
         // timestamp
         .timeRangeFrom(convertTimeToDate(alertsSampleRequest.getTimeRangeFrom()))

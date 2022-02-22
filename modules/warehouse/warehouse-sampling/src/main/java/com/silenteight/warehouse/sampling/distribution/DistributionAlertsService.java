@@ -7,6 +7,7 @@ import com.silenteight.model.api.v1.AlertsDistributionServiceProto.AlertDistribu
 import com.silenteight.model.api.v1.AlertsDistributionServiceProto.AlertsDistributionRequest;
 import com.silenteight.model.api.v1.AlertsDistributionServiceProto.AlertsDistributionResponse;
 import com.silenteight.model.api.v1.AlertsDistributionServiceProto.Distribution;
+import com.silenteight.warehouse.indexer.alert.AlertColumnName;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedDataResponse.Row;
 import com.silenteight.warehouse.indexer.query.grouping.FetchGroupedTimeRangedDataRequest;
@@ -79,7 +80,7 @@ class DistributionAlertsService {
     return FetchGroupedTimeRangedDataRequest.builder()
         .from(toOffsetDateTime(request.getTimeRangeFrom()))
         .to(toOffsetDateTime(request.getTimeRangeTo()))
-        .dateField(samplingProperties.getTimeFieldName())
+        .dateField(AlertColumnName.RECOMMENDATION_DATE.getName())
         .fields(request.getGroupingFieldsList())
         .queryFilters(samplingProperties.getQueryFilters())
         .build();

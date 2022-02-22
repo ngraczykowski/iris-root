@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
+import com.silenteight.warehouse.indexer.alert.AlertColumnName;
 import com.silenteight.warehouse.indexer.query.MultiValueEntry;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 public class AlertSearchCriteria {
 
   @NonNull
-  private String timeFieldName;
+  private AlertColumnName timeFieldName;
   @NonNull
   private String timeRangeFrom;
   @NonNull

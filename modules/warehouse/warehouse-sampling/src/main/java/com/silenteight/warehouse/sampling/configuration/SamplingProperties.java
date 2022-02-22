@@ -11,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import javax.annotation.Nullable;
-import javax.validation.constraints.NotBlank;
 
 import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
@@ -26,9 +25,6 @@ public class SamplingProperties {
 
   @Nullable
   private final List<FilterProperties> filters;
-
-  @NotBlank
-  private final String timeFieldName;
 
   public List<FilterProperties> getFilters() {
     return ofNullable(filters)

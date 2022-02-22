@@ -3,8 +3,6 @@ warehouse:
     alert:
       labels:
       recommendation-date-field: "alert_create_time"
-  sampling:
-    time-field-name: alert_create_time
 
   indexer.diagnostic.enabled: true
   retention:

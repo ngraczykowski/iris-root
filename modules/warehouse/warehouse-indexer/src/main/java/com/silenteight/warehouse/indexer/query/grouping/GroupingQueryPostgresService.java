@@ -49,7 +49,7 @@ public class GroupingQueryPostgresService implements GroupingQueryService {
         AlertMapperConstants::removeAlertPrefix).collect(Collectors.toList());
 
     List<AlertGroupingDto> alertGroupings = alertRepository.fetchGroupedAlerts(
-        AlertColumnName.CREATED_AT, fetchGroupedDataRequest.getFrom(),
+        AlertColumnName.RECOMMENDATION_DATE, fetchGroupedDataRequest.getFrom(),
         fetchGroupedDataRequest.getTo(), filters, groupingFieldsWithoutPrefix);
 
     List<Row> rows = alertGroupings

@@ -59,7 +59,6 @@ warehouse:
           - 'alert_comment'
           - 'alert_lastCaseComment'
   sampling:
-    time-field-name: alert_recommendationDate
     filters:
       - name: alert_s8_recommendation
         values: ACTION_FALSE_POSITIVE
