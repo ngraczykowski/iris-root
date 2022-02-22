@@ -57,6 +57,7 @@ message ExtractFactsResponse {
     OK = 0;
     ERROR = 1;
     NO_FACTS_EXTRACTED = 2;
+    INCONCLUSIVE = 3;
   }
 }
 
