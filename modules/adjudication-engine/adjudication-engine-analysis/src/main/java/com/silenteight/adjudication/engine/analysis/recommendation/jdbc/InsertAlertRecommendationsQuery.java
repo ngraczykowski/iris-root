@@ -57,7 +57,7 @@ class InsertAlertRecommendationsQuery {
             + ":comment)\n"
             + "ON CONFLICT DO NOTHING\n"
             + "RETURNING recommendation_id, analysis_id, alert_id, created_at, "
-            + "recommended_action, comment;");
+            + "recommended_action, match_contexts,  comment;");
     sql.declareParameter(new SqlParameter(ALERT_ID_COLUMN, Types.BIGINT));
     sql.declareParameter(new SqlParameter(ANALYSIS_ID_COLUMN, Types.BIGINT));
     sql.declareParameter(new SqlParameter(RECOMMENDED_ACTION_COLUMN, Types.VARCHAR));
