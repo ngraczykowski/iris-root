@@ -200,7 +200,7 @@ class AdjudicationEngineAnalysisIntegrationTest {
     var recommendation = recommendations.next();
 
     assertThat(recommendation.getRecommendationComment())
-        .contains("NOTE: This is the default alert comment template!");
+        .contains("Manual Investigation");
     assertThat(
         ResourceName.create(recommendation.getName()).getLong("analysis")).isEqualTo(analysisId);
     assertThat(recommendation.getRecommendedAction()).isEqualTo("MATCH");
