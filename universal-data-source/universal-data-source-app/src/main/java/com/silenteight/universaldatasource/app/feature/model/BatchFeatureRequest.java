@@ -15,4 +15,11 @@ public class BatchFeatureRequest {
 
   List<String> features;
 
+  public BatchFeatureRequest mapRequestFeatures(List<String> features) {
+    return BatchFeatureRequest.builder()
+        .agentInputType(agentInputType)
+        .matches(matches)
+        .features(features)
+        .build();
+  }
 }

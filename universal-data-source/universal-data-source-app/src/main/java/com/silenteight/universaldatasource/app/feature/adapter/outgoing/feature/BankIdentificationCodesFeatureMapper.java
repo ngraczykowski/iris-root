@@ -3,6 +3,7 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature
 import com.silenteight.datasource.api.bankidentificationcodes.v1.BankIdentificationCodesFeatureInput;
 import com.silenteight.datasource.api.bankidentificationcodes.v1.BankIdentificationCodesInput;
 import com.silenteight.datasource.api.bankidentificationcodes.v1.BatchGetMatchBankIdentificationCodesInputsResponse;
+import com.silenteight.universaldatasource.app.feature.mapper.FeatureInputMapper;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
 import com.google.protobuf.Any;
@@ -15,8 +16,8 @@ import org.springframework.stereotype.Component;
 class BankIdentificationCodesFeatureMapper
     extends BaseFeatureMapper<BankIdentificationCodesFeatureInput> {
 
-  BankIdentificationCodesFeatureMapper() {
-    super(BankIdentificationCodesFeatureInput.class);
+  BankIdentificationCodesFeatureMapper(final FeatureInputMapper featureInputMapper) {
+    super(BankIdentificationCodesFeatureInput.class, featureInputMapper);
   }
 
   @Override

@@ -3,6 +3,7 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature
 import com.silenteight.datasource.api.historicaldecisions.v1.BatchGetMatchHistoricalDecisionsInputsResponse;
 import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisionsInput;
 import com.silenteight.datasource.api.historicaldecisions.v1.HistoricalDecisionsInput.HistoricalDecisionsFeatureInput;
+import com.silenteight.universaldatasource.app.feature.mapper.FeatureInputMapper;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
 import com.google.protobuf.Any;
@@ -14,8 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 class HistoricalDecisionsFeatureMapper extends BaseFeatureMapper<HistoricalDecisionsFeatureInput> {
 
-  HistoricalDecisionsFeatureMapper() {
-    super(HistoricalDecisionsFeatureInput.class);
+  HistoricalDecisionsFeatureMapper(final FeatureInputMapper featureInputMapper) {
+    super(HistoricalDecisionsFeatureInput.class, featureInputMapper);
   }
 
   @Override

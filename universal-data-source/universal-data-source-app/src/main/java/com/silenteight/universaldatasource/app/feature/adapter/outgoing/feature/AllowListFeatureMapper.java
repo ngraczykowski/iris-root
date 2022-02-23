@@ -3,6 +3,7 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature
 import com.silenteight.datasource.api.allowlist.v1.AllowListFeatureInput;
 import com.silenteight.datasource.api.allowlist.v1.AllowListInput;
 import com.silenteight.datasource.api.allowlist.v1.BatchGetMatchAllowListInputsResponse;
+import com.silenteight.universaldatasource.app.feature.mapper.FeatureInputMapper;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
 import com.google.protobuf.Any;
@@ -14,8 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 class AllowListFeatureMapper extends BaseFeatureMapper<AllowListFeatureInput> {
 
-  AllowListFeatureMapper() {
-    super(AllowListFeatureInput.class);
+  AllowListFeatureMapper(final FeatureInputMapper featureInputMapper) {
+    super(AllowListFeatureInput.class, featureInputMapper);
   }
 
   @Override

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sep.base.aspects.metrics.Timed;
+import com.silenteight.universaldatasource.app.feature.mapper.FeatureInputMapper;
 import com.silenteight.universaldatasource.app.feature.model.BatchFeatureRequest;
 import com.silenteight.universaldatasource.app.feature.model.MatchFeatureOutput;
 import com.silenteight.universaldatasource.app.feature.model.MatchFeatureOutput.MatchInput;
@@ -27,6 +28,7 @@ class BatchGetFeatureInputService implements BatchGetFeatureInputUseCase {
 
   private final FeatureDataAccess dataAccess;
   private final FeatureMapperFactory featureMapperFactory;
+  private final FeatureInputMapper featureInputMapper;
 
   @Timed(value = "uds.feature.use_cases", extraTags = { "action", "batchGetFeature" })
   @Override
@@ -48,12 +50,21 @@ class BatchGetFeatureInputService implements BatchGetFeatureInputUseCase {
         .featureMapperFactory(featureMapperFactory)
         .agentInputType(batchFeatureRequest.getAgentInputType())
         .matches(new HashSet<>(matches))
-        .features(batchFeatureRequest.getFeatures())
+        .requestedFeatures(batchFeatureRequest.getFeatures())
         .consumer(consumer)
         .build();
 
+    streamData(batchFeatureRequest, featureOutputConsumer);
+  }
+
+  private void streamData(
+      BatchFeatureRequest batchFeatureRequest, FeatureOutputConsumer featureOutputConsumer) {
+
+    var requestWithMappedFeatures = batchFeatureRequest.mapRequestFeatures(
+        featureInputMapper.mapByKeys(batchFeatureRequest.getFeatures()));
+
     int featuresCount = dataAccess.stream(
-        batchFeatureRequest,
+        requestWithMappedFeatures,
         featureOutputConsumer::consumeFeatureOutput);
 
     featureOutputConsumer.mockUnseenMatchOutputs();
@@ -71,17 +82,17 @@ class BatchGetFeatureInputService implements BatchGetFeatureInputUseCase {
     private final FeatureMapperFactory featureMapperFactory;
     private final String agentInputType;
     private final Set<String> matches;
-    private final List<String> features;
+    private final List<String> requestedFeatures;
     private final Consumer<BatchFeatureInputResponse> consumer;
 
     void consumeFeatureOutput(MatchFeatureOutput matchFeatureOutput) {
-      matches.removeAll(
+      this.matches.removeAll(
           matchFeatureOutput.getMatchInputs().stream().map(MatchInput::getMatch).collect(
               Collectors.toSet()));
 
-      var featureInputResponse = featureMapperFactory
+      var featureInputResponse = this.featureMapperFactory
           .get(matchFeatureOutput.getAgentInputType())
-          .map(matchFeatureOutput);
+          .map(matchFeatureOutput, this.requestedFeatures);
 
       consumer.accept(featureInputResponse);
     }
@@ -91,7 +102,9 @@ class BatchGetFeatureInputService implements BatchGetFeatureInputUseCase {
           "Sending mocked unseen matches - all features inputs are mocked (matches size: {}).",
           matches.size());
       var emptyResponse =
-          featureMapperFactory.get(agentInputType).createEmptyResponse(matches, features);
+          featureMapperFactory
+              .get(agentInputType)
+              .createEmptyResponse(matches, this.requestedFeatures);
       consumer.accept(emptyResponse);
     }
   }

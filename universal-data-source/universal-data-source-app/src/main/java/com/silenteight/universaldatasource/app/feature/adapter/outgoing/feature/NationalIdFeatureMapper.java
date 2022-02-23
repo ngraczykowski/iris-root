@@ -3,6 +3,7 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature
 import com.silenteight.datasource.api.name.v1.BatchGetMatchNameInputsResponse;
 import com.silenteight.datasource.api.nationalid.v1.NationalIdFeatureInput;
 import com.silenteight.datasource.api.nationalid.v1.NationalIdInput;
+import com.silenteight.universaldatasource.app.feature.mapper.FeatureInputMapper;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
 import com.google.protobuf.Any;
@@ -14,8 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 class NationalIdFeatureMapper extends BaseFeatureMapper<NationalIdFeatureInput> {
 
-  NationalIdFeatureMapper() {
-    super(NationalIdFeatureInput.class);
+  NationalIdFeatureMapper(final FeatureInputMapper featureInputMapper) {
+    super(NationalIdFeatureInput.class, featureInputMapper);
   }
 
   @Override

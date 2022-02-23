@@ -37,7 +37,6 @@ class FeatureExtractor implements ResultSetExtractor<Integer> {
   private final Consumer<MatchFeatureOutput> consumer;
   private final String agentInputType;
   private final int chunkSize;
-  private final List<String> requestedFeatures;
 
   @Override
   public Integer extractData(ResultSet rs) throws SQLException {
@@ -52,7 +51,6 @@ class FeatureExtractor implements ResultSetExtractor<Integer> {
 
       matchFeatureOutputs.add(MatchInput.builder()
           .match(match)
-          .requestedFeatures(requestedFeatures)
           .agentInputs(getListOfAgentInputObjects(agentInputAggregate))
           .build());
 
@@ -73,21 +71,9 @@ class FeatureExtractor implements ResultSetExtractor<Integer> {
 
   private static List<AgentInput> getListOfAgentInputObjects(String agentInputAggregate) {
     var featureInputMap = agentInputAggregateToMap(agentInputAggregate);
-    editAgentInputFeatureName(featureInputMap);
     return featureInputMap.entrySet().stream()
-        .map(a -> new AgentInput(a.getKey(), a.getValue().toString()))
+        .map(a -> new AgentInput(a.getKey(), a.getValue()))
         .collect(Collectors.toList());
-  }
-
-  // FIXME(ahaczewski): This should be moved to BaseFeatureMapper, as there is a perfect spot
-  //  for setting different feature name
-  private static void editAgentInputFeatureName(Map<String, ObjectNode> featureInputMap) {
-    featureInputMap.forEach((key, value) -> {
-      if (log.isTraceEnabled()) {
-        log.trace("Map feature name: {}, to: {}", value.get(AGENT_INPUT_FEATURE_KEY), key);
-      }
-      value.put(AGENT_INPUT_FEATURE_KEY, key);
-    });
   }
 
   private static Map<String, ObjectNode> agentInputAggregateToMap(String agentInputAggregate) {

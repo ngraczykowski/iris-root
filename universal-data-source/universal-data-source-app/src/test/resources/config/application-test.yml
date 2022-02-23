@@ -72,3 +72,8 @@ grpc:
       address: in-process:test
     data-source:
       address: in-process:test
+
+uds:
+  feature:
+    mapping:
+      state2: state

@@ -3,6 +3,7 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature
 import com.silenteight.datasource.api.transaction.v1.BatchGetMatchTransactionInputsResponse;
 import com.silenteight.datasource.api.transaction.v1.TransactionFeatureInput;
 import com.silenteight.datasource.api.transaction.v1.TransactionInput;
+import com.silenteight.universaldatasource.app.feature.mapper.FeatureInputMapper;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
 import com.google.protobuf.Any;
@@ -14,8 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 class TransactionFeatureMapper extends BaseFeatureMapper<TransactionFeatureInput> {
 
-  TransactionFeatureMapper() {
-    super(TransactionFeatureInput.class);
+  TransactionFeatureMapper(final FeatureInputMapper featureInputMapper) {
+    super(TransactionFeatureInput.class, featureInputMapper);
   }
 
   @Override

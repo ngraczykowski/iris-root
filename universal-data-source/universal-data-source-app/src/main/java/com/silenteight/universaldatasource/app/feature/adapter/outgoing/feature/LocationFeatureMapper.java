@@ -3,6 +3,7 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature
 import com.silenteight.datasource.api.location.v1.BatchGetMatchLocationInputsResponse;
 import com.silenteight.datasource.api.location.v1.LocationFeatureInput;
 import com.silenteight.datasource.api.location.v1.LocationInput;
+import com.silenteight.universaldatasource.app.feature.mapper.FeatureInputMapper;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
 import com.google.protobuf.Any;
@@ -14,8 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 class LocationFeatureMapper extends BaseFeatureMapper<LocationFeatureInput> {
 
-  LocationFeatureMapper() {
-    super(LocationFeatureInput.class);
+  LocationFeatureMapper(final FeatureInputMapper featureInputMapper) {
+    super(LocationFeatureInput.class, featureInputMapper);
   }
 
   @Override

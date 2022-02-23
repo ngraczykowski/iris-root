@@ -3,6 +3,7 @@ package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature
 import com.silenteight.datasource.api.date.v1.BatchGetMatchDateInputsResponse;
 import com.silenteight.datasource.api.date.v1.DateFeatureInput;
 import com.silenteight.datasource.api.date.v1.DateInput;
+import com.silenteight.universaldatasource.app.feature.mapper.FeatureInputMapper;
 import com.silenteight.universaldatasource.app.feature.port.outgoing.BaseFeatureMapper;
 
 import com.google.protobuf.Any;
@@ -14,8 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 class DateFeatureMapper extends BaseFeatureMapper<DateFeatureInput> {
 
-  DateFeatureMapper() {
-    super(DateFeatureInput.class);
+  DateFeatureMapper(final FeatureInputMapper featureInputMapper) {
+    super(DateFeatureInput.class, featureInputMapper);
   }
 
   @Override

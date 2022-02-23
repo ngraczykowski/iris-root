@@ -15,7 +15,8 @@ public interface FeatureMapper {
 
   String getType();
 
-  BatchFeatureInputResponse map(MatchFeatureOutput matchFeatureOutput);
+  BatchFeatureInputResponse map(
+      final MatchFeatureOutput matchFeatureOutput, final List<String> requestedFeatures);
 
   Message unpackAnyMessage(Any featureInput) throws InvalidProtocolBufferException;
 

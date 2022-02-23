@@ -1,8 +1,9 @@
 package com.silenteight.universaldatasource.app.feature.model;
 
 import lombok.Builder;
-import lombok.NonNull;
 import lombok.Value;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.List;
 
@@ -19,9 +20,6 @@ public class MatchFeatureOutput {
 
     String match;
 
-    @NonNull
-    List<String> requestedFeatures;
-
     List<AgentInput> agentInputs;
   }
 
@@ -30,6 +28,6 @@ public class MatchFeatureOutput {
 
     String feature;
 
-    String agentInputJson;
+    ObjectNode agentInputJson;
   }
 }
