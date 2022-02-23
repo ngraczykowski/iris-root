@@ -66,6 +66,9 @@ class ProcessAlertService {
   }
 
   private AlertsReadingResponse readByAlerts(MappingIterator<LearningCsvRow> it, String fileName) {
+    if (!it.hasNext()) {
+      throw new ReadAlertException("Data are empty!");
+    }
 
     var firstRow = it.next();
     assertRowNotNull(firstRow);
