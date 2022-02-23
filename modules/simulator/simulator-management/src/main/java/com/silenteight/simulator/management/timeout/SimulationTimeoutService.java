@@ -30,11 +30,16 @@ class SimulationTimeoutService {
   @NonNull
   private final List<SimulationTimeoutValidator> validators;
 
+  @NonNull
+  private final SimulationLastCheckTimes simulationLastCheckTimes;
+
   @Transactional
   public void timeoutSimulations() {
     List<SimulationDto> runningSimulations = listSimulationsQuery
         .listDomainDto(of(RUNNING, STREAMING))
         .stream()
+        .filter(simulationDto -> simulationLastCheckTimes
+            .isIntervalElapsed(simulationDto.getSimulationName()))
         .collect(toList());
 
     runningSimulations.forEach(this::timeoutSingleSimulation);
@@ -42,6 +47,8 @@ class SimulationTimeoutService {
 
   private void timeoutSingleSimulation(SimulationDto simulationDto) {
     log.info("Process of checking timeout for simulationId={} started.", simulationDto.getId());
+    simulationLastCheckTimes.updateSimulationCheckTimestamp(simulationDto.getSimulationName());
+
     boolean doTimeout = validators.stream().anyMatch(validator -> validator.valid(simulationDto));
     if (doTimeout)
       simulationService.timeout(simulationDto.getId());
