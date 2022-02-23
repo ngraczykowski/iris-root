@@ -6,11 +6,17 @@ import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRe
 import com.silenteight.payments.bridge.agents.port.NameAddressCrossmatchUseCase;
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 
+import org.apache.commons.collections.MapUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.silenteight.payments.bridge.agents.model.AlertedPartyKey.*;
+import static com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.CROSSMATCH;
+import static com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.NO_CROSSMATCH;
+import static com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentResponse.NO_DECISION;
 import static java.util.Arrays.asList;
 
 @Service
@@ -21,39 +27,60 @@ class NameAddressCrossmatchAgent implements NameAddressCrossmatchUseCase {
     WatchlistType wlType = WatchlistType.ofCode(
         request.getWatchlistType());
 
-    if (WatchlistType.ADDRESS == wlType && !isNameWildcard(request.getWatchlistName()))
-      return NameAddressCrossmatchAgentResponse.NO_DECISION;
-
     Map<AlertedPartyKey, String> apProperties = request.getAlertPartyEntities();
-    if (apProperties == null || apProperties.isEmpty())
-      return NameAddressCrossmatchAgentResponse.NO_DECISION;
 
-    if (apProperties.containsKey(ALERTED_NO_MATCH_KEY) ||
-        apProperties.containsKey(ALERTED_NAMEADDRESS_SEGMENT_KEY)) {
-      return NameAddressCrossmatchAgentResponse.NO_DECISION;
+    if (WatchlistType.ADDRESS == wlType && isNameNotWildcard(request.getWatchlistName())) {
+      return NO_DECISION;
     }
 
-    if (checkNameAddressCrossmatch(apProperties, wlType))
-      return NameAddressCrossmatchAgentResponse.CROSSMATCH;
-    else
-      return NameAddressCrossmatchAgentResponse.NO_CROSSMATCH;
+    if (MapUtils.isEmpty(apProperties)) {
+      return NO_DECISION;
+    }
+
+    if (mapContainsAtLeastKeys(apProperties,
+        ALERTED_NO_MATCH_KEY, ALERTED_NAMEADDRESS_SEGMENT_KEY)) {
+      return NO_DECISION;
+    }
+
+    return checkNameAddressCrossmatch(apProperties, wlType) ? CROSSMATCH : NO_CROSSMATCH;
   }
 
   private static boolean checkNameAddressCrossmatch(
       Map<AlertedPartyKey, String> entityData, WatchlistType wlType) {
 
+    var isNameCrossMatch = checkNameCrossMatch(entityData, wlType);
+    var isAddressCrossMatch = checkAddressCrossMatch(entityData, wlType);
+
+    return isNameCrossMatch || isAddressCrossMatch;
+  }
+
+  private static boolean checkNameCrossMatch(
+      Map<AlertedPartyKey, String> entityData,
+      WatchlistType wlType) {
     return mapNotContainsKeys(entityData, ALERTED_NAME_KEY, ALERTED_COMPANY_NAME_KEY)
-        && asList(WatchlistType.COMPANY, WatchlistType.INDIVIDUAL).contains(wlType)
-        || mapNotContainsKeys(entityData, ALERTED_ADDRESS_KEY, ALERTED_COUNTRY_TOWN_KEY)
+        && asList(WatchlistType.COMPANY, WatchlistType.INDIVIDUAL).contains(wlType);
+  }
+
+  private static boolean checkAddressCrossMatch(
+      Map<AlertedPartyKey, String> entityData,
+      WatchlistType wlType) {
+    return mapNotContainsKeys(entityData, ALERTED_ADDRESS_KEY, ALERTED_COUNTRY_TOWN_KEY)
         && WatchlistType.ADDRESS == wlType;
+  }
+
+  private static boolean mapContainsAtLeastKeys(
+      Map<AlertedPartyKey, String> map, AlertedPartyKey... keys) {
+    var alertedPartyKeys = Arrays.stream(keys).collect(Collectors.toSet());
+    return map.keySet().stream().anyMatch(alertedPartyKeys::contains);
   }
 
   private static boolean mapNotContainsKeys(
       Map<AlertedPartyKey, String> map, AlertedPartyKey... keys) {
-    return map.keySet().stream().noneMatch(k -> asList(keys).contains(k));
+    return map.keySet().stream()
+        .noneMatch(k -> asList(keys).contains(k));
   }
 
-  private static boolean isNameWildcard(String name) {
-    return name.equals("*");
+  private static boolean isNameNotWildcard(String name) {
+    return !name.equals("*");
   }
 }
