@@ -144,4 +144,11 @@
     <sqlFile path="db/changelog/sql/create_template_contextual_agent_tp.sql"/>
     <sqlFile path="db/changelog/sql/update_template_match_v3.sql"/>
   </changeSet>
+
+  <changeSet id="adjudication-engine-comments-1.15.0_16" author="jgajewski">
+    <sqlFile path="db/changelog/sql/update_template_contextual_agent_fp_v2.sql"/>
+    <sqlFile path="db/changelog/sql/update_template_contextual_agent_tp_v2.sql"/>
+    <sqlFile path="db/changelog/sql/update_template_historical_agent_fp_v2.sql"/>
+    <sqlFile path="db/changelog/sql/update_template_historical_agent_tp_v2.sql"/>
+  </changeSet>
 </databaseChangeLog>
