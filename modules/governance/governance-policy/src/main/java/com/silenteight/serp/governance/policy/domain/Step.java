@@ -191,4 +191,8 @@ class Step extends BaseModifiableEntity
   public boolean match(StepSearchCriteriaDto criteria) {
     return featureLogics.stream().anyMatch(fl -> fl.match(criteria));
   }
+
+  public void incrementOrder() {
+    ++sortOrder;
+  }
 }
