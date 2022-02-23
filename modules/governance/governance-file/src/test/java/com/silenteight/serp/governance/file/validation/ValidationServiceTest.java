@@ -87,7 +87,6 @@ class ValidationServiceTest {
       MockMultipartFile file) {
 
     assertThrows(InvalidFileException.class, () -> underTest.validate(file));
-
   }
 
   @ParameterizedTest

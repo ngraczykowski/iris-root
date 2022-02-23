@@ -261,6 +261,9 @@ public class PolicyService {
         .orElseThrow(() -> new StepNotFoundException(baseStepId));
 
     Step clonedStep = originStep.cloneStep(request.getNewStepId());
+    int baseStepOrder = originStep.getSortOrder();
+    incrementStepsOrder(policy.getSteps(), baseStepOrder);
+    clonedStep.incrementOrder();
     policy.addStep(clonedStep);
     request.postAudit(auditingLogger::log);
     return clonedStep.getStepId();
@@ -381,5 +384,11 @@ public class PolicyService {
   private Policy validateAndReturnPolicy(UUID policyId) {
     return policyRepository.findByPolicyId(policyId)
         .orElseThrow(() -> new WrongBasePolicyException(policyId));
+  }
+
+  private static void incrementStepsOrder(Collection<Step> steps, Integer baseStepOrder) {
+    steps.stream()
+        .filter(step -> step.getSortOrder() > baseStepOrder)
+        .forEach(Step::incrementOrder);
   }
 }

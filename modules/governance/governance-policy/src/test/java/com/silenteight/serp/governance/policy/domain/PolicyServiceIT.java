@@ -1,7 +1,9 @@
 package com.silenteight.serp.governance.policy.domain;
 
 import com.silenteight.sep.base.testing.BaseDataJpaTest;
+import com.silenteight.serp.governance.policy.domain.dto.CloneStepRequest;
 import com.silenteight.serp.governance.policy.domain.dto.CreateStepRequest;
+import com.silenteight.serp.governance.policy.domain.dto.SetStepsOrderRequest;
 import com.silenteight.serp.governance.policy.domain.dto.UpdateStepRequest;
 
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.PersistenceException;
 
@@ -19,6 +22,8 @@ import static com.silenteight.serp.governance.policy.domain.StepType.BUSINESS_LO
 import static com.silenteight.serp.governance.policy.domain.TestFixtures.*;
 import static com.silenteight.solving.api.v1.FeatureVectorSolution.SOLUTION_NO_DECISION;
 import static java.lang.String.format;
+import static java.util.List.of;
+import static java.util.UUID.randomUUID;
 import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
@@ -43,7 +48,7 @@ class PolicyServiceIT extends BaseDataJpaTest {
   void addStepToPolicy_succeeded_whenAllDataValid() {
     //given
     Policy policy = createPolicy();
-    UUID stepUuid = UUID.randomUUID();
+    UUID stepUuid = randomUUID();
     CreateStepRequest request = CreateStepRequest.of(
         policy.getPolicyId(),
         SOLUTION_NO_DECISION,
@@ -69,7 +74,7 @@ class PolicyServiceIT extends BaseDataJpaTest {
   void addStepToPolicy_throwsPersistenceException_whenStepNameToLong() {
     //given
     Policy policy = createPolicy();
-    UUID stepUuid = UUID.randomUUID();
+    UUID stepUuid = randomUUID();
     CreateStepRequest request = CreateStepRequest.of(
         policy.getPolicyId(),
         SOLUTION_NO_DECISION,
@@ -94,7 +99,7 @@ class PolicyServiceIT extends BaseDataJpaTest {
   void updateStep_succeeded_whenAllDataValid() {
     //given
     Policy policy = createPolicy();
-    Step step = addStep(policy);
+    Step step = addStep(policy, FIRST_STEP_ID);
     UpdateStepRequest request = UpdateStepRequest.of(
         policy.getId(),
         step.getStepId(),
@@ -117,7 +122,7 @@ class PolicyServiceIT extends BaseDataJpaTest {
   void updateStep_throwsPersistenceException_whenStepNameToLong() {
     //given
     Policy policy = createPolicy();
-    Step step = addStep(policy);
+    Step step = addStep(policy, FIRST_STEP_ID);
     UpdateStepRequest request = UpdateStepRequest.of(
         policy.getId(),
         step.getStepId(),
@@ -137,22 +142,85 @@ class PolicyServiceIT extends BaseDataJpaTest {
     assertThat(thrown.getCause().getCause().getMessage()).isEqualTo(STEP_NAME_TOO_LONG_MSG);
   }
 
+  @Test
+  void shouldCloneFirstStepAndSetOrder() {
+    //given
+    Policy policy = createPolicy();
+    Step firstStep = addStep(policy, FIRST_STEP_ID);
+    UUID firstStepId = firstStep.getStepId();
+    underTest.setStepsOrder(createSetStepsOrderRequest(POLICY_ID, of(firstStepId)));
+
+    Step secondStep = addStep(policy, SECOND_STEP_ID);
+    UUID secondStepId = secondStep.getStepId();
+    underTest.setStepsOrder(createSetStepsOrderRequest(POLICY_ID, of(firstStepId, secondStepId)));
+
+    //when
+    CloneStepRequest cloneStepRequest =
+        createCloneStepRequest(policy.getPolicyId(), firstStepId, OTHER_STEP_ID);
+
+    UUID clonedStepId = underTest.cloneStep(cloneStepRequest);
+
+    //then
+    Integer firstStepOrder = stepRepository.getStepByStepId(firstStepId).getSortOrder();
+    Integer clonedStepOrder = stepRepository.getStepByStepId(clonedStepId).getSortOrder();
+    Integer thirdStepOrder = stepRepository.getStepByStepId(secondStepId).getSortOrder();
+
+    assertThat(firstStep.getSortOrder()).isEqualTo(firstStepOrder);
+    assertThat(clonedStepOrder).isEqualTo(firstStepOrder + 1);
+    assertThat(thirdStepOrder).isEqualTo(firstStepOrder + 2);
+  }
+
+  @Test
+  void shouldCloneLastStepAndSetOrder() {
+    //given
+    Policy policy = createPolicy();
+    Step firstStep = addStep(policy, FIRST_STEP_ID);
+    UUID firstStepId = firstStep.getStepId();
+    underTest.setStepsOrder(createSetStepsOrderRequest(POLICY_ID, of(firstStepId)));
+
+    Step secondStep = addStep(policy, SECOND_STEP_ID);
+    UUID secondStepId = secondStep.getStepId();
+    underTest.setStepsOrder(createSetStepsOrderRequest(POLICY_ID, of(firstStepId, secondStepId)));
+
+    //when
+    CloneStepRequest cloneStepRequest =
+        createCloneStepRequest(policy.getPolicyId(), secondStepId, OTHER_STEP_ID);
+
+    UUID clonedStepId = underTest.cloneStep(cloneStepRequest);
+
+    //then
+    Integer firstStepOrder = stepRepository.getStepByStepId(firstStepId).getSortOrder();
+    Integer secondStepOrder = stepRepository.getStepByStepId(secondStepId).getSortOrder();
+    Integer clonedStepOrder = stepRepository.getStepByStepId(clonedStepId).getSortOrder();
+
+    assertThat(firstStep.getSortOrder()).isEqualTo(firstStepOrder);
+    assertThat(secondStep.getSortOrder()).isEqualTo(secondStepOrder);
+    assertThat(clonedStepOrder).isEqualTo(secondStepOrder + 1);
+  }
+
   private Policy createPolicy() {
-    Policy policy = new Policy(UUID.randomUUID(), POLICY_NAME, POLICY_DESCRIPTION, USER);
+    Policy policy = new Policy(POLICY_ID, POLICY_NAME, POLICY_DESCRIPTION, USER);
     return policyRepository.save(policy);
   }
 
-  private Step addStep(Policy policy) {
-    UUID stepUuid = UUID.randomUUID();
+  private Step addStep(Policy policy, UUID stepId) {
     CreateStepRequest request = CreateStepRequest.of(
         policy.getPolicyId(),
         SOLUTION_NO_DECISION,
-        stepUuid,
+        stepId,
         STEP_NAME,
         STEP_DESCRIPTION,
         BUSINESS_LOGIC,
         USER);
     underTest.addStepToPolicy(request);
-    return stepRepository.getStepByStepId(stepUuid);
+    return stepRepository.getStepByStepId(stepId);
+  }
+
+  private SetStepsOrderRequest createSetStepsOrderRequest(UUID policyID, List<UUID> steps) {
+    return SetStepsOrderRequest.of(policyID, steps, OTHER_USER);
+  }
+
+  private CloneStepRequest createCloneStepRequest(UUID policyId, UUID baseStepId, UUID newStepID) {
+    return CloneStepRequest.of(newStepID, baseStepId, policyId, OTHER_USER);
   }
 }
