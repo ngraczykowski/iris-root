@@ -7,7 +7,7 @@ import com.silenteight.sep.base.testing.BaseJdbcTest;
 
 import com.icegreen.greenmail.configuration.GreenMailConfiguration;
 import com.icegreen.greenmail.junit5.GreenMailExtension;
-import com.icegreen.greenmail.util.ServerSetupTest;
+import com.icegreen.greenmail.util.ServerSetup;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class EmailSenderServiceTest extends BaseJdbcTest {
 
   @RegisterExtension
-  static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP)
+  static GreenMailExtension greenMail = new GreenMailExtension(getServerStartup())
       .withConfiguration(GreenMailConfiguration
           .aConfig()
           .withUser("user", "password"))
@@ -105,6 +105,13 @@ class EmailSenderServiceTest extends BaseJdbcTest {
     bufferedInputStream.read(data, 0, data.length);
 
     return data;
+  }
+
+  protected static ServerSetup getServerStartup() {
+    final ServerSetup serverSetup = new ServerSetup(3025, null, ServerSetup.PROTOCOL_SMTP);
+    serverSetup.setServerStartupTimeout(2000L);
+    serverSetup.setVerbose(true);
+    return serverSetup;
   }
 }
 

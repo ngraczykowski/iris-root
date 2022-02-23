@@ -39,6 +39,8 @@ class EmailSenderService implements EmailSenderUseCase {
         prepareMessageHelper(sendEmailRequest, mimeMessage);
 
     try {
+      log.debug("Starting an attempt to send an email, notification ids={}",
+          sendEmailRequest.getIds());
       emailSender.send(messagePreparator);
     } catch (MailAuthenticationException | MailParseException |
         MailPreparationException exception) {
@@ -48,6 +50,8 @@ class EmailSenderService implements EmailSenderUseCase {
           exception.getMessage(), exception.getCause(), sendEmailRequest.getIds());
       throw new NonRecoverableEmailSendingException("Mail could not be sent.");
     }
+    log.debug("Successful attempt to send an email, notification ids={}",
+        sendEmailRequest.getIds());
   }
 
   private void prepareMessageHelper(
