@@ -6,6 +6,7 @@ import com.silenteight.adjudication.api.v1.Recommendation;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.InsertRecommendationRequest;
 import com.silenteight.adjudication.engine.analysis.recommendation.domain.RecommendationResponse;
 import com.silenteight.adjudication.engine.analysis.recommendation.jdbc.SelectPendingAlertsQuery.MatchContextsJsonNodeReadException;
+import com.silenteight.adjudication.engine.analysis.recommendation.jdbc.SelectPendingAlertsQuery.MatchIdsArrayReadException;
 import com.silenteight.adjudication.engine.analysis.recommendation.transform.dto.AnalysisRecommendationContext;
 import com.silenteight.adjudication.engine.comments.comment.domain.MatchContext;
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
@@ -13,12 +14,15 @@ import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.SqlUpdate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
+import java.sql.Array;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.*;
@@ -53,11 +57,11 @@ class InsertAlertRecommendationsQuery {
             + "match_contexts, comment"
             + ")\n"
             + "VALUES ("
-            + ":analysis_id, :alert_id, now(), :recommended_action, :match_ids, :match_contexts, "
+            + ":analysis_id, :alert_id, NOW(), :recommended_action, :match_ids, :match_contexts, "
             + ":comment)\n"
             + "ON CONFLICT DO NOTHING\n"
             + "RETURNING recommendation_id, analysis_id, alert_id, created_at, "
-            + "recommended_action, comment;");
+            + "recommended_action,match_ids,match_contexts::text, comment;");
     sql.declareParameter(new SqlParameter(ALERT_ID_COLUMN, Types.BIGINT));
     sql.declareParameter(new SqlParameter(ANALYSIS_ID_COLUMN, Types.BIGINT));
     sql.declareParameter(new SqlParameter(RECOMMENDED_ACTION_COLUMN, Types.VARCHAR));
@@ -120,9 +124,8 @@ class InsertAlertRecommendationsQuery {
     var analysisId = (long) it.get(ANALYSIS_ID_COLUMN);
     var recommendationId = (long) it.get("recommendation_id");
     var alertId = (long) it.get(ALERT_ID_COLUMN);
-    var matchIds = ((long[]) it.get(MATCH_IDS_COLUMN));
-    var matchContexts = (String) it.get(MATCH_CONTEXTS_COLUMN);
-    var objectNodes = readMatchContext(matchContexts);
+    var matchIds = readMatchIds((Array) it.get(MATCH_IDS_COLUMN));
+    var objectNodes = readMatchContext((String) it.get(MATCH_CONTEXTS_COLUMN));
     var createdAt = (Timestamp) it.get(CREATED_AT_COLUMN);
     var recommendedAction = (String) it.get(RECOMMENDED_ACTION_COLUMN);
     var comment = (String) it.get(COMMENT_COLUMN);
@@ -148,6 +151,19 @@ class InsertAlertRecommendationsQuery {
         .metaData(recommendationMetadata)
         .recommendation(recommendation)
         .build();
+  }
+
+  private static long[] readMatchIds(Array o) {
+    if (o == null) {
+      debug("Match Ids array is empty");
+      return new long[0];
+    }
+    try {
+      return ArrayUtils.toPrimitive((Long[]) o.getArray());
+    } catch (SQLException e) {
+      log.error("Could not get matchIds:", e);
+      throw new MatchIdsArrayReadException(e);
+    }
   }
 
   private static String writeMatchContexts(ObjectNode[] matchContexts) {

@@ -90,6 +90,15 @@ class SelectPendingAlertsQuery {
     }
   }
 
+  static class MatchIdsArrayReadException extends RuntimeException {
+
+    private static final long serialVersionUID = 1116976327222398L;
+
+    MatchIdsArrayReadException(Throwable cause) {
+      super(cause);
+    }
+  }
+
   static class MatchContextsJsonNodeReadException extends RuntimeException {
 
     private static final long serialVersionUID = 3876426976327990398L;
