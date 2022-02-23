@@ -26,12 +26,14 @@ class SimulationTimeoutConfiguration {
       SimulationService simulationService,
       AnalysisTimeoutValidator analysisTimeoutValidator,
       IndexingTimeoutValidator indexingTimeoutValidator,
-      UpdateTimeoutValidator updateTimeoutValidator
+      UpdateTimeoutValidator updateTimeoutValidator,
+      SimulationLastCheckTimes simulationTimeoutInterval
   ) {
     return new SimulationTimeoutService(
         listSimulationsQuery,
         simulationService,
-        of(updateTimeoutValidator, indexingTimeoutValidator, analysisTimeoutValidator));
+        of(updateTimeoutValidator, indexingTimeoutValidator, analysisTimeoutValidator),
+        simulationTimeoutInterval);
   }
 
   @Bean
@@ -64,5 +66,13 @@ class SimulationTimeoutConfiguration {
       @Valid SimulationTimeoutProperties timeoutProperties) {
 
     return new UpdateTimeoutValidator(timeSource, timeoutProperties.getDurationTime());
+  }
+
+  @Bean
+  SimulationLastCheckTimes simulationLastCheckTimes(
+      TimeSource timeSource,
+      @Valid SimulationTimeoutProperties timeoutProperties) {
+
+    return new SimulationLastCheckTimes(timeSource, timeoutProperties.getDurationTime());
   }
 }
