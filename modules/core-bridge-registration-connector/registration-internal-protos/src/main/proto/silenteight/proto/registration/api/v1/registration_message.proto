@@ -40,3 +40,12 @@ message MessageBatchError {
   string error_description = 2 [(google.api.field_behavior) = REQUIRED];
   optional string batch_metadata = 3;
 }
+
+message MessageVerifyBatchTimeout {
+  string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message MessageNotifyBatchTimedOut {
+  string analysis_name = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string alert_names = 2 [(google.api.field_behavior) = REQUIRED];
+}
