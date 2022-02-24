@@ -71,6 +71,18 @@ class PolicyServiceIT extends BaseDataJpaTest {
   }
 
   @Test
+  void addStepToPolicy_forceCorrectStepsOrder_whenCallingTwice() {
+    //given
+    Policy policy = createPolicy();
+    Step firstStep = addStep(policy, FIRST_STEP_ID);
+    //when
+    Step secondStep = addStep(policy, SECOND_STEP_ID);
+    //then
+    assertThat(firstStep.getSortOrder()).isEqualTo(0);
+    assertThat(secondStep.getSortOrder()).isEqualTo(1);
+  }
+
+  @Test
   void addStepToPolicy_throwsPersistenceException_whenStepNameToLong() {
     //given
     Policy policy = createPolicy();
