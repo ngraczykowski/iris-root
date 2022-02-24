@@ -28,8 +28,6 @@ greenmail:
   startup:
     timeout: 1000
 pb:
-  sear-learning:
-    useNewLearning: true
   email-notification:
     from: "email.example@silenteight.com"
     to: "email.example2@silenteight.com"

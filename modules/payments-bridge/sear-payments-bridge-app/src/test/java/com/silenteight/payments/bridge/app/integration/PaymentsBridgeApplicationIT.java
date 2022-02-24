@@ -9,7 +9,6 @@ import com.silenteight.payments.bridge.firco.dto.input.RequestDto;
 import com.silenteight.payments.bridge.mock.ae.MockAlertUseCase;
 import com.silenteight.payments.bridge.mock.datasource.MockDatasourceService;
 import com.silenteight.payments.bridge.mock.warehouse.MockWarehouseService;
-import com.silenteight.payments.bridge.svb.learning.reader.port.HandleLearningAlertsUseCase;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 
@@ -73,8 +72,6 @@ class PaymentsBridgeApplicationIT {
   CreateAlertMessageUseCase createAlertMessageUseCase;
   @Autowired
   ResourceLoader resourceLoader;
-  @Autowired
-  HandleLearningAlertsUseCase handleLearningDataUseCase;
   @Autowired
   PaymentsBridgeEventsListener paymentsBridgeEventsListener;
   @Autowired
