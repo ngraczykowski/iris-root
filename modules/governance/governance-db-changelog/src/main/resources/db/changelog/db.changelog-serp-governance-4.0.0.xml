@@ -580,4 +580,27 @@
                     columnName="policy_name"
                     newDataType="VARCHAR(80)"/>
   </changeSet>
+  <changeSet id="serp-governance-4.0.0-24" author="dsniezek">
+    <comment>
+      Fix duplicated governance_policy_step.sort_order
+    </comment>
+    <sql>
+      UPDATE governance_policy_step ps
+      SET sort_order = v_governance_policy_step.new_sort_order - 1 FROM
+        (
+          SELECT vps.id,
+          row_number() over (PARTITION BY policy_id ORDER BY sort_order, vps.id) AS new_sort_order,
+          vps.sort_order
+          FROM governance_policy_step vps ORDER BY vps.id
+        ) AS v_governance_policy_step
+      WHERE ps.id = v_governance_policy_step.id;
+    </sql>
+    <rollback/>
+  </changeSet>
+  <changeSet id="serp-governance-4.0.0-25" author="dsniezek">
+    <comment>
+      Add unique index on governance_policy_step(policy_id, sort_order)
+    </comment>
+    <addUniqueConstraint tableName="governance_policy_step" columnNames="policy_id,sort_order" initiallyDeferred="true"/>
+  </changeSet>
 </databaseChangeLog>

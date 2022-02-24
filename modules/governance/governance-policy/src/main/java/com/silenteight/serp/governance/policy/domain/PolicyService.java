@@ -29,8 +29,6 @@ import static java.util.stream.IntStream.range;
 @RequiredArgsConstructor
 public class PolicyService {
 
-  private static final int DEFAULT_STEP_ORDER_VALUE = Integer.MAX_VALUE;
-
   @NonNull
   private final PolicyRepository policyRepository;
   @NonNull
@@ -98,7 +96,7 @@ public class PolicyService {
         createStepRequest.getStepName(),
         createStepRequest.getStepDescription(),
         createStepRequest.getStepType(),
-        DEFAULT_STEP_ORDER_VALUE,
+        lastSortOrder(policy.getSteps()),
         createStepRequest.getCreatedBy());
     createStepRequest.postAudit(auditingLogger::log);
   }
@@ -390,5 +388,9 @@ public class PolicyService {
     steps.stream()
         .filter(step -> step.getSortOrder() > baseStepOrder)
         .forEach(Step::incrementOrder);
+  }
+
+  private Integer lastSortOrder(Collection<Step> steps) {
+    return steps.stream().mapToInt(s -> s.getSortOrder() + 1).max().orElse(0);
   }
 }
