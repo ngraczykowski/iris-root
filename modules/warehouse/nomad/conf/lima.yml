@@ -138,7 +138,8 @@ warehouse.reports.v2:
                sim.payload ->> 'features/nationalityCountry:solution'             AS "Nationality Country",
                sim.payload ->> 'features/residencyCountry:solution'               AS "Residency Country"
         FROM warehouse_simulation_alert sim
-                 JOIN warehouse_match match ON sim.id = match.alert_id
+            JOIN warehouse_alert prod on prod.name = sim.name
+            JOIN warehouse_match match ON prod.id = match.alert_id
         WHERE sim.analysis_name = 'analysis/${analysisId}'
         GROUP BY sim.payload ->> 'match_reason:policy',
                  sim.payload ->> 'match_reason:policy_title',
@@ -163,10 +164,10 @@ warehouse.reports.v2:
       selectSqlQuery: >
         SELECT prod.discriminator                                                        AS "S8 Alert ID",
                STRING_AGG(match.payload ->> 'watchListId', ',')                          AS "Watchlist Hit IDs",
-               sim.payload ->> 'match_reason:policyId'                                   AS "Policy ID",
-               sim.payload ->> 'match_reason:policyTitle'                                AS "Policy Name",
-               sim.payload ->> 'match_reason:stepId'                                     AS "Step ID",
-               sim.payload ->> 'match_reason:stepTitle'                                  AS "Step Name",
+               sim.payload ->> 'match_reason:policy'                                     AS "Policy ID",
+               sim.payload ->> 'match_reason:policy_title'                               AS "Policy Name",
+               sim.payload ->> 'match_reason:step'                                       AS "Step ID",
+               sim.payload ->> 'match_reason:step_title'                                 AS "Step Name",
                STRING_AGG(sim.payload ->> 'match_reason:feature_vector_signature', ',')  AS "Reasoning Branch IDs",
                prod.payload ->> 'trackingId'                                             AS "Tracking ID",
                prod.payload ->> 'batchType'                                              AS "Batch Type",
@@ -182,10 +183,10 @@ warehouse.reports.v2:
                  JOIN warehouse_match match ON prod.id = match.alert_id
         WHERE sim.analysis_name = 'analysis/${analysisId}'
         GROUP BY prod.discriminator,
-                 sim.payload ->> 'match_reason:policyId',
-                 sim.payload ->> 'match_reason:policyTitle',
-                 sim.payload ->> 'match_reason:stepId',
-                 sim.payload ->> 'match_reason:stepTitle',
+                 sim.payload ->> 'match_reason:policy',
+                 sim.payload ->> 'match_reason:policy_title',
+                 sim.payload ->> 'match_reason:step',
+                 sim.payload ->> 'match_reason:step_title',
                  prod.payload ->> 'trackingId',
                  prod.payload ->> 'batchType',
                  prod.payload ->> 'batchCountry',
@@ -202,10 +203,10 @@ warehouse.reports.v2:
       selectSqlQuery: >
         SELECT prod.discriminator                                      AS "S8 Alert ID",
                match.payload ->> 'watchListId'                         AS "Watchlist Hit ID",
-               sim.payload ->> 'match_reason:policyId'                 AS "Policy ID",
-               sim.payload ->> 'match_reason:policyTitle'              AS "Policy Name",
-               sim.payload ->> 'match_reason:stepI'                    AS "Step ID",
-               sim.payload ->> 'match_reason:stepTitle'                AS "Step Name",
+               sim.payload ->> 'match_reason:policy'                   AS "Policy ID",
+               sim.payload ->> 'match_reason:policy_title'             AS "Policy Name",
+               sim.payload ->> 'match_reason:step'                     AS "Step ID",
+               sim.payload ->> 'match_reason:step_title'               AS "Step Name",
                sim.payload ->> 'match_reason:feature_vector_signature' AS "Reasoning Branch ID",
                prod.payload ->> 'batchId'                              AS "Batch ID",
                prod.payload ->> 'batchType'                            AS "Batch Type",
@@ -219,7 +220,7 @@ warehouse.reports.v2:
                sim.payload ->> 'recommendation_recommended_action'     AS "S8 Alert Resolution"
         FROM warehouse_simulation_alert sim
                  JOIN warehouse_alert prod ON sim.name = prod.name
-                 JOIN warehouse_match match ON sim.id = match.alert_id
+                 JOIN warehouse_match match ON prod.id = match.alert_id
         WHERE sim.analysis_name = 'analysis/${analysisId}'
 
     - name: ACCURACY_ALERT_LEVEL
@@ -246,7 +247,7 @@ warehouse.reports.v2:
                prod.payload ->> 'lastCaseComment'                  AS "Analyst Reason"
         FROM warehouse_simulation_alert sim
                  JOIN warehouse_alert prod ON sim.name = prod.name
-                 JOIN warehouse_match match ON sim.id = match.alert_id
+                 JOIN warehouse_match match ON prod.id = match.alert_id
         WHERE sim.analysis_name = 'analysis/${analysisId}'
         AND prod.payload ->> 'analyst_decision' IN
               ('analyst_decision_false_positive', 'analyst_decision_true_positive')
@@ -289,7 +290,7 @@ warehouse.reports.v2:
                prod.payload ->> 'lastCaseComment'                      AS "Analyst Reason"
         FROM warehouse_simulation_alert sim
                  JOIN warehouse_alert prod ON sim.name = prod.name
-                 JOIN warehouse_match match ON sim.id = match.alert_id
+                 JOIN warehouse_match match ON prod.id = match.alert_id
         WHERE sim.analysis_name = 'analysis/${analysisId}'
         AND prod.payload ->> 'analyst_decision' IN
               ('analyst_decision_false_positive', 'analyst_decision_true_positive')
