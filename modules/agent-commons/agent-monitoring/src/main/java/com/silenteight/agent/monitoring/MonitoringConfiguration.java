@@ -25,6 +25,6 @@ class MonitoringConfiguration {
       value = "sentry.enabled",
       havingValue = "false")
   Monitoring dummyMonitoring() {
-    return t -> log.info("Dummy monitoring for local environment");
+    return t -> { };
   }
 }
