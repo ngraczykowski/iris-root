@@ -14,7 +14,7 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @Slf4j
 @Validated
-@ConfigurationProperties(prefix = "pb.svb-learning")
+@ConfigurationProperties(prefix = "pb.sear-learning")
 public class LearningProperties {
 
   @NotEmpty

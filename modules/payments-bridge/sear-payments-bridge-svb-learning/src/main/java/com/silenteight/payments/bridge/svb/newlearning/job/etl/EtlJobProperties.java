@@ -9,7 +9,7 @@ import org.springframework.validation.annotation.Validated;
 @Data
 @Slf4j
 @Validated
-@ConfigurationProperties(prefix = "pb.svb-learning.unregistered")
+@ConfigurationProperties(prefix = "pb.sear-learning.unregistered")
 public class EtlJobProperties {
 
   private int chunkSize = 10;

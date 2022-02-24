@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 @Data
 @Slf4j
 @Validated
-@ConfigurationProperties(prefix = "pb.svb-learning.store")
+@ConfigurationProperties(prefix = "pb.sear-learning.store")
 public class StoreCsvJobProperties {
 
   private long retryPeriodMilliseconds = 30 * 1000;

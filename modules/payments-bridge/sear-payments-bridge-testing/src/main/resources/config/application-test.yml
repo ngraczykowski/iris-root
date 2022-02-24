@@ -28,7 +28,7 @@ greenmail:
   startup:
     timeout: 1000
 pb:
-  svb-learning:
+  sear-learning:
     useNewLearning: true
   email-notification:
     from: "email.example@silenteight.com"

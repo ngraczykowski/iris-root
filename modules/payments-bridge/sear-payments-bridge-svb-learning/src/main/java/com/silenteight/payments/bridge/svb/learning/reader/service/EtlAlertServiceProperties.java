@@ -9,7 +9,7 @@ import java.time.ZoneId;
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotEmpty;
 
-@ConfigurationProperties("pb.svb-learning.etl.alert")
+@ConfigurationProperties("pb.sear-learning.etl.alert")
 @Data
 class EtlAlertServiceProperties {
 

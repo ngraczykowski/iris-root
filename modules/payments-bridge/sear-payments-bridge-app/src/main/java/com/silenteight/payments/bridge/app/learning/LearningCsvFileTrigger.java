@@ -27,10 +27,10 @@ class LearningCsvFileTrigger {
   private final CsvFileResourceProvider csvFileResourceProvider;
   private final LearningFileRepository learningFileRepository;
 
-  @Scheduled(cron = "${pb.svb-learning.trigger-csv-processing.cron}")
+  @Scheduled(cron = "${pb.sear-learning.trigger-csv-processing.cron}")
   @SchedulerLock(name = "processLearningScheduler",
-      lockAtMostFor = "${pb.svb-learning.trigger-csv-processing.lock-most}",
-      lockAtLeastFor = "${pb.svb-learning.trigger-csv-processing.lock-least}")
+      lockAtMostFor = "${pb.sear-learning.trigger-csv-processing.lock-most}",
+      lockAtLeastFor = "${pb.sear-learning.trigger-csv-processing.lock-least}")
   public void process() {
     var repositoryFiles = csvFileResourceProvider.getFilesList();
     var newNames = getNonProcessedFiles(repositoryFiles);

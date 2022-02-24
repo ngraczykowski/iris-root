@@ -5,7 +5,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
-@ConfigurationProperties("pb.svb-learning.aws.file-list")
+@ConfigurationProperties("pb.sear-learning.aws.file-list")
 @Data
 @Validated
 class AwsFileListProviderProperties {

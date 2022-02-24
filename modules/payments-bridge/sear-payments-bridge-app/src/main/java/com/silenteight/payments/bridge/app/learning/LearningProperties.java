@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 
 @Data
 @Validated
-@ConfigurationProperties(prefix = "pb.svb-learning")
+@ConfigurationProperties(prefix = "pb.sear-learning")
 class LearningProperties {
 
   private Boolean useNewLearning = false;

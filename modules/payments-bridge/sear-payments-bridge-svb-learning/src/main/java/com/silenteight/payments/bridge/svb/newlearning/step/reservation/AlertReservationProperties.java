@@ -9,7 +9,7 @@ import org.springframework.validation.annotation.Validated;
 @Data
 @Slf4j
 @Validated
-@ConfigurationProperties(prefix = "pb.svb-learning.reservation")
+@ConfigurationProperties(prefix = "pb.sear-learning.reservation")
 class AlertReservationProperties {
 
   private int chunkSize = 1024;
