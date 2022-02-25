@@ -33,4 +33,19 @@ class RecommendationMapperSpec extends Specification {
     then:
     recommendation == RecommendationFixtures.ERRONEOUS_RECOMMENDATION_RESPONSE
   }
+
+  def 'should create recommendation response for null recommendation metadata'() {
+    given:
+    def batchWithAlerts = RecommendationFixtures.BATCH_WITH_ALERTS_DTO
+    def recommendationWithNullMetadata = [RecommendationFixtures.RECOMMENDATION_WITHOUT_METADATA]
+    def recommendedAtForErrorAlerts = RecommendationFixtures.RECOMMENDATION_RECOMMENDED_AT
+    def batchStatistics = RecommendationFixtures.BATCH_STATISTICS
+
+    when:
+    def recommendation = RecommendationMapper.toRecommendationsResponse(
+        batchWithAlerts, recommendationWithNullMetadata, recommendedAtForErrorAlerts, batchStatistics)
+
+    then:
+    recommendation == RecommendationFixtures.RECOMMENDATION_WITHOUT_METADATA_RESPONSE
+  }
 }

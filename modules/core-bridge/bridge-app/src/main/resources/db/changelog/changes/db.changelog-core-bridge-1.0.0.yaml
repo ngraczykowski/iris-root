@@ -237,3 +237,14 @@ databaseChangeLog:
               - column:
                   name: status
             tableName: matches
+
+  - changeSet:
+      id: 1.0.0-4
+      author: apozorski
+      changes:
+        - addColumn:
+            tableName: recommendations
+            columns:
+              - column:
+                  name: timeout
+                  type: boolean

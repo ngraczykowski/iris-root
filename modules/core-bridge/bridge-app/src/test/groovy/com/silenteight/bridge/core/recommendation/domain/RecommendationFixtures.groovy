@@ -2,6 +2,9 @@ package com.silenteight.bridge.core.recommendation.domain
 
 import com.silenteight.adjudication.api.library.v1.util.TimeStampUtil
 import com.silenteight.bridge.core.Fixtures
+import com.silenteight.bridge.core.recommendation.domain.command.GetRecommendationCommand
+import com.silenteight.bridge.core.recommendation.domain.command.ReadyRecommendationsCommand
+import com.silenteight.bridge.core.recommendation.domain.command.ProceedBatchTimeoutCommand
 import com.silenteight.bridge.core.recommendation.domain.model.BatchStatistics
 import com.silenteight.bridge.core.recommendation.domain.model.BatchStatistics.RecommendationsStats
 import com.silenteight.bridge.core.recommendation.domain.model.BatchWithAlertsDto
@@ -30,6 +33,12 @@ class RecommendationFixtures {
   static def RECOMMENDATION_ACTION = 'recommendation_action'
   static def RECOMMENDATION_COMMENT = 'recommendation_comment'
   static def ERROR_DESCRIPTION = 'error occurred'
+
+  static def READY_RECOMMENDATIONS_COMMAND = new ReadyRecommendationsCommand(ANALYSIS_NAME)
+
+  static def TIMED_OUT_RECOMMENDATIONS_COMMAND = new ProceedBatchTimeoutCommand(ANALYSIS_NAME, [ALERT_NAME])
+
+  static def GET_RECOMMENDATIONS_RESPONSE_COMMAND = new GetRecommendationCommand(ANALYSIS_NAME)
 
   static def ERROR_ALERT_DTO = AlertWithMatchesDto.builder()
       .id(Fixtures.ALERT_ID)
@@ -100,6 +109,16 @@ class RecommendationFixtures {
       .metadata(RECOMMENDATION_METADATA)
       .build()
 
+  static def RECOMMENDATION_WITHOUT_METADATA = RecommendationWithMetadata.builder()
+      .name(RECOMMENDATION_NAME)
+      .analysisName(ANALYSIS_NAME)
+      .alertName(ALERT_NAME)
+      .recommendedAction(RECOMMENDATION_ACTION)
+      .recommendationComment(RECOMMENDATION_COMMENT)
+      .recommendedAt(RECOMMENDATION_RECOMMENDED_AT)
+      .metadata(null)
+      .build()
+
   static def ALERT_RECOMMENDATION = Alert
       .newBuilder()
       .setId(Fixtures.ALERT_ID)
@@ -162,6 +181,17 @@ class RecommendationFixtures {
       .addAllMatches([FIRST_MATCH_RECOMMENDATION, SECOND_MATCH_RECOMMENDATION])
       .build()
 
+  static def RECOMMENDATION_WITHOUT_MATCHES = Recommendation.newBuilder()
+      .setBatchId(Fixtures.BATCH_ID)
+      .setName(RECOMMENDATION_NAME)
+      .setRecommendedAction(RECOMMENDATION_ACTION)
+      .setRecommendationComment(RECOMMENDATION_COMMENT)
+      .setPolicyId(POLICY_NAME)
+      .setRecommendedAt(TimeStampUtil.fromOffsetDateTime(RECOMMENDATION_RECOMMENDED_AT))
+      .setAlert(ALERT_RECOMMENDATION)
+      .addAllMatches([])
+      .build()
+
   static def ERRONEOUS_RECOMMENDATION = Recommendation.newBuilder()
       .setBatchId(Fixtures.BATCH_ID)
       .setName("")
@@ -191,6 +221,11 @@ class RecommendationFixtures {
 
   static def RECOMMENDATION_RESPONSE = RecommendationsResponse.newBuilder()
       .addAllRecommendations(List.of(RECOMMENDATION))
+      .setStatistics(STATISTICS)
+      .build()
+
+  static def RECOMMENDATION_WITHOUT_METADATA_RESPONSE = RecommendationsResponse.newBuilder()
+      .addAllRecommendations(List.of(RECOMMENDATION_WITHOUT_MATCHES))
       .setStatistics(STATISTICS)
       .build()
 

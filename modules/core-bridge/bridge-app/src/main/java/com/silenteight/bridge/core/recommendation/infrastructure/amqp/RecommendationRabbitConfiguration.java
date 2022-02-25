@@ -11,6 +11,7 @@ import java.util.Optional;
 @Configuration
 @EnableConfigurationProperties({
     RecommendationIncomingRecommendationsGeneratedConfigurationProperties.class,
+    RecommendationIncomingNotifyBatchTimeoutConfigurationProperties.class,
     RecommendationOutgoingRecommendationsReceivedConfigurationProperties.class
 })
 class RecommendationRabbitConfiguration {
@@ -62,6 +63,55 @@ class RecommendationRabbitConfiguration {
       @Qualifier("recommendationsReadyDeadLetterExchange") DirectExchange exchange,
       RecommendationIncomingRecommendationsGeneratedConfigurationProperties properties) {
     return BindingBuilder.bind(queue).to(exchange).with(properties.queueName());
+  }
+
+  @Bean
+  Queue notifyBatchTimeoutQueue(
+      RecommendationIncomingNotifyBatchTimeoutConfigurationProperties properties) {
+    return QueueBuilder.durable(properties.queueName())
+        .withArgument(X_DEAD_LETTER_EXCHANGE, properties.deadLetterExchangeName())
+        .withArgument(X_DEAD_LETTER_ROUTING_KEY, properties.queueName())
+        .build();
+  }
+
+  @Bean
+  Queue notifyBatchTimeoutDeadLetterQueue(
+      RecommendationIncomingNotifyBatchTimeoutConfigurationProperties properties) {
+    return QueueBuilder.durable(properties.deadLetterQueueName())
+        .withArgument(
+            X_MESSAGE_TTL,
+            Optional.ofNullable(properties.deadLetterQueueTimeToLiveInMilliseconds())
+                .orElse(DEFAULT_TTL_IN_MILLISECONDS))
+        .withArgument(X_DEAD_LETTER_EXCHANGE, EMPTY_ROUTING_KEY)
+        .build();
+  }
+
+  @Bean
+  DirectExchange notifyBatchTimeoutDeadLetterExchange(
+      RecommendationIncomingNotifyBatchTimeoutConfigurationProperties properties) {
+    return new DirectExchange(properties.deadLetterExchangeName());
+  }
+
+  @Bean
+  Binding notifyBatchTimeoutBinding(
+      @Qualifier("notifyBatchTimeoutQueue") Queue queue,
+      RecommendationIncomingNotifyBatchTimeoutConfigurationProperties properties) {
+    return BindingBuilder
+        .bind(queue)
+        // TODO: ALL-489: inject the exchange and delete application.yaml exchange-name
+        .to(new DirectExchange(properties.exchangeName()))
+        .with(EMPTY_ROUTING_KEY);
+  }
+
+  @Bean
+  Binding notifyBatchTimeoutDeadLetterBinding(
+      @Qualifier("notifyBatchTimeoutDeadLetterQueue") Queue queue,
+      @Qualifier("notifyBatchTimeoutDeadLetterExchange") DirectExchange exchange,
+      RecommendationIncomingNotifyBatchTimeoutConfigurationProperties properties) {
+    return BindingBuilder
+        .bind(queue)
+        .to(exchange)
+        .with(properties.queueName());
   }
 
   @Bean

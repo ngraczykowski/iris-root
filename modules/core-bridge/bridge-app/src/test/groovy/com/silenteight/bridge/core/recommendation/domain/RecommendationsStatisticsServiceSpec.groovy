@@ -1,14 +1,12 @@
 package com.silenteight.bridge.core.recommendation.domain
 
-import com.silenteight.bridge.core.recommendation.domain.RecommendationsStatisticsService.RecommendedAction
 import com.silenteight.bridge.core.recommendation.domain.model.RecommendationWithMetadata
+import com.silenteight.bridge.core.recommendation.domain.model.RecommendedAction
 
 import spock.lang.Specification
 import spock.lang.Subject
 
-import static com.silenteight.bridge.core.recommendation.domain.RecommendationsStatisticsService.RecommendedAction.*
-
-class RecommendationsStatisticsServiceTest extends Specification {
+class RecommendationsStatisticsServiceSpec extends Specification {
 
   @Subject
   def underTest = new RecommendationsStatisticsService()
@@ -16,12 +14,12 @@ class RecommendationsStatisticsServiceTest extends Specification {
   def 'should create recommendations statistics'() {
     given:
     def recommendations = [
-        [createRecommendationWithAction(ACTION_INVESTIGATE)] * 1,
-        [createRecommendationWithAction(ACTION_INVESTIGATE_HINTED_FALSE_POSITIVE)] * 2,
-        [createRecommendationWithAction(ACTION_INVESTIGATE_PARTIALLY_FALSE_POSITIVE)] * 3,
-        [createRecommendationWithAction(ACTION_INVESTIGATE_HINTED_TRUE_POSITIVE)] * 4,
-        [createRecommendationWithAction(ACTION_FALSE_POSITIVE)] * 5,
-        [createRecommendationWithAction(ACTION_POTENTIAL_TRUE_POSITIVE)] * 6,
+        [createRecommendationWithAction(RecommendedAction.ACTION_INVESTIGATE)] * 1,
+        [createRecommendationWithAction(RecommendedAction.ACTION_INVESTIGATE_HINTED_FALSE_POSITIVE)] * 2,
+        [createRecommendationWithAction(RecommendedAction.ACTION_INVESTIGATE_PARTIALLY_FALSE_POSITIVE)] * 3,
+        [createRecommendationWithAction(RecommendedAction.ACTION_INVESTIGATE_HINTED_TRUE_POSITIVE)] * 4,
+        [createRecommendationWithAction(RecommendedAction.ACTION_FALSE_POSITIVE)] * 5,
+        [createRecommendationWithAction(RecommendedAction.ACTION_POTENTIAL_TRUE_POSITIVE)] * 6,
     ].flatten() as List<RecommendationWithMetadata>
 
     when:

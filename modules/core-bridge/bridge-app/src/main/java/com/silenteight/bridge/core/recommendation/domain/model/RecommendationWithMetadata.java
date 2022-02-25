@@ -10,7 +10,9 @@ public record RecommendationWithMetadata(String name,
                                          String recommendedAction,
                                          String recommendationComment,
                                          OffsetDateTime recommendedAt,
-                                         RecommendationMetadata metadata) {
+                                         RecommendationMetadata metadata,
+                                         Boolean timeout
+) {
 
   @Builder
   public RecommendationWithMetadata {}

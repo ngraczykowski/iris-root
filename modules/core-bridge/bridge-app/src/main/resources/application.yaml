@@ -71,6 +71,12 @@ amqp:
         dead-letter-exchange-name: recommendations-generated.dlx
         exchange-name: ae.event
         exchange-routing-key: ae.event.recommendations-generated
+      notify-batch-timeout:
+        exchange-name: notify-batch-timeout-exchange
+        queue-name: notify-batch-timeout-queue
+        dead-letter-queue-name: notify-batch-timeout.dlq
+        dead-letter-queue-time-to-live-in-milliseconds: 10000
+        dead-letter-exchange-name: notify-batch-timeout.dlx
 
 ### SPRING
 spring:

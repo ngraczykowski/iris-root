@@ -107,9 +107,11 @@ class RecommendationMapper {
 
   private List<Match> getProtoMatches(
       RecommendationWithMetadata recommendation, AlertWithMatchesDto matchingAlert) {
-    return recommendation.metadata().matchMetadata().stream()
-        .map(matchMetadata -> toProtoMatch(matchMetadata, matchingAlert))
-        .toList();
+    return Optional.ofNullable(recommendation.metadata())
+        .map(metadata -> metadata.matchMetadata().stream()
+            .map(matchMetadata -> toProtoMatch(matchMetadata, matchingAlert))
+            .toList())
+        .orElseGet(List::of);
   }
 
   private Match toProtoMatch(MatchMetadata matchMetadata, AlertWithMatchesDto alert) {

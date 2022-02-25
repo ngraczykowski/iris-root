@@ -49,6 +49,31 @@
       "name": "amqp.registration.outgoing.notify-batch-completed.exchange-name",
       "type": "java.lang.String",
       "description": "Exchange name for notify batch completed event."
+    },
+    {
+      "name": "amqp.recommendation.incoming.notify-batch-timeout.exchange-name",
+      "type": "java.lang.String",
+      "description": "Exchange name for notify batch timeout event."
+    },
+    {
+      "name": "amqp.recommendation.incoming.notify-batch-timeout.queue-name",
+      "type": "java.lang.String",
+      "description": "Queue name for notify batch timeout event."
+    },
+    {
+      "name": "amqp.recommendation.incoming.notify-batch-timeout.dead-letter-queue-name",
+      "type": "java.lang.String",
+      "description": "Dead letter queue name for notify batch timeout event."
+    },
+    {
+      "name": "amqp.recommendation.incoming.notify-batch-timeout.dead-letter-queue-time-to-live-in-milliseconds",
+      "type": "java.time.Duration",
+      "description": "Dead letter queue time to live for notify batch timeout event."
+    },
+    {
+      "name": "amqp.recommendation.incoming.notify-batch-timeout.dead-letter-exchange-name",
+      "type": "java.lang.String",
+      "description": "Dead letter exchange name for notify batch timeout event."
     }
   ]
 }

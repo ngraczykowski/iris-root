@@ -9,4 +9,6 @@ public interface RecommendationRepository {
   void saveAll(List<RecommendationWithMetadata> recommendations);
 
   List<RecommendationWithMetadata> findByAnalysisName(String analysisName);
+
+  List<String> findRecommendationAlertNamesByAnalysisName(String analysisName);
 }

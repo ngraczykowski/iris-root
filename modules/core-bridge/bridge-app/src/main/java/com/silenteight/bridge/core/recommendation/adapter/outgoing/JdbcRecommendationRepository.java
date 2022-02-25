@@ -28,6 +28,15 @@ class JdbcRecommendationRepository implements RecommendationRepository {
         .toList();
   }
 
+  @Override
+  public List<String> findRecommendationAlertNamesByAnalysisName(String analysisName) {
+    return crudRecommendationRepository
+        .findAlertNamesByAnalysisName(analysisName)
+        .stream()
+        .map(RecommendationAlertNameProjection::alertName)
+        .toList();
+  }
+
   private RecommendationWithMetadata mapToRecommendationWithMetadata(RecommendationEntity entity) {
     return RecommendationWithMetadata.builder()
         .name(entity.name())
@@ -43,14 +52,15 @@ class JdbcRecommendationRepository implements RecommendationRepository {
   private List<RecommendationEntity> mapToRecommendationEntity(
       List<RecommendationWithMetadata> recommendations) {
     return recommendations.stream()
-        .map(e -> RecommendationEntity.builder()
-            .name(e.name())
-            .alertName(e.alertName())
-            .analysisName(e.analysisName())
-            .recommendedAction(e.recommendedAction())
-            .recommendationComment(e.recommendationComment())
-            .recommendedAt(e.recommendedAt().toInstant())
-            .payload(e.metadata())
+        .map(recommendation -> RecommendationEntity.builder()
+            .name(recommendation.name())
+            .alertName(recommendation.alertName())
+            .analysisName(recommendation.analysisName())
+            .recommendedAction(recommendation.recommendedAction())
+            .recommendationComment(recommendation.recommendationComment())
+            .recommendedAt(recommendation.recommendedAt().toInstant())
+            .payload(recommendation.metadata())
+            .timeout(recommendation.timeout())
             .build())
         .toList();
   }

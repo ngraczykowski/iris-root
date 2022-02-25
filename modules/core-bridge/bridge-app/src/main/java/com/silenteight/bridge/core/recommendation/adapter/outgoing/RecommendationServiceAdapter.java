@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 class RecommendationServiceAdapter implements RecommendationService {
 
+  private static final boolean RECOMMENDATION_NOT_TIMED_OUT = false;
+
   private final RecommendationServiceClient recommendationServiceClient;
 
   @Override
@@ -44,6 +46,7 @@ class RecommendationServiceAdapter implements RecommendationService {
         .recommendedAction(recommendation.getRecommendedAction())
         .recommendationComment(recommendation.getRecommendationComment())
         .metadata(mapToRecommendationMetadata(recommendation.getMetadata()))
+        .timeout(RECOMMENDATION_NOT_TIMED_OUT)
         .build();
   }
 

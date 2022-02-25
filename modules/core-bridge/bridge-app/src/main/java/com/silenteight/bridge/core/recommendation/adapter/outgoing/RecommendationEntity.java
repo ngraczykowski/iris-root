@@ -17,7 +17,9 @@ record RecommendationEntity(@Id long id,
                             Instant recommendedAt,
                             String recommendedAction,
                             String recommendationComment,
-                            RecommendationMetadata payload) {
+                            RecommendationMetadata payload,
+                            Boolean timeout
+) {
 
   @Builder
   RecommendationEntity {}
