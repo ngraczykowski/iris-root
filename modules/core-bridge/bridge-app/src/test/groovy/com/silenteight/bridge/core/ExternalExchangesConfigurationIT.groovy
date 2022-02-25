@@ -1,6 +1,5 @@
 package com.silenteight.bridge.core
 
-import com.silenteight.bridge.core.recommendation.infrastructure.amqp.RecommendationIncomingNotifyBatchTimeoutConfigurationProperties
 import com.silenteight.bridge.core.recommendation.infrastructure.amqp.RecommendationIncomingRecommendationsGeneratedConfigurationProperties
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationIncomingMatchFeatureInputSetFedProperties
 
@@ -22,11 +21,5 @@ class ExternalExchangesConfigurationIT {
   DirectExchange testMatchFeatureInputSetFedExchange(
       AmqpRegistrationIncomingMatchFeatureInputSetFedProperties properties) {
     return new DirectExchange(properties.exchangeName())
-  }
-
-  @Bean
-  DirectExchange testNotifyBatchTimeoutExchange(
-      RecommendationIncomingNotifyBatchTimeoutConfigurationProperties properties) {
-    return new DirectExchange(properties.exchangeName()) // TODO: ALL-489 to delete
   }
 }

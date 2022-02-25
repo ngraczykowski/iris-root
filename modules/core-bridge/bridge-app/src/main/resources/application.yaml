@@ -39,6 +39,11 @@ amqp:
         exchange-name: notify-batch-error-exchange
       notify-batch-completed:
         exchange-name: notify-batch-completed-exchange
+      verify-batch-timeout:
+        exchange-name: verify-batch-timeout-exchange
+        delay-time: PT60M
+      notify-batch-timed-out:
+        exchange-name: notify-batch-timed-out-exchange
     incoming:
       match-feature-input-set-fed:
         exchange-name: match-feature-input-set-fed-exchange
@@ -59,6 +64,11 @@ amqp:
         dead-letter-queue-name: recommendation-delivered.dlq
         dead-letter-queue-time-to-live-in-milliseconds: 10000
         dead-letter-exchange-name: recommendation-delivered.dlx
+      verify-batch-timeout:
+        queue-name: verify-batch-timeout-queue
+        dead-letter-queue-name: verify-batch-timeout.dlq
+        dead-letter-queue-time-to-live-in-milliseconds: 10000
+        dead-letter-exchange-name: verify-batch-timeout.dlx
   recommendation:
     outgoing:
       recommendation-received:
@@ -72,7 +82,6 @@ amqp:
         exchange-name: ae.event
         exchange-routing-key: ae.event.recommendations-generated
       notify-batch-timeout:
-        exchange-name: notify-batch-timeout-exchange
         queue-name: notify-batch-timeout-queue
         dead-letter-queue-name: notify-batch-timeout.dlq
         dead-letter-queue-time-to-live-in-milliseconds: 10000

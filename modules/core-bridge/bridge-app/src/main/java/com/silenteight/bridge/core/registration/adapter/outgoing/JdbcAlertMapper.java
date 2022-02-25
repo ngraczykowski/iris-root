@@ -28,10 +28,6 @@ class JdbcAlertMapper {
         .build();
   }
 
-  AlertId toAlertId(AlertIdNameProjection projection) {
-    return new AlertId(projection.alertId());
-  }
-
   Alert toAlert(AlertEntity alert) {
     return Alert.builder()
         .name(alert.name())
@@ -46,7 +42,7 @@ class JdbcAlertMapper {
         .build();
   }
 
-  AlertName toAlertName(AlertIdNameProjection projection) {
+  AlertName toAlertName(AlertNameProjection projection) {
     return new AlertName(projection.name());
   }
 

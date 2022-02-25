@@ -6,9 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService;
+import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchEventPublisher;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DefaultModelService;
-import com.silenteight.bridge.core.registration.domain.port.outgoing.EventPublisher;
 
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,7 @@ class BatchService {
   private static final EnumSet<BatchStatus> ALLOWED_BATCH_STATUSES_FOR_REGISTRATION =
       EnumSet.of(BatchStatus.STORED, BatchStatus.PROCESSING);
 
-  private final EventPublisher eventPublisher;
+  private final BatchEventPublisher eventPublisher;
   private final AnalysisService analysisService;
   private final BatchRepository batchRepository;
   private final DefaultModelService defaultModelService;
@@ -123,7 +123,10 @@ class BatchService {
         .batchMetadata(registerBatchCommand.batchMetadata())
         .status(BatchStatus.STORED)
         .build();
-    return Optional.of(batchRepository.create(batch));
+
+    var createdBatch = batchRepository.create(batch);
+    eventPublisher.publish(new BatchCreated(createdBatch.id()));
+    return Optional.of(createdBatch);
   }
 
   private void markBatchAsError(NotifyBatchErrorCommand notifyBatchErrorCommand) {

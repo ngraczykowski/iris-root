@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Configuration
@@ -18,7 +19,10 @@ import java.util.Optional;
     AmqpRegistrationIncomingRecommendationDeliveredProperties.class,
     AmqpRegistrationIncomingMatchFeatureInputSetFedProperties.class,
     AmqpRegistrationOutgoingNotifyBatchCompletedProperties.class,
-    AmqpRegistrationOutgoingNotifyBatchErrorProperties.class
+    AmqpRegistrationOutgoingNotifyBatchErrorProperties.class,
+    AmqpRegistrationOutgoingVerifyBatchTimeoutProperties.class,
+    AmqpRegistrationIncomingVerifyBatchTimeoutProperties.class,
+    AmqpRegistrationOutgoingNotifyBatchTimedOutProperties.class
 })
 class RegistrationRabbitConfiguration {
 
@@ -158,7 +162,6 @@ class RegistrationRabbitConfiguration {
         .with(EMPTY_ROUTING_KEY);
   }
 
-
   @Bean
   Binding recommendationsReceivedDeadLetterBinding(
       @Qualifier("recommendationsReceivedDeadLetterQueue") Queue queue,
@@ -188,5 +191,70 @@ class RegistrationRabbitConfiguration {
     factory.setConsumerBatchEnabled(true);
     factory.setReceiveTimeout(properties.batchReceiveTimeout().toMillis());
     return factory;
+  }
+
+  @Bean
+  CustomExchange verifyBatchTimeoutExchange(
+      AmqpRegistrationOutgoingVerifyBatchTimeoutProperties properties) {
+    var type = "x-delayed-message";
+    var isDurable = true;
+    var isAutoDelete = false;
+    Map<String, Object> arguments = Map.of("x-delayed-type", "direct");
+    return new CustomExchange(properties.exchangeName(), type, isDurable, isAutoDelete, arguments);
+  }
+
+  @Bean
+  Queue verifyBatchTimeoutQueue(
+      AmqpRegistrationIncomingVerifyBatchTimeoutProperties properties) {
+    return QueueBuilder.durable(properties.queueName())
+        .withArgument(X_DEAD_LETTER_EXCHANGE, properties.deadLetterExchangeName())
+        .withArgument(X_DEAD_LETTER_ROUTING_KEY, properties.queueName())
+        .build();
+  }
+
+  @Bean
+  Binding verifyBatchTimeoutBinding(
+      @Qualifier("verifyBatchTimeoutQueue") Queue queue,
+      @Qualifier("verifyBatchTimeoutExchange") CustomExchange exchange) {
+    return BindingBuilder
+        .bind(queue)
+        .to(exchange)
+        .with(EMPTY_ROUTING_KEY)
+        .noargs();
+  }
+
+  @Bean
+  Queue verifyBatchTimeoutDeadLetterQueue(
+      AmqpRegistrationIncomingVerifyBatchTimeoutProperties properties) {
+    return QueueBuilder.durable(properties.deadLetterQueueName())
+        .withArgument(
+            X_MESSAGE_TTL,
+            Optional.ofNullable(properties.deadLetterQueueTimeToLiveInMilliseconds())
+                .orElse(DEFAULT_TTL_IN_MILLISECONDS))
+        .withArgument(X_DEAD_LETTER_EXCHANGE, EMPTY_ROUTING_KEY)
+        .build();
+  }
+
+  @Bean
+  DirectExchange verifyBatchTimeoutDeadLetterExchange(
+      AmqpRegistrationIncomingVerifyBatchTimeoutProperties properties) {
+    return new DirectExchange(properties.deadLetterExchangeName());
+  }
+
+  @Bean
+  Binding verifyBatchTimeoutDeadLetterBinding(
+      @Qualifier("verifyBatchTimeoutDeadLetterQueue") Queue queue,
+      @Qualifier("verifyBatchTimeoutDeadLetterExchange") DirectExchange exchange,
+      AmqpRegistrationIncomingVerifyBatchTimeoutProperties properties) {
+    return BindingBuilder
+        .bind(queue)
+        .to(exchange)
+        .with(properties.queueName());
+  }
+
+  @Bean
+  DirectExchange batchTimedOutExchange(
+      AmqpRegistrationOutgoingNotifyBatchTimedOutProperties properties) {
+    return new DirectExchange(properties.exchangeName());
   }
 }

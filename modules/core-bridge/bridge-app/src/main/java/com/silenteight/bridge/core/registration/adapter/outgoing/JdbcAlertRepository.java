@@ -53,7 +53,14 @@ class JdbcAlertRepository implements AlertRepository {
   @Override
   public List<AlertName> findAllAlertNamesByBatchIdAndAlertIdIn(
       String batchId, List<String> alertIds) {
-    return alertRepository.findByBatchIdAndAlertIdIn(batchId, alertIds).stream()
+    return alertRepository.findNamesByBatchIdAndAlertIdIn(batchId, alertIds).stream()
+        .map(mapper::toAlertName)
+        .toList();
+  }
+
+  @Override
+  public List<AlertName> findAllAlertNamesByBatchId(String batchId) {
+    return alertRepository.findNamesByBatchId(batchId).stream()
         .map(mapper::toAlertName)
         .toList();
   }

@@ -30,7 +30,8 @@ This same works with command `test` <br>
 `./gradlew clean test ` - run all tests <br>
 `./gradlew clean test -PunitTests` - run only unit tests
 
-Tests are considered as integration when they have the word `IT` as postfix in the class name
-eg: `DatabaseIntegrationTestIT` or they have the word `Integration` in the class name
-eg: `DatabaseIntegrationTest`. So it's important to name test classes appropriately.
+Tests are considered as unit when they have a suffix `Spec` in their class name e.g. `MyServiceSpec`.
+On the other hand, tests are considered as integration when they have a suffix `IntegrationSpec` in their class name
+e.g. `DatabaseIntegrationTestIntegrationSpec`. 
+So it's important to name test classes appropriately.
 

@@ -10,6 +10,5 @@ public record RecommendationIncomingNotifyBatchTimeoutConfigurationProperties(
     String deadLetterQueueName,
     Integer deadLetterQueueTimeToLiveInMilliseconds,
     String deadLetterExchangeName,
-    String exchangeName,
     String exchangeRoutingKey
 ) {}

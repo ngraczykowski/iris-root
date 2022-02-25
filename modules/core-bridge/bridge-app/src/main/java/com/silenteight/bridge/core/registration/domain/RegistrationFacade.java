@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.command.GetBatchWithAlertsCommand;
+import com.silenteight.bridge.core.registration.domain.command.VerifyBatchTimeoutCommand;
 import com.silenteight.bridge.core.registration.domain.model.BatchId;
 import com.silenteight.bridge.core.registration.domain.model.BatchWithAlerts;
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert;
@@ -20,6 +21,7 @@ public class RegistrationFacade {
   private final BatchService batchService;
   private final AlertService alertService;
   private final AlertAnalysisService alertAnalysisService;
+  private final BatchTimeoutService batchTimeoutService;
 
   public BatchId register(RegisterBatchCommand registerBatchCommand) {
     return batchService.register(registerBatchCommand);
@@ -65,5 +67,9 @@ public class RegistrationFacade {
 
   public void addAlertsToAnalysis(List<AddAlertToAnalysisCommand> addAlertToAnalysisCommands) {
     alertAnalysisService.addAlertsToAnalysis(addAlertToAnalysisCommands);
+  }
+
+  public void verifyBatchTimeout(VerifyBatchTimeoutCommand command) {
+    batchTimeoutService.verifyBatchTimeout(command);
   }
 }

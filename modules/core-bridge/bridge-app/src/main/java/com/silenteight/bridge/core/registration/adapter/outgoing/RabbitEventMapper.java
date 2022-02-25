@@ -2,8 +2,10 @@ package com.silenteight.bridge.core.registration.adapter.outgoing;
 
 import com.silenteight.bridge.core.registration.domain.model.BatchCompleted;
 import com.silenteight.bridge.core.registration.domain.model.BatchError;
+import com.silenteight.bridge.core.registration.domain.model.BatchTimedOut;
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted;
 import com.silenteight.proto.registration.api.v1.MessageBatchError;
+import com.silenteight.proto.registration.api.v1.MessageNotifyBatchTimedOut;
 
 import org.springframework.stereotype.Component;
 
@@ -26,6 +28,13 @@ class RabbitEventMapper {
         .setBatchId(event.id())
         .setErrorDescription(event.errorDescription())
         .setBatchMetadata(Optional.ofNullable(event.batchMetadata()).orElse(""))
+        .build();
+  }
+
+  MessageNotifyBatchTimedOut toMessageNotifyBatchTimedOut(BatchTimedOut event) {
+    return MessageNotifyBatchTimedOut.newBuilder()
+        .setAnalysisName(event.analysisName())
+        .addAllAlertNames(event.alertNames())
         .build();
   }
 }

@@ -9,12 +9,12 @@ import com.silenteight.proto.registration.api.v1.MessageAlertMatchesFeatureInput
 import spock.lang.Specification
 import spock.lang.Subject
 
-class AlertMatchesFeatureInputFedReceivedListenerSpec extends Specification {
+class AlertMatchesFeatureInputFedReceivedAmqpListenerSpec extends Specification {
 
   def registrationFacade = Mock(RegistrationFacade)
 
   @Subject
-  def underTest = new AlertMatchesFeatureInputFedReceivedListener(registrationFacade)
+  def underTest = new AlertMatchesFeatureInputFedReceivedAmqpListener(registrationFacade)
 
   def 'should call RegistrationFacade with proper arguments'() {
     given:

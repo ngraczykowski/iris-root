@@ -23,7 +23,17 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
       WHERE batch_id = :batchId AND NOT status = 'RECOMMENDED' AND NOT status = 'ERROR'""")
   long countAllAlertsByBatchIdAndNotRecommendedAndNotErrorStatuses(String batchId);
 
-  List<AlertIdNameProjection> findByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
+  @Query("""
+        SELECT name FROM alerts
+        WHERE batch_id = :batchId AND alert_id IN (:alertIds)
+      """)
+  List<AlertNameProjection> findNamesByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
+
+  @Query("""
+        SELECT name FROM alerts
+        WHERE batch_id = :batchId
+      """)
+  List<AlertNameProjection> findNamesByBatchId(String batchId);
 
   @Query(
       rowMapperClass = AlertWithMatchNamesProjectionRowMapper.class,

@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class AlertMatchesFeatureInputFedReceivedListener {
+class AlertMatchesFeatureInputFedReceivedAmqpListener {
 
   private final RegistrationFacade registrationFacade;
 

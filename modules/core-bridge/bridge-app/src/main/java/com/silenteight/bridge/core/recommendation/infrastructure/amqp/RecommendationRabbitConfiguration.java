@@ -95,11 +95,10 @@ class RecommendationRabbitConfiguration {
   @Bean
   Binding notifyBatchTimeoutBinding(
       @Qualifier("notifyBatchTimeoutQueue") Queue queue,
-      RecommendationIncomingNotifyBatchTimeoutConfigurationProperties properties) {
+      @Qualifier("batchTimedOutExchange") DirectExchange exchange) {
     return BindingBuilder
         .bind(queue)
-        // TODO: ALL-489: inject the exchange and delete application.yaml exchange-name
-        .to(new DirectExchange(properties.exchangeName()))
+        .to(exchange)
         .with(EMPTY_ROUTING_KEY);
   }
 

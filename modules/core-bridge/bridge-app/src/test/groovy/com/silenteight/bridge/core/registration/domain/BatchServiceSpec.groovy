@@ -5,11 +5,12 @@ import com.silenteight.bridge.core.registration.domain.model.Analysis
 import com.silenteight.bridge.core.registration.domain.model.Batch
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus
 import com.silenteight.bridge.core.registration.domain.model.BatchCompleted
+import com.silenteight.bridge.core.registration.domain.model.BatchCreated
 import com.silenteight.bridge.core.registration.domain.model.DefaultModel
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository
 import com.silenteight.bridge.core.registration.domain.port.outgoing.DefaultModelService
-import com.silenteight.bridge.core.registration.domain.port.outgoing.EventPublisher
+import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchEventPublisher
 
 import spock.lang.Specification
 import spock.lang.Subject
@@ -17,14 +18,13 @@ import spock.lang.Unroll
 
 class BatchServiceSpec extends Specification {
 
-  def eventPublisher = Mock(EventPublisher)
+  def eventPublisher = Mock(BatchEventPublisher)
   def analysisService = Mock(AnalysisService)
   def batchRepository = Mock(BatchRepository)
   def modelService = Mock(DefaultModelService)
 
   @Subject
-  def underTest = new BatchService(
-      eventPublisher, analysisService, batchRepository, modelService)
+  def underTest = new BatchService(eventPublisher, analysisService, batchRepository, modelService)
 
   def 'should register batch'() {
     given:
@@ -45,6 +45,7 @@ class BatchServiceSpec extends Specification {
     1 * analysisService.create(_ as DefaultModel) >>
         new Analysis(RegistrationFixtures.ANALYSIS_NAME)
     1 * batchRepository.create(_ as Batch) >> RegistrationFixtures.BATCH
+    1 * eventPublisher.publish(new BatchCreated(batchId))
   }
 
   def 'should return batch if already exists'() {

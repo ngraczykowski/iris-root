@@ -2,6 +2,7 @@ package com.silenteight.bridge.core.registration.adapter.outgoing
 
 import com.silenteight.bridge.core.registration.domain.model.BatchCompleted
 import com.silenteight.bridge.core.registration.domain.model.BatchError
+import com.silenteight.bridge.core.registration.domain.model.BatchTimedOut
 
 import spock.lang.Specification
 import spock.lang.Subject
@@ -48,6 +49,22 @@ class RabbitEventMapperSpec extends Specification {
       batchId == 'batchId'
       batchMetadata == 'batchMetadata'
       errorDescription == 'Failed to register batch in Core Bridge Registration'
+    }
+  }
+
+  def 'should map to message batch timed out'() {
+    given:
+    def analysisName = 'analysisName'
+    def alertNames = ['firstAlertName', 'secondAlertName']
+    def event = new BatchTimedOut(analysisName, alertNames)
+
+    when:
+    def result = underTest.toMessageNotifyBatchTimedOut(event)
+
+    then:
+    with(result) {
+      it.analysisName == analysisName
+      alertNamesList == alertNames
     }
   }
 }

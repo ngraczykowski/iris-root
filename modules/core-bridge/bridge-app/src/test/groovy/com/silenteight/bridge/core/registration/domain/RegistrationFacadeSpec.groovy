@@ -2,6 +2,7 @@ package com.silenteight.bridge.core.registration.domain
 
 import com.silenteight.bridge.core.Fixtures
 import com.silenteight.bridge.core.recommendation.domain.RecommendationFixtures
+import com.silenteight.bridge.core.registration.domain.command.VerifyBatchTimeoutCommand
 import com.silenteight.bridge.core.registration.domain.model.Alert
 
 import spock.lang.Specification
@@ -12,9 +13,11 @@ class RegistrationFacadeSpec extends Specification {
   def batchService = Mock(BatchService)
   def alertService = Mock(AlertService)
   def alertAnalysisService = Mock(AlertAnalysisService)
+  def batchTimeoutService = Mock(BatchTimeoutService)
 
   @Subject
-  def underTest = new RegistrationFacade(batchService, alertService, alertAnalysisService)
+  def underTest = new RegistrationFacade(
+      batchService, alertService, alertAnalysisService, batchTimeoutService)
 
   def 'should call register batch method'() {
     given:
@@ -144,5 +147,16 @@ class RegistrationFacadeSpec extends Specification {
 
     then:
     1 * batchService.markBatchAsDelivered(batchId)
+  }
+
+  def 'should call verify batch timeout'() {
+    given:
+    def command = new VerifyBatchTimeoutCommand(Fixtures.BATCH_ID)
+
+    when:
+    underTest.verifyBatchTimeout(command)
+
+    then:
+    1 * batchTimeoutService.verifyBatchTimeout(command)
   }
 }
