@@ -2,18 +2,21 @@ package com.silenteight.bridge.core.registration.domain
 
 import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertStatus
 import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.AlertWithMatches
-import com.silenteight.bridge.core.registration.domain.RegisterAlertsCommand.Match
 import com.silenteight.bridge.core.registration.domain.model.Alert
 import com.silenteight.bridge.core.registration.domain.model.AlertsToRegister
 import com.silenteight.bridge.core.registration.domain.model.RegisteredAlerts
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert
-import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert.RegistrationMatch
 import com.silenteight.bridge.core.registration.domain.model.RegistrationAlert.Status
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRegistrationService
 import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertRepository
 
 import spock.lang.Specification
 import spock.lang.Subject
+
+import static com.silenteight.bridge.core.registration.domain.AlertServiceSpecHelper.buildAlert
+import static com.silenteight.bridge.core.registration.domain.AlertServiceSpecHelper.buildAlertToRegister
+import static com.silenteight.bridge.core.registration.domain.AlertServiceSpecHelper.buildRegisteredAlert
+import static com.silenteight.bridge.core.registration.domain.AlertServiceSpecHelper.buildRegistrationAlert
 
 class AlertServiceSpec extends Specification {
 
@@ -30,30 +33,19 @@ class AlertServiceSpec extends Specification {
       registrationAlertResponseMapper
   )
 
-  def 'should register and save alerts with matches'() {
+  def 'two unregistered successful alerts: should save both alerts and matches'() {
     given:
     def alertsWithMatches = [
-        AlertWithMatches.builder()
-            .alertId('alert_id_1')
-            .matches([new Match('match_id_11')])
-            .alertStatus(AlertStatus.SUCCESS)
-            .build(),
-        AlertWithMatches.builder()
-            .alertId('alert_id_2')
-            .matches([new Match('match_id_21')])
-            .alertStatus(AlertStatus.SUCCESS)
-            .build()
+        buildAlert('alert_id_1', ['match_id_11'], AlertStatus.SUCCESS),
+        buildAlert('alert_id_2', ['match_id_21'], AlertStatus.SUCCESS)
     ]
 
     def command = new RegisterAlertsCommand('batch_id_1', alertsWithMatches)
 
     def alertsToRegister = new AlertsToRegister(
-        [new AlertsToRegister.AlertWithMatches(
-            'alert_id_1',
-            [new AlertsToRegister.Match('match_id_11')]),
-         new AlertsToRegister.AlertWithMatches(
-             'alert_id_2',
-             [new AlertsToRegister.Match('match_id_21')]),
+        [
+            buildAlertToRegister('alert_id_1', ['match_id_11']),
+            buildAlertToRegister('alert_id_2', ['match_id_21'])
         ])
 
     def registeredAlerts = new RegisteredAlerts(
@@ -72,154 +64,317 @@ class AlertServiceSpec extends Specification {
     def response = underTest.registerAlertsAndMatches(command)
 
     then:
-    1 * alertRepository.findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >> []
-    1 * alertMapper.toAlertsToRegister(_ as List<AlertWithMatches>) >> alertsToRegister
+    with(alertRepository) {
+      1 * findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >> []
+      1 * saveAlerts(_ as List<Alert>)
+    }
+    with(alertMapper) {
+      1 * toAlertsToRegister(_ as List<AlertWithMatches>) >> alertsToRegister
+      1 * toAlerts(_ as RegisteredAlerts, alertsWithMatches, 'batch_id_1') >> alerts
+      1 * toErrorAlerts([] as List<AlertWithMatches>, 'batch_id_1') >> []
+    }
+    with(registrationAlertResponseMapper) {
+      1 * fromAlertsToRegistrationAlerts(_ as List<Alert>) >> alerts
+      1 * fromAlertsWithMatchesToRegistrationAlerts(
+          _ as List<com.silenteight.bridge.core.registration.domain.model.AlertWithMatches>) >> []
+    }
     1 * alertRegistrationService.registerAlerts(_ as AlertsToRegister) >> registeredAlerts
-    1 * alertMapper.toAlerts(_ as RegisteredAlerts, alertsWithMatches, 'batch_id_1') >> alerts
-    1 * alertRepository.saveAlerts(_ as List<Alert>)
-    1 * alertMapper.toErrorAlerts([] as List<AlertWithMatches>, 'batch_id_1') >> []
-    1 * registrationAlertResponseMapper.fromAlertsToRegistrationAlerts(_ as List<Alert>) >> alerts
-    1 * registrationAlertResponseMapper.fromAlertsWithMatchesToRegistrationAlerts(
-        _ as List<com.silenteight.bridge.core.registration.domain.model.AlertWithMatches>) >> []
+
     response.size() == 2
   }
 
-  def 'should register and save only alerts not existing in DB'() {
+  def 'one registered and one unregistered alerts: should save only unregistered alert and matches'() {
     given:
-    def alertIdExistingInDb = 'alert_id_1'
+    def registeredId = "alert_id_1"
+    def unregisteredId = "alert_id_2"
+    def unregistered = buildAlert(unregisteredId, ['match_id_21'], AlertStatus.SUCCESS)
 
-    def alert1 = AlertWithMatches.builder()
-        .alertId(alertIdExistingInDb)
-        .alertMetadata('alertMetadata')
-        .matches([new Match('match_id_11')])
-        .alertStatus(AlertStatus.SUCCESS)
-        .build()
-
-    def alert2 = AlertWithMatches.builder()
-        .alertId('alert_id_2')
-        .alertMetadata('alertMetadata')
-        .matches([new Match('match_id_21')])
-        .alertStatus(AlertStatus.SUCCESS)
-        .build()
-
-    def command = new RegisterAlertsCommand('batch_id_1', [alert1, alert2])
-
-    def alreadyRegisteredAlerts = [
-        com.silenteight.bridge.core.registration.domain.model.AlertWithMatches.builder()
-            .id(alertIdExistingInDb)
-            .name('alertName')
-            .metadata('alertMetadata')
-            .matches(
-                [
-                    new com.silenteight.bridge.core.registration.domain.model.AlertWithMatches.Match(
-                        'match_id_11', 'match_name')
-                ]
-            )
-            .status(com.silenteight.bridge.core.registration.domain.model.AlertStatus.REGISTERED)
-            .build()
+    def alertsWithMatches = [
+        buildAlert(registeredId, ['match_id_11'], AlertStatus.SUCCESS),
+        unregistered
     ]
 
+    def command = new RegisterAlertsCommand('batch_id_1', alertsWithMatches)
+
     def alertsToRegister = new AlertsToRegister(
-        [new AlertsToRegister.AlertWithMatches(
-            'alert_id_1',
-            [new AlertsToRegister.Match('match_id_11')]),
-         new AlertsToRegister.AlertWithMatches(
-             'alert_id_2',
-             [new AlertsToRegister.Match('match_id_21')]),
+        [
+            buildAlertToRegister(unregisteredId, ['match_id_21'])
         ])
 
     def registeredAlerts = new RegisteredAlerts(
         [
-            RegisteredAlerts.AlertWithMatches.builder().build(),
-            RegisteredAlerts.AlertWithMatches.builder().build()
+            RegisteredAlerts.AlertWithMatches.builder()
+                .alertId(unregisteredId)
+                .build()
         ]
     )
 
-    def newAlerts = [RegistrationAlert.builder().id('alert_id_2').build()]
+    def alerts = [RegistrationAlert.builder().id(unregisteredId).build()]
+
+    def alreadyExistingAlerts = [buildRegistrationAlert(registeredId, Status.SUCCESS)]
+
+    def alertsFromDB = [buildRegisteredAlert(registeredId)]
+
+    when:
+    def response = underTest.registerAlertsAndMatches(command)
+
+    then:
+    with(alertRepository) {
+      1 * findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >> alertsFromDB
+      1 * saveAlerts(_ as List<Alert>)
+    }
+    with(alertMapper) {
+      1 * toAlertsToRegister(_ as List<AlertWithMatches>) >> alertsToRegister
+      1 * toAlerts(_ as RegisteredAlerts, [unregistered], 'batch_id_1') >> alerts
+      1 * toErrorAlerts([] as List<AlertWithMatches>, 'batch_id_1') >> []
+    }
+    with(registrationAlertResponseMapper) {
+      1 * fromAlertsToRegistrationAlerts(_ as List<Alert>) >> alerts
+      1 * fromAlertsWithMatchesToRegistrationAlerts(
+          _ as List<com.silenteight.bridge.core.registration.domain.model.AlertWithMatches>) >> alreadyExistingAlerts
+    }
+    1 * alertRegistrationService.registerAlerts(_ as AlertsToRegister) >> registeredAlerts
+
+    response.size() == 2
+  }
+
+  def 'two registered successful alerts: should not register alerts'() {
+    def firstRegisteredId = "alert_id_1"
+    def secondRegisteredId = "alert_id_2"
+
+    def alertsWithMatches = [
+        buildAlert(firstRegisteredId, ['match_id_11'], AlertStatus.SUCCESS),
+        buildAlert(secondRegisteredId, ['match_id_21'], AlertStatus.SUCCESS)
+    ]
+
+    def command = new RegisterAlertsCommand('batch_id_1', alertsWithMatches)
 
     def alreadyExistingAlerts = [
-        RegistrationAlert.builder()
-            .id(alertIdExistingInDb)
-            .name('alertName')
-            .status(Status.SUCCESS)
-            .matches(
-                [
-                    RegistrationMatch.builder()
-                        .id('match_id_11')
-                        .name('match_name')
-                        .build()
-                ]
-            )
-            .build()
+        buildRegistrationAlert(firstRegisteredId, Status.SUCCESS),
+        buildRegistrationAlert(secondRegisteredId, Status.SUCCESS)
+    ]
+
+    def alertsFromDb = [
+        buildRegisteredAlert(firstRegisteredId),
+        buildRegisteredAlert(secondRegisteredId)
     ]
 
     when:
     def response = underTest.registerAlertsAndMatches(command)
 
     then:
-    1 * alertRepository.findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >>
-        alreadyRegisteredAlerts
-    1 * alertMapper.toAlertsToRegister([alert2]) >> alertsToRegister
-    1 * alertRegistrationService.registerAlerts(_ as AlertsToRegister) >> registeredAlerts
-    1 * alertMapper.toAlerts(_ as RegisteredAlerts, [alert2], 'batch_id_1') >> newAlerts
-    1 * alertRepository.saveAlerts(_ as List<Alert>)
-    1 * alertMapper.toErrorAlerts(_ as List<AlertWithMatches>, 'batch_id_1') >> []
-    1 * registrationAlertResponseMapper.fromAlertsToRegistrationAlerts(_ as List<Alert>) >> newAlerts
-    1 * registrationAlertResponseMapper.fromAlertsWithMatchesToRegistrationAlerts(alreadyRegisteredAlerts) >>
-        alreadyExistingAlerts
+    with(alertRepository) {
+      1 * findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >> alertsFromDb
+      0 * saveAlerts(_ as List<Alert>)
+    }
+    with(alertMapper) {
+      0 * toAlertsToRegister(_ as List<AlertWithMatches>)
+      0 * toAlerts(_ as RegisteredAlerts, [], 'batch_id_1')
+      1 * toErrorAlerts([] as List<AlertWithMatches>, 'batch_id_1') >> []
+    }
+    with(registrationAlertResponseMapper) {
+      0 * fromAlertsToRegistrationAlerts(_ as List<Alert>)
+      1 * fromAlertsWithMatchesToRegistrationAlerts(
+          _ as List<com.silenteight.bridge.core.registration.domain.model.AlertWithMatches>) >> alreadyExistingAlerts
+    }
+    0 * alertRegistrationService.registerAlerts(_ as AlertsToRegister)
+
     response.size() == 2
   }
 
-  def 'should register alerts with the status SUCCESS and create succeeded and failed in DB'() {
+  def 'two unregistered alerts with status SUCCESS and FAILURE: should save both alerts and matches'() {
     given:
-    def succeededAlert = AlertWithMatches.builder()
-        .alertId('alert_id_2')
-        .matches([new Match('match_id_21')])
-        .alertStatus(AlertStatus.SUCCESS)
-        .build()
+    def successAlertId = 'alert_id_1'
+    def failedAlertId = 'alert_id_2'
 
-    def failedAlert = AlertWithMatches.builder()
-        .alertId('alert_id_1')
-        .matches([new Match('match_id_11')])
-        .alertStatus(AlertStatus.FAILURE)
-        .build()
+    def successAlert = buildAlert(successAlertId, ['match_id_11'], AlertStatus.SUCCESS)
+    def failedAlert = buildAlert(failedAlertId, ['match_id_21'], AlertStatus.FAILURE)
 
-    def command = new RegisterAlertsCommand('batch_id_1', [succeededAlert, failedAlert])
+    def alertsWithMatches = [
+        successAlert,
+        failedAlert
+    ]
+
+    def command = new RegisterAlertsCommand('batch_id_1', alertsWithMatches)
 
     def alertsToRegister = new AlertsToRegister(
-        [new AlertsToRegister.AlertWithMatches(
-            'alert_id_1',
-            [new AlertsToRegister.Match('match_id_11')]),
-         new AlertsToRegister.AlertWithMatches(
-             'alert_id_2',
-             [new AlertsToRegister.Match('match_id_21')]),
+        [
+            buildAlertToRegister(successAlertId, ['match_id_11']),
+            buildAlertToRegister(failedAlertId, ['match_id_21'])
         ])
 
     def registeredAlerts = new RegisteredAlerts(
         [
             RegisteredAlerts.AlertWithMatches.builder().build(),
-            RegisteredAlerts.AlertWithMatches.builder().build()
         ]
     )
 
-    def failedAlerts = [RegistrationAlert.builder().id('alert_id_1').status(Status.FAILURE).build()]
-    def succeededAlerts = [RegistrationAlert.builder().id('alert_id_2').status(Status.SUCCESS).build()]
+    def alerts = [buildRegistrationAlert(successAlertId, Status.SUCCESS)]
+
+    def failedAlerts = [buildRegistrationAlert(failedAlertId, Status.FAILURE)]
 
     when:
     def response = underTest.registerAlertsAndMatches(command)
 
     then:
-    1 * alertRepository.findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >> []
-    1 * alertMapper.toAlertsToRegister(_ as List<AlertWithMatches>) >> alertsToRegister
+    with(alertRepository) {
+      1 * findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >> []
+      2 * saveAlerts(_ as List<Alert>)
+    }
+    with(alertMapper) {
+      1 * toAlertsToRegister(_ as List<AlertWithMatches>) >> alertsToRegister
+      1 * toAlerts(_ as RegisteredAlerts, [successAlert], 'batch_id_1') >> alerts
+      1 * toErrorAlerts([failedAlert] as List<AlertWithMatches>, 'batch_id_1') >> failedAlerts
+    }
+    with(registrationAlertResponseMapper) {
+      1 * fromAlertsToRegistrationAlerts(alerts as List<Alert>) >> alerts
+      1 * fromAlertsToRegistrationAlerts(failedAlerts as List<Alert>) >> failedAlerts
+      1 * fromAlertsWithMatchesToRegistrationAlerts([]) >> []
+    }
     1 * alertRegistrationService.registerAlerts(_ as AlertsToRegister) >> registeredAlerts
-    1 * alertMapper.toAlerts(_ as RegisteredAlerts, [succeededAlert], 'batch_id_1') >> [Alert.builder().build()]
-    1 * alertRepository.saveAlerts(_ as List<Alert>)
-    1 * alertMapper.toErrorAlerts(_ as List<AlertWithMatches>, 'batch_id_1') >> [Alert.builder().build()]
-    1 * alertRepository.saveAlerts(_ as List<Alert>)
-    1 * registrationAlertResponseMapper.fromAlertsToRegistrationAlerts(_ as List<Alert>) >> failedAlerts
-    1 * registrationAlertResponseMapper.fromAlertsToRegistrationAlerts(_ as List<Alert>) >> succeededAlerts
-    1 * registrationAlertResponseMapper.fromAlertsWithMatchesToRegistrationAlerts(
-        _ as List<com.silenteight.bridge.core.registration.domain.model.AlertWithMatches>) >> []
+
+    response.size() == 2
+  }
+
+  def 'two alerts - registered FAILURE and unregistered SUCCESS: should register SUCCESS alert'() {
+    given:
+    def successAlertId = 'alert_id_1'
+    def failedAlertId = 'alert_id_2'
+
+    def successAlert = buildAlert(successAlertId, ['match_id_11'], AlertStatus.SUCCESS)
+    def failedAlert = buildAlert(failedAlertId, ['match_id_21'], AlertStatus.FAILURE)
+
+    def alertsWithMatches = [
+        successAlert,
+        failedAlert
+    ]
+
+    def command = new RegisterAlertsCommand('batch_id_1', alertsWithMatches)
+
+    def alertsToRegister = new AlertsToRegister(
+        [
+            buildAlertToRegister(successAlertId, ['match_id_11']),
+        ])
+
+    def registeredAlerts = new RegisteredAlerts(
+        [
+            RegisteredAlerts.AlertWithMatches.builder().build(),
+        ]
+    )
+
+    def registeredAlert = buildRegisteredAlert(failedAlertId)
+
+    def alerts = [buildRegistrationAlert(successAlertId, Status.SUCCESS)]
+
+    def failedAlerts = [buildRegistrationAlert(failedAlertId, Status.FAILURE)]
+
+    when:
+    def response = underTest.registerAlertsAndMatches(command)
+
+    then:
+    with(alertRepository) {
+      1 * findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >> [registeredAlert]
+      1 * saveAlerts(_ as List<Alert>)
+    }
+    with(alertMapper) {
+      1 * toAlertsToRegister(_ as List<AlertWithMatches>) >> alertsToRegister
+      1 * toAlerts(_ as RegisteredAlerts, [successAlert], 'batch_id_1') >> alerts
+      0 * toErrorAlerts([failedAlert] as List<AlertWithMatches>, 'batch_id_1')
+    }
+    with(registrationAlertResponseMapper) {
+      1 * fromAlertsToRegistrationAlerts(alerts as List<Alert>) >> alerts
+      1 * fromAlertsWithMatchesToRegistrationAlerts([registeredAlert]) >> failedAlerts
+    }
+    1 * alertRegistrationService.registerAlerts(_ as AlertsToRegister) >> registeredAlerts
+
+    response.size() == 2
+  }
+
+  def 'two alerts - unregistered FAILURE and registered SUCCESS: should register FAILURE alert'() {
+    given:
+    def successAlertId = 'alert_id_1'
+    def failedAlertId = 'alert_id_2'
+
+    def successAlert = buildAlert(successAlertId, ['match_id_11'], AlertStatus.SUCCESS)
+    def failedAlert = buildAlert(failedAlertId, ['match_id_21'], AlertStatus.FAILURE)
+
+    def alertsWithMatches = [
+        successAlert,
+        failedAlert
+    ]
+
+    def command = new RegisterAlertsCommand('batch_id_1', alertsWithMatches)
+
+    def registeredAlert = buildRegisteredAlert(successAlertId)
+
+    def alerts = [buildRegistrationAlert(successAlertId, Status.SUCCESS)]
+
+    def failedAlerts = [buildRegistrationAlert(failedAlertId, Status.FAILURE)]
+
+    when:
+    def response = underTest.registerAlertsAndMatches(command)
+
+    then:
+    with(alertRepository) {
+      1 * findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >> [registeredAlert]
+      1 * saveAlerts(_ as List<Alert>)
+    }
+    with(alertMapper) {
+      0 * toAlertsToRegister(_ as List<AlertWithMatches>)
+      0 * toAlerts(_ as RegisteredAlerts, [successAlert], 'batch_id_1')
+      1 * toErrorAlerts([failedAlert] as List<AlertWithMatches>, 'batch_id_1') >> failedAlerts
+    }
+    with(registrationAlertResponseMapper) {
+      0 * fromAlertsToRegistrationAlerts(alerts as List<Alert>)
+      1 * fromAlertsToRegistrationAlerts(failedAlerts as List<Alert>) >> failedAlerts
+      1 * fromAlertsWithMatchesToRegistrationAlerts([registeredAlert]) >> alerts
+    }
+    0 * alertRegistrationService.registerAlerts(_ as AlertsToRegister)
+
+    response.size() == 2
+  }
+
+  def 'two registered failure alerts: should not register alerts'() {
+    def firstRegisteredId = "alert_id_1"
+    def secondRegisteredId = "alert_id_2"
+
+    def alertsWithMatches = [
+        buildAlert(firstRegisteredId, ['match_id_11'], AlertStatus.FAILURE),
+        buildAlert(secondRegisteredId, ['match_id_21'], AlertStatus.FAILURE)
+    ]
+
+    def command = new RegisterAlertsCommand('batch_id_1', alertsWithMatches)
+
+    def alreadyExistingAlerts = [
+        buildRegistrationAlert(firstRegisteredId, Status.FAILURE),
+        buildRegistrationAlert(secondRegisteredId, Status.FAILURE)
+    ]
+
+    def alertsFromDb = [
+        buildRegisteredAlert(firstRegisteredId),
+        buildRegisteredAlert(secondRegisteredId)
+    ]
+
+    when:
+    def response = underTest.registerAlertsAndMatches(command)
+
+    then:
+    with(alertRepository) {
+      1 * findAllWithMatchesByBatchIdAndAlertIdsIn(_ as String, _ as List<String>) >> alertsFromDb
+      0 * saveAlerts(_ as List<Alert>)
+    }
+    with(alertMapper) {
+      0 * toAlertsToRegister(_ as List<AlertWithMatches>)
+      0 * toAlerts(_ as RegisteredAlerts, [], 'batch_id_1')
+      1 * toErrorAlerts([] as List<AlertWithMatches>, 'batch_id_1') >> []
+    }
+    with(registrationAlertResponseMapper) {
+      0 * fromAlertsToRegistrationAlerts(_ as List<Alert>)
+      1 * fromAlertsWithMatchesToRegistrationAlerts(
+          _ as List<com.silenteight.bridge.core.registration.domain.model.AlertWithMatches>) >> alreadyExistingAlerts
+    }
+    0 * alertRegistrationService.registerAlerts(_ as AlertsToRegister)
+
     response.size() == 2
   }
 
@@ -244,7 +399,7 @@ class AlertServiceSpec extends Specification {
 
     then:
     1 * alertRepository.countAllPendingAlerts(batchId) >> 0
-    result == true
+    result
   }
 
 
@@ -257,6 +412,6 @@ class AlertServiceSpec extends Specification {
 
     then:
     1 * alertRepository.countAllPendingAlerts(batchId) >> 1
-    result == false
+    !result
   }
 }
