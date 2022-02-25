@@ -14,11 +14,16 @@ class AgentDataSourceException(AgentException):
 
 
 class AgentDataSource:
+    """
+    channel_stream_method attribute - it is a grpc channel stream call, given in implementation.
+    I.e. in org name agent it is a NameInputServiceStub.BatchGetMatchNameInputs method
+    """
+
     def __init__(self, config: Config):
         assert config.application_config
         self.application_config = config.application_config
         self.address_service = AddressService(config.application_config)
-        self.channel, self.command = None, None
+        self.channel, self.channel_stream_method = None, None
         self.logger = logging.getLogger("AgentDataSource")
 
     async def start(self):
@@ -28,13 +33,13 @@ class AgentDataSource:
         if not address:
             raise Exception("No address for data source")
         self.channel = grpc.aio.insecure_channel(address)
-        self.command = None
+        self.channel_stream_method = None
 
     async def request(
         self, request: AgentExchangeRequest
     ) -> AsyncGenerator[Tuple[str, str, Any], None]:
         try:
-            async for response in self.command(
+            async for response in self.channel_stream_method(
                 self.prepare_request(request),
                 timeout=self.application_config["grpc"]["client"]["data-source"].get("timeout"),
             ):

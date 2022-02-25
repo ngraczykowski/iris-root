@@ -34,7 +34,7 @@ class JohnnyAgentDataSource(AgentDataSource):
     async def start(self):
         await super().start()
         stub = NameInputServiceStub(self.channel)
-        self.command = stub.BatchGetMatchNameInputs
+        self.channel_stream = stub.BatchGetMatchNameInputs
 
     def prepare_request(self, request: AgentExchangeRequest) -> BatchGetMatchNameInputsRequest:
         return BatchGetMatchNameInputsRequest(matches=request.matches, features=request.features)
@@ -123,7 +123,7 @@ def main():
         JohnnyAgent(config),
         services=[
             AgentExchange(config, JohnnyAgentDataSource(config)),
-            GrpcService(config, servicers=[JohnnyAgentGrpcServicer()]),
+            GrpcService(config, agent_servicer=JohnnyAgentGrpcServicer()),
         ],
     )
 

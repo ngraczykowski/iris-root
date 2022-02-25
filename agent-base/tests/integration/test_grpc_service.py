@@ -38,7 +38,7 @@ async def johnny_agent(config: Config):
     runner = AgentRunner(config)
     await runner.start(
         agent,
-        services=[GrpcService(config, servicers=(JohnnyAgentGrpcServicer(),))],
+        services=[GrpcService(config, agent_servicer=JohnnyAgentGrpcServicer())],
     )
     try:
         yield agent

@@ -62,9 +62,7 @@ async def johnny_agent(config):
         await runner.stop()
 
 
-def get_solutions(
-    response: AgentExchangeResponse,
-) -> Generator[Tuple[str, str, str], None, None]:
+def get_solutions(response: AgentExchangeResponse) -> Generator[Tuple[str, str, str], None, None]:
     for agent_output in response.agent_outputs:
         for agent_feature_output in agent_output.features:
             yield (
@@ -75,16 +73,13 @@ def get_solutions(
 
 
 @pytest.mark.rabbitmq
-async def test_single_request_returns_correct_identificators(
-    ae_mock: AdjudicationEngineMock,
-):
+async def test_single_request_returns_correct_identificators(ae_mock: AdjudicationEngineMock):
     for i in range(10):
         match, feature = f"match_{i}", FEATURE_NAME
         correlation_id = await ae_mock.send(
             AgentExchangeRequest(matches=[match], features=[feature])
         )
         response = await ae_mock.wait_for(correlation_id)
-
         assert response
         assert isinstance(response, AgentExchangeResponse)
 

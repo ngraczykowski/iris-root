@@ -7,18 +7,20 @@ from grpc_reflection.v1alpha import reflection
 
 from agent_base.agent import AgentService
 from agent_base.grpc_service.health_servicer import AgentHealthServicer
+from agent_base.grpc_service.servicer import AgentGrpcServicer
 from agent_base.utils import Config
 
 
 class GrpcService(AgentService):
-    def __init__(self, config: Config, servicers=()):
+    def __init__(self, config: Config, agent_servicer: AgentGrpcServicer, servicers=()):
         super().__init__(config=config)
         self.logger = logging.getLogger("GrpcService")
         self.server = None
+        self.agent_servicer = agent_servicer
         self.health_servicer = AgentHealthServicer(
             experimental_non_blocking=True, experimental_thread_pool=self.pool
         )
-        self.servicers = (self.health_servicer, *servicers)
+        self.servicers = (self.health_servicer, self.agent_servicer, *servicers)
 
     async def start(self, *args, **kwargs):
         self.logger.debug("Starting grpc service")
@@ -28,8 +30,7 @@ class GrpcService(AgentService):
 
         await super().start(*args, **kwargs)
         await self._start_server()
-        for servicer in self.servicers:
-            servicer.set_create_resolve_task(self.create_resolve_task)
+        self.agent_servicer.set_create_resolve_task(self.create_resolve_task)
 
         self.logger.debug("Grpc service started")
         return self

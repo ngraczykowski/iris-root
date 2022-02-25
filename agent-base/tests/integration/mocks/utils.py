@@ -7,6 +7,10 @@ import sys
 from agent_base.example import main as run_agent
 from tests.integration.mocks.data_source_mock import DataSourceMock
 
+"""
+This file functions are not used here, but in agents - to test i.e. performance.
+"""
+
 
 @contextlib.contextmanager
 def run_in_process(f):

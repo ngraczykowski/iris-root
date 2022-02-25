@@ -3,7 +3,7 @@ import collections
 import logging
 import os
 import time
-from typing import Any, AsyncGenerator, Generator, Tuple
+from typing import Any, AsyncGenerator, Dict, Generator, Tuple
 
 import aio_pika
 import lz4.frame
@@ -50,6 +50,18 @@ class AgentExchange(AgentService):
 
         self.logger.debug("Agent exchange started")
 
+    async def stop(self):
+        self.logger.debug("Stopping agent exchange")
+
+        tasks = [s.stop() for s in self.connections]
+        if self.data_source:
+            tasks.append(self.data_source.stop())
+
+        await asyncio.gather(*tasks)
+        self.connections = []
+
+        self.logger.debug("Agent exchange stopped")
+
     async def on_request(self, message: aio_pika.IncomingMessage) -> aio_pika.Message:
         body = message.body.strip()
 
@@ -88,10 +100,11 @@ class AgentExchange(AgentService):
         agent_inputs = self.data_source.request(request)
         resolved = await self._resolve_all(request, agent_inputs)
         response = self._prepare_response(request, resolved)
-
         return response
 
-    async def _resolve_all(self, request, agent_inputs):
+    async def _resolve_all(
+        self, request: AgentExchangeRequest, agent_inputs: AsyncGenerator
+    ) -> Dict[str, Dict[str, AgentOutput.Feature]]:
         resolved = collections.defaultdict(dict)
         try:
             self.logger.debug(type(agent_inputs))
@@ -109,45 +122,27 @@ class AgentExchange(AgentService):
 
         return resolved
 
-    def _update_absent_solutions(self, request, resolved, solution):
-        for match in request.matches:
-            for feature in request.features:
-                if feature not in resolved[match]:
-                    resolved[match][feature] = AgentOutput.Feature(
-                        feature=feature,
-                        feature_solution=solution,
-                    )
-
-    async def _resolve_task(self, feature, task):
-        try:
-            result = await task
-        except Exception as err:
-            self.logger.error(repr(err))
-            return AgentOutput.Feature(
-                feature=feature, feature_solution=self.default_error_solution
-            )
-        else:
-            return self._create_agent_output_feature(feature, result)
-
-    def _create_agent_output_feature(self, feature, result):
-        solution, reason = result
-
-        reason_struct = Struct()
-        reason_struct.update(reason)
-        return AgentOutput.Feature(
-            feature=feature,
-            feature_solution=AgentOutput.FeatureSolution(solution=solution, reason=reason_struct),
-        )
-
     async def _create_tasks(
         self,
         request_inputs: AsyncGenerator[Generator[Tuple[str, str, Any], None, None], None],
     ) -> AsyncGenerator[Tuple[str, str, Any], None]:
         async for match, feature, args in request_inputs:
-            self.logger.info(f"Input arguments len {len(args)}")
             yield match, feature, self.create_resolve_task(*args)
 
-    def _prepare_response(self, request, resolved):
+    async def _resolve_task(self, feature: str, task: Any):
+        try:
+            result = await task
+            return self._create_agent_output_feature(feature, result)
+
+        except Exception as err:
+            self.logger.error(repr(err))
+            return AgentOutput.Feature(
+                feature=feature, feature_solution=self.default_error_solution
+            )
+
+    def _prepare_response(
+        self, request: AgentExchangeRequest, resolved: Dict[str, Dict[str, Any]]
+    ) -> AgentExchangeResponse:
         response = AgentExchangeResponse(agent_outputs=[])
         for match in request.matches:
             features = [
@@ -160,18 +155,6 @@ class AgentExchange(AgentService):
             response.agent_outputs.append(AgentOutput(match=match, features=features))
 
         return response
-
-    async def stop(self):
-        self.logger.debug("Stopping agent exchange")
-
-        tasks = [s.stop() for s in self.connections]
-        if self.data_source:
-            tasks.append(self.data_source.stop())
-
-        await asyncio.gather(*tasks)
-        self.connections = []
-
-        self.logger.debug("Agent exchange stopped")
 
     async def _set_pika_connection(self):
         messaging_config = self.config.application_config["agent"]["agent-exchange"]
@@ -215,3 +198,27 @@ class AgentExchange(AgentService):
             for address in addresses.split(","):
                 host, port = address.split(":")
                 yield {"host": host, "port": port, **rabbitmq_config}
+
+    @staticmethod
+    def _update_absent_solutions(
+        request: AgentExchangeRequest,
+        resolved: Dict[str, Dict[str, Any]],
+        solution: AgentOutput.FeatureSolution,
+    ):
+        for match in request.matches:
+            for feature in request.features:
+                if feature not in resolved[match]:
+                    resolved[match][feature] = AgentOutput.Feature(
+                        feature=feature,
+                        feature_solution=solution,
+                    )
+
+    @staticmethod
+    def _create_agent_output_feature(feature: str, result: Tuple[Any, Any]):
+        solution, reason = result
+        reason_struct = Struct()
+        reason_struct.update(reason)
+        return AgentOutput.Feature(
+            feature=feature,
+            feature_solution=AgentOutput.FeatureSolution(solution=solution, reason=reason_struct),
+        )

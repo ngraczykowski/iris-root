@@ -3,7 +3,10 @@ import concurrent.futures
 import contextlib
 import functools
 import logging
+from typing import List
 
+from agent_base.agent.agent import Agent
+from agent_base.agent.agent_service import AgentService
 from agent_base.utils import Config
 
 
@@ -30,7 +33,7 @@ class AgentRunner:
         self.pool = None
         self.running = []
 
-    async def start(self, agent, services):
+    async def start(self, agent: Agent, services: List[AgentService]):
         if self.running:
             raise Exception("Already running, stop services first")
 
@@ -48,5 +51,5 @@ class AgentRunner:
         if self.pool:
             self.pool.shutdown()
 
-    def run(self, agent, services):
+    def run(self, agent: Agent, services: List[AgentService]):
         run(functools.partial(self.start, agent, services), self.stop)
