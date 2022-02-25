@@ -19,7 +19,8 @@ public final class PostgresContainer {
   private static final PostgreSQLContainer<?> CONTAINER;
 
   static {
-    CONTAINER = new PostgreSQLContainer<>("postgres:10")
+    CONTAINER = new PostgreSQLContainer<>("postgres:"
+        + System.getProperty("testcontainers.postgres.version", "12"))
         .withDatabaseName("test_db_" + randomAlphabetic(6))
         .withUsername("user_" + randomAlphabetic(6))
         .withPassword(randomAlphanumeric(12))
