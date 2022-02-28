@@ -3,6 +3,10 @@ package com.silenteight.serp.governance.policy.transform.rbs;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,13 +21,16 @@ import java.io.InputStream;
 import java.time.Duration;
 import java.util.concurrent.ForkJoinPool;
 
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
+import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
+import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
 import static java.util.Objects.requireNonNull;
 import static org.springframework.http.ResponseEntity.accepted;
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(ROOT)
+@RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@Tag(name = POLICY_ENDPOINT_TAG)
 class RbsImportController {
 
   private static final Duration IMPORT_TIMEOUT = Duration.ofSeconds(1);
@@ -34,6 +41,11 @@ class RbsImportController {
 
   @PostMapping(value = IMPORT_FROM_RBS_URL, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthorized('IMPORT_POLICY_FROM_RBS')")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = ACCEPTED_STATUS, description = SUCCESS_RESPONSE_DESCRIPTION),
+      @ApiResponse(responseCode = BAD_REQUEST_STATUS, description = BAD_REQUEST_DESCRIPTION,
+          content = @Content)
+  })
   public DeferredResult<ResponseEntity<?>> importPolicy(@RequestParam("file") MultipartFile file) {
     String filename = file.getOriginalFilename();
     requireNonNull(filename);

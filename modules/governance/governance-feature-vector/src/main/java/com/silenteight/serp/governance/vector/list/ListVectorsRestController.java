@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.serp.governance.common.web.rest.Paging;
 import com.silenteight.serp.governance.vector.domain.dto.FeatureVectorsDto;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,13 +18,16 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.Min;
 
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
+import static com.silenteight.serp.governance.vector.domain.DomainConstants.VECTOR_ENDPOINT_TAG;
 import static java.lang.String.valueOf;
 import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @RestController
-@RequestMapping(ROOT)
+@RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@Tag(name = VECTOR_ENDPOINT_TAG)
 class ListVectorsRestController {
 
   private static final String LIST_VECTORS_URL = "/v1/vectors";
