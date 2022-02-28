@@ -58,6 +58,7 @@ class CategoryValueGrpcAdapterTest {
 
     public static final String CATEGORY = "category";
     public static final String CATEGORY_VALUE_NAME = "category value name";
+    public static final String CATEGORY_VALUE_ALERT = "category value alert";
     public static final String CATEGORY_VALUE_MATCH = "category value match";
 
     static final MultiValueIn MULTI_VALUE = MultiValueIn.builder()
@@ -67,6 +68,7 @@ class CategoryValueGrpcAdapterTest {
     static final List<CategoryValueIn> CATEGORY_VALUE_INS = List.of(
         CategoryValueIn.builder()
             .name(CATEGORY_VALUE_NAME)
+            .alert(CATEGORY_VALUE_ALERT)
             .match(CATEGORY_VALUE_MATCH)
             .multiValue(MULTI_VALUE)
             .build()

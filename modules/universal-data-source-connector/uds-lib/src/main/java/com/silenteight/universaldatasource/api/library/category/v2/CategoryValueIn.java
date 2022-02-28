@@ -10,6 +10,7 @@ import com.silenteight.datasource.categories.api.v2.CategoryValue;
 public class CategoryValueIn {
 
   String name;
+  String alert;
   String match;
   String singleValue;
   MultiValueIn multiValue;
@@ -17,6 +18,7 @@ public class CategoryValueIn {
   CategoryValue toCategoryValue() {
     CategoryValue.Builder builder = CategoryValue.newBuilder()
         .setName(name)
+        .setAlert(alert)
         .setMatch(match);
 
     if (singleValue != null) {
