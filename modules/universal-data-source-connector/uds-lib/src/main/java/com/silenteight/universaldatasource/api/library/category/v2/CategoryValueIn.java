@@ -9,7 +9,6 @@ import com.silenteight.datasource.categories.api.v2.CategoryValue;
 @Builder
 public class CategoryValueIn {
 
-  String name;
   String alert;
   String match;
   String singleValue;
@@ -17,7 +16,6 @@ public class CategoryValueIn {
 
   CategoryValue toCategoryValue() {
     CategoryValue.Builder builder = CategoryValue.newBuilder()
-        .setName(name)
         .setAlert(alert)
         .setMatch(match);
 

@@ -67,7 +67,6 @@ class CategoryValueGrpcAdapterTest {
 
     static final List<CategoryValueIn> CATEGORY_VALUE_INS = List.of(
         CategoryValueIn.builder()
-            .name(CATEGORY_VALUE_NAME)
             .alert(CATEGORY_VALUE_ALERT)
             .match(CATEGORY_VALUE_MATCH)
             .multiValue(MULTI_VALUE)
