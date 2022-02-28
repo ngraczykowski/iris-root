@@ -20,6 +20,9 @@ class DataRetentionProperties {
   @NestedConfigurationProperty
   private PersonalInformation personalInformation = new PersonalInformation();
 
+  @NestedConfigurationProperty
+  private File file = new File();
+
   @Data
   static class AlertData {
     @NotNull
@@ -32,4 +35,9 @@ class DataRetentionProperties {
     Duration expiration = Duration.ofDays(151);
   }
 
+  @Data
+  static class File {
+    @NotNull
+    Duration expiration = Duration.ofDays(151);
+  }
 }
