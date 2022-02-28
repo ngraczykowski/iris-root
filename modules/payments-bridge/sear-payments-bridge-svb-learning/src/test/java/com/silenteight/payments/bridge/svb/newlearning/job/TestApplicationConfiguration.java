@@ -7,6 +7,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUs
 import com.silenteight.payments.bridge.agents.port.*;
 import com.silenteight.payments.bridge.data.retention.port.CreateAlertDataRetentionUseCase;
 import com.silenteight.payments.bridge.datasource.agent.port.CreateAgentInputsClient;
+import com.silenteight.payments.bridge.datasource.category.port.CreateCategoriesClient;
 import com.silenteight.payments.bridge.datasource.category.port.CreateCategoryValuesClient;
 import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
 import com.silenteight.payments.bridge.svb.learning.engine.HistoricalDecisionLearningEnginePort;
@@ -115,5 +116,10 @@ public class TestApplicationConfiguration {
   @Bean
   CreateContextualLearningFeatureInputUseCase createContextualLearningFeatureInputUseCase() {
     return new CreateContextualLearningFeatureInputUseCaseMock();
+  }
+
+  @Bean
+  CreateCategoriesClient createCategoriesClient() {
+    return new CreateCategoriesClientMock();
   }
 }

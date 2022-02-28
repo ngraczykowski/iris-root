@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.learning.categories.service;
+package com.silenteight.payments.bridge.svb.newlearning.service;
 
 import lombok.RequiredArgsConstructor;
 
