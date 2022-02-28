@@ -59,9 +59,6 @@ class ModelRule(ReductionRule):
     source: pathlib.Path
     model: Union[SklearnModel, Any] = None
 
-    def __post_init__(self):
-        self.solutions = [ModelSolutionRule(**v) for v in self.solutions]
-
     def check(self, scores: Mapping[str, Score]) -> Optional[SolutionWithProbability]:
         predicted = self.model.predict(scores)
 
@@ -85,6 +82,10 @@ class ScoresReduction:
         for rule in cfg["rules"]:
             if "source" in rule:
                 rule["model"] = SklearnModel(config.get_config_path(rule["source"], required=True))
+                model_solution_rules = [
+                    ModelSolutionRule(**model_rule) for model_rule in rule["solutions"]
+                ]
+                rule["solutions"] = model_solution_rules
                 rules.append(ModelRule(**rule))
             else:
                 rules.append(FeatureRule(**rule))

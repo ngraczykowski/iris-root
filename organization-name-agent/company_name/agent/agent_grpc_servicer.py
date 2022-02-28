@@ -20,7 +20,6 @@ class CompanyNameAgentGrpcServicer(OrganizationNameAgentServicer, AgentGrpcServi
     async def CompareOrganizationNames(
         self, request: CompareOrganizationNamesRequest, _context
     ) -> CompareOrganizationNamesResponse:
-
         names = list(request.alerted_party_names), list(request.watchlist_party_names)
         result: Result = await self.create_resolve_task(*names)
         return CompareOrganizationNamesResponse(

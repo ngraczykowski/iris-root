@@ -8,9 +8,10 @@ from agent_base.grpc_service import GrpcService
 from agent_base.utils import Config
 
 from company_name.agent.agent import CompanyNameAgent
+from company_name.agent.agent_config_grpc_servicer import CompanyNameAgentConfigServicer
 from company_name.agent.agent_data_source import CompanyNameAgentDataSource
 from company_name.agent.agent_exchange import CompanyNameAgentExchange
-from company_name.agent.grpc_service import CompanyNameAgentGrpcServicer
+from company_name.agent.agent_grpc_servicer import CompanyNameAgentGrpcServicer
 
 
 def run(
@@ -38,11 +39,20 @@ def run(
                 data_source=CompanyNameAgentDataSource(config),
             )
         )
+
+    agent = CompanyNameAgent(config=config, additional_knowledge_dir=additional_knowledge_dir)
+
     if start_grpc_service:
-        services.append(GrpcService(config, servicers=(CompanyNameAgentGrpcServicer(),)))
+        services.append(
+            GrpcService(
+                config,
+                agent_servicer=CompanyNameAgentGrpcServicer(),
+                servicers=(CompanyNameAgentConfigServicer(agent),),
+            )
+        )
 
     AgentRunner(config).run(
-        CompanyNameAgent(config=config, additional_knowledge_dir=additional_knowledge_dir),
+        agent=agent,
         services=services,
     )
 

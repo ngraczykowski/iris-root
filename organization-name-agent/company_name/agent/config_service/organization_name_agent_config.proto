@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+service OrganizationNameAgentConfig {
+
+  rpc ChangeOrganizationNameAgentConfig (ChangeOrganizationNameAgentConfigRequest)
+      returns (ChangeOrganizationNameAgentConfigResponse) {
+  }
+}
+
+message ChangeOrganizationNameAgentConfigRequest {
+  repeated FeatureRule feature_rules = 1;
+  repeated ModelSolutionRule model_solution_rules = 2;
+  string model_path = 3;
+  NameAlphabetRule name_alphabet_rule = 4;
+  NameInclusionRule name_inclusion_rule = 5;
+  NameLengthRule name_length_rule = 6;
+}
+
+message FeatureRule {
+  float threshold = 1;
+  string feature = 2;
+  Solution solution = 3;
+  float solution_probability = 4;
+}
+
+message ModelSolutionRule {
+  Solution solution = 1;
+  float threshold = 2;
+  string label = 3;
+}
+
+message NameAlphabetRule {
+  float min_acceptable_fraction = 1;
+  repeated string acceptable_alphabets = 2;
+}
+
+message NameInclusionRule {
+  repeated string without_part = 1;
+  repeated string without_token = 2;
+}
+
+message NameLengthRule {
+  uint32 max_length = 1;
+  uint32 max_unique_tokens = 2;
+}
+
+enum Solution {
+  MATCH = 0;
+  INCONCLUSIVE = 1;
+  NO_MATCH = 2;
+  NO_DATA = 3;
+  AGENT_ERROR = 4;
+}
+
+message ChangeOrganizationNameAgentConfigResponse {
+  Status status = 1;
+
+  enum Status {
+    ERROR = 0;
+    OK = 1;
+  }
+}

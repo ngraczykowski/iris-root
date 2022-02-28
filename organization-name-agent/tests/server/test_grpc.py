@@ -15,7 +15,7 @@ from silenteight.agent.organizationname.v1.api.organization_name_agent_pb2_grpc 
 
 PORT = Config().load_yaml_config("application.local.yaml")["agent"]["grpc"]["port"]
 GRPC_ADDRESS = f"localhost:{PORT}"
-TIMEOUT_SEC = 5
+TIMEOUT_SEC = 0.5
 
 TEST_CASES = [
     {
@@ -61,11 +61,11 @@ def grpc_server_on(channel) -> bool:
         return False
 
 
-def wait_for_server():
-    channel = grpc.insecure_channel(GRPC_ADDRESS)
+def wait_for_server(address):
+    channel = grpc.insecure_channel(address)
     counter = 0
     while counter < 10 and not grpc_server_on(channel):
-        time.sleep(5)
+        time.sleep(2)
         counter += 1
     if counter == 10:
         raise ServerIsNotRunning("Check server")
@@ -78,10 +78,10 @@ def kill_recursive(process_pid: int):
     process.kill()
 
 
-def kill_process_on_the_port():
+def kill_process_on_the_port(port):
     kill = subprocess.Popen(
         "kill -9 $(netstat -ltnp | "
-        f"grep -w :{PORT} | "
+        f"grep -w :{port} | "
         "awk '{ print $7 }' | "
         "grep -o '[0-9]\\+' )".split()
     )
@@ -92,9 +92,9 @@ class TestServer(unittest.TestCase):
     def setUp(self):
         self.config_path = pathlib.Path("./config/application.yaml")
         self.config_path.symlink_to("application.local.yaml")  # link to file from the same dir
-        kill_process_on_the_port()
+        kill_process_on_the_port(PORT)
         self.server_process = subprocess.Popen("python -m company_name.main -v --grpc".split())
-        wait_for_server()
+        wait_for_server(GRPC_ADDRESS)
 
     def tearDown(self):
         kill_recursive(self.server_process.pid)

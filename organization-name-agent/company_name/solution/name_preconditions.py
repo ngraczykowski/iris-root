@@ -32,7 +32,6 @@ class LengthRule(BasicPreconditionRule):
 
 
 class InclusionRule(BasicPreconditionRule):
-
     rules_checks = {
         "without_part": lambda name, value: not any(v in name.source.cleaned for v in value),
         "without_token": lambda name, value: not any(
@@ -81,18 +80,20 @@ class AlphabetRule(BasicPreconditionRule):
 class NamePreconditions:
     configuration_file_name = "name-preconditions.yaml"
 
-    rules = {
+    preconditions = {
         "length": LengthRule,
         "inclusion": InclusionRule,
         "alphabet": AlphabetRule,
     }
 
     def __init__(self, config: Config):
-        rules_config = config.load_yaml_config(self.configuration_file_name, required=False)
-        unrecognized_rules = set(rules_config.keys()).difference(self.rules)
+        preconditions_config = config.load_yaml_config(self.configuration_file_name, required=False)
+        unrecognized_rules = set(preconditions_config.keys()).difference(self.preconditions)
         if unrecognized_rules:
             raise ConfigurationException(f"Unrecognized rules {unrecognized_rules}")
-        self.rules_checks = {key: self.rules[key](value) for key, value in rules_config.items()}
+        self.preconditions_rules = {
+            key: self.preconditions[key](value) for key, value in preconditions_config.items()
+        }
 
     def preconditions_met(self, name: NameInformation) -> bool:
-        return all(rule.check(name) for rule in self.rules_checks.values())
+        return all(rule.check(name) for rule in self.preconditions_rules.values())
