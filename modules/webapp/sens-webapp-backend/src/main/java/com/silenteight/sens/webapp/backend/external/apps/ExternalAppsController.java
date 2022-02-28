@@ -3,6 +3,7 @@ package com.silenteight.sens.webapp.backend.external.apps;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,16 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import static com.silenteight.sens.webapp.backend.external.apps.ExternalAppsController.APP_ENDPOINT_TAG;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sep.base.common.logging.LogMarkers.INTERNAL;
 import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(ROOT)
+@RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @Slf4j
+@Tag(name = APP_ENDPOINT_TAG)
 class ExternalAppsController {
 
   private static final String REPORTING_APP_NAME = "reporting";
+  protected static final String APP_ENDPOINT_TAG = "App";
 
   @NonNull
   private final String reportingUrl;

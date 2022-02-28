@@ -8,4 +8,6 @@ public final class DomainConstants {
 
   public static final int SSO_MAPPING_FIELD_MIN_LENGTH = 3;
   public static final int SSO_MAPPING_FIELD_MAX_LENGTH = 80;
+
+  public static final String SSO_ENDPOINT_TAG = "Sso";
 }

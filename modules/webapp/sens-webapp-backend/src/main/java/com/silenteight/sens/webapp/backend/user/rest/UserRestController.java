@@ -27,6 +27,9 @@ import com.silenteight.sep.usermanagement.api.role.dto.RolesDto;
 import com.silenteight.sep.usermanagement.api.user.UserUpdater.UserUpdateException;
 
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.vavr.control.Either;
 import io.vavr.control.Try;
 import org.springframework.data.domain.Page;
@@ -42,8 +45,9 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
+import static com.silenteight.sens.webapp.common.rest.RestConstants.*;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
+import static com.silenteight.sens.webapp.user.domain.DomainConstants.USER_ENDPOINT_TAG;
 import static com.silenteight.sep.usermanagement.api.origin.SensOrigin.SENS_ORIGIN;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
@@ -54,11 +58,13 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.http.ResponseEntity.*;
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(ROOT + "/users")
+@RequestMapping(value = ROOT + "/users", produces = APPLICATION_JSON_VALUE)
+@Tag(name = USER_ENDPOINT_TAG)
 class UserRestController {
 
   @NonNull
@@ -106,6 +112,9 @@ class UserRestController {
 
   @PostMapping
   @PreAuthorize("isAuthorized('CREATE_USER')")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = CREATED_STATUS, description = SUCCESS_RESPONSE_DESCRIPTION)
+  })
   public ResponseEntity<Void> create(@Valid @RequestBody CreateUserDto dto) {
     log.info(USER_MANAGEMENT, "Creating new User. dto={}", dto);
 
@@ -126,6 +135,11 @@ class UserRestController {
 
   @PatchMapping("/{username}")
   @PreAuthorize("isAuthorized('EDIT_USER')")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = NO_CONTENT_STATUS, description = SUCCESS_RESPONSE_DESCRIPTION),
+      @ApiResponse(responseCode = UNPROCESSABLE_ENTITY_STATUS, description = "invalid data"),
+      @ApiResponse(responseCode = INSUFFICIENT_STORAGE_STATUS, description = "error during update")
+  })
   public ResponseEntity<Void> update(
       @PathVariable String username, @Valid @RequestBody UpdateUserDto dto) {
     log.info(USER_MANAGEMENT, "Updating user. username={}, body={}", username, dto);
@@ -152,6 +166,9 @@ class UserRestController {
 
   @DeleteMapping("/{username}")
   @PreAuthorize("isAuthorized('REMOVE_USER')")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = NO_CONTENT_STATUS, description = SUCCESS_RESPONSE_DESCRIPTION)
+  })
   public ResponseEntity<Void> delete(@PathVariable String username) {
     log.info(USER_MANAGEMENT, "Deleting User {}", username);
     return Try.run(

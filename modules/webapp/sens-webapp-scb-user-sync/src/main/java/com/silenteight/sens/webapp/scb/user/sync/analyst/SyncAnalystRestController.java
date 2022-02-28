@@ -16,11 +16,12 @@ import javax.annotation.Nullable;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.USER_MANAGEMENT;
 import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(ROOT)
+@RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 class SyncAnalystRestController {
 
   @Nullable

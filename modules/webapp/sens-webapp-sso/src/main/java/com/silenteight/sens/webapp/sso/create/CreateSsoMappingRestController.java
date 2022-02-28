@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.sso.create.dto.CreateSsoMappingDto;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
+import static com.silenteight.sens.webapp.common.rest.RestConstants.*;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.SSO_MANAGEMENT;
+import static com.silenteight.sens.webapp.sso.domain.DomainConstants.SSO_ENDPOINT_TAG;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.ResponseEntity.status;
 
@@ -24,6 +28,7 @@ import static org.springframework.http.ResponseEntity.status;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(ROOT)
+@Tag(name = SSO_ENDPOINT_TAG)
 class CreateSsoMappingRestController {
 
   @NonNull
@@ -31,6 +36,10 @@ class CreateSsoMappingRestController {
 
   @PostMapping("/sso/mappings")
   @PreAuthorize("isAuthorized('CREATE_SS0_MAPPING')")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = CREATED_STATUS, description = SUCCESS_RESPONSE_DESCRIPTION),
+      @ApiResponse(responseCode = BAD_REQUEST_STATUS, description = BAD_REQUEST_DESCRIPTION)
+  })
   public ResponseEntity<Void> create(@Valid @RequestBody CreateSsoMappingDto dto) {
     log.info(SSO_MANAGEMENT, "Creating new sso mapping. dto={}", dto);
 
