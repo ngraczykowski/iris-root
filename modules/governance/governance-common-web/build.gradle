@@ -10,6 +10,7 @@ dependencies {
   api libraries.javax_annotation_api
   api libraries.silenteight_sep_base_common
   api libraries.sentry
+  api libraries.springdoc_data_rest
 
   // General dependencies
   implementation libraries.silenteight_audit_bs
@@ -23,6 +24,5 @@ dependencies {
   implementation libraries.spring_webmvc
 
   implementation libraries.springdoc_ui
-  implementation libraries.springdoc_data_rest
   implementation libraries.springdoc_security
 }

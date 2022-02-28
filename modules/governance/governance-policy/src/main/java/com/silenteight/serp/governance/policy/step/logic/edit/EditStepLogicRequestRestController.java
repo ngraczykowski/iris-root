@@ -9,6 +9,9 @@ import com.silenteight.serp.governance.policy.step.logic.edit.dto.EditStepLogicD
 import com.silenteight.serp.governance.policy.step.logic.edit.dto.FeatureLogicDto;
 import com.silenteight.serp.governance.policy.step.logic.edit.dto.MatchConditionDto;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -18,12 +21,14 @@ import java.util.Collection;
 import java.util.UUID;
 import javax.validation.Valid;
 
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT;
+import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
+import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
 import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
+@Tag(name = POLICY_ENDPOINT_TAG)
 class EditStepLogicRequestRestController {
 
   @NonNull
@@ -31,6 +36,10 @@ class EditStepLogicRequestRestController {
 
   @PutMapping("/v1/steps/{id}/logic")
   @PreAuthorize("isAuthorized('EDIT_STEPS_LOGIC')")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = ACCEPTED_STATUS, description = SUCCESS_RESPONSE_DESCRIPTION),
+      @ApiResponse(responseCode = BAD_REQUEST_STATUS, description = BAD_REQUEST_DESCRIPTION)
+  })
   public ResponseEntity<Void> edit(
       @PathVariable UUID id,
       @Valid @RequestBody EditStepLogicDto editStepLogicDto,

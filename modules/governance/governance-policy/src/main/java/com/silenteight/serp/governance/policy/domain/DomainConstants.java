@@ -13,4 +13,6 @@ public final class DomainConstants {
   public static final int MAX_POLICY_NAME_LENGTH = 80;
   public static final int MIN_STEP_NAME_LENGTH = 3;
   public static final int MAX_STEP_NAME_LENGTH = 150;
+
+  public static final String POLICY_ENDPOINT_TAG = "Policy";
 }
