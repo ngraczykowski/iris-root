@@ -2,7 +2,7 @@ package com.silenteight.payments.bridge.svb.newlearning.step.learning.engine;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.payments.bridge.svb.learning.engine.HistoricalDecisionLearningEnginePort;
+import com.silenteight.payments.bridge.svb.newlearning.port.HistoricalDecisionLearningEnginePort;
 
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.context.annotation.Bean;

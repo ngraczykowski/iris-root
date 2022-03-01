@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.ae.alertregistration.domain.RegisteredAlert;
 import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredAlertUseCase;
+import com.silenteight.payments.bridge.common.event.AlreadySolvedAlertEvent;
 import com.silenteight.payments.bridge.svb.newlearning.domain.AlertComposite;
 import com.silenteight.payments.bridge.svb.newlearning.step.etl.LearningProcessedAlert.LearningProcessedAlertBuilder;
 import com.silenteight.payments.bridge.svb.oldetl.model.UnsupportedMessageException;
 
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ class EtlAlertProcessor implements ItemProcessor<AlertComposite, LearningProcess
   private final FindRegisteredAlertUseCase findRegisteredAlertUseCase;
   private final ProcessRegisteredService processRegisteredService;
   private final ProcessUnregisteredService processUnregisteredService;
+  private final ApplicationEventPublisher eventPublisher;
   private final Long jobId;
   private final String fileName;
 
@@ -41,8 +44,8 @@ class EtlAlertProcessor implements ItemProcessor<AlertComposite, LearningProcess
   LearningProcessedAlert processRegistered(
       AlertComposite alertComposite, List<RegisteredAlert> solvingRegistered) {
     var resultBuilder = createBuilder(alertComposite);
-
     try {
+      eventPublisher.publishEvent(new AlreadySolvedAlertEvent(solvingRegistered.size()));
       processRegisteredService.process(alertComposite, solvingRegistered);
       return resultBuilder.result(SUCCESSFUL.toString()).build();
     } catch (UnsupportedMessageException e) {

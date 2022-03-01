@@ -1,7 +1,7 @@
 package com.silenteight.payments.bridge.app.integration.learning.engine;
 
 
-import com.silenteight.payments.bridge.svb.learning.engine.HistoricalDecisionLearningEnginePort;
+import com.silenteight.payments.bridge.svb.newlearning.port.HistoricalDecisionLearningEnginePort;
 
 import org.springframework.integration.annotation.MessagingGateway;
 

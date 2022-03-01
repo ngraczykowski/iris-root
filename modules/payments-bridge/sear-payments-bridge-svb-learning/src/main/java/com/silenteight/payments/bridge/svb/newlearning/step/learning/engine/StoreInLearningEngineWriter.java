@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.svb.newlearning.step.learning.engine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.payments.bridge.svb.learning.engine.HistoricalDecisionLearningEnginePort;
+import com.silenteight.payments.bridge.svb.newlearning.port.HistoricalDecisionLearningEnginePort;
 import com.silenteight.proto.learningstore.historicaldecision.v1.api.HistoricalDecisionLearningStoreExchangeRequest;
 
 import org.springframework.batch.item.ItemWriter;

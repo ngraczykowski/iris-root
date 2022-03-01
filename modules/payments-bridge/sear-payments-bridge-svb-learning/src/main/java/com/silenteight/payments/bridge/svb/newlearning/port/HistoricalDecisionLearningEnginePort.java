@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.learning.engine;
+package com.silenteight.payments.bridge.svb.newlearning.port;
 
 import com.silenteight.proto.learningstore.historicaldecision.v1.api.HistoricalDecisionLearningStoreExchangeRequest;
 

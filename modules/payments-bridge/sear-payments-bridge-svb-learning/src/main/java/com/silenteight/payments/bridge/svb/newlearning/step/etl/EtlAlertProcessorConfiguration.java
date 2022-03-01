@@ -7,6 +7,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredA
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,6 +20,7 @@ class EtlAlertProcessorConfiguration {
   private final FindRegisteredAlertUseCase findRegisteredAlertUseCase;
   private final ProcessRegisteredService processRegisteredService;
   private final ProcessUnregisteredService processUnregisteredService;
+  private final ApplicationEventPublisher eventPublisher;
 
   @Bean
   @StepScope
@@ -28,6 +30,7 @@ class EtlAlertProcessorConfiguration {
         stepExecution.getJobParameters().getString(FILE_NAME_PARAMETER);
     return new EtlAlertProcessor(
         findRegisteredAlertUseCase, processRegisteredService, processUnregisteredService,
+        eventPublisher,
         stepExecution.getJobExecution().getJobId(), fileName);
   }
 }

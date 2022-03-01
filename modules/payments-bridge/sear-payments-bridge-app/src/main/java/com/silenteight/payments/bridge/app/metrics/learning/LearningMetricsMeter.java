@@ -3,9 +3,9 @@ package com.silenteight.payments.bridge.app.metrics.learning;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.payments.bridge.common.event.AlreadySolvedAlertEvent;
 import com.silenteight.payments.bridge.common.event.LearningAlertRegisteredEvent;
 import com.silenteight.payments.bridge.common.event.SolvingAlertRegisteredEvent;
-import com.silenteight.payments.bridge.svb.learning.event.AlreadySolvedAlertEvent;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;

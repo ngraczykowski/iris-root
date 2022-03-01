@@ -10,7 +10,7 @@ import com.silenteight.payments.bridge.datasource.agent.port.CreateAgentInputsCl
 import com.silenteight.payments.bridge.datasource.category.port.CreateCategoriesClient;
 import com.silenteight.payments.bridge.datasource.category.port.CreateCategoryValuesClient;
 import com.silenteight.payments.bridge.etl.parser.port.MessageParserUseCase;
-import com.silenteight.payments.bridge.svb.learning.engine.HistoricalDecisionLearningEnginePort;
+import com.silenteight.payments.bridge.svb.newlearning.port.HistoricalDecisionLearningEnginePort;
 import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
 import com.silenteight.payments.bridge.warehouse.index.port.IndexLearningUseCase;
 

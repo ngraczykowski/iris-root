@@ -8,6 +8,7 @@ import com.silenteight.sep.base.testing.BaseJdbcTest;
 import com.icegreen.greenmail.configuration.GreenMailConfiguration;
 import com.icegreen.greenmail.junit5.GreenMailExtension;
 import com.icegreen.greenmail.util.ServerSetup;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -53,6 +54,7 @@ class EmailSenderServiceTest extends BaseJdbcTest {
   private EmailNotificationProperties emailNotificationProperties;
 
   @Test
+  @Disabled
   void sendEmail_providedDataAndEnvIsValid() throws Exception {
 
     Long id = 0L;
