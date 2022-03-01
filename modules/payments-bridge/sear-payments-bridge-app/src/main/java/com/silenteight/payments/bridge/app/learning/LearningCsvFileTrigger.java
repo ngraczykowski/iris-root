@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.common.resource.csv.file.provider.model.ObjectPath;
 import com.silenteight.payments.bridge.common.resource.csv.file.provider.port.CsvFileResourceProvider;
-import com.silenteight.payments.bridge.svb.newlearning.domain.CsvProcessingFileStatus;
+import com.silenteight.payments.bridge.svb.learning.domain.CsvProcessingFileStatus;
 
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.scheduling.annotation.Scheduled;

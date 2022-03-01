@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
-import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.STORE_CSV_JOB_NAME;
+import static com.silenteight.payments.bridge.svb.learning.job.csvstore.LearningJobConstants.STORE_CSV_JOB_NAME;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

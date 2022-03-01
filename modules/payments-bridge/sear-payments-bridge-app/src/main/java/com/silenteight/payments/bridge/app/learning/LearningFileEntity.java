@@ -10,8 +10,8 @@ import org.springframework.batch.core.JobParametersBuilder;
 
 import javax.persistence.*;
 
-import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.BUCKET_NAME_PARAMETER;
-import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.FILE_NAME_PARAMETER;
+import static com.silenteight.payments.bridge.svb.learning.job.csvstore.LearningJobConstants.BUCKET_NAME_PARAMETER;
+import static com.silenteight.payments.bridge.svb.learning.job.csvstore.LearningJobConstants.FILE_NAME_PARAMETER;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PUBLIC;
 

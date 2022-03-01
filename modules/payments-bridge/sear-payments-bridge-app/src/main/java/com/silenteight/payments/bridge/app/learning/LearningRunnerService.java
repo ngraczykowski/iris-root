@@ -8,7 +8,7 @@ import com.silenteight.payments.bridge.common.event.TriggerBatchJobEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import static com.silenteight.payments.bridge.svb.newlearning.job.csvstore.LearningJobConstants.STORE_CSV_JOB_NAME;
+import static com.silenteight.payments.bridge.svb.learning.job.csvstore.LearningJobConstants.STORE_CSV_JOB_NAME;
 
 @Service
 @RequiredArgsConstructor

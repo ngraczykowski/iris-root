@@ -3,7 +3,7 @@ package com.silenteight.payments.bridge.app.learning;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.payments.bridge.PaymentsBridgeApplication;
-import com.silenteight.payments.bridge.svb.newlearning.domain.CsvProcessingFileStatus;
+import com.silenteight.payments.bridge.svb.learning.domain.CsvProcessingFileStatus;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 

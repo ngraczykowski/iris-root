@@ -1,7 +1,7 @@
 package com.silenteight.payments.bridge.app.learning;
 
-import com.silenteight.payments.bridge.svb.newlearning.domain.CsvProcessingFileStatus;
-import com.silenteight.payments.bridge.svb.newlearning.domain.LearningFile;
+import com.silenteight.payments.bridge.svb.learning.domain.CsvProcessingFileStatus;
+import com.silenteight.payments.bridge.svb.learning.domain.LearningFile;
 
 import java.util.Optional;
 
