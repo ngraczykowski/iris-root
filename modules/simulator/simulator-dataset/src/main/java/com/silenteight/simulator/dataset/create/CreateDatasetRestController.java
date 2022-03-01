@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.simulator.dataset.create.dto.CreateDatasetRequestDto;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,7 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import javax.validation.Valid;
 
-import static com.silenteight.simulator.common.web.rest.RestConstants.ROOT;
+import static com.silenteight.simulator.common.web.rest.RestConstants.*;
+import static com.silenteight.simulator.dataset.domain.DomainConstants.DATASET_ENDPOINT_TAG;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.ResponseEntity.status;
 
@@ -26,6 +30,7 @@ import static org.springframework.http.ResponseEntity.status;
 @RestController
 @RequestMapping(ROOT)
 @AllArgsConstructor
+@Tag(name = DATASET_ENDPOINT_TAG)
 class CreateDatasetRestController {
 
   static final String DATASET_URL = "/v1/datasets";
@@ -35,6 +40,10 @@ class CreateDatasetRestController {
 
   @PostMapping(DATASET_URL)
   @PreAuthorize("isAuthorized('CREATE_DATASET')")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = CREATED_STATUS, description = SUCCESS_RESPONSE_DESCRIPTION),
+      @ApiResponse(responseCode = BAD_REQUEST_STATUS, description = BAD_REQUEST_DESCRIPTION)
+  })
   public ResponseEntity<Void> create(
       @RequestBody @Valid CreateDatasetRequestDto dto, Authentication authentication) {
 

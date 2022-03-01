@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.simulator.common.web.rest.RestConstants;
-
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
+import static com.silenteight.simulator.common.web.rest.RestConstants.ROOT;
+import static com.silenteight.simulator.management.domain.DomainConstants.SIMULATION_ENDPOINT_TAG;
 import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @RestController
-@RequestMapping(RestConstants.ROOT)
+@RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @AllArgsConstructor
+@Tag(name = SIMULATION_ENDPOINT_TAG)
 class SimulationProgressController {
 
   private static final String ANALYSIS_PROGRESS_URL = "/v1/simulations/{id}/progress";
