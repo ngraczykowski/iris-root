@@ -6,6 +6,7 @@ import com.silenteight.payments.bridge.ae.alertregistration.port.FindRegisteredA
 import com.silenteight.payments.bridge.ae.alertregistration.port.RegisterAlertUseCase;
 import com.silenteight.payments.bridge.agents.port.*;
 import com.silenteight.payments.bridge.data.retention.port.CreateAlertDataRetentionUseCase;
+import com.silenteight.payments.bridge.data.retention.port.CreateFileRetentionUseCase;
 import com.silenteight.payments.bridge.datasource.agent.port.CreateAgentInputsClient;
 import com.silenteight.payments.bridge.datasource.category.port.CreateCategoriesClient;
 import com.silenteight.payments.bridge.datasource.category.port.CreateCategoryValuesClient;
@@ -29,6 +30,11 @@ public class TestApplicationConfiguration {
     BatchProperties properties = new BatchProperties();
     properties.setTablePrefix("pb_batch_");
     return properties;
+  }
+
+  @Bean
+  CreateFileRetentionUseCase createFileRetentionUseCase() {
+    return new CreateFileRetentionUseCaseMock();
   }
 
   @Bean
