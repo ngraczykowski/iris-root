@@ -4,3 +4,23 @@ serp:
       declare: false
       enabled: true
       name: ae.error-queue
+#---------------------------------------------------------------------------------------------------
+# MANAGEMENT
+#---------------------------------------------------------------------------------------------------
+
+# Management HTTP server
+management:
+  endpoint:
+    health.show-details: always
+
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers" ]
+    loggers:
+      sensitive: false
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
