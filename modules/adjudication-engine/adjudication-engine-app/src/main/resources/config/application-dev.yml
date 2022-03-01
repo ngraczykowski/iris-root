@@ -53,3 +53,23 @@ spring:
 grpc:
   logging:
     enabled: true
+#---------------------------------------------------------------------------------------------------
+# MANAGEMENT
+#---------------------------------------------------------------------------------------------------
+
+# Management HTTP server
+management:
+  endpoint:
+    health.show-details: always
+
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: [ "health", "info", "liquibase", "metrics", "prometheus", "loggers", "threaddump", "heapdump" ]
+    loggers:
+      sensitive: false
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
