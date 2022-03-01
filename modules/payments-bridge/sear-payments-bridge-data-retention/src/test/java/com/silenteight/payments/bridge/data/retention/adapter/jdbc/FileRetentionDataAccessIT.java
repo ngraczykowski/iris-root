@@ -1,5 +1,6 @@
 package com.silenteight.payments.bridge.data.retention.adapter.jdbc;
 
+import com.silenteight.payments.bridge.data.retention.model.FileDataRetention;
 import com.silenteight.sep.base.testing.BaseJdbcTest;
 
 import org.junit.jupiter.api.Test;
@@ -8,11 +9,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Sql
-@Import({ FileRetentionDataAccess.class, FindFileDataRetention.class })
+@Import({
+    FileRetentionDataAccess.class, FindFileDataRetention.class, InsertFileDataRetention.class })
 class FileRetentionDataAccessIT extends BaseJdbcTest {
 
   @Autowired
@@ -31,5 +34,13 @@ class FileRetentionDataAccessIT extends BaseJdbcTest {
     var before = OffsetDateTime.now().minusDays(10);
     var result = fileRetentionDataAccess.findFileNameBefore(before);
     assertEquals(0, result.size());
+  }
+
+  @Test
+  public void shouldInsertFileRetention() {
+    fileRetentionDataAccess.create(
+        List.of(FileDataRetention.builder().fileName("newfile").build()));
+    assertEquals(1, jdbcTemplate.queryForObject(
+        "SELECT count(*) FROM pb_file_data_retention WHERE file_name = 'newfile'", Integer.class));
   }
 }
