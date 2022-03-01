@@ -1,6 +1,8 @@
 package com.silenteight.sep.usermanagement.keycloak.query;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sep.usermanagement.api.role.UserRoles;
@@ -22,6 +24,7 @@ import static com.silenteight.sep.usermanagement.keycloak.query.role.RolesProvid
 import static java.time.OffsetDateTime.parse;
 import static java.util.UUID.randomUUID;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 class KeycloakUserQueryTestFixtures {
 
   static final String CLIENT_ID = "TEST_CLIENT";

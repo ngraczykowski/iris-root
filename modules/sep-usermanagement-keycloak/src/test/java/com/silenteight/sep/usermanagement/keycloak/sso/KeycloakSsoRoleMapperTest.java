@@ -3,11 +3,13 @@ package com.silenteight.sep.usermanagement.keycloak.sso;
 import com.silenteight.sep.usermanagement.api.identityprovider.dto.CreateRoleMappingDto;
 import com.silenteight.sep.usermanagement.api.identityprovider.dto.RoleMappingDto;
 import com.silenteight.sep.usermanagement.api.identityprovider.dto.SsoAttributeDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.exception.SsoRoleMapperAlreadyExistsException;
 import com.silenteight.sep.usermanagement.api.role.dto.RolesDto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,9 +18,8 @@ import org.keycloak.admin.client.resource.IdentityProviderResource;
 import org.keycloak.admin.client.resource.IdentityProvidersResource;
 import org.keycloak.representations.idm.IdentityProviderMapperRepresentation;
 import org.keycloak.representations.idm.IdentityProviderRepresentation;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
+import org.mockito.*;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -39,6 +40,10 @@ import static org.mockito.Mockito.*;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class KeycloakSsoRoleMapperTest {
 
+  public static final String SAML_ATTR_KEY_VALUE_1 =
+      "{\"key\":\"saml_attr_01\",\"value\":\"saml_attr_val_01\"}";
+  public static final String SAML_ATTR_KEY_VALUE_2 =
+      "{\"key\":\"saml_attr_02\",\"value\":\"saml_attr_val_02\"}";
   @Mock
   private IdentityProvidersResource identityProvidersResource;
 
@@ -118,14 +123,20 @@ class KeycloakSsoRoleMapperTest {
         ))
         .roles(new RolesDto(List.of("governance.uma_protection", "create policy")))
         .build();
-
-    //when
-    underTest.addMapping(roleMappingDto);
-
+    RoleMappingDto result;
+    try (
+        MockedStatic<KeycloakMapperFinder> keycloakMapperFinder = mockStatic(
+            KeycloakMapperFinder.class)) {
+      keycloakMapperFinder
+          .when(() -> KeycloakMapperFinder.findKeycloakMappersBySharedId(any(), any()))
+          .thenAnswer(this::getIdentityProviderMapperRepresentations);
+      //when
+      result = underTest.addMapping(roleMappingDto);
+    }
     //then
+    result.getName();
     verify(identityProviderResource, times(2))
         .addMapper(mapperCaptor.capture());
-
     assertThat(mapperCaptor.getAllValues().get(0))
         .satisfies(mapper -> {
           String mapperName = mapper.getName();
@@ -136,10 +147,8 @@ class KeycloakSsoRoleMapperTest {
           assertThat(mapper.getConfig().get("syncMode")).isEqualTo("FORCE");
           assertThat(mapper.getConfig().get("role"))
               .isEqualTo(roleMappingDto.getRoles().getRoles().get(0));
-          assertThat(mapper.getConfig().get("attributes"))
-              .contains("{\"key\":\"saml_attr_01\",\"value\":\"saml_attr_val_01\"}");
-          assertThat(mapper.getConfig().get("attributes"))
-              .contains("{\"key\":\"saml_attr_02\",\"value\":\"saml_attr_val_02\"}");
+          assertThat(mapper.getConfig().get("attributes")).contains(SAML_ATTR_KEY_VALUE_1);
+          assertThat(mapper.getConfig().get("attributes")).contains(SAML_ATTR_KEY_VALUE_2);
         });
     //and
     assertThat(mapperCaptor.getAllValues().get(1))
@@ -152,10 +161,8 @@ class KeycloakSsoRoleMapperTest {
           assertThat(mapper.getConfig().get("syncMode")).isEqualTo("FORCE");
           assertThat(mapper.getConfig().get("role"))
               .isEqualTo(roleMappingDto.getRoles().getRoles().get(1));
-          assertThat(mapper.getConfig().get("attributes"))
-              .contains("{\"key\":\"saml_attr_01\",\"value\":\"saml_attr_val_01\"}");
-          assertThat(mapper.getConfig().get("attributes"))
-              .contains("{\"key\":\"saml_attr_02\",\"value\":\"saml_attr_val_02\"}");
+          assertThat(mapper.getConfig().get("attributes")).contains(SAML_ATTR_KEY_VALUE_1);
+          assertThat(mapper.getConfig().get("attributes")).contains(SAML_ATTR_KEY_VALUE_2);
         });
   }
 
@@ -178,7 +185,7 @@ class KeycloakSsoRoleMapperTest {
     Executable when = () -> underTest.addMapping(roleMappingDto);
 
     //then
-    assertThrows(SsoRoleMapperAlreadyExistException.class, when);
+    assertThrows(SsoRoleMapperAlreadyExistsException.class, when);
   }
 
   @Test
@@ -267,6 +274,32 @@ class KeycloakSsoRoleMapperTest {
     verify(identityProviderResource, times(1))
         .delete(mapperIdCaptor.capture());
     assertThat(mapperIdCaptor.getValue()).isEqualTo(LEGACY_MAPPING_UUID);
+  }
+
+  @NotNull
+  private List<IdentityProviderMapperRepresentation> getIdentityProviderMapperRepresentations(
+      InvocationOnMock invocation) {
+    IdentityProviderMapperRepresentation mapper01 =
+        new IdentityProviderMapperRepresentation();
+    mapper01.setId("01");
+    mapper01.setName("Mapper" + "_ID_" + invocation.getArgument(1) + "_SUB_01");
+    mapper01.setIdentityProviderAlias(ID_PROVIDER_NAME);
+    mapper01.setConfig(ImmutableMap.of(
+        "syncMode", "FORCE",
+        "attributes", "[" + SAML_ATTR_KEY_VALUE_1 + "," + SAML_ATTR_KEY_VALUE_2
+            + "]",
+        "role", "governance.uma_protection"));
+    IdentityProviderMapperRepresentation mapper02 =
+        new IdentityProviderMapperRepresentation();
+    mapper01.setId("02");
+    mapper02.setName("Mapper" + "_ID_" + invocation.getArgument(1) + "_SUB_02");
+    mapper02.setIdentityProviderAlias(ID_PROVIDER_NAME);
+    mapper02.setConfig(ImmutableMap.of(
+        "syncMode", "FORCE",
+        "attributes", "[" + SAML_ATTR_KEY_VALUE_1 + "," + SAML_ATTR_KEY_VALUE_2
+            + "]",
+        "role", "create policy"));
+    return List.of(mapper01, mapper02);
   }
 
   private static List<IdentityProviderMapperRepresentation> availableMappersFixture() {

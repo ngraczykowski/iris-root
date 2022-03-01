@@ -8,6 +8,7 @@ import com.silenteight.sep.usermanagement.api.identityprovider.IdentityProviderR
 import com.silenteight.sep.usermanagement.api.identityprovider.dto.CreateRoleMappingDto;
 import com.silenteight.sep.usermanagement.api.identityprovider.dto.RoleMappingDto;
 import com.silenteight.sep.usermanagement.api.identityprovider.dto.SsoAttributeDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.exception.SsoRoleMapperAlreadyExistsException;
 import com.silenteight.sep.usermanagement.keycloak.KeycloakException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,19 +26,15 @@ import java.util.function.Consumer;
 import javax.ws.rs.NotFoundException;
 
 import static com.silenteight.sep.usermanagement.keycloak.logging.LogMarkers.USER_MANAGEMENT;
+import static com.silenteight.sep.usermanagement.keycloak.sso.KeycloakMapperFinder.findKeycloakMappersBySharedId;
 import static com.silenteight.sep.usermanagement.keycloak.sso.KeycloakRoleMapperTypes.SAML_ADVANCED_ROLE_IDP_MAPPER;
-import static com.silenteight.sep.usermanagement.keycloak.sso.SsoMappingNameResolver.build;
-import static com.silenteight.sep.usermanagement.keycloak.sso.SsoMappingNameResolver.extractId;
-import static com.silenteight.sep.usermanagement.keycloak.sso.SsoMappingNameResolver.extractSharedName;
-import static com.silenteight.sep.usermanagement.keycloak.sso.SsoMappingNameResolver.isLegacyName;
+import static com.silenteight.sep.usermanagement.keycloak.sso.SsoMappingNameResolver.*;
 import static java.util.Collections.emptySet;
 import static java.util.Comparator.comparing;
 import static java.util.List.of;
 import static java.util.Optional.ofNullable;
-import static java.util.UUID.fromString;
-import static java.util.UUID.randomUUID;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.toList;
+import static java.util.UUID.*;
+import static java.util.stream.Collectors.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -62,14 +59,15 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
   }
 
   @Override
-  public void addMapping(CreateRoleMappingDto dto) throws KeycloakException {
-    log.info(USER_MANAGEMENT, "Adding SSO role mapping for identity provider={}, mapping name={}",
-        dto.getName());
+  public RoleMappingDto addMapping(CreateRoleMappingDto dto) throws KeycloakException {
+    log.info(USER_MANAGEMENT, "Adding SSO role mapping with name={}", dto.getName());
 
     final IdentityProviderResource idpResource = getDefaultProvider();
-    findMappingByName(idpResource, dto.getName()).ifPresentOrElse(m -> {
-      throw new SsoRoleMapperAlreadyExistException(dto.getName());
-    }, () -> addKeycloakMappings(idpResource, dto));
+    if (exists(idpResource, dto.getName())) {
+      throw new SsoRoleMapperAlreadyExistsException(dto.getName());
+    }
+    UUID uuid = addKeycloakMappings(idpResource, dto);
+    return getMapping(uuid, idpResource);
   }
 
   @Override
@@ -92,7 +90,10 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
   public RoleMappingDto getMapping(UUID mappingId) throws KeycloakException {
     log.info(USER_MANAGEMENT, "Retrieving SSO role mapping with aggregate id={}", mappingId);
 
-    IdentityProviderResource idpResource = getDefaultProvider();
+    return getMapping(mappingId, getDefaultProvider());
+  }
+
+  private RoleMappingDto getMapping(UUID mappingId, IdentityProviderResource idpResource) {
     List<IdentityProviderMapperRepresentation> keycloakMappers =
         findKeycloakMappersBySharedId(idpResource, mappingId);
 
@@ -108,9 +109,9 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
 
     return keycloakMappers.stream()
         .collect(groupingBy(r -> extractSharedName(r.getName())))
-        .entrySet()
+        .values()
         .stream()
-        .map(e -> buildRoleMappingDto(e.getValue()))
+        .map(this::buildRoleMappingDto)
         .sorted(comparing(RoleMappingDto::getName))
         .collect(toList());
   }
@@ -136,16 +137,15 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
     return dto;
   }
 
-  private void addKeycloakMappings(IdentityProviderResource idpResource, CreateRoleMappingDto dto) {
+  private UUID addKeycloakMappings(IdentityProviderResource idpResource, CreateRoleMappingDto dto) {
     UUID aggregateMappingId = randomUUID();
     dto.getRoles()
         .getRoles()
-        .forEach(withCounter((mappingIndex, role) -> {
-          idpResource.addMapper(
-              createKeycloakRoleMapper(mappingIndex,
-                  idpResource.toRepresentation().getAlias(), dto.getName(),
-                  aggregateMappingId, dto.getSsoAttributes(), role));
-        }));
+        .forEach(withCounter((mappingIndex, role) -> idpResource.addMapper(
+            createKeycloakRoleMapper(mappingIndex,
+                idpResource.toRepresentation().getAlias(), dto.getName(),
+                aggregateMappingId, dto.getSsoAttributes(), role))));
+    return aggregateMappingId;
   }
 
   private IdentityProviderMapperRepresentation createKeycloakRoleMapper(
@@ -172,9 +172,7 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
 
   private IdentityProviderResource getDefaultProvider() {
     IdentityProviderRepresentation idp = identityProvidersResource.findAll()
-        .stream()
-        .sorted(comparing(IdentityProviderRepresentation::getAlias))
-        .findFirst()
+        .stream().min(comparing(IdentityProviderRepresentation::getAlias))
         .orElseThrow(IdentityProviderNotFoundException::new);
 
     return getProviderByName(idp.getAlias());
@@ -193,7 +191,7 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
   private Set<SsoAttributeDto> attrsFromString(String attributes) {
     try {
       return sepUserManagementKeycloakObjectMapper
-          .readValue(attributes, new TypeReference<Set<SsoAttributeDto>>() {});
+          .readValue(attributes, new TypeReference<>() {});
     } catch (JsonProcessingException e) {
       log.error(USER_MANAGEMENT,
           "Could not convert keycloak SSO attributes to SsoAttribute collection.", e);
@@ -201,21 +199,9 @@ public class KeycloakSsoRoleMapper implements IdentityProviderRoleMapper {
     }
   }
 
-  private Optional<IdentityProviderMapperRepresentation> findMappingByName(
-      IdentityProviderResource idpResource, String mappingName) {
-
+  private static boolean exists(IdentityProviderResource idpResource, String mappingName) {
     return idpResource.getMappers().stream()
-        .filter(m -> mappingName.equals(extractSharedName(m.getName())))
-        .findFirst();
-  }
-
-  private List<IdentityProviderMapperRepresentation> findKeycloakMappersBySharedId(
-      IdentityProviderResource idpResource, UUID aggregateId) {
-
-    return idpResource
-        .getMappers()
-        .stream()
-        .filter(m -> aggregateId.toString().equals(extractId(m.getName()))).collect(toList());
+        .anyMatch(m -> mappingName.equals(extractSharedName(m.getName())));
   }
 
   private Optional<IdentityProviderMapperRepresentation> findLegacyMapper(

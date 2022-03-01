@@ -3,6 +3,7 @@ package com.silenteight.sep.usermanagement.keycloak.sso;
 import com.silenteight.sep.usermanagement.api.identityprovider.dto.CreateRoleMappingDto;
 import com.silenteight.sep.usermanagement.api.identityprovider.dto.RoleMappingDto;
 import com.silenteight.sep.usermanagement.api.identityprovider.dto.SsoAttributeDto;
+import com.silenteight.sep.usermanagement.api.identityprovider.exception.SsoRoleMapperAlreadyExistsException;
 import com.silenteight.sep.usermanagement.api.role.dto.RolesDto;
 import com.silenteight.sep.usermanagement.keycloak.BaseKeycloakIntegrationTest;
 
@@ -117,17 +118,18 @@ public class KeycloakSsoRoleMapperIntegrationTest extends BaseKeycloakIntegratio
   @Test
   void shouldNotCreateMappingWhenAlreadyExists() {
     //given
+    CreateRoleMappingDto mappingAddedTwice = createRoleMappingDto("existingMapping");
     Map<String, CreateRoleMappingDto> ssoMappings = Map.of(
         "mapping 01", createRoleMappingDto("mapping 01"),
-        "existingMapping", createRoleMappingDto("existingMapping"),
+        "existingMapping", mappingAddedTwice,
         "mapping 03", createRoleMappingDto("mapping 03"),
         "mapping 04", createRoleMappingDto("mapping 04"));
     //and
     ssoMappings.values().forEach(dto -> underTest.addMapping(dto));
 
     //expect
-    assertThrows(SsoRoleMapperAlreadyExistException.class, () ->
-        underTest.addMapping(createRoleMappingDto("existingMapping")));
+    assertThrows(SsoRoleMapperAlreadyExistsException.class, () ->
+        underTest.addMapping(mappingAddedTwice));
   }
 
   @Test

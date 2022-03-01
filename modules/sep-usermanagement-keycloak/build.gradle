@@ -19,7 +19,7 @@ ext {
   libraries = [:]
   springBootVersion = "2.4.9"
   silenteightSepBaseVersion = "1.12.2"
-  silenteightSepUsermanagementApiVersion = "1.15.0"
+  silenteightSepUsermanagementApiVersion = "1.16.0"
   keycloakVersion = "15.0.2"
   testContainerKeycloakVersion = "1.9.0"
   testContainerJupiterVersion = "1.16.2"
@@ -42,6 +42,7 @@ libraries.keycloak_bom = [group: 'org.keycloak.bom', name: 'keycloak-adapter-bom
 libraries.keycloak_admin_client = [group: 'org.keycloak', name: 'keycloak-admin-client', version: keycloakVersion]
 
 libraries.assertj_core = [group: 'org.assertj', name: 'assertj-core']
+libraries.mockito_inline = [group: 'org.mockito', name: 'mockito-inline']
 libraries.caffeine = [group: 'com.github.ben-manes.caffeine', name: 'caffeine']
 libraries.streamex = [group: "one.util", name: "streamex", version: "0.7.2"]
 
@@ -74,6 +75,7 @@ dependencies {
   }
   testImplementation libraries.assertj_core
   testImplementation libraries.test_container_jupiter
+  testImplementation libraries.mockito_inline
 
   api libraries.spring_context
 }
