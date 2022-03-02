@@ -20,12 +20,13 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
     RemoveDuplicatedHitsQuery.class,
     RemoveDuplicatedActionsQuery.class,
     RemoveFileCsvRowsQuery.class,
-    RemoveLearningAlertsQuery.class })
+    RemoveLearningAlertsQuery.class,
+    RemoveHitsWithoutParentQuery.class,
+    RemoveActionsWithoutParentQuery.class })
 class RemoveFileDataIT extends BaseJdbcTest {
 
   @Autowired
   private JdbcLearningDataAccess jdbcLearningDataAccess;
-
 
   @Test
   void shouldRemoveCsvRows() {
@@ -39,9 +40,27 @@ class RemoveFileDataIT extends BaseJdbcTest {
   @Test
   void shouldRemoveLearningAlerts() {
     jdbcLearningDataAccess.removeFileData(List.of("learning/mocked_learning.csv"));
-    var fileRowsCount = jdbcTemplate.queryForObject(
+    var alertsCount = jdbcTemplate.queryForObject(
         "SELECT count(*) FROM pb_learning_alert WHERE file_name = 'learning/mocked_learning.csv'",
         Integer.class);
-    assertThat(fileRowsCount).isEqualTo(0);
+    assertThat(alertsCount).isEqualTo(0);
+  }
+
+  @Test
+  void shouldRemoveHits() {
+    jdbcLearningDataAccess.removeFileData(List.of("learning/mocked_learning.csv"));
+    var hitsCount = jdbcTemplate.queryForObject(
+        "SELECT count(*) FROM pb_learning_hit",
+        Integer.class);
+    assertThat(hitsCount).isEqualTo(0);
+  }
+
+  @Test
+  void shouldRemoveActions() {
+    jdbcLearningDataAccess.removeFileData(List.of("learning/mocked_learning.csv"));
+    var actions = jdbcTemplate.queryForObject(
+        "SELECT count(*) FROM pb_learning_hit",
+        Integer.class);
+    assertThat(actions).isEqualTo(0);
   }
 }

@@ -296,3 +296,20 @@ UK
 [FXREFNB       X]
 [ADDENDACNT    X] 0007
 [ORIGSTSCD     X] 1', 'N/A', '2019/01/01', '36', '0', '0', '', '0', '0', '883252A2-C870-7D0A-E053-150A6C0A0D90', 'N/A', '2019-04-29 13:52:45.000000', '11', 'learning/mocked_learning.csv');
+
+-- Insert hits to delete
+
+INSERT INTO public.pb_learning_hit (learning_hit_id, fkco_messages, fkco_b_highlight_hit, fkco_v_name_matched_text, fkco_v_address_matched_text, fkco_v_city_matched_text, fkco_v_state_matched_text, fkco_v_country_matched_text, fkco_v_list_matched_name, fkco_v_fml_type, fkco_i_fml_priority, fkco_i_fml_confidentiality, fkco_v_hit_match_level, fkco_v_hit_type, fkco_i_nonblocking, fkco_i_blocking, fkco_listed_record, fkco_filtered_date, fkco_d_filtered_datetime_1, fkco_v_matched_tag, fkco_v_matched_tag_content, fkco_i_sequence, fkco_v_list_fmm_id, fkco_v_list_official_ref, fkco_v_list_type, fkco_v_list_origin, fkco_v_list_designation, fkco_v_list_pep, fkco_v_list_fep, fkco_v_list_name, fkco_v_list_city, fkco_v_list_state, fkco_v_list_country, fkco_v_list_userdata1, fkco_v_list_userdata2, fkco_v_list_keyword, fkco_v_list_add_info) VALUES (1, 47, 'N/A', 'Saddam Hussein', 'N/A', 'N/A', 'N/A', 'N/A', 'HUSSEIN, SADDAM', 'BLOCKING', '0', '0', '0', 'NAME', '0', '1', '97', '6950', null, 'RECEIVER', '4AW2253FQ3TEC
+Saddam Hussein
+316 MAIN STREET
+Baghdad
+IR', '1', 'AS00048458', '2009-02-10 11:44:46 UST', 'INDIVIDUAL', 'US_OFAC', 'IRAQ2', '0', '0', 'AL-TIKRITI, SADDAM HUSSEIN', 'N/A', 'N/A', 'N/A', '46118', 'N/A', 'OS:OFAC', 'List ID: 0 / Create Date: 06/25/2003 11:05:11 / Last Update Date: 10/20/2014 08:53:41 / Program: IRAQ2 / Weak Alias: ''ABU ALI'' / Title: FORMER PRESIDENT; FORMER PRESIDENT NAMED IN UNSCR 1438; FORMER PRESIDENT NAMED IN UNSCR 1483 / Nationality: IRAQ / OtherInformation: NAMED IN UNSCR 1483 / OriginalID: 7843');
+INSERT INTO public.pb_learning_hit (learning_hit_id, fkco_messages, fkco_b_highlight_hit, fkco_v_name_matched_text, fkco_v_address_matched_text, fkco_v_city_matched_text, fkco_v_state_matched_text, fkco_v_country_matched_text, fkco_v_list_matched_name, fkco_v_fml_type, fkco_i_fml_priority, fkco_i_fml_confidentiality, fkco_v_hit_match_level, fkco_v_hit_type, fkco_i_nonblocking, fkco_i_blocking, fkco_listed_record, fkco_filtered_date, fkco_d_filtered_datetime_1, fkco_v_matched_tag, fkco_v_matched_tag_content, fkco_i_sequence, fkco_v_list_fmm_id, fkco_v_list_official_ref, fkco_v_list_type, fkco_v_list_origin, fkco_v_list_designation, fkco_v_list_pep, fkco_v_list_fep, fkco_v_list_name, fkco_v_list_city, fkco_v_list_state, fkco_v_list_country, fkco_v_list_userdata1, fkco_v_list_userdata2, fkco_v_list_keyword, fkco_v_list_add_info) VALUES (2, 47, 'N/A', 'Saddam Hussein', 'N/A', 'N/A', 'N/A', 'N/A', 'HUSSEIN, UDAI SADDAM', 'BLOCKING', '0', '0', '0', 'NAME', '0', '1', '98', '6950', null, 'RECEIVER', '4AW2253FQ3TEC
+Saddam Hussein
+316 MAIN STREET
+Baghdad
+IR', '2', 'AS00048462', '2010-02-10 13:10:16 UST', 'INDIVIDUAL', 'US_OFAC', 'IRAQ2', '0', '0', 'AL-TIKRITI, UDAY SADDAM HUSSEIN', 'N/A', 'N/A', 'N/A', '46119', 'N/A', 'OS:OFAC', 'List ID: 0 / Create Date: 06/25/2003 11:05:11 / Last Update Date: 10/20/2014 09:18:52 / Program: IRAQ2 / Title: FORMER LEADER PARAMILITARY ORG. FEDAYEEN SADDAM / Nationality: IRAQ / OtherInformation: SADDAM HUSSEIN AL-TIKRITI''S ELDEST SON; SADDAM HUSSEIN ELDEST SON / OriginalID: 7845');
+
+-- Insert action to delete
+
+INSERT INTO public.pb_learning_action (learning_action_id, fkco_messages, fkco_v_action_comment, fkco_action_date, fkco_d_action_datetime, fkco_operator, fkco_status, fkco_i_total_action, fkco_v_status_name, fkco_v_status_behavior) VALUES (3, 47, 'asdf', '6950', '2019-01-10 19:33:54.000000', '309', '28', '1', 'L3_CANCEL', 'CANCELLED');

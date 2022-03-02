@@ -23,6 +23,8 @@ class JdbcLearningDataAccess implements LearningDataAccess {
 
   private final RemoveFileCsvRowsQuery removeFileCsvRowsQuery;
   private final RemoveLearningAlertsQuery removeLearningAlertsQuery;
+  private final RemoveHitsWithoutParentQuery removeHitsWithoutParentQuery;
+  private final RemoveActionsWithoutParentQuery removeActionsWithoutParentQuery;
 
   @Override
   public AlertsReadingResponse select(long jobId, String fileName) {
@@ -51,5 +53,7 @@ class JdbcLearningDataAccess implements LearningDataAccess {
   public void removeFileData(List<String> fileNames) {
     removeFileCsvRowsQuery.remove(fileNames);
     removeLearningAlertsQuery.remove(fileNames);
+    removeHitsWithoutParentQuery.remove();
+    removeActionsWithoutParentQuery.remove();
   }
 }
