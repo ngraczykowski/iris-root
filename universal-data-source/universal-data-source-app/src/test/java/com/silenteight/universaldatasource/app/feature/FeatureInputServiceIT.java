@@ -68,9 +68,7 @@ class FeatureInputServiceIT {
   private JdbcTemplate jdbcTemplate;
 
   @Test
-  @Sql(scripts = {
-      "adapter/outgoing/jdbc/populate_feature_inputs.sql",
-      "adapter/outgoing/jdbc/populate_feature_mapper_inputs.sql" })
+  @Sql("adapter/outgoing/jdbc/populate_feature_inputs.sql")
   @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetNameFeature() {
@@ -89,9 +87,7 @@ class FeatureInputServiceIT {
   }
 
   @Test
-  @Sql(scripts = {
-      "adapter/outgoing/jdbc/populate_feature_inputs.sql",
-      "adapter/outgoing/jdbc/populate_feature_mapper_inputs.sql" })
+  @Sql("adapter/outgoing/jdbc/populate_feature_inputs.sql")
   @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetLocationFeature() {
@@ -127,9 +123,7 @@ class FeatureInputServiceIT {
   }
 
   @Test
-  @Sql(scripts = {
-      "adapter/outgoing/jdbc/populate_feature_inputs.sql",
-      "adapter/outgoing/jdbc/populate_feature_mapper_inputs.sql" })
+  @Sql("adapter/outgoing/jdbc/populate_feature_inputs.sql")
   @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetLocationFeatureAfterMappingFeatureState() {
@@ -164,9 +158,7 @@ class FeatureInputServiceIT {
 
 
   @Test
-  @Sql(scripts = {
-      "adapter/outgoing/jdbc/populate_feature_inputs.sql",
-      "adapter/outgoing/jdbc/populate_feature_mapper_inputs.sql" })
+  @Sql("adapter/outgoing/jdbc/populate_feature_inputs.sql")
   @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetFreeTextFeature() {
@@ -198,9 +190,7 @@ class FeatureInputServiceIT {
   }
 
   @Test
-  @Sql(scripts = {
-      "adapter/outgoing/jdbc/populate_feature_inputs.sql",
-      "adapter/outgoing/jdbc/populate_feature_mapper_inputs.sql" })
+  @Sql("adapter/outgoing/jdbc/populate_feature_inputs.sql")
   @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetIsPepFeature() {
@@ -228,9 +218,7 @@ class FeatureInputServiceIT {
   }
 
   @Test
-  @Sql(scripts = {
-      "adapter/outgoing/jdbc/populate_feature_inputs.sql",
-      "adapter/outgoing/jdbc/populate_feature_mapper_inputs.sql" })
+  @Sql("adapter/outgoing/jdbc/populate_feature_inputs.sql")
   @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetHistoricalDecisionFeature() {
@@ -246,9 +234,7 @@ class FeatureInputServiceIT {
   }
 
   @Test
-  @Sql(scripts = {
-      "adapter/outgoing/jdbc/populate_feature_inputs.sql",
-      "adapter/outgoing/jdbc/populate_feature_mapper_inputs.sql" })
+  @Sql("adapter/outgoing/jdbc/populate_feature_inputs.sql")
   @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetFeatureForAllRequestedMatchesWhenOneExist() {
@@ -267,9 +253,7 @@ class FeatureInputServiceIT {
   }
 
   @Test
-  @Sql(scripts = {
-      "adapter/outgoing/jdbc/populate_feature_inputs.sql",
-      "adapter/outgoing/jdbc/populate_feature_mapper_inputs.sql" })
+  @Sql("adapter/outgoing/jdbc/populate_feature_inputs.sql")
   @Sql(scripts = "adapter/outgoing/jdbc/truncate_feature_inputs.sql",
       executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void shouldGetFeatureForAllRequestedMatchesWhenNoneExist() {

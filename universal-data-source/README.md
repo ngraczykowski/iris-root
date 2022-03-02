@@ -17,6 +17,20 @@ The application consist of three parts:
    universal-data-source.universal-data-source-app.main'
 5. Run the Spring Application using as a main class `UniversalDataSourceApplication`.
 
+## Configuration for multiple versions of agent
+
+To use the same feature input for different versions of agents set mapping property,
+for example for features/geo2 use data from features/geo:
+
+```
+uds:
+  feature:
+    mapping:
+      geo2: geo
+```
+
+
+
 ## Command examples
 
 Creating a new category:
