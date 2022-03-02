@@ -13,6 +13,7 @@ fi
 python setup.py bdist_wheel
 artifact=$(basename -- "$(ls ./dist/company_name_surrounding_agent-*.whl)")
 version=$(ls -al "./dist/$artifact" | awk -F'company_name_surrounding_agent-|-py3-none-any.whl' '{print $2}')
+echo "$version" > PACKAGE_VERSION
 
 # zipfile (executable, to run without installing)
 pip install shiv
