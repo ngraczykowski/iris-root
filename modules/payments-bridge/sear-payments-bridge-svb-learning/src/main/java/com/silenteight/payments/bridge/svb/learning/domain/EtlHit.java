@@ -10,9 +10,16 @@ import com.silenteight.payments.bridge.agents.model.NameAddressCrossmatchAgentRe
 import com.silenteight.payments.bridge.common.dto.common.WatchlistType;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.silenteight.payments.bridge.svb.learning.domain.WatchlistTerms.EMBARGO;
+import static com.silenteight.payments.bridge.svb.learning.domain.WatchlistTerms.NA;
+import static com.silenteight.payments.bridge.svb.learning.domain.WatchlistTerms.WILDCARD;
 
 @Value
 @Builder
@@ -66,8 +73,9 @@ public class EtlHit {
   }
 
   public NameAddressCrossmatchAgentRequest toNameAddressCrossmatchAgentRequest() {
-    return NameAddressCrossmatchAgentRequest.builder().alertPartyEntities(alertedPartyEntities)
-        .watchlistName(hitComposite.getFirstWatchlistName().orElse(""))
+    return NameAddressCrossmatchAgentRequest.builder()
+        .alertPartyEntities(alertedPartyEntities)
+        .watchlistName(getWlName())
         .watchlistCountry(hitComposite.getFkcoVListCountry())
         .watchlistType(hitComposite.getFkcoVListType())
         .build();
@@ -90,5 +98,29 @@ public class EtlHit {
 
   public String getTag() {
     return hitComposite.getFkcoVMatchedTag();
+  }
+
+  private String getWlName() {
+    if (hitComposite.getFkcoVHitType().equals(EMBARGO)) {
+
+      List<String> listOfNames = Arrays.asList(
+          hitComposite.getFirstWatchlistName().orElse(""),
+          hitComposite.getFkcoVListCity(),
+          hitComposite.getFkcoVListState(),
+          hitComposite.getFkcoVListCountry());
+
+      return listOfNames.stream()
+          .filter(EtlHit::isElemNotNotBlankAndNotContainsSpecificCharacters)
+          .findFirst()
+          .orElse("");
+    } else {
+      return hitComposite.getFkcoVListName();
+    }
+  }
+
+  private static boolean isElemNotNotBlankAndNotContainsSpecificCharacters(String elem) {
+    return StringUtils.isNotBlank(elem) &&
+        !WILDCARD.equals(elem) &&
+        !NA.equals(elem);
   }
 }
