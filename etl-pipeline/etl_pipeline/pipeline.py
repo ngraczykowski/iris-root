@@ -1,11 +1,13 @@
 from abc import ABC
 
-from etl_pipeline.data_processor_engine.engine import Engine
+from etl_pipeline.data_processor_engine.engine.engine import Engine, ProcessingEngine
 
 
 class ETLPipeline(ABC):
-    def __init__(self, engine: Engine):
-        self.engine = engine
+    def __init__(self, engine: Engine, config=None):
+        self.engine: ProcessingEngine = engine
+        self.engine.pipeline_config = config
+        self.pipeline_config = config
 
     def convert_raw_to_standardized(self):
         pass

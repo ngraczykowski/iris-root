@@ -1,10 +1,8 @@
 import pyspark.sql
 
-from etl_pipeline.data_processor_engine.spark import spark_instance
-
 
 def add_status_stage(
-    item_status_history: pyspark.sql.DataFrame, system_id: str = "22601"
+    item_status_history: pyspark.sql.DataFrame, spark_instance, system_id: str = "22601"
 ) -> pyspark.sql.DataFrame:
     necessary_columns = ["ITEM_ID", "CREATE_DATE", "USER_JOIN_ID"]
     if not all(

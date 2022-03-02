@@ -64,12 +64,15 @@ tests_require = [
     "urllib3==1.26.7",
     "virtualenv==20.10.0",
     "yarl==1.7.2",
+    "fuzzywuzzy",
+    "pyjarowinkler",
+    "xmltodict",
 ]
 
 
 setup(
     name="etl_pipeline",
-    version="0.5.0-dev",
+    version="0.5.1-dev",
     description="ETL pipeline",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",

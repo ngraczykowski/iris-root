@@ -5,24 +5,29 @@ from typing import Dict, List
 import pyspark.sql
 import pyspark.sql.functions as F
 
+from config import columns_namespace
 from etl_pipeline.agent_input_creator.config import AGENT_INPUT_AGG_COL_CONFIG, AGENT_INPUT_CONFIG
 from etl_pipeline.agent_input_creator.sql import sql_to_merge_specific_columns_to_standardized
-from etl_pipeline.data_processor_engine.spark import spark_instance
 
 
-def create_input_for_agents(cleansed_alert_df: pyspark.sql.DataFrame, destination: str):
+def create_input_for_agents(
+    cleansed_alert_df: pyspark.sql.DataFrame, destination: str, spark_instance
+):
     """Parameters
     ----------
     cleansed_alert_df : pyspark.sql.DataFrame
     destination : str
     """
     sql_expression = sql_to_merge_specific_columns_to_standardized(
-        cleansed_alert_df, AGENT_INPUT_CONFIG
+        cleansed_alert_df, AGENT_INPUT_CONFIG, spark_instance=spark_instance
     )
     agent_input_refined_df = cleansed_alert_df.select("*", *sql_expression)
 
     sql_expression = sql_to_merge_specific_columns_to_standardized(
-        agent_input_refined_df, AGENT_INPUT_AGG_COL_CONFIG, aggregated=True
+        agent_input_refined_df,
+        AGENT_INPUT_AGG_COL_CONFIG,
+        aggregated=True,
+        spark_instance=spark_instance,
     )
     agent_input_agg_df = agent_input_refined_df.select("*", *sql_expression).withColumn(
         "_index", F.monotonically_increasing_id()
@@ -31,16 +36,24 @@ def create_input_for_agents(cleansed_alert_df: pyspark.sql.DataFrame, destinatio
         agent_input_agg_df, os.path.join(destination, "agent_input_agg_df.delta")
     )
 
-    _extract_and_save_agent_inputs(agent_input_agg_df, destination)
+    _extract_and_save_agent_inputs(agent_input_agg_df, destination, spark_instance=spark_instance)
 
 
-def _extract_and_save_agent_inputs(agent_input_agg_df: pyspark.sql.DataFrame, destination: str):
+def _extract_and_save_agent_inputs(
+    agent_input_agg_df: pyspark.sql.DataFrame, destination: str, spark_instance
+):
     """Parameters
     ----------
     agent_input_agg_df : pyspark.sql.DataFrame
     destination : str
     """
-    key_cols = ["_index", "ALERT_INTERNAL_ID", "ALERT_ID", "hit_listId", "hit_entryId"]
+    key_cols = [
+        "_index",
+        columns_namespace.ALERT_INTERNAL_ID,
+        columns_namespace.ALERT_ID,
+        "hit_listId",
+        "hit_entryId",
+    ]
     os.makedirs(os.path.join(destination, "agent-input"), exist_ok=True)
     for agent_name, input_agg_col_config in AGENT_INPUT_AGG_COL_CONFIG.items():
 
@@ -57,7 +70,11 @@ def _extract_and_save_agent_inputs(agent_input_agg_df: pyspark.sql.DataFrame, de
             agent_input_df = agent_input_agg_df.select(*key_cols, *input_agg_col_config.keys())
 
         _save_agent_input_to_delta_file(
-            agent_input_df, agent_name, input_agg_col_config, destination
+            agent_input_df,
+            agent_name,
+            input_agg_col_config,
+            destination,
+            spark_instance=spark_instance,
         )
 
 
@@ -66,6 +83,7 @@ def _save_agent_input_to_delta_file(
     agent_name: str,
     input_agg_col_config: Dict[str, List[str]],
     destination: str,
+    spark_instance,
 ):
     """Our agent support the input list has None, hence, filter out None from all the agg columns
     (they will be the agent inputs)

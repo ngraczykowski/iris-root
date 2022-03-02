@@ -7,7 +7,7 @@ import pyspark
 import pyspark.sql.functions as F
 from pyspark.sql.types import ArrayType, BooleanType, StringType, StructField, StructType
 
-from etl_pipeline.data_processor_engine.engine import Engine
+from etl_pipeline.data_processor_engine.abstract_engine import Engine
 from etl_pipeline.xml_parser.config import XMLExtractorConfig
 from etl_pipeline.xml_parser.xml_extractor import XMLExtractor, XMLFunction
 

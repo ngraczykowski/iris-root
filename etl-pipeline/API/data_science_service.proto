@@ -1,0 +1,73 @@
+// Copyright 2022 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package silenteight.proto.data.science.api.v1;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+
+option java_package = "com.silenteight.proto.data.science.api.v1";
+option java_outer_classname = "DataScienceServiceProto";
+option java_multiple_files = true;
+
+service DataScienceService {
+
+  rpc FeedDataScienceService (FeedDataScienceServiceRequest) returns (FeedDataScienceServiceResponse) {
+    option (google.api.http) = {
+      post: "/v1/feeding:feedDataScienceService"
+      body: "feedDataScienceService"
+    };
+  }
+
+  rpc FeedDataScienceServiceStream (stream FeedDataScienceServiceRequest) returns (stream FeedDataScienceServiceResponse) {
+    option (google.api.http) = {
+      post: "/v1/feeding:feedDataScienceServiceStream"
+      body: "feedDataScienceServiceStream"
+    };
+  }
+}
+
+message FeedDataScienceServiceRequest {
+  string alert_name = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated Match matches = 2 [(google.api.field_behavior) = REQUIRED];
+  map<string, string> flat_payload = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message Match {
+  string match_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string match_name = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message FeedDataScienceServiceResponse {
+  string alert_name = 1 [(google.api.field_behavior) = REQUIRED];
+  FeedingStatus feeding_status = 2 [(google.api.field_behavior) = REQUIRED];
+  repeated FedMatch fed_matches = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+enum FeedingStatus {
+  UNKNOWN = 0;
+  FAILURE = 1;
+  SUCCESS = 2;
+}
+
+message FedMatch {
+  string match_name = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+// async response on RabbitMQ
+message FeedDataScienceServiceRequestAsync {
+  string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string alert_name = 2 [(google.api.field_behavior) = REQUIRED];
+  repeated Match matches = 3 [(google.api.field_behavior) = REQUIRED];
+  map<string, string> flat_payload = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+// message on RabbitMQ
+message DataScienceEvent {
+  string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string alert_name = 2 [(google.api.field_behavior) = REQUIRED];
+  FeedingStatus feeding_status = 3 [(google.api.field_behavior) = REQUIRED];
+  repeated FedMatch fed_matches = 4 [(google.api.field_behavior) = REQUIRED];
+}

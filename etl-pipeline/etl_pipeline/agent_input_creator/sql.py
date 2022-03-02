@@ -2,15 +2,15 @@ from typing import Dict, List
 
 import pyspark.sql
 
-from etl_pipeline.data_processor_engine.spark import spark_instance
-
 
 def sql_to_merge_specific_columns_to_standardized(
     df: pyspark.sql.DataFrame,
     agent_input_prepended_agent_name_config: Dict[str, Dict[str, List[str]]],
+    spark_instance,
     aggregated: bool = False,
 ) -> List[str]:
-    """Merge the customer specific columns into standardized agent primary and alias input columns.
+    """Merge the customer specific columns into
+    standardized agent primary and alias input columns_namespace.
 
     Input:
     { 'name_agent': {'name_agent_ap': ['record_name', 'whatever_other_name'],
