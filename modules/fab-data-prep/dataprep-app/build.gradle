@@ -1,0 +1,22 @@
+plugins {
+  id "java"
+  id "org.springframework.boot" version "2.6.4"
+}
+
+description = "dataprep-app"
+
+apply from: "${rootProject.projectDir}/gradle/scripts/dependencies.gradle"
+
+dependencies {
+  implementation 'org.springframework.boot:spring-boot-autoconfigure'
+  implementation 'org.springframework.boot:spring-boot-starter-amqp'
+  testImplementation libraries.spring_boot_test
+  testImplementation libraries.spring_test
+}
+
+jar {
+  manifest {
+    attributes "Main-Class": "com.silentheight.fab.dataprep.FabDataPreparationApplication.java"
+  }
+}
+

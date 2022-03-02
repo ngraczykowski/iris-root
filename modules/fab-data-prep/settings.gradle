@@ -1,0 +1,3 @@
+rootProject.name = 'fab-dataprep'
+include 'dataprep-app'
+

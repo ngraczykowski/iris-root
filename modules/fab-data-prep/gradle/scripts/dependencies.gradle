@@ -1,0 +1,20 @@
+ext {
+  libraries = [:]
+  springBootVersion = "2.6.4"
+  sepDependenciesVersion = "2.5.0"
+}
+
+libraries.spring_boot_test = [group: 'org.springframework.boot', name: 'spring-boot-test']
+libraries.spring_test = [group: 'org.springframework', name: 'spring-test']
+
+dependencies {
+  implementation platform("com.silenteight.sep:sep-dependencies:$sepDependenciesVersion")
+  annotationProcessor platform("com.silenteight.sep:sep-dependencies:$sepDependenciesVersion")
+  implementation platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+  annotationProcessor platform(
+      "org.springframework.boot:spring-boot-dependencies:$springBootVersion")
+}
+
+test {
+  useJUnitPlatform()
+}
