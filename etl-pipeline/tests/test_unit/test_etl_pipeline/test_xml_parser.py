@@ -3,8 +3,8 @@ import unittest
 
 import pytest
 
-from custom.aia.config import AIA_ALERT_HEADER_CONFIG, AIA_HIT_CONFIG
-from custom.aia.xml_pipeline import AIAWatchlistExtractor, AIAXMLPipeline
+from etl_pipeline.custom.aia.config import AIA_ALERT_HEADER_CONFIG, AIA_HIT_CONFIG
+from etl_pipeline.custom.aia.xml_pipeline import AIAWatchlistExtractor, AIAXMLPipeline
 from etl_pipeline.data_processor_engine.spark_engine import SparkProcessingEngine
 from etl_pipeline.xml_parser.xml_pipeline import AlertHitDictFactory, WatchlistExtractor
 from tests.shared import TEST_ETL_PIPELINE_DATA_PATH, TEST_SHARED_DATA_REFERENCE_DIR

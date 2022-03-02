@@ -5,7 +5,7 @@ import lxml
 import pyspark
 from pyspark.sql.types import ArrayType, StructField, StructType
 
-from custom.aia.config import AIA_ALERT_HEADER_CONFIG, AIA_HIT_CONFIG
+from etl_pipeline.custom.aia.config import AIA_ALERT_HEADER_CONFIG, AIA_HIT_CONFIG
 from etl_pipeline.xml_parser.config import XMLExtractorConfig
 from etl_pipeline.xml_parser.xml_pipeline import (
     AlertHitDictFactory,

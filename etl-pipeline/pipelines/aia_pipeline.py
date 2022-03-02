@@ -1,7 +1,8 @@
 import os
 import re
 
-from custom.aia.config import (
+from etl_pipeline.agent_input_creator.input_creator import create_input_for_agents
+from etl_pipeline.custom.aia.config import (
     ALERT_NOTES_FILE_NAME,
     ALERTS_FILE_NAME,
     APPLICATION_DATA_DIR,
@@ -9,9 +10,8 @@ from custom.aia.config import (
     RAW_DATA_DIR,
     STANDARDIZED_DATA_DIR,
 )
-from custom.aia.transformations import custom_transform
-from custom.aia.xml_pipeline import AIAXMLPipeline
-from etl_pipeline.agent_input_creator.input_creator import create_input_for_agents
+from etl_pipeline.custom.aia.transformations import custom_transform
+from etl_pipeline.custom.aia.xml_pipeline import AIAXMLPipeline
 from etl_pipeline.pipeline import ETLPipeline
 
 

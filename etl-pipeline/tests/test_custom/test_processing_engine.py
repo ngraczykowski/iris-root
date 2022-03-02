@@ -3,7 +3,6 @@ import unittest
 
 from config import columns_namespace, pipeline_config
 from etl_pipeline.data_processor_engine.spark_engine.spark import SparkProcessingEngine
-from pipelines.ms_pipeline import ms_customized_merge_df360_and_WM_Account_In_Scope
 from tests.utils import compare_dataframe
 
 ALERT_ID, ALERT_INTERNAL_ID = columns_namespace.ALERT_ID, columns_namespace.ALERT_INTERNAL_ID
@@ -30,14 +29,6 @@ class TestEngine(unittest.TestCase):
             self.test_set_ref_key, self.uut.spark_instance
         )
         result = self.uut.set_ref_key(input_data)
-        assert compare_dataframe(result, reference_data, unique_column=ALERT_ID)
-
-    def test_ms_customized_merge_df360_and_WM_Account_In_Scope(self):
-        input_data, reference_data = load_input_and_reference_data(
-            self.test_ms_customized_merge_df360_and_WM_Account_In_Scope, self.uut.spark_instance
-        )
-        input_data.registerTempTable("df360")
-        result = ms_customized_merge_df360_and_WM_Account_In_Scope(self.uut)
         assert compare_dataframe(result, reference_data, unique_column=ALERT_ID)
 
     def test_set_trigger_reasons(self):

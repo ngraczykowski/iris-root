@@ -40,3 +40,12 @@ class TestMSPipeline(unittest.TestCase):
         x = [key for key, value in df_schema_dict.items() if not isinstance(value, NullType)]
 
         assert compare_dataframe(result.select(x), reference_data)
+
+    def test_ms_customized_merge_df360_and_WM_Account_In_Scope(self):
+        input_data, reference_data = load_input_and_reference_data(
+            self.test_ms_customized_merge_df360_and_WM_Account_In_Scope,
+            self.uut.engine.spark_instance,
+        )
+        input_data.registerTempTable("df360")
+        result = self.uut.ms_customized_merge_df360_and_WM_Account_In_Scope()
+        assert compare_dataframe(result, reference_data, unique_column=columns_namespace.ALERT_ID)
