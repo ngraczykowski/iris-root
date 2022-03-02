@@ -21,7 +21,7 @@ public interface AlertRepository {
 
   List<AlertName> findAllAlertNamesByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
 
-  List<AlertName> findAllAlertNamesByBatchId(String batchId);
+  List<AlertName> findNamesByBatchIdAndStatusIsRegisteredOrProcessing(String batchId);
 
   List<Alert> findAllByBatchId(String batchId);
 

@@ -1,11 +1,11 @@
 package com.silenteight.bridge.core.registration.adapter.outgoing
 
-import com.silenteight.bridge.core.Fixtures
-import com.silenteight.bridge.core.registration.domain.model.*
-import com.silenteight.bridge.core.registration.domain.port.outgoing.VerifyBatchTimeoutPublisher
-import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchTimedOutProperties
+import com.silenteight.bridge.core.registration.domain.model.BatchCompleted
+import com.silenteight.bridge.core.registration.domain.model.BatchError
+import com.silenteight.bridge.core.registration.domain.model.BatchTimedOut
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchCompletedProperties
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchErrorProperties
+import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingNotifyBatchTimedOutProperties
 import com.silenteight.proto.registration.api.v1.MessageBatchCompleted
 import com.silenteight.proto.registration.api.v1.MessageBatchError
 import com.silenteight.proto.registration.api.v1.MessageNotifyBatchTimedOut
@@ -29,12 +29,10 @@ class RabbitBatchEventPublisherSpec extends Specification {
   def batchTimedOutProperties = new AmqpRegistrationOutgoingNotifyBatchTimedOutProperties(
       'timed-out-exchange')
 
-  def batchProcessingTimeoutPublisher = Mock(VerifyBatchTimeoutPublisher)
-
   @Subject
   def underTest = new BatchEventRabbitPublisher(
       mapper, rabbitTemplate, batchErrorProperties, batchCompletedProperties,
-      batchTimedOutProperties, batchProcessingTimeoutPublisher)
+      batchTimedOutProperties)
 
   def 'notify error for batch'() {
     given:
@@ -81,18 +79,6 @@ class RabbitBatchEventPublisherSpec extends Specification {
     1 * mapper.toMessageBatchCompleted(batchCompleted) >> messageBatchCompleted
     1 * rabbitTemplate
         .convertAndSend(batchCompletedProperties.exchangeName(), "", messageBatchCompleted)
-  }
-
-  def 'notify batch created'() {
-    given:
-    def batchId = Fixtures.BATCH_ID
-    def batchCreated = new BatchCreated(batchId)
-
-    when:
-    underTest.publish(batchCreated)
-
-    then:
-    1 * batchProcessingTimeoutPublisher.publish(new VerifyBatchTimeoutEvent(batchId))
   }
 
   def 'notify batch timed out'() {

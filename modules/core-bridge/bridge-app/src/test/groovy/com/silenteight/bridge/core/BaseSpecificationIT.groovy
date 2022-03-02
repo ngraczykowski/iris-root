@@ -24,15 +24,17 @@ class BaseSpecificationIT extends Specification {
       .withCopyFileToContainer(
           MountableFile.forHostPath(
               Paths.get('../docker/rabbitmq/rabbitmq_delayed_message_exchange-3.9.0.ez')),
-          '/opt/rabbitmq/plugins/')
+          '/opt/rabbitmq/plugins/rabbitmq_delayed_message_exchange-3.9.0.ez')
       .withPluginsEnabled('rabbitmq_delayed_message_exchange')
 
   static String getGrpcPortForTest() {return "21234"}
 
   @Shared
+  @SuppressWarnings('unused')
   public PostgreSQLContainer POSTGRES_SQL_CONTAINER = postgresqlContainer
 
   @Shared
+  @SuppressWarnings('unused')
   public RabbitMQContainer RABBITMQ_CONTAINER = rabbitMqContainer
 
   @DynamicPropertySource

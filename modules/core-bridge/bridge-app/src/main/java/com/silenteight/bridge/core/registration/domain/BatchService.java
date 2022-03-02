@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.bridge.core.registration.domain.model.*;
 import com.silenteight.bridge.core.registration.domain.model.Batch.BatchStatus;
-import com.silenteight.bridge.core.registration.domain.port.outgoing.AnalysisService;
-import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchEventPublisher;
-import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
-import com.silenteight.bridge.core.registration.domain.port.outgoing.DefaultModelService;
+import com.silenteight.bridge.core.registration.domain.port.outgoing.*;
 
 import org.springframework.stereotype.Service;
 
@@ -31,6 +28,7 @@ class BatchService {
   private final AnalysisService analysisService;
   private final BatchRepository batchRepository;
   private final DefaultModelService defaultModelService;
+  private final VerifyBatchTimeoutPublisher verifyBatchTimeoutPublisher;
 
   BatchId register(RegisterBatchCommand registerBatchCommand) {
     return batchRepository.findById(registerBatchCommand.id())
@@ -125,7 +123,9 @@ class BatchService {
         .build();
 
     var createdBatch = batchRepository.create(batch);
-    eventPublisher.publish(new BatchCreated(createdBatch.id()));
+
+    verifyBatchTimeoutPublisher.publish(new VerifyBatchTimeoutEvent(createdBatch.id()));
+
     return Optional.of(createdBatch);
   }
 

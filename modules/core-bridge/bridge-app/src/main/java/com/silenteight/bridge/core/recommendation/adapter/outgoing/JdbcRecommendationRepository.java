@@ -46,6 +46,7 @@ class JdbcRecommendationRepository implements RecommendationRepository {
         .recommendationComment(entity.recommendationComment())
         .recommendedAction(entity.recommendedAction())
         .metadata(entity.payload())
+        .timeout(entity.timeout())
         .build();
   }
 

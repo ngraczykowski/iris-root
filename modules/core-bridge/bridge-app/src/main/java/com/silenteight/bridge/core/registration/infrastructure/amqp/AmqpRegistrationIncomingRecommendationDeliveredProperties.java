@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
 @ConfigurationProperties(prefix = "amqp.registration.incoming.recommendation-delivered")
-record AmqpRegistrationIncomingRecommendationDeliveredProperties(
+public record AmqpRegistrationIncomingRecommendationDeliveredProperties(
     String queueName,
     String deadLetterQueueName,
     Integer deadLetterQueueTimeToLiveInMilliseconds,

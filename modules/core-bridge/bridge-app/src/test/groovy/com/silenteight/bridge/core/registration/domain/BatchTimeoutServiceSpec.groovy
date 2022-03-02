@@ -31,7 +31,7 @@ class BatchTimeoutServiceSpec extends Specification {
     def alertNames = ['alert1', 'alert2', 'alert3']
 
     1 * batchRepository.findById(batch.id()) >> Optional.of(batch)
-    1 * alertRepository.findAllAlertNamesByBatchId(batch.id()) >>
+    1 * alertRepository.findNamesByBatchIdAndStatusIsRegisteredOrProcessing(batch.id()) >>
         alertNames.collect {new AlertName(it)}
 
     when:
@@ -70,6 +70,21 @@ class BatchTimeoutServiceSpec extends Specification {
     then:
     noExceptionThrown()
     0 * batchEventPublisher._
+  }
+
+  def "should not publish message when no pending alerts were found"() {
+    given:
+    def batch = createBatch(PROCESSING)
+    def command = new VerifyBatchTimeoutCommand(batch.id())
+
+    1 * batchRepository.findById(batch.id()) >> Optional.of(batch)
+    1 * alertRepository.findNamesByBatchIdAndStatusIsRegisteredOrProcessing(batch.id()) >> []
+
+    when:
+    underTest.verifyBatchTimeout(command)
+
+    then:
+    0 * batchEventPublisher.publish(_)
   }
 
   private static def createBatch(BatchStatus status) {

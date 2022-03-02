@@ -66,7 +66,7 @@ class AlertMapperSpec extends Specification {
     then:
     with(result.first()) {
       name() == 'alertName'
-      status() == Status.REGISTERED
+      status() == AlertStatus.REGISTERED
       alertId() == 'alertId'
       batchId() == 'batchId'
       errorDescription() == null

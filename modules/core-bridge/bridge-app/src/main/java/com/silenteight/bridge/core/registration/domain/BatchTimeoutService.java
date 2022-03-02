@@ -12,6 +12,7 @@ import com.silenteight.bridge.core.registration.domain.port.outgoing.AlertReposi
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchEventPublisher;
 import com.silenteight.bridge.core.registration.domain.port.outgoing.BatchRepository;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.EnumSet;
@@ -56,12 +57,16 @@ class BatchTimeoutService {
   private void notifyBatchTimedOut(Batch batch) {
     log.info("Batch with id [{}] is timed out", batch.id());
     var alertNames = getAlertNames(batch.id());
-    var event = new BatchTimedOut(batch.analysisName(), alertNames);
-    batchEventPublisher.publish(event);
+    if (CollectionUtils.isNotEmpty(alertNames)) {
+      var event = new BatchTimedOut(batch.analysisName(), alertNames);
+      batchEventPublisher.publish(event);
+    } else {
+      log.info("No pending alerts found for batch with id: {}", batch.id());
+    }
   }
 
   private List<String> getAlertNames(String batchId) {
-    return alertRepository.findAllAlertNamesByBatchId(batchId).stream()
+    return alertRepository.findNamesByBatchIdAndStatusIsRegisteredOrProcessing(batchId).stream()
         .map(AlertName::alertName)
         .toList();
   }

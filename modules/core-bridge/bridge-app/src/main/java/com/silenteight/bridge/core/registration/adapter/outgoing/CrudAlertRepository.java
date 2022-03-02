@@ -31,9 +31,9 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
 
   @Query("""
         SELECT name FROM alerts
-        WHERE batch_id = :batchId
+        WHERE batch_id = :batchId AND (status = 'REGISTERED' OR status = 'PROCESSING')
       """)
-  List<AlertNameProjection> findNamesByBatchId(String batchId);
+  List<AlertNameProjection> findNamesByBatchIdAndStatusIsRegisteredOrProcessing(String batchId);
 
   @Query(
       rowMapperClass = AlertWithMatchNamesProjectionRowMapper.class,

@@ -2,6 +2,7 @@ package com.silenteight.bridge.core
 
 import com.silenteight.bridge.core.recommendation.infrastructure.amqp.RecommendationIncomingRecommendationsGeneratedConfigurationProperties
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationIncomingMatchFeatureInputSetFedProperties
+import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationIncomingRecommendationDeliveredProperties
 
 import org.springframework.amqp.core.DirectExchange
 import org.springframework.amqp.core.TopicExchange
@@ -20,6 +21,12 @@ class ExternalExchangesConfigurationIT {
   @Bean
   DirectExchange testMatchFeatureInputSetFedExchange(
       AmqpRegistrationIncomingMatchFeatureInputSetFedProperties properties) {
+    return new DirectExchange(properties.exchangeName())
+  }
+
+  @Bean
+  DirectExchange testRecommendationsDeliveredExchange(
+      AmqpRegistrationIncomingRecommendationDeliveredProperties properties) {
     return new DirectExchange(properties.exchangeName())
   }
 }
