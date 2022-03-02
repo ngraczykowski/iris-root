@@ -158,3 +158,141 @@ Saddam Hussain
 316 MAIN STREET
 PGH
 US', '3', 'AS00048458', '2009-02-10 11:44:46 UST', 'INDIVIDUAL', 'US_OFAC', 'IRAQ2', '0', '0', 'AL-TIKRITI, SADDAM HUSSEIN', 'N/A', 'N/A', 'N/A', '46118', 'N/A', 'OS:OFAC', 'List ID: 0 / Create Date: 06/25/2003 11:05:11 / Last Update Date: 10/20/2014 08:53:41 / Program: IRAQ2 / Weak Alias: ''ABU ALI'' / Title: FORMER PRESIDENT; FORMER PRESIDENT NAMED IN UNSCR 1438; FORMER PRESIDENT NAMED IN UNSCR 1483 / Nationality: IRAQ / OtherInformation: NAMED IN UNSCR 1483 / OriginalID: 7843', 'FR_FAIL', 'PENDING', '11', 'learning/mocked_learning.csv');
+
+-- Data to remove from pb_learning_alert
+
+INSERT INTO public.pb_learning_alert (learning_alert_id, fkco_id, fkco_v_system_id, fkco_v_format, fkco_v_type, fkco_v_transaction_ref, fkco_v_related_ref, fkco_v_sens, fkco_v_business_unit, fkco_v_application, fkco_v_currency, fkco_f_amount, fkco_v_content, fkco_b_highlight_all, fkco_v_value_date, fkco_unit, fkco_i_msg_fml_priority, fkco_i_msg_fml_confidentiality, fkco_d_app_deadline, fkco_i_app_priority, fkco_i_normamount, fkco_v_messageid, fkco_v_copy_service, fkco_d_filtered_datetime, fkco_i_blockinghits, file_name) VALUES (1, 47, 'WMQOUT', 'N/A', 'IAT', 'MORENO IAT TEST', 'N/A', 'O', 'NACHA', 'PEP', 'USD', '28990.99', '[FIRCOSOFT     X]FMT V1.0 GEN
+[SEC            ]IAT
+[VALUEDATE     X]2019/03/01
+[TRANCODE       ]27
+[AMOUNT         ]28990.99
+[ORIGAMOUNT     ]28990.99
+[ORIGCURR       ]USD
+[DESTCURR       ]USD
+[FXIND         X]FF
+[FXREFID       X]3
+[TRACENUM       ]121140390000027
+[ADDENDACNT     ]0007
+[DESTCNTRY      ]IND
+[ORIGSTSCD     X]1
+[CMPNYDESC      ]IAT PAYPAL
+[RCVACCTNO      ]2342342342
+[ORIGINATOR     ]770510487C
+JOHN SMITH
+3003 Tasman Dr
+Santa Clara
+US
+[RECEIVER       ]4AW2253FQ3TEC
+Saddam Hussein
+316 MAIN STREET
+Baghdad
+IR
+[ORIGFI         ]12114039
+Silicon Valley Bank
+01
+12114039
+US
+[RCVFI          ]12114040
+TEST SYSTEM BANK1
+01
+12114040
+GB
+[PYMTINFO       ]Testing IAT Message 2019-Msg4', 'N/A', '2019/03/01', '35', '0', '0', '', '0', '0', 'MSGID00029', 'N/A', '2019-04-29 13:52:45.000000', '2', 'learning/mocked_learning.csv');
+INSERT INTO public.pb_learning_alert (learning_alert_id, fkco_id, fkco_v_system_id, fkco_v_format, fkco_v_type, fkco_v_transaction_ref, fkco_v_related_ref, fkco_v_sens, fkco_v_business_unit, fkco_v_application, fkco_v_currency, fkco_f_amount, fkco_v_content, fkco_b_highlight_all, fkco_v_value_date, fkco_unit, fkco_i_msg_fml_priority, fkco_i_msg_fml_confidentiality, fkco_d_app_deadline, fkco_i_app_priority, fkco_i_normamount, fkco_v_messageid, fkco_v_copy_service, fkco_d_filtered_datetime, fkco_i_blockinghits, file_name) VALUES (2, 102925, 'DIN20190429085242-00061-24304', 'IAT-O', 'IAT', '11859', 'N/A', 'O', 'NACHA', 'PEP', 'USD', '155.27', '[FIRCOSOFT     X] SVB BE MUX FILTER
+[APPLI         X] PEP
+[UNIT          X] US
+[REFERENCE     X] 0011859
+[TYPE          X] IAT-O
+[VALUEDATE     X] 2019/01/01
+[PURPOSE        ] IAT PAYPAL
+[AMOUNT        X] USD 1.5527000000000002
+[INSPMTAMT     X] USD 10
+[SENDER         ] 25317006
+[SENDERBANK     ] 25317006
+TEST SYSTEM BANK1
+01
+AutoReceiver-G23GM6LOM
+US
+[ORIGINATOR     ] AutoReceiver-G23GM6LOM
+JOHN SMITH
+FLAT 1 4, 15AOSWALD STREET
+GLASGOW
+GB
+[CRDACCNUM      ] 3300684802
+[RECEIVBANK     ] AutoReceiver-G23GM6LOM
+TEST SYSTEM BANK2
+01
+AutoReceiver-G23GM6LOM
+US
+[RECEIVER       ] AutoReceiver-G23GM6LOM
+[BENE           ] AutoReceiver-G23GM6LOM
+Saddam Hussain
+316 MAIN STREET
+PGH
+US
+[ORGBENEINF     ] value1
+value2
+value3
+[TRANCD        X] 27
+[ITMBANK        ] Adam
+1
+AutoReceiver-G23GM6LOM
+US
+[ITMBANK1       ] Boris
+2
+AutoReceiver-G23GM6LOM
+UK
+[FXMATH        X] FF
+[FXREFNB       X]
+[ADDENDACNT    X] 0007
+[DESTCNTRY      ] US
+[ORIGSTSCD     X] 1', 'N/A', '2019/01/01', '36', '0', '0', '', '0', '0', '87AB4899-BE5B-5E4F-E053-150A6C0A7A84', 'N/A', '2019-04-29 13:52:45.000000', '11', 'learning/mocked_learning.csv');
+INSERT INTO public.pb_learning_alert (learning_alert_id, fkco_id, fkco_v_system_id, fkco_v_format, fkco_v_type, fkco_v_transaction_ref, fkco_v_related_ref, fkco_v_sens, fkco_v_business_unit, fkco_v_application, fkco_v_currency, fkco_f_amount, fkco_v_content, fkco_b_highlight_all, fkco_v_value_date, fkco_unit, fkco_i_msg_fml_priority, fkco_i_msg_fml_confidentiality, fkco_d_app_deadline, fkco_i_app_priority, fkco_i_normamount, fkco_v_messageid, fkco_v_copy_service, fkco_d_filtered_datetime, fkco_i_blockinghits, file_name) VALUES (3, 120325, 'DIN20190506003548-00000-3376', 'IAT-O', 'IAT', '11859', 'N/A', 'O', 'NACHA', 'PEP', 'USD', '608.13', '[FIRCOSOFT     X] SVB BE MUX FILTER
+[APPLI         X] PEP
+[UNIT          X] US
+[REFERENCE     X] 0011859
+[TYPE          X] IAT-O
+[VALUEDATE     X] 2019/01/01
+[PURPOSE        ] IAT PAYPAL
+[AMOUNT        X] USD 6.0813
+[INSPMTAMT     X] USD 10
+[SENDER         ] 25317006
+[SENDERBANK     ] 25317006
+TEST SYSTEM BANK1
+01
+AutoReceiver-4K4SJDQGK
+US
+[ORIGINATOR     ] AutoReceiver-4K4SJDQGK
+JOHN SMITH
+FLAT 1 4, 15AOSWALD STREET
+GLASGOW
+GB
+[CRDACCNUM      ] 3300684802
+[RECEIVBANK     ] AutoReceiver-4K4SJDQGK
+TEST SYSTEM BANK2
+01
+AutoReceiver-4K4SJDQGK
+US
+[RECEIVER       ] AutoReceiver-4K4SJDQGK
+[BENE           ] AutoReceiver-4K4SJDQGK
+Saddam Hussain
+316 MAIN STREET
+PGH
+US
+[ORGBENEINF     ] value1
+value2
+value3
+[TRANCD        X] 27
+[DESTCNTRY      ] US
+[ITMBANK        ] Adam
+1
+AutoReceiver-4K4SJDQGK
+US
+[ITMBANK1       ] Boris
+2
+AutoReceiver-4K4SJDQGK
+UK
+[FXMATH        X] FF
+[FXREFNB       X]
+[ADDENDACNT    X] 0007
+[ORIGSTSCD     X] 1', 'N/A', '2019/01/01', '36', '0', '0', '', '0', '0', '883252A2-C870-7D0A-E053-150A6C0A0D90', 'N/A', '2019-04-29 13:52:45.000000', '11', 'learning/mocked_learning.csv');
