@@ -19,16 +19,15 @@ class StoreInLearningEngineWriter implements ItemWriter<HistoricalDecisionLearni
   @Override
   public void write(
       List<? extends HistoricalDecisionLearningAggregate> items) {
-    if (log.isDebugEnabled()) {
-      log.debug(
-          "Sending data with historical decisions to learning engine chunk size:{}",
-          items.size());
-    }
-
     items.forEach(aggregate -> sendToLearningBridge(aggregate.getHistoricalFeatureRequests()));
   }
 
   private void sendToLearningBridge(List<HistoricalDecisionLearningStoreExchangeRequest> requests) {
+    if (log.isDebugEnabled()) {
+      log.debug(
+          "Sending data with analyst recommendations to learning engine, alertCount:{}",
+          requests.size());
+    }
     requests.forEach(learningEngineBridge::send);
   }
 }

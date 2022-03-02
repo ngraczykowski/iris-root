@@ -38,6 +38,9 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class AlertComposite {
 
+  private static final String ANALYST_DECISION_FALSE_POSITIVE = "analyst_decision_false_positive";
+  private static final String ANALYST_DECISION_TRUE_POSITIVE = "analyst_decision_true_positive";
+
   UUID alertMessageId;
 
   // Learning engine is multi-tenant db so some discriminator is required.
@@ -59,7 +62,6 @@ public class AlertComposite {
     return alertDetails.getSystemId();
   }
 
-
   public HistoricalDecisionLearningStoreExchangeRequest toHistoricalDecisionRequest(
       DecisionMapper decisionMapper, String featureTypeDiscriminator) {
     var alerts =
@@ -67,6 +69,7 @@ public class AlertComposite {
             .filter(
                 hit -> shouldBeAddedToRequest(hit.getFkcoVMatchedTag(), featureTypeDiscriminator))
             .map(hit -> mapToAlert(decisionMapper, featureTypeDiscriminator, hit))
+            .filter(AlertComposite::isAlertValid)
             .peek(alert -> {
               if (log.isTraceEnabled()) {
                 log.debug(
@@ -81,6 +84,32 @@ public class AlertComposite {
     return HistoricalDecisionLearningStoreExchangeRequest.newBuilder()
         .addAllAlerts(alerts)
         .build();
+  }
+
+  private static boolean isAlertValid(Alert alert) {
+    return isAlertPartyIdNotEmpty(alert) && isDecisionFinal(alert);
+  }
+
+  private static boolean isAlertPartyIdNotEmpty(Alert alert) {
+    return !alert.getAlertedParty().getId().isEmpty();
+  }
+
+  private static boolean isDecisionFinal(Alert alert) {
+    for (var decision : alert.getDecisionsList()) {
+      var analystDecision = decision.getValue();
+      if (isAnalystDecisionFinal(analystDecision)) {
+        return true;
+      }
+    }
+    log.debug(
+        "Analyst decision is not final. Alert: {} won't be send to Learning Engine",
+        alert.getAlertId());
+    return false;
+  }
+
+  private static boolean isAnalystDecisionFinal(String analystDecision) {
+    return analystDecision.equals(ANALYST_DECISION_TRUE_POSITIVE) ||
+        analystDecision.equals(ANALYST_DECISION_FALSE_POSITIVE);
   }
 
   private static boolean shouldBeAddedToRequest(String tag, String featureTypeDiscriminator) {
