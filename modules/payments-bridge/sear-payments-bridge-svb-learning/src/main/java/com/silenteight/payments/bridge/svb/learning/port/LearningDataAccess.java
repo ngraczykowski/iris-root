@@ -14,4 +14,6 @@ public interface LearningDataAccess {
   boolean isFileStored(String fileName);
 
   void removeDuplicates();
+
+  void removeFileData(List<String> fileNames);
 }

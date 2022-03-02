@@ -21,6 +21,8 @@ class JdbcLearningDataAccess implements LearningDataAccess {
 
   private final List<RemoveDuplicatedQuery> removeDuplicatedQueries;
 
+  private final RemoveFileCsvRowsQuery removeFileCsvRowsQuery;
+
   @Override
   public AlertsReadingResponse select(long jobId, String fileName) {
     return selectProcessedAlertsStatusQuery.select(jobId, fileName);
@@ -41,5 +43,11 @@ class JdbcLearningDataAccess implements LearningDataAccess {
   @Transactional
   public void removeDuplicates() {
     removeDuplicatedQueries.forEach(RemoveDuplicatedQuery::remove);
+  }
+
+  @Override
+  @Transactional
+  public void removeFileData(List<String> fileNames) {
+    removeFileCsvRowsQuery.remove(fileNames);
   }
 }

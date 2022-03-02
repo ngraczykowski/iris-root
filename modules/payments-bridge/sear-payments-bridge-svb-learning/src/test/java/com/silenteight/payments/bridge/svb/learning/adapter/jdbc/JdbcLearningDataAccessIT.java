@@ -19,7 +19,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
     InsertAlertResultQuery.class,
     CheckIsFileStoredQuery.class,
     RemoveDuplicatedHitsQuery.class,
-    RemoveDuplicatedActionsQuery.class})
+    RemoveDuplicatedActionsQuery.class,
+    RemoveFileCsvRowsQuery.class })
 class JdbcLearningDataAccessIT extends BaseJdbcTest {
 
   @Autowired
