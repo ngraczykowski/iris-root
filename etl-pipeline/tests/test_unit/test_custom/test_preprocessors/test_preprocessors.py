@@ -2,8 +2,8 @@ import json
 import os
 from typing import Dict
 
-from custom.aia.preprocessors.note_preprocessor import add_note_stage
-from custom.aia.preprocessors.status_preprocessor import add_status_stage
+from etl_pipeline.custom.aia.preprocessors.note_preprocessor import add_note_stage
+from etl_pipeline.custom.aia.preprocessors.status_preprocessor import add_status_stage
 from etl_pipeline.data_processor_engine.spark_engine import SparkProcessingEngine
 from tests.shared import TEST_SHARED_DATA_REFERENCE_DIR
 

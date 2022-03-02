@@ -4,7 +4,7 @@ import pyspark.sql.functions as F
 from pyspark.sql.types import ArrayType, MapType, StringType
 
 from cleaners.identity.nric import extract_ap_nric, extract_wl_nric_dob
-from custom.aia.config import (
+from etl_pipeline.custom.aia.config import (
     ALERT_NOTES_FILE_NAME,
     ALERT_STATUSES_DF_FILE_NAME,
     ALERTS_FILE_NAME,
@@ -12,7 +12,7 @@ from custom.aia.config import (
     ITEM_STATUS_FILE_NAME,
     STANDARDIZED_DATA_DIR,
 )
-from custom.aia.preprocessors import add_note_stage, add_status_stage
+from etl_pipeline.custom.aia.preprocessors import add_note_stage, add_status_stage
 
 
 def custom_transform(df, spark_instance):

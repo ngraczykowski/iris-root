@@ -7,7 +7,8 @@ from spark_manager.spark_client import SparkClient
 from spark_manager.spark_config import SPARK_CONF
 
 from config import columns_namespace
-from custom.ms.transformations import (
+from etl_pipeline.agent_input_creator.sql import sql_to_merge_specific_columns_to_standardized
+from etl_pipeline.custom.ms.transformations import (
     create_agent_input,
     create_agent_input_agg_col_config,
     custom_determine_wl_type,
@@ -18,9 +19,8 @@ from custom.ms.transformations import (
     udf_select_wl_names,
     udf_split_ap_names_by_ms_delimiter,
 )
-from etl_pipeline.agent_input_creator.sql import sql_to_merge_specific_columns_to_standardized
 from etl_pipeline.data_processor_engine.engine.engine import ProcessingEngine
-from pattern import AccountType
+from etl_pipeline.pattern import AccountType
 
 
 def extract_party_fields(field_name):

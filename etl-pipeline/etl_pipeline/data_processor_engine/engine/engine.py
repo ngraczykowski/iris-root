@@ -7,9 +7,9 @@ from spark_manager.spark_client import SparkClient
 from spark_manager.spark_config import SPARK_CONF
 
 from config import columns_namespace
-from custom.ms.trigger_discovery.discoverer import TriggeredTokensDiscoverer
+from etl_pipeline.custom.ms.trigger_discovery.discoverer import TriggeredTokensDiscoverer
 from etl_pipeline.data_processor_engine.abstract_engine import Engine
-from pattern_json import (
+from etl_pipeline.pattern_json import (
     ACCT_NUM,
     ADDRESS_ID,
     ALERT_ID,

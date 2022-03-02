@@ -15,9 +15,9 @@ from pyspark.sql.types import (
 from serppythonclient.yml import YamlLoader
 
 from config import columns_namespace
-from custom.ms.config import CONFIG_PATH
-from custom.ms.datatypes.status.sanctions import SanctionsStatus
-from pattern import AccountType
+from etl_pipeline.custom.ms.config import CONFIG_PATH
+from etl_pipeline.custom.ms.datatypes.status.sanctions import SanctionsStatus
+from etl_pipeline.pattern import AccountType
 
 with open(CONFIG_PATH) as conf:
     loaded = YamlLoader.get_instance().load(conf)

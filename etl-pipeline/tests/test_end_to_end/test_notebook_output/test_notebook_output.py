@@ -3,7 +3,7 @@ import shutil
 from glob import glob
 
 from config import columns_namespace
-from custom.aia.config import (
+from etl_pipeline.custom.aia.config import (
     APPLICATION_DATA_DIR,
     CLEANSED_DATA_DIR,
     RAW_DATA_DIR,
