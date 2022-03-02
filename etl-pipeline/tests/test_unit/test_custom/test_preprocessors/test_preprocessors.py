@@ -4,8 +4,11 @@ from typing import Dict
 
 from custom.aia.preprocessors.note_preprocessor import add_note_stage
 from custom.aia.preprocessors.status_preprocessor import add_status_stage
-from etl_pipeline.data_processor_engine.spark import spark_instance
+from etl_pipeline.data_processor_engine.spark_engine import SparkProcessingEngine
 from tests.shared import TEST_SHARED_DATA_REFERENCE_DIR
+
+spark_engine = SparkProcessingEngine()
+spark_instance = spark_engine.spark_instance
 
 
 def test_note_preprocessor():
@@ -13,7 +16,7 @@ def test_note_preprocessor():
         f"{TEST_SHARED_DATA_REFERENCE_DIR}/2.standardized/ACM_ALERT_NOTES.delta"
     )
     expected_output = _read_json("note_output.json")
-    result_frame = add_note_stage(note_input)
+    result_frame = add_note_stage(note_input, spark_instance=spark_instance)
     result_frame_pd = result_frame.toPandas()
     for column_name in [
         "analyst_note_stage",
@@ -29,7 +32,7 @@ def test_status_preprocessor():
         f"{TEST_SHARED_DATA_REFERENCE_DIR}/2.standardized/ACM_ITEM_STATUS_HISTORY.delta"
     )
     expected_output = _read_json("status_output.json")
-    result_frame = add_status_stage(status_input, system_id="22601")
+    result_frame = add_status_stage(status_input, system_id="22601", spark_instance=spark_instance)
     result_frame_pd = result_frame.toPandas()
     for column_name in [
         "analyst_status_stage",

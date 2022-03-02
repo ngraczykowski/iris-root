@@ -1,0 +1,6 @@
+[submodule "ms-name-screening-poc"]
+	path = ms-name-screening-poc
+	url = ../../ms/ms-name-screening-poc
+[submodule "ms-dumping-ground"]
+	path = ms-dumping-ground
+	url = ../../ms/ms-dumping-ground

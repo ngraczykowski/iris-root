@@ -13,10 +13,9 @@ from custom.aia.config import (
     STANDARDIZED_DATA_DIR,
 )
 from custom.aia.preprocessors import add_note_stage, add_status_stage
-from etl_pipeline.data_processor_engine.spark import spark_instance
 
 
-def custom_transform(df):
+def custom_transform(df, spark_instance):
     alert_statuses_df = spark_instance.read_delta(
         os.path.join(STANDARDIZED_DATA_DIR, ALERT_STATUSES_DF_FILE_NAME)
     ).select("STATUS_INTERNAL_ID", "STATUS_NAME")
@@ -28,8 +27,10 @@ def custom_transform(df):
     alert_ap_wl_hit_names_df = spark_instance.cast_array_null_to_array_string(
         alert_ap_wl_hit_names_df.select(reordered_columns)
     )
-    custom_nric_preprocess(alert_ap_wl_hit_names_df, ALERTS_FILE_NAME)
-    custom_notes_status_preprocess()
+    custom_nric_preprocess(
+        alert_ap_wl_hit_names_df, ALERTS_FILE_NAME, spark_instance=spark_instance
+    )
+    custom_notes_status_preprocess(spark_instance)
 
 
 def custom_remove_status_identifiers(item_status_history_df, alert_statuses_df):
@@ -49,11 +50,11 @@ def custom_remove_status_identifiers(item_status_history_df, alert_statuses_df):
     )
 
 
-def custom_process_notes():
+def custom_process_notes(spark_instance):
     alert_notes_df = spark_instance.read_delta(
         os.path.join(STANDARDIZED_DATA_DIR, ALERT_NOTES_FILE_NAME)
     )
-    alert_notes_stage_df = add_note_stage(alert_notes_df)
+    alert_notes_stage_df = add_note_stage(alert_notes_df, spark_instance=spark_instance)
     spark_instance.safe_save_delta(
         alert_notes_stage_df,
         delta_target_path=os.path.join(CLEANSED_DATA_DIR, ALERT_NOTES_FILE_NAME),
@@ -61,7 +62,7 @@ def custom_process_notes():
     )
 
 
-def custom_process_statuses():
+def custom_process_statuses(spark_instance):
     item_status_history_df = spark_instance.read_delta(
         os.path.join(STANDARDIZED_DATA_DIR, ITEM_STATUS_FILE_NAME)
     )
@@ -82,19 +83,21 @@ def custom_process_statuses():
     )
     item_status_history_df = item_status_history_df.select(reordered_columns)
 
-    item_status_history_stage_df = add_status_stage(item_status_history_df)
+    item_status_history_stage_df = add_status_stage(
+        item_status_history_df, spark_instance=spark_instance
+    )
     spark_instance.safe_save_delta(
         item_status_history_stage_df,
         delta_target_path=os.path.join(CLEANSED_DATA_DIR, ITEM_STATUS_FILE_NAME),
     )
 
 
-def custom_notes_status_preprocess():
-    custom_process_notes()
-    custom_process_statuses()
+def custom_notes_status_preprocess(spark_instance):
+    custom_process_notes(spark_instance)
+    custom_process_statuses(spark_instance)
 
 
-def custom_nric_preprocess(df, file_name):
+def custom_nric_preprocess(df, file_name, spark_instance):
     alert_nric_df = df.withColumn(
         "hit_cs_1_data_points",
         F.udf(extract_wl_nric_dob, MapType(StringType(), ArrayType(StringType())))("hit_cs_1"),

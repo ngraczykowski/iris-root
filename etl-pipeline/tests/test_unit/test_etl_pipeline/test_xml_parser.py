@@ -5,7 +5,7 @@ import pytest
 
 from custom.aia.config import AIA_ALERT_HEADER_CONFIG, AIA_HIT_CONFIG
 from custom.aia.xml_pipeline import AIAWatchlistExtractor, AIAXMLPipeline
-from etl_pipeline.data_processor_engine.spark import spark_engine, spark_instance
+from etl_pipeline.data_processor_engine.spark_engine import SparkProcessingEngine
 from etl_pipeline.xml_parser.xml_pipeline import AlertHitDictFactory, WatchlistExtractor
 from tests.shared import TEST_ETL_PIPELINE_DATA_PATH, TEST_SHARED_DATA_REFERENCE_DIR
 from tests.test_unit.test_etl_pipeline.reference.test_get_wl_hit_aliases_matched_name import (
@@ -13,6 +13,9 @@ from tests.test_unit.test_etl_pipeline.reference.test_get_wl_hit_aliases_matched
     REFERENCE_OUTPUT_FOR_TEST_WL_HIT_ALIASES_MATCHED_NAME,
 )
 from tests.utils import compare_dataframe, load_json, load_pickle, load_xml
+
+spark_engine = SparkProcessingEngine()
+spark_instance = spark_engine.spark_instance
 
 
 class TestAlertHitDicttFactory(unittest.TestCase):
@@ -116,13 +119,15 @@ class TestAIAWatchlistExtractor(unittest.TestCase):
     def test_remove_unnecessary_columns(self):
         df = spark_instance.read_delta(
             os.path.join(
-                TEST_ETL_PIPELINE_DATA_PATH, "test_input_remove_unnecessary_columns.delta"
+                TEST_ETL_PIPELINE_DATA_PATH,
+                "test_input_remove_unnecessary_columns.delta",
             )
         )
         result = self.uut.remove_unnecessary_columns(df)
         reference_df = spark_instance.read_delta(
             os.path.join(
-                TEST_ETL_PIPELINE_DATA_PATH, "test_output_remove_unnecessary_columns.delta"
+                TEST_ETL_PIPELINE_DATA_PATH,
+                "test_output_remove_unnecessary_columns.delta",
             )
         )
         self.assertTrue(compare_dataframe(result, reference_df))

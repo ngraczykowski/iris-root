@@ -20,3 +20,23 @@ APP:
   REPORT_DATA_DIR: 5.report/
   SANDBOX_DATA_DIR: 6.sandbox/
   APPLICATION_CONF_DIR: ../conf/
+
+PIPELINE:
+  output-paths: output-paths
+  alerts-data: alerts-data
+  alerts-notes: alerts-notes
+  alerts-xml-data: alerts-xml-data
+  temp: temp
+  sanctions-360: sanctions-360
+  input-record-columns: input-record-columns
+  id-column-name: id-column-name
+  ds-type: ds-type
+  wm-accounts-in-scope-input-path: ms-name-screening-poc/test-data/Sanctions/WM/WM_Account_In_Scope.csv
+  df360-input-path: df360-input-path
+  df360-output-path: df360-output-path
+  fuzziness: fuzziness
+  party-and-address-relationship-input-path: tests/shared/Party_And_Address_Relationship.csv
+  wm-parties-in-scope-input-path: ms-name-screening-poc/test-data/Sanctions/WM/WM_Parties_In_Scope.csv
+  decision-tree: decision-tree
+  alerts: alerts
+  type: type

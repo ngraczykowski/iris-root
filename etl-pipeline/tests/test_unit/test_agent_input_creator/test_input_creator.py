@@ -4,9 +4,12 @@ from unittest import TestCase
 
 from etl_pipeline.agent_input_creator.config import AGENT_INPUT_CONFIG
 from etl_pipeline.agent_input_creator.input_creator import create_input_for_agents
-from etl_pipeline.data_processor_engine.spark import spark_instance
+from etl_pipeline.data_processor_engine.spark_engine import SparkProcessingEngine
 from tests.shared import TEST_SHARED_DATA_REFERENCE_DIR
 from tests.utils import compare_dataframe
+
+spark_engine = SparkProcessingEngine()
+spark_instance = spark_engine.spark_instance
 
 
 class TestCreateInput(TestCase):
@@ -21,7 +24,9 @@ class TestCreateInput(TestCase):
         )
         cleansed_alert_df = spark_instance.cast_array_null_to_array_string(cleansed_alert_df)
 
-        create_input_for_agents(cleansed_alert_df, destination="temporary/")
+        create_input_for_agents(
+            cleansed_alert_df, destination="temporary/", spark_instance=spark_instance
+        )
 
         for agent_name in AGENT_INPUT_CONFIG.keys():
             result_df = spark_instance.read_delta(

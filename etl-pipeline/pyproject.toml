@@ -1,6 +1,15 @@
 [tool.black]
 line-length = 99
 target-version = ['py36', 'py37', 'py38']
+exclude = '''
+/(
+  | ms-dumping-ground
+  | ms-name-screening-poc
+  | .tox
+  | .eggs
+)/
+
+'''
 
 [build-system]
 requires = ["setuptools >= 49.2.0", "wheel >= 0.34.2"]

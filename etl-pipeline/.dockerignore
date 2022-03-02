@@ -8,3 +8,4 @@ agents/*
 .tox/*
 .git/*
 spark-manager/*
+.eggs/*

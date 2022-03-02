@@ -2,15 +2,15 @@ import os
 import shutil
 from glob import glob
 
+from config import columns_namespace
 from custom.aia.config import (
     APPLICATION_DATA_DIR,
     CLEANSED_DATA_DIR,
     RAW_DATA_DIR,
     STANDARDIZED_DATA_DIR,
 )
-from etl_pipeline.data_processor_engine.spark import spark_engine
-from etl_pipeline.data_processor_engine.spark import spark_instance as spark
-from main_pipeline import AIAPipeline
+from etl_pipeline.data_processor_engine.spark_engine import SparkProcessingEngine
+from pipelines.aia_pipeline import AIAPipeline
 from tests.shared import TEST_SHARED_DATA_REFERENCE_DIR
 from tests.utils import compare_dataframe
 
@@ -18,12 +18,15 @@ REFERENCE_DIR = TEST_SHARED_DATA_REFERENCE_DIR
 
 
 ID_MAP = {
-    "ALERTS.delta": "ALERT_ID",
-    "ACM_ALERT_NOTES.delta": "ALERT_ID",
+    "ALERTS.delta": columns_namespace.ALERT_ID,
+    "ACM_ALERT_NOTES.delta": columns_namespace.ALERT_ID,
     "ACM_ITEM_STATUS_HISTORY.delta": "ITEM_ID",
-    "agent_input_agg_df.delta": "ALERT_ID",
+    "agent_input_agg_df.delta": columns_namespace.ALERT_ID,
     "ACM_MD_ALERT_STATUSES.delta": "E_ISSUE",
 }
+
+spark_engine = SparkProcessingEngine()
+spark = spark_engine.spark_instance
 
 
 def clean_up():
@@ -36,7 +39,9 @@ def clean_up():
         pass
 
 
-def compare_created_data_with_reference_data(reference, unique_column="ALERT_INTERNAL_ID"):
+def compare_created_data_with_reference_data(
+    reference, unique_column=columns_namespace.ALERT_INTERNAL_ID
+):
     rel_path = os.path.relpath(os.path.dirname(reference), "tests/shared/reference")
     filename = os.path.basename(reference)
     reference_dataframe = spark.read_delta(os.path.join("data", rel_path, filename))
