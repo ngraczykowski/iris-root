@@ -49,11 +49,7 @@ class JdbcLearningDataAccess implements LearningDataAccess {
   }
 
   @Override
-  @Transactional
-  public void removeFileData(List<String> fileNames) {
-    removeFileCsvRowsQuery.remove(fileNames);
-    removeLearningAlertsQuery.remove(fileNames);
-    removeHitsWithoutParentQuery.remove();
-    removeActionsWithoutParentQuery.remove();
+  public void removeCsvRows(List<Long> rowIds) {
+    removeFileCsvRowsQuery.remove(rowIds);
   }
 }

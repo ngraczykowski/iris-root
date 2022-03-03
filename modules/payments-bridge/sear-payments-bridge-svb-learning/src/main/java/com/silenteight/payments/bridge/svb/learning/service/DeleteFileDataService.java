@@ -19,6 +19,5 @@ class DeleteFileDataService {
   @EventListener
   public void removeFileData(FilesExpiredEvent filesExpiredEvent) {
     log.info("Received expired files to remove data = {}", filesExpiredEvent.getFileNames());
-    learningDataAccess.removeFileData(filesExpiredEvent.getFileNames());
   }
 }

@@ -30,37 +30,10 @@ class RemoveFileDataIT extends BaseJdbcTest {
 
   @Test
   void shouldRemoveCsvRows() {
-    jdbcLearningDataAccess.removeFileData(List.of("learning/mocked_learning.csv"));
+    jdbcLearningDataAccess.removeCsvRows(List.of(1L, 2L, 3L));
     var fileRowsCount = jdbcTemplate.queryForObject(
         "SELECT count(*) FROM pb_learning_csv_row WHERE file_name = 'learning/mocked_learning.csv'",
         Integer.class);
     assertThat(fileRowsCount).isEqualTo(0);
-  }
-
-  @Test
-  void shouldRemoveLearningAlerts() {
-    jdbcLearningDataAccess.removeFileData(List.of("learning/mocked_learning.csv"));
-    var alertsCount = jdbcTemplate.queryForObject(
-        "SELECT count(*) FROM pb_learning_alert WHERE file_name = 'learning/mocked_learning.csv'",
-        Integer.class);
-    assertThat(alertsCount).isEqualTo(0);
-  }
-
-  @Test
-  void shouldRemoveHits() {
-    jdbcLearningDataAccess.removeFileData(List.of("learning/mocked_learning.csv"));
-    var hitsCount = jdbcTemplate.queryForObject(
-        "SELECT count(*) FROM pb_learning_hit",
-        Integer.class);
-    assertThat(hitsCount).isEqualTo(0);
-  }
-
-  @Test
-  void shouldRemoveActions() {
-    jdbcLearningDataAccess.removeFileData(List.of("learning/mocked_learning.csv"));
-    var actions = jdbcTemplate.queryForObject(
-        "SELECT count(*) FROM pb_learning_hit",
-        Integer.class);
-    assertThat(actions).isEqualTo(0);
   }
 }

@@ -19,17 +19,17 @@ class RemoveFileCsvRowsQuery {
   @Language("PostgreSQL")
   private static final String SQL =
       "DELETE FROM pb_learning_csv_row\n"
-          + " WHERE file_name IN (:file_name)\n";
-  private static final String FILE_NAME = "file_name";
+          + " WHERE pb_learning_csv_row.learning_csv_row_id IN (:row_id)\n";
+  private static final String ROW_ID = "row_id";
 
   private final JdbcTemplate jdbcTemplate;
 
-  public void remove(List<String> fileNames) {
+  public void remove(List<Long> rowIds) {
     var query = createQuery();
 
-    for (var fileName : fileNames) {
+    for (var rowId : rowIds) {
       var paramMap =
-          Map.of(FILE_NAME, fileName);
+          Map.of(ROW_ID, rowId);
       query.updateByNamedParam(paramMap);
     }
 
@@ -40,7 +40,7 @@ class RemoveFileCsvRowsQuery {
     var batchSqlUpdate = new BatchSqlUpdate();
     batchSqlUpdate.setJdbcTemplate(jdbcTemplate);
     batchSqlUpdate.setSql(SQL);
-    batchSqlUpdate.declareParameter(new SqlParameter(FILE_NAME, Types.VARCHAR));
+    batchSqlUpdate.declareParameter(new SqlParameter(ROW_ID, Types.BIGINT));
     batchSqlUpdate.compile();
     return batchSqlUpdate;
   }
