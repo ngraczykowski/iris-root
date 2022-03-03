@@ -1,6 +1,7 @@
 ext {
   libraries = [:]
   springBootVersion = "2.6.4"
+  springCloudVersion = "2021.0.1"
   sepDependenciesVersion = "2.5.0"
   silenteightSepBaseVersion = "1.12.5"
   silenteightUniversalDataSourceApiVersion = '1.2.0'
@@ -17,6 +18,8 @@ libraries.spring_boot_starter_amqp = [group: 'org.springframework.boot', name: '
 libraries.spring_boot_starter_logging = [group: 'org.springframework.boot', name: 'spring-boot-starter-logging']
 libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow']
 libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web']
+libraries.spring_cloud_starter_sleuth = [group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth']
+libraries.spring_cloud_dependencies = [group: 'org.springframework.cloud', name: 'spring-cloud-dependencies']
 
 libraries.hibernate_validator = [group: 'org.hibernate.validator', name:'hibernate-validator']
 
@@ -25,21 +28,16 @@ libraries.spring_boot_test = [group: 'org.springframework.boot', name: 'spring-b
 libraries.spring_boot_test_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-test-autoconfigure']
 
 // GRPC
-libraries.grpc_spring_boot_starter = [group: 'net.devh', name: 'grpc-spring-boot-starter', version: '2.13.0.RELEASE']
-libraries.grpc_brave_instrumentation = [group: 'io.zipkin.brave', name: 'brave-instrumentation-grpc', version: '5.13.2']
+libraries.grpc_client_spring_boot_starter = [group: 'net.devh', name: 'grpc-client-spring-boot-starter']
+libraries.grpc_brave_instrumentation = [group: 'io.zipkin.brave', name: 'brave-instrumentation-grpc']
 
 dependencies {
   implementation platform("com.silenteight.sep:sep-dependencies:$sepDependenciesVersion")
   annotationProcessor platform("com.silenteight.sep:sep-dependencies:$sepDependenciesVersion")
-  implementation libraries.universal_datasource_api_library
-  implementation libraries.data_source_agentinput_api
-
   implementation platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion")
   annotationProcessor platform(
       "org.springframework.boot:spring-boot-dependencies:$springBootVersion")
-
-  implementation libraries.grpc_spring_boot_starter
-  implementation libraries.grpc_brave_instrumentation
+  implementation platform("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
 }
 
 test {

@@ -9,11 +9,17 @@ apply from: "${rootProject.projectDir}/gradle/scripts/dependencies.gradle"
 
 dependencies {
   implementation libraries.silenteight_sep_base_common
+  implementation libraries.universal_datasource_api_library
+  implementation libraries.data_source_agentinput_api
   implementation libraries.spring_boot_autoconfigure
   implementation libraries.spring_boot_starter_amqp
+  implementation libraries.grpc_client_spring_boot_starter
+  implementation project(":dataprep-proto")
   runtimeOnly libraries.hibernate_validator
   runtimeOnly libraries.spring_boot_starter_undertow
   runtimeOnly libraries.spring_boot_starter_actuator
+  runtimeOnly libraries.grpc_brave_instrumentation
+  runtimeOnly libraries.spring_cloud_starter_sleuth
   testImplementation libraries.spring_boot_test
   testImplementation libraries.spring_test
 }

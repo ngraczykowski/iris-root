@@ -5,6 +5,20 @@ spring:
   application:
     name: feb-dataprep
 
+  ### RABBITMQ
+  rabbitmq:
+    username: dev
+    password: dev
+    listener:
+      type: simple
+
+
+amqp:
+  dataprep:
+    incoming:
+      alert-and-matches-stored:
+        queue-name: alert-and-matches-stored-queue
+
 silenteight:
   bridge:
 

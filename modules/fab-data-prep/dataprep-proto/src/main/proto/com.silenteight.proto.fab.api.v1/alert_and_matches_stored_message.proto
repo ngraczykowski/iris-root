@@ -1,0 +1,24 @@
+// Copyright 2022 Silent Eight Pte. Ltd.
+
+syntax = "proto3";
+
+package com.silenteight.proto.fab.api.v1;
+
+import "google/api/field_behavior.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "FabBridgeMessageProto";
+option java_package = "com.silenteight.proto.fab.api.v1";
+
+message MessageAlertAndMatchesStored {
+  string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string alert_id = 2 [(google.api.field_behavior) = REQUIRED];
+  string alert_name = 3 [(google.api.field_behavior) = REQUIRED];
+  string alert_status = 4 [(google.api.field_behavior) = REQUIRED];
+  repeated StoredMatch stored_matches = 5 [(google.api.field_behavior) = REQUIRED];
+}
+
+message StoredMatch {
+  string match_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string match_name = 2 [(google.api.field_behavior) = REQUIRED];
+}

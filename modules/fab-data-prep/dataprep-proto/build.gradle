@@ -1,0 +1,8 @@
+plugins {
+    id 'java-library'
+    id "com.google.protobuf"
+}
+
+protobufSetup {
+    generateGrpc = true
+}
