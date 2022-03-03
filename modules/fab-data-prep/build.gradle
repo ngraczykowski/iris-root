@@ -1,4 +1,5 @@
 plugins {
+	id "maven-publish"
 	id "org.sonarqube" version "3.3"
 	id "com.silenteight.gradle.wrapper" version "1.1.0"
 	id "com.silenteight.gradle.release" version "1.4.0"
