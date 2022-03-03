@@ -1,0 +1,3 @@
+rootProject.name = 'firco-trust-cmapi-connector'
+
+include 'ftcc-app'

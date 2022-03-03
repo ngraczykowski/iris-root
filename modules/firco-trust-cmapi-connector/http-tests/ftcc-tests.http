@@ -1,0 +1,19 @@
+### sear-customer-bridge
+// @no-log
+// @no-cookie-jar
+// request-1.json.json
+POST {{baseurl}}/rest/ftcc/alert
+Accept: application/json
+Content-Type: application/json
+
+< ./requests/request-example-cmapi-trust.json.json
+
+###  ear-customer-bridge with DC param
+// @no-log
+// @no-cookie-jar
+//
+POST {{baseurl}}/rest/ftcc/alert?dc=Data%20center
+Accept: application/json
+Content-Type: application/json
+
+< ./requests/request-example-cmapi-trust.json.json

@@ -1,0 +1,202 @@
+{
+  "Header": null,
+  "Body": {
+    "msg_SendMessage": {
+      "VersionTag": "1",
+      "Authentication": {
+        "UserLogin": "login",
+        "UserPassword": "",
+        "UserRealm": ""
+      },
+      "Messages": [
+        {
+          "Message": {
+            "Unit": "TRAINING",
+            "BusinessUnit": "",
+            "MessageID": "00000004",
+            "SystemID": "TRAINING!60C2ED1B-58A1D68E-0326AE78-A8C7CC79",
+            "Bypass": "0",
+            "Command": "1",
+            "ApplicationCode": "FFF FEED",
+            "CustomerInfo": {
+              "Account": "",
+              "City": "35310MORDELLES",
+              "Country": "",
+              "DateOfBirth": "",
+              "Name": "YASIN RAHMAN",
+              "PlaceOfBirth": "",
+              "State": "",
+              "UserData1": "",
+              "UserData2": ""
+            },
+            "MessageData": "Nom;client;YASIN RAHMAN;Adresse;64 XXXXXX XX XXXXXXXX XXXXXXX;YYYYYZZZZZZZZZ",
+            "LastComment": "",
+            "LastOperator": "patrick",
+            "FilteredDate": "2017\/05\/22 13:52:00",
+            "CreatedDate": "2018\/08\/27 09:46:39",
+            "Priority": "0",
+            "Confidentiality": "0",
+            "Blocking": "1",
+            "NonBlocking": "0",
+            "BatchID": "",
+            "Hits": [
+              {
+                "Hit": {
+                  "MatchingText": "YASIN RAHMAN",
+                  "Positions": [
+                    {
+                      "Position": {
+                        "PositionStart": "11",
+                        "PositionEnd": "22"
+                      }
+                    }
+                  ],
+                  "Score": "1.0",
+                  "Tag": "NAM",
+                  "SolutionType": "1",
+                  "SynonymIndex": "0",
+                  "RulesContext": {
+                    "Type": "1",
+                    "Priority": "0",
+                    "Confidentiality": "0",
+                    "Info": "none"
+                  },
+                  "EntityText": "YASIN, ABDUL RAHMAN",
+                  "HittedEntity": {
+                    "ID": "PSY0003",
+                    "IsException": "0",
+                    "OfficialReferences": [
+                      {
+                        "OfficialReference": {
+                          "Name": "OSFI_2006\/02\/09"
+                        }
+                      }
+                    ],
+                    "Names": [
+                      {
+                        "Name": "YASIN, ABDUL RAHMAN"
+                      },
+                      {
+                        "Name": "YASIN, ABOUD"
+                      },
+                      {
+                        "Name": "TAHER, ABDUL RAHMAN SAID"
+                      },
+                      {
+                        "Name": "TAHA, ABDUL RAHMAN"
+                      }
+                    ],
+                    "Addresses": [
+                      {
+                        "Address": {
+                          "IsMain": "1",
+                          "PostalAddress": "",
+                          "Cities": [
+                          ],
+                          "States": [
+                          ],
+                          "Countries": [
+                          ]
+                        }
+                      }
+                    ],
+                    "Origin": "OSFI",
+                    "Designation": "BSIF",
+                    "Keywords": [
+                      {
+                        "Keyword": "none"
+                      }
+                    ],
+                    "Type": "I",
+                    "Codes": [
+                    ],
+                    "AdditionalInfo": "none",
+                    "DatesOfBirth": [
+                      {
+                        "DateOfBirth": "10\/04\/60\nNATIONALITY: \nnone"
+                      }
+                    ],
+                    "PlacesOfBirth": [
+                      {
+                        "PlacesOfBirth": "BLOOMINGTON, INDIANA, USA"
+                      }
+                    ],
+                    "Hyperlinks": [
+                      {
+                        "Hyperlink": "none"
+                      }
+                    ],
+                    "UserData1": "",
+                    "UserData2": "",
+                    "Nationality": "",
+                    "IsPEP": "0",
+                    "IsFEP": "0",
+                    "HideOnlyIDs": [
+                      {
+                        "HideOnlyID": ""
+                      }
+                    ],
+                    "HideIDs": [
+                    ],
+                    "HideOrigins": [
+                    ],
+                    "HideInTags": [
+                    ],
+                    "HideUnits": [
+                    ],
+                    "HideSenderReceivers": [
+                    ]
+                  }
+                }
+              }
+            ],
+            "Actions": [
+              {
+                "Action": {
+                  "DateTime": "20170522135200",
+                  "Operator": "FFFFEED",
+                  "Comment": "Suspect(s) detected by FircoSoft Filter",
+                  "Status": {
+                    "ID": "0",
+                    "Name": "NEW",
+                    "RoutingCode": "0",
+                    "Checksum": "ed10e9af8ecdee8e303f4c95783757c6"
+                  }
+                }
+              },
+              {
+                "Action": {
+                  "DateTime": "20180827094707",
+                  "Operator": "patrick",
+                  "Comment": "",
+                  "Status": {
+                    "ID": "200",
+                    "Name": "COMMHUB",
+                    "RoutingCode": "12",
+                    "Checksum": "e185b730a2fa17693d8dd9846df5319b"
+                  }
+                }
+              }
+            ],
+            "CurrentStatus": {
+              "ID": "200",
+              "Name": "COMMHUB",
+              "RoutingCode": "12",
+              "Checksum": "e185b730a2fa17693d8dd9846df5319b"
+            },
+            "NextStatuses": [
+              {
+                "Status": {
+                  "ID": "4",
+                  "Name": "PENDING",
+                  "RoutingCode": "12",
+                  "Checksum": "dc44ae12825d619154b8a1dc8e09223b"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
