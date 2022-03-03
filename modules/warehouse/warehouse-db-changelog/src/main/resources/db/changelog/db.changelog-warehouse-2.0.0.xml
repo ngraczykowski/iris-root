@@ -224,4 +224,28 @@
     </addColumn>
   </changeSet>
 
+
+  <changeSet id="warehouse-2.0.0-12" author="wfirlej">
+    <sql splitStatements="true">
+      ALTER TABLE warehouse_match RENAME TO warehouse_match_old;
+
+      CREATE TABLE IF NOT EXISTS warehouse_match
+      (
+        alert_id   bigint                  NOT NULL
+        CONSTRAINT fk_alert_id
+        REFERENCES warehouse_alert ON DELETE CASCADE,
+        match_id   varchar(128),
+        name       varchar(128),
+        created_at timestamp default now() NOT NULL,
+        payload    jsonb                   NOT NULL,
+        CONSTRAINT uniq_warehouse_match_alert_id_match_id
+        UNIQUE (alert_id, match_id)
+        ) PARTITION BY RANGE (alert_id);
+
+      CREATE TABLE warehouse_match_1500000 PARTITION OF warehouse_match FOR VALUES FROM (1) TO (1500000);
+      INSERT INTO warehouse_match (SELECT alert_id, match_id, name, created_at, payload FROM warehouse_match_old);
+    </sql>
+
+  </changeSet>
+
 </databaseChangeLog>
