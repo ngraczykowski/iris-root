@@ -36,4 +36,13 @@ class RemoveFileDataIT extends BaseJdbcTest {
         Integer.class);
     assertThat(fileRowsCount).isEqualTo(0);
   }
+
+  @Test
+  void shouldRemoveAlerts() {
+    jdbcLearningDataAccess.removeAlerts(List.of(1L, 2L, 3L));
+    var fileRowsCount = jdbcTemplate.queryForObject(
+        "SELECT count(*) FROM pb_learning_alert WHERE file_name = 'learning/mocked_learning.csv'",
+        Integer.class);
+    assertThat(fileRowsCount).isEqualTo(0);
+  }
 }

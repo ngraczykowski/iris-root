@@ -16,11 +16,13 @@ class RemoveFileDataJobConfiguration {
 
   private final JobBuilderFactory jobBuilderFactory;
   private final Step removeCsvRowsStep;
+  private final Step removeAlertsStep;
 
   @Bean
   Job removeFileDataJob() {
     return this.jobBuilderFactory.get(REMOVE_FILE_DATA_JOB_NAME)
         .start(removeCsvRowsStep)
+        .next(removeAlertsStep)
         .build();
   }
 }

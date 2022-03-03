@@ -16,8 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 
-import static com.silenteight.payments.bridge.svb.learning.job.remove.RemoveFileDataJobConstants.REMOVE_FILE_DATA_STEP_NAME;
+import static com.silenteight.payments.bridge.svb.learning.job.remove.RemoveFileDataJobConstants.REMOVE_ALERT_STEP_NAME;
+import static com.silenteight.payments.bridge.svb.learning.job.remove.RemoveFileDataJobConstants.REMOVE_CSV_ROW_STEP_NAME;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
 @Import({ TestApplicationConfiguration.class })
 @ComponentScan(basePackages = {
@@ -32,14 +34,28 @@ class RemoveFileDataJobTest extends BaseBatchTest {
 
   @Test
   @Sql(scripts = "RemoveFileDataJobTest.sql")
+  @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public void testRemovingCsvRowsStep() {
-    var transformAlertStep = createStepExecution(REMOVE_FILE_DATA_STEP_NAME).get();
+    var transformAlertStep = createStepExecution(REMOVE_CSV_ROW_STEP_NAME).get();
     assertThat(transformAlertStep.getReadCount()).isEqualTo(3);
     assertThat(jdbcTemplate.queryForObject(
         "SELECT count(*) FROM pb_learning_csv_row",
         Integer.class)).isEqualTo(0);
   }
+
+  @Test
+  @Sql(scripts = "RemoveFileDataJobTest.sql")
+  @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
+  @Transactional(propagation = Propagation.NOT_SUPPORTED)
+  public void testRemovingAlertsStep() {
+    var transformAlertStep = createStepExecution(REMOVE_ALERT_STEP_NAME).get();
+    assertThat(transformAlertStep.getReadCount()).isEqualTo(3);
+    assertThat(jdbcTemplate.queryForObject(
+        "SELECT count(*) FROM pb_learning_alert",
+        Integer.class)).isEqualTo(0);
+  }
+
 
   @Nonnull
   private Optional<StepExecution> createStepExecution(String stepName) {

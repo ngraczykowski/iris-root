@@ -16,4 +16,6 @@ public interface LearningDataAccess {
   void removeDuplicates();
 
   void removeCsvRows(List<Long> rowIds);
+
+  void removeAlerts(List<Long> alertIds);
 }

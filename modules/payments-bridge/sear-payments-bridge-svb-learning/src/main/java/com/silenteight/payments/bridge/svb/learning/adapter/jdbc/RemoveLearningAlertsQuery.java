@@ -18,18 +18,18 @@ class RemoveLearningAlertsQuery {
 
   @Language("PostgreSQL")
   private static final String SQL =
-      "DELETE FROM pb_learning_alert\n"
-          + " WHERE file_name IN (:file_name)\n";
-  private static final String FILE_NAME = "file_name";
+      "DELETE FROM pb_learning_alert pla\n"
+          + " WHERE pla.learning_alert_id IN (:alert_id)\n";
+  private static final String ALERTS_ID = "alert_id";
 
   private final JdbcTemplate jdbcTemplate;
 
-  public void remove(List<String> fileNames) {
+  public void remove(List<Long> alertIds) {
     var query = createQuery();
 
-    for (var fileName : fileNames) {
+    for (var alertId : alertIds) {
       var paramMap =
-          Map.of(FILE_NAME, fileName);
+          Map.of(ALERTS_ID, alertId);
       query.updateByNamedParam(paramMap);
     }
 
@@ -40,7 +40,7 @@ class RemoveLearningAlertsQuery {
     var batchSqlUpdate = new BatchSqlUpdate();
     batchSqlUpdate.setJdbcTemplate(jdbcTemplate);
     batchSqlUpdate.setSql(SQL);
-    batchSqlUpdate.declareParameter(new SqlParameter(FILE_NAME, Types.VARCHAR));
+    batchSqlUpdate.declareParameter(new SqlParameter(ALERTS_ID, Types.BIGINT));
     batchSqlUpdate.compile();
     return batchSqlUpdate;
   }

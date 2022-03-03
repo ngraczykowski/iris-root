@@ -1,4 +1,4 @@
-package com.silenteight.payments.bridge.svb.learning.step.remove.csvrow;
+package com.silenteight.payments.bridge.svb.learning.step.remove.alert;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,41 +22,41 @@ import org.springframework.context.annotation.Configuration;
 import javax.sql.DataSource;
 
 import static com.silenteight.payments.bridge.svb.learning.job.csvstore.LearningJobConstants.FILE_NAME_PARAMETER;
-import static com.silenteight.payments.bridge.svb.learning.job.remove.RemoveFileDataJobConstants.REMOVE_CSV_ROW_STEP_NAME;
+import static com.silenteight.payments.bridge.svb.learning.job.remove.RemoveFileDataJobConstants.REMOVE_ALERT_STEP_NAME;
 
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
 @EnableConfigurationProperties(RemoveFileDataJobProperties.class)
-class RemoveCsvRowStepConfiguration {
+class RemoveAlertStepConfiguration {
 
   @Language("PostgreSQL")
   private static final String QUERY =
-      "SELECT learning_csv_row_id FROM pb_learning_csv_row WHERE file_name = ?";
+      "SELECT learning_alert_id FROM pb_learning_alert WHERE file_name = ?";
 
   private final RemoveFileDataJobProperties properties;
 
   @Bean
-  Step removeCsvRowsStep(
-      JdbcCursorItemReader<Long> removeLearningCsvRowReader,
-      ItemWriter<Long> removeCsvRowDataWriter,
+  Step removeAlertsStep(
+      JdbcCursorItemReader<Long> removeLearningAlertReader,
+      ItemWriter<Long> removeAlertWriter,
       StepBuilderFactory stepBuilderFactory) {
     return stepBuilderFactory
-        .get(REMOVE_CSV_ROW_STEP_NAME)
+        .get(REMOVE_ALERT_STEP_NAME)
         .<Long, Long>chunk(properties.getChunkSize())
-        .reader(removeLearningCsvRowReader)
-        .writer(removeCsvRowDataWriter)
+        .reader(removeLearningAlertReader)
+        .writer(removeAlertWriter)
         .build();
   }
 
   @Bean
   @StepScope
-  public JdbcCursorItemReader<Long> removeLearningCsvRowReader(
+  public JdbcCursorItemReader<Long> removeLearningAlertReader(
       @Value("#{stepExecution}") StepExecution stepExecution,
       DataSource dataSource) {
     var fileName = stepExecution.getJobParameters().getString(FILE_NAME_PARAMETER);
     return new JdbcCursorItemReaderBuilder<Long>()
-        .name("csvRowIdReader")
+        .name("alertReader")
         .dataSource(dataSource)
         .queryArguments(fileName)
         .sql(QUERY)

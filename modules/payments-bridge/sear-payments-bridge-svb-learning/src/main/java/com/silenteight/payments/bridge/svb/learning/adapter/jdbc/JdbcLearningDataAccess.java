@@ -52,4 +52,9 @@ class JdbcLearningDataAccess implements LearningDataAccess {
   public void removeCsvRows(List<Long> rowIds) {
     removeFileCsvRowsQuery.remove(rowIds);
   }
+
+  @Override
+  public void removeAlerts(List<Long> alertIds) {
+    removeLearningAlertsQuery.remove(alertIds);
+  }
 }
