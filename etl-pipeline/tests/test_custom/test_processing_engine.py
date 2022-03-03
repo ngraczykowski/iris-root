@@ -1,81 +1,92 @@
-import os
 import unittest
+from copy import deepcopy
 
 from config import columns_namespace, pipeline_config
-from etl_pipeline.data_processor_engine.spark_engine.spark import SparkProcessingEngine
-from tests.utils import compare_dataframe
-
-ALERT_ID, ALERT_INTERNAL_ID = columns_namespace.ALERT_ID, columns_namespace.ALERT_INTERNAL_ID
+from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
+from tests.test_custom.constant import (
+    EXAMPLE_FOR_TEST_SET_REF_KEY,
+    EXAMPLE_PARTIES,
+    EXAMPLE_PARTIES_WITH_NAMES,
+    RESULT_FOR_EXAMPLE_FOR_TEST_SET_REF_KEY,
+)
 
 TEST_PATH = "tests/shared/test_ms_pipeline/"
-
-
-def load_input_and_reference_data(func, spark_instance):
-    funcname = func.__name__
-    input_data, output_data = spark_instance.read_delta(
-        os.path.join(TEST_PATH, funcname + "_input.delta")
-    ), spark_instance.read_delta(os.path.join(TEST_PATH, funcname + "_output.delta"))
-    return input_data, output_data
 
 
 class TestEngine(unittest.TestCase):
     @classmethod
     def setUpClass(self):
-        self.uut = SparkProcessingEngine()
-        self.uut.pipeline_config = pipeline_config
-
-    def test_set_ref_key(self):
-        input_data, reference_data = load_input_and_reference_data(
-            self.test_set_ref_key, self.uut.spark_instance
-        )
-        result = self.uut.set_ref_key(input_data)
-        assert compare_dataframe(result, reference_data, unique_column=ALERT_ID)
+        self.uut = JsonProcessingEngine(pipeline_config)
 
     def test_set_trigger_reasons(self):
-        input_data, reference_data = load_input_and_reference_data(
-            self.test_set_trigger_reasons, self.uut.spark_instance
-        )
-        result = self.uut.set_trigger_reasons(input_data)
-        assert compare_dataframe(result, reference_data, unique_column=ALERT_ID)
-
-    def test_merge_with_party_and_address_relationships(self):
-        input_data, reference_data = load_input_and_reference_data(
-            self.test_merge_with_party_and_address_relationships, self.uut.spark_instance
-        )
-        result = self.uut.merge_with_party_and_address_relationships(input_data)
-        assert compare_dataframe(result, reference_data, unique_column=ALERT_ID)
+        match = EXAMPLE_FOR_TEST_SET_REF_KEY
+        result = self.uut.set_trigger_reasons(match, pipeline_config.FUZZINESS_LEVEL)
+        self.assertEqual(sorted(result), sorted(RESULT_FOR_EXAMPLE_FOR_TEST_SET_REF_KEY))
 
     def test_set_beneficiary_hits(self):
-        input_data, reference_data = load_input_and_reference_data(
-            self.test_set_beneficiary_hits, self.uut.spark_instance
-        )
-        result = self.uut.set_beneficiary_hits(input_data)
-        assert compare_dataframe(result, reference_data, unique_column=ALERT_ID)
+        match = EXAMPLE_FOR_TEST_SET_REF_KEY
+        assert match.get(columns_namespace.IS_BENEFICIARY_HIT, None) is None
+        self.uut.set_beneficiary_hits(match)
+        assert not match.get(columns_namespace.IS_BENEFICIARY_HIT, None)
 
-    def test_set_concat_residue(self):
-        input_data, reference_data = load_input_and_reference_data(
-            self.test_set_concat_residue, self.uut.spark_instance
-        )
-        result = self.uut.set_concat_residue(input_data)
-        assert compare_dataframe(result, reference_data, unique_column=ALERT_ID)
+    def test_connect_full_names(self):
+        parties = deepcopy(EXAMPLE_PARTIES)
+        self.uut.connect_full_names(parties)
+        for party in parties:
+            assert party[columns_namespace.CONNECTED_FULL_NAME] == ""
 
-    def test_set_concat_address_no_change(self):
-        input_data, reference_data = load_input_and_reference_data(
-            self.test_set_concat_address_no_change, self.uut.spark_instance
-        )
-        result = self.uut.set_concat_address_no_change(input_data)
-        assert compare_dataframe(result, reference_data, unique_column=ALERT_ID)
+        parties = deepcopy(EXAMPLE_PARTIES_WITH_NAMES)
+        self.uut.connect_full_names(parties)
+        assert parties[0][columns_namespace.CONNECTED_FULL_NAME] == "Ultra Giga Pole"
+        assert parties[1][columns_namespace.CONNECTED_FULL_NAME] == ""
 
-    def test_set_discovery_tokens(self):
-        input_data, reference_data = load_input_and_reference_data(
-            self.test_set_discovery_tokens, self.uut.spark_instance
-        )
-        result = self.uut.set_discovery_tokens(input_data)
-        assert compare_dataframe(result, reference_data, unique_column=ALERT_ID)
+    def test_collect_party_values(self):
+        payload = {}
+        parties = deepcopy(EXAMPLE_PARTIES)
+        self.uut.collect_party_values(parties, payload)
+        assert payload == {
+            "all_connected_parties_names": ["", ""],
+            "ALL_PARTY_TYPES": ["", ""],
+            "ALL_PARTY_NAMES": ["Shaolin kung fu master", "John, Doe Doe"],
+            "ALL_PARTY_DOBS": ["", "10/10/1969"],
+            "ALL_PARTY_BIRTH_COUNTRIES": ["1341412312312", "13413401280"],
+            "ALL_PARTY_CITIZENSHIP_COUNTRIES": ["", "Arabian Emirates"],
+            "ALL_PARTY_RESIDENCY_COUNTRIES": ["", ""],
+        }
 
-    def test_set_clean_names(self):
-        input_data, reference_data = load_input_and_reference_data(
-            self.test_set_clean_names, self.uut.spark_instance
-        )
-        result = self.uut.set_clean_names(input_data)
-        assert compare_dataframe(result, reference_data, unique_column=ALERT_ID)
+    def test_get_clean_names_from_concat_name(self):
+        assert self.uut.get_clean_names_from_concat_name(
+            "KA LAI JOSEPH CHAN & KAR LUN KAREN LEE LUNKAREN",
+            {
+                "PRIN_OWN_NM": "KA LAI JOSEPH CHAN",
+                "ORD_PLACR_NM": "KA LAI JOSEPH CHAN",
+            },
+        ) == {
+            "PRIN_OWN_NM": "KA LAI JOSEPH CHAN",
+            "concat_residue": " & KAR LUN KAREN LEE LUNKAREN",
+        }
+
+        assert self.uut.get_clean_names_from_concat_name(
+            "MANULIFE INVEST MANAGEMENT (US) LLC - MD SHORT TERM BOND FUND - SPOT ONLY REPATRIATION MANAGEMENT(US) BONDFUND",
+            {
+                "LAST_NM": "MANULIFE INVEST MANAGEMENT",
+                "FRST_NM": "MANULIFE INVEST MANAGEMENT",
+                "PRIN_OWN_NM": "MD SHORT TERM BOND FUND",
+            },
+        ) == {
+            "LAST_NM": "MANULIFE INVEST MANAGEMENT",
+            "PRIN_OWN_NM": "MD SHORT TERM BOND FUND",
+            "concat_residue": " (US) LLC -  - SPOT ONLY REPATRIATION MANAGEMENT(US) BONDFUND",
+        }
+
+        assert self.uut.get_clean_names_from_concat_name(
+            "VTB CAPITAL PLC A/C JP MORGAN CHASE BANK NA PLCA/C",
+            {" ": ["VTB CAPITAL PLC", "Zoria"]},
+        ) == {" ": "VTB CAPITAL PLC", "concat_residue": " A/C JP MORGAN CHASE BANK NA PLCA/C"}
+
+        assert self.uut.get_clean_names_from_concat_name(
+            "MSSB C/F SALVATORE P TADDEO JR IRA STANDARD DATED 09/11/97 28 WARREN ST RUMSON NJ 07760",
+            {"all_party_names": ["Taddeo, Lisa", "Taddeo, Sal"]},
+        ) == {
+            "concat_residue": "MSSB C/F SALVATORE P TADDEO JR IRA STANDARD DATED 09/11/97 28 WARREN ST RUMSON NJ 07760"
+        }
