@@ -40,6 +40,9 @@ warehouse:
         routing-key: retention.alerts-expired
       to-remove:
         bindings: []
+  partition:
+    scheduledCron: 0 30 0 ? * *
+    size: 1500000
   indexer:
     production-batch-size: 200
     simulation-batch-size: 200

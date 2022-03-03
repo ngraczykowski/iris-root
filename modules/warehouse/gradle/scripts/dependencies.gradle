@@ -7,7 +7,7 @@ ext {
   silenteightAuditBsVersion = "1.2.0"
   silenteightCommonsVersion = "2.1.0"
   silenteightSepAuthVersion = "1.21.0"
-  silenteightSepBaseVersion = "1.12.3"
+  silenteightSepBaseVersion = "1.14.0"
   silenteightDataApiVersion = "2.3.0"
   silenteightDataRetentionApiVersion = "0.3.0"
   silenteightSamplingAlertsApiVersion = "1.6.0"
@@ -64,7 +64,8 @@ libraries.spring_boot_actuator = [group: 'org.springframework.boot', name: 'spri
 libraries.spring_boot_actuator_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-actuator-autoconfigure']
 libraries.spring_boot_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-autoconfigure']
 libraries.spring_boot_autoconfigure_processor = [group: 'org.springframework.boot', name: 'spring-boot-autoconfigure-processor']
-libraries.spring_boot_configuration_processor = [group: 'org.springframework.boot', name: 'spring-boot-configuration-processor']
+libraries.spring_boot_configuration_processor = [group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: '2.6.3']
+libraries.spring_boot_dependencies = [group: 'org.springframework.boot', name: 'spring-boot-dependencies']
 libraries.spring_boot_starter_actuator = [group: 'org.springframework.boot', name: 'spring-boot-starter-actuator']
 libraries.spring_boot_starter_amqp = [group: 'org.springframework.boot', name: 'spring-boot-starter-amqp']
 libraries.spring_boot_starter_elasticsearch = [group: 'org.springframework.boot', name: 'spring-boot-starter-data-elasticsearch']
@@ -262,6 +263,9 @@ configurations.all {
 dependencies {
   implementation platform("com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
   implementation platform("org.testcontainers:testcontainers-bom:1.15.3")
+  implementation platform("io.projectreactor:reactor-bom:2020.0.13")
+  implementation platform("org.springframework.boot:spring-boot-dependencies:2.5.7")
+  implementation platform("org.springframework.cloud:spring-cloud-dependencies:2020.0.4")
   annotationProcessor platform(
       "com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
 

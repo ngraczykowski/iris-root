@@ -76,6 +76,9 @@ warehouse:
   migration:
     enabled: true
     batch-size: 20
+  partition:
+    scheduledCron: 0 30 0 ? * *
+    size: 1500000
   indexer:
     production-batch-size: 200
     simulation-batch-size: 200
