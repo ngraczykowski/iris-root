@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="customer-bridge-sync-3.2.0-1" author="mmrowka">
+    <addColumn tableName="scb_gns_sync_delta">
+      <column name="watchlist_id" type="VARCHAR(64)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="customer-bridge-sync-3.2.0-2" author="bmartofel">
+    <createTable tableName="scb_recommendation">
+      <column name="scb_recommendation_id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="system_id" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="discriminator" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="decision" type="VARCHAR(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="comment" type="TEXT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="customer-bridge-sync-3.2.0-3" author="mmrowka">
+    <addColumn tableName="scb_gns_sync_delta">
+      <column name="delta_job_name" type="VARCHAR(64)"/>
+    </addColumn>
+    <dropPrimaryKey tableName="scb_gns_sync_delta"
+                    constraintName="scb_gns_sync_delta_pkey"/>
+    <addPrimaryKey tableName="scb_gns_sync_delta"
+                   columnNames="alert_external_id,delta_job_name"
+                   constraintName="scb_gns_sync_delta_pkey"/>
+  </changeSet>
+
+  <changeSet id="customer-bridge-sync-3.2.0-4" author="mmrowka">
+    <addColumn tableName="scb_recommendation">
+      <column name="recommended_at" type="TIMESTAMP"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="customer-bridge-sync-3.2.0-5" author="iwnek">
+    <addColumn tableName="scb_recommendation">
+      <column name="watchlist_id" type="VARCHAR(64)"/>
+    </addColumn>
+
+    <createIndex
+        tableName="scb_recommendation"
+        indexName="ix_scb_recommendation_system_id">
+      <column name="system_id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="scb_recommendation"
+        indexName="ix_scb_recommendation_watchlist_id">
+      <column name="watchlist_id"/>
+    </createIndex>
+
+    <createIndex
+        tableName="scb_recommendation"
+        indexName="ix_scb_recommendation_discriminator">
+      <column name="discriminator"/>
+    </createIndex>
+  </changeSet>
+
+</databaseChangeLog>

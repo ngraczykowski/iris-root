@@ -1,0 +1,4 @@
+@ParametersAreNonnullByDefault
+package com.silenteight.customerbridge.common.recommendation.alertinfo;
+
+import javax.annotation.ParametersAreNonnullByDefault;

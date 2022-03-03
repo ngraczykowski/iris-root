@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="customer-bridge-sync-3.3.0-1" author="ajaromin">
+    <createView viewName="scb_v_recommendation_insensitive">
+      SELECT scb_recommendation_id, system_id, discriminator, decision, created_at
+      FROM scb_recommendation
+    </createView>
+  </changeSet>
+
+  <changeSet id="customer-bridge-sync-3.3.0-2" author="mjasinski">
+    <createTable tableName="scb_cbs_alert_under_processing">
+      <column name="system_id" type="VARCHAR(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="batch_id" type="VARCHAR(64)">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="customer-bridge-sync-3.3.0-3" author="bmartofel">
+    <addUniqueConstraint tableName="scb_cbs_alert_under_processing" columnNames="system_id,batch_id"/>
+  </changeSet>
+
+</databaseChangeLog>

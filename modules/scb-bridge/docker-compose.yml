@@ -1,0 +1,50 @@
+version: "3.5"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.8.2-management
+    restart: unless-stopped
+    ports:
+      - "${RABBITMQ_AMQP_PORT:-24130}:5672"
+      - "${RABBITMQ_MQTT_PORT:-24134}:1883"
+      - "${RABBITMQ_STOMP_PORT:-24135}:61613"
+      - "${RABBITMQ_MANAGEMENT_PORT:-24131}:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "${RABBITMQ_USER:-serp}"
+      RABBITMQ_DEFAULT_PASS: "${RABBITMQ_PASSWORD:-serp}"
+      RABBITMQ_VM_MEMORY_HIGH_WATERMARK: "${RABBITMQ_MEMORY:-1024MiB}"
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: '-rabbitmq_management path_prefix "/rabbitmq"'
+      RABBITMQ_IO_THREAD_POOL_SIZE: 16
+      RABBITMQ_MAX_NUMBER_OF_PROCESSES: 131072
+    volumes:
+      - rabbitmq-storage:/var/lib/rabbitmq
+    deploy:
+      resources:
+        limits:
+          memory: 1280M
+        reservations:
+          memory: 1280M
+
+  postgres:
+    image: postgres:10
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-24291}:5432"
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB:-customer_bridge}"
+      POSTGRES_USER: "${POSTGRES_USER:-cb}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-cb}"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - postgres-storage:/var/lib/postgresql/data
+      - ./docker/postgres:/docker-entrypoint-initdb.d
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 1G
+
+volumes:
+  rabbitmq-storage:
+  postgres-storage:

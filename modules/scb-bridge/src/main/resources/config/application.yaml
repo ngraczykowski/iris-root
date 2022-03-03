@@ -1,0 +1,106 @@
+server:
+  port: 24220
+grpc:
+  server:
+    port: 24221
+
+spring:
+  ### RABBITMQ
+  rabbitmq:
+    port: 24130
+    username: serp
+    password: serp
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+  batch:
+    initialize-schema: never
+    job:
+      enabled: 'false'
+
+  datasource:
+    password: cb
+    username: cb
+    url: jdbc:postgresql://localhost:24291/customer_bridge
+
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    open-in-view: false
+
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: true
+
+    properties:
+      hibernate:
+        jdbc:
+          fetch_size: 10
+          batch_size: 10
+        order_inserts: 'true'
+        order_updates: 'true'
+  
+  application:
+    name: customer-bridge
+  
+  quartz:
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: ScbBridgeScheduler
+    
+    jdbc:
+      initialize-schema: never
+    job-store-type: memory
+
+  external:
+    datasource:
+      password: ${serp.gns.db.password}
+      username: ${serp.gns.db.user}
+      url: ${serp.gns.db.url}
+      hikari:
+        auto-commit: ${serp.gns.db.auto-commit}
+        isolate-internal-queries: ${serp.gns.db.isolate-internal-queries}
+        maximum-pool-size: ${serp.gns.db.connections.max:${serp.db.connections.max}}
+        connection-init-sql: ${serp.gns.db.connection-init-query}
+        minimum-idle: ${serp.gns.db.connections.min:${serp.db.connections.min}}
+        pool-name: GNS-Pool
+
+      hikari-on-demand:
+        minimum-idle: ${serp.gns.db.connections.on-demand.min:${serp.db.connections.min}}
+        isolate-internal-queries: ${serp.gns.db.isolate-internal-queries}
+        connection-init-sql: ${serp.gns.db.connection-init-query}
+        auto-commit: ${serp.gns.db.auto-commit}
+        maximum-pool-size: ${serp.gns.db.connections.on-demand.max:${serp.db.connections.max}}
+        pool-name: GNS-On-Demand-Pool
+
+serp:
+  # GNS DB Configuration
+  gns:
+    db:
+      password: 'CyevM34juNlBO'
+      connection-init-query: SELECT 1 FROM DUAL
+      auto-commit: 'false'
+      url: jdbc:oracle:thin:@${serp.gns.db.host}:${serp.gns.db.port}/${serp.gns.db.service.name}
+      service:
+        name: ORCLCDB
+      user: LC_GNS_WEB_SIT_01
+      port: '1521'
+      host: oracle.silenteight.com
+      isolate-internal-queries: 'true'
+      connections:
+        min: '1'
+        max: '30'
+        on-demand:
+          max: '20'
+          min: '1'
+
+  # General Settings
+  scb:
+    bridge:
+      config:
+        time-zone: Asia/Hong_Kong
+        chunk-size: 250
+        query-timeout: 300

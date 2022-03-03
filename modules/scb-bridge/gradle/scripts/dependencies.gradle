@@ -14,67 +14,18 @@ ext {
   silenteightSensWebappVersion = "1.28.3"
   silenteightSepFrontendVersion = "1.27.0"
 
-  //Agents
-  silenteightCountryVersion = "2.10.0"
-  silenteightLinguisticsVersion = "3.15.0"
-  silenteightDocumentVersion = "2.16.0"
-  silenteightGenderVersion = "1.8.0"
-  silenteightDateAgentVersion = "1.11.0"
-
-  serpProtocolVersion = "0.36.0"
+  serpProtocolVersion = "0.37.0"
   agentsProtocolVersion = "0.9.0"
-  silenteightKeycloakImportsVersion = "1.2.0"
-  silenteightKeycloakThemeVersion = "1.1.0"
-  silenteightGovernanceApiVersion = "1.2.0"
 }
 
 // @formatter:off
 
 // Silent Eight
-libraries.silenteight_audit_bs = [group: 'com.silenteight.auditing.bs', name: 'silenteight-audit-bs', version: silenteightAuditBsVersion]
 libraries.silenteight_commons_core = [group: 'com.silenteight.commons', name: 'silenteight-commons-core', version: silenteightCommonsVersion]
-libraries.silenteight_sep_base_aspects = [group: 'com.silenteight.sep.base', name: 'sep-base-aspects', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name: 'sep-base-common', version: silenteightSepBaseVersion]
-libraries.silenteight_sep_base_testing = [group: 'com.silenteight.sep.base', name: 'sep-base-testing', version: silenteightSepBaseVersion]
-libraries.silenteight_country_agent = [group: 'com.silenteight.country', name: 'country-agent', version: silenteightCountryVersion]
-libraries.silenteight_country_agent_dist = [group: 'com.silenteight.country', name: 'country-agent-dist', version: silenteightCountryVersion, ext: 'tar.bz2']
-libraries.silenteight_csv_converter = [group: 'com.silenteight.tools.csvconverter', name: 'silenteight-csvconverter', version: '1.0.6']
-libraries.silenteight_solvers_date = [group: 'com.silenteight.solvers', name: 'solver-date', version: silenteightSolversVersion]
-libraries.silenteight_solvers_docno = [group: 'com.silenteight.solvers', name: 'solver-docno', version: silenteightSolversVersion]
-libraries.silenteight_solvers_map = [group: 'com.silenteight.solvers', name: 'solver-map', version: silenteightSolversVersion]
-libraries.silenteight_solvers_entity_name_to_type = [group: 'com.silenteight.solvers', name: 'agent-entity-name-to-type', version: silenteightSolversVersion]
-libraries.silenteight_solvers_region = [group: 'com.silenteight.solvers', name: 'solver-region', version: silenteightSolversVersion]
-libraries.silenteight_agents_protocol = [group: 'com.silenteight.agent.api', name: 'protocol-agents', version: agentsProtocolVersion]
 libraries.silenteight_serp_protocol_base = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-base', version: serpProtocolVersion]
-libraries.silenteight_serp_protocol_ns = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-ns', version: serpProtocolVersion]
 libraries.silenteight_serp_protocol_scb = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-scb', version: serpProtocolVersion]
-libraries.silenteight_governance_api = [group: 'com.silenteight.governance.api', name: 'se-governance-api', version: silenteightGovernanceApiVersion]
-libraries.silenteight_spring_cloud_consul_discovery = [group: 'com.silenteight.spring.cloud.consul.discovery', name: 'silenteight-spring-cloud-consul-discovery', version: '2.4.0']
-libraries.silenteight_sens_webapp_backend = [group: 'com.silenteight.sens.webapp', name: 'sens-webapp-backend', version: silenteightSensWebappVersion]
-libraries.silenteight_sep_frontend = [group: 'com.silenteight.sep', name: 'sep-frontend', version: silenteightSepFrontendVersion]
-libraries.silenteight_sens_webapp_scb_chrome_extension = [group: 'com.silenteight.sens.webapp', name: 'sens-webapp-scb-chrome-extension', version: silenteightSensWebappVersion, classifier: 'plugin']
-libraries.silenteight_sens_webapp_scb_report = [group: 'com.silenteight.sens.webapp', name: 'sens-webapp-scb-report', version: silenteightSensWebappVersion, classifier: 'plugin']
-libraries.silenteight_sens_webapp_scb_user_sync = [group: 'com.silenteight.sens.webapp', name: 'sens-webapp-scb-user-sync', version: silenteightSensWebappVersion, classifier: 'plugin']
-libraries.silenteight_document_comparer_agent = [group: 'com.silenteight.document', name: 'document-comparer-agent', version: silenteightDocumentVersion]
-libraries.silenteight_document_comparer_agent_dist = [group: 'com.silenteight.document', name: 'document-comparer-agent-dist-siempre-ns', version: silenteightDocumentVersion, ext: 'tar.bz2']
-libraries.silenteight_document_conf = [group: 'com.silenteight.document', name: 'document-agent-conf', version: silenteightDocumentVersion]
-libraries.silenteight_document_recognizer_agent = [group: 'com.silenteight.document', name: 'document-recognizer-agent', version: silenteightDocumentVersion]
-libraries.silenteight_document_recognizer_agent_dist = [group: 'com.silenteight.document', name: 'document-recognizer-agent-dist-siempre-ns', version: silenteightDocumentVersion, ext: 'tar.bz2']
-libraries.silenteight_document_agent = [group: 'com.silenteight.document', name: 'document-number-agent', version: silenteightDocumentVersion]
-libraries.silenteight_document_agent_dist = [group: 'com.silenteight.document', name: 'document-number-agent-dist-siempre-ns', version: silenteightDocumentVersion, ext: 'tar.bz2']
-libraries.silenteight_gender_agent = [group: 'com.silenteight.gender', name: 'gender-agent', version: silenteightGenderVersion]
-libraries.silenteight_gender_agent_dist = [group: 'com.silenteight.gender', name: 'gender-agent-dist', version: silenteightGenderVersion, ext: 'tar.bz2']
-libraries.silenteight_linguistics_conf = [group: 'com.silenteight.linguistics', name: 'linguistics-conf', version: silenteightLinguisticsVersion]
-libraries.silenteight_name_agent = [group: 'com.silenteight.linguistics', name: 'linguistics-name-agent', version: silenteightLinguisticsVersion]
-libraries.silenteight_name_agent_dist = [group: 'com.silenteight.linguistics', name: 'name-agent-dist-siempre-ns', version: silenteightLinguisticsVersion, ext: 'tar.bz2']
-libraries.silenteight_region_agent = [group: 'com.silenteight.linguistics', name: 'linguistics-region-agent', version: silenteightLinguisticsVersion]
-libraries.silenteight_region_agent_dist = [group: 'com.silenteight.linguistics', name: 'region-agent-dist', version: silenteightLinguisticsVersion, ext: 'tar.bz2']
-libraries.silenteight_date_agent_conf = [group: 'com.silenteight.dates', name: 'date-agent-conf', version: silenteightDateAgentVersion]
-libraries.silenteight_date_agent = [group: 'com.silenteight.dates', name: 'date-agent', version: silenteightDateAgentVersion]
-libraries.silenteight_date_agent_dist = [group: 'com.silenteight.dates', name: 'date-agent-dist-siempre-ns', version: silenteightDateAgentVersion, ext: 'tar.bz2']
 libraries.consul_grpc_registration = [group: 'com.silenteight.commons', name: 'consul-grpc-registration', version: '1.0.0']
-libraries.silenteight_keycloak_imports = [group: 'com.silenteight.sep.usermanagement', name: 'keycloak-imports', version: silenteightKeycloakImportsVersion]
-libraries.silenteight_keycloak_theme = [group: 'com.silenteight.sep.usermanagement', name: 'keycloak-theme', version: silenteightKeycloakThemeVersion]
 
 // Spring
 libraries.spring_aop = [group: 'org.springframework', name: 'spring-aop']
@@ -177,6 +128,7 @@ libraries.caffeine_jcache = [group: 'com.github.ben-manes.caffeine', name: 'jcac
 libraries.classgraph = [group: 'io.github.classgraph', name: 'classgraph']
 libraries.commons_codec = [group: 'commons-codec', name: 'commons-codec']
 libraries.commons_lang3 = [group: 'org.apache.commons', name: 'commons-lang3']
+libraries.commons_collections4 = [group: 'org.apache.commons', name: 'commons-collections4', version: '4.4']
 libraries.commons_text = [group: 'org.apache.commons', name: 'commons-text']
 libraries.consul_client = [group: "com.orbitz.consul", name: "consul-client"]
 libraries.fastutil = [group: 'it.unimi.dsi', name: 'fastutil']
@@ -287,6 +239,33 @@ dependencies {
       "com.silenteight.sep:sep-dependencies:1.12.1")
 
   implementation libraries.slf4j_api
+  implementation libraries.commons_lang3
+  implementation libraries.commons_collections4
+
+  implementation libraries.spring_batch_core
+  implementation libraries.spring_batch_infrastructure
+
+  implementation libraries.spring_boot_starter_quartz
+
+  implementation libraries.oracle
+
+  implementation libraries.protobuf_java
+  implementation libraries.protobuf_java_util
+  implementation libraries.grpc_stub
+  implementation libraries.reactor_grpc_stub
+
+  implementation libraries.reactor_core
+  implementation libraries.reactor_rabbitmq
+
+  implementation libraries.jaxb_api
+
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_serp_protocol_base
+  implementation libraries.silenteight_serp_protocol_scb
+
+  testImplementation libraries.awaitility
+  testImplementation libraries.spring_batch_test
+  testImplementation libraries.spock_spring
 }
 
 configurations {
