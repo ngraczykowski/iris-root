@@ -4,12 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.adjudication.api.library.v1.AdjudicationEngineLibraryRuntimeException;
-import com.silenteight.adjudication.api.v1.AddDatasetRequest;
-import com.silenteight.adjudication.api.v1.Analysis;
+import com.silenteight.adjudication.api.v1.*;
 import com.silenteight.adjudication.api.v1.AnalysisServiceGrpc.AnalysisServiceBlockingStub;
-import com.silenteight.adjudication.api.v1.BatchAddAlertsRequest;
-import com.silenteight.adjudication.api.v1.CreateAnalysisRequest;
-import com.silenteight.adjudication.api.v1.GetAnalysisRequest;
 
 import io.vavr.control.Try;
 
@@ -51,6 +47,8 @@ public class AnalysisGrpcAdapter implements AnalysisServiceClient {
             .setPolicy(request.getPolicy())
             .addAllCategories(request.getCategories())
             .addAllFeatures(AnalysisGrpcMapper.mapFeatures(request.getFeatures()))
+            .setNotificationFlags(
+                AnalysisGrpcMapper.mapToNotificationFlags(request.getNotificationFlags()))
             .build())
         .build();
 

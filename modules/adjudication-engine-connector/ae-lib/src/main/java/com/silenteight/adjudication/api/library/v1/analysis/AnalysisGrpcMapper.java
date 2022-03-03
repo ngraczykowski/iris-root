@@ -5,11 +5,15 @@ import lombok.experimental.UtilityClass;
 import com.silenteight.adjudication.api.library.v1.analysis.AddAlertsToAnalysisOut.AddedAlert;
 import com.silenteight.adjudication.api.v1.Analysis;
 import com.silenteight.adjudication.api.v1.Analysis.Feature;
+import com.silenteight.adjudication.api.v1.Analysis.NotificationFlags;
 import com.silenteight.adjudication.api.v1.AnalysisAlert;
 import com.silenteight.adjudication.api.v1.AnalysisDataset;
 import com.silenteight.adjudication.api.v1.BatchAddAlertsResponse;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @UtilityClass
@@ -59,6 +63,18 @@ class AnalysisGrpcMapper {
         .build();
   }
 
+  NotificationFlags mapToNotificationFlags(@Nullable NotificationFlagsIn notificationFlags) {
+    return Optional.ofNullable(notificationFlags)
+        .map(flags -> NotificationFlags.newBuilder()
+            .setAttachRecommendation(flags.isAttachRecommendation())
+            .setAttachMetadata(flags.isAttachMetadata())
+            .build())
+        .orElseGet(() -> NotificationFlags.newBuilder()
+            .setAttachRecommendation(false)
+            .setAttachMetadata(false)
+            .build());
+  }
+
   private List<AddedAlert> mapToAddedAlerts(BatchAddAlertsResponse batchAddAlertsResponse) {
     return batchAddAlertsResponse.getAnalysisAlertsList().stream()
         .map(AnalysisGrpcMapper::createAddedAlert)
@@ -71,5 +87,4 @@ class AnalysisGrpcMapper {
         .createdAt(analysisAlert.getCreateTime())
         .build();
   }
-
 }

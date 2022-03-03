@@ -3,6 +3,8 @@ package com.silenteight.adjudication.api.library.v1.analysis;
 import lombok.Builder;
 import lombok.Value;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 @Builder
@@ -14,4 +16,5 @@ public class CreateAnalysisIn {
   String strategy;
   List<String> categories;
   List<FeatureIn> features;
+  @Nullable NotificationFlagsIn notificationFlags;
 }

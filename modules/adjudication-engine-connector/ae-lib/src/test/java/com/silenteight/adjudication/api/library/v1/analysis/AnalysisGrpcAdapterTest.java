@@ -61,6 +61,32 @@ class AnalysisGrpcAdapterTest {
         .features(List.of(
             FeatureIn.builder().name("feature_1").agentConfig("config_1").build(),
             FeatureIn.builder().name("feature_2").agentConfig("config_2").build()))
+        .notificationFlags(NotificationFlagsIn.builder()
+            .attachRecommendation(true)
+            .build())
+        .build();
+
+    //when
+    var response = underTest.createAnalysis(request);
+
+    //then
+    assertThat(response.getName()).isEqualTo("analysisName");
+    assertThat(response.getPolicy()).isEqualTo("policy");
+    assertThat(response.getStrategy()).isEqualTo("strategy");
+  }
+
+  @Test
+  @DisplayName("should create analysis for null notification flags")
+  void shouldCreateAnalysisForNullNotificationFlags() {
+    //given
+    var request = CreateAnalysisIn.builder()
+        .name("analysisName")
+        .policy("policy")
+        .strategy("strategy")
+        .categories(List.of("category_1", "category_2"))
+        .features(List.of(
+            FeatureIn.builder().name("feature_1").agentConfig("config_1").build(),
+            FeatureIn.builder().name("feature_2").agentConfig("config_2").build()))
         .build();
 
     //when
