@@ -54,7 +54,7 @@
     "configurations": []
   },
   "agents/geo/versions/2.0.0/configs/1": {
-    "agentId": "5a879f5b-01de-4f92-b251-8f3957e30bd1",
+    "agentId": "fd46923f-f68f-4b79-9d63-1621f081cfd0",
     "features": [
       "features/geo2"
     ],
@@ -99,14 +99,14 @@
     "configurations": []
   },
   "agents/companyName/versions/2.0.0/configs/1": {
-    "agentId": "22425a2e-4d27-4eef-b18b-8d7adbe0009c",
+    "agentId": "080101a1-ef44-4f4b-ab1d-cfdbc2acbe9e",
     "features": [
       "features/organizationName2"
     ],
     "featuresList": [
       {
         "name": "features/organizationName2",
-        "displayName": "Org Name v2"
+        "displayName": "Organization Name v2"
       }
     ],
     "responses": [
@@ -132,6 +132,30 @@
       {
         "name": "features/historicalRiskAccountNumber",
         "displayName": "Historical Risk - Account Number"
+      }
+    ],
+    "responses": [
+      "TRUE_POSITIVE",
+      "NOT_TRUE_POSITIVE",
+      "NO_DATA",
+      "DATA_SOURCE_ERROR"
+    ],
+    "configurations": []
+  },
+  "agents/historicaldecisions/versions/2.0.0/configs/1": {
+    "agentId": "f3f14f58-eb7c-4b3d-b170-f15753093926",
+    "features": [
+      "features/historicalRiskAccountNumberTP",
+      "features/historicalRiskAccountNumberFP"
+    ],
+    "featuresList": [
+      {
+        "name": "features/historicalRiskAccountNumberTP",
+        "displayName": "Historical Risk - Account Number - TP"
+      },
+      {
+        "name": "features/historicalRiskAccountNumberFP",
+        "displayName": "Historical Risk - Account Number - FP"
       }
     ],
     "responses": [
