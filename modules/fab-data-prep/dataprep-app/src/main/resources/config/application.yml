@@ -1,0 +1,6 @@
+serp.show-env: true
+
+#TODO: Without that SilentEightImplicitNamingStrategy throws error
+spring:
+  application:
+    name: feb-dataprep

@@ -2,10 +2,23 @@ ext {
   libraries = [:]
   springBootVersion = "2.6.4"
   sepDependenciesVersion = "2.5.0"
+  silenteightSepBaseVersion = "1.12.5"
 }
 
-libraries.spring_boot_test = [group: 'org.springframework.boot', name: 'spring-boot-test']
+libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name: 'sep-base-common', version: silenteightSepBaseVersion]
+
+libraries.spring_boot_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-autoconfigure']
+libraries.spring_boot_starter_actuator = [group: 'org.springframework.boot', name: 'spring-boot-starter-actuator']
+libraries.spring_boot_starter_amqp = [group: 'org.springframework.boot', name: 'spring-boot-starter-amqp']
+libraries.spring_boot_starter_logging = [group: 'org.springframework.boot', name: 'spring-boot-starter-logging']
+libraries.spring_boot_starter_undertow = [group: 'org.springframework.boot', name: 'spring-boot-starter-undertow']
+libraries.spring_boot_starter_web = [group: 'org.springframework.boot', name: 'spring-boot-starter-web']
+
+libraries.hibernate_validator = [group: 'org.hibernate.validator', name:'hibernate-validator']
+
 libraries.spring_test = [group: 'org.springframework', name: 'spring-test']
+libraries.spring_boot_test = [group: 'org.springframework.boot', name: 'spring-boot-test']
+libraries.spring_boot_test_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-test-autoconfigure']
 
 dependencies {
   implementation platform("com.silenteight.sep:sep-dependencies:$sepDependenciesVersion")
