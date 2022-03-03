@@ -23,6 +23,12 @@ message WatchlistParty {
 message HistoricalDecisionsReason {
   repeated DecisionCount decision_counts = 1 [(google.api.field_behavior) = REQUIRED];
   Discriminator discriminator = 2 [(google.api.field_behavior) = REQUIRED];
+  //In case when alerted party ID was given in the request, it's just copied here (e.g. Historical Decisions Agent)
+  //Otherwise, it's generated from various request values - e.g. in Contextual Learning Agent
+  //match_text, matching_field and discriminator from VerifyRequest are used. 
+  string alerted_party_id = 3 [(google.api.field_behavior) = REQUIRED];
+  string watchlist_party_id = 4 [(google.api.field_behavior) = REQUIRED];
+  string watchlist_party_type = 5 [(google.api.field_behavior) = REQUIRED];
 }
 
 message DecisionCount {
