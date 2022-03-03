@@ -27,7 +27,7 @@ class BaseSpecificationIT extends Specification {
           '/opt/rabbitmq/plugins/rabbitmq_delayed_message_exchange-3.9.0.ez')
       .withPluginsEnabled('rabbitmq_delayed_message_exchange')
 
-  static String getGrpcPortForTest() {return "21234"}
+  static String getGrpcPortForTest() {return new ServerSocket(0).getLocalPort()}
 
   @Shared
   @SuppressWarnings('unused')
