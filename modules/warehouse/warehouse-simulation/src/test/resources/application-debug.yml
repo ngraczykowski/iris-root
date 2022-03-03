@@ -32,6 +32,6 @@ management:
 
 server:
   error:
-    include-stacktrace: on_trace_param
+    include-stacktrace: ON_PARAM
 
 debug: true
