@@ -14,11 +14,11 @@ import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestIni
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icegreen.greenmail.configuration.GreenMailConfiguration;
-import com.icegreen.greenmail.junit5.GreenMailExtension;
-import com.icegreen.greenmail.util.ServerSetupTest;
+import com.icegreen.greenmail.util.GreenMail;
 import org.awaitility.core.ConditionEvaluationLogger;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -38,11 +39,13 @@ import java.util.UUID;
 import java.util.stream.Stream;
 import javax.mail.internet.MimeMessage;
 
+import static com.silenteight.payments.bridge.testing.GreenMailConfiguration.getServerStartup;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 @SpringBootTest(classes = { PaymentsBridgeApplication.class })
 @ContextConfiguration(initializers = { RabbitTestInitializer.class, PostgresTestInitializer.class })
@@ -59,12 +62,20 @@ class PaymentsBridgeApplicationIT {
   private static final String TOO_MANY_HITS_REQUEST_FILE =
       "2021-10-01_1837_osama_bin_laden.json";
 
-  @RegisterExtension
-  static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP)
-      .withConfiguration(GreenMailConfiguration
-          .aConfig()
-          .withUser("user", "password"))
-      .withPerMethodLifecycle(false);
+  private static final String EMAIL_RECEIVER = "email.example2@silenteight.com";
+  private static final String EMAIL_SUBJECT = "Silent Eight - Learning data";
+  private static final String EMAIL_MESSAGE = "This is to confirm Silent Eight has received";
+
+  private static GreenMail greenMail;
+
+  @BeforeAll
+  static void beforeAll() {
+    greenMail = new GreenMail(getServerStartup(3025));
+    greenMail.withConfiguration(GreenMailConfiguration
+            .aConfig()
+            .withUser("user", "password"))
+        .start();
+  }
 
   @Autowired
   ObjectMapper objectMapper;
@@ -98,7 +109,6 @@ class PaymentsBridgeApplicationIT {
     var alertName = MockAlertUseCase.getAlertName("alert_system_id");
     assertUdsValuesCreated(alertName);
     assertMailSent();
-
     assertAlertIndexed("system_id_2|87AB4899-BE5B-5E4F-E053-150A6C0A7A84");
   }
 
@@ -115,6 +125,11 @@ class PaymentsBridgeApplicationIT {
       assertThat(receivedMessages.length).isGreaterThanOrEqualTo(2);
       MimeMessage receivedMessage = receivedMessages[0];
       assertEquals(1, receivedMessage.getAllRecipients().length);
+      assertEquals(EMAIL_RECEIVER, receivedMessage.getAllRecipients()[0].toString());
+      var receivedMessageContent =
+          new String(receivedMessage.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+      assertTrue(receivedMessageContent.contains(EMAIL_MESSAGE));
+      assertTrue(receivedMessage.getSubject().contains(EMAIL_SUBJECT));
     });
   }
 
@@ -175,5 +190,10 @@ class PaymentsBridgeApplicationIT {
         .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))
         .atMost(Duration.ofSeconds(3))
         .until(() -> !paymentsBridgeEventsListener.containsRegisteredAlert(alertId));
+  }
+
+  @AfterAll
+  static void afterAll() {
+    greenMail.stop();
   }
 }

@@ -24,9 +24,6 @@ spring:
         transport:
           protocol: smtp
 
-greenmail:
-  startup:
-    timeout: 1000
 pb:
   email-notification:
     from: "email.example@silenteight.com"
