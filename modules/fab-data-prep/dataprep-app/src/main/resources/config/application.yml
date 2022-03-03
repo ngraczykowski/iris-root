@@ -4,3 +4,16 @@ serp.show-env: true
 spring:
   application:
     name: feb-dataprep
+
+silenteight:
+  bridge:
+
+    grpc:
+      universal-data-source:
+        uds-deadline: 1m
+
+grpc:
+  client:
+    universal-data-source.address: static://localhost:24805
+    GLOBAL:
+      negotiation-type: PLAINTEXT
