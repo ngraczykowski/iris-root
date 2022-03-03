@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: ftcc
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: dev
+    password: dev
+    virtual-host: /
+    listener:
+      type: simple
+      direct:
+        consumers-per-queue: ${pb.messaging.concurrency:4}
+        prefetch: ${pb.messaging.prefetch:25}
+        retry:
+          enabled: true
+          multiplier: 2
+      simple:
+        concurrency: 1
+        max-concurrency: ${pb.messaging.concurrency:4}
+        prefetch: ${pb.messaging.prefetch:25}
+        retry:
+          enabled: true
+          multiplier: 2
+          max-attempts: 5
+          initial-interval: 500
+          max-interval: 4000
