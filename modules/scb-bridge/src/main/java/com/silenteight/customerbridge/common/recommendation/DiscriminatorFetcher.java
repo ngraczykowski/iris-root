@@ -5,7 +5,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.customerbridge.common.DateConverter;
+import com.silenteight.customerbridge.common.batch.DateConverter;
 import com.silenteight.customerbridge.common.config.FetcherConfiguration;
 
 import org.intellij.lang.annotations.Language;

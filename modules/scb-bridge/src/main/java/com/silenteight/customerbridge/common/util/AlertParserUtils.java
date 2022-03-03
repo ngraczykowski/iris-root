@@ -69,7 +69,7 @@ public final class AlertParserUtils {
     return ObjectIds.fromUuidAndSource(UUID.randomUUID(), recordId, recordSignature);
   }
 
-  static ObjectId makeId(
+  public static ObjectId makeId(
       @NonNull String systemId,
       @Nullable String watchlistId,
       @Nullable Instant lastResetDecisionDate) {

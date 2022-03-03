@@ -1,0 +1,208 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.0.0-1
+      author: smrozowski
+      changes:
+        - createTable:
+            tableName: scb_cbs_alert_under_processing
+            columns:
+              - column:
+                  name: system_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: batch_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: state
+                  type: varchar(32)
+                  defaultValue: 'IN_PROGRESS'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: error
+                  type: varchar(1000)
+              - column:
+                  name: priority
+                  type: integer
+                  defaultValueNumeric: 1
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payload
+                  type: bytea
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: scb_cbs_alert_under_processing
+            columnNames: system_id, batch_id
+            constraintName: pk_scb_cbs_alert_under_processing
+
+        - createTable:
+            tableName: scb_recommendation
+            columns:
+              - column:
+                  name: scb_recommendation_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: scb_recommendation_pkey
+              - column:
+                  name: system_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: discriminator
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: decision
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: comment
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recommended_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: watchlist_id
+                  type: varchar(64)
+
+        - createIndex:
+            tableName: scb_recommendation
+            columns:
+              - column:
+                  name: system_id
+            indexName: idx_scb_recommendation_system_id
+
+        - createIndex:
+            tableName: scb_recommendation
+            columns:
+              - column:
+                  name: watchlist_id
+            indexName: idx_scb_recommendation_watchlist_id
+
+        - createIndex:
+            tableName: scb_recommendation
+            columns:
+              - column:
+                  name: discriminator
+            indexName: idx_scb_recommendation_discriminator
+
+        - createTable:
+            tableName: scb_gns_sync
+            columns:
+              - column:
+                  name: gns_sync_id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: scb_gns_sync_pkey
+              - column:
+                  name: started_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: finished_at
+                  type: timestamp
+              - column:
+                  name: partially_loaded
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: error_message
+                  type: text
+              - column:
+                  name: sync_mode
+                  type: varchar(50)
+
+        - createTable:
+            tableName: scb_gns_sync_delta
+            columns:
+              - column:
+                  name: alert_external_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: decisions_count
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: watchlist_id
+                  type: varchar(64)
+              - column:
+                  name: delta_job_name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: scb_gns_sync_delta
+            columnNames: alert_external_id, delta_job_name
+            constraintName: pk_scb_gns_sync_delta
+
+        - createTable:
+            tableName: scb_cbs_hits_details_helper
+            columns:
+              - column:
+                  name: system_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: seq_no
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: gns_sync_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: batch_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: hit_neo_flag
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: scb_cbs_hits_details_helper
+            columnNames: system_id, seq_no, gns_sync_id
+            constraintName: pk_scb_cbs_hits_details_helper
+

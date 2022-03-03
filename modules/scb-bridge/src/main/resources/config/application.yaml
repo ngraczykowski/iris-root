@@ -11,9 +11,6 @@ spring:
     username: serp
     password: serp
 
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.xml
-
   batch:
     initialize-schema: never
     job:
@@ -40,17 +37,17 @@ spring:
           batch_size: 10
         order_inserts: 'true'
         order_updates: 'true'
-  
+
   application:
     name: customer-bridge
-  
+
   quartz:
     properties:
       org:
         quartz:
           scheduler:
             instanceName: ScbBridgeScheduler
-    
+
     jdbc:
       initialize-schema: never
     job-store-type: memory
@@ -104,3 +101,31 @@ serp:
         time-zone: Asia/Hong_Kong
         chunk-size: 250
         query-timeout: 300
+      alert:
+        cleaner:
+          offset: 1D
+          cron-expression: '0 0 0 * * ?'
+        reader:
+          solvedAlertsProcessingEnabled: 'false'
+      gns:
+        solution:
+          states:
+            ANALYST_NO_SOLUTION: [0]
+      solving:
+        alert:
+          cronExpression: '0/6 * * * * ?'
+          db_relation_name: 'SENS_V_FFF_RECORDS'
+        watchlist:
+          cronExpression: '3/6 * * * * ?'
+          db_relation_name: 'SENS_V_FFF_RECORDS'
+      learning:
+        alert:
+          cronExpression: '0 0 3 ? * SUN'
+          db_relation_name: 'SENS_V_FFF_RECORDS'
+        watchlist:
+          cronExpression: '0 0 6 ? * SUN'
+          db_relation_name: 'SENS_V_FFF_RECORDS'
+        ecm:
+          cronExpression: '0 0 9 ? * SUN'
+          db_relation_name: 'SENS_V_FFF_RECORDS'
+

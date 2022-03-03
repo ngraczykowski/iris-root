@@ -3,8 +3,8 @@ package com.silenteight.customerbridge.gnsrt.generator;
 import lombok.Builder;
 import lombok.NonNull;
 
-import com.silenteight.customerbridge.common.DateConverter;
 import com.silenteight.customerbridge.common.alertrecord.AlertRecord;
+import com.silenteight.customerbridge.common.batch.DateConverter;
 import com.silenteight.customerbridge.common.gnsparty.GnsParty;
 import com.silenteight.customerbridge.common.hitdetails.lexer.Lexer;
 import com.silenteight.customerbridge.gnsrt.model.GnsRtAlertStatus;

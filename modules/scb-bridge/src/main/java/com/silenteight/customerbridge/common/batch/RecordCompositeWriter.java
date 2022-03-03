@@ -1,0 +1,95 @@
+package com.silenteight.customerbridge.common.batch;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
+
+import com.silenteight.customerbridge.cbs.gateway.CbsAckAlert;
+import com.silenteight.customerbridge.cbs.gateway.CbsAckGateway;
+import com.silenteight.customerbridge.common.domain.GnsSyncDeltaService;
+import com.silenteight.customerbridge.common.ingest.BatchAlertIngestService;
+import com.silenteight.customerbridge.common.protocol.AlertWrapper;
+import com.silenteight.proto.serp.scb.v1.ScbAlertDetails;
+import com.silenteight.proto.serp.v1.alert.Alert;
+
+import org.springframework.batch.item.ItemWriter;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
+
+@RequiredArgsConstructor
+@Slf4j
+@Builder
+public class RecordCompositeWriter implements ItemWriter<AlertComposite> {
+
+  private final GnsSyncDeltaService deltaService;
+  private final BatchAlertIngestService ingestService;
+  private final CbsAckGateway cbsAckGateway;
+  private final WriterConfiguration configuration;
+  private final String deltaJobName;
+
+  @Override
+  public void write(List<? extends AlertComposite> items) {
+    ingestAlerts(items);
+
+    if (configuration.isUseDelta())
+      deltaService.updateDelta(getDeltas(items), deltaJobName);
+
+    if (log.isDebugEnabled())
+      log.debug("Saved records: count={}", items.size());
+
+    if (configuration.isAckRecords())
+      ackReadAlerts(items);
+  }
+
+  private void ingestAlerts(List<? extends AlertComposite> items) {
+    Stream<Alert> alerts = items.stream().map(AlertComposite::getAlert);
+    if (configuration.isLearningMode())
+      ingestService.ingestAlertsForLearn(alerts);
+    else
+      ingestService.ingestAlertsForRecommendation(alerts);
+  }
+
+  private static Map<String, Integer> getDeltas(List<? extends AlertComposite> items) {
+    var alertCollector = toMap(
+        AlertComposite::getSystemId, AlertComposite::getDecisionsCount,
+        (existing, replacement) -> existing);
+
+    return items
+        .stream()
+        .collect(alertCollector);
+  }
+
+  private void ackReadAlerts(List<? extends AlertComposite> items) {
+    Set<CbsAckAlert> readAlerts = items
+        .stream()
+        .map(RecordCompositeWriter::unpackAlertDetails)
+        .map(AlertCompositeToAckAlertMapper::toAckAlert)
+        .collect(toSet());
+
+    cbsAckGateway.ackReadAlerts(readAlerts);
+  }
+
+  private static ScbAlertDetails unpackAlertDetails(AlertComposite alertComposite) {
+    AlertWrapper alertWrapper = new AlertWrapper(alertComposite.getAlert());
+    return alertWrapper
+        .unpackDetails(ScbAlertDetails.class)
+        .orElseThrow(() -> new IllegalArgumentException("Alert has no details"));
+  }
+
+  @Getter
+  @Value(staticConstructor = "of")
+  static class WriterConfiguration {
+
+    private final boolean useDelta;
+    private final boolean ackRecords;
+    private final boolean learningMode;
+  }
+}

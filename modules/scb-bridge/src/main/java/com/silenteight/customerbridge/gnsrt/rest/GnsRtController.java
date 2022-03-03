@@ -2,11 +2,11 @@ package com.silenteight.customerbridge.gnsrt.rest;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.customerbridge.common.recommendation.GnsRtRecommendationUseCase;
-import com.silenteight.customerbridge.common.recommendation.InvalidGnsRtRequestDataException;
 import com.silenteight.customerbridge.gnsrt.model.request.GnsRtRecommendationRequest;
 import com.silenteight.customerbridge.gnsrt.model.response.ErrorResponse;
 import com.silenteight.customerbridge.gnsrt.model.response.GnsRtRecommendationResponse;
+import com.silenteight.customerbridge.gnsrt.recommendation.GnsRtRecommendationUseCase;
+import com.silenteight.customerbridge.gnsrt.recommendation.InvalidGnsRtRequestDataException;
 
 import io.grpc.StatusRuntimeException;
 import org.springframework.http.HttpStatus;

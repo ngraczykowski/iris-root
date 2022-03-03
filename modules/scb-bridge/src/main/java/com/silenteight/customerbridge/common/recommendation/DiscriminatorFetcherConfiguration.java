@@ -2,8 +2,8 @@ package com.silenteight.customerbridge.common.recommendation;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.customerbridge.cbs.ScbBridgeConfigProperties;
-import com.silenteight.customerbridge.common.DateConverter;
+import com.silenteight.customerbridge.cbs.batch.ScbBridgeConfigProperties;
+import com.silenteight.customerbridge.common.batch.DateConverter;
 import com.silenteight.customerbridge.common.config.FetcherConfiguration;
 
 import org.springframework.beans.factory.annotation.Qualifier;
