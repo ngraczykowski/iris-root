@@ -2,7 +2,7 @@ warehouse:
   persistence:
     alert:
       labels:
-      recommendation-date-field: "alert_create_time"
+      recommendation-date-field: "create_time"
 
   indexer.diagnostic.enabled: true
   retention:
