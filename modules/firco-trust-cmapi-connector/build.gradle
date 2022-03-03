@@ -13,7 +13,7 @@ plugins {
 }
 
 projectSetup {
-  javaVersion = JavaVersion.VERSION_17
+  javaVersion = JavaVersion.VERSION_11
 }
 
 ext {
