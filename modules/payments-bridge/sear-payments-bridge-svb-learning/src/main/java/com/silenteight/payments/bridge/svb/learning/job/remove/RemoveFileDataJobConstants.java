@@ -12,4 +12,5 @@ public final class RemoveFileDataJobConstants {
   // Steps
   public static final String REMOVE_CSV_ROW_STEP_NAME = "remove-csv-row-step";
   public static final String REMOVE_ALERT_STEP_NAME = "remove-alert-step";
+  public static final String REMOVE_HIT_STEP_NAME = "remove-hit-step";
 }

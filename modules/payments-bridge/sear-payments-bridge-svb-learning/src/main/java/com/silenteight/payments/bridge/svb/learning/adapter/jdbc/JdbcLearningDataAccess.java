@@ -23,7 +23,7 @@ class JdbcLearningDataAccess implements LearningDataAccess {
 
   private final RemoveFileCsvRowsQuery removeFileCsvRowsQuery;
   private final RemoveLearningAlertsQuery removeLearningAlertsQuery;
-  private final RemoveHitsWithoutParentQuery removeHitsWithoutParentQuery;
+  private final RemoveHitsQuery removeHitsQuery;
   private final RemoveActionsWithoutParentQuery removeActionsWithoutParentQuery;
 
   @Override
@@ -56,5 +56,10 @@ class JdbcLearningDataAccess implements LearningDataAccess {
   @Override
   public void removeAlerts(List<Long> alertIds) {
     removeLearningAlertsQuery.remove(alertIds);
+  }
+
+  @Override
+  public void removeHits(List<Long> hitIds) {
+    removeHitsQuery.remove(hitIds);
   }
 }

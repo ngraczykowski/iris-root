@@ -18,6 +18,7 @@ import javax.annotation.Nonnull;
 
 import static com.silenteight.payments.bridge.svb.learning.job.remove.RemoveFileDataJobConstants.REMOVE_ALERT_STEP_NAME;
 import static com.silenteight.payments.bridge.svb.learning.job.remove.RemoveFileDataJobConstants.REMOVE_CSV_ROW_STEP_NAME;
+import static com.silenteight.payments.bridge.svb.learning.job.remove.RemoveFileDataJobConstants.REMOVE_HIT_STEP_NAME;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 
@@ -53,6 +54,18 @@ class RemoveFileDataJobTest extends BaseBatchTest {
     assertThat(transformAlertStep.getReadCount()).isEqualTo(3);
     assertThat(jdbcTemplate.queryForObject(
         "SELECT count(*) FROM pb_learning_alert",
+        Integer.class)).isEqualTo(0);
+  }
+
+  @Test
+  @Sql(scripts = "RemoveFileDataJobTest.sql")
+  @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
+  @Transactional(propagation = Propagation.NOT_SUPPORTED)
+  public void testRemovingHitsStep() {
+    var transformAlertStep = createStepExecution(REMOVE_HIT_STEP_NAME).get();
+    assertThat(transformAlertStep.getReadCount()).isEqualTo(2);
+    assertThat(jdbcTemplate.queryForObject(
+        "SELECT count(*) FROM pb_learning_hit",
         Integer.class)).isEqualTo(0);
   }
 

@@ -18,4 +18,6 @@ public interface LearningDataAccess {
   void removeCsvRows(List<Long> rowIds);
 
   void removeAlerts(List<Long> alertIds);
+
+  void removeHits(List<Long> hitIds);
 }
