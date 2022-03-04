@@ -1,6 +1,6 @@
 package com.silenteight.universaldatasource.app.feature.adapter.outgoing.feature;
 
-import com.silenteight.datasource.api.date.v1.BatchGetMatchDateInputsResponse;
+import com.silenteight.datasource.api.document.v1.BatchGetMatchDocumentInputsResponse;
 import com.silenteight.datasource.api.document.v1.DocumentFeatureInput;
 import com.silenteight.datasource.api.document.v1.DocumentInput;
 import com.silenteight.universaldatasource.app.feature.mapper.FeatureInputMapper;
@@ -21,7 +21,7 @@ class DocumentFeatureMapper extends BaseFeatureMapper<DocumentFeatureInput> {
 
   @Override
   protected Builder createBatchResponseBuilder() {
-    return BatchGetMatchDateInputsResponse.newBuilder();
+    return BatchGetMatchDocumentInputsResponse.newBuilder();
   }
 
   @Override
