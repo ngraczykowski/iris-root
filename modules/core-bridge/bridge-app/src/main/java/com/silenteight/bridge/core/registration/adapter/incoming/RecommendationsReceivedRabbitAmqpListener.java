@@ -17,7 +17,10 @@ class RecommendationsReceivedRabbitAmqpListener {
 
   private final RegistrationFacade registrationFacade;
 
-  @RabbitListener(queues = "${amqp.registration.incoming.recommendation-received.queue-name}")
+  @RabbitListener(
+      queues = "${amqp.registration.incoming.recommendation-received.queue-name}",
+      errorHandler = "registrationAmqpErrorHandler"
+  )
   public void recommendationReceived(RecommendationsReceived recommendation) {
     log.info(
         "Received RecommendationsReceived amqp message for analysis id={}",

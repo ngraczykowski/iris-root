@@ -15,3 +15,9 @@ configure(subprojects) {Project subproject ->
     archivesBaseName = "silenteight-" + subproject.name
   }
 }
+sonarqube {
+  properties {
+    // Excludes files or folders from duplication analysis, comma separated
+    property 'sonar.cpd.exclusions', "**/bridge-app/**/*AmqpErrorHandler.java"
+  }
+}

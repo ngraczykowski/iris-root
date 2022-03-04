@@ -17,7 +17,9 @@ class VerifyBatchTimeoutAmqpListener {
 
   private final RegistrationFacade registrationFacade;
 
-  @RabbitListener(queues = "${amqp.registration.incoming.verify-batch-timeout.queue-name}")
+  @RabbitListener(
+      queues = "${amqp.registration.incoming.verify-batch-timeout.queue-name}",
+      errorHandler = "registrationAmqpErrorHandler")
   void verifyBatchTimeout(MessageVerifyBatchTimeout message) {
     log.info("Received a message that batch with id [{}] is timed out. "
         + "Proceeding to verify whether it is still processing", message.getBatchId());

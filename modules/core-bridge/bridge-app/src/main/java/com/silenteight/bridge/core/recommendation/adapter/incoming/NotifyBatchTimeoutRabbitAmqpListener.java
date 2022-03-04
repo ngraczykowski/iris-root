@@ -17,7 +17,10 @@ class NotifyBatchTimeoutRabbitAmqpListener {
 
   private final RecommendationFacade recommendationFacade;
 
-  @RabbitListener(queues = "${amqp.recommendation.incoming.notify-batch-timeout.queue-name}")
+  @RabbitListener(
+      queues = "${amqp.recommendation.incoming.notify-batch-timeout.queue-name}",
+      errorHandler = "recommendationAmqpErrorHandler"
+  )
   public void subscribe(MessageNotifyBatchTimedOut message) {
     log.info(
         "Received NotifyBatchTimedOut amqp message for analysis={}", message.getAnalysisName());

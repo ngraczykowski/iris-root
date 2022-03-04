@@ -17,7 +17,10 @@ class RecommendationsDeliveredRabbitAmqpListener {
 
   private final RegistrationFacade registrationFacade;
 
-  @RabbitListener(queues = "${amqp.registration.incoming.recommendation-delivered.queue-name}")
+  @RabbitListener(
+      queues = "${amqp.registration.incoming.recommendation-delivered.queue-name}",
+      errorHandler = "registrationAmqpErrorHandler"
+  )
   public void recommendationDelivered(RecommendationsDelivered recommendation) {
     log.info(
         "Received RecommendationsDelivered amqp batch id={}", recommendation.getBatchId());

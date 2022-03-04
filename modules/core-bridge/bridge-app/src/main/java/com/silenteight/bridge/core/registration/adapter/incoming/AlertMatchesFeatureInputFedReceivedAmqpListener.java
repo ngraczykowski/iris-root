@@ -23,7 +23,8 @@ class AlertMatchesFeatureInputFedReceivedAmqpListener {
 
   @RabbitListener(
       queues = "${amqp.registration.incoming.match-feature-input-set-fed.queue-name}",
-      containerFactory = "registrationRabbitAmqpListenerContainerFactory"
+      containerFactory = "registrationRabbitAmqpListenerContainerFactory",
+      errorHandler = "registrationAmqpErrorHandler"
   )
   public void matchFeatureInputSetFed(List<MessageAlertMatchesFeatureInputFed> messages) {
     log.info("Received {} messages with alerts. Trying to add them to analysis", messages.size());

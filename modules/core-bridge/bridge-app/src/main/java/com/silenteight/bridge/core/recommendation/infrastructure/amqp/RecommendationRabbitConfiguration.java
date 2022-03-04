@@ -12,7 +12,8 @@ import java.util.Optional;
 @EnableConfigurationProperties({
     RecommendationIncomingRecommendationsGeneratedConfigurationProperties.class,
     RecommendationIncomingNotifyBatchTimeoutConfigurationProperties.class,
-    RecommendationOutgoingRecommendationsReceivedConfigurationProperties.class
+    RecommendationOutgoingRecommendationsReceivedConfigurationProperties.class,
+    AmqpRecommendationProperties.class
 })
 class RecommendationRabbitConfiguration {
 

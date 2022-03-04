@@ -34,6 +34,7 @@ server:
 ### AMQP
 amqp:
   registration:
+    number-of-retries-dead-messages: 3
     outgoing:
       notify-batch-error:
         exchange-name: notify-batch-error-exchange
@@ -70,6 +71,7 @@ amqp:
         dead-letter-queue-time-to-live-in-milliseconds: 10000
         dead-letter-exchange-name: verify-batch-timeout.dlx
   recommendation:
+    number-of-retries-dead-messages: 3
     outgoing:
       recommendation-received:
         exchange-name: recommendation-received-exchange

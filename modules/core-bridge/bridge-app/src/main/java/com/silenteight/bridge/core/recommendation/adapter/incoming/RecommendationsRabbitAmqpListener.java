@@ -17,7 +17,10 @@ class RecommendationsRabbitAmqpListener {
 
   private final RecommendationFacade recommendationFacade;
 
-  @RabbitListener(queues = "${amqp.recommendation.incoming.recommendations-generated.queue-name}")
+  @RabbitListener(
+      queues = "${amqp.recommendation.incoming.recommendations-generated.queue-name}",
+      errorHandler = "recommendationAmqpErrorHandler"
+  )
   public void subscribe(RecommendationsGenerated recommendation) {
     log.info(
         "Received RecommendationsGenerated amqp message for analysis={}",

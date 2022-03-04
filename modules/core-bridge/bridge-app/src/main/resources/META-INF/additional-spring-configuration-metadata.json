@@ -76,6 +76,11 @@
       "description": "Dead letter exchange name for notify batch timeout event."
     },
     {
+      "name": "amqp.recommendation.number-of-retries-dead-messages",
+      "type": "java.lang.String",
+      "description": "Amount of retries for a message before it will be discarded."
+    },
+    {
       "name": "amqp.registration.outgoing.verify-batch-timeout.exchange-name",
       "type": "java.lang.String",
       "description": "Exchange name for verify batch time out event."
@@ -109,6 +114,11 @@
       "name": "amqp.registration.incoming.verify-batch-timeout.dead-letter-exchange-name",
       "type": "java.lang.String",
       "description": "Dead letter exchange name for verifying batch time out."
+    },
+    {
+      "name": "amqp.registration.number-of-retries-dead-messages",
+      "type": "java.lang.String",
+      "description": "Amount of retries for a message before it will be discarded."
     }
   ]
 }
