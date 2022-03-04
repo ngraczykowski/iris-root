@@ -1,0 +1,46 @@
+plugins {
+  id "java"
+  id "groovy"
+}
+
+dependencies {
+
+  // Application Starters
+//  implementation libraries.spring_batch_starter
+  implementation libraries.spring_boot_starter_actuator
+  implementation libraries.spring_boot_starter_logging
+  implementation libraries.spring_boot_starter_undertow
+  implementation libraries.spring_boot_starter_web
+  implementation libraries.spring_boot_starter_security
+
+  implementation libraries.jakarta_validation_api
+
+  // Jackson
+  implementation libraries.jackson_annotations
+  implementation libraries.jackson_databind
+  runtimeOnly libraries.jackson_datatype_jdk8
+  runtimeOnly libraries.jackson_datatype_jsr310
+  runtimeOnly libraries.jackson_module_afterburner
+  runtimeOnly libraries.jackson_module_paranamer
+  runtimeOnly libraries.jackson_module_parameter_names
+
+  // Database
+//  implementation libraries.spring_boot_starter_data_jpa
+//  implementation libraries.spring_boot_starter_jdbc
+//  implementation libraries.liquibase_core
+//  implementation libraries.hikari_cp
+//  runtimeOnly libraries.postgresql
+//  runtimeOnly libraries.liquibase_sessionlock
+
+  // Shedlock
+//  implementation libraries.shedlock_spring
+//  implementation libraries.shedlock_jdbc_provider
+
+  testImplementation libraries.silenteight_sep_base_testing
+}
+
+jar {
+  manifest {
+    attributes "Main-Class": "com.silenteight.connector.ftcc.app.FtccApplication"
+  }
+}
