@@ -5,5 +5,22 @@ gradleBuild(
     sonarEnabled: true,
     dependencyCheckEnabled: true,
     includeBuildNumberInSnapshotVersion: true,
-    archiveArtifactsPattern: '**/build/libs/*-exec.jar'
+    archiveArtifactsPattern: '**/build/libs/*-exec.jar',
+    additionalStages:{
+        stage('Deploy exec to artifactory') {
+            rtUpload (
+                serverId: "silenteight-repo",
+                spec:
+                    """{
+                      "files": [
+                        {
+                          "pattern": "**/build/libs/*-exec.jar",
+                          "limit": 5,
+                          "target": "artifactory/libs-build-local/com/silenteight/fab/dataprep-app/"
+                        }
+                     ]
+                    }"""
+            )
+        }
+    }
 )
