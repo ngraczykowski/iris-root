@@ -1,0 +1,13 @@
+plugins {
+  id "java-library"
+  id "groovy"
+  id "maven-publish"
+}
+
+description = "Agent Metrics"
+
+dependencies {
+  implementation libraries.micrometer_core
+  implementation libraries.spring_boot_starter_aop
+  implementation libraries.commons_text
+}
