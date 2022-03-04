@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.fab.dataprep.domain.FeedingFacade;
+import com.silenteight.proto.fab.api.v1.AlertsDetailsResponse;
 import com.silenteight.proto.fab.api.v1.MessageAlertAndMatchesStored;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -19,12 +20,35 @@ class AlertAndMatchesRabbitAmqpListener {
 
   private final FeedingFacade feedingFacade;
 
+  private final AlertDetailsFacade alertDetailsFacade;
+
+  //TODO: Why only one incoming alert? not many?
   @RabbitListener(queues = QUEUE_NAME_PROPERTY)
   public void subscribe(MessageAlertAndMatchesStored message) {
     log.info(
         "Received a message with: batch id: {}, alert id: {}, alert name: {}", message.getBatchId(),
         message.getAlertId(), message.getAlertName());
-
-    feedingFacade.feedUds(message);
+    AlertsDetailsResponse alertsDetailsResponse = getAlertDetails(message);
+    createFeatureInput(alertsDetailsResponse);
+    feedUds();
   }
+
+  private void feedUds() {
+    feedingFacade.feedUds();
+    sendMatchFeatureInputFeed();
+  }
+
+  private void sendMatchFeatureInputFeed() {
+    log.info("Have to be implemented");
+  }
+
+
+  private void createFeatureInput(AlertsDetailsResponse alertsDetailsResponse) {
+    log.info("Have to be implemented");
+  }
+
+  private AlertsDetailsResponse getAlertDetails(MessageAlertAndMatchesStored message) {
+    return alertDetailsFacade.getAlertDetails(message);
+  }
+
 }

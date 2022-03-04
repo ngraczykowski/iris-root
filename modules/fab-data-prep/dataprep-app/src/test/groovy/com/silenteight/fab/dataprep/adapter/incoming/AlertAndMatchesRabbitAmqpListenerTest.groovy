@@ -1,7 +1,6 @@
 package com.silenteight.fab.dataprep.adapter.incoming
 
 import com.silenteight.fab.dataprep.BaseSpecificationIT
-import com.silenteight.fab.dataprep.domain.FeedingFacade
 import com.silenteight.proto.fab.api.v1.MessageAlertAndMatchesStored
 import com.silenteight.proto.fab.api.v1.StoredMatch
 
@@ -26,7 +25,7 @@ class AlertAndMatchesRabbitAmqpListenerTest extends BaseSpecificationIT {
   private RabbitTemplate rabbitTemplate
 
   @SpringBean
-  FeedingFacade feedingFacade = Mock()
+  AlertDetailsFacade alertDetailsFacade = Mock()
 
   @Value(QUEUE_NAME_PROPERTY)
   String queueName
@@ -44,7 +43,7 @@ class AlertAndMatchesRabbitAmqpListenerTest extends BaseSpecificationIT {
         .build()
 
     MessageAlertAndMatchesStored receivedMessage = null
-    1 * feedingFacade.feedUds(_) >> { MessageAlertAndMatchesStored msg ->
+    1 * alertDetailsFacade.getAlertDetails(_) >> { MessageAlertAndMatchesStored msg ->
       receivedMessage = msg
     }
 
