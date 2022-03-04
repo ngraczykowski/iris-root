@@ -22,8 +22,8 @@ ext {
 
 apply from: "${gradleScriptDir}/resolutionRules.gradle"
 
-configure(subprojects) {Project subproject ->
-  subproject.pluginManager.withPlugin("java") {
+subprojects {Project subproject ->
+  pluginManager.withPlugin("java") {
     archivesBaseName = "silenteight-" + subproject.name
 
     subproject.apply from: "${gradleScriptDir}/dependencies.gradle"
