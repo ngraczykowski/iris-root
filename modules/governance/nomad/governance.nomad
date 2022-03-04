@@ -31,7 +31,7 @@ locals {
   jvm_memory = ceil(var.memory * 0.7)
   perm_memory = ceil(var.memory * 0.2)
   database_node_destination = "eu2"
-  database_volume           = "/srv/sep-cluster/postgres/${var.namespace}-governance"
+  database_volume = "/srv/sep-cluster/postgres12/${var.namespace}-governance"
 }
 
 job "governance" {
@@ -71,7 +71,7 @@ job "governance" {
       }
 
       config {
-        image   = "postgres:10"
+        image   = "postgres:12"
         ports   = [
           "tcp"]
         volumes = [
