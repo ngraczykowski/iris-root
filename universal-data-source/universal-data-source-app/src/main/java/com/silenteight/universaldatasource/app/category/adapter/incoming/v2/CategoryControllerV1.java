@@ -29,6 +29,7 @@ public class CategoryControllerV1 {
     var filteredCategories = categories.stream()
         .filter(category -> !category.getDisplayName().equals("Specific Terms"))
         .filter(category -> !category.getDisplayName().equals("Specific Terms 3"))
+        .filter(category -> !category.getDisplayName().equals("Historical Risk Assessment"))
         .collect(Collectors.toList());
 
     return ResponseEntity.ok(categoryMapper.mapCategories(filteredCategories));
