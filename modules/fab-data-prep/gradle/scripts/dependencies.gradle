@@ -6,6 +6,11 @@ ext {
   silenteightSepBaseVersion = "1.12.5"
   silenteightUniversalDataSourceApiVersion = '1.2.0'
   silenteightDataSourceApiVersion = '0.18.0'
+  groovyVersion = '3.0.9'
+  testContainersVersion = '1.16.2'
+  junitJupiterVersion = '5.8.2'
+  mockitoVersion = '4.1.0'
+  spockVersion = '2.1-M2-groovy-3.0'
 }
 
 libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name: 'sep-base-common', version: silenteightSepBaseVersion]
@@ -26,6 +31,16 @@ libraries.hibernate_validator = [group: 'org.hibernate.validator', name:'hiberna
 libraries.spring_test = [group: 'org.springframework', name: 'spring-test']
 libraries.spring_boot_test = [group: 'org.springframework.boot', name: 'spring-boot-test']
 libraries.spring_boot_test_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-test-autoconfigure']
+libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion]
+libraries.junit_jupiter_api = [group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitJupiterVersion]
+libraries.junit_jupiter_engine = [group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitJupiterVersion]
+libraries.junit_jupiter_testcontainers = [group: 'org.testcontainers', name: 'junit-jupiter', version: testContainersVersion]
+libraries.mockito_core = [group: 'org.mockito', name: 'mockito-core', version: mockitoVersion]
+libraries.mockito_junit_jupiter = [group: 'org.mockito', name: 'mockito-junit-jupiter', version: mockitoVersion]
+libraries.spock_core = [group: 'org.spockframework', name: 'spock-core', version: spockVersion]
+libraries.spock_spring = [group: 'org.spockframework', name: 'spock-spring', version: spockVersion]
+libraries.testcontainers_rabbitmq = [group: 'org.testcontainers', name: 'rabbitmq', version: testContainersVersion]
+libraries.testcontainers_spock = [group: 'org.testcontainers', name: 'spock', version: testContainersVersion]
 
 // GRPC
 libraries.grpc_client_spring_boot_starter = [group: 'net.devh', name: 'grpc-client-spring-boot-starter']

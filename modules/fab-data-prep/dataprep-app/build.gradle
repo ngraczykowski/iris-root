@@ -1,5 +1,6 @@
 plugins {
   id "java"
+  id "groovy"
   id "org.springframework.boot" version "2.6.4"
 }
 
@@ -20,8 +21,19 @@ dependencies {
   runtimeOnly libraries.spring_boot_starter_actuator
   runtimeOnly libraries.grpc_brave_instrumentation
   runtimeOnly libraries.spring_cloud_starter_sleuth
+
   testImplementation libraries.spring_boot_test
   testImplementation libraries.spring_test
+  testImplementation libraries.groovy_all
+  testImplementation libraries.spock_core
+  testImplementation libraries.spock_spring
+  testImplementation libraries.junit_jupiter_api
+  testImplementation libraries.junit_jupiter_testcontainers
+  testImplementation libraries.mockito_core
+  testImplementation libraries.mockito_junit_jupiter
+  testImplementation libraries.testcontainers_rabbitmq
+  testImplementation libraries.testcontainers_spock
+  testRuntimeOnly libraries.junit_jupiter_engine
 }
 
 jar {
