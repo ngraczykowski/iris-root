@@ -25,7 +25,7 @@ locals {
   jvm_memory = ceil(var.memory * 0.7)
   perm_memory = ceil(var.memory * 0.2)
   database_node_destination = "eu2"
-  database_volume           = "/srv/sep-cluster/postgres/${var.namespace}-webapp"
+  database_volume           = "/srv/sep-cluster/postgres12/${var.namespace}-webapp"
 }
 
 job "webapp" {
@@ -61,7 +61,7 @@ job "webapp" {
       }
 
       config {
-        image   = "postgres:10"
+        image   = "postgres:12"
         ports   = [
           "tcp"]
         volumes = [
@@ -89,7 +89,6 @@ job "webapp" {
       }
     }
   }
-
   group "webapp" {
     count = 1
 
