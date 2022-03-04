@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="serp-sync-test-3.9.0-1" author="bmartofel" context="test">
+    <createTable tableName="fof_states" schemaName="gns">
+      <column name="state_id" type="NUMERIC(22, 0)"/>
+      <column name="state_name" type="VARCHAR(30)"/>
+      <column name="final_state" type="NUMERIC(22, 0)"/>
+      <column name="data_type" type="NUMERIC(22, 0)"/>
+      <column name="status" type="NUMERIC(22, 0)"/>
+      <column name="control_transition" type="NUMERIC(22, 0)"/>
+      <column name="behaviour" type="NUMERIC(22, 0)"/>
+      <column name="label" type="VARCHAR(30)"/>
+      <column name="description" type="VARCHAR(5000)"/>
+    </createTable>
+  </changeSet>
+</databaseChangeLog>

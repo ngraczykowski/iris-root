@@ -1,0 +1,215 @@
+Suspect(s) detected by OFAC-Agent:3 
+SystemId: 
+Associate: 
+=============================
+Suspect detected #1
+
+OFAC ID:AS00247275
+MATCH: 0.00
+TAG: NID
+MATCHINGTEXT: 1136, 
+RESULT: (0)
+
+BATCH: 2017/07/12_0001_BH_BTCH_DENY
+NAME: MUHAMMADI GUL, MOHAMMAD MOSLIM HAQQANI
+  Synonyms:
+   - HAQQANI, MOSLIM
+ADDRESS: 
+  Synonyms: none
+CITY: 
+  Synonyms: none
+COUNTRY: 
+  Synonyms: none
+STATE: 
+  Synonyms: none
+ORIGIN: 
+BOFE
+DESIGNATION: 
+AFGHANISTAN
+TYPE: 
+I
+SEARCH CODES: 
+none
+USER DATA 1: 
+46721
+USER DATA 2: 
+none
+OFFICIAL REF: 
+2014-03-21 15:10:26 BofE
+PASSPORT: 
+none
+BIC CODES: 
+none
+NATID: 
+1136
+PLACE OF BIRTH: 
+Gawargan village, Pul-e-Khumri District, Baghlan Province, Afghanistan
+DATE OF BIRTH: 
+1965
+NATIONALITY: 
+none
+ADDITIONAL INFOS: 
+List ID: 29 / Create Date: 10/06/2008 14:31:43 / Last Update Date: 06/18/2015 15:08:00 / Program: AFGHANISTAN / Title: DEPUTY MINISTER OF HAJ AND RELIGIOUS AFFAIRS UNDER THE TALIBAN REGIME; DEPUTY MINISTER OF HIGHER EDUCATION UNDER THE TALIBAN REGIME; MAULAVI / Nationality: AFGHAN / NATIONAL NO: 1136 OtherInfo: Afghan, tazkira / OtherInformation: UN Ref TI.H.73.01. Ethnic Pashtun from Baghlan Province. Believed to be in Afghanistan/Pakistan border area. Speaks fluent English, Urdu and Arabic.; NATIONAL NO: 1136 (Afghan, tazkira) / EffectiveDate: 3/21/2014 / OriginalID: 7169
+FML TYPE: 
+1
+FML PRIORITY: 
+0
+FML CONFIDENTIALITY: 
+0
+FML INFO: 
+none
+PEP-FEP: 
+0 0
+KEYWORDS: 
+OS:BANK_OF_ENGLAND
+HYPERLINKS: 
+none
+TYS: 4
+ISN: -1
+
+=============================
+Suspect detected #2
+
+OFAC ID:CL20012587
+MATCH: 0.00
+TAG: NAM
+MATCHINGTEXT: ALI MERZA, BH, 
+RESULT: (0)
+
+BATCH: 2017/07/12_0001_BH_BTCH_DENY
+NAME: ALI, MIRZA MOHAMMED
+  Synonyms: none
+ADDRESS: 
+  Synonyms: none
+CITY: 
+  Synonyms: none
+COUNTRY: BAHRAIN
+  Synonyms:
+   - BAHREIN
+STATE: 
+  Synonyms: none
+ORIGIN: 
+DENYCOUNTRY
+DESIGNATION: 
+BH-BM
+TYPE: 
+I
+SEARCH CODES: 
+none
+USER DATA 1: 
+ANTI-MONEY LAUNDERING Financial Others
+USER DATA 2: 
+none
+OFFICIAL REF: 
+12/19/2016
+PASSPORT: 
+none
+BIC CODES: 
+none
+NATID: 
+791007286
+PLACE OF BIRTH: 
+none
+DATE OF BIRTH: 
+none
+NATIONALITY: 
+none
+ADDITIONAL INFOS: 
+This party was frozen by the Central Bank of Bahrain.Reference Number CD/36/2012 No new account/services/transactions are allowed for this party. For escalation, please refer to Bahrain FCC Team.
+FML TYPE: 
+1
+FML PRIORITY: 
+0
+FML CONFIDENTIALITY: 
+0
+FML INFO: 
+none
+PEP-FEP: 
+0 0
+KEYWORDS: 
+none
+HYPERLINKS: 
+none
+TYS: 1
+ISN: 0
+
+=============================
+Suspect detected #3
+
+OFAC ID:AS00012844
+MATCH: 0.00
+TAG: NAM
+MATCHINGTEXT: HASAN ALI, 
+RESULT: (0)
+
+BATCH: 2017/07/12_0001_BH_BTCH_DENY
+NAME: FADHIL, MUSTAFA MOHAMED
+  Synonyms:
+   - MOHAMMED, MUSTAFA
+   - JIHAD, ABU
+   - FAZUL, MUSTAFA
+   - FADIL, MUSTAFA MUHAMAD
+   - ELBISHY, MOUSTAFA ALI
+   * ALI, HASSAN
+   - AL-NUBI, ABU
+   - AL MASRI, ABD AL WAKIL
+ADDRESS: 
+  Synonyms: none
+CITY: 
+  Synonyms: none
+COUNTRY: 
+  Synonyms: none
+STATE: 
+  Synonyms: none
+ORIGIN: 
+UST
+DESIGNATION: 
+SDGT
+TYPE: 
+I
+SEARCH CODES: 
+12773667 201735161
+USER DATA 1: 
+45708
+USER DATA 2: 
+none
+OFFICIAL REF: 
+2009-10-14 14:07:01 UST
+PASSPORT: 
+none
+BIC CODES: 
+none
+NATID: 
+none
+PLACE OF BIRTH: 
+CAIRO, EGYPT
+DATE OF BIRTH: 
+06/23/1976
+NATIONALITY: 
+none
+ADDITIONAL INFOS: 
+List ID: 0 / Create Date: 10/12/2001 00:00:00 / Last Update Date: 06/23/2016 11:01:52 / Program: SDGT / Weak Alias: 'ANIS, ABU'; 'HUSSEIN'; 'KHALID'; 'YUSSRR, ABU' / Citizenship: EGYPT; KENYA / KenyanIDNo: 12773667; SerialNo: 201735161 / OriginalID: 6924
+FML TYPE: 
+1
+FML PRIORITY: 
+0
+FML CONFIDENTIALITY: 
+0
+FML INFO: 
+none
+PEP-FEP: 
+0 0
+KEYWORDS: 
+OS:OFAC
+HYPERLINKS: 
+none
+TYS: 1
+ISN: 6
+
+=============================
+   *** INTERNAL OFAC DETAILS ***
+HasSndRcvIn
+Limited: 0
+|AS00247275|0.00|NID|89|92|
+|CL20012587|0.00|NAM|22|30|63|64|
+|AS00012844|0.00|NAM|32|40|

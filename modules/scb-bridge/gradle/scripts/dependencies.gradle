@@ -24,6 +24,7 @@ ext {
 libraries.silenteight_commons_core = [group: 'com.silenteight.commons', name: 'silenteight-commons-core', version: silenteightCommonsVersion]
 libraries.silenteight_sep_base_aspects = [group: 'com.silenteight.sep.base', name: 'sep-base-aspects', version: silenteightSepBaseVersion]
 libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name: 'sep-base-common', version: silenteightSepBaseVersion]
+libraries.silenteight_sep_base_testing = [group: 'com.silenteight.sep.base', name: 'sep-base-testing', version: silenteightSepBaseVersion]
 libraries.silenteight_serp_protocol_base = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-base', version: serpProtocolVersion]
 libraries.silenteight_serp_protocol_scb = [group: 'com.silenteight.serp.protocol', name: 'serp-protocol-scb', version: serpProtocolVersion]
 libraries.consul_grpc_registration = [group: 'com.silenteight.commons', name: 'consul-grpc-registration', version: '1.0.0']
@@ -198,6 +199,7 @@ libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', versio
 libraries.hamcrest = [group: 'org.hamcrest', name: 'hamcrest']
 libraries.json_path = [group: 'com.jayway.jsonpath', name: 'json-path']
 libraries.junit_jupiter_api = [group: 'org.junit.jupiter', name: 'junit-jupiter-api']
+libraries.junit_platform_commons = [group: 'org.junit.platform', name: 'junit-platform-commons', version: '1.7.0']
 libraries.objenesis = [group: 'org.objenesis', name: 'objenesis']
 libraries.rest_assured = [group: 'io.rest-assured', name: 'rest-assured']
 libraries.rest_assured_spring_mock_mvc = [group: 'io.rest-assured', name: 'spring-mock-mvc']
@@ -264,10 +266,14 @@ dependencies {
   implementation libraries.silenteight_sep_base_aspects
   implementation libraries.silenteight_serp_protocol_base
   implementation libraries.silenteight_serp_protocol_scb
+  implementation libraries.silenteight_sep_base_testing
 
   testImplementation libraries.awaitility
   testImplementation libraries.spring_batch_test
   testImplementation libraries.spock_spring
+  testImplementation libraries.test_containers
+
+  testRuntimeOnly libraries.junit_platform_commons
 }
 
 configurations {

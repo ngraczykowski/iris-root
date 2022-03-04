@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="serp-sync-test-3.0.0-1" author="ahaczewski" context="test">
+    <sql dbms="postgresql">
+      CREATE SCHEMA IF NOT EXISTS gns;
+    </sql>
+
+    <rollback>
+      <sql dbms="postgresql">
+        DROP SCHEMA IF EXISTS gns CASCADE;
+      </sql>
+    </rollback>
+  </changeSet>
+
+  <changeSet id="serp-sync-test-3.0.0-2" author="ahaczewski" context="test">
+    <createTable tableName="fff_records" schemaName="gns">
+      <column name="system_id" type="VARCHAR(64)"/>
+      <column name="batch_id" type="VARCHAR(32)"/>
+      <column name="last_dec_batch_id" type="VARCHAR(32)"/>
+      <column name="blocking_alerts" type="NUMERIC(22, 0)" defaultValue="0"/>
+      <column name="bunit" type="VARCHAR(256)"/>
+      <column name="char_sep" type="NUMERIC(22, 0)" defaultValue="10"/>
+      <column name="confidentiality" type="NUMERIC(22, 0)" defaultValue="0"/>
+      <column name="created" type="VARCHAR(32)"/>
+      <column name="db_account" type="VARCHAR(256)"/>
+      <column name="db_city" type="VARCHAR(1024)"/>
+      <column name="db_country" type="VARCHAR(256)"/>
+      <column name="db_dob" type="VARCHAR(128)"/>
+      <column name="db_name" type="VARCHAR(256)"/>
+      <column name="db_pob" type="VARCHAR(256)"/>
+      <column name="db_state" type="VARCHAR(256)"/>
+      <column name="db_user1" type="VARCHAR(256)"/>
+      <column name="db_user2" type="VARCHAR(256)"/>
+      <column name="decision_type" type="NUMERIC(22, 0)"/>
+      <column name="filtered" type="VARCHAR(32)"/>
+      <column name="from_appli" type="VARCHAR(256)"/>
+      <column name="holder" type="VARCHAR(64)"/>
+      <column name="last_comment" type="VARCHAR(1024)"/>
+      <column name="last_operator" type="VARCHAR(64)"/>
+      <column name="last_update" type="VARCHAR(32)"/>
+      <column name="nature" type="VARCHAR(256)"/>
+      <column name="nonblocking_alerts" type="NUMERIC(22, 0)" defaultValue="0"/>
+      <column name="priority" type="NUMERIC(22, 0)" defaultValue="0"/>
+      <column name="record" type="TEXT"/>
+      <column name="record_id" type="VARCHAR(256)"/>
+      <column name="record_lock" type="NUMERIC(22, 0)" defaultValue="0"/>
+      <column name="sign_key" type="VARCHAR(256)"/>
+      <column name="sign_key2" type="VARCHAR(256)"/>
+      <column name="type_of_rec" type="VARCHAR(256)"/>
+      <column name="unit" type="VARCHAR(32)"/>
+      <column name="prev_decision_type" type="NUMERIC(22, 0)" defaultValue="-1"/>
+      <column name="fmt_name" type="VARCHAR(64)"/>
+    </createTable>
+
+    <createTable tableName="fff_hits_details" schemaName="gns">
+      <column name="system_id" type="VARCHAR(64)"/>
+      <column name="details" type="TEXT"/>
+    </createTable>
+
+    <createTable tableName="fff_decisions" schemaName="gns">
+      <column name="id" type="NUMERIC(22, 0)"/>
+      <column name="system_id" type="VARCHAR(64)"/>
+      <column name="decision_date" type="VARCHAR(32)"/>
+      <column name="type" type="NUMERIC(22, 0)"/>
+      <column name="operator" type="VARCHAR(64)"/>
+      <column name="comments" type="VARCHAR(1024)"/>
+    </createTable>
+
+    <createView viewName="sens_v_fff_records" schemaName="gns">
+      SELECT * FROM gns.fff_records
+    </createView>
+  </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,208 @@
+{
+    "screenCustomerNameRes": {
+        "header": {
+            "messageDetails": {
+                "messageVersion": 2,
+                "messageType": {
+                    "typeName": "Risk:CustomerScreening",
+                    "subType": {
+                        "subTypeName": "screenCustomerName",
+                        "subTypeScheme": null
+                    }
+                },
+                "multiMessage": {
+                    "multiMessageKnown": null
+                }
+            },
+            "originationDetails": {
+                "messageSender": {
+                    "messageSender": {
+                        "value": "GNSRT",
+                        "systemScheme": null
+                    },
+                    "senderDomain": {
+                        "domainName": {
+                            "value": "Risk",
+                            "domainNameScheme": null
+                        },
+                        "subDomainName": {
+                            "subDomainType": "Compliance",
+                            "subdomainNameScheme": null
+                        }
+                    },
+                    "countryCode": "HK"
+                },
+                "messageTimestamp": "2020-02-19T06:14:40.888+0000",
+                "initiatedTimestamp": "2020-02-19T06:14:40.888+0000",
+                "trackingId": "HK_GNSRT_CHECK_858",
+                "correlationID": null,
+                "conversationID": null,
+                "customSearchID": null,
+                "batchID": null,
+                "serviceBusID": null,
+                "validFrom": null,
+                "validTo": null,
+                "timeToLive": null,
+                "priority": null,
+                "checksum": null,
+                "compressionAlgorithm": null,
+                "encoding": null,
+                "possibleDuplicate": false
+            },
+            "captureSystem": "GNSRT",
+            "process": {
+                "processName": null,
+                "eventType": "Request",
+                "lifecycleState": null,
+                "workflowState": null,
+                "action": null
+            },
+            "metadata": null,
+            "messageHistory": [],
+            "exceptions": null
+        },
+        "screenCustomerNameResPayload": {
+            "payloadFormat": "XML",
+            "payloadVersion": "1.1",
+            "screenCustomerNameResInfo": {
+                "header": {
+                    "sourceSystem": "GNSRT",
+                    "countryCode": "HK",
+                    "segment": "BUSINESS_BANKING",
+                    "clientType": "I",
+                    "partyType": "Related Party",
+                    "screeningUniqueReference": "HK_GNSRT_CHECK_858",
+                    "watchlistTypeAll": null,
+                    "watchlistTypeSanctions": "Y",
+                    "watchlistTypePEP": "Y",
+                    "watchlistTypeAM": null,
+                    "watchlistTypeDD": null,
+                    "genericSearchFlag": "N",
+                    "priorityScreeningFlag": "N",
+                    "userBankID": "1515756",
+                    "userDepartment": "EDMI",
+                    "requestorOrGroupMailId": null,
+                    "emailNotificationRequiredOrNot": "Y",
+                    "responseType": "Initial",
+                    "requestInTime": "2020-02-20T21:51:36",
+                    "requestOutTime": "2020-02-20T21:51:40"
+                },
+                "screenableData": {
+                    "sourceSystemIdentifier": "GNSRT",
+                    "customerIdentificationNo": "HK_GNSRT_CHECK_858",
+                    "clientType": "I",
+                    "fullLegalName": "Test",
+                    "fullTradingName": null,
+                    "legalParentOrGroupName": null,
+                    "executiveManagementNames": null,
+                    "supplementaryCardName": null,
+                    "alternateName1": "",
+                    "alternateName2": "",
+                    "alternateName3": null,
+                    "alternateNameRest": null,
+                    "registeredOrResidentialAddress": "",
+                    "registeredOrResidentialAddressCountry": "IN",
+                    "mailingOrCommunicationAddress": null,
+                    "mailingOrCommunicationAddressCountry": null,
+                    "operatingOrOfficialAddress": null,
+                    "operatingOrOfficialAddressCountry": null,
+                    "otherAddress": "",
+                    "otherAddressCountry": "",
+                    "registeredAddressOfHeadOffice": null,
+                    "registeredAddressCountryOfHeadOffice": null,
+                    "registeredAddressOfParentCompany": null,
+                    "registeredAddressCountryOfParentCompany": null,
+                    "nationalityAll": "IN",
+                    "establishmentCountryOfHO": null,
+                    "establishmentCountryOfParentCompany": null,
+                    "identificationType1": "Passport",
+                    "identificationNumber1": "14220056 ASAPD2186Q",
+                    "identificationType2": "",
+                    "identificationNumber2": "",
+                    "identificationType3": "",
+                    "identificationNumber3": "",
+                    "identificationType4": null,
+                    "identificationNumber4": null,
+                    "identificationTypeRest": null,
+                    "identificationNumberRest": null,
+                    "dateOfBirthOrRegistration": "",
+                    "countryOfBirthOrRegistration": null,
+                    "homeStateAuthorityOrGovtCountryName": null,
+                    "nameOfStockExchange": null,
+                    "nameOfAuthority": null,
+                    "businessNature": null,
+                    "classesOfBeneficiary": null,
+                    "clientLegalEntityType": null,
+                    "clientSegment": "Business Banking",
+                    "clientSubSegment": null,
+                    "customerStatus": null,
+                    "acctOrRelationshipOrProfileClosedDate": null,
+                    "lastCDDApprovedDate": null,
+                    "linkedCustomerIdentificationNo": "",
+                    "natureOfRelationshipWithHomeStateAuthority": null,
+                    "ownershipStatusOfClient": null,
+                    "partyType": "Related Party",
+                    "supplierType": null,
+                    "relationshipToThePrimaryCardholder": null,
+                    "staffAccountIdentifier": null,
+                    "gender": null,
+                    "countryOfEmployment": null,
+                    "relatedPartyType": null,
+                    "supplementaryInformation4": null,
+                    "casaFlag": null,
+                    "supplementaryInformation5": null,
+                    "priorityIndicator": null,
+                    "dateTimeStamp": "2020-02-19T02:14:40",
+                    "addressCity": null,
+                    "relianceFlgOrSuppTypOrKoreanName": null,
+                    "realTimeMessageIndicator": "GNSRT",
+                    "changeOrPriorityIndicator": "N",
+                    "alternateID1Description": null,
+                    "alternateID1": null,
+                    "alternateID2Description": null,
+                    "alternateID2": null,
+                    "supplementaryInformation1": null,
+                    "supplementaryInformation2": null,
+                    "supplementaryInformation3": null,
+                    "nottobeused": null,
+                    "supplementaryInformation6": null,
+                    "supplementaryInformation7": null,
+                    "supplementaryInformation8": null,
+                    "supplementaryInformation9": null,
+                    "supplementaryInformation10": null,
+                    "amlcountry": "HK",
+                    "cddriskRating": null,
+                    "pepstatus": null,
+                    "rmcodeOfCDDOwner": null,
+                    "rmlocationOfCDDOwner": null
+                },
+                "immediateResponseData": {
+                    "immediateResponseTimestamp": "2020-02-20T21:51:40.000",
+                    "overAllStatus": "POTENTIAL_MATCH",
+                    "alerts": [
+                        {
+                            "watchlistType": "PEP",
+                            "alertStatus": "POTENTIAL_MATCH",
+                            "alertID": "HK_BTCH_PEPL!B7BB2BE4-21C27EF4-25D578E7-A7AE4D1A",
+                            "hitList": [
+                                {
+                                    "hitID": "AS03706790",
+                                    "hitDetails": "T0ZBQyBJRDpBUzAzNzA2NzkwCk1BVENIOiAwLjAwClRBRzogQ09ECk1BVENISU5HVEVYVDogQVNBUEQyMTg2USwgClJFU1VMVDogKDApCgpOQU1FOiBERVZJLCBNQUxBCiAgU3lub255bXM6CiAgIC0g4KSu4KS+4KSy4KS+IOCkpuClh+CkteClgApBRERSRVNTOiAKICBTeW5vbnltczogbm9uZQpDSVRZOiAKICBTeW5vbnltczogbm9uZQpDT1VOVFJZOiBJTkRJQQogIFN5bm9ueW1zOgogICAtIEJIQVJBVAogICAtIEJIQVJBVElZQSBHQU5BUkFKWUEKICAgLSBJTkRFCiAgIC0gSU5ESUVOCiAgIC0gUkVQVUJMSUMgT0YgSU5ESUEKU1RBVEU6IAogIFN5bm9ueW1zOiBub25lCk9SSUdJTjogClBFUApERVNJR05BVElPTjogCkdXTApUWVBFOiAKSW5kaXZpZHVhbApTRUFSQ0ggQ09ERVM6IApBU0FQRDIxODZRClVTRVIgREFUQSAxOiAKbm9uZQpVU0VSIERBVEEgMjogCm5vbmUKT0ZGSUNJQUwgUkVGOiAKMjAxOC0wNS0yOSAxMDo0OToxNCBQRVAKUEFTU1BPUlQ6IApub25lCkJJQyBDT0RFUzogCm5vbmUKTkFUSUQ6IApub25lClBMQUNFIE9GIEJJUlRIOiAKbm9uZQpEQVRFIE9GIEJJUlRIOiAKbm9uZQpOQVRJT05BTElUWTogCm5vbmUKQURESVRJT05BTCBJTkZPUzogCkxpc3QgSUQ6IDEwMjAgLyBDcmVhdGUgRGF0ZTogMDUvMTEvMjAxMiAwMDowMDowMCAvIExhc3QgVXBkYXRlIERhdGU6IDA1LzI5LzIwMTggMTA6NDk6MTQgLyBPcmdfUElEOiAyNjAwNjk2IC8gVGl0bGU6IFdJRkUgT0YgTEFMIEJBQlUgUFJBU0FELCBGT1JNRVIgTUVNQkVSIE9GIFRIRSBCSUhBUiBMRUdJU0xBVElWRSBDT1VOQ0lMLiAvIE90aGVySUQ6IEFTQVBEMjE4NlEgLyBHZW5kZXI6IEZFTUFMRSAvIFJlbGF0aW9uc2hpcDogV2lmZSAvIE9yaWdpbmFsSUQ6IDI2MDIwMzUKRk1MIFRZUEU6IAoxCkZNTCBQUklPUklUWTogCjIKRk1MIENPTkZJREVOVElBTElUWTogCjAKRk1MIElORk86IAorR05TUlQgU0VUIFBSSU9SSVRZIExFVkVMMgpQRVAtRkVQOiAKMSAwCktFWVdPUkRTOiAKT1M6UEVQIE5TOk5BTUVTT1VSQ0VfV0VCU0lURSBFTlRJVFlMRVZFTDpMRVZFTF9TVEFURSBTQzpGQU1JTFlfTUVNQkVSCkhZUEVSTElOS1M6IApodHRwczovL2FjY3VpdHkud29ybGRjb21wbGlhbmNlLmNvbS9zaWduaW4uYXNweD9lbnQ9MmI3MGZiY2MtOGMxZi00NzI3LTkxZTMtNjhlNDEyNTNhYjhhClRZUzogMgpJU046IC0xCgo="
+                                }
+                            ],
+                            "watchlistAlertDecisionTimestamp": null
+                        },
+                        {
+                            "watchlistType": "Sanctions",
+                            "alertStatus": "NO_MATCH",
+                            "alertID": "",
+                            "hitList": [],
+                            "watchlistAlertDecisionTimestamp": null
+                        }
+                    ]
+                },
+                "finalDecisionData": null
+            }
+        }
+    }
+}

@@ -1,0 +1,227 @@
+{
+    "screenCustomerNameRes": {
+        "header": {
+            "messageDetails": {
+                "messageVersion": 2,
+                "messageType": {
+                    "typeName": "Risk:CustomerScreening",
+                    "subType": {
+                        "subTypeName": "screenCustomerName",
+                        "subTypeScheme": null
+                    }
+                },
+                "multiMessage": {
+                    "multiMessageKnown": null
+                }
+            },
+            "originationDetails": {
+                "messageSender": {
+                    "messageSender": {
+                        "value": "GNSRT",
+                        "systemScheme": null
+                    },
+                    "senderDomain": {
+                        "domainName": {
+                            "value": "Risk",
+                            "domainNameScheme": null
+                        },
+                        "subDomainName": {
+                            "subDomainType": "Compliance",
+                            "subdomainNameScheme": null
+                        }
+                    },
+                    "countryCode": "SG"
+                },
+                "messageTimestamp": "2019-10-11T05:06:05.739+0000",
+                "initiatedTimestamp": "2019-10-11T05:06:05.739+0000",
+                "trackingId": "SG_GNSRT_CHECK_001",
+                "correlationID": null,
+                "conversationID": null,
+                "customSearchID": null,
+                "batchID": null,
+                "serviceBusID": null,
+                "validFrom": null,
+                "validTo": null,
+                "timeToLive": null,
+                "priority": null,
+                "checksum": null,
+                "compressionAlgorithm": null,
+                "encoding": null,
+                "possibleDuplicate": false
+            },
+            "captureSystem": "GNSRT",
+            "process": {
+                "processName": null,
+                "eventType": "Request",
+                "lifecycleState": null,
+                "workflowState": null,
+                "action": null
+            },
+            "metadata": null,
+            "messageHistory": [],
+            "exceptions": null
+        },
+        "screenCustomerNameResPayload": {
+            "payloadFormat": null,
+            "payloadVersion": null,
+            "screenCustomerNameResInfo": {
+                "header": {
+                    "sourceSystem": "GNSRT",
+                    "countryCode": "SG",
+                    "segment": "BUSINESS_BANKING",
+                    "clientType": "C",
+                    "partyType": "Customer",
+                    "screeningUniqueReference": "SG_GNSRT_CHECK_19",
+                    "watchlistTypeAll": "Y",
+                    "watchlistTypeSanctions": null,
+                    "watchlistTypePEP": null,
+                    "watchlistTypeAM": null,
+                    "watchlistTypeDD": null,
+                    "genericSearchFlag": "N",
+                    "priorityScreeningFlag": "N",
+                    "userBankID": "1587856",
+                    "userDepartment": "EDMI",
+                    "requestorOrGroupMailId": null,
+                    "emailNotificationRequiredOrNot": "Y\n                                                                                    ",
+                    "responseType": "Initial",
+                    "requestInTime": "2020-02-20T21:40:42",
+                    "requestOutTime": "2020-02-20T21:40:48"
+                },
+                "screenableData": {
+                    "sourceSystemIdentifier": "GNSRT",
+                    "customerIdentificationNo": "SG_GNSRT_CHECK_19",
+                    "clientType": "C",
+                    "fullLegalName": "COMMERCIAL BANK OF CHINA EFUND ASIAN ELITE FUND Another: SCI",
+                    "fullTradingName": null,
+                    "legalParentOrGroupName": null,
+                    "executiveManagementNames": null,
+                    "supplementaryCardName": null,
+                    "alternateName1": "BLOTO INTERNATIONAL COMPANY",
+                    "alternateName2": "POOLAK, SIIRI",
+                    "alternateName3": null,
+                    "alternateNameRest": null,
+                    "registeredOrResidentialAddress": "",
+                    "registeredOrResidentialAddressCountry": "SY",
+                    "mailingOrCommunicationAddress": null,
+                    "mailingOrCommunicationAddressCountry": null,
+                    "operatingOrOfficialAddress": null,
+                    "operatingOrOfficialAddressCountry": null,
+                    "otherAddress": "",
+                    "otherAddressCountry": "",
+                    "registeredAddressOfHeadOffice": null,
+                    "registeredAddressCountryOfHeadOffice": null,
+                    "registeredAddressOfParentCompany": null,
+                    "registeredAddressCountryOfParentCompany": null,
+                    "nationalityAll": "SG",
+                    "establishmentCountryOfHO": null,
+                    "establishmentCountryOfParentCompany": null,
+                    "identificationType1": "National ID",
+                    "identificationNumber1": "14220056",
+                    "identificationType2": "",
+                    "identificationNumber2": "",
+                    "identificationType3": "",
+                    "identificationNumber3": "",
+                    "identificationType4": null,
+                    "identificationNumber4": null,
+                    "identificationTypeRest": null,
+                    "identificationNumberRest": null,
+                    "dateOfBirthOrRegistration": "1966-05-04",
+                    "countryOfBirthOrRegistration": null,
+                    "homeStateAuthorityOrGovtCountryName": null,
+                    "nameOfStockExchange": null,
+                    "nameOfAuthority": null,
+                    "businessNature": null,
+                    "classesOfBeneficiary": null,
+                    "clientLegalEntityType": null,
+                    "clientSegment": "Business Banking",
+                    "clientSubSegment": null,
+                    "customerStatus": null,
+                    "acctOrRelationshipOrProfileClosedDate": null,
+                    "lastCDDApprovedDate": null,
+                    "linkedCustomerIdentificationNo": "",
+                    "natureOfRelationshipWithHomeStateAuthority": null,
+                    "ownershipStatusOfClient": null,
+                    "partyType": "Customer",
+                    "supplierType": null,
+                    "relationshipToThePrimaryCardholder": null,
+                    "staffAccountIdentifier": null,
+                    "gender": null,
+                    "countryOfEmployment": null,
+                    "relatedPartyType": null,
+                    "supplementaryInformation4": null,
+                    "casaFlag": null,
+                    "supplementaryInformation5": null,
+                    "priorityIndicator": null,
+                    "dateTimeStamp": "2019-10-11T01:06:05",
+                    "addressCity": null,
+                    "relianceFlgOrSuppTypOrKoreanName": null,
+                    "realTimeMessageIndicator": "GNSRT",
+                    "changeOrPriorityIndicator": "N",
+                    "alternateID1Description": null,
+                    "alternateID1": null,
+                    "alternateID2Description": null,
+                    "alternateID2": null,
+                    "supplementaryInformation1": null,
+                    "supplementaryInformation2": null,
+                    "supplementaryInformation3": null,
+                    "nottobeused": null,
+                    "supplementaryInformation6": null,
+                    "supplementaryInformation7": null,
+                    "supplementaryInformation8": null,
+                    "supplementaryInformation9": null,
+                    "supplementaryInformation10": null,
+                    "amlcountry": "SG",
+                    "cddriskRating": null,
+                    "pepstatus": null,
+                    "rmcodeOfCDDOwner": null,
+                    "rmlocationOfCDDOwner": null
+                },
+                "immediateResponseData": {
+                    "immediateResponseTimestamp": "2020-02-20T21:40:48.000",
+                    "overAllStatus": "POTENTIAL_MATCH",
+                    "alerts": [
+                        {
+                            "watchlistType": "Sanctions",
+                            "alertStatus": "POTENTIAL_MATCH",
+                            "alertID": "SG_BTCH_DENY!EC930340-54EA34DD-CE4F7B06-FBDE3654",
+                            "hitList": [
+                                {
+                                    "hitID": "AS00688345",
+                                    "hitDetails": "T0ZBQyBJRDpBUzAwNjg4MzQ1Ck1BVENIOiAwLjAwClRBRzogTkFNCk1BVENISU5HVEVYVDogU1ksIApSRVNVTFQ6ICgwKQoKTkFNRTogKgogIFN5bm9ueW1zOiBub25lCkFERFJFU1M6IAogIFN5bm9ueW1zOiBub25lCkNJVFk6ICoKICBTeW5vbnltczogbm9uZQpDT1VOVFJZOiBTWVJJQU4gQVJBQiBSRVBVQkxJQwogIFN5bm9ueW1zOgogICAtIEFMIEpVTUhVUklZQUggQUwgQVJBQklZQUggQVMgU1VSSVlBSAogICAtIFJFUFVCTElRVUUgQVJBQkUgU1lSSUVOTkUKICAgLSBTSVJJQQogICAtIFNVUklZRQogICAtIFNZUklBCiAgIC0gU1lSSUFOIEFSQUIgUkVQVUJMSUMKICAgLSBTWVJJRQogICAtIFNZUklFTgogICAtIFNZUklFTiBBUkFCSVNDSEUgUkVQVUJMSUsKICAgLSBTWVJJU0NIClNUQVRFOiAKICBTeW5vbnltczogbm9uZQpPUklHSU46IApJU04KREVTSUdOQVRJT046IApDSEVNX19CSU9fV0VBUE9OUwpUWVBFOiAKT3RoZXIKU0VBUkNIIENPREVTOiAKVk9MNzhOTzIzNwpVU0VSIERBVEEgMTogCm5vbmUKVVNFUiBEQVRBIDI6IApub25lCk9GRklDSUFMIFJFRjogCjIwMTgtMDMtMTUgMTc6NDQ6NDAgSVNOClBBU1NQT1JUOiAKbm9uZQpCSUMgQ09ERVM6IApub25lCk5BVElEOiAKbm9uZQpQTEFDRSBPRiBCSVJUSDogCm5vbmUKREFURSBPRiBCSVJUSDogCm5vbmUKTkFUSU9OQUxJVFk6IApub25lCkFERElUSU9OQUwgSU5GT1M6IAo0OSBtYWluIGNpdGllczoCQUxFUFBPLCBEQU1BU0NVUywgSEFNQSwgAkhPTVMsIExBVEFLSUEsIFRBUlRPVVMsIEFMIEhBU0FLQUgsIAJBUiBSQVFRQUgsIERBWVIgQVogWkFXUiwgVEFETVVSLCBKQUJMQUgsIAJCQU5JWUFTLCBUQVJUVVMsIEhBTUFILCBISU1TLCACTU9VTlQgSEVSTU9OLCBBTCBRVU5BWVRJUkFILCBBUyBTVVdBWURBLCBEQU1BUywgAkxBREhJUUlZQUgsIFJBS0tBSCwgUUFNSVNITFksIFBBTE1ZUkEsIAJEQVJBQSwgQUwgUUFNSVNITEksIElETElCLCBBUyBTV0FZREEsIAJBTCBCQUIsIE1BUk1BUklUQSwgU1VSQU4sIEFGUklOLCACQUwgTUFMSUtJWUFILCBBTCBNVUtIQVJSQU0sIEFMIFRIQVdSQUgsIEFTIFNBRklSQUgsIAJERUlSIEFUSVlBSCwgTkFXQSwgU0FGSVRBLCBTQUxBTUlZQUgsIAJBTEVQLCBBTEVQTywgREFNQVNLVVMsIERBTUFTQ08sIAJMQVRBUVVJQSwgTEFPRElDRUEsIEJVUkogSVNMQU0sIERFSVIgRVogWk9SLCACREFNQVNDQVMsIERBTUFTRUsCAkxpc3QgSUQ6IDEwNTIgLyBDcmVhdGUgRGF0ZTogMTAvMjgvMjAxMyAyMjoxNzozNiAvIExhc3QgVXBkYXRlIERhdGU6IDAzLzE1LzIwMTggMTc6MzE6MDQgLyBQcm9ncmFtOiBDSEVNSUNBTCBBTkQgQklPTE9HSUNBTCBXRUFQT05TIFNBTkNUSU9OUyBMQVdTIC8gRmVkZXJhbFJlZ2lzdGVyQ2l0YXRpb246IFZvbC4gNzgsIE5vLiAyMzcgT3RoZXJJbmZvOiAxMi8xMC8yMDEzIC8gRWZmZWN0aXZlRGF0ZTogMTIvMTAvMjAxMwpGTUwgVFlQRTogCjEKRk1MIFBSSU9SSVRZOiAKMgpGTUwgQ09ORklERU5USUFMSVRZOiAKMApGTUwgSU5GTzogCitHTlNSVCBTRVQgUFJJT1JJVFkgTEVWRUwyClBFUC1GRVA6IAowIDAKS0VZV09SRFM6IApPUzpCVVJFQVVfT0ZfSU5URVJOQVRJT05BTF9TRUNVUgpIWVBFUkxJTktTOiAKbm9uZQpUWVM6IDYKSVNOOiAtMQoK"
+                                },
+                                {
+                                    "hitID": "AS00008907",
+                                    "hitDetails": "T0ZBQyBJRDpBUzAwMDA4OTA3Ck1BVENIOiAwLjAwClRBRzogTkFNCk1BVENISU5HVEVYVDogU1ksIApSRVNVTFQ6ICgwKQoKTkFNRTogKgogIFN5bm9ueW1zOiBub25lCkFERFJFU1M6IAogIFN5bm9ueW1zOiBub25lCkNJVFk6ICoKICBTeW5vbnltczogbm9uZQpDT1VOVFJZOiBTWVJJQU4gQVJBQiBSRVBVQkxJQwogIFN5bm9ueW1zOgogICAtIEFMIEpVTUhVUklZQUggQUwgQVJBQklZQUggQVMgU1VSSVlBSAogICAtIFJFUFVCTElRVUUgQVJBQkUgU1lSSUVOTkUKICAgLSBTSVJJQQogICAtIFNVUklZRQogICAtIFNZUklBCiAgIC0gU1lSSUFOIEFSQUIgUkVQVUJMSUMKICAgLSBTWVJJRQogICAtIFNZUklFTgogICAtIFNZUklFTiBBUkFCSVNDSEUgUkVQVUJMSUsKICAgLSBTWVJJU0NIClNUQVRFOiAKICBTeW5vbnltczogbm9uZQpPUklHSU46IApSQkwKREVTSUdOQVRJT046IApTWVJJQU5fQVJBQl9SRVBVQkxJQwpUWVBFOiAKT3RoZXIKU0VBUkNIIENPREVTOiAKbm9uZQpVU0VSIERBVEEgMTogCm5vbmUKVVNFUiBEQVRBIDI6IApub25lCk9GRklDSUFMIFJFRjogCjIwMTYtMDMtMDIgMTQ6MjQ6NDAgUkJMClBBU1NQT1JUOiAKbm9uZQpCSUMgQ09ERVM6IApub25lCk5BVElEOiAKbm9uZQpQTEFDRSBPRiBCSVJUSDogCm5vbmUKREFURSBPRiBCSVJUSDogCm5vbmUKTkFUSU9OQUxJVFk6IApub25lCkFERElUSU9OQUwgSU5GT1M6IAo0OSBtYWluIGNpdGllczoCQUxFUFBPLCBEQU1BU0NVUywgSEFNQSwgAkhPTVMsIExBVEFLSUEsIFRBUlRPVVMsIEFMIEhBU0FLQUgsIAJBUiBSQVFRQUgsIERBWVIgQVogWkFXUiwgVEFETVVSLCBKQUJMQUgsIAJCQU5JWUFTLCBUQVJUVVMsIEhBTUFILCBISU1TLCACTU9VTlQgSEVSTU9OLCBBTCBRVU5BWVRJUkFILCBBUyBTVVdBWURBLCBEQU1BUywgAkxBREhJUUlZQUgsIFJBS0tBSCwgUUFNSVNITFksIFBBTE1ZUkEsIAJEQVJBQSwgQUwgUUFNSVNITEksIElETElCLCBBUyBTV0FZREEsIAJBTCBCQUIsIE1BUk1BUklUQSwgU1VSQU4sIEFGUklOLCACQUwgTUFMSUtJWUFILCBBTCBNVUtIQVJSQU0sIEFMIFRIQVdSQUgsIEFTIFNBRklSQUgsIAJERUlSIEFUSVlBSCwgTkFXQSwgU0FGSVRBLCBTQUxBTUlZQUgsIAJBTEVQLCBBTEVQTywgREFNQVNLVVMsIERBTUFTQ08sIAJMQVRBUVVJQSwgTEFPRElDRUEsIEJVUkogSVNMQU0sIERFSVIgRVogWk9SLCACREFNQVNDQVMsIERBTUFTRUsCAkxpc3QgSUQ6IDEwNzIgLyBDcmVhdGUgRGF0ZTogMDgvMjIvMTk5NiAwMDowMDowMCAvIExhc3QgVXBkYXRlIERhdGU6IDAyLzE5LzIwMTYgMDg6NTk6MjggLyBQcm9ncmFtOiBTWVJJQU4gQVJBQiBSRVBVQkxJQyAvIE90aGVySW5mb3JtYXRpb246IFhMT0MuIE9GQUMgbWFpbnRhaW5zIGEgc2FuY3Rpb25zIHByb2dyYW0gZm9yIFN5cmlhLiBQbGVhc2UgcmVmZXIgdG8gdGhlIE9GQUMgd2Vic2l0ZSBmb3IgZGV0YWlsZWQgaW5mb3JtYXRpb246IGh0dHA6Ly93d3cudHJlYXN1cnkuZ292L3Jlc291cmNlLWNlbnRlci9zYW5jdGlvbnMvUHJvZ3JhbXMvcGFnZXMvc3lyaWEuYXNweApGTUwgVFlQRTogCjEKRk1MIFBSSU9SSVRZOiAKMgpGTUwgQ09ORklERU5USUFMSVRZOiAKMApGTUwgSU5GTzogCitHTlNSVCBTRVQgUFJJT1JJVFkgTEVWRUwyClBFUC1GRVA6IAowIDAKS0VZV09SRFM6IApPUzpPRkFDCkhZUEVSTElOS1M6IApub25lClRZUzogNgpJU046IC0xCgo="
+                                },
+                                {
+                                    "hitID": "IL00056025",
+                                    "hitDetails": "T0ZBQyBJRDpJTDAwMDU2MDI1Ck1BVENIOiAwLjAwClRBRzogTkFNCk1BVENISU5HVEVYVDogSU5URVJOQVRJT05BTCBDT01QQU5ZLCAKUkVTVUxUOiAoMCkKCk5BTUU6IEQuSy4gSU5URVJOQVRJT05BTCBDTy4KICBTeW5vbnltczogbm9uZQpBRERSRVNTOiAxNjgtNDUgVE9EQU5HLVJPLCBEVUNLWUFORy1HVSwgR09ZQU5HLUNJVFkKICBTeW5vbnltczogbm9uZQpDSVRZOiBLWUVVTkdHSS1ETwogIFN5bm9ueW1zOiBub25lCkNPVU5UUlk6IEtPUkVBIFJFUFVCTElDIE9GCiAgU3lub255bXM6CiAgIC0gQ09SRUEgREVMIFNVUgogICAtIENPUkVFIERVIFNVRAogICAtIERBRUhBTiBNSU5HVUsKICAgLSBIQU5HVUsKICAgLSBLT1JFQSBSRVBVQkxJQyBPRgogICAtIEtPUkVBLCBSRVBVQkxJQyBPRgogICAtIFJFUFVCTElDIE9GIEtPUkVBCiAgIC0gUkVQVUJMSUsgS09SRUEKICAgLSBSRVBVQkxJUVVFIERFIENPUkVFCiAgIC0gU09VVEggS09SRUEKICAgLSBUQUVIQU4gTUlOR1VLClNUQVRFOiAKICBTeW5vbnltczogbm9uZQpPUklHSU46IApTQU5DVElPTlNHUk9VUApERVNJR05BVElPTjogClhYLVNBTkNDTlRSWU5FWC1TQzEyClRZUEU6IApDb21wYW55ClNFQVJDSCBDT0RFUzogCm5vbmUKVVNFUiBEQVRBIDE6IApSRk0tVFMuTlMuT0ItREVOWSBORVcKVVNFUiBEQVRBIDI6IApub25lCk9GRklDSUFMIFJFRjogCjExLzE0LzE5IDE6MzA6MDAgQU0KUEFTU1BPUlQ6IApub25lCkJJQyBDT0RFUzogCm5vbmUKTkFUSUQ6IApub25lClBMQUNFIE9GIEJJUlRIOiAKbm9uZQpEQVRFIE9GIEJJUlRIOiAKbm9uZQpOQVRJT05BTElUWTogCm5vbmUKQURESVRJT05BTCBJTkZPUzogCkQuSy4gSU5URVJOQVRJT05BTCBDTy4gYmFzZWQgaW4gU291dGggS29yZWEuIFRoZSBjb21wYW55IFByZXNpZGVudCByZW1pdHRlZCBhIHBheW1lbnQgdG8gYW5vdGhlciBpbmRpdmlkdWFsIHNob3dpbmcgSXJhbmlhbiBhZGRyZXNzLiBCYXNlZCBvbiBwcm9mb3JtYSBpbnZvaWNlIG9idGFpbmVkLCB0aGUgY29tcGFueSB3YXMgbGlzdGVkIGFzIHRoZSBidXllciBvZiBnb29kcyBwdXJjaGFzaW5nIHNhbXBsZSBiaXR1bWVuIGJlaW5nIHNoaXBwZWQgZnJvbSBVQUUgdG8gQmFuZ2xhZGVzaC4gUHJvZm9ybWEgaW52b2ljZSByZXZlYWxlZCBhbiBJcmFuaWFuIHBhcnR5IGFzIHRoZSBzZWxsZXIgb2YgdGhlIGdvb2RzIGFuZCB0aGUgdHJhbnNhY3Rpb24gd2FzIHJlamVjdGVkIGFuZCByZXBvcnRlZCB0byBPRkFDIGJlaW5nIGltcGVybWlzc2libGUgZnJvbSBVUyByZWd1bGF0b3J5IHBlcnNwZWN0aXZlLiBJbnRlbGxpZ2VuY2UgZ2F0aGVyZWQgYnkgQW1lcmljYXMgUlNULiBDYXNlIFJlZmVyZW5jZSBVU0YxOTEwMjItMDAwMDYzLiBUZWFtcyBzaG91bGQgZXhlcmNpc2UgYXBwcm9wcmlhdGUgZHVlIGRpbGlnZW5jZS4gVHJhbnNhY3Rpb25zIHBlcm1pc3NpYmxlIGlmIG5vcm1hbCBjb3Vyc2Ugb2YgZHVlIGRpbGlnZW5jZSBzdXBwb3J0cyBubyBzYW5jdGlvbnMgbmV4dXMuIEFueSBjb25maXJtZWQgc2FuY3Rpb25zIG5leHVzIHNoYWxsIGJlIGVzY2FsYXRlZCBhY2NvcmRpbmcgdG8geW91ciBCQVUgcHJvY2VkdXJlcy4gVXBkYXRlcyBhbmQgUmV0aXJlcyB0byBWZXJpdGFzIGZvciB0aGlzIGVudGl0eSByZXF1aXJlIEFtZXJpY2FzIFJTVCBhcHByb3ZhbC4KRk1MIFRZUEU6IAoxCkZNTCBQUklPUklUWTogCjIKRk1MIENPTkZJREVOVElBTElUWTogCjAKRk1MIElORk86IAorR05TUlQgU0VUIFBSSU9SSVRZIExFVkVMMgpQRVAtRkVQOiAKMCAwCktFWVdPUkRTOiAKSU5URVJOQUwgWFgtR1MKSFlQRVJMSU5LUzogCklMMDAwNTYwMjUKVFlTOiAxCklTTjogMAoK"
+                                },
+                                {
+                                    "hitID": "AS00098666",
+                                    "hitDetails": "T0ZBQyBJRDpBUzAwMDk4NjY2Ck1BVENIOiAwLjAwClRBRzogTkFNCk1BVENISU5HVEVYVDogQkxPVE8gSU5URVJOQVRJT05BTCBDT01QQU5ZLCAKUkVTVUxUOiAoMCkKCk5BTUU6IEJMT1RPIElOVEVSTkFUSU9OQUwgQ09NUEFOWQogIFN5bm9ueW1zOgogICAtIEJMT1RPIElOVEVSTkFUSU9OQUwsIExURC4KICAgLSBCTFVUTyBJTlRFUk5BVElPTkFMCiAgIC0gUExVVE8tRFVCQUkgVFJBRElORyBDT01QQU5ZLCBMTEMKQUREUkVTUzogMTMxLzEzIFNVS0hVTVZJVCBST0FELCBLTE9OR1RPRVkgTkVVQSBTVUItRElTVFJJQ1QsIFdBVFRBTkEgRElTVFJJQ1QsIDEwMTEwCiAgU3lub255bXM6IG5vbmUKQ0lUWTogQkFOR0tPSwogIFN5bm9ueW1zOiBub25lCkNPVU5UUlk6IFRIQUlMQU5ECiAgU3lub255bXM6CiAgIC0gS0lOR0RPTSBPRiBUSEFJTEFORAogICAtIFBSQVRIRVQgVEhBSQogICAtIFJBVEhDSEEgQU5BQ0hBSyBUSEFJCiAgIC0gVEhBSUxBTkQKICAgLSBUSEFJTEFOREUKICAgLSBUSEFJTEFORElBClNUQVRFOiAKICBTeW5vbnltczogbm9uZQpPUklHSU46IApVU1QKREVTSUdOQVRJT046IApJUkFRMgpUWVBFOiAKQ29tcGFueQpTRUFSQ0ggQ09ERVM6IApub25lClVTRVIgREFUQSAxOiAKbm9uZQpVU0VSIERBVEEgMjogCm5vbmUKT0ZGSUNJQUwgUkVGOiAKMjAwNC0wOC0wMiAxNzowMDowNSBVU1QKUEFTU1BPUlQ6IApub25lCkJJQyBDT0RFUzogCm5vbmUKTkFUSUQ6IApub25lClBMQUNFIE9GIEJJUlRIOiAKbm9uZQpEQVRFIE9GIEJJUlRIOiAKbm9uZQpOQVRJT05BTElUWTogCm5vbmUKQURESVRJT05BTCBJTkZPUzogCkxpc3QgSUQ6IDAgLyBDcmVhdGUgRGF0ZTogMDgvMDIvMjAwNCAxNTowMjoyNyAvIExhc3QgVXBkYXRlIERhdGU6IDA1LzA2LzIwMTEgMTc6MTI6NDAgLyBQcm9ncmFtOiBJUkFRMiAvIE9yaWdpbmFsSUQ6IDg0MjAKRk1MIFRZUEU6IAoxCkZNTCBQUklPUklUWTogCjIKRk1MIENPTkZJREVOVElBTElUWTogCjAKRk1MIElORk86IAorR05TUlQgU0VUIFBSSU9SSVRZIExFVkVMMgpQRVAtRkVQOiAKMCAwCktFWVdPUkRTOiAKT1M6T0ZBQwpIWVBFUkxJTktTOiAKbm9uZQpUWVM6IDEKSVNOOiAwCgo="
+                                }
+                            ],
+                            "watchlistAlertDecisionTimestamp": null
+                        },
+                        {
+                            "watchlistType": "AM",
+                            "alertStatus": "NO_MATCH",
+                            "alertID": "",
+                            "hitList": [],
+                            "watchlistAlertDecisionTimestamp": null
+                        },
+                        {
+                            "watchlistType": "PEP",
+                            "alertStatus": "NO_MATCH",
+                            "alertID": "",
+                            "hitList": [],
+                            "watchlistAlertDecisionTimestamp": null
+                        }
+                    ]
+                },
+                "finalDecisionData": null
+            }
+        }
+    }
+}

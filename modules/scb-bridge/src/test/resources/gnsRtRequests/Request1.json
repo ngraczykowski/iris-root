@@ -1,0 +1,219 @@
+{
+    "screenCustomerNameRes": {
+        "header": {
+            "messageDetails": {
+                "messageVersion": 2,
+                "messageType": {
+                    "typeName": "Risk:CustomerScreening",
+                    "subType": {
+                        "subTypeName": "Risk:screenCustomerName",
+                        "subTypeScheme": null
+                    }
+                },
+                "multiMessage": {
+                    "multiMessageKnown": null
+                }
+            },
+            "originationDetails": {
+                "messageSender": {
+                    "messageSender": {
+                        "value": "SMECDD",
+                        "systemScheme": null
+                    },
+                    "senderDomain": {
+                        "domainName": {
+                            "value": "Risk",
+                            "domainNameScheme": null
+                        },
+                        "subDomainName": {
+                            "subDomainType": "Compliance",
+                            "subdomainNameScheme": null
+                        }
+                    },
+                    "countryCode": "IN"
+                },
+                "messageTimestamp": null,
+                "initiatedTimestamp": null,
+                "trackingId": "SMECDD_CHECK_001",
+                "correlationID": null,
+                "conversationID": null,
+                "customSearchID": null,
+                "batchID": null,
+                "serviceBusID": null,
+                "validFrom": null,
+                "validTo": null,
+                "timeToLive": null,
+                "priority": null,
+                "checksum": null,
+                "compressionAlgorithm": null,
+                "encoding": null,
+                "possibleDuplicate": false
+            },
+            "captureSystem": "SMECDD",
+            "process": {
+                "processName": null,
+                "eventType": "Request",
+                "lifecycleState": null,
+                "workflowState": null,
+                "action": null
+            },
+            "metadata": null,
+            "messageHistory": [],
+            "exceptions": null
+        },
+        "screenCustomerNameResPayload": {
+            "payloadFormat": "XML",
+            "payloadVersion": "1.1",
+            "screenCustomerNameResInfo": {
+                "header": {
+                    "sourceSystem": "SMECDD",
+                    "countryCode": "IN",
+                    "segment": "BUSINESS_BANKING",
+                    "clientType": "I",
+                    "partyType": "Related Party",
+                    "screeningUniqueReference": "SMECDD_CHECK_001",
+                    "watchlistTypeAll": "Y",
+                    "watchlistTypeSanctions": "N",
+                    "watchlistTypePEP": "N",
+                    "watchlistTypeAM": "N",
+                    "watchlistTypeDD": null,
+                    "genericSearchFlag": "N",
+                    "priorityScreeningFlag": "N",
+                    "userBankID": "1526764",
+                    "userDepartment": null,
+                    "requestorOrGroupMailId": null,
+                    "emailNotificationRequiredOrNot": "Y",
+                    "responseType": "Initial",
+                    "requestInTime": "2020-02-20T21:27:57",
+                    "requestOutTime": "2020-02-20T21:28:02"
+                },
+                "screenableData": {
+                    "sourceSystemIdentifier": "SMECDD",
+                    "customerIdentificationNo": "SMECDD_CHECK_001",
+                    "clientType": "I",
+                    "fullLegalName": "Mahendra Nath",
+                    "fullTradingName": null,
+                    "legalParentOrGroupName": null,
+                    "executiveManagementNames": null,
+                    "supplementaryCardName": null,
+                    "alternateName1": "",
+                    "alternateName2": null,
+                    "alternateName3": null,
+                    "alternateNameRest": null,
+                    "registeredOrResidentialAddress": "",
+                    "registeredOrResidentialAddressCountry": null,
+                    "mailingOrCommunicationAddress": null,
+                    "mailingOrCommunicationAddressCountry": null,
+                    "operatingOrOfficialAddress": "",
+                    "operatingOrOfficialAddressCountry": "",
+                    "otherAddress": null,
+                    "otherAddressCountry": null,
+                    "registeredAddressOfHeadOffice": null,
+                    "registeredAddressCountryOfHeadOffice": null,
+                    "registeredAddressOfParentCompany": null,
+                    "registeredAddressCountryOfParentCompany": null,
+                    "nationalityAll": "null",
+                    "establishmentCountryOfHO": null,
+                    "establishmentCountryOfParentCompany": null,
+                    "identificationType1": null,
+                    "identificationNumber1": "",
+                    "identificationType2": null,
+                    "identificationNumber2": null,
+                    "identificationType3": null,
+                    "identificationNumber3": null,
+                    "identificationType4": null,
+                    "identificationNumber4": null,
+                    "identificationTypeRest": null,
+                    "identificationNumberRest": null,
+                    "dateOfBirthOrRegistration": "",
+                    "countryOfBirthOrRegistration": null,
+                    "homeStateAuthorityOrGovtCountryName": null,
+                    "nameOfStockExchange": null,
+                    "nameOfAuthority": null,
+                    "businessNature": "8123",
+                    "classesOfBeneficiary": null,
+                    "clientLegalEntityType": "Privately Owned Company",
+                    "clientSegment": "Business Banking",
+                    "clientSubSegment": "SME - High Growth Small Business",
+                    "customerStatus": null,
+                    "acctOrRelationshipOrProfileClosedDate": null,
+                    "lastCDDApprovedDate": null,
+                    "linkedCustomerIdentificationNo": "17215",
+                    "natureOfRelationshipWithHomeStateAuthority": null,
+                    "ownershipStatusOfClient": null,
+                    "partyType": "Related Party",
+                    "supplierType": null,
+                    "relationshipToThePrimaryCardholder": null,
+                    "staffAccountIdentifier": null,
+                    "gender": null,
+                    "countryOfEmployment": null,
+                    "relatedPartyType": "",
+                    "supplementaryInformation4": null,
+                    "casaFlag": null,
+                    "supplementaryInformation5": null,
+                    "priorityIndicator": null,
+                    "dateTimeStamp": "2020-02-20T13:57:58",
+                    "addressCity": null,
+                    "relianceFlgOrSuppTypOrKoreanName": null,
+                    "realTimeMessageIndicator": "GNSRT",
+                    "changeOrPriorityIndicator": "N",
+                    "alternateID1Description": null,
+                    "alternateID1": null,
+                    "alternateID2Description": null,
+                    "alternateID2": null,
+                    "supplementaryInformation1": null,
+                    "supplementaryInformation2": null,
+                    "supplementaryInformation3": null,
+                    "nottobeused": null,
+                    "supplementaryInformation6": null,
+                    "supplementaryInformation7": null,
+                    "supplementaryInformation8": null,
+                    "supplementaryInformation9": null,
+                    "supplementaryInformation10": null,
+                    "amlcountry": "IN",
+                    "cddriskRating": null,
+                    "pepstatus": null,
+                    "rmcodeOfCDDOwner": null,
+                    "rmlocationOfCDDOwner": null
+                },
+                "immediateResponseData": {
+                    "immediateResponseTimestamp": "2020-02-20T21:28:02.123",
+                    "overAllStatus": "POTENTIAL_MATCH",
+                    "alerts": [
+                        {
+                            "watchlistType": "Sanctions",
+                            "alertStatus": "NO_MATCH",
+                            "alertID": "",
+                            "hitList": [],
+                            "watchlistAlertDecisionTimestamp": null
+                        },
+                        {
+                            "watchlistType": "PEP",
+                            "alertStatus": "NO_MATCH",
+                            "alertID": "",
+                            "hitList": [],
+                            "watchlistAlertDecisionTimestamp": null
+                        },
+                        {
+                            "watchlistType": "AM",
+                            "alertStatus": "POTENTIAL_MATCH",
+                            "alertID": "IN_BTCH_DUDL!737FC9C1-BDE337AD-75A2086D-78C6F14C",
+                            "hitList": [
+                                {
+                                    "hitID": "AM00009986",
+                                    "hitDetails": "T0ZBQyBJRDpBTTAwMDA5OTg2Ck1BVENIOiAwLjAwClRBRzogTkFNCk1BVENISU5HVEVYVDogTWFoZW5kcmEgTmF0aCwgClJFU1VMVDogKDApCgpOQU1FOiBOQVRIIFZZQVMsIE1BSEVORFJBCiAgU3lub255bXM6IG5vbmUKQUREUkVTUzogCiAgU3lub255bXM6IG5vbmUKQ0lUWTogCiAgU3lub255bXM6IG5vbmUKQ09VTlRSWTogCiAgU3lub255bXM6IG5vbmUKU1RBVEU6IAogIFN5bm9ueW1zOiBub25lCk9SSUdJTjogCkFNTExPQ0FMCkRFU0lHTkFUSU9OOiAKSU4tU0VOU0MtQVNTT0MKVFlQRTogCkluZGl2aWR1YWwKU0VBUkNIIENPREVTOiAKbm9uZQpVU0VSIERBVEEgMTogClJGTS1YWC5YWC5PQi1EVUVEIFVQREFURQpVU0VSIERBVEEgMjogCm5vbmUKT0ZGSUNJQUwgUkVGOiAKMTAvMjAvMjAxOSAxOjMwOjAwIEFNClBBU1NQT1JUOiAKbm9uZQpCSUMgQ09ERVM6IApub25lCk5BVElEOiAKbm9uZQpQTEFDRSBPRiBCSVJUSDogCm5vbmUKREFURSBPRiBCSVJUSDogCjA4LzE5LzE5NTUKTkFUSU9OQUxJVFk6IApub25lCkFERElUSU9OQUwgSU5GT1M6IApUaGVyZSBpcyBubyByZWd1bGF0b3J5L3N0YXR1dG9yeSByZXN0cmljdGlvbiBmb3IgcHJvZ3Jlc3NpbmcgdHJhbnNhY3Rpb25zIGZvciB0aGlzIGVudGl0eS4gUGxlYXNlIHJlZmVyIHRvIEluZGlhIEZDUiB0ZWFtIG9ubHkgaWYgYSBuZXcgYWNjb3VudCBpcyBiZWluZyBvcGVuZWQuIEZvciBTQU0gYWxlcnRzLCBJbmRpYSBUcmFkZSBTZXJ2aWNlcyBtYXkgY2hlY2sgZm9yIGhhcmQgaG9sZHMgcmVzdHJpY3Rpbmcgb3BlcmF0aW9ucyBhdCBhY2NvdW50IGxldmVsLCBpZiBhbnk7IE5vIHJlZmVycmFscyBuZWVkIGJlIG1hZGUgdG8gQ291bnRyeSBGQ1IgaWYgdGhlIHR4bnMgYXJlIG90aGVyd2lzZSBpbiBvcmRlci4gVGhlIGVudGl0eSBjYW1lIHVuZGVyIGFkdmVyc2UgQU1MIHNjcnV0aW55LiBQbHMgZW5zdXJlIHRoZXJlIGlzIG5vIHRpcC1vZmYgdG8gdGhlIGNvbmNlcm5lZCBlbnRpdHkgb24gdmlld2luZyB0aGlzIGFsZXJ0LgpGTUwgVFlQRTogCjEKRk1MIFBSSU9SSVRZOiAKMgpGTUwgQ09ORklERU5USUFMSVRZOiAKMApGTUwgSU5GTzogCitHTlNSVCBTRVQgUFJJT1JJVFkgTEVWRUwyClBFUC1GRVA6IAowIDAKS0VZV09SRFM6IApJTi1OTQpIWVBFUkxJTktTOiAKQU0wMDAwOTk4NgpUWVM6IDEKSVNOOiAwCgo="
+                                },
+                                {
+                                    "hitID": "AS05305170",
+                                    "hitDetails": "T0ZBQyBJRDpBUzA1MzA1MTcwCk1BVENIOiAwLjAwClRBRzogTkFNCk1BVENISU5HVEVYVDogTWFoZW5kcmEgTmF0aCwgClJFU1VMVDogKDApCgpOQU1FOiBOQVRILCBNIEZBTkVFTkRSQQogIFN5bm9ueW1zOiBub25lCkFERFJFU1M6IAogIFN5bm9ueW1zOiBub25lCkNJVFk6IAogIFN5bm9ueW1zOiBub25lCkNPVU5UUlk6IElORElBCiAgU3lub255bXM6CiAgIC0gQkhBUkFUCiAgIC0gQkhBUkFUSVlBIEdBTkFSQUpZQQogICAtIElOREUKICAgLSBJTkRJRU4KICAgLSBSRVBVQkxJQyBPRiBJTkRJQQpTVEFURTogCiAgU3lub255bXM6IG5vbmUKT1JJR0lOOiAKRURBCkRFU0lHTkFUSU9OOiAKR1dMClRZUEU6IApJbmRpdmlkdWFsClNFQVJDSCBDT0RFUzogCm5vbmUKVVNFUiBEQVRBIDE6IApub25lClVTRVIgREFUQSAyOiAKbm9uZQpPRkZJQ0lBTCBSRUY6IAoyMDE2LTAyLTE3IDA4OjM0OjQ5IEVEQQpQQVNTUE9SVDogCm5vbmUKQklDIENPREVTOiAKbm9uZQpOQVRJRDogCm5vbmUKUExBQ0UgT0YgQklSVEg6IApub25lCkRBVEUgT0YgQklSVEg6IApub25lCk5BVElPTkFMSVRZOiAKbm9uZQpBRERJVElPTkFMIElORk9TOiAKTGlzdCBJRDogMTEwNiAvIENyZWF0ZSBEYXRlOiAwMi8xNi8yMDE2IDAwOjAwOjAwIC8gTGFzdCBVcGRhdGUgRGF0ZTogMDIvMTYvMjAxNiAxNjo0MDo0OSAvIFRpdGxlOiBBUlJFU1RFRCBGT1IgQ09SUlVQVElPTiAtIEZFQlJVQVJZLCAyMDEzIC8gR2VuZGVyOiBNQUxFIC8gT3RoZXJJbmZvcm1hdGlvbjogQWNjb3JkaW5nIHRvIHRoZSBJTi1JbmRpYW4gQ2VudHJhbCBCdXJlYXUgb2YgSW52ZXN0aWdhdGlvbjsgRmVicnVhcnkgMDcsIDIwMTM6IFRoZSBDZW50cmFsIEJ1cmVhdSBvZiBJbnZlc3RpZ2F0aW9uIGhhcyBhcnJlc3RlZCBNIEZhbmVlbmRyYSBOYXRoLCBhbiBFeGVjdXRpdmUgRW5naW5lZXIgb2YgQ2VudHJhbCBQdWJsaWMgd29ya3MsIERlcGFydG1lbnQsIFRocmlzc3VyIENlbnRyYWwgRGl2aXNpb24sIFRocmlzc3VyIChLZXJhbGEpIGZvciBkIC8gT3JpZ2luYWxJRDogNzI1ODQ0OQpGTUwgVFlQRTogCjEKRk1MIFBSSU9SSVRZOiAKMgpGTUwgQ09ORklERU5USUFMSVRZOiAKMApGTUwgSU5GTzogCitHTlNSVCBTRVQgUFJJT1JJVFkgTEVWRUwyClBFUC1GRVA6IAowIDAKS0VZV09SRFM6IApPUzpFTkZPUkNFTUVOVCBOUzpOQU1FU09VUkNFX0lOLUNCSSBFTlRJVFlMRVZFTDpMRVZFTF9OQSBTQzpDT1JSVVBUSU9OCkhZUEVSTElOS1M6IApodHRwczovL2FjY3VpdHkud29ybGRjb21wbGlhbmNlLmNvbS9zaWduaW4uYXNweD9lbnQ9NDQxZjUyNTYtNGMzNS00NDVlLTliMGEtZWZkNzdjN2E1ZjNkClRZUzogMQpJU046IDAKCg=="
+                                }
+                            ],
+                            "watchlistAlertDecisionTimestamp": null
+                        }
+                    ]
+                },
+                "finalDecisionData": null
+            }
+        }
+    }
+}

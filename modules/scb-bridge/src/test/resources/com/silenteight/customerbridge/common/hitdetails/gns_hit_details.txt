@@ -1,0 +1,157 @@
+Suspect(s) detected by OFAC-Agent:2
+SystemId:
+Associate:
+=============================
+Suspect detected #1
+
+OFAC ID:AS04452817
+MATCH: 0.00
+TAG: COD
+MATCHINGTEXT: AXZPS0997C,
+RESULT: (0)
+
+BATCH: 2019/03/12_0002_IN_BTCH_PEPL
+NAME: VARMA, SREEMATI DEV
+  Synonyms:
+   - SEN, MOON MOON
+   - VARMA, SRIMATI DEV
+   - মুন মুন সেন
+   - শ্রীমতী দেব ভর্মা
+ADDRESS:
+  Synonyms: none
+CITY:
+  Synonyms: none
+COUNTRY: INDIA
+  Synonyms:
+   - BHARAT
+   - BHARATIYA GANARAJYA
+   - INDE
+   - INDIEN
+   - REPUBLIC OF INDIA
+STATE:
+  Synonyms: none
+ORIGIN:
+PEP
+DESIGNATION:
+GWL
+TYPE:
+I
+SEARCH CODES:
+AXZPS0997C
+USER DATA 1:
+none
+USER DATA 2:
+none
+OFFICIAL REF:
+2018-06-29 10:47:18 PEP
+PASSPORT:
+none
+BIC CODES:
+none
+NATID:
+none
+PLACE OF BIRTH:
+Kolkata, West Bengal, India
+DATE OF BIRTH:
+03/28/1948 03/28/1954
+NATIONALITY:
+none
+ADDITIONAL INFOS:
+List ID: 1020 / Create Date: 05/23/2014 00:00:00 / Last Update Date: 06/29/2018 10:47:18 / Org_PID: 5377543 / Title: MEMBER OF LOK SABHA (MAY 16, 2014 - MAY, 2019). / OtherID: AXZPS0997C / Gender: FEMALE / OtherInformation: Political Party: Trinamool Congress. Constituency: Bankura (West Bengal). Career: Member of Lok Sabha (May 16, 2014 - May, 2019). / Relationship: Mother / EffectiveDate: 2014 / ExpirationDate: 2019 / OriginalID: 5377520
+FML TYPE:
+1
+FML PRIORITY:
+0
+FML CONFIDENTIALITY:
+0
+FML INFO:
+none
+PEP-FEP:
+1 0
+KEYWORDS:
+OS:PEP NS:NAMESOURCE_WEBSITE ENTITYLEVEL:LEVEL_NATIONAL SC:GOVT_BRANCH_MEMBER
+HYPERLINKS:
+https://accuity.worldcompliance.com/signin.aspx?ent=fb5392f2-aded-40af-b4c8-dd32cc7d51c5
+TYS: 2
+ISN: -1
+
+=============================
+Suspect detected #2
+
+OFAC ID:AS04452817
+MATCH: 0.00
+TAG: NAM
+MATCHINGTEXT: MOON MOON SEN, IND,
+RESULT: (0)
+
+BATCH: 2019/03/12_0002_IN_BTCH_PEPL
+NAME: VARMA, SREEMATI DEV
+  Synonyms:
+   * SEN, MOON MOON
+   - VARMA, SRIMATI DEV
+   - মুন মুন সেন
+   - শ্রীমতী দেব ভর্মা
+ADDRESS:
+  Synonyms: none
+CITY:
+  Synonyms: none
+COUNTRY: INDIA
+  Synonyms:
+   - BHARAT
+   - BHARATIYA GANARAJYA
+   - INDE
+   - INDIEN
+   - REPUBLIC OF INDIA
+STATE:
+  Synonyms: none
+ORIGIN:
+PEP
+DESIGNATION:
+GWL
+TYPE:
+I
+SEARCH CODES:
+AXZPS0997C
+USER DATA 1:
+none
+USER DATA 2:
+none
+OFFICIAL REF:
+2018-06-29 10:47:18 PEP
+PASSPORT:
+none
+BIC CODES:
+none
+NATID:
+none
+PLACE OF BIRTH:
+Kolkata, West Bengal, India
+DATE OF BIRTH:
+03/28/1948 03/28/1954
+NATIONALITY:
+none
+ADDITIONAL INFOS:
+List ID: 1020 / Create Date: 05/23/2014 00:00:00 / Last Update Date: 06/29/2018 10:47:18 / Org_PID: 5377543 / Title: MEMBER OF LOK SABHA (MAY 16, 2014 - MAY, 2019). / OtherID: AXZPS0997C / Gender: FEMALE / OtherInformation: Political Party: Trinamool Congress. Constituency: Bankura (West Bengal). Career: Member of Lok Sabha (May 16, 2014 - May, 2019). / Relationship: Mother / EffectiveDate: 2014 / ExpirationDate: 2019 / OriginalID: 5377520
+FML TYPE:
+1
+FML PRIORITY:
+0
+FML CONFIDENTIALITY:
+0
+FML INFO:
+none
+PEP-FEP:
+1 0
+KEYWORDS:
+OS:PEP NS:NAMESOURCE_WEBSITE ENTITYLEVEL:LEVEL_NATIONAL SC:GOVT_BRANCH_MEMBER
+HYPERLINKS:
+https://accuity.worldcompliance.com/signin.aspx?ent=fb5392f2-aded-40af-b4c8-dd32cc7d51c5
+TYS: 1
+ISN: 1
+
+=============================
+   *** INTERNAL OFAC DETAILS ***
+HasSndRcvIn
+Limited: 0
+|AS04452817|0.00|COD|100|109|
+|AS04452817|0.00|NAM|36|48|86|88|
