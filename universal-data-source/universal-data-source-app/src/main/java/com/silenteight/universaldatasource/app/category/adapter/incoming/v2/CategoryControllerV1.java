@@ -26,12 +26,6 @@ public class CategoryControllerV1 {
   public ResponseEntity<List<CategoryDto>> getAvailableCategories() {
     var categories = listAvailableCategoriesUseCase.getAvailableCategories().getCategoriesList();
 
-    var filteredCategories = categories.stream()
-        .filter(category -> !category.getDisplayName().equals("Specific Terms"))
-        .filter(category -> !category.getDisplayName().equals("Specific Terms 3"))
-        .filter(category -> !category.getDisplayName().equals("Historical Risk Assessment"))
-        .collect(Collectors.toList());
-
-    return ResponseEntity.ok(categoryMapper.mapCategories(filteredCategories));
+    return ResponseEntity.ok(categoryMapper.mapCategories(categories));
   }
 }
