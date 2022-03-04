@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +26,11 @@ public class CategoryControllerV1 {
   public ResponseEntity<List<CategoryDto>> getAvailableCategories() {
     var categories = listAvailableCategoriesUseCase.getAvailableCategories().getCategoriesList();
 
-    return ResponseEntity.ok(categoryMapper.mapCategories(categories));
+    var filteredCategories = categories.stream()
+        .filter(category -> !category.getDisplayName().equals("Specific Terms"))
+        .filter(category -> !category.getDisplayName().equals("Specific Terms 3"))
+        .collect(Collectors.toList());
+
+    return ResponseEntity.ok(categoryMapper.mapCategories(filteredCategories));
   }
 }
