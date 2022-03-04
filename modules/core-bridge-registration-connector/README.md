@@ -2,7 +2,7 @@
 
 # Library basic information
 
-This library was generated with java jdk-17 LTS and Gradle 7.3.
+This library was generated with java jdk-17 LTS (downgraded to jdk-11 from 1.14.0 version) and Gradle 7.3.
 
 The main purpose of the library is to cover and handle main implementation in Java language of
 classes using GRPC protocol based on protobuf contracts. You do not need to implement those by

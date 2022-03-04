@@ -1,16 +1,19 @@
 package com.silenteight.registration.api.library.v1;
 
 import lombok.Builder;
+import lombok.Value;
 
 import com.silenteight.proto.registration.api.v1.NotifyBatchErrorRequest;
 
 import java.util.Optional;
 
-public record NotifyBatchErrorIn(String batchId, String errorDescription,
-                                 String batchMetadata) {
+@Value
+@Builder
+public class NotifyBatchErrorIn {
 
-  @Builder
-  public NotifyBatchErrorIn {}
+  String batchId;
+  String batchMetadata;
+  String errorDescription;
 
   NotifyBatchErrorRequest toNotifyBatchErrorRequest() {
     return NotifyBatchErrorRequest.newBuilder()

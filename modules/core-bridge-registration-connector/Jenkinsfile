@@ -1,7 +1,7 @@
 @Library('pipeline-shared-library') _
 
 gradleBuild(
-    jdkVersion: 'jdk-17',
+    jdkVersion: 'jdk-11',
     archiveArtifactsPattern: '**/build/libs/*.jar, plugins/**/*.jar',
     includeBuildNumberInSnapshotVersion: true
 )

@@ -1,16 +1,19 @@
 package com.silenteight.registration.api.library.v1;
 
 import lombok.Builder;
+import lombok.Value;
 
 import com.silenteight.proto.registration.api.v1.RegisterBatchRequest;
 
 import java.util.Optional;
 
-public record RegisterBatchIn(String batchId, Long alertCount,
-                              String batchMetadata) {
+@Value
+@Builder
+public class RegisterBatchIn {
 
-  @Builder
-  public RegisterBatchIn {}
+  String batchId;
+  String batchMetadata;
+  Long alertCount;
 
   RegisterBatchRequest toRegisterBatchRequest() {
     return RegisterBatchRequest.newBuilder()
