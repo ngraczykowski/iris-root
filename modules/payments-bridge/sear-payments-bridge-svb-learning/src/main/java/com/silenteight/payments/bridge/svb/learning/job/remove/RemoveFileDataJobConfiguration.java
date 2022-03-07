@@ -18,6 +18,7 @@ class RemoveFileDataJobConfiguration {
   private final Step removeCsvRowsStep;
   private final Step removeAlertsStep;
   private final Step removeHitsStep;
+  private final Step removeActionsStep;
 
   @Bean
   Job removeFileDataJob() {
@@ -25,6 +26,7 @@ class RemoveFileDataJobConfiguration {
         .start(removeCsvRowsStep)
         .next(removeAlertsStep)
         .next(removeHitsStep)
+        .next(removeActionsStep)
         .build();
   }
 }

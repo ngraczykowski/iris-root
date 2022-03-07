@@ -22,7 +22,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
     RemoveFileCsvRowsQuery.class,
     RemoveLearningAlertsQuery.class,
     RemoveHitsQuery.class,
-    RemoveActionsWithoutParentQuery.class })
+    RemoveActionsQuery.class })
 class RemoveFileDataIT extends BaseJdbcTest {
 
   @Autowired
@@ -51,6 +51,15 @@ class RemoveFileDataIT extends BaseJdbcTest {
     jdbcLearningDataAccess.removeHits(List.of(1L, 2L));
     var fileRowsCount = jdbcTemplate.queryForObject(
         "SELECT count(*) FROM pb_learning_hit WHERE learning_hit_id in (1, 2)",
+        Integer.class);
+    assertThat(fileRowsCount).isEqualTo(0);
+  }
+
+  @Test
+  void shouldRemoveActions() {
+    jdbcLearningDataAccess.removeActions(List.of(3L));
+    var fileRowsCount = jdbcTemplate.queryForObject(
+        "SELECT count(*) FROM pb_learning_action WHERE learning_action_id in (3)",
         Integer.class);
     assertThat(fileRowsCount).isEqualTo(0);
   }

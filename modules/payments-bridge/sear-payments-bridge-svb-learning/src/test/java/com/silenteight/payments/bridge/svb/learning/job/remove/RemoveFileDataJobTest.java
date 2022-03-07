@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 
+import static com.silenteight.payments.bridge.svb.learning.job.remove.RemoveFileDataJobConstants.REMOVE_ACTION_STEP_NAME;
 import static com.silenteight.payments.bridge.svb.learning.job.remove.RemoveFileDataJobConstants.REMOVE_ALERT_STEP_NAME;
 import static com.silenteight.payments.bridge.svb.learning.job.remove.RemoveFileDataJobConstants.REMOVE_CSV_ROW_STEP_NAME;
 import static com.silenteight.payments.bridge.svb.learning.job.remove.RemoveFileDataJobConstants.REMOVE_HIT_STEP_NAME;
@@ -66,6 +67,18 @@ class RemoveFileDataJobTest extends BaseBatchTest {
     assertThat(transformAlertStep.getReadCount()).isEqualTo(2);
     assertThat(jdbcTemplate.queryForObject(
         "SELECT count(*) FROM pb_learning_hit",
+        Integer.class)).isEqualTo(0);
+  }
+
+  @Test
+  @Sql(scripts = "RemoveFileDataJobTest.sql")
+  @Sql(scripts = "../TruncateJobData.sql", executionPhase = AFTER_TEST_METHOD)
+  @Transactional(propagation = Propagation.NOT_SUPPORTED)
+  public void testRemovingActionsStep() {
+    var transformAlertStep = createStepExecution(REMOVE_ACTION_STEP_NAME).get();
+    assertThat(transformAlertStep.getReadCount()).isEqualTo(1);
+    assertThat(jdbcTemplate.queryForObject(
+        "SELECT count(*) FROM pb_learning_action",
         Integer.class)).isEqualTo(0);
   }
 

@@ -23,7 +23,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
     RemoveFileCsvRowsQuery.class,
     RemoveLearningAlertsQuery.class,
     RemoveHitsQuery.class,
-    RemoveActionsWithoutParentQuery.class })
+    RemoveActionsQuery.class })
 class JdbcLearningDataAccessIT extends BaseJdbcTest {
 
   @Autowired

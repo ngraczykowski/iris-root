@@ -20,4 +20,6 @@ public interface LearningDataAccess {
   void removeAlerts(List<Long> alertIds);
 
   void removeHits(List<Long> hitIds);
+
+  void removeActions(List<Long> actionIds);
 }

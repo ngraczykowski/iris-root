@@ -312,4 +312,4 @@ IR', '2', 'AS00048462', '2010-02-10 13:10:16 UST', 'INDIVIDUAL', 'US_OFAC', 'IRA
 
 -- Insert action to delete
 
-INSERT INTO public.pb_learning_action (learning_action_id, fkco_messages, fkco_v_action_comment, fkco_action_date, fkco_d_action_datetime, fkco_operator, fkco_status, fkco_i_total_action, fkco_v_status_name, fkco_v_status_behavior) VALUES (3, 47, 'asdf', '6950', '2019-01-10 19:33:54.000000', '309', '28', '1', 'L3_CANCEL', 'CANCELLED');
+INSERT INTO public.pb_learning_action (learning_action_id, fkco_messages, fkco_v_action_comment, fkco_action_date, fkco_d_action_datetime, fkco_operator, fkco_status, fkco_i_total_action, fkco_v_status_name, fkco_v_status_behavior) VALUES (3, 1233, 'asdf', '6950', '2019-01-10 19:33:54.000000', '309', '28', '1', 'L3_CANCEL', 'CANCELLED');
