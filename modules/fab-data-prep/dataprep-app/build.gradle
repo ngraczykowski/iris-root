@@ -44,3 +44,10 @@ jar {
   }
 }
 
+publishing {
+  publications {
+    bootJava(MavenPublication) {
+      artifact bootJar
+    }
+  }
+}
