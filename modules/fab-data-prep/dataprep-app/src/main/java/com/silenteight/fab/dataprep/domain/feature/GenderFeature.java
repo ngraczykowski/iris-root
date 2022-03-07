@@ -15,7 +15,8 @@ import static java.util.stream.Collectors.toList;
 public class GenderFeature implements FabFeature<GenderFeatureInputOut> {
 
   @Override
-  public BatchCreateAgentInputsIn<GenderFeatureInputOut> createFeatureInput(FeatureInputsCommand featureInputsCommand) {
+  public BatchCreateAgentInputsIn<GenderFeatureInputOut> createFeatureInput(
+      FeatureInputsCommand featureInputsCommand) {
     var agentInputInList = featureInputsCommand.getExtractedAlert().getMatches()
         .stream()
         .map(Match::getMatchName)

@@ -11,8 +11,8 @@ public interface FabFeature<T extends Feature> {
   BatchCreateAgentInputsIn<T> createFeatureInput(FeatureInputsCommand featureInputsCommand);
 
   default BatchCreateAgentInputsIn<T> toAgentInputs(List<AgentInputIn<T>> agentInputs) {
-      return BatchCreateAgentInputsIn.<T>builder()
-          .agentInputs(agentInputs)
-          .build();
+    return BatchCreateAgentInputsIn.<T>builder()
+        .agentInputs(agentInputs)
+        .build();
   }
 }
