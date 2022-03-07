@@ -34,9 +34,9 @@ class RecommendationServiceClientMock implements RecommendationServiceClient {
         .addValue("status", AlertStatus.ERROR.name());
     var alertNamesFromDb = jdbcTemplate.query(
         """
-            SELECT a.id, name, alert_id 
-            FROM alerts a
-            LEFT JOIN batches b ON a.batch_id = b.batch_id
+            SELECT a.id, name, alert_id
+            FROM core_bridge_alerts a
+            LEFT JOIN core_bridge_batches b ON a.batch_id = b.batch_id
             WHERE analysis_name = :analysisName
             AND a.status != :status
             """,
@@ -78,8 +78,8 @@ class RecommendationServiceClientMock implements RecommendationServiceClient {
         .addValue("alertId", alertId);
     var matchesFromDb = jdbcTemplate.queryForList(
         """
-            SELECT name 
-            FROM matches m
+            SELECT name
+            FROM core_bridge_matches m
             WHERE alert_id = :alertId
             """,
         namedParameters, String.class);

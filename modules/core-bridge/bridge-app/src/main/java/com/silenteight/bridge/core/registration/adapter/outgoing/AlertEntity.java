@@ -11,7 +11,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.Instant;
 import java.util.Set;
 
-@Table("alerts")
+@Table("core_bridge_alerts")
 record AlertEntity(@Id long id,
                    String name,
                    Status status,

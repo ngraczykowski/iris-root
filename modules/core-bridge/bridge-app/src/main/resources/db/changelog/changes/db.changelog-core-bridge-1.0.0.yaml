@@ -6,16 +6,16 @@ databaseChangeLog:
         - onFail: MARK_RAN
           not:
             - tableExists:
-                tableName: batches
+                tableName: core_bridge_batches
             - tableExists:
-                tableName: recommendations
+                tableName: core_bridge_recommendations
             - tableExists:
-                tableName: alerts
+                tableName: core_bridge_alerts
             - tableExists:
-                tableName: matches
+                tableName: core_bridge_matches
       changes:
         - createTable:
-            tableName: batches
+            tableName: core_bridge_batches
             columns:
               - column:
                   name: id
@@ -60,9 +60,14 @@ databaseChangeLog:
               - column:
                   name: updated_at
                   type: timestamp
+              - column:
+                  name: policy_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
 
         - createTable:
-            tableName: recommendations
+            tableName: core_bridge_recommendations
             columns:
               - column:
                   name: id
@@ -105,14 +110,17 @@ databaseChangeLog:
               - column:
                   name: payload
                   type: jsonb
+              - column:
+                  name: timeout
+                  type: boolean
 
         - addUniqueConstraint:
             columnNames: analysis_name, alert_name
             constraintName: unique_recommendation_constraint
-            tableName: recommendations
+            tableName: core_bridge_recommendations
 
         - createTable:
-            tableName: alerts
+            tableName: core_bridge_alerts
             columns:
               - column:
                   name: id
@@ -161,10 +169,10 @@ databaseChangeLog:
         - addUniqueConstraint:
             columnNames: alert_id, batch_id
             constraintName: alert_id_batch_id
-            tableName: alerts
+            tableName: core_bridge_alerts
 
         - createTable:
-            tableName: matches
+            tableName: core_bridge_matches
             columns:
               - column:
                   name: id
@@ -185,18 +193,13 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     foreignKeyName: fk_alert_id
-                    references: alerts(id)
+                    references: core_bridge_alerts(id)
               - column:
                   name: name
                   type: VARCHAR(255)
                   constraints:
                     nullable: true
                     unique: true
-              - column:
-                  name: status
-                  type: VARCHAR(30)
-                  constraints:
-                    nullable: false
               - column:
                   name: created_at
                   type: timestamp
@@ -207,44 +210,4 @@ databaseChangeLog:
         - addUniqueConstraint:
             columnNames: match_id, alert_id
             constraintName: match_id_alert_id
-            tableName: matches
-
-  - changeSet:
-      id: 1.0.0-2
-      author: askubicha
-      preConditions:
-        - onFail: MARK_RAN
-          not:
-            - columnExists:
-                tableName: batches
-                columnName: policy_name
-      changes:
-        - addColumn:
-            tableName: batches
-            columns:
-              - column:
-                  name: policy_name
-                  type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-
-  - changeSet:
-      id: 1.0.0-3
-      author: apozorski
-      changes:
-        - dropColumn:
-            columns:
-              - column:
-                  name: status
-            tableName: matches
-
-  - changeSet:
-      id: 1.0.0-4
-      author: apozorski
-      changes:
-        - addColumn:
-            tableName: recommendations
-            columns:
-              - column:
-                  name: timeout
-                  type: boolean
+            tableName: core_bridge_matches

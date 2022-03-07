@@ -6,7 +6,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.Instant;
 
-@Table("matches")
+@Table("core_bridge_matches")
 record MatchEntity(
     String name,
     String matchId,

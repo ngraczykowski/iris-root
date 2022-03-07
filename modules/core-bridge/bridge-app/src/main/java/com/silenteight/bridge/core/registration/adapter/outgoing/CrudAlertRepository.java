@@ -12,25 +12,25 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
 
   @Modifying
   @Query("""
-      UPDATE alerts
+      UPDATE core_bridge_alerts
       SET status = :status, updated_at = NOW()
       WHERE batch_id = :batchId AND name IN(:alertNames)""")
   void updateAlertsStatusByBatchIdAndNamesIn(
       String batchId, String status, List<String> alertNames);
 
   @Query("""
-      SELECT COUNT(status) FROM alerts 
+      SELECT COUNT(status) FROM core_bridge_alerts 
       WHERE batch_id = :batchId AND NOT status = 'RECOMMENDED' AND NOT status = 'ERROR'""")
   long countAllAlertsByBatchIdAndNotRecommendedAndNotErrorStatuses(String batchId);
 
   @Query("""
-        SELECT name FROM alerts
+        SELECT name FROM core_bridge_alerts
         WHERE batch_id = :batchId AND alert_id IN (:alertIds)
       """)
   List<AlertNameProjection> findNamesByBatchIdAndAlertIdIn(String batchId, List<String> alertIds);
 
   @Query("""
-        SELECT name FROM alerts
+        SELECT name FROM core_bridge_alerts
         WHERE batch_id = :batchId AND (status = 'REGISTERED' OR status = 'PROCESSING')
       """)
   List<AlertNameProjection> findNamesByBatchIdAndStatusIsRegisteredOrProcessing(String batchId);
@@ -46,8 +46,8 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
             a.error_description AS alert_error_description,
             m.match_id AS match_match_id,
             m.name AS match_name
-          FROM alerts a
-          LEFT JOIN matches m ON m.alert_id = a.id
+          FROM core_bridge_alerts a
+          LEFT JOIN core_bridge_matches m ON m.alert_id = a.id
           WHERE a.batch_id = :batchId""")
   List<AlertWithMatchNamesProjection> findAllWithMatchesByBatchId(String batchId);
 
@@ -62,8 +62,8 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
             a.error_description AS alert_error_description,
             m.match_id AS match_match_id,
             m.name AS match_name
-          FROM alerts a
-          LEFT JOIN matches m ON m.alert_id = a.id
+          FROM core_bridge_alerts a
+          LEFT JOIN core_bridge_matches m ON m.alert_id = a.id
           WHERE a.batch_id = :batchId AND a.alert_id IN(:alertIds)""")
   List<AlertWithMatchNamesProjection> findAllWithMatchesByBatchIdAndAlertIdsIn(
       String batchId, List<String> alertIds);
@@ -74,14 +74,14 @@ interface CrudAlertRepository extends CrudRepository<AlertEntity, Long> {
 
   @Modifying
   @Query("""
-      UPDATE alerts
+      UPDATE core_bridge_alerts
       SET status = :status, updated_at = NOW()
       WHERE batch_id = :batchId AND alert_id IN(:alertIds)""")
   void updateAlertsStatusByBatchIdAndIdsIn(String batchId, String status, List<String> alertIds);
 
   @Modifying
   @Query("""
-      UPDATE alerts
+      UPDATE core_bridge_alerts
       SET status = :status, error_description = :errorDescription, updated_at = NOW()
       WHERE batch_id = :batchId AND alert_id IN(:alertIds)""")
   void updateAlertsStatusWithErrorDescriptionByBatchIdAndAlertIds(

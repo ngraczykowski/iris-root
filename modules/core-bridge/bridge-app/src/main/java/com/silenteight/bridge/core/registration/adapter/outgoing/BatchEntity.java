@@ -9,7 +9,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.Instant;
 
-@Table("batches")
+@Table("core_bridge_batches")
 record BatchEntity(@Id long id,
                    Status status,
                    String batchId,

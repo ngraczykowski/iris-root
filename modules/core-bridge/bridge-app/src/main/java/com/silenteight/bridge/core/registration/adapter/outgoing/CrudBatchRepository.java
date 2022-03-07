@@ -16,20 +16,20 @@ interface CrudBatchRepository extends CrudRepository<BatchEntity, Long> {
 
   @Query("""
       SELECT batch_id, policy_name
-      FROM batches
+      FROM core_bridge_batches
       WHERE analysis_name = :analysisName""")
   Optional<BatchIdWithPolicyProjection> findBatchIdWithPolicyByAnalysisName(String analysisName);
 
   @Modifying
   @Query("""
-      UPDATE batches 
+      UPDATE core_bridge_batches 
       SET status = :status, error_description = :errorDescription, updated_at = NOW() 
       WHERE batch_id = :batchId""")
   void updateStatusAndErrorDescription(String batchId, Status status, String errorDescription);
 
   @Modifying
   @Query("""
-      UPDATE batches 
+      UPDATE core_bridge_batches 
       SET status = :status, updated_at = NOW() 
       WHERE batch_id = :batchId""")
   void updateStatusByBatchId(String status, String batchId);

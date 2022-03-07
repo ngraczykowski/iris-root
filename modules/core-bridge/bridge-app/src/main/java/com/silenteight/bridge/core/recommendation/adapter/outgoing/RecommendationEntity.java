@@ -9,7 +9,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.Instant;
 
-@Table("recommendations")
+@Table("core_bridge_recommendations")
 record RecommendationEntity(@Id long id,
                             String name,
                             String alertName,

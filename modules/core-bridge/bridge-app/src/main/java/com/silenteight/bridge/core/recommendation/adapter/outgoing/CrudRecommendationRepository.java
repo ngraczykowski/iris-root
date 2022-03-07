@@ -11,7 +11,7 @@ interface CrudRecommendationRepository extends CrudRepository<RecommendationEnti
 
   @Query("""
       SELECT alert_name
-      FROM recommendations
+      FROM core_bridge_recommendations
       WHERE analysis_name = :analysisName""")
   List<RecommendationAlertNameProjection> findAlertNamesByAnalysisName(String analysisName);
 }
