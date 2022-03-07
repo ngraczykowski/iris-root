@@ -8,6 +8,7 @@ import com.silenteight.proto.registration.api.v1.MessageVerifyBatchTimeout
 import org.springframework.amqp.core.Message
 import org.springframework.amqp.core.MessagePostProcessor
 import org.springframework.amqp.rabbit.core.RabbitTemplate
+import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -15,6 +16,7 @@ import java.time.Duration
 
 import static VerifyBatchTimeoutRabbitPublisher.DELAY_HEADER_NAME
 
+@Ignore // due to ALL-657
 class VerifyBatchTimeoutRabbitPublisherSpec extends Specification {
 
   def amqpProperties = new AmqpRegistrationOutgoingVerifyBatchTimeoutProperties(
