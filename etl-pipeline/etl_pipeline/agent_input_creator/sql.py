@@ -5,7 +5,7 @@ import pyspark.sql
 
 def sql_to_merge_specific_columns_to_standardized(
     df: pyspark.sql.DataFrame,
-    agent_input_prepended_agent_name_config: Dict[str, Dict[str, List[str]]],
+    agent_config: Dict[str, Dict[str, List[str]]],
     spark_instance,
     aggregated: bool = False,
 ) -> List[str]:
@@ -27,7 +27,7 @@ def sql_to_merge_specific_columns_to_standardized(
     Parameters
     ----------
     df : pyspark.sql.DataFrame
-    agent_input_prepended_agent_name_config : Dict[str, Dict[str, List[str]]]
+    agent_config : Dict[str, Dict[str, List[str]]]
     Returns
     aggregated : bool, optional
     -------
@@ -36,7 +36,7 @@ def sql_to_merge_specific_columns_to_standardized(
 
     sql_expr_list = []
 
-    for _, config in agent_input_prepended_agent_name_config.items():
+    for _, config in agent_config.items():
         for target_col, source_cols in config.items():
             if aggregated:
                 sql_expr = spark_instance.merge_to_target_col_from_source_cols_sql_expression(
