@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.step.logic.edit;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureConfiguration;
 import com.silenteight.serp.governance.policy.domain.dto.ConfigurePolicyRequest.FeatureLogicConfiguration;
@@ -25,6 +26,7 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
 import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
@@ -45,6 +47,8 @@ class EditStepLogicRequestRestController {
       @Valid @RequestBody EditStepLogicDto editStepLogicDto,
       Authentication authentication) {
 
+    log.info("Editing step logic. EditStepLogicDto={}", editStepLogicDto);
+
     EditStepLogicCommand command = EditStepLogicCommand
         .builder()
         .stepId(id)
@@ -53,6 +57,8 @@ class EditStepLogicRequestRestController {
         .user(authentication.getName())
         .build();
     editStepLogicUseCase.activate(command);
+
+    log.debug("Editing step logic request processed.");
     return ResponseEntity.accepted().build();
   }
 

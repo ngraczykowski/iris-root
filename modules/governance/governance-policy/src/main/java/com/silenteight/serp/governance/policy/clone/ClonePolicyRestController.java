@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.clone;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -23,6 +24,7 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.UNPR
 import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
 import static org.springframework.http.ResponseEntity.accepted;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
@@ -43,12 +45,16 @@ class ClonePolicyRestController {
       @PathVariable UUID newId,
       Authentication authentication) {
 
+    log.info("Cloning policy. basePolicyId={}, newPolicyId={}", id,newId);
+
     ClonePolicyCommand command = ClonePolicyCommand.builder()
         .id(newId)
         .createdBy(authentication.getName())
         .basePolicyId(id)
         .build();
     clonePolicyUseCase.activate(command);
+
+    log.debug("Cloning policy request processed.");
     return accepted().build();
   }
 }

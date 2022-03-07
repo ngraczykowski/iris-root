@@ -42,6 +42,8 @@ class CreatePolicyRequestRestController {
   public ResponseEntity<Void> create(
       @Valid @RequestBody CreatePolicyDto createPolicyDto, Authentication authentication) {
 
+    log.info("Creating policy. CreatePolicyDto={}", createPolicyDto);
+
     CreatePolicyCommand command = CreatePolicyCommand
         .builder()
         .id(createPolicyDto.getId())
@@ -50,6 +52,8 @@ class CreatePolicyRequestRestController {
         .build();
     createPolicyUseCase.activate(command);
     //TODO https://silent8.atlassian.net/browse/WEB-2231
+
+    log.debug("Create policy request processed.");
     return accepted().build();
   }
 }

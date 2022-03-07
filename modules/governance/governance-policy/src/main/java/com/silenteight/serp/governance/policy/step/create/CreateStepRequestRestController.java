@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.step.create;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.policy.step.create.dto.CreateStepDto;
 
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
 import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
@@ -39,6 +41,8 @@ class CreateStepRequestRestController {
       @Valid @RequestBody CreateStepDto createStepDto,
       Authentication authentication) {
 
+    log.info("Creating step. CreateStepDto={}", createStepDto);
+
     CreateStepCommand command = CreateStepCommand
         .builder()
         .policyId(id)
@@ -50,6 +54,8 @@ class CreateStepRequestRestController {
         .stepType(createStepDto.getType())
         .build();
     createStepUseCase.activate(command);
+
+    log.debug("Creating step request processed.");
     return ResponseEntity.noContent().build();
   }
 }

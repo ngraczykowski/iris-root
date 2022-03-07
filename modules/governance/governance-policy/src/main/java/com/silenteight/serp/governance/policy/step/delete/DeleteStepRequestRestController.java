@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.step.delete;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -21,6 +22,7 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.ROOT
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.SUCCESS_RESPONSE_DESCRIPTION;
 import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
@@ -36,6 +38,7 @@ class DeleteStepRequestRestController {
       @ApiResponse(responseCode = NO_CONTENT_STATUS, description = SUCCESS_RESPONSE_DESCRIPTION)
   })
   public ResponseEntity<Void> delete(@PathVariable UUID id, Authentication authentication) {
+    log.info("Deleting step. stepId={}", id);
 
     DeleteStepCommand command = DeleteStepCommand
         .builder()
@@ -44,6 +47,7 @@ class DeleteStepRequestRestController {
         .build();
     removeStepUseCase.activate(command);
 
+    log.debug("Deleting step request processed.");
     return ResponseEntity.noContent().build();
   }
 
