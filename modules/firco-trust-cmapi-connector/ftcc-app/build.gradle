@@ -6,6 +6,8 @@ plugins {
 }
 
 dependencies {
+  implementation project(":ftcc-ingest")
+
   // Utilities
 //  implementation libraries.commons_lang3
 //  implementation libraries.commons_text
@@ -20,7 +22,7 @@ dependencies {
 //  runtimeOnly libraries.sentry_logback
 
   // Base Libraries
-//  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_sep_base_common
 //  implementation libraries.silenteight_commons_app
 
   // Application Starters
@@ -29,7 +31,6 @@ dependencies {
   implementation libraries.spring_boot_starter_logging
   implementation libraries.spring_boot_starter_undertow
   implementation libraries.spring_boot_starter_web
-
 
   // Jackson
   implementation libraries.jackson_annotations
@@ -41,12 +42,15 @@ dependencies {
   runtimeOnly libraries.jackson_module_parameter_names
 
   // Database
-//  implementation libraries.spring_boot_starter_data_jpa
-//  implementation libraries.spring_boot_starter_jdbc
-//  implementation libraries.liquibase_core
-//  implementation libraries.hikari_cp
-//  runtimeOnly libraries.postgresql
-//  runtimeOnly libraries.liquibase_sessionlock
+  implementation libraries.spring_boot_starter_data_jpa
+  implementation libraries.spring_boot_starter_jdbc
+  implementation libraries.liquibase_core
+  implementation libraries.hikari_cp
+  runtimeOnly libraries.postgresql
+  runtimeOnly libraries.liquibase_sessionlock
+
+  // Validator
+  implementation libraries.hibernate_validator
 
   // Messaging
   implementation libraries.amqp_client

@@ -1,3 +1,16 @@
+ftcc:
+  #-------------------------------------------------------------------------------------------------
+  # DATABASE
+  #-------------------------------------------------------------------------------------------------
+  db:
+    host: localhost
+    port: 5432
+    schema: public
+    name: ftcc
+    username: ftcc
+    password: ftcc
+
+
 spring:
   application:
     name: ftcc
@@ -11,18 +24,85 @@ spring:
     listener:
       type: simple
       direct:
-        consumers-per-queue: ${pb.messaging.concurrency:4}
-        prefetch: ${pb.messaging.prefetch:25}
+        consumers-per-queue: ${ftcc.messaging.concurrency:4}
+        prefetch: ${ftcc.messaging.prefetch:25}
         retry:
           enabled: true
           multiplier: 2
       simple:
         concurrency: 1
-        max-concurrency: ${pb.messaging.concurrency:4}
-        prefetch: ${pb.messaging.prefetch:25}
+        max-concurrency: ${ftcc.messaging.concurrency:4}
+        prefetch: ${ftcc.messaging.prefetch:25}
         retry:
           enabled: true
           multiplier: 2
           max-attempts: 5
           initial-interval: 500
           max-interval: 4000
+
+  #-------------------------------------------------------------------------------------------------
+  # DATABASE
+  #-------------------------------------------------------------------------------------------------
+  datasource:
+    # Postgres database
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://${ftcc.db.host}:${ftcc.db.port}/${ftcc.db.name}?currentSchema=${ftcc.db.schema:public}
+    username: ${ftcc.db.username}
+    password: ${ftcc.db.password}
+
+    # Hikari pool configuration
+    hikari:
+      pool-name: Database-Pool
+      minimum-idle: ${ftcc.db.connections.min:1}
+      maximum-pool-size: ${ftcc.db.connections.max:25}
+      auto-commit: false
+      schema: ${ftcc.db.schema:public}
+      isolate-internal-queries: true
+      # NOTE(ahaczewski): Forces HikariCP to commit the transaction after opening fresh connection.
+      #  Without it, the connection transaction is left in OPEN state instead of IDLE, because
+      #  just before HikariCP runs `SET SESSION sftcc.h_path TO '${ae.db.schema}'` which begins
+      #  transaction. Thus, with that query as workaround, we force the transaction commit.
+      connection-init-sql: SELECT 1
+      data-source-properties:
+        ApplicationName: Firco Trust CMAPI Connector
+        reWriteBatchedInserts: true
+
+  # Database migrations
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+    default-schema: ${ftcc.db.schema:public}
+    contexts: default
+    database-change-log-table: ftcc_databasechangelog
+    database-change-log-lock-table: ftcc_databasechangeloglock
+
+  # Spring Data JPA
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    open-in-view: false
+    database-platform: com.silenteight.sep.base.common.support.hibernate.FixedPostgreSql95Dialect
+
+    hibernate:
+      ddl-auto: create
+      use-new-id-generator-mappings: true
+
+    properties:
+      hibernate.cache.use_query_cache: false
+      hibernate.connection.handling_mode: DELAYED_ACQUISITION_AND_HOLD
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.generate_statistics: false
+      hibernate.id.optimizer.pooled.preferred: pooled-lo
+      hibernate.jdbc.batch_size: 2048
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate.jdbc.use_get_generated_keys: true
+      hibernate.jdbc.time_zone: UTC
+      hibernate.temp.use_jdbc_metadata_defaults: false
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      #org.hibernate.flushMode: COMMIT
+      org.hibernate.envers.audit_table_suffix: _audit
+      org.hibernate.envers.store_data_at_delete: true
+
+  sql:
+    init:
+      mode: never
