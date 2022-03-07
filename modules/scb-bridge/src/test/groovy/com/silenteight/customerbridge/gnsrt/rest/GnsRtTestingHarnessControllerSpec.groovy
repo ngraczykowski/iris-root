@@ -95,7 +95,7 @@ class GnsRtTestingHarnessControllerSpec extends Specification {
 
   def createGnsRtRequest() {
     def someDate = LocalDateTime.of(2020, 4, 30, 0, 0, 0)
-        .toInstant(ZoneId.of("Asia/Hong_Kong").getOffset())
+        .atZone(ZoneId.of("Asia/Hong_Kong")).toInstant()
 
     new GnsRtRecommendationRequest(
         screenCustomerNameRes: new GnsRtScreenCustomerNameRes(

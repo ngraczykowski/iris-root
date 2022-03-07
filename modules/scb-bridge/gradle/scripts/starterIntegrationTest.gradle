@@ -1,3 +1,0 @@
-dependencies {
-  starterIntegrationTest libraries.spring_integration_test
-}

@@ -5,6 +5,20 @@ grpc:
     port: 24221
 
 spring:
+  cloud:
+    consul:
+      config:
+        enabled: false
+      enabled: false
+      host: localhost
+      port: 8500
+      discovery:
+        enabled: true
+        register: false
+        register-health-check: false
+      service-registry:
+        auto-registration:
+          enabled: false
   ### RABBITMQ
   rabbitmq:
     port: 24130

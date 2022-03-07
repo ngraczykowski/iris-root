@@ -1,3 +1,0 @@
-dependencies {
-  starterGrpcTest libraries.grpc_testing
-}

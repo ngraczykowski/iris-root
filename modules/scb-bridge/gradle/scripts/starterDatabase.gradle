@@ -2,16 +2,6 @@ dependencies {
   // Liquibase for handling migrations
   starterDatabase libraries.liquibase_core
 
-  // Transaction API
-  starterDatabase libraries.jakarta_transaction_api
-
-  // Spring Data JPA
-  starterDatabase(libraries.spring_data_jpa) {
-    //exclude group:'org.aspectj', module:'aspectjrt'
-  }
-
-  starterDatabase libraries.spring_jdbc
-
   // Hibernate
   starterDatabase libraries.hibernate_core
   starterDatabase libraries.hibernate_envers
