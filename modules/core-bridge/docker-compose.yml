@@ -21,9 +21,7 @@ services:
           memory: 1G
 
   rabbitmq:
-    build:
-      context: ./
-      dockerfile: ./docker/rabbitmq/Dockerfile
+    image: docker.io/library/rabbitmq:3.8.16-management
     restart: unless-stopped
     ports:
       - 5680:5672
@@ -42,6 +40,7 @@ services:
       RABBITMQ_MAX_NUMBER_OF_PROCESSES: 131072
     volumes:
       - rabbitmq-storage:/var/lib/rabbitmq
+      - ./docker/rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
     deploy:
       resources:
         limits:
