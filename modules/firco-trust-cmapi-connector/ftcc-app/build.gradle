@@ -73,3 +73,11 @@ jar {
     attributes "Main-Class": "com.silenteight.connector.ftcc.app.FtccApplication"
   }
 }
+
+publishing {
+  publications {
+    bootJava(MavenPublication) {
+      artifact bootJar
+    }
+  }
+}

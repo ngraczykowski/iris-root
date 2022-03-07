@@ -35,6 +35,10 @@ subprojects {Project subproject ->
       java.dependsOn processResources
     }
 
+    project.tasks.withType(JavaCompile).configureEach { JavaCompile java ->
+      java.options.fork = true
+    }
+
   }
 }
 
