@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import static java.lang.System.setProperty;
 
-
 @EntityScan
 @Slf4j
 @SpringBootApplication
@@ -22,5 +21,4 @@ public class FtccApplication {
     // NOTE(ahaczewski): Force use of fast random source.
     setProperty("java.security.egd", "file:/dev/urandom");
   }
-
 }
