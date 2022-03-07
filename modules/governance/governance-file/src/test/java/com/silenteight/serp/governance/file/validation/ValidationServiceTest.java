@@ -32,11 +32,11 @@ class ValidationServiceTest {
 
   private static final MockMultipartFile MOCK_MULTIPART_FILE_TXT =
       new MockMultipartFile("test_file", "test()_-#.txt", TEXT_PLAIN_VALUE,
-          getTestFileAsBytes("src/test/resources/test-files/test()_-#.txt"));
+          getTestFileAsBytes("src/test/resources/files/test()_-#.txt"));
 
   private static final MockMultipartFile MOCK_MULTIPART_FILE_PNG =
       new MockMultipartFile("test_file_2", "test_file.pdf", APPLICATION_PDF_VALUE,
-          getTestFileAsBytes("src/test/resources/test-files/test.png"));
+          getTestFileAsBytes("src/test/resources/files/test.png"));
 
   private static final MockMultipartFile MOCK_MULTIPART_FILE_WITH_BIG_SIZE_AND_WRONG_TYPE =
       new MockMultipartFile("test_file_3", "test_file.cbor", APPLICATION_OCTET_STREAM_VALUE,
@@ -46,7 +46,7 @@ class ValidationServiceTest {
       new MockMultipartFile("test_file._4",
           "AI Reasoning last 24h_2021-09-17T10_10_50.943Z_891f94f0-179f-52ec-a00e-6b25ef5112c0.csv",
           TEXT_XML_VALUE, getTestFileAsBytes(
-          "src/test/resources/test-files/AI Reasoning last "
+          "src/test/resources/files/AI Reasoning last "
               + "24h_2021-09-17T10_10_50.943Z_891f94f0-179f-52ec-a00e-6b25ef5112c0.csv"));
 
   private static final MockMultipartFile MOCK_MULTIPART_FILE_WITH_BIG_FILE_NAME =
@@ -61,7 +61,7 @@ class ValidationServiceTest {
 
   private static final MockMultipartFile MOCK_MULTIPART_FILE_WRONG_TYPE =
       new MockMultipartFile("test-zip", "test.zip", APPLICATION_OCTET_STREAM_VALUE,
-          getTestFileAsBytes("src/test/resources/test-files/test.zip"));
+          getTestFileAsBytes("src/test/resources/files/test.zip"));
 
   @BeforeEach
   public void init() {
