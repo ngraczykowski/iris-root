@@ -1,0 +1,64 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+  id "distribution"
+  id "maven-publish"
+}
+
+description = "Core Bridge Distribution"
+
+configurations {
+  dist
+}
+
+dependencies {
+  dist project(path: ":bridge-app", configuration: "bootArchives")
+}
+
+def runScript(String name) {
+  copySpec {
+    from(file("src/bash/run.template.sh")) {
+      rename {
+        name
+      }
+      filter(
+          ReplaceTokens,
+          tokens: [jarfile: "${name}-${project.version}.jar".toString()],
+          beginToken: "@@",
+          endToken: "@@",
+      )
+      into("bin/")
+    }
+  }
+}
+
+distributions {
+  main {
+    distributionBaseName = "core-bridge-dist"
+
+    contents {
+      from(configurations.dist) {
+        into "lib/"
+      }
+      with runScript("core-bridge")
+    }
+  }
+}
+
+tasks.named("distTar") {
+  compression = Compression.BZIP2
+  archiveExtension = "tar.bz2"
+}
+
+tasks.withType(Zip) {
+  enabled = false
+}
+
+publishing {
+  publications {
+    distribution(MavenPublication) {
+      artifact distTar
+      artifactId "core-bridge-dist"
+    }
+  }
+}
