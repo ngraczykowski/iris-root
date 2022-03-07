@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.transform.rbs;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,6 +28,7 @@ import static java.util.Objects.requireNonNull;
 import static org.springframework.http.ResponseEntity.accepted;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -47,6 +49,8 @@ class RbsImportController {
           content = @Content)
   })
   public DeferredResult<ResponseEntity<?>> importPolicy(@RequestParam("file") MultipartFile file) {
+    log.info("Importing policy from RBS. fileName={}", file.getOriginalFilename());
+
     String filename = file.getOriginalFilename();
     requireNonNull(filename);
 
@@ -62,6 +66,7 @@ class RbsImportController {
       }
     });
 
+    log.debug("Importing policy from RBS request processed.");
     return output;
   }
 

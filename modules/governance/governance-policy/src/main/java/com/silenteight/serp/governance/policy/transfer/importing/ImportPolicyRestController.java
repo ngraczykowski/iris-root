@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.transfer.importing;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.policy.common.PolicyImportedResponse;
 
@@ -23,6 +24,7 @@ import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLI
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequestMapping(value = ROOT, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -37,12 +39,15 @@ class ImportPolicyRestController {
   public ResponseEntity<PolicyImportedResponse> importPolicy(
       @RequestParam("file") MultipartFile file, Authentication authentication) throws IOException {
 
+    log.info("Importing policy from file. fileName={}", file.getOriginalFilename());
+
     ImportPolicyCommand command = ImportPolicyCommand.builder()
-                                                     .inputStream(file.getInputStream())
-                                                     .createdBy(authentication.getName())
-                                                     .build();
+        .inputStream(file.getInputStream())
+        .createdBy(authentication.getName())
+        .build();
     UUID policyId = importPolicyUseCase.apply(command);
 
+    log.debug("Importing policy from file request processed.");
     return ok(new PolicyImportedResponse(policyId));
   }
 }

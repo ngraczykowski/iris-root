@@ -34,6 +34,8 @@ class SetPolicyStepsOrderRequestRestController {
       @Valid @RequestBody List<UUID> stepsOrder,
       Authentication authentication) {
 
+    log.info("Setting step order for policy. policyId={},stepsOrder={}", id, stepsOrder);
+
     SetPolicyStepsOrderCommand command = SetPolicyStepsOrderCommand
         .builder()
         .policyId(id)
@@ -42,6 +44,7 @@ class SetPolicyStepsOrderRequestRestController {
         .build();
     setPolicyStepsUseCase.activate(command);
 
+    log.debug("Setting step order for policy request processed.");
     return ResponseEntity.ok().build();
   }
 }

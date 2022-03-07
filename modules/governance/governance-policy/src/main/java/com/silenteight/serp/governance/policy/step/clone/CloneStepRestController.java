@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.policy.step.clone;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -20,6 +21,7 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
 import static com.silenteight.serp.governance.policy.domain.DomainConstants.POLICY_ENDPOINT_TAG;
 import static org.springframework.http.ResponseEntity.accepted;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
@@ -41,6 +43,8 @@ class CloneStepRestController {
       @PathVariable UUID newStepId,
       Authentication authentication) {
 
+    log.info("Cloning step. policyId={},stepId={},newStepId={}", policyId, stepId, newStepId);
+
     CloneStepCommand command = CloneStepCommand.builder()
         .newStepId(newStepId)
         .baseStepId(stepId)
@@ -49,6 +53,8 @@ class CloneStepRestController {
         .build();
 
     cloneStepUseCase.activate(command);
+
+    log.debug("Cloning step request processed.");
     return accepted().build();
   }
 }

@@ -51,6 +51,8 @@ class EditPolicyRequestRestController {
       @Valid @RequestBody EditPolicyDto editPolicyDto,
       Authentication authentication) {
 
+    log.info("Editing policy. EditPolicyDto={}", editPolicyDto);
+
     String userName = authentication.getName();
     EditPolicyCommand command = EditPolicyCommand
         .builder()
@@ -62,6 +64,7 @@ class EditPolicyRequestRestController {
     editPolicyUseCase.activate(command);
     changePolicyState(id, editPolicyDto.getState(), authentication.getName());
 
+    log.debug("Editing policy request processed.");
     return ResponseEntity.ok().build();
   }
 
