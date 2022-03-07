@@ -18,6 +18,9 @@ amqp:
     incoming:
       alert-and-matches-stored:
         queue-name: alert-and-matches-stored-queue
+    outgoing:
+      match-feature-input-set-fed:
+        exchange-name: match-feature-input-set-fed-exchange
 
 silenteight:
   bridge:
@@ -32,3 +35,8 @@ grpc:
     cm-api-connector.address: static://localhost:24806
     GLOBAL:
       negotiation-type: PLAINTEXT
+
+feeding:
+  features:
+    dummy-feature.enabled: true
+    gender-feature.enabled: true

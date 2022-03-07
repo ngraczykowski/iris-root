@@ -6,6 +6,7 @@ ext {
   silenteightSepBaseVersion = "1.12.5"
   silenteightUniversalDataSourceApiVersion = '1.2.0'
   silenteightDataSourceApiVersion = '0.18.0'
+  coreBridgeRegistrationApiVersion = '1.14.0'
   groovyVersion = '3.0.9'
   testContainersVersion = '1.16.2'
   junitJupiterVersion = '5.8.2'
@@ -16,6 +17,7 @@ ext {
 libraries.silenteight_sep_base_common = [group: 'com.silenteight.sep.base', name: 'sep-base-common', version: silenteightSepBaseVersion]
 libraries.universal_datasource_api_library = [group: 'com.silenteight.universaldatasource.api.library', name: 'uds-lib', version: silenteightUniversalDataSourceApiVersion]
 libraries.data_source_agentinput_api = [group: 'com.silenteight.sens.date-source-api', name: 'data-source-agentinput-api', version: silenteightDataSourceApiVersion]
+libraries.registration_api_proto = [group: 'com.silenteight.registration.api.library', name: 'registration-internal-protos', version: coreBridgeRegistrationApiVersion]
 
 libraries.spring_boot_autoconfigure = [group: 'org.springframework.boot', name: 'spring-boot-autoconfigure']
 libraries.spring_boot_starter_actuator = [group: 'org.springframework.boot', name: 'spring-boot-starter-actuator']
@@ -45,6 +47,8 @@ libraries.testcontainers_spock = [group: 'org.testcontainers', name: 'spock', ve
 // GRPC
 libraries.grpc_client_spring_boot_starter = [group: 'net.devh', name: 'grpc-client-spring-boot-starter']
 libraries.grpc_brave_instrumentation = [group: 'io.zipkin.brave', name: 'brave-instrumentation-grpc']
+
+libraries.vavr = [group: 'io.vavr', name: 'vavr', version: '0.10.4']
 
 dependencies {
   implementation platform("com.silenteight.sep:sep-dependencies:$sepDependenciesVersion")
