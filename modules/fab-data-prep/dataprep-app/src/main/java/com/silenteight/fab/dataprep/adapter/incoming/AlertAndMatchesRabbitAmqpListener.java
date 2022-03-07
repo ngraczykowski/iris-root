@@ -4,11 +4,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.fab.dataprep.domain.FeedingFacade;
+import com.silenteight.fab.dataprep.domain.model.ExtractedAlert;
+import com.silenteight.proto.fab.api.v1.AlertDetails;
 import com.silenteight.proto.fab.api.v1.AlertsDetailsResponse;
 import com.silenteight.proto.fab.api.v1.MessageAlertAndMatchesStored;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Component
@@ -29,22 +35,30 @@ class AlertAndMatchesRabbitAmqpListener {
         "Received a message with: batch id: {}, alert id: {}, alert name: {}", message.getBatchId(),
         message.getAlertId(), message.getAlertName());
     AlertsDetailsResponse alertsDetailsResponse = getAlertDetails(message);
-    createFeatureInput(alertsDetailsResponse);
-    feedUds();
+
+    List<ExtractedAlert> extractedAlerts = getExtractedAlerts(message, alertsDetailsResponse);
+    extractedAlerts.forEach(feedingFacade::etlAndFeedUds);
   }
 
-  private void feedUds() {
-    feedingFacade.feedUds();
-    sendMatchFeatureInputFeed();
+  private List<ExtractedAlert> getExtractedAlerts(
+      MessageAlertAndMatchesStored message,
+      AlertsDetailsResponse alertsDetailsResponse) {
+    return alertsDetailsResponse.getAlertsList()
+        .stream()
+        .map(alertDetails -> getExtractedAlert(message, alertDetails))
+        .collect(toList());
   }
 
-  private void sendMatchFeatureInputFeed() {
-    log.info("Have to be implemented");
-  }
-
-
-  private void createFeatureInput(AlertsDetailsResponse alertsDetailsResponse) {
-    log.info("Have to be implemented");
+  private ExtractedAlert getExtractedAlert(
+      MessageAlertAndMatchesStored message,
+      AlertDetails alertDetails) {
+    return ExtractedAlert.builder()
+        .batchId(message.getBatchId())
+        .alertId(message.getAlertId())
+        .alertName(alertDetails.getAlertName())
+        .payload(alertDetails.getPayload())
+        .build();
+    //TODO set fields: status, errorDescription, matches
   }
 
   private AlertsDetailsResponse getAlertDetails(MessageAlertAndMatchesStored message) {

@@ -38,5 +38,4 @@ grpc:
 
 feeding:
   features:
-    dummy-feature.enabled: true
     gender-feature.enabled: true

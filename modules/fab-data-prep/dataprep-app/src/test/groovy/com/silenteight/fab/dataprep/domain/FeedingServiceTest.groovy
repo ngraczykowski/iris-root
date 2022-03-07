@@ -1,15 +1,18 @@
 package com.silenteight.fab.dataprep.domain
 
-import com.silenteight.fab.dataprep.domain.feature.Feature
+import com.silenteight.fab.dataprep.domain.feature.FabFeature
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand
+import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputServiceClient
 
 import spock.lang.Specification
 
 class FeedingServiceTest extends Specification {
 
+  AgentInputServiceClient agentInputServiceClient = Mock()
+
   def "should fail when no features were initialized"() {
     when:
-    new FeedingService([])
+    new FeedingService([], agentInputServiceClient)
 
     then:
     thrown(IllegalStateException)
@@ -18,11 +21,11 @@ class FeedingServiceTest extends Specification {
   def "should call all features"() {
     given:
     def features = [
-        Mock(Feature),
-        Mock(Feature)
+        Mock(FabFeature),
+        Mock(FabFeature)
     ]
 
-    def featureService = new FeedingService(features)
+    def featureService = new FeedingService(features, agentInputServiceClient)
 
     def command = FeatureInputsCommand.builder()
         .batchId('123')
@@ -33,5 +36,6 @@ class FeedingServiceTest extends Specification {
 
     then:
     features.each {1 * it.createFeatureInput(command)}
+    features.size() * agentInputServiceClient.createBatchCreateAgentInputs(_) >> []
   }
 }
