@@ -49,14 +49,14 @@ public class FeedingFacade {
         });
   }
 
-  private FeatureInputsCommand createFeatureInputsCommand(ExtractedAlert extractedAlert) {
+  private static FeatureInputsCommand createFeatureInputsCommand(ExtractedAlert extractedAlert) {
     return FeatureInputsCommand.builder()
         .batchId(extractedAlert.getBatchId())
         .extractedAlert(extractedAlert)
         .build();
   }
 
-  private UdsFedEvent createUdsFedEvent(
+  private static UdsFedEvent createUdsFedEvent(
       ExtractedAlert extractedAlert, Status status, AlertErrorDescription errorDescription) {
     return UdsFedEvent.builder()
         .batchId(extractedAlert.getBatchId())
@@ -67,7 +67,7 @@ public class FeedingFacade {
         .build();
   }
 
-  private List<FedMatch> createFedMatches(ExtractedAlert extractedAlert) {
+  private static List<FedMatch> createFedMatches(ExtractedAlert extractedAlert) {
     return extractedAlert.getMatches().stream()
         .map(match -> new FedMatch(match.getMatchId()))
         .collect(toList());

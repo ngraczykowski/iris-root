@@ -49,7 +49,7 @@ class AlertAndMatchesRabbitAmqpListener {
         .collect(toList());
   }
 
-  private ExtractedAlert getExtractedAlert(
+  private static ExtractedAlert getExtractedAlert(
       MessageAlertAndMatchesStored message,
       AlertDetails alertDetails) {
     return ExtractedAlert.builder()
