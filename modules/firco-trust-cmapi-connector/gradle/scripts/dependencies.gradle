@@ -269,8 +269,8 @@ dependencies {
   implementation platform("io.projectreactor:reactor-bom:2020.0.13")
   implementation platform("com.silenteight.sep:sep-dependencies:$sepDependenciesVersion")
   annotationProcessor platform("com.silenteight.sep:sep-dependencies:$sepDependenciesVersion")
-  implementation platform("org.springframework.boot:spring-boot-dependencies:2.5.7")
-  annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:2.5.7")
+  implementation platform("org.springframework.boot:spring-boot-dependencies:2.6.4")
+  annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:2.6.4")
   implementation platform("org.springframework.cloud:spring-cloud-dependencies:2020.0.4")
   implementation platform("io.sentry:sentry-bom:5.6.0")
 
