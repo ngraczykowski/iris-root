@@ -1,4 +1,4 @@
 rootProject.name = 'firco-trust-cmapi-connector'
 
 include 'ftcc-app'
-include 'ftcc-firco'
+include 'ftcc-ingest'
