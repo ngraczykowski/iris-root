@@ -103,26 +103,22 @@ class PaymentsBridgeApplicationIT {
   }
 
   @Test
+  @Sql(scripts = "add_registered_alert.sql")
   void shouldProcessLearningFilesUnregisteredAlert() {
     assertAlertRegistered();
     assertAlertIndexed("alert_system_id|87AB4899-BE5B-5E4F-E053-150A6C0A7A84");
     var alertName = MockAlertUseCase.getAlertName("alert_system_id");
     assertUdsValuesCreated(alertName);
     assertMailSent();
-    assertAlertIndexed("system_id_2|87AB4899-BE5B-5E4F-E053-150A6C0A7A84");
-  }
 
-  @Test
-  @Sql(scripts = "shouldProcessLearningFileWithRegisteredAlert.sql")
-  void shouldProcessLearningFilesRegisteredAlert() {
+    // Registered alert
     assertAlertIndexed("system_id_2|87AB4899-BE5B-5E4F-E053-150A6C0A7A84");
-    assertMailSent();
   }
 
   private static void assertMailSent() {
-    await().atMost(2, SECONDS).untilAsserted(() -> {
+    await().atMost(4, SECONDS).untilAsserted(() -> {
       MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
-      assertThat(receivedMessages.length).isGreaterThanOrEqualTo(2);
+      assertThat(receivedMessages.length).isGreaterThanOrEqualTo(1);
       MimeMessage receivedMessage = receivedMessages[0];
       assertEquals(1, receivedMessage.getAllRecipients().length);
       assertEquals(EMAIL_RECEIVER, receivedMessage.getAllRecipients()[0].toString());
