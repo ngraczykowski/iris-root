@@ -13,7 +13,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
 
 import static com.silenteight.payments.bridge.svb.learning.step.composite.ActionCompositeRowMapper.mapRow;
@@ -40,9 +43,6 @@ class ActionCompositeFetcher
   @Override
   protected Map<Long, List<ActionComposite>> fetchWithConnection(
       Connection connection, List<Long> fkcoIds) {
-    if (fkcoIds.isEmpty()) {
-      return Collections.emptyMap();
-    }
     var preparedQuery = prepareQuery(ACTIONS_QUERY, fkcoIds);
 
     try (PreparedStatement statement = connection.prepareStatement(preparedQuery)) {

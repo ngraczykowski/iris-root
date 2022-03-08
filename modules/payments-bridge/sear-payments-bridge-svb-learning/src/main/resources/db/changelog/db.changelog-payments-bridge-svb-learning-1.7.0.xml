@@ -12,4 +12,9 @@
                     newDataType="varchar(64)"/>
   </changeSet>
 
+  <changeSet id="payments-bridge-svb-learning-1.7.1" author="wkeska">
+    <dropTable tableName="pb_learning_etl_reservation"/>
+    <dropTable tableName="pb_learning_historical_reservation"/>
+    <dropTable tableName="pb_learning_contextual_reservation"/>
+  </changeSet>
 </databaseChangeLog>

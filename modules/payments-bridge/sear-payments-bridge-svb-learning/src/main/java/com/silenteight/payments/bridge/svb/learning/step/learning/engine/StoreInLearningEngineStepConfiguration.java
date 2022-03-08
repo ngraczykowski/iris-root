@@ -8,6 +8,7 @@ import com.silenteight.payments.bridge.svb.learning.job.etl.EtlJobProperties;
 import com.silenteight.payments.bridge.svb.learning.step.composite.AlertCompositeReaderFactory;
 
 import org.intellij.lang.annotations.Language;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -24,6 +25,7 @@ import org.springframework.retry.policy.AlwaysRetryPolicy;
 
 import java.io.IOException;
 
+import static com.silenteight.payments.bridge.svb.learning.job.csvstore.LearningJobConstants.FILE_NAME_PARAMETER;
 import static com.silenteight.payments.bridge.svb.learning.job.csvstore.LearningJobConstants.HISTORICAL_ASSESSMENT_STORE_STEP;
 
 @Configuration
@@ -33,8 +35,9 @@ import static com.silenteight.payments.bridge.svb.learning.job.csvstore.Learning
 class StoreInLearningEngineStepConfiguration {
 
   @Language("PostgreSQL")
-  private static final String QUERY =
-      "SELECT learning_alert_id FROM pb_learning_historical_reservation WHERE job_id=?";
+  private static final String QUERY = "SELECT learning_alert_id"
+      + " FROM pb_learning_alert"
+      + " WHERE file_name=?";
 
   private final StepBuilderFactory stepBuilderFactory;
   private final AlertCompositeReaderFactory alertCompositeReaderFactory;
@@ -46,9 +49,10 @@ class StoreInLearningEngineStepConfiguration {
   @Bean
   @StepScope
   public AbstractItemStreamItemReader<AlertComposite> historicalReservationCompositeReader(
-      @Value("#{stepExecution.jobExecution.jobId}") Long jobId) {
+      @Value("#{stepExecution.jobExecution}") JobExecution jobExecution) {
+    var fileName = jobExecution.getJobParameters().getString(FILE_NAME_PARAMETER);
     return alertCompositeReaderFactory.createAlertCompositeReader(
-        QUERY, jobId, properties.getChunkSize());
+        QUERY, fileName, properties.getChunkSize());
   }
 
   @Bean

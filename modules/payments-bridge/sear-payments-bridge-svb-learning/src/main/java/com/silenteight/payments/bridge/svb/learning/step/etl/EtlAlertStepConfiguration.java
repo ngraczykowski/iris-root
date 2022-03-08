@@ -8,6 +8,7 @@ import com.silenteight.payments.bridge.svb.learning.job.etl.EtlJobProperties;
 import com.silenteight.payments.bridge.svb.learning.step.composite.AlertCompositeReaderFactory;
 
 import org.intellij.lang.annotations.Language;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -24,6 +25,7 @@ import org.springframework.retry.policy.AlwaysRetryPolicy;
 
 import java.io.IOException;
 
+import static com.silenteight.payments.bridge.svb.learning.job.csvstore.LearningJobConstants.FILE_NAME_PARAMETER;
 import static com.silenteight.payments.bridge.svb.learning.job.etl.EtlJobConstants.ETL_STEP_NAME;
 
 @Configuration
@@ -34,8 +36,8 @@ class EtlAlertStepConfiguration {
 
   @Language("PostgreSQL")
   private static final String QUERY = "SELECT learning_alert_id"
-      + " FROM pb_learning_etl_reservation"
-      + " WHERE job_id=?";
+      + " FROM pb_learning_alert"
+      + " WHERE file_name=?";
 
   private final StepBuilderFactory stepBuilderFactory;
   private final EtlJobProperties properties;
@@ -46,9 +48,10 @@ class EtlAlertStepConfiguration {
   @Bean
   @StepScope
   public AbstractItemStreamItemReader<AlertComposite> compositeAlertReader(
-      @Value("#{stepExecution.jobExecution.jobId}") Long jobId) {
+      @Value("#{stepExecution.jobExecution}") JobExecution jobExecution) {
+    var fileName = jobExecution.getJobParameters().getString(FILE_NAME_PARAMETER);
     return alertCompositeReaderFactory.createAlertCompositeReader(
-        QUERY, jobId, properties.getChunkSize());
+        QUERY, fileName, properties.getChunkSize());
   }
 
   @Bean

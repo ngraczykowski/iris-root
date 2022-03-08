@@ -1,4 +1,4 @@
-INSERT INTO public.pb_learning_alert (learning_alert_id, fkco_id, fkco_v_system_id, fkco_v_format,
+INSERT INTO public.pb_learning_alert (file_name,learning_alert_id, fkco_id, fkco_v_system_id, fkco_v_format,
                                       fkco_v_type, fkco_v_transaction_ref, fkco_v_related_ref,
                                       fkco_v_sens, fkco_v_business_unit, fkco_v_application,
                                       fkco_v_currency, fkco_f_amount, fkco_v_content,
@@ -7,7 +7,7 @@ INSERT INTO public.pb_learning_alert (learning_alert_id, fkco_id, fkco_v_system_
                                       fkco_d_app_deadline, fkco_i_app_priority, fkco_i_normamount,
                                       fkco_v_messageid, fkco_v_copy_service,
                                       fkco_d_filtered_datetime, fkco_i_blockinghits)
-VALUES (1, 102925, 'charlie', 'IAT-O', 'IAT', '11859', 'N/A', 'O', 'NACHA', 'PEP', 'USD', '155.27', '[FIRCOSOFT     X] SVB BE MUX FILTER
+VALUES ('fileName',1, 102925, 'charlie', 'IAT-O', 'IAT', '11859', 'N/A', 'O', 'NACHA', 'PEP', 'USD', '155.27', '[FIRCOSOFT     X] SVB BE MUX FILTER
 [APPLI         X] PEP
 [UNIT          X] US
 [REFERENCE     X] 0011859
@@ -57,7 +57,7 @@ UK
 [DESTCNTRY      ] US
 [ORIGSTSCD     X] 1', 'N/A', '2019/01/01', '36', '0', '0', '', '0', '0', 'unicorn', 'N/A',
         '1999-01-01 14:52:45.000000', '11');
-INSERT INTO public.pb_learning_alert (learning_alert_id, fkco_id, fkco_v_system_id, fkco_v_format,
+INSERT INTO public.pb_learning_alert (file_name, learning_alert_id, fkco_id, fkco_v_system_id, fkco_v_format,
                                       fkco_v_type, fkco_v_transaction_ref, fkco_v_related_ref,
                                       fkco_v_sens, fkco_v_business_unit, fkco_v_application,
                                       fkco_v_currency, fkco_f_amount, fkco_v_content,
@@ -66,7 +66,7 @@ INSERT INTO public.pb_learning_alert (learning_alert_id, fkco_id, fkco_v_system_
                                       fkco_d_app_deadline, fkco_i_app_priority, fkco_i_normamount,
                                       fkco_v_messageid, fkco_v_copy_service,
                                       fkco_d_filtered_datetime, fkco_i_blockinghits)
-VALUES (2, 102925, 'DIN20190429085242-00061-24304', 'IAT-O', 'IAT', '11859', 'N/A', 'O', 'NACHA',
+VALUES ('fileName',2, 102925, 'DIN20190429085242-00061-24304', 'IAT-O', 'IAT', '11859', 'N/A', 'O', 'NACHA',
         'PEP', 'USD', '155.27', '[FIRCOSOFT     X] SVB BE MUX FILTER
 [APPLI         X] PEP
 [UNIT          X] US
@@ -169,6 +169,3 @@ INSERT INTO public.pb_learning_action (learning_action_id, fkco_messages, fkco_v
 VALUES (4, 102925, 'Automation Comment - FR FAIL', '7059', '2019-07-29 13:54:16.000000', '9196',
         '23', '1', 'FR_FAIL', 'PENDING');
 
-
-INSERT INTO public.pb_learning_etl_reservation (learning_alert_id, job_id) VALUES (1, 1);
-INSERT INTO public.pb_learning_etl_reservation (learning_alert_id, job_id) VALUES (2, 1);

@@ -17,14 +17,12 @@ import static com.silenteight.payments.bridge.svb.learning.job.csvstore.Learning
 class HistoricalRiskAssessmentJobConfiguration {
 
   private final JobBuilderFactory jobBuilderFactory;
-  private final Step historicalAssessmentReservationStep;
   private final Step storeHistoricalAssessmentInLearningEngineStep;
 
   @Bean
   Job historicalRiskAssessmentJob() {
     return jobBuilderFactory.get(HISTORICAL_RISK_ASSESSMENT_JOB_NAME)
-        .start(historicalAssessmentReservationStep)
-        .next(storeHistoricalAssessmentInLearningEngineStep)
+        .start(storeHistoricalAssessmentInLearningEngineStep)
         .build();
   }
 }

@@ -16,10 +16,6 @@ ALTER SEQUENCE pb_batch_job_seq RESTART WITH 1;
 ALTER SEQUENCE pb_batch_step_execution_seq RESTART WITH 1;
 
 DELETE
-FROM pb_learning_historical_reservation;
-DELETE
-FROM pb_learning_etl_reservation;
-DELETE
 FROM pb_learning_csv_row;
 DELETE
 FROM pb_learning_alert;

@@ -15,14 +15,12 @@ import static com.silenteight.payments.bridge.svb.learning.job.csvstore.Learning
 class ContextualJobConfiguration {
 
   private final JobBuilderFactory jobBuilderFactory;
-  private final Step contextualReservationStep;
   private final Step storeContextualLearningInLearningEngineStep;
 
   @Bean
   Job contextualLearningJob() {
     return jobBuilderFactory.get(CONTEXTUAL_LEARNING_JOB_NAME)
-        .start(contextualReservationStep)
-        .next(storeContextualLearningInLearningEngineStep)
+        .start(storeContextualLearningInLearningEngineStep)
         .build();
   }
 }
