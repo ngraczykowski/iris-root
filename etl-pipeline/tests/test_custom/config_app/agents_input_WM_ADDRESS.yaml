@@ -1,0 +1,5 @@
+dob_agent:
+  ap:
+  - ALL_PARTY_DOBS
+  wl:
+  - matchesPayloads.WL_DOB

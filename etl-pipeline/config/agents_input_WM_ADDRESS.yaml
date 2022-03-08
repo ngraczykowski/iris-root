@@ -1,0 +1,20 @@
+dob_agent:
+  ap:
+  - ALL_PARTY_DOBS
+  wl:
+  - matchesPayloads.WL_DOB
+
+nationality_agent:
+  ap: []
+  wl:
+  - matchesPayloads.WL_NATIONALITY
+  - matchesPayloads.WL_POB
+  - matchesPayloads.WL_CITIZENSHIP
+  - matchesPayloads.WL_COUNTRY
+  - matchesPayloads.WL_COUNTRYNAME
+
+residency_agent:
+  ap:
+  - ADDRESS1_COUNTRY
+  wl:
+  - matchesPayloads.WL_COUNTRY
