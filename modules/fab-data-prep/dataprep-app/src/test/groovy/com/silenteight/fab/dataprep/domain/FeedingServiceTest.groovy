@@ -35,7 +35,7 @@ class FeedingServiceTest extends Specification {
     featureService.createFeatureInputs(command)
 
     then:
-    features.each {1 * it.createFeatureInput(command)}
-    features.size() * agentInputServiceClient.createBatchCreateAgentInputs(_) >> []
+    features.each {1 * it.createFeatureInput(command) >> []}
+    1 * agentInputServiceClient.createBatchCreateAgentInputs(_) >> []
   }
 }
