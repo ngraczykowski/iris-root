@@ -103,14 +103,14 @@ warehouse.report.statistics:
     FROM warehouse_simulation_alert wsa
     JOIN warehouse_alert wa ON wsa.name = wa.name
     WHERE wsa.analysis_name = ?
-    AND (wa.payload ->> 'DN_CASE.currentState') IN ('Level 1 Review', 'Level 2 Review')
+    AND (wa.payload ->> 'analyst_decision') IN ('ANALYST_FALSE_POSITIVE', 'ANALYST_TRUE_POSITIVE')
     AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
   analyst-false-positive-query:
     SELECT count(*)
     FROM warehouse_simulation_alert wsa
     JOIN warehouse_alert wa ON wsa.name = wa.name
     WHERE wsa.analysis_name = ?
-    AND (wa.payload ->> 'DN_CASE.currentState') = 'Level 1 Review'
+    AND (wa.payload ->> 'analyst_decision') = 'ANALYST_FALSE_POSITIVE'
     AND (wsa.payload ->> 'recommendation_recommended_action') = 'ACTION_FALSE_POSITIVE'
 
 warehouse.reports.v2:
@@ -293,4 +293,4 @@ warehouse.reports.v2:
                  JOIN warehouse_match match ON prod.id = match.alert_id
         WHERE sim.analysis_name = 'analysis/${analysisId}'
         AND prod.payload ->> 'analyst_decision' IN
-              ('analyst_decision_false_positive', 'analyst_decision_true_positive')
+              ('ANALYST_FALSE_POSITIVE', 'ANALYST_TRUE_POSITIVE')
