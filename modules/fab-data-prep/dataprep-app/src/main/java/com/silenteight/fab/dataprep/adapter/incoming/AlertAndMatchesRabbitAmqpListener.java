@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.fab.dataprep.domain.FeedingFacade;
+import com.silenteight.fab.dataprep.domain.TransformService;
 import com.silenteight.fab.dataprep.domain.model.ExtractedAlert;
 import com.silenteight.proto.fab.api.v1.AlertDetails;
 import com.silenteight.proto.fab.api.v1.AlertsDetailsResponse;
@@ -28,6 +29,8 @@ class AlertAndMatchesRabbitAmqpListener {
 
   private final AlertDetailsFacade alertDetailsFacade;
 
+  private final TransformService transformService;
+
   //TODO: Why only one incoming alert? not many?
   @RabbitListener(queues = QUEUE_NAME_PROPERTY)
   public void subscribe(MessageAlertAndMatchesStored message) {
@@ -49,14 +52,14 @@ class AlertAndMatchesRabbitAmqpListener {
         .collect(toList());
   }
 
-  private static ExtractedAlert getExtractedAlert(
+  private ExtractedAlert getExtractedAlert(
       MessageAlertAndMatchesStored message,
       AlertDetails alertDetails) {
     return ExtractedAlert.builder()
         .batchId(message.getBatchId())
         .alertId(message.getAlertId())
         .alertName(alertDetails.getAlertName())
-        .payload(alertDetails.getPayload())
+        .parsedPayload(transformService.convert(alertDetails.getPayload()))
         .build();
     //TODO set fields: status, errorDescription, matches
   }

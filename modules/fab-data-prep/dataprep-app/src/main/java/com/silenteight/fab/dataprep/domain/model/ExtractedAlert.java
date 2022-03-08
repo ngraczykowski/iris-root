@@ -14,7 +14,7 @@ public class ExtractedAlert {
   String alertName;
   AlertStatus status;
   AlertErrorDescription errorDescription;
-  String payload;
+  ParsedPayload parsedPayload;
   List<Match> matches;
 
   @Value
