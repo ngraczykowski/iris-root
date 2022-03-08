@@ -1,6 +1,7 @@
 package com.silenteight.payments.bridge.svb.learning.step.composite;
 
 import lombok.extern.slf4j.Slf4j;
+
 import com.silenteight.payments.bridge.common.agents.ContextualLearningProperties;
 import com.silenteight.payments.bridge.common.app.LearningProperties;
 import com.silenteight.payments.bridge.svb.learning.domain.AlertComposite;
