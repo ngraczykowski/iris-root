@@ -44,6 +44,19 @@ abstract class BaseCompositeFetcher<I, O> {
     return String.format(query, String.join(",", Collections.nCopies(ids.size(), "?")));
   }
 
+  protected static void setQueryParameters(
+      PreparedStatement stat, Collection<Long> alertIds, final String filename) throws
+      SQLException {
+
+    int systemIdIdx = 1;
+    for (var id : alertIds) {
+      stat.setLong(systemIdIdx, id);
+      systemIdIdx++;
+    }
+
+    stat.setString(systemIdIdx, filename);
+  }
+
   protected static void setQueryParameters(PreparedStatement stat, Collection<Long> alertIds) throws
       SQLException {
 

@@ -15,13 +15,23 @@ public class AlertCompositeReaderFactory {
   private final AlertCompositeFetcher alertCompositeFetcher;
   private final DataSource dataSource;
 
+
   public AlertCompositeReader createAlertCompositeReader(
-      String alertsQuery, long jobId, int chunkSize) {
+      final String alertsQuery, final long jobId, final int chunkSize
+  ) {
+    return createAlertCompositeReader(alertsQuery, jobId, chunkSize, "");
+  }
+
+  public AlertCompositeReader createAlertCompositeReader(
+      final String alertsQuery, final long jobId, final int chunkSize, final String filename
+  ) {
     var cursorReader = new BetterJdbcCursorItemReader<Long>();
     cursorReader.setSql(alertsQuery);
     cursorReader.setPreparedStatementSetter(ps -> ps.setLong(1, jobId));
     cursorReader.setRowMapper((rs, rowNum) -> rs.getLong(1));
     cursorReader.setDataSource(dataSource);
+
+    this.alertCompositeFetcher.setFileName(filename);
     return new AlertCompositeReader(alertCompositeFetcher, cursorReader, chunkSize);
   }
 }

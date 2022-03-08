@@ -12,10 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.sql.DataSource;
 
 @Slf4j
@@ -35,6 +32,9 @@ class HitCompositeFetcher extends BaseCompositeFetcher<List<Long>, Map<Long, Lis
   @Override
   protected Map<Long, List<HitComposite>> fetchWithConnection(
       Connection connection, List<Long> fkcoIds) {
+    if (fkcoIds.isEmpty()) {
+      return Collections.emptyMap();
+    }
     var preparedQuery = prepareQuery(HITS_QUERY, fkcoIds);
 
     try (PreparedStatement statement = connection.prepareStatement(preparedQuery)) {
