@@ -31,7 +31,7 @@ locals {
   jvm_memory                = ceil(var.memory * 0.7)
   perm_memory               = ceil(var.memory * 0.2)
   database_node_destination = "eu4"
-  database_volume           = "/srv/sep-cluster/postgres/${var.namespace}-hsbc-bridge"
+  database_volume           = "/srv/sep-cluster/postgres12/${var.namespace}-hsbc-bridge"
 }
 
 job "hsbc-bridge" {
@@ -71,7 +71,7 @@ job "hsbc-bridge" {
       }
 
       config {
-        image   = "postgres:10"
+        image   = "postgres:12"
         ports   = [
           "tcp"
         ]
