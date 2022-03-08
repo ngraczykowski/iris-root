@@ -41,8 +41,7 @@ variable "grpcui_tags" {
 locals {
   jvm_memory                = ceil(var.memory * 0.7)
   perm_memory               = ceil(var.memory * 0.2)
-    database_volume           = "/srv/sep-cluster/postgres/${var.namespace}-universal-data-source"
-
+  database_volume = "/srv/sep-cluster/postgres12/${var.namespace}-universal-data-source"
 }
 
 job "universal-data-source" {
@@ -82,7 +81,7 @@ job "universal-data-source" {
         }
 
         config {
-          image   = "postgres:10.18"
+          image   = "postgres:12"
           ports   = [
             "tcp"
           ]
