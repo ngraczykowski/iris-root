@@ -42,9 +42,6 @@ class WatchlistExtractor:
         result = []
         entry_list = []
         for entry in record["entity"]["citizenships"]:
-            import pdb
-
-            pdb.set_trace()
             entry_list.append(entry["citizenship"])
         data_item_list = self.as_list(entry_list)
         for item in data_item_list:

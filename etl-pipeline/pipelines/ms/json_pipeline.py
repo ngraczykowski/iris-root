@@ -1,6 +1,8 @@
+import os
+
 from omegaconf import OmegaConf
 
-from config import columns_namespace
+from config import CONFIG_APP_DIR, columns_namespace
 from custom.ms.datatypes.field import InputRecordField
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.custom.ms.transformations import (
@@ -96,8 +98,8 @@ class MSPipeline(ETLPipeline):
                     new_config[elements[-1]] = value
         return new_config
 
-    def load_config(self, alert_type="WM_PARTY"):
-        filenames = {"WM_PARTY": "config/agents_input_WM_PARTY.yaml"}
+    def load_config(self, alert_type="WM_ADDRESS"):
+        filenames = {"WM_ADDRESS": os.path.join(CONFIG_APP_DIR, "agents_input_WM_ADDRESS.yaml")}
         yaml_conf = OmegaConf.load(filenames[alert_type])
         agent_config = {}
         for key, value in dict(yaml_conf).items():
@@ -114,7 +116,6 @@ class MSPipeline(ETLPipeline):
 
     def transform_cleansed_to_application(self, payload):
         matches = payload["matchesPayloads"]
-
         agent_config, yaml_conf = self.load_config()
         agent_input_prepended_agent_name_config = prepend_agent_name_to_ap_or_wl_or_aliases_key(
             agent_config
