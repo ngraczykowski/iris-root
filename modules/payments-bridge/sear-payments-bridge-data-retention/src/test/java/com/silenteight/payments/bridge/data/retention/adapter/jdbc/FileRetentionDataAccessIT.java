@@ -12,10 +12,14 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @Sql
 @Import({
-    FileRetentionDataAccess.class, FindFileDataRetention.class, InsertFileDataRetention.class })
+    FileRetentionDataAccess.class,
+    FindFileDataRetention.class,
+    InsertFileDataRetention.class,
+    UpdateFileDataRetention.class })
 class FileRetentionDataAccessIT extends BaseJdbcTest {
 
   @Autowired
@@ -42,5 +46,14 @@ class FileRetentionDataAccessIT extends BaseJdbcTest {
         List.of(FileDataRetention.builder().fileName("newfile").build()));
     assertEquals(1, jdbcTemplate.queryForObject(
         "SELECT count(*) FROM pb_file_data_retention WHERE file_name = 'newfile'", Integer.class));
+  }
+
+  @Test
+  public void shouldUpdateRemoveAt() {
+    fileRetentionDataAccess.update(List.of("updateFile"));
+    var removedAt = jdbcTemplate.queryForObject(
+        "SELECT file_data_removed_at FROM pb_file_data_retention WHERE file_name = 'updateFile'",
+        OffsetDateTime.class);
+    assertNotNull(removedAt);
   }
 }

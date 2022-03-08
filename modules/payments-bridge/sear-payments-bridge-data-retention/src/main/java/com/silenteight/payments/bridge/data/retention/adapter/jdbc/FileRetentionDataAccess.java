@@ -17,6 +17,7 @@ class FileRetentionDataAccess implements FileDataRetentionAccessPort {
 
   private final FindFileDataRetention findFileDataRetention;
   private final InsertFileDataRetention insertFileDataRetention;
+  private final UpdateFileDataRetention updateFileDataRetention;
 
   @Override
   public List<String> findFileNameBefore(OffsetDateTime dateTime) {
@@ -27,5 +28,11 @@ class FileRetentionDataAccess implements FileDataRetentionAccessPort {
   @Transactional
   public void create(Iterable<FileDataRetention> fileDataRetentions) {
     insertFileDataRetention.update(fileDataRetentions);
+  }
+
+  @Override
+  @Transactional
+  public void update(List<String> fileNames) {
+    updateFileDataRetention.update(fileNames);
   }
 }

@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Service
 @EnableConfigurationProperties(DataRetentionProperties.class)
@@ -25,10 +26,20 @@ class CheckFileExpirationService implements CheckFileExpirationUseCase {
 
   @Override
   public void execute() {
-    var dateBefore = dataRetentionProperties.getFile().getExpiration();
-    var dateTime = OffsetDateTime.now().minus(dateBefore);
-    var expiredFiles = dataRetentionAccessPort.findFileNameBefore(dateTime);
+    var expiredFiles = getExpiredFiles();
+
+    if (expiredFiles.isEmpty()) {
+      return;
+    }
+
     applicationEventPublisher.publishEvent(
         FilesExpiredEvent.builder().fileNames(expiredFiles).build());
+    dataRetentionAccessPort.update(expiredFiles);
+  }
+
+  private List<String> getExpiredFiles() {
+    var dateBefore = dataRetentionProperties.getFile().getExpiration();
+    var dateTime = OffsetDateTime.now().minus(dateBefore);
+    return dataRetentionAccessPort.findFileNameBefore(dateTime);
   }
 }

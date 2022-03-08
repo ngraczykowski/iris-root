@@ -10,4 +10,6 @@ public interface FileDataRetentionAccessPort {
   List<String> findFileNameBefore(OffsetDateTime dateTime);
 
   void create(Iterable<FileDataRetention> fileDataRetentions);
+
+  void update(List<String> fileNames);
 }
