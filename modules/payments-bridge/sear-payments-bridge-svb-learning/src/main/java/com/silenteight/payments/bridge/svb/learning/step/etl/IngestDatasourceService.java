@@ -13,6 +13,8 @@ import com.silenteight.payments.bridge.svb.learning.domain.EtlHit;
 import com.silenteight.payments.bridge.svb.learning.domain.HitComposite;
 import com.silenteight.payments.bridge.svb.learning.step.etl.category.port.CreateCategoriesUseCase;
 import com.silenteight.payments.bridge.svb.learning.step.etl.feature.port.CreateFeatureUseCase;
+import com.silenteight.payments.bridge.svb.learning.step.etl.feature.service.DefaultFeatureInputSpecification;
+import com.silenteight.payments.bridge.svb.learning.step.etl.feature.service.FeatureInputSpecification;
 import com.silenteight.payments.bridge.svb.oldetl.model.CreateAlertedPartyEntitiesRequest;
 import com.silenteight.payments.bridge.svb.oldetl.port.CreateAlertedPartyEntitiesUseCase;
 import com.silenteight.payments.bridge.svb.oldetl.response.AlertedPartyData;
@@ -31,34 +33,50 @@ import static java.util.stream.Collectors.toList;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-class IngestDatasourceService {
+public class IngestDatasourceService {
 
   private final CreateFeatureUseCase createFeatureUseCase;
   private final CreateCategoriesUseCase createCategoriesUseCase;
   private final MessageParserUseCase messageParserUseCase;
   private final CreateAlertedPartyEntitiesUseCase createAlertedPartyEntitiesUseCase;
 
-  void ingest(AlertComposite alertComposite, RegisterAlertResponse registeredAlert) {
-    processForUnstructuredTags(alertComposite, registeredAlert);
-    processForStructuredTags(alertComposite, registeredAlert);
+  public void ingest(AlertComposite alertComposite, RegisterAlertResponse registeredAlert) {
+    ingest(alertComposite, registeredAlert, DefaultFeatureInputSpecification.INSTANCE);
   }
 
+  public void ingest(
+      final AlertComposite alertComposite, final RegisterAlertResponse registeredAlert,
+      final FeatureInputSpecification featureInputSpecification
+  ) {
+    processForUnstructuredTags(alertComposite, registeredAlert, featureInputSpecification);
+    processForStructuredTags(alertComposite, registeredAlert, featureInputSpecification);
+  }
+
+
   private void processForUnstructuredTags(
-      AlertComposite alertComposite, RegisterAlertResponse registeredAlert) {
-    createFeatureUseCase.createUnstructuredFeatureInputs(alertComposite.getHits(), registeredAlert);
+      AlertComposite alertComposite, RegisterAlertResponse registeredAlert,
+      FeatureInputSpecification featureInputSpecification) {
+    createFeatureUseCase.createUnstructuredFeatureInputs(
+        alertComposite.getHits(),
+        registeredAlert,
+        featureInputSpecification
+    );
+
+    // TODO
     createCategoriesUseCase.createUnstructuredCategoryValues(
         alertComposite.getHits(), registeredAlert);
   }
 
   private void processForStructuredTags(
-      AlertComposite alertComposite, RegisterAlertResponse registeredAlert) {
+      AlertComposite alertComposite, RegisterAlertResponse registeredAlert,
+      FeatureInputSpecification featureInputSpecification) {
     var etlHits = createEtlHits(alertComposite);
 
     if (etlHits.isEmpty()) {
       return;
     }
 
-    createFeatureUseCase.createFeatureInputs(etlHits, registeredAlert);
+    createFeatureUseCase.createFeatureInputs(etlHits, registeredAlert, featureInputSpecification);
     createCategoriesUseCase.createCategoryValues(etlHits, registeredAlert);
   }
 

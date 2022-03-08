@@ -22,6 +22,7 @@ public class AlertCompositeReaderFactory {
     cursorReader.setPreparedStatementSetter(ps -> ps.setString(1, fileName));
     cursorReader.setRowMapper((rs, rowNum) -> rs.getLong(1));
     cursorReader.setDataSource(dataSource);
+
     return new AlertCompositeReader(alertCompositeFetcher, cursorReader, chunkSize);
   }
 }

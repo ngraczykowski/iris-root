@@ -42,12 +42,44 @@ class CreateFeatureService implements CreateFeatureUseCase {
     createAgentInputsClient.createAgentInputs(
         BatchCreateAgentInputsRequest.newBuilder().addAllAgentInputs(agentInputs).build());
 
+    return createFeatureInputs(etlHits, registeredAlert, DefaultFeatureInputSpecification.INSTANCE);
+  }
+
+  @Override
+  public List<AgentInput> createFeatureInputs(
+      List<EtlHit> etlHits, RegisterAlertResponse registeredAlert,
+      FeatureInputSpecification featureInputSpecification) {
+    var alertName = registeredAlert.getAlertName();
+
+    var agentInputs = etlHits.stream().map(hit -> AgentInput
+            .newBuilder()
+            .setAlert(alertName)
+            .setMatch(registeredAlert.getMatchName(hit.getMatchId()))
+            .addAllFeatureInputs(createFeaturesInputs(hit))
+            .build())
+        .filter(featureInputSpecification::isSatisfy)
+        .collect(toList());
+
+    createAgentInputsClient.createAgentInputs(
+        BatchCreateAgentInputsRequest.newBuilder().addAllAgentInputs(agentInputs).build());
+
     return agentInputs;
   }
 
   @Override
   public List<AgentInput> createUnstructuredFeatureInputs(
-      List<HitComposite> hitComposites, RegisterAlertResponse registeredAlert) {
+      final List<HitComposite> hitComposites, final RegisterAlertResponse registeredAlert
+  ) {
+    return createUnstructuredFeatureInputs(
+        hitComposites, registeredAlert, DefaultFeatureInputSpecification.INSTANCE);
+  }
+
+  @Override
+  public List<AgentInput> createUnstructuredFeatureInputs(
+      final List<HitComposite> hitComposites,
+      final RegisterAlertResponse registeredAlert,
+      final FeatureInputSpecification featureInputSpecification
+  ) {
     var alertName = registeredAlert.getAlertName();
 
     var agentInputs = hitComposites.stream().map(hit -> AgentInput
@@ -56,13 +88,15 @@ class CreateFeatureService implements CreateFeatureUseCase {
             .setMatch(registeredAlert.getMatchName(hit.getMatchId()))
             .addAllFeatureInputs(createUnstructuredFeaturesInputs(hit))
             .build())
+        .filter(featureInputSpecification::isSatisfy)
         .collect(toList());
 
-    createAgentInputsClient.createAgentInputs(
-        BatchCreateAgentInputsRequest.newBuilder().addAllAgentInputs(agentInputs).build());
-
+    final BatchCreateAgentInputsRequest batchCreateAgentInputsRequest =
+        BatchCreateAgentInputsRequest.newBuilder().addAllAgentInputs(agentInputs).build();
+    createAgentInputsClient.createAgentInputs(batchCreateAgentInputsRequest);
     return agentInputs;
   }
+
 
   @Nonnull
   private List<FeatureInput> createFeaturesInputs(EtlHit hit) {

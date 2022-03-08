@@ -19,7 +19,11 @@ public class FindRegisteredAlertPortMock implements FindRegisteredAlertUseCase {
         .filter(registered::contains)
         .map(a -> new RegisteredAlert(
             a, "alerts/1", List.of(
-            RegisteredMatch.builder().matchId("matchId").matchName("alerts/1/matches/1").build())))
+            RegisteredMatch
+                .builder()
+                .matchId("shrekMatchId(ORIGINATOR, #1)")
+                .matchName("alerts/1/matches/1")
+                .build())))
         .collect(
             toList());
   }
