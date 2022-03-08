@@ -7,7 +7,6 @@ JAVA_OPTS=(
     -Dfile.encoding=UTF-8
     -Dsun.jnu.encoding=UTF-8
     -Djava.security.egd=file:/dev/urandom
-    $EXTRA_JAVA_OPTS
 )
 
 # Parse all arguments before -- as java options, and all remaining as jar arguments.
@@ -28,4 +27,4 @@ if [[ $# -eq 0 ]]; then
     set -- "${ARGS[@]}"
 fi
 
-exec java "${JAVA_OPTS[@]}" -cp "$basedir"/lib/@@jarfile@@:$JAVA_CLASSPATH "$@"
+exec java "${JAVA_OPTS[@]}" -jar "$basedir"/lib/@@jarfile@@ "$@"
