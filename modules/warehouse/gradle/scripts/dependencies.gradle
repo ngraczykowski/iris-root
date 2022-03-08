@@ -125,6 +125,10 @@ libraries.springdoc_ui = [group: 'org.springdoc', name: 'springdoc-openapi-ui', 
 libraries.springdoc_data_rest = [group: 'org.springdoc', name: 'springdoc-openapi-data-rest', version: libraries.springdoc_ui.version]
 libraries.springdoc_security = [group: 'org.springdoc', name: 'springdoc-openapi-security', version: libraries.springdoc_ui.version]
 
+// Sentry
+libraries.sentry = [group: 'io.sentry', name: 'sentry']
+libraries.sentry_logback = [group: 'io.sentry', name: 'sentry-logback']
+libraries.sentry_spring_boot_starter = [group: 'io.sentry', name: 'sentry-spring-boot-starter']
 
 // Others
 libraries.apache_httpclient = [group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13']
@@ -268,6 +272,7 @@ dependencies {
   implementation platform("org.springframework.cloud:spring-cloud-dependencies:2020.0.4")
   annotationProcessor platform(
       "com.silenteight.sep:sep-dependencies:$gradle.ext.sepDependenciesVersion")
+  implementation platform("io.sentry:sentry-bom:5.6.0")
 
   implementation libraries.slf4j_api
   implementation libraries.silenteight_sep_auth

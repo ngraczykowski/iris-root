@@ -17,3 +17,8 @@ memoryLimit: 2048Mi
 memoryRequest: 512Mi
 
 esInitDockerImage: 278875966478.dkr.ecr.us-east-1.amazonaws.com/warehouse-es-init:1.0.0
+
+sentry:
+  dsn: https://d7ee180dea524cfe99a42fe89bafd689@o1129201.ingest.sentry.io/6173144
+  environment: unknown
+  tracesSampleRate: 0
