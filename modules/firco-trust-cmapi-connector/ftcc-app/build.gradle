@@ -5,9 +5,16 @@ plugins {
   id "com.google.cloud.tools.jib"
 }
 
+description = "Firco Trust CMAPI Connector"
+
 dependencies {
   implementation project(":ftcc-ingest")
 
+  implementation libraries.silenteight_sep_base_common
+  implementation libraries.silenteight_commons_app
+
+  implementation libraries.commons_lang3
+  implementation libraries.hibernate_validator
   // Utilities
 //  implementation libraries.commons_lang3
 //  implementation libraries.commons_text

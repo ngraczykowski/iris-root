@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,7 +39,7 @@ public class RequestDto implements Serializable {
     return getAuthentication().getUserRealm();
   }
 
-  public List<AlertMessageDto> getAlerts() {
+  public List<JsonNode> getAlerts() {
     return body.getAlerts();
   }
 

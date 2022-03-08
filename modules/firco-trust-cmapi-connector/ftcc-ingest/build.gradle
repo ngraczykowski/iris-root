@@ -1,9 +1,13 @@
 plugins {
   id "java"
-  id "groovy"
 }
 
+description = "Firco Trust CMAPI Connector Ingest"
+
 dependencies {
+  implementation project(":ftcc-common")
+
+  implementation libraries.silenteight_sep_base_common
 
   // Application Starters
 //  implementation libraries.spring_batch_starter
@@ -36,11 +40,9 @@ dependencies {
 //  implementation libraries.shedlock_spring
 //  implementation libraries.shedlock_jdbc_provider
 
-  testImplementation libraries.silenteight_sep_base_testing
-}
+  implementation libraries.rest_assured
+  implementation libraries.rest_assured_spring_mock_mvc
 
-jar {
-  manifest {
-    attributes "Main-Class": "com.silenteight.connector.ftcc.app.FtccApplication"
-  }
+  testImplementation project(":ftcc-common-testing")
+  testImplementation libraries.silenteight_sep_base_testing
 }

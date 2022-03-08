@@ -46,11 +46,9 @@ services:
         reservations:
           memory: 1280M
 
-
 volumes:
   postgres-storage:
   rabbitmq-storage:
-
 
 networks:
   default:

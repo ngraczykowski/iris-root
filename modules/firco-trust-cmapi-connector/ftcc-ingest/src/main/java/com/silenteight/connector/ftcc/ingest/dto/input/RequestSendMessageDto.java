@@ -4,15 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import static java.util.stream.Collectors.toList;
 
 @Data
 @AllArgsConstructor
@@ -33,12 +35,11 @@ public class RequestSendMessageDto implements Serializable {
   @Size(min = 1)
   @NotNull
   @Valid
-  private List<RequestMessageDto> messages;
+  private List<JsonNode> messages;
 
-  List<AlertMessageDto> getAlerts() {
+  List<JsonNode> getAlerts() {
     return messages
         .stream()
-        .map(RequestMessageDto::getMessage)
-        .collect(Collectors.toList());
+        .collect(toList());
   }
 }

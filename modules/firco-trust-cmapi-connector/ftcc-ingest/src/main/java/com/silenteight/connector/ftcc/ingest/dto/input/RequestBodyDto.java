@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.UpperCamelCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
@@ -30,7 +31,7 @@ public class RequestBodyDto implements Serializable {
     return sendMessageDto.getAuthentication();
   }
 
-  List<AlertMessageDto> getAlerts() {
+  List<JsonNode> getAlerts() {
     return sendMessageDto.getAlerts();
   }
 }
