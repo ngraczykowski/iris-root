@@ -3,6 +3,7 @@ package com.silenteight.warehouse.retention.simulation;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.dataretention.api.v1.AnalysisExpired;
 import com.silenteight.sep.base.testing.containers.PostgresContainer.PostgresTestInitializer;
 import com.silenteight.sep.base.testing.containers.RabbitContainer.RabbitTestInitializer;
 import com.silenteight.warehouse.test.client.gateway.AnalysisExpiredClientGateway;
@@ -21,7 +22,9 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.List;
 
 import static com.silenteight.warehouse.retention.simulation.RetentionSimulationFixtures.ANALYSIS_EXPIRED_REQUEST;
+import static com.silenteight.warehouse.retention.simulation.RetentionSimulationFixtures.ANALYSIS_NAME;
 import static com.silenteight.warehouse.retention.simulation.RetentionSimulationFixtures.SIMULATION_DATA_INDEX_REQUEST;
+import static java.util.List.of;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.*;
 import static org.awaitility.Awaitility.await;
@@ -66,6 +69,30 @@ class AnalysisExpiredIT {
 
     // when
     analysisExpiredClientGateway.indexRequest(ANALYSIS_EXPIRED_REQUEST);
+    await()
+        .atMost(5, SECONDS)
+        .until(() -> !simAlertTableHasRecords());
+
+    // then
+    assertThat(simAlertTableHasRecords()).isFalse();
+  }
+
+  @SneakyThrows
+  @Test
+  void shouldHandleNonExistingAnalysisGracefully() {
+    // given
+    simulationIndexClientGateway.indexRequest(SIMULATION_DATA_INDEX_REQUEST);
+    await()
+        .atMost(TIMEOUT, SECONDS)
+        .until(() -> this.indexedSimEventListener.hasAnyEvent());
+
+    assertThat(simAlertTableHasRecords()).isTrue();
+
+    // when
+    AnalysisExpired analysisExpired = AnalysisExpired.newBuilder()
+        .addAllAnalysis(of("analysis/non-existing", ANALYSIS_NAME, "analysis/non-existing"))
+        .build();
+    analysisExpiredClientGateway.indexRequest(analysisExpired);
     await()
         .atMost(5, SECONDS)
         .until(() -> !simAlertTableHasRecords());

@@ -18,7 +18,8 @@ import static org.apache.commons.lang3.StringUtils.substringAfterLast;
 public class RetentionSimulationUseCase {
 
   @Language("PostgreSQL")
-  private static final String DROP_SIM_TABLE_QUERY = "DROP TABLE warehouse_simulation_alert_%s";
+  private static final String DROP_SIM_TABLE_QUERY =
+      "DROP TABLE IF EXISTS warehouse_simulation_alert_%s";
   private static final String ANALYSIS_SEPARATOR = "/";
   private static final String DASH = "-";
   private static final String UNDERSCORE = "_";
