@@ -1,6 +1,6 @@
-# Customer Bridge
+# Scb Bridge
 
-Customer Bridge application uses **Java 11** (need to upgrade to 17)
+SCB Bridge application uses **Java 17** 
 
 ## Application ports
 
