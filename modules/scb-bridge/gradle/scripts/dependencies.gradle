@@ -115,6 +115,7 @@ libraries.protobuf_java_util = [group: 'com.google.protobuf', name: 'protobuf-ja
 // Testing
 libraries.spring_test = [group: 'org.springframework', name: 'spring-test', version: springVersion]
 libraries.groovy_all = [group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion]
+libraries.json_path = [group: 'com.jayway.jsonpath', name: 'json-path']
 libraries.junit_platform_commons = [group: 'org.junit.platform', name: 'junit-platform-commons', version: junitPlatformCommonsVersion]
 libraries.spock_spring = [group: 'org.spockframework', name: 'spock-spring', version: spockSpringVersion]
 
@@ -190,6 +191,9 @@ dependencies {
   implementation libraries.silenteight_serp_protocol_scb
   implementation libraries.silenteight_sep_base_testing
   implementation libraries.silenteight_commons_core
+
+  implementation libraries.groovy_all
+  implementation libraries.json_path
 
   testImplementation libraries.spock_spring
   testRuntimeOnly libraries.junit_platform_commons

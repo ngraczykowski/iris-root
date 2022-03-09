@@ -2,20 +2,20 @@ package com.silenteight.scb.ingest.adapter.incomming.common.recommendation;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.NoArgsConstructor;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Data
 @ValidRecommendationRequest
-@AllArgsConstructor(onConstructor = @__(@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)))
+@AllArgsConstructor
+@NoArgsConstructor
 public class RecommendationRequest {
 
-  private final String systemId;
-  private final String unit;
-  private final String account;
-  private final String recordDetails;
+  private String systemId;
+  private String unit;
+  private String account;
+  private String recordDetails;
 
   boolean hasSystemId() {
     return isNotEmpty(systemId);
