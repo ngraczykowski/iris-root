@@ -629,7 +629,7 @@ components:
           type: array
           items:
             type: string
-        attributeToRoleDtoSet:
+        attributes:
           $ref: '#/components/schemas/AttributeToRoleDto'
       example:
         id: 'f90222c9-80c9-499a-8a2b-8aa793434f00'

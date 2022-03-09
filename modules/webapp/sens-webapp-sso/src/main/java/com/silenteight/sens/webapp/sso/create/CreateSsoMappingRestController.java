@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.sens.webapp.sso.create.dto.CreateSsoMappingDto;
+import com.silenteight.sens.webapp.sso.list.dto.SsoMappingDto;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -40,7 +41,7 @@ class CreateSsoMappingRestController {
       @ApiResponse(responseCode = CREATED_STATUS, description = SUCCESS_RESPONSE_DESCRIPTION),
       @ApiResponse(responseCode = BAD_REQUEST_STATUS, description = BAD_REQUEST_DESCRIPTION)
   })
-  public ResponseEntity<Void> create(@Valid @RequestBody CreateSsoMappingDto dto) {
+  public ResponseEntity<SsoMappingDto> create(@Valid @RequestBody CreateSsoMappingDto dto) {
     log.info(SSO_MANAGEMENT, "Creating new sso mapping. dto={}", dto);
 
     CreateSsoMappingCommand command = CreateSsoMappingCommand.builder()
@@ -49,7 +50,6 @@ class CreateSsoMappingRestController {
         .attributes(dto.getAttributes())
         .build();
 
-    createSsoMappingUseCase.activate(command);
-    return status(CREATED).build();
+    return status(CREATED).body(createSsoMappingUseCase.activate(command));
   }
 }

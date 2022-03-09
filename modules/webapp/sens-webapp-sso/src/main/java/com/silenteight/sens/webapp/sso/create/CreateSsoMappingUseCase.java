@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.sens.webapp.sso.domain.SsoMappingService;
+import com.silenteight.sens.webapp.sso.list.dto.SsoMappingDto;
 
 @RequiredArgsConstructor
 class CreateSsoMappingUseCase {
@@ -11,7 +12,7 @@ class CreateSsoMappingUseCase {
   @NonNull
   private final SsoMappingService ssoMappingService;
 
-  void activate(CreateSsoMappingCommand command) {
-    ssoMappingService.create(command);
+  SsoMappingDto activate(CreateSsoMappingCommand command) {
+    return ssoMappingService.create(command);
   }
 }

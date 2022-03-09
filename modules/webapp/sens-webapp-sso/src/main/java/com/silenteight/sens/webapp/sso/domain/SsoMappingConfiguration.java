@@ -10,12 +10,22 @@ class SsoMappingConfiguration {
 
   @Bean
   SsoMappingService ssoMappingService(
-      IdentityProviderRoleMapper identityProviderRoleMapper) {
-    return new SsoMappingService(identityProviderRoleMapper);
+      IdentityProviderRoleMapper identityProviderRoleMapper,
+      RoleMappingDtoToSsoMappingDtoConverter roleMappingDtoToSsoMappingDtoConverter) {
+    return new SsoMappingService(
+        identityProviderRoleMapper, roleMappingDtoToSsoMappingDtoConverter);
   }
 
   @Bean
-  SsoMappingsDetailsQuery ssoMappingQuery(IdentityProviderRoleMapper identityProviderRoleMapper) {
-    return new SsoMappingsDetailsQuery(identityProviderRoleMapper);
+  SsoMappingsDetailsQuery ssoMappingQuery(
+      IdentityProviderRoleMapper identityProviderRoleMapper,
+      RoleMappingDtoToSsoMappingDtoConverter roleMappingDtoToSsoMappingDtoConverter) {
+    return new SsoMappingsDetailsQuery(
+        identityProviderRoleMapper, roleMappingDtoToSsoMappingDtoConverter);
+  }
+
+  @Bean
+  RoleMappingDtoToSsoMappingDtoConverter roleMappingDtoToSsoMappingDtoConverter() {
+    return new RoleMappingDtoToSsoMappingDtoConverter();
   }
 }

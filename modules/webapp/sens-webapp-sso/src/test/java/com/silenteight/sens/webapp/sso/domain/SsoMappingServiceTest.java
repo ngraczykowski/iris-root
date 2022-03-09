@@ -29,6 +29,9 @@ class SsoMappingServiceTest {
   @Mock
   IdentityProviderRoleMapper identityProviderRoleMapper;
 
+  @Mock
+  RoleMappingDtoToSsoMappingDtoConverter roleMappingDtoToSsoMappingDtoConverter;
+
   private static final DeleteSsoMappingRequest REQUEST = DeleteSsoMappingRequest.builder()
       .ssoMappingId(SSO_ID_1)
       .build();

@@ -21,7 +21,7 @@ import static com.silenteight.sens.webapp.common.rest.RestConstants.ROOT;
 import static com.silenteight.sens.webapp.common.rest.RestConstants.SUCCESS_RESPONSE_DESCRIPTION;
 import static com.silenteight.sens.webapp.logging.SensWebappLogMarkers.SSO_MANAGEMENT;
 import static com.silenteight.sens.webapp.sso.domain.DomainConstants.SSO_ENDPOINT_TAG;
-import static org.springframework.http.ResponseEntity.accepted;
+import static org.springframework.http.ResponseEntity.noContent;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -45,6 +45,6 @@ class DeleteSsoMappingRestController {
         .build();
 
     deleteSsoMappingUseCase.activate(request);
-    return accepted().build();
+    return noContent().build();
   }
 }

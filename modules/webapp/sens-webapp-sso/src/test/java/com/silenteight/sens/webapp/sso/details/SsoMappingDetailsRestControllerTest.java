@@ -31,8 +31,8 @@ class SsoMappingDetailsRestControllerTest extends BaseRestControllerTest {
 
     get(DETAILS_SSO_MAPPING_URL).statusCode(OK.value())
         .body("name", is(SS0_NAME))
-        .body("attributeToRoleDtoSet[0].attribute", is("Attribute #1"))
-        .body("attributeToRoleDtoSet[0].role", is("Role #1"))
+        .body("attributes[0].attribute", is("Attribute #1"))
+        .body("attributes[0].role", is("Role #1"))
         .body("roles[0]", is(USER_ADMINISTRATOR))
         .body("roles[1]", is(AUDITOR));
   }

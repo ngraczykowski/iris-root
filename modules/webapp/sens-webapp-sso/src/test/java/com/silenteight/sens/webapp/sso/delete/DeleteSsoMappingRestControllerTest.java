@@ -15,8 +15,8 @@ import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.CoreMatchers.anything;
 import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpStatus.ACCEPTED;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @Import({ DeleteSsoMappingRestController.class })
 class DeleteSsoMappingRestControllerTest extends BaseRestControllerTest {
@@ -28,8 +28,8 @@ class DeleteSsoMappingRestControllerTest extends BaseRestControllerTest {
 
   @Test
   @WithMockUser(username = USERNAME, authorities = USER_ADMINISTRATOR)
-  void its200WhenSsoMappingIsDeleted() {
-    delete(DELETE_SSO_MAPPING_URL).statusCode(ACCEPTED.value());
+  void its204WhenSsoMappingIsDeleted() {
+    delete(DELETE_SSO_MAPPING_URL).statusCode(NO_CONTENT.value());
 
     ArgumentCaptor<DeleteSsoMappingRequest> captor =
         ArgumentCaptor.forClass(DeleteSsoMappingRequest.class);

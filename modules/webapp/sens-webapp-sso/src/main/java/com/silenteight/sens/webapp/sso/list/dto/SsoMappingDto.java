@@ -7,6 +7,7 @@ import lombok.Value;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import javax.validation.Valid;
 
 @Builder
 @Value
@@ -19,7 +20,8 @@ public class SsoMappingDto {
   String name;
 
   @NonNull
-  Set<AttributeToRoleDto> attributeToRoleDtoSet;
+  @Valid
+  Set<AttributeToRoleDto> attributes;
 
   @NonNull
   List<String> roles;

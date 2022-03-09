@@ -125,14 +125,14 @@ public final class SsoMappingTestFixtures {
   public static final SsoMappingDto SSO_MAPPING_DTO_1 = SsoMappingDto.builder()
       .id(SSO_ID_1)
       .name(SS0_NAME)
-      .attributeToRoleDtoSet(Set.of(ATTRIBUTE_TO_ROLE_DTO))
+      .attributes(Set.of(ATTRIBUTE_TO_ROLE_DTO))
       .roles(ROLES_NAMES_LIST)
       .build();
 
   public static final SsoMappingDto SSO_MAPPING_DTO_2 = SsoMappingDto.builder()
       .id(SSO_ID_2)
       .name(SS0_NAME_2)
-      .attributeToRoleDtoSet(Set.of(ATTRIBUTE_TO_ROLE_DTO_2))
+      .attributes(Set.of(ATTRIBUTE_TO_ROLE_DTO_2))
       .roles(emptyList())
       .build();
 

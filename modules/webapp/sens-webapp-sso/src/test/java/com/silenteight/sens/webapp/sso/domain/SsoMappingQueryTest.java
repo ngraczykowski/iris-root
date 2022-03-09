@@ -30,10 +30,14 @@ class SsoMappingQueryTest {
   @Mock
   IdentityProviderRoleMapper identityProviderRoleMapper;
 
+  @Mock
+  RoleMappingDtoToSsoMappingDtoConverter roleMappingDtoToSsoMappingDtoConverter;
+
   @Test
   void shouldReturnSsoMappingDtoList() {
     //given
     when(identityProviderRoleMapper.listDefaultIdpMappings()).thenReturn(ROLE_MAPPING_DTO_LIST);
+    when(roleMappingDtoToSsoMappingDtoConverter.convert(any())).thenCallRealMethod();
 
     //when
     List<SsoMappingDto> ssoMappingDtoList = new ArrayList<>(underTest.listAll());
@@ -49,6 +53,7 @@ class SsoMappingQueryTest {
   void shouldReturnSingleSsoMappingDto() {
     //given
     when(identityProviderRoleMapper.getMapping(SSO_ID_1)).thenReturn(ROLE_MAPPING_DTO_1);
+    when(roleMappingDtoToSsoMappingDtoConverter.convert(any())).thenCallRealMethod();
 
     //when
     SsoMappingDto ssoMappingDto = underTest.details(SSO_ID_1);

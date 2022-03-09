@@ -32,9 +32,14 @@ class CreateSsoMappingRestControllerTest extends BaseRestControllerTest {
   @Test
   @WithMockUser(username = USERNAME, authorities = USER_ADMINISTRATOR)
   void its201WhenSsoMappingIsCreated() {
-    doNothing().when(createSsoMappingUseCase).activate(any());
+    when(createSsoMappingUseCase.activate(any())).thenReturn(SSO_MAPPING_DTO_1);
 
-    post(CREATE_SSO_MAPPING_URL, CREATE_SSO_MAPPING_DTO).statusCode(CREATED.value());
+    post(CREATE_SSO_MAPPING_URL, CREATE_SSO_MAPPING_DTO).statusCode(CREATED.value())
+        .body("name", is(SS0_NAME))
+        .body("attributes[0].attribute", is("Attribute #1"))
+        .body("attributes[0].role", is("Role #1"))
+        .body("roles[0]", is(USER_ADMINISTRATOR))
+        .body("roles[1]", is(AUDITOR));;
   }
 
   @Test
@@ -48,8 +53,6 @@ class CreateSsoMappingRestControllerTest extends BaseRestControllerTest {
   @ParameterizedTest
   @MethodSource("getDtosWithInvalidFieldsLength")
   void its400WhenFieldLengthIsNotValid(CreateSsoMappingDto createSsoMappingDto) {
-    doNothing().when(createSsoMappingUseCase).activate(any());
-
     post(CREATE_SSO_MAPPING_URL, createSsoMappingDto)
         .statusCode(BAD_REQUEST.value());
   }
