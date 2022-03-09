@@ -28,9 +28,12 @@ silenteight:
     grpc:
       universal-data-source:
         uds-deadline: 1m
+      registration:
+        registration-deadline: 1m
 
 grpc:
   client:
+    registration.address: static://localhost:24804
     universal-data-source.address: static://localhost:24805
     cm-api-connector.address: static://localhost:24806
     GLOBAL:

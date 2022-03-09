@@ -1,7 +1,7 @@
 package com.silenteight.fab.dataprep.adapter.incoming
 
 import com.silenteight.fab.dataprep.BaseSpecificationIT
-import com.silenteight.proto.fab.api.v1.MessageAlertAndMatchesStored
+import com.silenteight.proto.fab.api.v1.MessageAlertStored
 
 import org.spockframework.spring.SpringBean
 import org.springframework.amqp.rabbit.core.RabbitTemplate
@@ -29,16 +29,16 @@ class AlertAndMatchesRabbitAmqpListenerTest extends BaseSpecificationIT {
   @Value(QUEUE_NAME_PROPERTY)
   String queueName
 
-  def "verify that MessageAlertAndMatchesStored event is sent over rabbitMQ"() {
+  def "verify that MessageAlertStored event is sent over rabbitMQ"() {
     given:
     def conditions = new PollingConditions(timeout: 5, initialDelay: 0.2, factor: 1.25)
-    def message = MessageAlertAndMatchesStored.newBuilder()
+    def message = MessageAlertStored.newBuilder()
         .setBatchId("batchId")
         .setAlertId("alertId")
         .build()
 
-    MessageAlertAndMatchesStored receivedMessage = null
-    1 * alertDetailsFacade.getAlertDetails(_) >> { MessageAlertAndMatchesStored msg ->
+    MessageAlertStored receivedMessage = null
+    1 * alertDetailsFacade.getAlertDetails(_) >> { MessageAlertStored msg ->
       receivedMessage = msg
     }
 

@@ -1,14 +1,14 @@
 package com.silenteight.fab.dataprep.domain.model;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.NonNull;
-import lombok.Value;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.List;
 
-@Value
+@Data
 @Builder
 public class ExtractedAlert {
 
@@ -22,7 +22,7 @@ public class ExtractedAlert {
   ParsedPayload parsedPayload;
   List<Match> matches;
 
-  @Value
+  @Data
   @Builder
   public static class Match {
 

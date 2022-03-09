@@ -10,7 +10,7 @@ option java_multiple_files = true;
 option java_outer_classname = "FabBridgeMessageProto";
 option java_package = "com.silenteight.proto.fab.api.v1";
 
-message MessageAlertAndMatchesStored {
+message MessageAlertStored {
   string batch_id = 1 [(google.api.field_behavior) = REQUIRED];
   string alert_id = 2 [(google.api.field_behavior) = REQUIRED];
 }

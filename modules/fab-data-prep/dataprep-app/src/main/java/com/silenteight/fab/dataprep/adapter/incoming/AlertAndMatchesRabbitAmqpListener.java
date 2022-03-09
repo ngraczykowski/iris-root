@@ -4,11 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.fab.dataprep.domain.FeedingFacade;
+import com.silenteight.fab.dataprep.domain.RegistrationService;
 import com.silenteight.fab.dataprep.domain.TransformService;
 import com.silenteight.fab.dataprep.domain.model.ExtractedAlert;
 import com.silenteight.proto.fab.api.v1.AlertDetails;
 import com.silenteight.proto.fab.api.v1.AlertsDetailsResponse;
-import com.silenteight.proto.fab.api.v1.MessageAlertAndMatchesStored;
+import com.silenteight.proto.fab.api.v1.MessageAlertStored;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -31,20 +32,22 @@ class AlertAndMatchesRabbitAmqpListener {
 
   private final TransformService transformService;
 
+  private final RegistrationService registrationService;
+
   //TODO: Why only one incoming alert? not many?
   @RabbitListener(queues = QUEUE_NAME_PROPERTY)
-  public void subscribe(MessageAlertAndMatchesStored message) {
+  public void subscribe(MessageAlertStored message) {
     log.info(
         "Received a message with: batch id: {}, alert id: {}", message.getBatchId(),
         message.getAlertId());
     AlertsDetailsResponse alertsDetailsResponse = getAlertDetails(message);
 
     List<ExtractedAlert> extractedAlerts = getExtractedAlerts(message, alertsDetailsResponse);
+    registrationService.registerAlertsAndMatches(extractedAlerts);
     extractedAlerts.forEach(feedingFacade::etlAndFeedUds);
   }
 
-  private List<ExtractedAlert> getExtractedAlerts(
-      MessageAlertAndMatchesStored message,
+  private List<ExtractedAlert> getExtractedAlerts(MessageAlertStored message,
       AlertsDetailsResponse alertsDetailsResponse) {
     return alertsDetailsResponse.getAlertsList()
         .stream()
@@ -52,9 +55,7 @@ class AlertAndMatchesRabbitAmqpListener {
         .collect(toList());
   }
 
-  private ExtractedAlert getExtractedAlert(
-      MessageAlertAndMatchesStored message,
-      AlertDetails alertDetails) {
+  private ExtractedAlert getExtractedAlert(MessageAlertStored message, AlertDetails alertDetails) {
     return ExtractedAlert.builder()
         .batchId(message.getBatchId())
         .alertId(message.getAlertId())
@@ -63,7 +64,7 @@ class AlertAndMatchesRabbitAmqpListener {
     //TODO set fields: alertName, status, errorDescription, matches
   }
 
-  private AlertsDetailsResponse getAlertDetails(MessageAlertAndMatchesStored message) {
+  private AlertsDetailsResponse getAlertDetails(MessageAlertStored message) {
     return alertDetailsFacade.getAlertDetails(message);
   }
 

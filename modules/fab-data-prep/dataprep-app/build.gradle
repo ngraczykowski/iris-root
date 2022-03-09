@@ -14,6 +14,7 @@ dependencies {
   implementation libraries.data_source_agentinput_api
   implementation libraries.data_source_api
   implementation libraries.registration_api_proto
+  implementation libraries.registration_lib
   implementation libraries.spring_boot_autoconfigure
   implementation libraries.spring_boot_starter_amqp
   implementation libraries.grpc_client_spring_boot_starter

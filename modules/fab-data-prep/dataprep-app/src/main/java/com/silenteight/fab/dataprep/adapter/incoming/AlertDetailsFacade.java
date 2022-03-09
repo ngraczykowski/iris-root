@@ -2,11 +2,8 @@ package com.silenteight.fab.dataprep.adapter.incoming;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.fab.dataprep.domain.MessageAlertAndMatchesStoredToAlertHeaderConverter;
 import com.silenteight.fab.dataprep.infrastructure.grpc.AlertDetailsServiceClient;
-import com.silenteight.proto.fab.api.v1.AlertsDetailsRequest;
-import com.silenteight.proto.fab.api.v1.AlertsDetailsResponse;
-import com.silenteight.proto.fab.api.v1.MessageAlertAndMatchesStored;
+import com.silenteight.proto.fab.api.v1.*;
 
 import org.springframework.stereotype.Service;
 
@@ -16,14 +13,20 @@ public class AlertDetailsFacade {
 
   private final AlertDetailsServiceClient alertDetailsServiceClient;
 
-  private final MessageAlertAndMatchesStoredToAlertHeaderConverter
-      messageAlertAndMatchesStoredToAlertHeaderConverter =
-      new MessageAlertAndMatchesStoredToAlertHeaderConverter();
-
-  public AlertsDetailsResponse getAlertDetails(MessageAlertAndMatchesStored message) {
+  public AlertsDetailsResponse getAlertDetails(MessageAlertStored message) {
     AlertsDetailsRequest alertsDetailsRequest = AlertsDetailsRequest.newBuilder()
-        .addAlerts(messageAlertAndMatchesStoredToAlertHeaderConverter.convert(message)).build();
+        .addAlerts(convert(message)).build();
 
     return alertDetailsServiceClient.get(alertsDetailsRequest);
   }
+
+  public static AlertHeader convert(MessageAlertStored source) {
+    return AlertHeader
+        .newBuilder()
+        .setAlertId(source.getAlertId())
+        .setBatchId(source.getBatchId())
+        .build();
+  }
+
+
 }
