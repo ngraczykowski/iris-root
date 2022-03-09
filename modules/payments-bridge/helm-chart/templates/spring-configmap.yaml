@@ -34,7 +34,7 @@ data:
         alert-resolution:
           percentiles: [ 0.5, 0.95 ]
       sear-learning:
-        discriminator-prefix: {{ .Values.svbLearning.discriminatorPrefix | quote }}
+        discriminator-prefix: {{ .Values.searLearning.discriminatorPrefix | quote }}
     grpc:
       client:
         GLOBAL:

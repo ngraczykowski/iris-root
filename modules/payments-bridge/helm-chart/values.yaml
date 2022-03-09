@@ -62,7 +62,7 @@ mail:
   username: ""
   password: ""
 
-svbLearning:
+searLearning:
   discriminatorPrefix: "default"
 
 sentry:
