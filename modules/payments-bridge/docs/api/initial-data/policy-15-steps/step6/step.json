@@ -1,0 +1,7 @@
+{
+  "id": "{{step6-uuid}}",
+  "name": "06 - C, , Name Match,No,Weak, NMT AnyValueExceptErrorNoData, Geo No,Weak",
+  "description": "",
+  "solution": "FALSE_POSITIVE",
+  "type": "BUSINESS_LOGIC"
+}

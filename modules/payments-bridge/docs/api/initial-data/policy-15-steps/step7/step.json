@@ -1,0 +1,7 @@
+{
+  "id": "{{step7-uuid}}",
+  "name": "07 - I, Co Xmatch, Name No,Weak, NMT Weak,NoMatch, Geo No,Weak,CountryMatch",
+  "description": "",
+  "solution": "FALSE_POSITIVE",
+  "type": "BUSINESS_LOGIC"
+}

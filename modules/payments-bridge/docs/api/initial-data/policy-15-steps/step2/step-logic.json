@@ -1,0 +1,26 @@
+{
+  "featuresLogic": [
+    {
+      "toFulfill": 2,
+      "features": [
+        {
+          "name": "categories/watchlistType",
+          "condition": "is",
+          "values": [
+            "ADDRESS"
+          ]
+        },
+        {
+          "name": "features/geo2",
+          "condition": "is",
+          "values": [
+            "CITY_NO_MATCH",
+            "COUNTRY_NO_MATCH",
+            "COUNTRY_WEAK_MATCH",
+            "STATE_NO_MATCH"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "featuresLogic": [
+    {
+      "toFulfill": 2,
+      "features": [
+        {
+          "name": "categories/watchlistType",
+          "condition": "is",
+          "values": [
+            "COMPANY"
+          ]
+        },
+        {
+          "name": "features/name",
+          "condition": "is",
+          "values": [
+            "WEAK_MATCH",
+            "NO_MATCH",
+            "HQ_NO_MATCH"
+          ]
+        }
+      ]
+    }
+  ]
+}

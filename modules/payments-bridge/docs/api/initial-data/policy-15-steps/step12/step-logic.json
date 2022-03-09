@@ -1,0 +1,36 @@
+{
+  "featuresLogic": [
+    {
+      "toFulfill": 3,
+      "features": [
+        {
+          "name": "categories/watchlistType",
+          "condition": "is",
+          "values": [
+            "VESSEL"
+          ]
+        },
+        {
+          "name": "categories/companyNameSurrounding",
+          "condition": "is",
+          "values": [
+            "MATCH_1",
+            "MATCH_2",
+            "MATCH_3",
+            "MATCH_4",
+            "MATCH_5_OR_MORE"
+          ]
+        },
+        {
+          "name": "features/name",
+          "condition": "is",
+          "values": [
+            "WEAK_MATCH",
+            "NO_MATCH",
+            "HQ_NO_MATCH"
+          ]
+        }
+      ]
+    }
+  ]
+}

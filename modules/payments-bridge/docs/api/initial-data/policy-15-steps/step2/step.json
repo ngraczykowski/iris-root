@@ -1,0 +1,7 @@
+{
+  "id": "{{step2-uuid}}",
+  "name": "02 - Embargo, Geo No Weak",
+  "description": "",
+  "solution": "FALSE_POSITIVE",
+  "type": "BUSINESS_LOGIC"
+}

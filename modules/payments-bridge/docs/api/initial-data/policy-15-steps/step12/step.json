@@ -1,0 +1,7 @@
+{
+  "id": "{{step12-uuid}}",
+  "name": "12 - V, Company Crossmatch, Name No,Weak",
+  "description": "",
+  "solution": "FALSE_POSITIVE",
+  "type": "BUSINESS_LOGIC"
+}

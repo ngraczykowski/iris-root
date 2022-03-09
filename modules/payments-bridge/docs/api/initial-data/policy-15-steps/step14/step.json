@@ -1,0 +1,7 @@
+{
+  "id": "{{step14-uuid}}",
+  "name": "14 - I, Name No,Weak, Geo No,Weak,NoData",
+  "description": "",
+  "solution": "FALSE_POSITIVE",
+  "type": "BUSINESS_LOGIC"
+}

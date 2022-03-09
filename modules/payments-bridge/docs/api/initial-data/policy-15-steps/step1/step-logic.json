@@ -1,0 +1,23 @@
+{
+  "featuresLogic": [
+    {
+      "toFulfill": 2,
+      "features": [
+        {
+          "name": "categories/historicalRiskAssessment",
+          "condition": "is",
+          "values": [
+            "YES"
+          ]
+        },
+        {
+          "name": "categories/matchType",
+          "condition": "is",
+          "values": [
+            "BIC"
+          ]
+        }
+      ]
+    }
+  ]
+}
