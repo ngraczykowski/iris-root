@@ -31,10 +31,15 @@ message AlertsDetailsResponse {
 message AlertDetails {
   string alert_name = 1 [(google.api.field_behavior) = REQUIRED];
   repeated Match matches = 2 [(google.api.field_behavior) = REQUIRED];
+  //Field contains MessageData(list of values separated by ';' character)
+  //Example JSON Path is $.Body.msg_SendMessage.Messages[0].Message.MessageData
   string payload = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
 message Match {
   string match_id = 1 [(google.api.field_behavior) = REQUIRED];
   string match_name = 2 [(google.api.field_behavior) = REQUIRED];
+  //Field contains Hit data in json format.
+  //Example JSON Path is $.Body.msg_SendMessage.Messages[0].Message.Hits[0].Hit
+  string payload = 3 [(google.api.field_behavior) = REQUIRED];
 }
