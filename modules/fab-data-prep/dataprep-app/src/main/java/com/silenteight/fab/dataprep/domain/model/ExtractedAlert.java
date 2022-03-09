@@ -1,7 +1,10 @@
 package com.silenteight.fab.dataprep.domain.model;
 
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Value;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.List;
 
@@ -9,7 +12,9 @@ import java.util.List;
 @Builder
 public class ExtractedAlert {
 
+  @NonNull
   String batchId;
+  @NonNull
   String alertId;
   String alertName;
   AlertStatus status;
@@ -23,5 +28,6 @@ public class ExtractedAlert {
 
     String matchId;
     String matchName;
+    JsonNode payload;
   }
 }
