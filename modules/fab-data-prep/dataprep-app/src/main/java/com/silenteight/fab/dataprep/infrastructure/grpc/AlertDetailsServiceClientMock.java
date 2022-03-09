@@ -28,8 +28,7 @@ public class AlertDetailsServiceClientMock extends AlertDetailsServiceClient {
   AlertDetails convert(AlertHeader request) {
     return AlertDetails
         .newBuilder()
-        .setAlertName(request.getAlertName())
-        .addAllMatches(request.getMatchesList())
+        .setAlertId(request.getAlertId())
         .setPayload("Empty payload")
         .build();
   }

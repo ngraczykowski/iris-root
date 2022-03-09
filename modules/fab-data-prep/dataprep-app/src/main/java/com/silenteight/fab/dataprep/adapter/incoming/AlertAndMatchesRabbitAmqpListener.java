@@ -35,8 +35,8 @@ class AlertAndMatchesRabbitAmqpListener {
   @RabbitListener(queues = QUEUE_NAME_PROPERTY)
   public void subscribe(MessageAlertAndMatchesStored message) {
     log.info(
-        "Received a message with: batch id: {}, alert id: {}, alert name: {}", message.getBatchId(),
-        message.getAlertId(), message.getAlertName());
+        "Received a message with: batch id: {}, alert id: {}", message.getBatchId(),
+        message.getAlertId());
     AlertsDetailsResponse alertsDetailsResponse = getAlertDetails(message);
 
     List<ExtractedAlert> extractedAlerts = getExtractedAlerts(message, alertsDetailsResponse);
@@ -58,10 +58,9 @@ class AlertAndMatchesRabbitAmqpListener {
     return ExtractedAlert.builder()
         .batchId(message.getBatchId())
         .alertId(message.getAlertId())
-        .alertName(alertDetails.getAlertName())
         .parsedPayload(transformService.convert(alertDetails.getPayload()))
         .build();
-    //TODO set fields: status, errorDescription, matches
+    //TODO set fields: alertName, status, errorDescription, matches
   }
 
   private AlertsDetailsResponse getAlertDetails(MessageAlertAndMatchesStored message) {

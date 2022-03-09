@@ -2,7 +2,6 @@ package com.silenteight.fab.dataprep.adapter.incoming
 
 import com.silenteight.fab.dataprep.BaseSpecificationIT
 import com.silenteight.proto.fab.api.v1.MessageAlertAndMatchesStored
-import com.silenteight.proto.fab.api.v1.StoredMatch
 
 import org.spockframework.spring.SpringBean
 import org.springframework.amqp.rabbit.core.RabbitTemplate
@@ -36,10 +35,6 @@ class AlertAndMatchesRabbitAmqpListenerTest extends BaseSpecificationIT {
     def message = MessageAlertAndMatchesStored.newBuilder()
         .setBatchId("batchId")
         .setAlertId("alertId")
-        .setAlertName("alertName")
-        .setAlertStatus("SUCCESS")
-        .addStoredMatches(
-            StoredMatch.newBuilder().setMatchId("matchId").setMatchName("matchName").build())
         .build()
 
     MessageAlertAndMatchesStored receivedMessage = null
