@@ -87,6 +87,11 @@ spring:
         maximum-pool-size: ${serp.gns.db.connections.on-demand.max:${serp.db.connections.max}}
         pool-name: GNS-On-Demand-Pool
 
+silenteight:
+  scb-bridge:
+    grpc:
+      registration:
+        registration-deadline: 1m
 serp:
   # GNS DB Configuration
   gns:
