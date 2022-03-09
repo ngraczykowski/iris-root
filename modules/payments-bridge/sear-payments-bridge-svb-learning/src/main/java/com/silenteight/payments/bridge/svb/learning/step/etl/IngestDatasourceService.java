@@ -62,9 +62,9 @@ public class IngestDatasourceService {
         featureInputSpecification
     );
 
-    // TODO
     createCategoriesUseCase.createUnstructuredCategoryValues(
-        alertComposite.getHits(), registeredAlert);
+        alertComposite.getHits(), registeredAlert,
+        featureInputSpecification);
   }
 
   private void processForStructuredTags(
@@ -77,7 +77,8 @@ public class IngestDatasourceService {
     }
 
     createFeatureUseCase.createFeatureInputs(etlHits, registeredAlert, featureInputSpecification);
-    createCategoriesUseCase.createCategoryValues(etlHits, registeredAlert);
+    createCategoriesUseCase.createCategoryValues(
+        etlHits, registeredAlert, featureInputSpecification);
   }
 
   private List<EtlHit> createEtlHits(AlertComposite alertComposite) {

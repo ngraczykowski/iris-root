@@ -3,6 +3,7 @@ package com.silenteight.payments.bridge.svb.learning.step.reetl;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.datasource.agentinput.api.v1.AgentInput;
+import com.silenteight.datasource.categories.api.v2.CategoryValue;
 import com.silenteight.payments.bridge.svb.learning.step.etl.feature.service.FeatureInputSpecification;
 
 import java.util.List;
@@ -24,6 +25,14 @@ class IndicatedFeatureInputSpecification implements FeatureInputSpecification {
       return true;
     }
     return this.allowedFeaturedInputs.contains(agentInput.getName());
+  }
+
+  @Override
+  public boolean isSatisfy(CategoryValue categoryValue) {
+    if (this.allowedFeaturedInputs.isEmpty()) {
+      return true;
+    }
+    return this.allowedFeaturedInputs.contains(categoryValue.getName());
   }
 
 }

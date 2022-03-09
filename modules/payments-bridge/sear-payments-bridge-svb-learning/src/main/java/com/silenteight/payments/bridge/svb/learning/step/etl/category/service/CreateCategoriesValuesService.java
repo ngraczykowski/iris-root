@@ -10,6 +10,8 @@ import com.silenteight.payments.bridge.datasource.category.port.CreateCategoryVa
 import com.silenteight.payments.bridge.svb.learning.domain.EtlHit;
 import com.silenteight.payments.bridge.svb.learning.domain.HitComposite;
 import com.silenteight.payments.bridge.svb.learning.step.etl.category.port.CreateCategoriesUseCase;
+import com.silenteight.payments.bridge.svb.learning.step.etl.feature.service.DefaultFeatureInputSpecification;
+import com.silenteight.payments.bridge.svb.learning.step.etl.feature.service.FeatureInputSpecification;
 
 import org.springframework.stereotype.Service;
 
@@ -28,10 +30,11 @@ class CreateCategoriesValuesService implements CreateCategoriesUseCase {
 
   @Override
   public List<CreateCategoryValuesRequest> createCategoryValues(
-      List<EtlHit> etlHits, RegisterAlertResponse registeredAlert) {
+      final List<EtlHit> etlHits, final RegisterAlertResponse registeredAlert,
+      final FeatureInputSpecification featureInputSpecification) {
     var categoryValuesRequests = etlHits
         .stream()
-        .map(hit -> createCategoryValuesRequests(hit, registeredAlert))
+        .map(hit -> createCategoryValuesRequests(hit, registeredAlert, featureInputSpecification))
         .flatMap(List::stream)
         .collect(toList());
 
@@ -40,12 +43,31 @@ class CreateCategoriesValuesService implements CreateCategoriesUseCase {
   }
 
   @Override
+  public List<CreateCategoryValuesRequest> createCategoryValues(
+      List<EtlHit> etlHits, RegisterAlertResponse registeredAlert) {
+    return this.createCategoryValues(
+        etlHits, registeredAlert, DefaultFeatureInputSpecification.INSTANCE);
+  }
+
+
+  @Override
   public List<CreateCategoryValuesRequest> createUnstructuredCategoryValues(
       List<HitComposite> hitComposites,
-      RegisterAlertResponse registerAlert) {
+      RegisterAlertResponse registerAlert
+  ) {
+    return this.createUnstructuredCategoryValues(hitComposites, registerAlert,
+        DefaultFeatureInputSpecification.INSTANCE);
+  }
+
+  @Override
+  public List<CreateCategoryValuesRequest> createUnstructuredCategoryValues(
+      final List<HitComposite> hitComposites,
+      final RegisterAlertResponse registerAlert,
+      final FeatureInputSpecification featureInputSpecification) {
     var categoryValuesRequests = hitComposites
         .stream()
-        .map(hit -> createUnstructuredCategoryValuesRequests(hit, registerAlert))
+        .map(hit -> createUnstructuredCategoryValuesRequests(hit, registerAlert,
+            featureInputSpecification))
         .flatMap(List::stream)
         .collect(toList());
 
@@ -54,10 +76,12 @@ class CreateCategoriesValuesService implements CreateCategoriesUseCase {
   }
 
   private List<CreateCategoryValuesRequest> createCategoryValuesRequests(
-      EtlHit hit, RegisterAlertResponse registeredAlert) {
+      final EtlHit hit, final RegisterAlertResponse registeredAlert,
+      final FeatureInputSpecification featureInputSpecification) {
     var categoryValues = createCategoryValue(hit, registeredAlert);
     return categoryValues
         .stream()
+        .filter(featureInputSpecification::isSatisfy)
         .map(cv -> CreateCategoryValuesRequest
             .newBuilder()
             .setCategory(cv.getName())
@@ -73,10 +97,12 @@ class CreateCategoriesValuesService implements CreateCategoriesUseCase {
   }
 
   private List<CreateCategoryValuesRequest> createUnstructuredCategoryValuesRequests(
-      HitComposite hit, RegisterAlertResponse registeredAlert) {
+      HitComposite hit, RegisterAlertResponse registeredAlert,
+      FeatureInputSpecification featureInputSpecification) {
     var categoryValues = createUnstructuredCategoryValue(hit, registeredAlert);
     return categoryValues
         .stream()
+        .filter(featureInputSpecification::isSatisfy)
         .map(cv -> CreateCategoryValuesRequest
             .newBuilder()
             .setCategory(cv.getName())
