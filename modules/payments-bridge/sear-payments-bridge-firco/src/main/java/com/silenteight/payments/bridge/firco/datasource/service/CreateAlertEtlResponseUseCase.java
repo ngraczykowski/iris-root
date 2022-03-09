@@ -46,7 +46,7 @@ class CreateAlertEtlResponseUseCase {
     for (int idx = 0, hitCount = alertMessageDtoHits.size(); idx < hitCount; idx++) {
       var hit = alertMessageDtoHits.get(idx).getHit();
 
-      if (hit.isNotBlocking() || !ofTag(hit.getTag()).equals(STRUCTURED)) {
+      if (hit.isNotBlocking() || !STRUCTURED.equals(ofTag(hit.getTag()))) {
         skippedHits.add(hit.getMatchId(idx));
         continue;
       }
@@ -56,7 +56,7 @@ class CreateAlertEtlResponseUseCase {
     }
 
     if (!skippedHits.isEmpty()) {
-      log.info("Skipping non-blocking hits: systemId={}, hits={}",
+      log.warn("Skipping non-blocking or !STRUCTURED hits: systemId={}, hits={}",
           alertMessageDto.getSystemID(), skippedHits);
     }
 

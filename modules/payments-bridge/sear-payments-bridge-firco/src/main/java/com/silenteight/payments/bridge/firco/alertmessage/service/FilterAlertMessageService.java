@@ -38,7 +38,13 @@ class FilterAlertMessageService implements FilterAlertMessageUseCase {
   @Override
   public boolean isResolvedOrOutdated(AlertId alert) {
     var status = alertMessageStatusService.findByAlertId(alert.getAlertId());
-    return isTransitionForbidden(status) || isRequiredResolutionTimeElapsed(status);
+    var result = isTransitionForbidden(status) || isRequiredResolutionTimeElapsed(status);
+    if (result) {
+      log.warn("Alert:{} isResolvedOrOutdated:{}", alert.getAlertId(), result);
+    } else {
+      log.debug("Alert:{} isResolvedOrOutdated:{}", alert.getAlertId(), result);
+    }
+    return result;
   }
 
   @Override
@@ -78,7 +84,7 @@ class FilterAlertMessageService implements FilterAlertMessageUseCase {
         .orElse(0);
 
     if (alertMessageProperties.getMaxHitsPerAlert() < numberOfHits) {
-      log.info(
+      log.warn(
           "The AlertMessage [{}] has too many hits [{}]. Responding with MANUAL_INVESTIGATION",
           alertId, numberOfHits);
       return true;

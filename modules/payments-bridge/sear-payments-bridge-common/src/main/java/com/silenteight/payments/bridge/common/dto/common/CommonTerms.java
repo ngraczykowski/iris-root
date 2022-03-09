@@ -20,6 +20,8 @@ public class CommonTerms {
 
   public static final String APPLICATION_CODE_GTEX = "GTEX";
   public static final String APPLICATION_CODE_GFX = "GFX";
+  public static final String APPLICATION_CODE_H_R_GTEX = "H_R_GTEX";
+
 
   public static final String FIRCO_FORMAT_SWF = "SWF";
   public static final String FIRCO_FORMAT_IAT_O = "IAT-O";

@@ -57,7 +57,8 @@ class PaymentsBridgeApplicationIT {
 
   private static final String SAMPLE_REQUESTS_DIR = "requests";
   private static final List<String> VALID_REQUEST_FILES = List.of(
-      "2021_10_08-1754_uat_firco_alert.json");
+      "2021_10_08-1754_uat_firco_alert.json",
+      "gtex_firco_alert.json", "h_r_gtex_firco_alert.json");
 
   private static final String TOO_MANY_HITS_REQUEST_FILE =
       "2021-10-01_1837_osama_bin_laden.json";
@@ -95,6 +96,7 @@ class PaymentsBridgeApplicationIT {
   @ParameterizedTest
   @MethodSource("filesFactory")
   void shouldRegisterAlertAndInputs(String fileName) {
+    // assumed h_r_gtex is same format as gtex message
     var alertId = createAlert(fileName);
     await()
         .conditionEvaluationListener(new ConditionEvaluationLogger(log::info))

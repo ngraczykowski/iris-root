@@ -50,8 +50,9 @@ public class AlertParserService {
   }
 
   public static String extractFircoFormat(String applicationCode, MessageData messageData) {
-    if (applicationCode.equals(APPLICATION_CODE_GTEX))
+    if (isSwiftFormat(applicationCode)) {
       return FIRCO_FORMAT_SWF;
+    }
 
     var type = messageData.getValue("TYPE");
 
@@ -65,5 +66,10 @@ public class AlertParserService {
 
     throw new UnsupportedMessageException(
         "Unable to map unknown TYPE " + type + " to FKCO_V_FORMAT");
+  }
+
+  private static boolean isSwiftFormat(String applicationCode) {
+    return APPLICATION_CODE_GTEX.equals(applicationCode) || APPLICATION_CODE_H_R_GTEX.equals(
+        applicationCode);
   }
 }
