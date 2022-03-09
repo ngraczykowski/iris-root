@@ -170,7 +170,7 @@ public abstract class BaseFeatureMapper<T extends Message> implements FeatureMap
 
     private void mapInputAgent(AgentInput agentInput) {
       var featureFromDatabase = agentInput.getFeature();
-      var featureMapped = this.featureInputMapper.mapByValue(featureFromDatabase);
+      var featureMapped = this.featureInputMapper.mapByKey(featureFromDatabase);
       final ObjectNode agentInputJson = agentInput.getAgentInputJson();
       agentInputJson.put(AGENT_INPUT_FEATURE_KEY, featureMapped);
     }
