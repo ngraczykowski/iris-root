@@ -6,7 +6,7 @@ def jenkins = new com.silenteight.jenkins.ci.Jenkins()
 
 gradleBuild(
     jdkVersion: 'jdk-17',
-    sonarEnabled: false,
+    sonarEnabled: true,
     failPipeline: true,
     sonarDecorate: true,
     dependencyCheckEnabled: true,
