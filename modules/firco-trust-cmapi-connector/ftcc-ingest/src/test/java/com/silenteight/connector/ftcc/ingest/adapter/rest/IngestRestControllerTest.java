@@ -2,10 +2,12 @@ package com.silenteight.connector.ftcc.ingest.adapter.rest;
 
 import com.silenteight.connector.ftcc.common.testing.rest.BaseRestControllerTest;
 import com.silenteight.connector.ftcc.ingest.dto.input.RequestDto;
+import com.silenteight.connector.ftcc.ingest.registration.RegistrationService;
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
 import java.io.IOException;
@@ -20,6 +22,9 @@ import static org.springframework.http.HttpStatus.OK;
 class IngestRestControllerTest extends BaseRestControllerTest {
 
   private static final String INGEST_URL = "/v1/alert";
+
+  @MockBean
+  private RegistrationService registrationService;
 
   @Test
   void its200_whenAlertSent() throws IOException {

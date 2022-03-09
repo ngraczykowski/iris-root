@@ -14,6 +14,15 @@ ftcc:
     username: ftcc
     password: ftcc
 
+grpc:
+  client:
+    GLOBAL:
+      enableKeepAlive: true
+      negotiationType: PLAINTEXT
+
+    core-bridge:
+      address: static://localhost:24801
+
 spring:
   application:
     name: ftcc

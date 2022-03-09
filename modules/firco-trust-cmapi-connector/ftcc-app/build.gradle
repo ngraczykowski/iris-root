@@ -16,7 +16,7 @@ dependencies {
   implementation libraries.commons_lang3
   implementation libraries.hibernate_validator
   // Utilities
-//  implementation libraries.commons_lang3
+  implementation libraries.commons_lang3
 //  implementation libraries.commons_text
 //  implementation libraries.guava
 
@@ -30,7 +30,10 @@ dependencies {
 
   // Base Libraries
   implementation libraries.silenteight_sep_base_common
-//  implementation libraries.silenteight_commons_app
+  implementation libraries.silenteight_commons_app
+
+  implementation libraries.core_bridge_registration_connector_lib
+  implementation libraries.core_bridge_registration_connector_proto
 
   // Application Starters
 //  implementation libraries.spring_batch_starter
@@ -67,6 +70,11 @@ dependencies {
   implementation libraries.spring_integration_core
   implementation libraries.spring_integration_http
   implementation libraries.sear_rabbitmq_common_schema
+
+  // gRPC
+  implementation libraries.grpc_api
+  implementation libraries.grpc_stub
+  implementation libraries.grpc_client_spring_boot_starter
 
   // Shedlock
 //  implementation libraries.shedlock_spring

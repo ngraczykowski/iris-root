@@ -4,6 +4,7 @@ import com.silenteight.commons.app.spring.ApplicationBuilderConfigurer;
 import com.silenteight.commons.app.spring.ConfigurableApplicationBuilder;
 import com.silenteight.commons.app.spring.DefaultSpringApplicationContextCallback;
 import com.silenteight.commons.app.spring.SpringApplicationTemplate;
+import com.silenteight.connector.ftcc.app.grpc.GrpcModule;
 import com.silenteight.connector.ftcc.ingest.IngestModule;
 
 import org.springframework.boot.Banner.Mode;
@@ -17,7 +18,10 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackageClasses = {
-    IngestModule.class
+    // Domain modules
+    IngestModule.class,
+    // Interface modules
+    GrpcModule.class
 })
 public class FtccApplication {
 
