@@ -23,7 +23,7 @@ interface DatasetAlertRepository extends Repository<DatasetAlertEntity, DatasetA
       + "    FROM ae_alert aea\n"
       + "    LEFT JOIN ae_alert_labels aal ON aea.alert_id = aal.alert_id\n"
       + "    LEFT JOIN ae_match am ON aea.alert_id = am.alert_id\n"
-      + "    WHERE aea.alerted_at between ?3 and ?4\n"
+      + "    WHERE aea.alerted_at >= ?3 and aea.alerted_at < ?4\n"
       + "    AND (?2 IS NULL OR (aal.name || aal.value IN (?2)))\n"
       + "    AND am.match_id IS NOT NULL\n"
       + "ON CONFLICT DO NOTHING",
