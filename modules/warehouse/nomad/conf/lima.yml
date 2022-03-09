@@ -117,7 +117,7 @@ warehouse.reports.v2:
   reports:
     - name: RB_SCORER_MATCH_LEVEL
       type: simulation
-      description: RB Scorer Match Level
+      description: RB Scorer
       selectSqlQuery: >
         SELECT sim.payload ->> 'match_reason:policy'                              AS "Policy ID",
                sim.payload ->> 'match_reason:policy_title'                        AS "Policy Name",
@@ -158,48 +158,9 @@ warehouse.reports.v2:
                  sim.payload ->> 'features/nationalityCountry:solution',
                  sim.payload ->> 'features/residencyCountry:solution'
 
-    - name: AI_REASONING_ALERT_LEVEL
-      type: simulation
-      description: AI Reasoning ALERT Level
-      selectSqlQuery: >
-        SELECT prod.discriminator                                                        AS "S8 Alert ID",
-               STRING_AGG(match.payload ->> 'watchListId', ',')                          AS "Watchlist Hit IDs",
-               sim.payload ->> 'match_reason:policy'                                     AS "Policy ID",
-               sim.payload ->> 'match_reason:policy_title'                               AS "Policy Name",
-               sim.payload ->> 'match_reason:step'                                       AS "Step ID",
-               sim.payload ->> 'match_reason:step_title'                                 AS "Step Name",
-               STRING_AGG(sim.payload ->> 'match_reason:feature_vector_signature', ',')  AS "Reasoning Branch IDs",
-               prod.payload ->> 'trackingId'                                             AS "Tracking ID",
-               prod.payload ->> 'batchType'                                              AS "Batch Type",
-               prod.payload ->> 'batchCountry'                                           AS "Origin Country",
-               prod.payload ->> 'batchWatchList'                                         AS "Watchlist Type",
-               prod.payload ->> 'sourceSystemIdentifier'                                 AS "Source System ID",
-               sim.payload ->> 'recommendation_recommended_action'                       AS "S8 Alert Resolution",
-               prod.payload ->> 's8_readTimestamp'                                       AS "S8 Read Timestamp",
-               sim.payload ->> 'recommendation_create_time'                              AS "S8 Resolution Timestamp",
-               sim.payload ->> 'recommendation_comment'                                  AS "S8 Alert Reason"
-        FROM warehouse_simulation_alert sim
-                 JOIN warehouse_alert prod ON sim.name = prod.name
-                 JOIN warehouse_match match ON prod.id = match.alert_id
-        WHERE sim.analysis_name = 'analysis/${analysisId}'
-        GROUP BY prod.discriminator,
-                 sim.payload ->> 'match_reason:policy',
-                 sim.payload ->> 'match_reason:policy_title',
-                 sim.payload ->> 'match_reason:step',
-                 sim.payload ->> 'match_reason:step_title',
-                 prod.payload ->> 'trackingId',
-                 prod.payload ->> 'batchType',
-                 prod.payload ->> 'batchCountry',
-                 prod.payload ->> 'batchWatchList',
-                 prod.payload ->> 'sourceSystemIdentifier',
-                 sim.payload ->> 'recommendation_recommended_action',
-                 sim.payload ->> 'recommendation_create_time',
-                 sim.payload ->> 'recommendation_comment',
-                 prod.payload ->> 's8_readTimestamp'
-
     - name: AI_REASONING_MATCH_LEVEL
       type: simulation
-      description: AI Reasoning Match Level
+      description: AI Reasoning
       selectSqlQuery: >
         SELECT prod.discriminator                                      AS "S8 Alert ID",
                match.payload ->> 'watchListId'                         AS "Watchlist Hit ID",
@@ -223,53 +184,9 @@ warehouse.reports.v2:
                  JOIN warehouse_match match ON prod.id = match.alert_id
         WHERE sim.analysis_name = 'analysis/${analysisId}'
 
-    - name: ACCURACY_ALERT_LEVEL
-      type: simulation
-      description: Accuracy Alert Level
-      selectSqlQuery: >
-        SELECT prod.discriminator                                  AS "S8 Alert ID",
-               STRING_AGG(match.payload ->> 'watchListId', ',')    AS "Watchlist Hit IDs",
-               sim.payload ->> 'match_reason:policy'               AS "Policy ID",
-               sim.payload ->> 'match_reason:policy_title'         AS "Policy Name",
-               sim.payload ->> 'match_reason:step'                 AS "Step ID",
-               sim.payload ->> 'match_reason:step_title'           AS "Step Name",
-               STRING_AGG(sim.payload ->> 'match_reason:feature_vector_signature',
-                          ',')                                     AS "Reasoning Branch IDs",
-               prod.payload ->> 'batchId'                          AS "Batch Id",
-               prod.payload ->> 'batchType'                        AS "Batch Type",
-               prod.payload ->> 'batchCountry'                     AS "Origin Country",
-               prod.payload ->> 'batchWatchList'                   AS "Watchlist Type",
-               sim.payload ->> 'recommendation_recommended_action' AS "S8 Alert Resolution",
-               sim.payload ->> 'recommendation_create_time'        AS "S8 Resolution Timestamp",
-               sim.payload ->> 'recommendation_comment'            AS "S8 Alert Reason",
-               prod.payload ->> 'analyst_decision'                 AS "Analyst Decision",
-               prod.payload ->> 'DN_CASE.modifiedDateTime'         AS "Analyst Decision Timestamp",
-               prod.payload ->> 'lastCaseComment'                  AS "Analyst Reason"
-        FROM warehouse_simulation_alert sim
-                 JOIN warehouse_alert prod ON sim.name = prod.name
-                 JOIN warehouse_match match ON prod.id = match.alert_id
-        WHERE sim.analysis_name = 'analysis/${analysisId}'
-        AND prod.payload ->> 'analyst_decision' IN
-              ('analyst_decision_false_positive', 'analyst_decision_true_positive')
-        GROUP BY prod.discriminator,
-                 sim.payload ->> 'match_reason:policy',
-                 sim.payload ->> 'match_reason:policy_title',
-                 sim.payload ->> 'match_reason:step',
-                 sim.payload ->> 'match_reason:step_title',
-                 prod.payload ->> 'batchId',
-                 prod.payload ->> 'batchType',
-                 prod.payload ->> 'batchCountry',
-                 prod.payload ->> 'batchWatchList',
-                 sim.payload ->> 'recommendation_recommended_action',
-                 sim.payload ->> 'recommendation_create_time',
-                 sim.payload ->> 'recommendation_comment',
-                 prod.payload ->> 'analyst_decision',
-                 prod.payload ->> 'DN_CASE.modifiedDateTime',
-                 prod.payload ->> 'lastCaseComment'
-
     - name: ACCURACY_MATCH_LEVEL
       type: simulation
-      description: Accuracy Match Level
+      description: Accuracy
       selectSqlQuery: >
         SELECT prod.discriminator                                      AS "S8 Alert ID",
                match.payload ->> 'watchListId'                         AS "Watchlist Hit ID",
