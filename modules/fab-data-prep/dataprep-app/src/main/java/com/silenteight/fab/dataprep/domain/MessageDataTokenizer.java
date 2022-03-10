@@ -2,28 +2,28 @@ package com.silenteight.fab.dataprep.domain;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.fab.dataprep.domain.model.ParsedPayload;
+import com.silenteight.fab.dataprep.domain.model.ParsedMessageData;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class TransformService implements Converter<String, ParsedPayload> {
+public class MessageDataTokenizer implements Converter<String, ParsedMessageData> {
 
   private static final String SEPARATOR = ";";
 
   static final int NUMBER_OF_SEGMENTS = 28;
 
   @Override
-  public ParsedPayload convert(String source) {
+  public ParsedMessageData convert(String source) {
     String[] parts = source.split(SEPARATOR, -1);
     if (parts.length != NUMBER_OF_SEGMENTS) {
       throw new IllegalArgumentException(
           "Alert payload should contains " + NUMBER_OF_SEGMENTS + "segments separated with"
               + SEPARATOR);
     }
-    return ParsedPayload.builder()
+    return ParsedMessageData.builder()
         .salutation(parts[0])
         .name(parts[1])
         .shortName(parts[2])

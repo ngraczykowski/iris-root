@@ -2,11 +2,11 @@ package com.silenteight.fab.dataprep.domain
 
 import spock.lang.Specification
 
-class TransformServiceTest extends Specification {
+class MessageDataTokenizerTest extends Specification {
 
   def "should correct parse payload #payload"() {
     when:
-    def result = new TransformService().convert(payload)
+    def result = new MessageDataTokenizer().convert(payload)
     then:
     result.getSalutation() == expected[0]
     result.getName() == expected[1]
@@ -45,12 +45,12 @@ class TransformServiceTest extends Specification {
 
   def "should throws exception when can't payload #payload"() {
     when:
-    new TransformService().convert(payload)
+    new MessageDataTokenizer().convert(payload)
     then:
     thrown(IllegalArgumentException)
 
     where:
-    payload << ["", ";".repeat(TransformService.NUMBER_OF_SEGMENTS - 2)]
+    payload << ["", ";".repeat(MessageDataTokenizer.NUMBER_OF_SEGMENTS - 2)]
   }
 
 }

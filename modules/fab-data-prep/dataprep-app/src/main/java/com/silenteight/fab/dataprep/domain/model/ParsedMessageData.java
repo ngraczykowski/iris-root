@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class ParsedPayload {
+public class ParsedMessageData {
 
   String salutation;
   String name;

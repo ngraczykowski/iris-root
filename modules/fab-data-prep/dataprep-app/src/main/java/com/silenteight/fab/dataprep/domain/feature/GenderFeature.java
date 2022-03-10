@@ -38,7 +38,7 @@ public class GenderFeature implements FabFeature {
   }
 
   private List<String> getAlertedPartGenders(ExtractedAlert extractedAlert) {
-    return of(extractedAlert.getParsedPayload().getGender());
+    return of(extractedAlert.getParsedMessageData().getGender());
   }
 
 }

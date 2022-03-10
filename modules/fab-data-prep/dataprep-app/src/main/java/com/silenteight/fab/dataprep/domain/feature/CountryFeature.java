@@ -45,7 +45,7 @@ public class CountryFeature implements FabFeature {
   }
 
   private List<String> getAlertedPart(ExtractedAlert extractedAlert) {
-    return of(extractedAlert.getParsedPayload().getCountry());
+    return of(extractedAlert.getParsedMessageData().getCountry());
   }
 
   protected List<String> getWatchlistPart(JsonNode jsonNode) {

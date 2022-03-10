@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.fab.dataprep.domain.model.ExtractedAlert;
-import com.silenteight.fab.dataprep.domain.model.ParsedPayload;
+import com.silenteight.fab.dataprep.domain.model.ParsedMessageData;
 import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.name.v1.*;
@@ -51,8 +51,8 @@ public class NameFeature implements FabFeature {
   }
 
   private List<AlertedPartyNameOut> getAlertedPart(ExtractedAlert extractedAlert) {
-    ParsedPayload parsedPayload = extractedAlert.getParsedPayload();
-    return Stream.of(parsedPayload.getName(), parsedPayload.getShortName())
+    ParsedMessageData parsedMessageData = extractedAlert.getParsedMessageData();
+    return Stream.of(parsedMessageData.getName(), parsedMessageData.getShortName())
         .map(this::getAlertedPartyNameOut)
         .collect(toList());
   }

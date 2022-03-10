@@ -3,11 +3,11 @@ package com.silenteight.fab.dataprep.adapter.incoming;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.fab.dataprep.domain.AlertParser;
 import com.silenteight.fab.dataprep.domain.FeedingFacade;
+import com.silenteight.fab.dataprep.domain.MessageDataTokenizer;
 import com.silenteight.fab.dataprep.domain.RegistrationService;
-import com.silenteight.fab.dataprep.domain.TransformService;
 import com.silenteight.fab.dataprep.domain.model.ExtractedAlert;
-import com.silenteight.proto.fab.api.v1.AlertDetails;
 import com.silenteight.proto.fab.api.v1.AlertsDetailsResponse;
 import com.silenteight.proto.fab.api.v1.MessageAlertStored;
 
@@ -30,7 +30,9 @@ class AlertAndMatchesRabbitAmqpListener {
 
   private final AlertDetailsFacade alertDetailsFacade;
 
-  private final TransformService transformService;
+  private final MessageDataTokenizer messageDataTokenizer;
+
+  private final AlertParser alertParser;
 
   private final RegistrationService registrationService;
 
@@ -51,17 +53,8 @@ class AlertAndMatchesRabbitAmqpListener {
       AlertsDetailsResponse alertsDetailsResponse) {
     return alertsDetailsResponse.getAlertsList()
         .stream()
-        .map(alertDetails -> getExtractedAlert(message, alertDetails))
+        .map(alertDetails -> alertParser.parse(message, alertDetails))
         .collect(toList());
-  }
-
-  private ExtractedAlert getExtractedAlert(MessageAlertStored message, AlertDetails alertDetails) {
-    return ExtractedAlert.builder()
-        .batchId(message.getBatchId())
-        .alertId(message.getAlertId())
-        .parsedPayload(transformService.convert(alertDetails.getPayload()))
-        .build();
-    //TODO set fields: alertName, status, errorDescription, matches
   }
 
   private AlertsDetailsResponse getAlertDetails(MessageAlertStored message) {

@@ -3,10 +3,12 @@ package com.silenteight.fab.dataprep.domain
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand
 import com.silenteight.fab.dataprep.domain.model.ExtractedAlert
 import com.silenteight.fab.dataprep.domain.model.ExtractedAlert.Match
-import com.silenteight.fab.dataprep.domain.model.ParsedPayload
+import com.silenteight.fab.dataprep.domain.model.ParsedMessageData
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.io.Resources
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 class Fixtures {
 
@@ -15,7 +17,7 @@ class Fixtures {
 
   static def MAPPER = new ObjectMapper()
 
-  static ParsedPayload PARSED_PAYLOAD = ParsedPayload.builder()
+  static ParsedMessageData PARSED_PAYLOAD = ParsedMessageData.builder()
       .salutation('MR')
       .name('OSAMA BIN LADIN')
       .shortName('BIN LADIN')
@@ -46,11 +48,17 @@ class Fixtures {
       .lastUpdateTime('')
       .build()
 
+  private static URL HIT_URL = Resources.getResource("hit.json");
+
   static Match MATCH = Match.builder()
       .matchId(UUID.randomUUID().toString())
       .matchName(MATCH_NAME)
-      .payload(MAPPER.readTree(Resources.getResource('message.json')))
+      .payload(MAPPER.readTree(HIT_URL))
   .build()
+
+  static String HIT = Resources.toString(HIT_URL, UTF_8);
+
+  static String MESSAGE = Resources.toString(Resources.getResource("message.json"), UTF_8);
 
   static FeatureInputsCommand FEATURE_INPUTS_COMMAND = FeatureInputsCommand.builder()
       .batchId('batchId')   //TODO remove one of batchId
@@ -59,7 +67,7 @@ class Fixtures {
               .batchId('batchId')
               .alertId('alertId')
               .alertName(ALERT_NAME)
-              .parsedPayload(PARSED_PAYLOAD)
+              .parsedMessageData(PARSED_PAYLOAD)
               .matches([MATCH])
               .build())
       .build()
