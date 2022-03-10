@@ -1,10 +1,10 @@
 import pyspark.sql
 
-from config import columns_namespace
+from etl_pipeline.config import columns_namespace as cn
 
 
 def add_note_stage(alert_notes: pyspark.sql.DataFrame, spark_instance) -> pyspark.sql.DataFrame:
-    necessary_columns = [columns_namespace.ALERT_ID, "CREATE_DATE"]
+    necessary_columns = [cn.ALERT_ID, "CREATE_DATE"]
     if not all(spark_instance.column_exists(alert_notes, column) for column in necessary_columns):
         raise ValueError(
             f"item_status_history data frame must contain {necessary_columns} columns"

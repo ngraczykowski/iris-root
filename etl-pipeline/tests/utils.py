@@ -1,10 +1,10 @@
 import json
 import pickle
 
-from config import columns_namespace
+from etl_pipeline.config import columns_namespace as cn
 
 
-def compare_dataframe(dataframe_1, dataframe_2, unique_column=columns_namespace.ALERT_INTERNAL_ID):
+def compare_dataframe(dataframe_1, dataframe_2, unique_column=cn.ALERT_INTERNAL_ID):
     dataframe_1_rows = dataframe_1.sort(unique_column, ascending=False).collect()
     dataframe_2_rows = dataframe_2.sort(unique_column, ascending=False).collect()
     if len(dataframe_1_rows) == len(dataframe_2_rows):

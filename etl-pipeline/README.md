@@ -2,7 +2,28 @@
 
 Generic project that help Data Scientists in analyze of the Client's data as well as Developers in creation of fast and scalable architecture of microservices. 
 
-# MVP
+# Service
+
+1. Install etl service the newest version (it's >0.5.4!)"
+`pip install etl_pipeline`
+
+2. Copy paste directory `config` and set-up `config/service/service.yaml` settings
+`CONFIG_APP_DIR=<PATH TO CONFIG DIRECTORY> python -m etl_pipeline`
+
+## Emulating environment
+
+1. You can launch service via:
+`CONFIG_APP_DIR=etl_service/config python etl_pipeline`
+
+2. You can launch data source service stub via:
+`python tests/test_custom/data_source_stub.py`
+
+3. You can now send request as shown in:
+`pytest ./tests/test_custom/test_client.py`
+
+
+
+# Playground
 
 1. Load submodules: `git submodule update --init --recursive`
 2. Docker login:

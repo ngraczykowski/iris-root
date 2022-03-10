@@ -5,12 +5,13 @@ from pyspark.sql.types import NullType
 from spark_manager.spark_client import SparkClient
 from spark_manager.spark_config import SPARK_CONF
 
-from config import columns_namespace, pipeline_config
+from etl_pipeline.config import columns_namespace as cn
+from etl_pipeline.config import pipeline_config
 from etl_pipeline.data_processor_engine.spark_engine import SparkProcessingEngine
 from pipelines.ms.spark_pipeline import MSPipeline
 from tests.utils import compare_dataframe
 
-ALERT_INTERNAL_ID = columns_namespace.ALERT_INTERNAL_ID
+ALERT_INTERNAL_ID = cn.ALERT_INTERNAL_ID
 TEST_PATH = "tests/shared/test_ms_pipeline/"
 spark_instance = SparkClient(SPARK_CONF)
 
@@ -50,4 +51,4 @@ class TestMSPipeline(unittest.TestCase):
         )
         input_data.registerTempTable("df360")
         result = self.uut.ms_customized_merge_df360_and_WM_Account_In_Scope()
-        assert compare_dataframe(result, reference_data, unique_column=columns_namespace.ALERT_ID)
+        assert compare_dataframe(result, reference_data, unique_column=cn.ALERT_ID)

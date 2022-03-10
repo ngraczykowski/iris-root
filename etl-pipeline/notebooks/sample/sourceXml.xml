@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<alert>
+  <headerInfo>
+    <uniqueCustomerId>R_US_Active_Address_A05004166163_2020-01-22-10.14.37.938227</uniqueCustomerId>
+    <datasetId>1044</datasetId>
+    <datasetName>R_US_Active_Address</datasetName>
+    <masterId>73336348</masterId>
+    <currentVersionId>123707448</currentVersionId>
+    <stopDescriptors>
+      <stopDescriptor>
+        <name>Agent Smith</name>
+      </stopDescriptor>
+    </stopDescriptors>
+    <firstVersionCreatedDt>2020-01-23T09:33:55.514-05:00</firstVersionCreatedDt>
+    <lastVersionUpdatedDt>2020-01-23T09:33:55.514-05:00</lastVersionUpdatedDt>
+    <masterVersion>0aaada432294d7aa3ce34b6b44fd84b03fbadf07</masterVersion>
+    <inputVersionSample>R_US_Active_Address_A05004166163_2020-01-22-10.14.</inputVersionSample>
+  </headerInfo>
+  <inputRecordHist>
+    <inputRecord>
+      <version>0aaada432294d7aa3ce34b6b44fd84b03fbadf07</version>
+      <createdDate>01/23/20</createdDate>
+      <field name="SOURCE_REF" isScreenable="false">
+        <value>R_US_Active_Address_A05004166163_2020-01-22-10.14.37.938227</value>
+        <sortOrder>1</sortOrder>
+      </field>
+      <field name="UNIQUE_KEY" isScreenable="false">
+        <value>A05004166163</value>
+        <sortOrder>2</sortOrder>
+      </field>
+      <field name="BARCODE" isScreenable="false">
+        <sortOrder>3</sortOrder>
+      </field>
+      <field name="ADDRESS_TYPE" isScreenable="false">
+        <value>Plating Address</value>
+        <sortOrder>4</sortOrder>
+      </field>
+      <field name="CARE_OF_TEXT" isScreenable="true">
+        <sortOrder>5</sortOrder>
+      </field>
+      <field name="ATTENTION_TO_TEXT" isScreenable="true">
+        <sortOrder>6</sortOrder>
+      </field>
+      <field name="ADDRESS1_LINE1" isScreenable="false">
+        <value>XXX C/F YYY A ZET (DECD)</value>
+        <sortOrder>7</sortOrder>
+      </field>
+      <field name="ADDRESS1_LINE2" isScreenable="false">
+        <value>Agent ZET (BENE)</value>
+        <sortOrder>8</sortOrder>
+      </field>
+      <field name="ADDRESS1_LINE3" isScreenable="false">
+        <value>ABC DEF GHI</value>
+        <sortOrder>9</sortOrder>
+      </field>
+      <field name="ADDRESS1_LINE4" isScreenable="false">
+        <value>123 XYZ RD</value>
+        <sortOrder>10</sortOrder>
+      </field>
+      <field name="ADDRESS1_LINE5" isScreenable="false">
+        <value>ZET XXX 11111</value>
+        <sortOrder>11</sortOrder>
+      </field>
+      <field name="ADDRESS1_LINE6" isScreenable="false">
+        <sortOrder>12</sortOrder>
+      </field>
+      <field name="CONCAT_ADDRESS" isScreenable="true">
+        <value>XXX C/F YYY A ZET (DECD) Agent ZET (BENE) ABC DEF GHI 123 XYZ RD ZET XXX 11111
+        </value>
+        <sortOrder>13</sortOrder>
+      </field>
+      <field name="ADDRESS1_CITY" isScreenable="true">
+        <sortOrder>14</sortOrder>
+      </field>
+      <field name="ADDRESS1_STATE" isScreenable="true">
+        <sortOrder>15</sortOrder>
+      </field>
+      <field name="ADDRESS1_PROVINCE" isScreenable="true">
+        <sortOrder>16</sortOrder>
+      </field>
+      <field name="ADDRESS1_POSTALCODE" isScreenable="true">
+        <sortOrder>17</sortOrder>
+      </field>
+      <field name="ADDRESS1_ZIP5" isScreenable="true">
+        <sortOrder>18</sortOrder>
+      </field>
+      <field name="ADDRESS1_ZIP4" isScreenable="true">
+        <sortOrder>19</sortOrder>
+      </field>
+      <field name="ADDRESS1_COUNTRY" isScreenable="true">
+        <value>UNITED STATES OF AMERICA</value>
+        <sortOrder>20</sortOrder>
+      </field>
+      <field name="ADDRESS1_COUNTRYCODE" isScreenable="true">
+        <value>USA</value>
+        <sortOrder>21</sortOrder>
+      </field>
+      <field name="ADDRESS1_FOREIGNDOMESTICCODE" isScreenable="true">
+        <value>DOMESTIC</value>
+        <sortOrder>22</sortOrder>
+      </field>
+      <status>A</status>
+      <masterId>73336348</masterId>
+      <versionId>123707448</versionId>
+      <uniqueCustId>R_US_Active_Address_A05004166163_2020-01-22-10.14.37.938227</uniqueCustId>
+    </inputRecord>
+  </inputRecordHist>
+  <matchRecords>
+    <matchRecord>
+      <masterId>73336348</masterId>
+      <accountSeq>1</accountSeq>
+      <datasetId>1044</datasetId>
+      <uniqueCustomerId>R_US_Active_Address_A05004166163_2020-01-22-10.14.37.938227
+      </uniqueCustomerId>
+      <masterVersion>0aaada432294d7aa3ce34b6b44fd84b03fbadf07</masterVersion>
+      <matchId>49670889</matchId>
+      <matchStatus>O</matchStatus>
+      <riskScore>-1.0</riskScore>
+      <inputVersionId>123707448</inputVersionId>
+      <matchType>GWL</matchType>
+      <entityId>910238</entityId>
+      <entityVersion>20160802111024</entityVersion>
+      <entity id="910238" version="20160802111024">
+        <name>Agent W Smith&amp;Wesson</name>
+        <listId>15001</listId>
+        <listCode>-1003</listCode>
+        <entityType>03</entityType>
+        <createdDate>10/04/2017</createdDate>
+        <lastUpdateDate>09/14/2018</lastUpdateDate>
+        <source>CON</source>
+        <dobs>
+          <dob>07/08/1956</dob>
+        </dobs>
+        <ids/>
+        <programs>
+          <program type="MSSBGWM">MSSB - GWM ENTRY</program>
+        </programs>
+        <sdfs>
+          <sdf name="FILE_UPLOADED_1">N/A</sdf>
+          <sdf name="FILE_UPLOADED_2">N/A</sdf>
+          <sdf name="FILE_UPLOADED_3">N/A</sdf>
+          <sdf name="PHONE">111-111-1111</sdf>
+          <sdf name="PLACEOFBIRTH">N/A</sdf>
+          <sdf name="TITLE">FOR ADDITIONAL INFORMATION PLEASE CONTACT AML DEPARTMENT AT
+            212-762-8000. PLEASE REFERENCE CI 765966
+          </sdf>
+          <sdf name="UPDATE_DATE">08/02/2016 11:10:24</sdf>
+        </sdfs>
+        <addresses>
+          <address>
+            <address1>1032 E 14TH STREET</address1>
+            <city>SAN LEANDRO</city>
+            <postalCode>94577</postalCode>
+            <address2>CA;USA</address2>
+          </address>
+        </addresses>
+      </entity>
+      <entityType>03</entityType>
+      <entityTextType>UPID</entityTextType>
+      <sourceCode>CON</sourceCode>
+      <stopDescriptors>
+        <stopDescriptor>
+          <name>Agent Smith</name>
+          <totalMatchScore>0.9090909090909091</totalMatchScore>
+          <stopDescriptorDetail>
+            <inputToken>Agent</inputToken>
+            <inputSynonym>null</inputSynonym>
+            <sdToken>Agent</sdToken>
+            <matchScore>1.0</matchScore>
+          </stopDescriptorDetail>
+          <stopDescriptorDetail>
+            <inputToken>XXX</inputToken>
+            <inputSynonym>null</inputSynonym>
+            <sdToken>Smith</sdToken>
+            <matchScore>0.75</matchScore>
+          </stopDescriptorDetail>
+        </stopDescriptor>
+      </stopDescriptors>
+      <firstMatchedDate>01/23/20</firstMatchedDate>
+      <lastMatchedDate>01/23/20</lastMatchedDate>
+      <lastReviewDate>01/23/20</lastReviewDate>
+    </matchRecord>
+    <matchRecord>
+      <masterId>73336348</masterId>
+      <accountSeq>1</accountSeq>
+      <datasetId>1044</datasetId>
+      <uniqueCustomerId>R_US_Active_Address_A05004166163_2020-01-22-10.14.37.938227
+      </uniqueCustomerId>
+      <masterVersion>0aaada432294d7aa3ce34b6b44fd84b03fbadf07</masterVersion>
+      <matchId>49670889</matchId>
+      <matchStatus>O</matchStatus>
+      <riskScore>-1.0</riskScore>
+      <inputVersionId>123707448</inputVersionId>
+      <matchType>GWL</matchType>
+      <entityId>910239</entityId>
+      <entityVersion>20160802111029</entityVersion>
+      <entity id="910239" version="20160802111029">
+        <name>Agent W Smith&amp;Drexler</name>
+        <listId>15001</listId>
+        <listCode>-1003</listCode>
+        <entityType>03</entityType>
+        <createdDate>10/04/2017</createdDate>
+        <lastUpdateDate>09/14/2018</lastUpdateDate>
+        <source>CON</source>
+        <dobs>
+          <dob>07/08/1956</dob>
+        </dobs>
+        <ids/>
+        <programs>
+          <program type="MSSBGWM">MSSB - GWM ENTRY</program>
+        </programs>
+        <sdfs>
+          <sdf name="FILE_UPLOADED_1">N/A</sdf>
+          <sdf name="FILE_UPLOADED_2">N/A</sdf>
+          <sdf name="FILE_UPLOADED_3">N/A</sdf>
+          <sdf name="PHONE">111-111-1111</sdf>
+          <sdf name="PLACEOFBIRTH">N/A</sdf>
+          <sdf name="TITLE">FOR ADDITIONAL INFORMATION PLEASE CONTACT AML DEPARTMENT AT
+            212-762-8000. PLEASE REFERENCE CI 765966
+          </sdf>
+          <sdf name="UPDATE_DATE">08/02/2016 11:10:24</sdf>
+        </sdfs>
+        <addresses>
+          <address>
+            <address1>1032 E 14TH STREET</address1>
+            <city>SAN LEANDRO</city>
+            <postalCode>94577</postalCode>
+            <address2>CA;USA</address2>
+          </address>
+        </addresses>
+      </entity>
+      <entityType>03</entityType>
+      <entityTextType>UPID</entityTextType>
+      <sourceCode>CON</sourceCode>
+      <stopDescriptors>
+        <stopDescriptor>
+          <name>Agent Smith</name>
+          <totalMatchScore>0.9090909090909091</totalMatchScore>
+          <stopDescriptorDetail>
+            <inputToken>Agent</inputToken>
+            <inputSynonym>null</inputSynonym>
+            <sdToken>Agent</sdToken>
+            <matchScore>1.0</matchScore>
+          </stopDescriptorDetail>
+          <stopDescriptorDetail>
+            <inputToken>XXX</inputToken>
+            <inputSynonym>null</inputSynonym>
+            <sdToken>Smith</sdToken>
+            <matchScore>0.75</matchScore>
+          </stopDescriptorDetail>
+        </stopDescriptor>
+      </stopDescriptors>
+      <firstMatchedDate>01/23/20</firstMatchedDate>
+      <lastMatchedDate>01/23/20</lastMatchedDate>
+      <lastReviewDate>01/23/20</lastReviewDate>
+    </matchRecord>
+  </matchRecords>
+</alert>

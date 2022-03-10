@@ -5,9 +5,9 @@ from typing import Dict, List
 import pyspark.sql
 import pyspark.sql.functions as F
 
-from config import columns_namespace
 from etl_pipeline.agent_input_creator.config import AGENT_INPUT_AGG_COL_CONFIG, AGENT_INPUT_CONFIG
 from etl_pipeline.agent_input_creator.sql import sql_to_merge_specific_columns_to_standardized
+from etl_pipeline.config import columns_namespace as cn
 
 
 def create_input_for_agents(
@@ -49,8 +49,8 @@ def _extract_and_save_agent_inputs(
     """
     key_cols = [
         "_index",
-        columns_namespace.ALERT_INTERNAL_ID,
-        columns_namespace.ALERT_ID,
+        cn.ALERT_INTERNAL_ID,
+        cn.ALERT_ID,
         "hit_listId",
         "hit_entryId",
     ]
