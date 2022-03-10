@@ -5,4 +5,6 @@ import com.silenteight.adjudication.engine.features.matchfeaturevalue.dto.MatchF
 public interface MatchFeatureValueDataAccess {
 
   int saveAll(Iterable<MatchFeatureValue> featureValues);
+
+  int delete(Iterable<String> features);
 }

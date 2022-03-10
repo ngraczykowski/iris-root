@@ -44,6 +44,14 @@ ae:
         chunk-size: 1024
         max-rows: 8192
 
+  match-feature-value:
+    not-cached:
+      features:
+        - "features/historicalRiskAccountNumberTP"
+        - "features/historicalRiskAccountNumberFP"
+        - "features/contextualLearningNameTP"
+        - "features/contextualLearningNameFP"
+
   grpc:
     client:
       category-service:

@@ -13,6 +13,7 @@ dependencies {
   implementation libraries.guava
   implementation libraries.spring_integration_amqp
   implementation libraries.hibernate_types
+  implementation libraries.shedlock_spring
 
   testImplementation project(":adjudication-engine-alerts")
   testImplementation project(":adjudication-engine-testing")

@@ -17,6 +17,16 @@ class InMemoryMatchFeatureValueDataAccess implements MatchFeatureValueDataAccess
     return store.size() - previousSize;
   }
 
+  @Override
+  public int delete(Iterable<String> features) {
+    var sizeBefore = store.size();
+    for (var feature : features) {
+      store.removeIf(f -> f.getValue().equals(feature));
+    }
+    var sizeAfter = store.size();
+    return sizeBefore - sizeAfter;
+  }
+
   boolean isEmpty() {
     return store.isEmpty();
   }
