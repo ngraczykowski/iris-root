@@ -128,6 +128,11 @@ spring:
     password: core
     url: jdbc:postgresql://localhost:24882/core_bridge
 
+  ### LIQUIBASE
+  liquibase:
+    database-change-log-lock-table: core_bridge_liquibase_lock
+    database-change-log-table: core_bridge_liquibase_log
+
 ### LOGGING
 logging:
   level:

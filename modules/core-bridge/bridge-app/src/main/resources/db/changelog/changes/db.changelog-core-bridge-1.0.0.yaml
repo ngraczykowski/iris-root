@@ -129,7 +129,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: alert_pkey
+                    primaryKeyName: core_alert_pkey
               - column:
                   name: alert_id
                   type: VARCHAR(255)
