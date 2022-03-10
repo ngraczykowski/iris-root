@@ -22,7 +22,7 @@ public class DeleteMatchFeatureValueJob {
       name = "DeleteMatchFeatureValueJob.deleteMatchFeatureValues")
   @Scheduled(cron = "${ae.match-feature-value.not-cached.scheduler:* */10 * * * ?}")
   public void deleteMatchFeatureValues() {
-    if (features != null && !features.isEmpty()) {
+    if (features != null && features.size() > 0) {
       deleteMatchFeatureValuesUseCase.deleteMatchFeatureValues(features);
     }
   }
