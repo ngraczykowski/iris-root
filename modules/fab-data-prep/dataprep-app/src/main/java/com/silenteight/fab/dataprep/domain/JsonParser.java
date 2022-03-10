@@ -11,12 +11,15 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class JsonParser {
+
+  private static final String HITS_PATH = "$.Hits";
+
   private final ParseContext parseContext;
 
   public List<JsonNode> getHits(String json) {
-    ReadContext documentContext = parseContext.parse(json);
-    TypeRef<List<JsonNode>> typeRef = new TypeRef<List<JsonNode>>() {};
+    TypeRef<List<JsonNode>> typeRef = new TypeRef<>() {};
 
-    return documentContext.read("$.Hits", typeRef);
+    return parseContext.parse(json)
+        .read(HITS_PATH, typeRef);
   }
 }

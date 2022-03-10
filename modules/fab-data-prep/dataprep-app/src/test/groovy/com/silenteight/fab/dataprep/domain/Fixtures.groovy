@@ -9,6 +9,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.io.Resources
 
 class Fixtures {
+
+  static final String MATCH_NAME = 'matches/1'
+  static final String ALERT_NAME = 'alerts/1'
+
   static def MAPPER = new ObjectMapper()
 
   static ParsedPayload PARSED_PAYLOAD = ParsedPayload.builder()
@@ -44,7 +48,7 @@ class Fixtures {
 
   static Match MATCH = Match.builder()
       .matchId(UUID.randomUUID().toString())
-      .matchName('matches/1')
+      .matchName(MATCH_NAME)
       .payload(MAPPER.readTree(Resources.getResource('message.json')))
   .build()
 
@@ -54,6 +58,7 @@ class Fixtures {
           ExtractedAlert.builder()
               .batchId('batchId')
               .alertId('alertId')
+              .alertName(ALERT_NAME)
               .parsedPayload(PARSED_PAYLOAD)
               .matches([MATCH])
               .build())

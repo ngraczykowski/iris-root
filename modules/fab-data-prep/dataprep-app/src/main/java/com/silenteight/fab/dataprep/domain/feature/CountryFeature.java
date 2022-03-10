@@ -21,7 +21,8 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class CountryFeature implements FabFeature {
 
-  private static final String FEATURE_NAME = "features/country";
+  static final String FEATURE_NAME = "features/country";
+  private static final String JSON_PATH = "$.HittedEntity.Addresses[*].Address.Countries[*]";
 
   private final ParseContext parseContext;
 
@@ -47,11 +48,11 @@ public class CountryFeature implements FabFeature {
     return of(extractedAlert.getParsedPayload().getCountry());
   }
 
-  private List<String> getWatchlistPart(JsonNode jsonNode) {
-    TypeRef<List<String>> typeRef = new TypeRef<List<String>>() {};
+  protected List<String> getWatchlistPart(JsonNode jsonNode) {
+    TypeRef<List<String>> typeRef = new TypeRef<>() {};
 
     return parseContext
         .parse(jsonNode)
-        .read("$.HittedEntity.Addresses[*].Address.Countries[*]", typeRef);
+        .read(JSON_PATH, typeRef);
   }
 }
