@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.changerequest.approve;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.changerequest.approve.dto.ApproveChangeRequestDto;
 
@@ -18,9 +19,9 @@ import javax.validation.Valid;
 
 import static com.silenteight.serp.governance.changerequest.domain.DomainConstants.CHANGE_REQUEST_ENDPOINT_TAG;
 import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
-import static com.silenteight.serp.governance.common.web.rest.RestConstants.BAD_REQUEST_DESCRIPTION;
 import static org.springframework.http.ResponseEntity.noContent;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
@@ -40,13 +41,14 @@ class ApproveChangeRequestRestController {
       @PathVariable UUID id,
       @Valid @RequestBody ApproveChangeRequestDto request,
       Authentication authentication) {
-
+    log.info("Request to approve change request received, changeRequestId={}", id);
     ApproveChangeRequestCommand command = ApproveChangeRequestCommand.builder()
         .id(id)
         .approverUsername(authentication.getName())
         .approverComment(request.getApproverComment())
         .build();
     approveChangeRequestUseCase.activate(command);
+    log.debug("Request to approve change request processed, changeRequestId={}.", id);
     return noContent().build();
   }
 }

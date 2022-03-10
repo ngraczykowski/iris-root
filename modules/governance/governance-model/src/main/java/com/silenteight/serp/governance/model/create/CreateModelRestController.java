@@ -2,6 +2,7 @@ package com.silenteight.serp.governance.model.create;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.serp.governance.model.create.dto.CreateModelDto;
 
@@ -22,6 +23,7 @@ import static com.silenteight.serp.governance.common.web.rest.RestConstants.*;
 import static com.silenteight.serp.governance.model.domain.DomainConstants.SOLVING_MODEL_ENDPOINT_TAG;
 import static org.springframework.http.ResponseEntity.accepted;
 
+@Slf4j
 @RestController
 @RequestMapping(ROOT)
 @RequiredArgsConstructor
@@ -40,13 +42,14 @@ class CreateModelRestController {
   })
   public ResponseEntity<Void> create(
       @Valid @RequestBody CreateModelDto request, Authentication authentication) {
-
+    log.info("Creating model.CreateModelDto={}", request);
     CreateModelCommand command = CreateModelCommand.builder()
         .id(request.getId())
         .policy(request.getPolicy())
         .createdBy(authentication.getName())
         .build();
     createModelUseCase.activate(command);
+    log.debug("Create model request processed.");
     return accepted().build();
   }
 }
