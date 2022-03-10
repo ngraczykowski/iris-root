@@ -7,25 +7,25 @@ import com.silenteight.fab.dataprep.domain.model.ExtractedAlert;
 import com.silenteight.fab.dataprep.domain.model.ParsedMessageData;
 import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
-import com.silenteight.universaldatasource.api.library.name.v1.*;
+import com.silenteight.universaldatasource.api.library.date.v1.DateFeatureInputOut;
+import com.silenteight.universaldatasource.api.library.date.v1.EntityTypeOut;
+import com.silenteight.universaldatasource.api.library.date.v1.SeverityModeOut;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.ParseContext;
 import com.jayway.jsonpath.TypeRef;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
-public class NameFeature implements FabFeature {
+public class DateFeature implements FabFeature {
 
-  static final String FEATURE_NAME = "features/name";
-  private static final String WATCH_LIST_NAME_PATH = "$.HittedEntity.Names[*].Name";
-  private static final String MATCHING_TEXT_PATH = "$.MatchingText";
+  static final String FEATURE_NAME = "features/date";
+  private static final String JSON_PATH = "$.HittedEntity.DatesOfBirth[*].DateOfBirth";
 
   private final ParseContext parseContext;
 
@@ -39,47 +39,27 @@ public class NameFeature implements FabFeature {
             AgentInputIn.builder()
                 .match(match.getMatchName())
                 .alert(extractedAlert.getAlertName())
-                .featureInputs(of(NameFeatureInputOut.builder()
+                .featureInputs(of(DateFeatureInputOut.builder()
                     .feature(FEATURE_NAME)
-                    .alertedPartyNames(getAlertedPart(parsedMessageData))
+                    .alertedPartyDates(getAlertedPart(parsedMessageData))
+                    .watchlistDates(getWatchlistPart(match.getPayload()))
                     .alertedPartyType(getPartyType(parsedMessageData))
-                    .watchlistNames(getWatchlistPart(match.getPayload()))
-                    .matchingTexts(getMatchingTexts(match.getPayload()))
+                    .mode(SeverityModeOut.NORMAL)   //TODO is it correct?
                     .build()))
                 .build())
         .collect(toList());
   }
 
-  private List<AlertedPartyNameOut> getAlertedPart(ParsedMessageData parsedMessageData) {
-    return Stream.of(parsedMessageData.getName(), parsedMessageData.getShortName())
-        .map(this::getAlertedPartyNameOut)
-        .collect(toList());
+  private List<String> getAlertedPart(ParsedMessageData parsedMessageData) {
+    return of(parsedMessageData.getDob());
   }
 
-  private AlertedPartyNameOut getAlertedPartyNameOut(String name) {
-    return AlertedPartyNameOut.builder()
-        .name(name)
-        .build();
-  }
-
-  protected List<WatchlistNameOut> getWatchlistPart(JsonNode jsonNode) {
+  protected List<String> getWatchlistPart(JsonNode jsonNode) {
     TypeRef<List<String>> typeRef = new TypeRef<>() {};
 
     return parseContext
         .parse(jsonNode)
-        .read(WATCH_LIST_NAME_PATH, typeRef)
-        .stream()
-        .map(name -> getWatchlistNameOut(name, NameTypeOut.REGULAR))
-        .collect(toList());
-
-    //TODO add alias names
-  }
-
-  private WatchlistNameOut getWatchlistNameOut(String name, NameTypeOut type) {
-    return WatchlistNameOut.builder()
-        .name(name)
-        .type(type)
-        .build();
+        .read(JSON_PATH, typeRef);
   }
 
   private EntityTypeOut getPartyType(ParsedMessageData parsedMessageData) {
@@ -92,9 +72,5 @@ public class NameFeature implements FabFeature {
       default:
         return EntityTypeOut.ENTITY_TYPE_UNSPECIFIED;
     }
-  }
-
-  private List<String> getMatchingTexts(JsonNode jsonNode) {
-    return of(parseContext.parse(jsonNode).read(MATCHING_TEXT_PATH, String.class));
   }
 }

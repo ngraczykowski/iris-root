@@ -7,6 +7,12 @@ import lombok.Value;
 @Builder
 public class ParsedMessageData {
 
+  public enum CustomerType {
+    ENTITY_TYPE_UNSPECIFIED,
+    INDIVIDUAL,
+    ORGANIZATION
+  }
+
   String salutation;
   String name;
   String shortName;
@@ -35,4 +41,15 @@ public class ParsedMessageData {
   String alternate;
   String latestCustomerNumber;
   String lastUpdateTime;
+
+  public CustomerType getCustomerTypeAsEnum() {
+    String type = getCustomerType();
+    if (type == null || type.isBlank()) {
+      return CustomerType.ENTITY_TYPE_UNSPECIFIED;
+    } else if ("I".equalsIgnoreCase(type)) {
+      return CustomerType.INDIVIDUAL;
+    } else {
+      return CustomerType.ORGANIZATION;
+    }
+  }
 }

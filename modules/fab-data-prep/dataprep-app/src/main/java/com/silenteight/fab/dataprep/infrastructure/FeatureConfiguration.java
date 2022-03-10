@@ -1,9 +1,6 @@
 package com.silenteight.fab.dataprep.infrastructure;
 
-import com.silenteight.fab.dataprep.domain.feature.CountryFeature;
-import com.silenteight.fab.dataprep.domain.feature.FabFeature;
-import com.silenteight.fab.dataprep.domain.feature.GenderFeature;
-import com.silenteight.fab.dataprep.domain.feature.NameFeature;
+import com.silenteight.fab.dataprep.domain.feature.*;
 
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ParseContext;
@@ -41,5 +38,11 @@ public class FeatureConfiguration {
   @ConditionalOnProperty("feeding.features.name-feature.enabled")
   FabFeature nameFeature(ParseContext parseContext) {
     return new NameFeature(parseContext);
+  }
+
+  @Bean
+  @ConditionalOnProperty("feeding.features.date-feature.enabled")
+  FabFeature dateFeature(ParseContext parseContext) {
+    return new DateFeature(parseContext);
   }
 }

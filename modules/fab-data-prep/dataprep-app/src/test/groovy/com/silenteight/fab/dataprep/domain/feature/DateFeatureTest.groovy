@@ -1,7 +1,9 @@
 package com.silenteight.fab.dataprep.domain.feature
 
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn
-import com.silenteight.universaldatasource.api.library.name.v1.*
+import com.silenteight.universaldatasource.api.library.date.v1.DateFeatureInputOut
+import com.silenteight.universaldatasource.api.library.date.v1.EntityTypeOut
+import com.silenteight.universaldatasource.api.library.date.v1.SeverityModeOut
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -10,27 +12,15 @@ import spock.lang.Specification
 import spock.lang.Subject
 
 import static com.silenteight.fab.dataprep.domain.Fixtures.*
-import static java.util.stream.Collectors.toList
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
-class NameFeatureTest extends Specification {
+class DateFeatureTest extends Specification {
 
   @Subject
   @Autowired
-  NameFeature underTest
+  DateFeature underTest
 
   def 'featureInput should be created'() {
-    given:
-    def alertedPart =
-        ['OSAMA BIN LADIN', 'BIN LADIN'].stream()
-            .map {AlertedPartyNameOut.builder().name(it).build()}
-            .collect(toList())
-    def watchlistPart =
-        ["YASIN, ABDUL RAHMAN", "YASIN, ABOUD", "TAHER, ABDUL RAHMAN SAID", "TAHA, ABDUL RAHMAN"]
-            .stream()
-            .map {WatchlistNameOut.builder().name(it).type(NameTypeOut.REGULAR).build()}
-            .collect(toList())
-
     when:
     def result = underTest.createFeatureInput(FEATURE_INPUTS_COMMAND)
 
@@ -39,12 +29,12 @@ class NameFeatureTest extends Specification {
                    .match(MATCH_NAME)
                    .alert(ALERT_NAME)
                    .featureInputs(
-                       [NameFeatureInputOut.builder()
-                            .feature(NameFeature.FEATURE_NAME)
-                            .alertedPartyNames(alertedPart)
-                            .watchlistNames(watchlistPart)
+                       [DateFeatureInputOut.builder()
+                            .feature(DateFeature.FEATURE_NAME)
+                            .alertedPartyDates(['30/8/1965'])
+                            .watchlistDates(['10/04/60\nNATIONALITY: \nnone'])
                             .alertedPartyType(EntityTypeOut.INDIVIDUAL)
-                            .matchingTexts(["YASIN RAHMAN"])
+                            .mode(SeverityModeOut.NORMAL)
                             .build()])
                    .build()]
   }
