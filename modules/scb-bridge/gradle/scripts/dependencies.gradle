@@ -114,6 +114,8 @@ libraries.grpc_netty_shaded = [group: 'io.grpc', name: 'grpc-netty-shaded', vers
 libraries.guava = [group: 'com.google.guava', name: 'guava', version: guavaVersion]
 libraries.protobuf_java = [group: 'com.google.protobuf', name: 'protobuf-java', version: googleProtobufVersion]
 libraries.protobuf_java_util = [group: 'com.google.protobuf', name: 'protobuf-java-util', version: googleProtobufVersion]
+libraries.xstream = [group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.19']
+libraries.vavr = [group: 'io.vavr', name: 'vavr', version: '0.10.4']
 
 // Testing
 libraries.spring_test = [group: 'org.springframework', name: 'spring-test', version: springVersion]
@@ -199,6 +201,8 @@ dependencies {
 
   implementation libraries.groovy_all
   implementation libraries.json_path
+  implementation libraries.xstream
+  implementation libraries.vavr
 
   testImplementation libraries.spock_spring
   testRuntimeOnly libraries.junit_platform_commons

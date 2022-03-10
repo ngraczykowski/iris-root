@@ -8,10 +8,11 @@ import spock.lang.Subject
 
 class RegistrationGrpcAdapterSpec extends Specification {
 
+  def mapper = Mock(RegistrationMapper)
   def registrationServiceClient = Mock(RegistrationServiceClient)
 
   @Subject
-  def underTest = new RegistrationGrpcAdapter(registrationServiceClient)
+  def underTest = new RegistrationGrpcAdapter(mapper, registrationServiceClient)
 
   def 'should register batch in core bridge'() {
     given:
@@ -22,6 +23,7 @@ class RegistrationGrpcAdapterSpec extends Specification {
     underTest.registerBatch(batch)
 
     then:
+    1 * mapper.toRegisterBatchIn(batch) >> batchIn
     1 * registrationServiceClient.registerBatch(batchIn)
     0 * _
   }
