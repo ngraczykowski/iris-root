@@ -1,9 +1,6 @@
-import os
-
-from omegaconf import OmegaConf
-
-from config import CONFIG_APP_DIR, columns_namespace
-from custom.ms.datatypes.field import InputRecordField
+from etl_pipeline.config import agents_config
+from etl_pipeline.config import columns_namespace as cn
+from etl_pipeline.custom.ms.datatypes.field import InputRecordField
 from etl_pipeline.custom.ms.payload_loader import PayloadLoader
 from etl_pipeline.custom.ms.transformations import (
     create_agent_input_agg_col_config,
@@ -18,77 +15,70 @@ class MSPipeline(ETLPipeline):
         return df
 
     def transform_standardized_to_cleansed(self, payload):
-        payload = {key: payload[key] for key in sorted(payload)}
-        payload = PayloadLoader().load_payload_from_json(payload)
-
-        matches = payload["matchesPayloads"]
-        parties = payload["alertPayload"]["supplementalInfo"]["parties"]
-        payload["alertPayload"]["inputRecord"]["fields"] = {
+        match_ids = payload[cn.MATCH_IDS]
+        matches = payload[cn.ALERT_FIELD][cn.MATCH_RECORDS]
+        parties = payload[cn.ALERT_FIELD][cn.SUPPLEMENTAL_INFO][cn.PARTIES]
+        payload[cn.ALERT_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORD][cn.FIELDS] = {
             i["name"]: InputRecordField(**i)
-            for i in payload["alertPayload"]["inputRecord"]["fields"]
+            for i in payload[cn.ALERT_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORD][cn.FIELDS]
         }
-        fields = payload["alertPayload"]["inputRecord"]["fields"]
+        fields = payload[cn.ALERT_FIELD][cn.INPUT_RECORD_HIST][cn.INPUT_RECORD][cn.FIELDS]
 
-        for match in matches:
+        for match_id in match_ids:
+            match = matches[match_id]
             WatchlistExtractor().update_match_with_wl_values(match)
-            match[columns_namespace.TRIGGERED_BY] = self.engine.set_trigger_reasons(
+            match[cn.TRIGGERED_BY] = self.engine.set_trigger_reasons(
                 match, self.pipeline_config.FUZZINESS_LEVEL
             )
             self.engine.set_beneficiary_hits(match)
         self.engine.connect_full_names(parties)
         self.engine.collect_party_values(parties, payload)
-        payload[columns_namespace.ALL_CONNECTED_PARTIES_NAMES] = payload[
-            columns_namespace.ALL_PARTY_TYPES
-        ]
+        payload[cn.ALL_CONNECTED_PARTY_TYPES] = payload[cn.ALL_PARTY_TYPES]
         names_source_cols = [
-            columns_namespace.ALL_PARTY_NAMES,
-            columns_namespace.ALL_CONNECTED_PARTIES_NAMES,
+            cn.ALL_PARTY_NAMES,
+            cn.ALL_CONNECTED_PARTIES_NAMES,
         ]
 
         payload.update(
             {
-                columns_namespace.CLEANED_NAMES: self.engine.get_clean_names_from_concat_name(
-                    fields.get(fields.get(columns_namespace.CONCAT_ADDRESS, "")),
+                cn.CLEANED_NAMES: self.engine.get_clean_names_from_concat_name(
+                    fields.get(fields.get(cn.CONCAT_ADDRESS, "")),
                     {key: payload[key] for key in names_source_cols},
                 )
             }
         )
-        payload.update(
-            {
-                columns_namespace.CONCAT_RESIDUE: payload[columns_namespace.CLEANED_NAMES][
-                    columns_namespace.CONCAT_RESIDUE
-                ]
-            }
-        )
-        concat_residue = payload[columns_namespace.CONCAT_RESIDUE]
+        payload.update({cn.CONCAT_RESIDUE: payload[cn.CLEANED_NAMES][cn.CONCAT_RESIDUE]})
+        concat_residue = payload[cn.CONCAT_RESIDUE]
         concat_address = fields.get(
-            fields.get(columns_namespace.CONCAT_ADDRESS, ""),
+            fields.get(cn.CONCAT_ADDRESS, ""),
             "",
         )
 
-        payload.update(
-            {columns_namespace.CONCAT_ADDRESS_NO_CHANGES: concat_residue == concat_address}
-        )
-        for record in matches:
-            record[columns_namespace.AP_TRIGGERS] = self.engine.set_triggered_tokens_discovery(
-                payload, record, fields
+        payload.update({cn.CONCAT_ADDRESS_NO_CHANGES: concat_residue == concat_address})
+        for match_id in match_ids:
+            match = matches[match_id]
+            match[cn.AP_TRIGGERS] = self.engine.set_triggered_tokens_discovery(
+                payload, match, fields
             )
 
         return payload
 
-    def get_key(self, payload, match_id, conf):
+    def get_key(self, payload, match, conf):
         new_config = {}
         for key, value in dict(conf).items():
             temp_dict = dict(value)
             for new_key in temp_dict:
                 for element in temp_dict[new_key]:
                     elements = element.split(".")
-                    if "matchesPayloads" in element:
-                        value = payload["matchesPayloads"][match_id]
+                    if cn.MATCH_RECORDS in element:
+                        value = match
                         elements = elements[1:]
                     else:
                         value = payload
                     for field_name in elements:
+                        if field_name == "field":
+                            value = value[0][field_name][elements[-1]].value
+                            break
                         try:
                             value = value.get(field_name, None)
                         except TypeError:
@@ -99,8 +89,7 @@ class MSPipeline(ETLPipeline):
         return new_config
 
     def load_config(self, alert_type="WM_ADDRESS"):
-        filenames = {"WM_ADDRESS": os.path.join(CONFIG_APP_DIR, "agents_input_WM_ADDRESS.yaml")}
-        yaml_conf = OmegaConf.load(filenames[alert_type])
+        yaml_conf = agents_config[alert_type]
         agent_config = {}
         for key, value in dict(yaml_conf).items():
             temp_dict = dict(value)
@@ -115,7 +104,8 @@ class MSPipeline(ETLPipeline):
         return agent_config, yaml_conf
 
     def transform_cleansed_to_application(self, payload):
-        matches = payload["matchesPayloads"]
+        match_ids = payload[cn.MATCH_IDS]
+        matches = payload[cn.ALERT_FIELD][cn.MATCH_RECORDS]
         agent_config, yaml_conf = self.load_config()
         agent_input_prepended_agent_name_config = prepend_agent_name_to_ap_or_wl_or_aliases_key(
             agent_config
@@ -125,8 +115,9 @@ class MSPipeline(ETLPipeline):
             agent_input_prepended_agent_name_config
         )
 
-        for num, match in enumerate(matches):
-            config = self.get_key(payload, num, yaml_conf)
+        for match_id in match_ids:
+            match = matches[match_id]
+            config = self.get_key(payload, match, yaml_conf)
             self.engine.sql_to_merge_specific_columns_to_standardized(
                 agent_input_prepended_agent_name_config,
                 match,

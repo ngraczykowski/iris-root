@@ -1,11 +1,12 @@
 import os
 import unittest
 
-from config import columns_namespace, pipeline_config
+from etl_pipeline.config import columns_namespace as cn
+from etl_pipeline.config import pipeline_config
 from etl_pipeline.data_processor_engine.spark_engine.spark import SparkProcessingEngine
 from tests.utils import compare_dataframe
 
-ALERT_ID, ALERT_INTERNAL_ID = columns_namespace.ALERT_ID, columns_namespace.ALERT_INTERNAL_ID
+ALERT_ID, ALERT_INTERNAL_ID = cn.ALERT_ID, cn.ALERT_INTERNAL_ID
 
 TEST_PATH = "tests/shared/test_ms_pipeline/"
 

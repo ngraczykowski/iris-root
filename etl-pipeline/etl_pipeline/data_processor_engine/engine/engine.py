@@ -3,10 +3,8 @@ import re
 from typing import Dict
 
 from fuzzywuzzy import fuzz
-from spark_manager.spark_client import SparkClient
-from spark_manager.spark_config import SPARK_CONF
 
-from config import columns_namespace
+from etl_pipeline.config import columns_namespace as cn
 from etl_pipeline.custom.ms.trigger_discovery.discoverer import TriggeredTokensDiscoverer
 from etl_pipeline.data_processor_engine.abstract_engine import Engine
 from etl_pipeline.pattern_json import (
@@ -42,7 +40,6 @@ class ProcessingEngine(Engine):
     REF_KEY_REGEX_PYTHON = re.compile(REF_KEY_REGEX)
 
     def __init__(self):
-        self.spark_instance = SparkClient(SPARK_CONF)
         self.pipeline_config = None
 
     def set_ref_key(self, row):
@@ -53,7 +50,7 @@ class ProcessingEngine(Engine):
     def set_trigger_reasons(values):
         skip_columns = ["USER_NOTE_TEXT"]
         result = []
-        for whole_token in json.loads(values["WL_MATCHED_TOKENS"]):
+        for whole_token in json.loads(values[cn.WL_MATCHED_TOKENS]):
             for token in whole_token.split():
                 for key, value in values.items():
                     if not value or key.startswith("WL_") or key in skip_columns:
@@ -68,9 +65,7 @@ class ProcessingEngine(Engine):
         return list(set(result))
 
     def set_beneficiary_hits(self, payload):
-        payload[columns_namespace.IS_BENEFICIARY_HIT] = (
-            payload[columns_namespace.AD_BNFL_NM] in payload[columns_namespace.TRIGGERED_BY]
-        )
+        payload[cn.IS_BENEFICIARY_HIT] = payload[cn.AD_BNFL_NM] in payload[cn.TRIGGERED_BY]
 
     def load_raw_data(self, *args, **kwargs):
         return self.spark_instance.read_csv(*args, **kwargs)
@@ -104,24 +99,20 @@ class ProcessingEngine(Engine):
             ALERT_ID: payload[ALERT_ID],
             ALERTED_PARTY_NAME: payload[ALERTED_PARTY_NAME],
             ACCT_NUM: payload[ACCT_NUM],
-            columns_namespace.TRIGGERED_BY: payload[columns_namespace.TRIGGERED_BY],
+            cn.TRIGGERED_BY: payload[cn.TRIGGERED_BY],
             SRC_SYS_ACCT_KEY: payload[SRC_SYS_ACCT_KEY],
             ADDRESS_ID: payload[ADDRESS_ID],
             ALL_PARTY_DETAILS: selected_parties_payload,
             ALL_PARTS_NAMES: [party[PRTY_NM] for party in selected_parties_payload],
-            columns_namespace.ALL_PARTY_TYPES: [
-                party[PRTY_TYP] for party in selected_parties_payload
-            ],
-            columns_namespace.ALL_PARTY_DOBS: [
-                party[DOB_DT] for party in selected_parties_payload
-            ],
-            columns_namespace.ALL_PARTY_BIRTH_COUNTRIES: [
+            cn.ALL_PARTY_TYPES: [party[PRTY_TYP] for party in selected_parties_payload],
+            cn.ALL_PARTY_DOBS: [party[DOB_DT] for party in selected_parties_payload],
+            cn.ALL_PARTY_BIRTH_COUNTRIES: [
                 party[PRTY_CNTRY_OF_BIRTH] for party in selected_parties_payload
             ],
-            columns_namespace.ALL_PARTY_CITIZENSHIP_COUNTRIES: [
+            cn.ALL_PARTY_CITIZENSHIP_COUNTRIES: [
                 party[PRTY_PRIM_CTZNSH_CNTRY] for party in selected_parties_payload
             ],
-            columns_namespace.ALL_PARTY_RESIDENCY_COUNTRIES: [
+            cn.ALL_PARTY_RESIDENCY_COUNTRIES: [
                 party[PRTY_RSDNC_CNTRY_CD] for party in selected_parties_payload
             ],
             ALL_CONNECTED_PARTIES_NAMES: [
@@ -172,22 +163,20 @@ class ProcessingEngine(Engine):
         return ProcessingEngine.get_clean_names_from_concat_name(concat_field, concat_fields_map)
 
     def set_clean_names(self, payload):
-        names_source_cols = [columns_namespace.ALL_PARTY_NAMES, ALL_CONNECTED_PARTIES_NAMES]
-        payload[
-            columns_namespace.CLEANED_NAMES
-        ] = ProcessingEngine.get_clean_names_from_concat_name(
-            columns_namespace.CONCAT_ADDRESS, *names_source_cols
+        names_source_cols = [cn.ALL_PARTY_NAMES, ALL_CONNECTED_PARTIES_NAMES]
+        payload[cn.CLEANED_NAMES] = ProcessingEngine.get_clean_names_from_concat_name(
+            cn.CONCAT_ADDRESS, *names_source_cols
         )
         return payload
 
     def set_concat_residue(self, payload):
-        payload[CONCAT_RESIDUE] = payload[columns_namespace.CLEANED_NAMES][CONCAT_RESIDUE]
+        payload[CONCAT_RESIDUE] = payload[cn.CLEANED_NAMES][CONCAT_RESIDUE]
         return payload
 
     def set_concat_address_no_change(self, payload):
-        payload[columns_namespace.CONCAT_ADDRESS_NO_CHANGES] = None
-        if payload[CONCAT_RESIDUE] == payload[columns_namespace.CONCAT_ADDRESS]:
-            payload[columns_namespace.CONCAT_ADDRESS_NO_CHANGES] = payload[CONCAT_RESIDUE]
+        payload[cn.CONCAT_ADDRESS_NO_CHANGES] = None
+        if payload[CONCAT_RESIDUE] == payload[cn.CONCAT_ADDRESS]:
+            payload[cn.CONCAT_ADDRESS_NO_CHANGES] = payload[CONCAT_RESIDUE]
         return payload
 
     @staticmethod
@@ -200,7 +189,7 @@ class ProcessingEngine(Engine):
         for i in range(len(ap_columns)):
             if ap_columns[i] != "":
                 dict_values[ap_columns[i]] = ap_columns[i]
-        matched_tokens = payload[columns_namespace.WL_MATCHED_TOKENS]
+        matched_tokens = payload[cn.WL_MATCHED_TOKENS]
         return discoverer.discover(matched_tokens, dict_values)
 
 

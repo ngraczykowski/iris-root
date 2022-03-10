@@ -2,7 +2,7 @@ import os
 import shutil
 from glob import glob
 
-from config import columns_namespace
+from etl_pipeline.config import columns_namespace as cn
 from etl_pipeline.custom.aia.config import (
     APPLICATION_DATA_DIR,
     CLEANSED_DATA_DIR,
@@ -18,10 +18,10 @@ REFERENCE_DIR = TEST_SHARED_DATA_REFERENCE_DIR
 
 
 ID_MAP = {
-    "ALERTS.delta": columns_namespace.ALERT_ID,
-    "ACM_ALERT_NOTES.delta": columns_namespace.ALERT_ID,
+    "ALERTS.delta": cn.ALERT_ID,
+    "ACM_ALERT_NOTES.delta": cn.ALERT_ID,
     "ACM_ITEM_STATUS_HISTORY.delta": "ITEM_ID",
-    "agent_input_agg_df.delta": columns_namespace.ALERT_ID,
+    "agent_input_agg_df.delta": cn.ALERT_ID,
     "ACM_MD_ALERT_STATUSES.delta": "E_ISSUE",
 }
 
@@ -39,9 +39,7 @@ def clean_up():
         pass
 
 
-def compare_created_data_with_reference_data(
-    reference, unique_column=columns_namespace.ALERT_INTERNAL_ID
-):
+def compare_created_data_with_reference_data(reference, unique_column=cn.ALERT_INTERNAL_ID):
     rel_path = os.path.relpath(os.path.dirname(reference), "tests/shared/reference")
     filename = os.path.basename(reference)
     reference_dataframe = spark.read_delta(os.path.join("data", rel_path, filename))

@@ -4,7 +4,7 @@ from typing import Dict
 
 from fuzzywuzzy import fuzz
 
-from config import columns_namespace
+from etl_pipeline.config import columns_namespace as cn
 from etl_pipeline.custom.ms.trigger_discovery.discoverer import TriggeredTokensDiscoverer
 from etl_pipeline.data_processor_engine.engine.engine import ProcessingEngine
 from etl_pipeline.pattern_json import (
@@ -33,13 +33,13 @@ from etl_pipeline.pattern_json import (
 )
 
 COLLECTIVE_REPRESENTATION_MAP = {
-    columns_namespace.ALL_CONNECTED_PARTIES_NAMES: columns_namespace.CONNECTED_FULL_NAME,
-    columns_namespace.ALL_PARTY_TYPES: "partyType",
-    columns_namespace.ALL_PARTY_NAMES: "partyName",
-    columns_namespace.ALL_PARTY_DOBS: "dobDate",
-    columns_namespace.ALL_PARTY_BIRTH_COUNTRIES: "partyCountryOfBirth",
-    columns_namespace.ALL_PARTY_CITIZENSHIP_COUNTRIES: "partyPrimaryCitizenshipCountry",
-    columns_namespace.ALL_PARTY_RESIDENCY_COUNTRIES: "partyResidenceCountryCode",
+    cn.ALL_CONNECTED_PARTIES_NAMES: cn.CONNECTED_FULL_NAME,
+    cn.ALL_PARTY_TYPES: "partyType",
+    cn.ALL_PARTY_NAMES: "partyName",
+    cn.ALL_PARTY_DOBS: "dobDate",
+    cn.ALL_PARTY_BIRTH_COUNTRIES: "partyCountryOfBirth",
+    cn.ALL_PARTY_CITIZENSHIP_COUNTRIES: "partyPrimaryCitizenshipCountry",
+    cn.ALL_PARTY_RESIDENCY_COUNTRIES: "partyResidenceCountryCode",
 }
 
 
@@ -75,13 +75,13 @@ class JsonProcessingEngine(ProcessingEngine):
             for i in range(len(alerted_tokens))
             if float(tokens_scores[i]) >= threshold
         ]
-        return {"WL_MATCHED_TOKENS": json.dumps(result)}
+        return {cn.WL_MATCHED_TOKENS: json.dumps(result)}
 
     @staticmethod
     def set_trigger_reasons(match, fuzziness_level):
         skip_columns = ["USER_NOTE_TEXT"]
         result = []
-        for whole_token in json.loads(match["WL_MATCHED_TOKENS"]):
+        for whole_token in json.loads(match[cn.WL_MATCHED_TOKENS]):
             for token in whole_token.split():
                 for key, value in match.items():
                     if not value or key.startswith("WL_") or key in skip_columns:
@@ -95,19 +95,17 @@ class JsonProcessingEngine(ProcessingEngine):
         return list(set(result))
 
     def set_beneficiary_hits(self, payload):
-        payload[columns_namespace.IS_BENEFICIARY_HIT] = (
-            columns_namespace.AD_BNFL_NM in payload[columns_namespace.TRIGGERED_BY]
-        )
+        payload[cn.IS_BENEFICIARY_HIT] = cn.AD_BNFL_NM in payload[cn.TRIGGERED_BY]
 
     def connect_full_names(self, parties):
         for party in parties:
-            party[columns_namespace.CONNECTED_FULL_NAME] = " ".join(
+            party[cn.CONNECTED_FULL_NAME] = " ".join(
                 [
                     party.get(key, "")
                     for key in [
-                        columns_namespace.PRTY_FST_NM,
-                        columns_namespace.PRTY_MDL_NM,
-                        columns_namespace.PRTY_LST_NM,
+                        cn.PRTY_FST_NM,
+                        cn.PRTY_MDL_NM,
+                        cn.PRTY_LST_NM,
                     ]
                 ]
             ).strip()
@@ -148,24 +146,20 @@ class JsonProcessingEngine(ProcessingEngine):
             ALERT_ID: payload[ALERT_ID],
             ALERTED_PARTY_NAME: payload[ALERTED_PARTY_NAME],
             ACCT_NUM: payload[ACCT_NUM],
-            columns_namespace.TRIGGERED_BY: payload[columns_namespace.TRIGGERED_BY],
+            cn.TRIGGERED_BY: payload[cn.TRIGGERED_BY],
             SRC_SYS_ACCT_KEY: payload[SRC_SYS_ACCT_KEY],
             ADDRESS_ID: payload[ADDRESS_ID],
             ALL_PARTY_DETAILS: selected_parties_payload,
             ALL_PARTS_NAMES: [party[PRTY_NM] for party in selected_parties_payload],
-            columns_namespace.ALL_PARTY_TYPES: [
-                party[PRTY_TYP] for party in selected_parties_payload
-            ],
-            columns_namespace.ALL_PARTY_DOBS: [
-                party[DOB_DT] for party in selected_parties_payload
-            ],
-            columns_namespace.ALL_PARTY_BIRTH_COUNTRIES: [
+            cn.ALL_PARTY_TYPES: [party[PRTY_TYP] for party in selected_parties_payload],
+            cn.ALL_PARTY_DOBS: [party[DOB_DT] for party in selected_parties_payload],
+            cn.ALL_PARTY_BIRTH_COUNTRIES: [
                 party[PRTY_CNTRY_OF_BIRTH] for party in selected_parties_payload
             ],
-            columns_namespace.ALL_PARTY_CITIZENSHIP_COUNTRIES: [
+            cn.ALL_PARTY_CITIZENSHIP_COUNTRIES: [
                 party[PRTY_PRIM_CTZNSH_CNTRY] for party in selected_parties_payload
             ],
-            columns_namespace.ALL_PARTY_RESIDENCY_COUNTRIES: [
+            cn.ALL_PARTY_RESIDENCY_COUNTRIES: [
                 party[PRTY_RSDNC_CNTRY_CD] for party in selected_parties_payload
             ],
             ALL_CONNECTED_PARTIES_NAMES: [
@@ -218,22 +212,20 @@ class JsonProcessingEngine(ProcessingEngine):
         )
 
     def set_clean_names(self, payload):
-        names_source_cols = [columns_namespace.ALL_PARTY_NAMES, ALL_CONNECTED_PARTIES_NAMES]
-        payload[
-            columns_namespace.CLEANED_NAMES
-        ] = JsonProcessingEngine.get_clean_names_from_concat_name(
-            columns_namespace.CONCAT_ADDRESS, *names_source_cols
+        names_source_cols = [cn.ALL_PARTY_NAMES, ALL_CONNECTED_PARTIES_NAMES]
+        payload[cn.CLEANED_NAMES] = JsonProcessingEngine.get_clean_names_from_concat_name(
+            cn.CONCAT_ADDRESS, *names_source_cols
         )
         return payload
 
     def set_concat_residue(self, payload):
-        payload[CONCAT_RESIDUE] = payload[columns_namespace.CLEANED_NAMES][CONCAT_RESIDUE]
+        payload[CONCAT_RESIDUE] = payload[cn.CLEANED_NAMES][CONCAT_RESIDUE]
         return payload
 
     def set_concat_address_no_change(self, payload):
-        payload[columns_namespace.CONCAT_ADDRESS_NO_CHANGES] = None
-        if payload[CONCAT_RESIDUE] == payload[columns_namespace.CONCAT_ADDRESS]:
-            payload[columns_namespace.CONCAT_ADDRESS_NO_CHANGES] = payload[CONCAT_RESIDUE]
+        payload[cn.CONCAT_ADDRESS_NO_CHANGES] = None
+        if payload[CONCAT_RESIDUE] == payload[cn.CONCAT_ADDRESS]:
+            payload[cn.CONCAT_ADDRESS_NO_CHANGES] = payload[CONCAT_RESIDUE]
         return payload
 
     @staticmethod
@@ -246,25 +238,25 @@ class JsonProcessingEngine(ProcessingEngine):
         for i in range(len(ap_columns)):
             if ap_columns[i] != "":
                 dict_values[ap_columns[i]] = ap_columns[i]
-        matched_tokens = payload[columns_namespace.WL_MATCHED_TOKENS]
+        matched_tokens = payload[cn.WL_MATCHED_TOKENS]
         return self.discoverer.discover(matched_tokens, dict_values)
 
     def set_triggered_tokens_discovery(self, payload, match, fields):
-        TRIGGERS_MAPPING = {
-            columns_namespace.ALL_PARTY_NAMES: payload[columns_namespace.ALL_PARTY_NAMES],
-            columns_namespace.ADDRESS1_COUNTRY: fields.get(columns_namespace.ADDRESS1_COUNTRY),
-            columns_namespace.ADDRESS1_LINE1: fields.get(columns_namespace.ADDRESS1_LINE1),
-            columns_namespace.ADDRESS1_LINE2: fields.get(columns_namespace.ADDRESS1_LINE2),
-            columns_namespace.ADDRESS1_LINE3: fields.get(columns_namespace.ADDRESS1_LINE3),
-            columns_namespace.ADDRESS1_LINE4: fields.get(columns_namespace.ADDRESS1_LINE4),
-            columns_namespace.ADDRESS1_LINE5: fields.get(columns_namespace.ADDRESS1_LINE5),
-            columns_namespace.CONCAT_ADDRESS: fields.get(columns_namespace.CONCAT_ADDRESS),
+        TRIGGERS_MAP = {
+            cn.ALL_PARTY_NAMES: payload[cn.ALL_PARTY_NAMES],
+            cn.ADDRESS1_COUNTRY: fields.get(cn.ADDRESS1_COUNTRY).value,
+            cn.ADDRESS1_LINE1: fields.get(cn.ADDRESS1_LINE1).value,
+            cn.ADDRESS1_LINE2: fields.get(cn.ADDRESS1_LINE2).value,
+            cn.ADDRESS1_LINE3: fields.get(cn.ADDRESS1_LINE3).value,
+            cn.ADDRESS1_LINE4: fields.get(cn.ADDRESS1_LINE4).value,
+            cn.ADDRESS1_LINE5: fields.get(cn.ADDRESS1_LINE5).value,
+            cn.CONCAT_ADDRESS: fields.get(cn.CONCAT_ADDRESS).value,
         }
-        return self.discoverer.discover(json.loads(match["WL_MATCHED_TOKENS"]), TRIGGERS_MAPPING)
+        return self.discoverer.discover(json.loads(match[cn.WL_MATCHED_TOKENS]), TRIGGERS_MAP)
 
     def prepare_agent_mapper(self, payload, match):
         agent_mapper = {
-            "all_party_dobs": payload[columns_namespace.ALL_PARTY_DOBS],
+            "all_party_dobs": payload[cn.ALL_PARTY_DOBS],
             "WL_DOB": match["WL_DOB"],
         }
 
@@ -272,7 +264,7 @@ class JsonProcessingEngine(ProcessingEngine):
 
     def prepare_aggregation_mapper(self, payload, match):
         aggregation_mapper = {
-            "all_party_dobs": payload[columns_namespace.ALL_PARTY_DOBS],
+            "all_party_dobs": payload[cn.ALL_PARTY_DOBS],
             "WL_DOB": match["WL_DOB"],
             "dob_agent_ap": match["dob_agent_ap"],
             "dob_agent_wl": match["dob_agent_wl"],

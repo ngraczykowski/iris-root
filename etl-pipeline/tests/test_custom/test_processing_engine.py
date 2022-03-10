@@ -1,7 +1,8 @@
 import unittest
 from copy import deepcopy
 
-from config import columns_namespace, pipeline_config
+from etl_pipeline.config import columns_namespace as cn
+from etl_pipeline.config import pipeline_config
 from etl_pipeline.data_processor_engine.json_engine.json_engine import JsonProcessingEngine
 from tests.test_custom.constant import (
     EXAMPLE_FOR_TEST_SET_REF_KEY,
@@ -25,20 +26,20 @@ class TestEngine(unittest.TestCase):
 
     def test_set_beneficiary_hits(self):
         match = EXAMPLE_FOR_TEST_SET_REF_KEY
-        assert match.get(columns_namespace.IS_BENEFICIARY_HIT, None) is None
+        assert match.get(cn.IS_BENEFICIARY_HIT, None) is None
         self.uut.set_beneficiary_hits(match)
-        assert not match.get(columns_namespace.IS_BENEFICIARY_HIT, None)
+        assert not match.get(cn.IS_BENEFICIARY_HIT, None)
 
     def test_connect_full_names(self):
         parties = deepcopy(EXAMPLE_PARTIES)
         self.uut.connect_full_names(parties)
         for party in parties:
-            assert party[columns_namespace.CONNECTED_FULL_NAME] == ""
+            assert party[cn.CONNECTED_FULL_NAME] == ""
 
         parties = deepcopy(EXAMPLE_PARTIES_WITH_NAMES)
         self.uut.connect_full_names(parties)
-        assert parties[0][columns_namespace.CONNECTED_FULL_NAME] == "Ultra Giga Pole"
-        assert parties[1][columns_namespace.CONNECTED_FULL_NAME] == ""
+        assert parties[0][cn.CONNECTED_FULL_NAME] == "Ultra Giga Pole"
+        assert parties[1][cn.CONNECTED_FULL_NAME] == ""
 
     def test_collect_party_values(self):
         payload = {}

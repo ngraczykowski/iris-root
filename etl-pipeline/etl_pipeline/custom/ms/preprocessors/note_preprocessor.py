@@ -1,6 +1,6 @@
 import pyspark.sql.functions as F
 
-from config import columns_namespace
+from etl_pipeline.config import columns_namespace as cn
 from etl_pipeline.custom.ms.config import JOINING_SEP
 
 # from etl_pipeline.custom.ms.transformations import prepare_df, store_and_read_df
@@ -13,7 +13,7 @@ def get_last_comment(comments):
 
 def register_alerts_notes_table(df):
     cols = [
-        columns_namespace.ALERT_INTERNAL_ID,
+        cn.ALERT_INTERNAL_ID,
         "USER_NOTE_TEXT",
         "CREATE_DATE",
         # 'BUS_DT'
