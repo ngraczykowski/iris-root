@@ -3,6 +3,7 @@ package com.silenteight.fab.dataprep.infrastructure;
 import com.silenteight.fab.dataprep.domain.feature.CountryFeature;
 import com.silenteight.fab.dataprep.domain.feature.FabFeature;
 import com.silenteight.fab.dataprep.domain.feature.GenderFeature;
+import com.silenteight.fab.dataprep.domain.feature.NameFeature;
 
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.ParseContext;
@@ -34,5 +35,11 @@ public class FeatureConfiguration {
   @ConditionalOnProperty("feeding.features.country-feature.enabled")
   FabFeature countryFeature(ParseContext parseContext) {
     return new CountryFeature(parseContext);
+  }
+
+  @Bean
+  @ConditionalOnProperty("feeding.features.name-feature.enabled")
+  FabFeature nameFeature(ParseContext parseContext) {
+    return new NameFeature(parseContext);
   }
 }

@@ -43,3 +43,4 @@ feeding:
   features:
     gender-feature.enabled: true
     country-feature.enabled: true
+    name-feature.enabled: true
