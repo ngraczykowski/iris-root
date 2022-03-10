@@ -151,8 +151,8 @@ public abstract class BaseFeatureMapper<T extends Message> implements FeatureMap
       var featureInputBuilder =
           matchInputBuilder.newBuilderForField(maybeRepeatedFeatureInputsField);
       for (var agentInput : matchInput.getAgentInputs()) {
-        mapInputAgent(agentInput);
-        missingFeatures.remove(agentInput.getFeature());
+        var addedFeature = mapInputAgent(agentInput, requestedFeatures);
+        missingFeatures.remove(addedFeature);
         // Parse JSON from agentInput into <AGENT>FeatureInput message builder.
         JsonToStructConverter.map(featureInputBuilder, agentInput.getAgentInputJson().toString());
         // Add agent input, i.e., `<AGENT>Input.<AGENT>_inputs`.
@@ -168,11 +168,16 @@ public abstract class BaseFeatureMapper<T extends Message> implements FeatureMap
       return missingFeatures;
     }
 
-    private void mapInputAgent(AgentInput agentInput) {
+    private String mapInputAgent(
+        AgentInput agentInput, List<String> requestedFeatures) {
       var featureFromDatabase = agentInput.getFeature();
-      var featureMapped = this.featureInputMapper.mapByKey(featureFromDatabase);
-      final ObjectNode agentInputJson = agentInput.getAgentInputJson();
-      agentInputJson.put(AGENT_INPUT_FEATURE_KEY, featureMapped);
+      if (!requestedFeatures.contains(featureFromDatabase)) {
+        var featureMapped = this.featureInputMapper.mapByValue(featureFromDatabase);
+        final ObjectNode agentInputJson = agentInput.getAgentInputJson();
+        agentInputJson.put(AGENT_INPUT_FEATURE_KEY, featureMapped);
+        return featureMapped;
+      }
+      return agentInput.getFeature();
     }
   }
 

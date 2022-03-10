@@ -29,6 +29,8 @@ uds:
       geo2: geo
 ```
 
+NOTE: Mapping won't work in case of one request with two sides of mapped feature name
+eg. features/geo2 and features/geo.
 
 
 ## Command examples
