@@ -15,7 +15,7 @@ message RecommendationsDelivered {
   repeated string alert_ids = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
-message RecommendationsReceived {
-  string analysis_id = 1 [(google.api.field_behavior) = REQUIRED];
-  repeated string alert_ids = 2 [(google.api.field_behavior) = REQUIRED];
+message RecommendationsStored {
+  string analysis_name = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string alert_names = 2 [(google.api.field_behavior) = REQUIRED];
 }
