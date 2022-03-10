@@ -4,8 +4,14 @@ plugins {
 
 description = "Firco Trust CMAPI Connector Ingest"
 
+configurations {
+  implementation.extendsFrom starterDatabase
+  runtimeOnly.extendsFrom starterDatabaseRuntime
+}
+
 dependencies {
   implementation project(":ftcc-common")
+  implementation project(":ftcc-db-changelog")
 
   implementation libraries.silenteight_sep_base_common
   implementation libraries.core_bridge_registration_connector_lib
@@ -44,6 +50,10 @@ dependencies {
   implementation libraries.rest_assured
   implementation libraries.rest_assured_spring_mock_mvc
 
+  implementation libraries.hibernate_types
+
   testImplementation project(":ftcc-common-testing")
   testImplementation libraries.silenteight_sep_base_testing
+
+  aspect libraries.silenteight_sep_base_aspects
 }

@@ -31,7 +31,11 @@ public class RequestBodyDto implements Serializable {
     return sendMessageDto.getAuthentication();
   }
 
-  List<JsonNode> getAlerts() {
-    return sendMessageDto.getAlerts();
+  long getMessagesCount() {
+    return sendMessageDto.getMessagesCount();
+  }
+
+  List<JsonNode> getMessages() {
+    return sendMessageDto.getMessages();
   }
 }

@@ -281,3 +281,10 @@ dependencies {
 
   implementation libraries.slf4j_api
 }
+
+configurations {
+  starterDatabase
+  starterDatabaseRuntime
+}
+
+apply from: "${gradleScriptDir}/starterDatabase.gradle"

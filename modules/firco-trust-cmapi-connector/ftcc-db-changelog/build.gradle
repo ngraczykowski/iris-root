@@ -1,0 +1,13 @@
+plugins {
+  id "java"
+}
+
+description = "Firco Trust CMAPI Connector DB Changelog"
+
+configurations {
+  implementation.extendsFrom starterDatabase
+}
+
+dependencies {
+  implementation libraries.liquibase_sessionlock
+}

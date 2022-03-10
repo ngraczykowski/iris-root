@@ -14,8 +14,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import static java.util.stream.Collectors.toList;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,9 +35,7 @@ public class RequestSendMessageDto implements Serializable {
   @Valid
   private List<JsonNode> messages;
 
-  List<JsonNode> getAlerts() {
-    return messages
-        .stream()
-        .collect(toList());
+  long getMessagesCount() {
+    return messages.size();
   }
 }

@@ -1,8 +1,8 @@
-package com.silenteight.connector.ftcc.ingest.adapter.rest;
+package com.silenteight.connector.ftcc.ingest.adapter.incoming;
 
 import com.silenteight.connector.ftcc.common.testing.rest.BaseRestControllerTest;
+import com.silenteight.connector.ftcc.ingest.domain.IngestFacade;
 import com.silenteight.connector.ftcc.ingest.dto.input.RequestDto;
-import com.silenteight.connector.ftcc.ingest.registration.RegistrationService;
 import com.silenteight.sep.base.common.support.jackson.JsonConversionHelper;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ class IngestRestControllerTest extends BaseRestControllerTest {
   private static final String INGEST_URL = "/v1/alert";
 
   @MockBean
-  private RegistrationService registrationService;
+  private IngestFacade ingestFacade;
 
   @Test
   void its200_whenAlertSent() throws IOException {

@@ -39,8 +39,12 @@ public class RequestDto implements Serializable {
     return getAuthentication().getUserRealm();
   }
 
-  public List<JsonNode> getAlerts() {
-    return body.getAlerts();
+  public long getMessagesCount() {
+    return body.getMessagesCount();
+  }
+
+  public List<JsonNode> getMessages() {
+    return body.getMessages();
   }
 
   public CaseManagerAuthenticationDto getAuthentication() {

@@ -2,12 +2,14 @@ plugins {
   id "java"
   id "groovy"
   id "org.springframework.boot"
+  id "io.freefair.aspectj.post-compile-weaving"
   id "com.google.cloud.tools.jib"
 }
 
 description = "Firco Trust CMAPI Connector"
 
 dependencies {
+  implementation project(":ftcc-db-changelog")
   implementation project(":ftcc-ingest")
 
   implementation libraries.silenteight_sep_base_common
@@ -81,6 +83,8 @@ dependencies {
 //  implementation libraries.shedlock_jdbc_provider
 
   testImplementation libraries.silenteight_sep_base_testing
+
+  aspect libraries.silenteight_sep_base_aspects
 }
 
 jar {

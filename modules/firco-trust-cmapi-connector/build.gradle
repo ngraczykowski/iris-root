@@ -6,6 +6,7 @@ plugins {
   id "com.silenteight.gradle.wrapper" version "1.1.0"
   id "com.silenteight.gradle.testreportspublisher" version "1.2.0"
   id "nebula.resolution-rules" version "9.0.0"
+  id "io.freefair.aspectj" version "5.3.0" apply false
   // Spring boot plugin version should be same as Spring version
   // in gradle/scripts/dependencies.gradle
   id "org.springframework.boot" version "2.6.4" apply false
@@ -28,6 +29,11 @@ subprojects {Project subproject ->
 
     subproject.apply from: "${gradleScriptDir}/dependencies.gradle"
     subproject.pluginManager.apply "maven-publish"
+    subproject.pluginManager.apply "io.freefair.aspectj.post-compile-weaving"
+
+    subproject.aspectj {
+      version = libraries.aspectjtools.version
+    }
 
     subproject.tasks.named(JavaPlugin.COMPILE_JAVA_TASK_NAME).configure {JavaCompile java ->
       def processResources = project.tasks.named(JavaPlugin.PROCESS_RESOURCES_TASK_NAME)
@@ -38,7 +44,6 @@ subprojects {Project subproject ->
     project.tasks.withType(JavaCompile).configureEach { JavaCompile java ->
       java.options.fork = true
     }
-
   }
 }
 

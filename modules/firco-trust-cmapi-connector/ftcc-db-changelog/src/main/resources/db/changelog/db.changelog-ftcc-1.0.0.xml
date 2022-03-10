@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="ftcc-1.0.0-1" author="mmastylo">
+    <createTable tableName="ftcc_request">
+      <column name="batch_id" type="${type.uuid}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createIndex
+        tableName="ftcc_request"
+        indexName="ix_ftcc_request_batch_id"
+        unique="true">
+      <column name="batch_id"/>
+    </createIndex>
+
+    <createTable tableName="ftcc_message">
+      <column name="message_id" type="${type.uuid}">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="batch_id" type="${type.uuid}">
+        <constraints nullable="false"/>
+      </column>
+      <column name="payload" type="JSONB">
+        <constraints nullable="false"/>
+      </column>
+      <column name="created_at" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint
+        baseTableName="ftcc_message"
+        baseColumnNames="batch_id"
+        constraintName="fk_ftcc_message_batch_id"
+        referencedTableName="ftcc_request"
+        referencedColumnNames="batch_id"
+        onDelete="CASCADE"
+        onUpdate="CASCADE"
+        deferrable="true"
+        initiallyDeferred="true"/>
+  </changeSet>
+
+</databaseChangeLog>

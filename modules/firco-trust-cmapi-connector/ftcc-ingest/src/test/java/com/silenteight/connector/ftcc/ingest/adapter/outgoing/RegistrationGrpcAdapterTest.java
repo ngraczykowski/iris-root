@@ -1,4 +1,4 @@
-package com.silenteight.connector.ftcc.ingest.registration;
+package com.silenteight.connector.ftcc.ingest.adapter.outgoing;
 
 import com.silenteight.connector.ftcc.ingest.dto.input.RequestBodyDto;
 import com.silenteight.connector.ftcc.ingest.dto.input.RequestDto;
@@ -18,22 +18,22 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.silenteight.connector.ftcc.ingest.registration.RegistrationFixtures.BATCH_ID;
+import static com.silenteight.connector.ftcc.ingest.adapter.outgoing.RegistrationFixtures.BATCH;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class RegistrationServiceTest {
+class RegistrationGrpcAdapterTest {
 
   private static final long DEADLINE_IN_SECONDS = 30L;
 
   @Mock
   private RegistrationServiceBlockingStub registrationStub;
 
-  private RegistrationService underTest;
+  private RegistrationGrpcAdapter underTest;
 
   @BeforeEach
   void setUp() {
-    underTest = new RegistrationService(
+    underTest = new RegistrationGrpcAdapter(
         new RegistrationServiceGrpcAdapter(registrationStub, DEADLINE_IN_SECONDS));
   }
 
@@ -45,20 +45,20 @@ class RegistrationServiceTest {
     RequestDto request = makeRequest();
 
     // when
-    underTest.registerBatch(BATCH_ID, request);
+    underTest.registerBatch(BATCH);
 
     // then
     verify(registrationStub).registerBatch(RegisterBatchRequest
         .newBuilder()
-        .setBatchId(BATCH_ID)
-        .setAlertCount(2L)
+        .setBatchId(BATCH.getBatchId())
+        .setAlertCount(BATCH.getAlertsCount())
         .setBatchMetadata("")
         .build());
   }
 
   private static RequestDto makeRequest() {
     JsonNode message1 = new TextNode("message1");
-    JsonNode message2 = new TextNode("message1");
+    JsonNode message2 = new TextNode("message2");
 
     RequestSendMessageDto sendMessage = new RequestSendMessageDto();
     sendMessage.setMessages(List.of(message1, message2));

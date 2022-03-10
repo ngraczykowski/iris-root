@@ -84,8 +84,6 @@ spring:
     change-log: classpath:/db/changelog/db.changelog-master.xml
     default-schema: ${ftcc.db.schema:public}
     contexts: default
-    database-change-log-table: ftcc_databasechangelog
-    database-change-log-lock-table: ftcc_databasechangeloglock
 
   # Spring Data JPA
   jpa:
