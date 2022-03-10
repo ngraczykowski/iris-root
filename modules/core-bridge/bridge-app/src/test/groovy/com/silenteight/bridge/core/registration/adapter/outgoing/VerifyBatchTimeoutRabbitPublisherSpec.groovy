@@ -5,22 +5,13 @@ import com.silenteight.bridge.core.registration.domain.model.VerifyBatchTimeoutE
 import com.silenteight.bridge.core.registration.infrastructure.amqp.AmqpRegistrationOutgoingVerifyBatchTimeoutProperties
 import com.silenteight.proto.registration.api.v1.MessageVerifyBatchTimeout
 
-import org.springframework.amqp.core.Message
-import org.springframework.amqp.core.MessagePostProcessor
 import org.springframework.amqp.rabbit.core.RabbitTemplate
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Subject
 
-import java.time.Duration
-
-import static VerifyBatchTimeoutRabbitPublisher.DELAY_HEADER_NAME
-
-@Ignore // due to ALL-657
 class VerifyBatchTimeoutRabbitPublisherSpec extends Specification {
 
-  def amqpProperties = new AmqpRegistrationOutgoingVerifyBatchTimeoutProperties(
-      'exchange', Duration.ofMinutes(60))
+  def amqpProperties = new AmqpRegistrationOutgoingVerifyBatchTimeoutProperties('exchange')
   def rabbitTemplate = Mock(RabbitTemplate)
 
   @Subject
@@ -38,15 +29,6 @@ class VerifyBatchTimeoutRabbitPublisherSpec extends Specification {
     underTest.publish(event)
 
     then:
-    1 * rabbitTemplate
-        .convertAndSend(amqpProperties.exchangeName(), '', message, _ as MessagePostProcessor) >>
-        {List args ->
-          def messagePostProcessor = args[3] as MessagePostProcessor
-          def rabbitMessage = new Message()
-          messagePostProcessor.postProcessMessage(rabbitMessage)
-          assert rabbitMessage
-              .getMessageProperties()
-              .getHeader(DELAY_HEADER_NAME) == amqpProperties.delayTime().toMillis()
-        }
+    1 * rabbitTemplate.convertAndSend(amqpProperties.exchangeName(), '', message)
   }
 }

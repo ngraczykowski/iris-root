@@ -42,7 +42,6 @@ amqp:
         exchange-name: notify-batch-completed-exchange
       verify-batch-timeout:
         exchange-name: verify-batch-timeout-exchange
-        delay-time: PT60M
       notify-batch-timed-out:
         exchange-name: notify-batch-timed-out-exchange
     incoming:
@@ -70,6 +69,7 @@ amqp:
         dead-letter-queue-name: verify-batch-timeout.dlq
         dead-letter-queue-time-to-live-in-milliseconds: 10000
         dead-letter-exchange-name: verify-batch-timeout.dlx
+        delay-time: 60m
   recommendation:
     number-of-retries-dead-messages: 3
     outgoing:

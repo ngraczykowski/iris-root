@@ -18,7 +18,6 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.context.annotation.Import
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
-import spock.lang.Ignore
 import spock.util.concurrent.PollingConditions
 
 import static com.silenteight.bridge.core.registration.domain.model.AlertStatus.RECOMMENDED
@@ -31,13 +30,12 @@ import static com.silenteight.proto.registration.api.v1.AlertStatus.SUCCESS
         "grpc.server.port=-1",
         "grpc.client.inProcess.address=in-process:test",
         "registration.analysis.mock-recommendations-generation=false",
-        "amqp.registration.outgoing.verify-batch-timeout.delay-time:PT2S"
+        "amqp.registration.incoming.verify-batch-timeout.delay-time:2s"
     ]
 )
 @ActiveProfiles("test")
 @DirtiesContext
 @Import(AnalysisTimeoutFlowRabbitMqTestConfig.class)
-@Ignore // due to ALL-657
 class AnalysisTimeoutFlowIntegrationSpec extends BaseSpecificationIT {
 
   @GrpcClient("inProcess")
