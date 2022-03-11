@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 
-import static com.silenteight.fab.dataprep.adapter.incoming.AlertAndMatchesRabbitAmqpListener.QUEUE_NAME_PROPERTY
+import static com.silenteight.fab.dataprep.adapter.incoming.AlertMessagesRabbitAmqpListener.QUEUE_NAME_PROPERTY
 
 @TestConfiguration
 class IngestFlowRabbitMqTestConfig {

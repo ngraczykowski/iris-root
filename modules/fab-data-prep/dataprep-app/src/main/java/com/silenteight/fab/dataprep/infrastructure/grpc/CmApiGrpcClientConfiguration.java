@@ -1,6 +1,6 @@
 package com.silenteight.fab.dataprep.infrastructure.grpc;
 
-import com.silenteight.proto.fab.api.v1.AlertDetailsServiceGrpc.AlertDetailsServiceBlockingStub;
+import com.silenteight.proto.fab.api.v1.AlertMessageDetailsServiceGrpc.AlertMessageDetailsServiceBlockingStub;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.context.annotation.Bean;
@@ -13,12 +13,12 @@ import static com.silenteight.fab.dataprep.infrastructure.grpc.KnownServices.CM_
 class CmApiGrpcClientConfiguration {
 
   @GrpcClient(CM_API_CONNECTOR)
-  private AlertDetailsServiceBlockingStub alertDetailsServiceBlockingStub;
+  private AlertMessageDetailsServiceBlockingStub alertMessageDetailsServiceBlockingStub;
 
   @Bean
   @Profile("!dev")
   AlertDetailsServiceClient alertsDetailsServiceClient() {
-    return new AlertDetailsServiceClient(alertDetailsServiceBlockingStub);
+    return new AlertDetailsServiceClient(alertMessageDetailsServiceBlockingStub);
   }
 
   @Bean

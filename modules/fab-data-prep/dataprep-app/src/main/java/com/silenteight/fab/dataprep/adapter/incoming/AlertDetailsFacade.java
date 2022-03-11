@@ -13,18 +13,18 @@ public class AlertDetailsFacade {
 
   private final AlertDetailsServiceClient alertDetailsServiceClient;
 
-  public AlertsDetailsResponse getAlertDetails(MessageAlertStored message) {
-    AlertsDetailsRequest alertsDetailsRequest = AlertsDetailsRequest.newBuilder()
+  public AlertMessagesDetailsResponse getAlertDetails(AlertMessageStored message) {
+    AlertMessagesDetailsRequest detailsRequest = AlertMessagesDetailsRequest.newBuilder()
         .addAlerts(convert(message)).build();
 
-    return alertDetailsServiceClient.get(alertsDetailsRequest);
+    return alertDetailsServiceClient.get(detailsRequest);
   }
 
-  public static AlertHeader convert(MessageAlertStored source) {
-    return AlertHeader
+  public static AlertMessageHeader convert(AlertMessageStored source) {
+    return AlertMessageHeader
         .newBuilder()
-        .setAlertId(source.getAlertId())
-        .setBatchId(source.getBatchId())
+        .setMessageName(source.getMessageName())
+        .setBatchName(source.getBatchName())
         .build();
   }
 

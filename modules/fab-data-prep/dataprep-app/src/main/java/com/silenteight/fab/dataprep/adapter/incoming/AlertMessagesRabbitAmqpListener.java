@@ -8,9 +8,7 @@ import com.silenteight.fab.dataprep.domain.FeedingFacade;
 import com.silenteight.fab.dataprep.domain.RegistrationService;
 import com.silenteight.fab.dataprep.domain.model.ExtractedAlert;
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
-import com.silenteight.proto.fab.api.v1.AlertDetails;
-import com.silenteight.proto.fab.api.v1.AlertsDetailsResponse;
-import com.silenteight.proto.fab.api.v1.MessageAlertStored;
+import com.silenteight.proto.fab.api.v1.*;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -23,7 +21,7 @@ import static java.util.stream.Collectors.toMap;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class AlertAndMatchesRabbitAmqpListener {
+class AlertMessagesRabbitAmqpListener {
 
   public static final String QUEUE_NAME_PROPERTY =
       "${amqp.dataprep.incoming.alert-and-matches-stored.queue-name}";
@@ -38,28 +36,27 @@ class AlertAndMatchesRabbitAmqpListener {
 
   //TODO: Why only one incoming alert? not many?
   @RabbitListener(queues = QUEUE_NAME_PROPERTY)
-  public void subscribe(MessageAlertStored message) {
+  public void subscribe(AlertMessageStored message) {
     log.info(
-        "Received a message with: batch id: {}, alert id: {}", message.getBatchId(),
-        message.getAlertId());
-    AlertsDetailsResponse alertsDetailsResponse = getAlertDetails(message);
+        "Received a message with: batch name: {}, alert message name: {}", message.getBatchName(),
+        message.getMessageName());
+    AlertMessagesDetailsResponse response = getAlertDetails(message);
     Map<String, ExtractedAlert> extractedAlerts =
-        getExtractedAlerts(message, alertsDetailsResponse);
+        getExtractedAlerts(message, response);
     List<RegisteredAlert> registeredAlerts =
         registrationService.registerAlertsAndMatches(extractedAlerts);
     registeredAlerts.forEach(feedingFacade::etlAndFeedUds);
   }
 
   private Map<String, ExtractedAlert> getExtractedAlerts(
-      MessageAlertStored message,
-      AlertsDetailsResponse alertsDetailsResponse) {
+      AlertMessageStored message,
+      AlertMessagesDetailsResponse alertsDetailsResponse) {
     return alertsDetailsResponse.getAlertsList()
         .stream()
-        //.map(alertDetails -> alertParser.parse(message, alertDetails))
-        .collect(toMap(AlertDetails::getAlertId, ad -> alertParser.parse(message, ad)));
+        .collect(toMap(AlertMessageDetails::getMessageName, ad -> alertParser.parse(message, ad)));
   }
 
-  private AlertsDetailsResponse getAlertDetails(MessageAlertStored message) {
+  private AlertMessagesDetailsResponse getAlertDetails(AlertMessageStored message) {
     return alertDetailsFacade.getAlertDetails(message);
   }
 

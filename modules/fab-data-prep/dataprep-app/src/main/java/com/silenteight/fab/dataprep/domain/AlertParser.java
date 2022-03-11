@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import com.silenteight.fab.dataprep.domain.model.ExtractedAlert;
 import com.silenteight.fab.dataprep.domain.model.ExtractedAlert.Match;
 import com.silenteight.fab.dataprep.domain.model.ParsedMessageData;
-import com.silenteight.proto.fab.api.v1.AlertDetails;
-import com.silenteight.proto.fab.api.v1.MessageAlertStored;
+import com.silenteight.proto.fab.api.v1.AlertMessageDetails;
+import com.silenteight.proto.fab.api.v1.AlertMessageStored;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.DocumentContext;
@@ -33,12 +33,12 @@ public class AlertParser {
 
   private final MessageDataTokenizer messageDataTokenizer;
 
-  public ExtractedAlert parse(MessageAlertStored message, AlertDetails alertDetails) {
+  public ExtractedAlert parse(AlertMessageStored message, AlertMessageDetails alertDetails) {
     DocumentContext documentContext = parseContext.parse(alertDetails.getPayload());
 
     return ExtractedAlert.builder()
-        .batchId(message.getBatchId())
-        .alertId(message.getAlertId())
+        .batchId(message.getBatchName())
+        .alertId(message.getMessageName())
         .parsedMessageData(parseMessageData(documentContext))
         .matches(getMatches(documentContext))
         .build();

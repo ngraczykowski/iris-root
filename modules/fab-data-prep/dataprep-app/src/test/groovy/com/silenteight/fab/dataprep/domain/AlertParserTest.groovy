@@ -1,7 +1,7 @@
 package com.silenteight.fab.dataprep.domain
 
-import com.silenteight.proto.fab.api.v1.AlertDetails
-import com.silenteight.proto.fab.api.v1.MessageAlertStored
+import com.silenteight.proto.fab.api.v1.AlertMessageDetails
+import com.silenteight.proto.fab.api.v1.AlertMessageStored
 
 import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,13 +17,13 @@ class AlertParserTest extends Specification {
 
   def "AlertDetails should be parsed"() {
     given:
-    def alertDetails = AlertDetails.newBuilder().setAlertId("alertId")
+    def alertMessageDetails = AlertMessageDetails.newBuilder().setMessageName("alertId")
         .setPayload(Fixtures.MESSAGE).build();
-    def messageAlertStored = MessageAlertStored.newBuilder().setBatchId("batchId")
-        .setAlertId("alertId").build();
+    def alertMessageStored = AlertMessageStored.newBuilder().setBatchName("batchId")
+        .setMessageName("alertId").build();
 
     when:
-    def extractedAlert = underTest.parse(messageAlertStored, alertDetails)
+    def extractedAlert = underTest.parse(alertMessageStored, alertMessageDetails)
 
     then:
     extractedAlert.getParsedMessageData().getGender() == "M";

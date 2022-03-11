@@ -3,9 +3,9 @@ package com.silenteight.fab.dataprep.infrastructure.grpc;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.fab.api.v1.AlertDetailsServiceGrpc.AlertDetailsServiceBlockingStub;
-import com.silenteight.proto.fab.api.v1.AlertsDetailsRequest;
-import com.silenteight.proto.fab.api.v1.AlertsDetailsResponse;
+import com.silenteight.proto.fab.api.v1.AlertMessageDetailsServiceGrpc.AlertMessageDetailsServiceBlockingStub;
+import com.silenteight.proto.fab.api.v1.AlertMessagesDetailsRequest;
+import com.silenteight.proto.fab.api.v1.AlertMessagesDetailsResponse;
 
 import static lombok.AccessLevel.PACKAGE;
 
@@ -13,9 +13,9 @@ import static lombok.AccessLevel.PACKAGE;
 @RequiredArgsConstructor(access = PACKAGE)
 public class AlertDetailsServiceClient {
 
-  private final AlertDetailsServiceBlockingStub blockingStub;
+  private final AlertMessageDetailsServiceBlockingStub blockingStub;
 
-  public AlertsDetailsResponse get(AlertsDetailsRequest request) {
+  public AlertMessagesDetailsResponse get(AlertMessagesDetailsRequest request) {
     return blockingStub.alertsDetails(request);
   }
 
