@@ -3,8 +3,8 @@ package com.silenteight.fab.dataprep.domain.feature;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.fab.dataprep.domain.model.ExtractedAlert;
 import com.silenteight.fab.dataprep.domain.model.ParsedMessageData;
+import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
 import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
 import com.silenteight.universaldatasource.api.library.date.v1.DateFeatureInputOut;
@@ -31,14 +31,14 @@ public class DateFeature implements FabFeature {
 
   @Override
   public List<AgentInputIn<Feature>> createFeatureInput(FeatureInputsCommand featureInputsCommand) {
-    ExtractedAlert extractedAlert = featureInputsCommand.getExtractedAlert();
-    ParsedMessageData parsedMessageData = extractedAlert.getParsedMessageData();
-    return featureInputsCommand.getExtractedAlert().getMatches()
+    RegisteredAlert registeredAlert = featureInputsCommand.getRegisteredAlert();
+    ParsedMessageData parsedMessageData = registeredAlert.getParsedMessageData();
+    return registeredAlert.getMatches()
         .stream()
         .map(match ->
             AgentInputIn.builder()
                 .match(match.getMatchName())
-                .alert(extractedAlert.getAlertName())
+                .alert(registeredAlert.getAlertName())
                 .featureInputs(of(DateFeatureInputOut.builder()
                     .feature(FEATURE_NAME)
                     .alertedPartyDates(getAlertedPart(parsedMessageData))

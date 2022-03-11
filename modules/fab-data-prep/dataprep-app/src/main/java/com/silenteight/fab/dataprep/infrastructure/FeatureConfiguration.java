@@ -24,8 +24,8 @@ public class FeatureConfiguration {
 
   @Bean
   @ConditionalOnProperty("feeding.features.gender-feature.enabled")
-  FabFeature genderFeature() {
-    return new GenderFeature();
+  FabFeature genderFeature(ParseContext parseContext) {
+    return new GenderFeature(parseContext);
   }
 
   @Bean

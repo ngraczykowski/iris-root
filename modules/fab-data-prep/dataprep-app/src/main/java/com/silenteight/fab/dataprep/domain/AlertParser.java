@@ -15,9 +15,11 @@ import com.jayway.jsonpath.TypeRef;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.function.UnaryOperator.identity;
+import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
@@ -47,11 +49,11 @@ public class AlertParser {
     return messageDataTokenizer.convert(documentContext.read(MESSAGE_DATA_PATH, String.class));
   }
 
-  private static List<Match> getMatches(DocumentContext documentContext) {
+  private static Map<String, Match> getMatches(DocumentContext documentContext) {
     return getHits(documentContext)
         .stream()
         .map(AlertParser::convert)
-        .collect(toList());
+        .collect(toMap(Match::getMatchId, identity()));
   }
 
   private static Match convert(JsonNode jsonNode) {

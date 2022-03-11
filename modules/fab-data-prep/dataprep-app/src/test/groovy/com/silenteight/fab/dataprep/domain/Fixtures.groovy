@@ -1,14 +1,14 @@
 package com.silenteight.fab.dataprep.domain
 
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand
-import com.silenteight.fab.dataprep.domain.model.ExtractedAlert
-import com.silenteight.fab.dataprep.domain.model.ExtractedAlert.Match
 import com.silenteight.fab.dataprep.domain.model.ParsedMessageData
+import com.silenteight.fab.dataprep.domain.model.RegisteredAlert
+import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.io.Resources
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.charset.StandardCharsets.UTF_8
 
 class Fixtures {
 
@@ -54,7 +54,7 @@ class Fixtures {
       .matchId(UUID.randomUUID().toString())
       .matchName(MATCH_NAME)
       .payload(MAPPER.readTree(HIT_URL))
-  .build()
+      .build()
 
   static String HIT = Resources.toString(HIT_URL, UTF_8);
 
@@ -62,8 +62,8 @@ class Fixtures {
 
   static FeatureInputsCommand FEATURE_INPUTS_COMMAND = FeatureInputsCommand.builder()
       .batchId('batchId')   //TODO remove one of batchId
-      .extractedAlert(
-          ExtractedAlert.builder()
+      .registeredAlert(
+          RegisteredAlert.builder()
               .batchId('batchId')
               .alertId('alertId')
               .alertName(ALERT_NAME)

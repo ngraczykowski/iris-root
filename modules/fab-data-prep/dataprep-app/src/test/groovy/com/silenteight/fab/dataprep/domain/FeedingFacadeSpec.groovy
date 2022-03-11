@@ -3,8 +3,8 @@ package com.silenteight.fab.dataprep.domain
 import com.silenteight.fab.dataprep.domain.feature.FeatureInputsCommand
 import com.silenteight.fab.dataprep.domain.model.AlertErrorDescription
 import com.silenteight.fab.dataprep.domain.model.AlertStatus
-import com.silenteight.fab.dataprep.domain.model.ExtractedAlert
-import com.silenteight.fab.dataprep.domain.model.ExtractedAlert.Match
+import com.silenteight.fab.dataprep.domain.model.RegisteredAlert
+import com.silenteight.fab.dataprep.domain.model.RegisteredAlert.Match
 import com.silenteight.fab.dataprep.domain.model.UdsFedEvent
 import com.silenteight.fab.dataprep.domain.model.UdsFedEvent.FedMatch
 import com.silenteight.fab.dataprep.domain.model.UdsFedEvent.Status
@@ -26,7 +26,7 @@ class FeedingFacadeSpec extends Specification {
 
   def "should get extracted alert"() {
     given:
-    def extractedAlert = ExtractedAlert.builder()
+    def registeredAlert = RegisteredAlert.builder()
         .batchId('batchId')
         .alertId('alertId')
         .alertName('alertName')
@@ -44,7 +44,7 @@ class FeedingFacadeSpec extends Specification {
 
     def featureInputsCommand = FeatureInputsCommand.builder()
         .batchId('batchId')
-        .extractedAlert(extractedAlert)
+        .registeredAlert(registeredAlert)
         .build()
 
     def udsFedEvent = UdsFedEvent.builder()
@@ -60,7 +60,7 @@ class FeedingFacadeSpec extends Specification {
         .build()
 
     when:
-    underTest.etlAndFeedUds(extractedAlert)
+    underTest.etlAndFeedUds(registeredAlert)
 
     then:
     if (status == AlertStatus.SUCCESS && feedingStatus == Status.SUCCESS) {

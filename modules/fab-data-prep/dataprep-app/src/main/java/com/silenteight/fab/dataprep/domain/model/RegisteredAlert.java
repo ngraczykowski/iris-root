@@ -6,30 +6,31 @@ import lombok.Value;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import java.util.Map;
+import java.util.List;
 
 @Value
 @Builder
-public class ExtractedAlert {
+public class RegisteredAlert {
 
   @NonNull
   String batchId;
   @NonNull
   String alertId;
+  @NonNull
+  String alertName;
   AlertStatus status;
   AlertErrorDescription errorDescription;
   ParsedMessageData parsedMessageData;
-  Map<String, Match> matches;
-
-  public Match getMatch(String matchId) {
-    return matches.get(matchId);
-  }
+  List<Match> matches;
 
   @Value
   @Builder
   public static class Match {
 
+    @NonNull
     String matchId;
+    @NonNull
+    String matchName;
     JsonNode payload;
   }
 }

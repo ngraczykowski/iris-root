@@ -28,7 +28,7 @@ class AlertParserTest extends Specification {
     then:
     extractedAlert.getParsedMessageData().getGender() == "M";
     extractedAlert.matches.size() == 1
-    extractedAlert.matches.each  {it ->
+    extractedAlert.matches.values().each  {it ->
       def parser = new JsonSlurper();
       assert parser.parseText(it.getPayload().toString()) == parser.parseText(Fixtures.HIT)
     }
