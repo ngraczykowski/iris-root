@@ -1,20 +1,30 @@
 from setuptools import find_packages, setup
 
+dev_require = [
+    "fuzzywuzzy==0.18.0",
+    "omegaconf==2.1.1",
+    "grpcio==1.44.0",
+    "pyspark==3.1.1",
+    "lxml==4.7.1",
+    "googleapis-common-protos==1.55.0",
+    "data-source-agentinput-api==0.21.0.5",
+    "data-source-api==0.21.0.5",
+]
+
+
 tests_require = [
     "fuzzywuzzy==0.18.0",
     "omegaconf==2.1.1",
-    "pyspark==3.1.1",
-    "jupyter==1.0.0",
-    "jupyterlab==3.3.0",
-    "notebook==6.4.8",
     "spark-manager==0.9.2.dev0",
     "lxml==4.7.1",
+    "data-source-agentinput-api==0.21.0.5",
+    "data-source-api==0.21.0.5",
 ]
 
 
 setup(
     name="etl_pipeline",
-    version="0.5.4-dev",
+    version="0.5.4-dev1",
     description="ETL pipeline",
     author="Silent Eight Pte. Ltd.",
     author_email="support@silenteight.com",
