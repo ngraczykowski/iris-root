@@ -1,12 +1,9 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.alertrecord
 
-import com.silenteight.proto.serp.v1.alert.AnalystSolution
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision.AnalystSolution
 
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import static com.silenteight.proto.serp.v1.alert.AnalystSolution.ANALYST_FALSE_POSITIVE
-import static com.silenteight.proto.serp.v1.alert.AnalystSolution.ANALYST_NO_SOLUTION
 
 class DecisionRecordSpec extends Specification {
 
@@ -37,14 +34,14 @@ class DecisionRecordSpec extends Specification {
 
     where:
     decisionRecord                                    | expectedResult
-    decisionRecord('', ANALYST_NO_SOLUTION)           | true
-    decisionRecord('a', ANALYST_NO_SOLUTION)          | false
-    decisionRecord('FSK', ANALYST_NO_SOLUTION)        | true
-    decisionRecord('FFFFEED', ANALYST_NO_SOLUTION)    | true
-    decisionRecord('', ANALYST_FALSE_POSITIVE)        | false
-    decisionRecord('a', ANALYST_FALSE_POSITIVE)       | false
-    decisionRecord('FSK', ANALYST_FALSE_POSITIVE)     | false
-    decisionRecord('FFFFEED', ANALYST_FALSE_POSITIVE) | false
+    decisionRecord('', AnalystSolution.ANALYST_NO_SOLUTION) | true
+    decisionRecord('a', AnalystSolution.ANALYST_NO_SOLUTION)          | false
+    decisionRecord('FSK', AnalystSolution.ANALYST_NO_SOLUTION)        | true
+    decisionRecord('FFFFEED', AnalystSolution.ANALYST_NO_SOLUTION)    | true
+    decisionRecord('', AnalystSolution.ANALYST_FALSE_POSITIVE)        | false
+    decisionRecord('a', AnalystSolution.ANALYST_FALSE_POSITIVE)       | false
+    decisionRecord('FSK', AnalystSolution.ANALYST_FALSE_POSITIVE)     | false
+    decisionRecord('FFFFEED', AnalystSolution.ANALYST_FALSE_POSITIVE) | false
   }
 
   def decisionRecord(String operator) {

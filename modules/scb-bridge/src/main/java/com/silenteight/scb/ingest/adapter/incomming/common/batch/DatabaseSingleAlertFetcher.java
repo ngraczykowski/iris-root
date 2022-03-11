@@ -3,8 +3,8 @@ package com.silenteight.scb.ingest.adapter.incomming.common.batch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.serp.v1.alert.Alert;
-import com.silenteight.proto.serp.v1.alert.Decision;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision;
 
 import java.sql.Connection;
 import java.sql.SQLException;

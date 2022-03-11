@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.registration.api.library.v1.RegistrationLibraryException;
 import com.silenteight.registration.api.library.v1.RegistrationServiceClient;
 import com.silenteight.scb.ingest.domain.model.Batch;
+import com.silenteight.scb.ingest.domain.model.RegistrationRequest;
+import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
@@ -26,4 +28,15 @@ class RegistrationGrpcAdapter implements RegistrationApiClient {
     log.info("Batch with id: {} registered in Core Bridge.", batch.id());
   }
 
+  @Override
+  @Retryable(value = RegistrationLibraryException.class)
+  public RegistrationResponse registerAlertsAndMatches(RegistrationRequest request) {
+    var alertWithMatchesIn = registrationMapper.toRegisterAlertsAndMatchesIn(request);
+    var registerAlertsAndMatchesOut =
+        registrationServiceClient.registerAlertsAndMatches(alertWithMatchesIn);
+    log.info(
+        "Alerts and matches registered in Core Bridge for batch with id: {}",
+        request.getBatchId());
+    return registrationMapper.toRegistrationResponse(registerAlertsAndMatchesOut);
+  }
 }

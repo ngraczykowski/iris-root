@@ -4,10 +4,8 @@ import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertReco
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.DateConverter
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.SuspectsCollection
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model.Suspect
-import com.silenteight.scb.ingest.adapter.incomming.common.protocol.AlertWrapper
-import com.silenteight.proto.serp.scb.v1.ScbAlertDetails
-import com.silenteight.proto.serp.v1.alert.Alert
-import com.silenteight.proto.serp.v1.alert.Decision
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision
 
 import spock.lang.Specification
 
@@ -30,7 +28,7 @@ class EcmAlertCompositeRowProcessorSpec extends Specification {
     def suspectsCollection = createSuspectsCollection(suspects)
     def externalId = new ExternalId('system-id', 'AM00000965')
     def decisions = [:]
-    decisions.put(externalId, [new Decision()])
+    decisions.put(externalId, [Decision.builder().build()])
 
     when:
     def list = objectUnderTest.process(someAlertRow, decisions, suspectsCollection)
@@ -39,7 +37,7 @@ class EcmAlertCompositeRowProcessorSpec extends Specification {
     list.size() == 1
     def alertComposite = list.first()
     alertComposite.decisionsCount == 1
-    ScbAlertDetails alertDetails = getScbAlertDetails(alertComposite.alert)
+    AlertDetails alertDetails = alertComposite.alert.details
     alertDetails.batchId == 'batchId'
     alertDetails.watchlistId == 'AM00000965'
 
@@ -50,11 +48,6 @@ class EcmAlertCompositeRowProcessorSpec extends Specification {
             new Suspect(ofacId: 'ofacId-2', batchId: 'batchId', index: 2)
         ]
     ]
-  }
-
-  def getScbAlertDetails(Alert alert) {
-    AlertWrapper alertWrapper = new AlertWrapper(alert)
-    alertWrapper.unpackDetails(ScbAlertDetails.class).get()
   }
 
   def createSuspectsCollection(suspects) {

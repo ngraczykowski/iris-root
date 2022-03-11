@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.BatchConstants.JobName;
+import com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncConstants;
 
 import org.quartz.*;
 import org.springframework.batch.core.configuration.JobLocator;
@@ -12,8 +13,6 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-
-import static com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncConstants.GNS_SYNC_MODE_KEY;
 
 @RequiredArgsConstructor
 @Configuration
@@ -35,7 +34,7 @@ class QuartzConfiguration {
     jobDataMap.put("jobLauncher", jobLauncher);
     jobDataMap.put("jobLocator", jobLocator);
     jobDataMap.put("jobOperator", jobOperator);
-    jobDataMap.put(GNS_SYNC_MODE_KEY, jobConfiguration.getJobType());
+    jobDataMap.put(GnsSyncConstants.GNS_SYNC_MODE_KEY, jobConfiguration.getJobType());
 
     return jobDataMap;
   }

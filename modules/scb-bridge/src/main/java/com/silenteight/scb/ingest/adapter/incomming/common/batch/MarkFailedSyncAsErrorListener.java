@@ -42,8 +42,8 @@ class MarkFailedSyncAsErrorListener extends JobExecutionListenerSupport {
 
   private static String getErrorMessage(List<Throwable> failureExceptions) {
     return failureExceptions
-          .stream()
-          .map(Throwable::getMessage)
-          .collect(Collectors.joining(", "));
+        .stream()
+        .map(Throwable::getMessage)
+        .collect(Collectors.joining(", "));
   }
 }

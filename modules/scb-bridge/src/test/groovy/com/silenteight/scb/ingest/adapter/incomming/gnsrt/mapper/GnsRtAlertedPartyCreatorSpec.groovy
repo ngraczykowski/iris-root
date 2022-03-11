@@ -1,9 +1,6 @@
 package com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper
 
-import com.silenteight.proto.serp.scb.v1.ScbAlertedPartyDetails
-import com.silenteight.proto.serp.v1.alert.Party.Source
 import com.silenteight.scb.ingest.adapter.incomming.common.gender.Gender
-import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtAlertedPartyCreator
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.ScreenableData
 
 import spock.lang.Specification
@@ -70,84 +67,81 @@ class GnsRtAlertedPartyCreatorSpec extends Specification {
     def result = GnsRtAlertedPartyCreator.createAlertedParty(data, recordId)
 
     then:
-    result.source == Source.SOURCE_CONFIDENTIAL
     result.id.sourceId == recordId
-    with(result.details.unpack(ScbAlertedPartyDetails.class)) {
-      apId == data.customerIdentificationNo
-      apDbCountry == data.amlCountry
-      apBookingLocation == data.amlCountry
-      apName == data.fullLegalName
-      apDobDoi == data.dateOfBirthOrRegistration
-      apNationality == data.nationalityAll
-      apCustStatus == data.customerStatus
-      apGender == data.gender
-      apResidence == data.registeredOrResidentialAddressCountry
-      custType == data.clientType
-      apGenderFromName == Gender.MALE.name()
+    result.apId == data.customerIdentificationNo
+    result.apDbCountry == data.amlCountry
+    result.apBookingLocation == data.amlCountry
+    result.apName == data.fullLegalName
+    result.apDobDoi == data.dateOfBirthOrRegistration
+    result.apNationality == data.nationalityAll
+    result.apCustStatus == data.customerStatus
+    result.apGender == data.gender
+    result.apResidence == data.registeredOrResidentialAddressCountry
+    result.custType == data.clientType
+    result.apGenderFromName == Gender.MALE.name()
 
-      apDocNationalIdsList.asList().containsAll(
-          [
-              data.identificationNumber1,
-              data.identificationNumber2,
-              data.identificationNumber3,
-              data.identificationNumber4
-          ])
+    result.apDocNationalIds.asList().containsAll(
+        [
+            data.identificationNumber1,
+            data.identificationNumber2,
+            data.identificationNumber3,
+            data.identificationNumber4
+        ])
 
-      apNameSynonymsList.asList().containsAll(
-          [
-              data.alternateName1,
-              data.alternateName2,
-              data.alternateName3,
-              data.alternateNameRest,
-              data.fullTradingName,
-              data.legalParentOrGroupName,
-              data.executiveManagementNames,
-              data.supplementaryCardName
-          ])
+    result.apNameSynonyms.asList().containsAll(
+        [
+            data.alternateName1,
+            data.alternateName2,
+            data.alternateName3,
+            data.alternateNameRest,
+            data.fullTradingName,
+            data.legalParentOrGroupName,
+            data.executiveManagementNames,
+            data.supplementaryCardName
+        ])
 
-      apDocPassportsList.asList().containsAll(
-          [
-              data.identificationNumberRest
-          ])
+    result.apDocPassports.asList().containsAll(
+        [
+            data.identificationNumberRest
+        ])
 
-      apNationalitySynonymsList.asList().containsAll(
-          [
-              data.countryOfBirthOrRegistration,
-              data.nationalityAll
-          ])
+    result.apNationalitySynonyms.asList().containsAll(
+        [
+            data.countryOfBirthOrRegistration,
+            data.nationalityAll
+        ])
 
-      apResidenceSynonymsList.asList().containsAll(
-          [
-              data.registeredOrResidentialAddressCountry,
-              data.mailingOrCommunicationAddressCountry,
-              data.operatingOrOfficialAddressCountry,
-              data.otherAddressCountry,
-              data.registeredAddressCountryOfHeadOffice,
-              data.registeredAddressCountryOfParentCompany,
-              data.establishmentCountryOfHO,
-              data.establishmentCountryOfParentCompany
-          ])
+    result.apResidenceSynonyms.asList().containsAll(
+        [
+            data.registeredOrResidentialAddressCountry,
+            data.mailingOrCommunicationAddressCountry,
+            data.operatingOrOfficialAddressCountry,
+            data.otherAddressCountry,
+            data.registeredAddressCountryOfHeadOffice,
+            data.registeredAddressCountryOfParentCompany,
+            data.establishmentCountryOfHO,
+            data.establishmentCountryOfParentCompany
+        ])
 
-      apResidentialAddressesList.asList().containsAll(
-          [
-              data.registeredOrResidentialAddress,
-              data.mailingOrCommunicationAddress,
-              data.operatingOrOfficialAddress,
-              data.otherAddress,
-              data.registeredAddressOfHeadOffice,
-              data.registeredAddressOfParentCompany,
-              data.nameOfAuthority,
-          ])
+    result.apResidentialAddresses.asList().containsAll(
+        [
+            data.registeredOrResidentialAddress,
+            data.mailingOrCommunicationAddress,
+            data.operatingOrOfficialAddress,
+            data.otherAddress,
+            data.registeredAddressOfHeadOffice,
+            data.registeredAddressOfParentCompany,
+            data.nameOfAuthority,
+        ])
 
-      apDocOthersList.asList().containsAll(
-          [
-              data.identificationNumber1,
-              data.identificationNumber2,
-              data.identificationNumber3,
-              data.identificationNumber4,
-              data.identificationNumberRest
-          ])
-    }
+    result.apDocOthers.asList().containsAll(
+        [
+            data.identificationNumber1,
+            data.identificationNumber2,
+            data.identificationNumber3,
+            data.identificationNumber4,
+            data.identificationNumberRest
+        ])
   }
 
   def 'should create correct gender based on name'() {
@@ -164,8 +158,6 @@ class GnsRtAlertedPartyCreatorSpec extends Specification {
 
     then:
     result.id.sourceId == recordId
-    with(result.details.unpack(ScbAlertedPartyDetails.class)) {
-      apGenderFromName == Gender.MALE.name()
-    }
+    result.apGenderFromName == Gender.MALE.name()
   }
 }

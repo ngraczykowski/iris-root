@@ -141,7 +141,7 @@ public class GnsParty {
     return getStringField(GnsPartyCommonFields.NAME);
   }
 
-  Optional<String> getStringField(String name) {
+  public Optional<String> getStringField(String name) {
     return ofNullable(fields.get(name))
         .map(v -> (String) v)
         .filter(StringUtils::isNotEmpty);

@@ -4,11 +4,10 @@ import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.RecordCompositeWriter.WriterConfiguration
 import com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncDeltaService
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService
-import com.silenteight.proto.serp.scb.v1.ScbAlertDetails
-import com.silenteight.proto.serp.v1.alert.Alert
-import com.silenteight.proto.serp.v1.common.ObjectId
+import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails
 
-import com.google.protobuf.Any
 import io.micrometer.core.instrument.Tag
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -91,23 +90,22 @@ class RecordCompositeWriterSpec extends Specification {
   }
 
   def createAlert() {
-    Alert.newBuilder()
-        .setId(createId())
-        .setDetails(createAlertDetails())
+    Alert.builder()
+        .id(createId())
+        .details(createAlertDetails())
         .build()
   }
 
   def createAlertDetails() {
-    Any.pack(
-        ScbAlertDetails
-            .newBuilder()
-            .setBatchId('batch-id')
-            .setSystemId('system-id')
-            .build())
+    AlertDetails
+        .builder()
+        .batchId('batch-id')
+        .systemId('system-id')
+        .build()
   }
 
   def createId() {
-    ObjectId.newBuilder().setSourceId('external-id').build()
+    ObjectId.builder().sourceId('external-id').build()
   }
 
   def createAlertComposite() {

@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.ScbBridgeConfigProperties;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsGatewayFactory;
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.DateConverter;
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.SuspectDataFetcher;
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm.EcmRecordCompositeFetcher.EcmFetcherConfiguration;
@@ -14,8 +15,6 @@ import com.silenteight.scb.ingest.adapter.incomming.common.quartz.EcmAnalystDeci
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
-
-import static com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsGatewayFactory.getHitDetailsHelperFetcher;
 
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -46,23 +45,23 @@ class EcmAlertFetcherConfigurationHelper {
         createSuspectDataFetcher(cbsHitsDetailsHelperViewName));
   }
 
-  EcmRecordDecisionsFetcher createEcmDecisionsFetcher(String ecmView) {
-    return new EcmRecordDecisionsFetcher(ecmDecisionRowMapper(), ecmView);
-  }
-
   private SuspectDataFetcher createSuspectDataFetcher(String cbsHitsDetailsHelperViewName) {
     FetcherConfiguration configuration = createFetcherConfiguration(cbsHitsDetailsHelperViewName);
 
     return new SuspectDataFetcher(
-        new HitDetailsParser(), getHitDetailsHelperFetcher(configuration));
+        new HitDetailsParser(), CbsGatewayFactory.getHitDetailsHelperFetcher(configuration));
+  }
+
+  private FetcherConfiguration createFetcherConfiguration(String dbRelationName) {
+    return new FetcherConfiguration(dbRelationName, queryTimeout);
   }
 
   private EcmAlertCompositeRowProcessor createEcmAlertCompositeRowProcessor() {
     return new EcmAlertCompositeRowProcessor(dateConverter);
   }
 
-  private FetcherConfiguration createFetcherConfiguration(String dbRelationName) {
-    return new FetcherConfiguration(dbRelationName, queryTimeout);
+  EcmRecordDecisionsFetcher createEcmDecisionsFetcher(String ecmView) {
+    return new EcmRecordDecisionsFetcher(ecmDecisionRowMapper(), ecmView);
   }
 
   private EcmDecisionRowMapper ecmDecisionRowMapper() {

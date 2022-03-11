@@ -6,6 +6,8 @@ import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing.AlertUnderProcessingKey;
 import com.silenteight.sep.base.common.entity.BaseEntity;
 
+import org.hibernate.annotations.Type;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -40,6 +42,7 @@ public class AlertUnderProcessing extends BaseEntity {
 
   @NonNull
   @Lob
+  @Type(type = "org.hibernate.type.BinaryType")
   private byte[] payload;
 
   public AlertUnderProcessing(String systemId, String batchId, ScbAlertIdContext alertIdContext) {
@@ -49,6 +52,11 @@ public class AlertUnderProcessing extends BaseEntity {
     this.payload = alertIdContext.toByteArray();
   }
 
+  public enum State {
+    IN_PROGRESS,
+    ERROR
+  }
+
   @Data
   public static class AlertUnderProcessingKey implements Serializable {
 
@@ -56,11 +64,6 @@ public class AlertUnderProcessing extends BaseEntity {
 
     private String systemId;
     private String batchId;
-  }
-
-  public enum State {
-    IN_PROGRESS,
-    ERROR
   }
 }
 

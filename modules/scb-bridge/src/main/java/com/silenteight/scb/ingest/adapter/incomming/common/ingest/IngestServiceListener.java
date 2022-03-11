@@ -1,7 +1,8 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.ingest;
 
-import com.silenteight.proto.serp.v1.alert.Alert;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 
 public interface IngestServiceListener {
+
   void send(Alert alert);
 }

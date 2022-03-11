@@ -2,7 +2,7 @@ package com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.serp.v1.alert.Decision;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,10 +11,6 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm.ExternalId.HIT_UNIQUE_ID;
-import static com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm.ExternalId.SYSTEM_ID;
-import static com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm.ExternalId.tryToExtractWatchlistIdFromHitUniqueId;
 
 @Slf4j
 class EcmRecordDecisionsFetcher {
@@ -31,6 +27,16 @@ class EcmRecordDecisionsFetcher {
     this.ecmViewName = ecmViewName;
 
     this.fetchSqlQuery = prepareFetchQuery();
+  }
+
+  private String prepareFetchQuery() {
+    if (log.isTraceEnabled()) {
+      log.trace("Executing SQL: ecmViewName={}, query={}", ecmViewName,
+          WHITESPACE.matcher(EcmQueryTemplates.DECISIONS_QUERY).replaceAll(" "));
+    }
+
+    return EcmQueryTemplates.DECISIONS_QUERY
+        .replace(":ecmViewName", ecmViewName);
   }
 
   @SuppressWarnings("findsecbugs:SQL_INJECTION_JDBC")
@@ -52,9 +58,10 @@ class EcmRecordDecisionsFetcher {
       setQueryParameters(statement, externalIds);
       try (ResultSet resultSet = statement.executeQuery()) {
         while (resultSet.next()) {
-          var systemId = resultSet.getString(SYSTEM_ID);
+          var systemId = resultSet.getString(ExternalId.SYSTEM_ID);
           var watchlistId =
-              tryToExtractWatchlistIdFromHitUniqueId(resultSet.getString(HIT_UNIQUE_ID));
+              ExternalId.tryToExtractWatchlistIdFromHitUniqueId(resultSet.getString(
+                  ExternalId.HIT_UNIQUE_ID));
 
           if (externalIds.contains(new ExternalId(systemId, watchlistId))) {
             Decision decision = decisionRowMapper.mapRow(resultSet);
@@ -70,16 +77,6 @@ class EcmRecordDecisionsFetcher {
   private String prepareQuery(List<ExternalId> externalIds) {
     return String.format(
         fetchSqlQuery, String.join(",", Collections.nCopies(externalIds.size(), "?")));
-  }
-
-  private String prepareFetchQuery() {
-    if (log.isTraceEnabled()) {
-      log.trace("Executing SQL: ecmViewName={}, query={}", ecmViewName,
-          WHITESPACE.matcher(EcmQueryTemplates.DECISIONS_QUERY).replaceAll(" "));
-    }
-
-    return EcmQueryTemplates.DECISIONS_QUERY
-        .replace(":ecmViewName", ecmViewName);
   }
 
   private static void setQueryParameters(
@@ -99,7 +96,7 @@ class EcmRecordDecisionsFetcher {
       Map<ExternalId, List<Decision>> decisions) {
 
     if (log.isTraceEnabled())
-      log.trace("Adding decision: decision={}, count={}", decision.getId(), decisions.size());
+      log.trace("Adding decision: decision={}, count={}", decision.id(), decisions.size());
 
     decisions
         .computeIfAbsent(new ExternalId(systemId, watchlistId), s -> new ArrayList<>())

@@ -34,6 +34,19 @@ class ScbSyncStepsConfiguration {
   }
 
   @Bean
+  public JobParameterExecutionContextCopyListener executionContextCopyListener() {
+    JobParameterExecutionContextCopyListener listener =
+        new JobParameterExecutionContextCopyListener();
+    listener.setKeys(new String[] { GnsSyncConstants.GNS_SYNC_MODE_KEY });
+    return listener;
+  }
+
+  @NotNull
+  private StepBuilder createStep(String stepName) {
+    return stepBuilderFactory.get(STEP_NAME_PREFIX + stepName);
+  }
+
+  @Bean
   public Step finishGnsSyncTasklet() {
     return createStep("finishGnsSyncTasklet")
         .tasklet(new FinishGnsSyncTasklet(syncService))
@@ -42,16 +55,26 @@ class ScbSyncStepsConfiguration {
   }
 
   @Bean
-  MeteringAlertCompositeProcessor meteringAlertCompositeProcessor() {
-    return new MeteringAlertCompositeProcessor();
-  }
-
-  @Bean
   public Step collectRecordsAlertLevel(
       RecordCompositeReader alertLevelRecordCompositeReader,
       RecordCompositeWriter alertLevelRecordCompositeWriter) {
     return createCollectRecordsStep(
         alertLevelRecordCompositeReader, alertLevelRecordCompositeWriter);
+  }
+
+  private Step createCollectRecordsStep(
+      RecordCompositeReader reader, RecordCompositeWriter writer) {
+    return createStep("collectRecordsStep")
+        .<AlertComposite, AlertComposite>chunk(properties.getChunkSize())
+        .reader(reader)
+        .processor(meteringAlertCompositeProcessor())
+        .writer(writer)
+        .build();
+  }
+
+  @Bean
+  MeteringAlertCompositeProcessor meteringAlertCompositeProcessor() {
+    return new MeteringAlertCompositeProcessor();
   }
 
   @Bean
@@ -77,28 +100,5 @@ class ScbSyncStepsConfiguration {
     return createCollectRecordsStep(
         learningWatchlistLevelRecordCompositeReader,
         scbLearningWatchlistLevelRecordCompositeWriter);
-  }
-
-  @Bean
-  public JobParameterExecutionContextCopyListener executionContextCopyListener() {
-    JobParameterExecutionContextCopyListener listener =
-        new JobParameterExecutionContextCopyListener();
-    listener.setKeys(new String[] { GnsSyncConstants.GNS_SYNC_MODE_KEY });
-    return listener;
-  }
-
-  private Step createCollectRecordsStep(
-      RecordCompositeReader reader, RecordCompositeWriter writer) {
-    return createStep("collectRecordsStep")
-        .<AlertComposite, AlertComposite>chunk(properties.getChunkSize())
-        .reader(reader)
-        .processor(meteringAlertCompositeProcessor())
-        .writer(writer)
-        .build();
-  }
-
-  @NotNull
-  private StepBuilder createStep(String stepName) {
-    return stepBuilderFactory.get(STEP_NAME_PREFIX + stepName);
   }
 }

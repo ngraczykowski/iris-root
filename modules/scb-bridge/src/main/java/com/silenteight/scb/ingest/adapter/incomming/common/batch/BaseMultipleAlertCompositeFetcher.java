@@ -3,7 +3,7 @@ package com.silenteight.scb.ingest.adapter.incomming.common.batch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.serp.v1.alert.Decision;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -31,14 +31,6 @@ abstract class BaseMultipleAlertCompositeFetcher implements MultipleAlertComposi
     }
   }
 
-  protected abstract List<AlertComposite> fetch(Connection connection, List<String> systemIds)
-      throws SQLException;
-
-  Map<String, List<Decision>> fetchDecisions(
-      Connection connection, List<String> systemIds) throws SQLException {
-    return decisionsFetcher.fetchDecisions(connection, systemIds);
-  }
-
   private List<AlertComposite> fetchInTransaction(List<String> systemIds) throws SQLException {
     List<AlertComposite> result = new ArrayList<>();
     try (Connection connection = externalDataSource.getConnection()) {
@@ -50,5 +42,13 @@ abstract class BaseMultipleAlertCompositeFetcher implements MultipleAlertComposi
       connection.commit();
     }
     return result;
+  }
+
+  protected abstract List<AlertComposite> fetch(Connection connection, List<String> systemIds)
+      throws SQLException;
+
+  Map<String, List<Decision>> fetchDecisions(
+      Connection connection, List<String> systemIds) throws SQLException {
+    return decisionsFetcher.fetchDecisions(connection, systemIds);
   }
 }

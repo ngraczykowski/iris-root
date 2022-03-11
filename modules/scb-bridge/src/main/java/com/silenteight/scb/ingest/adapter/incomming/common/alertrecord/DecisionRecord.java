@@ -4,12 +4,8 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
-import com.silenteight.proto.serp.scb.v1.ScbDecisionDetails;
-import com.silenteight.proto.serp.v1.alert.AnalystSolution;
-import com.silenteight.proto.serp.v1.alert.Decision;
-import com.silenteight.proto.serp.v1.common.ObjectId;
-import com.silenteight.protocol.utils.ObjectIds;
-import com.silenteight.sep.base.common.protocol.AnyUtils;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -17,9 +13,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import static com.google.common.base.Strings.nullToEmpty;
-import static com.google.protobuf.Timestamp.getDefaultInstance;
-import static com.silenteight.proto.serp.v1.alert.AnalystSolution.ANALYST_NO_SOLUTION;
-import static com.silenteight.protocol.utils.MoreTimestamps.toTimestampOrDefault;
+import static com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision.AnalystSolution.ANALYST_NO_SOLUTION;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
@@ -43,30 +37,36 @@ public class DecisionRecord {
   @Nullable
   String comments;
 
-  AnalystSolution solution;
+  Decision.AnalystSolution solution;
 
   @Nullable
   String stateName;
 
   public Decision toDecision() {
-    var builder = Decision.newBuilder()
-        .setAuthorId(operator)
-        .setComment(nullToEmpty(comments))
-        .setCreatedAt(toTimestampOrDefault(decisionDate, getDefaultInstance()))
-        .setId(makeDecisionId())
-        .setSolution(solution);
+    var builder = Decision.builder()
+        .authorId(operator)
+        .comment(nullToEmpty(comments))
+        .createdAt(decisionDate)
+        .id(makeDecisionId())
+        .solution(solution);
 
     if (isNotEmpty(stateName))
-      builder.setDetails(AnyUtils.pack(ScbDecisionDetails.newBuilder()
-          .setStateName(stateName)
-          .build()));
+      builder.stateName(stateName)
+          .build();
 
     return builder.build();
   }
 
   private ObjectId makeDecisionId() {
-    return ObjectIds.fromUuidAndSource(
-        UUID.randomUUID(), operator + "@" + type, String.valueOf(decisionDate));
+    return ObjectId.builder()
+        .id(UUID.randomUUID())
+        .sourceId(operator + "@" + type)
+        .discriminator(String.valueOf(decisionDate))
+        .build();
+  }
+
+  public boolean isResetDecision() {
+    return !isAnalystDecision() && isAnalystNoSolution();
   }
 
   public boolean isAnalystDecision() {
@@ -75,10 +75,6 @@ public class DecisionRecord {
     }
 
     return Stream.of(SYSTEM_OPERATORS).noneMatch(s -> s.equalsIgnoreCase(operator));
-  }
-
-  public boolean isResetDecision() {
-    return !isAnalystDecision() && isAnalystNoSolution();
   }
 
   private boolean isAnalystNoSolution() {

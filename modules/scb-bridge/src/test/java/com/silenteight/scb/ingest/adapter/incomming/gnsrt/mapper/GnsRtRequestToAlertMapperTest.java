@@ -2,10 +2,9 @@ package com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.serp.scb.v1.ScbWatchlistPartyDetails;
-import com.silenteight.proto.serp.v1.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.gender.GenderDetector;
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.HitDetailsParser;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.GnsRtAlertStatus;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtAlert;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtRecommendationRequest;
@@ -25,8 +24,6 @@ import java.util.Map;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import static com.silenteight.sep.base.common.protocol.AnyUtils.maybeUnpack;
-import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
@@ -98,7 +95,7 @@ class GnsRtRequestToAlertMapperTest {
 
   private static void verifyAlerts(List<GnsRtAlert> gnsRtAlerts, List<Alert> alerts) {
     assertThat(alerts.stream().findFirst().isPresent()).isTrue();
-    assertThat(alerts.stream().findFirst().get().getId().getSourceId()).isEqualTo(
+    assertThat(alerts.stream().findFirst().get().id().sourceId()).isEqualTo(
         gnsRtAlerts
             .stream()
             .filter(x -> x.getAlertStatus() == GnsRtAlertStatus.POTENTIAL_MATCH)
@@ -127,9 +124,9 @@ class GnsRtRequestToAlertMapperTest {
 
     //then
     assertThat(alerts).hasSize(1);
-    var alertId = alerts.get(0).getId();
-    assertThat(alertId.getSourceId()).isEqualTo("IN_BTCH_DUDL!737FC9C1-BDE337AD-75A2086D-78C6F14C");
-    assertThat(alertId.getDiscriminator()).isEqualTo("2020-02-20T13:28:02Z");
+    var alertId = alerts.get(0).id();
+    assertThat(alertId.sourceId()).isEqualTo("IN_BTCH_DUDL!737FC9C1-BDE337AD-75A2086D-78C6F14C");
+    assertThat(alertId.discriminator()).isEqualTo("2020-02-20T13:28:02Z");
   }
 
   @Test
@@ -141,19 +138,17 @@ class GnsRtRequestToAlertMapperTest {
     List<Alert> alerts = gnsRtRequestToAlertMapper.map(gnsRtRecommendationRequest);
 
     //then
-    var matches = alerts.get(0).getMatchesList();
+    var matches = alerts.get(0).matches();
     var match = matches.stream()
-        .filter(m -> m.getId().getSourceId().equals("AS05305170"))
+        .filter(m -> m.id().sourceId().equals("AS05305170"))
         .findFirst();
 
     assertThat(match.isPresent());
 
-    var details = match.get().getMatchedParty().getDetails();
-    var partyDetails =
-        maybeUnpack(details, ScbWatchlistPartyDetails.class).get();
+    var details = match.get().matchedParty();
 
-    assertThat(partyDetails.getWlCountry()).isEqualTo("INDIA");
-    assertThat(partyDetails.getWlDesignation()).isEqualTo("GWL");
+    assertThat(details.wlCountry()).isEqualTo("INDIA");
+    assertThat(details.wlDesignation()).isEqualTo("GWL");
   }
 
   @Test
@@ -165,18 +160,16 @@ class GnsRtRequestToAlertMapperTest {
     var alerts = gnsRtRequestToAlertMapper.map(gnsRtRecommendationRequest);
 
     //then
-    var matches = alerts.get(0).getMatchesList();
+    var matches = alerts.get(0).matches();
     var match = matches.stream()
-        .filter(m -> m.getId().getSourceId().equals("AS05305170"))
+        .filter(m -> m.id().sourceId().equals("AS05305170"))
         .findFirst();
 
     assertThat(match.isPresent());
 
-    var details = match.get().getMatchedParty().getDetails();
-    var partyDetails =
-        maybeUnpack(details, ScbWatchlistPartyDetails.class).get();
+    var details = match.get().matchedParty();
 
-    assertThat(partyDetails.getWlNationality()).isEqualTo(EMPTY);
+    assertThat(details.wlNationality()).isNull();
   }
 
   @Test
@@ -188,18 +181,16 @@ class GnsRtRequestToAlertMapperTest {
     var alerts = gnsRtRequestToAlertMapper.map(gnsRtRecommendationRequest);
 
     //then
-    var matches = alerts.get(0).getMatchesList();
+    var matches = alerts.get(0).matches();
     var match = matches.stream()
-        .filter(m -> m.getId().getSourceId().equals("AS05305170"))
+        .filter(m -> m.id().sourceId().equals("AS05305170"))
         .findFirst();
 
     assertThat(match.isPresent());
 
-    var details = match.get().getMatchedParty().getDetails();
-    var partyDetails =
-        maybeUnpack(details, ScbWatchlistPartyDetails.class).get();
+    var details = match.get().matchedParty();
 
-    assertThat(partyDetails.getWlNationality()).isEqualTo("PAKISTAN");
-    assertThat(partyDetails.getWlGender()).isEqualTo("MALE");
+    assertThat(details.wlNationality()).isEqualTo("PAKISTAN");
+    assertThat(details.wlGender()).isEqualTo("MALE");
   }
 }

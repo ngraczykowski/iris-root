@@ -4,16 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.serp.scb.v1.ScbAlertDetails;
-import com.silenteight.proto.serp.v1.alert.Alert;
-import com.silenteight.proto.serp.v1.alert.Alert.Builder;
 import com.silenteight.proto.serp.v1.alert.Alert.Flags;
-import com.silenteight.proto.serp.v1.alert.Alert.State;
-import com.silenteight.proto.serp.v1.alert.Decision;
-import com.silenteight.proto.serp.v1.alert.Match;
-import com.silenteight.proto.serp.v1.alert.Party;
-import com.silenteight.proto.serp.v1.common.ObjectId;
-import com.silenteight.protocol.utils.Uuids;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord.AlertRecordComposite;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.DecisionRecord;
@@ -21,12 +12,18 @@ import com.silenteight.scb.ingest.adapter.incomming.common.batch.DateConverter;
 import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.GnsParty;
 import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.RecordParser;
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model.Suspect;
-import com.silenteight.scb.ingest.adapter.incomming.common.protocol.MatchWrapper;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.AlertBuilder;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Flag;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.State;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertedParty;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils;
-import com.silenteight.sep.base.common.protocol.AnyUtils;
 
-import com.google.protobuf.Any;
-import com.google.protobuf.Timestamp;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.time.Instant;
 import java.util.*;
@@ -36,147 +33,47 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static com.google.common.base.Strings.nullToEmpty;
-import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
-import static com.silenteight.protocol.utils.MoreTimestamps.toTimestampOrDefault;
 import static com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper.AlertMapper.Option.*;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.function.Predicate.not;
-import static org.apache.commons.lang3.ArrayUtils.contains;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Slf4j
 @RequiredArgsConstructor
 public class AlertMapper {
 
+  private static final String NO_NEW_MATCHES_WARNING = "No new matches found in alert: {}";
   private final DateConverter dateConverter;
   private final MatchCollector matchCollector;
   private final SuspectsCollector suspectsCollector;
-
-  private static final String NO_NEW_MATCHES_WARNING = "No new matches found in alert: {}";
-
-  public List<Alert> fromAlertRecordComposite(
-      @NonNull AlertRecordComposite alertRecordComposite, Option... options) {
-    return contains(options, WATCHLIST_LEVEL) ?
-           mapAsWatchlistLevel(alertRecordComposite, options) :
-           mapAsAlertLevel(alertRecordComposite, options);
-  }
-
-  private List<Alert> mapAsWatchlistLevel(
-      AlertRecordComposite alertRecordComposite, Option[] options) {
-    var suspects = getSuspects(alertRecordComposite);
-
-    if (contains(options, ONLY_UNSOLVED) && atLeastOneSuspectHasNeoFlag(suspects))
-      suspects.removeIf(not(Suspect::hasNeoFlag));
-
-    var alerts = suspects.stream()
-        .map(s -> doMap(singletonList(s), alertRecordComposite, options))
-        .filter(shouldAlertBeProcessed(options))
-        .collect(Collectors.toList());
-
-    if (alerts.isEmpty())
-      log.warn(NO_NEW_MATCHES_WARNING, alertRecordComposite.getSystemId());
-
-    return alerts;
-  }
-
-  private List<Alert> mapAsAlertLevel(AlertRecordComposite alertRecordComposite, Option[] options) {
-    var suspects = getSuspects(alertRecordComposite);
-    var alert = doMap(suspects, alertRecordComposite, options);
-
-    if (contains(options, ONLY_UNSOLVED) && hasOnlySolvedMatches(alert.getMatchesList())) {
-      log.warn(NO_NEW_MATCHES_WARNING, alert.getId().getSourceId());
-      return emptyList();
-    }
-    return singletonList(alert);
-  }
-
-  private Alert doMap(
-      Collection<Suspect> suspects,
-      AlertRecordComposite alertRecordComposite,
-      Option... options) {
-
-    AlertRecord alertRecord = alertRecordComposite.getAlert();
-    Optional<Decision> lastDecision = alertRecordComposite.getLastDecision();
-    Instant filtered = dateConverter.convert(alertRecord.getFilteredString()).orElse(null);
-    GnsParty gnsParty = makeGnsParty(alertRecord);
-    Instant discriminator = getDiscriminator(alertRecordComposite, filtered);
-    AlertContext alertContext =
-        buildAlertContext(alertRecord, gnsParty, lastDecision.isPresent());
-    String watchlistId = contains(options, WATCHLIST_LEVEL) ? getWatchlistId(suspects) : "";
-    List<Match> matches = collectMatches(suspects, alertContext);
-
-    Builder builder = initializeBuilder()
-        .addAllMatches(matches)
-        .setAlertedParty(makeAlertedParty(alertRecord, gnsParty))
-        .setDecisionGroup(nullToEmpty(alertRecord.getUnit()))
-        .setDetails(createDetails(alertRecord, watchlistId))
-        .setFlags(getFlags(options))
-        .setGeneratedAt(toTimestampOrDefault(filtered, Timestamp.getDefaultInstance()))
-        .setId(makeId(alertRecord.getSystemId(), watchlistId, discriminator))
-        .setSecurityGroup(alertRecord.getSystemId().substring(0, 2));
-
-    if (contains(options, FOR_LEARNING)) {
-      addAllDecisions(alertRecordComposite.getDecisions(), builder);
-    } else
-      lastDecision.ifPresent(builder::addDecisions);
-
-    if (suspects.isEmpty() || gnsParty.isEmpty()) {
-      log.debug("No suspects found or invalid record in alert: {}", alertRecord.getSystemId());
-      markAlertAsDamaged(builder);
-    }
-
-    return builder.build();
-  }
-
-  private void addAllDecisions(List<DecisionRecord> decisionRecords, Builder builder) {
-    builder.addAllDecisions(decisionRecords.stream()
-        .map(DecisionRecord::toDecision)
-        .collect(Collectors.toList()));
-  }
 
   private static boolean atLeastOneSuspectHasNeoFlag(Collection<Suspect> suspects) {
     return suspects.stream().anyMatch(Suspect::hasNeoFlag);
   }
 
   private static Predicate<Alert> shouldAlertBeProcessed(Option[] options) {
-    return a -> !contains(options, ONLY_UNSOLVED) || hasAnyNewMatches(a);
+    return a -> !ArrayUtils.contains(options, ONLY_UNSOLVED) || hasAnyNewMatches(a);
   }
 
   private static boolean hasAnyNewMatches(Alert alert) {
-    return !hasOnlySolvedMatches(alert.getMatchesList());
+    return !hasOnlySolvedMatches(alert.matches());
   }
 
   private static boolean hasOnlySolvedMatches(List<Match> matches) {
     return matches.stream()
-        .map(MatchWrapper::new)
-        .noneMatch(MatchWrapper::isNew);
+        .noneMatch(Match::isNew);
   }
 
-  private static void markAlertAsDamaged(Builder builder) {
-    builder.setState(State.STATE_DAMAGED);
-    builder.setFlags(Flags.FLAG_NONE_VALUE);
+  private static void markAlertAsDamaged(Alert.AlertBuilder builder) {
+    builder.state(State.STATE_DAMAGED);
+    builder.flags(Flags.FLAG_NONE_VALUE);
   }
 
-  private static Builder initializeBuilder() {
-    return Alert.newBuilder()
-        .setReceivedAt(toTimestamp(Instant.now()))
-        .setState(State.STATE_CORRECT);
-  }
-
-  private static int getFlags(Option... options) {
-    int flags = Flags.FLAG_NONE_VALUE;
-
-    if (contains(options, FOR_RECOMMENDATION))
-      flags |= Flags.FLAG_RECOMMEND_VALUE | Flags.FLAG_PROCESS_VALUE;
-
-    if (contains(options, FOR_LEARNING))
-      flags |= Flags.FLAG_LEARN_VALUE;
-
-    if (contains(options, ATTACH_ALERT))
-      flags |= Flags.FLAG_ATTACH_VALUE;
-
-    return flags;
+  private static AlertBuilder initializeBuilder() {
+    return Alert.builder()
+        .receivedAt(Instant.now())
+        .state(Alert.State.STATE_CORRECT);
   }
 
   private static AlertContext buildAlertContext(
@@ -199,7 +96,7 @@ public class AlertMapper {
     return suspects.iterator().next().getOfacId();
   }
 
-  private static Party makeAlertedParty(AlertRecord alertRecord, GnsParty gnsParty) {
+  private static AlertedParty makeAlertedParty(AlertRecord alertRecord, GnsParty gnsParty) {
     return new AlertedPartyCreator().makeAlertedParty(alertRecord, gnsParty);
   }
 
@@ -210,25 +107,15 @@ public class AlertMapper {
     return composite.getLastResetDecisionDate().orElse(filtered);
   }
 
-  @Nonnull
-  private Collection<Suspect> getSuspects(AlertRecordComposite composite) {
-    return suspectsCollector.collect(composite.getHitsDetails(), composite.getCbsHitDetails());
-  }
-
-  private static Any createDetails(AlertRecord alertRecord, String watchlistId) {
-    ScbAlertDetails.Builder detailsBuilder = ScbAlertDetails
-        .newBuilder()
-        .setBatchId(nullToEmpty(alertRecord.getBatchId()))
-        .setUnit(nullToEmpty(alertRecord.getUnit()))
-        .setAccount(nullToEmpty(alertRecord.getDbAccount()))
-        .setSystemId(alertRecord.getSystemId())
-        .setWatchlistId(watchlistId);
-
-    return AnyUtils.pack(detailsBuilder.build());
-  }
-
-  private List<Match> collectMatches(Collection<Suspect> suspects, AlertContext alertContext) {
-    return matchCollector.collectMatches(suspects, alertContext);
+  private static AlertDetails createDetails(AlertRecord alertRecord, String watchlistId) {
+    return AlertDetails
+        .builder()
+        .batchId(nullToEmpty(alertRecord.getBatchId()))
+        .unit(nullToEmpty(alertRecord.getUnit()))
+        .account(nullToEmpty(alertRecord.getDbAccount()))
+        .systemId(alertRecord.getSystemId())
+        .watchlistId(watchlistId)
+        .build();
   }
 
   private static ObjectId makeId(
@@ -236,10 +123,10 @@ public class AlertMapper {
       @Nullable String watchlistId,
       @Nullable Instant lastResetDecisionDate) {
     return ObjectId
-        .newBuilder()
-        .setId(Uuids.random())
-        .setSourceId(makeSourceId(systemId, watchlistId))
-        .setDiscriminator(String.valueOf(lastResetDecisionDate))
+        .builder()
+        .id(UUID.randomUUID())
+        .sourceId(makeSourceId(systemId, watchlistId))
+        .discriminator(String.valueOf(lastResetDecisionDate))
         .build();
   }
 
@@ -255,6 +142,111 @@ public class AlertMapper {
         alertRow.getCharSep(),
         alertRow.getFmtName(),
         alertRow.getRecord());
+  }
+
+  private static int getFlags(Option... options) {
+    int flags = Flag.NONE.getValue();
+
+    if (ArrayUtils.contains(options, FOR_RECOMMENDATION))
+      flags |= Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue();
+
+    if (ArrayUtils.contains(options, FOR_LEARNING))
+      flags |= Flag.LEARN.getValue();
+
+    if (ArrayUtils.contains(options, ATTACH_ALERT))
+      flags |= Flag.ATTACH.getValue();
+
+    return flags;
+  }
+
+  public List<Alert> fromAlertRecordComposite(
+      @NonNull AlertRecordComposite alertRecordComposite, Option... options) {
+    return ArrayUtils.contains(options, WATCHLIST_LEVEL) ?
+           mapAsWatchlistLevel(alertRecordComposite, options) :
+           mapAsAlertLevel(alertRecordComposite, options);
+  }
+
+  private List<Alert> mapAsWatchlistLevel(
+      AlertRecordComposite alertRecordComposite, Option[] options) {
+    var suspects = getSuspects(alertRecordComposite);
+
+    if (ArrayUtils.contains(options, ONLY_UNSOLVED) && atLeastOneSuspectHasNeoFlag(suspects))
+      suspects.removeIf(not(Suspect::hasNeoFlag));
+
+    var alerts = suspects.stream()
+        .map(s -> doMap(singletonList(s), alertRecordComposite, options))
+        .filter(shouldAlertBeProcessed(options))
+        .collect(Collectors.toList());
+
+    if (alerts.isEmpty())
+      log.warn(NO_NEW_MATCHES_WARNING, alertRecordComposite.getSystemId());
+
+    return alerts;
+  }
+
+  private List<Alert> mapAsAlertLevel(AlertRecordComposite alertRecordComposite, Option[] options) {
+    var suspects = getSuspects(alertRecordComposite);
+    var alert = doMap(suspects, alertRecordComposite, options);
+
+    if (ArrayUtils.contains(options, ONLY_UNSOLVED) && hasOnlySolvedMatches(alert.matches())) {
+      log.warn(NO_NEW_MATCHES_WARNING, alert.id().sourceId());
+      return emptyList();
+    }
+    return singletonList(alert);
+  }
+
+  private Alert doMap(
+      Collection<Suspect> suspects,
+      AlertRecordComposite alertRecordComposite,
+      Option... options) {
+
+    AlertRecord alertRecord = alertRecordComposite.getAlert();
+    Optional<Decision> lastDecision = alertRecordComposite.getLastDecision();
+    Instant filtered = dateConverter.convert(alertRecord.getFilteredString()).orElse(null);
+    GnsParty gnsParty = makeGnsParty(alertRecord);
+    Instant discriminator = getDiscriminator(alertRecordComposite, filtered);
+    AlertContext alertContext =
+        buildAlertContext(alertRecord, gnsParty, lastDecision.isPresent());
+    String watchlistId =
+        ArrayUtils.contains(options, WATCHLIST_LEVEL) ? getWatchlistId(suspects) : "";
+    List<Match> matches = collectMatches(suspects, alertContext);
+
+    Alert.AlertBuilder builder = initializeBuilder()
+        .matches(matches)
+        .alertedParty(makeAlertedParty(alertRecord, gnsParty))
+        .decisionGroup(nullToEmpty(alertRecord.getUnit()))
+        .details(createDetails(alertRecord, watchlistId))
+        .flags(getFlags(options))
+        .generatedAt(filtered)
+        .id(makeId(alertRecord.getSystemId(), watchlistId, discriminator))
+        .securityGroup(alertRecord.getSystemId().substring(0, 2));
+
+    if (ArrayUtils.contains(options, FOR_LEARNING)) {
+      addAllDecisions(alertRecordComposite.getDecisions(), builder);
+    } else
+      lastDecision.ifPresent(decision -> builder.decisions(Collections.singletonList(decision)));
+
+    if (suspects.isEmpty() || gnsParty.isEmpty()) {
+      log.debug("No suspects found or invalid record in alert: {}", alertRecord.getSystemId());
+      markAlertAsDamaged(builder);
+    }
+
+    return builder.build();
+  }
+
+  private void addAllDecisions(List<DecisionRecord> decisionRecords, Alert.AlertBuilder builder) {
+    builder.decisions(decisionRecords.stream()
+        .map(DecisionRecord::toDecision)
+        .collect(Collectors.toList()));
+  }
+
+  @Nonnull
+  private Collection<Suspect> getSuspects(AlertRecordComposite composite) {
+    return suspectsCollector.collect(composite.getHitsDetails(), composite.getCbsHitDetails());
+  }
+
+  private List<Match> collectMatches(Collection<Suspect> suspects, AlertContext alertContext) {
+    return matchCollector.collectMatches(suspects, alertContext);
   }
 
   public enum Option {

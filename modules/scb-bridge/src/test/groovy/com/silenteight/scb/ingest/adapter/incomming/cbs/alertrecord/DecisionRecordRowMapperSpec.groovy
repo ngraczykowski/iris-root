@@ -1,12 +1,13 @@
 package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord
 
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.DateConverter
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision.AnalystSolution
 
 import spock.lang.Specification
 
 import java.sql.ResultSet
 
-import static com.silenteight.proto.serp.v1.alert.AnalystSolution.ANALYST_FALSE_POSITIVE
 import static java.time.Instant.ofEpochMilli
 import static java.util.Optional.of
 
@@ -32,7 +33,7 @@ class DecisionRecordRowMapperSpec extends Specification {
     1 * resultSet.getInt('type') >> 1
 
     1 * dateConverter.convert('2019/01/07 09:16:28') >> of(ofEpochMilli(2000))
-    1 * gnsSolutionMapper.mapSolution(1) >> ANALYST_FALSE_POSITIVE
+    1 * gnsSolutionMapper.mapSolution(1) >> AnalystSolution.ANALYST_FALSE_POSITIVE
 
     result.operator == 'operator'
     result.comments == 'comment'
@@ -40,6 +41,6 @@ class DecisionRecordRowMapperSpec extends Specification {
     result.stateName == 'FALSE'
     result.type == 1
     result.decisionDate.epochSecond == 2
-    result.solution == ANALYST_FALSE_POSITIVE
+    result.solution == AnalystSolution.ANALYST_FALSE_POSITIVE
   }
 }

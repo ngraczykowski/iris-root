@@ -36,3 +36,6 @@ out/
 build/
 .gradle/
 !gradle/wrapper/gradle-wrapper.jar
+
+### jenv ###
+.java-version

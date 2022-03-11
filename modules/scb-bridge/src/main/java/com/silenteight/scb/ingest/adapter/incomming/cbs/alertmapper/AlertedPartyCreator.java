@@ -2,17 +2,14 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper;
 
 import lombok.NonNull;
 
-import com.silenteight.proto.serp.scb.v1.ScbAlertedPartyDetails;
-import com.silenteight.proto.serp.v1.alert.Party;
-import com.silenteight.proto.serp.v1.alert.Party.Source;
-import com.silenteight.proto.serp.v1.common.ObjectId;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord;
 import com.silenteight.scb.ingest.adapter.incomming.common.gender.GenderDetector;
 import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.GnsParty;
 import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.SupplementaryInformationHelper;
-import com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertedParty;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertedParty.AlertedPartyBuilder;
 import com.silenteight.scb.ingest.adapter.incomming.common.validation.ChineseCharactersValidator;
-import com.silenteight.sep.base.common.protocol.AnyUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,13 +19,13 @@ import java.util.Set;
 import static com.google.common.base.Strings.nullToEmpty;
 import static com.silenteight.scb.ingest.adapter.incomming.common.indicator.RecordSignCreator.fromRecord;
 import static com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils.makeAlertedPartyId;
+import static com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils.mapString;
 
 class AlertedPartyCreator {
 
-  Party makeAlertedParty(
+  AlertedParty makeAlertedParty(
       @NonNull AlertRecord alertRecord,
       @NonNull GnsParty party) {
-
     List<String> allNames = new ArrayList<>();
     party.getName().ifPresent(allNames::add);
     allNames.addAll(party.getAlternateNames());
@@ -36,39 +33,32 @@ class AlertedPartyCreator {
     String genderFromName =
         GenderDetector.determineApGenderFromName(alertRecord.getTypeOfRec(), allNames);
 
-    ScbAlertedPartyDetails.Builder builder = ScbAlertedPartyDetails
-        .newBuilder()
-        .setApId(alertRecord.getSystemId())
-        .setApGenderFromName(genderFromName)
-        .addAllApDocNationalIds(party.getNationalIds())
-        .addAllApNameSynonyms(party.getAlternateNames())
-        .addAllApOriginalCnNames(getChineseNames(party));
+    AlertedPartyBuilder builder = AlertedParty.builder()
+        .id(makePartyId(alertRecord))
+        .apId(alertRecord.getSystemId())
+        .apGenderFromName(genderFromName)
+        .apDocNationalIds(party.getNationalIds())
+        .apNameSynonyms(party.getAlternateNames())
+        .apOriginalCnNames(getChineseNames(party));
 
-    party.getName().ifPresent(builder::setApName);
-
-    AlertParserUtils.mapString(party.getSourceSystemIdentifier(), builder::setApSrcSysId);
-
+    party.getName().ifPresent(builder::apName);
+    mapString(party.getSourceSystemIdentifier(), builder::apSrcSysId);
     party
-        .mapString("nationalityAll", builder::setApNationality)
-        .mapString("registOrResidenAddCntry", builder::setApResidence)
-        .mapString("customerStatus", builder::setApCustStatus)
-        .mapString("gender", builder::setApGender)
-        .mapString("bookingLocation", builder::setApBookingLocation)
-        .mapCollection("nationalities", builder::addAllApNationalitySynonyms)
-        .mapCollection("residencies", builder::addAllApResidenceSynonyms)
-        .mapCollection("residentialAddresses", builder::addAllApResidentialAddresses)
-        .mapCollection("passportNumbers", builder::addAllApDocPassports)
-        .mapCollection("identifications", builder::addAllApDocOthers)
-        .mapString("clientType", builder::setCustType)
-        .mapString("dateOfBirthOrRegis", builder::setApDobDoi)
-        .mapString("bookingLocation", builder::setApDbCountry);
+        .mapString("nationalityAll", builder::apNationality)
+        .mapString("registOrResidenAddCntry", builder::apResidence)
+        .mapString("customerStatus", builder::apCustStatus)
+        .mapString("gender", builder::apGender)
+        .mapString("bookingLocation", builder::apBookingLocation)
+        .mapCollection("nationalities", builder::apNationalitySynonyms)
+        .mapCollection("residencies", builder::apResidenceSynonyms)
+        .mapCollection("residentialAddresses", builder::apResidentialAddresses)
+        .mapCollection("passportNumbers", builder::apDocPassports)
+        .mapCollection("identifications", builder::apDocOthers)
+        .mapString("clientType", builder::custType)
+        .mapString("dateOfBirthOrRegis", builder::apDobDoi)
+        .mapString("bookingLocation", builder::apDbCountry);
 
-    return Party
-        .newBuilder()
-        .setId(makePartyId(alertRecord))
-        .setSource(Source.SOURCE_CONFIDENTIAL)
-        .setDetails(AnyUtils.pack(builder.build()))
-        .build();
+    return builder.build();
   }
 
   private static ObjectId makePartyId(AlertRecord alertRecord) {

@@ -1,7 +1,5 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.gender
 
-import com.silenteight.scb.ingest.adapter.incomming.common.gender.TitleGenderDetector
-
 import spock.lang.Specification
 import spock.lang.Unroll
 

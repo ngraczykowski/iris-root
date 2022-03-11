@@ -1,6 +1,10 @@
 server:
   port: 24220
 grpc:
+  client:
+    registration:
+      address: static://localhost:24805
+      negotiation-type: PLAINTEXT
   server:
     port: 24221
 
@@ -129,7 +133,7 @@ serp:
       gns:
         solution:
           states:
-            ANALYST_NO_SOLUTION: [0]
+            ANALYST_NO_SOLUTION: [ 0 ]
       solving:
         alert:
           cronExpression: '0/6 * * * * ?'

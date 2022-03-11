@@ -1,6 +1,6 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.batch
 
-import com.silenteight.proto.serp.scb.v1.ScbAlertDetails
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails
 
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -9,7 +9,7 @@ class AlertCompositeToAckAlertMapperSpec extends Specification {
 
   def 'should do not allow to create ack alert from invalid scbAlertDetails'() {
     given:
-    def scbAlertDetails = ScbAlertDetails.newBuilder().build()
+    def scbAlertDetails = AlertDetails.builder().build()
 
     when:
     AlertCompositeToAckAlertMapper.toAckAlert(scbAlertDetails)
@@ -21,11 +21,11 @@ class AlertCompositeToAckAlertMapperSpec extends Specification {
   @Unroll
   def "should map alert composite to ack alert when watchlistId = #watchlistId"() {
     given:
-    def scbAlertDetails = ScbAlertDetails
-        .newBuilder()
-        .setBatchId('batch-id')
-        .setSystemId('system-id')
-        .setWatchlistId(watchlistId)
+    def scbAlertDetails = AlertDetails
+        .builder()
+        .batchId('batch-id')
+        .systemId('system-id')
+        .watchlistId(watchlistId)
         .build()
 
     when:

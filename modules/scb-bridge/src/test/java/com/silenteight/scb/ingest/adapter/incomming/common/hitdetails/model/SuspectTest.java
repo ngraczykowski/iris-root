@@ -1,8 +1,7 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model;
 
-import com.silenteight.proto.serp.scb.v1.ScbWatchlistPartyDetails;
-import com.silenteight.proto.serp.v1.alert.Party;
 import com.silenteight.scb.ingest.adapter.incomming.common.gender.GenderDetector;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.MatchedParty;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +9,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import static com.google.common.collect.ImmutableSet.of;
-import static com.silenteight.sep.base.common.protocol.AnyUtils.maybeUnpack;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static org.assertj.core.api.Assertions.*;
@@ -210,12 +208,10 @@ class SuspectTest {
     when(genderDetector.determineWlGenderFromName(anyString(), anyList())).thenReturn("");
 
     // when
-    Party party = suspect.makeWatchlistParty("typeOfRec", genderDetector);
-    ScbWatchlistPartyDetails partyDetails =
-        maybeUnpack(party.getDetails(), ScbWatchlistPartyDetails.class).get();
+    MatchedParty party = suspect.makeWatchlistParty("typeOfRec", genderDetector);
 
     // then
-    assertThat(partyDetails.getWlCountry()).isEqualTo("country");
-    assertThat(partyDetails.getWlDesignation()).isEqualTo("designation");
+    assertThat(party.wlCountry()).isEqualTo("country");
+    assertThat(party.wlDesignation()).isEqualTo("designation");
   }
 }

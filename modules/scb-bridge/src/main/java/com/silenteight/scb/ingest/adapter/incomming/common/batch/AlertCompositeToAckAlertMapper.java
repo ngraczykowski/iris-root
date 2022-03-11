@@ -4,20 +4,20 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import com.silenteight.proto.serp.scb.v1.ScbAlertDetails;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckAlert;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class AlertCompositeToAckAlertMapper {
 
-  static CbsAckAlert toAckAlert(@NonNull ScbAlertDetails scbAlertDetails) {
+  static CbsAckAlert toAckAlert(@NonNull AlertDetails alertDetails) {
 
     return new CbsAckAlert(
-        scbAlertDetails.getSystemId(),
-        scbAlertDetails.getBatchId(),
-        isWatchlistLevel(scbAlertDetails.getWatchlistId()));
+        alertDetails.systemId(),
+        alertDetails.batchId(),
+        isWatchlistLevel(alertDetails.watchlistId()));
   }
 
   private static boolean isWatchlistLevel(String watchlistId) {

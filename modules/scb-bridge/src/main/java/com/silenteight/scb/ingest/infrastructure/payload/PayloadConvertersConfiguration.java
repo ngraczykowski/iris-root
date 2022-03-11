@@ -1,6 +1,5 @@
 package com.silenteight.scb.ingest.infrastructure.payload;
 
-
 import com.silenteight.scb.ingest.domain.payload.PayloadConverter;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

@@ -1,17 +1,17 @@
 package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord
 
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision.AnalystSolution
+
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import static com.silenteight.proto.serp.v1.alert.AnalystSolution.*
 
 class GnsSolutionMapperSpec extends Specification {
 
   def underTest = new GnsSolutionMapper(
       [
-          (ANALYST_NO_SOLUTION)   : [0, 12],
-          (ANALYST_FALSE_POSITIVE): [1],
-          (ANALYST_TRUE_POSITIVE) : [223]
+          (AnalystSolution.ANALYST_NO_SOLUTION)   : [0, 12],
+          (AnalystSolution.ANALYST_FALSE_POSITIVE): [1],
+          (AnalystSolution.ANALYST_TRUE_POSITIVE) : [223]
       ])
 
   @Unroll
@@ -24,10 +24,10 @@ class GnsSolutionMapperSpec extends Specification {
 
     where:
     type | expectedResult
-    0    | ANALYST_NO_SOLUTION
-    1    | ANALYST_FALSE_POSITIVE
-    12   | ANALYST_NO_SOLUTION
-    223  | ANALYST_TRUE_POSITIVE
-    404  | ANALYST_OTHER
+    0    | AnalystSolution.ANALYST_NO_SOLUTION
+    1    | AnalystSolution.ANALYST_FALSE_POSITIVE
+    12   | AnalystSolution.ANALYST_NO_SOLUTION
+    223  | AnalystSolution.ANALYST_TRUE_POSITIVE
+    404  | AnalystSolution.ANALYST_OTHER
   }
 }

@@ -1,12 +1,12 @@
 package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord;
 
-import com.silenteight.proto.serp.v1.alert.AnalystSolution;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision.AnalystSolution;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.proto.serp.v1.alert.AnalystSolution.ANALYST_OTHER;
+import static com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision.AnalystSolution.ANALYST_OTHER;
 
 public class GnsSolutionMapper {
 

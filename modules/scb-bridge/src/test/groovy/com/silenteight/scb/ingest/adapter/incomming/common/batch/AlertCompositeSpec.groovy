@@ -1,8 +1,8 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.batch
 
-import com.silenteight.proto.serp.v1.alert.Decision
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord
 import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.GnsParty
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision
 
 import spock.lang.Specification
 
@@ -63,7 +63,7 @@ class AlertCompositeSpec extends Specification {
   def createDecisionCollection() {
     new DecisionsCollection(
         [
-            Decision.newBuilder().build()
+            Decision.builder().build()
         ])
   }
 }

@@ -1,7 +1,5 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm
 
-import com.silenteight.proto.serp.v1.alert.Alert
-import com.silenteight.proto.serp.v1.alert.Decision
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.AlertComposite
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.SuspectDataFetcher
@@ -9,6 +7,10 @@ import com.silenteight.scb.ingest.adapter.incomming.common.batch.SuspectsCollect
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm.EcmRecordCompositeFetcher.EcmFetcherConfiguration
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model.Suspect
 import com.silenteight.scb.ingest.adapter.incomming.common.metrics.AlertsFetchedEvent
+import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision.AnalystSolution
 
 import io.micrometer.core.instrument.ImmutableTag
 import io.micrometer.core.instrument.Tag
@@ -18,8 +20,6 @@ import spock.lang.Specification
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
-
-import static com.silenteight.proto.serp.v1.alert.AnalystSolution.*
 
 class EcmRecordCompositeFetcherSpec extends Specification {
 
@@ -88,9 +88,10 @@ class EcmRecordCompositeFetcherSpec extends Specification {
 
   class Fixtures {
 
-    Decision decision1 = Decision.newBuilder().setSolution(ANALYST_TRUE_POSITIVE).build()
-    Decision decision2 = Decision.newBuilder().setSolution(ANALYST_FALSE_POSITIVE).build()
-    Decision decision3 = Decision.newBuilder().setSolution(ANALYST_POTENTIAL_TRUE_POSITIVE).build()
+    Decision decision1 = Decision.builder().solution(AnalystSolution.ANALYST_TRUE_POSITIVE).build()
+    Decision decision2 = Decision.builder().solution(AnalystSolution.ANALYST_FALSE_POSITIVE).build()
+    Decision decision3 = Decision.builder().solution(
+        AnalystSolution.ANALYST_POTENTIAL_TRUE_POSITIVE).build()
 
     ExternalId externalId1 = new ExternalId('systemId1', 'watchlistId1')
     ExternalId externalId2 = new ExternalId('systemId1', 'watchlistId2')
@@ -100,7 +101,9 @@ class EcmRecordCompositeFetcherSpec extends Specification {
     Suspect suspect2 = new Suspect(ofacId: 'watchlistId2')
     Suspect suspect3 = new Suspect(ofacId: 'watchlistId3')
 
-    Alert alert = Alert.newBuilder().build()
+    ObjectId objectId = ObjectId.builder().build();
+
+    Alert alert = Alert.builder().id(objectId).build()
     Tag tag = new ImmutableTag('', '')
     AlertComposite alertComposite = new AlertComposite(alert, 0, [tag])
   }

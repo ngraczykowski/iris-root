@@ -2,6 +2,7 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord;
 
 import lombok.RequiredArgsConstructor;
 
+import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.QueryStatementHelper;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.CbsHitDetails;
 import com.silenteight.scb.ingest.adapter.incomming.common.validation.OracleRelationName;
 
@@ -17,7 +18,6 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.validation.Valid;
 
-import static com.silenteight.scb.ingest.adapter.incomming.cbs.batch.QueryStatementHelper.prepareQuery;
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 
@@ -29,11 +29,8 @@ class JdbcCbsHitDetailsHelperQuery {
       "SELECT SYSTEM_ID, BATCH_ID, SEQ_NO, HIT_NEO_FLAG"
           + " FROM :dbRelationName"
           + " WHERE SYSTEM_ID IN (%s)";
-
-  private final JdbcCbsHitDetailsRowMapper mapper = new JdbcCbsHitDetailsRowMapper();
-
   private static final int HITS_PER_RECORD = 1_000;
-
+  private final JdbcCbsHitDetailsRowMapper mapper = new JdbcCbsHitDetailsRowMapper();
   private final JdbcTemplate jdbcTemplate;
 
   List<CbsHitDetails> execute(
@@ -52,7 +49,8 @@ class JdbcCbsHitDetailsHelperQuery {
   @Nonnull
   private List<CbsHitDetails> getCbsHitDetails(
       String dbRelationName, Collection<String> systemIds) {
-    String query = prepareQuery(CBS_HITS_DETAILS_QUERY, dbRelationName, systemIds);
+    String query =
+        QueryStatementHelper.prepareQuery(CBS_HITS_DETAILS_QUERY, dbRelationName, systemIds);
     jdbcTemplate.setFetchSize(HITS_PER_RECORD);
     return jdbcTemplate.query(query, getArgumentSetter(systemIds), mapper);
   }

@@ -1,7 +1,8 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm;
 
-import com.silenteight.proto.serp.v1.alert.Decision;
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.DateConverter;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision.AnalystSolution;
 import com.silenteight.scb.ingest.adapter.incomming.common.quartz.EcmAnalystDecision;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -13,22 +14,18 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.annotation.Nonnull;
 
-import static com.silenteight.proto.serp.v1.alert.AnalystSolution.ANALYST_FALSE_POSITIVE;
-import static com.silenteight.proto.serp.v1.alert.AnalystSolution.ANALYST_TRUE_POSITIVE;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class EcmDecisionRowMapperTest {
 
-  private EcmDecisionRowMapper ecmDecisionRowMapper;
-
   private static final String ACTION_DATE = "ACTION_DATE";
   private static final String ANALYST_DECISION = "ANALYST_DECISION";
   private static final String ANALYST_COMMENTS = "ANALYST_COMMENTS";
-
   private static final String ACTION_DATE_VALUE = "2019/01/28 17:20:44";
   private static final String ANALYST_COMMENTS_VALUE =
       "New Alert Correlation member linked to case.";
+  private EcmDecisionRowMapper ecmDecisionRowMapper;
 
   @BeforeEach
   void setUp() {
@@ -41,11 +38,11 @@ class EcmDecisionRowMapperTest {
   private List<EcmAnalystDecision> prepareAndGetEcmAnalystSolutions() {
     var ecmAnalystSolution1 = new EcmAnalystDecision();
     ecmAnalystSolution1.setText("Risk Relevant");
-    ecmAnalystSolution1.setSolution(ANALYST_TRUE_POSITIVE);
+    ecmAnalystSolution1.setSolution(AnalystSolution.ANALYST_TRUE_POSITIVE);
 
     var ecmAnalystSolution2 = new EcmAnalystDecision();
     ecmAnalystSolution2.setText("Risk Irrelevant - Activity in line with Business");
-    ecmAnalystSolution2.setSolution(ANALYST_FALSE_POSITIVE);
+    ecmAnalystSolution2.setSolution(AnalystSolution.ANALYST_FALSE_POSITIVE);
 
     return List.of(ecmAnalystSolution1, ecmAnalystSolution2);
   }
@@ -64,8 +61,8 @@ class EcmDecisionRowMapperTest {
     final Decision decision = ecmDecisionRowMapper.mapRow(resultSet);
 
     //then
-    assertThat(decision.getComment()).isEqualTo(ANALYST_COMMENTS_VALUE);
-    assertThat(decision.getSolution().getNumber()).isEqualTo(number);
+    assertThat(decision.comment()).isEqualTo(ANALYST_COMMENTS_VALUE);
+    assertThat(decision.solution().getValue()).isEqualTo(number);
   }
 
   @Nonnull

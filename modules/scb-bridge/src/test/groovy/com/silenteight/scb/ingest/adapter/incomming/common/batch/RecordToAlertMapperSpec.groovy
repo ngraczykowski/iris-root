@@ -1,22 +1,16 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.batch
 
-import com.silenteight.proto.serp.scb.v1.ScbAlertDetails
-import com.silenteight.proto.serp.scb.v1.ScbAlertedPartyDetails
-import com.silenteight.proto.serp.v1.alert.Alert
-import com.silenteight.proto.serp.v1.alert.Alert.Flags
-import com.silenteight.proto.serp.v1.alert.Alert.State
-import com.silenteight.proto.serp.v1.alert.AnalystSolution
-import com.silenteight.proto.serp.v1.alert.Decision
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord
 import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.GnsParty
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model.Suspect
-import com.silenteight.scb.ingest.adapter.incomming.common.protocol.AlertWrapper
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.State
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision.AnalystSolution
 
 import io.micrometer.core.instrument.Tags
 import spock.lang.Shared
 import spock.lang.Specification
-
-import static com.silenteight.sep.base.common.protocol.AnyUtils.maybeUnpack
 
 class RecordToAlertMapperSpec extends Specification {
 
@@ -57,7 +51,7 @@ class RecordToAlertMapperSpec extends Specification {
     def result = objectUnderTest.toAlert(suspectCollection)
 
     then:
-    getScbAlertDetails(result).watchlistId == expectedResult
+    result.details.watchlistId == expectedResult
 
     where:
     watchlistLevel | suspects                   | expectedResult
@@ -78,16 +72,15 @@ class RecordToAlertMapperSpec extends Specification {
     def result = objectUnderTest.toAlert(suspectCollection)
 
     then:
-    def details = result.getAlertedParty().getDetails()
-    def partyDetails = maybeUnpack(details, ScbAlertedPartyDetails.class).get()
+    def details = result.alertedParty
 
     and:
-    partyDetails.apBookingLocation == 'bl'
+    details.apBookingLocation == 'bl'
   }
 
   def 'should build suspect context'() {
     given:
-    def decisions = new DecisionsCollection([new Decision()])
+    def decisions = new DecisionsCollection([Decision.builder().build()])
     def alertData = createAlertRecordBuilder()
         .lastDecBatchId('lastBatchId')
         .typeOfRec('I')
@@ -144,8 +137,8 @@ class RecordToAlertMapperSpec extends Specification {
     result.state == State.STATE_DAMAGED
     result.decisionGroup == 'EN_BTCH_ALLOW'
     result.securityGroup == 'EN'
-    result.decisionsCount == 0
-    result.flags == Flags.FLAG_NONE_VALUE
+    result.decisions.isEmpty()
+    result.flags == Alert.Flag.NONE.value
     result.generatedAt
     result.receivedAt
     result.alertedParty
@@ -205,11 +198,6 @@ class RecordToAlertMapperSpec extends Specification {
     result.matchesCount > 0
   }
 
-  def getScbAlertDetails(Alert alert) {
-    AlertWrapper alertWrapper = new AlertWrapper(alert)
-    alertWrapper.unpackDetails(ScbAlertDetails.class).get()
-  }
-
   def createSuspectCollection(suspects) {
     new SuspectsCollection(suspects)
   }
@@ -219,9 +207,9 @@ class RecordToAlertMapperSpec extends Specification {
   }
 
   def createDecision(String authorId) {
-    Decision.newBuilder()
-        .setAuthorId(authorId)
-        .setSolution(AnalystSolution.ANALYST_FALSE_POSITIVE)
+    Decision.builder()
+        .authorId(authorId)
+        .solution(AnalystSolution.ANALYST_FALSE_POSITIVE)
         .build()
   }
 

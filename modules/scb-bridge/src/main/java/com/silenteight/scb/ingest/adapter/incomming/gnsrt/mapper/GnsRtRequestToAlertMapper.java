@@ -2,26 +2,21 @@ package com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.proto.serp.scb.v1.ScbMatchDetails;
-import com.silenteight.proto.serp.scb.v1.ScbWatchlistPartyDetails;
-import com.silenteight.proto.serp.scb.v1.WatchlistName;
-import com.silenteight.proto.serp.v1.alert.Alert;
-import com.silenteight.proto.serp.v1.alert.Alert.Flags;
-import com.silenteight.proto.serp.v1.alert.Match;
-import com.silenteight.proto.serp.v1.alert.Party;
-import com.silenteight.proto.serp.v1.alert.Party.Source;
-import com.silenteight.protocol.utils.Uuids;
 import com.silenteight.scb.ingest.adapter.incomming.common.WlName;
 import com.silenteight.scb.ingest.adapter.incomming.common.gender.GenderDetector;
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.HitDetailsParser;
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model.Suspect;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.MatchDetails;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.MatchedParty;
 import com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.GnsRtAlertStatus;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.*;
-import com.silenteight.sep.base.common.protocol.AnyUtils;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
@@ -75,72 +70,63 @@ public class GnsRtRequestToAlertMapper {
   private List<Match> makeMatches(Collection<Suspect> suspects, ScreenableData screenableData) {
     AtomicInteger counter = new AtomicInteger(0);
     return suspects.stream().map(s -> {
-      Party party = makeWatchlistParty(s, screenableData.getClientType());
-      ScbMatchDetails details = s.makeMatchDetails(
+      MatchedParty party = makeWatchlistParty(s, screenableData.getClientType());
+      MatchDetails details = s.makeMatchDetails(
           s.getMergedMatchingTexts(),
           screenableData.getFullLegalName(),
           GnsRtFieldsMapper.getAlternateNames(screenableData));
 
       return Match
-          .newBuilder()
-          .setId(party.getId().toBuilder().setId(Uuids.random()))
-          .setMatchedParty(party)
-          .setFlags(Flags.FLAG_NONE_VALUE)
-          .setIndex(counter.getAndIncrement())
-          .setDetails(AnyUtils.pack(details))
+          .builder()
+          .id(party.id().toBuilder().id(UUID.randomUUID()).build())
+          .matchedParty(party)
+          .index(counter.getAndIncrement())
+          .details(details)
           .build();
     }).collect(toList());
   }
 
-  private Party makeWatchlistParty(Suspect suspect, String typeOfRec) {
+  private MatchedParty makeWatchlistParty(Suspect suspect, String typeOfRec) {
     List<String> wlNationalIds = AlertParserUtils.expand(
         singletonList(suspect.getNationalId()), suspect.getSearchCodes().asList());
     List<String> names = AlertParserUtils.expand(
         singletonList(suspect.getName()), suspect.getNameSynonyms().asListOfNames());
 
-    ScbWatchlistPartyDetails.Builder detailsBuilder = ScbWatchlistPartyDetails
-        .newBuilder()
-        .setWlGenderFromName(genderDetector.determineWlGenderFromName(typeOfRec, names))
-        .addAllWlNameSynonyms(suspect.getNameSynonyms().asListOfNames())
-        .addAllWlHitNames(suspect.getActiveNames().stream().map(WlName::getName).collect(toList()))
-        .addAllWlNames(mapWatchlistNames(suspect.getActiveNames()))
-        .addAllWlOriginalCnNames(mapWatchlistNames(suspect.getOriginalChineseNames()))
-        .addAllWlSearchCodes(suspect.getSearchCodes().asList())
-        .addAllWlNationalIds(wlNationalIds)
-        .addAllWlBicCodes(suspect.getBicCodes().asList())
-        .addAllWlHitType(suspect.getTags());
+    MatchedParty.MatchedPartyBuilder builder = MatchedParty.builder()
+        .id(AlertParserUtils.makeWatchlistPartyId(suspect.getOfacId(), suspect.getBatchId()))
+        .wlGenderFromName(genderDetector.determineWlGenderFromName(typeOfRec, names))
+        .wlNameSynonyms(suspect.getNameSynonyms().asListOfNames())
+        .wlHitNames(suspect.getActiveNames().stream().map(WlName::getName).collect(toList()))
+        .wlNames(mapWatchlistNames(suspect.getActiveNames()))
+        .wlOriginalCnNames(mapWatchlistNames(suspect.getOriginalChineseNames()))
+        .wlSearchCodes(suspect.getSearchCodes().asList())
+        .wlNationalIds(wlNationalIds)
+        .wlBicCodes(suspect.getBicCodes().asList())
+        .wlHitType(suspect.getTags());
 
     mapString(
-        AlertParserUtils.determineApType(typeOfRec, suspect.getType()), detailsBuilder::setApType);
-    mapString(suspect.getNotes().getOrDefault("gender", EMPTY), detailsBuilder::setWlGender);
-    mapString(suspect.getOfacId(), detailsBuilder::setWlId);
-    mapString(suspect.getName(), detailsBuilder::setWlName);
-    mapString(suspect.getType(), detailsBuilder::setWlType);
-    mapString(suspect.getBirthDate(), detailsBuilder::setWlDob);
+        AlertParserUtils.determineApType(typeOfRec, suspect.getType()), builder::apType);
+    mapString(suspect.getNotes().getOrDefault("gender", EMPTY), builder::wlGender);
+    mapString(suspect.getOfacId(), builder::wlId);
+    mapString(suspect.getName(), builder::wlName);
+    mapString(suspect.getType(), builder::wlType);
+    mapString(suspect.getBirthDate(), builder::wlDob);
     mapString(
-        suspect.getNotes().getOrDefault("nationality", EMPTY), detailsBuilder::setWlNationality);
-    mapString(suspect.getCountry(), detailsBuilder::setWlResidence);
-    mapString(suspect.getNationalId(), detailsBuilder::setWlNationalId);
-    mapString(suspect.getPassport(), detailsBuilder::setWlPassport);
-    mapString(suspect.getCountry(), detailsBuilder::setWlCountry);
-    mapString(suspect.getDesignation(), detailsBuilder::setWlDesignation);
-    mapString(suspect.getNotes().getOrDefault("title", EMPTY), detailsBuilder::setWlTitle);
+        suspect.getNotes().getOrDefault("nationality", EMPTY), builder::wlNationality);
+    mapString(suspect.getCountry(), builder::wlResidence);
+    mapString(suspect.getNationalId(), builder::wlNationalId);
+    mapString(suspect.getPassport(), builder::wlPassport);
+    mapString(suspect.getCountry(), builder::wlCountry);
+    mapString(suspect.getDesignation(), builder::wlDesignation);
+    mapString(suspect.getNotes().getOrDefault("title", EMPTY), builder::wlTitle);
 
-    return Party
-        .newBuilder()
-        .setId(AlertParserUtils.makeWatchlistPartyId(suspect.getOfacId(), suspect.getBatchId()))
-        .setSource(Source.SOURCE_CONFIDENTIAL)
-        .setDetails(AnyUtils.pack(detailsBuilder.build()))
-        .build();
+    return builder.build();
   }
 
-  private static List<WatchlistName> mapWatchlistNames(List<WlName> watchlistNames) {
+  private static List<MatchedParty.WatchlistName> mapWatchlistNames(List<WlName> watchlistNames) {
     return watchlistNames
         .stream()
-        .map(name -> WatchlistName.newBuilder()
-            .setName(name.getName())
-            .setType(name.getType().name())
-            .build())
+        .map(name -> new MatchedParty.WatchlistName(name.getName(), name.getType().name()))
         .collect(Collectors.toList());
   }
 }

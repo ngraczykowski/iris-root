@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import static com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm.EcmQueryTemplates.EXTERNAL_IDS_QUERY;
-import static com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm.ExternalId.HIT_UNIQUE_ID;
 
 @Slf4j
 class ExternalIdsReaderFactory {
@@ -50,7 +49,8 @@ class ExternalIdsReaderFactory {
     public ExternalId mapRow(ResultSet rs, int rowNum) throws SQLException {
       return new ExternalId(
           rs.getString(ExternalId.SYSTEM_ID),
-          ExternalId.tryToExtractWatchlistIdFromHitUniqueId(rs.getString(HIT_UNIQUE_ID)));
+          ExternalId.tryToExtractWatchlistIdFromHitUniqueId(
+              rs.getString(ExternalId.HIT_UNIQUE_ID)));
     }
   }
 }

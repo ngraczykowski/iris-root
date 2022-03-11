@@ -2,9 +2,9 @@ package com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.serp.v1.alert.Decision;
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.AlertComposite;
 import com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncDeltaService;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -51,13 +51,6 @@ class EcmDeltaAlertCompositeFetcher {
     }
   }
 
-  private Map<ExternalId, List<Decision>> fetchDecisions(
-      List<ExternalId> externalIds) throws SQLException {
-    try (Connection connection = ecmDataSource.getConnection()) {
-      return ecmRecordDecisionsFetcher.fetchDecisions(connection, externalIds);
-    }
-  }
-
   private List<AlertComposite> fetchInTransaction(List<ExternalId> externalIds) throws
       SQLException {
     List<AlertComposite> result = new ArrayList<>();
@@ -83,8 +76,11 @@ class EcmDeltaAlertCompositeFetcher {
     return ecmRecordCompositeFetcher.fetchRecordsWithDetails(connection, decisionsMap, delta);
   }
 
-  private Map<ExternalId, Integer> getPreviousRecordDecisionCounts(List<ExternalId> externalIds) {
-    return syncDeltaService.findAllByExternalId(externalIds, deltaJobName);
+  private Map<ExternalId, List<Decision>> fetchDecisions(
+      List<ExternalId> externalIds) throws SQLException {
+    try (Connection connection = ecmDataSource.getConnection()) {
+      return ecmRecordDecisionsFetcher.fetchDecisions(connection, externalIds);
+    }
   }
 
   private List<ExternalId> determineDelta(
@@ -97,6 +93,10 @@ class EcmDeltaAlertCompositeFetcher {
         .filter(getDeltaPredicate(prevCounts))
         .map(Entry::getKey)
         .collect(toList());
+  }
+
+  private Map<ExternalId, Integer> getPreviousRecordDecisionCounts(List<ExternalId> externalIds) {
+    return syncDeltaService.findAllByExternalId(externalIds, deltaJobName);
   }
 
   @Nonnull

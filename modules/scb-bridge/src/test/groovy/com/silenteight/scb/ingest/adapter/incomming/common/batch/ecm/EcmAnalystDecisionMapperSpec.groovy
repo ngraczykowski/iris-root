@@ -1,17 +1,18 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm
 
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision.AnalystSolution
 import com.silenteight.scb.ingest.adapter.incomming.common.quartz.EcmAnalystDecision
 
 import spock.lang.Specification
 import spock.lang.Unroll
 
-import static com.silenteight.proto.serp.v1.alert.AnalystSolution.*
-
 class EcmAnalystDecisionMapperSpec extends Specification {
 
   def mappedAnalystDecisions = [
-      new EcmAnalystDecision(text: 'Risk Relevant', solution: ANALYST_TRUE_POSITIVE),
-      new EcmAnalystDecision(text: 'Risk Irrelevant', solution: ANALYST_FALSE_POSITIVE)
+      new EcmAnalystDecision(
+          text: 'Risk Relevant', solution: AnalystSolution.ANALYST_TRUE_POSITIVE),
+      new EcmAnalystDecision(
+          text: 'Risk Irrelevant', solution: AnalystSolution.ANALYST_FALSE_POSITIVE)
   ]
   def underTest = new EcmAnalystDecisionMapper(mappedAnalystDecisions)
 
@@ -24,11 +25,11 @@ class EcmAnalystDecisionMapperSpec extends Specification {
     result == expectedResult
 
     where:
-    analystDecision   | expectedResult
-    'Risk Relevant'   | ANALYST_TRUE_POSITIVE
-    'Risk Irrelevant' | ANALYST_FALSE_POSITIVE
-    null              | ANALYST_OTHER
-    ''                | ANALYST_OTHER
-    'Risk relevant'   | ANALYST_OTHER
+    analystDecision | expectedResult
+    'Risk Relevant' | AnalystSolution.ANALYST_TRUE_POSITIVE
+    'Risk Irrelevant' | AnalystSolution.ANALYST_FALSE_POSITIVE
+    null | AnalystSolution.ANALYST_OTHER
+    '' | AnalystSolution.ANALYST_OTHER
+    'Risk relevant' | AnalystSolution.ANALYST_OTHER
   }
 }

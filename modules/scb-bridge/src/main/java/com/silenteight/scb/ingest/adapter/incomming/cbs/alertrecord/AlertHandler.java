@@ -4,29 +4,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.proto.serp.scb.v1.ScbAlertIdContext;
-import com.silenteight.proto.serp.v1.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertInFlightService;
-import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing.State;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.alertunderprocessing.AlertUnderProcessing;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckAlert;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput;
-import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.alertinfo.AlertInfoService;
-import com.silenteight.sep.base.common.messaging.MessageSender;
-import com.silenteight.sep.base.common.messaging.properties.MessageIdAndPriorityProvider;
-import com.silenteight.sep.base.common.messaging.properties.MessagePropertiesProvider;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 
 import java.util.List;
-
-import static java.util.UUID.randomUUID;
 
 @RequiredArgsConstructor
 @Slf4j
 class AlertHandler {
 
-  private final AlertInfoService alertInfoService;
   private final AlertInFlightService alertInFlightService;
   private final CbsAckGateway cbsAckGateway;
-  private final MessageSender messageSender;
 
   void handleAlerts(ScbAlertIdContext context, AlertCompositeCollection alertCompositeCollection) {
     handleValidAlerts(alertCompositeCollection.getValidAlerts(), context);
@@ -49,27 +41,15 @@ class AlertHandler {
           break;
         default:
         case ERROR:
-          alertInFlightService.update(alertId, State.ERROR, "Fatal error on ACK");
+          alertInFlightService.update(
+              alertId, AlertUnderProcessing.State.ERROR, "Fatal error on ACK");
       }
     });
   }
 
   private void sendAlerts(List<Alert> alerts, int priority) {
     alerts.forEach(a -> {
-      messageSender.send(a, getMessageProvider(priority));
-      alertInfoService.sendAlertInfo(a);
-    });
-  }
 
-  private void handleInvalidAlerts(List<InvalidAlert> invalidAlerts, boolean watchlistLevel) {
-    invalidAlerts.forEach(alert -> {
-      if (alert.hasReasonCausedByFatalError()) {
-        log.warn("Fatal error occurred on alert={}, marked with ERROR state.", alert.getAlertId());
-        ackAlert(alert.getSystemId(), alert.getBatchId(), watchlistLevel);
-        alertInFlightService.update(alert.getAlertId(), State.ERROR, alert.getReasonMessage());
-      } else {
-        log.warn("Temporary problem occurred on alert={}, will retry again.", alert.getAlertId());
-      }
     });
   }
 
@@ -82,7 +62,16 @@ class AlertHandler {
             .build());
   }
 
-  private static MessagePropertiesProvider getMessageProvider(int priority) {
-    return new MessageIdAndPriorityProvider(randomUUID().toString(), priority);
+  private void handleInvalidAlerts(List<InvalidAlert> invalidAlerts, boolean watchlistLevel) {
+    invalidAlerts.forEach(alert -> {
+      if (alert.hasReasonCausedByFatalError()) {
+        log.warn("Fatal error occurred on alert={}, marked with ERROR state.", alert.getAlertId());
+        ackAlert(alert.getSystemId(), alert.getBatchId(), watchlistLevel);
+        alertInFlightService.update(
+            alert.getAlertId(), AlertUnderProcessing.State.ERROR, alert.getReasonMessage());
+      } else {
+        log.warn("Temporary problem occurred on alert={}, will retry again.", alert.getAlertId());
+      }
+    });
   }
 }

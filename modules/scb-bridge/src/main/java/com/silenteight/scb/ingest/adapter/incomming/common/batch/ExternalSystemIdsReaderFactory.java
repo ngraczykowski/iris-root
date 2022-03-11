@@ -2,6 +2,7 @@ package com.silenteight.scb.ingest.adapter.incomming.common.batch;
 
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.QueryStatementHelper;
 import com.silenteight.sep.base.common.batch.reader.BetterJdbcCursorItemReader;
 import com.silenteight.sep.base.common.batch.reader.BetterJdbcCursorItemReaderBuilder;
 
@@ -10,8 +11,6 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.sql.DataSource;
-
-import static com.silenteight.scb.ingest.adapter.incomming.cbs.batch.QueryStatementHelper.DB_RELATION_NAME_PARAM;
 
 @Slf4j
 class ExternalSystemIdsReaderFactory {
@@ -30,7 +29,8 @@ class ExternalSystemIdsReaderFactory {
   }
 
   private static String buildQuery(String dbRelationName) {
-    return QueryTemplates.SYSTEM_IDS_QUERY.replace(DB_RELATION_NAME_PARAM, dbRelationName);
+    return QueryTemplates.SYSTEM_IDS_QUERY
+        .replace(QueryStatementHelper.DB_RELATION_NAME_PARAM, dbRelationName);
   }
 
   BetterJdbcCursorItemReader<String> get() {

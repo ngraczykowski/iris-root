@@ -5,11 +5,11 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
 
-import com.silenteight.proto.serp.v1.alert.Decision;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertid.AlertId;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.CbsHitDetails;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.DecisionRecord;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision;
 
 import java.time.Instant;
 import java.util.Comparator;

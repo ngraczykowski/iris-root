@@ -2,10 +2,10 @@ package com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.serp.v1.alert.Decision;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord;
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.*;
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model.Suspect;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision;
 
 import java.util.Comparator;
 import java.util.List;
@@ -48,17 +48,17 @@ class EcmAlertCompositeRowProcessor extends BaseAlertCompositeRowProcessor {
     return AlertComposite.create(recordToAlertMapper, suspects, decisions.size());
   }
 
-  private static ExternalId getExternalId(AlertRecord alertRecord, Suspect suspect) {
-    return new ExternalId(alertRecord.getSystemId(), suspect.getOfacId());
-  }
-
   private RecordToAlertMapper getRecordToAlertMapper(
       AlertRecord alertRecord, List<Decision> decisions) {
     var lastDecision = decisions.stream()
-        .max(Comparator.comparing(d -> d.getCreatedAt().getNanos()))
+        .max(Comparator.comparing(Decision::createdAt))
         .orElseThrow(() -> new IllegalStateException("ECM decision does not exist"));
     var decisionCollection = new DecisionsCollection(singleton(lastDecision));
 
     return createRecordToAlertMapper(alertRecord, decisionCollection, WATCHLIST_LEVEL);
+  }
+
+  private static ExternalId getExternalId(AlertRecord alertRecord, Suspect suspect) {
+    return new ExternalId(alertRecord.getSystemId(), suspect.getOfacId());
   }
 }

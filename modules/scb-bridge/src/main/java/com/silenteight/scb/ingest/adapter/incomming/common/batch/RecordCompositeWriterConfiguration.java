@@ -37,6 +37,25 @@ class RecordCompositeWriterConfiguration {
         alertLevelSolvingJobProperties.getName());
   }
 
+  private static RecordCompositeWriter createRecordCompositeWriter(
+      CbsAckGateway cbsAckGateway,
+      WriterConfiguration writerConfiguration,
+      GnsSyncDeltaService deltaService,
+      BatchAlertIngestService ingestService,
+      String deltaJobName) {
+    return RecordCompositeWriter.builder()
+        .cbsAckGateway(cbsAckGateway)
+        .configuration(writerConfiguration)
+        .deltaService(deltaService)
+        .ingestService(ingestService)
+        .deltaJobName(deltaJobName)
+        .build();
+  }
+
+  private static WriterConfiguration solvingWriterConfiguration(boolean ackRecords) {
+    return WriterConfiguration.of(false, ackRecords, false);
+  }
+
   @Bean
   @JobScope
   RecordCompositeWriter watchlistLevelRecordCompositeWriter(
@@ -100,24 +119,5 @@ class RecordCompositeWriterConfiguration {
         .ingestService(ingestService)
         .deltaJobName(ecmBridgeLearningJobProperties.getDeltaJobName())
         .build();
-  }
-
-  private static RecordCompositeWriter createRecordCompositeWriter(
-      CbsAckGateway cbsAckGateway,
-      WriterConfiguration writerConfiguration,
-      GnsSyncDeltaService deltaService,
-      BatchAlertIngestService ingestService,
-      String deltaJobName) {
-    return RecordCompositeWriter.builder()
-        .cbsAckGateway(cbsAckGateway)
-        .configuration(writerConfiguration)
-        .deltaService(deltaService)
-        .ingestService(ingestService)
-        .deltaJobName(deltaJobName)
-        .build();
-  }
-
-  private static WriterConfiguration solvingWriterConfiguration(boolean ackRecords) {
-    return WriterConfiguration.of(false, ackRecords, false);
   }
 }

@@ -2,9 +2,9 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.proto.serp.v1.alert.Match.Flags;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.NeoFlag;
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model.Suspect;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match.Flag;
 
 import javax.annotation.Nullable;
 
@@ -25,12 +25,12 @@ public class GnsMatchCalculator {
   private final boolean hasLastDecision;
 
   public int calculateFlags() {
-    int flags = Flags.FLAG_NONE_VALUE;
+    int flags = Flag.NONE.getValue();
 
     if (isObsolete())
-      flags |= Flags.FLAG_OBSOLETE_VALUE;
+      flags |= Flag.OBSOLETE.getValue();
     if (isSolvedByAnalyst())
-      flags |= Flags.FLAG_SOLVED_VALUE;
+      flags |= Flag.SOLVED.getValue();
 
     return flags;
   }
@@ -46,6 +46,10 @@ public class GnsMatchCalculator {
     return contains(lowerCaseBatchId, OBSOLETE);
   }
 
+  private boolean isNeoFlagPresent() {
+    return nonNull(suspect.getNeoFlag());
+  }
+
   private boolean isSolvedByAnalyst() {
     if (isNeoFlagPresent())
       return NeoFlag.EXISTING == suspect.getNeoFlag();
@@ -58,17 +62,13 @@ public class GnsMatchCalculator {
         && !isObsolete();
   }
 
-  public boolean isNew() {
-    return !isObsolete() && !isSolvedByAnalyst();
-  }
-
   private boolean checkLastDecisionBatchId() {
     return isNotBlank(suspect.getBatchId())
         && isNotBlank(lastDecBatchId)
         && suspect.getBatchId().compareTo(lastDecBatchId) <= 0;
   }
 
-  private boolean isNeoFlagPresent() {
-    return nonNull(suspect.getNeoFlag());
+  public boolean isNew() {
+    return !isObsolete() && !isSolvedByAnalyst();
   }
 }

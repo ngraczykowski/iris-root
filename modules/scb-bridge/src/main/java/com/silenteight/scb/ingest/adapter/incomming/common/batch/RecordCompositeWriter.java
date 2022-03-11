@@ -6,13 +6,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.serp.scb.v1.ScbAlertDetails;
-import com.silenteight.proto.serp.v1.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckAlert;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway;
 import com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncDeltaService;
 import com.silenteight.scb.ingest.adapter.incomming.common.ingest.BatchAlertIngestService;
-import com.silenteight.scb.ingest.adapter.incomming.common.protocol.AlertWrapper;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 
 import org.springframework.batch.item.ItemWriter;
 
@@ -70,18 +68,11 @@ public class RecordCompositeWriter implements ItemWriter<AlertComposite> {
   private void ackReadAlerts(List<? extends AlertComposite> items) {
     Set<CbsAckAlert> readAlerts = items
         .stream()
-        .map(RecordCompositeWriter::unpackAlertDetails)
+        .map(alertComposite -> alertComposite.getAlert().details())
         .map(AlertCompositeToAckAlertMapper::toAckAlert)
         .collect(toSet());
 
     cbsAckGateway.ackReadAlerts(readAlerts);
-  }
-
-  private static ScbAlertDetails unpackAlertDetails(AlertComposite alertComposite) {
-    AlertWrapper alertWrapper = new AlertWrapper(alertComposite.getAlert());
-    return alertWrapper
-        .unpackDetails(ScbAlertDetails.class)
-        .orElseThrow(() -> new IllegalArgumentException("Alert has no details"));
   }
 
   @Getter

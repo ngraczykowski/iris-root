@@ -43,7 +43,8 @@ class AlertProcessor {
   private Map<ScbAlertIdContext, List<AlertId>> groupAlertIdsByContext(
       List<AlertIdWithDetails> alertIds) {
     return alertIds.stream()
-        .collect(groupingBy(AlertIdWithDetails::getContext,
+        .collect(groupingBy(
+            AlertIdWithDetails::getContext,
             mapping(AlertIdWithDetails::toAlertId, toList())));
   }
 

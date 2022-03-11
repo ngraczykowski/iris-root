@@ -4,6 +4,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncConstants;
+
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.InterruptableJob;
 import org.quartz.JobDataMap;
@@ -15,8 +17,6 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.configuration.JobLocator;
 import org.springframework.batch.core.launch.*;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
-
-import static com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncConstants.GNS_SYNC_MODE_KEY;
 
 @DisallowConcurrentExecution
 @NoArgsConstructor
@@ -44,7 +44,8 @@ class QuartzBatchJobLauncher implements InterruptableJob {
 
     JobParameters params = new JobParametersBuilder()
         .addString("JobID", String.valueOf(System.currentTimeMillis()))
-        .addString(GNS_SYNC_MODE_KEY, jobDataMap.getString(GNS_SYNC_MODE_KEY))
+        .addString(GnsSyncConstants.GNS_SYNC_MODE_KEY, jobDataMap.getString(
+            GnsSyncConstants.GNS_SYNC_MODE_KEY))
         .toJobParameters();
 
     jobLauncher.run(job, params);

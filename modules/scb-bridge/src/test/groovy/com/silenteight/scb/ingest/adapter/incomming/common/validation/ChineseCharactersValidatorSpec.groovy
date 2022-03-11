@@ -1,7 +1,5 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.validation
 
-import com.silenteight.scb.ingest.adapter.incomming.common.validation.ChineseCharactersValidator
-
 import spock.lang.Specification
 import spock.lang.Unroll
 

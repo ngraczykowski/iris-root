@@ -2,26 +2,19 @@ package com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.proto.serp.scb.v1.ScbAlertDetails;
-import com.silenteight.proto.serp.v1.alert.Alert;
-import com.silenteight.proto.serp.v1.alert.Alert.Flags;
-import com.silenteight.proto.serp.v1.alert.Alert.State;
-import com.silenteight.proto.serp.v1.alert.Match;
-import com.silenteight.proto.serp.v1.common.ObjectId;
-import com.silenteight.protocol.utils.Uuids;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Flag;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.*;
-import com.silenteight.sep.base.common.protocol.AnyUtils;
-
-import com.google.protobuf.Any;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.UUID;
 
 import static com.google.common.base.Strings.nullToEmpty;
-import static com.google.protobuf.Timestamp.getDefaultInstance;
-import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
-import static com.silenteight.protocol.utils.MoreTimestamps.toTimestampOrDefault;
 
 @RequiredArgsConstructor
 class GnsRtRequestToAlertMapperHelper {
@@ -48,18 +41,16 @@ class GnsRtRequestToAlertMapperHelper {
     var userBankId = header.getUserBankID();
     var trackingId = customerNameRes.getHeader().getOriginationDetails().getTrackingId();
 
-    return Alert
-        .newBuilder()
-        .setId(makeId(alert, immediateResponseTimestamp))
-        .setDecisionGroup(nullToEmpty(extractUnit(alert.getAlertId())))
-        .setSecurityGroup(header.getCountryCode())
-        .setState(State.STATE_CORRECT)
-        .setFlags(Flags.FLAG_PROCESS_VALUE | Flags.FLAG_RECOMMEND_VALUE)
-        .setGeneratedAt(toTimestampOrDefault(immediateResponseTimestamp, getDefaultInstance()))
-        .setReceivedAt(toTimestamp(Instant.now()))
-        .setAlertedParty(GnsRtAlertedPartyCreator.createAlertedParty(screenableData, recordId))
-        .addAllMatches(matches)
-        .setDetails(createDetails(alert.getAlertId(), userBankId, trackingId))
+    return Alert.builder()
+        .id(makeId(alert, immediateResponseTimestamp))
+        .decisionGroup(nullToEmpty(extractUnit(alert.getAlertId())))
+        .flags(Flag.PROCESS.getValue() | Flag.RECOMMEND.getValue())
+        .state(Alert.State.STATE_CORRECT)
+        .generatedAt(immediateResponseTimestamp)
+        .receivedAt(Instant.now())
+        .alertedParty(GnsRtAlertedPartyCreator.createAlertedParty(screenableData, recordId))
+        .matches(matches)
+        .details(createDetails(alert.getAlertId(), userBankId, trackingId))
         .build();
   }
 
@@ -67,10 +58,10 @@ class GnsRtRequestToAlertMapperHelper {
     var discriminator = getDiscriminatorValue(immediateResponseTimestamp);
 
     return ObjectId
-        .newBuilder()
-        .setId(Uuids.random())
-        .setDiscriminator(discriminator)
-        .setSourceId(alert.getAlertId())
+        .builder()
+        .id(UUID.randomUUID())
+        .discriminator(discriminator)
+        .sourceId(alert.getAlertId())
         .build();
   }
 
@@ -78,15 +69,12 @@ class GnsRtRequestToAlertMapperHelper {
     return String.valueOf(immediateResponseTimestamp.truncatedTo(ChronoUnit.SECONDS));
   }
 
-  private static Any createDetails(String systemId, String userBankId, String trackingId) {
-    ScbAlertDetails.Builder detailsBuilder = ScbAlertDetails
-        .newBuilder()
-        .setBatchId(nullToEmpty(trackingId))
-        .setUnit(nullToEmpty(extractUnit(systemId)))
-        .setAccount(nullToEmpty(userBankId))
-        .setSystemId(systemId);
-
-    return AnyUtils.pack(detailsBuilder.build());
+  private static AlertDetails createDetails(String systemId, String userBankId, String trackingId) {
+    return AlertDetails.builder()
+        .batchId(nullToEmpty(trackingId))
+        .unit(nullToEmpty(extractUnit(systemId)))
+        .account(nullToEmpty(userBankId))
+        .build();
   }
 
   private static String extractRecordId(String alertId) {

@@ -6,7 +6,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.serp.v1.alert.Decision;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.QueryStatementHelper;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecordMapper;
@@ -14,6 +13,7 @@ import com.silenteight.scb.ingest.adapter.incomming.common.batch.AlertComposite;
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.SuspectDataFetcher;
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.SuspectsCollection;
 import com.silenteight.scb.ingest.adapter.incomming.common.metrics.AlertsFetchedEvent;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.silenteight.scb.ingest.adapter.incomming.cbs.batch.QueryStatementHelper.setQueryParameters;
 import static com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm.EcmQueryTemplates.RECORDS_QUERY;
 import static java.time.Duration.between;
 import static java.util.Collections.emptyList;
@@ -65,7 +64,7 @@ class EcmRecordCompositeFetcher {
       statement.setFetchSize(delta.size());
       statement.setQueryTimeout(configuration.getTimeout());
 
-      setQueryParameters(statement, systemIds);
+      QueryStatementHelper.setQueryParameters(statement, systemIds);
 
       try (ResultSet resultSet = statement.executeQuery()) {
         while (resultSet.next()) {

@@ -5,26 +5,21 @@ import lombok.NonNull;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.serp.scb.v1.ScbAlertDetails;
-import com.silenteight.proto.serp.scb.v1.ScbAlertedPartyDetails;
-import com.silenteight.proto.serp.v1.alert.Alert;
-import com.silenteight.proto.serp.v1.alert.Alert.Flags;
-import com.silenteight.proto.serp.v1.alert.Alert.State;
-import com.silenteight.proto.serp.v1.alert.AnalystSolution;
-import com.silenteight.proto.serp.v1.alert.Match;
-import com.silenteight.proto.serp.v1.alert.Party;
-import com.silenteight.proto.serp.v1.alert.Party.Source;
-import com.silenteight.proto.serp.v1.common.ObjectId;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord;
 import com.silenteight.scb.ingest.adapter.incomming.common.gender.GenderDetector;
 import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.GnsParty;
 import com.silenteight.scb.ingest.adapter.incomming.common.gnsparty.SupplementaryInformationHelper;
-import com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Flag;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.State;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertedParty;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertedParty.AlertedPartyBuilder;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision.AnalystSolution;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.common.validation.ChineseCharactersValidator;
-import com.silenteight.sep.base.common.protocol.AnyUtils;
 
-import com.google.protobuf.Any;
-import com.google.protobuf.Timestamp;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
 
@@ -37,9 +32,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static com.google.common.base.Strings.nullToEmpty;
-import static com.silenteight.protocol.utils.MoreTimestamps.toTimestamp;
-import static com.silenteight.protocol.utils.MoreTimestamps.toTimestampOrDefault;
 import static com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils.makeAlertedPartyId;
+import static com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils.makeId;
+import static com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils.mapString;
 import static java.util.Optional.ofNullable;
 
 @Value
@@ -77,23 +72,23 @@ public class RecordToAlertMapper {
     List<Match> matches = makeMatches(suspects);
     String watchlistId = getWatchlistId(matches);
 
-    Alert.Builder builder = Alert
-        .newBuilder()
-        .setId(createId(watchlistId))
-        .setFlags(getFlags())
-        .setDecisionGroup(nullToEmpty(alertData.getUnit()))
-        .setSecurityGroup(getCountry())
-        .setState(State.STATE_CORRECT)
-        .setGeneratedAt(toTimestampOrDefault(filtered, Timestamp.getDefaultInstance()))
-        .setReceivedAt(toTimestamp(receivedAt))
-        .setAlertedParty(makeAlertedParty(alertedParty))
-        .addAllMatches(matches)
-        .setDetails(createDetails(watchlistId))
-        .addAllDecisions(decisionsCollection.getDecisions());
+    Alert.AlertBuilder builder = Alert
+        .builder()
+        .id(createId(watchlistId))
+        .flags(getFlags())
+        .decisionGroup(nullToEmpty(alertData.getUnit()))
+        .securityGroup(getCountry())
+        .state(State.STATE_CORRECT)
+        .generatedAt(filtered)
+        .receivedAt(receivedAt)
+        .alertedParty(makeAlertedParty(alertedParty))
+        .matches(matches)
+        .details(createDetails(watchlistId))
+        .decisions(decisionsCollection.getDecisions());
 
     if (isDamagedAlert(suspects)) {
       log.debug("Alert: {} has no suspects or invalid record / hit details data", getSystemId());
-      builder.setState(State.STATE_DAMAGED);
+      builder.state(State.STATE_DAMAGED);
     }
 
     return builder.build();
@@ -103,26 +98,21 @@ public class RecordToAlertMapper {
     return !suspects.hasSuspects() || alertedParty.isEmpty();
   }
 
-  String getSystemId() {
-    return alertData.getSystemId();
-  }
-
-  private Any createDetails(String watchlistId) {
-    ScbAlertDetails.Builder detailsBuilder = ScbAlertDetails
-        .newBuilder()
-        .setBatchId(nullToEmpty(alertData.getBatchId()))
-        .setUnit(nullToEmpty(alertData.getUnit()))
-        .setAccount(nullToEmpty(alertData.getDbAccount()))
-        .setSystemId(getSystemId())
-        .setWatchlistId(watchlistId);
-
-    return AnyUtils.pack(detailsBuilder.build());
+  private AlertDetails createDetails(String watchlistId) {
+    return AlertDetails
+        .builder()
+        .batchId(nullToEmpty(alertData.getBatchId()))
+        .unit(nullToEmpty(alertData.getUnit()))
+        .account(nullToEmpty(alertData.getDbAccount()))
+        .systemId(alertData.getSystemId())
+        .watchlistId(watchlistId)
+        .build();
   }
 
   private String getWatchlistId(List<Match> matches) {
     if (watchlistLevel) {
       validateWatchlistLevelMatches(matches.size());
-      return matches.get(0).getMatchedParty().getId().getSourceId();
+      return matches.get(0).matchedParty().id().sourceId();
     }
     return EMPTY_WATCHLIST_ID;
   }
@@ -137,17 +127,21 @@ public class RecordToAlertMapper {
         .getLastResetDecisionDate()
         .orElse(getFiltered());
 
-    return AlertParserUtils.makeId(nullToEmpty(getSystemId()), watchlistId, lastResetDecisionDate);
+    return makeId(nullToEmpty(getSystemId()), watchlistId, lastResetDecisionDate);
+  }
+
+  String getSystemId() {
+    return alertData.getSystemId();
   }
 
   private int getFlags() {
-    int flags = Flags.FLAG_NONE_VALUE;
+    int flags = Flag.NONE.getValue();
 
     if (requestRecommendation)
-      flags |= Flags.FLAG_RECOMMEND_VALUE | Flags.FLAG_PROCESS_VALUE | Flags.FLAG_ATTACH_VALUE;
+      flags |= Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue();
 
     if (requestProcessing)
-      flags |= Flags.FLAG_PROCESS_VALUE;
+      flags |= Flag.PROCESS.getValue();
 
     return flags;
   }
@@ -173,7 +167,7 @@ public class RecordToAlertMapper {
         .build();
   }
 
-  private Party makeAlertedParty(GnsParty party) {
+  private AlertedParty makeAlertedParty(GnsParty party) {
     List<String> allNames = new ArrayList<>();
     party.getName().ifPresent(allNames::add);
     allNames.addAll(party.getAlternateNames());
@@ -181,39 +175,32 @@ public class RecordToAlertMapper {
     String genderFromName =
         GenderDetector.determineApGenderFromName(alertData.getTypeOfRec(), allNames);
 
-    ScbAlertedPartyDetails.Builder builder = ScbAlertedPartyDetails
-        .newBuilder()
-        .setApId(getSystemId())
-        .setApGenderFromName(genderFromName)
-        .addAllApDocNationalIds(party.getNationalIds())
-        .addAllApNameSynonyms(party.getAlternateNames())
-        .addAllApOriginalCnNames(getChineseNames(party));
+    AlertedPartyBuilder builder = AlertedParty.builder()
+        .id(makeAlertedPartyId(nullToEmpty(alertData.getRecordId()), recordSignature))
+        .apId(getSystemId())
+        .apGenderFromName(genderFromName)
+        .apDocNationalIds(party.getNationalIds())
+        .apNameSynonyms(party.getAlternateNames())
+        .apOriginalCnNames(getChineseNames(party));
 
-    party.getName().ifPresent(builder::setApName);
-
-    AlertParserUtils.mapString(party.getSourceSystemIdentifier(), builder::setApSrcSysId);
-
+    party.getName().ifPresent(builder::apName);
+    mapString(party.getSourceSystemIdentifier(), builder::apSrcSysId);
     party
-        .mapString("nationalityAll", builder::setApNationality)
-        .mapString("registOrResidenAddCntry", builder::setApResidence)
-        .mapString("customerStatus", builder::setApCustStatus)
-        .mapString("gender", builder::setApGender)
-        .mapString("bookingLocation", builder::setApBookingLocation)
-        .mapCollection("nationalities", builder::addAllApNationalitySynonyms)
-        .mapCollection("residencies", builder::addAllApResidenceSynonyms)
-        .mapCollection("residentialAddresses", builder::addAllApResidentialAddresses)
-        .mapCollection("passportNumbers", builder::addAllApDocPassports)
-        .mapCollection("identifications", builder::addAllApDocOthers)
-        .mapString("clientType", builder::setCustType)
-        .mapString("dateOfBirthOrRegis", builder::setApDobDoi)
-        .mapString("bookingLocation", builder::setApDbCountry);
+        .mapString("nationalityAll", builder::apNationality)
+        .mapString("registOrResidenAddCntry", builder::apResidence)
+        .mapString("customerStatus", builder::apCustStatus)
+        .mapString("gender", builder::apGender)
+        .mapString("bookingLocation", builder::apBookingLocation)
+        .mapCollection("nationalities", builder::apNationalitySynonyms)
+        .mapCollection("residencies", builder::apResidenceSynonyms)
+        .mapCollection("residentialAddresses", builder::apResidentialAddresses)
+        .mapCollection("passportNumbers", builder::apDocPassports)
+        .mapCollection("identifications", builder::apDocOthers)
+        .mapString("clientType", builder::custType)
+        .mapString("dateOfBirthOrRegis", builder::apDobDoi)
+        .mapString("bookingLocation", builder::apDbCountry);
 
-    return Party
-        .newBuilder()
-        .setId(makeAlertedPartyId(nullToEmpty(alertData.getRecordId()), recordSignature))
-        .setSource(Source.SOURCE_CONFIDENTIAL)
-        .setDetails(AnyUtils.pack(builder.build()))
-        .build();
+    return builder.build();
   }
 
   static Set<String> getChineseNames(GnsParty party) {

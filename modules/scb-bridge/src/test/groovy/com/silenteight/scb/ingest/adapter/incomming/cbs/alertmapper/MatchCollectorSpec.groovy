@@ -1,10 +1,9 @@
 package com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper
 
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model.Suspect
-import com.silenteight.proto.serp.v1.alert.Match.Flags
-import com.silenteight.proto.serp.v1.alert.Party
-import com.silenteight.proto.serp.v1.alert.Party.Source
-import com.silenteight.proto.serp.v1.common.ObjectId
+import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.MatchedParty
 
 import spock.lang.Specification
 
@@ -66,13 +65,11 @@ class MatchCollectorSpec extends Specification {
   }
 
   def verifyMatchFlags(int flags) {
-    flags == Flags.FLAG_NONE_VALUE
+    flags == Match.Flag.NONE.value
   }
 
-  def verifyMatchedParty(Party party) {
+  def verifyMatchedParty(MatchedParty party) {
     party.id
-    party.details
-    party.source == Source.SOURCE_CONFIDENTIAL
   }
 
   def verifyMatchId(ObjectId objectId, Suspect suspect) {

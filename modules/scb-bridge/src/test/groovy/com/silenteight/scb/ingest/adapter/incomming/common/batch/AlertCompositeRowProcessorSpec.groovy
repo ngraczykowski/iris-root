@@ -1,10 +1,8 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.batch
 
-import com.silenteight.proto.serp.scb.v1.ScbAlertDetails
-import com.silenteight.proto.serp.v1.alert.Alert
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model.Suspect
-import com.silenteight.scb.ingest.adapter.incomming.common.protocol.AlertWrapper
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails
 
 import spock.lang.Specification
 
@@ -36,7 +34,7 @@ class AlertCompositeRowProcessorSpec extends Specification {
 
     then:
     list.size() == 1
-    ScbAlertDetails alertDetails = getScbAlertDetails(list.first().alert)
+    AlertDetails alertDetails = list.first().alert.details()
     alertDetails.batchId == 'batchId'
     alertDetails.watchlistId == 'ofacId-2'
 
@@ -55,11 +53,6 @@ class AlertCompositeRowProcessorSpec extends Specification {
             new Suspect(ofacId: 'ofacId-2', batchId: 'batchId', index: 2)
         ]
     ]
-  }
-
-  def getScbAlertDetails(Alert alert) {
-    AlertWrapper alertWrapper = new AlertWrapper(alert)
-    alertWrapper.unpackDetails(ScbAlertDetails.class).get()
   }
 
   def createSuspectsCollection(suspects) {

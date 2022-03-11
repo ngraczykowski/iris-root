@@ -1,7 +1,5 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.util
 
-import com.silenteight.scb.ingest.adapter.incomming.common.util.MatchingTextTransformer
-
 import spock.lang.Specification
 import spock.lang.Unroll
 

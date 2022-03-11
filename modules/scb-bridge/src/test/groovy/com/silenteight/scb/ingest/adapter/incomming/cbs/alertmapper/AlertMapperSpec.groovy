@@ -8,11 +8,9 @@ import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertReco
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.DecisionRecord
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.DateConverter
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model.Suspect
-import com.silenteight.proto.serp.v1.alert.Alert
-import com.silenteight.proto.serp.v1.alert.Alert.Flags
-import com.silenteight.proto.serp.v1.alert.Alert.State
-import com.silenteight.proto.serp.v1.alert.AnalystSolution
-import com.silenteight.proto.serp.v1.alert.Match
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match
 
 import spock.lang.Specification
 
@@ -110,8 +108,8 @@ class AlertMapperSpec extends Specification {
     1 * suspectsCollector.collect(alertRecord.details, cbsHitDetails) >> []
     result.size() == 1
     with(result.first()) {
-      flags == Flags.FLAG_NONE_VALUE
-      state == State.STATE_DAMAGED
+      flags == Alert.Flag.NONE.value
+      state == Alert.State.STATE_DAMAGED
     }
   }
 
@@ -137,14 +135,13 @@ class AlertMapperSpec extends Specification {
   def verifyAlert(Alert alert) {
     alert.alertedParty
     alert.decisionGroup == alertRecord.unit
-    alert.decisionsCount == decisions.size()
     alert.details
-    alert.flags == (Flags.FLAG_RECOMMEND_VALUE | Flags.FLAG_PROCESS_VALUE | Flags.FLAG_ATTACH_VALUE)
+    alert.flags == (Alert.Flag.RECOMMEND.value | Alert.Flag.PROCESS.value | Alert.Flag.ATTACH.value)
     alert.generatedAt
     alert.id
-    alert.matchesList == matches
+    alert.matches == matches
     alert.securityGroup == 'MY'
-    alert.state == State.STATE_CORRECT
+    alert.state == Alert.State.STATE_CORRECT
   }
 
   def alertRecord = AlertRecord.builder()
@@ -163,10 +160,10 @@ class AlertMapperSpec extends Specification {
       .decisionDate(Instant.now())
       .operator('FSK')
       .systemId('')
-      .solution(AnalystSolution.ANALYST_NO_SOLUTION)
+      .solution(Decision.AnalystSolution.ANALYST_NO_SOLUTION)
       .build()
   def decisions = [decision]
-  def match = Match.newBuilder().build()
+  def match = Match.builder().build()
   def matches = [match]
   def suspect1 = new Suspect(ofacId: '1')
   def suspect2 = new Suspect(ofacId: '1')

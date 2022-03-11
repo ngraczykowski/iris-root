@@ -2,7 +2,7 @@ package com.silenteight.scb.ingest.adapter.incomming.common.quartz;
 
 import lombok.Data;
 
-import com.silenteight.proto.serp.v1.alert.AnalystSolution;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision.AnalystSolution;
 
 import org.springframework.validation.annotation.Validated;
 

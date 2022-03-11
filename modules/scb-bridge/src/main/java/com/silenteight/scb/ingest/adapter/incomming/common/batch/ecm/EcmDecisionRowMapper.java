@@ -2,14 +2,10 @@ package com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.proto.serp.v1.alert.AnalystSolution;
-import com.silenteight.proto.serp.v1.alert.Decision;
-import com.silenteight.proto.serp.v1.alert.Decision.Builder;
-import com.silenteight.proto.serp.v1.common.ObjectId;
-import com.silenteight.protocol.utils.ObjectIds;
 import com.silenteight.scb.ingest.adapter.incomming.common.batch.DateConverter;
-
-import com.google.protobuf.Timestamp;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision;
+import com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,8 +14,6 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import static com.google.common.base.Strings.nullToEmpty;
-import static com.silenteight.protocol.utils.MoreTimestamps.toTimestampOrDefault;
-import static com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils.mapString;
 
 @RequiredArgsConstructor
 class EcmDecisionRowMapper {
@@ -35,17 +29,17 @@ class EcmDecisionRowMapper {
   Decision mapRow(ResultSet resultSet) throws SQLException {
     Instant decisionDate =
         dateConverter.convert(resultSet.getString(ACTION_DATE_COLUMN)).orElse(null);
-    final AnalystSolution analystDecision =
+    final Decision.AnalystSolution analystDecision =
         ecmAnalystDecisionMapper.mapEcmDecision(resultSet.getString(ANALYST_DECISION_COLUMN));
 
-    Builder builder = Decision
-        .newBuilder()
-        .setCreatedAt(toTimestampOrDefault(decisionDate, Timestamp.getDefaultInstance()))
-        .setId(makeDecisionId(OPERATOR, analystDecision.getNumber(), decisionDate))
-        .setSolution(analystDecision);
+    Decision.DecisionBuilder builder = Decision
+        .builder()
+        .createdAt(decisionDate)
+        .id(makeDecisionId(OPERATOR, analystDecision.getValue(), decisionDate))
+        .solution(analystDecision);
 
-    mapString(resultSet.getString(ANALYST_COMMENTS_COLUMN), builder::setComment);
-    mapString(OPERATOR, builder::setAuthorId);
+    AlertParserUtils.mapString(resultSet.getString(ANALYST_COMMENTS_COLUMN), builder::comment);
+    AlertParserUtils.mapString(OPERATOR, builder::authorId);
 
     return builder.build();
   }
@@ -54,8 +48,10 @@ class EcmDecisionRowMapper {
       @Nullable String operator,
       int type,
       @Nullable Instant date) {
-
-    return ObjectIds.fromUuidAndSource(
-        UUID.randomUUID(), nullToEmpty(operator) + "@" + type, String.valueOf(date));
+    return ObjectId.builder()
+        .id(UUID.randomUUID())
+        .sourceId(nullToEmpty(operator) + "@" + type)
+        .discriminator(String.valueOf(date))
+        .build();
   }
 }

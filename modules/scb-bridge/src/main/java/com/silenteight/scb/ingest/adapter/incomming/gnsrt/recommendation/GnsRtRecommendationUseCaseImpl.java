@@ -5,16 +5,16 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.serp.v1.alert.Alert;
-import com.silenteight.proto.serp.v1.api.GenerateRecommendationsResponse;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.alertinfo.AlertInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtRecommendationRequest;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtRecommendationResponse;
-import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtResponseAlerts;
+import com.silenteight.scb.ingest.adapter.outgoing.RegistrationApiClient;
+import com.silenteight.scb.ingest.domain.model.RegistrationRequest;
+import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -30,45 +30,23 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
   private final AlertInfoService alertInfoService;
   private final StoreGnsRtRecommendationUseCase storeGnsRtRecommendationUseCase;
   private final RecommendationGatewayService recommendationService;
+  private final RegistrationApiClient registrationApiClient;
 
   @Override
   public Mono<GnsRtRecommendationResponse> recommend(@NonNull GnsRtRecommendationRequest request) {
     List<Alert> alerts = mapAlerts(request);
     logGnsRtRequest(alerts);
 
-    return sendAlertInfo(alerts)
-        .thenMany(recommendAlerts(alerts))
-        .doOnNext(this::storeResponse)
-        .map(response -> mapResponse(request, response))
-        .collect(
-            GnsRtRecommendationResponse::new,
-            (response, alert) -> response.getSilent8Response().getAlerts().add(alert));
-  }
+    //register batch (what is batch in gns-rt?)
+    //register alerts & matches
+    RegistrationResponse registrationResponse =
+        registrationApiClient.registerAlertsAndMatches(RegistrationRequest.builder().build());
 
-  private void storeResponse(GenerateRecommendationsResponse response) {
-    storeGnsRtRecommendationUseCase.storeRecommendation(response.getAlertRecommendation());
+    return Mono.empty();
   }
 
   private List<Alert> mapAlerts(GnsRtRecommendationRequest request) {
     return alertMapper.map(request);
-  }
-
-  private Mono<Void> sendAlertInfo(List<Alert> alerts) {
-    return alertInfoService.sendAlertInfo(alerts);
-  }
-
-  private Flux<GenerateRecommendationsResponse> recommendAlerts(List<Alert> alerts) {
-    return Flux.defer(() -> recommendationService.recommend(alerts));
-  }
-
-  private GnsRtResponseAlerts mapResponse(
-      GnsRtRecommendationRequest request, GenerateRecommendationsResponse response) {
-
-    var recommendation = response.getAlertRecommendation();
-    var sourceId = recommendation.getAlertId().getSourceId();
-    var gnsAlert = GnsRtAlertResolver.resolve(request, sourceId);
-
-    return responseMapper.map(gnsAlert, recommendation);
   }
 
   private static void logGnsRtRequest(List<Alert> alerts) {
@@ -82,7 +60,6 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
   }
 
   private static String prepareAlertMessage(Alert alert) {
-    return String.format("%s (%s hits)", alert.getId().getSourceId(), alert.getMatchesCount());
+    return String.format("%s (%s hits)", alert.id().sourceId(), alert.getMatchesCount());
   }
 }
-

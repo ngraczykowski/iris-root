@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckAlert;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsAckGateway;
-import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsOutput.State;
 
 import org.springframework.dao.TransientDataAccessException;
@@ -39,7 +38,7 @@ public class ReactiveCbsAckService {
         .map(state -> new AckAlertResult(state, index));
   }
 
-  private CbsOutput.State doAckSingleAlert(AckAlertRequest ackAlertRequest) {
+  private State doAckSingleAlert(AckAlertRequest ackAlertRequest) {
     CbsAckAlert ackAlert = ackAlertRequest.asCbsAckAlert();
     String systemId = ackAlertRequest.getSystemId();
 

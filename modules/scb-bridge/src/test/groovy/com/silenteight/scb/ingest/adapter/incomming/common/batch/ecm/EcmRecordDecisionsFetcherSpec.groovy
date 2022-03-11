@@ -1,6 +1,6 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm
 
-import com.silenteight.proto.serp.v1.alert.Decision
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision
 
 import spock.lang.Specification
 
@@ -38,7 +38,7 @@ class EcmRecordDecisionsFetcherSpec extends Specification {
     resultSet.next() >> {(++resultSetIdx <= 1)}
     1 * resultSet.getString('SYSTEM_ID') >> 'systemId1'
     1 * resultSet.getString('HIT_UNIQUE_ID') >> 'AS10782119_NAM_1'
-    1 * ecmDecisionRowMapper.mapRow(resultSet) >> new Decision()
+    1 * ecmDecisionRowMapper.mapRow(resultSet) >> Decision.builder().build()
   }
 
   def 'should do not fetch ecm decisions of nonExisting externalIds'() {

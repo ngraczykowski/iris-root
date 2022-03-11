@@ -2,12 +2,10 @@ package com.silenteight.scb.ingest.adapter.incomming.common.batch.ecm;
 
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.proto.serp.v1.alert.AnalystSolution;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision.AnalystSolution;
 import com.silenteight.scb.ingest.adapter.incomming.common.quartz.EcmAnalystDecision;
 
 import java.util.List;
-
-import static com.silenteight.proto.serp.v1.alert.AnalystSolution.ANALYST_OTHER;
 
 @RequiredArgsConstructor
 class EcmAnalystDecisionMapper {
@@ -20,6 +18,6 @@ class EcmAnalystDecisionMapper {
         .filter(s -> s.getText().equals(analystDecision))
         .map(EcmAnalystDecision::getSolution)
         .findFirst()
-        .orElse(ANALYST_OTHER);
+        .orElse(AnalystSolution.ANALYST_OTHER);
   }
 }

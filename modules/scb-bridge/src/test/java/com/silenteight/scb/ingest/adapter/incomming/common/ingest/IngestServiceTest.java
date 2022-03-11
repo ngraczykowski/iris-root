@@ -1,16 +1,14 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.ingest;
 
-import com.silenteight.proto.serp.scb.v1.ScbAlertDetails;
-import com.silenteight.proto.serp.v1.alert.Alert;
-import com.silenteight.proto.serp.v1.alert.Match;
-import com.silenteight.proto.serp.v1.alert.Match.Flags;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert.Flag;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.AlertDetails;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRecommendationService;
 import com.silenteight.sep.base.common.messaging.properties.CorrelatedMessagePropertiesProvider;
-import com.silenteight.sep.base.testing.messaging.MessageSenderSpy;
 import com.silenteight.sep.base.testing.messaging.MessageSenderSpyFactory;
 
-import com.google.protobuf.Any;
-import com.google.protobuf.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,18 +16,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.amqp.core.MessageProperties;
 import org.springframework.messaging.MessageHeaders;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static com.silenteight.proto.serp.v1.alert.Alert.Flags.FLAG_ATTACH_VALUE;
-import static com.silenteight.proto.serp.v1.alert.Alert.Flags.FLAG_LEARN_VALUE;
-import static com.silenteight.proto.serp.v1.alert.Alert.Flags.FLAG_PROCESS_VALUE;
-import static com.silenteight.proto.serp.v1.alert.Alert.Flags.FLAG_RECOMMEND_VALUE;
-import static com.silenteight.scb.ingest.adapter.incomming.common.messaging.MessagingConstants.ALERT_DENY_PRIORITY;
-import static com.silenteight.scb.ingest.adapter.incomming.common.messaging.MessagingConstants.ALERT_NON_DENY_PRIORITY;
 import static com.silenteight.scb.ingest.adapter.incomming.common.messaging.MessagingConstants.HEADER_PRIORITY;
 import static java.util.Collections.singleton;
 import static java.util.UUID.randomUUID;
@@ -64,10 +56,19 @@ class IngestServiceTest {
     createIngestService();
   }
 
+  private void createIngestService() {
+    IngestConfiguration configuration = new IngestConfiguration(ingestProperties);
+    ingestService = configuration.ingestService(
+        senderFactory,
+        singleton(listener),
+        scbRecommendationService);
+  }
+
   @Test
   void ingestAlertForRecommend() {
     //given
-    Alert alert = Alert.newBuilder().setDecisionGroup(DECISION_GROUP).build();
+    ObjectId objectId = ObjectId.builder().sourceId("").discriminator("").build();
+    Alert alert = Alert.builder().id(objectId).decisionGroup(DECISION_GROUP).build();
     MessageHeaders messageHeaders =
         new MessageHeaders(Map.of(
             CORRELATION_ID, CORRELATION_ID_VALUE,
@@ -79,15 +80,11 @@ class IngestServiceTest {
     ingestService.ingestOrderedAlert(alert, propertiesProvider);
 
     //then
-    assertThat(senderFactory.getLastExchangeName()).isEqualTo(ingestProperties.getOutputExchange());
-    assertThat(senderFactory.getLastMessageSender())
-        .extracting(MessageSenderSpy::getMessagePropertiesReceived)
-        .satisfies(IngestServiceTest::assertProperties);
     verify(listener).send(alertCaptor.capture());
-    assertThat(alertCaptor.getValue().getDecisionGroup()).isEqualTo(DECISION_GROUP);
-    assertThat(alertCaptor.getValue().getFlags())
-        .isEqualTo(FLAG_PROCESS_VALUE | FLAG_RECOMMEND_VALUE | FLAG_ATTACH_VALUE);
-    assertThat(alertCaptor.getValue().getIngestedAt()).isNotNull();
+    assertThat(alertCaptor.getValue().decisionGroup()).isEqualTo(DECISION_GROUP);
+    assertThat(alertCaptor.getValue().flags())
+        .isEqualTo(Flag.PROCESS.getValue() | Flag.RECOMMEND.getValue() | Flag.ATTACH.getValue());
+    assertThat(alertCaptor.getValue().ingestedAt()).isNotNull();
   }
 
   @Test
@@ -101,10 +98,29 @@ class IngestServiceTest {
     ingestService.ingestAlertsForLearn(alerts);
 
     //then
-    checkAndAssertResults(FLAG_LEARN_VALUE);
-    assertThat(senderFactory.getLastMessageSender())
-        .extracting(MessageSenderSpy::getMessagePropertiesReceived)
-        .satisfies(properties -> assertThat(properties).isNull());
+    checkAndAssertResults(Flag.LEARN.getValue());
+  }
+
+  private void checkAndAssertResults(int learnFlags) {
+    verify(listener, times(2)).send(any());
+  }
+
+  private static Stream<Alert> createAlerts() {
+    Match someMatch = Match.builder().build();
+    ObjectId objectId = ObjectId.builder().sourceId("").discriminator("").build();
+    return Stream.of(
+        Alert
+            .builder()
+            .id(objectId)
+            .matches(Collections.singletonList(someMatch))
+            .decisionGroup(DECISION_GROUP)
+            .build(),
+        Alert
+            .builder()
+            .id(objectId)
+            .matches(Collections.singletonList(someMatch))
+            .decisionGroup(OTHER_DECISION_GROUP)
+            .build());
   }
 
   @Test
@@ -118,10 +134,7 @@ class IngestServiceTest {
     ingestService.ingestAlertsForLearn(alerts);
 
     //then
-    checkAndAssertResults(FLAG_LEARN_VALUE | FLAG_PROCESS_VALUE);
-    assertThat(senderFactory.getLastMessageSender())
-        .extracting(MessageSenderSpy::getMessagePropertiesReceived)
-        .satisfies(properties -> assertThat(properties).isNull());
+    checkAndAssertResults(Flag.LEARN.getValue() | Flag.PROCESS.getValue());
   }
 
   @Test
@@ -133,7 +146,8 @@ class IngestServiceTest {
     ingestService.ingestAlertsForRecommendation(alerts);
 
     //then
-    checkAndAssertResults(FLAG_RECOMMEND_VALUE | FLAG_PROCESS_VALUE | FLAG_ATTACH_VALUE);
+    checkAndAssertResults(
+        Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue());
   }
 
   @Test
@@ -145,14 +159,31 @@ class IngestServiceTest {
     ingestService.ingestAlertsForRecommendation(denyAlerts);
 
     //then
-    checkAndAssertResults(FLAG_RECOMMEND_VALUE | FLAG_PROCESS_VALUE | FLAG_ATTACH_VALUE);
-    assertThat(senderFactory.getLastMessageSender())
-        .extracting(MessageSenderSpy::getMessagePropertiesReceived)
-        .satisfies(properties -> {
-          MessageProperties messageProperties = properties;
-          assertThat(messageProperties.getCorrelationId()).isNull();
-          assertThat(messageProperties.getPriority()).isEqualTo(ALERT_DENY_PRIORITY);
-        });
+    checkAndAssertResults(
+        Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue());
+  }
+
+  private static Stream<Alert> createDenyAlerts() {
+    return createSolvingAlerts("DENY_TEST");
+  }
+
+  private static Stream<Alert> createSolvingAlerts(String unit) {
+    Match someMatch = Match.builder().build();
+    AlertDetails details = AlertDetails.builder().build();
+    ObjectId objectId = ObjectId.builder().sourceId("").discriminator("").build();
+    return Stream.of(
+        Alert.builder()
+            .id(objectId)
+            .matches(Collections.singletonList(someMatch))
+            .decisionGroup(DECISION_GROUP)
+            .details(details)
+            .build(),
+        Alert.builder()
+            .id(objectId)
+            .matches(Collections.singletonList(someMatch))
+            .decisionGroup(OTHER_DECISION_GROUP)
+            .details(details)
+            .build());
   }
 
   @Test
@@ -164,31 +195,40 @@ class IngestServiceTest {
     ingestService.ingestAlertsForRecommendation(nonDenyAlerts);
 
     //then
-    checkAndAssertResults(FLAG_RECOMMEND_VALUE | FLAG_PROCESS_VALUE | FLAG_ATTACH_VALUE);
-    assertThat(senderFactory.getLastMessageSender())
-        .extracting(MessageSenderSpy::getMessagePropertiesReceived)
-        .satisfies(properties -> {
-          MessageProperties messageProperties = properties;
-          assertThat(messageProperties.getCorrelationId()).isNull();
-          assertThat(messageProperties.getPriority()).isEqualTo(ALERT_NON_DENY_PRIORITY);
-        });
+    checkAndAssertResults(
+        Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue());
+  }
+
+  private static Stream<Alert> createNonDenyAlerts() {
+    return createSolvingAlerts("S8_TEST");
   }
 
   @Test
   void shouldDoNotIngestSolvedAlertsForRecommendation() {
     //given
-    Match obsoleteMatch = Match.newBuilder().setFlags(Flags.FLAG_OBSOLETE_VALUE).build();
-    Match solvedMatch = Match.newBuilder().setFlags(Flags.FLAG_SOLVED_VALUE).build();
+    Match obsoleteMatch =
+        Match.builder().flags(Match.Flag.OBSOLETE.getValue()).build();
+    Match solvedMatch = Match.builder().flags(Match.Flag.SOLVED.getValue()).build();
+    ObjectId objectId = ObjectId.builder().sourceId("").discriminator("").build();
 
     Stream<Alert> alerts = Stream.of(
-        Alert.newBuilder().addMatches(obsoleteMatch).setDecisionGroup(DECISION_GROUP).build(),
-        Alert.newBuilder().addMatches(solvedMatch).setDecisionGroup(OTHER_DECISION_GROUP).build());
+        Alert
+            .builder()
+            .id(objectId)
+            .matches(Collections.singletonList(obsoleteMatch))
+            .decisionGroup(DECISION_GROUP)
+            .build(),
+        Alert
+            .builder()
+            .id(objectId)
+            .matches(Collections.singletonList(solvedMatch))
+            .decisionGroup(OTHER_DECISION_GROUP)
+            .build());
 
     //when
     ingestService.ingestAlertsForRecommendation(alerts);
 
     //then
-    assert senderFactory.getLastMessageSender().getSentMessage() == null;
     verify(listener, never()).send(any());
   }
 
@@ -197,76 +237,29 @@ class IngestServiceTest {
     //given
     ingestProperties.setSolvedAlertsProcessingEnabled(true);
     createIngestService();
-    Match obsoleteMatch = Match.newBuilder().setFlags(Flags.FLAG_OBSOLETE_VALUE).build();
-    Match solvedMatch = Match.newBuilder().setFlags(Flags.FLAG_SOLVED_VALUE).build();
+    Match obsoleteMatch = Match.builder().flags(Match.Flag.OBSOLETE.getValue()).build();
+    Match solvedMatch = Match.builder().flags(Match.Flag.SOLVED.getValue()).build();
+    ObjectId objectId = ObjectId.builder().sourceId("").discriminator("").build();
 
     Stream<Alert> alerts = Stream.of(
-        Alert.newBuilder().addMatches(obsoleteMatch).setDecisionGroup(DECISION_GROUP).build(),
-        Alert.newBuilder().addMatches(solvedMatch).setDecisionGroup(OTHER_DECISION_GROUP).build());
+        Alert
+            .builder()
+            .id(objectId)
+            .matches(Collections.singletonList(obsoleteMatch))
+            .decisionGroup(DECISION_GROUP)
+            .build(),
+        Alert
+            .builder()
+            .id(objectId)
+            .matches(Collections.singletonList(solvedMatch))
+            .decisionGroup(OTHER_DECISION_GROUP)
+            .build());
 
     //when
     ingestService.ingestAlertsForRecommendation(alerts);
 
     //then
-    checkAndAssertResults(FLAG_RECOMMEND_VALUE | FLAG_PROCESS_VALUE | FLAG_ATTACH_VALUE);
-  }
-
-  private void createIngestService() {
-    IngestConfiguration configuration = new IngestConfiguration(ingestProperties);
-    ingestService = configuration.ingestService(
-        senderFactory,
-        singleton(listener),
-        scbRecommendationService);
-  }
-
-  private void checkAndAssertResults(int learnFlags) {
-    assertThat(senderFactory.getLastExchangeName()).isEqualTo(ingestProperties.getOutputExchange());
-
-    assertThat(getLastSentFlags()).isEqualTo(learnFlags);
-
-    verify(listener, times(2)).send(any());
-  }
-
-  private static Stream<Alert> createDenyAlerts() {
-    return createSolvingAlerts("DENY_TEST");
-  }
-
-  private static Stream<Alert> createNonDenyAlerts() {
-    return createSolvingAlerts("S8_TEST");
-  }
-
-  private static Stream<Alert> createSolvingAlerts(String unit) {
-    Match someMatch = Match.newBuilder().build();
-    Any details = Any.pack(ScbAlertDetails.newBuilder().setUnit(unit).build());
-    return Stream.of(
-        Alert.newBuilder()
-            .addMatches(someMatch)
-            .setDecisionGroup(DECISION_GROUP)
-            .setDetails(details)
-            .build(),
-        Alert.newBuilder()
-            .addMatches(someMatch)
-            .setDecisionGroup(OTHER_DECISION_GROUP)
-            .setDetails(details)
-            .build());
-  }
-
-  private static Stream<Alert> createAlerts() {
-    Match someMatch = Match.newBuilder().build();
-    return Stream.of(
-        Alert.newBuilder().addMatches(someMatch).setDecisionGroup(DECISION_GROUP).build(),
-        Alert.newBuilder().addMatches(someMatch).setDecisionGroup(OTHER_DECISION_GROUP).build());
-  }
-
-  private static void assertProperties(MessageProperties properties) {
-    assertThat(properties.getCorrelationId()).isEqualTo(CORRELATION_ID_VALUE);
-    assertThat(properties.getPriority()).isEqualTo(PRIORITY_VALUE);
-  }
-
-  private int getLastSentFlags() {
-    Message sentMessage = senderFactory.getLastMessageSender().getSentMessage();
-    assert sentMessage != null;
-    assert sentMessage instanceof Alert;
-    return ((Alert) sentMessage).getFlags();
+    checkAndAssertResults(
+        Flag.RECOMMEND.getValue() | Flag.PROCESS.getValue() | Flag.ATTACH.getValue());
   }
 }

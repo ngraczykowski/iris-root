@@ -51,6 +51,24 @@ class AlertInfosMapperTestFactory {
   }
 
   @NotNull
+  private static Party createParty(Message partyDetails) {
+    return Party
+        .newBuilder()
+        .setDetails(AnyUtils.pack(partyDetails))
+        .build();
+  }
+
+  @NotNull
+  private static ScbWatchlistPartyDetails createWatchlistPartyDetails() {
+    return ScbWatchlistPartyDetails
+        .newBuilder()
+        .setWlId("wlId1")
+        .addWlHitType("type1")
+        .addWlHitType("type2")
+        .build();
+  }
+
+  @NotNull
   private static Timestamp createTimestamp(int seconds) {
     return Timestamp.newBuilder().setSeconds(seconds).build();
   }
@@ -58,14 +76,6 @@ class AlertInfosMapperTestFactory {
   @NotNull
   private static ObjectId createObjectId(String sourceId) {
     return ObjectIds.randomFromSource(sourceId, "discriminator");
-  }
-
-  @NotNull
-  private static Party createParty(Message partyDetails) {
-    return Party
-        .newBuilder()
-        .setDetails(AnyUtils.pack(partyDetails))
-        .build();
   }
 
   @NotNull
@@ -84,16 +94,6 @@ class AlertInfosMapperTestFactory {
         .newBuilder()
         .setApDbCountry("dbCountry")
         .setApSrcSysId("srcSysId")
-        .build();
-  }
-
-  @NotNull
-  private static ScbWatchlistPartyDetails createWatchlistPartyDetails() {
-    return ScbWatchlistPartyDetails
-        .newBuilder()
-        .setWlId("wlId1")
-        .addWlHitType("type1")
-        .addWlHitType("type2")
         .build();
   }
 }

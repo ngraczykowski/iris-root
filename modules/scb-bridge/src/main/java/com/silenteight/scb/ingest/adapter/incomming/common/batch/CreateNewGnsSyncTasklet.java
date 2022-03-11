@@ -15,9 +15,6 @@ import org.springframework.batch.repeat.RepeatStatus;
 
 import javax.annotation.Nonnull;
 
-import static com.silenteight.scb.ingest.adapter.incomming.common.batch.BatchUtils.getJobContext;
-import static com.silenteight.scb.ingest.adapter.incomming.common.batch.BatchUtils.getStepExecutionContext;
-
 @Slf4j
 @RequiredArgsConstructor
 class CreateNewGnsSyncTasklet implements Tasklet {
@@ -29,8 +26,8 @@ class CreateNewGnsSyncTasklet implements Tasklet {
       @NotNull StepContribution stepContribution,
       @NotNull ChunkContext chunkContext) {
 
-    ExecutionContext jobContext = getJobContext(chunkContext);
-    ExecutionContext stepExecutionContext = getStepExecutionContext(chunkContext);
+    ExecutionContext jobContext = BatchUtils.getJobContext(chunkContext);
+    ExecutionContext stepExecutionContext = BatchUtils.getStepExecutionContext(chunkContext);
 
     String syncMode = getAndValidateSyncMode(stepExecutionContext);
     Long syncId = syncService.startNewSync(syncMode);

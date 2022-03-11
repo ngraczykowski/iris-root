@@ -3,17 +3,16 @@ package com.silenteight.scb.ingest.adapter.incomming.common.batch;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import com.silenteight.proto.serp.scb.v1.ScbMatchDetails;
-import com.silenteight.proto.serp.v1.alert.Match;
-import com.silenteight.proto.serp.v1.alert.Party;
-import com.silenteight.protocol.utils.Uuids;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertmapper.GnsMatchCalculator;
 import com.silenteight.scb.ingest.adapter.incomming.common.gender.GenderDetector;
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model.Suspect;
-import com.silenteight.sep.base.common.protocol.AnyUtils;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.Match;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.MatchDetails;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.MatchedParty;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
@@ -44,6 +43,29 @@ public class SuspectsCollection {
         .orElseThrow(() -> new MissingSuspectIndexException(suspect));
   }
 
+  private Match makeMatch(int index, Suspect suspect, AlertContext alertContext) {
+    MatchedParty party = suspect.makeWatchlistParty(alertContext.getTypeOfRec(), genderDetector);
+    MatchDetails details = suspect.makeMatchDetails(
+        suspect.getMergedMatchingTexts(),
+        alertContext.getPartyName(),
+        alertContext.getPartyAlternateNames());
+
+    return Match
+        .builder()
+        .id(party.id().toBuilder().id(UUID.randomUUID()).build())
+        .matchedParty(party)
+        .flags(calculateFlags(suspect, alertContext))
+        .index(index)
+        .details(details)
+        .build();
+  }
+
+  private static int calculateFlags(Suspect suspect, AlertContext alertContext) {
+    GnsMatchCalculator gnsMatchCalculator = new GnsMatchCalculator(
+        suspect, alertContext.getLastDecBatchId(), alertContext.isLastDecisionPresent());
+    return gnsMatchCalculator.calculateFlags();
+  }
+
   @Nonnull
   public Stream<Suspect> streamAsSuspects() {
     return suspects.stream();
@@ -55,29 +77,6 @@ public class SuspectsCollection {
 
   public int size() {
     return suspects.size();
-  }
-
-  private Match makeMatch(int index, Suspect suspect, AlertContext alertContext) {
-    Party party = suspect.makeWatchlistParty(alertContext.getTypeOfRec(), genderDetector);
-    ScbMatchDetails details = suspect.makeMatchDetails(
-        suspect.getMergedMatchingTexts(),
-        alertContext.getPartyName(),
-        alertContext.getPartyAlternateNames());
-
-    return Match
-        .newBuilder()
-        .setId(party.getId().toBuilder().setId(Uuids.random()))
-        .setMatchedParty(party)
-        .setFlags(calculateFlags(suspect, alertContext))
-        .setIndex(index)
-        .setDetails(AnyUtils.pack(details))
-        .build();
-  }
-
-  private static int calculateFlags(Suspect suspect, AlertContext alertContext) {
-    GnsMatchCalculator gnsMatchCalculator = new GnsMatchCalculator(
-        suspect, alertContext.getLastDecBatchId(), alertContext.isLastDecisionPresent());
-    return gnsMatchCalculator.calculateFlags();
   }
 
   static class MissingSuspectIndexException extends IllegalStateException {

@@ -198,6 +198,8 @@ dependencies {
   implementation libraries.silenteight_serp_protocol_scb
   implementation libraries.silenteight_sep_base_testing
   implementation libraries.silenteight_commons_core
+  implementation libraries.registration_api_library
+  implementation libraries.registration_api_proto
 
   implementation libraries.groovy_all
   implementation libraries.json_path

@@ -1,6 +1,6 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.batch;
 
-import com.silenteight.proto.serp.v1.alert.Alert;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.alert.Alert;
 
 import java.util.Optional;
 

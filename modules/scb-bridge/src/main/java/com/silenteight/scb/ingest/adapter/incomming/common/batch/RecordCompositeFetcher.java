@@ -3,11 +3,12 @@ package com.silenteight.scb.ingest.adapter.incomming.common.batch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.serp.v1.alert.Decision;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.QueryStatementHelper;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecordMapper;
 import com.silenteight.scb.ingest.adapter.incomming.common.config.FetcherConfiguration;
 import com.silenteight.scb.ingest.adapter.incomming.common.metrics.AlertsFetchedEvent;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision;
 import com.silenteight.sep.base.aspects.metrics.Timed;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -18,9 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.silenteight.scb.ingest.adapter.incomming.cbs.batch.QueryStatementHelper.prepareQuery;
-import static com.silenteight.scb.ingest.adapter.incomming.cbs.batch.QueryStatementHelper.setQueryParameters;
-import static com.silenteight.scb.ingest.adapter.incomming.common.batch.QueryTemplates.RECORDS_QUERY;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.joining;
@@ -77,7 +75,7 @@ class RecordCompositeFetcher {
     try (PreparedStatement statement = prepareRecordsQueryStatement(connection, ids)) {
       statement.setFetchSize(ids.size());
       statement.setQueryTimeout(configuration.getTimeout());
-      setQueryParameters(statement, ids);
+      QueryStatementHelper.setQueryParameters(statement, ids);
 
       try (ResultSet resultSet = statement.executeQuery()) {
         while (resultSet.next()) {
@@ -97,7 +95,8 @@ class RecordCompositeFetcher {
 
   private PreparedStatement prepareRecordsQueryStatement(Connection connection, List<String> ids)
       throws SQLException {
-    String query = prepareQuery(RECORDS_QUERY, configuration.getDbRelationName(), ids);
+    String query = QueryStatementHelper.prepareQuery(QueryTemplates.RECORDS_QUERY,
+        configuration.getDbRelationName(), ids);
     return connection.prepareStatement(query);
   }
 

@@ -3,7 +3,8 @@ package com.silenteight.scb.ingest.adapter.incomming.common.batch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.serp.v1.alert.Decision;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.QueryStatementHelper;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,8 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.silenteight.scb.ingest.adapter.incomming.cbs.batch.QueryStatementHelper.prepareQuery;
-import static com.silenteight.scb.ingest.adapter.incomming.cbs.batch.QueryStatementHelper.setQueryParameters;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 
@@ -36,22 +35,26 @@ class RecordDecisionsFetcher implements DecisionFetcher {
   private final DecisionRowMapper decisionRowMapper;
   private final String dbRelationName;
 
+  @Override
+  public List<Decision> fetchDecisions(Connection connection, String id) throws SQLException {
+    return fetchDecisions(connection, singletonList(id)).getOrDefault(id, emptyList());
+  }
+
   @SuppressWarnings("findsecbugs:SQL_INJECTION_JDBC")
   Map<String, List<Decision>> fetchDecisions(Connection connection, List<String> ids)
       throws SQLException {
-
     if (log.isDebugEnabled())
       log.debug("Fetching decisions: systemIds={}, dbRelationName={}", ids, dbRelationName);
 
     Map<String, List<Decision>> result = new HashMap<>();
-    String query = prepareQuery(DECISIONS_QUERY, dbRelationName, ids);
+    String query = QueryStatementHelper.prepareQuery(DECISIONS_QUERY, dbRelationName, ids);
 
     if (log.isTraceEnabled())
       log.trace("Executing SQL: decisionsPerRecord={}, query={}", DECISIONS_PER_RECORD, query);
 
     try (PreparedStatement statement = connection.prepareStatement(query)) {
       statement.setFetchSize(ids.size() * DECISIONS_PER_RECORD);
-      setQueryParameters(statement, ids);
+      QueryStatementHelper.setQueryParameters(statement, ids);
       try (ResultSet resultSet = statement.executeQuery()) {
         while (resultSet.next()) {
           Decision decision = decisionRowMapper.mapRow(resultSet);
@@ -63,16 +66,10 @@ class RecordDecisionsFetcher implements DecisionFetcher {
     return result;
   }
 
-  @Override
-  public List<Decision> fetchDecisions(Connection connection, String id) throws SQLException {
-    return fetchDecisions(connection, singletonList(id)).getOrDefault(id, emptyList());
-  }
-
   private static void addDecision(
       Decision decision, String systemId, Map<String, List<Decision>> decisions) {
-
     if (log.isTraceEnabled())
-      log.trace("Adding decision: decision={}, count={}", decision.getId(), decisions.size());
+      log.trace("Adding decision: decision={}, count={}", decision.id(), decisions.size());
 
     decisions.computeIfAbsent(systemId, s -> new ArrayList<>()).add(decision);
   }

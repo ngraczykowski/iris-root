@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.persistence.EntityManager;
 
-import static com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER;
 import static java.util.stream.Collectors.toMap;
 
 @RequiredArgsConstructor
@@ -26,7 +25,7 @@ public class GnsSyncDeltaService {
   private final EntityManager entityManager;
   private final GnsSyncDeltaRepository deltaRepository;
 
-  @Transactional(PRIMARY_TRANSACTION_MANAGER)
+  @Transactional(GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER)
   public void updateDelta(Map<String, Integer> deltas, String deltaJobName) {
     if (deltas.isEmpty())
       return;
@@ -56,7 +55,7 @@ public class GnsSyncDeltaService {
     }
   }
 
-  @Transactional(transactionManager = PRIMARY_TRANSACTION_MANAGER, readOnly = true)
+  @Transactional(transactionManager = GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER, readOnly = true)
   public Map<String, Integer> findAllByAlertExternalId(List<String> ids, String deltaJobName) {
     return deltaRepository
         .findAllByAlertExternalIdInAndDeltaJobName(ids, deltaJobName)
@@ -66,7 +65,7 @@ public class GnsSyncDeltaService {
             GnsSyncDeltaProjection::getDecisionsCount));
   }
 
-  @Transactional(transactionManager = PRIMARY_TRANSACTION_MANAGER, readOnly = true)
+  @Transactional(transactionManager = GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER, readOnly = true)
   public Map<ExternalId, Integer> findAllByExternalId(
       List<ExternalId> externalIds, String deltaJobName) {
     final List<String> systemIds =

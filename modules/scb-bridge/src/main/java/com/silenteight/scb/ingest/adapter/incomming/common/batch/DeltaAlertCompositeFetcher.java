@@ -3,8 +3,8 @@ package com.silenteight.scb.ingest.adapter.incomming.common.batch;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 
-import com.silenteight.proto.serp.v1.alert.Decision;
 import com.silenteight.scb.ingest.adapter.incomming.common.domain.GnsSyncDeltaService;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -19,7 +19,6 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
-
 class DeltaAlertCompositeFetcher extends BaseMultipleAlertCompositeFetcher {
 
   private final RecordCompositeFetcher recordCompositeFetcher;
@@ -49,10 +48,6 @@ class DeltaAlertCompositeFetcher extends BaseMultipleAlertCompositeFetcher {
       return emptyList();
   }
 
-  private Map<String, Integer> getPreviousRecordDecisionCounts(List<String> ids) {
-    return syncDeltaService.findAllByAlertExternalId(ids, deltaJobName);
-  }
-
   private List<String> determineDelta(
       List<String> systemIds, Map<String, List<Decision>> groupedDecisions) {
     Map<String, Integer> prevCounts = getPreviousRecordDecisionCounts(systemIds);
@@ -63,6 +58,10 @@ class DeltaAlertCompositeFetcher extends BaseMultipleAlertCompositeFetcher {
         .filter(getDeltaPredicate(prevCounts))
         .map(Entry::getKey)
         .collect(toList());
+  }
+
+  private Map<String, Integer> getPreviousRecordDecisionCounts(List<String> ids) {
+    return syncDeltaService.findAllByAlertExternalId(ids, deltaJobName);
   }
 
   @Nonnull

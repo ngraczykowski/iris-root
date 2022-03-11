@@ -4,21 +4,19 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 
-import com.silenteight.proto.serp.scb.v1.ScbMatchDetails;
-import com.silenteight.proto.serp.scb.v1.ScbMatchDetails.Builder;
-import com.silenteight.proto.serp.scb.v1.ScbWatchlistPartyDetails;
-import com.silenteight.proto.serp.scb.v1.WatchlistName;
-import com.silenteight.proto.serp.v1.alert.Party;
-import com.silenteight.proto.serp.v1.alert.Party.Source;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.CbsHitDetails;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.domain.NeoFlag;
 import com.silenteight.scb.ingest.adapter.incomming.common.WlName;
+import com.silenteight.scb.ingest.adapter.incomming.common.WlNameType;
 import com.silenteight.scb.ingest.adapter.incomming.common.gender.GenderDetector;
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model.support.StringsList;
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.model.support.SynonymsList;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.MatchDetails;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.MatchedParty;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.match.MatchedParty.WatchlistName;
+import com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils;
 import com.silenteight.scb.ingest.adapter.incomming.common.util.MatchingTextTransformer;
 import com.silenteight.scb.ingest.adapter.incomming.common.validation.ChineseCharactersValidator;
-import com.silenteight.sep.base.common.protocol.AnyUtils;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,14 +26,11 @@ import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.silenteight.scb.ingest.adapter.incomming.common.WlNameType.ALIAS;
-import static com.silenteight.scb.ingest.adapter.incomming.common.WlNameType.NAME;
 import static com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils.determineApType;
-import static com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils.expand;
-import static com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils.makeWatchlistPartyId;
 import static com.silenteight.scb.ingest.adapter.incomming.common.util.AlertParserUtils.mapString;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.nonNull;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -105,10 +100,7 @@ public class Suspect {
   private static List<WatchlistName> mapWatchlistNames(List<WlName> watchlistNames) {
     return watchlistNames
         .stream()
-        .map(name -> WatchlistName.newBuilder()
-            .setName(name.getName())
-            .setType(name.getType().name())
-            .build())
+        .map(name -> new WatchlistName(name.getName(), name.getType().name()))
         .collect(Collectors.toList());
   }
 
@@ -249,12 +241,12 @@ public class Suspect {
     var chineseNames = new ArrayList<WlName>();
 
     if (hasOriginalChineseName(name)) {
-      chineseNames.add(new WlName(name, NAME));
+      chineseNames.add(new WlName(name, WlNameType.NAME));
     }
 
     if (hasTag(Tag.NAME)) {
       streamChineseNameSynonyms()
-          .map(name -> new WlName(name, ALIAS))
+          .map(name -> new WlName(name, WlNameType.ALIAS))
           .forEach(chineseNames::add);
     }
 
@@ -268,7 +260,7 @@ public class Suspect {
   private Set<WlName> createActiveNamesSet() {
     if (hasTag(Tag.NAME)) {
       Set<WlName> activeNamesPrototype = streamActiveNameSynonyms()
-          .map(name -> new WlName(name, ALIAS))
+          .map(name -> new WlName(name, WlNameType.ALIAS))
           .collect(toSet());
       if (!activeNamesPrototype.isEmpty())
         return activeNamesPrototype;
@@ -279,11 +271,11 @@ public class Suspect {
 
   private Set<WlName> getPrimaryNameOrSynonymsIfNotAvailable() {
     if (name != null)
-      return Collections.singleton(new WlName(name, NAME));
+      return Collections.singleton(new WlName(name, WlNameType.NAME));
     else
       return nameSynonyms.asSetOfNames()
           .stream()
-          .map(name -> new WlName(name, ALIAS)).collect(
+          .map(name -> new WlName(name, WlNameType.ALIAS)).collect(
               Collectors.toSet());
   }
 
@@ -316,13 +308,14 @@ public class Suspect {
         .ifPresent(c -> setNeoFlag(c.getHitNeoFlag()));
   }
 
-  public ScbMatchDetails makeMatchDetails(
+  public MatchDetails makeMatchDetails(
       Set<String> matchingTexts, @Nullable String name, List<String> alternateNames) {
 
-    Builder builder = isNameTag() ? buildNameMatchDetails(name, alternateNames)
-                                  : buildNonNameMatchDetails(name, alternateNames);
+    MatchDetails.MatchDetailsBuilder builder =
+        isNameTag() ? buildNameMatchDetails(name, alternateNames)
+                    : buildNonNameMatchDetails(name, alternateNames);
 
-    return builder.addAllMatchingTexts(matchingTexts).build();
+    return builder.matchingTexts(matchingTexts).build();
   }
 
   private boolean isNameTag() {
@@ -330,7 +323,7 @@ public class Suspect {
   }
 
   @Nonnull
-  private Builder buildNameMatchDetails(
+  private MatchDetails.MatchDetailsBuilder buildNameMatchDetails(
       @Nullable String name, List<String> alternateNames) {
 
     MatchingTextTransformer transformer =
@@ -347,57 +340,50 @@ public class Suspect {
     if (matchedAlternateNames != null)
       matchedNames.addAll(matchedAlternateNames);
 
-    return ScbMatchDetails.newBuilder().addAllMatchedApNames(matchedNames);
+    return MatchDetails.builder().matchedApNames(matchedNames);
   }
 
   @Nonnull
-  private static Builder buildNonNameMatchDetails(
+  private static MatchDetails.MatchDetailsBuilder buildNonNameMatchDetails(
       @Nullable String name, List<String> alternateNames) {
-
-    Builder builder = ScbMatchDetails.newBuilder();
-
     if (StringUtils.isNotEmpty(name))
-      builder.addMatchedApNames(name);
+      alternateNames.add(name);
 
-    return builder.addAllMatchedApNames(alternateNames);
+    return MatchDetails.builder().matchedApNames(alternateNames);
   }
 
-  public Party makeWatchlistParty(String typeOfRec, GenderDetector genderDetector) {
-    List<String> wlNationalIds = expand(
+  public MatchedParty makeWatchlistParty(String typeOfRec, GenderDetector genderDetector) {
+    List<String> wlNationalIds = AlertParserUtils.expand(
         singletonList(getNationalId()), getSearchCodes().asList());
-    List<String> names = expand(
+    List<String> names = AlertParserUtils.expand(
         singletonList(getName()), getNameSynonyms().asListOfNames());
 
-    ScbWatchlistPartyDetails.Builder detailsBuilder = ScbWatchlistPartyDetails
-        .newBuilder()
-        .setWlGenderFromName(genderDetector.determineWlGenderFromName(typeOfRec, names))
-        .addAllWlNameSynonyms(getNameSynonyms().asListOfNames())
-        .addAllWlNames(mapWatchlistNames(getActiveNames()))
-        .addAllWlSearchCodes(getSearchCodes().asList())
-        .addAllWlNationalIds(wlNationalIds)
-        .addAllWlBicCodes(getBicCodes().asList())
-        .addAllWlHitType(getTags())
-        .addAllWlOriginalCnNames(mapWatchlistNames(getOriginalChineseNames()));
+    MatchedParty.MatchedPartyBuilder builder = MatchedParty.builder()
+        .id(AlertParserUtils.makeWatchlistPartyId(getOfacId(), getBatchId()))
+        .wlGenderFromName(genderDetector.determineWlGenderFromName(typeOfRec, names))
+        .wlNameSynonyms(getNameSynonyms().asListOfNames())
+        .wlNames(mapWatchlistNames(getActiveNames()))
+        .wlHitNames(getActiveNames().stream().map(WlName::getName).collect(toList()))
+        .wlSearchCodes(getSearchCodes().asList())
+        .wlNationalIds(wlNationalIds)
+        .wlBicCodes(getBicCodes().asList())
+        .wlHitType(getTags())
+        .wlOriginalCnNames(mapWatchlistNames(getOriginalChineseNames()));
 
-    mapString(determineApType(typeOfRec, getType()), detailsBuilder::setApType);
-    mapString(getNotes().getOrDefault("gender", EMPTY), detailsBuilder::setWlGender);
-    mapString(getOfacId(), detailsBuilder::setWlId);
-    mapString(getName(), detailsBuilder::setWlName);
-    mapString(getType(), detailsBuilder::setWlType);
-    mapString(getBirthDate(), detailsBuilder::setWlDob);
-    mapString(getNotes().getOrDefault("nationality", EMPTY), detailsBuilder::setWlNationality);
-    mapString(getCountry(), detailsBuilder::setWlResidence);
-    mapString(getNationalId(), detailsBuilder::setWlNationalId);
-    mapString(getPassport(), detailsBuilder::setWlPassport);
-    mapString(getCountry(), detailsBuilder::setWlCountry);
-    mapString(getDesignation(), detailsBuilder::setWlDesignation);
-    mapString(getNotes().getOrDefault("title", EMPTY), detailsBuilder::setWlTitle);
+    mapString(determineApType(typeOfRec, getType()), builder::apType);
+    mapString(getNotes().getOrDefault("gender", EMPTY), builder::wlGender);
+    mapString(getOfacId(), builder::wlId);
+    mapString(getName(), builder::wlName);
+    mapString(getType(), builder::wlType);
+    mapString(getBirthDate(), builder::wlDob);
+    mapString(getNotes().getOrDefault("nationality", EMPTY), builder::wlNationality);
+    mapString(getCountry(), builder::wlResidence);
+    mapString(getNationalId(), builder::wlNationalId);
+    mapString(getPassport(), builder::wlPassport);
+    mapString(getCountry(), builder::wlCountry);
+    mapString(getDesignation(), builder::wlDesignation);
+    mapString(getNotes().getOrDefault("title", EMPTY), builder::wlTitle);
 
-    return Party
-        .newBuilder()
-        .setId(makeWatchlistPartyId(getOfacId(), getBatchId()))
-        .setSource(Source.SOURCE_CONFIDENTIAL)
-        .setDetails(AnyUtils.pack(detailsBuilder.build()))
-        .build();
+    return builder.build();
   }
 }

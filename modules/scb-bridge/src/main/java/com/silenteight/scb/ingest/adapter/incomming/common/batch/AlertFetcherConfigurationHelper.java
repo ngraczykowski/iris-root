@@ -5,12 +5,11 @@ import lombok.AllArgsConstructor;
 
 import com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord.GnsSolutionMapper;
 import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.ScbBridgeConfigProperties;
+import com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsGatewayFactory;
 import com.silenteight.scb.ingest.adapter.incomming.common.config.FetcherConfiguration;
 import com.silenteight.scb.ingest.adapter.incomming.common.hitdetails.HitDetailsParser;
 
 import org.springframework.context.ApplicationEventPublisher;
-
-import static com.silenteight.scb.ingest.adapter.incomming.cbs.gateway.CbsGatewayFactory.getHitDetailsHelperFetcher;
 
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -41,14 +40,10 @@ class AlertFetcherConfigurationHelper {
         eventPublisher);
   }
 
-  RecordDecisionsFetcher createDecisionsFetcher(String dbRelationName) {
-    return new RecordDecisionsFetcher(decisionRowMapper(), dbRelationName);
-  }
-
   private SuspectDataFetcher createSuspectDataFetcher(String cbsHitsDetailsHelperViewName) {
     FetcherConfiguration configuration = createFetcherConfiguration(cbsHitsDetailsHelperViewName);
     return new SuspectDataFetcher(
-        new HitDetailsParser(), getHitDetailsHelperFetcher(configuration));
+        new HitDetailsParser(), CbsGatewayFactory.getHitDetailsHelperFetcher(configuration));
   }
 
   private AlertCompositeRowProcessor createAlertCompositeRowProcessor(boolean watchlistLevel) {
@@ -57,6 +52,10 @@ class AlertFetcherConfigurationHelper {
 
   private FetcherConfiguration createFetcherConfiguration(String dbRelationName) {
     return new FetcherConfiguration(dbRelationName, queryTimeout);
+  }
+
+  RecordDecisionsFetcher createDecisionsFetcher(String dbRelationName) {
+    return new RecordDecisionsFetcher(decisionRowMapper(), dbRelationName);
   }
 
   private DecisionRowMapper decisionRowMapper() {

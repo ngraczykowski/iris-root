@@ -1,6 +1,6 @@
 package com.silenteight.scb.ingest.adapter.incomming.common.batch;
 
-import com.silenteight.proto.serp.v1.alert.Decision;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.decision.Decision;
 
 import java.sql.Connection;
 import java.sql.SQLException;

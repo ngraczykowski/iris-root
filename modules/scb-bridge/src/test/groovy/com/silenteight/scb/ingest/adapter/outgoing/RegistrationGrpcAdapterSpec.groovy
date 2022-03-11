@@ -28,4 +28,20 @@ class RegistrationGrpcAdapterSpec extends Specification {
     0 * _
   }
 
+  def 'should register alerts and matches in core bridge'() {
+    given:
+    def request = Fixtures.REGISTRATION_REQUEST
+    def response = Fixtures.REGISTRATION_RESPONSE
+    def registerAlertsAndMatchesIn = RegisterAlertsAndMatchesIn.builder().build()
+    def registerAlertsAndMatchesOut = RegisterAlertsAndMatchesOut.builder().build()
+
+    when:
+    underTest.registerAlertsAndMatches(request)
+
+    then:
+    1 * mapper.toRegisterAlertsAndMatchesIn(Fixtures.REGISTRATION_REQUEST) >> registerAlertsAndMatchesIn
+    1 * registrationServiceClient.registerAlertsAndMatches(registerAlertsAndMatchesIn) >> registerAlertsAndMatchesOut
+    1 * mapper.toRegistrationResponse(registerAlertsAndMatchesOut) >> response
+    0 * _
+  }
 }

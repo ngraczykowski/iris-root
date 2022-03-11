@@ -4,9 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import com.silenteight.proto.serp.v1.common.ObjectId;
-import com.silenteight.protocol.utils.ObjectIds;
-import com.silenteight.protocol.utils.Uuids;
+import com.silenteight.scb.ingest.adapter.incomming.common.model.ObjectId;
 
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -61,12 +59,20 @@ public final class AlertParserUtils {
   }
 
   public static ObjectId makeWatchlistPartyId(@NonNull String ofacId, @Nullable String batchId) {
-    return ObjectIds.fromUuidAndSource(UUID.randomUUID(), ofacId, nullToEmpty(batchId));
+    return ObjectId.builder()
+        .id(UUID.randomUUID())
+        .sourceId(ofacId)
+        .discriminator(nullToEmpty(batchId))
+        .build();
   }
 
   public static ObjectId makeAlertedPartyId(
       @NonNull String recordId, @NonNull String recordSignature) {
-    return ObjectIds.fromUuidAndSource(UUID.randomUUID(), recordId, recordSignature);
+    return ObjectId.builder()
+        .id(UUID.randomUUID())
+        .sourceId(recordId)
+        .discriminator(recordSignature)
+        .build();
   }
 
   public static ObjectId makeId(
@@ -74,10 +80,10 @@ public final class AlertParserUtils {
       @Nullable String watchlistId,
       @Nullable Instant lastResetDecisionDate) {
     return ObjectId
-        .newBuilder()
-        .setId(Uuids.random())
-        .setSourceId(makeSourceId(systemId, watchlistId))
-        .setDiscriminator(String.valueOf(lastResetDecisionDate))
+        .builder()
+        .id(UUID.randomUUID())
+        .sourceId(makeSourceId(systemId, watchlistId))
+        .discriminator(String.valueOf(lastResetDecisionDate))
         .build();
   }
 

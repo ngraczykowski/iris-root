@@ -3,6 +3,7 @@ package com.silenteight.scb.ingest.adapter.incomming.cbs.alertrecord;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.silenteight.scb.ingest.adapter.incomming.cbs.batch.QueryStatementHelper;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecord;
 import com.silenteight.scb.ingest.adapter.incomming.common.alertrecord.AlertRecordMapper;
 
@@ -22,7 +23,6 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.validation.ValidationException;
 
-import static com.silenteight.scb.ingest.adapter.incomming.cbs.batch.QueryStatementHelper.prepareQuery;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.transaction.annotation.Isolation.SERIALIZABLE;
 
@@ -54,7 +54,9 @@ class DatabaseAlertRecordReader implements AlertRecordReader {
   @Nonnull
   private List<AlertRecord> getAlertRecords(
       String dbRelationName, Collection<String> systemIds) {
-    var query = prepareQuery(AlertsReaderQueryTemplates.RECORDS_QUERY, dbRelationName, systemIds);
+    var query =
+        QueryStatementHelper.prepareQuery(AlertsReaderQueryTemplates.RECORDS_QUERY, dbRelationName,
+            systemIds);
     return jdbcTemplate.query(query, getArgumentSetter(systemIds), mapper);
   }
 

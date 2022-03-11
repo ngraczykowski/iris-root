@@ -36,27 +36,6 @@ class AlertsUnderProcessingService implements AlertInFlightService {
   }
 
   @Override
-  public List<AlertIdWithDetails> readChunk() {
-    return alertUnderProcessingRepository.findTop2000ByErrorIsNullOrderByPriorityDesc()
-        .stream()
-        .map(this::getAlertIdWithDetails)
-        .collect(toList());
-  }
-
-  private AlertIdWithDetails getAlertIdWithDetails(AlertUnderProcessing alert) {
-    try {
-      return AlertIdWithDetails
-          .builder()
-          .systemId(alert.getSystemId())
-          .batchId(alert.getBatchId())
-          .context(ScbAlertIdContext.parseFrom(alert.getPayload()))
-          .build();
-    } catch (InvalidProtocolBufferException exception) {
-      throw new IllegalStateException("Invalid proto definition", exception);
-    }
-  }
-
-  @Override
   @Transactional(GnsSyncConstants.PRIMARY_TRANSACTION_MANAGER)
   public void delete(@NonNull AlertId alertId) {
     alertUnderProcessingRepository.deleteBySystemIdAndBatchId(
@@ -83,6 +62,27 @@ class AlertsUnderProcessingService implements AlertInFlightService {
 
     alertUnderProcessingRepository.update(
         alertId.getSystemId(), alertId.getBatchId(), state, trimmedError);
+  }
+
+  @Override
+  public List<AlertIdWithDetails> readChunk() {
+    return alertUnderProcessingRepository.findTop2000ByErrorIsNullOrderByPriorityDesc()
+        .stream()
+        .map(this::getAlertIdWithDetails)
+        .collect(toList());
+  }
+
+  private AlertIdWithDetails getAlertIdWithDetails(AlertUnderProcessing alert) {
+    try {
+      return AlertIdWithDetails
+          .builder()
+          .systemId(alert.getSystemId())
+          .batchId(alert.getBatchId())
+          .context(ScbAlertIdContext.parseFrom(alert.getPayload()))
+          .build();
+    } catch (InvalidProtocolBufferException exception) {
+      throw new IllegalStateException("Invalid proto definition", exception);
+    }
   }
 
   private Collection<AlertId> getAlertsUnderProcessing(Collection<AlertId> alerts) {
