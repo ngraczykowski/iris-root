@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 
 @Data
 @Validated
-@ConfigurationProperties(prefix = "warehouse.migration")
+@ConfigurationProperties(prefix = "warehouse.alert.migration")
 class MigrationProperties {
 
   int batchSize;

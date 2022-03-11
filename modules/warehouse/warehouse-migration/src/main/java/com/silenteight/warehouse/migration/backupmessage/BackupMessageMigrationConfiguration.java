@@ -20,7 +20,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 @Configuration
-@ConditionalOnProperty(value = "warehouse.migration.enabled", havingValue = "true")
+@ConditionalOnProperty(value = "warehouse.alert.migration.enabled", havingValue = "true")
 @EnableConfigurationProperties(MigrationProperties.class)
 class BackupMessageMigrationConfiguration {
 
