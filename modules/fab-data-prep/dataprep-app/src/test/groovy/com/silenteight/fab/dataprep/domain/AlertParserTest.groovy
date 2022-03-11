@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import spock.lang.Specification
 
+import static com.silenteight.fab.dataprep.domain.Fixtures.*
+
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 class AlertParserTest extends Specification {
 
@@ -17,10 +19,10 @@ class AlertParserTest extends Specification {
 
   def "AlertDetails should be parsed"() {
     given:
-    def alertMessageDetails = AlertMessageDetails.newBuilder().setMessageName("alertId")
-        .setPayload(Fixtures.MESSAGE).build();
-    def alertMessageStored = AlertMessageStored.newBuilder().setBatchName("batchId")
-        .setMessageName("alertId").build();
+    def alertMessageDetails = AlertMessageDetails.newBuilder().setMessageName(MESSAGE_NAME)
+        .setPayload(MESSAGE).build();
+    def alertMessageStored = AlertMessageStored.newBuilder().setBatchName(BATCH_NAME)
+        .setMessageName(MESSAGE_NAME).build();
 
     when:
     def parsedAlertMessage = underTest.parse(alertMessageStored, alertMessageDetails)
@@ -30,7 +32,7 @@ class AlertParserTest extends Specification {
     parsedAlertMessage.hits.size() == 1
     parsedAlertMessage.hits.values().each  {it ->
       def parser = new JsonSlurper();
-      assert parser.parseText(it.getPayload().toString()) == parser.parseText(Fixtures.HIT)
+      assert parser.parseText(it.getPayload().toString()) == parser.parseText(HIT)
     }
   }
 

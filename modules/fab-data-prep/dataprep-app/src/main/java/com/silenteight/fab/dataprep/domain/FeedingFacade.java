@@ -35,7 +35,7 @@ public class FeedingFacade {
         .onFailure(e -> {
           log.error(
               "Failed to create feature inputs for batch id: {} and alert id: {}.",
-              registeredAlert.getBatchName(), registeredAlert.getMessageName(), e);
+              registeredAlert.getBatchName(), registeredAlert.getAlertName(), e);
           feedingEventPublisher.publish(
               createUdsFedEvent(
                   registeredAlert, Status.FAILURE, AlertErrorDescription.CREATE_FEATURE_INPUT));
@@ -43,7 +43,7 @@ public class FeedingFacade {
         .onSuccess(e -> {
           log.info(
               "Feature inputs for batch id: {} and alert id: {} created successfully.",
-              registeredAlert.getBatchName(), registeredAlert.getMessageName());
+              registeredAlert.getBatchName(), registeredAlert.getAlertName());
           feedingEventPublisher.publish(
               createUdsFedEvent(registeredAlert, Status.SUCCESS, AlertErrorDescription.NONE));
         });
@@ -59,7 +59,7 @@ public class FeedingFacade {
       RegisteredAlert registeredAlert, Status status, AlertErrorDescription errorDescription) {
     return UdsFedEvent.builder()
         .batchId(registeredAlert.getBatchName())
-        .alertId(registeredAlert.getMessageName())
+        .alertId(registeredAlert.getAlertName())
         .errorDescription(errorDescription)
         .feedingStatus(status)
         .fedMatches(createFedMatches(registeredAlert))
@@ -68,7 +68,7 @@ public class FeedingFacade {
 
   private static List<FedMatch> createFedMatches(RegisteredAlert registeredAlert) {
     return registeredAlert.getMatches().stream()
-        .map(match -> new FedMatch(match.getHitName()))
+        .map(match -> new FedMatch(match.getMatchName()))
         .collect(toList());
   }
 }

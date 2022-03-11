@@ -14,6 +14,9 @@ class Fixtures {
 
   static final String MATCH_NAME = 'matches/1'
   static final String ALERT_NAME = 'alerts/1'
+  static final String HIT_NAME = 'hits/d0bd7272-a12a-11ec-9ee7-7bf12518d571'
+  static final String MESSAGE_NAME = 'messages/e525c926-a12a-11ec-97fc-3f5de86f02ac'
+  static final String BATCH_NAME = 'batches/031dafde-a12b-11ec-8e04-2f2fd89dfc3f'
 
   static def MAPPER = new ObjectMapper()
 
@@ -69,8 +72,8 @@ class Fixtures {
   static FeatureInputsCommand FEATURE_INPUTS_COMMAND = FeatureInputsCommand.builder()
       .registeredAlert(
           RegisteredAlert.builder()
-              .batchName('batchId')
-              .messageName('alertId')
+              .batchName(BATCH_NAME)
+              .messageName(MESSAGE_NAME)
               .alertName(ALERT_NAME)
               .parsedMessageData(PARSED_PAYLOAD)
               .matches([MATCH])
@@ -80,8 +83,8 @@ class Fixtures {
   static FeatureInputsCommand EMPTY_FEATURE_INPUTS_COMMAND = FeatureInputsCommand.builder()
       .registeredAlert(
           RegisteredAlert.builder()
-              .batchName('batchId')
-              .messageName('alertId')
+              .batchName(BATCH_NAME)
+              .messageName(MESSAGE_NAME)
               .alertName(ALERT_NAME)
               .parsedMessageData(PARSED_PAYLOAD)
               .matches([EMPTY_MATCH])

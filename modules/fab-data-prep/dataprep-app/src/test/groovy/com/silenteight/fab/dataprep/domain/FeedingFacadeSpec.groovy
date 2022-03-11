@@ -13,6 +13,8 @@ import com.silenteight.fab.dataprep.domain.outgoing.FeedingEventPublisher
 import spock.lang.Specification
 import spock.lang.Subject
 
+import static com.silenteight.fab.dataprep.domain.Fixtures.*
+
 class FeedingFacadeSpec extends Specification {
 
   FeedingService feedingService = Mock()
@@ -27,16 +29,16 @@ class FeedingFacadeSpec extends Specification {
   def "should get extracted alert"() {
     given:
     def registeredAlert = RegisteredAlert.builder()
-        .batchName('batchId')
-        .messageName('alertId')
-        .alertName('alertName')
+        .batchName(BATCH_NAME)
+        .messageName(MESSAGE_NAME)
+        .alertName(ALERT_NAME)
         .status(status)
         .errorDescription(errorDescription)
         .matches(
             [
                 Match.builder()
-                    .hitName('matchId')
-                    .matchName('matchName')
+                    .hitName(HIT_NAME)
+                    .matchName(MATCH_NAME)
                     .build()
             ]
         )
@@ -47,13 +49,13 @@ class FeedingFacadeSpec extends Specification {
         .build()
 
     def udsFedEvent = UdsFedEvent.builder()
-        .batchId('batchId')
-        .alertId('alertId')
+        .batchId(BATCH_NAME)
+        .alertId(ALERT_NAME)
         .errorDescription(errorDescription)
         .feedingStatus(feedingStatus)
         .fedMatches(
             [
-                new FedMatch('matchId')
+                new FedMatch(MATCH_NAME)
             ]
         )
         .build()
