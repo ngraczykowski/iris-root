@@ -46,3 +46,4 @@ feeding:
     name-feature.enabled: true
     date-feature.enabled: true
     nationality-feature.enabled: true
+    passport-feature.enabled: true

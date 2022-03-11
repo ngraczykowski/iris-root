@@ -3,6 +3,7 @@ package com.silenteight.fab.dataprep.infrastructure;
 import com.silenteight.fab.dataprep.domain.feature.*;
 
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.ParseContext;
 import com.jayway.jsonpath.spi.json.JacksonJsonNodeJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
@@ -17,6 +18,7 @@ public class FeatureConfiguration {
   ParseContext parseContext() {
     return JsonPath.using(com.jayway.jsonpath.Configuration
         .builder()
+        .options(Option.SUPPRESS_EXCEPTIONS)
         .mappingProvider(new JacksonMappingProvider())
         .jsonProvider(new JacksonJsonNodeJsonProvider())
         .build());
@@ -50,5 +52,11 @@ public class FeatureConfiguration {
   @ConditionalOnProperty("feeding.features.nationality-feature.enabled")
   FabFeature nationalityFeature(ParseContext parseContext) {
     return new NationalityFeature(parseContext);
+  }
+
+  @Bean
+  @ConditionalOnProperty("feeding.features.passport-feature.enabled")
+  FabFeature passportFeature(ParseContext parseContext) {
+    return new PassportFeature(parseContext);
   }
 }

@@ -56,6 +56,12 @@ class Fixtures {
       .payload(MAPPER.readTree(HIT_URL))
       .build()
 
+  static Match EMPTY_MATCH = Match.builder()
+      .matchId(UUID.randomUUID().toString())
+      .matchName(MATCH_NAME)
+      .payload(MAPPER.readTree('{}'))
+      .build()
+
   static String HIT = Resources.toString(HIT_URL, UTF_8);
 
   static String MESSAGE = Resources.toString(Resources.getResource("message.json"), UTF_8);
@@ -69,6 +75,18 @@ class Fixtures {
               .alertName(ALERT_NAME)
               .parsedMessageData(PARSED_PAYLOAD)
               .matches([MATCH])
+              .build())
+      .build()
+
+  static FeatureInputsCommand EMPTY_FEATURE_INPUTS_COMMAND = FeatureInputsCommand.builder()
+      .batchId('batchId')
+      .registeredAlert(
+          RegisteredAlert.builder()
+              .batchId('batchId')
+              .alertId('alertId')
+              .alertName(ALERT_NAME)
+              .parsedMessageData(PARSED_PAYLOAD)
+              .matches([EMPTY_MATCH])
               .build())
       .build()
 }

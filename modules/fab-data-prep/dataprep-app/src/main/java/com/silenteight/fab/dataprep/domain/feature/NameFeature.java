@@ -16,6 +16,7 @@ import com.jayway.jsonpath.TypeRef;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static java.util.Collections.emptyList;
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 
@@ -95,6 +96,7 @@ public class NameFeature implements FabFeature {
   }
 
   private List<String> getMatchingTexts(JsonNode jsonNode) {
-    return of(parseContext.parse(jsonNode).read(MATCHING_TEXT_PATH, String.class));
+    String value = parseContext.parse(jsonNode).read(MATCHING_TEXT_PATH, String.class);
+    return value == null ? emptyList() : of(value);
   }
 }

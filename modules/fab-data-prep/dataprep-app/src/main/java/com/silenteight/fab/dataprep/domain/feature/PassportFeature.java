@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.silenteight.fab.dataprep.domain.model.RegisteredAlert;
 import com.silenteight.universaldatasource.api.library.Feature;
 import com.silenteight.universaldatasource.api.library.agentinput.v1.AgentInputIn;
-import com.silenteight.universaldatasource.api.library.country.v1.CountryFeatureInputOut;
+import com.silenteight.universaldatasource.api.library.document.v1.DocumentFeatureInputOut;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.ParseContext;
@@ -19,10 +19,10 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
-public class NationalityFeature implements FabFeature {
+public class PassportFeature implements FabFeature {
 
-  static final String FEATURE_NAME = "features/nationalityCountry";
-  private static final String JSON_PATH = "$.HittedEntity.Nationality";
+  static final String FEATURE_NAME = "features/passportNumberDocument";
+  private static final String JSON_PATH = "$.HittedEntity.PassportNumber";    //TODO is it correct?
 
   private final ParseContext parseContext;
 
@@ -35,17 +35,17 @@ public class NationalityFeature implements FabFeature {
             AgentInputIn.builder()
                 .match(match.getMatchName())
                 .alert(registeredAlert.getAlertName())
-                .featureInputs(of(CountryFeatureInputOut.builder()
+                .featureInputs(of(DocumentFeatureInputOut.builder()
                     .feature(FEATURE_NAME)
-                    .alertedPartyCountries(getAlertedPart(registeredAlert))
-                    .watchlistCountries(getWatchlistPart(match.getPayload()))
+                    .alertedPartyDocuments(getAlertedPart(registeredAlert))
+                    .watchlistDocuments(getWatchlistPart(match.getPayload()))
                     .build()))
                 .build())
         .collect(toList());
   }
 
   private List<String> getAlertedPart(RegisteredAlert registeredAlert) {
-    return of(registeredAlert.getParsedMessageData().getCountryOfIncorporation());
+    return of(registeredAlert.getParsedMessageData().getPassportNum());
   }
 
   protected List<String> getWatchlistPart(JsonNode jsonNode) {
