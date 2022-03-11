@@ -8,6 +8,8 @@ import static java.util.Arrays.asList;
 
 class GnsRtRecommendationUseCaseImplFixtures {
 
+  String batchId = "batchId";
+
   ObjectId alertId1 = ObjectId.builder()
       .sourceId("alertId1")
       .discriminator("discriminator")
@@ -26,25 +28,6 @@ class GnsRtRecommendationUseCaseImplFixtures {
   Alert alert1 = alert(alertId1);
   Alert alert2 = alert(alertId2);
 
-  private static GnsRtRecommendationRequest request(GnsRtAlert... alerts) {
-    ImmediateResponseData immediateResponseData = new ImmediateResponseData();
-    immediateResponseData.setAlerts(asList(alerts));
-
-    GnsRtScreenCustomerNameResInfo info = new GnsRtScreenCustomerNameResInfo();
-    info.setImmediateResponseData(immediateResponseData);
-
-    GnsRtScreenCustomerNameResPayload payload = new GnsRtScreenCustomerNameResPayload();
-    payload.setScreenCustomerNameResInfo(info);
-
-    GnsRtScreenCustomerNameRes screenCustomerNameRes = new GnsRtScreenCustomerNameRes();
-    screenCustomerNameRes.setScreenCustomerNameResPayload(payload);
-
-    GnsRtRecommendationRequest gnsRtRecommendationRequest = new GnsRtRecommendationRequest();
-    gnsRtRecommendationRequest.setScreenCustomerNameRes(screenCustomerNameRes);
-
-    return gnsRtRecommendationRequest;
-  }
-
   private static GnsRtAlert gnsAlert(ObjectId id) {
     var alert = new GnsRtAlert();
     alert.setAlertId(id.sourceId());
@@ -56,5 +39,32 @@ class GnsRtRecommendationUseCaseImplFixtures {
     return Alert.builder()
         .id(id)
         .build();
+  }
+
+  private GnsRtRecommendationRequest request(GnsRtAlert... alerts) {
+    ImmediateResponseData immediateResponseData = new ImmediateResponseData();
+    immediateResponseData.setAlerts(asList(alerts));
+
+    GnsRtScreenCustomerNameResInfo info = new GnsRtScreenCustomerNameResInfo();
+    info.setImmediateResponseData(immediateResponseData);
+
+    GnsRtScreenCustomerNameResPayload payload = new GnsRtScreenCustomerNameResPayload();
+    payload.setScreenCustomerNameResInfo(info);
+
+    GnsRtOriginationDetails gnsRtOriginationDetails = new GnsRtOriginationDetails();
+    gnsRtOriginationDetails.setTrackingId(batchId);
+
+    GnsRtScreenCustomerNameResHeader gnsRtScreenCustomerNameResHeader =
+        new GnsRtScreenCustomerNameResHeader();
+    gnsRtScreenCustomerNameResHeader.setOriginationDetails(gnsRtOriginationDetails);
+
+    GnsRtScreenCustomerNameRes screenCustomerNameRes = new GnsRtScreenCustomerNameRes();
+    screenCustomerNameRes.setScreenCustomerNameResPayload(payload);
+    screenCustomerNameRes.setHeader(gnsRtScreenCustomerNameResHeader);
+
+    GnsRtRecommendationRequest gnsRtRecommendationRequest = new GnsRtRecommendationRequest();
+    gnsRtRecommendationRequest.setScreenCustomerNameRes(screenCustomerNameRes);
+
+    return gnsRtRecommendationRequest;
   }
 }

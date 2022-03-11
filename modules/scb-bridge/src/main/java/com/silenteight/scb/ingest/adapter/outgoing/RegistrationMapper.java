@@ -35,25 +35,25 @@ class RegistrationMapper {
         .build();
   }
 
-  private AlertWithMatchesIn toAlertWithMatchesIn(AlertWithMatchesMetadata alertWithMetadata) {
+  private AlertWithMatchesIn toAlertWithMatchesIn(AlertWithMatches alertWithMatches) {
     return AlertWithMatchesIn.builder()
-        .alertId(alertWithMetadata.getAlertId())
-        .status(AlertStatusIn.valueOf(alertWithMetadata.getStatus().name()))
-        .errorDescription(getErrorDescription(alertWithMetadata).getDescription())
-        .metadata(getMetadata(alertWithMetadata))
-        .matches(alertWithMetadata.getMatches().stream().map(this::toMatchIn).toList())
+        .alertId(alertWithMatches.getAlertId())
+        .status(AlertStatusIn.valueOf(alertWithMatches.getStatus().name()))
+        .errorDescription(getErrorDescription(alertWithMatches).getDescription())
+        .metadata(getMetadata(alertWithMatches))
+        .matches(alertWithMatches.getMatches().stream().map(this::toMatchIn).toList())
         .build();
   }
 
   private AlertErrorDescription getErrorDescription(
-      AlertWithMatchesMetadata alertWithMatchesMetadata) {
+      AlertWithMatches alertWithMatches) {
     return Optional
-        .ofNullable(alertWithMatchesMetadata.getAlertErrorDescription())
+        .ofNullable(alertWithMatches.getAlertErrorDescription())
         .orElse(AlertErrorDescription.NONE);
   }
 
-  private String getMetadata(AlertWithMatchesMetadata alertWithMatchesMetadata) {
-    return Optional.ofNullable(alertWithMatchesMetadata.getMetadata())
+  private String getMetadata(AlertWithMatches alertWithMatches) {
+    return Optional.ofNullable(alertWithMatches.getMetadata())
         .map(converter::serializeFromObjectToJson)
         .orElse("");
   }

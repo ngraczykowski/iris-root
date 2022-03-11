@@ -3,7 +3,7 @@ server:
 grpc:
   client:
     registration:
-      address: static://localhost:24805
+      address: static://localhost:24806
       negotiation-type: PLAINTEXT
   server:
     port: 24221

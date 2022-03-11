@@ -9,6 +9,7 @@ import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.ScbRec
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.alertinfo.AlertInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
+import com.silenteight.scb.ingest.domain.AlertService;
 
 import io.grpc.Channel;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -24,6 +25,7 @@ class GnsRtRecommendationUseCaseConfiguration {
   private final GnsRtResponseMapper gnsRtResponseMapper;
   private final AlertInfoService alertInfoService;
   private final ScbRecommendationService scbRecommendationService;
+  private final AlertService alertService;
 
   @Setter(onMethod_ = @GrpcClient("gateway"))
   private Channel gatewayChannel;
@@ -36,6 +38,7 @@ class GnsRtRecommendationUseCaseConfiguration {
         .alertInfoService(alertInfoService)
         .storeGnsRtRecommendationUseCase(storeGnsRtRecommendationUseCase())
         .recommendationService(recommendationGatewayService())
+        .alertService(alertService)
         .build();
   }
 

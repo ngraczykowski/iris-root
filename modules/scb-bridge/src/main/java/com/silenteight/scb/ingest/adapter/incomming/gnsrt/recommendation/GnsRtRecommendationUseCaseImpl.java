@@ -11,10 +11,10 @@ import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToA
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.request.GnsRtRecommendationRequest;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.model.response.GnsRtRecommendationResponse;
-import com.silenteight.scb.ingest.adapter.outgoing.RegistrationApiClient;
-import com.silenteight.scb.ingest.domain.model.RegistrationRequest;
+import com.silenteight.scb.ingest.domain.AlertService;
 import com.silenteight.scb.ingest.domain.model.RegistrationResponse;
 
+import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -30,19 +30,24 @@ public class GnsRtRecommendationUseCaseImpl implements GnsRtRecommendationUseCas
   private final AlertInfoService alertInfoService;
   private final StoreGnsRtRecommendationUseCase storeGnsRtRecommendationUseCase;
   private final RecommendationGatewayService recommendationService;
-  private final RegistrationApiClient registrationApiClient;
+  private final AlertService alertService;
 
   @Override
   public Mono<GnsRtRecommendationResponse> recommend(@NonNull GnsRtRecommendationRequest request) {
     List<Alert> alerts = mapAlerts(request);
     logGnsRtRequest(alerts);
 
-    //register batch (what is batch in gns-rt?)
+    //register batch
     //register alerts & matches
+    String batchId = getBatchId(request);
     RegistrationResponse registrationResponse =
-        registrationApiClient.registerAlertsAndMatches(RegistrationRequest.builder().build());
+        alertService.registerAlertsAndMatches(batchId, alerts);
 
     return Mono.empty();
+  }
+
+  private String getBatchId(@NotNull GnsRtRecommendationRequest request) {
+    return request.getScreenCustomerNameRes().getHeader().getOriginationDetails().getTrackingId();
   }
 
   private List<Alert> mapAlerts(GnsRtRecommendationRequest request) {

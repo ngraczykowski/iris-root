@@ -12,12 +12,12 @@ public class RegistrationRequest {
   String batchId;
 
   @Builder.Default
-  List<AlertWithMatchesMetadata> alertsWithMatches = List.of();
+  List<AlertWithMatches> alertsWithMatches = List.of();
 
   public static RegistrationRequest of(
-      Batch batch, List<AlertWithMatchesMetadata> alertsWithMatches) {
+      String batchId, List<AlertWithMatches> alertsWithMatches) {
     return RegistrationRequest.builder()
-        .batchId(batch.id())
+        .batchId(batchId)
         .alertsWithMatches(alertsWithMatches)
         .build();
   }

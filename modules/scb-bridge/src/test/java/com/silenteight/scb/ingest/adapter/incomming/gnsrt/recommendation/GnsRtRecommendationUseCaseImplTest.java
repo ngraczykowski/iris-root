@@ -3,7 +3,7 @@ package com.silenteight.scb.ingest.adapter.incomming.gnsrt.recommendation;
 import com.silenteight.scb.ingest.adapter.incomming.common.recommendation.alertinfo.AlertInfoService;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtRequestToAlertMapper;
 import com.silenteight.scb.ingest.adapter.incomming.gnsrt.mapper.GnsRtResponseMapper;
-import com.silenteight.scb.ingest.adapter.outgoing.RegistrationApiClient;
+import com.silenteight.scb.ingest.domain.AlertService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class GnsRtRecommendationUseCaseImplTest {
   @Mock
   private RecommendationGatewayService recommendationService;
   @Mock
-  private RegistrationApiClient registrationApiClient;
+  private AlertService alertService;
 
   private GnsRtRecommendationUseCaseImpl underTest;
 
@@ -44,7 +44,7 @@ class GnsRtRecommendationUseCaseImplTest {
         .alertInfoService(alertInfoService)
         .storeGnsRtRecommendationUseCase(storeGnsRtRecommendationUseCase)
         .recommendationService(recommendationService)
-        .registrationApiClient(registrationApiClient)
+        .alertService(alertService)
         .build();
   }
 
@@ -58,6 +58,8 @@ class GnsRtRecommendationUseCaseImplTest {
     StepVerifier
         .create(mono)
         .verifyComplete();
+
+    verify(alertService).registerAlertsAndMatches(fixtures.batchId, alerts);
   }
 
   @Test
@@ -70,5 +72,7 @@ class GnsRtRecommendationUseCaseImplTest {
     StepVerifier
         .create(mono)
         .verifyComplete();
+
+    verify(alertService).registerAlertsAndMatches(fixtures.batchId, alerts);
   }
 }
