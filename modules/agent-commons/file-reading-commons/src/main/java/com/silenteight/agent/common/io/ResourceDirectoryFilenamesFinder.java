@@ -27,6 +27,7 @@ public class ResourceDirectoryFilenamesFinder {
   private static final int MAX_DEPTH = 1;
   private static final String JAR_SCHEME = "jar";
   private static final String URI_DIR_SEPARATOR = "!";
+  private static final String JAR_EXTENSION_WITH_DOT = ".jar";
   private final String resourceDirectoryPath;
 
   public Stream<String> find() throws IOException {
@@ -56,7 +57,7 @@ public class ResourceDirectoryFilenamesFinder {
 
   private static boolean hasNestedJar(String directoryUriString) {
     var dirs = directoryUriString.split(URI_DIR_SEPARATOR);
-    return nonNull(dirs) && dirs.length > 2 && dirs[1].contains(".jar");
+    return dirs.length > 2 && dirs[1].contains(JAR_EXTENSION_WITH_DOT);
   }
 
   private static void forEachFilenameInDirectory(
@@ -69,7 +70,7 @@ public class ResourceDirectoryFilenamesFinder {
     }
   }
 
-  private URI tryGettingDirectoryUri(String resourceDirectoryPath) throws IOException {
+  private static URI tryGettingDirectoryUri(String resourceDirectoryPath) throws IOException {
     try {
       URL directoryUrl = ResourceDirectoryFilenamesFinder.class
           .getResource(resourceDirectoryPath);
